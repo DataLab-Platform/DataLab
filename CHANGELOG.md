@@ -17,10 +17,76 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 ### 🛠️ Bug Fixes ###
 
+**Signal axis calibration - Replace X by other signal's Y:**
+
+* Added new "Replace X by other signal's Y" operation in Processing > Axis transformation menu for signal calibration workflows
+* Addresses critical missing functionality reported by users who needed to apply wavelength calibration or similar transformations to spectroscopy data
+* The operation combines two signals: uses Y values from one signal as the new X coordinates for another signal's Y values
+* Unlike X-Y mode (which resamples and interpolates), this operation directly uses Y arrays without interpolation, preserving exact calibration values
+* Requires both signals to have the same number of points - raises clear error message if sizes don't match
+* Automatically transfers metadata: X axis label/unit taken from calibration signal's Y label/unit
+* Menu location: Processing > Axis transformation > "Replace X by other signal's Y"
+* This closes [Issue #273](https://github.com/datalab-platform/datalab/issues/273) - Missing signal axis calibration: no way to replace X with Y from another signal
+
+**X-Y mode:**
+
+* The X-Y mode processing operation for signals has been moved to Processing > Axis transformation > "X-Y mode" for better discoverability
+* The nuance between X-Y mode (which resamples/interpolates) and the new "Replace X by other signal's Y" operation has been clarified in documentation
+
+**Lock LUT setting persistence:**
+
+* Fixed "Lock LUT range when updating data" setting not persisting in Settings > Visualization > Images > Default Image visualization settings
+* The `keep_lut_range` parameter was not being saved to configuration, causing the checkbox to systematically uncheck itself after validation (added missing `ima_def_keep_lut_range` option in configuration)
+* This closes [Issue #270](https://github.com/datalab-platform/datalab/issues/270) - Lock LUT setting not persisting in image visualization defaults
+
+**Custom signal creation:**
+
+* Fixed `AttributeError: 'NoneType' object has no attribute 'T'` error when creating a custom signal from the menu
+* This closes [Issue #269](https://github.com/datalab-platform/datalab/issues/269) - Custom Signal Creation: `AttributeError` when creating signal from menu
+
 **Macro execution:**
 
 * Fixed `UnicodeEncodeError` when executing macros that print Unicode characters (e.g., arrows `→`) on Windows systems with certain locales, e.g. cp1252 (closes [Issue #263](https://github.com/datalab-platform/datalab/issues/263))
 * The macro subprocess now automatically uses UTF-8 encoding for stdout and stderr, eliminating the need to manually add `sys.stdout.reconfigure(encoding='utf-8')` at the beginning of each macro.
+
+**ROI coordinate precision:**
+
+* ROI coordinates are now automatically rounded to appropriate precision when defining ROIs interactively from geometrical shapes, avoiding excessive decimal places while maintaining reasonable precision relative to data sampling (1/10th of sampling period for signals, 1/10th of pixel spacing for images)
+* ROI coordinates are also rounded when displaying them in the "Edit numerically" dialog, preventing floating-point arithmetic errors from showing excessive decimal places (e.g., 172.29999999999995 is now displayed as 172.3)
+* This closes [Issue #266](https://github.com/datalab-platform/datalab/issues/266) - Excessive decimal places in ROI coordinates
+
+**Polygonal ROI handling:**
+
+* Fixed `ValueError: Buffer has wrong number of dimensions` error when creating masks from polygonal ROIs in the ROI editor
+* The PolygonalTool was incorrectly initializing ROI coordinates as a nested list instead of a flat list, causing mask computation to fail
+
+**HDF5 file opening dialog:**
+
+* Fixed bug where user's choice in the "clear workspace" confirmation dialog was ignored when opening HDF5 files
+* When the user clicked "No" in the dialog, the default configuration setting was applied instead of respecting the user's choice
+* This closes [Issue #267](https://github.com/datalab-platform/datalab/issues/267) - HDF5 file opening dialog ignores user's choice
+
+**Creation tab axis update:**
+
+* Fixed plot not updating when modifying only xmin/xmax parameters for distribution signals (Zero, Normal, Poisson, Uniform) in the Creation tab
+* The issue occurred because the data hash calculation only considered Y values, so changes to X axis bounds were not detected
+* Plot now properly refreshes when any axis parameter changes, even if Y values remain identical
+* This closes [Issue #268](https://github.com/datalab-platform/datalab/issues/268) - Creation tab axis not updating for distribution signals
+
+**ROI statistics with out-of-bounds ROI:**
+
+* Fixed `ValueError: zero-size array to reduction operation minimum which has no identity` error when computing statistics on images with ROI extending beyond canvas boundaries
+* The issue occurred when a ROI partially or completely extended outside the image bounds, resulting in empty array slices during statistics computation
+* ROI bounding boxes are now properly clipped to image boundaries, and fully out-of-bounds ROIs return NaN statistics values
+* This fix is implemented in Sigima library (see [Issue #1](https://github.com/DataLab-Platform/Sigima/issues/1) - `ValueError` when computing statistics on ROI extending beyond image boundaries)
+
+**Object property panel tab selection:**
+
+* Fixed tab selection behavior in object properties panel to be more predictable and user-friendly
+* Properties tab is now always shown by default when switching between objects, providing consistent navigation
+* Creation, Processing, and Analysis tabs now appear automatically only once after their respective triggering events (object creation, 1-to-1 processing, or analysis computation), then revert to Properties tab for subsequent selections
+* This eliminates the confusing behavior where the tab would arbitrarily persist or change based on previous selections
+* This closes [Issue #271](https://github.com/datalab-platform/datalab/issues/271) - Improve object property panel tab selection behavior
 
 ## DataLab Version 1.0.1 ##
 

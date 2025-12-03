@@ -122,6 +122,13 @@ def create_signal_gui(
         param = NewSignalParam()
         edit = True  # Default to editing if no parameters provided
 
+    # CustomSignalParam requires edit mode to initialize the xyarray.
+    # Without this, if edit=False (the default in new_object), the setup_array
+    # call would be skipped, leaving xyarray as None, which would cause an
+    # AttributeError when trying to access param.xyarray.T later.
+    if isinstance(param, OrigCustomSignalParam):
+        edit = True
+
     if isinstance(param, OrigCustomSignalParam) and edit:
         p_init = NewSignalParam(_("Custom signal"))
         p_init.size = 10  # Set smaller default size for initial input

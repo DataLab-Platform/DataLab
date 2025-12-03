@@ -3,7 +3,6 @@ graft resources
 graft macros
 graft plugins
 include conftest.py
-include CHANGELOG.md
 include CONTRIBUTING.md
 include requirements.txt
 include *.desktop

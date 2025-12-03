@@ -11,6 +11,7 @@ from plotpy.builder import make
 from plotpy.items import AnnotatedXRange
 from sigima.objects import SegmentROI, SignalObj, SignalROI
 
+from datalab.adapters_plotpy.coordutils import round_signal_coords
 from datalab.adapters_plotpy.roi.base import (
     BaseROIPlotPyAdapter,
     BaseSingleROIPlotPyAdapter,
@@ -36,11 +37,14 @@ class SegmentROIPlotPyAdapter(BaseSingleROIPlotPyAdapter[SegmentROI, AnnotatedXR
         return item
 
     @classmethod
-    def from_plot_item(cls, item: AnnotatedXRange) -> SegmentROI:
+    def from_plot_item(
+        cls, item: AnnotatedXRange, obj: SignalObj | None = None
+    ) -> SegmentROI:
         """Create ROI from plot item
 
         Args:
             item: plot item
+            obj: signal object for coordinate rounding (optional)
 
         Returns:
             ROI
@@ -48,6 +52,9 @@ class SegmentROIPlotPyAdapter(BaseSingleROIPlotPyAdapter[SegmentROI, AnnotatedXR
         if not isinstance(item, AnnotatedXRange):
             raise TypeError("Invalid plot item type")
         coords = sorted(item.get_range())
+        # Round coordinates to appropriate precision
+        if obj is not None:
+            coords = round_signal_coords(obj, coords)
         title = str(item.title().text())
         return SegmentROI(coords, False, title)
 

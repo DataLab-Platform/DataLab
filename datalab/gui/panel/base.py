@@ -216,6 +216,13 @@ class ObjectProp(QW.QWidget):
         self.analysis_parameters.setReadOnly(True)
         self.analysis_parameters.setFont(font)
 
+        # Track newly created objects to show Creation tab only once
+        self._newly_created_obj_uuid: str | None = None
+        # Track when analysis results were just computed
+        self._fresh_analysis_obj_uuid: str | None = None
+        # Track when object was just processed (1-to-1)
+        self._fresh_processing_obj_uuid: str | None = None
+
         self.tabwidget.addTab(
             self.processing_history, get_icon("history.svg"), _("History")
         )
@@ -370,11 +377,16 @@ class ObjectProp(QW.QWidget):
         self.properties.get()
         self.properties.apply_button.setEnabled(False)
 
-    def update_properties_from(self, obj: SignalObj | ImageObj | None = None) -> None:
+    def update_properties_from(
+        self,
+        obj: SignalObj | ImageObj | None = None,
+        force_tab: Literal["creation", "processing", "analysis", None] | None = None,
+    ) -> None:
         """Update properties panel (properties, creation, processing) from object.
 
         Args:
             obj: Signal or Image object
+            force_tab: Force a specific tab to be current
         """
         self.properties.setDisabled(obj is None)
         if obj is None:
@@ -411,29 +423,55 @@ class ObjectProp(QW.QWidget):
         self.processing_scroll = None
 
         # Setup Creation and Processing tabs (if applicable)
-        has_creation_tab = has_processing_tab = False
+        has_creation_tab = False
+        has_processing_tab = False
         if obj is not None:
             has_creation_tab = self.setup_creation_tab(obj)
-            has_processing_tab = self.setup_processing_tab(obj)
+            has_processing_tab = self.setup_processing_tab(obj)  # Processing tab setup
 
         # Trigger visibility update for History and Analysis parameters tabs
         # (will be called via textChanged signals, but we call explicitly
         # here to ensure initial state is correct)
         self._update_tab_visibility()
 
-        # Handle priority regarding the tab to set as current:
-        # 1. Analysis parameters if content exists
-        # 2. Creation tab if it exists
-        # 3. Processing tab if it exists
-        # 4. Properties tab
-        if has_analysis_parameters:
-            self.tabwidget.setCurrentWidget(self.analysis_parameters)
-        elif has_creation_tab:
+        # Determine which tab to show based on force_tab parameter:
+        # - If force_tab="creation" and Creation tab exists, show it
+        # - If force_tab="processing" and Processing tab exists, show it
+        # - If force_tab="analysis" and Analysis tab has content, show it
+        # - Otherwise, always show Properties tab (default behavior)
+        if force_tab == "creation" and has_creation_tab:
             self.tabwidget.setCurrentWidget(self.creation_scroll)
-        elif has_processing_tab:
+        elif force_tab == "processing" and has_processing_tab:
             self.tabwidget.setCurrentWidget(self.processing_scroll)
+        elif force_tab == "analysis" and has_analysis_parameters:
+            self.tabwidget.setCurrentWidget(self.analysis_parameters)
         else:
+            # Default: always show Properties tab when switching objects
             self.tabwidget.setCurrentWidget(self.properties)
+
+    def mark_as_newly_created(self, obj: SignalObj | ImageObj) -> None:
+        """Mark object to show Creation tab on next selection.
+
+        Args:
+            obj: Object to mark
+        """
+        self._newly_created_obj_uuid = get_uuid(obj)
+
+    def mark_as_freshly_processed(self, obj: SignalObj | ImageObj) -> None:
+        """Mark object to show Processing tab on next selection.
+
+        Args:
+            obj: Object to mark
+        """
+        self._fresh_processing_obj_uuid = get_uuid(obj)
+
+    def mark_as_fresh_analysis(self, obj: SignalObj | ImageObj) -> None:
+        """Mark object to show Analysis tab on next selection.
+
+        Args:
+            obj: Object to mark
+        """
+        self._fresh_analysis_obj_uuid = get_uuid(obj)
 
     def get_changed_properties(self) -> dict[str, Any]:
         """Get dictionary of properties that have changed from original values.
@@ -1490,6 +1528,16 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         obj.check_data()
         self.objmodel.add_object(obj, group_id)
 
+        # Mark this object as newly created to show Creation tab on first selection
+        # BUT: Don't overwrite if this object is already marked as freshly processed
+        # or has fresh analysis results (those take precedence)
+        obj_uuid = get_uuid(obj)
+        if (
+            obj_uuid != self.objprop._fresh_processing_obj_uuid
+            and obj_uuid != self.objprop._fresh_analysis_obj_uuid
+        ):
+            self.objprop.mark_as_newly_created(obj)
+
         # Block signals to avoid updating the plot (unnecessary refresh)
         self.objview.blockSignals(True)
         self.objview.add_object_item(obj, group_id, set_current=set_current)
@@ -2419,7 +2467,26 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """
         selected_objects = self.objview.get_sel_objects(include_groups=True)
         selected_groups = self.objview.get_sel_groups()
-        self.objprop.update_properties_from(self.objview.get_current_object())
+
+        # Determine which tab to show based on object state
+        current_obj = self.objview.get_current_object()
+        force_tab = None
+        if current_obj is not None:
+            obj_uuid = get_uuid(current_obj)
+            # Show Creation tab for newly created objects (only once)
+            if obj_uuid == self.objprop._newly_created_obj_uuid:
+                force_tab = "creation"
+                self.objprop._newly_created_obj_uuid = None
+            # Show Processing tab for freshly processed objects (only once)
+            elif obj_uuid == self.objprop._fresh_processing_obj_uuid:
+                force_tab = "processing"
+                self.objprop._fresh_processing_obj_uuid = None
+            # Show Analysis tab for objects with fresh analysis results
+            elif obj_uuid == self.objprop._fresh_analysis_obj_uuid:
+                force_tab = "analysis"
+                self.objprop._fresh_analysis_obj_uuid = None
+
+        self.objprop.update_properties_from(current_obj, force_tab=force_tab)
         self.acthandler.selected_objects_changed(selected_groups, selected_objects)
         self.refresh_plot("selected", update_items, False)
 

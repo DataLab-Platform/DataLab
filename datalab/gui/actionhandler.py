@@ -1269,7 +1269,9 @@ class SignalActionHandler(BaseActionHandler):
             with self.new_menu(_("Axis transformation")):
                 self.action_for("transpose")
                 self.action_for("reverse_x")
-                self.action_for("to_cartesian")
+                self.action_for("replace_x_by_other_y")
+                self.action_for("xy_mode")
+                self.action_for("to_cartesian", separator=True)
                 self.action_for("to_polar")
             with self.new_menu(_("Frequency filters"), icon_name="highpass.svg"):
                 self.action_for("lowpass")
@@ -1364,7 +1366,6 @@ class SignalActionHandler(BaseActionHandler):
                     separator=True,
                     tip=_("Compute all stability features"),
                 )
-            self.action_for("xy_mode", separator=True)
 
         # MARK: ANALYSIS
         with self.new_category(ActionCategory.ANALYSIS):

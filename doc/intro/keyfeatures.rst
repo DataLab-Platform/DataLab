@@ -61,13 +61,14 @@ Signal Image  Feature
 ✓      ✓      Linear calibration
 ✓      ✓      Normalization, Clipping, Offset correction
 ✓      ..     Reverse X-axis
+✓      ..     Replace X by other signal's Y (calibration)
+✓      ..     X-Y mode
 ..     ✓      Thresholding (manual, Otsu...)
 ✓      ✓      Gaussian filter, Wiener filter
 ✓      ✓      Moving average, moving median
 ✓      ✓      FFT, inverse FFT, Power/Phase/Magnitude spectrum, Power Spectral Density
 ✓      ..     Interpolation, resampling
 ✓      ..     Detrending
-✓      ..     X-Y mode
 ✓      ..     Interactive fit: Gauss, Lorentz, Voigt, polynomial, CDF...
 ✓      ..     Interactive multigaussian fit
 ✓      ..     Frequency filters (low-pass, high-pass, band-pass, band-stop)

@@ -68,6 +68,27 @@ The DataLab package was renamed from ``cdl`` to ``datalab`` for clarity:
    import sigima.params
    from datalab.plugins import PluginBase
 
+Plugin file naming convention
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Plugin filenames must follow the new naming convention:
+
+.. important::
+
+   Plugin files must be renamed from ``cdl_*.py`` to ``datalab_*.py``.
+
+**Examples:**
+
+- ``cdl_myplugin.py`` → ``datalab_myplugin.py``
+- ``cdl_custom_filters.py`` → ``datalab_custom_filters.py``
+- ``cdl_example.py`` → ``datalab_example.py``
+
+This naming convention is required for DataLab to automatically discover and load plugins at startup. Plugins that don't follow this naming pattern will not be loaded.
+
+.. note::
+
+   The plugin discovery mechanism looks for Python files matching the pattern ``datalab_*.py`` in the plugins directory. Make sure to update your plugin filenames accordingly.
+
 New result objects
 ^^^^^^^^^^^^^^^^^^
 
@@ -77,6 +98,29 @@ DataLab v1.0 introduces two new immutable result types:
 - **GeometryResult**: Replaces ``ResultShape`` for geometric results (e.g., detected features, contours)
 
 These new result types are computation-oriented and free of application-specific logic (e.g., Qt, metadata). All metadata-related behaviors have been migrated to the DataLab application layer using **adapter classes** (``TableAdapter``, ``GeometryAdapter``).
+
+Object UUID access
+^^^^^^^^^^^^^^^^^^
+
+The way to access an object's UUID has changed:
+
+.. code-block:: python
+
+   # v0.20 - Direct attribute access
+   obj_uuid = obj.uuid
+
+   # v1.0 - Use helper function from datalab.objectmodel
+   from datalab.objectmodel import get_uuid
+   obj_uuid = get_uuid(obj)
+
+   # Alternative in v1.0 - Access metadata directly
+   obj_uuid = obj.get_metadata_option("uuid")
+
+This change applies to both ``SignalObj`` and ``ImageObj`` objects. The UUID is now stored in the object's metadata rather than as a direct attribute.
+
+.. note::
+
+   The ``get_uuid()`` function is defined in ``datalab.objectmodel``, not as a method on the object itself. Import it before use: ``from datalab.objectmodel import get_uuid``.
 
 Unified processor interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

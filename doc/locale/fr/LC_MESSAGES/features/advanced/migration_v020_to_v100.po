@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-29 12:10+0100\n"
+"POT-Creation-Date: 2025-11-29 12:42+0100\n"
 "PO-Revision-Date: 2025-10-18 10:00+0200\n"
 "Last-Translator: DataLab Team\n"
 "Language: fr\n"
@@ -102,6 +102,33 @@ msgstr "Renommage du package"
 msgid "The DataLab package was renamed from ``cdl`` to ``datalab`` for clarity:"
 msgstr "Le package DataLab a été renommé de ``cdl`` à ``datalab`` par souci de clarté :"
 
+msgid "Plugin file naming convention"
+msgstr "Convention de nommage des fichiers de plugin"
+
+msgid "Plugin filenames must follow the new naming convention:"
+msgstr "Les noms de fichiers de plugin doivent suivre la nouvelle convention de nommage :"
+
+msgid "Plugin files must be renamed from ``cdl_*.py`` to ``datalab_*.py``."
+msgstr "Les fichiers de plugin doivent être renommés de ``cdl_*.py`` en ``datalab_*.py``."
+
+msgid "**Examples:**"
+msgstr "**Exemples :**"
+
+msgid "``cdl_myplugin.py`` → ``datalab_myplugin.py``"
+msgstr "``cdl_myplugin.py`` → ``datalab_myplugin.py``"
+
+msgid "``cdl_custom_filters.py`` → ``datalab_custom_filters.py``"
+msgstr "``cdl_custom_filters.py`` → ``datalab_custom_filters.py``"
+
+msgid "``cdl_example.py`` → ``datalab_example.py``"
+msgstr "``cdl_example.py`` → ``datalab_example.py``"
+
+msgid "This naming convention is required for DataLab to automatically discover and load plugins at startup. Plugins that don't follow this naming pattern will not be loaded."
+msgstr "Cette convention de nommage est requise pour que DataLab découvre et charge automatiquement les plugins au démarrage. Les plugins qui ne suivent pas ce schéma de nommage ne seront pas chargés."
+
+msgid "The plugin discovery mechanism looks for Python files matching the pattern ``datalab_*.py`` in the plugins directory. Make sure to update your plugin filenames accordingly."
+msgstr "Le mécanisme de découverte des plugins recherche les fichiers Python correspondant au motif ``datalab_*.py`` dans le répertoire des plugins. Assurez-vous de mettre à jour les noms de fichiers de vos plugins en conséquence."
+
 msgid "New result objects"
 msgstr "Nouveaux objets résultat"
 
@@ -116,6 +143,18 @@ msgstr "**GeometryResult** : Remplace ``ResultShape`` pour les résultats géom�
 
 msgid "These new result types are computation-oriented and free of application-specific logic (e.g., Qt, metadata). All metadata-related behaviors have been migrated to the DataLab application layer using **adapter classes** (``TableAdapter``, ``GeometryAdapter``)."
 msgstr "Ces nouveaux types de résultats sont orientés calcul et exempts de logique spécifique à l'application (par exemple, Qt, métadonnées). Tous les comportements liés aux métadonnées ont été migrés vers la couche applicative de DataLab en utilisant des **classes d'adaptation** (``TableAdapter``, ``GeometryAdapter``)."
+
+msgid "Object UUID access"
+msgstr "Accès à l'UUID de l'objet"
+
+msgid "The way to access an object's UUID has changed:"
+msgstr "La manière d'accéder à l'UUID d'un objet a changé :"
+
+msgid "This change applies to both ``SignalObj`` and ``ImageObj`` objects. The UUID is now stored in the object's metadata rather than as a direct attribute."
+msgstr "Ce changement s'applique aux objets ``SignalObj`` et ``ImageObj``. L'UUID est désormais stocké dans les métadonnées de l'objet plutôt que comme un attribut direct."
+
+msgid "The ``get_uuid()`` function is defined in ``datalab.objectmodel``, not as a method on the object itself. Import it before use: ``from datalab.objectmodel import get_uuid``."
+msgstr "La fonction ``get_uuid()`` est définie dans ``datalab.objectmodel``, et non comme une méthode de l'objet lui-même. Importez-la avant utilisation : ``from datalab.objectmodel import get_uuid``."
 
 msgid "Unified processor interface"
 msgstr "Interface processeur unifiée"

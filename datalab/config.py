@@ -301,6 +301,7 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     ima_def_interpolation = conf.Option()
     ima_def_alpha = conf.Option()
     ima_def_alpha_function = conf.Option()
+    ima_def_keep_lut_range = conf.Option()
 
     # Annotated shape and marker visualization settings for signals
     sig_shape_param = conf.DataSetOption()
@@ -459,6 +460,7 @@ def initialize():
     Conf.view.ima_def_interpolation.get(5)
     Conf.view.ima_def_alpha.get(1.0)
     Conf.view.ima_def_alpha_function.get(LUTAlpha.NONE.value)
+    Conf.view.ima_def_keep_lut_range.get(False)
 
     # Datetime format strings: % must be escaped as %% for ConfigParser
     Conf.view.sig_datetime_format_s.get("%%H:%%M:%%S")

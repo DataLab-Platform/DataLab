@@ -32,11 +32,13 @@ def __conversion_methods(
     single_roi = roi.get_single_roi(0)
     with qt_app_context(exec_loop=False):
         plot_item = create_adapter_from_object(single_roi).to_plot_item(obj)
-        sroi_new = plotitem_to_singleroi(plot_item)
+        sroi_new = plotitem_to_singleroi(plot_item, obj)
         orig_coords = [float(val) for val in single_roi.get_physical_coords(obj)]
         new_coords = [float(val) for val in sroi_new.get_physical_coords(obj)]
         execenv.print(f"{orig_coords} --> {new_coords}")
-        assert np.array_equal(orig_coords, new_coords)
+        # Check that coordinates are close
+        # (allowing for rounding applied during conversion)
+        assert np.allclose(orig_coords, new_coords, rtol=1e-5, atol=1e-10)
 
 
 def test_signal_roi_plotitem_conversion() -> None:

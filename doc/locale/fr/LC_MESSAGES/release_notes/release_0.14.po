@@ -1,0 +1,205 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-03 16:26+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Version 0.14"
+msgstr ""
+
+msgid "DataLab Version 0.14.2 (2024-03-22)"
+msgstr "DataLab Version 0.14.2 (22/03/2024)"
+
+msgid "⚠️ API changes required for fixing support for multiple signals loading feature:"
+msgstr "⚠️ Modifications de l'API nécessaires pour corriger la fonctionnalité de chargement de plusieurs signaux :"
+
+msgid "Merged `open_object` and `open_objects` methods to `load_from_files` in proxy classes, main window and data panels"
+msgstr "Fusion des méthodes `open_object` et `open_objects` en `load_from_files` dans les classes proxy, la fenêtre principale et les panneaux de données"
+
+msgid "For consistency's sake: merged `save_object` and `save_objects` into `save_to_files`"
+msgstr "Pour des raisons de cohérence : fusion de `save_object` et `save_objects` en `save_to_files`"
+
+msgid "To sum up, those changes lead to the following situation:"
+msgstr "En résumé, ces changements mènent à la situation suivante :"
+
+msgid "`load_from_files`: load a sequence of objects from multiple files"
+msgstr "`load_from_files` : charge une séquence d'objets à partir de plusieurs fichiers"
+
+msgid "`save_to_files`: save a sequence of objects to multiple files (at the moment, it only supports saving a single object to a single file, but it may be extended in the future to support saving multiple objects to a single file)"
+msgstr "`save_to_files` : sauvegarde une séquence d'objets dans plusieurs fichiers (pour le moment, il ne prend en charge que la sauvegarde d'un seul objet dans un seul fichier, mais il pourrait être étendu à l'avenir pour prendre en charge la sauvegarde de plusieurs objets dans un seul fichier)"
+
+msgid "🛠️ Bug fixes:"
+msgstr "🛠️ Correctifs :"
+
+msgid "Fixed [Issue #61](https://github.com/DataLab-Platform/DataLab/issues/61) - Text file import wizard: application crash when importing a multiple curve text file:"
+msgstr "Correction de l'[Issue #61](https://github.com/DataLab-Platform/DataLab/issues/61) - Assistant d'importation de fichiers texte : plantage de l'application lors de l'importation d'un fichier texte à courbes multiples :"
+
+msgid "This issue concerns a use case where the text file contains multiple curves"
+msgstr "Ce problème concerne un cas d'utilisation où le fichier texte contient plusieurs courbes"
+
+msgid "This is now fixed and an automatic test has been added to prevent regressions"
+msgstr "C'est maintenant corrigé et un test automatique a été ajouté pour éviter les régressions"
+
+msgid "DataLab Version 0.14.1 (2024-03-18)"
+msgstr "DataLab Version 0.14.1 (18/03/2024)"
+
+msgid "🎉 New domain name: [datalab-platform.com](https://datalab-platform.com)"
+msgstr "🎉 Nouveau nom de domaine : [datalab-platform.com](https://datalab-platform.com)"
+
+msgid "💥 New features:"
+msgstr "💥 Nouvelles fonctionnalités :"
+
+msgid "Added support for colormap inversion in Image View:"
+msgstr "Ajout de la prise en charge de l'inversion de la palette de couleurs dans la Vue Image :"
+
+msgid "New \"Invert colormap\" entry in plot context menu, image parameters, and in the default image view settings"
+msgstr "Ajout de la nouvelle entrée \"Inverser la palette de couleurs\" dans le menu contextuel du graphique, les paramètres de l'image et dans les paramètres par défaut de la vue image"
+
+msgid "This requires `PlotPy` v2.3 or later"
+msgstr "Cette fonctionnalité nécessite `PlotPy` v2.3 ou ultérieur"
+
+msgid "HDF5 Browser:"
+msgstr "Explorateur HDF5 :"
+
+msgid "Added \"Show array\" button at the corner of the \"Group\" and \"Attributes\" tabs, to show the array in a separate window (useful for copy/pasting data to other applications, for instance)"
+msgstr "Ajout du bouton \"Afficher le tableau\" dans le coin des onglets \"Groupe\" et \"Attributs\", pour afficher le tableau dans une fenêtre séparée (utile pour copier/coller des données dans d'autres applications, par exemple)"
+
+msgid "Attributes: added support for more scalar data types"
+msgstr "Attributs : ajout de la prise en charge de plus de types de données scalaires"
+
+msgid "Testability and maintainability:"
+msgstr "Testabilité et maintenabilité :"
+
+msgid "DataLab's unit tests are now using [pytest](https://pytest.org). This has required a lot of work for the transition, especially to readapt the tests so that they may be executed in the same process. For instance, a particular attention has been given to sandboxing the tests, so that they do not interfere with each other."
+msgstr "Les tests unitaires de DataLab utilisent désormais [pytest](https://pytest.org). Cela a nécessité beaucoup de travail pour la transition, en particulier pour réadapter les tests afin qu'ils puissent être exécutés dans le même processus. Par exemple, une attention particulière a été portée à l'isolement des tests, afin qu'ils n'interfèrent pas les uns avec les autres."
+
+msgid "Added continuous integration (CI) with GitHub Actions"
+msgstr "Ajout de l'intégration continue (CI) avec GitHub Actions"
+
+msgid "For this release, test coverage is 87%"
+msgstr "Pour cette version, la couverture des tests est de 87%"
+
+msgid "Text file import assistant:"
+msgstr "Assistant d'importation de fichiers texte :"
+
+msgid "Drastically improved the performance of the array preview when importing large text files (no more progress bar, and the preview is now displayed almost instantaneously)"
+msgstr "Amélioration drastique des performances de l'aperçu du tableau lors de l'importation de fichiers texte volumineux (plus de barre de progression, et l'aperçu est désormais affiché presque instantanément)"
+
+msgid "XML-RPC server was not shut down properly when closing DataLab"
+msgstr "Le serveur XML-RPC n'était pas arrêté correctement lors de la fermeture de DataLab"
+
+msgid "Fixed test-related issues: some edge cases were hidden by the old test suite, and have been revealed by the transition to `pytest`. This has led to some bug fixes and improvements in the code."
+msgstr "Correction de problèmes liés aux tests : certains cas limites étaient masqués par l'ancienne suite de tests, et ont été révélés par la transition vers `pytest`. Cela a conduit à des corrections de bugs et à des améliorations du code."
+
+msgid "On Linux, when running a computation on a signal or an image, and on rare occasions, the computation was stuck as if it was running indefinitely. Even though the graphical user interface was still responsive, the computation was not progressing and the user had to cancel the operation and restart it. This was due to the start method of the separate process used for the computation (default method was \"fork\" on Linux). This is now fixed by using the \"spawn\" method instead, which is the recommended method for latest versions of Python on Linux when multithreading is involved."
+msgstr "Sur Linux, lors de l'exécution d'un calcul sur un signal ou une image, et à de rares occasions, le calcul restait bloqué comme s'il s'exécutait indéfiniment. Même si l'interface graphique était toujours réactive, le calcul n'avançait pas et l'utilisateur devait annuler l'opération et la redémarrer. Cela était dû à la méthode de démarrage du processus séparé utilisé pour le calcul (la méthode par défaut était \"fork\" sur Linux). Ceci est maintenant corrigé en utilisant la méthode \"spawn\" à la place, qui est la méthode recommandée pour les dernières versions de Python sur Linux lorsque le multithreading est employé."
+
+msgid "Fixed [Issue #60](https://github.com/DataLab-Platform/DataLab/issues/60) - `OSError: Invalid HDF5 file [...]` when trying to open an HDF5 file with an extension other than \".h5\""
+msgstr "Correction de l'[Issue #60](https://github.com/DataLab-Platform/DataLab/issues/60) - `OSError: Invalid HDF5 file [...]` lors de la tentative d'ouverture d'un fichier HDF5 avec une extension autre que \".h5\""
+
+msgid "Image Region of Interest (ROI) extraction: when modifying the image bounds in the confirmation dialog box, the ROI was not updated accordingly until the operation was run again"
+msgstr "Région d'intérêt (ROI) d'image : lors de la modification des limites de l'image dans la boîte de dialogue de confirmation, la ROI n'était pas mise à jour en conséquence jusqu'à ce que l'opération soit relancée"
+
+msgid "Deprecation issues:"
+msgstr "Problèmes d'obsolescence :"
+
+msgid "Fixed `scipy.ndimage.filters` deprecation warning"
+msgstr "Correction de l'avertissement d'obsolescence `scipy.ndimage.filters`"
+
+msgid "Fixed `numpy.fromstring` deprecation warning"
+msgstr "Correction de l'avertissement d'obsolescence `numpy.fromstring`"
+
+msgid "DataLab Version 0.14.0 (2024-03-05)"
+msgstr "DataLab Version 0.14.0 (05/03/2024)"
+
+msgid "New \"Histogram\" feature in \"Analysis\" menu:"
+msgstr "Nouvelle fonctionnalité \"Histogramme\" dans le menu Analyse\" :"
+
+msgid "Added histogram computation feature for both signals and images"
+msgstr "Ajout de la fonctionnalité de calcul d'histogramme pour les signaux et les images"
+
+msgid "The histogram is computed on the regions of interest (ROI) if any, or on the whole signal/image if no ROI is defined"
+msgstr "L'histogramme est calculé sur les régions d'intérêt (ROI) le cas échéant, ou sur l'ensemble du signal/image si aucune ROI n'est définie"
+
+msgid "Editable parameters: number of bins, lower and upper bounds"
+msgstr "Paramètres modifiables : nombre de classes, limites inférieure et supérieure"
+
+msgid "HDF5 browser:"
+msgstr "Explorateur HDF5 :"
+
+msgid "Improved tree view layout (more compact and readable)"
+msgstr "Amélioration de la disposition de la vue arborescente (plus compacte et lisible)"
+
+msgid "Multiple files can now be opened at once, using the file selection dialog box"
+msgstr "Plusieurs fichiers peuvent désormais être ouverts en même temps, en utilisant la boîte de dialogue de sélection de fichiers"
+
+msgid "Added tabs with information below the graphical preview:"
+msgstr "Ajout d'onglets avec des informations sous l'aperçu graphique :"
+
+msgid "Group info: path, textual preview, etc."
+msgstr "Informations sur le groupe : chemin, aperçu textuel, etc."
+
+msgid "Attributes info: name, value"
+msgstr "Informations sur les attributs : nom, valeur"
+
+msgid "Added \"Show only supported data\" check box: when checked, only supported data (signals and images) are shown in the tree view"
+msgstr "Ajout de la case à cocher \"Afficher uniquement les données prises en charge\" : lorsqu'elle est cochée, seules les données prises en charge (signaux et images) sont affichées dans la vue arborescente"
+
+msgid "Added \"Show values\" check box, to show/hide the values in the tree view"
+msgstr "Ajout de la case à cocher \"Afficher les valeurs\", pour afficher/masquer les valeurs dans la vue arborescente"
+
+msgid "Macro Panel:"
+msgstr "Panneau de macro-commandes :"
+
+msgid "Macro commands are now numbered, starting from 1, like signals and images"
+msgstr "Les macro-commandes sont désormais numérotées, à partir de 1, comme les signaux et les images"
+
+msgid "Remote control API (`RemoteProxy` and `LocalProxy`):"
+msgstr "API de contrôle à distance (`RemoteProxy` et `LocalProxy`) :"
+
+msgid "`get_object_titles` method now accepts \"macro\" as panel name and returns the list of macro titles"
+msgstr "`get_object_titles` accepte désormais \"macro\" comme nom de panneau et retourne la liste des titres de macro"
+
+msgid "New `run_macro`, `stop_macro` and `import_macro_from_file` methods"
+msgstr "Nouvelles méthodes `run_macro`, `stop_macro` et `import_macro_from_file`"
+
+msgid "Stand-alone version - Integration in Windows start menu:"
+msgstr "Version autonome - Intégration dans le menu de démarrage de Windows :"
+
+msgid "Fixed \"Uninstall\" shortcut (unclickable due to a generic name)"
+msgstr "Correction du raccourci \"Désinstaller\" (non cliquable en raison d'un nom générique)"
+
+msgid "Translated \"Browse installation directory\" and \"Uninstall\" shortcuts"
+msgstr "Traduction des raccourcis \"Parcourir le répertoire d'installation\" et \"Désinstaller\""
+
+msgid "Fixed [Issue #55](https://github.com/DataLab-Platform/DataLab/issues/55) - Changing image bounds in Image View has no effect on the associated image object properties"
+msgstr "Correction de l'[Issue #55](https://github.com/DataLab-Platform/DataLab/issues/55) - Changer les limites de l'image dans la vue d'image n'a aucun effet sur les propriétés de l'objet image associé"
+
+msgid "Fixed [Issue #56](https://github.com/DataLab-Platform/DataLab/issues/56) - \"Test data\" plugin: `AttributeError: 'NoneType' object has no attribute 'data'` when canceling \"Create image with peaks\""
+msgstr "Correction de l'[Issue #56](https://github.com/DataLab-Platform/DataLab/issues/56) - Plugin \"Données de test\" : `AttributeError: 'NoneType' object has no attribute 'data'` lors de l'annulation de \"Créer une image avec des pics\""
+
+msgid "Fixed [Issue #57](https://github.com/DataLab-Platform/DataLab/issues/57) - Circle and ellipse result shapes are not transformed properly"
+msgstr "Ceci corrige l'[Issue #57](https://github.com/DataLab-Platform/DataLab/issues/57) - Les formes résultat cercle et ellipse ne sont pas transformées correctement"
+
+msgid "Curve color and style cycle:"
+msgstr "Cycle de couleur et de style de courbe :"
+
+msgid "Before this release, this cycle was handled by the same mechanism either for the Signal Panel or the HDF5 Browser, which was not the expected behavior"
+msgstr "Avant cette version, ce cycle était géré par le même mécanisme pour le Panneau Signal ou l'Explorateur HDF5, ce qui n'était pas le comportement attendu"
+
+msgid "Now, the cycle is handled separately: the HDF5 Browser or the Text Import Wizard use always the same color and style for curves, and they don't interfere with the Signal Panel cycle"
+msgstr "A présent, le cycle est géré séparément : l'Explorateur HDF5 ou l'Assistant d'importation de texte utilisent toujours la même couleur et le même style pour les courbes, et ils n'interfèrent pas avec le cycle du Panneau Signal"

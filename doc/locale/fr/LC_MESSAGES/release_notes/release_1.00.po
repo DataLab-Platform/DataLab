@@ -1,0 +1,998 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-03 16:26+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Version 1.0"
+msgstr ""
+
+msgid "DataLab Version 1.0.2 (unreleased)"
+msgstr "DataLab Version 1.0.2 (non publiée)"
+
+msgid "🛠️ Bug Fixes"
+msgstr "🛠️ Correctifs"
+
+msgid "**Signal axis calibration - Replace X by other signal's Y:**"
+msgstr "**Calibration de l'axe des signaux - Remplacer X par le Y d'un autre signal :**"
+
+msgid "Added new \"Replace X by other signal's Y\" operation in Processing > Axis transformation menu for signal calibration workflows"
+msgstr "Ajout de la nouvelle opération \"Remplacer X par le Y d'un autre signal\" dans le menu Traitement > Transformation d'axe pour les flux de travail de calibration des signaux"
+
+msgid "Addresses critical missing functionality reported by users who needed to apply wavelength calibration or similar transformations to spectroscopy data"
+msgstr "Répond à une fonctionnalité critique manquante signalée par les utilisateurs qui avaient besoin d'appliquer une calibration en longueur d'onde ou des transformations similaires aux données de spectroscopie"
+
+msgid "The operation combines two signals: uses Y values from one signal as the new X coordinates for another signal's Y values"
+msgstr "L'opération combine deux signaux : elle utilise les valeurs Y d'un signal comme nouvelles coordonnées X pour les valeurs Y d'un autre signal"
+
+msgid "Unlike X-Y mode (which resamples and interpolates), this operation directly uses Y arrays without interpolation, preserving exact calibration values"
+msgstr "Contrairement au mode X-Y (qui rééchantillonne et interpole), cette opération utilise directement les tableaux Y sans interpolation, préservant ainsi les valeurs de calibration exactes"
+
+msgid "Requires both signals to have the same number of points - raises clear error message if sizes don't match"
+msgstr "Nécessite que les deux signaux aient le même nombre de points - affiche un message d'erreur clair si les tailles ne correspondent pas"
+
+msgid "Automatically transfers metadata: X axis label/unit taken from calibration signal's Y label/unit"
+msgstr "Transfert automatique des métadonnées : l'étiquette/unité de l'axe X est prise à partir de l'étiquette/unité Y du signal de calibration"
+
+msgid "Menu location: Processing > Axis transformation > \"Replace X by other signal's Y\""
+msgstr "Emplacement dans le menu : Traitement > Transformation d'axe > \"Remplacer X par le Y d'un autre signal\""
+
+msgid "This closes [Issue #273](https://github.com/datalab-platform/datalab/issues/273) - Missing signal axis calibration: no way to replace X with Y from another signal"
+msgstr "Ceci clôture [Issue #273](https://github.com/datalab-platform/datalab/issues/273) - Calibration de l'axe des signaux manquante : aucun moyen de remplacer X par Y d'un autre signal"
+
+msgid "**X-Y mode:**"
+msgstr "**Mode X-Y :**"
+
+msgid "The X-Y mode processing operation for signals has been moved to Processing > Axis transformation > \"X-Y mode\" for better discoverability"
+msgstr "Le traitement Mode X-Y pour les signaux a été déplacé vers Traitement > Transformation des axes > \"Mode X-Y\" pour une meilleure découvrabilité"
+
+msgid "The nuance between X-Y mode (which resamples/interpolates) and the new \"Replace X by other signal's Y\" operation has been clarified in documentation"
+msgstr "La nuance entre le mode X-Y (qui rééchantillonne/interpole) et la nouvelle opération \"Remplacer X par le Y d'un autre signal\" a été clarifiée dans la documentation"
+
+msgid "**Lock LUT setting persistence:**"
+msgstr "**Persistance du paramètre de verrouillage de la LUT :**"
+
+msgid "Fixed \"Lock LUT range when updating data\" setting not persisting in Settings > Visualization > Images > Default Image visualization settings"
+msgstr "Correction du paramètre \"Verrouiller la LUT lors de la mise à jour des données\" ne persistant pas dans Paramètres > Visualisation > Images > Paramètres de visualisation d'image par défaut"
+
+msgid "The `keep_lut_range` parameter was not being saved to configuration, causing the checkbox to systematically uncheck itself after validation (added missing `ima_def_keep_lut_range` option in configuration)"
+msgstr "Le paramètre `keep_lut_range` n'était pas enregistré dans la configuration, ce qui faisait que la case à cocher se décochait systématiquement après validation (ajout de l'option manquante `ima_def_keep_lut_range` dans la configuration)"
+
+msgid "This closes [Issue #270](https://github.com/datalab-platform/datalab/issues/270) - Lock LUT setting not persisting in image visualization defaults"
+msgstr "Ceci clôture [Issue #270](https://github.com/datalab-platform/datalab/issues/270) - Persistance du paramètre de verrouillage de la LUT dans les paramètres de visualisation d'image par défaut"
+
+msgid "**Custom signal creation:**"
+msgstr "**Création de signaux personnalisés :**"
+
+msgid "Fixed `AttributeError: 'NoneType' object has no attribute 'T'` error when creating a custom signal from the menu"
+msgstr "Correction de l'erreur `AttributeError: 'NoneType' object has no attribute 'T'` lors de la création d'un signal personnalisé à partir du menu"
+
+msgid "This closes [Issue #269](https://github.com/datalab-platform/datalab/issues/269) - Custom Signal Creation: `AttributeError` when creating signal from menu"
+msgstr "Ceci clôture [Issue #269](https://github.com/datalab-platform/datalab/issues/269) - Création de signaux personnalisés : `AttributeError` lors de la création d'un signal à partir du menu"
+
+msgid "**Macro execution:**"
+msgstr "**Exécution des macros :**"
+
+msgid "Fixed `UnicodeEncodeError` when executing macros that print Unicode characters (e.g., arrows `→`) on Windows systems with certain locales, e.g. cp1252 (closes [Issue #263](https://github.com/datalab-platform/datalab/issues/263))"
+msgstr "Correction de l'erreur `UnicodeEncodeError` lors de l'exécution de macros qui impriment des caractères Unicode (par exemple, des flèches `→`) sur les systèmes Windows avec certaines locales, par exemple cp1252 (ceci clôture [Issue #263](https://github.com/datalab-platform/datalab/issues/263))"
+
+msgid "The macro subprocess now automatically uses UTF-8 encoding for stdout and stderr, eliminating the need to manually add `sys.stdout.reconfigure(encoding='utf-8')` at the beginning of each macro."
+msgstr "Le sous-processus de la macro utilise désormais automatiquement l'encodage UTF-8 pour stdout et stderr, éliminant ainsi la nécessité d'ajouter manuellement `sys.stdout.reconfigure(encoding='utf-8')` au début de chaque macro."
+
+msgid "**ROI coordinate precision:**"
+msgstr "**Prise en charge des coordonnées non uniformes :**"
+
+msgid "ROI coordinates are now automatically rounded to appropriate precision when defining ROIs interactively from geometrical shapes, avoiding excessive decimal places while maintaining reasonable precision relative to data sampling (1/10th of sampling period for signals, 1/10th of pixel spacing for images)"
+msgstr "Les coordonnées des ROI sont désormais automatiquement arrondies à une précision appropriée lors de la définition interactive des ROI à partir de formes géométriques, évitant ainsi des décimales excessives tout en maintenant une précision raisonnable par rapport à l'échantillonnage des données (1/10e de la période d'échantillonnage pour les signaux, 1/10e de l'espacement des pixels pour les images)"
+
+msgid "ROI coordinates are also rounded when displaying them in the \"Edit numerically\" dialog, preventing floating-point arithmetic errors from showing excessive decimal places (e.g., 172.29999999999995 is now displayed as 172.3)"
+msgstr "Les coordonnées des ROI sont également arrondies lors de leur affichage dans la boîte de dialogue \"Éditer numériquement\", empêchant les erreurs d'arithmétique en virgule flottante d'afficher des décimales excessives (par exemple, 172.29999999999995 est désormais affiché sous forme de 172.3)"
+
+msgid "This closes [Issue #266](https://github.com/datalab-platform/datalab/issues/266) - Excessive decimal places in ROI coordinates"
+msgstr "Ceci clôture [Issue #266](https://github.com/datalab-platform/datalab/issues/266) - Décimales excessives dans les coordonnées des ROI"
+
+msgid "**Polygonal ROI handling:**"
+msgstr "**Gestion des ROI polygonales :**"
+
+msgid "Fixed `ValueError: Buffer has wrong number of dimensions` error when creating masks from polygonal ROIs in the ROI editor"
+msgstr "Correction de l'erreur `ValueError: Buffer has wrong number of dimensions` lors de la création de masques à partir de ROI polygonales dans l'éditeur de ROI"
+
+msgid "The PolygonalTool was incorrectly initializing ROI coordinates as a nested list instead of a flat list, causing mask computation to fail"
+msgstr "Le PolygonalTool initialisait incorrectement les coordonnées des ROI sous forme de liste imbriquée au lieu d'une liste plate, ce qui provoquait l'échec du calcul du masque"
+
+msgid "**HDF5 file opening dialog:**"
+msgstr "**Boîte de dialogue d'ouverture de fichiers HDF5 :**"
+
+msgid "Fixed bug where user's choice in the \"clear workspace\" confirmation dialog was ignored when opening HDF5 files"
+msgstr "Correction du bug où le choix de l'utilisateur dans la boîte de dialogue de confirmation \"effacer l'espace de travail\" était ignoré lors de l'ouverture de fichiers HDF5"
+
+msgid "When the user clicked \"No\" in the dialog, the default configuration setting was applied instead of respecting the user's choice"
+msgstr "Lorsque l'utilisateur cliquait sur \"Non\" dans la boîte de dialogue, le paramètre de configuration par défaut était appliqué au lieu de respecter le choix de l'utilisateur"
+
+msgid "This closes [Issue #267](https://github.com/datalab-platform/datalab/issues/267) - HDF5 file opening dialog ignores user's choice"
+msgstr "Ceci clôture [Issue #267](https://github.com/datalab-platform/datalab/issues/267) - La boîte de dialogue d'ouverture de fichiers HDF5 ignore le choix de l'utilisateur"
+
+msgid "**Creation tab axis update:**"
+msgstr "**Mise à jour de l'axe dans l'onglet Création :**"
+
+msgid "Fixed plot not updating when modifying only xmin/xmax parameters for distribution signals (Zero, Normal, Poisson, Uniform) in the Creation tab"
+msgstr "Correction du graphique ne se mettant pas à jour lors de la modification uniquement des paramètres xmin/xmax pour les signaux de distribution (Zéro, Normal, Poisson, Uniforme) dans l'onglet Création"
+
+msgid "The issue occurred because the data hash calculation only considered Y values, so changes to X axis bounds were not detected"
+msgstr "Le problème est survenu parce que le calcul du hash des données ne prenait en compte que les valeurs Y, de sorte que les modifications des limites de l'axe X n'étaient pas détectées"
+
+msgid "Plot now properly refreshes when any axis parameter changes, even if Y values remain identical"
+msgstr "Le graphique se rafraîchit désormais correctement lorsque n'importe quel paramètre d'axe change, même si les valeurs Y restent identiques"
+
+msgid "This closes [Issue #268](https://github.com/datalab-platform/datalab/issues/268) - Creation tab axis not updating for distribution signals"
+msgstr "Ceci clôture [Issue #268](https://github.com/datalab-platform/datalab/issues/268) - L'axe de l'onglet Création ne se met pas à jour pour les signaux de distribution"
+
+msgid "**ROI statistics with out-of-bounds ROI:**"
+msgstr "**Statistiques ROI avec ROI hors limites :**"
+
+msgid "Fixed `ValueError: zero-size array to reduction operation minimum which has no identity` error when computing statistics on images with ROI extending beyond canvas boundaries"
+msgstr "Correction de l'erreur `ValueError: zero-size array to reduction operation minimum which has no identity` lors du calcul des statistiques sur des images avec ROI s'étendant au-delà des limites de la zone de dessin"
+
+msgid "The issue occurred when a ROI partially or completely extended outside the image bounds, resulting in empty array slices during statistics computation"
+msgstr "Le problème est survenu lorsqu'un ROI s'étendait partiellement ou complètement en dehors des limites de l'image, ce qui entraînait des tranches de tableau vides lors du calcul des statistiques"
+
+msgid "ROI bounding boxes are now properly clipped to image boundaries, and fully out-of-bounds ROIs return NaN statistics values"
+msgstr "Les boîtes englobantes des ROI sont désormais correctement limitées aux limites de l'image, et les ROI complètement hors limites renvoient des valeurs statistiques NaN"
+
+msgid "This fix is implemented in Sigima library (see [Issue #1](https://github.com/DataLab-Platform/Sigima/issues/1) - `ValueError` when computing statistics on ROI extending beyond image boundaries)"
+msgstr "Cette correction est implémentée dans la bibliothèque Sigima (voir [Issue #1](https://github.com/DataLab-Platform/Sigima/issues/1) - `ValueError` lors du calcul des statistiques sur ROI s'étendant au-delà des limites de l'image)"
+
+msgid "**Object property panel tab selection:**"
+msgstr "**Sélection des onglets du panneau des propriétés des objets :**"
+
+msgid "Fixed tab selection behavior in object properties panel to be more predictable and user-friendly"
+msgstr "Correction du comportement de sélection des onglets dans le panneau des propriétés des objets pour le rendre plus prévisible et convivial"
+
+msgid "Properties tab is now always shown by default when switching between objects, providing consistent navigation"
+msgstr "L'onglet Propriétés est désormais toujours affiché par défaut lors du changement d'objet, offrant une navigation cohérente"
+
+msgid "Creation, Processing, and Analysis tabs now appear automatically only once after their respective triggering events (object creation, 1-to-1 processing, or analysis computation), then revert to Properties tab for subsequent selections"
+msgstr "Les onglets Création, Traitement et Analyse apparaissent désormais automatiquement une seule fois après leurs événements déclencheurs respectifs (création d'objet, traitement 1-vers-1 ou calcul d'analyse), puis reviennent à l'onglet Propriétés pour les sélections ultérieures"
+
+msgid "This eliminates the confusing behavior where the tab would arbitrarily persist or change based on previous selections"
+msgstr "Cela élimine le comportement déroutant où l'onglet persistait ou changeait arbitrairement en fonction des sélections précédentes"
+
+msgid "This closes [Issue #271](https://github.com/datalab-platform/datalab/issues/271) - Improve object property panel tab selection behavior"
+msgstr "Ceci clôture [Issue #271](https://github.com/datalab-platform/datalab/issues/271) - Amélioration du comportement de sélection des onglets du panneau des propriétés des objets"
+
+msgid "DataLab Version 1.0.1 (2025-11-18)"
+msgstr "DataLab Version 1.0.1 (18/11/2025)"
+
+msgid "This major release represents a significant milestone for DataLab with numerous enhancements across all areas. The changes are organized by category for easier navigation."
+msgstr "Cette version majeure représente une étape importante pour DataLab avec de nombreuses améliorations dans tous les domaines. Les changements sont organisés par catégorie pour une navigation plus facile."
+
+msgid "**Note**: Version 1.0.1 is a patch release that addresses Windows installer limitations in version 1.0.0 (released 2025-11-16), where it was not possible to install DataLab V1.0 alongside earlier major versions (V0.20 and earlier) despite the intended coexistence support. This release contains no new features or functional changes."
+msgstr "**Note** : La version 1.0.1 est une version corrective qui résout les limitations de l'installateur Windows de la version 1.0.0 (publiée le 16/11/2025), où il n'était pas possible d'installer DataLab V1.0 aux côtés des versions majeures antérieures (V0.20 et antérieures) malgré le support de coexistence prévu. Cette version ne contient aucune nouvelle fonctionnalité ni modification fonctionnelle."
+
+msgid "🎨 User Interface & Workflow"
+msgstr "🎨 Interface utilisateur et flux de travail"
+
+msgid "**Menu reorganization:**"
+msgstr "**Réorganisation des menus :**"
+
+msgid "**New \"Create\" menu**: Separated object creation functionality from the \"File\" menu, placed between \"File\" and \"Edit\" menus for clearer organization"
+msgstr "**Nouveau menu \"Création\"** : La fonctionnalité de création d'objets a été séparée du menu \"Fichier\" et placée entre les menus \"Fichier\" et \"Édition\" pour une organisation plus claire"
+
+msgid "All \"File > New [...]\" actions moved to \"Create\" menu"
+msgstr "Toutes les actions \"Fichier > Nouveau [...]\" ont été déplacées vers le menu \"Création\""
+
+msgid "**Migration note**: Find signal/image creation actions in the new \"Create\" menu"
+msgstr "**Note de migration** : Les actions de création de signaux/images se trouvent désormais dans le nouveau menu \"Création\""
+
+msgid "**New \"ROI\" menu**: Dedicated menu for Region of Interest management, positioned between \"Edit\" and \"Operations\" menus"
+msgstr "**Nouveau menu \"ROI\"** : Menu dédié à la gestion des régions d'intérêt, placé entre les menus \"Édition\" et \"Opérations\""
+
+msgid "**New \"Annotations\" submenu**: Consolidated annotation operations in the \"Edit\" menu"
+msgstr "**Nouveau sous-menu \"Annotations\"** : Regroupement des opérations d'annotation dans le menu \"Édition\""
+
+msgid "**New \"Metadata\" submenu**: Grouped all metadata operations in the \"Edit\" menu"
+msgstr "**Nouveau sous-menu \"Métadonnées\"** : Regroupement de toutes les opérations de métadonnées dans le menu \"Édition\""
+
+msgid "**Interactive object editing:**"
+msgstr "**Édition interactive d'objets :**"
+
+msgid "**Interactive object creation**: Creation parameters can be modified after object creation via new \"Creation\" tab in properties panel"
+msgstr "**Création interactive d'objets** : Les paramètres de création peuvent être modifiés après la création de l'objet via le nouvel onglet \"Création\" dans le panneau des propriétés"
+
+msgid "Apply changes without creating new objects, preserving subsequent processing"
+msgstr "Appliquer les modifications sans créer de nouveaux objets, en préservant le traitement ultérieur"
+
+msgid "Available for parametric generators (Gaussian, sine, etc.)"
+msgstr "Disponible pour les générateurs paramétriques (Gaussien, sinusoïdal, etc.)"
+
+msgid "**Interactive 1-to-1 processing**: Processing parameters can be adjusted and reapplied via new \"Processing\" tab"
+msgstr "**Traitement interactif 1-vers-1** : Les paramètres de traitement peuvent être ajustés et réappliqués après le traitement initial"
+
+msgid "Update result objects in-place with modified parameters"
+msgstr "Mise à jour sur place des objets résultats avec les paramètres modifiés"
+
+msgid "Only for parametric operations (filters, morphology, etc.)"
+msgstr "Uniquement pour les opérations paramétriques (filtres, morphologie, etc.)"
+
+msgid "**Recompute feature**: New \"Recompute\" action (Ctrl+R) to quickly reprocess objects with stored parameters"
+msgstr "**Fonction de recalcul** : Nouvelle action \"Recalculer\" (Ctrl+R) pour retraiter rapidement les objets avec les paramètres stockés"
+
+msgid "Works with single or multiple objects"
+msgstr "Fonctionne avec un ou plusieurs objets"
+
+msgid "Automatically updates results when source data changes"
+msgstr "Met à jour automatiquement les résultats lorsque les données sources changent"
+
+msgid "**Automatic ROI analysis update**: Analysis results automatically recalculate when ROI is modified"
+msgstr "**Mise à jour automatique de l'analyse ROI** : Les résultats d'analyse sont automatiquement recalculés lorsque le ROI est modifié"
+
+msgid "Works for all analysis operations (statistics, centroid, etc.)"
+msgstr "Fonctionne pour toutes les opérations d'analyse (statistiques, centroïde, etc.)"
+
+msgid "Silent background recomputation for immediate feedback"
+msgstr "Recalcul silencieux en arrière-plan pour un retour immédiat"
+
+msgid "**Select source objects**: Navigate to source objects used in processing via new \"Edit\" menu action"
+msgstr "**Sélectionner les objets source** : Naviguer vers les objets source utilisés dans le traitement via une nouvelle action du menu \"Édition\""
+
+msgid "Handles all processing patterns (1-to-1, 2-to-1, n-to-1)"
+msgstr "Gère tous les modèles de traitement (1-vers-1, 2-vers-1, n-vers-1)"
+
+msgid "Shows informative messages if sources no longer exist"
+msgstr "Affiche des messages informatifs si les sources n'existent plus"
+
+msgid "**Processing history**: New \"History\" tab displays object processing lineage as hierarchical tree"
+msgstr "**Historique de traitement** : Nouvel onglet \"Historique\" affichant la lignée de traitement des objets"
+
+msgid "Shows complete processing chain from creation to current state"
+msgstr "Affiche la chaîne de traitement complète depuis la création jusqu'à l'état actuel"
+
+msgid "Selectable text for documentation purposes"
+msgstr "Texte sélectionnable à des fins de documentation"
+
+msgid "**Multi-object property editing:**"
+msgstr "**Édition des propriétés de plusieurs objets :**"
+
+msgid "Apply property changes to multiple selected objects simultaneously"
+msgstr "Appliquer les modifications de propriétés à plusieurs objets sélectionnés simultanément"
+
+msgid "Only modified properties are applied, preserving unchanged individual settings"
+msgstr "Seules les propriétés modifiées sont appliquées, préservant les paramètres individuels inchangés"
+
+msgid "Typical use case: Adjust LUT boundaries or colormap for multiple images at once"
+msgstr "Cas d'utilisation typique : modification des limites de la LUT (bornes de l'échelle Z) ou de la carte des couleurs de plusieurs images à la fois, ou ajustement des propriétés d'affichage d'un groupe de signaux."
+
+msgid "**Dialog sizing improvements:**"
+msgstr "**Améliorations de la taille des boîtes de dialogue :**"
+
+msgid "Processing dialogs now intelligently resize based on main window size"
+msgstr "Les boîtes de dialogue de traitement se redimensionnent désormais intelligemment en fonction de la taille de la fenêtre principale"
+
+msgid "Never exceed main window dimensions for better user experience"
+msgstr "Ne dépasse jamais les dimensions de la fenêtre principale pour une meilleure expérience utilisateur"
+
+msgid "**Internal console indicator:**"
+msgstr "**Indicateur de la console interne :**"
+
+msgid "Status bar indicator shows console status when hidden"
+msgstr "L'indicateur de la barre d'état affiche l'état de la console lorsqu'elle est masquée"
+
+msgid "Turns red on errors/warnings to alert users"
+msgstr "Devient rouge en cas d'erreurs/avertissements pour alerter les utilisateurs"
+
+msgid "Click to open console"
+msgstr "Cliquer pour ouvrir la console"
+
+msgid "🎬 New Object Creation Features"
+msgstr "🎬 Nouvelles fonctionnalités de création d'objets"
+
+msgid "**Parametric signal generators:**"
+msgstr "**Générateurs de signaux paramétriques :**"
+
+msgid "Linear chirp, logistic function, Planck function"
+msgstr "Chirp linéaire, fonction logistique, fonction de Planck"
+
+msgid "Generate signals with Poisson noise"
+msgstr "Générer des signaux avec bruit de Poisson"
+
+msgid "**Parametric image generators:**"
+msgstr "**Générateurs d'images paramétriques :**"
+
+msgid "**Checkerboard**: Calibration pattern with configurable square size and light/dark values"
+msgstr "**Damier** : Motif de calibration avec taille de carrés et valeurs claires/sombres configurables"
+
+msgid "**Sinusoidal grating**: Frequency response testing with independent X/Y spatial frequencies"
+msgstr "**Réseau sinusoïdal** : Test de réponse en fréquence avec fréquences spatiales X/Y indépendantes"
+
+msgid "**Ring pattern**: Concentric circular rings for radial analysis and PSF testing"
+msgstr "**Motif en anneau** : Anneaux circulaires concentriques pour l'analyse radiale et les tests PSF. Période d'anneau, largeur, position centrale et plage d'amplitude réglables."
+
+msgid "**Siemens star**: Resolution testing with radial spokes and configurable radius"
+msgstr "**Étoile de Siemens** : Test de résolution avec rayons radiaux et rayon configurable"
+
+msgid "**2D sinc**: Cardinal sine function for PSF modeling and diffraction simulation"
+msgstr "**Sinc 2D** : Fonction sinus cardinal pour la modélisation de la PSF et la simulation de motifs de diffraction. Les paramètres incluent l'amplitude, la position centrale, le facteur d'échelle (sigma) et le décalage DC."
+
+msgid "**2D ramp**: New ramp image generator"
+msgstr "**Rampe 2D** : Nouveau générateur d'image de rampe"
+
+msgid "**Poisson noise**: Generate images with Poisson noise distribution"
+msgstr "**Bruit de Poisson** : Générer des images avec distribution de bruit de Poisson"
+
+msgid "**Signal/image creation from operations:**"
+msgstr "**Création de signaux/images à partir d'opérations :**"
+
+msgid "Create complex-valued signal/image from real and imaginary parts"
+msgstr "Créer un signal/image à valeurs complexes à partir des parties réelle et imaginaire"
+
+msgid "Create complex-valued signal/image from magnitude and phase (closes [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216))"
+msgstr "Créer un signal/image à valeurs complexes à partir de la magnitude et de la phase (ceci clôture [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216))"
+
+msgid "Extract phase (argument) information from complex signals or images"
+msgstr "Extraire l'information de phase (argument) des signaux ou images complexes"
+
+msgid "🔬 Data Processing & Analysis"
+msgstr "🔬 Traitement et analyse de données"
+
+msgid "**Signal processing:**"
+msgstr "**Traitement du signal :**"
+
+msgid "**Enhanced curve fitting**: Significantly improved parameter estimation for all curve types (Gaussian, Lorentzian, Voigt, exponential, sinusoidal, Planckian, asymmetric peaks, CDF)"
+msgstr "**Ajustement de courbes amélioré** : Estimation des paramètres considérablement améliorée pour tous les types de courbes (Gaussienne, Lorentzienne, Voigt, exponentielle, sinusoïdale, Planckienne, pics asymétriques, CDF)"
+
+msgid "Smarter initial parameter guesses for robust convergence"
+msgstr "Estimations initiales des paramètres plus intelligentes pour une convergence robuste"
+
+msgid "**Locked parameter support**: Lock individual parameters during optimization (requires PlotPy v2.8.0)"
+msgstr "**Prise en charge des paramètres verrouillés** (nécessite PlotPy v2.8.0) :"
+
+msgid "**X-array compatibility checking**: Comprehensive validation for multi-signal operations with automatic interpolation options"
+msgstr "**Vérification de la compatibilité des tableaux X pour les calculs multi-signaux** :"
+
+msgid "New configuration setting: Ask user or interpolate automatically"
+msgstr "Nouveau paramètre de configuration : Demander à l'utilisateur ou interpoler automatiquement"
+
+msgid "Prevents unexpected results from incompatible signal arrays"
+msgstr "Empêche les résultats inattendus dus à des tableaux de signaux incompatibles"
+
+msgid "**Zero padding enhancements**: Support for prepending and appending zeros, default strategy now \"Next power of 2\""
+msgstr "**Améliorations du zero padding** : Prise en charge de l'ajout de zéros au début et à la fin, stratégie par défaut désormais \"Prochaine puissance de 2\""
+
+msgid "**Ideal frequency domain filter**: \"Brick wall filter\" for signals (closes [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215))"
+msgstr "**Filtre idéal dans le domaine fréquentiel** : \"Filtre en brique\" pour les signaux (ceci clôture [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215))"
+
+msgid "**Bandwidth at -3dB**: Enhanced to support passband bandwidth"
+msgstr "**Bande passante à -3dB** : Améliorée pour prendre en charge la bande passante"
+
+msgid "**Pulse features extraction**: Comprehensive pulse analysis for step and square signals"
+msgstr "**Extraction des caractéristiques des impulsions** : Nouvelle fonctionnalité complète d'analyse des impulsions pour les signaux en escalier et carrés :"
+
+msgid "Automated shape recognition and polarity detection"
+msgstr "Reconnaissance automatique de la forme et détection de la polarité"
+
+msgid "Measures amplitude, rise/fall time, FWHM, timing parameters, baseline ranges"
+msgstr "Mesure l'amplitude, le temps de montée/descente, la FWHM, les paramètres temporels, les plages de référence"
+
+msgid "**Frequency domain filters**: Deconvolution and Gaussian filter (closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189), [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205))"
+msgstr "**Filtres dans le domaine fréquentiel** : Déconvolution et filtre Gaussien (ceci clôture [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189), [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205))"
+
+msgid "**Coordinate transformations**: Convert to Cartesian/polar coordinates"
+msgstr "**Transformations de coordonnées** : Conversion en coordonnées cartésiennes/polaires"
+
+msgid "**X-Y mode**: Simulate oscilloscope X-Y mode (plot one signal vs. another)"
+msgstr "**Mode X-Y** : Simule le mode X-Y d'un oscilloscope (trace un signal par rapport à un autre)"
+
+msgid "**Find operations**: First abscissa at y=..., ordinate at x=..., full width at y=..."
+msgstr "**Opérations de recherche** : Première abscisse à y=..., ordonnée à x=..., largeur totale à y=..."
+
+msgid "**`1/x` operation**: Reciprocal operation with NaN handling for zero denominators"
+msgstr "**Opération `1/x`** : Opération réciproque avec gestion des NaN pour les dénominateurs nuls"
+
+msgid "**Image processing:**"
+msgstr "**Traitement d'images :**"
+
+msgid "**2D resampling**: Resample images to new coordinate grids with multiple interpolation methods (closes [Issue #208](https://github.com/DataLab-Platform/DataLab/issues/208))"
+msgstr "**Rééchantillonnage 2D** : Rééchantillonner les images vers de nouvelles grilles de coordonnées avec plusieurs méthodes d'interpolation (ceci clôture [Issue #208](https://github.com/DataLab-Platform/DataLab/issues/208))"
+
+msgid "**Convolution**: 2D convolution operation"
+msgstr "**Convolution** : Opération de convolution 2D"
+
+msgid "**Erase area**: Erase image areas defined by ROI (closes [Issue #204](https://github.com/DataLab-Platform/DataLab/issues/204))"
+msgstr "**Effacer une zone** : Effacer les zones d'image définies par ROI (ceci clôture [Issue #204](https://github.com/DataLab-Platform/DataLab/issues/204))"
+
+msgid "**Horizontal/vertical projections**: Sum of pixels along axes (closes [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209))"
+msgstr "**Projections horizontales/verticales** : Somme des pixels le long des axes (ceci clôture [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209))"
+
+msgid "**Improved centroid computation**: More accurate in challenging cases (truncated/asymmetric images) (see [Issue #251](https://github.com/DataLab-Platform/DataLab/issues/251))"
+msgstr "**Calcul du centroïde amélioré** : Plus précis dans les cas difficiles (images tronquées/asymétriques) (voir [Issue #251](https://github.com/DataLab-Platform/DataLab/issues/251))"
+
+msgid "**Flip diagonally**: New geometric transformation"
+msgstr "**Retourner en diagonale** : Nouvelle transformation géométrique"
+
+msgid "**`1/x` operation**: Reciprocal operation for images"
+msgstr "**Opération `1/x`** : Opération réciproque pour les images"
+
+msgid "**Cross-panel operations:**"
+msgstr "**Opérations inter-panneaux :**"
+
+msgid "**Signals to image conversion**: Combine multiple signals into 2D images"
+msgstr "**Conversion signaux vers image** : Combiner plusieurs signaux en images 2D"
+
+msgid "Two orientation modes: as rows (spectrograms) or columns (waterfall displays)"
+msgstr "Deux modes d'orientation : en lignes (spectrogrammes) ou en colonnes (affichages en cascade)"
+
+msgid "Optional normalization (Z-score, Min-Max, Maximum)"
+msgstr "Normalisation optionnelle (Z-score, Min-Max, Maximum)"
+
+msgid "Typical use cases: heatmaps, spectrograms, multi-channel data visualization"
+msgstr "Cas d'utilisation typiques : cartes de chaleur, spectrogrammes, visualisation de données multi-canaux"
+
+msgid "**Common features:**"
+msgstr "**Fonctionnalités communes :**"
+
+msgid "**Standard deviation**: Calculate across multiple signals/images (closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196))"
+msgstr "**Écart-type** : Calculer sur plusieurs signaux/images (ceci clôture [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196))"
+
+msgid "**Add noise**: Add Gaussian, Poisson, or uniform noise (closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201))"
+msgstr "**Ajouter du bruit** : Ajouter du bruit gaussien, de Poisson ou uniforme (ceci clôture [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201))"
+
+#, python-brace-format
+msgid "**Add metadata**: Add custom metadata with pattern support (`{title}`, `{index}`, etc.) and type conversion"
+msgstr "**Ajouter des métadonnées** : Ajouter des métadonnées personnalisées avec prise en charge des motifs (`{title}`, `{index}`, etc.) et conversion de type"
+
+msgid "📐 ROI & Annotation Management"
+msgstr "📐 Gestion des ROI et annotations"
+
+msgid "**ROI features:**"
+msgstr "**Fonctionnalités ROI :**"
+
+msgid "**ROI clipboard operations**: Copy/paste ROIs between objects"
+msgstr "**Opérations de presse-papiers ROI** : Copier/coller les ROI entre objets"
+
+msgid "**ROI import/export**: Save/load ROIs as JSON files"
+msgstr "**Importer/exporter des ROI** : Enregistrer/charger les ROI au format JSON"
+
+msgid "**Individual ROI removal**: Remove ROIs selectively via \"Remove\" submenu"
+msgstr "**Suppression individuelle de ROI** : Supprimer les ROI sélectivement via le sous-menu \"Supprimer\""
+
+msgid "**ROI title editing**: Set titles during interactive creation and in confirmation dialog"
+msgstr "**Édition des titres de ROI** : Définir les titres pendant la création interactive et dans la boîte de dialogue de confirmation"
+
+msgid "**Create ROI grid**: Generate grid of ROIs with configurable rows, columns, and spacing"
+msgstr "**Créer une grille de ROI** : Générer une grille de ROI avec lignes, colonnes et espacement configurables"
+
+msgid "Import/export grid configurations"
+msgstr "Importer/exporter les configurations de grille"
+
+msgid "Preview before creation"
+msgstr "Aperçu avant création"
+
+msgid "**Inverse ROI logic**: Select area outside defined shapes (images only)"
+msgstr "**Logique ROI inverse** : Sélectionner la zone en dehors des formes définies (images uniquement)"
+
+msgid "**Coordinate-based ROI creation**: Manual input of coordinates for rectangular and circular ROIs"
+msgstr "**Création de ROI par coordonnées** : Saisie manuelle des coordonnées pour les ROI rectangulaires et circulaires"
+
+msgid "**Multi-object ROI editing**: Edit ROIs on multiple objects simultaneously"
+msgstr "**Édition de ROI multi-objets** : Éditer les ROI sur plusieurs objets simultanément"
+
+msgid "**Annotation features:**"
+msgstr "**Fonctionnalités d'annotation :**"
+
+msgid "**Annotation clipboard**: Copy/paste annotations between objects"
+msgstr "**Coller les annotations** : Coller les annotations du presse-papiers sur l'objet (ou les objets) sélectionné(s)"
+
+msgid "**Edit annotations**: Interactive editor dialog with PlotPy tools"
+msgstr "**Éditer les annotations** : Boîte de dialogue d'éditeur interactif avec outils PlotPy"
+
+msgid "**Import/export annotations**: Save/load as .dlabann JSON files with versioning"
+msgstr "**Exporter les annotations** : Enregistrer les annotations dans des fichiers JSON .dlabann"
+
+msgid "**Delete annotations**: Remove from single or multiple objects with confirmation"
+msgstr "**Supprimer les annotations** : Supprimer toutes les annotations de l'objet (ou des objets) sélectionné(s)"
+
+msgid "**Annotations independent from ROI**: Can coexist on same object"
+msgstr "**Annotations indépendantes des ROI** : Peuvent coexister sur le même objet"
+
+msgid "**Detection with ROI creation:**"
+msgstr "**Détection avec création de ROI :**"
+
+msgid "All 7 detection algorithms now support automatic ROI creation:"
+msgstr "Les 7 algorithmes de détection prennent désormais en charge la création automatique de ROI :"
+
+msgid "Peak detection, contour shape, blob detection (DOG/DOH/LOG/OpenCV), Hough circle"
+msgstr "Détection de pics, forme de contour, détection de blobs (DOG/DOH/LOG/OpenCV), cercle de Hough"
+
+msgid "**ROI geometry choice**: Rectangular or circular ROIs"
+msgstr "**Choix de géométrie de ROI** : ROI rectangulaires ou circulaires"
+
+msgid "**2D peak detection**: Option to choose ROI geometry (closes related requirements)"
+msgstr "**Détection de pics 2D** : Option pour choisir la géométrie de ROI (ceci clôture les exigences associées)"
+
+msgid "📊 Visualization & Display"
+msgstr "📊 Visualisation et affichage"
+
+msgid "**Performance & display limits:**"
+msgstr "**Performances et limites d'affichage :**"
+
+msgid "**Configurable result display limits**: Prevent UI freezing with large result sets"
+msgstr "**Optimisations des performances pour les grands ensembles de résultats** : Ajout de limites d'affichage configurables pour éviter le gel de l'interface utilisateur avec de grands résultats d'analyse"
+
+msgid "`max_shapes_to_draw` (default: 1,000), `max_cells_in_label` (default: 100), `max_cols_in_label` (default: 15)"
+msgstr "`max_shapes_to_draw` (par défaut : 1 000), `max_cells_in_label` (par défaut : 100), `max_cols_in_label` (par défaut : 15)"
+
+msgid "Settings documented with performance implications"
+msgstr "Paramètres documentés avec implications sur les performances"
+
+msgid "**Faster contour rendering**: Over 5x performance improvement for contour display"
+msgstr "**Rendu de contours plus rapide** : Amélioration des performances de plus de 5x pour l'affichage des contours"
+
+msgid "**Signal rendering optimization**: Smart linewidth clamping for large datasets"
+msgstr "**Optimisation des performances de rendu des signaux** : Ajout d'un plafonnement intelligent de l'épaisseur de trait pour les grands ensembles de données"
+
+msgid "New setting: \"Line width performance threshold\" (default: 1,000 points)"
+msgstr "Nouveau paramètre : « Seuil de performance de l'épaisseur de trait » (par défaut : 1 000 points) dans les paramètres de visualisation des signaux"
+
+msgid "Prevents 10x slowdown from Qt raster engine limitation"
+msgstr "Empêche un ralentissement de 10x dû à la limitation du moteur raster de Qt"
+
+msgid "**Result visualization:**"
+msgstr "**Visualisation des résultats :**"
+
+msgid "**Merged result labels**: All analysis results consolidated in single read-only label"
+msgstr "**Étiquettes de résultats fusionnées** : Tous les résultats d'analyse pour un signal ou une image sont désormais affichés dans une seule étiquette consolidée en lecture seule"
+
+msgid "Reduces visual clutter, auto-updates, horizontally divided results"
+msgstr "Réduit l'encombrement visuel, mises à jour automatiques, résultats divisés horizontalement"
+
+msgid "**Result label visibility control**: Toggle visibility via Properties panel checkbox"
+msgstr "**Contrôle de visibilité de l'étiquette de résultats** : Basculer la visibilité via la case à cocher du panneau de propriétés"
+
+msgid "Default visibility configurable in Settings"
+msgstr "Visibilité par défaut configurable dans les paramètres"
+
+msgid "**Results group organization**: Plot results automatically organized in dedicated \"Results\" group"
+msgstr "**Création de groupe de résultats** : Toutes les opérations de tracé des résultats organisent désormais automatiquement les résultats dans un groupe \"Résultats\" dédié"
+
+msgid "**Comprehensive result titles**: Include source object identifiers (e.g., \"FWHM (s001, s002, s003)\")"
+msgstr "**Titres de résultats complets** : Les titres des signaux de résultats incluent désormais les identifiants des objets source"
+
+msgid "**Individual result deletion**: Remove results selectively via Analysis menu"
+msgstr "**Suppression individuelle de résultats** : Supprimer les résultats sélectivement via le menu Analyse"
+
+msgid "**Customizable shape/marker styles**: Four new style configuration buttons in Settings"
+msgstr "**Styles de formes/marqueurs personnalisables** : Quatre nouveaux boutons de configuration de style dans les paramètres"
+
+msgid "Separate styles for signals and images"
+msgstr "Fonctionnalités communes aux signaux et aux images :"
+
+msgid "Interactive editor with comprehensive options"
+msgstr "Éditeur interactif avec options complètes"
+
+msgid "Persistent configuration with refresh on change"
+msgstr "Configuration persistante avec rafraîchissement au changement"
+
+msgid "**Enhanced profile extraction:**"
+msgstr "Fonctionnalité d'extraction de profil d'intensité :"
+
+msgid "Click directly on X/Y profile plots to switch extraction direction"
+msgstr "Cliquer directement sur les tracés de profils X/Y pour changer la direction d'extraction"
+
+msgid "No need to open parameters dialog for direction changes"
+msgstr "Pas besoin d'ouvrir la boîte de dialogue des paramètres pour les changements de direction"
+
+msgid "Improves workflow efficiency (closes [Issue #156](https://github.com/DataLab-Platform/DataLab/issues/156))"
+msgstr "Améliore l'efficacité du flux de travail (ceci clôture [Issue #156](https://github.com/DataLab-Platform/DataLab/issues/156))"
+
+msgid "**DateTime signal support:**"
+msgstr "**Prise en charge des signaux DateTime :**"
+
+msgid "Automatic datetime detection in CSV files"
+msgstr "Détection automatique des dates dans les fichiers CSV"
+
+msgid "**Datetime axis formatting**: Human-readable timestamps on X-axis"
+msgstr "**Formatage de l'axe datetime** : Horodatages lisibles sur l'axe X"
+
+msgid "**Configurable formats**: Separate formats for standard and sub-second units"
+msgstr "**Formats configurables** : Formats séparés pour les unités standard et sub-secondes"
+
+msgid "Supports various time units (seconds, milliseconds, microseconds, minutes, hours)"
+msgstr "Prend en charge diverses unités de temps (secondes, millisecondes, microsecondes, minutes, heures)"
+
+msgid "Closes [Issue #258](https://github.com/DataLab-Platform/DataLab/issues/258)"
+msgstr "Ceci clôture [Issue #258](https://github.com/DataLab-Platform/DataLab/issues/258)"
+
+msgid "**Settings:**"
+msgstr "**Paramètres :**"
+
+msgid "**Autoscale margins**: Configurable margins (0-50%) for signal/image plots"
+msgstr "**Marges d'auto-échelle** : Marges configurables (0-50%) pour les tracés de signaux/images"
+
+msgid "**Lock image aspect ratio**: Option for 1:1 aspect ratio (default: use physical pixel size) (closes [Issue #244](https://github.com/DataLab-Platform/DataLab/issues/244))"
+msgstr "**Verrouiller le rapport d'aspect de l'image** : Option pour un rapport d'aspect 1:1 (par défaut : utiliser la taille de pixel physique) (ceci clôture [Issue #244](https://github.com/DataLab-Platform/DataLab/issues/244))"
+
+msgid "**Show console on error**: Configurable behavior (default: off)"
+msgstr "**Afficher la console en cas d'erreur** : Comportement configurable (par défaut : désactivé)"
+
+msgid "**Image extent parameters:**"
+msgstr "**Paramètres d'étendue de l'image :**"
+
+msgid "New \"Extent\" group box showing computed Xmin, Xmax, Ymin, Ymax"
+msgstr "Nouvelle boîte de groupe « Étendue » affichant les Xmin, Xmax, Ymin, Ymax calculés"
+
+msgid "Automatically calculated from origin, pixel spacing, and dimensions"
+msgstr "Calculé automatiquement à partir de l'origine, de l'espacement des pixels et des dimensions"
+
+msgid "📁 Import/Export & File Handling"
+msgstr "📁 Import/Export et gestion des fichiers"
+
+msgid "**New file format support:**"
+msgstr "**Prise en charge de nouveaux formats de fichiers :**"
+
+msgid "**FT-Lab signals and images**: CEA binary formats (.sig, .ima) (closes [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211))"
+msgstr "**Signaux et images FT-Lab** : Formats binaires CEA (.sig, .ima) (ceci clôture [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211))"
+
+msgid "**Coordinated text files**: Real and complex-valued images with error images (similar to Matris format)"
+msgstr "**Fichiers texte coordonnés** : Images à valeurs réelles et complexes avec images d'erreur (similaire au format Matris)"
+
+msgid "Automatic NaN handling, metadata with units and labels"
+msgstr "Gestion automatique des NaN, métadonnées avec unités et étiquettes"
+
+msgid "**Enhanced HDF5 support:**"
+msgstr "**Prise en charge HDF5 améliorée :**"
+
+msgid "**Custom file extensions**: Intelligent HDF5 detection by content (not just extension)"
+msgstr "**Extensions de fichiers personnalisées** : Détection intelligente HDF5 par contenu (pas seulement l'extension)"
+
+msgid "Extension-based detection for dialogs, content-based for drag-and-drop"
+msgstr "Détection basée sur l'extension pour les boîtes de dialogue, basée sur le contenu pour le glisser-déposer"
+
+msgid "\"All files (*)\" option in file dialogs"
+msgstr "Option \"Tous les fichiers (*)\" dans les boîtes de dialogue de fichiers"
+
+msgid "**HDF5 Browser improvements**: Default collapsed tree view for better navigation"
+msgstr "**Améliorations du navigateur HDF5** : Vue arboresc ente réduite par défaut pour une meilleure navigation"
+
+msgid "**Workspace clearing options**: Configurable behavior with \"Ignore\" option (closes [Issue #146](https://github.com/DataLab-Platform/DataLab/issues/146))"
+msgstr "**Options de nettoyage de l'espace de travail** : Comportement configurable avec option \"Ignorer\" (ceci clôture [Issue #146](https://github.com/DataLab-Platform/DataLab/issues/146))."
+
+msgid "**Text file improvements:**"
+msgstr "**Améliorations des fichiers texte :**"
+
+msgid "**CSV delimiter handling**: Better support for various whitespace separators"
+msgstr "Amélioration de la gestion des délimiteurs dans la lecture CSV (signaux) pour mieux prendre en charge les fichiers avec divers séparateurs d'espaces."
+
+msgid "**Locale decimal separator**: Support for comma as decimal separator (closes [Issue #124](https://github.com/DataLab-Platform/DataLab/issues/124))"
+msgstr "**Séparateur décimal local** : Prise en charge de la virgule comme séparateur décimal (ceci clôture [Issue #124](https://github.com/DataLab-Platform/DataLab/issues/124))"
+
+msgid "**Encoding error tolerance**: Ignore errors for files with special characters"
+msgstr "**Tolérance aux erreurs d'encodage** : Ignorer les erreurs pour les fichiers avec des caractères spéciaux"
+
+msgid "**Header detection**: Automatic detection and skipping of data headers"
+msgstr "**Détection d'en-tête** : Détection et saut automatiques des en-têtes de données"
+
+msgid "**Other I/O features:**"
+msgstr "**Autres fonctionnalités d'E/S :**"
+
+msgid "**Save to directory**: New feature (closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227))"
+msgstr "**Enregistrer dans un répertoire** : Nouvelle fonctionnalité (ceci clôture [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227))"
+
+msgid "**Open from directory**: Recursively open multiple files with folder drag-and-drop support"
+msgstr "**Ouvrir depuis un répertoire** : Ouvrir récursivement plusieurs fichiers avec prise en charge du glisser-déposer de dossiers"
+
+msgid "**File ordering**: Consistent alphabetical sorting across platforms"
+msgstr "**Ordre d'importation des fichiers** : Correction de l'ordre incohérent des fichiers entre les plateformes lors de l'importation d'images/signaux"
+
+msgid "🔧 Advanced Features"
+msgstr "🔧 Fonctionnalités avancées"
+
+msgid "**Non-uniform coordinate support:**"
+msgstr "**Prise en charge des coordonnées non uniformes :**"
+
+msgid "Images now support non-uniform pixel spacing"
+msgstr "Les images prennent désormais en charge l'espacement de pixels non uniforme"
+
+msgid "\"Set uniform coordinates\" feature for conversion"
+msgstr "Nouvelle fonctionnalité \"Définir les coordonnées uniformes\" dans le menu Traitement > Transformation des axes :"
+
+msgid "**Polynomial calibration**: Up to cubic order for X, Y, Z axes"
+msgstr "Prend désormais en charge l'étalonnage polynomial jusqu'à l'ordre cubique pour tous les axes (X, Y, Z)"
+
+msgid "Creates non-uniform coordinates for X/Y, transforms values for Z"
+msgstr "Pour les axes X et Y : Crée des coordonnées non uniformes pour représenter les transformations polynomiales"
+
+msgid "HDF5 and text file formats preserve non-uniform information"
+msgstr "Le format HDF5 préserve les informations de coordonnées non uniformes"
+
+msgid "**Group management:**"
+msgstr "**Gestion des groupes :**"
+
+msgid "**Panel-specific short IDs**: `gs` prefix for signals, `gi` prefix for images"
+msgstr "**ID courts spécifiques au panneau** : Préfixe `gs` pour les signaux, préfixe `gi` pour les images"
+
+msgid "Avoids ambiguity in cross-panel operations"
+msgstr "Évite l'ambiguïté dans les opérations inter-panneaux"
+
+msgid "Fixed group numbering for new groups"
+msgstr "Numérotation de groupe fixe pour les nouveaux groupes"
+
+msgid "**Configuration:**"
+msgstr "Réinitialisation de la configuration de DataLab :"
+
+msgid "**Version-specific folders**: Major version coexistence (`.DataLab_v1`, `.DataLab_v2`, etc.)"
+msgstr "**Dossiers spécifiques à la version** : Coexistence des versions majeures (`.DataLab_v1`, `.DataLab_v2`, etc.)"
+
+msgid "Allows v0.x and v1.x to run simultaneously"
+msgstr "Permet à v0.x et v1.x de s'exécuter simultanément"
+
+msgid "**Public API & Remote Control:**"
+msgstr "API publique (locale ou distante) :"
+
+msgid "Enhanced metadata handling with function name context"
+msgstr "**Amélioration de la gestion des métadonnées en ajoutant le contexte du nom de la fonction aux résultats** :"
+
+msgid "`add_group`, `add_signal`, `add_image` methods with `group_id` and `set_current` arguments"
+msgstr "Méthodes `add_group`, `add_signal`, `add_image` avec arguments `group_id` et `set_current`"
+
+msgid "`get_object_uuids` with optional `group` filter"
+msgstr "`get_object_uuids` avec filtre `group` optionnel"
+
+msgid "Multiple API improvements for better programmability"
+msgstr "Plusieurs améliorations de l'API pour une meilleure programmabilité"
+
+msgid "**Processing infrastructure (for developers):**"
+msgstr "**Infrastructure de traitement (pour les développeurs) :**"
+
+msgid "New `@computation_function` decorator for computation functions"
+msgstr "Ajout d'un nouveau décorateur `@computation_function` pour marquer et enregistrer les fonctions de calcul"
+
+msgid "Renamed computation functions (removed \"compute_\" prefix)"
+msgstr "Renommé les fonctions de calcul pour supprimer le préfixe redondant \"compute_\" (par exemple, `compute_fft` ➝ `fft`)"
+
+msgid "Refactored `BaseProcessor` methods with clear naming:"
+msgstr "Méthodes `BaseProcessor` refactorisées avec des noms clairs :"
+
+msgid "`compute_1_to_1`, `compute_1_to_0`, `compute_1_to_n`, `compute_n_to_1`, `compute_2_to_1`"
+msgstr "`compute_1_to_1`, `compute_1_to_0`, `compute_1_to_n`, `compute_n_to_1`, `compute_2_to_1`"
+
+msgid "**No backward compatibility maintained** for these internal changes (closes [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180))"
+msgstr "**Aucune compatibilité ascendante n'est maintenue** pour ces modifications internes (ceci clôture [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180))"
+
+msgid "**Performance fixes:**"
+msgstr "**Corrections de performances :**"
+
+msgid "**Switching between images with many results**: Dramatic improvement (66s → <1ms) when navigating images with hundreds of shapes"
+msgstr "**Passage entre images avec de nombreux résultats** : Amélioration spectaculaire (66s → <1ms) lors de la navigation entre des images avec des centaines de formes"
+
+msgid "**Plot cleanup robustness**: Fixed errors when removing analysis results"
+msgstr "**Robustesse du nettoyage des graphiques** : Correction d'erreurs occasionnelles lors de la suppression des résultats d'analyse des graphiques"
+
+msgid "**Critical fix**: Result labels now properly excluded from cleanup to prevent disappearance"
+msgstr "**Correction critique** : Les éléments d'étiquette de résultat sont désormais correctement exclus du nettoyage pour éviter une suppression accidentelle"
+
+msgid "**Cross-panel & group handling:**"
+msgstr "**Gestion inter-panneaux et des groupes :**"
+
+msgid "**Cross-panel computation groups**: Fixed inconsistent group organization for image-to-signal operations"
+msgstr "**Groupes de calculs inter-panneaux** : Correction de l'organisation incohérente des groupes pour les opérations image vers signal"
+
+msgid "**File import ordering**: Consistent alphabetical sorting across all platforms"
+msgstr "**Ordre d'importation des fichiers** : Correction de l'ordre incohérent des fichiers entre les plateformes lors de l'importation d'images/signaux"
+
+msgid "**Action state updates:**"
+msgstr "**Mises à jour de l'état des actions :**"
+
+msgid "Fixed action enable states not updating after annotation/metadata operations"
+msgstr "Correction des états d'activation des actions ne se mettant pas à jour après les opérations d'annotation/métadonnées"
+
+msgid "UI now immediately reflects current object state"
+msgstr "L'interface utilisateur reflète désormais immédiatement l'état actuel de l'objet"
+
+msgid "**Result management:**"
+msgstr "**Gestion des résultats :**"
+
+msgid "Fixed result label deletion to permanently remove associated metadata"
+msgstr "Correction de la suppression des étiquettes de résultats pour supprimer définitivement les métadonnées associées"
+
+msgid "Fixed duplicate results parameter metadata cleanup"
+msgstr "Correction du nettoyage des métadonnées de paramètres de résultats en double"
+
+msgid "**Result coordinate fixes**: Corrected shifted results on images with ROIs and shifted origin ([Issue #106](https://github.com/DataLab-Platform/DataLab/issues/106))"
+msgstr "**Corrections des coordonnées des résultats** : Correction des résultats décalés sur les images avec des ROI et une origine décalée ([Issue #106](https://github.com/DataLab-Platform/DataLab/issues/106))"
+
+msgid "**Profile extraction indices**: Fixed wrong indices with ROI ([Issue #107](https://github.com/DataLab-Platform/DataLab/issues/107))"
+msgstr "**Indices d'extraction de profil** : Correction des indices erronés avec ROI ([Issue #107](https://github.com/DataLab-Platform/DataLab/issues/107))"
+
+msgid "**ROI-related fixes:**"
+msgstr "**Corrections liées aux ROI :**"
+
+msgid "Fixed multi-image ROI extraction not saving ROI in first object ([Issue #120](https://github.com/DataLab-Platform/DataLab/issues/120))"
+msgstr "Correction de l'extraction de ROI multi-image ne sauvegardant pas la ROI dans le premier objet ([Issue #120](https://github.com/DataLab-Platform/DataLab/issues/120))"
+
+msgid "Fixed AttributeError when extracting multiple ROIs on single image with multiple selections ([Issue #121](https://github.com/DataLab-Platform/DataLab/issues/121))"
+msgstr "Correction de l'AttributeError lors de l'extraction de plusieurs ROI sur une seule image avec plusieurs sélections ([Issue #121](https://github.com/DataLab-Platform/DataLab/issues/121))"
+
+msgid "Fixed mask refresh issues ([Issue #122](https://github.com/DataLab-Platform/DataLab/issues/122), [Issue #123](https://github.com/DataLab-Platform/DataLab/issues/123))"
+msgstr "Correction des problèmes de rafraîchissement du masque ([Issue #122](https://github.com/DataLab-Platform/DataLab/issues/122), [Issue #123](https://github.com/DataLab-Platform/DataLab/issues/123))"
+
+msgid "Fixed ROI editor on multiple signals/images ([Issue #135](https://github.com/DataLab-Platform/DataLab/issues/135))"
+msgstr "Correction de l'éditeur de ROI sur plusieurs signaux/images ([Issue #135](https://github.com/DataLab-Platform/DataLab/issues/135))"
+
+msgid "Fixed ROI clearing affecting only first image ([Issue #160](https://github.com/DataLab-Platform/DataLab/issues/160))"
+msgstr "Correction de l'effacement des ROI n'affectant que la première image ([Issue #160](https://github.com/DataLab-Platform/DataLab/issues/160))"
+
+msgid "Fixed ROI editor showing first instead of last image ([Issue #158](https://github.com/DataLab-Platform/DataLab/issues/158))"
+msgstr "Correction de l'éditeur de ROI affichant la première au lieu de la dernière image ([Issue #158](https://github.com/DataLab-Platform/DataLab/issues/158))"
+
+msgid "**Text Import Wizard:**"
+msgstr "**Assistant d'importation de texte :**"
+
+msgid "Fixed preservation of user-defined titles and units ([Issue #239](https://github.com/DataLab-Platform/DataLab/issues/239))"
+msgstr "Correction de la préservation des titres et unités définis par l'utilisateur ([Issue #239](https://github.com/DataLab-Platform/DataLab/issues/239))"
+
+msgid "Fixed preservation of data types ([Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240))"
+msgstr "Correction de la préservation des types de données ([Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240))"
+
+msgid "Fixed comma decimal separator support ([Issue #186](https://github.com/DataLab-Platform/DataLab/issues/186))"
+msgstr "Correction de la prise en charge du séparateur décimal virgule ([Issue #186](https://github.com/DataLab-Platform/DataLab/issues/186))"
+
+msgid "Fixed trailing delimiter issue ([Issue #238](https://github.com/DataLab-Platform/DataLab/issues/238))"
+msgstr "Correction du problème de délimiteur final ([Issue #238](https://github.com/DataLab-Platform/DataLab/issues/238))"
+
+msgid "**Curve fitting & analysis:**"
+msgstr "**Ajustement amélioré pour tous les types de courbes** :"
+
+msgid "Improved initial frequency estimate for sinusoidal fitting"
+msgstr "Amélioration de l'estimation initiale de la fréquence pour l'ajustement de courbe sinusoïdale."
+
+msgid "Fixed parameter display formatting for extreme values"
+msgstr "Correction du formatage d'affichage des paramètres pour les valeurs extrêmes"
+
+msgid "Fixed FWHM computation exception handling"
+msgstr "Correction de la gestion des exceptions de calcul FWHM"
+
+msgid "Fixed curve marker style changing unexpectedly ([Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184))"
+msgstr "Correction du changement inattendu du style de marqueur de courbe ([Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184))"
+
+msgid "Fixed hard crash on zero signal with curve stats tool ([Issue #233](https://github.com/DataLab-Platform/DataLab/issues/233))"
+msgstr "Correction du plantage brutal sur un signal nul avec l'outil de statistiques de courbe ([Issue #233](https://github.com/DataLab-Platform/DataLab/issues/233))"
+
+msgid "**Image handling:**"
+msgstr "**Gestion des images :**"
+
+msgid "Fixed aspect ratio not updating when switching images"
+msgstr "Correction du rapport d'aspect ne se mettant pas à jour lors du changement d'images"
+
+msgid "Fixed shape unpacking issues ([Issue #246](https://github.com/DataLab-Platform/DataLab/issues/246), [Issue #247](https://github.com/DataLab-Platform/DataLab/issues/247))"
+msgstr "Correction des problèmes de dépaquetage des formes ([Issue #246](https://github.com/DataLab-Platform/DataLab/issues/246), [Issue #247](https://github.com/DataLab-Platform/DataLab/issues/247))"
+
+msgid "Fixed colormaps not stored in metadata (PlotPy v2.6.3+ issue) ([Issue #138](https://github.com/DataLab-Platform/DataLab/issues/138))"
+msgstr "Correction des colormaps non stockées dans les métadonnées (problème PlotPy v2.6.3+) ([Issue #138](https://github.com/DataLab-Platform/DataLab/issues/138))"
+
+msgid "Fixed amplitude calculation for non-integer data types"
+msgstr "Correction du calcul de l'amplitude pour les types de données non entiers"
+
+msgid "Fixed ifft1d x-axis computation when shift=False ([Issue #241](https://github.com/DataLab-Platform/DataLab/issues/241))"
+msgstr "Correction du calcul de l'axe x pour ifft1d lorsque shift=False ([Issue #241](https://github.com/DataLab-Platform/DataLab/issues/241))"
+
+msgid "Fixed moving median crash on Linux with mirror mode ([Issue #117](https://github.com/DataLab-Platform/DataLab/issues/117)) - SciPy bug"
+msgstr "Correction du plantage du médian mobile sur Linux avec le mode miroir ([Issue #117](https://github.com/DataLab-Platform/DataLab/issues/117)) - bug SciPy"
+
+msgid "Fixed magnitude spectrum with logarithmic scale ([Issue #169](https://github.com/DataLab-Platform/DataLab/issues/169))"
+msgstr "Correction du spectre de magnitude avec échelle logarithmique ([Issue #169](https://github.com/DataLab-Platform/DataLab/issues/169))"
+
+msgid "Fixed pairwise operation mode for asymmetric functions ([Issue #157](https://github.com/DataLab-Platform/DataLab/issues/157))"
+msgstr "Correction du mode d'opération par paires pour les fonctions asymétriques ([Issue #157](https://github.com/DataLab-Platform/DataLab/issues/157))"
+
+msgid "**Analysis & results:**"
+msgstr "**Analyse et résultats :**"
+
+msgid "Fixed NaN value handling in statistics and normalization ([Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141), [Issue #152](https://github.com/DataLab-Platform/DataLab/issues/152), [Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153))"
+msgstr "Correction de la gestion des valeurs NaN dans les statistiques et la normalisation ([Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141), [Issue #152](https://github.com/DataLab-Platform/DataLab/issues/152), [Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153))"
+
+msgid "Fixed analysis results kept from original after processing ([Issue #136](https://github.com/DataLab-Platform/DataLab/issues/136))"
+msgstr "Correction des résultats d'analyse conservés de l'original après le traitement ([Issue #136](https://github.com/DataLab-Platform/DataLab/issues/136))"
+
+msgid "Fixed duplicate results with no ROI defined"
+msgstr "Correction des résultats en double lorsqu'aucune ROI n'est définie"
+
+msgid "Fixed \"One curve per result title\" mode ignoring ROIs ([Issue #132](https://github.com/DataLab-Platform/DataLab/issues/132))"
+msgstr "Correction du mode \"Une courbe par titre de résultat\" ignorant les ROI ([Issue #132](https://github.com/DataLab-Platform/DataLab/issues/132))"
+
+msgid "Added result validation for array-like results"
+msgstr "Ajout de la validation des résultats pour les résultats de type tableau"
+
+msgid "**Plot & visualization:**"
+msgstr "**Graphique et visualisation :**"
+
+msgid "Fixed profile plots not refreshing when moving/resizing ([Issue #172](https://github.com/DataLab-Platform/DataLab/issues/172)) - PlotPy fix"
+msgstr "Correction des tracés de profils ne se rafraîchissant pas lors du déplacement/redimensionnement ([Issue #172](https://github.com/DataLab-Platform/DataLab/issues/172)) - correction PlotPy"
+
+msgid "Fixed empty average profile display outside image area ([Issue #168](https://github.com/DataLab-Platform/DataLab/issues/168)) - PlotPy fix"
+msgstr "Correction de l'affichage du profil moyen vide en dehors de la zone de l'image ([Issue #168](https://github.com/DataLab-Platform/DataLab/issues/168)) - correction PlotPy"
+
+msgid "Fixed average profile extraction ValueError with oversized rectangle ([Issue #144](https://github.com/DataLab-Platform/DataLab/issues/144))"
+msgstr "Correction de la ValueError d'extraction de profil moyen avec un rectangle surdimensionné ([Issue #144](https://github.com/DataLab-Platform/DataLab/issues/144))"
+
+msgid "Disabled generic \"Axes\" tab in parameter dialogs"
+msgstr "Désactivation de l'onglet générique \"Axes\" dans les boîtes de dialogue des paramètres"
+
+msgid "**Other fixes:**"
+msgstr "**Autres corrections :**"
+
+msgid "Fixed proxy `add_object` method not supporting metadata ([Issue #111](https://github.com/DataLab-Platform/DataLab/issues/111))"
+msgstr "Correction de la méthode proxy `add_object` ne prenant pas en charge les métadonnées ([Issue #111](https://github.com/DataLab-Platform/DataLab/issues/111))"
+
+msgid "Fixed RemoteClient method calls without optional arguments ([Issue #113](https://github.com/DataLab-Platform/DataLab/issues/113))"
+msgstr "Correction des appels de méthode RemoteClient sans arguments optionnels ([Issue #113](https://github.com/DataLab-Platform/DataLab/issues/113))"
+
+msgid "Fixed KeyError when removing group after opening HDF5 ([Issue #116](https://github.com/DataLab-Platform/DataLab/issues/116))"
+msgstr "Correction du KeyError lors de la suppression d'un groupe après l'ouverture d'un HDF5 ([Issue #116](https://github.com/DataLab-Platform/DataLab/issues/116))"
+
+msgid "Fixed KeyError in \"View in new window\" with multiple images after HDF5 open ([Issue #159](https://github.com/DataLab-Platform/DataLab/issues/159))"
+msgstr "Correction du KeyError dans \"Afficher dans une nouvelle fenêtre\" avec plusieurs images après l'ouverture d'un HDF5 ([Issue #159](https://github.com/DataLab-Platform/DataLab/issues/159))"
+
+msgid "Fixed long object titles display ([Issue #128](https://github.com/DataLab-Platform/DataLab/issues/128))"
+msgstr "Correction de l'affichage des titres d'objets longs ([Issue #128](https://github.com/DataLab-Platform/DataLab/issues/128))"
+
+msgid "Fixed file name titles showing relative paths ([Issue #165](https://github.com/DataLab-Platform/DataLab/issues/165))"
+msgstr "Correction des titres de noms de fichiers affichant des chemins relatifs ([Issue #165](https://github.com/DataLab-Platform/DataLab/issues/165))"
+
+msgid "Fixed unexpected group names in \"Open from directory\" ([Issue #177](https://github.com/DataLab-Platform/DataLab/issues/177))"
+msgstr "Correction des noms de groupe inattendus dans \"Ouvrir depuis un répertoire\" ([Issue #177](https://github.com/DataLab-Platform/DataLab/issues/177))"
+
+msgid "Fixed one group per folder expectation ([Issue #163](https://github.com/DataLab-Platform/DataLab/issues/163))"
+msgstr "Correction de l'attente d'un groupe par dossier ([Issue #163](https://github.com/DataLab-Platform/DataLab/issues/163))"
+
+msgid "Fixed unsupported files in recursive loading ([Issue #164](https://github.com/DataLab-Platform/DataLab/issues/164))"
+msgstr "Correction des fichiers non pris en charge dans le chargement récursif ([Issue #164](https://github.com/DataLab-Platform/DataLab/issues/164))"
+
+msgid "**Removed features:**"
+msgstr "**Fonctionnalités supprimées :**"
+
+msgid "Removed \"Use reference image LUT range\" setting (confusing behavior)"
+msgstr "Suppression de l'option \"Utiliser la plage de LUT de l'image de référence\" :"
+
+msgid "**Migration**: Use multi-selection property editing instead"
+msgstr "**Stratégie de migration** : Utilisez plutôt le nouvel éditeur de propriétés de sélection multiple :"
+
+msgid "🔒 Security Fixes"
+msgstr "🔒 Corrections de sécurité :"
+
+msgid "**CVE-2023-4863**: Fixed vulnerability in opencv-python-headless"
+msgstr "**Correction de vulnérabilité de dépendance** : Correction de la vulnérabilité CVE-2023-4863 dans opencv-python-headless"
+
+msgid "Updated minimum requirement from 4.5.4.60 to 4.8.1.78"
+msgstr "Mise à jour de l'exigence minimale de 4.5.4.60 à 4.8.1.78"
+
+msgid "See [DataLab security advisory](https://github.com/DataLab-Platform/DataLab/security/dependabot/1)"
+msgstr "Voir l'[avis de sécurité DataLab](https://github.com/DataLab-Platform/DataLab/security/dependabot/1) pour plus de détails."
+
+msgid "ℹ️ Other Changes"
+msgstr "ℹ️ Autres changements :"
+
+msgid "Bumped minimum `plotpy` requirement to V2.8"
+msgstr "Dépendance `plotpy` mise à jour vers V2.8.0"
+
+msgid "Bumped minimum `guidata` requirement to V3.13"
+msgstr "Dépendance `guidata` mise à jour vers V3.13.0"
+
+msgid "Using new `guidata` translation utility based on `babel`"
+msgstr "Utilisation du nouvel utilitaire de traduction `guidata` basé sur `babel`"
+
+msgid "Python 3.13 now supported (via scikit-image V0.25)"
+msgstr "Python 3.13 désormais pris en charge (via scikit-image V0.25)"

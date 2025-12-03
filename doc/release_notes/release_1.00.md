@@ -1,0 +1,464 @@
+# Version 1.0 #
+
+## DataLab Version 1.1.0 (unreleased) ##
+
+### ✨ New Features ###
+
+**Proxy API:**
+
+* Added `remove_object()` method to proxy interface (local and remote) for selective object deletion
+  * Removes currently selected object from active panel
+  * Optional `force` parameter to skip confirmation dialog
+  * Complements existing `reset_all()` method which removes all objects
+
+## DataLab Version 1.0.2 (unreleased) ##
+
+### 🛠️ Bug Fixes ###
+
+**Signal axis calibration - Replace X by other signal's Y:**
+
+* Added new "Replace X by other signal's Y" operation in Processing > Axis transformation menu for signal calibration workflows
+* Addresses critical missing functionality reported by users who needed to apply wavelength calibration or similar transformations to spectroscopy data
+* The operation combines two signals: uses Y values from one signal as the new X coordinates for another signal's Y values
+* Unlike X-Y mode (which resamples and interpolates), this operation directly uses Y arrays without interpolation, preserving exact calibration values
+* Requires both signals to have the same number of points - raises clear error message if sizes don't match
+* Automatically transfers metadata: X axis label/unit taken from calibration signal's Y label/unit
+* Menu location: Processing > Axis transformation > "Replace X by other signal's Y"
+* This closes [Issue #273](https://github.com/datalab-platform/datalab/issues/273) - Missing signal axis calibration: no way to replace X with Y from another signal
+
+**X-Y mode:**
+
+* The X-Y mode processing operation for signals has been moved to Processing > Axis transformation > "X-Y mode" for better discoverability
+* The nuance between X-Y mode (which resamples/interpolates) and the new "Replace X by other signal's Y" operation has been clarified in documentation
+
+**Lock LUT setting persistence:**
+
+* Fixed "Lock LUT range when updating data" setting not persisting in Settings > Visualization > Images > Default Image visualization settings
+* The `keep_lut_range` parameter was not being saved to configuration, causing the checkbox to systematically uncheck itself after validation (added missing `ima_def_keep_lut_range` option in configuration)
+* This closes [Issue #270](https://github.com/datalab-platform/datalab/issues/270) - Lock LUT setting not persisting in image visualization defaults
+
+**Custom signal creation:**
+
+* Fixed `AttributeError: 'NoneType' object has no attribute 'T'` error when creating a custom signal from the menu
+* This closes [Issue #269](https://github.com/datalab-platform/datalab/issues/269) - Custom Signal Creation: `AttributeError` when creating signal from menu
+
+**Macro execution:**
+
+* Fixed `UnicodeEncodeError` when executing macros that print Unicode characters (e.g., arrows `→`) on Windows systems with certain locales, e.g. cp1252 (closes [Issue #263](https://github.com/datalab-platform/datalab/issues/263))
+* The macro subprocess now automatically uses UTF-8 encoding for stdout and stderr, eliminating the need to manually add `sys.stdout.reconfigure(encoding='utf-8')` at the beginning of each macro.
+
+**ROI coordinate precision:**
+
+* ROI coordinates are now automatically rounded to appropriate precision when defining ROIs interactively from geometrical shapes, avoiding excessive decimal places while maintaining reasonable precision relative to data sampling (1/10th of sampling period for signals, 1/10th of pixel spacing for images)
+* ROI coordinates are also rounded when displaying them in the "Edit numerically" dialog, preventing floating-point arithmetic errors from showing excessive decimal places (e.g., 172.29999999999995 is now displayed as 172.3)
+* This closes [Issue #266](https://github.com/datalab-platform/datalab/issues/266) - Excessive decimal places in ROI coordinates
+
+**Polygonal ROI handling:**
+
+* Fixed `ValueError: Buffer has wrong number of dimensions` error when creating masks from polygonal ROIs in the ROI editor
+* The PolygonalTool was incorrectly initializing ROI coordinates as a nested list instead of a flat list, causing mask computation to fail
+
+**HDF5 file opening dialog:**
+
+* Fixed bug where user's choice in the "clear workspace" confirmation dialog was ignored when opening HDF5 files
+* When the user clicked "No" in the dialog, the default configuration setting was applied instead of respecting the user's choice
+* This closes [Issue #267](https://github.com/datalab-platform/datalab/issues/267) - HDF5 file opening dialog ignores user's choice
+
+**Creation tab axis update:**
+
+* Fixed plot not updating when modifying only xmin/xmax parameters for distribution signals (Zero, Normal, Poisson, Uniform) in the Creation tab
+* The issue occurred because the data hash calculation only considered Y values, so changes to X axis bounds were not detected
+* Plot now properly refreshes when any axis parameter changes, even if Y values remain identical
+* This closes [Issue #268](https://github.com/datalab-platform/datalab/issues/268) - Creation tab axis not updating for distribution signals
+
+**ROI statistics with out-of-bounds ROI:**
+
+* Fixed `ValueError: zero-size array to reduction operation minimum which has no identity` error when computing statistics on images with ROI extending beyond canvas boundaries
+* The issue occurred when a ROI partially or completely extended outside the image bounds, resulting in empty array slices during statistics computation
+* ROI bounding boxes are now properly clipped to image boundaries, and fully out-of-bounds ROIs return NaN statistics values
+* This fix is implemented in Sigima library (see [Issue #1](https://github.com/DataLab-Platform/Sigima/issues/1) - `ValueError` when computing statistics on ROI extending beyond image boundaries)
+
+**Object property panel tab selection:**
+
+* Fixed tab selection behavior in object properties panel to be more predictable and user-friendly
+* Properties tab is now always shown by default when switching between objects, providing consistent navigation
+* Creation, Processing, and Analysis tabs now appear automatically only once after their respective triggering events (object creation, 1-to-1 processing, or analysis computation), then revert to Properties tab for subsequent selections
+* This eliminates the confusing behavior where the tab would arbitrarily persist or change based on previous selections
+* This closes [Issue #271](https://github.com/datalab-platform/datalab/issues/271) - Improve object property panel tab selection behavior
+
+## DataLab Version 1.0.1 (2025-11-18) ##
+
+This major release represents a significant milestone for DataLab with numerous enhancements across all areas. The changes are organized by category for easier navigation.
+
+> **Note**: Version 1.0.1 is a patch release that addresses Windows installer limitations in version 1.0.0 (released 2025-11-16), where it was not possible to install DataLab V1.0 alongside earlier major versions (V0.20 and earlier) despite the intended coexistence support. This release contains no new features or functional changes.
+
+### 🎨 User Interface & Workflow ###
+
+**Menu reorganization:**
+
+* **New "Create" menu**: Separated object creation functionality from the "File" menu, placed between "File" and "Edit" menus for clearer organization
+  * All "File > New [...]" actions moved to "Create" menu
+  * **Migration note**: Find signal/image creation actions in the new "Create" menu
+* **New "ROI" menu**: Dedicated menu for Region of Interest management, positioned between "Edit" and "Operations" menus
+* **New "Annotations" submenu**: Consolidated annotation operations in the "Edit" menu
+* **New "Metadata" submenu**: Grouped all metadata operations in the "Edit" menu
+
+**Interactive object editing:**
+
+* **Interactive object creation**: Creation parameters can be modified after object creation via new "Creation" tab in properties panel
+  * Apply changes without creating new objects, preserving subsequent processing
+  * Available for parametric generators (Gaussian, sine, etc.)
+* **Interactive 1-to-1 processing**: Processing parameters can be adjusted and reapplied via new "Processing" tab
+  * Update result objects in-place with modified parameters
+  * Only for parametric operations (filters, morphology, etc.)
+* **Recompute feature**: New "Recompute" action (Ctrl+R) to quickly reprocess objects with stored parameters
+  * Works with single or multiple objects
+  * Automatically updates results when source data changes
+* **Automatic ROI analysis update**: Analysis results automatically recalculate when ROI is modified
+  * Works for all analysis operations (statistics, centroid, etc.)
+  * Silent background recomputation for immediate feedback
+* **Select source objects**: Navigate to source objects used in processing via new "Edit" menu action
+  * Handles all processing patterns (1-to-1, 2-to-1, n-to-1)
+  * Shows informative messages if sources no longer exist
+* **Processing history**: New "History" tab displays object processing lineage as hierarchical tree
+  * Shows complete processing chain from creation to current state
+  * Selectable text for documentation purposes
+
+**Multi-object property editing:**
+
+* Apply property changes to multiple selected objects simultaneously
+* Only modified properties are applied, preserving unchanged individual settings
+* Typical use case: Adjust LUT boundaries or colormap for multiple images at once
+
+**Dialog sizing improvements:**
+
+* Processing dialogs now intelligently resize based on main window size
+* Never exceed main window dimensions for better user experience
+
+**Internal console indicator:**
+
+* Status bar indicator shows console status when hidden
+* Turns red on errors/warnings to alert users
+* Click to open console
+
+### 🎬 New Object Creation Features ###
+
+**Parametric signal generators:**
+
+* Linear chirp, logistic function, Planck function
+* Generate signals with Poisson noise
+
+**Parametric image generators:**
+
+* **Checkerboard**: Calibration pattern with configurable square size and light/dark values
+* **Sinusoidal grating**: Frequency response testing with independent X/Y spatial frequencies
+* **Ring pattern**: Concentric circular rings for radial analysis and PSF testing
+* **Siemens star**: Resolution testing with radial spokes and configurable radius
+* **2D sinc**: Cardinal sine function for PSF modeling and diffraction simulation
+* **2D ramp**: New ramp image generator
+* **Poisson noise**: Generate images with Poisson noise distribution
+
+**Signal/image creation from operations:**
+
+* Create complex-valued signal/image from real and imaginary parts
+* Create complex-valued signal/image from magnitude and phase (closes [Issue #216](https://github.com/DataLab-Platform/DataLab/issues/216))
+* Extract phase (argument) information from complex signals or images
+
+### 🔬 Data Processing & Analysis ###
+
+**Signal processing:**
+
+* **Enhanced curve fitting**: Significantly improved parameter estimation for all curve types (Gaussian, Lorentzian, Voigt, exponential, sinusoidal, Planckian, asymmetric peaks, CDF)
+  * Smarter initial parameter guesses for robust convergence
+  * **Locked parameter support**: Lock individual parameters during optimization (requires PlotPy v2.8.0)
+* **X-array compatibility checking**: Comprehensive validation for multi-signal operations with automatic interpolation options
+  * New configuration setting: Ask user or interpolate automatically
+  * Prevents unexpected results from incompatible signal arrays
+* **Zero padding enhancements**: Support for prepending and appending zeros, default strategy now "Next power of 2"
+* **Ideal frequency domain filter**: "Brick wall filter" for signals (closes [Issue #215](https://github.com/DataLab-Platform/DataLab/issues/215))
+* **Bandwidth at -3dB**: Enhanced to support passband bandwidth
+* **Pulse features extraction**: Comprehensive pulse analysis for step and square signals
+  * Automated shape recognition and polarity detection
+  * Measures amplitude, rise/fall time, FWHM, timing parameters, baseline ranges
+* **Frequency domain filters**: Deconvolution and Gaussian filter (closes [Issue #189](https://github.com/DataLab-Platform/DataLab/issues/189), [Issue #205](https://github.com/DataLab-Platform/DataLab/issues/205))
+* **Coordinate transformations**: Convert to Cartesian/polar coordinates
+* **X-Y mode**: Simulate oscilloscope X-Y mode (plot one signal vs. another)
+* **Find operations**: First abscissa at y=..., ordinate at x=..., full width at y=...
+* **`1/x` operation**: Reciprocal operation with NaN handling for zero denominators
+
+**Image processing:**
+
+* **2D resampling**: Resample images to new coordinate grids with multiple interpolation methods (closes [Issue #208](https://github.com/DataLab-Platform/DataLab/issues/208))
+* **Convolution**: 2D convolution operation
+* **Erase area**: Erase image areas defined by ROI (closes [Issue #204](https://github.com/DataLab-Platform/DataLab/issues/204))
+* **Horizontal/vertical projections**: Sum of pixels along axes (closes [Issue #209](https://github.com/DataLab-Platform/DataLab/issues/209))
+* **Improved centroid computation**: More accurate in challenging cases (truncated/asymmetric images) (see [Issue #251](https://github.com/DataLab-Platform/DataLab/issues/251))
+* **Flip diagonally**: New geometric transformation
+* **`1/x` operation**: Reciprocal operation for images
+
+**Cross-panel operations:**
+
+* **Signals to image conversion**: Combine multiple signals into 2D images
+  * Two orientation modes: as rows (spectrograms) or columns (waterfall displays)
+  * Optional normalization (Z-score, Min-Max, Maximum)
+  * Typical use cases: heatmaps, spectrograms, multi-channel data visualization
+
+**Common features:**
+
+* **Standard deviation**: Calculate across multiple signals/images (closes [Issue #196](https://github.com/DataLab-Platform/DataLab/issues/196))
+* **Add noise**: Add Gaussian, Poisson, or uniform noise (closes [Issue #201](https://github.com/DataLab-Platform/DataLab/issues/201))
+* **Add metadata**: Add custom metadata with pattern support (`{title}`, `{index}`, etc.) and type conversion
+
+### 📐 ROI & Annotation Management ###
+
+**ROI features:**
+
+* **ROI clipboard operations**: Copy/paste ROIs between objects
+* **ROI import/export**: Save/load ROIs as JSON files
+* **Individual ROI removal**: Remove ROIs selectively via "Remove" submenu
+* **ROI title editing**: Set titles during interactive creation and in confirmation dialog
+* **Create ROI grid**: Generate grid of ROIs with configurable rows, columns, and spacing
+  * Import/export grid configurations
+  * Preview before creation
+* **Inverse ROI logic**: Select area outside defined shapes (images only)
+* **Coordinate-based ROI creation**: Manual input of coordinates for rectangular and circular ROIs
+* **Multi-object ROI editing**: Edit ROIs on multiple objects simultaneously
+
+**Annotation features:**
+
+* **Annotation clipboard**: Copy/paste annotations between objects
+* **Edit annotations**: Interactive editor dialog with PlotPy tools
+* **Import/export annotations**: Save/load as .dlabann JSON files with versioning
+* **Delete annotations**: Remove from single or multiple objects with confirmation
+* **Annotations independent from ROI**: Can coexist on same object
+
+**Detection with ROI creation:**
+
+* All 7 detection algorithms now support automatic ROI creation:
+  * Peak detection, contour shape, blob detection (DOG/DOH/LOG/OpenCV), Hough circle
+* **ROI geometry choice**: Rectangular or circular ROIs
+* **2D peak detection**: Option to choose ROI geometry (closes related requirements)
+
+### 📊 Visualization & Display ###
+
+**Performance & display limits:**
+
+* **Configurable result display limits**: Prevent UI freezing with large result sets
+  * `max_shapes_to_draw` (default: 1,000), `max_cells_in_label` (default: 100), `max_cols_in_label` (default: 15)
+  * Settings documented with performance implications
+* **Faster contour rendering**: Over 5x performance improvement for contour display
+* **Signal rendering optimization**: Smart linewidth clamping for large datasets
+  * New setting: "Line width performance threshold" (default: 1,000 points)
+  * Prevents 10x slowdown from Qt raster engine limitation
+
+**Result visualization:**
+
+* **Merged result labels**: All analysis results consolidated in single read-only label
+  * Reduces visual clutter, auto-updates, horizontally divided results
+* **Result label visibility control**: Toggle visibility via Properties panel checkbox
+  * Default visibility configurable in Settings
+* **Results group organization**: Plot results automatically organized in dedicated "Results" group
+* **Comprehensive result titles**: Include source object identifiers (e.g., "FWHM (s001, s002, s003)")
+* **Individual result deletion**: Remove results selectively via Analysis menu
+* **Customizable shape/marker styles**: Four new style configuration buttons in Settings
+  * Separate styles for signals and images
+  * Interactive editor with comprehensive options
+  * Persistent configuration with refresh on change
+
+**Enhanced profile extraction:**
+
+* Click directly on X/Y profile plots to switch extraction direction
+* No need to open parameters dialog for direction changes
+* Improves workflow efficiency (closes [Issue #156](https://github.com/DataLab-Platform/DataLab/issues/156))
+
+**DateTime signal support:**
+
+* Automatic datetime detection in CSV files
+* **Datetime axis formatting**: Human-readable timestamps on X-axis
+* **Configurable formats**: Separate formats for standard and sub-second units
+* Supports various time units (seconds, milliseconds, microseconds, minutes, hours)
+* Closes [Issue #258](https://github.com/DataLab-Platform/DataLab/issues/258)
+
+**Settings:**
+
+* **Autoscale margins**: Configurable margins (0-50%) for signal/image plots
+* **Lock image aspect ratio**: Option for 1:1 aspect ratio (default: use physical pixel size) (closes [Issue #244](https://github.com/DataLab-Platform/DataLab/issues/244))
+* **Show console on error**: Configurable behavior (default: off)
+
+**Image extent parameters:**
+
+* New "Extent" group box showing computed Xmin, Xmax, Ymin, Ymax
+* Automatically calculated from origin, pixel spacing, and dimensions
+
+### 📁 Import/Export & File Handling ###
+
+**New file format support:**
+
+* **FT-Lab signals and images**: CEA binary formats (.sig, .ima) (closes [Issue #211](https://github.com/DataLab-Platform/DataLab/issues/211))
+* **Coordinated text files**: Real and complex-valued images with error images (similar to Matris format)
+  * Automatic NaN handling, metadata with units and labels
+
+**Enhanced HDF5 support:**
+
+* **Custom file extensions**: Intelligent HDF5 detection by content (not just extension)
+  * Extension-based detection for dialogs, content-based for drag-and-drop
+  * "All files (*)" option in file dialogs
+* **HDF5 Browser improvements**: Default collapsed tree view for better navigation
+* **Workspace clearing options**: Configurable behavior with "Ignore" option (closes [Issue #146](https://github.com/DataLab-Platform/DataLab/issues/146))
+
+**Text file improvements:**
+
+* **CSV delimiter handling**: Better support for various whitespace separators
+* **Locale decimal separator**: Support for comma as decimal separator (closes [Issue #124](https://github.com/DataLab-Platform/DataLab/issues/124))
+* **Encoding error tolerance**: Ignore errors for files with special characters
+* **Header detection**: Automatic detection and skipping of data headers
+
+**Other I/O features:**
+
+* **Save to directory**: New feature (closes [Issue #227](https://github.com/DataLab-Platform/DataLab/issues/227))
+* **Open from directory**: Recursively open multiple files with folder drag-and-drop support
+* **File ordering**: Consistent alphabetical sorting across platforms
+
+### 🔧 Advanced Features ###
+
+**Non-uniform coordinate support:**
+
+* Images now support non-uniform pixel spacing
+* "Set uniform coordinates" feature for conversion
+* **Polynomial calibration**: Up to cubic order for X, Y, Z axes
+  * Creates non-uniform coordinates for X/Y, transforms values for Z
+* HDF5 and text file formats preserve non-uniform information
+
+**Group management:**
+
+* **Panel-specific short IDs**: `gs` prefix for signals, `gi` prefix for images
+  * Avoids ambiguity in cross-panel operations
+* Fixed group numbering for new groups
+
+**Configuration:**
+
+* **Version-specific folders**: Major version coexistence (`.DataLab_v1`, `.DataLab_v2`, etc.)
+  * Allows v0.x and v1.x to run simultaneously
+
+**Public API & Remote Control:**
+
+* Enhanced metadata handling with function name context
+* `add_group`, `add_signal`, `add_image` methods with `group_id` and `set_current` arguments
+* `get_object_uuids` with optional `group` filter
+* Multiple API improvements for better programmability
+
+**Processing infrastructure (for developers):**
+
+* New `@computation_function` decorator for computation functions
+* Renamed computation functions (removed "compute_" prefix)
+* Refactored `BaseProcessor` methods with clear naming:
+  * `compute_1_to_1`, `compute_1_to_0`, `compute_1_to_n`, `compute_n_to_1`, `compute_2_to_1`
+* **No backward compatibility maintained** for these internal changes (closes [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180))
+
+### 🛠️ Bug Fixes ###
+
+**Performance fixes:**
+
+* **Switching between images with many results**: Dramatic improvement (66s → <1ms) when navigating images with hundreds of shapes
+* **Plot cleanup robustness**: Fixed errors when removing analysis results
+* **Critical fix**: Result labels now properly excluded from cleanup to prevent disappearance
+
+**Cross-panel & group handling:**
+
+* **Cross-panel computation groups**: Fixed inconsistent group organization for image-to-signal operations
+* **File import ordering**: Consistent alphabetical sorting across all platforms
+
+**Action state updates:**
+
+* Fixed action enable states not updating after annotation/metadata operations
+* UI now immediately reflects current object state
+
+**Result management:**
+
+* Fixed result label deletion to permanently remove associated metadata
+* Fixed duplicate results parameter metadata cleanup
+* **Result coordinate fixes**: Corrected shifted results on images with ROIs and shifted origin ([Issue #106](https://github.com/DataLab-Platform/DataLab/issues/106))
+* **Profile extraction indices**: Fixed wrong indices with ROI ([Issue #107](https://github.com/DataLab-Platform/DataLab/issues/107))
+
+**ROI-related fixes:**
+
+* Fixed multi-image ROI extraction not saving ROI in first object ([Issue #120](https://github.com/DataLab-Platform/DataLab/issues/120))
+* Fixed AttributeError when extracting multiple ROIs on single image with multiple selections ([Issue #121](https://github.com/DataLab-Platform/DataLab/issues/121))
+* Fixed mask refresh issues ([Issue #122](https://github.com/DataLab-Platform/DataLab/issues/122), [Issue #123](https://github.com/DataLab-Platform/DataLab/issues/123))
+* Fixed ROI editor on multiple signals/images ([Issue #135](https://github.com/DataLab-Platform/DataLab/issues/135))
+* Fixed ROI clearing affecting only first image ([Issue #160](https://github.com/DataLab-Platform/DataLab/issues/160))
+* Fixed ROI editor showing first instead of last image ([Issue #158](https://github.com/DataLab-Platform/DataLab/issues/158))
+
+**Text Import Wizard:**
+
+* Fixed preservation of user-defined titles and units ([Issue #239](https://github.com/DataLab-Platform/DataLab/issues/239))
+* Fixed preservation of data types ([Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240))
+* Fixed comma decimal separator support ([Issue #186](https://github.com/DataLab-Platform/DataLab/issues/186))
+* Fixed trailing delimiter issue ([Issue #238](https://github.com/DataLab-Platform/DataLab/issues/238))
+
+**Curve fitting & analysis:**
+
+* Improved initial frequency estimate for sinusoidal fitting
+* Fixed parameter display formatting for extreme values
+* Fixed FWHM computation exception handling
+* Fixed curve marker style changing unexpectedly ([Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184))
+* Fixed hard crash on zero signal with curve stats tool ([Issue #233](https://github.com/DataLab-Platform/DataLab/issues/233))
+
+**Image handling:**
+
+* Fixed aspect ratio not updating when switching images
+* Fixed shape unpacking issues ([Issue #246](https://github.com/DataLab-Platform/DataLab/issues/246), [Issue #247](https://github.com/DataLab-Platform/DataLab/issues/247))
+* Fixed colormaps not stored in metadata (PlotPy v2.6.3+ issue) ([Issue #138](https://github.com/DataLab-Platform/DataLab/issues/138))
+* Fixed amplitude calculation for non-integer data types
+
+**Signal processing:**
+
+* Fixed ifft1d x-axis computation when shift=False ([Issue #241](https://github.com/DataLab-Platform/DataLab/issues/241))
+* Fixed moving median crash on Linux with mirror mode ([Issue #117](https://github.com/DataLab-Platform/DataLab/issues/117)) - SciPy bug
+* Fixed magnitude spectrum with logarithmic scale ([Issue #169](https://github.com/DataLab-Platform/DataLab/issues/169))
+* Fixed pairwise operation mode for asymmetric functions ([Issue #157](https://github.com/DataLab-Platform/DataLab/issues/157))
+
+**Analysis & results:**
+
+* Fixed NaN value handling in statistics and normalization ([Issue #141](https://github.com/DataLab-Platform/DataLab/issues/141), [Issue #152](https://github.com/DataLab-Platform/DataLab/issues/152), [Issue #153](https://github.com/DataLab-Platform/DataLab/issues/153))
+* Fixed analysis results kept from original after processing ([Issue #136](https://github.com/DataLab-Platform/DataLab/issues/136))
+* Fixed duplicate results with no ROI defined
+* Fixed "One curve per result title" mode ignoring ROIs ([Issue #132](https://github.com/DataLab-Platform/DataLab/issues/132))
+* Added result validation for array-like results
+
+**Plot & visualization:**
+
+* Fixed profile plots not refreshing when moving/resizing ([Issue #172](https://github.com/DataLab-Platform/DataLab/issues/172)) - PlotPy fix
+* Fixed empty average profile display outside image area ([Issue #168](https://github.com/DataLab-Platform/DataLab/issues/168)) - PlotPy fix
+* Fixed average profile extraction ValueError with oversized rectangle ([Issue #144](https://github.com/DataLab-Platform/DataLab/issues/144))
+* Disabled generic "Axes" tab in parameter dialogs
+
+**Other fixes:**
+
+* Fixed proxy `add_object` method not supporting metadata ([Issue #111](https://github.com/DataLab-Platform/DataLab/issues/111))
+* Fixed RemoteClient method calls without optional arguments ([Issue #113](https://github.com/DataLab-Platform/DataLab/issues/113))
+* Fixed KeyError when removing group after opening HDF5 ([Issue #116](https://github.com/DataLab-Platform/DataLab/issues/116))
+* Fixed KeyError in "View in new window" with multiple images after HDF5 open ([Issue #159](https://github.com/DataLab-Platform/DataLab/issues/159))
+* Fixed long object titles display ([Issue #128](https://github.com/DataLab-Platform/DataLab/issues/128))
+* Fixed file name titles showing relative paths ([Issue #165](https://github.com/DataLab-Platform/DataLab/issues/165))
+* Fixed unexpected group names in "Open from directory" ([Issue #177](https://github.com/DataLab-Platform/DataLab/issues/177))
+* Fixed one group per folder expectation ([Issue #163](https://github.com/DataLab-Platform/DataLab/issues/163))
+* Fixed unsupported files in recursive loading ([Issue #164](https://github.com/DataLab-Platform/DataLab/issues/164))
+
+**Removed features:**
+
+* Removed "Use reference image LUT range" setting (confusing behavior)
+  * **Migration**: Use multi-selection property editing instead
+
+### 🔒 Security Fixes ###
+
+* **CVE-2023-4863**: Fixed vulnerability in opencv-python-headless
+  * Updated minimum requirement from 4.5.4.60 to 4.8.1.78
+  * See [DataLab security advisory](https://github.com/DataLab-Platform/DataLab/security/dependabot/1)
+
+### ℹ️ Other Changes ###
+
+* Bumped minimum `plotpy` requirement to V2.8
+* Bumped minimum `guidata` requirement to V3.13
+* Using new `guidata` translation utility based on `babel`
+* Python 3.13 now supported (via scikit-image V0.25)

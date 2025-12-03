@@ -1136,7 +1136,7 @@ msgid ":py:func:`calibration <sigima.proc.image.calibration>`"
 msgstr ""
 
 msgid "Compute polynomial calibration"
-msgstr "Calculer la calibration polynomiale"
+msgstr "Calculer l'étalonnage polynomial"
 
 msgid "`test_image_calibration <https://github.com/DataLab-Platform/Sigima/blob/v1.0.2/sigima/tests/image/geometry_unit_test.py#L548>`_"
 msgstr ""
@@ -1948,4 +1948,3 @@ msgstr ""
 
 msgid "`test_image_zero_padding <https://github.com/DataLab-Platform/Sigima/blob/v1.0.2/sigima/tests/image/fft2d_unit_test.py#L50>`_"
 msgstr ""
-

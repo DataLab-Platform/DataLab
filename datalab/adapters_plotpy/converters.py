@@ -39,11 +39,13 @@ def plotitem_to_singleroi(
     | AnnotatedRectangle
     | AnnotatedCircle
     | AnnotatedPolygon,
+    obj: SignalObj | ImageObj | None = None,
 ) -> SegmentROI | RectangularROI | CircularROI | PolygonalROI:
     """Create a single ROI from the given PlotPy item to integrate with DataLab
 
     Args:
         plot_item: The PlotPy item for which to create a single ROI
+        obj: Optional signal or image object for coordinate rounding
 
     Returns:
         A single ROI instance
@@ -66,7 +68,7 @@ def plotitem_to_singleroi(
         adapter = PolygonalROIPlotPyAdapter
     else:
         raise TypeError(f"Unsupported PlotPy item type: {type(plot_item)}")
-    return adapter.from_plot_item(plot_item)
+    return adapter.from_plot_item(plot_item, obj)
 
 
 def singleroi_to_plotitem(

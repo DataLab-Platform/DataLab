@@ -1,0 +1,154 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-03 16:26+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Version 0.12"
+msgstr ""
+
+msgid "DataLab Version 0.12.0 (2024-02-16)"
+msgstr "DataLab Version 0.12.0 (16/02/2024)"
+
+msgid "🧹 Clarity-Enhanced Interface Update:"
+msgstr "🧹 Clarification de certains libellés des interfaces graphiques :"
+
+msgid "The tabs used to switch between the data panels (signals and images) and the visualization components (\"Curve panel\" and \"Image panel\") have been renamed to \"Signal Panel\" and \"Image Panel\" (instead of \"Signals\" and \"Images\")"
+msgstr "Les onglets utilisés pour basculer entre les panneaux de données (signaux et images) et les composants de visualisation (\"Panneau de courbes\" et \"Panneau d'images\") ont été renommés en \"Panneau Signal\" et \"Panneau Image\" (au lieu de \"Signaux\" et \"Images\")"
+
+msgid "The visualization components have been renamed to \"Signal View\" and \"Image View\" (instead of \"Curve panel\" and \"Image panel\")"
+msgstr "Les composants de visualisation ont été renommés en \"Vue Signal\" et \"Vue Image\" (au lieu de \"Panneau de courbes\" et \"Panneau d'images\")"
+
+msgid "The data panel toolbar has been renamed to \"Signal Toolbar\" and \"Image Toolbar\" (instead of \"Signal Processing Toolbar\" and \"Image Processing Toolbar\")"
+msgstr "Les barres d'outils des panneaux de données ont été renommées en \"Barre d'outils Signal\" et \"Barre d'outils Image\" (au lieu de \"Barre d'outils Traitement du Signal\" et \"Barre d'outils Traitement d'Image\")"
+
+msgid "Ergonomics improvements: the \"Signal Panel\" and \"Image Panel\" are now displayed on the left side of the main window, and the \"Signal View\" and \"Image View\" are displayed on the right side of the main window. This reduces the distance between the list of objects (signals and images) and the associated actions (toolbars and menus), and makes the interface more intuitive and easier to use"
+msgstr "Améliorations ergonomiques : le \"Panneau Signal\" et le \"Panneau Image\" sont désormais affichés sur le côté gauche de la fenêtre principale, et la \"Vue Signal\" et la \"Vue Image\" sont affichées sur le côté droit de la fenêtre principale. Cela réduit la distance entre la liste des objets (signaux et images) et les actions associées (barres d'outils et menus), et rend l'interface plus intuitive et plus facile à utiliser"
+
+msgid "✨ New tour and demo feature:"
+msgstr "✨ Nouvelle fonctionnalité de visite guidée et de démonstration :"
+
+msgid "When starting DataLab for the first time, an optional tour is now shown to the user to introduce the main features of the application"
+msgstr "Lors du premier démarrage de DataLab, une visite guidée est désormais affichée à l'utilisateur pour présenter les principales fonctionnalités de l'application"
+
+msgid "The tour can be started again at any time from the \"?\" menu"
+msgstr "La visite guidée peut être relancée à tout moment depuis le menu \"?\""
+
+msgid "Also added a new \"Demo\" feature to the \"?\" menu"
+msgstr "Ajout d'une nouvelle fonctionnalité \"Démonstration\" dans le menu \"?\""
+
+msgid "🚀 New Binder environment to test DataLab online without installing anything"
+msgstr "🚀 Nouvel environnement Binder pour tester DataLab en ligne sans rien installer"
+
+msgid "📚 Documentation:"
+msgstr "📚 Documentation :"
+
+msgid "New text tutorials are available:"
+msgstr "De nouveaux tutoriels textuels sont disponibles :"
+
+msgid "Measuring Laser Beam Size"
+msgstr "Mesure de la taille d'un faisceau laser"
+
+msgid "DataLab and Spyder: a perfect match"
+msgstr "DataLab et Spyder : un mariage parfait"
+
+msgid "\"Getting started\" section: added more explanations and links to the tutorials"
+msgstr "Section \"Premiers pas\" : ajout de plus d'explications et de liens vers les tutoriels"
+
+msgid "New \"Contributing\" section explaining how to contribute to DataLab, whether you are a developer or not"
+msgstr "Nouvelle section \"Contribuer\" expliquant comment contribuer à DataLab, que vous soyez développeur ou non"
+
+msgid "New \"Macros\" section explaining how to use the macro commands feature"
+msgstr "Nouvelle section \"Macros\" expliquant comment utiliser la fonctionnalité de macro-commandes"
+
+msgid "Added \"Copy\" button to code blocks in the documentation"
+msgstr "Ajout du bouton \"Copier\" aux blocs de code dans la documentation"
+
+msgid "💥 New features:"
+msgstr "💥 Nouvelles fonctionnalités :"
+
+msgid "New \"Text file import assistant\" feature:"
+msgstr "Nouvelle fonctionnalité d'assistant d'importation de fichiers texte :"
+
+msgid "This feature allows to import text files as signals or images"
+msgstr "Cette fonctionnalité permet d'importer des fichiers texte en tant que signaux ou images"
+
+msgid "The user can define the source (clipboard or texte file)"
+msgstr "L'utilisateur peut définir la source (presse-papiers ou fichier texte)"
+
+msgid "Then, it is possible to define the delimiter, the number of rows to skip, the destination data type, etc."
+msgstr "Ensuite, il est possible de définir le délimiteur, le nombre de lignes à sauter, le type de données de destination, etc."
+
+msgid "Added menu on the \"Signal Panel\" and \"Image Panel\" tabs corner to quickly access the most used features (e.g. \"Add\", \"Remove\", \"Duplicate\", etc.)"
+msgstr "Ajout d'un menu dans le coin des onglets \"Panneau Signal\" et \"Panneau Image\" pour accéder rapidement aux fonctionnalités les plus utilisées (par exemple \"Ajouter\", \"Supprimer\", \"Dupliquer\", etc.)"
+
+msgid "Intensity profile extraction feature:"
+msgstr "Fonctionnalité d'extraction de profil d'intensité :"
+
+msgid "Added graphical user interface to extract intensity profiles from images, for both line and averaged profiles"
+msgstr "Ajout d'une interface graphique pour extraire des profils d'intensité des images, pour les profils linéaires et moyennés"
+
+msgid "Parameters are still directly editable by the user (\"Edit profile parameters\" button)"
+msgstr "Les paramètres sont toujours directement modifiables par l'utilisateur (bouton \"Modifier les paramètres du profil\")"
+
+msgid "Parameters are now stored from one profile extraction to another"
+msgstr "Les paramètres sont désormais stockés d'une extraction de profil à l'autre"
+
+msgid "Statistics feature:"
+msgstr "Fonctionnalité de statistiques :"
+
+msgid "Added `<y>/σ(y)` to the signal \"Statistics\" result table (in addition to the mean, median, standard deviation, etc.)"
+msgstr "Ajout de `<y>/σ(y)` au tableau de résultats \"Statistiques\" du signal (en plus de la moyenne, de la médiane, de l'écart-type, etc.)"
+
+msgid "Added `peak-to-peak` to the signal and image \"Statistics\" result table"
+msgstr "Ajout de `peak-to-peak` au tableau de résultats \"Statistiques\" du signal et de l'image"
+
+msgid "Curve fitting feature: fit results are now stored in a dictionary in the signal metadata (instead of being stored individually in the signal metadata)"
+msgstr "Fonctionnalité d'ajustement de courbe : les résultats de l'ajustement sont désormais stockés dans un dictionnaire dans les métadonnées du signal (au lieu d'être stockés individuellement dans les métadonnées du signal)"
+
+msgid "Window state:"
+msgstr "État de la fenêtre :"
+
+msgid "The toolbars and dock widgets state (visibility, position, etc.) are now stored in the configuration file and restored at startup (size and position were already stored and restored)"
+msgstr "L'état des barres d'outils et des widgets de dock (visibilité, position, etc.) est désormais stocké dans le fichier de configuration et restauré au démarrage (la taille et la position étaient déjà stockées et restaurées)"
+
+msgid "This implements part of [Issue #30](https://github.com/DataLab-Platform/DataLab/issues/30) - Save/restore main window layout"
+msgstr "Ceci implémente une partie de [Issue #30](https://github.com/DataLab-Platform/DataLab/issues/30) - Sauvegarder/restaurer la disposition de la fenêtre principale"
+
+msgid "🛠️ Bug fixes:"
+msgstr "🛠️ Correctifs :"
+
+msgid "Fixed [Issue #41](https://github.com/DataLab-Platform/DataLab/issues/41) - Radial profile extraction: unable to enter user-defined center coordinates"
+msgstr "Correction de l'[Issue #41](https://github.com/DataLab-Platform/DataLab/issues/41) - Extraction du profil radial : impossible d'entrer les coordonnées du centre définies par l'utilisateur"
+
+msgid "Fixed [Issue #49](https://github.com/DataLab-Platform/DataLab/issues/49) - Error when trying to open a (UTF-8 BOM) text file as an image"
+msgstr "Correction de l'[Issue #49](https://github.com/DataLab-Platform/DataLab/issues/49) - Erreur lors de l'ouverture d'un fichier texte (UTF-8 BOM) en tant qu'image"
+
+msgid "Fixed [Issue #51](https://github.com/DataLab-Platform/DataLab/issues/51) - Unexpected dimensions when adding new ROI on an image with X/Y arbitrary units (not pixels)"
+msgstr "Correction de l'[Issue #51](https://github.com/DataLab-Platform/DataLab/issues/51) - Dimensions inattendues lors de l'ajout d'une nouvelle ROI sur une image avec des unités X/Y arbitraires (pas des pixels)"
+
+msgid "Improved plot item style serialization management:"
+msgstr "Amélioration de la gestion de la sérialisation du style des items graphiques :"
+
+msgid "Before this release, the plot item style was stored in the signal/image metadata only when saving the workspace to an HDF5 file. So, when modifying the style of a signal/image from the \"Parameters\" button (view toolbar), the style was not kept in some cases (e.g. when duplicating the signal/image)."
+msgstr "Avant cette version, le style des items graphiques était stocké dans les métadonnées du signal/image uniquement lors de la sauvegarde de l'espace de travail dans un fichier HDF5. Ainsi, lors de la modification du style d'un signal/image à partir du bouton \"Paramètres\" (barre d'outils de la vue), le style n'était pas conservé dans certains cas (par exemple lors de la duplication du signal/image)."
+
+msgid "Now, the plot item style is stored in the signal/image metadata whenever the style is modified, and is restored when reloading the workspace"
+msgstr "A présent, le style des items graphiques est stocké dans les métadonnées du signal/image chaque fois que le style est modifié, et est restauré lors du rechargement de l'espace de travail"
+
+msgid "Handled `ComplexWarning` cast warning when adding regions of interest (ROI) to a signal with complex data"
+msgstr "Traitement de l'avertissement de conversion `ComplexWarning` lors de l'ajout de régions d'intérêt (ROI) à un signal avec des données complexes"

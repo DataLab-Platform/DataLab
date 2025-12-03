@@ -1,0 +1,226 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-03 16:26+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Version 0.18"
+msgstr ""
+
+msgid "DataLab Version 0.18.2 (2025-03-16)"
+msgstr "DataLab Version 0.18.2 (16/03/2025)"
+
+msgid "ℹ️ General information:"
+msgstr "ℹ️ Informations générales :"
+
+msgid "Python 3.13 is now supported, since the availability of the scikit-image V0.25 (see [Issue #104](https://github.com/DataLab-Platform/DataLab/issues/104) - Python 3.13: `KeyError: 'area_bbox'`)"
+msgstr "Python 3.13 est désormais pris en charge, depuis la disponibilité de scikit-image V0.25 (voir [Issue #104](https://github.com/DataLab-Platform/DataLab/issues/104) - Python 3.13 : `KeyError: 'area_bbox'`)"
+
+msgid "💥 Enhancements:"
+msgstr "💥 Améliorations :"
+
+msgid "Added new \"Keep results after computation\" option in \"Processing\" section:"
+msgstr "Ajout de la nouvelle option \"Conserver les résultats après le calcul\" dans la section \"Traitement\" :"
+
+msgid "Before this change, when applying a processing feature (e.g. a filter, a threshold, etc.) on a signal or an image, the analysis results were removed from the object"
+msgstr "Avant ce changement, lors de l'application d'une fonction de traitement (par exemple un filtre, un seuil, etc.) sur un signal ou une image, les résultats de l'analyse étaient supprimés de l'objet"
+
+msgid "This new option allows to keep the analysis results after applying a processing feature on a signal or an image. Even if the analysis results are not updated, they might be relevant in some use cases (e.g. when using the 2D peak detection feature on an image, and then applying a filter on the image, or summing two images, etc.)"
+msgstr "Cette nouvelle option permet de conserver les résultats de l'analyse après l'application d'une fonction de traitement sur un signal ou une image. Même si les résultats de l'analyse ne sont pas mis à jour, ils peuvent être pertinents dans certains cas d'utilisation (par exemple lors de l'utilisation de la fonction de détection de pics 2D sur une image, puis de l'application d'un filtre sur l'image, ou de la sommation de deux images, etc.)"
+
+msgid "🛠️ Bug fixes:"
+msgstr "🛠️ Correctifs :"
+
+msgid "Fixed [Issue #138](https://github.com/DataLab-Platform/DataLab/issues/138) - Image colormaps were no longer stored in metadata (and serialized in HDF5 files) since PlotPy v2.6.3 (this commit, specifically: [PlotPyStack/PlotPy@a37af8a](https://github.com/PlotPyStack/PlotPy/commit/a37af8ae8392e5e3655e5c34b67a7cd1544ea845))"
+msgstr "Correction de l'[Issue #138](https://github.com/DataLab-Platform/DataLab/issues/138) - Les cartes de couleurs d'image n'étaient plus stockées dans les métadonnées (et sérialisées dans les fichiers HDF5) depuis PlotPy v2.6.3 (ce commit, en particulier : [PlotPyStack/PlotPy@a37af8a](https://github.com/PlotPyStack/PlotPy/commit/a37af8ae8392e5e3655e5c34b67a7cd1544ea845))"
+
+msgid "Fixed [Issue #137](https://github.com/DataLab-Platform/DataLab/issues/137) - Arithmetic operations and signal interpolation: dialog box with parameters is not displayed"
+msgstr "Correction de l'[Issue #137](https://github.com/DataLab-Platform/DataLab/issues/137) - Opérations arithmétiques et interpolation de signal : la boîte de dialogue avec les paramètres n'est pas affichée"
+
+msgid "Fixed [Issue #136](https://github.com/DataLab-Platform/DataLab/issues/136) - When processing a signal or an image, the analysis result is kept from original object"
+msgstr "Correction de l'[Issue #136](https://github.com/DataLab-Platform/DataLab/issues/136) - Lors du traitement d'un signal ou d'une image, le résultat de l'analyse est conservé à partir de l'objet d'origine"
+
+msgid "Before this fix, when processing a signal or an image (e.g. when applying a filter, a threshold, etc.), the analysis result was kept from the original object, and was not updated with the new data. Thus the analysis result was not meaningful anymore, and was misleading the user."
+msgstr "Avant cette correction, lors du traitement d'un signal ou d'une image (par exemple lors de l'application d'un filtre, d'un seuil, etc.), le résultat de l'analyse était conservé à partir de l'objet d'origine, et n'était pas mis à jour avec les nouvelles données. Ainsi, le résultat de l'analyse n'était plus pertinent, et induisait l'utilisateur en erreur."
+
+msgid "This is now fixed: the analysis result is now removed when processing a signal or an image. However it is not recalculated automatically, because there is no way to know which analysis result should be recalculated (e.g. if the user has applied a filter, should the FWHM be recalculated?) - besides, the current implementation of the analysis features does not allow to recalculate the analysis results automatically when the data is modified. The user has to recalculate the analysis results manually if needed."
+msgstr "Ceci est maintenant corrigé : le résultat de l'analyse est maintenant supprimé lors du traitement d'un signal ou d'une image. Cependant, il n'est pas recalculé automatiquement, car il n'y a aucun moyen de savoir quel résultat de l'analyse doit être recalculé (par exemple, si l'utilisateur a appliqué un filtre, le FWHM doit-il être recalculé ?) - de plus, l'implémentation actuelle des fonctionnalités d'analyse ne permet pas de recalculer automatiquement les résultats de l'analyse lorsque les données sont modifiées. L'utilisateur doit recalculer manuellement les résultats de l'analyse si nécessaire."
+
+msgid "Fixed [Issue #132](https://github.com/DataLab-Platform/DataLab/issues/132) - Plot analysis results: \"One curve per result title\" mode ignores ROIs"
+msgstr "Correction de l'[Issue #132](https://github.com/DataLab-Platform/DataLab/issues/132) - Tracer les résultats de l'analyse : le mode \"Une courbe par titre de résultat\" ignore les ROI"
+
+msgid "Before this fix, the \"One curve per result title\" mode was ignoring ROIs, and was plotting the selected result for all objects (signals or images) without taking into account the ROI defined on the objects"
+msgstr "Avant cette correction, le mode \"Une courbe par titre de résultat\" ignorait les ROI, et traçait le résultat sélectionné pour tous les objets (signaux ou images) sans tenir compte de la ROI définie sur les objets"
+
+msgid "This is now fixed: the \"One curve per result title\" mode now takes into account the ROI defined on the objects, and plots the selected result for each object (signal or image) and for each ROI defined on the object"
+msgstr "Ceci est maintenant corrigé : le mode \"Une courbe par titre de résultat\" prend désormais en compte la ROI définie sur les objets, et trace le résultat sélectionné pour chaque objet (signal ou image) et pour chaque ROI définie sur l'objet"
+
+msgid "Fixed [Issue #128](https://github.com/DataLab-Platform/DataLab/issues/128) - Support long object titles in Signal and Image panels"
+msgstr "Correction de l'[Issue #128](https://github.com/DataLab-Platform/DataLab/issues/128) - Prise en charge des longs titres d'objet dans les panneaux Signal et Image"
+
+msgid "Fixed [Issue #133](https://github.com/DataLab-Platform/DataLab/issues/133) - Remove specific analysis results from metadata clipboard during copy operation"
+msgstr "Correction de l'[Issue #133](https://github.com/DataLab-Platform/DataLab/issues/133) - Supprimer des résultats d'analyse spécifiques du presse-papiers de métadonnées lors de l'opération de copie"
+
+msgid "Fixed [Issue #135](https://github.com/DataLab-Platform/DataLab/issues/135) - Allow to edit ROI on multiple signals or images at once"
+msgstr "Correction de l'[Issue #135](https://github.com/DataLab-Platform/DataLab/issues/135) - Permettre de modifier la ROI sur plusieurs signaux ou images à la fois"
+
+msgid "Before this fix, the ROI editor was disabled when multiple signals or images were selected"
+msgstr "Avant cette correction, l'éditeur de ROI était désactivé lorsque plusieurs signaux ou images étaient sélectionnés"
+
+msgid "This is now fixed: the ROI editor is now enabled when multiple signals or images are selected, and the ROI is applied to all selected signals or images (only the ROI of the first selected signal or image is taken into account)"
+msgstr "Ceci est maintenant corrigé : l'éditeur de ROI est maintenant activé lorsque plusieurs signaux ou images sont sélectionnés, et la ROI est appliquée à tous les signaux ou images sélectionnés (seule la ROI du premier signal ou image sélectionné est prise en compte)"
+
+msgid "This new behavior is consistent with the ROI extraction feature, which allows to extract the ROI on multiple signals or images at once, based on the ROI defined on the first selected signal or image"
+msgstr "Ce nouveau comportement est cohérent avec la fonctionnalité d'extraction de ROI, qui permet d'extraire la ROI sur plusieurs signaux ou images à la fois, en fonction de la ROI définie sur le premier signal ou image sélectionné"
+
+msgid "Image ROI features:"
+msgstr "Fonctionnalité de ROI d'image :"
+
+msgid "Fixed [Issue #120](https://github.com/DataLab-Platform/DataLab/issues/120) - ROI extraction on multiple images: defined ROI should not be saved in the first selected object. The design choice is to save the defined ROI neither in the first nor in any of the selected objects: the ROI is only used for the extraction, and is not saved in any object"
+msgstr "Correction de l'[Issue #120](https://github.com/DataLab-Platform/DataLab/issues/120) - Extraction de ROI sur plusieurs images : la ROI définie ne doit pas être enregistrée dans le premier objet sélectionné. Le choix de conception est de ne pas enregistrer la ROI définie ni dans le premier ni dans aucun des objets sélectionnés : la ROI est uniquement utilisée pour l'extraction, et n'est pas enregistrée dans aucun objet"
+
+msgid "Fixed [Issue #121](https://github.com/DataLab-Platform/DataLab/issues/121) - `AttributeError` when extracting multiple ROIs on a single image, if more than one image is selected"
+msgstr "Correction de l'[Issue #121](https://github.com/DataLab-Platform/DataLab/issues/121) - `AttributeError` lors de l'extraction de plusieurs ROIs sur une seule image, si plus d'une image est sélectionnée"
+
+msgid "Fixed [Issue #122](https://github.com/DataLab-Platform/DataLab/issues/122) - Image masks are not refreshed when removing metadata except for the active image"
+msgstr "Correction de l'[Issue #122](https://github.com/DataLab-Platform/DataLab/issues/122) - Les masques d'image ne sont pas actualisés lors de la suppression des métadonnées sauf pour l'image active"
+
+msgid "Fixed [Issue #123](https://github.com/DataLab-Platform/DataLab/issues/123) - Image masks are not refreshed when pasting metadata on multiple images, except for the last image"
+msgstr "Correction de l'[Issue #123](https://github.com/DataLab-Platform/DataLab/issues/123) - Les masques d'image ne sont pas actualisés lors du collage de métadonnées sur plusieurs images, sauf pour la dernière image"
+
+msgid "Text and CSV files:"
+msgstr "Fichiers texte et CSV :"
+
+msgid "Enhance text file reading by detecting data headers (using a list of typical headers from scientific instruments) and by allowing to skip the header when reading the file"
+msgstr "Améliorer la lecture des fichiers texte en détectant les en-têtes de données (en utilisant une liste d'en-têtes typiques des instruments scientifiques) et en permettant de sauter l'en-tête lors de la lecture du fichier"
+
+msgid "Ignore encoding errors when reading files in both open feature and import wizard, hence allowing to read files with special characters without raising an exception"
+msgstr "Ignorer les erreurs d'encodage lors de la lecture des fichiers dans la fonctionnalité d'ouverture et l'assistant d'importation, permettant ainsi de lire des fichiers avec des caractères spéciaux sans lever d'exception"
+
+msgid "Fixed [Issue #124](https://github.com/DataLab-Platform/DataLab/issues/124) - Text files: support locale decimal separator (different than `.`)"
+msgstr "Correction de l'[Issue #124](https://github.com/DataLab-Platform/DataLab/issues/124) - Fichiers texte : prise en charge du séparateur décimal local (différent de `.`)"
+
+msgid "Signal analysis features: fixed duplicate results when no ROI is defined"
+msgstr "Fonctionnalités d'analyse de signal : correction des résultats en double lorsqu'aucune ROI n'est définie"
+
+msgid "Fixed [Issue #113](https://github.com/DataLab-Platform/DataLab/issues/113) - Call to `RemoteClient.open_h5_files` (and `import_h5_file`) fails without passing the optional arguments"
+msgstr "Correction de l'[Issue #113](https://github.com/DataLab-Platform/DataLab/issues/113) - L'appel à `RemoteClient.open_h5_files` (et `import_h5_file`) échoue sans passer les arguments facultatifs"
+
+msgid "Fixed [Issue #116](https://github.com/DataLab-Platform/DataLab/issues/116) - `KeyError` exception when trying to remove a group after opening an HDF5 file"
+msgstr "Correction de l'[Issue #116](https://github.com/DataLab-Platform/DataLab/issues/116) - Exception `KeyError` lors de la tentative de suppression d'un groupe après l'ouverture d'un fichier HDF5"
+
+msgid "DataLab Version 0.18.1 (2024-12-13)"
+msgstr "DataLab Version 0.18.1 (13/12/2024)"
+
+msgid "FWHM computation now raises an exception when less than two points are found with zero-crossing method"
+msgstr "Le calcul de la FWHM lève désormais une exception lorsqu'il y a moins de deux points trouvés avec la méthode du zéro-crossing"
+
+msgid "Improved result validation for array-like results by checking the data type of the result"
+msgstr "Amélioration de la validation des résultats de type tableau en vérifiant le type de données du résultat"
+
+msgid "Fixed [Issue #106](https://github.com/DataLab-Platform/DataLab/issues/106) - Analysis: coordinate shifted results on images with ROIs and shifted origin"
+msgstr "Correction de l'[Issue #106](https://github.com/DataLab-Platform/DataLab/issues/106) - Analyse : résultats décalés de coordonnées sur des images avec des ROIs et une origine décalée"
+
+msgid "Fixed [Issue #107](https://github.com/DataLab-Platform/DataLab/issues/107) - Wrong indices when extracting a profile from an image with a ROI"
+msgstr "Correction de l'[Issue #107](https://github.com/DataLab-Platform/DataLab/issues/107) - Mauvais indices lors de l'extraction d'un profil à partir d'une image avec une ROI"
+
+msgid "Fixed [Issue #111](https://github.com/DataLab-Platform/DataLab/issues/111) - Proxy `add_object` method does not support signal/image metadata (e.g. ROI)"
+msgstr "Correction de l'[Issue #111](https://github.com/DataLab-Platform/DataLab/issues/111) - La méthode `add_object` du proxy ne prend pas en charge les métadonnées du signal/image (par exemple la ROI)"
+
+msgid "Test data plugin / \"Create 2D noisy gauss image\": fixed amplitude calculation in `datalab.tests.data.create_2d_random` for non-integer data types"
+msgstr "Plugin de données de test / \"Créer une image gaussienne bruitée 2D\" : correction du calcul de l'amplitude dans `datalab.tests.data.create_2d_random` pour les types de données non entiers"
+
+msgid "📚 Documentation:"
+msgstr "📚 Documentation :"
+
+msgid "Fixed path separators in plugin directory documentation"
+msgstr "Correction des séparateurs de chemin dans la documentation du répertoire des plugins"
+
+msgid "Corrected left and right area descriptions in workspace documentation"
+msgstr "Corrigé les descriptions des zones gauche et droite dans la documentation de l'espace de travail"
+
+msgid "Updated Google style link in contributing guidelines"
+msgstr "Lien de style Google mis à jour dans les directives de contribution"
+
+msgid "Fixed various French translations in the documentation"
+msgstr "Corrections de diverses traductions françaises dans la documentation"
+
+msgid "DataLab Version 0.18.0 (2024-11-14)"
+msgstr "DataLab Version 0.18.0 (14/11/2024)"
+
+msgid "PlotPy v2.7 is required for this release."
+msgstr "PlotPy v2.7 est requis pour cette version."
+
+msgid "Dropped support for Python 3.8."
+msgstr "Prise en charge de Python 3.8 abandonnée."
+
+msgid "Python 3.13 is not supported yet, due to the fact that some dependencies are not compatible with this version."
+msgstr "Python 3.13 n'est pas encore pris en charge, car certaines dépendances ne sont pas compatibles avec cette version."
+
+msgid "💥 New features and enhancements:"
+msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "New operation mode feature:"
+msgstr "Nouvelle fonctionnalité de mode d'opération :"
+
+msgid "Added \"Operation mode\" feature to the \"Processing\" tab in the \"Settings\" dialog box"
+msgstr "Ajout de la fonctionnalité \"Mode d'opération\" à l'onglet \"Traitement\" de la boîte de dialogue \"Paramètres\""
+
+msgid "This feature allows to choose between \"single\" and \"pairwise\" operation modes for all basic operations (addition, subtraction, multiplication, division, etc.):"
+msgstr "Cette fonctionnalité permet de choisir entre les modes d'opération \"single\" et \"pairwise\" pour toutes les opérations de base (addition, soustraction, multiplication, division, etc.) :"
+
+msgid "\"Single\" mode: single operand mode (default mode: the operation is done on each object independently)"
+msgstr "Mode \"single\" : mode d'opérande unique (mode par défaut : l'opération est effectuée sur chaque objet indépendamment)"
+
+msgid "\"Pairwise\" mode: pairwise operand mode (the operation is done on each pair of objects)"
+msgstr "Mode \"pairwise\" : mode d'opérande par paire (l'opération est effectuée sur chaque paire d'objets)"
+
+msgid "This applies to both signals and images, and to computations taking *N* inputs"
+msgstr "Cela s'applique à la fois aux signaux et aux images, et aux calculs prenant *N* entrées"
+
+msgid "Computations taking *N* inputs are the ones where:"
+msgstr "Les calculs prenant *N* entrées sont ceux où :"
+
+msgid "*N(>=2)* objects in give *N* objects out"
+msgstr "*N(>=2)* objets en entrée donnent *N* objets en sortie"
+
+msgid "*N(>=1)* object(s) + 1 object in give N objects out"
+msgstr "*N(>=1)* objet(s) + 1 objet en entrée donnent N objets en sortie"
+
+msgid "New ROI (Region Of Interest) features:"
+msgstr "Nouvelles fonctionnalités de ROI (Région d'intérêt) :"
+
+msgid "New polygonal ROI feature"
+msgstr "Nouvelle fonctionnalité de ROI polygonale"
+
+msgid "Complete redesign of the ROI editor user interfaces, improving ergonomics and consistency with the rest of the application"
+msgstr "Refonte complète des interfaces utilisateur de l'éditeur de ROI, améliorant l'ergonomie et la cohérence avec le reste de l'application"
+
+msgid "Major internal refactoring of the ROI system to make it more robust (more tests) and easier to maintain"
+msgstr "Refactorisation interne majeure du système de ROI pour le rendre plus robuste (plus de tests) et plus facile à maintenir"
+
+msgid "Implemented [Issue #102](https://github.com/DataLab-Platform/DataLab/issues/102) - Launch DataLab using `datalab` instead of `datalab`. Note that the `datalab` command is still available for backward compatibility."
+msgstr "Implémentation de l'[Issue #102](https://github.com/DataLab-Platform/DataLab/issues/102) - Lancer DataLab en utilisant `datalab` au lieu de `datalab`. Notez que la commande `datalab` est toujours disponible pour la compatibilité ascendante."
+
+msgid "Implemented [Issue #101](https://github.com/DataLab-Platform/DataLab/issues/101) - Configuration: set default image interpolation to anti-aliasing (`5` instead of `0` for nearest). This change is motivated by the fact that a performance improvement was made in PlotPy v2.7 on Windows, which allows to use anti-aliasing interpolation by default without a significant performance impact."
+msgstr "Implémentation de l'[Issue #101](https://github.com/DataLab-Platform/DataLab/issues/101) - Configuration : définir l'interpolation d'image par défaut sur l'anti-crénelage (`5` au lieu de `0` pour le plus proche). Ce changement est motivé par le fait qu'une amélioration des performances a été apportée dans PlotPy v2.7 sur Windows, ce qui permet d'utiliser l'interpolation par anti-crénelage par défaut sans impact significatif sur les performances."
+
+msgid "Implemented [Issue #100](https://github.com/DataLab-Platform/DataLab/issues/100) - Use the same installer and executable on Windows 7 SP1, 8, 10, 11. Before this change, a specific installer was required for Windows 7 SP1, due to the fact that Python 3.9 and later versions are not supported on this platform. A workaround was implemented to make DataLab work on Windows 7 SP1 with Python 3.9."
+msgstr "Implémentation de l'[Issue #100](https://github.com/DataLab-Platform/DataLab/issues/100) - Utiliser le même programme d'installation et exécutable sur Windows 7 SP1, 8, 10, 11. Avant ce changement, un programme d'installation spécifique était requis pour Windows 7 SP1, en raison du fait que Python 3.9 et les versions ultérieures ne sont pas prises en charge sur cette plateforme. Une solution de contournement a été mise en œuvre pour faire fonctionner DataLab sur Windows 7 SP1 avec Python 3.9."
+
+msgid "Fixed [Issue #103](https://github.com/DataLab-Platform/DataLab/issues/103) - `proxy.add_annotations_from_items`: circle shape color seems to be ignored."
+msgstr "Correction de l'[Issue #103](https://github.com/DataLab-Platform/DataLab/issues/103) - `proxy.add_annotations_from_items` : la couleur de la forme de cercle semble être ignorée."

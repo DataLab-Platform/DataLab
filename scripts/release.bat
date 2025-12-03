@@ -18,7 +18,6 @@ move "dist\*.whl" %destdir%
 move "dist\*.gz" %destdir%
 move "dist\*.zip" %destdir%
 move "wix\DataLab-%VERSION%.msi" %destdir%
-copy "CHANGELOG.md" %destdir%
 move %MODNAME%\data\doc\*.pdf %destdir%
 explorer %destdir% || exit /b 0
 

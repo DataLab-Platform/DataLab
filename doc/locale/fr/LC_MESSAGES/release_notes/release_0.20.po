@@ -1,0 +1,193 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-03 16:26+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Version 0.20"
+msgstr ""
+
+msgid "DataLab Version 0.20.1 (2025-07-15)"
+msgstr "DataLab Version 0.20.1 (15/07/2025)"
+
+msgid "🛠️ Bug fixes:"
+msgstr "🛠️ Corrections de bugs :"
+
+msgid "Fixed [Issue #233](https://github.com/DataLab-Platform/DataLab/issues/233) - Hard crash when trying to activate the curve stats tool on a zero signal"
+msgstr "Correction de l'[Issue #233](https://github.com/DataLab-Platform/DataLab/issues/233) - Plantage brutal lors de la tentative d'activation de l'outil de statistiques de courbe sur un signal nul"
+
+msgid "Fixed [Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Curve marker style unexpectedly changes to \"Square\" after validating \"Parameters…\" dialog"
+msgstr "Correction de l'[Issue #184](https://github.com/DataLab-Platform/DataLab/issues/184) - Le style du marqueur de courbe change de manière inattendue en \"Carré\" après la validation de la boîte de dialogue \"Paramètres…\""
+
+msgid "Fixed [Issue #117](https://github.com/DataLab-Platform/DataLab/issues/117) - DataLab's signal moving median crashes on Linux with `mode='mirror'`: `free(): invalid next size (normal)` (this is a bug in SciPy v1.15.0 to v1.15.2, which was fixed in SciPy v1.15.3)"
+msgstr "Correction de l'[Issue #117](https://github.com/DataLab-Platform/DataLab/issues/117) - Le médian mobile du signal de DataLab plante sur Linux avec `mode='mirror'` : `free(): invalid next size (normal)` (c'est un bug dans SciPy v1.15.0 à v1.15.2, qui a été corrigé dans SciPy v1.15.3)"
+
+msgid "Fixed [Issue #186](https://github.com/DataLab-Platform/DataLab/issues/186) - Image text files with a comma as decimal separator cannot be opened directly (only the Import Wizard does support this)"
+msgstr "Correction de l'[Issue #186](https://github.com/DataLab-Platform/DataLab/issues/186) - Les fichiers texte d'image avec une virgule comme séparateur décimal ne peuvent pas être ouverts directement (seul l'assistant d'importation le supporte)"
+
+msgid "Fixed [Issue #238](https://github.com/DataLab-Platform/DataLab/issues/238) - Image text files with a trailing delimiter leads to data with a superfluous column when opened directly (does not happen in the Import Wizard)"
+msgstr "Correction de l'[Issue #238](https://github.com/DataLab-Platform/DataLab/issues/238) - Les fichiers texte d'image avec un délimiteur final entraînent des données avec une colonne superflue lorsqu'ils sont ouverts directement (ceci ne se produit pas dans l'assistant d'importation)"
+
+msgid "Fixed [Issue #239](https://github.com/DataLab-Platform/DataLab/issues/239) - Text Import Wizard does not preserve user-defined titles and units"
+msgstr "Correction de l'[Issue #239](https://github.com/DataLab-Platform/DataLab/issues/239) - L'assistant d'importation de texte ne conserve pas les titres et unités définis par l'utilisateur"
+
+msgid "Fixed [Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240) - Text Import Wizard does not preserve user-defined data type (e.g. `int16`, `float32`, etc.)"
+msgstr "Correction de l'[Issue #240](https://github.com/DataLab-Platform/DataLab/issues/240) - L'assistant d'importation de texte ne conserve pas le type de données défini par l'utilisateur (par exemple `int16`, `float32`, etc.)"
+
+msgid "Fixed [Issue #235](https://github.com/DataLab-Platform/DataLab/issues/235) - Text Import Wizard: add support for importing signal files with integer values"
+msgstr "Correction de l'[Issue #235](https://github.com/DataLab-Platform/DataLab/issues/235) - L'assistant d'importation de texte : ajout de la prise en charge de l'importation de fichiers de signal avec des valeurs entières"
+
+msgid "Fixed [Issue #236](https://github.com/DataLab-Platform/DataLab/issues/236) - Text Import Wizard: add support for `.mca` files"
+msgstr "Correction de l'[Issue #236](https://github.com/DataLab-Platform/DataLab/issues/236) - L'assistant d'importation de texte : ajout de la prise en charge des fichiers `.mca`"
+
+msgid "Fixed [Issue #243](https://github.com/DataLab-Platform/DataLab/issues/243) - View in a new window (image): intensity profile tools are sometimes disabled (fixed in PlotPy v2.7.5)"
+msgstr "Correction de l'[Issue #243](https://github.com/DataLab-Platform/DataLab/issues/243) - Affichage dans une nouvelle fenêtre (image) : les outils de profil d'intensité sont parfois désactivés (corrigé dans PlotPy v2.7.5)"
+
+msgid "DataLab Version 0.20.0 (2025-04-28)"
+msgstr "DataLab Version 0.20.0 (28/04/2025)"
+
+msgid "💥 New features and enhancements:"
+msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "ANDOR SIF Images:"
+msgstr "Images ANDOR SIF :"
+
+msgid "Added support for background images in ANDOR SIF files"
+msgstr "Ajout de la prise en charge des images de fond dans les fichiers ANDOR SIF"
+
+msgid "This closes [Issue #178](https://github.com/DataLab-Platform/DataLab/issues/178) - Add support for ANDOR SIF files with background image"
+msgstr "Ceci clôture le ticket [Issue #178](https://github.com/DataLab-Platform/DataLab/issues/178) - Ajout de la prise en charge des fichiers ANDOR SIF avec image de fond"
+
+msgid "Array editor (results, signal and image data, ...):"
+msgstr "Éditeur de tableau (résultats, données de signal et d'image, ...)"
+
+msgid "New \"Copy all\" button in the array editor dialog box, to copy all the data in the clipboard, including row and column headers"
+msgstr "Nouvelle fonctionnalité \"Copier tout\" dans la boîte de dialogue de l'éditeur de tableau, pour copier toutes les données dans le presse-papiers, y compris les en-têtes de ligne et de colonne"
+
+msgid "New \"Export\" button in the array editor dialog box, to export the data in a CSV file, including row and column headers"
+msgstr "Nouvelle fonctionnalité \"Exporter\" dans la boîte de dialogue de l'éditeur de tableau, pour exporter les données dans un fichier CSV, y compris les en-têtes de ligne et de colonne"
+
+msgid "New \"Paste\" button in the array editor dialog box, to paste the data from the clipboard into the array editor (this feature is not available for read-only data, such as analysis results)"
+msgstr "Nouvelle fonctionnalité \"Coller\" dans la boîte de dialogue de l'éditeur de tableau, pour coller les données du presse-papiers dans l'éditeur de tableau (cette fonctionnalité n'est pas disponible pour les données en lecture seule, telles que les résultats d'analyse)"
+
+msgid "The features above require guidata v3.9.0 or later"
+msgstr "Les fonctionnalités ci-dessus nécessitent guidata v3.9.0 ou une version ultérieure"
+
+msgid "This closes [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) and [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
+msgstr "Ceci clôture les tickets [Issue #174](https://github.com/DataLab-Platform/DataLab/issues/174), [Issue #175](https://github.com/DataLab-Platform/DataLab/issues/175) et [Issue #176](https://github.com/DataLab-Platform/DataLab/issues/176)"
+
+msgid "Fourier analysis features (\"Processing\" menu):"
+msgstr "Fonctionnalités d'analyse de Fourier (menu \"Traitement\") :"
+
+msgid "New \"Zero padding\" feature"
+msgstr "Nouvelle fonctionnalité \"Complément de zéros\""
+
+msgid "Implementation for signals:"
+msgstr "Implémentation pour les signaux :"
+
+msgid "Choose a zero padding strategy (Next power of 2, Double the length, Triple the length, Custom length)"
+msgstr "Choisissez une stratégie de complément de zéros (prochain multiple de 2, double la longueur, triple la longueur, longueur personnalisée)"
+
+msgid "Or manually set the zero padding length (if \"Custom length\" is selected)"
+msgstr "Ou définissez manuellement la longueur de complément de zéros (si \"Longueur personnalisée\" est sélectionnée)"
+
+msgid "Implementation for images:"
+msgstr "Implémentation pour les images :"
+
+msgid "Choose a zero padding strategy (Next power of 2, Next multiple of 64, Custom length)"
+msgstr "Choisissez une stratégie de complément de zéros (prochain multiple de 2, prochain multiple de 64, longueur personnalisée)"
+
+msgid "Or manually set the zero padding row and column lengths (if \"Custom length\" is selected)"
+msgstr "Ou définissez manuellement les longueurs de ligne et de colonne de complément de zéros (si \"Longueur personnalisée\" est sélectionnée)"
+
+msgid "Set the position of the zero padding (bottom-right, centered)"
+msgstr "Définir la position du complément de zéros (en bas à droite, centré)"
+
+msgid "This closes [Issue #170](https://github.com/DataLab-Platform/DataLab/issues/170) - Fourier analysis: add zero padding feature for signals and images"
+msgstr "Ceci corrige l'[Issue #170](https://github.com/DataLab-Platform/DataLab/issues/170) - Analyse de Fourier : ajouter la fonctionnalité de complément de zéros pour les signaux et les images"
+
+msgid "Region of Interest (ROI) editor:"
+msgstr "Éditeur de région d'intérêt (ROI) :"
+
+msgid "This concerns the \"Edit Regions of Interest\" feature for both signals and images"
+msgstr "Cela concerne la fonctionnalité \"Éditer les régions d'intérêt\" pour les signaux et les images"
+
+msgid "New behavior:"
+msgstr "Nouveau comportement :"
+
+msgid "Signals: the range ROI selection tool is now active by default, and the user can select right away the range of the signal to be used as a ROI"
+msgstr "Signaux : l'outil de sélection de la plage ROI est désormais actif par défaut, et l'utilisateur peut sélectionner immédiatement la plage du signal à utiliser comme ROI"
+
+msgid "Images: the rectangular ROI selection tool is now active by default, and the user can select right away the rectangular ROI to be used as a ROI"
+msgstr "Images : l'outil de sélection de la ROI rectangulaire est désormais actif par défaut, et l'utilisateur peut sélectionner immédiatement la ROI rectangulaire à utiliser comme ROI"
+
+msgid "This closes [Issue #154](https://github.com/DataLab-Platform/DataLab/issues/154) - ROI editor: activate ROI selection tool by default, so that the user can select right away the area to be used as a ROI"
+msgstr "Ceci clôture le ticket [Issue #154](https://github.com/DataLab-Platform/DataLab/issues/154) - Éditeur de ROI : activer l'outil de sélection de ROI par défaut, afin que l'utilisateur puisse sélectionner immédiatement la zone à utiliser comme ROI"
+
+msgid "Added the \"Select tool\" to editor's toolbar, to allow the user to switch between the \"Select\" and \"Draw\" tools easily without having to use the plot toolbar on the top of the window"
+msgstr "Ajout de l'outil \"Sélectionner\" à la barre d'outils de l'éditeur, pour permettre à l'utilisateur de basculer facilement entre les outils \"Sélectionner\" et \"Dessiner\" sans avoir à utiliser la barre d'outils de tracé en haut de la fenêtre"
+
+msgid "Signal processing features (\"Processing\" menu):"
+msgstr "Fonctionnalités de traitement du signal (menu \"Traitement\") :"
+
+msgid "New \"X-Y mode\" feature: this feature simulates the behavior of the X-Y mode of an oscilloscope, i.e. it allows to plot one signal as a function of another signal (e.g. X as a function of Y)"
+msgstr "Nouvelle fonctionnalité \"Mode X-Y\" : cette fonctionnalité simule le comportement du mode X-Y d'un oscilloscope, c'est-à-dire qu'elle permet de tracer un signal en fonction d'un autre signal (par exemple X en fonction de Y)"
+
+msgid "New abscissa and ordinate find features:"
+msgstr "Nouvelles fonctionnalités de recherche d'abscisse et d'ordonnée :"
+
+msgid "\"First abscissa at y=...\" feature: this feature allows to find the first abscissa value of a signal at a given y value (e.g. the abscissa value of a signal at y=0)"
+msgstr "Fonctionnalité \"Abscisse à y=...\" : cette fonctionnalité permet de trouver la première valeur d'abscisse d'un signal à une valeur y donnée (par exemple, la valeur d'abscisse d'un signal à y=0)"
+
+msgid "\"Ordinate at x=...\" feature: this feature allows to find the ordinate value of a signal at a given x value (e.g. the ordinate value of a signal at x=0)"
+msgstr "Fonctionnalité \"Ordonnée à x=...\" : cette fonctionnalité permet de trouver la valeur d'ordonnée d'un signal à une valeur x donnée (par exemple, la valeur d'ordonnée d'un signal à x=0)"
+
+msgid "Each feature has its own dialog box, which allows to set the y or x value to be used for the search with a slider or a text box"
+msgstr "Chaque fonctionnalité a sa propre boîte de dialogue, qui permet de définir la valeur y ou x à utiliser pour la recherche avec un curseur ou une zone de texte"
+
+msgid "This closes [Issue #125](https://github.com/DataLab-Platform/DataLab/issues/125) and [Issue #126](https://github.com/DataLab-Platform/DataLab/issues/126)"
+msgstr "Ceci clôture les tickets [Issue #125](https://github.com/DataLab-Platform/DataLab/issues/125) et [Issue #126](https://github.com/DataLab-Platform/DataLab/issues/126)"
+
+msgid "New full width at given y feature:"
+msgstr "Nouvelle fonctionnalité de calcul de largeur à un y donné :"
+
+msgid "The \"Full width at y=...\" feature allows to find the full width of a signal at a given y value (e.g. the full width of a signal at y=0)"
+msgstr "La fonctionnalité \"Largeur à y=...\" permet de calculer la largeur d'un signal à une valeur y donnée"
+
+msgid "A specific dialog box allows to set the y value to be used for the search with a slider or a text box"
+msgstr "Une boîte de dialogue spécifique permet de définir la valeur y à utiliser avec un curseur ou une zone de texte"
+
+msgid "This closes [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
+msgstr "Ceci clôture le ticket [Issue #127](https://github.com/DataLab-Platform/DataLab/issues/127)"
+
+msgid "Public API (local or remote):"
+msgstr "API publique (locale ou distante) :"
+
+msgid "Add `group_id` and `set_current` arguments to `add_signal`, `add_image` and `add_object` methods:"
+msgstr "Ajout des arguments `group_id` et `set_current` aux méthodes `add_signal`, `add_image` et `add_object` :"
+
+msgid "This concerns the `LocalProxy`, `AbstractDLControl`, `RemoteClient`, `RemoteServer` and `DLMainWindow` classes"
+msgstr "Cela concerne les classes `LocalProxy`, `AbstractDLControl`, `RemoteClient`, `RemoteServer` et `DLMainWindow`"
+
+msgid "`group_id` argument allows to specify the group ID where the signal or image should be added (if not specified, the signal or image is added to the current group)"
+msgstr "L'argument `group_id` permet de spécifier l'identifiant du groupe où le signal ou l'image doit être ajouté (s'il n'est pas spécifié, le signal ou l'image est ajouté au groupe actuel)"
+
+msgid "`set_current` argument allows to specify if the signal or image should be set as current after being added (default is `True`)"
+msgstr "L'argument `set_current` permet de spécifier si le signal ou l'image doit être défini comme actuel après avoir été ajouté (la valeur par défaut est `True`)"
+
+msgid "This closes [Issue #151](https://github.com/DataLab-Platform/DataLab/issues/151) - Public API: add a keyword `group_id` to `add_signal` and `add_image`"
+msgstr "Ceci corrige l'[Issue #151](https://github.com/DataLab-Platform/DataLab/issues/151) - API publique : ajouter un mot-clé `group_id` à `add_signal` et `add_image`"

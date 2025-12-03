@@ -1627,6 +1627,8 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                     )
                     if answer == QW.QMessageBox.Yes:
                         reset_all = True
+                    elif answer == QW.QMessageBox.No:
+                        reset_all = False
                     elif answer == QW.QMessageBox.Ignore:
                         Conf.io.h5_clear_workspace_ask.set(False)
         if h5files is None:

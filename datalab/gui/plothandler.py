@@ -55,7 +55,16 @@ if TYPE_CHECKING:
 
 
 def calc_data_hash(obj: SignalObj | ImageObj) -> str:
-    """Calculate a hash for a SignalObj | ImageObj object's data"""
+    """Calculate a hash for a SignalObj | ImageObj object's data
+
+    For signals, this includes both X and Y data to detect axis changes.
+    For images, this includes only the Z data.
+    """
+    if isinstance(obj, SignalObj):
+        # For signals, hash both X and Y data to detect axis changes
+        # (e.g., when xmin/xmax is modified without changing Y values)
+        return hashlib.sha1(np.ascontiguousarray(obj.xydata)).hexdigest()
+    # For images, hash only the image data
     return hashlib.sha1(np.ascontiguousarray(obj.data)).hexdigest()
 
 

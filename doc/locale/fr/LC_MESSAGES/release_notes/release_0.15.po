@@ -1,0 +1,160 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-03 16:26+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "Version 0.15"
+msgstr ""
+
+msgid "DataLab Version 0.15.1 (2024-05-03)"
+msgstr "DataLab Version 0.15.1 (03/05/2024)"
+
+msgid "🛠️ Bug fixes:"
+msgstr "🛠️ Correctifs :"
+
+msgid "Fixed [Issue #68](https://github.com/DataLab-Platform/DataLab/issues/68) - Slow loading of even simple plots:"
+msgstr "Correction de l'[Issue #68](https://github.com/DataLab-Platform/DataLab/issues/68) - Chargement lent même pour des graphiques simples :"
+
+msgid "On macOS, the user experience was degraded when handling even simple plots"
+msgstr "Sur macOS, l'expérience utilisateur était dégradée lors de la manipulation de graphiques simples"
+
+msgid "This was due to the way macOS handles the pop-up windows, e.g. when refreshing the plot view (\"Creating plot items\" progress bar), hence causing a very annoying flickering effect and a global slowdown of the application"
+msgstr "Cela était dû à la manière dont macOS gère les fenêtres contextuelles, par exemple lors du rafraîchissement de la vue du graphique (barre de progression \"Création d'éléments de graphique\"), provoquant ainsi un effet de scintillement très gênant et un ralentissement global de l'application"
+
+msgid "This is now fixed by showing the progress bar only after a short delay (1s), that is when it is really needed (i.e. for long operations)"
+msgstr "Le problème est maintenant résolu en affichant la barre de progression uniquement après un court délai (1s), c'est-à-dire lorsqu'elle est vraiment nécessaire (c'est-à-dire pour les opérations longues)"
+
+msgid "Thanks to [@marcel-goldschen-ohm](https://github.com/marcel-goldschen-ohm) for the very thorough feedback and the help in testing the fix"
+msgstr "Merci à [@marcel-goldschen-ohm](https://github.com/marcel-goldschen-ohm) pour la description très détaillée du problème et l'aide apportée pour tester la correction"
+
+msgid "Fixed [Issue #69](https://github.com/DataLab-Platform/DataLab/issues/69) - Annotations should be read-only in Signal/Image View"
+msgstr "Correction de l'[Issue #68](https://github.com/DataLab-Platform/DataLab/issues/69) - Les annotations devraient être en lecture seule dans la vue Signal/Image"
+
+msgid "Regarding the annotations, DataLab's current behavior is the following:"
+msgstr "En ce qui concerne les annotations, le comportement actuel de DataLab est le suivant :"
+
+msgid "Annotations are created only when showing the signal/image in a separate window (double-click on the object, or \"View\" > \"View in a new window\")"
+msgstr "Les annotations ne sont créées que lors de l'affichage du signal/image dans une fenêtre séparée (double-clic sur l'objet, ou \"Affichage\" > \"Afficher dans une nouvelle fenêtre\")"
+
+msgid "When displaying the objects in either the \"Signal View\" or the \"Image View\", the annotations should be read-only (i.e. not movable, nor resizable or deletable)"
+msgstr "Quand les objets sont affichés dans la \"Vue Signal\" ou la \"Vue Image\", les annotations devraient être en lecture seule (c'est-à-dire non déplaçables, ni redimensionnables ou supprimables)"
+
+msgid "However, some annotations were still deletable in the \"Signal View\" and the \"Image View\": this is now fixed"
+msgstr "Toutefois, certaines annotations étaient toujours supprimables dans la \"Vue Signal\" et la \"Vue Image\" : c'est maintenant corrigé"
+
+msgid "Note that the fact that annotations can't be created in the \"Signal View\" or the \"Image View\" is a limitation of the current implementation, and may be improved in future versions"
+msgstr "Notons que le fait que les annotations ne peuvent pas être créées dans la \"Vue Signal\" ou la \"Vue Image\" est une limitation de l'implémentation actuelle, et peut être amélioré dans les versions futures"
+
+msgid "DataLab Version 0.15.0 (2024-04-11)"
+msgstr "DataLab Version 0.15.0 (11/04/2024)"
+
+msgid "🎁 New installer for the stand-alone version on Windows:"
+msgstr "🎁 Nouvel installeur pour la version autonome sur Windows :"
+
+msgid "The stand-alone version on Windows is now distributed as an MSI installer (instead of an EXE installer)"
+msgstr "La version autonome sur Windows est désormais distribuée en tant qu'installeur MSI (au lieu d'un installeur EXE)"
+
+msgid "This avoids the false positive detection of the stand-alone version as a potential threat by some antivirus software"
+msgstr "Cela évite la détection de faux positifs de la version autonome comme une menace potentielle par certains logiciels antivirus"
+
+msgid "The program will install files and shortcuts:"
+msgstr "Le programme installera des fichiers et des raccourcis :"
+
+msgid "For current user, if the user has no administrator privileges"
+msgstr "Pour l'utilisateur actuel, si l'utilisateur n'a pas de privilèges d'administrateur"
+
+msgid "For all users, if the user has administrator privileges"
+msgstr "Pour tous les utilisateurs, si l'utilisateur a des privilèges d'administrateur"
+
+msgid "Installation directory may be customized"
+msgstr "Le répertoire d'installation peut être personnalisé"
+
+msgid "MSI installer allows to integrate DataLab's installation seemlessly in an organization's deployment system"
+msgstr "L'installeur MSI permet d'intégrer l'installation de DataLab de manière transparente dans le système de déploiement d'une organisation"
+
+msgid "💥 New features and enhancements:"
+msgstr "💥 Nouvelles fonctionnalités et améliorations :"
+
+msgid "Added support for large text/CSV files:"
+msgstr "Ajout de la prise en charge des fichiers texte/CSV volumineux :"
+
+msgid "Files over 1 GB (and with reasonable number of lines) can now be imported as signals or images without crashing the application or even slowing it down"
+msgstr "Les fichiers de plus de 1 Go (et avec un nombre raisonnable de lignes) peuvent désormais être importés en tant que signaux ou images sans quitter inopinément l'application ou même la ralentir"
+
+msgid "The file is read by chunks and, for signals, the data is downsampled to a reasonable number of points for visualization"
+msgstr "Le fichier est lu par morceaux et, pour les signaux, les données sont rééchantillonnées à un nombre raisonnable de points pour la visualisation"
+
+msgid "Large files are supported when opening a file (or dragging and dropping a file in the Signal Panel) and when importing a file in the Text Import Wizard"
+msgstr "Les fichiers volumineux sont pris en charge lors de l'ouverture d'un fichier (ou du glisser-déposer d'un fichier dans le Panneau Signal) et lors de l'importation d'un fichier dans l'Assistant d'importation de texte"
+
+msgid "Auto downsampling feature:"
+msgstr "Nouvelle fonctionnalité de sous-échantillonnage automatique :"
+
+msgid "Added \"Auto downsampling\" feature to signal visualization settings (see \"Settings\" dialog box)"
+msgstr "Ajout de la fonctionnalité \"Sous-échantillonnage automatique\" aux paramètres de visualisation des signaux (voir la boîte de dialogue \"Paramètres\")"
+
+msgid "This feature allows to automatically downsample the signal data for visualization when the number of points is too high and would lead to a slow rendering"
+msgstr "Cette fonctionnalité permet de rééchantillonner automatiquement les données du signal pour la visualisation lorsque le nombre de points est trop élevé et entraînerait un rendu lent"
+
+msgid "The downsampling factor is automatically computed based on the configured maximum number of points to display"
+msgstr "Le facteur de sous-échantillonnage est automatiquement calculé en fonction du nombre maximal de points à afficher configuré"
+
+msgid "This feature is enabled by default and may be disabled in the signal visualization settings"
+msgstr "Cette fonctionnalité est activée par défaut et peut être désactivée dans les paramètres de visualisation du signal"
+
+msgid "CSV format handling:"
+msgstr "Gestion du format CSV :"
+
+msgid "Improved support for CSV files with a header row (column names)"
+msgstr "Amélioration de la prise en charge des fichiers CSV avec une ligne d'en-tête (noms de colonnes)"
+
+msgid "Added support for CSV files with empty columns"
+msgstr "Ajout de la prise en charge des fichiers CSV avec des colonnes vides"
+
+msgid "Open/save file error handling:"
+msgstr "Gestion des erreurs d'ouverture/enregistrement de fichiers :"
+
+msgid "Error messages are now more explicit when opening or saving a file fails"
+msgstr "Les messages d'erreur sont désormais plus explicites lorsque l'ouverture ou l'enregistrement d'un fichier échoue"
+
+msgid "Added a link to the folder containing the file in the error message"
+msgstr "Ajout d'un lien vers le dossier contenant le fichier dans le message d'erreur"
+
+msgid "Added \"Plugins and I/O formats\" page to the Installation and Configuration Viewer (see \"Help\" menu)"
+msgstr "Ajout de la page \"Plugins et fonctionnalités d'entrée/sortie\" au Visualiseur d'installation et de configuration (voir le menu \"Aide\")"
+
+msgid "Reset DataLab configuration:"
+msgstr "Réinitialisation de la configuration de DataLab :"
+
+msgid "In some cases, it may be useful to reset the DataLab configuration file to its default values (e.g. when the configuration file is corrupted)"
+msgstr "Dans certains cas, il peut être utile de réinitialiser le fichier de configuration de DataLab à ses valeurs par défaut (par exemple, lorsque le fichier de configuration est corrompu)"
+
+msgid "Added new `--reset` command line option to remove the configuration folder"
+msgstr "Ajout de la nouvelle option de ligne de commande `--reset` pour supprimer le dossier de configuration"
+
+msgid "Added new \"Reset DataLab\" Start Menu shortcut to the Windows installer"
+msgstr "Ajout du nouveau raccourci du Menu Démarer \"Reset DataLab\" à l'installeur Windows"
+
+msgid "Fixed [Issue #64](https://github.com/DataLab-Platform/DataLab/issues/64) - HDF5 browser does not show datasets with 1x1 size:"
+msgstr "Correction de l'[Issue #64](https://github.com/DataLab-Platform/DataLab/issues/64) - L'explorateur HDF5 ne montre pas les ensembles de données de taille 1x1 :"
+
+msgid "HDF5 datasets with a size of 1x1 were not shown in the HDF5 browser"
+msgstr "Les datasets HDF5 de taille 1x1 n'étaient pas affichés dans l'explorateur HDF5"
+
+msgid "Even if those datasets should not be considered as signals or images, they are now shown in the HDF5 browser (but not checkable, i.e. not importable as signals or images)"
+msgstr "Même si ces données ne devraient pas être considérées comme des signaux ou des images, elles sont désormais affichées dans l'explorateur HDF5 (mais non sélectionnables, c'est-à-dire non importables en tant que signaux ou images)"

@@ -51,6 +51,48 @@ Reverse X-axis
 
 Create a new signal which is the result of reversing X data.
 
+Replace X by other signal's Y
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Create a new signal by combining two signals, using Y values from the second signal
+as X coordinates for the first signal's Y values.
+
+This feature is particularly useful for calibration scenarios, such as:
+
+- Applying wavelength calibration to spectroscopy data
+- Using a calibrated reference signal to rescale measurement data
+- Combining signals where one contains calibration points
+
+The two signals must have the same number of points. The operation directly uses
+the Y arrays without interpolation.
+
+.. list-table::
+    :header-rows: 1
+    :widths: 40, 60
+
+    * - Input
+      - Description
+    * - Signal 1
+      - Provides the Y data for the output signal
+    * - Signal 2
+      - Provides the Y data that becomes the X coordinates of the output signal
+
+X-Y mode
+~~~~~~~~
+
+Create a new signal by simulating the X-Y mode of an oscilloscope.
+
+This operation plots one signal as a function of another by:
+
+1. Finding the overlapping X range between both signals
+2. Resampling both signals onto a common X grid within that overlap
+3. Using the resampled Y values as coordinates (first signal's Y as X, second signal's Y as Y)
+
+.. note::
+
+  This is different from "Replace X by other signal's Y" as it performs interpolation to handle signals
+  with different X arrays.
+
 Convert to Cartesian coordinates
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -481,9 +523,3 @@ The following stability analysis methods are available:
 .. note::
 
     The "All stability features" option allows to compute all stability analysis methods at once.
-
-
-X-Y Mode
-^^^^^^^^
-
-Simulate the X-Y mode of an oscilloscope.
