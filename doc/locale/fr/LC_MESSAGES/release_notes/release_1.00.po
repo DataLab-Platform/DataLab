@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-03 16:26+0100\n"
+"POT-Creation-Date: 2025-12-03 18:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -771,6 +771,9 @@ msgstr "`compute_1_to_1`, `compute_1_to_0`, `compute_1_to_n`, `compute_n_to_1`, 
 
 msgid "**No backward compatibility maintained** for these internal changes (closes [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180))"
 msgstr "**Aucune compatibilité ascendante n'est maintenue** pour ces modifications internes (ceci clôture [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180))"
+
+msgid "🛠️ Bug Fixes since version 0.20"
+msgstr "🛠️ Correctifs depuis la version 0.20"
 
 msgid "**Performance fixes:**"
 msgstr "**Corrections de performances :**"
