@@ -195,6 +195,23 @@ def insert_processing_parameters(
         obj.set_metadata_option(PROCESSING_PARAMETERS_OPTION, pp.to_dict())
 
 
+def run_with_env(func: Callable, args: tuple, env_json: str) -> CompOut:
+    """Wrapper to apply environment config before calling func
+
+    Args:
+        func: function to call
+        args: function arguments
+        env_json: JSON string with environment configuration
+
+    Returns:
+        Computation output object containing the result, error message,
+         or warning message.
+    """
+    sigima_options.set_env(env_json)
+    sigima_options.ensure_loaded_from_env()  # recharge depuis l'env
+    return wng_err_func(func, args)
+
+
 # Enable multiprocessing support for Windows, with frozen executable (e.g. PyInstaller)
 multiprocessing.freeze_support()
 
@@ -219,22 +236,6 @@ COMPUTATION_TIP = _(
 
 
 POOL: Pool | None = None
-
-
-def run_with_env(func: Callable, args: tuple, env_json: str) -> CompOut:
-    """Wrapper to apply environment config before calling func
-
-    Args:
-        func: function to call
-        args: function arguments
-
-    Returns:
-        Computation output object containing the result, error message,
-         or warning message.
-    """
-    sigima_options.set_env(env_json)
-    sigima_options.ensure_loaded_from_env()  # recharge depuis l'env
-    return wng_err_func(func, args)
 
 
 class WorkerState(Enum):
