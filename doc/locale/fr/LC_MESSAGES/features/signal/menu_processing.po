@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 18:12+0100\n"
+"POT-Creation-Date: 2025-12-03 11:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -75,6 +75,66 @@ msgstr "Inverser l'axe des X"
 msgid "Create a new signal which is the result of reversing X data."
 msgstr "Crée un signal à partir des données inversées de l'axe des X du signal sélectionné."
 
+msgid "Replace X by other signal's Y"
+msgstr "Remplacer X par le Y d'un autre signal"
+
+msgid "Create a new signal by combining two signals, using Y values from the second signal as X coordinates for the first signal's Y values."
+msgstr "Crée un nouveau signal en combinant deux signaux, en utilisant les valeurs Y du second signal comme coordonnées X pour les valeurs Y du premier signal."
+
+msgid "This feature is particularly useful for calibration scenarios, such as:"
+msgstr "Cette fonctionnalité est particulièrement utile pour les scénarios d'étalonnage, tels que :"
+
+msgid "Applying wavelength calibration to spectroscopy data"
+msgstr "Appliquer un étalonnage en longueur d'onde aux données de spectroscopie"
+
+msgid "Using a calibrated reference signal to rescale measurement data"
+msgstr "Utiliser un signal de référence étalonné pour recalibrer les données de mesure"
+
+msgid "Combining signals where one contains calibration points"
+msgstr "Combiner des signaux où l'un contient des points d'étalonnage"
+
+msgid "The two signals must have the same number of points. The operation directly uses the Y arrays without interpolation."
+msgstr "Les deux signaux doivent avoir le même nombre de points. L'opération utilise directement les tableaux Y sans interpolation."
+
+msgid "Input"
+msgstr "Entrée"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Signal 1"
+msgstr "Signal 1"
+
+msgid "Provides the Y data for the output signal"
+msgstr "Fournit les données Y pour le signal de sortie"
+
+msgid "Signal 2"
+msgstr "Signal 2"
+
+msgid "Provides the Y data that becomes the X coordinates of the output signal"
+msgstr "Fournit les données Y qui deviennent les coordonnées X du signal de sortie"
+
+msgid "X-Y mode"
+msgstr "Mode X-Y"
+
+msgid "Create a new signal by simulating the X-Y mode of an oscilloscope."
+msgstr "Crée un nouveau signal en simulant le mode X-Y d'un oscilloscope."
+
+msgid "This operation plots one signal as a function of another by:"
+msgstr "Cette opération trace un signal en fonction d'un autre en :"
+
+msgid "Finding the overlapping X range between both signals"
+msgstr "Trouvant la plage X qui se chevauche entre les deux signaux"
+
+msgid "Resampling both signals onto a common X grid within that overlap"
+msgstr "Rééchantillonnant les deux signaux sur une grille X commune dans ce chevauchement"
+
+msgid "Using the resampled Y values as coordinates (first signal's Y as X, second signal's Y as Y)"
+msgstr "Utilisant les valeurs Y rééchantillonnées comme coordonnées (Y du premier signal comme X, Y du second signal comme Y)"
+
+msgid "This is different from \"Replace X by other signal's Y\" as it performs interpolation to handle signals with different X arrays."
+msgstr "Ceci est différent de \"Remplacer X par le Y d'un autre signal\" car il effectue une interpolation pour gérer les signaux avec des tableaux X différents."
+
 msgid "Convert to Cartesian coordinates"
 msgstr "Convertir en coordonnées cartésiennes"
 
@@ -108,7 +168,6 @@ msgstr "Normalisation"
 msgid "Maximum"
 msgstr "Maximum"
 
-#, python-brace-format
 msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\max\\left(y_{0}\\right)}`"
 msgstr ""
 
@@ -156,9 +215,6 @@ msgstr "Génère de nouveaux signaux en ajoutant le même bruit à chaque signal
 
 msgid "Noise"
 msgstr "Bruit"
-
-msgid "Description"
-msgstr "Description"
 
 msgid "Gaussian"
 msgstr "Gaussien"
@@ -786,9 +842,3 @@ msgstr "Dérivée de la déviation d'Allan, quantifie la stabilité en termes de
 
 msgid "The \"All stability features\" option allows to compute all stability analysis methods at once."
 msgstr "L'option \"Toutes les analyses de stabilité\" permet de calculer toutes les méthodes d'analyse de stabilité en une seule fois."
-
-msgid "X-Y Mode"
-msgstr "Mode XY"
-
-msgid "Simulate the X-Y mode of an oscilloscope."
-msgstr "Simuler le mode XY d'un oscilloscope."

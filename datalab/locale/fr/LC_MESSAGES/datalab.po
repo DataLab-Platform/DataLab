@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2025-11-29 16:49+0100\n"
+"POT-Creation-Date: 2025-12-03 12:01+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: Christophe Debonnel <c.debonnel@codra.fr>\n"
 "Language: fr\n"
@@ -1890,6 +1890,19 @@ msgstr "Intégrale"
 
 msgid "signal to convolve with"
 msgstr "signal pour la convolution"
+
+msgid "Replace X by other signal's Y"
+msgstr "Remplacer X par le Y d'un autre signal"
+
+msgid ""
+"Replace X coordinates using Y values from another signal.\n"
+"Useful for calibration: plot data vs wavelength scale."
+msgstr ""
+"Remplacer les coordonnées X en utilisant les valeurs Y d'un autre signal.\n"
+"Utile pour l'étalonnage : tracer des données en fonction d'une échelle de longueurs d'onde."
+
+msgid "signal providing Y values for X axis"
+msgstr "signal fournissant les valeurs Y pour l'axe X"
 
 msgid "signal to deconvolve with"
 msgstr "signal pour la déconvolution"

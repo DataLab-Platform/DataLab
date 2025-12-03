@@ -6,6 +6,22 @@ See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.
 
 ### 🛠️ Bug Fixes ###
 
+**Signal axis calibration - Replace X by other signal's Y:**
+
+* Added new "Replace X by other signal's Y" operation in Processing > Axis transformation menu for signal calibration workflows
+* Addresses critical missing functionality reported by users who needed to apply wavelength calibration or similar transformations to spectroscopy data
+* The operation combines two signals: uses Y values from one signal as the new X coordinates for another signal's Y values
+* Unlike X-Y mode (which resamples and interpolates), this operation directly uses Y arrays without interpolation, preserving exact calibration values
+* Requires both signals to have the same number of points - raises clear error message if sizes don't match
+* Automatically transfers metadata: X axis label/unit taken from calibration signal's Y label/unit
+* Menu location: Processing > Axis transformation > "Replace X by other signal's Y"
+* This closes [Issue #273](https://github.com/datalab-platform/datalab/issues/273) - Missing signal axis calibration: no way to replace X with Y from another signal
+
+**X-Y mode:**
+
+* The X-Y mode processing operation for signals has been moved to Processing > Axis transformation > "X-Y mode" for better discoverability
+* The nuance between X-Y mode (which resamples/interpolates) and the new "Replace X by other signal's Y" operation has been clarified in documentation
+
 **Lock LUT setting persistence:**
 
 * Fixed "Lock LUT range when updating data" setting not persisting in Settings > Visualization > Images > Default Image visualization settings

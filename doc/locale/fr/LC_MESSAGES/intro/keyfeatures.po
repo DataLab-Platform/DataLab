@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-10 10:01+0200\n"
+"POT-Creation-Date: 2025-12-03 11:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,6 +140,12 @@ msgstr "Normalisation, rognage, correction de décalage"
 msgid "Reverse X-axis"
 msgstr "Inversion de l'axe X"
 
+msgid "Replace X by other signal's Y (calibration)"
+msgstr "Remplacer X par le Y d'un autre signal (calibration)"
+
+msgid "X-Y mode"
+msgstr "Mode X-Y"
+
 msgid "Thresholding (manual, Otsu...)"
 msgstr "Seuillage (manuel, Otsu...)"
 
@@ -157,9 +163,6 @@ msgstr "Interpolation, rééchantillonnage"
 
 msgid "Detrending"
 msgstr "Elimination de tendance"
-
-msgid "X-Y mode"
-msgstr "Mode XY"
 
 msgid "Interactive fit: Gauss, Lorentz, Voigt, polynomial, CDF..."
 msgstr "Ajustement interactif : Gauss, Lorentz, Voigt, polynôme, CDF..."

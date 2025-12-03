@@ -165,6 +165,16 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             obj2_name=_("signal to convolve with"),
         )
         self.register_2_to_1(
+            sips.replace_x_by_other_y,
+            _("Replace X by other signal's Y"),
+            comment=_(
+                "Replace X coordinates using Y values from another signal.\n"
+                "Useful for calibration: plot data vs wavelength scale."
+            ),
+            obj2_name=_("signal providing Y values for X axis"),
+            skip_xarray_compat=True,
+        )
+        self.register_2_to_1(
             sips.deconvolution,
             _("Deconvolution"),
             icon_name="deconvolution.svg",

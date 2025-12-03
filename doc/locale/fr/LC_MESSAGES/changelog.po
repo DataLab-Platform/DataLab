@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-30 15:30+0100\n"
+"POT-Creation-Date: 2025-12-03 12:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,6 +29,42 @@ msgstr "DataLab Version 1.0.2 (non publiée)"
 
 msgid "🛠️ Bug Fixes"
 msgstr "🛠️ Correctifs"
+
+msgid "**Signal axis calibration - Replace X by other signal's Y:**"
+msgstr "**Calibration de l'axe des signaux - Remplacer X par le Y d'un autre signal :**"
+
+msgid "Added new \"Replace X by other signal's Y\" operation in Processing > Axis transformation menu for signal calibration workflows"
+msgstr "Ajout de la nouvelle opération \"Remplacer X par le Y d'un autre signal\" dans le menu Traitement > Transformation d'axe pour les flux de travail de calibration des signaux"
+
+msgid "Addresses critical missing functionality reported by users who needed to apply wavelength calibration or similar transformations to spectroscopy data"
+msgstr "Répond à une fonctionnalité critique manquante signalée par les utilisateurs qui avaient besoin d'appliquer une calibration en longueur d'onde ou des transformations similaires aux données de spectroscopie"
+
+msgid "The operation combines two signals: uses Y values from one signal as the new X coordinates for another signal's Y values"
+msgstr "L'opération combine deux signaux : elle utilise les valeurs Y d'un signal comme nouvelles coordonnées X pour les valeurs Y d'un autre signal"
+
+msgid "Unlike X-Y mode (which resamples and interpolates), this operation directly uses Y arrays without interpolation, preserving exact calibration values"
+msgstr "Contrairement au mode X-Y (qui rééchantillonne et interpole), cette opération utilise directement les tableaux Y sans interpolation, préservant ainsi les valeurs de calibration exactes"
+
+msgid "Requires both signals to have the same number of points - raises clear error message if sizes don't match"
+msgstr "Nécessite que les deux signaux aient le même nombre de points - affiche un message d'erreur clair si les tailles ne correspondent pas"
+
+msgid "Automatically transfers metadata: X axis label/unit taken from calibration signal's Y label/unit"
+msgstr "Transfert automatique des métadonnées : l'étiquette/unité de l'axe X est prise à partir de l'étiquette/unité Y du signal de calibration"
+
+msgid "Menu location: Processing > Axis transformation > \"Replace X by other signal's Y\""
+msgstr "Emplacement dans le menu : Traitement > Transformation d'axe > \"Remplacer X par le Y d'un autre signal\""
+
+msgid "This closes [Issue #273](https://github.com/datalab-platform/datalab/issues/273) - Missing signal axis calibration: no way to replace X with Y from another signal"
+msgstr "Ceci clôture [Issue #273](https://github.com/datalab-platform/datalab/issues/273) - Calibration de l'axe des signaux manquante : aucun moyen de remplacer X par Y d'un autre signal"
+
+msgid "**X-Y mode:**"
+msgstr "**Mode X-Y :**"
+
+msgid "The X-Y mode processing operation for signals has been moved to Processing > Axis transformation > \"X-Y mode\" for better discoverability"
+msgstr "Le traitement Mode X-Y pour les signaux a été déplacé vers Traitement > Transformation des axes > \"Mode X-Y\" pour une meilleure découvrabilité"
+
+msgid "The nuance between X-Y mode (which resamples/interpolates) and the new \"Replace X by other signal's Y\" operation has been clarified in documentation"
+msgstr "La nuance entre le mode X-Y (qui rééchantillonne/interpole) et la nouvelle opération \"Remplacer X par le Y d'un autre signal\" a été clarifiée dans la documentation"
 
 msgid "**Lock LUT setting persistence:**"
 msgstr "**Persistance du paramètre de verrouillage de la LUT :**"
