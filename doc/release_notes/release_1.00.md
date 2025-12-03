@@ -1,6 +1,6 @@
 # Version 1.0 #
 
-## DataLab Version 1.0.2 (unreleased) ##
+## DataLab Version 1.0.2 (2025-12-03) ##
 
 ### 🛠️ Bug Fixes ###
 
