@@ -7,9 +7,9 @@ name: Install and Test on Ubuntu (latest) with PyQt5
 
 on:
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "main", "develop", "release" ]
   pull_request:
-    branches: [ "main", "develop" ]
+    branches: [ "main", "develop", "release" ]
 
 jobs:
   build:
@@ -43,6 +43,29 @@ jobs:
            git clone --depth 1 --branch develop https://github.com/PlotPyStack/guidata.git
            git clone --depth 1 --branch develop https://github.com/PlotPyStack/plotpy.git
            git clone --depth 1 --branch develop https://github.com/DataLab-Platform/sigima.git
+           cd DataLab
+           pip install -e ../guidata
+           pip install -e ../PythonQwt
+           pip install -e ../plotpy
+           pip install -e ../sigima
+           # Install tomli for TOML parsing (safe if already present)
+           pip install tomli
+           # Extract dependencies and save to file, then install
+           python -c "import tomli; f=open('pyproject.toml','rb'); data=tomli.load(f); deps=[d for d in data['project']['dependencies'] if not any(p in d for p in ['guidata','PlotPy','Sigima'])]; open('deps.txt','w').write('\n'.join(deps))"
+           pip install -r deps.txt
+           # Install DataLab without dependencies
+           pip install --no-deps .
+        elif [ "${{ github.ref_name }}" = "release" ]; then
+           # Clone dependencies from release branches (with fallback to main/master)
+           cd ..
+           # Try cloning PythonQwt from main or master
+           git clone --depth 1 https://github.com/PlotPyStack/PythonQwt.git || git clone --depth 1 --branch master https://github.com/PlotPyStack/PythonQwt.git
+           # Try cloning guidata from release, fallback to main or master
+           git clone --depth 1 --branch release https://github.com/PlotPyStack/guidata.git || git clone --depth 1 https://github.com/PlotPyStack/guidata.git || git clone --depth 1 --branch master https://github.com/PlotPyStack/guidata.git
+           # Try cloning plotpy from release, fallback to main or master
+           git clone --depth 1 --branch release https://github.com/PlotPyStack/plotpy.git || git clone --depth 1 https://github.com/PlotPyStack/plotpy.git || git clone --depth 1 --branch master https://github.com/PlotPyStack/plotpy.git
+           # Try cloning sigima from release, fallback to main
+           git clone --depth 1 --branch release https://github.com/DataLab-Platform/sigima.git || git clone --depth 1 https://github.com/DataLab-Platform/sigima.git
            cd DataLab
            pip install -e ../guidata
            pip install -e ../PythonQwt

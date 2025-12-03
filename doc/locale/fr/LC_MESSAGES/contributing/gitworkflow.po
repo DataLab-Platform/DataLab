@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 18:07+0200\n"
+"POT-Creation-Date: 2025-12-03 14:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -55,20 +55,47 @@ msgstr "Fusionné de nouveau dans ``develop`` une fois terminé."
 msgid "Deleted after merging."
 msgstr "Supprimé après la fusion."
 
+msgid "Release Branch"
+msgstr "Branche de maintenance"
+
+msgid "``release``: Represents the current maintenance line for patch releases."
+msgstr "``release`` : Représente la ligne de maintenance actuelle pour les versions correctives."
+
+msgid "Created from ``main`` after a stable release when the first patch is needed."
+msgstr "Créé à partir de ``main`` après une version stable lorsque le premier correctif est nécessaire."
+
+msgid "Accepts ``fix/xxx`` and ``hotfix/xxx`` branch merges."
+msgstr "Accepte les fusions des branches ``fix/xxx`` et ``hotfix/xxx``."
+
+msgid "Merged back into ``main`` for each patch release tag (e.g., 1.0.1, 1.0.2)."
+msgstr "Fusionné de nouveau dans ``main`` pour chaque tag de version corrective (par exemple, 1.0.1, 1.0.2)."
+
+msgid "Reset or recreated when starting a new minor/major release cycle."
+msgstr "Réinitialisé ou recréé lors du démarrage d'un nouveau cycle de version mineure/majeure."
+
+msgid "The ``release`` branch is not versioned (no ``release/1.0.x``). It always represents \"the current maintenance line.\" When a new minor version is released (e.g., 1.2.0), the old ``release`` branch is deleted and a new one is created from the fresh tag when the first patch for 1.2.1 is needed."
+msgstr "La branche ``release`` n'est pas versionnée (pas de ``release/1.0.x``). Elle représente toujours « la ligne de maintenance actuelle ». Lorsqu'une nouvelle version mineure est publiée (par exemple, 1.2.0), l'ancienne branche ``release`` est supprimée et une nouvelle est créée à partir du nouveau tag lorsque le premier correctif pour 1.2.1 est nécessaire."
+
 msgid "Bug Fix Branches"
 msgstr "Branches de correction d'anomalies"
 
 msgid "``fix/xxx``: Used for general bug fixes that are not urgent."
 msgstr "``fix/xxx`` : Utilisé pour les corrections générales d'anomalies qui ne sont pas urgentes."
 
+msgid "Created from ``develop`` (for next feature release) or ``release`` (for patch release)."
+msgstr "Créé à partir de ``develop`` (pour la prochaine version de fonctionnalité) ou ``release`` (pour la version corrective)."
+
+msgid "Merged back into the originating branch once completed."
+msgstr "Fusionné de nouveau dans la branche d'origine une fois terminé."
+
 msgid "``hotfix/xxx``: Used for urgent production-critical fixes."
 msgstr "``hotfix/xxx`` : Utilisé pour les corrections urgentes critiques pour la production."
 
-msgid "Created from ``main``."
-msgstr "Créé à partir de ``main``."
+msgid "Created from ``release`` (if exists) or ``main`` (if no ``release`` branch yet)."
+msgstr "Créé à partir de ``release`` (si elle existe) ou ``main`` (si aucune branche ``release`` n'existe encore)."
 
-msgid "Merged back into ``main``."
-msgstr "Fusionné de nouveau dans ``main``."
+msgid "Merged back into ``release`` or ``main``."
+msgstr "Fusionné de nouveau dans ``release`` ou ``main``."
 
 msgid "The fix is then cherry-picked into ``develop``."
 msgstr "La correction est ensuite sélectionnée dans ``develop``."
@@ -115,6 +142,9 @@ msgstr "Ne pas laisser les branches de fonctionnalités non fusionnées trop lon
 msgid "Workflow for Regular Bug Fixes"
 msgstr "Workflow pour les corrections d'anomalies régulières"
 
+msgid "For next feature release (target: ``develop``):"
+msgstr "Pour la prochaine version de fonctionnalité (cible : ``develop``) :"
+
 msgid "Create a bug fix branch from ``develop``:"
 msgstr "Créer une branche de correction d'anomalie à partir de ``develop`` :"
 
@@ -127,17 +157,26 @@ msgstr "Fusionner la branche de correction de nouveau dans ``develop`` :"
 msgid "Delete the fix branch:"
 msgstr "Supprimer la branche de correction :"
 
-msgid "Do not create a ``fix/xxx`` branch from a ``develop/feature_name`` branch. Always branch from ``develop`` to ensure fixes are correctly propagated."
-msgstr "Ne pas créer une branche ``fix/xxx`` à partir d'une branche ``develop/feature_name``. Toujours créer une branche à partir de ``develop`` pour garantir que les corrections sont correctement propagées."
+msgid "For current maintenance release (target: ``release``):"
+msgstr "Pour la version de maintenance actuelle (cible : ``release``) :"
+
+msgid "Create a bug fix branch from ``release``:"
+msgstr "Créer une branche de correction d'anomalie à partir de ``release`` :"
+
+msgid "Merge the fix branch back into ``release``:"
+msgstr "Fusionner la branche de correction de nouveau dans ``release`` :"
+
+msgid "Do not create a ``fix/xxx`` branch from a ``develop/feature_name`` branch. Always branch from ``develop`` or ``release`` to ensure fixes are correctly propagated."
+msgstr "Ne pas créer une branche ``fix/xxx`` à partir d'une branche ``develop/feature_name``. Toujours créer une branche à partir de ``develop`` ou ``release`` pour garantir que les corrections sont correctement propagées."
 
 msgid "Workflow for Critical Hotfixes"
 msgstr "Workflow pour les correctifs urgents"
 
-msgid "Create a hotfix branch from ``main``:"
-msgstr "Créer une branche de correctif urgent à partir de ``main`` :"
+msgid "Create a hotfix branch from ``release`` (or ``main`` if no ``release`` branch exists):"
+msgstr "Créer une branche de correctif urgent à partir de ``release`` (ou ``main`` si aucune branche ``release`` n'existe) :"
 
-msgid "Merge the fix back into ``main``:"
-msgstr "Fusionner le correctif de nouveau dans ``main`` :"
+msgid "Merge the fix back into ``release`` (or ``main``):"
+msgstr "Fusionner la correction de nouveau dans ``release`` (ou ``main``) :"
 
 msgid "Cherry-pick the fix into ``develop``:"
 msgstr "Faire un cherry-pick du correctif dans ``develop`` :"
@@ -148,6 +187,39 @@ msgstr "Supprimer la branche de correctif urgent :"
 msgid "Do not merge ``fix/xxx`` or ``hotfix/xxx`` directly into ``main`` without following the workflow. Ensure hotfixes are cherry-picked into ``develop`` to avoid losing fixes in future releases."
 msgstr "Ne pas fusionner ``fix/xxx`` ou ``hotfix/xxx`` directement dans ``main`` sans suivre le workflow. Assurez-vous que les correctifs urgents ont fait l'objet de cherry-pick dans ``develop`` pour éviter de perdre des correctifs dans les futures versions."
 
+msgid "Workflow for Patch Releases"
+msgstr "Workflow pour les versions correctives"
+
+msgid "When ready to release a patch version (e.g., 1.0.1, 1.0.2):"
+msgstr "Dès qu'une version corrective est prête à être publiée (par exemple, 1.0.1, 1.0.2) :"
+
+msgid "Ensure the ``release`` branch contains all desired fixes."
+msgstr "S'assurer que la branche ``release`` contient toutes les corrections souhaitées."
+
+msgid "Merge ``release`` into ``main``:"
+msgstr "Fusionner ``release`` dans ``main`` :"
+
+msgid "Tag the release on ``main``:"
+msgstr "Taguer la version sur ``main`` :"
+
+msgid "Keep the ``release`` branch for additional patches in the same minor version series."
+msgstr "Conserver la branche ``release`` pour des correctifs supplémentaires dans la même série de versions mineures."
+
+msgid "Workflow for Minor/Major Releases"
+msgstr "Workflow pour les versions mineures/majeures"
+
+msgid "When ready to release a new minor or major version (e.g., 1.1.0, 2.0.0):"
+msgstr "Dès qu'une nouvelle version mineure ou majeure est prête à être publiée (par exemple, 1.1.0, 2.0.0) :"
+
+msgid "Merge ``develop`` into ``main``:"
+msgstr "Fusionner ``develop`` dans ``main`` :"
+
+msgid "Delete the old ``release`` branch (if exists):"
+msgstr "Supprimer l'ancienne branche ``release`` (si elle existe) :"
+
+msgid "Create a new ``release`` branch from ``main`` when the first patch for 1.1.1 is needed:"
+msgstr "Créer une nouvelle branche ``release`` à partir de ``main`` lorsque le premier correctif pour 1.1.1 est nécessaire :"
+
 msgid "Best Practices"
 msgstr "Bonnes pratiques"
 
@@ -157,11 +229,17 @@ msgstr "Réorganiser régulièrement les branches de fonctionnalités sur ``deve
 msgid "Avoid long-lived branches to minimize merge conflicts."
 msgstr "Éviter les branches de longue durée pour minimiser les conflits de fusion."
 
-msgid "Ensure bug fixes in ``main`` are **always cherry-picked** to ``develop``."
-msgstr "S'assurer que les corrections d'anomalies dans ``main`` sont **font toujours l'objet d'un cherry-pick** dans ``develop``."
+msgid "Ensure bug fixes in ``release`` or ``main`` are **always cherry-picked** to ``develop``."
+msgstr "S'assurer que les corrections de bogues dans ``release`` ou ``main`` sont **toujours sélectionnées** dans ``develop``."
 
 msgid "Clearly differentiate between ``fix/xxx`` (non-urgent fixes) and ``hotfix/xxx`` (critical production fixes)."
 msgstr "Différencier clairement entre ``fix/xxx`` (correctifs non urgents) et ``hotfix/xxx`` (correctifs critiques pour la production)."
+
+msgid "When creating the ``release`` branch, update CHANGELOG to indicate which version it targets (e.g., add a comment in the merge commit: \"Create release branch for v1.0.x maintenance\")."
+msgstr "Lors de la création de la branche ``release``, mettre à jour le CHANGELOG pour indiquer la version qu'elle cible (par exemple, ajouter un commentaire dans le commit de fusion : \"Créer une branche de maintenance pour v1.0.x\")."
+
+msgid "The ``release`` branch always represents the current maintenance line. To know which version it targets, check the most recent tag on ``main`` or the CHANGELOG."
+msgstr "La branche ``release`` représente toujours la ligne de maintenance actuelle. Pour savoir quelle version elle cible, vérifiez le tag le plus récent sur ``main`` ou le CHANGELOG."
 
 msgid "Takeaway"
 msgstr "Conclusion"
@@ -169,5 +247,5 @@ msgstr "Conclusion"
 msgid "This workflow ensures a structured yet flexible development process while keeping ``main`` stable and ``develop`` always updated with the latest changes."
 msgstr "Ce workflow garantit un processus de développement structuré mais flexible tout en maintenant ``main`` stable et ``develop`` toujours à jour avec les dernières modifications."
 
-msgid "It also ensures that bug fixes are correctly managed and propagated across branches."
-msgstr "Il garantit également que les corrections d'anomalies sont correctement gérées et propagées entre les branches."
+msgid "The ``release`` branch provides a dedicated maintenance line for patch releases, allowing ``develop`` to proceed with new features without interference. This solves the problem of coordinating unreleased changes across the PlotPyStack ecosystem (DataLab, Sigima, PlotPy, guidata, PythonQwt) by providing a stable branch for CI testing during maintenance cycles."
+msgstr "La branche ``release`` fournit une ligne de maintenance dédiée pour les versions correctives, permettant à ``develop`` de poursuivre avec de nouvelles fonctionnalités sans interférence. Cela résout le problème de la coordination des modifications non publiées à travers l'écosystème PlotPyStack (DataLab, Sigima, PlotPy, guidata, PythonQwt) en fournissant une branche stable pour les tests CI pendant les cycles de maintenance."
