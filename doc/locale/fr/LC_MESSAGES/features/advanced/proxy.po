@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 16:57+0200\n"
+"POT-Creation-Date: 2025-12-03 18:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -344,6 +344,12 @@ msgid "Import all objects from HDF5 files. Defaults to None."
 msgstr ""
 
 msgid "Raise DataLab window"
+msgstr ""
+
+msgid "Remove current object from current panel."
+msgstr ""
+
+msgid "if True, remove object without confirmation. Defaults to False."
 msgstr ""
 
 msgid "Reset all application data"

@@ -1,16 +1,5 @@
 # Version 1.0 #
 
-## DataLab Version 1.1.0 (unreleased) ##
-
-### ✨ New Features ###
-
-**Proxy API:**
-
-* Added `remove_object()` method to proxy interface (local and remote) for selective object deletion
-  * Removes currently selected object from active panel
-  * Optional `force` parameter to skip confirmation dialog
-  * Complements existing `reset_all()` method which removes all objects
-
 ## DataLab Version 1.0.2 (unreleased) ##
 
 ### 🛠️ Bug Fixes ###
@@ -355,7 +344,7 @@ This major release represents a significant milestone for DataLab with numerous 
   * `compute_1_to_1`, `compute_1_to_0`, `compute_1_to_n`, `compute_n_to_1`, `compute_2_to_1`
 * **No backward compatibility maintained** for these internal changes (closes [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180))
 
-### 🛠️ Bug Fixes ###
+### 🛠️ Bug Fixes since version 0.20 ###
 
 **Performance fixes:**
 
