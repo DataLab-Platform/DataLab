@@ -8,6 +8,13 @@
 
 * Fixed macro console taking excessive vertical space on first open - the script editor now properly gets 70% of space and console 30% by default, ensuring comfortable editing without manual resizing
 
+**Macro naming:**
+
+* Fixed automatic macro naming generating duplicate names after reloading workspace from HDF5 files
+* When macros were deserialized from saved workspaces or imported from files, the internal counter used for generating default names (e.g., "macro_01", "macro_02") was not updated, causing the next new macro to potentially reuse an existing name
+* The counter now synchronizes with existing macro names after loading, ensuring unique sequential naming
+* Default macro names simplified from translated "Untitled XX" to language-neutral "macro_XX" format for better consistency across locales
+
 **Macro execution:**
 
 * Fixed syntax errors when using f-strings with nested quotes in macros (e.g., `f'text {func("arg")}'` now works correctly)
