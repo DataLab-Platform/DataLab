@@ -583,6 +583,35 @@ DataLab development uses a **multi-root workspace** (`.code-workspace` file) wit
 2. Use `.env` file to point to local development versions
 3. Test changes in both Sigima unit tests AND DataLab integration tests
 
+## Release Notes Guidelines
+
+**Location**: `doc/release_notes/release_1.00.md`
+
+**Writing Style**: Focus on **user impact**, not implementation details.
+
+**Good release note** (user-focused):
+- ✅ "Fixed syntax errors when using f-strings with nested quotes in macros"
+- ✅ "Fixed corrupted Unicode characters in macro console output on Windows"
+- ✅ "Fixed 'Lock LUT range' setting not persisting after closing Settings dialog"
+
+**Bad release note** (implementation-focused):
+- ❌ "Removed `code.replace('"', "'")` that broke f-strings"
+- ❌ "Changed QTextCodec.codecForLocale() to codecForName(b'UTF-8')"
+- ❌ "Added missing `ima_def_keep_lut_range` option in configuration"
+
+**Structure**:
+- **What went wrong**: Describe the symptom users experienced
+- **When it occurred**: Specify the context/scenario
+- **What's fixed**: Explain the benefit, not the implementation
+
+**Example**:
+```markdown
+**Macro execution:**
+
+* Fixed syntax errors when using f-strings with nested quotes in macros (e.g., `f'text {func("arg")}'` now works correctly)
+* Fixed corrupted Unicode characters in macro console output on Windows - special characters like ✅, 💡, and → now display correctly instead of showing garbled text
+```
+
 ## Key Files Reference
 
 | File | Purpose |
@@ -598,6 +627,7 @@ DataLab development uses a **multi-root workspace** (`.code-workspace` file) wit
 | `sigima/proc/image/processing.py` | Image computation functions |
 | `scripts/run_with_env.py` | Environment loader (loads `.env`) |
 | `.env` | Local PYTHONPATH for development |
+| `doc/release_notes/release_1.00.md` | Release notes for version 1.0.x |
 
 ## Getting Help
 
