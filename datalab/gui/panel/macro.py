@@ -204,6 +204,10 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             self.addWidget(widget)
         self.setStretchFactor(0, 2)
         self.setStretchFactor(1, 1)
+        # Set initial sizes: give more space to editor (70%) than console (30%)
+        # This ensures proper layout on first open
+        total_height = 600  # Default reasonable height
+        self.setSizes([int(total_height * 0.7), int(total_height * 0.3)])
 
         self.run_action = None
         self.stop_action = None
