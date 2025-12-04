@@ -186,8 +186,20 @@ print("All done!")
         """
         global UNTITLED_NB  # pylint: disable=global-statement
         UNTITLED_NB += 1
-        untitled = _("Untitled")
-        return f"{untitled} {UNTITLED_NB:02d}"
+        return f"macro_{UNTITLED_NB:02d}"
+
+    @staticmethod
+    def set_untitled_number(number: int) -> None:
+        """Set the untitled number counter
+
+        This is useful when loading macros from HDF5 or files to ensure
+        that the next untitled macro has a unique name.
+
+        Args:
+            number: New untitled number
+        """
+        global UNTITLED_NB  # pylint: disable=global-statement
+        UNTITLED_NB = number
 
     def modification_changed(self, state: bool) -> None:
         """Method called when macro's editor modification state changed

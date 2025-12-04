@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-04 15:05+0100\n"
+"POT-Creation-Date: 2025-12-04 15:55+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -33,6 +33,21 @@ msgstr "**Disposition du panneau des macros :**"
 #, python-format
 msgid "Fixed macro console taking excessive vertical space on first open - the script editor now properly gets 70% of space and console 30% by default, ensuring comfortable editing without manual resizing"
 msgstr "Correction du panneau de la console des macros prenant un espace vertical excessif à la première ouverture - l'éditeur de scripts obtient désormais correctement 70 % de l'espace et la console 30 % par défaut, garantissant une édition confortable sans redimensionnement manuel"
+
+msgid "**Macro naming:**"
+msgstr "**Nommage des macros :**"
+
+msgid "Fixed automatic macro naming generating duplicate names after reloading workspace from HDF5 files"
+msgstr "Correction du nommage automatique des macros générant des noms en double après le rechargement de l'espace de travail à partir de fichiers HDF5"
+
+msgid "When macros were deserialized from saved workspaces or imported from files, the internal counter used for generating default names (e.g., \"macro_01\", \"macro_02\") was not updated, causing the next new macro to potentially reuse an existing name"
+msgstr "Lorsque les macros étaient désérialisées à partir d'espaces de travail enregistrés ou importées à partir de fichiers, le compteur interne utilisé pour générer des noms par défaut (par exemple, \"macro_01\", \"macro_02\") n'était pas mis à jour, ce qui pouvait entraîner la réutilisation d'un nom existant pour la prochaine nouvelle macro"
+
+msgid "The counter now synchronizes with existing macro names after loading, ensuring unique sequential naming"
+msgstr "Le compteur se synchronise désormais avec les noms de macros existants après le chargement, garantissant un nommage séquentiel unique"
+
+msgid "Default macro names simplified from translated \"Untitled XX\" to language-neutral \"macro_XX\" format for better consistency across locales"
+msgstr "Les noms de macros par défaut ont été simplifiés du format traduit \"Sans titre XX\" au format neutre en termes de langue \"macro_XX\" pour une meilleure cohérence entre les locales"
 
 msgid "**Macro execution:**"
 msgstr "**Exécution des macros :**"
