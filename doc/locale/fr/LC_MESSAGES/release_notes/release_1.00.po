@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-03 21:59+0100\n"
+"POT-Creation-Date: 2025-12-04 15:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -26,6 +26,13 @@ msgstr ""
 
 msgid "🛠️ Bug Fixes since version 1.0.2"
 msgstr "🛠️ Correctifs depuis la version 1.0.2"
+
+msgid "**Macro panel layout:**"
+msgstr "**Disposition du panneau des macros :**"
+
+#, python-format
+msgid "Fixed macro console taking excessive vertical space on first open - the script editor now properly gets 70% of space and console 30% by default, ensuring comfortable editing without manual resizing"
+msgstr "Correction du panneau de la console des macros prenant un espace vertical excessif à la première ouverture - l'éditeur de scripts obtient désormais correctement 70 % de l'espace et la console 30 % par défaut, garantissant une édition confortable sans redimensionnement manuel"
 
 msgid "**Macro execution:**"
 msgstr "**Exécution des macros :**"

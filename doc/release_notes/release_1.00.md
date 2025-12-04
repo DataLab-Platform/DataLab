@@ -4,6 +4,10 @@
 
 ### 🛠️ Bug Fixes since version 1.0.2 ###
 
+**Macro panel layout:**
+
+* Fixed macro console taking excessive vertical space on first open - the script editor now properly gets 70% of space and console 30% by default, ensuring comfortable editing without manual resizing
+
 **Macro execution:**
 
 * Fixed syntax errors when using f-strings with nested quotes in macros (e.g., `f'text {func("arg")}'` now works correctly)
