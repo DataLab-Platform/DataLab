@@ -260,7 +260,7 @@ print("All done!")
     def run(self) -> None:
         """Run macro"""
         self.process = QC.QProcess()
-        code = self.get_code().replace('"', "'")
+        code = self.get_code()
         datalab_path = osp.abspath(osp.join(osp.dirname(datalab.__file__), os.pardir))
         # Reconfigure stdout/stderr to use UTF-8 encoding to avoid UnicodeEncodeError
         # on Windows with locales that don't support all Unicode characters
