@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-03 18:20+0100\n"
+"POT-Creation-Date: 2025-12-03 21:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -21,11 +21,27 @@ msgstr ""
 msgid "Version 1.0"
 msgstr ""
 
+msgid "DataLab Version 1.0.3"
+msgstr ""
+
+msgid "🛠️ Bug Fixes since version 1.0.2"
+msgstr "🛠️ Correctifs depuis la version 1.0.2"
+
+msgid "**Macro execution:**"
+msgstr "**Exécution des macros :**"
+
+#, python-brace-format
+msgid "Fixed syntax errors when using f-strings with nested quotes in macros (e.g., `f'text {func(\"arg\")}'` now works correctly)"
+msgstr "Correction des erreurs de syntaxe lors de l'utilisation de f-strings avec des guillemets imbriqués dans les macros (par exemple, `f'text {func(\"arg\")}'` fonctionne désormais correctement)"
+
+msgid "Fixed corrupted Unicode characters in macro console output on Windows - special characters like ✅, 💡, and → now display correctly instead of showing garbled text"
+msgstr "Correction des caractères Unicode corrompus dans la sortie de la console des macros sous Windows - les caractères spéciaux comme ✅, 💡 et → s'affichent désormais correctement au lieu d'afficher du texte illisible"
+
 msgid "DataLab Version 1.0.2 (2025-12-03)"
 msgstr "DataLab Version 1.0.2 (03/12/2025)"
 
-msgid "🛠️ Bug Fixes"
-msgstr "🛠️ Correctifs"
+msgid "🛠️ Bug Fixes since version 1.0.1"
+msgstr "🛠️ Correctifs depuis la version 1.0.1"
 
 msgid "**Signal axis calibration - Replace X by other signal's Y:**"
 msgstr "**Calibration de l'axe des signaux - Remplacer X par le Y d'un autre signal :**"

@@ -1,8 +1,17 @@
 # Version 1.0 #
 
+## DataLab Version 1.0.3 ##
+
+### 🛠️ Bug Fixes since version 1.0.2 ###
+
+**Macro execution:**
+
+* Fixed syntax errors when using f-strings with nested quotes in macros (e.g., `f'text {func("arg")}'` now works correctly)
+* Fixed corrupted Unicode characters in macro console output on Windows - special characters like ✅, 💡, and → now display correctly instead of showing garbled text
+
 ## DataLab Version 1.0.2 (2025-12-03) ##
 
-### 🛠️ Bug Fixes ###
+### 🛠️ Bug Fixes since version 1.0.1 ###
 
 **Signal axis calibration - Replace X by other signal's Y:**
 
