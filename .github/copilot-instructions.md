@@ -337,7 +337,6 @@ proxy.calc("moving_average", sigima.params.MovingAverageParam.create(n=5))
 - `proxy.add_signal()`, `proxy.add_image()`: Create objects
 - `proxy.calc()`: Run processor methods
 - `proxy.get_object()`: Retrieve data
-- `proxy.delete_object()`: Remove objects
 
 ### 6. Remote Control API
 
