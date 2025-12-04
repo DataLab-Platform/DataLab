@@ -208,8 +208,10 @@ print("All done!")
         Returns:
             Locale str
         """
-        locale_codec = QC.QTextCodec.codecForLocale()
-        return locale_codec.toUnicode(bytearr.data())
+        # Python 3 outputs UTF-8 by default, so we need to decode as UTF-8
+        # instead of using the system locale codec (which might be cp1252 on Windows)
+        utf8_codec = QC.QTextCodec.codecForName(b"UTF-8")
+        return utf8_codec.toUnicode(bytearr.data())
 
     def get_stdout(self) -> str:
         """Return standard output str
