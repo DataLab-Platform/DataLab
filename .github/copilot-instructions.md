@@ -585,7 +585,7 @@ DataLab development uses a **multi-root workspace** (`.code-workspace` file) wit
 
 ## Release Notes Guidelines
 
-**Location**: `doc/release_notes/release_1.00.md`
+**Location**: `doc/release_notes/release_MAJOR.MINOR.md` where MINOR is zero-padded to 2 digits (e.g., `release_1.00.md` for v1.0.x, `release_1.01.md` for v1.1.x)
 
 **Writing Style**: Focus on **user impact**, not implementation details.
 
@@ -627,7 +627,7 @@ DataLab development uses a **multi-root workspace** (`.code-workspace` file) wit
 | `sigima/proc/image/processing.py` | Image computation functions |
 | `scripts/run_with_env.py` | Environment loader (loads `.env`) |
 | `.env` | Local PYTHONPATH for development |
-| `doc/release_notes/release_1.00.md` | Release notes for version 1.0.x |
+| `doc/release_notes/release_MAJOR.MINOR.md` | Release notes (MINOR is zero-padded: release_1.00.md for v1.0.x, release_1.01.md for v1.1.x) |
 
 ## Getting Help
 
