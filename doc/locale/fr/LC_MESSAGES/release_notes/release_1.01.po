@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-03 18:16+0100\n"
+"POT-Creation-Date: 2025-12-04 15:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -22,14 +22,35 @@ msgstr ""
 msgid "Version 1.1"
 msgstr ""
 
-msgid "DataLab Version 1.1.0 (unreleased)"
-msgstr "DataLab Version 1.1.0 (non publié)"
+msgid "DataLab Version 1.1.0"
+msgstr ""
 
 msgid "✨ New Features"
 msgstr "✨ Nouvelles fonctionnalités"
 
-msgid "**Proxy API:**"
-msgstr "**API Proxy :**"
+msgid "**Remote control API enhancements:**"
+msgstr "**Améliorations de l'API de contrôle à distance :**"
+
+msgid "Added `call_method()` method to `RemoteProxy` class for calling any public method on DataLab main window or panels:"
+msgstr "Ajout de la méthode `call_method()` à la classe `RemoteProxy` pour appeler n'importe quelle méthode publique sur la fenêtre principale de DataLab ou les panneaux :"
+
+msgid "Enables programmatic access to operations not exposed through dedicated proxy methods (e.g., `remove_object`, `delete_all_objects`, `get_current_panel`)"
+msgstr "Permet l'accès programmatique à des opérations non exposées via des méthodes proxy dédiées (par exemple, `remove_object`, `delete_all_objects`, `get_current_panel`)"
+
+msgid "Supports automatic method resolution: checks main window first, then current panel if method not found"
+msgstr "Prend en charge la résolution automatique des méthodes : vérifie d'abord la fenêtre principale, puis le panneau actuel si la méthode n'est pas trouvée"
+
+msgid "Optional `panel` parameter allows targeting specific panel (\"signal\" or \"image\")"
+msgstr "Le paramètre optionnel `panel` permet de cibler un panneau spécifique (\"signal\" ou \"image\")"
+
+msgid "Thread-safe execution: GUI operations automatically execute in main thread to prevent freezing"
+msgstr "Exécution thread-safe : les opérations GUI s'exécutent automatiquement dans le thread principal pour éviter le gel"
+
+msgid "New macro example `test_call_method.py` demonstrates usage: removing objects, getting current panel, and panel-specific operations"
+msgstr "Un nouvel exemple de macro `test_call_method.py` démontre l'utilisation : suppression d'objets, obtention du panneau actuel et opérations spécifiques au panneau"
+
+msgid "Expands automation capabilities for advanced macro workflows and external application control"
+msgstr "Étend les capacités d'automatisation pour des flux de travail de macro avancés et le contrôle d'applications externes"
 
 msgid "Added `remove_object()` method to proxy interface (local and remote) for selective object deletion"
 msgstr "Ajout de la méthode `remove_object()` à l'interface proxy (locale et distante) pour la suppression sélective d'objets"
@@ -40,5 +61,6 @@ msgstr "Supprime l'objet actuellement sélectionné du panneau actif"
 msgid "Optional `force` parameter to skip confirmation dialog"
 msgstr "Paramètre optionnel `force` pour ignorer la boîte de dialogue de confirmation"
 
-msgid "Complements existing `reset_all()` method which removes all objects"
+#, fuzzy
+msgid "Complements existing `reset_all()` method which clears the entire workspace (including all macros)"
 msgstr "Complète la méthode existante `reset_all()` qui supprime tous les objets"

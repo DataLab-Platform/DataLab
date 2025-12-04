@@ -449,6 +449,109 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         panel.delete_metadata(refresh_plot, keep_roi)
 
     @remote_controlled
+    def call_method(
+        self,
+        method_name: str,
+        *args,
+        panel: Literal["signal", "image"] | None = None,
+        **kwargs,
+    ):
+        """Call a public method on a panel or main window.
+
+        This generic method allows calling any public method that is not explicitly
+        exposed in the proxy API. The method resolution follows this order:
+
+        1. If panel is specified: call method on that specific panel
+        2. If panel is None:
+           a. Try to call method on main window (DLMainWindow)
+           b. If not found, try to call method on current panel (BaseDataPanel)
+
+        This makes it convenient to call panel methods without specifying the panel
+        parameter when working on the current panel.
+
+        Args:
+            method_name: Name of the method to call
+            *args: Positional arguments to pass to the method
+            panel: Panel name ("signal", "image", or None for auto-detection).
+             Defaults to None.
+            **kwargs: Keyword arguments to pass to the method
+
+        Returns:
+            The return value of the called method
+
+        Raises:
+            AttributeError: If the method does not exist or is not public
+            ValueError: If the panel name is invalid
+
+        Examples:
+            >>> # Call remove_object on current panel (auto-detected)
+            >>> win.call_method("remove_object", force=True)
+            >>> # Call a signal panel method specifically
+            >>> win.call_method("delete_all_objects", panel="signal")
+            >>> # Call main window method
+            >>> win.call_method("get_current_panel")
+        """
+        # Security check: only allow public methods (not starting with _)
+        if method_name.startswith("_"):
+            raise AttributeError(
+                f"Cannot call private method '{method_name}' through proxy"
+            )
+
+        # If panel is specified, use that panel directly
+        if panel is not None:
+            target = self.__get_datapanel(panel)
+            if not hasattr(target, method_name):
+                raise AttributeError(
+                    f"Method '{method_name}' does not exist on {panel} panel"
+                )
+            method = getattr(target, method_name)
+            if not callable(method):
+                raise AttributeError(f"'{method_name}' is not a callable method")
+            return method(*args, **kwargs)
+
+        # Panel is None: try main window first, then current panel
+        # Try main window first
+        if hasattr(self, method_name):
+            method = getattr(self, method_name)
+            if callable(method):
+                return method(*args, **kwargs)
+
+        # Method not found on main window, try current panel
+        current_panel = self.__get_current_basedatapanel()
+        if hasattr(current_panel, method_name):
+            method = getattr(current_panel, method_name)
+            if callable(method):
+                return method(*args, **kwargs)
+
+        # Method not found anywhere
+        raise AttributeError(
+            f"Method '{method_name}' does not exist on main window or current panel"
+        )
+
+    def call_method_slot(
+        self,
+        method_name: str,
+        args: list,
+        panel: Literal["signal", "image"] | None,
+        kwargs: dict,
+    ) -> None:
+        """Slot to call a method from RemoteServer thread in GUI thread.
+
+        This slot receives signals from RemoteServer and executes the method in
+        the GUI thread, avoiding thread-safety issues with Qt widgets and dialogs.
+
+        Args:
+            method_name: Name of the method to call
+            args: Positional arguments as a list
+            panel: Panel name or None for auto-detection
+            kwargs: Keyword arguments as a dict
+        """
+        # Call the method and store result in RemoteServer
+        result = self.call_method(method_name, *args, panel=panel, **kwargs)
+        # Store result in RemoteServer for retrieval by XML-RPC thread
+        self.remote_server.result = result
+
+    @remote_controlled
     def get_object_shapes(
         self,
         nb_id_title: int | str | None = None,

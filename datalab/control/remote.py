@@ -89,6 +89,7 @@ class RemoteServer(QC.QThread):
     SIG_RUN_MACRO = QC.Signal(str)
     SIG_STOP_MACRO = QC.Signal(str)
     SIG_IMPORT_MACRO_FROM_FILE = QC.Signal(str)
+    SIG_CALL_METHOD = QC.Signal(str, list, object, dict)
 
     def __init__(self, win: DLMainWindow) -> None:
         QC.QThread.__init__(self)
@@ -120,6 +121,7 @@ class RemoteServer(QC.QThread):
         self.SIG_RUN_MACRO.connect(win.run_macro)
         self.SIG_STOP_MACRO.connect(win.stop_macro)
         self.SIG_IMPORT_MACRO_FROM_FILE.connect(win.import_macro_from_file)
+        self.SIG_CALL_METHOD.connect(win.call_method_slot)
 
     def serve(self) -> None:
         """Start server and serve forever"""
@@ -635,6 +637,38 @@ class RemoteServer(QC.QThread):
         """
         self.SIG_IMPORT_MACRO_FROM_FILE.emit(filename)
 
+    @remote_call
+    def call_method(
+        self,
+        method_name: str,
+        call_params: dict,
+    ):
+        """Call a public method on a panel or main window.
+
+        Method resolution order when panel is None:
+        1. Try main window (DLMainWindow)
+        2. If not found, try current panel (BaseDataPanel)
+
+        Args:
+            method_name: Name of the method to call
+            call_params: Dictionary with keys 'args' (list), 'panel' (str|None),
+             'kwargs' (dict). Defaults to empty for missing keys.
+
+        Returns:
+            The return value of the called method
+
+        Raises:
+            AttributeError: If the method does not exist or is not public
+            ValueError: If the panel name is invalid
+
+        """
+        args = call_params.get("args", [])
+        panel = call_params.get("panel")
+        kwargs = call_params.get("kwargs", {})
+        self.result = None
+        self.SIG_CALL_METHOD.emit(method_name, args, panel, kwargs)
+        return self.result
+
 
 RemoteServer.check_remote_functions()
 
@@ -1014,3 +1048,39 @@ class RemoteClient(BaseProxy):
         items_json = items_to_json(items)
         if items_json is not None:
             self._datalab.add_annotations_from_items(items_json, refresh_plot, panel)
+
+    def call_method(
+        self,
+        method_name: str,
+        *args,
+        panel: str | None = None,
+        **kwargs,
+    ):
+        """Call a public method on a panel or main window.
+
+        Method resolution order when panel is None:
+        1. Try main window (DLMainWindow)
+        2. If not found, try current panel (BaseDataPanel)
+
+        Args:
+            method_name: Name of the method to call
+            *args: Positional arguments to pass to the method
+            panel: Panel name ("signal", "image", or None for auto-detection).
+             Defaults to None.
+            **kwargs: Keyword arguments to pass to the method
+
+        Returns:
+            The return value of the called method
+
+        Raises:
+            AttributeError: If the method does not exist or is not public
+            ValueError: If the panel name is invalid
+        """
+        # Convert args/kwargs to single dict for XML-RPC serialization
+        # This avoids XML-RPC signature mismatch issues with default parameters
+        call_params = {
+            "args": list(args) if args else [],
+            "panel": panel,
+            "kwargs": dict(kwargs) if kwargs else {},
+        }
+        return self._datalab.call_method(method_name, call_params)

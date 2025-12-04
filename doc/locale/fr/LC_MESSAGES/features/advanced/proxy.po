@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-03 18:16+0100\n"
+"POT-Creation-Date: 2025-10-16 16:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -185,6 +185,33 @@ msgid "Compute function parameter. Defaults to None."
 msgstr ""
 
 msgid "unknown function"
+msgstr ""
+
+msgid "Call a public method on a panel or main window."
+msgstr ""
+
+msgid "Method resolution order when panel is None: 1. Try main window (DLMainWindow) 2. If not found, try current panel (BaseDataPanel)"
+msgstr ""
+
+msgid "Name of the method to call"
+msgstr ""
+
+msgid "Positional arguments to pass to the method"
+msgstr ""
+
+msgid "Panel name (\"signal\", \"image\", or None for auto-detection). Defaults to None."
+msgstr ""
+
+msgid "Keyword arguments to pass to the method"
+msgstr ""
+
+msgid "The return value of the called method"
+msgstr ""
+
+msgid "If the method does not exist or is not public"
+msgstr ""
+
+msgid "If the panel name is invalid"
 msgstr ""
 
 msgid "Close DataLab application"

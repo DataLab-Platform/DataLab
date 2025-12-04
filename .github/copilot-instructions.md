@@ -337,7 +337,19 @@ proxy.calc("moving_average", sigima.params.MovingAverageParam.create(n=5))
 - `proxy.add_signal()`, `proxy.add_image()`: Create objects
 - `proxy.calc()`: Run processor methods
 - `proxy.get_object()`: Retrieve data
-- `proxy.delete_object()`: Remove objects
+- `proxy.call_method()`: Call any public panel or window method
+
+**Generic Method Calling**:
+```python
+# Remove objects from current panel
+proxy.call_method("remove_object", force=True)
+
+# Call method on specific panel
+proxy.call_method("delete_all_objects", panel="signal")
+
+# Call main window method
+panel_name = proxy.call_method("get_current_panel")
+```
 
 ### 6. Remote Control API
 
