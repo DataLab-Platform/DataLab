@@ -4,8 +4,9 @@
 
 ### 🛠️ Bug Fixes since version 1.0.2 ###
 
-**Annotation visibility:**
+**Marker visibility:**
 
+* Fixed cross marker (shown when pressing Alt key on plot) colors inherited from PlotPy being too pale on white background, and other marker properties explicitly configured for better contrast
 * Fixed default annotation colors inherited from PlotPy being too pale on white background - segment and drag shape annotations now use brighter green (`#00ff55`) for better visibility
 
 **Macro panel layout:**
