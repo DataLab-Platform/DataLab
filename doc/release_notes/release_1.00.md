@@ -4,6 +4,10 @@
 
 ### 🛠️ Bug Fixes since version 1.0.2 ###
 
+**Annotation visibility:**
+
+* Fixed default annotation colors inherited from PlotPy being too pale on white background - segment and drag shape annotations now use brighter green (`#00ff55`) for better visibility
+
 **Macro panel layout:**
 
 * Fixed macro console taking excessive vertical space on first open - the script editor now properly gets 70% of space and console 30% by default, ensuring comfortable editing without manual resizing
