@@ -48,12 +48,26 @@ def remote_call(func: Callable) -> object:
     @functools.wraps(func)
     def method_wrapper(*args, **kwargs):
         """Decorator wrapper function"""
-        self = args[0]  # extracting 'self' from method arguments
+        self: RemoteServer = args[0]  # extracting 'self' from method arguments
         self.is_ready = False
         output = func(*args, **kwargs)
         while not self.is_ready:
             QC.QCoreApplication.processEvents()
             time.sleep(0.05)
+        # Check if an exception was raised and stored by the slot
+        if self.exception is not None:
+            exc = self.exception
+            self.exception = None  # Clear the exception
+            raise exc
+        # For methods that use signal/slot pattern (like call_method),
+        # they return self.result which is set by the slot. The function
+        # itself returns this value, but it's set asynchronously, so we
+        # need to return the value AFTER waiting, not the initial return value.
+        # Since we wait above, self.result should now be set by the slot.
+        # If the function returned self.result, use the updated value.
+        if output is None:
+            # Return self.result which should be set by now
+            return self.result
         return output
 
     return method_wrapper
@@ -97,6 +111,8 @@ class RemoteServer(QC.QThread):
         self.is_ready = True
         self.server: SimpleXMLRPCServer | None = None
         self.win = win
+        self.result = None
+        self.exception = None
         win.SIG_READY.connect(self.datalab_is_ready)
         win.SIG_CLOSING.connect(self.shutdown_server)
         self.SIG_CLOSE_APP.connect(win.close)
@@ -665,8 +681,10 @@ class RemoteServer(QC.QThread):
         args = call_params.get("args", [])
         panel = call_params.get("panel")
         kwargs = call_params.get("kwargs", {})
-        self.result = None
+        self.result = None  # Initialize result
         self.SIG_CALL_METHOD.emit(method_name, args, panel, kwargs)
+        # The decorator waits for is_ready, then this returns self.result
+        # which was set by call_method_slot
         return self.result
 
 

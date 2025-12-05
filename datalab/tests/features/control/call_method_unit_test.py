@@ -8,19 +8,21 @@ Test for call_method generic proxy feature
 
 from __future__ import annotations
 
+import xmlrpc.client
+
 import numpy as np
 from sigima.tests.data import get_test_image, get_test_signal
 
-from datalab.tests.features.control.remoteclient_unit import cdl_env_context
+from datalab.tests import datalab_in_background_context
 
 
-def test_call_method():
+def test_call_method() -> None:
     """Test call_method generic proxy feature"""
-    with cdl_env_context() as proxy:
+    with datalab_in_background_context() as proxy:
         # Test 1: Add some test data
         signal = get_test_signal("paracetamol.txt")
         proxy.add_object(signal)
-        image = get_test_image("contrast.png")
+        image = get_test_image("flower.npy")
         proxy.add_object(image)
 
         # Test 2: Call remove_object without panel parameter (auto-detection)
@@ -77,18 +79,19 @@ def test_call_method():
         proxy.call_method("delete_metadata", refresh_plot=False, keep_roi=True)
 
         # Test 5: Error handling - try to call a private method
+        # Note: XML-RPC converts exceptions to xmlrpc.client.Fault
         try:
             proxy.call_method("__init__")
             assert False, "Should not allow calling private methods"
-        except AttributeError as e:
-            assert "private method" in str(e).lower()
+        except xmlrpc.client.Fault as exc:
+            assert "private method" in exc.faultString.lower()
 
         # Test 6: Error handling - try to call non-existent method
         try:
             proxy.call_method("this_method_does_not_exist")
             assert False, "Should raise AttributeError for non-existent method"
-        except AttributeError as e:
-            assert "does not exist" in str(e).lower()
+        except xmlrpc.client.Fault as exc:
+            assert "does not exist" in exc.faultString.lower()
 
         # Test 7: Call main window method (not panel method)
         panel_name = proxy.call_method("get_current_panel")

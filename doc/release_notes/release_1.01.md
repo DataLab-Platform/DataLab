@@ -11,6 +11,7 @@
   * Supports automatic method resolution: checks main window first, then current panel if method not found
   * Optional `panel` parameter allows targeting specific panel ("signal" or "image")
   * Thread-safe execution: GUI operations automatically execute in main thread to prevent freezing
+  * Proper exception handling: exceptions raised during method execution (e.g., attempting to call private methods) are captured and propagated to the client as `xmlrpc.client.Fault` objects with the original error message
   * New macro example `test_call_method.py` demonstrates usage: removing objects, getting current panel, and panel-specific operations
   * Expands automation capabilities for advanced macro workflows and external application control
 

@@ -528,6 +528,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             f"Method '{method_name}' does not exist on main window or current panel"
         )
 
+    @remote_controlled
     def call_method_slot(
         self,
         method_name: str,
@@ -547,9 +548,15 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             kwargs: Keyword arguments as a dict
         """
         # Call the method and store result in RemoteServer
-        result = self.call_method(method_name, *args, panel=panel, **kwargs)
-        # Store result in RemoteServer for retrieval by XML-RPC thread
-        self.remote_server.result = result
+        try:
+            result = self.call_method(method_name, *args, panel=panel, **kwargs)
+            # Store result in RemoteServer for retrieval by XML-RPC thread
+            self.remote_server.result = result
+            self.remote_server.exception = None  # Clear any previous exception
+        except Exception as exc:  # pylint: disable=broad-except
+            # Store exception for re-raising in XML-RPC thread
+            self.remote_server.result = None
+            self.remote_server.exception = exc
 
     @remote_controlled
     def get_object_shapes(

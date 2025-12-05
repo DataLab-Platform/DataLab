@@ -34,7 +34,7 @@ from sigima.tests import helpers
 
 import datalab.config  # Loading icons
 from datalab.config import MOD_NAME, SHOTPATH
-from datalab.control.proxy import RemoteProxy
+from datalab.control.proxy import RemoteProxy, proxy_context
 from datalab.env import execenv
 from datalab.gui.main import DLMainWindow
 from datalab.gui.panel.image import ImagePanel
@@ -187,6 +187,20 @@ def close_datalab_background() -> None:
     proxy.connect(timeout=5.0)  # 5 seconds max to connect
     proxy.close_application()
     proxy.disconnect()
+
+
+@contextmanager
+def datalab_in_background_context() -> Generator[RemoteProxy, None, None]:
+    """Context manager for DataLab instance with proxy connection"""
+    run_datalab_in_background()
+    with proxy_context("remote") as proxy:
+        try:
+            yield proxy
+        except Exception as exc:  # pylint: disable=broad-except
+            proxy.close_application()
+            raise exc
+        # Cleanup
+        proxy.close_application()
 
 
 @contextmanager
