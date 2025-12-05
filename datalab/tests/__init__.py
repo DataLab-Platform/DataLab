@@ -172,6 +172,23 @@ def run_datalab_in_background(wait_until_ready: bool = True) -> None:
             ) from exc
 
 
+def close_datalab_background() -> None:
+    """Close DataLab application running as a service.
+
+    This function connects to the DataLab application running in the background
+    (started with `run_datalab_in_background`) and sends a command to close it.
+    It uses the `RemoteProxy` class to establish the connection and send the
+    close command.
+
+    Raises:
+        ConnectionRefusedError: If unable to connect to the DataLab application.
+    """
+    proxy = RemoteProxy(autoconnect=False)
+    proxy.connect(timeout=5.0)  # 5 seconds max to connect
+    proxy.close_application()
+    proxy.disconnect()
+
+
 @contextmanager
 def skip_if_opencv_missing() -> Generator[None, None, None]:
     """Skip test if OpenCV is not available"""

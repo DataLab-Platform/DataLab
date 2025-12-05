@@ -159,7 +159,7 @@ def test_with_real_server() -> None:
 
     # Launch DataLab application in the background
     execenv.print("Launching DataLab in background...")
-    run_datalab_in_background(wait_until_ready=True)
+    run_datalab_in_background()
 
     # Import and run the comprehensive test from sigima
     execenv.print("Running comprehensive client tests with real server...")
@@ -176,9 +176,13 @@ def test_with_real_server() -> None:
         # Run all tests
         tester.run_comprehensive_test()
         execenv.print("✨ All tests passed with real DataLab server!")
-    finally:
-        # Clean up
+    except Exception as exc:
+        execenv.print("❌ Some tests failed with real DataLab server.")
         tester.close_datalab()
+        raise exc
+
+    # Clean up
+    tester.close_datalab()
 
 
 def test_version_compatibility() -> None:

@@ -20,7 +20,7 @@ from qtpy import QtWidgets as QW
 from datalab.config import _
 from datalab.control.proxy import RemoteProxy
 from datalab.env import execenv
-from datalab.tests import run_datalab_in_background
+from datalab.tests import close_datalab_background, run_datalab_in_background
 from datalab.tests.features.control import embedded1_unit_test
 from datalab.tests.features.control.remoteclient_unit import multiple_commands
 from datalab.utils.qthelpers import bring_to_front
@@ -179,40 +179,44 @@ def qt_wait_print(dt: float, message: str, parent=None):
 def test_remote_client():
     """Remote client application test"""
     run_datalab_in_background()
-
-    with qt_app_context(exec_loop=True):
-        window = HostWindow()
-        window.resize(800, 800)
-        window.show()
-        dt = 1
-        if execenv.unattended:
-            qt_wait(8, show_message=True, parent=window)
-            window.init_cdl()
-            with qt_wait_print(dt, "Executing multiple commands"):
-                window.exec_multiple_cmd()
-            bring_to_front(window)
-            with qt_wait_print(dt, "Raising DataLab window"):
-                window.raise_cdl()
-            with qt_wait_print(dt, "Import macro"):
-                window.import_macro()
-            with qt_wait_print(dt, "Getting object titles"):
-                window.get_object_titles()
-            with qt_wait_print(dt, "Getting object uuids"):
-                window.get_object_uuids()
-            with qt_wait_print(dt, "Getting object"):
-                window.get_object()
-            with qt_wait_print(dt, "Adding signals"):
-                window.add_signals()
-            with qt_wait_print(dt, "Adding images"):
-                window.add_images()
-            with qt_wait_print(dt, "Run macro"):
-                window.run_macro()
-            with qt_wait_print(dt * 2, "Stop macro"):
-                window.stop_macro()
-            with qt_wait_print(dt, "Removing all objects"):
-                window.remove_all()
-            with qt_wait_print(dt, "Closing DataLab"):
-                window.close_datalab()
+    try:
+        with qt_app_context(exec_loop=True):
+            window = HostWindow()
+            window.resize(800, 800)
+            window.show()
+            dt = 1
+            if execenv.unattended:
+                qt_wait(8, show_message=True, parent=window)
+                window.init_cdl()
+                with qt_wait_print(dt, "Executing multiple commands"):
+                    window.exec_multiple_cmd()
+                bring_to_front(window)
+                with qt_wait_print(dt, "Raising DataLab window"):
+                    window.raise_cdl()
+                with qt_wait_print(dt, "Import macro"):
+                    window.import_macro()
+                with qt_wait_print(dt, "Getting object titles"):
+                    window.get_object_titles()
+                with qt_wait_print(dt, "Getting object uuids"):
+                    window.get_object_uuids()
+                with qt_wait_print(dt, "Getting object"):
+                    window.get_object()
+                with qt_wait_print(dt, "Adding signals"):
+                    window.add_signals()
+                with qt_wait_print(dt, "Adding images"):
+                    window.add_images()
+                with qt_wait_print(dt, "Run macro"):
+                    window.run_macro()
+                with qt_wait_print(dt * 2, "Stop macro"):
+                    window.stop_macro()
+                with qt_wait_print(dt, "Removing all objects"):
+                    window.remove_all()
+                with qt_wait_print(dt, "Closing DataLab"):
+                    window.close_datalab()
+    except Exception as exc:
+        execenv.print("❌ Remote client test failed.")
+        close_datalab_background()  # Ensure DataLab is closed in case of failure
+        raise exc
 
 
 if __name__ == "__main__":
