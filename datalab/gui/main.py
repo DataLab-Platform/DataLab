@@ -703,6 +703,10 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             # Showing the log viewer for testing purpose (unattended mode) but only
             # if option 'do_not_quit' is not set, to avoid blocking the test suite
             self.__show_logviewer()
+        elif execenv.do_not_quit:
+            # If 'do_not_quit' is set, we do not show any message box to avoid blocking
+            # the test suite
+            return
         elif Conf.main.faulthandler_log_available.get(
             False
         ) or Conf.main.traceback_log_available.get(False):
