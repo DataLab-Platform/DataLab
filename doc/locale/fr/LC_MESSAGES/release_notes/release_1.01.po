@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-04 15:45+0100\n"
+"POT-Creation-Date: 2025-12-08 13:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -31,6 +31,9 @@ msgstr "✨ Nouvelles fonctionnalités"
 msgid "**Remote control API enhancements:**"
 msgstr "**Améliorations de l'API de contrôle à distance :**"
 
+msgid "**Note:** These new features also concern the macro commands API, as macros use the same proxy interface as remote control clients."
+msgstr "**Remarque :** Ces nouvelles fonctionnalités concernent également l'API des commandes de macro, car les macros utilisent la même interface proxy que les clients de contrôle à distance."
+
 msgid "Added `call_method()` method to `RemoteProxy` class for calling any public method on DataLab main window or panels:"
 msgstr "Ajout de la méthode `call_method()` à la classe `RemoteProxy` pour appeler n'importe quelle méthode publique sur la fenêtre principale de DataLab ou les panneaux :"
 
@@ -45,6 +48,9 @@ msgstr "Le paramètre optionnel `panel` permet de cibler un panneau spécifique 
 
 msgid "Thread-safe execution: GUI operations automatically execute in main thread to prevent freezing"
 msgstr "Exécution thread-safe : les opérations GUI s'exécutent automatiquement dans le thread principal pour éviter le gel"
+
+msgid "Proper exception handling: exceptions raised during method execution (e.g., attempting to call private methods) are captured and propagated to the client as `xmlrpc.client.Fault` objects with the original error message"
+msgstr "Gestion appropriée des exceptions : les exceptions levées lors de l'exécution de la méthode (par exemple, tenter d'appeler des méthodes privées) sont capturées et propagées au client sous forme d'objets `xmlrpc.client.Fault` avec le message d'erreur original"
 
 msgid "New macro example `test_call_method.py` demonstrates usage: removing objects, getting current panel, and panel-specific operations"
 msgstr "Un nouvel exemple de macro `test_call_method.py` démontre l'utilisation : suppression d'objets, obtention du panneau actuel et opérations spécifiques au panneau"
@@ -61,6 +67,5 @@ msgstr "Supprime l'objet actuellement sélectionné du panneau actif"
 msgid "Optional `force` parameter to skip confirmation dialog"
 msgstr "Paramètre optionnel `force` pour ignorer la boîte de dialogue de confirmation"
 
-#, fuzzy
 msgid "Complements existing `reset_all()` method which clears the entire workspace (including all macros)"
-msgstr "Complète la méthode existante `reset_all()` qui supprime tous les objets"
+msgstr "Complète la méthode existante `reset_all()` qui efface l'ensemble de l'espace de travail (y compris toutes les macros)"

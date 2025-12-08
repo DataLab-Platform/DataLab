@@ -6,6 +6,8 @@
 
 **Remote control API enhancements:**
 
+> **Note:** These new features also concern the macro commands API, as macros use the same proxy interface as remote control clients.
+
 * Added `call_method()` method to `RemoteProxy` class for calling any public method on DataLab main window or panels:
   * Enables programmatic access to operations not exposed through dedicated proxy methods (e.g., `remove_object`, `delete_all_objects`, `get_current_panel`)
   * Supports automatic method resolution: checks main window first, then current panel if method not found
