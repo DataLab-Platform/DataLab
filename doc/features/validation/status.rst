@@ -13,7 +13,19 @@ Functional validation
 In DataLab, functional validation is based on a classic test strategy (see
 :ref:`functional_validation`).
 
-Test coverage is around 90%, with more than 200 tests.
+.. list-table::
+    :header-rows: 1
+    :align: left
+
+    * - Package
+      - Coverage
+      - Number of tests
+    * - DataLab
+      - ~82%
+      - >130
+    * - Sigima
+      - ~90%
+      - >570
 
 Technical validation
 ---------------------
