@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-03 21:59+0100\n"
+"POT-Creation-Date: 2025-12-09 10:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -34,8 +34,32 @@ msgstr "Validation fonctionnelle"
 msgid "In DataLab, functional validation is based on a classic test strategy (see :ref:`functional_validation`)."
 msgstr "Dans DataLab, la validation fonctionnelle est basée sur une stratégie de test classique (voir :ref:`functional_validation`)."
 
-msgid "Test coverage is around 90%, with more than 200 tests."
-msgstr "La couverture de test est d'environ 90%, avec plus de 200 tests."
+msgid "Package"
+msgstr "Package"
+
+msgid "Coverage"
+msgstr "Couverture"
+
+msgid "Number of tests"
+msgstr "Nombre de tests"
+
+msgid "DataLab"
+msgstr "DataLab"
+
+msgid "~82%"
+msgstr ""
+
+msgid ">130"
+msgstr ""
+
+msgid "Sigima"
+msgstr "Sigima"
+
+msgid "~90%"
+msgstr ""
+
+msgid ">570"
+msgstr ""
 
 msgid "Technical validation"
 msgstr "Validation technique"
@@ -1957,4 +1981,3 @@ msgstr ""
 
 msgid "`test_image_zero_padding <https://github.com/DataLab-Platform/Sigima/blob/v1.0.3/sigima/tests/image/fft2d_unit_test.py#L50>`_"
 msgstr ""
-
