@@ -99,6 +99,8 @@ class RemoteServer(QC.QThread):
     SIG_SAVE_TO_H5 = QC.Signal(str)
     SIG_OPEN_H5 = QC.Signal(list, bool, bool)
     SIG_IMPORT_H5 = QC.Signal(str, bool)
+    SIG_LOAD_H5_WORKSPACE = QC.Signal(list, bool)
+    SIG_SAVE_H5_WORKSPACE = QC.Signal(str)
     SIG_CALC = QC.Signal(str, object)
     SIG_RUN_MACRO = QC.Signal(str)
     SIG_STOP_MACRO = QC.Signal(str)
@@ -133,6 +135,8 @@ class RemoteServer(QC.QThread):
         self.SIG_SAVE_TO_H5.connect(win.save_to_h5_file)
         self.SIG_OPEN_H5.connect(win.open_h5_files)
         self.SIG_IMPORT_H5.connect(win.import_h5_file)
+        self.SIG_LOAD_H5_WORKSPACE.connect(win.load_h5_workspace)
+        self.SIG_SAVE_H5_WORKSPACE.connect(win.save_h5_workspace)
         self.SIG_CALC.connect(win.calc)
         self.SIG_RUN_MACRO.connect(win.run_macro)
         self.SIG_STOP_MACRO.connect(win.stop_macro)
@@ -296,6 +300,37 @@ class RemoteServer(QC.QThread):
         """
         reset_all = False if reset_all is None else reset_all
         self.SIG_IMPORT_H5.emit(filename, reset_all)
+
+    @remote_call
+    def load_h5_workspace(self, h5files: list[str], reset_all: bool = False) -> None:
+        """Load native DataLab HDF5 workspace files without any GUI elements.
+
+        This method can be safely called from scripts as it does not create
+        any Qt widgets, dialogs, or progress bars.
+
+        Args:
+            h5files: List of native DataLab HDF5 filenames
+            reset_all: Reset all application data before importing. Defaults to False.
+
+        Raises:
+            ValueError: If a file is not a valid native DataLab HDF5 file
+        """
+        self.SIG_LOAD_H5_WORKSPACE.emit(h5files, reset_all)
+
+    @remote_call
+    def save_h5_workspace(self, filename: str) -> None:
+        """Save current workspace to a native DataLab HDF5 file without GUI elements.
+
+        This method can be safely called from scripts as it does not create
+        any Qt widgets, dialogs, or progress bars.
+
+        Args:
+            filename: HDF5 filename to save to
+
+        Raises:
+            IOError: If file cannot be saved
+        """
+        self.SIG_SAVE_H5_WORKSPACE.emit(filename)
 
     @remote_call
     def load_from_files(self, filenames: list[str]) -> None:
