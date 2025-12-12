@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-04 15:55+0100\n"
+"POT-Creation-Date: 2025-12-04 17:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -26,6 +26,33 @@ msgstr ""
 
 msgid "🛠️ Bug Fixes since version 1.0.2"
 msgstr "🛠️ Correctifs depuis la version 1.0.2"
+
+msgid "**Plugin development - Infinite loop when iterating over group objects:**"
+msgstr "**Développement de plugins - Boucle infinie lors de l'itération sur les objets d'un groupe :**"
+
+msgid "Fixed infinite loop occurring in plugins when iterating over object IDs returned by `ObjectGroup.get_object_ids()` while simultaneously adding new objects to the same group"
+msgstr "Correction de la boucle infinie se produisant dans les plugins lors de l'itération sur les identifiants d'objets retournés par `ObjectGroup.get_object_ids()` tout en ajoutant simultanément de nouveaux objets au même groupe"
+
+msgid "The method was returning a direct reference to the internal list instead of a copy, causing the iteration to include newly added objects and loop indefinitely"
+msgstr "La méthode retournait une référence directe à la liste interne au lieu d'une copie, ce qui faisait que l'itération incluait les objets nouvellement ajoutés et bouclait indéfiniment"
+
+msgid "This particularly affected plugin workflows that loop over signals/images in a group and add results to the same or another group"
+msgstr "Cela affectait particulièrement les flux de travail des plugins qui bouclent sur les signaux/images d'un groupe et ajoutent des résultats au même groupe ou à un autre groupe"
+
+msgid "The fix ensures `get_object_ids()` now returns a copy of the list, making iteration safe even when modifying the group"
+msgstr "Le correctif garantit que `get_object_ids()` retourne désormais une copie de la liste, rendant l'itération sûre même lors de la modification du groupe"
+
+msgid "This closes [Issue #274](https://github.com/datalab-platform/datalab/issues/274) - Infinite loop when iterating over group objects while adding new objects"
+msgstr "Ceci clôture [Issue #274](https://github.com/datalab-platform/datalab/issues/274) - Boucle infinie lors de l'itération sur les objets d'un groupe tout en ajoutant de nouveaux objets"
+
+msgid "**Marker visibility:**"
+msgstr "**Visibilité des marqueurs :**"
+
+msgid "Fixed cross marker (shown when pressing Alt key on plot) colors inherited from PlotPy being too pale on white background, and other marker properties explicitly configured for better contrast"
+msgstr "Correction des couleurs du marqueur en croix (affiché en appuyant sur la touche Alt sur le graphique) héritées de PlotPy étant trop pâles sur fond blanc, et d'autres propriétés de marqueurs explicitement configurées pour un meilleur contraste"
+
+msgid "Fixed default annotation colors inherited from PlotPy being too pale on white background - segment and drag shape annotations now use brighter green (`#00ff55`) for better visibility"
+msgstr "Correction des couleurs d'annotation par défaut héritées de PlotPy étant trop pâles sur fond blanc - les annotations de segments et de formes glissées utilisent désormais un vert plus vif (`#00ff55`) pour une meilleure visibilité"
 
 msgid "**Macro panel layout:**"
 msgstr "**Disposition du panneau des macros :**"
