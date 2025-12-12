@@ -301,7 +301,7 @@ class LocalProxy(BaseProxy):
         self._datalab.add_annotations_from_items(items, refresh_plot, panel)
 
     def load_h5_workspace(
-        self, h5files: list[str] | str, reset_all: bool = True
+        self, h5files: list[str] | str, reset_all: bool = False
     ) -> None:
         """Load HDF5 workspace files without showing file dialog.
 
@@ -312,12 +312,13 @@ class LocalProxy(BaseProxy):
         Args:
             h5files: Path(s) to HDF5 file(s). Can be a single path string or a list
              of paths
-            reset_all: If True (default), reset workspace before loading.
-             If False, append to existing workspace
+            reset_all: If True, reset workspace before loading. Defaults to False.
 
         Raises:
             ValueError: if file is not a DataLab native HDF5 file
         """
+        if isinstance(h5files, str):
+            h5files = [h5files]
         self._datalab.load_h5_workspace(h5files, reset_all)
 
     def save_h5_workspace(self, filename: str) -> None:

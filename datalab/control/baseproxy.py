@@ -642,6 +642,41 @@ class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
         """
         self._datalab.import_h5_file(filename, reset_all)
 
+    def load_h5_workspace(self, h5files: list[str], reset_all: bool = False) -> None:
+        """Load native DataLab HDF5 workspace files without any GUI elements.
+
+        This method can be safely called from scripts (e.g., internal console,
+        macros) as it does not create any Qt widgets, dialogs, or progress bars.
+
+        .. warning::
+
+            This method only supports native DataLab HDF5 files. For importing
+            arbitrary HDF5 files (non-native), use :meth:`open_h5_files` or
+            :meth:`import_h5_file` instead.
+
+        Args:
+            h5files: List of native DataLab HDF5 filenames
+            reset_all: Reset all application data before importing. Defaults to False.
+
+        Raises:
+            ValueError: If a file is not a valid native DataLab HDF5 file
+        """
+        self._datalab.load_h5_workspace(h5files, reset_all)
+
+    def save_h5_workspace(self, filename: str) -> None:
+        """Save current workspace to a native DataLab HDF5 file without GUI elements.
+
+        This method can be safely called from scripts (e.g., internal console,
+        macros) as it does not create any Qt widgets, dialogs, or progress bars.
+
+        Args:
+            filename: HDF5 filename to save to
+
+        Raises:
+            IOError: If file cannot be saved
+        """
+        self._datalab.save_h5_workspace(filename)
+
     def load_from_files(self, filenames: list[str]) -> None:
         """Open objects from files in current panel (signals/images).
 
