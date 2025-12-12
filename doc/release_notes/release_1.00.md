@@ -33,6 +33,14 @@
 * Fixed syntax errors when using f-strings with nested quotes in macros (e.g., `f'text {func("arg")}'` now works correctly)
 * Fixed corrupted Unicode characters in macro console output on Windows - special characters like ✅, 💡, and → now display correctly instead of showing garbled text
 
+**Internal console - HDF5 workspace operations:**
+
+* Fixed application freeze when calling `open_h5_files()` from the internal console - the console runs in a separate thread and creating Qt GUI elements (progress dialogs) from non-main threads causes deadlocks
+* Added new headless API methods `load_h5_workspace()` and `save_h5_workspace()` that can be safely called from the internal console or any script context without GUI dependencies
+* These methods are also available through the remote control API for consistency
+* Note: `load_h5_workspace()` only supports native DataLab HDF5 files; for importing arbitrary HDF5 files, use macros with `RemoteProxy`
+* This closes [Issue #275](https://github.com/datalab-platform/datalab/issues/275) - Console freezes when calling `open_h5_files()` from internal console
+
 ## DataLab Version 1.0.2 (2025-12-03) ##
 
 ### 🛠️ Bug Fixes since version 1.0.1 ###

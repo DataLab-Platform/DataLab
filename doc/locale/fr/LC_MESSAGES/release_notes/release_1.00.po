@@ -86,6 +86,24 @@ msgstr "Correction des erreurs de syntaxe lors de l'utilisation de f-strings ave
 msgid "Fixed corrupted Unicode characters in macro console output on Windows - special characters like ✅, 💡, and → now display correctly instead of showing garbled text"
 msgstr "Correction des caractères Unicode corrompus dans la sortie de la console des macros sous Windows - les caractères spéciaux comme ✅, 💡 et → s'affichent désormais correctement au lieu d'afficher du texte illisible"
 
+msgid "**Internal console - HDF5 workspace operations:**"
+msgstr "**Console interne - Opérations sur l'espace de travail HDF5 :**"
+
+msgid "Fixed application freeze when calling `open_h5_files()` from the internal console - the console runs in a separate thread and creating Qt GUI elements (progress dialogs) from non-main threads causes deadlocks"
+msgstr "Correction du blocage de l'application lors de l'appel de `open_h5_files()` depuis la console interne - la console s'exécute dans un thread séparé et la création d'éléments d'interface Qt (boîtes de dialogue de progression) depuis des threads non principaux provoque des blocages"
+
+msgid "Added new headless API methods `load_h5_workspace()` and `save_h5_workspace()` that can be safely called from the internal console or any script context without GUI dependencies"
+msgstr "Ajout de nouvelles méthodes d'API sans interface graphique `load_h5_workspace()` et `save_h5_workspace()` qui peuvent être appelées en toute sécurité depuis la console interne ou tout contexte de script sans dépendances à l'interface graphique"
+
+msgid "These methods are also available through the remote control API for consistency"
+msgstr "Ces méthodes sont également disponibles via l'API de contrôle distant pour plus de cohérence"
+
+msgid "Note: `load_h5_workspace()` only supports native DataLab HDF5 files; for importing arbitrary HDF5 files, use macros with `RemoteProxy`"
+msgstr "Note : `load_h5_workspace()` ne prend en charge que les fichiers HDF5 natifs de DataLab ; pour importer des fichiers HDF5 arbitraires, utilisez des macros avec `RemoteProxy`"
+
+msgid "This closes [Issue #275](https://github.com/datalab-platform/datalab/issues/275) - Console freezes when calling `open_h5_files()` from internal console"
+msgstr "Ceci clôture [Issue #275](https://github.com/datalab-platform/datalab/issues/275) - Blocage de la console lors de l'appel de `open_h5_files()` depuis la console interne"
+
 msgid "DataLab Version 1.0.2 (2025-12-03)"
 msgstr "DataLab Version 1.0.2 (03/12/2025)"
 

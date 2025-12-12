@@ -1360,6 +1360,10 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             title += f" [{datalab.__version__}]"
         self.setWindowTitle(title)
 
+    def is_modified(self) -> bool:
+        """Return True if mainwindow is modified"""
+        return self.__is_modified
+
     def __add_dockwidget(self, child, title: str) -> QW.QDockWidget:
         """Add QDockWidget and toggleViewAction"""
         dockwidget, location = child.create_dockwidget(title)
@@ -1559,9 +1563,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             if not filename:
                 return
         with qth.qt_try_loadsave_file(self, filename, "save"):
-            filename = self.__check_h5file(filename, "save")
-            self.h5inputoutput.save_file(filename)
-            self.set_modified(False)
+            self.save_h5_workspace(filename)
 
     @remote_controlled
     def open_h5_files(
@@ -1666,6 +1668,59 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         for filename in filenames:
             self.__check_h5file(filename, "load")
         self.h5inputoutput.import_files(filenames, False, reset_all)
+
+    @remote_controlled
+    def load_h5_workspace(self, h5files: list[str], reset_all: bool = False) -> None:
+        """Load native DataLab HDF5 workspace files without any GUI elements.
+
+        This method can be safely called from the internal console as it does not
+        create any Qt widgets, dialogs, or progress bars. It is designed for
+        programmatic use when loading DataLab workspace files.
+
+        .. warning::
+
+            This method only supports native DataLab HDF5 files. For importing
+            arbitrary HDF5 files (non-native), use the GUI menu or macros with
+            :class:`datalab.control.proxy.RemoteProxy`.
+
+        Args:
+            h5files: List of native DataLab HDF5 filenames
+            reset_all: Reset all application data before importing. Defaults to False.
+
+        Raises:
+            ValueError: If a file is not a valid native DataLab HDF5 file
+        """
+        for idx, filename in enumerate(h5files):
+            filename = self.__check_h5file(filename, "load")
+            success = self.h5inputoutput.open_file_headless(
+                filename, reset_all=(reset_all and idx == 0)
+            )
+            if not success:
+                raise ValueError(
+                    f"File '{filename}' is not a native DataLab HDF5 file. "
+                    f"Use the GUI menu or a macro with RemoteProxy to import "
+                    f"arbitrary HDF5 files."
+                )
+        # Refresh panel trees after loading
+        self.repopulate_panel_trees()
+
+    @remote_controlled
+    def save_h5_workspace(self, filename: str) -> None:
+        """Save current workspace to a native DataLab HDF5 file without GUI elements.
+
+        This method can be safely called from the internal console as it does not
+        create any Qt widgets, dialogs, or progress bars. It is designed for
+        programmatic use when saving DataLab workspace files.
+
+        Args:
+            filename: HDF5 filename to save to
+
+        Raises:
+            IOError: If file cannot be saved
+        """
+        filename = self.__check_h5file(filename, "save")
+        self.h5inputoutput.save_file(filename)
+        self.set_modified(False)
 
     @remote_controlled
     def import_h5_file(self, filename: str, reset_all: bool | None = None) -> None:
@@ -2027,7 +2082,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         Returns:
             True if closed properly, False otherwise
         """
-        if not env.execenv.unattended and self.__is_modified:
+        if not env.execenv.unattended and self.is_modified():
             answer = QW.QMessageBox.warning(
                 self,
                 _("Quit"),
@@ -2039,7 +2094,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             )
             if answer == QW.QMessageBox.Yes:
                 self.save_to_h5_file()
-                if self.__is_modified:
+                if self.is_modified():
                     return False
             elif answer == QW.QMessageBox.Cancel:
                 return False
