@@ -4,6 +4,14 @@
 
 ### 🛠️ Bug Fixes since version 1.0.2 ###
 
+**Plugin development - Infinite loop when iterating over group objects:**
+
+* Fixed infinite loop occurring in plugins when iterating over object IDs returned by `ObjectGroup.get_object_ids()` while simultaneously adding new objects to the same group
+* The method was returning a direct reference to the internal list instead of a copy, causing the iteration to include newly added objects and loop indefinitely
+* This particularly affected plugin workflows that loop over signals/images in a group and add results to the same or another group
+* The fix ensures `get_object_ids()` now returns a copy of the list, making iteration safe even when modifying the group
+* This closes [Issue #274](https://github.com/datalab-platform/datalab/issues/274) - Infinite loop when iterating over group objects while adding new objects
+
 **Marker visibility:**
 
 * Fixed cross marker (shown when pressing Alt key on plot) colors inherited from PlotPy being too pale on white background, and other marker properties explicitly configured for better contrast
