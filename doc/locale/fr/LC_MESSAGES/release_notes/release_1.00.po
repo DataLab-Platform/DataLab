@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-12 19:37+0100\n"
+"POT-Creation-Date: 2025-12-13 10:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -26,6 +26,18 @@ msgstr ""
 
 msgid "🛠️ Bug Fixes since version 1.0.2"
 msgstr "🛠️ Correctifs depuis la version 1.0.2"
+
+msgid "**Icons - Qt SVG warnings on Linux:**"
+msgstr "**Icônes - Avertissements Qt SVG sous Linux :**"
+
+msgid "Fixed \"qt.svg: Invalid path data; path truncated\" warnings appearing 4 times at startup on Linux/Ubuntu"
+msgstr "Correction des avertissements « qt.svg: Invalid path data; path truncated » apparaissant 4 fois au démarrage sous Linux/Ubuntu"
+
+msgid "Cleaned SVG icon files to remove Inkscape/Sodipodi metadata and fixed path syntax in two icon files that used implicit cubic Bézier command continuation (not supported by Qt's SVG renderer on Linux)"
+msgstr "Nettoyage des fichiers d'icônes SVG pour supprimer les métadonnées Inkscape/Sodipodi et correction de la syntaxe des chemins dans deux fichiers d'icônes qui utilisaient une continuation implicite de commande de courbe de Bézier cubique (non prise en charge par le moteur de rendu SVG de Qt sous Linux)"
+
+msgid "This closes [Issue #278](https://github.com/datalab-platform/datalab/issues/278) - Fix \"qt.svg: Invalid path data; path truncated\" warnings on Linux"
+msgstr "Ceci clôture [Issue #278](https://github.com/datalab-platform/datalab/issues/278) - Correction des avertissements « qt.svg: Invalid path data; path truncated » sous Linux"
 
 msgid "**ROI extraction - KeyError when extracting ROIs:**"
 msgstr "**Extraction de ROI - KeyError lors de l'extraction des ROI :**"

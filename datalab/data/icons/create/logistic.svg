@@ -3,5 +3,5 @@
     xmlns="http://www.w3.org/2000/svg">
     <rect style="fill:#696969;fill-opacity:1;stroke-width:0.547874" width="0.53186357" height="12.584304" x="6.7340684" y="0.70784807" />
     <rect style="fill:#696969;fill-opacity:1;stroke-width:0.54642" width="0.53186357" height="12.5176" x="6.7340684" y="-13.258801" transform="rotate(90)" />
-    <path style="fill:none;stroke:#9900cc;stroke-width:0.35;stroke-linejoin:round" d="M 1.5,12 C 2,12 2.5,12 3,11.9 3.5,11.8 4,11.6 4.5,11.2 5,10.8 5.5,10.2 6,9.5 6.5,8.5 7,7.2 7.5,5.5 8,4 8.5,3 9,2.5 9.5,2.2 10,2.1 10.5,2.05 11,2.02 11.5,2.01 12,2 12.5,2" />
+    <path style="fill:none;stroke:#9900cc;stroke-width:0.35;stroke-linejoin:round" d="M 1.5,12 C 2,12 2.5,12 3,11.9 C 3.5,11.8 4,11.6 4.5,11.2 C 5,10.8 5.5,10.2 6,9.5 C 6.5,8.5 7,7.2 7.5,5.5 C 8,4 8.5,3 9,2.5 C 9.5,2.2 10,2.1 10.5,2.05 C 11,2.02 11.5,2.01 12,2 L 12.5,2" />
 </svg>
