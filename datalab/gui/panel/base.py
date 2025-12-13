@@ -2921,9 +2921,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             dialog was accepted or not.
         """
         obj = self.objview.get_sel_objects(include_groups=True)[-1]
-        item = create_adapter_from_object(obj).make_item(
-            update_from=self.plothandler[get_uuid(obj)]
-        )
+        # Use get() instead of [] to avoid KeyError if the plot item doesn't exist
+        # (can happen when "auto refresh" is disabled or in "show first only" mode
+        # where not all objects have plot items created yet)
+        existing_item = self.plothandler.get(get_uuid(obj))
+        item = create_adapter_from_object(obj).make_item(update_from=existing_item)
         roi_editor_class = self.get_roieditor_class()  # pylint: disable=not-callable
         roi_editor = roi_editor_class(
             parent=self.parentWidget(),
