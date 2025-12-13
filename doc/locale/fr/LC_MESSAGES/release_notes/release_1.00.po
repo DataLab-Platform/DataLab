@@ -119,6 +119,18 @@ msgstr "Note : `load_h5_workspace()` ne prend en charge que les fichiers HDF5 na
 msgid "This closes [Issue #275](https://github.com/datalab-platform/datalab/issues/275) - Console freezes when calling `open_h5_files()` from internal console"
 msgstr "Ceci clôture [Issue #275](https://github.com/datalab-platform/datalab/issues/275) - Blocage de la console lors de l'appel de `open_h5_files()` depuis la console interne"
 
+msgid "**Signal cursor dialogs - Decimal input with regional settings:**"
+msgstr "**Boîtes de dialogue de curseur de signal - Saisie décimale avec les paramètres régionaux :**"
+
+msgid "Fixed decimal value input failing in signal cursor dialogs when using regional settings with comma as decimal separator (e.g., French, German locales)"
+msgstr "Correction de l'échec de la saisie de valeurs décimales dans les boîtes de dialogue de curseur de signal lors de l'utilisation de paramètres régionaux avec la virgule comme séparateur décimal (par exemple, locales française, allemande)"
+
+msgid "The Y input field in \"First abscissa at y=...\", \"Ordinate at x=...\", and \"Full width at y=...\" dialogs now consistently accepts dot as decimal separator regardless of system locale"
+msgstr "Le champ de saisie Y dans les boîtes de dialogue \"Première abscisse à y=...\", \"Ordonnée à x=...\" et \"Largeur totale à y=...\" accepte désormais systématiquement le point comme séparateur décimal, quelle que soit la locale du système"
+
+msgid "This closes [Issue #276](https://github.com/datalab-platform/datalab/issues/276) - Decimal input fails with regional settings using comma as decimal separator"
+msgstr "Ceci clôture [Issue #276](https://github.com/datalab-platform/datalab/issues/276) - Échec de la saisie décimale avec les paramètres régionaux utilisant la virgule comme séparateur décimal"
+
 msgid "DataLab Version 1.0.2 (2025-12-03)"
 msgstr "DataLab Version 1.0.2 (03/12/2025)"
 

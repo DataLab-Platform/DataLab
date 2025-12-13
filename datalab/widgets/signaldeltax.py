@@ -15,6 +15,7 @@ import numpy as np
 from guidata.configtools import get_icon
 from plotpy.builder import make
 from plotpy.plot import PlotDialog
+from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from sigima.tools.signal.pulse import full_width_at_y
@@ -68,7 +69,9 @@ class SignalDeltaXDialog(PlotDialog):
         self.deltaxlineedit.setDisabled(True)
         self.ylineedit = QW.QLineEdit()
         self.ylineedit.editingFinished.connect(self.ylineedit_editing_finished)
-        self.ylineedit.setValidator(QG.QDoubleValidator())
+        y_validator = QG.QDoubleValidator()
+        y_validator.setLocale(QC.QLocale("C"))
+        self.ylineedit.setValidator(y_validator)
         xygroup = QW.QGroupBox(_("Cursor position"))
         xylayout = QW.QHBoxLayout()
         xylayout.addWidget(xlabel)

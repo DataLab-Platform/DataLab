@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-16 16:57+0200\n"
+"POT-Creation-Date: 2025-12-13 08:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -361,6 +361,24 @@ msgstr ""
 msgid "list of file names"
 msgstr ""
 
+msgid "Load native DataLab HDF5 workspace files without any GUI elements."
+msgstr ""
+
+msgid "This method can be safely called from scripts (e.g., internal console, macros) as it does not create any Qt widgets, dialogs, or progress bars."
+msgstr ""
+
+msgid "This method only supports native DataLab HDF5 files. For importing arbitrary HDF5 files (non-native), use :meth:`open_h5_files` or :meth:`import_h5_file` instead."
+msgstr ""
+
+msgid "List of native DataLab HDF5 filenames"
+msgstr ""
+
+msgid "Reset all application data before importing. Defaults to False."
+msgstr ""
+
+msgid "If a file is not a valid native DataLab HDF5 file"
+msgstr ""
+
 msgid "Open a DataLab HDF5 file or import from any other HDF5 file."
 msgstr ""
 
@@ -389,6 +407,15 @@ msgid "Macro number, or macro title. Defaults to None (current macro)."
 msgstr ""
 
 msgid "if macro not found"
+msgstr ""
+
+msgid "Save current workspace to a native DataLab HDF5 file without GUI elements."
+msgstr ""
+
+msgid "HDF5 filename to save to"
+msgstr ""
+
+msgid "If file cannot be saved"
 msgstr ""
 
 msgid "Save to a DataLab HDF5 file."
@@ -464,6 +491,30 @@ msgid "refresh plot. Defaults to True"
 msgstr ""
 
 msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used"
+msgstr ""
+
+msgid "Load HDF5 workspace files without showing file dialog."
+msgstr ""
+
+msgid "This method loads one or more DataLab native HDF5 files directly, bypassing the file dialog. It is safe to call from the internal console or any context where Qt dialogs would cause threading issues."
+msgstr ""
+
+msgid "Path(s) to HDF5 file(s). Can be a single path string or a list of paths"
+msgstr ""
+
+msgid "If True, reset workspace before loading. Defaults to False."
+msgstr ""
+
+msgid "if file is not a DataLab native HDF5 file"
+msgstr ""
+
+msgid "Save workspace to HDF5 file without showing file dialog."
+msgstr ""
+
+msgid "This method saves the current workspace to a DataLab native HDF5 file directly, bypassing the file dialog. It is safe to call from the internal console or any context where Qt dialogs would cause threading issues."
+msgstr ""
+
+msgid "Path to the output HDF5 file"
 msgstr ""
 
 msgid "Proxy context manager"
