@@ -94,6 +94,15 @@
 * Fixed duplicate suffix in result image title when extracting radial profile from an image (e.g., `radial_profile(i019)|center=(192.500, 192.500)|center=(192.500, 192.500)` instead of `radial_profile(i019)|center=(192.500, 192.500)`)
 * This fix is provided by Sigima 1.0.4
 
+**Grid ROI - Missing spacing parameters for non-uniform grids:**
+
+* Fixed grid ROI feature not working correctly for images where subimages don't fill the entire image area (e.g., laser spot arrays with gaps between spots)
+* Added missing `xstep` and `ystep` parameters to control horizontal and vertical spacing between ROI centers, as a percentage of the automatically computed cell width/height (default 100% = evenly distributed grid)
+* Previously, the grid was always assumed to be evenly distributed across the entire image, which failed when there was significant offset or gaps between features
+* Users can now adjust ROI spacing independently from ROI size to accurately extract grids from real-world data like laser spot arrays, diffraction patterns, or any regularly spaced features with gaps
+* This fix is provided by Sigima 1.0.4
+* This closes [Issue #282](https://github.com/datalab-platform/datalab/issues/282) - Grid ROI Missing Spacing Parameters
+
 **Result visualization - Analysis result segments hard to see:**
 
 * Fixed analysis result markers (FWHM, pulse features, etc.) being difficult or impossible to see on signal plots
