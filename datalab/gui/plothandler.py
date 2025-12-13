@@ -162,6 +162,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         self.__merged_result_adapters = {}
         self.cleanup_dataview()
         self.remove_all_shape_items()
+        self.plot.replot()
 
     def add_shapes(self, oid: str, do_autoscale: bool = False) -> None:
         """Add geometric shape items associated to computed results and annotations,
