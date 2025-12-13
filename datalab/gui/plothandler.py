@@ -391,7 +391,10 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         if what == "selected":
             # Refresh selected objects
             oids = self.panel.objview.get_sel_object_uuids(include_groups=True)
-            if len(oids) == 1:
+            if len(oids) <= 1:
+                # Cleanup data view when there is 0 or 1 selected object.
+                # This removes stray plot items (like XRangeSelection, DataInfoLabel)
+                # that were created by PlotPy tools but are not managed by DataLab.
                 self.cleanup_dataview()
             self.remove_all_shape_items()
             for item in self:

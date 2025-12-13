@@ -4,6 +4,13 @@
 
 ### 🛠️ Bug Fixes since version 1.0.2 ###
 
+**Signal view - XRangeSelection items persist after removing signals:**
+
+* Fixed XRangeSelection and DataInfoLabel items (created by PlotPy's curve statistics tools) remaining visible on the plot after removing all signals
+* When activating the XRangeSelection tool from the PlotPy toolbar and then removing the signal(s), these tool-created graphical objects were not cleaned up
+* The cleanup logic now correctly triggers when there are zero selected objects (after deleting the last one), not just when exactly one object is selected
+* This closes [Issue #280](https://github.com/datalab-platform/datalab/issues/280) - XRangeSelection items persist after removing all signals
+
 **Remote control - Crash when adding object via proxy:**
 
 * Fixed `AttributeError: 'NoneType' object has no attribute 'setText'` crash when adding objects via `RemoteProxy.add_object()` in macros
