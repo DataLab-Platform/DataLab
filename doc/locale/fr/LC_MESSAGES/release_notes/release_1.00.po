@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 12:31+0100\n"
+"POT-Creation-Date: 2025-12-13 13:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -26,6 +26,21 @@ msgstr ""
 
 msgid "🛠️ Bug Fixes since version 1.0.2"
 msgstr "🛠️ Correctifs depuis la version 1.0.2"
+
+msgid "**Signal view - XRangeSelection items persist after removing signals:**"
+msgstr "**Vue des signaux - Les éléments XRangeSelection persistent après la suppression des signaux :**"
+
+msgid "Fixed XRangeSelection and DataInfoLabel items (created by PlotPy's curve statistics tools) remaining visible on the plot after removing all signals"
+msgstr "Correction des éléments XRangeSelection et DataInfoLabel (créés par les outils de statistiques de courbes de PlotPy) restant visibles sur le graphique après la suppression de tous les signaux"
+
+msgid "When activating the XRangeSelection tool from the PlotPy toolbar and then removing the signal(s), these tool-created graphical objects were not cleaned up"
+msgstr "Lors de l'activation de l'outil XRangeSelection depuis la barre d'outils PlotPy, puis de la suppression du ou des signaux, ces objets graphiques créés par l'outil n'étaient pas nettoyés"
+
+msgid "The cleanup logic now correctly triggers when there are zero selected objects (after deleting the last one), not just when exactly one object is selected"
+msgstr "La logique de nettoyage se déclenche désormais correctement lorsqu'il n'y a aucun objet sélectionné (après la suppression du dernier), et pas seulement lorsqu'un seul objet est sélectionné"
+
+msgid "This closes [Issue #280](https://github.com/datalab-platform/datalab/issues/280) - XRangeSelection items persist after removing all signals"
+msgstr "Ceci clôture [Issue #280](https://github.com/datalab-platform/datalab/issues/280) - Les éléments XRangeSelection persistent après la suppression de tous les signaux"
 
 msgid "**Remote control - Crash when adding object via proxy:**"
 msgstr "**Contrôle distant - Plantage lors de l'ajout d'un objet via le proxy :**"
