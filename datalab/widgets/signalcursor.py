@@ -12,6 +12,7 @@ import numpy as np
 from guidata.configtools import get_icon
 from plotpy.builder import make
 from plotpy.plot import PlotDialog
+from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from sigima.tools.signal.features import find_x_values_at_y
@@ -76,10 +77,14 @@ class SignalCursorDialog(PlotDialog):
         ylabel = QW.QLabel("Y=")
         self.xlineedit = QW.QLineEdit()
         self.xlineedit.editingFinished.connect(self.xlineedit_editing_finished)
-        self.xlineedit.setValidator(QG.QDoubleValidator())
+        x_validator = QG.QDoubleValidator()
+        x_validator.setLocale(QC.QLocale("C"))
+        self.xlineedit.setValidator(x_validator)
         self.ylineedit = QW.QLineEdit()
         self.ylineedit.editingFinished.connect(self.ylineedit_editing_finished)
-        self.ylineedit.setValidator(QG.QDoubleValidator())
+        y_validator = QG.QDoubleValidator()
+        y_validator.setLocale(QC.QLocale("C"))
+        self.ylineedit.setValidator(y_validator)
         self.xlineedit.setReadOnly(self.__cursor_orientation == "horizontal")
         self.xlineedit.setDisabled(self.__cursor_orientation == "horizontal")
         self.ylineedit.setReadOnly(self.__cursor_orientation == "vertical")

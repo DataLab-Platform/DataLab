@@ -48,6 +48,12 @@
 * Note: `load_h5_workspace()` only supports native DataLab HDF5 files; for importing arbitrary HDF5 files, use macros with `RemoteProxy`
 * This closes [Issue #275](https://github.com/datalab-platform/datalab/issues/275) - Console freezes when calling `open_h5_files()` from internal console
 
+**Signal cursor dialogs - Decimal input with regional settings:**
+
+* Fixed decimal value input failing in signal cursor dialogs when using regional settings with comma as decimal separator (e.g., French, German locales)
+* The Y input field in "First abscissa at y=...", "Ordinate at x=...", and "Full width at y=..." dialogs now consistently accepts dot as decimal separator regardless of system locale
+* This closes [Issue #276](https://github.com/datalab-platform/datalab/issues/276) - Decimal input fails with regional settings using comma as decimal separator
+
 ## DataLab Version 1.0.2 (2025-12-03) ##
 
 ### 🛠️ Bug Fixes since version 1.0.1 ###
