@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 10:35+0100\n"
+"POT-Creation-Date: 2025-12-13 11:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -26,6 +26,21 @@ msgstr ""
 
 msgid "🛠️ Bug Fixes since version 1.0.2"
 msgstr "🛠️ Correctifs depuis la version 1.0.2"
+
+msgid "**Remote control - Crash when adding object via proxy:**"
+msgstr "**Contrôle distant - Plantage lors de l'ajout d'un objet via le proxy :**"
+
+msgid "Fixed `AttributeError: 'NoneType' object has no attribute 'setText'` crash when adding objects via `RemoteProxy.add_object()` in macros"
+msgstr "Correction du plantage `AttributeError: 'NoneType' object has no attribute 'setText'` lors de l'ajout d'objets via `RemoteProxy.add_object()` dans les macros"
+
+msgid "The crash occurred in `update_tree()` when the tree view became temporarily out of sync with the object model (e.g., when adding objects with specific metadata configurations or ROIs via remote proxy)"
+msgstr "Le plantage se produisait dans `update_tree()` lorsque la vue arborescente se désynchronisait temporairement avec le modèle d'objets (par exemple, lors de l'ajout d'objets avec des configurations de métadonnées spécifiques ou des ROIs via le proxy distant)"
+
+msgid "The tree view now rebuilds automatically if inconsistencies are detected, ensuring robust object addition in all scenarios"
+msgstr "La vue arborescente se reconstruit désormais automatiquement si des incohérences sont détectées, assurant un ajout d'objets robuste dans tous les scénarios"
+
+msgid "This closes [Issue #279](https://github.com/datalab-platform/datalab/issues/279) - AttributeError in update_tree() when adding object via RemoteProxy"
+msgstr "Ceci clôture [Issue #279](https://github.com/datalab-platform/datalab/issues/279) - AttributeError dans update_tree() lors de l'ajout d'un objet via RemoteProxy"
 
 msgid "**Icons - Qt SVG warnings on Linux:**"
 msgstr "**Icônes - Avertissements Qt SVG sous Linux :**"
@@ -205,9 +220,6 @@ msgstr "Correction de l'erreur `AttributeError: 'NoneType' object has no attribu
 
 msgid "This closes [Issue #269](https://github.com/datalab-platform/datalab/issues/269) - Custom Signal Creation: `AttributeError` when creating signal from menu"
 msgstr "Ceci clôture [Issue #269](https://github.com/datalab-platform/datalab/issues/269) - Création de signaux personnalisés : `AttributeError` lors de la création d'un signal à partir du menu"
-
-msgid "**Macro execution:**"
-msgstr "**Exécution des macros :**"
 
 msgid "Fixed `UnicodeEncodeError` when executing macros that print Unicode characters (e.g., arrows `→`) on Windows systems with certain locales, e.g. cp1252 (closes [Issue #263](https://github.com/datalab-platform/datalab/issues/263))"
 msgstr "Correction de l'erreur `UnicodeEncodeError` lors de l'exécution de macros qui impriment des caractères Unicode (par exemple, des flèches `→`) sur les systèmes Windows avec certaines locales, par exemple cp1252 (ceci clôture [Issue #263](https://github.com/datalab-platform/datalab/issues/263))"

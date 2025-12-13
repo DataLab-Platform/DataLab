@@ -4,6 +4,13 @@
 
 ### 🛠️ Bug Fixes since version 1.0.2 ###
 
+**Remote control - Crash when adding object via proxy:**
+
+* Fixed `AttributeError: 'NoneType' object has no attribute 'setText'` crash when adding objects via `RemoteProxy.add_object()` in macros
+* The crash occurred in `update_tree()` when the tree view became temporarily out of sync with the object model (e.g., when adding objects with specific metadata configurations or ROIs via remote proxy)
+* The tree view now rebuilds automatically if inconsistencies are detected, ensuring robust object addition in all scenarios
+* This closes [Issue #279](https://github.com/datalab-platform/datalab/issues/279) - AttributeError in update_tree() when adding object via RemoteProxy
+
 **Icons - Qt SVG warnings on Linux:**
 
 * Fixed "qt.svg: Invalid path data; path truncated" warnings appearing 4 times at startup on Linux/Ubuntu
