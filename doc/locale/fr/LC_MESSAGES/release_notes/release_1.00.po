@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 14:17+0100\n"
+"POT-Creation-Date: 2025-12-13 16:32+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -199,6 +199,21 @@ msgstr "Correction du suffixe en double dans le titre de l'image résultante lor
 
 msgid "This fix is provided by Sigima 1.0.4"
 msgstr "Ce correctif est fourni par Sigima 1.0.4"
+
+msgid "**Result visualization - Analysis result segments hard to see:**"
+msgstr "**Visualisation des résultats - Segments de résultats d'analyse difficiles à voir :**"
+
+msgid "Fixed analysis result markers (FWHM, pulse features, etc.) being difficult or impossible to see on signal plots"
+msgstr "Correction des marqueurs de résultats d'analyse (FWHM, caractéristiques des impulsions, etc.) difficiles ou impossibles à voir sur les graphiques de signaux"
+
+msgid "These measurement indicators were appearing black on white backgrounds or white on dark backgrounds, making them blend into the plot"
+msgstr "Ces indicateurs de mesure apparaissaient en noir sur des fonds blancs ou en blanc sur des fonds sombres, les faisant se fondre dans le graphique"
+
+msgid "They now display in bright green with thicker lines, making them clearly visible in all color themes"
+msgstr "Ils s'affichent désormais en vert vif avec des lignes plus épaisses, les rendant clairement visibles dans tous les thèmes de couleur"
+
+msgid "Also removed the filled area that was obscuring the underlying signal data - markers now show only the boundary lines indicating the measured region"
+msgstr "Suppression également de la zone remplie qui obscurcissait les données de signal sous-jacentes - les marqueurs affichent désormais uniquement les lignes de délimitation indiquant la région mesurée"
 
 msgid "DataLab Version 1.0.2 (2025-12-03)"
 msgstr "DataLab Version 1.0.2 (03/12/2025)"

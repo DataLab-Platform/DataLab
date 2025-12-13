@@ -87,6 +87,13 @@
 * Fixed duplicate suffix in result image title when extracting radial profile from an image (e.g., `radial_profile(i019)|center=(192.500, 192.500)|center=(192.500, 192.500)` instead of `radial_profile(i019)|center=(192.500, 192.500)`)
 * This fix is provided by Sigima 1.0.4
 
+**Result visualization - Analysis result segments hard to see:**
+
+* Fixed analysis result markers (FWHM, pulse features, etc.) being difficult or impossible to see on signal plots
+* These measurement indicators were appearing black on white backgrounds or white on dark backgrounds, making them blend into the plot
+* They now display in bright green with thicker lines, making them clearly visible in all color themes
+* Also removed the filled area that was obscuring the underlying signal data - markers now show only the boundary lines indicating the measured region
+
 ## DataLab Version 1.0.2 (2025-12-03) ##
 
 ### 🛠️ Bug Fixes since version 1.0.1 ###
