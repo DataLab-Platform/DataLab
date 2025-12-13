@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 11:43+0100\n"
+"POT-Creation-Date: 2025-12-13 12:31+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -157,6 +157,15 @@ msgstr "Le champ de saisie Y dans les boîtes de dialogue \"Première abscisse �
 
 msgid "This closes [Issue #276](https://github.com/datalab-platform/datalab/issues/276) - Decimal input fails with regional settings using comma as decimal separator"
 msgstr "Ceci clôture [Issue #276](https://github.com/datalab-platform/datalab/issues/276) - Échec de la saisie décimale avec les paramètres régionaux utilisant la virgule comme séparateur décimal"
+
+msgid "**Radial profile title:**"
+msgstr "**Titre du profil radial :**"
+
+msgid "Fixed duplicate suffix in result image title when extracting radial profile from an image (e.g., `radial_profile(i019)|center=(192.500, 192.500)|center=(192.500, 192.500)` instead of `radial_profile(i019)|center=(192.500, 192.500)`)"
+msgstr "Correction du suffixe en double dans le titre de l'image résultante lors de l'extraction du profil radial d'une image (par exemple, `radial_profile(i019)|center=(192.500, 192.500)|center=(192.500, 192.500)` au lieu de `radial_profile(i019)|center=(192.500, 192.500)`)"
+
+msgid "This fix is provided by Sigima 1.0.4"
+msgstr "Ce correctif est fourni par Sigima 1.0.4"
 
 msgid "DataLab Version 1.0.2 (2025-12-03)"
 msgstr "DataLab Version 1.0.2 (03/12/2025)"

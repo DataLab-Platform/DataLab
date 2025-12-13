@@ -67,6 +67,11 @@
 * The Y input field in "First abscissa at y=...", "Ordinate at x=...", and "Full width at y=..." dialogs now consistently accepts dot as decimal separator regardless of system locale
 * This closes [Issue #276](https://github.com/datalab-platform/datalab/issues/276) - Decimal input fails with regional settings using comma as decimal separator
 
+**Radial profile title:**
+
+* Fixed duplicate suffix in result image title when extracting radial profile from an image (e.g., `radial_profile(i019)|center=(192.500, 192.500)|center=(192.500, 192.500)` instead of `radial_profile(i019)|center=(192.500, 192.500)`)
+* This fix is provided by Sigima 1.0.4
+
 ## DataLab Version 1.0.2 (2025-12-03) ##
 
 ### 🛠️ Bug Fixes since version 1.0.1 ###
