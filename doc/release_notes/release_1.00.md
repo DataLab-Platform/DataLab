@@ -4,6 +4,14 @@
 
 ### 🛠️ Bug Fixes since version 1.0.2 ###
 
+**Result labels - False "omitted" message for single-row results:**
+
+* Fixed result labels (e.g., pulse features) incorrectly showing "X more rows omitted" message when displaying single-row results with no actual truncation
+* The bug occurred because `len(adapter.result)` was used to get the row count, but this actually returns the number of column headers, not data rows
+* For pulse features with 13 columns, this caused the label to think there were 13 rows when only 1 row existed, leading to a false "12 more rows omitted" message
+* The fix ensures accurate row counting using `len(df)` instead, preventing false truncation notices
+* This closes [Issue #281](https://github.com/datalab-platform/datalab/issues/281) - Result Labels False "Omitted" Message
+
 **Signal view - XRangeSelection items persist after removing signals:**
 
 * Fixed XRangeSelection and DataInfoLabel items (created by PlotPy's curve statistics tools) remaining visible on the plot after removing all signals

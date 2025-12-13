@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 13:42+0100\n"
+"POT-Creation-Date: 2025-12-13 14:17+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -26,6 +26,24 @@ msgstr ""
 
 msgid "🛠️ Bug Fixes since version 1.0.2"
 msgstr "🛠️ Correctifs depuis la version 1.0.2"
+
+msgid "**Result labels - False \"omitted\" message for single-row results:**"
+msgstr "**Étiquettes de résultats - Faux message \"omis\" pour les résultats à une seule ligne :**"
+
+msgid "Fixed result labels (e.g., pulse features) incorrectly showing \"X more rows omitted\" message when displaying single-row results with no actual truncation"
+msgstr "Correction des étiquettes de résultats (par exemple, les caractéristiques des impulsions) affichant incorrectement le message \"X lignes supplémentaires omises\" lors de l'affichage de résultats à une seule ligne sans troncature réelle"
+
+msgid "The bug occurred because `len(adapter.result)` was used to get the row count, but this actually returns the number of column headers, not data rows"
+msgstr "L'anomalie s'est produite parce que `len(adapter.result)` était utilisé pour obtenir le nombre de lignes, mais cela renvoie en fait le nombre d'en-têtes de colonnes, pas les lignes de données"
+
+msgid "For pulse features with 13 columns, this caused the label to think there were 13 rows when only 1 row existed, leading to a false \"12 more rows omitted\" message"
+msgstr "Pour les caractéristiques des impulsions avec 13 colonnes, cela a amené l'étiquette à penser qu'il y avait 13 lignes alors qu'il n'y en avait qu'une seule, ce qui a conduit à un faux message \"12 lignes supplémentaires omises\""
+
+msgid "The fix ensures accurate row counting using `len(df)` instead, preventing false truncation notices"
+msgstr "Le correctif garantit un comptage précis des lignes en utilisant `len(df)` à la place, évitant ainsi les fausses notifications de troncature"
+
+msgid "This closes [Issue #281](https://github.com/datalab-platform/datalab/issues/281) - Result Labels False \"Omitted\" Message"
+msgstr "Ceci clôture [Issue #281](https://github.com/datalab-platform/datalab/issues/281) - Faux message \"omis\" des étiquettes de résultats"
 
 msgid "**Signal view - XRangeSelection items persist after removing signals:**"
 msgstr "**Vue des signaux - Les éléments XRangeSelection persistent après la suppression des signaux :**"
