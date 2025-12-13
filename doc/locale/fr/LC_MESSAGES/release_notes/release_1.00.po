@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 17:28+0100\n"
+"POT-Creation-Date: 2025-12-13 18:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -214,6 +214,24 @@ msgstr "Correction du suffixe en double dans le titre de l'image résultante lor
 
 msgid "This fix is provided by Sigima 1.0.4"
 msgstr "Ce correctif est fourni par Sigima 1.0.4"
+
+msgid "**Grid ROI - Missing spacing parameters for non-uniform grids:**"
+msgstr "**ROI de grille - Paramètres d'espacement manquants pour les grilles non uniformes :**"
+
+msgid "Fixed grid ROI feature not working correctly for images where subimages don't fill the entire image area (e.g., laser spot arrays with gaps between spots)"
+msgstr "Correction de la fonctionnalité ROI de grille ne fonctionnant pas correctement pour les images où les sous-images ne remplissent pas toute la zone de l'image (par exemple, les réseaux de points laser avec des espaces entre les points)"
+
+msgid "Added missing `xstep` and `ystep` parameters to control horizontal and vertical spacing between ROI centers, as a percentage of the automatically computed cell width/height (default 100% = evenly distributed grid)"
+msgstr "Ajout des paramètres manquants `xstep` et `ystep` pour contrôler l'espacement horizontal et vertical entre les centres des ROI, en pourcentage de la largeur/hauteur de cellule calculée automatiquement (par défaut 100 % = grille uniformément répartie)"
+
+msgid "Previously, the grid was always assumed to be evenly distributed across the entire image, which failed when there was significant offset or gaps between features"
+msgstr "Auparavant, la grille était toujours supposée être uniformément répartie sur toute l'image, ce qui échouait lorsqu'il y avait un décalage ou des espaces importants entre les caractéristiques"
+
+msgid "Users can now adjust ROI spacing independently from ROI size to accurately extract grids from real-world data like laser spot arrays, diffraction patterns, or any regularly spaced features with gaps"
+msgstr "Les utilisateurs peuvent désormais ajuster l'espacement des ROI indépendamment de la taille des ROI pour extraire avec précision des grilles à partir de données réelles telles que des réseaux de points laser, des motifs de diffraction ou toute caractéristique régulièrement espacée avec des espaces"
+
+msgid "This closes [Issue #282](https://github.com/datalab-platform/datalab/issues/282) - Grid ROI Missing Spacing Parameters"
+msgstr "Ceci clôture [Issue #282](https://github.com/datalab-platform/datalab/issues/282) - Paramètres d'espacement manquants pour la ROI de grille"
 
 msgid "**Result visualization - Analysis result segments hard to see:**"
 msgstr "**Visualisation des résultats - Segments de résultats d'analyse difficiles à voir :**"
