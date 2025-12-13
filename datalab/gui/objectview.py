@@ -222,11 +222,26 @@ class SimpleObjectTree(QW.QTreeWidget):
             self.set_current_item_id(uuid)
 
     def update_tree(self) -> None:
-        """Update tree"""
+        """Update tree
+
+        Note: If an item is not found in the tree, the tree is repopulated to ensure
+        consistency between the tree and the model. This can happen in rare cases when
+        objects are added to the model but the tree was not properly updated.
+        """
         for group in self.objmodel.get_groups():
-            self.__update_item(self.get_item_from_id(get_uuid(group)), group)
+            group_item = self.get_item_from_id(get_uuid(group))
+            if group_item is None:
+                # Group item not found, repopulate tree to fix inconsistency
+                self.populate_tree()
+                return
+            self.__update_item(group_item, group)
             for obj in group:
-                self.__update_item(self.get_item_from_id(get_uuid(obj)), obj)
+                obj_item = self.get_item_from_id(get_uuid(obj))
+                if obj_item is None:
+                    # Object item not found, repopulate tree to fix inconsistency
+                    self.populate_tree()
+                    return
+                self.__update_item(obj_item, obj)
 
     def __add_to_group_item(
         self, obj: SignalObj | ImageObj, group_item: QW.QTreeWidgetItem
