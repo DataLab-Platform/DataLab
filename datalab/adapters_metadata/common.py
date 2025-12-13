@@ -365,7 +365,7 @@ def resultadapter_to_html(
             num_cols = max_display_cols
 
         # Calculate number of cells (rows × columns)
-        num_rows = len(adapter.result)
+        num_rows = len(df)
         num_cells = num_rows * num_cols
 
         # Check if truncation is needed BEFORE calling to_html()
