@@ -4,6 +4,13 @@
 
 ### 🛠️ Bug Fixes since version 1.0.2 ###
 
+**Plot refresh - ROIs and annotations persist after "Remove all":**
+
+* Fixed ROIs and annotations occasionally remaining visible after executing "Remove all" action from the Edit menu
+* The issue occurred because the plot widget wasn't explicitly told to redraw after clearing all plot items and shape items
+* The plot now correctly refreshes its display after clearing all objects, ensuring a clean view without requiring panel switching
+* The bug was intermittent and hard to reproduce systematically, making it appear as if objects were "stuck" on the plot
+
 **Result labels - False "omitted" message for single-row results:**
 
 * Fixed result labels (e.g., pulse features) incorrectly showing "X more rows omitted" message when displaying single-row results with no actual truncation

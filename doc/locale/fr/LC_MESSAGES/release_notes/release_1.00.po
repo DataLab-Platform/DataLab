@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 16:32+0100\n"
+"POT-Creation-Date: 2025-12-13 17:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -26,6 +26,21 @@ msgstr ""
 
 msgid "🛠️ Bug Fixes since version 1.0.2"
 msgstr "🛠️ Correctifs depuis la version 1.0.2"
+
+msgid "**Plot refresh - ROIs and annotations persist after \"Remove all\":**"
+msgstr "**Rafraîchissement du graphique - Les ROI et annotations persistent après \"Tout supprimer\" :**"
+
+msgid "Fixed ROIs and annotations occasionally remaining visible after executing \"Remove all\" action from the Edit menu"
+msgstr "Correction des ROI et annotations restant occasionnellement visibles après l'exécution de l'action \"Tout supprimer\" depuis le menu Édition"
+
+msgid "The issue occurred because the plot widget wasn't explicitly told to redraw after clearing all plot items and shape items"
+msgstr "Le problème est survenu parce que le widget de tracé n'était pas explicitement invité à se redessiner après la suppression de tous les éléments de tracé et des éléments de forme"
+
+msgid "The plot now correctly refreshes its display after clearing all objects, ensuring a clean view without requiring panel switching"
+msgstr "Le graphique se rafraîchit désormais correctement après la suppression de tous les objets, garantissant une vue propre sans nécessiter de changement de panneau"
+
+msgid "The bug was intermittent and hard to reproduce systematically, making it appear as if objects were \"stuck\" on the plot"
+msgstr "Le bug était intermittent et difficile à reproduire systématiquement, donnant l'impression que les objets étaient \"coincés\" sur le graphique"
 
 msgid "**Result labels - False \"omitted\" message for single-row results:**"
 msgstr "**Étiquettes de résultats - Faux message \"omis\" pour les résultats à une seule ligne :**"
