@@ -89,8 +89,8 @@ def get_manifest_package_info(manifest_path: Path) -> str:
             result_lines.append(f"{name:{name_width}}   {version:{version_width}}")
 
         return os.linesep.join(result_lines)
-    except Exception as e:
-        return f"Error reading manifest file: {e}"
+    except Exception as exc:  # pylint: disable=broad-except
+        return f"Error reading manifest file: {exc}"
 
 
 def get_install_info() -> str:
