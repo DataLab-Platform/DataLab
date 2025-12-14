@@ -75,7 +75,7 @@ def test_round_image_coords():
     assert rounded == [10.0, 21.0, 31.0, 40.0]
 
     # Test with empty coords
-    assert round_image_coords(img, []) == []
+    assert not round_image_coords(img, [])
 
     # Test error for odd number of coordinates
     with pytest.raises(ValueError, match="even number of elements"):

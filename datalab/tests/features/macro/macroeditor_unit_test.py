@@ -25,7 +25,7 @@ from qtpy import QtWidgets as QW
 
 from datalab.env import execenv
 from datalab.gui.macroeditor import Macro
-from datalab.gui.panel import macro
+from datalab.gui.panel.macro import MacroPanel
 from datalab.tests import datalab_test_app_context, helpers
 
 
@@ -56,7 +56,7 @@ print("All done! :)")
 def test_macro_editor():
     """Test dep viewer window"""
     with qt_app_context(exec_loop=True):
-        widget = macro.MacroPanel(None)
+        widget = MacroPanel(None)
         widget.resize(800, 600)
         widget.show()
 
