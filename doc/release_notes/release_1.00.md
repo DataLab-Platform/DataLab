@@ -103,6 +103,14 @@
 * This fix is provided by Sigima 1.0.4
 * This closes [Issue #282](https://github.com/datalab-platform/datalab/issues/282) - Grid ROI Missing Spacing Parameters
 
+**Analysis auto-recompute - Redundant O(n²) calculations when adding ROI:**
+
+* Fixed severe performance issue where adding ROI to N selected images with analysis results (e.g., Statistics, Centroid) triggered N² calculations instead of N
+* When 10 images were selected with pre-computed statistics, adding a ROI would show 10 progress bars of 10 calculations each (100 total) instead of a single progress bar with 10 calculations
+* The issue occurred because `auto_recompute_analysis()` was calling `compute_1_to_0()` which by default processes all selected objects, not just the specific object being recomputed
+* Added `target_objs` parameter to `compute_1_to_0()` to allow specifying which objects to process, and updated `auto_recompute_analysis()` to use it
+* This closes [Issue #283](https://github.com/datalab-platform/datalab/issues/283) - Redundant O(n²) calculations when adding ROI to multiple images with analysis results
+
 **Result visualization - Analysis result segments hard to see:**
 
 * Fixed analysis result markers (FWHM, pulse features, etc.) being difficult or impossible to see on signal plots
