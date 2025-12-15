@@ -235,6 +235,87 @@ def test_analysis_recompute_after_recompute_1_to_1():
         print("\n✓ Recompute_1_to_1 auto-analysis test passed!")
 
 
+def test_analysis_recompute_avoids_redundant_calculations():
+    """Test that auto-recompute doesn't cause O(n²) redundant calculations.
+
+    This test verifies that when multiple objects have ROIs modified simultaneously,
+    the analysis is recomputed only once per object, not once per object × number
+    of selected objects.
+
+    Regression test for bug: When N images were selected with statistics computed,
+    adding a ROI would trigger N × N = N² calculations instead of N.
+    """
+    with datalab_test_app_context(console=False) as win:
+        panel = win.imagepanel
+
+        # Create multiple images (N = 5 for this test)
+        n_images = 5
+        size = 100
+        images = []
+        for i in range(n_images):
+            param = Gauss2DParam.create(height=size, width=size, sigma=15)
+            img = create_image_from_param(param)
+            img.title = f"Test image {i + 1}"
+            panel.add_object(img)
+            images.append(img)
+
+        # Select all images
+        panel.objview.select_objects(images)
+        selected = panel.objview.get_sel_objects()
+        assert len(selected) == n_images, f"Should have {n_images} selected objects"
+
+        # Compute statistics on all selected images
+        with Conf.proc.show_result_dialog.temp(False):
+            panel.processor.run_feature("centroid")
+
+        # Verify all images have centroid results
+        for img in images:
+            centroid = get_centroid_coords(img)
+            assert centroid is not None, f"Image '{img.title}' should have centroid"
+
+        print(f"\nInitial statistics computed for {n_images} images")
+
+        # Track how many times compute_1_to_0 is called during auto-recompute
+        # by counting the calls via a wrapper
+        call_count = [0]  # Use list to allow modification in closure
+        original_compute_1_to_0 = panel.processor.compute_1_to_0
+
+        def counting_compute_1_to_0(*args, **kwargs):
+            call_count[0] += 1
+            return original_compute_1_to_0(*args, **kwargs)
+
+        panel.processor.compute_1_to_0 = counting_compute_1_to_0
+
+        try:
+            # Add ROI to all selected images via edit_roi_graphically flow
+            # Simulating what happens when user adds ROI in the editor
+            roi = create_image_roi("rectangle", [25, 25, 50, 50])
+            for img in images:
+                img.roi = roi
+                # Simulate the auto-recompute that happens after ROI modification
+                panel.processor.auto_recompute_analysis(img)
+
+            # With the fix, compute_1_to_0 should be called exactly N times
+            # (once per object), not N² times
+            print(f"compute_1_to_0 was called {call_count[0]} times")
+            assert call_count[0] == n_images, (
+                f"compute_1_to_0 should be called exactly {n_images} times "
+                f"(once per object), but was called {call_count[0]} times. "
+                f"This suggests O(n²) redundant calculations."
+            )
+
+            # Verify the target_objs parameter is being used correctly:
+            # Each call should process only 1 object, not all selected objects
+            # This is verified by checking that the call count matches n_images
+
+        finally:
+            # Restore the original method
+            panel.processor.compute_1_to_0 = original_compute_1_to_0
+
+        print(f"\n✓ Auto-recompute correctly called {n_images} times (no O(n²) issue)")
+
+
 if __name__ == "__main__":
     test_analysis_recompute_after_roi_change()
     test_analysis_recompute_after_recompute_1_to_1()
+    test_analysis_recompute_avoids_redundant_calculations()

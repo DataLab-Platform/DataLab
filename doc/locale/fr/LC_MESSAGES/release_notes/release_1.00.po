@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-13 17:28+0100\n"
+"POT-Creation-Date: 2025-12-13 18:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -232,6 +232,24 @@ msgstr "Les utilisateurs peuvent désormais ajuster l'espacement des ROI indépe
 
 msgid "This closes [Issue #282](https://github.com/datalab-platform/datalab/issues/282) - Grid ROI Missing Spacing Parameters"
 msgstr "Ceci clôture [Issue #282](https://github.com/datalab-platform/datalab/issues/282) - Paramètres d'espacement manquants pour la ROI de grille"
+
+msgid "**Analysis auto-recompute - Redundant O(n²) calculations when adding ROI:**"
+msgstr "**Recalcul automatique de l'analyse - Calculs redondants O(n²) lors de l'ajout de ROI :**"
+
+msgid "Fixed severe performance issue where adding ROI to N selected images with analysis results (e.g., Statistics, Centroid) triggered N² calculations instead of N"
+msgstr "Correction d'un problème de performance sévère où l'ajout d'une ROI à N images sélectionnées avec des résultats d'analyse (p. ex. Statistiques, Centroïde) déclenchait N² calculs au lieu de N"
+
+msgid "When 10 images were selected with pre-computed statistics, adding a ROI would show 10 progress bars of 10 calculations each (100 total) instead of a single progress bar with 10 calculations"
+msgstr "Lorsque 10 images étaient sélectionnées avec des statistiques pré-calculées, l'ajout d'une ROI affichait 10 barres de progression de 10 calculs chacune (100 au total) au lieu d'une seule barre de progression avec 10 calculs"
+
+msgid "The issue occurred because `auto_recompute_analysis()` was calling `compute_1_to_0()` which by default processes all selected objects, not just the specific object being recomputed"
+msgstr "Le problème se produisait car `auto_recompute_analysis()` appelait `compute_1_to_0()` qui, par défaut, traite tous les objets sélectionnés, pas seulement l'objet spécifique en cours de recalcul"
+
+msgid "Added `target_objs` parameter to `compute_1_to_0()` to allow specifying which objects to process, and updated `auto_recompute_analysis()` to use it"
+msgstr "Ajout du paramètre `target_objs` à `compute_1_to_0()` pour permettre de spécifier quels objets traiter, et mise à jour de `auto_recompute_analysis()` pour l'utiliser"
+
+msgid "This closes [Issue #283](https://github.com/datalab-platform/datalab/issues/283) - Redundant O(n²) calculations when adding ROI to multiple images with analysis results"
+msgstr "Ceci clôture [Issue #283](https://github.com/datalab-platform/datalab/issues/283) - Calculs redondants O(n²) lors de l'ajout de ROI à plusieurs images avec des résultats d'analyse"
 
 msgid "**Result visualization - Analysis result segments hard to see:**"
 msgstr "**Visualisation des résultats - Segments de résultats d'analyse difficiles à voir :**"
