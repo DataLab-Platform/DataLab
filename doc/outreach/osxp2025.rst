@@ -8,7 +8,7 @@ Open Source Experience 2025
 Conference Overview
 -------------------
 
-In December 2025, DataLab 1.0 will be presented at `Open Source Experience 2025 <https://www.opensource-experience.com/>`_ in Paris, one of Europe's largest events dedicated to open-source software and communities. This presentation marks the official announcement of DataLab's evolution into a modular platform.
+In December 2025, DataLab 1.0 was presented at `Open Source Experience 2025 <https://www.opensource-experience.com/>`_ in Paris, one of Europe's largest events dedicated to open-source software and communities. This presentation marked the official announcement of DataLab's evolution into a modular platform.
 
 **Event Details:**
 
@@ -127,17 +127,15 @@ This presentation is significant for several reasons:
 **CEA Partnership**
     Reinforces the strong relationship between DataLab and CEA, one of its major supporters.
 
-Looking Forward
----------------
+Presentation Highlights
+-----------------------
 
-This presentation at OSXP 2025 will:
+This presentation at OSXP 2025:
 
-- Announce and showcase DataLab 1.0's release and new architecture
-- Demonstrate how the modular design enables custom application development
-- Highlight the successful collaboration with the NLnet Foundation
-- Present concrete examples of how DataLab can be used both as an application and as a development platform
-- Inspire organizations to adopt DataLab for their scientific data processing needs
-- Foster community engagement and contributions to the DataLab ecosystem
+- Announced and showcased DataLab 1.0's release and new architecture
+- Demonstrated how the modular design enables custom application development
+- Highlighted the successful collaboration with the NLnet Foundation
+- Presented concrete examples of how DataLab can be used both as an application and as a development platform
 
 DataLab 1.0 represents a significant evolution - from a specialized application to a comprehensive platform that empowers users to build their own data processing solutions while maintaining the simplicity and power of the complete GUI application.
 
@@ -145,7 +143,7 @@ The originally planned X-ray scene reconstruction project remains an excellent e
 
 .. note::
 
-   **Upcoming Event**: This presentation will take place on **December 11, 2025**. Check back after the event for presentation materials, feedback, and potentially a video recording.
+   **Past Event**: This presentation took place on **December 11, 2025**. Presentation materials and additional information may be added here in the future.
 
 Conference Track
 ----------------
