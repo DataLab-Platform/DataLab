@@ -6,12 +6,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 from guidata.configtools import get_icon
 from plotpy.builder import make
-from plotpy.plot import PlotDialog
+from plotpy.plot import PlotDialog, PlotOptions
 
 from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import _
@@ -29,16 +29,25 @@ class ImageBackgroundDialog(PlotDialog):
     Args:
         image: image object
         parent: parent widget. Defaults to None.
+        options: plot options. Defaults to None.
     """
 
-    def __init__(self, image: ImageObj, parent: QWidget | None = None) -> None:
+    def __init__(
+        self,
+        image: ImageObj,
+        parent: QWidget | None = None,
+        options: PlotOptions | dict[str, Any] | None = None,
+    ) -> None:
         self.__background: float | None = None
         self.__rect_coords: tuple[float, float, float, float] | None = None
         self.imageitem: MaskedXYImageItem | None = None
         self.rectarea: RectangleShape | None = None
         self.comput2d: RangeComputation2d | None = None
         super().__init__(
-            title=_("Image background selection"), edit=True, parent=parent
+            title=_("Image background selection"),
+            edit=True,
+            parent=parent,
+            options=options,
         )
         self.setObjectName("backgroundselection")
         if parent is None:
