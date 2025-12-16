@@ -154,7 +154,63 @@ def test_delete_results_clears_analysis_parameters():
         execenv.print("\n✓ All tests passed!")
 
 
+def test_delete_results_after_roi_removed():
+    """Test that deleting results works when ROI was removed from object.
+
+    This tests the fix for the bug where deleting results fails with
+    AttributeError when results contain ROI information but the ROI
+    was subsequently removed from the object.
+    """
+    with datalab_test_app_context(console=False) as win:
+        execenv.print("Test delete_results after ROI removed:")
+        panel = win.imagepanel
+
+        # Create a test image with ROI
+        param = Gauss2DParam.create(height=200, width=200, sigma=20)
+        img = create_image_from_param(param)
+        roi = create_image_roi("rectangle", [25, 25, 100, 100])
+        img.roi = roi
+        panel.add_object(img)
+        execenv.print("  ✓ Created image with ROI")
+
+        # Run centroid analysis - this stores ROI index in results
+        execenv.print("  Running centroid analysis with ROI...")
+        with Conf.proc.show_result_dialog.temp(False):
+            panel.processor.run_feature("centroid")
+
+        # Verify that results exist and contain ROI information
+        img_refreshed = panel.objmodel[get_uuid(img)]
+        adapter_before = GeometryAdapter.from_obj(img_refreshed, "centroid")
+        assert adapter_before is not None, "Centroid result should exist"
+        df = adapter_before.to_dataframe()
+        assert "roi_index" in df.columns, "Results should contain roi_index"
+        execenv.print("  ✓ Centroid result created with ROI information")
+
+        # Now remove the ROI from the object (simulating user action)
+        img_refreshed.roi = None
+        execenv.print("  ✓ Removed ROI from object")
+
+        # Try to delete all results - this should NOT raise an error
+        execenv.print("  Deleting all results (with ROI removed)...")
+        panel.objview.select_objects([get_uuid(img)])
+        try:
+            panel.delete_results()
+            execenv.print("  ✓ Delete results succeeded (no AttributeError)")
+        except AttributeError as e:
+            raise AssertionError(
+                f"delete_results should not raise AttributeError when ROI is None: {e}"
+            ) from e
+
+        # Verify that results were deleted
+        img_after = panel.objmodel[get_uuid(img)]
+        adapter_after = GeometryAdapter.from_obj(img_after, "centroid")
+        assert adapter_after is None, "Centroid result should be deleted"
+        execenv.print("  ✓ Centroid result deleted successfully")
+        execenv.print("\n✓ Test passed!")
+
+
 if __name__ == "__main__":
     test_delete_results_image()
     test_delete_results_signal()
     test_delete_results_clears_analysis_parameters()
+    test_delete_results_after_roi_removed()

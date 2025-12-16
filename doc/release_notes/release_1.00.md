@@ -4,6 +4,16 @@
 
 ### 🛠️ Bug Fixes since version 1.0.2 ###
 
+**Remove all results - AttributeError when ROI was removed:**
+
+* Fixed "Remove all results" action failing with `AttributeError: 'NoneType' object has no attribute 'get_single_roi_title'` when results contain ROI information but the ROI was subsequently removed from the object
+* The issue occurred when:
+  1. Running an analysis with a ROI (e.g., Centroid on an image with rectangular ROI)
+  2. Removing the ROI from the object
+  3. Trying to delete all results via "Analysis > Remove results > Remove all results"
+* The fix adds a proper None check before accessing the ROI's title
+* This closes [Issue #286](https://github.com/DataLab-Platform/DataLab/issues/286) - "Remove all results" fails with AttributeError when ROI was removed
+
 **Analysis auto-recompute - Stale parameters after deleting results:**
 
 * Fixed analysis parameters not being cleared when deleting analysis results, which could cause unexpected auto-recompute behavior when modifying ROIs

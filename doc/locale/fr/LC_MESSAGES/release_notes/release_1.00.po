@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-16 10:16+0100\n"
+"POT-Creation-Date: 2025-12-16 10:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -26,6 +26,30 @@ msgstr ""
 
 msgid "🛠️ Bug Fixes since version 1.0.2"
 msgstr "🛠️ Correctifs depuis la version 1.0.2"
+
+msgid "**Remove all results - AttributeError when ROI was removed:**"
+msgstr "**Supprimer tous les résultats - AttributeError lorsque la ROI a été supprimée :**"
+
+msgid "Fixed \"Remove all results\" action failing with `AttributeError: 'NoneType' object has no attribute 'get_single_roi_title'` when results contain ROI information but the ROI was subsequently removed from the object"
+msgstr "Correction de l'action « Supprimer tous les résultats » qui échouait avec `AttributeError: 'NoneType' object has no attribute 'get_single_roi_title'` lorsque les résultats contiennent des informations de ROI mais que la ROI a été ensuite supprimée de l'objet"
+
+msgid "The issue occurred when:"
+msgstr "Le problème se produisait lorsque :"
+
+msgid "Running an analysis with a ROI (e.g., Centroid on an image with rectangular ROI)"
+msgstr "Exécution d'une analyse avec une ROI (par ex. Centroïde sur une image avec ROI rectangulaire)"
+
+msgid "Removing the ROI from the object"
+msgstr "Suppression de la ROI de l'objet"
+
+msgid "Trying to delete all results via \"Analysis > Remove results > Remove all results\""
+msgstr "Tentative de suppression de tous les résultats via « Analyse > Supprimer les résultats > Supprimer tous les résultats »"
+
+msgid "The fix adds a proper None check before accessing the ROI's title"
+msgstr "Le correctif ajoute une vérification de valeur None appropriée avant d'accéder au titre de la ROI"
+
+msgid "This closes [Issue #286](https://github.com/DataLab-Platform/DataLab/issues/286) - 'Remove all results' fails with AttributeError when ROI was removed"
+msgstr "Ceci clôture [Issue #286](https://github.com/datalab-platform/datalab/issues/286) - 'Remove all results' fails with AttributeError when ROI was removed"
 
 msgid "**Analysis auto-recompute - Stale parameters after deleting results:**"
 msgstr "**Recalcul automatique de l'analyse - Paramètres obsolètes après suppression des résultats :**"
