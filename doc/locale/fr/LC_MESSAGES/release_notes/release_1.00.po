@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-15 16:33+0100\n"
+"POT-Creation-Date: 2025-12-16 10:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -26,6 +26,24 @@ msgstr ""
 
 msgid "🛠️ Bug Fixes since version 1.0.2"
 msgstr "🛠️ Correctifs depuis la version 1.0.2"
+
+msgid "**Backwards-drawn rectangular ROI causes NaN statistics:**"
+msgstr "**ROI rectangulaire dessinée à l'envers cause des statistiques NaN :**"
+
+msgid "Fixed rectangular ROI statistics returning NaN values when the ROI was drawn \"backwards\" (from bottom-right to top-left instead of top-left to bottom-right)"
+msgstr "Correction des statistiques de ROI rectangulaire retournant des valeurs NaN lorsque la ROI était dessinée « à l'envers » (du coin inférieur droit vers le coin supérieur gauche au lieu du coin supérieur gauche vers le coin inférieur droit)"
+
+msgid "The issue occurred because the ROI coordinate conversion produced negative width/height values, causing the mask generation to fail"
+msgstr "Le problème est survenu parce que la conversion des coordonnées de la ROI produisait des valeurs de largeur/hauteur négatives, provoquant l'échec de la génération du masque"
+
+msgid "ROI mask generation now works correctly regardless of the direction in which the rectangle was drawn"
+msgstr "La génération du masque de ROI fonctionne désormais correctement quelle que soit la direction dans laquelle le rectangle a été dessiné"
+
+msgid "This closes [Issue #284](https://github.com/datalab-platform/datalab/issues/284) - Backwards-drawn rectangular ROI causes NaN statistics"
+msgstr "Ceci clôture [Issue #284](https://github.com/datalab-platform/datalab/issues/284) - Backwards-drawn rectangular ROI causes NaN statistics"
+
+msgid "This fix is included in Sigima 1.0.4"
+msgstr "Ce correctif est inclus dans Sigima 1.0.4"
 
 msgid "**Plot refresh - ROIs and annotations persist after \"Remove all\":**"
 msgstr "**Rafraîchissement du graphique - Les ROI et annotations persistent après \"Tout supprimer\" :**"
