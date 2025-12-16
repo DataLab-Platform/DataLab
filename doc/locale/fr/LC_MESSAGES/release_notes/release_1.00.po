@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-16 10:56+0100\n"
+"POT-Creation-Date: 2025-12-16 12:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -26,6 +26,21 @@ msgstr ""
 
 msgid "🛠️ Bug Fixes since version 1.0.2"
 msgstr "🛠️ Correctifs depuis la version 1.0.2"
+
+msgid "**Separate plot windows - Incorrect aspect ratio for non-uniform coordinates:**"
+msgstr "**Fenêtres de tracé séparées - Rapport d'aspect incorrect pour les coordonnées non uniformes :**"
+
+msgid "Fixed separate plot windows (e.g., \"View in a new window\", ROI editors, profile dialogs) not using the same aspect ratio configuration as the integrated plot handler"
+msgstr "Correction des fenêtres de tracé séparées (par ex. « Voir dans une nouvelle fenêtre », éditeurs de ROI, dialogues de profil) qui n'utilisaient pas la même configuration de rapport d'aspect que le gestionnaire de tracé intégré"
+
+msgid "When displaying images with non-uniform coordinates, the main plot correctly unlocks the aspect ratio for proper display, but separate windows were not inheriting this setting"
+msgstr "Lors de l'affichage d'images avec des coordonnées non uniformes, le tracé principal déverrouille correctement le rapport d'aspect pour un affichage approprié, mais les fenêtres séparées n'héritaient pas de ce paramètre"
+
+msgid "All image dialogs now properly inherit the aspect ratio settings, ensuring consistent display behavior across all plot windows"
+msgstr "Toutes les boîtes de dialogue d'image héritent désormais correctement des paramètres de rapport d'aspect, assurant un comportement d'affichage cohérent sur toutes les fenêtres de tracé"
+
+msgid "This closes [Issue #287](https://github.com/DataLab-Platform/DataLab/issues/287) - Separate plot windows don't use same aspect ratio configuration as integrated plot"
+msgstr "Ceci clôture [Issue #287](https://github.com/datalab-platform/datalab/issues/287) - Separate plot windows don't use same aspect ratio configuration as integrated plot"
 
 msgid "**Remove all results - AttributeError when ROI was removed:**"
 msgstr "**Supprimer tous les résultats - AttributeError lorsque la ROI a été supprimée :**"

@@ -4,6 +4,13 @@
 
 ### 🛠️ Bug Fixes since version 1.0.2 ###
 
+**Separate plot windows - Incorrect aspect ratio for non-uniform coordinates:**
+
+* Fixed separate plot windows (e.g., "View in a new window", ROI editors, profile dialogs) not using the same aspect ratio configuration as the integrated plot handler
+* When displaying images with non-uniform coordinates, the main plot correctly unlocks the aspect ratio for proper display, but separate windows were not inheriting this setting
+* All image dialogs now properly inherit the aspect ratio settings, ensuring consistent display behavior across all plot windows
+* This closes [Issue #287](https://github.com/DataLab-Platform/DataLab/issues/287) - Separate plot windows don't use same aspect ratio configuration as integrated plot
+
 **Remove all results - AttributeError when ROI was removed:**
 
 * Fixed "Remove all results" action failing with `AttributeError: 'NoneType' object has no attribute 'get_single_roi_title'` when results contain ROI information but the ROI was subsequently removed from the object

@@ -810,4 +810,9 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedXYImageItem]):
         options = super().get_plot_options()
         options.zlabel = self.plot.get_axis_title("right")
         options.zunit = self.plot.get_axis_unit("right")
+        # Include aspect ratio configuration so that separate plot dialogs
+        # (e.g. "View in a new window", ROI editors, profile dialogs) use the same
+        # settings as the integrated plot handler:
+        options.aspect_ratio = self.plot.get_aspect_ratio()
+        options.lock_aspect_ratio = self.plot.lock_aspect_ratio
         return options
