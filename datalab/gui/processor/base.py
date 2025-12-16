@@ -195,6 +195,21 @@ def insert_processing_parameters(
         obj.set_metadata_option(PROCESSING_PARAMETERS_OPTION, pp.to_dict())
 
 
+def clear_analysis_parameters(obj: SignalObj | ImageObj) -> None:
+    """Clear analysis parameters from object metadata.
+
+    This removes the stored analysis parameters (1-to-0 operations) from the object.
+    Should be called when all analysis results are deleted to prevent the
+    auto_recompute_analysis function from attempting to recompute deleted analyses.
+
+    Args:
+        obj: Signal or Image object
+    """
+    key = f"__{ANALYSIS_PARAMETERS_OPTION}"
+    if key in obj.metadata:
+        del obj.metadata[key]
+
+
 def run_with_env(func: Callable, args: tuple, env_json: str) -> CompOut:
     """Wrapper to apply environment config before calling func
 

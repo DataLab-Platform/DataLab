@@ -50,6 +50,10 @@ from qtpy import QtWidgets as QW
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter, have_results
 from datalab.config import Conf, _
 from datalab.gui import newobject
+from datalab.gui.processor.base import (
+    clear_analysis_parameters,
+    extract_analysis_parameters,
+)
 from datalab.widgets import fitdialog
 
 if TYPE_CHECKING:
@@ -361,6 +365,15 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             obj: Object containing the result
             adapter: Adapter for the result to delete
         """
+        # Check if this result matches the stored analysis parameters
+        # If so, clear them to prevent auto-recompute from attempting to
+        # recompute the deleted analysis when ROI changes
+        analysis_params = extract_analysis_parameters(obj)
+        if (
+            analysis_params is not None
+            and analysis_params.func_name == adapter.func_name
+        ):
+            clear_analysis_parameters(obj)
         adapter.remove_from(obj)
         # Update properties panel to reflect the removal
         if obj is self.panel.objview.get_current_object():
