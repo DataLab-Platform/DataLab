@@ -88,7 +88,7 @@ class ResultData:
             if "roi_index" in df.columns:
                 i_roi = int(df.iloc[i_row_res]["roi_index"])
                 roititle = ""
-                if i_roi >= 0:
+                if i_roi >= 0 and obj.roi is not None:
                     roititle = obj.roi.get_single_roi_title(i_roi)
                     ylabel += f"|{roititle}"
             self.ylabels.append(ylabel)
