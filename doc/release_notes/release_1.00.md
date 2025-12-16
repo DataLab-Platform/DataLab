@@ -4,6 +4,14 @@
 
 ### 🛠️ Bug Fixes since version 1.0.2 ###
 
+**LUT range incorrectly copied when processing images:**
+
+* Fixed processed images inheriting the LUT range (display contrast settings) from the source image, causing incorrect visualization when data values change significantly
+* When applying operations like offset correction, the result image now auto-scales its display range to fit the new data values instead of using the original image's LUT range
+* Previously, users had to manually adjust the LUT to see processed images correctly (they could appear completely black or with wrong contrast)
+* This closes [Issue #288](https://github.com/DataLab-Platform/DataLab/issues/288) - LUT range incorrectly copied when processing images
+* This fix is included in Sigima 1.0.4
+
 **Separate plot windows - Incorrect aspect ratio for non-uniform coordinates:**
 
 * Fixed separate plot windows (e.g., "View in a new window", ROI editors, profile dialogs) not using the same aspect ratio configuration as the integrated plot handler
