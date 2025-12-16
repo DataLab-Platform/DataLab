@@ -231,6 +231,42 @@
             ],
         },
         {
+            "label": "cleanup-doc-translations",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "scripts/run_with_env.py",
+                "${command:python.interpreterPath}",
+                "-m",
+                "guidata.utils.translations",
+                "cleanup-doc",
+                "--directory",
+                ".",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": true,
+                },
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false,
+            },
+            "presentation": {
+                "clear": true,
+                "echo": true,
+                "focus": false,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": true,
+            },
+            "type": "shell",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "sphinx-intl update",
+            ],
+        },
+        {
             "label": "sphinx-intl build",
             "command": "${command:python.interpreterPath}",
             "args": [
@@ -296,7 +332,7 @@
             "type": "shell",
             "dependsOrder": "sequence",
             "dependsOn": [
-                "sphinx-intl update",
+                "cleanup-doc-translations",
             ],
         },
         {
