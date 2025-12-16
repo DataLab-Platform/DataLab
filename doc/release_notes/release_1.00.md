@@ -4,6 +4,14 @@
 
 ### 🛠️ Bug Fixes since version 1.0.2 ###
 
+**Backwards-drawn rectangular ROI causes NaN statistics:**
+
+* Fixed rectangular ROI statistics returning NaN values when the ROI was drawn "backwards" (from bottom-right to top-left instead of top-left to bottom-right)
+* The issue occurred because the ROI coordinate conversion produced negative width/height values, causing the mask generation to fail
+* ROI mask generation now works correctly regardless of the direction in which the rectangle was drawn
+* This closes [Issue #284](https://github.com/datalab-platform/datalab/issues/284) - Backwards-drawn rectangular ROI causes NaN statistics
+* This fix is included in Sigima 1.0.4
+
 **Plot refresh - ROIs and annotations persist after "Remove all":**
 
 * Fixed ROIs and annotations occasionally remaining visible after executing "Remove all" action from the Edit menu
