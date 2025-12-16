@@ -4,6 +4,12 @@
 
 ### 🛠️ Bug Fixes since version 1.0.2 ###
 
+**Loading images with a single row or column fails:**
+
+* Fixed loading image files with a single row or column (e.g., some SIF spectroscopy files with shape `(1, N)`) causing an `IndexError` and preventing the image from being displayed
+* The underlying issue was in PlotPy's coordinate-to-bin conversion function which assumed at least 2 points
+* This fix is included in PlotPy 2.8.3
+
 **LUT range incorrectly copied when processing images:**
 
 * Fixed processed images inheriting the LUT range (display contrast settings) from the source image, causing incorrect visualization when data values change significantly

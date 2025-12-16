@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-16 14:35+0100\n"
+"POT-Creation-Date: 2025-12-16 17:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -26,6 +26,18 @@ msgstr ""
 
 msgid "🛠️ Bug Fixes since version 1.0.2"
 msgstr "🛠️ Correctifs depuis la version 1.0.2"
+
+msgid "**Loading images with a single row or column fails:**"
+msgstr "**Le chargement des images avec une seule ligne ou colonne échoue :**"
+
+msgid "Fixed loading image files with a single row or column (e.g., some SIF spectroscopy files with shape `(1, N)`) causing an `IndexError` and preventing the image from being displayed"
+msgstr "Correction du chargement des fichiers d'images avec une seule ligne ou colonne (par exemple, certains fichiers de spectroscopie SIF avec une forme `(1, N)`) provoquant une `IndexError` et empêchant l'affichage de l'image"
+
+msgid "The underlying issue was in PlotPy's coordinate-to-bin conversion function which assumed at least 2 points"
+msgstr "Le problème sous-jacent se trouvait dans la fonction de conversion des coordonnées en bacs de PlotPy qui supposait au moins 2 points"
+
+msgid "This fix is included in PlotPy 2.8.3"
+msgstr "Ce correctif est inclus dans PlotPy 2.8.3"
 
 msgid "**LUT range incorrectly copied when processing images:**"
 msgstr "**Plage LUT copiée incorrectement lors du traitement des images :**"
