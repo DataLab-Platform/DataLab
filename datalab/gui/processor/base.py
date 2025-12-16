@@ -945,7 +945,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             TableAdapter.remove_all_from(result_obj)
             GeometryAdapter.remove_all_from(result_obj)
 
-    def auto_recompute_analysis(self, obj: SignalObj | ImageObj) -> None:
+    def auto_recompute_analysis(
+        self, obj: SignalObj | ImageObj, refresh_plot: bool = True
+    ) -> None:
         """Automatically recompute analysis (1-to-0) operations after data changes.
 
         This method checks if the object has 1-to-0 analysis parameters (analysis
@@ -962,6 +964,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         Args:
             obj: The object whose data was modified
+            refresh_plot: Whether to refresh the plot after recomputation
         """
         # Check if object has 1-to-0 analysis parameters (analysis operations)
         proc_params = extract_analysis_parameters(obj)
@@ -982,7 +985,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         # Update the view
         obj_uuid = get_uuid(obj)
         self.panel.objview.update_item(obj_uuid)
-        self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+        if refresh_plot:
+            self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
 
     def __exec_func(
         self,
@@ -2390,8 +2394,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 )
                 # Auto-recompute analysis operations for objects with modified ROIs
                 if mode == "apply":
-                    for obj_i in objs:
-                        self.auto_recompute_analysis(obj_i)
+                    with create_progress_bar(
+                        self.panel, _("Recomputing..."), max_=len(objs)
+                    ) as progress:
+                        for idx, obj_i in enumerate(objs):
+                            progress.setValue(idx)
+                            self.auto_recompute_analysis(obj_i, refresh_plot=False)
+                    self.panel.manual_refresh()
         return edited_roi
 
     def edit_roi_numerically(self) -> TypeROI:
