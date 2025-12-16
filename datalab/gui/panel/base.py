@@ -79,6 +79,7 @@ from datalab.gui.newobject import (
 from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
     ProcessingParameters,
+    clear_analysis_parameters,
     extract_processing_parameters,
     insert_processing_parameters,
 )
@@ -3276,6 +3277,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     # Remove all table and geometry results using adapter methods
                     TableAdapter.remove_all_from(obj)
                     GeometryAdapter.remove_all_from(obj)
+                    # Clear analysis parameters to prevent auto-recompute from
+                    # attempting to recompute deleted analyses when ROI changes
+                    clear_analysis_parameters(obj)
                     if obj is self.objview.get_current_object():
                         self.objprop.update_properties_from(obj)
                 # Update action states to reflect the removal

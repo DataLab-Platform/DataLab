@@ -4,6 +4,13 @@
 
 ### 🛠️ Bug Fixes since version 1.0.2 ###
 
+**Analysis auto-recompute - Stale parameters after deleting results:**
+
+* Fixed analysis parameters not being cleared when deleting analysis results, which could cause unexpected auto-recompute behavior when modifying ROIs
+* After deleting results (via "Delete all results" or individual result deletion), changing the ROI would trigger recomputation of the deleted analysis because the stored parameters remained in object metadata
+* The fix ensures analysis parameters are properly cleared alongside the results, preventing unwanted automatic recomputation
+* This closes [Issue #285](https://github.com/DataLab-Platform/DataLab/issues/285) - Analysis parameters not cleared after deleting results
+
 **Backwards-drawn rectangular ROI causes NaN statistics:**
 
 * Fixed rectangular ROI statistics returning NaN values when the ROI was drawn "backwards" (from bottom-right to top-left instead of top-left to bottom-right)

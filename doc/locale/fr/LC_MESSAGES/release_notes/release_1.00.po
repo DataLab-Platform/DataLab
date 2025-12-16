@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-15 16:33+0100\n"
+"POT-Creation-Date: 2025-12-16 10:16+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -26,6 +26,21 @@ msgstr ""
 
 msgid "🛠️ Bug Fixes since version 1.0.2"
 msgstr "🛠️ Correctifs depuis la version 1.0.2"
+
+msgid "**Analysis auto-recompute - Stale parameters after deleting results:**"
+msgstr "**Recalcul automatique de l'analyse - Paramètres obsolètes après suppression des résultats :**"
+
+msgid "Fixed analysis parameters not being cleared when deleting analysis results, which could cause unexpected auto-recompute behavior when modifying ROIs"
+msgstr "Correction des paramètres d'analyse qui n'étaient pas effacés lors de la suppression des résultats, ce qui pouvait provoquer un comportement de recalcul automatique inattendu lors de la modification des ROI"
+
+msgid "After deleting results (via \"Delete all results\" or individual result deletion), changing the ROI would trigger recomputation of the deleted analysis because the stored parameters remained in object metadata"
+msgstr "Après la suppression des résultats (via « Supprimer tous les résultats » ou suppression individuelle), la modification de la ROI déclenchait le recalcul de l'analyse supprimée car les paramètres restaient dans les métadonnées de l'objet"
+
+msgid "The fix ensures analysis parameters are properly cleared alongside the results, preventing unwanted automatic recomputation"
+msgstr "Le correctif assure que les paramètres d'analyse sont correctement effacés avec les résultats, empêchant le recalcul automatique indésirable"
+
+msgid "This closes [Issue #285](https://github.com/DataLab-Platform/DataLab/issues/285) - Analysis parameters not cleared after deleting results"
+msgstr "Ceci clôture [Issue #285](https://github.com/datalab-platform/datalab/issues/285) - Analysis parameters not cleared after deleting results"
 
 msgid "**Backwards-drawn rectangular ROI causes NaN statistics:**"
 msgstr "**ROI rectangulaire dessinée à l'envers cause des statistiques NaN :**"
