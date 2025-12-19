@@ -11,7 +11,7 @@ See [DataLab website](https://datalab-platform.com/) for more details.
 
 ----
 
-This branch contains the resources for the DataLab Binder environments.
+ℹ️ This branch contains the resources for the DataLab Binder environments.
 
 ⚠️ The DataLab version installed on the Binder environment may not be up-to-date.
 However, a shortcut is available on the desktop to upgrade DataLab to the latest version.
