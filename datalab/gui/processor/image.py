@@ -779,7 +779,8 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                 == QW.QMessageBox.No
             ):
                 return
-        editor = ImageGridROIEditor(parent=self.parent(), obj=obj0)
+        options = self.panel.plothandler.get_plot_options()
+        editor = ImageGridROIEditor(parent=self.parent(), obj=obj0, options=options)
         if exec_dialog(editor):
             for obj in self.panel.objview.get_sel_objects():
                 obj.roi = editor.get_roi()
@@ -1014,7 +1015,10 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         with :py:func:`sigima.proc.image.offset_correction`"""
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         if param is None:
-            dlg = imagebackground.ImageBackgroundDialog(obj, parent=self.mainwindow)
+            options = self.panel.plothandler.get_plot_options()
+            dlg = imagebackground.ImageBackgroundDialog(
+                obj, parent=self.mainwindow, options=options
+            )
             if exec_dialog(dlg):
                 x0, y0, x1, y1 = dlg.get_rect_coords()
                 param = ROI2DParam.create(

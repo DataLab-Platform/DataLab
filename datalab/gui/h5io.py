@@ -54,6 +54,31 @@ class H5InputOutput:
             panel.serialize_to_hdf5(writer)
         writer.close()
 
+    def open_file_headless(self, filename: str, reset_all: bool) -> bool:
+        """Open native DataLab HDF5 file without any GUI elements.
+
+        This method can be safely called from any thread (e.g., the console thread)
+        as it does not create any Qt widgets or dialogs.
+
+        Args:
+            filename: HDF5 filename
+            reset_all: Reset all application data before importing
+
+        Returns:
+            True if file was successfully opened as a native DataLab file,
+            False if the file format is not compatible (KeyError was raised)
+        """
+        try:
+            reader = NativeH5Reader(filename)
+            if reset_all:
+                self.mainwindow.reset_all()
+            for panel in self.mainwindow.panels:
+                panel.deserialize_from_hdf5(reader, reset_all)
+            reader.close()
+            return True
+        except KeyError:
+            return False
+
     def open_file(self, filename: str, import_all: bool, reset_all: bool) -> None:
         """Open HDF5 file"""
         progress = None

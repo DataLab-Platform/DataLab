@@ -8,9 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-03 18:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -31,8 +29,8 @@ msgstr "Open Source Experience 2025"
 msgid "Conference Overview"
 msgstr "Aperçu de la conférence"
 
-msgid "In December 2025, DataLab 1.0 will be presented at `Open Source Experience 2025 <https://www.opensource-experience.com/>`_ in Paris, one of Europe's largest events dedicated to open-source software and communities. This presentation marks the official announcement of DataLab's evolution into a modular platform."
-msgstr "En décembre 2025, DataLab 1.0 sera présenté à l'`Open Source Experience 2025 <https://www.opensource-experience.com/>`_ à Paris, l'un des plus grands événements d'Europe dédié aux logiciels et communautés open-source. Cette présentation marque l'annonce officielle de l'évolution de DataLab vers une plateforme modulaire."
+msgid "In December 2025, DataLab 1.0 was presented at `Open Source Experience 2025 <https://www.opensource-experience.com/>`_ in Paris, one of Europe's largest events dedicated to open-source software and communities. This presentation marked the official announcement of DataLab's evolution into a modular platform."
+msgstr "En décembre 2025, DataLab 1.0 a été présenté à l'`Open Source Experience 2025 <https://www.opensource-experience.com/>`_ à Paris, l'un des plus grands événements d'Europe dédié aux logiciels et communautés open-source. Cette présentation a marqué l'annonce officielle de l'évolution de DataLab vers une plateforme modulaire."
 
 msgid "**Event Details:**"
 msgstr "**Détails de l'événement :**"
@@ -265,29 +263,23 @@ msgstr "**Partenariat CEA :**"
 msgid "Reinforces the strong relationship between DataLab and CEA, one of its major supporters."
 msgstr "Renforce la relation étroite entre DataLab et le CEA, l'un de ses principaux soutiens."
 
-msgid "Looking Forward"
-msgstr "Perspectives"
+msgid "Presentation Highlights"
+msgstr "Points Clés de la Présentation"
 
-msgid "This presentation at OSXP 2025 will:"
-msgstr "Cette présentation à OSXP 2025 mettra en avant :"
+msgid "This presentation at OSXP 2025:"
+msgstr "Cette présentation à OSXP 2025 :"
 
-msgid "Announce and showcase DataLab 1.0's release and new architecture"
-msgstr "Annoncer et présenter la sortie de DataLab 1.0 et sa nouvelle architecture"
+msgid "Announced and showcased DataLab 1.0's release and new architecture"
+msgstr "A annoncé et présenté la sortie de DataLab 1.0 et sa nouvelle architecture"
 
-msgid "Demonstrate how the modular design enables custom application development"
-msgstr "Démontrer comment la conception modulaire permet le développement d'applications personnalisées"
+msgid "Demonstrated how the modular design enables custom application development"
+msgstr "A démontré comment la conception modulaire permet le développement d'applications personnalisées"
 
-msgid "Highlight the successful collaboration with the NLnet Foundation"
-msgstr "Mettre en avant la collaboration réussie avec la NLnet Foundation"
+msgid "Highlighted the successful collaboration with the NLnet Foundation"
+msgstr "A mis en avant la collaboration réussie avec la NLnet Foundation"
 
-msgid "Present concrete examples of how DataLab can be used both as an application and as a development platform"
-msgstr "Présenter des exemples concrets de la manière dont DataLab peut être utilisé à la fois comme application et comme plateforme de développement"
-
-msgid "Inspire organizations to adopt DataLab for their scientific data processing needs"
-msgstr "Inspirer les organisations à adopter DataLab pour leurs besoins en traitement de données scientifiques"
-
-msgid "Foster community engagement and contributions to the DataLab ecosystem"
-msgstr "Favoriser l'engagement communautaire et les contributions à l'écosystème DataLab"
+msgid "Presented concrete examples of how DataLab can be used both as an application and as a development platform"
+msgstr "A présenté des exemples concrets de la manière dont DataLab peut être utilisé à la fois comme application et comme plateforme de développement"
 
 msgid "DataLab 1.0 represents a significant evolution - from a specialized application to a comprehensive platform that empowers users to build their own data processing solutions while maintaining the simplicity and power of the complete GUI application."
 msgstr "DataLab 1.0 représente une évolution significative - passant d'une application spécialisée à une plateforme complète qui permet aux utilisateurs de créer leurs propres solutions de traitement de données tout en conservant la simplicité et la puissance de l'application GUI complète."
@@ -295,8 +287,8 @@ msgstr "DataLab 1.0 représente une évolution significative - passant d'une app
 msgid "The originally planned X-ray scene reconstruction project remains an excellent example of DataLab's capabilities in advanced industrial applications, demonstrating how the platform bridges the gap between research and industrial applications while combining scientific rigor, industrial robustness, and open-source collaboration."
 msgstr "Le projet de reconstruction de scènes radiographiées initialement prévu reste un excellent exemple des capacités de DataLab dans les applications industrielles avancées, démontrant comment la plateforme comble le fossé entre la recherche et les applications industrielles tout en combinant rigueur scientifique, robustesse industrielle et collaboration open-source."
 
-msgid "**Upcoming Event**: This presentation will take place on **December 11, 2025**. Check back after the event for presentation materials, feedback, and potentially a video recording."
-msgstr "**Événement à Venir** : Cette présentation aura lieu le **11 décembre 2025**. Revenez après l'événement pour les documents de présentation, les retours d'expérience et potentiellement un enregistrement vidéo."
+msgid "**Past Event**: This presentation took place on **December 11, 2025**. Presentation materials and additional information may be added here in the future."
+msgstr "**Événement Passé** : Cette présentation a eu lieu le **11 décembre 2025**. Les documents de présentation et informations complémentaires pourront être ajoutés ici à l'avenir."
 
 msgid "Conference Track"
 msgstr "Thématique de la Conférence"

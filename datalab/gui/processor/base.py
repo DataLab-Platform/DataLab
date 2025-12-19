@@ -195,6 +195,21 @@ def insert_processing_parameters(
         obj.set_metadata_option(PROCESSING_PARAMETERS_OPTION, pp.to_dict())
 
 
+def clear_analysis_parameters(obj: SignalObj | ImageObj) -> None:
+    """Clear analysis parameters from object metadata.
+
+    This removes the stored analysis parameters (1-to-0 operations) from the object.
+    Should be called when all analysis results are deleted to prevent the
+    auto_recompute_analysis function from attempting to recompute deleted analyses.
+
+    Args:
+        obj: Signal or Image object
+    """
+    key = f"__{ANALYSIS_PARAMETERS_OPTION}"
+    if key in obj.metadata:
+        del obj.metadata[key]
+
+
 def run_with_env(func: Callable, args: tuple, env_json: str) -> CompOut:
     """Wrapper to apply environment config before calling func
 
@@ -945,7 +960,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             TableAdapter.remove_all_from(result_obj)
             GeometryAdapter.remove_all_from(result_obj)
 
-    def auto_recompute_analysis(self, obj: SignalObj | ImageObj) -> None:
+    def auto_recompute_analysis(
+        self, obj: SignalObj | ImageObj, refresh_plot: bool = True
+    ) -> None:
         """Automatically recompute analysis (1-to-0) operations after data changes.
 
         This method checks if the object has 1-to-0 analysis parameters (analysis
@@ -962,6 +979,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         Args:
             obj: The object whose data was modified
+            refresh_plot: Whether to refresh the plot after recomputation
         """
         # Check if object has 1-to-0 analysis parameters (analysis operations)
         proc_params = extract_analysis_parameters(obj)
@@ -974,14 +992,16 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         # Get the actual function from the function name
         feature = self.get_feature(proc_params.func_name)
 
-        # Recompute the analysis operation silently
+        # Recompute the analysis operation silently, only for this specific object
+        # (not all selected objects, to avoid O(n²) behavior when called in a loop)
         with Conf.proc.show_result_dialog.temp(False):
-            self.compute_1_to_0(feature.function, param, edit=False)
+            self.compute_1_to_0(feature.function, param, edit=False, target_objs=[obj])
 
         # Update the view
         obj_uuid = get_uuid(obj)
         self.panel.objview.update_item(obj_uuid)
-        self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+        if refresh_plot:
+            self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
 
     def __exec_func(
         self,
@@ -1332,12 +1352,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        target_objs: list[SignalObj | ImageObj] | None = None,
     ) -> ResultData:
         """Generic processing method: 1 object in → no object out.
 
-        Applies a function to each selected object, returning metadata or measurement
-        results (e.g. peak coordinates, statistical properties) without generating
-        new objects. Results are stored in the object's metadata and returned as a
+        Applies a function to each selected object (or specified target objects),
+        returning metadata or measurement results (e.g. peak coordinates, statistical
+        properties) without generating new objects. Results are stored in the object's
+        metadata and returned as a
         ResultData instance.
 
         Args:
@@ -1349,6 +1371,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             title: Optional progress bar title.
             comment: Optional comment for parameter dialog.
             edit: Whether to open the parameter editor before execution.
+            target_objs: Optional list of specific objects to process. If None,
+             processes all currently selected objects.
 
         Returns:
             ResultData instance containing the results for all processed objects.
@@ -1365,7 +1389,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if param is not None:
             if edit and not param.edit(parent=self.mainwindow):
                 return None
-        objs = self.panel.objview.get_sel_objects(include_groups=True)
+        objs = (
+            target_objs
+            if target_objs is not None
+            else self.panel.objview.get_sel_objects(include_groups=True)
+        )
         current_obj = self.panel.objview.get_current_object()
         title = func.__name__ if title is None else title
         refresh_needed = False
@@ -2381,8 +2409,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 )
                 # Auto-recompute analysis operations for objects with modified ROIs
                 if mode == "apply":
-                    for obj_i in objs:
-                        self.auto_recompute_analysis(obj_i)
+                    with create_progress_bar(
+                        self.panel, _("Recomputing..."), max_=len(objs)
+                    ) as progress:
+                        for idx, obj_i in enumerate(objs):
+                            progress.setValue(idx)
+                            self.auto_recompute_analysis(obj_i, refresh_plot=False)
+                    self.panel.manual_refresh()
         return edited_roi
 
     def edit_roi_numerically(self) -> TypeROI:

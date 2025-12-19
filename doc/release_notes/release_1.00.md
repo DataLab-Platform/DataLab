@@ -1,8 +1,172 @@
 # Version 1.0 #
 
+## DataLab Version 1.0.3 ##
+
+### 🛠️ Bug Fixes since version 1.0.2 ###
+
+**Loading images with a single row or column fails:**
+
+* Fixed loading image files with a single row or column (e.g., some SIF spectroscopy files with shape `(1, N)`) causing an `IndexError` and preventing the image from being displayed
+* The underlying issue was in PlotPy's coordinate-to-bin conversion function which assumed at least 2 points
+* This fix is included in PlotPy 2.8.3
+
+**LUT range incorrectly copied when processing images:**
+
+* Fixed processed images inheriting the LUT range (display contrast settings) from the source image, causing incorrect visualization when data values change significantly
+* When applying operations like offset correction, the result image now auto-scales its display range to fit the new data values instead of using the original image's LUT range
+* Previously, users had to manually adjust the LUT to see processed images correctly (they could appear completely black or with wrong contrast)
+* This closes [Issue #288](https://github.com/DataLab-Platform/DataLab/issues/288) - LUT range incorrectly copied when processing images
+* This fix is included in Sigima 1.0.4
+
+**Separate plot windows - Incorrect aspect ratio for non-uniform coordinates:**
+
+* Fixed separate plot windows (e.g., "View in a new window", ROI editors, profile dialogs) not using the same aspect ratio configuration as the integrated plot handler
+* When displaying images with non-uniform coordinates, the main plot correctly unlocks the aspect ratio for proper display, but separate windows were not inheriting this setting
+* All image dialogs now properly inherit the aspect ratio settings, ensuring consistent display behavior across all plot windows
+* This closes [Issue #287](https://github.com/DataLab-Platform/DataLab/issues/287) - Separate plot windows don't use same aspect ratio configuration as integrated plot
+
+**Remove all results - AttributeError when ROI was removed:**
+
+* Fixed "Remove all results" action failing with `AttributeError: 'NoneType' object has no attribute 'get_single_roi_title'` when results contain ROI information but the ROI was subsequently removed from the object
+* The issue occurred when:
+  1. Running an analysis with a ROI (e.g., Centroid on an image with rectangular ROI)
+  2. Removing the ROI from the object
+  3. Trying to delete all results via "Analysis > Remove results > Remove all results"
+* The fix adds a proper None check before accessing the ROI's title
+* This closes [Issue #286](https://github.com/DataLab-Platform/DataLab/issues/286) - "Remove all results" fails with AttributeError when ROI was removed
+
+**Analysis auto-recompute - Stale parameters after deleting results:**
+
+* Fixed analysis parameters not being cleared when deleting analysis results, which could cause unexpected auto-recompute behavior when modifying ROIs
+* After deleting results (via "Delete all results" or individual result deletion), changing the ROI would trigger recomputation of the deleted analysis because the stored parameters remained in object metadata
+* The fix ensures analysis parameters are properly cleared alongside the results, preventing unwanted automatic recomputation
+* This closes [Issue #285](https://github.com/DataLab-Platform/DataLab/issues/285) - Analysis parameters not cleared after deleting results
+
+**Backwards-drawn rectangular ROI causes NaN statistics:**
+
+* Fixed rectangular ROI statistics returning NaN values when the ROI was drawn "backwards" (from bottom-right to top-left instead of top-left to bottom-right)
+* The issue occurred because the ROI coordinate conversion produced negative width/height values, causing the mask generation to fail
+* ROI mask generation now works correctly regardless of the direction in which the rectangle was drawn
+* This closes [Issue #284](https://github.com/datalab-platform/datalab/issues/284) - Backwards-drawn rectangular ROI causes NaN statistics
+* This fix is included in Sigima 1.0.4
+
+**Plot refresh - ROIs and annotations persist after "Remove all":**
+
+* Fixed ROIs and annotations occasionally remaining visible after executing "Remove all" action from the Edit menu
+* The issue occurred because the plot widget wasn't explicitly told to redraw after clearing all plot items and shape items
+* The plot now correctly refreshes its display after clearing all objects, ensuring a clean view without requiring panel switching
+* The bug was intermittent and hard to reproduce systematically, making it appear as if objects were "stuck" on the plot
+
+**Result labels - False "omitted" message for single-row results:**
+
+* Fixed result labels (e.g., pulse features) incorrectly showing "X more rows omitted" message when displaying single-row results with no actual truncation
+* The bug occurred because `len(adapter.result)` was used to get the row count, but this actually returns the number of column headers, not data rows
+* For pulse features with 13 columns, this caused the label to think there were 13 rows when only 1 row existed, leading to a false "12 more rows omitted" message
+* The fix ensures accurate row counting using `len(df)` instead, preventing false truncation notices
+* This closes [Issue #281](https://github.com/datalab-platform/datalab/issues/281) - Result Labels False "Omitted" Message
+
+**Signal view - XRangeSelection items persist after removing signals:**
+
+* Fixed XRangeSelection and DataInfoLabel items (created by PlotPy's curve statistics tools) remaining visible on the plot after removing all signals
+* When activating the XRangeSelection tool from the PlotPy toolbar and then removing the signal(s), these tool-created graphical objects were not cleaned up
+* The cleanup logic now correctly triggers when there are zero selected objects (after deleting the last one), not just when exactly one object is selected
+* This closes [Issue #280](https://github.com/datalab-platform/datalab/issues/280) - XRangeSelection items persist after removing all signals
+
+**Remote control - Crash when adding object via proxy:**
+
+* Fixed `AttributeError: 'NoneType' object has no attribute 'setText'` crash when adding objects via `RemoteProxy.add_object()` in macros
+* The crash occurred in `update_tree()` when the tree view became temporarily out of sync with the object model (e.g., when adding objects with specific metadata configurations or ROIs via remote proxy)
+* The tree view now rebuilds automatically if inconsistencies are detected, ensuring robust object addition in all scenarios
+* This closes [Issue #279](https://github.com/datalab-platform/datalab/issues/279) - AttributeError in update_tree() when adding object via RemoteProxy
+
+**Icons - Qt SVG warnings on Linux:**
+
+* Fixed "qt.svg: Invalid path data; path truncated" warnings appearing 4 times at startup on Linux/Ubuntu
+* Cleaned SVG icon files to remove Inkscape/Sodipodi metadata and fixed path syntax in two icon files that used implicit cubic Bézier command continuation (not supported by Qt's SVG renderer on Linux)
+* This closes [Issue #278](https://github.com/datalab-platform/datalab/issues/278) - Fix "qt.svg: Invalid path data; path truncated" warnings on Linux
+
+**ROI extraction - KeyError when extracting ROIs:**
+
+* Fixed `KeyError` when extracting ROIs from images with ROIs generated by blob detection or other analysis functions
+* The issue occurred because the ROI editor was trying to access plot items that hadn't been created yet (e.g., when "auto refresh" was disabled or in certain selection scenarios)
+* The ROI extraction dialog now handles missing plot items gracefully
+* This closes [Issue #276](https://github.com/datalab-platform/datalab/issues/276) - KeyError when extracting ROIs from images with blob detection results
+
+**Plugin development - Infinite loop when iterating over group objects:**
+
+* Fixed infinite loop occurring in plugins when iterating over object IDs returned by `ObjectGroup.get_object_ids()` while simultaneously adding new objects to the same group
+* The method was returning a direct reference to the internal list instead of a copy, causing the iteration to include newly added objects and loop indefinitely
+* This particularly affected plugin workflows that loop over signals/images in a group and add results to the same or another group
+* The fix ensures `get_object_ids()` now returns a copy of the list, making iteration safe even when modifying the group
+* This closes [Issue #274](https://github.com/datalab-platform/datalab/issues/274) - Infinite loop when iterating over group objects while adding new objects
+
+**Marker visibility:**
+
+* Fixed cross marker (shown when pressing Alt key on plot) colors inherited from PlotPy being too pale on white background, and other marker properties explicitly configured for better contrast
+* Fixed default annotation colors inherited from PlotPy being too pale on white background - segment and drag shape annotations now use brighter green (`#00ff55`) for better visibility
+
+**Macro panel layout:**
+
+* Fixed macro console taking excessive vertical space on first open - the script editor now properly gets 70% of space and console 30% by default, ensuring comfortable editing without manual resizing
+
+**Macro naming:**
+
+* Fixed automatic macro naming generating duplicate names after reloading workspace from HDF5 files
+* When macros were deserialized from saved workspaces or imported from files, the internal counter used for generating default names (e.g., "macro_01", "macro_02") was not updated, causing the next new macro to potentially reuse an existing name
+* The counter now synchronizes with existing macro names after loading, ensuring unique sequential naming
+* Default macro names simplified from translated "Untitled XX" to language-neutral "macro_XX" format for better consistency across locales
+
+**Macro execution:**
+
+* Fixed syntax errors when using f-strings with nested quotes in macros (e.g., `f'text {func("arg")}'` now works correctly)
+* Fixed corrupted Unicode characters in macro console output on Windows - special characters like ✅, 💡, and → now display correctly instead of showing garbled text
+
+**Internal console - HDF5 workspace operations:**
+
+* Fixed application freeze when calling `open_h5_files()` from the internal console - the console runs in a separate thread and creating Qt GUI elements (progress dialogs) from non-main threads causes deadlocks
+* Added new headless API methods `load_h5_workspace()` and `save_h5_workspace()` that can be safely called from the internal console or any script context without GUI dependencies
+* These methods are also available through the remote control API for consistency
+* Note: `load_h5_workspace()` only supports native DataLab HDF5 files; for importing arbitrary HDF5 files, use macros with `RemoteProxy`
+* This closes [Issue #275](https://github.com/datalab-platform/datalab/issues/275) - Console freezes when calling `open_h5_files()` from internal console
+
+**Signal cursor dialogs - Decimal input with regional settings:**
+
+* Fixed decimal value input failing in signal cursor dialogs when using regional settings with comma as decimal separator (e.g., French, German locales)
+* The Y input field in "First abscissa at y=...", "Ordinate at x=...", and "Full width at y=..." dialogs now consistently accepts dot as decimal separator regardless of system locale
+* This closes [Issue #276](https://github.com/datalab-platform/datalab/issues/276) - Decimal input fails with regional settings using comma as decimal separator
+
+**Radial profile title:**
+
+* Fixed duplicate suffix in result image title when extracting radial profile from an image (e.g., `radial_profile(i019)|center=(192.500, 192.500)|center=(192.500, 192.500)` instead of `radial_profile(i019)|center=(192.500, 192.500)`)
+* This fix is provided by Sigima 1.0.4
+
+**Grid ROI - Missing spacing parameters for non-uniform grids:**
+
+* Fixed grid ROI feature not working correctly for images where subimages don't fill the entire image area (e.g., laser spot arrays with gaps between spots)
+* Added missing `xstep` and `ystep` parameters to control horizontal and vertical spacing between ROI centers, as a percentage of the automatically computed cell width/height (default 100% = evenly distributed grid)
+* Previously, the grid was always assumed to be evenly distributed across the entire image, which failed when there was significant offset or gaps between features
+* Users can now adjust ROI spacing independently from ROI size to accurately extract grids from real-world data like laser spot arrays, diffraction patterns, or any regularly spaced features with gaps
+* This fix is provided by Sigima 1.0.4
+* This closes [Issue #282](https://github.com/datalab-platform/datalab/issues/282) - Grid ROI Missing Spacing Parameters
+
+**Analysis auto-recompute - Redundant O(n²) calculations when adding ROI:**
+
+* Fixed severe performance issue where adding ROI to N selected images with analysis results (e.g., Statistics, Centroid) triggered N² calculations instead of N
+* When 10 images were selected with pre-computed statistics, adding a ROI would show 10 progress bars of 10 calculations each (100 total) instead of a single progress bar with 10 calculations
+* The issue occurred because `auto_recompute_analysis()` was calling `compute_1_to_0()` which by default processes all selected objects, not just the specific object being recomputed
+* Added `target_objs` parameter to `compute_1_to_0()` to allow specifying which objects to process, and updated `auto_recompute_analysis()` to use it
+* This closes [Issue #283](https://github.com/datalab-platform/datalab/issues/283) - Redundant O(n²) calculations when adding ROI to multiple images with analysis results
+
+**Result visualization - Analysis result segments hard to see:**
+
+* Fixed analysis result markers (FWHM, pulse features, etc.) being difficult or impossible to see on signal plots
+* These measurement indicators were appearing black on white backgrounds or white on dark backgrounds, making them blend into the plot
+* They now display in bright green with thicker lines, making them clearly visible in all color themes
+* Also removed the filled area that was obscuring the underlying signal data - markers now show only the boundary lines indicating the measured region
+
 ## DataLab Version 1.0.2 (2025-12-03) ##
 
-### 🛠️ Bug Fixes ###
+### 🛠️ Bug Fixes since version 1.0.1 ###
 
 **Signal axis calibration - Replace X by other signal's Y:**
 

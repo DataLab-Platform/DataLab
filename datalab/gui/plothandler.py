@@ -162,6 +162,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         self.__merged_result_adapters = {}
         self.cleanup_dataview()
         self.remove_all_shape_items()
+        self.plot.replot()
 
     def add_shapes(self, oid: str, do_autoscale: bool = False) -> None:
         """Add geometric shape items associated to computed results and annotations,
@@ -391,7 +392,10 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         if what == "selected":
             # Refresh selected objects
             oids = self.panel.objview.get_sel_object_uuids(include_groups=True)
-            if len(oids) == 1:
+            if len(oids) <= 1:
+                # Cleanup data view when there is 0 or 1 selected object.
+                # This removes stray plot items (like XRangeSelection, DataInfoLabel)
+                # that were created by PlotPy tools but are not managed by DataLab.
                 self.cleanup_dataview()
             self.remove_all_shape_items()
             for item in self:
@@ -806,4 +810,9 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedXYImageItem]):
         options = super().get_plot_options()
         options.zlabel = self.plot.get_axis_title("right")
         options.zunit = self.plot.get_axis_unit("right")
+        # Include aspect ratio configuration so that separate plot dialogs
+        # (e.g. "View in a new window", ROI editors, profile dialogs) use the same
+        # settings as the integrated plot handler:
+        options.aspect_ratio = self.plot.get_aspect_ratio()
+        options.lock_aspect_ratio = self.plot.lock_aspect_ratio
         return options

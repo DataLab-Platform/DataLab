@@ -79,6 +79,7 @@ from datalab.gui.newobject import (
 from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
     ProcessingParameters,
+    clear_analysis_parameters,
     extract_processing_parameters,
     insert_processing_parameters,
 )
@@ -217,11 +218,11 @@ class ObjectProp(QW.QWidget):
         self.analysis_parameters.setFont(font)
 
         # Track newly created objects to show Creation tab only once
-        self._newly_created_obj_uuid: str | None = None
+        self.newly_created_obj_uuid: str | None = None
         # Track when analysis results were just computed
-        self._fresh_analysis_obj_uuid: str | None = None
+        self.fresh_analysis_obj_uuid: str | None = None
         # Track when object was just processed (1-to-1)
-        self._fresh_processing_obj_uuid: str | None = None
+        self.fresh_processing_obj_uuid: str | None = None
 
         self.tabwidget.addTab(
             self.processing_history, get_icon("history.svg"), _("History")
@@ -455,7 +456,7 @@ class ObjectProp(QW.QWidget):
         Args:
             obj: Object to mark
         """
-        self._newly_created_obj_uuid = get_uuid(obj)
+        self.newly_created_obj_uuid = get_uuid(obj)
 
     def mark_as_freshly_processed(self, obj: SignalObj | ImageObj) -> None:
         """Mark object to show Processing tab on next selection.
@@ -463,7 +464,7 @@ class ObjectProp(QW.QWidget):
         Args:
             obj: Object to mark
         """
-        self._fresh_processing_obj_uuid = get_uuid(obj)
+        self.fresh_processing_obj_uuid = get_uuid(obj)
 
     def mark_as_fresh_analysis(self, obj: SignalObj | ImageObj) -> None:
         """Mark object to show Analysis tab on next selection.
@@ -471,7 +472,7 @@ class ObjectProp(QW.QWidget):
         Args:
             obj: Object to mark
         """
-        self._fresh_analysis_obj_uuid = get_uuid(obj)
+        self.fresh_analysis_obj_uuid = get_uuid(obj)
 
     def get_changed_properties(self) -> dict[str, Any]:
         """Get dictionary of properties that have changed from original values.
@@ -1532,9 +1533,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # BUT: Don't overwrite if this object is already marked as freshly processed
         # or has fresh analysis results (those take precedence)
         obj_uuid = get_uuid(obj)
-        if (
-            obj_uuid != self.objprop._fresh_processing_obj_uuid
-            and obj_uuid != self.objprop._fresh_analysis_obj_uuid
+        if obj_uuid not in (
+            self.objprop.fresh_processing_obj_uuid,
+            self.objprop.fresh_analysis_obj_uuid,
         ):
             self.objprop.mark_as_newly_created(obj)
 
@@ -2474,17 +2475,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if current_obj is not None:
             obj_uuid = get_uuid(current_obj)
             # Show Creation tab for newly created objects (only once)
-            if obj_uuid == self.objprop._newly_created_obj_uuid:
+            if obj_uuid == self.objprop.newly_created_obj_uuid:
                 force_tab = "creation"
-                self.objprop._newly_created_obj_uuid = None
+                self.objprop.newly_created_obj_uuid = None
             # Show Processing tab for freshly processed objects (only once)
-            elif obj_uuid == self.objprop._fresh_processing_obj_uuid:
+            elif obj_uuid == self.objprop.fresh_processing_obj_uuid:
                 force_tab = "processing"
-                self.objprop._fresh_processing_obj_uuid = None
+                self.objprop.fresh_processing_obj_uuid = None
             # Show Analysis tab for objects with fresh analysis results
-            elif obj_uuid == self.objprop._fresh_analysis_obj_uuid:
+            elif obj_uuid == self.objprop.fresh_analysis_obj_uuid:
                 force_tab = "analysis"
-                self.objprop._fresh_analysis_obj_uuid = None
+                self.objprop.fresh_analysis_obj_uuid = None
 
         self.objprop.update_properties_from(current_obj, force_tab=force_tab)
         self.acthandler.selected_objects_changed(selected_groups, selected_objects)
@@ -2921,9 +2922,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             dialog was accepted or not.
         """
         obj = self.objview.get_sel_objects(include_groups=True)[-1]
-        item = create_adapter_from_object(obj).make_item(
-            update_from=self.plothandler[get_uuid(obj)]
-        )
+        # Use get() instead of [] to avoid KeyError if the plot item doesn't exist
+        # (can happen when "auto refresh" is disabled or in "show first only" mode
+        # where not all objects have plot items created yet)
+        existing_item = self.plothandler.get(get_uuid(obj))
+        item = create_adapter_from_object(obj).make_item(update_from=existing_item)
         roi_editor_class = self.get_roieditor_class()  # pylint: disable=not-callable
         roi_editor = roi_editor_class(
             parent=self.parentWidget(),
@@ -3274,6 +3277,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     # Remove all table and geometry results using adapter methods
                     TableAdapter.remove_all_from(obj)
                     GeometryAdapter.remove_all_from(obj)
+                    # Clear analysis parameters to prevent auto-recompute from
+                    # attempting to recompute deleted analyses when ROI changes
+                    clear_analysis_parameters(obj)
                     if obj is self.objview.get_current_object():
                         self.objprop.update_properties_from(obj)
                 # Update action states to reflect the removal

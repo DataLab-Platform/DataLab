@@ -48,6 +48,16 @@ def multiple_commands(remote: RemoteProxy):
         remote.reset_all()
         remote.open_h5_files([fname], True, False)
         remote.import_h5_file(fname, True)
+
+        # Test new headless workspace API methods (Issue #275)
+        fname_workspace = osp.join(tmpdir, "workspace_test.h5")
+        remote.save_h5_workspace(fname_workspace)
+        assert osp.exists(fname_workspace), "Workspace file was not created"
+        remote.reset_all()
+        remote.load_h5_workspace([fname_workspace], reset_all=True)
+        # Verify objects were restored
+        assert len(remote.get_object_titles()) > 0, "No objects after load_h5_workspace"
+
         remote.set_current_panel("signal")
         assert remote.get_current_panel() == "signal"
         remote.calc("log10")

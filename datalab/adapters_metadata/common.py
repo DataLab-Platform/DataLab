@@ -88,7 +88,7 @@ class ResultData:
             if "roi_index" in df.columns:
                 i_roi = int(df.iloc[i_row_res]["roi_index"])
                 roititle = ""
-                if i_roi >= 0:
+                if i_roi >= 0 and obj.roi is not None:
                     roititle = obj.roi.get_single_roi_title(i_roi)
                     ylabel += f"|{roititle}"
             self.ylabels.append(ylabel)
@@ -365,7 +365,7 @@ def resultadapter_to_html(
             num_cols = max_display_cols
 
         # Calculate number of cells (rows × columns)
-        num_rows = len(adapter.result)
+        num_rows = len(df)
         num_cells = num_rows * num_cols
 
         # Check if truncation is needed BEFORE calling to_html()

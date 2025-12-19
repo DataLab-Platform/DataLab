@@ -204,6 +204,10 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             self.addWidget(widget)
         self.setStretchFactor(0, 2)
         self.setStretchFactor(1, 1)
+        # Set initial sizes: give more space to editor (70%) than console (30%)
+        # This ensures proper layout on first open
+        total_height = 600  # Default reasonable height
+        self.setSizes([int(total_height * 0.7), int(total_height * 0.3)])
 
         self.run_action = None
         self.stop_action = None
@@ -252,6 +256,8 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
                 #  in a group but directly in the root of the HDF5 file
                 obj = self.deserialize_object_from_hdf5(reader, name, reset_all)
                 self.add_object(obj)
+        # Update untitled number counter to prevent duplicate names
+        self.update_untitled_counter()
 
     def __len__(self) -> int:
         """Return number of objects"""
@@ -298,6 +304,8 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         self.tabwidget.clear()
         self.__macros.clear()
         super().remove_all_objects()
+        # Reset untitled counter when clearing all macros
+        Macro.set_untitled_number(0)
 
     # ---- Macro panel API -------------------------------------------------------------
     def setup_actions(self) -> None:
@@ -572,8 +580,26 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
                 Conf.main.base_dir.set(filename)
                 macro = self.add_macro()
                 macro.from_file(filename)
+            # Update untitled number counter to prevent duplicate names
+            self.update_untitled_counter()
             return self.get_number_from_macro(macro)
         return -1
+
+    def update_untitled_counter(self) -> None:
+        """Update the untitled counter based on existing macro titles
+
+        This scans all macro titles to find the highest "macro_XX" number
+        and updates the global counter to prevent duplicate names.
+        """
+        max_untitled = 0
+        for macro in self.__macros:
+            # Match titles like "macro_01", "macro_02", etc.
+            match = re.match(r"macro_(\d+)", macro.title)
+            if match:
+                number = int(match.group(1))
+                max_untitled = max(max_untitled, number)
+        # Set the counter to the highest found number
+        Macro.set_untitled_number(max_untitled)
 
     def remove_macro(self, number_or_title: int | str | None = None) -> None:
         """Remove macro

@@ -4,7 +4,7 @@ PlotPy >= 2.8.2
 PyQt5 >= 5.15.6
 PyWavelets >= 1.2
 SciPy >= 1.10.1
-Sigima >= 1.0.3
+Sigima >= 1.0.4
 babel
 build
 guidata >= 3.13.4
