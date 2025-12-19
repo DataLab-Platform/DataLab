@@ -2,6 +2,7 @@ graft doc
 graft resources
 graft macros
 graft plugins
+graft datalab/locale
 include conftest.py
 include CONTRIBUTING.md
 include requirements.txt

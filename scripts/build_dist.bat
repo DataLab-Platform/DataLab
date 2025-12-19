@@ -22,6 +22,8 @@ if exist %CLONEDIR% ( rmdir /s /q %CLONEDIR% )
 git clone -l -s . %CLONEDIR%
 
 pushd %CLONEDIR%
+@REM Compile translations
+%PYTHON% -m guidata.utils.translations compile --name datalab --directory .
 @REM Build source package
 %PYTHON% -m build --sdist
 @REM Build wheel package with PDF documentation embedded
