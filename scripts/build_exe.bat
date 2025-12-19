@@ -21,6 +21,11 @@ set REPODIR=%SCRIPTPATH%\..
 set CLONEDIR=%REPODIR%\..\%LIBNAME%-tempdir
 if exist %CLONEDIR% ( rmdir /s /q %CLONEDIR% )
 git clone -l -s . %CLONEDIR%
+
+@REM Compile translations in cloned directory using dev environment (which has babel)
+@REM This must happen BEFORE pushd because run_with_env.py loads .env from current dir
+%PYTHON% scripts/run_with_env.py %PYTHON% -m guidata.utils.translations compile --name datalab --directory %CLONEDIR%
+
 pushd %CLONEDIR%
 
 @REM Backup PYTHONPATH
@@ -45,8 +50,7 @@ for %%s in (16 24 32 48 128 256) do (
 magick "%RESPATH%\tmp-*.png" "%RESPATH%\DataLab.ico"
 del "%RESPATH%\tmp-*.png"
 
-@REM Compile translations
-%PYTHON% -m guidata.utils.translations compile --name datalab --directory .
+@REM Note: Translations were already compiled in the cloned directory using the dev environment
 
 @REM Generate build manifest
 %PYTHON% scripts\generate_manifest.py
