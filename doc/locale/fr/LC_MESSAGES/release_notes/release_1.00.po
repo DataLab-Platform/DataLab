@@ -19,8 +19,8 @@ msgstr ""
 msgid "Version 1.0"
 msgstr ""
 
-msgid "DataLab Version 1.0.3"
-msgstr ""
+msgid "DataLab Version 1.0.3 (2025-12-19)"
+msgstr "DataLab Version 1.0.3 (19/12/2025)"
 
 msgid "🛠️ Bug Fixes since version 1.0.2"
 msgstr "🛠️ Correctifs depuis la version 1.0.2"

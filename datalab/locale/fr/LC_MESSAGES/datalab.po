@@ -1,5 +1,5 @@
 # French translations for datalab.
-# Copyright (C) 2025 DataLab Platform Developers
+# Copyright (C) 2026 DataLab Platform Developers
 # This file is distributed under the same license as the datalab project.
 #
 msgid ""

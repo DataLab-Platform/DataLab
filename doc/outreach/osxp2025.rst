@@ -44,6 +44,19 @@ At the heart of this architectural shift lies a new object-oriented processing l
 
 The talk will highlight the key features of DataLab 1.0, including its redesigned architecture and new user-facing functionalities, and will demonstrate how it can serve both as a ready-to-use application and as a foundation for building domain-specific tools in scientific and industrial contexts.
 
+Watch the Full Presentation
+---------------------------
+
+.. raw:: html
+
+   <div style="max-width: 800px; margin: 2em auto;">
+   <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+   <iframe src="https://www.youtube.com/embed/0D4ffBJIc5Q"
+   style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+   frameborder="0" allowfullscreen></iframe>
+   </div>
+   </div>
+
 Original Planned Topic
 ----------------------
 
@@ -144,18 +157,6 @@ The originally planned X-ray scene reconstruction project remains an excellent e
 .. note::
 
    **Past Event**: This presentation took place on **December 11, 2025**. Presentation materials and additional information may be added here in the future.
-
-Conference Track
-----------------
-
-The presentation is part of the **Artificial Intelligence and Scientific Computing** track, which is appropriate for DataLab 1.0's positioning at the intersection of:
-
-- Modern scientific computing (signal and image processing)
-- Platform architecture and modular design
-- Open-source development methodologies
-- Industrial and academic applications
-
-This track placement highlights DataLab's evolution as both a complete scientific application and a foundation for building specialized tools in the scientific Python ecosystem.
 
 Resources
 ---------
