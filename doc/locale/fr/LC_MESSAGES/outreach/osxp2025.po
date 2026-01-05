@@ -104,6 +104,9 @@ msgstr "Au cœur de ce changement architectural se trouve une nouvelle biblioth�
 msgid "The talk will highlight the key features of DataLab 1.0, including its redesigned architecture and new user-facing functionalities, and will demonstrate how it can serve both as a ready-to-use application and as a foundation for building domain-specific tools in scientific and industrial contexts."
 msgstr "La présentation mettra en avant les principales fonctionnalités de DataLab 1.0, y compris son architecture repensée et ses nouvelles fonctionnalités orientées utilisateur, et démontrera comment il peut servir à la fois d'application prête à l'emploi et de base pour la création d'outils spécifiques au domaine dans des contextes scientifiques et industriels."
 
+msgid "Watch the Full Presentation"
+msgstr "Regardez la présentation complète"
+
 msgid "Original Planned Topic"
 msgstr "Sujet Initialement Prévu"
 
@@ -289,27 +292,6 @@ msgstr "Le projet de reconstruction de scènes radiographiées initialement pré
 
 msgid "**Past Event**: This presentation took place on **December 11, 2025**. Presentation materials and additional information may be added here in the future."
 msgstr "**Événement Passé** : Cette présentation a eu lieu le **11 décembre 2025**. Les documents de présentation et informations complémentaires pourront être ajoutés ici à l'avenir."
-
-msgid "Conference Track"
-msgstr "Thématique de la Conférence"
-
-msgid "The presentation is part of the **Artificial Intelligence and Scientific Computing** track, which is appropriate for DataLab 1.0's positioning at the intersection of:"
-msgstr "La présentation fait partie de la thématique **Intelligence Artificielle et Calcul Scientifique**, ce qui est approprié pour le positionnement de DataLab 1.0 à l'intersection de :"
-
-msgid "Modern scientific computing (signal and image processing)"
-msgstr "Calcul scientifique moderne (traitement du signal et de l'image)"
-
-msgid "Platform architecture and modular design"
-msgstr "Architecture de plateforme et conception modulaire"
-
-msgid "Open-source development methodologies"
-msgstr "Méthodologies de développement open-source"
-
-msgid "Industrial and academic applications"
-msgstr "Applications industrielles et académiques"
-
-msgid "This track placement highlights DataLab's evolution as both a complete scientific application and a foundation for building specialized tools in the scientific Python ecosystem."
-msgstr "Ce positionnement dans la thématique met en lumière l'évolution de DataLab en tant qu'application scientifique complète et fondation pour la création d'outils spécialisés dans l'écosystème scientifique Python."
 
 msgid "Resources"
 msgstr "Ressources"

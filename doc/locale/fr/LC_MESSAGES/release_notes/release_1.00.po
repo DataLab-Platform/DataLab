@@ -19,8 +19,8 @@ msgstr ""
 msgid "Version 1.0"
 msgstr ""
 
-msgid "DataLab Version 1.0.3"
-msgstr ""
+msgid "DataLab Version 1.0.3 (2025-12-19)"
+msgstr "DataLab Version 1.0.3 (19/12/2025)"
 
 msgid "🛠️ Bug Fixes since version 1.0.2"
 msgstr "🛠️ Correctifs depuis la version 1.0.2"
@@ -425,9 +425,6 @@ msgstr "Correction de l'erreur `AttributeError: 'NoneType' object has no attribu
 
 msgid "This closes [Issue #269](https://github.com/datalab-platform/datalab/issues/269) - Custom Signal Creation: `AttributeError` when creating signal from menu"
 msgstr "Ceci clôture [Issue #269](https://github.com/datalab-platform/datalab/issues/269) - Création de signaux personnalisés : `AttributeError` lors de la création d'un signal à partir du menu"
-
-msgid "**Macro execution:**"
-msgstr "**Exécution des macros :**"
 
 msgid "Fixed `UnicodeEncodeError` when executing macros that print Unicode characters (e.g., arrows `→`) on Windows systems with certain locales, e.g. cp1252 (closes [Issue #263](https://github.com/datalab-platform/datalab/issues/263))"
 msgstr "Correction de l'erreur `UnicodeEncodeError` lors de l'exécution de macros qui impriment des caractères Unicode (par exemple, des flèches `→`) sur les systèmes Windows avec certaines locales, par exemple cp1252 (ceci clôture [Issue #263](https://github.com/datalab-platform/datalab/issues/263))"
