@@ -10,6 +10,9 @@ on:
     branches: [ "main", "develop", "release" ]
   pull_request:
     branches: [ "main", "develop", "release" ]
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * 1"
 
 jobs:
   build:
@@ -85,4 +88,48 @@ jobs:
     - name: Lint with Ruff
       run: ruff check --output-format=github datalab
     - name: Test with pytest
+      run: pytest -v --tb=long
+
+  build_latest:
+    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+    continue-on-error: true
+    env:
+      DISPLAY: ':99.0'
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python 3.13
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.13"
+
+    - name: Install dependencies (latest)
+      run: |
+        set -euxo pipefail
+        sudo apt-get update
+        sudo apt-get install -y \
+          libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
+          libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0 x11-utils
+
+        /sbin/start-stop-daemon --start --quiet \
+          --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background \
+          --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX
+
+        python -m pip install --upgrade pip
+        python -m pip install ruff pytest
+        python -m pip install PyQt5
+
+        # Install DataLab itself, but do NOT install its pinned deps
+        python -m pip install -e . --no-deps
+
+        # Upgrade the core scientific stack to the newest pip can install
+        python -m pip install -U --upgrade-strategy eager \
+          numpy scipy h5py scikit-image pillow imageio tifffile pandas
+
+    - name: Lint with Ruff (latest)
+      run: ruff check --output-format=github datalab
+
+    - name: Test with pytest (latest)
       run: pytest -v --tb=long
