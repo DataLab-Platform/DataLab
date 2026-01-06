@@ -6,7 +6,6 @@
 name: Install and Test on Ubuntu (latest) with PyQt5
 
 on:
-  workflow_dispatch:
   push:
     branches: [ "main", "develop", "release" ]
   pull_request:
@@ -23,22 +22,6 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.9", "3.13"]
-        include:
-          # Baseline that used to pass (from 2025-12-19)
-          - python-version: "3.13"
-            numpy: "2.3.5"
-            skimage: "0.25.2"
-          # Newer versions that appeared on 2026-01-05
-          - python-version: "3.13"
-            numpy: "2.4.0"
-            skimage: "0.26.0"
-          # Cross-checks to identify the culprit
-          - python-version: "3.13"
-            numpy: "2.3.5"
-            skimage: "0.26.0"
-          - python-version: "3.13"
-            numpy: "2.4.0"
-            skimage: "0.25.2"
 
     steps:
     - uses: actions/checkout@v4
@@ -53,15 +36,6 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install ruff pytest
         pip install PyQt5
-
-        # --- quick bisect constraints (only active for the matrix entries that define them)
-        if [ -n "${{ matrix.numpy }}" ] || [ -n "${{ matrix.skimage }}" ]; then
-          echo "numpy==${{ matrix.numpy }}" > constraints.txt
-          echo "scikit-image==${{ matrix.skimage }}" >> constraints.txt
-          python -m pip install -c constraints.txt "numpy==${{ matrix.numpy }}" "scikit-image==${{ matrix.skimage }}"
-        fi
-        # ---
-
         if [ "${{ github.ref_name }}" = "develop" ]; then
            # Clone and install development versions of key dependencies with editable install
            cd ..
