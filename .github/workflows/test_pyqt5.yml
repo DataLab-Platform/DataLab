@@ -124,9 +124,10 @@ jobs:
         # Install DataLab itself, but do NOT install its pinned deps
         python -m pip install -e . --no-deps
 
-        # Upgrade the core scientific stack to the newest pip can install
+        # Upgrade the dependencies to their latest versions
         python -m pip install -U --upgrade-strategy eager \
-          numpy scipy h5py scikit-image pillow imageio tifffile pandas
+          numpy scipy h5py scikit-image pillow imageio tifffile pandas \
+          guidata PlotPy Sigima PyWavelets psutil packaging
 
     - name: Lint with Ruff (latest)
       run: ruff check --output-format=github datalab
