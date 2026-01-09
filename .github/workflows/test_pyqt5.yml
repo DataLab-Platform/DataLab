@@ -124,10 +124,8 @@ jobs:
         # Install DataLab itself, but do NOT install its pinned deps
         python -m pip install -e . --no-deps
 
-        # Upgrade the dependencies to their latest versions
-        python -m pip install -U --upgrade-strategy eager \
-          numpy scipy h5py scikit-image pillow imageio tifffile pandas \
-          guidata PlotPy Sigima PyWavelets psutil packaging
+        # Extract dependency names from pyproject.toml and install latest versions
+        python -m pip install -U --upgrade-strategy eager $(python -c "import tomllib, re; print(' '.join(re.sub(r'[\[\]<>=!~,.\s].*$', '', d).strip() for d in tomllib.loads(open('pyproject.toml', 'rb').read().decode())['project']['dependencies']))")
 
     - name: Lint with Ruff (latest)
       run: ruff check --output-format=github datalab
