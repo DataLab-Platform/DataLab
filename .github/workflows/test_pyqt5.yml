@@ -104,7 +104,6 @@ jobs:
 
   build_latest:
     if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && (github.event.inputs.job_to_run == 'all' || github.event.inputs.job_to_run == 'build_latest')) }}
-    continue-on-error: true
     env:
       DISPLAY: ':99.0'
     runs-on: ubuntu-latest
