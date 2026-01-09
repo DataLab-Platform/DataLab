@@ -11,11 +11,22 @@ on:
   pull_request:
     branches: [ "main", "develop", "release" ]
   workflow_dispatch:
+    inputs:
+      job_to_run:
+        description: 'Which job to run'
+        required: true
+        type: choice
+        options:
+          - 'all'
+          - 'build'
+          - 'build_latest'
+        default: 'all'
   schedule:
     - cron: "0 5 * * 1"
 
 jobs:
   build:
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.job_to_run == 'all' || github.event.inputs.job_to_run == 'build' }}
 
     env:
       DISPLAY: ':99.0'
@@ -91,7 +102,7 @@ jobs:
       run: pytest -v --tb=long
 
   build_latest:
-    if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+    if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && (github.event.inputs.job_to_run == 'all' || github.event.inputs.job_to_run == 'build_latest')) }}
     continue-on-error: true
     env:
       DISPLAY: ':99.0'
