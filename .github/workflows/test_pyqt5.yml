@@ -132,11 +132,19 @@ jobs:
         python -m pip install ruff pytest
         python -m pip install PyQt5
 
+        # Clone and install Sigima from the same branch as DataLab
+        cd ..
+        git clone --depth 1 --branch ${{ github.ref_name }} https://github.com/DataLab-Platform/sigima.git || git clone --depth 1 https://github.com/DataLab-Platform/sigima.git
+        cd DataLab
+
         # Install DataLab itself, but do NOT install its pinned deps
         python -m pip install -e . --no-deps
 
-        # Extract dependency names from pyproject.toml and install latest versions
-        python -m pip install -U --upgrade-strategy eager $(python -c "import tomllib, re; print(' '.join(re.sub(r'[\[\]<>=!~,.\s].*$', '', d).strip() for d in tomllib.loads(open('pyproject.toml', 'rb').read().decode())['project']['dependencies']))")
+        # Install Sigima from local clone
+        python -m pip install -e ../sigima
+
+        # Extract dependency names from pyproject.toml (excluding Sigima) and install latest versions
+        python -m pip install -U --upgrade-strategy eager $(python -c "import tomllib, re; print(' '.join(re.sub(r'[\[\]<>=!~,.\s].*$', '', d).strip() for d in tomllib.loads(open('pyproject.toml', 'rb').read().decode())['project']['dependencies'] if 'Sigima' not in d))")
 
     - name: Lint with Ruff (latest)
       run: ruff check --output-format=github datalab
