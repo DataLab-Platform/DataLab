@@ -213,8 +213,9 @@ def get_more_image_stats(
                 if xunit and zunit:
                     densityfmt += " " + zunit + "/" + xunit + "²"
                 info = info + f"<br>ρ = {densityfmt % density}"
-
-    c_i, c_j = measure.centroid(data)
+    # Convert data (ndarray) to a simple array to compute centroid with the new
+    # einsum optimisation introduce in numpy 2.4.0 and scikit-image 0.26.0
+    c_i, c_j = measure.centroid(np.array(data))
     c_x, c_y = item.get_plot_coordinates(c_j + ix0, c_i + iy0)
     info += "<br>" + "<br>".join(
         [
