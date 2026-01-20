@@ -19,6 +19,36 @@ msgstr ""
 msgid "Version 1.0"
 msgstr ""
 
+msgid "DataLab Version 1.0.4"
+msgstr ""
+
+msgid "🛠️ Bug Fixes since version 1.0.3"
+msgstr "🛠️ Correctifs depuis la version 1.0.3"
+
+msgid "**Dependency compatibility - NumPy 2.4.0 and scikit-image 0.26.0:**"
+msgstr "**Compatibilité des dépendances - NumPy 2.4.0 et scikit-image 0.26.0 :**"
+
+msgid "Fixed compatibility issue with NumPy 2.4.0 and scikit-image 0.26.0 where centroid computation failed with `ValueError` due to einsum optimization changes"
+msgstr "Correction du problème de compatibilité avec NumPy 2.4.0 et scikit-image 0.26.0 où le calcul du centroïde échouait avec `ValueError` en raison de modifications de l'optimisation einsum"
+
+msgid "The issue occurred when displaying image statistics in the dock widget - the centroid calculation now explicitly converts data to a simple NumPy array before calling `measure.centroid()`"
+msgstr "Le problème se produisait lors de l'affichage des statistiques d'image dans le widget dock - le calcul du centroïde convertit désormais explicitement les données en un simple tableau NumPy avant d'appeler `measure.centroid()`"
+
+msgid "Updated all dependency maximum versions to prevent future regression issues from breaking changes in new major releases"
+msgstr "Mise à jour de toutes les versions maximales des dépendances pour éviter que de futurs problèmes de régression dus à des changements majeurs ne causent des dysfonctionnements"
+
+msgid "Dependencies now have upper bounds: NumPy < 2.5, SciPy < 1.17, scikit-image < 0.27, pandas < 3.0, PyWavelets < 2.0"
+msgstr "Les dépendances ont désormais des limites supérieures : NumPy < 2.5, SciPy < 1.17, scikit-image < 0.27, pandas < 3.0, PyWavelets < 2.0"
+
+msgid "A new CI workflow (`build_latest`) continuously tests DataLab against the latest available versions of all dependencies to catch compatibility issues early"
+msgstr "Un nouveau flux de travail CI (`build_latest`) teste en continu DataLab contre les dernières versions disponibles de toutes les dépendances pour détecter rapidement les problèmes de compatibilité"
+
+msgid "Updated Sigima dependency to version 1.0.6 for improved compatibility"
+msgstr "Mise à jour de la dépendance Sigima vers la version 1.0.6 pour une meilleure compatibilité"
+
+msgid "This closes [Issue #289](https://github.com/DataLab-Platform/DataLab/issues/289) - Compatibility with NumPy 2.4.0 and scikit-image 0.26.0"
+msgstr "Ceci clôture [Issue #289](https://github.com/DataLab-Platform/DataLab/issues/289) - Compatibilité avec NumPy 2.4.0 et scikit-image 0.26.0"
+
 msgid "DataLab Version 1.0.3 (2025-12-19)"
 msgstr "DataLab Version 1.0.3 (19/12/2025)"
 

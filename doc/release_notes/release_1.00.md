@@ -1,5 +1,19 @@
 # Version 1.0 #
 
+## DataLab Version 1.0.4 ##
+
+### 🛠️ Bug Fixes since version 1.0.3 ###
+
+**Dependency compatibility - NumPy 2.4.0 and scikit-image 0.26.0:**
+
+* Fixed compatibility issue with NumPy 2.4.0 and scikit-image 0.26.0 where centroid computation failed with `ValueError` due to einsum optimization changes
+* The issue occurred when displaying image statistics in the dock widget - the centroid calculation now explicitly converts data to a simple NumPy array before calling `measure.centroid()`
+* Updated all dependency maximum versions to prevent future regression issues from breaking changes in new major releases
+* Dependencies now have upper bounds: NumPy < 2.5, SciPy < 1.17, scikit-image < 0.27, pandas < 3.0, PyWavelets < 2.0
+* A new CI workflow (`build_latest`) continuously tests DataLab against the latest available versions of all dependencies to catch compatibility issues early
+* Updated Sigima dependency to version 1.0.6 for improved compatibility
+* This closes [Issue #289](https://github.com/DataLab-Platform/DataLab/issues/289) - Compatibility with NumPy 2.4.0 and scikit-image 0.26.0
+
 ## DataLab Version 1.0.3 (2025-12-19) ##
 
 ### 🛠️ Bug Fixes since version 1.0.2 ###
