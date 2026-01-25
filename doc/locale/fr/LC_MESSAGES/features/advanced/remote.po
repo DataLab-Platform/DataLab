@@ -8,27 +8,35 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-25 13:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-msgid "How to remote control DataLab, the open-source scientific data analysis and visualization platform"
-msgstr "Comment contrôler à distance DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
+msgid "How to remote control DataLab using XML-RPC"
+msgstr "Comment contrôler DataLab à distance en utilisant XML-RPC"
 
 msgid "DataLab, remote control, XML-RPC, Python, IDE, Spyder, Jupyter, third-party application, signal, image, HDF5, calculation, processor"
 msgstr "DataLab, contrôle à distance, XML-RPC, Python, IDE, Spyder, Jupyter, application tierce, signal, image, HDF5, calcul, processeur"
 
-msgid "Remote controlling"
-msgstr "Contrôle à distance"
+msgid "Remote controlling (XML-RPC)"
+msgstr "Contrôle à distance (XML-RPC)"
+
+msgid "**For new projects, we recommend using the** :ref:`Web API <ref-to-webapi>` **instead of XML-RPC.** The Web API provides better performance for large arrays, token-based authentication, and compatibility with browser environments (WASM/Pyodide)."
+msgstr "**Pour les nouveaux projets, nous recommandons d'utiliser l'** :ref:`API Web <ref-to-webapi>` **au lieu de XML-RPC.** L'API Web offre de meilleures performances pour les grands tableaux, une authentification basée sur des jetons et une compatibilité avec les environnements de navigateur (WASM/Pyodide)."
+
+msgid "XML-RPC remains available for backward compatibility with existing integrations."
+msgstr "XML-RPC reste disponible pour la compatibilité avec les intégrations existantes."
 
 msgid "DataLab may be controlled remotely using the `XML-RPC`_ protocol which is natively supported by Python (and many other languages). Remote controlling allows to access DataLab main features from a separate process."
 msgstr "DataLab peut être contrôlé à distance en utilisant le protocole `XML-RPC`_ qui est nativement supporté par Python (et beaucoup d'autres langages). Le contrôle à distance permet d'accéder aux principales fonctionnalités de DataLab à partir d'un processus séparé."
 
-msgid "If you are looking for a lighweight alternative solution to remote control DataLab (i.e. without having to install the whole DataLab package and its dependencies on your environment), you may use the `Sigima`_ package that provides a simple remote client for DataLab. To install it, just run: `pip install sigima`."
-msgstr "Si vous recherchez une solution alternative légère pour contrôler à distance DataLab (c'est-à-dire sans avoir à installer l'ensemble du package DataLab et ses dépendances sur votre environnement), vous pouvez utiliser le package `Sigima`_ qui fournit un client distant simple pour DataLab. Pour l'installer, il suffit d'exécuter : `pip install sigima`."
+msgid "If you are looking for a lighweight alternative solution to remote control DataLab (i.e. without having to install the whole DataLab package and its dependencies on your environment), you may use the `Sigima`_ package that provides a simple remote client for DataLab. To install it, just run: ``pip install sigima``."
+msgstr "Si vous recherchez une solution alternative légère pour contrôler DataLab à distance (c'est-à-dire sans avoir à installer l'ensemble du package DataLab et ses dépendances sur votre environnement), vous pouvez utiliser le package `Sigima`_ qui fournit un simple client distant pour DataLab. Pour l'installer, il suffit d'exécuter : ``pip install sigima``."
 
 msgid "From an IDE"
 msgstr "Depuis un IDE"
@@ -341,6 +349,30 @@ msgstr ""
 msgid "If the panel name is invalid"
 msgstr ""
 
+msgid "Start the WebAPI server."
+msgstr ""
+
+msgid "Host address to bind to. Defaults to \"127.0.0.1\"."
+msgstr ""
+
+msgid "Port number. Defaults to 8080."
+msgstr ""
+
+msgid "Dictionary with server info including 'url' and 'token'."
+msgstr ""
+
+msgid "Stop the WebAPI server."
+msgstr ""
+
+msgid "True if server was stopped, False if it wasn't running."
+msgstr ""
+
+msgid "Get the current status of the WebAPI server."
+msgstr ""
+
+msgid "Dictionary with status info including 'running', 'url', and 'port'."
+msgstr ""
+
 msgid "Add group to DataLab."
 msgstr ""
 
@@ -568,4 +600,3 @@ msgstr ""
 
 msgid "Show titles state"
 msgstr ""
-

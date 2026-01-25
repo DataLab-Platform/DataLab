@@ -247,3 +247,44 @@ class XMLRPCStatus(BaseStatus):
         else:
             self.label.setText(text + str(self.port))
             self.set_icon("libre-gui-link.svg")
+
+
+class WebAPIStatus(BaseStatus):
+    """Web API status widget.
+    Shows the Web API server status and port number.
+
+    Args:
+        parent (QWidget): parent widget
+    """
+
+    def __init__(self, parent: QW.QWidget | None = None) -> None:
+        super().__init__(None, parent)
+        self.port: int | None = None
+        self.url: str | None = None
+
+    def set_status(self, url: str | None, port: int | None) -> None:
+        """Set Web API server status.
+
+        Args:
+            url: Web API server URL (e.g. "http://127.0.0.1:8080").
+                If None, Web API server is not running.
+            port: Web API server port number.
+        """
+        self.url = url
+        self.port = port
+        self.update_status()
+
+    def update_status(self) -> None:
+        """Update status widget"""
+        text = _("Web API:") + " "
+        if self.port is None:
+            self.label.setText(text + "-")
+            self.set_icon("libre-gui-unlink.svg")
+            self.setToolTip(_("Web API server is not running"))
+        else:
+            self.label.setText(text + str(self.port))
+            self.set_icon("libre-gui-link.svg")
+            tooltip = _("Web API server is running") + "\n"
+            if self.url:
+                tooltip += f"URL: {self.url}"
+            self.setToolTip(tooltip)

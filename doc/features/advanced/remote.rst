@@ -1,11 +1,19 @@
 .. _ref-to-remote-control:
 
-Remote controlling
-==================
+Remote controlling (XML-RPC)
+============================
 
 .. meta::
-    :description: How to remote control DataLab, the open-source scientific data analysis and visualization platform
+    :description: How to remote control DataLab using XML-RPC
     :keywords: DataLab, remote control, XML-RPC, Python, IDE, Spyder, Jupyter, third-party application, signal, image, HDF5, calculation, processor
+
+.. note::
+
+    **For new projects, we recommend using the** :ref:`Web API <ref-to-webapi>` **instead
+    of XML-RPC.** The Web API provides better performance for large arrays, token-based
+    authentication, and compatibility with browser environments (WASM/Pyodide).
+
+    XML-RPC remains available for backward compatibility with existing integrations.
 
 DataLab may be controlled remotely using the `XML-RPC`_ protocol which is
 natively supported by Python (and many other languages). Remote controlling
@@ -17,7 +25,7 @@ allows to access DataLab main features from a separate process.
     DataLab (i.e. without having to install the whole DataLab package and its
     dependencies on your environment), you may use the `Sigima`_ package that
     provides a simple remote client for DataLab. To install it, just run:
-    `pip install sigima`.
+    ``pip install sigima``.
 
 .. _Sigima: https://github.com/DataLab-Platform/Sigima
 

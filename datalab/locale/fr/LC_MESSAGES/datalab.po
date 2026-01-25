@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"POT-Creation-Date: 2026-01-25 12:19+0100\n"
+"POT-Creation-Date: 2026-01-25 13:18+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -3092,6 +3092,15 @@ msgstr "Plugins :"
 msgid "XML-RPC:"
 msgstr "XML-RPC :"
 
+msgid "Web API:"
+msgstr "API Web :"
+
+msgid "Web API server is not running"
+msgstr "Serveur API Web arrêté"
+
+msgid "Web API server is running"
+msgstr "Serveur API Web démarré"
+
 msgid "Source"
 msgstr "Source"
 
@@ -3342,3 +3351,4 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+

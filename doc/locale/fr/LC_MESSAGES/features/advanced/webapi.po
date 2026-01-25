@@ -1,0 +1,332 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-25 13:18+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+msgid "How to use the DataLab Web API for HTTP/JSON integration"
+msgstr "Comment utiliser l'API Web DataLab pour l'intégration HTTP/JSON"
+
+msgid "DataLab, Web API, REST, HTTP, JSON, Jupyter, notebook, integration"
+msgstr "DataLab, API Web, REST, HTTP, JSON, Jupyter, notebook, intégration"
+
+msgid "Web API"
+msgstr "API Web"
+
+msgid "The DataLab Web API provides a modern **HTTP/JSON interface** for external access to the DataLab workspace. It is the recommended integration path for new projects, especially for Jupyter notebooks and web-based tools."
+msgstr "L'API Web DataLab fournit une interface moderne **HTTP/JSON** pour un accès externe à l'espace de travail DataLab. C'est la voie d'intégration recommandée pour les nouveaux projets, en particulier pour les notebooks Jupyter et les outils basés sur le web."
+
+msgid "The Web API is available starting from DataLab 1.1. It requires additional dependencies that can be installed with: ``pip install datalab-platform[webapi]``"
+msgstr "L'API Web est disponible à partir de DataLab 1.1. Elle nécessite des dépendances supplémentaires qui peuvent être installées avec : ``pip install datalab-platform[webapi]``"
+
+msgid "Overview"
+msgstr "Aperçu"
+
+msgid "The Web API enables:"
+msgstr "L'API Web permet :"
+
+msgid "**Jupyter notebook integration** via `DataLab-Kernel <https://github.com/DataLab-Platform/DataLab-Kernel>`_"
+msgstr "**Intégration de notebooks Jupyter** via `DataLab-Kernel <https://github.com/DataLab-Platform/DataLab-Kernel>`_"
+
+msgid "**WASM/Pyodide compatibility** (no XML-RPC dependency)"
+msgstr "**Compatibilité WASM/Pyodide** (pas de dépendance XML-RPC)"
+
+msgid "**External tool integration** (any HTTP client)"
+msgstr "**Intégration d'outils externes** (tout client HTTP)"
+
+msgid "Unlike the XML-RPC interface, the Web API:"
+msgstr "Contrairement à l'interface XML-RPC, l'API Web :"
+
+msgid "Uses **JSON** for metadata and **NPZ** for binary data (efficient large array transfer)"
+msgstr "Utilise **JSON** pour les métadonnées et **NPZ** pour les données binaires (transfert efficace de grands tableaux)"
+
+msgid "Provides **bearer token authentication** for security"
+msgstr "Fournit une **authentification par jeton bearer** pour la sécurité"
+
+msgid "Follows **REST conventions** with OpenAPI documentation"
+msgstr "Suit les **conventions REST** avec documentation OpenAPI"
+
+msgid "Works in **browser environments** (WASM/Pyodide)"
+msgstr "Fonctionne dans les **environnements navigateur** (WASM/Pyodide)"
+
+msgid "Comparison with XML-RPC"
+msgstr "Comparaison avec XML-RPC"
+
+msgid "Feature"
+msgstr "Fonctionnalité"
+
+msgid "XML-RPC"
+msgstr "XML-RPC"
+
+msgid "Protocol"
+msgstr "Protocole"
+
+msgid "XML"
+msgstr "XML"
+
+msgid "JSON + Binary (NPZ)"
+msgstr "JSON + Binaire (NPZ)"
+
+msgid "WASM Support"
+msgstr "Support WASM"
+
+msgid "❌"
+msgstr "❌"
+
+msgid "✅"
+msgstr "✅"
+
+msgid "Large Arrays"
+msgstr "Grands tableaux"
+
+msgid "Slow (base64)"
+msgstr "Lent (base64)"
+
+msgid "Fast (NPZ)"
+msgstr "Rapide (NPZ)"
+
+msgid "Authentication"
+msgstr "Authentification"
+
+msgid "None"
+msgstr "Aucune"
+
+msgid "Bearer Token"
+msgstr "Jeton Bearer"
+
+msgid "Standards"
+msgstr "Standards"
+
+msgid "REST + OpenAPI"
+msgstr "REST + OpenAPI"
+
+msgid "Quick Start"
+msgstr "Démarrage rapide"
+
+msgid "Enabling the Web API"
+msgstr "Activer l'API Web"
+
+msgid "There are several ways to enable the Web API server:"
+msgstr "Il existe plusieurs façons d'activer le serveur API Web :"
+
+msgid "**Via UI**: View → Web API → Start Web API Server"
+msgstr "**Via l'interface** : Affichage → API Web → Démarrer le serveur API Web"
+
+msgid "**Via environment variable**: Set ``DATALAB_WEBAPI_ENABLED=1`` before starting DataLab"
+msgstr "**Via variable d'environnement** : Définir ``DATALAB_WEBAPI_ENABLED=1`` avant de démarrer DataLab"
+
+msgid "When started, DataLab displays the server URL and authentication token in a dialog. The status bar also shows the Web API port when the server is running."
+msgstr "Au démarrage, DataLab affiche l'URL du serveur et le jeton d'authentification dans une boîte de dialogue. La barre d'état affiche également le port de l'API Web lorsque le serveur est en cours d'exécution."
+
+msgid "Connecting from a Notebook"
+msgstr "Connexion depuis un notebook"
+
+msgid "Set the environment variables before starting your notebook kernel:"
+msgstr "Définissez les variables d'environnement avant de démarrer le noyau de votre notebook :"
+
+msgid "Then in your notebook using DataLab-Kernel:"
+msgstr "Puis dans votre notebook utilisant DataLab-Kernel :"
+
+msgid "API Reference"
+msgstr "Référence de l'API"
+
+msgid "Base URL: ``http://127.0.0.1:<port>/api/v1``"
+msgstr "URL de base : ``http://127.0.0.1:<port>/api/v1``"
+
+msgid "Status Endpoint (No Auth Required)"
+msgstr "Point d'accès Status (sans authentification)"
+
+msgid "Method"
+msgstr "Méthode"
+
+msgid "Endpoint"
+msgstr "Point d'accès"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "GET"
+msgstr "GET"
+
+msgid "``/status``"
+msgstr "``/status``"
+
+msgid "Server status and version information"
+msgstr "État du serveur et informations de version"
+
+msgid "Object Operations (Auth Required)"
+msgstr "Opérations sur les objets (authentification requise)"
+
+msgid "All endpoints below require the ``Authorization: Bearer <token>`` header."
+msgstr "Tous les points d'accès ci-dessous nécessitent l'en-tête ``Authorization: Bearer <token>``."
+
+msgid "``/objects``"
+msgstr "``/objects``"
+
+msgid "List all objects with metadata (JSON)"
+msgstr "Lister tous les objets avec métadonnées (JSON)"
+
+#, python-brace-format
+msgid "``/objects/{name}``"
+msgstr "``/objects/{name}``"
+
+msgid "Get object metadata (JSON)"
+msgstr "Obtenir les métadonnées d'un objet (JSON)"
+
+msgid "DELETE"
+msgstr "DELETE"
+
+msgid "Delete an object"
+msgstr "Supprimer un objet"
+
+msgid "PATCH"
+msgstr "PATCH"
+
+#, python-brace-format
+msgid "``/objects/{name}/metadata``"
+msgstr "``/objects/{name}/metadata``"
+
+msgid "Update object metadata"
+msgstr "Mettre à jour les métadonnées d'un objet"
+
+msgid "Binary Data Transfer (Auth Required)"
+msgstr "Transfert de données binaires (authentification requise)"
+
+#, python-brace-format
+msgid "``/objects/{name}/data``"
+msgstr "``/objects/{name}/data``"
+
+msgid "Download object as NPZ archive"
+msgstr "Télécharger l'objet sous forme d'archive NPZ"
+
+msgid "PUT"
+msgstr "PUT"
+
+msgid "Upload object from NPZ archive"
+msgstr "Envoyer un objet depuis une archive NPZ"
+
+msgid "Data Format"
+msgstr "Format des données"
+
+msgid "Objects are transferred using NumPy's NPZ format for efficiency."
+msgstr "Les objets sont transférés au format NPZ de NumPy pour plus d'efficacité."
+
+msgid "SignalObj NPZ Structure"
+msgstr "Structure NPZ de SignalObj"
+
+msgid "ImageObj NPZ Structure"
+msgstr "Structure NPZ de ImageObj"
+
+msgid "All API endpoints except ``/status`` require a bearer token:"
+msgstr "Tous les points d'accès de l'API sauf ``/status`` nécessitent un jeton bearer :"
+
+msgid "The token is generated when the server starts and displayed in the connection dialog."
+msgstr "Le jeton est généré au démarrage du serveur et affiché dans la boîte de dialogue de connexion."
+
+msgid "Environment Variables"
+msgstr "Variables d'environnement"
+
+msgid "Variable"
+msgstr "Variable"
+
+msgid "Default"
+msgstr "Valeur par défaut"
+
+msgid "``DATALAB_WEBAPI_HOST``"
+msgstr "``DATALAB_WEBAPI_HOST``"
+
+msgid "Bind address"
+msgstr "Adresse de liaison"
+
+msgid "``127.0.0.1``"
+msgstr "``127.0.0.1``"
+
+msgid "``DATALAB_WEBAPI_PORT``"
+msgstr "``DATALAB_WEBAPI_PORT``"
+
+msgid "Server port"
+msgstr "Port du serveur"
+
+msgid "Auto-detect"
+msgstr "Détection automatique"
+
+msgid "``DATALAB_WEBAPI_TOKEN``"
+msgstr "``DATALAB_WEBAPI_TOKEN``"
+
+msgid "Auth token"
+msgstr "Jeton d'authentification"
+
+msgid "Generated"
+msgstr "Généré"
+
+msgid "Security Model"
+msgstr "Modèle de sécurité"
+
+msgid "The Web API implements the following security measures:"
+msgstr "L'API Web implémente les mesures de sécurité suivantes :"
+
+msgid "**Localhost binding**: By default, the server only accepts connections from the local machine (127.0.0.1)."
+msgstr "**Liaison localhost** : Par défaut, le serveur n'accepte que les connexions provenant de la machine locale (127.0.0.1)."
+
+msgid "**Token authentication**: Every request (except status) must include a valid bearer token."
+msgstr "**Authentification par jeton** : Chaque requête (sauf status) doit inclure un jeton bearer valide."
+
+msgid "**Explicit opt-in**: Remote binding (0.0.0.0) requires explicit configuration."
+msgstr "**Opt-in explicite** : La liaison distante (0.0.0.0) nécessite une configuration explicite."
+
+msgid "Exposing the API to the network allows anyone with the token to access your data. Use with caution on trusted networks only."
+msgstr "Exposer l'API sur le réseau permet à quiconque possédant le jeton d'accéder à vos données. À utiliser avec précaution uniquement sur des réseaux de confiance."
+
+msgid "Architecture"
+msgstr "Architecture"
+
+msgid "The Web API runs in a separate thread from the Qt GUI. The ``WorkspaceAdapter`` ensures thread-safe access to DataLab objects by marshalling calls to the main thread using Qt's signal/slot mechanism."
+msgstr "L'API Web s'exécute dans un thread séparé de l'interface Qt. Le ``WorkspaceAdapter`` assure un accès thread-safe aux objets DataLab en acheminant les appels vers le thread principal via le mécanisme signal/slot de Qt."
+
+msgid "Installation"
+msgstr "Installation"
+
+msgid "The Web API requires additional dependencies:"
+msgstr "L'API Web nécessite des dépendances supplémentaires :"
+
+msgid "This installs:"
+msgstr "Ceci installe :"
+
+msgid "FastAPI (web framework)"
+msgstr "FastAPI (framework web)"
+
+msgid "Uvicorn (ASGI server)"
+msgstr "Uvicorn (serveur ASGI)"
+
+msgid "Pydantic (data validation)"
+msgstr "Pydantic (validation de données)"
+
+msgid "Programmatic Control"
+msgstr "Contrôle programmatique"
+
+msgid "The Web API can also be started and controlled programmatically via the XML-RPC interface, which is useful for automated workflows:"
+msgstr "L'API Web peut également être démarrée et contrôlée par programmation via l'interface XML-RPC, ce qui est utile pour les flux de travail automatisés :"
+
+msgid "See Also"
+msgstr "Voir aussi"
+
+msgid ":ref:`ref-to-remote-control` for the XML-RPC interface (legacy)"
+msgstr ":ref:`ref-to-remote-control` pour l'interface XML-RPC (historique)"
+
+msgid "`DataLab-Kernel documentation <https://github.com/DataLab-Platform/DataLab-Kernel>`_ for Jupyter integration"
+msgstr "`Documentation DataLab-Kernel <https://github.com/DataLab-Platform/DataLab-Kernel>`_ pour l'intégration Jupyter"

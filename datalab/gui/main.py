@@ -148,6 +148,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.__old_size: tuple[int, int] | None = None
         self.__memory_warning = False
         self.memorystatus: status.MemoryStatus | None = None
+        self.webapistatus: status.WebAPIStatus | None = None
 
         self.consolestatus: status.ConsoleStatus | None = None
         self.console: DockableConsole | None = None
@@ -1019,6 +1020,9 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         xmlrpcstatus = status.XMLRPCStatus()
         xmlrpcstatus.set_port(self.remote_server.port)
         self.statusBar().addPermanentWidget(xmlrpcstatus)
+        # Web API server status
+        self.webapistatus = status.WebAPIStatus()
+        self.statusBar().addPermanentWidget(self.webapistatus)
         # Memory status
         threshold = Conf.main.available_memory_threshold.get()
         self.memorystatus = status.MemoryStatus(threshold)

@@ -245,6 +245,17 @@ class WebApiActions:
         self._stop_action.setEnabled(True)
         self._copy_action.setEnabled(True)
         self._status_action.setText(_("Status: Running at {}").format(url))
+        # Update status bar widget
+        if self._main_window.webapistatus is not None:
+            # Extract port from URL
+            try:
+                from urllib.parse import urlparse
+
+                parsed = urlparse(url)
+                port = parsed.port
+            except Exception:  # pylint: disable=broad-exception-caught
+                port = None
+            self._main_window.webapistatus.set_status(url, port)
 
     def _on_server_stopped(self) -> None:
         """Handle server stopped signal."""
@@ -252,6 +263,9 @@ class WebApiActions:
         self._stop_action.setEnabled(False)
         self._copy_action.setEnabled(False)
         self._status_action.setText(_("Status: Not running"))
+        # Update status bar widget
+        if self._main_window.webapistatus is not None:
+            self._main_window.webapistatus.set_status(None, None)
 
     def _on_server_error(self, message: str) -> None:
         """Handle server error signal."""
