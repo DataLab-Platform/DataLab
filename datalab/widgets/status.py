@@ -257,10 +257,28 @@ class WebAPIStatus(BaseStatus):
         parent (QWidget): parent widget
     """
 
+    SIG_SHOW_INFO = QC.Signal()  # Signal to show connection info
+    SIG_START_SERVER = QC.Signal()  # Signal to propose starting server
+
     def __init__(self, parent: QW.QWidget | None = None) -> None:
         super().__init__(None, parent)
         self.port: int | None = None
         self.url: str | None = None
+        self.label.setCursor(QG.QCursor(QC.Qt.PointingHandCursor))
+        self.label.mouseReleaseEvent = self.on_click
+        self.update_status()  # Initialize widget state
+
+    def on_click(self, event: QG.QMouseEvent) -> None:
+        """Handle mouse click event on label.
+
+        Args:
+            event: mouse event
+        """
+        if event.button() == QC.Qt.LeftButton:
+            if self.port is None:
+                self.SIG_START_SERVER.emit()
+            else:
+                self.SIG_SHOW_INFO.emit()
 
     def set_status(self, url: str | None, port: int | None) -> None:
         """Set Web API server status.
@@ -276,15 +294,17 @@ class WebAPIStatus(BaseStatus):
 
     def update_status(self) -> None:
         """Update status widget"""
-        text = _("Web API:") + " "
         if self.port is None:
-            self.label.setText(text + "-")
+            self.label.setText(_("Web API"))
             self.set_icon("libre-gui-unlink.svg")
-            self.setToolTip(_("Web API server is not running"))
+            self.setToolTip(
+                _("Web API server is not running") + "\n" + _("Click to start")
+            )
         else:
-            self.label.setText(text + str(self.port))
+            self.label.setText(_("Web API:") + " " + str(self.port))
             self.set_icon("libre-gui-link.svg")
             tooltip = _("Web API server is running") + "\n"
             if self.url:
-                tooltip += f"URL: {self.url}"
+                tooltip += f"URL: {self.url}\n"
+            tooltip += _("Click to view connection info")
             self.setToolTip(tooltip)

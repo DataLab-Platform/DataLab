@@ -280,3 +280,37 @@ class WebApiActions:
         """Clean up resources on shutdown."""
         if self._controller is not None and self._controller.is_running:
             self._controller.stop()
+
+    def show_connection_info(self) -> None:
+        """Show connection info dialog or copy to clipboard.
+
+        This is called when the status widget is clicked while server is running.
+        """
+        if self._controller is None or not self._controller.is_running:
+            return
+
+        # Show the connection info dialog
+        info = self._controller.get_connection_info()
+        self._show_connection_dialog(info["url"], info["token"])
+
+    def start_server_from_status_widget(self) -> None:
+        """Start server from status widget click.
+
+        This is called when the status widget is clicked while server is not running.
+        Shows a confirmation dialog before starting the server.
+        """
+        # Show confirmation dialog
+        answer = QW.QMessageBox.question(
+            self._main_window,
+            _("Start Web API Server"),
+            _(
+                "Do you want to start the Web API server?\n\n"
+                "This will allow external applications to connect to DataLab "
+                "and control it remotely via HTTP/JSON."
+            ),
+            QW.QMessageBox.Yes | QW.QMessageBox.No,
+            QW.QMessageBox.No,
+        )
+
+        if answer == QW.QMessageBox.Yes:
+            self._start_server()

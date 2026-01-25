@@ -708,6 +708,16 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         """Set memory warning state"""
         self.__memory_warning = state
 
+    def __show_webapi_info(self) -> None:
+        """Show Web API connection info when status widget is clicked."""
+        if self.webapi_actions is not None:
+            self.webapi_actions.show_connection_info()
+
+    def __start_webapi_server(self) -> None:
+        """Start Web API server when status widget is clicked."""
+        if self.webapi_actions is not None:
+            self.webapi_actions.start_server_from_status_widget()
+
     def confirm_memory_state(self) -> bool:  # pragma: no cover
         """Check memory warning state and eventually show a warning dialog
 
@@ -1022,6 +1032,8 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.statusBar().addPermanentWidget(xmlrpcstatus)
         # Web API server status
         self.webapistatus = status.WebAPIStatus()
+        self.webapistatus.SIG_SHOW_INFO.connect(self.__show_webapi_info)
+        self.webapistatus.SIG_START_SERVER.connect(self.__start_webapi_server)
         self.statusBar().addPermanentWidget(self.webapistatus)
         # Memory status
         threshold = Conf.main.available_memory_threshold.get()

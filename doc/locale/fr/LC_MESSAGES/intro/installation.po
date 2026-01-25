@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-25 13:18+0100\n"
+"POT-Creation-Date: 2026-01-25 19:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -233,7 +233,7 @@ msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
 msgid "Sigima"
 msgstr ""
 
-msgid ">= 1.0.4"
+msgid ">= 1.0.6"
 msgstr ""
 
 msgid "Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform."
@@ -242,7 +242,7 @@ msgstr ""
 msgid "NumPy"
 msgstr ""
 
-msgid ">= 1.22"
+msgid ">= 1.22, < 2.5"
 msgstr ""
 
 msgid "Fundamental package for array computing in Python"
@@ -251,7 +251,7 @@ msgstr "Paquet fondamental pour le calcul sur tableaux en Python"
 msgid "SciPy"
 msgstr ""
 
-msgid ">= 1.10.1"
+msgid ">= 1.10.1, < 1.17"
 msgstr ""
 
 msgid "Fundamental algorithms for scientific computing in Python"
@@ -260,7 +260,7 @@ msgstr "Algorithmes fondamentaux pour le calcul scientifique en Python"
 msgid "scikit-image"
 msgstr ""
 
-msgid ">= 0.19.2"
+msgid ">= 0.19.2, < 0.27"
 msgstr ""
 
 msgid "Image processing in Python"
@@ -269,7 +269,7 @@ msgstr "Traitement d'images en Python"
 msgid "pandas"
 msgstr ""
 
-msgid ">= 1.4"
+msgid ">= 1.4, < 3.0"
 msgstr ""
 
 msgid "Powerful data structures for data analysis, time series, and statistics"
@@ -278,7 +278,7 @@ msgstr "Analyse de données, séries temporelles et statistiques"
 msgid "PyWavelets"
 msgstr ""
 
-msgid ">= 1.2"
+msgid ">= 1.2, < 2.0"
 msgstr ""
 
 msgid "PyWavelets, wavelet transform module"
