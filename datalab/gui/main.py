@@ -1631,6 +1631,10 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                 self.settings_action,
             ],
         )
+        # Add Web API submenu
+        if self.webapi_actions is not None:
+            self.file_menu.addSeparator()
+            self.webapi_actions.create_menu(self.file_menu)
         if self.quit_action is not None:
             add_actions(self.file_menu, [self.quit_action])
 
@@ -1638,10 +1642,6 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         """Update view menu before showing up"""
         self.__update_generic_menu(self.view_menu)
         add_actions(self.view_menu, [None] + self.createPopupMenu().actions())
-        # Add Web API submenu (must be added here since menu is cleared on each show)
-        if self.webapi_actions is not None:
-            self.view_menu.addSeparator()
-            self.webapi_actions.create_menu(self.view_menu)
 
     @remote_controlled
     def toggle_show_titles(self, state: bool) -> None:
