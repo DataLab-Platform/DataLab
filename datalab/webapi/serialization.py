@@ -37,14 +37,14 @@ from __future__ import annotations
 import io
 import json
 import zipfile
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 import numpy as np
 
 if TYPE_CHECKING:
     from sigima.objects import ImageObj, SignalObj
 
-    DataObject = SignalObj | ImageObj
+    DataObject = Union[SignalObj, ImageObj]
 
 
 def serialize_object_to_npz(obj: DataObject) -> bytes:

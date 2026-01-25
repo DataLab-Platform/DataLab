@@ -54,19 +54,19 @@ _server_url: str | None = None
 
 def set_adapter(adapter: WorkspaceAdapter) -> None:
     """Set the workspace adapter for route handlers."""
-    global _adapter  # noqa: PLW0603
+    global _adapter  # noqa: PLW0603  # pylint: disable=global-statement
     _adapter = adapter
 
 
 def set_auth_token(token: str) -> None:
     """Set the authentication token."""
-    global _auth_token  # noqa: PLW0603
+    global _auth_token  # noqa: PLW0603  # pylint: disable=global-statement
     _auth_token = token
 
 
 def set_server_url(url: str) -> None:
     """Set the server URL."""
-    global _server_url  # noqa: PLW0603
+    global _server_url  # noqa: PLW0603  # pylint: disable=global-statement
     _server_url = url
 
 

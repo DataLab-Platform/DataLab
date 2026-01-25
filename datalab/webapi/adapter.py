@@ -30,14 +30,14 @@ handlers via FastAPI dependency injection.
 from __future__ import annotations
 
 import threading
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Union
 
 from qtpy.QtCore import QObject, Signal, Slot
 
 if TYPE_CHECKING:
     from sigima.objects import ImageObj, SignalObj
 
-    DataObject = SignalObj | ImageObj
+    DataObject = Union[SignalObj, ImageObj]
 
 
 class MainThreadExecutor(QObject):
@@ -61,7 +61,7 @@ class MainThreadExecutor(QObject):
         try:
             result_container["result"] = func()
             result_container["error"] = None
-        except Exception as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught
             result_container["result"] = None
             result_container["error"] = e
         finally:
@@ -93,8 +93,9 @@ class MainThreadExecutor(QObject):
         result_container["done"].wait()
 
         # Re-raise any exception
-        if result_container["error"] is not None:
-            raise result_container["error"]
+        error = result_container["error"]
+        if error is not None:
+            raise error  # pylint: disable=raising-bad-type
 
         return result_container["result"]
 
@@ -105,7 +106,7 @@ _executor: MainThreadExecutor | None = None
 
 def get_executor() -> MainThreadExecutor:
     """Get or create the main thread executor."""
-    global _executor
+    global _executor  # pylint: disable=global-statement
     if _executor is None:
         _executor = MainThreadExecutor()
     return _executor

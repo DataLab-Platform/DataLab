@@ -972,7 +972,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
     def __setup_webapi(self) -> None:
         """Setup Web API actions."""
         self.webapi_actions = WebApiActions(self)
-        # Note: Menu is added in __update_view_menu since view_menu is cleared on each show
+        # Note: Menu is added in __update_view_menu since view_menu is cleared each show
 
     def __register_plugins(self) -> None:
         """Register plugins"""

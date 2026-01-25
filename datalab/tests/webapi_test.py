@@ -18,9 +18,9 @@ import pytest
 
 # Check if webapi dependencies are available
 try:
-    import fastapi  # noqa: F401
+    import uvicorn
 
-    WEBAPI_AVAILABLE = True
+    WEBAPI_AVAILABLE = uvicorn is not None  # Actually use the import
 except ImportError:
     WEBAPI_AVAILABLE = False
 
@@ -304,11 +304,15 @@ class TestAPIEndpointsWithMock:
     # to test the full HTTP flow without a real DataLab instance
 
     def test_status_endpoint(self):
-        """Test the /api/v1/status endpoint (no auth required)."""
-        # This would set up a test client and verify status response
-        pass  # TODO: Implement with mock adapter
+        """Test the /api/v1/status endpoint (no auth required).
+
+        TODO: Implement with mock adapter - This would set up a test client
+        and verify status response.
+        """
 
     def test_list_objects_requires_auth(self):
-        """Test that /api/v1/objects requires authentication."""
-        # This would verify 401 response without token
-        pass  # TODO: Implement with mock adapter
+        """Test that /api/v1/objects requires authentication.
+
+        TODO: Implement with mock adapter - This would verify 401 response
+        without token.
+        """

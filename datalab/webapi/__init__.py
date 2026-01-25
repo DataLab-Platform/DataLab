@@ -77,6 +77,7 @@ def get_webapi_controller():
     Raises:
         ImportError: If webapi dependencies are not available.
     """
+    # pylint: disable=global-statement
     global _controller_instance  # noqa: PLW0603
 
     if not WEBAPI_AVAILABLE:
