@@ -71,6 +71,8 @@ from datalab.utils.qthelpers import (
     bring_to_front,
     configure_menu_about_to_show,
 )
+from datalab.webapi import WEBAPI_AVAILABLE, get_webapi_controller
+from datalab.webapi.actions import WebApiActions
 from datalab.widgets import instconfviewer, logviewer, status
 from datalab.widgets.warningerror import go_to_error
 
@@ -162,6 +164,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.tabmenu: QW.QMenu | None = None
         self.docks: dict[AbstractPanel | DockableConsole, QW.QDockWidget] | None = None
         self.h5inputoutput = H5InputOutput(self)
+        self.webapi_actions: WebApiActions | None = None
 
         self.openh5_action: QW.QAction | None = None
         self.saveh5_action: QW.QAction | None = None
@@ -636,6 +639,60 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         """
         self.macropanel.import_macro_from_file(filename)
 
+    # ------WebAPI control
+    @remote_controlled
+    def start_webapi_server(
+        self,
+        host: str | None = None,
+        port: int | None = None,
+    ) -> dict:
+        """Start the Web API server.
+
+        Args:
+            host: Host address to bind to. Defaults to "127.0.0.1".
+            port: Port number. Defaults to auto-detect available port.
+
+        Returns:
+            Dictionary with "url" and "token" keys.
+
+        Raises:
+            RuntimeError: If Web API deps not installed or server already running.
+        """
+        if not WEBAPI_AVAILABLE:
+            raise RuntimeError(
+                "Web API dependencies not installed. "
+                "Install with: pip install datalab-platform[webapi]"
+            )
+
+        controller = get_webapi_controller()
+        controller.set_main_window(self)
+        url, token = controller.start(host=host, port=port)
+        return {"url": url, "token": token}
+
+    @remote_controlled
+    def stop_webapi_server(self) -> None:
+        """Stop the Web API server."""
+        if not WEBAPI_AVAILABLE:
+            return
+
+        controller = get_webapi_controller()
+        controller.stop()
+
+    @remote_controlled
+    def get_webapi_status(self) -> dict:
+        """Get Web API server status.
+
+        Returns:
+            Dictionary with "running", "url", and "token" keys.
+        """
+        if not WEBAPI_AVAILABLE:
+            return {"running": False, "url": None, "token": None, "available": False}
+
+        controller = get_webapi_controller()
+        info = controller.get_connection_info()
+        info["available"] = True
+        return info
+
     # ------Misc.
     @property
     def panels(self) -> tuple[AbstractPanel, ...]:
@@ -902,6 +959,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.__create_plugins_actions()
         self.__setup_central_widget()
         self.__add_menus()
+        self.__setup_webapi()
         if console:
             self.__setup_console()
         self.__update_actions(update_other_data_panel=True)
@@ -909,6 +967,11 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.__configure_panels()
         # Now that everything is set up, we can restore the window state:
         self.__restore_state()
+
+    def __setup_webapi(self) -> None:
+        """Setup Web API actions."""
+        self.webapi_actions = WebApiActions(self)
+        # Note: Menu is added in __update_view_menu since view_menu is cleared on each show
 
     def __register_plugins(self) -> None:
         """Register plugins"""
@@ -1559,6 +1622,10 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         """Update view menu before showing up"""
         self.__update_generic_menu(self.view_menu)
         add_actions(self.view_menu, [None] + self.createPopupMenu().actions())
+        # Add Web API submenu (must be added here since menu is cleared on each show)
+        if self.webapi_actions is not None:
+            self.view_menu.addSeparator()
+            self.webapi_actions.create_menu(self.view_menu)
 
     @remote_controlled
     def toggle_show_titles(self, state: bool) -> None:
@@ -2239,6 +2306,8 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                 # it would represent too much effort for an error occuring in test
                 # configurations only.
                 pass
+        if self.webapi_actions is not None:
+            self.webapi_actions.cleanup()
         self.reset_all()
         self.__save_pos_size_and_state()
         self.__unregister_plugins()

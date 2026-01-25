@@ -6,7 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  datalab\n"
 "Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
+"POT-Creation-Date: 2026-01-25 12:19+0100\n"
 "PO-Revision-Date: 2025-05-22 15:46+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
 "Language-Team: DataLab Platform Developers <p.raybaut@codra.fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -1031,9 +1033,6 @@ msgstr "Propriétés"
 msgid "Parameters for function `%s`"
 msgstr "Paramètres pour la fonction `%s`"
 
-msgid "Created"
-msgstr "Création de"
-
 msgid "Original object"
 msgstr "Objet original"
 
@@ -1296,9 +1295,6 @@ msgstr "L'étiquette a été ajoutée comme annotation. Vous pouvez la modifier 
 
 msgid "Macro panel"
 msgstr "Panneau des macros"
-
-msgid "Python files"
-msgstr "Fichiers Python"
 
 msgid "-***- Macro Console -***-"
 msgstr "-***- Console des macros -***-"
@@ -2804,6 +2800,61 @@ msgstr "dans ce dossier"
 msgid "Open tab menu"
 msgstr "Ouvrir le menu des onglets"
 
+msgid "Start Web API Server"
+msgstr "Démarrer le serveur API Web"
+
+msgid "Start the HTTP/JSON Web API server for external access"
+msgstr "Démarrer le serveur API Web HTTP/JSON pour l'accès externe"
+
+msgid "Stop Web API Server"
+msgstr "Arrêter le serveur API Web"
+
+msgid "Copy Connection Info"
+msgstr "Copier les infos de connexion"
+
+msgid "Copy URL and token to clipboard"
+msgstr "Copier l'URL et le jeton dans le presse-papier"
+
+msgid "Status: Not running"
+msgstr "Statut : Non démarré"
+
+msgid "Web API unavailable (install datalab-platform[webapi])"
+msgstr "API Web non disponible (installer datalab-platform[webapi])"
+
+msgid "Web API"
+msgstr "API Web"
+
+msgid "Failed to start Web API server:"
+msgstr "Échec du démarrage du serveur API Web :"
+
+msgid "Connection info copied to clipboard"
+msgstr "Infos de connexion copiées dans le presse-papier"
+
+msgid "Web API Server Started"
+msgstr "Serveur API Web démarré"
+
+msgid "The Web API server is now running. Use the following credentials to connect:"
+msgstr "Le serveur API Web est maintenant en cours d'exécution. Utilisez les identifiants suivants pour vous connecter :"
+
+msgid "URL:"
+msgstr "URL :"
+
+msgid "Token:"
+msgstr "Jeton :"
+
+msgid "Tip: Set these environment variables in your notebook:\n"
+msgstr "Astuce : Définissez ces variables d'environnement dans votre notebook :\n"
+
+msgid "Copy to Clipboard"
+msgstr "Copier dans le presse-papier"
+
+#, python-brace-format
+msgid "Status: Running at {}"
+msgstr "Statut : En cours d'exécution à {}"
+
+msgid "Web API server error:"
+msgstr "Erreur du serveur API Web :"
+
 msgid "Connection to DataLab"
 msgstr "Connexion à DataLab"
 
@@ -2998,9 +3049,6 @@ msgstr "Distance minimale :"
 
 msgid "Signal peak detection"
 msgstr "Détection de pics 1D"
-
-msgid "Peaks:"
-msgstr "Pics :"
 
 msgid "Internal console"
 msgstr "Console interne"

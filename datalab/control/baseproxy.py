@@ -554,6 +554,41 @@ class AbstractDLControl(abc.ABC):
             ValueError: unknown function
         """
 
+    # =========================================================================
+    # Web API control methods
+    # =========================================================================
+
+    @abc.abstractmethod
+    def start_webapi_server(
+        self,
+        host: str | None = None,
+        port: int | None = None,
+    ) -> dict:
+        """Start the Web API server.
+
+        Args:
+            host: Host address to bind to. Defaults to "127.0.0.1".
+            port: Port number. Defaults to auto-detect available port.
+
+        Returns:
+            Dictionary with "url" and "token" keys.
+
+        Raises:
+            RuntimeError: If Web API deps not installed or server already running.
+        """
+
+    @abc.abstractmethod
+    def stop_webapi_server(self) -> None:
+        """Stop the Web API server."""
+
+    @abc.abstractmethod
+    def get_webapi_status(self) -> dict:
+        """Get Web API server status.
+
+        Returns:
+            Dictionary with "running", "url", and "token" keys.
+        """
+
     @abc.abstractmethod
     def call_method(
         self,
@@ -933,3 +968,39 @@ class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
             ValueError: If the panel name is invalid
         """
         return self._datalab.call_method(method_name, *args, panel=panel, **kwargs)
+
+    # =========================================================================
+    # Web API control methods
+    # =========================================================================
+
+    def start_webapi_server(
+        self,
+        host: str | None = None,
+        port: int | None = None,
+    ) -> dict:
+        """Start the Web API server.
+
+        Args:
+            host: Host address to bind to. Defaults to "127.0.0.1".
+            port: Port number. Defaults to auto-detect available port.
+
+        Returns:
+            Dictionary with "url" and "token" keys.
+
+        Raises:
+            RuntimeError: If Web API dependencies not installed or server
+             already running.
+        """
+        return self._datalab.start_webapi_server(host, port)
+
+    def stop_webapi_server(self) -> None:
+        """Stop the Web API server."""
+        return self._datalab.stop_webapi_server()
+
+    def get_webapi_status(self) -> dict:
+        """Get Web API server status.
+
+        Returns:
+            Dictionary with "running", "url", and "token" keys.
+        """
+        return self._datalab.get_webapi_status()

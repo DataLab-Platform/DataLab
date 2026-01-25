@@ -722,6 +722,49 @@ class RemoteServer(QC.QThread):
         # which was set by call_method_slot
         return self.result
 
+    # =========================================================================
+    # Web API control methods
+    # =========================================================================
+
+    @remote_call
+    def start_webapi_server(
+        self,
+        host: str | None = None,
+        port: int | None = None,
+    ) -> dict:
+        """Start the Web API server.
+
+        Args:
+            host: Host address to bind to. Defaults to "127.0.0.1".
+            port: Port number. Defaults to auto-detect available port.
+
+        Returns:
+            Dictionary with "url" and "token" keys.
+
+        Raises:
+            RuntimeError: If Web API dependencies not installed or server
+             already running.
+        """
+        # Delegate to main window method which is @remote_controlled
+        # This ensures SIG_READY is emitted for the @remote_call decorator
+        return self.win.start_webapi_server(host, port)
+
+    @remote_call
+    def stop_webapi_server(self) -> None:
+        """Stop the Web API server."""
+        # Delegate to main window method which is @remote_controlled
+        return self.win.stop_webapi_server()
+
+    @remote_call
+    def get_webapi_status(self) -> dict:
+        """Get Web API server status.
+
+        Returns:
+            Dictionary with "running", "url", and "token" keys.
+        """
+        # Delegate to main window method which is @remote_controlled
+        return self.win.get_webapi_status()
+
 
 RemoteServer.check_remote_functions()
 
@@ -1137,3 +1180,35 @@ class RemoteClient(BaseProxy):
             "kwargs": dict(kwargs) if kwargs else {},
         }
         return self._datalab.call_method(method_name, call_params)
+
+    # === WebAPI Server Control Methods ===
+
+    def start_webapi_server(
+        self, host: str = "127.0.0.1", port: int = 8080
+    ) -> dict[str, str | int]:
+        """Start the WebAPI server.
+
+        Args:
+            host: Host address to bind to. Defaults to "127.0.0.1".
+            port: Port number. Defaults to 8080.
+
+        Returns:
+            Dictionary with server info including 'url' and 'token'.
+        """
+        return self._datalab.start_webapi_server(host, port)
+
+    def stop_webapi_server(self) -> bool:
+        """Stop the WebAPI server.
+
+        Returns:
+            True if server was stopped, False if it wasn't running.
+        """
+        return self._datalab.stop_webapi_server()
+
+    def get_webapi_status(self) -> dict[str, str | int | bool]:
+        """Get the current status of the WebAPI server.
+
+        Returns:
+            Dictionary with status info including 'running', 'url', and 'port'.
+        """
+        return self._datalab.get_webapi_status()
