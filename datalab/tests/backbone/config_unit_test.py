@@ -128,7 +128,7 @@ def check_conf(conf, name, win: QW.QMainWindow, h5files):
         #  Check position, taking into account screen offset (e.g. Linux/Gnome)
         conf_x, conf_y = sec_main[OPT_POS.option]
         conf_w, conf_h = sec_main[OPT_SIZ.option]
-        available_go = QW.QDesktopWidget().availableGeometry()
+        available_go = QW.QApplication.primaryScreen().availableGeometry()
         x_offset, y_offset = available_go.x(), available_go.y()
         assert_in_interval(win.x(), conf_x - x_offset, 0, "X position")
         assert_in_interval(win.y(), conf_y - y_offset / 2, 15 + y_offset, "Y position")
