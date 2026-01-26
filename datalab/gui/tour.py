@@ -456,9 +456,8 @@ class BaseTour(QW.QWidget, metaclass=BaseTourMeta):
         Args:
             factor: Factor by which the size of the window is multiplied.
         """
-        desktop = QW.QApplication.desktop()
-        screen = desktop.screenNumber(desktop.cursor().pos())
-        screen_geometry = desktop.screenGeometry(screen)
+        screen = QW.QApplication.primaryScreen()
+        screen_geometry = screen.geometry()
         width = int(screen_geometry.width() * factor)
         height = int(screen_geometry.height() * factor)
         self.win.resize(width, height)
