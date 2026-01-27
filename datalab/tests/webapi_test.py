@@ -266,7 +266,6 @@ class TestAuthToken:
 # They are marked for opt-in execution
 
 
-@pytest.mark.integration
 class TestAPIEndpointsWithMock:
     """Integration tests using a mock workspace adapter."""
 
