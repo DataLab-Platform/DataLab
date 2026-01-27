@@ -40,10 +40,9 @@ import zipfile
 from typing import TYPE_CHECKING, Union
 
 import numpy as np
+from sigima.objects import ImageObj, SignalObj
 
 if TYPE_CHECKING:
-    from sigima.objects import ImageObj, SignalObj
-
     DataObject = Union[SignalObj, ImageObj]
 
 
@@ -172,12 +171,6 @@ def _read_array_from_zip(zf: zipfile.ZipFile, name: str) -> np.ndarray | None:
 
 def _deserialize_signal(zf: zipfile.ZipFile, metadata: dict) -> DataObject:
     """Deserialize a SignalObj from NPZ archive."""
-    # Import SignalObj (prefer sigima, fallback to local)
-    try:
-        from sigima import SignalObj
-    except ImportError as exc:
-        raise ImportError("sigima is required to deserialize SignalObj") from exc
-
     x = _read_array_from_zip(zf, "x.npy")
     y = _read_array_from_zip(zf, "y.npy")
     dx = _read_array_from_zip(zf, "dx.npy")
@@ -206,12 +199,6 @@ def _deserialize_signal(zf: zipfile.ZipFile, metadata: dict) -> DataObject:
 
 def _deserialize_image(zf: zipfile.ZipFile, metadata: dict) -> DataObject:
     """Deserialize an ImageObj from NPZ archive."""
-    # Import ImageObj (prefer sigima, fallback to local)
-    try:
-        from sigima import ImageObj
-    except ImportError as exc:
-        raise ImportError("sigima is required to deserialize ImageObj") from exc
-
     data = _read_array_from_zip(zf, "data.npy")
     if data is None:
         raise ValueError("Invalid image NPZ: missing data.npy")

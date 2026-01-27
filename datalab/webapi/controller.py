@@ -150,6 +150,8 @@ class WebApiController(QObject):
 
         try:
             # Import here to allow graceful failure if deps not installed
+
+            # pylint: disable=import-outside-toplevel
             import uvicorn
             from fastapi import FastAPI
 

@@ -26,9 +26,11 @@ from __future__ import annotations
 
 import secrets
 from typing import Annotated
+from urllib.parse import quote
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response, status
 
+from datalab import __version__
 from datalab.webapi.adapter import WorkspaceAdapter
 from datalab.webapi.schema import (
     ApiStatus,
@@ -141,8 +143,6 @@ async def get_status() -> ApiStatus:
     This endpoint does not require authentication and can be used to check
     if the server is running and to get the API version.
     """
-    from datalab import __version__
-
     return ApiStatus(
         running=True,
         version=__version__,
@@ -343,8 +343,6 @@ async def get_object_data(
             content_disposition = f'attachment; filename="{name}.npz"'
         except UnicodeEncodeError:
             # Use RFC 5987 encoding for Unicode filenames
-            from urllib.parse import quote
-
             encoded_name = quote(name, safe="")
             content_disposition = f"attachment; filename*=UTF-8''{encoded_name}.npz"
 
@@ -420,8 +418,15 @@ async def put_object_data(
         meta = object_to_metadata(obj, name)
         return ObjectMetadata(**meta)
 
+    except HTTPException:
+        raise  # Re-raise HTTPException without wrapping
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail=f"Invalid NPZ format: {e}",
+        ) from e
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error adding object '{name}': {e}",
         ) from e

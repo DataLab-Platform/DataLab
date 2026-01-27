@@ -59,6 +59,7 @@ class WebApiActions:
     def _init_controller(self) -> None:
         """Initialize the Web API controller if available."""
         try:
+            # pylint: disable=import-outside-toplevel
             from datalab.webapi import WEBAPI_AVAILABLE, get_webapi_controller
 
             if WEBAPI_AVAILABLE:
@@ -249,6 +250,7 @@ class WebApiActions:
         if self._main_window.webapistatus is not None:
             # Extract port from URL
             try:
+                # pylint: disable=import-outside-toplevel
                 from urllib.parse import urlparse
 
                 parsed = urlparse(url)

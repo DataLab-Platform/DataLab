@@ -15,6 +15,20 @@ import zipfile
 
 import numpy as np
 import pytest
+from sigima import ImageObj, SignalObj
+
+from datalab.webapi.routes import generate_auth_token
+from datalab.webapi.schema import (
+    MetadataPatchRequest,
+    ObjectListResponse,
+    ObjectMetadata,
+    ObjectType,
+)
+from datalab.webapi.serialization import (
+    deserialize_object_from_npz,
+    object_to_metadata,
+    serialize_object_to_npz,
+)
 
 # Check if webapi dependencies are available
 try:
@@ -35,13 +49,6 @@ class TestNPZSerialization:
 
     def test_signal_round_trip(self):
         """Test serializing and deserializing a SignalObj."""
-        from sigima import SignalObj
-
-        from datalab.webapi.serialization import (
-            deserialize_object_from_npz,
-            serialize_object_to_npz,
-        )
-
         # Create a signal
         x = np.linspace(0, 10, 100)
         y = np.sin(x)
@@ -80,13 +87,6 @@ class TestNPZSerialization:
 
     def test_signal_with_uncertainties(self):
         """Test signal with dx/dy uncertainties."""
-        from sigima import SignalObj
-
-        from datalab.webapi.serialization import (
-            deserialize_object_from_npz,
-            serialize_object_to_npz,
-        )
-
         x = np.linspace(0, 10, 50)
         y = np.cos(x)
         dx = np.ones_like(x) * 0.01
@@ -104,13 +104,6 @@ class TestNPZSerialization:
 
     def test_image_round_trip(self):
         """Test serializing and deserializing an ImageObj."""
-        from sigima import ImageObj
-
-        from datalab.webapi.serialization import (
-            deserialize_object_from_npz,
-            serialize_object_to_npz,
-        )
-
         # Create an image
         data = np.random.rand(128, 128).astype(np.float32)
         obj = ImageObj()
@@ -148,13 +141,6 @@ class TestNPZSerialization:
 
     def test_image_preserves_dtype(self):
         """Test that image dtype is preserved through serialization."""
-        from sigima import ImageObj
-
-        from datalab.webapi.serialization import (
-            deserialize_object_from_npz,
-            serialize_object_to_npz,
-        )
-
         for dtype in [np.uint8, np.uint16, np.float32, np.float64]:
             obj = ImageObj()
             obj.data = np.random.randint(0, 255, (64, 64)).astype(dtype)
@@ -173,10 +159,6 @@ class TestObjectMetadata:
 
     def test_signal_metadata(self):
         """Test extracting metadata from a SignalObj."""
-        from sigima import SignalObj
-
-        from datalab.webapi.serialization import object_to_metadata
-
         obj = SignalObj()
         obj.set_xydata(np.linspace(0, 10, 100), np.sin(np.linspace(0, 10, 100)))
         obj.title = "My Signal"
@@ -193,10 +175,6 @@ class TestObjectMetadata:
 
     def test_image_metadata(self):
         """Test extracting metadata from an ImageObj."""
-        from sigima import ImageObj
-
-        from datalab.webapi.serialization import object_to_metadata
-
         obj = ImageObj()
         obj.data = np.zeros((256, 512), dtype=np.uint16)
         obj.title = "My Image"
@@ -219,8 +197,6 @@ class TestSchemaModels:
 
     def test_object_metadata_validation(self):
         """Test ObjectMetadata model validation."""
-        from datalab.webapi.schema import ObjectMetadata, ObjectType
-
         # Valid metadata
         meta = ObjectMetadata(
             name="test",
@@ -246,8 +222,6 @@ class TestSchemaModels:
 
     def test_object_list_response(self):
         """Test ObjectListResponse model."""
-        from datalab.webapi.schema import ObjectListResponse, ObjectMetadata, ObjectType
-
         objs = [
             ObjectMetadata(
                 name="s1", type=ObjectType.SIGNAL, shape=[50], dtype="float64"
@@ -263,8 +237,6 @@ class TestSchemaModels:
 
     def test_metadata_patch_request(self):
         """Test MetadataPatchRequest model."""
-        from datalab.webapi.schema import MetadataPatchRequest
-
         patch = MetadataPatchRequest(title="New Title", xlabel="Updated X")
 
         # model_dump should exclude None values
@@ -279,8 +251,6 @@ class TestAuthToken:
 
     def test_generate_token(self):
         """Test token generation."""
-        from datalab.webapi.routes import generate_auth_token
-
         token1 = generate_auth_token()
         token2 = generate_auth_token()
 

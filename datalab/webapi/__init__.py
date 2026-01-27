@@ -65,7 +65,7 @@ try:
 except ImportError:
     WEBAPI_AVAILABLE = False
 
-_controller_instance = None
+_CONTROLLER_INSTANCE = None
 
 
 def get_webapi_controller():
@@ -78,7 +78,7 @@ def get_webapi_controller():
         ImportError: If webapi dependencies are not available.
     """
     # pylint: disable=global-statement
-    global _controller_instance  # noqa: PLW0603
+    global _CONTROLLER_INSTANCE  # noqa: PLW0603
 
     if not WEBAPI_AVAILABLE:
         raise ImportError(
@@ -86,9 +86,10 @@ def get_webapi_controller():
             "Install with: pip install datalab-platform[webapi]"
         )
 
-    if _controller_instance is None:
+    if _CONTROLLER_INSTANCE is None:
+        # pylint: disable=import-outside-toplevel
         from datalab.webapi.controller import WebApiController
 
-        _controller_instance = WebApiController()
+        _CONTROLLER_INSTANCE = WebApiController()
 
-    return _controller_instance
+    return _CONTROLLER_INSTANCE
