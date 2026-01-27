@@ -859,6 +859,12 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         if tour:
             Conf.main.tour_enabled.set(False)
             self.show_tour()
+        # Auto-start WebAPI server if environment variable is set
+        if os.environ.get("DATALAB_WEBAPI_ENABLED") == "1":
+            try:
+                self.start_webapi_server()
+            except Exception as e:  # pylint: disable=broad-exception-caught
+                print(f"Warning: Failed to auto-start WebAPI server: {e}")
 
     def take_screenshot(self, name: str) -> None:  # pragma: no cover
         """Take main window screenshot"""

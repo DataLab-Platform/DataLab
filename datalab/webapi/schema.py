@@ -144,3 +144,52 @@ class WorkspaceEvent(BaseModel):
     object_name: str | None = Field(None, description="Affected object name")
     old_name: str | None = Field(None, description="Old name (for rename events)")
     timestamp: float = Field(..., description="Unix timestamp")
+
+
+# =============================================================================
+# Computation API schemas
+# =============================================================================
+
+
+class SelectObjectsRequest(BaseModel):
+    """Request to select objects in a panel."""
+
+    selection: list[str] = Field(
+        ..., description="List of object names/titles to select"
+    )
+    panel: ObjectType | None = Field(
+        None, description="Panel to select in (signal/image). None = current panel."
+    )
+
+
+class SelectObjectsResponse(BaseModel):
+    """Response for object selection."""
+
+    selected: list[str] = Field(..., description="List of selected object names")
+    panel: str = Field(..., description="Panel where selection was made")
+
+
+class CalcRequest(BaseModel):
+    """Request to call a computation function.
+
+    The computation is applied to the currently selected objects in DataLab.
+    """
+
+    name: str = Field(
+        ..., description="Computation function name (e.g., 'normalize', 'fft')"
+    )
+    param: dict[str, Any] | None = Field(
+        None,
+        description="Computation parameters as a dictionary. "
+        "Keys are parameter names, values are parameter values.",
+    )
+
+
+class CalcResponse(BaseModel):
+    """Response from a computation."""
+
+    success: bool = Field(..., description="Whether computation succeeded")
+    function: str = Field(..., description="Name of the computation function called")
+    result_names: list[str] = Field(
+        default_factory=list, description="Names of newly created result objects"
+    )

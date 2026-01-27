@@ -43,22 +43,25 @@ if TYPE_CHECKING:
 
 
 class MainThreadExecutor(QObject):
-    """Helper to execute functions on the main thread.
+    """Helper to execute functions on the main thread using Qt signals.
 
-    Note: Thread marshalling is currently disabled due to Qt event loop issues
-    when running DataLab in certain modes. The WebAPI operations work in
-    practice for sequential HTTP calls.
+    Thread marshalling is currently disabled - all operations run directly.
+    This is because proper Qt thread marshalling requires complex synchronization
+    that can cause deadlocks in the current architecture.
+
+    TODO: Implement proper thread marshalling when DataLab's threading model
+    is refactored.
 
     Important: This class must be instantiated on the main thread!
     """
 
     def __init__(self) -> None:
         super().__init__()
-        # Track if we're on the main thread
-        self._main_thread = threading.current_thread()
 
     def run_on_main_thread(self, func) -> Any:
-        """Run a function on the main thread and wait for result.
+        """Run a function (currently runs directly, not on main thread).
+
+        Thread marshalling is disabled - see class docstring.
 
         Args:
             func: Zero-argument callable to execute.
@@ -69,9 +72,7 @@ class MainThreadExecutor(QObject):
         Raises:
             Any exception raised by the function.
         """
-        # TODO: Thread marshalling is currently disabled due to Qt event loop
-        # issues when running in test mode. The WebAPI operations are not
-        # thread-safe but work in practice for sequential HTTP calls.
+        # Thread marshalling disabled - just run directly
         return func()
 
 
@@ -382,3 +383,206 @@ class WorkspaceAdapter(QObject):
                     panel.remove_all_objects()
 
         self._executor.run_on_main_thread(do_clear)
+
+    # =========================================================================
+    # Computation operations (for calc API)
+    # =========================================================================
+
+    def select_objects(
+        self, names: list[str], panel: str | None = None
+    ) -> tuple[list[str], str]:
+        """Select objects by name in a panel.
+
+        This operation is marshaled to the Qt main thread for thread safety.
+
+        Args:
+            names: List of object names/titles to select.
+            panel: Panel name ("signal" or "image"). None = auto-detect or current.
+
+        Returns:
+            Tuple of (list of selected names, panel name).
+
+        Raises:
+            KeyError: If any object not found.
+            ValueError: If objects span multiple panels.
+        """
+        self._ensure_main_window()
+
+        def do_select():
+            # Determine panel for each object
+            panels_found = set()
+            obj_indices = []
+
+            for name in names:
+                obj_panel = self.get_object_panel(name)
+                if obj_panel is None:
+                    raise KeyError(f"Object '{name}' not found")
+                panels_found.add(obj_panel)
+
+            if len(panels_found) > 1:
+                raise ValueError(
+                    "Cannot select objects from multiple panels. "
+                    f"Found objects in: {panels_found}"
+                )
+
+            if panel is not None:
+                target_panel = panel
+            elif panels_found:
+                target_panel = panels_found.pop()
+            else:
+                target_panel = "signal"
+
+            # Get the panel widget
+            if target_panel == "signal":
+                panel_widget = self._main_window.signalpanel
+            else:
+                panel_widget = self._main_window.imagepanel
+
+            # Find object indices (1-based) by name
+            for name in names:
+                for idx, obj in enumerate(panel_widget.objmodel):
+                    if obj.title == name:
+                        obj_indices.append(idx + 1)  # 1-based indexing
+                        break
+
+            # Select the objects using the panel's method
+            if obj_indices:
+                panel_widget.objview.select_objects(obj_indices)
+
+            return names, target_panel
+
+        return self._executor.run_on_main_thread(do_select)
+
+    def get_selected_objects(self, panel: str | None = None) -> list[str]:
+        """Get names of currently selected objects.
+
+        Args:
+            panel: Panel name. None = current panel.
+
+        Returns:
+            List of selected object names.
+        """
+        self._ensure_main_window()
+
+        def do_get_selected():
+            if panel == "signal":
+                panel_widget = self._main_window.signalpanel
+            elif panel == "image":
+                panel_widget = self._main_window.imagepanel
+            else:
+                # Use current panel
+                panel_widget = self._main_window.tabwidget.currentWidget()
+                if not hasattr(panel_widget, "objmodel"):
+                    return []
+
+            return [obj.title for obj in panel_widget.objview.get_sel_objects()]
+
+        return self._executor.run_on_main_thread(do_get_selected)
+
+    def calc(self, name: str, param: dict | None = None) -> tuple[bool, list[str]]:
+        """Call a computation function on currently selected objects.
+
+        This operation is marshaled to the Qt main thread for thread safety.
+
+        Args:
+            name: Computation function name (e.g., "normalize", "fft").
+            param: Optional parameters as a dictionary.
+
+        Returns:
+            Tuple of (success, list of new object names created).
+
+        Raises:
+            ValueError: If computation function not found.
+        """
+        self._ensure_main_window()
+
+        def do_calc():
+            # Get objects before calc to track new ones
+            before_names = set(self._get_all_object_names())
+
+            # Convert param dict to DataSet if provided
+            param_dataset = None
+            if param is not None:
+                param_dataset = self._dict_to_dataset(name, param)
+
+            # Call the main window's calc method
+            try:
+                self._main_window.calc(name, param_dataset)
+                success = True
+            except ValueError:
+                raise
+            except Exception as e:  # pylint: disable=broad-exception-caught
+                raise RuntimeError(f"Computation '{name}' failed: {e}") from e
+
+            # Get objects after calc to find new ones
+            after_names = set(self._get_all_object_names())
+            new_names = list(after_names - before_names)
+
+            return success, new_names
+
+        return self._executor.run_on_main_thread(do_calc)
+
+    def _get_all_object_names(self) -> list[str]:
+        """Get all object names from all panels."""
+        names = []
+        for panel in [self._main_window.signalpanel, self._main_window.imagepanel]:
+            if panel is not None:
+                for obj in panel.objmodel:
+                    names.append(obj.title)
+        return names
+
+    def _dict_to_dataset(self, func_name: str, param_dict: dict):
+        """Convert a parameter dictionary to a DataSet object.
+
+        This looks up the parameter class for the given function and
+        creates an instance with the provided values.
+
+        Args:
+            func_name: Computation function name.
+            param_dict: Dictionary of parameter values.
+
+        Returns:
+            DataSet instance, or None if no parameters needed.
+        """
+        import guidata.dataset as gds  # pylint: disable=import-outside-toplevel
+
+        # Try to find the parameter class from the processor
+        # First, look in the current panel's processor
+        panel = self._main_window.tabwidget.currentWidget()
+        if hasattr(panel, "processor"):
+            try:
+                feature = panel.processor.get_feature(func_name)
+                if feature.paramclass is not None:
+                    # Create instance and set values
+                    param_obj = feature.paramclass()
+                    for key, value in param_dict.items():
+                        if hasattr(param_obj, key):
+                            setattr(param_obj, key, value)
+                    return param_obj
+            except ValueError:
+                pass
+
+        # Fallback: try to import common parameter classes from sigima
+        try:
+            import sigima.params  # pylint: disable=import-outside-toplevel
+
+            # Try to find matching param class (e.g., "normalize" -> NormalizeParam)
+            param_class_name = func_name.title().replace("_", "") + "Param"
+            if hasattr(sigima.params, param_class_name):
+                param_class = getattr(sigima.params, param_class_name)
+                return param_class.create(**param_dict)
+        except ImportError:
+            pass
+
+        # If we can't find a param class, create a simple DataSet
+        if param_dict:
+
+            class DynamicParam(gds.DataSet):
+                pass
+
+            param_obj = DynamicParam()
+            for key, value in param_dict.items():
+                setattr(param_obj, key, value)
+            return param_obj
+
+        return None

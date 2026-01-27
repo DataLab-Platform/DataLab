@@ -34,10 +34,14 @@ from datalab import __version__
 from datalab.webapi.adapter import WorkspaceAdapter
 from datalab.webapi.schema import (
     ApiStatus,
+    CalcRequest,
+    CalcResponse,
     ErrorResponse,
     MetadataPatchRequest,
     ObjectListResponse,
     ObjectMetadata,
+    SelectObjectsRequest,
+    SelectObjectsResponse,
 )
 from datalab.webapi.serialization import (
     deserialize_object_from_npz,
@@ -429,4 +433,119 @@ async def put_object_data(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error adding object '{name}': {e}",
+        ) from e
+
+
+# =============================================================================
+# Computation endpoints
+# =============================================================================
+
+
+@router.post(
+    "/select",
+    response_model=SelectObjectsResponse,
+    responses={
+        401: {"model": ErrorResponse},
+        404: {"model": ErrorResponse},
+        422: {"model": ErrorResponse},
+    },
+)
+async def select_objects(
+    request: SelectObjectsRequest,
+    _token: str = Depends(verify_token),
+    adapter: WorkspaceAdapter = Depends(get_adapter),
+) -> SelectObjectsResponse:
+    """Select objects in a panel.
+
+    Selects the specified objects by name, making them the active selection
+    for subsequent operations like ``calc``.
+
+    Args:
+        request: Selection request with object names and optional panel.
+
+    Returns:
+        List of selected object names and the panel.
+    """
+    try:
+        panel_str = request.panel.value if request.panel else None
+        selected, panel = adapter.select_objects(request.selection, panel_str)
+        return SelectObjectsResponse(selected=selected, panel=panel)
+
+    except KeyError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e),
+        ) from e
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(e),
+        ) from e
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error selecting objects: {e}",
+        ) from e
+
+
+@router.post(
+    "/calc",
+    response_model=CalcResponse,
+    responses={
+        401: {"model": ErrorResponse},
+        404: {"model": ErrorResponse},
+        422: {"model": ErrorResponse},
+        500: {"model": ErrorResponse},
+    },
+)
+async def calc(
+    request: CalcRequest,
+    _token: str = Depends(verify_token),
+    adapter: WorkspaceAdapter = Depends(get_adapter),
+) -> CalcResponse:
+    """Call a computation function.
+
+    Executes a DataLab computation function on the currently selected objects.
+    Use the ``/select`` endpoint first to select the objects to process.
+
+    Common computation functions include:
+
+    - Signal: ``normalize``, ``fft``, ``ifft``, ``moving_average``, ``derivative``
+    - Image: ``normalize``, ``rotate``, ``flip``, ``denoise``, ``threshold``
+
+    Args:
+        request: Computation request with function name and optional parameters.
+
+    Returns:
+        Success status and names of any newly created result objects.
+
+    Example request::
+
+        {
+            "name": "normalize",
+            "param": {"method": "maximum"}
+        }
+    """
+    try:
+        success, new_names = adapter.calc(request.name, request.param)
+        return CalcResponse(
+            success=success,
+            function=request.name,
+            result_names=new_names,
+        )
+
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Unknown computation function '{request.name}': {e}",
+        ) from e
+    except RuntimeError as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(e),
+        ) from e
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Computation error: {e}",
         ) from e
