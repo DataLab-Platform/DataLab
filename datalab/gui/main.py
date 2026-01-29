@@ -1503,7 +1503,9 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             raise ValueError(f"Unknown panel {panel}")
 
     @remote_controlled
-    def calc(self, name: str, param: gds.DataSet | None = None) -> None:
+    def calc(
+        self, name: str, param: gds.DataSet | None = None, edit: bool = True
+    ) -> None:
         """Call computation feature ``name``
 
         .. note::
@@ -1516,6 +1518,8 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         Args:
             name: Compute function name
             param: Compute function parameter. Defaults to None.
+            edit: Whether to show parameter edit dialog. Defaults to True.
+             Set to False when calling from remote/API to avoid blocking dialogs.
 
         Raises:
             ValueError: unknown function
@@ -1539,7 +1543,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                 # registered feature:
                 try:
                     feature = panel.processor.get_feature(name)
-                    panel.processor.run_feature(feature, param)
+                    panel.processor.run_feature(feature, param, edit=edit)
                     return
                 except ValueError:
                     continue

@@ -29,7 +29,6 @@ handlers via FastAPI dependency injection.
 
 from __future__ import annotations
 
-import threading
 from typing import TYPE_CHECKING, Any, Union
 
 from qtpy.QtCore import QObject
@@ -505,9 +504,10 @@ class WorkspaceAdapter(QObject):
             if param is not None:
                 param_dataset = self._dict_to_dataset(name, param)
 
-            # Call the main window's calc method
+            # Call the main window's calc method with edit=False to prevent
+            # blocking modal dialogs when called from the API
             try:
-                self._main_window.calc(name, param_dataset)
+                self._main_window.calc(name, param_dataset, edit=False)
                 success = True
             except ValueError:
                 raise
