@@ -154,6 +154,7 @@ class WebApiController(QObject):
             # pylint: disable=import-outside-toplevel
             import uvicorn
             from fastapi import FastAPI
+            from fastapi.middleware.cors import CORSMiddleware
 
             from datalab.webapi.adapter import WorkspaceAdapter
             from datalab.webapi.routes import (
@@ -191,6 +192,27 @@ class WebApiController(QObject):
                 description="HTTP/JSON API for DataLab workspace access",
                 version="1.0.0",
             )
+
+            # Add CORS middleware for JupyterLite and other browser-based clients
+            app.add_middleware(
+                CORSMiddleware,
+                allow_origins=["*"],  # Allow all origins for JupyterLite
+                allow_credentials=True,
+                allow_methods=["*"],
+                allow_headers=["*"],
+            )
+
+            # Add Private Network Access headers for browser-to-localhost requests
+            # This allows JupyterLite (HTTPS public origin) to reach local DataLab
+            # See: https://wicg.github.io/private-network-access/
+            @app.middleware("http")
+            async def add_private_network_access_headers(request, call_next):
+                response = await call_next(request)
+                # Handle preflight for Private Network Access
+                if request.headers.get("Access-Control-Request-Private-Network"):
+                    response.headers["Access-Control-Allow-Private-Network"] = "true"
+                return response
+
             app.include_router(router)
 
             # Configure Uvicorn
