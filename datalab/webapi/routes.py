@@ -25,6 +25,7 @@ The token is generated when the server starts and must be included in the
 from __future__ import annotations
 
 import secrets
+import traceback
 from typing import Annotated
 from urllib.parse import quote
 
@@ -369,9 +370,10 @@ async def get_object_data(
             detail=f"Object '{name}' not found",
         ) from e
     except Exception as e:  # pylint: disable=broad-exception-caught
+        tb = traceback.format_exc()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error retrieving object '{name}': {e}",
+            detail=f"Error retrieving object '{name}': {e}\n\nTraceback:\n{tb}",
         ) from e
 
 

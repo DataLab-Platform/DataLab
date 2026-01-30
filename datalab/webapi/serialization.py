@@ -46,11 +46,58 @@ if TYPE_CHECKING:
     DataObject = Union[SignalObj, ImageObj]
 
 
+def _to_python_scalar(value):
+    """Convert numpy scalar types to Python native types for JSON serialization.
+
+    Args:
+        value: Any value, possibly a numpy scalar.
+
+    Returns:
+        Python native type if input was a numpy scalar, otherwise unchanged.
+    """
+    if isinstance(value, np.integer):
+        return int(value)
+    if isinstance(value, np.floating):
+        return float(value)
+    if isinstance(value, np.bool_):
+        return bool(value)
+    return value
+
+
+def _make_json_serializable(value):
+    """Recursively convert a value to be JSON serializable.
+
+    Handles numpy arrays, numpy scalars, nested dicts, and lists.
+
+    Args:
+        value: Any value that may contain numpy types.
+
+    Returns:
+        JSON-serializable value.
+    """
+    if isinstance(value, dict):
+        return {k: _make_json_serializable(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_make_json_serializable(item) for item in value]
+    if isinstance(value, tuple):
+        return [_make_json_serializable(item) for item in value]
+    if isinstance(value, np.ndarray):
+        return value.tolist()
+    if isinstance(value, np.integer):
+        return int(value)
+    if isinstance(value, np.floating):
+        return float(value)
+    if isinstance(value, np.bool_):
+        return bool(value)
+    return value
+
+
 def _serialize_obj_metadata(obj_metadata: dict) -> dict:
     """Convert object metadata to JSON-serializable format.
 
     Handles numpy arrays (from GeometryResult.coords, TableResult, etc.)
-    by converting them to nested lists.
+    by converting them to nested lists, and numpy scalar types (int64, float64)
+    to Python native types.
 
     Args:
         obj_metadata: The object's metadata dictionary.
@@ -58,16 +105,7 @@ def _serialize_obj_metadata(obj_metadata: dict) -> dict:
     Returns:
         JSON-serializable dictionary.
     """
-    result = {}
-    for key, value in obj_metadata.items():
-        if isinstance(value, dict):
-            # Recursively handle nested dicts (like GeometryResult.to_dict())
-            result[key] = _serialize_obj_metadata(value)
-        elif isinstance(value, np.ndarray):
-            result[key] = value.tolist()
-        else:
-            result[key] = value
-    return result
+    return _make_json_serializable(obj_metadata)
 
 
 def _deserialize_obj_metadata(serialized: dict) -> dict:
@@ -159,7 +197,8 @@ def _serialize_signal(obj, buffer: io.BytesIO, *, compress: bool = True) -> None
 
 def _serialize_image(obj, buffer: io.BytesIO, *, compress: bool = True) -> None:
     """Serialize an ImageObj to NPZ format."""
-    # Build metadata dict
+    # Build metadata dict - use _to_python_scalar for numeric values that may be
+    # numpy scalars after HDF5 deserialization
     metadata = {
         "type": "image",
         "title": getattr(obj, "title", None),
@@ -169,10 +208,10 @@ def _serialize_image(obj, buffer: io.BytesIO, *, compress: bool = True) -> None:
         "xunit": getattr(obj, "xunit", None),
         "yunit": getattr(obj, "yunit", None),
         "zunit": getattr(obj, "zunit", None),
-        "x0": getattr(obj, "x0", 0.0),
-        "y0": getattr(obj, "y0", 0.0),
-        "dx": getattr(obj, "dx", 1.0),
-        "dy": getattr(obj, "dy", 1.0),
+        "x0": _to_python_scalar(getattr(obj, "x0", 0.0)),
+        "y0": _to_python_scalar(getattr(obj, "y0", 0.0)),
+        "dx": _to_python_scalar(getattr(obj, "dx", 1.0)),
+        "dy": _to_python_scalar(getattr(obj, "dy", 1.0)),
     }
     # Include object metadata (contains Geometry_*, Table_* results)
     obj_metadata = getattr(obj, "metadata", None)
@@ -340,10 +379,10 @@ def object_to_metadata(obj: DataObject, name: str) -> dict:
             "yunit": getattr(obj, "yunit", None),
             "zunit": getattr(obj, "zunit", None),
             "attributes": {
-                "x0": getattr(obj, "x0", 0.0),
-                "y0": getattr(obj, "y0", 0.0),
-                "dx": getattr(obj, "dx", 1.0),
-                "dy": getattr(obj, "dy", 1.0),
+                "x0": _to_python_scalar(getattr(obj, "x0", 0.0)),
+                "y0": _to_python_scalar(getattr(obj, "y0", 0.0)),
+                "dx": _to_python_scalar(getattr(obj, "dx", 1.0)),
+                "dy": _to_python_scalar(getattr(obj, "dy", 1.0)),
             },
         }
     raise TypeError(f"Unsupported object type: {obj_type}")
