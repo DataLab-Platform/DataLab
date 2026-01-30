@@ -29,9 +29,10 @@ handlers via FastAPI dependency injection.
 
 from __future__ import annotations
 
+import threading
 from typing import TYPE_CHECKING, Any, Union
 
-from qtpy.QtCore import QObject
+from qtpy.QtCore import QCoreApplication, QObject, QThread, Signal, Slot
 
 from datalab.objectmodel import get_uuid
 
@@ -44,23 +45,51 @@ if TYPE_CHECKING:
 class MainThreadExecutor(QObject):
     """Helper to execute functions on the main thread using Qt signals.
 
-    Thread marshalling is currently disabled - all operations run directly.
-    This is because proper Qt thread marshalling requires complex synchronization
-    that can cause deadlocks in the current architecture.
+    This class uses Qt's signal/slot mechanism to safely marshal function calls
+    from worker threads (like the Uvicorn server thread) to the Qt main thread.
+    This is essential because Qt GUI operations must be performed on the main
+    thread.
 
-    TODO: Implement proper thread marshalling when DataLab's threading model
-    is refactored.
+    The implementation uses a signal connected with Qt.QueuedConnection to post
+    work to the main thread's event loop, and a threading.Event to synchronize
+    the calling thread with the result.
 
     Important: This class must be instantiated on the main thread!
     """
 
+    # Signal to request execution on main thread
+    _execute_signal = Signal(object, object)  # (func, result_holder)
+
     def __init__(self) -> None:
         super().__init__()
+        # Connect signal to slot - this connection will queue calls to main thread
+        self._execute_signal.connect(self._execute_on_main_thread)
+        # Store the main thread for comparison
+        self._main_thread = QThread.currentThread()
+
+    @Slot(object, object)
+    def _execute_on_main_thread(self, func, result_holder: dict) -> None:
+        """Slot that executes the function on the main thread.
+
+        Args:
+            func: Zero-argument callable to execute.
+            result_holder: Dict to store result/exception and signal completion.
+        """
+        try:
+            result_holder["result"] = func()
+            result_holder["exception"] = None
+        except Exception as e:  # pylint: disable=broad-exception-caught
+            result_holder["result"] = None
+            result_holder["exception"] = e
+        finally:
+            # Signal that execution is complete
+            result_holder["event"].set()
 
     def run_on_main_thread(self, func) -> Any:
-        """Run a function (currently runs directly, not on main thread).
+        """Run a function on the Qt main thread and wait for the result.
 
-        Thread marshalling is disabled - see class docstring.
+        If already on the main thread, executes directly. Otherwise, uses
+        Qt's signal/slot mechanism to marshal the call to the main thread.
 
         Args:
             func: Zero-argument callable to execute.
@@ -71,8 +100,33 @@ class MainThreadExecutor(QObject):
         Raises:
             Any exception raised by the function.
         """
-        # Thread marshalling disabled - just run directly
-        return func()
+        # Check if we're already on the main thread
+        if QThread.currentThread() == self._main_thread:
+            return func()
+
+        # Create result holder with synchronization event
+        result_holder = {
+            "result": None,
+            "exception": None,
+            "event": threading.Event(),
+        }
+
+        # Emit signal to queue execution on main thread
+        self._execute_signal.emit(func, result_holder)
+
+        # Wait for execution to complete
+        # Use a timeout to avoid hanging forever if something goes wrong
+        if not result_holder["event"].wait(timeout=30.0):
+            raise TimeoutError("Main thread execution timed out after 30 seconds")
+
+        # Process pending events to ensure UI updates are applied
+        QCoreApplication.processEvents()
+
+        # Re-raise any exception from the main thread
+        if result_holder["exception"] is not None:
+            raise result_holder["exception"]
+
+        return result_holder["result"]
 
 
 class WorkspaceAdapter(QObject):
