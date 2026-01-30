@@ -46,11 +46,14 @@ if TYPE_CHECKING:
     DataObject = Union[SignalObj, ImageObj]
 
 
-def serialize_object_to_npz(obj: DataObject) -> bytes:
+def serialize_object_to_npz(obj: DataObject, *, compress: bool = True) -> bytes:
     """Serialize a SignalObj or ImageObj to NPZ format.
 
     Args:
         obj: The object to serialize.
+        compress: If True (default), use ZIP deflate compression.
+            Set to False for faster serialization at the cost of larger size.
+            For incompressible data (random images), False can be 10-30x faster.
 
     Returns:
         Bytes containing the NPZ archive.
@@ -64,16 +67,16 @@ def serialize_object_to_npz(obj: DataObject) -> bytes:
     obj_type = type(obj).__name__
 
     if obj_type == "SignalObj":
-        _serialize_signal(obj, buffer)
+        _serialize_signal(obj, buffer, compress=compress)
     elif obj_type == "ImageObj":
-        _serialize_image(obj, buffer)
+        _serialize_image(obj, buffer, compress=compress)
     else:
         raise TypeError(f"Unsupported object type: {obj_type}")
 
     return buffer.getvalue()
 
 
-def _serialize_signal(obj, buffer: io.BytesIO) -> None:
+def _serialize_signal(obj, buffer: io.BytesIO, *, compress: bool = True) -> None:
     """Serialize a SignalObj to NPZ format."""
     # Build metadata dict
     metadata = {
@@ -86,7 +89,8 @@ def _serialize_signal(obj, buffer: io.BytesIO) -> None:
     }
 
     # Create zip archive
-    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zf:
+    compression = zipfile.ZIP_DEFLATED if compress else zipfile.ZIP_STORED
+    with zipfile.ZipFile(buffer, "w", compression) as zf:
         # Write arrays
         _write_array_to_zip(zf, "x.npy", obj.x)
         _write_array_to_zip(zf, "y.npy", obj.y)
@@ -100,7 +104,7 @@ def _serialize_signal(obj, buffer: io.BytesIO) -> None:
         zf.writestr("metadata.json", json.dumps(metadata, ensure_ascii=False))
 
 
-def _serialize_image(obj, buffer: io.BytesIO) -> None:
+def _serialize_image(obj, buffer: io.BytesIO, *, compress: bool = True) -> None:
     """Serialize an ImageObj to NPZ format."""
     # Build metadata dict
     metadata = {
@@ -119,7 +123,8 @@ def _serialize_image(obj, buffer: io.BytesIO) -> None:
     }
 
     # Create zip archive
-    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zf:
+    compression = zipfile.ZIP_DEFLATED if compress else zipfile.ZIP_STORED
+    with zipfile.ZipFile(buffer, "w", compression) as zf:
         _write_array_to_zip(zf, "data.npy", obj.data)
         zf.writestr("metadata.json", json.dumps(metadata, ensure_ascii=False))
 

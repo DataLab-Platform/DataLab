@@ -321,6 +321,7 @@ async def update_object_metadata(
 )
 async def get_object_data(
     name: str,
+    compress: bool = True,
     _token: str = Depends(verify_token),
     adapter: WorkspaceAdapter = Depends(get_adapter),
 ) -> Response:
@@ -331,13 +332,17 @@ async def get_object_data(
 
     Args:
         name: Object name/title.
+        compress: If True (default), use ZIP deflate compression.
+            Set to False for faster serialization (10-30x) at the cost of
+            larger size (~10% increase for typical image data).
+            Recommended: False for large images and fast local connections.
 
     Returns:
         Binary NPZ archive.
     """
     try:
         obj = adapter.get_object(name)
-        npz_data = serialize_object_to_npz(obj)
+        npz_data = serialize_object_to_npz(obj, compress=compress)
 
         # Build Content-Disposition header with safe filename
         # Use RFC 5987 encoding for non-ASCII characters, or fallback to ASCII
