@@ -46,6 +46,55 @@ if TYPE_CHECKING:
     DataObject = Union[SignalObj, ImageObj]
 
 
+def _serialize_obj_metadata(obj_metadata: dict) -> dict:
+    """Convert object metadata to JSON-serializable format.
+
+    Handles numpy arrays (from GeometryResult.coords, TableResult, etc.)
+    by converting them to nested lists.
+
+    Args:
+        obj_metadata: The object's metadata dictionary.
+
+    Returns:
+        JSON-serializable dictionary.
+    """
+    result = {}
+    for key, value in obj_metadata.items():
+        if isinstance(value, dict):
+            # Recursively handle nested dicts (like GeometryResult.to_dict())
+            result[key] = _serialize_obj_metadata(value)
+        elif isinstance(value, np.ndarray):
+            result[key] = value.tolist()
+        else:
+            result[key] = value
+    return result
+
+
+def _deserialize_obj_metadata(serialized: dict) -> dict:
+    """Convert deserialized metadata back to original types.
+
+    Converts nested lists back to numpy arrays where appropriate
+    (for coords fields in geometry results).
+
+    Args:
+        serialized: The JSON-deserialized metadata.
+
+    Returns:
+        Metadata with numpy arrays restored.
+    """
+    result = {}
+    for key, value in serialized.items():
+        if isinstance(value, dict):
+            # Recursively handle nested dicts
+            result[key] = _deserialize_obj_metadata(value)
+        elif isinstance(value, list) and key == "coords":
+            # Convert coords back to numpy array
+            result[key] = np.array(value)
+        else:
+            result[key] = value
+    return result
+
+
 def serialize_object_to_npz(obj: DataObject, *, compress: bool = True) -> bytes:
     """Serialize a SignalObj or ImageObj to NPZ format.
 
@@ -87,6 +136,10 @@ def _serialize_signal(obj, buffer: io.BytesIO, *, compress: bool = True) -> None
         "xunit": getattr(obj, "xunit", None),
         "yunit": getattr(obj, "yunit", None),
     }
+    # Include object metadata (contains Geometry_*, Table_* results)
+    obj_metadata = getattr(obj, "metadata", None)
+    if obj_metadata:
+        metadata["obj_metadata"] = _serialize_obj_metadata(obj_metadata)
 
     # Create zip archive
     compression = zipfile.ZIP_DEFLATED if compress else zipfile.ZIP_STORED
@@ -121,6 +174,10 @@ def _serialize_image(obj, buffer: io.BytesIO, *, compress: bool = True) -> None:
         "dx": getattr(obj, "dx", 1.0),
         "dy": getattr(obj, "dy", 1.0),
     }
+    # Include object metadata (contains Geometry_*, Table_* results)
+    obj_metadata = getattr(obj, "metadata", None)
+    if obj_metadata:
+        metadata["obj_metadata"] = _serialize_obj_metadata(obj_metadata)
 
     # Create zip archive
     compression = zipfile.ZIP_DEFLATED if compress else zipfile.ZIP_STORED
@@ -199,6 +256,10 @@ def _deserialize_signal(zf: zipfile.ZipFile, metadata: dict) -> DataObject:
     if metadata.get("yunit"):
         obj.yunit = metadata["yunit"]
 
+    # Restore object metadata (Geometry_*, Table_* results)
+    if metadata.get("obj_metadata"):
+        obj.metadata = _deserialize_obj_metadata(metadata["obj_metadata"])
+
     return obj
 
 
@@ -232,6 +293,10 @@ def _deserialize_image(zf: zipfile.ZipFile, metadata: dict) -> DataObject:
     obj.y0 = metadata.get("y0", 0.0)
     obj.dx = metadata.get("dx", 1.0)
     obj.dy = metadata.get("dy", 1.0)
+
+    # Restore object metadata (Geometry_*, Table_* results)
+    if metadata.get("obj_metadata"):
+        obj.metadata = _deserialize_obj_metadata(metadata["obj_metadata"])
 
     return obj
 
