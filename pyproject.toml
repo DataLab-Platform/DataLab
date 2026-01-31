@@ -96,7 +96,7 @@ doc = [
     "sphinx-copybutton",
     "pydata-sphinx-theme",
 ]
-test = ["pytest", "pytest-xvfb"]
+test = ["pytest", "pytest-xvfb", "httpx"]
 
 [tool.setuptools.packages.find]
 include = ["datalab*"]

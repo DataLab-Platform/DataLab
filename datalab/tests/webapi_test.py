@@ -266,22 +266,145 @@ class TestAuthToken:
 # They are marked for opt-in execution
 
 
+class MockWorkspaceAdapter:
+    """Mock workspace adapter for testing."""
+
+    def __init__(self):
+        self._objects: dict[str, SignalObj | ImageObj] = {}
+
+    def add_object(self, name: str, obj: SignalObj | ImageObj) -> None:
+        """Add an object to the mock workspace."""
+        self._objects[name] = obj
+
+    def list_objects(self) -> list[tuple[str, str]]:
+        """List all objects in the mock workspace."""
+        result = []
+        for name, obj in self._objects.items():
+            panel = "signal" if type(obj).__name__ == "SignalObj" else "image"
+            result.append((name, panel))
+        return result
+
+    def get_object(self, name: str) -> SignalObj | ImageObj:
+        """Get an object by name."""
+        if name not in self._objects:
+            raise KeyError(f"Object '{name}' not found")
+        return self._objects[name]
+
+
 class TestAPIEndpointsWithMock:
     """Integration tests using a mock workspace adapter."""
 
-    # These tests would use httpx.MockTransport or similar
-    # to test the full HTTP flow without a real DataLab instance
+    @pytest.fixture
+    def test_client(self):
+        """Create a test client with mock adapter."""
+        from fastapi import FastAPI
+        from fastapi.testclient import TestClient
 
-    def test_status_endpoint(self):
-        """Test the /api/v1/status endpoint (no auth required).
+        from datalab.webapi.routes import (
+            router,
+            set_adapter,
+            set_auth_token,
+            set_server_url,
+        )
 
-        TODO: Implement with mock adapter - This would set up a test client
-        and verify status response.
-        """
+        # Create a fresh app with the router
+        app = FastAPI()
+        app.include_router(router)
 
-    def test_list_objects_requires_auth(self):
-        """Test that /api/v1/objects requires authentication.
+        # Set up mock adapter and auth
+        mock_adapter = MockWorkspaceAdapter()
+        test_token = "test-token-12345"
 
-        TODO: Implement with mock adapter - This would verify 401 response
-        without token.
-        """
+        set_adapter(mock_adapter)
+        set_auth_token(test_token)
+        set_server_url("http://localhost:8000")
+
+        client = TestClient(app)
+        return client, test_token, mock_adapter
+
+    def test_status_endpoint(self, test_client):
+        """Test the /api/v1/status endpoint (no auth required)."""
+        client, _token, _adapter = test_client
+
+        response = client.get("/api/v1/status")
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["running"] is True
+        assert "version" in data
+        assert data["api_version"] == "v1"
+        assert data["url"] == "http://localhost:8000"
+        assert data["workspace_mode"] == "live"
+
+    def test_list_objects_requires_auth(self, test_client):
+        """Test that /api/v1/objects requires authentication."""
+        client, _token, _adapter = test_client
+
+        # Request without Authorization header should return 401
+        response = client.get("/api/v1/objects")
+
+        assert response.status_code == 401
+        assert "WWW-Authenticate" in response.headers
+        assert response.headers["WWW-Authenticate"] == "Bearer"
+
+    def test_list_objects_with_invalid_token(self, test_client):
+        """Test that /api/v1/objects rejects invalid tokens."""
+        client, _token, _adapter = test_client
+
+        response = client.get(
+            "/api/v1/objects", headers={"Authorization": "Bearer wrong-token"}
+        )
+
+        assert response.status_code == 401
+
+    def test_list_objects_with_valid_token(self, test_client):
+        """Test that /api/v1/objects works with valid token."""
+        client, token, adapter = test_client
+
+        # Add a test signal to the mock adapter
+        x = np.linspace(0, 10, 50)
+        y = np.sin(x)
+        signal = SignalObj()
+        signal.set_xydata(x, y)
+        signal.title = "Test Signal"
+        adapter.add_object("Test Signal", signal)
+
+        response = client.get(
+            "/api/v1/objects", headers={"Authorization": f"Bearer {token}"}
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["count"] == 1
+        assert len(data["objects"]) == 1
+        assert data["objects"][0]["name"] == "Test Signal"
+        assert data["objects"][0]["type"] == "signal"
+
+    def test_list_objects_empty_workspace(self, test_client):
+        """Test listing objects in an empty workspace."""
+        client, token, _adapter = test_client
+
+        response = client.get(
+            "/api/v1/objects", headers={"Authorization": f"Bearer {token}"}
+        )
+
+        assert response.status_code == 200
+        data = response.json()
+        assert data["count"] == 0
+        assert data["objects"] == []
+
+    def test_invalid_auth_header_format(self, test_client):
+        """Test that malformed Authorization headers are rejected."""
+        client, _token, _adapter = test_client
+
+        # Missing "Bearer" prefix
+        response = client.get(
+            "/api/v1/objects", headers={"Authorization": "test-token-12345"}
+        )
+        assert response.status_code == 401
+
+        # Wrong prefix
+        response = client.get(
+            "/api/v1/objects", headers={"Authorization": "Basic test-token-12345"}
+        )
+        assert response.status_code == 401
