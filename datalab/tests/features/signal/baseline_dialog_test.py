@@ -15,7 +15,7 @@ import sigima.objects
 import sigima.proc.signal as sips
 from guidata.qthelpers import exec_dialog, qt_app_context
 from sigima.tests.data import create_paracetamol_signal
-from sigima.tests.vistools import view_curves
+from sigima.viz import view_curves
 
 from datalab.env import execenv
 from datalab.widgets.signalbaseline import SignalBaselineDialog

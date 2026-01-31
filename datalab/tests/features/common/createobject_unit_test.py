@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import sigima.objects
 from guidata.qthelpers import qt_app_context
-from sigima.tests.vistools import view_curves, view_images
+from sigima.viz import view_curves, view_images
 
 from datalab.env import execenv
 from datalab.gui.newobject import create_image_gui, create_signal_gui
