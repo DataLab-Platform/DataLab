@@ -50,6 +50,10 @@ dependencies = [
     "PyWavelets >= 1.2, < 2.0",
     "psutil >= 5.8",
     "packaging >= 21.3",
+    # Web API server for HTTP/JSON remote control and notebook integration
+    "fastapi >= 0.110.0",
+    "uvicorn[standard] >= 0.27.0",
+    "pydantic >= 2.0",
 ]
 dynamic = ["version"]
 
@@ -65,12 +69,6 @@ datalab-tests = "datalab.tests:run"
 [project.optional-dependencies]
 qt = ["PyQt5 >= 5.15.6"]
 opencv = ["opencv-python-headless >= 4.8.1.78"]
-webapi = [
-    # Web API server for HTTP/JSON remote control and notebook integration
-    "fastapi >= 0.110.0",
-    "uvicorn[standard] >= 0.27.0",
-    "pydantic >= 2.0",
-]
 exe = [
     # This section is used to build the standalone executable with PyInstaller for the
     # official stand-alone releases of DataLab.

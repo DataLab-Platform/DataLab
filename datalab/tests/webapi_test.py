@@ -38,19 +38,6 @@ from datalab.webapi.serialization import (
     serialize_object_to_npz,
 )
 
-# Check if webapi dependencies are available
-try:
-    import uvicorn
-
-    WEBAPI_AVAILABLE = uvicorn is not None  # Actually use the import
-except ImportError:
-    WEBAPI_AVAILABLE = False
-
-
-pytestmark = pytest.mark.skipif(
-    not WEBAPI_AVAILABLE, reason="Web API dependencies not installed"
-)
-
 
 class TestNPZSerialization:
     """Tests for NPZ serialization module."""
