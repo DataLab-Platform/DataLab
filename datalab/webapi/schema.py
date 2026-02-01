@@ -25,7 +25,7 @@ Design Principles
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any
+from typing import Any, Optional
 
 from pydantic import BaseModel, Field
 
@@ -50,13 +50,13 @@ class ObjectMetadata(BaseModel):
     dtype: str = Field(..., description="NumPy dtype string (e.g., 'float64')")
 
     # Optional metadata
-    title: str | None = Field(None, description="Display title")
-    xlabel: str | None = Field(None, description="X-axis label")
-    ylabel: str | None = Field(None, description="Y-axis label")
-    zlabel: str | None = Field(None, description="Z-axis label (images only)")
-    xunit: str | None = Field(None, description="X-axis unit")
-    yunit: str | None = Field(None, description="Y-axis unit")
-    zunit: str | None = Field(None, description="Z-axis unit (images only)")
+    title: Optional[str] = Field(None, description="Display title")
+    xlabel: Optional[str] = Field(None, description="X-axis label")
+    ylabel: Optional[str] = Field(None, description="Y-axis label")
+    zlabel: Optional[str] = Field(None, description="Z-axis label (images only)")
+    xunit: Optional[str] = Field(None, description="X-axis unit")
+    yunit: Optional[str] = Field(None, description="Y-axis unit")
+    zunit: Optional[str] = Field(None, description="Z-axis unit (images only)")
 
     # Extended attributes
     attributes: dict[str, Any] = Field(
@@ -81,13 +81,13 @@ class ObjectCreateRequest(BaseModel):
     overwrite: bool = Field(False, description="Replace existing object if present")
 
     # Optional metadata to set
-    title: str | None = Field(None, description="Display title")
-    xlabel: str | None = Field(None, description="X-axis label")
-    ylabel: str | None = Field(None, description="Y-axis label")
-    zlabel: str | None = Field(None, description="Z-axis label (images only)")
-    xunit: str | None = Field(None, description="X-axis unit")
-    yunit: str | None = Field(None, description="Y-axis unit")
-    zunit: str | None = Field(None, description="Z-axis unit (images only)")
+    title: Optional[str] = Field(None, description="Display title")
+    xlabel: Optional[str] = Field(None, description="X-axis label")
+    ylabel: Optional[str] = Field(None, description="Y-axis label")
+    zlabel: Optional[str] = Field(None, description="Z-axis label (images only)")
+    xunit: Optional[str] = Field(None, description="X-axis unit")
+    yunit: Optional[str] = Field(None, description="Y-axis unit")
+    zunit: Optional[str] = Field(None, description="Z-axis unit (images only)")
     attributes: dict[str, Any] = Field(
         default_factory=dict, description="Additional metadata"
     )
@@ -96,14 +96,14 @@ class ObjectCreateRequest(BaseModel):
 class MetadataPatchRequest(BaseModel):
     """Request to update object metadata."""
 
-    title: str | None = Field(None, description="New display title")
-    xlabel: str | None = Field(None, description="New X-axis label")
-    ylabel: str | None = Field(None, description="New Y-axis label")
-    zlabel: str | None = Field(None, description="New Z-axis label")
-    xunit: str | None = Field(None, description="New X-axis unit")
-    yunit: str | None = Field(None, description="New Y-axis unit")
-    zunit: str | None = Field(None, description="New Z-axis unit")
-    attributes: dict[str, Any] | None = Field(
+    title: Optional[str] = Field(None, description="New display title")
+    xlabel: Optional[str] = Field(None, description="New X-axis label")
+    ylabel: Optional[str] = Field(None, description="New Y-axis label")
+    zlabel: Optional[str] = Field(None, description="New Z-axis label")
+    xunit: Optional[str] = Field(None, description="New X-axis unit")
+    yunit: Optional[str] = Field(None, description="New Y-axis unit")
+    zunit: Optional[str] = Field(None, description="New Z-axis unit")
+    attributes: Optional[dict[str, Any]] = Field(
         None, description="Attributes to merge (not replace)"
     )
 
@@ -114,7 +114,7 @@ class ApiStatus(BaseModel):
     running: bool = Field(..., description="Whether the API server is running")
     version: str = Field(..., description="DataLab version")
     api_version: str = Field("v1", description="API version")
-    url: str | None = Field(None, description="Base URL when running")
+    url: Optional[str] = Field(None, description="Base URL when running")
     workspace_mode: str = Field(..., description="Current workspace mode")
     localhost_no_token: bool = Field(
         False, description="Whether localhost connections can bypass authentication"
@@ -126,7 +126,7 @@ class ErrorResponse(BaseModel):
 
     error: str = Field(..., description="Error type/code")
     message: str = Field(..., description="Human-readable error message")
-    detail: str | None = Field(None, description="Additional detail")
+    detail: Optional[str] = Field(None, description="Additional detail")
 
 
 # Event types for WebSocket (future)
@@ -144,8 +144,8 @@ class WorkspaceEvent(BaseModel):
     """A workspace change event (for WebSocket notifications)."""
 
     event: EventType = Field(..., description="Event type")
-    object_name: str | None = Field(None, description="Affected object name")
-    old_name: str | None = Field(None, description="Old name (for rename events)")
+    object_name: Optional[str] = Field(None, description="Affected object name")
+    old_name: Optional[str] = Field(None, description="Old name (for rename events)")
     timestamp: float = Field(..., description="Unix timestamp")
 
 
@@ -160,7 +160,7 @@ class SelectObjectsRequest(BaseModel):
     selection: list[str] = Field(
         ..., description="List of object names/titles to select"
     )
-    panel: ObjectType | None = Field(
+    panel: Optional[ObjectType] = Field(
         None, description="Panel to select in (signal/image). None = current panel."
     )
 
@@ -181,7 +181,7 @@ class CalcRequest(BaseModel):
     name: str = Field(
         ..., description="Computation function name (e.g., 'normalize', 'fft')"
     )
-    param: dict[str, Any] | None = Field(
+    param: Optional[dict[str, Any]] = Field(
         None,
         description="Computation parameters as a dictionary. "
         "Keys are parameter names, values are parameter values.",
