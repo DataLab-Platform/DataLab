@@ -15,9 +15,17 @@ import zipfile
 
 import numpy as np
 import pytest
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
 from sigima import ImageObj, SignalObj
 
-from datalab.webapi.routes import generate_auth_token
+from datalab.webapi.routes import (
+    generate_auth_token,
+    router,
+    set_adapter,
+    set_auth_token,
+    set_server_url,
+)
 from datalab.webapi.schema import (
     MetadataPatchRequest,
     ObjectListResponse,
@@ -297,16 +305,6 @@ class TestAPIEndpointsWithMock:
     @pytest.fixture
     def test_client(self):
         """Create a test client with mock adapter."""
-        from fastapi import FastAPI
-        from fastapi.testclient import TestClient
-
-        from datalab.webapi.routes import (
-            router,
-            set_adapter,
-            set_auth_token,
-            set_server_url,
-        )
-
         # Create a fresh app with the router
         app = FastAPI()
         app.include_router(router)

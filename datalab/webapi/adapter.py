@@ -124,7 +124,7 @@ class MainThreadExecutor(QObject):
 
         # Re-raise any exception from the main thread
         if result_holder["exception"] is not None:
-            raise result_holder["exception"]
+            raise result_holder["exception"]  # pylint: disable=raising-bad-type
 
         return result_holder["result"]
 
@@ -632,7 +632,7 @@ class WorkspaceAdapter(QObject):
         if param_dict:
 
             class DynamicParam(gds.DataSet):
-                pass
+                """Dynamic parameter class created at runtime."""
 
             param_obj = DynamicParam()
             for key, value in param_dict.items():

@@ -47,6 +47,15 @@ class MainSettings(gds.DataSet):
             "<br>like your own scripts (e.g. from Spyder or Jupyter) or other software."
         ),
     )
+    webapi_localhost_no_token = gds.BoolItem(
+        "",
+        _("Web API localhost bypass"),
+        help=_(
+            "When enabled, connections from localhost (127.0.0.1) to the Web API "
+            "<br>do not require authentication. This simplifies notebook integration "
+            "<br>when DataLab-Kernel runs on the same machine."
+        ),
+    )
     available_memory_threshold = gds.IntItem(
         _("Memory threshold"),
         default=0,

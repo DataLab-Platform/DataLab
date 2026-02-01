@@ -116,6 +116,9 @@ class ApiStatus(BaseModel):
     api_version: str = Field("v1", description="API version")
     url: str | None = Field(None, description="Base URL when running")
     workspace_mode: str = Field(..., description="Current workspace mode")
+    localhost_no_token: bool = Field(
+        False, description="Whether localhost connections can bypass authentication"
+    )
 
 
 class ErrorResponse(BaseModel):

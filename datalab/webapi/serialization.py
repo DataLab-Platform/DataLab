@@ -64,7 +64,7 @@ def _to_python_scalar(value):
     return value
 
 
-def _make_json_serializable(value):
+def _make_json_serializable(value):  # pylint: disable=too-many-return-statements
     """Recursively convert a value to be JSON serializable.
 
     Handles numpy arrays, numpy scalars, nested dicts, and lists.

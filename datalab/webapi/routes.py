@@ -57,6 +57,7 @@ router = APIRouter(prefix="/api/v1", tags=["workspace"])
 _adapter: WorkspaceAdapter | None = None
 _auth_token: str | None = None
 _server_url: str | None = None
+_localhost_no_token: bool = False
 
 
 def set_adapter(adapter: WorkspaceAdapter) -> None:
@@ -77,6 +78,12 @@ def set_server_url(url: str) -> None:
     _server_url = url
 
 
+def set_localhost_no_token(enabled: bool) -> None:
+    """Set whether localhost connections can bypass authentication."""
+    global _localhost_no_token  # noqa: PLW0603  # pylint: disable=global-statement
+    _localhost_no_token = enabled
+
+
 def generate_auth_token() -> str:
     """Generate a secure random authentication token."""
     return secrets.token_urlsafe(32)
@@ -92,18 +99,28 @@ def get_adapter() -> WorkspaceAdapter:
     return _adapter
 
 
-def verify_token(authorization: Annotated[str | None, Header()] = None) -> str:
+def verify_token(
+    request: Request, authorization: Annotated[str | None, Header()] = None
+) -> str | None:
     """Dependency: Verify the bearer token.
 
     Args:
+        request: The incoming request (for client IP check).
         authorization: Authorization header value.
 
     Returns:
-        The validated token.
+        The validated token, or None if localhost bypass is enabled.
 
     Raises:
         HTTPException: If token is missing or invalid.
     """
+    # Check for localhost bypass
+    if _localhost_no_token:
+        client_ip = request.client.host if request.client else None
+        if client_ip in ("127.0.0.1", "::1", "localhost"):
+            # Localhost bypass enabled and request is from localhost
+            return None
+
     if _auth_token is None:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
@@ -154,6 +171,7 @@ async def get_status() -> ApiStatus:
         api_version="v1",
         url=_server_url,
         workspace_mode="live",
+        localhost_no_token=_localhost_no_token,
     )
 
 

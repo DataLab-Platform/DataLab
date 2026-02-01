@@ -68,19 +68,49 @@ There are several ways to enable the Web API server:
 When started, DataLab displays the server URL and authentication token in a dialog.
 The status bar also shows the Web API port when the server is running.
 
+The default port is **18080** (or the next available port if busy).
+
 .. TODO: Add screenshot when available
    .. figure:: /images/shots/webapi_started.png
 
        Web API connection dialog showing URL and token
 
-Connecting from a Notebook
+Auto-Discovery
+^^^^^^^^^^^^^^
+
+DataLab-Kernel can automatically discover and connect to a running DataLab instance
+without any manual configuration. When the Web API starts, DataLab writes connection
+information to a file that DataLab-Kernel reads automatically.
+
+**Just load the extension** — no environment variables or explicit connection needed:
+
+.. code-block:: python
+
+    # In your notebook (JupyterLab, VS Code, etc.)
+    %load_ext datalab_kernel
+
+    # DataLab-Kernel automatically finds and connects to DataLab
+    workspace.list()  # Already connected!
+
+The auto-discovery mechanism tries the following methods in order:
+
+1. **Environment variables** (``DATALAB_WORKSPACE_URL``, ``DATALAB_WORKSPACE_TOKEN``)
+2. **Connection file** written by DataLab (native Python only)
+3. **URL query parameters** (JupyterLite: ``?datalab_url=...&datalab_token=...``)
+4. **Well-known port probing** (``http://127.0.0.1:18080``)
+
+If discovery fails, DataLab-Kernel starts in standalone mode and you can connect
+later using ``workspace.connect()``.
+
+Manual Connection (Legacy)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Set the environment variables before starting your notebook kernel:
+If auto-discovery doesn't work (e.g., running on a different machine), you can
+set environment variables before starting your notebook kernel:
 
 .. code-block:: bash
 
-    export DATALAB_WORKSPACE_URL=http://127.0.0.1:8080
+    export DATALAB_WORKSPACE_URL=http://127.0.0.1:18080
     export DATALAB_WORKSPACE_TOKEN=<your-token>
 
 Then in your notebook using DataLab-Kernel:
@@ -207,7 +237,7 @@ Environment Variables
      - ``127.0.0.1``
    * - ``DATALAB_WEBAPI_PORT``
      - Server port
-     - Auto-detect
+     - ``18080`` (or next available)
    * - ``DATALAB_WEBAPI_TOKEN``
      - Auth token
      - Generated
@@ -224,6 +254,21 @@ The Web API implements the following security measures:
    bearer token.
 
 3. **Explicit opt-in**: Remote binding (0.0.0.0) requires explicit configuration.
+
+Localhost Token Bypass
+^^^^^^^^^^^^^^^^^^^^^^
+
+For simplified local development, you can disable token verification for localhost
+connections in **Edit → Settings → Web API localhost bypass**.
+
+When enabled, clients connecting from ``127.0.0.1`` do not need to provide a token.
+This makes auto-discovery work seamlessly even when the connection file cannot be
+read (e.g., in JupyterLite or sandboxed environments).
+
+.. warning::
+
+    Only enable localhost bypass when you control all applications running on
+    your machine. Malicious local software could access your data without a token.
 
 .. warning::
 

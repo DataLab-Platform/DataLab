@@ -31,15 +31,42 @@ Usage
 
 from __future__ import annotations
 
+import json
 import os
 import socket
 import threading
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from qtpy.QtCore import QObject, Signal
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
+
+# Default port for Web API (predictable for auto-discovery)
+DEFAULT_WEBAPI_PORT = 18080
+
+
+def get_connection_file_path() -> Path:
+    """Get the path to the connection info file.
+
+    The file is stored in a platform-specific location:
+    - Windows: %APPDATA%/DataLab/webapi_connection.json
+    - Linux/Mac: ~/.config/datalab/webapi_connection.json
+
+    Returns:
+        Path to the connection file.
+    """
+    if os.name == "nt":
+        # Windows: use APPDATA
+        base = Path(os.environ.get("APPDATA", Path.home() / "AppData" / "Roaming"))
+    else:
+        # Linux/Mac: use XDG_CONFIG_HOME or ~/.config
+        base = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
+
+    config_dir = base / "datalab"
+    config_dir.mkdir(parents=True, exist_ok=True)
+    return config_dir / "webapi_connection.json"
 
 
 class WebApiController(QObject):
@@ -96,7 +123,7 @@ class WebApiController(QObject):
         return self._token
 
     def _find_available_port(
-        self, start_port: int = 8080, max_attempts: int = 100
+        self, start_port: int = DEFAULT_WEBAPI_PORT, max_attempts: int = 100
     ) -> int:
         """Find an available port.
 
@@ -131,7 +158,7 @@ class WebApiController(QObject):
 
         Args:
             host: Host to bind to. Defaults to DATALAB_WEBAPI_HOST or "127.0.0.1".
-            port: Port to bind to. Defaults to DATALAB_WEBAPI_PORT or auto-detect.
+            port: Port to bind to. Defaults to DATALAB_WEBAPI_PORT or 18080.
             token: Authentication token. Defaults to DATALAB_WEBAPI_TOKEN or generated.
 
         Returns:
@@ -162,6 +189,7 @@ class WebApiController(QObject):
                 router,
                 set_adapter,
                 set_auth_token,
+                set_localhost_no_token,
                 set_server_url,
             )
 
@@ -175,12 +203,18 @@ class WebApiController(QObject):
                 token or os.environ.get("DATALAB_WEBAPI_TOKEN") or generate_auth_token()
             )
 
+            # Check localhost bypass setting
+            from datalab.config import Conf
+
+            localhost_no_token = Conf.main.webapi_localhost_no_token.get(False)
+
             # Create adapter
             self._adapter = WorkspaceAdapter(self._main_window)
 
             # Configure routes
             set_adapter(self._adapter)
             set_auth_token(token)
+            set_localhost_no_token(localhost_no_token)
 
             self._url = f"http://{host}:{port}"
             set_server_url(self._url)
@@ -226,6 +260,9 @@ class WebApiController(QObject):
             )
             self._uvicorn_server = uvicorn.Server(config)
 
+            # Write connection file for client auto-discovery
+            self._write_connection_file()
+
             # Start server in thread
             self._server_thread = threading.Thread(
                 target=self._run_server,
@@ -263,6 +300,9 @@ class WebApiController(QObject):
                 return
             self._running = False
 
+        # Remove connection file
+        self._remove_connection_file()
+
         if self._uvicorn_server is not None:
             self._uvicorn_server.should_exit = True
 
@@ -276,6 +316,30 @@ class WebApiController(QObject):
         self._token = None
 
         self.server_stopped.emit()
+
+    def _write_connection_file(self) -> None:
+        """Write connection info to file for client auto-discovery."""
+        try:
+            connection_info = {
+                "url": self._url,
+                "token": self._token,
+                "pid": os.getpid(),
+            }
+            connection_file = get_connection_file_path()
+            connection_file.write_text(json.dumps(connection_info, indent=2))
+        except Exception:  # pylint: disable=broad-exception-caught
+            # Non-critical: don't fail server start if file write fails
+            pass
+
+    def _remove_connection_file(self) -> None:
+        """Remove the connection file."""
+        try:
+            connection_file = get_connection_file_path()
+            if connection_file.exists():
+                connection_file.unlink()
+        except Exception:  # pylint: disable=broad-exception-caught
+            # Non-critical: ignore errors during cleanup
+            pass
 
     def get_connection_info(self) -> dict:
         """Get connection information for clients.

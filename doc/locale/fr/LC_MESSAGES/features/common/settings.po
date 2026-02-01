@@ -55,6 +55,15 @@ msgstr "**Serveur RPC**"
 msgid "Enable the RPC (Remote Procedure Call) server to communicate with external applications, such as your own scripts running in Spyder, Jupyter, or other software. This allows programmatic control of DataLab."
 msgstr "Activer le serveur RPC (Remote Procedure Call) pour communiquer avec des applications externes, telles que vos propres scripts s'exécutant dans Spyder, Jupyter ou d'autres logiciels. Cela permet un contrôle programmatique de DataLab."
 
+msgid "**Web API localhost bypass**"
+msgstr "**Contournement localhost de l'API Web**"
+
+msgid "When enabled, connections from localhost (127.0.0.1) to the Web API do not require authentication. This simplifies notebook integration when DataLab-Kernel runs on the same machine. Disabled by default for security."
+msgstr "Lorsque cette option est activée, les connexions depuis localhost (127.0.0.1) vers l'API Web ne nécessitent pas d'authentification. Cela simplifie l'intégration des notebooks lorsque DataLab-Kernel s'exécute sur la même machine. Désactivé par défaut pour des raisons de sécurité."
+
+msgid "When this option is enabled, any application running on your local machine can access the DataLab Web API without a token. Only enable this if you understand the security implications."
+msgstr "Lorsque cette option est activée, toute application s'exécutant sur votre machine locale peut accéder à l'API Web DataLab sans jeton. N'activez cette option que si vous comprenez les implications en matière de sécurité."
+
 msgid "**Memory threshold**"
 msgstr "**Seuil de mémoire**"
 

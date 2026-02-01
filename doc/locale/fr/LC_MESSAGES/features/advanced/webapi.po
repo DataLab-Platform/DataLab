@@ -8,9 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-25 13:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -133,11 +131,41 @@ msgstr "**Via variable d'environnement** : Définir ``DATALAB_WEBAPI_ENABLED=1``
 msgid "When started, DataLab displays the server URL and authentication token in a dialog. The status bar also shows the Web API port when the server is running."
 msgstr "Au démarrage, DataLab affiche l'URL du serveur et le jeton d'authentification dans une boîte de dialogue. La barre d'état affiche également le port de l'API Web lorsque le serveur est en cours d'exécution."
 
-msgid "Connecting from a Notebook"
-msgstr "Connexion depuis un notebook"
+msgid "The default port is **18080** (or the next available port if busy)."
+msgstr "Le port par défaut est **18080** (ou le prochain port disponible s'il est occupé)."
 
-msgid "Set the environment variables before starting your notebook kernel:"
-msgstr "Définissez les variables d'environnement avant de démarrer le noyau de votre notebook :"
+msgid "Auto-Discovery"
+msgstr "Découverte automatique"
+
+msgid "DataLab-Kernel can automatically discover and connect to a running DataLab instance without any manual configuration. When the Web API starts, DataLab writes connection information to a file that DataLab-Kernel reads automatically."
+msgstr "DataLab-Kernel peut automatiquement découvrir et se connecter à une instance DataLab en cours d'exécution sans aucune configuration manuelle. Lorsque l'API Web démarre, DataLab écrit les informations de connexion dans un fichier que DataLab-Kernel lit automatiquement."
+
+msgid "**Just load the extension** — no environment variables or explicit connection needed:"
+msgstr "**Chargez simplement l'extension** — aucune variable d'environnement ni connexion explicite requise :"
+
+msgid "The auto-discovery mechanism tries the following methods in order:"
+msgstr "Le mécanisme de découverte automatique essaie les méthodes suivantes dans l'ordre :"
+
+msgid "**Environment variables** (``DATALAB_WORKSPACE_URL``, ``DATALAB_WORKSPACE_TOKEN``)"
+msgstr "**Variables d'environnement** (``DATALAB_WORKSPACE_URL``, ``DATALAB_WORKSPACE_TOKEN``)"
+
+msgid "**Connection file** written by DataLab (native Python only)"
+msgstr "**Fichier de connexion** écrit par DataLab (Python natif uniquement)"
+
+msgid "**URL query parameters** (JupyterLite: ``?datalab_url=...&datalab_token=...``)"
+msgstr "**Paramètres d'URL** (JupyterLite : ``?datalab_url=...&datalab_token=...``)"
+
+msgid "**Well-known port probing** (``http://127.0.0.1:18080``)"
+msgstr "**Sondage du port bien connu** (``http://127.0.0.1:18080``)"
+
+msgid "If discovery fails, DataLab-Kernel starts in standalone mode and you can connect later using ``workspace.connect()``."
+msgstr "Si la découverte échoue, DataLab-Kernel démarre en mode autonome et vous pouvez vous connecter plus tard avec ``workspace.connect()``."
+
+msgid "Manual Connection (Legacy)"
+msgstr "Connexion manuelle (historique)"
+
+msgid "If auto-discovery doesn't work (e.g., running on a different machine), you can set environment variables before starting your notebook kernel:"
+msgstr "Si la découverte automatique ne fonctionne pas (par exemple, en cas d'exécution sur une machine différente), vous pouvez définir des variables d'environnement avant de démarrer le noyau de votre notebook :"
 
 msgid "Then in your notebook using DataLab-Kernel:"
 msgstr "Puis dans votre notebook utilisant DataLab-Kernel :"
@@ -262,8 +290,8 @@ msgstr "``DATALAB_WEBAPI_PORT``"
 msgid "Server port"
 msgstr "Port du serveur"
 
-msgid "Auto-detect"
-msgstr "Détection automatique"
+msgid "``18080`` (or next available)"
+msgstr "``18080`` (ou le suivant disponible)"
 
 msgid "``DATALAB_WEBAPI_TOKEN``"
 msgstr "``DATALAB_WEBAPI_TOKEN``"
@@ -288,6 +316,18 @@ msgstr "**Authentification par jeton** : Chaque requête (sauf status) doit incl
 
 msgid "**Explicit opt-in**: Remote binding (0.0.0.0) requires explicit configuration."
 msgstr "**Opt-in explicite** : La liaison distante (0.0.0.0) nécessite une configuration explicite."
+
+msgid "Localhost Token Bypass"
+msgstr "Contournement du jeton pour localhost"
+
+msgid "For simplified local development, you can disable token verification for localhost connections in **Edit → Settings → Web API localhost bypass**."
+msgstr "Pour simplifier le développement local, vous pouvez désactiver la vérification du jeton pour les connexions localhost dans **Édition → Paramètres → Contournement localhost de l'API Web**."
+
+msgid "When enabled, clients connecting from ``127.0.0.1`` do not need to provide a token. This makes auto-discovery work seamlessly even when the connection file cannot be read (e.g., in JupyterLite or sandboxed environments)."
+msgstr "Lorsque cette option est activée, les clients se connectant depuis ``127.0.0.1`` n'ont pas besoin de fournir de jeton. Cela permet à la découverte automatique de fonctionner de manière transparente même lorsque le fichier de connexion ne peut pas être lu (par exemple, dans JupyterLite ou les environnements sandboxés)."
+
+msgid "Only enable localhost bypass when you control all applications running on your machine. Malicious local software could access your data without a token."
+msgstr "N'activez le contournement localhost que lorsque vous contrôlez toutes les applications s'exécutant sur votre machine. Un logiciel malveillant local pourrait accéder à vos données sans jeton."
 
 msgid "Exposing the API to the network allows anyone with the token to access your data. Use with caution on trusted networks only."
 msgstr "Exposer l'API sur le réseau permet à quiconque possédant le jeton d'accéder à vos données. À utiliser avec précaution uniquement sur des réseaux de confiance."
