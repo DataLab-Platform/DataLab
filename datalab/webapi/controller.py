@@ -241,10 +241,35 @@ class WebApiController(QObject):
             # See: https://wicg.github.io/private-network-access/
             @app.middleware("http")
             async def add_private_network_access_headers(request, call_next):
+                # Handle preflight OPTIONS requests for Private Network Access
+                if request.method == "OPTIONS":
+                    # Check if this is a Private Network Access preflight
+                    if request.headers.get("Access-Control-Request-Private-Network"):
+                        # Return a proper preflight response with PNA header
+                        from starlette.responses import Response
+
+                        response = Response(
+                            status_code=204,
+                            headers={
+                                "Access-Control-Allow-Origin": request.headers.get(
+                                    "Origin", "*"
+                                ),
+                                "Access-Control-Allow-Methods": (
+                                    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+                                ),
+                                "Access-Control-Allow-Headers": request.headers.get(
+                                    "Access-Control-Request-Headers", "*"
+                                ),
+                                "Access-Control-Allow-Credentials": "true",
+                                "Access-Control-Allow-Private-Network": "true",
+                                "Access-Control-Max-Age": "86400",
+                            },
+                        )
+                        return response
+
                 response = await call_next(request)
-                # Handle preflight for Private Network Access
-                if request.headers.get("Access-Control-Request-Private-Network"):
-                    response.headers["Access-Control-Allow-Private-Network"] = "true"
+                # Add PNA header to all responses (for non-preflight requests)
+                response.headers["Access-Control-Allow-Private-Network"] = "true"
                 return response
 
             app.include_router(router)
