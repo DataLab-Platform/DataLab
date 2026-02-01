@@ -2159,8 +2159,8 @@ msgstr "Le serveur XML-RPC est utilisé pour communiquer avec des applications e
 msgid "Web API localhost bypass"
 msgstr "Contournement localhost de l'API Web"
 
-msgid "When enabled, connections from localhost (127.0.0.1) to the Web API <br>do not require authentication. This simplifies notebook integration <br>when DataLab-Kernel runs on the same machine."
-msgstr "Lorsque cette option est activée, les connexions depuis localhost (127.0.0.1) vers l'API Web <br>ne nécessitent pas d'authentification. Cela simplifie l'intégration des notebooks <br>lorsque DataLab-Kernel s'exécute sur la même machine."
+msgid "When enabled (default), connections from localhost (127.0.0.1) to the <br>Web API do not require authentication. This simplifies notebook <br>integration when DataLab-Kernel runs on the same machine.<br>Disable for stricter security if needed."
+msgstr "Lorsque cette option est activée (par défaut), les connexions depuis localhost (127.0.0.1) <br>vers l'API Web ne nécessitent pas d'authentification. Cela simplifie l'intégration <br>des notebooks lorsque DataLab-Kernel s'exécute sur la même machine.<br>Désactiver pour une sécurité plus stricte si nécessaire."
 
 msgid "Memory threshold"
 msgstr "Seuil de mémoire"

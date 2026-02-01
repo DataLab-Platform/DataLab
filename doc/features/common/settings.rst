@@ -34,15 +34,15 @@ The General settings tab contains main window and general feature settings:
     programmatic control of DataLab.
 
 **Web API localhost bypass**
-    When enabled, connections from localhost (127.0.0.1) to the Web API do not require
-    authentication. This simplifies notebook integration when DataLab-Kernel runs on
-    the same machine. Disabled by default for security.
+    When enabled (default), connections from localhost (127.0.0.1) to the Web API do not
+    require authentication. This simplifies notebook integration when DataLab-Kernel runs
+    on the same machine. Disable for stricter security if needed.
 
     .. note::
 
         When this option is enabled, any application running on your local machine can
-        access the DataLab Web API without a token. Only enable this if you understand
-        the security implications.
+        access the DataLab Web API without a token. Disable this option if you need
+        stricter security.
 
 **Memory threshold**
     Set a threshold (in MB) below which a warning is displayed before loading new data.

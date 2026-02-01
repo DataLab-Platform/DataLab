@@ -51,9 +51,10 @@ class MainSettings(gds.DataSet):
         "",
         _("Web API localhost bypass"),
         help=_(
-            "When enabled, connections from localhost (127.0.0.1) to the Web API "
-            "<br>do not require authentication. This simplifies notebook integration "
-            "<br>when DataLab-Kernel runs on the same machine."
+            "When enabled (default), connections from localhost (127.0.0.1) to the "
+            "<br>Web API do not require authentication. This simplifies notebook "
+            "<br>integration when DataLab-Kernel runs on the same machine."
+            "<br>Disable for stricter security if needed."
         ),
     )
     available_memory_threshold = gds.IntItem(

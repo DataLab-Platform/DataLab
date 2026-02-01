@@ -206,7 +206,7 @@ class WebApiController(QObject):
             # Check localhost bypass setting
             from datalab.config import Conf
 
-            localhost_no_token = Conf.main.webapi_localhost_no_token.get(False)
+            localhost_no_token = Conf.main.webapi_localhost_no_token.get()
 
             # Create adapter
             self._adapter = WorkspaceAdapter(self._main_window)
