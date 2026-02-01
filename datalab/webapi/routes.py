@@ -26,7 +26,7 @@ from __future__ import annotations
 
 import secrets
 import traceback
-from typing import Annotated
+from typing import Annotated, Optional
 from urllib.parse import quote
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response, status
@@ -100,8 +100,8 @@ def get_adapter() -> WorkspaceAdapter:
 
 
 def verify_token(
-    request: Request, authorization: Annotated[str | None, Header()] = None
-) -> str | None:
+    request: Request, authorization: Annotated[Optional[str], Header()] = None
+) -> Optional[str]:
     """Dependency: Verify the bearer token.
 
     Args:
