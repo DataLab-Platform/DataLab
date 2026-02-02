@@ -4,11 +4,12 @@ PlotPy >= 2.8.2
 PyQt5 >= 5.15.6
 PyWavelets >= 1.2, < 2.0
 SciPy >= 1.10.1, < 1.17
-Sigima >= 1.0.6
+Sigima >= 1.1.0
 babel
 build
 fastapi >= 0.110.0
 guidata >= 3.13.4
+httpx
 myst_parser
 opencv-python-headless >= 4.8.1.78
 packaging >= 21.3
