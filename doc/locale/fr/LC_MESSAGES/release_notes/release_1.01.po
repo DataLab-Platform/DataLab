@@ -18,13 +18,73 @@ msgstr ""
 "Generated-By: Babel 2.17.0\n"
 
 msgid "Version 1.1"
-msgstr ""
+msgstr "Version 1.1"
 
-msgid "DataLab Version 1.1.0"
-msgstr ""
+msgid "DataLab Version 1.1.0 (2026-02-02)"
+msgstr "DataLab Version 1.1.0 (2026-02-02)"
 
 msgid "✨ New Features"
 msgstr "✨ Nouvelles fonctionnalités"
+
+msgid "**Web API for HTTP/JSON integration:**"
+msgstr "**API Web pour l'intégration HTTP/JSON :**"
+
+msgid "DataLab now provides a modern **HTTP/JSON Web API** as an alternative to the existing XML-RPC interface. This is the recommended integration path for new projects, especially for Jupyter notebooks and web-based tools."
+msgstr "DataLab propose désormais une **API Web HTTP/JSON** moderne comme alternative à l'interface XML-RPC existante. C'est la voie d'intégration recommandée pour les nouveaux projets, notamment pour les notebooks Jupyter et les outils web."
+
+msgid "**Accessible via**: File → Web API → Start Web API Server (or set `DATALAB_WEBAPI_ENABLED=1` environment variable)"
+msgstr "**Accessible via** : Fichier → API Web → Démarrer le serveur API Web (ou définir la variable d'environnement `DATALAB_WEBAPI_ENABLED=1`)"
+
+msgid "**Key benefits**:"
+msgstr "**Avantages clés** :"
+
+msgid "JSON for metadata and NPZ for binary data (efficient large array transfer)"
+msgstr "JSON pour les métadonnées et NPZ pour les données binaires (transfert efficace de grands tableaux)"
+
+msgid "Bearer token authentication for security"
+msgstr "Authentification par jeton Bearer pour la sécurité"
+
+msgid "REST conventions with OpenAPI documentation"
+msgstr "Conventions REST avec documentation OpenAPI"
+
+msgid "WASM/Pyodide compatibility (works in browser environments)"
+msgstr "Compatibilité WASM/Pyodide (fonctionne dans les environnements navigateur)"
+
+msgid "**Endpoints include**:"
+msgstr "**Points d'accès inclus** :"
+
+msgid "Object listing, retrieval, creation, and deletion"
+msgstr "Listage, récupération, création et suppression d'objets"
+
+msgid "Metadata management and binary data transfer (NPZ format)"
+msgstr "Gestion des métadonnées et transfert de données binaires (format NPZ)"
+
+msgid "Computation API for running processing operations remotely"
+msgstr "API de calcul pour exécuter des opérations de traitement à distance"
+
+msgid "**Auto-discovery**: DataLab-Kernel automatically finds and connects to a running DataLab instance without manual configuration"
+msgstr "**Découverte automatique** : DataLab-Kernel trouve et se connecte automatiquement à une instance DataLab en cours d'exécution sans configuration manuelle"
+
+msgid "**Security**: Localhost binding by default, with optional localhost token bypass for simplified local development"
+msgstr "**Sécurité** : Liaison localhost par défaut, avec contournement optionnel du jeton localhost pour simplifier le développement local"
+
+msgid "**Requires additional dependencies**: Install with `pip install datalab-platform[webapi]`"
+msgstr "**Nécessite des dépendances supplémentaires** : Installer avec `pip install datalab-platform[webapi]`"
+
+msgid "See :ref:`ref-to-webapi` for complete documentation."
+msgstr "Voir :ref:`ref-to-webapi` pour la documentation complète."
+
+msgid "**PyQt6 compatibility:**"
+msgstr "**Compatibilité PyQt6 :**"
+
+msgid "DataLab now fully supports PyQt6 in addition to PyQt5"
+msgstr "DataLab prend désormais entièrement en charge PyQt6 en plus de PyQt5"
+
+msgid "Fixed screen geometry retrieval to use `primaryScreen()` for Qt5-Qt6 compatibility"
+msgstr "Correction de la récupération de la géométrie de l'écran pour utiliser `primaryScreen()` pour la compatibilité Qt5-Qt6"
+
+msgid "CI pipeline now includes PyQt6 testing to ensure ongoing compatibility"
+msgstr "Le pipeline CI inclut désormais les tests PyQt6 pour garantir une compatibilité continue"
 
 msgid "**Remote control API enhancements:**"
 msgstr "**Améliorations de l'API de contrôle à distance :**"
@@ -67,3 +127,12 @@ msgstr "Paramètre optionnel `force` pour ignorer la boîte de dialogue de confi
 
 msgid "Complements existing `reset_all()` method which clears the entire workspace (including all macros)"
 msgstr "Complète la méthode existante `reset_all()` qui efface l'ensemble de l'espace de travail (y compris toutes les macros)"
+
+msgid "**Dependencies:**"
+msgstr "**Dépendances :**"
+
+msgid "Updated Sigima dependency to version 1.1.0 which includes new features and bug fixes"
+msgstr "Mise à jour de la dépendance Sigima vers la version 1.1.0 qui inclut de nouvelles fonctionnalités et corrections de bugs"
+
+msgid "Added optional Web API dependencies: FastAPI, Uvicorn, and Pydantic (install with `pip install datalab-platform[webapi]`)"
+msgstr "Ajout des dépendances optionnelles pour l'API Web : FastAPI, Uvicorn et Pydantic (installer avec `pip install datalab-platform[webapi]`)"
