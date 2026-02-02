@@ -7,9 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-03 16:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -27,29 +25,17 @@ msgstr "DataLab Version 1.0.4 (02/02/2026)"
 msgid "🛠️ Bug Fixes since version 1.0.3"
 msgstr "🛠️ Correctifs depuis la version 1.0.3"
 
-msgid "**Dependency compatibility - NumPy 2.4.0 and scikit-image 0.26.0:**"
-msgstr "**Compatibilité des dépendances - NumPy 2.4.0 et scikit-image 0.26.0 :**"
+msgid "**Centroid computation compatibility:**"
+msgstr "**Compatibilité du calcul du barycentre :**"
 
-msgid "Fixed compatibility issue with NumPy 2.4.0 and scikit-image 0.26.0 where centroid computation failed with `ValueError` due to einsum optimization changes"
-msgstr "Correction du problème de compatibilité avec NumPy 2.4.0 et scikit-image 0.26.0 où le calcul du centroïde échouait avec `ValueError` en raison de modifications de l'optimisation einsum"
+msgid "Fixed centroid computation failing with NumPy 2.4.0 and scikit-image 0.26.0 due to new einsum optimization that doesn't accept masked arrays"
+msgstr "Correction de l'échec du calcul du barycentre avec NumPy 2.4.0 et scikit-image 0.26.0 en raison de la nouvelle optimisation einsum qui n'accepte pas les tableaux masqués"
 
-msgid "The issue occurred when displaying image statistics in the dock widget - the centroid calculation now explicitly converts data to a simple NumPy array before calling `measure.centroid()`"
-msgstr "Le problème se produisait lors de l'affichage des statistiques d'image dans le widget dock - le calcul du centroïde convertit désormais explicitement les données en un simple tableau NumPy avant d'appeler `measure.centroid()`"
+msgid "Image data is now explicitly converted to a standard NumPy array before computing the centroid"
+msgstr "Les données d'image sont désormais converties explicitement en un tableau NumPy standard avant le calcul du barycentre"
 
-msgid "Updated all dependency maximum versions to prevent future regression issues from breaking changes in new major releases"
-msgstr "Mise à jour de toutes les versions maximales des dépendances pour éviter que de futurs problèmes de régression dus à des changements majeurs ne causent des dysfonctionnements"
-
-msgid "Dependencies now have upper bounds: NumPy < 2.5, SciPy < 1.17, scikit-image < 0.27, pandas < 3.0, PyWavelets < 2.0"
-msgstr "Les dépendances ont désormais des limites supérieures : NumPy < 2.5, SciPy < 1.17, scikit-image < 0.27, pandas < 3.0, PyWavelets < 2.0"
-
-msgid "A new CI workflow (`build_latest`) continuously tests DataLab against the latest available versions of all dependencies to catch compatibility issues early"
-msgstr "Un nouveau flux de travail CI (`build_latest`) teste en continu DataLab contre les dernières versions disponibles de toutes les dépendances pour détecter rapidement les problèmes de compatibilité"
-
-msgid "Updated Sigima dependency to version 1.0.6 for improved compatibility"
-msgstr "Mise à jour de la dépendance Sigima vers la version 1.0.6 pour une meilleure compatibilité"
-
-msgid "This closes [Issue #289](https://github.com/DataLab-Platform/DataLab/issues/289) - Compatibility with NumPy 2.4.0 and scikit-image 0.26.0"
-msgstr "Ceci clôture [Issue #289](https://github.com/DataLab-Platform/DataLab/issues/289) - Compatibilité avec NumPy 2.4.0 et scikit-image 0.26.0"
+msgid "This closes [Issue #289](https://github.com/DataLab-Platform/DataLab/issues/289) - Compatibility issue with NumPy 2.4.0 and scikit-image 0.26.0"
+msgstr "Ceci clôture [Issue #289](https://github.com/DataLab-Platform/DataLab/issues/289) - Problème de compatibilité avec NumPy 2.4.0 et scikit-image 0.26.0"
 
 msgid "DataLab Version 1.0.3 (2025-12-19)"
 msgstr "DataLab Version 1.0.3 (19/12/2025)"
@@ -222,6 +208,184 @@ msgstr "Ceci clôture [Issue #279](https://github.com/datalab-platform/datalab/i
 msgid "**Icons - Qt SVG warnings on Linux:**"
 msgstr "**Icônes - Avertissements Qt SVG sous Linux :**"
 
+msgid "Fixed \"qt.svg: Invalid path data; path truncated\" warnings appearing 4 times at startup on Linux/Ubuntu"
+msgstr "Correction des avertissements « qt.svg: Invalid path data; path truncated » apparaissant 4 fois au démarrage sous Linux/Ubuntu"
+
+msgid "Cleaned SVG icon files to remove Inkscape/Sodipodi metadata and fixed path syntax in two icon files that used implicit cubic Bézier command continuation (not supported by Qt's SVG renderer on Linux)"
+msgstr "Nettoyage des fichiers d'icônes SVG pour supprimer les métadonnées Inkscape/Sodipodi et correction de la syntaxe des chemins dans deux fichiers d'icônes qui utilisaient une continuation implicite de commande de courbe de Bézier cubique (non prise en charge par le moteur de rendu SVG de Qt sous Linux)"
+
+msgid "This closes [Issue #278](https://github.com/datalab-platform/datalab/issues/278) - Fix \"qt.svg: Invalid path data; path truncated\" warnings on Linux"
+msgstr "Ceci clôture [Issue #278](https://github.com/datalab-platform/datalab/issues/278) - Correction des avertissements « qt.svg: Invalid path data; path truncated » sous Linux"
+
+msgid "**ROI extraction - KeyError when extracting ROIs:**"
+msgstr "**Extraction de ROI - KeyError lors de l'extraction des ROI :**"
+
+msgid "Fixed `KeyError` when extracting ROIs from images with ROIs generated by blob detection or other analysis functions"
+msgstr "Correction de l'erreur `KeyError` lors de l'extraction des ROI à partir d'images avec des ROI générées par la détection de blobs ou d'autres fonctions d'analyse"
+
+msgid "The issue occurred because the ROI editor was trying to access plot items that hadn't been created yet (e.g., when \"auto refresh\" was disabled or in certain selection scenarios)"
+msgstr "Le problème est survenu parce que l'éditeur de ROI essayait d'accéder à des éléments de tracé qui n'avaient pas encore été créés (par exemple, lorsque le \"rafraîchissement automatique\" était désactivé ou dans certains scénarios de sélection)"
+
+msgid "The ROI extraction dialog now handles missing plot items gracefully"
+msgstr "La boîte de dialogue d'extraction de ROI gère désormais correctement les éléments de tracé manquants"
+
+msgid "This closes [Issue #276](https://github.com/datalab-platform/datalab/issues/276) - KeyError when extracting ROIs from images with blob detection results"
+msgstr "Ceci clôture [Issue #276](https://github.com/datalab-platform/datalab/issues/276) - KeyError lors de l'extraction des ROI à partir d'images avec des résultats de détection de blobs"
+
+msgid "**Plugin development - Infinite loop when iterating over group objects:**"
+msgstr "**Développement de plugins - Boucle infinie lors de l'itération sur les objets d'un groupe :**"
+
+msgid "Fixed infinite loop occurring in plugins when iterating over object IDs returned by `ObjectGroup.get_object_ids()` while simultaneously adding new objects to the same group"
+msgstr "Correction de la boucle infinie se produisant dans les plugins lors de l'itération sur les identifiants d'objets retournés par `ObjectGroup.get_object_ids()` tout en ajoutant simultanément de nouveaux objets au même groupe"
+
+msgid "The method was returning a direct reference to the internal list instead of a copy, causing the iteration to include newly added objects and loop indefinitely"
+msgstr "La méthode retournait une référence directe à la liste interne au lieu d'une copie, ce qui faisait que l'itération incluait les objets nouvellement ajoutés et bouclait indéfiniment"
+
+msgid "This particularly affected plugin workflows that loop over signals/images in a group and add results to the same or another group"
+msgstr "Cela affectait particulièrement les flux de travail des plugins qui bouclent sur les signaux/images d'un groupe et ajoutent des résultats au même groupe ou à un autre groupe"
+
+msgid "The fix ensures `get_object_ids()` now returns a copy of the list, making iteration safe even when modifying the group"
+msgstr "Le correctif garantit que `get_object_ids()` retourne désormais une copie de la liste, rendant l'itération sûre même lors de la modification du groupe"
+
+msgid "This closes [Issue #274](https://github.com/datalab-platform/datalab/issues/274) - Infinite loop when iterating over group objects while adding new objects"
+msgstr "Ceci clôture [Issue #274](https://github.com/datalab-platform/datalab/issues/274) - Boucle infinie lors de l'itération sur les objets d'un groupe tout en ajoutant de nouveaux objets"
+
+msgid "**Marker visibility:**"
+msgstr "**Visibilité des marqueurs :**"
+
+msgid "Fixed cross marker (shown when pressing Alt key on plot) colors inherited from PlotPy being too pale on white background, and other marker properties explicitly configured for better contrast"
+msgstr "Correction des couleurs du marqueur en croix (affiché en appuyant sur la touche Alt sur le graphique) héritées de PlotPy étant trop pâles sur fond blanc, et d'autres propriétés de marqueurs explicitement configurées pour un meilleur contraste"
+
+msgid "Fixed default annotation colors inherited from PlotPy being too pale on white background - segment and drag shape annotations now use brighter green (`#00ff55`) for better visibility"
+msgstr "Correction des couleurs d'annotation par défaut héritées de PlotPy étant trop pâles sur fond blanc - les annotations de segments et de formes glissées utilisent désormais un vert plus vif (`#00ff55`) pour une meilleure visibilité"
+
+msgid "**Macro panel layout:**"
+msgstr "**Disposition du panneau des macros :**"
+
+#, python-format
+msgid "Fixed macro console taking excessive vertical space on first open - the script editor now properly gets 70% of space and console 30% by default, ensuring comfortable editing without manual resizing"
+msgstr "Correction du panneau de la console des macros prenant un espace vertical excessif à la première ouverture - l'éditeur de scripts obtient désormais correctement 70 % de l'espace et la console 30 % par défaut, garantissant une édition confortable sans redimensionnement manuel"
+
+msgid "**Macro naming:**"
+msgstr "**Nommage des macros :**"
+
+msgid "Fixed automatic macro naming generating duplicate names after reloading workspace from HDF5 files"
+msgstr "Correction du nommage automatique des macros générant des noms en double après le rechargement de l'espace de travail à partir de fichiers HDF5"
+
+msgid "When macros were deserialized from saved workspaces or imported from files, the internal counter used for generating default names (e.g., \"macro_01\", \"macro_02\") was not updated, causing the next new macro to potentially reuse an existing name"
+msgstr "Lorsque les macros étaient désérialisées à partir d'espaces de travail enregistrés ou importées à partir de fichiers, le compteur interne utilisé pour générer des noms par défaut (par exemple, \"macro_01\", \"macro_02\") n'était pas mis à jour, ce qui pouvait entraîner la réutilisation d'un nom existant pour la prochaine nouvelle macro"
+
+msgid "The counter now synchronizes with existing macro names after loading, ensuring unique sequential naming"
+msgstr "Le compteur se synchronise désormais avec les noms de macros existants après le chargement, garantissant un nommage séquentiel unique"
+
+msgid "Default macro names simplified from translated \"Untitled XX\" to language-neutral \"macro_XX\" format for better consistency across locales"
+msgstr "Les noms de macros par défaut ont été simplifiés du format traduit \"Sans titre XX\" au format neutre en termes de langue \"macro_XX\" pour une meilleure cohérence entre les locales"
+
+msgid "**Macro execution:**"
+msgstr "**Exécution des macros :**"
+
+#, python-brace-format
+msgid "Fixed syntax errors when using f-strings with nested quotes in macros (e.g., `f'text {func(\"arg\")}'` now works correctly)"
+msgstr "Correction des erreurs de syntaxe lors de l'utilisation de f-strings avec des guillemets imbriqués dans les macros (par exemple, `f'text {func(\"arg\")}'` fonctionne désormais correctement)"
+
+msgid "Fixed corrupted Unicode characters in macro console output on Windows - special characters like ✅, 💡, and → now display correctly instead of showing garbled text"
+msgstr "Correction des caractères Unicode corrompus dans la sortie de la console des macros sous Windows - les caractères spéciaux comme ✅, 💡 et → s'affichent désormais correctement au lieu d'afficher du texte illisible"
+
+msgid "**Internal console - HDF5 workspace operations:**"
+msgstr "**Console interne - Opérations sur l'espace de travail HDF5 :**"
+
+msgid "Fixed application freeze when calling `open_h5_files()` from the internal console - the console runs in a separate thread and creating Qt GUI elements (progress dialogs) from non-main threads causes deadlocks"
+msgstr "Correction du blocage de l'application lors de l'appel de `open_h5_files()` depuis la console interne - la console s'exécute dans un thread séparé et la création d'éléments d'interface Qt (boîtes de dialogue de progression) depuis des threads non principaux provoque des blocages"
+
+msgid "Added new headless API methods `load_h5_workspace()` and `save_h5_workspace()` that can be safely called from the internal console or any script context without GUI dependencies"
+msgstr "Ajout de nouvelles méthodes d'API sans interface graphique `load_h5_workspace()` et `save_h5_workspace()` qui peuvent être appelées en toute sécurité depuis la console interne ou tout contexte de script sans dépendances à l'interface graphique"
+
+msgid "These methods are also available through the remote control API for consistency"
+msgstr "Ces méthodes sont également disponibles via l'API de contrôle distant pour plus de cohérence"
+
+msgid "Note: `load_h5_workspace()` only supports native DataLab HDF5 files; for importing arbitrary HDF5 files, use macros with `RemoteProxy`"
+msgstr "Note : `load_h5_workspace()` ne prend en charge que les fichiers HDF5 natifs de DataLab ; pour importer des fichiers HDF5 arbitraires, utilisez des macros avec `RemoteProxy`"
+
+msgid "This closes [Issue #275](https://github.com/datalab-platform/datalab/issues/275) - Console freezes when calling `open_h5_files()` from internal console"
+msgstr "Ceci clôture [Issue #275](https://github.com/datalab-platform/datalab/issues/275) - Blocage de la console lors de l'appel de `open_h5_files()` depuis la console interne"
+
+msgid "**Signal cursor dialogs - Decimal input with regional settings:**"
+msgstr "**Boîtes de dialogue de curseur de signal - Saisie décimale avec les paramètres régionaux :**"
+
+msgid "Fixed decimal value input failing in signal cursor dialogs when using regional settings with comma as decimal separator (e.g., French, German locales)"
+msgstr "Correction de l'échec de la saisie de valeurs décimales dans les boîtes de dialogue de curseur de signal lors de l'utilisation de paramètres régionaux avec la virgule comme séparateur décimal (par exemple, locales française, allemande)"
+
+msgid "The Y input field in \"First abscissa at y=...\", \"Ordinate at x=...\", and \"Full width at y=...\" dialogs now consistently accepts dot as decimal separator regardless of system locale"
+msgstr "Le champ de saisie Y dans les boîtes de dialogue \"Première abscisse à y=...\", \"Ordonnée à x=...\" et \"Largeur totale à y=...\" accepte désormais systématiquement le point comme séparateur décimal, quelle que soit la locale du système"
+
+msgid "This closes [Issue #276](https://github.com/datalab-platform/datalab/issues/276) - Decimal input fails with regional settings using comma as decimal separator"
+msgstr "Ceci clôture [Issue #276](https://github.com/datalab-platform/datalab/issues/276) - Échec de la saisie décimale avec les paramètres régionaux utilisant la virgule comme séparateur décimal"
+
+msgid "**Radial profile title:**"
+msgstr "**Titre du profil radial :**"
+
+msgid "Fixed duplicate suffix in result image title when extracting radial profile from an image (e.g., `radial_profile(i019)|center=(192.500, 192.500)|center=(192.500, 192.500)` instead of `radial_profile(i019)|center=(192.500, 192.500)`)"
+msgstr "Correction du suffixe en double dans le titre de l'image résultante lors de l'extraction du profil radial d'une image (par exemple, `radial_profile(i019)|center=(192.500, 192.500)|center=(192.500, 192.500)` au lieu de `radial_profile(i019)|center=(192.500, 192.500)`)"
+
+msgid "This fix is provided by Sigima 1.0.4"
+msgstr "Ce correctif est fourni par Sigima 1.0.4"
+
+msgid "**Grid ROI - Missing spacing parameters for non-uniform grids:**"
+msgstr "**ROI de grille - Paramètres d'espacement manquants pour les grilles non uniformes :**"
+
+msgid "Fixed grid ROI feature not working correctly for images where subimages don't fill the entire image area (e.g., laser spot arrays with gaps between spots)"
+msgstr "Correction de la fonctionnalité ROI de grille ne fonctionnant pas correctement pour les images où les sous-images ne remplissent pas toute la zone de l'image (par exemple, les réseaux de points laser avec des espaces entre les points)"
+
+msgid "Added missing `xstep` and `ystep` parameters to control horizontal and vertical spacing between ROI centers, as a percentage of the automatically computed cell width/height (default 100% = evenly distributed grid)"
+msgstr "Ajout des paramètres manquants `xstep` et `ystep` pour contrôler l'espacement horizontal et vertical entre les centres des ROI, en pourcentage de la largeur/hauteur de cellule calculée automatiquement (par défaut 100 % = grille uniformément répartie)"
+
+msgid "Previously, the grid was always assumed to be evenly distributed across the entire image, which failed when there was significant offset or gaps between features"
+msgstr "Auparavant, la grille était toujours supposée être uniformément répartie sur toute l'image, ce qui échouait lorsqu'il y avait un décalage ou des espaces importants entre les caractéristiques"
+
+msgid "Users can now adjust ROI spacing independently from ROI size to accurately extract grids from real-world data like laser spot arrays, diffraction patterns, or any regularly spaced features with gaps"
+msgstr "Les utilisateurs peuvent désormais ajuster l'espacement des ROI indépendamment de la taille des ROI pour extraire avec précision des grilles à partir de données réelles telles que des réseaux de points laser, des motifs de diffraction ou toute caractéristique régulièrement espacée avec des espaces"
+
+msgid "This closes [Issue #282](https://github.com/datalab-platform/datalab/issues/282) - Grid ROI Missing Spacing Parameters"
+msgstr "Ceci clôture [Issue #282](https://github.com/datalab-platform/datalab/issues/282) - Paramètres d'espacement manquants pour la ROI de grille"
+
+msgid "**Analysis auto-recompute - Redundant O(n²) calculations when adding ROI:**"
+msgstr "**Recalcul automatique de l'analyse - Calculs redondants O(n²) lors de l'ajout de ROI :**"
+
+msgid "Fixed severe performance issue where adding ROI to N selected images with analysis results (e.g., Statistics, Centroid) triggered N² calculations instead of N"
+msgstr "Correction d'un problème de performance sévère où l'ajout d'une ROI à N images sélectionnées avec des résultats d'analyse (p. ex. Statistiques, Centroïde) déclenchait N² calculs au lieu de N"
+
+msgid "When 10 images were selected with pre-computed statistics, adding a ROI would show 10 progress bars of 10 calculations each (100 total) instead of a single progress bar with 10 calculations"
+msgstr "Lorsque 10 images étaient sélectionnées avec des statistiques pré-calculées, l'ajout d'une ROI affichait 10 barres de progression de 10 calculs chacune (100 au total) au lieu d'une seule barre de progression avec 10 calculs"
+
+msgid "The issue occurred because `auto_recompute_analysis()` was calling `compute_1_to_0()` which by default processes all selected objects, not just the specific object being recomputed"
+msgstr "Le problème se produisait car `auto_recompute_analysis()` appelait `compute_1_to_0()` qui, par défaut, traite tous les objets sélectionnés, pas seulement l'objet spécifique en cours de recalcul"
+
+msgid "Added `target_objs` parameter to `compute_1_to_0()` to allow specifying which objects to process, and updated `auto_recompute_analysis()` to use it"
+msgstr "Ajout du paramètre `target_objs` à `compute_1_to_0()` pour permettre de spécifier quels objets traiter, et mise à jour de `auto_recompute_analysis()` pour l'utiliser"
+
+msgid "This closes [Issue #283](https://github.com/datalab-platform/datalab/issues/283) - Redundant O(n²) calculations when adding ROI to multiple images with analysis results"
+msgstr "Ceci clôture [Issue #283](https://github.com/datalab-platform/datalab/issues/283) - Calculs redondants O(n²) lors de l'ajout de ROI à plusieurs images avec des résultats d'analyse"
+
+msgid "**Result visualization - Analysis result segments hard to see:**"
+msgstr "**Visualisation des résultats - Segments de résultats d'analyse difficiles à voir :**"
+
+msgid "Fixed analysis result markers (FWHM, pulse features, etc.) being difficult or impossible to see on signal plots"
+msgstr "Correction des marqueurs de résultats d'analyse (FWHM, caractéristiques des impulsions, etc.) difficiles ou impossibles à voir sur les graphiques de signaux"
+
+msgid "These measurement indicators were appearing black on white backgrounds or white on dark backgrounds, making them blend into the plot"
+msgstr "Ces indicateurs de mesure apparaissaient en noir sur des fonds blancs ou en blanc sur des fonds sombres, les faisant se fondre dans le graphique"
+
+msgid "They now display in bright green with thicker lines, making them clearly visible in all color themes"
+msgstr "Ils s'affichent désormais en vert vif avec des lignes plus épaisses, les rendant clairement visibles dans tous les thèmes de couleur"
+
+msgid "Also removed the filled area that was obscuring the underlying signal data - markers now show only the boundary lines indicating the measured region"
+msgstr "Suppression également de la zone remplie qui obscurcissait les données de signal sous-jacentes - les marqueurs affichent désormais uniquement les lignes de délimitation indiquant la région mesurée"
+
+msgid "DataLab Version 1.0.2 (2025-12-03)"
+msgstr "DataLab Version 1.0.2 (03/12/2025)"
+
+msgid "🛠️ Bug Fixes since version 1.0.1"
+msgstr "🛠️ Correctifs depuis la version 1.0.1"
 
 msgid "**Signal axis calibration - Replace X by other signal's Y:**"
 msgstr "**Calibration de l'axe des signaux - Remplacer X par le Y d'un autre signal :**"
@@ -279,9 +443,6 @@ msgstr "Correction de l'erreur `AttributeError: 'NoneType' object has no attribu
 
 msgid "This closes [Issue #269](https://github.com/datalab-platform/datalab/issues/269) - Custom Signal Creation: `AttributeError` when creating signal from menu"
 msgstr "Ceci clôture [Issue #269](https://github.com/datalab-platform/datalab/issues/269) - Création de signaux personnalisés : `AttributeError` lors de la création d'un signal à partir du menu"
-
-msgid "**Macro execution:**"
-msgstr "**Exécution des macros :**"
 
 msgid "Fixed `UnicodeEncodeError` when executing macros that print Unicode characters (e.g., arrows `→`) on Windows systems with certain locales, e.g. cp1252 (closes [Issue #263](https://github.com/datalab-platform/datalab/issues/263))"
 msgstr "Correction de l'erreur `UnicodeEncodeError` lors de l'exécution de macros qui impriment des caractères Unicode (par exemple, des flèches `→`) sur les systèmes Windows avec certaines locales, par exemple cp1252 (ceci clôture [Issue #263](https://github.com/datalab-platform/datalab/issues/263))"

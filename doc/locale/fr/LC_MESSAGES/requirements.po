@@ -59,7 +59,7 @@ msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
 msgid "Sigima"
 msgstr ""
 
-msgid ">= 1.0.6"
+msgid ">= 1.1.0"
 msgstr ""
 
 msgid "Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform."
@@ -126,6 +126,30 @@ msgid ">= 21.3"
 msgstr ""
 
 msgid "Core utilities for Python packages"
+msgstr ""
+
+msgid "fastapi"
+msgstr ""
+
+msgid ">= 0.110.0"
+msgstr ""
+
+msgid "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
+msgstr ""
+
+msgid "uvicorn[standard]"
+msgstr ""
+
+msgid ">= 0.27.0"
+msgstr ""
+
+msgid "pydantic"
+msgstr ""
+
+msgid ">= 2.0"
+msgstr ""
+
+msgid "Data validation using Python type hints"
 msgstr ""
 
 msgid "Optional modules for GUI support (Qt):"
@@ -238,4 +262,10 @@ msgstr ""
 
 msgid "A pytest plugin to run Xvfb (or Xephyr/Xvnc) for tests."
 msgstr "Un plugin pytest pour exécuter Xvfb (ou Xephyr/Xvnc) pour les tests."
+
+msgid "httpx"
+msgstr ""
+
+msgid "The next generation HTTP client."
+msgstr ""
 

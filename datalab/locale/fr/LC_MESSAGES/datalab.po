@@ -1298,7 +1298,7 @@ msgid "Macro panel"
 msgstr "Panneau des macros"
 
 msgid "Python files"
-msgstr "Fichiers Python""
+msgstr "Fichiers Python"
 
 msgid "-***- Macro Console -***-"
 msgstr "-***- Console des macros -***-"
@@ -3379,3 +3379,4 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+
