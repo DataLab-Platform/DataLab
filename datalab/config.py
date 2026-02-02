@@ -135,6 +135,7 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     process_isolation_enabled = conf.Option()
     rpc_server_enabled = conf.Option()
     rpc_server_port = conf.Option()
+    webapi_localhost_no_token = conf.Option()  # Allow localhost without token
     traceback_log_path = conf.ConfigPathOption()
     traceback_log_available = conf.Option()
     faulthandler_enabled = conf.Option()
@@ -406,6 +407,9 @@ def initialize():
     Conf.main.color_mode.get("auto")
     Conf.main.process_isolation_enabled.get(True)
     Conf.main.rpc_server_enabled.get(True)
+    Conf.main.webapi_localhost_no_token.get(
+        True
+    )  # Enabled by default (Web API is off by default)
     Conf.main.traceback_log_path.get(f".{APP_NAME}_traceback.log")
     Conf.main.faulthandler_log_path.get(f".{APP_NAME}_faulthandler.log")
     Conf.main.available_memory_threshold.get(500)

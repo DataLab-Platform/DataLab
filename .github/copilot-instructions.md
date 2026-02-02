@@ -19,9 +19,9 @@ This document provides comprehensive guidance for AI coding agents working on th
 ### Technology Stack
 
 - **Python**: 3.9+ (using `from __future__ import annotations`)
-- **Core Libraries**: NumPy (≥1.26.4), SciPy (≥1.10.1), scikit-image, OpenCV
-- **GUI**: Qt via PlotPy (≥2.8.2) and guidata (≥3.13.3)
-- **Computation**: Sigima (≥1.0.2) - separate package
+- **Core Libraries**: NumPy (=1.26.4), SciPy (=1.10.1), scikit-image, OpenCV
+- **GUI**: Qt via PlotPy (=2.8.2) and guidata (=3.13.3)
+- **Computation**: Sigima (=1.0.2) - separate package
 - **Testing**: pytest with coverage
 - **Linting/Formatting**: Ruff (preferred), Pylint (with specific disables)
 - **Internationalization**: gettext (.po files), sphinx-intl for docs
@@ -32,25 +32,25 @@ This document provides comprehensive guidance for AI coding agents working on th
 
 ```
 DataLab/
-├── datalab/              # Main application code
-│   ├── gui/              # GUI layer
-│   │   ├── processor/    # Processor pattern (signal.py, image.py, base.py)
-│   │   ├── actionhandler.py  # Menu/action management
-│   │   ├── main.py       # Main window
-│   │   └── panel/        # Signal/Image panels
-│   ├── control/          # Remote control API (proxy.py, remote.py)
-│   ├── plugins/          # Plugin system
-│   ├── tests/            # pytest test suite
-│   ├── locale/           # Translations (.po files)
-│   └── config.py         # Configuration management
-├── doc/                  # Sphinx documentation
-│   ├── locale/fr/        # French documentation translations
-│   └── features/         # Feature documentation (signal/, image/)
-├── macros/examples/      # Demo macros
-├── scripts/              # Build/development scripts
-│   └── run_with_env.py   # Environment loader (.env support)
-├── .env                  # Local Python path (PYTHONPATH=.;../guidata;../plotpy;../sigima)
-└── pyproject.toml        # Project configuration
++-- datalab/              # Main application code
+�   +-- gui/              # GUI layer
+�   �   +-- processor/    # Processor pattern (signal.py, image.py, base.py)
+�   �   +-- actionhandler.py  # Menu/action management
+�   �   +-- main.py       # Main window
+�   �   +-- panel/        # Signal/Image panels
+�   +-- control/          # Remote control API (proxy.py, remote.py)
+�   +-- plugins/          # Plugin system
+�   +-- tests/            # pytest test suite
+�   +-- locale/           # Translations (.po files)
+�   +-- config.py         # Configuration management
++-- doc/                  # Sphinx documentation
+�   +-- locale/fr/        # French documentation translations
+�   +-- features/         # Feature documentation (signal/, image/)
++-- macros/examples/      # Demo macros
++-- scripts/              # Build/development scripts
+�   +-- run_with_env.py   # Environment loader (.env support)
++-- .env                  # Local Python path (PYTHONPATH=.;../guidata;../plotpy;../sigima)
++-- pyproject.toml        # Project configuration
 ```
 
 **Related Projects** (sibling directories in multi-root workspace):
@@ -66,10 +66,10 @@ DataLab/
 **ALWAYS use `scripts/run_with_env.py` for Python commands** to load environment from `.env`:
 
 ```powershell
-# ✅ CORRECT - Loads PYTHONPATH from .env
+# ? CORRECT - Loads PYTHONPATH from .env
 python scripts/run_with_env.py python -m pytest
 
-# ❌ WRONG - Misses local development packages
+# ? WRONG - Misses local development packages
 python -m pytest
 ```
 
@@ -138,7 +138,7 @@ python scripts/run_with_env.py python -m sphinx build doc build/doc -b html -D l
 
 ## Core Patterns
 
-### 1. Processor Pattern (GUI ↔ Computation Bridge)
+### 1. Processor Pattern (GUI ? Computation Bridge)
 
 **Location**: `datalab/gui/processor/`
 
@@ -148,11 +148,11 @@ python scripts/run_with_env.py python -m sphinx build doc build/doc -b html -D l
 
 | Method | Pattern | Multi-selection | Use Cases |
 |--------|---------|----------------|-----------|
-| `compute_1_to_1` | 1 obj → 1 obj | k → k | Independent transformations (FFT, normalization) |
-| `compute_1_to_0` | 1 obj → metadata | k → 0 | Analysis producing scalar results (FWHM, centroid) |
-| `compute_1_to_n` | 1 obj → n objs | k → k·n | ROI extraction, splitting |
-| `compute_n_to_1` | n objs → 1 obj | n → 1 (or n → n pairwise) | Averaging, summing, concatenation |
-| `compute_2_to_1` | 1 obj + 1 operand → 1 obj | k + 1 → k (or n + n pairwise) | Binary operations (add, multiply) |
+| `compute_1_to_1` | 1 obj ? 1 obj | k ? k | Independent transformations (FFT, normalization) |
+| `compute_1_to_0` | 1 obj ? metadata | k ? 0 | Analysis producing scalar results (FWHM, centroid) |
+| `compute_1_to_n` | 1 obj ? n objs | k ? k�n | ROI extraction, splitting |
+| `compute_n_to_1` | n objs ? 1 obj | n ? 1 (or n ? n pairwise) | Averaging, summing, concatenation |
+| `compute_2_to_1` | 1 obj + 1 operand ? 1 obj | k + 1 ? k (or n + n pairwise) | Binary operations (add, multiply) |
 
 **Example: Implementing a New Processing Feature**
 
@@ -213,13 +213,13 @@ def register_operations(self) -> None:
 **When to Skip**: Use `skip_xarray_compat=True` when operations **intentionally use mismatched X arrays** (e.g., replacing X with Y values from another signal).
 
 ```python
-# ❌ BAD: Will trigger unwanted interpolation
+# ? BAD: Will trigger unwanted interpolation
 self.register_2_to_1(
     sips.replace_x_by_other_y,
     _("Replace X by other signal's Y"),
 )
 
-# ✅ GOOD: Skips compatibility check
+# ? GOOD: Skips compatibility check
 self.register_2_to_1(
     sips.replace_x_by_other_y,
     _("Replace X by other signal's Y"),
@@ -257,13 +257,13 @@ def setup_processing_actions(self) -> None:
 **Menu Organization**:
 
 Menus are organized by function:
-- `File` → Import/export, project management
-- `Edit` → Copy/paste, delete, metadata editing
-- `Operation` → Basic math (add, multiply, etc.)
-- `Processing` → Advanced transformations, filters
-  - `Axis transformation` → Calibration, X-Y mode, replace X
-- `Analysis` → Measurements, ROI extraction
-- `Computing` → FFT, convolution, fit
+- `File` ? Import/export, project management
+- `Edit` ? Copy/paste, delete, metadata editing
+- `Operation` ? Basic math (add, multiply, etc.)
+- `Processing` ? Advanced transformations, filters
+  - `Axis transformation` ? Calibration, X-Y mode, replace X
+- `Analysis` ? Measurements, ROI extraction
+- `Computing` ? FFT, convolution, fit
 
 The complete menu structure is defined in `datalab/gui/actionhandler.py`.
 A text extract of the menu hiearchy is available in `scripts/datalab_menus.txt` (it is
@@ -337,6 +337,19 @@ proxy.calc("moving_average", sigima.params.MovingAverageParam.create(n=5))
 - `proxy.add_signal()`, `proxy.add_image()`: Create objects
 - `proxy.calc()`: Run processor methods
 - `proxy.get_object()`: Retrieve data
+- `proxy.call_method()`: Call any public panel or window method
+
+**Generic Method Calling**:
+```python
+# Remove objects from current panel
+proxy.call_method("remove_object", force=True)
+
+# Call method on specific panel
+proxy.call_method("delete_all_objects", panel="signal")
+
+# Call main window method
+panel_name = proxy.call_method("get_current_panel")
+```
 
 ### 6. Remote Control API
 
@@ -419,7 +432,7 @@ def compute_feature(obj: SignalObj, param: MyParam) -> SignalObj:
 
 ### Imports
 
-**Order**: Standard library → Third-party → Local
+**Order**: Standard library ? Third-party ? Local
 
 ```python
 from __future__ import annotations
@@ -444,11 +457,11 @@ if TYPE_CHECKING:
 ```python
 from datalab.config import _
 
-# ✅ CORRECT
+# ? CORRECT
 menu_title = _("Processing")
 action_text = _("Replace X by other signal's Y")
 
-# ❌ WRONG
+# ? WRONG
 menu_title = "Processing"  # Not translatable!
 ```
 
@@ -529,9 +542,9 @@ menu_title = "Processing"  # Not translatable!
 - **X coordinate manipulation**: Set `skip_xarray_compat=True`
 
 **Examples**:
-- ✅ `difference` (subtract two signals): Compatible X arrays expected → `skip_xarray_compat=False`
-- ✅ `xy_mode` (swap X and Y): Uses Y as new X → `skip_xarray_compat=True`
-- ✅ `replace_x_by_other_y`: Takes Y from second signal as X → `skip_xarray_compat=True`
+- ? `difference` (subtract two signals): Compatible X arrays expected ? `skip_xarray_compat=False`
+- ? `xy_mode` (swap X and Y): Uses Y as new X ? `skip_xarray_compat=True`
+- ? `replace_x_by_other_y`: Takes Y from second signal as X ? `skip_xarray_compat=True`
 
 ### Debugging Tips
 
@@ -557,15 +570,15 @@ menu_title = "Processing"  # Not translatable!
 ## VS Code Tasks
 
 The workspace includes predefined tasks (`.vscode/tasks.json`). Access via:
-- `Ctrl+Shift+B` → "🧽🔦 Ruff" (format + lint)
-- Terminal → "Run Task..." → "🚀 Pytest", "📚 Compile translations", etc.
+- `Ctrl+Shift+B` ? "???? Ruff" (format + lint)
+- Terminal ? "Run Task..." ? "?? Pytest", "?? Compile translations", etc.
 
 **Key Tasks**:
-- `🧽🔦 Ruff`: Format and lint code
-- `🚀 Pytest`: Run tests with `--ff`
-- `📚 Compile translations`: Build .mo files
-- `🔎 Scan translations`: Update .po files
-- `🌐 Build/open HTML doc`: Generate and open Sphinx docs
+- `???? Ruff`: Format and lint code
+- `?? Pytest`: Run tests with `--ff`
+- `?? Compile translations`: Build .mo files
+- `?? Scan translations`: Update .po files
+- `?? Build/open HTML doc`: Generate and open Sphinx docs
 
 ## Multi-Root Workspace
 
@@ -584,19 +597,19 @@ DataLab development uses a **multi-root workspace** (`.code-workspace` file) wit
 
 ## Release Notes Guidelines
 
-**Location**: `doc/release_notes/release_1.00.md`
+**Location**: `doc/release_notes/release_MAJOR.MINOR.md` where MINOR is zero-padded to 2 digits (e.g., `release_1.00.md` for v1.0.x, `release_1.01.md` for v1.1.x)
 
 **Writing Style**: Focus on **user impact**, not implementation details.
 
 **Good release note** (user-focused):
-- ✅ "Fixed syntax errors when using f-strings with nested quotes in macros"
-- ✅ "Fixed corrupted Unicode characters in macro console output on Windows"
-- ✅ "Fixed 'Lock LUT range' setting not persisting after closing Settings dialog"
+- ? "Fixed syntax errors when using f-strings with nested quotes in macros"
+- ? "Fixed corrupted Unicode characters in macro console output on Windows"
+- ? "Fixed 'Lock LUT range' setting not persisting after closing Settings dialog"
 
 **Bad release note** (implementation-focused):
-- ❌ "Removed `code.replace('"', "'")` that broke f-strings"
-- ❌ "Changed QTextCodec.codecForLocale() to codecForName(b'UTF-8')"
-- ❌ "Added missing `ima_def_keep_lut_range` option in configuration"
+- ? "Removed `code.replace('"', "'")` that broke f-strings"
+- ? "Changed QTextCodec.codecForLocale() to codecForName(b'UTF-8')"
+- ? "Added missing `ima_def_keep_lut_range` option in configuration"
 
 **Structure**:
 - **What went wrong**: Describe the symptom users experienced
@@ -608,7 +621,7 @@ DataLab development uses a **multi-root workspace** (`.code-workspace` file) wit
 **Macro execution:**
 
 * Fixed syntax errors when using f-strings with nested quotes in macros (e.g., `f'text {func("arg")}'` now works correctly)
-* Fixed corrupted Unicode characters in macro console output on Windows - special characters like ✅, 💡, and → now display correctly instead of showing garbled text
+* Fixed corrupted Unicode characters in macro console output on Windows - special characters like ?, ??, and ? now display correctly instead of showing garbled text
 ```
 
 ## Key Files Reference
@@ -626,7 +639,7 @@ DataLab development uses a **multi-root workspace** (`.code-workspace` file) wit
 | `sigima/proc/image/processing.py` | Image computation functions |
 | `scripts/run_with_env.py` | Environment loader (loads `.env`) |
 | `.env` | Local PYTHONPATH for development |
-| `doc/release_notes/release_1.00.md` | Release notes for version 1.0.x |
+| `doc/release_notes/release_MAJOR.MINOR.md` | Release notes (MINOR is zero-padded: release_1.00.md for v1.0.x, release_1.01.md for v1.1.x) |
 
 ## Getting Help
 

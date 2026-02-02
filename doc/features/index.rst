@@ -136,6 +136,7 @@ This section describes the advanced features of DataLab.
    advanced/plugins
    advanced/migration_v020_to_v100
    advanced/macros
+   advanced/webapi
    advanced/remote
    advanced/model
    advanced/logviewer

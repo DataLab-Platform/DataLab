@@ -164,6 +164,11 @@ def __misc_unit_function(win: DLMainWindow) -> None:
         group_id=get_uuid(gp2),
         set_current=False,
     )
+    sig = win.get_object()  # Get the last added signal
+    nobj0 = len(win.signalpanel)
+    win.remove_object(force=True)  # Test the remove object method, then add it back
+    assert len(win.signalpanel) == nobj0 - 1, "One object should have been removed"
+    win.add_object(sig)
 
     # Add image
     __print_test_result("Add image")

@@ -164,6 +164,14 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
                 obj = func(title=self.sigtitle)
                 self.add_object(obj)
                 self.host.log(f"Added signal: {obj.title}")
+            # Remove last added signal to test remove_object
+            nobj0 = len(self.datalab.get_object_titles())
+            sig = self.datalab.get_object()  # Get the last added signal
+            self.datalab.remove_object(force=True)  # Test remove object method
+            assert len(self.datalab.get_object_titles()) == nobj0 - 1, (
+                "One object should have been removed"
+            )
+            self.add_object(sig)  # Add it back
 
     def add_images(self):
         """Add images to DataLab"""

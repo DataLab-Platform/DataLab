@@ -1,8 +1,8 @@
 # Version 1.0 #
 
-## DataLab Version 1.0.4 (2026-02-02) ##
+## DataLab Version 1.0.2 (unreleased) ##
 
-### 🛠️ Bug Fixes since version 1.0.3 ###
+### 🛠️ Bug Fixes ###
 
 **Centroid computation compatibility:**
 
@@ -518,7 +518,7 @@ This major release represents a significant milestone for DataLab with numerous 
   * `compute_1_to_1`, `compute_1_to_0`, `compute_1_to_n`, `compute_n_to_1`, `compute_2_to_1`
 * **No backward compatibility maintained** for these internal changes (closes [Issue #180](https://github.com/DataLab-Platform/DataLab/issues/180))
 
-### 🛠️ Bug Fixes since version 0.20 ###
+### 🛠️ Bug Fixes ###
 
 **Performance fixes:**
 

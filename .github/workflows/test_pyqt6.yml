@@ -50,7 +50,7 @@ jobs:
         sudo apt-get install -y libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0 x11-utils libegl1
         /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX
         python -m pip install --upgrade pip
-        python -m pip install ruff pytest
+        python -m pip install ruff pytest httpx
         pip install PyQt6
         if [ "${{ github.ref_name }}" = "develop" ]; then
            # Clone and install development versions of key dependencies with editable install
@@ -130,7 +130,7 @@ jobs:
           --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX
 
         python -m pip install --upgrade pip
-        python -m pip install ruff pytest
+        python -m pip install ruff pytest httpx
         python -m pip install PyQt6
 
         # Clone and install Sigima from the same branch as DataLab

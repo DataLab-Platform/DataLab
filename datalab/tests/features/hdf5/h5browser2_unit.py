@@ -15,7 +15,7 @@ import time
 import numpy as np
 import psutil
 from guidata.qthelpers import qt_app_context
-from sigima.tests.vistools import view_curves
+from sigima.viz import view_curves
 
 from datalab.env import execenv
 from datalab.tests import helpers

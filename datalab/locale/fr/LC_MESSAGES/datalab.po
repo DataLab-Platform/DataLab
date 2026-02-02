@@ -2162,6 +2162,12 @@ msgstr "Serveur XML-RPC"
 msgid "RPC server is used to communicate with external applications,<br>like your own scripts (e.g. from Spyder or Jupyter) or other software."
 msgstr "Le serveur XML-RPC est utilisé pour communiquer avec des applications externes,<br>comme vos propres scripts (par exemple depuis Spyder ou Jupyter) ou d'autres logiciels."
 
+msgid "Web API localhost bypass"
+msgstr "Contournement localhost de l'API Web"
+
+msgid "When enabled (default), connections from localhost (127.0.0.1) to the <br>Web API do not require authentication. This simplifies notebook <br>integration when DataLab-Kernel runs on the same machine.<br>Disable for stricter security if needed."
+msgstr "Lorsque cette option est activée (par défaut), les connexions depuis localhost (127.0.0.1) <br>vers l'API Web ne nécessitent pas d'authentification. Cela simplifie l'intégration <br>des notebooks lorsque DataLab-Kernel s'exécute sur la même machine.<br>Désactiver pour une sécurité plus stricte si nécessaire."
+
 msgid "Memory threshold"
 msgstr "Seuil de mémoire"
 
@@ -2804,6 +2810,70 @@ msgstr "dans ce dossier"
 msgid "Open tab menu"
 msgstr "Ouvrir le menu des onglets"
 
+msgid "Start Web API Server"
+msgstr "Démarrer le serveur API Web"
+
+msgid "Start the HTTP/JSON Web API server for external access"
+msgstr "Démarrer le serveur API Web HTTP/JSON pour l'accès externe"
+
+msgid "Stop Web API Server"
+msgstr "Arrêter le serveur API Web"
+
+msgid "Copy Connection Info"
+msgstr "Copier les infos de connexion"
+
+msgid "Copy URL and token to clipboard"
+msgstr "Copier l'URL et le jeton dans le presse-papier"
+
+msgid "Status: Not running"
+msgstr "Statut : Non démarré"
+
+msgid "Web API unavailable (install datalab-platform[webapi])"
+msgstr "API Web non disponible (installer datalab-platform[webapi])"
+
+msgid "Web API"
+msgstr "API Web"
+
+msgid "Failed to start Web API server:"
+msgstr "Échec du démarrage du serveur API Web :"
+
+msgid "Connection info copied to clipboard"
+msgstr "Infos de connexion copiées dans le presse-papier"
+
+msgid "Web API Server Started"
+msgstr "Serveur API Web démarré"
+
+msgid "The Web API server is now running. Use the following credentials to connect:"
+msgstr "Le serveur API Web est maintenant en cours d'exécution. Utilisez les identifiants suivants pour vous connecter :"
+
+msgid "URL:"
+msgstr "URL :"
+
+msgid "Token:"
+msgstr "Jeton :"
+
+msgid "Tip: Set these environment variables in your notebook:\n"
+msgstr "Astuce : Définissez ces variables d'environnement dans votre notebook :\n"
+
+msgid "Copy to Clipboard"
+msgstr "Copier dans le presse-papier"
+
+#, python-brace-format
+msgid "Status: Running at {}"
+msgstr "Statut : En cours d'exécution à {}"
+
+msgid "Web API server error:"
+msgstr "Erreur du serveur API Web :"
+
+msgid ""
+"Do you want to start the Web API server?\n"
+"\n"
+"This will allow external applications to connect to DataLab and control it remotely via HTTP/JSON."
+msgstr ""
+"Souhaitez-vous démarrer le serveur API Web ?\n"
+"\n"
+"Cela permettra aux applications externes de se connecter à DataLab et de le contrôler à distance via HTTP/JSON."
+
 msgid "Connection to DataLab"
 msgstr "Connexion à DataLab"
 
@@ -3043,6 +3113,21 @@ msgstr "Plugins :"
 
 msgid "XML-RPC:"
 msgstr "XML-RPC :"
+
+msgid "Web API server is not running"
+msgstr "Serveur API Web arrêté"
+
+msgid "Click to start"
+msgstr "Cliquer pour démarrer"
+
+msgid "Web API:"
+msgstr "API Web :"
+
+msgid "Web API server is running"
+msgstr "Serveur API Web démarré"
+
+msgid "Click to view connection info"
+msgstr "Cliquer pour voir les infos de connexion"
 
 msgid "Source"
 msgstr "Source"

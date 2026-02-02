@@ -48,12 +48,26 @@ def remote_call(func: Callable) -> object:
     @functools.wraps(func)
     def method_wrapper(*args, **kwargs):
         """Decorator wrapper function"""
-        self = args[0]  # extracting 'self' from method arguments
+        self: RemoteServer = args[0]  # extracting 'self' from method arguments
         self.is_ready = False
         output = func(*args, **kwargs)
         while not self.is_ready:
             QC.QCoreApplication.processEvents()
             time.sleep(0.05)
+        # Check if an exception was raised and stored by the slot
+        if self.exception is not None:
+            exc = self.exception
+            self.exception = None  # Clear the exception
+            raise exc
+        # For methods that use signal/slot pattern (like call_method),
+        # they return self.result which is set by the slot. The function
+        # itself returns this value, but it's set asynchronously, so we
+        # need to return the value AFTER waiting, not the initial return value.
+        # Since we wait above, self.result should now be set by the slot.
+        # If the function returned self.result, use the updated value.
+        if output is None:
+            # Return self.result which should be set by now
+            return self.result
         return output
 
     return method_wrapper
@@ -81,6 +95,7 @@ class RemoteServer(QC.QThread):
     SIG_TOGGLE_AUTO_REFRESH = QC.Signal(bool)
     SIG_TOGGLE_SHOW_TITLES = QC.Signal(bool)
     SIG_RESET_ALL = QC.Signal()
+    SIG_REMOVE_OBJECT = QC.Signal(bool)
     SIG_SAVE_TO_H5 = QC.Signal(str)
     SIG_OPEN_H5 = QC.Signal(list, bool, bool)
     SIG_IMPORT_H5 = QC.Signal(str, bool)
@@ -90,6 +105,7 @@ class RemoteServer(QC.QThread):
     SIG_RUN_MACRO = QC.Signal(str)
     SIG_STOP_MACRO = QC.Signal(str)
     SIG_IMPORT_MACRO_FROM_FILE = QC.Signal(str)
+    SIG_CALL_METHOD = QC.Signal(str, list, object, dict)
 
     def __init__(self, win: DLMainWindow) -> None:
         QC.QThread.__init__(self)
@@ -97,6 +113,8 @@ class RemoteServer(QC.QThread):
         self.is_ready = True
         self.server: SimpleXMLRPCServer | None = None
         self.win = win
+        self.result = None
+        self.exception = None
         win.SIG_READY.connect(self.datalab_is_ready)
         win.SIG_CLOSING.connect(self.shutdown_server)
         self.SIG_CLOSE_APP.connect(win.close)
@@ -113,6 +131,7 @@ class RemoteServer(QC.QThread):
         self.SIG_TOGGLE_AUTO_REFRESH.connect(win.toggle_auto_refresh)
         self.SIG_TOGGLE_SHOW_TITLES.connect(win.toggle_show_titles)
         self.SIG_RESET_ALL.connect(win.reset_all)
+        self.SIG_REMOVE_OBJECT.connect(win.remove_object)
         self.SIG_SAVE_TO_H5.connect(win.save_to_h5_file)
         self.SIG_OPEN_H5.connect(win.open_h5_files)
         self.SIG_IMPORT_H5.connect(win.import_h5_file)
@@ -122,6 +141,7 @@ class RemoteServer(QC.QThread):
         self.SIG_RUN_MACRO.connect(win.run_macro)
         self.SIG_STOP_MACRO.connect(win.stop_macro)
         self.SIG_IMPORT_MACRO_FROM_FILE.connect(win.import_macro_from_file)
+        self.SIG_CALL_METHOD.connect(win.call_method_slot)
 
     def serve(self) -> None:
         """Start server and serve forever"""
@@ -233,6 +253,15 @@ class RemoteServer(QC.QThread):
     def reset_all(self) -> None:
         """Reset all application data"""
         self.SIG_RESET_ALL.emit()
+
+    @remote_call
+    def remove_object(self, force: bool = False) -> None:
+        """Remove current object from current panel.
+
+        Args:
+            force: if True, remove object without confirmation. Defaults to False.
+        """
+        self.SIG_REMOVE_OBJECT.emit(force)
 
     @remote_call
     def save_to_h5_file(self, filename: str) -> None:
@@ -659,6 +688,83 @@ class RemoteServer(QC.QThread):
         """
         self.SIG_IMPORT_MACRO_FROM_FILE.emit(filename)
 
+    @remote_call
+    def call_method(
+        self,
+        method_name: str,
+        call_params: dict,
+    ):
+        """Call a public method on a panel or main window.
+
+        Method resolution order when panel is None:
+        1. Try main window (DLMainWindow)
+        2. If not found, try current panel (BaseDataPanel)
+
+        Args:
+            method_name: Name of the method to call
+            call_params: Dictionary with keys 'args' (list), 'panel' (str|None),
+             'kwargs' (dict). Defaults to empty for missing keys.
+
+        Returns:
+            The return value of the called method
+
+        Raises:
+            AttributeError: If the method does not exist or is not public
+            ValueError: If the panel name is invalid
+
+        """
+        args = call_params.get("args", [])
+        panel = call_params.get("panel")
+        kwargs = call_params.get("kwargs", {})
+        self.result = None  # Initialize result
+        self.SIG_CALL_METHOD.emit(method_name, args, panel, kwargs)
+        # The decorator waits for is_ready, then this returns self.result
+        # which was set by call_method_slot
+        return self.result
+
+    # =========================================================================
+    # Web API control methods
+    # =========================================================================
+
+    @remote_call
+    def start_webapi_server(
+        self,
+        host: str | None = None,
+        port: int | None = None,
+    ) -> dict:
+        """Start the Web API server.
+
+        Args:
+            host: Host address to bind to. Defaults to "127.0.0.1".
+            port: Port number. Defaults to auto-detect available port.
+
+        Returns:
+            Dictionary with "url" and "token" keys.
+
+        Raises:
+            RuntimeError: If Web API dependencies not installed or server
+             already running.
+        """
+        # Delegate to main window method which is @remote_controlled
+        # This ensures SIG_READY is emitted for the @remote_call decorator
+        return self.win.start_webapi_server(host, port)
+
+    @remote_call
+    def stop_webapi_server(self) -> None:
+        """Stop the Web API server."""
+        # Delegate to main window method which is @remote_controlled
+        return self.win.stop_webapi_server()
+
+    @remote_call
+    def get_webapi_status(self) -> dict:
+        """Get Web API server status.
+
+        Returns:
+            Dictionary with "running", "url", and "token" keys.
+        """
+        # Delegate to main window method which is @remote_controlled
+        return self.win.get_webapi_status()
+
 
 RemoteServer.check_remote_functions()
 
@@ -1038,3 +1144,71 @@ class RemoteClient(BaseProxy):
         items_json = items_to_json(items)
         if items_json is not None:
             self._datalab.add_annotations_from_items(items_json, refresh_plot, panel)
+
+    def call_method(
+        self,
+        method_name: str,
+        *args,
+        panel: str | None = None,
+        **kwargs,
+    ):
+        """Call a public method on a panel or main window.
+
+        Method resolution order when panel is None:
+        1. Try main window (DLMainWindow)
+        2. If not found, try current panel (BaseDataPanel)
+
+        Args:
+            method_name: Name of the method to call
+            *args: Positional arguments to pass to the method
+            panel: Panel name ("signal", "image", or None for auto-detection).
+             Defaults to None.
+            **kwargs: Keyword arguments to pass to the method
+
+        Returns:
+            The return value of the called method
+
+        Raises:
+            AttributeError: If the method does not exist or is not public
+            ValueError: If the panel name is invalid
+        """
+        # Convert args/kwargs to single dict for XML-RPC serialization
+        # This avoids XML-RPC signature mismatch issues with default parameters
+        call_params = {
+            "args": list(args) if args else [],
+            "panel": panel,
+            "kwargs": dict(kwargs) if kwargs else {},
+        }
+        return self._datalab.call_method(method_name, call_params)
+
+    # === WebAPI Server Control Methods ===
+
+    def start_webapi_server(
+        self, host: str = "127.0.0.1", port: int = 8080
+    ) -> dict[str, str | int]:
+        """Start the WebAPI server.
+
+        Args:
+            host: Host address to bind to. Defaults to "127.0.0.1".
+            port: Port number. Defaults to 8080.
+
+        Returns:
+            Dictionary with server info including 'url' and 'token'.
+        """
+        return self._datalab.start_webapi_server(host, port)
+
+    def stop_webapi_server(self) -> bool:
+        """Stop the WebAPI server.
+
+        Returns:
+            True if server was stopped, False if it wasn't running.
+        """
+        return self._datalab.stop_webapi_server()
+
+    def get_webapi_status(self) -> dict[str, str | int | bool]:
+        """Get the current status of the WebAPI server.
+
+        Returns:
+            Dictionary with status info including 'running', 'url', and 'port'.
+        """
+        return self._datalab.get_webapi_status()

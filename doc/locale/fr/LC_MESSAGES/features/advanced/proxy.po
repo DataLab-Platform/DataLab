@@ -185,6 +185,33 @@ msgstr ""
 msgid "unknown function"
 msgstr ""
 
+msgid "Call a public method on a panel or main window."
+msgstr ""
+
+msgid "Method resolution order when panel is None: 1. Try main window (DLMainWindow) 2. If not found, try current panel (BaseDataPanel)"
+msgstr ""
+
+msgid "Name of the method to call"
+msgstr ""
+
+msgid "Positional arguments to pass to the method"
+msgstr ""
+
+msgid "Panel name (\"signal\", \"image\", or None for auto-detection). Defaults to None."
+msgstr ""
+
+msgid "Keyword arguments to pass to the method"
+msgstr ""
+
+msgid "The return value of the called method"
+msgstr ""
+
+msgid "If the method does not exist or is not public"
+msgstr ""
+
+msgid "If the panel name is invalid"
+msgstr ""
+
 msgid "Close DataLab application"
 msgstr ""
 
@@ -302,6 +329,12 @@ msgstr ""
 msgid "DataLab version"
 msgstr ""
 
+msgid "Get the current status of the WebAPI server."
+msgstr ""
+
+msgid "Dictionary with status info including 'running', 'url', and 'port'."
+msgstr ""
+
 msgid "Open DataLab HDF5 browser to Import HDF5 file."
 msgstr ""
 
@@ -362,6 +395,12 @@ msgstr ""
 msgid "Raise DataLab window"
 msgstr ""
 
+msgid "Remove current object from current panel."
+msgstr ""
+
+msgid "if True, remove object without confirmation. Defaults to False."
+msgstr ""
+
 msgid "Reset all application data"
 msgstr ""
 
@@ -413,7 +452,25 @@ msgstr ""
 msgid "XML-RPC port to connect to. If None, the port is automatically retrieved from DataLab configuration."
 msgstr ""
 
+msgid "Start the WebAPI server."
+msgstr ""
+
+msgid "Host address to bind to. Defaults to \"127.0.0.1\"."
+msgstr ""
+
+msgid "Port number. Defaults to 8080."
+msgstr ""
+
+msgid "Dictionary with server info including 'url' and 'token'."
+msgstr ""
+
 msgid "Stop macro."
+msgstr ""
+
+msgid "Stop the WebAPI server."
+msgstr ""
+
+msgid "True if server was stopped, False if it wasn't running."
 msgstr ""
 
 msgid "Toggle auto refresh state."
@@ -480,6 +537,27 @@ msgid "This method saves the current workspace to a DataLab native HDF5 file dir
 msgstr ""
 
 msgid "Path to the output HDF5 file"
+msgstr ""
+
+msgid "Get Web API server status."
+msgstr ""
+
+msgid "Dictionary with \"running\", \"url\", and \"token\" keys."
+msgstr ""
+
+msgid "Start the Web API server."
+msgstr ""
+
+msgid "Port number. Defaults to auto-detect available port."
+msgstr ""
+
+msgid "Dictionary with \"url\" and \"token\" keys."
+msgstr ""
+
+msgid "If Web API dependencies not installed or server     already running."
+msgstr ""
+
+msgid "Stop the Web API server."
 msgstr ""
 
 msgid "Proxy context manager"

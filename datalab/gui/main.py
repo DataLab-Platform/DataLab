@@ -71,6 +71,8 @@ from datalab.utils.qthelpers import (
     bring_to_front,
     configure_menu_about_to_show,
 )
+from datalab.webapi import WEBAPI_AVAILABLE, get_webapi_controller
+from datalab.webapi.actions import WebApiActions
 from datalab.widgets import instconfviewer, logviewer, status
 from datalab.widgets.warningerror import go_to_error
 
@@ -146,6 +148,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.__old_size: tuple[int, int] | None = None
         self.__memory_warning = False
         self.memorystatus: status.MemoryStatus | None = None
+        self.webapistatus: status.WebAPIStatus | None = None
 
         self.consolestatus: status.ConsoleStatus | None = None
         self.console: DockableConsole | None = None
@@ -162,6 +165,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.tabmenu: QW.QMenu | None = None
         self.docks: dict[AbstractPanel | DockableConsole, QW.QDockWidget] | None = None
         self.h5inputoutput = H5InputOutput(self)
+        self.webapi_actions: WebApiActions | None = None
 
         self.openh5_action: QW.QAction | None = None
         self.saveh5_action: QW.QAction | None = None
@@ -449,6 +453,116 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         panel.delete_metadata(refresh_plot, keep_roi)
 
     @remote_controlled
+    def call_method(
+        self,
+        method_name: str,
+        *args,
+        panel: Literal["signal", "image"] | None = None,
+        **kwargs,
+    ):
+        """Call a public method on a panel or main window.
+
+        This generic method allows calling any public method that is not explicitly
+        exposed in the proxy API. The method resolution follows this order:
+
+        1. If panel is specified: call method on that specific panel
+        2. If panel is None:
+           a. Try to call method on main window (DLMainWindow)
+           b. If not found, try to call method on current panel (BaseDataPanel)
+
+        This makes it convenient to call panel methods without specifying the panel
+        parameter when working on the current panel.
+
+        Args:
+            method_name: Name of the method to call
+            *args: Positional arguments to pass to the method
+            panel: Panel name ("signal", "image", or None for auto-detection).
+             Defaults to None.
+            **kwargs: Keyword arguments to pass to the method
+
+        Returns:
+            The return value of the called method
+
+        Raises:
+            AttributeError: If the method does not exist or is not public
+            ValueError: If the panel name is invalid
+
+        Examples:
+            >>> # Call remove_object on current panel (auto-detected)
+            >>> win.call_method("remove_object", force=True)
+            >>> # Call a signal panel method specifically
+            >>> win.call_method("delete_all_objects", panel="signal")
+            >>> # Call main window method
+            >>> win.call_method("get_current_panel")
+        """
+        # Security check: only allow public methods (not starting with _)
+        if method_name.startswith("_"):
+            raise AttributeError(
+                f"Cannot call private method '{method_name}' through proxy"
+            )
+
+        # If panel is specified, use that panel directly
+        if panel is not None:
+            target = self.__get_datapanel(panel)
+            if not hasattr(target, method_name):
+                raise AttributeError(
+                    f"Method '{method_name}' does not exist on {panel} panel"
+                )
+            method = getattr(target, method_name)
+            if not callable(method):
+                raise AttributeError(f"'{method_name}' is not a callable method")
+            return method(*args, **kwargs)
+
+        # Panel is None: try main window first, then current panel
+        # Try main window first
+        if hasattr(self, method_name):
+            method = getattr(self, method_name)
+            if callable(method):
+                return method(*args, **kwargs)
+
+        # Method not found on main window, try current panel
+        current_panel = self.__get_current_basedatapanel()
+        if hasattr(current_panel, method_name):
+            method = getattr(current_panel, method_name)
+            if callable(method):
+                return method(*args, **kwargs)
+
+        # Method not found anywhere
+        raise AttributeError(
+            f"Method '{method_name}' does not exist on main window or current panel"
+        )
+
+    @remote_controlled
+    def call_method_slot(
+        self,
+        method_name: str,
+        args: list,
+        panel: Literal["signal", "image"] | None,
+        kwargs: dict,
+    ) -> None:
+        """Slot to call a method from RemoteServer thread in GUI thread.
+
+        This slot receives signals from RemoteServer and executes the method in
+        the GUI thread, avoiding thread-safety issues with Qt widgets and dialogs.
+
+        Args:
+            method_name: Name of the method to call
+            args: Positional arguments as a list
+            panel: Panel name or None for auto-detection
+            kwargs: Keyword arguments as a dict
+        """
+        # Call the method and store result in RemoteServer
+        try:
+            result = self.call_method(method_name, *args, panel=panel, **kwargs)
+            # Store result in RemoteServer for retrieval by XML-RPC thread
+            self.remote_server.result = result
+            self.remote_server.exception = None  # Clear any previous exception
+        except Exception as exc:  # pylint: disable=broad-except
+            # Store exception for re-raising in XML-RPC thread
+            self.remote_server.result = None
+            self.remote_server.exception = exc
+
+    @remote_controlled
     def get_object_shapes(
         self,
         nb_id_title: int | str | None = None,
@@ -526,6 +640,60 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         """
         self.macropanel.import_macro_from_file(filename)
 
+    # ------WebAPI control
+    @remote_controlled
+    def start_webapi_server(
+        self,
+        host: str | None = None,
+        port: int | None = None,
+    ) -> dict:
+        """Start the Web API server.
+
+        Args:
+            host: Host address to bind to. Defaults to "127.0.0.1".
+            port: Port number. Defaults to auto-detect available port.
+
+        Returns:
+            Dictionary with "url" and "token" keys.
+
+        Raises:
+            RuntimeError: If Web API deps not installed or server already running.
+        """
+        if not WEBAPI_AVAILABLE:
+            raise RuntimeError(
+                "Web API dependencies not installed. "
+                "Install with: pip install datalab-platform[webapi]"
+            )
+
+        controller = get_webapi_controller()
+        controller.set_main_window(self)
+        url, token = controller.start(host=host, port=port)
+        return {"url": url, "token": token}
+
+    @remote_controlled
+    def stop_webapi_server(self) -> None:
+        """Stop the Web API server."""
+        if not WEBAPI_AVAILABLE:
+            return
+
+        controller = get_webapi_controller()
+        controller.stop()
+
+    @remote_controlled
+    def get_webapi_status(self) -> dict:
+        """Get Web API server status.
+
+        Returns:
+            Dictionary with "running", "url", and "token" keys.
+        """
+        if not WEBAPI_AVAILABLE:
+            return {"running": False, "url": None, "token": None, "available": False}
+
+        controller = get_webapi_controller()
+        info = controller.get_connection_info()
+        info["available"] = True
+        return info
+
     # ------Misc.
     @property
     def panels(self) -> tuple[AbstractPanel, ...]:
@@ -539,6 +707,16 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
     def __set_low_memory_state(self, state: bool) -> None:
         """Set memory warning state"""
         self.__memory_warning = state
+
+    def __show_webapi_info(self) -> None:
+        """Show Web API connection info when status widget is clicked."""
+        if self.webapi_actions is not None:
+            self.webapi_actions.show_connection_info()
+
+    def __start_webapi_server(self) -> None:
+        """Start Web API server when status widget is clicked."""
+        if self.webapi_actions is not None:
+            self.webapi_actions.start_server_from_status_widget()
 
     def confirm_memory_state(self) -> bool:  # pragma: no cover
         """Check memory warning state and eventually show a warning dialog
@@ -600,6 +778,10 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             # Showing the log viewer for testing purpose (unattended mode) but only
             # if option 'do_not_quit' is not set, to avoid blocking the test suite
             self.__show_logviewer()
+        elif execenv.do_not_quit:
+            # If 'do_not_quit' is set, we do not show any message box to avoid blocking
+            # the test suite
+            return
         elif Conf.main.faulthandler_log_available.get(
             False
         ) or Conf.main.traceback_log_available.get(False):
@@ -677,6 +859,12 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         if tour:
             Conf.main.tour_enabled.set(False)
             self.show_tour()
+        # Auto-start WebAPI server if environment variable is set
+        if os.environ.get("DATALAB_WEBAPI_ENABLED") == "1":
+            try:
+                self.start_webapi_server()
+            except Exception as e:  # pylint: disable=broad-exception-caught
+                print(f"Warning: Failed to auto-start WebAPI server: {e}")
 
     def take_screenshot(self, name: str) -> None:  # pragma: no cover
         """Take main window screenshot"""
@@ -788,6 +976,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.__create_plugins_actions()
         self.__setup_central_widget()
         self.__add_menus()
+        self.__setup_webapi()
         if console:
             self.__setup_console()
         self.__update_actions(update_other_data_panel=True)
@@ -795,6 +984,11 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.__configure_panels()
         # Now that everything is set up, we can restore the window state:
         self.__restore_state()
+
+    def __setup_webapi(self) -> None:
+        """Setup Web API actions."""
+        self.webapi_actions = WebApiActions(self)
+        # Note: Menu is added in __update_view_menu since view_menu is cleared each show
 
     def __register_plugins(self) -> None:
         """Register plugins"""
@@ -842,6 +1036,11 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         xmlrpcstatus = status.XMLRPCStatus()
         xmlrpcstatus.set_port(self.remote_server.port)
         self.statusBar().addPermanentWidget(xmlrpcstatus)
+        # Web API server status
+        self.webapistatus = status.WebAPIStatus()
+        self.webapistatus.SIG_SHOW_INFO.connect(self.__show_webapi_info)
+        self.webapistatus.SIG_START_SERVER.connect(self.__start_webapi_server)
+        self.statusBar().addPermanentWidget(self.webapistatus)
         # Memory status
         threshold = Conf.main.available_memory_threshold.get()
         self.memorystatus = status.MemoryStatus(threshold)
@@ -1304,7 +1503,9 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             raise ValueError(f"Unknown panel {panel}")
 
     @remote_controlled
-    def calc(self, name: str, param: gds.DataSet | None = None) -> None:
+    def calc(
+        self, name: str, param: gds.DataSet | None = None, edit: bool = True
+    ) -> None:
         """Call computation feature ``name``
 
         .. note::
@@ -1317,6 +1518,8 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         Args:
             name: Compute function name
             param: Compute function parameter. Defaults to None.
+            edit: Whether to show parameter edit dialog. Defaults to True.
+             Set to False when calling from remote/API to avoid blocking dialogs.
 
         Raises:
             ValueError: unknown function
@@ -1340,7 +1543,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                 # registered feature:
                 try:
                     feature = panel.processor.get_feature(name)
-                    panel.processor.run_feature(feature, param)
+                    panel.processor.run_feature(feature, param, edit=edit)
                     return
                 except ValueError:
                     continue
@@ -1438,6 +1641,10 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                 self.settings_action,
             ],
         )
+        # Add Web API submenu
+        if self.webapi_actions is not None:
+            self.file_menu.addSeparator()
+            self.webapi_actions.create_menu(self.file_menu)
         if self.quit_action is not None:
             add_actions(self.file_menu, [self.quit_action])
 
@@ -1530,6 +1737,16 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         for panel in self.panels:
             if panel is not None:
                 panel.remove_all_objects()
+
+    @remote_controlled
+    def remove_object(self, force: bool = False) -> None:
+        """Remove current object from current panel.
+
+        Args:
+            force: if True, remove object without confirmation. Defaults to False.
+        """
+        panel = self.__get_current_basedatapanel()
+        panel.remove_object(force)
 
     @staticmethod
     def __check_h5file(filename: str, operation: str) -> str:
@@ -2115,6 +2332,8 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                 # it would represent too much effort for an error occuring in test
                 # configurations only.
                 pass
+        if self.webapi_actions is not None:
+            self.webapi_actions.cleanup()
         self.reset_all()
         self.__save_pos_size_and_state()
         self.__unregister_plugins()

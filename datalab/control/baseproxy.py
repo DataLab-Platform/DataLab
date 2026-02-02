@@ -128,6 +128,14 @@ class AbstractDLControl(abc.ABC):
         """Reset all application data"""
 
     @abc.abstractmethod
+    def remove_object(self, force: bool = False) -> None:
+        """Remove current object from current panel.
+
+        Args:
+            force: if True, remove object without confirmation. Defaults to False.
+        """
+
+    @abc.abstractmethod
     def toggle_auto_refresh(self, state: bool) -> None:
         """Toggle auto refresh state.
 
@@ -546,6 +554,85 @@ class AbstractDLControl(abc.ABC):
             ValueError: unknown function
         """
 
+    # =========================================================================
+    # Web API control methods
+    # =========================================================================
+
+    @abc.abstractmethod
+    def start_webapi_server(
+        self,
+        host: str | None = None,
+        port: int | None = None,
+    ) -> dict:
+        """Start the Web API server.
+
+        Args:
+            host: Host address to bind to. Defaults to "127.0.0.1".
+            port: Port number. Defaults to auto-detect available port.
+
+        Returns:
+            Dictionary with "url" and "token" keys.
+
+        Raises:
+            RuntimeError: If Web API deps not installed or server already running.
+        """
+
+    @abc.abstractmethod
+    def stop_webapi_server(self) -> None:
+        """Stop the Web API server."""
+
+    @abc.abstractmethod
+    def get_webapi_status(self) -> dict:
+        """Get Web API server status.
+
+        Returns:
+            Dictionary with "running", "url", and "token" keys.
+        """
+
+    @abc.abstractmethod
+    def call_method(
+        self,
+        method_name: str,
+        *args,
+        panel: str | None = None,
+        **kwargs,
+    ):
+        """Call a public method on a panel or main window.
+
+        This generic method allows calling any public method that is not explicitly
+        exposed in the proxy API. The method resolution follows this order:
+
+        1. If panel is specified: call method on that specific panel
+        2. If panel is None:
+           a. Try to call method on main window (DLMainWindow)
+           b. If not found, try to call method on current panel (BaseDataPanel)
+
+        This makes it convenient to call panel methods without specifying the panel
+        parameter when working on the current panel.
+
+        Args:
+            method_name: Name of the method to call
+            *args: Positional arguments to pass to the method
+            panel: Panel name ("signal", "image", or None for auto-detection).
+             Defaults to None.
+            **kwargs: Keyword arguments to pass to the method
+
+        Returns:
+            The return value of the called method
+
+        Raises:
+            AttributeError: If the method does not exist or is not public
+            ValueError: If the panel name is invalid
+
+        Examples:
+            >>> # Call remove_object on current panel (auto-detected)
+            >>> proxy.call_method("remove_object", force=True)
+            >>> # Call a signal panel method specifically
+            >>> proxy.call_method("delete_all_objects", panel="signal")
+            >>> # Call main window method
+            >>> proxy.call_method("raise_window")
+        """
+
 
 class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
     """Common base class for DataLab proxies
@@ -593,6 +680,14 @@ class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
     def reset_all(self) -> None:
         """Reset all application data"""
         self._datalab.reset_all()
+
+    def remove_object(self, force: bool = False) -> None:
+        """Remove current object from current panel.
+
+        Args:
+            force: if True, remove object without confirmation. Defaults to False.
+        """
+        self._datalab.remove_object(force)
 
     def toggle_auto_refresh(self, state: bool) -> None:
         """Toggle auto refresh state.
@@ -844,3 +939,68 @@ class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
             filename: Filename.
         """
         return self._datalab.import_macro_from_file(filename)
+
+    def call_method(
+        self,
+        method_name: str,
+        *args,
+        panel: str | None = None,
+        **kwargs,
+    ):
+        """Call a public method on a panel or main window.
+
+        Method resolution order when panel is None:
+        1. Try main window (DLMainWindow)
+        2. If not found, try current panel (BaseDataPanel)
+
+        Args:
+            method_name: Name of the method to call
+            *args: Positional arguments to pass to the method
+            panel: Panel name ("signal", "image", or None for auto-detection).
+             Defaults to None.
+            **kwargs: Keyword arguments to pass to the method
+
+        Returns:
+            The return value of the called method
+
+        Raises:
+            AttributeError: If the method does not exist or is not public
+            ValueError: If the panel name is invalid
+        """
+        return self._datalab.call_method(method_name, *args, panel=panel, **kwargs)
+
+    # =========================================================================
+    # Web API control methods
+    # =========================================================================
+
+    def start_webapi_server(
+        self,
+        host: str | None = None,
+        port: int | None = None,
+    ) -> dict:
+        """Start the Web API server.
+
+        Args:
+            host: Host address to bind to. Defaults to "127.0.0.1".
+            port: Port number. Defaults to auto-detect available port.
+
+        Returns:
+            Dictionary with "url" and "token" keys.
+
+        Raises:
+            RuntimeError: If Web API dependencies not installed or server
+             already running.
+        """
+        return self._datalab.start_webapi_server(host, port)
+
+    def stop_webapi_server(self) -> None:
+        """Stop the Web API server."""
+        return self._datalab.stop_webapi_server()
+
+    def get_webapi_status(self) -> dict:
+        """Get Web API server status.
+
+        Returns:
+            Dictionary with "running", "url", and "token" keys.
+        """
+        return self._datalab.get_webapi_status()

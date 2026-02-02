@@ -7,6 +7,7 @@ SciPy >= 1.10.1, < 1.17
 Sigima >= 1.0.6
 babel
 build
+fastapi >= 0.110.0
 guidata >= 3.13.4
 myst_parser
 opencv-python-headless >= 4.8.1.78
@@ -14,6 +15,7 @@ packaging >= 21.3
 pandas >= 1.4, < 3.0
 pre-commit
 psutil >= 5.8
+pydantic >= 2.0
 pydata-sphinx-theme
 pyinstaller == 6.16.0
 pylint
@@ -26,3 +28,4 @@ sphinx-copybutton
 sphinx-sitemap
 sphinx_design
 sphinx_intl
+uvicorn[standard] >= 0.27.0

@@ -15,7 +15,7 @@ import sigima.objects
 import sigima.params
 import sigima.proc.image as sipi
 from guidata.qthelpers import exec_dialog, qt_app_context
-from sigima.tests import vistools
+from sigima import viz
 from sigima.tests.data import create_noisy_gaussian_image
 
 from datalab.env import execenv
@@ -58,7 +58,7 @@ def test_image_offset_correction_with_background_dialog() -> None:
             param.x0, param.y0, param.dx, param.dy = ix0, iy0, ix1 - ix0, iy1 - iy0
             i2 = sipi.offset_correction(i1, param)
             i3 = sipi.clip(i2, sigima.params.ClipParam.create(lower=0))
-            vistools.view_images_side_by_side(
+            viz.view_images_side_by_side(
                 [i1, i3],
                 titles=["Original image", "Corrected image"],
                 title="Image offset correction and thresholding",
