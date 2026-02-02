@@ -54,34 +54,34 @@ from datalab.webapi.serialization import (
 router = APIRouter(prefix="/api/v1", tags=["workspace"])
 
 # Global references (set by controller at startup)
-_adapter: WorkspaceAdapter | None = None
-_auth_token: str | None = None
-_server_url: str | None = None
-_localhost_no_token: bool = False
+_ADAPTER: WorkspaceAdapter | None = None
+_AUTH_TOKEN: str | None = None
+_SERVER_URL: str | None = None
+_LOCALHOST_NO_TOKEN: bool = False
 
 
 def set_adapter(adapter: WorkspaceAdapter) -> None:
     """Set the workspace adapter for route handlers."""
-    global _adapter  # noqa: PLW0603  # pylint: disable=global-statement
-    _adapter = adapter
+    global _ADAPTER  # noqa: PLW0603  # pylint: disable=global-statement
+    _ADAPTER = adapter
 
 
 def set_auth_token(token: str) -> None:
     """Set the authentication token."""
-    global _auth_token  # noqa: PLW0603  # pylint: disable=global-statement
-    _auth_token = token
+    global _AUTH_TOKEN  # noqa: PLW0603  # pylint: disable=global-statement
+    _AUTH_TOKEN = token
 
 
 def set_server_url(url: str) -> None:
     """Set the server URL."""
-    global _server_url  # noqa: PLW0603  # pylint: disable=global-statement
-    _server_url = url
+    global _SERVER_URL  # noqa: PLW0603  # pylint: disable=global-statement
+    _SERVER_URL = url
 
 
 def set_localhost_no_token(enabled: bool) -> None:
     """Set whether localhost connections can bypass authentication."""
-    global _localhost_no_token  # noqa: PLW0603  # pylint: disable=global-statement
-    _localhost_no_token = enabled
+    global _LOCALHOST_NO_TOKEN  # noqa: PLW0603  # pylint: disable=global-statement
+    _LOCALHOST_NO_TOKEN = enabled
 
 
 def generate_auth_token() -> str:
@@ -91,12 +91,12 @@ def generate_auth_token() -> str:
 
 def get_adapter() -> WorkspaceAdapter:
     """Dependency: Get the workspace adapter."""
-    if _adapter is None:
+    if _ADAPTER is None:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Workspace adapter not initialized",
         )
-    return _adapter
+    return _ADAPTER
 
 
 def verify_token(
@@ -115,13 +115,13 @@ def verify_token(
         HTTPException: If token is missing or invalid.
     """
     # Check for localhost bypass
-    if _localhost_no_token:
+    if _LOCALHOST_NO_TOKEN:
         client_ip = request.client.host if request.client else None
         if client_ip in ("127.0.0.1", "::1", "localhost"):
             # Localhost bypass enabled and request is from localhost
             return None
 
-    if _auth_token is None:
+    if _AUTH_TOKEN is None:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Authentication not configured",
@@ -143,7 +143,7 @@ def verify_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    if not secrets.compare_digest(parts[1], _auth_token):
+    if not secrets.compare_digest(parts[1], _AUTH_TOKEN):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid token",
@@ -169,9 +169,9 @@ async def get_status() -> ApiStatus:
         running=True,
         version=__version__,
         api_version="v1",
-        url=_server_url,
+        url=_SERVER_URL,
         workspace_mode="live",
-        localhost_no_token=_localhost_no_token,
+        localhost_no_token=_LOCALHOST_NO_TOKEN,
     )
 
 
