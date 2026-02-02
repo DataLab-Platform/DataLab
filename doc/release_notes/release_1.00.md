@@ -1,5 +1,15 @@
 # Version 1.0 #
 
+## DataLab Version 1.0.4 (2026-02-02) ##
+
+### 🛠️ Bug Fixes since version 1.0.3 ###
+
+**Centroid computation compatibility:**
+
+* Fixed centroid computation failing with NumPy 2.4.0 and scikit-image 0.26.0 due to new einsum optimization that doesn't accept masked arrays
+* Image data is now explicitly converted to a standard NumPy array before computing the centroid
+* This closes [Issue #289](https://github.com/DataLab-Platform/DataLab/issues/289) - Compatibility issue with NumPy 2.4.0 and scikit-image 0.26.0
+
 ## DataLab Version 1.0.3 (2025-12-19) ##
 
 ### 🛠️ Bug Fixes since version 1.0.2 ###

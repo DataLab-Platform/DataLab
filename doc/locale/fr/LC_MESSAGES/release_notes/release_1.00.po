@@ -19,6 +19,24 @@ msgstr ""
 msgid "Version 1.0"
 msgstr ""
 
+msgid "DataLab Version 1.0.4 (2026-02-02)"
+msgstr "DataLab Version 1.0.4 (02/02/2026)"
+
+msgid "🛠️ Bug Fixes since version 1.0.3"
+msgstr "🛠️ Correctifs depuis la version 1.0.3"
+
+msgid "**Centroid computation compatibility:**"
+msgstr "**Compatibilité du calcul de centroïde :**"
+
+msgid "Fixed centroid computation failing with NumPy 2.4.0 and scikit-image 0.26.0 due to new einsum optimization that doesn't accept masked arrays"
+msgstr "Correction du calcul de centroïde qui échouait avec NumPy 2.4.0 et scikit-image 0.26.0 en raison d'une nouvelle optimisation einsum qui n'accepte pas les tableaux masqués"
+
+msgid "Image data is now explicitly converted to a standard NumPy array before computing the centroid"
+msgstr "Les données d'image sont désormais explicitement converties en tableau NumPy standard avant le calcul du centroïde"
+
+msgid "This closes [Issue #289](https://github.com/DataLab-Platform/DataLab/issues/289) - Compatibility issue with NumPy 2.4.0 and scikit-image 0.26.0"
+msgstr "Ceci clôture [Issue #289](https://github.com/DataLab-Platform/DataLab/issues/289) - Problème de compatibilité avec NumPy 2.4.0 et scikit-image 0.26.0"
+
 msgid "DataLab Version 1.0.3 (2025-12-19)"
 msgstr "DataLab Version 1.0.3 (19/12/2025)"
 
