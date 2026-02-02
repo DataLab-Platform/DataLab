@@ -20,7 +20,6 @@ DataLab now provides a modern **HTTP/JSON Web API** as an alternative to the exi
   * Computation API for running processing operations remotely
 * **Auto-discovery**: DataLab-Kernel automatically finds and connects to a running DataLab instance without manual configuration
 * **Security**: Localhost binding by default, with optional localhost token bypass for simplified local development
-* **Requires additional dependencies**: Install with `pip install datalab-platform[webapi]`
 
 **PyQt6 compatibility:**
 
@@ -49,4 +48,4 @@ DataLab now provides a modern **HTTP/JSON Web API** as an alternative to the exi
 **Dependencies:**
 
 * Updated Sigima dependency to version 1.1.0 which includes new features and bug fixes
-* Added optional Web API dependencies: FastAPI, Uvicorn, and Pydantic (install with `pip install datalab-platform[webapi]`)
+* Added Web API dependencies: FastAPI, Uvicorn, and Pydantic (included in standard installation)

@@ -29,8 +29,8 @@ msgstr "API Web"
 msgid "The DataLab Web API provides a modern **HTTP/JSON interface** for external access to the DataLab workspace. It is the recommended integration path for new projects, especially for Jupyter notebooks and web-based tools."
 msgstr "L'API Web DataLab fournit une interface moderne **HTTP/JSON** pour un accès externe à l'espace de travail DataLab. C'est la voie d'intégration recommandée pour les nouveaux projets, en particulier pour les notebooks Jupyter et les outils basés sur le web."
 
-msgid "The Web API is available starting from DataLab 1.1. It requires additional dependencies that can be installed with: ``pip install datalab-platform[webapi]``"
-msgstr "L'API Web est disponible à partir de DataLab 1.1. Elle nécessite des dépendances supplémentaires qui peuvent être installées avec : ``pip install datalab-platform[webapi]``"
+msgid "The Web API is available starting from DataLab 1.1. The required dependencies (FastAPI, Uvicorn, Pydantic) are included in the standard DataLab installation."
+msgstr "L'API Web est disponible à partir de DataLab 1.1. Les dépendances requises (FastAPI, Uvicorn, Pydantic) sont incluses dans l'installation standard de DataLab."
 
 msgid "Overview"
 msgstr "Aperçu"
@@ -122,8 +122,8 @@ msgstr "Activer l'API Web"
 msgid "There are several ways to enable the Web API server:"
 msgstr "Il existe plusieurs façons d'activer le serveur API Web :"
 
-msgid "**Via UI**: View → Web API → Start Web API Server"
-msgstr "**Via l'interface** : Affichage → API Web → Démarrer le serveur API Web"
+msgid "**Via UI**: File → Web API → Start Web API Server"
+msgstr "**Via l'interface** : Fichier → API Web → Démarrer le serveur API Web"
 
 msgid "**Via environment variable**: Set ``DATALAB_WEBAPI_ENABLED=1`` before starting DataLab"
 msgstr "**Via variable d'environnement** : Définir ``DATALAB_WEBAPI_ENABLED=1`` avant de démarrer DataLab"
@@ -341,11 +341,8 @@ msgstr "L'API Web s'exécute dans un thread séparé de l'interface Qt. Le ``Wor
 msgid "Installation"
 msgstr "Installation"
 
-msgid "The Web API requires additional dependencies:"
-msgstr "L'API Web nécessite des dépendances supplémentaires :"
-
-msgid "This installs:"
-msgstr "Ceci installe :"
+msgid "The Web API dependencies are included in the standard DataLab installation:"
+msgstr "Les dépendances de l'API Web sont incluses dans l'installation standard de DataLab :"
 
 msgid "FastAPI (web framework)"
 msgstr "FastAPI (framework web)"
@@ -355,6 +352,9 @@ msgstr "Uvicorn (serveur ASGI)"
 
 msgid "Pydantic (data validation)"
 msgstr "Pydantic (validation de données)"
+
+msgid "No additional installation steps are required."
+msgstr "Aucune étape d'installation supplémentaire n'est nécessaire."
 
 msgid "Programmatic Control"
 msgstr "Contrôle programmatique"

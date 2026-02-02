@@ -68,12 +68,6 @@ msgstr "**Découverte automatique** : DataLab-Kernel trouve et se connecte autom
 msgid "**Security**: Localhost binding by default, with optional localhost token bypass for simplified local development"
 msgstr "**Sécurité** : Liaison localhost par défaut, avec contournement optionnel du jeton localhost pour simplifier le développement local"
 
-msgid "**Requires additional dependencies**: Install with `pip install datalab-platform[webapi]`"
-msgstr "**Nécessite des dépendances supplémentaires** : Installer avec `pip install datalab-platform[webapi]`"
-
-msgid "See :ref:`ref-to-webapi` for complete documentation."
-msgstr "Voir :ref:`ref-to-webapi` pour la documentation complète."
-
 msgid "**PyQt6 compatibility:**"
 msgstr "**Compatibilité PyQt6 :**"
 
@@ -134,5 +128,6 @@ msgstr "**Dépendances :**"
 msgid "Updated Sigima dependency to version 1.1.0 which includes new features and bug fixes"
 msgstr "Mise à jour de la dépendance Sigima vers la version 1.1.0 qui inclut de nouvelles fonctionnalités et corrections de bugs"
 
-msgid "Added optional Web API dependencies: FastAPI, Uvicorn, and Pydantic (install with `pip install datalab-platform[webapi]`)"
-msgstr "Ajout des dépendances optionnelles pour l'API Web : FastAPI, Uvicorn et Pydantic (installer avec `pip install datalab-platform[webapi]`)"
+msgid "Added Web API dependencies: FastAPI, Uvicorn, and Pydantic (included in standard installation)"
+msgstr "Ajout des dépendances pour l'API Web : FastAPI, Uvicorn et Pydantic (incluses dans l'installation standard)"
+

@@ -13,8 +13,8 @@ especially for Jupyter notebooks and web-based tools.
 
 .. note::
 
-    The Web API is available starting from DataLab 1.1. It requires additional
-    dependencies that can be installed with: ``pip install datalab-platform[webapi]``
+    The Web API is available starting from DataLab 1.1. The required dependencies
+    (FastAPI, Uvicorn, Pydantic) are included in the standard DataLab installation.
 
 Overview
 --------
@@ -62,7 +62,7 @@ Enabling the Web API
 
 There are several ways to enable the Web API server:
 
-1. **Via UI**: View → Web API → Start Web API Server
+1. **Via UI**: File → Web API → Start Web API Server
 2. **Via environment variable**: Set ``DATALAB_WEBAPI_ENABLED=1`` before starting DataLab
 
 When started, DataLab displays the server URL and authentication token in a dialog.
@@ -307,17 +307,13 @@ thread using Qt's signal/slot mechanism.
 Installation
 ------------
 
-The Web API requires additional dependencies:
-
-.. code-block:: bash
-
-    pip install datalab-platform[webapi]
-
-This installs:
+The Web API dependencies are included in the standard DataLab installation:
 
 - FastAPI (web framework)
 - Uvicorn (ASGI server)
 - Pydantic (data validation)
+
+No additional installation steps are required.
 
 Programmatic Control
 --------------------
