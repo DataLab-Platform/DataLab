@@ -52,6 +52,11 @@ del "%RESPATH%\tmp-*.png"
 
 @REM Note: Translations were already compiled in the cloned directory using the dev environment
 
+@REM Copy PDF documentation from original repository
+set MODNAME=datalab
+if not exist %MODNAME%\data\doc ( mkdir %MODNAME%\data\doc )
+copy %REPODIR%\%MODNAME%\data\doc\*.pdf %MODNAME%\data\doc
+
 @REM Generate build manifest
 %PYTHON% scripts\generate_manifest.py
 
