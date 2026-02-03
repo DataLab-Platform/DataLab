@@ -7,7 +7,7 @@ xorg
 xubuntu-icon-theme
 libxss1
 libpci3
-libasound2
+libasound2t64
 fonts-ubuntu
 qutebrowser
 htop
