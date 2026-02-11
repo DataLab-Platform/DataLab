@@ -12,8 +12,12 @@ from pathlib import Path
 
 def load_env_file(env_path: str | None = None) -> None:
     """Load environment variables from a .env file."""
+    # Set a flag to indicate that the environment has been loaded by this script
+    # This prevents batch scripts (like utils.bat) from reloading .env and overwriting variables
+    os.environ["DATALAB_ENV_LOADED"] = "1"
+
     if env_path is None:
-        # Get ".eenv" file from the current directory
+        # Get ".env" file from the current directory
         env_path = Path.cwd() / ".env"
     if not Path(env_path).is_file():
         raise FileNotFoundError(f"Environment file not found: {env_path}")
@@ -24,8 +28,32 @@ def load_env_file(env_path: str | None = None) -> None:
             if not line or line.startswith("#") or "=" not in line:
                 continue
             key, value = line.split("=", 1)
-            os.environ[key.strip()] = value.strip()
-            print(f"  Loaded variable: {key.strip()}={value.strip()}")
+            value = os.path.expandvars(value.strip())
+
+            # Handle PATH variable specifically:
+            # 1. Convert relative paths to absolute paths
+            # 2. Normalize path separators
+            if key.strip().upper() == "PATH":
+                paths = value.split(os.pathsep)
+                abs_paths = []
+                for p in paths:
+                    p = p.strip()
+                    if not p:
+                        continue
+                    # Check if it looks like a relative path component
+                    # (not starting with drive or root)
+                    # Note: This simple check assumes standard usage in .env
+                    if not os.path.isabs(p) and not p.startswith("%"):
+                        try:
+                            # Resolve relative to .env file directory
+                            p = str((Path(env_path).parent / p).resolve())
+                        except Exception:
+                            pass  # Keep as is if resolution fails
+                    abs_paths.append(os.path.normpath(p))
+                value = os.pathsep.join(abs_paths)
+
+            os.environ[key.strip()] = value
+            print(f"  Loaded variable: {key.strip()}={value}")
 
 
 def execute_command(command: list[str]) -> int:

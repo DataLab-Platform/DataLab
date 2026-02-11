@@ -374,7 +374,7 @@
         },
         {
             "label": "🛠️ Generate doc assets",
-            "command": "${command:python.interpreterPath} scripts/run_with_env.py ${command:python.interpreterPath} -m guidata.utils.genreqs all && ${command:python.interpreterPath} scripts/run_with_env.py ${command:python.interpreterPath} doc/update_validation_status.py",
+            "command": "${command:python.interpreterPath} scripts/run_with_env.py ${command:python.interpreterPath} -m guidata.utils.genreqs all; if ($?) { ${command:python.interpreterPath} scripts/run_with_env.py ${command:python.interpreterPath} doc/update_validation_status.py }",
             "options": {
                 "cwd": "${workspaceFolder}",
                 "statusbar": {
@@ -431,7 +431,7 @@
             "label": "📊 Coverage full",
             "type": "shell",
             "windows": {
-                "command": "${command:python.interpreterPath} -m coverage combine && ${command:python.interpreterPath} -m coverage html && start htmlcov\\index.html",
+                "command": "${command:python.interpreterPath} -m coverage combine; if ($?) { ${command:python.interpreterPath} -m coverage html; if ($?) { start htmlcov\\index.html } }",
             },
             "linux": {
                 "command": "${command:python.interpreterPath} -m coverage combine && ${command:python.interpreterPath} -m coverage html && xdg-open htmlcov/index.html",
@@ -493,15 +493,12 @@
         {
             "label": "🔁 Reinstall guidata/plotpy/sigima dev",
             "type": "shell",
-            "windows": {
-                "command": ".venv/scripts/pip uninstall -y guidata plotpy sigima; Remove-Item -Recurse -Force .venv/Lib/site-packages/guidata -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force .venv/Lib/site-packages/plotpy -ErrorAction SilentlyContinue; Remove-Item -Recurse -Force .venv/Lib/site-packages/sigima -ErrorAction SilentlyContinue; .venv/scripts/pip install -e ../guidata; .venv/scripts/pip install -e ../plotpy; .venv/scripts/pip install -e ../sigima",
-            },
-            "linux": {
-                "command": ".venv/bin/pip uninstall -y guidata plotpy sigima && rm -rf .venv/lib/python*/site-packages/guidata && rm -rf .venv/lib/python*/site-packages/plotpy && rm -rf .venv/lib/python*/site-packages/sigima && .venv/bin/pip install -e ../guidata && .venv/bin/pip install -e ../plotpy && .venv/bin/pip install -e ../sigima",
-            },
-            "osx": {
-                "command": ".venv/bin/pip uninstall -y guidata plotpy sigima && rm -rf .venv/lib/python*/site-packages/guidata && rm -rf .venv/lib/python*/site-packages/plotpy && rm -rf .venv/lib/python*/site-packages/sigima && .venv/bin/pip install -e ../guidata && .venv/bin/pip install -e ../plotpy && .venv/bin/pip install -e ../sigima",
-            },
+            "command": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "scripts/run_with_env.py",
+                "${config:python.defaultInterpreterPath}",
+                "${workspaceFolder}/scripts/reinstall_dev.py",
+            ],
             "options": {
                 "cwd": "${workspaceFolder}",
                 "statusbar": {
@@ -543,9 +540,15 @@
         {
             "label": "Create executable",
             "type": "shell",
-            "command": "cmd",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "scripts/run_with_env.py",
+                "cmd",
+                "/c",
+                "scripts\\build_exe.bat",
+            ],
             "options": {
-                "cwd": "scripts",
+                "cwd": "${workspaceFolder}",
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
                     // "RELEASE": "1",
@@ -555,10 +558,6 @@
                     "hide": true,
                 },
             },
-            "args": [
-                "/c",
-                "build_exe.bat",
-            ],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -576,9 +575,15 @@
         {
             "label": "Create installer",
             "type": "shell",
-            "command": "cmd",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "scripts/run_with_env.py",
+                "cmd",
+                "/c",
+                "scripts\\build_installer.bat",
+            ],
             "options": {
-                "cwd": "scripts",
+                "cwd": "${workspaceFolder}",
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
                     "UNATTENDED": "1",
@@ -587,10 +592,6 @@
                     "hide": true,
                 },
             },
-            "args": [
-                "/c",
-                "build_installer.bat",
-            ],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -608,9 +609,9 @@
         {
             "label": "Build PDF doc",
             "type": "shell",
-            "command": "cmd",
+            "command": "${command:python.interpreterPath}",
             "options": {
-                "cwd": "scripts",
+                "cwd": "${workspaceFolder}",
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
@@ -622,8 +623,10 @@
                 },
             },
             "args": [
+                "scripts/run_with_env.py",
+                "cmd",
                 "/c",
-                "build_doc.bat",
+                "scripts\\build_doc.bat"
             ],
             "problemMatcher": [],
             "group": {
@@ -703,9 +706,15 @@
         {
             "label": "GitHub Pages: build",
             "type": "shell",
-            "command": "cmd",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "scripts/run_with_env.py",
+                "cmd",
+                "/c",
+                "scripts\\build_ghpages.bat",
+            ],
             "options": {
-                "cwd": "scripts",
+                "cwd": "${workspaceFolder}",
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
@@ -716,10 +725,6 @@
                     "hide": true,
                 },
             },
-            "args": [
-                "/c",
-                "build_ghpages.bat",
-            ],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -741,9 +746,15 @@
         {
             "label": "GitHub Pages: preview",
             "type": "shell",
-            "command": "cmd",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "scripts/run_with_env.py",
+                "cmd",
+                "/c",
+                "scripts\\preview_ghpages.bat",
+            ],
             "options": {
-                "cwd": "scripts",
+                "cwd": "${workspaceFolder}",
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
                     "QT_COLOR_MODE": "light",
@@ -754,10 +765,6 @@
                     "hide": true,
                 },
             },
-            "args": [
-                "/c",
-                "preview_ghpages.bat",
-            ],
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -816,9 +823,15 @@
         {
             "label": "Build Python packages",
             "type": "shell",
-            "command": "cmd",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "scripts/run_with_env.py",
+                "cmd",
+                "/c",
+                "scripts\\build_dist.bat",
+            ],
             "options": {
-                "cwd": "scripts",
+                "cwd": "${workspaceFolder}",
                 "env": {
                     "PYTHON": "${command:python.interpreterPath}",
                     // "RELEASE": "1",
@@ -828,10 +841,6 @@
                     "hide": true,
                 },
             },
-            "args": [
-                "/c",
-                "build_dist.bat",
-            ],
             "problemMatcher": [],
             "group": {
                 "kind": "build",

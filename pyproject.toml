@@ -31,6 +31,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Image Processing",
     "Topic :: Scientific/Engineering :: Human Machine Interfaces",
@@ -141,7 +142,7 @@ filterwarnings = [
 ]
 
 [tool.ruff]
-exclude = [".git", ".vscode", "build", "dist", "*.ipynb"]
+exclude = [".git", ".vscode", "build", "dist", "*.ipynb","venv*",".venv*",]
 line-length = 88                               # Same as Black.
 indent-width = 4                               # Same as Black.
 target-version = "py39"                        # Assume Python 3.9.

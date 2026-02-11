@@ -62,6 +62,12 @@ goto:eof
 :SetPythonPath
     set ORIGINAL_PYTHONPATH=%PYTHONPATH%
     cd %~dp0..
+    
+    if defined DATALAB_ENV_LOADED (
+        REM Environment already loaded by run_with_env.py, skip .env reloading
+        goto :skip_env_load
+    )
+
     if not defined RELEASE (set RELEASE=0)
     if %RELEASE%==1 (
         set PYTHONPATH=%CD%
@@ -70,6 +76,8 @@ goto:eof
             set %%A
         )
     )
+    
+    :skip_env_load
     set PYTHONPATH=%PYTHONPATH%;%ORIGINAL_PYTHONPATH%
     goto:eof
 
