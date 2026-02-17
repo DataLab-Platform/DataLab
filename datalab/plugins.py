@@ -27,6 +27,7 @@ import os
 import os.path as osp
 import pkgutil
 import sys
+import traceback
 from typing import TYPE_CHECKING
 
 from qtpy import QtWidgets as QW
@@ -328,13 +329,17 @@ def discover_plugins() -> list[type[PluginBase]]:
     for _finder, name, _ispkg in pkgutil.iter_modules():
         if not name.startswith(f"{MOD_NAME}_"):
             continue
-        # If module is already loaded, reload it so that code changes
-        # are taken into account (useful for hot-reload in dev).
-        if name in sys.modules:
-            module = importlib.reload(sys.modules[name])
-        else:
-            module = importlib.import_module(name)
-        modules.append(module)
+        try:
+            # If module is already loaded, reload it so that code changes
+            # are taken into account (useful for hot-reload in dev).
+            if name in sys.modules:
+                module = importlib.reload(sys.modules[name])
+            else:
+                module = importlib.import_module(name)
+            modules.append(module)
+        except Exception as e:  # pylint: disable=broad-except
+            print(f"Error loading plugin '{name}': {e}")
+            traceback.print_exc()
     return modules
 
 

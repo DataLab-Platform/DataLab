@@ -1007,10 +1007,11 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             plugin_nb = len(discover_plugins())
             execenv.log(self, f"{plugin_nb} plugin(s) found")
         for plugin_class in PluginRegistry.get_plugin_classes():
-            with qth.try_or_log_error(f"Instantiating plugin {plugin_class.__name__}"):
+            with qth.try_or_log_error(
+                f"Instantiating and registering plugin {plugin_class.__name__}"
+            ):
                 # Instantiating plugin
                 plugin: PluginBase = plugin_class()
-            with qth.try_or_log_error(f"Registering plugin {plugin.info.name}"):
                 # Registering plugin
                 plugin.register(self)
 
@@ -1076,12 +1077,10 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             # Instantiate and register plugins again
             for plugin_class in PluginRegistry.get_plugin_classes():
                 with qth.try_or_log_error(
-                    f"Instantiating plugin {plugin_class.__name__} (reload)"
+                    f"Instantiating and registering plugin "
+                    f"{plugin_class.__name__} (reload)"
                 ):
                     plugin: PluginBase = plugin_class()
-                with qth.try_or_log_error(
-                    f"Registering plugin {plugin.info.name} (reload)"
-                ):
                     plugin.register(self)
 
             # Recreate plugin actions for the new plugin set
