@@ -386,6 +386,15 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         # Use the same refresh pattern as delete_results() method
         self.panel.refresh_plot("selected", True, False)
 
+    def clear_plugin_actions(self) -> None:
+        """Clear plugin actions and submenus"""
+        self.feature_actions.pop(ActionCategory.PLUGINS, None)
+        # Clear submenus related to plugins
+        plugin_prefix = ActionCategory.PLUGINS.name + "/"
+        for key in list(self.__submenus.keys()):
+            if key.startswith(plugin_prefix):
+                self.__submenus.pop(key)
+
     @contextmanager
     def new_category(self, category: ActionCategory) -> Generator[None, None, None]:
         """Context manager for creating a new menu.
@@ -439,6 +448,15 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 setattr(self, store_ref, menu)
         else:
             menu = self.__submenus[key]
+            # When reusing an existing submenu (e.g. after re-running
+            # plugin action creation), clear previous actions so that the
+            # submenu contents reflect the latest definitions.
+            #
+            # However, if we are in the PLUGINS category, we don't want to
+            # clear the menu because multiple plugins might contribute to the
+            # same submenu (e.g. "Processing").
+            if self.__category_in_progress is not ActionCategory.PLUGINS:
+                menu.clear()
 
         # Save current submenu state and push new submenu onto stack
         submenu_state = {
@@ -471,14 +489,24 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             # Update submenu in progress status BEFORE adding to parent
             self.__submenu_in_progress = len(self.__submenu_stack) > 0
 
-            if current_submenu["is_new"]:
-                # Add this submenu to its parent (either category or parent submenu)
-                if self.__submenu_stack:
-                    # We're in a nested submenu, add to parent submenu's actions
-                    parent_submenu = self.__submenu_stack[-1]
+            # Add this submenu to its parent (either category or parent submenu)
+            if self.__submenu_stack:
+                # We're in a nested submenu, add to parent submenu's actions
+                parent_submenu = self.__submenu_stack[-1]
+                if current_submenu["is_new"]:
                     parent_submenu["actions"].append(current_submenu["menu"])
-                else:
-                    # We're at the top level, add to category actions
+            else:
+                # We're at the top level, ensure the submenu is attached to the
+                # current category. This must also work when the category
+                # action list was cleared (e.g. when reloading plugins), in
+                # which case we need to re-add existing submenus.
+                category_actions = self.feature_actions.get(
+                    self.__category_in_progress, []
+                )
+                if (
+                    current_submenu["is_new"]
+                    or current_submenu["menu"] not in category_actions
+                ):
                     # Force using the current category, not SUBMENU
                     self.add_to_action_list(
                         current_submenu["menu"], category=self.__category_in_progress

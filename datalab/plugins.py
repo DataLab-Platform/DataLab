@@ -110,6 +110,14 @@ class PluginRegistry(type):
         execenv.log(cls, "All plugins unregistered")
 
     @classmethod
+    def clear_plugin_classes(cls) -> None:
+        """Clear registered plugin classes.
+
+        This is mainly useful when reloading plugin modules at runtime.
+        """
+        cls._plugin_classes.clear()
+
+    @classmethod
     def get_plugin_info(cls, html: bool = True) -> str:
         """Return plugin information (names, versions, descriptions) in html format
 
@@ -297,23 +305,58 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
 def discover_plugins() -> list[type[PluginBase]]:
     """Discover plugins using naming convention
 
+    This function reloads or imports all modules matching the DataLab
+    plugin naming scheme (``"{MOD_NAME}_*"``). Plugin classes are then
+    registered automatically via the :class:`PluginRegistry` metaclass.
+
     Returns:
-        List of discovered plugins (as classes)
+        List of imported/reloaded plugin modules
     """
-    if Conf.main.plugins_enabled.get():
-        for path in [
-            Conf.main.plugins_path.get(),
-            PLUGINS_DEFAULT_PATH,
-        ] + OTHER_PLUGINS_PATHLIST:
-            rpath = osp.realpath(path)
-            if rpath not in sys.path:
-                sys.path.append(rpath)
-        return [
-            importlib.import_module(name)
-            for _finder, name, _ispkg in pkgutil.iter_modules()
-            if name.startswith(f"{MOD_NAME}_")
-        ]
-    return []
+    if not Conf.main.plugins_enabled.get():
+        return []
+
+    # Ensure plugin search paths are present in sys.path
+    for path in [
+        Conf.main.plugins_path.get(),
+        PLUGINS_DEFAULT_PATH,
+    ] + OTHER_PLUGINS_PATHLIST:
+        rpath = osp.realpath(path)
+        if rpath not in sys.path:
+            sys.path.append(rpath)
+
+    modules: list[type[PluginBase]] = []
+    for _finder, name, _ispkg in pkgutil.iter_modules():
+        if not name.startswith(f"{MOD_NAME}_"):
+            continue
+        # If module is already loaded, reload it so that code changes
+        # are taken into account (useful for hot-reload in dev).
+        if name in sys.modules:
+            module = importlib.reload(sys.modules[name])
+        else:
+            module = importlib.import_module(name)
+        modules.append(module)
+    return modules
+
+
+def reload_plugin_modules() -> None:
+    """Reload plugin modules and reset plugin classes.
+
+    This helper is intended for hot-reloading plugins at runtime. It:
+
+    - Updates the plugin search path
+    - Clears the plugin class registry
+    - Reloads or imports all modules matching the plugin naming convention
+    """
+    if not Conf.main.plugins_enabled.get():
+        return
+
+    # Reset class registry before re-executing modules so that plugin
+    # classes are rebuilt from freshly executed code.
+    PluginRegistry.unregister_all_plugins()
+
+    # Re-discover plugins; discover_plugins will reload modules that
+    # are already imported.
+    discover_plugins()
 
 
 def discover_v020_plugins() -> list[tuple[str, str]]:

@@ -175,6 +175,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.autorefresh_action: QW.QAction | None = None
         self.showfirstonly_action: QW.QAction | None = None
         self.showlabel_action: QW.QAction | None = None
+        self.reload_plugins_action: QW.QAction | None = None
 
         self.file_menu: QW.QMenu | None = None
         self.create_menu: QW.QMenu | None = None
@@ -991,7 +992,16 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         # Note: Menu is added in __update_view_menu since view_menu is cleared each show
 
     def __register_plugins(self) -> None:
-        """Register plugins"""
+        """Discover and register third-party plugins at startup
+
+        The discovery phase imports all modules following the plugin
+        naming convention. Plugin classes are then provided by
+        :class:`PluginRegistry` and instantiated/registered here.
+        """
+        # Clear plugin class registry to avoid duplicate registration
+        # when reloading modules or running tests
+        PluginRegistry.clear_plugin_classes()
+
         with qth.try_or_log_error("Discovering plugins"):
             # Discovering plugins
             plugin_nb = len(discover_plugins())
@@ -1005,7 +1015,12 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                 plugin.register(self)
 
     def __create_plugins_actions(self) -> None:
-        """Create plugins actions"""
+        """Ask each registered plugin to create its UI actions
+
+        Actions created while the PLUGINS category is active are stored
+        in the panels' action handlers and later exposed through the
+        *Plugins* menu.
+        """
         with self.signalpanel.acthandler.new_category(ActionCategory.PLUGINS):
             with self.imagepanel.acthandler.new_category(ActionCategory.PLUGINS):
                 for plugin in PluginRegistry.get_plugins():
@@ -1014,9 +1029,66 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 
     @staticmethod
     def __unregister_plugins() -> None:
-        """Unregister plugins"""
+        """Unregister all plugins and let them cleanup their hooks"""
         with qth.try_or_log_error("Unregistering plugins"):
             PluginRegistry.unregister_all_plugins()
+
+    def reload_plugins(self) -> None:
+        """Reload third-party plugins at runtim
+
+        The workflow is:
+
+        1. Unregister current plugins (so they can release resources).
+        2. Clear plugin actions from both panels.
+        3. Clear the plugin class registry and re-discover plugin
+           modules so that code changes on disk are picked up.
+        4. Re-instantiate and register all plugin classes.
+        5. Ask plugins to recreate their actions and refresh menus.
+        """
+        with qth.try_or_log_error("Reloading plugins"):
+            if not Conf.main.plugins_enabled.get():
+                QW.QMessageBox.information(
+                    self,
+                    _("Plugins"),
+                    _(
+                        "Third-party plugins are disabled. Enable them in the "
+                        "Settings dialog to use this feature."
+                    ),
+                )
+                return
+
+            # Unregister existing plugin instances
+            self.__unregister_plugins()
+
+            # Clear existing plugin actions on both panels so that
+            # removed plugins no longer appear in menus.
+            for panel in (self.signalpanel, self.imagepanel):
+                panel.acthandler.clear_plugin_actions()
+
+            # Reset plugin class registry and rediscover plugins. The
+            # discovery step will reload already-imported modules so
+            # that code changes are picked up.
+            PluginRegistry.clear_plugin_classes()
+            with qth.try_or_log_error("Discovering plugins (reload)"):
+                plugin_nb = len(discover_plugins())
+                execenv.log(self, f"{plugin_nb} plugin(s) found (reloaded)")
+
+            # Instantiate and register plugins again
+            for plugin_class in PluginRegistry.get_plugin_classes():
+                with qth.try_or_log_error(
+                    f"Instantiating plugin {plugin_class.__name__} (reload)"
+                ):
+                    plugin: PluginBase = plugin_class()
+                with qth.try_or_log_error(
+                    f"Registering plugin {plugin.info.name} (reload)"
+                ):
+                    plugin.register(self)
+
+            # Recreate plugin actions for the new plugin set
+            self.__create_plugins_actions()
+
+            # Update actions and menus to reflect new plugin set
+            self.__update_actions(update_other_data_panel=True)
 
     def __configure_statusbar(self, console: bool) -> None:
         """Configure status bar
@@ -1144,6 +1216,15 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             icon=get_icon("show_titles.svg"),
             tip=_("Show or hide ROI and other graphical object titles or subtitles"),
             toggled=self.toggle_show_titles,
+        )
+
+        # Plugins menu actions
+        self.reload_plugins_action = create_action(
+            self,
+            _("Reload plugins"),
+            icon=get_icon("refresh-auto.svg"),
+            tip=_("Reload third-party plugins from disk"),
+            triggered=self.reload_plugins,
         )
 
     def __add_signal_panel(self) -> None:
@@ -1597,8 +1678,11 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.signalpanel_toolbar.setVisible(is_signal)
         self.imagepanel_toolbar.setVisible(not is_signal)
         if self.plugins_menu is not None:
-            plugin_actions = panel.get_category_actions(ActionCategory.PLUGINS)
-            self.plugins_menu.setEnabled(len(plugin_actions) > 0)
+            # Keep the Plugins menu enabled even when there are no
+            # registered plugin actions so that the "Reload plugins"
+            # entry is always usable (new plugins can be discovered
+            # after being added on disk).
+            self.plugins_menu.setEnabled(True)
 
     def __tab_index_changed(self, index: int) -> None:
         """Switch from signal to image mode, or vice-versa"""
@@ -1624,6 +1708,11 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             self.plugins_menu: ActionCategory.PLUGINS,
         }[menu]
         actions = panel.get_category_actions(category)
+        # Always expose the reload action in the Plugins menu, even if
+        # no plugin has registered actions yet (so that new plugins can be
+        # discovered after they are added on disk).
+        if menu is self.plugins_menu:
+            actions = list(actions) + [None, self.reload_plugins_action]
         add_actions(menu, actions)
 
     def __update_file_menu(self) -> None:
