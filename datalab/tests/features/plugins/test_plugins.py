@@ -501,8 +501,7 @@ def test_plugin_duplicate_name():
         # Start application - should handle duplicate gracefully
         with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
             mock_run_tests.return_value = False
-            with datalab_test_app_context(console=False) as win:
-                win: DLMainWindow
+            with datalab_test_app_context(console=False):
                 QW.QApplication.processEvents()
 
                 # Verify app is still alive
@@ -629,8 +628,7 @@ def test_plugin_with_dialogs():
             "self.main._test_dialog_flag = True",
         )
 
-        with datalab_test_app_context(console=False) as win:
-            win: DLMainWindow
+        with datalab_test_app_context(console=False):
             QW.QApplication.processEvents()
 
             # Verify plugin loaded
@@ -709,8 +707,7 @@ class SyntaxErrorPlugin(PluginBase):
         # Start application - should handle syntax error gracefully
         with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
             mock_run_tests.return_value = False
-            with datalab_test_app_context(console=False) as win:
-                win: DLMainWindow
+            with datalab_test_app_context(console=False):
                 QW.QApplication.processEvents()
 
                 # Verify app is still alive

@@ -132,8 +132,9 @@ class PluginTestData(PluginBase):
             )
             sah.new_action(
                 _("Load all test signals"),
-                triggered=lambda regclass=SignalIORegistry,
-                title=_("Load all test signals"): self.load_test_objs(regclass, title),
+                triggered=lambda regclass=SignalIORegistry, title=_("Load all test signals"): (
+                    self.load_test_objs(regclass, title)
+                ),
                 select_condition="always",
                 separator=True,
             )
@@ -183,8 +184,9 @@ class PluginTestData(PluginBase):
             )
             iah.new_action(
                 _("Load all test images"),
-                triggered=lambda regclass=ImageIORegistry,
-                title=_("Load all test images"): self.load_test_objs(regclass, title),
+                triggered=lambda regclass=ImageIORegistry, title=_("Load all test images"): (
+                    self.load_test_objs(regclass, title)
+                ),
                 select_condition="always",
                 separator=True,
             )
