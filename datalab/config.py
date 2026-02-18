@@ -149,6 +149,7 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     available_memory_threshold = conf.Option()
     current_tab = conf.Option()
     plugins_enabled = conf.Option()
+    plugins_enabled_list = conf.Option()  # List of enabled plugin names
     plugins_path = conf.Option()
     tour_enabled = conf.Option()
     v020_plugins_warning_ignore = conf.Option()  # True: do not warn, False: warn
@@ -414,6 +415,9 @@ def initialize():
     Conf.main.faulthandler_log_path.get(f".{APP_NAME}_faulthandler.log")
     Conf.main.available_memory_threshold.get(500)
     Conf.main.plugins_enabled.get(True)
+    Conf.main.plugins_enabled_list.get(
+        None
+    )  # None = all enabled, [] = none, list = specific
     Conf.main.plugins_path.get(Conf.get_path("plugins"))
     Conf.main.tour_enabled.get(True)
     Conf.main.v020_plugins_warning_ignore.get(False)

@@ -130,6 +130,11 @@ def create_dialog_plugin_file(
 
 def test_plugin_system():
     """Test the entire plugin lifecycle: discovery, reload, cleanup"""
+    from datalab.config import Conf
+
+    # Ensure plugins_enabled_list is None (all plugins enabled)
+    Conf.main.plugins_enabled_list.set(None)
+
     # We need to monkeypatch the plugin path or add to sys.path
     # The temporary_plugin_dir context manager handles adding to sys.path
 
@@ -521,6 +526,11 @@ def test_plugin_duplicate_name():
 
 def test_plugin_nested_menus():
     """Test plugin with nested submenus (3 levels deep)"""
+    from datalab.config import Conf
+
+    # Ensure plugins_enabled_list is None (all plugins enabled)
+    Conf.main.plugins_enabled_list.set(None)
+
     with temporary_plugin_dir() as plugin_dir:
         execenv.print(f"Using temporary plugin directory: {plugin_dir}")
 
@@ -615,6 +625,11 @@ def test_plugin_nested_menus():
 
 def test_plugin_with_dialogs():
     """Test plugin using dialog methods (show_warning, show_info, etc.)"""
+    from datalab.config import Conf
+
+    # Ensure plugins_enabled_list is None (all plugins enabled)
+    Conf.main.plugins_enabled_list.set(None)
+
     with temporary_plugin_dir() as plugin_dir:
         execenv.print(f"Using temporary plugin directory: {plugin_dir}")
 
@@ -669,6 +684,11 @@ def test_plugin_with_dialogs():
 
 def test_plugin_syntax_error():
     """Test that plugin file with syntax error is handled gracefully"""
+    from datalab.config import Conf
+
+    # Ensure plugins_enabled_list is None (all plugins enabled)
+    Conf.main.plugins_enabled_list.set(None)
+
     with temporary_plugin_dir() as plugin_dir:
         execenv.print(f"Using temporary plugin directory: {plugin_dir}")
 
@@ -772,3 +792,230 @@ def test_plugin_abstract():
 
                 # Abstract plugin should NOT be loaded
                 assert "Abstract Plugin" not in plugin_names
+
+
+def test_plugin_enabled_list():
+    """Test that plugins_enabled_list configuration filters plugins correctly"""
+    from datalab.config import Conf
+
+    # Save original config - check if option exists
+    try:
+        original_enabled_list = Conf.main.plugins_enabled_list.get()
+        had_config = True
+    except:  # noqa: E722
+        original_enabled_list = None
+        had_config = False
+
+    try:
+        with temporary_plugin_dir() as plugin_dir:
+            execenv.print(f"Using temporary plugin directory: {plugin_dir}")
+
+            # Create two test plugins
+            create_nested_menu_plugin_file(
+                plugin_dir,
+                "datalab_test_plugin_enabled1.py",
+                "TestPluginEnabled1",
+                "Enable Test Plugin 1",
+                "Level 1 Menu",
+                "Action Level 1",
+                "pass",
+                "Level 2 Submenu",
+                "Action Level 2",
+                "pass",
+                "Level 3 Submenu",
+                "Action Level 3",
+                "pass",
+            )
+
+            create_nested_menu_plugin_file(
+                plugin_dir,
+                "datalab_test_plugin_enabled2.py",
+                "TestPluginEnabled2",
+                "Enable Test Plugin 2",
+                "Level 1 Menu",
+                "Action Level 1",
+                "pass",
+                "Level 2 Submenu",
+                "Action Level 2",
+                "pass",
+                "Level 3 Submenu",
+                "Action Level 3",
+                "pass",
+            )
+
+            # Start with all plugins enabled (None = default)
+            Conf.main.plugins_enabled_list.set(None)
+
+            with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
+                mock_run_tests.return_value = False
+                with datalab_test_app_context(console=False) as win:
+                    QW.QApplication.processEvents()
+
+                    # Both plugins should be loaded
+                    plugins = PluginRegistry.get_plugins()
+                    plugin_names = [p.info.name for p in plugins]
+                    execenv.print(f"Registered plugins (all enabled): {plugin_names}")
+                    assert "Enable Test Plugin 1" in plugin_names
+                    assert "Enable Test Plugin 2" in plugin_names
+
+                    # Now disable Plugin 2 by only enabling Plugin 1
+                    Conf.main.plugins_enabled_list.set(["Enable Test Plugin 1"])
+                    win.reload_plugins()
+                    QW.QApplication.processEvents()
+
+                    # Only Plugin 1 should be loaded now
+                    plugins = PluginRegistry.get_plugins()
+                    plugin_names = [p.info.name for p in plugins]
+                    execenv.print(f"Registered plugins (only Plugin 1): {plugin_names}")
+                    assert "Enable Test Plugin 1" in plugin_names
+                    assert "Enable Test Plugin 2" not in plugin_names
+
+                    # Re-enable all plugins (set to None = default)
+                    Conf.main.plugins_enabled_list.set(None)
+                    win.reload_plugins()
+                    QW.QApplication.processEvents()
+
+                    # Both plugins should be loaded again
+                    plugins = PluginRegistry.get_plugins()
+                    plugin_names = [p.info.name for p in plugins]
+                    execenv.print(
+                        f"Registered plugins (all re-enabled): {plugin_names}"
+                    )
+                    assert "Enable Test Plugin 1" in plugin_names
+                    assert "Enable Test Plugin 2" in plugin_names
+    finally:
+        # Restore config properly
+        if had_config:
+            Conf.main.plugins_enabled_list.set(original_enabled_list)
+        else:
+            # Remove option to restore to unset state
+            try:
+                Conf.remove_option("main", "plugins_enabled_list")
+            except:  # noqa: E722
+                pass
+
+
+def test_plugin_config_shows_disabled_plugins():
+    """Test that disabled plugins remain visible in configuration dialog"""
+    from datalab.config import Conf
+    from datalab.gui.pluginconfig import PluginConfigDialog
+
+    # Save original config - check if option exists
+    try:
+        original_enabled_list = Conf.main.plugins_enabled_list.get()
+        had_config = True
+    except:  # noqa: E722
+        original_enabled_list = None
+        had_config = False
+
+    try:
+        with temporary_plugin_dir() as plugin_dir:
+            execenv.print(f"Using temporary plugin directory: {plugin_dir}")
+
+            # Create two test plugins
+            create_nested_menu_plugin_file(
+                plugin_dir,
+                "datalab_test_plugin_config1.py",
+                "TestPluginConfig1",
+                "Config Test Plugin 1",
+                "Menu 1",
+                "Action 1",
+                "pass",
+                "Submenu 1",
+                "Subaction 1",
+                "pass",
+                "Subsubmenu 1",
+                "Subsubaction 1",
+                "pass",
+            )
+
+            create_nested_menu_plugin_file(
+                plugin_dir,
+                "datalab_test_plugin_config2.py",
+                "TestPluginConfig2",
+                "Config Test Plugin 2",
+                "Menu 2",
+                "Action 2",
+                "pass",
+                "Submenu 2",
+                "Subaction 2",
+                "pass",
+                "Subsubmenu 2",
+                "Subsubaction 2",
+                "pass",
+            )
+
+            # Start with all plugins enabled (None = default)
+            Conf.main.plugins_enabled_list.set(None)
+
+            with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
+                mock_run_tests.return_value = False
+                with datalab_test_app_context(console=False) as win:
+                    QW.QApplication.processEvents()
+
+                    # Both plugins should be loaded
+                    plugins = PluginRegistry.get_plugins()
+                    plugin_names = [p.info.name for p in plugins]
+                    assert "Config Test Plugin 1" in plugin_names
+                    assert "Config Test Plugin 2" in plugin_names
+
+                    # Open config dialog - should show both plugins
+                    dialog = PluginConfigDialog(win)
+                    widget_names = [
+                        w.plugin_class.PLUGIN_INFO.name for w in dialog.plugin_widgets
+                    ]
+                    execenv.print(
+                        f"Plugins in config dialog (all active): {widget_names}"
+                    )
+                    assert "Config Test Plugin 1" in widget_names
+                    assert "Config Test Plugin 2" in widget_names
+                    dialog.deleteLater()
+
+                    # Disable Plugin 2 via configuration
+                    Conf.main.plugins_enabled_list.set(["Config Test Plugin 1"])
+                    win.reload_plugins()
+                    QW.QApplication.processEvents()
+
+                    # Only Plugin 1 should be loaded now
+                    plugins = PluginRegistry.get_plugins()
+                    plugin_names = [p.info.name for p in plugins]
+                    assert "Config Test Plugin 1" in plugin_names
+                    assert "Config Test Plugin 2" not in plugin_names
+
+                    # Open config dialog again - BOTH plugins should still be visible
+                    # This is the critical test: disabled plugins must remain in config
+                    dialog2 = PluginConfigDialog(win)
+                    widget_names = [
+                        w.plugin_class.PLUGIN_INFO.name for w in dialog2.plugin_widgets
+                    ]
+                    execenv.print(
+                        f"Plugins in config dialog (Plugin 2 disabled): {widget_names}"
+                    )
+                    assert "Config Test Plugin 1" in widget_names
+                    assert "Config Test Plugin 2" in widget_names, (
+                        "Disabled plugin should still be visible in config dialog"
+                    )
+
+                    # Verify Plugin 1 is checked and Plugin 2 is unchecked
+                    for widget in dialog2.plugin_widgets:
+                        plugin_name = widget.plugin_class.PLUGIN_INFO.name
+                        if plugin_name == "Config Test Plugin 1":
+                            assert widget.checkbox.isChecked(), (
+                                "Plugin 1 should be checked (enabled)"
+                            )
+                        elif plugin_name == "Config Test Plugin 2":
+                            assert not widget.checkbox.isChecked(), (
+                                "Plugin 2 should be unchecked (disabled)"
+                            )
+
+                    dialog2.deleteLater()
+    finally:
+        # Restore config properly
+        if had_config:
+            Conf.main.plugins_enabled_list.set(original_enabled_list)
+        else:
+            # Remove option to restore to unset state (None)
+            try:
+                Conf.remove_option("main", "plugins_enabled_list")
+            except:  # noqa: E722
+                pass

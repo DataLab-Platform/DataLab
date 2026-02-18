@@ -62,6 +62,7 @@ from datalab.gui.actionhandler import ActionCategory
 from datalab.gui.docks import DockablePlotWidget
 from datalab.gui.h5io import H5InputOutput
 from datalab.gui.panel import base, image, macro, signal
+from datalab.gui.pluginconfig import PluginConfigDialog
 from datalab.gui.settings import edit_settings
 from datalab.objectmodel import ObjectGroup
 from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plugins
@@ -176,6 +177,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.showfirstonly_action: QW.QAction | None = None
         self.showlabel_action: QW.QAction | None = None
         self.reload_plugins_action: QW.QAction | None = None
+        self.configure_plugins_action: QW.QAction | None = None
 
         self.file_menu: QW.QMenu | None = None
         self.create_menu: QW.QMenu | None = None
@@ -1006,13 +1008,28 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             # Discovering plugins
             plugin_nb = len(discover_plugins())
             execenv.log(self, f"{plugin_nb} plugin(s) found")
+
+        # Get enabled plugins list from configuration
+        # None = all plugins enabled (default), [] = no plugins, list = specific plugins
+        enabled_list = Conf.main.plugins_enabled_list.get(None)
+
         for plugin_class in PluginRegistry.get_plugin_classes():
             with qth.try_or_log_error(
                 f"Instantiating and registering plugin {plugin_class.__name__}"
             ):
-                # Instantiating plugin
+                # Check if plugin is enabled before instantiation
+                # None means all plugins are enabled
+                if enabled_list is not None:
+                    plugin_name = plugin_class.PLUGIN_INFO.name
+                    if plugin_name not in enabled_list:
+                        execenv.log(
+                            self,
+                            f"Plugin {plugin_name} is disabled, skipping registration",
+                        )
+                        continue
+
+                # Instantiate and register plugin
                 plugin: PluginBase = plugin_class()
-                # Registering plugin
                 plugin.register(self)
 
     def __create_plugins_actions(self) -> None:
@@ -1033,6 +1050,22 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         """Unregister all plugins and let them cleanup their hooks"""
         with qth.try_or_log_error("Unregistering plugins"):
             PluginRegistry.unregister_all_plugins()
+
+    def __configure_plugins(self) -> None:
+        """Open plugin configuration dialog"""
+        dialog = PluginConfigDialog(self)
+        dialog.exec()
+        # if dialog.exec():
+        #    # User clicked OK - configuration was saved, offer to reload plugins
+        #    reply = QW.QMessageBox.question(
+        #        self,
+        #        _("Plugins"),
+        #        _("Plugin configuration has been saved. Reload plugins now?"),
+        #        QW.QMessageBox.Yes | QW.QMessageBox.No,
+        #        QW.QMessageBox.Yes,
+        #    )
+        #    if reply == QW.QMessageBox.Yes:
+        #        self.reload_plugins()
 
     def reload_plugins(self) -> None:
         """Reload third-party plugins at runtim
@@ -1074,12 +1107,28 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                 plugin_nb = len(discover_plugins())
                 execenv.log(self, f"{plugin_nb} plugin(s) found (reloaded)")
 
+            # Get enabled plugins list from configuration
+            # None = all enabled (default), [] = none, list = specific plugins
+            enabled_list = Conf.main.plugins_enabled_list.get(None)
+
             # Instantiate and register plugins again
             for plugin_class in PluginRegistry.get_plugin_classes():
                 with qth.try_or_log_error(
                     f"Instantiating and registering plugin "
                     f"{plugin_class.__name__} (reload)"
                 ):
+                    # Check if plugin is enabled before instantiation
+                    # None means all plugins are enabled
+                    if enabled_list is not None:
+                        plugin_name = plugin_class.PLUGIN_INFO.name
+                        if plugin_name not in enabled_list:
+                            execenv.log(
+                                self,
+                                f"Plugin {plugin_name} is disabled, "
+                                "skipping registration (reload)",
+                            )
+                            continue
+
                     plugin: PluginBase = plugin_class()
                     plugin.register(self)
 
@@ -1224,6 +1273,13 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             icon=get_icon("refresh-auto.svg"),
             tip=_("Reload third-party plugins from disk"),
             triggered=self.reload_plugins,
+        )
+        self.configure_plugins_action = create_action(
+            self,
+            _("Configure plugins..."),
+            icon=get_icon("libre-gui-settings.svg"),
+            tip=_("Enable or disable plugins"),
+            triggered=self.__configure_plugins,
         )
 
     def __add_signal_panel(self) -> None:
@@ -1711,7 +1767,11 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         # no plugin has registered actions yet (so that new plugins can be
         # discovered after they are added on disk).
         if menu is self.plugins_menu:
-            actions = list(actions) + [None, self.reload_plugins_action]
+            actions = list(actions) + [
+                None,
+                self.configure_plugins_action,
+                self.reload_plugins_action,
+            ]
         add_actions(menu, actions)
 
     def __update_file_menu(self) -> None:
