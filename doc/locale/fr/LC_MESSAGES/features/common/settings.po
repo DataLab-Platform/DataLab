@@ -76,11 +76,17 @@ msgstr "**Plugins tiers**"
 msgid "Enable or disable third-party plugins at startup."
 msgstr "Activer ou désactiver les plugins tiers au démarrage."
 
+msgid "When disabled, third-party plugins are not discovered or loaded."
+msgstr "Lorsque cette option est désactivée, les plugins tiers ne sont ni découverts ni chargés."
+
 msgid "**Plugins path**"
 msgstr "**Chemin des plugins**"
 
 msgid "Specify the directory path where DataLab should look for third-party plugins. DataLab will also discover plugins in your PYTHONPATH."
 msgstr "Spécifier le chemin du répertoire où DataLab doit rechercher les plugins tiers. DataLab découvrira également les plugins dans votre PYTHONPATH."
+
+msgid "To enable or disable individual plugins, use the ``Plugins > Configure plugins...`` menu action, then apply changes with ``Plugins > Reload plugins``."
+msgstr "Pour activer ou désactiver des plugins individuellement, utilisez l'action de menu ``Plugins > Configure plugins...``, puis appliquez les changements avec ``Plugins > Reload plugins``."
 
 msgid "Processing"
 msgstr "Traitement"

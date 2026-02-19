@@ -1068,16 +1068,12 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         #        self.reload_plugins()
 
     def reload_plugins(self) -> None:
-        """Reload third-party plugins at runtim
+        """Reload third-party plugins at runtime.
 
-        The workflow is:
-
-        1. Unregister current plugins (so they can release resources).
-        2. Clear plugin actions from both panels.
-        3. Clear the plugin class registry and re-discover plugin
-           modules so that code changes on disk are picked up.
-        4. Re-instantiate and register all plugin classes.
-        5. Ask plugins to recreate their actions and refresh menus.
+        This unregisters active plugins, clears plugin actions from both panels,
+        re-discovers plugin modules (reloading code changes from disk),
+        re-registers enabled plugins, then recreates plugin actions and refreshes
+        menus.
         """
         with qth.try_or_log_error("Reloading plugins"):
             if not Conf.main.plugins_enabled.get():

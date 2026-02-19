@@ -245,11 +245,11 @@ msgstr "De plus, dans le code du plugin, nous voulons ajouter une entrée dans l
 msgid "Here is the plugin code:"
 msgstr "Voici le code du plugin :"
 
-msgid "To test it, we have to add the plugin script to one of the plugin directories that are discovered by DataLab at startup: you can find it under \"Files > Settings\" (see the :ref:`about_plugins` section for more details, or the :ref:`tutorial_blobs` for an example). We then restart DataLab and we can see that the plugin has been loaded."
-msgstr "Pour le tester, nous devons ajouter le script du plugin à l'un des répertoires de plugins qui sont découverts par DataLab au démarrage : vous pouvez le trouver sous \"Fichiers > Paramètres\" (voir la section :ref:`about_plugins` pour plus de détails, ou le :ref:`tutorial_blobs` pour un exemple). Nous redémarrons ensuite DataLab et nous pouvons voir que le plugin a été chargé."
+msgid "To test it, we have to add the plugin script to one of the plugin directories that are discovered by DataLab at startup: you can find it under \"File > Settings...\" (see the :ref:`about_plugins` section for more details, or the :ref:`tutorial_blobs` for an example). We then reload plugins from the \"Plugins\" menu (or restart DataLab) and we can see that the plugin has been loaded."
+msgstr "Pour le tester, nous devons ajouter le script du plugin dans l'un des répertoires de plugins découverts par DataLab au démarrage : vous pouvez le trouver via \"Fichier > Paramètres...\" (voir la section :ref:`about_plugins` pour plus de détails, ou :ref:`tutorial_blobs` pour un exemple). Nous rechargeons ensuite les plugins depuis le menu \"Plugins\" (ou redémarrons DataLab) et nous pouvons voir que le plugin a été chargé."
 
-msgid "At the restart we can see that the plugin has been loaded."
-msgstr "Au redémarrage, nous pouvons voir que le plugin a été chargé."
+msgid "After reloading plugins (or restarting DataLab), we can see that the plugin has been loaded."
+msgstr "Après le rechargement des plugins (ou le redémarrage de DataLab), nous pouvons voir que le plugin a été chargé."
 
 msgid "We generate again our test image using (see the first steps of the tutorial), and we process it using the plugin: \"Plugins > My custom filters > Weighted average denoise\"."
 msgstr "Nous générons à nouveau notre image de test en utilisant (voir les premières étapes du tutoriel), et nous la traitons en utilisant le plugin : \"Plugins > My custom filters > Weighted average denoise\"."

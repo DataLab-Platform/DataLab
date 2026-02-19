@@ -51,10 +51,13 @@ The General settings tab contains main window and general feature settings:
 
 **Third-party plugins**
     Enable or disable third-party plugins at startup.
+    When disabled, third-party plugins are not discovered or loaded.
 
 **Plugins path**
     Specify the directory path where DataLab should look for third-party plugins.
     DataLab will also discover plugins in your PYTHONPATH.
+    To enable or disable individual plugins, use the ``Plugins > Configure plugins...``
+    menu action, then apply changes with ``Plugins > Reload plugins``.
 
 Processing
 ----------
