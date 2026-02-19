@@ -150,7 +150,7 @@ exclude = [
     "*.ipynb",
     "venv*",
     ".venv*",
-    "datalab/data/tests/plugin_*.py",  # Template files with placeholders
+    "datalab/data/tests/plugin/*.py",  # Template files with placeholders
 ]
 line-length = 88                               # Same as Black.
 indent-width = 4                               # Same as Black.

@@ -124,13 +124,13 @@ class PluginInfoWidget(QW.QWidget):
 
     def show_full_description(self):
         """Show full plugin description in a dialog"""
-        description = self.plugin.PLUGIN_INFO.description or _(
+        description = self.plugin_class.PLUGIN_INFO.description or _(
             "No description available"
         )
         QW.QMessageBox.information(
             self,
             _("Plugin Description"),
-            f"<b>{self.plugin.PLUGIN_INFO.name}</b><br><br>{description}",
+            f"<b>{self.plugin_class.PLUGIN_INFO.name}</b><br><br>{description}",
         )
 
     def is_enabled(self) -> bool:

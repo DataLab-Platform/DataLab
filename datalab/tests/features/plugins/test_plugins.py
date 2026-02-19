@@ -25,7 +25,9 @@ from datalab.plugins import PluginRegistry
 from datalab.tests import datalab_test_app_context
 
 # Path to plugin templates
-DATA_TESTS_DIR = osp.abspath(osp.join(osp.dirname(__file__), "../../../data/tests"))
+DATA_TESTS_DIR = osp.abspath(
+    osp.join(osp.dirname(__file__), "../../../data/tests/plugin")
+)
 
 
 def get_plugin_code(filename):
@@ -35,8 +37,15 @@ def get_plugin_code(filename):
 
 @contextlib.contextmanager
 def temporary_plugin_dir():
-    """Create a temporary directory for plugins and add it to sys.path"""
-    # Create a unique temporary directory
+    """Create a temporary directory for plugins and add it to sys.path.
+
+    On exit, removes the directory from sys.path **and** purges any
+    ``datalab_test_plugin_*`` modules from ``sys.modules`` so that the
+    next test starts with a clean import state.  This prevents stale
+    module objects (which hold references to destroyed Qt widgets) from
+    surviving across tests – a common cause of ACCESS_VIOLATION crashes
+    under coverage.
+    """
     import tempfile
 
     tmpdir = tempfile.mkdtemp(prefix="datalab_test_plugins_")
@@ -47,7 +56,14 @@ def temporary_plugin_dir():
     try:
         yield tmpdir
     finally:
-        # Cleanup
+        # Purge cached test-plugin modules so they cannot leak Qt references
+        stale_modules = [
+            name for name in sys.modules if name.startswith("datalab_test_plugin")
+        ]
+        for name in stale_modules:
+            del sys.modules[name]
+
+        # Remove from sys.path
         if tmpdir in sys.path:
             sys.path.remove(tmpdir)
         shutil.rmtree(tmpdir, ignore_errors=True)
@@ -76,54 +92,18 @@ def create_plugin_file(
         f.write(content)
 
 
-def create_nested_menu_plugin_file(
-    directory,
-    filename,
-    class_name,
-    plugin_name,
-    menu_level_1,
-    action_level_1,
-    test_code_1,
-    menu_level_2,
-    action_level_2,
-    test_code_2,
-    menu_level_3,
-    action_level_3,
-    test_code_3,
-):
-    """Create a plugin file with nested menus"""
-    template = get_plugin_code("plugin_nested_menus.py")
-    content = template.replace("{class_name}", class_name)
-    content = content.replace("{plugin_name}", plugin_name)
-    content = content.replace("{menu_level_1}", menu_level_1)
-    content = content.replace("{action_level_1}", action_level_1)
-    content = content.replace("{test_code_1}", test_code_1)
-    content = content.replace("{menu_level_2}", menu_level_2)
-    content = content.replace("{action_level_2}", action_level_2)
-    content = content.replace("{test_code_2}", test_code_2)
-    content = content.replace("{menu_level_3}", menu_level_3)
-    content = content.replace("{action_level_3}", action_level_3)
-    content = content.replace("{test_code_3}", test_code_3)
+def create_plugin_from_template(directory, filename, template_name, replacements):
+    """Create a plugin file from any template with placeholder replacements.
 
-    with open(osp.join(directory, filename), "w", encoding="utf-8") as f:
-        f.write(content)
-
-
-def create_dialog_plugin_file(
-    directory,
-    filename,
-    class_name,
-    plugin_name,
-    menu_name,
-    test_code="pass",
-):
-    """Create a plugin file with dialog tests"""
-    template = get_plugin_code("plugin_with_dialogs.py")
-    content = template.replace("{class_name}", class_name)
-    content = content.replace("{plugin_name}", plugin_name)
-    content = content.replace("{menu_name}", menu_name)
-    content = content.replace("{test_code}", test_code)
-
+    Args:
+        directory: Target directory
+        filename: Output filename
+        template_name: Template file in DATA_TESTS_DIR (e.g. "plugin_nested_menus.py")
+        replacements: Dict of {placeholder: value} to substitute
+    """
+    content = get_plugin_code(template_name)
+    for key, value in replacements.items():
+        content = content.replace(key, value)
     with open(osp.join(directory, filename), "w", encoding="utf-8") as f:
         f.write(content)
 
@@ -385,7 +365,20 @@ def test_plugin_system():
             with open(
                 osp.join(plugin_dir, init_error_filename), "w", encoding="utf-8"
             ) as f:
-                f.write(get_plugin_code("plugin_error.py"))
+                f.write(
+                    "from datalab.plugins import PluginBase, PluginInfo\n\n\n"
+                    "class BrokenPlugin(PluginBase):\n"
+                    "    PLUGIN_INFO = PluginInfo(\n"
+                    '        name="Broken Plugin",\n'
+                    '        version="1.0.0",\n'
+                    '        description="This plugin raises an error on init",\n'
+                    "    )\n\n"
+                    "    def __init__(self):\n"
+                    "        super().__init__()\n"
+                    '        raise RuntimeError("Planned failure")\n\n'
+                    "    def create_actions(self):\n"
+                    "        pass\n"
+                )
 
             # Trigger reload
             # Expected behavior:
@@ -449,33 +442,98 @@ def test_plugin_config_disabled():
                     )
 
 
-def test_plugin_invalid_info():
-    """Test that plugin with invalid PLUGIN_INFO is handled gracefully"""
+def test_plugin_error_handling():
+    """Test that various malformed plugins are handled gracefully.
+
+    Verifies that the application survives and valid plugins continue to work
+    when encountering plugins with:
+    - PLUGIN_INFO set to None
+    - Missing create_actions method (abstract)
+    - Syntax errors in the source file
+    """
+    from datalab.config import Conf
+
+    Conf.main.plugins_enabled_list.set(None)
+
     with temporary_plugin_dir() as plugin_dir:
         execenv.print(f"Using temporary plugin directory: {plugin_dir}")
 
-        # Create plugin with PLUGIN_INFO = None
-        invalid_plugin_filename = "datalab_test_plugin_invalid_info.py"
-        with open(
-            osp.join(plugin_dir, invalid_plugin_filename), "w", encoding="utf-8"
-        ) as f:
-            f.write(get_plugin_code("plugin_invalid_info.py"))
+        # Create a valid plugin to verify it survives alongside bad ones
+        create_plugin_file(
+            plugin_dir,
+            "datalab_test_plugin_good.py",
+            "TestPluginGood",
+            "Valid Plugin",
+            "Action Valid",
+            "action_valid",
+        )
 
-        # Start application - plugin should fail to instantiate but not crash the app
+        # Plugin with PLUGIN_INFO = None
+        with open(
+            osp.join(plugin_dir, "datalab_test_plugin_invalid_info.py"),
+            "w",
+            encoding="utf-8",
+        ) as f:
+            f.write(
+                "from datalab.plugins import PluginBase\n\n"
+                "class InvalidInfoPlugin(PluginBase):\n"
+                "    PLUGIN_INFO = None\n"
+                "    def create_actions(self):\n"
+                "        pass\n"
+            )
+
+        # Plugin without create_actions method (abstract)
+        with open(
+            osp.join(plugin_dir, "datalab_test_plugin_no_actions.py"),
+            "w",
+            encoding="utf-8",
+        ) as f:
+            f.write(
+                "from datalab.plugins import PluginBase, PluginInfo\n\n\n"
+                "class NoCreateActionsPlugin(PluginBase):\n"
+                "    PLUGIN_INFO = PluginInfo(\n"
+                '        name="No Create Actions Plugin",\n'
+                '        version="1.0.0",\n'
+                '        description="Plugin without create_actions method",\n'
+                "    )\n\n"
+                "    # Missing create_actions() method - should raise error\n"
+            )
+
+        # Plugin with syntax error
+        with open(
+            osp.join(plugin_dir, "datalab_test_plugin_syntax_error.py"),
+            "w",
+            encoding="utf-8",
+        ) as f:
+            f.write(
+                "from datalab.plugins import PluginBase, PluginInfo\n\n"
+                "class SyntaxErrorPlugin(PluginBase):\n"
+                "    PLUGIN_INFO = PluginInfo(\n"
+                '        name="Syntax Error Plugin",\n'
+                '        version="1.0.0"\n'
+                '        description="Missing comma"\n'
+                "    )\n\n"
+                "    def create_actions(self):\n"
+                "        pass\n"
+            )
+
         with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
             mock_run_tests.return_value = False
             with datalab_test_app_context(console=False):
                 QW.QApplication.processEvents()
 
-                # Verify app is still alive
                 plugins = PluginRegistry.get_plugins()
                 plugin_names = [p.info.name for p in plugins]
+                plugin_classes = [p.__class__.__name__ for p in plugins]
                 execenv.print(f"Registered plugins: {plugin_names}")
 
-                # Invalid plugin should NOT be registered
-                assert "InvalidInfoPlugin" not in [
-                    p.__class__.__name__ for p in plugins
-                ]
+                # Valid plugin must survive
+                assert "Valid Plugin" in plugin_names
+
+                # Bad plugins must NOT be loaded
+                assert "InvalidInfoPlugin" not in plugin_classes
+                assert "No Create Actions Plugin" not in plugin_names
+                assert "Syntax Error Plugin" not in plugin_names
 
 
 def test_plugin_duplicate_name():
@@ -534,21 +592,24 @@ def test_plugin_nested_menus():
     with temporary_plugin_dir() as plugin_dir:
         execenv.print(f"Using temporary plugin directory: {plugin_dir}")
 
-        # Create plugin with nested menus
-        create_nested_menu_plugin_file(
+        # Create plugin with nested menus (using plugin_nested_menus.py template)
+        create_plugin_from_template(
             plugin_dir,
             "datalab_test_plugin_nested.py",
-            "TestPluginNested",
-            "Nested Menus Plugin",
-            "Level 1 Menu",
-            "Action Level 1",
-            "self.main._test_level_1 = True",
-            "Level 2 Submenu",
-            "Action Level 2",
-            "self.main._test_level_2 = True",
-            "Level 3 Submenu",
-            "Action Level 3",
-            "self.main._test_level_3 = True",
+            "plugin_nested_menus.py",
+            {
+                "{class_name}": "TestPluginNested",
+                "{plugin_name}": "Nested Menus Plugin",
+                "{menu_level_1}": "Level 1 Menu",
+                "{action_level_1}": "Action Level 1",
+                "{test_code_1}": "self.main._test_level_1 = True",
+                "{menu_level_2}": "Level 2 Submenu",
+                "{action_level_2}": "Action Level 2",
+                "{test_code_2}": "self.main._test_level_2 = True",
+                "{menu_level_3}": "Level 3 Submenu",
+                "{action_level_3}": "Action Level 3",
+                "{test_code_3}": "self.main._test_level_3 = True",
+            },
         )
 
         with datalab_test_app_context(console=False) as win:
@@ -633,14 +694,17 @@ def test_plugin_with_dialogs():
     with temporary_plugin_dir() as plugin_dir:
         execenv.print(f"Using temporary plugin directory: {plugin_dir}")
 
-        # Create plugin with dialog tests
-        create_dialog_plugin_file(
+        # Create plugin with dialog tests (using plugin_with_dialogs.py template)
+        create_plugin_from_template(
             plugin_dir,
             "datalab_test_plugin_dialogs.py",
-            "TestPluginDialogs",
-            "Dialogs Plugin",
-            "Test Dialogs",
-            "self.main._test_dialog_flag = True",
+            "plugin_with_dialogs.py",
+            {
+                "{class_name}": "TestPluginDialogs",
+                "{plugin_name}": "Dialogs Plugin",
+                "{menu_name}": "Test Dialogs",
+                "{test_code}": "self.main._test_dialog_flag = True",
+            },
         )
 
         with datalab_test_app_context(console=False):
@@ -682,8 +746,135 @@ def test_plugin_with_dialogs():
                 assert result is True
 
 
-def test_plugin_syntax_error():
-    """Test that plugin file with syntax error is handled gracefully"""
+def test_plugin_enable_disable_config():
+    """Test plugin enable/disable filtering and configuration dialog.
+
+    Verifies that:
+    - plugins_enabled_list correctly filters which plugins are loaded
+    - Disabled plugins remain visible in the configuration dialog
+    - Plugin checkboxes reflect the enabled/disabled state
+    - Re-enabling all plugins restores them
+    """
+    from datalab.config import Conf
+    from datalab.gui.pluginconfig import PluginConfigDialog
+
+    # Save original config
+    try:
+        original_enabled_list = Conf.main.plugins_enabled_list.get()
+        had_config = True
+    except:  # noqa: E722
+        original_enabled_list = None
+        had_config = False
+
+    try:
+        with temporary_plugin_dir() as plugin_dir:
+            execenv.print(f"Using temporary plugin directory: {plugin_dir}")
+
+            create_plugin_file(
+                plugin_dir,
+                "datalab_test_plugin_1.py",
+                "TestPluginOne",
+                "Test Plugin 1",
+                "Action One",
+                "action_1",
+            )
+            create_plugin_file(
+                plugin_dir,
+                "datalab_test_plugin_2.py",
+                "TestPluginTwo",
+                "Test Plugin 2",
+                "Action Two",
+                "action_2",
+            )
+
+            Conf.main.plugins_enabled_list.set(None)
+
+            with patch("datalab.utils.qthelpers.is_running_tests") as mock:
+                mock.return_value = False
+                with datalab_test_app_context(console=False) as win:
+                    QW.QApplication.processEvents()
+
+                    # --- All enabled ---
+                    plugins = PluginRegistry.get_plugins()
+                    plugin_names = [p.info.name for p in plugins]
+                    execenv.print(f"Registered plugins (all enabled): {plugin_names}")
+                    assert "Test Plugin 1" in plugin_names
+                    assert "Test Plugin 2" in plugin_names
+
+                    # Config dialog shows both
+                    dialog = PluginConfigDialog(win)
+                    widget_names = [
+                        w.plugin_class.PLUGIN_INFO.name for w in dialog.plugin_widgets
+                    ]
+                    assert "Test Plugin 1" in widget_names
+                    assert "Test Plugin 2" in widget_names
+                    dialog.close()
+                    dialog.deleteLater()
+                    QW.QApplication.processEvents()
+
+                    # --- Disable Plugin 2 ---
+                    Conf.main.plugins_enabled_list.set(["Test Plugin 1"])
+                    win.reload_plugins()
+                    QW.QApplication.processEvents()
+
+                    plugins = PluginRegistry.get_plugins()
+                    plugin_names = [p.info.name for p in plugins]
+                    execenv.print(f"Registered plugins (only Plugin 1): {plugin_names}")
+                    assert "Test Plugin 1" in plugin_names
+                    assert "Test Plugin 2" not in plugin_names
+
+                    # Config dialog still shows both, Plugin 2 unchecked
+                    dialog2 = PluginConfigDialog(win)
+                    widget_names = [
+                        w.plugin_class.PLUGIN_INFO.name for w in dialog2.plugin_widgets
+                    ]
+                    assert "Test Plugin 1" in widget_names
+                    assert "Test Plugin 2" in widget_names, (
+                        "Disabled plugin should still be visible in config dialog"
+                    )
+                    for widget in dialog2.plugin_widgets:
+                        name = widget.plugin_class.PLUGIN_INFO.name
+                        if name == "Test Plugin 1":
+                            assert widget.checkbox.isChecked(), (
+                                "Plugin 1 should be checked (enabled)"
+                            )
+                        elif name == "Test Plugin 2":
+                            assert not widget.checkbox.isChecked(), (
+                                "Plugin 2 should be unchecked (disabled)"
+                            )
+                    dialog2.close()
+                    dialog2.deleteLater()
+                    QW.QApplication.processEvents()
+
+                    # --- Re-enable all ---
+                    Conf.main.plugins_enabled_list.set(None)
+                    win.reload_plugins()
+                    QW.QApplication.processEvents()
+
+                    plugins = PluginRegistry.get_plugins()
+                    plugin_names = [p.info.name for p in plugins]
+                    execenv.print(
+                        f"Registered plugins (all re-enabled): {plugin_names}"
+                    )
+                    assert "Test Plugin 1" in plugin_names
+                    assert "Test Plugin 2" in plugin_names
+    finally:
+        if had_config:
+            Conf.main.plugins_enabled_list.set(original_enabled_list)
+        else:
+            try:
+                Conf.remove_option("main", "plugins_enabled_list")
+            except:  # noqa: E722
+                pass
+
+
+def test_plugin_many_actions_visual():
+    """Test plugin with many actions in dropdown menu - Visual test for user observation
+
+    This test launches DataLab with a plugin containing multiple actions to verify
+    the dropdown menu behavior. The test will pause to allow user observation.
+    """
+    # guitest: show
     from datalab.config import Conf
 
     # Ensure plugins_enabled_list is None (all plugins enabled)
@@ -692,330 +883,177 @@ def test_plugin_syntax_error():
     with temporary_plugin_dir() as plugin_dir:
         execenv.print(f"Using temporary plugin directory: {plugin_dir}")
 
-        # Create a valid plugin first
-        create_plugin_file(
+        # Create plugin with many actions (using plugin_many_actions.py template)
+        create_plugin_from_template(
             plugin_dir,
-            "datalab_test_plugin_valid.py",
-            "TestPluginValid",
-            "Valid Plugin",
-            "Action Valid",
-            "action_valid",
+            "datalab_test_plugin_many_actions.py",
+            "plugin_many_actions.py",
+            {
+                "{class_name}": "TestPluginManyActions",
+                "{plugin_name}": "Many Actions Test",
+                "{menu_name}": "Test Menu with Many Actions",
+                "{action_prefix}": "Test Action",
+                "{test_code_1}": "self.main._test_action_1 = True",
+                "{test_code_2}": "self.main._test_action_2 = True",
+                "{test_code_3}": "self.main._test_action_3 = True",
+                "{test_code_4}": "self.main._test_action_4 = True",
+                "{test_code_5}": "self.main._test_action_5 = True",
+            },
         )
 
-        # Create plugin with actual syntax error
-        syntax_error_filename = "datalab_test_plugin_syntax_error.py"
-        with open(
-            osp.join(plugin_dir, syntax_error_filename), "w", encoding="utf-8"
-        ) as f:
-            # Write invalid Python code
-            f.write(
-                """
-from datalab.plugins import PluginBase, PluginInfo
+        with datalab_test_app_context(console=False) as win:
+            QW.QApplication.processEvents()
 
-class SyntaxErrorPlugin(PluginBase):
-    PLUGIN_INFO = PluginInfo(
-        name="Syntax Error Plugin",
-        version="1.0.0"
-        description="Missing comma causes syntax error"  # Missing comma here
+            # Verify plugin loaded
+            plugins = PluginRegistry.get_plugins()
+            plugin_names = [p.info.name for p in plugins]
+            execenv.print(f"Loaded plugins: {plugin_names}")
+            assert "Many Actions Test" in plugin_names
+
+            # Switch to signal panel
+            win.tabwidget.setCurrentWidget(win.signalpanel)
+            QW.QApplication.processEvents()
+
+            # Open plugins menu to show dropdown
+            win.plugins_menu.aboutToShow.emit()
+
+            # Find the submenu with multiple actions
+            from datalab.gui.actionhandler import ActionCategory
+
+            plugin_actions = win.signalpanel.get_category_actions(
+                ActionCategory.PLUGINS
+            )
+
+            # Find the menu
+            test_menu = None
+            for item in plugin_actions:
+                if (
+                    isinstance(item, QW.QMenu)
+                    and item.title() == "Test Menu with Many Actions"
+                ):
+                    test_menu = item
+                    break
+
+            assert test_menu is not None, "Test menu not found"
+
+            # Trigger aboutToShow to populate the menu
+            test_menu.aboutToShow.emit()
+
+            # Verify all 5 actions are present
+            menu_actions = test_menu.actions()
+            action_texts = [a.text() for a in menu_actions if not a.isSeparator()]
+            execenv.print(f"Menu actions: {action_texts}")
+
+            assert len(action_texts) == 5
+            for i in range(1, 6):
+                assert f"Test Action {i}" in action_texts
+
+            # Test triggering one action
+            for act in menu_actions:
+                if act.text() == "Test Action 3":
+                    act.trigger()
+                    break
+
+            assert getattr(win, "_test_action_3", None) is True
+
+            execenv.print(
+                "Visual test passed - Multiple actions displayed correctly in dropdown"
+            )
+
+
+def test_plugin_long_description():
+    """Test plugin with very long description and "Show more" button.
+
+    Verifies that:
+    - Plugins with long descriptions load correctly and actions work
+    - The show_full_description widget method works without AttributeError
+      (regression test for self.plugin → self.plugin_class fix)
+    """
+    from datalab.config import Conf
+    from datalab.gui.pluginconfig import PluginInfoWidget, PluginState
+
+    Conf.main.plugins_enabled_list.set(None)
+
+    long_description = (
+        "This is an extremely long description that is designed to test "
+        "how the plugin system handles descriptions that span multiple lines "
+        "and contain a large amount of text. The description should not break "
+        "the UI layout or cause any rendering issues. It should be properly "
+        "truncated or wrapped in any display contexts such as tooltips, status "
+        "bars, or configuration dialogs. This text continues to be very long "
+        "to ensure we adequately test the edge case of exceptionally verbose "
+        "plugin descriptions that might be provided by third-party developers "
+        "who want to thoroughly explain what their plugin does and how to use it."
     )
 
-    def create_actions(self):
-        pass
-"""
-            )
-
-        # Start application - should handle syntax error gracefully
-        with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
-            mock_run_tests.return_value = False
-            with datalab_test_app_context(console=False):
-                QW.QApplication.processEvents()
-
-                # Verify app is still alive
-                plugins = PluginRegistry.get_plugins()
-                plugin_names = [p.info.name for p in plugins]
-                execenv.print(f"Registered plugins: {plugin_names}")
-
-                # Valid plugin should be loaded
-                assert "Valid Plugin" in plugin_names
-
-                # Syntax error plugin should NOT be loaded
-                assert "Syntax Error Plugin" not in plugin_names
-
-
-def test_plugin_no_create_actions():
-    """Test that plugin without create_actions method fails gracefully"""
     with temporary_plugin_dir() as plugin_dir:
         execenv.print(f"Using temporary plugin directory: {plugin_dir}")
 
-        # Create plugin without create_actions method
-        no_actions_filename = "datalab_test_plugin_no_actions.py"
-        with open(
-            osp.join(plugin_dir, no_actions_filename), "w", encoding="utf-8"
-        ) as f:
-            f.write(get_plugin_code("plugin_no_create_actions.py"))
+        create_plugin_from_template(
+            plugin_dir,
+            "datalab_test_plugin_long_desc.py",
+            "plugin_long_description.py",
+            {
+                "{class_name}": "TestPluginLongDescription",
+                "{plugin_name}": "Long Description Test",
+                "{long_description}": long_description,
+                "{action_name}": "Test Action",
+                "{test_code}": "self.main._test_long_desc = True",
+            },
+        )
 
-        # Start application - plugin should fail to instantiate
-        with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
-            mock_run_tests.return_value = False
-            with datalab_test_app_context(console=False):
-                QW.QApplication.processEvents()
+        with datalab_test_app_context(console=False) as win:
+            QW.QApplication.processEvents()
 
-                # Verify app is still alive
-                plugins = PluginRegistry.get_plugins()
-                plugin_names = [p.info.name for p in plugins]
-                execenv.print(f"Registered plugins: {plugin_names}")
+            # Verify plugin loaded with long description
+            plugins = PluginRegistry.get_plugins()
+            plugin = None
+            plugin_class = None
+            for p in plugins:
+                if p.info.name == "Long Description Test":
+                    plugin = p
+                    plugin_class = type(p)
+                    break
 
-                # Plugin without create_actions should NOT be loaded
-                assert "No Create Actions Plugin" not in plugin_names
-
-
-def test_plugin_abstract():
-    """Test that abstract plugin class cannot be instantiated"""
-    with temporary_plugin_dir() as plugin_dir:
-        execenv.print(f"Using temporary plugin directory: {plugin_dir}")
-
-        # Create abstract plugin
-        abstract_filename = "datalab_test_plugin_abstract.py"
-        with open(osp.join(plugin_dir, abstract_filename), "w", encoding="utf-8") as f:
-            f.write(get_plugin_code("plugin_abstract.py"))
-
-        # Start application - abstract plugin should fail to instantiate
-        with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
-            mock_run_tests.return_value = False
-            with datalab_test_app_context(console=False):
-                QW.QApplication.processEvents()
-
-                # Verify app is still alive
-                plugins = PluginRegistry.get_plugins()
-                plugin_names = [p.info.name for p in plugins]
-                execenv.print(f"Registered plugins: {plugin_names}")
-
-                # Abstract plugin should NOT be loaded
-                assert "Abstract Plugin" not in plugin_names
-
-
-def test_plugin_enabled_list():
-    """Test that plugins_enabled_list configuration filters plugins correctly"""
-    from datalab.config import Conf
-
-    # Save original config - check if option exists
-    try:
-        original_enabled_list = Conf.main.plugins_enabled_list.get()
-        had_config = True
-    except:  # noqa: E722
-        original_enabled_list = None
-        had_config = False
-
-    try:
-        with temporary_plugin_dir() as plugin_dir:
-            execenv.print(f"Using temporary plugin directory: {plugin_dir}")
-
-            # Create two test plugins
-            create_nested_menu_plugin_file(
-                plugin_dir,
-                "datalab_test_plugin_enabled1.py",
-                "TestPluginEnabled1",
-                "Enable Test Plugin 1",
-                "Level 1 Menu",
-                "Action Level 1",
-                "pass",
-                "Level 2 Submenu",
-                "Action Level 2",
-                "pass",
-                "Level 3 Submenu",
-                "Action Level 3",
-                "pass",
+            assert plugin is not None, "Long Description Test plugin not loaded"
+            assert len(plugin.info.description) > 500, "Description not long enough"
+            execenv.print(
+                f"Plugin description length: {len(plugin.info.description)} chars"
             )
 
-            create_nested_menu_plugin_file(
-                plugin_dir,
-                "datalab_test_plugin_enabled2.py",
-                "TestPluginEnabled2",
-                "Enable Test Plugin 2",
-                "Level 1 Menu",
-                "Action Level 1",
-                "pass",
-                "Level 2 Submenu",
-                "Action Level 2",
-                "pass",
-                "Level 3 Submenu",
-                "Action Level 3",
-                "pass",
+            # Verify the action works
+            win.tabwidget.setCurrentWidget(win.signalpanel)
+            QW.QApplication.processEvents()
+
+            win.plugins_menu.aboutToShow.emit()
+            for act in win.plugins_menu.actions():
+                if act.text() == "Test Action":
+                    act.trigger()
+                    break
+            assert getattr(win, "_test_long_desc", None) is True
+
+            # Test show_full_description doesn't raise AttributeError
+            # (regression test for self.plugin → self.plugin_class fix)
+            # We mock QMessageBox.information to avoid opening a real modal
+            # dialog in offscreen mode — the static call can trigger C++
+            # access violations during teardown.
+            widget = PluginInfoWidget(
+                plugin_class, enabled=True, state=PluginState.ENABLED
             )
-
-            # Start with all plugins enabled (None = default)
-            Conf.main.plugins_enabled_list.set(None)
-
-            with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
-                mock_run_tests.return_value = False
-                with datalab_test_app_context(console=False) as win:
-                    QW.QApplication.processEvents()
-
-                    # Both plugins should be loaded
-                    plugins = PluginRegistry.get_plugins()
-                    plugin_names = [p.info.name for p in plugins]
-                    execenv.print(f"Registered plugins (all enabled): {plugin_names}")
-                    assert "Enable Test Plugin 1" in plugin_names
-                    assert "Enable Test Plugin 2" in plugin_names
-
-                    # Now disable Plugin 2 by only enabling Plugin 1
-                    Conf.main.plugins_enabled_list.set(["Enable Test Plugin 1"])
-                    win.reload_plugins()
-                    QW.QApplication.processEvents()
-
-                    # Only Plugin 1 should be loaded now
-                    plugins = PluginRegistry.get_plugins()
-                    plugin_names = [p.info.name for p in plugins]
-                    execenv.print(f"Registered plugins (only Plugin 1): {plugin_names}")
-                    assert "Enable Test Plugin 1" in plugin_names
-                    assert "Enable Test Plugin 2" not in plugin_names
-
-                    # Re-enable all plugins (set to None = default)
-                    Conf.main.plugins_enabled_list.set(None)
-                    win.reload_plugins()
-                    QW.QApplication.processEvents()
-
-                    # Both plugins should be loaded again
-                    plugins = PluginRegistry.get_plugins()
-                    plugin_names = [p.info.name for p in plugins]
-                    execenv.print(
-                        f"Registered plugins (all re-enabled): {plugin_names}"
-                    )
-                    assert "Enable Test Plugin 1" in plugin_names
-                    assert "Enable Test Plugin 2" in plugin_names
-    finally:
-        # Restore config properly
-        if had_config:
-            Conf.main.plugins_enabled_list.set(original_enabled_list)
-        else:
-            # Remove option to restore to unset state
-            try:
-                Conf.remove_option("main", "plugins_enabled_list")
-            except:  # noqa: E722
-                pass
-
-
-def test_plugin_config_shows_disabled_plugins():
-    """Test that disabled plugins remain visible in configuration dialog"""
-    from datalab.config import Conf
-    from datalab.gui.pluginconfig import PluginConfigDialog
-
-    # Save original config - check if option exists
-    try:
-        original_enabled_list = Conf.main.plugins_enabled_list.get()
-        had_config = True
-    except:  # noqa: E722
-        original_enabled_list = None
-        had_config = False
-
-    try:
-        with temporary_plugin_dir() as plugin_dir:
-            execenv.print(f"Using temporary plugin directory: {plugin_dir}")
-
-            # Create two test plugins
-            create_nested_menu_plugin_file(
-                plugin_dir,
-                "datalab_test_plugin_config1.py",
-                "TestPluginConfig1",
-                "Config Test Plugin 1",
-                "Menu 1",
-                "Action 1",
-                "pass",
-                "Submenu 1",
-                "Subaction 1",
-                "pass",
-                "Subsubmenu 1",
-                "Subsubaction 1",
-                "pass",
-            )
-
-            create_nested_menu_plugin_file(
-                plugin_dir,
-                "datalab_test_plugin_config2.py",
-                "TestPluginConfig2",
-                "Config Test Plugin 2",
-                "Menu 2",
-                "Action 2",
-                "pass",
-                "Submenu 2",
-                "Subaction 2",
-                "pass",
-                "Subsubmenu 2",
-                "Subsubaction 2",
-                "pass",
-            )
-
-            # Start with all plugins enabled (None = default)
-            Conf.main.plugins_enabled_list.set(None)
-
-            with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
-                mock_run_tests.return_value = False
-                with datalab_test_app_context(console=False) as win:
-                    QW.QApplication.processEvents()
-
-                    # Both plugins should be loaded
-                    plugins = PluginRegistry.get_plugins()
-                    plugin_names = [p.info.name for p in plugins]
-                    assert "Config Test Plugin 1" in plugin_names
-                    assert "Config Test Plugin 2" in plugin_names
-
-                    # Open config dialog - should show both plugins
-                    dialog = PluginConfigDialog(win)
-                    widget_names = [
-                        w.plugin_class.PLUGIN_INFO.name for w in dialog.plugin_widgets
-                    ]
-                    execenv.print(
-                        f"Plugins in config dialog (all active): {widget_names}"
-                    )
-                    assert "Config Test Plugin 1" in widget_names
-                    assert "Config Test Plugin 2" in widget_names
-                    dialog.deleteLater()
-
-                    # Disable Plugin 2 via configuration
-                    Conf.main.plugins_enabled_list.set(["Config Test Plugin 1"])
-                    win.reload_plugins()
-                    QW.QApplication.processEvents()
-
-                    # Only Plugin 1 should be loaded now
-                    plugins = PluginRegistry.get_plugins()
-                    plugin_names = [p.info.name for p in plugins]
-                    assert "Config Test Plugin 1" in plugin_names
-                    assert "Config Test Plugin 2" not in plugin_names
-
-                    # Open config dialog again - BOTH plugins should still be visible
-                    # This is the critical test: disabled plugins must remain in config
-                    dialog2 = PluginConfigDialog(win)
-                    widget_names = [
-                        w.plugin_class.PLUGIN_INFO.name for w in dialog2.plugin_widgets
-                    ]
-                    execenv.print(
-                        f"Plugins in config dialog (Plugin 2 disabled): {widget_names}"
-                    )
-                    assert "Config Test Plugin 1" in widget_names
-                    assert "Config Test Plugin 2" in widget_names, (
-                        "Disabled plugin should still be visible in config dialog"
+            with patch.object(QW.QMessageBox, "information") as mock_msgbox:
+                try:
+                    widget.show_full_description()
+                except AttributeError as e:
+                    raise AssertionError(
+                        f"show_full_description raised AttributeError: {e}"
                     )
 
-                    # Verify Plugin 1 is checked and Plugin 2 is unchecked
-                    for widget in dialog2.plugin_widgets:
-                        plugin_name = widget.plugin_class.PLUGIN_INFO.name
-                        if plugin_name == "Config Test Plugin 1":
-                            assert widget.checkbox.isChecked(), (
-                                "Plugin 1 should be checked (enabled)"
-                            )
-                        elif plugin_name == "Config Test Plugin 2":
-                            assert not widget.checkbox.isChecked(), (
-                                "Plugin 2 should be unchecked (disabled)"
-                            )
+                # Verify the dialog would have been shown with correct content
+                assert mock_msgbox.called, "QMessageBox.information was not called"
+                call_args = mock_msgbox.call_args[0]
+                assert "Long Description Test" in call_args[2], (
+                    "Plugin name should appear in description dialog"
+                )
+            del widget
 
-                    dialog2.deleteLater()
-    finally:
-        # Restore config properly
-        if had_config:
-            Conf.main.plugins_enabled_list.set(original_enabled_list)
-        else:
-            # Remove option to restore to unset state (None)
-            try:
-                Conf.remove_option("main", "plugins_enabled_list")
-            except:  # noqa: E722
-                pass
+            execenv.print("Long description plugin handled correctly")
