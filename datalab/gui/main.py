@@ -17,10 +17,12 @@ from __future__ import annotations
 import abc
 import base64
 import functools
+import logging
 import os
 import os.path as osp
 import sys
 import time
+import traceback
 import webbrowser
 from typing import TYPE_CHECKING
 
@@ -153,6 +155,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 
         self.consolestatus: status.ConsoleStatus | None = None
         self.console: DockableConsole | None = None
+        self._startup_errors: list[str] = []
         self.macropanel: MacroPanel | None = None
 
         self.main_toolbar: QW.QToolBar | None = None
@@ -222,10 +225,11 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         Returns:
             BaseDataPanel: current panel
         """
-        panel = self.tabwidget.currentWidget()
-        if not isinstance(panel, base.BaseDataPanel):
-            panel = self.signalpanel
-        return panel
+        if self.tabwidget is not None:
+            panel = self.tabwidget.currentWidget()
+            if isinstance(panel, base.BaseDataPanel):
+                return panel
+        return self.signalpanel
 
     def __get_datapanel(
         self, panel: Literal["signal", "image"] | None
@@ -982,12 +986,12 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.__setup_webapi()
         if console:
             self.__setup_console()
+            self.__flush_startup_errors()
         self.__update_actions(update_other_data_panel=True)
         self.__add_macro_panel()
         self.__configure_panels()
         # Now that everything is set up, we can restore the window state:
         self.__restore_state()
-        self.reload_plugins()
 
     def __setup_webapi(self) -> None:
         """Setup Web API actions."""
@@ -1000,6 +1004,12 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         The discovery phase imports all modules following the plugin
         naming convention. Plugin classes are then provided by
         :class:`PluginRegistry` and instantiated/registered here.
+
+        Errors are captured per-plugin so that one failing plugin does not
+        prevent the others from loading.  Because this method runs before
+        the internal console is available, error tracebacks are buffered
+        in ``_startup_errors`` and replayed to the console later (see
+        :meth:`setup`).
         """
         # Clear plugin class registry to avoid duplicate registration
         # when reloading modules or running tests
@@ -1010,14 +1020,15 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             plugin_nb = len(discover_plugins())
             execenv.log(self, f"{plugin_nb} plugin(s) found")
 
+        # Buffer any import errors that occurred during discovery
+        self._startup_errors.extend(PluginRegistry.get_discovery_errors())
+
         # Get enabled plugins list from configuration
         # None = all plugins enabled (default), [] = no plugins, list = specific plugins
         enabled_list = Conf.main.plugins_enabled_list.get(None)
 
         for plugin_class in PluginRegistry.get_plugin_classes():
-            with qth.try_or_log_error(
-                f"Instantiating and registering plugin {plugin_class.__name__}"
-            ):
+            try:
                 # Check if plugin is enabled before instantiation
                 # None means all plugins are enabled
                 if enabled_list is not None:
@@ -1032,6 +1043,40 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                 # Instantiate and register plugin
                 plugin: PluginBase = plugin_class()
                 plugin.register(self)
+            except Exception:  # pylint: disable=broad-except
+                if qth.is_running_tests():
+                    raise
+                # Log to file (same mechanism as try_or_log_error)
+                tb_text = traceback.format_exc()
+                traceback.print_exc()
+                logger = logging.getLogger(__name__)
+                logger.error(
+                    "Error in Instantiating and registering plugin %s",
+                    plugin_class.__name__,
+                    exc_info=True,
+                )
+                Conf.main.traceback_log_available.set(True)
+                # Buffer for replay in console once it is ready
+                self._startup_errors.append(tb_text)
+                # Record structured info about the failed plugin
+                mod = sys.modules.get(plugin_class.__module__)
+                filepath = getattr(mod, "__file__", "") if mod else ""
+                PluginRegistry.add_failed_plugin(
+                    plugin_class.__name__, filepath or "", tb_text
+                )
+
+    def __flush_startup_errors(self) -> None:
+        """Write any buffered startup errors to the internal console.
+
+        Called right after :meth:`__setup_console` so that plugin-import
+        tracebacks captured during :meth:`__register_plugins` become
+        visible to the user in the console widget.
+        """
+        if self.console is None or not self._startup_errors:
+            return
+        for tb_text in self._startup_errors:
+            self.console.write_error(tb_text)
+        self._startup_errors.clear()
 
     def __create_plugins_actions(self) -> None:
         """Ask each registered plugin to create its UI actions
@@ -1110,10 +1155,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 
             # Instantiate and register plugins again
             for plugin_class in PluginRegistry.get_plugin_classes():
-                with qth.try_or_log_error(
-                    f"Instantiating and registering plugin "
-                    f"{plugin_class.__name__} (reload)"
-                ):
+                try:
                     # Check if plugin is enabled before instantiation
                     # None means all plugins are enabled
                     if enabled_list is not None:
@@ -1128,12 +1170,36 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 
                     plugin: PluginBase = plugin_class()
                     plugin.register(self)
+                except Exception:  # pylint: disable=broad-except
+                    if qth.is_running_tests():
+                        raise
+                    context = (
+                        f"Instantiating and registering plugin "
+                        f"{plugin_class.__name__} (reload)"
+                    )
+                    tb_text = traceback.format_exc()
+                    traceback.print_exc()
+                    logger = logging.getLogger(__name__)
+                    logger.error("Error in %s", context, exc_info=True)
+                    Conf.main.traceback_log_available.set(True)
+                    # Write error to console (available during reload)
+                    if self.console is not None:
+                        self.console.write_error(tb_text)
+                    # Record structured info about the failed plugin
+                    mod = sys.modules.get(plugin_class.__module__)
+                    filepath = getattr(mod, "__file__", "") if mod else ""
+                    PluginRegistry.add_failed_plugin(
+                        plugin_class.__name__, filepath or "", tb_text
+                    )
 
             # Recreate plugin actions for the new plugin set
             self.__create_plugins_actions()
 
             # Update actions and menus to reflect new plugin set
             self.__update_actions(update_other_data_panel=True)
+
+            # Update plugin status in the status bar
+            self.pluginstatus.update_status()
 
     def __configure_statusbar(self, console: bool) -> None:
         """Configure status bar
@@ -1147,8 +1213,8 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             self.consolestatus = status.ConsoleStatus()
             self.statusBar().addPermanentWidget(self.consolestatus)
         # Plugin status
-        pluginstatus = status.PluginStatus()
-        self.statusBar().addPermanentWidget(pluginstatus)
+        self.pluginstatus = status.PluginStatus()
+        self.statusBar().addPermanentWidget(self.pluginstatus)
         # XML-RPC server status
         xmlrpcstatus = status.XMLRPCStatus()
         xmlrpcstatus.set_port(self.remote_server.port)
@@ -2486,7 +2552,8 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.__unregister_plugins()
 
         # Saving current tab for next session
-        Conf.main.current_tab.set(self.tabwidget.currentIndex())
+        if self.tabwidget is not None:
+            Conf.main.current_tab.set(self.tabwidget.currentIndex())
 
         execenv.log(self, "closed properly")
         return True

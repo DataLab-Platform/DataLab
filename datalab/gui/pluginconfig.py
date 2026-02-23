@@ -9,6 +9,7 @@ Dialog for managing plugin enable/disable state and viewing plugin information.
 
 from __future__ import annotations
 
+import os.path as osp
 from typing import TYPE_CHECKING
 
 from guidata.qthelpers import win32_fix_title_bar_background
@@ -21,7 +22,7 @@ from datalab.plugins import PluginRegistry
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
-    from datalab.plugins import PluginBase
+    from datalab.plugins import FailedPluginInfo, PluginBase
 
 
 def _apply_palette_color(widget: QW.QWidget, color: QG.QColor) -> None:
@@ -209,6 +210,124 @@ class PluginInfoWidget(QW.QWidget):
         return self.is_enabled() != self.initial_enabled
 
 
+class FailedPluginInfoWidget(QW.QWidget):
+    """Widget displaying information for a plugin that failed to load"""
+
+    def __init__(
+        self,
+        failed_info: FailedPluginInfo,
+        parent: QW.QWidget = None,
+    ):
+        """Initialize failed plugin info widget
+
+        Args:
+            failed_info: Structured information about the failed plugin
+            parent: Parent widget
+        """
+        super().__init__(parent)
+
+        # Main layout
+        layout = QW.QVBoxLayout()
+        layout.setContentsMargins(5, 5, 5, 5)
+        self.setLayout(layout)
+
+        # Top row: disabled checkbox, file name, error status
+        top_layout = QW.QHBoxLayout()
+
+        # Disabled checkbox (always unchecked, non-interactive)
+        checkbox = QW.QCheckBox()
+        checkbox.setChecked(False)
+        checkbox.setEnabled(False)
+        top_layout.addWidget(checkbox)
+
+        # Plugin file name (bold, grayed out)
+        file_name = osp.basename(failed_info.name)
+        name_label = QW.QLabel(file_name)
+        name_font = name_label.font()
+        name_font.setBold(True)
+        name_label.setFont(name_font)
+        _apply_subdued_color(name_label)
+        top_layout.addWidget(name_label)
+
+        # Status indicator (gray "Import error")
+        status_label = QW.QLabel()
+        status_font = status_label.font()
+        status_font.setBold(True)
+        status_label.setFont(status_font)
+        status_label.setText("\u26a0 " + _("Import error"))
+        _apply_subdued_color(status_label)
+        top_layout.addWidget(status_label)
+
+        top_layout.addStretch()
+        layout.addLayout(top_layout)
+
+        # Description area: file path + traceback
+        desc_container = QW.QWidget()
+        desc_container_layout = QW.QVBoxLayout()
+        desc_container_layout.setContentsMargins(20, 0, 0, 0)
+        desc_container.setLayout(desc_container_layout)
+
+        description = failed_info.filepath
+        if failed_info.traceback:
+            description += "\n\n" + failed_info.traceback.strip()
+
+        # Full description label (always in expandable scroll area)
+        desc_label = QW.QLabel(description)
+        desc_label.setWordWrap(True)
+        desc_label.setTextInteractionFlags(QC.Qt.TextSelectableByMouse)
+        _apply_subdued_color(desc_label)
+
+        # Use monospace font for the traceback
+        mono_font = QG.QFont("Consolas", desc_label.font().pointSize() - 1)
+        desc_label.setFont(mono_font)
+
+        desc_scroll = QW.QScrollArea()
+        desc_scroll.setWidgetResizable(True)
+        desc_scroll.setHorizontalScrollBarPolicy(QC.Qt.ScrollBarAsNeeded)
+        desc_scroll.setWidget(desc_label)
+        desc_scroll.setMaximumHeight(60)
+        desc_scroll.setStyleSheet(
+            "QScrollArea { border: none; background: transparent; }"
+        )
+        desc_container_layout.addWidget(desc_scroll)
+
+        # Toggle expand/collapse button
+        self._expanded = False
+        self._desc_scroll = desc_scroll
+        self._toggle_btn = QW.QPushButton("\u25bc " + _("Show more"))
+        self._toggle_btn.setFlat(True)
+        self._toggle_btn.setCursor(QC.Qt.PointingHandCursor)
+        link_color = QW.QApplication.instance().palette().color(QG.QPalette.Link)
+        self._toggle_btn.setStyleSheet(
+            f"QPushButton {{ color: {link_color.name()}; border: none; "
+            "text-align: left; padding: 0; } "
+            "QPushButton:hover { text-decoration: underline; }"
+        )
+        toggle_font = self._toggle_btn.font()
+        toggle_font.setPointSize(toggle_font.pointSize() - 1)
+        self._toggle_btn.setFont(toggle_font)
+        self._toggle_btn.clicked.connect(self._toggle_description)
+        desc_container_layout.addWidget(self._toggle_btn)
+
+        layout.addWidget(desc_container)
+
+        # Separator line
+        line = QW.QFrame()
+        line.setFrameShape(QW.QFrame.HLine)
+        line.setFrameShadow(QW.QFrame.Sunken)
+        layout.addWidget(line)
+
+    def _toggle_description(self):
+        """Toggle between collapsed and expanded description"""
+        self._expanded = not self._expanded
+        if self._expanded:
+            self._desc_scroll.setMaximumHeight(200)
+            self._toggle_btn.setText("\u25b2 " + _("Show less"))
+        else:
+            self._desc_scroll.setMaximumHeight(60)
+            self._toggle_btn.setText("\u25bc " + _("Show more"))
+
+
 class PluginConfigDialog(QW.QDialog):
     """Dialog for configuring plugins"""
 
@@ -334,6 +453,13 @@ class PluginConfigDialog(QW.QDialog):
             widget = PluginInfoWidget(plugin_class, enabled, state)
             self.plugin_widgets.append(widget)
             self.plugins_layout.addWidget(widget)
+
+        # Add failed plugins at the end (grayed out, non-interactive)
+        failed_plugins = PluginRegistry.get_failed_plugins()
+        if failed_plugins:
+            for failed_info in failed_plugins:
+                failed_widget = FailedPluginInfoWidget(failed_info)
+                self.plugins_layout.addWidget(failed_widget)
 
         # Add stretch at the end
         self.plugins_layout.addStretch()

@@ -10,7 +10,8 @@ the main window.
 
 # guitest: show
 
-# pylint: disable=wrong-import-position,import-outside-toplevel
+# ruff: noqa: E402
+# pylint: disable=import-outside-toplevel
 
 import contextlib
 import importlib
@@ -29,7 +30,7 @@ if _project_root not in sys.path:
 from qtpy import QtWidgets as QW
 
 from datalab.env import execenv
-from datalab.gui.main import DLMainWindow  # noqa: F811
+from datalab.gui.main import DLMainWindow
 from datalab.plugins import PluginRegistry
 from datalab.tests import datalab_test_app_context
 
