@@ -11,7 +11,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from guidata.qthelpers import win32_fix_title_bar_background
 from qtpy import QtCore as QC
+from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from datalab.config import Conf, _
@@ -20,6 +22,34 @@ from datalab.plugins import PluginRegistry
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
     from datalab.plugins import PluginBase
+
+
+def _apply_palette_color(widget: QW.QWidget, color: QG.QColor) -> None:
+    """Apply a foreground color to a widget via its palette (theme-safe).
+
+    Args:
+        widget: Target widget
+        color: Foreground color to apply
+    """
+    palette = widget.palette()
+    palette.setColor(QG.QPalette.WindowText, color)
+    widget.setPalette(palette)
+
+
+def _apply_subdued_color(widget: QW.QWidget) -> None:
+    """Apply a subdued/secondary text color that works in both light and dark themes.
+
+    Args:
+        widget: Target widget
+    """
+    app_palette = QW.QApplication.instance().palette()
+    text_color = app_palette.color(QG.QPalette.Text)
+    # Blend the text color towards mid-tone for a subdued effect
+    subdued = QG.QColor(text_color)
+    subdued.setAlpha(150)
+    palette = widget.palette()
+    palette.setColor(QG.QPalette.WindowText, subdued)
+    widget.setPalette(palette)
 
 
 class PluginState:
@@ -67,54 +97,84 @@ class PluginInfoWidget(QW.QWidget):
         top_layout.addWidget(self.checkbox)
 
         # Plugin name
-        name_label = QW.QLabel(f"<b>{self.plugin_class.PLUGIN_INFO.name}</b>")
+        name_label = QW.QLabel(self.plugin_class.PLUGIN_INFO.name)
+        name_font = name_label.font()
+        name_font.setBold(True)
+        name_label.setFont(name_font)
         top_layout.addWidget(name_label)
 
         # Version
         version_label = QW.QLabel(f"v{self.plugin_class.PLUGIN_INFO.version}")
-        version_label.setStyleSheet("color: gray;")
+        _apply_subdued_color(version_label)
         top_layout.addWidget(version_label)
 
         # Status indicator
         status_label = QW.QLabel()
+        status_font = status_label.font()
+        status_font.setBold(True)
+        status_label.setFont(status_font)
         if state == PluginState.ENABLED:
-            status_label.setText("● " + _("Active"))
-            status_label.setStyleSheet("color: green; font-weight: bold;")
+            status_label.setText("\u2713 " + _("Active"))
+            _apply_palette_color(status_label, QG.QColor("#2ecc71"))
         elif state == PluginState.DISABLED:
-            status_label.setText("● " + _("Disabled"))
-            status_label.setStyleSheet("color: red; font-weight: bold;")
+            status_label.setText("\u2717 " + _("Disabled"))
+            _apply_palette_color(status_label, QG.QColor("#e74c3c"))
         else:  # ERROR
-            status_label.setText("● " + _("Error"))
-            status_label.setStyleSheet("color: gray; font-weight: bold;")
+            status_label.setText("\u2717 " + _("Error"))
+            _apply_subdued_color(status_label)
         top_layout.addWidget(status_label)
 
         top_layout.addStretch()
         layout.addLayout(top_layout)
 
-        # Description preview area
-        desc_layout = QW.QHBoxLayout()
-        desc_layout.setContentsMargins(20, 0, 0, 0)
-
-        # Description text (truncated)
+        # Description area
         description = self.plugin_class.PLUGIN_INFO.description or _(
             "No description available"
         )
-        preview_text = (
-            description[:100] + "..." if len(description) > 100 else description
-        )
-        self.desc_label = QW.QLabel(preview_text)
+        is_long = len(description) > 100
+
+        desc_container = QW.QWidget()
+        desc_container_layout = QW.QVBoxLayout()
+        desc_container_layout.setContentsMargins(20, 0, 0, 0)
+        desc_container.setLayout(desc_container_layout)
+
+        # Full description label (always present)
+        self.desc_label = QW.QLabel(description)
         self.desc_label.setWordWrap(True)
-        self.desc_label.setStyleSheet("color: #555;")
-        desc_layout.addWidget(self.desc_label, 1)
+        _apply_subdued_color(self.desc_label)
 
-        # "Show more" button if description is long
-        if len(description) > 100:
-            self.show_more_btn = QW.QPushButton(_("Show more..."))
-            self.show_more_btn.setMaximumWidth(100)
-            self.show_more_btn.clicked.connect(self.show_full_description)
-            desc_layout.addWidget(self.show_more_btn)
+        if is_long:
+            # Expandable scroll area for long descriptions
+            self._desc_scroll = QW.QScrollArea()
+            self._desc_scroll.setWidgetResizable(True)
+            self._desc_scroll.setHorizontalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
+            self._desc_scroll.setWidget(self.desc_label)
+            self._desc_scroll.setMaximumHeight(60)
+            self._desc_scroll.setStyleSheet(
+                "QScrollArea { border: none; background: transparent; }"
+            )
+            desc_container_layout.addWidget(self._desc_scroll)
 
-        layout.addLayout(desc_layout)
+            # Toggle expand/collapse button
+            self._expanded = False
+            self._toggle_btn = QW.QPushButton("\u25bc " + _("Show more"))
+            self._toggle_btn.setFlat(True)
+            self._toggle_btn.setCursor(QC.Qt.PointingHandCursor)
+            link_color = QW.QApplication.instance().palette().color(QG.QPalette.Link)
+            self._toggle_btn.setStyleSheet(
+                f"QPushButton {{ color: {link_color.name()}; border: none; "
+                "text-align: left; padding: 0; } "
+                "QPushButton:hover { text-decoration: underline; }"
+            )
+            toggle_font = self._toggle_btn.font()
+            toggle_font.setPointSize(toggle_font.pointSize() - 1)
+            self._toggle_btn.setFont(toggle_font)
+            self._toggle_btn.clicked.connect(self._toggle_description)
+            desc_container_layout.addWidget(self._toggle_btn)
+        else:
+            desc_container_layout.addWidget(self.desc_label)
+
+        layout.addWidget(desc_container)
 
         # Separator line
         line = QW.QFrame()
@@ -122,16 +182,15 @@ class PluginInfoWidget(QW.QWidget):
         line.setFrameShadow(QW.QFrame.Sunken)
         layout.addWidget(line)
 
-    def show_full_description(self):
-        """Show full plugin description in a dialog"""
-        description = self.plugin_class.PLUGIN_INFO.description or _(
-            "No description available"
-        )
-        QW.QMessageBox.information(
-            self,
-            _("Plugin Description"),
-            f"<b>{self.plugin_class.PLUGIN_INFO.name}</b><br><br>{description}",
-        )
+    def _toggle_description(self):
+        """Toggle between collapsed and expanded description"""
+        self._expanded = not self._expanded
+        if self._expanded:
+            self._desc_scroll.setMaximumHeight(150)
+            self._toggle_btn.setText("\u25b2 " + _("Show less"))
+        else:
+            self._desc_scroll.setMaximumHeight(60)
+            self._toggle_btn.setText("\u25bc " + _("Show more"))
 
     def is_enabled(self) -> bool:
         """Check if plugin is enabled via checkbox
@@ -160,6 +219,7 @@ class PluginConfigDialog(QW.QDialog):
             parent: Main window instance
         """
         super().__init__(parent)
+        win32_fix_title_bar_background(self)
         self.main = parent
         self.plugin_widgets: list[PluginInfoWidget] = []
 
@@ -173,7 +233,15 @@ class PluginConfigDialog(QW.QDialog):
 
         # Title
         title_label = QW.QLabel(_("Manage Plugins"))
-        title_label.setStyleSheet("font-size: 14pt; font-weight: bold;")
+        title_font = title_label.font()
+        title_font.setPointSize(title_font.pointSize() + 4)
+        title_font.setBold(True)
+        title_label.setFont(title_font)
+        # Ensure title color follows the system palette (fixes dark mode)
+        _apply_palette_color(
+            title_label,
+            QW.QApplication.instance().palette().color(QG.QPalette.WindowText),
+        )
         layout.addWidget(title_label)
 
         # Info text
@@ -184,8 +252,19 @@ class PluginConfigDialog(QW.QDialog):
             )
         )
         info_label.setWordWrap(True)
-        info_label.setStyleSheet("color: #666; margin-bottom: 10px;")
+        _apply_subdued_color(info_label)
         layout.addWidget(info_label)
+
+        # Select All / Deselect All buttons
+        select_layout = QW.QHBoxLayout()
+        self.select_all_btn = QW.QPushButton(_("Select All"))
+        self.deselect_all_btn = QW.QPushButton(_("Deselect All"))
+        self.select_all_btn.clicked.connect(self._select_all)
+        self.deselect_all_btn.clicked.connect(self._deselect_all)
+        select_layout.addWidget(self.select_all_btn)
+        select_layout.addWidget(self.deselect_all_btn)
+        select_layout.addStretch()
+        layout.addLayout(select_layout)
 
         # Scroll area for plugins
         scroll = QW.QScrollArea()
@@ -211,6 +290,16 @@ class PluginConfigDialog(QW.QDialog):
         button_box.accepted.connect(self.accept)
         button_box.rejected.connect(self.reject)
         layout.addWidget(button_box)
+
+    def _select_all(self):
+        """Check all plugin checkboxes"""
+        for widget in self.plugin_widgets:
+            widget.checkbox.setChecked(True)
+
+    def _deselect_all(self):
+        """Uncheck all plugin checkboxes"""
+        for widget in self.plugin_widgets:
+            widget.checkbox.setChecked(False)
 
     def populate_plugins(self):
         """Populate the dialog with all discovered plugins"""

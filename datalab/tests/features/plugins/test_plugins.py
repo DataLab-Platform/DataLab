@@ -10,51 +10,70 @@ the main window.
 
 # guitest: show
 
+# pylint: disable=wrong-import-position,import-outside-toplevel
+
 import contextlib
+import importlib
+import importlib.util
 import os
 import os.path as osp
 import shutil
 import sys
 from unittest.mock import patch
 
+# Ensure project root is on path (standalone execution)
+_project_root = osp.abspath(osp.join(osp.dirname(__file__), "..", "..", "..", ".."))
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
+
 from qtpy import QtWidgets as QW
 
 from datalab.env import execenv
-from datalab.gui.main import DLMainWindow
+from datalab.gui.main import DLMainWindow  # noqa: F811
 from datalab.plugins import PluginRegistry
 from datalab.tests import datalab_test_app_context
 
 # Path to plugin templates
-DATA_TESTS_DIR = osp.abspath(
-    osp.join(osp.dirname(__file__), "../../../data/tests/plugin")
+TEMPLATES_DIR = osp.abspath(osp.join(osp.dirname(__file__), "templates"))
+
+# Fixed directory for temporary test plugin files (inside the project tree)
+_TEST_PLUGINS_DIR = osp.abspath(
+    osp.join(osp.dirname(__file__), "..", "..", "..", "data", "tests", "plugins")
 )
 
 
 def get_plugin_code(filename):
-    with open(osp.join(DATA_TESTS_DIR, filename), "r", encoding="utf-8") as f:
+    """Read a plugin template file from TEMPLATES_DIR."""
+    with open(osp.join(TEMPLATES_DIR, filename), "r", encoding="utf-8") as f:
         return f.read()
 
 
 @contextlib.contextmanager
 def temporary_plugin_dir():
-    """Create a temporary directory for plugins and add it to sys.path.
+    """Create a fixed directory for test plugins and add it to sys.path.
 
-    On exit, removes the directory from sys.path **and** purges any
+    The directory ``datalab/data/tests/plugins/`` is used so that the path
+    is deterministic and stays within the project tree (cross-platform).
+
+    On exit, removes the directory from sys.path, purges any
     ``datalab_test_plugin_*`` modules from ``sys.modules`` so that the
-    next test starts with a clean import state.  This prevents stale
-    module objects (which hold references to destroyed Qt widgets) from
-    surviving across tests – a common cause of ACCESS_VIOLATION crashes
-    under coverage.
+    next test starts with a clean import state, and deletes the directory
+    contents.  This prevents stale module objects (which hold references
+    to destroyed Qt widgets) from surviving across tests – a common cause
+    of ACCESS_VIOLATION crashes under coverage.
     """
-    import tempfile
+    if osp.exists(_TEST_PLUGINS_DIR):
+        shutil.rmtree(_TEST_PLUGINS_DIR)
+    os.makedirs(_TEST_PLUGINS_DIR)
 
-    tmpdir = tempfile.mkdtemp(prefix="datalab_test_plugins_")
-
-    # Add to sys.path
-    sys.path.insert(0, tmpdir)
+    # Add to sys.path and invalidate import caches so that Python's
+    # path finders pick up the freshly (re)created directory.
+    sys.path.insert(0, _TEST_PLUGINS_DIR)
+    sys.path_importer_cache.pop(_TEST_PLUGINS_DIR, None)
+    importlib.invalidate_caches()
 
     try:
-        yield tmpdir
+        yield _TEST_PLUGINS_DIR
     finally:
         # Purge cached test-plugin modules so they cannot leak Qt references
         stale_modules = [
@@ -63,10 +82,12 @@ def temporary_plugin_dir():
         for name in stale_modules:
             del sys.modules[name]
 
-        # Remove from sys.path
-        if tmpdir in sys.path:
-            sys.path.remove(tmpdir)
-        shutil.rmtree(tmpdir, ignore_errors=True)
+        # Remove from sys.path and clean up finder cache
+        if _TEST_PLUGINS_DIR in sys.path:
+            sys.path.remove(_TEST_PLUGINS_DIR)
+        sys.path_importer_cache.pop(_TEST_PLUGINS_DIR, None)
+        importlib.invalidate_caches()
+        shutil.rmtree(_TEST_PLUGINS_DIR, ignore_errors=True)
 
 
 def create_plugin_file(
@@ -79,7 +100,7 @@ def create_plugin_file(
     test_code="pass",
 ):
     """Create a plugin file in the specified directory"""
-    template = get_plugin_code("plugin_valid.py")
+    template = get_plugin_code("plugin_valid.py.template")
     # Replace placeholders manually since .format() might fail if the template contains
     # other braces
     content = template.replace("{class_name}", class_name)
@@ -98,7 +119,8 @@ def create_plugin_from_template(directory, filename, template_name, replacements
     Args:
         directory: Target directory
         filename: Output filename
-        template_name: Template file in DATA_TESTS_DIR (e.g. "plugin_nested_menus.py")
+        template_name: Template file in TEMPLATES_DIR
+         (e.g. "plugin_nested_menus.py.template")
         replacements: Dict of {placeholder: value} to substitute
     """
     content = get_plugin_code(template_name)
@@ -226,9 +248,10 @@ def test_plugin_system():
             sp_all_actions = []
             # We need to access the private attribute _BaseActionHandler__actions
             # The mangled name depends on the class defining the attribute
-            for act_list in (
-                win.signalpanel.acthandler._BaseActionHandler__actions.values()  # type: ignore
-            ):
+            sig_actions = (  # type: ignore
+                win.signalpanel.acthandler._BaseActionHandler__actions.values()
+            )
+            for act_list in sig_actions:
                 # Handle both QAction and QMenu (QMenu uses .title() instead of .text())
                 sp_all_actions.extend(
                     [
@@ -238,9 +261,10 @@ def test_plugin_system():
                 )
 
             ip_all_actions = []
-            for act_list in (
-                win.imagepanel.acthandler._BaseActionHandler__actions.values()  # type: ignore
-            ):
+            img_actions = (  # type: ignore
+                win.imagepanel.acthandler._BaseActionHandler__actions.values()
+            )
+            for act_list in img_actions:
                 # Handle both QAction and QMenu (QMenu uses .title() instead of .text())
                 ip_all_actions.extend(
                     [
@@ -596,7 +620,7 @@ def test_plugin_nested_menus():
         create_plugin_from_template(
             plugin_dir,
             "datalab_test_plugin_nested.py",
-            "plugin_nested_menus.py",
+            "plugin_nested_menus.py.template",
             {
                 "{class_name}": "TestPluginNested",
                 "{plugin_name}": "Nested Menus Plugin",
@@ -698,7 +722,7 @@ def test_plugin_with_dialogs():
         create_plugin_from_template(
             plugin_dir,
             "datalab_test_plugin_dialogs.py",
-            "plugin_with_dialogs.py",
+            "plugin_with_dialogs.py.template",
             {
                 "{class_name}": "TestPluginDialogs",
                 "{plugin_name}": "Dialogs Plugin",
@@ -762,7 +786,7 @@ def test_plugin_enable_disable_config():
     try:
         original_enabled_list = Conf.main.plugins_enabled_list.get()
         had_config = True
-    except:  # noqa: E722
+    except Exception:  # noqa: BLE001
         original_enabled_list = None
         had_config = False
 
@@ -863,8 +887,10 @@ def test_plugin_enable_disable_config():
             Conf.main.plugins_enabled_list.set(original_enabled_list)
         else:
             try:
-                Conf.remove_option("main", "plugins_enabled_list")
-            except:  # noqa: E722
+                Conf.remove_option(  # pylint: disable=no-member
+                    "main", "plugins_enabled_list"
+                )
+            except Exception:  # noqa: BLE001
                 pass
 
 
@@ -887,7 +913,7 @@ def test_plugin_many_actions_visual():
         create_plugin_from_template(
             plugin_dir,
             "datalab_test_plugin_many_actions.py",
-            "plugin_many_actions.py",
+            "plugin_many_actions.py.template",
             {
                 "{class_name}": "TestPluginManyActions",
                 "{plugin_name}": "Many Actions Test",
@@ -992,7 +1018,7 @@ def test_plugin_long_description():
         create_plugin_from_template(
             plugin_dir,
             "datalab_test_plugin_long_desc.py",
-            "plugin_long_description.py",
+            "plugin_long_description.py.template",
             {
                 "{class_name}": "TestPluginLongDescription",
                 "{plugin_name}": "Long Description Test",
@@ -1032,28 +1058,43 @@ def test_plugin_long_description():
                     break
             assert getattr(win, "_test_long_desc", None) is True
 
-            # Test show_full_description doesn't raise AttributeError
-            # (regression test for self.plugin → self.plugin_class fix)
-            # We mock QMessageBox.information to avoid opening a real modal
-            # dialog in offscreen mode — the static call can trigger C++
-            # access violations during teardown.
+            # Test _toggle_description doesn't raise AttributeError
+            # (regression test for expandable description widget)
             widget = PluginInfoWidget(
                 plugin_class, enabled=True, state=PluginState.ENABLED
             )
-            with patch.object(QW.QMessageBox, "information") as mock_msgbox:
-                try:
-                    widget.show_full_description()
-                except AttributeError as e:
-                    raise AssertionError(
-                        f"show_full_description raised AttributeError: {e}"
-                    )
-
-                # Verify the dialog would have been shown with correct content
-                assert mock_msgbox.called, "QMessageBox.information was not called"
-                call_args = mock_msgbox.call_args[0]
-                assert "Long Description Test" in call_args[2], (
-                    "Plugin name should appear in description dialog"
+            try:
+                # Long description should have the toggle button
+                assert hasattr(widget, "_toggle_btn"), (
+                    "Long description should have a toggle button"
                 )
+                assert hasattr(widget, "_desc_scroll"), (
+                    "Long description should have a scroll area"
+                )
+                # Toggle expand
+                # pylint: disable=protected-access
+                widget._toggle_description()
+                assert widget._expanded is True
+                assert widget._desc_scroll.maximumHeight() == 150
+                # Toggle collapse
+                widget._toggle_description()
+                assert widget._expanded is False
+                assert widget._desc_scroll.maximumHeight() == 60
+                # pylint: enable=protected-access
+            except AttributeError as e:
+                raise AssertionError(
+                    f"_toggle_description raised AttributeError: {e}"
+                ) from e
             del widget
 
             execenv.print("Long description plugin handled correctly")
+
+
+if __name__ == "__main__":
+    _launch_path = osp.join(osp.dirname(__file__), "launch_with_test_plugins.py")
+    _spec = importlib.util.spec_from_file_location(
+        "launch_with_test_plugins", _launch_path
+    )
+    _mod = importlib.util.module_from_spec(_spec)
+    _spec.loader.exec_module(_mod)
+    _mod.main()

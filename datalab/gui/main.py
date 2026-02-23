@@ -987,6 +987,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.__configure_panels()
         # Now that everything is set up, we can restore the window state:
         self.__restore_state()
+        self.reload_plugins()
 
     def __setup_webapi(self) -> None:
         """Setup Web API actions."""
@@ -1401,6 +1402,8 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.processing_menu = self.menuBar().addMenu(_("Processing"))
         self.analysis_menu = self.menuBar().addMenu(_("Analysis"))
         self.plugins_menu = self.menuBar().addMenu(_("Plugins"))
+        # Make plugins menu scrollable to handle many plugins without overflow
+        self.plugins_menu.setStyleSheet("QMenu { menu-scrollable: 1; }")
         self.view_menu = self.menuBar().addMenu(_("&View"))
         configure_menu_about_to_show(self.view_menu, self.__update_view_menu)
         self.help_menu = self.menuBar().addMenu("?")

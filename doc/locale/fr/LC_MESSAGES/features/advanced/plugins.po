@@ -198,8 +198,8 @@ msgstr "Voici un exemple simple d'un plugin qui ajoute de nouveaux formats de fi
 msgid "Example templates used by the test suite"
 msgstr "Exemples de modèles utilisés par la suite de tests"
 
-msgid "DataLab also provides plugin templates used by integration tests in ``datalab/data/tests/plugin``. They are useful as development references for:"
-msgstr "DataLab fournit aussi des modèles de plugins utilisés par les tests d'intégration dans ``datalab/data/tests/plugin``. Ils servent de références de développement pour :"
+msgid "DataLab also provides plugin templates used by integration tests in ``datalab/tests/features/plugins/templates``. They are useful as development references for:"
+msgstr "DataLab fournit aussi des modèles de plugins utilisés par les tests d'intégration dans ``datalab/tests/features/plugins/templates``. Ils servent de références de développement pour :"
 
 msgid "basic valid plugin structure,"
 msgstr "une structure de plugin valide de base,"

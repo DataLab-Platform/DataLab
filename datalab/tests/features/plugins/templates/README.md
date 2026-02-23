@@ -8,11 +8,14 @@ Each template file contains placeholders (e.g., `{class_name}`, `{plugin_name}`)
 
 ### Available Templates
 
-- **plugin_valid.py**: Basic valid plugin template with actions for both signal and image panels
-- **plugin_nested_menus.py**: Plugin with nested submenus (3 levels deep)
-- **plugin_with_dialogs.py**: Plugin demonstrating dialog methods (show_warning, show_error, etc.)
-- **plugin_many_actions.py**: Plugin with multiple actions in a dropdown menu
-- **plugin_long_description.py**: Plugin with an extremely long description
+Template files use the `.py.template` extension so that linters (Ruff, Pylint)
+skip them – they contain `{placeholders}` that are not valid Python.
+
+- **plugin_valid.py.template**: Basic valid plugin template with actions for both signal and image panels
+- **plugin_nested_menus.py.template**: Plugin with nested submenus (3 levels deep)
+- **plugin_with_dialogs.py.template**: Plugin demonstrating dialog methods (show_warning, show_error, etc.)
+- **plugin_many_actions.py.template**: Plugin with multiple actions in a dropdown menu
+- **plugin_long_description.py.template**: Plugin with an extremely long description
 
 Note: Simple error-case plugins (init error, missing `create_actions`, invalid
 `PLUGIN_INFO`, syntax errors) are inlined directly in the test file.
@@ -23,13 +26,13 @@ Tests use these templates via the `create_plugin_file()` and `create_plugin_from
 helper functions in `test_plugins.py`:
 
 ```python
-# For plugin_valid.py (most common):
+# For plugin_valid.py.template (most common):
 create_plugin_file(plugin_dir, "datalab_my_plugin.py",
                    "MyPlugin", "My Test Plugin", "My Action", "my_action")
 
 # For any template with custom placeholders:
 create_plugin_from_template(plugin_dir, "datalab_my_plugin.py",
-                            "plugin_nested_menus.py",
+                            "plugin_nested_menus.py.template",
                             {"{class_name}": "MyPlugin", ...})
 ```
 
@@ -71,11 +74,11 @@ When creating a new template:
 ## Directory Structure
 
 ```
-datalab/data/tests/plugin/
+datalab/tests/features/plugins/templates/
 ├── README.md                      # This file
-├── plugin_valid.py                # Standard valid plugin
-├── plugin_nested_menus.py         # Nested submenus
-├── plugin_with_dialogs.py         # Dialog methods
-├── plugin_many_actions.py         # Many dropdown actions
-└── plugin_long_description.py     # Long description text
+├── plugin_valid.py.template                # Standard valid plugin
+├── plugin_nested_menus.py.template         # Nested submenus
+├── plugin_with_dialogs.py.template         # Dialog methods
+├── plugin_many_actions.py.template         # Many dropdown actions
+└── plugin_long_description.py.template     # Long description text
 ```

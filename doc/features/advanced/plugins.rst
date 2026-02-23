@@ -138,7 +138,7 @@ Example templates used by the test suite
 ----------------------------------------
 
 DataLab also provides plugin templates used by integration tests in
-``datalab/data/tests/plugin``. They are useful as development references for:
+``datalab/tests/features/plugins/templates``. They are useful as development references for:
 
 - basic valid plugin structure,
 - nested plugin menus,

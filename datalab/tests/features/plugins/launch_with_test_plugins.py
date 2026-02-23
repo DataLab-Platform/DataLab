@@ -14,7 +14,8 @@ This script creates temporary test plugins and launches DataLab so you can:
 
 Usage::
 
-    python scripts/run_with_env.py python datalab/tests/features/plugins/launch_with_test_plugins.py
+    python scripts/run_with_env.py
+    python datalab/tests/features/plugins/launch_with_test_plugins.py
 
 Close the DataLab window to end the script.
 """
@@ -23,10 +24,10 @@ Close the DataLab window to end the script.
 
 from __future__ import annotations
 
+import os
 import os.path as osp
 import shutil
 import sys
-import tempfile
 
 # Ensure project root is on path
 _project_root = osp.abspath(osp.join(osp.dirname(__file__), "..", "..", "..", ".."))
@@ -35,8 +36,11 @@ if _project_root not in sys.path:
 
 
 # Path to plugin templates
-DATA_TESTS_DIR = osp.abspath(
-    osp.join(osp.dirname(__file__), "../../../data/tests/plugin")
+TEMPLATES_DIR = osp.abspath(osp.join(osp.dirname(__file__), "templates"))
+
+# Fixed directory for temporary visual-test plugin files (inside the project tree)
+_VISUAL_PLUGINS_DIR = osp.abspath(
+    osp.join(osp.dirname(__file__), "..", "..", "..", "data", "tests", "visual_plugins")
 )
 
 
@@ -49,7 +53,7 @@ def get_plugin_template(filename: str) -> str:
     Returns:
         Template content as string
     """
-    with open(osp.join(DATA_TESTS_DIR, filename), "r", encoding="utf-8") as f:
+    with open(osp.join(TEMPLATES_DIR, filename), "r", encoding="utf-8") as f:
         return f.read()
 
 
@@ -139,13 +143,19 @@ class AutoTestPlugin{i}(PluginBase):
     return created
 
 
-def main():
+def main():  # pylint: disable=import-outside-toplevel
     """Create test plugins and launch DataLab for visual inspection."""
     from datalab.config import Conf
 
-    tmpdir = tempfile.mkdtemp(prefix="datalab_visual_test_plugins_")
-    print(f"Temporary plugin directory: {tmpdir}")
+    if osp.exists(_VISUAL_PLUGINS_DIR):
+        shutil.rmtree(_VISUAL_PLUGINS_DIR)
+    os.makedirs(_VISUAL_PLUGINS_DIR)
+    tmpdir = _VISUAL_PLUGINS_DIR
+    print(f"Visual test plugin directory: {tmpdir}")
     sys.path.insert(0, tmpdir)
+
+    # Save the original plugins_path before any modification
+    original_path = Conf.main.plugins_path.get()
 
     try:
         # ------------------------------------------------------------------
@@ -154,7 +164,7 @@ def main():
         create_plugin_from_template(
             tmpdir,
             "datalab_plugin_many_actions_visual.py",
-            "plugin_many_actions.py",
+            "plugin_many_actions.py.template",
             {
                 "{class_name}": "VisualTestManyActions",
                 "{plugin_name}": "Visual Test: Many Actions",
@@ -176,12 +186,12 @@ def main():
             "verbose plugin descriptions. "
             * 10
             + "The description should be displayed properly in tooltips, status "
-            "bars, and configuration dialogs without breaking the UI layout. " * 5
+            "bars, and configuration dialogs without breaking the UI layout. " * 50
         )
         create_plugin_from_template(
             tmpdir,
             "datalab_plugin_long_description_visual.py",
-            "plugin_long_description.py",
+            "plugin_long_description.py.template",
             {
                 "{class_name}": "VisualTestLongDescription",
                 "{plugin_name}": "Visual Test: Long Description",
@@ -197,7 +207,7 @@ def main():
         create_plugin_from_template(
             tmpdir,
             "datalab_plugin_nested_menus_visual.py",
-            "plugin_nested_menus.py",
+            "plugin_nested_menus.py.template",
             {
                 "{class_name}": "VisualTestNestedMenus",
                 "{plugin_name}": "Visual Test: Nested Menus",
@@ -216,7 +226,7 @@ def main():
         # ------------------------------------------------------------------
         # 4) Many auto-generated plugins for scrollbar testing
         # ------------------------------------------------------------------
-        bulk = generate_bulk_plugins(tmpdir, count=20)
+        bulk = generate_bulk_plugins(tmpdir, count=40)
         print(f"Generated {len(bulk)} bulk plugins for scrollbar testing")
 
         # ------------------------------------------------------------------
@@ -229,7 +239,7 @@ def main():
         print("  1. 📋 Many Actions       – dropdown menu with 5 actions")
         print("  2. 📄 Long Description   – test 'Show more' button")
         print("  3. 📁 Nested Menus       – 3-level nested submenus")
-        print("  4. 🔢 20 Auto Plugins    – scrollbar in Settings > Plugins")
+        print("  4. 🔢 40 Auto Plugins    – scrollbar in Settings > Plugins")
         print("\nManual verification checklist:")
         print("  ✓ Open Plugins menu → see all plugin actions")
         print("  ✓ Open Settings > Plugins → verify scrollbar with 23 plugins")
@@ -238,13 +248,12 @@ def main():
         print("\nLaunching DataLab...")
         print("=" * 70 + "\n")
 
-        # Configure: enable all plugins, add temp dir to path
+        # Configure: enable all plugins, point plugins_path to temp dir.
+        # plugins_path is a DirectoryItem (single directory), so we replace it
+        # rather than concatenating.  The original path (if any) is already on
+        # sys.path thanks to DataLab startup, so existing plugins stay visible.
         Conf.main.plugins_enabled_list.set(None)
-        original_path = Conf.main.plugins_path.get()
-        if original_path:
-            Conf.main.plugins_path.set(original_path + ";" + tmpdir)
-        else:
-            Conf.main.plugins_path.set(tmpdir)
+        Conf.main.plugins_path.set(tmpdir)
 
         # Launch DataLab
         from datalab.app import run
@@ -253,6 +262,7 @@ def main():
 
     finally:
         # Restore config and cleanup
+        Conf.main.plugins_path.set(original_path)
         print(f"\nCleaning up: {tmpdir}")
         if tmpdir in sys.path:
             sys.path.remove(tmpdir)
