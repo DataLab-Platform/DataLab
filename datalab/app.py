@@ -6,6 +6,7 @@ DataLab launcher module
 
 from __future__ import annotations
 
+import atexit
 from typing import TYPE_CHECKING
 
 from guidata.configtools import get_image_file_path
@@ -13,9 +14,14 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from datalab.config import Conf
+from datalab.config import APP_NAME, Conf, _
 from datalab.env import execenv
 from datalab.gui.main import DLMainWindow
+from datalab.utils.instancecheck import (
+    create_lock_file,
+    is_another_instance_running,
+    remove_lock_file,
+)
 from datalab.utils.qthelpers import datalab_app_context
 
 if TYPE_CHECKING:
@@ -87,8 +93,35 @@ def run(
         h5files = ([] if h5files is None else h5files) + execenv.h5files
 
     with datalab_app_context(exec_loop=True):
+        # --- Instance detection -------------------------------------------
+        running_pid = is_another_instance_running()
+        if running_pid is not None:
+            answer = QW.QMessageBox.warning(
+                None,
+                APP_NAME,
+                _(
+                    "Another instance of DataLab (PID %d) appears to be "
+                    "running.\n"
+                    "Running multiple instances simultaneously may cause "
+                    "side effects: preferences being overwritten, remote "
+                    "control discovery issues, etc.\n\n"
+                    "Do you want to continue anyway?"
+                )
+                % running_pid,
+                QW.QMessageBox.Yes | QW.QMessageBox.No,
+                QW.QMessageBox.No,
+            )
+            if answer == QW.QMessageBox.No:
+                return
+        create_lock_file(force=(running_pid is not None))
+        atexit.register(remove_lock_file)
+        # ------------------------------------------------------------------
         window = create(
-            splash=True, console=console, objects=objects, h5files=h5files, size=size
+            splash=True,
+            console=console,
+            objects=objects,
+            h5files=h5files,
+            size=size,
         )
         QW.QApplication.processEvents()
         window.execute_post_show_actions()
