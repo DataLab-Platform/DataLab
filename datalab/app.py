@@ -94,27 +94,31 @@ def run(
 
     with datalab_app_context(exec_loop=True):
         # --- Instance detection -------------------------------------------
-        running_pid = is_another_instance_running()
-        if running_pid is not None:
-            answer = QW.QMessageBox.warning(
-                None,
-                APP_NAME,
-                _(
-                    "Another instance of DataLab (PID %d) appears to be "
-                    "running.\n"
-                    "Running multiple instances simultaneously may cause "
-                    "side effects: preferences being overwritten, remote "
-                    "control discovery issues, etc.\n\n"
-                    "Do you want to continue anyway?"
+        # In unattended mode (tests), skip the lock check entirely so that
+        # tests are never blocked by a running DataLab instance or a stale
+        # lock file.
+        if not execenv.unattended:
+            running_pid = is_another_instance_running()
+            if running_pid is not None:
+                answer = QW.QMessageBox.warning(
+                    None,
+                    APP_NAME,
+                    _(
+                        "Another instance of DataLab (PID %d) appears to be "
+                        "running.\n"
+                        "Running multiple instances simultaneously may cause "
+                        "side effects: preferences being overwritten, remote "
+                        "control discovery issues, etc.\n\n"
+                        "Do you want to continue anyway?"
+                    )
+                    % running_pid,
+                    QW.QMessageBox.Yes | QW.QMessageBox.No,
+                    QW.QMessageBox.No,
                 )
-                % running_pid,
-                QW.QMessageBox.Yes | QW.QMessageBox.No,
-                QW.QMessageBox.No,
-            )
-            if answer == QW.QMessageBox.No:
-                return
-        create_lock_file(force=(running_pid is not None))
-        atexit.register(remove_lock_file)
+                if answer == QW.QMessageBox.No:
+                    return
+            create_lock_file(force=(running_pid is not None))
+            atexit.register(remove_lock_file)
         # ------------------------------------------------------------------
         window = create(
             splash=True,

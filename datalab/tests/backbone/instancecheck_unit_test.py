@@ -10,6 +10,7 @@ Testing PID lock file mechanism for single-instance detection.
 
 from __future__ import annotations
 
+import json
 import os
 from unittest import mock
 
@@ -55,36 +56,62 @@ class TestIsPidAlive:
 
 
 # ---------------------------------------------------------------------------
-# _read_lock_pid
+# _read_lock_pids
 # ---------------------------------------------------------------------------
 
 
-class TestReadLockPid:
-    """Tests for _read_lock_pid."""
+class TestReadLockPids:
+    """Tests for _read_lock_pids."""
 
     def test_missing_file(self, tmp_path):
-        """Should return None when the lock file does not exist."""
-        assert instancecheck._read_lock_pid(str(tmp_path / "nope.lock")) is None
+        """Should return empty list when the lock file does not exist."""
+        assert instancecheck._read_lock_pids(str(tmp_path / "nope.lock")) == []
 
-    def test_valid_pid(self, tmp_path):
-        """Should return the integer PID stored in the file."""
+    def test_valid_json_list(self, tmp_path):
+        """Should return the list of PIDs stored in JSON format."""
+        lock = tmp_path / "test.lock"
+        lock.write_text(json.dumps([12345, 67890]))
+        assert instancecheck._read_lock_pids(str(lock)) == [12345, 67890]
+
+    def test_legacy_single_pid(self, tmp_path):
+        """Should handle legacy single-PID plain-text format."""
         lock = tmp_path / "test.lock"
         lock.write_text("12345")
-        assert instancecheck._read_lock_pid(str(lock)) == 12345
+        assert instancecheck._read_lock_pids(str(lock)) == [12345]
 
     def test_corrupted_content(self, tmp_path):
-        """Should return None and remove the corrupted file."""
+        """Should return empty list and remove the corrupted file."""
         lock = tmp_path / "bad.lock"
         lock.write_text("not-a-number")
-        assert instancecheck._read_lock_pid(str(lock)) is None
+        assert instancecheck._read_lock_pids(str(lock)) == []
         assert not lock.exists()
 
     def test_empty_file(self, tmp_path):
         """An empty file is treated as corrupted."""
         lock = tmp_path / "empty.lock"
         lock.write_text("")
-        assert instancecheck._read_lock_pid(str(lock)) is None
+        assert instancecheck._read_lock_pids(str(lock)) == []
         assert not lock.exists()
+
+
+class TestReadLockPidLegacy:
+    """Tests for _read_lock_pid (legacy compat wrapper)."""
+
+    def test_missing_file(self, tmp_path):
+        """Should return None when the lock file does not exist."""
+        assert instancecheck._read_lock_pid(str(tmp_path / "nope.lock")) is None
+
+    def test_valid_pid(self, tmp_path):
+        """Should return the first PID stored in the file."""
+        lock = tmp_path / "test.lock"
+        lock.write_text(json.dumps([12345, 67890]))
+        assert instancecheck._read_lock_pid(str(lock)) == 12345
+
+    def test_legacy_single_pid(self, tmp_path):
+        """Should return the integer PID stored in legacy format."""
+        lock = tmp_path / "test.lock"
+        lock.write_text("12345")
+        assert instancecheck._read_lock_pid(str(lock)) == 12345
 
 
 # ---------------------------------------------------------------------------
@@ -104,29 +131,63 @@ class TestIsAnotherInstanceRunning:
         """Lock file with our own PID → not 'another' instance."""
         _tmp_path, lock_path = lock_dir
         with open(lock_path, "w") as f:
-            f.write(str(os.getpid()))
+            json.dump([os.getpid()], f)
         assert instancecheck.is_another_instance_running() is None
 
     def test_alive_foreign_pid(self, lock_dir):
         """Lock file with a live foreign PID → returns that PID."""
         _tmp_path, lock_path = lock_dir
-        # Use PID 1 (init on Unix, System Idle on Windows) which is always alive
-        # but not ours.  Mock _is_pid_alive to guarantee the behaviour.
+        foreign_pid = 99999
+        with open(lock_path, "w") as f:
+            json.dump([foreign_pid], f)
+        with mock.patch.object(instancecheck, "_is_pid_alive", return_value=True):
+            assert instancecheck.is_another_instance_running() == foreign_pid
+
+    def test_stale_lock_removed(self, lock_dir):
+        """Stale lock (dead PID) should be cleaned automatically."""
+        _tmp_path, lock_path = lock_dir
+        dead_pid = 2**22 - 1
+        with open(lock_path, "w") as f:
+            json.dump([dead_pid], f)
+        with mock.patch.object(instancecheck, "_is_pid_alive", return_value=False):
+            assert instancecheck.is_another_instance_running() is None
+        assert not os.path.exists(lock_path)
+
+    def test_multiple_pids_one_alive(self, lock_dir):
+        """Lock file with multiple PIDs, one alive → returns the alive one."""
+        _tmp_path, lock_path = lock_dir
+        alive_pid = 99999
+        dead_pid = 88888
+        with open(lock_path, "w") as f:
+            json.dump([dead_pid, alive_pid], f)
+
+        def fake_alive(pid):
+            return pid == alive_pid
+
+        with mock.patch.object(instancecheck, "_is_pid_alive", side_effect=fake_alive):
+            assert instancecheck.is_another_instance_running() == alive_pid
+
+        # Dead PID was cleaned up, alive PID remains
+        remaining = instancecheck._read_lock_pids(lock_path)
+        assert remaining == [alive_pid]
+
+    def test_multiple_pids_all_dead(self, lock_dir):
+        """Lock file with multiple stale PIDs → file removed entirely."""
+        _tmp_path, lock_path = lock_dir
+        with open(lock_path, "w") as f:
+            json.dump([88888, 77777], f)
+        with mock.patch.object(instancecheck, "_is_pid_alive", return_value=False):
+            assert instancecheck.is_another_instance_running() is None
+        assert not os.path.exists(lock_path)
+
+    def test_legacy_single_pid_format(self, lock_dir):
+        """Legacy format (plain integer) should be handled transparently."""
+        _tmp_path, lock_path = lock_dir
         foreign_pid = 99999
         with open(lock_path, "w") as f:
             f.write(str(foreign_pid))
         with mock.patch.object(instancecheck, "_is_pid_alive", return_value=True):
             assert instancecheck.is_another_instance_running() == foreign_pid
-
-    def test_stale_lock_removed(self, lock_dir):
-        """Stale lock (dead PID) should be removed automatically."""
-        _tmp_path, lock_path = lock_dir
-        dead_pid = 2**22 - 1
-        with open(lock_path, "w") as f:
-            f.write(str(dead_pid))
-        with mock.patch.object(instancecheck, "_is_pid_alive", return_value=False):
-            assert instancecheck.is_another_instance_running() is None
-        assert not os.path.exists(lock_path)
 
 
 # ---------------------------------------------------------------------------
@@ -141,15 +202,15 @@ class TestCreateLockFile:
         """Lock file should contain the current PID after creation."""
         _tmp_path, lock_path = lock_dir
         instancecheck.create_lock_file()
-        with open(lock_path) as f:
-            assert int(f.read().strip()) == os.getpid()
+        pids = instancecheck._read_lock_pids(lock_path)
+        assert os.getpid() in pids
 
     def test_atomic_prevents_overwrite_of_live_instance(self, lock_dir):
         """Should raise RuntimeError if another live instance holds the lock."""
         _tmp_path, lock_path = lock_dir
         foreign_pid = 99999
         with open(lock_path, "w") as f:
-            f.write(str(foreign_pid))
+            json.dump([foreign_pid], f)
         with mock.patch.object(instancecheck, "_is_pid_alive", return_value=True):
             with pytest.raises(RuntimeError, match="already running"):
                 instancecheck.create_lock_file()
@@ -159,49 +220,97 @@ class TestCreateLockFile:
         _tmp_path, lock_path = lock_dir
         dead_pid = 2**22 - 1
         with open(lock_path, "w") as f:
-            f.write(str(dead_pid))
+            json.dump([dead_pid], f)
         with mock.patch.object(instancecheck, "_is_pid_alive", return_value=False):
             instancecheck.create_lock_file()
-        with open(lock_path) as f:
-            assert int(f.read().strip()) == os.getpid()
+        pids = instancecheck._read_lock_pids(lock_path)
+        assert os.getpid() in pids
+        assert dead_pid not in pids
 
-    def test_force_overwrites_live_instance(self, lock_dir):
-        """force=True should overwrite lock even when another instance lives."""
+    def test_force_adds_pid_alongside_live_instance(self, lock_dir):
+        """force=True should add our PID alongside the existing live one."""
         _tmp_path, lock_path = lock_dir
         foreign_pid = 99999
         with open(lock_path, "w") as f:
-            f.write(str(foreign_pid))
+            json.dump([foreign_pid], f)
         with mock.patch.object(instancecheck, "_is_pid_alive", return_value=True):
             # Without force, would raise RuntimeError
             instancecheck.create_lock_file(force=True)
-        with open(lock_path) as f:
-            assert int(f.read().strip()) == os.getpid()
+        pids = instancecheck._read_lock_pids(lock_path)
+        assert os.getpid() in pids
+        assert foreign_pid in pids
+
+    def test_does_not_duplicate_own_pid(self, lock_dir):
+        """Calling create_lock_file twice should not duplicate our PID."""
+        _tmp_path, lock_path = lock_dir
+        instancecheck.create_lock_file()
+        instancecheck.create_lock_file()
+        pids = instancecheck._read_lock_pids(lock_path)
+        assert pids.count(os.getpid()) == 1
 
 
 class TestRemoveLockFile:
     """Tests for remove_lock_file."""
 
     def test_removes_own_lock(self, lock_dir):
-        """Should remove the lock file when it contains our PID."""
+        """Should remove the lock file when only our PID is present."""
         _tmp_path, lock_path = lock_dir
         instancecheck.create_lock_file()
         assert os.path.exists(lock_path)
         instancecheck.remove_lock_file()
         assert not os.path.exists(lock_path)
 
-    def test_does_not_remove_foreign_lock(self, lock_dir):
-        """Should NOT remove the lock file when it contains another PID."""
+    def test_keeps_file_with_other_pids(self, lock_dir):
+        """Should keep the lock file when other PIDs are still registered."""
         _tmp_path, lock_path = lock_dir
+        foreign_pid = 99999
         with open(lock_path, "w") as f:
-            f.write("99999")
+            json.dump([foreign_pid, os.getpid()], f)
         instancecheck.remove_lock_file()
         assert os.path.exists(lock_path)
+        remaining = instancecheck._read_lock_pids(lock_path)
+        assert remaining == [foreign_pid]
+
+    def test_does_not_remove_foreign_lock(self, lock_dir):
+        """Should NOT modify the lock file when it does not contain our PID."""
+        _tmp_path, lock_path = lock_dir
+        with open(lock_path, "w") as f:
+            json.dump([99999], f)
+        instancecheck.remove_lock_file()
+        assert os.path.exists(lock_path)
+        assert instancecheck._read_lock_pids(lock_path) == [99999]
 
     def test_noop_when_no_lock(self, lock_dir):
         """Should do nothing when there is no lock file."""
         _tmp_path, lock_path = lock_dir
         assert not os.path.exists(lock_path)
         instancecheck.remove_lock_file()  # Should not raise
+
+    def test_concurrent_close_preserves_remaining(self, lock_dir):
+        """Closing one of two instances should preserve the other's PID.
+
+        This is the key bug fix: with the old single-PID design, closing
+        instance B would delete the lock even though instance A was still
+        running, allowing a new instance C to start without a warning.
+        """
+        _tmp_path, lock_path = lock_dir
+        foreign_pid = 99999
+
+        # Simulate two instances registered
+        with open(lock_path, "w") as f:
+            json.dump([foreign_pid, os.getpid()], f)
+
+        # Current process closes
+        instancecheck.remove_lock_file()
+
+        # Lock file still exists with foreign PID
+        assert os.path.exists(lock_path)
+        remaining = instancecheck._read_lock_pids(lock_path)
+        assert remaining == [foreign_pid]
+
+        # A new instance would still detect the foreign PID
+        with mock.patch.object(instancecheck, "_is_pid_alive", return_value=True):
+            assert instancecheck.is_another_instance_running() == foreign_pid
 
 
 # ---------------------------------------------------------------------------

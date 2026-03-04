@@ -94,7 +94,7 @@ class TestDataLabConcurrentInstances:
             assert int(f.read().strip()) == child_pid
 
     def test_user_continues_lock_overwritten(self, running_datalab):
-        """User clicks Yes → lock file is overwritten with DataLab B's PID."""
+        """User clicks Yes → our PID is added alongside DataLab A's PID."""
         lock_path, child_pid, _proc = running_datalab
 
         # Collision detected
@@ -103,12 +103,16 @@ class TestDataLabConcurrentInstances:
         # The app would show a dialog; user clicks Yes → force create lock
         create_lock_file(force=True)
 
-        # Lock now belongs to DataLab B (this process)
-        with open(lock_path) as f:
-            assert int(f.read().strip()) == os.getpid()
+        # Lock now contains both DataLab A and DataLab B (this process)
+        import json
 
-        # Our own PID → not "another" instance
-        assert is_another_instance_running() is None
+        with open(lock_path) as f:
+            pids = json.loads(f.read())
+        assert os.getpid() in pids
+        assert child_pid in pids
+
+        # Our own PID → not "another" instance, but A is still detected
+        assert is_another_instance_running() == child_pid
 
     def test_stale_lock_from_crashed_instance(self, tmp_path):
         """DataLab A crashed → stale lock is cleaned on B's startup."""
