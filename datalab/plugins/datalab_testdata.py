@@ -119,6 +119,14 @@ class PluginTestData(PluginBase):
             obj = test_data.create_grid_of_gaussian_images(param)
             self.proxy.add_object(obj)
 
+    def _load_all_test_signals(self) -> None:
+        """Load all test signals."""
+        self.load_test_objs(SignalIORegistry, _("Load all test signals"))
+
+    def _load_all_test_images(self) -> None:
+        """Load all test images."""
+        self.load_test_objs(ImageIORegistry, _("Load all test images"))
+
     # Plugin menu entries ------------------------------------------------------
     def create_actions(self) -> None:
         """Create actions"""
@@ -132,8 +140,7 @@ class PluginTestData(PluginBase):
             )
             sah.new_action(
                 _("Load all test signals"),
-                triggered=lambda regclass=SignalIORegistry,
-                title=_("Load all test signals"): self.load_test_objs(regclass, title),
+                triggered=self._load_all_test_signals,
                 select_condition="always",
                 separator=True,
             )
@@ -183,8 +190,7 @@ class PluginTestData(PluginBase):
             )
             iah.new_action(
                 _("Load all test images"),
-                triggered=lambda regclass=ImageIORegistry,
-                title=_("Load all test images"): self.load_test_objs(regclass, title),
+                triggered=self._load_all_test_images,
                 select_condition="always",
                 separator=True,
             )

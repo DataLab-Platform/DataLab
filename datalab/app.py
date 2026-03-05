@@ -117,7 +117,7 @@ def run(
                 )
                 if answer == QW.QMessageBox.No:
                     return
-            create_lock_file(force=(running_pid is not None))
+            create_lock_file(force=running_pid is not None)
             atexit.register(remove_lock_file)
         # ------------------------------------------------------------------
         window = create(

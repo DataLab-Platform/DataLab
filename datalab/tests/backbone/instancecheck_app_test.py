@@ -14,8 +14,11 @@ If the user refuses, B closes.  If the user accepts, B continues.
 
 # guitest: skip
 
+# pylint: disable=redefined-outer-name
+
 from __future__ import annotations
 
+import json
 import os
 import subprocess
 import sys
@@ -28,7 +31,6 @@ from datalab.utils.instancecheck import (
     LOCK_FILENAME,
     create_lock_file,
     is_another_instance_running,
-    remove_lock_file,
 )
 
 
@@ -50,7 +52,7 @@ def running_datalab(tmp_path):
         "time.sleep(60)\n"  # Stay alive — simulates DataLab being open
     )
 
-    proc = subprocess.Popen(
+    proc = subprocess.Popen(  # pylint: disable=consider-using-with
         [sys.executable, str(script)],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
@@ -90,7 +92,7 @@ class TestDataLabConcurrentInstances:
 
         # The app would show a dialog; user clicks No → app returns early
         # The lock file still belongs to DataLab A
-        with open(lock_path) as f:
+        with open(lock_path, encoding="utf-8") as f:
             assert int(f.read().strip()) == child_pid
 
     def test_user_continues_lock_overwritten(self, running_datalab):
@@ -104,9 +106,7 @@ class TestDataLabConcurrentInstances:
         create_lock_file(force=True)
 
         # Lock now contains both DataLab A and DataLab B (this process)
-        import json
-
-        with open(lock_path) as f:
+        with open(lock_path, encoding="utf-8") as f:
             pids = json.loads(f.read())
         assert os.getpid() in pids
         assert child_pid in pids
@@ -132,6 +132,7 @@ class TestDataLabConcurrentInstances:
             capture_output=True,
             text=True,
             timeout=10,
+            check=False,
         )
         dead_pid = int(result.stdout.strip())
         assert os.path.exists(lock_path)

@@ -47,7 +47,7 @@ def _get_lock_path() -> str:
     Returns:
         Absolute path to ``datalab.lock`` inside the configuration directory.
     """
-    from datalab.config import Conf
+    from datalab.config import Conf  # pylint: disable=import-outside-toplevel
 
     return Conf.get_path(LOCK_FILENAME)
 
@@ -98,18 +98,20 @@ def _is_pid_alive_win32(pid: int) -> bool:
        that it is a DataLab process.  PID recycling may cause false
        positives (see module docstring).
     """
-    import ctypes
+    import ctypes  # pylint: disable=import-outside-toplevel
 
-    PROCESS_QUERY_LIMITED_INFORMATION = 0x1000
-    STILL_ACTIVE = 259  # https://learn.microsoft.com/windows/win32/api/processthreadsapi/nf-processthreadsapi-getexitcodeprocess
+    process_query_limited_information = 0x1000
+    # https://learn.microsoft.com/windows/win32/api/processthreadsapi/
+    # nf-processthreadsapi-getexitcodeprocess
+    still_active = 259
     kernel32 = ctypes.windll.kernel32  # type: ignore[attr-defined]
-    handle = kernel32.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, False, pid)
+    handle = kernel32.OpenProcess(process_query_limited_information, False, pid)
     if not handle:
         return False
     try:
         exit_code = ctypes.c_ulong()
         if kernel32.GetExitCodeProcess(handle, ctypes.byref(exit_code)):
-            return exit_code.value == STILL_ACTIVE
+            return exit_code.value == still_active
         # GetExitCodeProcess failed — assume alive to be safe
         return True
     finally:
@@ -142,7 +144,7 @@ def _read_lock_pids(lock_path: str) -> list[int]:
         List of stored PIDs (may be empty).
     """
     try:
-        with open(lock_path) as fobj:
+        with open(lock_path, encoding="utf-8") as fobj:
             content = fobj.read().strip()
     except FileNotFoundError:
         return []
@@ -185,7 +187,7 @@ def _write_lock_pids(lock_path: str, pids: list[int]) -> None:
         _remove_lock_path(lock_path)
         return
     try:
-        with open(lock_path, "w") as fobj:
+        with open(lock_path, "w", encoding="utf-8") as fobj:
             json.dump(pids, fobj)
     except OSError:
         logger.warning("Could not write lock file '%s'", lock_path)
