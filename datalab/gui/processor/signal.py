@@ -37,6 +37,9 @@ from datalab.widgets import (
     signaldeltax,
     signalpeak,
 )
+from datalab.widgets.replacespecialvalues import (
+    ReplaceSpecialValuesSignalParamDL,
+)
 
 
 class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
@@ -232,6 +235,12 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         )
         self.register_1_to_1(
             sips.clip, _("Clipping"), sigima_base.ClipParam, "clip.svg"
+        )
+        self.register_1_to_1(
+            sips.replace_special_values,
+            _("Replace special values"),
+            ReplaceSpecialValuesSignalParamDL,
+            "replace_nan.svg",
         )
         self.register_1_to_1(
             sips.offset_correction,
