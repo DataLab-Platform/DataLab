@@ -27,6 +27,7 @@ _project_root = osp.abspath(osp.join(osp.dirname(__file__), "..", "..", "..", ".
 if _project_root not in sys.path:
     sys.path.insert(0, _project_root)
 
+from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from datalab.env import execenv
@@ -833,6 +834,19 @@ def test_plugin_enable_disable_config():
                     ]
                     assert "Test Plugin 1" in widget_names
                     assert "Test Plugin 2" in widget_names
+                    assert dialog.toggle_all_checkbox.checkState() == QC.Qt.Checked
+
+                    dialog.filter_combo.setCurrentIndex(2)
+                    QW.QApplication.processEvents()
+                    visible_disabled = [
+                        w.plugin_class.PLUGIN_INFO.name
+                        for w in dialog.plugin_widgets
+                        if w.isVisible()
+                    ]
+                    assert visible_disabled == []
+
+                    dialog.filter_combo.setCurrentIndex(0)
+                    QW.QApplication.processEvents()
                     dialog.close()
                     dialog.deleteLater()
                     QW.QApplication.processEvents()
@@ -867,6 +881,36 @@ def test_plugin_enable_disable_config():
                             assert not widget.checkbox.isChecked(), (
                                 "Plugin 2 should be unchecked (disabled)"
                             )
+
+                    assert dialog2.toggle_all_checkbox.checkState() == (
+                        QC.Qt.PartiallyChecked
+                    )
+
+                    dialog2.filter_combo.setCurrentIndex(1)
+                    QW.QApplication.processEvents()
+                    visible_enabled = [
+                        w.plugin_class.PLUGIN_INFO.name
+                        for w in dialog2.plugin_widgets
+                        if w.isVisible()
+                    ]
+                    assert visible_enabled == ["Test Plugin 1"]
+
+                    dialog2.filter_combo.setCurrentIndex(2)
+                    QW.QApplication.processEvents()
+                    visible_disabled = [
+                        w.plugin_class.PLUGIN_INFO.name
+                        for w in dialog2.plugin_widgets
+                        if w.isVisible()
+                    ]
+                    assert visible_disabled == ["Test Plugin 2"]
+
+                    dialog2.toggle_all_checkbox.setChecked(True)
+                    QW.QApplication.processEvents()
+                    assert all(
+                        widget.checkbox.isChecked() for widget in dialog2.plugin_widgets
+                    )
+                    assert dialog2.toggle_all_checkbox.checkState() == QC.Qt.Checked
+
                     dialog2.close()
                     dialog2.deleteLater()
                     QW.QApplication.processEvents()

@@ -234,9 +234,11 @@ class PluginStatus(BaseStatus):
             ntotal = nplugins + nfailed
             text += f"{nplugins}/{ntotal}"
             has_errors = nfailed > 0
+            self.setEnabled(True)
         else:
             text += "-"
             has_errors = False
+            self.setEnabled(False)
         self.label.setText(text)
         self.set_icon(self.ko_icon if has_errors else self.ok_icon)
         if has_errors:

@@ -2180,8 +2180,8 @@ msgstr "Seuil de mémoire en dessous duquel un avertissement est affiché avant 
 msgid "Third-party plugins"
 msgstr "Plugins tiers"
 
-msgid "Disable third-party plugins at startup"
-msgstr "Désactiver les plugins tiers au démarrage"
+msgid "Enable or disable third-party plugins immediately. Changes are applied without restarting DataLab"
+msgstr "Activer ou désactiver immédiatement les plugins tiers. Les changements sont appliqués sans redémarrer DataLab"
 
 msgid "Plugins path"
 msgstr "Chemin des plugins"
@@ -3379,4 +3379,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-

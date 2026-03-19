@@ -69,7 +69,10 @@ class MainSettings(gds.DataSet):
     plugins_enabled = gds.BoolItem(
         "",
         _("Third-party plugins"),
-        help=_("Disable third-party plugins at startup"),
+        help=_(
+            "Enable or disable third-party plugins immediately. "
+            "Changes are applied without restarting DataLab"
+        ),
     )
     plugins_path = gds.DirectoryItem(
         _("Plugins path"),
@@ -521,7 +524,6 @@ RESTART_OPTIONS = (
     ("process_isolation_enabled", _("Process isolation enable status")),
     ("rpc_server_enabled", _("RPC server enable status")),
     ("console_enabled", _("Console enable status")),
-    ("plugins_enabled", _("Third-party plugins support")),
     ("plugins_path", _("Third-party plugins path")),
 )
 

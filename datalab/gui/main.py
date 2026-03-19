@@ -1200,6 +1200,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 
             # Update plugin status in the status bar
             self.pluginstatus.update_status()
+            self.__update_plugins_availability()
 
     def __configure_statusbar(self, console: bool) -> None:
         """Configure status bar
@@ -1229,6 +1230,41 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.memorystatus = status.MemoryStatus(threshold)
         self.memorystatus.SIG_MEMORY_ALARM.connect(self.__set_low_memory_state)
         self.statusBar().addPermanentWidget(self.memorystatus)
+        self.__update_plugins_availability()
+
+    def __update_plugins_availability(self) -> None:
+        """Update plugin-related UI according to third-party plugin setting."""
+        plugins_enabled = Conf.main.plugins_enabled.get()
+
+        if self.plugins_menu is not None:
+            self.plugins_menu.setEnabled(plugins_enabled)
+
+        for action in (self.reload_plugins_action, self.configure_plugins_action):
+            if action is not None:
+                action.setEnabled(plugins_enabled)
+
+        if hasattr(self, "pluginstatus") and self.pluginstatus is not None:
+            self.pluginstatus.update_status()
+
+    def __apply_plugins_enabled_setting(self) -> None:
+        """Apply third-party plugin enablement without manual user intervention."""
+        plugins_enabled = Conf.main.plugins_enabled.get()
+
+        if plugins_enabled:
+            self.reload_plugins()
+            return
+
+        self.__unregister_plugins()
+        for panel in (self.signalpanel, self.imagepanel):
+            panel.acthandler.clear_plugin_actions()
+
+        PluginRegistry.clear_plugin_classes()
+        PluginRegistry.clear_failed_plugins()
+        PluginRegistry.clear_discovery_errors()
+        self._startup_errors.clear()
+
+        self.__update_actions(update_other_data_panel=True)
+        self.__update_plugins_availability()
 
     def __add_toolbar(
         self, title: str, position: Literal["top", "bottom", "left", "right"], name: str
@@ -1344,6 +1380,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             tip=_("Enable or disable plugins"),
             triggered=self.__configure_plugins,
         )
+        self.__update_plugins_availability()
 
     def __add_signal_panel(self) -> None:
         """Setup signal toolbar, widgets and panel"""
@@ -1798,11 +1835,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.signalpanel_toolbar.setVisible(is_signal)
         self.imagepanel_toolbar.setVisible(not is_signal)
         if self.plugins_menu is not None:
-            # Keep the Plugins menu enabled even when there are no
-            # registered plugin actions so that the "Reload plugins"
-            # entry is always usable (new plugins can be discovered
-            # after being added on disk).
-            self.plugins_menu.setEnabled(True)
+            self.plugins_menu.setEnabled(Conf.main.plugins_enabled.get())
 
     def __tab_index_changed(self, index: int) -> None:
         """Switch from signal to image mode, or vice-versa"""
@@ -1832,11 +1865,12 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         # no plugin has registered actions yet (so that new plugins can be
         # discovered after they are added on disk).
         if menu is self.plugins_menu:
-            actions = list(actions) + [
-                None,
-                self.configure_plugins_action,
-                self.reload_plugins_action,
-            ]
+            if Conf.main.plugins_enabled.get():
+                actions = list(actions) + [
+                    None,
+                    self.configure_plugins_action,
+                    self.reload_plugins_action,
+                ]
         add_actions(menu, actions)
 
     def __update_file_menu(self) -> None:
@@ -2420,6 +2454,8 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                 self.__update_color_mode()
             if option == "show_console_on_error":
                 self.__update_console_show_mode()
+            if option == "plugins_enabled":
+                self.__apply_plugins_enabled_setting()
             if option == "plot_toolbar_position":
                 for dock in self.docks.values():
                     widget = dock.widget()
