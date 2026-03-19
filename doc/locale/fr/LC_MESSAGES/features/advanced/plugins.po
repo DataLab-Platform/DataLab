@@ -90,8 +90,8 @@ msgstr "Gestion des plugins dans DataLab"
 msgid "The **Plugins** menu provides two dedicated actions:"
 msgstr "Le menu **Plugins** propose deux actions dédiées :"
 
-msgid "**Configure plugins...** Opens the plugin configuration dialog where you can enable or disable plugins individually."
-msgstr "**Configure plugins...** Ouvre la boîte de dialogue de configuration des plugins, où vous pouvez activer ou désactiver les plugins individuellement."
+msgid "**Configure plugins...** Opens the plugin configuration dialog where you can enable or disable plugins individually. After saving changes, DataLab can reload plugins immediately without restarting the application."
+msgstr "**Configure plugins...** Ouvre la boîte de dialogue de configuration des plugins, où vous pouvez activer ou désactiver les plugins individuellement. Après enregistrement des changements, DataLab peut recharger immédiatement les plugins sans redémarrer l'application."
 
 msgid "**Reload plugins** Reloads plugin modules from disk without restarting DataLab."
 msgstr "**Reload plugins** Recharge les modules de plugins depuis le disque sans redémarrer DataLab."
@@ -117,8 +117,8 @@ msgstr "Recréer les actions des plugins et rafraîchir les menus."
 msgid "This workflow allows iterative plugin development while DataLab is running."
 msgstr "Ce flux permet un développement itératif des plugins pendant que DataLab est en cours d'exécution."
 
-msgid "Plugin enable/disable state is persisted in DataLab settings. Disabled plugins remain listed in the configuration dialog and can be re-enabled later."
-msgstr "L'état d'activation/désactivation des plugins est conservé dans les paramètres de DataLab. Les plugins désactivés restent listés dans la boîte de dialogue de configuration et peuvent être réactivés plus tard."
+msgid "Plugin enable/disable state is persisted in DataLab settings. Disabled plugins remain listed in the configuration dialog and can be re-enabled later. The global third-party plugins setting in Preferences is also applied immediately: disabling it removes plugin actions and greys out the Plugins menu and status indicator, while enabling it reloads plugins automatically."
+msgstr "L'état d'activation/désactivation des plugins est conservé dans les paramètres de DataLab. Les plugins désactivés restent listés dans la boîte de dialogue de configuration et peuvent être réactivés plus tard. Le réglage global des plugins tiers dans les préférences est lui aussi appliqué immédiatement : le désactiver supprime les actions des plugins et grise le menu Plugins ainsi que l'indicateur d'état, tandis que le réactiver recharge automatiquement les plugins."
 
 msgid "Plugin API helpers"
 msgstr "Aides de l'API plugin"

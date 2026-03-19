@@ -62,6 +62,7 @@ The **Plugins** menu provides two dedicated actions:
 
 - **Configure plugins...**
   Opens the plugin configuration dialog where you can enable or disable plugins individually.
+  After saving changes, DataLab can reload plugins immediately without restarting the application.
 
 - **Reload plugins**
   Reloads plugin modules from disk without restarting DataLab.
@@ -78,7 +79,7 @@ This workflow allows iterative plugin development while DataLab is running.
 
 .. note::
 
-   Plugin enable/disable state is persisted in DataLab settings. Disabled plugins remain listed in the configuration dialog and can be re-enabled later.
+  Plugin enable/disable state is persisted in DataLab settings. Disabled plugins remain listed in the configuration dialog and can be re-enabled later. The global third-party plugins setting in Preferences is also applied immediately: disabling it removes plugin actions and greys out the Plugins menu and status indicator, while enabling it reloads plugins automatically.
 
 Plugin API helpers
 ------------------

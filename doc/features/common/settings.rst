@@ -50,14 +50,15 @@ The General settings tab contains main window and general feature settings:
     to disable the warning.
 
 **Third-party plugins**
-    Enable or disable third-party plugins at startup.
+    Enable or disable third-party plugins immediately.
+    Changes are applied without restarting DataLab.
     When disabled, third-party plugins are not discovered or loaded.
 
 **Plugins path**
     Specify the directory path where DataLab should look for third-party plugins.
     DataLab will also discover plugins in your PYTHONPATH.
     To enable or disable individual plugins, use the ``Plugins > Configure plugins...``
-    menu action, then apply changes with ``Plugins > Reload plugins``.
+    menu action. DataLab then proposes reloading plugins automatically.
 
 Processing
 ----------
