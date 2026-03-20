@@ -81,6 +81,53 @@ def _create_description_scroll_area(widget: QW.QWidget) -> QW.QScrollArea:
     return scroll_area
 
 
+def _create_expand_toggle_button(callback) -> QW.QPushButton:
+    """Create a theme-aware expand/collapse button."""
+    button = QW.QPushButton("\u25bc " + _("Show more"))
+    button.setFlat(True)
+    button.setCursor(QC.Qt.PointingHandCursor)
+    link_color = QW.QApplication.instance().palette().color(QG.QPalette.Link)
+    button.setStyleSheet(
+        f"QPushButton {{ color: {link_color.name()}; border: none; "
+        "text-align: left; padding: 0; } "
+        "QPushButton:hover { text-decoration: underline; }"
+    )
+    toggle_font = button.font()
+    toggle_font.setPointSize(toggle_font.pointSize() - 1)
+    button.setFont(toggle_font)
+    button.clicked.connect(callback)
+    return button
+
+
+def _create_status_label(text: str, color: QG.QColor | None = None) -> QW.QLabel:
+    """Create a bold status label with optional palette color."""
+    status_label = QW.QLabel(text)
+    status_font = status_label.font()
+    status_font.setBold(True)
+    status_label.setFont(status_font)
+    if color is None:
+        _apply_subdued_color(status_label)
+    else:
+        _apply_palette_color(status_label, color)
+    return status_label
+
+
+def _create_description_container(
+    description_label: QW.QLabel,
+) -> tuple[QW.QWidget, QW.QScrollArea]:
+    """Create the indented description container used by plugin widgets."""
+    desc_container = QW.QWidget()
+    desc_container_layout = QW.QVBoxLayout()
+    desc_container_layout.setContentsMargins(20, 0, 0, 0)
+    desc_container_layout.setSpacing(0)
+    desc_container.setLayout(desc_container_layout)
+
+    desc_scroll = _create_description_scroll_area(description_label)
+    desc_scroll.setMaximumHeight(60)
+    desc_container_layout.addWidget(desc_scroll)
+    return desc_container, desc_scroll
+
+
 class PluginState:
     """Plugin state enumeration"""
 
@@ -111,21 +158,25 @@ class PluginInfoWidget(QW.QWidget):
         self.plugin_class = plugin_class
         self.initial_enabled = enabled
         self.state = state
+        self._expanded = False
 
         # Main layout
         layout = QW.QVBoxLayout()
         layout.setContentsMargins(5, 5, 5, 5)
         self.setLayout(layout)
 
-        # Top row: checkbox, name, right-aligned metadata
+        layout.addLayout(self._create_top_row(enabled, state))
+        layout.addWidget(self._create_description_widget())
+        layout.addWidget(self._create_separator())
+
+    def _create_top_row(self, enabled: bool, state: str) -> QW.QHBoxLayout:
+        """Create the top row with checkbox, title and metadata."""
         top_layout = QW.QHBoxLayout()
 
-        # Checkbox
         self.checkbox = QW.QCheckBox()
         self.checkbox.setChecked(enabled)
         top_layout.addWidget(self.checkbox)
 
-        # Plugin name
         name_label = QW.QLabel(self.plugin_class.PLUGIN_INFO.name)
         name_font = name_label.font()
         name_font.setBold(True)
@@ -136,81 +187,57 @@ class PluginInfoWidget(QW.QWidget):
 
         meta_layout = QW.QHBoxLayout()
         meta_layout.setSpacing(12)
-
-        # Version
         version_label = QW.QLabel(f"v{self.plugin_class.PLUGIN_INFO.version}")
         _apply_subdued_color(version_label)
         meta_layout.addWidget(version_label)
-
-        # Status indicator
-        status_label = QW.QLabel()
-        status_font = status_label.font()
-        status_font.setBold(True)
-        status_label.setFont(status_font)
-        if state == PluginState.ENABLED:
-            status_label.setText("\u2713 " + _("Active"))
-            _apply_palette_color(status_label, STATUS_ENABLED_COLOR)
-        elif state == PluginState.DISABLED:
-            status_label.setText("\u2717 " + _("Disabled"))
-            _apply_palette_color(status_label, STATUS_DISABLED_COLOR)
-        else:  # ERROR
-            status_label.setText("\u2717 " + _("Error"))
-            _apply_subdued_color(status_label)
-        meta_layout.addWidget(status_label)
-
+        meta_layout.addWidget(self._create_state_label(state))
         top_layout.addLayout(meta_layout)
-        layout.addLayout(top_layout)
+        return top_layout
 
-        # Description area
+    @staticmethod
+    def _create_state_label(state: str) -> QW.QLabel:
+        """Create the state label."""
+        if state == PluginState.ENABLED:
+            return _create_status_label("\u2713 " + _("Active"), STATUS_ENABLED_COLOR)
+        if state == PluginState.DISABLED:
+            return _create_status_label(
+                "\u2717 " + _("Disabled"), STATUS_DISABLED_COLOR
+            )
+        return _create_status_label("\u2717 " + _("Error"))
+
+    def _create_description_widget(self) -> QW.QWidget:
+        """Create the description area for the plugin."""
         description = self.plugin_class.PLUGIN_INFO.description or _(
             "No description available"
         )
-        is_long = len(description) > 100
-
-        desc_container = QW.QWidget()
-        desc_container_layout = QW.QVBoxLayout()
-        desc_container_layout.setContentsMargins(20, 0, 0, 0)
-        desc_container_layout.setSpacing(0)
-        desc_container.setLayout(desc_container_layout)
-
-        # Full description label (always present)
         self.desc_label = QW.QLabel(description)
         self.desc_label.setWordWrap(True)
         self.desc_label.setAlignment(QC.Qt.AlignLeft | QC.Qt.AlignTop)
         _apply_subdued_color(self.desc_label)
 
-        if is_long:
-            # Expandable scroll area for long descriptions
-            self._desc_scroll = _create_description_scroll_area(self.desc_label)
-            self._desc_scroll.setMaximumHeight(60)
-            desc_container_layout.addWidget(self._desc_scroll)
-
-            # Toggle expand/collapse button
-            self._expanded = False
-            self._toggle_btn = QW.QPushButton("\u25bc " + _("Show more"))
-            self._toggle_btn.setFlat(True)
-            self._toggle_btn.setCursor(QC.Qt.PointingHandCursor)
-            link_color = QW.QApplication.instance().palette().color(QG.QPalette.Link)
-            self._toggle_btn.setStyleSheet(
-                f"QPushButton {{ color: {link_color.name()}; border: none; "
-                "text-align: left; padding: 0; } "
-                "QPushButton:hover { text-decoration: underline; }"
-            )
-            toggle_font = self._toggle_btn.font()
-            toggle_font.setPointSize(toggle_font.pointSize() - 1)
-            self._toggle_btn.setFont(toggle_font)
-            self._toggle_btn.clicked.connect(self._toggle_description)
-            desc_container_layout.addWidget(self._toggle_btn)
-        else:
+        if len(description) <= 100:
+            desc_container = QW.QWidget()
+            desc_container_layout = QW.QVBoxLayout()
+            desc_container_layout.setContentsMargins(20, 0, 0, 0)
+            desc_container_layout.setSpacing(0)
             desc_container_layout.addWidget(self.desc_label)
+            desc_container.setLayout(desc_container_layout)
+            return desc_container
 
-        layout.addWidget(desc_container)
+        desc_container, self._desc_scroll = _create_description_container(
+            self.desc_label
+        )
+        self._toggle_btn = _create_expand_toggle_button(self._toggle_description)
+        desc_container.layout().addWidget(self._toggle_btn)
+        return desc_container
 
-        # Separator line
+    @staticmethod
+    def _create_separator() -> QW.QFrame:
+        """Create the row separator."""
         line = QW.QFrame()
         line.setFrameShape(QW.QFrame.HLine)
         line.setFrameShadow(QW.QFrame.Sunken)
-        layout.addWidget(line)
+        return line
 
     def _toggle_description(self):
         """Toggle between collapsed and expanded description"""
@@ -264,22 +291,25 @@ class FailedPluginInfoWidget(QW.QWidget):
             parent: Parent widget
         """
         super().__init__(parent)
+        self._expanded = False
 
         # Main layout
         layout = QW.QVBoxLayout()
         layout.setContentsMargins(5, 5, 5, 5)
         self.setLayout(layout)
 
-        # Top row: disabled checkbox, file name, right-aligned status
-        top_layout = QW.QHBoxLayout()
+        layout.addLayout(self._create_top_row(failed_info))
+        layout.addWidget(self._create_description_widget(failed_info))
+        layout.addWidget(PluginInfoWidget._create_separator())
 
-        # Disabled checkbox (always unchecked, non-interactive)
+    def _create_top_row(self, failed_info: FailedPluginInfo) -> QW.QHBoxLayout:
+        """Create the top row for a failed plugin."""
+        top_layout = QW.QHBoxLayout()
         checkbox = QW.QCheckBox()
         checkbox.setChecked(False)
         checkbox.setEnabled(False)
         top_layout.addWidget(checkbox)
 
-        # Plugin file name (bold, grayed out)
         file_name = osp.basename(failed_info.name)
         name_label = QW.QLabel(file_name)
         name_font = name_label.font()
@@ -289,74 +319,32 @@ class FailedPluginInfoWidget(QW.QWidget):
         top_layout.addWidget(name_label)
 
         top_layout.addStretch()
-
         meta_layout = QW.QHBoxLayout()
         meta_layout.setSpacing(12)
-
-        # Status indicator (gray "Import error")
-        status_label = QW.QLabel()
-        status_font = status_label.font()
-        status_font.setBold(True)
-        status_label.setFont(status_font)
-        status_label.setText("\u26a0 " + _("Import error"))
-        _apply_subdued_color(status_label)
-        meta_layout.addWidget(status_label)
-
+        meta_layout.addWidget(_create_status_label("\u26a0 " + _("Import error")))
         top_layout.addLayout(meta_layout)
-        layout.addLayout(top_layout)
+        return top_layout
 
-        # Description area: file path + traceback
-        desc_container = QW.QWidget()
-        desc_container_layout = QW.QVBoxLayout()
-        desc_container_layout.setContentsMargins(20, 0, 0, 0)
-        desc_container_layout.setSpacing(0)
-        desc_container.setLayout(desc_container_layout)
-
+    def _create_description_widget(self, failed_info: FailedPluginInfo) -> QW.QWidget:
+        """Create the expandable traceback/details area."""
         description = failed_info.filepath
         if failed_info.traceback:
             description += "\n\n" + failed_info.traceback.strip()
 
-        # Full description label (always in expandable scroll area)
         desc_label = QW.QLabel(description)
         desc_label.setWordWrap(True)
         desc_label.setAlignment(QC.Qt.AlignLeft | QC.Qt.AlignTop)
         desc_label.setTextInteractionFlags(QC.Qt.TextSelectableByMouse)
         _apply_subdued_color(desc_label)
 
-        # Use monospace font for the traceback
         mono_font = QG.QFont("Consolas", desc_label.font().pointSize() - 1)
         desc_label.setFont(mono_font)
 
-        desc_scroll = _create_description_scroll_area(desc_label)
-        desc_scroll.setHorizontalScrollBarPolicy(QC.Qt.ScrollBarAsNeeded)
-        desc_scroll.setMaximumHeight(60)
-        desc_container_layout.addWidget(desc_scroll)
-
-        # Toggle expand/collapse button
-        self._expanded = False
-        self._desc_scroll = desc_scroll
-        self._toggle_btn = QW.QPushButton("\u25bc " + _("Show more"))
-        self._toggle_btn.setFlat(True)
-        self._toggle_btn.setCursor(QC.Qt.PointingHandCursor)
-        link_color = QW.QApplication.instance().palette().color(QG.QPalette.Link)
-        self._toggle_btn.setStyleSheet(
-            f"QPushButton {{ color: {link_color.name()}; border: none; "
-            "text-align: left; padding: 0; } "
-            "QPushButton:hover { text-decoration: underline; }"
-        )
-        toggle_font = self._toggle_btn.font()
-        toggle_font.setPointSize(toggle_font.pointSize() - 1)
-        self._toggle_btn.setFont(toggle_font)
-        self._toggle_btn.clicked.connect(self._toggle_description)
-        desc_container_layout.addWidget(self._toggle_btn)
-
-        layout.addWidget(desc_container)
-
-        # Separator line
-        line = QW.QFrame()
-        line.setFrameShape(QW.QFrame.HLine)
-        line.setFrameShadow(QW.QFrame.Sunken)
-        layout.addWidget(line)
+        desc_container, self._desc_scroll = _create_description_container(desc_label)
+        self._desc_scroll.setHorizontalScrollBarPolicy(QC.Qt.ScrollBarAsNeeded)
+        self._toggle_btn = _create_expand_toggle_button(self._toggle_description)
+        desc_container.layout().addWidget(self._toggle_btn)
+        return desc_container
 
     def _toggle_description(self):
         """Toggle between collapsed and expanded description"""
@@ -397,60 +385,10 @@ class PluginConfigDialog(QW.QDialog):
         layout = QW.QVBoxLayout()
         self.setLayout(layout)
 
-        # Title
-        title_label = QW.QLabel(_("Manage Plugins"))
-        title_font = title_label.font()
-        title_font.setPointSize(title_font.pointSize() + 4)
-        title_font.setBold(True)
-        title_label.setFont(title_font)
-        # Ensure title color follows the system palette (fixes dark mode)
-        _apply_palette_color(
-            title_label,
-            QW.QApplication.instance().palette().color(QG.QPalette.WindowText),
-        )
-        layout.addWidget(title_label)
-
-        # Info text
-        info_label = QW.QLabel(
-            _(
-                "Enable or disable plugins. Changes will be applied "
-                "after clicking OK and reloading plugins."
-            )
-        )
-        info_label.setWordWrap(True)
-        _apply_subdued_color(info_label)
-        layout.addWidget(info_label)
-
-        controls_layout = QW.QHBoxLayout()
-        self.toggle_all_checkbox = QW.QCheckBox(_("Enable all plugins"))
-        self.toggle_all_checkbox.setTristate(True)
-        self.toggle_all_checkbox.toggled.connect(self._set_all_enabled)
-        controls_layout.addWidget(self.toggle_all_checkbox)
-
-        controls_layout.addStretch()
-        controls_layout.addWidget(QW.QLabel(_("Filter:")))
-        self.filter_combo = QW.QComboBox()
-        self.filter_combo.addItem(_("All plugins"), FILTER_ALL)
-        self.filter_combo.addItem(_("Enabled plugins"), FILTER_ENABLED)
-        self.filter_combo.addItem(_("Disabled plugins"), FILTER_DISABLED)
-        self.filter_combo.addItem(_("Plugins with errors"), FILTER_ERRORS)
-        self.filter_combo.currentIndexChanged.connect(self._apply_filter)
-        controls_layout.addWidget(self.filter_combo)
-        layout.addLayout(controls_layout)
-
-        # Scroll area for plugins
-        scroll = QW.QScrollArea()
-        scroll.setWidgetResizable(True)
-        scroll.setHorizontalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
-
-        # Container widget for plugins
-        container = QW.QWidget()
-        self.plugins_layout = QW.QVBoxLayout()
-        self.plugins_layout.setContentsMargins(0, 0, 0, 0)
-        container.setLayout(self.plugins_layout)
-        scroll.setWidget(container)
-
-        layout.addWidget(scroll, 1)
+        layout.addWidget(self._create_title_label())
+        layout.addWidget(self._create_info_label())
+        layout.addLayout(self._create_controls_layout())
+        layout.addWidget(self._create_scroll_area(), 1)
 
         # Populate plugins
         self.populate_plugins()
@@ -462,6 +400,67 @@ class PluginConfigDialog(QW.QDialog):
         button_box.accepted.connect(self.accept)
         button_box.rejected.connect(self.reject)
         layout.addWidget(button_box)
+
+    @staticmethod
+    def _create_title_label() -> QW.QLabel:
+        """Create the dialog title label."""
+        title_label = QW.QLabel(_("Manage Plugins"))
+        title_font = title_label.font()
+        title_font.setPointSize(title_font.pointSize() + 4)
+        title_font.setBold(True)
+        title_label.setFont(title_font)
+        _apply_palette_color(
+            title_label,
+            QW.QApplication.instance().palette().color(QG.QPalette.WindowText),
+        )
+        return title_label
+
+    @staticmethod
+    def _create_info_label() -> QW.QLabel:
+        """Create the dialog information label."""
+        info_label = QW.QLabel(
+            _(
+                "Enable or disable plugins. Changes will be applied "
+                "after clicking OK and reloading plugins."
+            )
+        )
+        info_label.setWordWrap(True)
+        _apply_subdued_color(info_label)
+        return info_label
+
+    def _create_controls_layout(self) -> QW.QHBoxLayout:
+        """Create the row with master controls."""
+        controls_layout = QW.QHBoxLayout()
+        self.toggle_all_checkbox = QW.QCheckBox(_("Enable all plugins"))
+        self.toggle_all_checkbox.setTristate(True)
+        self.toggle_all_checkbox.toggled.connect(self._set_all_enabled)
+        controls_layout.addWidget(self.toggle_all_checkbox)
+
+        controls_layout.addStretch()
+        controls_layout.addWidget(QW.QLabel(_("Filter:")))
+        self.filter_combo = QW.QComboBox()
+        for label, data in (
+            (_("All plugins"), FILTER_ALL),
+            (_("Enabled plugins"), FILTER_ENABLED),
+            (_("Disabled plugins"), FILTER_DISABLED),
+            (_("Plugins with errors"), FILTER_ERRORS),
+        ):
+            self.filter_combo.addItem(label, data)
+        self.filter_combo.currentIndexChanged.connect(self._apply_filter)
+        controls_layout.addWidget(self.filter_combo)
+        return controls_layout
+
+    def _create_scroll_area(self) -> QW.QScrollArea:
+        """Create the plugin scroll area."""
+        scroll = QW.QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
+        container = QW.QWidget()
+        self.plugins_layout = QW.QVBoxLayout()
+        self.plugins_layout.setContentsMargins(0, 0, 0, 0)
+        container.setLayout(self.plugins_layout)
+        scroll.setWidget(container)
+        return scroll
 
     def _set_all_enabled(self, enabled: bool):
         """Set all plugin checkboxes to the same state."""
@@ -505,50 +504,40 @@ class PluginConfigDialog(QW.QDialog):
 
     def populate_plugins(self):
         """Populate the dialog with all discovered plugins"""
-        # Get all discovered plugin classes (not just registered instances)
-        plugin_classes = PluginRegistry.get_plugin_classes()
-
-        # Get currently registered plugin names (active plugins)
         registered_names = {p.info.name for p in PluginRegistry.get_plugins()}
-
-        # Get enabled plugins from config
-        # None = all enabled (default), [] = none enabled, list = specific plugins
         enabled_plugins = Conf.main.plugins_enabled_list.get(None)
 
-        failed_plugins = PluginRegistry.get_failed_plugins()
-        if failed_plugins:
-            for failed_info in failed_plugins:
-                failed_widget = FailedPluginInfoWidget(failed_info)
-                self.failed_plugin_widgets.append(failed_widget)
-                self.plugins_layout.addWidget(failed_widget)
-
-        for plugin_class in plugin_classes:
-            plugin_name = plugin_class.PLUGIN_INFO.name
-
-            # Determine if plugin is enabled in config
-            # If None, all plugins are enabled by default
-            if enabled_plugins is None:
-                enabled = True
-            else:
-                enabled = plugin_name in enabled_plugins
-
-            # Determine current state (is it actually loaded/active?)
-            state = (
-                PluginState.ENABLED
-                if plugin_name in registered_names
-                else PluginState.DISABLED
-            )
-
-            # Create widget for this plugin
-            widget = PluginInfoWidget(plugin_class, enabled, state)
-            widget.checkbox.toggled.connect(self._plugin_toggled)
-            self.plugin_widgets.append(widget)
-            self.plugins_layout.addWidget(widget)
+        self._add_failed_plugins()
+        self._add_plugin_widgets(registered_names, enabled_plugins)
 
         # Add stretch at the end
         self.plugins_layout.addStretch()
         self._sync_toggle_all_checkbox()
         self._apply_filter()
+
+    def _add_failed_plugins(self) -> None:
+        """Add failed plugin widgets before regular plugins."""
+        for failed_info in PluginRegistry.get_failed_plugins():
+            failed_widget = FailedPluginInfoWidget(failed_info)
+            self.failed_plugin_widgets.append(failed_widget)
+            self.plugins_layout.addWidget(failed_widget)
+
+    def _add_plugin_widgets(
+        self, registered_names: set[str], enabled_plugins: list[str] | None
+    ) -> None:
+        """Add widgets for discovered plugins."""
+        for plugin_class in PluginRegistry.get_plugin_classes():
+            plugin_name = plugin_class.PLUGIN_INFO.name
+            enabled = enabled_plugins is None or plugin_name in enabled_plugins
+            state = (
+                PluginState.ENABLED
+                if plugin_name in registered_names
+                else PluginState.DISABLED
+            )
+            widget = PluginInfoWidget(plugin_class, enabled, state)
+            widget.checkbox.toggled.connect(self._plugin_toggled)
+            self.plugin_widgets.append(widget)
+            self.plugins_layout.addWidget(widget)
 
     def accept(self):
         """Apply changes and close dialog"""

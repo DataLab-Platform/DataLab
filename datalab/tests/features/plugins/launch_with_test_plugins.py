@@ -28,12 +28,11 @@ import os
 import os.path as osp
 import shutil
 import sys
+from importlib import import_module
 
-# Ensure project root is on path
-_project_root = osp.abspath(osp.join(osp.dirname(__file__), "..", "..", "..", ".."))
-if _project_root not in sys.path:
-    sys.path.insert(0, _project_root)
-
+PROJECT_ROOT = osp.abspath(osp.join(osp.dirname(__file__), "..", "..", "..", ".."))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
 
 # Path to plugin templates
 TEMPLATES_DIR = osp.abspath(osp.join(osp.dirname(__file__), "templates"))
@@ -42,6 +41,11 @@ TEMPLATES_DIR = osp.abspath(osp.join(osp.dirname(__file__), "templates"))
 _VISUAL_PLUGINS_DIR = osp.abspath(
     osp.join(osp.dirname(__file__), "..", "..", "..", "data", "tests", "visual_plugins")
 )
+
+
+def _get_enabled_plugins_option(conf_class):
+    """Return the optional enabled-plugins config entry when available."""
+    return getattr(conf_class.main, "plugins_enabled_list", None)
 
 
 def get_plugin_template(filename: str) -> str:
@@ -143,9 +147,10 @@ class AutoTestPlugin{i}(PluginBase):
     return created
 
 
-def main():  # pylint: disable=import-outside-toplevel
+def main():
     """Create test plugins and launch DataLab for visual inspection."""
-    from datalab.config import Conf
+    conf_class = import_module("datalab.config").Conf
+    enabled_plugins_option = _get_enabled_plugins_option(conf_class)
 
     if osp.exists(_VISUAL_PLUGINS_DIR):
         shutil.rmtree(_VISUAL_PLUGINS_DIR)
@@ -155,7 +160,10 @@ def main():  # pylint: disable=import-outside-toplevel
     sys.path.insert(0, tmpdir)
 
     # Save the original plugins_path before any modification
-    original_path = Conf.main.plugins_path.get()
+    original_path = conf_class.main.plugins_path.get()
+    original_enabled_list = None
+    if enabled_plugins_option is not None:
+        original_enabled_list = enabled_plugins_option.get(None)
 
     try:
         # ------------------------------------------------------------------
@@ -252,17 +260,20 @@ def main():  # pylint: disable=import-outside-toplevel
         # plugins_path is a DirectoryItem (single directory), so we replace it
         # rather than concatenating.  The original path (if any) is already on
         # sys.path thanks to DataLab startup, so existing plugins stay visible.
-        Conf.main.plugins_enabled_list.set(None)
-        Conf.main.plugins_path.set(tmpdir)
+        if enabled_plugins_option is not None:
+            enabled_plugins_option.set(None)
+        conf_class.main.plugins_path.set(tmpdir)
 
         # Launch DataLab
-        from datalab.app import run
+        run = import_module("datalab.app").run
 
         run()
 
     finally:
         # Restore config and cleanup
-        Conf.main.plugins_path.set(original_path)
+        if enabled_plugins_option is not None:
+            enabled_plugins_option.set(original_enabled_list)
+        conf_class.main.plugins_path.set(original_path)
         print(f"\nCleaning up: {tmpdir}")
         if tmpdir in sys.path:
             sys.path.remove(tmpdir)

@@ -13,7 +13,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.18.0\n"
 
 msgid "Plugin system for DataLab, the open-source scientific data analysis and visualization platform"
 msgstr "Systeme de plugins de DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
@@ -273,14 +273,61 @@ msgstr "Désenregistrer le plugin"
 msgid "Unregister all plugins"
 msgstr "Désenregistrer tous les plugins"
 
-msgid "Return plugin information (names, versions, descriptions) in html format"
-msgstr "Retourne les informations sur les plugins (noms, versions, descriptions) au format html"
+#, fuzzy
+msgid "Clear registered plugin classes."
+msgstr "Retourne les classes de plugins"
+
+msgid "This is mainly useful when reloading plugin modules at runtime."
+msgstr ""
+
+msgid "Record an error traceback that occurred during plugin discovery."
+msgstr ""
 
 msgid "Parameters"
 msgstr "Paramètres"
 
+msgid "Formatted traceback string"
+msgstr ""
+
+msgid "Return error tracebacks collected during plugin discovery."
+msgstr ""
+
+msgid "Returns"
+msgstr "Retourne"
+
+msgid "List of formatted traceback strings (may be empty)"
+msgstr ""
+
+msgid "Clear recorded discovery errors."
+msgstr ""
+
+msgid "Record a plugin that failed to load or instantiate."
+msgstr ""
+
+#, fuzzy
+msgid "Module or plugin class name"
+msgstr "Retourne les classes de plugins"
+
+msgid "File path of the plugin module"
+msgstr ""
+
+msgid "Return structured info about plugins that failed to load."
+msgstr ""
+
+msgid "List of FailedPluginInfo objects (may be empty)"
+msgstr ""
+
+msgid "Clear recorded failed plugin info."
+msgstr ""
+
+msgid "Return plugin information (names, versions, descriptions) in html format"
+msgstr "Retourne les informations sur les plugins (noms, versions, descriptions) au format html"
+
 msgid "return html formatted text (default: True)"
 msgstr "retourner du texte formaté en html (par défaut : True)"
+
+msgid "Information about a plugin that failed to load or instantiate."
+msgstr ""
 
 msgid "Plugin info"
 msgstr "Informations sur le plugin"
@@ -317,9 +364,6 @@ msgstr "titre du nouveau signal"
 
 msgid "size of the new signal (default: None, get from current signal)"
 msgstr "taille du nouveau signal (par défaut : None, obtenue à partir du signal actuel)"
-
-msgid "Returns"
-msgstr "Retourne"
 
 msgid "New signal parameter dataset (or None if canceled)"
 msgstr "Nouveau jeu de paramètres de signal (ou None si annulé)"
@@ -363,8 +407,32 @@ msgstr "Créer des actions"
 msgid "Discover plugins using naming convention"
 msgstr "Découvrir les plugins en utilisant la convention de nommage"
 
-msgid "List of discovered plugins (as classes)"
-msgstr "Liste des plugins découverts (en tant que classes)"
+#, python-brace-format
+msgid "This function reloads or imports all modules matching the DataLab plugin naming scheme (``\"{MOD_NAME}_*\"``). Plugin classes are then registered automatically via the :class:`PluginRegistry` metaclass."
+msgstr ""
+
+msgid "Import errors for individual plugins are captured and logged so that one broken plugin does not prevent the others from loading.  Error tracebacks are accumulated in :class:`PluginRegistry` class attributes so that callers (e.g. the main window) can replay them into the internal console once it is ready."
+msgstr ""
+
+#, fuzzy
+msgid "List of imported/reloaded plugin modules"
+msgstr "Redécouvrir et recharger les modules de plugins,"
+
+msgid "Reload plugin modules and reset plugin classes."
+msgstr ""
+
+msgid "This helper is intended for hot-reloading plugins at runtime. It:"
+msgstr ""
+
+msgid "Updates the plugin search path"
+msgstr ""
+
+#, fuzzy
+msgid "Clears the plugin class registry"
+msgstr "Retourne les classes de plugins"
+
+msgid "Reloads or imports all modules matching the plugin naming convention"
+msgstr ""
 
 msgid "Discover v0.20 plugins (with ``cdl_`` prefix) without importing them"
 msgstr "Découvrir les plugins v0.20 (avec le préfixe ``cdl_``) sans les importer"
@@ -377,3 +445,4 @@ msgstr "Instancier et obtenir les plugins disponibles"
 
 msgid "List of available plugins (as instances)"
 msgstr "Liste des plugins disponibles (en tant qu'instances)"
+

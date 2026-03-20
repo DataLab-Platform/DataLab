@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.18.0\n"
 
 msgid "Settings of DataLab, the open-source scientific data analysis and visualization platform"
 msgstr "Préférences de DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
@@ -73,22 +73,14 @@ msgstr "Définir un seuil (en Mo) en dessous duquel un avertissement est affich�
 msgid "**Third-party plugins**"
 msgstr "**Plugins tiers**"
 
-msgid "Enable or disable third-party plugins immediately."
-msgstr "Activer ou désactiver immédiatement les plugins tiers."
-
-msgid "Changes are applied without restarting DataLab."
-msgstr "Les changements sont appliqués sans redémarrer DataLab."
-
-msgid "When disabled, third-party plugins are not discovered or loaded."
-msgstr "Lorsque cette option est désactivée, les plugins tiers ne sont ni découverts ni chargés."
+msgid "Enable or disable third-party plugins immediately. Changes are applied without restarting DataLab. When disabled, third-party plugins are not discovered or loaded."
+msgstr ""
 
 msgid "**Plugins path**"
 msgstr "**Chemin des plugins**"
 
-msgid "Specify the directory path where DataLab should look for third-party plugins. DataLab will also discover plugins in your PYTHONPATH."
-msgstr "Spécifier le chemin du répertoire où DataLab doit rechercher les plugins tiers. DataLab découvrira également les plugins dans votre PYTHONPATH."
-
-msgid "To enable or disable individual plugins, use the ``Plugins > Configure plugins...`` menu action. DataLab then proposes reloading plugins automatically."
+#, fuzzy
+msgid "Specify the directory path where DataLab should look for third-party plugins. DataLab will also discover plugins in your PYTHONPATH. To enable or disable individual plugins, use the ``Plugins > Configure plugins...`` menu action. DataLab then proposes reloading plugins automatically."
 msgstr "Pour activer ou désactiver des plugins individuellement, utilisez l'action de menu ``Plugins > Configure plugins...``. DataLab propose ensuite de recharger automatiquement les plugins."
 
 msgid "Processing"
@@ -475,3 +467,4 @@ msgstr "**Arguments de l'éditeur externe**"
 
 msgid "Command-line arguments to pass to the external editor."
 msgstr "Arguments de ligne de commande à passer à l'éditeur externe."
+

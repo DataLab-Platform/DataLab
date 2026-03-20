@@ -11,6 +11,10 @@ DataLab project.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# This module intentionally concentrates the application shell, menus, panels,
+# status widgets and shutdown logic. A file-length disable is more honest than
+# splitting high-coupling UI code only to satisfy a metric.
+# pylint: disable=too-many-lines
 
 from __future__ import annotations
 
@@ -114,7 +118,11 @@ class DLMainWindowMeta(type(QW.QMainWindow), abc.ABCMeta):
     """Mixed metaclass to avoid conflicts"""
 
 
-class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta):
+# DLMainWindow is the top-level UI shell, so it legitimately owns many widget
+# references and public control methods used by the rest of the application.
+class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-public-methods
+    QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
+):
     """DataLab main window
 
     Args:
@@ -136,7 +144,9 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             return DLMainWindow(console, hide_on_close)
         return DLMainWindow.__instance
 
-    def __init__(self, console=None, hide_on_close=False):
+    # Startup wiring is intentionally kept linear here because it assembles the
+    # full application object graph and side effects in a predictable order.
+    def __init__(self, console=None, hide_on_close=False):  # pylint: disable=too-many-statements
         """Initialize main window"""
         DLMainWindow.__instance = self
         super().__init__()
@@ -152,6 +162,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.__memory_warning = False
         self.memorystatus: status.MemoryStatus | None = None
         self.webapistatus: status.WebAPIStatus | None = None
+        self.pluginstatus: status.PluginStatus | None = None
 
         self.consolestatus: status.ConsoleStatus | None = None
         self.console: DockableConsole | None = None
@@ -225,11 +236,10 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         Returns:
             BaseDataPanel: current panel
         """
-        if self.tabwidget is not None:
-            panel = self.tabwidget.currentWidget()
-            if isinstance(panel, base.BaseDataPanel):
-                return panel
-        return self.signalpanel
+        panel = self.tabwidget.currentWidget()
+        if not isinstance(panel, base.BaseDataPanel):
+            panel = self.signalpanel
+        return panel
 
     def __get_datapanel(
         self, panel: Literal["signal", "image"] | None
@@ -1043,6 +1053,9 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
                 # Instantiate and register plugin
                 plugin: PluginBase = plugin_class()
                 plugin.register(self)
+            # Plugin registration executes third-party code. We intentionally
+            # isolate any exception here so the failure is still reported in the
+            # internal console, log files, and plugin configuration dialog.
             except Exception:  # pylint: disable=broad-except
                 if qth.is_running_tests():
                     raise
@@ -1101,17 +1114,6 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         """Open plugin configuration dialog"""
         dialog = PluginConfigDialog(self)
         dialog.exec()
-        # if dialog.exec():
-        #    # User clicked OK - configuration was saved, offer to reload plugins
-        #    reply = QW.QMessageBox.question(
-        #        self,
-        #        _("Plugins"),
-        #        _("Plugin configuration has been saved. Reload plugins now?"),
-        #        QW.QMessageBox.Yes | QW.QMessageBox.No,
-        #        QW.QMessageBox.Yes,
-        #    )
-        #    if reply == QW.QMessageBox.Yes:
-        #        self.reload_plugins()
 
     def reload_plugins(self) -> None:
         """Reload third-party plugins at runtime.
@@ -1170,6 +1172,9 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 
                     plugin: PluginBase = plugin_class()
                     plugin.register(self)
+                # Plugin registration executes third-party code. We intentionally
+                # isolate any exception here so the failure is still reported in the
+                # internal console, log files, and plugin configuration dialog.
                 except Exception:  # pylint: disable=broad-except
                     if qth.is_running_tests():
                         raise
@@ -2299,7 +2304,9 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         self.add_object(obj, group_id, set_current)
         return True
 
-    def add_image(
+    # This API mirrors the image metadata accepted by create_image, so the
+    # argument count is part of the stable public interface rather than noise.
+    def add_image(  # pylint: disable=too-many-arguments
         self,
         title: str,
         data: np.ndarray,
@@ -2311,7 +2318,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         zlabel: str = "",
         group_id: str = "",
         set_current: bool = True,
-    ) -> bool:  # pylint: disable=too-many-arguments
+    ) -> bool:
         """Add image data to DataLab.
 
         Args:
@@ -2402,7 +2409,9 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
         # Allow Qt to refresh the window:
         self.setUpdatesEnabled(True)
 
-    def __edit_settings(self) -> None:
+    # Settings changes are intentionally dispatched in one place because each
+    # option may trigger a specific live UI update or panel refresh.
+    def __edit_settings(self) -> None:  # pylint: disable=too-many-branches,too-many-statements
         """Edit settings"""
         changed_options = edit_settings(self)
         sigima_options.fft_shift_enabled.set(Conf.proc.fft_shift_enabled.get())
@@ -2572,7 +2581,7 @@ class DLMainWindow(QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
             try:
                 self.console.close()
             except RuntimeError:
-                # TODO: [P3] Investigate further why the following error occurs when
+                # Note: investigate further why the following error occurs when
                 # restarting the mainwindow (this is *not* a production case):
                 # "RuntimeError: wrapped C/C++ object of type DockableConsole
                 #  has been deleted".

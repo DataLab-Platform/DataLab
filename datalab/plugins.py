@@ -407,6 +407,9 @@ def discover_plugins() -> list[type[PluginBase]]:
             else:
                 module = importlib.import_module(name)
             modules.append(module)
+        # Plugin discovery imports arbitrary third-party modules. We must catch
+        # every failure here so discovery can continue and the error is exposed
+        # through the console, log files, and plugin configuration dialog.
         except Exception as e:  # pylint: disable=broad-except
             tb_text = traceback.format_exc()
             print(f"Error loading plugin '{name}': {e}")
@@ -423,6 +426,8 @@ def discover_plugins() -> list[type[PluginBase]]:
                 spec = importlib.util.find_spec(name)
                 if spec and spec.origin:
                     filepath = spec.origin
+            # Best effort only: failing to resolve the file path must never mask
+            # the original plugin import error already captured above.
             except Exception:  # pylint: disable=broad-except
                 if hasattr(finder, "path"):
                     filepath = osp.join(finder.path, name)

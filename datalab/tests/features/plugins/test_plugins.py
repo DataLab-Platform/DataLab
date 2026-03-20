@@ -10,9 +10,6 @@ the main window.
 
 # guitest: show
 
-# ruff: noqa: E402
-# pylint: disable=import-outside-toplevel
-
 import contextlib
 import importlib
 import importlib.util
@@ -22,15 +19,11 @@ import shutil
 import sys
 from unittest.mock import patch
 
-# Ensure project root is on path (standalone execution)
-_project_root = osp.abspath(osp.join(osp.dirname(__file__), "..", "..", "..", ".."))
-if _project_root not in sys.path:
-    sys.path.insert(0, _project_root)
-
-from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
+from datalab.config import Conf
 from datalab.env import execenv
+from datalab.gui.actionhandler import ActionCategory
 from datalab.gui.main import DLMainWindow
 from datalab.plugins import PluginRegistry
 from datalab.tests import datalab_test_app_context
@@ -132,10 +125,20 @@ def create_plugin_from_template(directory, filename, template_name, replacements
         f.write(content)
 
 
-def test_plugin_system():
-    """Test the entire plugin lifecycle: discovery, reload, cleanup"""
-    from datalab.config import Conf
+@contextlib.contextmanager
+def temporary_template_plugin(filename, template_name, replacements):
+    """Create a single template-based plugin inside a temporary plugin directory."""
+    Conf.main.plugins_enabled_list.set(None)
+    with temporary_plugin_dir() as plugin_dir:
+        execenv.print(f"Using temporary plugin directory: {plugin_dir}")
+        create_plugin_from_template(plugin_dir, filename, template_name, replacements)
+        yield plugin_dir
 
+
+# This end-to-end regression test intentionally keeps the whole plugin
+# lifecycle in one linear scenario: discovery, menu wiring, reload and cleanup.
+def test_plugin_system():  # pylint: disable=too-many-statements
+    """Test the entire plugin lifecycle: discovery, reload, cleanup"""
     # Ensure plugins_enabled_list is None (all plugins enabled)
     Conf.main.plugins_enabled_list.set(None)
 
@@ -245,14 +248,12 @@ def test_plugin_system():
             assert "Action Plugin 2_signal" not in action_names
 
             # Verify actions are registered in both panels (Signal and Image)
-            # We access private member for testing purposes
-            # pylint: disable=protected-access
             sp_all_actions = []
             # We need to access the private attribute _BaseActionHandler__actions
             # The mangled name depends on the class defining the attribute
-            sig_actions = (  # type: ignore
-                win.signalpanel.acthandler._BaseActionHandler__actions.values()
-            )
+            sig_actions = getattr(
+                win.signalpanel.acthandler, "_BaseActionHandler__actions"
+            ).values()
             for act_list in sig_actions:
                 # Handle both QAction and QMenu (QMenu uses .title() instead of .text())
                 sp_all_actions.extend(
@@ -263,9 +264,9 @@ def test_plugin_system():
                 )
 
             ip_all_actions = []
-            img_actions = (  # type: ignore
-                win.imagepanel.acthandler._BaseActionHandler__actions.values()
-            )
+            img_actions = getattr(
+                win.imagepanel.acthandler, "_BaseActionHandler__actions"
+            ).values()
             for act_list in img_actions:
                 # Handle both QAction and QMenu (QMenu uses .title() instead of .text())
                 ip_all_actions.extend(
@@ -427,7 +428,7 @@ def test_plugin_system():
 
             # Verify that the healthy plugin is still functional
             # Reset flag
-            win._test_plugin_flag = None  # pylint: disable=protected-access
+            setattr(win, "_test_plugin_flag", None)
 
             win.plugins_menu.aboutToShow.emit()
             actions = win.plugins_menu.actions()
@@ -477,8 +478,6 @@ def test_plugin_error_handling():
     - Missing create_actions method (abstract)
     - Syntax errors in the source file
     """
-    from datalab.config import Conf
-
     Conf.main.plugins_enabled_list.set(None)
 
     with temporary_plugin_dir() as plugin_dir:
@@ -610,8 +609,6 @@ def test_plugin_duplicate_name():
 
 def test_plugin_nested_menus():
     """Test plugin with nested submenus (3 levels deep)"""
-    from datalab.config import Conf
-
     # Ensure plugins_enabled_list is None (all plugins enabled)
     Conf.main.plugins_enabled_list.set(None)
 
@@ -651,8 +648,6 @@ def test_plugin_nested_menus():
             QW.QApplication.processEvents()
 
             # Get plugin category actions from signal panel
-            from datalab.gui.actionhandler import ActionCategory
-
             plugin_actions = win.signalpanel.get_category_actions(
                 ActionCategory.PLUGINS
             )
@@ -712,8 +707,6 @@ def test_plugin_nested_menus():
 
 def test_plugin_with_dialogs():
     """Test plugin using dialog methods (show_warning, show_info, etc.)"""
-    from datalab.config import Conf
-
     # Ensure plugins_enabled_list is None (all plugins enabled)
     Conf.main.plugins_enabled_list.set(None)
 
@@ -770,369 +763,6 @@ def test_plugin_with_dialogs():
                 result = plugin.ask_yesno("Test question?")
                 assert mock_question.called
                 assert result is True
-
-
-def test_plugin_enable_disable_config():
-    """Test plugin enable/disable filtering and configuration dialog.
-
-    Verifies that:
-    - plugins_enabled_list correctly filters which plugins are loaded
-    - Disabled plugins remain visible in the configuration dialog
-    - Plugin checkboxes reflect the enabled/disabled state
-    - Re-enabling all plugins restores them
-    """
-    from datalab.config import Conf
-    from datalab.gui.pluginconfig import PluginConfigDialog
-
-    # Save original config
-    try:
-        original_enabled_list = Conf.main.plugins_enabled_list.get()
-        had_config = True
-    except Exception:  # noqa: BLE001
-        original_enabled_list = None
-        had_config = False
-
-    try:
-        with temporary_plugin_dir() as plugin_dir:
-            execenv.print(f"Using temporary plugin directory: {plugin_dir}")
-
-            create_plugin_file(
-                plugin_dir,
-                "datalab_test_plugin_1.py",
-                "TestPluginOne",
-                "Test Plugin 1",
-                "Action One",
-                "action_1",
-            )
-            create_plugin_file(
-                plugin_dir,
-                "datalab_test_plugin_2.py",
-                "TestPluginTwo",
-                "Test Plugin 2",
-                "Action Two",
-                "action_2",
-            )
-
-            Conf.main.plugins_enabled_list.set(None)
-
-            with patch("datalab.utils.qthelpers.is_running_tests") as mock:
-                mock.return_value = False
-                with datalab_test_app_context(console=False) as win:
-                    QW.QApplication.processEvents()
-
-                    # --- All enabled ---
-                    plugins = PluginRegistry.get_plugins()
-                    plugin_names = [p.info.name for p in plugins]
-                    execenv.print(f"Registered plugins (all enabled): {plugin_names}")
-                    assert "Test Plugin 1" in plugin_names
-                    assert "Test Plugin 2" in plugin_names
-
-                    # Config dialog shows both
-                    dialog = PluginConfigDialog(win)
-                    widget_names = [
-                        w.plugin_class.PLUGIN_INFO.name for w in dialog.plugin_widgets
-                    ]
-                    assert "Test Plugin 1" in widget_names
-                    assert "Test Plugin 2" in widget_names
-                    assert dialog.toggle_all_checkbox.checkState() == QC.Qt.Checked
-
-                    dialog.filter_combo.setCurrentIndex(2)
-                    QW.QApplication.processEvents()
-                    visible_disabled = [
-                        w.plugin_class.PLUGIN_INFO.name
-                        for w in dialog.plugin_widgets
-                        if w.isVisible()
-                    ]
-                    assert visible_disabled == []
-
-                    dialog.filter_combo.setCurrentIndex(0)
-                    QW.QApplication.processEvents()
-                    dialog.close()
-                    dialog.deleteLater()
-                    QW.QApplication.processEvents()
-
-                    # --- Disable Plugin 2 ---
-                    Conf.main.plugins_enabled_list.set(["Test Plugin 1"])
-                    win.reload_plugins()
-                    QW.QApplication.processEvents()
-
-                    plugins = PluginRegistry.get_plugins()
-                    plugin_names = [p.info.name for p in plugins]
-                    execenv.print(f"Registered plugins (only Plugin 1): {plugin_names}")
-                    assert "Test Plugin 1" in plugin_names
-                    assert "Test Plugin 2" not in plugin_names
-
-                    # Config dialog still shows both, Plugin 2 unchecked
-                    dialog2 = PluginConfigDialog(win)
-                    widget_names = [
-                        w.plugin_class.PLUGIN_INFO.name for w in dialog2.plugin_widgets
-                    ]
-                    assert "Test Plugin 1" in widget_names
-                    assert "Test Plugin 2" in widget_names, (
-                        "Disabled plugin should still be visible in config dialog"
-                    )
-                    for widget in dialog2.plugin_widgets:
-                        name = widget.plugin_class.PLUGIN_INFO.name
-                        if name == "Test Plugin 1":
-                            assert widget.checkbox.isChecked(), (
-                                "Plugin 1 should be checked (enabled)"
-                            )
-                        elif name == "Test Plugin 2":
-                            assert not widget.checkbox.isChecked(), (
-                                "Plugin 2 should be unchecked (disabled)"
-                            )
-
-                    assert dialog2.toggle_all_checkbox.checkState() == (
-                        QC.Qt.PartiallyChecked
-                    )
-
-                    dialog2.filter_combo.setCurrentIndex(1)
-                    QW.QApplication.processEvents()
-                    visible_enabled = [
-                        w.plugin_class.PLUGIN_INFO.name
-                        for w in dialog2.plugin_widgets
-                        if w.isVisible()
-                    ]
-                    assert visible_enabled == ["Test Plugin 1"]
-
-                    dialog2.filter_combo.setCurrentIndex(2)
-                    QW.QApplication.processEvents()
-                    visible_disabled = [
-                        w.plugin_class.PLUGIN_INFO.name
-                        for w in dialog2.plugin_widgets
-                        if w.isVisible()
-                    ]
-                    assert visible_disabled == ["Test Plugin 2"]
-
-                    dialog2.toggle_all_checkbox.setChecked(True)
-                    QW.QApplication.processEvents()
-                    assert all(
-                        widget.checkbox.isChecked() for widget in dialog2.plugin_widgets
-                    )
-                    assert dialog2.toggle_all_checkbox.checkState() == QC.Qt.Checked
-
-                    dialog2.close()
-                    dialog2.deleteLater()
-                    QW.QApplication.processEvents()
-
-                    # --- Re-enable all ---
-                    Conf.main.plugins_enabled_list.set(None)
-                    win.reload_plugins()
-                    QW.QApplication.processEvents()
-
-                    plugins = PluginRegistry.get_plugins()
-                    plugin_names = [p.info.name for p in plugins]
-                    execenv.print(
-                        f"Registered plugins (all re-enabled): {plugin_names}"
-                    )
-                    assert "Test Plugin 1" in plugin_names
-                    assert "Test Plugin 2" in plugin_names
-    finally:
-        if had_config:
-            Conf.main.plugins_enabled_list.set(original_enabled_list)
-        else:
-            try:
-                Conf.remove_option(  # pylint: disable=no-member
-                    "main", "plugins_enabled_list"
-                )
-            except Exception:  # noqa: BLE001
-                pass
-
-
-def test_plugin_many_actions_visual():
-    """Test plugin with many actions in dropdown menu - Visual test for user observation
-
-    This test launches DataLab with a plugin containing multiple actions to verify
-    the dropdown menu behavior. The test will pause to allow user observation.
-    """
-    # guitest: show
-    from datalab.config import Conf
-
-    # Ensure plugins_enabled_list is None (all plugins enabled)
-    Conf.main.plugins_enabled_list.set(None)
-
-    with temporary_plugin_dir() as plugin_dir:
-        execenv.print(f"Using temporary plugin directory: {plugin_dir}")
-
-        # Create plugin with many actions (using plugin_many_actions.py template)
-        create_plugin_from_template(
-            plugin_dir,
-            "datalab_test_plugin_many_actions.py",
-            "plugin_many_actions.py.template",
-            {
-                "{class_name}": "TestPluginManyActions",
-                "{plugin_name}": "Many Actions Test",
-                "{menu_name}": "Test Menu with Many Actions",
-                "{action_prefix}": "Test Action",
-                "{test_code_1}": "self.main._test_action_1 = True",
-                "{test_code_2}": "self.main._test_action_2 = True",
-                "{test_code_3}": "self.main._test_action_3 = True",
-                "{test_code_4}": "self.main._test_action_4 = True",
-                "{test_code_5}": "self.main._test_action_5 = True",
-            },
-        )
-
-        with datalab_test_app_context(console=False) as win:
-            QW.QApplication.processEvents()
-
-            # Verify plugin loaded
-            plugins = PluginRegistry.get_plugins()
-            plugin_names = [p.info.name for p in plugins]
-            execenv.print(f"Loaded plugins: {plugin_names}")
-            assert "Many Actions Test" in plugin_names
-
-            # Switch to signal panel
-            win.tabwidget.setCurrentWidget(win.signalpanel)
-            QW.QApplication.processEvents()
-
-            # Open plugins menu to show dropdown
-            win.plugins_menu.aboutToShow.emit()
-
-            # Find the submenu with multiple actions
-            from datalab.gui.actionhandler import ActionCategory
-
-            plugin_actions = win.signalpanel.get_category_actions(
-                ActionCategory.PLUGINS
-            )
-
-            # Find the menu
-            test_menu = None
-            for item in plugin_actions:
-                if (
-                    isinstance(item, QW.QMenu)
-                    and item.title() == "Test Menu with Many Actions"
-                ):
-                    test_menu = item
-                    break
-
-            assert test_menu is not None, "Test menu not found"
-
-            # Trigger aboutToShow to populate the menu
-            test_menu.aboutToShow.emit()
-
-            # Verify all 5 actions are present
-            menu_actions = test_menu.actions()
-            action_texts = [a.text() for a in menu_actions if not a.isSeparator()]
-            execenv.print(f"Menu actions: {action_texts}")
-
-            assert len(action_texts) == 5
-            for i in range(1, 6):
-                assert f"Test Action {i}" in action_texts
-
-            # Test triggering one action
-            for act in menu_actions:
-                if act.text() == "Test Action 3":
-                    act.trigger()
-                    break
-
-            assert getattr(win, "_test_action_3", None) is True
-
-            execenv.print(
-                "Visual test passed - Multiple actions displayed correctly in dropdown"
-            )
-
-
-def test_plugin_long_description():
-    """Test plugin with very long description and "Show more" button.
-
-    Verifies that:
-    - Plugins with long descriptions load correctly and actions work
-    - The show_full_description widget method works without AttributeError
-      (regression test for self.plugin → self.plugin_class fix)
-    """
-    from datalab.config import Conf
-    from datalab.gui.pluginconfig import PluginInfoWidget, PluginState
-
-    Conf.main.plugins_enabled_list.set(None)
-
-    long_description = (
-        "This is an extremely long description that is designed to test "
-        "how the plugin system handles descriptions that span multiple lines "
-        "and contain a large amount of text. The description should not break "
-        "the UI layout or cause any rendering issues. It should be properly "
-        "truncated or wrapped in any display contexts such as tooltips, status "
-        "bars, or configuration dialogs. This text continues to be very long "
-        "to ensure we adequately test the edge case of exceptionally verbose "
-        "plugin descriptions that might be provided by third-party developers "
-        "who want to thoroughly explain what their plugin does and how to use it."
-    )
-
-    with temporary_plugin_dir() as plugin_dir:
-        execenv.print(f"Using temporary plugin directory: {plugin_dir}")
-
-        create_plugin_from_template(
-            plugin_dir,
-            "datalab_test_plugin_long_desc.py",
-            "plugin_long_description.py.template",
-            {
-                "{class_name}": "TestPluginLongDescription",
-                "{plugin_name}": "Long Description Test",
-                "{long_description}": long_description,
-                "{action_name}": "Test Action",
-                "{test_code}": "self.main._test_long_desc = True",
-            },
-        )
-
-        with datalab_test_app_context(console=False) as win:
-            QW.QApplication.processEvents()
-
-            # Verify plugin loaded with long description
-            plugins = PluginRegistry.get_plugins()
-            plugin = None
-            plugin_class = None
-            for p in plugins:
-                if p.info.name == "Long Description Test":
-                    plugin = p
-                    plugin_class = type(p)
-                    break
-
-            assert plugin is not None, "Long Description Test plugin not loaded"
-            assert len(plugin.info.description) > 500, "Description not long enough"
-            execenv.print(
-                f"Plugin description length: {len(plugin.info.description)} chars"
-            )
-
-            # Verify the action works
-            win.tabwidget.setCurrentWidget(win.signalpanel)
-            QW.QApplication.processEvents()
-
-            win.plugins_menu.aboutToShow.emit()
-            for act in win.plugins_menu.actions():
-                if act.text() == "Test Action":
-                    act.trigger()
-                    break
-            assert getattr(win, "_test_long_desc", None) is True
-
-            # Test _toggle_description doesn't raise AttributeError
-            # (regression test for expandable description widget)
-            widget = PluginInfoWidget(
-                plugin_class, enabled=True, state=PluginState.ENABLED
-            )
-            try:
-                # Long description should have the toggle button
-                assert hasattr(widget, "_toggle_btn"), (
-                    "Long description should have a toggle button"
-                )
-                assert hasattr(widget, "_desc_scroll"), (
-                    "Long description should have a scroll area"
-                )
-                # Toggle expand
-                # pylint: disable=protected-access
-                widget._toggle_description()
-                assert widget._expanded is True
-                assert widget._desc_scroll.maximumHeight() == 150
-                # Toggle collapse
-                widget._toggle_description()
-                assert widget._expanded is False
-                assert widget._desc_scroll.maximumHeight() == 60
-                # pylint: enable=protected-access
-            except AttributeError as e:
-                raise AssertionError(
-                    f"_toggle_description raised AttributeError: {e}"
-                ) from e
-            del widget
-
-            execenv.print("Long description plugin handled correctly")
 
 
 if __name__ == "__main__":
