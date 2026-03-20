@@ -23,7 +23,7 @@ Note: Simple error-case plugins (init error, missing `create_actions`, invalid
 ## Usage in Tests
 
 Tests use these templates via the `create_plugin_file()` and `create_plugin_from_template()`
-helper functions in `test_plugins.py`:
+helper functions in `plugin_test_dataset.py`:
 
 ```python
 # For plugin_valid.py.template (most common):
@@ -37,6 +37,13 @@ create_plugin_from_template(plugin_dir, "datalab_my_plugin.py",
 ```
 
 ## Visual Testing Script
+
+Run `plugin_test_dataset.py` to create or clear a standalone plugin dataset:
+
+```bash
+python scripts/run_with_env.py python datalab/tests/features/plugins/plugin_test_dataset.py create --dataset test
+python scripts/run_with_env.py python datalab/tests/features/plugins/plugin_test_dataset.py clear --dataset test
+```
 
 Run `launch_with_test_plugins.py` to launch DataLab with visual test plugins:
 

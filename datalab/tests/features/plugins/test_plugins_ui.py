@@ -13,7 +13,7 @@ from datalab.gui.actionhandler import ActionCategory
 from datalab.gui.pluginconfig import PluginConfigDialog, PluginInfoWidget, PluginState
 from datalab.plugins import PluginRegistry
 from datalab.tests import datalab_test_app_context
-from datalab.tests.features.plugins.test_plugins import (
+from datalab.tests.features.plugins.plugin_test_dataset import (
     create_plugin_file,
     temporary_plugin_dir,
     temporary_template_plugin,

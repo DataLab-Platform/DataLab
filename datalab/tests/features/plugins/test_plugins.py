@@ -10,13 +10,10 @@ the main window.
 
 # guitest: show
 
-import contextlib
 import importlib
 import importlib.util
 import os
 import os.path as osp
-import shutil
-import sys
 from unittest.mock import patch
 
 from qtpy import QtWidgets as QW
@@ -27,112 +24,11 @@ from datalab.gui.actionhandler import ActionCategory
 from datalab.gui.main import DLMainWindow
 from datalab.plugins import PluginRegistry
 from datalab.tests import datalab_test_app_context
-
-# Path to plugin templates
-TEMPLATES_DIR = osp.abspath(osp.join(osp.dirname(__file__), "templates"))
-
-# Fixed directory for temporary test plugin files (inside the project tree)
-_TEST_PLUGINS_DIR = osp.abspath(
-    osp.join(osp.dirname(__file__), "..", "..", "..", "data", "tests", "plugins")
+from datalab.tests.features.plugins.plugin_test_dataset import (
+    create_plugin_file,
+    create_plugin_from_template,
+    temporary_plugin_dir,
 )
-
-
-def get_plugin_code(filename):
-    """Read a plugin template file from TEMPLATES_DIR."""
-    with open(osp.join(TEMPLATES_DIR, filename), "r", encoding="utf-8") as f:
-        return f.read()
-
-
-@contextlib.contextmanager
-def temporary_plugin_dir():
-    """Create a fixed directory for test plugins and add it to sys.path.
-
-    The directory ``datalab/data/tests/plugins/`` is used so that the path
-    is deterministic and stays within the project tree (cross-platform).
-
-    On exit, removes the directory from sys.path, purges any
-    ``datalab_test_plugin_*`` modules from ``sys.modules`` so that the
-    next test starts with a clean import state, and deletes the directory
-    contents.  This prevents stale module objects (which hold references
-    to destroyed Qt widgets) from surviving across tests – a common cause
-    of ACCESS_VIOLATION crashes under coverage.
-    """
-    if osp.exists(_TEST_PLUGINS_DIR):
-        shutil.rmtree(_TEST_PLUGINS_DIR)
-    os.makedirs(_TEST_PLUGINS_DIR)
-
-    # Add to sys.path and invalidate import caches so that Python's
-    # path finders pick up the freshly (re)created directory.
-    sys.path.insert(0, _TEST_PLUGINS_DIR)
-    sys.path_importer_cache.pop(_TEST_PLUGINS_DIR, None)
-    importlib.invalidate_caches()
-
-    try:
-        yield _TEST_PLUGINS_DIR
-    finally:
-        # Purge cached test-plugin modules so they cannot leak Qt references
-        stale_modules = [
-            name for name in sys.modules if name.startswith("datalab_test_plugin")
-        ]
-        for name in stale_modules:
-            del sys.modules[name]
-
-        # Remove from sys.path and clean up finder cache
-        if _TEST_PLUGINS_DIR in sys.path:
-            sys.path.remove(_TEST_PLUGINS_DIR)
-        sys.path_importer_cache.pop(_TEST_PLUGINS_DIR, None)
-        importlib.invalidate_caches()
-        shutil.rmtree(_TEST_PLUGINS_DIR, ignore_errors=True)
-
-
-def create_plugin_file(
-    directory,
-    filename,
-    class_name,
-    plugin_name,
-    action_name,
-    action_obj_name,
-    test_code="pass",
-):
-    """Create a plugin file in the specified directory"""
-    template = get_plugin_code("plugin_valid.py.template")
-    # Replace placeholders manually since .format() might fail if the template contains
-    # other braces
-    content = template.replace("{class_name}", class_name)
-    content = content.replace("{plugin_name}", plugin_name)
-    content = content.replace("{action_name}", action_name)
-    content = content.replace("{action_object_name}", action_obj_name)
-    content = content.replace("{test_code}", test_code)
-
-    with open(osp.join(directory, filename), "w", encoding="utf-8") as f:
-        f.write(content)
-
-
-def create_plugin_from_template(directory, filename, template_name, replacements):
-    """Create a plugin file from any template with placeholder replacements.
-
-    Args:
-        directory: Target directory
-        filename: Output filename
-        template_name: Template file in TEMPLATES_DIR
-         (e.g. "plugin_nested_menus.py.template")
-        replacements: Dict of {placeholder: value} to substitute
-    """
-    content = get_plugin_code(template_name)
-    for key, value in replacements.items():
-        content = content.replace(key, value)
-    with open(osp.join(directory, filename), "w", encoding="utf-8") as f:
-        f.write(content)
-
-
-@contextlib.contextmanager
-def temporary_template_plugin(filename, template_name, replacements):
-    """Create a single template-based plugin inside a temporary plugin directory."""
-    Conf.main.plugins_enabled_list.set(None)
-    with temporary_plugin_dir() as plugin_dir:
-        execenv.print(f"Using temporary plugin directory: {plugin_dir}")
-        create_plugin_from_template(plugin_dir, filename, template_name, replacements)
-        yield plugin_dir
 
 
 # This end-to-end regression test intentionally keeps the whole plugin
