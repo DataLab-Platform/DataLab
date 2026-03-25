@@ -3,7 +3,7 @@
 """Standalone helpers to generate and clean plugin test datasets.
 
 This module centralizes all file generation used by plugin-related tests and
-manual visual checks. It may be imported by tests, or executed directly to
+manual inspection checks. It may be imported by tests, or executed directly to
 create or clear a full dataset on disk.
 """
 
@@ -16,13 +16,14 @@ import os
 import os.path as osp
 import shutil
 import sys
+import textwrap
 from collections.abc import Iterable
 
 TEMPLATES_DIR = osp.abspath(osp.join(osp.dirname(__file__), "templates"))
 TEST_PLUGINS_DIR = osp.abspath(
     osp.join(osp.dirname(__file__), "..", "..", "..", "data", "tests", "plugins")
 )
-VISUAL_PLUGINS_DIR = osp.abspath(
+MANUAL_TEST_PLUGINS_DIR = osp.abspath(
     osp.join(
         osp.dirname(__file__),
         "..",
@@ -30,22 +31,23 @@ VISUAL_PLUGINS_DIR = osp.abspath(
         "..",
         "data",
         "tests",
-        "visual_plugins",
+        "manual_plugins",
     )
 )
 
 TEST_PLUGIN_MODULE_PREFIXES = ("datalab_test_plugin",)
-VISUAL_PLUGIN_MODULE_PREFIXES = ("datalab_plugin",)
+MANUAL_PLUGIN_MODULE_PREFIXES = ("datalab_plugin",)
 
 __all__ = [
+    "MANUAL_TEST_PLUGINS_DIR",
     "TEST_PLUGINS_DIR",
-    "VISUAL_PLUGINS_DIR",
-    "create_plugin_directory",
     "clear_plugin_directory",
+    "create_manual_test_plugin_dataset",
+    "create_plugin_directory",
     "create_plugin_file",
     "create_plugin_from_template",
     "create_test_plugin_dataset",
-    "create_visual_test_dataset",
+    "ensure_plugin_dir_on_syspath",
     "generate_bulk_plugins",
     "get_plugin_template",
     "temporary_plugin_dir",
@@ -57,6 +59,25 @@ def get_plugin_template(filename: str) -> str:
     """Read a plugin template file from the templates directory."""
     with open(osp.join(TEMPLATES_DIR, filename), "r", encoding="utf-8") as handle:
         return handle.read()
+
+
+def _format_python_string_literal(
+    text: str, *, inner_indent: int = 12, outer_indent: int = 8
+) -> str:
+    """Format a string as a wrapped Python string literal expression."""
+    wrapped = textwrap.wrap(
+        text,
+        width=68,
+        break_long_words=False,
+        break_on_hyphens=False,
+    )
+    if len(wrapped) <= 1:
+        return repr(text)
+
+    inner_prefix = " " * inner_indent
+    outer_prefix = " " * outer_indent
+    joined = "\n".join(f"{inner_prefix}{part!r}" for part in wrapped)
+    return f"(\n{joined}\n{outer_prefix})"
 
 
 def create_plugin_directory(plugin_dir: str, *, clear_existing: bool = True) -> str:
@@ -226,16 +247,19 @@ def create_test_plugin_dataset(plugin_dir: str = TEST_PLUGINS_DIR) -> list[str]:
             {
                 "{class_name}": "TestPluginLongDescription",
                 "{plugin_name}": "Long Description Test",
-                "{long_description}": (
+                "{long_description}": _format_python_string_literal(
                     "This is an extremely long description that is designed to test "
-                    "how the plugin system handles descriptions that span multiple lines "
-                    "and contain a large amount of text. The description should not break "
-                    "the UI layout or cause any rendering issues. It should be properly "
-                    "truncated or wrapped in any display contexts such as tooltips, status "
-                    "bars, or configuration dialogs. This text continues to be very long "
-                    "to ensure we adequately test the edge case of exceptionally verbose "
-                    "plugin descriptions that might be provided by third-party developers "
-                    "who want to thoroughly explain what their plugin does and how to use it."
+                    "how the plugin system handles descriptions that span "
+                    "multiple lines and contain a large amount of text. "
+                    "The description should not break the UI layout or cause "
+                    "any rendering issues. It should be properly truncated "
+                    "or wrapped in any display contexts such as tooltips, "
+                    "status bars, or configuration dialogs. This text "
+                    "continues to be very long to ensure we adequately test "
+                    "the edge case of exceptionally verbose plugin "
+                    "descriptions that might be provided by third-party "
+                    "developers who want to thoroughly explain what their "
+                    "plugin does and how to use it."
                 ),
                 "{action_name}": "Test Action",
                 "{test_code}": "self.main._test_long_desc = True",
@@ -291,6 +315,8 @@ def generate_bulk_plugins(plugin_dir: str, count: int = 20) -> list[str]:
                 "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
             )
 
+        description_literal = _format_python_string_literal(description)
+
         plugin_code = f'''\
 """Auto-generated test plugin {index}"""
 from datalab.plugins import PluginBase, PluginInfo
@@ -302,7 +328,7 @@ class AutoTestPlugin{index}(PluginBase):
     PLUGIN_INFO = PluginInfo(
         name="Auto Test Plugin {index}",
         version="1.0.{index}",
-        description="""{description}""",
+        description={description_literal},
     )
 
     def create_actions(self):
@@ -322,19 +348,19 @@ class AutoTestPlugin{index}(PluginBase):
     return created
 
 
-def create_visual_test_dataset(
-    plugin_dir: str = VISUAL_PLUGINS_DIR, *, bulk_count: int = 40
+def create_manual_test_plugin_dataset(
+    plugin_dir: str = MANUAL_TEST_PLUGINS_DIR, *, bulk_count: int = 40
 ) -> list[str]:
-    """Create the visual inspection plugin dataset."""
+    """Create the manual inspection plugin dataset."""
     plugin_dir = create_plugin_directory(plugin_dir)
     created = [
         create_plugin_from_template(
             plugin_dir,
-            "datalab_plugin_many_actions_visual.py",
+            "datalab_plugin_many_actions_test.py",
             "plugin_many_actions.py.template",
             {
-                "{class_name}": "VisualTestManyActions",
-                "{plugin_name}": "Visual Test: Many Actions",
+                "{class_name}": "PluginTestManyActions",
+                "{plugin_name}": "Plugin Test: Many Actions",
                 "{menu_name}": "📋 Test Menu with Many Actions",
                 "{action_prefix}": "Test Action",
                 "{test_code_1}": "print('Action 1 triggered')",
@@ -346,16 +372,17 @@ def create_visual_test_dataset(
         ),
         create_plugin_from_template(
             plugin_dir,
-            "datalab_plugin_long_description_visual.py",
+            "datalab_plugin_long_description_test.py",
             "plugin_long_description.py.template",
             {
-                "{class_name}": "VisualTestLongDescription",
-                "{plugin_name}": "Visual Test: Long Description",
-                "{long_description}": (
+                "{class_name}": "PluginTestLongDescription",
+                "{plugin_name}": "Plugin Test: Long Description",
+                "{long_description}": _format_python_string_literal(
                     "This is an EXTREMELY LONG DESCRIPTION to test how DataLab handles "
                     "verbose plugin descriptions. "
                     * 10
-                    + "The description should be displayed properly in tooltips, status "
+                    + "The description should be displayed properly in tooltips, "
+                    "status "
                     "bars, and configuration dialogs without breaking the UI layout. "
                     * 50
                 ),
@@ -365,11 +392,34 @@ def create_visual_test_dataset(
         ),
         create_plugin_from_template(
             plugin_dir,
-            "datalab_plugin_nested_menus_visual.py",
+            "datalab_plugin_responsive_description_test.py",
+            "plugin_long_description.py.template",
+            {
+                "{class_name}": "PluginTestResponsiveDescription",
+                "{plugin_name}": "Plugin Test: Responsive Description",
+                "{long_description}": _format_python_string_literal(
+                    "This medium-length description is tuned for manual verification "
+                    "of the plugin configuration dialog. At the default window "
+                    "width, it should be truncated with a Show more button. "
+                    "When you widen the "
+                    "configuration dialog, the same description should become fully "
+                    "visible and the button should disappear because the "
+                    "rendered space "
+                    "is sufficient."
+                ),
+                "{action_name}": "↔ Test Responsive Description",
+                "{test_code}": (
+                    "print('Responsive description plugin action triggered')"
+                ),
+            },
+        ),
+        create_plugin_from_template(
+            plugin_dir,
+            "datalab_plugin_nested_menus_test.py",
             "plugin_nested_menus.py.template",
             {
-                "{class_name}": "VisualTestNestedMenus",
-                "{plugin_name}": "Visual Test: Nested Menus",
+                "{class_name}": "PluginTestNestedMenus",
+                "{plugin_name}": "Plugin Test: Nested Menus",
                 "{menu_level_1}": "📁 Level 1 Menu",
                 "{action_level_1}": "Action at Level 1",
                 "{test_code_1}": "print('Level 1 action triggered')",
@@ -392,7 +442,7 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("action", choices=("create", "clear"))
     parser.add_argument(
         "--dataset",
-        choices=("test", "visual"),
+        choices=("test", "manual"),
         default="test",
         help="Dataset recipe to manage.",
     )
@@ -404,7 +454,7 @@ def _build_parser() -> argparse.ArgumentParser:
         "--bulk-count",
         type=int,
         default=40,
-        help="Number of auto-generated visual plugins.",
+        help="Number of auto-generated manual-test plugins.",
     )
     return parser
 
@@ -412,16 +462,20 @@ def _build_parser() -> argparse.ArgumentParser:
 def main() -> None:
     """Command-line entry point."""
     args = _build_parser().parse_args()
-    if args.dataset == "visual":
-        plugin_dir = args.plugin_dir or VISUAL_PLUGINS_DIR
-        module_prefixes = VISUAL_PLUGIN_MODULE_PREFIXES
-        create_dataset = lambda: create_visual_test_dataset(
-            plugin_dir, bulk_count=args.bulk_count
-        )
+    if args.dataset == "manual":
+        plugin_dir = args.plugin_dir or MANUAL_TEST_PLUGINS_DIR
+        module_prefixes = MANUAL_PLUGIN_MODULE_PREFIXES
+
+        def create_dataset() -> list[str]:
+            return create_manual_test_plugin_dataset(
+                plugin_dir, bulk_count=args.bulk_count
+            )
     else:
         plugin_dir = args.plugin_dir or TEST_PLUGINS_DIR
         module_prefixes = TEST_PLUGIN_MODULE_PREFIXES
-        create_dataset = lambda: create_test_plugin_dataset(plugin_dir)
+
+        def create_dataset() -> list[str]:
+            return create_test_plugin_dataset(plugin_dir)
 
     if args.action == "clear":
         clear_plugin_directory(plugin_dir, module_prefixes=module_prefixes)

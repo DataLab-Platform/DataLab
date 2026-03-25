@@ -36,16 +36,18 @@ create_plugin_from_template(plugin_dir, "datalab_my_plugin.py",
                             {"{class_name}": "MyPlugin", ...})
 ```
 
-## Visual Testing Script
+## Manual Inspection Script
 
 Run `plugin_test_dataset.py` to create or clear a standalone plugin dataset:
 
 ```bash
 python scripts/run_with_env.py python datalab/tests/features/plugins/plugin_test_dataset.py create --dataset test
 python scripts/run_with_env.py python datalab/tests/features/plugins/plugin_test_dataset.py clear --dataset test
+python scripts/run_with_env.py python datalab/tests/features/plugins/plugin_test_dataset.py create --dataset manual
+python scripts/run_with_env.py python datalab/tests/features/plugins/plugin_test_dataset.py clear --dataset manual
 ```
 
-Run `launch_with_test_plugins.py` to launch DataLab with visual test plugins:
+Run `launch_with_test_plugins.py` to launch DataLab with the manual plugin test dataset:
 
 ```bash
 python scripts/run_with_env.py python datalab/tests/features/plugins/launch_with_test_plugins.py
@@ -66,7 +68,7 @@ The plugin system tests (`datalab/tests/features/plugins/test_plugins.py`) cover
 3. **UI Integration**: Menu population, action registration, panel-specific actions
 4. **Configuration**: Enable/disable plugins, persistent settings
 5. **Edge Cases**: Duplicate names, missing methods, long descriptions
-6. **Visual Tests**: Observable behavior in a running DataLab instance
+6. **Manual Inspection**: Observable behavior in a running DataLab instance
 
 ## Adding New Templates
 

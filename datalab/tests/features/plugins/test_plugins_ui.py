@@ -1,6 +1,6 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
-"""Plugin UI configuration and visual behavior tests."""
+"""Plugin UI configuration and interactive behavior tests."""
 
 from __future__ import annotations
 
@@ -10,14 +10,40 @@ from qtpy import QtWidgets as QW
 from datalab.config import Conf
 from datalab.env import execenv
 from datalab.gui.actionhandler import ActionCategory
-from datalab.gui.pluginconfig import PluginConfigDialog, PluginInfoWidget, PluginState
-from datalab.plugins import PluginRegistry
+from datalab.gui.pluginconfig import (
+    ExpandableDescriptionWidget,
+    FailedPluginInfoWidget,
+    PluginConfigDialog,
+    PluginInfoWidget,
+    PluginState,
+)
+from datalab.plugins import FailedPluginInfo
 from datalab.tests import datalab_test_app_context
 from datalab.tests.features.plugins.plugin_test_dataset import (
     create_plugin_file,
     temporary_plugin_dir,
     temporary_template_plugin,
 )
+
+
+def _make_dummy_plugin_class(name: str, description: str):
+    """Create a minimal plugin class for UI-only widget tests."""
+
+    class DummyPlugin:
+        """Minimal plugin-like class exposing PLUGIN_INFO."""
+
+    DummyPlugin.PLUGIN_INFO = type(
+        "PluginInfoHolder",
+        (),
+        {
+            "name": name,
+            "version": "1.0.0",
+            "description": description,
+            "icon": None,
+        },
+    )()
+
+    return DummyPlugin
 
 
 def _show_dialog(dialog: PluginConfigDialog) -> None:
@@ -31,6 +57,22 @@ def _close_dialog(dialog: PluginConfigDialog) -> None:
     dialog.close()
     dialog.deleteLater()
     QW.QApplication.processEvents()
+
+
+def _create_plugin_description_widget(
+    name: str, description: str, *, width: int
+) -> PluginInfoWidget:
+    """Create a plugin info widget with a controlled rendered width."""
+    widget = PluginInfoWidget(
+        _make_dummy_plugin_class(name, description),
+        enabled=True,
+        state=PluginState.ENABLED,
+    )
+    widget.setFixedWidth(width)
+    widget.show()
+    widget.description_widget.refresh_description()
+    QW.QApplication.processEvents()
+    return widget
 
 
 def test_plugin_enable_disable_config():
@@ -117,7 +159,31 @@ def test_plugin_enable_disable_config():
                 assert "Test Plugin 2" in visible_disabled_names
                 assert "Test Plugin 1" not in visible_disabled_names
 
-                dialog2._set_all_enabled(True)
+                plugin_2_widget = next(
+                    widget
+                    for widget in dialog2.plugin_widgets
+                    if widget.plugin_class.PLUGIN_INFO.name == "Test Plugin 2"
+                )
+                plugin_2_widget.checkbox.setChecked(True)
+                QW.QApplication.processEvents()
+                visible_disabled_names = [
+                    widget.plugin_class.PLUGIN_INFO.name
+                    for widget in dialog2.plugin_widgets
+                    if widget.isVisible()
+                ]
+                assert "Test Plugin 2" in visible_disabled_names
+
+                dialog2.filter_combo.setCurrentIndex(1)
+                QW.QApplication.processEvents()
+                visible_enabled_names = [
+                    widget.plugin_class.PLUGIN_INFO.name
+                    for widget in dialog2.plugin_widgets
+                    if widget.isVisible()
+                ]
+                assert "Test Plugin 2" not in visible_enabled_names
+
+                dialog2.set_all_enabled(True)
+                QW.QApplication.processEvents()
                 assert all(
                     widget.checkbox.isChecked() for widget in dialog2.plugin_widgets
                 )
@@ -129,7 +195,7 @@ def test_plugin_enable_disable_config():
             Conf.main.plugins_enabled_list.remove()
 
 
-def test_plugin_many_actions_visual():
+def test_plugin_many_actions_menu_behavior():
     """Test plugin with many actions in dropdown menu."""
     with temporary_template_plugin(
         "datalab_test_plugin_many_actions.py",
@@ -151,6 +217,7 @@ def test_plugin_many_actions_visual():
             win.tabwidget.setCurrentWidget(win.signalpanel)
             QW.QApplication.processEvents()
             win.plugins_menu.aboutToShow.emit()
+            assert "menu-scrollable" in win.plugins_menu.styleSheet()
             plugin_actions = win.signalpanel.get_category_actions(
                 ActionCategory.PLUGINS
             )
@@ -162,6 +229,7 @@ def test_plugin_many_actions_visual():
                 and item.title() == "Test Menu with Many Actions"
             )
             test_menu.aboutToShow.emit()
+            assert "menu-scrollable" in test_menu.styleSheet()
 
             action_texts = [
                 action.text()
@@ -191,44 +259,129 @@ def test_plugin_long_description():
         "plugin descriptions that might be provided by third-party developers "
         "who want to thoroughly explain what their plugin does and how to use it."
     )
+    with datalab_test_app_context(console=False):
+        widget = _create_plugin_description_widget(
+            "Long Description Test", long_description, width=260
+        )
 
-    with temporary_template_plugin(
-        "datalab_test_plugin_long_desc.py",
-        "plugin_long_description.py.template",
-        {
-            "{class_name}": "TestPluginLongDescription",
-            "{plugin_name}": "Long Description Test",
-            "{long_description}": long_description,
-            "{action_name}": "Test Action",
-            "{test_code}": "self.main._test_long_desc = True",
-        },
-    ):
-        with datalab_test_app_context(console=False) as win:
-            QW.QApplication.processEvents()
-            plugin = next(
-                plugin
-                for plugin in PluginRegistry.get_plugins()
-                if plugin.info.name == "Long Description Test"
-            )
-            plugin_class = type(plugin)
+        toggle_description = getattr(widget, "_toggle_description")
+        toggle_button = widget.toggle_button
+        desc_label = getattr(widget, "desc_label")
+        scroll_area = widget.description_widget.scroll_area
 
-            win.tabwidget.setCurrentWidget(win.signalpanel)
-            QW.QApplication.processEvents()
-            win.plugins_menu.aboutToShow.emit()
-            for action in win.plugins_menu.actions():
-                if action.text() == "Test Action":
-                    action.trigger()
-                    break
-            assert getattr(win, "_test_long_desc", None) is True
+        assert toggle_button.isVisible()
+        assert desc_label.text().endswith("…")
+        assert scroll_area.verticalScrollBarPolicy() == QC.Qt.ScrollBarAlwaysOff
 
-            widget = PluginInfoWidget(
-                plugin_class, enabled=True, state=PluginState.ENABLED
-            )
-            toggle_description = getattr(widget, "_toggle_description")
-            desc_scroll = getattr(widget, "_desc_scroll")
-            toggle_description()
-            assert getattr(widget, "_expanded") is True
-            assert desc_scroll.maximumHeight() == 150
-            toggle_description()
-            assert getattr(widget, "_expanded") is False
-            assert desc_scroll.maximumHeight() == 60
+        toggle_description()
+        assert getattr(widget, "_expanded") is True
+        assert not desc_label.text().endswith("…")
+        expanded_height = desc_label.height()
+
+        toggle_description()
+        assert getattr(widget, "_expanded") is False
+        assert desc_label.text().endswith("…")
+        assert desc_label.height() < expanded_height
+        assert scroll_area.verticalScrollBarPolicy() == QC.Qt.ScrollBarAlwaysOff
+        widget.close()
+        widget.deleteLater()
+        QW.QApplication.processEvents()
+
+
+def test_plugin_description_toggle_depends_on_dialog_width():
+    """Show more should depend on rendered height, not raw character count."""
+    description = (
+        "This description is intentionally sized so that it needs the 'Show more' "
+        "button in the default plugin configuration width, yet it should become "
+        "fully visible once the configuration dialog is made significantly wider. "
+        "That verifies the behavior depends on rendered space instead of raw "
+        "character count alone."
+    )
+    app = QW.QApplication.instance() or QW.QApplication([])
+    widget = ExpandableDescriptionWidget(description)
+    assert widget.needs_toggle_for_width(240)
+
+    wide_width = next(
+        width
+        for width in (800, 1200, 1600, 2400)
+        if not widget.needs_toggle_for_width(width)
+    )
+
+    widget.setFixedWidth(240)
+    widget.refresh_description()
+    assert not widget.toggle_button.isHidden()
+    assert widget.label.text().endswith("…")
+
+    widget.setFixedWidth(wide_width)
+    widget.set_expanded(True)
+    assert widget.label.text() == description
+    widget.close()
+    widget.deleteLater()
+    QW.QApplication.processEvents()
+    assert app is not None
+
+
+def test_plugin_very_long_description_scrolls_only_when_expanded():
+    """Very long descriptions should use an internal scrollbar only when expanded."""
+    description = " ".join(["Very long plugin description for scrollbar testing."] * 80)
+
+    with datalab_test_app_context(console=False):
+        widget = _create_plugin_description_widget(
+            "Very Long Description Test", description, width=260
+        )
+
+        scroll_area = widget.description_widget.scroll_area
+        collapsed_height = scroll_area.height()
+        assert scroll_area.verticalScrollBarPolicy() == QC.Qt.ScrollBarAlwaysOff
+        assert widget.desc_label.text().endswith("…")
+
+        widget.description_widget.set_expanded(True)
+        QW.QApplication.processEvents()
+        assert scroll_area.verticalScrollBarPolicy() == QC.Qt.ScrollBarAsNeeded
+        assert scroll_area.height() > collapsed_height
+
+        widget.description_widget.set_expanded(False)
+        QW.QApplication.processEvents()
+        assert scroll_area.verticalScrollBarPolicy() == QC.Qt.ScrollBarAlwaysOff
+        assert scroll_area.height() == collapsed_height
+        widget.close()
+        widget.deleteLater()
+        QW.QApplication.processEvents()
+
+
+def test_failed_plugin_description_uses_same_expand_collapse_behavior():
+    """Failed plugins should use the same truncated/expanded display behavior."""
+    traceback_text = "\n".join(
+        [
+            f"Traceback line {index}: import failure in plugin loading."
+            for index in range(80)
+        ]
+    )
+    failed_info = FailedPluginInfo(
+        name="bad_plugin.py",
+        filepath="C:/plugins/bad_plugin.py",
+        traceback=traceback_text,
+    )
+
+    with datalab_test_app_context(console=False):
+        widget = FailedPluginInfoWidget(failed_info)
+        widget.setFixedWidth(260)
+        widget.show()
+        widget.description_widget.refresh_description()
+        QW.QApplication.processEvents()
+
+        scroll_area = widget.description_widget.scroll_area
+        collapsed_height = scroll_area.height()
+        assert widget.description_widget.toggle_button.isVisible()
+        assert widget.desc_label.text().endswith("…")
+        assert scroll_area.verticalScrollBarPolicy() == QC.Qt.ScrollBarAlwaysOff
+
+        widget.description_widget.set_expanded(True)
+        QW.QApplication.processEvents()
+        assert not widget.desc_label.text().endswith("…")
+        assert scroll_area.verticalScrollBarPolicy() == QC.Qt.ScrollBarAsNeeded
+        assert scroll_area.height() > collapsed_height
+
+        widget.close()
+        widget.deleteLater()
+        QW.QApplication.processEvents()

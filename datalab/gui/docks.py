@@ -440,7 +440,7 @@ class DockablePlotWidget(DockableWidget):
         self.update_color_mode()
         plot = self.plotwidget.get_plot()
         canvas = plot.canvas()
-        canvas.setFrameStyle(canvas.Plain | canvas.NoFrame)
+        canvas.setFrameStyle(QW.QFrame.Plain | QW.QFrame.NoFrame)
         plot.SIG_ITEMS_CHANGED.connect(self.update_watermark)
 
     def update_color_mode(self) -> None:

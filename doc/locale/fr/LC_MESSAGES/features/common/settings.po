@@ -74,14 +74,13 @@ msgid "**Third-party plugins**"
 msgstr "**Plugins tiers**"
 
 msgid "Enable or disable third-party plugins immediately. Changes are applied without restarting DataLab. When disabled, third-party plugins are not discovered or loaded."
-msgstr ""
+msgstr "Activer ou désactiver immédiatement les plugins tiers. Les modifications sont appliquées sans redémarrer DataLab. Lorsqu'ils sont désactivés, les plugins tiers ne sont ni détectés ni chargés."
 
 msgid "**Plugins path**"
 msgstr "**Chemin des plugins**"
 
-#, fuzzy
 msgid "Specify the directory path where DataLab should look for third-party plugins. DataLab will also discover plugins in your PYTHONPATH. To enable or disable individual plugins, use the ``Plugins > Configure plugins...`` menu action. DataLab then proposes reloading plugins automatically."
-msgstr "Pour activer ou désactiver des plugins individuellement, utilisez l'action de menu ``Plugins > Configure plugins...``. DataLab propose ensuite de recharger automatiquement les plugins."
+msgstr "Indiquer le répertoire dans lequel DataLab doit rechercher les plugins tiers. DataLab détectera également les plugins présents dans votre PYTHONPATH. Pour activer ou désactiver des plugins individuellement, utilisez l'action de menu ``Plugins > Configurer les plugins...``. DataLab proposera ensuite de recharger automatiquement les plugins."
 
 msgid "Processing"
 msgstr "Traitement"
@@ -467,4 +466,3 @@ msgstr "**Arguments de l'éditeur externe**"
 
 msgid "Command-line arguments to pass to the external editor."
 msgstr "Arguments de ligne de commande à passer à l'éditeur externe."
-

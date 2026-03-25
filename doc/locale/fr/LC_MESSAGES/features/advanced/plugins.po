@@ -16,7 +16,7 @@ msgstr ""
 "Generated-By: Babel 2.18.0\n"
 
 msgid "Plugin system for DataLab, the open-source scientific data analysis and visualization platform"
-msgstr "Systeme de plugins de DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
+msgstr "Système de plugins de DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
 
 msgid "DataLab, plugin, processing, input/output, HDF5, file format, data analysis, visualization, scientific, open-source, platform"
 msgstr "DataLab, plugin, traitement, entrée/sortie, HDF5, format de fichier, analyse de données, visualisation, scientifique, open-source, plateforme"
@@ -91,10 +91,10 @@ msgid "The **Plugins** menu provides two dedicated actions:"
 msgstr "Le menu **Plugins** propose deux actions dédiées :"
 
 msgid "**Configure plugins...** Opens the plugin configuration dialog where you can enable or disable plugins individually. After saving changes, DataLab can reload plugins immediately without restarting the application."
-msgstr "**Configure plugins...** Ouvre la boîte de dialogue de configuration des plugins, où vous pouvez activer ou désactiver les plugins individuellement. Après enregistrement des changements, DataLab peut recharger immédiatement les plugins sans redémarrer l'application."
+msgstr "**Configurer les plugins...** Ouvre la boîte de dialogue de configuration des plugins, où vous pouvez activer ou désactiver les plugins individuellement. Après enregistrement des modifications, DataLab peut recharger immédiatement les plugins sans redémarrer l'application."
 
 msgid "**Reload plugins** Reloads plugin modules from disk without restarting DataLab."
-msgstr "**Reload plugins** Recharge les modules de plugins depuis le disque sans redémarrer DataLab."
+msgstr "**Recharger les plugins** Recharge les modules de plugins depuis le disque sans redémarrer DataLab."
 
 msgid "When reloading plugins, DataLab performs the following steps:"
 msgstr "Lors du rechargement des plugins, DataLab effectue les étapes suivantes :"
@@ -445,4 +445,3 @@ msgstr "Instancier et obtenir les plugins disponibles"
 
 msgid "List of available plugins (as instances)"
 msgstr "Liste des plugins disponibles (en tant qu'instances)"
-

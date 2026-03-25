@@ -4,9 +4,7 @@ class {class_name}(PluginBase):
     PLUGIN_INFO = PluginInfo(
         name="{plugin_name}",
         version="1.0.0",
-        description=(
-            "{long_description}"
-        ),
+        description={long_description},
     )
 
     def test_action(self):

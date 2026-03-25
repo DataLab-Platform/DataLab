@@ -69,7 +69,6 @@ def _create_description_scroll_area(widget: QW.QWidget) -> QW.QScrollArea:
     container_layout.setContentsMargins(0, 0, 0, 0)
     container_layout.setSpacing(0)
     container_layout.addWidget(widget)
-    container_layout.addStretch()
     container.setLayout(container_layout)
 
     scroll_area = QW.QScrollArea()
@@ -126,6 +125,194 @@ def _create_description_container(
     desc_scroll.setMaximumHeight(60)
     desc_container_layout.addWidget(desc_scroll)
     return desc_container, desc_scroll
+
+
+class ExpandableDescriptionWidget(QW.QWidget):
+    """Description widget that truncates on collapse and expands to content height."""
+
+    toggled = QC.Signal(bool)
+
+    collapsed_line_count = 3
+    expanded_height_ratio = 0.35
+    expanded_min_factor = 2
+
+    def __init__(
+        self,
+        description: str,
+        parent: QW.QWidget = None,
+        *,
+        text_interaction_flags: QC.Qt.TextInteractionFlags = QC.Qt.NoTextInteraction,
+        label_font: QG.QFont | None = None,
+    ) -> None:
+        super().__init__(parent)
+        self._description = description
+        self._expanded = False
+
+        layout = QW.QVBoxLayout()
+        layout.setContentsMargins(20, 0, 0, 0)
+        layout.setSpacing(0)
+        self.setLayout(layout)
+
+        self.label = QW.QLabel()
+        self.label.setAlignment(QC.Qt.AlignLeft | QC.Qt.AlignTop)
+        self.label.setSizePolicy(QW.QSizePolicy.Expanding, QW.QSizePolicy.Fixed)
+        self.label.setTextInteractionFlags(text_interaction_flags)
+        if label_font is not None:
+            self.label.setFont(label_font)
+        _apply_subdued_color(self.label)
+
+        self.scroll_area = _create_description_scroll_area(self.label)
+        self.scroll_area.setVerticalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
+        layout.addWidget(self.scroll_area)
+
+        self.toggle_button = _create_expand_toggle_button(self._toggle_description)
+        layout.addWidget(self.toggle_button)
+
+        QC.QTimer.singleShot(0, self.refresh_description)
+
+    def resizeEvent(self, event: QG.QResizeEvent) -> None:  # pylint: disable=invalid-name
+        """Refresh truncation when the available width changes."""
+        super().resizeEvent(event)
+        self.refresh_description()
+
+    def showEvent(self, event: QG.QShowEvent) -> None:  # pylint: disable=invalid-name
+        """Refresh after first layout pass to use the actual widget width."""
+        super().showEvent(event)
+        QC.QTimer.singleShot(0, self.refresh_description)
+
+    def _get_available_width(self) -> int:
+        """Return the effective text width inside the widget."""
+        margins = self.layout().contentsMargins()
+        width = self.width() - margins.left() - margins.right()
+        if width <= 0:
+            width = self.label.width()
+        if width <= 0:
+            width = 400
+        return width
+
+    def _get_line_layout(self, width: int) -> tuple[list[tuple[int, int, int]], int]:
+        """Return wrapped line metadata and total text height for a given width."""
+        layout = QG.QTextLayout(self._description, self.label.font())
+        text_option = QG.QTextOption()
+        text_option.setWrapMode(QG.QTextOption.WrapAtWordBoundaryOrAnywhere)
+        layout.setTextOption(text_option)
+
+        line_data: list[tuple[int, int, int]] = []
+        total_height = 0
+        layout.beginLayout()
+        while True:
+            line = layout.createLine()
+            if not line.isValid():
+                break
+            line.setLineWidth(width)
+            line.setPosition(QC.QPointF(0, total_height))
+            line_height = max(1, int(round(line.height())))
+            line_data.append((line.textStart(), line.textLength(), line_height))
+            total_height += line_height
+        layout.endLayout()
+
+        if not line_data:
+            line_height = self.label.fontMetrics().lineSpacing()
+            return [(0, len(self._description), line_height)], line_height
+        return line_data, total_height
+
+    def _build_collapsed_text(
+        self, width: int, line_data: list[tuple[int, int, int]]
+    ) -> str:
+        """Build the truncated multi-line text shown in collapsed mode."""
+        if len(line_data) <= self.collapsed_line_count:
+            return self._description
+
+        lines: list[str] = []
+        for start, length, _height in line_data[: self.collapsed_line_count - 1]:
+            lines.append(self._description[start : start + length].rstrip())
+
+        last_visible_start = line_data[self.collapsed_line_count - 1][0]
+        remaining_text = " ".join(self._description[last_visible_start:].split())
+        elided_last_line = self.label.fontMetrics().elidedText(
+            remaining_text, QC.Qt.ElideRight, width
+        )
+        lines.append(elided_last_line)
+        return "\n".join(lines)
+
+    def refresh_description(self) -> None:
+        """Update toggle visibility, displayed text, and label height."""
+        width = self._get_available_width()
+        line_data, total_height = self._get_line_layout(width)
+        needs_toggle = self.needs_toggle_for_width(width)
+        collapsed_height = sum(
+            height for _start, _length, height in line_data[: self.collapsed_line_count]
+        )
+        if not collapsed_height:
+            collapsed_height = total_height
+
+        self.toggle_button.setVisible(needs_toggle)
+        if not needs_toggle:
+            self._expanded = False
+            self.label.setWordWrap(True)
+            self.label.setText(self._description)
+            self.label.setFixedHeight(total_height)
+            self.scroll_area.setFixedHeight(total_height)
+            self.scroll_area.setVerticalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
+            self.updateGeometry()
+            return
+
+        if self._expanded:
+            self.label.setWordWrap(True)
+            self.label.setText(self._description)
+            self.label.setFixedHeight(total_height)
+            max_height = self._get_expanded_max_height(collapsed_height)
+            self.scroll_area.setFixedHeight(min(total_height, max_height))
+            if total_height > max_height:
+                self.scroll_area.setVerticalScrollBarPolicy(QC.Qt.ScrollBarAsNeeded)
+            else:
+                self.scroll_area.setVerticalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
+            self.scroll_area.verticalScrollBar().setValue(0)
+            self.toggle_button.setText("\u25b2 " + _("Show less"))
+            self.updateGeometry()
+            return
+
+        collapsed_text = self._build_collapsed_text(width, line_data)
+        self.label.setWordWrap(False)
+        self.label.setText(collapsed_text)
+        self.label.setFixedHeight(collapsed_height)
+        self.scroll_area.setFixedHeight(collapsed_height)
+        self.scroll_area.setVerticalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
+        self.scroll_area.verticalScrollBar().setValue(0)
+        self.toggle_button.setText("\u25bc " + _("Show more"))
+        self.updateGeometry()
+
+    def needs_toggle_for_width(self, width: int) -> bool:
+        """Return whether the text would need an expand/collapse toggle."""
+        line_data, _total_height = self._get_line_layout(width)
+        return len(line_data) > self.collapsed_line_count
+
+    def _get_expanded_max_height(self, collapsed_height: int) -> int:
+        """Return the maximum height allocated to expanded descriptions."""
+        minimum_height = max(
+            collapsed_height * self.expanded_min_factor,
+            collapsed_height,
+        )
+        window = self.window()
+        if window is None or window.height() <= 0:
+            return minimum_height
+        proportional_height = int(window.height() * self.expanded_height_ratio)
+        return max(minimum_height, proportional_height)
+
+    def is_expanded(self) -> bool:
+        """Return the current expanded state."""
+        return self._expanded
+
+    def set_expanded(self, expanded: bool) -> None:
+        """Set the expanded state and refresh the widget."""
+        self._expanded = expanded
+        self.refresh_description()
+
+    def _toggle_description(self) -> None:
+        """Toggle between collapsed and expanded description states."""
+        self._expanded = not self._expanded
+        self.refresh_description()
+        self.toggled.emit(self._expanded)
 
 
 class PluginState:
@@ -210,26 +397,16 @@ class PluginInfoWidget(QW.QWidget):
         description = self.plugin_class.PLUGIN_INFO.description or _(
             "No description available"
         )
-        self.desc_label = QW.QLabel(description)
-        self.desc_label.setWordWrap(True)
-        self.desc_label.setAlignment(QC.Qt.AlignLeft | QC.Qt.AlignTop)
-        _apply_subdued_color(self.desc_label)
+        self.description_widget = ExpandableDescriptionWidget(description)
+        self.description_widget.toggled.connect(self._sync_description_expanded_state)
+        self.desc_label = self.description_widget.label
+        self.toggle_button = self.description_widget.toggle_button
+        self._toggle_btn = self.toggle_button
+        return self.description_widget
 
-        if len(description) <= 100:
-            desc_container = QW.QWidget()
-            desc_container_layout = QW.QVBoxLayout()
-            desc_container_layout.setContentsMargins(20, 0, 0, 0)
-            desc_container_layout.setSpacing(0)
-            desc_container_layout.addWidget(self.desc_label)
-            desc_container.setLayout(desc_container_layout)
-            return desc_container
-
-        desc_container, self._desc_scroll = _create_description_container(
-            self.desc_label
-        )
-        self._toggle_btn = _create_expand_toggle_button(self._toggle_description)
-        desc_container.layout().addWidget(self._toggle_btn)
-        return desc_container
+    def _sync_description_expanded_state(self, expanded: bool) -> None:
+        """Keep the legacy expanded state in sync with the description widget."""
+        self._expanded = expanded
 
     @staticmethod
     def _create_separator() -> QW.QFrame:
@@ -241,13 +418,8 @@ class PluginInfoWidget(QW.QWidget):
 
     def _toggle_description(self):
         """Toggle between collapsed and expanded description"""
-        self._expanded = not self._expanded
-        if self._expanded:
-            self._desc_scroll.setMaximumHeight(150)
-            self._toggle_btn.setText("\u25b2 " + _("Show less"))
-        else:
-            self._desc_scroll.setMaximumHeight(60)
-            self._toggle_btn.setText("\u25bc " + _("Show more"))
+        self.description_widget.set_expanded(not self.description_widget.is_expanded())
+        self._expanded = self.description_widget.is_expanded()
 
     def is_enabled(self) -> bool:
         """Check if plugin is enabled via checkbox
@@ -268,9 +440,9 @@ class PluginInfoWidget(QW.QWidget):
     def matches_filter(self, filter_mode: str) -> bool:
         """Return whether widget should be visible for current filter."""
         if filter_mode == FILTER_ENABLED:
-            return self.is_enabled()
+            return self.state == PluginState.ENABLED
         if filter_mode == FILTER_DISABLED:
-            return not self.is_enabled()
+            return self.state == PluginState.DISABLED
         if filter_mode == FILTER_ERRORS:
             return False
         return True
@@ -331,30 +503,20 @@ class FailedPluginInfoWidget(QW.QWidget):
         if failed_info.traceback:
             description += "\n\n" + failed_info.traceback.strip()
 
-        desc_label = QW.QLabel(description)
-        desc_label.setWordWrap(True)
-        desc_label.setAlignment(QC.Qt.AlignLeft | QC.Qt.AlignTop)
-        desc_label.setTextInteractionFlags(QC.Qt.TextSelectableByMouse)
-        _apply_subdued_color(desc_label)
-
-        mono_font = QG.QFont("Consolas", desc_label.font().pointSize() - 1)
-        desc_label.setFont(mono_font)
-
-        desc_container, self._desc_scroll = _create_description_container(desc_label)
-        self._desc_scroll.setHorizontalScrollBarPolicy(QC.Qt.ScrollBarAsNeeded)
-        self._toggle_btn = _create_expand_toggle_button(self._toggle_description)
-        desc_container.layout().addWidget(self._toggle_btn)
-        return desc_container
+        mono_font = QG.QFont("Consolas", self.font().pointSize() - 1)
+        self.description_widget = ExpandableDescriptionWidget(
+            description,
+            text_interaction_flags=QC.Qt.TextSelectableByMouse,
+            label_font=mono_font,
+        )
+        self.desc_label = self.description_widget.label
+        self._toggle_btn = self.description_widget.toggle_button
+        return self.description_widget
 
     def _toggle_description(self):
         """Toggle between collapsed and expanded description"""
-        self._expanded = not self._expanded
-        if self._expanded:
-            self._desc_scroll.setMaximumHeight(200)
-            self._toggle_btn.setText("\u25b2 " + _("Show less"))
-        else:
-            self._desc_scroll.setMaximumHeight(60)
-            self._toggle_btn.setText("\u25bc " + _("Show more"))
+        self.description_widget.set_expanded(not self.description_widget.is_expanded())
+        self._expanded = self.description_widget.is_expanded()
 
     @staticmethod
     def matches_filter(filter_mode: str) -> bool:
@@ -433,7 +595,7 @@ class PluginConfigDialog(QW.QDialog):
         controls_layout = QW.QHBoxLayout()
         self.toggle_all_checkbox = QW.QCheckBox(_("Enable all plugins"))
         self.toggle_all_checkbox.setTristate(True)
-        self.toggle_all_checkbox.toggled.connect(self._set_all_enabled)
+        self.toggle_all_checkbox.toggled.connect(self.set_all_enabled)
         controls_layout.addWidget(self.toggle_all_checkbox)
 
         controls_layout.addStretch()
@@ -462,7 +624,7 @@ class PluginConfigDialog(QW.QDialog):
         scroll.setWidget(container)
         return scroll
 
-    def _set_all_enabled(self, enabled: bool):
+    def set_all_enabled(self, enabled: bool) -> None:
         """Set all plugin checkboxes to the same state."""
         for widget in self.plugin_widgets:
             widget.checkbox.blockSignals(True)

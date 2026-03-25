@@ -441,6 +441,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         if is_new:
             self.__submenus[key] = menu = QW.QMenu(title)
+            if self.__category_in_progress is ActionCategory.PLUGINS:
+                menu.setStyleSheet("QMenu { menu-scrollable: 1; }")
             if icon_name:
                 menu.setIcon(get_icon(icon_name))
             # Store reference to menu if requested
@@ -448,6 +450,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 setattr(self, store_ref, menu)
         else:
             menu = self.__submenus[key]
+            if self.__category_in_progress is ActionCategory.PLUGINS:
+                menu.setStyleSheet("QMenu { menu-scrollable: 1; }")
             # When reusing an existing submenu (e.g. after re-running
             # plugin action creation), clear previous actions so that the
             # submenu contents reflect the latest definitions.
