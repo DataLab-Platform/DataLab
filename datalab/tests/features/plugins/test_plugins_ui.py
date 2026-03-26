@@ -270,17 +270,17 @@ def test_plugin_long_description():
         scroll_area = widget.description_widget.scroll_area
 
         assert toggle_button.isVisible()
-        assert desc_label.text().endswith("…")
+        assert not widget.description_widget.is_expanded()
         assert scroll_area.verticalScrollBarPolicy() == QC.Qt.ScrollBarAlwaysOff
 
         toggle_description()
         assert getattr(widget, "_expanded") is True
-        assert not desc_label.text().endswith("…")
+        assert widget.description_widget.is_expanded()
         expanded_height = desc_label.height()
 
         toggle_description()
         assert getattr(widget, "_expanded") is False
-        assert desc_label.text().endswith("…")
+        assert not widget.description_widget.is_expanded()
         assert desc_label.height() < expanded_height
         assert scroll_area.verticalScrollBarPolicy() == QC.Qt.ScrollBarAlwaysOff
         widget.close()
@@ -310,11 +310,11 @@ def test_plugin_description_toggle_depends_on_dialog_width():
     widget.setFixedWidth(240)
     widget.refresh_description()
     assert not widget.toggle_button.isHidden()
-    assert widget.label.text().endswith("…")
+    assert not widget.is_expanded()
 
     widget.setFixedWidth(wide_width)
     widget.set_expanded(True)
-    assert widget.label.text() == description
+    assert widget.label.toPlainText() == description
     widget.close()
     widget.deleteLater()
     QW.QApplication.processEvents()
@@ -333,7 +333,7 @@ def test_plugin_very_long_description_scrolls_only_when_expanded():
         scroll_area = widget.description_widget.scroll_area
         collapsed_height = scroll_area.height()
         assert scroll_area.verticalScrollBarPolicy() == QC.Qt.ScrollBarAlwaysOff
-        assert widget.desc_label.text().endswith("…")
+        assert not widget.description_widget.is_expanded()
 
         widget.description_widget.set_expanded(True)
         QW.QApplication.processEvents()
@@ -373,12 +373,12 @@ def test_failed_plugin_description_uses_same_expand_collapse_behavior():
         scroll_area = widget.description_widget.scroll_area
         collapsed_height = scroll_area.height()
         assert widget.description_widget.toggle_button.isVisible()
-        assert widget.desc_label.text().endswith("…")
+        assert not widget.description_widget.is_expanded()
         assert scroll_area.verticalScrollBarPolicy() == QC.Qt.ScrollBarAlwaysOff
 
         widget.description_widget.set_expanded(True)
         QW.QApplication.processEvents()
-        assert not widget.desc_label.text().endswith("…")
+        assert widget.description_widget.is_expanded()
         assert scroll_area.verticalScrollBarPolicy() == QC.Qt.ScrollBarAsNeeded
         assert scroll_area.height() > collapsed_height
 

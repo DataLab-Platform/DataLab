@@ -208,6 +208,10 @@ class ActionCategory(enum.Enum):
     PLUGINS = enum.auto()  # for plugins actions
 
 
+#: Stylesheet enabling scrollable menus (used for plugin submenus)
+SCROLLABLE_MENU_STYLESHEET = "QMenu { menu-scrollable: 1; }"
+
+
 class BaseActionHandler(metaclass=abc.ABCMeta):
     """Object handling panel GUI interactions: actions, menus, ...
 
@@ -442,7 +446,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         if is_new:
             self.__submenus[key] = menu = QW.QMenu(title)
             if self.__category_in_progress is ActionCategory.PLUGINS:
-                menu.setStyleSheet("QMenu { menu-scrollable: 1; }")
+                menu.setStyleSheet(SCROLLABLE_MENU_STYLESHEET)
             if icon_name:
                 menu.setIcon(get_icon(icon_name))
             # Store reference to menu if requested
@@ -451,7 +455,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         else:
             menu = self.__submenus[key]
             if self.__category_in_progress is ActionCategory.PLUGINS:
-                menu.setStyleSheet("QMenu { menu-scrollable: 1; }")
+                menu.setStyleSheet(SCROLLABLE_MENU_STYLESHEET)
             # When reusing an existing submenu (e.g. after re-running
             # plugin action creation), clear previous actions so that the
             # submenu contents reflect the latest definitions.

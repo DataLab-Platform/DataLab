@@ -361,7 +361,7 @@ def create_manual_test_plugin_dataset(
             {
                 "{class_name}": "PluginTestManyActions",
                 "{plugin_name}": "Plugin Test: Many Actions",
-                "{menu_name}": "📋 Test Menu with Many Actions",
+                "{menu_name}": "Test Menu with Many Actions",
                 "{action_prefix}": "Test Action",
                 "{test_code_1}": "print('Action 1 triggered')",
                 "{test_code_2}": "print('Action 2 triggered')",
@@ -386,7 +386,7 @@ def create_manual_test_plugin_dataset(
                     "bars, and configuration dialogs without breaking the UI layout. "
                     * 50
                 ),
-                "{action_name}": "📄 Test Long Description",
+                "{action_name}": "Test Long Description",
                 "{test_code}": "print('Long description plugin action triggered')",
             },
         ),
@@ -420,13 +420,13 @@ def create_manual_test_plugin_dataset(
             {
                 "{class_name}": "PluginTestNestedMenus",
                 "{plugin_name}": "Plugin Test: Nested Menus",
-                "{menu_level_1}": "📁 Level 1 Menu",
+                "{menu_level_1}": "Level 1 Menu",
                 "{action_level_1}": "Action at Level 1",
                 "{test_code_1}": "print('Level 1 action triggered')",
-                "{menu_level_2}": "📁 Level 2 Submenu",
+                "{menu_level_2}": "Level 2 Submenu",
                 "{action_level_2}": "Action at Level 2",
                 "{test_code_2}": "print('Level 2 action triggered')",
-                "{menu_level_3}": "📁 Level 3 Submenu",
+                "{menu_level_3}": "Level 3 Submenu",
                 "{action_level_3}": "Action at Level 3",
                 "{test_code_3}": "print('Level 3 action triggered')",
             },

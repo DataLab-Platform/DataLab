@@ -17,85 +17,51 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from datalab.config import Conf, _
+from datalab.config import PLUGIN_ERROR_COLOR, PLUGIN_OK_COLOR, Conf, _
 from datalab.plugins import PluginRegistry
+from datalab.widgets.expandable import (
+    ExpandableDescriptionWidget,
+    apply_palette_color,
+    apply_subdued_color,
+)
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
     from datalab.plugins import FailedPluginInfo, PluginBase
 
 
-STATUS_ENABLED_COLOR = QG.QColor("#2ecc71")
-STATUS_DISABLED_COLOR = QG.QColor("#e74c3c")
+# --- Constants -------------------------------------------------------------------
 
+#: Color for the "Active" status label
+STATUS_ENABLED_COLOR = QG.QColor(PLUGIN_OK_COLOR)
+
+#: Color for the "Disabled" / error status label
+STATUS_DISABLED_COLOR = QG.QColor(PLUGIN_ERROR_COLOR)
+
+#: Filter identifiers for the plugin list
 FILTER_ALL = "all"
 FILTER_ENABLED = "enabled"
 FILTER_DISABLED = "disabled"
 FILTER_ERRORS = "errors"
 
+#: Content margins for individual plugin rows (left, top, right, bottom)
+PLUGIN_ROW_MARGINS: tuple[int, int, int, int] = (5, 5, 5, 5)
 
-def _apply_palette_color(widget: QW.QWidget, color: QG.QColor) -> None:
-    """Apply a foreground color to a widget via its palette (theme-safe).
+#: Spacing between metadata items (version, state) in the top row
+META_SPACING: int = 12
 
-    Args:
-        widget: Target widget
-        color: Foreground color to apply
-    """
-    palette = widget.palette()
-    palette.setColor(QG.QPalette.WindowText, color)
-    widget.setPalette(palette)
+#: Dialog minimum dimensions
+DIALOG_MIN_WIDTH: int = 600
+DIALOG_MIN_HEIGHT: int = 400
 
+#: Title font point-size increment relative to default
+TITLE_FONT_SIZE_DELTA: int = 4
 
-def _apply_subdued_color(widget: QW.QWidget) -> None:
-    """Apply a subdued/secondary text color that works in both light and dark themes.
-
-    Args:
-        widget: Target widget
-    """
-    app_palette = QW.QApplication.instance().palette()
-    text_color = app_palette.color(QG.QPalette.Text)
-    # Blend the text color towards mid-tone for a subdued effect
-    subdued = QG.QColor(text_color)
-    subdued.setAlpha(150)
-    palette = widget.palette()
-    palette.setColor(QG.QPalette.WindowText, subdued)
-    widget.setPalette(palette)
+#: Font point-size decrement for monospace traceback labels
+MONO_FONT_SIZE_DELTA: int = 1
 
 
-def _create_description_scroll_area(widget: QW.QWidget) -> QW.QScrollArea:
-    """Create a description scroll area with consistent spacing behavior."""
-    container = QW.QWidget()
-    container_layout = QW.QVBoxLayout()
-    container_layout.setContentsMargins(0, 0, 0, 0)
-    container_layout.setSpacing(0)
-    container_layout.addWidget(widget)
-    container.setLayout(container_layout)
-
-    scroll_area = QW.QScrollArea()
-    scroll_area.setWidgetResizable(True)
-    scroll_area.setHorizontalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
-    scroll_area.setFrameShape(QW.QFrame.NoFrame)
-    scroll_area.setWidget(container)
-    scroll_area.setStyleSheet("QScrollArea { border: none; background: transparent; }")
-    return scroll_area
-
-
-def _create_expand_toggle_button(callback) -> QW.QPushButton:
-    """Create a theme-aware expand/collapse button."""
-    button = QW.QPushButton("\u25bc " + _("Show more"))
-    button.setFlat(True)
-    button.setCursor(QC.Qt.PointingHandCursor)
-    link_color = QW.QApplication.instance().palette().color(QG.QPalette.Link)
-    button.setStyleSheet(
-        f"QPushButton {{ color: {link_color.name()}; border: none; "
-        "text-align: left; padding: 0; } "
-        "QPushButton:hover { text-decoration: underline; }"
-    )
-    toggle_font = button.font()
-    toggle_font.setPointSize(toggle_font.pointSize() - 1)
-    button.setFont(toggle_font)
-    button.clicked.connect(callback)
-    return button
+# --- Helpers ---------------------------------------------------------------------
 
 
 def _create_status_label(text: str, color: QG.QColor | None = None) -> QW.QLabel:
@@ -105,214 +71,10 @@ def _create_status_label(text: str, color: QG.QColor | None = None) -> QW.QLabel
     status_font.setBold(True)
     status_label.setFont(status_font)
     if color is None:
-        _apply_subdued_color(status_label)
+        apply_subdued_color(status_label)
     else:
-        _apply_palette_color(status_label, color)
+        apply_palette_color(status_label, color)
     return status_label
-
-
-def _create_description_container(
-    description_label: QW.QLabel,
-) -> tuple[QW.QWidget, QW.QScrollArea]:
-    """Create the indented description container used by plugin widgets."""
-    desc_container = QW.QWidget()
-    desc_container_layout = QW.QVBoxLayout()
-    desc_container_layout.setContentsMargins(20, 0, 0, 0)
-    desc_container_layout.setSpacing(0)
-    desc_container.setLayout(desc_container_layout)
-
-    desc_scroll = _create_description_scroll_area(description_label)
-    desc_scroll.setMaximumHeight(60)
-    desc_container_layout.addWidget(desc_scroll)
-    return desc_container, desc_scroll
-
-
-class ExpandableDescriptionWidget(QW.QWidget):
-    """Description widget that truncates on collapse and expands to content height."""
-
-    toggled = QC.Signal(bool)
-
-    collapsed_line_count = 3
-    expanded_height_ratio = 0.35
-    expanded_min_factor = 2
-
-    def __init__(
-        self,
-        description: str,
-        parent: QW.QWidget = None,
-        *,
-        text_interaction_flags: QC.Qt.TextInteractionFlags = QC.Qt.NoTextInteraction,
-        label_font: QG.QFont | None = None,
-    ) -> None:
-        super().__init__(parent)
-        self._description = description
-        self._expanded = False
-
-        layout = QW.QVBoxLayout()
-        layout.setContentsMargins(20, 0, 0, 0)
-        layout.setSpacing(0)
-        self.setLayout(layout)
-
-        self.label = QW.QLabel()
-        self.label.setAlignment(QC.Qt.AlignLeft | QC.Qt.AlignTop)
-        self.label.setSizePolicy(QW.QSizePolicy.Expanding, QW.QSizePolicy.Fixed)
-        self.label.setTextInteractionFlags(text_interaction_flags)
-        if label_font is not None:
-            self.label.setFont(label_font)
-        _apply_subdued_color(self.label)
-
-        self.scroll_area = _create_description_scroll_area(self.label)
-        self.scroll_area.setVerticalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
-        layout.addWidget(self.scroll_area)
-
-        self.toggle_button = _create_expand_toggle_button(self._toggle_description)
-        layout.addWidget(self.toggle_button)
-
-        QC.QTimer.singleShot(0, self.refresh_description)
-
-    def resizeEvent(self, event: QG.QResizeEvent) -> None:  # pylint: disable=invalid-name
-        """Refresh truncation when the available width changes."""
-        super().resizeEvent(event)
-        self.refresh_description()
-
-    def showEvent(self, event: QG.QShowEvent) -> None:  # pylint: disable=invalid-name
-        """Refresh after first layout pass to use the actual widget width."""
-        super().showEvent(event)
-        QC.QTimer.singleShot(0, self.refresh_description)
-
-    def _get_available_width(self) -> int:
-        """Return the effective text width inside the widget."""
-        margins = self.layout().contentsMargins()
-        width = self.width() - margins.left() - margins.right()
-        if width <= 0:
-            width = self.label.width()
-        if width <= 0:
-            width = 400
-        return width
-
-    def _get_line_layout(self, width: int) -> tuple[list[tuple[int, int, int]], int]:
-        """Return wrapped line metadata and total text height for a given width."""
-        layout = QG.QTextLayout(self._description, self.label.font())
-        text_option = QG.QTextOption()
-        text_option.setWrapMode(QG.QTextOption.WrapAtWordBoundaryOrAnywhere)
-        layout.setTextOption(text_option)
-
-        line_data: list[tuple[int, int, int]] = []
-        total_height = 0
-        layout.beginLayout()
-        while True:
-            line = layout.createLine()
-            if not line.isValid():
-                break
-            line.setLineWidth(width)
-            line.setPosition(QC.QPointF(0, total_height))
-            line_height = max(1, int(round(line.height())))
-            line_data.append((line.textStart(), line.textLength(), line_height))
-            total_height += line_height
-        layout.endLayout()
-
-        if not line_data:
-            line_height = self.label.fontMetrics().lineSpacing()
-            return [(0, len(self._description), line_height)], line_height
-        return line_data, total_height
-
-    def _build_collapsed_text(
-        self, width: int, line_data: list[tuple[int, int, int]]
-    ) -> str:
-        """Build the truncated multi-line text shown in collapsed mode."""
-        if len(line_data) <= self.collapsed_line_count:
-            return self._description
-
-        lines: list[str] = []
-        for start, length, _height in line_data[: self.collapsed_line_count - 1]:
-            lines.append(self._description[start : start + length].rstrip())
-
-        last_visible_start = line_data[self.collapsed_line_count - 1][0]
-        remaining_text = " ".join(self._description[last_visible_start:].split())
-        elided_last_line = self.label.fontMetrics().elidedText(
-            remaining_text, QC.Qt.ElideRight, width
-        )
-        lines.append(elided_last_line)
-        return "\n".join(lines)
-
-    def refresh_description(self) -> None:
-        """Update toggle visibility, displayed text, and label height."""
-        width = self._get_available_width()
-        line_data, total_height = self._get_line_layout(width)
-        needs_toggle = self.needs_toggle_for_width(width)
-        collapsed_height = sum(
-            height for _start, _length, height in line_data[: self.collapsed_line_count]
-        )
-        if not collapsed_height:
-            collapsed_height = total_height
-
-        self.toggle_button.setVisible(needs_toggle)
-        if not needs_toggle:
-            self._expanded = False
-            self.label.setWordWrap(True)
-            self.label.setText(self._description)
-            self.label.setFixedHeight(total_height)
-            self.scroll_area.setFixedHeight(total_height)
-            self.scroll_area.setVerticalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
-            self.updateGeometry()
-            return
-
-        if self._expanded:
-            self.label.setWordWrap(True)
-            self.label.setText(self._description)
-            self.label.setFixedHeight(total_height)
-            max_height = self._get_expanded_max_height(collapsed_height)
-            self.scroll_area.setFixedHeight(min(total_height, max_height))
-            if total_height > max_height:
-                self.scroll_area.setVerticalScrollBarPolicy(QC.Qt.ScrollBarAsNeeded)
-            else:
-                self.scroll_area.setVerticalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
-            self.scroll_area.verticalScrollBar().setValue(0)
-            self.toggle_button.setText("\u25b2 " + _("Show less"))
-            self.updateGeometry()
-            return
-
-        collapsed_text = self._build_collapsed_text(width, line_data)
-        self.label.setWordWrap(False)
-        self.label.setText(collapsed_text)
-        self.label.setFixedHeight(collapsed_height)
-        self.scroll_area.setFixedHeight(collapsed_height)
-        self.scroll_area.setVerticalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
-        self.scroll_area.verticalScrollBar().setValue(0)
-        self.toggle_button.setText("\u25bc " + _("Show more"))
-        self.updateGeometry()
-
-    def needs_toggle_for_width(self, width: int) -> bool:
-        """Return whether the text would need an expand/collapse toggle."""
-        line_data, _total_height = self._get_line_layout(width)
-        return len(line_data) > self.collapsed_line_count
-
-    def _get_expanded_max_height(self, collapsed_height: int) -> int:
-        """Return the maximum height allocated to expanded descriptions."""
-        minimum_height = max(
-            collapsed_height * self.expanded_min_factor,
-            collapsed_height,
-        )
-        window = self.window()
-        if window is None or window.height() <= 0:
-            return minimum_height
-        proportional_height = int(window.height() * self.expanded_height_ratio)
-        return max(minimum_height, proportional_height)
-
-    def is_expanded(self) -> bool:
-        """Return the current expanded state."""
-        return self._expanded
-
-    def set_expanded(self, expanded: bool) -> None:
-        """Set the expanded state and refresh the widget."""
-        self._expanded = expanded
-        self.refresh_description()
-
-    def _toggle_description(self) -> None:
-        """Toggle between collapsed and expanded description states."""
-        self._expanded = not self._expanded
-        self.refresh_description()
-        self.toggled.emit(self._expanded)
 
 
 class PluginState:
@@ -346,10 +108,11 @@ class PluginInfoWidget(QW.QWidget):
         self.initial_enabled = enabled
         self.state = state
         self._expanded = False
+        self.setSizePolicy(QW.QSizePolicy.Preferred, QW.QSizePolicy.Maximum)
 
         # Main layout
         layout = QW.QVBoxLayout()
-        layout.setContentsMargins(5, 5, 5, 5)
+        layout.setContentsMargins(*PLUGIN_ROW_MARGINS)
         self.setLayout(layout)
 
         layout.addLayout(self._create_top_row(enabled, state))
@@ -373,9 +136,9 @@ class PluginInfoWidget(QW.QWidget):
         top_layout.addStretch()
 
         meta_layout = QW.QHBoxLayout()
-        meta_layout.setSpacing(12)
+        meta_layout.setSpacing(META_SPACING)
         version_label = QW.QLabel(f"v{self.plugin_class.PLUGIN_INFO.version}")
-        _apply_subdued_color(version_label)
+        apply_subdued_color(version_label)
         meta_layout.addWidget(version_label)
         meta_layout.addWidget(self._create_state_label(state))
         top_layout.addLayout(meta_layout)
@@ -464,10 +227,11 @@ class FailedPluginInfoWidget(QW.QWidget):
         """
         super().__init__(parent)
         self._expanded = False
+        self.setSizePolicy(QW.QSizePolicy.Preferred, QW.QSizePolicy.Maximum)
 
         # Main layout
         layout = QW.QVBoxLayout()
-        layout.setContentsMargins(5, 5, 5, 5)
+        layout.setContentsMargins(*PLUGIN_ROW_MARGINS)
         self.setLayout(layout)
 
         layout.addLayout(self._create_top_row(failed_info))
@@ -487,12 +251,12 @@ class FailedPluginInfoWidget(QW.QWidget):
         name_font = name_label.font()
         name_font.setBold(True)
         name_label.setFont(name_font)
-        _apply_subdued_color(name_label)
+        apply_subdued_color(name_label)
         top_layout.addWidget(name_label)
 
         top_layout.addStretch()
         meta_layout = QW.QHBoxLayout()
-        meta_layout.setSpacing(12)
+        meta_layout.setSpacing(META_SPACING)
         meta_layout.addWidget(_create_status_label("\u26a0 " + _("Import error")))
         top_layout.addLayout(meta_layout)
         return top_layout
@@ -503,7 +267,7 @@ class FailedPluginInfoWidget(QW.QWidget):
         if failed_info.traceback:
             description += "\n\n" + failed_info.traceback.strip()
 
-        mono_font = QG.QFont("Consolas", self.font().pointSize() - 1)
+        mono_font = QG.QFont("Consolas", self.font().pointSize() - MONO_FONT_SIZE_DELTA)
         self.description_widget = ExpandableDescriptionWidget(
             description,
             text_interaction_flags=QC.Qt.TextSelectableByMouse,
@@ -540,8 +304,8 @@ class PluginConfigDialog(QW.QDialog):
         self.failed_plugin_widgets: list[FailedPluginInfoWidget] = []
 
         self.setWindowTitle(_("Plugin Configuration"))
-        self.setMinimumWidth(600)
-        self.setMinimumHeight(400)
+        self.setMinimumWidth(DIALOG_MIN_WIDTH)
+        self.setMinimumHeight(DIALOG_MIN_HEIGHT)
 
         # Main layout
         layout = QW.QVBoxLayout()
@@ -568,10 +332,10 @@ class PluginConfigDialog(QW.QDialog):
         """Create the dialog title label."""
         title_label = QW.QLabel(_("Manage Plugins"))
         title_font = title_label.font()
-        title_font.setPointSize(title_font.pointSize() + 4)
+        title_font.setPointSize(title_font.pointSize() + TITLE_FONT_SIZE_DELTA)
         title_font.setBold(True)
         title_label.setFont(title_font)
-        _apply_palette_color(
+        apply_palette_color(
             title_label,
             QW.QApplication.instance().palette().color(QG.QPalette.WindowText),
         )
@@ -587,7 +351,7 @@ class PluginConfigDialog(QW.QDialog):
             )
         )
         info_label.setWordWrap(True)
-        _apply_subdued_color(info_label)
+        apply_subdued_color(info_label)
         return info_label
 
     def _create_controls_layout(self) -> QW.QHBoxLayout:

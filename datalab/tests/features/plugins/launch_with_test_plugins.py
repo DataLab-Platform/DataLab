@@ -83,14 +83,11 @@ def main():
         print("PLUGIN TEST SETUP COMPLETE")
         print("=" * 70)
         print("\nCreated plugins:")
-        print("  1. 📋 Many Actions       – dropdown menu with 5 actions")
-        print("  2. 📄 Long Description   – test 'Show more' and 'Show less'")
-        print("  3. ↔ Responsive Desc.   – resize Plugin Configuration dialog")
-        print("  4. 📁 Nested Menus       – 3-level nested submenus")
-        print(
-            f"  5. 🔢 {bulk_count} Auto Plugins    – "
-            "scrollbar in Settings > Plugins"
-        )
+        print("  1.  Many Actions       – dropdown menu with 5 actions")
+        print("  2.  Long Description   – test 'Show more' and 'Show less'")
+        print("  3.  Responsive Desc.   – resize Plugin Configuration dialog")
+        print("  4.  Nested Menus       – 3-level nested submenus")
+        print(f"  5.  {bulk_count} Auto Plugins    – scrollbar in Settings > Plugins")
         print("\nManual verification checklist:")
         print("  ✓ Open Plugins menu → see all plugin actions")
         print("  ✓ Open Settings > Plugins → verify scrollbar in plugin list")
