@@ -574,7 +574,7 @@ class ImageROIEditor(
     ICON_NAME = "roi_ima.svg"
     OBJ_NAME = _("image")
     ROI_ITEM_TYPES = (AnnotatedRectangle, AnnotatedCircle, AnnotatedPolygon)
-    ADDITIONAL_OPTIONS = {"show_itemlist": True, "show_contrast": False}
+    ADDITIONAL_OPTIONS = {"show_itemlist": True, "show_contrast": True}
 
     def get_obj_roi_class(self) -> type[ImageROI]:
         """Get object ROI class"""
