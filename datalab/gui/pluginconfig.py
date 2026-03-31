@@ -19,8 +19,8 @@ from qtpy import QtWidgets as QW
 
 from datalab.config import PLUGIN_ERROR_COLOR, PLUGIN_OK_COLOR, Conf, _
 from datalab.plugins import PluginRegistry
-from datalab.widgets.expandable import (
-    ExpandableDescriptionWidget,
+from datalab.widgets.expandabletext import (
+    ExpandableTextWidget,
     apply_palette_color,
     apply_subdued_color,
 )
@@ -160,7 +160,7 @@ class PluginInfoWidget(QW.QWidget):
         description = self.plugin_class.PLUGIN_INFO.description or _(
             "No description available"
         )
-        self.description_widget = ExpandableDescriptionWidget(description)
+        self.description_widget = ExpandableTextWidget(description)
         self.description_widget.toggled.connect(self._sync_description_expanded_state)
         self.desc_label = self.description_widget.label
         self.toggle_button = self.description_widget.toggle_button
@@ -268,7 +268,7 @@ class FailedPluginInfoWidget(QW.QWidget):
             description += "\n\n" + failed_info.traceback.strip()
 
         mono_font = QG.QFont("Consolas", self.font().pointSize() - MONO_FONT_SIZE_DELTA)
-        self.description_widget = ExpandableDescriptionWidget(
+        self.description_widget = ExpandableTextWidget(
             description,
             text_interaction_flags=QC.Qt.TextSelectableByMouse,
             label_font=mono_font,

@@ -1,7 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-Expandable description widget
+Expandable text widget
 -------------------------------
 
 Reusable widget that displays text with an expand/collapse toggle.
@@ -98,7 +98,7 @@ def _create_toggle_button(callback, text: str) -> QW.QPushButton:
 # --- Main widget -----------------------------------------------------------------
 
 
-class ExpandableDescriptionWidget(QW.QWidget):
+class ExpandableTextWidget(QW.QWidget):
     """Widget displaying text with an expand/collapse toggle.
 
     Clips to *collapsed_line_count* lines when collapsed and provides a

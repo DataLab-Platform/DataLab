@@ -11,7 +11,7 @@ from datalab.config import Conf
 from datalab.env import execenv
 from datalab.gui.actionhandler import ActionCategory
 from datalab.gui.pluginconfig import (
-    ExpandableDescriptionWidget,
+    ExpandableTextWidget,
     FailedPluginInfoWidget,
     PluginConfigDialog,
     PluginInfoWidget,
@@ -298,7 +298,7 @@ def test_plugin_description_toggle_depends_on_dialog_width():
         "character count alone."
     )
     app = QW.QApplication.instance() or QW.QApplication([])
-    widget = ExpandableDescriptionWidget(description)
+    widget = ExpandableTextWidget(description)
     assert widget.needs_toggle_for_width(240)
 
     wide_width = next(
