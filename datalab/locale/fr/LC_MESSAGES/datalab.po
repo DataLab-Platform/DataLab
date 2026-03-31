@@ -13,7 +13,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.18.0\n"
 
 msgid "Results"
 msgstr "Résultats"
@@ -723,6 +723,12 @@ msgstr " ou dans la documentation PDF."
 msgid "Choosing to ignore this message will prevent it from appearing again."
 msgstr "Ignorer ce message empêchera son affichage ultérieur."
 
+msgid "Plugins"
+msgstr "Plugins"
+
+msgid "Third-party plugins are disabled. Enable them in the Settings dialog to use this feature."
+msgstr "Les plugins tiers sont désactivés. Activez-les dans la boîte de dialogue des préférences pour utiliser cette fonctionnalité."
+
 #, python-format
 msgid "Welcome to %s!"
 msgstr "Bienvenue dans %s !"
@@ -784,6 +790,18 @@ msgstr "Afficher les titres des objets graphiques"
 msgid "Show or hide ROI and other graphical object titles or subtitles"
 msgstr "Afficher ou cacher les titres (et sous-titres) des régions d'intérêt et autres objets graphiques"
 
+msgid "Reload plugins"
+msgstr "Recharger les plugins"
+
+msgid "Reload third-party plugins from disk"
+msgstr "Recharger les plugins tiers depuis le disque"
+
+msgid "Configure plugins..."
+msgstr "Configurer les plugins..."
+
+msgid "Enable or disable plugins"
+msgstr "Activer ou désactiver les plugins"
+
 msgid "Signal Panel Toolbar"
 msgstr "Barre d'outils du panneau Signal"
 
@@ -828,9 +846,6 @@ msgstr "Traitement"
 
 msgid "Analysis"
 msgstr "Analyse"
-
-msgid "Plugins"
-msgstr "Plugins"
 
 msgid "&View"
 msgstr "&Affichage"
@@ -1341,6 +1356,57 @@ msgstr "Création des formes géométriques"
 
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
+
+msgid "Show more"
+msgstr "Afficher plus"
+
+msgid "Show less"
+msgstr "Afficher moins"
+
+msgid "Active"
+msgstr "Actif"
+
+msgid "Disabled"
+msgstr "Désactivé"
+
+msgid "No description available"
+msgstr "Aucune description disponible"
+
+msgid "Import error"
+msgstr "Erreur d'importation"
+
+msgid "Plugin Configuration"
+msgstr "Configuration des plugins"
+
+msgid "Manage Plugins"
+msgstr "Gérer les plugins"
+
+msgid "Enable or disable plugins. Changes will be applied after clicking OK and reloading plugins."
+msgstr "Activer ou désactiver les plugins. Les modifications seront appliquées après avoir cliqué sur OK et rechargé les plugins."
+
+msgid "Enable all plugins"
+msgstr "Activer tous les plugins"
+
+msgid "Filter:"
+msgstr "Filtre :"
+
+msgid "All plugins"
+msgstr "Tous les plugins"
+
+msgid "Enabled plugins"
+msgstr "Plugins activés"
+
+msgid "Disabled plugins"
+msgstr "Plugins désactivés"
+
+msgid "Plugins with errors"
+msgstr "Plugins en erreur"
+
+msgid "Reload Plugins"
+msgstr "Recharger les plugins"
+
+msgid "Plugin configuration has been saved. Do you want to reload plugins now to apply changes?"
+msgstr "La configuration des plugins a été enregistrée. Voulez-vous recharger les plugins maintenant pour appliquer les modifications ?"
 
 msgid "Failed to deserialize processing parameters from JSON."
 msgstr "Échec de la désérialisation des paramètres de traitement depuis le format JSON."
@@ -2180,8 +2246,8 @@ msgstr "Seuil de mémoire en dessous duquel un avertissement est affiché avant 
 msgid "Third-party plugins"
 msgstr "Plugins tiers"
 
-msgid "Disable third-party plugins at startup"
-msgstr "Désactiver les plugins tiers au démarrage"
+msgid "Enable or disable third-party plugins immediately. Changes are applied without restarting DataLab"
+msgstr "Activer ou désactiver immédiatement les plugins tiers. Les changements sont appliqués sans redémarrer DataLab"
 
 msgid "Plugins path"
 msgstr "Chemin des plugins"
@@ -2478,9 +2544,6 @@ msgstr "Etat d'activation du serveur XML-RPC"
 
 msgid "Console enable status"
 msgstr "Etat d'activation de la console"
-
-msgid "Third-party plugins support"
-msgstr "Prise en charge des plugins tiers"
 
 msgid "Third-party plugins path"
 msgstr "Chemin des plugins tiers"

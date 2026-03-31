@@ -13,10 +13,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.18.0\n"
 
 msgid "Plugin system for DataLab, the open-source scientific data analysis and visualization platform"
-msgstr "Systeme de plugins de DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
+msgstr "Système de plugins de DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
 
 msgid "DataLab, plugin, processing, input/output, HDF5, file format, data analysis, visualization, scientific, open-source, platform"
 msgstr "DataLab, plugin, traitement, entrée/sortie, HDF5, format de fichier, analyse de données, visualisation, scientifique, open-source, plateforme"
@@ -42,8 +42,11 @@ msgstr "Être un module Python dont le nom **commence par** ``datalab_`` (par ex
 msgid "Contain a class that **inherits from** :class:`datalab.plugins.PluginBase`,"
 msgstr "Contenir une classe qui **hérite de** :class:`datalab.plugins.PluginBase`,"
 
-msgid "Include a class attribute named ``PLUGIN_INFO``, which must be an instance of :class:`datalab.plugins.PluginInfo`."
-msgstr "Inclure un attribut de classe nommé ``PLUGIN_INFO``, qui doit être une instance de :class:`datalab.plugins.PluginInfo`."
+msgid "Include a class attribute named ``PLUGIN_INFO``, which must be an instance of :class:`datalab.plugins.PluginInfo`,"
+msgstr "Inclure un attribut de classe nommé ``PLUGIN_INFO``, qui doit être une instance de :class:`datalab.plugins.PluginInfo`,"
+
+msgid "Implement the ``create_actions`` method."
+msgstr "Implémenter la méthode ``create_actions``."
 
 msgid "This `PLUGIN_INFO` object is used by DataLab to retrieve metadata such as the plugin name, type, and menu integration."
 msgstr "Cet objet `PLUGIN_INFO` est utilisé par DataLab pour récupérer des métadonnées telles que le nom du plugin, le type et l'intégration dans le menu."
@@ -80,6 +83,63 @@ msgstr "Le répertoire de distribution autonome : Si vous utilisez une version g
 
 msgid "The internal `datalab/plugins` folder (not recommended for user plugins): This location is reserved for built-in or bundled plugins and should not be modified manually."
 msgstr "Le dossier interne `datalab/plugins` (non recommandé pour les plugins utilisateur) : Cet emplacement est réservé aux plugins intégrés ou fournis et ne doit pas être modifié manuellement."
+
+msgid "Managing plugins in DataLab"
+msgstr "Gestion des plugins dans DataLab"
+
+msgid "The **Plugins** menu provides two dedicated actions:"
+msgstr "Le menu **Plugins** propose deux actions dédiées :"
+
+msgid "**Configure plugins...** Opens the plugin configuration dialog where you can enable or disable plugins individually. After saving changes, DataLab can reload plugins immediately without restarting the application."
+msgstr "**Configurer les plugins...** Ouvre la boîte de dialogue de configuration des plugins, où vous pouvez activer ou désactiver les plugins individuellement. Après enregistrement des modifications, DataLab peut recharger immédiatement les plugins sans redémarrer l'application."
+
+msgid "**Reload plugins** Reloads plugin modules from disk without restarting DataLab."
+msgstr "**Recharger les plugins** Recharge les modules de plugins depuis le disque sans redémarrer DataLab."
+
+msgid "When reloading plugins, DataLab performs the following steps:"
+msgstr "Lors du rechargement des plugins, DataLab effectue les étapes suivantes :"
+
+msgid "Unregister currently active plugins,"
+msgstr "Désenregistrer les plugins actuellement actifs,"
+
+msgid "Clear plugin actions from signal and image panels,"
+msgstr "Effacer les actions de plugins des panneaux signal et image,"
+
+msgid "Re-discover and reload plugin modules,"
+msgstr "Redécouvrir et recharger les modules de plugins,"
+
+msgid "Re-register enabled plugins,"
+msgstr "Réenregistrer les plugins activés,"
+
+msgid "Recreate plugin actions and refresh menus."
+msgstr "Recréer les actions des plugins et rafraîchir les menus."
+
+msgid "This workflow allows iterative plugin development while DataLab is running."
+msgstr "Ce flux permet un développement itératif des plugins pendant que DataLab est en cours d'exécution."
+
+msgid "Plugin enable/disable state is persisted in DataLab settings. Disabled plugins remain listed in the configuration dialog and can be re-enabled later. The global third-party plugins setting in Preferences is also applied immediately: disabling it removes plugin actions and greys out the Plugins menu and status indicator, while enabling it reloads plugins automatically."
+msgstr "L'état d'activation/désactivation des plugins est conservé dans les paramètres de DataLab. Les plugins désactivés restent listés dans la boîte de dialogue de configuration et peuvent être réactivés plus tard. Le réglage global des plugins tiers dans les préférences est lui aussi appliqué immédiatement : le désactiver supprime les actions des plugins et grise le menu Plugins ainsi que l'indicateur d'état, tandis que le réactiver recharge automatiquement les plugins."
+
+msgid "Plugin API helpers"
+msgstr "Aides de l'API plugin"
+
+msgid "Plugins inheriting from :class:`datalab.plugins.PluginBase` have direct access to useful helpers:"
+msgstr "Les plugins qui héritent de :class:`datalab.plugins.PluginBase` ont un accès direct à des aides utiles :"
+
+msgid "``self.signalpanel`` and ``self.imagepanel``: access to panel APIs and action handlers,"
+msgstr "``self.signalpanel`` et ``self.imagepanel`` : accès aux API de panneaux et aux gestionnaires d'actions,"
+
+msgid "``self.proxy``: a :class:`datalab.control.proxy.LocalProxy` instance for object creation and processing,"
+msgstr "``self.proxy`` : une instance de :class:`datalab.control.proxy.LocalProxy` pour créer des objets et lancer des traitements,"
+
+msgid "``show_warning``, ``show_error``, ``show_info``, ``ask_yesno``: convenience dialog methods,"
+msgstr "``show_warning``, ``show_error``, ``show_info``, ``ask_yesno`` : méthodes pratiques pour les boîtes de dialogue,"
+
+msgid "``edit_new_signal_parameters`` and ``edit_new_image_parameters``: helpers for object parameter dialogs."
+msgstr "``edit_new_signal_parameters`` et ``edit_new_image_parameters`` : aides pour les boîtes de dialogue de paramètres d'objet."
+
+msgid "These helpers simplify plugin code and keep it consistent with DataLab behavior."
+msgstr "Ces aides simplifient le code des plugins et le maintiennent cohérent avec le comportement de DataLab."
 
 msgid "How to develop a plugin?"
 msgstr "Comment développer un plugin ?"
@@ -132,8 +192,32 @@ msgstr "Voici un exemple minimal d'un plugin qui imprime un message lorsqu'il es
 msgid "Example: input/output plugin"
 msgstr "Exemple : plugin d'entrée/sortie"
 
-msgid "Here is a simple example of a plugin that adds a new file formats to DataLab."
+msgid "Here is a simple example of a plugin that adds new file formats to DataLab."
 msgstr "Voici un exemple simple d'un plugin qui ajoute de nouveaux formats de fichiers à DataLab."
+
+msgid "Example templates used by the test suite"
+msgstr "Exemples de modèles utilisés par la suite de tests"
+
+msgid "DataLab also provides plugin templates used by integration tests in ``datalab/tests/features/plugins/templates``. They are useful as development references for:"
+msgstr "DataLab fournit aussi des modèles de plugins utilisés par les tests d'intégration dans ``datalab/tests/features/plugins/templates``. Ils servent de références de développement pour :"
+
+msgid "basic valid plugin structure,"
+msgstr "une structure de plugin valide de base,"
+
+msgid "nested plugin menus,"
+msgstr "des menus de plugin imbriqués,"
+
+msgid "plugins with dialog actions,"
+msgstr "des plugins avec actions de boîtes de dialogue,"
+
+msgid "plugins with many actions,"
+msgstr "des plugins avec de nombreuses actions,"
+
+msgid "plugins with long descriptions."
+msgstr "des plugins avec de longues descriptions."
+
+msgid "The corresponding feature tests are located in ``datalab/tests/features/plugins/test_plugins.py`` and cover plugin lifecycle, hot-reload behavior, error handling, duplicate names, and configuration filtering."
+msgstr "Les tests fonctionnels correspondants sont dans ``datalab/tests/features/plugins/test_plugins.py`` et couvrent le cycle de vie des plugins, le rechargement à chaud, la gestion des erreurs, les noms en doublon et le filtrage de configuration."
 
 msgid "Other examples"
 msgstr "Autres exemples"
@@ -189,14 +273,61 @@ msgstr "Désenregistrer le plugin"
 msgid "Unregister all plugins"
 msgstr "Désenregistrer tous les plugins"
 
-msgid "Return plugin information (names, versions, descriptions) in html format"
-msgstr "Retourne les informations sur les plugins (noms, versions, descriptions) au format html"
+#, fuzzy
+msgid "Clear registered plugin classes."
+msgstr "Retourne les classes de plugins"
+
+msgid "This is mainly useful when reloading plugin modules at runtime."
+msgstr ""
+
+msgid "Record an error traceback that occurred during plugin discovery."
+msgstr ""
 
 msgid "Parameters"
 msgstr "Paramètres"
 
+msgid "Formatted traceback string"
+msgstr ""
+
+msgid "Return error tracebacks collected during plugin discovery."
+msgstr ""
+
+msgid "Returns"
+msgstr "Retourne"
+
+msgid "List of formatted traceback strings (may be empty)"
+msgstr ""
+
+msgid "Clear recorded discovery errors."
+msgstr ""
+
+msgid "Record a plugin that failed to load or instantiate."
+msgstr ""
+
+#, fuzzy
+msgid "Module or plugin class name"
+msgstr "Retourne les classes de plugins"
+
+msgid "File path of the plugin module"
+msgstr ""
+
+msgid "Return structured info about plugins that failed to load."
+msgstr ""
+
+msgid "List of FailedPluginInfo objects (may be empty)"
+msgstr ""
+
+msgid "Clear recorded failed plugin info."
+msgstr ""
+
+msgid "Return plugin information (names, versions, descriptions) in html format"
+msgstr "Retourne les informations sur les plugins (noms, versions, descriptions) au format html"
+
 msgid "return html formatted text (default: True)"
 msgstr "retourner du texte formaté en html (par défaut : True)"
+
+msgid "Information about a plugin that failed to load or instantiate."
+msgstr ""
 
 msgid "Plugin info"
 msgstr "Informations sur le plugin"
@@ -233,9 +364,6 @@ msgstr "titre du nouveau signal"
 
 msgid "size of the new signal (default: None, get from current signal)"
 msgstr "taille du nouveau signal (par défaut : None, obtenue à partir du signal actuel)"
-
-msgid "Returns"
-msgstr "Retourne"
 
 msgid "New signal parameter dataset (or None if canceled)"
 msgstr "Nouveau jeu de paramètres de signal (ou None si annulé)"
@@ -279,8 +407,32 @@ msgstr "Créer des actions"
 msgid "Discover plugins using naming convention"
 msgstr "Découvrir les plugins en utilisant la convention de nommage"
 
-msgid "List of discovered plugins (as classes)"
-msgstr "Liste des plugins découverts (en tant que classes)"
+#, python-brace-format
+msgid "This function reloads or imports all modules matching the DataLab plugin naming scheme (``\"{MOD_NAME}_*\"``). Plugin classes are then registered automatically via the :class:`PluginRegistry` metaclass."
+msgstr ""
+
+msgid "Import errors for individual plugins are captured and logged so that one broken plugin does not prevent the others from loading.  Error tracebacks are accumulated in :class:`PluginRegistry` class attributes so that callers (e.g. the main window) can replay them into the internal console once it is ready."
+msgstr ""
+
+#, fuzzy
+msgid "List of imported/reloaded plugin modules"
+msgstr "Redécouvrir et recharger les modules de plugins,"
+
+msgid "Reload plugin modules and reset plugin classes."
+msgstr ""
+
+msgid "This helper is intended for hot-reloading plugins at runtime. It:"
+msgstr ""
+
+msgid "Updates the plugin search path"
+msgstr ""
+
+#, fuzzy
+msgid "Clears the plugin class registry"
+msgstr "Retourne les classes de plugins"
+
+msgid "Reloads or imports all modules matching the plugin naming convention"
+msgstr ""
 
 msgid "Discover v0.20 plugins (with ``cdl_`` prefix) without importing them"
 msgstr "Découvrir les plugins v0.20 (avec le préfixe ``cdl_``) sans les importer"

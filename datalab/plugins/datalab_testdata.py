@@ -130,10 +130,12 @@ class PluginTestData(PluginBase):
                 triggered=self.create_paracetamol_signal,
                 select_condition="always",
             )
+            _title = _("Load all test signals")
             sah.new_action(
-                _("Load all test signals"),
-                triggered=lambda regclass=SignalIORegistry,
-                title=_("Load all test signals"): self.load_test_objs(regclass, title),
+                _title,
+                triggered=lambda regclass=SignalIORegistry, title=_title: (
+                    self.load_test_objs(regclass, title)
+                ),
                 select_condition="always",
                 separator=True,
             )
@@ -181,10 +183,12 @@ class PluginTestData(PluginBase):
                 triggered=self.create_grid_gaussian_image,
                 select_condition="always",
             )
+            _title = _("Load all test images")
             iah.new_action(
-                _("Load all test images"),
-                triggered=lambda regclass=ImageIORegistry,
-                title=_("Load all test images"): self.load_test_objs(regclass, title),
+                _title,
+                triggered=lambda regclass=ImageIORegistry, title=_title: (
+                    self.load_test_objs(regclass, title)
+                ),
                 select_condition="always",
                 separator=True,
             )

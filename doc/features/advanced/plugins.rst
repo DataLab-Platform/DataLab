@@ -18,7 +18,8 @@ To be recognized as a plugin, the file must:
 
 - Be a Python module whose name **starts with** ``datalab_`` (e.g. ``datalab_myplugin.py``),
 - Contain a class that **inherits from** :class:`datalab.plugins.PluginBase`,
-- Include a class attribute named ``PLUGIN_INFO``, which must be an instance of :class:`datalab.plugins.PluginInfo`.
+- Include a class attribute named ``PLUGIN_INFO``, which must be an instance of :class:`datalab.plugins.PluginInfo`,
+- Implement the ``create_actions`` method.
 
 This `PLUGIN_INFO` object is used by DataLab to retrieve metadata such as the plugin name, type, and menu integration.
 
@@ -53,6 +54,44 @@ Plugins are automatically discovered at startup from multiple locations:
 
 - The internal `datalab/plugins` folder (not recommended for user plugins):
   This location is reserved for built-in or bundled plugins and should not be modified manually.
+
+Managing plugins in DataLab
+---------------------------
+
+The **Plugins** menu provides two dedicated actions:
+
+- **Configure plugins...**
+  Opens the plugin configuration dialog where you can enable or disable plugins individually.
+  After saving changes, DataLab can reload plugins immediately without restarting the application.
+
+- **Reload plugins**
+  Reloads plugin modules from disk without restarting DataLab.
+
+When reloading plugins, DataLab performs the following steps:
+
+1. Unregister currently active plugins,
+2. Clear plugin actions from signal and image panels,
+3. Re-discover and reload plugin modules,
+4. Re-register enabled plugins,
+5. Recreate plugin actions and refresh menus.
+
+This workflow allows iterative plugin development while DataLab is running.
+
+.. note::
+
+  Plugin enable/disable state is persisted in DataLab settings. Disabled plugins remain listed in the configuration dialog and can be re-enabled later. The global third-party plugins setting in Preferences is also applied immediately: disabling it removes plugin actions and greys out the Plugins menu and status indicator, while enabling it reloads plugins automatically.
+
+Plugin API helpers
+------------------
+
+Plugins inheriting from :class:`datalab.plugins.PluginBase` have direct access to useful helpers:
+
+- ``self.signalpanel`` and ``self.imagepanel``: access to panel APIs and action handlers,
+- ``self.proxy``: a :class:`datalab.control.proxy.LocalProxy` instance for object creation and processing,
+- ``show_warning``, ``show_error``, ``show_info``, ``ask_yesno``: convenience dialog methods,
+- ``edit_new_signal_parameters`` and ``edit_new_image_parameters``: helpers for object parameter dialogs.
+
+These helpers simplify plugin code and keep it consistent with DataLab behavior.
 
 How to develop a plugin?
 ------------------------
@@ -92,9 +131,25 @@ Here is a minimal example of a plugin that prints a message when activated:
 Example: input/output plugin
 ----------------------------
 
-Here is a simple example of a plugin that adds a new file formats to DataLab.
+Here is a simple example of a plugin that adds new file formats to DataLab.
 
 .. literalinclude:: ../../../datalab/plugins/datalab_imageformats.py
+
+Example templates used by the test suite
+----------------------------------------
+
+DataLab also provides plugin templates used by integration tests in
+``datalab/tests/features/plugins/templates``. They are useful as development references for:
+
+- basic valid plugin structure,
+- nested plugin menus,
+- plugins with dialog actions,
+- plugins with many actions,
+- plugins with long descriptions.
+
+The corresponding feature tests are located in
+``datalab/tests/features/plugins/test_plugins.py`` and cover plugin lifecycle,
+hot-reload behavior, error handling, duplicate names, and configuration filtering.
 
 Other examples
 --------------
