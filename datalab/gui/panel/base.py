@@ -2934,6 +2934,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             mode=mode,
             item=item,
             options=self.plothandler.get_plot_options(),
+            source_panel=self,
             size=self.get_dialog_size(),
         )
         if exec_dialog(roi_editor):

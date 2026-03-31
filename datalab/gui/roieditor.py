@@ -72,6 +72,9 @@ if TYPE_CHECKING:
     from plotpy.plot import BasePlot
     from plotpy.tools.base import InteractiveTool
 
+    from datalab.gui.panel.base import BaseDataPanel
+    from datalab.gui.panel.image import ImagePanel
+
 
 def configure_roi_item_in_tool(shape, obj: SignalObj | ImageObj) -> None:
     """Configure ROI item in tool"""
@@ -241,6 +244,7 @@ class BaseROIEditor(
         mode: Literal["apply", "extract", "define"] = "apply",
         item: TypePlotItem | None = None,
         options: PlotOptions | dict[str, Any] | None = None,
+        source_panel: BaseDataPanel | None = None,
         size: tuple[int, int] | None = None,
     ) -> None:
         assert mode in ("apply", "extract", "define"), (
@@ -251,6 +255,7 @@ class BaseROIEditor(
         self.singleobj_btn: QW.QCheckBox | None = None
         self.obj = obj
         self.mode = mode
+        self.source_panel = source_panel
         if item is None:
             item = create_adapter_from_object(obj).make_item()
         self.main_item = item
@@ -505,6 +510,7 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, AnnotatedXR
         mode: Literal["apply", "extract", "define"] = "apply",
         item: TypePlotItem | None = None,
         options: PlotOptions | dict[str, Any] | None = None,
+        source_panel: BaseDataPanel | None = None,
         size: tuple[int, int] | None = None,
     ) -> None:
         super().__init__(
@@ -513,6 +519,7 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, AnnotatedXR
             mode=mode,
             item=item,
             options=options,
+            source_panel=source_panel,
             size=size,
         )
 
@@ -576,9 +583,77 @@ class ImageROIEditor(
     ROI_ITEM_TYPES = (AnnotatedRectangle, AnnotatedCircle, AnnotatedPolygon)
     ADDITIONAL_OPTIONS = {"show_itemlist": True, "show_contrast": True}
 
+    def __init__(
+        self,
+        parent: QW.QWidget | None,
+        obj: SignalObj | ImageObj,
+        mode: Literal["apply", "extract", "define"] = "apply",
+        item: TypePlotItem | None = None,
+        options: PlotOptions | dict[str, Any] | None = None,
+        source_panel: BaseDataPanel | None = None,
+        size: tuple[int, int] | None = None,
+    ) -> None:
+        self._contrast_sync_in_progress = False
+        super().__init__(
+            parent=parent,
+            obj=obj,
+            mode=mode,
+            item=item,
+            options=options,
+            source_panel=source_panel,
+            size=size,
+        )
+        if isinstance(self.obj, ImageObj) and self.source_panel is not None:
+            image_panel = self.source_panel
+            if hasattr(image_panel, "register_contrast_editor"):
+                image_panel.register_contrast_editor(self.obj, self)
+        self.get_plot().SIG_LUT_CHANGED.connect(self.plot_lut_changed)
+
     def get_obj_roi_class(self) -> type[ImageROI]:
         """Get object ROI class"""
         return ImageROI
+
+    def _update_contrast_panel_range(self, zmin: float, zmax: float) -> None:
+        """Update ROI editor contrast panel range without re-emitting LUT signals."""
+        contrast = self.get_manager().get_contrast_panel()
+        if contrast is None:
+            return
+        contrast.histogram.range.set_range(zmin, zmax, dosignal=False)
+        contrast.histogram.replot()
+
+    def _set_editor_contrast_state(self, zmin: float, zmax: float) -> bool:
+        """Update ROI editor contrast state.
+
+        Returns:
+            True if the LUT range differs from the current main item range.
+        """
+        self.obj.zscalemin, self.obj.zscalemax = zmin, zmax
+        self._update_contrast_panel_range(zmin, zmax)
+        return self.main_item.get_lut_range() != (zmin, zmax)
+
+    def apply_shared_contrast(self, zmin: float, zmax: float) -> None:
+        """Apply a contrast change coming from the image panel."""
+        if not self._set_editor_contrast_state(zmin, zmax):
+            return
+        self._contrast_sync_in_progress = True
+        try:
+            self.main_item.set_lut_range((zmin, zmax))
+            plot = self.get_plot()
+            plot.update_colormap_axis(self.main_item)
+            plot.notify_colormap_changed()
+        finally:
+            self._contrast_sync_in_progress = False
+
+    def plot_lut_changed(self, plot: BasePlot) -> None:
+        """Synchronize ROI editor contrast changes with the source image panel."""
+        if self._contrast_sync_in_progress or not isinstance(self.obj, ImageObj):
+            return
+        zmin, zmax = self.main_item.get_lut_range()
+        self._set_editor_contrast_state(zmin, zmax)
+        if self.source_panel is not None and hasattr(
+            self.source_panel, "apply_shared_contrast"
+        ):
+            self.source_panel.apply_shared_contrast(self.obj, zmin, zmax, source=self)
 
     def add_tools_to_plot_dialog(self) -> None:
         """Add tools to plot dialog"""
