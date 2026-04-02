@@ -17,11 +17,7 @@ from qtpy import QtWidgets as QW
 from datalab.config import APP_NAME, Conf, _
 from datalab.env import execenv
 from datalab.gui.main import DLMainWindow
-from datalab.utils.instancecheck import (
-    create_lock_file,
-    is_another_instance_running,
-    remove_lock_file,
-)
+from datalab.utils.instancecheck import ApplicationInstanceRegistry
 from datalab.utils.qthelpers import datalab_app_context
 
 if TYPE_CHECKING:
@@ -98,7 +94,8 @@ def run(
         # tests are never blocked by a running DataLab instance or a stale
         # lock file.
         if not execenv.unattended:
-            running_pid = is_another_instance_running()
+            registry = ApplicationInstanceRegistry()
+            running_pid = registry.is_another_instance_running()
             if running_pid is not None:
                 answer = QW.QMessageBox.warning(
                     None,
@@ -117,8 +114,8 @@ def run(
                 )
                 if answer == QW.QMessageBox.No:
                     return
-            create_lock_file(force=running_pid is not None)
-            atexit.register(remove_lock_file)
+            registry.create_lock_file(force=running_pid is not None)
+            atexit.register(registry.remove_lock_file)
         # ------------------------------------------------------------------
         window = create(
             splash=True,

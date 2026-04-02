@@ -27,11 +27,7 @@ from unittest import mock
 import pytest
 
 from datalab.utils import instancecheck
-from datalab.utils.instancecheck import (
-    LOCK_FILENAME,
-    create_lock_file,
-    is_another_instance_running,
-)
+from datalab.utils.instancecheck import ApplicationInstanceRegistry
 
 
 @pytest.fixture()
@@ -41,7 +37,7 @@ def running_datalab(tmp_path):
     The subprocess writes its PID into a lock file and stays alive for the
     duration of the test, mimicking a DataLab instance that is open.
     """
-    lock_path = str(tmp_path / LOCK_FILENAME)
+    lock_path = str(tmp_path / ApplicationInstanceRegistry().lock_filename)
 
     script = tmp_path / "_fake_running_datalab.py"
     script.write_text(
@@ -62,12 +58,11 @@ def running_datalab(tmp_path):
     child_pid = int(proc.stdout.readline().decode().strip())
     time.sleep(0.3)  # Ensure lock file is flushed
 
-    registry = instancecheck.ApplicationInstanceRegistry(app_name="TestDataLab")
-    with (
-        mock.patch.object(instancecheck, "DEFAULT_REGISTRY", registry),
-        mock.patch.object(registry, "_get_lock_path", return_value=lock_path),
-    ):
-        yield lock_path, child_pid, proc
+    registry = instancecheck.ApplicationInstanceRegistry(
+        lock_filename="TestDataLab.lock"
+    )
+    with mock.patch.object(registry, "_get_lock_path", return_value=lock_path):
+        yield lock_path, child_pid, proc, registry
 
     proc.terminate()
     proc.wait(timeout=5)
@@ -78,24 +73,24 @@ class TestDataLabConcurrentInstances:
 
     def test_running_instance_detection_and_force_flow(self, running_datalab):
         """A running instance is detected, preserved, then extended with force."""
-        lock_path, child_pid, _proc = running_datalab
+        lock_path, child_pid, _proc, registry = running_datalab
 
-        assert is_another_instance_running() == child_pid
+        assert registry.is_another_instance_running() == child_pid
 
         with open(lock_path, encoding="utf-8") as f:
             assert int(f.read().strip()) == child_pid
 
-        create_lock_file(force=True)
+        registry.create_lock_file(force=True)
 
-        pids = instancecheck.DEFAULT_REGISTRY.read_lock_pids(lock_path)
+        pids = registry.read_lock_pids(lock_path)
         assert os.getpid() in pids
         assert child_pid in pids
 
-        assert is_another_instance_running() == child_pid
+        assert registry.is_another_instance_running() == child_pid
 
     def test_stale_lock_from_crashed_instance(self, tmp_path):
         """DataLab A crashed → stale lock is cleaned on B's startup."""
-        lock_path = str(tmp_path / LOCK_FILENAME)
+        lock_path = str(tmp_path / ApplicationInstanceRegistry().lock_filename)
 
         # Simulate DataLab A that crashed (exits immediately)
         script = tmp_path / "_crashed_datalab.py"
@@ -116,13 +111,12 @@ class TestDataLabConcurrentInstances:
         dead_pid = int(result.stdout.strip())
         assert os.path.exists(lock_path)
 
-        registry = instancecheck.ApplicationInstanceRegistry(app_name="TestDataLab")
-        with (
-            mock.patch.object(instancecheck, "DEFAULT_REGISTRY", registry),
-            mock.patch.object(registry, "_get_lock_path", return_value=lock_path),
-        ):
+        registry = instancecheck.ApplicationInstanceRegistry(
+            lock_filename="TestDataLab.lock"
+        )
+        with mock.patch.object(registry, "_get_lock_path", return_value=lock_path):
             # DataLab B starts up and detects the stale lock
-            detected = is_another_instance_running()
+            detected = registry.is_another_instance_running()
             assert detected is None, (
                 f"Stale lock (PID {dead_pid}) should be cleaned, got {detected}"
             )

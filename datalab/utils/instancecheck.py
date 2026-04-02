@@ -45,12 +45,11 @@ LockEntry = Dict[str, Union[int, float]]
 class ApplicationInstanceRegistry:
     """PID-based registry for concurrent DataLab instances."""
 
-    def __init__(self, app_name: str | None = None) -> None:
-        """Initialize registry with the target application name."""
-        if app_name is None:
-            app_name = APP_NAME
-        self.app_name = app_name
-        self.lock_filename = f"{app_name}.lock"
+    def __init__(self, lock_filename: str | None = None) -> None:
+        """Initialize registry with the lock file name."""
+        if lock_filename is None:
+            lock_filename = f"{APP_NAME}.lock"
+        self.lock_filename = lock_filename
 
     def _get_lock_path(self) -> str:
         """Return the absolute path to the lock file.
@@ -386,52 +385,3 @@ class ApplicationInstanceRegistry:
                 "Lock file does not contain current PID %d — not modifying",
                 my_pid,
             )
-
-
-DEFAULT_REGISTRY = ApplicationInstanceRegistry()
-LOCK_FILENAME = DEFAULT_REGISTRY.lock_filename
-
-
-def _get_lock_path() -> str:
-    """Return the default registry lock path."""
-    return DEFAULT_REGISTRY.get_lock_path()
-
-
-def _is_pid_alive(pid: int) -> bool:
-    """Return whether the PID is alive according to the default registry."""
-    return DEFAULT_REGISTRY.is_pid_alive(pid)
-
-
-def _remove_lock_path(lock_path: str) -> None:
-    """Remove a lock file using the default registry."""
-    DEFAULT_REGISTRY.remove_lock_path(lock_path)
-
-
-def _read_lock_pids(lock_path: str) -> list[int]:
-    """Read lock-file PIDs using the default registry."""
-    return DEFAULT_REGISTRY.read_lock_pids(lock_path)
-
-
-def _write_lock_pids(lock_path: str, pids: list[int]) -> None:
-    """Write lock-file PIDs using the default registry."""
-    DEFAULT_REGISTRY.write_lock_pids(lock_path, pids)
-
-
-def _read_lock_pid(lock_path: str) -> int | None:
-    """Read the first lock-file PID using the default registry."""
-    return DEFAULT_REGISTRY.read_lock_pid(lock_path)
-
-
-def is_another_instance_running() -> int | None:
-    """Return the PID of another running instance, if any."""
-    return DEFAULT_REGISTRY.is_another_instance_running()
-
-
-def create_lock_file(*, force: bool = False) -> None:
-    """Register the current process in the default registry lock file."""
-    DEFAULT_REGISTRY.create_lock_file(force=force)
-
-
-def remove_lock_file() -> None:
-    """Remove the current process from the default registry lock file."""
-    DEFAULT_REGISTRY.remove_lock_file()
