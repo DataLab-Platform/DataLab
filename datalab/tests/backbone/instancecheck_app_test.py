@@ -27,6 +27,7 @@ from unittest import mock
 
 import pytest
 
+from datalab.utils import instancecheck
 from datalab.utils.instancecheck import (
     LOCK_FILENAME,
     create_lock_file,
@@ -62,8 +63,10 @@ def running_datalab(tmp_path):
     child_pid = int(proc.stdout.readline().decode().strip())
     time.sleep(0.3)  # Ensure lock file is flushed
 
-    with mock.patch(
-        "datalab.utils.instancecheck._get_lock_path", return_value=lock_path
+    registry = instancecheck.ApplicationInstanceRegistry(app_name="TestDataLab")
+    with (
+        mock.patch.object(instancecheck, "DEFAULT_REGISTRY", registry),
+        mock.patch.object(registry, "_get_lock_path", return_value=lock_path),
     ):
         yield lock_path, child_pid, proc
 
@@ -137,9 +140,10 @@ class TestDataLabConcurrentInstances:
         dead_pid = int(result.stdout.strip())
         assert os.path.exists(lock_path)
 
-        with mock.patch(
-            "datalab.utils.instancecheck._get_lock_path",
-            return_value=lock_path,
+        registry = instancecheck.ApplicationInstanceRegistry(app_name="TestDataLab")
+        with (
+            mock.patch.object(instancecheck, "DEFAULT_REGISTRY", registry),
+            mock.patch.object(registry, "_get_lock_path", return_value=lock_path),
         ):
             # DataLab B starts up and detects the stale lock
             detected = is_another_instance_running()

@@ -23,9 +23,13 @@ from datalab.utils import instancecheck
 
 @pytest.fixture()
 def lock_dir(tmp_path):
-    """Provide a temporary directory and patch _get_lock_path to use it."""
-    lock_path = str(tmp_path / instancecheck.LOCK_FILENAME)
-    with mock.patch.object(instancecheck, "_get_lock_path", return_value=lock_path):
+    """Provide a temporary directory and patch the default registry."""
+    registry = instancecheck.ApplicationInstanceRegistry(app_name="TestDataLab")
+    lock_path = str(tmp_path / registry.lock_filename)
+    with (
+        mock.patch.object(instancecheck, "DEFAULT_REGISTRY", registry),
+        mock.patch.object(registry, "_get_lock_path", return_value=lock_path),
+    ):
         yield tmp_path, lock_path
 
 
@@ -44,8 +48,16 @@ class TestIsPidAlive:
     def test_nonexistent_pid_posix(self):
         """Posix path: ProcessLookupError means dead."""
         with (
-            mock.patch.object(instancecheck, "_is_pid_alive_posix", return_value=False),
-            mock.patch.object(instancecheck, "_is_pid_alive_win32", return_value=False),
+            mock.patch.object(
+                instancecheck.DEFAULT_REGISTRY,
+                "_is_pid_alive_posix",
+                return_value=False,
+            ),
+            mock.patch.object(
+                instancecheck.DEFAULT_REGISTRY,
+                "_is_pid_alive_win32",
+                return_value=False,
+            ),
         ):
             # Mock both platform implementations to guarantee the result
             # regardless of the host OS.
@@ -142,7 +154,9 @@ class TestIsAnotherInstanceRunning:
         foreign_pid = 99999
         with open(lock_path, "w", encoding="utf-8") as f:
             json.dump([foreign_pid], f)
-        with mock.patch.object(instancecheck, "_is_pid_alive", return_value=True):
+        with mock.patch.object(
+            instancecheck.DEFAULT_REGISTRY, "_is_pid_alive", return_value=True
+        ):
             assert instancecheck.is_another_instance_running() == foreign_pid
 
     def test_stale_lock_removed(self, lock_dir):
@@ -151,7 +165,9 @@ class TestIsAnotherInstanceRunning:
         dead_pid = 2**22 - 1
         with open(lock_path, "w", encoding="utf-8") as f:
             json.dump([dead_pid], f)
-        with mock.patch.object(instancecheck, "_is_pid_alive", return_value=False):
+        with mock.patch.object(
+            instancecheck.DEFAULT_REGISTRY, "_is_pid_alive", return_value=False
+        ):
             assert instancecheck.is_another_instance_running() is None
         assert not os.path.exists(lock_path)
 
@@ -166,7 +182,9 @@ class TestIsAnotherInstanceRunning:
         def fake_alive(pid):
             return pid == alive_pid
 
-        with mock.patch.object(instancecheck, "_is_pid_alive", side_effect=fake_alive):
+        with mock.patch.object(
+            instancecheck.DEFAULT_REGISTRY, "_is_pid_alive", side_effect=fake_alive
+        ):
             assert instancecheck.is_another_instance_running() == alive_pid
 
         # Dead PID was cleaned up, alive PID remains
@@ -178,7 +196,9 @@ class TestIsAnotherInstanceRunning:
         _tmp_path, lock_path = lock_dir
         with open(lock_path, "w", encoding="utf-8") as f:
             json.dump([88888, 77777], f)
-        with mock.patch.object(instancecheck, "_is_pid_alive", return_value=False):
+        with mock.patch.object(
+            instancecheck.DEFAULT_REGISTRY, "_is_pid_alive", return_value=False
+        ):
             assert instancecheck.is_another_instance_running() is None
         assert not os.path.exists(lock_path)
 
@@ -188,7 +208,9 @@ class TestIsAnotherInstanceRunning:
         foreign_pid = 99999
         with open(lock_path, "w", encoding="utf-8") as f:
             f.write(str(foreign_pid))
-        with mock.patch.object(instancecheck, "_is_pid_alive", return_value=True):
+        with mock.patch.object(
+            instancecheck.DEFAULT_REGISTRY, "_is_pid_alive", return_value=True
+        ):
             assert instancecheck.is_another_instance_running() == foreign_pid
 
 
@@ -213,7 +235,9 @@ class TestCreateLockFile:
         foreign_pid = 99999
         with open(lock_path, "w", encoding="utf-8") as f:
             json.dump([foreign_pid], f)
-        with mock.patch.object(instancecheck, "_is_pid_alive", return_value=True):
+        with mock.patch.object(
+            instancecheck.DEFAULT_REGISTRY, "_is_pid_alive", return_value=True
+        ):
             with pytest.raises(RuntimeError, match="already running"):
                 instancecheck.create_lock_file()
 
@@ -223,7 +247,9 @@ class TestCreateLockFile:
         dead_pid = 2**22 - 1
         with open(lock_path, "w", encoding="utf-8") as f:
             json.dump([dead_pid], f)
-        with mock.patch.object(instancecheck, "_is_pid_alive", return_value=False):
+        with mock.patch.object(
+            instancecheck.DEFAULT_REGISTRY, "_is_pid_alive", return_value=False
+        ):
             instancecheck.create_lock_file()
         pids = instancecheck._read_lock_pids(lock_path)
         assert os.getpid() in pids
@@ -235,7 +261,9 @@ class TestCreateLockFile:
         foreign_pid = 99999
         with open(lock_path, "w", encoding="utf-8") as f:
             json.dump([foreign_pid], f)
-        with mock.patch.object(instancecheck, "_is_pid_alive", return_value=True):
+        with mock.patch.object(
+            instancecheck.DEFAULT_REGISTRY, "_is_pid_alive", return_value=True
+        ):
             # Without force, would raise RuntimeError
             instancecheck.create_lock_file(force=True)
         pids = instancecheck._read_lock_pids(lock_path)
@@ -311,7 +339,9 @@ class TestRemoveLockFile:
         assert remaining == [foreign_pid]
 
         # A new instance would still detect the foreign PID
-        with mock.patch.object(instancecheck, "_is_pid_alive", return_value=True):
+        with mock.patch.object(
+            instancecheck.DEFAULT_REGISTRY, "_is_pid_alive", return_value=True
+        ):
             assert instancecheck.is_another_instance_running() == foreign_pid
 
 
@@ -329,9 +359,13 @@ class TestIntegrationLockFile:
 
     def test_lock_path_uses_config_directory(self):
         """Lock path must be inside the DataLab config directory, not '.none'."""
-        from datalab.config import Conf  # pylint: disable=import-outside-toplevel
+        from datalab.config import (  # pylint: disable=import-outside-toplevel
+            APP_NAME,
+            Conf,
+        )
 
         lock_path = Conf.get_path(instancecheck.LOCK_FILENAME)
+        assert instancecheck.LOCK_FILENAME == f"{APP_NAME}.lock"
         assert ".none" not in lock_path, (
             f"Lock path points to uninitialized config dir: {lock_path}"
         )
