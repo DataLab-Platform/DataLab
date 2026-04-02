@@ -103,6 +103,10 @@ class TestReadLockPidLegacy:
         lock.write_text(json.dumps([12345, 67890]))
         assert instancecheck._read_lock_pid(str(lock)) == 12345
 
+        lock = tmp_path / "entry.lock"
+        lock.write_text(json.dumps([{"pid": 23456, "create_time": 1.0, "name": "x"}]))
+        assert instancecheck._read_lock_pid(str(lock)) == 23456
+
         lock = tmp_path / "legacy.lock"
         lock.write_text("12345")
         assert instancecheck._read_lock_pid(str(lock)) == 12345
@@ -124,13 +128,14 @@ class TestIsAnotherInstanceRunning:
     def test_mixed_pids_keep_only_live_foreign_entries(self, lock_dir):
         """Own and stale PIDs are ignored while a live foreign PID is kept."""
         _tmp_path, lock_path = lock_dir
+        current_pid = os.getpid()
         alive_pid = 99999
         dead_pid = 88888
         with open(lock_path, "w", encoding="utf-8") as f:
-            json.dump([os.getpid(), dead_pid, alive_pid], f)
+            json.dump([current_pid, dead_pid, alive_pid], f)
 
         def fake_alive(pid):
-            return pid == alive_pid
+            return pid in (current_pid, alive_pid)
 
         with mock.patch.object(
             instancecheck.DEFAULT_REGISTRY, "_is_pid_alive", side_effect=fake_alive
@@ -138,7 +143,7 @@ class TestIsAnotherInstanceRunning:
             assert instancecheck.is_another_instance_running() == alive_pid
 
         remaining = instancecheck._read_lock_pids(lock_path)
-        assert remaining == [os.getpid(), alive_pid]
+        assert remaining == [current_pid, alive_pid]
 
     def test_all_stale_pids_remove_file(self, lock_dir):
         """A lock file containing only stale foreign PIDs is removed."""
@@ -180,6 +185,18 @@ class TestCreateLockFile:
                 instancecheck.create_lock_file()
             instancecheck.create_lock_file(force=True)
         assert instancecheck._read_lock_pids(lock_path) == [foreign_pid, os.getpid()]
+
+    def test_rejects_recycled_pid_with_wrong_signature(self, lock_dir):
+        """A reused PID with a different signature is cleaned as stale."""
+        _tmp_path, lock_path = lock_dir
+        current_pid = os.getpid()
+        with open(lock_path, "w", encoding="utf-8") as f:
+            json.dump(
+                [{"pid": current_pid, "create_time": 1.0, "name": "old_datalab"}],
+                f,
+            )
+        instancecheck.create_lock_file()
+        assert instancecheck._read_lock_pids(lock_path) == [current_pid]
 
     @pytest.mark.parametrize("force", [False, True])
     def test_replaces_stale_lock(self, lock_dir, force):

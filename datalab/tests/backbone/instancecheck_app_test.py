@@ -18,7 +18,6 @@ If the user refuses, B closes.  If the user accepts, B continues.
 
 from __future__ import annotations
 
-import json
 import os
 import subprocess
 import sys
@@ -88,8 +87,7 @@ class TestDataLabConcurrentInstances:
 
         create_lock_file(force=True)
 
-        with open(lock_path, encoding="utf-8") as f:
-            pids = json.loads(f.read())
+        pids = instancecheck._read_lock_pids(lock_path)
         assert os.getpid() in pids
         assert child_pid in pids
 
