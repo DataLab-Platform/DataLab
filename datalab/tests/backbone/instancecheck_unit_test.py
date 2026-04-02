@@ -104,7 +104,7 @@ class TestReadLockPidLegacy:
         assert instancecheck._read_lock_pid(str(lock)) == 12345
 
         lock = tmp_path / "entry.lock"
-        lock.write_text(json.dumps([{"pid": 23456, "create_time": 1.0, "name": "x"}]))
+        lock.write_text(json.dumps([{"pid": 23456, "create_time": 1.0}]))
         assert instancecheck._read_lock_pid(str(lock)) == 23456
 
         lock = tmp_path / "legacy.lock"
@@ -187,12 +187,12 @@ class TestCreateLockFile:
         assert instancecheck._read_lock_pids(lock_path) == [foreign_pid, os.getpid()]
 
     def test_rejects_recycled_pid_with_wrong_signature(self, lock_dir):
-        """A reused PID with a different signature is cleaned as stale."""
+        """A reused PID with a different create_time is cleaned as stale."""
         _tmp_path, lock_path = lock_dir
         current_pid = os.getpid()
         with open(lock_path, "w", encoding="utf-8") as f:
             json.dump(
-                [{"pid": current_pid, "create_time": 1.0, "name": "old_datalab"}],
+                [{"pid": current_pid, "create_time": 1.0}],
                 f,
             )
         instancecheck.create_lock_file()

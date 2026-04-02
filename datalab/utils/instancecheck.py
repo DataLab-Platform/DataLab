@@ -21,8 +21,8 @@ Cross-platform PID liveness check:
 .. note::
 
     Legacy lock files storing only PIDs are still supported for backward
-    compatibility. New lock entries also store process creation time and name
-    to reduce false positives caused by PID recycling.
+    compatibility. New lock entries also store process creation time to reduce
+    false positives caused by PID recycling.
 """
 
 from __future__ import annotations
@@ -39,7 +39,7 @@ from datalab.config import APP_NAME, Conf
 logger = logging.getLogger(__name__)
 
 
-LockEntry = Dict[str, Union[int, float, str]]
+LockEntry = Dict[str, Union[int, float]]
 
 
 class ApplicationInstanceRegistry:
@@ -100,7 +100,6 @@ class ApplicationInstanceRegistry:
             return {
                 "pid": pid,
                 "create_time": process.create_time(),
-                "name": process.name(),
             }
         except (psutil.NoSuchProcess, psutil.ZombieProcess):
             return None
@@ -131,8 +130,6 @@ class ApplicationInstanceRegistry:
             entry: LockEntry = {"pid": pid}
             if "create_time" in item:
                 entry["create_time"] = float(item["create_time"])
-            if "name" in item:
-                entry["name"] = str(item["name"])
             return entry
 
         raise ValueError("Invalid lock entry")
@@ -260,7 +257,7 @@ class ApplicationInstanceRegistry:
         if not self._is_pid_alive(pid):
             return False
 
-        if "create_time" not in entry and "name" not in entry:
+        if "create_time" not in entry:
             return True
 
         try:
@@ -270,8 +267,6 @@ class ApplicationInstanceRegistry:
                 create_time = float(entry["create_time"])
                 if abs(process.create_time() - create_time) > 1e-3:
                     is_alive = False
-            if "name" in entry and process.name() != entry["name"]:
-                is_alive = False
         except (psutil.NoSuchProcess, psutil.ZombieProcess):
             is_alive = False
         except psutil.AccessDenied:
