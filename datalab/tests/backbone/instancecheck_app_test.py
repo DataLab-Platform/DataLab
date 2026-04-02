@@ -77,44 +77,22 @@ def running_datalab(tmp_path):
 class TestDataLabConcurrentInstances:
     """Integration: DataLab detects when another instance is already open."""
 
-    def test_detects_running_instance(self, running_datalab):
-        """DataLab B detects that DataLab A is already open."""
-        _lock_path, child_pid, _proc = running_datalab
-
-        detected_pid = is_another_instance_running()
-        assert detected_pid == child_pid, (
-            f"DataLab should detect the running instance (PID {child_pid})"
-        )
-
-    def test_user_refuses_no_lock_overwrite(self, running_datalab):
-        """User clicks No → lock file is NOT overwritten (DataLab B exits)."""
+    def test_running_instance_detection_and_force_flow(self, running_datalab):
+        """A running instance is detected, preserved, then extended with force."""
         lock_path, child_pid, _proc = running_datalab
 
-        # Collision detected
         assert is_another_instance_running() == child_pid
 
-        # The app would show a dialog; user clicks No → app returns early
-        # The lock file still belongs to DataLab A
         with open(lock_path, encoding="utf-8") as f:
             assert int(f.read().strip()) == child_pid
 
-    def test_user_continues_lock_overwritten(self, running_datalab):
-        """User clicks Yes → our PID is added alongside DataLab A's PID."""
-        lock_path, child_pid, _proc = running_datalab
-
-        # Collision detected
-        assert is_another_instance_running() == child_pid
-
-        # The app would show a dialog; user clicks Yes → force create lock
         create_lock_file(force=True)
 
-        # Lock now contains both DataLab A and DataLab B (this process)
         with open(lock_path, encoding="utf-8") as f:
             pids = json.loads(f.read())
         assert os.getpid() in pids
         assert child_pid in pids
 
-        # Our own PID → not "another" instance, but A is still detected
         assert is_another_instance_running() == child_pid
 
     def test_stale_lock_from_crashed_instance(self, tmp_path):

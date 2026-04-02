@@ -16,9 +16,7 @@ any warning.
 
 Cross-platform PID liveness check:
 
-- **Linux / macOS**: ``os.kill(pid, 0)``
-- **Windows**: ``ctypes.windll.kernel32.OpenProcess`` (because
-  ``os.kill(pid, 0)`` calls ``TerminateProcess`` on Python 3.9–3.11).
+- **All platforms**: ``psutil.pid_exists(pid)``
 
 .. note::
 
@@ -34,7 +32,10 @@ from __future__ import annotations
 import json
 import logging
 import os
-import sys
+
+import psutil
+
+from datalab.config import APP_NAME, Conf
 
 logger = logging.getLogger(__name__)
 
@@ -45,10 +46,6 @@ class ApplicationInstanceRegistry:
     def __init__(self, app_name: str | None = None) -> None:
         """Initialize registry with the target application name."""
         if app_name is None:
-            from datalab.config import (
-                APP_NAME,  # pylint: disable=import-outside-toplevel
-            )
-
             app_name = APP_NAME
         self.app_name = app_name
         self.lock_filename = f"{app_name}.lock"
@@ -59,16 +56,16 @@ class ApplicationInstanceRegistry:
         Returns:
             Absolute path to the lock file inside the configuration directory.
         """
-        from datalab.config import Conf  # pylint: disable=import-outside-toplevel
-
         return Conf.get_path(self.lock_filename)
+
+    def get_lock_path(self) -> str:
+        """Return the absolute path to the lock file."""
+        return self._get_lock_path()
 
     def _is_pid_alive(self, pid: int) -> bool:
         """Check if a process with the given PID is still running.
 
-        On Unix (Linux, macOS) this uses ``os.kill(pid, 0)``.
-        On Windows this uses ``ctypes.windll.kernel32.OpenProcess`` because
-        ``os.kill(pid, 0)`` calls ``TerminateProcess`` on Python < 3.12.
+        This uses ``psutil.pid_exists(pid)`` on all supported platforms.
 
         Args:
             pid: Process ID to check.
@@ -76,55 +73,13 @@ class ApplicationInstanceRegistry:
         Returns:
             True if the process is alive, False otherwise.
         """
-        if sys.platform == "win32":
-            return self._is_pid_alive_win32(pid)
-        return self._is_pid_alive_posix(pid)
-
-    def _is_pid_alive_posix(self, pid: int) -> bool:
-        """Unix implementation: ``os.kill(pid, 0)``."""
-        try:
-            os.kill(pid, 0)
-        except ProcessLookupError:
+        if pid <= 0:
             return False
-        except PermissionError:
-            # Process exists but we don't have permission to signal it
-            return True
-        except OSError:
-            return False
-        return True
+        return psutil.pid_exists(pid)
 
-    def _is_pid_alive_win32(self, pid: int) -> bool:
-        """Windows implementation using ``kernel32.OpenProcess``.
-
-        Opens the process with ``PROCESS_QUERY_LIMITED_INFORMATION`` and then
-        calls ``GetExitCodeProcess`` to distinguish a *running* process from
-        one that has terminated but whose handle is still open (Windows keeps
-        zombie process objects until all handles are closed).
-
-        .. note::
-
-           This only checks that *a* process with the given PID exists, not
-           that it is a DataLab process.  PID recycling may cause false
-           positives (see module docstring).
-        """
-        import ctypes  # pylint: disable=import-outside-toplevel
-
-        process_query_limited_information = 0x1000
-        # https://learn.microsoft.com/windows/win32/api/processthreadsapi/
-        # nf-processthreadsapi-getexitcodeprocess
-        still_active = 259
-        kernel32 = ctypes.windll.kernel32  # type: ignore[attr-defined]
-        handle = kernel32.OpenProcess(process_query_limited_information, False, pid)
-        if not handle:
-            return False
-        try:
-            exit_code = ctypes.c_ulong()
-            if kernel32.GetExitCodeProcess(handle, ctypes.byref(exit_code)):
-                return exit_code.value == still_active
-            # GetExitCodeProcess failed — assume alive to be safe
-            return True
-        finally:
-            kernel32.CloseHandle(handle)
+    def is_pid_alive(self, pid: int) -> bool:
+        """Check if a process with the given PID is still running."""
+        return self._is_pid_alive(pid)
 
     def _remove_lock_path(self, lock_path: str) -> None:
         """Remove the lock file at the given path.
@@ -136,6 +91,10 @@ class ApplicationInstanceRegistry:
             os.remove(lock_path)
         except OSError:
             logger.warning("Could not remove lock file '%s'", lock_path)
+
+    def remove_lock_path(self, lock_path: str) -> None:
+        """Remove the lock file at the given path."""
+        self._remove_lock_path(lock_path)
 
     def _read_lock_pids(self, lock_path: str) -> list[int]:
         """Read and return the list of PIDs stored in the lock file.
@@ -180,6 +139,10 @@ class ApplicationInstanceRegistry:
             self._remove_lock_path(lock_path)
             return []
 
+    def read_lock_pids(self, lock_path: str) -> list[int]:
+        """Read and return the list of PIDs stored in the lock file."""
+        return self._read_lock_pids(lock_path)
+
     def _write_lock_pids(self, lock_path: str, pids: list[int]) -> None:
         """Write the list of PIDs to the lock file in JSON format.
 
@@ -198,6 +161,10 @@ class ApplicationInstanceRegistry:
         except OSError:
             logger.warning("Could not write lock file '%s'", lock_path)
 
+    def write_lock_pids(self, lock_path: str, pids: list[int]) -> None:
+        """Write the list of PIDs to the lock file."""
+        self._write_lock_pids(lock_path, pids)
+
     def _read_lock_pid(self, lock_path: str) -> int | None:
         """Read and return the PID stored in the lock file (legacy compat).
 
@@ -213,6 +180,38 @@ class ApplicationInstanceRegistry:
         pids = self._read_lock_pids(lock_path)
         return pids[0] if pids else None
 
+    def read_lock_pid(self, lock_path: str) -> int | None:
+        """Read and return the first PID stored in the lock file."""
+        return self._read_lock_pid(lock_path)
+
+    def _cleanup_stale_lock_pids(self, lock_path: str) -> list[int]:
+        """Remove stale PIDs from the lock file and return live entries.
+
+        If no live PID remains, the lock file is removed.
+
+        Args:
+            lock_path: Absolute path to the lock file.
+
+        Returns:
+            List of live PIDs still registered in the lock file.
+        """
+        pids = self._read_lock_pids(lock_path)
+        if not pids:
+            return []
+
+        my_pid = os.getpid()
+        live_pids = []
+        for pid in pids:
+            if pid == my_pid or self._is_pid_alive(pid):
+                live_pids.append(pid)
+            else:
+                logger.info("Removing stale PID %d from lock file", pid)
+
+        if len(live_pids) != len(pids):
+            self._write_lock_pids(lock_path, live_pids)
+
+        return live_pids
+
     def is_another_instance_running(self) -> int | None:
         """Check if another DataLab instance is already running.
 
@@ -224,29 +223,15 @@ class ApplicationInstanceRegistry:
             PID of the first live foreign instance if found, None otherwise.
         """
         lock_path = self._get_lock_path()
-        pids = self._read_lock_pids(lock_path)
+        pids = self._cleanup_stale_lock_pids(lock_path)
         if not pids:
             return None
 
         my_pid = os.getpid()
-        live_pids = []
-        found_foreign = None
-
         for pid in pids:
-            if pid == my_pid:
-                live_pids.append(pid)
-                continue
-            if self._is_pid_alive(pid):
-                live_pids.append(pid)
-                if found_foreign is None:
-                    found_foreign = pid
-            else:
-                logger.info("Removing stale PID %d from lock file", pid)
-
-        if len(live_pids) != len(pids):
-            self._write_lock_pids(lock_path, live_pids)
-
-        return found_foreign
+            if pid != my_pid:
+                return pid
+        return None
 
     def create_lock_file(self, *, force: bool = False) -> None:
         """Register the current process in the lock file.
@@ -265,9 +250,16 @@ class ApplicationInstanceRegistry:
              *force* is False.
         """
         lock_path = self._get_lock_path()
+        pids = self._cleanup_stale_lock_pids(lock_path)
+        my_pid = os.getpid()
 
         if not force:
-            existing_pid = self.is_another_instance_running()
+            for pid in pids:
+                if pid != my_pid:
+                    existing_pid = pid
+                    break
+            else:
+                existing_pid = None
             if existing_pid is not None:
                 raise RuntimeError(
                     f"Another DataLab instance is already running (PID {existing_pid})"
@@ -276,8 +268,6 @@ class ApplicationInstanceRegistry:
         if force:
             logger.info("Force-creating lock file (user override)")
 
-        pids = self._read_lock_pids(lock_path)
-        my_pid = os.getpid()
         if my_pid not in pids:
             pids.append(my_pid)
         self._write_lock_pids(lock_path, pids)
@@ -290,7 +280,7 @@ class ApplicationInstanceRegistry:
         registered, the lock file is rewritten without our PID.
         """
         lock_path = self._get_lock_path()
-        pids = self._read_lock_pids(lock_path)
+        pids = self._cleanup_stale_lock_pids(lock_path)
         if not pids:
             return
 
@@ -310,44 +300,45 @@ LOCK_FILENAME = DEFAULT_REGISTRY.lock_filename
 
 
 def _get_lock_path() -> str:
-    return DEFAULT_REGISTRY._get_lock_path()
+    """Return the default registry lock path."""
+    return DEFAULT_REGISTRY.get_lock_path()
 
 
 def _is_pid_alive(pid: int) -> bool:
-    return DEFAULT_REGISTRY._is_pid_alive(pid)
-
-
-def _is_pid_alive_posix(pid: int) -> bool:
-    return DEFAULT_REGISTRY._is_pid_alive_posix(pid)
-
-
-def _is_pid_alive_win32(pid: int) -> bool:
-    return DEFAULT_REGISTRY._is_pid_alive_win32(pid)
+    """Return whether the PID is alive according to the default registry."""
+    return DEFAULT_REGISTRY.is_pid_alive(pid)
 
 
 def _remove_lock_path(lock_path: str) -> None:
-    DEFAULT_REGISTRY._remove_lock_path(lock_path)
+    """Remove a lock file using the default registry."""
+    DEFAULT_REGISTRY.remove_lock_path(lock_path)
 
 
 def _read_lock_pids(lock_path: str) -> list[int]:
-    return DEFAULT_REGISTRY._read_lock_pids(lock_path)
+    """Read lock-file PIDs using the default registry."""
+    return DEFAULT_REGISTRY.read_lock_pids(lock_path)
 
 
 def _write_lock_pids(lock_path: str, pids: list[int]) -> None:
-    DEFAULT_REGISTRY._write_lock_pids(lock_path, pids)
+    """Write lock-file PIDs using the default registry."""
+    DEFAULT_REGISTRY.write_lock_pids(lock_path, pids)
 
 
 def _read_lock_pid(lock_path: str) -> int | None:
-    return DEFAULT_REGISTRY._read_lock_pid(lock_path)
+    """Read the first lock-file PID using the default registry."""
+    return DEFAULT_REGISTRY.read_lock_pid(lock_path)
 
 
 def is_another_instance_running() -> int | None:
+    """Return the PID of another running instance, if any."""
     return DEFAULT_REGISTRY.is_another_instance_running()
 
 
 def create_lock_file(*, force: bool = False) -> None:
+    """Register the current process in the default registry lock file."""
     DEFAULT_REGISTRY.create_lock_file(force=force)
 
 
 def remove_lock_file() -> None:
+    """Remove the current process from the default registry lock file."""
     DEFAULT_REGISTRY.remove_lock_file()
