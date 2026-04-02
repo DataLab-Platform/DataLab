@@ -30,6 +30,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+from typing import Dict, Union
 
 import psutil
 
@@ -38,7 +39,7 @@ from datalab.config import APP_NAME, Conf
 logger = logging.getLogger(__name__)
 
 
-LockEntry = dict[str, int | float | str]
+LockEntry = Dict[str, Union[int, float, str]]
 
 
 class ApplicationInstanceRegistry:
@@ -255,6 +256,7 @@ class ApplicationInstanceRegistry:
     def _is_lock_entry_alive(self, entry: LockEntry) -> bool:
         """Return whether a lock entry still matches a live process."""
         pid = int(entry["pid"])
+        is_alive = False
         if not self._is_pid_alive(pid):
             return False
 
@@ -263,18 +265,19 @@ class ApplicationInstanceRegistry:
 
         try:
             process = psutil.Process(pid)
+            is_alive = True
             if "create_time" in entry:
                 create_time = float(entry["create_time"])
                 if abs(process.create_time() - create_time) > 1e-3:
-                    return False
+                    is_alive = False
             if "name" in entry and process.name() != entry["name"]:
-                return False
+                is_alive = False
         except (psutil.NoSuchProcess, psutil.ZombieProcess):
-            return False
+            is_alive = False
         except psutil.AccessDenied:
-            return True
+            is_alive = True
 
-        return True
+        return is_alive
 
     def _cleanup_stale_lock_entries(self, lock_path: str) -> list[LockEntry]:
         """Remove stale lock entries and return live entries.

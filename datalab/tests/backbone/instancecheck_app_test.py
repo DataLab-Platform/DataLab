@@ -87,7 +87,7 @@ class TestDataLabConcurrentInstances:
 
         create_lock_file(force=True)
 
-        pids = instancecheck._read_lock_pids(lock_path)
+        pids = instancecheck.DEFAULT_REGISTRY.read_lock_pids(lock_path)
         assert os.getpid() in pids
         assert child_pid in pids
 
