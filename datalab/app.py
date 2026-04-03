@@ -114,7 +114,7 @@ def run(
                 )
                 if answer == QW.QMessageBox.No:
                     QC.QTimer.singleShot(0, QW.QApplication.instance().quit)
-                    return 0
+                    return
             registry.create_lock_file(force=running_pid is not None)
             atexit.register(registry.remove_lock_file)
         # ------------------------------------------------------------------
