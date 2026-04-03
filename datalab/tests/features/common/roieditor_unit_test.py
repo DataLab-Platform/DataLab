@@ -97,6 +97,47 @@ def test_image_roi_editor(screenshots: bool = False) -> None:
                         assert edited_roi.is_empty(), "ROI is not cleared"
 
 
+def test_image_roi_editor_contrast_sync() -> None:
+    """Test image ROI editor contrast synchronization hooks."""
+
+    class FakeImagePanel:
+        """Minimal image panel stub used to validate contrast sync."""
+
+        def __init__(self) -> None:
+            self.registered = []
+            self.applied = []
+
+        def register_contrast_editor(self, obj, editor) -> None:
+            self.registered.append((obj, editor))
+
+        def apply_shared_contrast(self, obj, zmin, zmax, source=None) -> None:
+            self.applied.append((obj, zmin, zmax, source))
+
+    obj = create_multigaussian_image()
+    panel = FakeImagePanel()
+    with qt_app_context(exec_loop=False):
+        editor = ImageROIEditor(
+            parent=None,
+            obj=obj,
+            mode="apply",
+            source_panel=panel,
+            size=(800, 600),
+        )
+
+        editor.apply_shared_contrast(10.0, 20.0)
+        assert editor.main_item.get_lut_range() == (10.0, 20.0)
+
+        editor.main_item.set_lut_range((30.0, 40.0))
+        plot = editor.get_plot()
+        plot.update_colormap_axis(editor.main_item)
+        plot.notify_colormap_changed()
+
+        assert panel.registered == [(obj, editor)]
+        assert panel.applied[-1][0] is obj
+        assert panel.applied[-1][1:3] == (30.0, 40.0)
+        assert panel.applied[-1][3] is editor
+
+
 if __name__ == "__main__":
     test_signal_roi_editor(screenshots=True)
     test_image_roi_editor(screenshots=True)
