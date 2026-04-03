@@ -51,32 +51,9 @@ class ApplicationInstanceRegistry:
             lock_filename = f"{APP_NAME}.lock"
         self.lock_filename = lock_filename
 
-    def _get_lock_path(self) -> str:
-        """Return the absolute path to the lock file.
-
-        Returns:
-            Absolute path to the lock file inside the configuration directory.
-        """
-        return Conf.get_path(self.lock_filename)
-
-    def get_lock_path(self) -> str:
-        """Return the absolute path to the lock file."""
-        return self._get_lock_path()
-
-    def _is_pid_alive(self, pid: int) -> bool:
-        """Check if a process with the given PID is still running.
-
-        This uses ``psutil.pid_exists(pid)`` on all supported platforms.
-
-        Args:
-            pid: Process ID to check.
-
-        Returns:
-            True if the process is alive, False otherwise.
-        """
-        if pid <= 0:
-            return False
-        return psutil.pid_exists(pid)
+    # ---------------------------------------------------------------------------
+    # Private helpers
+    # ---------------------------------------------------------------------------
 
     def _create_lock_entry(self, pid: int | None = None) -> LockEntry | None:
         """Create a lock entry for the given process.
@@ -104,10 +81,6 @@ class ApplicationInstanceRegistry:
             return None
         except psutil.AccessDenied:
             return {"pid": pid}
-
-    def is_pid_alive(self, pid: int) -> bool:
-        """Check if a process with the given PID is still running."""
-        return self._is_pid_alive(pid)
 
     def _normalize_lock_entry(self, item: object) -> LockEntry:
         """Normalize a lock entry loaded from disk.
@@ -146,7 +119,7 @@ class ApplicationInstanceRegistry:
 
         if not content:
             logger.warning("Empty lock file '%s', removing", lock_path)
-            self._remove_lock_path(lock_path)
+            self.remove_lock_path(lock_path)
             return []
 
         try:
@@ -160,65 +133,13 @@ class ApplicationInstanceRegistry:
             return [self._normalize_lock_entry(int(content))]
         except ValueError:
             logger.warning("Corrupted lock file '%s', removing", lock_path)
-            self._remove_lock_path(lock_path)
+            self.remove_lock_path(lock_path)
             return []
-
-    def _remove_lock_path(self, lock_path: str) -> None:
-        """Remove the lock file at the given path.
-
-        Args:
-            lock_path: Absolute path to the lock file to remove.
-        """
-        try:
-            os.remove(lock_path)
-        except OSError:
-            logger.warning("Could not remove lock file '%s'", lock_path)
-
-    def remove_lock_path(self, lock_path: str) -> None:
-        """Remove the lock file at the given path."""
-        self._remove_lock_path(lock_path)
-
-    def _read_lock_pids(self, lock_path: str) -> list[int]:
-        """Read and return the list of PIDs stored in the lock file.
-
-        Supports both the legacy single-PID format (plain integer) and the new
-        JSON-list format.  If the file is missing, unreadable, or corrupted,
-        returns an empty list and cleans up the file when appropriate.
-
-        Args:
-            lock_path: Absolute path to the lock file.
-
-        Returns:
-            List of stored PIDs (may be empty).
-        """
-        return [int(entry["pid"]) for entry in self._read_lock_entries(lock_path)]
-
-    def read_lock_pids(self, lock_path: str) -> list[int]:
-        """Read and return the list of PIDs stored in the lock file."""
-        return self._read_lock_pids(lock_path)
-
-    def _write_lock_pids(self, lock_path: str, pids: list[int]) -> None:
-        """Write the list of PIDs to the lock file in JSON format.
-
-        If the list is empty, the lock file is removed instead.
-
-        Args:
-            lock_path: Absolute path to the lock file.
-            pids: List of PIDs to write.
-        """
-        if not pids:
-            self._remove_lock_path(lock_path)
-            return
-        try:
-            with open(lock_path, "w", encoding="utf-8") as fobj:
-                json.dump(pids, fobj)
-        except OSError:
-            logger.warning("Could not write lock file '%s'", lock_path)
 
     def _write_lock_entries(self, lock_path: str, entries: list[LockEntry]) -> None:
         """Write lock entries to the lock file in JSON format."""
         if not entries:
-            self._remove_lock_path(lock_path)
+            self.remove_lock_path(lock_path)
             return
         try:
             with open(lock_path, "w", encoding="utf-8") as fobj:
@@ -226,34 +147,11 @@ class ApplicationInstanceRegistry:
         except OSError:
             logger.warning("Could not write lock file '%s'", lock_path)
 
-    def write_lock_pids(self, lock_path: str, pids: list[int]) -> None:
-        """Write the list of PIDs to the lock file."""
-        self._write_lock_pids(lock_path, pids)
-
-    def _read_lock_pid(self, lock_path: str) -> int | None:
-        """Read and return the PID stored in the lock file (legacy compat).
-
-        If the file is missing, unreadable, or contains non-integer content,
-        returns None and cleans up the corrupted file when appropriate.
-
-        Args:
-            lock_path: Absolute path to the lock file.
-
-        Returns:
-            The first stored PID, or None if unreadable/missing.
-        """
-        pids = self._read_lock_pids(lock_path)
-        return pids[0] if pids else None
-
-    def read_lock_pid(self, lock_path: str) -> int | None:
-        """Read and return the first PID stored in the lock file."""
-        return self._read_lock_pid(lock_path)
-
     def _is_lock_entry_alive(self, entry: LockEntry) -> bool:
         """Return whether a lock entry still matches a live process."""
         pid = int(entry["pid"])
         is_alive = False
-        if not self._is_pid_alive(pid):
+        if not self.is_pid_alive(pid):
             return False
 
         if "create_time" not in entry:
@@ -300,6 +198,92 @@ class ApplicationInstanceRegistry:
 
         return live_entries
 
+    # ---------------------------------------------------------------------------
+    # Public API
+    # ---------------------------------------------------------------------------
+
+    def get_lock_path(self) -> str:
+        """Return the absolute path to the lock file.
+
+        Returns:
+            Absolute path to the lock file inside the configuration directory.
+        """
+        return Conf.get_path(self.lock_filename)
+
+    def is_pid_alive(self, pid: int) -> bool:
+        """Check if a process with the given PID is still running.
+
+        This uses ``psutil.pid_exists(pid)`` on all supported platforms.
+
+        Args:
+            pid: Process ID to check.
+
+        Returns:
+            True if the process is alive, False otherwise.
+        """
+        if pid <= 0:
+            return False
+        return psutil.pid_exists(pid)
+
+    def remove_lock_path(self, lock_path: str) -> None:
+        """Remove the lock file at the given path.
+
+        Args:
+            lock_path: Absolute path to the lock file to remove.
+        """
+        try:
+            os.remove(lock_path)
+        except OSError:
+            logger.warning("Could not remove lock file '%s'", lock_path)
+
+    def read_lock_pids(self, lock_path: str) -> list[int]:
+        """Read and return the list of PIDs stored in the lock file.
+
+        Supports both the legacy single-PID format (plain integer) and the new
+        JSON-list format.  If the file is missing, unreadable, or corrupted,
+        returns an empty list and cleans up the file when appropriate.
+
+        Args:
+            lock_path: Absolute path to the lock file.
+
+        Returns:
+            List of stored PIDs (may be empty).
+        """
+        return [int(entry["pid"]) for entry in self._read_lock_entries(lock_path)]
+
+    def write_lock_pids(self, lock_path: str, pids: list[int]) -> None:
+        """Write the list of PIDs to the lock file in JSON format.
+
+        If the list is empty, the lock file is removed instead.
+
+        Args:
+            lock_path: Absolute path to the lock file.
+            pids: List of PIDs to write.
+        """
+        if not pids:
+            self.remove_lock_path(lock_path)
+            return
+        try:
+            with open(lock_path, "w", encoding="utf-8") as fobj:
+                json.dump(pids, fobj)
+        except OSError:
+            logger.warning("Could not write lock file '%s'", lock_path)
+
+    def read_lock_pid(self, lock_path: str) -> int | None:
+        """Read and return the PID stored in the lock file (legacy compat).
+
+        If the file is missing, unreadable, or contains non-integer content,
+        returns None and cleans up the corrupted file when appropriate.
+
+        Args:
+            lock_path: Absolute path to the lock file.
+
+        Returns:
+            The first stored PID, or None if unreadable/missing.
+        """
+        pids = self.read_lock_pids(lock_path)
+        return pids[0] if pids else None
+
     def is_another_instance_running(self) -> int | None:
         """Check if another DataLab instance is already running.
 
@@ -310,7 +294,7 @@ class ApplicationInstanceRegistry:
         Returns:
             PID of the first live foreign instance if found, None otherwise.
         """
-        lock_path = self._get_lock_path()
+        lock_path = self.get_lock_path()
         entries = self._cleanup_stale_lock_entries(lock_path)
         if not entries:
             return None
@@ -338,7 +322,7 @@ class ApplicationInstanceRegistry:
             RuntimeError: If another live instance already holds the lock and
              *force* is False.
         """
-        lock_path = self._get_lock_path()
+        lock_path = self.get_lock_path()
         entries = self._cleanup_stale_lock_entries(lock_path)
         pids = [int(entry["pid"]) for entry in entries]
         my_pid = os.getpid()
@@ -371,7 +355,7 @@ class ApplicationInstanceRegistry:
         deleted when no instances remain.  If other instances are still
         registered, the lock file is rewritten without our PID.
         """
-        lock_path = self._get_lock_path()
+        lock_path = self.get_lock_path()
         entries = self._cleanup_stale_lock_entries(lock_path)
         if not entries:
             return

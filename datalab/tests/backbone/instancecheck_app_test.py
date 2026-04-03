@@ -61,7 +61,7 @@ def running_datalab(tmp_path):
     registry = instancecheck.ApplicationInstanceRegistry(
         lock_filename="TestDataLab.lock"
     )
-    with mock.patch.object(registry, "_get_lock_path", return_value=lock_path):
+    with mock.patch.object(registry, "get_lock_path", return_value=lock_path):
         yield lock_path, child_pid, proc, registry
 
     proc.terminate()
@@ -114,7 +114,7 @@ class TestDataLabConcurrentInstances:
         registry = instancecheck.ApplicationInstanceRegistry(
             lock_filename="TestDataLab.lock"
         )
-        with mock.patch.object(registry, "_get_lock_path", return_value=lock_path):
+        with mock.patch.object(registry, "get_lock_path", return_value=lock_path):
             # DataLab B starts up and detects the stale lock
             detected = registry.is_another_instance_running()
             assert detected is None, (

@@ -28,17 +28,17 @@ def lock_dir(tmp_path):
         lock_filename="TestDataLab.lock"
     )
     lock_path = str(tmp_path / registry.lock_filename)
-    with mock.patch.object(registry, "_get_lock_path", return_value=lock_path):
+    with mock.patch.object(registry, "get_lock_path", return_value=lock_path):
         yield tmp_path, lock_path, registry
 
 
 # ---------------------------------------------------------------------------
-# _is_pid_alive
+# is_pid_alive
 # ---------------------------------------------------------------------------
 
 
 class TestIsPidAlive:
-    """Tests for the _is_pid_alive helper."""
+    """Tests for the is_pid_alive helper."""
 
     def test_current_process_is_alive(self):
         """Current process PID should be reported as alive."""
@@ -141,7 +141,7 @@ class TestIsAnotherInstanceRunning:
         def fake_alive(pid):
             return pid in (current_pid, alive_pid)
 
-        with mock.patch.object(registry, "_is_pid_alive", side_effect=fake_alive):
+        with mock.patch.object(registry, "is_pid_alive", side_effect=fake_alive):
             assert registry.is_another_instance_running() == alive_pid
 
         remaining = registry.read_lock_pids(lock_path)
@@ -152,7 +152,7 @@ class TestIsAnotherInstanceRunning:
         _tmp_path, lock_path, registry = lock_dir
         with open(lock_path, "w", encoding="utf-8") as f:
             json.dump([88888, 77777], f)
-        with mock.patch.object(registry, "_is_pid_alive", return_value=False):
+        with mock.patch.object(registry, "is_pid_alive", return_value=False):
             assert registry.is_another_instance_running() is None
         assert not os.path.exists(lock_path)
 
@@ -178,7 +178,7 @@ class TestCreateLockFile:
         foreign_pid = 99999
         with open(lock_path, "w", encoding="utf-8") as f:
             json.dump([foreign_pid], f)
-        with mock.patch.object(registry, "_is_pid_alive", return_value=True):
+        with mock.patch.object(registry, "is_pid_alive", return_value=True):
             with pytest.raises(RuntimeError, match="already running"):
                 registry.create_lock_file()
             registry.create_lock_file(force=True)
@@ -202,7 +202,7 @@ class TestCreateLockFile:
         _tmp_path, lock_path, registry = lock_dir
         with open(lock_path, "w", encoding="utf-8") as f:
             json.dump([99999], f)
-        with mock.patch.object(registry, "_is_pid_alive", return_value=False):
+        with mock.patch.object(registry, "is_pid_alive", return_value=False):
             registry.create_lock_file(force=force)
         assert registry.read_lock_pids(lock_path) == [os.getpid()]
 
@@ -216,11 +216,11 @@ class TestRemoveLockFile:
         foreign_pid = 99999
         with open(lock_path, "w", encoding="utf-8") as f:
             json.dump([foreign_pid, os.getpid()], f)
-        with mock.patch.object(registry, "_is_pid_alive", return_value=True):
+        with mock.patch.object(registry, "is_pid_alive", return_value=True):
             registry.remove_lock_file()
         assert os.path.exists(lock_path)
         assert registry.read_lock_pids(lock_path) == [foreign_pid]
-        with mock.patch.object(registry, "_is_pid_alive", return_value=True):
+        with mock.patch.object(registry, "is_pid_alive", return_value=True):
             assert registry.is_another_instance_running() == foreign_pid
 
     def test_remove_lock_file_noop_without_own_pid(self, lock_dir):
@@ -228,7 +228,7 @@ class TestRemoveLockFile:
         _tmp_path, lock_path, registry = lock_dir
         with open(lock_path, "w", encoding="utf-8") as f:
             json.dump([99999], f)
-        with mock.patch.object(registry, "_is_pid_alive", return_value=True):
+        with mock.patch.object(registry, "is_pid_alive", return_value=True):
             registry.remove_lock_file()
         assert registry.read_lock_pids(lock_path) == [99999]
 
