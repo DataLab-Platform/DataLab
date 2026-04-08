@@ -1,5 +1,18 @@
 # Version 1.1 #
 
+## DataLab Version 1.1.1 ##
+
+### 🛠️ Bug Fixes since version 1.1.0 ###
+
+**Flip/rotation operations crash or hang in stand-alone version:**
+
+* Fixed image flip and rotation operations ("Flip horizontally", "Flip vertically", "Rotate 90° left/right", "Flip diagonally") crashing with an `ImportError` or hanging indefinitely in the stand-alone Windows version (PyInstaller build)
+* The issue was caused by the multiprocessing worker process needing to import the full DataLab GUI module chain when unpickling the geometric transform wrapper, triggering circular imports in the frozen executable
+* Moved the geometry post-processing code to a standalone module with no GUI dependencies, so the worker process no longer triggers the DataLab GUI import chain
+* Also moved `multiprocessing.freeze_support()` to the application entry point as defense-in-depth, per Python and PyInstaller best practices
+* This was not reproducible with the Python package version of DataLab, only with the stand-alone executable
+* This closes [Issue #304](https://github.com/DataLab-Platform/DataLab/issues/304) - Flip/rotation operations crash or hang in stand-alone (PyInstaller) version
+
 ## DataLab Version 1.1.0 (2026-02-02) ##
 
 ### ✨ New Features ###
