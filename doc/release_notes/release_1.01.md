@@ -1,6 +1,9 @@
 # Version 1.1 #
 
-## DataLab Version 1.1.1 ##
+## DataLab Version 1.1.1 (2026-04-08) ##
+
+> **Note:** This is a **maintenance release** that fixes a single bug affecting **only the
+stand-alone executable version** of DataLab for **Microsoft Windows**. If you installed DataLab via `pip`, `conda`, or if you are running DataLab on Linux or macOS, **you are not affected by this bug** and there is no need to update to this version.
 
 ### 🛠️ Bug Fixes since version 1.1.0 ###
 
