@@ -30,10 +30,10 @@ msgid "🛠️ Bug Fixes since version 1.1.0"
 msgstr "🛠️ Corrections de bugs depuis la version 1.1.0"
 
 msgid "**Flip/rotation operations crash or hang in stand-alone version:**"
-msgstr "**Les opérations de rotation/flip plantent ou se bloquent dans la version autonome :**"
+msgstr "**Les opérations de rotation/symétrie échouent ou se bloquent dans la version autonome :**"
 
 msgid "Fixed image flip and rotation operations (\"Flip horizontally\", \"Flip vertically\", \"Rotate 90° left/right\", \"Flip diagonally\") crashing with an `ImportError` or hanging indefinitely in the stand-alone Windows version (PyInstaller build)"
-msgstr "Correction des opérations de rotation et de flip d'image (\"Flip horizontal\", \"Flip vertical\", \"Rotate 90° gauche/droite\", \"Flip diagonal\") qui plantaient avec un `ImportError` ou se bloquaient indéfiniment dans la version autonome Windows (build PyInstaller)"
+msgstr "Correction des opérations de rotation et de symétrie d'image (\"Symétrie horizontale\", \"Symétrie verticale\", \"Rotation 90° gauche/droite\", \"Symétrie diagonale\") qui plantaient avec un `ImportError` ou se bloquaient indéfiniment dans la version autonome Windows (build PyInstaller)"
 
 msgid "The issue was caused by the multiprocessing worker process needing to import the full DataLab GUI module chain when unpickling the geometric transform wrapper, triggering circular imports in the frozen executable"
 msgstr "Le problème était causé par le worker exécuté en mode multiprocessus qui devait importer la chaîne complète des modules GUI de DataLab lors du dé-pickling du wrapper de transformation géométrique, déclenchant des imports circulaires dans l'exécutable PyInstaller"
@@ -45,7 +45,7 @@ msgid "This was not reproducible with the Python package version of DataLab, onl
 msgstr "Cela n'était pas reproductible avec la version package Python de DataLab, uniquement avec l'exécutable autonome"
 
 msgid "This closes [Issue #304](https://github.com/DataLab-Platform/DataLab/issues/304) - Flip/rotation operations crash or hang in stand-alone (PyInstaller) version"
-msgstr "Ceci clôture [Issue #304](https://github.com/DataLab-Platform/DataLab/issues/304) - Les opérations de rotation/flip échouent ou se bloquent dans la version autonome (PyInstaller)"
+msgstr "Ceci clôture [Issue #304](https://github.com/DataLab-Platform/DataLab/issues/304) - Les opérations de rotation/symétrie échouent ou se bloquent dans la version autonome (PyInstaller)"
 
 msgid "DataLab Version 1.1.0 (2026-02-02)"
 msgstr "DataLab Version 1.1.0 (2026-02-02)"
