@@ -7,14 +7,7 @@ DataLab
 Starter script for DataLab.
 """
 
-import multiprocessing
 import sys
-
-# Enable multiprocessing support for frozen executables (e.g. PyInstaller).
-# This MUST be called before any other imports or code, so that child processes
-# spawned by multiprocessing are handled before entering the import chain
-# (otherwise, partially initialized modules cause circular import errors).
-multiprocessing.freeze_support()
 
 # --------------------------------------------------------------------------------------
 # Macro command execution for the standalone version of DataLab
@@ -27,7 +20,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "-c":
 #
 # This part is executed when the script is run as a standalone application.
 # It is protected by using `if __name__ == '__main__':` to avoid running it again when
-# the multiprocessing pool is created.
+# the multiprocessing pool is created (see datalab/gui/processor/base.py).
 elif __name__ == "__main__":
     try:
         from datalab.app import run
