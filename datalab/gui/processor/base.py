@@ -227,8 +227,8 @@ def run_with_env(func: Callable, args: tuple, env_json: str) -> CompOut:
     return wng_err_func(func, args)
 
 
-# Enable multiprocessing support for Windows, with frozen executable (e.g. PyInstaller)
-multiprocessing.freeze_support()
+# Note: multiprocessing.freeze_support() is called in start.pyw (entry point)
+# before any imports, which is required for PyInstaller frozen executables.
 
 # Set start method to 'spawn' for Linux (default is 'fork' which is not safe here
 # because of the use of Qt and multithreading) - for other OS, the default is
