@@ -20,6 +20,33 @@ msgstr ""
 msgid "Version 1.1"
 msgstr "Version 1.1"
 
+msgid "DataLab Version 1.1.1 (2026-04-08)"
+msgstr "DataLab Version 1.1.1 (2026-04-08)"
+
+msgid "**Note:** This is a **maintenance release** that fixes a single bug affecting **only the stand-alone executable version** of DataLab for **Microsoft Windows**. If you installed DataLab via `pip`, `conda`, or if you are running DataLab on Linux or macOS, **you are not affected by this bug** and there is no need to update to this version."
+msgstr "**Remarque :** Il s'agit d'une **version de maintenance** qui corrige un seul bug affectant **uniquement la version exécutable autonome** de DataLab pour **Microsoft Windows**. Si vous avez installé DataLab via `pip`, `conda`, ou si vous utilisez DataLab sur Linux ou macOS, **vous n'êtes pas affecté par ce bug** et il n'est pas nécessaire de mettre à jour vers cette version."
+
+msgid "🛠️ Bug Fixes since version 1.1.0"
+msgstr "🛠️ Corrections de bugs depuis la version 1.1.0"
+
+msgid "**Flip/rotation operations crash or hang in stand-alone version:**"
+msgstr "**Les opérations de rotation/flip plantent ou se bloquent dans la version autonome :**"
+
+msgid "Fixed image flip and rotation operations (\"Flip horizontally\", \"Flip vertically\", \"Rotate 90° left/right\", \"Flip diagonally\") crashing with an `ImportError` or hanging indefinitely in the stand-alone Windows version (PyInstaller build)"
+msgstr "Correction des opérations de rotation et de flip d'image (\"Flip horizontal\", \"Flip vertical\", \"Rotate 90° gauche/droite\", \"Flip diagonal\") qui plantaient avec un `ImportError` ou se bloquaient indéfiniment dans la version autonome Windows (build PyInstaller)"
+
+msgid "The issue was caused by the multiprocessing worker process needing to import the full DataLab GUI module chain when unpickling the geometric transform wrapper, triggering circular imports in the frozen executable"
+msgstr "Le problème était causé par le worker exécuté en mode multiprocessus qui devait importer la chaîne complète des modules GUI de DataLab lors du dé-pickling du wrapper de transformation géométrique, déclenchant des imports circulaires dans l'exécutable PyInstaller"
+
+msgid "Moved the geometry post-processing code to a standalone module with no GUI dependencies, so the worker process no longer triggers the DataLab GUI import chain"
+msgstr "Le code de post-traitement géométrique a été déplacé vers un module autonome sans dépendances GUI, de sorte que le processus de travail ne déclenche plus la chaîne d'importation GUI de DataLab"
+
+msgid "This was not reproducible with the Python package version of DataLab, only with the stand-alone executable"
+msgstr "Cela n'était pas reproductible avec la version package Python de DataLab, uniquement avec l'exécutable autonome"
+
+msgid "This closes [Issue #304](https://github.com/DataLab-Platform/DataLab/issues/304) - Flip/rotation operations crash or hang in stand-alone (PyInstaller) version"
+msgstr "Ceci clôture [Issue #304](https://github.com/DataLab-Platform/DataLab/issues/304) - Les opérations de rotation/flip échouent ou se bloquent dans la version autonome (PyInstaller)"
+
 msgid "DataLab Version 1.1.0 (2026-02-02)"
 msgstr "DataLab Version 1.1.0 (2026-02-02)"
 
@@ -130,4 +157,3 @@ msgstr "Mise à jour de la dépendance Sigima vers la version 1.1.0 qui inclut d
 
 msgid "Added Web API dependencies: FastAPI, Uvicorn, and Pydantic (included in standard installation)"
 msgstr "Ajout des dépendances pour l'API Web : FastAPI, Uvicorn et Pydantic (incluses dans l'installation standard)"
-
