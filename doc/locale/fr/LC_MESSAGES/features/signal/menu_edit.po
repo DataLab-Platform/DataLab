@@ -15,7 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.18.0\n"
 
 msgid "Manipulate metadata and annotations"
 msgstr "Manipuler les métadonnées et les annotations"
@@ -97,6 +97,12 @@ msgstr "Toute autre information que vous avez pu ajouter aux métadonnées d'un 
 
 msgid "Copying metadata from a signal to another will overwrite the metadata of the destination signal (for the metadata keys that are common to both signals) or simply add the metadata keys that are not present in the destination signal."
 msgstr "Copier les métadonnées d'un signal à un autre écrasera les métadonnées du signal de destination (pour les clés de métadonnées communes aux deux signaux) ou ajoutera simplement les clés de métadonnées qui ne sont pas présentes dans le signal de destination."
+
+msgid "When pasting metadata, a dialog box allows you to select which metadata categories to keep from the clipboard:"
+msgstr "Lorsque vous collez des métadonnées, une boîte de dialogue vous permet de sélectionner les catégories de métadonnées à conserver à partir du presse-papiers :"
+
+msgid "Screenshot of the \"Paste metadata\" dialog."
+msgstr "Capture d'écran de la boîte de dialogue \"Coller les métadonnées\"."
 
 msgid "Import/export metadata"
 msgstr "Importer/exporter les métadonnées"
