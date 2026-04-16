@@ -20,7 +20,7 @@ specific module of this package:
 - **Signal and image panels**: those panels are used to display signals and images
   and to provide a set of tools to manipulate them. Each data panel relies on a set
   of modules to handle the GUI features (:mod:`datalab.gui.actionhandler` and
-  :mod:`datalab.gui.objectview`), the data model (:mod:`datalab.gui.objectmodel`),
+  :mod:`datalab.gui.objectview`), the data model (:mod:`datalab.objectmodel`),
   the data visualization (:mod:`datalab.gui.plothandler`),
   and the data processing (:mod:`datalab.gui.processor`).
 
