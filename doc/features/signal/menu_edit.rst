@@ -100,6 +100,13 @@ This feature allows you to tranfer those information from one signal to another:
     destination signal (for the metadata keys that are common to both signals)
     or simply add the metadata keys that are not present in the destination signal.
 
+When pasting metadata, a dialog box allows you to select which metadata categories
+to keep from the clipboard:
+
+.. figure:: /images/shots/s_paste_metadata.png
+
+    Screenshot of the "Paste metadata" dialog.
+
 Import/export metadata
 ^^^^^^^^^^^^^^^^^^^^^^
 

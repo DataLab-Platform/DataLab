@@ -15,7 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
+"Generated-By: Babel 2.18.0\n"
 
 msgid "Manipulate metadata and annotations"
 msgstr "Manipuler les métadonnées et les annotations"
@@ -100,6 +100,12 @@ msgstr "Toute autre information que vous avez pu ajouter aux métadonnées d'une
 
 msgid "Copying metadata from an image to another will overwrite the metadata of the destination image (for the metadata keys that are common to both images) or simply add the metadata keys that are not present in the destination image."
 msgstr "Copier les métadonnées d'une image à une autre écrasera les métadonnées de l'image de destination (pour les clés de métadonnées communes aux deux images) ou ajoutera simplement les clés de métadonnées qui ne sont pas présentes dans l'image de destination."
+
+msgid "When pasting metadata, a dialog box allows you to select which metadata categories to keep from the clipboard:"
+msgstr "Lorsque vous collez des métadonnées, une boîte de dialogue vous permet de sélectionner les catégories de métadonnées à conserver à partir du presse-papiers :"
+
+msgid "Screenshot of the \"Paste metadata\" dialog."
+msgstr "Capture d'écran de la boîte de dialogue \"Coller les métadonnées\"."
 
 msgid "Import/export metadata"
 msgstr "Importer/exporter les métadonnées"
@@ -226,10 +232,10 @@ msgid "The \"Paste annotations\" action is only enabled when there are annotatio
 msgstr "L'action \"Coller les annotations\" n'est activée que lorsqu'il y a des annotations dans le presse-papiers (c'est-à-dire après avoir utilisé \"Copier les annotations\")."
 
 msgid "Edit annotations"
-msgstr ""
+msgstr "Modifier les annotations"
 
 msgid "The \"Edit annotations\" |annotations_edit| action opens a dialog where you can view, add, modify, or remove annotations from the current image. This provides a visual way to manage all annotations on an image."
-msgstr "L'action \"Éditer les annotations\" |annotations_edit| ouvre une boîte de dialogue où vous pouvez visualiser, ajouter, modifier ou supprimer des annotations de l'image actuelle. Cela offre un moyen visuel de gérer toutes les annotations sur une image."
+msgstr "L'action \"Modifier les annotations\" |annotations_edit| ouvre une boîte de dialogue où vous pouvez visualiser, ajouter, modifier ou supprimer des annotations de l'image actuelle. Cela offre un moyen visuel de gérer toutes les annotations sur une image."
 
 msgid "annotations_edit"
 msgstr ""
