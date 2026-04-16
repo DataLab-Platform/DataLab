@@ -4,7 +4,7 @@
 Object model
 ============
 
-The :mod:`datalab.gui.objectmodel` module defines the object data model used by the
+The :mod:`datalab.objectmodel` module defines the object data model used by the
 GUI to store signals, images and groups.
 
 The model is based on a hierarchical tree of objects, with two levels:
