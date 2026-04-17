@@ -158,3 +158,9 @@ msgstr "Correction de l'`AttributeError` dans la boîte de dialogue de configura
 
 msgid "Fixed plugin import errors being silently swallowed when they occurred before the internal console was initialized"
 msgstr "Correction des erreurs d'importation de plugins étant silencieusement ignorées lorsqu'elles se produisaient avant l'initialisation de la console interne"
+
+msgid "**Remote control API:**"
+msgstr "**API de contrôle à distance :**"
+
+msgid "Added new `set_object` method to the proxy API (XML-RPC and Web API) allowing users to push modified signal/image objects back to DataLab after retrieving them with `get_object` — previously, modifications to object properties (e.g. `dx`, `dy`, `x0`, `y0`, `title`) were lost because `get_object` returns a copy (fixes [Issue #305](https://github.com/DataLab-Platform/DataLab/issues/305))"
+msgstr "Ajout de la nouvelle méthode `set_object` à l'API proxy (XML-RPC et Web API) permettant aux utilisateurs de renvoyer des objets signal/image modifiés à DataLab après les avoir récupérés avec `get_object` — auparavant, les modifications des propriétés des objets (par exemple `dx`, `dy`, `x0`, `y0`, `title`) étaient perdues car `get_object` renvoie une copie (corrige [Issue #305](https://github.com/DataLab-Platform/DataLab/issues/305))"

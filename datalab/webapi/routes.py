@@ -461,6 +461,66 @@ async def put_object_data(
         ) from e
 
 
+@router.put(
+    "/objects/{name}",
+    response_model=ObjectMetadata,
+    responses={
+        401: {"model": ErrorResponse},
+        404: {"model": ErrorResponse},
+        422: {"model": ErrorResponse},
+        500: {"model": ErrorResponse},
+    },
+)
+async def set_object(
+    name: str,
+    request: Request,
+    _token: str = Depends(verify_token),
+    adapter: WorkspaceAdapter = Depends(get_adapter),
+) -> ObjectMetadata:
+    """Update an existing object in-place from NPZ data.
+
+    The request body must be a NumPy NPZ archive containing the object data
+    (x.npy/y.npy for signals, data.npy for images) and metadata.json.
+
+    Unlike ``PUT /objects/{name}/data`` (which creates or replaces), this
+    endpoint requires the object to already exist and updates it in-place,
+    preserving its identity, group membership, and position.
+
+    Args:
+        name: Object name/title (must already exist).
+        request: FastAPI request (body contains NPZ archive bytes).
+
+    Returns:
+        Updated object metadata.
+    """
+    try:
+        body = await request.body()
+        obj = deserialize_object_from_npz(body)
+        obj.title = name
+        adapter.set_object(name, obj)
+
+        # Return updated metadata
+        updated = adapter.get_object(name)
+        meta = object_to_metadata(updated, name)
+        return ObjectMetadata(**meta)
+
+    except KeyError as e:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Object '{name}' not found",
+        ) from e
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"Invalid NPZ format: {e}",
+        ) from e
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error updating object '{name}': {e}",
+        ) from e
+
+
 # =============================================================================
 # Computation endpoints
 # =============================================================================

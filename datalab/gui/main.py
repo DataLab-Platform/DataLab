@@ -2226,6 +2226,27 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 raise TypeError(f"Unsupported object type {type(obj)}")
 
     @remote_controlled
+    def set_object(self, obj: SignalObj | ImageObj) -> None:
+        """Set object data - update an existing signal or image in-place.
+
+        The existing object is identified by UUID carried by ``obj``
+        (from a previous :meth:`get_object` call).
+
+        Args:
+            obj: object with updated data (signal or image)
+
+        Raises:
+            KeyError: if no object with matching UUID is found
+            TypeError: if object type is unsupported
+        """
+        if isinstance(obj, SignalObj):
+            self.signalpanel.set_object(obj)
+        elif isinstance(obj, ImageObj):
+            self.imagepanel.set_object(obj)
+        else:
+            raise TypeError(f"Unsupported object type {type(obj)}")
+
+    @remote_controlled
     def load_from_files(self, filenames: list[str]) -> None:
         """Open objects from files in current panel (signals/images)
 

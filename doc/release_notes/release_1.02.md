@@ -73,3 +73,7 @@ DataLab now detects when another instance is already running and warns the user 
 
 * Fixed `AttributeError` in plugin configuration dialog when clicking "Show full description" (incorrect attribute reference)
 * Fixed plugin import errors being silently swallowed when they occurred before the internal console was initialized
+
+**Remote control API:**
+
+* Added new `set_object` method to the proxy API (XML-RPC and Web API) allowing users to push modified signal/image objects back to DataLab after retrieving them with `get_object` — previously, modifications to object properties (e.g. `dx`, `dy`, `x0`, `y0`, `title`) were lost because `get_object` returns a copy (fixes [Issue #305](https://github.com/DataLab-Platform/DataLab/issues/305))

@@ -84,7 +84,14 @@ from datalab.gui.processor.base import (
     insert_processing_parameters,
 )
 from datalab.gui.roieditor import TypeROIEditor
-from datalab.objectmodel import ObjectGroup, get_short_id, get_uuid, set_uuid
+from datalab.objectmodel import (
+    ObjectGroup,
+    get_number,
+    get_short_id,
+    get_uuid,
+    set_number,
+    set_uuid,
+)
 from datalab.utils.qthelpers import (
     CallbackWorker,
     create_progress_bar,
@@ -1549,6 +1556,33 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.SIG_OBJECT_ADDED.emit()
 
         self.objview.update_tree()
+
+    def set_object(self, obj: TypeObj) -> None:
+        """Update an existing object in-place with data from ``obj``.
+
+        The existing object is identified by UUID (carried by ``obj`` from a
+        previous :meth:`get_object` call). All data attributes are copied from
+        ``obj`` to the existing object while preserving internal metadata
+        (number, group membership).
+
+        Args:
+            obj: SignalObj or ImageObj with the same UUID as an existing object.
+
+        Raises:
+            KeyError: if no object with matching UUID is found
+        """
+        obj_uuid = get_uuid(obj)
+        existing = self.objmodel[obj_uuid]  # KeyError if not found
+        # Preserve internal number metadata before overwriting
+        number = get_number(existing)
+        # Copy all public DataSet item values from obj to existing
+        for item in existing._items:  # pylint: disable=protected-access
+            name = item.get_name()
+            if not name.startswith("_"):
+                setattr(existing, name, getattr(obj, name))
+        set_number(existing, number)
+        self.objview.update_tree()
+        self.refresh_plot("selected", update_items=True, force=True)
 
     def remove_all_objects(self) -> None:
         """Remove all objects"""

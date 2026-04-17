@@ -441,6 +441,18 @@ msgstr ""
 msgid "Panel name (valid values: \"signal\", \"image\", \"macro\"))"
 msgstr ""
 
+msgid "Set object data in DataLab."
+msgstr ""
+
+msgid "Update an existing object in DataLab with new data from ``obj``. The object is identified by its UUID (which is carried by ``obj`` from a previous :meth:`get_object` call)."
+msgstr ""
+
+msgid "Signal or image object (must have the same UUID as an existing object in DataLab)"
+msgstr ""
+
+msgid "if no object with matching UUID is found"
+msgstr ""
+
 msgid "Set XML-RPC port to connect to."
 msgstr ""
 

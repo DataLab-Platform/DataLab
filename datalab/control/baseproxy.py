@@ -342,6 +342,22 @@ class AbstractDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
+    def set_object(self, obj: SignalObj | ImageObj) -> None:
+        """Set object data in DataLab.
+
+        Update an existing object in DataLab with new data from ``obj``.
+        The object is identified by its UUID (which is carried by ``obj``
+        from a previous :meth:`get_object` call).
+
+        Args:
+            obj: Signal or image object (must have the same UUID as an
+             existing object in DataLab)
+
+        Raises:
+            KeyError: if no object with matching UUID is found
+        """
+
+    @abc.abstractmethod
     def add_group(
         self, title: str, panel: str | None = None, select: bool = False
     ) -> None:
@@ -858,6 +874,22 @@ class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
             Tuple: groups titles, lists of inner objects uuids and titles
         """
         return self._datalab.get_group_titles_with_object_info()
+
+    def set_object(self, obj: SignalObj | ImageObj) -> None:
+        """Set object data in DataLab.
+
+        Update an existing object in DataLab with new data from ``obj``.
+        The object is identified by its UUID (which is carried by ``obj``
+        from a previous :meth:`get_object` call).
+
+        Args:
+            obj: Signal or image object (must have the same UUID as an
+             existing object in DataLab)
+
+        Raises:
+            KeyError: if no object with matching UUID is found
+        """
+        self._datalab.set_object(obj)
 
     def get_object_titles(self, panel: str | None = None) -> list[str]:
         """Get object (signal/image) list for current panel.
