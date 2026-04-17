@@ -94,8 +94,8 @@ class CurveStatsToolFunctions:
             )
         else:  # YRangeCursorTool
             labelfuncs = (
-                ("%g &lt; y &lt; %g", lambda ymin, ymax: (ymin, ymax)),
-                ("∆y=%g", lambda ymin, ymax: ymax - ymin),
+                ("%g &lt; y &lt; %g", lambda ymin, ymax: (min(ymin, ymax), max(ymin, ymax))),
+                ("∆y=%g", lambda ymin, ymax: abs(ymax - ymin)),
             )
         statstool.set_labelfuncs(labelfuncs)
 
