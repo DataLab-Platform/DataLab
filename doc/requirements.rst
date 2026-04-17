@@ -29,7 +29,7 @@ The `datalab-platform` package requires the following Python modules:
       - >= 0.19.2, < 0.27
       - Image processing in Python
     * - pandas
-      - >= 1.4, < 3.0
+      - >= 1.4, < 3.1
       - Powerful data structures for data analysis, time series, and statistics
     * - PyWavelets
       - >= 1.2, < 2.0

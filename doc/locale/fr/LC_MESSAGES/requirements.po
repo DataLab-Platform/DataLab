@@ -90,7 +90,7 @@ msgstr "Traitement d'images en Python"
 msgid "pandas"
 msgstr ""
 
-msgid ">= 1.4, < 3.0"
+msgid ">= 1.4, < 3.1"
 msgstr ""
 
 msgid "Powerful data structures for data analysis, time series, and statistics"

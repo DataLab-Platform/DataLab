@@ -30,6 +30,12 @@ msgstr "Lorsque le \"Panneau Signal\" est sélectionné, les menus et barres d'o
 msgid "The \"Operations\" menu allows you to perform various operations on the selected signals, such as arithmetic operations, peak detection, or convolution."
 msgstr "Le menu \"Opérations\" permet d'effectuer diverses opérations sur les signaux sélectionnés, telles que des opérations arithmétiques, la détection de pics, ou encore la convolution."
 
+msgid "Arithmetic"
+msgstr "Arithmétique"
+
+msgid "Evaluate a user-defined arithmetic expression on the selected signals. The expression can reference the signal's X and Y arrays as variables."
+msgstr "Évalue une expression arithmétique définie par l'utilisateur sur les signaux sélectionnés. L'expression peut référencer les tableaux X et Y du signal comme variables."
+
 msgid "Operations with a constant"
 msgstr "Opérations avec une constante"
 
@@ -270,6 +276,17 @@ msgstr ""
 msgid ":math:`y_{M} = \\sqrt{\\dfrac{1}{M}\\sum_{k=0}^{M-1}{(y_{k} - \\bar{y})^{2}}}`"
 msgstr ""
 
+#, fuzzy
+msgid "|quadratic_difference| Quadratic Difference"
+msgstr "|quadratic_difference| Différence quadratique"
+
+msgid "quadratic_difference"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ":math:`y_{2} = \\sqrt{y_{1}^{2} - y_{0}^{2}}`"
+msgstr ""
+
 msgid "Other mathematical functions"
 msgstr "Autres fonctions mathématiques"
 
@@ -294,24 +311,6 @@ msgstr ""
 
 msgid ":math:`y_{k} = \\sqrt{y_{k}}`"
 msgstr ""
-
-msgid "|derivative| Derivative"
-msgstr "|derivative| Dérivée"
-
-msgid "derivative"
-msgstr ""
-
-msgid "Based on `numpy.gradient <https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_"
-msgstr "Basée sur `numpy.gradient <https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_"
-
-msgid "|integral| Integral"
-msgstr "|integral| Intégrale"
-
-msgid "integral"
-msgstr ""
-
-msgid "Based on `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_"
-msgstr "Basée sur `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_"
 
 msgid "|signal_to_image| Assemble signals into image"
 msgstr "|signal_to_image| Assembler les signaux en une image"

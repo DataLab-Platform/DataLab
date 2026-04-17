@@ -12,16 +12,19 @@ This document provides comprehensive guidance for AI coding agents working on th
 2. **DataLab GUI**: Qt application layer built on PlotPyStack (PlotPy + guidata)
 3. **Processor Pattern**: Bridge between GUI and computation functions
 4. **Action Handler**: Manages menus, toolbars, and GUI actions
-5. **Plugin System**: Extensible architecture for third-party features
+5. **Plugin System**: Extensible architecture for third-party features (with hot-reload)
 6. **Macro System**: User-scriptable automation via Python
 7. **Remote Control**: XML-RPC API for external applications
+8. **Web API**: FastAPI-based HTTP/JSON server for notebook integration and remote control
 
 ### Technology Stack
 
 - **Python**: 3.9+ (using `from __future__ import annotations`)
-- **Core Libraries**: NumPy (=1.26.4), SciPy (=1.10.1), scikit-image, OpenCV
-- **GUI**: Qt via PlotPy (=2.8.2) and guidata (=3.13.3)
-- **Computation**: Sigima (=1.0.2) - separate package
+- **Core Libraries**: NumPy (>=1.22), SciPy (>=1.10.1), scikit-image (>=0.19.2), OpenCV (optional)
+- **GUI**: Qt via PlotPy (>=2.8.2) and guidata (>=3.13.4)
+- **Computation**: Sigima (>=1.1.0) - separate package
+- **Web API**: FastAPI (>=0.110.0), uvicorn (>=0.27.0), pydantic (>=2.0)
+- **Other**: pandas (>=1.4), PyWavelets (>=1.2), psutil (>=5.8), packaging (>=21.3)
 - **Testing**: pytest with coverage
 - **Linting/Formatting**: Ruff (preferred), Pylint (with specific disables)
 - **Internationalization**: gettext (.po files), sphinx-intl for docs
@@ -33,22 +36,39 @@ This document provides comprehensive guidance for AI coding agents working on th
 ```
 DataLab/
 +-- datalab/              # Main application code
-�   +-- gui/              # GUI layer
-�   �   +-- processor/    # Processor pattern (signal.py, image.py, base.py)
-�   �   +-- actionhandler.py  # Menu/action management
-�   �   +-- main.py       # Main window
-�   �   +-- panel/        # Signal/Image panels
-�   +-- control/          # Remote control API (proxy.py, remote.py)
-�   +-- plugins/          # Plugin system
-�   +-- tests/            # pytest test suite
-�   +-- locale/           # Translations (.po files)
-�   +-- config.py         # Configuration management
+│   +-- gui/              # GUI layer
+│   │   +-- processor/    # Processor pattern (signal.py, image.py, base.py)
+│   │   +-- actionhandler.py  # Menu/action management
+│   │   +-- main.py       # Main window
+│   │   +-- panel/        # Signal/Image panels
+│   +-- control/          # Remote control API
+│   │   +-- baseproxy.py  # Abstract API definition (BaseProxy)
+│   │   +-- proxy.py      # RemoteProxy, LocalProxy
+│   │   +-- remote.py     # XML-RPC server
+│   +-- webapi/           # Web API (FastAPI HTTP/JSON server)
+│   │   +-- routes.py     # API endpoint definitions
+│   │   +-- controller.py # Business logic
+│   │   +-- adapter.py    # DataLab GUI adapter
+│   │   +-- schema.py     # Pydantic models
+│   │   +-- serialization.py  # NPZ data serialization
+│   │   +-- actions.py    # GUI actions (start/stop server)
+│   +-- adapters_plotpy/  # PlotPy integration adapters
+│   +-- adapters_metadata/  # Metadata adapters
+│   +-- h5/               # HDF5 I/O layer
+│   +-- widgets/          # Qt widgets (dialogs, editors, viewers)
+│   +-- utils/            # Utilities (instance check, etc.)
+│   +-- plugins/          # Built-in plugins
+│   +-- plugins.py        # Plugin system implementation
+│   +-- tests/            # pytest test suite
+│   +-- locale/           # Translations (.po files)
+│   +-- config.py         # Configuration management
+│   +-- objectmodel.py    # Object data model for GUI
 +-- doc/                  # Sphinx documentation
-�   +-- locale/fr/        # French documentation translations
-�   +-- features/         # Feature documentation (signal/, image/)
+│   +-- locale/fr/        # French documentation translations
+│   +-- features/         # Feature documentation (signal/, image/)
 +-- macros/examples/      # Demo macros
 +-- scripts/              # Build/development scripts
-�   +-- run_with_env.py   # Environment loader (.env support)
+│   +-- run_with_env.py   # Environment loader (.env support)
 +-- .env                  # Local Python path (PYTHONPATH=.;../guidata;../plotpy;../sigima)
 +-- pyproject.toml        # Project configuration
 ```
@@ -150,7 +170,7 @@ python scripts/run_with_env.py python -m sphinx build doc build/doc -b html -D l
 |--------|---------|----------------|-----------|
 | `compute_1_to_1` | 1 obj ? 1 obj | k ? k | Independent transformations (FFT, normalization) |
 | `compute_1_to_0` | 1 obj ? metadata | k ? 0 | Analysis producing scalar results (FWHM, centroid) |
-| `compute_1_to_n` | 1 obj ? n objs | k ? k�n | ROI extraction, splitting |
+| `compute_1_to_n` | 1 obj ? n objs | k ? k�n | ROI extraction, splitting |
 | `compute_n_to_1` | n objs ? 1 obj | n ? 1 (or n ? n pairwise) | Averaging, summing, concatenation |
 | `compute_2_to_1` | 1 obj + 1 operand ? 1 obj | k + 1 ? k (or n + n pairwise) | Binary operations (add, multiply) |
 
@@ -257,25 +277,31 @@ def setup_processing_actions(self) -> None:
 **Menu Organization**:
 
 Menus are organized by function:
-- `File` ? Import/export, project management
-- `Edit` ? Copy/paste, delete, metadata editing
-- `Operation` ? Basic math (add, multiply, etc.)
-- `Processing` ? Advanced transformations, filters
-  - `Axis transformation` ? Calibration, X-Y mode, replace X
-- `Analysis` ? Measurements, ROI extraction
-- `Computing` ? FFT, convolution, fit
+- `File` → Import/export, project management, Web API server control
+- `Create` → Generate synthetic signals/images
+- `Edit` → Copy/paste, delete, metadata/annotations editing
+- `ROI` → Region of interest management
+- `Operations` → Basic math (add, multiply, etc.), arithmetic, convolution
+- `Processing` → Advanced transformations, filters
+  - `Axis transformation` → Calibration, X-Y mode, replace X
+  - `Fourier analysis` → FFT, PSD, magnitude/phase spectrum
+  - `Fitting` → Curve fitting (interactive and automatic)
+  - `Stability analysis` → Allan variance, Hadamard variance, etc.
+- `Analysis` → Measurements, statistics, peak detection
+- `View` → Display options, panels visibility
 
 The complete menu structure is defined in `datalab/gui/actionhandler.py`.
-A text extract of the menu hiearchy is available in `scripts/datalab_menus.txt` (it is
+A text extract of the menu hierarchy is available in `scripts/datalab_menus.txt` (it is
 generated with `scripts/print_datalab_menus.py`).
 
 ### 4. Plugin System
 
-**Location**: `datalab/plugins.py`, `datalab/plugins/`
+**Location**: `datalab/plugins.py`, `datalab/plugins/`, `datalab/gui/pluginconfig.py`
 
 **Key Classes**:
-- `PluginBase`: Base class for all plugins (uses metaclass `PluginRegistry`)
-- `PluginInfo`: Plugin metadata (name, version, description, icon)
+- `PluginBase`: Abstract base class for all plugins (uses metaclass `PluginBaseMeta`)
+- `PluginInfo`: Plugin metadata dataclass (name, version, description, icon)
+- `PluginRegistry`: Metaclass that auto-registers plugin subclasses
 
 **Example: Creating a Plugin**
 
@@ -285,29 +311,44 @@ from datalab.plugins import PluginBase, PluginInfo
 class MyPlugin(PluginBase):
     """My custom plugin."""
 
-    def __init__(self):
-        super().__init__()
-        self.info = PluginInfo(
-            name="My Plugin",
-            version="1.0.0",
-            description="Does something useful",
-            icon="my_icon.svg",
-        )
+    PLUGIN_INFO = PluginInfo(
+        name="My Plugin",
+        version="1.0.0",
+        description="Does something useful",
+        icon="my_icon.svg",
+    )
 
-    def register(self, mainwindow: DLMainWindow) -> None:
-        """Register plugin with main window."""
-        # Add menu items, actions, etc.
+    def create_actions(self):
+        """Create plugin actions (required)."""
+        # Use self.signalpanel, self.imagepanel, self.proxy
+        # to add menu items and processing actions
         pass
 
-    def unregister(self) -> None:
-        """Unregister plugin."""
+    def register_hooks(self):
+        """Optional: called when plugin is registered."""
+        pass
+
+    def unregister_hooks(self):
+        """Optional: called when plugin is unregistered."""
         pass
 ```
 
+**Plugin API Helpers**:
+- `self.signalpanel` / `self.imagepanel`: Access to panel APIs
+- `self.proxy`: `LocalProxy` instance for object creation and processing
+- `self.show_warning()`, `self.show_error()`, `self.show_info()`, `self.ask_yesno()`: Dialog helpers
+- `self.edit_new_signal_parameters()`, `self.edit_new_image_parameters()`: Object parameter dialogs
+
 **Plugin Discovery**: Plugins are loaded from:
 1. `datalab/plugins/` (built-in)
-2. User-defined paths in `Conf.get_path("plugins")`
-3. For frozen apps, from `plugins/` directory next to executable
+2. User plugin directory (`~/.DataLab/plugins`)
+3. Custom plugin directory (configurable in preferences)
+4. For frozen apps, from `plugins/` directory next to executable
+
+**Plugin Hot-Reload**: Plugins can be reloaded without restarting DataLab:
+- **Plugins > Configure plugins...**: Enable/disable individual plugins
+- **Plugins > Reload plugins**: Reload all plugin modules from disk
+- The reload workflow: unregister → clear actions → re-discover → re-register → recreate actions
 
 ### 5. Macro System
 
@@ -356,8 +397,9 @@ panel_name = proxy.call_method("get_current_panel")
 **Location**: `datalab/control/`
 
 **Classes**:
-- `RemoteProxy`: XML-RPC client for remote DataLab control
-- `LocalProxy`: Direct access for same-process scripting
+- `BaseProxy` (`baseproxy.py`): Abstract base defining the DataLab control API
+- `RemoteProxy` (`proxy.py`): XML-RPC client for remote DataLab control
+- `LocalProxy` (`proxy.py`): Direct access for same-process scripting
 
 **Calling Processor Methods**:
 
@@ -369,6 +411,27 @@ proxy.calc("average")
 p = sigima.params.MovingAverageParam.create(n=30)
 proxy.calc("moving_average", p)
 ```
+
+### 7. Web API (HTTP/JSON)
+
+**Location**: `datalab/webapi/`
+
+**Purpose**: FastAPI-based HTTP/JSON server for DataLab-Kernel (Jupyter) integration
+and remote control from any HTTP client (including WASM/Pyodide environments).
+
+**Key Modules**:
+- `routes.py`: API endpoint definitions (`/api/v1/...`)
+- `controller.py`: Business logic layer
+- `adapter.py`: Bridge between Web API and DataLab GUI
+- `schema.py`: Pydantic request/response models
+- `serialization.py`: NPZ binary data serialization
+- `actions.py`: GUI actions (start/stop server from File > Web API menu)
+
+**Server Control**: Available in `File > Web API` menu:
+- Start/Stop Web API Server
+- Copy Connection Info (URL + token)
+
+**Authentication**: Bearer token authentication for all endpoints except `/api/v1/status`.
 
 ## Coding Conventions
 
@@ -634,7 +697,13 @@ DataLab development uses a **multi-root workspace** (`.code-workspace` file) wit
 | `datalab/gui/actionhandler.py` | Menu and action management |
 | `datalab/config.py` | Configuration, `_()` translation function |
 | `datalab/plugins.py` | Plugin system implementation |
+| `datalab/gui/pluginconfig.py` | Plugin configuration dialog |
+| `datalab/control/baseproxy.py` | Abstract base proxy (API definition) |
 | `datalab/control/proxy.py` | Remote control API (RemoteProxy, LocalProxy) |
+| `datalab/webapi/routes.py` | Web API endpoint definitions |
+| `datalab/webapi/controller.py` | Web API business logic |
+| `datalab/webapi/actions.py` | Web API GUI actions (start/stop server) |
+| `datalab/objectmodel.py` | Object data model for GUI |
 | `sigima/proc/signal/processing.py` | Signal computation functions |
 | `sigima/proc/image/processing.py` | Image computation functions |
 | `scripts/run_with_env.py` | Environment loader (loads `.env`) |

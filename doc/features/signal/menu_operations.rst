@@ -21,6 +21,17 @@ The "Operations" menu allows you to perform various operations on the
 selected signals, such as arithmetic operations, peak detection, or
 convolution.
 
+Arithmetic
+----------
+
+Evaluate a user-defined arithmetic expression on the selected signals.
+The expression can reference the signal's X and Y arrays as variables.
+
+.. |arithmetic| image:: ../../../datalab/data/icons/operations/arithmetic.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
 Operations with a constant
 --------------------------
 
@@ -228,6 +239,8 @@ Create a new signal which is the result of a statistical operation on each point
       - :math:`y_{M} = \dfrac{1}{M}\sum_{k=0}^{M-1}{y_{k}}`
     * - |standard_deviation| Standard Deviation
       - :math:`y_{M} = \sqrt{\dfrac{1}{M}\sum_{k=0}^{M-1}{(y_{k} - \bar{y})^{2}}}`
+    * - |quadratic_difference| Quadratic Difference
+      - :math:`y_{2} = \sqrt{y_{1}^{2} - y_{0}^{2}}`
 
 .. |average| image:: ../../../datalab/data/icons/operations/average.svg
     :width: 24px
@@ -235,6 +248,11 @@ Create a new signal which is the result of a statistical operation on each point
     :class: dark-light no-scaled-link
 
 .. |standard_deviation| image:: ../../../datalab/data/icons/operations/std.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |quadratic_difference| image:: ../../../datalab/data/icons/operations/quadratic_difference.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -252,10 +270,6 @@ Other mathematical functions
       - :math:`y_{k} = y_{k}^{n}`
     * - |sqrt| Square root
       - :math:`y_{k} = \sqrt{y_{k}}`
-    * - |derivative| Derivative
-      - Based on `numpy.gradient <https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_
-    * - |integral| Integral
-      - Based on `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_
     * - |signal_to_image| Assemble signals into image
       - Create a 2D image by assembling selected 1D signals as rows or columns,
         with optional normalization.
@@ -267,16 +281,6 @@ Other mathematical functions
     :class: dark-light no-scaled-link
 
 .. |sqrt| image:: ../../../datalab/data/icons/operations/sqrt.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
-
-.. |derivative| image:: ../../../datalab/data/icons/operations/derivative.svg
-    :width: 24px
-    :height: 24px
-    :class: dark-light no-scaled-link
-
-.. |integral| image:: ../../../datalab/data/icons/operations/integral.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

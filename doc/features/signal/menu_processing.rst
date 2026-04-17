@@ -369,6 +369,26 @@ This can be done automatically or through an interactive curve fitting dialog.
     * - Cumulative Distribution Function (CDF)
       - :math:`y = y_{0} + A \erf\left(\dfrac{x - x_{0}}{\sqrt{2} \sigma}\right)`
 
+Evaluate fit
+~~~~~~~~~~~~
+
+Apply a previously computed fit to a signal. This feature uses the fit parameters
+stored in the signal metadata (from a prior fitting operation) to generate the
+fitted curve. This is useful to evaluate the fit on a different X range or on
+a different signal.
+
+Derivative
+^^^^^^^^^^
+
+Create a new signal which is the derivative of each selected signal.
+Based on `numpy.gradient <https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_.
+
+Integral
+^^^^^^^^
+
+Create a new signal which is the integral of each selected signal.
+Based on `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_.
+
 Windowing
 ^^^^^^^^^
 
@@ -509,7 +529,7 @@ The following stability analysis methods are available:
       - Measure of the stability of a signal: defined as the variance of the difference between two successive measurements as a function of the time interval between them.
     * - Allan deviation
       - Square root of the Allan variance.
-    * - Overlapping Allan deviation
+    * - Overlapping Allan variance
       - A more robust version of the Allan variance that overlaps successive segments to improve statistical confidence.
     * - Modified Allan variance
       - A variation of the Allan variance that accounts for phase noise by introducing a filtering operation.

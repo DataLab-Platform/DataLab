@@ -572,6 +572,24 @@ msgstr "Fonction de distribution cumulative (CDF)"
 msgid ":math:`y = y_{0} + A \\erf\\left(\\dfrac{x - x_{0}}{\\sqrt{2} \\sigma}\\right)`"
 msgstr ""
 
+msgid "Evaluate fit"
+msgstr "Évaluer l'ajustement"
+
+msgid "Apply a previously computed fit to a signal. This feature uses the fit parameters stored in the signal metadata (from a prior fitting operation) to generate the fitted curve. This is useful to evaluate the fit on a different X range or on a different signal."
+msgstr "Applique un ajustement précédemment calculé à un signal. Cette fonctionnalité utilise les paramètres d'ajustement stockés dans les métadonnées du signal (issus d'une opération d'ajustement antérieure) pour générer la courbe ajustée. Cela est utile pour évaluer l'ajustement sur une plage X différente ou sur un autre signal."
+
+msgid "Derivative"
+msgstr "Dérivée"
+
+msgid "Create a new signal which is the derivative of each selected signal. Based on `numpy.gradient <https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_."
+msgstr "Crée un signal à partir de la dérivée de chaque signal sélectionné. Basé sur `numpy.gradient <https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_."
+
+msgid "Integral"
+msgstr "Intégrale"
+
+msgid "Create a new signal which is the integral of each selected signal. Based on `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_."
+msgstr "Crée un signal à partir de l'intégrale de chaque signal sélectionné. Basé sur `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_."
+
 msgid "Windowing"
 msgstr "Fenêtrage"
 
@@ -803,8 +821,9 @@ msgstr "Ecart-type d'Allan"
 msgid "Square root of the Allan variance."
 msgstr "Racine carrée de la variance d'Allan."
 
-msgid "Overlapping Allan deviation"
-msgstr "Ecart-type d'Allan avec recouvrement"
+#, fuzzy
+msgid "Overlapping Allan variance"
+msgstr "Variance d'Allan avec recouvrement"
 
 msgid "A more robust version of the Allan variance that overlaps successive segments to improve statistical confidence."
 msgstr "Une version plus robuste de la variance d'Allan qui recoupe les segments successifs pour améliorer la confiance statistique."
