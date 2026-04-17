@@ -4,16 +4,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  datalab\n"
-"Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
-"PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Language: fr\n"
-"Language-Team: DataLab Platform Developers <p.raybaut@codra.fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.18.0\n"
 
 msgid "Results"
 msgstr "Résultats"
@@ -33,6 +28,18 @@ msgstr "%s non affichées"
 #, python-format
 msgid "Only %d out of %d shapes are displayed"
 msgstr "Seules %d sur %d formes sont affichées"
+
+#, python-format
+msgid ""
+"Another instance of DataLab (PID %d) appears to be running.\n"
+"Running multiple instances simultaneously may cause side effects: preferences being overwritten, remote control discovery issues, etc.\n"
+"\n"
+"Do you want to continue anyway?"
+msgstr ""
+"Une autre instance de DataLab (PID %d) semble être en cours d'exécution.\n"
+"L'exécution simultanée de plusieurs instances peut provoquer des effets de bord : écrasement des préférences, problèmes de découverte du contrôle à distance, etc.\n"
+"\n"
+"Voulez-vous continuer malgré tout ?"
 
 msgid "DataLab is a generic signal and image processing platform"
 msgstr "DataLab est une plateforme générique de traitement du signal et de l'image"
@@ -1356,12 +1363,6 @@ msgstr "Création des formes géométriques"
 
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
-
-msgid "Show more"
-msgstr "Afficher plus"
-
-msgid "Show less"
-msgstr "Afficher moins"
 
 msgid "Active"
 msgstr "Actif"
@@ -2742,11 +2743,14 @@ msgstr "Anneau"
 msgid "Grid of Gaussian Images"
 msgstr "Grille d'images gaussiennes"
 
-msgid "Load spectrum of paracetamol"
-msgstr "Charger le spectre du paracétamol"
-
 msgid "Load all test signals"
 msgstr "Charger tous les signaux de test"
+
+msgid "Load all test images"
+msgstr "Charger toutes les images de test"
+
+msgid "Load spectrum of paracetamol"
+msgstr "Charger le spectre du paracétamol"
 
 msgid "Create image with peaks"
 msgstr "Créer une image avec des pics"
@@ -2771,9 +2775,6 @@ msgstr "Créer une image avec un anneau"
 
 msgid "Create image with a grid of gaussian spots"
 msgstr "Créer une image avec une grille de spots gaussiens"
-
-msgid "Load all test images"
-msgstr "Charger toutes les images de test"
 
 msgid "Host application"
 msgstr "Application hôte"
@@ -2939,6 +2940,12 @@ msgstr ""
 
 msgid "Connection to DataLab"
 msgstr "Connexion à DataLab"
+
+msgid "Show more"
+msgstr "Afficher plus"
+
+msgid "Show less"
+msgstr "Afficher moins"
 
 msgid "Contents of file"
 msgstr "Contenu du fichier"
@@ -3443,17 +3450,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 msgid "Example Wizard"
 msgstr "Assistant exemple"
 
-#, python-format
-msgid ""
-"Another instance of DataLab (PID %d) appears to be running.\n"
-"Running multiple instances simultaneously may cause side effects: preferences "
-"being overwritten, remote control discovery issues, etc.\n"
-"\n"
-"Do you want to continue anyway?"
-msgstr ""
-"Une autre instance de DataLab (PID %d) semble être en cours d'exécution.\n"
-"L'exécution simultanée de plusieurs instances peut provoquer des effets "
-"de bord : écrasement des préférences, problèmes de découverte du contrôle "
-"à distance, etc.\n"
-"\n"
-"Voulez-vous continuer malgré tout ?"
