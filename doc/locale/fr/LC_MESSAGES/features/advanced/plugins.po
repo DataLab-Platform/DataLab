@@ -115,6 +115,30 @@ msgstr "Ce flux permet un développement itératif des plugins pendant que DataL
 msgid "Plugin enable/disable state is persisted in DataLab settings. Disabled plugins remain listed in the configuration dialog and can be re-enabled later. The global third-party plugins setting in Preferences is also applied immediately: disabling it removes plugin actions and greys out the Plugins menu and status indicator, while enabling it reloads plugins automatically."
 msgstr "L'état d'activation/désactivation des plugins est conservé dans les paramètres de DataLab. Les plugins désactivés restent listés dans la boîte de dialogue de configuration et peuvent être réactivés plus tard. Le réglage global des plugins tiers dans les préférences est lui aussi appliqué immédiatement : le désactiver supprime les actions des plugins et grise le menu Plugins ainsi que l'indicateur d'état, tandis que le réactiver recharge automatiquement les plugins."
 
+msgid "Hot-reload workflow for plugin development"
+msgstr "Rechargement à chaud pour le développement de plugins"
+
+msgid "The hot-reload feature is designed to accelerate the plugin development cycle. Here is the recommended workflow:"
+msgstr "La fonctionnalité de rechargement à chaud est conçue pour accélérer le cycle de développement des plugins. Voici le workflow recommandé :"
+
+msgid "Start DataLab normally."
+msgstr "Démarrer DataLab normalement."
+
+msgid "Create or edit your plugin file (e.g. ``datalab_myplugin.py``) in one of the plugin directories (e.g. ``~/.DataLab/plugins``)."
+msgstr "Créer ou modifier votre fichier plugin (par exemple ``datalab_myplugin.py``) dans l'un des répertoires de plugins (par exemple ``~/.DataLab/plugins``)."
+
+msgid "In DataLab, use **Plugins > Reload plugins** to pick up your changes instantly."
+msgstr "Dans DataLab, utiliser **Plugins > Recharger les plugins** pour prendre en compte les modifications instantanément."
+
+msgid "Test your plugin actions directly in the running application."
+msgstr "Tester les actions du plugin directement dans l'application en cours d'exécution."
+
+msgid "Iterate: edit the file, reload, test — without restarting DataLab."
+msgstr "Itérer : modifier le fichier, recharger, tester — sans redémarrer DataLab."
+
+msgid "To selectively enable or disable specific plugins during development, use **Plugins > Configure plugins...**. The dialog lists all discovered plugins with their name, version, description, and file path. Toggling a plugin takes effect immediately after closing the dialog."
+msgstr "Pour activer ou désactiver sélectivement des plugins pendant le développement, utiliser **Plugins > Configurer les plugins...**. La boîte de dialogue liste tous les plugins découverts avec leur nom, version, description et chemin de fichier. L'activation/désactivation d'un plugin prend effet immédiatement après la fermeture de la boîte de dialogue."
+
 msgid "Plugin API helpers"
 msgstr "Aides de l'API plugin"
 

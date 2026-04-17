@@ -81,6 +81,24 @@ This workflow allows iterative plugin development while DataLab is running.
 
   Plugin enable/disable state is persisted in DataLab settings. Disabled plugins remain listed in the configuration dialog and can be re-enabled later. The global third-party plugins setting in Preferences is also applied immediately: disabling it removes plugin actions and greys out the Plugins menu and status indicator, while enabling it reloads plugins automatically.
 
+Hot-reload workflow for plugin development
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The hot-reload feature is designed to accelerate the plugin development cycle.
+Here is the recommended workflow:
+
+1. Start DataLab normally.
+2. Create or edit your plugin file (e.g. ``datalab_myplugin.py``) in one of the
+   plugin directories (e.g. ``~/.DataLab/plugins``).
+3. In DataLab, use **Plugins > Reload plugins** to pick up your changes instantly.
+4. Test your plugin actions directly in the running application.
+5. Iterate: edit the file, reload, test — without restarting DataLab.
+
+To selectively enable or disable specific plugins during development, use
+**Plugins > Configure plugins...**. The dialog lists all discovered plugins
+with their name, version, description, and file path. Toggling a plugin
+takes effect immediately after closing the dialog.
+
 Plugin API helpers
 ------------------
 
