@@ -16,7 +16,7 @@ msgid "Version 1.1"
 msgstr "Version 1.1"
 
 msgid "DataLab Version 1.1.1 (2026-04-08)"
-msgstr "DataLab Version 1.1.1 (2026-04-08)"
+msgstr "DataLab Version 1.1.1 (08/04/2026)"
 
 msgid "**Note:** This is a **maintenance release** that fixes a single bug affecting **only the stand-alone executable version** of DataLab for **Microsoft Windows**. If you installed DataLab via `pip`, `conda`, or if you are running DataLab on Linux or macOS, **you are not affected by this bug** and there is no need to update to this version."
 msgstr "**Remarque :** Il s'agit d'une **version de maintenance** qui corrige un seul bug affectant **uniquement la version exécutable autonome** de DataLab pour **Microsoft Windows**. Si vous avez installé DataLab via `pip`, `conda`, ou si vous utilisez DataLab sur Linux ou macOS, **vous n'êtes pas affecté par ce bug** et il n'est pas nécessaire de mettre à jour vers cette version."
@@ -43,7 +43,7 @@ msgid "This closes [Issue #304](https://github.com/DataLab-Platform/DataLab/issu
 msgstr "Ceci clôture [Issue #304](https://github.com/DataLab-Platform/DataLab/issues/304) - Les fonctionnalités de rotation/symétrie échouent ou se bloquent dans la version autonome (PyInstaller)"
 
 msgid "DataLab Version 1.1.0 (2026-02-02)"
-msgstr "DataLab Version 1.1.0 (2026-02-02)"
+msgstr "DataLab Version 1.1.0 (02/02/2026)"
 
 msgid "✨ New Features"
 msgstr "✨ Nouvelles fonctionnalités"
