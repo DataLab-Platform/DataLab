@@ -37,9 +37,9 @@ msgid ""
 "Do you want to continue anyway?"
 msgstr ""
 "Une autre instance de DataLab (PID %d) semble être en cours d'exécution.\n"
-"L'exécution simultanée de plusieurs instances peut provoquer des effets de bord : écrasement des préférences, problèmes de découverte du contrôle à distance, etc.\n"
+"L'exécution simultanée de plusieurs instances peut entraîner des dysfonctionnements : écrasement des préférences, problèmes de découverte du contrôle à distance, etc.\n"
 "\n"
-"Voulez-vous continuer malgré tout ?"
+"Souhaitez-vous néanmoins continuer ?"
 
 msgid "DataLab is a generic signal and image processing platform"
 msgstr "DataLab est une plateforme générique de traitement du signal et de l'image"
@@ -3449,4 +3449,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-
