@@ -260,6 +260,10 @@ def test_plugin_system():  # pylint: disable=too-many-statements
             found_action = False
             for act in actions:
                 if act.text() == "Action Plugin 2 Updated_common":
+                    # Force-enable the action: with 0 items in the workspace
+                    # it is disabled by SelectCond.at_least_one, and
+                    # QAction.trigger() is a no-op on disabled actions.
+                    act.setEnabled(True)
                     act.trigger()
                     found_action = True
                     break
@@ -331,6 +335,7 @@ def test_plugin_system():  # pylint: disable=too-many-statements
             found_action = False
             for act in actions:
                 if act.text() == "Action Plugin 2 Updated_common":
+                    act.setEnabled(True)
                     act.trigger()
                     found_action = True
                     break

@@ -212,7 +212,11 @@ class ExpandableTextWidget(QW.QWidget):
         width = self.label.viewport().width()
         if width <= 0:
             margins = self.layout().contentsMargins()
-            width = self.width() - margins.left() - margins.right()
+            widget_width = self.width()
+            if widget_width <= 0:
+                # Widget not yet shown: honour setFixedWidth / setMinimumWidth
+                widget_width = self.minimumWidth()
+            width = widget_width - margins.left() - margins.right()
         return max(width, 0)
 
     def _get_collapsed_height(self) -> int:
