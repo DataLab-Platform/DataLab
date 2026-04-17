@@ -209,14 +209,23 @@ class ExpandableTextWidget(QW.QWidget):
 
     def _get_text_width(self) -> int:
         """Return the effective text width inside the browser viewport."""
+        margins = self.layout().contentsMargins()
+        margin_width = margins.left() + margins.right()
+
+        # When the widget has an explicit fixed width, derive the text
+        # width from it.  The viewport may not yet reflect this constraint
+        # before the first layout pass (e.g. PyQt6 offscreen platform).
+        min_w = self.minimumWidth()
+        max_w = self.maximumWidth()
+        if 0 < min_w == max_w:
+            return max(min_w - margin_width, 0)
+
         width = self.label.viewport().width()
         if width <= 0:
-            margins = self.layout().contentsMargins()
             widget_width = self.width()
             if widget_width <= 0:
-                # Widget not yet shown: honour setFixedWidth / setMinimumWidth
-                widget_width = self.minimumWidth()
-            width = widget_width - margins.left() - margins.right()
+                widget_width = min_w
+            width = widget_width - margin_width
         return max(width, 0)
 
     def _get_collapsed_height(self) -> int:
