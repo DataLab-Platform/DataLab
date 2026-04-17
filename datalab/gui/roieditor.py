@@ -73,7 +73,6 @@ if TYPE_CHECKING:
     from plotpy.tools.base import InteractiveTool
 
     from datalab.gui.panel.base import BaseDataPanel
-    from datalab.gui.panel.image import ImagePanel
 
 
 def configure_roi_item_in_tool(shape, obj: SignalObj | ImageObj) -> None:
