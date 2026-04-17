@@ -1,0 +1,158 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Version 1.2"
+msgstr "Version 1.2"
+
+msgid "DataLab Version 1.2.0 (2026-04-20)"
+msgstr "DataLab Version 1.2.0 (20/04/2026)"
+
+msgid "✨ New Features"
+msgstr "✨ Nouvelles fonctionnalités"
+
+msgid "**Plugin configuration dialog:**"
+msgstr "**Boîte de dialogue de configuration des plugins :**"
+
+msgid "DataLab now provides a dedicated **plugin configuration dialog** (accessible via \"Plugins > Configure plugins...\") that gives full control over third-party plugin management:"
+msgstr "DataLab propose désormais une **boîte de dialogue de configuration des plugins** (accessible via \"Plugins > Configurer les plugins...\") qui offre un contrôle total sur la gestion des plugins tiers :"
+
+msgid "Enable or disable individual plugins using checkboxes, or toggle all plugins at once with a tri-state master checkbox"
+msgstr "Activez ou désactivez les plugins individuels à l'aide de cases à cocher, ou basculez tous les plugins en même temps avec une case à cocher principale à trois états"
+
+msgid "Filter plugins by status: all, enabled, disabled, or plugins with import errors"
+msgstr "Filtrez les plugins par statut : tous, activés, désactivés ou plugins avec des erreurs d'importation"
+
+msgid "View plugin details including version, author, and expandable long descriptions directly in the dialog"
+msgstr "Affichez les détails des plugins, y compris la version, l'auteur et les descriptions longues extensibles directement dans la boîte de dialogue"
+
+msgid "Plugins with import errors are displayed prominently at the top with their full traceback, making it easy to diagnose installation issues"
+msgstr "Les plugins avec des erreurs d'importation sont affichés en haut avec leur trace complète, ce qui facilite le diagnostic des problèmes d'installation"
+
+msgid "**Plugin hot-reload:**"
+msgstr "**Rechargement à chaud des plugins :**"
+
+msgid "Third-party plugins can now be reloaded at runtime without restarting DataLab, via \"Plugins > Reload plugins\""
+msgstr "Les plugins tiers peuvent désormais être rechargés à l'exécution sans redémarrer DataLab, via \"Plugins > Recharger les plugins\""
+
+msgid "Enabling or disabling plugins in the Preferences dialog or plugin configuration dialog takes effect immediately - no restart required"
+msgstr "L'activation ou la désactivation des plugins dans la boîte de dialogue Préférences ou la boîte de dialogue de configuration des plugins prend effet immédiatement - aucun redémarrage n'est nécessaire"
+
+msgid "The Plugins menu, status widget, and plugin actions are automatically refreshed after configuration changes"
+msgstr "Le menu Plugins, le widget d'état et les actions des plugins sont automatiquement actualisés après les modifications de configuration"
+
+msgid "**Multi-instance detection:**"
+msgstr "**Détection de multi-instance :**"
+
+msgid "DataLab now detects when another instance is already running and warns the user before opening a second instance:"
+msgstr "DataLab détecte désormais lorsqu'une autre instance est déjà en cours d'exécution et avertit l'utilisateur avant d'ouvrir une deuxième instance :"
+
+msgid "Uses a PID-based lock file mechanism that supports multiple concurrent instances (reference counting)"
+msgstr "Utilise un mécanisme de fichier de verrouillage basé sur le PID qui prend en charge plusieurs instances simultanées (comptage de références)"
+
+msgid "Stale PIDs from crashed processes are automatically cleaned up"
+msgstr "Les PID obsolètes des processus plantés sont automatiquement nettoyés"
+
+msgid "Cross-platform support (Windows, macOS, Linux) using platform-specific process detection"
+msgstr "Prise en charge multiplateforme (Windows, macOS, Linux) utilisant la détection de processus spécifique à la plateforme"
+
+msgid "Closing one instance no longer incorrectly removes the lock file when other instances are still running"
+msgstr "La fermeture d'une instance ne supprime plus incorrectement le fichier de verrouillage lorsque d'autres instances sont encore en cours d'exécution"
+
+msgid "**Image ROI editor contrast synchronization:**"
+msgstr "**Synchronisation du contraste de l'éditeur ROI d'image :**"
+
+msgid "The image ROI editor now shares contrast (LUT) settings with the source image panel"
+msgstr "L'éditeur ROI d'image partage désormais les paramètres de contraste (LUT) avec le panneau de l'image source"
+
+msgid "Adjusting the contrast in the ROI editor is reflected back in the main panel and vice versa"
+msgstr "L'ajustement du contraste dans l'éditeur ROI est reflété dans le panneau principal et vice versa"
+
+msgid "Contrast controls are fully re-enabled in the image ROI editor dialog"
+msgstr "Les contrôles de contraste sont entièrement réactivés dans la boîte de dialogue de l'éditeur ROI d'image"
+
+msgid "📖 Documentation"
+msgstr "📖 Documentation"
+
+msgid "Added API documentation for the `datalab.objectmodel` module"
+msgstr "Ajout de la documentation de l'API pour le module `datalab.objectmodel`"
+
+msgid "Added screenshots for the \"Paste metadata\" dialog (signal and image panels)"
+msgstr "Ajout de captures d'écran pour la boîte de dialogue \"Coller les métadonnées\" (panneaux de signal et d'image)"
+
+msgid "Updated plugin documentation to describe the new configuration dialog, hot-reload workflow, and plugin API helpers"
+msgstr "Mise à jour de la documentation des plugins pour décrire la nouvelle boîte de dialogue de configuration, le flux de travail de rechargement à chaud et les assistants de l'API des plugins"
+
+msgid "Updated third-party plugin development guide with new template references and test coverage information"
+msgstr "Mise à jour du guide de développement des plugins tiers avec de nouvelles références de modèles et des informations sur la couverture des tests"
+
+msgid "Updated French translations across all new and modified documentation pages"
+msgstr "Mise à jour des traductions françaises sur toutes les pages de documentation nouvelles et modifiées"
+
+msgid "🔧 Improvements"
+msgstr "🔧 Améliorations"
+
+msgid "**Compatibility:**"
+msgstr "**Compatibilité :**"
+
+msgid "Officially support pandas 3.0.x (updated dependency constraint from `< 3.0` to `< 3.1`)"
+msgstr "Prise en charge officielle de pandas 3.0.x (contrainte de dépendance mise à jour de `< 3.0` à `< 3.1`)"
+
+msgid "Added legacy support for the `WINPYDIRBASE` environment variable for WinPython-based deployments"
+msgstr "Ajout de la prise en charge héritée de la variable d'environnement `WINPYDIRBASE` pour les déploiements basés sur WinPython"
+
+msgid "**Plugin system hardening:**"
+msgstr "**Renforcement du système de plugins :**"
+
+msgid "Plugin discovery and registration is now resilient to third-party import failures while preserving error reporting in the console, logs, and configuration dialog"
+msgstr "La découverte et l'enregistrement des plugins sont désormais résilients aux échecs d'importation de tiers tout en préservant le rapport d'erreurs dans la console, les journaux et la boîte de dialogue de configuration"
+
+msgid "Plugin submenus are now scrollable to prevent overflow when many plugin entries are registered"
+msgstr "Les sous-menus des plugins sont désormais défilables pour éviter le débordement lorsque de nombreuses entrées de plugins sont enregistrées"
+
+msgid "**Development tooling:**"
+msgstr "**Outils de développement :**"
+
+msgid "New `run_with_env.py` script for running tasks across multiple Python environment contexts (WinPython, venv, etc.)"
+msgstr "Nouveau script `run_with_env.py` pour exécuter des tâches dans plusieurs contextes d'environnement Python (WinPython, venv, etc.)"
+
+msgid "Simplified environment variable handling by removing the `DATALAB_ENV_LOADED` system"
+msgstr "Simplification de la gestion des variables d'environnement en supprimant le système `DATALAB_ENV_LOADED`"
+
+msgid "Fixed Coverage full VS Code task to properly use the `run_with_env.py` wrapper"
+msgstr "Correction de la tâche complète Coverage dans VS Code pour utiliser correctement le wrapper `run_with_env.py`"
+
+msgid "🛠️ Bug Fixes"
+msgstr "🛠️ Corrections de bugs"
+
+msgid "**HDF5 workspace - Table serialization:**"
+msgstr "**Espace de travail HDF5 - Sérialisation des tables :**"
+
+msgid "Fixed callable metadata not being stripped during HDF5 save/load of `TableResult` objects"
+msgstr "Correction de la non-suppression des métadonnées appelables lors de l'enregistrement/chargement HDF5 des objets `TableResult`"
+
+msgid "Fixed string-based enum values in table results not being restored correctly after HDF5 round-trip"
+msgstr "Correction de la restauration incorrecte des valeurs d'énumération basées sur des chaînes dans les résultats de table après un aller-retour HDF5"
+
+msgid "Fixed `column_formats` attribute not surviving HDF5 round-trip for both `TableResult` and `TableResultBuilder` outputs"
+msgstr "Correction de la non-survie de l'attribut `column_formats` lors de l'aller-retour HDF5 pour les sorties `TableResult` et `TableResultBuilder`"
+
+msgid "**Plugin system:**"
+msgstr "**Système de plugins :**"
+
+msgid "Fixed `AttributeError` in plugin configuration dialog when clicking \"Show full description\" (incorrect attribute reference)"
+msgstr "Correction de l'`AttributeError` dans la boîte de dialogue de configuration des plugins lors du clic sur \"Afficher la description complète\" (référence d'attribut incorrecte)"
+
+msgid "Fixed plugin import errors being silently swallowed when they occurred before the internal console was initialized"
+msgstr "Correction des erreurs d'importation de plugins étant silencieusement ignorées lorsqu'elles se produisaient avant l'initialisation de la console interne"
+
