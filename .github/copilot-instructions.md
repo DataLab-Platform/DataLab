@@ -22,7 +22,7 @@ This document provides comprehensive guidance for AI coding agents working on th
 - **Python**: 3.9+ (using `from __future__ import annotations`)
 - **Core Libraries**: NumPy (>=1.22), SciPy (>=1.10.1), scikit-image (>=0.19.2), OpenCV (optional)
 - **GUI**: Qt via PlotPy (>=2.8.2) and guidata (>=3.13.4)
-- **Computation**: Sigima (>=1.1.0) - separate package
+- **Computation**: Sigima (>=1.1.2) - separate package
 - **Web API**: FastAPI (>=0.110.0), uvicorn (>=0.27.0), pydantic (>=2.0)
 - **Other**: pandas (>=1.4), PyWavelets (>=1.2), psutil (>=5.8), packaging (>=21.3)
 - **Testing**: pytest with coverage

@@ -226,7 +226,7 @@ msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
 msgid "Sigima"
 msgstr ""
 
-msgid ">= 1.1.0"
+msgid ">= 1.1.2"
 msgstr ""
 
 msgid "Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform."
@@ -438,4 +438,3 @@ msgstr ""
 
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
-

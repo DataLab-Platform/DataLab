@@ -108,6 +108,9 @@ msgstr "**Compatibilité :**"
 msgid "Officially support pandas 3.0.x (updated dependency constraint from `< 3.0` to `< 3.1`)"
 msgstr "Prise en charge officielle de pandas 3.0.x (contrainte de dépendance mise à jour de `< 3.0` à `< 3.1`)"
 
+msgid "Updated minimum Sigima requirement from 1.1.0 to 1.1.2 to benefit from latest computation engine fixes and improvements"
+msgstr "Mise à jour de la version minimale requise de Sigima de 1.1.0 à 1.1.2 pour bénéficier des dernières corrections et améliorations du moteur de calcul"
+
 msgid "Added legacy support for the `WINPYDIRBASE` environment variable for WinPython-based deployments"
 msgstr "Ajout de la prise en charge héritée de la variable d'environnement `WINPYDIRBASE` pour les déploiements basés sur WinPython"
 
@@ -155,4 +158,3 @@ msgstr "Correction de l'`AttributeError` dans la boîte de dialogue de configura
 
 msgid "Fixed plugin import errors being silently swallowed when they occurred before the internal console was initialized"
 msgstr "Correction des erreurs d'importation de plugins étant silencieusement ignorées lorsqu'elles se produisaient avant l'initialisation de la console interne"
-

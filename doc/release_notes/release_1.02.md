@@ -47,6 +47,7 @@ DataLab now detects when another instance is already running and warns the user 
 **Compatibility:**
 
 * Officially support pandas 3.0.x (updated dependency constraint from `< 3.0` to `< 3.1`)
+* Updated minimum Sigima requirement from 1.1.0 to 1.1.2 to benefit from latest computation engine fixes and improvements
 * Added legacy support for the `WINPYDIRBASE` environment variable for WinPython-based deployments
 
 **Plugin system hardening:**

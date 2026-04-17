@@ -54,7 +54,7 @@ msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
 msgid "Sigima"
 msgstr ""
 
-msgid ">= 1.1.0"
+msgid ">= 1.1.2"
 msgstr ""
 
 msgid "Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform."
@@ -263,4 +263,3 @@ msgstr ""
 
 msgid "The next generation HTTP client."
 msgstr ""
-
