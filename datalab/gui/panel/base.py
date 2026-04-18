@@ -1588,6 +1588,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             setattr(existing, name, getattr(obj, name))
         set_number(existing, number)
         self.objview.update_tree()
+        # Refresh the object properties panel so updated values are shown
+        # immediately if the modified object is currently selected.
+        self.objview.item_selection_changed()
         self.refresh_plot("selected", update_items=True, force=True)
 
     def remove_all_objects(self) -> None:
