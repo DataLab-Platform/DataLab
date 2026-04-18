@@ -12,6 +12,7 @@ DataLab now provides a dedicated **plugin configuration dialog** (accessible via
 * Filter plugins by status: all, enabled, disabled, or plugins with import errors
 * View plugin details including version, author, and expandable long descriptions directly in the dialog
 * Plugins with import errors are displayed prominently at the top with their full traceback, making it easy to diagnose installation issues
+* The expandable text widget used for long descriptions computes its preferred width from a fixed measurement context, ensuring stable layout and reliable "Show full description" toggling regardless of dialog resizing or offscreen rendering
 
 **Plugin hot-reload:**
 
@@ -33,6 +34,14 @@ DataLab now detects when another instance is already running and warns the user 
 * The image ROI editor now shares contrast (LUT) settings with the source image panel
 * Adjusting the contrast in the ROI editor is reflected back in the main panel and vice versa
 * Contrast controls are fully re-enabled in the image ROI editor dialog
+
+**Remote control API — push modified objects back to DataLab:**
+
+The proxy API (XML-RPC and Web API) now exposes a new `set_object` method that updates an existing signal or image in DataLab from a modified copy obtained via `get_object` (fixes [Issue #305](https://github.com/DataLab-Platform/DataLab/issues/305)):
+
+* Previously, modifications to object properties (e.g. `dx`, `dy`, `x0`, `y0`, `title`) made on the result of `get_object` were lost because `get_object` returns a copy — `set_object` now provides a clean round-trip workflow
+* Works for both signal and image objects: computed result items attached to the object are preserved during the update, so updating an `ImageObj` no longer triggers a type mismatch
+* The properties panel is automatically refreshed after `set_object`, so updated object properties (title, units, axes, uncertainties, etc.) are immediately visible in the GUI
 
 ### 📖 Documentation ###
 
@@ -73,7 +82,3 @@ DataLab now detects when another instance is already running and warns the user 
 
 * Fixed `AttributeError` in plugin configuration dialog when clicking "Show full description" (incorrect attribute reference)
 * Fixed plugin import errors being silently swallowed when they occurred before the internal console was initialized
-
-**Remote control API:**
-
-* Added new `set_object` method to the proxy API (XML-RPC and Web API) allowing users to push modified signal/image objects back to DataLab after retrieving them with `get_object` — previously, modifications to object properties (e.g. `dx`, `dy`, `x0`, `y0`, `title`) were lost because `get_object` returns a copy (fixes [Issue #305](https://github.com/DataLab-Platform/DataLab/issues/305))

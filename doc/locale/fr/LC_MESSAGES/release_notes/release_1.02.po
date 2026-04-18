@@ -39,6 +39,9 @@ msgstr "Affichez les détails des plugins, y compris la version, l'auteur et les
 msgid "Plugins with import errors are displayed prominently at the top with their full traceback, making it easy to diagnose installation issues"
 msgstr "Les plugins avec des erreurs d'importation sont affichés en haut avec leur trace complète, ce qui facilite le diagnostic des problèmes d'installation"
 
+msgid "The expandable text widget used for long descriptions computes its preferred width from a fixed measurement context, ensuring stable layout and reliable \"Show full description\" toggling regardless of dialog resizing or offscreen rendering"
+msgstr "Le widget de texte extensible utilisé pour les descriptions longues calcule sa largeur préférée à partir d'un contexte de mesure fixe, garantissant une mise en page stable et un basculement fiable de \"Afficher la description complète\" quelles que soient les redimensionnements de la boîte de dialogue ou le rendu hors écran"
+
 msgid "**Plugin hot-reload:**"
 msgstr "**Rechargement à chaud des plugins :**"
 
@@ -80,6 +83,21 @@ msgstr "L'ajustement du contraste dans l'éditeur ROI est reflété dans le pann
 
 msgid "Contrast controls are fully re-enabled in the image ROI editor dialog"
 msgstr "Les contrôles de contraste sont entièrement réactivés dans la boîte de dialogue de l'éditeur ROI d'image"
+
+msgid "**Remote control API — push modified objects back to DataLab:**"
+msgstr "**API de contrôle à distance — renvoyer les objets modifiés vers DataLab :**"
+
+msgid "The proxy API (XML-RPC and Web API) now exposes a new `set_object` method that updates an existing signal or image in DataLab from a modified copy obtained via `get_object` (fixes [Issue #305](https://github.com/DataLab-Platform/DataLab/issues/305)):"
+msgstr "L'API proxy (XML-RPC et Web API) expose désormais une nouvelle méthode `set_object` qui met à jour un signal ou une image existant dans DataLab à partir d'une copie modifiée obtenue via `get_object` (corrige [Issue #305](https://github.com/DataLab-Platform/DataLab/issues/305)) :"
+
+msgid "Previously, modifications to object properties (e.g. `dx`, `dy`, `x0`, `y0`, `title`) made on the result of `get_object` were lost because `get_object` returns a copy — `set_object` now provides a clean round-trip workflow"
+msgstr "Auparavant, les modifications des propriétés des objets (par ex. `dx`, `dy`, `x0`, `y0`, `title`) effectuées sur le résultat de `get_object` étaient perdues car `get_object` renvoie une copie — `set_object` fournit désormais un flux aller-retour propre"
+
+msgid "Works for both signal and image objects: computed result items attached to the object are preserved during the update, so updating an `ImageObj` no longer triggers a type mismatch"
+msgstr "Fonctionne pour les objets signal et image : les éléments de résultats calculés attachés à l'objet sont préservés lors de la mise à jour, de sorte que la mise à jour d'un `ImageObj` ne déclenche plus d'incompatibilité de type"
+
+msgid "The properties panel is automatically refreshed after `set_object`, so updated object properties (title, units, axes, uncertainties, etc.) are immediately visible in the GUI"
+msgstr "Le panneau des propriétés est automatiquement rafraîchi après `set_object`, de sorte que les propriétés modifiées (titre, unités, axes, incertitudes, etc.) sont immédiatement visibles dans l'interface graphique"
 
 msgid "📖 Documentation"
 msgstr "📖 Documentation"
@@ -158,9 +176,3 @@ msgstr "Correction de l'`AttributeError` dans la boîte de dialogue de configura
 
 msgid "Fixed plugin import errors being silently swallowed when they occurred before the internal console was initialized"
 msgstr "Correction des erreurs d'importation de plugins étant silencieusement ignorées lorsqu'elles se produisaient avant l'initialisation de la console interne"
-
-msgid "**Remote control API:**"
-msgstr "**API de contrôle à distance :**"
-
-msgid "Added new `set_object` method to the proxy API (XML-RPC and Web API) allowing users to push modified signal/image objects back to DataLab after retrieving them with `get_object` — previously, modifications to object properties (e.g. `dx`, `dy`, `x0`, `y0`, `title`) were lost because `get_object` returns a copy (fixes [Issue #305](https://github.com/DataLab-Platform/DataLab/issues/305))"
-msgstr "Ajout de la nouvelle méthode `set_object` à l'API proxy (XML-RPC et Web API) permettant aux utilisateurs de renvoyer des objets signal/image modifiés à DataLab après les avoir récupérés avec `get_object` — auparavant, les modifications des propriétés des objets (par exemple `dx`, `dy`, `x0`, `y0`, `title`) étaient perdues car `get_object` renvoie une copie (corrige [Issue #305](https://github.com/DataLab-Platform/DataLab/issues/305))"
