@@ -24,6 +24,7 @@ import numpy as np
 import plotpy.io
 from guidata.configtools import get_icon
 from guidata.dataset import restore_dataset, update_dataset
+from guidata.dataset.datatypes import ComputedProp
 from guidata.qthelpers import add_actions, create_action, exec_dialog
 from plotpy.plot import BasePlot, BasePlotOptions, PlotDialog, SyncPlotDialog
 from plotpy.tools import ActionTool
@@ -1575,11 +1576,16 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         existing = self.objmodel[obj_uuid]  # KeyError if not found
         # Preserve internal number metadata before overwriting
         number = get_number(existing)
-        # Copy all public DataSet item values from obj to existing
+        # Copy all public DataSet item values from obj to existing.
+        # Skip computed (read-only) items such as ImageObj.xmin/xmax/ymin/ymax,
+        # which would raise ValueError on assignment (see Issue #305).
         for item in existing._items:  # pylint: disable=protected-access
             name = item.get_name()
-            if not name.startswith("_"):
-                setattr(existing, name, getattr(obj, name))
+            if name.startswith("_"):
+                continue
+            if isinstance(item.get_prop("data", "computed", None), ComputedProp):
+                continue
+            setattr(existing, name, getattr(obj, name))
         set_number(existing, number)
         self.objview.update_tree()
         self.refresh_plot("selected", update_items=True, force=True)
