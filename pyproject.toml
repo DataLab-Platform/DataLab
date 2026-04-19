@@ -131,8 +131,9 @@ include = ["datalab*"]
 version = { attr = "datalab.__version__" }
 
 [tool.pytest.ini_options]
-addopts = "datalab --import-mode=importlib"
-# addopts = "datalab --import-mode=importlib --show-windows"  # Disable offscreen mode
+testpaths = ["datalab"]
+addopts = "--import-mode=importlib"
+# addopts = "--import-mode=importlib --show-windows"  # Disable offscreen mode
 filterwarnings = [
     # Ignore specific deprecation warnings from external libraries
     "ignore::DeprecationWarning:pandas.*",
