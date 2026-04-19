@@ -135,6 +135,7 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
         source: roieditor.ImageROIEditor | None = None,
     ) -> None:
         """Apply a contrast change coming from another view."""
+        del source  # unused: kept for API symmetry with _notify_contrast_editors
         self._update_object_contrast_state(obj, zmin, zmax, update_panel=True)
         item = self.plothandler.get(get_uuid(obj))
         if item is None:

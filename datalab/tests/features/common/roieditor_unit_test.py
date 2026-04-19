@@ -108,9 +108,11 @@ def test_image_roi_editor_contrast_sync() -> None:
             self.applied = []
 
         def register_contrast_editor(self, obj, editor) -> None:
+            """Record an editor registration call."""
             self.registered.append((obj, editor))
 
         def apply_shared_contrast(self, obj, zmin, zmax, source=None) -> None:
+            """Record an applied contrast change call."""
             self.applied.append((obj, zmin, zmax, source))
 
     obj = create_multigaussian_image()

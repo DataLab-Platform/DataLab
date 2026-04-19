@@ -38,23 +38,27 @@ class TestFixLdata:
     """Tests for :func:`fix_ldata` (label normalisation)."""
 
     def test_string(self) -> None:
+        """A regular ``str`` is returned unchanged."""
         assert fix_ldata("hello") == "hello"
 
     def test_bytes(self) -> None:
+        """A ``bytes`` value is decoded to ``str``."""
         assert fix_ldata(b"hello") == "hello"
 
     def test_numpy_bytes(self) -> None:
+        """A ``numpy.bytes_`` value is decoded to ``str``."""
         assert fix_ldata(np.bytes_(b"label")) == "label"
 
     def test_none_returns_empty(self) -> None:
+        """``None`` is normalised to an empty string."""
         assert fix_ldata(None) == ""
 
     def test_empty_string_returns_empty(self) -> None:
-        # Falsy non-None inputs should also fall through to ``""``
+        """Falsy non-None inputs also fall through to ``""``."""
         assert fix_ldata("") == ""
 
     def test_unknown_type_returns_empty(self) -> None:
-        # A non-string, non-bytes, non-void object returns "" by design
+        """A non-string, non-bytes, non-void object returns ``""`` by design."""
         assert fix_ldata(3.14) == ""
 
 
@@ -67,22 +71,27 @@ class TestFixNdata:
     """Tests for :func:`fix_ndata` (numeric normalisation)."""
 
     def test_integer_value_returns_int(self) -> None:
+        """Whole-number floats are coerced to ``int``."""
         result = fix_ndata(5.0)
         assert result == 5
-        assert type(result) is int
+        assert result.__class__ is int
 
     def test_float_value_returns_float(self) -> None:
+        """Non-integral floats are kept as ``float``."""
         result = fix_ndata(2.5)
         assert result == pytest.approx(2.5)
-        assert type(result) is float
+        assert result.__class__ is float
 
     def test_string_int_returns_int(self) -> None:
+        """A numeric string is parsed and coerced to ``int`` when integral."""
         assert fix_ndata("7") == 7
 
     def test_invalid_string_returns_none(self) -> None:
+        """A non-numeric string returns ``None``."""
         assert fix_ndata("not-a-number") is None
 
     def test_none_returns_none(self) -> None:
+        """``None`` is propagated as ``None``."""
         assert fix_ndata(None) is None
 
 
@@ -99,29 +108,35 @@ class TestDtypeHelpers:
         [np.int8, np.int32, np.uint16, np.float32, np.float64, np.complex128],
     )
     def test_supported_num_dtype_true(self, dtype) -> None:
+        """Standard numeric dtypes are recognised as supported."""
         arr = np.zeros(3, dtype=dtype)
         assert is_supported_num_dtype(arr) is True
 
     def test_supported_num_dtype_false_for_object(self) -> None:
+        """Object-dtype arrays are not considered numeric."""
         arr = np.array(["abc", "def"], dtype=object)
         assert is_supported_num_dtype(arr) is False
 
     def test_is_single_str_array_true(self) -> None:
+        """An ``ndarray`` (not a numpy generic) is rejected."""
         # ``np.generic`` numpy.str_ scalar with shape (1,)
         scalar = np.array(["x"], dtype=str)[0:1]  # ndarray, not generic
         # ``is_single_str_array`` requires an ``np.generic``; ndarray returns False
         assert is_single_str_array(scalar) is False
 
     def test_is_single_str_array_false_for_ndarray(self) -> None:
+        """A multi-element ndarray of strings is not a single string array."""
         arr = np.array(["a", "b"])
         assert is_single_str_array(arr) is False
 
     def test_supported_str_dtype_true_for_bytes_array(self) -> None:
+        """NumPy bytes-dtype arrays are not classified as string-supported."""
         arr = np.array([b"x", b"y"], dtype="S2")
         # numpy bytes dtype name starts with "bytes" not "string" → expected False
         assert is_supported_str_dtype(arr) is False
 
     def test_supported_str_dtype_false_for_int(self) -> None:
+        """Numeric arrays are not string-supported."""
         assert is_supported_str_dtype(np.zeros(3, dtype=np.int32)) is False
 
 
@@ -130,8 +145,8 @@ class TestDtypeHelpers:
 # =============================================================================
 
 
-@pytest.fixture
-def h5_with_datasets(tmp_path):
+@pytest.fixture(name="h5_with_datasets")
+def _h5_with_datasets(tmp_path):
     """Build a small in-memory HDF5 file containing typical layouts."""
     path = tmp_path / "fixture.h5"
     with h5py.File(path, "w") as f:
@@ -153,11 +168,13 @@ class TestProcessScalarValue:
     """Tests for :func:`process_scalar_value`."""
 
     def test_returns_callback_result(self, h5_with_datasets) -> None:
+        """The callback is applied to the dataset's first element."""
         with h5py.File(h5_with_datasets, "r") as f:
             result = process_scalar_value(f, "scalar", float)
         assert result == pytest.approx(42.5)
 
     def test_missing_dataset_returns_none(self, h5_with_datasets) -> None:
+        """A missing dataset path yields ``None``."""
         with h5py.File(h5_with_datasets, "r") as f:
             result = process_scalar_value(f, "missing", float)
         assert result is None
@@ -167,6 +184,7 @@ class TestProcessLabel:
     """Tests for :func:`process_label`."""
 
     def test_two_element_label(self, h5_with_datasets) -> None:
+        """A two-element label dataset fills ``(x, y, "")``."""
         with h5py.File(h5_with_datasets, "r") as f:
             xl, yl, zl = process_label(f, "label2")
         assert xl == "X-Axis"
@@ -174,11 +192,13 @@ class TestProcessLabel:
         assert zl == ""
 
     def test_three_element_label(self, h5_with_datasets) -> None:
+        """A three-element label dataset fills ``(x, y, z)``."""
         with h5py.File(h5_with_datasets, "r") as f:
             xl, yl, zl = process_label(f, "label3")
         assert (xl, yl, zl) == ("X", "Y", "Z")
 
     def test_missing_returns_empty_strings(self, h5_with_datasets) -> None:
+        """A missing label dataset returns three empty strings."""
         with h5py.File(h5_with_datasets, "r") as f:
             result = process_label(f, "missing")
         assert result == ("", "", "")
@@ -188,12 +208,14 @@ class TestProcessXyValues:
     """Tests for :func:`process_xy_values`."""
 
     def test_returns_pair(self, h5_with_datasets) -> None:
+        """A two-element dataset is returned as a ``(x, y)`` pair."""
         with h5py.File(h5_with_datasets, "r") as f:
             x, y = process_xy_values(f, "xy")
         assert x == pytest.approx(1.5)
         assert y == pytest.approx(2.5)
 
     def test_missing_returns_none_pair(self, h5_with_datasets) -> None:
+        """A missing dataset returns ``(None, None)``."""
         with h5py.File(h5_with_datasets, "r") as f:
             x, y = process_xy_values(f, "missing")
         assert x is None

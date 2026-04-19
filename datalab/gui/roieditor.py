@@ -645,6 +645,7 @@ class ImageROIEditor(
 
     def plot_lut_changed(self, plot: BasePlot) -> None:
         """Synchronize ROI editor contrast changes with the source image panel."""
+        del plot  # unused: required by SIG_LUT_CHANGED slot signature
         if self._contrast_sync_in_progress or not isinstance(self.obj, ImageObj):
             return
         zmin, zmax = self.main_item.get_lut_range()
