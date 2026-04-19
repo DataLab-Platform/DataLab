@@ -234,14 +234,45 @@ msgstr "Transfert de données binaires (authentification requise)"
 msgid "``/objects/{name}/data``"
 msgstr "``/objects/{name}/data``"
 
-msgid "Download object as NPZ archive"
-msgstr "Télécharger l'objet sous forme d'archive NPZ"
+msgid "Download object as NPZ archive (supports ``?compress=false``)"
+msgstr "Télécharger l'objet sous forme d'archive NPZ (prend en charge ``?compress=false``)"
 
 msgid "PUT"
 msgstr "PUT"
 
-msgid "Upload object from NPZ archive"
-msgstr "Envoyer un objet depuis une archive NPZ"
+msgid "Create or replace an object from an NPZ archive (supports ``?overwrite=true``)"
+msgstr "Créer ou remplacer un objet à partir d'une archive NPZ (prend en charge ``?overwrite=true``)"
+
+#, python-brace-format
+msgid "``/objects/{name}``"
+msgstr "``/objects/{name}``"
+
+msgid "Update an existing object **in-place** from an NPZ archive, preserving its identity, group membership and position"
+msgstr "Mettre à jour **sur place** un objet existant à partir d'une archive NPZ, en préservant son identité, son appartenance à un groupe et sa position"
+
+msgid "The ``GET /objects/{name}/data`` endpoint streams an NPZ archive as ``application/x-npz``. Pass ``?compress=false`` to skip ZIP deflate compression when the client (e.g. a notebook) prefers a faster transfer at the cost of larger payloads. Object names containing non-ASCII characters are returned in the ``Content-Disposition`` header using the RFC 5987 ``filename*`` form."
+msgstr "Le point d'accès ``GET /objects/{name}/data`` diffuse une archive NPZ sous le type ``application/x-npz``. Passez ``?compress=false`` pour désactiver la compression deflate du ZIP lorsque le client (par exemple un notebook) préfère un transfert plus rapide au prix d'une charge utile plus volumineuse. Les noms d'objets contenant des caractères non ASCII sont renvoyés dans l'en-tête ``Content-Disposition`` au moyen de la forme ``filename*`` de la RFC 5987."
+
+msgid "The ``PUT /objects/{name}/data`` endpoint creates a new object with the given name, or returns ``409 Conflict`` if it already exists. Pass ``?overwrite=true`` to atomically replace the existing object."
+msgstr "Le point d'accès ``PUT /objects/{name}/data`` crée un nouvel objet portant le nom indiqué, ou renvoie ``409 Conflict`` s'il existe déjà. Passez ``?overwrite=true`` pour remplacer l'objet existant de manière atomique."
+
+msgid "Computation (Auth Required)"
+msgstr "Calcul (authentification requise)"
+
+msgid "POST"
+msgstr "POST"
+
+msgid "``/select``"
+msgstr "``/select``"
+
+msgid "Select objects in a panel for subsequent computations"
+msgstr "Sélectionner des objets dans un panneau pour les calculs ultérieurs"
+
+msgid "``/calc``"
+msgstr "``/calc``"
+
+msgid "Run a DataLab computation function on the current selection"
+msgstr "Exécuter une fonction de calcul DataLab sur la sélection courante"
 
 msgid "Data Format"
 msgstr "Format des données"

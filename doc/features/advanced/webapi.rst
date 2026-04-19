@@ -181,10 +181,41 @@ Binary Data Transfer (Auth Required)
      - Description
    * - GET
      - ``/objects/{name}/data``
-     - Download object as NPZ archive
+     - Download object as NPZ archive (supports ``?compress=false``)
    * - PUT
      - ``/objects/{name}/data``
-     - Upload object from NPZ archive
+     - Create or replace an object from an NPZ archive
+       (supports ``?overwrite=true``)
+   * - PUT
+     - ``/objects/{name}``
+     - Update an existing object **in-place** from an NPZ archive,
+       preserving its identity, group membership and position
+
+The ``GET /objects/{name}/data`` endpoint streams an NPZ archive as
+``application/x-npz``. Pass ``?compress=false`` to skip ZIP deflate compression
+when the client (e.g. a notebook) prefers a faster transfer at the cost of
+larger payloads. Object names containing non-ASCII characters are returned in
+the ``Content-Disposition`` header using the RFC 5987 ``filename*`` form.
+
+The ``PUT /objects/{name}/data`` endpoint creates a new object with the given
+name, or returns ``409 Conflict`` if it already exists. Pass
+``?overwrite=true`` to atomically replace the existing object.
+
+Computation (Auth Required)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. list-table::
+   :header-rows: 1
+
+   * - Method
+     - Endpoint
+     - Description
+   * - POST
+     - ``/select``
+     - Select objects in a panel for subsequent computations
+   * - POST
+     - ``/calc``
+     - Run a DataLab computation function on the current selection
 
 Data Format
 -----------
