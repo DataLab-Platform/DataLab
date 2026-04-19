@@ -49,6 +49,7 @@ The proxy API (XML-RPC and Web API) now exposes a new `set_object` method that u
 * Added screenshots for the "Paste metadata" dialog (signal and image panels)
 * Updated plugin documentation to describe the new configuration dialog, hot-reload workflow, and plugin API helpers
 * Updated third-party plugin development guide with new template references and test coverage information
+* Expanded Web API reference: documented the binary data transfer options (`?compress=false` for faster uncompressed NPZ downloads, `?overwrite=true` for atomic replacement of existing objects), the in-place `PUT /objects/{name}` endpoint that updates an object while preserving its identity, group membership and position, and the new "Computation" section listing the `/select` and `/calc` endpoints used to drive DataLab computations remotely
 * Updated French translations across all new and modified documentation pages
 
 ### 🔧 Improvements ###

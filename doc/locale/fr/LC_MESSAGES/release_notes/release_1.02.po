@@ -114,6 +114,9 @@ msgstr "Mise à jour de la documentation des plugins pour décrire la nouvelle b
 msgid "Updated third-party plugin development guide with new template references and test coverage information"
 msgstr "Mise à jour du guide de développement des plugins tiers avec de nouvelles références de modèles et des informations sur la couverture des tests"
 
+msgid "Expanded Web API reference: documented the binary data transfer options (`?compress=false` for faster uncompressed NPZ downloads, `?overwrite=true` for atomic replacement of existing objects), the in-place `PUT /objects/{name}` endpoint that updates an object while preserving its identity, group membership and position, and the new \"Computation\" section listing the `/select` and `/calc` endpoints used to drive DataLab computations remotely"
+msgstr "Enrichissement de la référence de l'API Web : documentation des options de transfert binaire (`?compress=false` pour des téléchargements NPZ non compressés plus rapides, `?overwrite=true` pour le remplacement atomique d'objets existants), du point d'entrée `PUT /objects/{name}` qui met à jour un objet sur place en préservant son identité, son groupe d'appartenance et sa position, ainsi que de la nouvelle section « Calcul » listant les points d'entrée `/select` et `/calc` permettant de piloter les calculs DataLab à distance"
+
 msgid "Updated French translations across all new and modified documentation pages"
 msgstr "Mise à jour des traductions françaises sur toutes les pages de documentation nouvelles et modifiées"
 
