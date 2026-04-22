@@ -79,6 +79,12 @@ msgstr "Le répertoire de distribution autonome : Si vous utilisez une version g
 msgid "The internal `datalab/plugins` folder (not recommended for user plugins): This location is reserved for built-in or bundled plugins and should not be modified manually."
 msgstr "Le dossier interne `datalab/plugins` (non recommandé pour les plugins utilisateur) : Cet emplacement est réservé aux plugins intégrés ou fournis et ne doit pas être modifié manuellement."
 
+msgid "Additional directories listed in the ``DATALAB_PLUGINS`` environment variable: One or more directories may be specified, separated by the OS path separator (``;`` on Windows, ``:`` on Linux/macOS), following the same convention as ``PYTHONPATH``. All listed directories are appended to the plugin search path at startup; non-existent paths are silently skipped (a warning is written to the log file). Examples:"
+msgstr "Répertoires supplémentaires listés dans la variable d'environnement ``DATALAB_PLUGINS`` : Un ou plusieurs répertoires peuvent être spécifiés, séparés par le séparateur de chemin du système d'exploitation (``;`` sous Windows, ``:`` sous Linux/macOS), selon la même convention que ``PYTHONPATH``. Tous les répertoires listés sont ajoutés aux chemins de recherche des plugins au démarrage ; les chemins inexistants sont ignorés silencieusement (un avertissement est consigné dans le fichier journal). Exemples :"
+
+msgid "Changes to this variable are only taken into account at DataLab startup."
+msgstr "Les modifications apportées à cette variable ne sont prises en compte qu'au démarrage de DataLab."
+
 msgid "Managing plugins in DataLab"
 msgstr "Gestion des plugins dans DataLab"
 
@@ -235,8 +241,8 @@ msgstr "des plugins avec de nombreuses actions,"
 msgid "plugins with long descriptions."
 msgstr "des plugins avec de longues descriptions."
 
-msgid "The corresponding feature tests are located in ``datalab/tests/features/plugins/test_plugins.py`` and cover plugin lifecycle, hot-reload behavior, error handling, duplicate names, and configuration filtering."
-msgstr "Les tests fonctionnels correspondants sont dans ``datalab/tests/features/plugins/test_plugins.py`` et couvrent le cycle de vie des plugins, le rechargement à chaud, la gestion des erreurs, les noms en doublon et le filtrage de configuration."
+msgid "The corresponding feature tests are located in ``datalab/tests/features/plugins/plugins_app_test.py`` and cover plugin lifecycle, hot-reload behavior, error handling, duplicate names, and configuration filtering."
+msgstr "Les tests fonctionnels correspondants sont dans ``datalab/tests/features/plugins/plugins_app_test.py`` et couvrent le cycle de vie des plugins, le rechargement à chaud, la gestion des erreurs, les noms en doublon et le filtrage de configuration."
 
 msgid "Other examples"
 msgstr "Autres exemples"

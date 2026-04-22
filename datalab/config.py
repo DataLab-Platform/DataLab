@@ -9,6 +9,7 @@ This module handles `DataLab` configuration (options, images and icons).
 
 from __future__ import annotations
 
+import logging
 import os
 import os.path as osp
 import sys
@@ -108,6 +109,61 @@ if IS_FROZEN:
         os.mkdir(OTHER_PLUGINS_PATHLIST[-1])
     except OSError:
         pass
+
+# Additional third-party plugin directories provided via the `DATALAB_PLUGINS`
+# environment variable. Multiple paths may be separated by `os.pathsep`
+# (`;` on Windows, `:` on Unix), following the same convention as `PYTHONPATH`.
+# Non-existent paths are skipped with a warning logged at startup.
+DATALAB_PLUGINS_ENV_VAR = "DATALAB_PLUGINS"
+#: Plugin directories declared through the ``DATALAB_PLUGINS`` env var
+#: (subset of :data:`OTHER_PLUGINS_PATHLIST`, kept around so that consumers
+#: such as the plugin configuration dialog can flag them as user-provided).
+DATALAB_PLUGINS_ENV_PATHS: list[str] = []
+
+
+def parse_datalab_plugins_env_var(
+    env_value: str | None,
+    pathlist: list[str],
+    env_paths: list[str],
+) -> None:
+    """Parse ``DATALAB_PLUGINS`` and append valid directories to ``pathlist``.
+
+    Args:
+        env_value: Raw value of the ``DATALAB_PLUGINS`` environment variable
+         (``None`` or empty string is a no-op).
+        pathlist: Plugin search path list to extend in-place
+         (typically :data:`OTHER_PLUGINS_PATHLIST`).
+        env_paths: List of env-var-provided directories to extend in-place
+         (typically :data:`DATALAB_PLUGINS_ENV_PATHS`), used by the GUI to
+         flag entries originating from the environment variable.
+    """
+    if not env_value:
+        return
+
+    logger = logging.getLogger(__name__)
+    for raw_path in env_value.split(os.pathsep):
+        path = raw_path.strip()
+        if not path:
+            continue
+        path = osp.normpath(osp.expanduser(path))
+        if osp.isdir(path):
+            if path not in pathlist:
+                pathlist.append(path)
+            if path not in env_paths:
+                env_paths.append(path)
+        else:
+            logger.warning(
+                "%s: ignoring non-existent plugin directory '%s'",
+                DATALAB_PLUGINS_ENV_VAR,
+                path,
+            )
+
+
+parse_datalab_plugins_env_var(
+    os.environ.get(DATALAB_PLUGINS_ENV_VAR),
+    OTHER_PLUGINS_PATHLIST,
+    DATALAB_PLUGINS_ENV_PATHS,
+)
 
 
 def get_mod_source_dir() -> str | None:

@@ -1053,9 +1053,6 @@ msgstr "Propriétés"
 msgid "Parameters for function `%s`"
 msgstr "Paramètres pour la fonction `%s`"
 
-msgid "Created"
-msgstr "Création de"
-
 msgid "Original object"
 msgstr "Objet original"
 
@@ -1319,9 +1316,6 @@ msgstr "L'étiquette a été ajoutée comme annotation. Vous pouvez la modifier 
 msgid "Macro panel"
 msgstr "Panneau des macros"
 
-msgid "Python files"
-msgstr "Fichiers Python"
-
 msgid "-***- Macro Console -***-"
 msgstr "-***- Console des macros -***-"
 
@@ -1379,11 +1373,27 @@ msgstr "Erreur d'importation"
 msgid "Plugin Configuration"
 msgstr "Configuration des plugins"
 
+msgid "Enable/disable plugins"
+msgstr "Activer/désactiver les plugins"
+
+msgid "Plugin search paths"
+msgstr "Chemins de recherche des plugins"
+
 msgid "Manage Plugins"
 msgstr "Gérer les plugins"
 
-msgid "Enable or disable plugins. Changes will be applied after clicking OK and reloading plugins."
-msgstr "Activer ou désactiver les plugins. Les modifications seront appliquées après avoir cliqué sur OK et rechargé les plugins."
+msgid "Changes will be applied after clicking OK and reloading plugins."
+msgstr "Les modifications seront appliquées après avoir cliqué sur OK et rechargé les plugins."
+
+msgid "The following directories are scanned at startup for plugins:"
+msgstr "Les répertoires suivants sont analysés au démarrage pour détecter les plugins :"
+
+msgid "No plugin search path is currently active."
+msgstr "Aucun chemin de recherche de plugins n'est actuellement actif."
+
+#, python-format
+msgid "Additional directories can be added via the <code>%s</code> environment variable (multiple paths separated by '<code>%s</code>'). Changes take effect at DataLab startup."
+msgstr "Des répertoires supplémentaires peuvent être ajoutés via la variable d'environnement <code>%s</code> (plusieurs chemins séparés par '<code>%s</code>'). Les modifications prennent effet au démarrage de DataLab."
 
 msgid "Enable all plugins"
 msgstr "Activer tous les plugins"
@@ -3139,9 +3149,6 @@ msgstr "Distance minimale :"
 msgid "Signal peak detection"
 msgstr "Détection de pics 1D"
 
-msgid "Peaks:"
-msgstr "Pics :"
-
 msgid "Internal console"
 msgstr "Console interne"
 
@@ -3449,4 +3456,3 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-
