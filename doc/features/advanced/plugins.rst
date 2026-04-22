@@ -185,7 +185,7 @@ DataLab also provides plugin templates used by integration tests in
 - plugins with long descriptions.
 
 The corresponding feature tests are located in
-``datalab/tests/features/plugins/test_plugins.py`` and cover plugin lifecycle,
+``datalab/tests/features/plugins/plugins_app_test.py`` and cover plugin lifecycle,
 hot-reload behavior, error handling, duplicate names, and configuration filtering.
 
 Other examples

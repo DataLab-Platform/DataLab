@@ -241,8 +241,8 @@ msgstr "des plugins avec de nombreuses actions,"
 msgid "plugins with long descriptions."
 msgstr "des plugins avec de longues descriptions."
 
-msgid "The corresponding feature tests are located in ``datalab/tests/features/plugins/test_plugins.py`` and cover plugin lifecycle, hot-reload behavior, error handling, duplicate names, and configuration filtering."
-msgstr "Les tests fonctionnels correspondants sont dans ``datalab/tests/features/plugins/test_plugins.py`` et couvrent le cycle de vie des plugins, le rechargement à chaud, la gestion des erreurs, les noms en doublon et le filtrage de configuration."
+msgid "The corresponding feature tests are located in ``datalab/tests/features/plugins/plugins_app_test.py`` and cover plugin lifecycle, hot-reload behavior, error handling, duplicate names, and configuration filtering."
+msgstr "Les tests fonctionnels correspondants sont dans ``datalab/tests/features/plugins/plugins_app_test.py`` et couvrent le cycle de vie des plugins, le rechargement à chaud, la gestion des erreurs, les noms en doublon et le filtrage de configuration."
 
 msgid "Other examples"
 msgstr "Autres exemples"

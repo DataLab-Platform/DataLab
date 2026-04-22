@@ -61,7 +61,7 @@ This allows manual inspection of:
 
 ## Test Coverage
 
-The plugin system tests (`datalab/tests/features/plugins/test_plugins.py`) cover:
+The plugin system tests (`datalab/tests/features/plugins/plugins_app_test.py`) cover:
 
 1. **Plugin Lifecycle**: Discovery, loading, reloading, cleanup
 2. **Error Handling**: ImportError, InitError, SyntaxError, invalid PLUGIN_INFO
