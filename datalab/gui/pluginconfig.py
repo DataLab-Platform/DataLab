@@ -9,6 +9,7 @@ Dialog for managing plugin enable/disable state and viewing plugin information.
 
 from __future__ import annotations
 
+import os
 import os.path as osp
 from typing import TYPE_CHECKING
 
@@ -17,8 +18,16 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from datalab.config import PLUGIN_ERROR_COLOR, PLUGIN_OK_COLOR, Conf, _
-from datalab.plugins import PluginRegistry
+from datalab.config import (
+    DATALAB_PLUGINS_ENV_PATHS,
+    DATALAB_PLUGINS_ENV_VAR,
+    OTHER_PLUGINS_PATHLIST,
+    PLUGIN_ERROR_COLOR,
+    PLUGIN_OK_COLOR,
+    Conf,
+    _,
+)
+from datalab.plugins import PLUGINS_DEFAULT_PATH, PluginRegistry
 from datalab.widgets.expandabletext import (
     ExpandableTextWidget,
     apply_palette_color,
@@ -312,9 +321,11 @@ class PluginConfigDialog(QW.QDialog):
         self.setLayout(layout)
 
         layout.addWidget(self._create_title_label())
-        layout.addWidget(self._create_info_label())
-        layout.addLayout(self._create_controls_layout())
-        layout.addWidget(self._create_scroll_area(), 1)
+
+        tabs = QW.QTabWidget()
+        tabs.addTab(self._create_plugins_tab(), _("Enable/disable plugins"))
+        tabs.addTab(self._create_search_paths_tab(), _("Plugin search paths"))
+        layout.addWidget(tabs, 1)
 
         # Populate plugins
         self.populate_plugins()
@@ -341,18 +352,114 @@ class PluginConfigDialog(QW.QDialog):
         )
         return title_label
 
+    def _create_plugins_tab(self) -> QW.QWidget:
+        """Create the 'Enable/disable plugins' tab content."""
+        tab = QW.QWidget()
+        tab_layout = QW.QVBoxLayout()
+        tab.setLayout(tab_layout)
+        tab_layout.addWidget(self._create_info_label())
+        tab_layout.addLayout(self._create_controls_layout())
+        tab_layout.addWidget(self._create_scroll_area(), 1)
+        return tab
+
+    def _create_search_paths_tab(self) -> QW.QWidget:
+        """Create the 'Plugin search paths' tab content (scrollable)."""
+        tab = QW.QWidget()
+        tab_layout = QW.QVBoxLayout()
+        tab_layout.setContentsMargins(0, 0, 0, 0)
+        tab.setLayout(tab_layout)
+
+        scroll = QW.QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
+        container = QW.QWidget()
+        container_layout = QW.QVBoxLayout()
+        container.setLayout(container_layout)
+        container_layout.addLayout(self._create_search_paths_layout())
+        container_layout.addStretch()
+        scroll.setWidget(container)
+        tab_layout.addWidget(scroll)
+        return tab
+
     @staticmethod
     def _create_info_label() -> QW.QLabel:
         """Create the dialog information label."""
         info_label = QW.QLabel(
-            _(
-                "Enable or disable plugins. Changes will be applied "
-                "after clicking OK and reloading plugins."
-            )
+            _("Changes will be applied after clicking OK and reloading plugins.")
         )
         info_label.setWordWrap(True)
         apply_subdued_color(info_label)
         return info_label
+
+    @staticmethod
+    def _collect_search_paths() -> list[tuple[str, bool]]:
+        """Return active plugin search paths with their env-var origin flag.
+
+        Returns:
+            List of ``(path, from_env_var)`` tuples in discovery order.
+        """
+        seen: set[str] = set()
+        entries: list[tuple[str, bool]] = []
+        env_paths_norm = {osp.normpath(p) for p in DATALAB_PLUGINS_ENV_PATHS}
+        candidates: list[str] = []
+        custom = Conf.main.plugins_path.get()
+        if custom:
+            candidates.append(custom)
+        candidates.append(PLUGINS_DEFAULT_PATH)
+        candidates.extend(OTHER_PLUGINS_PATHLIST)
+        for raw in candidates:
+            if not raw:
+                continue
+            path = osp.normpath(raw)
+            if path in seen:
+                continue
+            seen.add(path)
+            entries.append((path, path in env_paths_norm))
+        return entries
+
+    def _create_search_paths_layout(self) -> QW.QVBoxLayout:
+        """Create the layout listing active plugin search paths."""
+        paths_layout = QW.QVBoxLayout()
+
+        intro = QW.QLabel(
+            _("The following directories are scanned at startup for plugins:")
+        )
+        intro.setWordWrap(True)
+        paths_layout.addWidget(intro)
+
+        items: list[str] = []
+        for path, from_env in self._collect_search_paths():
+            url = QC.QUrl.fromLocalFile(path).toString()
+            link = f'<a href="{url}">{path}</a>'
+            if from_env:
+                link += f" <i>({_('from')} <code>{DATALAB_PLUGINS_ENV_VAR}</code>)</i>"
+            items.append(f"<li>{link}</li>")
+        if items:
+            html = (
+                "<ul style='margin:0; padding-left:18px;'>" + "".join(items) + "</ul>"
+            )
+        else:
+            html = "<i>" + _("No plugin search path is currently active.") + "</i>"
+
+        paths_label = QW.QLabel(html)
+        paths_label.setTextInteractionFlags(QC.Qt.TextBrowserInteraction)
+        paths_label.setOpenExternalLinks(True)
+        paths_label.setWordWrap(True)
+        paths_layout.addWidget(paths_label)
+
+        hint = QW.QLabel(
+            _(
+                "Additional directories can be added via the "
+                "<code>%s</code> environment variable "
+                "(multiple paths separated by '<code>%s</code>'). "
+                "Changes take effect at DataLab startup."
+            )
+            % (DATALAB_PLUGINS_ENV_VAR, os.pathsep)
+        )
+        hint.setWordWrap(True)
+        apply_subdued_color(hint)
+        paths_layout.addWidget(hint)
+        return paths_layout
 
     def _create_controls_layout(self) -> QW.QHBoxLayout:
         """Create the row with master controls."""

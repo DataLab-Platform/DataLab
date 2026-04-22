@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Language: fr\n"
@@ -20,3 +19,18 @@ msgstr "DataLab Version 1.3.0"
 
 msgid "✨ New Features"
 msgstr "✨ Nouvelles fonctionnalités"
+
+msgid "**Third-party plugin discovery via environment variable:**"
+msgstr "**Découverte des plugins tiers via une variable d'environnement :**"
+
+msgid "Added support for the `DATALAB_PLUGINS` environment variable, allowing one or more directories to be specified as additional plugin search paths"
+msgstr "Ajout de la prise en charge de la variable d'environnement `DATALAB_PLUGINS`, permettant de spécifier un ou plusieurs répertoires comme chemins de recherche supplémentaires pour les plugins"
+
+msgid "Multiple directories can be listed using the OS path separator (`;` on Windows, `:` on Linux/macOS), following the same convention as `PYTHONPATH`"
+msgstr "Plusieurs répertoires peuvent être listés en utilisant le séparateur de chemin du système d'exploitation (`;` sous Windows, `:` sous Linux/macOS), selon la même convention que `PYTHONPATH`"
+
+msgid "Listed directories are appended to the existing plugin search paths at startup and are picked up automatically by the plugin discovery mechanism"
+msgstr "Les répertoires listés sont ajoutés aux chemins de recherche existants au démarrage et sont automatiquement pris en compte par le mécanisme de découverte des plugins"
+
+msgid "Non-existent directories are silently skipped (a warning is recorded in the log file), so a stale environment variable on another machine will not prevent DataLab from starting"
+msgstr "Les répertoires inexistants sont ignorés silencieusement (un avertissement est consigné dans le fichier journal), ainsi une variable d'environnement obsolète sur une autre machine n'empêchera pas le démarrage de DataLab"

@@ -109,6 +109,37 @@ if IS_FROZEN:
     except OSError:
         pass
 
+# Additional third-party plugin directories provided via the `DATALAB_PLUGINS`
+# environment variable. Multiple paths may be separated by `os.pathsep`
+# (`;` on Windows, `:` on Unix), following the same convention as `PYTHONPATH`.
+# Non-existent paths are skipped with a warning logged at startup.
+DATALAB_PLUGINS_ENV_VAR = "DATALAB_PLUGINS"
+#: Plugin directories declared through the ``DATALAB_PLUGINS`` env var
+#: (subset of :data:`OTHER_PLUGINS_PATHLIST`, kept around so that consumers
+#: such as the plugin configuration dialog can flag them as user-provided).
+DATALAB_PLUGINS_ENV_PATHS: list[str] = []
+_env_plugins = os.environ.get(DATALAB_PLUGINS_ENV_VAR, "")
+if _env_plugins:
+    import logging as _logging  # local import to avoid polluting module namespace
+
+    _logger = _logging.getLogger(__name__)
+    for _raw_path in _env_plugins.split(os.pathsep):
+        _path = _raw_path.strip()
+        if not _path:
+            continue
+        _path = osp.normpath(osp.expanduser(_path))
+        if osp.isdir(_path):
+            if _path not in OTHER_PLUGINS_PATHLIST:
+                OTHER_PLUGINS_PATHLIST.append(_path)
+            if _path not in DATALAB_PLUGINS_ENV_PATHS:
+                DATALAB_PLUGINS_ENV_PATHS.append(_path)
+        else:
+            _logger.warning(
+                "%s: ignoring non-existent plugin directory '%s'",
+                DATALAB_PLUGINS_ENV_VAR,
+                _path,
+            )
+
 
 def get_mod_source_dir() -> str | None:
     """Return module source directory

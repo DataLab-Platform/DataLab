@@ -55,6 +55,25 @@ Plugins are automatically discovered at startup from multiple locations:
 - The internal `datalab/plugins` folder (not recommended for user plugins):
   This location is reserved for built-in or bundled plugins and should not be modified manually.
 
+- Additional directories listed in the ``DATALAB_PLUGINS`` environment variable:
+  One or more directories may be specified, separated by the OS path separator
+  (``;`` on Windows, ``:`` on Linux/macOS), following the same convention as
+  ``PYTHONPATH``. All listed directories are appended to the plugin search path
+  at startup; non-existent paths are silently skipped (a warning is written to
+  the log file). Examples:
+
+  .. code-block:: bash
+
+     # Linux/macOS
+     export DATALAB_PLUGINS="/opt/my_plugins:/home/alice/datalab_plugins"
+
+  .. code-block:: bat
+
+     :: Windows
+     set DATALAB_PLUGINS=C:\my_plugins;D:\shared\datalab_plugins
+
+  Changes to this variable are only taken into account at DataLab startup.
+
 Managing plugins in DataLab
 ---------------------------
 
