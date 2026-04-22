@@ -7,13 +7,17 @@ These tests exercise the parsing logic that turns the environment variable
 into entries of :data:`datalab.config.OTHER_PLUGINS_PATHLIST` and verifies
 that :func:`datalab.plugins.discover_plugins` actually finds plugin modules
 placed in those directories.
+
+The parsing function is tested directly (without reloading
+``datalab.config``) to avoid corrupting global singletons (``Conf``,
+``PluginRegistry``, the ``PluginBase`` metaclass) shared with the rest of
+the test session.
 """
 
 # guitest: skip
 
 from __future__ import annotations
 
-import importlib
 import os
 import sys
 import textwrap
@@ -21,53 +25,54 @@ from pathlib import Path
 
 import pytest
 
-
-def _reload_config(monkeypatch: pytest.MonkeyPatch, env_value: str | None) -> object:
-    """Reload ``datalab.config`` with a controlled ``DATALAB_PLUGINS`` value."""
-    if env_value is None:
-        monkeypatch.delenv("DATALAB_PLUGINS", raising=False)
-    else:
-        monkeypatch.setenv("DATALAB_PLUGINS", env_value)
-    import datalab.config as config_mod
-
-    return importlib.reload(config_mod)
+from datalab import config as config_mod
+from datalab import plugins as plugins_mod
 
 
-def test_env_var_unset_leaves_default_paths(monkeypatch: pytest.MonkeyPatch) -> None:
-    """When the env var is unset, the default plugin path list is unchanged."""
-    config_mod = _reload_config(monkeypatch, None)
-    assert config_mod.OTHER_PLUGINS_PATHLIST  # at least the bundled directory
+def test_env_var_unset_leaves_default_paths() -> None:
+    """When the env var is empty/unset, the path list is left untouched."""
+    pathlist: list[str] = ["/initial/path"]
+    env_paths: list[str] = []
+
+    config_mod.parse_datalab_plugins_env_var(None, pathlist, env_paths)
+    config_mod.parse_datalab_plugins_env_var("", pathlist, env_paths)
+
+    assert pathlist == ["/initial/path"]
+    assert env_paths == []
 
 
-def test_env_var_adds_existing_directories(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
-    """Existing directories listed in the env var are appended to the path list."""
+def test_env_var_adds_existing_directories(tmp_path: Path) -> None:
+    """Existing directories listed in the env var are appended to both lists."""
     dir1 = tmp_path / "plugins_a"
     dir2 = tmp_path / "plugins_b"
     dir1.mkdir()
     dir2.mkdir()
     env_value = os.pathsep.join([str(dir1), str(dir2)])
 
-    config_mod = _reload_config(monkeypatch, env_value)
-    paths = [os.path.normpath(p) for p in config_mod.OTHER_PLUGINS_PATHLIST]
-    assert os.path.normpath(str(dir1)) in paths
-    assert os.path.normpath(str(dir2)) in paths
+    pathlist: list[str] = []
+    env_paths: list[str] = []
+    config_mod.parse_datalab_plugins_env_var(env_value, pathlist, env_paths)
+
+    expected = [os.path.normpath(str(dir1)), os.path.normpath(str(dir2))]
+    assert [os.path.normpath(p) for p in pathlist] == expected
+    assert [os.path.normpath(p) for p in env_paths] == expected
 
 
 def test_env_var_skips_missing_directories(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, caplog: pytest.LogCaptureFixture
+    tmp_path: Path, caplog: pytest.LogCaptureFixture
 ) -> None:
-    """Missing directories are skipped silently and a warning is logged."""
+    """Missing directories are skipped and a warning is logged."""
     existing = tmp_path / "exists"
     existing.mkdir()
     missing = tmp_path / "does_not_exist"
     env_value = os.pathsep.join([str(existing), str(missing), "  "])
 
+    pathlist: list[str] = []
+    env_paths: list[str] = []
     with caplog.at_level("WARNING", logger="datalab.config"):
-        config_mod = _reload_config(monkeypatch, env_value)
+        config_mod.parse_datalab_plugins_env_var(env_value, pathlist, env_paths)
 
-    paths = [os.path.normpath(p) for p in config_mod.OTHER_PLUGINS_PATHLIST]
+    paths = [os.path.normpath(p) for p in pathlist]
     assert os.path.normpath(str(existing)) in paths
     assert os.path.normpath(str(missing)) not in paths
     assert any("does_not_exist" in r.message for r in caplog.records)
@@ -76,7 +81,12 @@ def test_env_var_skips_missing_directories(
 def test_discover_plugins_finds_module_in_env_dir(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
-    """``datalab_*`` module in a ``DATALAB_PLUGINS`` directory is discovered."""
+    """A ``datalab_*`` module in an env-var directory is discovered.
+
+    ``OTHER_PLUGINS_PATHLIST`` is mutated in-place (and restored after) to
+    avoid reloading ``datalab.config`` or ``datalab.plugins``, which would
+    invalidate the ``PluginBase`` metaclass and break later tests.
+    """
     plugin_dir = tmp_path / "extra_plugins"
     plugin_dir.mkdir()
     plugin_name = "datalab_envvar_discovery_probe"
@@ -91,22 +101,22 @@ def test_discover_plugins_finds_module_in_env_dir(
         encoding="utf-8",
     )
 
-    monkeypatch.setenv("DATALAB_PLUGINS", str(plugin_dir))
-    # Ensure config picks up the env var, then reload plugins module so it
-    # imports the refreshed OTHER_PLUGINS_PATHLIST.
-    importlib.reload(importlib.import_module("datalab.config"))
-    plugins_mod = importlib.reload(importlib.import_module("datalab.plugins"))
-
-    # Make sure plugins are enabled for discovery
-    from datalab.config import Conf
-
-    monkeypatch.setattr(Conf.main.plugins_enabled, "get", lambda *a, **kw: True)
-
+    extra_path = str(plugin_dir)
+    config_mod.OTHER_PLUGINS_PATHLIST.append(extra_path)
+    sys.modules.pop(plugin_name, None)
     try:
+        # Ensure plugins are considered enabled regardless of user config
+        monkeypatch.setattr(
+            config_mod.Conf.main.plugins_enabled, "get", lambda *a, **kw: True
+        )
         modules = plugins_mod.discover_plugins()
         discovered_names = {m.__name__ for m in modules}
         assert plugin_name in discovered_names
     finally:
+        try:
+            config_mod.OTHER_PLUGINS_PATHLIST.remove(extra_path)
+        except ValueError:
+            pass
         sys.modules.pop(plugin_name, None)
 
 
