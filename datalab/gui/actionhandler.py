@@ -1440,6 +1440,7 @@ class SignalActionHandler(BaseActionHandler):
                 tip=_("Compute the ordinate at a given x value (linear interpolation)"),
             )
             self.action_for("extract_pulse_features")
+            self.action_for("extract_peak_positions")
             self.new_action(
                 _("Peak detection"),
                 separator=True,

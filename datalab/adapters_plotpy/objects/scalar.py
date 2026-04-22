@@ -344,6 +344,59 @@ def create_pulse_crossing_marker(
     return cursor
 
 
+def create_xy_marker_cross(x: float, y: float, label: str) -> Marker:
+    """Create a cross marker at ``(x, y)`` for XY-markers visualization.
+
+    Used to highlight remarkable points (e.g. spectral line positions) at
+    the corresponding ``(x, y)`` coordinates as computed by the producing
+    algorithm. Only a cross symbol is drawn (no horizontal/vertical guide
+    lines).
+
+    Args:
+        x: X-coordinate of the marker.
+        y: Y-coordinate of the marker.
+        label: Short text shown next to the marker (typically a row index
+         like ``"#3"``). The full ``(x, y)`` value is intentionally not
+         shown on the plot to avoid clutter; users refer to the results
+         table for the actual values.
+
+    Returns:
+        Marker item styled as a cross at the given position.
+    """
+
+    def _label_cb(_x: float, _y: float) -> str:
+        return label
+
+    # ``markerstyle=None`` disables the horizontal/vertical guide lines so
+    # that only the symbol is drawn at ``(x, y)``. The symbol style is
+    # configured via ``make.marker``'s direct parameters so that both the
+    # ``symbol`` (unselected) and ``sel_symbol`` (selected) parameter groups
+    # are initialized consistently.
+    marker = make.marker(
+        position=(x, y),
+        label_cb=_label_cb,
+        markerstyle=None,
+        marker="XCross",
+        markersize=11,
+        markerfacecolor="#d36d1a",
+        markeredgecolor="#d36d1a",
+    )
+    marker.markerparam.symbol.edgewidth = 2.5
+    marker.markerparam.text.textcolor = "#ffffff"
+    marker.markerparam.text.background_color = "#000000"
+    marker.markerparam.text.background_alpha = 0.5
+    marker.markerparam.text.font.bold = True
+    marker.markerparam.update_item(marker)
+    # Note: we deliberately keep ``can_resize`` at its default ``True`` value
+    # because :class:`plotpy.items.Marker.draw` hides the symbol via
+    # ``no_symbol_context(self, not self.can_resize())`` when the marker is
+    # not resizable. Using ``set_readonly`` is enough to make the marker
+    # non-interactive without losing the cross symbol.
+    marker.set_selectable(False)
+    marker.set_readonly(True)
+    return marker
+
+
 def are_values_valid(values: list[float | None]) -> bool:
     """Check if all values are valid (not None or nan)
 
@@ -388,6 +441,68 @@ class TablePlotPyAdapter(ResultPlotPyAdapter):
         if self.result_adapter.result.is_pulse_features():
             pulse_items = self.create_pulse_visualization_items(obj)
             items.extend(pulse_items)
+        elif self.result_adapter.result.is_xy_markers():
+            items.extend(self.create_xy_markers_visualization_items())
+        elif self.result_adapter.result.is_x_markers():
+            items.extend(self.create_axis_markers_visualization_items("x"))
+        elif self.result_adapter.result.is_y_markers():
+            items.extend(self.create_axis_markers_visualization_items("y"))
+        return items
+
+    def create_xy_markers_visualization_items(self) -> list[Marker]:
+        """Create XY-markers visualization items from table data.
+
+        For each row of the table, create a cross marker at the ``(x, y)``
+        position. The first two columns of the table are interpreted as the
+        ``x`` and ``y`` coordinates respectively (regardless of the column
+        names, which may carry the source signal axis labels and units).
+        The Y values are taken as-is from the table (they may have been
+        computed by interpolation, curve fitting, etc., by the producing
+        algorithm) and are not recomputed from the displayed signal.
+
+        Returns:
+            List of PlotPy items for XY-markers visualization.
+        """
+        items: list[Marker] = []
+        table = self.result_adapter.result
+        if len(table.headers) < 2:
+            return items
+        x_header, y_header = table.headers[0], table.headers[1]
+        for index, (x_val, y_val) in enumerate(
+            zip(table.col(x_header), table.col(y_header))
+        ):
+            if are_values_valid([x_val, y_val]):
+                items.append(create_xy_marker_cross(x_val, y_val, f"#{index}"))
+        return items
+
+    def create_axis_markers_visualization_items(
+        self, axis: Literal["x", "y"]
+    ) -> list[Marker]:
+        """Create axis-markers visualization items from table data.
+
+        For each row of the table, create a vertical cursor (``axis="x"``)
+        or a horizontal cursor (``axis="y"``) at the corresponding position.
+        The first column of the table provides the position values
+        (regardless of the column name, which may carry the source signal
+        axis label and unit).
+
+        Args:
+            axis: Either ``"x"`` (vertical cursors) or ``"y"`` (horizontal
+                cursors).
+
+        Returns:
+            List of PlotPy items for axis-markers visualization.
+        """
+        items: list[Marker] = []
+        table = self.result_adapter.result
+        if not table.headers:
+            return items
+        orientation: Literal["h", "v"] = "v" if axis == "x" else "h"
+        for index, value in enumerate(table.col(table.headers[0])):
+            if are_values_valid([value]):
+                items.append(
+                    create_pulse_crossing_marker(orientation, value, f"#{index}")
+                )
         return items
 
     def create_pulse_visualization_items(

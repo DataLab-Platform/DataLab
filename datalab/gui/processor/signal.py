@@ -514,6 +514,15 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             comment=_("Extract pulse features (amplitude, rise time, fall time...)"),
         )
         self.register_1_to_0(
+            sips.extract_peak_positions,
+            _("Extract peak positions"),
+            paramclass=sips.PeakDetectionParam,
+            comment=_(
+                "Extract peak positions as an X-markers table "
+                "(e.g. for spectral line analysis)"
+            ),
+        )
+        self.register_1_to_0(
             sips.x_at_minmax,
             _("Abscissa of the minimum and maximum"),
             comment=_(
