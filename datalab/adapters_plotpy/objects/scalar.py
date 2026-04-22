@@ -483,17 +483,39 @@ class MergedResultPlotPyAdapter:
     def create_merged_label(self) -> LabelItem | None:
         """Create a single merged label from all result adapters.
 
+        The label position can be customized per object via metadata options:
+
+        - ``result_label_position`` (str, default ``"TL"``): one of PlotPy's
+          relative positions (``"TL"``, ``"T"``, ``"TR"``, ``"L"``, ``"R"``,
+          ``"BL"``, ``"B"``, ``"BR"``). Used both as the canvas anchor and as
+          the label-relative anchor (the same corner of the label is pinned
+          to the same corner of the plot).
+        - ``result_label_offset`` (tuple ``(dx, dy)`` or list, default
+          ``(0, 0)``): pixel offset of the label relative to the anchor.
+
         Returns:
             Merged label item, or None if no results
         """
         if not self.result_adapters:
             return None
 
+        # Per-object label placement (set via ``obj.set_metadata_option(...)``)
+        position = self.obj.get_metadata_option("result_label_position", "TL")
+        offset = self.obj.get_metadata_option("result_label_offset", (0, 0))
+        offset = (int(offset[0]), int(offset[1]))
+
         # Create the label with merged content
         merged_html = resultadapter_to_html(self.result_adapters, self.obj)
-        item = make.label(merged_html, "TL", (0, 0), "TL", title="Results")
+        item = make.label(merged_html, position, offset, position, title="Results")
         font = get_font(PLOTPY_CONF, "results", "label/font")
         item.set_style("results", "label")
+        # ``set_style`` above re-reads the ``results/label`` config section into
+        # ``labelparam`` and clobbers anchor/abspos/xc/yc set by ``make.label``.
+        # Re-apply the requested placement so per-object metadata wins.
+        item.labelparam.abspos = True
+        item.labelparam.absg = position
+        item.labelparam.anchor = position
+        item.labelparam.xc, item.labelparam.yc = offset
         item.labelparam.font.update_param(font)
         item.labelparam.update_item(item)
 
