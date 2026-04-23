@@ -15,6 +15,15 @@ msgstr ""
 msgid "Version 1.2"
 msgstr "Version 1.2"
 
+msgid "DataLab Version 1.2.1"
+msgstr "DataLab Version 1.2.1"
+
+msgid "**Signal panel menus:**"
+msgstr "**Menus du panneau Signal :**"
+
+msgid "Restored the \"Linear calibration\" entry in the \"Processing > Axis transformation\" menu of the Signal panel - it had been inadvertently dropped during a menu reorganization and was no longer reachable from the menu bar, even though the underlying computation was still available"
+msgstr "Restauration de l'entrée « Étalonnage linéaire » dans le menu « Traitement > Transformation des axes » du panneau Signal - elle avait été supprimée par inadvertance lors d'une réorganisation des menus et n'était plus accessible depuis la barre de menus, alors même que le calcul sous-jacent restait disponible"
+
 msgid "DataLab Version 1.2.0 (2026-04-20)"
 msgstr "DataLab Version 1.2.0 (20/04/2026)"
 

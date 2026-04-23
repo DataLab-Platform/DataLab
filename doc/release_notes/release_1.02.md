@@ -1,5 +1,13 @@
 # Version 1.2 #
 
+## DataLab Version 1.2.1 ##
+
+### 🛠️ Bug Fixes ###
+
+**Signal panel menus:**
+
+* Restored the "Linear calibration" entry in the "Processing > Axis transformation" menu of the Signal panel - it had been inadvertently dropped during a menu reorganization and was no longer reachable from the menu bar, even though the underlying computation was still available
+
 ## DataLab Version 1.2.0 (2026-04-20) ##
 
 ### ✨ New Features ###
