@@ -1320,6 +1320,7 @@ class SignalActionHandler(BaseActionHandler):
                 self.action_for("reverse_x")
                 self.action_for("replace_x_by_other_y")
                 self.action_for("xy_mode")
+                self.action_for("calibration", separator=True)
                 self.action_for("to_cartesian", separator=True)
                 self.action_for("to_polar")
             with self.new_menu(_("Frequency filters"), icon_name="highpass.svg"):
