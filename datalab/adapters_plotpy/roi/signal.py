@@ -7,6 +7,7 @@ PlotPy Adapter Signal ROI Module
 
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING, Iterator
 
 import numpy as np
@@ -15,7 +16,7 @@ from plotpy.items.shape.range import XRangeSelection
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from sigima.objects import SegmentROI, SignalObj, SignalROI
-from sigima.objects.base import get_generic_roi_title
+from sigima.objects.base import GENERIC_ROI_TITLE_REGEXP, get_generic_roi_title
 
 from datalab.adapters_plotpy.coordutils import round_signal_coords
 from datalab.adapters_plotpy.roi.base import (
@@ -95,7 +96,8 @@ class _CurveClippedXRangeSelection(XRangeSelection):
     ) -> QG.QPolygonF | None:
         """Build a polygon that follows the signal curve between ``self._min``
         and ``self._max``, with a flat baseline at y=0 (clamped to the visible
-        canvas area when y=0 lies outside the current axis range).
+        canvas area when y=0 lies outside the current axis range, or fall back
+        to the canvas bottom when the y-axis uses a logarithmic scale).
         """
         if self._curve_x is None or self._curve_y is None:
             return None
@@ -103,6 +105,14 @@ class _CurveClippedXRangeSelection(XRangeSelection):
         y_arr = self._curve_y
         if x_arr.size < 2:
             return None
+        # Filter non-finite samples (NaN/Inf) which would produce invalid
+        # polygon vertices via ``np.interp``.
+        finite = np.isfinite(x_arr) & np.isfinite(y_arr)
+        if not finite.all():
+            x_arr = x_arr[finite]
+            y_arr = y_arr[finite]
+            if x_arr.size < 2:
+                return None
         xmin, xmax = self._min, self._max
         if xmin is None or xmax is None:
             return None
@@ -133,17 +143,42 @@ class _CurveClippedXRangeSelection(XRangeSelection):
         ys = ys[keep]
         if xs.size < 2:
             return None
-        # Baseline at y=0 in axis coordinates, clamped to the visible canvas
-        # area so that the polygon stays renderable even when 0 is outside
-        # the current y-axis range.
-        baseline_y = yMap.transform(0.0)
-        baseline_y = max(rct.top(), min(rct.bottom(), baseline_y))
+        # Baseline: y=0 in axis coordinates for linear scales, clamped to the
+        # visible canvas area. On a log scale, y=0 has no meaning, so fall
+        # back to the canvas bottom.
+        baseline_y = self._compute_baseline_y(yMap, rct)
+        if baseline_y is None:
+            return None
         polygon = QG.QPolygonF()
         polygon.append(QC.QPointF(xMap.transform(xs[0]), baseline_y))
         for xv, yv in zip(xs, ys):
             polygon.append(QC.QPointF(xMap.transform(xv), yMap.transform(yv)))
         polygon.append(QC.QPointF(xMap.transform(xs[-1]), baseline_y))
         return polygon
+
+    def _compute_baseline_y(
+        self,
+        yMap: qwt.scale_map.QwtScaleMap,
+        rct: QRectF,
+    ) -> float | None:
+        """Return the canvas y-coordinate of the polygon baseline.
+
+        Uses y=0 when the y-axis is linear, falls back to the canvas bottom
+        when the axis is logarithmic (where y=0 is undefined).
+        """
+        plot = self.plot()
+        is_log_y = False
+        if plot is not None:
+            try:
+                is_log_y = plot.get_axis_scale(self.yAxis()) == "log"
+            except Exception:  # pragma: no cover - defensive
+                is_log_y = False
+        if is_log_y:
+            return rct.bottom()
+        baseline_y = yMap.transform(0.0)
+        if not np.isfinite(baseline_y):
+            return rct.bottom()
+        return max(rct.top(), min(rct.bottom(), baseline_y))
 
     def draw(
         self,
@@ -170,11 +205,11 @@ class _CurveClippedXRangeSelection(XRangeSelection):
         rct.setLeft(xMap.transform(self._min))
         rct.setRight(xMap.transform(self._max))
 
-        # Choose the brush: per-instance color override has priority
+        # Choose the brush: per-instance color override has priority. The pen
+        # is preserved (so selection style — width/dash — keeps its visual
+        # role) and only its color is replaced to match the fill color.
         if self._fill_color is not None:
             brush = QG.QBrush(self._fill_color)
-            # When using a per-instance color, also use it for the edges so
-            # that the ROI keeps a consistent visual identity.
             edge_color = QG.QColor(self._fill_color)
             edge_color.setAlpha(255)
             pen = QG.QPen(pen)
@@ -312,12 +347,19 @@ class SignalROIPlotPyAdapter(BaseROIPlotPyAdapter[SignalROI]):
     ) -> Iterator[AnnotatedXRange]:
         """Iterate over ROI plot items, applying alternating fill colors so
         that several ROIs displayed on the same signal can be visually
-        distinguished."""
+        distinguished. The color cycling index is derived from the trailing
+        digits of the ROI title (``ROI<n>``) when available, falling back to
+        the position of the ROI in the list otherwise; this keeps the
+        per-ROI color stable across deletions/reorderings.
+        """
         for index, single_roi in enumerate(self.roi.single_rois):
-            color = roi_color_for_index(index)
+            title = single_roi.title or get_generic_roi_title(index)
+            match = re.match(GENERIC_ROI_TITLE_REGEXP, title)
+            color_index = int(match.group(1)) if match is not None else index
+            color = roi_color_for_index(color_index)
             roi_item = self.to_plot_item(single_roi, obj, fill_color=color)
             item = configure_roi_item(
                 roi_item, fmt, lbl, editable, option=self.roi.PREFIX
             )
-            item.setTitle(single_roi.title or get_generic_roi_title(index))
+            item.setTitle(title)
             yield item
