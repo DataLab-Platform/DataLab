@@ -56,7 +56,7 @@ from sigima.objects import (
     TypeObj,
     TypeROI,
 )
-from sigima.objects.base import get_generic_roi_title
+from sigima.objects.base import GENERIC_ROI_TITLE_REGEXP, get_generic_roi_title
 
 from datalab.adapters_plotpy import (
     TypePlotItem,
@@ -88,6 +88,16 @@ def tool_deselect_items(tool: InteractiveTool) -> None:
     plot.select_some_items([])  # Deselect all items
 
 
+def _roi_index_from_title(shape: TypeROIItem) -> int:
+    """Extract the trailing numeric index from a ``ROI<n>`` shape title.
+
+    Returns 0 if the title does not match the generic ROI title pattern
+    (which should not happen after :func:`tool_setup_shape` has run).
+    """
+    match = re.match(GENERIC_ROI_TITLE_REGEXP, str(shape.title().text()))
+    return int(match.group(1)) if match is not None else 0
+
+
 def tool_setup_shape(
     plot: BasePlot,
     shape: TypeROIItem,
@@ -97,8 +107,7 @@ def tool_setup_shape(
     configure_roi_item_in_tool(shape, obj)
     max_index = -1
     for item in plot.get_items():
-        name = str(item.title().text())
-        match = re.match(r"ROI(\d+)", name)
+        match = re.match(GENERIC_ROI_TITLE_REGEXP, str(item.title().text()))
         if match is not None:
             max_index = max(max_index, int(match.group(1)))
     shape.setTitle(get_generic_roi_title(max_index + 1))
@@ -123,16 +132,12 @@ class ROISegmentTool(HRangeTool):
     def create_shape(self) -> AnnotatedXRange:
         """Create shape"""
         plot = self.get_active_plot()
-        # Count existing ROI range items so the new ROI gets the next color in
-        # the cycling palette (consistent with the rendering of saved ROIs).
-        existing = sum(
-            1 for item in plot.get_items() if isinstance(item, AnnotatedXRange)
-        )
-        color = roi_color_for_index(existing)
-        shape = create_adapter_from_object(self.roi).to_plot_item(
-            self.obj, fill_color=color
-        )
+        shape = create_adapter_from_object(self.roi).to_plot_item(self.obj)
         tool_setup_shape(plot, shape, self.obj)
+        # Apply the cycling fill color based on the title index assigned by
+        # ``tool_setup_shape`` (so the color matches the persisted ROI
+        # numbering and stays stable across deletions).
+        shape.shape.set_fill_color(roi_color_for_index(_roi_index_from_title(shape)))
         return shape
 
 
@@ -550,14 +555,16 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, AnnotatedXR
         if param.edit(parent=self):
             segment_roi = param.to_single_roi(self.obj)
             plot = self.get_plot()
-            existing = sum(
-                1 for item in plot.get_items() if isinstance(item, AnnotatedXRange)
-            )
-            color = roi_color_for_index(existing)
-            shape = create_adapter_from_object(segment_roi).to_plot_item(
-                self.obj, fill_color=color
-            )
+            shape = create_adapter_from_object(segment_roi).to_plot_item(self.obj)
             configure_roi_item_in_tool(shape, self.obj)
+            # If the user did not provide a title, assign a unique ``ROI<n>``
+            # title via the standard tool setup so color cycling stays
+            # consistent with other ROIs.
+            if not str(shape.title().text()).strip():
+                tool_setup_shape(plot, shape, self.obj)
+            shape.shape.set_fill_color(
+                roi_color_for_index(_roi_index_from_title(shape))
+            )
             plot.add_item(shape)
             plot.set_active_item(shape)
 
