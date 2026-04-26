@@ -65,6 +65,7 @@ from datalab.adapters_plotpy import (
     create_adapter_from_object,
     plotitem_to_singleroi,
 )
+from datalab.adapters_plotpy.roi.signal import roi_color_for_index
 from datalab.config import Conf, _
 from datalab.env import execenv
 
@@ -121,8 +122,17 @@ class ROISegmentTool(HRangeTool):
 
     def create_shape(self) -> AnnotatedXRange:
         """Create shape"""
-        shape = create_adapter_from_object(self.roi).to_plot_item(self.obj)
-        tool_setup_shape(self.get_active_plot(), shape, self.obj)
+        plot = self.get_active_plot()
+        # Count existing ROI range items so the new ROI gets the next color in
+        # the cycling palette (consistent with the rendering of saved ROIs).
+        existing = sum(
+            1 for item in plot.get_items() if isinstance(item, AnnotatedXRange)
+        )
+        color = roi_color_for_index(existing)
+        shape = create_adapter_from_object(self.roi).to_plot_item(
+            self.obj, fill_color=color
+        )
+        tool_setup_shape(plot, shape, self.obj)
         return shape
 
 
@@ -539,10 +549,17 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, AnnotatedXR
         param = ROI1DParam()
         if param.edit(parent=self):
             segment_roi = param.to_single_roi(self.obj)
-            shape = create_adapter_from_object(segment_roi).to_plot_item(self.obj)
+            plot = self.get_plot()
+            existing = sum(
+                1 for item in plot.get_items() if isinstance(item, AnnotatedXRange)
+            )
+            color = roi_color_for_index(existing)
+            shape = create_adapter_from_object(segment_roi).to_plot_item(
+                self.obj, fill_color=color
+            )
             configure_roi_item_in_tool(shape, self.obj)
-            self.get_plot().add_item(shape)
-            self.get_plot().set_active_item(shape)
+            plot.add_item(shape)
+            plot.set_active_item(shape)
 
     def create_coordinate_based_roi_actions(self) -> list[QW.QAction]:
         """Create coordinate-based ROI actions"""
