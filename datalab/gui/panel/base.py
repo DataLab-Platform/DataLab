@@ -2980,6 +2980,15 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             source_panel=self,
             size=self.get_dialog_size(),
         )
+        # Propagate the source plot axis scales (e.g. log) to the ROI editor
+        # so that signals/images displayed with non-linear scales keep the same
+        # representation in the ROI editor dialog (see issue: ROI editor was
+        # always opening with default lin-lin scales).
+        src_plot = self.plothandler.plot
+        roi_editor.get_plot().set_scales(
+            src_plot.get_axis_scale("bottom"),
+            src_plot.get_axis_scale("left"),
+        )
         if exec_dialog(roi_editor):
             return roi_editor.get_roieditor_results()
         return None
