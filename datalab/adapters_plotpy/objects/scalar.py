@@ -344,6 +344,64 @@ def create_pulse_crossing_marker(
     return cursor
 
 
+def create_axis_marker_cursor(
+    orientation: Literal["h", "v"], position: float, label: str
+) -> Marker:
+    """Create an axis-marker cursor for X_MARKERS / Y_MARKERS visualization.
+
+    Rendered as a thin blue **dashed** line (best legibility against most
+    spectra and curves), with a compact black-on-white label.
+
+    Args:
+        orientation: 'h' for horizontal, 'v' for vertical cursor
+        position: Position of the cursor along the relevant axis
+        label: Label for the cursor (typically a letter like ``"a"``)
+
+    Returns:
+        Marker item styled as a dashed axis cursor
+    """
+    if orientation == "h":
+        cursor = make.hcursor(position, label=label)
+    elif orientation == "v":
+        cursor = make.vcursor(position, label=label)
+    else:
+        raise ValueError("Orientation must be 'h' or 'v'")
+
+    cursor.set_movable(False)
+    cursor.set_selectable(False)
+    cursor.markerparam.line.color = "#4681d8"  # Matplotlib-like blue
+    cursor.markerparam.line.width = 2.0
+    cursor.markerparam.line.style = "DashLine"
+    cursor.markerparam.symbol.marker = "NoSymbol"
+    cursor.markerparam.text.textcolor = "#4681d8"
+    cursor.markerparam.text.background_color = "#ffffff"
+    cursor.markerparam.text.background_alpha = 0.7
+    cursor.markerparam.text.font.bold = True
+    cursor.markerparam.update_item(cursor)
+
+    return cursor
+
+
+def _alpha_label(index: int) -> str:
+    """Return an alphabetic label for a 0-based index (``a``, ``b``, ..., ``z``,
+    ``aa``, ``ab``, ...).
+
+    Used to label axis-marker cursors (``X_MARKERS`` / ``Y_MARKERS``), so they
+    can be distinguished at a glance from XY cross markers (which use numeric
+    labels).
+    """
+    if index < 0:
+        return ""
+    label = ""
+    n = index
+    while True:
+        label = chr(ord("a") + (n % 26)) + label
+        n = n // 26 - 1
+        if n < 0:
+            break
+    return label
+
+
 def create_xy_marker_cross(x: float, y: float, label: str) -> Marker:
     """Create a cross marker at ``(x, y)`` for XY-markers visualization.
 
@@ -472,7 +530,9 @@ class TablePlotPyAdapter(ResultPlotPyAdapter):
             zip(table.col(x_header), table.col(y_header))
         ):
             if are_values_valid([x_val, y_val]):
-                items.append(create_xy_marker_cross(x_val, y_val, f"#{index}"))
+                # XY cross markers use *numeric* labels (1-indexed) to make
+                # them visually distinct from axis markers (which use letters).
+                items.append(create_xy_marker_cross(x_val, y_val, f"#{index + 1}"))
         return items
 
     def create_axis_markers_visualization_items(
@@ -500,8 +560,11 @@ class TablePlotPyAdapter(ResultPlotPyAdapter):
         orientation: Literal["h", "v"] = "v" if axis == "x" else "h"
         for index, value in enumerate(table.col(table.headers[0])):
             if are_values_valid([value]):
+                # Axis markers use *alphabetic* labels (a, b, c, ...) to make
+                # them visually distinct from XY cross markers (which use
+                # numeric labels). Rendered as blue dashed cursors.
                 items.append(
-                    create_pulse_crossing_marker(orientation, value, f"#{index}")
+                    create_axis_marker_cursor(orientation, value, _alpha_label(index))
                 )
         return items
 
