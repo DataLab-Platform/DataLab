@@ -480,6 +480,17 @@ class ViewSettings(gds.DataSet):
             "Can be toggled per-object using the checkbox in the Properties panel."
         ),
     )
+    show_marker_labels_in_table = gds.BoolItem(
+        _("Show marker labels in result tables"),
+        _("Marker labels"),
+        default=True,
+        help=_(
+            "Prepend a marker-label column to result tables for marker results "
+            "(XY/X/Y markers), so each row can be matched with the corresponding "
+            "cross or dashed cursor drawn on the plot. XY markers use numeric "
+            "labels (#1, #2, ...), axis markers use letters (a, b, c, ...)."
+        ),
+    )
     _g3 = gds.EndGroup("")
 
     _end_view_tabs = gds.EndTabGroup("")

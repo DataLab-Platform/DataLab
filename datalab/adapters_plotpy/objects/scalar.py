@@ -41,6 +41,7 @@ from datalab.adapters_metadata import (
     TableAdapter,
     resultadapter_to_html,
 )
+from datalab.adapters_metadata.common import alpha_label as _alpha_label
 from datalab.adapters_plotpy.base import (
     config_annotated_shape,
     items_to_json,
@@ -380,26 +381,6 @@ def create_axis_marker_cursor(
     cursor.markerparam.update_item(cursor)
 
     return cursor
-
-
-def _alpha_label(index: int) -> str:
-    """Return an alphabetic label for a 0-based index (``a``, ``b``, ..., ``z``,
-    ``aa``, ``ab``, ...).
-
-    Used to label axis-marker cursors (``X_MARKERS`` / ``Y_MARKERS``), so they
-    can be distinguished at a glance from XY cross markers (which use numeric
-    labels).
-    """
-    if index < 0:
-        return ""
-    label = ""
-    n = index
-    while True:
-        label = chr(ord("a") + (n % 26)) + label
-        n = n // 26 - 1
-        if n < 0:
-            break
-    return label
 
 
 def create_xy_marker_cross(x: float, y: float, label: str) -> Marker:
