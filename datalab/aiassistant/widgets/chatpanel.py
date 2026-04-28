@@ -159,8 +159,9 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         self.history_view.setTextCursor(cursor)
 
     def _append_user(self, text: str) -> None:
+        you = _("You")
         self._append_html(
-            f"<div style='margin-top:6px;'><b>{_('You')}:</b><br>"
+            f"<div style='margin-top:6px;'><b>{you}:</b><br>"
             f"{html.escape(text).replace(chr(10), '<br>')}</div>"
         )
 

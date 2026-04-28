@@ -50,6 +50,9 @@ msgstr "Envoyer"
 msgid "AI Assistant ready. Configure your provider through the Settings… button before sending the first message."
 msgstr "Assistant IA prêt. Configurez votre fournisseur via le bouton Paramètres… avant d'envoyer le premier message."
 
+msgid "You"
+msgstr "Vous"
+
 msgid "Thinking…"
 msgstr "Réflexion en cours…"
 
