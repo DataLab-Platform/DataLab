@@ -17,6 +17,7 @@ This module is GUI-agnostic: tool confirmation is delegated to a callback
 
 from __future__ import annotations
 
+import inspect
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Callable
 
@@ -32,7 +33,7 @@ if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
 
 
-DEFAULT_SYSTEM_PROMPT = """\
+_BASE_SYSTEM_PROMPT = """\
 You are an AI assistant integrated in DataLab, a scientific data processing
 application for 1D signals and 2D images. You help the user by:
 
@@ -42,17 +43,135 @@ application for 1D signals and 2D images. You help the user by:
 - Applying registered processing operations through 'apply_operation'.
 - Writing complete Python macros and running them through
   'create_and_run_macro' for complex workflows.
+- Visually inspecting plots through 'capture_view' (returns the current
+  signal/image plot as an image you can analyse) when you need to assess
+  the shape of a signal or the appearance of an image before/after
+  processing.
+- Looking up the public API of the proxy and data objects via
+  'get_api_help' BEFORE writing a macro that uses unfamiliar methods.
 
 Guidelines:
 
 - Always discover available operations via 'list_available_operations' before
   calling 'apply_operation' on an unknown name.
 - Prefer atomic 'apply_operation' calls over macros when possible.
-- Macros may import 'numpy as np', 'scipy.signal as sps' and use
-  'from datalab.control.proxy import RemoteProxy; proxy = RemoteProxy()'.
+- When writing a macro, ONLY use the public API documented in the cheat
+  sheet below or returned by 'get_api_help'. Never invent attributes or
+  methods on 'proxy', 'SignalObj' or 'ImageObj'.
+- 'create_and_run_macro' returns the macro console output (stdout + stderr,
+  including Python tracebacks) and exit code. If exit_code != 0, READ the
+  output, fix the macro, and call the tool again.
 - Be concise. Confirm completion in one sentence after the last tool call.
 - Never invent operation names or parameter fields.
 """
+
+
+_MACRO_FEWSHOT = """\
+
+# ----- Canonical macro examples (copy these patterns) -----
+
+## Example 1 — create a signal and apply an FFT
+```python
+import numpy as np
+from datalab.control.proxy import RemoteProxy
+
+proxy = RemoteProxy()
+x = np.linspace(0.0, 1.0, 1024)
+y = np.sin(2 * np.pi * 50.0 * x)
+proxy.add_signal("sine 50Hz", x, y)
+proxy.calc("fft")
+print("done")
+```
+
+## Example 2 — iterate on existing signals, normalise each
+```python
+import sigima.params
+from datalab.control.proxy import RemoteProxy
+
+proxy = RemoteProxy()
+proxy.set_current_panel("signal")
+for uuid in proxy.get_object_uuids("signal"):
+    proxy.select_objects([uuid])
+    proxy.calc("normalize", sigima.params.NormalizeParam.create(method="minmax"))
+```
+
+## Example 3 — read data out of an object
+```python
+from datalab.control.proxy import RemoteProxy
+
+proxy = RemoteProxy()
+obj = proxy.get_object()        # current selected signal/image
+# SignalObj exposes: obj.x, obj.y, obj.title, obj.xunit, obj.yunit
+# ImageObj  exposes: obj.data, obj.title, obj.x0, obj.y0, obj.dx, obj.dy
+print(obj.title, getattr(obj, "y", getattr(obj, "data", None)).shape)
+```
+"""
+
+
+def _summarise_signature(member) -> str:
+    """Return a short ``name(sig)  # first docstring line`` summary."""
+    try:
+        sig = str(inspect.signature(member))
+    except (TypeError, ValueError):
+        sig = "(...)"
+    doc = (inspect.getdoc(member) or "").strip().splitlines()
+    first = doc[0] if doc else ""
+    if len(first) > 90:
+        first = first[:87] + "..."
+    return f"{sig}  # {first}".rstrip("  # ")
+
+
+def _build_proxy_cheatsheet() -> str:
+    """Return a one-line-per-method cheat sheet of the public proxy API."""
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.control.baseproxy import BaseProxy  # noqa: WPS433
+
+    lines = [
+        "# RemoteProxy / LocalProxy public API "
+        "(import: `from datalab.control.proxy import RemoteProxy`)"
+    ]
+    for name, member in sorted(inspect.getmembers(BaseProxy, inspect.isfunction)):
+        if name.startswith("_"):
+            continue
+        lines.append(f"- proxy.{name}{_summarise_signature(member)}")
+    return "\n".join(lines)
+
+
+def _build_objects_cheatsheet() -> str:
+    """Return a short cheat sheet for SignalObj / ImageObj."""
+    return (
+        "# SignalObj (1D)\n"
+        "- attributes: x, y, dx, dy, title, xunit, yunit, xlabel, ylabel, "
+        "metadata, roi, uuid\n"
+        "- properties: xydata -> (x, y)\n"
+        "- methods: copy(), set_xydata(x, y, dx=None, dy=None), "
+        "get_data(roi_index=None) -> (x, y)\n"
+        "\n"
+        "# ImageObj (2D)\n"
+        "- attributes: data, title, x0, y0, dx, dy, xunit, yunit, zunit, "
+        "metadata, roi, uuid\n"
+        "- methods: copy(), set_data_type(dtype), get_data(roi_index=None)\n"
+        "\n"
+        "# Parameters: import via `import sigima.params` then "
+        "`sigima.params.<Name>Param.create(...)`\n"
+        "  e.g. NormalizeParam, MovingAverageParam, FFTParam, GaussianParam.\n"
+    )
+
+
+def build_default_system_prompt() -> str:
+    """Return the default system prompt with auto-generated API cheat sheet."""
+    return (
+        _BASE_SYSTEM_PROMPT
+        + "\n"
+        + _build_proxy_cheatsheet()
+        + "\n\n"
+        + _build_objects_cheatsheet()
+        + _MACRO_FEWSHOT
+    )
+
+
+# Kept for backwards compatibility (and so that callers can still override it).
+DEFAULT_SYSTEM_PROMPT = _BASE_SYSTEM_PROMPT
 
 
 @dataclass
@@ -107,7 +226,7 @@ class AIController:
         self.mainwindow = mainwindow
         self.confirm_callback = confirm_callback
         self.execute_callback = execute_callback
-        self.system_prompt = system_prompt or DEFAULT_SYSTEM_PROMPT
+        self.system_prompt = system_prompt or build_default_system_prompt()
         self.max_iterations = int(max_iterations)
         self.auto_approve_readonly = bool(auto_approve_readonly)
         self.history: list[ChatMessage] = [
@@ -172,6 +291,10 @@ class AIController:
                         name=call.name,
                     )
                 )
+                # Inject any follow-up messages attached by the tool (e.g. a
+                # multimodal user message carrying a screenshot).
+                for extra in result.followup_messages:
+                    self.history.append(extra)
         return TurnResult(
             assistant_message=(
                 "Stopped after reaching the maximum number of tool-call "

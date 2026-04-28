@@ -17,11 +17,17 @@ This module groups all tools that are registered by default in
 
 from __future__ import annotations
 
+import ast
+import base64
+import inspect
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
+from qtpy import QtCore as QC
+from qtpy import QtGui as QG
 
-from datalab.aiassistant.tools.registry import Tool, ToolRegistry
+from datalab.aiassistant.providers.base import ChatMessage
+from datalab.aiassistant.tools.registry import Tool, ToolRegistry, ToolResult
 
 if TYPE_CHECKING:
     from datalab.control.proxy import LocalProxy
@@ -290,18 +296,295 @@ def _tool_apply_operation(
 # =============================================================================
 
 
+def _proxy_public_api() -> set[str]:
+    """Return the set of public method names of :class:`BaseProxy`."""
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.control.baseproxy import BaseProxy  # noqa: WPS433
+
+    return {
+        name
+        for name, member in inspect.getmembers(BaseProxy, inspect.isfunction)
+        if not name.startswith("_")
+    }
+
+
+def _validate_macro_code(code: str) -> list[str]:
+    """Validate macro source code statically.
+
+    Returns:
+        List of human-readable warnings/errors. Empty list means the code
+        looks fine. Syntax errors are returned as a single-element list.
+    """
+    try:
+        tree = ast.parse(code)
+    except SyntaxError as exc:
+        return [f"SyntaxError: {exc.msg} (line {exc.lineno})"]
+
+    proxy_names: set[str] = set()
+    for node in ast.walk(tree):
+        # Detect `proxy = RemoteProxy(...)` / `proxy = LocalProxy(...)`
+        if isinstance(node, ast.Assign):
+            if (
+                isinstance(node.value, ast.Call)
+                and isinstance(node.value.func, ast.Name)
+                and node.value.func.id in ("RemoteProxy", "LocalProxy")
+            ):
+                for tgt in node.targets:
+                    if isinstance(tgt, ast.Name):
+                        proxy_names.add(tgt.id)
+    if not proxy_names:
+        proxy_names = {"proxy"}  # heuristic default
+
+    public = _proxy_public_api()
+    warnings: list[str] = []
+    seen: set[str] = set()
+    for node in ast.walk(tree):
+        if (
+            isinstance(node, ast.Attribute)
+            and isinstance(node.value, ast.Name)
+            and node.value.id in proxy_names
+            and node.attr not in public
+            and node.attr not in seen
+        ):
+            seen.add(node.attr)
+            warnings.append(
+                f"Unknown method 'proxy.{node.attr}' (line {node.lineno}). "
+                f"Use 'get_api_help' to see the available methods."
+            )
+    return warnings
+
+
+def _wait_macro_finished(macro, console, console_before_len: int, timeout: float):
+    """Block until ``macro`` finishes (or ``timeout`` elapses); return output."""
+    loop = QC.QEventLoop()
+    macro.FINISHED.connect(loop.quit)
+    timed_out = {"flag": False}
+
+    def _on_timeout() -> None:
+        timed_out["flag"] = True
+        loop.quit()
+
+    timer = QC.QTimer()
+    timer.setSingleShot(True)
+    timer.timeout.connect(_on_timeout)
+    timer.start(int(max(timeout, 0.1) * 1000))
+    loop.exec_()
+    timer.stop()
+
+    full = console.toPlainText()
+    output = full[console_before_len:]
+    return output, timed_out["flag"]
+
+
 def _tool_create_and_run_macro(
     proxy: LocalProxy,
     mainwindow: DLMainWindow,
     title: str,
     code: str,
     autorun: bool = True,
+    timeout: float = 30.0,
 ) -> dict[str, Any]:
+    # Static validation FIRST so we don't bother running invalid code.
+    warnings = _validate_macro_code(code)
+    syntax_errors = [w for w in warnings if w.startswith("SyntaxError")]
+    if syntax_errors:
+        return {
+            "title": title,
+            "ok": False,
+            "validation_errors": syntax_errors,
+            "hint": "Fix the syntax errors and call create_and_run_macro again.",
+        }
+
     macropanel = mainwindow.macropanel
     macro = macropanel.add_macro_with_code(title, code)
-    if autorun:
-        proxy.run_macro(macro.title)
-    return {"title": macro.title, "autorun": bool(autorun)}
+
+    result: dict[str, Any] = {"title": macro.title, "validation_warnings": warnings}
+    if not autorun:
+        result["autorun"] = False
+        return result
+
+    console = macropanel.console
+    before_len = len(console.toPlainText())
+    macro.run()
+    output, timed_out = _wait_macro_finished(macro, console, before_len, timeout)
+
+    exit_code = macro.get_exit_code()
+    # Trim very long outputs to keep token budget reasonable.
+    trimmed = output if len(output) <= 4000 else "...[truncated]...\n" + output[-4000:]
+    result.update(
+        {
+            "autorun": True,
+            "exit_code": exit_code,
+            "ok": (exit_code == 0) and not timed_out,
+            "timed_out": timed_out,
+            "console_output": trimmed,
+        }
+    )
+    if timed_out:
+        result["hint"] = (
+            "Macro did not finish within the timeout. Increase 'timeout' or "
+            "simplify the macro."
+        )
+    elif exit_code != 0:
+        result["hint"] = (
+            "Macro failed. Read 'console_output' (Python traceback included), "
+            "fix the code and call create_and_run_macro again."
+        )
+    return result
+
+
+def _tool_get_macro_console_output(
+    proxy: LocalProxy,
+    mainwindow: DLMainWindow,
+    last_n_chars: int = 4000,
+) -> dict[str, Any]:
+    text = mainwindow.macropanel.console.toPlainText()
+    if last_n_chars and len(text) > last_n_chars:
+        text = "...[truncated]...\n" + text[-int(last_n_chars) :]
+    return {"console_output": text}
+
+
+# =============================================================================
+# API help tool
+# =============================================================================
+
+
+def _format_signature(member) -> str:
+    try:
+        return str(inspect.signature(member))
+    except (TypeError, ValueError):
+        return "(...)"
+
+
+def _members_help(cls, kind: str = "method") -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    for name, member in sorted(inspect.getmembers(cls)):
+        if name.startswith("_"):
+            continue
+        if kind == "method" and not callable(member):
+            continue
+        doc = inspect.getdoc(member) or ""
+        first = doc.strip().splitlines()[0] if doc else ""
+        entry: dict[str, Any] = {"name": name, "doc": first}
+        if callable(member):
+            entry["signature"] = _format_signature(member)
+        out.append(entry)
+    return out
+
+
+def _tool_get_api_help(
+    proxy: LocalProxy,
+    mainwindow: DLMainWindow,
+    symbol: str,
+) -> dict[str, Any]:
+    sym = symbol.lower()
+    if sym in ("proxy", "remoteproxy", "localproxy", "baseproxy"):
+        # pylint: disable-next=import-outside-toplevel
+        from datalab.control.baseproxy import BaseProxy  # noqa: WPS433
+
+        return {"symbol": "RemoteProxy", "methods": _members_help(BaseProxy)}
+    if sym == "signalobj":
+        # pylint: disable-next=import-outside-toplevel
+        from sigima.objects import SignalObj  # noqa: WPS433
+
+        return {
+            "symbol": "SignalObj",
+            "attributes": [
+                "x",
+                "y",
+                "dx",
+                "dy",
+                "title",
+                "xunit",
+                "yunit",
+                "xlabel",
+                "ylabel",
+                "metadata",
+                "roi",
+                "uuid",
+            ],
+            "methods": _members_help(SignalObj),
+        }
+    if sym == "imageobj":
+        # pylint: disable-next=import-outside-toplevel
+        from sigima.objects import ImageObj  # noqa: WPS433
+
+        return {
+            "symbol": "ImageObj",
+            "attributes": [
+                "data",
+                "title",
+                "x0",
+                "y0",
+                "dx",
+                "dy",
+                "xunit",
+                "yunit",
+                "zunit",
+                "metadata",
+                "roi",
+                "uuid",
+            ],
+            "methods": _members_help(ImageObj),
+        }
+    if sym in ("sigima.params", "params"):
+        # pylint: disable-next=import-outside-toplevel
+        import sigima.params as sp  # noqa: WPS433
+
+        names = sorted(n for n in dir(sp) if n.endswith("Param"))
+        return {"symbol": "sigima.params", "param_classes": names}
+    raise ValueError(
+        f"Unknown symbol {symbol!r}. Use one of: "
+        "'proxy', 'SignalObj', 'ImageObj', 'sigima.params'."
+    )
+
+
+# =============================================================================
+# View capture tool (multimodal)
+# =============================================================================
+
+
+def _tool_capture_view(
+    proxy: LocalProxy,
+    mainwindow: DLMainWindow,
+    panel: str | None = None,
+) -> ToolResult:
+    panel_widget = _resolve_panel(mainwindow, panel)
+    plotwidget = panel_widget.plothandler.plotwidget
+    pixmap: QG.QPixmap = plotwidget.grab()
+    if pixmap.isNull():
+        return ToolResult(ok=False, error="Failed to grab plot widget pixmap.")
+
+    buf = QC.QBuffer()
+    buf.open(QC.QBuffer.WriteOnly)
+    pixmap.save(buf, "PNG")
+    b64 = base64.b64encode(bytes(buf.data())).decode("ascii")
+    buf.close()
+
+    panel_id = panel_widget.PANEL_STR_ID
+    summary = {
+        "panel": panel_id,
+        "size": [pixmap.width(), pixmap.height()],
+        "format": "image/png",
+        "note": ("Screenshot follows in the next user message as an image block."),
+    }
+    followup = ChatMessage(
+        role="user",
+        content=[
+            {
+                "type": "text",
+                "text": (
+                    f"Here is the current view of the {panel_id} panel "
+                    "(captured via 'capture_view'):"
+                ),
+            },
+            {
+                "type": "image_url",
+                "image_url": {"url": f"data:image/png;base64,{b64}"},
+            },
+        ],
+    )
+    return ToolResult(ok=True, data=summary, followup_messages=[followup])
 
 
 # =============================================================================
@@ -513,10 +796,14 @@ def build_default_registry() -> ToolRegistry:
             name="create_and_run_macro",
             description=(
                 "Create a new macro tab in the Macro panel with the given Python "
-                "code, then optionally run it. The macro has access to "
-                "'datalab.control.proxy.RemoteProxy' to drive DataLab. Use this "
-                "for complex multi-step scripts; prefer 'apply_operation' for "
-                "atomic actions."
+                "code, then optionally run it SYNCHRONOUSLY and return the macro "
+                "console output (stdout + stderr, including Python tracebacks) "
+                "and exit code. The macro has access to "
+                "'datalab.control.proxy.RemoteProxy' to drive DataLab. The code "
+                "is statically validated (syntax + unknown 'proxy.*' methods) "
+                "before execution. Use this for complex multi-step scripts; "
+                "prefer 'apply_operation' for atomic actions. If 'ok' is False, "
+                "read 'console_output' or 'validation_errors' and try again."
             ),
             parameters={
                 "type": "object",
@@ -527,11 +814,85 @@ def build_default_registry() -> ToolRegistry:
                         "description": "Full Python source code of the macro.",
                     },
                     "autorun": {"type": "boolean", "default": True},
+                    "timeout": {
+                        "type": "number",
+                        "default": 30.0,
+                        "description": (
+                            "Maximum number of seconds to wait for the macro to finish."
+                        ),
+                    },
                 },
                 "required": ["title", "code"],
                 "additionalProperties": False,
             },
             handler=_tool_create_and_run_macro,
+        )
+    )
+    reg.register(
+        Tool(
+            name="get_macro_console_output",
+            description=(
+                "Return the current contents of the Macro panel console "
+                "(includes prior macro runs)."
+            ),
+            parameters={
+                "type": "object",
+                "properties": {
+                    "last_n_chars": {"type": "integer", "default": 4000},
+                },
+                "additionalProperties": False,
+            },
+            handler=_tool_get_macro_console_output,
+            readonly=True,
+        )
+    )
+    reg.register(
+        Tool(
+            name="get_api_help",
+            description=(
+                "Return the public API of DataLab objects: methods of "
+                "RemoteProxy, attributes/methods of SignalObj or ImageObj, or "
+                "the list of available 'sigima.params' parameter classes. "
+                "Call this BEFORE writing a macro that uses unfamiliar methods "
+                "to avoid hallucinating attribute names."
+            ),
+            parameters={
+                "type": "object",
+                "properties": {
+                    "symbol": {
+                        "type": "string",
+                        "enum": [
+                            "proxy",
+                            "SignalObj",
+                            "ImageObj",
+                            "sigima.params",
+                        ],
+                    }
+                },
+                "required": ["symbol"],
+                "additionalProperties": False,
+            },
+            handler=_tool_get_api_help,
+            readonly=True,
+        )
+    )
+    reg.register(
+        Tool(
+            name="capture_view",
+            description=(
+                "Grab a PNG screenshot of the current signal or image plot "
+                "widget and inject it as an image into the conversation, so "
+                "that the assistant can visually inspect the data (signal "
+                "shape, image appearance, presence of artefacts, result of a "
+                "processing step, etc.). Requires a multimodal-capable model."
+            ),
+            parameters={
+                "type": "object",
+                "properties": {"panel": _PANEL_PARAM},
+                "additionalProperties": False,
+            },
+            handler=_tool_capture_view,
+            readonly=True,
         )
     )
 

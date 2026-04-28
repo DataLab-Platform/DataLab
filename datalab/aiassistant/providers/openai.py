@@ -81,13 +81,22 @@ def _message_to_openai(message: ChatMessage) -> dict[str, Any]:
     """Convert a :class:`ChatMessage` into an OpenAI-format dict."""
     out: dict[str, Any] = {"role": message.role}
     if message.role == "tool":
-        out["content"] = message.content
+        # Tool messages must carry plain text content.
+        content = message.content
+        if isinstance(content, list):
+            content = "".join(
+                block.get("text", "")
+                for block in content
+                if block.get("type") == "text"
+            )
+        out["content"] = content
         if message.tool_call_id is not None:
             out["tool_call_id"] = message.tool_call_id
         if message.name is not None:
             out["name"] = message.name
         return out
     if message.content:
+        # Pass list content (multimodal blocks) through unchanged.
         out["content"] = message.content
     if message.tool_calls:
         out["tool_calls"] = [

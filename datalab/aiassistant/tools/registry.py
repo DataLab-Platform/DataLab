@@ -18,6 +18,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any, Callable
 
 if TYPE_CHECKING:
+    from datalab.aiassistant.providers.base import ChatMessage
     from datalab.control.proxy import LocalProxy
     from datalab.gui.main import DLMainWindow
 
@@ -62,11 +63,16 @@ class ToolResult:
         ok: True if execution succeeded.
         data: Tool result payload (JSON-serializable).
         error: Error message if execution failed.
+        followup_messages: Extra messages (e.g. a user message carrying an
+         image) to append to the conversation history right after the tool
+         result message. Useful for multimodal payloads that cannot live in
+         a ``role:"tool"`` message.
     """
 
     ok: bool
     data: Any = None
     error: str | None = None
+    followup_messages: list[ChatMessage] = field(default_factory=list)
 
     def to_message_content(self) -> str:
         """Return the JSON content sent back to the LLM."""
@@ -134,4 +140,6 @@ class ToolRegistry:
             data = tool.handler(proxy, mainwindow, **arguments)
         except Exception as exc:  # pylint: disable=broad-except
             return ToolResult(ok=False, error=f"{type(exc).__name__}: {exc}")
+        if isinstance(data, ToolResult):
+            return data
         return ToolResult(ok=True, data=data)
