@@ -28,6 +28,41 @@ if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
 
 
+class _GuiBridge(QC.QObject):
+    """Marshal callables from worker threads onto the GUI thread.
+
+    The bridge lives in the GUI thread. Background threads call
+    :meth:`call_in_gui` which posts the callable to the GUI thread via a
+    queued signal and waits on a semaphore until the result (or exception)
+    is available.
+    """
+
+    _request = QC.Signal(object, object)  # callable, holder
+
+    def __init__(self, parent: QC.QObject | None = None) -> None:
+        super().__init__(parent)
+        self._request.connect(self._on_request, QC.Qt.QueuedConnection)
+
+    def _on_request(self, func, holder: dict) -> None:
+        try:
+            holder["result"] = func()
+        except BaseException as exc:  # noqa: BLE001 - re-raised in caller
+            holder["error"] = exc
+        finally:
+            holder["sem"].release()
+
+    def call_in_gui(self, func):
+        """Run ``func()`` on the GUI thread and return its result."""
+        if QC.QThread.currentThread() is self.thread():
+            return func()
+        holder: dict = {"sem": QC.QSemaphore(0)}
+        self._request.emit(func, holder)
+        holder["sem"].acquire()
+        if "error" in holder:
+            raise holder["error"]
+        return holder.get("result")
+
+
 class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
     """AI Assistant chat dock.
 
@@ -52,6 +87,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         self._proxy = LocalProxy(mainwindow)
         self._controller: AIController | None = None
         self._worker: AIWorker | None = None
+        self._bridge = _GuiBridge(self)
         self._setup_ui()
 
     # ------------------------------------------------------------------ UI
@@ -198,14 +234,26 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
             timeout=timeout,
         )
         registry = build_default_registry()
+
+        def confirm_in_gui(tool: Tool, arguments: dict) -> bool:
+            return self._bridge.call_in_gui(
+                lambda: ToolConfirmDialog.confirm(tool, arguments, self)
+            )
+
+        def execute_in_gui(name: str, arguments: dict):
+            return self._bridge.call_in_gui(
+                lambda: registry.call(name, arguments, self._proxy, self.mainwindow)
+            )
+
         return AIController(
             provider=provider,
             registry=registry,
             proxy=self._proxy,
             mainwindow=self.mainwindow,
-            confirm_callback=self._confirm_tool,
+            confirm_callback=confirm_in_gui,
             max_iterations=max_iterations,
             auto_approve_readonly=auto_approve,
+            execute_callback=execute_in_gui,
         )
 
     def _confirm_tool(self, tool: Tool, arguments: dict) -> bool:

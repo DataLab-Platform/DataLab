@@ -71,6 +71,7 @@ class TurnResult:
 
 
 ConfirmCallback = Callable[[Tool, dict], bool]
+ExecuteCallback = Callable[[str, dict], ToolResult]
 
 
 class AIController:
@@ -98,12 +99,14 @@ class AIController:
         system_prompt: str | None = None,
         max_iterations: int = 8,
         auto_approve_readonly: bool = True,
+        execute_callback: ExecuteCallback | None = None,
     ) -> None:
         self.provider = provider
         self.registry = registry
         self.proxy = proxy
         self.mainwindow = mainwindow
         self.confirm_callback = confirm_callback
+        self.execute_callback = execute_callback
         self.system_prompt = system_prompt or DEFAULT_SYSTEM_PROMPT
         self.max_iterations = int(max_iterations)
         self.auto_approve_readonly = bool(auto_approve_readonly)
@@ -151,9 +154,15 @@ class AIController:
                             tool_executions=executions,
                             cancelled=True,
                         )
-                    result = self.registry.call(
-                        call.name, call.arguments, self.proxy, self.mainwindow
-                    )
+                    if self.execute_callback is None:
+                        result = self.registry.call(
+                            call.name,
+                            call.arguments,
+                            self.proxy,
+                            self.mainwindow,
+                        )
+                    else:
+                        result = self.execute_callback(call.name, call.arguments)
                 executions.append((call.name, dict(call.arguments), result))
                 self.history.append(
                     ChatMessage(
