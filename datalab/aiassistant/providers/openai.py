@@ -33,6 +33,7 @@ class OpenAIProvider(LLMProvider):
     """
 
     name = "openai"
+    api_key_env_var = "OPENAI_API_KEY"
 
     def chat(
         self,

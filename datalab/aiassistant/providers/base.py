@@ -10,6 +10,7 @@ library, so that it can be reused / tested in headless environments.
 from __future__ import annotations
 
 import abc
+import os
 from dataclasses import dataclass, field
 from typing import Any, Literal
 
@@ -89,6 +90,13 @@ class LLMProvider(abc.ABC):
 
     name: str = ""
 
+    #: Name of the environment variable from which the API key may be read
+    #: when none is configured explicitly. ``None`` disables the env-var
+    #: fallback (e.g. for the mock provider). Subclasses should set this to
+    #: the conventional variable name expected by the upstream SDK
+    #: (e.g. ``"OPENAI_API_KEY"`` for OpenAI).
+    api_key_env_var: str | None = None
+
     def __init__(
         self,
         api_key: str,
@@ -102,6 +110,34 @@ class LLMProvider(abc.ABC):
         self.base_url = base_url
         self.temperature = temperature
         self.timeout = timeout
+
+    @classmethod
+    def resolve_api_key(cls, configured_key: str | None) -> str:
+        """Return the API key to use, applying the env-var fallback.
+
+        Resolution order (first non-empty value wins):
+
+        1. ``configured_key`` — value stored in the DataLab configuration
+           (typically set via the AI Assistant settings dialog).
+        2. The environment variable named by :attr:`api_key_env_var`, if any.
+
+        Storing the API key in an environment variable is the recommended
+        practice: it avoids writing the secret in clear text in the DataLab
+        INI file, and it lets the same machine-wide credential be shared
+        with other tools (the OpenAI SDK, ``curl``, etc.).
+
+        Args:
+            configured_key: API key read from the DataLab configuration.
+             May be ``None`` or empty.
+
+        Returns:
+            The resolved API key, or an empty string if none is available.
+        """
+        if configured_key:
+            return configured_key
+        if cls.api_key_env_var:
+            return os.environ.get(cls.api_key_env_var, "") or ""
+        return ""
 
     @abc.abstractmethod
     def chat(

@@ -37,7 +37,11 @@ class AISettings(gds.DataSet):
         notempty=False,
         help=_(
             "Your provider API key. Stored in the DataLab INI file in plain "
-            "text — keep this file private."
+            "text — keep this file private.\n\n"
+            "Recommended: leave this field empty and set the provider's "
+            "standard environment variable instead (e.g. OPENAI_API_KEY for "
+            "OpenAI). This avoids writing the secret to disk and lets the "
+            "same credential be shared with other tools."
         ),
     )
     base_url = gds.StringItem(

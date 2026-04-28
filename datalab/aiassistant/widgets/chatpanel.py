@@ -204,7 +204,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         provider_name = Conf.ai.provider.get("openai")
         if provider_name not in PROVIDERS:
             provider_name = "openai"
-        api_key = Conf.ai.api_key.get("")
+        configured_key = Conf.ai.api_key.get("")
         model = Conf.ai.model.get("gpt-4o-mini")
         base_url = Conf.ai.base_url.get("") or None
         temperature = float(Conf.ai.temperature.get(0.2))
@@ -212,7 +212,27 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         max_iterations = int(Conf.ai.max_iterations.get(8))
         auto_approve = bool(Conf.ai.auto_approve_readonly.get(True))
 
+        try:
+            provider_cls = get_provider(provider_name)
+        except KeyError as exc:
+            QW.QMessageBox.critical(self, _("AI Assistant"), str(exc))
+            return None
+
+        # Resolve the API key: explicit configuration wins, then fall back
+        # to the provider-specific environment variable (e.g. OPENAI_API_KEY).
+        api_key = provider_cls.resolve_api_key(configured_key)
+
         if not api_key and provider_name != "mock":
+            env_var = provider_cls.api_key_env_var
+            env_hint = (
+                _(
+                    "\n\nTip: you can also set the {var} environment "
+                    "variable to avoid storing the key in the "
+                    "configuration file."
+                ).format(var=env_var)
+                if env_var
+                else ""
+            )
             QW.QMessageBox.warning(
                 self,
                 _("AI Assistant"),
@@ -221,15 +241,11 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
                     "Open the Settings… dialog to enter your "
                     "provider credentials, or select the 'mock' "
                     "provider for offline testing."
-                ),
+                )
+                + env_hint,
             )
             return None
 
-        try:
-            provider_cls = get_provider(provider_name)
-        except KeyError as exc:
-            QW.QMessageBox.critical(self, _("AI Assistant"), str(exc))
-            return None
         provider = provider_cls(
             api_key=api_key,
             model=model,
