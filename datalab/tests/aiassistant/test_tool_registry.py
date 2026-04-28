@@ -42,6 +42,7 @@ def _make_registry() -> ToolRegistry:
 
 
 def test_register_duplicate_raises() -> None:
+    """Registering a tool twice under the same name raises ValueError."""
     reg = _make_registry()
     with pytest.raises(ValueError):
         reg.register(
@@ -55,6 +56,7 @@ def test_register_duplicate_raises() -> None:
 
 
 def test_get_unknown_tool_lists_available() -> None:
+    """Unknown tool lookup raises KeyError mentioning available tool names."""
     reg = _make_registry()
     with pytest.raises(KeyError) as excinfo:
         reg.get("missing")
@@ -62,6 +64,7 @@ def test_get_unknown_tool_lists_available() -> None:
 
 
 def test_call_success_returns_payload() -> None:
+    """A successful tool call returns its data wrapped in a ToolResult."""
     reg = _make_registry()
     res: ToolResult = reg.call("echo", {"x": 1, "y": "z"}, proxy=None, mainwindow=None)
     assert res.ok is True
@@ -71,6 +74,7 @@ def test_call_success_returns_payload() -> None:
 
 
 def test_call_failure_returns_error() -> None:
+    """A failing tool call returns ToolResult with ok=False and an error."""
     reg = _make_registry()
     res = reg.call("boom", {}, proxy=None, mainwindow=None)
     assert res.ok is False
@@ -80,6 +84,7 @@ def test_call_failure_returns_error() -> None:
 
 
 def test_list_schemas_format() -> None:
+    """list_schemas() returns one schema per registered tool."""
     reg = _make_registry()
     schemas = reg.list_schemas()
     names = {s["name"] for s in schemas}

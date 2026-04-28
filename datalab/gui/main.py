@@ -1670,6 +1670,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     def __add_aiassistant_panel(self) -> None:
         """Add AI Assistant panel"""
         # Local import to keep AI assistant fully optional/loadable on demand
+        # pylint: disable-next=import-outside-toplevel
         from datalab.aiassistant.widgets.chatpanel import (  # noqa: WPS433
             AIAssistantPanel,
         )

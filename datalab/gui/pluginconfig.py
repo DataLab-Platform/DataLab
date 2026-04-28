@@ -311,6 +311,9 @@ class PluginConfigDialog(QW.QDialog):
         self.main = parent
         self.plugin_widgets: list[PluginInfoWidget] = []
         self.failed_plugin_widgets: list[FailedPluginInfoWidget] = []
+        self.toggle_all_checkbox: QW.QCheckBox | None = None
+        self.filter_combo: QW.QComboBox | None = None
+        self.plugins_layout: QW.QVBoxLayout | None = None
 
         self.setWindowTitle(_("Plugin Configuration"))
         self.setMinimumWidth(DIALOG_MIN_WIDTH)

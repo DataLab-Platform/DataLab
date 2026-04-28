@@ -46,6 +46,7 @@ class _GuiBridge(QC.QObject):
     def _on_request(self, func, holder: dict) -> None:
         try:
             holder["result"] = func()
+        # pylint: disable-next=broad-exception-caught
         except BaseException as exc:  # noqa: BLE001 - re-raised in caller
             holder["error"] = exc
         finally:
@@ -136,9 +137,10 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
             )
         )
 
-    def eventFilter(  # noqa: N802 - Qt API
+    def eventFilter(  # noqa: N802 - Qt API  pylint: disable=invalid-name
         self, obj: QC.QObject, event: QC.QEvent
     ) -> bool:
+        """Send the message on Ctrl+Enter from the input editor."""
         if obj is self.input_edit and event.type() == QC.QEvent.KeyPress:
             key = event.key()
             mods = event.modifiers()
@@ -196,6 +198,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
     # --------------------------------------------------------- controller
 
     def _build_controller(self) -> AIController | None:
+        # pylint: disable-next=import-outside-toplevel
         from datalab.aiassistant.providers import PROVIDERS  # noqa: WPS433
 
         provider_name = Conf.ai.provider.get("openai")
@@ -269,6 +272,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         self._append_system(_("Conversation reset."))
 
     def _on_open_settings(self) -> None:
+        # pylint: disable-next=import-outside-toplevel
         from datalab.aiassistant.widgets.settingsdialog import (  # noqa: WPS433
             AISettingsDialog,
         )

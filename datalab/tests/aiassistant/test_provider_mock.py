@@ -13,18 +13,21 @@ def _send(provider: MockProvider, text: str):
 
 
 def test_greeting_returns_text_only() -> None:
+    """Greeting keywords yield a text-only assistant message."""
     msg = _send(MockProvider(), "Hello there")
     assert msg.content
-    assert msg.tool_calls == []
+    assert not msg.tool_calls
 
 
 def test_list_keyword_triggers_list_objects() -> None:
+    """The 'list' keyword triggers the list_objects tool call."""
     msg = _send(MockProvider(), "please list objects in the panel")
     assert len(msg.tool_calls) == 1
     assert msg.tool_calls[0].name == "list_objects"
 
 
 def test_signal_keyword_triggers_create_signal() -> None:
+    """The 'signal'/'sin' keywords trigger create_synthetic_signal."""
     msg = _send(MockProvider(), "create a sine signal")
     assert len(msg.tool_calls) == 1
     call = msg.tool_calls[0]
@@ -33,6 +36,7 @@ def test_signal_keyword_triggers_create_signal() -> None:
 
 
 def test_macro_keyword_triggers_macro_tool() -> None:
+    """The 'macro' keyword triggers create_and_run_macro with sample code."""
     msg = _send(MockProvider(), "write a macro for me")
     assert msg.tool_calls and msg.tool_calls[0].name == "create_and_run_macro"
     assert "RemoteProxy" in msg.tool_calls[0].arguments["code"]
@@ -51,6 +55,7 @@ def test_fft_keyword_triggers_two_step_plan() -> None:
 
 
 def test_unknown_input_returns_help_text() -> None:
+    """An unrelated input returns the mock provider help text."""
     msg = _send(MockProvider(), "completely unrelated request")
     assert "Mock provider" in msg.content
-    assert msg.tool_calls == []
+    assert not msg.tool_calls

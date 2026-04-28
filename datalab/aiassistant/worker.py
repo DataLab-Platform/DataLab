@@ -36,6 +36,7 @@ class AIWorker(QC.QThread):
         self._user_message = user_message
 
     def run(self) -> None:  # pragma: no cover - thread entry point
+        """Execute the controller turn and emit the appropriate signal."""
         try:
             result: TurnResult = self._controller.send(self._user_message)
         except Exception as exc:  # pylint: disable=broad-except

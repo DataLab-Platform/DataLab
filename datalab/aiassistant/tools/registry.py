@@ -13,6 +13,7 @@ Each tool exposes a :class:`Tool` dataclass containing:
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any, Callable
 
@@ -69,8 +70,6 @@ class ToolResult:
 
     def to_message_content(self) -> str:
         """Return the JSON content sent back to the LLM."""
-        import json
-
         if self.ok:
             try:
                 return json.dumps({"ok": True, "result": self.data}, default=str)

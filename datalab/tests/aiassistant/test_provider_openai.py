@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import json
+import urllib.error
 from unittest import mock
 
 import pytest
@@ -14,6 +15,8 @@ from datalab.aiassistant.providers.base import ChatMessage, ToolCall
 
 
 class _FakeResponse:
+    """Minimal urlopen-like response wrapping a JSON payload."""
+
     def __init__(self, payload: dict) -> None:
         self._body = json.dumps(payload).encode("utf-8")
 
@@ -24,6 +27,7 @@ class _FakeResponse:
         return None
 
     def read(self) -> bytes:
+        """Return the raw JSON body bytes."""
         return self._body
 
 
@@ -44,7 +48,7 @@ def test_chat_text_response() -> None:
     ):
         msg = _make_provider().chat([ChatMessage(role="user", content="hello")])
     assert msg.content == "hi"
-    assert msg.tool_calls == []
+    assert not msg.tool_calls
     assert msg.finish_reason == "stop"
 
 
@@ -89,6 +93,7 @@ def test_chat_request_payload() -> None:
 
     def fake_urlopen(req, timeout):  # noqa: ARG001
         captured["url"] = req.full_url
+        captured["timeout"] = timeout
         captured["headers"] = dict(req.headers)
         captured["body"] = json.loads(req.data.decode("utf-8"))
         return _FakeResponse(
@@ -111,8 +116,6 @@ def test_chat_request_payload() -> None:
 
 def test_http_error_raises_provider_error() -> None:
     """HTTP errors are wrapped into LLMProviderError."""
-    import urllib.error
-
     err = urllib.error.HTTPError(
         url="x", code=401, msg="unauthorized", hdrs=None, fp=None
     )

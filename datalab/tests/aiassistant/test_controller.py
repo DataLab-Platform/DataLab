@@ -55,6 +55,7 @@ def _registry_with(handler) -> ToolRegistry:
 
 
 def test_text_only_response_returns_immediately() -> None:
+    """A plain assistant text reply ends the loop without tool calls."""
     provider = _ScriptedProvider([AssistantMessage(content="hello")])
     ctrl = AIController(
         provider=provider,
@@ -65,7 +66,7 @@ def test_text_only_response_returns_immediately() -> None:
     )
     result = ctrl.send("hi")
     assert result.assistant_message == "hello"
-    assert result.tool_executions == []
+    assert not result.tool_executions
 
 
 def test_tool_call_loop_with_confirmation() -> None:
@@ -99,6 +100,7 @@ def test_tool_call_loop_with_confirmation() -> None:
 
 
 def test_readonly_tool_skips_confirmation() -> None:
+    """Read-only tools are auto-approved and the confirm callback is skipped."""
     registry = _registry_with(lambda *a, **k: None)  # noqa: ARG005
     replies = [
         AssistantMessage(tool_calls=[ToolCall(id="c1", name="inspect", arguments={})]),
@@ -119,6 +121,7 @@ def test_readonly_tool_skips_confirmation() -> None:
 
 
 def test_user_cancels_tool_call() -> None:
+    """Returning False from the confirm callback cancels the turn."""
     registry = _registry_with(lambda *a, **k: None)  # noqa: ARG005
     replies = [
         AssistantMessage(
@@ -135,10 +138,11 @@ def test_user_cancels_tool_call() -> None:
     )
     result = ctrl.send("please")
     assert result.cancelled is True
-    assert result.tool_executions == []
+    assert not result.tool_executions
 
 
 def test_max_iterations_safety_cap() -> None:
+    """The controller stops after max_iterations to avoid infinite tool loops."""
     registry = _registry_with(lambda *a, **k: None)  # noqa: ARG005
     # Always reply with another tool call -> would loop forever without the cap
     replies = [

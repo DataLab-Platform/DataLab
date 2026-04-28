@@ -55,6 +55,7 @@ class MockProvider(LLMProvider):
     def _next_id(self) -> str:
         return f"mock_{next(self._id_counter)}"
 
+    # pylint: disable-next=too-many-return-statements
     def chat(self, messages, tools=None):  # noqa: ARG002
         if self._pending:
             return self._pending.pop(0)
