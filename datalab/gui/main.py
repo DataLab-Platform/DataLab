@@ -168,6 +168,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.console: DockableConsole | None = None
         self._startup_errors: list[str] = []
         self.macropanel: MacroPanel | None = None
+        self.aiassistantpanel = None  # type: ignore[assignment]
 
         self.main_toolbar: QW.QToolBar | None = None
         self.signalpanel_toolbar: QW.QToolBar | None = None
@@ -999,6 +1000,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.__flush_startup_errors()
         self.__update_actions(update_other_data_panel=True)
         self.__add_macro_panel()
+        self.__add_aiassistant_panel()
         self.__configure_panels()
         # Now that everything is set up, we can restore the window state:
         self.__restore_state()
@@ -1664,6 +1666,19 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.docks[self.macropanel] = mdock
         self.tabifyDockWidget(self.docks[self.imagepanel], mdock)
         self.docks[self.signalpanel].raise_()
+
+    def __add_aiassistant_panel(self) -> None:
+        """Add AI Assistant panel"""
+        # Local import to keep AI assistant fully optional/loadable on demand
+        from datalab.aiassistant.widgets.chatpanel import (  # noqa: WPS433
+            AIAssistantPanel,
+        )
+
+        self.aiassistantpanel = AIAssistantPanel(self)
+        adock = self.__add_dockwidget(self.aiassistantpanel, _("AI Assistant"))
+        self.docks[self.aiassistantpanel] = adock
+        self.tabifyDockWidget(self.docks[self.macropanel], adock)
+        self.docks[self.macropanel].raise_()
 
     def __configure_panels(self) -> None:
         """Configure panels"""

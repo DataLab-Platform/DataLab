@@ -431,6 +431,40 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
                     opt.set(def_dict[name])
 
 
+class AISection(conf.Section, metaclass=conf.SectionMeta):
+    """Class defining the AI assistant configuration section structure.
+    Each class attribute is an option (metaclass is automatically affecting
+    option names in .INI file based on class attribute names)."""
+
+    # AI assistant enabled state (True: enabled, False: disabled).
+    enabled = conf.Option()
+
+    # Provider name (e.g. "openai"). See `datalab.aiassistant.providers.PROVIDERS`.
+    provider = conf.Option()
+
+    # Model name (e.g. "gpt-4o-mini").
+    model = conf.Option()
+
+    # Optional base URL override (for OpenAI-compatible endpoints).
+    base_url = conf.Option()
+
+    # API key (stored in plain text in the INI file: never commit this).
+    # The AI assistant displays a clear warning when this fallback is used.
+    api_key = conf.Option()
+
+    # Sampling temperature (float, 0.0-2.0).
+    temperature = conf.Option()
+
+    # HTTP timeout in seconds.
+    timeout = conf.Option()
+
+    # Maximum number of tool-call iterations per user prompt (safety cap).
+    max_iterations = conf.Option()
+
+    # Auto-approve read-only inspection tools without confirmation dialog.
+    auto_approve_readonly = conf.Option()
+
+
 # Usage (example): Conf.console.console_enabled.get(True)
 class Conf(conf.Configuration, metaclass=conf.ConfMeta):
     """Class defining DataLab configuration structure.
@@ -442,6 +476,7 @@ class Conf(conf.Configuration, metaclass=conf.ConfMeta):
     view = ViewSection()
     proc = ProcSection()
     io = IOSection()
+    ai = AISection()
 
 
 def get_old_log_fname(fname):
