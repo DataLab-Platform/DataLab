@@ -118,7 +118,9 @@ def _summarise_signature(member) -> str:
     first = doc[0] if doc else ""
     if len(first) > 90:
         first = first[:87] + "..."
-    return f"{sig}  # {first}".rstrip("  # ")
+    if not first:
+        return sig
+    return f"{sig}  # {first}"
 
 
 def _build_proxy_cheatsheet() -> str:

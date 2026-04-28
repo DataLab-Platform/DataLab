@@ -7,6 +7,7 @@ Unit tests for the AI assistant conversation store and input history.
 from __future__ import annotations
 
 import os.path as osp
+import time
 
 from datalab.aiassistant.conversation import (
     Conversation,
@@ -18,6 +19,7 @@ from datalab.aiassistant.providers.base import ChatMessage, ToolCall
 
 
 def test_derive_title_truncates_and_collapses_whitespace():
+    """Title derivation collapses whitespace and truncates with an ellipsis."""
     assert derive_title("  hello   world  ") == "hello world"
     long = "x" * 200
     out = derive_title(long, max_len=20)
@@ -27,6 +29,7 @@ def test_derive_title_truncates_and_collapses_whitespace():
 
 
 def test_conversation_roundtrip():
+    """Conversation.to_dict()/from_dict() preserve all fields and tool calls."""
     conv = Conversation.new()
     conv.title = "demo"
     conv.messages = [
@@ -47,6 +50,7 @@ def test_conversation_roundtrip():
 
 
 def test_conversation_store_save_load_list_delete(tmp_path):
+    """ConversationStore round-trips save/load/list/delete operations."""
     store = ConversationStore(str(tmp_path))
     conv = Conversation.new()
     conv.title = "first"
@@ -65,12 +69,11 @@ def test_conversation_store_save_load_list_delete(tmp_path):
     assert loaded.messages[0].content == "hello"
 
     store.delete(conv.id)
-    assert store.list() == []
+    assert not store.list()
 
 
 def test_conversation_store_prunes_oldest(tmp_path):
-    import time
-
+    """ConversationStore keeps only the most recent ``max_conversations``."""
     store = ConversationStore(str(tmp_path), max_conversations=2)
     ids = []
     for index in range(4):
@@ -89,6 +92,7 @@ def test_conversation_store_prunes_oldest(tmp_path):
 
 
 def test_input_history_persistence_and_dedup(tmp_path):
+    """InputHistory persists entries to disk and deduplicates them."""
     path = str(tmp_path / "hist.txt")
     hist = InputHistory(path)
     hist.add("alpha")
@@ -101,6 +105,7 @@ def test_input_history_persistence_and_dedup(tmp_path):
 
 
 def test_input_history_navigation_preserves_draft(tmp_path):
+    """InputHistory navigation captures and restores the in-progress draft."""
     hist = InputHistory(str(tmp_path / "h.txt"))
     hist.add("first")
     hist.add("second")
@@ -115,6 +120,7 @@ def test_input_history_navigation_preserves_draft(tmp_path):
 
 
 def test_input_history_handles_multiline_entries(tmp_path):
+    """Multiline and backslash-containing entries round-trip through disk."""
     path = str(tmp_path / "h.txt")
     hist = InputHistory(path)
     hist.add("line1\nline2\\with-backslash")
@@ -123,8 +129,9 @@ def test_input_history_handles_multiline_entries(tmp_path):
 
 
 def test_input_history_ignores_empty(tmp_path):
+    """Empty or whitespace-only entries are silently dropped."""
     hist = InputHistory(str(tmp_path / "h.txt"))
     hist.add("   ")
     hist.add("")
-    assert hist.items() == []
+    assert not hist.items()
     assert hist.previous("anything") is None

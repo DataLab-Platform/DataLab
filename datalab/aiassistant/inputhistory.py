@@ -134,8 +134,16 @@ class InputHistory:
     def next(self, current_text: str) -> str | None:  # noqa: A003
         """Return the next entry (newer), restoring the draft past the end.
 
-        Returns ``None`` when no navigation is currently in progress.
+        Args:
+            current_text: Current input text (kept for API symmetry with
+             :meth:`prev`; the working draft is captured by ``prev`` and
+             restored from there).
+
+        Returns:
+            The next history entry, or ``None`` when no navigation is in
+            progress.
         """
+        del current_text  # API symmetry only; draft handling lives in ``prev``
         if self._index is None:
             return None
         if self._index < len(self._items) - 1:
