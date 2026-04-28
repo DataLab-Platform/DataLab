@@ -29,6 +29,103 @@ msgstr "%s non affichées"
 msgid "Only %d out of %d shapes are displayed"
 msgstr "Seules %d sur %d formes sont affichées"
 
+msgid "AI Assistant"
+msgstr "Assistant IA"
+
+msgid "New conversation"
+msgstr "Nouvelle conversation"
+
+msgid "Settings…"
+msgstr "Paramètres…"
+
+msgid "Idle"
+msgstr "Inactif"
+
+msgid "Ask the assistant…  (Ctrl+Enter to send)"
+msgstr "Posez votre question à l'assistant…  (Ctrl+Entrée pour envoyer)"
+
+msgid "Send"
+msgstr "Envoyer"
+
+msgid "AI Assistant ready. Configure your provider through the Settings… button before sending the first message."
+msgstr "Assistant IA prêt. Configurez votre fournisseur via le bouton Paramètres… avant d'envoyer le premier message."
+
+msgid "Thinking…"
+msgstr "Réflexion en cours…"
+
+msgid ""
+"No API key configured.\n"
+"\n"
+"Open the Settings… dialog to enter your provider credentials, or select the 'mock' provider for offline testing."
+msgstr ""
+"Aucune clé d'API configurée.\n"
+"\n"
+"Ouvrez la boîte de dialogue Paramètres… pour saisir les identifiants de votre fournisseur, ou sélectionnez le fournisseur 'mock' pour des tests hors ligne."
+
+msgid "Conversation reset."
+msgstr "Conversation réinitialisée."
+
+msgid "Tool execution cancelled by user."
+msgstr "Exécution de l'outil annulée par l'utilisateur."
+
+#, python-format
+msgid "Error: %s"
+msgstr "Erreur : %s"
+
+msgid "Enable AI Assistant"
+msgstr "Activer l'assistant IA"
+
+msgid "Provider"
+msgstr "Fournisseur"
+
+msgid "Use 'mock' to test the AI assistant pipeline offline without any API key (scripted replies based on simple keywords)."
+msgstr "Utilisez 'mock' pour tester l'assistant IA hors ligne sans clé d'API (réponses scriptées basées sur des mots-clés simples)."
+
+msgid "Model"
+msgstr "Modèle"
+
+msgid "API key"
+msgstr "Clé d'API"
+
+msgid "Your provider API key. Stored in the DataLab INI file in plain text — keep this file private."
+msgstr "Clé d'API de votre fournisseur. Stockée en clair dans le fichier INI de DataLab — gardez ce fichier privé."
+
+msgid "Base URL (optional)"
+msgstr "URL de base (optionnel)"
+
+msgid "Override for OpenAI-compatible endpoints. Leave empty for default."
+msgstr "À utiliser pour les points d'entrée compatibles OpenAI. Laisser vide pour la valeur par défaut."
+
+msgid "Temperature"
+msgstr "Température"
+
+msgid "HTTP timeout (s)"
+msgstr "Délai d'expiration HTTP (s)"
+
+msgid "Max tool-call iterations"
+msgstr "Nombre maximum d'itérations d'appels d'outils"
+
+msgid "Auto-approve read-only inspection tools"
+msgstr "Approuver automatiquement les outils d'inspection en lecture seule"
+
+msgid "AI Assistant — Confirm tool call"
+msgstr "Assistant IA — Confirmer l'appel d'outil"
+
+msgid "The AI assistant requests to run the following action:"
+msgstr "L'assistant IA demande à exécuter l'action suivante :"
+
+msgid "Parameters:"
+msgstr "Paramètres :"
+
+msgid "Macro code:"
+msgstr "Code de la macro :"
+
+msgid "Run"
+msgstr "Exécuter"
+
+msgid "Cancel"
+msgstr "Annuler"
+
 #, python-format
 msgid ""
 "Another instance of DataLab (PID %d) appears to be running.\n"
@@ -2860,9 +2957,6 @@ msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La dé
 
 msgid "Click OK to end demo."
 msgstr "Cliquer sur OK pour terminer la démo."
-
-msgid "Cancel"
-msgstr "Annuler"
 
 msgid "Error:"
 msgstr "Erreur:"
