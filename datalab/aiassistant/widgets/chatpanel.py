@@ -7,6 +7,7 @@ AI Assistant chat dock panel.
 from __future__ import annotations
 
 import html
+import os.path as osp
 from typing import TYPE_CHECKING
 
 from guidata.widgets.dockable import DockableWidgetMixin
@@ -15,6 +16,12 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from datalab.aiassistant.controller import AIController
+from datalab.aiassistant.conversation import (
+    Conversation,
+    ConversationStore,
+    derive_title,
+)
+from datalab.aiassistant.inputhistory import InputHistory
 from datalab.aiassistant.providers import get_provider
 from datalab.aiassistant.tools.builtin import build_default_registry
 from datalab.aiassistant.widgets.toolconfirmdialog import ToolConfirmDialog
@@ -24,8 +31,16 @@ from datalab.control.proxy import LocalProxy
 
 if TYPE_CHECKING:
     from datalab.aiassistant.controller import TurnResult
+    from datalab.aiassistant.providers.base import ChatMessage
     from datalab.aiassistant.tools.registry import Tool
     from datalab.gui.main import DLMainWindow
+
+
+_AI_CONFIG_SUBDIR = "aiassistant"
+_CONVERSATIONS_SUBDIR = "conversations"
+_INPUT_HISTORY_FILENAME = "input_history.txt"
+_INPUT_HISTORY_MAX = 500
+_CONVERSATIONS_MAX = 200
 
 
 class _GuiBridge(QC.QObject):
@@ -89,6 +104,16 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         self._controller: AIController | None = None
         self._worker: AIWorker | None = None
         self._bridge = _GuiBridge(self)
+        base_dir = Conf.get_path(_AI_CONFIG_SUBDIR)
+        self._conv_store = ConversationStore(
+            osp.join(base_dir, _CONVERSATIONS_SUBDIR),
+            max_conversations=_CONVERSATIONS_MAX,
+        )
+        self._input_history = InputHistory(
+            osp.join(base_dir, _INPUT_HISTORY_FILENAME),
+            max_size=_INPUT_HISTORY_MAX,
+        )
+        self._current_conversation: Conversation | None = None
         self._setup_ui()
 
     # ------------------------------------------------------------------ UI
@@ -101,9 +126,13 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         toolbar = QW.QHBoxLayout()
         self.new_button = QW.QPushButton(_("New conversation"))
         self.new_button.clicked.connect(self._on_new_conversation)
+        self.history_button = QW.QPushButton(_("History…"))
+        self.history_button.setToolTip(_("Browse, load or delete past conversations."))
+        self.history_button.clicked.connect(self._on_open_history)
         self.settings_button = QW.QPushButton(_("Settings…"))
         self.settings_button.clicked.connect(self._on_open_settings)
         toolbar.addWidget(self.new_button)
+        toolbar.addWidget(self.history_button)
         toolbar.addWidget(self.settings_button)
         toolbar.addStretch(1)
         self.status_label = QW.QLabel(_("Idle"))
@@ -118,7 +147,10 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         # Input
         self.input_edit = QW.QPlainTextEdit()
         self.input_edit.setPlaceholderText(
-            _("Ask the assistant…  (Ctrl+Enter to send)")
+            _(
+                "Ask the assistant…  (Ctrl+Enter to send, "
+                "Ctrl+Up/Down to navigate previous prompts)"
+            )
         )
         self.input_edit.installEventFilter(self)
         layout.addWidget(self.input_edit)
@@ -140,7 +172,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
     def eventFilter(  # noqa: N802 - Qt API  pylint: disable=invalid-name
         self, obj: QC.QObject, event: QC.QEvent
     ) -> bool:
-        """Send the message on Ctrl+Enter from the input editor."""
+        """Handle Ctrl+Enter to send and Ctrl+Up/Down to browse history."""
         if obj is self.input_edit and event.type() == QC.QEvent.KeyPress:
             key = event.key()
             mods = event.modifiers()
@@ -150,7 +182,46 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
             ):
                 self._on_send()
                 return True
+            if mods & QC.Qt.ControlModifier and key == QC.Qt.Key_Up:
+                self._navigate_input_history(forward=False)
+                return True
+            if mods & QC.Qt.ControlModifier and key == QC.Qt.Key_Down:
+                self._navigate_input_history(forward=True)
+                return True
+            # Any other typing invalidates the navigation cursor so that the
+            # next Ctrl+Up call captures the freshly edited draft.
+            if key not in (
+                QC.Qt.Key_Control,
+                QC.Qt.Key_Shift,
+                QC.Qt.Key_Alt,
+                QC.Qt.Key_Meta,
+                QC.Qt.Key_Up,
+                QC.Qt.Key_Down,
+                QC.Qt.Key_Left,
+                QC.Qt.Key_Right,
+                QC.Qt.Key_Home,
+                QC.Qt.Key_End,
+                QC.Qt.Key_PageUp,
+                QC.Qt.Key_PageDown,
+            ):
+                self._input_history.reset_navigation()
         return super().eventFilter(obj, event)
+
+    def _navigate_input_history(self, *, forward: bool) -> None:
+        current = self.input_edit.toPlainText()
+        text = (
+            self._input_history.next(current)
+            if forward
+            else self._input_history.previous(current)
+        )
+        if text is None:
+            return
+        self.input_edit.blockSignals(True)
+        self.input_edit.setPlainText(text)
+        self.input_edit.blockSignals(False)
+        cursor = self.input_edit.textCursor()
+        cursor.movePosition(QG.QTextCursor.End)
+        self.input_edit.setTextCursor(cursor)
 
     # ----------------------------------------------------------- helpers
 
@@ -193,6 +264,8 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
     def _set_busy(self, busy: bool) -> None:
         self.send_button.setEnabled(not busy)
         self.input_edit.setEnabled(not busy)
+        self.new_button.setEnabled(not busy)
+        self.history_button.setEnabled(not busy)
         self.status_label.setText(_("Thinking…") if busy else _("Idle"))
 
     # --------------------------------------------------------- controller
@@ -284,8 +357,19 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
     def _on_new_conversation(self) -> None:
         if self._controller is not None:
             self._controller.reset()
+        self._current_conversation = None
         self.history_view.clear()
         self._append_system(_("Conversation reset."))
+
+    def _on_open_history(self) -> None:
+        # pylint: disable-next=import-outside-toplevel
+        from datalab.aiassistant.widgets.conversationsdialog import (  # noqa: WPS433
+            ConversationsDialog,
+        )
+
+        dialog = ConversationsDialog(self._conv_store, self)
+        if dialog.exec_() and dialog.selected_id is not None:
+            self._load_conversation(dialog.selected_id)
 
     def _on_open_settings(self) -> None:
         # pylint: disable-next=import-outside-toplevel
@@ -306,6 +390,10 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
             self._controller = self._build_controller()
             if self._controller is None:
                 return
+        self._input_history.add(text)
+        if self._current_conversation is None:
+            self._current_conversation = Conversation.new()
+            self._current_conversation.title = derive_title(text)
         self.input_edit.clear()
         self._append_user(text)
         self._set_busy(True)
@@ -328,10 +416,78 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         if result.cancelled:
             self._append_system(_("Tool execution cancelled by user."))
         self._append_assistant(result.assistant_message)
+        self._persist_current_conversation()
         self._set_busy(False)
         self._worker = None
 
     def _on_turn_failed(self, error: str) -> None:
         self._append_system(_("Error: %s") % error)
+        self._persist_current_conversation()
         self._set_busy(False)
         self._worker = None
+
+    # ----------------------------------------------------- conversations
+
+    def _persist_current_conversation(self) -> None:
+        if self._controller is None or self._current_conversation is None:
+            return
+        self._current_conversation.messages = self._controller.get_messages()
+        try:
+            self._conv_store.save(self._current_conversation)
+        except OSError as exc:
+            self._append_system(_("Failed to save conversation: %s") % exc)
+
+    def _load_conversation(self, conv_id: str) -> None:
+        try:
+            conversation = self._conv_store.load(conv_id)
+        except (OSError, ValueError) as exc:
+            QW.QMessageBox.critical(
+                self,
+                _("AI Assistant"),
+                _("Failed to load conversation: %s") % exc,
+            )
+            return
+        if self._controller is None:
+            self._controller = self._build_controller()
+            if self._controller is None:
+                return
+        self._controller.load_messages(conversation.messages)
+        self._current_conversation = conversation
+        self.history_view.clear()
+        self._render_messages(conversation.messages)
+        self._append_system(
+            _("Loaded conversation: %s") % (conversation.title or conversation.id)
+        )
+
+    def _render_messages(self, messages: list[ChatMessage]) -> None:
+        """Re-render persisted messages in the chat view."""
+        for msg in messages:
+            if msg.role == "user":
+                self._append_user(self._content_to_text(msg.content))
+            elif msg.role == "assistant":
+                if msg.content:
+                    self._append_assistant(self._content_to_text(msg.content))
+                for call in msg.tool_calls:
+                    self._append_system(
+                        _("Tool call: %(name)s(%(args)s)")
+                        % {"name": call.name, "args": call.arguments}
+                    )
+            elif msg.role == "tool":
+                content = self._content_to_text(msg.content)
+                summary = content[:200] if content else ""
+                self._append_tool(msg.name or "tool", True, summary)
+
+    @staticmethod
+    def _content_to_text(content) -> str:
+        if isinstance(content, str):
+            return content
+        if isinstance(content, list):
+            parts: list[str] = []
+            for part in content:
+                if isinstance(part, dict):
+                    if "text" in part:
+                        parts.append(str(part["text"]))
+                    elif part.get("type") == "image_url":
+                        parts.append("[image]")
+            return "\n".join(parts)
+        return str(content)

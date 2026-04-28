@@ -35,14 +35,20 @@ msgstr "Assistant IA"
 msgid "New conversation"
 msgstr "Nouvelle conversation"
 
+msgid "History…"
+msgstr "Historique…"
+
+msgid "Browse, load or delete past conversations."
+msgstr "Parcourir, charger ou supprimer les conversations passées."
+
 msgid "Settings…"
 msgstr "Paramètres…"
 
 msgid "Idle"
 msgstr "Inactif"
 
-msgid "Ask the assistant…  (Ctrl+Enter to send)"
-msgstr "Posez votre question à l'assistant…  (Ctrl+Entrée pour envoyer)"
+msgid "Ask the assistant…  (Ctrl+Enter to send, Ctrl+Up/Down to navigate previous prompts)"
+msgstr "Posez une question à l'assistant…  (Ctrl+Entrée pour envoyer, Ctrl+Flèche haut/bas pour naviguer dans les questions précédentes)"
 
 msgid "Send"
 msgstr "Envoyer"
@@ -55,6 +61,16 @@ msgstr "Vous"
 
 msgid "Thinking…"
 msgstr "Réflexion en cours…"
+
+#, python-brace-format
+msgid ""
+"\n"
+"\n"
+"Tip: you can also set the {var} environment variable to avoid storing the key in the configuration file."
+msgstr ""
+"\n"
+"\n"
+"Astuce : vous pouvez aussi définir la variable d'environnement {var} pour éviter de stocker la clé dans le fichier de configuration."
 
 msgid ""
 "No API key configured.\n"
@@ -75,6 +91,62 @@ msgstr "Exécution de l'outil annulée par l'utilisateur."
 msgid "Error: %s"
 msgstr "Erreur : %s"
 
+#, python-format
+msgid "Failed to save conversation: %s"
+msgstr "Échec de l'enregistrement de la conversation : %s"
+
+#, python-format
+msgid "Failed to load conversation: %s"
+msgstr "Échec du chargement de la conversation : %s"
+
+#, python-format
+msgid "Loaded conversation: %s"
+msgstr "Conversation chargée : %s"
+
+#, python-format
+msgid "Tool call: %(name)s(%(args)s)"
+msgstr "Appel d'outil : %(name)s(%(args)s)"
+
+msgid "AI Assistant — Conversation history"
+msgstr "Assistant IA — Historique des conversations"
+
+msgid "Double-click a conversation to load it. Loading a conversation replaces the current one."
+msgstr "Double-cliquez sur une conversation pour la charger. Le chargement remplace la conversation en cours."
+
+msgid "Load"
+msgstr "Charger"
+
+msgid "Delete"
+msgstr "Supprimer"
+
+msgid "Refresh"
+msgstr "Actualiser"
+
+msgid "Close"
+msgstr "Fermer"
+
+#, python-brace-format
+msgid ""
+"Created: {created}\n"
+"Updated: {updated}\n"
+"Messages: {count}"
+msgstr ""
+"Création : {created}\n"
+"Mise à jour : {updated}\n"
+"Messages : {count}"
+
+msgid "unknown"
+msgstr "inconnu"
+
+msgid "(untitled)"
+msgstr "(sans titre)"
+
+msgid "Delete conversation"
+msgstr "Supprimer la conversation"
+
+msgid "Delete the selected conversation? This cannot be undone."
+msgstr "Supprimer la conversation sélectionnée ? Cette action est irréversible."
+
 msgid "Enable AI Assistant"
 msgstr "Activer l'assistant IA"
 
@@ -90,8 +162,14 @@ msgstr "Modèle"
 msgid "API key"
 msgstr "Clé d'API"
 
-msgid "Your provider API key. Stored in the DataLab INI file in plain text — keep this file private."
-msgstr "Clé d'API de votre fournisseur. Stockée en clair dans le fichier INI de DataLab — gardez ce fichier privé."
+msgid ""
+"Your provider API key. Stored in the DataLab INI file in plain text — keep this file private.\n"
+"\n"
+"Recommended: leave this field empty and set the provider's standard environment variable instead (e.g. OPENAI_API_KEY for OpenAI). This avoids writing the secret to disk and lets the same credential be shared with other tools."
+msgstr ""
+"Clé d'API de votre fournisseur. Stockée en clair dans le fichier INI de DataLab — gardez ce fichier privé.\n"
+"\n"
+"Recommandé : laissez ce champ vide et définissez plutôt la variable d'environnement standard du fournisseur (par ex. OPENAI_API_KEY pour OpenAI). Cela évite d'écrire le secret sur le disque et permet de partager le même identifiant avec d'autres outils."
 
 msgid "Base URL (optional)"
 msgstr "URL de base (optionnel)"
@@ -2690,9 +2768,6 @@ msgstr ""
 
 msgid "Start"
 msgstr "Démarrer"
-
-msgid "Close"
-msgstr "Fermer"
 
 msgid "Hit <b>Enter</b> to continue to the next step, or <b>Esc</b> to close the tour."
 msgstr "Taper <b>Entrée</b> pour passer à l'étape suivante, ou <b>Echap</b> pour fermer la visite guidée."

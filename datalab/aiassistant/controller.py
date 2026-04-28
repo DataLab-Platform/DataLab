@@ -237,6 +237,24 @@ class AIController:
         """Clear the conversation history (keep the system prompt)."""
         self.history = [ChatMessage(role="system", content=self.system_prompt)]
 
+    def load_messages(self, messages: list[ChatMessage]) -> None:
+        """Replace the current history with ``messages``.
+
+        The system prompt is always reset to the controller's current
+        ``system_prompt`` (which is auto-generated and may have changed
+        since the conversation was persisted). Any system messages from
+        ``messages`` are dropped.
+        """
+        self.history = [ChatMessage(role="system", content=self.system_prompt)]
+        for msg in messages:
+            if msg.role == "system":
+                continue
+            self.history.append(msg)
+
+    def get_messages(self) -> list[ChatMessage]:
+        """Return the conversation messages, excluding the system prompt."""
+        return [msg for msg in self.history if msg.role != "system"]
+
     def send(self, user_message: str) -> TurnResult:
         """Send a user message and run the tool-call loop."""
         self.history.append(ChatMessage(role="user", content=user_message))
