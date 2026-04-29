@@ -241,7 +241,7 @@ def _action_matches(path: list[str], query: str) -> bool:
     q = _normalise(query).lower()
     if not q:
         return False
-    if q == full or q == norm_path[-1]:
+    if q in (full, norm_path[-1]):
         return True
     # Allow partial path match (e.g. "Correction/Corriger le spectre")
     q_parts = [p for p in q.split("/") if p]
