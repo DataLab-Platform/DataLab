@@ -25,9 +25,11 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
+from qtpy import QtWidgets as QW
 
 from datalab.aiassistant.providers.base import ChatMessage
 from datalab.aiassistant.tools.registry import Tool, ToolRegistry, ToolResult
+from datalab.gui.actionhandler import ActionCategory
 
 if TYPE_CHECKING:
     from datalab.control.proxy import LocalProxy
@@ -164,6 +166,165 @@ def _tool_list_available_operations(
             }
         )
     return {"panel": panel_widget.PANEL_STR_ID, "operations": ops}
+
+
+# =============================================================================
+# Plugin discovery and triggering
+# =============================================================================
+
+
+def _iter_plugin_actions(
+    menu: QW.QMenu, path: list[str]
+) -> list[tuple[list[str], QW.QAction]]:
+    """Recursively collect (path, action) pairs from a plugin QMenu.
+
+    Submenus contribute to the path; leaf QActions (without submenu) yield
+    one ``(path, action)`` entry.
+    """
+    out: list[tuple[list[str], QW.QAction]] = []
+    for action in menu.actions():
+        if action.isSeparator():
+            continue
+        submenu = action.menu()
+        if submenu is not None:
+            out.extend(
+                _iter_plugin_actions(submenu, path + [action.text() or submenu.title()])
+            )
+        else:
+            title = action.text()
+            if not title:
+                continue
+            out.append((path + [title], action))
+    return out
+
+
+def _collect_plugin_actions_for_panel(
+    panel_widget,
+) -> list[tuple[list[str], QW.QAction]]:
+    """Return all plugin actions registered on a panel as (path, action) pairs.
+
+    The first path element is the plugin top-level menu title (typically the
+    plugin name).
+    """
+    sah = panel_widget.acthandler
+    entries = sah.feature_actions.get(ActionCategory.PLUGINS, [])
+    out: list[tuple[list[str], QW.QAction]] = []
+    for entry in entries:
+        if entry is None:
+            continue
+        if isinstance(entry, QW.QMenu):
+            out.extend(_iter_plugin_actions(entry, [entry.title()]))
+        elif isinstance(entry, QW.QAction):
+            submenu = entry.menu()
+            title = entry.text()
+            if submenu is not None and title:
+                out.extend(_iter_plugin_actions(submenu, [title]))
+            elif title:
+                out.append(([title], entry))
+    return out
+
+
+def _normalise(text: str) -> str:
+    """Strip Qt mnemonic markers, ellipses and surrounding whitespace."""
+    return (text or "").replace("&", "").replace("…", "").replace("...", "").strip()
+
+
+def _action_matches(path: list[str], query: str) -> bool:
+    """Match a plugin action path against a user-provided query string.
+
+    Accepts either the full ``"Plugin/Submenu/Action"`` path or just the
+    leaf action title. Matching is case-insensitive and tolerant of Qt
+    mnemonics ('&') and trailing ellipses.
+    """
+    norm_path = [_normalise(p).lower() for p in path]
+    full = "/".join(norm_path)
+    q = _normalise(query).lower()
+    if not q:
+        return False
+    if q == full or q == norm_path[-1]:
+        return True
+    # Allow partial path match (e.g. "Correction/Corriger le spectre")
+    q_parts = [p for p in q.split("/") if p]
+    return all(part in full for part in q_parts) or q in norm_path[-1]
+
+
+def _tool_list_plugin_actions(
+    proxy: LocalProxy, mainwindow: DLMainWindow, panel: str | None = None
+) -> dict[str, Any]:
+    """List menu actions contributed by registered DataLab plugins."""
+    if panel is None:
+        panels = [mainwindow.signalpanel, mainwindow.imagepanel]
+    else:
+        panels = [_resolve_panel(mainwindow, panel)]
+    plugins_info: list[dict[str, Any]] = []
+    for panel_widget in panels:
+        for path, action in _collect_plugin_actions_for_panel(panel_widget):
+            plugins_info.append(
+                {
+                    "panel": panel_widget.PANEL_STR_ID,
+                    "plugin": path[0],
+                    "menu_path": "/".join(path),
+                    "action": path[-1],
+                    "enabled": bool(action.isEnabled()),
+                    "tip": action.toolTip() or "",
+                }
+            )
+    return {"plugin_actions": plugins_info}
+
+
+def _tool_trigger_plugin_action(
+    proxy: LocalProxy,
+    mainwindow: DLMainWindow,
+    action: str,
+    panel: str | None = None,
+    plugin: str | None = None,
+) -> dict[str, Any]:
+    """Trigger a plugin menu action by name or full menu path."""
+    if panel is None:
+        panels = [mainwindow.signalpanel, mainwindow.imagepanel]
+    else:
+        panels = [_resolve_panel(mainwindow, panel)]
+
+    candidates: list[tuple[Any, list[str], QW.QAction]] = []
+    for panel_widget in panels:
+        for path, qaction in _collect_plugin_actions_for_panel(panel_widget):
+            if (
+                plugin is not None
+                and _normalise(plugin).lower() not in _normalise(path[0]).lower()
+            ):
+                continue
+            if _action_matches(path, action):
+                candidates.append((panel_widget, path, qaction))
+
+    if not candidates:
+        raise ValueError(
+            f"No plugin action matches {action!r}"
+            + (f" in plugin {plugin!r}" if plugin else "")
+            + ". Use 'list_plugin_actions' to discover available actions."
+        )
+    if len(candidates) > 1:
+        paths = [f"{p.PANEL_STR_ID}: {'/'.join(path)}" for p, path, _ in candidates]
+        raise ValueError(
+            f"Ambiguous plugin action {action!r}, multiple matches: {paths}. "
+            "Pass an exact 'menu_path' (and 'plugin'/'panel' if needed)."
+        )
+
+    panel_widget, path, qaction = candidates[0]
+    # Activate the panel hosting the action so that select-conditions and
+    # the plugin's `signalpanel`/`imagepanel` accessors target the right one.
+    proxy.set_current_panel(panel_widget.PANEL_STR_ID)
+    if not qaction.isEnabled():
+        raise ValueError(
+            f"Plugin action {'/'.join(path)!r} is currently disabled. "
+            "Make sure a compatible object is selected (use 'list_objects' "
+            "and 'select_objects' first)."
+        )
+    qaction.trigger()
+    return {
+        "panel": panel_widget.PANEL_STR_ID,
+        "plugin": path[0],
+        "menu_path": "/".join(path),
+    }
 
 
 # =============================================================================
@@ -673,6 +834,65 @@ def build_default_registry() -> ToolRegistry:
             },
             handler=_tool_list_available_operations,
             readonly=True,
+        )
+    )
+    reg.register(
+        Tool(
+            name="list_plugin_actions",
+            description=(
+                "List menu actions contributed by registered DataLab plugins. "
+                "Each entry includes the hosting panel, the plugin name, the "
+                "full menu path (e.g. 'ASNR – Analyse spectrale/Correction/"
+                "Corriger le spectre…'), the leaf action title, the current "
+                "enabled state and the tooltip. Use this BEFORE calling "
+                "'trigger_plugin_action' so you can pick the right action."
+            ),
+            parameters={
+                "type": "object",
+                "properties": {"panel": _PANEL_PARAM},
+                "additionalProperties": False,
+            },
+            handler=_tool_list_plugin_actions,
+            readonly=True,
+        )
+    )
+    reg.register(
+        Tool(
+            name="trigger_plugin_action",
+            description=(
+                "Trigger a plugin menu action by its title or its full menu "
+                "path (as returned by 'list_plugin_actions'). Use this when "
+                "the user asks for a feature provided by a plugin (e.g. "
+                "'corrige le spectre avec le plugin ASNR'). The action runs "
+                "synchronously on the active panel; ensure a compatible "
+                "object is selected first if needed."
+            ),
+            parameters={
+                "type": "object",
+                "properties": {
+                    "action": {
+                        "type": "string",
+                        "description": (
+                            "Action title or full menu path "
+                            "(e.g. 'Corriger le spectre' or "
+                            "'ASNR – Analyse spectrale/Correction/"
+                            "Corriger le spectre')."
+                        ),
+                    },
+                    "plugin": {
+                        "type": ["string", "null"],
+                        "description": (
+                            "Optional plugin name to disambiguate when "
+                            "several plugins expose actions with similar "
+                            "titles."
+                        ),
+                    },
+                    "panel": _PANEL_PARAM,
+                },
+                "required": ["action"],
+                "additionalProperties": False,
+            },
+            handler=_tool_trigger_plugin_action,
         )
     )
     reg.register(
