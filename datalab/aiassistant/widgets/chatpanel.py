@@ -24,6 +24,7 @@ from datalab.aiassistant.conversation import (
 from datalab.aiassistant.inputhistory import InputHistory
 from datalab.aiassistant.providers import get_provider
 from datalab.aiassistant.tools.builtin import build_default_registry
+from datalab.aiassistant.widgets.markdown import markdown_to_html
 from datalab.aiassistant.widgets.toolconfirmdialog import ToolConfirmDialog
 from datalab.aiassistant.worker import AIWorker
 from datalab.config import Conf, _
@@ -243,8 +244,8 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
             return
         self._append_html(
             f"<div style='margin-top:6px;color:#1a5fb4;'>"
-            f"<b>{_('Assistant')}:</b><br>"
-            f"{html.escape(text).replace(chr(10), '<br>')}</div>"
+            f"<b>{_('Assistant')}:</b>"
+            f"{markdown_to_html(text)}</div>"
         )
 
     def _append_tool(self, name: str, ok: bool, summary: str) -> None:
