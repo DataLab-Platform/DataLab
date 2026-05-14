@@ -130,11 +130,8 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         self.history_button = QW.QPushButton(_("History…"))
         self.history_button.setToolTip(_("Browse, load or delete past conversations."))
         self.history_button.clicked.connect(self._on_open_history)
-        self.settings_button = QW.QPushButton(_("Settings…"))
-        self.settings_button.clicked.connect(self._on_open_settings)
         toolbar.addWidget(self.new_button)
         toolbar.addWidget(self.history_button)
-        toolbar.addWidget(self.settings_button)
         toolbar.addStretch(1)
         self.status_label = QW.QLabel(_("Idle"))
         toolbar.addWidget(self.status_label)
@@ -165,8 +162,9 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
 
         self._append_system(
             _(
-                "AI Assistant ready. Configure your provider through the "
-                "Settings… button before sending the first message."
+                "AI Assistant ready. Configure your provider in the "
+                "Edit > Preferences dialog (AI Assistant tab) before "
+                "sending the first message."
             )
         )
 
@@ -312,9 +310,9 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
                 _("AI Assistant"),
                 _(
                     "No API key configured.\n\n"
-                    "Open the Settings… dialog to enter your "
-                    "provider credentials, or select the 'mock' "
-                    "provider for offline testing."
+                    "Open the Edit > Preferences dialog (AI Assistant tab) "
+                    "to enter your provider credentials, or select the "
+                    "'mock' provider for offline testing."
                 )
                 + env_hint,
             )
@@ -374,14 +372,13 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         if dialog.exec_() and dialog.selected_id is not None:
             self._load_conversation(dialog.selected_id)
 
-    def _on_open_settings(self) -> None:
-        # pylint: disable-next=import-outside-toplevel
-        from datalab.aiassistant.widgets.settingsdialog import (  # noqa: WPS433
-            AISettingsDialog,
-        )
+    def invalidate_controller(self) -> None:
+        """Drop the cached controller so the next prompt rebuilds it.
 
-        if AISettingsDialog.edit(self):
-            self._controller = None  # rebuild on next send
+        Called whenever AI assistant settings are modified through
+        DataLab's main Settings dialog (Edit > Preferences).
+        """
+        self._controller = None
 
     def _on_send(self) -> None:
         text = self.input_edit.toPlainText().strip()

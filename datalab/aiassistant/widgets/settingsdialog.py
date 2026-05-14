@@ -11,13 +11,13 @@ from typing import TYPE_CHECKING
 import guidata.dataset as gds
 
 from datalab.aiassistant.providers import PROVIDERS
-from datalab.config import Conf, _
+from datalab.config import _
 
 if TYPE_CHECKING:
     from qtpy import QtWidgets as QW
 
 
-class AISettings(gds.DataSet, title=_("AI Assistant Settings")):
+class AISettings(gds.DataSet):
     """AI Assistant configuration."""
 
     enabled = gds.BoolItem(_("Enable AI Assistant"), default=True)
@@ -74,48 +74,36 @@ class AISettings(gds.DataSet, title=_("AI Assistant Settings")):
     )
 
 
-def _load_from_conf() -> AISettings:
-    """Load settings from :class:`Conf.ai`."""
-    settings = AISettings()
-    settings.enabled = bool(Conf.ai.enabled.get(True))
-    provider = str(Conf.ai.provider.get("openai"))
-    if provider not in PROVIDERS:
-        # Tolerate stale config values (e.g. integer index from older versions)
-        provider = "openai"
-    settings.provider = provider
-    settings.model = str(Conf.ai.model.get("gpt-4o-mini"))
-    settings.api_key = str(Conf.ai.api_key.get(""))
-    settings.base_url = str(Conf.ai.base_url.get(""))
-    settings.temperature = float(Conf.ai.temperature.get(0.2))
-    settings.timeout = float(Conf.ai.timeout.get(60.0))
-    settings.max_iterations = int(Conf.ai.max_iterations.get(8))
-    settings.auto_approve_readonly = bool(Conf.ai.auto_approve_readonly.get(True))
-    settings.expose_macro_tool = bool(Conf.ai.expose_macro_tool.get(True))
-    return settings
-
-
-def _save_to_conf(settings: AISettings) -> None:
-    """Save settings to :class:`Conf.ai`."""
-    Conf.ai.enabled.set(bool(settings.enabled))
-    Conf.ai.provider.set(str(settings.provider))
-    Conf.ai.model.set(str(settings.model))
-    Conf.ai.api_key.set(str(settings.api_key))
-    Conf.ai.base_url.set(str(settings.base_url))
-    Conf.ai.temperature.set(float(settings.temperature))
-    Conf.ai.timeout.set(float(settings.timeout))
-    Conf.ai.max_iterations.set(int(settings.max_iterations))
-    Conf.ai.auto_approve_readonly.set(bool(settings.auto_approve_readonly))
-    Conf.ai.expose_macro_tool.set(bool(settings.expose_macro_tool))
+# Names of all options exposed by :class:`AISettings`. Used to detect whether
+# the AI assistant configuration was modified through the global Settings
+# dialog (so callers can rebuild the controller).
+AI_OPTION_NAMES: frozenset[str] = frozenset(
+    item.get_name() for item in AISettings().get_items()
+)
 
 
 class AISettingsDialog:
-    """Helper exposing :meth:`edit` returning True on accept."""
+    """Compatibility shim opening the global Settings dialog.
+
+    AI assistant settings now live as a tab in DataLab's main Settings
+    dialog (see :func:`datalab.gui.settings.edit_settings`). This helper is
+    kept so the chat panel's "Settings" button keeps a single entry point
+    and can detect whether any AI option was actually changed.
+    """
 
     @staticmethod
     def edit(parent: QW.QWidget | None = None) -> bool:
-        """Open the settings dialog. Returns True if the user accepted."""
-        settings = _load_from_conf()
-        if settings.edit(parent):
-            _save_to_conf(settings)
-            return True
-        return False
+        """Open the main Settings dialog.
+
+        Returns:
+            ``True`` if at least one AI assistant option was modified, so the
+            caller can rebuild the controller. ``False`` otherwise (dialog
+            cancelled or no AI option changed).
+        """
+        # Local import to avoid a hard dependency from the AI assistant
+        # package on the GUI settings module at import time.
+        # pylint: disable-next=import-outside-toplevel
+        from datalab.gui.settings import edit_settings  # noqa: WPS433
+
+        changed = edit_settings(parent)
+        return any(option in AI_OPTION_NAMES for option in changed)

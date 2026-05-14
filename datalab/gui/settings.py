@@ -485,6 +485,84 @@ class ViewSettings(gds.DataSet):
     _end_view_tabs = gds.EndTabGroup("")
 
 
+def _ai_provider_choices(*_args: Any) -> list[tuple[str, str]]:
+    """Return the list of available AI providers as ChoiceItem entries.
+
+    Used as a deferred callable for :class:`AISettings.provider`'s
+    ``choices``, so the AI assistant package is only imported when the
+    Settings dialog is actually built.
+    """
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.aiassistant.providers import PROVIDERS  # noqa: WPS433
+
+    return [(name, name, None) for name in PROVIDERS]
+
+
+class AISettings(gds.DataSet):
+    """DataLab AI Assistant settings"""
+
+    enabled = gds.BoolItem(_("Enable AI Assistant"), default=True)
+    provider = gds.ChoiceItem(
+        _("Provider"),
+        _ai_provider_choices,
+        default="openai",
+        help=_(
+            "Use 'mock' to test the AI assistant pipeline offline without "
+            "any API key (scripted replies based on simple keywords)."
+        ),
+    )
+    model = gds.StringItem(_("Model"), default="gpt-4o-mini")
+    api_key = gds.StringItem(
+        _("API key"),
+        default="",
+        notempty=False,
+        help=_(
+            "Your provider API key. Stored in the DataLab INI file in plain "
+            "text — keep this file private.\n\n"
+            "Recommended: leave this field empty and set the provider's "
+            "standard environment variable instead (e.g. OPENAI_API_KEY for "
+            "OpenAI). This avoids writing the secret to disk and lets the "
+            "same credential be shared with other tools."
+        ),
+    )
+    base_url = gds.StringItem(
+        _("Base URL (optional)"),
+        default="",
+        notempty=False,
+        help=_("Override for OpenAI-compatible endpoints. Leave empty for default."),
+    )
+    temperature = gds.FloatItem(
+        _("Temperature"), default=0.2, min=0.0, max=2.0, step=0.1
+    )
+    timeout = gds.FloatItem(_("HTTP timeout (s)"), default=60.0, min=5.0, max=600.0)
+    max_iterations = gds.IntItem(
+        _("Max tool-call iterations"), default=8, min=1, max=64
+    )
+    auto_approve_readonly = gds.BoolItem(
+        _("Auto-approve read-only inspection tools"), default=True
+    )
+    expose_macro_tool = gds.BoolItem(
+        _("Allow AI to create and run macros (Python code)"),
+        default=True,
+        help=_(
+            "When enabled, the AI assistant may create and execute Python "
+            "macros with full access to DataLab through the RemoteProxy API. "
+            "Each macro execution still requires explicit user confirmation.\n\n"
+            "Disable this option if you do not want the AI to be able to "
+            "propose arbitrary code execution at all (the macro tool is then "
+            "hidden from the model entirely)."
+        ),
+    )
+
+
+# Names of all options exposed by :class:`AISettings`. Used to detect whether
+# the AI assistant configuration was modified through the global Settings
+# dialog (so callers can rebuild the AI controller).
+AI_OPTION_NAMES: frozenset[str] = frozenset(
+    item.get_name() for item in AISettings().get_items()
+)
+
+
 # Generator yielding (param, section, option) tuples from configuration dictionary
 def _iter_conf(
     paramdict: dict[str, gds.DataSet],
@@ -560,11 +638,24 @@ def get_all_options(paramdict: dict[str, gds.DataSet]) -> list:
 
 def create_dataset_dict() -> dict[str, gds.DataSet]:
     """Create a dictionary of datasets for each settings tab, populate it from Conf."""
+    # Local import to keep the AI assistant package optional and avoid loading
+    # its provider stack until the Settings dialog is actually opened.
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.aiassistant.providers import PROVIDERS  # noqa: WPS433
+
+    # Tolerate stale config values (e.g. an unknown provider name from a
+    # previous DataLab version) so :class:`AISettings`' ChoiceItem does not
+    # raise when populated from Conf.
+    provider = str(Conf.ai.provider.get("openai"))
+    if provider not in PROVIDERS:
+        Conf.ai.provider.set("openai")
+
     paramdict = {
         "main": MainSettings(_("General"), icon="libre-gui-settings.svg"),
         "proc": ProcSettings(_("Processing"), icon="libre-tech-ram.svg"),
         "view": ViewSettings(_("Visualization"), icon="visualization.svg"),
         "io": IOSettings(_("I/O"), icon="io.svg"),
+        "ai": AISettings(_("AI Assistant"), icon="ai-assistant.svg"),
         "console": ConsoleSettings(_("Console"), icon="console.svg"),
     }
     conf_to_datasets(paramdict)

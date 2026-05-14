@@ -69,7 +69,7 @@ from datalab.gui.docks import DockablePlotWidget
 from datalab.gui.h5io import H5InputOutput
 from datalab.gui.panel import base, image, macro, signal
 from datalab.gui.pluginconfig import PluginConfigDialog
-from datalab.gui.settings import edit_settings
+from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
 from datalab.objectmodel import ObjectGroup
 from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plugins
 from datalab.utils import qthelpers as qth
@@ -2552,6 +2552,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.signalpanel.manual_refresh()
         if refresh_image_panel:
             self.imagepanel.manual_refresh()
+
+        # Invalidate the AI assistant controller if any AI option changed,
+        # so the next prompt rebuilds it with the updated configuration.
+        if self.aiassistantpanel is not None and any(
+            option in AI_OPTION_NAMES for option in changed_options
+        ):
+            self.aiassistantpanel.invalidate_controller()
 
     def __show_logviewer(self) -> None:
         """Show error logs"""

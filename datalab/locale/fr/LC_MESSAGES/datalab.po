@@ -41,9 +41,6 @@ msgstr "Historique…"
 msgid "Browse, load or delete past conversations."
 msgstr "Parcourir, charger ou supprimer les conversations passées."
 
-msgid "Settings…"
-msgstr "Paramètres…"
-
 msgid "Idle"
 msgstr "Inactif"
 
@@ -53,8 +50,8 @@ msgstr "Posez une question à l'assistant…  (Ctrl+Entrée pour envoyer, Ctrl+F
 msgid "Send"
 msgstr "Envoyer"
 
-msgid "AI Assistant ready. Configure your provider through the Settings… button before sending the first message."
-msgstr "Assistant IA prêt. Configurez votre fournisseur via le bouton Paramètres… avant d'envoyer le premier message."
+msgid "AI Assistant ready. Configure your provider in the Edit > Preferences dialog (AI Assistant tab) before sending the first message."
+msgstr "Assistant IA prêt. Configurez votre fournisseur dans le menu Edition > Préférences (onglet Assistant IA) avant d'envoyer le premier message."
 
 msgid "You"
 msgstr "Vous"
@@ -75,11 +72,11 @@ msgstr ""
 msgid ""
 "No API key configured.\n"
 "\n"
-"Open the Settings… dialog to enter your provider credentials, or select the 'mock' provider for offline testing."
+"Open the Edit > Preferences dialog (AI Assistant tab) to enter your provider credentials, or select the 'mock' provider for offline testing."
 msgstr ""
 "Aucune clé d'API configurée.\n"
 "\n"
-"Ouvrez la boîte de dialogue Paramètres… pour saisir les identifiants de votre fournisseur, ou sélectionnez le fournisseur 'mock' pour des tests hors ligne."
+"Ouvrez le menu Edition > Préférences (onglet Assistant IA) pour entrer les identifiants de votre fournisseur, ou sélectionnez le fournisseur 'mock' pour des tests hors ligne."
 
 msgid "Conversation reset."
 msgstr "Conversation réinitialisée."
@@ -147,9 +144,6 @@ msgstr "Supprimer la conversation"
 msgid "Delete the selected conversation? This cannot be undone."
 msgstr "Supprimer la conversation sélectionnée ? Cette action est irréversible."
 
-msgid "AI Assistant Settings"
-msgstr "Paramètres de l'assistant IA"
-
 msgid "Enable AI Assistant"
 msgstr "Activer l'assistant IA"
 
@@ -199,7 +193,8 @@ msgid ""
 "When enabled, the AI assistant may create and execute Python macros with full access to DataLab through the RemoteProxy API. Each macro execution still requires explicit user confirmation.\n"
 "\n"
 "Disable this option if you do not want the AI to be able to propose arbitrary code execution at all (the macro tool is then hidden from the model entirely)."
-msgstr "Lorsque cette option est activée, l'assistant IA peut créer et exécuter des macros Python avec un accès complet à DataLab via l'API RemoteProxy. Chaque exécution de macro nécessite toujours une confirmation explicite de l'utilisateur.\n"
+msgstr ""
+"Lorsque cette option est activée, l'assistant IA peut créer et exécuter des macros Python avec un accès complet à DataLab via l'API RemoteProxy. Chaque exécution de macro nécessite toujours une confirmation explicite de l'utilisateur.\n"
 "\n"
 "Désactivez cette option si vous ne souhaitez pas que l'IA puisse proposer l'exécution de code arbitraire (l'outil de macro est alors entièrement masqué pour le modèle)."
 
