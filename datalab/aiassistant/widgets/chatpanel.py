@@ -10,6 +10,7 @@ import html
 import os.path as osp
 from typing import TYPE_CHECKING
 
+from guidata.configtools import get_icon
 from guidata.widgets.dockable import DockableWidgetMixin
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -125,9 +126,11 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
 
         # Toolbar
         toolbar = QW.QHBoxLayout()
-        self.new_button = QW.QPushButton(_("New conversation"))
+        self.new_button = QW.QPushButton(
+            get_icon("libre-gui-add.svg"), _("New conversation")
+        )
         self.new_button.clicked.connect(self._on_new_conversation)
-        self.history_button = QW.QPushButton(_("History…"))
+        self.history_button = QW.QPushButton(get_icon("history.svg"), _("History…"))
         self.history_button.setToolTip(_("Browse, load or delete past conversations."))
         self.history_button.clicked.connect(self._on_open_history)
         toolbar.addWidget(self.new_button)
@@ -155,7 +158,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
 
         send_row = QW.QHBoxLayout()
         send_row.addStretch(1)
-        self.send_button = QW.QPushButton(_("Send"))
+        self.send_button = QW.QPushButton(get_icon("apply.svg"), _("Send"))
         self.send_button.clicked.connect(self._on_send)
         send_row.addWidget(self.send_button)
         layout.addLayout(send_row)

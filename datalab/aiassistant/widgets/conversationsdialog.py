@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from guidata.configtools import get_icon
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
@@ -54,17 +55,19 @@ class ConversationsDialog(QW.QDialog):
         layout.addWidget(self._list, 1)
 
         button_row = QW.QHBoxLayout()
-        self._load_button = QW.QPushButton(_("Load"))
+        self._load_button = QW.QPushButton(get_icon("restore.svg"), _("Load"))
         self._load_button.clicked.connect(self._on_load)
-        self._delete_button = QW.QPushButton(_("Delete"))
+        self._delete_button = QW.QPushButton(get_icon("edit/delete.svg"), _("Delete"))
         self._delete_button.clicked.connect(self._on_delete)
-        self._refresh_button = QW.QPushButton(_("Refresh"))
+        self._refresh_button = QW.QPushButton(
+            get_icon("refresh-manual.svg"), _("Refresh")
+        )
         self._refresh_button.clicked.connect(self._refresh)
         button_row.addWidget(self._load_button)
         button_row.addWidget(self._delete_button)
         button_row.addWidget(self._refresh_button)
         button_row.addStretch(1)
-        close_button = QW.QPushButton(_("Close"))
+        close_button = QW.QPushButton(get_icon("libre-gui-close.svg"), _("Close"))
         close_button.clicked.connect(self.reject)
         button_row.addWidget(close_button)
         layout.addLayout(button_row)
