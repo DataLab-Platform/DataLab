@@ -147,6 +147,9 @@ msgstr "Supprimer la conversation"
 msgid "Delete the selected conversation? This cannot be undone."
 msgstr "Supprimer la conversation sélectionnée ? Cette action est irréversible."
 
+msgid "AI Assistant Settings"
+msgstr "Paramètres de l'assistant IA"
+
 msgid "Enable AI Assistant"
 msgstr "Activer l'assistant IA"
 
@@ -188,6 +191,17 @@ msgstr "Nombre maximum d'itérations d'appels d'outils"
 
 msgid "Auto-approve read-only inspection tools"
 msgstr "Approuver automatiquement les outils d'inspection en lecture seule"
+
+msgid "Allow AI to create and run macros (Python code)"
+msgstr "Autoriser l'IA à créer et exécuter des macros (code Python)"
+
+msgid ""
+"When enabled, the AI assistant may create and execute Python macros with full access to DataLab through the RemoteProxy API. Each macro execution still requires explicit user confirmation.\n"
+"\n"
+"Disable this option if you do not want the AI to be able to propose arbitrary code execution at all (the macro tool is then hidden from the model entirely)."
+msgstr "Lorsque cette option est activée, l'assistant IA peut créer et exécuter des macros Python avec un accès complet à DataLab via l'API RemoteProxy. Chaque exécution de macro nécessite toujours une confirmation explicite de l'utilisateur.\n"
+"\n"
+"Désactivez cette option si vous ne souhaitez pas que l'IA puisse proposer l'exécution de code arbitraire (l'outil de macro est alors entièrement masqué pour le modèle)."
 
 msgid "AI Assistant — Confirm tool call"
 msgstr "Assistant IA — Confirmer l'appel d'outil"

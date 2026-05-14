@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from qtpy import QtWidgets as QW
 
 
-class AISettings(gds.DataSet):
+class AISettings(gds.DataSet, title=_("AI Assistant Settings")):
     """AI Assistant configuration."""
 
     enabled = gds.BoolItem(_("Enable AI Assistant"), default=True)
@@ -95,6 +95,7 @@ def _load_from_conf() -> AISettings:
 
 
 def _save_to_conf(settings: AISettings) -> None:
+    """Save settings to :class:`Conf.ai`."""
     Conf.ai.enabled.set(bool(settings.enabled))
     Conf.ai.provider.set(str(settings.provider))
     Conf.ai.model.set(str(settings.model))
