@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 from typing import TYPE_CHECKING
 
+from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtWidgets as QW
 
 from datalab.config import _
@@ -56,10 +57,13 @@ class ToolConfirmDialog(QW.QDialog):
         layout.addWidget(params_view, 1)
 
         # Special case: macro code preview is more readable as plain Python
+        # — render it through guidata's CodeEditor so users get syntax
+        # highlighting (same widget as the Macro panel editor).
         if tool.name == "create_and_run_macro" and "code" in arguments:
             layout.addWidget(QW.QLabel(_("Macro code:")))
-            code_view = QW.QPlainTextEdit()
+            code_view = CodeEditor(language="python")
             code_view.setReadOnly(True)
+            code_view.setLineWrapMode(QW.QPlainTextEdit.NoWrap)
             code_view.setPlainText(str(arguments.get("code", "")))
             layout.addWidget(code_view, 2)
 
