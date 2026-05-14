@@ -187,6 +187,7 @@ def run_signal_computations(
 
     param = sigima.params.PeakDetectionParam()
     panel.processor.compute_peak_detection(param)
+    panel.processor.compute_markers_to_signal()
 
     panel.processor.compute_multigaussianfit()
 

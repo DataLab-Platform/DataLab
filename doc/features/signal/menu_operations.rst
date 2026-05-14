@@ -273,6 +273,11 @@ Other mathematical functions
     * - |signal_to_image| Assemble signals into image
       - Create a 2D image by assembling selected 1D signals as rows or columns,
         with optional normalization.
+    * - |peak_detect| Create signal from markers table...
+      - Build a sticks signal from an XY-markers table result attached to the
+        selected signal — typically produced by *Analysis ▸ Extract peak
+        positions*. When several XY-markers tables are stored on the signal,
+        a dialog lets you pick the source table.
 
 
 .. |power| image:: ../../../datalab/data/icons/operations/power.svg
@@ -286,6 +291,11 @@ Other mathematical functions
     :class: dark-light no-scaled-link
 
 .. |signal_to_image| image:: ../../../datalab/data/icons/operations/signals_to_image.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |peak_detect| image:: ../../../datalab/data/icons/processing/peak_detect.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

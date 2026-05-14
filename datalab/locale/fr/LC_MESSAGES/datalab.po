@@ -694,8 +694,17 @@ msgstr "Ordonnée à x=..."
 msgid "Compute the ordinate at a given x value (linear interpolation)"
 msgstr "Calcule l'ordonnée à une valeur x donnée (interpolation linéaire)"
 
-msgid "Peak detection"
-msgstr "Détection de pics"
+msgid "Peak detection..."
+msgstr "Détection de pics..."
+
+msgid "Interactive peak detection: adjust threshold and minimum distance visually, then store detected peaks as an XY-markers table result"
+msgstr "Détection de pics interactive : ajustez visuellement le seuil et la distance minimale, puis stockez les pics détectés sous la forme d'une table de marqueurs XY"
+
+msgid "Create signal from markers table..."
+msgstr "Créer un signal à partir d'une table de marqueurs..."
+
+msgid "Build a sticks signal from an XY-markers table result (e.g. from 'Extract peak positions')"
+msgstr "Crée un signal de type bâtons à partir d'une table de marqueurs XY (p.ex. issue de la commande 'Extraire les positions des pics')"
 
 msgid "Curve anti-aliasing"
 msgstr "Anticrénelage des courbes"
@@ -2066,6 +2075,9 @@ msgstr "Détection de contours"
 msgid "Compute contour shape fit"
 msgstr "Ajustement d'une forme géométrique à un contour"
 
+msgid "Peak detection"
+msgstr "Détection de pics"
+
 msgid "Detect peaks in the image"
 msgstr "Détection de pics dans l'image"
 
@@ -2319,6 +2331,16 @@ msgstr "Contraste"
 
 msgid "Compute contrast of a signal, i.e. (max-min)/(max+min), e.g. for an image profile"
 msgstr "Calcule le contraste d'un signal, c'est-à-dire (max-min)/(max+min), p.ex. pour un profil d'image"
+
+msgid "Create signal from markers table"
+msgstr "Créer un signal à partir d'une table de marqueurs"
+
+#, python-format
+msgid "Signal '%s' has no XY-markers table result. Run 'Extract peak positions' (or another XY-markers analysis) first."
+msgstr "Le signal '%s' ne possède aucun résultat de type table de marqueurs XY. Exécutez d'abord 'Extraire les positions des pics' (ou une autre analyse produisant une table de marqueurs XY)."
+
+msgid "Markers table"
+msgstr "Table de marqueurs"
 
 msgid "Full width at y"
 msgstr "Largeur à y=..."
@@ -3655,3 +3677,51 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+
+msgid "Minimum value"
+msgstr "Valeur minimum"
+
+msgid "Maximum value"
+msgstr "Valeur maximum"
+
+msgid "Step between levels"
+msgstr "Pas entre les niveaux"
+
+msgid "Overlay image"
+msgstr "Image de fond"
+
+msgid "Show level labels"
+msgstr "Afficher les étiquettes de niveaux"
+
+msgid "Contour isoline plot"
+msgstr "Tracé de lignes de contour"
+
+msgid "Display isolines (contour lines) overlaid on the selected image, with configurable level range, step, and optional value labels"
+msgstr "Afficher les isolignes (lignes de contour) superposées à l'image sélectionnée, avec une plage de niveaux configurable, un pas entre les niveaux, et des étiquettes de valeurs optionnelles"
+
+msgid "Annotation"
+msgstr "Annotation"
+
+msgid "Contour"
+msgstr "Contour"
+
+msgid "Select a single image first."
+msgstr "Sélectionnez d'abord une seule image."
+
+msgid "Selected image does not contain finite data."
+msgstr "L'image sélectionnée ne contient pas de données finies."
+
+msgid "Selected image is constant: no contour can be drawn."
+msgstr "L'image sélectionnée est constante : aucun contour ne peut être tracé."
+
+msgid "Contour plot parameters"
+msgstr "Paramètres du tracé de contours"
+
+msgid "Maximum value must be strictly greater than minimum."
+msgstr "La valeur maximale doit être strictement supérieure à la valeur minimale."
+
+msgid "No contour was found for the selected level range."
+msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée."
+
+msgid "Show contour plot..."
+msgstr "Afficher le tracé de contours..."
