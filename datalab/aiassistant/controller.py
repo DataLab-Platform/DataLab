@@ -44,14 +44,12 @@ application for 1D signals and 2D images. You help the user by:
 - Invoking plugin-provided features through 'trigger_plugin_action' (use
   'list_plugin_actions' first to discover what each installed plugin
   exposes; this is how third-party plugins like ASNR are reached).
-- Writing complete Python macros and running them through
-  'create_and_run_macro' for complex workflows.
+{macro_capability}\
 - Visually inspecting plots through 'capture_view' (returns the current
   signal/image plot as an image you can analyse) when you need to assess
   the shape of a signal or the appearance of an image before/after
   processing.
-- Looking up the public API of the proxy and data objects via
-  'get_api_help' BEFORE writing a macro that uses unfamiliar methods.
+{macro_api_help}\
 
 Guidelines:
 
@@ -60,16 +58,37 @@ Guidelines:
 - When the user mentions a plugin (or asks for a feature that is not in
   'list_available_operations'), call 'list_plugin_actions' first and then
   'trigger_plugin_action' with the matching action title or menu path.
-- Prefer atomic 'apply_operation' calls over macros when possible.
-- When writing a macro, ONLY use the public API documented in the cheat
-  sheet below or returned by 'get_api_help'. Never invent attributes or
-  methods on 'proxy', 'SignalObj' or 'ImageObj'.
-- 'create_and_run_macro' returns the macro console output (stdout + stderr,
-  including Python tracebacks) and exit code. If exit_code != 0, READ the
-  output, fix the macro, and call the tool again.
+{macro_guidelines}\
 - Be concise. Confirm completion in one sentence after the last tool call.
 - Never invent operation names or parameter fields.
 """
+
+
+_MACRO_CAPABILITY = (
+    "- Writing complete Python macros and running them through\n"
+    "  'create_and_run_macro' for complex workflows.\n"
+)
+
+_MACRO_API_HELP = (
+    "- Looking up the public API of the proxy and data objects via\n"
+    "  'get_api_help' BEFORE writing a macro that uses unfamiliar methods.\n"
+)
+
+_MACRO_GUIDELINES = (
+    "- Prefer atomic 'apply_operation' calls over macros when possible.\n"
+    "- When writing a macro, ONLY use the public API documented in the cheat\n"
+    "  sheet below or returned by 'get_api_help'. Never invent attributes or\n"
+    "  methods on 'proxy', 'SignalObj' or 'ImageObj'.\n"
+    "- 'create_and_run_macro' returns the macro console output (stdout + stderr,\n"
+    "  including Python tracebacks) and exit code. If exit_code != 0, READ the\n"
+    "  output, fix the macro, and call the tool again.\n"
+)
+
+_MACRO_DISABLED_NOTE = (
+    "\nNote: macro creation is disabled by the user. Do not attempt to write "
+    "or run Python macros; use 'apply_operation' or 'trigger_plugin_action' "
+    "instead.\n"
+)
 
 
 _MACRO_FEWSHOT = """\
@@ -166,15 +185,35 @@ def _build_objects_cheatsheet() -> str:
     )
 
 
-def build_default_system_prompt() -> str:
-    """Return the default system prompt with auto-generated API cheat sheet."""
+def build_default_system_prompt(
+    available_tool_names: set[str] | None = None,
+) -> str:
+    """Return the default system prompt with auto-generated API cheat sheet.
+
+    Args:
+        available_tool_names: Names of the tools actually exposed to the LLM.
+         When provided, sections that mention a missing tool are omitted so
+         the model is not pushed to call tools it does not have access to.
+         When ``None`` (default), assume all built-in tools are available
+         (backwards compatibility).
+    """
+    macro_enabled = available_tool_names is None or (
+        "create_and_run_macro" in available_tool_names
+    )
+    base = _BASE_SYSTEM_PROMPT.format(
+        macro_capability=_MACRO_CAPABILITY if macro_enabled else "",
+        macro_api_help=_MACRO_API_HELP if macro_enabled else "",
+        macro_guidelines=_MACRO_GUIDELINES if macro_enabled else "",
+    )
+    if not macro_enabled:
+        base += _MACRO_DISABLED_NOTE
     return (
-        _BASE_SYSTEM_PROMPT
+        base
         + "\n"
         + _build_proxy_cheatsheet()
         + "\n\n"
         + _build_objects_cheatsheet()
-        + _MACRO_FEWSHOT
+        + (_MACRO_FEWSHOT if macro_enabled else "")
     )
 
 
@@ -241,6 +280,32 @@ class AIController:
             ChatMessage(role="system", content=self.system_prompt)
         ]
 
+    @classmethod
+    def with_default_prompt(
+        cls,
+        provider: LLMProvider,
+        registry: ToolRegistry,
+        proxy: LocalProxy,
+        mainwindow: DLMainWindow,
+        confirm_callback: ConfirmCallback,
+        max_iterations: int = 8,
+        auto_approve_readonly: bool = True,
+        execute_callback: ExecuteCallback | None = None,
+    ) -> AIController:
+        """Build a controller whose system prompt matches ``registry``."""
+        tool_names = {schema["name"] for schema in registry.list_schemas()}
+        return cls(
+            provider=provider,
+            registry=registry,
+            proxy=proxy,
+            mainwindow=mainwindow,
+            confirm_callback=confirm_callback,
+            system_prompt=build_default_system_prompt(tool_names),
+            max_iterations=max_iterations,
+            auto_approve_readonly=auto_approve_readonly,
+            execute_callback=execute_callback,
+        )
+
     def reset(self) -> None:
         """Clear the conversation history (keep the system prompt)."""
         self.history = [ChatMessage(role="system", content=self.system_prompt)]
@@ -264,7 +329,24 @@ class AIController:
         return [msg for msg in self.history if msg.role != "system"]
 
     def send(self, user_message: str) -> TurnResult:
-        """Send a user message and run the tool-call loop."""
+        """Send a user message and run the tool-call loop.
+
+        On any unhandled exception during the turn (network failure, GUI
+        bridge error, etc.), the conversation history is rolled back to its
+        state before this call. This guarantees that the OpenAI invariant
+        "every assistant.tool_calls must be followed by matching tool
+        responses" is never violated in the persisted history — a corrupt
+        partial turn would otherwise poison every subsequent ``send()``.
+        The user message is preserved in the GUI input history regardless.
+        """
+        snapshot_len = len(self.history)
+        try:
+            return self._send_inner(user_message)
+        except BaseException:
+            del self.history[snapshot_len:]
+            raise
+
+    def _send_inner(self, user_message: str) -> TurnResult:
         self.history.append(ChatMessage(role="user", content=user_message))
         executions: list[tuple[str, dict, ToolResult]] = []
         tools_schema = self.registry.list_schemas()
@@ -284,7 +366,7 @@ class AIController:
                 return TurnResult(
                     assistant_message=response.content, tool_executions=executions
                 )
-            for call in response.tool_calls:
+            for call_index, call in enumerate(response.tool_calls):
                 try:
                     tool = self.registry.get(call.name)
                 except KeyError as exc:
@@ -294,6 +376,22 @@ class AIController:
                     if needs_confirm and not self.confirm_callback(
                         tool, call.arguments
                     ):
+                        # User cancelled. The OpenAI protocol requires every
+                        # 'tool_calls' entry to be followed by a matching
+                        # 'tool' response message; otherwise the next request
+                        # is rejected as malformed. Synthesize a cancellation
+                        # response for THIS call and every remaining call in
+                        # the same turn before returning.
+                        cancel_result = ToolResult(ok=False, error="Cancelled by user.")
+                        for pending in response.tool_calls[call_index:]:
+                            self.history.append(
+                                ChatMessage(
+                                    role="tool",
+                                    content=cancel_result.to_message_content(),
+                                    tool_call_id=pending.id,
+                                    name=pending.name,
+                                )
+                            )
                         return TurnResult(
                             assistant_message=response.content,
                             tool_executions=executions,

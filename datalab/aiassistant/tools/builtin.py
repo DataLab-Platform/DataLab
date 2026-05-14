@@ -760,8 +760,17 @@ _PANEL_PARAM = {
 }
 
 
-def build_default_registry() -> ToolRegistry:
-    """Build the default tool registry exposed to the LLM."""
+def build_default_registry(expose_macro_tool: bool = True) -> ToolRegistry:
+    """Build the default tool registry exposed to the LLM.
+
+    Args:
+        expose_macro_tool: If True (default), register the
+         ``create_and_run_macro`` tool, which lets the LLM execute arbitrary
+         Python code with full ``RemoteProxy`` access (still gated by the
+         confirmation dialog). Set to False to hide this tool from the LLM
+         entirely — useful in environments where macro execution by the AI
+         is considered too risky.
+    """
     reg = ToolRegistry()
 
     reg.register(
@@ -1011,43 +1020,45 @@ def build_default_registry() -> ToolRegistry:
             handler=_tool_apply_operation,
         )
     )
-    reg.register(
-        Tool(
-            name="create_and_run_macro",
-            description=(
-                "Create a new macro tab in the Macro panel with the given Python "
-                "code, then optionally run it SYNCHRONOUSLY and return the macro "
-                "console output (stdout + stderr, including Python tracebacks) "
-                "and exit code. The macro has access to "
-                "'datalab.control.proxy.RemoteProxy' to drive DataLab. The code "
-                "is statically validated (syntax + unknown 'proxy.*' methods) "
-                "before execution. Use this for complex multi-step scripts; "
-                "prefer 'apply_operation' for atomic actions. If 'ok' is False, "
-                "read 'console_output' or 'validation_errors' and try again."
-            ),
-            parameters={
-                "type": "object",
-                "properties": {
-                    "title": {"type": "string"},
-                    "code": {
-                        "type": "string",
-                        "description": "Full Python source code of the macro.",
+    if expose_macro_tool:
+        reg.register(
+            Tool(
+                name="create_and_run_macro",
+                description=(
+                    "Create a new macro tab in the Macro panel with the given Python "
+                    "code, then optionally run it SYNCHRONOUSLY and return the macro "
+                    "console output (stdout + stderr, including Python tracebacks) "
+                    "and exit code. The macro has access to "
+                    "'datalab.control.proxy.RemoteProxy' to drive DataLab. The code "
+                    "is statically validated (syntax + unknown 'proxy.*' methods) "
+                    "before execution. Use this for complex multi-step scripts; "
+                    "prefer 'apply_operation' for atomic actions. If 'ok' is False, "
+                    "read 'console_output' or 'validation_errors' and try again."
+                ),
+                parameters={
+                    "type": "object",
+                    "properties": {
+                        "title": {"type": "string"},
+                        "code": {
+                            "type": "string",
+                            "description": "Full Python source code of the macro.",
+                        },
+                        "autorun": {"type": "boolean", "default": True},
+                        "timeout": {
+                            "type": "number",
+                            "default": 30.0,
+                            "description": (
+                                "Maximum number of seconds to wait "
+                                "for the macro to finish."
+                            ),
+                        },
                     },
-                    "autorun": {"type": "boolean", "default": True},
-                    "timeout": {
-                        "type": "number",
-                        "default": 30.0,
-                        "description": (
-                            "Maximum number of seconds to wait for the macro to finish."
-                        ),
-                    },
+                    "required": ["title", "code"],
+                    "additionalProperties": False,
                 },
-                "required": ["title", "code"],
-                "additionalProperties": False,
-            },
-            handler=_tool_create_and_run_macro,
+                handler=_tool_create_and_run_macro,
+            )
         )
-    )
     reg.register(
         Tool(
             name="get_macro_console_output",

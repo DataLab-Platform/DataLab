@@ -60,6 +60,18 @@ class AISettings(gds.DataSet):
     auto_approve_readonly = gds.BoolItem(
         _("Auto-approve read-only inspection tools"), default=True
     )
+    expose_macro_tool = gds.BoolItem(
+        _("Allow AI to create and run macros (Python code)"),
+        default=True,
+        help=_(
+            "When enabled, the AI assistant may create and execute Python "
+            "macros with full access to DataLab through the RemoteProxy API. "
+            "Each macro execution still requires explicit user confirmation.\n\n"
+            "Disable this option if you do not want the AI to be able to "
+            "propose arbitrary code execution at all (the macro tool is then "
+            "hidden from the model entirely)."
+        ),
+    )
 
 
 def _load_from_conf() -> AISettings:
@@ -78,6 +90,7 @@ def _load_from_conf() -> AISettings:
     settings.timeout = float(Conf.ai.timeout.get(60.0))
     settings.max_iterations = int(Conf.ai.max_iterations.get(8))
     settings.auto_approve_readonly = bool(Conf.ai.auto_approve_readonly.get(True))
+    settings.expose_macro_tool = bool(Conf.ai.expose_macro_tool.get(True))
     return settings
 
 
@@ -91,6 +104,7 @@ def _save_to_conf(settings: AISettings) -> None:
     Conf.ai.timeout.set(float(settings.timeout))
     Conf.ai.max_iterations.set(int(settings.max_iterations))
     Conf.ai.auto_approve_readonly.set(bool(settings.auto_approve_readonly))
+    Conf.ai.expose_macro_tool.set(bool(settings.expose_macro_tool))
 
 
 class AISettingsDialog:

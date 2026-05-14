@@ -8,6 +8,7 @@ import json
 
 import pytest
 
+from datalab.aiassistant.tools.builtin import build_default_registry
 from datalab.aiassistant.tools.registry import Tool, ToolRegistry, ToolResult
 
 
@@ -92,3 +93,18 @@ def test_list_schemas_format() -> None:
     for schema in schemas:
         assert "description" in schema
         assert "parameters" in schema
+
+
+def test_default_registry_exposes_macro_tool() -> None:
+    """By default, the macro execution tool is exposed to the LLM."""
+    reg = build_default_registry()
+    assert "create_and_run_macro" in {s["name"] for s in reg.list_schemas()}
+
+
+def test_default_registry_can_hide_macro_tool() -> None:
+    """When ``expose_macro_tool=False``, the macro tool is not registered."""
+    reg = build_default_registry(expose_macro_tool=False)
+    names = {s["name"] for s in reg.list_schemas()}
+    assert "create_and_run_macro" not in names
+    # Read-only macro inspection tool stays available (no code execution).
+    assert "get_macro_console_output" in names

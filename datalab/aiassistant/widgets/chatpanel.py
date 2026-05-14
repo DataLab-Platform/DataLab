@@ -327,7 +327,9 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
             temperature=temperature,
             timeout=timeout,
         )
-        registry = build_default_registry()
+        registry = build_default_registry(
+            expose_macro_tool=bool(Conf.ai.expose_macro_tool.get(True))
+        )
 
         def confirm_in_gui(tool: Tool, arguments: dict) -> bool:
             return self._bridge.call_in_gui(
@@ -339,7 +341,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
                 lambda: registry.call(name, arguments, self._proxy, self.mainwindow)
             )
 
-        return AIController(
+        return AIController.with_default_prompt(
             provider=provider,
             registry=registry,
             proxy=self._proxy,

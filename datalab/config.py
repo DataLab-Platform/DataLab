@@ -464,6 +464,12 @@ class AISection(conf.Section, metaclass=conf.SectionMeta):
     # Auto-approve read-only inspection tools without confirmation dialog.
     auto_approve_readonly = conf.Option()
 
+    # Expose the 'create_and_run_macro' tool to the LLM. When False, the AI
+    # assistant cannot create or run macros (arbitrary Python code with full
+    # XML-RPC proxy access). Other tools (creation, processing, etc.) remain
+    # gated by the standard confirmation dialog.
+    expose_macro_tool = conf.Option()
+
 
 # Usage (example): Conf.console.console_enabled.get(True)
 class Conf(conf.Configuration, metaclass=conf.ConfMeta):

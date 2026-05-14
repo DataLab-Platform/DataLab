@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from unittest import mock
 
-from datalab.aiassistant.controller import AIController
+from datalab.aiassistant.controller import AIController, build_default_system_prompt
 from datalab.aiassistant.providers.base import (
     AssistantMessage,
     ChatMessage,
@@ -139,6 +139,37 @@ def test_user_cancels_tool_call() -> None:
     result = ctrl.send("please")
     assert result.cancelled is True
     assert not result.tool_executions
+    # OpenAI protocol: every assistant tool_call must have a matching tool
+    # response in the history, even on cancellation. Otherwise the next
+    # request to the API is rejected as malformed.
+    tool_msgs = [m for m in ctrl.history if m.role == "tool"]
+    assert [m.tool_call_id for m in tool_msgs] == ["c1"]
+
+
+def test_user_cancels_first_of_multiple_tool_calls() -> None:
+    """All pending tool_calls in the cancelled turn get a tool response."""
+    registry = _registry_with(lambda *a, **k: None)  # noqa: ARG005
+    replies = [
+        AssistantMessage(
+            content="batch",
+            tool_calls=[
+                ToolCall(id="c1", name="do_thing", arguments={}),
+                ToolCall(id="c2", name="do_thing", arguments={}),
+                ToolCall(id="c3", name="do_thing", arguments={}),
+            ],
+        ),
+    ]
+    ctrl = AIController(
+        provider=_ScriptedProvider(replies),
+        registry=registry,
+        proxy=mock.MagicMock(),
+        mainwindow=mock.MagicMock(),
+        confirm_callback=lambda *a: False,
+    )
+    result = ctrl.send("please")
+    assert result.cancelled is True
+    tool_msgs = [m for m in ctrl.history if m.role == "tool"]
+    assert [m.tool_call_id for m in tool_msgs] == ["c1", "c2", "c3"]
 
 
 def test_max_iterations_safety_cap() -> None:
@@ -162,3 +193,77 @@ def test_max_iterations_safety_cap() -> None:
     result = ctrl.send("loop")
     assert "maximum number of tool-call iterations" in result.assistant_message
     assert len(result.tool_executions) == 3
+
+
+class _RaisingProvider(LLMProvider):
+    """Provider that succeeds for the 1st call then raises on subsequent ones."""
+
+    name = "raising"
+
+    def __init__(self, first_reply: AssistantMessage, error: Exception) -> None:
+        super().__init__(api_key="x", model="x")
+        self._first = first_reply
+        self._error = error
+        self._calls = 0
+
+    def chat(self, messages, tools=None):  # noqa: ARG002
+        self._calls += 1
+        if self._calls == 1:
+            return self._first
+        raise self._error
+
+
+def test_send_rolls_back_history_on_provider_failure() -> None:
+    """An exception mid-turn must not leave dangling tool_calls in history.
+
+    Regression test: the OpenAI protocol requires every assistant.tool_calls
+    to be followed by matching tool responses. If ``send()`` raises after
+    appending tool_calls but before all tool responses are written, the
+    next ``send()`` would build an invalid request payload and the API
+    would respond with a 400 error. The controller must roll back to the
+    pre-call snapshot on any unhandled exception.
+    """
+    registry = _registry_with(lambda *a, **k: None)  # noqa: ARG005
+    # Iter 1 returns a tool call (gets processed cleanly), iter 2 raises.
+    first = AssistantMessage(
+        tool_calls=[ToolCall(id="c1", name="do_thing", arguments={})]
+    )
+    ctrl = AIController(
+        provider=_RaisingProvider(first, RuntimeError("network down")),
+        registry=registry,
+        proxy=mock.MagicMock(),
+        mainwindow=mock.MagicMock(),
+        confirm_callback=lambda *a: True,
+    )
+    history_before = list(ctrl.history)
+
+    import pytest
+
+    with pytest.raises(RuntimeError, match="network down"):
+        ctrl.send("hello")
+
+    assert ctrl.history == history_before, (
+        "history must be rolled back to its pre-send snapshot when the turn "
+        "fails, otherwise the next send() will produce a malformed request"
+    )
+
+
+def test_default_system_prompt_omits_macro_when_tool_disabled() -> None:
+    """The system prompt must not advertise tools that aren't in the registry.
+
+    Otherwise the LLM is pushed to call ``create_and_run_macro`` even though
+    the schema doesn't expose it, producing wasteful KeyError loops.
+    """
+    enabled = build_default_system_prompt(
+        {"list_objects", "apply_operation", "create_and_run_macro"}
+    )
+    disabled = build_default_system_prompt({"list_objects", "apply_operation"})
+    assert "create_and_run_macro" in enabled
+    assert "create_and_run_macro" not in disabled
+    assert "macro creation is disabled" in disabled
+
+
+def test_default_system_prompt_unrestricted_when_no_filter() -> None:
+    """Backwards compatibility: no filter means all tools are advertised."""
+    prompt = build_default_system_prompt()
+    assert "create_and_run_macro" in prompt
