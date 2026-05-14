@@ -391,6 +391,11 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     # Show merged result label on plot by default
     show_result_label = conf.Option()
 
+    # Prepend a marker-label column to result tables for
+    # XY_MARKERS / X_MARKERS / Y_MARKERS so each row can be matched with the
+    # corresponding cross or dashed cursor drawn on the plot.
+    show_marker_labels_in_table = conf.Option()
+
     @classmethod
     def get_def_dict(cls, category: Literal["ima", "sig"]) -> dict:
         """Get default visualization settings as a dictionary
@@ -534,6 +539,7 @@ def initialize():
     Conf.view.max_cells_in_label.get(100)
     Conf.view.max_cols_in_label.get(15)
     Conf.view.show_result_label.get(True)
+    Conf.view.show_marker_labels_in_table.get(True)
 
     # Initialize PlotPy configuration with versioned app name
     PLOTPY_CONF.set_application(

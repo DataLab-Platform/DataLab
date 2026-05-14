@@ -13,6 +13,9 @@ msgstr ""
 msgid "Results"
 msgstr "Résultats"
 
+msgid "Marker"
+msgstr "Marqueur"
+
 #, python-format
 msgid "%d more rows"
 msgstr "%d lignes supplémentaires"
@@ -2094,6 +2097,12 @@ msgstr "Extraire les caractéristiques d'une impulsion"
 msgid "Extract pulse features (amplitude, rise time, fall time...)"
 msgstr "Extraire les caractéristiques d'une impulsion (amplitude, temps de montée, temps de descente...)"
 
+msgid "Extract peak positions"
+msgstr "Extraire les positions des pics"
+
+msgid "Extract peak positions as an X-markers table (e.g. for spectral line analysis)"
+msgstr "Extraire les positions des pics sous forme de table de marqueurs X (p.ex. pour l'analyse de raies spectrales)"
+
 msgid "Abscissa of the minimum and maximum"
 msgstr "Abscisse du minimum et du maximum"
 
@@ -2546,6 +2555,15 @@ msgstr "Étiquette des résultats"
 
 msgid "Show the merged result label on the plot by default. Can be toggled per-object using the checkbox in the Properties panel."
 msgstr "Etiquette des résultats fusionnés sur le graphique par défaut. Peut être activée ou désactivée par objet à l'aide de la case à cocher dans le panneau des propriétés."
+
+msgid "Show marker labels in result tables"
+msgstr ""
+
+msgid "Marker labels"
+msgstr "Etiquettes des marqueurs"
+
+msgid "Prepend a marker-label column to result tables for marker results (XY/X/Y markers), so each row can be matched with the corresponding cross or dashed cursor drawn on the plot. XY markers use numeric labels (#1, #2, ...), axis markers use letters (a, b, c, ...)."
+msgstr "Ajouter une colonne d'étiquettes de marqueurs aux tables de résultats pour les résultats de marqueurs (marqueurs XY/X/Y), afin que chaque ligne puisse être associée au curseur croisé ou en pointillés correspondant dessiné sur le graphique. Les marqueurs XY utilisent des étiquettes numériques (#1, #2, ...), les marqueurs d'axe utilisent des lettres (a, b, c, ...)."
 
 msgid "Process isolation enable status"
 msgstr "Etat d'activation de l'isolation de processus"

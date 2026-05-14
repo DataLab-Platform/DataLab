@@ -26,6 +26,27 @@ if TYPE_CHECKING:
     from qtpy.QtWidgets import QWidget
 
 
+def alpha_label(index: int) -> str:
+    """Return an alphabetic label for a 0-based index.
+
+    Mapping: ``0 → "a"``, ``1 → "b"``, ..., ``25 → "z"``, ``26 → "aa"``, ...
+
+    Used to label axis-marker cursors (X_MARKERS / Y_MARKERS) and the
+    corresponding rows in the merged result label, so they can be matched
+    to the dashed cursors drawn on the plot.
+    """
+    if index < 0:
+        return ""
+    label = ""
+    n = index
+    while True:
+        label = chr(ord("a") + (n % 26)) + label
+        n = n // 26 - 1
+        if n < 0:
+            break
+    return label
+
+
 @dataclasses.dataclass
 class ResultData:
     """Result data associated to a shapetype"""
@@ -355,6 +376,32 @@ def resultadapter_to_html(
         # Remove roi_index column for display calculations
         display_df = df.drop(columns=["roi_index"]) if "roi_index" in df.columns else df
 
+        # If this is a marker result (XY/X/Y_MARKERS) and the user opted in,
+        # prepend a "marker label" column so each row in the displayed table
+        # can be matched with the cross / dashed cursor drawn on the plot
+        # (XY markers use numeric labels ``#1, #2, ...``; axis markers use
+        # alphabetic labels ``a, b, c, ...``). Forces the fast HTML path
+        # below to honor the injected column (the standard ``adapter.to_html``
+        # path does not see DataFrame mutations made here).
+        marker_labels_injected = False
+        result = adapter.result
+        if (
+            Conf.view.show_marker_labels_in_table.get(True)
+            and hasattr(result, "is_xy_markers")
+            and (
+                result.is_xy_markers()
+                or result.is_x_markers()
+                or (hasattr(result, "is_y_markers") and result.is_y_markers())
+            )
+        ):
+            if result.is_xy_markers():
+                marker_col = [f"#{i + 1}" for i in range(len(display_df))]
+            else:
+                marker_col = [alpha_label(i) for i in range(len(display_df))]
+            display_df = display_df.copy()
+            display_df.insert(0, _("Marker"), marker_col)
+            marker_labels_injected = True
+
         # For merged labels, limit display columns for readability
         max_display_cols = Conf.view.max_cols_in_label.get(20)
         num_cols = len(display_df.columns)
@@ -369,7 +416,7 @@ def resultadapter_to_html(
         num_cells = num_rows * num_cols
 
         # Check if truncation is needed BEFORE calling to_html()
-        if num_cells > max_cells or cols_truncated:
+        if num_cells > max_cells or cols_truncated or marker_labels_injected:
             # Calculate how many rows we can display given max_cells
             max_rows = max(1, max_cells // num_cols) if num_cols > 0 else num_rows
 
@@ -379,6 +426,10 @@ def resultadapter_to_html(
             # Generate HTML directly from truncated DataFrame for performance
             # This is MUCH faster than calling adapter.to_html() on full data
             html_kwargs = {"border": 0}
+            if marker_labels_injected:
+                # Hide pandas' numeric index since the injected "Marker"
+                # column already provides per-row identification.
+                html_kwargs["index"] = False
             html_kwargs.update(kwargs)
 
             # Format numeric columns efficiently
