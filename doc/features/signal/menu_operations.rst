@@ -295,7 +295,7 @@ Other mathematical functions
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |peak_detect| image:: ../../../datalab/data/icons/processing/peak_detect.svg
+.. |peak_detect| image:: ../../../datalab/data/icons/analysis/peak_detect.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
