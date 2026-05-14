@@ -19,6 +19,7 @@ from datalab.aiassistant.providers.base import (
     ChatMessage,
     LLMProvider,
     LLMProviderError,
+    TokenUsage,
     ToolCall,
 )
 
@@ -143,5 +144,17 @@ def _parse_openai_response(data: dict[str, Any]) -> AssistantMessage:
         content=content,
         tool_calls=tool_calls,
         finish_reason=finish_reason,
+        usage=_parse_openai_usage(data.get("usage")),
         raw=data,
+    )
+
+
+def _parse_openai_usage(usage: dict[str, Any] | None) -> TokenUsage | None:
+    """Decode the ``usage`` block of an OpenAI response, if any."""
+    if not usage:
+        return None
+    return TokenUsage(
+        prompt_tokens=usage.get("prompt_tokens"),
+        completion_tokens=usage.get("completion_tokens"),
+        total_tokens=usage.get("total_tokens"),
     )

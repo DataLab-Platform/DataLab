@@ -15,7 +15,7 @@ from datalab.aiassistant.conversation import (
     derive_title,
 )
 from datalab.aiassistant.inputhistory import InputHistory
-from datalab.aiassistant.providers.base import ChatMessage, ToolCall
+from datalab.aiassistant.providers.base import ChatMessage, TokenUsage, ToolCall
 
 
 def test_derive_title_truncates_and_collapses_whitespace():
@@ -135,3 +135,52 @@ def test_input_history_ignores_empty(tmp_path):
     hist.add("")
     assert not hist.items()
     assert hist.previous("anything") is None
+
+
+def test_conversation_usage_roundtrip():
+    """``Conversation.usage`` survives a to_dict/from_dict round-trip."""
+    conv = Conversation.new()
+    conv.usage = TokenUsage(prompt_tokens=42, completion_tokens=7, total_tokens=49)
+    restored = Conversation.from_dict(conv.to_dict())
+    assert restored.usage is not None
+    assert restored.usage.prompt_tokens == 42
+    assert restored.usage.completion_tokens == 7
+    assert restored.usage.total_tokens == 49
+
+
+def test_conversation_without_usage_field_loads_as_none():
+    """Conversations saved before token tracking restore with ``usage=None``."""
+    legacy = {
+        "id": "abc",
+        "title": "old",
+        "created_at": "2024-01-01T00:00:00",
+        "updated_at": "2024-01-01T00:00:00",
+        "messages": [],
+    }
+    restored = Conversation.from_dict(legacy)
+    assert restored.usage is None
+
+
+def test_conversation_store_rename(tmp_path):
+    """``ConversationStore.rename`` updates the title without bumping ``updated_at``."""
+    store = ConversationStore(str(tmp_path))
+    conv = Conversation.new()
+    conv.title = "before"
+    store.save(conv)
+    original_updated = store.load(conv.id).updated_at
+
+    time.sleep(0.02)
+    store.rename(conv.id, "after")
+
+    reloaded = store.load(conv.id)
+    assert reloaded.title == "after"
+    # Rename must NOT bump updated_at (mirrors DataLab-Web behaviour) so
+    # the chronological order in the history listing is preserved.
+    assert reloaded.updated_at == original_updated
+
+
+def test_conversation_store_rename_missing_id_is_noop(tmp_path):
+    """Renaming a non-existent conversation does not raise."""
+    store = ConversationStore(str(tmp_path))
+    store.rename("does-not-exist", "anything")
+    assert not store.list()

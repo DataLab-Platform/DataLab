@@ -11,6 +11,7 @@ from datalab.aiassistant.providers.base import (
     AssistantMessage,
     ChatMessage,
     LLMProvider,
+    TokenUsage,
     ToolCall,
 )
 from datalab.aiassistant.tools.registry import Tool, ToolRegistry
@@ -267,3 +268,91 @@ def test_default_system_prompt_unrestricted_when_no_filter() -> None:
     """Backwards compatibility: no filter means all tools are advertised."""
     prompt = build_default_system_prompt()
     assert "create_and_run_macro" in prompt
+
+
+def test_cumulative_usage_accumulates_across_iterations() -> None:
+    """Token usage from each provider response is summed into the cumulative
+    counter and forwarded to ``usage_callback``."""
+    registry = _registry_with(lambda *a, **k: None)  # noqa: ARG005
+    replies = [
+        AssistantMessage(
+            tool_calls=[ToolCall(id="c1", name="do_thing", arguments={})],
+            usage=TokenUsage(prompt_tokens=10, completion_tokens=3, total_tokens=13),
+        ),
+        AssistantMessage(
+            content="done",
+            usage=TokenUsage(prompt_tokens=20, completion_tokens=5, total_tokens=25),
+        ),
+    ]
+    callbacks: list[tuple[TokenUsage, TokenUsage]] = []
+    ctrl = AIController(
+        provider=_ScriptedProvider(replies),
+        registry=registry,
+        proxy=mock.MagicMock(),
+        mainwindow=mock.MagicMock(),
+        confirm_callback=lambda *a: True,
+        usage_callback=lambda turn, cum: callbacks.append((turn, cum)),
+    )
+    result = ctrl.send("go")
+    assert result.assistant_message == "done"
+    assert ctrl.get_usage().prompt_tokens == 30
+    assert ctrl.get_usage().completion_tokens == 8
+    assert ctrl.get_usage().total_tokens == 38
+    # Two callback invocations (one per provider response).
+    assert len(callbacks) == 2
+    # Per-turn usage on TurnResult sums the same.
+    assert result.turn_usage is not None
+    assert result.turn_usage.total_tokens == 38
+
+
+def test_load_messages_seeds_initial_usage() -> None:
+    """``load_messages`` restores the cumulative counter for resumed conversations."""
+    ctrl = AIController(
+        provider=_ScriptedProvider([]),
+        registry=ToolRegistry(),
+        proxy=mock.MagicMock(),
+        mainwindow=mock.MagicMock(),
+        confirm_callback=lambda *a: True,
+    )
+    seed = TokenUsage(prompt_tokens=100, completion_tokens=50, total_tokens=150)
+    ctrl.load_messages([], initial_usage=seed)
+    assert ctrl.get_usage().total_tokens == 150
+    # Reset clears it.
+    ctrl.reset()
+    assert ctrl.get_usage().total_tokens is None
+
+
+def test_abort_returns_aborted_result_and_rolls_back() -> None:
+    """Calling ``abort()`` mid-loop returns an aborted TurnResult and the
+    history snapshot is restored so the next ``send()`` is well-formed."""
+    registry = _registry_with(lambda *a, **k: None)  # noqa: ARG005
+
+    class _AbortingProvider(LLMProvider):
+        name = "aborting"
+
+        def __init__(self, ctrl_ref: list[AIController]) -> None:
+            super().__init__(api_key="x", model="x")
+            self._ctrl_ref = ctrl_ref
+
+        def chat(self, messages, tools=None):  # noqa: ARG002
+            # Trigger abort during the call so the next iteration sees it.
+            self._ctrl_ref[0].abort()
+            return AssistantMessage(
+                tool_calls=[ToolCall(id="c1", name="do_thing", arguments={})]
+            )
+
+    ctrl_ref: list[AIController] = []
+    ctrl = AIController(
+        provider=_AbortingProvider(ctrl_ref),
+        registry=registry,
+        proxy=mock.MagicMock(),
+        mainwindow=mock.MagicMock(),
+        confirm_callback=lambda *a: True,
+    )
+    ctrl_ref.append(ctrl)
+    history_before = list(ctrl.history)
+    result = ctrl.send("go")
+    assert result.aborted is True
+    assert result.assistant_message == ""
+    assert ctrl.history == history_before
+    assert ctrl.is_running is False

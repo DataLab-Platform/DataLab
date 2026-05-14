@@ -18,6 +18,7 @@ This module is GUI-agnostic: tool confirmation is delegated to a callback
 from __future__ import annotations
 
 import inspect
+import threading
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Callable
 
@@ -25,6 +26,8 @@ from datalab.aiassistant.providers.base import (
     AssistantMessage,
     ChatMessage,
     LLMProvider,
+    TokenUsage,
+    sum_usage,
 )
 from datalab.aiassistant.tools.registry import Tool, ToolRegistry, ToolResult
 
@@ -234,15 +237,27 @@ class TurnResult:
         assistant_message: Final assistant text (after all tool calls).
         tool_executions: Tool calls made during the turn.
         cancelled: True if the user cancelled at a confirmation prompt.
+        aborted: True if :meth:`AIController.abort` interrupted the loop.
+        turn_usage: Cumulative token usage for this single turn (sum of
+         every provider round-trip in the loop). ``None`` when no
+         round-trip reported usage.
     """
 
     assistant_message: str
     tool_executions: list[tuple[str, dict, ToolResult]] = field(default_factory=list)
     cancelled: bool = False
+    aborted: bool = False
+    turn_usage: TokenUsage | None = None
+
+
+class AIAbortError(RuntimeError):
+    """Raised inside the controller loop when :meth:`AIController.abort` is
+    called. Mirrors :class:`AbortError` in DataLab-Web."""
 
 
 ConfirmCallback = Callable[[Tool, dict], bool]
 ExecuteCallback = Callable[[str, dict], ToolResult]
+UsageCallback = Callable[[TokenUsage, TokenUsage], None]
 
 
 class AIController:
@@ -271,6 +286,7 @@ class AIController:
         max_iterations: int = 8,
         auto_approve_readonly: bool = True,
         execute_callback: ExecuteCallback | None = None,
+        usage_callback: UsageCallback | None = None,
     ) -> None:
         self.provider = provider
         self.registry = registry
@@ -278,12 +294,19 @@ class AIController:
         self.mainwindow = mainwindow
         self.confirm_callback = confirm_callback
         self.execute_callback = execute_callback
+        self.usage_callback = usage_callback
         self.system_prompt = system_prompt or build_default_system_prompt()
         self.max_iterations = int(max_iterations)
         self.auto_approve_readonly = bool(auto_approve_readonly)
         self.history: list[ChatMessage] = [
             ChatMessage(role="system", content=self.system_prompt)
         ]
+        # Cumulative token usage across the whole conversation. Reset on
+        # :meth:`reset` and :meth:`load_messages`.
+        self._cumulative_usage: TokenUsage = TokenUsage()
+        # Set while :meth:`send` is in flight to support :meth:`abort`.
+        self._abort_event = threading.Event()
+        self._running = False
 
     @classmethod
     def with_default_prompt(
@@ -296,6 +319,7 @@ class AIController:
         max_iterations: int = 8,
         auto_approve_readonly: bool = True,
         execute_callback: ExecuteCallback | None = None,
+        usage_callback: UsageCallback | None = None,
     ) -> AIController:
         """Build a controller whose system prompt matches ``registry``."""
         tool_names = {schema["name"] for schema in registry.list_schemas()}
@@ -309,29 +333,73 @@ class AIController:
             max_iterations=max_iterations,
             auto_approve_readonly=auto_approve_readonly,
             execute_callback=execute_callback,
+            usage_callback=usage_callback,
         )
 
     def reset(self) -> None:
         """Clear the conversation history (keep the system prompt)."""
         self.history = [ChatMessage(role="system", content=self.system_prompt)]
+        self._cumulative_usage = TokenUsage()
 
-    def load_messages(self, messages: list[ChatMessage]) -> None:
+    def load_messages(
+        self,
+        messages: list[ChatMessage],
+        initial_usage: TokenUsage | None = None,
+    ) -> None:
         """Replace the current history with ``messages``.
 
         The system prompt is always reset to the controller's current
         ``system_prompt`` (which is auto-generated and may have changed
         since the conversation was persisted). Any system messages from
         ``messages`` are dropped.
+
+        Args:
+            messages: Messages to restore (system messages are dropped).
+            initial_usage: Cumulative token usage to seed the running
+             counter with — typically the value persisted alongside the
+             conversation. ``None`` resets it to zero.
         """
         self.history = [ChatMessage(role="system", content=self.system_prompt)]
         for msg in messages:
             if msg.role == "system":
                 continue
             self.history.append(msg)
+        self._cumulative_usage = (
+            TokenUsage(
+                prompt_tokens=initial_usage.prompt_tokens,
+                completion_tokens=initial_usage.completion_tokens,
+                total_tokens=initial_usage.total_tokens,
+            )
+            if initial_usage is not None
+            else TokenUsage()
+        )
 
     def get_messages(self) -> list[ChatMessage]:
         """Return the conversation messages, excluding the system prompt."""
         return [msg for msg in self.history if msg.role != "system"]
+
+    def get_usage(self) -> TokenUsage:
+        """Snapshot of the cumulative token usage across the conversation."""
+        return TokenUsage(
+            prompt_tokens=self._cumulative_usage.prompt_tokens,
+            completion_tokens=self._cumulative_usage.completion_tokens,
+            total_tokens=self._cumulative_usage.total_tokens,
+        )
+
+    def abort(self) -> None:
+        """Request cancellation of the in-flight :meth:`send` call.
+
+        Idempotent — a no-op when the controller is idle. The abort takes
+        effect at the next safe point in the loop (between provider calls
+        / between tool calls). The currently-running provider HTTP request
+        is **not** interrupted; the abort is observed once it returns.
+        """
+        self._abort_event.set()
+
+    @property
+    def is_running(self) -> bool:
+        """True while a :meth:`send` call is in flight."""
+        return self._running
 
     def send(self, user_message: str) -> TurnResult:
         """Send a user message and run the tool-call loop.
@@ -343,20 +411,40 @@ class AIController:
         responses" is never violated in the persisted history — a corrupt
         partial turn would otherwise poison every subsequent ``send()``.
         The user message is preserved in the GUI input history regardless.
+
+        When :meth:`abort` is called while the loop is in flight, the call
+        returns a :class:`TurnResult` with ``aborted=True`` (the partial
+        transcript is rolled back so the persisted history stays valid).
         """
         snapshot_len = len(self.history)
+        self._abort_event.clear()
+        self._running = True
         try:
             return self._send_inner(user_message)
+        except AIAbortError:
+            del self.history[snapshot_len:]
+            return TurnResult(
+                assistant_message="",
+                aborted=True,
+            )
         except BaseException:
             del self.history[snapshot_len:]
             raise
+        finally:
+            self._running = False
+
+    def _check_abort(self) -> None:
+        if self._abort_event.is_set():
+            raise AIAbortError()
 
     def _send_inner(self, user_message: str) -> TurnResult:
         self.history.append(ChatMessage(role="user", content=user_message))
         executions: list[tuple[str, dict, ToolResult]] = []
         tools_schema = self.registry.list_schemas()
+        turn_usage: TokenUsage = TokenUsage()
 
         for _iteration in range(self.max_iterations):
+            self._check_abort()
             response: AssistantMessage = self.provider.chat(
                 self.history, tools=tools_schema
             )
@@ -367,11 +455,28 @@ class AIController:
                     tool_calls=list(response.tool_calls),
                 )
             )
+            if response.usage is not None:
+                self._cumulative_usage = sum_usage(
+                    self._cumulative_usage, response.usage
+                )
+                turn_usage = sum_usage(turn_usage, response.usage)
+                if self.usage_callback is not None:
+                    try:
+                        self.usage_callback(response.usage, self.get_usage())
+                    # pylint: disable-next=broad-exception-caught
+                    except BaseException:  # noqa: BLE001
+                        # The callback is a UI hook — never let it break
+                        # the conversation loop.
+                        pass
+            self._check_abort()
             if not response.tool_calls:
                 return TurnResult(
-                    assistant_message=response.content, tool_executions=executions
+                    assistant_message=response.content,
+                    tool_executions=executions,
+                    turn_usage=turn_usage if response.usage is not None else None,
                 )
             for call_index, call in enumerate(response.tool_calls):
+                self._check_abort()
                 try:
                     tool = self.registry.get(call.name)
                 except KeyError as exc:
@@ -401,6 +506,7 @@ class AIController:
                             assistant_message=response.content,
                             tool_executions=executions,
                             cancelled=True,
+                            turn_usage=turn_usage,
                         )
                     if self.execute_callback is None:
                         result = self.registry.call(
@@ -430,4 +536,5 @@ class AIController:
                 f"iterations ({self.max_iterations})."
             ),
             tool_executions=executions,
+            turn_usage=turn_usage,
         )

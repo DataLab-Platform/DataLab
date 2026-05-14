@@ -19,7 +19,7 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Any
 
-from datalab.aiassistant.providers.base import ChatMessage, ToolCall
+from datalab.aiassistant.providers.base import ChatMessage, TokenUsage, ToolCall
 
 
 def _now_iso() -> str:
@@ -86,6 +86,8 @@ class Conversation:
         created_at: ISO-8601 creation timestamp.
         updated_at: ISO-8601 last-modification timestamp.
         messages: Conversation messages (excluding the system prompt).
+        usage: Cumulative token usage across the conversation. ``None``
+         for conversations saved before token tracking was added.
     """
 
     id: str
@@ -93,6 +95,7 @@ class Conversation:
     created_at: str = ""
     updated_at: str = ""
     messages: list[ChatMessage] = field(default_factory=list)
+    usage: TokenUsage | None = None
 
     @classmethod
     def new(cls) -> Conversation:
@@ -102,23 +105,28 @@ class Conversation:
 
     def to_dict(self) -> dict[str, Any]:
         """Serialise to a JSON-friendly dict."""
-        return {
+        out: dict[str, Any] = {
             "id": self.id,
             "title": self.title,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
             "messages": [_message_to_dict(m) for m in self.messages],
         }
+        if self.usage is not None:
+            out["usage"] = self.usage.to_dict()
+        return out
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Conversation:
         """Rebuild a :class:`Conversation` from its serialised dict form."""
+        usage_data = data.get("usage")
         return cls(
             id=data.get("id", _make_id()),
             title=data.get("title", ""),
             created_at=data.get("created_at", _now_iso()),
             updated_at=data.get("updated_at", _now_iso()),
             messages=[_message_from_dict(m) for m in data.get("messages", [])],
+            usage=TokenUsage.from_dict(usage_data) if usage_data else None,
         )
 
 
@@ -195,6 +203,26 @@ class ConversationStore:
             os.remove(self._path(conv_id))
         except FileNotFoundError:
             pass
+
+    def rename(self, conv_id: str, title: str) -> None:
+        """Update the title of a stored conversation in place.
+
+        Does **not** bump ``updated_at`` so the history listing keeps its
+        chronological order — a rename is metadata housekeeping, not new
+        content. Silently no-ops when the conversation no longer exists.
+        Mirrors :func:`renameConversation` in DataLab-Web.
+        """
+        try:
+            conv = self.load(conv_id)
+        except (OSError, ValueError):
+            return
+        conv.title = title
+        path = self._path(conv_id)
+        tmp = path + ".tmp"
+        os.makedirs(self.directory, exist_ok=True)
+        with open(tmp, "w", encoding="utf-8") as file:
+            json.dump(conv.to_dict(), file, ensure_ascii=False, indent=2)
+        os.replace(tmp, path)
 
     def _prune(self) -> None:
         items = self.list()

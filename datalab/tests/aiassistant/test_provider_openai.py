@@ -125,3 +125,42 @@ def test_http_error_raises_provider_error() -> None:
     ):
         with pytest.raises(LLMProviderError):
             _make_provider().chat([ChatMessage(role="user", content="x")])
+
+
+def test_chat_parses_token_usage() -> None:
+    """A response carrying ``usage`` populates ``AssistantMessage.usage``."""
+    payload = {
+        "choices": [
+            {"finish_reason": "stop", "message": {"role": "assistant", "content": "hi"}}
+        ],
+        "usage": {
+            "prompt_tokens": 12,
+            "completion_tokens": 7,
+            "total_tokens": 19,
+        },
+    }
+    with mock.patch(
+        "datalab.aiassistant.providers.openai.urllib.request.urlopen",
+        return_value=_FakeResponse(payload),
+    ):
+        msg = _make_provider().chat([ChatMessage(role="user", content="hello")])
+    assert msg.usage is not None
+    assert msg.usage.prompt_tokens == 12
+    assert msg.usage.completion_tokens == 7
+    assert msg.usage.total_tokens == 19
+
+
+def test_chat_without_usage_field() -> None:
+    """A response without a ``usage`` field
+    leaves ``AssistantMessage.usage`` as None."""
+    payload = {
+        "choices": [
+            {"finish_reason": "stop", "message": {"role": "assistant", "content": "hi"}}
+        ],
+    }
+    with mock.patch(
+        "datalab.aiassistant.providers.openai.urllib.request.urlopen",
+        return_value=_FakeResponse(payload),
+    ):
+        msg = _make_provider().chat([ChatMessage(role="user", content="hello")])
+    assert msg.usage is None

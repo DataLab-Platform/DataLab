@@ -25,6 +25,7 @@ from datalab.aiassistant.conversation import (
 )
 from datalab.aiassistant.inputhistory import InputHistory
 from datalab.aiassistant.providers import get_provider
+from datalab.aiassistant.providers.base import TokenUsage
 from datalab.aiassistant.tools.builtin import build_default_registry
 from datalab.aiassistant.widgets.markdown import markdown_to_html
 from datalab.aiassistant.widgets.toolconfirmdialog import ToolConfirmDialog
@@ -142,6 +143,12 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         toolbar.addWidget(self.new_button)
         toolbar.addWidget(self.history_button)
         toolbar.addStretch(1)
+        self.usage_label = QW.QLabel("")
+        self.usage_label.setStyleSheet(
+            "color:#666;font-family:monospace;padding:0 6px;"
+        )
+        self.usage_label.setVisible(False)
+        toolbar.addWidget(self.usage_label)
         self.status_label = QW.QLabel(_("Idle"))
         toolbar.addWidget(self.status_label)
         layout.addLayout(toolbar)
@@ -170,6 +177,15 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
 
         send_row = QW.QHBoxLayout()
         send_row.addStretch(1)
+        self.stop_button = QW.QPushButton(get_icon("tour/stop.svg"), _("Stop"))
+        self.stop_button.setToolTip(_("Cancel the in-flight request (Esc)."))
+        self.stop_button.setStyleSheet(
+            "QPushButton { color: white; background-color: #c01c28; }"
+            "QPushButton:hover { background-color: #a51d2d; }"
+        )
+        self.stop_button.clicked.connect(self._on_stop)
+        self.stop_button.setVisible(False)
+        send_row.addWidget(self.stop_button)
         self.send_button = QW.QPushButton(get_icon("apply.svg"), _("Send"))
         self.send_button.clicked.connect(self._on_send)
         send_row.addWidget(self.send_button)
@@ -190,6 +206,9 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         if obj is self.input_edit and event.type() == QC.QEvent.KeyPress:
             key = event.key()
             mods = event.modifiers()
+            if key == QC.Qt.Key_Escape and self._worker is not None:
+                self._on_stop()
+                return True
             if (
                 key in (QC.Qt.Key_Return, QC.Qt.Key_Enter)
                 and mods & QC.Qt.ControlModifier
@@ -331,11 +350,69 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         self._append_system(_("Saved macro '%s' to the Macro panel.") % title)
 
     def _set_busy(self, busy: bool) -> None:
+        self.send_button.setVisible(not busy)
         self.send_button.setEnabled(not busy)
+        self.stop_button.setVisible(busy)
+        self.stop_button.setEnabled(busy)
         self.input_edit.setEnabled(not busy)
         self.new_button.setEnabled(not busy)
         self.history_button.setEnabled(not busy)
         self.status_label.setText(_("Thinking…") if busy else _("Idle"))
+
+    # ----------------------------------------------------- token usage
+
+    @staticmethod
+    def _format_token_count(value: int | None) -> str:
+        if value is None:
+            return "—"
+        if value < 1000:
+            return str(value)
+        if value < 1_000_000:
+            return f"{value / 1000:.1f}k".replace(".0k", "k")
+        return f"{value / 1_000_000:.1f}M".replace(".0M", "M")
+
+    @classmethod
+    def _format_usage_badge(cls, usage: TokenUsage | None) -> str:
+        if usage is None or not (
+            usage.prompt_tokens or usage.completion_tokens or usage.total_tokens
+        ):
+            return ""
+        if usage.prompt_tokens is not None or usage.completion_tokens is not None:
+            return (
+                f"↑{cls._format_token_count(usage.prompt_tokens)} "
+                f"↓{cls._format_token_count(usage.completion_tokens)}"
+            )
+        return f"Σ{cls._format_token_count(usage.total_tokens)}"
+
+    @classmethod
+    def _format_usage_tooltip(cls, usage: TokenUsage | None) -> str:
+        if usage is None:
+            return ""
+        lines = [_("Cumulative token usage")]
+        if usage.prompt_tokens is not None:
+            lines.append(_("Prompt: %d") % usage.prompt_tokens)
+        if usage.completion_tokens is not None:
+            lines.append(_("Completion: %d") % usage.completion_tokens)
+        if usage.total_tokens is not None:
+            lines.append(_("Total: %d") % usage.total_tokens)
+        return "\n".join(lines)
+
+    def _update_usage_badge(self, usage: TokenUsage | None) -> None:
+        text = self._format_usage_badge(usage)
+        self.usage_label.setText(text)
+        self.usage_label.setToolTip(self._format_usage_tooltip(usage))
+        self.usage_label.setVisible(bool(text))
+
+    def _on_usage(self, _turn: TokenUsage, cumulative: TokenUsage) -> None:
+        """Called from a worker thread whenever a provider reports usage."""
+        # Marshal to the GUI thread before touching widgets.
+        self._bridge.call_in_gui(lambda: self._update_usage_badge(cumulative))
+
+    def _on_stop(self) -> None:
+        if self._controller is not None and self._controller.is_running:
+            self._controller.abort()
+            self.status_label.setText(_("Stopping…"))
+            self.stop_button.setEnabled(False)
 
     # --------------------------------------------------------- controller
 
@@ -418,6 +495,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
             max_iterations=max_iterations,
             auto_approve_readonly=auto_approve,
             execute_callback=execute_in_gui,
+            usage_callback=self._on_usage,
         )
 
     def _confirm_tool(self, tool: Tool, arguments: dict) -> bool:
@@ -430,6 +508,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
             self._controller.reset()
         self._current_conversation = None
         self.history_view.clear()
+        self._update_usage_badge(None)
         self._append_system(_("Conversation reset."))
 
     def _on_open_history(self) -> None:
@@ -495,7 +574,10 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
                         self._append_save_macro_link(title, code)
         if result.cancelled:
             self._append_system(_("Tool execution cancelled by user."))
-        self._append_assistant(result.assistant_message)
+        if result.aborted:
+            self._append_system(_("Stopped by user."))
+        else:
+            self._append_assistant(result.assistant_message)
         self._persist_current_conversation()
         self._set_busy(False)
         self._worker = None
@@ -512,6 +594,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         if self._controller is None or self._current_conversation is None:
             return
         self._current_conversation.messages = self._controller.get_messages()
+        self._current_conversation.usage = self._controller.get_usage()
         try:
             self._conv_store.save(self._current_conversation)
         except OSError as exc:
@@ -531,9 +614,12 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
             self._controller = self._build_controller()
             if self._controller is None:
                 return
-        self._controller.load_messages(conversation.messages)
+        self._controller.load_messages(
+            conversation.messages, initial_usage=conversation.usage
+        )
         self._current_conversation = conversation
         self.history_view.clear()
+        self._update_usage_badge(conversation.usage)
         self._render_messages(conversation.messages)
         self._append_system(
             _("Loaded conversation: %s") % (conversation.title or conversation.id)

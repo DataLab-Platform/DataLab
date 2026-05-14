@@ -57,6 +57,69 @@ class ChatMessage:
 
 
 @dataclass
+class TokenUsage:
+    """Token-usage breakdown reported by the LLM provider.
+
+    All fields are optional because not every provider returns every counter
+    — sum whichever ones are populated. Mirrors the
+    :type:`TokenUsage` interface in DataLab-Web.
+
+    Args:
+        prompt_tokens: Tokens consumed by the prompt (input).
+        completion_tokens: Tokens generated in the response (output).
+        total_tokens: Sum reported by the provider (may differ from
+         ``prompt_tokens + completion_tokens`` for cached / discounted
+         tokens — keep both).
+    """
+
+    prompt_tokens: int | None = None
+    completion_tokens: int | None = None
+    total_tokens: int | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        """Serialise to a JSON-friendly dict (omitting ``None`` fields)."""
+        out: dict[str, Any] = {}
+        if self.prompt_tokens is not None:
+            out["prompt_tokens"] = self.prompt_tokens
+        if self.completion_tokens is not None:
+            out["completion_tokens"] = self.completion_tokens
+        if self.total_tokens is not None:
+            out["total_tokens"] = self.total_tokens
+        return out
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any] | None) -> TokenUsage:
+        """Rebuild from a serialised dict (missing fields stay ``None``)."""
+        if not data:
+            return cls()
+        return cls(
+            prompt_tokens=data.get("prompt_tokens"),
+            completion_tokens=data.get("completion_tokens"),
+            total_tokens=data.get("total_tokens"),
+        )
+
+
+def sum_usage(a: TokenUsage, b: TokenUsage) -> TokenUsage:
+    """Field-wise sum of two :class:`TokenUsage` records.
+
+    ``None + None`` stays ``None`` so we don't fabricate zeros for counters
+    the provider never reported. Mirrors ``sumUsage`` in
+    ``DataLab-Web/src/aiassistant/controller.ts``.
+    """
+
+    def _add(x: int | None, y: int | None) -> int | None:
+        if x is None and y is None:
+            return None
+        return (x or 0) + (y or 0)
+
+    return TokenUsage(
+        prompt_tokens=_add(a.prompt_tokens, b.prompt_tokens),
+        completion_tokens=_add(a.completion_tokens, b.completion_tokens),
+        total_tokens=_add(a.total_tokens, b.total_tokens),
+    )
+
+
+@dataclass
 class AssistantMessage:
     """The LLM's response.
 
@@ -64,12 +127,15 @@ class AssistantMessage:
         content: Text content (may be empty).
         tool_calls: Tool calls requested by the assistant.
         finish_reason: Provider-specific finish reason.
+        usage: Token usage for this single round-trip; ``None`` when the
+         provider did not include a usage block.
         raw: Raw provider response for debugging.
     """
 
     content: str = ""
     tool_calls: list[ToolCall] = field(default_factory=list)
     finish_reason: str | None = None
+    usage: TokenUsage | None = None
     raw: dict[str, Any] | None = None
 
 
