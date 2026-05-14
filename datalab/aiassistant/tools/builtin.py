@@ -554,12 +554,32 @@ def _tool_create_and_run_macro(
             "ok": False,
             "validation_errors": syntax_errors,
             "hint": "Fix the syntax errors and call create_and_run_macro again.",
+            # Echo source under ``_macro`` so the chat panel can offer
+            # a "Save to Macros" button even when execution failed
+            # (the user may want to fix it manually in the Macro panel).
+            "_macro": {"title": title, "code": code},
         }
 
     macropanel = mainwindow.macropanel
-    macro = macropanel.add_macro_with_code(title, code)
+    # Mirror DataLab-Web behaviour: the macro is TRANSIENT by default
+    # (not added to the Macro panel). The chat panel surfaces a
+    # "Save to Macros" link based on the ``_macro`` payload below so the
+    # user can opt in to persisting it.
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.gui.macroeditor import Macro  # noqa: WPS433
 
-    result: dict[str, Any] = {"title": macro.title, "validation_warnings": warnings}
+    macro = Macro(macropanel.console, title=title)
+    macro.set_code(code)
+
+    result: dict[str, Any] = {
+        "title": macro.title,
+        "validation_warnings": warnings,
+        # Echo the source under ``_macro`` so the AI Assistant chat panel
+        # can offer a "Save to Macros" button on user demand. The leading
+        # underscore is a hint that the field is UI-only — the LLM should
+        # ignore it (it is not part of the macro's actual stdout/stderr).
+        "_macro": {"title": macro.title, "code": code},
+    }
     if not autorun:
         result["autorun"] = False
         return result
@@ -1025,15 +1045,20 @@ def build_default_registry(expose_macro_tool: bool = True) -> ToolRegistry:
             Tool(
                 name="create_and_run_macro",
                 description=(
-                    "Create a new macro tab in the Macro panel with the given Python "
-                    "code, then optionally run it SYNCHRONOUSLY and return the macro "
-                    "console output (stdout + stderr, including Python tracebacks) "
-                    "and exit code. The macro has access to "
-                    "'datalab.control.proxy.RemoteProxy' to drive DataLab. The code "
-                    "is statically validated (syntax + unknown 'proxy.*' methods) "
-                    "before execution. Use this for complex multi-step scripts; "
-                    "prefer 'apply_operation' for atomic actions. If 'ok' is False, "
-                    "read 'console_output' or 'validation_errors' and try again."
+                    "Run an arbitrary Python macro against the workspace and "
+                    "return its console output (stdout + stderr, including "
+                    "Python tracebacks) and exit code. The macro has access "
+                    "to 'datalab.control.proxy.RemoteProxy' to drive "
+                    "DataLab. The code is statically validated (syntax + "
+                    "unknown 'proxy.*' methods) before execution. The run "
+                    "is TRANSIENT by default — the macro is NOT added to "
+                    "the Macro panel; the user can opt in via a "
+                    "'Save to Macros' link surfaced on the result, so always "
+                    "pick a short, descriptive title (e.g. 'Generate "
+                    "super-Gaussian'). Use this for complex multi-step "
+                    "scripts; prefer 'apply_operation' for atomic actions. "
+                    "If 'ok' is False, read 'console_output' or "
+                    "'validation_errors' and try again."
                 ),
                 parameters={
                     "type": "object",
