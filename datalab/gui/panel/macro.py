@@ -500,6 +500,25 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             self.rename_macro()
         return macro
 
+    def add_macro_with_code(self, title: str, code: str) -> Macro:
+        """Add a macro with a predefined title and code, without prompting.
+
+        This helper is used by the AI assistant to programmatically inject
+        a generated macro into the panel.
+
+        Args:
+            title: Macro title (displayed in the tab).
+            code: Python source code of the macro.
+
+        Returns:
+            The newly created macro.
+        """
+        macro = self.create_object()
+        macro.title = title
+        macro.set_code(code)
+        self.add_object(macro)
+        return macro
+
     def macro_name_changed(self, name: str) -> None:
         """Macro name has been changed
 

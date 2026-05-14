@@ -38,7 +38,7 @@ def test_env_var_unset_leaves_default_paths() -> None:
     config_mod.parse_datalab_plugins_env_var("", pathlist, env_paths)
 
     assert pathlist == ["/initial/path"]
-    assert env_paths == []
+    assert not env_paths
 
 
 def test_env_var_adds_existing_directories(tmp_path: Path) -> None:
