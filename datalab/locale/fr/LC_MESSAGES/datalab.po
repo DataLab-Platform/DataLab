@@ -1634,6 +1634,20 @@ msgstr "Annotation ajoutée"
 msgid "The label has been added as an annotation. You can edit or remove it using the annotation editing window.<br><br>Choosing to ignore this message will prevent it from being displayed again."
 msgstr "L'étiquette a été ajoutée comme annotation. Vous pouvez la modifier ou la supprimer en utilisant la fenêtre d'édition des annotations.<br><br>Ignorer ce message empêchera son affichage ultérieur."
 
+#, python-format
+msgid "Failed to deserialize history DataSet kwarg %r."
+msgstr "Échec de la désérialisation de l'argument DataSet de l'historique %r."
+
+#, python-format
+msgid "Failed to deserialize history DataSet-list kwarg %r."
+msgstr "Échec de la désérialisation de l'argument DataSet-list de l'historique %r."
+
+msgid "Replaying compound 'multiple_1_to_1' actions is not supported yet."
+msgstr "La relecture des actions composées 'multiple_1_to_1' n'est pas encore prise en charge."
+
+msgid "Cannot replay 2-to-1 action: source object(s) missing."
+msgstr "Impossible de rejouer une action 2-à-1 : objet(s) source manquant(s)."
+
 msgid "Session"
 msgstr "Session"
 
