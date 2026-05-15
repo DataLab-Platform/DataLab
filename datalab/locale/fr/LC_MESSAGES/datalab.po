@@ -50,6 +50,12 @@ msgstr "Inactif"
 msgid "Ask the assistant…  (Ctrl+Enter to send, Ctrl+Up/Down to navigate previous prompts)"
 msgstr "Posez une question à l'assistant…  (Ctrl+Entrée pour envoyer, Ctrl+Flèche haut/bas pour naviguer dans les questions précédentes)"
 
+msgid "Stop"
+msgstr "Arrêter"
+
+msgid "Cancel the in-flight request (Esc)."
+msgstr "Annuler la requête en cours (Échap)."
+
 msgid "Send"
 msgstr "Envoyer"
 
@@ -76,6 +82,24 @@ msgstr "Macro '%s' enregistrée dans le panneau de macros."
 msgid "Thinking…"
 msgstr "Réflexion en cours…"
 
+msgid "Cumulative token usage"
+msgstr "Utilisation cumulative des jetons"
+
+#, python-format
+msgid "Prompt: %d"
+msgstr "Invite : %d"
+
+#, python-format
+msgid "Completion: %d"
+msgstr "Complétion : %d"
+
+#, python-format
+msgid "Total: %d"
+msgstr "Total : %d"
+
+msgid "Stopping…"
+msgstr "Arrêt en cours…"
+
 #, python-brace-format
 msgid ""
 "\n"
@@ -100,6 +124,9 @@ msgstr "Conversation réinitialisée."
 
 msgid "Tool execution cancelled by user."
 msgstr "Exécution de l'outil annulée par l'utilisateur."
+
+msgid "Stopped by user."
+msgstr "Arrêté par l'utilisateur."
 
 #, python-format
 msgid "Error: %s"
@@ -133,6 +160,18 @@ msgstr "Charger"
 msgid "Delete"
 msgstr "Supprimer"
 
+msgid "Rename"
+msgstr "Renommer"
+
+msgid "Rename the selected conversation (F2)."
+msgstr "Renommer la conversation sélectionnée (F2)."
+
+msgid "Export…"
+msgstr "Exporter…"
+
+msgid "Save the selected conversation as a Markdown file."
+msgstr "Enregistrer la conversation sélectionnée au format Markdown."
+
 msgid "Refresh"
 msgstr "Actualiser"
 
@@ -160,6 +199,29 @@ msgstr "Supprimer la conversation"
 
 msgid "Delete the selected conversation? This cannot be undone."
 msgstr "Supprimer la conversation sélectionnée ? Cette action est irréversible."
+
+msgid "Rename conversation"
+msgstr "Renommer la conversation"
+
+msgid "New title:"
+msgstr "Nouveau titre :"
+
+msgid "Export failed"
+msgstr "Échec de l'exportation"
+
+#, python-format
+msgid "Could not load conversation: %s"
+msgstr "Impossible de charger la conversation : %s"
+
+msgid "Export conversation"
+msgstr "Exporter la conversation"
+
+msgid "Markdown files (*.md);;All files (*)"
+msgstr "Fichiers Markdown (*.md);;Tous les fichiers (*)"
+
+#, python-format
+msgid "Could not write file: %s"
+msgstr "Impossible d'écrire le fichier : %s"
 
 msgid "Enable AI Assistant"
 msgstr "Activer l'assistant IA"
@@ -300,9 +362,6 @@ msgstr "Sélectionner les objets source"
 #, python-format
 msgid "Select source object(s) used to create the selected %s"
 msgstr "Sélectionner le ou les objets source utilisés pour créer l'objet %s sélectionné"
-
-msgid "Rename"
-msgstr "Renommer"
 
 #, python-format
 msgid "Edit title of selected %s or group"
@@ -1555,9 +1614,6 @@ msgstr "Supprimer la macro"
 
 msgid "Macro editor toolbar"
 msgstr "Barre d'outils des macros"
-
-msgid "New title:"
-msgstr "Nouveau titre :"
 
 msgid "When closed, the macro is <u>permanently destroyed</u>, unless it has been exported first."
 msgstr "Lorsqu'elle est fermée, une macro est <u>détruite de manière définitive</u>, sauf si elle a été exportée au préalable."
