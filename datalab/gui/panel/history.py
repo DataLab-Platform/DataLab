@@ -9,12 +9,14 @@
 from __future__ import annotations
 
 import functools
+import html
 import inspect
 import os
 from typing import TYPE_CHECKING, Any, Callable, Generator
 from uuid import uuid4
 
 from guidata.configtools import get_icon
+from guidata.dataset.datatypes import DataSet
 from guidata.qthelpers import add_actions, create_action
 from guidata.widgets.dockable import DockableWidgetMixin
 from qtpy import QtCore as QC
@@ -131,25 +133,75 @@ class HistoryAction(ObjItf):
         """Return object title"""
         return self.__title
 
+    def __iter_param_kwargs(self) -> Generator[Any, None, None]:
+        """Yield kwargs values whose name ends with ``param`` (typically DataSets)."""
+        for kwname in self.kwargs:
+            if kwname.endswith("param"):
+                # Note: value can't be None (None values were filtered in __init__)
+                yield self.kwargs[kwname]
+
     @property
     def description(self) -> str:
         """Return object description (string representing function parameters)"""
         desc = ""
         no_parameters = True
-        for kwname in self.kwargs:
-            if kwname.endswith("param"):
-                param = self.kwargs[kwname]
-                # Note: `param` can't be None because we removed None values from kwargs
-                if desc:
-                    desc += os.linesep
-                desc += str(param)
-                no_parameters = False
+        for param in self.__iter_param_kwargs():
+            if desc:
+                desc += os.linesep
+            desc += str(param)
+            no_parameters = False
         if desc or no_parameters:
             return desc
         if len(self.args) >= 2 and isinstance(self.args[1], Callable):
             doc: str = self.args[1].__doc__
             return doc.splitlines()[0] if doc else ""
         return self.func.__doc__ or ""
+
+    @property
+    def description_summary(self) -> str:
+        """Return a short, single-line summary of the description (collapsed view).
+
+        For DataSet parameters, uses the dataset titles; otherwise falls back to
+        the first non-empty line of the full description.
+        """
+        titles: list[str] = []
+        for param in self.__iter_param_kwargs():
+            if isinstance(param, DataSet):
+                title = param.get_title()
+                if title:
+                    titles.append(title)
+        if titles:
+            return ", ".join(titles)
+        for line in self.description.splitlines():
+            stripped = line.strip()
+            if stripped:
+                return stripped
+        return ""
+
+    @property
+    def description_html(self) -> str:
+        """Return rich-text (HTML) description used for the expanded view.
+
+        For DataSet parameters, delegates to :meth:`DataSet.to_html` to mirror
+        the *Properties* tab rendering; otherwise returns the plain description
+        wrapped in HTML-safe ``<br>``-separated lines.
+        """
+        parts: list[str] = []
+        no_parameters = True
+        for param in self.__iter_param_kwargs():
+            no_parameters = False
+            if isinstance(param, DataSet):
+                parts.append(param.to_html())
+            else:
+                parts.append(html.escape(str(param)).replace("\n", "<br>"))
+        if parts:
+            return "<br><br>".join(parts)
+        if no_parameters:
+            text = self.description
+            if not text:
+                return ""
+            return html.escape(text).replace("\n", "<br>")
+        return ""
 
     def is_current_state_compatible(
         self, mainwindow: DLMainWindow, restore_selection: bool
@@ -484,8 +536,88 @@ class HistorySession:
             self.actions = self.actions[:index]
 
 
+class CollapsibleDescriptionWidget(QW.QWidget):
+    """Compact, expandable cell widget for the history Description column.
+
+    Shows a single-line summary by default; a chevron toggle reveals the full
+    HTML description (mirroring the *Properties* tab rendering).
+    """
+
+    toggled = QC.Signal(bool)
+
+    def __init__(
+        self,
+        summary: str,
+        html_text: str,
+        expanded: bool = False,
+        parent: QW.QWidget | None = None,
+    ) -> None:
+        super().__init__(parent)
+        self._summary = summary
+        self._html = html_text
+        self._expanded = expanded
+
+        self._toggle = QW.QToolButton(self)
+        self._toggle.setAutoRaise(True)
+        self._toggle.setCheckable(True)
+        self._toggle.setFocusPolicy(QC.Qt.NoFocus)
+        self._toggle.setArrowType(QC.Qt.RightArrow)
+        self._toggle.setToolTip(_("Show details"))
+
+        self._label = QW.QLabel(self)
+        self._label.setTextFormat(QC.Qt.RichText)
+        self._label.setWordWrap(True)
+        self._label.setTextInteractionFlags(QC.Qt.TextSelectableByMouse)
+        self._label.setAlignment(QC.Qt.AlignTop | QC.Qt.AlignLeft)
+
+        layout = QW.QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(2)
+        layout.addWidget(self._toggle, 0, QC.Qt.AlignTop)
+        layout.addWidget(self._label, 1)
+
+        # Hide the toggle when there is nothing more to show than the summary.
+        if not self._html or self._html_matches_summary():
+            self._toggle.setVisible(False)
+
+        self._toggle.toggled.connect(self._on_toggled)
+        self._refresh()
+
+    def _html_matches_summary(self) -> bool:
+        """Return True when the HTML rendering would not add information."""
+        return self._html.strip() == html.escape(self._summary).strip()
+
+    def _on_toggled(self, checked: bool) -> None:
+        self._expanded = checked
+        self._refresh()
+        self.toggled.emit(checked)
+
+    def _refresh(self) -> None:
+        if self._expanded:
+            self._toggle.setArrowType(QC.Qt.DownArrow)
+            self._toggle.setToolTip(_("Hide details"))
+            self._label.setText(self._html or html.escape(self._summary))
+        else:
+            self._toggle.setArrowType(QC.Qt.RightArrow)
+            self._toggle.setToolTip(_("Show details"))
+            self._label.setText(html.escape(self._summary))
+        self.updateGeometry()
+
+    def is_expanded(self) -> bool:
+        """Return current expanded state."""
+        return self._expanded
+
+    def set_expanded(self, expanded: bool) -> None:
+        """Programmatically set the expanded state."""
+        if expanded == self._expanded:
+            return
+        self._toggle.setChecked(expanded)
+
+
 class HistoryTree(QW.QTreeWidget):
     """Tree widget for the history panel"""
+
+    DESCRIPTION_COLUMN = 2
 
     def __init__(self, parent: QW.QWidget) -> None:
         """Create a new history tree widget"""
@@ -493,6 +625,42 @@ class HistoryTree(QW.QTreeWidget):
         self.setHeaderLabels([_("Title"), _("Date and time"), _("Description")])
         self.setContextMenuPolicy(QC.Qt.CustomContextMenu)
         self.setSelectionMode(QW.QAbstractItemView.ContiguousSelection)
+        self.setUniformRowHeights(False)
+        header = self.header()
+        header.setSectionResizeMode(self.DESCRIPTION_COLUMN, QW.QHeaderView.Stretch)
+        # Per-action expanded state, preserved across repopulate (delete/replay).
+        self.__expanded_state: dict[str, bool] = {}
+
+    def __on_description_toggled(self, uuid: str, expanded: bool) -> None:
+        """Remember the expanded state of a description cell."""
+        self.__expanded_state[uuid] = expanded
+        # Force the tree to recompute row heights now that the label content
+        # has changed.
+        self.scheduleDelayedItemsLayout()
+
+    def __install_description_widget(
+        self, item: QW.QTreeWidgetItem, action: HistoryAction
+    ) -> None:
+        """Attach the collapsible description widget to ``item`` (column 2).
+
+        The item must already be inserted in the tree before calling this.
+        """
+        expanded = self.__expanded_state.get(action.uuid, False)
+        widget = CollapsibleDescriptionWidget(
+            action.description_summary,
+            action.description_html,
+            expanded=expanded,
+            parent=self,
+        )
+        widget.toggled.connect(
+            lambda checked, uuid=action.uuid: self.__on_description_toggled(
+                uuid, checked
+            )
+        )
+        # Clear any text the item may carry for that column to avoid double
+        # rendering behind the widget.
+        item.setText(self.DESCRIPTION_COLUMN, "")
+        self.setItemWidget(item, self.DESCRIPTION_COLUMN, widget)
 
     @staticmethod
     def action_to_tree_item(action: HistoryAction) -> QW.QTreeWidgetItem:
@@ -504,9 +672,24 @@ class HistoryTree(QW.QTreeWidget):
         Returns:
             QW.QTreeWidgetItem: Tree item
         """
-        item = QW.QTreeWidgetItem([action.title, action.dtstr, action.description])
+        # Description column is left empty: a CollapsibleDescriptionWidget is
+        # installed by ``HistoryTree`` once the item is inserted in the tree.
+        item = QW.QTreeWidgetItem([action.title, action.dtstr, ""])
         item.setData(0, QC.Qt.UserRole, action.uuid)
         return item
+
+    def __forget_orphan_expanded_states(
+        self, history_sessions: list[HistorySession]
+    ) -> None:
+        """Drop expanded-state entries for actions that no longer exist."""
+        live_uuids = {
+            action.uuid for session in history_sessions for action in session.actions
+        }
+        self.__expanded_state = {
+            uuid: state
+            for uuid, state in self.__expanded_state.items()
+            if uuid in live_uuids
+        }
 
     def populate_tree(self, history_sessions: list[HistorySession]) -> None:
         """Populate the history tree widget
@@ -514,12 +697,15 @@ class HistoryTree(QW.QTreeWidget):
         Args:
             history_sessions: List of history sessions
         """
+        self.__forget_orphan_expanded_states(history_sessions)
         self.clear()
         for session in history_sessions:
             ritem = QW.QTreeWidgetItem([session.title, session.dtstr])
             self.addTopLevelItem(ritem)
             for action in session.actions:
-                ritem.addChild(self.action_to_tree_item(action))
+                child = self.action_to_tree_item(action)
+                ritem.addChild(child)
+                self.__install_description_widget(child, action)
         self.expandAll()
         for col in (0, 1):
             self.resizeColumnToContents(col)
@@ -539,6 +725,7 @@ class HistoryTree(QW.QTreeWidget):
         item = self.action_to_tree_item(action)
         ritem = self.topLevelItem(self.topLevelItemCount() - 1)
         ritem.addChild(item)
+        self.__install_description_widget(item, action)
 
     def get_action_from_uuid(
         self, uuid: str, history_sessions: list[HistorySession]

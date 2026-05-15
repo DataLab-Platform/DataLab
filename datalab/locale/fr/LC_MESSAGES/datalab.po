@@ -209,6 +209,7 @@ msgstr "Nouveau titre :"
 msgid "Export failed"
 msgstr "Échec de l'exportation"
 
+#, python-format
 msgid "Could not load conversation: %s"
 msgstr "Impossible de charger la conversation : %s"
 
@@ -1464,7 +1465,6 @@ msgstr "Modèle de valeur"
 msgid "Conversion"
 msgstr "Conversion"
 
-#, python-format
 msgid "Duplicate object or group"
 msgstr "Dupliquer l'objet ou le groupe %s"
 
@@ -1477,7 +1477,6 @@ msgstr "Supprimer le(s) groupe(s)"
 msgid "Are you sure you want to delete the selected group(s)?"
 msgstr "Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?"
 
-#, python-format
 msgid "Remove selected objects"
 msgstr "Supprimer les objets sélectionnés"
 
@@ -1501,7 +1500,6 @@ msgstr "Nom du groupe :"
 msgid "New group \"%s\""
 msgstr "Nouveau groupe \"%s\""
 
-#, python-format
 msgid "Rename selected object or group"
 msgstr "Renommer l'objet ou le groupe sélectionné"
 
@@ -1638,6 +1636,12 @@ msgstr "L'étiquette a été ajoutée comme annotation. Vous pouvez la modifier 
 
 msgid "Session"
 msgstr "Session"
+
+msgid "Show details"
+msgstr "Afficher les détails"
+
+msgid "Hide details"
+msgstr "Masquer les détails"
 
 msgid "Date and time"
 msgstr "Date et heure"
