@@ -2596,16 +2596,19 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Get only the properties that have changed from the original values
         changed_props = self.objprop.get_changed_properties()
 
-        # Apply only the changed properties to all selected objects
-        for obj in self.objview.get_sel_objects(include_groups=True):
-            obj.mark_roi_as_changed()
-            # Update only the changed properties instead of all properties
-            update_dataset(obj, changed_props)
-            self.objview.update_item(get_uuid(obj))
+        # Apply only the changed properties to all selected objects.
+        # The ``replaying()`` guard suppresses the synthetic history entries
+        # that the auto-recompute below would otherwise create for each object.
+        with self.mainwindow.historypanel.replaying():
+            for obj in self.objview.get_sel_objects(include_groups=True):
+                obj.mark_roi_as_changed()
+                # Update only the changed properties instead of all properties
+                update_dataset(obj, changed_props)
+                self.objview.update_item(get_uuid(obj))
 
-            # Auto-recompute analysis if the object had analysis parameters
-            # Since properties have changed, any analysis results may now be invalid
-            self.processor.auto_recompute_analysis(obj)
+                # Auto-recompute analysis if the object had analysis parameters
+                # Since properties have changed, any analysis results may now be invalid
+                self.processor.auto_recompute_analysis(obj)
 
         # Refresh all selected items, including non-visible ones (only_visible=False)
         # This ensures that plot items are updated for all selected objects, even if
@@ -2649,10 +2652,15 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 )
             return
 
-        # Recompute each object
-        with create_progress_bar(
-            self, _("Recomputing objects"), max_=len(recomputable_objects)
-        ) as progress:
+        # Recompute each object -- silence history capture while doing so:
+        # the underlying compute_* methods would otherwise re-register
+        # synthetic entries for every recomputed object.
+        with (
+            self.mainwindow.historypanel.replaying(),
+            create_progress_bar(
+                self, _("Recomputing objects"), max_=len(recomputable_objects)
+            ) as progress,
+        ):
             for index, obj in enumerate(recomputable_objects):
                 progress.setValue(index + 1)
                 QW.QApplication.processEvents()

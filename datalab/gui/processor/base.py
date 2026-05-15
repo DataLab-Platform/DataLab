@@ -993,8 +993,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         feature = self.get_feature(proc_params.func_name)
 
         # Recompute the analysis operation silently, only for this specific object
-        # (not all selected objects, to avoid O(n²) behavior when called in a loop)
-        with Conf.proc.show_result_dialog.temp(False):
+        # (not all selected objects, to avoid O(n²) behavior when called in a loop).
+        # The history-panel ``replaying()`` guard suppresses the synthetic entry
+        # that ``compute_1_to_0`` would otherwise add for this internally-triggered
+        # recomputation.
+        historypanel = self.panel.mainwindow.historypanel
+        with historypanel.replaying(), Conf.proc.show_result_dialog.temp(False):
             self.compute_1_to_0(feature.function, param, edit=False, target_objs=[obj])
 
         # Update the view

@@ -12,6 +12,7 @@ import functools
 import html
 import inspect
 import os
+from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any, Callable, Generator
 from uuid import uuid4
 
@@ -25,7 +26,7 @@ from qtpy import QtWidgets as QW
 from datalab.config import _
 from datalab.gui import ObjItf
 from datalab.gui.panel.base import AbstractPanel
-from datalab.objectmodel import get_number
+from datalab.objectmodel import get_uuid
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
@@ -281,24 +282,21 @@ class HistoryAction(ObjItf):
 class WorkspaceState:
     """Object representing the workspace state at a given time.
 
-    The workspace state is the state of the workspace at a given time. It contains
-    the list of objects in the workspace and the selection of objects. Instead of
-    storing the objects themselves, the workspace state only stores what is relevant
-    to the history panel, i.e. the object data shape and the object title (even
-    if the latter is purely informative).
+    The workspace state stores the per-panel selection of objects by **UUID**
+    (robust against reordering, renaming or interleaved insertions). For
+    informative display, it also retains the data shape and title of each
+    selected object at the time of capture.
     """
 
     def __init__(self) -> None:
         """Create a new workspace state"""
         # The selection is stored as a dictionary where the key is the panel name
-        # and the value is the list of selected object numbers (1 to N).
-        self.selection: dict[str, list[int]] = {}
+        # and the value is the list of UUIDs of selected objects.
+        self.selection: dict[str, list[str]] = {}
         # The states are stored as a dictionary where the key is the panel name
         # and the value is the list of states (str) of the objects in the panel. The
-        # state is a string containing the object data shape (for now, only the shape,
-        # but we could add more information if needed). The idea is that two objects
-        # have the same state, we can apply the same action (processing, operation, ...)
-        # to both objects.
+        # state is a string containing the object data shape (kept for informative
+        # display only -- not used for selection matching anymore).
         self.states: dict[str, list[str]] = {}
         # The titles are stored as a dictionary where the key is the panel name and the
         # value is the list of titles of the objects in the panel. The title is only
@@ -331,19 +329,20 @@ class WorkspaceState:
         with reader.group("titles"):
             self.titles = reader.read_dict()
 
-    def get_current_selection(self, mainwindow: DLMainWindow) -> dict[str, list[int]]:
-        """Get the current selection in the workspace
+    def get_current_selection(self, mainwindow: DLMainWindow) -> dict[str, list[str]]:
+        """Get the current selection in the workspace, keyed by panel name and
+        valued by the list of selected object UUIDs.
 
         Args:
             mainwindow: DataLab's main window
 
         Returns:
-            dict[str, list[int]]: Current selection in the workspace
+            Current selection in the workspace, by panel name → list of UUIDs.
         """
-        selection: dict[str, list[int]] = {}
+        selection: dict[str, list[str]] = {}
         for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
             selection[panel.PANEL_STR] = [
-                get_number(obj)
+                get_uuid(obj)
                 for obj in panel.objview.get_sel_objects(include_groups=True)
             ]
         return selection
@@ -356,73 +355,65 @@ class WorkspaceState:
         """
         self.selection = self.get_current_selection(mainwindow)
         for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
-            selection = self.selection[panel.PANEL_STR]
+            sel_uuids = self.selection[panel.PANEL_STR]
             self.states[panel.PANEL_STR] = [
                 str(obj.data.shape)
                 for obj in panel.objmodel
-                if get_number(obj) in selection
+                if get_uuid(obj) in sel_uuids
             ]
             self.titles[panel.PANEL_STR] = [
-                obj.title for obj in panel.objmodel if get_number(obj) in selection
+                obj.title for obj in panel.objmodel if get_uuid(obj) in sel_uuids
             ]
 
     def is_current_state_compatible(
         self, mainwindow: DLMainWindow, restore_selection: bool
     ) -> bool:
-        """Check if the current workspace state is compatible with the saved state
+        """Check if the current workspace state is compatible with the saved state.
+
+        Compatibility means that **every** UUID recorded in the saved selection
+        still exists in the corresponding panel. The data shape is no longer
+        used to discriminate (it is informative only): a missing UUID is the
+        only failure mode.
 
         Args:
             mainwindow: DataLab's main window
-            restore_selection: True to restore the selection before checking the state
+            restore_selection: Unused (kept for API symmetry). With UUID-based
+             identity, the compatibility check no longer depends on the current
+             selection -- it only depends on object existence.
 
         Returns:
-            bool: True if the current workspace state is compatible with the saved state
+            True if every saved UUID still exists in its panel, False otherwise.
         """
-        # A compatible state is a state where the selected objects are the same as the
-        # saved selected objects in terms of position in the list of objects and of
-        # data shape (title is not relevant).
-        # To check this, we have to try to restore the selection (without restoring it)
-        # and compare the current selection with the saved selection in terms of
-        # position in the list of objects and of data shape.
-        if self.states == {}:
+        if not self.selection:
             return True
-        current_states: dict[str, list[str]] = {}
-        selection = self.selection
-        if not restore_selection:
-            selection = self.get_current_selection(mainwindow)
         for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
-            numbers = selection[panel.PANEL_STR]
-            current_states[panel.PANEL_STR] = [
-                str(obj.data.shape)
-                for obj in panel.objmodel
-                if get_number(obj) in numbers
-            ]
-        return current_states == self.states
+            saved_uuids = self.selection.get(panel.PANEL_STR, [])
+            existing_uuids = set(panel.objmodel.get_object_ids())
+            for uuid in saved_uuids:
+                if uuid not in existing_uuids:
+                    return False
+        return True
 
     def restore(self, mainwindow: DLMainWindow) -> None:
-        """Restore the workspace state
-
-        Only the selection is restored, not the objects themselves because they are
-        not stored in the workspace state. Before restoring the selection, we may
-        check if the current workspace objects are compatible with the saved
-        workspace state. If not, we raise a `ValueError`.
+        """Restore the workspace state by selecting the recorded UUIDs.
 
         Args:
             mainwindow: DataLab's main window
 
         Raises:
-            ValueError: If the current workspace state is not compatible with the
-             saved state
+            ValueError: If at least one of the saved UUIDs no longer exists in
+             its panel.
         """
-        if self.selection == {}:
+        if not self.selection:
             return
         if not self.is_current_state_compatible(mainwindow, False):
             raise ValueError(
                 "Current workspace state is not compatible with saved state"
             )
         for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
-            numbers = self.selection[panel.PANEL_STR]
-            panel.objview.select_objects(numbers)
+            uuids = self.selection.get(panel.PANEL_STR, [])
+            if uuids:
+                panel.objview.select_objects(uuids)
 
 
 class HistorySession:
@@ -795,7 +786,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
 
     SIG_OBJECT_MODIFIED = QC.Signal()
 
-    FILE_FILTERS = f"{_('History files')} (*.cdlhist)"
+    FILE_FILTERS = f"{_('History files')} (*.dlhist)"
 
     def __init__(self, parent: DLMainWindow) -> None:
         super().__init__(parent)
@@ -805,6 +796,11 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
 
         self.__record_mode = False
         self.__edit_mode = False
+        # When `__replaying` is True, calls to `add_entry` are silently
+        # ignored. This prevents replay/recompute paths from polluting the
+        # history with synthetic entries triggered by their own internal
+        # `compute_*` calls. Use `replaying()` as a context manager.
+        self.__replaying = False
         self.__delete_action: QW.QAction | None = None
         self.__menu_actions: list[QW.QAction] = self.__create_menu_actions()
 
@@ -903,6 +899,26 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         """
         self.__record_mode = checked
 
+    @contextmanager
+    def replaying(self) -> Generator[None, None, None]:
+        """Context manager suppressing history capture during its scope.
+
+        Used by replay / recompute paths to avoid double-capture: the
+        generic ``compute_*`` methods of the processor would otherwise
+        register synthetic entries every time recompute or replay
+        triggers them.
+        """
+        previous = self.__replaying
+        self.__replaying = True
+        try:
+            yield
+        finally:
+            self.__replaying = previous
+
+    def is_replaying(self) -> bool:
+        """Return True when an external replay/recompute is in progress."""
+        return self.__replaying
+
     def show_context_menu(self, pos: QC.QPoint) -> None:
         """Show the context menu
 
@@ -945,11 +961,12 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
                 )
                 return
             if replay:
-                session_or_action.replay(
-                    self.mainwindow,
-                    restore_selection=restore_selection,
-                    edit=self.__edit_mode,
-                )
+                with self.replaying():
+                    session_or_action.replay(
+                        self.mainwindow,
+                        restore_selection=restore_selection,
+                        edit=self.__edit_mode,
+                    )
             elif restore_selection:
                 session_or_action.restore(self.mainwindow)
 
@@ -1051,7 +1068,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         assert isinstance(action_title, str), "action_title must be a string"
         assert isinstance(save_state, bool), "save_state must be a boolean"
         assert callable(func), "func must be callable"
-        if not self.__record_mode:
+        if not self.__record_mode or self.__replaying:
             return
         if save_state:
             state = WorkspaceState()

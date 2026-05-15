@@ -25,6 +25,7 @@ from sigima.tests.data import create_paracetamol_signal
 
 from datalab.env import execenv
 from datalab.gui.panel.history import HistoryAction, HistorySession, WorkspaceState
+from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_test_app_context
 
 
@@ -78,12 +79,13 @@ def test_history_app():
 
         # 2) 1-to-1 processing (compute_1_to_1) on signal #1: save_state=True
         panel.objview.select_objects([1])
+        obj1_uuid = get_uuid(panel.objmodel.get_object_from_number(1))
         panel.processor.run_feature(sips.derivative)
         assert len(history) == 2
         deriv_entry = history[2]
         assert deriv_entry.title  # title must be non-empty
-        # Workspace state must remember the single-object selection
-        assert deriv_entry.state.selection.get(panel.PANEL_STR) == [1]
+        # Workspace state must remember the single-object selection (by UUID)
+        assert deriv_entry.state.selection.get(panel.PANEL_STR) == [obj1_uuid]
         assert len(deriv_entry.state.states.get(panel.PANEL_STR, [])) == 1
 
         # 3) 1-to-1 with parameters (compute_1_to_1 + DataSet param)
@@ -101,22 +103,25 @@ def test_history_app():
         panel.processor.run_feature(sips.fwhm, sigima.params.FWHMParam())
         assert len(history) == 4
         fwhm_entry = history[4]
-        assert fwhm_entry.state.selection.get(panel.PANEL_STR) == [1]
+        assert fwhm_entry.state.selection.get(panel.PANEL_STR) == [obj1_uuid]
 
         # 5) n-to-1 aggregation (compute_n_to_1) on signals #1 and #2
+        obj2 = panel.objmodel.get_object_from_number(2)
+        obj2_uuid = get_uuid(obj2)
         panel.objview.select_objects([1, 2])
         panel.processor.run_feature(sips.average)
         assert len(history) == 5
         avg_entry = history[5]
-        assert sorted(avg_entry.state.selection.get(panel.PANEL_STR, [])) == [1, 2]
+        assert sorted(avg_entry.state.selection.get(panel.PANEL_STR, [])) == sorted(
+            [obj1_uuid, obj2_uuid]
+        )
 
         # 6) 2-to-1 binary operation (compute_2_to_1)
-        obj2 = panel.objmodel.get_object_from_number(2)
         panel.objview.select_objects([1])
         panel.processor.run_feature(sips.difference, obj2)
         assert len(history) == 6
         diff_entry = history[6]
-        assert diff_entry.state.selection.get(panel.PANEL_STR) == [1]
+        assert diff_entry.state.selection.get(panel.PANEL_STR) == [obj1_uuid]
 
         # --- Iteration / indexing API ------------------------------------------
         all_titles = _entry_titles(history)
