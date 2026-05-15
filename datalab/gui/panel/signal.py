@@ -146,10 +146,11 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
         signal = create_signal_gui(param, edit=edit, parent=self.parentWidget())
         if signal is None:
             return None
-        self.mainwindow.historypanel.add_entry(
+        self.mainwindow.historypanel.add_ui_entry(
             _("New signal"),
-            False,
-            self.new_object,
+            target="signalpanel",
+            method_name="new_object",
+            save_state=False,
             param=param,
             add_to_panel=add_to_panel,
         )

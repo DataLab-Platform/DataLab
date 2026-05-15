@@ -2062,8 +2062,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 )
             if not filename:
                 return
-        self.historypanel.add_entry(
-            _("Save to HDF5 file"), False, self.save_to_h5_file, filename=filename
+        self.historypanel.add_ui_entry(
+            _("Save to HDF5 file"),
+            target="mainwindow",
+            method_name="save_to_h5_file",
+            save_state=False,
+            filename=filename,
         )
         with qth.qt_try_loadsave_file(self, filename, "save"):
             self.save_h5_workspace(filename)
@@ -2141,10 +2145,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             entry_title = _("Open %d HDF5 files") % len(h5files)
         else:
             entry_title = _("Open HDF5 file")
-        self.historypanel.add_entry(
+        self.historypanel.add_ui_entry(
             entry_title,
-            False,
-            self.open_h5_files,
+            target="mainwindow",
+            method_name="open_h5_files",
+            save_state=False,
             h5files=h5files,
             import_all=import_all,
             reset_all=reset_all,

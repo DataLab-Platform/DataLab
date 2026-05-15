@@ -10,13 +10,14 @@ from __future__ import annotations
 
 import functools
 import html
-import inspect
 import os
+import warnings
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any, Callable, Generator
 from uuid import uuid4
 
 from guidata.configtools import get_icon
+from guidata.dataset.conv import dataset_to_json, json_to_dataset
 from guidata.dataset.datatypes import DataSet
 from guidata.qthelpers import add_actions, create_action
 from guidata.widgets.dockable import DockableWidgetMixin
@@ -35,13 +36,79 @@ if TYPE_CHECKING:
     from datalab.h5.native import NativeH5Reader, NativeH5Writer
 
 
+# Keys used in the kwargs dict to mark DataSet payloads, so that the
+# serialization layer can round-trip them as JSON strings instead of pickling
+# arbitrary Python objects.
+_DATASET_MARKER = "__dataset_json__"
+_DATASET_LIST_MARKER = "__dataset_list_json__"
+
+
+def _encode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
+    """Encode kwargs for HDF5 storage: replace ``DataSet`` and ``list[DataSet]``
+    values with marker dicts holding their JSON representation.
+
+    All other values must already be HDF5-friendly primitives (str, int, float,
+    bool, list/tuple of the same).
+
+    Args:
+        kwargs: Raw kwargs dict (may contain ``DataSet`` instances).
+
+    Returns:
+        A new dict with ``DataSet`` values wrapped in marker dicts.
+    """
+    encoded: dict[str, Any] = {}
+    for key, value in kwargs.items():
+        if value is None:
+            continue
+        if isinstance(value, DataSet):
+            encoded[key] = {_DATASET_MARKER: dataset_to_json(value)}
+        elif (
+            isinstance(value, list)
+            and value
+            and all(isinstance(item, DataSet) for item in value)
+        ):
+            encoded[key] = {
+                _DATASET_LIST_MARKER: [dataset_to_json(item) for item in value]
+            }
+        else:
+            encoded[key] = value
+    return encoded
+
+
+def _decode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
+    """Inverse of :func:`_encode_kwargs`."""
+    decoded: dict[str, Any] = {}
+    for key, value in kwargs.items():
+        if isinstance(value, dict) and _DATASET_MARKER in value:
+            try:
+                decoded[key] = json_to_dataset(value[_DATASET_MARKER])
+            except Exception:  # pylint: disable=broad-except
+                warnings.warn(
+                    _("Failed to deserialize history DataSet kwarg %r.") % key
+                )
+                decoded[key] = None
+        elif isinstance(value, dict) and _DATASET_LIST_MARKER in value:
+            try:
+                decoded[key] = [
+                    json_to_dataset(item) for item in value[_DATASET_LIST_MARKER]
+                ]
+            except Exception:  # pylint: disable=broad-except
+                warnings.warn(
+                    _("Failed to deserialize history DataSet-list kwarg %r.") % key
+                )
+                decoded[key] = []
+        else:
+            decoded[key] = value
+    return decoded
+
+
 def get_datetime_str() -> str:
     """Return current date and time as a string"""
     return QC.QDateTime.currentDateTime().toString("yyyy-MM-dd hh:mm:ss")
 
 
 def add_to_history(kwargs_names: list[str] = [], title: str | None = None):
-    """Method decorator to add the method call to the history panel
+    """Method decorator to add the method call to the history panel as a UI entry.
 
     Args:
         kwargs_names: List of keyword arguments to add to the history action.
@@ -58,13 +125,15 @@ def add_to_history(kwargs_names: list[str] = [], title: str | None = None):
             self: BaseDataPanel | BaseProcessor = args[0]
             history: HistoryPanel = self.mainwindow.historypanel
             histkwargs = {k: kwargs[k] for k in kwargs_names if k in kwargs}
-            history.add_entry(
-                kwargs.get("title", title),
-                kwargs.get("save_state", True),
-                func,
-                *args,
-                **histkwargs,
-            )
+            target = _resolve_self_target(self)
+            if target is not None:
+                history.add_ui_entry(
+                    kwargs.get("title", title) or func.__name__,
+                    target=target,
+                    method_name=func.__name__,
+                    save_state=kwargs.get("save_state", True),
+                    **histkwargs,
+                )
             return func(*args, **kwargs)
 
         return method_wrapper
@@ -72,74 +141,93 @@ def add_to_history(kwargs_names: list[str] = [], title: str | None = None):
     return add_to_history_decorator
 
 
+def _resolve_self_target(self_obj: Any) -> str | None:
+    """Resolve a 'self' instance to a string target understood by replay.
+
+    Used by the legacy ``@add_to_history`` decorator. Returns None when no
+    safe routing is possible (in which case the entry is skipped).
+    """
+    panel_str = getattr(self_obj, "PANEL_STR_ID", None)
+    if panel_str == "signal":
+        return "signalpanel"
+    if panel_str == "image":
+        return "imagepanel"
+    return None
+
+
+# ---------------------------------------------------------------------------
+# HistoryAction
+# ---------------------------------------------------------------------------
+
+
 class HistoryAction(ObjItf):
     """Object representing an action in the history panel.
 
-    An action is basically a function that can be called in the same conditions as
-    when it was added to the history panel. Replay an action is done by calling the
-    function with the same parameters.
+    An action is a serialisable description of either a *compute* call (resolved
+    via the panel processor's feature registry) or a *UI* call (resolved as a
+    method on a known target -- ``mainwindow``/``signalpanel``/``imagepanel``).
 
-    Args:
-        title: Title of the history action
-        func: Function to call
-        args: Function arguments
-        kwargs: Function keyword arguments
-        state: State of the workspace before the action
+    No Python ``Callable`` is ever pickled: a compute action is identified by
+    ``(panel_str, func_name, pattern)`` and a UI action by ``(target,
+    method_name)``. ``DataSet`` payloads inside ``kwargs`` are serialised with
+    :func:`guidata.dataset.conv.dataset_to_json`.
     """
+
+    KIND_COMPUTE = "compute"
+    KIND_UI = "ui"
 
     FUNC_EDIT_MODE = "edit"  # Name of the function parameter to enable edit mode
 
     def __init__(
         self,
-        title: str | None = None,
-        func: Callable | None = None,
-        args: tuple | None = None,
+        title: str = "",
+        kind: str = KIND_UI,
+        # --- compute-only --------------------------------------------------
+        panel_str: str | None = None,
+        func_name: str | None = None,
+        pattern: str | None = None,
+        # --- ui-only -------------------------------------------------------
+        target: str | None = None,
+        method_name: str | None = None,
+        # --- common --------------------------------------------------------
         kwargs: dict[str, Any] | None = None,
         state: WorkspaceState | None = None,
     ) -> None:
-        """Create a new action"""
         super().__init__()
-        self.__title = "" if title is None else title
-        if func is None:
-
-            def default_func():
-                """Default function"""
-                # This function is used to create a default action when the
-                # function is not provided.
-                pass
-
-            func = default_func
-        else:
-            if not callable(func):
-                raise TypeError("func must be callable")
-            self.func = func
-        self.args = () if args is None else args
-        kwargs = {} if kwargs is None else kwargs
-        self.kwargs = {k: v for k, v in kwargs.items() if v is not None}
+        self.__title = title or ""
+        self.kind = kind
+        # Compute kind:
+        self.panel_str = panel_str
+        self.func_name = func_name
+        self.pattern = pattern
+        # UI kind:
+        self.target = target
+        self.method_name = method_name
+        # Common:
+        self.kwargs: dict[str, Any] = (
+            {} if kwargs is None else {k: v for k, v in kwargs.items() if v is not None}
+        )
         self.state = WorkspaceState() if state is None else state
         self.dtstr: str = get_datetime_str()
         self.uuid: str = str(uuid4())
 
     def regenerate_uuid(self):
-        """Regenerate UUID
-
-        This method is used to regenerate UUID after loading the object from a file.
-        This is required to avoid UUID conflicts when loading objects from file
-        without clearing the workspace first.
-        """
-        # No UUID to regenerate for history action
+        """Regenerate UUID after loading from a file (no-op: per-action UUID)."""
 
     @property
     def title(self) -> str:
         """Return object title"""
         return self.__title
 
+    # ------------------------------------------------------------------
+    # Description rendering (used by the tree view)
+    # ------------------------------------------------------------------
+
     def __iter_param_kwargs(self) -> Generator[Any, None, None]:
         """Yield kwargs values whose name ends with ``param`` (typically DataSets)."""
-        for kwname in self.kwargs:
-            if kwname.endswith("param"):
-                # Note: value can't be None (None values were filtered in __init__)
-                yield self.kwargs[kwname]
+        for kwname, value in self.kwargs.items():
+            if kwname.endswith("param") and value is not None:
+                yield value
 
     @property
     def description(self) -> str:
@@ -152,11 +240,19 @@ class HistoryAction(ObjItf):
             desc += str(param)
             no_parameters = False
         if desc or no_parameters:
-            return desc
-        if len(self.args) >= 2 and isinstance(self.args[1], Callable):
-            doc: str = self.args[1].__doc__
-            return doc.splitlines()[0] if doc else ""
-        return self.func.__doc__ or ""
+            if desc:
+                return desc
+        # Fall back to a textual hint of the resolved callable
+        return self.__fallback_doc()
+
+    def __fallback_doc(self) -> str:
+        """Return a single-line docstring for the underlying call, if available."""
+        try:
+            func = self._resolve_callable()
+        except Exception:  # pylint: disable=broad-except
+            return ""
+        doc = getattr(func, "__doc__", None) or ""
+        return doc.splitlines()[0] if doc else ""
 
     @property
     def description_summary(self) -> str:
@@ -181,12 +277,7 @@ class HistoryAction(ObjItf):
 
     @property
     def description_html(self) -> str:
-        """Return rich-text (HTML) description used for the expanded view.
-
-        For DataSet parameters, delegates to :meth:`DataSet.to_html` to mirror
-        the *Properties* tab rendering; otherwise returns the plain description
-        wrapped in HTML-safe ``<br>``-separated lines.
-        """
+        """Return rich-text (HTML) description used for the expanded view."""
         parts: list[str] = []
         no_parameters = True
         for param in self.__iter_param_kwargs():
@@ -204,75 +295,188 @@ class HistoryAction(ObjItf):
             return html.escape(text).replace("\n", "<br>")
         return ""
 
+    # ------------------------------------------------------------------
+    # Workspace-state delegation
+    # ------------------------------------------------------------------
+
     def is_current_state_compatible(
         self, mainwindow: DLMainWindow, restore_selection: bool
     ) -> bool:
-        """Check if the current workspace state is compatible with the saved state
-
-        Args:
-            mainwindow: DataLab's main window
-            restore_selection: True to restore the selection before checking the state
-
-        Returns:
-            bool: True if the current workspace state is compatible with the saved state
-        """
+        """Check if the current workspace state is compatible with the saved state."""
         return self.state.is_current_state_compatible(mainwindow, restore_selection)
 
     def restore(self, mainwindow: DLMainWindow) -> None:
-        """Restore the associated workspace state
-
-        Args:
-            mainwindow: DataLab's main window
-        """
+        """Restore the associated workspace state."""
         self.state.restore(mainwindow)
+
+    # ------------------------------------------------------------------
+    # Replay
+    # ------------------------------------------------------------------
+
+    def _resolve_target(self, mainwindow: DLMainWindow) -> Any:
+        """Resolve the target object (UI kind) from the mainwindow."""
+        attr = self.target or "mainwindow"
+        if attr == "mainwindow":
+            return mainwindow
+        return getattr(mainwindow, attr)
+
+    def _resolve_panel(self, mainwindow: DLMainWindow):
+        """Resolve the data panel for a compute action."""
+        if self.panel_str == "signal":
+            return mainwindow.signalpanel
+        if self.panel_str == "image":
+            return mainwindow.imagepanel
+        raise ValueError(
+            f"Unknown panel_str {self.panel_str!r} for compute history action"
+        )
+
+    def _resolve_callable(self) -> Callable | None:
+        """Best-effort lookup of the underlying callable, for description only."""
+        if self.kind == self.KIND_COMPUTE and self.func_name:
+            try:
+                # Lazy import to avoid cycles at module import time.
+                import sigima.proc.image as sigimg  # noqa: F401
+                import sigima.proc.signal as sigsig  # noqa: F401
+            except Exception:  # pylint: disable=broad-except
+                return None
+            for module in (sigsig, sigimg):
+                func = getattr(module, self.func_name, None)
+                if callable(func):
+                    return func
+        return None
+
+    def _resolve_obj_by_uuid(self, mainwindow: DLMainWindow, uuid: str) -> Any | None:
+        """Look up an object by UUID across both data panels."""
+        for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
+            try:
+                return panel.objmodel[uuid]
+            except KeyError:
+                continue
+        return None
 
     def replay(
         self, mainwindow: DLMainWindow, restore_selection: bool, edit: bool
     ) -> None:
-        """Replay the action
+        """Replay the action.
 
         Args:
             mainwindow: DataLab's main window
             restore_selection: True to restore the workspace selection before replaying
-            edit: if True, always open the dialog boxes to edit parameters, if False,
-             use the parameters passed when creating the action
+            edit: if True, always open the dialog boxes to edit parameters; if False,
+             use the parameters captured when the action was recorded
         """
         if restore_selection:
             self.state.restore(mainwindow)
-        sig = inspect.signature(self.func)
-        if self.FUNC_EDIT_MODE in sig.parameters:
-            self.kwargs[self.FUNC_EDIT_MODE] = edit
-        self.func(*self.args, **self.kwargs)
+        if self.kind == self.KIND_COMPUTE:
+            self._replay_compute(mainwindow, edit)
+        else:
+            self._replay_ui(mainwindow, edit)
+
+    def _replay_compute(self, mainwindow: DLMainWindow, edit: bool) -> None:
+        """Replay a compute-kind action via ``processor.run_feature``."""
+        if self.pattern == "multiple_1_to_1":
+            raise NotImplementedError(
+                _("Replaying compound 'multiple_1_to_1' actions is not supported yet.")
+            )
+        panel = self._resolve_panel(mainwindow)
+        processor = panel.processor
+        feature = processor.get_feature(self.func_name)
+        run_kwargs: dict[str, Any] = {self.FUNC_EDIT_MODE: edit}
+        param = self.kwargs.get("param")
+        if self.pattern in {"1_to_1", "1_to_0", "n_to_1"}:
+            if param is not None:
+                run_kwargs["param"] = param
+        elif self.pattern == "2_to_1":
+            uuids = self.kwargs.get("obj2_uuids") or []
+            if isinstance(uuids, str):
+                uuids = [uuids]
+            objs2 = [
+                obj
+                for obj in (self._resolve_obj_by_uuid(mainwindow, u) for u in uuids)
+                if obj is not None
+            ]
+            if not objs2:
+                raise ValueError(
+                    _("Cannot replay 2-to-1 action: source object(s) missing.")
+                )
+            run_kwargs["obj2"] = objs2[0] if len(objs2) == 1 else objs2
+            if param is not None:
+                run_kwargs["param"] = param
+        elif self.pattern == "1_to_n":
+            params = self.kwargs.get("params") or []
+            run_kwargs["params"] = params
+        else:
+            raise ValueError(f"Unknown compute pattern: {self.pattern!r}")
+        processor.run_feature(feature, **run_kwargs)
+
+    def _replay_ui(self, mainwindow: DLMainWindow, edit: bool) -> None:
+        """Replay a UI-kind action by calling ``target.method_name(**kwargs)``."""
+        target = self._resolve_target(mainwindow)
+        method = getattr(target, self.method_name)
+        call_kwargs = dict(self.kwargs)
+        # Inject edit mode if the method supports it
+        try:
+            import inspect
+
+            sig = inspect.signature(method)
+            if self.FUNC_EDIT_MODE in sig.parameters:
+                call_kwargs[self.FUNC_EDIT_MODE] = edit
+        except (TypeError, ValueError):
+            pass
+        method(**call_kwargs)
+
+    # ------------------------------------------------------------------
+    # Serialisation -- no Callable is ever pickled
+    # ------------------------------------------------------------------
 
     def serialize(self, writer: NativeH5Writer) -> None:
-        """Serialize this action
-
-        Args:
-            writer: Writer
-        """
-        with writer.group("func"):
-            writer.write(self.func)
-        with writer.group("args"):
-            writer.write(self.args)
-        with writer.group("kwargs"):
-            writer.write_dict(self.kwargs)
+        """Serialize this action."""
+        with writer.group("kind"):
+            writer.write(self.kind)
+        with writer.group("title"):
+            writer.write(self.__title)
+        if self.panel_str is not None:
+            with writer.group("panel_str"):
+                writer.write(self.panel_str)
+        if self.func_name is not None:
+            with writer.group("func_name"):
+                writer.write(self.func_name)
+        if self.pattern is not None:
+            with writer.group("pattern"):
+                writer.write(self.pattern)
+        if self.target is not None:
+            with writer.group("target"):
+                writer.write(self.target)
+        if self.method_name is not None:
+            with writer.group("method_name"):
+                writer.write(self.method_name)
+        encoded = _encode_kwargs(self.kwargs)
+        if encoded:
+            with writer.group("kwargs"):
+                writer.write_dict(encoded)
         with writer.group("state"):
             self.state.serialize(writer)
         with writer.group("dtstr"):
             writer.write(self.dtstr)
 
     def deserialize(self, reader: NativeH5Reader) -> None:
-        """Deserialize this action
-
-        Args:
-            reader: Reader
-        """
-        with reader.group("func"):
-            self.func = reader.read_any()
-        with reader.group("args"):
-            self.args = reader.read_any()
-        with reader.group("kwargs"):
-            self.kwargs = reader.read_dict()
+        """Deserialize this action."""
+        with reader.group("kind"):
+            self.kind = reader.read_any()
+        with reader.group("title"):
+            self.__title = reader.read_any()
+        for attr in ("panel_str", "func_name", "pattern", "target", "method_name"):
+            try:
+                with reader.group(attr):
+                    setattr(self, attr, reader.read_any())
+            except (KeyError, ValueError):
+                setattr(self, attr, None)
+        try:
+            with reader.group("kwargs"):
+                raw = reader.read_dict()
+            self.kwargs = _decode_kwargs(raw)
+        except (KeyError, ValueError):
+            self.kwargs = {}
         with reader.group("state"):
             self.state.deserialize(reader)
         with reader.group("dtstr"):
@@ -1041,6 +1245,81 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self.__history_sessions.append(session)
         self.tree.populate_tree(self.__history_sessions)
 
+    def add_compute_entry(
+        self,
+        action_title: str,
+        panel_str: str,
+        func_name: str,
+        pattern: str,
+        save_state: bool = True,
+        **kwargs: Any,
+    ) -> None:
+        """Record a *compute* action in the current history session.
+
+        Args:
+            action_title: Title shown in the history tree.
+            panel_str: ``"signal"`` or ``"image"``.
+            func_name: Sigima feature name (resolvable via
+             :meth:`BaseProcessor.get_feature`).
+            pattern: One of ``"1_to_1"``, ``"1_to_0"``, ``"n_to_1"``, ``"2_to_1"``,
+             ``"1_to_n"``, ``"multiple_1_to_1"`` (the latter is recorded for
+             traceability but not replayable).
+            save_state: If True, capture the workspace state for replay.
+            **kwargs: Extra primitive kwargs (``param``, ``obj2_uuids``,
+             ``obj2_name``, ``pairwise``, ``params`` (list of DataSet),
+             ``func_names`` (list of str), ...). ``DataSet`` instances are
+             serialised as JSON.
+        """
+        if not self.__record_mode or self.__replaying:
+            return
+        state = WorkspaceState()
+        if save_state:
+            state.save(self.mainwindow)
+        action = HistoryAction(
+            title=action_title,
+            kind=HistoryAction.KIND_COMPUTE,
+            panel_str=panel_str,
+            func_name=func_name,
+            pattern=pattern,
+            kwargs=kwargs,
+            state=state,
+        )
+        self.add_object(action)
+
+    def add_ui_entry(
+        self,
+        action_title: str,
+        target: str,
+        method_name: str,
+        save_state: bool = True,
+        **kwargs: Any,
+    ) -> None:
+        """Record a *UI* action in the current history session.
+
+        Args:
+            action_title: Title shown in the history tree.
+            target: One of ``"mainwindow"``, ``"signalpanel"``, ``"imagepanel"``,
+             ``"historypanel"`` -- attribute path on the main window.
+            method_name: Method name to call on ``target`` at replay time.
+            save_state: If True, capture the workspace state for replay.
+            **kwargs: Method keyword arguments. ``DataSet`` instances are
+             serialised as JSON; other values must be HDF5-friendly primitives.
+        """
+        if not self.__record_mode or self.__replaying:
+            return
+        state = WorkspaceState()
+        if save_state:
+            state.save(self.mainwindow)
+        action = HistoryAction(
+            title=action_title,
+            kind=HistoryAction.KIND_UI,
+            target=target,
+            method_name=method_name,
+            kwargs=kwargs,
+            state=state,
+        )
+        self.add_object(action)
+
     def add_entry(
         self,
         action_title: str,
@@ -1049,34 +1328,29 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         *args,
         **kwargs,
     ) -> None:
-        """Add an entry to the current history list
+        """Legacy entry-point kept as a compatibility shim.
 
-        Args:
-            action_title: Title of the history action
-            save_state: If True, the current workspace state is saved before adding the
-             action (this is the most common case). If False, the action is added
-             without saving the state: this may be useful when the action is not
-             related to the current workspace state (e.g. when creating a new object).
-            func: Function to call
-            args: Function arguments
-            kwargs: Function keyword arguments
-
-        .. warning::
-
-            Action will **not** be added to history if *record mode* is disabled.
+        Most call sites have been migrated to :meth:`add_compute_entry` or
+        :meth:`add_ui_entry`. The remaining paths -- and the
+        :func:`add_to_history` decorator -- still call ``add_entry`` with a
+        bound method; we infer the ``(target, method_name)`` from the bound
+        ``func.__self__`` and route to :meth:`add_ui_entry`.
         """
-        assert isinstance(action_title, str), "action_title must be a string"
-        assert isinstance(save_state, bool), "save_state must be a boolean"
-        assert callable(func), "func must be callable"
         if not self.__record_mode or self.__replaying:
             return
-        if save_state:
-            state = WorkspaceState()
-            state.save(self.mainwindow)
-        else:
-            state = None
-        obj = HistoryAction(action_title, func, args, kwargs, state)
-        self.add_object(obj)
+        target = None
+        if hasattr(func, "__self__"):
+            target = _resolve_self_target(func.__self__)
+        if target is None:
+            # Cannot route safely -- skip rather than pickle a Callable.
+            return
+        self.add_ui_entry(
+            action_title,
+            target=target,
+            method_name=func.__name__,
+            save_state=save_state,
+            **kwargs,
+        )
 
     # ------ AbstractPanel interface ---------------------------------------------------
     def create_object(self) -> HistoryAction:

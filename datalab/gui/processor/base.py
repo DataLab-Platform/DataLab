@@ -45,7 +45,7 @@ from datalab.adapters_metadata import (
 from datalab.adapters_plotpy import coordutils
 from datalab.config import Conf, _
 from datalab.gui.processor.catcher import CompOut, wng_err_func
-from datalab.objectmodel import get_number, get_short_id, get_uuid, patch_title_with_ids
+from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
 from datalab.widgets.warningerror import show_warning_error
 
@@ -1272,14 +1272,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if param is not None:
             if edit and not param.edit(parent=self.mainwindow):
                 return
-        self.mainwindow.historypanel.add_entry(
+        self.mainwindow.historypanel.add_compute_entry(
             title or func.__name__,
-            True,
-            self.compute_1_to_1,
-            func,
+            panel_str=self.panel.PANEL_STR_ID,
+            func_name=func.__name__,
+            pattern="1_to_1",
             param=param,
-            title=title,
-            comment=comment,
         )
         self._compute_1_to_1_subroutine([func], [param], title)
 
@@ -1319,13 +1317,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 return
             if len(funcs) != len(params):
                 raise ValueError("Number of functions must match number of parameters")
-        self.mainwindow.historypanel.add_entry(
+        self.mainwindow.historypanel.add_compute_entry(
             title or "compute_multiple_1_to_1",
-            True,
-            self.compute_multiple_1_to_1,
-            funcs,
-            params=params,
-            title=title,
+            panel_str=self.panel.PANEL_STR_ID,
+            func_name=funcs[0].__name__ if funcs else "",
+            pattern="multiple_1_to_1",
+            func_names=[f.__name__ for f in funcs],
+            params=params if any(p is not None for p in params) else None,
         )
         self._compute_1_to_1_subroutine(funcs, params, title)
 
@@ -1363,13 +1361,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             group = gds.DataSetGroup(params, title=_("Parameters"))
             if not group.edit(parent=self.mainwindow):
                 return
-        self.mainwindow.historypanel.add_entry(
-            title,
-            True,
-            self.compute_1_to_n,
-            func,
+        self.mainwindow.historypanel.add_compute_entry(
+            title or func.__name__,
+            panel_str=self.panel.PANEL_STR_ID,
+            func_name=func.__name__,
+            pattern="1_to_n",
             params=params,
-            title=title,
         )
         self._compute_1_to_1_subroutine([func] * len(params), params, title)
 
@@ -1425,14 +1422,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         )
         current_obj = self.panel.objview.get_current_object()
         title = func.__name__ if title is None else title
-        self.mainwindow.historypanel.add_entry(
+        self.mainwindow.historypanel.add_compute_entry(
             title,
-            True,
-            self.compute_1_to_0,
-            func,
+            panel_str=self.panel.PANEL_STR_ID,
+            func_name=func.__name__,
+            pattern="1_to_0",
             param=param,
-            title=title,
-            comment=comment,
         )
         refresh_needed = False
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
@@ -1545,14 +1540,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         pairwise = is_pairwise_mode() if pairwise is None else pairwise
         name = func.__name__
 
-        self.mainwindow.historypanel.add_entry(
+        self.mainwindow.historypanel.add_compute_entry(
             name,
-            True,
-            self.compute_n_to_1,
-            func,
+            panel_str=self.panel.PANEL_STR_ID,
+            func_name=name,
+            pattern="n_to_1",
             param=param,
-            title=title,
-            comment=comment,
             pairwise=pairwise,
         )
 
@@ -1838,16 +1831,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if objs2 is None:
                     return
 
-            self.mainwindow.historypanel.add_entry(
-                title,
-                True,
-                self.compute_2_to_1,
-                [get_number(obj) for obj in objs2],
-                obj2_name,
-                func,
+            self.mainwindow.historypanel.add_compute_entry(
+                title or func.__name__,
+                panel_str=self.panel.PANEL_STR_ID,
+                func_name=func.__name__,
+                pattern="2_to_1",
                 param=param,
-                title=title,
-                comment=comment,
+                obj2_uuids=[get_uuid(obj) for obj in objs2],
+                obj2_name=obj2_name,
                 pairwise=True,
             )
 
@@ -1976,16 +1967,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     return
             obj2 = objs2[0]
 
-            self.mainwindow.historypanel.add_entry(
-                title,
-                True,
-                self.compute_2_to_1,
-                get_number(obj2),
-                obj2_name,
-                func,
+            self.mainwindow.historypanel.add_compute_entry(
+                title or func.__name__,
+                panel_str=self.panel.PANEL_STR_ID,
+                func_name=func.__name__,
+                pattern="2_to_1",
                 param=param,
-                title=title,
-                comment=comment,
+                obj2_uuids=[get_uuid(obj2)],
+                obj2_name=obj2_name,
                 pairwise=False,
             )
 

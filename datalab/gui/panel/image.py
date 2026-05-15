@@ -255,10 +255,11 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
         image = create_image_gui(param, edit=edit, parent=self.parentWidget())
         if image is None:
             return None
-        self.mainwindow.historypanel.add_entry(
+        self.mainwindow.historypanel.add_ui_entry(
             _("New image"),
-            False,
-            self.new_object,
+            target="imagepanel",
+            method_name="new_object",
+            save_state=False,
             param=param,
             add_to_panel=add_to_panel,
         )
