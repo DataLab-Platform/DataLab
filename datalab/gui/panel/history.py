@@ -23,6 +23,7 @@ from qtpy import QtWidgets as QW
 from datalab.config import _
 from datalab.gui import ObjItf
 from datalab.gui.panel.base import AbstractPanel
+from datalab.objectmodel import get_number
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
@@ -290,7 +291,8 @@ class WorkspaceState:
         selection: dict[str, list[int]] = {}
         for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
             selection[panel.PANEL_STR] = [
-                obj.number for obj in panel.objview.get_sel_objects(include_groups=True)
+                get_number(obj)
+                for obj in panel.objview.get_sel_objects(include_groups=True)
             ]
         return selection
 
@@ -304,10 +306,12 @@ class WorkspaceState:
         for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
             selection = self.selection[panel.PANEL_STR]
             self.states[panel.PANEL_STR] = [
-                str(obj.data.shape) for obj in panel.objmodel if obj.number in selection
+                str(obj.data.shape)
+                for obj in panel.objmodel
+                if get_number(obj) in selection
             ]
             self.titles[panel.PANEL_STR] = [
-                obj.title for obj in panel.objmodel if obj.number in selection
+                obj.title for obj in panel.objmodel if get_number(obj) in selection
             ]
 
     def is_current_state_compatible(
@@ -337,7 +341,9 @@ class WorkspaceState:
         for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
             numbers = selection[panel.PANEL_STR]
             current_states[panel.PANEL_STR] = [
-                str(obj.data.shape) for obj in panel.objmodel if obj.number in numbers
+                str(obj.data.shape)
+                for obj in panel.objmodel
+                if get_number(obj) in numbers
             ]
         return current_states == self.states
 

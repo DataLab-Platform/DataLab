@@ -1268,6 +1268,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if param is not None:
             if edit and not param.edit(parent=self.mainwindow):
                 return
+        self.mainwindow.historypanel.add_entry(
+            title or func.__name__,
+            True,
+            self.compute_1_to_1,
+            func,
+            param=param,
+            title=title,
+            comment=comment,
+        )
         self._compute_1_to_1_subroutine([func], [param], title)
 
     def compute_multiple_1_to_1(
@@ -1306,6 +1315,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 return
             if len(funcs) != len(params):
                 raise ValueError("Number of functions must match number of parameters")
+        self.mainwindow.historypanel.add_entry(
+            title or "compute_multiple_1_to_1",
+            True,
+            self.compute_multiple_1_to_1,
+            funcs,
+            params=params,
+            title=title,
+        )
         self._compute_1_to_1_subroutine(funcs, params, title)
 
     def compute_1_to_n(
@@ -1404,6 +1421,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         )
         current_obj = self.panel.objview.get_current_object()
         title = func.__name__ if title is None else title
+        self.mainwindow.historypanel.add_entry(
+            title,
+            True,
+            self.compute_1_to_0,
+            func,
+            param=param,
+            title=title,
+            comment=comment,
+        )
         refresh_needed = False
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
             rdata = ResultData()
