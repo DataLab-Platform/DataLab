@@ -67,7 +67,7 @@ from datalab.env import execenv
 from datalab.gui.actionhandler import ActionCategory
 from datalab.gui.docks import DockablePlotWidget
 from datalab.gui.h5io import H5InputOutput
-from datalab.gui.panel import base, image, macro, signal
+from datalab.gui.panel import base, history, image, macro, signal
 from datalab.gui.pluginconfig import PluginConfigDialog
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
 from datalab.objectmodel import ObjectGroup
@@ -168,6 +168,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.console: DockableConsole | None = None
         self._startup_errors: list[str] = []
         self.macropanel: MacroPanel | None = None
+        self.historypanel: history.HistoryPanel | None = None
         self.aiassistantpanel = None  # type: ignore[assignment]
 
         self.main_toolbar: QW.QToolBar | None = None
@@ -715,12 +716,17 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     # ------Misc.
     @property
     def panels(self) -> tuple[AbstractPanel, ...]:
-        """Return the tuple of implemented panels (signal, image)
+        """Return the tuple of implemented panels (signal, image, macro, history)
 
         Returns:
             Tuple of panels
         """
-        return (self.signalpanel, self.imagepanel, self.macropanel)
+        return (
+            self.signalpanel,
+            self.imagepanel,
+            self.macropanel,
+            self.historypanel,
+        )
 
     def __set_low_memory_state(self, state: bool) -> None:
         """Set memory warning state"""
@@ -1000,6 +1006,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.__flush_startup_errors()
         self.__update_actions(update_other_data_panel=True)
         self.__add_macro_panel()
+        self.__add_history_panel()
         self.__add_aiassistant_panel()
         self.__configure_panels()
         # Now that everything is set up, we can restore the window state:
@@ -1667,6 +1674,14 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.tabifyDockWidget(self.docks[self.imagepanel], mdock)
         self.docks[self.signalpanel].raise_()
 
+    def __add_history_panel(self) -> None:
+        """Add history panel"""
+        self.historypanel = history.HistoryPanel(self)
+        hdock = self.__add_dockwidget(self.historypanel, _("History Panel"))
+        self.docks[self.historypanel] = hdock
+        self.tabifyDockWidget(self.docks[self.macropanel], hdock)
+        self.docks[self.signalpanel].raise_()
+
     def __add_aiassistant_panel(self) -> None:
         """Add AI Assistant panel"""
         # Local import to keep AI assistant fully optional/loadable on demand
@@ -2047,6 +2062,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 )
             if not filename:
                 return
+        self.historypanel.add_entry(
+            _("Save to HDF5 file"), False, self.save_to_h5_file, filename=filename
+        )
         with qth.qt_try_loadsave_file(self, filename, "save"):
             self.save_h5_workspace(filename)
 
@@ -2119,6 +2137,18 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 )
         if not h5files:
             return
+        if len(h5files) > 1:
+            entry_title = _("Open %d HDF5 files") % len(h5files)
+        else:
+            entry_title = _("Open HDF5 file")
+        self.historypanel.add_entry(
+            entry_title,
+            False,
+            self.open_h5_files,
+            h5files=h5files,
+            import_all=import_all,
+            reset_all=reset_all,
+        )
         filenames, dsetnames = [], []
         for fname_with_dset in h5files:
             if "," in fname_with_dset:

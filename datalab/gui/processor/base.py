@@ -45,7 +45,7 @@ from datalab.adapters_metadata import (
 from datalab.adapters_plotpy import coordutils
 from datalab.config import Conf, _
 from datalab.gui.processor.catcher import CompOut, wng_err_func
-from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids
+from datalab.objectmodel import get_number, get_short_id, get_uuid, patch_title_with_ids
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
 from datalab.widgets.warningerror import show_warning_error
 
@@ -1342,6 +1342,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             group = gds.DataSetGroup(params, title=_("Parameters"))
             if not group.edit(parent=self.mainwindow):
                 return
+        self.mainwindow.historypanel.add_entry(
+            title,
+            True,
+            self.compute_1_to_n,
+            func,
+            params=params,
+            title=title,
+        )
         self._compute_1_to_1_subroutine([func] * len(params), params, title)
 
     def compute_1_to_0(
@@ -1471,6 +1479,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        pairwise: bool | None = None,
     ) -> None:
         """Generic processing method: n objects in → 1 object out.
 
@@ -1503,8 +1512,19 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         objmodel = self.panel.objmodel
-        pairwise = is_pairwise_mode()
+        pairwise = is_pairwise_mode() if pairwise is None else pairwise
         name = func.__name__
+
+        self.mainwindow.historypanel.add_entry(
+            name,
+            True,
+            self.compute_n_to_1,
+            func,
+            param=param,
+            title=title,
+            comment=comment,
+            pairwise=pairwise,
+        )
 
         if pairwise:
             src_grps, src_gids, src_objs, _nbobj, valid = (
@@ -1698,7 +1718,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
     def compute_2_to_1(
         self,
-        obj2: SignalObj | ImageObj | list[SignalObj | ImageObj] | None,
+        obj2: SignalObj
+        | ImageObj
+        | list[SignalObj | ImageObj]
+        | int
+        | list[int]
+        | None,
         obj2_name: str,
         func: Callable,
         param: gds.DataSet | None = None,
@@ -1707,6 +1732,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         comment: str | None = None,
         edit: bool | None = None,
         skip_xarray_compat: bool | None = None,
+        pairwise: bool | None = None,
     ) -> None:
         """Generic processing method: binary operation 1+1 → 1.
 
@@ -1745,7 +1771,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         objmodel = self.panel.objmodel
-        pairwise = is_pairwise_mode()
+        pairwise = is_pairwise_mode() if pairwise is None else pairwise
         name = func.__name__
 
         if obj2 is None:
@@ -1755,6 +1781,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             assert pairwise
         else:
             objs2 = [obj2]
+        if objs2 and all(isinstance(obj, int) for obj in objs2):
+            # If obj2 is a list of object numbers, convert to objects
+            objs2 = [objmodel.get_object_from_number(obj) for obj in objs2]
 
         dlg_title = _("Select %s") % obj2_name
 
@@ -1778,6 +1807,19 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 )
                 if objs2 is None:
                     return
+
+            self.mainwindow.historypanel.add_entry(
+                title,
+                True,
+                self.compute_2_to_1,
+                [get_number(obj) for obj in objs2],
+                obj2_name,
+                func,
+                param=param,
+                title=title,
+                comment=comment,
+                pairwise=True,
+            )
 
             n_pairs = len(src_objs[src_gids[0]])
             max_i_pair = min(
@@ -1903,6 +1945,19 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if objs2 is None:
                     return
             obj2 = objs2[0]
+
+            self.mainwindow.historypanel.add_entry(
+                title,
+                True,
+                self.compute_2_to_1,
+                get_number(obj2),
+                obj2_name,
+                func,
+                param=param,
+                title=title,
+                comment=comment,
+                pairwise=False,
+            )
 
             # Initialize signal mapping for potential interpolations
             signal_map = {}

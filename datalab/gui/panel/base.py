@@ -1718,6 +1718,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """Duplication signal/image object"""
         if not self.mainwindow.confirm_memory_state():
             return
+        self.mainwindow.historypanel.add_entry(
+            _("Duplicate object or group"), False, self.duplicate_object
+        )
         # Duplicate individual objects (exclusive with respect to groups)
         for oid in self.objview.get_sel_object_uuids():
             self.__duplicate_individual_obj(oid, set_current=False)
@@ -1732,6 +1735,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
     def copy_metadata(self) -> None:
         """Copy object metadata"""
+        self.mainwindow.historypanel.add_entry(
+            _("Copy metadata"), False, self.copy_metadata
+        )
         obj = self.objview.get_sel_objects()[0]
         self.metadata_clipboard = obj.metadata.copy()
 
@@ -1788,6 +1794,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             )
             if not param.edit(parent=self.parentWidget()):
                 return
+        self.mainwindow.historypanel.add_entry(
+            _("Paste metadata"), False, self.paste_metadata, param=param
+        )
         metadata = {}
         if param.keep_roi and ROI_KEY in self.metadata_clipboard:
             metadata[ROI_KEY] = self.metadata_clipboard[ROI_KEY]
@@ -1886,6 +1895,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             )
             if answer == QW.QMessageBox.No:
                 return
+        self.mainwindow.historypanel.add_entry(
+            _("Remove selected objects"),
+            False,
+            self.remove_object,
+            force=force,
+        )
         sel_objects = self.objview.get_sel_objects(include_groups=True)
         for obj in sorted(sel_objects, key=get_short_id, reverse=True):
             dlg_list: list[QW.QDialog] = []
@@ -2011,6 +2026,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Open a message box to enter the group name
         group_name, ok = QW.QInputDialog.getText(self, _("New group"), _("Group name:"))
         if ok:
+            self.mainwindow.historypanel.add_entry(
+                _('New group "%s"') % group_name,
+                False,
+                self.add_group,
+                title=group_name,
+                select=False,
+            )
             self.add_group(group_name)
 
     def rename_selected_object_or_group(self, new_name: str | None = None) -> None:
@@ -2019,6 +2041,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         Args:
             new_name: new name (default: None, i.e. ask user)
         """
+        self.mainwindow.historypanel.add_entry(
+            _("Rename selected object or group"),
+            False,
+            self.rename_selected_object_or_group,
+            new_name=new_name,
+        )
         sel_objects = self.objview.get_sel_objects(include_groups=False)
         sel_groups = self.objview.get_sel_groups()
         if (not sel_objects and not sel_groups) or len(sel_objects) + len(
@@ -2095,6 +2123,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         obj = self.objview.get_current_object()
         obj.title = title
         self.objview.update_item(get_uuid(obj))
+        self.mainwindow.historypanel.add_entry(
+            _('Set current object title to "%s"') % title,
+            False,
+            self.set_current_object_title,
+            title=title,
+        )
 
     def __load_from_file(
         self, filename: str, create_group: bool = True, add_objects: bool = True
@@ -2226,6 +2260,20 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 filenames, _filt = getopenfilenames(self, _("Open"), basedir, filters)
         # Sort filenames to ensure consistent alphabetical order across all platforms
         filenames = sorted(filenames)
+        nbf = len(filenames)
+        if nbf > 1:
+            entry_title = _("Load from %d files") % nbf
+        else:
+            entry_title = _('Load "%s"') % osp.basename(filenames[0])
+        self.mainwindow.historypanel.add_entry(
+            entry_title,
+            False,
+            self.load_from_files,
+            filenames=filenames,
+            create_group=create_group,
+            add_objects=add_objects,
+            ignore_errors=ignore_errors,
+        )
         objs = []
         for filename in filenames:
             with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
@@ -2253,6 +2301,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             filenames = [None] * len(objs)
         assert len(filenames) == len(objs), (
             "Number of filenames must match number of objects"
+        )
+        nbf = len(filenames)
+        if nbf > 1:
+            entry_title = _("Save to %d different files") % nbf
+        else:
+            entry_title = _('Save to "%s"') % osp.basename(filenames[0])
+        self.mainwindow.historypanel.add_entry(
+            entry_title, False, self.save_to_files, filenames=filenames
         )
         for index, obj in enumerate(objs):
             filename = filenames[index]
@@ -3308,6 +3364,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
     def delete_results(self) -> None:
         """Delete results"""
+        self.mainwindow.historypanel.add_entry(
+            _("Delete results"), False, self.delete_results
+        )
         objs = self.objview.get_sel_objects(include_groups=True)
         rdatadict = create_resultdata_dict(objs)
         if rdatadict:
@@ -3355,6 +3414,16 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
              added as an annotation, and that it can be edited or removed using the
              annotation editing window.
         """
+        if title is None:
+            action_title = _("Add object title to plot")
+        else:
+            action_title = _("Add label with title")
+        self.mainwindow.historypanel.add_entry(
+            action_title,
+            False,
+            self.add_label_with_title,
+            title=title,
+        )
         objs = self.objview.get_sel_objects(include_groups=True)
         for obj in objs:
             create_adapter_from_object(obj).add_label_with_title(title=title)
