@@ -465,17 +465,23 @@ class HistoryAction(ObjItf):
             self.kind = reader.read_any()
         with reader.group("title"):
             self.__title = reader.read_any()
+        # Optional descriptors are written conditionally; check existence in
+        # the underlying HDF5 group before reading to avoid leaking ``__seq``
+        # frames on the option stack via guidata's read_any fallback path.
+        current = reader.h5
+        for option in reader.option:
+            current = current.require_group(option)
         for attr in ("panel_str", "func_name", "pattern", "target", "method_name"):
-            try:
+            if attr in current.attrs or attr in current:
                 with reader.group(attr):
                     setattr(self, attr, reader.read_any())
-            except (KeyError, ValueError):
+            else:
                 setattr(self, attr, None)
-        try:
+        if "kwargs" in current.attrs or "kwargs" in current:
             with reader.group("kwargs"):
                 raw = reader.read_dict()
             self.kwargs = _decode_kwargs(raw)
-        except (KeyError, ValueError):
+        else:
             self.kwargs = {}
         with reader.group("state"):
             self.state.deserialize(reader)
@@ -1285,6 +1291,44 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             state=state,
         )
         self.add_object(action)
+
+    def add_compute_entry_from_pp(
+        self,
+        action_title: str,
+        pp: Any,  # ProcessingParameters (avoid circular import)
+        panel_str: str,
+        save_state: bool = True,
+        **extras: Any,
+    ) -> None:
+        """Record a *compute* action derived from a ``ProcessingParameters``.
+
+        Bridges the dash-form pattern used in object metadata
+        (``"1-to-1"`` …) with the underscore form expected by
+        :class:`HistoryAction` (``"1_to_1"`` …) so that both sides share
+        a single identity (``func_name`` / ``pattern`` / ``param``).
+
+        Args:
+            action_title: Title shown in the history tree.
+            pp: :class:`~datalab.gui.processor.base.ProcessingParameters`
+             instance describing the operation.
+            panel_str: ``"signal"`` or ``"image"``.
+            save_state: If True, capture the workspace state for replay.
+            **extras: Additional history-only kwargs (``obj2_uuids``,
+             ``obj2_name``, ``pairwise``, ``params``, ``func_names``…).
+        """
+        hist_pattern = pp.pattern.replace("-", "_")
+        kwargs: dict[str, Any] = {}
+        if pp.param is not None and "param" not in extras and "params" not in extras:
+            kwargs["param"] = pp.param
+        kwargs.update(extras)
+        self.add_compute_entry(
+            action_title,
+            panel_str=panel_str,
+            func_name=pp.func_name,
+            pattern=hist_pattern,
+            save_state=save_state,
+            **kwargs,
+        )
 
     def add_ui_entry(
         self,

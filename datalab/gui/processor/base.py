@@ -195,6 +195,43 @@ def insert_processing_parameters(
         obj.set_metadata_option(PROCESSING_PARAMETERS_OPTION, pp.to_dict())
 
 
+def build_processing_parameters(
+    func_name: str,
+    pattern: str,
+    *,
+    param: gds.DataSet | list[gds.DataSet] | None = None,
+    source_uuid: str | None = None,
+    source_uuids: list[str] | None = None,
+) -> ProcessingParameters:
+    """Single factory for :class:`ProcessingParameters`.
+
+    Centralises construction so that history-panel entries and per-object
+    metadata always share the same identity (``func_name``, ``pattern``,
+    ``param``).
+
+    Args:
+        func_name: Sigima feature name.
+        pattern: Dash-form pattern (``"1-to-1"``, ``"1-to-0"``,
+         ``"n-to-1"``, ``"2-to-1"``, ``"1-to-n"``).
+        param: Optional parameter dataset (or list of datasets for
+         multi-parameter patterns).
+        source_uuid: Source object UUID for ``"1-to-1"`` / ``"1-to-0"`` /
+         ``"1-to-n"`` patterns.
+        source_uuids: Source object UUIDs for ``"n-to-1"`` / ``"2-to-1"``
+         patterns.
+
+    Returns:
+        Newly constructed :class:`ProcessingParameters`.
+    """
+    return ProcessingParameters(
+        func_name=func_name,
+        pattern=pattern,
+        param=param,
+        source_uuid=source_uuid,
+        source_uuids=source_uuids,
+    )
+
+
 def clear_analysis_parameters(obj: SignalObj | ImageObj) -> None:
     """Clear analysis parameters from object metadata.
 
@@ -1272,12 +1309,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if param is not None:
             if edit and not param.edit(parent=self.mainwindow):
                 return
-        self.mainwindow.historypanel.add_compute_entry(
-            title or func.__name__,
-            panel_str=self.panel.PANEL_STR_ID,
-            func_name=func.__name__,
-            pattern="1_to_1",
-            param=param,
+        pp = build_processing_parameters(func.__name__, "1-to-1", param=param)
+        self.mainwindow.historypanel.add_compute_entry_from_pp(
+            title or func.__name__, pp, panel_str=self.panel.PANEL_STR_ID
         )
         self._compute_1_to_1_subroutine([func], [param], title)
 
@@ -1317,11 +1351,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 return
             if len(funcs) != len(params):
                 raise ValueError("Number of functions must match number of parameters")
-        self.mainwindow.historypanel.add_compute_entry(
+        pp = build_processing_parameters(
+            funcs[0].__name__ if funcs else "", "multiple-1-to-1"
+        )
+        self.mainwindow.historypanel.add_compute_entry_from_pp(
             title or "compute_multiple_1_to_1",
+            pp,
             panel_str=self.panel.PANEL_STR_ID,
-            func_name=funcs[0].__name__ if funcs else "",
-            pattern="multiple_1_to_1",
             func_names=[f.__name__ for f in funcs],
             params=params if any(p is not None for p in params) else None,
         )
@@ -1361,11 +1397,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             group = gds.DataSetGroup(params, title=_("Parameters"))
             if not group.edit(parent=self.mainwindow):
                 return
-        self.mainwindow.historypanel.add_compute_entry(
+        pp = build_processing_parameters(func.__name__, "1-to-n")
+        self.mainwindow.historypanel.add_compute_entry_from_pp(
             title or func.__name__,
+            pp,
             panel_str=self.panel.PANEL_STR_ID,
-            func_name=func.__name__,
-            pattern="1_to_n",
             params=params,
         )
         self._compute_1_to_1_subroutine([func] * len(params), params, title)
@@ -1422,12 +1458,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         )
         current_obj = self.panel.objview.get_current_object()
         title = func.__name__ if title is None else title
-        self.mainwindow.historypanel.add_compute_entry(
-            title,
-            panel_str=self.panel.PANEL_STR_ID,
-            func_name=func.__name__,
-            pattern="1_to_0",
-            param=param,
+        pp_history = build_processing_parameters(func.__name__, "1-to-0", param=param)
+        self.mainwindow.historypanel.add_compute_entry_from_pp(
+            title, pp_history, panel_str=self.panel.PANEL_STR_ID
         )
         refresh_needed = False
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
@@ -1540,12 +1573,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         pairwise = is_pairwise_mode() if pairwise is None else pairwise
         name = func.__name__
 
-        self.mainwindow.historypanel.add_compute_entry(
+        pp_history = build_processing_parameters(name, "n-to-1", param=param)
+        self.mainwindow.historypanel.add_compute_entry_from_pp(
             name,
+            pp_history,
             panel_str=self.panel.PANEL_STR_ID,
-            func_name=name,
-            pattern="n_to_1",
-            param=param,
             pairwise=pairwise,
         )
 
@@ -1831,12 +1863,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if objs2 is None:
                     return
 
-            self.mainwindow.historypanel.add_compute_entry(
+            pp_history = build_processing_parameters(
+                func.__name__, "2-to-1", param=param
+            )
+            self.mainwindow.historypanel.add_compute_entry_from_pp(
                 title or func.__name__,
+                pp_history,
                 panel_str=self.panel.PANEL_STR_ID,
-                func_name=func.__name__,
-                pattern="2_to_1",
-                param=param,
                 obj2_uuids=[get_uuid(obj) for obj in objs2],
                 obj2_name=obj2_name,
                 pairwise=True,
@@ -1967,12 +2000,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     return
             obj2 = objs2[0]
 
-            self.mainwindow.historypanel.add_compute_entry(
+            pp_history = build_processing_parameters(
+                func.__name__, "2-to-1", param=param
+            )
+            self.mainwindow.historypanel.add_compute_entry_from_pp(
                 title or func.__name__,
+                pp_history,
                 panel_str=self.panel.PANEL_STR_ID,
-                func_name=func.__name__,
-                pattern="2_to_1",
-                param=param,
                 obj2_uuids=[get_uuid(obj2)],
                 obj2_name=obj2_name,
                 pairwise=False,
