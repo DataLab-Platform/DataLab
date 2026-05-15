@@ -1,9 +1,9 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-History panel — Wave 2 invariants
+History panel contract tests
 
-Validates the post-Wave-2 history-panel contract:
+Validates the core history-panel contract:
 
 1. ``compute_1_to_1`` produces a coherent ``ProcessingParameters`` *and*
    history entry (same ``func_name``, same source UUID).
@@ -138,12 +138,12 @@ def test_history_action_hdf5_roundtrip_without_pickle():
         session.actions.append(original)
 
         with tempfile.TemporaryDirectory() as tmpdir:
-            path = os.path.join(tmpdir, "wave2.dlhist")
+            path = os.path.join(tmpdir, "history.dlhist")
             with NativeH5Writer(path) as writer:
-                writer.write_object_list([session], "wave2_history")
+                writer.write_object_list([session], "history_session")
             with NativeH5Reader(path) as reader:
                 restored_sessions = reader.read_object_list(
-                    "wave2_history", HistorySession
+                    "history_session", HistorySession
                 )
 
         assert len(restored_sessions) == 1
@@ -182,7 +182,7 @@ def test_ui_action_rename_capture_and_replay():
         obj = panel.objmodel.get_object_from_number(1)
         original_title = obj.title
 
-        new_title = "wave2-renamed"
+        new_title = "renamed-by-test"
         panel.objview.set_current_object(obj)
         panel.set_current_object_title(new_title)
         assert obj.title == new_title
@@ -202,7 +202,7 @@ def test_ui_action_rename_capture_and_replay():
         assert obj.title == new_title
         assert obj.title != original_title
 
-        # WorkspaceState type check (Wave-2 invariant).
+        # WorkspaceState type check.
         assert isinstance(rename_entry.state, WorkspaceState)
 
 
