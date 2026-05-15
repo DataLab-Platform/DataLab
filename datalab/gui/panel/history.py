@@ -612,6 +612,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
 
         self.__record_mode = False
         self.__edit_mode = False
+        self.__delete_action: QW.QAction | None = None
         self.__menu_actions: list[QW.QAction] = self.__create_menu_actions()
 
         self.mainwindow = parent
@@ -632,6 +633,12 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
 
         self.__history_sessions: list[HistorySession] = []
         self.__session_increment = 0
+        self.__update_actions_state()
+
+    def __update_actions_state(self) -> None:
+        """Update the enabled state of menu actions depending on history content."""
+        if self.__delete_action is not None:
+            self.__delete_action.setEnabled(len(self) > 0)
 
     def __create_menu_actions(self) -> list[QW.QAction]:
         """Create menu actions for the history panel
@@ -653,6 +660,12 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             icon=get_icon("record.svg"),
         )
         record_action.setChecked(self.__record_mode)
+        self.__delete_action = create_action(
+            self,
+            _("Delete"),
+            self.delete_actions,
+            icon=get_icon("delete.svg"),
+        )
         return [
             record_action,
             None,
@@ -678,12 +691,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             ),
             edit_action,
             None,
-            create_action(
-                self,
-                _("Delete"),
-                self.delete_actions,
-                icon=get_icon("delete.svg"),
-            ),
+            self.__delete_action,
         ]
 
     def toggle_edit_mode(self, checked: bool) -> None:
@@ -771,6 +779,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
                     if action in session.actions:
                         session.remove_action(action)
             self.tree.populate_tree(self.__history_sessions)
+            self.__update_actions_state()
 
     def serialize_to_hdf5(self, writer: NativeH5Writer) -> None:
         """Serialize whole panel to a HDF5 file
@@ -795,6 +804,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         if self.__history_sessions:
             self.__session_increment = self.__history_sessions[-1].number
         self.tree.populate_tree(self.__history_sessions)
+        self.__update_actions_state()
 
     def __len__(self) -> int:
         """Return number of objects"""
@@ -870,7 +880,9 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self.__history_sessions[-1].add_action(obj)
         self.tree.add_action_to_tree(obj)
         self.tree.rearrange_tree()
+        self.__update_actions_state()
 
     def remove_all_objects(self):
         """Remove all objects"""
         super().remove_all_objects()
+        self.__update_actions_state()
