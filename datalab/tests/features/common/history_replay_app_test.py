@@ -20,6 +20,22 @@ Covers replay/restore edge cases and HDF5 persistence paths:
    a new object when a tree item is selected.
 7. Public panel API ``replay_restore_actions(replay=False)`` only
    restores the workspace selection (no new object).
+8. ``n_to_1`` replay forces the captured selection so a chained
+   ``[New, ..., New, average]`` session does not aggregate over a
+   stale single-object selection.
+9. ``n_to_1`` replay falls back to the current selection when the
+   captured UUIDs no longer exist (typical of a full-session replay
+   in a fresh workspace), so the failure surfaces as the native
+   processor error rather than an opaque ``WorkspaceState``
+   incompatibility.
+10. Full ``HistorySession`` replay on an empty workspace correctly
+    re-runs ``[New, New, New, average]`` end-to-end: the per-session
+    UUID remap translates the captured ``n_to_1`` selection to the
+    freshly-created signals.
+11. Full ``HistorySession`` replay with an intermediate
+    ``[New, New, New, Remove, average]`` correctly drops the
+    vanished UUID from the remap queue so ``average`` aggregates
+    over the right two surviving signals.
 """
 
 # pylint: disable=invalid-name
@@ -33,6 +49,7 @@ import sigima.objects
 import sigima.params
 import sigima.proc.signal as sips
 from qtpy import QtCore as QC
+from sigima.objects.signal.creation import NewSignalParam
 from sigima.tests import helpers
 from sigima.tests.data import create_paracetamol_signal
 
@@ -309,6 +326,112 @@ def test_replay_n_to_1_forces_captured_selection():
         assert len(panel.objmodel) == n_before + 1
 
 
+# --- 9) n_to_1 replay tolerates vanished captured UUIDs -------------------
+
+
+def test_replay_n_to_1_falls_back_when_captured_uuids_gone():
+    """When the captured selection refers to UUIDs that no longer exist
+    (full-session replay creates fresh objects with new UUIDs), the
+    compute replay must fall back to the current selection rather than
+    raising the opaque ``WorkspaceState`` incompatibility error."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+
+        panel.add_object(create_paracetamol_signal())
+        panel.add_object(create_paracetamol_signal())
+        panel.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1, 2, 3])
+        panel.processor.run_feature(sips.average)
+        avg_entry = history[len(history)]
+        assert avg_entry.pattern == "n_to_1"
+
+        # Wipe the workspace and recreate three signals: same shape,
+        # different UUIDs (mimics the state mid-way through a full
+        # session replay). The captured selection is now stale.
+        win.reset_all()
+        panel.add_object(create_paracetamol_signal())
+        panel.add_object(create_paracetamol_signal())
+        panel.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1, 2, 3])
+        assert not avg_entry.state.is_current_state_compatible(win, False)
+
+        n_before = len(panel.objmodel)
+        # Must not raise ValueError("... not compatible with saved state");
+        # falls back to the current selection (the 3 freshly-added signals).
+        avg_entry.replay(win, restore_selection=False, edit=False)
+        assert len(panel.objmodel) == n_before + 1
+
+
+# --- 10) Full session replay with UUID remap ------------------------------
+
+
+def test_full_session_replay_remaps_uuids_for_n_to_1():
+    """A full ``HistorySession.replay`` on an empty workspace correctly
+    re-runs ``[New signal, New signal, New signal, average]``: the
+    per-session UUID remap translates ``average``'s captured selection
+    to the freshly-created signals, instead of aggregating over the
+    single object the last ``New signal`` left selected."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+
+        # Record [New, New, New, average].
+        for _i in range(3):
+            panel.new_object(param=NewSignalParam(), edit=False)
+        n_after_creations = len(panel.objmodel)
+        assert n_after_creations == 3
+        panel.objview.select_objects([1, 2, 3])
+        panel.processor.run_feature(sips.average)
+        assert len(panel.objmodel) == 4
+
+        session = history._HistoryPanel__history_sessions[-1]  # noqa: SLF001
+
+        # Reset to an empty workspace, then replay the whole session.
+        win.reset_all()
+        assert len(panel.objmodel) == 0
+        session.replay(win, restore_selection=False, edit=False)
+        # 3 fresh signals + 1 average = 4 objects.
+        assert len(panel.objmodel) == 4
+
+
+# --- 11) Full session replay with intermediate removal --------------------
+
+
+def test_full_session_replay_with_intermediate_removal():
+    """A full ``HistorySession.replay`` with ``[New, New, New, Remove,
+    average]`` correctly drops the removed UUID from the unclaimed
+    queue and the reverse remap, so ``average`` aggregates over the
+    two surviving signals (and not, e.g., over a stale single-object
+    selection or a removed one)."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+
+        # Record [New, New, New, Remove #3, average of remaining 2].
+        for _i in range(3):
+            panel.new_object(param=NewSignalParam(), edit=False)
+        assert len(panel.objmodel) == 3
+        panel.objview.select_objects([3])
+        panel.remove_object(force=True)
+        assert len(panel.objmodel) == 2
+        panel.objview.select_objects([1, 2])
+        panel.processor.run_feature(sips.average)
+        assert len(panel.objmodel) == 3
+
+        session = history._HistoryPanel__history_sessions[-1]  # noqa: SLF001
+
+        # Reset to an empty workspace, then replay the whole session.
+        win.reset_all()
+        assert len(panel.objmodel) == 0
+        session.replay(win, restore_selection=False, edit=False)
+        # 3 created − 1 removed + 1 average = 3 objects.
+        assert len(panel.objmodel) == 3
+
+
 if __name__ == "__main__":
     test_workspace_h5_roundtrip_with_history()
     test_history_panel_dlhist_roundtrip()
@@ -318,3 +441,6 @@ if __name__ == "__main__":
     test_replay_via_panel_api_creates_new_object()
     test_restore_selection_only_via_panel_api()
     test_replay_n_to_1_forces_captured_selection()
+    test_replay_n_to_1_falls_back_when_captured_uuids_gone()
+    test_full_session_replay_remaps_uuids_for_n_to_1()
+    test_full_session_replay_with_intermediate_removal()

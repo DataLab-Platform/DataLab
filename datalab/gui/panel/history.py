@@ -355,7 +355,11 @@ class HistoryAction(ObjItf):
         return None
 
     def replay(
-        self, mainwindow: DLMainWindow, restore_selection: bool, edit: bool
+        self,
+        mainwindow: DLMainWindow,
+        restore_selection: bool,
+        edit: bool,
+        uuid_remap: dict[str, dict[str, str]] | None = None,
     ) -> None:
         """Replay the action.
 
@@ -369,20 +373,51 @@ class HistoryAction(ObjItf):
              computation.
             edit: if True, always open the dialog boxes to edit parameters; if False,
              use the parameters captured when the action was recorded
+            uuid_remap: optional per-panel mapping ``{panel_str: {old_uuid: new_uuid}}``
+             used during full-session replay to translate captured UUIDs to the
+             freshly-created ones. Defaults to an empty (identity) mapping.
         """
+        if uuid_remap is None:
+            uuid_remap = {}
         if self.kind == self.KIND_COMPUTE:
-            # Compute actions are selection-driven: always restore the captured
-            # selection so chained replays (especially ``n_to_1`` / ``2_to_1``
-            # / ``1_to_n`` patterns) operate on the original input objects
-            # rather than on whatever the previous action left selected.
-            self.state.restore(mainwindow)
-            self._replay_compute(mainwindow, edit)
+            # Compute actions are selection-driven: restore the captured
+            # selection (translated through ``uuid_remap`` for session
+            # replays) whenever it is still resolvable so chained replays
+            # (especially ``n_to_1`` / ``2_to_1`` / ``1_to_n`` patterns)
+            # operate on the original input objects rather than on whatever
+            # the previous action left selected. When the captured UUIDs no
+            # longer exist (e.g. heuristic remap missed an object), fall
+            # back to the current selection -- replay may still fail
+            # downstream, but with the native processor error rather than
+            # an opaque ``WorkspaceState`` incompatibility.
+            translated = self._translate_state(uuid_remap)
+            if translated.is_current_state_compatible(mainwindow, False):
+                translated.restore(mainwindow)
+            self._replay_compute(mainwindow, edit, uuid_remap)
         else:
             if restore_selection:
                 self.state.restore(mainwindow)
             self._replay_ui(mainwindow, edit)
 
-    def _replay_compute(self, mainwindow: DLMainWindow, edit: bool) -> None:
+    def _translate_state(self, uuid_remap: dict[str, dict[str, str]]) -> WorkspaceState:
+        """Return a copy of ``self.state`` whose captured UUIDs have been
+        translated through ``uuid_remap`` (identity when no mapping)."""
+        if not uuid_remap:
+            return self.state
+        translated = WorkspaceState()
+        for panel_str, uuids in self.state.selection.items():
+            panel_map = uuid_remap.get(panel_str, {})
+            translated.selection[panel_str] = [panel_map.get(u, u) for u in uuids]
+        translated.states = dict(self.state.states)
+        translated.titles = dict(self.state.titles)
+        return translated
+
+    def _replay_compute(
+        self,
+        mainwindow: DLMainWindow,
+        edit: bool,
+        uuid_remap: dict[str, dict[str, str]] | None = None,
+    ) -> None:
         """Replay a compute-kind action via ``processor.run_feature``."""
         if self.pattern == "multiple_1_to_1":
             raise NotImplementedError(
@@ -400,6 +435,12 @@ class HistoryAction(ObjItf):
             uuids = self.kwargs.get("obj2_uuids") or []
             if isinstance(uuids, str):
                 uuids = [uuids]
+            # Translate captured UUIDs through ``uuid_remap`` (session replay).
+            # ``uuid_remap`` keys are ``panel.PANEL_STR`` (matches
+            # ``WorkspaceState.selection`` keys), not the
+            # ``HistoryAction.panel_str`` (PANEL_STR_ID).
+            panel_map = (uuid_remap or {}).get(panel.PANEL_STR, {})
+            uuids = [panel_map.get(u, u) for u in uuids]
             objs2 = [
                 obj
                 for obj in (self._resolve_obj_by_uuid(mainwindow, u) for u in uuids)
@@ -702,8 +743,95 @@ class HistorySession:
             edit: if True, always open the dialog boxes to edit parameters, if False,
              use the parameters passed when creating the action
         """
+        # Per-panel ``{old_uuid: new_uuid}`` mapping, populated as UI actions
+        # create new objects. Used by compute actions to translate their
+        # captured selection (and ``obj2_uuids``) into the freshly-created
+        # UUIDs of the current replay, so chained ``n_to_1`` / ``2_to_1`` /
+        # ``1_to_n`` actions operate on the correct inputs. Keys are
+        # ``panel.PANEL_STR`` (matches ``WorkspaceState.selection`` keys).
+        panels = (mainwindow.signalpanel, mainwindow.imagepanel)
+        # Map ``HistoryAction.panel_str`` (PANEL_STR_ID, e.g. ``"signal"``)
+        # to the corresponding ``panel.PANEL_STR`` used in remap keys.
+        id_to_pstr = {
+            mainwindow.signalpanel.PANEL_STR_ID: mainwindow.signalpanel.PANEL_STR,
+            mainwindow.imagepanel.PANEL_STR_ID: mainwindow.imagepanel.PANEL_STR,
+        }
+        uuid_remap: dict[str, dict[str, str]] = {p.PANEL_STR: {} for p in panels}
+        # FIFO of newly-created UUIDs not yet claimed by a remap entry --
+        # required because most creation UI actions (e.g. ``new_signal``)
+        # are recorded with ``save_state=False`` (empty captured selection),
+        # so we cannot pair captured-vs-new UUIDs by position at UI time.
+        # Subsequent compute actions claim from this queue on demand.
+        unclaimed: dict[str, list[str]] = {p.PANEL_STR: [] for p in panels}
         for action in self.actions[:]:
-            action.replay(mainwindow, restore_selection=restore_selection, edit=edit)
+            before = {p.PANEL_STR: set(p.objmodel.get_object_ids()) for p in panels}
+            if action.kind == HistoryAction.KIND_COMPUTE:
+                # Lazy-resolve any captured UUIDs missing from the remap by
+                # claiming from ``unclaimed`` (FIFO, panel-local).
+                pstr = id_to_pstr.get(action.panel_str or "", "")
+                captured = action.state.selection.get(pstr, [])
+                for old_uuid in captured:
+                    if old_uuid in uuid_remap.get(pstr, {}):
+                        continue
+                    queue = unclaimed.get(pstr) or []
+                    if queue:
+                        uuid_remap.setdefault(pstr, {})[old_uuid] = queue.pop(0)
+                # 2_to_1: also claim ``obj2_uuids`` from the queue if unknown.
+                if action.pattern == "2_to_1":
+                    obj2 = action.kwargs.get("obj2_uuids") or []
+                    if isinstance(obj2, str):
+                        obj2 = [obj2]
+                    for old_uuid in obj2:
+                        if old_uuid in uuid_remap.get(pstr, {}):
+                            continue
+                        queue = unclaimed.get(pstr) or []
+                        if queue:
+                            uuid_remap.setdefault(pstr, {})[old_uuid] = queue.pop(0)
+            action.replay(
+                mainwindow,
+                restore_selection=restore_selection,
+                edit=edit,
+                uuid_remap=uuid_remap,
+            )
+            if action.kind == HistoryAction.KIND_UI:
+                for panel in panels:
+                    pstr = panel.PANEL_STR
+                    current_ids = set(panel.objmodel.get_object_ids())
+                    new_uuids = [
+                        u
+                        for u in panel.objmodel.get_object_ids()
+                        if u not in before[pstr]
+                    ]
+                    # Drop vanished UUIDs from the unclaimed queue and the
+                    # reverse remap entries (e.g. ``Remove selected objects``):
+                    # this keeps the FIFO claim in sync with the live panel
+                    # contents during chained creation/removal replays.
+                    removed_uuids = before[pstr] - current_ids
+                    if removed_uuids:
+                        unclaimed[pstr] = [
+                            u for u in unclaimed.get(pstr, []) if u not in removed_uuids
+                        ]
+                        panel_map = uuid_remap.get(pstr, {})
+                        for old_key in [
+                            k for k, v in panel_map.items() if v in removed_uuids
+                        ]:
+                            panel_map.pop(old_key, None)
+                    if not new_uuids:
+                        continue
+                    captured = action.state.selection.get(pstr, [])
+                    if captured:
+                        # Captured post-action selection available: pair
+                        # captured UUIDs with new UUIDs by position.
+                        for old_uuid, new_uuid in zip(captured, new_uuids):
+                            uuid_remap.setdefault(pstr, {})[old_uuid] = new_uuid
+                        # Any extra newly-created UUIDs go to the queue.
+                        unclaimed.setdefault(pstr, []).extend(
+                            new_uuids[len(captured) :]
+                        )
+                    else:
+                        # No captured selection (typical of ``new_signal``):
+                        # queue all new UUIDs for lazy claiming.
+                        unclaimed.setdefault(pstr, []).extend(new_uuids)
 
     def serialize(self, writer: NativeH5Writer) -> None:
         """Serialize this history session
