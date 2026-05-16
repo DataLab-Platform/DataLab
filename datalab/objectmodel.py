@@ -110,6 +110,24 @@ def patch_title_with_ids(
         ) from exc
 
 
+#: Regex matching short IDs as embedded in computation titles
+#: (e.g. ``s001``, ``i012``, ``gs003``, ``gi007``).
+SHORT_ID_REGEX = re.compile(r"\b(g?[si])(\d{3})\b")
+
+
+def find_short_ids_in_title(title: str) -> list[tuple[int, int, str]]:
+    """Return a list of ``(start, end, short_id)`` tuples for every short ID
+    occurrence found in ``title``.
+
+    Args:
+        title: title string to scan
+
+    Returns:
+        List of ``(start, end, short_id)`` tuples, sorted by ``start``.
+    """
+    return [(m.start(), m.end(), m.group(0)) for m in SHORT_ID_REGEX.finditer(title)]
+
+
 class ObjectGroup:
     """Represents a DataLab object group
 
@@ -291,6 +309,28 @@ class ObjectModel:
             if get_uuid(group) == uuid:
                 return group
         raise KeyError(f"Object or group with uuid {uuid} not found")
+
+    def find_by_short_id(
+        self, short_id: str
+    ) -> SignalObj | ImageObj | ObjectGroup | None:
+        """Return the object or group whose short ID matches ``short_id``,
+        or ``None`` if no match is found in this model.
+
+        Args:
+            short_id: short ID to look up (e.g. ``"s001"``, ``"i012"``,
+             ``"gs003"`` or ``"gi007"``).
+
+        Returns:
+            The matching :class:`sigima.SignalObj`, :class:`sigima.ImageObj`
+            or :class:`ObjectGroup` instance, or ``None``.
+        """
+        for group in self._groups:
+            if get_short_id(group) == short_id:
+                return group
+        for obj in self._objects.values():
+            if get_short_id(obj) == short_id:
+                return obj
+        return None
 
     def get_group(self, uuid: str) -> ObjectGroup:
         """Return group with uuid"""
