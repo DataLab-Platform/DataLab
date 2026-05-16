@@ -6,6 +6,7 @@ Module for taking DataLab screenshots
 
 from datalab import config
 from datalab.tests.features.applauncher import launcher1_app_test
+from datalab.tests.features.common import history_panel_app_test
 from datalab.tests.features.utilities import settings_unit_test
 from datalab.tests.scenarios import beautiful_app
 
@@ -17,4 +18,5 @@ if __name__ == "__main__":
     beautiful_app.run_beautiful_scenario(screenshots=True)
     beautiful_app.run_blob_detection_on_flower_image(screenshots=True)
     settings_unit_test.capture_settings_screenshots()
+    history_panel_app_test.test_history_panel(screenshots=True)
     print("done.")
