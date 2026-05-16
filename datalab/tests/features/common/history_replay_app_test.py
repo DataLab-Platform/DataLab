@@ -273,6 +273,42 @@ def test_restore_selection_only_via_panel_api():
         assert panel.objview.get_sel_object_uuids() == [src_uuid]
 
 
+# --- 8) n_to_1 replay ignores restore_selection=False --------------------
+
+
+def test_replay_n_to_1_forces_captured_selection():
+    """``n_to_1`` replay must restore the captured multi-object selection
+    even when ``restore_selection=False`` (otherwise an aggregator such as
+    ``average`` would be applied to the single object the previous action
+    left selected and fail with ``src_list must be a list of at least 2
+    objects``)."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+
+        panel.add_object(create_paracetamol_signal())
+        panel.add_object(create_paracetamol_signal())
+        panel.add_object(create_paracetamol_signal())
+
+        # Average over the three signals (n_to_1 aggregator).
+        panel.objview.select_objects([1, 2, 3])
+        panel.processor.run_feature(sips.average)
+        avg_entry = history[len(history)]
+        assert avg_entry.pattern == "n_to_1"
+
+        # Drift selection to a single object (mimics the state left by a
+        # preceding "New signal" UI action in a chained session replay).
+        panel.objview.select_objects([1])
+        assert len(panel.objview.get_sel_object_uuids()) == 1
+
+        n_before = len(panel.objmodel)
+        # restore_selection=False on purpose: compute actions must still
+        # restore their captured selection internally.
+        avg_entry.replay(win, restore_selection=False, edit=False)
+        assert len(panel.objmodel) == n_before + 1
+
+
 if __name__ == "__main__":
     test_workspace_h5_roundtrip_with_history()
     test_history_panel_dlhist_roundtrip()
@@ -281,3 +317,4 @@ if __name__ == "__main__":
     test_replay_2_to_1_with_vanished_obj2_raises()
     test_replay_via_panel_api_creates_new_object()
     test_restore_selection_only_via_panel_api()
+    test_replay_n_to_1_forces_captured_selection()

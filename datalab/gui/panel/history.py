@@ -362,14 +362,24 @@ class HistoryAction(ObjItf):
         Args:
             mainwindow: DataLab's main window
             restore_selection: True to restore the workspace selection before replaying
+             a UI-kind action. Ignored for compute-kind actions: their semantics
+             depends on which objects are selected (e.g. ``n_to_1`` aggregators
+             such as ``average`` require their captured multi-object selection),
+             so the captured selection is always restored before running the
+             computation.
             edit: if True, always open the dialog boxes to edit parameters; if False,
              use the parameters captured when the action was recorded
         """
-        if restore_selection:
-            self.state.restore(mainwindow)
         if self.kind == self.KIND_COMPUTE:
+            # Compute actions are selection-driven: always restore the captured
+            # selection so chained replays (especially ``n_to_1`` / ``2_to_1``
+            # / ``1_to_n`` patterns) operate on the original input objects
+            # rather than on whatever the previous action left selected.
+            self.state.restore(mainwindow)
             self._replay_compute(mainwindow, edit)
         else:
+            if restore_selection:
+                self.state.restore(mainwindow)
             self._replay_ui(mainwindow, edit)
 
     def _replay_compute(self, mainwindow: DLMainWindow, edit: bool) -> None:
