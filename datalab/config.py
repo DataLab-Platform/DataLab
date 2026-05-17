@@ -436,6 +436,35 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
                     opt.set(def_dict[name])
 
 
+class MacroSection(conf.Section, metaclass=conf.SectionMeta):
+    """Class defining the Macro panel configuration section structure.
+    Each class attribute is an option (metaclass is automatically affecting
+    option names in .INI file based on class attribute names)."""
+
+    # UUIDs of the macros whose tab was open when DataLab was last closed
+    # (JSON-serialized list of strings).
+    open_tab_uids = conf.Option()
+
+    # UUID of the macro tab that was active when DataLab was last closed.
+    active_tab_uid = conf.Option()
+
+    # Serialized state of the editor/console QSplitter (base64-encoded
+    # QByteArray, see QSplitter.saveState).
+    splitter_state = conf.Option()
+
+    # Maximum number of lines kept in the macro console (FIFO).
+    console_max_lines = conf.Option()
+
+    # If True, closing a macro tab only hides it; the macro stays in the
+    # workspace. The user must use "Delete macro" to remove it permanently.
+    close_tab_keeps_macro = conf.Option()
+
+    # Path to a user-managed directory containing custom macro templates
+    # (``*.py`` files). Each file may declare its description on the first
+    # line using the ``# DataLab template: ...`` tag.
+    templates_path = conf.Option()
+
+
 class AISection(conf.Section, metaclass=conf.SectionMeta):
     """Class defining the AI assistant configuration section structure.
     Each class attribute is an option (metaclass is automatically affecting
@@ -487,6 +516,7 @@ class Conf(conf.Configuration, metaclass=conf.ConfMeta):
     view = ViewSection()
     proc = ProcSection()
     io = IOSection()
+    macro = MacroSection()
     ai = AISection()
 
 
@@ -536,6 +566,10 @@ def initialize():
     iofmts = Conf.io.imageio_formats.get(())
     if len(iofmts) > 0:
         sigima_options.imageio_formats.set(iofmts)  # Sync with sigima config
+    # Macro section
+    Conf.macro.console_max_lines.get(5000)
+    Conf.macro.close_tab_keeps_macro.get(True)
+    Conf.macro.templates_path.get(Conf.get_path("macro_templates"))
     # Proc section
     Conf.proc.operation_mode.get("single")
     Conf.proc.use_signal_bounds.get(False)
