@@ -584,7 +584,7 @@ msgid "Show results"
 msgstr "Afficher les résultats"
 
 msgid "Results label"
-msgstr "Etiquette des résultats"
+msgstr "Étiquette des résultats"
 
 msgid "Show or hide the merged result label on the plot"
 msgstr "Afficher ou masquer l'étiquette de résultat fusionnée sur le graphique"
@@ -2403,7 +2403,7 @@ msgid "Allan variance"
 msgstr "Variance d'Allan"
 
 msgid "Allan deviation"
-msgstr "Ecart-type d'Allan"
+msgstr "Écart-type d'Allan"
 
 msgid "Overlapping Allan variance"
 msgstr "Variance d’Allan avec recouvrement"
@@ -2418,7 +2418,7 @@ msgid "Total variance"
 msgstr "Variance totale"
 
 msgid "Time deviation"
-msgstr "Ecart-type temporel"
+msgstr "Écart-type temporel"
 
 msgid "X-Y mode"
 msgstr "Mode X-Y"
@@ -2902,31 +2902,31 @@ msgid "Maximum number of columns to display in merged result label."
 msgstr "Nombre maximum de colonnes à afficher dans l'étiquette de résultat fusionnée."
 
 msgid "Show the merged result label by default"
-msgstr "Afficher le titre de résultat fusionné par défaut"
+msgstr "Afficher l'étiquette de résultat fusionnée par défaut"
 
 msgid "Result label"
 msgstr "Étiquette des résultats"
 
 msgid "Show the merged result label on the plot by default. Can be toggled per-object using the checkbox in the Properties panel."
-msgstr "Etiquette des résultats fusionnés sur le graphique par défaut. Peut être activée ou désactivée par objet à l'aide de la case à cocher dans le panneau des propriétés."
+msgstr "Afficher l'étiquette des résultats fusionnés sur le graphique par défaut. Peut être activée ou désactivée par objet à l'aide de la case à cocher dans le panneau des propriétés."
 
 msgid "Show marker labels in result tables"
-msgstr ""
+msgstr "Afficher les étiquettes de marqueurs dans les tables de résultats"
 
 msgid "Marker labels"
-msgstr "Etiquettes des marqueurs"
+msgstr "Étiquettes des marqueurs"
 
 msgid "Prepend a marker-label column to result tables for marker results (XY/X/Y markers), so each row can be matched with the corresponding cross or dashed cursor drawn on the plot. XY markers use numeric labels (#1, #2, ...), axis markers use letters (a, b, c, ...)."
 msgstr "Ajouter une colonne d'étiquettes de marqueurs aux tables de résultats pour les résultats de marqueurs (marqueurs XY/X/Y), afin que chaque ligne puisse être associée au curseur croisé ou en pointillés correspondant dessiné sur le graphique. Les marqueurs XY utilisent des étiquettes numériques (#1, #2, ...), les marqueurs d'axe utilisent des lettres (a, b, c, ...)."
 
 msgid "Process isolation enable status"
-msgstr "Etat d'activation de l'isolation de processus"
+msgstr "État d'activation de l'isolation de processus"
 
 msgid "RPC server enable status"
-msgstr "Etat d'activation du serveur XML-RPC"
+msgstr "État d'activation du serveur XML-RPC"
 
 msgid "Console enable status"
-msgstr "Etat d'activation de la console"
+msgstr "État d'activation de la console"
 
 msgid "Third-party plugins path"
 msgstr "Chemin des plugins tiers"
@@ -3372,7 +3372,7 @@ msgid "Base line"
 msgstr "Ligne de base"
 
 msgid "Std-dev"
-msgstr "Ecart-type"
+msgstr "Écart-type"
 
 msgid "Mean"
 msgstr "Moyenne"
@@ -3791,7 +3791,7 @@ msgid "Set the labels and units for the imported data"
 msgstr "Définir les titres et unités pour les données importées"
 
 msgid "The following title, labels and units will be applied to the data.<br><br><i><u>Note</u>: Leave empty the labels and units to keep the default values (i.e. the values which were inferred from the data).</i>"
-msgstr "Les titres, étiquettes et unités suivants seront appliqués aux données.<br><br><i><u>Note</u> : Laisser vide les étiquettes et unités pour conserver les valeurs par défaut (c'est-à-dire les valeurs qui ont été déduites des données)."
+msgstr "Les titres, étiquettes et unités suivants seront appliqués aux données.<br><br><i><u>Note</u> : Laisser vide les étiquettes et unités pour conserver les valeurs par défaut (c'est-à-dire les valeurs qui ont été déduites des données).</i>"
 
 msgid "clipboard"
 msgstr "presse-papiers"
