@@ -197,53 +197,64 @@ def test_plugin_enable_disable_config():
 
 def test_plugin_many_actions_menu_behavior():
     """Test plugin with many actions in dropdown menu."""
-    with temporary_template_plugin(
-        "datalab_test_plugin_many_actions.py",
-        "plugin_many_actions.py.template",
-        {
-            "{class_name}": "TestPluginManyActions",
-            "{plugin_name}": "Many Actions Test",
-            "{menu_name}": "Test Menu with Many Actions",
-            "{action_prefix}": "Test Action",
-            "{test_code_1}": "self.main._test_action_1 = True",
-            "{test_code_2}": "self.main._test_action_2 = True",
-            "{test_code_3}": "self.main._test_action_3 = True",
-            "{test_code_4}": "self.main._test_action_4 = True",
-            "{test_code_5}": "self.main._test_action_5 = True",
-        },
-    ):
-        with datalab_test_app_context(console=False) as win:
-            QW.QApplication.processEvents()
-            win.tabwidget.setCurrentWidget(win.signalpanel)
-            QW.QApplication.processEvents()
-            win.plugins_menu.aboutToShow.emit()
-            assert "menu-scrollable" in win.plugins_menu.styleSheet()
-            plugin_actions = win.signalpanel.get_category_actions(
-                ActionCategory.PLUGINS
-            )
+    main_config = Conf.to_dict().get("main", {})
+    had_config = "plugins_enabled_list" in main_config
+    original_enabled_list = Conf.main.plugins_enabled_list.get(None)
 
-            test_menu = next(
-                item
-                for item in plugin_actions
-                if isinstance(item, QW.QMenu)
-                and item.title() == "Test Menu with Many Actions"
-            )
-            test_menu.aboutToShow.emit()
-            assert "menu-scrollable" in test_menu.styleSheet()
+    try:
+        Conf.main.plugins_enabled_list.set(None)
+        with temporary_template_plugin(
+            "datalab_test_plugin_many_actions.py",
+            "plugin_many_actions.py.template",
+            {
+                "{class_name}": "TestPluginManyActions",
+                "{plugin_name}": "Many Actions Test",
+                "{menu_name}": "Test Menu with Many Actions",
+                "{action_prefix}": "Test Action",
+                "{test_code_1}": "self.main._test_action_1 = True",
+                "{test_code_2}": "self.main._test_action_2 = True",
+                "{test_code_3}": "self.main._test_action_3 = True",
+                "{test_code_4}": "self.main._test_action_4 = True",
+                "{test_code_5}": "self.main._test_action_5 = True",
+            },
+        ):
+            with datalab_test_app_context(console=False) as win:
+                QW.QApplication.processEvents()
+                win.tabwidget.setCurrentWidget(win.signalpanel)
+                QW.QApplication.processEvents()
+                win.plugins_menu.aboutToShow.emit()
+                assert "menu-scrollable" in win.plugins_menu.styleSheet()
+                plugin_actions = win.signalpanel.get_category_actions(
+                    ActionCategory.PLUGINS
+                )
 
-            action_texts = [
-                action.text()
-                for action in test_menu.actions()
-                if not action.isSeparator()
-            ]
-            assert len(action_texts) == 5
-            assert "Test Action 3" in action_texts
-            action_3 = next(
-                action
-                for action in test_menu.actions()
-                if action.text() == "Test Action 3"
-            )
-            assert action_3.isEnabled()
+                test_menu = next(
+                    item
+                    for item in plugin_actions
+                    if isinstance(item, QW.QMenu)
+                    and item.title() == "Test Menu with Many Actions"
+                )
+                test_menu.aboutToShow.emit()
+                assert "menu-scrollable" in test_menu.styleSheet()
+
+                action_texts = [
+                    action.text()
+                    for action in test_menu.actions()
+                    if not action.isSeparator()
+                ]
+                assert len(action_texts) == 5
+                assert "Test Action 3" in action_texts
+                action_3 = next(
+                    action
+                    for action in test_menu.actions()
+                    if action.text() == "Test Action 3"
+                )
+                assert action_3.isEnabled()
+    finally:
+        if had_config:
+            Conf.main.plugins_enabled_list.set(original_enabled_list)
+        else:
+            Conf.main.plugins_enabled_list.remove()
 
 
 def test_plugin_long_description():
