@@ -9,9 +9,10 @@ REM   - wix\banner.bmp         (493x58 WiX UI banner)
 REM
 REM Run this script ONLY when the source SVG files change.
 REM The generated files are committed under git so that the
-REM release pipeline does not need Inkscape / ImageMagick.
+REM release pipeline does not need Inkscape.
 REM
-REM Requirements: Inkscape, ImageMagick (`magick` on PATH).
+REM Requirements: Inkscape (`inkscape` on PATH or installed under the
+REM default Windows path); Pillow (pulled transitively by DataLab).
 REM ======================================================
 call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% UsePython

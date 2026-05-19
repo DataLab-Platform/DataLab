@@ -18,7 +18,7 @@ set WIXPATH=%ROOTPATH%\wix
 REM Note: WiX UI bitmaps (wix\dialog.bmp, wix\banner.bmp) are committed under
 REM git and regenerated on demand via `scripts\build_resources.bat` when the
 REM source SVG files change. The release pipeline therefore does not require
-REM Inkscape or ImageMagick.
+REM Inkscape.
 
 echo Generating .wxs file for MSI installer...
 %PYTHON% "%WIXPATH%\makewxs.py" DataLab %VERSION%

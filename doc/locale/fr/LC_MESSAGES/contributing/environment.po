@@ -255,12 +255,6 @@ msgstr ""
 msgid "Version control system"
 msgstr "Système de contrôle de version"
 
-msgid "[ImageMagick](https://imagemagick.org/)"
-msgstr ""
-
-msgid "Image manipulation utilities"
-msgstr "Utilitaires de manipulation d'images"
-
 msgid "[Inkscape](https://inkscape.org/)"
 msgstr ""
 

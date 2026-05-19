@@ -3,7 +3,7 @@
 Regenerate committed binary graphics resources from their SVG sources.
 
 This script produces three files that are checked into git so that the
-release pipeline does not need Inkscape / ImageMagick:
+release pipeline does not need Inkscape:
 
     * ``resources/DataLab.ico``   - multi-size Windows icon used by the EXE
     * ``wix/dialog.bmp``          - 493x312 background of the WiX UI dialog
