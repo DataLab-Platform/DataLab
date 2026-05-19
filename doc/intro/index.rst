@@ -13,6 +13,8 @@ and image analysis tasks.
 
 DataLab integrates seemlessly into your workflow thanks to three main operating modes:
 
+.. tabularcolumns:: |>{\centering\arraybackslash}m{2cm}|m{\dimexpr\linewidth-2cm-4\tabcolsep\relax}|
+
 .. list-table::
     :header-rows: 0
 
