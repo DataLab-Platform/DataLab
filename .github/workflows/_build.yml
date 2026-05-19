@@ -263,7 +263,13 @@ jobs:
               TEX=$(ls *.tex | head -n 1) && \
               xelatex -interaction=nonstopmode -halt-on-error "$TEX" && \
               xelatex -interaction=nonstopmode -halt-on-error "$TEX" )
-            mv build/doc/*.pdf "datalab/data/doc/DataLab_${LNG}.pdf"
+            # Move the main document PDF (named after the .tex file). The
+            # build dir may also contain converted SVG→PDF assets
+            # (sponsors, icons) produced by sphinxcontrib.cairosvgconverter,
+            # so we cannot rely on a glob here.
+            MAIN_PDF=$(ls build/doc/*.tex | head -n 1)
+            MAIN_PDF="${MAIN_PDF%.tex}.pdf"
+            mv "$MAIN_PDF" "datalab/data/doc/DataLab_${LNG}.pdf"
           done
           ls -lh datalab/data/doc/
 
