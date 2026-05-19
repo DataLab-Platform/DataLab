@@ -9,10 +9,15 @@ Dialog for managing plugin enable/disable state and viewing plugin information.
 
 from __future__ import annotations
 
+import inspect
 import os
 import os.path as osp
+import shutil
+import subprocess
+import sys
 from typing import TYPE_CHECKING
 
+from guidata.configtools import get_icon
 from guidata.qthelpers import win32_fix_title_bar_background
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -86,6 +91,44 @@ def _create_status_label(text: str, color: QG.QColor | None = None) -> QW.QLabel
     return status_label
 
 
+def _open_local_path(path: str) -> bool:
+    """Open a local path with the desktop handler."""
+    return QG.QDesktopServices.openUrl(QC.QUrl.fromLocalFile(path))
+
+
+def _show_in_folder(path: str) -> bool:
+    """Show a file in its containing folder, selecting it when supported."""
+    filepath = osp.abspath(path)
+    directory = osp.dirname(filepath)
+
+    if sys.platform.startswith("win"):
+        commands = [["explorer", f"/select,{osp.normpath(filepath)}"]]
+    elif sys.platform == "darwin":
+        commands = [["open", "-R", filepath]]
+    else:
+        commands = []
+        if shutil.which("nautilus"):
+            commands.append(["nautilus", "--select", filepath])
+        if shutil.which("dolphin"):
+            commands.append(["dolphin", "--select", filepath])
+        if shutil.which("nemo"):
+            commands.append(["nemo", filepath])
+        if shutil.which("caja"):
+            commands.append(["caja", "--select", filepath])
+
+    for command in commands:
+        try:
+            subprocess.Popen(  # pylint: disable=consider-using-with
+                command,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            return True
+        except OSError:
+            continue
+    return _open_local_path(directory)
+
+
 class PluginState:
     """Plugin state enumeration"""
 
@@ -117,6 +160,9 @@ class PluginInfoWidget(QW.QWidget):
         self.initial_enabled = enabled
         self.state = state
         self._expanded = False
+        self.plugin_filepath = self._get_plugin_filepath()
+        self.open_file_button: QW.QPushButton | None = None
+        self.show_in_folder_button: QW.QPushButton | None = None
         self.setSizePolicy(QW.QSizePolicy.Preferred, QW.QSizePolicy.Maximum)
 
         # Main layout
@@ -126,6 +172,9 @@ class PluginInfoWidget(QW.QWidget):
 
         layout.addLayout(self._create_top_row(enabled, state))
         layout.addWidget(self._create_description_widget())
+        actions_layout = self._create_actions_layout()
+        if actions_layout is not None:
+            layout.addLayout(actions_layout)
         layout.addWidget(self._create_separator())
 
     def _create_top_row(self, enabled: bool, state: str) -> QW.QHBoxLayout:
@@ -179,6 +228,50 @@ class PluginInfoWidget(QW.QWidget):
     def _sync_description_expanded_state(self, expanded: bool) -> None:
         """Keep the legacy expanded state in sync with the description widget."""
         self._expanded = expanded
+
+    def _get_plugin_filepath(self) -> str | None:
+        """Return the Python file defining the plugin class, when available."""
+        filepath = getattr(self.plugin_class, "__plugin_filepath__", None)
+        if filepath:
+            return osp.abspath(filepath)
+        try:
+            filepath = inspect.getsourcefile(self.plugin_class) or inspect.getfile(
+                self.plugin_class
+            )
+        except (OSError, TypeError):
+            return None
+        return osp.abspath(filepath) if filepath else None
+
+    def _create_actions_layout(self) -> QW.QHBoxLayout | None:
+        """Create file/folder actions for the plugin source file."""
+        if not self.plugin_filepath:
+            return None
+
+        actions_layout = QW.QHBoxLayout()
+        actions_layout.addStretch()
+
+        self.open_file_button = QW.QPushButton(
+            get_icon("open_file_source.svg"), _("Open file")
+        )
+        self.open_file_button.clicked.connect(self._open_plugin_file)
+        actions_layout.addWidget(self.open_file_button)
+
+        self.show_in_folder_button = QW.QPushButton(
+            get_icon("show_in_folder.svg"), _("Show in folder")
+        )
+        self.show_in_folder_button.clicked.connect(self._show_plugin_in_folder)
+        actions_layout.addWidget(self.show_in_folder_button)
+        return actions_layout
+
+    def _open_plugin_file(self) -> None:
+        """Open the plugin file with the desktop handler."""
+        if self.plugin_filepath:
+            _open_local_path(self.plugin_filepath)
+
+    def _show_plugin_in_folder(self) -> None:
+        """Show the plugin file in its containing folder."""
+        if self.plugin_filepath:
+            _show_in_folder(self.plugin_filepath)
 
     @staticmethod
     def _create_separator() -> QW.QFrame:
@@ -236,6 +329,11 @@ class FailedPluginInfoWidget(QW.QWidget):
         """
         super().__init__(parent)
         self._expanded = False
+        self.plugin_filepath = (
+            osp.abspath(failed_info.filepath) if failed_info.filepath else None
+        )
+        self.open_file_button: QW.QPushButton | None = None
+        self.show_in_folder_button: QW.QPushButton | None = None
         self.setSizePolicy(QW.QSizePolicy.Preferred, QW.QSizePolicy.Maximum)
 
         # Main layout
@@ -245,6 +343,9 @@ class FailedPluginInfoWidget(QW.QWidget):
 
         layout.addLayout(self._create_top_row(failed_info))
         layout.addWidget(self._create_description_widget(failed_info))
+        actions_layout = self._create_actions_layout()
+        if actions_layout is not None:
+            layout.addLayout(actions_layout)
         layout.addWidget(PluginInfoWidget._create_separator())
 
     def _create_top_row(self, failed_info: FailedPluginInfo) -> QW.QHBoxLayout:
@@ -285,6 +386,37 @@ class FailedPluginInfoWidget(QW.QWidget):
         self.desc_label = self.description_widget.label
         self._toggle_btn = self.description_widget.toggle_button
         return self.description_widget
+
+    def _create_actions_layout(self) -> QW.QHBoxLayout | None:
+        """Create file/folder actions for the failed plugin path."""
+        if not self.plugin_filepath:
+            return None
+
+        actions_layout = QW.QHBoxLayout()
+        actions_layout.addStretch()
+
+        self.open_file_button = QW.QPushButton(
+            get_icon("open_file_source.svg"), _("Open file")
+        )
+        self.open_file_button.clicked.connect(self._open_plugin_file)
+        actions_layout.addWidget(self.open_file_button)
+
+        self.show_in_folder_button = QW.QPushButton(
+            get_icon("show_in_folder.svg"), _("Show in folder")
+        )
+        self.show_in_folder_button.clicked.connect(self._show_plugin_in_folder)
+        actions_layout.addWidget(self.show_in_folder_button)
+        return actions_layout
+
+    def _open_plugin_file(self) -> None:
+        """Open the failed plugin file with the desktop handler."""
+        if self.plugin_filepath:
+            _open_local_path(self.plugin_filepath)
+
+    def _show_plugin_in_folder(self) -> None:
+        """Show the failed plugin file in its containing folder."""
+        if self.plugin_filepath:
+            _show_in_folder(self.plugin_filepath)
 
     def _toggle_description(self):
         """Toggle between collapsed and expanded description"""

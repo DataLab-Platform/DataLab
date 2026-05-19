@@ -364,6 +364,18 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         """Create actions"""
 
 
+def _set_plugin_class_filepaths(module) -> None:
+    """Attach the module file path to plugin classes defined in that module."""
+    filepath = getattr(module, "__file__", None)
+    if not filepath:
+        return
+
+    filepath = osp.abspath(filepath)
+    for plugin_class in PluginRegistry.get_plugin_classes():
+        if plugin_class.__module__ == module.__name__:
+            plugin_class.__plugin_filepath__ = filepath
+
+
 def discover_plugins() -> list[type[PluginBase]]:
     """Discover plugins using naming convention
 
@@ -406,6 +418,7 @@ def discover_plugins() -> list[type[PluginBase]]:
                 module = importlib.reload(sys.modules[name])
             else:
                 module = importlib.import_module(name)
+            _set_plugin_class_filepaths(module)
             modules.append(module)
         # Plugin discovery imports arbitrary third-party modules. We must catch
         # every failure here so discovery can continue and the error is exposed

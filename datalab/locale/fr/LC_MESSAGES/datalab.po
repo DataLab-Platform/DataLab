@@ -1711,6 +1711,12 @@ msgstr "Désactivé"
 msgid "No description available"
 msgstr "Aucune description disponible"
 
+msgid "Open file"
+msgstr "Ouvrir le fichier"
+
+msgid "Show in folder"
+msgstr "Afficher dans le dossier"
+
 msgid "Import error"
 msgstr "Erreur d'importation"
 

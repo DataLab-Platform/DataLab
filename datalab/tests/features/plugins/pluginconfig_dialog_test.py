@@ -9,6 +9,7 @@ from qtpy import QtWidgets as QW
 
 from datalab.config import Conf
 from datalab.env import execenv
+from datalab.gui import pluginconfig
 from datalab.gui.actionhandler import ActionCategory
 from datalab.gui.pluginconfig import (
     ExpandableTextWidget,
@@ -26,7 +27,7 @@ from datalab.tests.features.plugins.plugin_test_dataset import (
 )
 
 
-def _make_dummy_plugin_class(name: str, description: str):
+def _make_dummy_plugin_class(name: str, description: str, filepath: str | None = None):
     """Create a minimal plugin class for UI-only widget tests."""
 
     class DummyPlugin:
@@ -42,6 +43,8 @@ def _make_dummy_plugin_class(name: str, description: str):
             "icon": None,
         },
     )()
+    if filepath is not None:
+        DummyPlugin.__plugin_filepath__ = filepath
 
     return DummyPlugin
 
@@ -80,11 +83,13 @@ def test_plugin_enable_disable_config():
     main_config = Conf.to_dict().get("main", {})
     had_config = "plugins_enabled_list" in main_config
     original_enabled_list = Conf.main.plugins_enabled_list.get(None)
+    plugin_1_path: str | None = None
+    plugin_2_path: str | None = None
 
     try:
         with temporary_plugin_dir() as plugin_dir:
             execenv.print(f"Using temporary plugin directory: {plugin_dir}")
-            create_plugin_file(
+            plugin_1_path = create_plugin_file(
                 plugin_dir,
                 "datalab_test_plugin_1.py",
                 "TestPluginOne",
@@ -92,7 +97,7 @@ def test_plugin_enable_disable_config():
                 "Action One",
                 "action_1",
             )
-            create_plugin_file(
+            plugin_2_path = create_plugin_file(
                 plugin_dir,
                 "datalab_test_plugin_2.py",
                 "TestPluginTwo",
@@ -112,6 +117,22 @@ def test_plugin_enable_disable_config():
                 ]
                 assert "Test Plugin 1" in widget_names
                 assert "Test Plugin 2" in widget_names
+                plugin_1_widget = next(
+                    widget
+                    for widget in dialog.plugin_widgets
+                    if widget.plugin_class.PLUGIN_INFO.name == "Test Plugin 1"
+                )
+                plugin_2_widget = next(
+                    widget
+                    for widget in dialog.plugin_widgets
+                    if widget.plugin_class.PLUGIN_INFO.name == "Test Plugin 2"
+                )
+                assert plugin_1_widget.plugin_filepath == plugin_1_path
+                assert plugin_2_widget.plugin_filepath == plugin_2_path
+                assert plugin_1_widget.open_file_button is not None
+                assert plugin_1_widget.show_in_folder_button is not None
+                assert plugin_2_widget.open_file_button is not None
+                assert plugin_2_widget.show_in_folder_button is not None
                 assert dialog.toggle_all_checkbox.checkState() == QC.Qt.Checked
 
                 dialog.filter_combo.setCurrentIndex(2)
@@ -332,6 +353,48 @@ def test_plugin_description_toggle_depends_on_dialog_width():
     assert app is not None
 
 
+def test_plugin_widget_can_open_plugin_file_and_show_in_folder(monkeypatch):
+    """Plugin widget should expose actions for opening file and showing it."""
+    opened_paths: list[str] = []
+    shown_paths: list[str] = []
+
+    def _open_local_path(path: str) -> bool:
+        opened_paths.append(path)
+        return True
+
+    def _show_in_folder(path: str) -> bool:
+        shown_paths.append(path)
+        return True
+
+    monkeypatch.setattr(pluginconfig, "_open_local_path", _open_local_path)
+    monkeypatch.setattr(pluginconfig, "_show_in_folder", _show_in_folder)
+
+    with datalab_test_app_context(console=False):
+        widget = PluginInfoWidget(
+            _make_dummy_plugin_class(
+                "Path Actions Test",
+                "Plugin with location actions.",
+                filepath=__file__,
+            ),
+            enabled=True,
+            state=PluginState.ENABLED,
+        )
+
+        assert widget.open_file_button is not None
+        assert widget.show_in_folder_button is not None
+        assert widget.show_in_folder_button.text() == "Show in folder"
+
+        widget.open_file_button.click()
+        widget.show_in_folder_button.click()
+
+        assert opened_paths == [__file__]
+        assert shown_paths == [__file__]
+
+        widget.close()
+        widget.deleteLater()
+        QW.QApplication.processEvents()
+
+
 def test_plugin_very_long_description_scrolls_only_when_expanded():
     """Very long descriptions should use an internal scrollbar only when expanded."""
     description = " ".join(["Very long plugin description for scrollbar testing."] * 80)
@@ -392,6 +455,46 @@ def test_failed_plugin_description_uses_same_expand_collapse_behavior():
         assert widget.description_widget.is_expanded()
         assert scroll_area.verticalScrollBarPolicy() == QC.Qt.ScrollBarAsNeeded
         assert scroll_area.height() > collapsed_height
+
+        widget.close()
+        widget.deleteLater()
+        QW.QApplication.processEvents()
+
+
+def test_failed_plugin_widget_can_open_plugin_file_and_show_in_folder(monkeypatch):
+    """Failed plugin widget should expose actions for opening file and showing it."""
+    opened_paths: list[str] = []
+    shown_paths: list[str] = []
+
+    def _open_local_path(path: str) -> bool:
+        opened_paths.append(path)
+        return True
+
+    def _show_in_folder(path: str) -> bool:
+        shown_paths.append(path)
+        return True
+
+    monkeypatch.setattr(pluginconfig, "_open_local_path", _open_local_path)
+    monkeypatch.setattr(pluginconfig, "_show_in_folder", _show_in_folder)
+
+    failed_info = FailedPluginInfo(
+        name="bad_plugin.py",
+        filepath=__file__,
+        traceback="Traceback",
+    )
+
+    with datalab_test_app_context(console=False):
+        widget = FailedPluginInfoWidget(failed_info)
+
+        assert widget.open_file_button is not None
+        assert widget.show_in_folder_button is not None
+        assert widget.show_in_folder_button.text() == "Show in folder"
+
+        widget.open_file_button.click()
+        widget.show_in_folder_button.click()
+
+        assert opened_paths == [__file__]
+        assert shown_paths == [__file__]
 
         widget.close()
         widget.deleteLater()
