@@ -200,7 +200,8 @@ jobs:
             libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0 \
             x11-utils xvfb \
             texlive-latex-base texlive-latex-extra texlive-fonts-recommended \
-            texlive-fonts-extra texlive-lang-french latexmk \
+            texlive-fonts-extra texlive-lang-french texlive-xetex latexmk \
+            fonts-symbola \
             imagemagick librsvg2-bin
           /sbin/start-stop-daemon --start --quiet \
             --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background \
@@ -254,13 +255,13 @@ jobs:
             echo "Dummy PDF file" > "datalab/data/doc/DataLab_${LNG}.pdf"
             rm -rf build/doc
             python -m sphinx -b latex -D language=$LNG doc build/doc
-            # No `-halt-on-error`: matches the local Windows/MiKTeX build,
-            # which lets pdflatex emit warnings (e.g. unsupported Unicode
-            # glyphs like emoji) without aborting. The second pass is here
-            # to stabilise cross-references.
+            # Use xelatex (configured via ``latex_engine`` in doc/conf.py):
+            # it natively renders the UTF-8 glyphs (emoji, box-drawing,
+            # arrows...) that pdflatex cannot handle. Two passes stabilise
+            # cross-references.
             ( cd build/doc && \
-              pdflatex -interaction=nonstopmode DataLab.tex && \
-              pdflatex -interaction=nonstopmode DataLab.tex )
+              xelatex -interaction=nonstopmode -halt-on-error DataLab.tex && \
+              xelatex -interaction=nonstopmode -halt-on-error DataLab.tex )
             mv build/doc/DataLab.pdf "datalab/data/doc/DataLab_${LNG}.pdf"
           done
           ls -lh datalab/data/doc/

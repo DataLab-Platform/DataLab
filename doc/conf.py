@@ -223,12 +223,34 @@ macros = {
 }
 
 latex_elements = {
+    # Use xelatex (set via ``latex_engine`` below): pdflatex chokes on the
+    # emoji / box-drawing / arrow glyphs sprinkled across the docs. Map the
+    # known problematic Unicode chars to the Symbola font (``fonts-symbola``
+    # on Debian/Ubuntu; usually fetched on demand by MiKTeX on Windows).
     "preamble": r"""
     \usepackage{amsmath}
     \usepackage{amssymb}
-    \usepackage{mathrsfs}"""
+    \usepackage{mathrsfs}
+    \usepackage{fontspec}
+    \usepackage{newunicodechar}
+    \newfontfamily\unicodefallback{Symbola}[Scale=MatchLowercase]
+    \newunicodechar{✅}{{\unicodefallback ✅}}
+    \newunicodechar{❌}{{\unicodefallback ❌}}
+    \newunicodechar{💡}{{\unicodefallback 💡}}
+    \newunicodechar{➝}{{\unicodefallback ➝}}
+    \newunicodechar{↔}{{\unicodefallback ↔}}
+    \newunicodechar{┌}{{\unicodefallback ┌}}
+    \newunicodechar{┐}{{\unicodefallback ┐}}
+    \newunicodechar{└}{{\unicodefallback └}}
+    \newunicodechar{┘}{{\unicodefallback ┘}}
+    \newunicodechar{├}{{\unicodefallback ├}}
+    \newunicodechar{┤}{{\unicodefallback ┤}}
+    \newunicodechar{─}{{\unicodefallback ─}}
+    \newunicodechar{│}{{\unicodefallback │}}
+    """
     + "\n".join(f"\\newcommand{{\\{cmd}}}{{{defn}}}" for cmd, defn in macros.items()),
 }
+latex_engine = "xelatex"
 
 # -- MathJax configuration for HTML output -----------------------------------
 mathjax3_config = {

@@ -35,9 +35,9 @@ for %%L in (fr en) do (
     sphinx-build -b latex -D language=%%L doc build\doc
     cd build\doc
     echo Building PDF documentation for %%L...
-    pdflatex -interaction=nonstopmode -quiet DataLab.tex
+    xelatex -interaction=nonstopmode -quiet DataLab.tex
     @REM Build again to fix table of contents (workaround)
-    pdflatex -interaction=nonstopmode -quiet DataLab.tex
+    xelatex -interaction=nonstopmode -quiet DataLab.tex
     echo Done.
     cd ..\..
     move /Y build\doc\DataLab.pdf %MODNAME%\data\doc\DataLab_%%L.pdf
