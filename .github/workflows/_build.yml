@@ -254,9 +254,13 @@ jobs:
             echo "Dummy PDF file" > "datalab/data/doc/DataLab_${LNG}.pdf"
             rm -rf build/doc
             python -m sphinx -b latex -D language=$LNG doc build/doc
+            # No `-halt-on-error`: matches the local Windows/MiKTeX build,
+            # which lets pdflatex emit warnings (e.g. unsupported Unicode
+            # glyphs like emoji) without aborting. The second pass is here
+            # to stabilise cross-references.
             ( cd build/doc && \
-              pdflatex -interaction=nonstopmode -halt-on-error DataLab.tex && \
-              pdflatex -interaction=nonstopmode -halt-on-error DataLab.tex )
+              pdflatex -interaction=nonstopmode DataLab.tex && \
+              pdflatex -interaction=nonstopmode DataLab.tex )
             mv build/doc/DataLab.pdf "datalab/data/doc/DataLab_${LNG}.pdf"
           done
           ls -lh datalab/data/doc/
