@@ -1,0 +1,192 @@
+# ============================================================================
+# Release candidate workflow.
+#
+# Mirrors `release.yml` but for pre-release tags `vX.Y.Z-rcN`. Publishes
+# the wheel + sdist to **TestPyPI** (Trusted Publishing) and creates a
+# GitHub pre-release. Does NOT touch PyPI nor GitHub Pages.
+#
+# Triggers:
+#   * push of a tag matching vX.Y.Z-rcN on any branch.
+#
+# Prerequisites:
+#   - Configure TestPyPI Trusted Publishing pointing to this workflow +
+#     the GitHub environment `testpypi`.
+# ============================================================================
+name: Release Candidate
+
+on:
+  push:
+    tags:
+      - "v[0-9]*.[0-9]*.[0-9]*-rc[0-9]*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-rc-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # A. Build sdist + wheel + PDFs (same as release.yml).
+  # ---------------------------------------------------------------------------
+  build-python-and-docs:
+    runs-on: ubuntu-latest
+    env:
+      DISPLAY: ":99.0"
+      QT_COLOR_MODE: light
+      RELEASE: "1"
+      UNATTENDED: "1"
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Verify tag matches datalab.__version__
+        id: version
+        run: |
+          python scripts/ci_release_helpers.py check-tag "$GITHUB_REF_NAME"
+          echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
+            libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0 \
+            x11-utils xvfb \
+            texlive-latex-base texlive-latex-extra texlive-fonts-recommended \
+            texlive-fonts-extra texlive-lang-french latexmk
+          /sbin/start-stop-daemon --start --quiet \
+            --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background \
+            --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip build
+          python -m pip install --upgrade PythonQwt guidata PlotPy Sigima
+          python -m pip install .[doc,qt]
+
+      - name: Compile translations
+        run: |
+          python -m sphinx build doc build/gettext -b gettext -W
+          python -m sphinx_intl build -d doc/locale
+          python -m guidata.utils.translations compile --name datalab --directory .
+
+      - name: Generate doc assets
+        run: |
+          python -m guidata.utils.genreqs all
+          python doc/update_validation_status.py
+
+      - name: Build PDF documentation (FR + EN)
+        run: |
+          rm -rf datalab/data/doc
+          mkdir -p datalab/data/doc
+          for LANG in fr en; do
+            echo "Dummy PDF file" > "datalab/data/doc/DataLab_${LANG}.pdf"
+            LANG=$LANG python doc/update_screenshots.py
+            rm -rf build/doc
+            python -m sphinx -b latex -D language=$LANG doc build/doc
+            ( cd build/doc && \
+              pdflatex -interaction=nonstopmode -halt-on-error DataLab.tex && \
+              pdflatex -interaction=nonstopmode -halt-on-error DataLab.tex )
+            mv build/doc/DataLab.pdf "datalab/data/doc/DataLab_${LANG}.pdf"
+          done
+
+      - name: Build sdist + wheel
+        run: |
+          python -m build --sdist
+          python -m build --wheel
+
+      - name: Upload Python distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-dists
+          path: dist/*
+          retention-days: 14
+
+      - name: Upload PDF documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdf-docs
+          path: datalab/data/doc/DataLab_*.pdf
+          retention-days: 14
+
+  # ---------------------------------------------------------------------------
+  # B. Publish sdist + wheel to TestPyPI via Trusted Publishing.
+  # ---------------------------------------------------------------------------
+  publish-testpypi:
+    needs: build-python-and-docs
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/datalab
+    permissions:
+      id-token: write
+    steps:
+      - name: Download Python distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: python-dists
+          path: dist
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  # ---------------------------------------------------------------------------
+  # C. Create a GitHub pre-release with PDFs + dists (no MSI for RCs).
+  # ---------------------------------------------------------------------------
+  github-prerelease:
+    needs: build-python-and-docs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Download Python distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: python-dists
+          path: assets/dists
+
+      - name: Download PDF documentation
+        uses: actions/download-artifact@v4
+        with:
+          name: pdf-docs
+          path: assets/pdfs
+
+      - name: Extract release notes
+        run: |
+          python scripts/ci_release_helpers.py release-notes \
+            "$GITHUB_REF_NAME" -o release-notes.md
+
+      - name: Create GitHub pre-release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: DataLab ${{ github.ref_name }}
+          body_path: release-notes.md
+          prerelease: true
+          draft: false
+          fail_on_unmatched_files: true
+          files: |
+            assets/dists/*.whl
+            assets/dists/*.tar.gz
+            assets/pdfs/DataLab_fr.pdf
+            assets/pdfs/DataLab_en.pdf
