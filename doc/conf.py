@@ -126,6 +126,7 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.githubpages",
     "sphinx.ext.viewcode",
+    "sphinx.ext.imgconverter",
     "sphinx_sitemap",
     "myst_parser",
     "sphinx_design",
