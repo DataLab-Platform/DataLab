@@ -135,6 +135,13 @@ extensions = [
 templates_path = ["_templates"]
 exclude_patterns = []
 
+# Per-language figure resolution: if e.g. ``foo.png`` is referenced, Sphinx
+# will use ``foo.<language>.png`` when available, falling back to ``foo.png``
+# otherwise. This is how the maintainer-refreshed UI screenshots under
+# ``doc/images/shots/`` (foo.fr.png / foo.en.png) get picked up automatically
+# in each language build.
+figure_language_filename = "{root}.{language}{ext}"
+
 # -- Options for sitemap extension -------------------------------------------
 html_baseurl = datalab.__homeurl__  # for sitemap extension
 sitemap_locales = ["en", "fr"]

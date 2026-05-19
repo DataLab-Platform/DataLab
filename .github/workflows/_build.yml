@@ -231,13 +231,22 @@ jobs:
           python doc/update_validation_status.py
 
       - name: Build PDF documentation (FR + EN)
+        # NOTE: doc/update_screenshots.py is intentionally NOT run here.
+        # Screenshots in doc/images/ are committed assets refreshed locally
+        # by the maintainer (see scripts/update_screenshots.bat). Re-running
+        # them under Xvfb hangs DataLab's GUI startup for unclear reasons
+        # and is not needed: the PDF build consumes the committed PNGs
+        # as-is. Sphinx picks `foo.<lang>.png` automatically when present
+        # (via `figure_language_filename` in doc/conf.py) and falls back to
+        # the unsuffixed `foo.png` otherwise.
         run: |
           rm -rf datalab/data/doc
           mkdir -p datalab/data/doc
           for LANG in fr en; do
-            # Dummy PDF so the "?" menu entry is visible in screenshots.
+            # Dummy PDF so the "?" menu entry would be visible in screenshots
+            # (kept for parity with the local build even though we no longer
+            # regenerate screenshots here).
             echo "Dummy PDF file" > "datalab/data/doc/DataLab_${LANG}.pdf"
-            LANG=$LANG python doc/update_screenshots.py
             rm -rf build/doc
             python -m sphinx -b latex -D language=$LANG doc build/doc
             ( cd build/doc && \
