@@ -19,7 +19,12 @@ Requirements
 * Inkscape (``inkscape`` on PATH, or ``INKSCAPE`` environment variable
   pointing to ``inkscape.exe``). The Windows default
   ``C:\\Program Files\\Inkscape\\bin\\inkscape.exe`` is tried as a fallback.
-* ImageMagick (``magick`` on PATH).
+* ImageMagick (``magick`` on PATH) - only used for the WiX BMP outputs.
+
+Pillow is used to encode the 256x256 sub-image as PNG (matching the icon
+originally committed in 2023 and keeping the ICO ~100 KB instead of
+~350 KB). It is already pulled transitively by scikit-image and PlotPy,
+so no extra install step is needed.
 """
 
 from __future__ import annotations
@@ -74,18 +79,93 @@ def _run(cmd: list[str]) -> None:
 
 
 def build_ico(inkscape: str, magick: str) -> None:
-    """Generate ``resources/DataLab.ico`` from ``resources/DataLab.svg``."""
+    """Generate ``resources/DataLab.ico`` from ``resources/DataLab.svg``.
+
+    Each size is rasterised individually by Inkscape (best quality), then
+    assembled into a multi-image ``.ico``. The 256x256 sub-image is stored
+    PNG-compressed and the smaller sizes as 32-bit BMP (DIB), matching the
+    byte layout of the icon originally committed in 2023 and keeping the
+    file ~100 KB instead of ~350 KB.
+    """
+    from PIL import Image
+
     src = RESOURCES / "DataLab.svg"
     dst = RESOURCES / "DataLab.ico"
     if not src.is_file():
         raise FileNotFoundError(src)
+
+    import io
+    import struct
+
+    entries: list[tuple[int, bytes]] = []  # (size, payload bytes as embedded)
     with tempfile.TemporaryDirectory() as tmp:
-        png_paths: list[str] = []
         for size in ICO_SIZES:
             png = Path(tmp) / f"tmp-{size}.png"
             _run([inkscape, str(src), "-o", str(png), "-w", str(size), "-h", str(size)])
-            png_paths.append(str(png))
-        _run([magick, *png_paths, str(dst)])
+            img = Image.open(png).convert("RGBA")
+            if size >= 256:
+                # Store as PNG.
+                buf = io.BytesIO()
+                img.save(buf, format="PNG")
+                entries.append((size, buf.getvalue()))
+            else:
+                # Store as 32bpp BMP/DIB: BITMAPINFOHEADER + BGRA pixels
+                # (bottom-up) + AND mask (all zero, RGBA already has alpha).
+                bgra = bytearray(size * size * 4)
+                pixels = img.tobytes()  # RGBA, top-down
+                row = size * 4
+                for y in range(size):
+                    src_off = (size - 1 - y) * row
+                    dst_off = y * row
+                    for x in range(size):
+                        r, g, b, a = pixels[src_off + x * 4 : src_off + x * 4 + 4]
+                        bgra[dst_off + x * 4 : dst_off + x * 4 + 4] = bytes(
+                            (b, g, r, a)
+                        )
+                # AND mask: 1 bpp, rows padded to 4 bytes, height = size.
+                mask_row = ((size + 31) // 32) * 4
+                and_mask = b"\x00" * (mask_row * size)
+                # BITMAPINFOHEADER: height is doubled (XOR + AND mask).
+                header = struct.pack(
+                    "<IiiHHIIiiII",
+                    40,  # biSize
+                    size,  # biWidth
+                    size * 2,  # biHeight (xor + and)
+                    1,  # biPlanes
+                    32,  # biBitCount
+                    0,  # biCompression = BI_RGB
+                    len(bgra),  # biSizeImage
+                    0,
+                    0,
+                    0,
+                    0,
+                )
+                entries.append((size, header + bytes(bgra) + and_mask))
+
+    # ICONDIR + ICONDIRENTRY[] + image data.
+    n = len(entries)
+    out = bytearray()
+    out += struct.pack("<HHH", 0, 1, n)  # reserved, type=1 (icon), count
+    data_offset = 6 + 16 * n
+    image_blob = bytearray()
+    for size, payload in entries:
+        w = 0 if size >= 256 else size
+        h = 0 if size >= 256 else size
+        out += struct.pack(
+            "<BBBBHHII",
+            w,
+            h,
+            0,  # color count (0 for >= 256 colors / 32bpp)
+            0,  # reserved
+            1,  # planes
+            32,  # bit count
+            len(payload),
+            data_offset,
+        )
+        data_offset += len(payload)
+        image_blob += payload
+    out += image_blob
+    dst.write_bytes(bytes(out))
     print(f"Wrote {dst.relative_to(REPO_ROOT)}")
 
 
