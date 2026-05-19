@@ -387,6 +387,7 @@ def test_full_session_replay_remaps_uuids_for_n_to_1():
         panel.processor.run_feature(sips.average)
         assert len(panel.objmodel) == 4
 
+        # pylint: disable=protected-access
         session = history._HistoryPanel__history_sessions[-1]  # noqa: SLF001
 
         # Reset to an empty workspace, then replay the whole session.
@@ -422,6 +423,7 @@ def test_full_session_replay_with_intermediate_removal():
         panel.processor.run_feature(sips.average)
         assert len(panel.objmodel) == 3
 
+        # pylint: disable=protected-access
         session = history._HistoryPanel__history_sessions[-1]  # noqa: SLF001
 
         # Reset to an empty workspace, then replay the whole session.

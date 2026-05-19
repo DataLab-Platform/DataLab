@@ -10,12 +10,15 @@ from __future__ import annotations
 
 import functools
 import html
+import inspect
 import os
 import warnings
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any, Callable, Generator
 from uuid import uuid4
 
+import sigima.proc.image
+import sigima.proc.signal
 from guidata.configtools import get_icon
 from guidata.dataset.conv import dataset_to_json, json_to_dataset
 from guidata.dataset.datatypes import DataSet
@@ -107,14 +110,16 @@ def get_datetime_str() -> str:
     return QC.QDateTime.currentDateTime().toString("yyyy-MM-dd hh:mm:ss")
 
 
-def add_to_history(kwargs_names: list[str] = [], title: str | None = None):
+def add_to_history(kwargs_names: list[str] | None = None, title: str | None = None):
     """Method decorator to add the method call to the history panel as a UI entry.
 
     Args:
         kwargs_names: List of keyword arguments to add to the history action.
-         Defaults to [].
+         Defaults to None.
         title: Title of the history action. Defaults to None.
     """
+    if kwargs_names is None:
+        kwargs_names = []
 
     def add_to_history_decorator(func):
         """Decorator function"""
@@ -333,13 +338,7 @@ class HistoryAction(ObjItf):
     def _resolve_callable(self) -> Callable | None:
         """Best-effort lookup of the underlying callable, for description only."""
         if self.kind == self.KIND_COMPUTE and self.func_name:
-            try:
-                # Lazy import to avoid cycles at module import time.
-                import sigima.proc.image as sigimg  # noqa: F401
-                import sigima.proc.signal as sigsig  # noqa: F401
-            except Exception:  # pylint: disable=broad-except
-                return None
-            for module in (sigsig, sigimg):
+            for module in (sigima.proc.signal, sigima.proc.image):
                 func = getattr(module, self.func_name, None)
                 if callable(func):
                     return func
@@ -467,8 +466,6 @@ class HistoryAction(ObjItf):
         call_kwargs = dict(self.kwargs)
         # Inject edit mode if the method supports it
         try:
-            import inspect
-
             sig = inspect.signature(method)
             if self.FUNC_EDIT_MODE in sig.parameters:
                 call_kwargs[self.FUNC_EDIT_MODE] = edit
@@ -626,7 +623,7 @@ class WorkspaceState:
                 obj.title for obj in panel.objmodel if get_uuid(obj) in sel_uuids
             ]
 
-    def is_current_state_compatible(
+    def is_current_state_compatible(  # pylint: disable=unused-argument
         self, mainwindow: DLMainWindow, restore_selection: bool
     ) -> bool:
         """Check if the current workspace state is compatible with the saved state.
@@ -1379,8 +1376,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
     def __iter__(self) -> Generator[HistoryAction, None, None]:
         """Iterate over objects"""
         for session in self.__history_sessions:
-            for action in session.actions:
-                yield action
+            yield from session.actions
 
     def create_new_session(self) -> None:
         """Create a new history list"""
@@ -1507,7 +1503,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         action_title: str,
         save_state: bool,
         func: Callable,
-        *args,
         **kwargs,
     ) -> None:
         """Legacy entry-point kept as a compatibility shim.

@@ -170,11 +170,14 @@ def test_history_app():
         # underlying ``HistorySession.remove_action`` path used by it.
         target = new_session_entry
         target_session: HistorySession | None = None
+
+        # pylint: disable=protected-access
         for session in history._HistoryPanel__history_sessions:  # noqa: SLF001
             if target in session.actions:
                 target_session = session
                 break
         assert target_session is not None
+
         n_before = len(history)
         target_session.remove_action(target)
         assert len(history) < n_before
