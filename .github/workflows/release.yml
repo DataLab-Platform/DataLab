@@ -1,30 +1,17 @@
 # ============================================================================
 # Build and publish a DataLab release.
 #
-# Mirrors the local VS Code task `✨ Release` (see scripts/release.bat),
-# which chains:
-#     🧹 Clean Up → Upgrade Sigima/PlotPyStack → 📚 Compile translations
-#     → Build Python packages (sdist + wheel + PDFs) → Create executable
-#     → Create installer (MSI)
+# The build itself is delegated to the reusable `_build.yml` workflow
+# (modular, one artifact per stage). This file only adds the publication
+# jobs: PyPI Trusted Publishing + draft GitHub Release + Pages deployment.
 #
 # Triggers:
-#   * push of a tag matching vX.Y.Z (no pre-release suffix) on the `main`
-#     branch only. RC tags `vX.Y.Z-rcN` are handled by `release-rc.yml`.
-#
-# Jobs:
-#   A. build-python-and-docs  (ubuntu)  — sdist, wheel, PDFs FR+EN
-#   B. build-msi              (windows) — PyInstaller EXE + WiX MSI
-#   C. publish-pypi           (ubuntu)  — PyPI Trusted Publishing (OIDC)
-#   D. github-release         (ubuntu)  — draft GitHub Release with assets
-#   E. deploy-pages           (uses pages.yml, non-blocking)
+#   * push of a tag matching vX.Y.Z (no pre-release suffix) on `main`.
+#     RC tags `vX.Y.Z-rcN` are handled by `release-rc.yml`.
 #
 # Prerequisites (one-time, off-CI):
-#   - Configure PyPI Trusted Publishing for the `datalab` project pointing
-#     to this workflow + the GitHub environment `pypi`.
-#   - Create a GitHub environment `pypi` (and optionally `testpypi`) with
-#     branch/tag protection rules.
-#   - Configure secret `GH_PAGES_TOKEN` or `GH_PAGES_DEPLOY_KEY` for
-#     `pages.yml` deployment (see that workflow for details).
+#   - Configure PyPI Trusted Publishing for `datalab` -> environment `pypi`.
+#   - Configure GH_PAGES_TOKEN or GH_PAGES_DEPLOY_KEY (see `pages.yml`).
 # ============================================================================
 name: Release
 
@@ -43,211 +30,19 @@ concurrency:
 
 jobs:
   # ---------------------------------------------------------------------------
-  # A. Build sdist + wheel + PDF documentation (FR + EN) on Ubuntu.
+  # Modular build (translations / PDFs / dists / MSI) via reusable workflow.
   # ---------------------------------------------------------------------------
-  build-python-and-docs:
-    runs-on: ubuntu-latest
-    env:
-      DISPLAY: ":99.0"
-      QT_COLOR_MODE: light
-      RELEASE: "1"
-      UNATTENDED: "1"
-    outputs:
-      version: ${{ steps.version.outputs.version }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # needed to verify the tag is reachable from main
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: pip
-
-      - name: Verify tag is on main branch
-        run: |
-          git fetch origin main --depth=200
-          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
-            echo "::error::Tag ${GITHUB_REF_NAME} (commit $GITHUB_SHA) is not reachable from origin/main."
-            exit 1
-          fi
-          echo "Tag commit is on main branch ✔"
-
-      - name: Verify tag matches datalab.__version__
-        id: version
-        run: |
-          python scripts/ci_release_helpers.py check-tag "$GITHUB_REF_NAME"
-          echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
-
-      - name: Install system dependencies (Qt + LaTeX + Xvfb)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
-            libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0 \
-            x11-utils xvfb \
-            texlive-latex-base texlive-latex-extra texlive-fonts-recommended \
-            texlive-fonts-extra texlive-lang-french latexmk
-          /sbin/start-stop-daemon --start --quiet \
-            --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background \
-            --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX
-
-      - name: Install Python dependencies
-        run: |
-          python -m pip install --upgrade pip build
-          python -m pip install --upgrade PythonQwt guidata PlotPy Sigima
-          python -m pip install .[doc,qt]
-
-      - name: Compile translations (UI + docs)
-        run: |
-          python -m sphinx build doc build/gettext -b gettext -W
-          python -m sphinx_intl build -d doc/locale
-          python -m guidata.utils.translations compile --name datalab --directory .
-
-      - name: Generate doc assets
-        run: |
-          python -m guidata.utils.genreqs all
-          python doc/update_validation_status.py
-
-      - name: Build PDF documentation (FR + EN)
-        run: |
-          rm -rf datalab/data/doc
-          mkdir -p datalab/data/doc
-          for LANG in fr en; do
-            # Dummy PDF so the "?" menu entry is visible in screenshots.
-            echo "Dummy PDF file" > "datalab/data/doc/DataLab_${LANG}.pdf"
-            LANG=$LANG python doc/update_screenshots.py
-            rm -rf build/doc
-            python -m sphinx -b latex -D language=$LANG doc build/doc
-            ( cd build/doc && \
-              pdflatex -interaction=nonstopmode -halt-on-error DataLab.tex && \
-              pdflatex -interaction=nonstopmode -halt-on-error DataLab.tex )
-            mv build/doc/DataLab.pdf "datalab/data/doc/DataLab_${LANG}.pdf"
-          done
-
-      - name: Build sdist + wheel
-        run: |
-          python -m build --sdist
-          # PDFs are already in datalab/data/doc, so the wheel embeds them.
-          python -m build --wheel
-
-      - name: Show built artefacts
-        run: ls -lh dist/ datalab/data/doc/
-
-      - name: Upload Python distributions
-        uses: actions/upload-artifact@v4
-        with:
-          name: python-dists
-          path: dist/*
-          retention-days: 14
-
-      - name: Upload PDF documentation
-        uses: actions/upload-artifact@v4
-        with:
-          name: pdf-docs
-          path: datalab/data/doc/DataLab_*.pdf
-          retention-days: 14
-
-      - name: Upload compiled translations
-        uses: actions/upload-artifact@v4
-        with:
-          name: translations-mo
-          path: |
-            datalab/locale/**/*.mo
-          retention-days: 14
+  build:
+    uses: ./.github/workflows/_build.yml
+    with:
+      build-msi: true
+      artifact-retention-days: 30
 
   # ---------------------------------------------------------------------------
-  # B. Build PyInstaller EXE + WiX MSI on Windows.
-  #    Inkscape / ImageMagick are NOT required: graphics resources
-  #    (DataLab.ico, wix/dialog.bmp, wix/banner.bmp) are committed and
-  #    regenerated on demand via `scripts/build_resources.bat`.
-  # ---------------------------------------------------------------------------
-  build-msi:
-    needs: build-python-and-docs
-    runs-on: windows-latest
-    env:
-      RELEASE: "1"
-      UNATTENDED: "1"
-      VERSION: ${{ needs.build-python-and-docs.outputs.version }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: pip
-
-      - name: Download PDF documentation
-        uses: actions/download-artifact@v4
-        with:
-          name: pdf-docs
-          path: datalab/data/doc
-
-      - name: Download compiled translations
-        uses: actions/download-artifact@v4
-        with:
-          name: translations-mo
-          path: datalab/locale
-
-      - name: Install WiX 4 + UI extension
-        shell: pwsh
-        run: |
-          dotnet tool install --global wix --version 4.*
-          wix extension add -g WixToolset.UI.wixext
-
-      - name: Install Python dependencies (with [exe] extra)
-        shell: pwsh
-        run: |
-          python -m pip install --upgrade pip setuptools wheel
-          python -m pip install --upgrade PythonQwt guidata PlotPy Sigima
-          python -m pip install .[exe]
-
-      - name: Generate build manifest
-        shell: pwsh
-        run: python scripts/generate_manifest.py
-
-      - name: Build PyInstaller executable
-        shell: pwsh
-        run: |
-          python -m PyInstaller DataLab.spec --noconfirm --clean
-          Copy-Item manifest.json dist/DataLab/manifest.json -Force
-          Copy-Item resources/api-ms-win-core-path-l1-1-0.dll dist/DataLab/_internal/ -Force
-
-      - name: Package executable as zip (internal, required by MSI)
-        shell: pwsh
-        run: |
-          $zip = "dist/DataLab-v$env:VERSION`_exe.zip"
-          Compress-Archive -Path dist/DataLab -DestinationPath $zip -CompressionLevel Fastest
-
-      - name: Generate WiX .wxs
-        shell: pwsh
-        run: python wix/makewxs.py DataLab $env:VERSION
-
-      - name: Build MSI installer
-        shell: pwsh
-        run: wix build "wix/DataLab-$env:VERSION.wxs" -ext WixToolset.UI.wixext
-
-      - name: Upload MSI installer
-        uses: actions/upload-artifact@v4
-        with:
-          name: msi-installer
-          path: wix/DataLab-*.msi
-          retention-days: 14
-
-      - name: Upload PyInstaller zip (debug only, not for public release)
-        uses: actions/upload-artifact@v4
-        with:
-          name: pyinstaller-exe
-          path: dist/DataLab-v*_exe.zip
-          retention-days: 7
-
-  # ---------------------------------------------------------------------------
-  # C. Publish sdist + wheel to PyPI via Trusted Publishing (OIDC).
+  # Publish sdist + wheel to PyPI via Trusted Publishing (OIDC).
   # ---------------------------------------------------------------------------
   publish-pypi:
-    needs: build-python-and-docs
+    needs: build
     runs-on: ubuntu-latest
     environment:
       name: pypi
@@ -265,12 +60,10 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
 
   # ---------------------------------------------------------------------------
-  # D. Create a draft GitHub Release with all public artefacts.
+  # Create a draft GitHub Release with all public artifacts.
   # ---------------------------------------------------------------------------
   github-release:
-    needs:
-      - build-python-and-docs
-      - build-msi
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -323,10 +116,10 @@ jobs:
             assets/pdfs/DataLab_en.pdf
 
   # ---------------------------------------------------------------------------
-  # E. Build & deploy documentation (delegated to pages.yml). Non-blocking.
+  # Build & deploy documentation (delegated to pages.yml). Non-blocking.
   # ---------------------------------------------------------------------------
   deploy-pages:
-    needs: build-python-and-docs
+    needs: build
     uses: ./.github/workflows/pages.yml
     secrets: inherit
     with:
