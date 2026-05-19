@@ -20,11 +20,13 @@ All other methods should be tested here.
 import os.path as osp
 import time
 
+from guidata.io import HDF5Reader, HDF5Writer
 from guidata.qthelpers import qt_app_context
 from qtpy import QtWidgets as QW
 
 from datalab.env import execenv
 from datalab.gui.macroeditor import Macro
+from datalab.gui.macros_templates import list_templates
 from datalab.gui.panel.macro import MacroPanel
 from datalab.tests import datalab_test_app_context, helpers
 
@@ -102,8 +104,6 @@ def test_macro_editor():
 
 def test_macro_uid_and_new_actions():
     """Test new Macro panel features: UID, duplicate, blank, templates."""
-    from datalab.gui.macros_templates import list_templates
-
     with qt_app_context(exec_loop=True):
         widget = MacroPanel(None)
         widget.resize(800, 600)
@@ -116,8 +116,6 @@ def test_macro_uid_and_new_actions():
         assert m1.uid != m2.uid, "Two macros must have distinct UIDs"
 
         # UID is preserved across serialize/deserialize round-trips.
-        from guidata.io import HDF5Reader, HDF5Writer
-
         with helpers.WorkdirRestoringTempDir() as tmpdir:
             h5_path = osp.join(tmpdir, "macro_uid.h5")
             with HDF5Writer(h5_path) as writer:

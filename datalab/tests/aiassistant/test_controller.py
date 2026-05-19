@@ -6,6 +6,8 @@ from __future__ import annotations
 
 from unittest import mock
 
+import pytest
+
 from datalab.aiassistant.controller import AIController, build_default_system_prompt
 from datalab.aiassistant.providers.base import (
     AssistantMessage,
@@ -237,9 +239,6 @@ def test_send_rolls_back_history_on_provider_failure() -> None:
         confirm_callback=lambda *a: True,
     )
     history_before = list(ctrl.history)
-
-    import pytest
-
     with pytest.raises(RuntimeError, match="network down"):
         ctrl.send("hello")
 

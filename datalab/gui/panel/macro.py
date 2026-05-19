@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import os.path as osp
 import re
+from datetime import datetime
 from typing import TYPE_CHECKING
 
 from guidata.config import CONF
@@ -33,6 +34,7 @@ from datalab.utils.qthelpers import (
     save_restore_stds,
 )
 from datalab.widgets.codecompleter import PythonCompleter
+from datalab.widgets.findreplace import FindReplaceBar
 
 if TYPE_CHECKING:
     from guidata.widgets.codeeditor import CodeEditor
@@ -81,8 +83,6 @@ class _RecentMacrosDialog(QW.QDialog):
         for entry in entries:
             ts = entry.get("last_seen")
             try:
-                from datetime import datetime
-
                 when = datetime.fromtimestamp(float(ts)).strftime("%Y-%m-%d %H:%M")
             except (TypeError, ValueError):
                 when = "?"
@@ -320,8 +320,6 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         editor_column_layout = QW.QVBoxLayout(editor_column)
         editor_column_layout.setContentsMargins(0, 0, 0, 0)
         editor_column_layout.addWidget(self.tabwidget)
-        from datalab.widgets.findreplace import FindReplaceBar
-
         self.find_bar = FindReplaceBar(
             lambda: self.get_macro().editor if self.get_macro() else None,
             shortcut_parent=self,
@@ -734,11 +732,9 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
     def _restore_splitter_state(self) -> None:
         """Restore splitter sizes from persisted configuration."""
         try:
-            from qtpy.QtCore import QByteArray
-
             raw = Conf.macro.splitter_state.get(None)
             if raw:
-                ba = QByteArray.fromBase64(raw.encode("ascii"))
+                ba = QC.QByteArray.fromBase64(raw.encode("ascii"))
                 self.restoreState(ba)
         except Exception:  # pylint: disable=broad-except
             pass

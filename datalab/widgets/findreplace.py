@@ -33,7 +33,7 @@ class FindReplaceBar(QW.QWidget):
 
     def __init__(
         self,
-        editor_provider: "CodeEditor | Callable[[], CodeEditor | None]",
+        editor_provider: CodeEditor | Callable[[], CodeEditor | None],
         shortcut_parent: QW.QWidget | None = None,
         parent: QW.QWidget | None = None,
     ) -> None:
