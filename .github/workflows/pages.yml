@@ -110,8 +110,12 @@ jobs:
         # rationale.
         run: |
           mkdir -p site
-          for LANG in fr en; do
-            python -m sphinx -b html -D language=$LANG doc "site/$LANG"
+          # Loop variable is `LNG`, not `LANG`: `LANG` is the OS locale env var
+          # read by Python's `locale.setlocale`, and setting it to a bare "fr"
+          # / "en" makes Sphinx fail with `locale.Error: unsupported locale
+          # setting` (see _build.yml for the same workaround).
+          for LNG in fr en; do
+            python -m sphinx -b html -D language=$LNG doc "site/$LNG"
           done
           # Top-level index redirecting to the English version.
           cat > site/index.html <<'EOF'

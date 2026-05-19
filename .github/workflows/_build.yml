@@ -242,17 +242,21 @@ jobs:
         run: |
           rm -rf datalab/data/doc
           mkdir -p datalab/data/doc
-          for LANG in fr en; do
+          # NOTE: the loop variable is `LNG` rather than `LANG` on purpose:
+          # `LANG` is the OS locale env var read by Python's `locale.setlocale`,
+          # and setting it to a bare "fr" / "en" (rather than "fr_FR.UTF-8")
+          # makes Sphinx fail with `locale.Error: unsupported locale setting`.
+          for LNG in fr en; do
             # Dummy PDF so the "?" menu entry would be visible in screenshots
             # (kept for parity with the local build even though we no longer
             # regenerate screenshots here).
-            echo "Dummy PDF file" > "datalab/data/doc/DataLab_${LANG}.pdf"
+            echo "Dummy PDF file" > "datalab/data/doc/DataLab_${LNG}.pdf"
             rm -rf build/doc
-            python -m sphinx -b latex -D language=$LANG doc build/doc
+            python -m sphinx -b latex -D language=$LNG doc build/doc
             ( cd build/doc && \
               pdflatex -interaction=nonstopmode -halt-on-error DataLab.tex && \
               pdflatex -interaction=nonstopmode -halt-on-error DataLab.tex )
-            mv build/doc/DataLab.pdf "datalab/data/doc/DataLab_${LANG}.pdf"
+            mv build/doc/DataLab.pdf "datalab/data/doc/DataLab_${LNG}.pdf"
           done
           ls -lh datalab/data/doc/
 
