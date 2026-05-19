@@ -81,6 +81,11 @@ jobs:
           python -m pip install --upgrade PythonQwt guidata PlotPy Sigima
           python -m pip install .[doc,qt]
 
+      - name: Symlink Sigima sibling checkout for doc literalincludes
+        run: |
+          SITE=$(python -c "import sigima, os; print(os.path.dirname(os.path.dirname(sigima.__file__)))")
+          ln -snf "$SITE" "$GITHUB_WORKSPACE/../Sigima"
+
       - name: Compile translations (UI + docs)
         run: |
           python -m sphinx build doc build/gettext -b gettext -W

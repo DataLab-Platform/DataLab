@@ -142,6 +142,16 @@ jobs:
           python -m pip install --upgrade PythonQwt guidata PlotPy Sigima
           python -m pip install .[doc,qt]
 
+      # Some .rst files use ``.. literalinclude:: ../../../../Sigima/...`` to
+      # quote Sigima source code. In the multi-root dev workspace `Sigima/`
+      # sits next to `DataLab/`; on CI we symlink the installed Sigima's
+      # site-packages dir to the same relative location so paths resolve.
+      - name: Symlink Sigima sibling checkout for doc literalincludes
+        run: |
+          SITE=$(python -c "import sigima, os; print(os.path.dirname(os.path.dirname(sigima.__file__)))")
+          ln -snf "$SITE" "$GITHUB_WORKSPACE/../Sigima"
+          ls -l "$GITHUB_WORKSPACE/../Sigima/sigima/tools/image/detection.py"
+
       - name: Compile docs gettext + sphinx_intl + UI .mo
         run: |
           python -m sphinx build doc build/gettext -b gettext -W
@@ -200,6 +210,11 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --upgrade PythonQwt guidata PlotPy Sigima
           python -m pip install .[doc,qt]
+
+      - name: Symlink Sigima sibling checkout for doc literalincludes
+        run: |
+          SITE=$(python -c "import sigima, os; print(os.path.dirname(os.path.dirname(sigima.__file__)))")
+          ln -snf "$SITE" "$GITHUB_WORKSPACE/../Sigima"
 
       - name: Download compiled translations
         uses: actions/download-artifact@v4
