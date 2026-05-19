@@ -56,7 +56,8 @@ jobs:
       # tag-related checks must be relaxed.
       skip-tag-check: true
       skip-tag-branch-check: true
-      artifact-retention-days: ${{ inputs.artifact-retention-days }}
+      # workflow_dispatch number inputs come through as strings; cast back.
+      artifact-retention-days: ${{ fromJSON(inputs.artifact-retention-days) }}
 
   # Summary job: collects all artifacts so they appear together at the end
   # of the run and prints a sanity report. Useful to spot a missing or
