@@ -150,5 +150,4 @@ The following software may be required for maintaining the project:
 | -------- | ----------- |
 | [gettext](https://mlocati.github.io/articles/gettext-iconv-windows.html) | Translations |
 | [Git](https://git-scm.com/) | Version control system |
-| [Inkscape](https://inkscape.org/) | Vector graphics editor |
 | [MikTeX](https://miktex.org/) | LaTeX distribution on Windows |

@@ -289,7 +289,7 @@ jobs:
 
   # ---------------------------------------------------------------------------
   # 4. Build PyInstaller EXE + WiX MSI on Windows.
-  #    Inkscape is NOT required: graphics resources
+  #    No external rasteriser is required: graphics resources
   #    (DataLab.ico, wix/dialog.bmp, wix/banner.bmp) are committed and
   #    regenerated on demand via `scripts/build_resources.bat`.
   # ---------------------------------------------------------------------------

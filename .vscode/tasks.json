@@ -539,7 +539,7 @@
         },
         {
             "label": "🎨 Generate resources",
-            "detail": "Regenerate DataLab.ico + WiX dialog/banner BMPs from SVG sources. Run only when SVG sources change. Requires Inkscape.",
+            "detail": "Regenerate DataLab.ico + WiX dialog/banner BMPs from SVG sources. Run only when SVG sources change. Uses Qt (QSvgRenderer) + Pillow.",
             "type": "shell",
             "command": "${command:python.interpreterPath}",
             "args": [

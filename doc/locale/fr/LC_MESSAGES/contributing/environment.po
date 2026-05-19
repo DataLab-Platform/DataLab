@@ -255,12 +255,6 @@ msgstr ""
 msgid "Version control system"
 msgstr "Système de contrôle de version"
 
-msgid "[Inkscape](https://inkscape.org/)"
-msgstr ""
-
-msgid "Vector graphics editor"
-msgstr "Editeur de graphiques vectoriels"
-
 msgid "[MikTeX](https://miktex.org/)"
 msgstr ""
 
