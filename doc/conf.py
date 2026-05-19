@@ -126,7 +126,7 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.githubpages",
     "sphinx.ext.viewcode",
-    "sphinx.ext.imgconverter",
+    "sphinxcontrib.cairosvgconverter",
     "sphinx_sitemap",
     "myst_parser",
     "sphinx_design",
@@ -242,9 +242,9 @@ latex_elements = {
     % its following paragraph.
     \usepackage{needspace}
     \usepackage{etoolbox}
-    \pretocmd{\section}{\Needspace{5\baselineskip}}{}{}
-    \pretocmd{\subsection}{\Needspace{4\baselineskip}}{}{}
-    \pretocmd{\subsubsection}{\Needspace{3\baselineskip}}{}{}
+    \pretocmd{\section}{\Needspace{12\baselineskip}}{}{}
+    \pretocmd{\subsection}{\Needspace{10\baselineskip}}{}{}
+    \pretocmd{\subsubsection}{\Needspace{8\baselineskip}}{}{}
     """
     + "\n".join(f"\\newcommand{{\\{cmd}}}{{{defn}}}" for cmd, defn in macros.items()),
 }

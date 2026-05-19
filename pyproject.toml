@@ -94,6 +94,7 @@ doc = [
     "sphinx_design",
     "sphinx-copybutton",
     "pydata-sphinx-theme",
+    "sphinxcontrib-svg2pdfconverter[CairoSVG]",
 ]
 test = ["pytest", "pytest-xvfb", "httpx"]
 
