@@ -15,6 +15,7 @@ import os.path as osp
 import shutil
 import subprocess
 import sys
+from datetime import datetime, timedelta
 from typing import TYPE_CHECKING
 
 from guidata.configtools import get_icon
@@ -127,6 +128,49 @@ def _show_in_folder(path: str) -> bool:
         except OSError:
             continue
     return _open_local_path(directory)
+
+
+def _get_latest_plugin_load_at(main: DLMainWindow) -> datetime:
+    """Return the most recent relevant plugin load timestamp."""
+    timestamps = [
+        value
+        for value in (
+            getattr(main, "started_at", None),
+            getattr(main, "plugins_last_load_at", None),
+        )
+        if isinstance(value, datetime)
+    ]
+    if timestamps:
+        return max(timestamps)
+    return datetime.now().astimezone()
+
+
+def _format_last_load_text(
+    timestamp: datetime,
+    now: datetime | None = None,
+    locale: QC.QLocale | None = None,
+) -> str:
+    """Format the last load text with today/yesterday/date semantics."""
+    if now is None:
+        now = datetime.now(timestamp.tzinfo) if timestamp.tzinfo else datetime.now()
+    if locale is None:
+        locale = QC.QLocale.system()
+
+    if timestamp.date() == now.date():
+        day_text = _("today")
+    elif timestamp.date() == (now - timedelta(days=1)).date():
+        day_text = _("yesterday")
+    else:
+        day_text = locale.toString(
+            QC.QDate(timestamp.year, timestamp.month, timestamp.day),
+            QC.QLocale.ShortFormat,
+        )
+
+    time_text = locale.toString(
+        QC.QTime(timestamp.hour, timestamp.minute),
+        "HH:mm",
+    )
+    return _("Last loaded: %s at %s") % (day_text, time_text)
 
 
 class PluginState:
@@ -445,6 +489,7 @@ class PluginConfigDialog(QW.QDialog):
         self.failed_plugin_widgets: list[FailedPluginInfoWidget] = []
         self.toggle_all_checkbox: QW.QCheckBox | None = None
         self.filter_combo: QW.QComboBox | None = None
+        self.load_info_label: QW.QLabel | None = None
         self.plugins_layout: QW.QVBoxLayout | None = None
 
         self.setWindowTitle(_("Plugin Configuration"))
@@ -471,7 +516,8 @@ class PluginConfigDialog(QW.QDialog):
         )
         button_box.accepted.connect(self.accept)
         button_box.rejected.connect(self.reject)
-        layout.addWidget(button_box)
+        layout.addLayout(self._create_footer_layout(button_box))
+        self._update_load_info_label()
 
     @staticmethod
     def _create_title_label() -> QW.QLabel:
@@ -630,6 +676,23 @@ class PluginConfigDialog(QW.QDialog):
         scroll.setWidget(container)
         return scroll
 
+    def _create_footer_layout(self, button_box: QW.QDialogButtonBox) -> QW.QHBoxLayout:
+        """Create the footer with the last-load label and dialog buttons."""
+        footer_layout = QW.QHBoxLayout()
+        self.load_info_label = QW.QLabel()
+        apply_subdued_color(self.load_info_label)
+        footer_layout.addWidget(self.load_info_label)
+        footer_layout.addStretch()
+        footer_layout.addWidget(button_box)
+        return footer_layout
+
+    def _update_load_info_label(self) -> None:
+        """Update the text describing the latest plugin load time."""
+        if self.load_info_label is None:
+            return
+        latest_load = _get_latest_plugin_load_at(self.main)
+        self.load_info_label.setText(_format_last_load_text(latest_load))
+
     def set_all_enabled(self, enabled: bool) -> None:
         """Set all plugin checkboxes to the same state."""
         for widget in self.plugin_widgets:
@@ -672,6 +735,7 @@ class PluginConfigDialog(QW.QDialog):
 
     def populate_plugins(self):
         """Populate the dialog with all discovered plugins"""
+        self._update_load_info_label()
         registered_names = {p.info.name for p in PluginRegistry.get_plugins()}
         enabled_plugins = Conf.main.plugins_enabled_list.get(None)
 

@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+from datetime import datetime
+
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
@@ -214,6 +216,65 @@ def test_plugin_enable_disable_config():
             Conf.main.plugins_enabled_list.set(original_enabled_list)
         else:
             Conf.main.plugins_enabled_list.remove()
+
+
+def test_last_load_text_uses_today_yesterday_or_date():
+    """Last load label should use relative day words when applicable."""
+
+    class DummyLocale:
+        """Deterministic locale stub for refresh label formatting."""
+
+    locale = DummyLocale()
+    locale.toString = lambda value, _format: (
+        f"{value.year():04d}-{value.month():02d}-{value.day():02d}"
+        if isinstance(value, QC.QDate)
+        else f"{value.hour():02d}:{value.minute():02d}"
+    )
+    now = datetime(2026, 5, 19, 15, 30)
+
+    today_text = pluginconfig._format_last_load_text(
+        datetime(2026, 5, 19, 9, 45), now=now, locale=locale
+    )
+    yesterday_text = pluginconfig._format_last_load_text(
+        datetime(2026, 5, 18, 23, 10), now=now, locale=locale
+    )
+    older_timestamp = datetime(2026, 5, 17, 8, 5)
+    older_text = pluginconfig._format_last_load_text(
+        older_timestamp, now=now, locale=locale
+    )
+
+    assert today_text == "Last loaded: today at 09:45"
+    assert yesterday_text == "Last loaded: yesterday at 23:10"
+    assert "today" not in older_text
+    assert "yesterday" not in older_text
+    assert older_text.endswith("08:05")
+    assert "2026-05-17" in older_text
+
+
+def test_plugin_dialog_shows_latest_load_text(monkeypatch):
+    """Dialog should display the most recent timestamp between startup and load."""
+
+    def _format_load_marker(timestamp, now=None, locale=None):
+        del now, locale
+        return f"Last loaded marker: {timestamp.hour:02d}:{timestamp.minute:02d}"
+
+    monkeypatch.setattr(
+        pluginconfig,
+        "_format_last_load_text",
+        _format_load_marker,
+    )
+
+    with datalab_test_app_context(console=False) as win:
+        win.started_at = datetime(2026, 5, 19, 9, 0)
+        win.plugins_last_load_at = datetime(2026, 5, 19, 11, 30)
+
+        dialog = PluginConfigDialog(win)
+        _show_dialog(dialog)
+
+        assert dialog.load_info_label is not None
+        assert dialog.load_info_label.text() == "Last loaded marker: 11:30"
+
+        _close_dialog(dialog)
 
 
 def test_plugin_many_actions_menu_behavior():

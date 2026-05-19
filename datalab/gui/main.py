@@ -28,6 +28,7 @@ import sys
 import time
 import traceback
 import webbrowser
+from datetime import datetime
 from typing import TYPE_CHECKING
 
 import guidata.dataset as gds
@@ -156,6 +157,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         execenv.log(self, "Starting initialization")
 
         self.ready_flag = True
+        self.started_at = datetime.now().astimezone()
+        self.plugins_last_load_at = self.started_at
 
         self.hide_on_close = hide_on_close
         self.__old_size: tuple[int, int] | None = None
@@ -1080,6 +1083,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     plugin_class.__name__, filepath or "", tb_text
                 )
 
+        self.plugins_last_load_at = datetime.now().astimezone()
+
     def __flush_startup_errors(self) -> None:
         """Write any buffered startup errors to the internal console.
 
@@ -1208,6 +1213,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             # Update plugin status in the status bar
             self.pluginstatus.update_status()
             self.__update_plugins_availability()
+            self.plugins_last_load_at = datetime.now().astimezone()
 
     def __configure_statusbar(self, console: bool) -> None:
         """Configure status bar

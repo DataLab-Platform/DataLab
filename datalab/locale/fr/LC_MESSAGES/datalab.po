@@ -1702,6 +1702,16 @@ msgstr "Création des formes géométriques"
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
+msgid "today"
+msgstr "aujourd'hui"
+
+msgid "yesterday"
+msgstr "hier"
+
+#, python-format
+msgid "Last loaded: %s at %s"
+msgstr "Dernier chargement : %s à %s"
+
 msgid "Active"
 msgstr "Actif"
 
