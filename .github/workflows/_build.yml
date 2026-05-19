@@ -381,7 +381,7 @@ jobs:
         shell: pwsh
         run: |
           dotnet tool install --global wix --version 4.*
-          wix extension add -g WixToolset.UI.wixext
+          wix extension add -g WixToolset.UI.wixext/4.0.5
 
       - name: Install Python dependencies (with [exe] extra)
         shell: pwsh
