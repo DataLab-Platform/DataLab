@@ -19,12 +19,11 @@ Requirements
 * Inkscape (``inkscape`` on PATH, or ``INKSCAPE`` environment variable
   pointing to ``inkscape.exe``). The Windows default
   ``C:\\Program Files\\Inkscape\\bin\\inkscape.exe`` is tried as a fallback.
-* ImageMagick (``magick`` on PATH) - only used for the WiX BMP outputs.
 
-Pillow is used to encode the 256x256 sub-image as PNG (matching the icon
-originally committed in 2023 and keeping the ICO ~100 KB instead of
-~350 KB). It is already pulled transitively by scikit-image and PlotPy,
-so no extra install step is needed.
+Pillow handles all image encoding (ICO assembly with PNG-compressed
+256x256 sub-image, and 24 bpp BMP v3 for the WiX UI assets). It is
+already pulled transitively by scikit-image and PlotPy, so no extra
+install step is needed.
 """
 
 from __future__ import annotations
@@ -63,22 +62,12 @@ def _find_inkscape() -> str:
     )
 
 
-def _find_magick() -> str:
-    """Locate the ImageMagick `magick` executable."""
-    found = shutil.which("magick")
-    if found:
-        return found
-    raise RuntimeError(
-        "ImageMagick `magick` not found. Install ImageMagick and add it to PATH."
-    )
-
-
 def _run(cmd: list[str]) -> None:
     print(" ".join(f'"{c}"' if " " in c else c for c in cmd))
     subprocess.run(cmd, check=True)
 
 
-def build_ico(inkscape: str, magick: str) -> None:
+def build_ico(inkscape: str) -> None:
     """Generate ``resources/DataLab.ico`` from ``resources/DataLab.svg``.
 
     Each size is rasterised individually by Inkscape (best quality), then
@@ -169,32 +158,40 @@ def build_ico(inkscape: str, magick: str) -> None:
     print(f"Wrote {dst.relative_to(REPO_ROOT)}")
 
 
-def _svg_to_bmp(
-    inkscape: str, magick: str, src: Path, dst: Path, width: int, height: int
-) -> None:
+def _svg_to_bmp(inkscape: str, src: Path, dst: Path, width: int, height: int) -> None:
+    """Rasterise ``src`` (SVG) and save it as a 24 bpp BMP v3 (no alpha).
+
+    WiX UI requires the legacy BMP format (BITMAPINFOHEADER, uncompressed,
+    no alpha channel) - which is exactly what Pillow writes by default when
+    the input image is in RGB mode.
+    """
+    from PIL import Image
+
     if not src.is_file():
         raise FileNotFoundError(src)
     dst.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory() as tmp:
         png = Path(tmp) / "tmp.png"
         _run([inkscape, str(src), "-o", str(png), "-w", str(width), "-h", str(height)])
-        # bmp3: format is required by WiX UI (legacy BMP without alpha).
-        _run([magick, str(png), f"bmp3:{dst}"])
+        # Convert RGBA -> RGB (flatten on white) to strip the alpha channel,
+        # then save as BMP v3 (24 bpp, uncompressed).
+        img = Image.open(png).convert("RGBA")
+        bg = Image.new("RGB", img.size, (255, 255, 255))
+        bg.paste(img, mask=img.split()[3])
+        bg.save(dst, format="BMP")
     print(f"Wrote {dst.relative_to(REPO_ROOT)}")
 
 
-def build_wix_bitmaps(inkscape: str, magick: str) -> None:
+def build_wix_bitmaps(inkscape: str) -> None:
     """Generate ``wix/dialog.bmp`` and ``wix/banner.bmp`` from their SVG sources."""
     _svg_to_bmp(
         inkscape,
-        magick,
         RESOURCES / "WixUIDialog.svg",
         WIX / "dialog.bmp",
         *DIALOG_SIZE,
     )
     _svg_to_bmp(
         inkscape,
-        magick,
         RESOURCES / "WixUIBanner.svg",
         WIX / "banner.bmp",
         *BANNER_SIZE,
@@ -216,14 +213,12 @@ def main(argv: list[str] | None = None) -> int:
         targets = {"ico", "wix"}
 
     inkscape = _find_inkscape()
-    magick = _find_magick()
     print(f"Using Inkscape: {inkscape}")
-    print(f"Using ImageMagick: {magick}")
 
     if "ico" in targets:
-        build_ico(inkscape, magick)
+        build_ico(inkscape)
     if "wix" in targets:
-        build_wix_bitmaps(inkscape, magick)
+        build_wix_bitmaps(inkscape)
 
     print("Done.")
     return 0
