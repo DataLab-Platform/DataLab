@@ -237,6 +237,14 @@ latex_elements = {
     \newfontfamily\unicodefallback{Symbola}[Scale=MatchLowercase]
     \usepackage[Symbols]{ucharclasses}
     \setTransitionsForSymbols{\unicodefallback}{\normalfont}
+    % Prevent orphan section headings at the bottom of a page: force a page
+    % break if there is not enough room for the heading plus a few lines of
+    % its following paragraph.
+    \usepackage{needspace}
+    \usepackage{etoolbox}
+    \pretocmd{\section}{\Needspace{5\baselineskip}}{}{}
+    \pretocmd{\subsection}{\Needspace{4\baselineskip}}{}{}
+    \pretocmd{\subsubsection}{\Needspace{3\baselineskip}}{}{}
     """
     + "\n".join(f"\\newcommand{{\\{cmd}}}{{{defn}}}" for cmd, defn in macros.items()),
 }
