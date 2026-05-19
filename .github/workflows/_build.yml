@@ -210,6 +210,9 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --upgrade PythonQwt guidata PlotPy Sigima
           python -m pip install .[doc,qt]
+          # sigima.proc.validation imports `_pytest` at module level (tech
+          # debt); doc/update_validation_status.py needs it to be importable.
+          python -m pip install pytest
 
       - name: Symlink Sigima sibling checkout for doc literalincludes
         run: |
