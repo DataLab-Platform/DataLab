@@ -145,7 +145,7 @@ def _get_latest_plugin_load_at(main: DLMainWindow) -> datetime:
     return datetime.now().astimezone()
 
 
-def _format_last_load_text(
+def format_last_load_text(
     timestamp: datetime,
     now: datetime | None = None,
     locale: QC.QLocale | None = None,
@@ -691,7 +691,7 @@ class PluginConfigDialog(QW.QDialog):
         if self.load_info_label is None:
             return
         latest_load = _get_latest_plugin_load_at(self.main)
-        self.load_info_label.setText(_format_last_load_text(latest_load))
+        self.load_info_label.setText(format_last_load_text(latest_load))
 
     def set_all_enabled(self, enabled: bool) -> None:
         """Set all plugin checkboxes to the same state."""

@@ -82,6 +82,8 @@ def _create_plugin_description_widget(
 
 def test_plugin_enable_disable_config():
     """Test plugin enable/disable filtering and configuration dialog."""
+    plugin_1_name = "Test Plugin 1"
+    plugin_2_name = "Test Plugin 2"
     main_config = Conf.to_dict().get("main", {})
     had_config = "plugins_enabled_list" in main_config
     original_enabled_list = Conf.main.plugins_enabled_list.get(None)
@@ -95,7 +97,7 @@ def test_plugin_enable_disable_config():
                 plugin_dir,
                 "datalab_test_plugin_1.py",
                 "TestPluginOne",
-                "Test Plugin 1",
+                plugin_1_name,
                 "Action One",
                 "action_1",
             )
@@ -103,7 +105,7 @@ def test_plugin_enable_disable_config():
                 plugin_dir,
                 "datalab_test_plugin_2.py",
                 "TestPluginTwo",
-                "Test Plugin 2",
+                plugin_2_name,
                 "Action Two",
                 "action_2",
             )
@@ -117,17 +119,17 @@ def test_plugin_enable_disable_config():
                     widget.plugin_class.PLUGIN_INFO.name
                     for widget in dialog.plugin_widgets
                 ]
-                assert "Test Plugin 1" in widget_names
-                assert "Test Plugin 2" in widget_names
+                assert plugin_1_name in widget_names
+                assert plugin_2_name in widget_names
                 plugin_1_widget = next(
                     widget
                     for widget in dialog.plugin_widgets
-                    if widget.plugin_class.PLUGIN_INFO.name == "Test Plugin 1"
+                    if widget.plugin_class.PLUGIN_INFO.name == plugin_1_name
                 )
                 plugin_2_widget = next(
                     widget
                     for widget in dialog.plugin_widgets
-                    if widget.plugin_class.PLUGIN_INFO.name == "Test Plugin 2"
+                    if widget.plugin_class.PLUGIN_INFO.name == plugin_2_name
                 )
                 assert plugin_1_widget.plugin_filepath == plugin_1_path
                 assert plugin_2_widget.plugin_filepath == plugin_2_path
@@ -146,7 +148,7 @@ def test_plugin_enable_disable_config():
                 ] == []
                 _close_dialog(dialog)
 
-                Conf.main.plugins_enabled_list.set(["Test Plugin 1"])
+                Conf.main.plugins_enabled_list.set([plugin_1_name])
                 win.reload_plugins()
                 QW.QApplication.processEvents()
 
@@ -157,7 +159,7 @@ def test_plugin_enable_disable_config():
                     for widget in dialog2.plugin_widgets
                     if widget.checkbox.isChecked()
                 ]
-                assert enabled_names == ["Test Plugin 1"]
+                assert enabled_names == [plugin_1_name]
                 assert dialog2.toggle_all_checkbox.checkState() == (
                     QC.Qt.PartiallyChecked
                 )
@@ -169,8 +171,8 @@ def test_plugin_enable_disable_config():
                     for widget in dialog2.plugin_widgets
                     if widget.isVisible()
                 ]
-                assert "Test Plugin 1" in visible_enabled_names
-                assert "Test Plugin 2" not in visible_enabled_names
+                assert plugin_1_name in visible_enabled_names
+                assert plugin_2_name not in visible_enabled_names
 
                 dialog2.filter_combo.setCurrentIndex(2)
                 QW.QApplication.processEvents()
@@ -179,13 +181,13 @@ def test_plugin_enable_disable_config():
                     for widget in dialog2.plugin_widgets
                     if widget.isVisible()
                 ]
-                assert "Test Plugin 2" in visible_disabled_names
-                assert "Test Plugin 1" not in visible_disabled_names
+                assert plugin_2_name in visible_disabled_names
+                assert plugin_1_name not in visible_disabled_names
 
                 plugin_2_widget = next(
                     widget
                     for widget in dialog2.plugin_widgets
-                    if widget.plugin_class.PLUGIN_INFO.name == "Test Plugin 2"
+                    if widget.plugin_class.PLUGIN_INFO.name == plugin_2_name
                 )
                 plugin_2_widget.checkbox.setChecked(True)
                 QW.QApplication.processEvents()
@@ -194,7 +196,7 @@ def test_plugin_enable_disable_config():
                     for widget in dialog2.plugin_widgets
                     if widget.isVisible()
                 ]
-                assert "Test Plugin 2" in visible_disabled_names
+                assert plugin_2_name in visible_disabled_names
 
                 dialog2.filter_combo.setCurrentIndex(1)
                 QW.QApplication.processEvents()
@@ -203,7 +205,7 @@ def test_plugin_enable_disable_config():
                     for widget in dialog2.plugin_widgets
                     if widget.isVisible()
                 ]
-                assert "Test Plugin 2" not in visible_enabled_names
+                assert plugin_2_name not in visible_enabled_names
 
                 dialog2.set_all_enabled(True)
                 QW.QApplication.processEvents()
@@ -221,25 +223,25 @@ def test_plugin_enable_disable_config():
 def test_last_load_text_uses_today_yesterday_or_date():
     """Last load label should use relative day words when applicable."""
 
-    class DummyLocale:
-        """Deterministic locale stub for refresh label formatting."""
+    def locale_to_string(value, _format):
+        """Return deterministic date/time strings for label tests."""
+        return (
+            f"{value.year():04d}-{value.month():02d}-{value.day():02d}"
+            if isinstance(value, QC.QDate)
+            else f"{value.hour():02d}:{value.minute():02d}"
+        )
 
-    locale = DummyLocale()
-    locale.toString = lambda value, _format: (
-        f"{value.year():04d}-{value.month():02d}-{value.day():02d}"
-        if isinstance(value, QC.QDate)
-        else f"{value.hour():02d}:{value.minute():02d}"
-    )
+    locale = type("DummyLocale", (), {"toString": staticmethod(locale_to_string)})()
     now = datetime(2026, 5, 19, 15, 30)
 
-    today_text = pluginconfig._format_last_load_text(
+    today_text = pluginconfig.format_last_load_text(
         datetime(2026, 5, 19, 9, 45), now=now, locale=locale
     )
-    yesterday_text = pluginconfig._format_last_load_text(
+    yesterday_text = pluginconfig.format_last_load_text(
         datetime(2026, 5, 18, 23, 10), now=now, locale=locale
     )
     older_timestamp = datetime(2026, 5, 17, 8, 5)
-    older_text = pluginconfig._format_last_load_text(
+    older_text = pluginconfig.format_last_load_text(
         older_timestamp, now=now, locale=locale
     )
 
@@ -260,7 +262,7 @@ def test_plugin_dialog_shows_latest_load_text(monkeypatch):
 
     monkeypatch.setattr(
         pluginconfig,
-        "_format_last_load_text",
+        "format_last_load_text",
         _format_load_marker,
     )
 
