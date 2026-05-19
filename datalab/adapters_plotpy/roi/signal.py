@@ -88,10 +88,10 @@ class _CurveClippedXRangeSelection(XRangeSelection):
         """Override the fill color for this ROI instance."""
         self._fill_color = QG.QColor(color)
 
-    def _build_curve_polygon(
+    def _build_curve_polygon(  # pylint: disable=too-many-return-statements
         self,
-        xMap: qwt.scale_map.QwtScaleMap,
-        yMap: qwt.scale_map.QwtScaleMap,
+        xMap: qwt.scale_map.QwtScaleMap,  # pylint: disable=invalid-name
+        yMap: qwt.scale_map.QwtScaleMap,  # pylint: disable=invalid-name
         rct: QRectF,
     ) -> QG.QPolygonF | None:
         """Build a polygon that follows the signal curve between ``self._min``
@@ -158,7 +158,7 @@ class _CurveClippedXRangeSelection(XRangeSelection):
 
     def _compute_baseline_y(
         self,
-        yMap: qwt.scale_map.QwtScaleMap,
+        yMap: qwt.scale_map.QwtScaleMap,  # pylint: disable=invalid-name
         rct: QRectF,
     ) -> float | None:
         """Return the canvas y-coordinate of the polygon baseline.
@@ -167,12 +167,7 @@ class _CurveClippedXRangeSelection(XRangeSelection):
         when the axis is logarithmic (where y=0 is undefined).
         """
         plot = self.plot()
-        is_log_y = False
-        if plot is not None:
-            try:
-                is_log_y = plot.get_axis_scale(self.yAxis()) == "log"
-            except Exception:  # pragma: no cover - defensive
-                is_log_y = False
+        is_log_y = plot is not None and plot.get_axis_scale(self.yAxis()) == "log"
         if is_log_y:
             return rct.bottom()
         baseline_y = yMap.transform(0.0)
@@ -247,10 +242,14 @@ class _CurveClippedXRangeSelection(XRangeSelection):
             sym.drawSymbol(painter, QC.QPointF(x1, y))
 
 
-class _CurveClippedAnnotatedXRange(AnnotatedXRange):
+class _CurveClippedAnnotatedXRange(AnnotatedXRange):  # pylint: disable=abstract-method
     """Annotated X-range selection whose underlying shape is a
     :class:`_CurveClippedXRangeSelection` (curve-clipped fill + per-instance
-    color)."""
+    color).
+
+    ``get_tr_size`` is intentionally not overridden: ``AnnotatedXRange`` (from
+    PlotPy) does not override it either, so the abstract-method warning is a
+    false positive inherited from upstream."""
 
     SHAPE_CLASS = _CurveClippedXRangeSelection
 

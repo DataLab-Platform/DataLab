@@ -98,9 +98,9 @@ def test_recentmacros_max_entries_cap():
     assert len(listed) == recentmacros.MAX_ENTRIES
 
 
-def test_recentmacros_corrupted_file_returns_empty(tmp_path):
+def test_recentmacros_corrupted_file_returns_empty():
     """A corrupted JSON file is silently ignored."""
-    path = recentmacros._path()
+    path = recentmacros._path()  # pylint: disable=protected-access
     os.makedirs(osp.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as fdesc:
         fdesc.write("not valid json {{{")

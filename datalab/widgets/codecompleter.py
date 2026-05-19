@@ -65,7 +65,9 @@ class PythonCompleter(QC.QObject):
     # Event handling
     # ------------------------------------------------------------------
 
-    def eventFilter(self, obj, event):  # noqa: N802 (Qt API)
+    def eventFilter(self, obj, event):  # pylint: disable=invalid-name
+        """Reimplement Qt method to forward key events
+        to the completer when its popup is visible."""
         if event.type() == QC.QEvent.KeyPress and self._completer.popup().isVisible():
             if event.key() in (
                 QC.Qt.Key_Enter,

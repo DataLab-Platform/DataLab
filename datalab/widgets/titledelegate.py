@@ -100,9 +100,6 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
     from the host view's ``mousePressEvent`` / ``mouseMoveEvent``.
     """
 
-    def __init__(self, parent: QW.QAbstractItemView) -> None:
-        super().__init__(parent)
-
     # pylint: disable=invalid-name
     def paint(
         self,
@@ -163,14 +160,6 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
         painter.setClipRect(clip)
         doc.documentLayout().draw(painter, ctx)
         painter.restore()
-
-    # pylint: disable=invalid-name
-    def sizeHint(
-        self, option: QW.QStyleOptionViewItem, index: QC.QModelIndex
-    ) -> QC.QSize:
-        """Reimplement Qt method to size items consistently with default text
-        rendering."""
-        return super().sizeHint(option, index)
 
     def anchor_at(
         self,
