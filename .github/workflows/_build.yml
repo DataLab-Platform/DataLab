@@ -260,9 +260,10 @@ jobs:
             # arrows...) that pdflatex cannot handle. Two passes stabilise
             # cross-references.
             ( cd build/doc && \
-              xelatex -interaction=nonstopmode -halt-on-error DataLab.tex && \
-              xelatex -interaction=nonstopmode -halt-on-error DataLab.tex )
-            mv build/doc/DataLab.pdf "datalab/data/doc/DataLab_${LNG}.pdf"
+              TEX=$(ls *.tex | head -n 1) && \
+              xelatex -interaction=nonstopmode -halt-on-error "$TEX" && \
+              xelatex -interaction=nonstopmode -halt-on-error "$TEX" )
+            mv build/doc/*.pdf "datalab/data/doc/DataLab_${LNG}.pdf"
           done
           ls -lh datalab/data/doc/
 

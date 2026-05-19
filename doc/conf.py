@@ -224,29 +224,41 @@ macros = {
 
 latex_elements = {
     # Use xelatex (set via ``latex_engine`` below): pdflatex chokes on the
-    # emoji / box-drawing / arrow glyphs sprinkled across the docs. Map the
-    # known problematic Unicode chars to the Symbola font (``fonts-symbola``
-    # on Debian/Ubuntu; usually fetched on demand by MiKTeX on Windows).
+    # emoji / box-drawing / arrow glyphs sprinkled across the docs. The
+    # ``ucharclasses`` package automatically routes whole Unicode blocks
+    # (emoji, dingbats, box-drawing, ...) to the Symbola fallback font
+    # (Debian/Ubuntu package ``fonts-symbola``; MiKTeX fetches it on
+    # demand on Windows).
     "preamble": r"""
     \usepackage{amsmath}
     \usepackage{amssymb}
     \usepackage{mathrsfs}
     \usepackage{fontspec}
-    \usepackage{newunicodechar}
     \newfontfamily\unicodefallback{Symbola}[Scale=MatchLowercase]
-    \newunicodechar{✅}{{\unicodefallback ✅}}
-    \newunicodechar{❌}{{\unicodefallback ❌}}
-    \newunicodechar{💡}{{\unicodefallback 💡}}
-    \newunicodechar{➝}{{\unicodefallback ➝}}
-    \newunicodechar{↔}{{\unicodefallback ↔}}
-    \newunicodechar{┌}{{\unicodefallback ┌}}
-    \newunicodechar{┐}{{\unicodefallback ┐}}
-    \newunicodechar{└}{{\unicodefallback └}}
-    \newunicodechar{┘}{{\unicodefallback ┘}}
-    \newunicodechar{├}{{\unicodefallback ├}}
-    \newunicodechar{┤}{{\unicodefallback ┤}}
-    \newunicodechar{─}{{\unicodefallback ─}}
-    \newunicodechar{│}{{\unicodefallback │}}
+    \usepackage[
+        Dingbats,
+        Arrows,
+        MiscellaneousSymbolsandArrows,
+        MiscellaneousSymbols,
+        MiscellaneousSymbolsandPictographs,
+        MiscellaneousTechnical,
+        BoxDrawing,
+        GeometricShapes,
+        SupplementalSymbolsandPictographs,
+        Emoticons,
+        TransportandMapSymbols,
+    ]{ucharclasses}
+    \setTransitionsForDingbats{\unicodefallback}{\normalfont}
+    \setTransitionsForArrows{\unicodefallback}{\normalfont}
+    \setTransitionsForMiscellaneousSymbolsandArrows{\unicodefallback}{\normalfont}
+    \setTransitionsForMiscellaneousSymbols{\unicodefallback}{\normalfont}
+    \setTransitionsForMiscellaneousSymbolsandPictographs{\unicodefallback}{\normalfont}
+    \setTransitionsForMiscellaneousTechnical{\unicodefallback}{\normalfont}
+    \setTransitionsForBoxDrawing{\unicodefallback}{\normalfont}
+    \setTransitionsForGeometricShapes{\unicodefallback}{\normalfont}
+    \setTransitionsForSupplementalSymbolsandPictographs{\unicodefallback}{\normalfont}
+    \setTransitionsForEmoticons{\unicodefallback}{\normalfont}
+    \setTransitionsForTransportandMapSymbols{\unicodefallback}{\normalfont}
     """
     + "\n".join(f"\\newcommand{{\\{cmd}}}{{{defn}}}" for cmd, defn in macros.items()),
 }
