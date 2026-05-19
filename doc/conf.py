@@ -235,30 +235,8 @@ latex_elements = {
     \usepackage{mathrsfs}
     \usepackage{fontspec}
     \newfontfamily\unicodefallback{Symbola}[Scale=MatchLowercase]
-    \usepackage[
-        Dingbats,
-        Arrows,
-        MiscellaneousSymbolsandArrows,
-        MiscellaneousSymbols,
-        MiscellaneousSymbolsandPictographs,
-        MiscellaneousTechnical,
-        BoxDrawing,
-        GeometricShapes,
-        SupplementalSymbolsandPictographs,
-        Emoticons,
-        TransportandMapSymbols,
-    ]{ucharclasses}
-    \setTransitionsForDingbats{\unicodefallback}{\normalfont}
-    \setTransitionsForArrows{\unicodefallback}{\normalfont}
-    \setTransitionsForMiscellaneousSymbolsandArrows{\unicodefallback}{\normalfont}
-    \setTransitionsForMiscellaneousSymbols{\unicodefallback}{\normalfont}
-    \setTransitionsForMiscellaneousSymbolsandPictographs{\unicodefallback}{\normalfont}
-    \setTransitionsForMiscellaneousTechnical{\unicodefallback}{\normalfont}
-    \setTransitionsForBoxDrawing{\unicodefallback}{\normalfont}
-    \setTransitionsForGeometricShapes{\unicodefallback}{\normalfont}
-    \setTransitionsForSupplementalSymbolsandPictographs{\unicodefallback}{\normalfont}
-    \setTransitionsForEmoticons{\unicodefallback}{\normalfont}
-    \setTransitionsForTransportandMapSymbols{\unicodefallback}{\normalfont}
+    \usepackage[Symbols]{ucharclasses}
+    \setTransitionsForSymbols{\unicodefallback}{\normalfont}
     """
     + "\n".join(f"\\newcommand{{\\{cmd}}}{{{defn}}}" for cmd, defn in macros.items()),
 }
