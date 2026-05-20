@@ -15,22 +15,17 @@ call %FUNC% UsePython
 call %FUNC% GetVersion DATALAB_VERSION
 cd %SCRIPTPATH%\..
 
-@REM Set light mode for Qt applications and clean previous documentation ===============
-set QT_COLOR_MODE=light
+@REM Clean previous documentation ======================================================
 if exist %MODNAME%\data\doc ( rmdir /s /q %MODNAME%\data\doc )
 mkdir %MODNAME%\data\doc
 
 @REM Build documentation ===============================================================
+@REM Screenshots under doc/images/ are NOT regenerated here: they are a maintainer
+@REM responsibility (run scripts\update_screenshots.bat or the dedicated VS Code
+@REM task "??? Refresh doc screenshots") and are committed as-is, which lets the
+@REM CI doc workflows build the PDF without launching DataLab/Qt.
 for %%L in (fr en) do (
-    @REM -------------------------------------------------------------------------------
-    @REM Create dummy PDF file, otherwise the PDF menu entry in "?" menu
-    @REM won't be visible in the automatic screenshot
-    echo Dummy PDF file > %MODNAME%\data\doc\DataLab_%%L.pdf
-    @REM -------------------------------------------------------------------------------
     set LANG=%%L
-    @REM Refresh screenshots (delegated ? same script the maintainer can run
-    @REM standalone via scripts\update_screenshots.bat or the VS Code task).
-    %PYTHON% doc/update_screenshots.py
     if exist build\doc ( rmdir /s /q build\doc )
     sphinx-build -b latex -D language=%%L doc build\doc
     cd build\doc
