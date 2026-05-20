@@ -369,6 +369,16 @@ latex_elements = {
     \pretocmd{\section}{\Needspace{12\baselineskip}}{}{}
     \pretocmd{\subsection}{\Needspace{10\baselineskip}}{}{}
     \pretocmd{\subsubsection}{\Needspace{8\baselineskip}}{}{}
+    % Sphinx 9 wraps every table cell content in \begin{varwidth}[t]{...}.
+    % Combined with our `m{}` column specs (e.g. intro/operating-modes and
+    % stakeholders tables), the [t] reference point makes short single-line
+    % cells sit at the row bottom instead of the visual centre. Forcing the
+    % varwidth alignment to [c] makes m{} truly centre the content; it is a
+    % no-op for p{}-style columns where Sphinx ignores the box reference.
+    \usepackage{varwidth}
+    \let\dlorigvarwidth\varwidth
+    \let\dlorigendvarwidth\endvarwidth
+    \renewenvironment{varwidth}[2][c]{\dlorigvarwidth[c]{#2}}{\dlorigendvarwidth}
     """
     + "\n".join(f"\\newcommand{{\\{cmd}}}{{{defn}}}" for cmd, defn in macros.items()),
 }
