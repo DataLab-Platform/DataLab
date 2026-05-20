@@ -16,6 +16,7 @@ import shutil
 import subprocess
 import sys
 from datetime import datetime, timedelta
+from html import escape
 from typing import TYPE_CHECKING
 
 from guidata.configtools import get_icon
@@ -490,6 +491,8 @@ class SearchPathItemWidget(QW.QWidget):
     ) -> None:
         super().__init__(parent)
         self.path = path
+        self.from_env = from_env
+        self.path_label: QW.QLabel | None = None
         self.edit_button: QW.QToolButton | None = None
         self.delete_button: QW.QToolButton | None = None
 
@@ -499,14 +502,9 @@ class SearchPathItemWidget(QW.QWidget):
         self.setLayout(layout)
 
         path_label = QW.QLabel()
-        path_label.setTextInteractionFlags(QC.Qt.TextBrowserInteraction)
-        path_label.setOpenExternalLinks(True)
         path_label.setWordWrap(True)
-        url = QC.QUrl.fromLocalFile(path).toString()
-        text = f'<a href="{url}">{path}</a>'
-        if from_env:
-            text += f" <i>({_('from')} <code>{DATALAB_PLUGINS_ENV_VAR}</code>)</i>"
-        path_label.setText(text)
+        self.path_label = path_label
+        self.set_links_enabled(True)
         layout.addWidget(path_label, 1)
 
         if editable:
@@ -521,6 +519,44 @@ class SearchPathItemWidget(QW.QWidget):
             self.delete_button.setToolTip(_("Remove directory"))
             self.delete_button.setAutoRaise(True)
             layout.addWidget(self.delete_button)
+
+    def set_links_enabled(self, enabled: bool) -> None:
+        """Update link interactivity and appearance for enabled/disabled states."""
+        if self.path_label is None:
+            return
+
+        self.path_label.setText(self._build_path_label_text(enabled))
+        if enabled:
+            self.path_label.setTextInteractionFlags(QC.Qt.TextBrowserInteraction)
+            self.path_label.setOpenExternalLinks(True)
+            self.path_label.setStyleSheet("")
+            return
+
+        disabled_color = QW.QApplication.palette().color(
+            QG.QPalette.Disabled, QG.QPalette.WindowText
+        )
+        disabled_color_name = disabled_color.name()
+        self.path_label.setTextInteractionFlags(QC.Qt.TextSelectableByMouse)
+        self.path_label.setOpenExternalLinks(False)
+        self.path_label.setStyleSheet(f"QLabel {{ color: {disabled_color_name}; }}")
+
+    def _build_path_label_text(self, enabled: bool) -> str:
+        """Return rich text for the path label according to enabled state."""
+        url = escape(QC.QUrl.fromLocalFile(self.path).toString(), quote=True)
+        path = escape(self.path)
+        if enabled:
+            link_text = f'<a href="{url}">{path}</a>'
+        else:
+            disabled_color = (
+                QW.QApplication.palette()
+                .color(QG.QPalette.Disabled, QG.QPalette.WindowText)
+                .name()
+            )
+            link_text = f'<span style="color: {disabled_color};">{path}</span>'
+        if self.from_env:
+            env_var = escape(DATALAB_PLUGINS_ENV_VAR)
+            link_text += f" <i>({_('from')} <code>{env_var}</code>)</i>"
+        return link_text
 
 
 class PluginConfigDialog(QW.QDialog):
@@ -539,16 +575,29 @@ class PluginConfigDialog(QW.QDialog):
         self.failed_plugin_widgets: list[FailedPluginInfoWidget] = []
         self.fixed_path_widgets: list[SearchPathItemWidget] = []
         self.extra_path_widgets: list[SearchPathItemWidget] = []
+        self.original_plugins_enabled = Conf.main.plugins_enabled.get(True)
+        self.plugins_enabled = self.original_plugins_enabled
+        self.original_v020_plugins_warning_ignore = (
+            Conf.main.v020_plugins_warning_ignore.get(False)
+        )
+        self.v020_plugins_warning_ignore = self.original_v020_plugins_warning_ignore
         self.original_extra_plugin_paths = get_user_plugin_paths()
         self.extra_plugin_paths = list(self.original_extra_plugin_paths)
+        self.tabs: QW.QTabWidget | None = None
         self.toggle_all_checkbox: QW.QCheckBox | None = None
         self.filter_combo: QW.QComboBox | None = None
         self.load_info_label: QW.QLabel | None = None
         self.plugins_layout: QW.QVBoxLayout | None = None
+        self.plugins_content: QW.QWidget | None = None
+        self.plugins_disabled_label: QW.QLabel | None = None
         self.extra_paths_layout: QW.QVBoxLayout | None = None
         self.extra_paths_placeholder: QW.QLabel | None = None
+        self.settings_scroll: QW.QScrollArea | None = None
+        self.settings_disabled_label: QW.QLabel | None = None
         self.add_path_button: QW.QPushButton | None = None
         self.reload_button: QW.QPushButton | None = None
+        self.global_toggle_button: QW.QPushButton | None = None
+        self.v020_warning_checkbox: QW.QCheckBox | None = None
 
         self.setWindowTitle(_("Plugin Configuration"))
         self.setMinimumWidth(DIALOG_MIN_WIDTH)
@@ -558,10 +607,11 @@ class PluginConfigDialog(QW.QDialog):
         layout = QW.QVBoxLayout()
         self.setLayout(layout)
 
-        tabs = QW.QTabWidget()
-        tabs.addTab(self._create_plugins_tab(), _("Enable/disable plugins"))
-        tabs.addTab(self._create_search_paths_tab(), _("Plugin search paths"))
-        layout.addWidget(tabs, 1)
+        self.tabs = QW.QTabWidget()
+        self.tabs.addTab(self._create_plugins_tab(), _("Enable/disable plugins"))
+        self.tabs.addTab(self._create_search_paths_tab(), _("Plugin settings"))
+        self.tabs.setCornerWidget(self._create_corner_widget(), QC.Qt.TopRightCorner)
+        layout.addWidget(self.tabs, 1)
 
         # Populate plugins
         self.populate_plugins()
@@ -579,6 +629,28 @@ class PluginConfigDialog(QW.QDialog):
         button_box.rejected.connect(self.reject)
         layout.addLayout(self._create_footer_layout(button_box))
         self._update_load_info_label()
+        self._update_global_plugins_ui()
+
+    def _create_corner_widget(self) -> QW.QWidget:
+        """Create the low-impact global plugin toggle shown near the tab titles."""
+        container = QW.QWidget()
+        layout = QW.QHBoxLayout()
+        layout.setContentsMargins(6, 2, 0, 2)
+        container.setLayout(layout)
+
+        self.global_toggle_button = QW.QPushButton()
+        self.global_toggle_button.setAutoDefault(False)
+        self.global_toggle_button.setDefault(False)
+        self.global_toggle_button.setCursor(QG.QCursor(QC.Qt.PointingHandCursor))
+        self.global_toggle_button.setSizePolicy(
+            QW.QSizePolicy.Fixed, QW.QSizePolicy.Fixed
+        )
+        self.global_toggle_button.setIconSize(QC.QSize(14, 14))
+        self.global_toggle_button.setMinimumHeight(24)
+        self.global_toggle_button.setStyleSheet("QPushButton { padding: 2px 8px; }")
+        self.global_toggle_button.clicked.connect(self._toggle_global_plugins_enabled)
+        layout.addWidget(self.global_toggle_button)
+        return container
 
     def _create_plugins_tab(self) -> QW.QWidget:
         """Create the 'Enable/disable plugins' tab content."""
@@ -586,27 +658,51 @@ class PluginConfigDialog(QW.QDialog):
         tab_layout = QW.QVBoxLayout()
         tab.setLayout(tab_layout)
         tab_layout.addWidget(self._create_info_label())
-        tab_layout.addLayout(self._create_controls_layout())
-        tab_layout.addWidget(self._create_scroll_area(), 1)
+
+        self.plugins_disabled_label = QW.QLabel(
+            _("Third-party plugins are globally disabled.")
+        )
+        self.plugins_disabled_label.setWordWrap(True)
+        apply_subdued_color(self.plugins_disabled_label)
+        self.plugins_disabled_label.hide()
+        tab_layout.addWidget(self.plugins_disabled_label)
+
+        self.plugins_content = QW.QWidget()
+        content_layout = QW.QVBoxLayout()
+        content_layout.setContentsMargins(0, 0, 0, 0)
+        self.plugins_content.setLayout(content_layout)
+        content_layout.addLayout(self._create_controls_layout())
+        content_layout.addWidget(self._create_scroll_area(), 1)
+        tab_layout.addWidget(self.plugins_content, 1)
         return tab
 
     def _create_search_paths_tab(self) -> QW.QWidget:
-        """Create the 'Plugin search paths' tab content (scrollable)."""
+        """Create the 'Plugin settings' tab content (scrollable)."""
         tab = QW.QWidget()
         tab_layout = QW.QVBoxLayout()
         tab_layout.setContentsMargins(0, 0, 0, 0)
         tab.setLayout(tab_layout)
 
-        scroll = QW.QScrollArea()
-        scroll.setWidgetResizable(True)
-        scroll.setHorizontalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
+        self.settings_disabled_label = QW.QLabel(
+            _("Third-party plugins are globally disabled.")
+        )
+        self.settings_disabled_label.setWordWrap(True)
+        apply_subdued_color(self.settings_disabled_label)
+        self.settings_disabled_label.hide()
+        tab_layout.addWidget(self.settings_disabled_label)
+
+        self.settings_scroll = QW.QScrollArea()
+        self.settings_scroll.setWidgetResizable(True)
+        self.settings_scroll.setHorizontalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
         container = QW.QWidget()
         container_layout = QW.QVBoxLayout()
         container.setLayout(container_layout)
         container_layout.addLayout(self._create_search_paths_layout())
+        container_layout.addSpacing(18)
+        container_layout.addLayout(self._create_warning_settings_layout())
         container_layout.addStretch()
-        scroll.setWidget(container)
-        tab_layout.addWidget(scroll)
+        self.settings_scroll.setWidget(container)
+        tab_layout.addWidget(self.settings_scroll)
         return tab
 
     @staticmethod
@@ -714,6 +810,36 @@ class PluginConfigDialog(QW.QDialog):
         apply_subdued_color(hint)
         paths_layout.addWidget(hint)
         return paths_layout
+
+    def _create_warning_settings_layout(self) -> QW.QVBoxLayout:
+        """Create the layout for plugin compatibility warning options."""
+        warnings_layout = QW.QVBoxLayout()
+
+        title = QW.QLabel(_("Compatibility warnings"))
+        title_font = title.font()
+        title_font.setBold(True)
+        title.setFont(title_font)
+        warnings_layout.addWidget(title)
+
+        self.v020_warning_checkbox = QW.QCheckBox(
+            _("Hide warnings for incompatible DataLab v0.20 plugins")
+        )
+        self.v020_warning_checkbox.setChecked(self.v020_plugins_warning_ignore)
+        self.v020_warning_checkbox.toggled.connect(
+            self._set_v020_plugins_warning_ignore
+        )
+        warnings_layout.addWidget(self.v020_warning_checkbox)
+
+        hint = QW.QLabel(
+            _(
+                "If enabled, DataLab will not warn you about v0.20 plugins "
+                "that are no longer compatible with v1.0."
+            )
+        )
+        hint.setWordWrap(True)
+        apply_subdued_color(hint)
+        warnings_layout.addWidget(hint)
+        return warnings_layout
 
     def _refresh_extra_path_widgets(self) -> None:
         """Rebuild the editable extra-path widgets."""
@@ -832,16 +958,74 @@ class PluginConfigDialog(QW.QDialog):
         latest_load = _get_latest_plugin_load_at(self.main)
         self.load_info_label.setText(format_last_load_text(latest_load))
 
+    def _update_global_plugins_ui(self) -> None:
+        """Refresh button texts and enabled state for global plugin controls."""
+        enabled = self.plugins_enabled
+        if self.global_toggle_button is not None:
+            self.global_toggle_button.setText(
+                _("Disable plugins globally")
+                if enabled
+                else _("Enable plugins globally")
+            )
+            self.global_toggle_button.setIcon(
+                get_icon("uncheck_all.svg") if enabled else get_icon("check_all.svg")
+            )
+        if self.reload_button is not None:
+            self.reload_button.setEnabled(enabled)
+        if self.plugins_content is not None:
+            self.plugins_content.setEnabled(enabled)
+        if self.plugins_disabled_label is not None:
+            self.plugins_disabled_label.setVisible(not enabled)
+        if self.settings_scroll is not None:
+            self.settings_scroll.setEnabled(enabled)
+        if self.settings_disabled_label is not None:
+            self.settings_disabled_label.setVisible(not enabled)
+        for widget in self.fixed_path_widgets + self.extra_path_widgets:
+            widget.set_links_enabled(enabled)
+
+    def _toggle_global_plugins_enabled(self) -> None:
+        """Toggle the local global third-party plugin enabled state."""
+        self.plugins_enabled = not self.plugins_enabled
+        self._update_global_plugins_ui()
+
+    def _set_v020_plugins_warning_ignore(self, state: bool) -> None:
+        """Store the local compatibility-warning preference."""
+        self.v020_plugins_warning_ignore = state
+
     def _has_changes(self) -> bool:
         """Return whether plugin enablement or search paths changed."""
         plugin_changes_made = any(
             widget.has_changed() for widget in self.plugin_widgets
         )
         path_changes_made = self.extra_plugin_paths != self.original_extra_plugin_paths
+        plugins_enabled_changed = self.plugins_enabled != self.original_plugins_enabled
+        warning_changed = (
+            self.v020_plugins_warning_ignore
+            != self.original_v020_plugins_warning_ignore
+        )
+        return (
+            plugin_changes_made
+            or path_changes_made
+            or plugins_enabled_changed
+            or warning_changed
+        )
+
+    def _has_reloadable_changes(self) -> bool:
+        """Return whether changes require plugin reload while plugins are enabled."""
+        plugin_changes_made = any(
+            widget.has_changed() for widget in self.plugin_widgets
+        )
+        path_changes_made = self.extra_plugin_paths != self.original_extra_plugin_paths
         return plugin_changes_made or path_changes_made
+
+    def _has_global_plugins_enabled_change(self) -> bool:
+        """Return whether the global third-party plugin state changed."""
+        return self.plugins_enabled != self.original_plugins_enabled
 
     def _save_configuration(self) -> None:
         """Persist current plugin enablement and search path settings."""
+        Conf.main.plugins_enabled.set(self.plugins_enabled)
+        Conf.main.v020_plugins_warning_ignore.set(self.v020_plugins_warning_ignore)
         enabled_plugins = [
             widget.plugin_class.PLUGIN_INFO.name
             for widget in self.plugin_widgets
@@ -849,6 +1033,12 @@ class PluginConfigDialog(QW.QDialog):
         ]
         Conf.main.plugins_enabled_list.set(enabled_plugins)
         set_user_plugin_paths(self.extra_plugin_paths)
+
+    def _mark_current_state_as_saved(self) -> None:
+        """Synchronize original values with the current dialog state."""
+        self.original_plugins_enabled = self.plugins_enabled
+        self.original_v020_plugins_warning_ignore = self.v020_plugins_warning_ignore
+        self.original_extra_plugin_paths = list(self.extra_plugin_paths)
 
     def _refresh_plugin_list(self) -> None:
         """Rebuild the plugin list from the current registry state."""
@@ -867,11 +1057,19 @@ class PluginConfigDialog(QW.QDialog):
 
     def _apply_and_reload_plugins(self) -> None:
         """Save configuration, reload plugins, and keep dialog open."""
+        if not self.plugins_enabled:
+            return
+        global_plugins_enabled_changed = self._has_global_plugins_enabled_change()
         if self._has_changes():
             self._save_configuration()
-            self.original_extra_plugin_paths = list(self.extra_plugin_paths)
-        self.main.reload_plugins()
+        if global_plugins_enabled_changed:
+            self.main.set_plugins_enabled(self.plugins_enabled)
+        else:
+            self.main.reload_plugins()
+        self._mark_current_state_as_saved()
         self._refresh_plugin_list()
+        self._update_load_info_label()
+        self._update_global_plugins_ui()
 
     def set_all_enabled(self, enabled: bool) -> None:
         """Set all plugin checkboxes to the same state."""
@@ -957,7 +1155,18 @@ class PluginConfigDialog(QW.QDialog):
             super().accept()
             return
 
+        global_plugins_enabled_changed = self._has_global_plugins_enabled_change()
+        reloadable_changes = self._has_reloadable_changes()
         self._save_configuration()
+
+        if global_plugins_enabled_changed:
+            self.main.set_plugins_enabled(self.plugins_enabled)
+            super().accept()
+            return
+
+        if not reloadable_changes:
+            super().accept()
+            return
 
         # Inform user that reload is needed
         reply = QW.QMessageBox.question(

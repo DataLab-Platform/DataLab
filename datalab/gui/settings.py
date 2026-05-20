@@ -66,22 +66,6 @@ class MainSettings(gds.DataSet):
             "before loading any new data"
         ),
     )
-    plugins_enabled = gds.BoolItem(
-        "",
-        _("Third-party plugins"),
-        help=_(
-            "Enable or disable third-party plugins immediately. "
-            "Changes are applied without restarting DataLab"
-        ),
-    )
-    v020_plugins_warning_ignore = gds.BoolItem(
-        _("Ignore compatibility issues warning"),
-        _("DataLab v0.20 plugins"),
-        help=_(
-            "If enabled, DataLab will not warn you about v0.20 plugins that are "
-            "no longer compatible with v1.0."
-        ),
-    )
     _g0 = gds.EndGroup("")
 
 
@@ -257,7 +241,7 @@ class ImageDefaultSettings(BaseImageParam):
 def edit_default_image_settings(
     dataset: gds.DataSet, item: gds.DataItem, value: Any, parent: QW.QWidget
 ) -> bool:
-    """Edit default image settings
+    """Edit default image settings.
 
     Args:
         dataset: dataset

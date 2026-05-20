@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
+import pytest
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
@@ -83,6 +84,23 @@ def _create_plugin_description_widget(
     widget.description_widget.refresh_description()
     QW.QApplication.processEvents()
     return widget
+
+
+@pytest.fixture(autouse=True)
+def restore_plugin_global_settings():
+    """Keep plugin-global settings isolated between tests.
+
+    Most tests in this module assume third-party plugins are enabled.
+    """
+    original_plugins_enabled = Conf.main.plugins_enabled.get(True)
+    original_warning_ignore = Conf.main.v020_plugins_warning_ignore.get(False)
+    Conf.main.plugins_enabled.set(True)
+    Conf.main.v020_plugins_warning_ignore.set(False)
+    try:
+        yield
+    finally:
+        Conf.main.plugins_enabled.set(original_plugins_enabled)
+        Conf.main.v020_plugins_warning_ignore.set(original_warning_ignore)
 
 
 def test_plugin_enable_disable_config():
@@ -451,6 +469,170 @@ def test_apply_and_reload_button_keeps_dialog_open_and_saves_changes(
             _close_dialog(dialog)
     finally:
         set_user_plugin_paths(original_paths)
+
+
+def test_plugins_menu_stays_available_when_plugins_are_globally_disabled():
+    """Plugins menu should remain usable to reopen configuration when disabled."""
+    original_plugins_enabled = Conf.main.plugins_enabled.get(True)
+
+    try:
+        Conf.main.plugins_enabled.set(False)
+
+        with datalab_test_app_context(console=False) as win:
+            QW.QApplication.processEvents()
+
+            assert win.plugins_menu is not None
+            assert win.plugins_menu.isEnabled()
+            assert win.configure_plugins_action is not None
+            assert win.configure_plugins_action.isEnabled()
+            assert win.reload_plugins_action is not None
+            assert not win.reload_plugins_action.isEnabled()
+
+            win.plugins_menu.aboutToShow.emit()
+            QW.QApplication.processEvents()
+
+            plugin_menu_texts = [action.text() for action in win.plugins_menu.actions()]
+            assert "Configure plugins..." in plugin_menu_texts
+            assert "Reload plugins" in plugin_menu_texts
+    finally:
+        Conf.main.plugins_enabled.set(original_plugins_enabled)
+
+
+def test_disabled_plugins_still_appear_in_configuration_dialog():
+    """Globally disabled plugins should remain listed but inactive in the dialog."""
+    plugin_name = "Disabled Visible Plugin"
+    main_config = Conf.to_dict().get("main", {})
+    had_config = "plugins_enabled_list" in main_config
+    original_enabled_list = Conf.main.plugins_enabled_list.get(None)
+
+    try:
+        with temporary_plugin_dir() as plugin_dir:
+            create_plugin_file(
+                plugin_dir,
+                "datalab_test_plugin_visible_when_disabled.py",
+                "DisabledVisiblePlugin",
+                plugin_name,
+                "Action Visible",
+                "action_visible",
+            )
+            Conf.main.plugins_enabled_list.set(None)
+
+            with datalab_test_app_context(console=False) as win:
+                dialog = PluginConfigDialog(win)
+                _show_dialog(dialog)
+
+                assert dialog.global_toggle_button is not None
+                dialog.global_toggle_button.click()
+                QW.QApplication.processEvents()
+                dialog.accept()
+                QW.QApplication.processEvents()
+
+                dialog2 = PluginConfigDialog(win)
+                _show_dialog(dialog2)
+
+                widget_names = [
+                    widget.plugin_class.PLUGIN_INFO.name
+                    for widget in dialog2.plugin_widgets
+                ]
+                assert plugin_name in widget_names
+                assert dialog2.plugins_content is not None
+                assert not dialog2.plugins_content.isEnabled()
+                assert dialog2.global_toggle_button is not None
+                assert dialog2.global_toggle_button.text() == "Enable plugins globally"
+
+                _close_dialog(dialog2)
+    finally:
+        if had_config:
+            Conf.main.plugins_enabled_list.set(original_enabled_list)
+        else:
+            Conf.main.plugins_enabled_list.remove()
+
+
+def test_plugin_settings_tab_exposes_global_toggle_and_warning_option():
+    """Plugin settings tab should host the global toggle and warning option."""
+    original_plugins_enabled = Conf.main.plugins_enabled.get(True)
+    original_warning_ignore = Conf.main.v020_plugins_warning_ignore.get(False)
+
+    try:
+        Conf.main.plugins_enabled.set(True)
+        Conf.main.v020_plugins_warning_ignore.set(False)
+
+        with datalab_test_app_context(console=False) as win:
+            dialog = PluginConfigDialog(win)
+            _show_dialog(dialog)
+
+            assert dialog.tabs is not None
+            assert dialog.tabs.tabText(1) == "Plugin settings"
+            assert dialog.global_toggle_button is not None
+            assert dialog.global_toggle_button.text() == "Disable plugins globally"
+            assert dialog.global_toggle_button.minimumHeight() == 24
+            assert not dialog.global_toggle_button.icon().isNull()
+            assert dialog.v020_warning_checkbox is not None
+            assert dialog.v020_warning_checkbox.isChecked() is False
+            assert dialog.reload_button is not None
+            assert dialog.reload_button.isEnabled()
+
+            dialog.global_toggle_button.click()
+            QW.QApplication.processEvents()
+
+            assert dialog.global_toggle_button.text() == "Enable plugins globally"
+            assert not dialog.global_toggle_button.icon().isNull()
+            assert dialog.plugins_content is not None
+            assert dialog.settings_scroll is not None
+            assert dialog.plugins_disabled_label is not None
+            assert dialog.settings_disabled_label is not None
+            assert not dialog.plugins_content.isEnabled()
+            assert not dialog.settings_scroll.isEnabled()
+            assert dialog.plugins_disabled_label.isVisible()
+            dialog.tabs.setCurrentIndex(1)
+            QW.QApplication.processEvents()
+            assert dialog.settings_disabled_label.isVisible()
+            assert not dialog.reload_button.isEnabled()
+            assert dialog.fixed_path_widgets
+            fixed_path_widget = dialog.fixed_path_widgets[0]
+            assert fixed_path_widget.path_label is not None
+            assert fixed_path_widget.path_label.openExternalLinks() is False
+            assert "<a href=" not in fixed_path_widget.path_label.text()
+            assert '<span style="color:' in fixed_path_widget.path_label.text()
+
+            _close_dialog(dialog)
+    finally:
+        Conf.main.plugins_enabled.set(original_plugins_enabled)
+        Conf.main.v020_plugins_warning_ignore.set(original_warning_ignore)
+
+
+def test_accept_applies_global_plugin_toggle(monkeypatch):
+    """Accepting the dialog should apply the global third-party plugin state."""
+    original_plugins_enabled = Conf.main.plugins_enabled.get(True)
+    original_warning_ignore = Conf.main.v020_plugins_warning_ignore.get(False)
+
+    def unexpected_reload(*args, **kwargs):
+        """Fail if a reload prompt is shown for a pure global toggle change."""
+        raise AssertionError("Reload prompt should not be shown")
+
+    try:
+        Conf.main.plugins_enabled.set(True)
+        Conf.main.v020_plugins_warning_ignore.set(False)
+
+        with datalab_test_app_context(console=False) as win:
+            dialog = PluginConfigDialog(win)
+            _show_dialog(dialog)
+
+            applied_states: list[bool] = []
+            monkeypatch.setattr(win, "set_plugins_enabled", applied_states.append)
+            monkeypatch.setattr(QW.QMessageBox, "question", unexpected_reload)
+
+            assert dialog.global_toggle_button is not None
+            dialog.global_toggle_button.click()
+            QW.QApplication.processEvents()
+            dialog.accept()
+            QW.QApplication.processEvents()
+
+            assert applied_states == [False]
+            assert Conf.main.plugins_enabled.get() is False
+    finally:
+        Conf.main.plugins_enabled.set(original_plugins_enabled)
+        Conf.main.v020_plugins_warning_ignore.set(original_warning_ignore)
 
 
 def test_plugin_many_actions_menu_behavior():

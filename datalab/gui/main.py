@@ -1042,6 +1042,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         # None = all plugins enabled (default), [] = no plugins, list = specific plugins
         enabled_list = Conf.main.plugins_enabled_list.get(None)
 
+        if not Conf.main.plugins_enabled.get():
+            self.plugins_last_load_at = datetime.now().astimezone()
+            return
+
         for plugin_class in PluginRegistry.get_plugin_classes():
             try:
                 # Check if plugin is enabled before instantiation
@@ -1122,6 +1126,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         dialog = PluginConfigDialog(self)
         dialog.exec()
 
+    def set_plugins_enabled(self, enabled: bool) -> None:
+        """Apply the global third-party plugin enabled state."""
+        Conf.main.plugins_enabled.set(enabled)
+        self.__apply_plugins_enabled_setting()
+
     def reload_plugins(self) -> None:
         """Reload third-party plugins at runtime.
 
@@ -1136,8 +1145,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     self,
                     _("Plugins"),
                     _(
-                        "Third-party plugins are disabled. Enable them in the "
-                        "Settings dialog to use this feature."
+                        "Third-party plugins are disabled. Enable them again "
+                        "from the plugin configuration dialog to use this "
+                        "feature."
                     ),
                 )
                 return
@@ -1249,12 +1259,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Update plugin-related UI according to third-party plugin setting."""
         plugins_enabled = Conf.main.plugins_enabled.get()
 
-        if self.plugins_menu is not None:
-            self.plugins_menu.setEnabled(plugins_enabled)
+        if self.reload_plugins_action is not None:
+            self.reload_plugins_action.setEnabled(plugins_enabled)
 
-        for action in (self.reload_plugins_action, self.configure_plugins_action):
-            if action is not None:
-                action.setEnabled(plugins_enabled)
+        if self.configure_plugins_action is not None:
+            self.configure_plugins_action.setEnabled(True)
 
         if hasattr(self, "pluginstatus") and self.pluginstatus is not None:
             self.pluginstatus.update_status()
@@ -1270,11 +1279,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.__unregister_plugins()
         for panel in (self.signalpanel, self.imagepanel):
             panel.acthandler.clear_plugin_actions()
-
-        PluginRegistry.clear_plugin_classes()
-        PluginRegistry.clear_failed_plugins()
-        PluginRegistry.clear_discovery_errors()
-        self._startup_errors.clear()
 
         self.__update_actions(update_other_data_panel=True)
         self.__update_plugins_availability()
@@ -1861,8 +1865,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         panel.selection_changed()
         self.signalpanel_toolbar.setVisible(is_signal)
         self.imagepanel_toolbar.setVisible(not is_signal)
-        if self.plugins_menu is not None:
-            self.plugins_menu.setEnabled(Conf.main.plugins_enabled.get())
 
     def __tab_index_changed(self, index: int) -> None:
         """Switch from signal to image mode, or vice-versa"""
@@ -1892,12 +1894,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         # no plugin has registered actions yet (so that new plugins can be
         # discovered after they are added on disk).
         if menu is self.plugins_menu:
-            if Conf.main.plugins_enabled.get():
-                actions = list(actions) + [
-                    None,
-                    self.configure_plugins_action,
-                    self.reload_plugins_action,
-                ]
+            actions = list(actions) + [
+                None,
+                self.configure_plugins_action,
+                self.reload_plugins_action,
+            ]
         add_actions(menu, actions)
 
     def __update_file_menu(self) -> None:
@@ -2506,8 +2507,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 self.__update_color_mode()
             if option == "show_console_on_error":
                 self.__update_console_show_mode()
-            if option == "plugins_enabled":
-                self.__apply_plugins_enabled_setting()
             if option == "plot_toolbar_position":
                 for dock in self.docks.values():
                     widget = dock.widget()
