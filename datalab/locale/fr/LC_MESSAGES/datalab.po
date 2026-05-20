@@ -1745,6 +1745,9 @@ msgstr "Activer/désactiver les plugins"
 msgid "Plugin search paths"
 msgstr "Chemins de recherche des plugins"
 
+msgid "Apply and reload plugins"
+msgstr "Appliquer et recharger les plugins"
+
 msgid "Manage Plugins"
 msgstr "Gérer les plugins"
 

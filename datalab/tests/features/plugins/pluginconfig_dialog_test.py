@@ -407,6 +407,52 @@ def test_env_var_plugin_paths_appear_as_fixed_read_only_entries(monkeypatch, tmp
         set_user_plugin_paths(original_paths)
 
 
+def test_apply_and_reload_button_keeps_dialog_open_and_saves_changes(
+    monkeypatch, tmp_path
+):
+    """Apply/reload button should save changes, reload plugins, and keep dialog open."""
+    added_dir = tmp_path / "plugins_added"
+    added_dir.mkdir()
+    original_paths = get_user_plugin_paths()
+
+    try:
+        set_user_plugin_paths([])
+        with datalab_test_app_context(console=False) as win:
+            dialog = PluginConfigDialog(win)
+            _show_dialog(dialog)
+
+            assert dialog.reload_button is not None
+            assert dialog.reload_button.text() == "Apply and reload plugins"
+
+            monkeypatch.setattr(
+                dialog,
+                "_browse_plugin_directory",
+                lambda _initial_path=None: str(added_dir),
+            )
+
+            reload_calls: list[bool] = []
+
+            def fake_reload_plugins() -> None:
+                """Record reload requests without closing the dialog."""
+                reload_calls.append(True)
+                win.plugins_last_load_at = datetime(2026, 5, 20, 14, 30)
+
+            monkeypatch.setattr(win, "reload_plugins", fake_reload_plugins)
+
+            dialog.add_path_button.click()
+            QW.QApplication.processEvents()
+            dialog.reload_button.click()
+            QW.QApplication.processEvents()
+
+            assert reload_calls == [True]
+            assert dialog.isVisible()
+            assert get_user_plugin_paths() == [str(added_dir)]
+
+            _close_dialog(dialog)
+    finally:
+        set_user_plugin_paths(original_paths)
+
+
 def test_plugin_many_actions_menu_behavior():
     """Test plugin with many actions in dropdown menu."""
     main_config = Conf.to_dict().get("main", {})

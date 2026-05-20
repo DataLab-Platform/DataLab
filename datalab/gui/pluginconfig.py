@@ -548,6 +548,7 @@ class PluginConfigDialog(QW.QDialog):
         self.extra_paths_layout: QW.QVBoxLayout | None = None
         self.extra_paths_placeholder: QW.QLabel | None = None
         self.add_path_button: QW.QPushButton | None = None
+        self.reload_button: QW.QPushButton | None = None
 
         self.setWindowTitle(_("Plugin Configuration"))
         self.setMinimumWidth(DIALOG_MIN_WIDTH)
@@ -571,6 +572,11 @@ class PluginConfigDialog(QW.QDialog):
         button_box = QW.QDialogButtonBox(
             QW.QDialogButtonBox.Ok | QW.QDialogButtonBox.Cancel
         )
+        self.reload_button = QW.QPushButton(
+            get_icon("refresh-auto.svg"), _("Apply and reload plugins")
+        )
+        button_box.addButton(self.reload_button, QW.QDialogButtonBox.ActionRole)
+        self.reload_button.clicked.connect(self._apply_and_reload_plugins)
         button_box.accepted.connect(self.accept)
         button_box.rejected.connect(self.reject)
         layout.addLayout(self._create_footer_layout(button_box))
@@ -842,6 +848,47 @@ class PluginConfigDialog(QW.QDialog):
         latest_load = _get_latest_plugin_load_at(self.main)
         self.load_info_label.setText(format_last_load_text(latest_load))
 
+    def _has_changes(self) -> bool:
+        """Return whether plugin enablement or search paths changed."""
+        plugin_changes_made = any(
+            widget.has_changed() for widget in self.plugin_widgets
+        )
+        path_changes_made = self.extra_plugin_paths != self.original_extra_plugin_paths
+        return plugin_changes_made or path_changes_made
+
+    def _save_configuration(self) -> None:
+        """Persist current plugin enablement and search path settings."""
+        enabled_plugins = [
+            widget.plugin_class.PLUGIN_INFO.name
+            for widget in self.plugin_widgets
+            if widget.is_enabled()
+        ]
+        Conf.main.plugins_enabled_list.set(enabled_plugins)
+        set_user_plugin_paths(self.extra_plugin_paths)
+
+    def _refresh_plugin_list(self) -> None:
+        """Rebuild the plugin list from the current registry state."""
+        if self.plugins_layout is None:
+            return
+
+        while self.plugins_layout.count():
+            item = self.plugins_layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
+
+        self.plugin_widgets.clear()
+        self.failed_plugin_widgets.clear()
+        self.populate_plugins()
+
+    def _apply_and_reload_plugins(self) -> None:
+        """Save configuration, reload plugins, and keep dialog open."""
+        if self._has_changes():
+            self._save_configuration()
+            self.original_extra_plugin_paths = list(self.extra_plugin_paths)
+        self.main.reload_plugins()
+        self._refresh_plugin_list()
+
     def set_all_enabled(self, enabled: bool) -> None:
         """Set all plugin checkboxes to the same state."""
         for widget in self.plugin_widgets:
@@ -922,27 +969,11 @@ class PluginConfigDialog(QW.QDialog):
 
     def accept(self):
         """Apply changes and close dialog"""
-        # Check if any changes were made
-        plugin_changes_made = any(
-            widget.has_changed() for widget in self.plugin_widgets
-        )
-        path_changes_made = self.extra_plugin_paths != self.original_extra_plugin_paths
-        changes_made = plugin_changes_made or path_changes_made
-
-        if not changes_made:
+        if not self._has_changes():
             super().accept()
             return
 
-        # Collect enabled plugin names
-        enabled_plugins = [
-            widget.plugin_class.PLUGIN_INFO.name
-            for widget in self.plugin_widgets
-            if widget.is_enabled()
-        ]
-
-        # Save to configuration
-        Conf.main.plugins_enabled_list.set(enabled_plugins)
-        set_user_plugin_paths(self.extra_plugin_paths)
+        self._save_configuration()
 
         # Inform user that reload is needed
         reply = QW.QMessageBox.question(
