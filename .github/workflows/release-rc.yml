@@ -1,0 +1,107 @@
+# ============================================================================
+# Release candidate workflow.
+#
+# Same modular build as `release.yml` (delegated to `_build.yml`) but
+# publishes to **TestPyPI** and creates a GitHub pre-release. Does not
+# touch PyPI nor GitHub Pages. MSI build is enabled by default.
+#
+# Triggers:
+#   * push of a tag matching vX.Y.Z-rcN on any branch.
+#
+# Prerequisites:
+#   - Configure TestPyPI Trusted Publishing -> GitHub environment `testpypi`.
+# ============================================================================
+name: Release Candidate
+
+on:
+  push:
+    tags:
+      - "v[0-9]*.[0-9]*.[0-9]*-rc[0-9]*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-rc-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    uses: ./.github/workflows/_build.yml
+    with:
+      build-msi: true
+      # RC tags may be pushed from any branch, so skip the "tag on main" check.
+      skip-tag-branch-check: true
+      artifact-retention-days: 14
+
+  publish-testpypi:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/datalab
+    permissions:
+      id-token: write
+    steps:
+      - name: Download Python distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: python-dists
+          path: dist
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  github-prerelease:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Download Python distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: python-dists
+          path: assets/dists
+
+      - name: Download PDF documentation
+        uses: actions/download-artifact@v4
+        with:
+          name: pdf-docs
+          path: assets/pdfs
+
+      - name: Download MSI installer
+        uses: actions/download-artifact@v4
+        with:
+          name: msi-installer
+          path: assets/msi
+
+      - name: Extract release notes
+        run: |
+          python scripts/ci_release_helpers.py release-notes \
+            "$GITHUB_REF_NAME" -o release-notes.md
+
+      - name: Create GitHub pre-release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: DataLab ${{ github.ref_name }}
+          body_path: release-notes.md
+          prerelease: true
+          draft: false
+          fail_on_unmatched_files: true
+          files: |
+            assets/dists/*.whl
+            assets/dists/*.tar.gz
+            assets/msi/*.msi
+            assets/pdfs/DataLab_fr.pdf
+            assets/pdfs/DataLab_en.pdf

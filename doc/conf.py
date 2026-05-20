@@ -126,6 +126,7 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.githubpages",
     "sphinx.ext.viewcode",
+    "sphinxcontrib.cairosvgconverter",
     "sphinx_sitemap",
     "myst_parser",
     "sphinx_design",
@@ -134,6 +135,13 @@ extensions = [
 ]
 templates_path = ["_templates"]
 exclude_patterns = []
+
+# Per-language figure resolution: if e.g. ``foo.png`` is referenced, Sphinx
+# will use ``foo.<language>.png`` when available, falling back to ``foo.png``
+# otherwise. This is how the maintainer-refreshed UI screenshots under
+# ``doc/images/shots/`` (foo.fr.png / foo.en.png) get picked up automatically
+# in each language build.
+figure_language_filename = "{root}.{language}{ext}"
 
 # -- Options for sitemap extension -------------------------------------------
 html_baseurl = datalab.__homeurl__  # for sitemap extension
@@ -215,12 +223,32 @@ macros = {
 }
 
 latex_elements = {
+    # Use xelatex (set via ``latex_engine`` below): pdflatex chokes on the
+    # emoji / box-drawing / arrow glyphs sprinkled across the docs. The
+    # ``ucharclasses`` package automatically routes whole Unicode blocks
+    # (emoji, dingbats, box-drawing, ...) to the Symbola fallback font
+    # (Debian/Ubuntu package ``fonts-symbola``; MiKTeX fetches it on
+    # demand on Windows).
     "preamble": r"""
     \usepackage{amsmath}
     \usepackage{amssymb}
-    \usepackage{mathrsfs}"""
+    \usepackage{mathrsfs}
+    \usepackage{fontspec}
+    \newfontfamily\unicodefallback{Symbola}[Scale=MatchLowercase]
+    \usepackage[Symbols]{ucharclasses}
+    \setTransitionsForSymbols{\unicodefallback}{\normalfont}
+    % Prevent orphan section headings at the bottom of a page: force a page
+    % break if there is not enough room for the heading plus a few lines of
+    % its following paragraph.
+    \usepackage{needspace}
+    \usepackage{etoolbox}
+    \pretocmd{\section}{\Needspace{12\baselineskip}}{}{}
+    \pretocmd{\subsection}{\Needspace{10\baselineskip}}{}{}
+    \pretocmd{\subsubsection}{\Needspace{8\baselineskip}}{}{}
+    """
     + "\n".join(f"\\newcommand{{\\{cmd}}}{{{defn}}}" for cmd, defn in macros.items()),
 }
+latex_engine = "xelatex"
 
 # -- MathJax configuration for HTML output -----------------------------------
 mathjax3_config = {

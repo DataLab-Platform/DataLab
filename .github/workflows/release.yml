@@ -1,0 +1,126 @@
+# ============================================================================
+# Build and publish a DataLab release.
+#
+# The build itself is delegated to the reusable `_build.yml` workflow
+# (modular, one artifact per stage). This file only adds the publication
+# jobs: PyPI Trusted Publishing + draft GitHub Release + Pages deployment.
+#
+# Triggers:
+#   * push of a tag matching vX.Y.Z (no pre-release suffix) on `main`.
+#     RC tags `vX.Y.Z-rcN` are handled by `release-rc.yml`.
+#
+# Prerequisites (one-time, off-CI):
+#   - Configure PyPI Trusted Publishing for `datalab` -> environment `pypi`.
+#   - Configure GH_PAGES_TOKEN or GH_PAGES_DEPLOY_KEY (see `pages.yml`).
+# ============================================================================
+name: Release
+
+on:
+  push:
+    tags:
+      - "v[0-9]*.[0-9]*.[0-9]*"
+      - "!v*-*"  # exclude pre-release tags (handled by release-rc.yml)
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Modular build (translations / PDFs / dists / MSI) via reusable workflow.
+  # ---------------------------------------------------------------------------
+  build:
+    uses: ./.github/workflows/_build.yml
+    with:
+      build-msi: true
+      artifact-retention-days: 30
+
+  # ---------------------------------------------------------------------------
+  # Publish sdist + wheel to PyPI via Trusted Publishing (OIDC).
+  # ---------------------------------------------------------------------------
+  publish-pypi:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/datalab
+    permissions:
+      id-token: write
+    steps:
+      - name: Download Python distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: python-dists
+          path: dist
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  # ---------------------------------------------------------------------------
+  # Create a draft GitHub Release with all public artifacts.
+  # ---------------------------------------------------------------------------
+  github-release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Download Python distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: python-dists
+          path: assets/dists
+
+      - name: Download PDF documentation
+        uses: actions/download-artifact@v4
+        with:
+          name: pdf-docs
+          path: assets/pdfs
+
+      - name: Download MSI installer
+        uses: actions/download-artifact@v4
+        with:
+          name: msi-installer
+          path: assets/msi
+
+      - name: Extract release notes
+        run: |
+          python scripts/ci_release_helpers.py release-notes \
+            "$GITHUB_REF_NAME" -o release-notes.md
+          echo "--- release notes preview ---"
+          head -n 20 release-notes.md
+
+      - name: Create draft GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: DataLab ${{ github.ref_name }}
+          body_path: release-notes.md
+          draft: true
+          fail_on_unmatched_files: true
+          files: |
+            assets/dists/*.whl
+            assets/dists/*.tar.gz
+            assets/msi/*.msi
+            assets/pdfs/DataLab_fr.pdf
+            assets/pdfs/DataLab_en.pdf
+
+  # ---------------------------------------------------------------------------
+  # Build & deploy documentation (delegated to pages.yml). Non-blocking.
+  # ---------------------------------------------------------------------------
+  deploy-pages:
+    needs: build
+    uses: ./.github/workflows/pages.yml
+    secrets: inherit
+    with:
+      deploy: true

@@ -28,14 +28,16 @@ for %%L in (fr en) do (
     echo Dummy PDF file > %MODNAME%\data\doc\DataLab_%%L.pdf
     @REM -------------------------------------------------------------------------------
     set LANG=%%L
+    @REM Refresh screenshots (delegated ? same script the maintainer can run
+    @REM standalone via scripts\update_screenshots.bat or the VS Code task).
     %PYTHON% doc/update_screenshots.py
     if exist build\doc ( rmdir /s /q build\doc )
     sphinx-build -b latex -D language=%%L doc build\doc
     cd build\doc
     echo Building PDF documentation for %%L...
-    pdflatex -interaction=nonstopmode -quiet DataLab.tex
+    xelatex -interaction=nonstopmode -quiet DataLab.tex
     @REM Build again to fix table of contents (workaround)
-    pdflatex -interaction=nonstopmode -quiet DataLab.tex
+    xelatex -interaction=nonstopmode -quiet DataLab.tex
     echo Done.
     cd ..\..
     move /Y build\doc\DataLab.pdf %MODNAME%\data\doc\DataLab_%%L.pdf

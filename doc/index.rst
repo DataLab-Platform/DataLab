@@ -74,8 +74,10 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
 DataLab has been funded, chronologically, by the following stakeholders:
 
+.. tabularcolumns:: |>{\centering\arraybackslash}m{2cm}|m{\dimexpr\linewidth-2cm-4\tabcolsep\relax}|
 .. list-table::
     :header-rows: 0
+    :widths: 8 92
 
     * - |cea_logo|
       - `CEA <https://www.cea.fr>`_, the French Alternative Energies and Atomic Energy Commission, is the major investor in DataLab, and is the main contributor to the project.
