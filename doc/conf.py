@@ -5,9 +5,17 @@
 import os
 import os.path as osp
 import sys
+import warnings
 import zipfile
 
 import guidata.config as gcfg
+
+# Silence Sphinx 10 deprecation warning emitted from cairocffi (third-party,
+# used by sphinxcontrib-svg2pdfconverter during LaTeX builds).
+warnings.filterwarnings(
+    "ignore",
+    message=r".*Sphinx 10 will drop support for representing paths as strings.*",
+)
 
 sys.path.insert(0, os.path.abspath(".."))
 
@@ -223,20 +231,127 @@ macros = {
 }
 
 latex_elements = {
+    # Drop the cmap package: it is a pdflatex-only helper, emits a noisy
+    # "pdftex not detected" warning under xelatex, and the resulting PDF
+    # remains fully searchable thanks to fontspec/XeTeX.
+    "cmappkg": "",
     # Use xelatex (set via ``latex_engine`` below): pdflatex chokes on the
     # emoji / box-drawing / arrow glyphs sprinkled across the docs. The
     # ``ucharclasses`` package automatically routes whole Unicode blocks
-    # (emoji, dingbats, box-drawing, ...) to the Symbola fallback font
-    # (Debian/Ubuntu package ``fonts-symbola``; MiKTeX fetches it on
-    # demand on Windows).
+    # to the Noto fallback fonts (SIL OFL, fully redistributable):
+    #   * Noto Sans Symbols 2 -- miscellaneous symbols, arrows, dingbats,
+    #     box drawing, geometric shapes...
+    #   * Noto Emoji -- monochrome emoji (XeLaTeX does not render the
+    #     COLR/CPAL color tables of Noto Color Emoji reliably).
+    # Install:
+    #   * Debian/Ubuntu: ``apt install fonts-noto-core fonts-noto-mono
+    #     fonts-noto-extra`` (``fonts-noto-extra`` ships the monochrome
+    #     ``NotoEmoji-Regular.ttf``; ``fonts-noto-color-emoji`` is *not*
+    #     usable because XeTeX rejects CBDT/CBLC color-bitmap fonts).
+    #   * Windows: MiKTeX fetches the ``noto`` and ``noto-emoji`` packages
+    #     on demand (``xelatex -enable-installer ...``).
     "preamble": r"""
     \usepackage{amsmath}
     \usepackage{amssymb}
     \usepackage{mathrsfs}
     \usepackage{fontspec}
-    \newfontfamily\unicodefallback{Symbola}[Scale=MatchLowercase]
-    \usepackage[Symbols]{ucharclasses}
-    \setTransitionsForSymbols{\unicodefallback}{\normalfont}
+    % Three complementary Noto fallbacks -- a single one does NOT cover every
+    % Unicode sub-block we hit in the docs:
+    %   * Noto Sans Symbols  -- arrows, box drawing, geometric shapes,
+    %     misc. symbols (info, check mark, sparkles, ...), dingbats.
+    %   * Noto Sans Symbols 2 -- box drawing extensions, transport, misc
+    %     technical (⏱), and a number of pictographs (🛠 🏗 📁 ...) the
+    %     monochrome Noto Emoji does NOT include.
+    %   * Noto Sans Mono     -- box drawing characters (─..╿), which
+    %     none of the Symbols fonts cover.
+    %   * Noto Emoji (mono)  -- emoji-presentation chars (✅ ✨ ❌ ⚠ ℹ).
+    %     Noto Color Emoji is not used because XeTeX rejects CBDT/CBLC bitmap
+    %     fonts. A few extended pictographs (🧱 🧠 🧩 🧹) live ONLY in Noto
+    %     Color Emoji and remain reported as missing -- acceptable cosmetic
+    %     limitation.
+    \newfontfamily\symbolsfallback{NotoSansSymbols-Regular.ttf}[Scale=MatchLowercase]
+    \newfontfamily\symbolstwofallback{NotoSansSymbols2-Regular.ttf}[Scale=MatchLowercase]
+    \newfontfamily\monofallback{NotoSansMono-Regular.ttf}[Scale=MatchLowercase]
+    \newfontfamily\emojifallback{NotoEmoji-Regular.ttf}[Scale=MatchLowercase]
+    \usepackage[Latin,Arrows,LetterlikeSymbols,BoxDrawing,GeometricShapes,Dingbats,MiscellaneousSymbols,MiscellaneousSymbolsAndArrows,MiscellaneousTechnical,Emoticons,MiscellaneousSymbolsAndPictographs,SupplementalSymbolsAndPictographs,TransportAndMapSymbols,SymbolsAndPictographsExtendedA]{ucharclasses}
+    % Force an explicit transition back to the main font whenever we re-enter
+    % a Latin block. Without this, XeTeX keeps the last font set by a
+    % Symbols/Emoji transition for every following Latin character, producing
+    % thousands of "Missing character: There is no <letter> in font Noto Emoji"
+    % warnings and a broken PDF.
+    \setTransitionsForLatin{\normalfont}{}
+    % Route blocks to the font that actually covers them. Coverage notes:
+    %   * Box Drawing / Block Elements / Misc Technical live in Symbols 2.
+    %   * ⚠ ✅ ✨ ➝ (Misc Symbols / Dingbats with emoji presentation)
+    %     are only in Noto Emoji.
+    \setTransitionsFor{Arrows}{\symbolsfallback}{\normalfont}
+    \setTransitionsFor{LetterlikeSymbols}{\emojifallback}{\normalfont}
+    \setTransitionsFor{BoxDrawing}{\monofallback}{\normalfont}
+    \setTransitionsFor{GeometricShapes}{\symbolsfallback}{\normalfont}
+    \setTransitionsFor{Dingbats}{\emojifallback}{\normalfont}
+    \setTransitionsFor{MiscellaneousSymbols}{\emojifallback}{\normalfont}
+    \setTransitionsFor{MiscellaneousSymbolsAndArrows}{\symbolstwofallback}{\normalfont}
+    \setTransitionsFor{MiscellaneousTechnical}{\symbolstwofallback}{\normalfont}
+    \setTransitionsFor{Emoticons}{\emojifallback}{\normalfont}
+    \setTransitionsFor{MiscellaneousSymbolsAndPictographs}{\emojifallback}{\normalfont}
+    \setTransitionsFor{SupplementalSymbolsAndPictographs}{\emojifallback}{\normalfont}
+    \setTransitionsFor{TransportAndMapSymbols}{\emojifallback}{\normalfont}
+    \setTransitionsFor{SymbolsAndPictographsExtendedA}{\emojifallback}{\normalfont}
+    % Individual overrides for codepoints that are NOT in the block-routed
+    % font but exist in another installed Noto. The strategy is:
+    %   1. Reset the codepoint's XeTeX charclass to 0 so the broader block's
+    %      \setTransitionsFor (which would switch to Noto Emoji and miss
+    %      the glyph) no longer fires for it.
+    %   2. Use \newunicodechar to redefine the character as a macro that
+    %      locally switches to Symbols 2 and emits the glyph via \char to
+    %      avoid the infinite recursion that would occur if the macro body
+    %      contained the active character itself.
+    %   * ➝ HEAVY ROUND-TIPPED RIGHTWARDS ARROW (Dingbats).
+    %   * 🛠 🏗 🗃 🖼: pictographs missing from Noto Emoji but present
+    %     in Symbols 2.
+    \XeTeXcharclass"279D=0
+    \XeTeXcharclass"1F6E0=0
+    \XeTeXcharclass"1F3D7=0
+    \XeTeXcharclass"1F5C3=0
+    \XeTeXcharclass"1F5BC=0
+    \usepackage{newunicodechar}
+    \newunicodechar{➝}{{\symbolstwofallback\char"279D\relax}}
+    \newunicodechar{🛠}{{\symbolstwofallback\char"1F6E0\relax}}
+    \newunicodechar{🏗}{{\symbolstwofallback\char"1F3D7\relax}}
+    \newunicodechar{🗃}{{\symbolstwofallback\char"1F5C3\relax}}
+    \newunicodechar{🖼}{{\symbolstwofallback\char"1F5BC\relax}}
+    % Discard U+FE0F (VARIATION SELECTOR-16) at the input layer: it has no
+    % visible glyph, only requests the emoji presentation of the preceding
+    % codepoint. catcode 9 means "ignored character", so XeTeX drops it before
+    % font selection -- no more "Missing character" warnings for it.
+    \catcode"FE0F=9\relax
+    % Silence cosmetic xelatex/LaTeX warnings that are inherent to the
+    % current Sphinx 9 + XeTeX + Noto fallback setup and do not affect the
+    % visible PDF output. We deliberately keep real errors and undefined
+    % cross-references visible.
+    %   * \tracinglostchars=0 mutes the XeTeX "Missing character" terminal
+    %     messages for the handful of color-bitmap-only emoji (🧱🧩🧠🧹)
+    %     that no monochrome Noto font ships.
+    %   * \hbadness / \vbadness raise the threshold so the engine no longer
+    %     reports Underfull \hbox/\vbox notices caused by long identifier
+    %     names in narrow table columns and code-style paragraphs.
+    %   * The silence filters drop predictable, harmless package messages.
+    \tracinglostchars=0
+    % Sphinx resets \hbadness/\vbadness at \begin{document}, so we re-apply
+    % the thresholds inside an \AtBeginDocument hook to silence Underfull
+    % \hbox/\vbox reports. Note: residual Overfull \hbox notices inside
+    % Sphinx tabulary/varwidth cells are not suppressible from here (Sphinx
+    % resets \hfuzz locally) and remain as informative typographic notices.
+    \AtBeginDocument{%
+      \hbadness=99999\relax
+      \vbadness=99999\relax
+    }
+    \usepackage{silence}
+    \WarningFilter{latexfont}{Font shape}
+    \WarningFilter{latexfont}{Some font shapes were not available}
+    \WarningFilter{cmap}{pdftex not detected}
+    \WarningFilter{longtable}{Table widths have changed}
+    \WarningFilter{rerunfilecheck}{File}
     % Prevent orphan section headings at the bottom of a page: force a page
     % break if there is not enough room for the heading plus a few lines of
     % its following paragraph.
@@ -249,6 +364,11 @@ latex_elements = {
     + "\n".join(f"\\newcommand{{\\{cmd}}}{{{defn}}}" for cmd, defn in macros.items()),
 }
 latex_engine = "xelatex"
+# Sphinx 9 emits the Python Module Index with a \detokenize/\sphinxstyleindexpageref
+# pattern whose key does not match the corresponding \label definitions, producing
+# spurious "undefined reference" warnings on every entry. The HTML build keeps a
+# fully functional modindex; the PDF one is not worth its bogus warnings.
+latex_domain_indices = False
 
 # -- MathJax configuration for HTML output -----------------------------------
 mathjax3_config = {

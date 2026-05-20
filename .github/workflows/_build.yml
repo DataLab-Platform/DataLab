@@ -201,7 +201,7 @@ jobs:
             x11-utils xvfb \
             texlive-latex-base texlive-latex-extra texlive-fonts-recommended \
             texlive-fonts-extra texlive-lang-french texlive-xetex latexmk \
-            fonts-symbola \
+            fonts-noto-core fonts-noto-mono fonts-noto-extra \
             imagemagick librsvg2-bin
           /sbin/start-stop-daemon --start --quiet \
             --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background \

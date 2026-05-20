@@ -16,7 +16,6 @@ DataLab integrates seemlessly into your workflow thanks to three main operating 
 .. tabularcolumns:: |>{\centering\arraybackslash}m{2cm}|m{\dimexpr\linewidth-2cm-4\tabcolsep\relax}|
 .. list-table::
     :header-rows: 0
-    :widths: 8 92
 
     * - |appmode|
       - **Stand-alone application**, with a graphical user interface that allows you to interact with your data and visualize the results of your analysis in real time.
