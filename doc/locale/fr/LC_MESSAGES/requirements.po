@@ -243,6 +243,9 @@ msgstr ""
 msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr "Thème Sphinx basé sur Bootstrap de la communauté PyData"
 
+msgid "sphinxcontrib-svg2pdfconverter[CairoSVG]"
+msgstr ""
+
 msgid "Optional modules for running test suite:"
 msgstr "Modules optionnels pour exécuter la suite de tests :"
 
@@ -263,3 +266,4 @@ msgstr ""
 
 msgid "The next generation HTTP client."
 msgstr ""
+

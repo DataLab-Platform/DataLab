@@ -415,6 +415,9 @@ msgstr ""
 msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr "Thème Bootstrap pour Sphinx de la communauté PyData"
 
+msgid "sphinxcontrib-svg2pdfconverter[CairoSVG]"
+msgstr ""
+
 msgid "Optional modules for running test suite:"
 msgstr "Modules optionnels pour l'exécution de la suite de tests :"
 
@@ -438,3 +441,4 @@ msgstr ""
 
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
+

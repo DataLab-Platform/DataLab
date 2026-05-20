@@ -121,6 +121,9 @@ Optional modules for building the documentation:
     * - pydata-sphinx-theme
       - 
       - Bootstrap-based Sphinx theme from the PyData community
+    * - sphinxcontrib-svg2pdfconverter[CairoSVG]
+      - 
+      - 
 
 Optional modules for running test suite:
 

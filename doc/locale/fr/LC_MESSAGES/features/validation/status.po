@@ -84,13 +84,13 @@ msgstr "Total"
 msgid "Number of compute functions"
 msgstr "Nombre de fonctions de calcul"
 
-msgid "96"
+msgid "97"
 msgstr ""
 
 msgid "115"
 msgstr ""
 
-msgid "211"
+msgid "212"
 msgstr ""
 
 msgid "Number of validated compute functions"
@@ -252,7 +252,7 @@ msgstr ""
 msgid "Compute bandwidth at -3 dB"
 msgstr ""
 
-msgid "`test_signal_bandwidth_3db <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/analysis_unit_test.py#L28>`_"
+msgid "`test_signal_bandwidth_3db <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/analysis_unit_test.py#L33>`_"
 msgstr ""
 
 msgid ":py:func:`calibration <sigima.proc.signal.calibration>`"
@@ -306,7 +306,7 @@ msgstr ""
 msgid "Compute contrast"
 msgstr "Calculer le contraste"
 
-msgid "`test_signal_contrast <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/analysis_unit_test.py#L83>`_"
+msgid "`test_signal_contrast <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/analysis_unit_test.py#L88>`_"
 msgstr ""
 
 msgid ":py:func:`convolution <sigima.proc.signal.convolution>`"
@@ -387,7 +387,7 @@ msgstr ""
 msgid "Compute Dynamic parameters"
 msgstr ""
 
-msgid "`test_dynamic_parameters <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/analysis_unit_test.py#L57>`_"
+msgid "`test_dynamic_parameters <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/analysis_unit_test.py#L62>`_"
 msgstr ""
 
 msgid ":py:func:`evaluate_fit <sigima.proc.signal.evaluate_fit>`"
@@ -415,6 +415,15 @@ msgid "Compute exponential fit"
 msgstr "Calculer l'ajustement exponentiel"
 
 msgid "`test_signal_exponential_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/fitting_unit_test.py#L308>`_"
+msgstr ""
+
+msgid ":py:func:`extract_peak_positions <sigima.proc.signal.extract_peak_positions>`"
+msgstr ""
+
+msgid "Extract peak positions as an XY-markers table"
+msgstr ""
+
+msgid "`test_signal_extract_peak_positions <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/peak_positions_unit_test.py#L51>`_"
 msgstr ""
 
 msgid ":py:func:`extract_pulse_features <sigima.proc.signal.extract_pulse_features>`"
@@ -672,7 +681,7 @@ msgstr ""
 msgid "Peak detection"
 msgstr ""
 
-msgid "`test_signal_peak_detection <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/peakdetection_unit_test.py#L23>`_"
+msgid "`test_signal_peak_detection <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/peakdetection_unit_test.py#L36>`_"
 msgstr ""
 
 msgid ":py:func:`phase <sigima.proc.signal.phase>`"
@@ -807,7 +816,7 @@ msgstr ""
 msgid "Compute sampling rate and period"
 msgstr ""
 
-msgid "`test_signal_sampling_rate_period <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/analysis_unit_test.py#L73>`_"
+msgid "`test_signal_sampling_rate_period <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/analysis_unit_test.py#L78>`_"
 msgstr ""
 
 msgid ":py:func:`sigmoid_fit <sigima.proc.signal.sigmoid_fit>`"
@@ -939,13 +948,13 @@ msgstr ""
 msgid ":py:func:`x_at_minmax <sigima.proc.signal.x_at_minmax>`"
 msgstr ""
 
-msgid "`test_signal_x_at_minmax <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/analysis_unit_test.py#L92>`_"
+msgid "`test_signal_x_at_minmax <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/analysis_unit_test.py#L143>`_"
 msgstr ""
 
 msgid ":py:func:`x_at_y <sigima.proc.signal.x_at_y>`"
 msgstr ""
 
-msgid "`test_signal_x_at_y <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/analysis_unit_test.py#L102>`_"
+msgid "`test_signal_x_at_y <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/analysis_unit_test.py#L153>`_"
 msgstr ""
 
 msgid ":py:func:`xy_mode <sigima.proc.signal.xy_mode>`"
@@ -960,7 +969,7 @@ msgstr ""
 msgid ":py:func:`y_at_x <sigima.proc.signal.y_at_x>`"
 msgstr ""
 
-msgid "`test_signal_y_at_x <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/analysis_unit_test.py#L115>`_"
+msgid "`test_signal_y_at_x <https://github.com/DataLab-Platform/Sigima/blob/v1.1.2/sigima/tests/signal/analysis_unit_test.py#L166>`_"
 msgstr ""
 
 msgid ":py:func:`zero_padding <sigima.proc.signal.zero_padding>`"

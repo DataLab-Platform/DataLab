@@ -29,4 +29,5 @@ sphinx-copybutton
 sphinx-sitemap
 sphinx_design
 sphinx_intl
+sphinxcontrib-svg2pdfconverter[CairoSVG]
 uvicorn[standard] >= 0.27.0
