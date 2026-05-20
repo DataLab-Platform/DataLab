@@ -373,7 +373,8 @@
             ],
         },
         {
-            "label": "🛠️ Generate doc assets",
+            "label": "📋 Refresh doc metadata",
+            "detail": "Regenerate requirements.txt + doc/requirements.rst (via guidata.utils.genreqs) and update Sigima validation status in the docs.",
             "command": "${command:python.interpreterPath} scripts/run_with_env.py ${command:python.interpreterPath} -m guidata.utils.genreqs all; if ($?) { ${command:python.interpreterPath} scripts/run_with_env.py ${command:python.interpreterPath} doc/update_validation_status.py }",
             "options": {
                 "cwd": "${workspaceFolder}",
@@ -706,7 +707,7 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "🛠️ Generate doc assets",
+                "📋 Refresh doc metadata",
             ],
         },
         {
@@ -803,7 +804,7 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "🛠️ Generate doc assets",
+                "📋 Refresh doc metadata",
             ],
         },
         {
@@ -919,7 +920,6 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "🛠️ Generate doc assets",
                 "Build PDF doc",
             ],
         },
