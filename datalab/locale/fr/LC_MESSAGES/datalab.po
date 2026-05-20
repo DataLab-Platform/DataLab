@@ -1748,9 +1748,6 @@ msgstr "Chemins de recherche des plugins"
 msgid "Apply and reload plugins"
 msgstr "Appliquer et recharger les plugins"
 
-msgid "Manage Plugins"
-msgstr "Gérer les plugins"
-
 msgid "Changes will be applied after clicking OK and reloading plugins."
 msgstr "Les modifications seront appliquées après avoir cliqué sur OK et rechargé les plugins."
 

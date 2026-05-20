@@ -558,8 +558,6 @@ class PluginConfigDialog(QW.QDialog):
         layout = QW.QVBoxLayout()
         self.setLayout(layout)
 
-        layout.addWidget(self._create_title_label())
-
         tabs = QW.QTabWidget()
         tabs.addTab(self._create_plugins_tab(), _("Enable/disable plugins"))
         tabs.addTab(self._create_search_paths_tab(), _("Plugin search paths"))
@@ -581,20 +579,6 @@ class PluginConfigDialog(QW.QDialog):
         button_box.rejected.connect(self.reject)
         layout.addLayout(self._create_footer_layout(button_box))
         self._update_load_info_label()
-
-    @staticmethod
-    def _create_title_label() -> QW.QLabel:
-        """Create the dialog title label."""
-        title_label = QW.QLabel(_("Manage Plugins"))
-        title_font = title_label.font()
-        title_font.setPointSize(title_font.pointSize() + TITLE_FONT_SIZE_DELTA)
-        title_font.setBold(True)
-        title_label.setFont(title_font)
-        apply_palette_color(
-            title_label,
-            QW.QApplication.instance().palette().color(QG.QPalette.WindowText),
-        )
-        return title_label
 
     def _create_plugins_tab(self) -> QW.QWidget:
         """Create the 'Enable/disable plugins' tab content."""
