@@ -274,29 +274,38 @@ latex_elements = {
     \newfontfamily\monofallback{NotoSansMono-Regular.ttf}[Scale=MatchLowercase]
     \newfontfamily\emojifallback{NotoEmoji-Regular.ttf}[Scale=MatchLowercase]
     \usepackage[Latin,Arrows,LetterlikeSymbols,BoxDrawing,GeometricShapes,Dingbats,MiscellaneousSymbols,MiscellaneousSymbolsAndArrows,MiscellaneousTechnical,Emoticons,MiscellaneousSymbolsAndPictographs,SupplementalSymbolsAndPictographs,TransportAndMapSymbols,SymbolsAndPictographsExtendedA]{ucharclasses}
-    % Force an explicit transition back to the main font whenever we re-enter
-    % a Latin block. Without this, XeTeX keeps the last font set by a
-    % Symbols/Emoji transition for every following Latin character, producing
-    % thousands of "Missing character: There is no <letter> in font Noto Emoji"
-    % warnings and a broken PDF.
-    \setTransitionsForLatin{\normalfont}{}
+    % Restore the *current* family (rm / sf / tt) instead of an unconditional
+    % \normalfont, which would break monospace rendering inside verbatim and
+    % inline code whenever a Unicode symbol appears nearby.
+    \makeatletter
+    \newcommand{\dlrestorefont}{%
+      \ifx\f@family\ttdefault\ttfamily\else
+      \ifx\f@family\sfdefault\sffamily\else
+      \normalfont\fi\fi}
+    \makeatother
+    % Force an explicit transition back to the surrounding family whenever we
+    % re-enter a Latin block. Without this, XeTeX keeps the last font set by
+    % a Symbols/Emoji transition for every following Latin character,
+    % producing thousands of "Missing character: There is no <letter> in font
+    % Noto Emoji" warnings and a broken PDF.
+    \setTransitionsForLatin{\dlrestorefont}{}
     % Route blocks to the font that actually covers them. Coverage notes:
     %   * Box Drawing / Block Elements / Misc Technical live in Symbols 2.
     %   * ⚠ ✅ ✨ ➝ (Misc Symbols / Dingbats with emoji presentation)
     %     are only in Noto Emoji.
-    \setTransitionsFor{Arrows}{\symbolsfallback}{\normalfont}
-    \setTransitionsFor{LetterlikeSymbols}{\emojifallback}{\normalfont}
-    \setTransitionsFor{BoxDrawing}{\monofallback}{\normalfont}
-    \setTransitionsFor{GeometricShapes}{\symbolsfallback}{\normalfont}
-    \setTransitionsFor{Dingbats}{\emojifallback}{\normalfont}
-    \setTransitionsFor{MiscellaneousSymbols}{\emojifallback}{\normalfont}
-    \setTransitionsFor{MiscellaneousSymbolsAndArrows}{\symbolstwofallback}{\normalfont}
-    \setTransitionsFor{MiscellaneousTechnical}{\symbolstwofallback}{\normalfont}
-    \setTransitionsFor{Emoticons}{\emojifallback}{\normalfont}
-    \setTransitionsFor{MiscellaneousSymbolsAndPictographs}{\emojifallback}{\normalfont}
-    \setTransitionsFor{SupplementalSymbolsAndPictographs}{\emojifallback}{\normalfont}
-    \setTransitionsFor{TransportAndMapSymbols}{\emojifallback}{\normalfont}
-    \setTransitionsFor{SymbolsAndPictographsExtendedA}{\emojifallback}{\normalfont}
+    \setTransitionsFor{Arrows}{\symbolsfallback}{\dlrestorefont}
+    \setTransitionsFor{LetterlikeSymbols}{\emojifallback}{\dlrestorefont}
+    \setTransitionsFor{BoxDrawing}{\monofallback}{\dlrestorefont}
+    \setTransitionsFor{GeometricShapes}{\symbolsfallback}{\dlrestorefont}
+    \setTransitionsFor{Dingbats}{\emojifallback}{\dlrestorefont}
+    \setTransitionsFor{MiscellaneousSymbols}{\emojifallback}{\dlrestorefont}
+    \setTransitionsFor{MiscellaneousSymbolsAndArrows}{\symbolstwofallback}{\dlrestorefont}
+    \setTransitionsFor{MiscellaneousTechnical}{\symbolstwofallback}{\dlrestorefont}
+    \setTransitionsFor{Emoticons}{\emojifallback}{\dlrestorefont}
+    \setTransitionsFor{MiscellaneousSymbolsAndPictographs}{\emojifallback}{\dlrestorefont}
+    \setTransitionsFor{SupplementalSymbolsAndPictographs}{\emojifallback}{\dlrestorefont}
+    \setTransitionsFor{TransportAndMapSymbols}{\emojifallback}{\dlrestorefont}
+    \setTransitionsFor{SymbolsAndPictographsExtendedA}{\emojifallback}{\dlrestorefont}
     % Individual overrides for codepoints that are NOT in the block-routed
     % font but exist in another installed Noto. The strategy is:
     %   1. Reset the codepoint's XeTeX charclass to 0 so the broader block's
