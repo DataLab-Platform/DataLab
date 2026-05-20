@@ -9,7 +9,12 @@ from datetime import datetime
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
-from datalab.config import Conf
+from datalab.config import (
+    OTHER_PLUGINS_PATHLIST,
+    Conf,
+    get_user_plugin_paths,
+    set_user_plugin_paths,
+)
 from datalab.env import execenv
 from datalab.gui import pluginconfig
 from datalab.gui.actionhandler import ActionCategory
@@ -277,6 +282,129 @@ def test_plugin_dialog_shows_latest_load_text(monkeypatch):
         assert dialog.load_info_label.text() == "Last loaded marker: 11:30"
 
         _close_dialog(dialog)
+
+
+def test_plugin_search_paths_can_be_added_edited_removed_and_persisted(
+    monkeypatch, tmp_path
+):
+    """Search path tab should manage persistent extra plugin directories."""
+    added_dir = tmp_path / "plugins_added"
+    edited_dir = tmp_path / "plugins_edited"
+    kept_dir = tmp_path / "plugins_kept"
+    for directory in (added_dir, edited_dir, kept_dir):
+        directory.mkdir()
+
+    original_paths = get_user_plugin_paths()
+
+    def answer_no(*args, **kwargs):
+        """Decline plugin reload after saving configuration."""
+        del args, kwargs
+        return QW.QMessageBox.No
+
+    try:
+        set_user_plugin_paths([])
+        with datalab_test_app_context(console=False) as win:
+            dialog = PluginConfigDialog(win)
+            _show_dialog(dialog)
+
+            assert len(dialog.fixed_path_widgets) >= 2
+            assert all(
+                widget.edit_button is None and widget.delete_button is None
+                for widget in dialog.fixed_path_widgets
+            )
+            assert dialog.add_path_button is not None
+            assert not dialog.extra_path_widgets
+
+            selected_paths = iter([str(added_dir), str(edited_dir), str(kept_dir)])
+
+            def browse_directory(_initial_path=None):
+                """Return deterministic directories for add/edit actions."""
+                return next(selected_paths)
+
+            monkeypatch.setattr(dialog, "_browse_plugin_directory", browse_directory)
+            monkeypatch.setattr(QW.QMessageBox, "question", answer_no)
+
+            dialog.add_path_button.click()
+            QW.QApplication.processEvents()
+            assert [widget.path for widget in dialog.extra_path_widgets] == [
+                str(added_dir)
+            ]
+
+            editable_widget = dialog.extra_path_widgets[0]
+            assert editable_widget.edit_button is not None
+            assert editable_widget.delete_button is not None
+
+            editable_widget.edit_button.click()
+            QW.QApplication.processEvents()
+            assert [widget.path for widget in dialog.extra_path_widgets] == [
+                str(edited_dir)
+            ]
+
+            dialog.add_path_button.click()
+            QW.QApplication.processEvents()
+            assert [widget.path for widget in dialog.extra_path_widgets] == [
+                str(edited_dir),
+                str(kept_dir),
+            ]
+
+            dialog.extra_path_widgets[0].delete_button.click()
+            QW.QApplication.processEvents()
+            assert [widget.path for widget in dialog.extra_path_widgets] == [
+                str(kept_dir)
+            ]
+
+            dialog.accept()
+            QW.QApplication.processEvents()
+
+        assert get_user_plugin_paths() == [str(kept_dir)]
+
+        with datalab_test_app_context(console=False) as win:
+            dialog = PluginConfigDialog(win)
+            _show_dialog(dialog)
+            assert [widget.path for widget in dialog.extra_path_widgets] == [
+                str(kept_dir)
+            ]
+            _close_dialog(dialog)
+    finally:
+        set_user_plugin_paths(original_paths)
+
+
+def test_env_var_plugin_paths_appear_as_fixed_read_only_entries(monkeypatch, tmp_path):
+    """Environment-provided plugin directories should be visible but not editable."""
+    env_dir = tmp_path / "env_plugins"
+    env_dir.mkdir()
+    env_path = str(env_dir)
+    original_paths = get_user_plugin_paths()
+
+    try:
+        set_user_plugin_paths([])
+        monkeypatch.setattr(pluginconfig, "DATALAB_PLUGINS_ENV_PATHS", [env_path])
+        monkeypatch.setattr(
+            pluginconfig,
+            "OTHER_PLUGINS_PATHLIST",
+            OTHER_PLUGINS_PATHLIST + [env_path],
+        )
+
+        with datalab_test_app_context(console=False) as win:
+            dialog = PluginConfigDialog(win)
+            _show_dialog(dialog)
+
+            env_widget = next(
+                widget
+                for widget in dialog.fixed_path_widgets
+                if widget.path == env_path
+            )
+            assert env_widget.edit_button is None
+            assert env_widget.delete_button is None
+            assert not any(
+                widget.path == env_path for widget in dialog.extra_path_widgets
+            )
+
+            fixed_paths = [widget.path for widget in dialog.fixed_path_widgets]
+            assert env_path in fixed_paths
+            _close_dialog(dialog)
+    finally:
+        set_user_plugin_paths(original_paths)
 
 
 def test_plugin_many_actions_menu_behavior():

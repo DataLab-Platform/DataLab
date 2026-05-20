@@ -40,7 +40,13 @@ from sigima.io.image.base import ImageFormatBase  # noqa: F401
 from sigima.io.image.formats import ClassicsImageFormat  # noqa: F401
 from sigima.io.signal.base import SignalFormatBase  # noqa: F401
 
-from datalab.config import MOD_NAME, OTHER_PLUGINS_PATHLIST, Conf, _
+from datalab.config import (
+    MOD_NAME,
+    OTHER_PLUGINS_PATHLIST,
+    Conf,
+    _,
+    get_user_plugin_paths,
+)
 from datalab.control.proxy import LocalProxy
 from datalab.env import execenv
 
@@ -399,10 +405,9 @@ def discover_plugins() -> list[type[PluginBase]]:
         return []
 
     # Ensure plugin search paths are present in sys.path
-    for path in [
-        Conf.main.plugins_path.get(),
-        PLUGINS_DEFAULT_PATH,
-    ] + OTHER_PLUGINS_PATHLIST:
+    for path in (
+        get_user_plugin_paths() + [PLUGINS_DEFAULT_PATH] + OTHER_PLUGINS_PATHLIST
+    ):
         rpath = osp.realpath(path)
         if rpath not in sys.path:
             sys.path.append(rpath)
@@ -477,10 +482,9 @@ def discover_v020_plugins() -> list[tuple[str, str]]:
     """
     v020_plugins = []
     if Conf.main.plugins_enabled.get():
-        for path in [
-            Conf.main.plugins_path.get(),
-            PLUGINS_DEFAULT_PATH,
-        ] + OTHER_PLUGINS_PATHLIST:
+        for path in (
+            get_user_plugin_paths() + [PLUGINS_DEFAULT_PATH] + OTHER_PLUGINS_PATHLIST
+        ):
             rpath = osp.realpath(path)
             if rpath not in sys.path:
                 sys.path.append(rpath)

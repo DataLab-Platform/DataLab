@@ -520,6 +520,56 @@ class Conf(conf.Configuration, metaclass=conf.ConfMeta):
     ai = AISection()
 
 
+def normalize_plugin_paths(paths: list[str] | tuple[str, ...] | None) -> list[str]:
+    """Normalize a list of plugin directories and drop duplicates/empties."""
+    normalized: list[str] = []
+    seen: set[str] = set()
+    for raw_path in paths or []:
+        if not raw_path:
+            continue
+        path = osp.normpath(osp.abspath(osp.expanduser(raw_path)))
+        if path in seen:
+            continue
+        seen.add(path)
+        normalized.append(path)
+    return normalized
+
+
+def get_user_plugin_paths() -> list[str]:
+    """Return user-configured extra plugin directories.
+
+    ``plugins_path`` accepts both the legacy single-directory string and the
+    newer list-of-directories form. For backward compatibility, this helper also
+    migrates any stale ``plugins_extra_paths`` value that may already exist in
+    the configuration file.
+    """
+    fixed_default = osp.normpath(Conf.get_path("plugins"))
+    configured_paths = Conf.main.plugins_path.get([])
+    legacy_extra_paths = conf.CONF.get("main", "plugins_extra_paths", [])
+
+    if isinstance(configured_paths, str):
+        candidates = [configured_paths]
+    elif configured_paths is None:
+        candidates = []
+    else:
+        candidates = list(configured_paths)
+
+    if isinstance(legacy_extra_paths, str):
+        legacy_extra_paths = [legacy_extra_paths]
+    elif legacy_extra_paths is None:
+        legacy_extra_paths = []
+
+    normalized = normalize_plugin_paths(candidates + list(legacy_extra_paths))
+    return [path for path in normalized if path != fixed_default]
+
+
+def set_user_plugin_paths(paths: list[str] | tuple[str, ...]) -> None:
+    """Persist user-configured extra plugin directories in ``plugins_path``."""
+    normalized = normalize_plugin_paths(list(paths))
+    Conf.main.plugins_path.set(normalized)
+    conf.CONF.remove_option("main", "plugins_extra_paths")
+
+
 def get_old_log_fname(fname):
     """Return old log fname from current log fname"""
     return osp.splitext(fname)[0] + ".1.log"
@@ -550,7 +600,7 @@ def initialize():
     Conf.main.plugins_enabled_list.get(
         None
     )  # None = all enabled, [] = none, list = specific
-    Conf.main.plugins_path.get(Conf.get_path("plugins"))
+    Conf.main.plugins_path.get([])
     Conf.main.tour_enabled.get(True)
     Conf.main.v020_plugins_warning_ignore.get(False)
     # Console section

@@ -74,15 +74,6 @@ class MainSettings(gds.DataSet):
             "Changes are applied without restarting DataLab"
         ),
     )
-    plugins_path = gds.DirectoryItem(
-        _("Plugins path"),
-        allow_none=True,
-        help=_(
-            "Path to third-party plugins.<br><br>"
-            "DataLab will discover plugins in this path, "
-            "as well as in your PYTHONPATH."
-        ),
-    )
     v020_plugins_warning_ignore = gds.BoolItem(
         _("Ignore compatibility issues warning"),
         _("DataLab v0.20 plugins"),
@@ -613,7 +604,6 @@ RESTART_OPTIONS = (
     ("process_isolation_enabled", _("Process isolation enable status")),
     ("rpc_server_enabled", _("RPC server enable status")),
     ("console_enabled", _("Console enable status")),
-    ("plugins_path", _("Third-party plugins path")),
 )
 
 

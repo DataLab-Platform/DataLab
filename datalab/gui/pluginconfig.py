@@ -23,6 +23,7 @@ from guidata.qthelpers import win32_fix_title_bar_background
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from qtpy.compat import getexistingdirectory
 
 from datalab.config import (
     DATALAB_PLUGINS_ENV_PATHS,
@@ -32,6 +33,9 @@ from datalab.config import (
     PLUGIN_OK_COLOR,
     Conf,
     _,
+    get_user_plugin_paths,
+    normalize_plugin_paths,
+    set_user_plugin_paths,
 )
 from datalab.plugins import PLUGINS_DEFAULT_PATH, PluginRegistry
 from datalab.widgets.expandabletext import (
@@ -473,6 +477,52 @@ class FailedPluginInfoWidget(QW.QWidget):
         return filter_mode in (FILTER_ALL, FILTER_ERRORS)
 
 
+class SearchPathItemWidget(QW.QWidget):
+    """Widget representing one plugin search path."""
+
+    def __init__(
+        self,
+        path: str,
+        *,
+        editable: bool,
+        from_env: bool = False,
+        parent: QW.QWidget | None = None,
+    ) -> None:
+        super().__init__(parent)
+        self.path = path
+        self.edit_button: QW.QToolButton | None = None
+        self.delete_button: QW.QToolButton | None = None
+
+        layout = QW.QHBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(6)
+        self.setLayout(layout)
+
+        path_label = QW.QLabel()
+        path_label.setTextInteractionFlags(QC.Qt.TextBrowserInteraction)
+        path_label.setOpenExternalLinks(True)
+        path_label.setWordWrap(True)
+        url = QC.QUrl.fromLocalFile(path).toString()
+        text = f'<a href="{url}">{path}</a>'
+        if from_env:
+            text += f" <i>({_('from')} <code>{DATALAB_PLUGINS_ENV_VAR}</code>)</i>"
+        path_label.setText(text)
+        layout.addWidget(path_label, 1)
+
+        if editable:
+            self.edit_button = QW.QToolButton()
+            self.edit_button.setIcon(get_icon("annotations_edit.svg"))
+            self.edit_button.setToolTip(_("Edit directory"))
+            self.edit_button.setAutoRaise(True)
+            layout.addWidget(self.edit_button)
+
+            self.delete_button = QW.QToolButton()
+            self.delete_button.setIcon(get_icon("annotations_delete.svg"))
+            self.delete_button.setToolTip(_("Remove directory"))
+            self.delete_button.setAutoRaise(True)
+            layout.addWidget(self.delete_button)
+
+
 class PluginConfigDialog(QW.QDialog):
     """Dialog for configuring plugins"""
 
@@ -487,10 +537,17 @@ class PluginConfigDialog(QW.QDialog):
         self.main = parent
         self.plugin_widgets: list[PluginInfoWidget] = []
         self.failed_plugin_widgets: list[FailedPluginInfoWidget] = []
+        self.fixed_path_widgets: list[SearchPathItemWidget] = []
+        self.extra_path_widgets: list[SearchPathItemWidget] = []
+        self.original_extra_plugin_paths = get_user_plugin_paths()
+        self.extra_plugin_paths = list(self.original_extra_plugin_paths)
         self.toggle_all_checkbox: QW.QCheckBox | None = None
         self.filter_combo: QW.QComboBox | None = None
         self.load_info_label: QW.QLabel | None = None
         self.plugins_layout: QW.QVBoxLayout | None = None
+        self.extra_paths_layout: QW.QVBoxLayout | None = None
+        self.extra_paths_placeholder: QW.QLabel | None = None
+        self.add_path_button: QW.QPushButton | None = None
 
         self.setWindowTitle(_("Plugin Configuration"))
         self.setMinimumWidth(DIALOG_MIN_WIDTH)
@@ -573,8 +630,8 @@ class PluginConfigDialog(QW.QDialog):
         return info_label
 
     @staticmethod
-    def _collect_search_paths() -> list[tuple[str, bool]]:
-        """Return active plugin search paths with their env-var origin flag.
+    def _collect_fixed_search_paths() -> list[tuple[str, bool]]:
+        """Return fixed plugin search paths with their env-var origin flag.
 
         Returns:
             List of ``(path, from_env_var)`` tuples in discovery order.
@@ -582,11 +639,7 @@ class PluginConfigDialog(QW.QDialog):
         seen: set[str] = set()
         entries: list[tuple[str, bool]] = []
         env_paths_norm = {osp.normpath(p) for p in DATALAB_PLUGINS_ENV_PATHS}
-        candidates: list[str] = []
-        custom = Conf.main.plugins_path.get()
-        if custom:
-            candidates.append(custom)
-        candidates.append(PLUGINS_DEFAULT_PATH)
+        candidates = [PLUGINS_DEFAULT_PATH]
         candidates.extend(OTHER_PLUGINS_PATHLIST)
         for raw in candidates:
             if not raw:
@@ -599,7 +652,7 @@ class PluginConfigDialog(QW.QDialog):
         return entries
 
     def _create_search_paths_layout(self) -> QW.QVBoxLayout:
-        """Create the layout listing active plugin search paths."""
+        """Create the layout listing plugin search paths."""
         paths_layout = QW.QVBoxLayout()
 
         intro = QW.QLabel(
@@ -608,31 +661,61 @@ class PluginConfigDialog(QW.QDialog):
         intro.setWordWrap(True)
         paths_layout.addWidget(intro)
 
-        items: list[str] = []
-        for path, from_env in self._collect_search_paths():
-            url = QC.QUrl.fromLocalFile(path).toString()
-            link = f'<a href="{url}">{path}</a>'
-            if from_env:
-                link += f" <i>({_('from')} <code>{DATALAB_PLUGINS_ENV_VAR}</code>)</i>"
-            items.append(f"<li>{link}</li>")
-        if items:
-            html = (
-                "<ul style='margin:0; padding-left:18px;'>" + "".join(items) + "</ul>"
-            )
-        else:
-            html = "<i>" + _("No plugin search path is currently active.") + "</i>"
+        fixed_title = QW.QLabel(_("Default plugin directories"))
+        fixed_font = fixed_title.font()
+        fixed_font.setBold(True)
+        fixed_title.setFont(fixed_font)
+        paths_layout.addWidget(fixed_title)
 
-        paths_label = QW.QLabel(html)
-        paths_label.setTextInteractionFlags(QC.Qt.TextBrowserInteraction)
-        paths_label.setOpenExternalLinks(True)
-        paths_label.setWordWrap(True)
-        paths_layout.addWidget(paths_label)
+        fixed_layout = QW.QVBoxLayout()
+        fixed_layout.setContentsMargins(18, 0, 0, 0)
+        fixed_layout.setSpacing(4)
+        for path, from_env in self._collect_fixed_search_paths():
+            widget = SearchPathItemWidget(path, editable=False, from_env=from_env)
+            self.fixed_path_widgets.append(widget)
+            fixed_layout.addWidget(widget)
+        paths_layout.addLayout(fixed_layout)
+
+        paths_layout.addSpacing(12)
+
+        header_layout = QW.QHBoxLayout()
+        extra_title = QW.QLabel(_("Additional plugin directories"))
+        extra_font = extra_title.font()
+        extra_font.setBold(True)
+        extra_title.setFont(extra_font)
+        header_layout.addWidget(extra_title)
+        header_layout.addStretch()
+        self.add_path_button = QW.QPushButton(get_icon("metadata_add.svg"), _("Add"))
+        self.add_path_button.clicked.connect(self._add_search_path)
+        header_layout.addWidget(self.add_path_button)
+        paths_layout.addLayout(header_layout)
+
+        extra_intro = QW.QLabel(
+            _("Additional directories are saved in DataLab configuration.")
+        )
+        extra_intro.setWordWrap(True)
+        apply_subdued_color(extra_intro)
+        paths_layout.addWidget(extra_intro)
+
+        self.extra_paths_layout = QW.QVBoxLayout()
+        self.extra_paths_layout.setContentsMargins(18, 0, 0, 0)
+        self.extra_paths_layout.setSpacing(4)
+        paths_layout.addLayout(self.extra_paths_layout)
+
+        self.extra_paths_placeholder = QW.QLabel(
+            _("No additional plugin directory is configured.")
+        )
+        self.extra_paths_placeholder.setWordWrap(True)
+        apply_subdued_color(self.extra_paths_placeholder)
+        self.extra_paths_layout.addWidget(self.extra_paths_placeholder)
+        self._refresh_extra_path_widgets()
 
         hint = QW.QLabel(
             _(
-                "Additional directories can be added via the "
+                "Directories provided via the "
                 "<code>%s</code> environment variable "
-                "(multiple paths separated by '<code>%s</code>'). "
+                "(multiple paths separated by '<code>%s</code>') "
+                "also appear above as read-only entries. "
                 "Changes take effect at DataLab startup."
             )
             % (DATALAB_PLUGINS_ENV_VAR, os.pathsep)
@@ -641,6 +724,72 @@ class PluginConfigDialog(QW.QDialog):
         apply_subdued_color(hint)
         paths_layout.addWidget(hint)
         return paths_layout
+
+    def _refresh_extra_path_widgets(self) -> None:
+        """Rebuild the editable extra-path widgets."""
+        if self.extra_paths_layout is None:
+            return
+
+        for widget in self.extra_path_widgets:
+            self.extra_paths_layout.removeWidget(widget)
+            widget.deleteLater()
+        self.extra_path_widgets.clear()
+
+        if self.extra_paths_placeholder is not None:
+            self.extra_paths_placeholder.setVisible(not self.extra_plugin_paths)
+
+        for path in self.extra_plugin_paths:
+            widget = SearchPathItemWidget(path, editable=True)
+            assert widget.edit_button is not None
+            assert widget.delete_button is not None
+            widget.edit_button.clicked.connect(
+                lambda _checked=False, item=widget: self._edit_search_path(item)
+            )
+            widget.delete_button.clicked.connect(
+                lambda _checked=False, item=widget: self._remove_search_path(item)
+            )
+            self.extra_path_widgets.append(widget)
+            self.extra_paths_layout.addWidget(widget)
+
+    def _browse_plugin_directory(self, initial_path: str | None = None) -> str | None:
+        """Open a directory chooser for a plugin search path."""
+        basedir = initial_path or Conf.main.base_dir.get(osp.expanduser("~"))
+        directory = getexistingdirectory(self, _("Select plugin directory"), basedir)
+        normalized = normalize_plugin_paths([directory])
+        return normalized[0] if normalized else None
+
+    def _get_fixed_search_path_set(self) -> set[str]:
+        """Return the normalized set of fixed plugin search paths."""
+        return {path for path, _from_env in self._collect_fixed_search_paths()}
+
+    def _add_search_path(self) -> None:
+        """Append a new extra plugin search path."""
+        path = self._browse_plugin_directory()
+        if not path:
+            return
+        if path in self._get_fixed_search_path_set() or path in self.extra_plugin_paths:
+            return
+        self.extra_plugin_paths.append(path)
+        self._refresh_extra_path_widgets()
+
+    def _edit_search_path(self, item: SearchPathItemWidget) -> None:
+        """Edit an existing extra plugin search path."""
+        path = self._browse_plugin_directory(item.path)
+        if not path:
+            return
+        other_paths = [entry for entry in self.extra_plugin_paths if entry != item.path]
+        if path in self._get_fixed_search_path_set() or path in other_paths:
+            return
+        index = self.extra_plugin_paths.index(item.path)
+        self.extra_plugin_paths[index] = path
+        self._refresh_extra_path_widgets()
+
+    def _remove_search_path(self, item: SearchPathItemWidget) -> None:
+        """Remove an extra plugin search path."""
+        self.extra_plugin_paths = [
+            path for path in self.extra_plugin_paths if path != item.path
+        ]
+        self._refresh_extra_path_widgets()
 
     def _create_controls_layout(self) -> QW.QHBoxLayout:
         """Create the row with master controls."""
@@ -774,7 +923,11 @@ class PluginConfigDialog(QW.QDialog):
     def accept(self):
         """Apply changes and close dialog"""
         # Check if any changes were made
-        changes_made = any(widget.has_changed() for widget in self.plugin_widgets)
+        plugin_changes_made = any(
+            widget.has_changed() for widget in self.plugin_widgets
+        )
+        path_changes_made = self.extra_plugin_paths != self.original_extra_plugin_paths
+        changes_made = plugin_changes_made or path_changes_made
 
         if not changes_made:
             super().accept()
@@ -789,6 +942,7 @@ class PluginConfigDialog(QW.QDialog):
 
         # Save to configuration
         Conf.main.plugins_enabled_list.set(enabled_plugins)
+        set_user_plugin_paths(self.extra_plugin_paths)
 
         # Inform user that reload is needed
         reply = QW.QMessageBox.question(
