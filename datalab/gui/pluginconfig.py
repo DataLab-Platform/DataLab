@@ -12,9 +12,6 @@ from __future__ import annotations
 import inspect
 import os
 import os.path as osp
-import shutil
-import subprocess
-import sys
 from datetime import datetime, timedelta
 from html import escape
 from typing import TYPE_CHECKING
@@ -39,6 +36,12 @@ from datalab.config import (
     set_user_plugin_paths,
 )
 from datalab.plugins import PLUGINS_DEFAULT_PATH, PluginRegistry
+from datalab.utils.qthelpers import (
+    open_local_path as _open_local_path,
+)
+from datalab.utils.qthelpers import (
+    show_in_folder as _show_in_folder,
+)
 from datalab.widgets.expandabletext import (
     ExpandableTextWidget,
     apply_palette_color,
@@ -95,44 +98,6 @@ def _create_status_label(text: str, color: QG.QColor | None = None) -> QW.QLabel
     else:
         apply_palette_color(status_label, color)
     return status_label
-
-
-def _open_local_path(path: str) -> bool:
-    """Open a local path with the desktop handler."""
-    return QG.QDesktopServices.openUrl(QC.QUrl.fromLocalFile(path))
-
-
-def _show_in_folder(path: str) -> bool:
-    """Show a file in its containing folder, selecting it when supported."""
-    filepath = osp.abspath(path)
-    directory = osp.dirname(filepath)
-
-    if sys.platform.startswith("win"):
-        commands = [["explorer", f"/select,{osp.normpath(filepath)}"]]
-    elif sys.platform == "darwin":
-        commands = [["open", "-R", filepath]]
-    else:
-        commands = []
-        if shutil.which("nautilus"):
-            commands.append(["nautilus", "--select", filepath])
-        if shutil.which("dolphin"):
-            commands.append(["dolphin", "--select", filepath])
-        if shutil.which("nemo"):
-            commands.append(["nemo", filepath])
-        if shutil.which("caja"):
-            commands.append(["caja", "--select", filepath])
-
-    for command in commands:
-        try:
-            subprocess.Popen(  # pylint: disable=consider-using-with
-                command,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-            return True
-        except OSError:
-            continue
-    return _open_local_path(directory)
 
 
 def _get_latest_plugin_load_at(main: DLMainWindow) -> datetime:

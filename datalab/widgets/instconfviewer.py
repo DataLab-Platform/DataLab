@@ -10,16 +10,12 @@ import json
 import locale
 import os
 import platform
-import shutil
-import subprocess
 import sys
 from importlib.metadata import distributions
 from pathlib import Path
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import exec_dialog
-from qtpy import QtCore as QC
-from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from sigima.io.image import ImageIORegistry
 from sigima.io.signal import SignalIORegistry
@@ -27,6 +23,7 @@ from sigima.io.signal import SignalIORegistry
 import datalab
 from datalab.config import APP_NAME, IS_FROZEN, Conf, _
 from datalab.plugins import PluginRegistry
+from datalab.utils.qthelpers import show_in_folder as _show_in_folder
 from datalab.widgets.fileviewer import FileViewerWidget, get_title_contents
 
 
@@ -130,44 +127,6 @@ def get_install_info() -> str:
     return info
 
 
-def _open_local_path(path: str) -> bool:
-    """Open a local path with the desktop handler."""
-    return QG.QDesktopServices.openUrl(QC.QUrl.fromLocalFile(path))
-
-
-def _show_in_folder(path: str) -> bool:
-    """Show a file in its containing folder, selecting it when supported."""
-    filepath = os.path.abspath(path)
-    directory = os.path.dirname(filepath)
-
-    if sys.platform.startswith("win"):
-        commands = [["explorer", f"/select,{os.path.normpath(filepath)}"]]
-    elif sys.platform == "darwin":
-        commands = [["open", "-R", filepath]]
-    else:
-        commands = []
-        if shutil.which("nautilus"):
-            commands.append(["nautilus", "--select", filepath])
-        if shutil.which("dolphin"):
-            commands.append(["dolphin", "--select", filepath])
-        if shutil.which("nemo"):
-            commands.append(["nemo", filepath])
-        if shutil.which("caja"):
-            commands.append(["caja", "--select", filepath])
-
-    for command in commands:
-        try:
-            subprocess.Popen(  # pylint: disable=consider-using-with
-                command,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-            return True
-        except OSError:
-            continue
-    return _open_local_path(directory)
-
-
 class ConfigFileViewerWidget(FileViewerWidget):
     """File viewer with actions for the displayed configuration file."""
 
@@ -181,8 +140,9 @@ class ConfigFileViewerWidget(FileViewerWidget):
 
         header_layout = QW.QHBoxLayout()
         header_layout.setContentsMargins(0, 0, 0, 0)
+        header_layout.addWidget(self.label)
+        header_layout.addStretch(1)
         header_layout.addWidget(self.show_in_folder_button)
-        header_layout.addWidget(self.label, 1)
 
         layout = self.layout()
         layout.removeWidget(self.label)
