@@ -666,6 +666,21 @@ class AISettings(gds.DataSet):
     max_iterations = gds.IntItem(
         _("Max tool-call iterations"), default=8, min=1, max=64
     )
+    max_history_messages = gds.IntItem(
+        _("Max history messages (0 = unlimited)"),
+        default=0,
+        min=0,
+        max=1024,
+        help=_(
+            "Cap the number of past messages (user + assistant + tool) sent "
+            "to the provider on each request. Useful with local models "
+            "that have a small context window (e.g. n_ctx=4096 on "
+            "llama.cpp): if the conversation grows beyond the model's "
+            "context, the server returns HTTP 400. Set to 0 to disable "
+            "the cap. The system prompt and the current user turn are "
+            "always preserved."
+        ),
+    )
     auto_approve_readonly = gds.BoolItem(
         _("Auto-approve read-only inspection tools"), default=True
     )

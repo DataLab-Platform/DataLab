@@ -495,6 +495,11 @@ class AISection(conf.Section, metaclass=conf.SectionMeta):
     # Maximum number of tool-call iterations per user prompt (safety cap).
     max_iterations = conf.Option()
 
+    # Maximum number of non-system messages sent to the provider on each
+    # request. 0 means unlimited. Useful to stay within a local model's
+    # context window.
+    max_history_messages = conf.Option()
+
     # Auto-approve read-only inspection tools without confirmation dialog.
     auto_approve_readonly = conf.Option()
 

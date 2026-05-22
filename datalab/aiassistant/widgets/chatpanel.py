@@ -429,6 +429,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         temperature = float(Conf.ai.temperature.get(0.2))
         timeout = float(Conf.ai.timeout.get(60.0))
         max_iterations = int(Conf.ai.max_iterations.get(8))
+        max_history_messages = int(Conf.ai.max_history_messages.get(0))
         auto_approve = bool(Conf.ai.auto_approve_readonly.get(True))
 
         try:
@@ -496,6 +497,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
             auto_approve_readonly=auto_approve,
             execute_callback=execute_in_gui,
             usage_callback=self._on_usage,
+            max_history_messages=max_history_messages,
         )
 
     def _confirm_tool(self, tool: Tool, arguments: dict) -> bool:
