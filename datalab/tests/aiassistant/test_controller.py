@@ -269,6 +269,16 @@ def test_default_system_prompt_unrestricted_when_no_filter() -> None:
     assert "create_and_run_macro" in prompt
 
 
+def test_default_system_prompt_forbids_inline_image_payloads() -> None:
+    """The prompt must instruct the model not to embed images or base64 blobs
+    in its prose responses (would bloat tokens and break QTextBrowser rendering)."""
+    prompt = build_default_system_prompt()
+    assert "NEVER embed images" in prompt
+    assert "data:image/" in prompt
+    assert "base64" in prompt
+    assert "capture_view" in prompt
+
+
 def test_cumulative_usage_accumulates_across_iterations() -> None:
     """Token usage from each provider response is summed into the cumulative
     counter and forwarded to ``usage_callback``."""
