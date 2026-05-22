@@ -538,14 +538,11 @@ def normalize_plugin_paths(paths: list[str] | tuple[str, ...] | None) -> list[st
 def get_user_plugin_paths() -> list[str]:
     """Return user-configured extra plugin directories.
 
-    ``plugins_path`` accepts both the legacy single-directory string and the
-    newer list-of-directories form. For backward compatibility, this helper also
-    migrates any stale ``plugins_extra_paths`` value that may already exist in
-    the configuration file.
+    ``plugins_path`` accepts both a single-directory string and the
+    list-of-directories form.
     """
     fixed_default = osp.normpath(Conf.get_path("plugins"))
     configured_paths = Conf.main.plugins_path.get([])
-    legacy_extra_paths = conf.CONF.get("main", "plugins_extra_paths", [])
 
     if isinstance(configured_paths, str):
         candidates = [configured_paths]
@@ -554,12 +551,7 @@ def get_user_plugin_paths() -> list[str]:
     else:
         candidates = list(configured_paths)
 
-    if isinstance(legacy_extra_paths, str):
-        legacy_extra_paths = [legacy_extra_paths]
-    elif legacy_extra_paths is None:
-        legacy_extra_paths = []
-
-    normalized = normalize_plugin_paths(candidates + list(legacy_extra_paths))
+    normalized = normalize_plugin_paths(candidates)
     return [path for path in normalized if path != fixed_default]
 
 
@@ -567,7 +559,6 @@ def set_user_plugin_paths(paths: list[str] | tuple[str, ...]) -> None:
     """Persist user-configured extra plugin directories in ``plugins_path``."""
     normalized = normalize_plugin_paths(list(paths))
     Conf.main.plugins_path.set(normalized)
-    conf.CONF.remove_option("main", "plugins_extra_paths")
 
 
 def get_old_log_fname(fname):
