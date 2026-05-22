@@ -459,8 +459,10 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
     def remove_all_objects(self) -> None:
         """Remove all objects"""
-        for macro in self.__macros:
-            macro.clear_autosave()
+        # Note: the autosave/recovery cache is intentionally NOT cleared here,
+        # so that closing DataLab (which calls ``reset_all`` → this method)
+        # without saving the workspace preserves unsaved macros for the next
+        # startup's recovery dialog.
         self.tabwidget.clear()
         self.__macros.clear()
         super().remove_all_objects()
