@@ -410,6 +410,16 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         return panel.objview.get_sel_object_uuids(include_groups)
 
     @remote_controlled
+    def get_current_object_uuid(self) -> str | None:
+        """Return current object uuid in current panel.
+
+        Returns:
+            UUID of the current object, or None if no object is current.
+        """
+        panel = self.__get_current_basedatapanel()
+        return panel.objview.get_current_object_uuid()
+
+    @remote_controlled
     def add_group(
         self,
         title: str,
