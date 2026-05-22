@@ -509,6 +509,104 @@ def _ai_provider_choices(*_args: Any) -> list[tuple[str, str]]:
     return [(name, name, None) for name in PROVIDERS]
 
 
+def _ai_refresh_parent(parent: QW.QWidget | None) -> None:
+    """Walk ``parent`` up looking for a guidata layout and refresh its widgets.
+
+    Used after a ButtonItem callback mutates several sibling fields, so the
+    UI reflects the change without requiring the user to reopen the dialog.
+    Silently no-ops when the layout cannot be located (worst case: the user
+    sees the updated values only after closing/reopening Preferences).
+    """
+    widget = parent
+    while widget is not None:
+        layout = getattr(widget, "edit", None)
+        update = getattr(layout, "update_widgets", None)
+        if callable(update):
+            try:
+                update()
+            except Exception:  # pylint: disable=broad-except
+                pass
+            return
+        widget = widget.parent()
+
+
+def _ai_load_preset(
+    dataset: gds.DataSet,
+    _item: Any,
+    _value: Any,
+    parent: QW.QWidget | None,
+) -> bool:
+    """Pop a list of OpenAI-compatible presets and apply the chosen one."""
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.aiassistant.presets import (  # noqa: WPS433
+        BASE_URL_PRESETS,
+        detect_preset,
+    )
+
+    labels = [p.label for p in BASE_URL_PRESETS]
+    current = detect_preset(getattr(dataset, "base_url", "") or "")
+    current_index = (
+        next((i for i, p in enumerate(BASE_URL_PRESETS) if p.key == current.key), 0)
+        if current is not None
+        else 0
+    )
+    label, ok = QW.QInputDialog.getItem(
+        parent,
+        _("Load preset"),
+        _("Choose an OpenAI-compatible endpoint preset:"),
+        labels,
+        current_index,
+        False,
+    )
+    if not ok:
+        return False
+    preset = next(p for p in BASE_URL_PRESETS if p.label == label)
+    dataset.base_url = preset.base_url
+    dataset.model = preset.default_model
+    _ai_refresh_parent(parent)
+    return True
+
+
+def _ai_test_connection(
+    dataset: gds.DataSet,
+    _item: Any,
+    _value: Any,
+    parent: QW.QWidget | None,
+) -> bool:
+    """Probe the configured endpoint and display the outcome in a dialog."""
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.aiassistant.presets import test_connection  # noqa: WPS433
+
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.aiassistant.providers import get_provider  # noqa: WPS433
+
+    base_url = (getattr(dataset, "base_url", "") or "").strip()
+    configured_key = (getattr(dataset, "api_key", "") or "").strip()
+    # Apply the same env-var fallback as the live provider so users who set
+    # OPENAI_API_KEY (recommended) are not forced to also paste the key into
+    # the dialog just to test the connection.
+    try:
+        provider_cls = get_provider(str(getattr(dataset, "provider", "openai")))
+        api_key = provider_cls.resolve_api_key(configured_key)
+    except Exception:  # pylint: disable=broad-except
+        api_key = configured_key
+    # Cap probe timeout at 10 s so the modal dialog never feels stuck.
+    timeout = min(float(getattr(dataset, "timeout", 10.0) or 10.0), 10.0)
+    result = test_connection(base_url, api_key, timeout=timeout)
+    title = _("AI Assistant — connection test")
+    box = QW.QMessageBox(parent)
+    box.setWindowTitle(title)
+    box.setIcon(
+        QW.QMessageBox.Icon.Information if result.ok else QW.QMessageBox.Icon.Warning
+    )
+    box.setText(result.message)
+    if result.details:
+        box.setDetailedText(result.details)
+    box.setStandardButtons(QW.QMessageBox.StandardButton.Ok)
+    box.exec()
+    return result.ok
+
+
 class AISettings(gds.DataSet):
     """DataLab AI Assistant settings"""
 
@@ -541,6 +639,25 @@ class AISettings(gds.DataSet):
         default="",
         notempty=False,
         help=_("Override for OpenAI-compatible endpoints. Leave empty for default."),
+    )
+    load_preset = gds.ButtonItem(
+        _("Load preset..."),
+        _ai_load_preset,
+        icon="libre-gui-settings.svg",
+        help=_(
+            "Pre-fill the Base URL and Model fields with a known OpenAI-"
+            "compatible endpoint (OpenAI cloud, Ollama, LM Studio, llama.cpp, "
+            "vLLM)."
+        ),
+    )
+    test_connection = gds.ButtonItem(
+        _("Test connection"),
+        _ai_test_connection,
+        icon="libre-gui-link.svg",
+        help=_(
+            "Probe the configured endpoint (GET /models) to verify the URL, "
+            "API key and network reachability. Does not consume any token."
+        ),
     )
     temperature = gds.FloatItem(
         _("Temperature"), default=0.2, min=0.0, max=2.0, step=0.1

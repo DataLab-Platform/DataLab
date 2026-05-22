@@ -10,6 +10,7 @@ library, so that it can be reused / tested in headless environments.
 from __future__ import annotations
 
 import abc
+import json
 import os
 from dataclasses import dataclass, field
 from typing import Any, Literal
@@ -141,6 +142,40 @@ class AssistantMessage:
 
 class LLMProviderError(RuntimeError):
     """Raised when an LLM provider call fails."""
+
+
+def extract_error_message(raw: str) -> str | None:
+    """Return the human-readable error string from an OpenAI-style JSON envelope.
+
+    Handles the common shapes produced by OpenAI-compatible servers:
+
+    - ``{"error": {"message": "..."}}`` — OpenAI cloud, Azure OpenAI, vLLM.
+    - ``{"error": "..."}`` — llama.cpp server, some local backends.
+    - ``{"message": "..."}`` — fallback for misc. servers.
+
+    Returns:
+        The extracted message, or ``None`` when the body is not JSON or has
+        no recognisable error string.
+    """
+    if not raw:
+        return None
+    try:
+        data = json.loads(raw)
+    except (json.JSONDecodeError, ValueError):
+        return None
+    if not isinstance(data, dict):
+        return None
+    err = data.get("error")
+    if isinstance(err, dict):
+        msg = err.get("message")
+        if isinstance(msg, str) and msg.strip():
+            return msg.strip()
+    if isinstance(err, str) and err.strip():
+        return err.strip()
+    msg = data.get("message")
+    if isinstance(msg, str) and msg.strip():
+        return msg.strip()
+    return None
 
 
 class LLMProvider(abc.ABC):

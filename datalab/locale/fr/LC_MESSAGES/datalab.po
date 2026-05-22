@@ -1592,21 +1592,6 @@ msgstr "Annotation ajoutée"
 msgid "The label has been added as an annotation. You can edit or remove it using the annotation editing window.<br><br>Choosing to ignore this message will prevent it from being displayed again."
 msgstr "L'étiquette a été ajoutée comme annotation. Vous pouvez la modifier ou la supprimer en utilisant la fenêtre d'édition des annotations.<br><br>Ignorer ce message empêchera son affichage ultérieur."
 
-msgid "Console toolbar"
-msgstr "Barre d'outils de la console"
-
-msgid "Clear console"
-msgstr "Effacer la console"
-
-msgid "Export console output to file..."
-msgstr "Exporter la sortie console vers un fichier..."
-
-msgid "↓ Resume autoscroll"
-msgstr "↓ Reprendre le défilement"
-
-msgid "Export console"
-msgstr "Exporter la console"
-
 msgid "Recent macros"
 msgstr "Macros récentes"
 
@@ -1622,6 +1607,9 @@ msgstr "Effacer toutes les macros récentes ?"
 
 msgid "Macro panel"
 msgstr "Panneau des macros"
+
+msgid "Clear console"
+msgstr "Effacer la console"
 
 msgid "-***- Macro Console -***-"
 msgstr "-***- Console des macros -***-"
@@ -1671,7 +1659,6 @@ msgstr "● Macro en cours d'exécution"
 msgid "○ Idle"
 msgstr "○ Inactif"
 
-#, python-format
 msgid "Restore unsaved macros"
 msgstr "Restaurer les macros non enregistrées"
 
@@ -2918,6 +2905,27 @@ msgstr "Étiquettes des marqueurs"
 
 msgid "Prepend a marker-label column to result tables for marker results (XY/X/Y markers), so each row can be matched with the corresponding cross or dashed cursor drawn on the plot. XY markers use numeric labels (#1, #2, ...), axis markers use letters (a, b, c, ...)."
 msgstr "Ajouter une colonne d'étiquettes de marqueurs aux tables de résultats pour les résultats de marqueurs (marqueurs XY/X/Y), afin que chaque ligne puisse être associée au curseur croisé ou en pointillés correspondant dessiné sur le graphique. Les marqueurs XY utilisent des étiquettes numériques (#1, #2, ...), les marqueurs d'axe utilisent des lettres (a, b, c, ...)."
+
+msgid "Load preset"
+msgstr "Charger un préréglage"
+
+msgid "Choose an OpenAI-compatible endpoint preset:"
+msgstr "Choisir un préréglage de point d'entrée compatible OpenAI :"
+
+msgid "AI Assistant — connection test"
+msgstr "Assistant IA — test de connexion"
+
+msgid "Load preset..."
+msgstr "Charger un préréglage..."
+
+msgid "Pre-fill the Base URL and Model fields with a known OpenAI-compatible endpoint (OpenAI cloud, Ollama, LM Studio, llama.cpp, vLLM)."
+msgstr "Pré-remplit les champs URL de base et Modèle avec un point d'entrée compatible OpenAI connu (OpenAI cloud, Ollama, LM Studio, llama.cpp, vLLM)."
+
+msgid "Test connection"
+msgstr "Tester la connexion"
+
+msgid "Probe the configured endpoint (GET /models) to verify the URL, API key and network reachability. Does not consume any token."
+msgstr "Interroge le point d'entrée configuré (GET /models) pour vérifier l'URL, la clé API et l'accessibilité réseau. Ne consomme aucun jeton."
 
 msgid "Process isolation enable status"
 msgstr "État d'activation de l'isolation de processus"
