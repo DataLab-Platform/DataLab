@@ -82,6 +82,10 @@ msgstr "Macro '%s' enregistrée dans le panneau de macros."
 msgid "Thinking…"
 msgstr "Réflexion en cours…"
 
+#, python-format
+msgid "Last request context size: %d tokens"
+msgstr "Taille du contexte de la dernière requête : %d jetons"
+
 msgid "Cumulative token usage"
 msgstr "Utilisation cumulative des jetons"
 
