@@ -2,6 +2,12 @@
 
 ## DataLab Version 1.2.1 ##
 
+### Breaking Changes ###
+
+**Debug environment variable renamed:**
+
+* Renamed the debug environment variable from `DEBUG` to `DATALAB_DEBUG` — the generic `DEBUG` name collided with widely-used third-party conventions (Django, Flask, Node.js tooling, CI systems) and could silently reset the user configuration file at startup when set for unrelated reasons. Setting `DATALAB_DEBUG=1` now activates debug mode; the bare `DEBUG` variable is ignored
+
 ### 🛠️ Bug Fixes ###
 
 **Signal panel menus:**

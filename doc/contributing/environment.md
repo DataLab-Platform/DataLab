@@ -95,7 +95,7 @@ Specific environment variables
 Enable the "debug" mode (no stdin/stdout redirection towards internal console):
 
     @REM Mode DEBUG
-    set DEBUG=1
+    set DATALAB_DEBUG=1
 
 Building PDF documentation requires LaTeX. On Windows, the following environment:
 
