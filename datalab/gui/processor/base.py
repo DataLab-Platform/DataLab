@@ -1445,6 +1445,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 # Apply processor-specific post-processing on the result
                 refresh_needed |= self.postprocess_1_to_0_result(obj, result)
 
+                # If post-processing created ROIs (e.g., contour detection),
+                # disable ROI creation in the stored parameters to prevent
+                # re-creation during auto-recompute on ROI change.
+                if refresh_needed and hasattr(param, "create_rois"):
+                    param.create_rois = False
+
                 # Append result to result data for later display
                 rdata.append(adapter, obj)
 
