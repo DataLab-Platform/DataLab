@@ -4,14 +4,16 @@
 Replace special values dialog
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Custom dialog widget for the "Replace special values" feature.
-Provides count display, kernel visualization, and enhanced parameter editing.
+Custom dialog widget for the "Replace special values" processing feature.
 
-Features implemented:
-- **Count display** (Point 4): colored badges showing NaN / +Inf / -Inf counts.
-- **Kernel preview** (Point 6): visual grid of the active neighbor mask.
-- **Effect preview** (Point 2): kernel shape updates on parameter change.
-- **Custom kernel** (Point 7): string-based kernel input with live preview.
+The dialog extends the standard guidata DataSet edition layout with:
+
+- **Count display**: colored badges showing the number (and percentage) of
+  NaN, +Inf and -Inf samples present in the source signal or image.
+- **Kernel preview**: visual grid of the active neighbor mask, displayed
+  whenever a neighbor-based strategy is selected for any of the three targets.
+- **Live preview update**: the kernel preview is refreshed automatically
+  whenever a parameter value changes.
 """
 
 from __future__ import annotations
@@ -173,7 +175,7 @@ class ReplaceSpecialValuesDialog(QW.QDialog):
 
     Shows coloured count badges (NaN, +Inf, -Inf) at the top, the standard
     DataSet parameter editing form in the middle, and a kernel/mask preview
-    at the bottom when a neighbor or custom-kernel strategy is selected.
+    at the bottom when a neighbor-based strategy is selected.
 
     Args:
         instance: DataSet parameter instance to edit.

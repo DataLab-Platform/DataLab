@@ -1,0 +1,125 @@
+# Version 1.2 #
+
+## DataLab Version 1.2.1 ##
+
+### ✨ New Features ###
+
+**Replace special values processing (signal and image):**
+
+DataLab now provides a dedicated **"Replace special values"** processing
+function that detects and replaces `NaN`, `+Inf` and `-Inf` values in both
+signals and images. The feature is available under
+**Processing → Level adjustment → Replace special values** in both the Signal
+and Image panels.
+
+* Each target (`NaN`, `+Inf`, `-Inf`) can be processed independently with its
+  own strategy
+* Signal strategies: do nothing, replace with zero / constant / minimum /
+  maximum / mean / median, delete affected points, forward fill, backward
+  fill, interpolation (linear, spline, quadratic, cubic, PCHIP), N-neighbor
+  minimum / maximum / mean / median
+* Image strategies: do nothing, replace with zero / constant / minimum /
+  maximum / mean / median, N-neighbor minimum / maximum / mean / median
+* The parameter dialog displays **colored badges** showing the number (and
+  percentage) of `NaN`, `+Inf` and `-Inf` samples found in the source object,
+  giving immediate visibility on what will be modified
+* When a neighbor strategy is selected, a **live kernel preview** shows the
+  shape of the neighborhood that will be used for the replacement
+
+### 🛠️ Bug Fixes ###
+
+**Signal panel menus:**
+
+* Restored the "Linear calibration" entry in the "Processing > Axis transformation" menu of the Signal panel - it had been inadvertently dropped during a menu reorganization and was no longer reachable from the menu bar, even though the underlying computation was still available
+
+**Signal display with uncertainty data:**
+
+* Fixed a crash that could occur when displaying a signal whose internal
+  `xydata` array had been expanded to four rows but whose `dx` / `dy`
+  uncertainty rows were entirely `NaN` (no real error bars) — the plot item
+  now correctly receives only the X / Y data in that case, instead of being
+  rejected by PlotPy's `CurveItem.set_data` for receiving four arguments
+
+## DataLab Version 1.2.0 (2026-04-20) ##
+
+### ✨ New Features ###
+
+**Plugin configuration dialog:**
+
+DataLab now provides a dedicated **plugin configuration dialog** (accessible via "Plugins > Configure plugins...") that gives full control over third-party plugin management:
+
+* Enable or disable individual plugins using checkboxes, or toggle all plugins at once with a tri-state master checkbox
+* Filter plugins by status: all, enabled, disabled, or plugins with import errors
+* View plugin details including version, author, and expandable long descriptions directly in the dialog
+* Plugins with import errors are displayed prominently at the top with their full traceback, making it easy to diagnose installation issues
+* The expandable text widget used for long descriptions computes its preferred width from a fixed measurement context, ensuring stable layout and reliable "Show full description" toggling regardless of dialog resizing or offscreen rendering
+
+**Plugin hot-reload:**
+
+* Third-party plugins can now be reloaded at runtime without restarting DataLab, via "Plugins > Reload plugins"
+* Enabling or disabling plugins in the Preferences dialog or plugin configuration dialog takes effect immediately - no restart required
+* The Plugins menu, status widget, and plugin actions are automatically refreshed after configuration changes
+
+**Multi-instance detection:**
+
+DataLab now detects when another instance is already running and warns the user before opening a second instance:
+
+* Uses a PID-based lock file mechanism that supports multiple concurrent instances (reference counting)
+* Stale PIDs from crashed processes are automatically cleaned up
+* Cross-platform support (Windows, macOS, Linux) using platform-specific process detection
+* Closing one instance no longer incorrectly removes the lock file when other instances are still running
+
+**Image ROI editor contrast synchronization:**
+
+* The image ROI editor now shares contrast (LUT) settings with the source image panel
+* Adjusting the contrast in the ROI editor is reflected back in the main panel and vice versa
+* Contrast controls are fully re-enabled in the image ROI editor dialog
+
+**Remote control API — push modified objects back to DataLab:**
+
+The proxy API (XML-RPC and Web API) now exposes a new `set_object` method that updates an existing signal or image in DataLab from a modified copy obtained via `get_object` (fixes [Issue #305](https://github.com/DataLab-Platform/DataLab/issues/305)):
+
+* Previously, modifications to object properties (e.g. `dx`, `dy`, `x0`, `y0`, `title`) made on the result of `get_object` were lost because `get_object` returns a copy — `set_object` now provides a clean round-trip workflow
+* Works for both signal and image objects: computed result items attached to the object are preserved during the update, so updating an `ImageObj` no longer triggers a type mismatch
+* The properties panel is automatically refreshed after `set_object`, so updated object properties (title, units, axes, uncertainties, etc.) are immediately visible in the GUI
+
+### 📖 Documentation ###
+
+* Added API documentation for the `datalab.objectmodel` module
+* Added screenshots for the "Paste metadata" dialog (signal and image panels)
+* Updated plugin documentation to describe the new configuration dialog, hot-reload workflow, and plugin API helpers
+* Updated third-party plugin development guide with new template references and test coverage information
+* Expanded Web API reference: documented the binary data transfer options (`?compress=false` for faster uncompressed NPZ downloads, `?overwrite=true` for atomic replacement of existing objects), the in-place `PUT /objects/{name}` endpoint that updates an object while preserving its identity, group membership and position, and the new "Computation" section listing the `/select` and `/calc` endpoints used to drive DataLab computations remotely
+* Updated French translations across all new and modified documentation pages
+
+### 🔧 Improvements ###
+
+**Compatibility:**
+
+* Officially support pandas 3.0.x (updated dependency constraint from `< 3.0` to `< 3.1`)
+* Updated minimum Sigima requirement from 1.1.0 to 1.1.2 to benefit from latest computation engine fixes and improvements
+* Added legacy support for the `WINPYDIRBASE` environment variable for WinPython-based deployments
+
+**Plugin system hardening:**
+
+* Plugin discovery and registration is now resilient to third-party import failures while preserving error reporting in the console, logs, and configuration dialog
+* Plugin submenus are now scrollable to prevent overflow when many plugin entries are registered
+
+**Development tooling:**
+
+* New `run_with_env.py` script for running tasks across multiple Python environment contexts (WinPython, venv, etc.)
+* Simplified environment variable handling by removing the `DATALAB_ENV_LOADED` system
+* Fixed Coverage full VS Code task to properly use the `run_with_env.py` wrapper
+
+### 🛠️ Bug Fixes ###
+
+**HDF5 workspace - Table serialization:**
+
+* Fixed callable metadata not being stripped during HDF5 save/load of `TableResult` objects
+* Fixed string-based enum values in table results not being restored correctly after HDF5 round-trip
+* Fixed `column_formats` attribute not surviving HDF5 round-trip for both `TableResult` and `TableResultBuilder` outputs
+
+**Plugin system:**
+
+* Fixed `AttributeError` in plugin configuration dialog when clicking "Show full description" (incorrect attribute reference)
+* Fixed plugin import errors being silently swallowed when they occurred before the internal console was initialized

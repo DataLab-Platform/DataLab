@@ -1577,6 +1577,9 @@ msgstr "Normaliser"
 msgid "Clipping"
 msgstr "Écrêtage"
 
+msgid "Replace special values"
+msgstr "Remplacer les valeurs spéciales"
+
 msgid "Add Gaussian noise"
 msgstr "Ajouter du bruit gaussien"
 
@@ -3044,6 +3047,21 @@ msgstr "Des journaux de bord ont été générés lors de la dernière session."
 
 msgid "Log files are currently empty."
 msgstr "Les journaux de bord sont vides."
+
+msgid "Kernel / Mask preview"
+msgstr "Aperçu du noyau / masque"
+
+#, python-brace-format
+msgid "{label} — Kernel / Mask preview"
+msgstr "{label} — Aperçu du noyau / masque"
+
+#, python-brace-format
+msgid "±{n} points"
+msgstr "±{n} points"
+
+#, python-brace-format
+msgid "±{n} rows × ±{n} columns"
+msgstr "±{n} lignes × ±{n} colonnes"
 
 msgid "Signal baseline selection"
 msgstr "Sélection de la ligne de base du signal"

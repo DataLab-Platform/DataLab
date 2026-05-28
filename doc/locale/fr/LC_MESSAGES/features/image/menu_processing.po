@@ -6,11 +6,11 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: DataLab \n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Project-Id-Version:  datalab\n"
+"Report-Msgid-Bugs-To: p.raybaut@codra.fr\n"
+"PO-Revision-Date: 2025-05-22 15:46+0200\n"
 "Language: fr\n"
-"Language-Team: fr <LL@li.org>\n"
+"Language-Team: DataLab Platform Developers <p.raybaut@codra.fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -179,6 +179,60 @@ msgstr "Ecrêtage"
 msgid "Apply the clipping to each selected image."
 msgstr "Applique un écrêtage sur chaque image sélectionnée."
 
+msgid "Replace special values"
+msgstr "Remplacer les valeurs spéciales"
+
+msgid "Create a new image where ``NaN``, ``+Inf`` and ``-Inf`` pixels are replaced using a configurable strategy per target value."
+msgstr "Crée une nouvelle image où les pixels ``NaN``, ``+Inf`` et ``-Inf`` sont remplacés à l'aide d'une stratégie configurable pour chaque valeur cible."
+
+msgid "Each of the three targets (``NaN``, ``+Inf``, ``-Inf``) is handled independently. For each target the user selects one of the following strategies (or *Do nothing* to leave the target untouched):"
+msgstr "Chacune des trois cibles (``NaN``, ``+Inf``, ``-Inf``) est traitée indépendamment. Pour chaque cible, l'utilisateur sélectionne l'une des stratégies suivantes (ou *Ne rien faire* pour laisser la cible inchangée) :"
+
+msgid "Strategy"
+msgstr "Stratégie"
+
+msgid "Do nothing"
+msgstr "Ne rien faire"
+
+msgid "Leave the target values untouched."
+msgstr "Laisser les valeurs cibles inchangées."
+
+msgid "Replace with zero"
+msgstr "Remplacer par zéro"
+
+msgid "Replace by ``0``."
+msgstr "Remplacer par ``0``."
+
+msgid "Replace with constant"
+msgstr "Remplacer par une constante"
+
+msgid "Replace by a user-defined constant value."
+msgstr "Remplacer par une valeur constante définie par l'utilisateur."
+
+msgid "Replace with minimum / maximum"
+msgstr "Remplacer par le minimum / maximum"
+
+msgid "Replace by the minimum / maximum of the finite pixels."
+msgstr "Remplacer par le minimum / maximum des pixels finis."
+
+msgid "Replace with mean / median"
+msgstr "Remplacer par la moyenne / médiane"
+
+msgid "Replace by the mean / median of the finite pixels."
+msgstr "Remplacer par la moyenne / médiane des pixels finis."
+
+msgid "N-neighbor minimum / maximum / mean / median"
+msgstr "Minimum / maximum / moyenne / médiane sur N voisins"
+
+msgid "Replace by the corresponding statistic computed on the ``(2N+1) × (2N+1)`` neighborhood around each affected pixel."
+msgstr "Remplacer par la statistique correspondante calculée sur le voisinage ``(2N+1) × (2N+1)`` autour de chaque pixel affecté."
+
+msgid "Before opening the standard parameter form, the dialog displays a count of each target found in the image (e.g. *NaN: 124 (0.5 %)*). When a neighbor strategy is selected, a small preview shows the 2D kernel that will be used."
+msgstr "Avant d'ouvrir le formulaire de paramètres standard, la boîte de dialogue affiche le nombre de chaque cible trouvée dans l'image (par exemple *NaN : 124 (0,5 %)*). Lorsqu'une stratégie fondée sur les voisins est sélectionnée, un petit aperçu montre le noyau 2D qui sera utilisé."
+
+msgid "Unlike for signals, no interpolation strategy is currently available for images."
+msgstr "Contrairement aux signaux, aucune stratégie d'interpolation n'est actuellement disponible pour les images."
+
 msgid "Offset correction"
 msgstr "Soustraction d'offset"
 
@@ -265,9 +319,6 @@ msgstr "Les paramètres suivants sont disponibles :"
 
 msgid "Parameter"
 msgstr "Paramètre"
-
-msgid "Strategy"
-msgstr "Stratégie"
 
 msgid "Zero padding strategy (see below)"
 msgstr "Stratégie de complément de zéros (voir ci-dessous)"
