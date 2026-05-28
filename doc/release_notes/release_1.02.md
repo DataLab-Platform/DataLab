@@ -8,6 +8,10 @@
 
 * Restored the "Linear calibration" entry in the "Processing > Axis transformation" menu of the Signal panel - it had been inadvertently dropped during a menu reorganization and was no longer reachable from the menu bar, even though the underlying computation was still available
 
+**Debug environment variable renamed:**
+
+* Renamed the debug environment variable from `DEBUG` to `DATALAB_DEBUG` — the generic `DEBUG` name collided with widely-used third-party conventions (Django, Flask, Node.js tooling, CI systems) and could silently reset the user configuration file at startup when set for unrelated reasons. Setting `DATALAB_DEBUG=1` now activates debug mode; the bare `DEBUG` variable is ignored
+
 ## DataLab Version 1.2.0 (2026-04-20) ##
 
 ### ✨ New Features ###
