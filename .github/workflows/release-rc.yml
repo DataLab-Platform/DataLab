@@ -59,6 +59,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write       # required by attest-build-provenance (OIDC)
+      attestations: write   # required by attest-build-provenance
     steps:
       - uses: actions/checkout@v4
 
@@ -85,6 +87,23 @@ jobs:
           name: msi-installer
           path: assets/msi
 
+      - name: Generate SHA256SUMS
+        run: |
+          cd assets
+          find dists msi pdfs -type f \
+            \( -name '*.whl' -o -name '*.tar.gz' -o -name '*.msi' -o -name '*.pdf' \) \
+            -printf '%P\n' | sort | xargs -I{} sha256sum {} \
+            > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            assets/dists/*.whl
+            assets/dists/*.tar.gz
+            assets/msi/*.msi
+
       - name: Extract release notes
         run: |
           python scripts/ci_release_helpers.py release-notes \
@@ -105,3 +124,4 @@ jobs:
             assets/msi/*.msi
             assets/pdfs/DataLab_fr.pdf
             assets/pdfs/DataLab_en.pdf
+            assets/SHA256SUMS
