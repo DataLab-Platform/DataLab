@@ -989,6 +989,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         # Get the parameter from processing parameters
         param = proc_params.param
 
+        # Disable ROI creation during auto-recompute: detection functions store
+        # create_rois=True in their parameters, but auto-recompute should only
+        # update analysis results, not recreate ROIs (which would make them
+        # impossible to delete or modify).
+        if hasattr(param, "create_rois"):
+            param.create_rois = False
+
         # Get the actual function from the function name
         feature = self.get_feature(proc_params.func_name)
 
@@ -1444,12 +1451,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                 # Apply processor-specific post-processing on the result
                 refresh_needed |= self.postprocess_1_to_0_result(obj, result)
-
-                # If post-processing created ROIs (e.g., contour detection),
-                # disable ROI creation in the stored parameters to prevent
-                # re-creation during auto-recompute on ROI change.
-                if refresh_needed and hasattr(param, "create_rois"):
-                    param.create_rois = False
 
                 # Append result to result data for later display
                 rdata.append(adapter, obj)
