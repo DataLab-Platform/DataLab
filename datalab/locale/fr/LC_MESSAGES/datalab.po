@@ -1053,6 +1053,9 @@ msgstr "Propriétés"
 msgid "Parameters for function `%s`"
 msgstr "Paramètres pour la fonction `%s`"
 
+msgid "Created"
+msgstr "Créé"
+
 msgid "Original object"
 msgstr "Objet original"
 
@@ -1315,6 +1318,9 @@ msgstr "L'étiquette a été ajoutée comme annotation. Vous pouvez la modifier 
 
 msgid "Macro panel"
 msgstr "Panneau des macros"
+
+msgid "Python files"
+msgstr "Fichiers Python"
 
 msgid "-***- Macro Console -***-"
 msgstr "-***- Console des macros -***-"
@@ -3132,6 +3138,9 @@ msgstr "Distance minimale :"
 
 msgid "Signal peak detection"
 msgstr "Détection de pics 1D"
+
+msgid "Peaks:"
+msgstr "Pics :"
 
 msgid "Internal console"
 msgstr "Console interne"
