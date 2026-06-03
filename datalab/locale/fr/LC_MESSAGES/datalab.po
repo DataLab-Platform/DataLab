@@ -65,6 +65,9 @@ msgstr "Assistant IA prêt. Configurez votre fournisseur dans le menu Edition > 
 msgid "You"
 msgstr "Vous"
 
+msgid "Assistant"
+msgstr "Assistant"
+
 msgid "Save to Macros"
 msgstr "Enregistrer dans les macros"
 
@@ -1341,6 +1344,9 @@ msgstr "Propriétés"
 msgid "Parameters for function `%s`"
 msgstr "Paramètres pour la fonction `%s`"
 
+msgid "Created"
+msgstr "Créé"
+
 msgid "Original object"
 msgstr "Objet original"
 
@@ -1375,6 +1381,12 @@ msgstr ""
 
 msgid "Processing Parameters"
 msgstr "Paramètres de traitement"
+
+msgid "Auto-recompute on edit"
+msgstr "Recalcul automatique lors de l'édition"
+
+msgid "Automatically re-run processing when parameters are modified"
+msgstr "Relancer automatiquement le traitement à chaque modification de paramètre"
 
 msgid "No processing object available."
 msgstr "Aucun objet de traitement disponible."
@@ -1419,6 +1431,9 @@ msgstr "Autres métadonnées"
 
 msgid "Save to directory"
 msgstr "Enregistrer dans un répertoire"
+
+msgid "Pattern help"
+msgstr "Aide sur le motif"
 
 msgid "Directory"
 msgstr "Répertoire"
@@ -1672,8 +1687,29 @@ msgstr "Description"
 msgid "Title"
 msgstr "Titre"
 
+msgid "Action is compatible with the current workspace state."
+msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
+
+msgid "Action is not compatible with the current workspace state."
+msgstr "L'action n'est pas compatible avec l'état actuel de l'espace de travail."
+
+msgid "Signal"
+msgstr "Signal"
+
+msgid "Shape"
+msgstr "Forme"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "Dimensions"
+msgstr "Dimensions"
+
 msgid "History panel"
 msgstr "Panneau d'historique"
+
+msgid "History files"
+msgstr "Fichiers d'historique"
 
 msgid "Edit mode"
 msgstr "Mode d'édition"
@@ -1681,23 +1717,173 @@ msgstr "Mode d'édition"
 msgid "Record mode"
 msgstr "Mode d'enregistrement"
 
+msgid "New session"
+msgstr "Nouvelle session"
+
+msgid "Start a new history session"
+msgstr "Démarrer une nouvelle session d'historique"
+
+msgid "Open history file..."
+msgstr "Ouvrir un fichier d'historique..."
+
+msgid "Open history from a standalone .dlhist file"
+msgstr "Ouvrir l'historique depuis un fichier .dlhist autonome"
+
+msgid "Save history file..."
+msgstr "Enregistrer un fichier d'historique..."
+
+msgid "Save history to a standalone .dlhist file"
+msgstr "Enregistrer l'historique dans un fichier .dlhist autonome"
+
+msgid "Duplicate selected history action/session"
+msgstr "Dupliquer l'action ou la session d'historique sélectionnée"
+
+msgid "Previous step"
+msgstr "Étape précédente"
+
+msgid "Select the previous action in the current session"
+msgstr "Sélectionner l'action précédente dans la session courante"
+
+msgid "Next step"
+msgstr "Étape suivante"
+
+msgid "Select the next action in the current session"
+msgstr "Sélectionner l'action suivante dans la session courante"
+
+msgid "Generate macro"
+msgstr "Générer une macro"
+
+msgid "Generate a Python macro script from history"
+msgstr "Générer un script macro Python à partir de l'historique"
+
+msgid "Remove incompatible"
+msgstr "Supprimer les incompatibles"
+
+msgid "Remove actions incompatible with the current workspace"
+msgstr "Supprimer les actions incompatibles avec l'espace de travail courant"
+
+msgid "Restore parameters"
+msgstr "Restaurer les paramètres"
+
+msgid "Restore original parameters (discard edit-mode changes)"
+msgstr "Restaurer les paramètres d'origine (annuler les modifications du mode d'édition)"
+
 msgid "Replay"
 msgstr "Rejouer"
 
-msgid "Restore selection"
-msgstr "Restaurer la sélection"
+msgid "Commit edit mode changes?"
+msgstr "Valider les modifications du mode d'édition ?"
 
-msgid "Restore selection and replay"
-msgstr "Restaurer la sélection et rejouer"
+msgid ""
+"You are about to exit Edit mode.\n"
+"\n"
+"All parameter changes made during this session will be permanently kept.\n"
+"This action cannot be undone — Restore will no longer be available.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Vous êtes sur le point de quitter le mode d'édition.\n"
+"\n"
+"Toutes les modifications de paramètres effectuées lors de cette session seront conservées de façon permanente.\n"
+"Cette action est irréversible — la fonction Restaurer ne sera plus disponible.\n"
+"\n"
+"Souhaitez-vous continuer ?"
 
 msgid "The current workspace state is not compatible with the action."
 msgstr "L'état actuel de l'espace de travail n'est pas compatible avec l'action."
 
-msgid "Delete actions"
-msgstr "Supprimer les actions"
+msgid "Parameters"
+msgstr "Paramètres"
 
-msgid "Do you really want to delete the selected action and all the next ones?"
-msgstr "Voulez-vous vraiment supprimer l'action sélectionnée et toutes les suivantes ?"
+#, python-format
+msgid "Action %s has been edited but its target output object(s) no longer exist — skipping."
+msgstr "L'action %s a été modifiée mais son ou ses objets de sortie cibles n'existent plus — ignorée."
+
+#, python-format
+msgid "Action %s uses pattern %r which is not recomputable yet."
+msgstr "L'action %s utilise le motif %r qui n'est pas encore recalculable."
+
+#, python-format
+msgid "Recompute failed for action %s: %s"
+msgstr "Échec du recalcul pour l'action %s : %s"
+
+#, python-format
+msgid ""
+"Action %(name)s skipped: plugin '%(loc)s' is missing.\n"
+"Required parameter class: %(param)s\n"
+"Reinstall the plugin to re-enable this action."
+msgstr ""
+"Action %(name)s ignorée : le plugin '%(loc)s' est manquant.\n"
+"Classe de paramètre requise : %(param)s\n"
+"Réinstallez le plugin pour réactiver cette action."
+
+#, python-format
+msgid "Action %s: source object was deleted — skipping."
+msgstr "Action %s : l'objet source a été supprimé — ignorée."
+
+#, python-format
+msgid "Action %s: all source objects were deleted — skipping."
+msgstr "Action %s : tous les objets source ont été supprimés — ignorée."
+
+#, python-format
+msgid "Action %s: missing source(s) for output #%d — skipping."
+msgstr "Action %s : source(s) manquante(s) pour la sortie n°%d — ignorée."
+
+#, python-format
+msgid "Action %s: source object(s) were deleted — skipping."
+msgstr "Action %s : le ou les objets source ont été supprimés — ignorée."
+
+#, python-format
+msgid "Action %s: %d analysed object(s) were deleted — skipping."
+msgstr "Action %s : %d objet(s) analysé(s) ont été supprimés — ignorée."
+
+msgid "Cascade recompute"
+msgstr "Recalcul en cascade"
+
+msgid "Some downstream actions could not be recomputed:"
+msgstr "Certaines actions en aval n'ont pas pu être recalculées :"
+
+msgid "No compute actions to export."
+msgstr "Aucune action de calcul à exporter."
+
+#, python-format
+msgid "Macro script copied to clipboard (%d actions)."
+msgstr "Script macro copié dans le presse-papiers (%d actions)."
+
+msgid ""
+"Do you really want to delete the selected items?\n"
+"\n"
+"Note: deleting an action also removes all subsequent actions in the same session."
+msgstr ""
+"Voulez-vous vraiment supprimer les éléments sélectionnés ?\n"
+"\n"
+"Note : la suppression d'une action supprime également toutes les actions suivantes de la même session."
+
+msgid "Do you really want to delete the selected items?"
+msgstr "Voulez-vous vraiment supprimer les éléments sélectionnés ?"
+
+msgid "All actions are compatible with the current workspace."
+msgstr "Toutes les actions sont compatibles avec l'espace de travail courant."
+
+#, python-format
+msgid "%d incompatible action(s) will be removed. Continue?"
+msgstr "%d action(s) incompatible(s) vont être supprimée(s). Continuer ?"
+
+msgid "Save history file"
+msgstr "Enregistrer un fichier d'historique"
+
+msgid "Open history file"
+msgstr "Ouvrir un fichier d'historique"
+
+msgid "Imported"
+msgstr "Importé"
+
+msgid "Some operations could not be reconnected after deletion:"
+msgstr "Certaines opérations n'ont pas pu être reconnectées après la suppression :"
+
+#, python-format
+msgid "“%s” has dependent operations but no valid source to reconnect to — downstream results are left unchanged."
+msgstr "« %s » possède des opérations dépendantes mais aucune source valide à laquelle se reconnecter — les résultats en aval restent inchangés."
 
 msgid "New image"
 msgstr "Nouvelle image"
@@ -1716,6 +1902,9 @@ msgstr "Effacer toutes les macros récentes ?"
 
 msgid "Macro panel"
 msgstr "Panneau des macros"
+
+msgid "Python files"
+msgstr "Fichiers Python"
 
 msgid "Clear console"
 msgstr "Effacer la console"
@@ -1831,6 +2020,9 @@ msgstr "Les modifications seront appliquées après avoir cliqué sur OK et rech
 msgid "The following directories are scanned at startup for plugins:"
 msgstr "Les répertoires suivants sont analysés au démarrage pour détecter les plugins :"
 
+msgid "from"
+msgstr "depuis"
+
 msgid "No plugin search path is currently active."
 msgstr "Aucun chemin de recherche de plugins n'est actuellement actif."
 
@@ -1905,9 +2097,6 @@ msgstr "En mode 'pairwise', vous devez sélectionner des objets dans au moins de
 
 msgid "In pairwise mode, you need to select the same number of objects in each group."
 msgstr "En mode 'pairwise', vous devez sélectionner le même nombre d'objets dans chaque groupe."
-
-msgid "Parameters"
-msgstr "Paramètres"
 
 #, python-format
 msgid "Calculating: %s"
@@ -3647,6 +3836,9 @@ msgstr "Distance minimale :"
 msgid "Signal peak detection"
 msgstr "Détection de pics 1D"
 
+msgid "Peaks:"
+msgstr "Pics :"
+
 msgid "Internal console"
 msgstr "Console interne"
 
@@ -3996,3 +4188,4 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
+
