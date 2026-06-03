@@ -6,11 +6,48 @@
 
 **Signal panel menus:**
 
-* Restored the "Linear calibration" entry in the "Processing > Axis transformation" menu of the Signal panel - it had been inadvertently dropped during a menu reorganization and was no longer reachable from the menu bar, even though the underlying computation was still available
+* Restored the "Linear calibration" entry in the "Processing > Axis transformation" menu of the Signal panel — it had been inadvertently dropped during a menu reorganization and was no longer reachable from the menu bar, even though the underlying computation was still available (fixes [Issue #312](https://github.com/DataLab-Platform/DataLab/issues/312))
+
+**Signal panel — Y range cursor:**
+
+* Fixed the Y range cursor annotation displaying an incorrect inequality (e.g. `5 < y < 2`) and a negative ∆y when the top cursor was dragged below the bottom cursor — the annotation now always shows values in sorted order with a positive range width (fixes [Issue #306](https://github.com/DataLab-Platform/DataLab/issues/306))
+
+**Image panel — Z-axis logarithmic scale:**
+
+* Fixed the "Base-10 logarithmic Z axis" toolbar action being permanently greyed out in the image panel — the tool now works correctly for all image types (fixes [Issue #313](https://github.com/DataLab-Platform/DataLab/issues/313), fixed upstream in PlotPy ≥ 2.10.0)
+
+**Image panel — contour detection:**
+
+* Fixed ellipse and circle contour detection producing incorrect results (wrong positions and sizes) due to swapped X/Y coordinates and missing unit conversions in the scikit-image model fitting code (fixes [Issue #326](https://github.com/DataLab-Platform/DataLab/issues/326), fixed upstream in Sigima ≥ 1.1.3)
+
+**ROI editor:**
+
+* Fixed the ROI editor dialog ignoring non-linear axis scales (e.g. logarithmic) of the source plot — the dialog now preserves the same axis scale configuration as the main panel (fixes [Issue #315](https://github.com/DataLab-Platform/DataLab/issues/315))
+
+**Theme and display:**
+
+* Fixed plot marker and shape colors being reverted to PlotPy defaults (yellow) instead of DataLab's configured colors (red) when the color mode was explicitly set to "light" or "dark" in settings — the custom color overrides are now re-applied after each theme switch (fixes [Issue #297](https://github.com/DataLab-Platform/DataLab/issues/297))
+* Fixed UI elements (text, icons, dialog layouts) not scaling properly with high-DPI display settings — DataSet HTML rendering, icon sizes, and viewport dimensions now adapt to the system scale factor (fixes [Issue #317](https://github.com/DataLab-Platform/DataLab/issues/317), fixed upstream in guidata ≥ 3.14.4)
+
+**Image properties editor:**
+
+* Fixed pixel size (`Δx` / `Δy`) input field corrupting typed values — most digits typed after the first were misinterpreted as decimal places due to a reactive update loop in the parameter editing widget (fixes [Issue #320](https://github.com/DataLab-Platform/DataLab/issues/320), fixed upstream in guidata ≥ 3.14.4)
 
 **Debug environment variable renamed:**
 
-* Renamed the debug environment variable from `DEBUG` to `DATALAB_DEBUG` — the generic `DEBUG` name collided with widely-used third-party conventions (Django, Flask, Node.js tooling, CI systems) and could silently reset the user configuration file at startup when set for unrelated reasons. Setting `DATALAB_DEBUG=1` now activates debug mode; the bare `DEBUG` variable is ignored
+* Renamed the debug environment variable from `DEBUG` to `DATALAB_DEBUG` — the generic `DEBUG` name collided with widely-used third-party conventions (Django, Flask, Node.js tooling, CI systems) and could silently reset the user configuration file at startup when set for unrelated reasons. Setting `DATALAB_DEBUG=1` now activates debug mode; the bare `DEBUG` variable is ignored (fixes [Issue #319](https://github.com/DataLab-Platform/DataLab/issues/319))
+
+**Remote control API:**
+
+* Exposed `get_current_object_uuid()` on the proxy API, making it available through XML-RPC and Web API
+
+### 🔧 Improvements ###
+
+**Compatibility:**
+
+* Updated minimum guidata requirement from 3.14.3 to 3.14.4 (high DPI and screen scaling issue, dataset input field fix, add secure build cli cmd)
+* Updated minimum PlotPy requirement from 2.8.2 to 2.10.0 (Z-axis log scale fix, toolbar overflow button visibility in dark theme, PythonQwt 0.16.0 optimization)
+* Updated minimum Sigima requirement from 1.1.2 to 1.1.3 (ellipse/circle contour detection fix)
 
 ## DataLab Version 1.2.0 (2026-04-20) ##
 
