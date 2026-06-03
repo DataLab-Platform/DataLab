@@ -2018,8 +2018,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     def reset_all(self) -> None:
         """Reset all application data"""
         for panel in self.panels:
-            if panel is not None:
+            if panel is not None and panel is not self.historypanel:
                 panel.remove_all_objects()
+        if self.historypanel is not None:
+            self.historypanel.start_new_session_after_workspace_reset()
 
     @remote_controlled
     def remove_object(self, force: bool = False) -> None:

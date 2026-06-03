@@ -139,7 +139,7 @@ class NativeH5Reader(HDF5Reader):
         Returns:
             The read value.
         """
-        val = super().read(group_name)
+        val = super().read(group_name, func=func, instance=instance, default=default)
         if isinstance(val, str) and val.startswith(H5_CALLABLE_PREFIX):
             return self.deserialize_func_or_class(val)
         return val

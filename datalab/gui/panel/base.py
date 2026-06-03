@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import abc
+import copy
 import glob
 import os
 import os.path as osp
@@ -90,6 +91,7 @@ from datalab.objectmodel import (
     get_number,
     get_short_id,
     get_uuid,
+    patch_title_with_ids,
     set_number,
     set_uuid,
 )
@@ -207,6 +209,13 @@ class ObjectProp(QW.QWidget):
         self.processing_param_editor: gdq.DataSetEditGroupBox | None = None
         self.current_processing_obj: SignalObj | ImageObj | None = None
         self.processing_scroll: QW.QScrollArea | None = None
+        # Auto-recompute toggle (session-only state, not persisted to Conf).
+        self.__auto_recompute_enabled: bool = False
+        self.__auto_recompute_timer = QC.QTimer(self)
+        self.__auto_recompute_timer.setSingleShot(True)
+        self.__auto_recompute_timer.timeout.connect(
+            self.__auto_recompute_trigger
+        )
 
         # Properties tab
         self.properties = gdq.DataSetEditGroupBox("", objclass)
@@ -725,6 +734,23 @@ class ObjectProp(QW.QWidget):
         editor.SIG_APPLY_BUTTON_CLICKED.connect(self.apply_processing_parameters)
         editor.set_apply_button_state(False)
 
+        # Hook into the per-edit change callback to support auto-recompute.
+        # ``DataSetEditLayout.change_callback`` is called whenever any widget
+        # value changes; wrap it so we can also (re)start the debounce timer.
+        try:
+            inner_layout = editor.edit  # DataSetEditLayout instance
+            original_change_cb = inner_layout.change_callback
+
+            def _wrapped_change_cb() -> None:
+                if original_change_cb is not None:
+                    original_change_cb()
+                if self.__auto_recompute_enabled:
+                    self.__auto_recompute_timer.start(300)
+
+            inner_layout.change_callback = _wrapped_change_cb
+        except AttributeError:
+            pass
+
         # Store reference to be able to retrieve it later
         self.processing_param_editor = editor
 
@@ -751,7 +777,21 @@ class ObjectProp(QW.QWidget):
             QW.QSizePolicy.Expanding, QW.QSizePolicy.Preferred
         )
 
-        self.processing_scroll.setWidget(editor)
+        # Build the tab content: editor + "Auto-recompute" checkbox.
+        container = QW.QWidget()
+        vbox = QW.QVBoxLayout(container)
+        vbox.setContentsMargins(0, 0, 0, 0)
+        vbox.addWidget(editor)
+        auto_cb = QW.QCheckBox(_("Auto-recompute on edit"), container)
+        auto_cb.setToolTip(
+            _("Automatically re-run processing when parameters are modified")
+        )
+        auto_cb.setChecked(self.__auto_recompute_enabled)
+        auto_cb.toggled.connect(self.__set_auto_recompute_enabled)
+        vbox.addWidget(auto_cb)
+        vbox.addStretch(1)
+
+        self.processing_scroll.setWidget(container)
         self.tabwidget.insertTab(
             insert_index,
             self.processing_scroll,
@@ -780,6 +820,24 @@ class ObjectProp(QW.QWidget):
         if isinstance(obj, SignalObj):
             return self.panel.mainwindow.signalpanel.processor
         return self.panel.mainwindow.imagepanel.processor
+
+    def __set_auto_recompute_enabled(self, enabled: bool) -> None:
+        """Toggle auto-recompute mode (session-only, not persisted)."""
+        self.__auto_recompute_enabled = bool(enabled)
+        if not self.__auto_recompute_enabled:
+            self.__auto_recompute_timer.stop()
+
+    def __auto_recompute_trigger(self) -> None:
+        """Debounced callback: push widget values then re-run processing."""
+        if not self.__auto_recompute_enabled:
+            return
+        editor = self.processing_param_editor
+        if editor is None:
+            return
+        # ``editor.set()`` synchronises widget values to the dataset and emits
+        # ``SIG_APPLY_BUTTON_CLICKED`` which is already wired to
+        # ``apply_processing_parameters``.
+        editor.set(check=False)
 
     def apply_processing_parameters(
         self, obj: SignalObj | ImageObj | None = None, interactive: bool = True
@@ -864,49 +922,116 @@ class ObjectProp(QW.QWidget):
         else:
             report.success = True
 
-            # Update the current object in-place with data from new object
-            obj.title = new_obj.title
-            if isinstance(obj, SignalObj):
-                obj.xydata = new_obj.xydata
-            else:  # ImageObj
-                obj.data = new_obj.data
-                # Invalidate ROI mask cache when image dimensions may have changed
-                # (the mask is computed based on image shape, so it must be recomputed)
-                obj.invalidate_maskdata_cache()
+            hpanel = getattr(self.panel.mainwindow, "historypanel", None)
+            is_edit_mode = hpanel is not None and hpanel.is_edit_mode()
 
-            # Update metadata with new processing parameters
-            updated_proc_params = ProcessingParameters(
-                func_name=proc_params.func_name,
-                pattern=proc_params.pattern,
-                param=param,
-                source_uuid=proc_params.source_uuid,
-            )
-            insert_processing_parameters(obj, updated_proc_params)
+            if is_edit_mode:
+                # --- Edit mode: mutate obj in-place, cascade downstream ---
 
-            # Auto-recompute analysis if the object had analysis parameters
-            # Since the data has changed, any analysis results are now invalid
-            # Use the processor for the current object's type (not source object's type)
-            obj_processor = self.__get_processor_associated_to(obj)
-            obj_processor.auto_recompute_analysis(obj)
+                # Update the current object in-place with data from new object
+                obj.title = new_obj.title
+                if isinstance(obj, SignalObj):
+                    obj.xydata = new_obj.xydata
+                else:  # ImageObj
+                    obj.data = new_obj.data
+                    # Invalidate ROI mask cache when image dimensions may
+                    # have changed (mask depends on image shape)
+                    obj.invalidate_maskdata_cache()
 
-            # Update the tree view item and refresh plot
-            obj_uuid = get_uuid(obj)
-            self.panel.objview.update_item(obj_uuid)
-            self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+                # Update metadata with new processing parameters
+                updated_proc_params = ProcessingParameters(
+                    func_name=proc_params.func_name,
+                    pattern=proc_params.pattern,
+                    param=param,
+                    source_uuid=proc_params.source_uuid,
+                )
+                insert_processing_parameters(obj, updated_proc_params)
 
-            # Update the Properties tab to reflect the new object properties
-            # (e.g., data type, dimensions, etc.)
-            self.__update_properties_dataset(obj)
+                # Propagate the edited param to the History panel:
+                # Mutate the matching existing action (snapshot originals
+                # first), refresh its tree display, then cascade recompute
+                # to downstream actions so the chain stays consistent with
+                # the new parameters.
+                action = hpanel.find_action_for_output(
+                    get_uuid(obj), proc_params.func_name
+                )
+                if action is not None:
+                    action.snapshot_kwargs()
+                    action.kwargs["param"] = copy.deepcopy(param)
+                    hpanel.refresh_action(action)
+                    hpanel.recompute_cascade(action)
 
-            # Refresh the Processing tab with the new parameters
-            # Don't reset parameters from source object - keep the user's values
-            # Set the Processing tab as current to keep it visible after refresh
-            QC.QTimer.singleShot(
-                0,
-                lambda: self.setup_processing_tab(
-                    obj, reset_params=False, set_current=True
-                ),
-            )
+                # Auto-recompute analysis (data changed, results invalid)
+                obj_processor = self.__get_processor_associated_to(obj)
+                obj_processor.auto_recompute_analysis(obj)
+
+                # Update the tree view item and refresh plot
+                obj_uuid = get_uuid(obj)
+                self.panel.objview.update_item(obj_uuid)
+                self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+
+                # Update the Properties tab to reflect the new object
+                self.__update_properties_dataset(obj)
+                # Refresh the displayed processing history (Properties tab
+                # description) so the parameter change is visible immediately
+                self.display_processing_history(obj)
+
+                # Refresh the Processing tab with the new parameters
+                QC.QTimer.singleShot(
+                    0,
+                    lambda: self.setup_processing_tab(
+                        obj, reset_params=False, set_current=True
+                    ),
+                )
+            else:
+                # --- Non-edit mode: create a new independent object ---
+
+                # Patch title with source object IDs (like menu-driven compute)
+                patch_title_with_ids(new_obj, [obj], get_short_id)
+
+                # Store processing metadata on the new object
+                # pylint: disable=import-outside-toplevel
+                from datalab.gui.processor.base import (
+                    build_processing_parameters,
+                )
+
+                new_pp = build_processing_parameters(
+                    proc_params.func_name,
+                    proc_params.pattern,
+                    param=copy.deepcopy(param),
+                    source_uuid=proc_params.source_uuid,
+                )
+                insert_processing_parameters(new_obj, new_pp)
+
+                # Mark as freshly processed so the Processing tab is shown
+                self.mark_as_freshly_processed(new_obj)
+
+                # Add the new object to the same group as the source object
+                group_id = self.panel.objmodel.get_object_group_id(obj)
+                self.panel.add_object(new_obj, group_id=group_id, set_current=True)
+
+                # Record a brand-new history entry with the new object UUID
+                if hpanel is not None:
+                    # Retrieve plugin_origin so replay without the plugin
+                    # produces a rich error message (C3) instead of generic.
+                    plugin_origin = None
+                    try:
+                        processor = self.__get_processor_associated_to(new_obj)
+                        feature = processor.get_feature(proc_params.func_name)
+                        plugin_origin = feature.plugin_origin
+                    except (ValueError, AttributeError):
+                        pass
+                    hpanel.add_compute_entry_from_pp(
+                        new_obj.title,
+                        new_pp,
+                        panel_str=self.panel.PANEL_STR_ID,
+                        output_uuids=[get_uuid(new_obj)],
+                        plugin_origin=plugin_origin,
+                    )
+
+                # Auto-recompute analysis on the new object
+                obj_processor = self.__get_processor_associated_to(new_obj)
+                obj_processor.auto_recompute_analysis(new_obj)
 
             if isinstance(obj, SignalObj):
                 report.message = _("Signal was reprocessed.")
@@ -932,6 +1057,7 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     H5_PREFIX = ""
     SIG_OBJECT_ADDED = QC.Signal()
     SIG_OBJECT_REMOVED = QC.Signal()
+    SIG_OBJECT_MODIFIED = QC.Signal()
 
     @abc.abstractmethod
     def __init__(self, parent):
@@ -1117,7 +1243,7 @@ class SaveToDirectoryGUIParam(gds.DataSet, title=_("Save to directory")):
             """,
             ]
         )
-        NonModalInfoDialog(parent, "Pattern help", text).show()
+        NonModalInfoDialog(parent, _("Pattern help"), text).show()
 
     def get_extension_choices(self, _item=None, _value=None):
         """Return list of available extensions for choice item."""
@@ -1258,7 +1384,7 @@ class AddMetadataParam(
             """,
             ]
         )
-        NonModalInfoDialog(parent, "Pattern help", text).show()
+        NonModalInfoDialog(parent, _("Pattern help"), text).show()
 
     def get_conversion_choices(self, _item=None, _value=None):
         """Return list of available conversion choices."""
@@ -1592,6 +1718,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # immediately if the modified object is currently selected.
         self.objview.item_selection_changed()
         self.refresh_plot("selected", update_items=True, force=True)
+        self.SIG_OBJECT_MODIFIED.emit()
 
     def remove_all_objects(self) -> None:
         """Remove all objects"""
@@ -1859,6 +1986,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Save settings to config
         Conf.io.add_metadata_settings.set(param)
 
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Add metadata"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="add_metadata",
+            save_state=True,
+            param=param,
+        )
+
         # Build values for all selected objects
         values = param.build_values(sel_objects)
 
@@ -1871,19 +2006,49 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             "selected", update_items=True, only_visible=False, only_existing=True
         )
 
-    def copy_roi(self) -> None:
-        """Copy regions of interest"""
-        obj = self.objview.get_sel_objects()[0]
-        self.__roi_clipboard = obj.roi.copy()
+    def copy_roi(self, roi_data=None) -> None:
+        """Copy regions of interest
 
-    def paste_roi(self) -> None:
-        """Paste regions of interest"""
+        Args:
+            roi_data: ROI snapshot for replay. When ``None`` (interactive use),
+                the ROI is read from the currently selected object.
+        """
+        if roi_data is None:
+            obj = self.objview.get_sel_objects()[0]
+            roi_data = obj.roi.copy()
+        self.__roi_clipboard = roi_data.copy()
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Copy regions of interest from selected %s")
+            % (_("signal") if self.PANEL_STR_ID == "signal" else _("image")),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="copy_roi",
+            save_state=True,
+            roi_data=roi_data,
+        )
+
+    def paste_roi(self, roi_data=None) -> None:
+        """Paste regions of interest
+
+        Args:
+            roi_data: ROI snapshot for replay. When ``None`` (interactive use),
+                the clipboard populated by :meth:`copy_roi` is used.
+        """
+        if roi_data is None:
+            roi_data = self.__roi_clipboard
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Paste regions of interest into selected %s")
+            % (_("signal") if self.PANEL_STR_ID == "signal" else _("image")),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="paste_roi",
+            save_state=True,
+            roi_data=roi_data,
+        )
         sel_objects = self.objview.get_sel_objects(include_groups=True)
         for obj in sel_objects:
             if obj.roi is None:
-                obj.roi = self.__roi_clipboard.copy()
+                obj.roi = roi_data.copy()
             else:
-                obj.roi = obj.roi.combine_with(self.__roi_clipboard)
+                obj.roi = obj.roi.combine_with(roi_data)
         self.selection_changed(update_items=True)
         self.refresh_plot(
             "selected", update_items=True, only_visible=False, only_existing=True
@@ -1905,11 +2070,15 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             )
             if answer == QW.QMessageBox.No:
                 return
+        # IMPORTANT: save_state=True is required so that the selection of objects
+        # being deleted is captured. On replay, the captured selection (translated
+        # through uuid_remap) is restored before remove_object runs, ensuring that
+        # the correct object is removed instead of whatever is currently selected.
         self.mainwindow.historypanel.add_ui_entry(
             _("Remove selected objects"),
             target=self.PANEL_STR_ID + "panel",
             method_name="remove_object",
-            save_state=False,
+            save_state=True,
             force=force,
         )
         sel_objects = self.objview.get_sel_objects(include_groups=True)
@@ -2382,6 +2551,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         Conf.main.base_dir.set(param.directory)
 
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Save to directory"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="save_to_directory",
+            save_state=True,
+            param=param,
+        )
+
         with create_progress_bar(self, _("Saving..."), max_=len(objs)) as progress:
             for i, (path, obj) in enumerate(param.generate_filepath_obj_pairs(objs)):
                 progress.setValue(i + 1)
@@ -2639,6 +2816,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Update the stored original values to reflect the new state
         # This ensures subsequent changes are compared against the current values
         self.objprop.update_original_values()
+        self.SIG_OBJECT_MODIFIED.emit()
 
     def recompute_processing(self) -> None:
         """Recompute/rerun selected objects or group with stored processing parameters.
