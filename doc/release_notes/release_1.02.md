@@ -45,7 +45,7 @@
 
 **Compatibility:**
 
-* Updated minimum guidata requirement from 3.14.3 to 3.14.4 (high DPI and screen scaling issue, dataset input field fix, add secure build cli cmd)
+* Updated minimum guidata requirement from 3.14.3 to 3.14.4 (high DPI and screen scaling issue, dataset input field fix, add secure build CLI cmd)
 * Updated minimum PlotPy requirement from 2.8.2 to 2.10.0 (Z-axis log scale fix, toolbar overflow button visibility in dark theme, PythonQwt 0.16.0 optimization)
 * Updated minimum Sigima requirement from 1.1.2 to 1.1.3 (ellipse/circle contour detection fix)
 
