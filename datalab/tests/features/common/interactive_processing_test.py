@@ -164,6 +164,10 @@ def test_recompute():
             filtered_sig = panel.objview.get_current_object()
             original_data = filtered_sig.y.copy()
 
+            # In-place recompute requires History panel edit mode (otherwise a
+            # new object is created instead of mutating the existing one).
+            win.historypanel.toggle_edit_mode(True)
+
             # Recompute with different input signal data
             constant = 1.23098765
             signal.y += constant
@@ -402,6 +406,10 @@ def test_apply_processing_parameters_signal():
             # Change constant from 5.0 to 15.0
             editor.dataset.value = v1 = 15.0
 
+            # In-place update requires History panel edit mode (otherwise a new
+            # object is created instead of mutating the existing one).
+            win.historypanel.toggle_edit_mode(True)
+
             # Apply the new processing parameters
             report = objprop.apply_processing_parameters()
 
@@ -462,6 +470,10 @@ def test_apply_processing_parameters_image():
             editor = objprop.processing_param_editor
             # Change constant from 7.0 to 20.0
             editor.dataset.value = v1 = 20.0
+
+            # In-place update requires History panel edit mode (otherwise a new
+            # object is created instead of mutating the existing one).
+            win.historypanel.toggle_edit_mode(True)
 
             # Apply the new processing parameters
             report = objprop.apply_processing_parameters()
@@ -657,6 +669,10 @@ def test_cross_panel_image_to_signal():
             # Change the center position
             editor.dataset.x0 = 40
             editor.dataset.y0 = 40
+
+            # In-place update + in-place recompute require History panel edit
+            # mode (otherwise new objects are created instead of mutating).
+            win.historypanel.toggle_edit_mode(True)
 
             # Apply the new processing parameters
             report = signal_panel.objprop.apply_processing_parameters()
@@ -1064,6 +1080,10 @@ def test_roi_mask_invalidation_on_processing_change():
             # Change binning factor from 2x2 to 4x4 (50x50 -> 25x25)
             editor.dataset.sx = 4
             editor.dataset.sy = 4
+
+            # In-place update requires History panel edit mode (otherwise a new
+            # object is created instead of mutating the existing one).
+            win.historypanel.toggle_edit_mode(True)
 
             # Apply the new processing parameters
             report = objprop.apply_processing_parameters(binned)

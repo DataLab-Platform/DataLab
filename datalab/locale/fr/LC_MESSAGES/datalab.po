@@ -1,6 +1,6 @@
-# French translations for datalab.
+# French translations for DataLab.
 # Copyright (C) 2026 DataLab Platform Developers
-# This file is distributed under the same license as the datalab project.
+# This file is distributed under the same license as the DataLab project.
 #
 msgid ""
 msgstr ""
@@ -949,6 +949,38 @@ msgstr "Troncature de données uint32 en int32."
 msgid "No supported data available in HDF5 file(s)."
 msgstr "Aucune donnée prise en charge dans le(s) fichier(s) HDF5."
 
+msgid "Generate macro"
+msgstr "Générer une macro"
+
+msgid "No compute actions to export."
+msgstr "Aucune action de calcul à exporter."
+
+#, python-format
+msgid "Macro script copied to clipboard (%d actions)."
+msgstr "Script macro copié dans le presse-papiers (%d actions)."
+
+msgid ""
+"Do you really want to delete the selected items?\n"
+"\n"
+"Note: deleting an action also removes all subsequent actions in the same session."
+msgstr ""
+"Voulez-vous vraiment supprimer les éléments sélectionnés ?\n"
+"\n"
+"Note : la suppression d'une action supprime également toutes les actions suivantes de la même session."
+
+msgid "Do you really want to delete the selected items?"
+msgstr "Voulez-vous vraiment supprimer les éléments sélectionnés ?"
+
+msgid "Remove incompatible"
+msgstr "Supprimer les incompatibles"
+
+msgid "All actions are compatible with the current workspace."
+msgstr "Toutes les actions sont compatibles avec l'espace de travail courant."
+
+#, python-format
+msgid "%d incompatible action(s) will be removed. Continue?"
+msgstr "%d action(s) incompatible(s) vont être supprimée(s). Continuer ?"
+
 msgid "Macro simple example"
 msgstr "Exemple simple de macro"
 
@@ -1656,54 +1688,17 @@ msgid "The label has been added as an annotation. You can edit or remove it usin
 msgstr "L'étiquette a été ajoutée comme annotation. Vous pouvez la modifier ou la supprimer en utilisant la fenêtre d'édition des annotations.<br><br>Ignorer ce message empêchera son affichage ultérieur."
 
 #, python-format
-msgid "Failed to deserialize history DataSet kwarg %r."
-msgstr "Échec de la désérialisation de l'argument DataSet de l'historique %r."
+msgid "“%s” has dependent operations but no valid source to reconnect to — downstream results are left unchanged."
+msgstr "« %s » possède des opérations dépendantes mais aucune source valide à laquelle se reconnecter — les résultats en aval restent inchangés."
 
-#, python-format
-msgid "Failed to deserialize history DataSet-list kwarg %r."
-msgstr "Échec de la désérialisation de l'argument DataSet-list de l'historique %r."
+msgid "Some operations could not be reconnected after deletion:"
+msgstr "Certaines opérations n'ont pas pu être reconnectées après la suppression :"
 
-msgid "Replaying compound 'multiple_1_to_1' actions is not supported yet."
-msgstr "La relecture des actions composées 'multiple_1_to_1' n'est pas encore prise en charge."
+msgid "The current workspace state is not compatible with the action."
+msgstr "L'état actuel de l'espace de travail n'est pas compatible avec l'action."
 
-msgid "Cannot replay 2-to-1 action: source object(s) missing."
-msgstr "Impossible de rejouer une action 2-à-1 : objet(s) source manquant(s)."
-
-msgid "Session"
-msgstr "Session"
-
-msgid "Show details"
-msgstr "Afficher les détails"
-
-msgid "Hide details"
-msgstr "Masquer les détails"
-
-msgid "Date and time"
-msgstr "Date et heure"
-
-msgid "Description"
-msgstr "Description"
-
-msgid "Title"
-msgstr "Titre"
-
-msgid "Action is compatible with the current workspace state."
-msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
-
-msgid "Action is not compatible with the current workspace state."
-msgstr "L'action n'est pas compatible avec l'état actuel de l'espace de travail."
-
-msgid "Signal"
-msgstr "Signal"
-
-msgid "Shape"
-msgstr "Forme"
-
-msgid "Image"
-msgstr "Image"
-
-msgid "Dimensions"
-msgstr "Dimensions"
+msgid "Parameters"
+msgstr "Paramètres"
 
 msgid "History panel"
 msgstr "Panneau d'historique"
@@ -1750,14 +1745,8 @@ msgstr "Étape suivante"
 msgid "Select the next action in the current session"
 msgstr "Sélectionner l'action suivante dans la session courante"
 
-msgid "Generate macro"
-msgstr "Générer une macro"
-
 msgid "Generate a Python macro script from history"
 msgstr "Générer un script macro Python à partir de l'historique"
-
-msgid "Remove incompatible"
-msgstr "Supprimer les incompatibles"
 
 msgid "Remove actions incompatible with the current workspace"
 msgstr "Supprimer les actions incompatibles avec l'espace de travail courant"
@@ -1788,12 +1777,6 @@ msgstr ""
 "Cette action est irréversible — la fonction Restaurer ne sera plus disponible.\n"
 "\n"
 "Souhaitez-vous continuer ?"
-
-msgid "The current workspace state is not compatible with the action."
-msgstr "L'état actuel de l'espace de travail n'est pas compatible avec l'action."
-
-msgid "Parameters"
-msgstr "Paramètres"
 
 #, python-format
 msgid "Action %s has been edited but its target output object(s) no longer exist — skipping."
@@ -1842,48 +1825,6 @@ msgstr "Recalcul en cascade"
 
 msgid "Some downstream actions could not be recomputed:"
 msgstr "Certaines actions en aval n'ont pas pu être recalculées :"
-
-msgid "No compute actions to export."
-msgstr "Aucune action de calcul à exporter."
-
-#, python-format
-msgid "Macro script copied to clipboard (%d actions)."
-msgstr "Script macro copié dans le presse-papiers (%d actions)."
-
-msgid ""
-"Do you really want to delete the selected items?\n"
-"\n"
-"Note: deleting an action also removes all subsequent actions in the same session."
-msgstr ""
-"Voulez-vous vraiment supprimer les éléments sélectionnés ?\n"
-"\n"
-"Note : la suppression d'une action supprime également toutes les actions suivantes de la même session."
-
-msgid "Do you really want to delete the selected items?"
-msgstr "Voulez-vous vraiment supprimer les éléments sélectionnés ?"
-
-msgid "All actions are compatible with the current workspace."
-msgstr "Toutes les actions sont compatibles avec l'espace de travail courant."
-
-#, python-format
-msgid "%d incompatible action(s) will be removed. Continue?"
-msgstr "%d action(s) incompatible(s) vont être supprimée(s). Continuer ?"
-
-msgid "Save history file"
-msgstr "Enregistrer un fichier d'historique"
-
-msgid "Open history file"
-msgstr "Ouvrir un fichier d'historique"
-
-msgid "Imported"
-msgstr "Importé"
-
-msgid "Some operations could not be reconnected after deletion:"
-msgstr "Certaines opérations n'ont pas pu être reconnectées après la suppression :"
-
-#, python-format
-msgid "“%s” has dependent operations but no valid source to reconnect to — downstream results are left unchanged."
-msgstr "« %s » possède des opérations dépendantes mais aucune source valide à laquelle se reconnecter — les résultats en aval restent inchangés."
 
 msgid "New image"
 msgstr "Nouvelle image"
@@ -3377,6 +3318,32 @@ msgstr "C'est la fin de la visite guidée !"
 msgid "You can show the tour again, or close this dialog box."
 msgstr "Vous pouvez afficher la visite guidée à nouveau, ou fermer cette boîte de dialogue."
 
+msgid "Save history file"
+msgstr "Enregistrer un fichier d'historique"
+
+msgid "Open history file"
+msgstr "Ouvrir un fichier d'historique"
+
+msgid "Imported"
+msgstr "Importé"
+
+msgid "Replaying compound 'multiple_1_to_1' actions is not supported yet."
+msgstr "La relecture des actions composées 'multiple_1_to_1' n'est pas encore prise en charge."
+
+msgid "Cannot replay 2-to-1 action: source object(s) missing."
+msgstr "Impossible de rejouer une action 2-à-1 : objet(s) source manquant(s)."
+
+#, python-format
+msgid "Failed to deserialize history DataSet kwarg %r."
+msgstr "Échec de la désérialisation de l'argument DataSet de l'historique %r."
+
+#, python-format
+msgid "Failed to deserialize history DataSet-list kwarg %r."
+msgstr "Échec de la désérialisation de l'argument DataSet-list de l'historique %r."
+
+msgid "Session"
+msgstr "Session"
+
 msgid "Registered plugins:"
 msgstr "Plugins enregistrés :"
 
@@ -3767,6 +3734,9 @@ msgstr "Afficher le tableau"
 msgid "Path"
 msgstr "Chemin"
 
+msgid "Description"
+msgstr "Description"
+
 msgid "Textual preview"
 msgstr "Aperçu textuel"
 
@@ -3784,6 +3754,24 @@ msgstr "Afficher uniquement les données prises en charge"
 
 msgid "Show values"
 msgstr "Afficher les valeurs"
+
+msgid "Show details"
+msgstr "Afficher les détails"
+
+msgid "Hide details"
+msgstr "Masquer les détails"
+
+msgid "Date and time"
+msgstr "Date et heure"
+
+msgid "Title"
+msgstr "Titre"
+
+msgid "Action is compatible with the current workspace state."
+msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
+
+msgid "Action is not compatible with the current workspace state."
+msgstr "L'action n'est pas compatible avec l'état actuel de l'espace de travail."
 
 msgid "Image background selection"
 msgstr "Sélection de l'arrière-plan de l'image"
@@ -4140,6 +4128,18 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+
+msgid "Signal"
+msgstr "Signal"
+
+msgid "Shape"
+msgstr "Forme"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "Dimensions"
+msgstr "Dimensions"
 
 msgid "Minimum value"
 msgstr "Valeur minimum"

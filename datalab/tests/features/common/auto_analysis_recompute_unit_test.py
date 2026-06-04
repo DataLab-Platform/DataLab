@@ -199,6 +199,10 @@ def test_analysis_recompute_after_recompute_1_to_1():
         editor = panel.objprop.processing_param_editor
         editor.dataset.angle = 90.0  # Change from 45° to 90°
 
+        # In-place recompute + automatic analysis recompute only happens when
+        # the History panel is in edit mode (otherwise a new object is created).
+        win.historypanel.toggle_edit_mode(True)
+
         # Apply the modified parameters (this triggers recompute_1_to_1)
         report = panel.objprop.apply_processing_parameters(interactive=False)
 
