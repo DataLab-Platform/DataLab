@@ -156,6 +156,10 @@ jobs:
           publish_branch: main
           publish_dir: ./site
           keep_files: false
+          # Re-write the apex CNAME on every deploy: peaceiris wipes the target
+          # with keep_files=false, and the built site has no root CNAME, so
+          # without this the custom domain binding is lost (site 404s).
+          cname: datalab-platform.com
           commit_message: "Update documentation from ${{ github.repository }}@${{ github.sha }}"
 
       - name: Deploy to DataLab-Platform.github.io (via SSH deploy key)
@@ -167,4 +171,8 @@ jobs:
           publish_branch: main
           publish_dir: ./site
           keep_files: false
+          # Re-write the apex CNAME on every deploy: peaceiris wipes the target
+          # with keep_files=false, and the built site has no root CNAME, so
+          # without this the custom domain binding is lost (site 404s).
+          cname: datalab-platform.com
           commit_message: "Update documentation from ${{ github.repository }}@${{ github.sha }}"
