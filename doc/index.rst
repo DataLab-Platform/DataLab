@@ -74,10 +74,9 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
 DataLab has been funded, chronologically, by the following stakeholders:
 
-.. tabularcolumns:: |>{\centering\arraybackslash}m{2cm}|m{\dimexpr\linewidth-2cm-4\tabcolsep\relax}|
+.. tabularcolumns:: |>{\centering\arraybackslash}m{1.2cm}|m{\dimexpr\linewidth-1.2cm-4\tabcolsep\relax}|
 .. list-table::
     :header-rows: 0
-    :widths: 8 92
 
     * - |cea_logo|
       - `CEA <https://www.cea.fr>`_, the French Alternative Energies and Atomic Energy Commission, is the major investor in DataLab, and is the main contributor to the project.
@@ -88,23 +87,40 @@ DataLab has been funded, chronologically, by the following stakeholders:
     * - |nlnet_logo|
       - `NLnet Foundation <https://nlnet.nl>`_, as part of the NGI0 Commons Fund, backed by the European Commission, has funded the `redesign of DataLab's core architecture <https://nlnet.nl/project/DataLab/>`_.
 
-.. |cea_logo| image:: images/logos/cea.svg
-    :width: 64px
-    :height: 64px
-    :target: https://www.cea.fr
-    :class: dark-light no-scaled-link
+.. Sphinx converts ``px`` to ``bp`` at 72 dpi for LaTeX, which makes ``64px``
+   render at ~22mm in the PDF -- way larger than in HTML. Define separate
+   substitutions per output: pixels for HTML, centimetres for LaTeX.
 
-.. |codra_logo| image:: images/logos/codra.svg
-    :width: 64px
-    :height: 64px
-    :target: https://codra.net
-    :class: dark-light no-scaled-link
+.. only:: html
 
-.. |nlnet_logo| image:: images/logos/nlnet.svg
-    :width: 64px
-    :height: 64px
-    :target: https://nlnet.nl
-    :class: dark-light no-scaled-link
+    .. |cea_logo| image:: images/logos/cea.svg
+        :width: 64px
+        :height: 64px
+        :target: https://www.cea.fr
+        :class: dark-light no-scaled-link
+
+    .. |codra_logo| image:: images/logos/codra.svg
+        :width: 64px
+        :height: 64px
+        :target: https://codra.net
+        :class: dark-light no-scaled-link
+
+    .. |nlnet_logo| image:: images/logos/nlnet.svg
+        :width: 64px
+        :height: 64px
+        :target: https://nlnet.nl
+        :class: dark-light no-scaled-link
+
+.. only:: latex
+
+    .. |cea_logo| image:: images/logos/cea.svg
+        :width: 1cm
+
+    .. |codra_logo| image:: images/logos/codra.svg
+        :width: 1cm
+
+    .. |nlnet_logo| image:: images/logos/nlnet.svg
+        :width: 1cm
 
 .. figure:: _static/plotpy-stack-powered.png
     :align: center

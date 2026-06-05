@@ -373,29 +373,6 @@
             ],
         },
         {
-            "label": "🛠️ Generate doc assets",
-            "command": "${command:python.interpreterPath} scripts/run_with_env.py ${command:python.interpreterPath} -m guidata.utils.genreqs all; if ($?) { ${command:python.interpreterPath} scripts/run_with_env.py ${command:python.interpreterPath} doc/update_validation_status.py }",
-            "options": {
-                "cwd": "${workspaceFolder}",
-                "statusbar": {
-                    "hide": true,
-                },
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": false,
-            },
-            "presentation": {
-                "clear": true,
-                "echo": true,
-                "focus": false,
-                "panel": "dedicated",
-                "reveal": "always",
-                "showReuseMessage": true,
-            },
-            "type": "shell",
-        },
-        {
             "label": "🧪 Coverage tests",
             "type": "shell",
             "command": "${command:python.interpreterPath}",
@@ -572,6 +549,30 @@
             },
         },
         {
+            "label": "📋 Refresh doc metadata",
+            "detail": "Regenerate requirements.txt + doc/requirements.rst (via guidata.utils.genreqs) and update Sigima validation status in the docs.",
+            "command": "${command:python.interpreterPath} scripts/run_with_env.py ${command:python.interpreterPath} -m guidata.utils.genreqs all; if ($?) { ${command:python.interpreterPath} scripts/run_with_env.py ${command:python.interpreterPath} doc/update_validation_status.py }",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": true,
+                },
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false,
+            },
+            "presentation": {
+                "clear": true,
+                "echo": true,
+                "focus": false,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": true,
+            },
+            "type": "shell",
+        },
+        {
             "label": "🖼️ Refresh doc screenshots",
             "detail": "Maintainer task: regenerate PNG screenshots under doc/images/ by launching DataLab for each language (fr + en). Commit the resulting diff in a dedicated 'docs: refresh screenshots' commit.",
             "type": "shell",
@@ -601,7 +602,7 @@
             },
         },
         {
-            "label": "Create executable",
+            "label": "🏗️ Create executable",
             "type": "shell",
             "command": "${command:python.interpreterPath}",
             "args": [
@@ -636,7 +637,7 @@
             },
         },
         {
-            "label": "Create installer",
+            "label": "📦 Create installer",
             "type": "shell",
             "command": "${command:python.interpreterPath}",
             "args": [
@@ -670,7 +671,7 @@
             },
         },
         {
-            "label": "Build PDF doc",
+            "label": "📘 Build PDF doc",
             "type": "shell",
             "command": "${command:python.interpreterPath}",
             "options": {
@@ -706,7 +707,7 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "🛠️ Generate doc assets",
+                "📋 Refresh doc metadata",
             ],
         },
         {
@@ -803,7 +804,7 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "🛠️ Generate doc assets",
+                "📋 Refresh doc metadata",
             ],
         },
         {
@@ -919,8 +920,7 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "🛠️ Generate doc assets",
-                "Build PDF doc",
+                "📘 Build PDF doc",
             ],
         },
         {
@@ -958,8 +958,8 @@
                 "Upgrade Sigima/PlotPyStack",
                 "📚 Compile translations",
                 "Build Python packages",
-                "Create executable",
-                "Create installer",
+                "🏗️ Create executable",
+                "📦 Create installer",
             ],
         },
         {

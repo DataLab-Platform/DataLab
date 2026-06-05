@@ -15,6 +15,84 @@ msgstr ""
 msgid "Version 1.2"
 msgstr "Version 1.2"
 
+msgid "DataLab Version 1.2.1"
+msgstr "DataLab Version 1.2.1"
+
+msgid "🛠️ Bug Fixes"
+msgstr "🛠️ Corrections de bugs"
+
+msgid "**Signal panel menus:**"
+msgstr "**Menus du panneau Signal :**"
+
+msgid "Restored the \"Linear calibration\" entry in the \"Processing > Axis transformation\" menu of the Signal panel — it had been inadvertently dropped during a menu reorganization and was no longer reachable from the menu bar, even though the underlying computation was still available (fixes [Issue #312](https://github.com/DataLab-Platform/DataLab/issues/312))"
+msgstr "Restauration de l'entrée « Étalonnage linéaire » dans le menu « Traitement > Transformation des axes » du panneau Signal — elle avait été supprimée par inadvertance lors d'une réorganisation des menus et n'était plus accessible depuis la barre de menus, alors même que le calcul sous-jacent restait disponible (corrige [Issue #312](https://github.com/DataLab-Platform/DataLab/issues/312))"
+
+msgid "**Signal panel — Y range cursor:**"
+msgstr "**Panneau Signal — curseur de plage Y :**"
+
+msgid "Fixed the Y range cursor annotation displaying an incorrect inequality (e.g. `5 < y < 2`) and a negative ∆y when the top cursor was dragged below the bottom cursor — the annotation now always shows values in sorted order with a positive range width (fixes [Issue #306](https://github.com/DataLab-Platform/DataLab/issues/306))"
+msgstr "Correction de l'annotation du curseur de plage Y affichant une inégalité incorrecte (par ex. `5 < y < 2`) et un ∆y négatif lorsque le curseur supérieur était glissé en dessous du curseur inférieur — l'annotation affiche désormais toujours les valeurs dans l'ordre croissant avec une largeur de plage positive (corrige [Issue #306](https://github.com/DataLab-Platform/DataLab/issues/306))"
+
+msgid "**Image panel — Z-axis logarithmic scale:**"
+msgstr "**Panneau Image — échelle logarithmique de l'axe Z :**"
+
+msgid "Fixed the \"Base-10 logarithmic Z axis\" toolbar action being permanently greyed out in the image panel — the tool now works correctly for all image types (fixes [Issue #313](https://github.com/DataLab-Platform/DataLab/issues/313), fixed upstream in PlotPy ≥ 2.10.0)"
+msgstr "Correction de l'action « Axe Z logarithmique base 10 » de la barre d'outils restant systématiquement grisée dans le panneau Image — l'outil fonctionne désormais correctement pour tous les types d'images (corrige [Issue #313](https://github.com/DataLab-Platform/DataLab/issues/313), corrigé en amont dans PlotPy ≥ 2.10.0)"
+
+msgid "**Image panel — contour detection:**"
+msgstr "**Panneau Image — détection de contours :**"
+
+msgid "Fixed ellipse and circle contour detection producing incorrect results (wrong positions and sizes) due to swapped X/Y coordinates and missing unit conversions in the scikit-image model fitting code (fixes [Issue #326](https://github.com/DataLab-Platform/DataLab/issues/326), fixed upstream in Sigima ≥ 1.1.3)"
+msgstr "Correction de la détection de contours ellipse et cercle produisant des résultats incorrects (positions et tailles erronées) en raison de coordonnées X/Y inversées et de conversions d'unités manquantes dans le code d'ajustement de modèle scikit-image (corrige [Issue #326](https://github.com/DataLab-Platform/DataLab/issues/326), corrigé en amont dans Sigima ≥ 1.1.3)"
+
+msgid "**ROI editor:**"
+msgstr "**Éditeur de ROI :**"
+
+msgid "Fixed the ROI editor dialog ignoring non-linear axis scales (e.g. logarithmic) of the source plot — the dialog now preserves the same axis scale configuration as the main panel (fixes [Issue #315](https://github.com/DataLab-Platform/DataLab/issues/315))"
+msgstr "Correction de la boîte de dialogue de l'éditeur de ROI ignorant les échelles d'axes non linéaires (par ex. logarithmique) du graphique source — la boîte de dialogue préserve désormais la même configuration d'échelle d'axes que le panneau principal (corrige [Issue #315](https://github.com/DataLab-Platform/DataLab/issues/315))"
+
+msgid "**Theme and display:**"
+msgstr "**Thème et affichage :**"
+
+msgid "Fixed plot marker and shape colors being reverted to PlotPy defaults (yellow) instead of DataLab's configured colors (red) when the color mode was explicitly set to \"light\" or \"dark\" in settings — the custom color overrides are now re-applied after each theme switch (fixes [Issue #297](https://github.com/DataLab-Platform/DataLab/issues/297))"
+msgstr "Correction des couleurs des marqueurs et formes des graphiques revenant aux valeurs par défaut de PlotPy (jaune) au lieu des couleurs configurées de DataLab (rouge) lorsque le mode de couleur était explicitement défini sur « clair » ou « sombre » dans les paramètres — les surcharges de couleurs personnalisées sont désormais réappliquées après chaque changement de thème (corrige [Issue #297](https://github.com/DataLab-Platform/DataLab/issues/297))"
+
+msgid "Fixed UI elements (text, icons, dialog layouts) not scaling properly with high-DPI display settings — DataSet HTML rendering, icon sizes, and viewport dimensions now adapt to the system scale factor (fixes [Issue #317](https://github.com/DataLab-Platform/DataLab/issues/317), fixed upstream in guidata ≥ 3.14.4)"
+msgstr "Correction des éléments d'interface (texte, icônes, dispositions des boîtes de dialogue) ne s'adaptant pas correctement aux paramètres d'affichage haute résolution (High-DPI) — le rendu HTML des DataSet, les tailles d'icônes et les dimensions de la zone d'affichage s'adaptent désormais au facteur d'échelle du système (corrige [Issue #317](https://github.com/DataLab-Platform/DataLab/issues/317), corrigé en amont dans guidata ≥ 3.14.4)"
+
+msgid "**Image properties editor:**"
+msgstr "**Éditeur de propriétés d'image :**"
+
+msgid "Fixed pixel size (`Δx` / `Δy`) input field corrupting typed values — most digits typed after the first were misinterpreted as decimal places due to a reactive update loop in the parameter editing widget (fixes [Issue #320](https://github.com/DataLab-Platform/DataLab/issues/320), fixed upstream in guidata ≥ 3.14.4)"
+msgstr "Correction du champ de saisie de la taille de pixel (`Δx` / `Δy`) corrompant les valeurs saisies — la plupart des chiffres tapés après le premier étaient interprétés comme des décimales en raison d'une boucle de mise à jour réactive dans le widget d'édition de paramètres (corrige [Issue #320](https://github.com/DataLab-Platform/DataLab/issues/320), corrigé en amont dans guidata ≥ 3.14.4)"
+
+msgid "**Debug environment variable renamed:**"
+msgstr "**Renommage de la variable d'environnement de débogage :**"
+
+msgid "Renamed the debug environment variable from `DEBUG` to `DATALAB_DEBUG` — the generic `DEBUG` name collided with widely-used third-party conventions (Django, Flask, Node.js tooling, CI systems) and could silently reset the user configuration file at startup when set for unrelated reasons. Setting `DATALAB_DEBUG=1` now activates debug mode; the bare `DEBUG` variable is ignored (fixes [Issue #319](https://github.com/DataLab-Platform/DataLab/issues/319))"
+msgstr "Renommage de la variable d'environnement de débogage de `DEBUG` à `DATALAB_DEBUG` — le nom générique `DEBUG` entrait en conflit avec des conventions largement utilisées par des tiers (Django, Flask, outils Node.js, systèmes CI) et pouvait réinitialiser silencieusement le fichier de configuration utilisateur au démarrage lorsqu'il était défini pour des raisons non liées. Définir `DATALAB_DEBUG=1` active désormais le mode débogage ; la variable `DEBUG` seule est ignorée (corrige [Issue #319](https://github.com/DataLab-Platform/DataLab/issues/319))"
+
+msgid "**Remote control API:**"
+msgstr "**API de contrôle à distance :**"
+
+msgid "Exposed `get_current_object_uuid()` on the proxy API, making it available through XML-RPC and Web API"
+msgstr "Exposition de `get_current_object_uuid()` sur l'API proxy, la rendant disponible via XML-RPC et l'API Web"
+
+msgid "🔧 Improvements"
+msgstr "🔧 Améliorations"
+
+msgid "**Compatibility:**"
+msgstr "**Compatibilité :**"
+
+msgid "Updated minimum guidata requirement from 3.14.3 to 3.14.4 (high DPI and screen scaling issue, dataset input field fix, add secure build CLI cmd)"
+msgstr "Mise à jour de la version minimale requise de guidata de 3.14.3 à 3.14.4 (problème de haute résolution et de mise à l'échelle de l'écran, correction du champ de saisie DataSet, ajout de la commande CLI de compilation sécurisée)"
+
+msgid "Updated minimum PlotPy requirement from 2.8.2 to 2.10.0 (Z-axis log scale fix, toolbar overflow button visibility in dark theme, PythonQwt 0.16.0 optimization)"
+msgstr "Mise à jour de la version minimale requise de PlotPy de 2.8.2 à 2.10.0 (correction de l'échelle logarithmique de l'axe Z, visibilité du bouton de débordement de la barre d'outils en thème sombre, optimisation PythonQwt 0.16.0)"
+
+msgid "Updated minimum Sigima requirement from 1.1.2 to 1.1.3 (ellipse/circle contour detection fix)"
+msgstr "Mise à jour de la version minimale requise de Sigima de 1.1.2 à 1.1.3 (correction de la détection de contours ellipse/cercle)"
+
 msgid "DataLab Version 1.2.0 (2026-04-20)"
 msgstr "DataLab Version 1.2.0 (20/04/2026)"
 
@@ -114,17 +192,12 @@ msgstr "Mise à jour de la documentation des plugins pour décrire la nouvelle b
 msgid "Updated third-party plugin development guide with new template references and test coverage information"
 msgstr "Mise à jour du guide de développement des plugins tiers avec de nouvelles références de modèles et des informations sur la couverture des tests"
 
+#, python-brace-format
 msgid "Expanded Web API reference: documented the binary data transfer options (`?compress=false` for faster uncompressed NPZ downloads, `?overwrite=true` for atomic replacement of existing objects), the in-place `PUT /objects/{name}` endpoint that updates an object while preserving its identity, group membership and position, and the new \"Computation\" section listing the `/select` and `/calc` endpoints used to drive DataLab computations remotely"
 msgstr "Enrichissement de la référence de l'API Web : documentation des options de transfert binaire (`?compress=false` pour des téléchargements NPZ non compressés plus rapides, `?overwrite=true` pour le remplacement atomique d'objets existants), du point d'entrée `PUT /objects/{name}` qui met à jour un objet sur place en préservant son identité, son groupe d'appartenance et sa position, ainsi que de la nouvelle section « Calcul » listant les points d'entrée `/select` et `/calc` permettant de piloter les calculs DataLab à distance"
 
 msgid "Updated French translations across all new and modified documentation pages"
 msgstr "Mise à jour des traductions françaises sur toutes les pages de documentation nouvelles et modifiées"
-
-msgid "🔧 Improvements"
-msgstr "🔧 Améliorations"
-
-msgid "**Compatibility:**"
-msgstr "**Compatibilité :**"
 
 msgid "Officially support pandas 3.0.x (updated dependency constraint from `< 3.0` to `< 3.1`)"
 msgstr "Prise en charge officielle de pandas 3.0.x (contrainte de dépendance mise à jour de `< 3.0` à `< 3.1`)"
@@ -155,9 +228,6 @@ msgstr "Simplification de la gestion des variables d'environnement en supprimant
 
 msgid "Fixed Coverage full VS Code task to properly use the `run_with_env.py` wrapper"
 msgstr "Correction de la tâche complète Coverage dans VS Code pour utiliser correctement le wrapper `run_with_env.py`"
-
-msgid "🛠️ Bug Fixes"
-msgstr "🛠️ Corrections de bugs"
 
 msgid "**HDF5 workspace - Table serialization:**"
 msgstr "**Espace de travail HDF5 - Sérialisation des tables :**"

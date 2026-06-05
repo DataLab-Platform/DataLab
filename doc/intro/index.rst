@@ -13,10 +13,9 @@ and image analysis tasks.
 
 DataLab integrates seemlessly into your workflow thanks to three main operating modes:
 
-.. tabularcolumns:: |>{\centering\arraybackslash}m{2cm}|m{\dimexpr\linewidth-2cm-4\tabcolsep\relax}|
+.. tabularcolumns:: |>{\centering\arraybackslash}m{1.2cm}|m{\dimexpr\linewidth-1.2cm-4\tabcolsep\relax}|
 .. list-table::
     :header-rows: 0
-    :widths: 8 92
 
     * - |appmode|
       - **Stand-alone application**, with a graphical user interface that allows you to interact with your data and visualize the results of your analysis in real time.
@@ -27,20 +26,37 @@ DataLab integrates seemlessly into your workflow thanks to three main operating 
     * - |remotemode|
       - **Remotely controlled** from your own software, or from an IDE (e.g., Spyder) or a Jupyter notebook, using the DataLab API.
 
-.. |appmode| image:: ../../resources/DataLab-app.svg
-    :width: 64px
-    :height: 64px
-    :class: dark-light no-scaled-link
+.. Sphinx converts ``px`` to ``bp`` at 72 dpi for LaTeX, which makes ``64px``
+   render at ~22mm in the PDF -- way larger than in HTML. Define separate
+   substitutions per output: pixels for HTML, centimetres for LaTeX.
 
-.. |libmode| image:: ../../resources/DataLab-lib.svg
-    :width: 64px
-    :height: 64px
-    :class: dark-light no-scaled-link
+.. only:: html
 
-.. |remotemode| image:: ../../resources/DataLab-remote.svg
-    :width: 64px
-    :height: 64px
-    :class: dark-light no-scaled-link
+    .. |appmode| image:: ../../resources/DataLab-app.svg
+        :width: 64px
+        :height: 64px
+        :class: dark-light no-scaled-link
+
+    .. |libmode| image:: ../../resources/DataLab-lib.svg
+        :width: 64px
+        :height: 64px
+        :class: dark-light no-scaled-link
+
+    .. |remotemode| image:: ../../resources/DataLab-remote.svg
+        :width: 64px
+        :height: 64px
+        :class: dark-light no-scaled-link
+
+.. only:: latex
+
+    .. |appmode| image:: ../../resources/DataLab-app.svg
+        :width: 1cm
+
+    .. |libmode| image:: ../../resources/DataLab-lib.svg
+        :width: 1cm
+
+    .. |remotemode| image:: ../../resources/DataLab-remote.svg
+        :width: 1cm
 
 DataLab leverages the power of Python and its scientific ecosystem, through the use of
 the following libraries:
