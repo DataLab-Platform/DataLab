@@ -137,11 +137,29 @@ msgstr "Calcule l'abscisse pour une ordonnée donnée du signal sélectionné. S
 msgid "Peak detection"
 msgstr "Détection de pics"
 
-msgid "Create a new signal from semi-automatic peak detection of each selected signal."
-msgstr "Crée un signal à partir de la détection automatique des pics de chaque signal sélectionné :"
+msgid "DataLab offers two complementary ways to detect peaks. Both produce the same result: an *XY-markers* :class:`~sigima.objects.scalar.TableResult` attached to the signal (visible from *View ▸ Show results* and overlayed on the curve)."
+msgstr "DataLab propose deux entrées complémentaires pour détecter les pics. Les deux produisent le même résultat : un :class:`~sigima.objects.scalar.TableResult` de type *marqueurs XY* attaché au signal (visible depuis *Vue ▸ Afficher les résultats* et superposé à la courbe)."
 
-msgid "Peak detection dialog: threshold is adjustable by moving the horizontal marker, peaks are detected automatically (see vertical markers with labels indicating peak position)"
-msgstr "Boîte de dialogue de détection de pics : le seuil de détection est ajustable en déplaçant le curseur horizontal, les pics sont détectés automatiquement (des marqueurs verticaux indiquent les pics détectés avec leur position)"
+msgid "Entry point"
+msgstr "Entrée"
+
+msgid "**Extract peak positions**"
+msgstr "**Extraire les positions des pics**"
+
+msgid "Parametric entry: fill the standard parameter dialog (threshold, minimum distance) and run."
+msgstr "Entrée paramétrique : remplissez la boîte de dialogue standard (seuil, distance minimale) et exécutez."
+
+msgid "**Peak detection...**"
+msgstr "**Détection de pics...**"
+
+msgid "Interactive entry: opens a dedicated dialog where the threshold is adjusted by moving a horizontal marker and the minimum distance by a slider. Detected peaks update live as vertical markers."
+msgstr "Entrée interactive : ouvre une boîte de dialogue dédiée dans laquelle le seuil est ajusté en déplaçant un curseur horizontal et la distance minimale via un slider. Les pics détectés sont mis à jour en temps réel sous forme de marqueurs verticaux."
+
+msgid "*Peak detection* dialog: threshold is adjustable by moving the horizontal marker, peaks are detected automatically (see vertical markers with labels indicating peak position)."
+msgstr "Boîte de dialogue *Détection de pics* : le seuil est ajustable en déplaçant le curseur horizontal, les pics sont détectés automatiquement (des marqueurs verticaux indiquent les pics détectés avec leur position)."
+
+msgid "To rebuild the historical *sticks* signal from the detected peaks, use *Operations ▸ Create signal from markers table…* on the selected signal."
+msgstr "Pour reconstruire l'ancien signal de type *bâtons* à partir des pics détectés, utilisez *Opérations ▸ Créer un signal à partir d'une table de marqueurs…* sur le signal sélectionné."
 
 msgid "Sampling rate and period"
 msgstr "Fréquence et période d'échantillonnage"

@@ -480,9 +480,230 @@ class ViewSettings(gds.DataSet):
             "Can be toggled per-object using the checkbox in the Properties panel."
         ),
     )
+    show_marker_labels_in_table = gds.BoolItem(
+        _("Show marker labels in result tables"),
+        _("Marker labels"),
+        default=True,
+        help=_(
+            "Prepend a marker-label column to result tables for marker results "
+            "(XY/X/Y markers), so each row can be matched with the corresponding "
+            "cross or dashed cursor drawn on the plot. XY markers use numeric "
+            "labels (#1, #2, ...), axis markers use letters (a, b, c, ...)."
+        ),
+    )
     _g3 = gds.EndGroup("")
 
     _end_view_tabs = gds.EndTabGroup("")
+
+
+def _ai_provider_choices(*_args: Any) -> list[tuple[str, str]]:
+    """Return the list of available AI providers as ChoiceItem entries.
+
+    Used as a deferred callable for :class:`AISettings.provider`'s
+    ``choices``, so the AI assistant package is only imported when the
+    Settings dialog is actually built.
+    """
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.aiassistant.providers import PROVIDERS  # noqa: WPS433
+
+    return [(name, name, None) for name in PROVIDERS]
+
+
+def _ai_refresh_parent(parent: QW.QWidget | None) -> None:
+    """Walk ``parent`` up looking for a guidata layout and refresh its widgets.
+
+    Used after a ButtonItem callback mutates several sibling fields, so the
+    UI reflects the change without requiring the user to reopen the dialog.
+    Silently no-ops when the layout cannot be located (worst case: the user
+    sees the updated values only after closing/reopening Preferences).
+    """
+    widget = parent
+    while widget is not None:
+        layout = getattr(widget, "edit", None)
+        update = getattr(layout, "update_widgets", None)
+        if callable(update):
+            try:
+                update()
+            except Exception:  # pylint: disable=broad-except
+                pass
+            return
+        widget = widget.parent()
+
+
+def _ai_load_preset(
+    dataset: gds.DataSet,
+    _item: Any,
+    _value: Any,
+    parent: QW.QWidget | None,
+) -> bool:
+    """Pop a list of OpenAI-compatible presets and apply the chosen one."""
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.aiassistant.presets import (  # noqa: WPS433
+        BASE_URL_PRESETS,
+        detect_preset,
+    )
+
+    labels = [p.label for p in BASE_URL_PRESETS]
+    current = detect_preset(getattr(dataset, "base_url", "") or "")
+    current_index = (
+        next((i for i, p in enumerate(BASE_URL_PRESETS) if p.key == current.key), 0)
+        if current is not None
+        else 0
+    )
+    label, ok = QW.QInputDialog.getItem(
+        parent,
+        _("Load preset"),
+        _("Choose an OpenAI-compatible endpoint preset:"),
+        labels,
+        current_index,
+        False,
+    )
+    if not ok:
+        return False
+    preset = next(p for p in BASE_URL_PRESETS if p.label == label)
+    dataset.base_url = preset.base_url
+    dataset.model = preset.default_model
+    _ai_refresh_parent(parent)
+    return True
+
+
+def _ai_test_connection(
+    dataset: gds.DataSet,
+    _item: Any,
+    _value: Any,
+    parent: QW.QWidget | None,
+) -> bool:
+    """Probe the configured endpoint and display the outcome in a dialog."""
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.aiassistant.presets import test_connection  # noqa: WPS433
+
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.aiassistant.providers import get_provider  # noqa: WPS433
+
+    base_url = (getattr(dataset, "base_url", "") or "").strip()
+    configured_key = (getattr(dataset, "api_key", "") or "").strip()
+    # Apply the same env-var fallback as the live provider so users who set
+    # OPENAI_API_KEY (recommended) are not forced to also paste the key into
+    # the dialog just to test the connection.
+    try:
+        provider_cls = get_provider(str(getattr(dataset, "provider", "openai")))
+        api_key = provider_cls.resolve_api_key(configured_key)
+    except Exception:  # pylint: disable=broad-except
+        api_key = configured_key
+    # Cap probe timeout at 10 s so the modal dialog never feels stuck.
+    timeout = min(float(getattr(dataset, "timeout", 10.0) or 10.0), 10.0)
+    result = test_connection(base_url, api_key, timeout=timeout)
+    title = _("AI Assistant — connection test")
+    box = QW.QMessageBox(parent)
+    box.setWindowTitle(title)
+    box.setIcon(
+        QW.QMessageBox.Icon.Information if result.ok else QW.QMessageBox.Icon.Warning
+    )
+    box.setText(result.message)
+    if result.details:
+        box.setDetailedText(result.details)
+    box.setStandardButtons(QW.QMessageBox.StandardButton.Ok)
+    box.exec()
+    return result.ok
+
+
+class AISettings(gds.DataSet):
+    """DataLab AI Assistant settings"""
+
+    enabled = gds.BoolItem(_("Enable AI Assistant"), default=True)
+    provider = gds.ChoiceItem(
+        _("Provider"),
+        _ai_provider_choices,
+        default="openai",
+        help=_(
+            "Use 'mock' to test the AI assistant pipeline offline without "
+            "any API key (scripted replies based on simple keywords)."
+        ),
+    )
+    model = gds.StringItem(_("Model"), default="gpt-4o-mini")
+    api_key = gds.StringItem(
+        _("API key"),
+        default="",
+        notempty=False,
+        help=_(
+            "Your provider API key. Stored in the DataLab INI file in plain "
+            "text — keep this file private.\n\n"
+            "Recommended: leave this field empty and set the provider's "
+            "standard environment variable instead (e.g. OPENAI_API_KEY for "
+            "OpenAI). This avoids writing the secret to disk and lets the "
+            "same credential be shared with other tools."
+        ),
+    )
+    base_url = gds.StringItem(
+        _("Base URL (optional)"),
+        default="",
+        notempty=False,
+        help=_("Override for OpenAI-compatible endpoints. Leave empty for default."),
+    )
+    load_preset = gds.ButtonItem(
+        _("Load preset..."),
+        _ai_load_preset,
+        icon="libre-gui-settings.svg",
+        help=_(
+            "Pre-fill the Base URL and Model fields with a known OpenAI-"
+            "compatible endpoint (OpenAI cloud, Ollama, LM Studio, llama.cpp, "
+            "vLLM)."
+        ),
+    )
+    test_connection = gds.ButtonItem(
+        _("Test connection"),
+        _ai_test_connection,
+        icon="libre-gui-link.svg",
+        help=_(
+            "Probe the configured endpoint (GET /models) to verify the URL, "
+            "API key and network reachability. Does not consume any token."
+        ),
+    )
+    temperature = gds.FloatItem(
+        _("Temperature"), default=0.2, min=0.0, max=2.0, step=0.1
+    )
+    timeout = gds.FloatItem(_("HTTP timeout (s)"), default=60.0, min=5.0, max=600.0)
+    max_iterations = gds.IntItem(
+        _("Max tool-call iterations"), default=8, min=1, max=64
+    )
+    max_history_messages = gds.IntItem(
+        _("Max history messages (0 = unlimited)"),
+        default=0,
+        min=0,
+        max=1024,
+        help=_(
+            "Cap the number of past messages (user + assistant + tool) sent "
+            "to the provider on each request. Useful with local models "
+            "that have a small context window (e.g. n_ctx=4096 on "
+            "llama.cpp): if the conversation grows beyond the model's "
+            "context, the server returns HTTP 400. Set to 0 to disable "
+            "the cap. The system prompt and the current user turn are "
+            "always preserved."
+        ),
+    )
+    auto_approve_readonly = gds.BoolItem(
+        _("Auto-approve read-only inspection tools"), default=True
+    )
+    expose_macro_tool = gds.BoolItem(
+        _("Allow AI to create and run macros (Python code)"),
+        default=True,
+        help=_(
+            "When enabled, the AI assistant may create and execute Python "
+            "macros with full access to DataLab through the RemoteProxy API. "
+            "Each macro execution still requires explicit user confirmation.\n\n"
+            "Disable this option if you do not want the AI to be able to "
+            "propose arbitrary code execution at all (the macro tool is then "
+            "hidden from the model entirely)."
+        ),
+    )
+
+
+# Names of all options exposed by :class:`AISettings`. Used to detect whether
+# the AI assistant configuration was modified through the global Settings
+# dialog (so callers can rebuild the AI controller).
+AI_OPTION_NAMES: frozenset[str] = frozenset(
+    item.get_name() for item in AISettings().get_items()
+)
 
 
 # Generator yielding (param, section, option) tuples from configuration dictionary
@@ -560,11 +781,24 @@ def get_all_options(paramdict: dict[str, gds.DataSet]) -> list:
 
 def create_dataset_dict() -> dict[str, gds.DataSet]:
     """Create a dictionary of datasets for each settings tab, populate it from Conf."""
+    # Local import to keep the AI assistant package optional and avoid loading
+    # its provider stack until the Settings dialog is actually opened.
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.aiassistant.providers import PROVIDERS  # noqa: WPS433
+
+    # Tolerate stale config values (e.g. an unknown provider name from a
+    # previous DataLab version) so :class:`AISettings`' ChoiceItem does not
+    # raise when populated from Conf.
+    provider = str(Conf.ai.provider.get("openai"))
+    if provider not in PROVIDERS:
+        Conf.ai.provider.set("openai")
+
     paramdict = {
         "main": MainSettings(_("General"), icon="libre-gui-settings.svg"),
         "proc": ProcSettings(_("Processing"), icon="libre-tech-ram.svg"),
         "view": ViewSettings(_("Visualization"), icon="visualization.svg"),
         "io": IOSettings(_("I/O"), icon="io.svg"),
+        "ai": AISettings(_("AI Assistant"), icon="ai-assistant.svg"),
         "console": ConsoleSettings(_("Console"), icon="console.svg"),
     }
     conf_to_datasets(paramdict)

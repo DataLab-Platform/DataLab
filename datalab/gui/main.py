@@ -71,7 +71,7 @@ from datalab.gui.docks import DockablePlotWidget
 from datalab.gui.h5io import H5InputOutput
 from datalab.gui.panel import base, image, macro, signal
 from datalab.gui.pluginconfig import PluginConfigDialog
-from datalab.gui.settings import edit_settings
+from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
 from datalab.objectmodel import ObjectGroup
 from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plugins
 from datalab.utils import qthelpers as qth
@@ -170,6 +170,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.console: DockableConsole | None = None
         self._startup_errors: list[str] = []
         self.macropanel: MacroPanel | None = None
+        self.aiassistantpanel = None  # type: ignore[assignment]
 
         self.main_toolbar: QW.QToolBar | None = None
         self.signalpanel_toolbar: QW.QToolBar | None = None
@@ -1011,6 +1012,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.__flush_startup_errors()
         self.__update_actions(update_other_data_panel=True)
         self.__add_macro_panel()
+        self.__add_aiassistant_panel()
         self.__configure_panels()
         # Now that everything is set up, we can restore the window state:
         self.__restore_state()
@@ -1676,6 +1678,20 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.docks[self.macropanel] = mdock
         self.tabifyDockWidget(self.docks[self.imagepanel], mdock)
         self.docks[self.signalpanel].raise_()
+
+    def __add_aiassistant_panel(self) -> None:
+        """Add AI Assistant panel"""
+        # Local import to keep AI assistant fully optional/loadable on demand
+        # pylint: disable-next=import-outside-toplevel
+        from datalab.aiassistant.widgets.chatpanel import (  # noqa: WPS433
+            AIAssistantPanel,
+        )
+
+        self.aiassistantpanel = AIAssistantPanel(self)
+        adock = self.__add_dockwidget(self.aiassistantpanel, _("AI Assistant"))
+        self.docks[self.aiassistantpanel] = adock
+        self.tabifyDockWidget(self.docks[self.macropanel], adock)
+        self.docks[self.macropanel].raise_()
 
     def __configure_panels(self) -> None:
         """Configure panels"""
@@ -2549,6 +2565,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.signalpanel.manual_refresh()
         if refresh_image_panel:
             self.imagepanel.manual_refresh()
+
+        # Invalidate the AI assistant controller if any AI option changed,
+        # so the next prompt rebuilds it with the updated configuration.
+        if self.aiassistantpanel is not None and any(
+            option in AI_OPTION_NAMES for option in changed_options
+        ):
+            self.aiassistantpanel.invalidate_controller()
 
     def __show_logviewer(self) -> None:
         """Show error logs"""

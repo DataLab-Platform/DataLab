@@ -20,11 +20,13 @@ All other methods should be tested here.
 import os.path as osp
 import time
 
+from guidata.io import HDF5Reader, HDF5Writer
 from guidata.qthelpers import qt_app_context
 from qtpy import QtWidgets as QW
 
 from datalab.env import execenv
 from datalab.gui.macroeditor import Macro
+from datalab.gui.macros_templates import list_templates
 from datalab.gui.panel.macro import MacroPanel
 from datalab.tests import datalab_test_app_context, helpers
 
@@ -98,6 +100,64 @@ def test_macro_editor():
         widget.import_macro_from_file(macro_path)
         assert len(widget.get_macro_titles()) == 1
         assert widget.get_macro_titles()[0] == osp.basename(macro_path)
+
+
+def test_macro_uid_and_new_actions():
+    """Test new Macro panel features: UID, duplicate, blank, templates."""
+    with qt_app_context(exec_loop=True):
+        widget = MacroPanel(None)
+        widget.resize(800, 600)
+        widget.show()
+
+        # --- UID stability ---
+        m1 = widget.add_macro()
+        m2 = widget.add_macro()
+        assert m1.uid and m2.uid
+        assert m1.uid != m2.uid, "Two macros must have distinct UIDs"
+
+        # UID is preserved across serialize/deserialize round-trips.
+        with helpers.WorkdirRestoringTempDir() as tmpdir:
+            h5_path = osp.join(tmpdir, "macro_uid.h5")
+            with HDF5Writer(h5_path) as writer:
+                with writer.group("macro"):
+                    m1.serialize(writer)
+            restored = Macro(widget.console)
+            with HDF5Reader(h5_path) as reader:
+                with reader.group("macro"):
+                    restored.deserialize(reader)
+            assert restored.uid == m1.uid
+
+        # --- duplicate_macro ---
+        widget.remove_all_objects()
+        original = widget.add_macro()
+        original_code = original.get_code()
+        widget.duplicate_macro()
+        assert len(widget.get_macro_titles()) == 2
+        copy = widget.get_macro(2)
+        assert copy is not original
+        assert copy.uid != original.uid
+        assert copy.get_code() == original_code
+        assert "(copy)" in copy.title
+
+        # --- add_blank_macro ---
+        widget.remove_all_objects()
+        blank = widget.add_blank_macro()
+        assert blank.get_code() == ""
+
+        # --- add_macro_from_template ---
+        widget.remove_all_objects()
+        templates = list_templates()
+        assert templates, "Expected bundled macro templates to be available"
+        tmpl_macro = widget.add_macro_from_template(templates[0])
+        # ``set_code`` may normalize whitespace (e.g. add trailing spaces on
+        # blank lines via the highlighter); compare the textual content
+        # line-by-line after stripping trailing whitespace.
+        actual = "\n".join(line.rstrip() for line in tmpl_macro.get_code().splitlines())
+        expected = "\n".join(line.rstrip() for line in templates[0].code.splitlines())
+        assert actual == expected
+        assert tmpl_macro.title == templates[0].title
+
+        widget.remove_all_objects()
 
 
 def test_macro_unicode_encoding():
@@ -200,4 +260,5 @@ print("All Unicode tests passed! ✓")
 
 if __name__ == "__main__":
     test_macro_editor()
+    test_macro_uid_and_new_actions()
     test_macro_unicode_encoding()

@@ -53,6 +53,10 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
+          # RC validation may be re-run on the same version (e.g. after fixing
+          # a later job). TestPyPI versions are immutable, so skip already
+          # uploaded files instead of failing the whole workflow.
+          skip-existing: true
 
   github-prerelease:
     needs: build
@@ -90,10 +94,14 @@ jobs:
       - name: Generate SHA256SUMS
         run: |
           cd assets
+          # Published release assets are flat, so SHA256SUMS must reference bare
+          # filenames. Run sha256sum from each file's own directory so the
+          # checksum line contains the basename (not dists/…, msi/…, pdfs/…).
           find dists msi pdfs -type f \
             \( -name '*.whl' -o -name '*.tar.gz' -o -name '*.msi' -o -name '*.pdf' \) \
-            -printf '%P\n' | sort | xargs -I{} sha256sum {} \
-            > SHA256SUMS
+            -printf '%p\n' | sort | while read -r f; do
+              ( cd "$(dirname "$f")" && sha256sum "$(basename "$f")" )
+            done > SHA256SUMS
           cat SHA256SUMS
 
       - name: Attest build provenance

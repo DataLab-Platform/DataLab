@@ -117,11 +117,33 @@ jobs:
           for LNG in fr en; do
             python -m sphinx -b html -D language=$LNG doc "site/$LNG"
           done
-          # Top-level index redirecting to the English version.
+          # Top-level index redirecting to the user's language: French when the
+          # browser prefers `fr*`, English otherwise. A <noscript> meta refresh
+          # falls back to English when JavaScript is disabled.
           cat > site/index.html <<'EOF'
           <!doctype html>
-          <meta http-equiv="refresh" content="0; url=./en/">
-          <link rel="canonical" href="./en/">
+          <html lang="en">
+          <head>
+          <meta charset="utf-8">
+          <title>DataLab</title>
+          <script>
+            (function () {
+              var langs = navigator.languages || [navigator.language || "en"];
+              var fr = langs.some(function (l) { return /^fr\b/i.test(l); });
+              location.replace(fr ? "./fr/" : "./en/");
+            })();
+          </script>
+          <noscript>
+            <meta http-equiv="refresh" content="0; url=./en/">
+          </noscript>
+          <link rel="alternate" hreflang="fr" href="./fr/">
+          <link rel="alternate" hreflang="en" href="./en/">
+          <link rel="alternate" hreflang="x-default" href="./en/">
+          </head>
+          <body>
+          <p>Redirecting… <a href="./en/">English</a> · <a href="./fr/">Français</a></p>
+          </body>
+          </html>
           EOF
 
       - name: Upload built site as artifact
@@ -156,6 +178,10 @@ jobs:
           publish_branch: main
           publish_dir: ./site
           keep_files: false
+          # Re-write the apex CNAME on every deploy: peaceiris wipes the target
+          # with keep_files=false, and the built site has no root CNAME, so
+          # without this the custom domain binding is lost (site 404s).
+          cname: datalab-platform.com
           commit_message: "Update documentation from ${{ github.repository }}@${{ github.sha }}"
 
       - name: Deploy to DataLab-Platform.github.io (via SSH deploy key)
@@ -167,4 +193,8 @@ jobs:
           publish_branch: main
           publish_dir: ./site
           keep_files: false
+          # Re-write the apex CNAME on every deploy: peaceiris wipes the target
+          # with keep_files=false, and the built site has no root CNAME, so
+          # without this the custom domain binding is lost (site 404s).
+          cname: datalab-platform.com
           commit_message: "Update documentation from ${{ github.repository }}@${{ github.sha }}"

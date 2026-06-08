@@ -100,10 +100,14 @@ jobs:
         # release. Users verify with: `sha256sum -c SHA256SUMS`.
         run: |
           cd assets
+          # Published release assets are flat, so SHA256SUMS must reference bare
+          # filenames. Run sha256sum from each file's own directory so the
+          # checksum line contains the basename (not dists/…, msi/…, pdfs/…).
           find dists msi pdfs -type f \
             \( -name '*.whl' -o -name '*.tar.gz' -o -name '*.msi' -o -name '*.pdf' \) \
-            -printf '%P\n' | sort | xargs -I{} sha256sum {} \
-            > SHA256SUMS
+            -printf '%p\n' | sort | while read -r f; do
+              ( cd "$(dirname "$f")" && sha256sum "$(basename "$f")" )
+            done > SHA256SUMS
           echo "--- SHA256SUMS ---"
           cat SHA256SUMS
 

@@ -11,11 +11,13 @@ from __future__ import annotations
 import re
 from collections.abc import Callable
 
+import guidata.dataset as gds
 import numpy as np
 import sigima.params
 import sigima.proc.base as sigima_base
 import sigima.proc.signal as sips
 from guidata.qthelpers import exec_dialog
+from qtpy import QtWidgets as QW
 from sigima.objects import (
     NormalDistributionParam,
     PoissonDistributionParam,
@@ -27,6 +29,7 @@ from sigima.objects import (
 )
 from sigima.objects.scalar import GeometryResult, TableResult
 
+from datalab.adapters_metadata.table_adapter import TableAdapter
 from datalab.config import _
 from datalab.gui.processor.base import BaseProcessor
 from datalab.utils.qthelpers import qt_try_except
@@ -329,12 +332,6 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             paramclass=sigima.params.PowerParam,
             icon_name="power.svg",
         )
-        self.register_1_to_1(
-            sips.peak_detection,
-            _("Peak detection"),
-            paramclass=sigima.params.PeakDetectionParam,
-            icon_name="peak_detect.svg",
-        )
         # Frequency filters
         self.register_1_to_1(
             sips.lowpass,
@@ -514,6 +511,15 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             comment=_("Extract pulse features (amplitude, rise time, fall time...)"),
         )
         self.register_1_to_0(
+            sips.extract_peak_positions,
+            _("Extract peak positions"),
+            paramclass=sips.PeakDetectionParam,
+            comment=_(
+                "Extract peak positions as an X-markers table "
+                "(e.g. for spectral line analysis)"
+            ),
+        )
+        self.register_1_to_0(
             sips.x_at_minmax,
             _("Abscissa of the minimum and maximum"),
             comment=_(
@@ -601,8 +607,18 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     def compute_peak_detection(
         self, param: sigima.params.PeakDetectionParam | None = None
     ) -> None:
-        """Detect peaks from data
-        with :py:func:`sigima.proc.signal.peak_detection`"""
+        """Interactive peak detection.
+
+        Opens :class:`~datalab.widgets.signalpeak.SignalPeakDetectionDialog`
+        to set the detection threshold and minimum distance visually, then
+        stores the detected peak positions as an XY-markers
+        :class:`~sigima.objects.scalar.TableResult` attached to the signal
+        (via :py:func:`sigima.proc.signal.extract_peak_positions`).
+
+        To rebuild the historical *sticks* signal from the detected peaks,
+        use :py:meth:`compute_markers_to_signal` afterwards (menu
+        *Operations ▸ Create signal from markers table…*).
+        """
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         edit, param = self.init_param(
             param, sips.PeakDetectionParam, _("Peak detection")
@@ -614,7 +630,57 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
                 param.min_dist = dlg.get_min_dist()
             else:
                 return
-        self.run_feature("peak_detection", param)
+        self.run_feature("extract_peak_positions", param)
+
+    @qt_try_except()
+    def compute_markers_to_signal(self) -> None:
+        """Build a sticks signal from an XY-markers table result
+        with :py:func:`sigima.proc.signal.markers_table_to_signal`.
+        """
+        selected = self.panel.objview.get_sel_objects(include_groups=True)
+        if not selected:
+            return
+        title = _("Create signal from markers table")
+        last_choice: str | None = None
+        for obj in selected:
+            adapters = [
+                a
+                for a in TableAdapter.iterate_from_obj(obj)
+                if a.result.is_xy_markers()
+            ]
+            if not adapters:
+                QW.QMessageBox.information(
+                    self.mainwindow,
+                    title,
+                    _(
+                        "Signal '%s' has no XY-markers table result. "
+                        "Run 'Extract peak positions' (or another XY-markers "
+                        "analysis) first."
+                    )
+                    % obj.title,
+                )
+                continue
+            if len(adapters) == 1:
+                adapter = adapters[0]
+            else:
+                titles = [a.result.title for a in adapters]
+                default_idx = titles.index(last_choice) if last_choice in titles else 0
+                choices = list(enumerate(titles))
+
+                class _MarkersChoice(gds.DataSet):
+                    """Markers table selection."""
+
+                    index = gds.ChoiceItem(
+                        _("Markers table"), choices, default=default_idx
+                    )
+
+                choice = _MarkersChoice(title)
+                if not choice.edit(self.mainwindow):
+                    continue
+                adapter = adapters[choice.index]
+                last_choice = titles[choice.index]
+            signal = sips.markers_table_to_signal(adapter.result, ref=obj)
+            self.panel.add_object(signal)
 
     @qt_try_except()
     def compute_polyfit(

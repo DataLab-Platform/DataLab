@@ -1441,11 +1441,16 @@ class SignalActionHandler(BaseActionHandler):
                 tip=_("Compute the ordinate at a given x value (linear interpolation)"),
             )
             self.action_for("extract_pulse_features")
+            self.action_for("extract_peak_positions")
             self.new_action(
-                _("Peak detection"),
-                separator=True,
+                _("Peak detection..."),
                 triggered=self.panel.processor.compute_peak_detection,
                 icon_name="peak_detect.svg",
+                tip=_(
+                    "Interactive peak detection: adjust threshold and minimum "
+                    "distance visually, then store detected peaks as an "
+                    "XY-markers table result"
+                ),
             )
             self.action_for("sampling_rate_period", separator=True)
             self.action_for("dynamic_parameters", context_menu_pos=-1)
@@ -1456,6 +1461,16 @@ class SignalActionHandler(BaseActionHandler):
         """Create actions that are added to the menus in the end"""
         super().create_last_actions()
         with self.new_category(ActionCategory.OPERATION):
+            self.new_action(
+                _("Create signal from markers table..."),
+                separator=True,
+                triggered=self.panel.processor.compute_markers_to_signal,
+                icon_name="peak_detect.svg",
+                tip=_(
+                    "Build a sticks signal from an XY-markers table result "
+                    "(e.g. from 'Extract peak positions')"
+                ),
+            )
             self.action_for("signals_to_image", separator=True)
 
         with self.new_category(ActionCategory.VIEW):

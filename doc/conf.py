@@ -109,6 +109,14 @@ def setup(app):
 
             # Suppress warnings about excluded API documents during gettext builds
             app.config.suppress_warnings.extend(["toc.excluded", "ref.doc"])
+            # The HTML/LaTeX builds define per-output image substitutions with
+            # the same names (px for HTML, cm for LaTeX) inside `only::` blocks
+            # -- see doc/index.rst and doc/intro/index.rst. docutils registers
+            # substitution definitions at read time, before `only` filtering, so
+            # it flags them as duplicates. They are harmless for gettext (which
+            # extracts strings, not images); suppress them so the `-W` gettext
+            # build does not fail.
+            app.config.suppress_warnings.append("docutils")
 
     app.connect("builder-inited", exclude_outreach_from_latex)
     app.connect("builder-inited", exclude_api_from_gettext)

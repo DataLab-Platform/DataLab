@@ -9,6 +9,7 @@ This module handles `DataLab` configuration (options, images and icons).
 
 from __future__ import annotations
 
+import logging
 import os
 import os.path as osp
 import sys
@@ -108,6 +109,61 @@ if IS_FROZEN:
         os.mkdir(OTHER_PLUGINS_PATHLIST[-1])
     except OSError:
         pass
+
+# Additional third-party plugin directories provided via the `DATALAB_PLUGINS`
+# environment variable. Multiple paths may be separated by `os.pathsep`
+# (`;` on Windows, `:` on Unix), following the same convention as `PYTHONPATH`.
+# Non-existent paths are skipped with a warning logged at startup.
+DATALAB_PLUGINS_ENV_VAR = "DATALAB_PLUGINS"
+#: Plugin directories declared through the ``DATALAB_PLUGINS`` env var
+#: (subset of :data:`OTHER_PLUGINS_PATHLIST`, kept around so that consumers
+#: such as the plugin configuration dialog can flag them as user-provided).
+DATALAB_PLUGINS_ENV_PATHS: list[str] = []
+
+
+def parse_datalab_plugins_env_var(
+    env_value: str | None,
+    pathlist: list[str],
+    env_paths: list[str],
+) -> None:
+    """Parse ``DATALAB_PLUGINS`` and append valid directories to ``pathlist``.
+
+    Args:
+        env_value: Raw value of the ``DATALAB_PLUGINS`` environment variable
+         (``None`` or empty string is a no-op).
+        pathlist: Plugin search path list to extend in-place
+         (typically :data:`OTHER_PLUGINS_PATHLIST`).
+        env_paths: List of env-var-provided directories to extend in-place
+         (typically :data:`DATALAB_PLUGINS_ENV_PATHS`), used by the GUI to
+         flag entries originating from the environment variable.
+    """
+    if not env_value:
+        return
+
+    logger = logging.getLogger(__name__)
+    for raw_path in env_value.split(os.pathsep):
+        path = raw_path.strip()
+        if not path:
+            continue
+        path = osp.normpath(osp.expanduser(path))
+        if osp.isdir(path):
+            if path not in pathlist:
+                pathlist.append(path)
+            if path not in env_paths:
+                env_paths.append(path)
+        else:
+            logger.warning(
+                "%s: ignoring non-existent plugin directory '%s'",
+                DATALAB_PLUGINS_ENV_VAR,
+                path,
+            )
+
+
+parse_datalab_plugins_env_var(
+    os.environ.get(DATALAB_PLUGINS_ENV_VAR),
+    OTHER_PLUGINS_PATHLIST,
+    DATALAB_PLUGINS_ENV_PATHS,
+)
 
 
 def get_mod_source_dir() -> str | None:
@@ -335,6 +391,11 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     # Show merged result label on plot by default
     show_result_label = conf.Option()
 
+    # Prepend a marker-label column to result tables for
+    # XY_MARKERS / X_MARKERS / Y_MARKERS so each row can be matched with the
+    # corresponding cross or dashed cursor drawn on the plot.
+    show_marker_labels_in_table = conf.Option()
+
     @classmethod
     def get_def_dict(cls, category: Literal["ima", "sig"]) -> dict:
         """Get default visualization settings as a dictionary
@@ -375,6 +436,80 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
                     opt.set(def_dict[name])
 
 
+class MacroSection(conf.Section, metaclass=conf.SectionMeta):
+    """Class defining the Macro panel configuration section structure.
+    Each class attribute is an option (metaclass is automatically affecting
+    option names in .INI file based on class attribute names)."""
+
+    # UUIDs of the macros whose tab was open when DataLab was last closed
+    # (JSON-serialized list of strings).
+    open_tab_uids = conf.Option()
+
+    # UUID of the macro tab that was active when DataLab was last closed.
+    active_tab_uid = conf.Option()
+
+    # Serialized state of the editor/console QSplitter (base64-encoded
+    # QByteArray, see QSplitter.saveState).
+    splitter_state = conf.Option()
+
+    # Maximum number of lines kept in the macro console (FIFO).
+    console_max_lines = conf.Option()
+
+    # If True, closing a macro tab only hides it; the macro stays in the
+    # workspace. The user must use "Delete macro" to remove it permanently.
+    close_tab_keeps_macro = conf.Option()
+
+    # Path to a user-managed directory containing custom macro templates
+    # (``*.py`` files). Each file may declare its description on the first
+    # line using the ``# DataLab template: ...`` tag.
+    templates_path = conf.Option()
+
+
+class AISection(conf.Section, metaclass=conf.SectionMeta):
+    """Class defining the AI assistant configuration section structure.
+    Each class attribute is an option (metaclass is automatically affecting
+    option names in .INI file based on class attribute names)."""
+
+    # AI assistant enabled state (True: enabled, False: disabled).
+    enabled = conf.Option()
+
+    # Provider name (e.g. "openai"). See `datalab.aiassistant.providers.PROVIDERS`.
+    provider = conf.Option()
+
+    # Model name (e.g. "gpt-4o-mini").
+    model = conf.Option()
+
+    # Optional base URL override (for OpenAI-compatible endpoints).
+    base_url = conf.Option()
+
+    # API key (stored in plain text in the INI file: never commit this).
+    # The AI assistant displays a clear warning when this fallback is used.
+    api_key = conf.Option()
+
+    # Sampling temperature (float, 0.0-2.0).
+    temperature = conf.Option()
+
+    # HTTP timeout in seconds.
+    timeout = conf.Option()
+
+    # Maximum number of tool-call iterations per user prompt (safety cap).
+    max_iterations = conf.Option()
+
+    # Maximum number of non-system messages sent to the provider on each
+    # request. 0 means unlimited. Useful to stay within a local model's
+    # context window.
+    max_history_messages = conf.Option()
+
+    # Auto-approve read-only inspection tools without confirmation dialog.
+    auto_approve_readonly = conf.Option()
+
+    # Expose the 'create_and_run_macro' tool to the LLM. When False, the AI
+    # assistant cannot create or run macros (arbitrary Python code with full
+    # XML-RPC proxy access). Other tools (creation, processing, etc.) remain
+    # gated by the standard confirmation dialog.
+    expose_macro_tool = conf.Option()
+
+
 # Usage (example): Conf.console.console_enabled.get(True)
 class Conf(conf.Configuration, metaclass=conf.ConfMeta):
     """Class defining DataLab configuration structure.
@@ -386,6 +521,8 @@ class Conf(conf.Configuration, metaclass=conf.ConfMeta):
     view = ViewSection()
     proc = ProcSection()
     io = IOSection()
+    macro = MacroSection()
+    ai = AISection()
 
 
 def get_old_log_fname(fname):
@@ -434,6 +571,10 @@ def initialize():
     iofmts = Conf.io.imageio_formats.get(())
     if len(iofmts) > 0:
         sigima_options.imageio_formats.set(iofmts)  # Sync with sigima config
+    # Macro section
+    Conf.macro.console_max_lines.get(5000)
+    Conf.macro.close_tab_keeps_macro.get(True)
+    Conf.macro.templates_path.get(Conf.get_path("macro_templates"))
     # Proc section
     Conf.proc.operation_mode.get("single")
     Conf.proc.use_signal_bounds.get(False)
@@ -478,6 +619,7 @@ def initialize():
     Conf.view.max_cells_in_label.get(100)
     Conf.view.max_cols_in_label.get(15)
     Conf.view.show_result_label.get(True)
+    Conf.view.show_marker_labels_in_table.get(True)
 
     # Initialize PlotPy configuration with versioned app name
     PLOTPY_CONF.set_application(
