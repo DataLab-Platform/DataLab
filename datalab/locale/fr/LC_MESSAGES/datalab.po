@@ -1336,6 +1336,9 @@ msgstr "Propriétés"
 msgid "Parameters for function `%s`"
 msgstr "Paramètres pour la fonction `%s`"
 
+msgid "Created"
+msgstr "Créé"
+
 msgid "Original object"
 msgstr "Objet original"
 
@@ -1485,11 +1488,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "New group"
-msgstr "Nouveau groupe"
-
 msgid "Group name:"
 msgstr "Nom du groupe :"
+
+msgid "New group"
+msgstr "Nouveau groupe"
 
 msgid "Rename object"
 msgstr "Renommer l'objet"
@@ -3248,11 +3251,17 @@ msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La dé
 msgid "Click OK to end demo."
 msgstr "Cliquer sur OK pour terminer la démo."
 
+msgid "Cancel"
+msgstr "Annuler"
+
 msgid "Error:"
 msgstr "Erreur:"
 
 msgid "Context"
 msgstr "Contexte"
+
+msgid "Error:"
+msgstr "Erreur:"
 
 #, python-format
 msgid "The file %s could not be read:"
@@ -3470,17 +3479,17 @@ msgstr "Déplier la sélection"
 msgid "HDF5 Browser"
 msgstr "Explorateur HDF5"
 
-msgid "Size"
-msgstr "Taille"
-
-msgid "Type"
-msgstr "Type"
-
 msgid "Value"
 msgstr "Valeur"
 
 msgid "Name"
 msgstr "Nom"
+
+msgid "Size"
+msgstr "Taille"
+
+msgid "Type"
+msgstr "Type"
 
 msgid "Unsupported data"
 msgstr "Données non prises en charge"

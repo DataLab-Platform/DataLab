@@ -19,7 +19,7 @@ from typing import Any, Generator
 from guidata.env import ExecEnv as GuiDataExecEnv
 
 # We could import DEBUG from datalab.config, but is it really worth it?
-DEBUG = os.environ.get("DEBUG", "").lower() in ("1", "true")
+DEBUG = os.environ.get("DATALAB_DEBUG", "").lower() in ("1", "true")
 
 
 class VerbosityLevels(enum.Enum):

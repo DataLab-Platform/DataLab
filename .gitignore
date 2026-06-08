@@ -33,7 +33,9 @@ DataLab_*.pdf
 wix/DataLab-*.wxs
 wix/bin/
 wix/obj/
-wix/*.bmp
+# Note: wix/dialog.bmp and wix/banner.bmp are intentionally committed; they are
+# generated from SVG sources by `scripts/build_resources.bat` only when needed,
+# so the release pipeline does not depend on any external rasteriser.
 *.wixpdb
 *.msi
 

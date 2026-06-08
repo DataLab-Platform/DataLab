@@ -68,7 +68,7 @@ _ = configtools.get_translation(MOD_NAME)
 APP_DESC = _("""DataLab is a generic signal and image processing platform""")
 APP_PATH = osp.dirname(__file__)
 
-DEBUG = os.environ.get("DEBUG", "").lower() in ("1", "true")
+DEBUG = os.environ.get("DATALAB_DEBUG", "").lower() in ("1", "true")
 if DEBUG:
     print("*** DEBUG mode *** [Reset configuration file, do not redirect std I/O]")
 
