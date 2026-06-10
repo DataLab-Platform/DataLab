@@ -24,6 +24,7 @@ import numpy as np
 import plotpy.io
 from guidata.configtools import get_icon
 from guidata.dataset import restore_dataset, update_dataset
+from guidata.dataset.datatypes import ComputedProp
 from guidata.qthelpers import add_actions, create_action, exec_dialog
 from plotpy.plot import BasePlot, BasePlotOptions, PlotDialog, SyncPlotDialog
 from plotpy.tools import ActionTool
@@ -84,7 +85,14 @@ from datalab.gui.processor.base import (
     insert_processing_parameters,
 )
 from datalab.gui.roieditor import TypeROIEditor
-from datalab.objectmodel import ObjectGroup, get_short_id, get_uuid, set_uuid
+from datalab.objectmodel import (
+    ObjectGroup,
+    get_number,
+    get_short_id,
+    get_uuid,
+    set_number,
+    set_uuid,
+)
 from datalab.utils.qthelpers import (
     CallbackWorker,
     create_progress_bar,
@@ -1550,6 +1558,41 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         self.objview.update_tree()
 
+    def set_object(self, obj: TypeObj) -> None:
+        """Update an existing object in-place with data from ``obj``.
+
+        The existing object is identified by UUID (carried by ``obj`` from a
+        previous :meth:`get_object` call). All data attributes are copied from
+        ``obj`` to the existing object while preserving internal metadata
+        (number, group membership).
+
+        Args:
+            obj: SignalObj or ImageObj with the same UUID as an existing object.
+
+        Raises:
+            KeyError: if no object with matching UUID is found
+        """
+        obj_uuid = get_uuid(obj)
+        existing = self.objmodel[obj_uuid]  # KeyError if not found
+        # Preserve internal number metadata before overwriting
+        number = get_number(existing)
+        # Copy all public DataSet item values from obj to existing.
+        # Skip computed (read-only) items such as ImageObj.xmin/xmax/ymin/ymax,
+        # which would raise ValueError on assignment (see Issue #305).
+        for item in existing._items:  # pylint: disable=protected-access
+            name = item.get_name()
+            if name.startswith("_"):
+                continue
+            if isinstance(item.get_prop("data", "computed", None), ComputedProp):
+                continue
+            setattr(existing, name, getattr(obj, name))
+        set_number(existing, number)
+        self.objview.update_tree()
+        # Refresh the object properties panel so updated values are shown
+        # immediately if the modified object is currently selected.
+        self.objview.item_selection_changed()
+        self.refresh_plot("selected", update_items=True, force=True)
+
     def remove_all_objects(self) -> None:
         """Remove all objects"""
         # iterate over a copy of self.__separate_views dict keys to avoid RuntimeError:
@@ -2934,7 +2977,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             mode=mode,
             item=item,
             options=self.plothandler.get_plot_options(),
+            source_panel=self,
             size=self.get_dialog_size(),
+        )
+        # Propagate the source plot axis scales (e.g. log) to the ROI editor
+        # so that signals/images displayed with non-linear scales keep the same
+        # representation in the ROI editor dialog (see issue: ROI editor was
+        # always opening with default lin-lin scales).
+        src_plot = self.plothandler.plot
+        roi_editor.get_plot().set_scales(
+            src_plot.get_axis_scale("bottom"),
+            src_plot.get_axis_scale("left"),
         )
         if exec_dialog(roi_editor):
             return roi_editor.get_roieditor_results()

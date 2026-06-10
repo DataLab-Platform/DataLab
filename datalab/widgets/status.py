@@ -15,7 +15,7 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from datalab.config import DEBUG, Conf, _
+from datalab.config import DEBUG, PLUGIN_ERROR_COLOR, Conf, _
 from datalab.env import execenv
 from datalab.plugins import PluginRegistry
 
@@ -199,20 +199,59 @@ class PluginStatus(BaseStatus):
         parent (QWidget): parent widget
     """
 
+    #: Size used for creating the tinted icon pixmap
+    ICON_TINT_SIZE: int = 64
+
+    #: Error color for tinting the icon when plugins have failed
+    ERROR_COLOR = QG.QColor(PLUGIN_ERROR_COLOR)
+
     def __init__(self, parent: QW.QWidget | None = None) -> None:
         super().__init__(None, parent)
-        self.set_icon("libre-gui-plugin.svg")
+        self.ok_icon = get_icon("libre-gui-plugin.svg")
+        self.ko_icon = self._make_red_icon(self.ok_icon)
         self.update_status()
+
+    @classmethod
+    def _make_red_icon(cls, icon: QG.QIcon) -> QG.QIcon:
+        """Create a red-tinted version of the given icon.
+
+        Args:
+            icon: Source icon
+
+        Returns:
+            Red-tinted icon
+        """
+        size = cls.ICON_TINT_SIZE
+        pixmap = icon.pixmap(size, size)
+        red_pixmap = QG.QPixmap(pixmap.size())
+        red_pixmap.fill(QC.Qt.transparent)
+        painter = QG.QPainter(red_pixmap)
+        painter.drawPixmap(0, 0, pixmap)
+        painter.setCompositionMode(QG.QPainter.CompositionMode_SourceIn)
+        painter.fillRect(red_pixmap.rect(), cls.ERROR_COLOR)
+        painter.end()
+        return QG.QIcon(red_pixmap)
 
     def update_status(self) -> None:
         """Update status widget"""
         text = _("Plugins:") + " "
         if Conf.main.plugins_enabled.get():
             nplugins = len(PluginRegistry.get_plugins())
-            text += str(nplugins)
+            nfailed = len(PluginRegistry.get_failed_plugins())
+            ntotal = nplugins + nfailed
+            text += f"{nplugins}/{ntotal}"
+            has_errors = nfailed > 0
+            self.setEnabled(True)
         else:
             text += "-"
+            has_errors = False
+            self.setEnabled(False)
         self.label.setText(text)
+        self.set_icon(self.ko_icon if has_errors else self.ok_icon)
+        if has_errors:
+            self.label.setStyleSheet("color: red")
+        else:
+            self.label.setStyleSheet("")
         self.setToolTip(PluginRegistry.get_plugin_info())
 
 

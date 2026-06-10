@@ -23,10 +23,13 @@ from __future__ import annotations
 import abc
 import dataclasses
 import importlib
+import importlib.util
+import logging
 import os
 import os.path as osp
 import pkgutil
 import sys
+import traceback
 from typing import TYPE_CHECKING
 
 from qtpy import QtWidgets as QW
@@ -61,6 +64,8 @@ class PluginRegistry(type):
 
     _plugin_classes: list[type[PluginBase]] = []
     _plugin_instances: list[PluginBase] = []
+    _discovery_errors: list[str] = []
+    _failed_plugins: list[FailedPluginInfo] = []
 
     def __init__(cls, name, bases, attrs):
         super().__init__(name, bases, attrs)
@@ -110,6 +115,62 @@ class PluginRegistry(type):
         execenv.log(cls, "All plugins unregistered")
 
     @classmethod
+    def clear_plugin_classes(cls) -> None:
+        """Clear registered plugin classes.
+
+        This is mainly useful when reloading plugin modules at runtime.
+        """
+        cls._plugin_classes.clear()
+
+    @classmethod
+    def add_discovery_error(cls, tb_text: str) -> None:
+        """Record an error traceback that occurred during plugin discovery.
+
+        Args:
+            tb_text: Formatted traceback string
+        """
+        cls._discovery_errors.append(tb_text)
+
+    @classmethod
+    def get_discovery_errors(cls) -> list[str]:
+        """Return error tracebacks collected during plugin discovery.
+
+        Returns:
+            List of formatted traceback strings (may be empty)
+        """
+        return list(cls._discovery_errors)
+
+    @classmethod
+    def clear_discovery_errors(cls) -> None:
+        """Clear recorded discovery errors."""
+        cls._discovery_errors.clear()
+
+    @classmethod
+    def add_failed_plugin(cls, name: str, filepath: str, tb_text: str) -> None:
+        """Record a plugin that failed to load or instantiate.
+
+        Args:
+            name: Module or plugin class name
+            filepath: File path of the plugin module
+            tb_text: Formatted traceback string
+        """
+        cls._failed_plugins.append(FailedPluginInfo(name, filepath, tb_text))
+
+    @classmethod
+    def get_failed_plugins(cls) -> list[FailedPluginInfo]:
+        """Return structured info about plugins that failed to load.
+
+        Returns:
+            List of FailedPluginInfo objects (may be empty)
+        """
+        return list(cls._failed_plugins)
+
+    @classmethod
+    def clear_failed_plugins(cls) -> None:
+        """Clear recorded failed plugin info."""
+        cls._failed_plugins.clear()
+
+    @classmethod
     def get_plugin_info(cls, html: bool = True) -> str:
         """Return plugin information (names, versions, descriptions) in html format
 
@@ -138,6 +199,15 @@ class PluginRegistry(type):
         else:
             text = italic(_("Plugins are disabled (see DataLab settings)"))
         return text
+
+
+@dataclasses.dataclass
+class FailedPluginInfo:
+    """Information about a plugin that failed to load or instantiate."""
+
+    name: str
+    filepath: str
+    traceback: str
 
 
 @dataclasses.dataclass
@@ -297,23 +367,93 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
 def discover_plugins() -> list[type[PluginBase]]:
     """Discover plugins using naming convention
 
+    This function reloads or imports all modules matching the DataLab
+    plugin naming scheme (``"{MOD_NAME}_*"``). Plugin classes are then
+    registered automatically via the :class:`PluginRegistry` metaclass.
+
+    Import errors for individual plugins are captured and logged so that
+    one broken plugin does not prevent the others from loading.  Error
+    tracebacks are accumulated in :class:`PluginRegistry` class attributes
+    so that callers (e.g. the main window) can replay them into the
+    internal console once it is ready.
+
     Returns:
-        List of discovered plugins (as classes)
+        List of imported/reloaded plugin modules
     """
-    if Conf.main.plugins_enabled.get():
-        for path in [
-            Conf.main.plugins_path.get(),
-            PLUGINS_DEFAULT_PATH,
-        ] + OTHER_PLUGINS_PATHLIST:
-            rpath = osp.realpath(path)
-            if rpath not in sys.path:
-                sys.path.append(rpath)
-        return [
-            importlib.import_module(name)
-            for _finder, name, _ispkg in pkgutil.iter_modules()
-            if name.startswith(f"{MOD_NAME}_")
-        ]
-    return []
+    PluginRegistry.clear_discovery_errors()
+    PluginRegistry.clear_failed_plugins()
+
+    if not Conf.main.plugins_enabled.get():
+        return []
+
+    # Ensure plugin search paths are present in sys.path
+    for path in [
+        Conf.main.plugins_path.get(),
+        PLUGINS_DEFAULT_PATH,
+    ] + OTHER_PLUGINS_PATHLIST:
+        rpath = osp.realpath(path)
+        if rpath not in sys.path:
+            sys.path.append(rpath)
+
+    modules: list[type[PluginBase]] = []
+    for finder, name, _ispkg in pkgutil.iter_modules():
+        if not name.startswith(f"{MOD_NAME}_"):
+            continue
+        try:
+            # If module is already loaded, reload it so that code changes
+            # are taken into account (useful for hot-reload in dev).
+            if name in sys.modules:
+                module = importlib.reload(sys.modules[name])
+            else:
+                module = importlib.import_module(name)
+            modules.append(module)
+        # Plugin discovery imports arbitrary third-party modules. We must catch
+        # every failure here so discovery can continue and the error is exposed
+        # through the console, log files, and plugin configuration dialog.
+        except Exception as e:  # pylint: disable=broad-except
+            tb_text = traceback.format_exc()
+            print(f"Error loading plugin '{name}': {e}")
+            traceback.print_exc()
+            # Log to file so it appears in Log Files viewer
+            logger = logging.getLogger(__name__)
+            logger.error("Error loading plugin '%s'", name, exc_info=True)
+            Conf.main.traceback_log_available.set(True)
+            # Accumulate for replay in internal console
+            PluginRegistry.add_discovery_error(tb_text)
+            # Record structured info about the failed plugin
+            filepath = ""
+            try:
+                spec = importlib.util.find_spec(name)
+                if spec and spec.origin:
+                    filepath = spec.origin
+            # Best effort only: failing to resolve the file path must never mask
+            # the original plugin import error already captured above.
+            except Exception:  # pylint: disable=broad-except
+                if hasattr(finder, "path"):
+                    filepath = osp.join(finder.path, name)
+            PluginRegistry.add_failed_plugin(name, filepath, tb_text)
+    return modules
+
+
+def reload_plugin_modules() -> None:
+    """Reload plugin modules and reset plugin classes.
+
+    This helper is intended for hot-reloading plugins at runtime. It:
+
+    - Updates the plugin search path
+    - Clears the plugin class registry
+    - Reloads or imports all modules matching the plugin naming convention
+    """
+    if not Conf.main.plugins_enabled.get():
+        return
+
+    # Reset class registry before re-executing modules so that plugin
+    # classes are rebuilt from freshly executed code.
+    PluginRegistry.unregister_all_plugins()
+
+    # Re-discover plugins; discover_plugins will reload modules that
+    # are already imported.
+    discover_plugins()
 
 
 def discover_v020_plugins() -> list[tuple[str, str]]:

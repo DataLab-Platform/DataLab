@@ -23,6 +23,7 @@ The public Application Programming Interface (API) of DataLab offers a set of fu
    api/main
    api/panel
    api/actionhandler
+   api/objectmodel
    api/objectview
    api/plothandler
    api/roieditor

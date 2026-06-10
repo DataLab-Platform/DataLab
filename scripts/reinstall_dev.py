@@ -3,8 +3,10 @@
 Reinstall multiple local libraries in editable mode for development.
 
 Workflow:
-  1) Try to uninstall all target libraries in one command (ignore errors if some are not installed).
-  2) Reinstall each library in editable mode from a sibling folder: ../<library>.
+  1) Try to uninstall all target libraries in one command
+     (ignore errors if some are not installed).
+  2) Reinstall each library in editable mode from a sibling folder:
+     ../<library>.
 
 This script uses the same Python interpreter that runs it (sys.executable),
 so pip operations happen in the same environment (e.g., your active venv).

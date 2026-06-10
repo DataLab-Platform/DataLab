@@ -56,7 +56,7 @@ from sigima.objects import (
     TypeObj,
     TypeROI,
 )
-from sigima.objects.base import get_generic_roi_title
+from sigima.objects.base import GENERIC_ROI_TITLE_REGEXP, get_generic_roi_title
 
 from datalab.adapters_plotpy import (
     TypePlotItem,
@@ -65,12 +65,15 @@ from datalab.adapters_plotpy import (
     create_adapter_from_object,
     plotitem_to_singleroi,
 )
+from datalab.adapters_plotpy.roi.signal import roi_color_for_index
 from datalab.config import Conf, _
 from datalab.env import execenv
 
 if TYPE_CHECKING:
     from plotpy.plot import BasePlot
     from plotpy.tools.base import InteractiveTool
+
+    from datalab.gui.panel.base import BaseDataPanel
 
 
 def configure_roi_item_in_tool(shape, obj: SignalObj | ImageObj) -> None:
@@ -85,6 +88,16 @@ def tool_deselect_items(tool: InteractiveTool) -> None:
     plot.select_some_items([])  # Deselect all items
 
 
+def _roi_index_from_title(shape: TypeROIItem) -> int:
+    """Extract the trailing numeric index from a ``ROI<n>`` shape title.
+
+    Returns 0 if the title does not match the generic ROI title pattern
+    (which should not happen after :func:`tool_setup_shape` has run).
+    """
+    match = re.match(GENERIC_ROI_TITLE_REGEXP, str(shape.title().text()))
+    return int(match.group(1)) if match is not None else 0
+
+
 def tool_setup_shape(
     plot: BasePlot,
     shape: TypeROIItem,
@@ -94,8 +107,7 @@ def tool_setup_shape(
     configure_roi_item_in_tool(shape, obj)
     max_index = -1
     for item in plot.get_items():
-        name = str(item.title().text())
-        match = re.match(r"ROI(\d+)", name)
+        match = re.match(GENERIC_ROI_TITLE_REGEXP, str(item.title().text()))
         if match is not None:
             max_index = max(max_index, int(match.group(1)))
     shape.setTitle(get_generic_roi_title(max_index + 1))
@@ -119,8 +131,13 @@ class ROISegmentTool(HRangeTool):
 
     def create_shape(self) -> AnnotatedXRange:
         """Create shape"""
+        plot = self.get_active_plot()
         shape = create_adapter_from_object(self.roi).to_plot_item(self.obj)
-        tool_setup_shape(self.get_active_plot(), shape, self.obj)
+        tool_setup_shape(plot, shape, self.obj)
+        # Apply the cycling fill color based on the title index assigned by
+        # ``tool_setup_shape`` (so the color matches the persisted ROI
+        # numbering and stays stable across deletions).
+        shape.shape.set_fill_color(roi_color_for_index(_roi_index_from_title(shape)))
         return shape
 
 
@@ -241,6 +258,7 @@ class BaseROIEditor(
         mode: Literal["apply", "extract", "define"] = "apply",
         item: TypePlotItem | None = None,
         options: PlotOptions | dict[str, Any] | None = None,
+        source_panel: BaseDataPanel | None = None,
         size: tuple[int, int] | None = None,
     ) -> None:
         assert mode in ("apply", "extract", "define"), (
@@ -251,6 +269,7 @@ class BaseROIEditor(
         self.singleobj_btn: QW.QCheckBox | None = None
         self.obj = obj
         self.mode = mode
+        self.source_panel = source_panel
         if item is None:
             item = create_adapter_from_object(obj).make_item()
         self.main_item = item
@@ -505,6 +524,7 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, AnnotatedXR
         mode: Literal["apply", "extract", "define"] = "apply",
         item: TypePlotItem | None = None,
         options: PlotOptions | dict[str, Any] | None = None,
+        source_panel: BaseDataPanel | None = None,
         size: tuple[int, int] | None = None,
     ) -> None:
         super().__init__(
@@ -513,6 +533,7 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, AnnotatedXR
             mode=mode,
             item=item,
             options=options,
+            source_panel=source_panel,
             size=size,
         )
 
@@ -533,10 +554,19 @@ class SignalROIEditor(BaseROIEditor[SignalObj, SignalROI, CurveItem, AnnotatedXR
         param = ROI1DParam()
         if param.edit(parent=self):
             segment_roi = param.to_single_roi(self.obj)
+            plot = self.get_plot()
             shape = create_adapter_from_object(segment_roi).to_plot_item(self.obj)
             configure_roi_item_in_tool(shape, self.obj)
-            self.get_plot().add_item(shape)
-            self.get_plot().set_active_item(shape)
+            # If the user did not provide a title, assign a unique ``ROI<n>``
+            # title via the standard tool setup so color cycling stays
+            # consistent with other ROIs.
+            if not str(shape.title().text()).strip():
+                tool_setup_shape(plot, shape, self.obj)
+            shape.shape.set_fill_color(
+                roi_color_for_index(_roi_index_from_title(shape))
+            )
+            plot.add_item(shape)
+            plot.set_active_item(shape)
 
     def create_coordinate_based_roi_actions(self) -> list[QW.QAction]:
         """Create coordinate-based ROI actions"""
@@ -574,11 +604,80 @@ class ImageROIEditor(
     ICON_NAME = "roi_ima.svg"
     OBJ_NAME = _("image")
     ROI_ITEM_TYPES = (AnnotatedRectangle, AnnotatedCircle, AnnotatedPolygon)
-    ADDITIONAL_OPTIONS = {"show_itemlist": True, "show_contrast": False}
+    ADDITIONAL_OPTIONS = {"show_itemlist": True, "show_contrast": True}
+
+    def __init__(
+        self,
+        parent: QW.QWidget | None,
+        obj: SignalObj | ImageObj,
+        mode: Literal["apply", "extract", "define"] = "apply",
+        item: TypePlotItem | None = None,
+        options: PlotOptions | dict[str, Any] | None = None,
+        source_panel: BaseDataPanel | None = None,
+        size: tuple[int, int] | None = None,
+    ) -> None:
+        self._contrast_sync_in_progress = False
+        super().__init__(
+            parent=parent,
+            obj=obj,
+            mode=mode,
+            item=item,
+            options=options,
+            source_panel=source_panel,
+            size=size,
+        )
+        if isinstance(self.obj, ImageObj) and self.source_panel is not None:
+            image_panel = self.source_panel
+            if hasattr(image_panel, "register_contrast_editor"):
+                image_panel.register_contrast_editor(self.obj, self)
+        self.get_plot().SIG_LUT_CHANGED.connect(self.plot_lut_changed)
 
     def get_obj_roi_class(self) -> type[ImageROI]:
         """Get object ROI class"""
         return ImageROI
+
+    def _update_contrast_panel_range(self, zmin: float, zmax: float) -> None:
+        """Update ROI editor contrast panel range without re-emitting LUT signals."""
+        contrast = self.get_manager().get_contrast_panel()
+        if contrast is None:
+            return
+        contrast.histogram.range.set_range(zmin, zmax, dosignal=False)
+        contrast.histogram.replot()
+
+    def _set_editor_contrast_state(self, zmin: float, zmax: float) -> bool:
+        """Update ROI editor contrast state.
+
+        Returns:
+            True if the LUT range differs from the current main item range.
+        """
+        self.obj.zscalemin, self.obj.zscalemax = zmin, zmax
+        self._update_contrast_panel_range(zmin, zmax)
+        return self.main_item.get_lut_range() != (zmin, zmax)
+
+    def apply_shared_contrast(self, zmin: float, zmax: float) -> None:
+        """Apply a contrast change coming from the image panel."""
+        if not self._set_editor_contrast_state(zmin, zmax):
+            return
+        self._contrast_sync_in_progress = True
+        try:
+            self.main_item.set_lut_range((zmin, zmax))
+            plot = self.get_plot()
+            plot.update_colormap_axis(self.main_item)
+            plot.notify_colormap_changed()
+        finally:
+            self._contrast_sync_in_progress = False
+
+    def plot_lut_changed(self, plot: BasePlot) -> None:
+        """Synchronize ROI editor contrast changes with the source image panel."""
+        del plot  # unused: required by SIG_LUT_CHANGED slot signature
+        if self._contrast_sync_in_progress or not isinstance(self.obj, ImageObj):
+            return
+        zmin, zmax = self.main_item.get_lut_range()
+        self._set_editor_contrast_state(zmin, zmax)
+        if self.source_panel is not None and hasattr(
+            self.source_panel, "apply_shared_contrast"
+        ):
+            self.source_panel.apply_shared_contrast(self.obj, zmin, zmax, source=self)
 
     def add_tools_to_plot_dialog(self) -> None:
         """Add tools to plot dialog"""

@@ -41,14 +41,9 @@ set PYTHONPATH=%CLONEDIR%
 @REM Install DataLab and its dependencies
 %PYTHON% -m pip install .[exe]
 
-@REM Generating icon
-set INKSCAPE_PATH="C:\Program Files\Inkscape\bin\inkscape.exe"
+@REM Note: DataLab.ico is committed under resources/ and regenerated on demand
+@REM via `scripts\build_resources.bat` when DataLab.svg changes.
 set RESPATH=%CLONEDIR%\resources
-for %%s in (16 24 32 48 128 256) do (
-  %INKSCAPE_PATH% "%RESPATH%\DataLab.svg" -o "%RESPATH%\tmp-%%s.png" -w %%s -h %%s
-)
-magick "%RESPATH%\tmp-*.png" "%RESPATH%\DataLab.ico"
-del "%RESPATH%\tmp-*.png"
 
 @REM Note: Translations were already compiled in the cloned directory using the dev environment
 

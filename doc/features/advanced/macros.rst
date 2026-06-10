@@ -43,10 +43,16 @@ Main features
 
 The Macro Panel is a simple interface to:
 
-- Create new macros, using the "New macro" |libre-gui-add| button.
-- Rename existing macros, using the "Rename macro" |libre-gui-pencil| button.
+- Create new macros, using the "New macro" |libre-gui-add| button. The button
+  also exposes a dropdown menu offering a blank macro and the bundled
+  *templates* (see :ref:`macro_templates`).
+- Rename existing macros, using the "Rename macro" |libre-gui-pencil| button
+  (or by double-clicking on a tab).
+- Duplicate the current macro, using the "Duplicate macro" |duplicate| button.
 - Import/export macros from/to files, using the "Import macro" |fileopen_py|
   and "Export macro" |filesave_py| buttons.
+- Reopen a macro from previous sessions, using the "Recent macros..."
+  |history| button (the recent list is persisted across DataLab sessions).
 - Execute macros, using the "Run macro" |libre-camera-flash-on| button.
 - Stop the execution of a macro, using the "Stop macro" |libre-camera-flash-off| button.
 
@@ -60,12 +66,22 @@ The Macro Panel is a simple interface to:
     :height: 24px
     :class: dark-light no-scaled-link
 
+.. |duplicate| image:: ../../../datalab/data/icons/edit/duplicate.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
 .. |fileopen_py| image:: ../../../datalab/data/icons/io/fileopen_py.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
 .. |filesave_py| image:: ../../../datalab/data/icons/io/filesave_py.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |history| image:: ../../../datalab/data/icons/history.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -91,6 +107,49 @@ workspace file.
    application. This means that you can continue working with DataLab while a macro
    is running and that *you can stop a macro at any time* using the
    |libre-camera-flash-off| button.
+
+Editor features
+---------------
+
+The macro editor offers a few features that make script writing more
+comfortable:
+
+- **Autosave**: every keystroke is debounced and persisted into the current
+  workspace, so unsaved edits survive an unexpected shutdown. A recovery
+  prompt is offered at startup when an autosaved revision is detected.
+- **Tab persistence**: the set of open macros and the active tab are restored
+  the next time DataLab starts, so you pick up exactly where you left off.
+- **Find / Replace** (``Ctrl+F`` / ``Ctrl+H``): an inline bar at the bottom
+  of the editor supports case-sensitive search, whole-word matching, regular
+  expressions, and replace (or replace-all) inside the active macro.
+- **Python autocompletion** is enabled out of the box (``Ctrl+Space`` to
+  trigger it manually), backed by the embedded code editor.
+
+Console
+-------
+
+The bottom *Console* panel captures the standard output and standard error
+streams produced by the running macro. Right-clicking inside the console
+exposes:
+
+- **Clear console** — wipe the current contents.
+- **Save history log...** — export the console history to a text file.
+
+The maximum number of lines retained by the console can be tuned via the
+``Conf.macro.console_max_lines`` setting (defaults to ``5000``).
+
+.. _macro_templates:
+
+Templates
+---------
+
+The "New macro" dropdown lists a set of ready-to-use *templates* covering
+common patterns (signal creation, image processing, batch loops, etc.).
+You can ship your own templates by dropping ``*.py`` files into the user
+templates directory — by default ``~/.DataLab/macro_templates/``, configurable
+via ``Conf.macro.templates_path``. The first non-empty docstring line of each
+template is used as its menu entry title. Bundled templates take precedence
+over user templates when names collide.
 
 Example
 -------

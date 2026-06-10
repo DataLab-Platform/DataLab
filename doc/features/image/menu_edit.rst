@@ -105,6 +105,13 @@ This feature allows you to tranfer those information from one image to another:
     destination image (for the metadata keys that are common to both images)
     or simply add the metadata keys that are not present in the destination image.
 
+When pasting metadata, a dialog box allows you to select which metadata categories
+to keep from the clipboard:
+
+.. figure:: /images/shots/i_paste_metadata.png
+
+    Screenshot of the "Paste metadata" dialog.
+
 Import/export metadata
 ^^^^^^^^^^^^^^^^^^^^^^
 

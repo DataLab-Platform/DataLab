@@ -36,6 +36,7 @@ def multiple_commands(remote: RemoteProxy):
         area = rect.get_rect()
         remote.add_annotations_from_items([rect])
         uuid = remote.get_sel_object_uuids()[0]
+        assert remote.get_current_object_uuid() == uuid
         items = remote.get_object_shapes()
         assert len(items) == 1 and items[0].get_rect() == area
         remote.add_label_with_title(f"Image uuid: {uuid}")
@@ -60,6 +61,20 @@ def multiple_commands(remote: RemoteProxy):
 
         remote.set_current_panel("signal")
         assert remote.get_current_panel() == "signal"
+
+        # Test set_object round-trip (get → modify → set → verify)
+        uuids = remote.get_object_uuids()
+        obj = remote.get_object(uuids[0])
+        original_title = obj.title
+        obj.title = "Modified by set_object"
+        remote.set_object(obj)
+        obj2 = remote.get_object(uuids[0])
+        assert obj2.title == "Modified by set_object", (
+            f"set_object failed: expected 'Modified by set_object', got '{obj2.title}'"
+        )
+        obj2.title = original_title
+        remote.set_object(obj2)
+
         remote.calc("log10")
 
         param = XYCalibrateParam.create(a=1.2, b=0.1)

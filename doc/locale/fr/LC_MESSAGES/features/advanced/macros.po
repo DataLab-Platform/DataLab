@@ -6,16 +6,11 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: DataLab \n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Language: fr\n"
-"Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.17.0\n"
 
 msgid "How to use macros in DataLab, the open-source data analysis and visualization platform"
 msgstr "Comment utiliser les macros dans DataLab, la plateforme d'analyse et de visualisation de données open-source"
@@ -53,16 +48,22 @@ msgstr "Fonctionnalités principales"
 msgid "The Macro Panel is a simple interface to:"
 msgstr "Le Gestionnaire de Macros est une interface simple pour :"
 
-msgid "Create new macros, using the \"New macro\" |libre-gui-add| button."
-msgstr "Créer de nouvelles macros, en utilisant le bouton \"Nouvelle macro\" |libre-gui-add|."
+msgid "Create new macros, using the \"New macro\" |libre-gui-add| button. The button also exposes a dropdown menu offering a blank macro and the bundled *templates* (see :ref:`macro_templates`)."
+msgstr "Créer de nouvelles macros, en utilisant le bouton \"Nouvelle macro\" |libre-gui-add|. Le bouton expose également un menu déroulant proposant une macro vierge et les *modèles* fournis (voir :ref:`macro_templates`)."
 
 msgid "libre-gui-add"
 msgstr ""
 
-msgid "Rename existing macros, using the \"Rename macro\" |libre-gui-pencil| button."
-msgstr "Renommer des macros existantes, en utilisant le bouton \"Renommer macro\" |libre-gui-pencil|."
+msgid "Rename existing macros, using the \"Rename macro\" |libre-gui-pencil| button (or by double-clicking on a tab)."
+msgstr "Renommer des macros existantes, en utilisant le bouton \"Renommer macro\" |libre-gui-pencil| (ou en double-cliquant sur un onglet)."
 
 msgid "libre-gui-pencil"
+msgstr ""
+
+msgid "Duplicate the current macro, using the \"Duplicate macro\" |duplicate| button."
+msgstr "Dupliquer la macro courante, en utilisant le bouton \"Dupliquer macro\" |duplicate|."
+
+msgid "duplicate"
 msgstr ""
 
 msgid "Import/export macros from/to files, using the \"Import macro\" |fileopen_py| and \"Export macro\" |filesave_py| buttons."
@@ -72,6 +73,12 @@ msgid "fileopen_py"
 msgstr ""
 
 msgid "filesave_py"
+msgstr ""
+
+msgid "Reopen a macro from previous sessions, using the \"Recent macros...\" |history| button (the recent list is persisted across DataLab sessions)."
+msgstr "Rouvrir une macro d'une session précédente, en utilisant le bouton \"Macros récentes...\" |history| (la liste des macros récentes est conservée d'une session à l'autre)."
+
+msgid "history"
 msgstr ""
 
 msgid "Execute macros, using the \"Run macro\" |libre-camera-flash-on| button."
@@ -91,6 +98,45 @@ msgstr "Les macros sont intégrées dans l'espace de travail de DataLab, elles s
 
 msgid "Macro are executed in a separate process, so they won't block the main DataLab application. This means that you can continue working with DataLab while a macro is running and that *you can stop a macro at any time* using the |libre-camera-flash-off| button."
 msgstr "Les macros sont exécutées dans un processus séparé, elles ne bloqueront donc pas l'application principale de DataLab. Cela signifie que vous pouvez continuer à travailler avec DataLab pendant qu'une macro est en cours d'exécution et que *vous pouvez arrêter une macro à tout moment* en utilisant le bouton |libre-camera-flash-off|."
+
+msgid "Editor features"
+msgstr "Fonctionnalités de l'éditeur"
+
+msgid "The macro editor offers a few features that make script writing more comfortable:"
+msgstr "L'éditeur de macros offre quelques fonctionnalités qui facilitent l'écriture de scripts :"
+
+msgid "**Autosave**: every keystroke is debounced and persisted into the current workspace, so unsaved edits survive an unexpected shutdown. A recovery prompt is offered at startup when an autosaved revision is detected."
+msgstr "**Sauvegarde automatique** : chaque frappe est temporisée et persistée dans l'espace de travail courant, afin que les modifications non sauvegardées survivent à un arrêt inattendu. Une invite de récupération est proposée au démarrage lorsqu'une version sauvegardée automatiquement est détectée."
+
+msgid "**Tab persistence**: the set of open macros and the active tab are restored the next time DataLab starts, so you pick up exactly where you left off."
+msgstr "**Persistance des onglets** : l'ensemble des macros ouvertes et l'onglet actif sont restaurés au démarrage suivant de DataLab, vous permettant de reprendre exactement là où vous vous étiez arrêté."
+
+msgid "**Find / Replace** (``Ctrl+F`` / ``Ctrl+H``): an inline bar at the bottom of the editor supports case-sensitive search, whole-word matching, regular expressions, and replace (or replace-all) inside the active macro."
+msgstr "**Rechercher / Remplacer** (``Ctrl+F`` / ``Ctrl+H``) : une barre intégrée en bas de l'éditeur prend en charge la recherche sensible à la casse, la correspondance de mots entiers, les expressions régulières et le remplacement (ou le remplacement total) dans la macro active."
+
+msgid "**Python autocompletion** is enabled out of the box (``Ctrl+Space`` to trigger it manually), backed by the embedded code editor."
+msgstr "**L'autocomplétion Python** est activée par défaut (``Ctrl+Espace`` pour la déclencher manuellement), fournie par l'éditeur de code intégré."
+
+msgid "Console"
+msgstr "Console"
+
+msgid "The bottom *Console* panel captures the standard output and standard error streams produced by the running macro. Right-clicking inside the console exposes:"
+msgstr "Le panneau *Console* en bas capture les flux de sortie standard et d'erreur standard produits par la macro en cours d'exécution. Un clic droit dans la console expose :"
+
+msgid "**Clear console** — wipe the current contents."
+msgstr "**Effacer la console** — efface le contenu actuel."
+
+msgid "**Save history log...** — export the console history to a text file."
+msgstr "**Enregistrer le journal de l'historique...** — exporte l'historique de la console vers un fichier texte."
+
+msgid "The maximum number of lines retained by the console can be tuned via the ``Conf.macro.console_max_lines`` setting (defaults to ``5000``)."
+msgstr "Le nombre maximum de lignes conservées par la console peut être ajusté via le paramètre ``Conf.macro.console_max_lines`` (par défaut ``5000``)."
+
+msgid "Templates"
+msgstr "Modèles"
+
+msgid "The \"New macro\" dropdown lists a set of ready-to-use *templates* covering common patterns (signal creation, image processing, batch loops, etc.). You can ship your own templates by dropping ``*.py`` files into the user templates directory — by default ``~/.DataLab/macro_templates/``, configurable via ``Conf.macro.templates_path``. The first non-empty docstring line of each template is used as its menu entry title. Bundled templates take precedence over user templates when names collide."
+msgstr "Le menu déroulant \"Nouvelle macro\" liste un ensemble de *modèles* prêts à l'emploi couvrant des cas courants (création de signal, traitement d'image, boucles de traitement par lots, etc.). Vous pouvez fournir vos propres modèles en plaçant des fichiers ``*.py`` dans le répertoire des modèles utilisateur — par défaut ``~/.DataLab/macro_templates/``, configurable via ``Conf.macro.templates_path``. La première ligne non vide de la docstring de chaque modèle est utilisée comme titre de l'entrée du menu. Les modèles fournis avec DataLab ont priorité sur les modèles utilisateur en cas de conflit de noms."
 
 msgid "Example"
 msgstr "Exemple"

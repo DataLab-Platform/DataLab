@@ -208,6 +208,10 @@ class ActionCategory(enum.Enum):
     PLUGINS = enum.auto()  # for plugins actions
 
 
+#: Stylesheet enabling scrollable menus (used for plugin submenus)
+SCROLLABLE_MENU_STYLESHEET = "QMenu { menu-scrollable: 1; }"
+
+
 class BaseActionHandler(metaclass=abc.ABCMeta):
     """Object handling panel GUI interactions: actions, menus, ...
 
@@ -386,6 +390,15 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         # Use the same refresh pattern as delete_results() method
         self.panel.refresh_plot("selected", True, False)
 
+    def clear_plugin_actions(self) -> None:
+        """Clear plugin actions and submenus"""
+        self.feature_actions.pop(ActionCategory.PLUGINS, None)
+        # Clear submenus related to plugins
+        plugin_prefix = ActionCategory.PLUGINS.name + "/"
+        for key in list(self.__submenus.keys()):
+            if key.startswith(plugin_prefix):
+                self.__submenus.pop(key)
+
     @contextmanager
     def new_category(self, category: ActionCategory) -> Generator[None, None, None]:
         """Context manager for creating a new menu.
@@ -432,6 +445,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         if is_new:
             self.__submenus[key] = menu = QW.QMenu(title)
+            if self.__category_in_progress is ActionCategory.PLUGINS:
+                menu.setStyleSheet(SCROLLABLE_MENU_STYLESHEET)
             if icon_name:
                 menu.setIcon(get_icon(icon_name))
             # Store reference to menu if requested
@@ -439,6 +454,17 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 setattr(self, store_ref, menu)
         else:
             menu = self.__submenus[key]
+            if self.__category_in_progress is ActionCategory.PLUGINS:
+                menu.setStyleSheet(SCROLLABLE_MENU_STYLESHEET)
+            # When reusing an existing submenu (e.g. after re-running
+            # plugin action creation), clear previous actions so that the
+            # submenu contents reflect the latest definitions.
+            #
+            # However, if we are in the PLUGINS category, we don't want to
+            # clear the menu because multiple plugins might contribute to the
+            # same submenu (e.g. "Processing").
+            if self.__category_in_progress is not ActionCategory.PLUGINS:
+                menu.clear()
 
         # Save current submenu state and push new submenu onto stack
         submenu_state = {
@@ -471,14 +497,24 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             # Update submenu in progress status BEFORE adding to parent
             self.__submenu_in_progress = len(self.__submenu_stack) > 0
 
-            if current_submenu["is_new"]:
-                # Add this submenu to its parent (either category or parent submenu)
-                if self.__submenu_stack:
-                    # We're in a nested submenu, add to parent submenu's actions
-                    parent_submenu = self.__submenu_stack[-1]
+            # Add this submenu to its parent (either category or parent submenu)
+            if self.__submenu_stack:
+                # We're in a nested submenu, add to parent submenu's actions
+                parent_submenu = self.__submenu_stack[-1]
+                if current_submenu["is_new"]:
                     parent_submenu["actions"].append(current_submenu["menu"])
-                else:
-                    # We're at the top level, add to category actions
+            else:
+                # We're at the top level, ensure the submenu is attached to the
+                # current category. This must also work when the category
+                # action list was cleared (e.g. when reloading plugins), in
+                # which case we need to re-add existing submenus.
+                category_actions = self.feature_actions.get(
+                    self.__category_in_progress, []
+                )
+                if (
+                    current_submenu["is_new"]
+                    or current_submenu["menu"] not in category_actions
+                ):
                     # Force using the current category, not SUBMENU
                     self.add_to_action_list(
                         current_submenu["menu"], category=self.__category_in_progress
@@ -1285,6 +1321,7 @@ class SignalActionHandler(BaseActionHandler):
                 self.action_for("reverse_x")
                 self.action_for("replace_x_by_other_y")
                 self.action_for("xy_mode")
+                self.action_for("calibration", separator=True)
                 self.action_for("to_cartesian", separator=True)
                 self.action_for("to_polar")
             with self.new_menu(_("Frequency filters"), icon_name="highpass.svg"):
@@ -1405,11 +1442,16 @@ class SignalActionHandler(BaseActionHandler):
                 tip=_("Compute the ordinate at a given x value (linear interpolation)"),
             )
             self.action_for("extract_pulse_features")
+            self.action_for("extract_peak_positions")
             self.new_action(
-                _("Peak detection"),
-                separator=True,
+                _("Peak detection..."),
                 triggered=self.panel.processor.compute_peak_detection,
                 icon_name="peak_detect.svg",
+                tip=_(
+                    "Interactive peak detection: adjust threshold and minimum "
+                    "distance visually, then store detected peaks as an "
+                    "XY-markers table result"
+                ),
             )
             self.action_for("sampling_rate_period", separator=True)
             self.action_for("dynamic_parameters", context_menu_pos=-1)
@@ -1420,6 +1462,16 @@ class SignalActionHandler(BaseActionHandler):
         """Create actions that are added to the menus in the end"""
         super().create_last_actions()
         with self.new_category(ActionCategory.OPERATION):
+            self.new_action(
+                _("Create signal from markers table..."),
+                separator=True,
+                triggered=self.panel.processor.compute_markers_to_signal,
+                icon_name="peak_detect.svg",
+                tip=_(
+                    "Build a sticks signal from an XY-markers table result "
+                    "(e.g. from 'Extract peak positions')"
+                ),
+            )
             self.action_for("signals_to_image", separator=True)
 
         with self.new_category(ActionCategory.VIEW):

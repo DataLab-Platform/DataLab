@@ -84,6 +84,7 @@ class RemoteServer(QC.QThread):
     SIG_CLOSE_APP = QC.Signal()
     SIG_RAISE_WINDOW = QC.Signal()
     SIG_ADD_OBJECT = QC.Signal(object, str, bool)
+    SIG_SET_OBJECT = QC.Signal(object)
     SIG_ADD_GROUP = QC.Signal(str, str, bool)
     SIG_LOAD_FROM_FILES = QC.Signal(list)
     SIG_LOAD_FROM_DIRECTORY = QC.Signal(str)
@@ -120,6 +121,7 @@ class RemoteServer(QC.QThread):
         self.SIG_CLOSE_APP.connect(win.close)
         self.SIG_RAISE_WINDOW.connect(win.raise_window)
         self.SIG_ADD_OBJECT.connect(win.add_object)
+        self.SIG_SET_OBJECT.connect(win.set_object)
         self.SIG_ADD_GROUP.connect(win.add_group)
         self.SIG_LOAD_FROM_FILES.connect(win.load_from_files)
         self.SIG_LOAD_FROM_DIRECTORY.connect(win.load_from_directory)
@@ -450,6 +452,26 @@ class RemoteServer(QC.QThread):
         return True
 
     @remote_call
+    def set_object(self, obj_data: list[str]) -> bool:
+        """Set object data in DataLab.
+
+        Update an existing object in DataLab with new data from ``obj_data``.
+        The object is identified by its UUID.
+
+        Args:
+            obj_data: Object data (RPC-JSON serialized)
+
+        Returns:
+            True if successful
+
+        Raises:
+            KeyError: if no object with matching UUID is found
+        """
+        obj = utils.rpcjson_to_dataset(obj_data)
+        self.SIG_SET_OBJECT.emit(obj)
+        return True
+
+    @remote_call
     def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
         """Return selected objects uuids.
 
@@ -460,6 +482,15 @@ class RemoteServer(QC.QThread):
             List of selected objects uuids.
         """
         return self.win.get_sel_object_uuids(include_groups)
+
+    @remote_call
+    def get_current_object_uuid(self) -> str | None:
+        """Return current object uuid in current panel.
+
+        Returns:
+            UUID of the current object, or None if no object is current.
+        """
+        return self.win.get_current_object_uuid()
 
     @remote_call
     def add_group(
@@ -1067,6 +1098,23 @@ class RemoteClient(BaseProxy):
         """
         obj_data = utils.dataset_to_rpcjson(obj)
         self._datalab.add_object(obj_data, group_id, set_current)
+
+    def set_object(self, obj: SignalObj | ImageObj) -> None:
+        """Set object data in DataLab.
+
+        Update an existing object in DataLab with new data from ``obj``.
+        The object is identified by its UUID (which is carried by ``obj``
+        from a previous :meth:`get_object` call).
+
+        Args:
+            obj: Signal or image object (must have the same UUID as an
+             existing object in DataLab)
+
+        Raises:
+            KeyError: if no object with matching UUID is found
+        """
+        obj_data = utils.dataset_to_rpcjson(obj)
+        self._datalab.set_object(obj_data)
 
     def calc(self, name: str, param: gds.DataSet | None = None) -> None:
         """Call computation feature ``name``

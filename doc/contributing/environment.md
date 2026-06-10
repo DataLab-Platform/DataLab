@@ -95,7 +95,7 @@ Specific environment variables
 Enable the "debug" mode (no stdin/stdout redirection towards internal console):
 
     @REM Mode DEBUG
-    set DEBUG=1
+    set DATALAB_DEBUG=1
 
 Building PDF documentation requires LaTeX. On Windows, the following environment:
 
@@ -150,6 +150,4 @@ The following software may be required for maintaining the project:
 | -------- | ----------- |
 | [gettext](https://mlocati.github.io/articles/gettext-iconv-windows.html) | Translations |
 | [Git](https://git-scm.com/) | Version control system |
-| [ImageMagick](https://imagemagick.org/) | Image manipulation utilities |
-| [Inkscape](https://inkscape.org/) | Vector graphics editor |
 | [MikTeX](https://miktex.org/) | LaTeX distribution on Windows |

@@ -422,6 +422,50 @@ class WorkspaceAdapter(QObject):
 
         self._executor.run_on_main_thread(do_update)
 
+    def set_object(self, name: str, obj: DataObject) -> None:
+        """Update an existing object in-place with new data.
+
+        This operation replaces all data attributes of the existing object
+        (identified by name/title) with those from ``obj``, preserving the
+        object's identity, group membership, and position in the workspace.
+
+        This operation is marshaled to the Qt main thread for thread safety.
+
+        Args:
+            name: Object name/title.
+            obj: Object with updated data (same type as existing).
+
+        Raises:
+            KeyError: If object not found.
+        """
+        self._ensure_main_window()
+
+        panel_name = self.get_object_panel(name)
+        if panel_name is None:
+            raise KeyError(f"Object '{name}' not found")
+
+        if panel_name == "signal":
+            panel = self._main_window.signalpanel
+        else:
+            panel = self._main_window.imagepanel
+
+        def do_set():
+            # Find the existing object by title
+            for existing in panel.objmodel:
+                if existing.title == name:
+                    # Copy all public DataSet item values
+                    for item in existing._items:  # pylint: disable=protected-access
+                        attr_name = item.get_name()
+                        if not attr_name.startswith("_"):
+                            setattr(existing, attr_name, getattr(obj, attr_name))
+                    # Refresh display
+                    panel.objview.update_tree()
+                    panel.SIG_REFRESH_PLOT.emit("selected", True)
+                    return
+            raise KeyError(f"Object '{name}' not found")
+
+        self._executor.run_on_main_thread(do_set)
+
     def clear(self) -> None:
         """Clear all objects from the workspace.
 

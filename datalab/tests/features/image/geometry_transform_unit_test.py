@@ -14,7 +14,7 @@ import sigima.proc.image as sipi
 from sigima.tests import data as test_data
 
 from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
-from datalab.gui.processor.image import apply_geometry_transform
+from datalab.gui.processor.geometry_postprocess import apply_geometry_transform
 from datalab.tests import datalab_test_app_context
 
 
