@@ -2430,6 +2430,9 @@ msgstr "Détection de taches basée sur SimpleBlobDetector d'OpenCV"
 msgid "Creating a ROI grid will overwrite any existing ROI.<br><br>Do you want to continue?"
 msgstr "La création d'une grille de ROI écrasera toute ROI existante.<br><br>Voulez-vous continuer ?"
 
+msgid "Regions of interest are already defined for this image.<br><br>Creating new ROIs from detection will replace the existing ones, which will be lost.<br><br>Do you want to continue?"
+msgstr "Des régions d'intérêt sont déjà définies pour cette image.<br><br>La création de nouvelles ROI par détection remplacera les existantes, qui seront perdues.<br><br>Voulez-vous continuer ?"
+
 msgid "Extract ROI"
 msgstr "Extraire une ROI"
 
