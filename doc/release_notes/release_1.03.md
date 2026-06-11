@@ -32,3 +32,7 @@ and Image panels.
   giving immediate visibility on what will be modified
 * When a neighbor strategy is selected, a **live kernel preview** shows the
   shape of the neighborhood that will be used for the replacement
+* Integer images are handled explicitly: because `NaN` and infinite values
+  cannot exist in integer data, the dialog explains that the operation is not
+  applicable and prevents accidental processing, while preserving the original
+  image data type without unnecessary float conversion
