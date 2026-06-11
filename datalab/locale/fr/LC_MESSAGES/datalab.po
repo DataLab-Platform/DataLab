@@ -1677,7 +1677,6 @@ msgstr "Enregistrer l'historique dans un fichier HDF5..."
 msgid "Save history to a standalone .dlhist file"
 msgstr "Enregistrer l'historique dans un fichier .dlhist autonome"
 
-#, python-format
 msgid "Duplicate selected history action/session"
 msgstr "Dupliquer l'objet %s sélectionné"
 
@@ -2168,6 +2167,9 @@ msgstr "Normaliser"
 
 msgid "Clipping"
 msgstr "Écrêtage"
+
+msgid "Replace special values"
+msgstr "Remplacer les valeurs spéciales"
 
 msgid "Add Gaussian noise"
 msgstr "Ajouter du bruit gaussien"
@@ -3772,6 +3774,21 @@ msgstr "Des journaux de bord ont été générés lors de la dernière session."
 msgid "Log files are currently empty."
 msgstr "Les journaux de bord sont vides."
 
+msgid "Kernel / Mask preview"
+msgstr "Aperçu du noyau / masque"
+
+#, python-brace-format
+msgid "{label} — Kernel / Mask preview"
+msgstr "{label} — Aperçu du noyau / masque"
+
+#, python-brace-format
+msgid "±{n} points"
+msgstr "±{n} points"
+
+#, python-brace-format
+msgid "±{n} rows × ±{n} columns"
+msgstr "±{n} lignes × ±{n} colonnes"
+
 msgid "Signal baseline selection"
 msgstr "Sélection de la ligne de base du signal"
 
@@ -4113,6 +4130,9 @@ msgstr "Image"
 msgid "Dimensions"
 msgstr "Dimensions"
 
+msgid "This image uses an integer data type, so it cannot contain NaN or infinite values. Replace special values is therefore not applicable."
+msgstr "Cette image utilise un type de données entier, elle ne peut donc pas contenir de valeurs NaN ou infinies. Le remplacement des valeurs spéciales n'est donc pas applicable."
+
 msgid "Minimum value"
 msgstr "Valeur minimum"
 
@@ -4160,3 +4180,4 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
+

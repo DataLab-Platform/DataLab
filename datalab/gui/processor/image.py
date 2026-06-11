@@ -36,6 +36,9 @@ from datalab.gui.roigrideditor import ImageGridROIEditor
 from datalab.objectmodel import get_uuid
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
 from datalab.widgets import imagebackground
+from datalab.widgets.replacespecialvalues import (
+    ReplaceSpecialValuesImageParamDL,
+)
 
 
 class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
@@ -279,6 +282,12 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             icon_name="normalize.svg",
         )
         self.register_1_to_1(sipi.clip, _("Clipping"), sipb.ClipParam, "clip.svg")
+        self.register_1_to_1(
+            sipi.replace_special_values,
+            _("Replace special values"),
+            ReplaceSpecialValuesImageParamDL,
+            "replace_nan.svg",
+        )
         self.register_1_to_1(
             sipi.offset_correction,
             _("Offset correction"),
