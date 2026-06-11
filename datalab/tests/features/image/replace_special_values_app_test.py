@@ -15,10 +15,12 @@ from __future__ import annotations
 
 import numpy as np
 import sigima.params
+from qtpy import QtWidgets as QW
 from sigima.enums import ReplacementStrategyImage as S
 from sigima.objects import ImageObj, create_image
 
 from datalab.tests import datalab_test_app_context
+from datalab.widgets.replacespecialvalues import ReplaceSpecialValuesImageParamDL
 
 
 def test_replace_special_values_image_app():
@@ -59,6 +61,47 @@ def test_replace_special_values_image_app():
                 ]
             ),
         )
+
+
+def test_replace_special_values_integer_image_app_noop():
+    """Integer images should keep their data unchanged and emit a warning path."""
+    with datalab_test_app_context(console=False) as win:
+        panel = win.imagepanel
+
+        data = np.arange(9, dtype=np.uint16).reshape(3, 3)
+        image = create_image("Integer image", data)
+        panel.add_object(image)
+        panel.objview.select_objects([image])
+
+        param = sigima.params.ReplaceSpecialValuesImageParam.create(
+            nan_strategy=S.CONSTANT,
+            nan_constant_value=10.0,
+        )
+        panel.processor.run_feature("replace_special_values", param, edit=False)
+
+        result_objects = panel.objview.get_sel_objects()
+        assert len(result_objects) == 1
+        result = result_objects[0]
+        assert isinstance(result, ImageObj)
+        assert result is not image
+        assert result.data.dtype == np.uint16
+        np.testing.assert_array_equal(result.data, data)
+
+
+def test_replace_special_values_integer_image_dialog_disabled():
+    """The custom dialog should inform the user and disable validation."""
+    with datalab_test_app_context(console=False):
+        data = np.arange(9, dtype=np.uint16).reshape(3, 3)
+        image = create_image("Integer image", data)
+
+        param = ReplaceSpecialValuesImageParamDL.create()
+        param.update_from_obj(image)
+
+        dlg = param.create_dialog()
+        ok_button = dlg.findChild(QW.QDialogButtonBox).button(QW.QDialogButtonBox.Ok)
+        assert ok_button is not None
+        assert not ok_button.isEnabled()
+        dlg.close()
 
 
 if __name__ == "__main__":

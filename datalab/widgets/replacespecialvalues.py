@@ -22,6 +22,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from guidata.dataset.qtwidgets import DataSetEditLayout
+from guidata.qthelpers import exec_dialog
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
@@ -191,11 +192,15 @@ class ReplaceSpecialValuesDialog(QW.QDialog):
         counts: dict[str, int],
         total_size: int,
         is_image: bool,
+        info_message: str | None = None,
+        can_apply: bool = True,
         parent: QWidget | None = None,
     ) -> None:
         super().__init__(parent)
         self.instance = instance
         self._is_image = is_image
+        self._info_message = info_message
+        self._can_apply = can_apply
         self.setWindowTitle(instance.get_title())
         self.setMinimumWidth(480)
 
@@ -212,6 +217,15 @@ class ReplaceSpecialValuesDialog(QW.QDialog):
         line.setFrameShape(QW.QFrame.HLine)
         line.setFrameShadow(QW.QFrame.Sunken)
         main_layout.addWidget(line)
+
+        if info_message:
+            info_label = QW.QLabel(info_message)
+            info_label.setWordWrap(True)
+            info_label.setStyleSheet(
+                "background-color: #eef6ff; border: 1px solid #8fb7e8; "
+                "padding: 8px; border-radius: 4px;"
+            )
+            main_layout.addWidget(info_label)
 
         # --- DataSet editing ---
         grid = QW.QGridLayout()
@@ -240,6 +254,9 @@ class ReplaceSpecialValuesDialog(QW.QDialog):
         bbox = QW.QDialogButtonBox(QW.QDialogButtonBox.Ok | QW.QDialogButtonBox.Cancel)
         bbox.accepted.connect(self.accept)
         bbox.rejected.connect(self.reject)
+        ok_button = bbox.button(QW.QDialogButtonBox.Ok)
+        if ok_button is not None:
+            ok_button.setEnabled(can_apply)
         main_layout.addWidget(bbox)
 
         # Initial preview
@@ -260,12 +277,11 @@ class ReplaceSpecialValuesDialog(QW.QDialog):
         p = self.instance
         for prefix in ("nan", "posinf", "neginf"):
             strategy = getattr(p, f"{prefix}_strategy")
-            name = _BADGE_LABELS[prefix]
             preview = self._kernel_previews[prefix]
             shown = (
-                self._try_show_image_kernel(strategy, prefix, name, preview)
+                self._try_show_image_kernel(strategy, prefix, preview)
                 if self._is_image
-                else self._try_show_signal_kernel(strategy, prefix, name, preview)
+                else self._try_show_signal_kernel(strategy, prefix, preview)
             )
             if not shown:
                 preview.hide_preview()
@@ -274,7 +290,6 @@ class ReplaceSpecialValuesDialog(QW.QDialog):
         self,
         strategy: ReplacementStrategySignal,
         prefix: str,
-        name: str,
         preview: _KernelPreviewWidget,
     ) -> bool:
         """Show kernel for signal neighbor strategies. Returns True if shown."""
@@ -302,7 +317,6 @@ class ReplaceSpecialValuesDialog(QW.QDialog):
         self,
         strategy: ReplacementStrategyImage,
         prefix: str,
-        name: str,
         preview: _KernelPreviewWidget,
     ) -> bool:
         """Show kernel for image neighbor strategies. Returns True if shown."""
@@ -330,6 +344,8 @@ class ReplaceSpecialValuesDialog(QW.QDialog):
 
     def accept(self) -> None:
         """Validate all widget values, then commit to the DataSet."""
+        if not self._can_apply:
+            return
         if self.edit_layout is not None:
             if not self.edit_layout.check_all_values():
                 return
@@ -355,6 +371,20 @@ class ReplaceSpecialValuesSignalParamDL(ReplaceSpecialValuesSignalParam):
         self._counts = count_special_values(y)
         self._total_size = int(y.size)
 
+    def create_dialog(
+        self,
+        parent: QWidget | None = None,
+        object_name: str | None = None,
+    ) -> ReplaceSpecialValuesDialog:
+        """Create the custom replace-special-values dialog."""
+        counts = getattr(self, "_counts", {"nan": 0, "posinf": 0, "neginf": 0})
+        total = getattr(self, "_total_size", 0)
+        dlg = ReplaceSpecialValuesDialog(
+            self, counts, total, is_image=False, parent=parent
+        )
+        dlg.setObjectName(object_name or self.__class__.__name__ + "Dialog")
+        return dlg
+
     def edit(
         self,
         parent: QWidget | None = None,
@@ -364,14 +394,7 @@ class ReplaceSpecialValuesSignalParamDL(ReplaceSpecialValuesSignalParam):
         object_name: str | None = None,
     ) -> int:
         """Open the custom replace-special-values dialog."""
-        from guidata.qthelpers import exec_dialog
-
-        counts = getattr(self, "_counts", {"nan": 0, "posinf": 0, "neginf": 0})
-        total = getattr(self, "_total_size", 0)
-        dlg = ReplaceSpecialValuesDialog(
-            self, counts, total, is_image=False, parent=parent
-        )
-        dlg.setObjectName(object_name or self.__class__.__name__ + "Dialog")
+        dlg = self.create_dialog(parent=parent, object_name=object_name)
         return exec_dialog(dlg)
 
 
@@ -383,12 +406,44 @@ class ReplaceSpecialValuesImageParamDL(ReplaceSpecialValuesImageParam):
 
     _counts: dict[str, int]
     _total_size: int
+    _can_apply: bool
+    _info_message: str | None
 
     def update_from_obj(self, obj: object) -> None:
         """Pre-analyse the image to compute special-value counts."""
-        data = obj.data.astype(float)  # type: ignore[union-attr]
+        data = obj.data  # type: ignore[union-attr]
         self._counts = count_special_values_2d(data)
         self._total_size = int(data.size)
+        if np.issubdtype(data.dtype, np.integer):
+            self._can_apply = False
+            self._info_message = _(
+                "This image uses an integer data type, so it cannot contain NaN "
+                "or infinite values. Replace special values is therefore not "
+                "applicable."
+            )
+        else:
+            self._can_apply = True
+            self._info_message = None
+
+    def create_dialog(
+        self,
+        parent: QWidget | None = None,
+        object_name: str | None = None,
+    ) -> ReplaceSpecialValuesDialog:
+        """Create the custom replace-special-values dialog."""
+        counts = getattr(self, "_counts", {"nan": 0, "posinf": 0, "neginf": 0})
+        total = getattr(self, "_total_size", 0)
+        dlg = ReplaceSpecialValuesDialog(
+            self,
+            counts,
+            total,
+            is_image=True,
+            info_message=getattr(self, "_info_message", None),
+            can_apply=getattr(self, "_can_apply", True),
+            parent=parent,
+        )
+        dlg.setObjectName(object_name or self.__class__.__name__ + "Dialog")
+        return dlg
 
     def edit(
         self,
@@ -399,12 +454,5 @@ class ReplaceSpecialValuesImageParamDL(ReplaceSpecialValuesImageParam):
         object_name: str | None = None,
     ) -> int:
         """Open the custom replace-special-values dialog."""
-        from guidata.qthelpers import exec_dialog
-
-        counts = getattr(self, "_counts", {"nan": 0, "posinf": 0, "neginf": 0})
-        total = getattr(self, "_total_size", 0)
-        dlg = ReplaceSpecialValuesDialog(
-            self, counts, total, is_image=True, parent=parent
-        )
-        dlg.setObjectName(object_name or self.__class__.__name__ + "Dialog")
+        dlg = self.create_dialog(parent=parent, object_name=object_name)
         return exec_dialog(dlg)
