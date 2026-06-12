@@ -243,6 +243,12 @@ msgstr ""
 msgid "Disconnect from DataLab XML-RPC server."
 msgstr ""
 
+msgid "Return current object uuid in current panel."
+msgstr ""
+
+msgid "UUID of the current object, or None if no object is current."
+msgstr ""
+
 msgid "Return current panel name."
 msgstr ""
 

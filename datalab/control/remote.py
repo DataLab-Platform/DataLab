@@ -484,6 +484,15 @@ class RemoteServer(QC.QThread):
         return self.win.get_sel_object_uuids(include_groups)
 
     @remote_call
+    def get_current_object_uuid(self) -> str | None:
+        """Return current object uuid in current panel.
+
+        Returns:
+            UUID of the current object, or None if no object is current.
+        """
+        return self.win.get_current_object_uuid()
+
+    @remote_call
     def add_group(
         self, title: str, panel: str | None = None, select: bool = False
     ) -> None:

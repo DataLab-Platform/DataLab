@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import os.path as osp
 import re
+from datetime import datetime
 from typing import TYPE_CHECKING
 
 from guidata.config import CONF
@@ -33,6 +34,7 @@ from datalab.utils.qthelpers import (
     save_restore_stds,
 )
 from datalab.widgets.codecompleter import PythonCompleter
+from datalab.widgets.findreplace import FindReplaceBar
 
 if TYPE_CHECKING:
     from guidata.widgets.codeeditor import CodeEditor
@@ -81,8 +83,6 @@ class _RecentMacrosDialog(QW.QDialog):
         for entry in entries:
             ts = entry.get("last_seen")
             try:
-                from datetime import datetime
-
                 when = datetime.fromtimestamp(float(ts)).strftime("%Y-%m-%d %H:%M")
             except (TypeError, ValueError):
                 when = "?"
@@ -320,8 +320,6 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         editor_column_layout = QW.QVBoxLayout(editor_column)
         editor_column_layout.setContentsMargins(0, 0, 0, 0)
         editor_column_layout.addWidget(self.tabwidget)
-        from datalab.widgets.findreplace import FindReplaceBar
-
         self.find_bar = FindReplaceBar(
             lambda: self.get_macro().editor if self.get_macro() else None,
             shortcut_parent=self,
@@ -354,13 +352,11 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         self.status_label: QW.QLabel | None = None
         self.__macros: list[Macro] = []
         self._active_tab_restored = False
+        self._recovery_checked = False
 
         self.setup_actions()
 
-        # Restore splitter state and trigger recovery prompt after the event
-        # loop is up so QMessageBox is properly parented and modal.
         self._restore_splitter_state()
-        QC.QTimer.singleShot(0, self._check_recovery)
 
     def update_color_mode(self) -> None:
         """Update color mode according to the current theme"""
@@ -461,8 +457,10 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
     def remove_all_objects(self) -> None:
         """Remove all objects"""
-        for macro in self.__macros:
-            macro.clear_autosave()
+        # Note: the autosave/recovery cache is intentionally NOT cleared here,
+        # so that closing DataLab (which calls ``reset_all`` → this method)
+        # without saving the workspace preserves unsaved macros for the next
+        # startup's recovery dialog.
         self.tabwidget.clear()
         self.__macros.clear()
         super().remove_all_objects()
@@ -734,11 +732,9 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
     def _restore_splitter_state(self) -> None:
         """Restore splitter sizes from persisted configuration."""
         try:
-            from qtpy.QtCore import QByteArray
-
             raw = Conf.macro.splitter_state.get(None)
             if raw:
-                ba = QByteArray.fromBase64(raw.encode("ascii"))
+                ba = QC.QByteArray.fromBase64(raw.encode("ascii"))
                 self.restoreState(ba)
         except Exception:  # pylint: disable=broad-except
             pass
@@ -778,6 +774,18 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         """Persist splitter state on close."""
         self._save_splitter_state()
         super().closeEvent(event)
+
+    def showEvent(self, event) -> None:  # noqa: N802
+        """Trigger the macro-recovery prompt on first show.
+
+        Deferred to the first showEvent (and re-scheduled via singleShot)
+        so the splash screen has been finished before the QMessageBox
+        appears — otherwise the dialog can pop up behind the splash.
+        """
+        super().showEvent(event)
+        if not self._recovery_checked:
+            self._recovery_checked = True
+            QC.QTimer.singleShot(0, self._check_recovery)
 
     def _check_recovery(self) -> None:
         """Offer to restore auto-saved macros from a previous session."""

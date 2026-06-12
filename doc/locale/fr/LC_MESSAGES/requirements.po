@@ -36,7 +36,7 @@ msgstr "Langage de programmation Python"
 msgid "guidata"
 msgstr ""
 
-msgid ">= 3.13.4"
+msgid ">= 3.14.4"
 msgstr ""
 
 msgid "Automatic GUI generation for easy dataset editing and display"
@@ -45,7 +45,7 @@ msgstr "Génération automatique d'interface graphique pour l'édition et l'affi
 msgid "PlotPy"
 msgstr ""
 
-msgid ">= 2.8.2"
+msgid ">= 2.10.0"
 msgstr ""
 
 msgid "Curve and image plotting tools for Python/Qt applications"
@@ -54,7 +54,7 @@ msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
 msgid "Sigima"
 msgstr ""
 
-msgid ">= 1.1.2"
+msgid ">= 1.1.4"
 msgstr ""
 
 msgid "Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform."
@@ -243,6 +243,9 @@ msgstr ""
 msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr "Thème Sphinx basé sur Bootstrap de la communauté PyData"
 
+msgid "sphinxcontrib-svg2pdfconverter[CairoSVG]"
+msgstr ""
+
 msgid "Optional modules for running test suite:"
 msgstr "Modules optionnels pour exécuter la suite de tests :"
 
@@ -263,3 +266,4 @@ msgstr ""
 
 msgid "The next generation HTTP client."
 msgstr ""
+

@@ -298,52 +298,50 @@ msgstr "Désenregistrer le plugin"
 msgid "Unregister all plugins"
 msgstr "Désenregistrer tous les plugins"
 
-#, fuzzy
 msgid "Clear registered plugin classes."
-msgstr "Retourne les classes de plugins"
+msgstr "Effacer les classes de plugins enregistrées"
 
 msgid "This is mainly useful when reloading plugin modules at runtime."
-msgstr ""
+msgstr "Ceci est principalement utile lors du rechargement des modules de plugins à l'exécution."
 
 msgid "Record an error traceback that occurred during plugin discovery."
-msgstr ""
+msgstr "Enregistrer une trace d'erreur survenue lors de la découverte des plugins."
 
 msgid "Parameters"
 msgstr "Paramètres"
 
 msgid "Formatted traceback string"
-msgstr ""
+msgstr "Chaîne de trace d'erreur formatée"
 
 msgid "Return error tracebacks collected during plugin discovery."
-msgstr ""
+msgstr "Retourner les traces d'erreur collectées lors de la découverte des plugins."
 
 msgid "Returns"
 msgstr "Retourne"
 
 msgid "List of formatted traceback strings (may be empty)"
-msgstr ""
+msgstr "Liste des chaînes de trace d'erreur formatées (peut être vide)"
 
 msgid "Clear recorded discovery errors."
-msgstr ""
+msgstr "Effacer les erreurs de découverte enregistrées."
 
 msgid "Record a plugin that failed to load or instantiate."
-msgstr ""
+msgstr "Enregistrer un plugin qui n'a pas pu être chargé ou instancié."
 
-#, fuzzy
 msgid "Module or plugin class name"
-msgstr "Retourne les classes de plugins"
+msgstr "Nom du module ou de la classe du plugin"
 
 msgid "File path of the plugin module"
 msgstr ""
 
 msgid "Return structured info about plugins that failed to load."
-msgstr ""
+msgstr "Renvoie des informations structurées sur les plugins qui n'ont pas pu être chargés."
 
 msgid "List of FailedPluginInfo objects (may be empty)"
-msgstr ""
+msgstr "Liste des objets FailedPluginInfo (peut être vide)"
 
 msgid "Clear recorded failed plugin info."
-msgstr ""
+msgstr "Effacer les informations sur les plugins ayant échoué."
 
 msgid "Return plugin information (names, versions, descriptions) in html format"
 msgstr "Retourne les informations sur les plugins (noms, versions, descriptions) au format html"
@@ -352,7 +350,7 @@ msgid "return html formatted text (default: True)"
 msgstr "retourner du texte formaté en html (par défaut : True)"
 
 msgid "Information about a plugin that failed to load or instantiate."
-msgstr ""
+msgstr "Informations sur un plugin qui n'a pas pu être chargé ou instancié."
 
 msgid "Plugin info"
 msgstr "Informations sur le plugin"
@@ -434,30 +432,28 @@ msgstr "Découvrir les plugins en utilisant la convention de nommage"
 
 #, python-brace-format
 msgid "This function reloads or imports all modules matching the DataLab plugin naming scheme (``\"{MOD_NAME}_*\"``). Plugin classes are then registered automatically via the :class:`PluginRegistry` metaclass."
-msgstr ""
+msgstr "Cette fonction recharge ou importe tous les modules correspondant au schéma de nommage des plugins DataLab (``\"{MOD_NAME}_*\"``). Les classes de plugins sont ensuite enregistrées automatiquement via la métaclasse :class:`PluginRegistry`."
 
 msgid "Import errors for individual plugins are captured and logged so that one broken plugin does not prevent the others from loading.  Error tracebacks are accumulated in :class:`PluginRegistry` class attributes so that callers (e.g. the main window) can replay them into the internal console once it is ready."
-msgstr ""
+msgstr "Les erreurs d'importation pour les plugins individuels sont capturées et enregistrées afin qu'un plugin défectueux n'empêche pas les autres de se charger. Les traces d'erreurs sont accumulées dans les attributs de classe :class:`PluginRegistry` afin que les appelants (par exemple, la fenêtre principale) puissent les rejouer dans la console interne une fois qu'elle est prête."
 
-#, fuzzy
 msgid "List of imported/reloaded plugin modules"
-msgstr "Redécouvrir et recharger les modules de plugins,"
+msgstr "Liste des modules de plugins importés/rechargés"
 
 msgid "Reload plugin modules and reset plugin classes."
-msgstr ""
+msgstr "Recharger les modules de plugins et réinitialiser les classes de plugins."
 
 msgid "This helper is intended for hot-reloading plugins at runtime. It:"
-msgstr ""
+msgstr "Cet assistant est destiné au rechargement à chaud des plugins à l'exécution. Il :"
 
 msgid "Updates the plugin search path"
-msgstr ""
+msgstr "Met à jour le chemin de recherche des plugins"
 
-#, fuzzy
 msgid "Clears the plugin class registry"
-msgstr "Retourne les classes de plugins"
+msgstr "Efface le registre des classes de plugins"
 
 msgid "Reloads or imports all modules matching the plugin naming convention"
-msgstr ""
+msgstr "Recharge ou importe tous les modules correspondant à la convention de nommage des plugins"
 
 msgid "Discover v0.20 plugins (with ``cdl_`` prefix) without importing them"
 msgstr "Découvrir les plugins v0.20 (avec le préfixe ``cdl_``) sans les importer"

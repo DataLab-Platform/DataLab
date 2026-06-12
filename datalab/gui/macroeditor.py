@@ -127,6 +127,10 @@ print("All done!")
             code: Code to be executed
         """
         self.editor.setPlainText(code)
+        # ``setPlainText`` leaves the document in the *modified* state, which
+        # would suppress the very first ``modificationChanged(True)`` emission
+        # on a real user edit and thus break the autosave/recovery cache.
+        self.editor.document().setModified(False)
 
     def serialize(self, writer: BaseIOHandler) -> None:
         """Serialize this macro

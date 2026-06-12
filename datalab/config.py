@@ -68,7 +68,7 @@ _ = configtools.get_translation(MOD_NAME)
 APP_DESC = _("""DataLab is a generic signal and image processing platform""")
 APP_PATH = osp.dirname(__file__)
 
-DEBUG = os.environ.get("DEBUG", "").lower() in ("1", "true")
+DEBUG = os.environ.get("DATALAB_DEBUG", "").lower() in ("1", "true")
 if DEBUG:
     print("*** DEBUG mode *** [Reset configuration file, do not redirect std I/O]")
 
@@ -496,6 +496,11 @@ class AISection(conf.Section, metaclass=conf.SectionMeta):
 
     # Maximum number of tool-call iterations per user prompt (safety cap).
     max_iterations = conf.Option()
+
+    # Maximum number of non-system messages sent to the provider on each
+    # request. 0 means unlimited. Useful to stay within a local model's
+    # context window.
+    max_history_messages = conf.Option()
 
     # Auto-approve read-only inspection tools without confirmation dialog.
     auto_approve_readonly = conf.Option()

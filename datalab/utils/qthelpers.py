@@ -477,6 +477,16 @@ def grab_save_window(
         # DataLab screenshot names or numbered items don't get timestamp
         add_timestamp = False
 
+    # Suffix the screenshot name with the active UI language so that the
+    # French and English documentation builds can each pick the right asset
+    # via Sphinx's ``figure_language_filename = "{root}.{language}{ext}"``.
+    # ``LANG`` is set by the screenshot refresh script (scripts/update_screenshots.bat)
+    # to ``fr`` or ``en`` for each pass. Anything else (or unset) is normalised
+    # to ``en``.
+    lang_env = (os.environ.get("LANG") or "en").lower()
+    lang = "fr" if lang_env.startswith("fr") else "en"
+    name = f"{name}.{lang}"
+
     # Use guidata's grab_save_window with DataLab-specific configuration
     guidata_grab_save_window(
         widget=widget, name=name, save_dir=SHOTPATH, add_timestamp=add_timestamp

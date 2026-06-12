@@ -64,6 +64,12 @@ Guidelines:
 {macro_guidelines}\
 - Be concise. Confirm completion in one sentence after the last tool call.
 - Never invent operation names or parameter fields.
+- NEVER embed images in your prose. Do not emit Markdown image tags
+  ('![alt](url)'), 'data:image/...' URIs, base64 blobs, HTML '<img>'
+  tags, or any other inline image syntax — neither real nor invented.
+  When a tool returns an image (e.g. 'capture_view'), the UI already
+  displays it; just describe it in plain text. Same rule for binary
+  payloads in general: never paste base64 strings back to the user.
 """
 
 
@@ -273,6 +279,11 @@ class AIController:
         system_prompt: Override the default system prompt.
         max_iterations: Safety cap on tool-call iterations per user prompt.
         auto_approve_readonly: Skip confirmation for read-only tools.
+        max_history_messages: Maximum number of non-system messages sent to
+         the provider on each request. ``0`` (the default) means unlimited.
+         Useful to stay within a local model's context window (llama.cpp /
+         LM Studio / Ollama all return HTTP 400 when the prompt exceeds
+         ``n_ctx``).
     """
 
     def __init__(
@@ -287,6 +298,7 @@ class AIController:
         auto_approve_readonly: bool = True,
         execute_callback: ExecuteCallback | None = None,
         usage_callback: UsageCallback | None = None,
+        max_history_messages: int = 0,
     ) -> None:
         self.provider = provider
         self.registry = registry
@@ -298,6 +310,7 @@ class AIController:
         self.system_prompt = system_prompt or build_default_system_prompt()
         self.max_iterations = int(max_iterations)
         self.auto_approve_readonly = bool(auto_approve_readonly)
+        self.max_history_messages = max(0, int(max_history_messages))
         self.history: list[ChatMessage] = [
             ChatMessage(role="system", content=self.system_prompt)
         ]
@@ -320,6 +333,7 @@ class AIController:
         auto_approve_readonly: bool = True,
         execute_callback: ExecuteCallback | None = None,
         usage_callback: UsageCallback | None = None,
+        max_history_messages: int = 0,
     ) -> AIController:
         """Build a controller whose system prompt matches ``registry``."""
         tool_names = {schema["name"] for schema in registry.list_schemas()}
@@ -334,6 +348,7 @@ class AIController:
             auto_approve_readonly=auto_approve_readonly,
             execute_callback=execute_callback,
             usage_callback=usage_callback,
+            max_history_messages=max_history_messages,
         )
 
     def reset(self) -> None:
@@ -437,6 +452,32 @@ class AIController:
         if self._abort_event.is_set():
             raise AIAbortError()
 
+    def _messages_for_provider(self) -> list[ChatMessage]:
+        """Return the (possibly truncated) message window sent to the provider.
+
+        When :attr:`max_history_messages` is positive, only the latest N
+        non-system messages are kept. Leading messages are then trimmed so
+        the window always starts on a ``user`` message — this avoids
+        leaving an orphan ``tool`` reply or an assistant ``tool_calls``
+        whose responses were dropped, which most providers reject.
+
+        The current (in-flight) turn is always preserved: if the cap is
+        smaller than the messages produced so far in this turn, the
+        window falls back to ``[latest user message ... end]``.
+        """
+        if self.max_history_messages <= 0:
+            return list(self.history)
+        non_system = [m for m in self.history if m.role != "system"]
+        window = non_system[-self.max_history_messages :]
+        while window and window[0].role != "user":
+            window.pop(0)
+        if not window:
+            for idx in range(len(non_system) - 1, -1, -1):
+                if non_system[idx].role == "user":
+                    window = non_system[idx:]
+                    break
+        return [ChatMessage(role="system", content=self.system_prompt), *window]
+
     def _send_inner(self, user_message: str) -> TurnResult:
         self.history.append(ChatMessage(role="user", content=user_message))
         executions: list[tuple[str, dict, ToolResult]] = []
@@ -446,7 +487,7 @@ class AIController:
         for _iteration in range(self.max_iterations):
             self._check_abort()
             response: AssistantMessage = self.provider.chat(
-                self.history, tools=tools_schema
+                self._messages_for_provider(), tools=tools_schema
             )
             self.history.append(
                 ChatMessage(

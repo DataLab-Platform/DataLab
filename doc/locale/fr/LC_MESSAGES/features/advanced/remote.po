@@ -143,466 +143,460 @@ msgid "Here is a simple example of how to use RemoteClient in a Python script or
 msgstr "Voici un exemple simple de l'utilisation de RemoteClient dans un script Python ou dans un notebook Jupyter :"
 
 msgid "Set XML-RPC port to connect to."
-msgstr ""
+msgstr "Définir le port XML-RPC auquel se connecter."
 
 msgid "Parameters"
 msgstr "Paramètres"
 
 msgid "XML-RPC port to connect to. If None, the port is automatically retrieved from DataLab configuration."
-msgstr ""
+msgstr "Port XML-RPC auquel se connecter. Si None, le port est automatiquement récupéré depuis la configuration de DataLab."
 
 msgid "Try to connect to DataLab XML-RPC server."
-msgstr ""
+msgstr "Essayer de se connecter au serveur XML-RPC de DataLab."
 
 msgid "XML-RPC port to connect to. If not specified, the port is automatically retrieved from DataLab configuration."
-msgstr ""
+msgstr "Port XML-RPC auquel se connecter. Si non spécifié, le port est automatiquement récupéré depuis la configuration de DataLab."
 
 msgid "Maximum time to wait for connection in seconds. Defaults to 5.0. This is the total maximum wait time, not per retry."
-msgstr ""
+msgstr "Temps maximum d'attente de connexion en secondes. Par défaut 5.0. Il s'agit du temps d'attente maximum total, et non par tentative."
 
 msgid "Number of retries. Defaults to 10. This parameter is deprecated and will be removed in a future version (kept for backward compatibility)."
-msgstr ""
+msgstr "Nombre de tentatives. Par défaut 10. Ce paramètre est déprécié et sera supprimé dans une version future (conservé pour la compatibilité ascendante)."
 
 msgid "Raises"
-msgstr ""
+msgstr "Lève"
 
 msgid "Unable to connect to DataLab"
-msgstr ""
+msgstr "Impossible de se connecter à DataLab"
 
 msgid "Invalid timeout (must be >= 0.0)"
-msgstr ""
+msgstr "Délai d'attente invalide (doit être >= 0.0)"
 
 msgid "Invalid number of retries (must be >= 1)"
-msgstr ""
+msgstr "Nombre de tentatives invalide (doit être >= 1)"
 
 msgid "Disconnect from DataLab XML-RPC server."
-msgstr ""
+msgstr "Se déconnecter du serveur XML-RPC de DataLab."
 
 msgid "Return True if connected to DataLab XML-RPC server."
-msgstr ""
+msgstr "Renvoie True si connecté au serveur XML-RPC de DataLab."
 
 msgid "Return list of available methods."
-msgstr ""
+msgstr "Renvoie la liste des méthodes disponibles."
 
 msgid "Add signal data to DataLab."
-msgstr ""
+msgstr "Ajouter des données de signal à DataLab."
 
 msgid "Signal title"
-msgstr ""
+msgstr "Titre du signal"
 
 msgid "X data"
-msgstr ""
+msgstr "Données X"
 
 msgid "Y data"
-msgstr ""
+msgstr "Données Y"
 
 msgid "X unit. Defaults to \"\""
-msgstr ""
+msgstr "Unité X. Par défaut \"\""
 
 msgid "Y unit. Defaults to \"\""
-msgstr ""
+msgstr "Unité Y. Par défaut \"\""
 
 msgid "X label. Defaults to \"\""
-msgstr ""
+msgstr "Libellé X. Par défaut \"\""
 
 msgid "Y label. Defaults to \"\""
-msgstr ""
+msgstr "Libellé Y. Par défaut \"\""
 
 msgid "group id in which to add the signal. Defaults to \"\""
-msgstr ""
+msgstr "Identifiant du groupe dans lequel ajouter le signal. Par défaut \"\""
 
 msgid "if True, set the added signal as current"
-msgstr ""
+msgstr "si True, définit le signal ajouté comme courant"
 
 msgid "Returns"
-msgstr ""
+msgstr "Renvoie"
 
 msgid "True if signal was added successfully, False otherwise"
-msgstr ""
+msgstr "True si le signal a été ajouté avec succès, False sinon"
 
 msgid "Invalid xdata dtype"
-msgstr ""
+msgstr "Type de données xdata invalide"
 
 msgid "Invalid ydata dtype"
-msgstr ""
+msgstr "Type de données ydata invalide"
 
 msgid "Add image data to DataLab."
-msgstr ""
+msgstr "Ajouter des données d'image à DataLab."
 
 msgid "Image title"
-msgstr ""
+msgstr "Titre de l'image"
 
 msgid "Image data"
-msgstr ""
+msgstr "Données de l'image"
 
 msgid "Z unit. Defaults to \"\""
-msgstr ""
+msgstr "Unité Z. Par défaut \"\""
 
 msgid "Z label. Defaults to \"\""
-msgstr ""
+msgstr "Libellé Z. Par défaut \"\""
 
 msgid "group id in which to add the image. Defaults to \"\""
-msgstr ""
+msgstr "Identifiant du groupe dans lequel ajouter l'image. Par défaut \"\""
 
 msgid "if True, set the added image as current"
-msgstr ""
+msgstr "si True, définit l'image ajoutée comme courante"
 
 msgid "True if image was added successfully, False otherwise"
-msgstr ""
+msgstr "True si l'image a été ajoutée avec succès, False sinon"
 
 msgid "Invalid data dtype"
-msgstr ""
+msgstr "Type de données invalide"
 
 msgid "Add object to DataLab."
-msgstr ""
+msgstr "Ajouter un objet à DataLab."
 
-#, fuzzy
 msgid "Signal or image object"
-msgstr "Basculer vers le panneau de signal ou d'image"
+msgstr "Objet signal ou image"
 
 msgid "group id in which to add the object. Defaults to \"\""
-msgstr ""
+msgstr "Identifiant du groupe dans lequel ajouter l'objet. Par défaut \"\""
 
 msgid "if True, set the added object as current"
-msgstr ""
+msgstr "si True, définit l'objet ajouté comme courant"
 
 msgid "Set object data in DataLab."
-msgstr ""
+msgstr "Définir les données d'un objet dans DataLab."
 
 msgid "Update an existing object in DataLab with new data from ``obj``. The object is identified by its UUID (which is carried by ``obj`` from a previous :meth:`get_object` call)."
-msgstr ""
+msgstr "Mettre à jour un objet existant dans DataLab avec les nouvelles données de ``obj``. L'objet est identifié par son UUID (qui est porté par ``obj`` depuis un appel précédent à :meth:`get_object`)."
 
 msgid "Signal or image object (must have the same UUID as an existing object in DataLab)"
-msgstr ""
+msgstr "Objet signal ou image (doit avoir le même UUID qu'un objet existant dans DataLab)"
 
 msgid "if no object with matching UUID is found"
-msgstr ""
+msgstr "si aucun objet avec un UUID correspondant n'est trouvé"
 
 msgid "Call computation feature ``name``"
-msgstr ""
+msgstr "Appeler la fonctionnalité de calcul ``name``"
 
 msgid "This calls either the processor's ``compute_<name>`` method (if it exists), or the processor's ``<name>`` computation feature (if it is registered, using the ``run_feature`` method). It looks for the function in all panels, starting with the current one."
-msgstr ""
+msgstr "Ceci appelle soit la méthode ``compute_<name>`` du processeur (si elle existe), soit la fonctionnalité de calcul ``<name>`` du processeur (si elle est enregistrée, en utilisant la méthode ``run_feature``). La fonction est recherchée dans tous les panneaux, en commençant par le panneau courant."
 
 msgid "Compute function name"
-msgstr ""
+msgstr "Nom de la fonction de calcul"
 
 msgid "Compute function parameter. Defaults to None."
-msgstr ""
+msgstr "Paramètre de la fonction de calcul. Par défaut None."
 
 msgid "unknown function"
-msgstr ""
+msgstr "fonction inconnue"
 
-#, fuzzy
 msgid "Get object (signal/image) from index."
-msgstr "Ouvrir un signal ou une image à partir d'un fichier"
+msgstr "Obtenir un objet (signal/image) à partir de l'index."
 
 msgid "Object number, or object id, or object title. Defaults to None (current object)."
-msgstr ""
+msgstr "Numéro de l'objet, identifiant de l'objet, ou titre de l'objet. Par défaut None (objet courant)."
 
 msgid "Panel name. Defaults to None (current panel)."
-msgstr ""
+msgstr "Nom du panneau. Par défaut None (panneau courant)."
 
 msgid "Object"
-msgstr ""
+msgstr "Objet"
 
 msgid "if object not found"
-msgstr ""
+msgstr "si l'objet n'est pas trouvé"
 
 msgid "Get plot item shapes associated to object (signal/image)."
-msgstr ""
+msgstr "Obtenir les formes des éléments graphiques associées à l'objet (signal/image)."
 
 msgid "List of plot item shapes"
-msgstr ""
+msgstr "Liste des formes des éléments graphiques"
 
 msgid "Add object annotations (annotation plot items)."
-msgstr ""
+msgstr "Ajouter des annotations à l'objet (éléments graphiques d'annotation)."
 
 msgid "annotation plot items"
-msgstr ""
+msgstr "éléments graphiques d'annotation"
 
 msgid "refresh plot. Defaults to True."
-msgstr ""
+msgstr "rafraîchir le graphique. Par défaut True."
 
 msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used."
-msgstr ""
+msgstr "nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le panneau courant est utilisé."
 
 msgid "Call a public method on a panel or main window."
-msgstr ""
+msgstr "Appeler une méthode publique sur un panneau ou la fenêtre principale."
 
 msgid "Method resolution order when panel is None: 1. Try main window (DLMainWindow) 2. If not found, try current panel (BaseDataPanel)"
-msgstr ""
+msgstr "Ordre de résolution des méthodes quand panel est None : 1. Essayer la fenêtre principale (DLMainWindow) 2. Si non trouvé, essayer le panneau courant (BaseDataPanel)"
 
 msgid "Name of the method to call"
-msgstr ""
+msgstr "Nom de la méthode à appeler"
 
 msgid "Positional arguments to pass to the method"
-msgstr ""
+msgstr "Arguments positionnels à passer à la méthode"
 
 msgid "Panel name (\"signal\", \"image\", or None for auto-detection). Defaults to None."
-msgstr ""
+msgstr "Nom du panneau (\"signal\", \"image\", ou None pour la détection automatique). Par défaut None."
 
 msgid "Keyword arguments to pass to the method"
-msgstr ""
+msgstr "Arguments nommés à passer à la méthode"
 
 msgid "The return value of the called method"
-msgstr ""
+msgstr "La valeur de retour de la méthode appelée"
 
 msgid "If the method does not exist or is not public"
-msgstr ""
+msgstr "Si la méthode n'existe pas ou n'est pas publique"
 
 msgid "If the panel name is invalid"
-msgstr ""
+msgstr "Si le nom du panneau est invalide"
 
 msgid "Start the WebAPI server."
-msgstr ""
+msgstr "Démarrer le serveur WebAPI."
 
 msgid "Host address to bind to. Defaults to \"127.0.0.1\"."
-msgstr ""
+msgstr "Adresse hôte à laquelle se lier. Par défaut \"127.0.0.1\"."
 
 msgid "Port number. Defaults to 8080."
-msgstr ""
+msgstr "Numéro de port. Par défaut 8080."
 
 msgid "Dictionary with server info including 'url' and 'token'."
-msgstr ""
+msgstr "Dictionnaire avec les informations du serveur incluant 'url' et 'token'."
 
 msgid "Stop the WebAPI server."
-msgstr ""
+msgstr "Arrêter le serveur WebAPI."
 
 msgid "True if server was stopped, False if it wasn't running."
-msgstr ""
+msgstr "True si le serveur a été arrêté, False s'il n'était pas en cours d'exécution."
 
 msgid "Get the current status of the WebAPI server."
-msgstr ""
+msgstr "Obtenir l'état actuel du serveur WebAPI."
 
 msgid "Dictionary with status info including 'running', 'url', and 'port'."
-msgstr ""
+msgstr "Dictionnaire avec les informations d'état incluant 'running', 'url' et 'port'."
 
 msgid "Add group to DataLab."
-msgstr ""
+msgstr "Ajouter un groupe à DataLab."
 
 msgid "Group title"
-msgstr ""
+msgstr "Titre du groupe"
 
 msgid "Panel name (valid values: \"signal\", \"image\"). Defaults to None."
-msgstr ""
+msgstr "Nom du panneau (valeurs valides : \"signal\", \"image\"). Par défaut None."
 
 msgid "Select the group after creation. Defaults to False."
-msgstr ""
+msgstr "Sélectionner le groupe après sa création. Par défaut False."
 
 msgid "Add a label with object title on the associated plot"
-msgstr ""
+msgstr "Ajouter un libellé avec le titre de l'objet sur le graphique associé"
 
 msgid "Label title. Defaults to None. If None, the title is the object title."
-msgstr ""
+msgstr "Titre du libellé. Par défaut None. Si None, le titre est le titre de l'objet."
 
-#, fuzzy
 msgid "Close DataLab application"
-msgstr "Depuis une application tierce"
+msgstr "Fermer l'application DataLab"
 
 msgid "Return a context manager to temporarily disable auto refresh."
-msgstr ""
+msgstr "Renvoie un gestionnaire de contexte pour désactiver temporairement le rafraîchissement automatique."
 
 msgid "Context manager"
-msgstr ""
+msgstr "Gestionnaire de contexte"
 
-#, fuzzy
 msgid "Example"
-msgstr "Exemples"
+msgstr "Exemple"
 
 msgid "Delete metadata of selected objects"
-msgstr ""
+msgstr "Supprimer les métadonnées des objets sélectionnés"
 
 msgid "Refresh plot. Defaults to True."
-msgstr ""
+msgstr "Rafraîchir le graphique. Par défaut True."
 
 msgid "Keep ROI. Defaults to False."
-msgstr ""
+msgstr "Conserver les ROI. Par défaut False."
+
+msgid "Return current object uuid in current panel."
+msgstr "Renvoie l'UUID de l'objet courant dans le panneau courant."
+
+msgid "UUID of the current object, or None if no object is current."
+msgstr "UUID de l'objet courant, ou None si aucun objet n'est courant."
 
 msgid "Return current panel name."
-msgstr ""
+msgstr "Renvoie le nom du panneau courant."
 
 msgid "\"signal\", \"image\", \"macro\"))"
-msgstr ""
+msgstr "\"signal\", \"image\", \"macro\"))"
 
 msgid "Return type"
-msgstr ""
+msgstr "Type de retour"
 
 msgid "Return groups titles and lists of inner objects uuids and titles."
-msgstr ""
+msgstr "Renvoie les titres des groupes et les listes des UUID et titres des objets internes."
 
 msgid "groups titles, lists of inner objects uuids and titles"
-msgstr ""
+msgstr "titres des groupes, listes des UUID et titres des objets internes"
 
 msgid "Get object (signal/image) list for current panel. Objects are sorted by group number and object index in group."
-msgstr ""
+msgstr "Obtenir la liste des objets (signal/image) pour le panneau courant. Les objets sont triés par numéro de groupe et index de l'objet dans le groupe."
 
 msgid "panel name (valid values: \"signal\", \"image\", \"macro\"). If None, current data panel is used (i.e. signal or image panel)."
-msgstr ""
+msgstr "nom du panneau (valeurs valides : \"signal\", \"image\", \"macro\"). Si None, le panneau de données courant est utilisé (c'est-à-dire le panneau signal ou image)."
 
-#, fuzzy
 msgid "List of object titles"
-msgstr "Obtenir la liste des objets"
+msgstr "Liste des titres des objets"
 
 msgid "if panel not found"
-msgstr ""
+msgstr "si le panneau n'est pas trouvé"
 
 msgid "Get object (signal/image) uuid list for current panel. Objects are sorted by group number and object index in group."
-msgstr ""
+msgstr "Obtenir la liste des UUID des objets (signal/image) pour le panneau courant. Les objets sont triés par numéro de groupe et index de l'objet dans le groupe."
 
 msgid "Group number, or group id, or group title. Defaults to None (all groups)."
-msgstr ""
+msgstr "Numéro du groupe, identifiant du groupe, ou titre du groupe. Par défaut None (tous les groupes)."
 
-#, fuzzy
 msgid "List of object uuids"
-msgstr "Obtenir la liste des objets"
+msgstr "Liste des UUID des objets"
 
 msgid "Return all public methods of the class, except itself."
-msgstr ""
+msgstr "Renvoie toutes les méthodes publiques de la classe, sauf elle-même."
 
 msgid "List of public methods"
-msgstr ""
+msgstr "Liste des méthodes publiques"
 
 msgid "Return selected objects uuids."
-msgstr ""
+msgstr "Renvoie les UUID des objets sélectionnés."
 
 msgid "If True, also return objects from selected groups."
-msgstr ""
+msgstr "Si True, renvoie également les objets des groupes sélectionnés."
 
 msgid "List of selected objects uuids."
-msgstr ""
+msgstr "Liste des UUID des objets sélectionnés."
 
 msgid "Return DataLab public version."
-msgstr ""
+msgstr "Renvoie la version publique de DataLab."
 
 msgid "DataLab version"
-msgstr ""
+msgstr "Version de DataLab"
 
 msgid "Open DataLab HDF5 browser to Import HDF5 file."
-msgstr ""
+msgstr "Ouvrir le navigateur HDF5 de DataLab pour importer un fichier HDF5."
 
-#, fuzzy
 msgid "HDF5 file name"
-msgstr "Parcourir un fichier HDF5"
+msgstr "Nom du fichier HDF5"
 
 msgid "Reset all application data. Defaults to None."
-msgstr ""
+msgstr "Réinitialiser toutes les données de l'application. Par défaut None."
 
 msgid "Import macro from file"
-msgstr ""
+msgstr "Importer une macro depuis un fichier"
 
 msgid "Filename."
-msgstr ""
+msgstr "Nom du fichier."
 
 msgid "Open objects from directory in current panel (signals/images)."
-msgstr ""
+msgstr "Ouvrir des objets depuis un répertoire dans le panneau courant (signaux/images)."
 
 msgid "directory path"
-msgstr ""
+msgstr "chemin du répertoire"
 
 msgid "Open objects from files in current panel (signals/images)."
-msgstr ""
+msgstr "Ouvrir des objets depuis des fichiers dans le panneau courant (signaux/images)."
 
 msgid "list of file names"
-msgstr ""
+msgstr "liste des noms de fichiers"
 
 msgid "Load native DataLab HDF5 workspace files without any GUI elements."
-msgstr ""
+msgstr "Charger des fichiers d'espace de travail HDF5 natifs DataLab sans aucun élément d'interface graphique."
 
 msgid "This method can be safely called from scripts (e.g., internal console, macros) as it does not create any Qt widgets, dialogs, or progress bars."
-msgstr ""
+msgstr "Cette méthode peut être appelée en toute sécurité depuis des scripts (par exemple, console interne, macros) car elle ne crée aucun widget Qt, boîte de dialogue ou barre de progression."
 
 msgid "This method only supports native DataLab HDF5 files. For importing arbitrary HDF5 files (non-native), use :meth:`open_h5_files` or :meth:`import_h5_file` instead."
-msgstr ""
+msgstr "Cette méthode ne prend en charge que les fichiers HDF5 natifs DataLab. Pour importer des fichiers HDF5 arbitraires (non natifs), utilisez plutôt :meth:`open_h5_files` ou :meth:`import_h5_file`."
 
-#, fuzzy
 msgid "List of native DataLab HDF5 filenames"
-msgstr "Enregistrer la session en cours dans un fichier HDF5"
+msgstr "Liste des noms de fichiers HDF5 natifs DataLab"
 
 msgid "Reset all application data before importing. Defaults to False."
-msgstr ""
+msgstr "Réinitialiser toutes les données de l'application avant l'importation. Par défaut False."
 
 msgid "If a file is not a valid native DataLab HDF5 file"
-msgstr ""
+msgstr "Si un fichier n'est pas un fichier HDF5 natif DataLab valide"
 
 msgid "Open a DataLab HDF5 file or import from any other HDF5 file."
-msgstr ""
+msgstr "Ouvrir un fichier HDF5 DataLab ou importer depuis tout autre fichier HDF5."
 
 msgid "List of HDF5 files to open. Defaults to None."
-msgstr ""
+msgstr "Liste des fichiers HDF5 à ouvrir. Par défaut None."
 
 msgid "Import all objects from HDF5 files. Defaults to None."
-msgstr ""
+msgstr "Importer tous les objets depuis les fichiers HDF5. Par défaut None."
 
 msgid "Raise DataLab window"
-msgstr ""
+msgstr "Mettre la fenêtre DataLab au premier plan"
 
 msgid "Remove current object from current panel."
-msgstr ""
+msgstr "Supprimer l'objet courant du panneau courant."
 
 msgid "if True, remove object without confirmation. Defaults to False."
-msgstr ""
+msgstr "si True, supprimer l'objet sans confirmation. Par défaut False."
 
 msgid "Reset all application data"
-msgstr ""
+msgstr "Réinitialiser toutes les données de l'application"
 
 msgid "Run macro."
-msgstr ""
+msgstr "Exécuter une macro."
 
 msgid "Macro number, or macro title. Defaults to None (current macro)."
-msgstr ""
+msgstr "Numéro de la macro, ou titre de la macro. Par défaut None (macro courante)."
 
 msgid "if macro not found"
-msgstr ""
+msgstr "si la macro n'est pas trouvée"
 
 msgid "Save current workspace to a native DataLab HDF5 file without GUI elements."
-msgstr ""
+msgstr "Enregistrer l'espace de travail courant dans un fichier HDF5 natif DataLab sans éléments d'interface graphique."
 
-#, fuzzy
 msgid "HDF5 filename to save to"
-msgstr "Parcourir un fichier HDF5"
+msgstr "Nom du fichier HDF5 dans lequel enregistrer"
 
 msgid "If file cannot be saved"
-msgstr ""
+msgstr "Si le fichier ne peut pas être enregistré"
 
-#, fuzzy
 msgid "Save to a DataLab HDF5 file."
-msgstr "Enregistrer la session en cours dans un fichier HDF5"
+msgstr "Enregistrer dans un fichier HDF5 DataLab."
 
 msgid "Select groups in current panel."
-msgstr ""
+msgstr "Sélectionner des groupes dans le panneau courant."
 
 msgid "List of group numbers (1 to N), or list of group uuids, or None to select all groups. Defaults to None."
-msgstr ""
+msgstr "Liste des numéros de groupes (1 à N), ou liste des UUID de groupes, ou None pour sélectionner tous les groupes. Par défaut None."
 
 msgid "panel name (valid values: \"signal\", \"image\"). If None, current panel is used. Defaults to None."
-msgstr ""
+msgstr "nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le panneau courant est utilisé. Par défaut None."
 
 msgid "Select objects in current panel."
-msgstr ""
+msgstr "Sélectionner des objets dans le panneau courant."
 
 msgid "List of object numbers (1 to N) or uuids to select"
-msgstr ""
+msgstr "Liste des numéros d'objets (1 à N) ou UUID à sélectionner"
 
-#, fuzzy
 msgid "Switch to panel."
-msgstr "Basculer vers le panneau de signal ou d'image"
+msgstr "Basculer vers le panneau."
 
 msgid "Panel name (valid values: \"signal\", \"image\", \"macro\"))"
-msgstr ""
+msgstr "Nom du panneau (valeurs valides : \"signal\", \"image\", \"macro\"))"
 
 msgid "Stop macro."
-msgstr ""
+msgstr "Arrêter la macro."
 
 msgid "Toggle auto refresh state."
-msgstr ""
+msgstr "Basculer l'état du rafraîchissement automatique."
 
 msgid "Auto refresh state"
-msgstr ""
+msgstr "État du rafraîchissement automatique"
 
 msgid "Toggle show titles state."
-msgstr ""
+msgstr "Basculer l'état d'affichage des titres."
 
 msgid "Show titles state"
-msgstr ""
-
+msgstr "État d'affichage des titres"

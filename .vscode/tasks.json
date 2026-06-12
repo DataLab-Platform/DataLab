@@ -373,29 +373,6 @@
             ],
         },
         {
-            "label": "🛠️ Generate doc assets",
-            "command": "${command:python.interpreterPath} scripts/run_with_env.py ${command:python.interpreterPath} -m guidata.utils.genreqs all; if ($?) { ${command:python.interpreterPath} scripts/run_with_env.py ${command:python.interpreterPath} doc/update_validation_status.py }",
-            "options": {
-                "cwd": "${workspaceFolder}",
-                "statusbar": {
-                    "hide": true,
-                },
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": false,
-            },
-            "presentation": {
-                "clear": true,
-                "echo": true,
-                "focus": false,
-                "panel": "dedicated",
-                "reveal": "always",
-                "showReuseMessage": true,
-            },
-            "type": "shell",
-        },
-        {
             "label": "🧪 Coverage tests",
             "type": "shell",
             "command": "${command:python.interpreterPath}",
@@ -538,7 +515,94 @@
             },
         },
         {
-            "label": "Create executable",
+            "label": "🎨 Generate resources",
+            "detail": "Regenerate DataLab.ico + WiX dialog/banner BMPs from SVG sources. Run only when SVG sources change. Uses Qt (QSvgRenderer) + Pillow.",
+            "type": "shell",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "scripts/run_with_env.py",
+                "${command:python.interpreterPath}",
+                "scripts/build_resources.py",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PYTHON": "${command:python.interpreterPath}",
+                    "UNATTENDED": "1",
+                },
+                "statusbar": {
+                    "hide": true,
+                },
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false,
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": true,
+            },
+        },
+        {
+            "label": "📋 Refresh doc metadata",
+            "detail": "Regenerate requirements.txt + doc/requirements.rst (via guidata.utils.genreqs) and update Sigima validation status in the docs.",
+            "command": "${command:python.interpreterPath} scripts/run_with_env.py ${command:python.interpreterPath} -m guidata.utils.genreqs all; if ($?) { ${command:python.interpreterPath} scripts/run_with_env.py ${command:python.interpreterPath} doc/update_validation_status.py }",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "statusbar": {
+                    "hide": true,
+                },
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false,
+            },
+            "presentation": {
+                "clear": true,
+                "echo": true,
+                "focus": false,
+                "panel": "dedicated",
+                "reveal": "always",
+                "showReuseMessage": true,
+            },
+            "type": "shell",
+        },
+        {
+            "label": "🖼️ Refresh doc screenshots",
+            "detail": "Maintainer task: regenerate PNG screenshots under doc/images/ by launching DataLab for each language (fr + en). Commit the resulting diff in a dedicated 'docs: refresh screenshots' commit.",
+            "type": "shell",
+            "command": "scripts\\update_screenshots.bat",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "PYTHON": "${command:python.interpreterPath}",
+                    "UNATTENDED": "1",
+                },
+                "statusbar": {
+                    "hide": true,
+                },
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false,
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": true,
+            },
+        },
+        {
+            "label": "🏗️ Create executable",
             "type": "shell",
             "command": "${command:python.interpreterPath}",
             "args": [
@@ -573,7 +637,7 @@
             },
         },
         {
-            "label": "Create installer",
+            "label": "📦 Create installer",
             "type": "shell",
             "command": "${command:python.interpreterPath}",
             "args": [
@@ -607,7 +671,7 @@
             },
         },
         {
-            "label": "Build PDF doc",
+            "label": "📘 Build PDF doc",
             "type": "shell",
             "command": "${command:python.interpreterPath}",
             "options": {
@@ -643,7 +707,7 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "🛠️ Generate doc assets",
+                "📋 Refresh doc metadata",
             ],
         },
         {
@@ -740,7 +804,7 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "🛠️ Generate doc assets",
+                "📋 Refresh doc metadata",
             ],
         },
         {
@@ -856,8 +920,7 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "🛠️ Generate doc assets",
-                "Build PDF doc",
+                "📘 Build PDF doc",
             ],
         },
         {
@@ -895,8 +958,8 @@
                 "Upgrade Sigima/PlotPyStack",
                 "📚 Compile translations",
                 "Build Python packages",
-                "Create executable",
-                "Create installer",
+                "🏗️ Create executable",
+                "📦 Create installer",
             ],
         },
         {

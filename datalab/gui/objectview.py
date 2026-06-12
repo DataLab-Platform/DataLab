@@ -765,6 +765,11 @@ class ObjectView(SimpleObjectTree):
             return self.objmodel[oid]
         return None
 
+    def get_current_object_uuid(self) -> str | None:
+        """Return current object uuid, or None if current item is a group
+        or if no item is current"""
+        return self.get_current_item_id(object_only=True)
+
     def set_current_object(self, obj: SignalObj | ImageObj) -> None:
         """Set current object"""
         self.set_current_item_id(get_uuid(obj))

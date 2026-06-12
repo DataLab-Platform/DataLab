@@ -385,7 +385,7 @@ def resultadapter_to_html(
         # path does not see DataFrame mutations made here).
         marker_labels_injected = False
         result = adapter.result
-        if (
+        if (  # pylint: disable=too-many-boolean-expressions
             Conf.view.show_marker_labels_in_table.get(True)
             and hasattr(result, "is_xy_markers")
             and (
