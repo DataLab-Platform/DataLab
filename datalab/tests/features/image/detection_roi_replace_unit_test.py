@@ -191,6 +191,43 @@ def test_preprocess_hook_abort_skipped_in_unattended():
         assert result is True, "preprocess_1_to_0 must return True in unattended mode"
 
 
+def test_auto_recompute_does_not_replace_rois():
+    """auto_recompute_analysis must not recreate ROIs deleted by the user.
+
+    Scenario:
+    1. Run peak detection with create_rois=True → ROIs are created and the
+       analysis parameters (including create_rois=True) are stored in the
+       object's metadata.
+    2. The user deletes the ROIs manually.
+    3. auto_recompute_analysis is triggered (e.g. after a data change).
+    4. The ROIs must NOT be recreated: auto_recompute_analysis disables
+       create_rois before calling compute_1_to_0.
+    """
+    with datalab_test_app_context() as win:
+        panel = win.imagepanel
+        ima = create_peak_image()
+        panel.add_object(ima)
+
+        # Step 1: run detection with ROI creation to store analysis params
+        param = sigima.params.Peak2DDetectionParam.create(create_rois=True)
+        panel.processor.compute_peak_detection(param)
+
+        obj = panel.objview.get_current_object()
+        assert obj.roi is not None, "Peak detection should have created ROIs"
+
+        # Step 2: user deletes the ROIs
+        obj.roi = None
+
+        # Step 3 & 4: auto-recompute must NOT recreate the ROIs
+        panel.processor.auto_recompute_analysis(obj)
+
+        obj = panel.objview.get_current_object()
+        assert obj.roi is None, (
+            "auto_recompute_analysis must not recreate ROIs "
+            "(create_rois is disabled during auto-recompute)"
+        )
+
+
 if __name__ == "__main__":
     test_create_rois_no_existing_roi()
     test_create_rois_with_existing_roi_unattended()
@@ -198,3 +235,4 @@ if __name__ == "__main__":
     test_dialog_shown_only_when_roi_exists()
     test_cancel_dialog_preserves_existing_roi()
     test_preprocess_hook_abort_skipped_in_unattended()
+    test_auto_recompute_does_not_replace_rois()
