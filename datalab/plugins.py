@@ -40,7 +40,13 @@ from sigima.io.image.base import ImageFormatBase  # noqa: F401
 from sigima.io.image.formats import ClassicsImageFormat  # noqa: F401
 from sigima.io.signal.base import SignalFormatBase  # noqa: F401
 
-from datalab.config import MOD_NAME, OTHER_PLUGINS_PATHLIST, Conf, _
+from datalab.config import (
+    MOD_NAME,
+    OTHER_PLUGINS_PATHLIST,
+    Conf,
+    _,
+    get_user_plugin_paths,
+)
 from datalab.control.proxy import LocalProxy
 from datalab.env import execenv
 
@@ -364,6 +370,18 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         """Create actions"""
 
 
+def _set_plugin_class_filepaths(module) -> None:
+    """Attach the module file path to plugin classes defined in that module."""
+    filepath = getattr(module, "__file__", None)
+    if not filepath:
+        return
+
+    filepath = osp.abspath(filepath)
+    for plugin_class in PluginRegistry.get_plugin_classes():
+        if plugin_class.__module__ == module.__name__:
+            plugin_class.__plugin_filepath__ = filepath
+
+
 def discover_plugins() -> list[type[PluginBase]]:
     """Discover plugins using naming convention
 
@@ -387,10 +405,9 @@ def discover_plugins() -> list[type[PluginBase]]:
         return []
 
     # Ensure plugin search paths are present in sys.path
-    for path in [
-        Conf.main.plugins_path.get(),
-        PLUGINS_DEFAULT_PATH,
-    ] + OTHER_PLUGINS_PATHLIST:
+    for path in (
+        get_user_plugin_paths() + [PLUGINS_DEFAULT_PATH] + OTHER_PLUGINS_PATHLIST
+    ):
         rpath = osp.realpath(path)
         if rpath not in sys.path:
             sys.path.append(rpath)
@@ -406,6 +423,7 @@ def discover_plugins() -> list[type[PluginBase]]:
                 module = importlib.reload(sys.modules[name])
             else:
                 module = importlib.import_module(name)
+            _set_plugin_class_filepaths(module)
             modules.append(module)
         # Plugin discovery imports arbitrary third-party modules. We must catch
         # every failure here so discovery can continue and the error is exposed
@@ -464,10 +482,9 @@ def discover_v020_plugins() -> list[tuple[str, str]]:
     """
     v020_plugins = []
     if Conf.main.plugins_enabled.get():
-        for path in [
-            Conf.main.plugins_path.get(),
-            PLUGINS_DEFAULT_PATH,
-        ] + OTHER_PLUGINS_PATHLIST:
+        for path in (
+            get_user_plugin_paths() + [PLUGINS_DEFAULT_PATH] + OTHER_PLUGINS_PATHLIST
+        ):
             rpath = osp.realpath(path)
             if rpath not in sys.path:
                 sys.path.append(rpath)

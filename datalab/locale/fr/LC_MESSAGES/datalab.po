@@ -1872,6 +1872,16 @@ msgstr "Création des formes géométriques"
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
+msgid "today"
+msgstr "aujourd'hui"
+
+msgid "yesterday"
+msgstr "hier"
+
+#, python-format
+msgid "Last loaded: %s at %s"
+msgstr "Dernier chargement : %s à %s"
+
 msgid "Active"
 msgstr "Actif"
 
@@ -1881,8 +1891,20 @@ msgstr "Désactivé"
 msgid "No description available"
 msgstr "Aucune description disponible"
 
+msgid "Open file"
+msgstr "Ouvrir le fichier"
+
+msgid "Show in folder"
+msgstr "Afficher dans le dossier"
+
 msgid "Import error"
 msgstr "Erreur d'importation"
+
+msgid "Edit directory"
+msgstr "Modifier le répertoire"
+
+msgid "Remove directory"
+msgstr "Supprimer le répertoire"
 
 msgid "Plugin Configuration"
 msgstr "Configuration des plugins"
@@ -1893,8 +1915,8 @@ msgstr "Activer/désactiver les plugins"
 msgid "Plugin search paths"
 msgstr "Chemins de recherche des plugins"
 
-msgid "Manage Plugins"
-msgstr "Gérer les plugins"
+msgid "Apply and reload plugins"
+msgstr "Appliquer et recharger les plugins"
 
 msgid "Changes will be applied after clicking OK and reloading plugins."
 msgstr "Les modifications seront appliquées après avoir cliqué sur OK et rechargé les plugins."
@@ -1902,15 +1924,27 @@ msgstr "Les modifications seront appliquées après avoir cliqué sur OK et rech
 msgid "The following directories are scanned at startup for plugins:"
 msgstr "Les répertoires suivants sont analysés au démarrage pour détecter les plugins :"
 
-msgid "from"
-msgstr "de"
+msgid "Default plugin directories"
+msgstr "Répertoires de plugins par défaut"
 
-msgid "No plugin search path is currently active."
-msgstr "Aucun chemin de recherche de plugins n'est actuellement actif."
+msgid "Additional plugin directories"
+msgstr "Répertoires de plugins supplémentaires"
+
+msgid "Add"
+msgstr "Ajouter"
+
+msgid "Additional directories are saved in DataLab configuration."
+msgstr "Les répertoires supplémentaires sont enregistrés dans la configuration de DataLab."
+
+msgid "No additional plugin directory is configured."
+msgstr "Aucun répertoire de plugins supplémentaire n'est configuré."
 
 #, python-format
-msgid "Additional directories can be added via the <code>%s</code> environment variable (multiple paths separated by '<code>%s</code>'). Changes take effect at DataLab startup."
-msgstr "Des répertoires supplémentaires peuvent être ajoutés via la variable d'environnement <code>%s</code> (plusieurs chemins séparés par '<code>%s</code>'). Les modifications prennent effet au démarrage de DataLab."
+msgid "Directories provided via the <code>%s</code> environment variable (multiple paths separated by '<code>%s</code>') also appear above as read-only entries. Changes take effect at DataLab startup."
+msgstr "Les répertoires fournis via la variable d'environnement <code>%s</code> (plusieurs chemins séparés par '<code>%s</code>') apparaissent également ci-dessus en lecture seule. Les modifications prennent effet au démarrage de DataLab."
+
+msgid "Select plugin directory"
+msgstr "Sélectionner un répertoire de plugins"
 
 msgid "Enable all plugins"
 msgstr "Activer tous les plugins"
@@ -1935,6 +1969,27 @@ msgstr "Recharger les plugins"
 
 msgid "Plugin configuration has been saved. Do you want to reload plugins now to apply changes?"
 msgstr "La configuration des plugins a été enregistrée. Voulez-vous recharger les plugins maintenant pour appliquer les modifications ?"
+
+msgid "Plugin settings"
+msgstr "Paramètres des plugins"
+
+msgid "Third-party plugins are globally disabled."
+msgstr "Les plugins tiers sont désactivés globalement."
+
+msgid "Compatibility warnings"
+msgstr "Avertissements de compatibilité"
+
+msgid "Hide warnings for incompatible DataLab v0.20 plugins"
+msgstr "Masquer les avertissements pour les plugins DataLab v0.20 incompatibles"
+
+msgid "Disable plugins globally"
+msgstr "Désactiver globalement les plugins"
+
+msgid "Enable plugins globally"
+msgstr "Activer globalement les plugins"
+
+msgid "Enable them again from the plugin configuration dialog to use this feature."
+msgstr "Réactivez-les depuis la boîte de dialogue de configuration des plugins pour utiliser cette fonctionnalité."
 
 msgid "Failed to deserialize processing parameters from JSON."
 msgstr "Échec de la désérialisation des paramètres de traitement depuis le format JSON."
@@ -2796,12 +2851,6 @@ msgstr "Plugins tiers"
 msgid "Enable or disable third-party plugins immediately. Changes are applied without restarting DataLab"
 msgstr "Activer ou désactiver immédiatement les plugins tiers. Les changements sont appliqués sans redémarrer DataLab"
 
-msgid "Plugins path"
-msgstr "Chemin des plugins"
-
-msgid "Path to third-party plugins.<br><br>DataLab will discover plugins in this path, as well as in your PYTHONPATH."
-msgstr "Chemin d'accès aux plugins tiers.<br><br>DataLab découvrira les plugins dans ce chemin, ainsi que dans votre PYTHONPATH."
-
 msgid "Ignore compatibility issues warning"
 msgstr "Ignorer l'avertissement de compatibilité"
 
@@ -3127,9 +3176,6 @@ msgstr "État d'activation du serveur XML-RPC"
 
 msgid "Console enable status"
 msgstr "État d'activation de la console"
-
-msgid "Third-party plugins path"
-msgstr "Chemin des plugins tiers"
 
 msgid "General"
 msgstr "Général"

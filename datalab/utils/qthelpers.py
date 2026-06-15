@@ -13,6 +13,7 @@ import logging
 import os
 import os.path as osp
 import shutil
+import subprocess
 import sys
 import time
 import traceback
@@ -84,6 +85,44 @@ def remove_empty_log_file(fname: str) -> None:
             os.remove(fname)
         except Exception:  # pylint: disable=broad-except
             pass
+
+
+def open_local_path(path: str) -> bool:
+    """Open a local path with the desktop handler."""
+    return QG.QDesktopServices.openUrl(QC.QUrl.fromLocalFile(path))
+
+
+def show_in_folder(path: str) -> bool:
+    """Show a file in its containing folder, selecting it when supported."""
+    filepath = osp.abspath(path)
+    directory = osp.dirname(filepath)
+
+    if sys.platform.startswith("win"):
+        commands = [["explorer", f"/select,{osp.normpath(filepath)}"]]
+    elif sys.platform == "darwin":
+        commands = [["open", "-R", filepath]]
+    else:
+        commands = []
+        if shutil.which("nautilus"):
+            commands.append(["nautilus", "--select", filepath])
+        if shutil.which("dolphin"):
+            commands.append(["dolphin", "--select", filepath])
+        if shutil.which("nemo"):
+            commands.append(["nemo", filepath])
+        if shutil.which("caja"):
+            commands.append(["caja", "--select", filepath])
+
+    for command in commands:
+        try:
+            subprocess.Popen(  # pylint: disable=consider-using-with
+                command,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
+            return True
+        except OSError:
+            continue
+    return open_local_path(directory)
 
 
 @contextmanager
