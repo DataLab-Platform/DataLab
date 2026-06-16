@@ -203,7 +203,10 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         self, obj: QC.QObject, event: QC.QEvent
     ) -> bool:
         """Handle Ctrl+Enter to send and Ctrl+Up/Down to browse history."""
-        if obj is self.input_edit and event.type() == QC.QEvent.KeyPress:
+        if (
+            obj is getattr(self, "input_edit", None)
+            and event.type() == QC.QEvent.KeyPress
+        ):
             key = event.key()
             mods = event.modifiers()
             if key == QC.Qt.Key_Escape and self._worker is not None:
