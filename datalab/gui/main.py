@@ -2516,6 +2516,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     panel.acthandler.show_label_action.setChecked(
                         Conf.view.show_result_label.get()
                     )
+            if option == "result_title_mode":
+                # Re-render result titles in the object trees (display only)
+                for panel in (self.signalpanel, self.imagepanel):
+                    panel.objview.populate_tree()
             if option == "color_mode":
                 self.__update_color_mode()
             if option == "show_console_on_error":

@@ -228,6 +228,20 @@ class ProcSettings(gds.DataSet):
             "If disabled, the results dialog will not be shown automatically."
         ),
     )
+    result_title_mode = gds.ChoiceItem(
+        _("Result titles"),
+        zip(
+            Conf.proc.result_title_mode.values,
+            [_("Source object short identifier"), _("Source object title")],
+        ),
+        help=_(
+            "How source objects are referenced in result titles after a "
+            "computation (display only):"
+            "<ul><li><b>Short identifier</b>: e.g. <i>fft(s001)</i> (default)</li>"
+            "<li><b>Title</b>: e.g. <i>fft(My signal)</i></li></ul>"
+            "Result titles update automatically when a source object is renamed."
+        ),
+    )
     _g1 = gds.EndGroup("")
 
 

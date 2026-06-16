@@ -302,6 +302,12 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     # - "interpolate": automatically interpolate when x-arrays are incompatible
     xarray_compat_behavior = conf.EnumOption(["ask", "interpolate"], default="ask")
 
+    # Result title rendering mode (display-only):
+    # - "short_id": embed source object short IDs in result titles, e.g. "fft(s001)"
+    #   (default, current behavior)
+    # - "title": embed source object titles in result titles, e.g. "fft(My signal)"
+    result_title_mode = conf.EnumOption(["short_id", "title"], default="short_id")
+
     # History and analysis tabs font
     small_mono_font = conf.FontOption()
 
@@ -644,6 +650,7 @@ def initialize():
     Conf.proc.show_result_dialog.get(True)
     Conf.proc.ignore_warnings.get(False)
     Conf.proc.xarray_compat_behavior.get("ask")
+    Conf.proc.result_title_mode.get("short_id")
     Conf.proc.small_mono_font.get((configtools.MONOSPACE, 8, False))
     # View section
     tb_pos = Conf.view.plot_toolbar_position.get("left")

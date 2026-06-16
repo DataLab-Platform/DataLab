@@ -4,6 +4,19 @@
 
 ### ✨ New Features ###
 
+**Result titles can show source object names:**
+
+After a processing operation, result titles are built from source object short
+identifiers (e.g. `fft(s001)`). A new setting now lets you display the source
+object *titles* instead (e.g. `fft(My signal)`), making processed objects easier
+to identify in the object tree.
+
+* Available under **Settings → Processing → Result management → Result titles**
+* Two choices: *Source object short identifier* (default) or *Source object title*
+* Result titles update automatically when a source object is renamed
+* Switching the option back instantly restores the short-identifier display
+* Display-only: object identity, computation results and saved files are unchanged
+
 **Third-party plugin discovery via environment variable:**
 
 * Added support for the `DATALAB_PLUGINS` environment variable, allowing one or more directories to be specified as additional plugin search paths

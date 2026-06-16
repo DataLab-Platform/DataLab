@@ -45,7 +45,7 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj
 
-from datalab.config import _
+from datalab.config import Conf, _
 from datalab.objectmodel import (
     ObjectGroup,
     find_short_ids_in_title,
@@ -263,10 +263,19 @@ class SimpleObjectTree(QW.QTreeWidget):
         self, item: QW.QTreeWidgetItem, obj: SignalObj | ImageObj | ObjectGroup
     ) -> None:
         """Update item"""
-        text = f"{get_short_id(obj)}: {obj.title}"
-        item.setText(0, text)
+        # The stored title is always in canonical short-ID form. We build the
+        # canonical text for tooltip/source resolution, and a possibly distinct
+        # display text honoring the result-title rendering mode (display-only).
+        use_titles = Conf.proc.result_title_mode.get() == "title"
+        canonical_text = f"{get_short_id(obj)}: {obj.title}"
+        display_text = (
+            canonical_text
+            if not use_titles
+            else f"{get_short_id(obj)}: {self.objmodel.get_display_title(obj, True)}"
+        )
+        item.setText(0, display_text)
         tooltip_parts: list[str] = []
-        sid_tooltip = self._build_short_id_tooltip(text)
+        sid_tooltip = self._build_short_id_tooltip(canonical_text)
         if sid_tooltip:
             tooltip_parts.append(sid_tooltip)
         if isinstance(obj, (SignalObj, ImageObj)):

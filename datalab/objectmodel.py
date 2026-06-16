@@ -83,6 +83,11 @@ def get_short_id(obj: SignalObj | ImageObj | ObjectGroup) -> str:
     return f"{obj.PREFIX}{get_number(obj):03d}"
 
 
+def get_title(obj: SignalObj | ImageObj | ObjectGroup) -> str:
+    """Return object or group title"""
+    return obj.title
+
+
 def patch_title_with_ids(
     dst_obj: SignalObj | ImageObj,
     src_objs: list[SignalObj] | list[ImageObj],
@@ -331,6 +336,62 @@ class ObjectModel:
             if get_short_id(obj) == short_id:
                 return obj
         return None
+
+    def __render_source_titles(self, title: str, seen: set[str]) -> str:
+        """Return ``title`` with every embedded source short ID replaced by the
+        title of the matching object or group.
+
+        Resolution is recursive (a source title may itself reference other
+        objects) and guarded against cycles. Short IDs that cannot be resolved
+        (e.g. the source object was removed) are left untouched.
+
+        Args:
+            title: title string, in canonical short-ID form (e.g. ``"fft(s001)"``)
+            seen: set of short IDs already being resolved (cycle guard)
+
+        Returns:
+            Title string with source short IDs replaced by source titles.
+        """
+        matches = find_short_ids_in_title(title)
+        if not matches:
+            return title
+        parts: list[str] = []
+        last = 0
+        for start, end, short_id in matches:
+            parts.append(title[last:start])
+            source = self.find_by_short_id(short_id)
+            if source is None or short_id in seen:
+                # Unresolved (removed source) or cycle: keep the short ID as-is
+                parts.append(title[start:end])
+            else:
+                parts.append(
+                    self.__render_source_titles(source.title, seen | {short_id})
+                )
+            last = end
+        parts.append(title[last:])
+        return "".join(parts)
+
+    def get_display_title(
+        self, obj_or_group: SignalObj | ImageObj | ObjectGroup, use_titles: bool
+    ) -> str:
+        """Return the title to display for ``obj_or_group``.
+
+        The stored title is always kept in canonical short-ID form (e.g.
+        ``"fft(s001)"``). This method optionally renders it for display by
+        replacing embedded source short IDs with the corresponding source
+        titles, without altering the stored title.
+
+        Args:
+            obj_or_group: object or group whose display title is requested
+            use_titles: if True, replace embedded source short IDs by source
+             titles; if False, return the stored (short-ID) title unchanged
+
+        Returns:
+            Title string to display.
+        """
+        if not use_titles:
+            return obj_or_group.title
+        return self.__render_source_titles(obj_or_group.title, set())
 
     def get_group(self, uuid: str) -> ObjectGroup:
         """Return group with uuid"""

@@ -2041,6 +2041,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     return
             obj.title = new_name
             self.objview.update_item(get_uuid(obj))
+            # Refresh dependent items: result titles referencing this object may
+            # display its new title (when the "title" result-title mode is on).
+            self.objview.update_tree()
             self.objprop.update_properties_from(obj)
         elif sel_groups:
             group = sel_groups[0]
@@ -2056,6 +2059,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     return
             group.title = new_name
             self.objview.update_item(get_uuid(group))
+            # Refresh dependent items: result titles referencing this group may
+            # display its new title (when the "title" result-title mode is on).
+            self.objview.update_tree()
 
     @abc.abstractmethod
     def get_newparam_from_current(

@@ -151,6 +151,20 @@ Result management
     producing results. When disabled, the results dialog is not shown automatically but
     results can still be viewed using the dedicated button or menu option.
 
+**Result titles**
+    Choose how source objects are referenced in result titles after a computation
+    (display only, the stored title is unchanged):
+
+    - **Source object short identifier**: e.g. ``fft(s001)`` (default)
+    - **Source object title**: e.g. ``fft(My signal)``
+
+    .. note::
+
+        Result titles update automatically when a source object is renamed, and revert
+        to short identifiers when the option is set back. This setting only affects how
+        titles are displayed in the object tree; it does not change object identity or
+        processing behavior.
+
 Visualization
 -------------
 
