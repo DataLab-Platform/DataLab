@@ -10,7 +10,6 @@ Remote client test
 
 import os
 import os.path as osp
-import time
 
 import numpy as np
 from guidata.qthelpers import qt_app_context
@@ -79,8 +78,6 @@ def multiple_commands(remote: RemoteProxy):
 
         param = XYCalibrateParam.create(a=1.2, b=0.1)
         remote.calc("calibration", param)
-
-        time.sleep(2)  # Avoid permission error when trying to clean-up temporary files
 
 
 def test_remoteclient_unit():
