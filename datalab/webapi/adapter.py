@@ -201,6 +201,8 @@ class WorkspaceAdapter(QObject):
         """Get an object by name.
 
         This operation is marshaled to the Qt main thread for thread safety.
+        The name may be either the stored object title or the title as shown in
+        the GUI (where source short IDs are replaced by source titles).
 
         Args:
             name: Object name/title.
@@ -217,16 +219,18 @@ class WorkspaceAdapter(QObject):
             # Search in signal panel
             sig_panel = self._main_window.signalpanel
             if sig_panel is not None:
-                for obj in sig_panel.objmodel:
-                    if obj.title == name:
-                        return obj.copy()
+                try:
+                    return sig_panel.objmodel.get_object_from_title(name).copy()
+                except KeyError:
+                    pass
 
             # Search in image panel
             img_panel = self._main_window.imagepanel
             if img_panel is not None:
-                for obj in img_panel.objmodel:
-                    if obj.title == name:
-                        return obj.copy()
+                try:
+                    return img_panel.objmodel.get_object_from_title(name).copy()
+                except KeyError:
+                    pass
 
             raise KeyError(f"Object '{name}' not found")
 
@@ -251,6 +255,8 @@ class WorkspaceAdapter(QObject):
         """Get the panel containing an object.
 
         This operation is marshaled to the Qt main thread for thread safety.
+        The name may be either the stored object title or the title as shown in
+        the GUI (where source short IDs are replaced by source titles).
 
         Args:
             name: Object name/title.
@@ -263,15 +269,19 @@ class WorkspaceAdapter(QObject):
         def do_lookup():
             sig_panel = self._main_window.signalpanel
             if sig_panel is not None:
-                for obj in sig_panel.objmodel:
-                    if obj.title == name:
-                        return "signal"
+                try:
+                    sig_panel.objmodel.get_object_from_title(name)
+                    return "signal"
+                except KeyError:
+                    pass
 
             img_panel = self._main_window.imagepanel
             if img_panel is not None:
-                for obj in img_panel.objmodel:
-                    if obj.title == name:
-                        return "image"
+                try:
+                    img_panel.objmodel.get_object_from_title(name)
+                    return "image"
+                except KeyError:
+                    pass
 
             return None
 

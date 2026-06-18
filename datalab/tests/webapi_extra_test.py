@@ -19,14 +19,18 @@ from __future__ import annotations
 import io
 import json
 import zipfile
+from types import SimpleNamespace
 from typing import Union
 
 import numpy as np
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from sigima import ImageObj, SignalObj
+from guidata.qthelpers import qt_app_context
+from sigima import ImageObj, SignalObj, create_signal
 
+from datalab.objectmodel import ObjectModel, get_uuid
+from datalab.webapi.adapter import WorkspaceAdapter
 from datalab.webapi.routes import (
     router,
     set_adapter,
@@ -578,6 +582,80 @@ class TestBinaryDataEndpoints:
         assert response.status_code == 200
         # Adapter now has the updated object
         assert adapter.get_object("Live").y.shape == (20,)
+
+
+# =============================================================================
+# Real WorkspaceAdapter — lookup by stored title or title shown in the GUI
+# =============================================================================
+
+
+def _build_workspace_adapter() -> WorkspaceAdapter:
+    """Return a ``WorkspaceAdapter`` backed by populated signal/image models.
+
+    The signal panel holds a source ``"My signal"`` (s001) and a result
+    ``"fft(s001)"`` (s002); the image panel holds a source ``"My image"`` (i001)
+    and a result ``"threshold(i001)"`` (i002). The result titles are stored in
+    canonical short-ID form, but the GUI shows them with source titles embedded.
+    """
+    smodel = ObjectModel(group_prefix="gs")
+    sgid = get_uuid(smodel.add_group("Signals"))
+    smodel.add_object(create_signal("My signal", x=[0.0, 1.0], y=[1.0, 2.0]), sgid)
+    smodel.add_object(create_signal("fft(s001)", x=[0.0, 1.0], y=[3.0, 4.0]), sgid)
+
+    imodel = ObjectModel(group_prefix="gi")
+    igid = get_uuid(imodel.add_group("Images"))
+    imodel.add_object(_make_image("My image"), igid)
+    imodel.add_object(_make_image("threshold(i001)"), igid)
+
+    main_window = SimpleNamespace(
+        signalpanel=SimpleNamespace(objmodel=smodel),
+        imagepanel=SimpleNamespace(objmodel=imodel),
+    )
+    return WorkspaceAdapter(main_window)
+
+
+class TestWorkspaceAdapterTitleLookup:
+    """The adapter resolves objects by stored title or by GUI-displayed title."""
+
+    def test_get_object_by_stored_title(self) -> None:
+        """A stored (short-ID) title still resolves the object."""
+        with qt_app_context():
+            adapter = _build_workspace_adapter()
+            assert adapter.get_object("fft(s001)").title == "fft(s001)"
+
+    def test_get_object_by_displayed_title(self) -> None:
+        """The title shown in the GUI resolves the same object."""
+        with qt_app_context():
+            adapter = _build_workspace_adapter()
+            assert adapter.get_object("fft(My signal)").title == "fft(s001)"
+
+    def test_get_image_object_by_displayed_title(self) -> None:
+        """The GUI-displayed title is also accepted for image objects."""
+        with qt_app_context():
+            adapter = _build_workspace_adapter()
+            assert adapter.get_object("threshold(My image)").title == "threshold(i001)"
+
+    def test_get_object_unknown_raises(self) -> None:
+        """An unknown title raises ``KeyError``."""
+        with qt_app_context():
+            adapter = _build_workspace_adapter()
+            with pytest.raises(KeyError):
+                adapter.get_object("does not exist")
+
+    def test_get_object_panel_by_displayed_title(self) -> None:
+        """``get_object_panel`` recognizes GUI-displayed titles per panel."""
+        with qt_app_context():
+            adapter = _build_workspace_adapter()
+            assert adapter.get_object_panel("fft(My signal)") == "signal"
+            assert adapter.get_object_panel("threshold(My image)") == "image"
+            assert adapter.get_object_panel("unknown") is None
+
+    def test_object_exists_by_displayed_title(self) -> None:
+        """``object_exists`` accepts the GUI-displayed title."""
+        with qt_app_context():
+            adapter = _build_workspace_adapter()
+            assert adapter.object_exists("fft(My signal)") is True
+            assert adapter.object_exists("nope") is False
 
 
 if __name__ == "__main__":
