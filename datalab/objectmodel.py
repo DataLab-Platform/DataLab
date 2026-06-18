@@ -442,8 +442,14 @@ class ObjectModel:
     def get_group_from_title(self, title: str) -> ObjectGroup:
         """Return group from its title.
 
+        As for :meth:`get_object_from_title`, the lookup first tries an exact
+        match against the stored title, then against the title shown in the GUI
+        (where embedded source short IDs are replaced by source titles). This
+        lets macros reference groups by the title displayed in the GUI,
+        regardless of the current display mode.
+
         Args:
-            title: group title
+            title: group title (stored title or title shown in the GUI)
 
         Returns:
             Group
@@ -453,6 +459,11 @@ class ObjectModel:
         """
         for group in self._groups:
             if group.title == title:
+                return group
+        # Also accept the title as shown in the GUI (source short IDs replaced
+        # by source titles):
+        for group in self._groups:
+            if self.get_display_title(group, True) == title:
                 return group
         raise KeyError(f"Group with title '{title}' not found")
 
@@ -630,8 +641,16 @@ class ObjectModel:
     def get_object_from_title(self, title: str) -> SignalObj | ImageObj:
         """Return object with title.
 
+        The lookup first tries an exact match against the stored title. If that
+        fails, it also accepts the title as shown in the GUI, where embedded
+        source short IDs are replaced by source titles (e.g. ``"fft(My signal)"``
+        matches an object whose stored title is ``"fft(s001)"`` when ``s001`` is
+        titled ``"My signal"``). This lets macros and scripts reference objects
+        by the title displayed in the GUI, regardless of the current result-title
+        display mode.
+
         Args:
-            title: object title
+            title: object title (stored title or title shown in the GUI)
 
         Returns:
             object with title
@@ -641,6 +660,11 @@ class ObjectModel:
         """
         for obj in self._objects.values():
             if obj.title == title:
+                return obj
+        # Also accept the title as shown in the GUI (source short IDs replaced
+        # by source titles):
+        for obj in self._objects.values():
+            if self.get_display_title(obj, True) == title:
                 return obj
         raise KeyError(f"Object with title '{title}' not found")
 

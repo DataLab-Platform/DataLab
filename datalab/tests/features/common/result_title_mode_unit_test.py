@@ -129,5 +129,57 @@ def test_title_mode_cycle_guard() -> None:
     assert model.get_display_title(src, use_titles=True) == "loop(loop(s001))"
 
 
+def test_lookup_by_stored_title() -> None:
+    """An object can be looked up by its stored (canonical) title."""
+    model, gid = _build_model()
+    _add_signal(model, gid, "My reference")  # s001
+    result = _add_signal(model, gid, "fft(s001)")  # s002
+    assert model.get_object_from_title("fft(s001)") is result
+
+
+def test_lookup_by_rendered_title() -> None:
+    """An object can be looked up by its rendered (source-title) name.
+
+    This makes macros work when the user references the object by the
+    human-readable title shown in the GUI (e.g. ``fft(My reference)``),
+    regardless of the current result-title display mode.
+    """
+    model, gid = _build_model()
+    _add_signal(model, gid, "My reference")  # s001
+    result = _add_signal(model, gid, "fft(s001)")  # s002
+    assert model.get_object_from_title("fft(My reference)") is result
+
+
+def test_lookup_by_rendered_title_recursive() -> None:
+    """Lookup by rendered title works through nested results."""
+    model, gid = _build_model()
+    _add_signal(model, gid, "My base")  # s001
+    _add_signal(model, gid, "deriv(s001)")  # s002
+    result = _add_signal(model, gid, "fft(s002)")  # s003
+    assert model.get_object_from_title("fft(deriv(My base))") is result
+
+
+def test_lookup_unknown_title_raises() -> None:
+    """Looking up a non-existent title (stored or rendered) raises KeyError."""
+    model, gid = _build_model()
+    _add_signal(model, gid, "My reference")  # s001
+    _add_signal(model, gid, "fft(s001)")  # s002
+    with pytest.raises(KeyError):
+        model.get_object_from_title("does not exist")
+
+
+def test_group_lookup_by_rendered_title() -> None:
+    """A group can be looked up by its stored and rendered title."""
+    model, gid = _build_model()
+    src = _add_signal(model, gid, "My reference")  # s001
+    group = model.get_group(gid)
+    group.title = "group(s001)"
+    # Stored-title lookup:
+    assert model.get_group_from_title("group(s001)") is group
+    # Rendered-title lookup:
+    assert model.get_group_from_title("group(My reference)") is group
+    assert src is not None  # keep the source alive for short-ID resolution
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
