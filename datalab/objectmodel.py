@@ -83,11 +83,6 @@ def get_short_id(obj: SignalObj | ImageObj | ObjectGroup) -> str:
     return f"{obj.PREFIX}{get_number(obj):03d}"
 
 
-def get_title(obj: SignalObj | ImageObj | ObjectGroup) -> str:
-    """Return object or group title"""
-    return obj.title
-
-
 def patch_title_with_ids(
     dst_obj: SignalObj | ImageObj,
     src_objs: list[SignalObj] | list[ImageObj],
