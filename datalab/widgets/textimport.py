@@ -579,6 +579,23 @@ class GraphicalRepresentationPage(WizardPage):
         objs = self.get_objs()
         self.set_valid(len(objs) > 0)
 
+    def cleanup(self) -> None:
+        """Release native plot resources deterministically.
+
+        Disconnect the item-change signal and drop every plot item before the
+        page (and its embedded PlotPy plot) is destroyed. Creating and tearing
+        down several wizards in sequence in native (on-screen) mode otherwise
+        leaves the cleanup to the garbage collector, whose ordering
+        occasionally triggers a Qt/PlotPy access violation (0xC0000005).
+        """
+        plot = self.plot_widget.get_plot()
+        try:
+            plot.SIG_ITEMS_CHANGED.disconnect(self.items_changed)
+        except (TypeError, RuntimeError):
+            pass
+        plot.del_all_items()
+        self.__objitmlist = []
+
     def get_objs(self) -> list[SignalObj | ImageObj]:
         """Return the objects"""
         return [obj for obj, item in self.__objitmlist if item.isVisible()]

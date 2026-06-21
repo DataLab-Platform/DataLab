@@ -23,6 +23,7 @@ This module is strongly inspired from Qt's `QWizard` and `QWizardPage` classes.
 from __future__ import annotations
 
 from qtpy import QtCore as QC
+from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename
 from qtpy.QtWidgets import QWidget
@@ -141,6 +142,25 @@ class Wizard(QW.QDialog):
         self.setSizePolicy(
             QW.QSizePolicy(QW.QSizePolicy.Minimum, QW.QSizePolicy.Minimum)
         )
+
+    def cleanup(self) -> None:
+        """Release page resources before the dialog is destroyed.
+
+        Pages that embed native-heavy widgets (e.g. a PlotPy plot) may expose a
+        ``cleanup`` method to tear those resources down deterministically. This
+        avoids a Qt/PlotPy native teardown race (access violation) when several
+        wizards are created and destroyed in sequence.
+        """
+        for index in range(self._pages_widget.count()):
+            page = self._pages_widget.widget(index)
+            page_cleanup = getattr(page, "cleanup", None)
+            if callable(page_cleanup):
+                page_cleanup()
+
+    def closeEvent(self, event: QG.QCloseEvent) -> None:
+        """Release page resources when the dialog is closed"""
+        self.cleanup()
+        super().closeEvent(event)
 
     def add_page(self, page: WizardPage, last_page: bool = False) -> None:
         """Add a page to the wizard"""
