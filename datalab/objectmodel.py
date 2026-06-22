@@ -388,6 +388,68 @@ class ObjectModel:
             return obj_or_group.title
         return self.__render_source_titles(obj_or_group.title, set())
 
+    @staticmethod
+    def __raise_ambiguous_title(
+        title: str,
+        matches: list[SignalObj | ImageObj | ObjectGroup],
+        label: str,
+    ) -> None:
+        """Raise a ``ValueError`` describing an ambiguous title lookup.
+
+        Args:
+            title: requested title that matched more than one item
+            matches: the matching objects or groups
+            label: human-readable kind, e.g. ``"Object"`` or ``"Group"``
+
+        Raises:
+            ValueError: always, listing the short IDs to disambiguate
+        """
+        short_ids = ", ".join(get_short_id(match) for match in matches)
+        raise ValueError(
+            f"{label} title '{title}' is ambiguous: it matches "
+            f"{len(matches)} items ({short_ids}). Use the short ID to "
+            f"reference one unambiguously."
+        )
+
+    def __find_by_title(
+        self,
+        candidates: list[SignalObj | ImageObj | ObjectGroup],
+        title: str,
+        label: str,
+    ) -> SignalObj | ImageObj | ObjectGroup:
+        """Return the single object or group matching ``title``.
+
+        The stored (canonical short-ID) title takes precedence: if exactly one
+        candidate has this stored title, it is returned. Otherwise the lookup
+        also accepts the title as shown in the GUI (source short IDs replaced by
+        source titles). In both stages, more than one match is an error: titles
+        are not unique identifiers (short IDs are), so an ambiguous lookup is
+        rejected rather than silently returning an arbitrary match.
+
+        Args:
+            candidates: objects or groups to search
+            title: stored title or title shown in the GUI
+            label: human-readable kind, e.g. ``"Object"`` or ``"Group"``
+
+        Returns:
+            The single matching object or group.
+
+        Raises:
+            KeyError: if no candidate matches the title
+            ValueError: if more than one candidate matches the title
+        """
+        stored = [c for c in candidates if c.title == title]
+        if len(stored) == 1:
+            return stored[0]
+        if len(stored) > 1:
+            self.__raise_ambiguous_title(title, stored, label)
+        rendered = [c for c in candidates if self.get_display_title(c, True) == title]
+        if len(rendered) == 1:
+            return rendered[0]
+        if len(rendered) > 1:
+            self.__raise_ambiguous_title(title, rendered, label)
+        raise KeyError(f"{label} with title '{title}' not found")
+
     def get_group(self, uuid: str) -> ObjectGroup:
         """Return group with uuid"""
         for group in self._groups:
@@ -441,7 +503,8 @@ class ObjectModel:
         match against the stored title, then against the title shown in the GUI
         (where embedded source short IDs are replaced by source titles). This
         lets macros reference groups by the title displayed in the GUI,
-        regardless of the current display mode.
+        regardless of the current display mode. Because titles are not unique
+        identifiers, a title matching several groups is rejected.
 
         Args:
             title: group title (stored title or title shown in the GUI)
@@ -450,17 +513,10 @@ class ObjectModel:
             Group
 
         Raises:
-            KeyError: if group with title not found
+            KeyError: if no group with title found
+            ValueError: if the title is ambiguous (matches several groups)
         """
-        for group in self._groups:
-            if group.title == title:
-                return group
-        # Also accept the title as shown in the GUI (source short IDs replaced
-        # by source titles):
-        for group in self._groups:
-            if self.get_display_title(group, True) == title:
-                return group
-        raise KeyError(f"Group with title '{title}' not found")
+        return self.__find_by_title(list(self._groups), title, "Group")
 
     def get_group_from_object(self, obj: SignalObj | ImageObj) -> ObjectGroup:
         """Return group containing object
@@ -642,7 +698,9 @@ class ObjectModel:
         matches an object whose stored title is ``"fft(s001)"`` when ``s001`` is
         titled ``"My signal"``). This lets macros and scripts reference objects
         by the title displayed in the GUI, regardless of the current result-title
-        display mode.
+        display mode. Because titles are not unique identifiers (short IDs are), a
+        title matching several objects is rejected instead of returning one at
+        random.
 
         Args:
             title: object title (stored title or title shown in the GUI)
@@ -651,17 +709,10 @@ class ObjectModel:
             object with title
 
         Raises:
-            KeyError: if object with title not found
+            KeyError: if no object with title found
+            ValueError: if the title is ambiguous (matches several objects)
         """
-        for obj in self._objects.values():
-            if obj.title == title:
-                return obj
-        # Also accept the title as shown in the GUI (source short IDs replaced
-        # by source titles):
-        for obj in self._objects.values():
-            if self.get_display_title(obj, True) == title:
-                return obj
-        raise KeyError(f"Object with title '{title}' not found")
+        return self.__find_by_title(list(self._objects.values()), title, "Object")
 
     def __get_group_object_mapping_to_shortid(self) -> dict[str, str]:
         """Return dictionary mapping group/object uuids to their short ID"""

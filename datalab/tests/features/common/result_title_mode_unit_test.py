@@ -181,5 +181,51 @@ def test_group_lookup_by_rendered_title() -> None:
     assert src is not None  # keep the source alive for short-ID resolution
 
 
+def test_lookup_ambiguous_stored_title_raises() -> None:
+    """A stored title shared by several objects is rejected as ambiguous.
+
+    Titles are not unique identifiers (short IDs are): returning an arbitrary
+    match would silently hide a mistake, so the lookup raises instead.
+    """
+    model, gid = _build_model()
+    _add_signal(model, gid, "Duplicate")  # s001
+    _add_signal(model, gid, "Duplicate")  # s002, same title
+    with pytest.raises(ValueError, match="ambiguous"):
+        model.get_object_from_title("Duplicate")
+
+
+def test_lookup_ambiguous_rendered_title_raises() -> None:
+    """Two results rendering to the same displayed title are ambiguous."""
+    model, gid = _build_model()
+    _add_signal(model, gid, "Dup")  # s001
+    _add_signal(model, gid, "Dup")  # s002, same source title
+    _add_signal(model, gid, "fft(s001)")  # s003 -> renders to "fft(Dup)"
+    _add_signal(model, gid, "fft(s002)")  # s004 -> renders to "fft(Dup)"
+    with pytest.raises(ValueError, match="ambiguous"):
+        model.get_object_from_title("fft(Dup)")
+
+
+def test_lookup_stored_title_takes_precedence_over_rendered() -> None:
+    """A unique stored match wins over a colliding rendered title.
+
+    Even when another object would render to the same displayed title, an
+    exact (and unique) stored-title match resolves unambiguously.
+    """
+    model, gid = _build_model()
+    _add_signal(model, gid, "Dup")  # s001
+    literal = _add_signal(model, gid, "fft(Dup)")  # s002, stored literally
+    _add_signal(model, gid, "fft(s001)")  # s003 -> renders to "fft(Dup)"
+    assert model.get_object_from_title("fft(Dup)") is literal
+
+
+def test_group_ambiguous_title_raises() -> None:
+    """A title shared by several groups is rejected as ambiguous."""
+    model, _gid = _build_model()
+    g2 = model.add_group("Group")  # second group with the default title
+    assert g2 is not None
+    with pytest.raises(ValueError, match="ambiguous"):
+        model.get_group_from_title("Group")
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
