@@ -165,6 +165,13 @@ Result management
         titles are displayed in the object tree; it does not change object identity or
         processing behavior.
 
+        When a source object (or group) referenced by a result title is deleted, its
+        name is preserved instead of being replaced by an anonymous placeholder. The
+        result title keeps showing the deleted source's name, and hovering over the
+        result displays which deleted source each preserved reference points to. This
+        information is stored with the workspace and remains compatible with files
+        opened in previous DataLab versions.
+
 Visualization
 -------------
 

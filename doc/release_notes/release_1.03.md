@@ -16,6 +16,12 @@ to identify in the object tree.
 * Result titles update automatically when a source object is renamed
 * Switching the option back instantly restores the short-identifier display
 * Display-only: object identity, computation results and saved files are unchanged
+* Deleting a source object no longer loses its name in dependent result titles:
+  the name of the deleted object (or group) is preserved, so result titles keep
+  showing where the data came from instead of an anonymous placeholder. Hovering
+  over a result reveals which deleted source each preserved reference points to.
+  This information is saved with the workspace, and files remain readable by
+  previous DataLab versions
 
 **Third-party plugin discovery via environment variable:**
 
