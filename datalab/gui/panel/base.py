@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import abc
 import glob
+import json
 import os
 import os.path as osp
 import re
@@ -1458,6 +1459,16 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 with writer.group(self.get_serializable_name(group)):
                     with writer.group("title"):
                         writer.write_str(group.title)
+                    # Persist the group's deleted-source reference registry as a
+                    # JSON string *attribute* (like the title). Storing it as an
+                    # attribute -- rather than a child group -- keeps the file
+                    # readable by older DataLab versions, whose deserializer only
+                    # iterates child groups (and would otherwise mistake it for an
+                    # object). Only written when non-empty.
+                    deleted_refs = self.objmodel.get_deleted_refs(group)
+                    if deleted_refs:
+                        with writer.group("deleted_source_refs"):
+                            writer.write_str(json.dumps(deleted_refs))
                     for obj in group.get_objects():
                         self.serialize_object_to_hdf5(obj, writer)
 
@@ -1477,11 +1488,24 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     group = self.add_group("")
                     with reader.group("title"):
                         group.title = reader.read_str()
+                    # Read the group's deleted-source reference registry, if
+                    # present (absent in files written by older versions -> the
+                    # default empty string yields an empty registry).
+                    refs_json = reader.read(
+                        "deleted_source_refs", func=reader.read_str, default=""
+                    )
                     for obj_name in reader.h5.get(f"{self.H5_PREFIX}/{name}", []):
                         obj = self.deserialize_object_from_hdf5(
                             reader, obj_name, reset_all
                         )
                         self.add_object(obj, get_uuid(group), set_current=False)
+                    # Restore the registry only after all objects are loaded, so
+                    # it does not interfere with the short-ID swaps performed
+                    # while objects are added one by one.
+                    if refs_json:
+                        self.objmodel.set_group_deleted_refs(
+                            group, json.loads(refs_json)
+                        )
                     self.selection_changed()
 
     def __len__(self) -> int:

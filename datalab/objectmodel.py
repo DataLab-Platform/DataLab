@@ -426,6 +426,21 @@ class ObjectModel:
         """
         return dict(self.__get_registry(obj_or_group))
 
+    def set_group_deleted_refs(self, group: ObjectGroup, refs: dict[str, str]) -> None:
+        """Restore a group's deleted-source reference registry (e.g. on load).
+
+        Group registries cannot live in metadata (groups have none), so they are
+        persisted separately and re-injected here after deserialization.
+
+        Args:
+            group: group whose registry is restored
+            refs: mapping ``token -> frozen canonical title`` (empty clears it)
+        """
+        if refs:
+            self._group_deleted_refs[group.uuid] = dict(refs)
+        else:
+            self._group_deleted_refs.pop(group.uuid, None)
+
     def __allocate_deleted_token(
         self, dependent: SignalObj | ImageObj | ObjectGroup, prefix: str
     ) -> str:
