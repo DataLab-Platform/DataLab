@@ -953,38 +953,6 @@ msgstr "Troncature de données uint32 en int32."
 msgid "No supported data available in HDF5 file(s)."
 msgstr "Aucune donnée prise en charge dans le(s) fichier(s) HDF5."
 
-msgid "Generate macro"
-msgstr "Générer une macro"
-
-msgid "No compute actions to export."
-msgstr "Pas d'actions de calcul à exporter."
-
-#, python-format
-msgid "Macro script copied to clipboard (%d actions)."
-msgstr "Script de macro copié dans le presse-papier (%d actions)."
-
-msgid ""
-"Do you really want to delete the selected items?\n"
-"\n"
-"Note: deleting an action also removes all subsequent actions in the same session."
-msgstr ""
-"Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?\n"
-"\n"
-"Remarque : la suppression d'une action entraîne également la suppression de toutes les actions suivantes dans la même session."
-
-msgid "Do you really want to delete the selected items?"
-msgstr "Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?"
-
-msgid "Remove incompatible"
-msgstr "Supprimer les actions incompatibles"
-
-msgid "All actions are compatible with the current workspace."
-msgstr "Toutes les actions sont compatibles avec l'espace de travail actuel."
-
-#, python-format
-msgid "%d incompatible action(s) will be removed. Continue?"
-msgstr "%d action(s) incompatible(s) seront supprimées. Continuer ?"
-
 msgid "Macro simple example"
 msgstr "Exemple simple de macro"
 
@@ -1523,11 +1491,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "Group name:"
-msgstr "Nom du groupe :"
-
 msgid "New group"
 msgstr "Nouveau groupe"
+
+msgid "Group name:"
+msgstr "Nom du groupe :"
 
 msgid "Rename object"
 msgstr "Renommer l'objet"
@@ -2035,6 +2003,9 @@ msgstr "En mode 'pairwise', vous devez sélectionner des objets dans au moins de
 msgid "In pairwise mode, you need to select the same number of objects in each group."
 msgstr "En mode 'pairwise', vous devez sélectionner le même nombre d'objets dans chaque groupe."
 
+msgid "Parameters"
+msgstr "Paramètres"
+
 #, python-format
 msgid "Calculating: %s"
 msgstr "Calcul : %s"
@@ -2065,6 +2036,9 @@ msgstr "Supprimer la ROI"
 #, python-format
 msgid "Are you sure you want to remove ROI '%s'?"
 msgstr "Êtes-vous sûr de vouloir supprimer la ROI '%s' ?"
+
+msgid "Regions of interest are already defined for this image.<br><br>Creating new ROIs from detection will replace the existing ones, which will be lost.<br><br>Do you want to continue?"
+msgstr "Des régions d'intérêt sont déjà définies pour cette image.<br><br>La création de nouvelles ROI par détection remplacera les existantes, qui seront perdues.<br><br>Voulez-vous continuer ?"
 
 msgid "Sum"
 msgstr "Addition"
@@ -3335,32 +3309,6 @@ msgstr "C'est la fin de la visite guidée !"
 msgid "You can show the tour again, or close this dialog box."
 msgstr "Vous pouvez afficher la visite guidée à nouveau, ou fermer cette boîte de dialogue."
 
-msgid "Save history file"
-msgstr "Enregistrer le fichier d'historique"
-
-msgid "Open history file"
-msgstr "Ouvrir le fichier d'historique"
-
-msgid "Imported"
-msgstr "Importer"
-
-msgid "Replaying compound 'multiple_1_to_1' actions is not supported yet."
-msgstr "La relecture des actions composées 'multiple_1_to_1' n'est pas encore prise en charge."
-
-msgid "Cannot replay 2-to-1 action: source object(s) missing."
-msgstr "Impossible de relire l'action 2-à-1 : objet(s) source manquant(s)."
-
-#, python-format
-msgid "Failed to deserialize history DataSet kwarg %r."
-msgstr "Echec de la désérialisation de l'argument DataSet de l'historique %r."
-
-#, python-format
-msgid "Failed to deserialize history DataSet-list kwarg %r."
-msgstr "Echec de la désérialisation de l'argument DataSet-list de l'historique %r."
-
-msgid "Session"
-msgstr "Session"
-
 msgid "Registered plugins:"
 msgstr "Plugins enregistrés :"
 
@@ -3426,9 +3374,6 @@ msgstr "Créer une image avec un anneau"
 
 msgid "Create image with a grid of gaussian spots"
 msgstr "Créer une image avec une grille de spots gaussiens"
-
-msgid "New signal"
-msgstr "Nouveau signal"
 
 msgid "Host application"
 msgstr "Application hôte"
@@ -3505,11 +3450,11 @@ msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La dé
 msgid "Click OK to end demo."
 msgstr "Cliquer sur OK pour terminer la démo."
 
-msgid "Context"
-msgstr "Contexte"
-
 msgid "Error:"
 msgstr "Erreur:"
+
+msgid "Context"
+msgstr "Contexte"
 
 #, python-format
 msgid "The file %s could not be read:"
@@ -3727,17 +3672,17 @@ msgstr "Déplier la sélection"
 msgid "HDF5 Browser"
 msgstr "Explorateur HDF5"
 
-msgid "Value"
-msgstr "Valeur"
-
-msgid "Name"
-msgstr "Nom"
-
 msgid "Size"
 msgstr "Taille"
 
 msgid "Type"
 msgstr "Type"
+
+msgid "Value"
+msgstr "Valeur"
+
+msgid "Name"
+msgstr "Nom"
 
 msgid "Unsupported data"
 msgstr "Données non prises en charge"
@@ -3774,24 +3719,6 @@ msgstr "Afficher uniquement les données prises en charge"
 
 msgid "Show values"
 msgstr "Afficher les valeurs"
-
-msgid "Show details"
-msgstr "Afficher les détails"
-
-msgid "Hide details"
-msgstr "Masquer les détails"
-
-msgid "Date and time"
-msgstr "Date et heure"
-
-msgid "Title"
-msgstr "Titre"
-
-msgid "Action is compatible with the current workspace state."
-msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
-
-msgid "Action is not compatible with the current workspace state."
-msgstr "L'action n'est pas compatible avec l'état actuel de l'espace de travail."
 
 msgid "Image background selection"
 msgstr "Sélection de l'arrière-plan de l'image"
@@ -4074,6 +4001,9 @@ msgstr "Tout sélectionner"
 msgid "Adding data to the plot"
 msgstr "Ajout des données au graphique"
 
+msgid "Title"
+msgstr "Titre"
+
 msgid "X label"
 msgstr "Titre X"
 
@@ -4226,4 +4156,5 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
+
 
