@@ -291,7 +291,6 @@ def test_no_infinite_roi_recreation_loop():
 
         obj = panel.objview.get_current_object()
         assert obj.roi is not None, "Initial detection should create ROIs"
-        initial_roi = obj.roi
 
         # Step 2: simulate user editing ROIs (replace with a single rectangle)
         obj.roi = create_image_roi("rectangle", [10, 10, 50, 50])
