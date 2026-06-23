@@ -51,6 +51,18 @@ on:
         type: number
         required: false
         default: 14
+      # SOURCE OF TRUTH for the Python version embedded in the official
+      # Windows executable / MSI installer: the `build-msi` job runs
+      # PyInstaller with this interpreter, so this default *is* the Python
+      # version shipped to end users. The release workflows do not override
+      # it (doc/contributing/environment.md points here rather than
+      # duplicating the value).
+      #
+      # ⚠ Pinned to 3.11 ON PURPOSE: CPython 3.11 is the LAST release that
+      # still runs on Windows 7 (SP1), provided the Wine-built
+      # api-ms-win-core-path-l1-1-0.dll shim is bundled (see the "Windows 7
+      # SP1 compatibility shim" copy in the build-msi job and resources/).
+      # Do NOT bump to 3.12+ without dropping Windows 7 support.
       python-version:
         type: string
         required: false
@@ -405,6 +417,8 @@ jobs:
         run: |
           python -m PyInstaller DataLab.spec --noconfirm --clean
           Copy-Item manifest.json dist/DataLab/manifest.json -Force
+          # Windows 7 SP1 compatibility shim (see python-version note above):
+          # CPython 3.11 needs this Wine-built DLL to run on Windows 7.
           Copy-Item resources/api-ms-win-core-path-l1-1-0.dll dist/DataLab/_internal/ -Force
 
       - name: Package executable as zip (internal, required by MSI workflow)

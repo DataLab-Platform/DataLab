@@ -113,7 +113,7 @@ include = ["datalab*"]
     "*.dlabroi",
     "*.dlabmeta",
     "*.dlabgrid",
-    "*_test.h5",
+    "*.h5",
     "*.npy",
     "*.dcm",
     "*.scor-data",
@@ -127,6 +127,7 @@ include = ["datalab*"]
     "*.html",
     "*.buildinfo",
     "*.inv",
+    "*.template",
 ]
 
 [tool.setuptools.dynamic]

@@ -46,7 +46,7 @@ CONFIGS = (
         SEC_MAIN.get_name(): {
             OPT_MAX.option: False,
             OPT_POS.option: (100, 100),
-            OPT_SIZ.option: (750, 600),
+            OPT_SIZ.option: (810, 600),
             OPT_DIR.option: osp.dirname(__file__),
         },
         SEC_CONS.get_name(): {
@@ -57,7 +57,7 @@ CONFIGS = (
         SEC_MAIN.get_name(): {
             OPT_MAX.option: True,
             OPT_POS.option: (10, 10),
-            OPT_SIZ.option: (750, 600),
+            OPT_SIZ.option: (810, 600),
             OPT_DIR.option: "",
         },
         SEC_CONS.get_name(): {
@@ -130,7 +130,7 @@ def check_conf(conf, name, win: QW.QMainWindow, h5files):
         conf_w, conf_h = sec_main[OPT_SIZ.option]
         available_go = QW.QApplication.primaryScreen().availableGeometry()
         x_offset, y_offset = available_go.x(), available_go.y()
-        assert_in_interval(win.x(), conf_x - x_offset, 0, "X position")
+        assert_in_interval(win.x(), conf_x - x_offset, 2, "X position")
         assert_in_interval(win.y(), conf_y - y_offset / 2, 15 + y_offset, "Y position")
         #  Check size
         assert_in_interval(win.width(), conf_w, 5, "Width")

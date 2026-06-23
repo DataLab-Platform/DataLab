@@ -206,7 +206,9 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     current_tab = conf.Option()
     plugins_enabled = conf.Option()
     plugins_enabled_list = conf.Option()  # List of enabled plugin names
-    plugins_path = conf.Option()
+    plugins_path = conf.Option()  # Deprecated: single-directory string, kept for
+    # backward compatibility. Use plugins_path_list instead.
+    plugins_path_list = conf.Option()  # List of extra plugin directories
     tour_enabled = conf.Option()
     v020_plugins_warning_ignore = conf.Option()  # True: do not warn, False: warn
 
@@ -525,6 +527,59 @@ class Conf(conf.Configuration, metaclass=conf.ConfMeta):
     ai = AISection()
 
 
+def normalize_plugin_paths(paths: list[str] | tuple[str, ...] | None) -> list[str]:
+    """Normalize a list of plugin directories and drop duplicates/empties."""
+    normalized: list[str] = []
+    seen: set[str] = set()
+    for raw_path in paths or []:
+        if not raw_path:
+            continue
+        path = osp.normpath(osp.abspath(osp.expanduser(raw_path)))
+        if path in seen:
+            continue
+        seen.add(path)
+        normalized.append(path)
+    return normalized
+
+
+def get_user_plugin_paths() -> list[str]:
+    """Return user-configured extra plugin directories.
+
+    Reads from ``plugins_path_list`` (list of directories).  For backward
+    compatibility, the deprecated ``plugins_path`` single-directory string is
+    also merged into ``plugins_path_list`` if this is empty.
+    """
+    fixed_default = osp.normpath(Conf.get_path("plugins"))
+
+    # New list-based option (primary)
+    path_list = Conf.main.plugins_path_list.get([])
+    if path_list is None:
+        path_list = []
+    candidates = list(path_list)
+
+    # Migrate deprecated single-directory option into the list
+    legacy_path = Conf.main.plugins_path.get("")
+    if legacy_path and isinstance(legacy_path, str):
+        norm_legacy = osp.normpath(osp.abspath(osp.expanduser(legacy_path)))
+        if not candidates and norm_legacy != fixed_default:
+            candidates.append(legacy_path)
+            Conf.main.plugins_path_list.set(candidates)
+
+    normalized = normalize_plugin_paths(candidates)
+    return [path for path in normalized if path != fixed_default]
+
+
+def set_user_plugin_paths(paths: list[str] | tuple[str, ...]) -> None:
+    """Persist user-configured extra plugin directories.
+
+    Writes to ``plugins_path_list``.  The deprecated ``plugins_path`` is left
+    untouched so that older DataLab versions can still find at least one
+    user-configured directory.
+    """
+    normalized = normalize_plugin_paths(list(paths))
+    Conf.main.plugins_path_list.set(normalized)
+
+
 def get_old_log_fname(fname):
     """Return old log fname from current log fname"""
     return osp.splitext(fname)[0] + ".1.log"
@@ -555,7 +610,8 @@ def initialize():
     Conf.main.plugins_enabled_list.get(
         None
     )  # None = all enabled, [] = none, list = specific
-    Conf.main.plugins_path.get(Conf.get_path("plugins"))
+    Conf.main.plugins_path.get("")  # Deprecated: kept for backward compat
+    Conf.main.plugins_path_list.get([])
     Conf.main.tour_enabled.get(True)
     Conf.main.v020_plugins_warning_ignore.get(False)
     # Console section

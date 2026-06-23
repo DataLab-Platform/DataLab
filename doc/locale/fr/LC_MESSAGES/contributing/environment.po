@@ -217,7 +217,10 @@ msgid "To create this file, copy the `.env.template` file to `.env` (and eventua
 msgstr "Pour créer ce fichier, copiez le fichier `.env.template` en `.env` (et ajoutez éventuellement vos propres chemins)."
 
 msgid "Windows installer"
-msgstr ""
+msgstr "Installeur Windows"
+
+msgid "The official Windows executable and MSI installer are built by the GitHub CI release pipeline. The Python version embedded in the standalone application shipped to end users is defined by the `python-version` input default of the reusable build workflow (`.github/workflows/_build.yml`), consumed by its `build-msi` job; the release workflows do not override it. That workflow is the single source of truth — refer to it for the exact version currently in use."
+msgstr "L'exécutable Windows officiel et l'installeur MSI sont générés par le pipeline de publication de l'intégration continue GitHub. La version de Python embarquée dans l'application autonome distribuée aux utilisateurs finaux est définie par la valeur par défaut de l'entrée `python-version` du workflow de build réutilisable (`.github/workflows/_build.yml`), utilisée par son job `build-msi` ; les workflows de publication ne la redéfinissent pas. Ce workflow est la source de vérité unique — reportez-vous-y pour connaître la version exacte actuellement utilisée."
 
 msgid "The Windows installer is built using [WiX Toolset](https://wixtoolset.org/) V4.0.5. Using the WiX Toolset requires [.NET SDK](https://dotnet.microsoft.com/download/dotnet/) V6.0 minimum."
 msgstr ""

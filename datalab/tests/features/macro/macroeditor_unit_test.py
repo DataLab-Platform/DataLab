@@ -24,6 +24,7 @@ from guidata.io import HDF5Reader, HDF5Writer
 from guidata.qthelpers import qt_app_context
 from qtpy import QtWidgets as QW
 
+from datalab.config import _
 from datalab.env import execenv
 from datalab.gui.macroeditor import Macro
 from datalab.gui.macros_templates import list_templates
@@ -137,7 +138,7 @@ def test_macro_uid_and_new_actions():
         assert copy is not original
         assert copy.uid != original.uid
         assert copy.get_code() == original_code
-        assert "(copy)" in copy.title
+        assert copy.title == _("%s (copy)") % original.title
 
         # --- add_blank_macro ---
         widget.remove_all_objects()

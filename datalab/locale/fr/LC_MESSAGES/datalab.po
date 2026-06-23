@@ -1602,6 +1602,145 @@ msgstr "Annotation ajoutée"
 msgid "The label has been added as an annotation. You can edit or remove it using the annotation editing window.<br><br>Choosing to ignore this message will prevent it from being displayed again."
 msgstr "L'étiquette a été ajoutée comme annotation. Vous pouvez la modifier ou la supprimer en utilisant la fenêtre d'édition des annotations.<br><br>Ignorer ce message empêchera son affichage ultérieur."
 
+#, python-format
+msgid "“%s” has dependent operations but no valid source to reconnect to — downstream results are left unchanged."
+msgstr "“%s” a des opérations dépendantes mais aucune source valide à reconnecter — les résultats en aval restent inchangés."
+
+msgid "Some operations could not be reconnected after deletion:"
+msgstr "Certaines opérations n'ont pas pu être reconnectées après la suppression :"
+
+msgid "The current workspace state is not compatible with the action."
+msgstr "Le statut actuel de l'espace de travail n'est pas compatible avec l'action."
+
+msgid "Parameters"
+msgstr "Paramètres"
+
+msgid "History panel"
+msgstr "Panneau d'historique"
+
+msgid "History files"
+msgstr "Fichiers d'historique"
+
+msgid "Edit mode"
+msgstr "Mode édition"
+
+msgid "Record mode"
+msgstr "Mode enregistrement"
+
+msgid "New session"
+msgstr "Nouvelle session"
+
+msgid "Start a new history session"
+msgstr "Démarrer une nouvelle session d'historique"
+
+msgid "Open history file..."
+msgstr "Ouvrir des fichiers HDF5..."
+
+msgid "Open history from a standalone .dlhist file"
+msgstr "Ouvrir l'historique depuis un fichier .dlhist autonome"
+
+msgid "Save history file..."
+msgstr "Enregistrer l'historique dans un fichier HDF5..."
+
+msgid "Save history to a standalone .dlhist file"
+msgstr "Enregistrer l'historique dans un fichier .dlhist autonome"
+
+msgid "Duplicate selected history action/session"
+msgstr "Dupliquer l'objet %s sélectionné"
+
+msgid "Previous step"
+msgstr "Étape précédente"
+
+msgid "Select the previous action in the current session"
+msgstr "Sélectionner l'action précédente dans la session en cours"
+
+msgid "Next step"
+msgstr "Étape suivante"
+
+msgid "Select the next action in the current session"
+msgstr "Sélectionner l'action suivante dans la session en cours"
+
+msgid "Generate a Python macro script from history"
+msgstr "Générer un script Python macro à partir de l'historique"
+
+msgid "Remove actions incompatible with the current workspace"
+msgstr "Supprimer les actions incompatibles avec l'espace de travail actuel"
+
+msgid "Restore parameters"
+msgstr "Restaurer les paramètres"
+
+msgid "Restore original parameters (discard edit-mode changes)"
+msgstr "Restaurer les paramètres d'origine (ignorer les modifications en mode édition)"
+
+msgid "Replay"
+msgstr "Rejouer"
+
+msgid "Commit edit mode changes?"
+msgstr "Valider les modifications du mode édition ?"
+
+msgid ""
+"You are about to exit Edit mode.\n"
+"\n"
+"All parameter changes made during this session will be permanently kept.\n"
+"This action cannot be undone — Restore will no longer be available.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Vous êtes sur le point de quitter le mode Édition.\n"
+"\n"
+"Toutes les modifications de paramètres effectuées pendant cette session seront conservées de manière permanente.\n"
+"Cette action est irréversible — la restauration ne sera plus disponible.\n"
+"\n"
+"Voulez-vous continuer ?"
+
+#, python-format
+msgid "Action %s has been edited but its target output object(s) no longer exist — skipping."
+msgstr "L'action %s a été modifiée mais son ou ses objets de sortie cibles n'existent plus — saut de l'action."
+
+#, python-format
+msgid "Action %s uses pattern %r which is not recomputable yet."
+msgstr "L'action %s utilise le modèle %r qui n'est pas encore retraitable."
+
+#, python-format
+msgid "Recompute failed for action %s: %s"
+msgstr "Le recalcul a échoué pour l'action %s : %s"
+
+#, python-format
+msgid ""
+"Action %(name)s skipped: plugin '%(loc)s' is missing.\n"
+"Required parameter class: %(param)s\n"
+"Reinstall the plugin to re-enable this action."
+msgstr ""
+"Action %(name)s ignorée : le plugin '%(loc)s' est manquant.\n"
+"Classe de paramètre requise : %(param)s\n"
+"Réinstallez le plugin pour réactiver cette action."
+
+#, python-format
+msgid "Action %s: source object was deleted — skipping."
+msgstr "L'action %s : l'objet source a été supprimé — saut de l'action."
+
+#, python-format
+msgid "Action %s: all source objects were deleted — skipping."
+msgstr "L'action %s : tous les objets source ont été supprimés — saut de l'action."
+
+#, python-format
+msgid "Action %s: missing source(s) for output #%d — skipping."
+msgstr "L'action %s : source(s) manquante(s) pour la sortie n°%d — saut de l'action."
+
+#, python-format
+msgid "Action %s: source object(s) were deleted — skipping."
+msgstr "L'action %s : objet(s) source supprimé(s) — saut de l'action."
+
+#, python-format
+msgid "Action %s: %d analysed object(s) were deleted — skipping."
+msgstr "L'action %s : %d objet(s) analysé(s) ont été supprimé(s) — saut de l'action."
+
+msgid "Cascade recompute"
+msgstr "Retraiter"
+
+msgid "Some downstream actions could not be recomputed:"
+msgstr "Certaines actions en aval n'ont pas pu être retraitées :"
+
 msgid "Recent macros"
 msgstr "Macros récentes"
 
@@ -1701,6 +1840,16 @@ msgstr "Création des formes géométriques"
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
+msgid "today"
+msgstr "aujourd'hui"
+
+msgid "yesterday"
+msgstr "hier"
+
+#, python-format
+msgid "Last loaded: %s at %s"
+msgstr "Dernier chargement : %s à %s"
+
 msgid "Active"
 msgstr "Actif"
 
@@ -1710,8 +1859,20 @@ msgstr "Désactivé"
 msgid "No description available"
 msgstr "Aucune description disponible"
 
+msgid "Open file"
+msgstr "Ouvrir le fichier"
+
+msgid "Show in folder"
+msgstr "Afficher dans le dossier"
+
 msgid "Import error"
 msgstr "Erreur d'importation"
+
+msgid "Edit directory"
+msgstr "Modifier le répertoire"
+
+msgid "Remove directory"
+msgstr "Supprimer le répertoire"
 
 msgid "Plugin Configuration"
 msgstr "Configuration des plugins"
@@ -1722,8 +1883,8 @@ msgstr "Activer/désactiver les plugins"
 msgid "Plugin search paths"
 msgstr "Chemins de recherche des plugins"
 
-msgid "Manage Plugins"
-msgstr "Gérer les plugins"
+msgid "Apply and reload plugins"
+msgstr "Appliquer et recharger les plugins"
 
 msgid "Changes will be applied after clicking OK and reloading plugins."
 msgstr "Les modifications seront appliquées après avoir cliqué sur OK et rechargé les plugins."
@@ -1731,15 +1892,27 @@ msgstr "Les modifications seront appliquées après avoir cliqué sur OK et rech
 msgid "The following directories are scanned at startup for plugins:"
 msgstr "Les répertoires suivants sont analysés au démarrage pour détecter les plugins :"
 
-msgid "from"
-msgstr "de"
+msgid "Default plugin directories"
+msgstr "Répertoires de plugins par défaut"
 
-msgid "No plugin search path is currently active."
-msgstr "Aucun chemin de recherche de plugins n'est actuellement actif."
+msgid "Additional plugin directories"
+msgstr "Répertoires de plugins supplémentaires"
+
+msgid "Add"
+msgstr "Ajouter"
+
+msgid "Additional directories are saved in DataLab configuration."
+msgstr "Les répertoires supplémentaires sont enregistrés dans la configuration de DataLab."
+
+msgid "No additional plugin directory is configured."
+msgstr "Aucun répertoire de plugins supplémentaire n'est configuré."
 
 #, python-format
-msgid "Additional directories can be added via the <code>%s</code> environment variable (multiple paths separated by '<code>%s</code>'). Changes take effect at DataLab startup."
-msgstr "Des répertoires supplémentaires peuvent être ajoutés via la variable d'environnement <code>%s</code> (plusieurs chemins séparés par '<code>%s</code>'). Les modifications prennent effet au démarrage de DataLab."
+msgid "Directories provided via the <code>%s</code> environment variable (multiple paths separated by '<code>%s</code>') also appear above as read-only entries. Changes take effect at DataLab startup."
+msgstr "Les répertoires fournis via la variable d'environnement <code>%s</code> (plusieurs chemins séparés par '<code>%s</code>') apparaissent également ci-dessus en lecture seule. Les modifications prennent effet au démarrage de DataLab."
+
+msgid "Select plugin directory"
+msgstr "Sélectionner un répertoire de plugins"
 
 msgid "Enable all plugins"
 msgstr "Activer tous les plugins"
@@ -1764,6 +1937,27 @@ msgstr "Recharger les plugins"
 
 msgid "Plugin configuration has been saved. Do you want to reload plugins now to apply changes?"
 msgstr "La configuration des plugins a été enregistrée. Voulez-vous recharger les plugins maintenant pour appliquer les modifications ?"
+
+msgid "Plugin settings"
+msgstr "Paramètres des plugins"
+
+msgid "Third-party plugins are globally disabled."
+msgstr "Les plugins tiers sont désactivés globalement."
+
+msgid "Compatibility warnings"
+msgstr "Avertissements de compatibilité"
+
+msgid "Hide warnings for incompatible DataLab v0.20 plugins"
+msgstr "Masquer les avertissements pour les plugins DataLab v0.20 incompatibles"
+
+msgid "Disable plugins globally"
+msgstr "Désactiver globalement les plugins"
+
+msgid "Enable plugins globally"
+msgstr "Activer globalement les plugins"
+
+msgid "Enable them again from the plugin configuration dialog to use this feature."
+msgstr "Réactivez-les depuis la boîte de dialogue de configuration des plugins pour utiliser cette fonctionnalité."
 
 msgid "Failed to deserialize processing parameters from JSON."
 msgstr "Échec de la désérialisation des paramètres de traitement depuis le format JSON."
@@ -2002,6 +2196,9 @@ msgstr "Normaliser"
 
 msgid "Clipping"
 msgstr "Écrêtage"
+
+msgid "Replace special values"
+msgstr "Remplacer les valeurs spéciales"
 
 msgid "Add Gaussian noise"
 msgstr "Ajouter du bruit gaussien"
@@ -2628,12 +2825,6 @@ msgstr "Plugins tiers"
 msgid "Enable or disable third-party plugins immediately. Changes are applied without restarting DataLab"
 msgstr "Activer ou désactiver immédiatement les plugins tiers. Les changements sont appliqués sans redémarrer DataLab"
 
-msgid "Plugins path"
-msgstr "Chemin des plugins"
-
-msgid "Path to third-party plugins.<br><br>DataLab will discover plugins in this path, as well as in your PYTHONPATH."
-msgstr "Chemin d'accès aux plugins tiers.<br><br>DataLab découvrira les plugins dans ce chemin, ainsi que dans votre PYTHONPATH."
-
 msgid "Ignore compatibility issues warning"
 msgstr "Ignorer l'avertissement de compatibilité"
 
@@ -2959,9 +3150,6 @@ msgstr "État d'activation du serveur XML-RPC"
 
 msgid "Console enable status"
 msgstr "État d'activation de la console"
-
-msgid "Third-party plugins path"
-msgstr "Chemin des plugins tiers"
 
 msgid "General"
 msgstr "Général"
@@ -3559,6 +3747,21 @@ msgstr "Des journaux de bord ont été générés lors de la dernière session."
 msgid "Log files are currently empty."
 msgstr "Les journaux de bord sont vides."
 
+msgid "Kernel / Mask preview"
+msgstr "Aperçu du noyau / masque"
+
+#, python-brace-format
+msgid "{label} — Kernel / Mask preview"
+msgstr "{label} — Aperçu du noyau / masque"
+
+#, python-brace-format
+msgid "±{n} points"
+msgstr "±{n} points"
+
+#, python-brace-format
+msgid "±{n} rows × ±{n} columns"
+msgstr "±{n} lignes × ±{n} colonnes"
+
 msgid "Signal baseline selection"
 msgstr "Sélection de la ligne de base du signal"
 
@@ -3891,6 +4094,21 @@ msgstr "Merci de sélectionner le fichier à importer."
 msgid "Example Wizard"
 msgstr "Assistant exemple"
 
+msgid "Signal"
+msgstr "Signal"
+
+msgid "Shape"
+msgstr "Forme"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "Dimensions"
+msgstr "Dimensions"
+
+msgid "This image uses an integer data type, so it cannot contain NaN or infinite values. Replace special values is therefore not applicable."
+msgstr "Cette image utilise un type de données entier, elle ne peut donc pas contenir de valeurs NaN ou infinies. Le remplacement des valeurs spéciales n'est donc pas applicable."
+
 msgid "Minimum value"
 msgstr "Valeur minimum"
 
@@ -3938,4 +4156,5 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
+
 

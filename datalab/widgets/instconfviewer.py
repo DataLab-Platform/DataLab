@@ -23,6 +23,7 @@ from sigima.io.signal import SignalIORegistry
 import datalab
 from datalab.config import APP_NAME, IS_FROZEN, Conf, _
 from datalab.plugins import PluginRegistry
+from datalab.utils.qthelpers import show_in_folder as _show_in_folder
 from datalab.widgets.fileviewer import FileViewerWidget, get_title_contents
 
 
@@ -126,6 +127,32 @@ def get_install_info() -> str:
     return info
 
 
+class ConfigFileViewerWidget(FileViewerWidget):
+    """File viewer with actions for the displayed configuration file."""
+
+    def __init__(self, filepath: str, parent: QW.QWidget | None = None) -> None:
+        super().__init__(parent=parent)
+        self.filepath = os.path.abspath(filepath)
+        self.show_in_folder_button = QW.QPushButton(
+            get_icon("show_in_folder.svg"), _("Show in folder")
+        )
+        self.show_in_folder_button.clicked.connect(self.show_file_in_folder)
+
+        header_layout = QW.QHBoxLayout()
+        header_layout.setContentsMargins(0, 0, 0, 0)
+        header_layout.addWidget(self.label)
+        header_layout.addStretch(1)
+        header_layout.addWidget(self.show_in_folder_button)
+
+        layout = self.layout()
+        layout.removeWidget(self.label)
+        layout.insertLayout(0, header_layout)
+
+    def show_file_in_folder(self) -> None:
+        """Open the folder containing the displayed configuration file."""
+        _show_in_folder(self.filepath)
+
+
 class InstallConfigViewerWindow(QW.QDialog):
     """Installation configuration window"""
 
@@ -160,7 +187,11 @@ class InstallConfigViewerWindow(QW.QDialog):
                 _("Plugins and I/O features"),
             ),
         ):
-            viewer = FileViewerWidget()
+            viewer = (
+                ConfigFileViewerWidget(Conf.get_filename())
+                if tab_title == _("User configuration")
+                else FileViewerWidget()
+            )
             viewer.set_data(title, contents)
             self.tabs.addTab(viewer, tab_icon, tab_title)
         layout = QW.QVBoxLayout()
