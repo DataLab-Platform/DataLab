@@ -114,6 +114,19 @@ def patch_title_with_ids(
 #: (e.g. ``s001``, ``i012``, ``gs003``, ``gi007``).
 SHORT_ID_REGEX = re.compile(r"\b(g?[si])(\d{3})\b")
 
+#: Metadata key holding the per-object "deleted source references" registry.
+#: This is a public key (no leading underscore) so it is copied with the object
+#: (duplication, copy/paste of "other" metadata) and serialized to files.
+DELETED_REF_KEY = "deleted_source_refs"
+
+#: Regex matching deleted-source reference tokens embedded in titles
+#: (e.g. ``sd001a`` for a deleted signal, ``id001`` for a deleted image,
+#: ``gsd001`` for  deleted signal group, ``gid001`` for a deleted image group).
+#: The trailing ``d`` and the 3+ digit count make this disjoint from
+#: :data:`SHORT_ID_REGEX` (live short IDs always have exactly 3 digits and no
+#: ``d`` separator).
+DELETED_REF_REGEX = re.compile(r"\b(gs|gi|s|i)d(\d{3,})\b")
+
 
 def find_short_ids_in_title(title: str) -> list[tuple[int, int, str]]:
     """Return a list of ``(start, end, short_id)`` tuples for every short ID
@@ -126,6 +139,34 @@ def find_short_ids_in_title(title: str) -> list[tuple[int, int, str]]:
         List of ``(start, end, short_id)`` tuples, sorted by ``start``.
     """
     return [(m.start(), m.end(), m.group(0)) for m in SHORT_ID_REGEX.finditer(title)]
+
+
+def find_deleted_refs_in_title(title: str) -> list[tuple[int, int, str]]:
+    """Return a list of ``(start, end, token)`` tuples for every deleted-source
+    reference token found in ``title`` (e.g. ``sd001``, ``id002``, ``gsd001``).
+
+    Args:
+        title: title string to scan
+
+    Returns:
+        List of ``(start, end, token)`` tuples, sorted by ``start``.
+    """
+    return [(m.start(), m.end(), m.group(0)) for m in DELETED_REF_REGEX.finditer(title)]
+
+
+def get_deleted_ref_prefix(obj_or_group: SignalObj | ImageObj | ObjectGroup) -> str:
+    """Return the deleted-reference token prefix for an object or group.
+
+    Args:
+        obj_or_group: object or group that is about to be deleted
+
+    Returns:
+        Token prefix: ``"sd"`` (signal), ``"id"`` (image), ``"gsd"`` (signal
+        group) or ``"gid"`` (image group).
+    """
+    if isinstance(obj_or_group, ObjectGroup):
+        return f"{obj_or_group.prefix}d"  # "gs" -> "gsd", "gi" -> "gid"
+    return f"{obj_or_group.PREFIX}d"  # "s" -> "sd", "i" -> "id"
 
 
 class ObjectGroup:
@@ -224,6 +265,12 @@ class ObjectModel:
         self._objects: dict[str, SignalObj | ImageObj] = {}
         # list of groups:
         self._groups: list[ObjectGroup] = []
+        # Per-group "deleted source references" registries, keyed by group uuid.
+        # Groups have no metadata dict (unlike SignalObj/ImageObj which store
+        # their registry in ``metadata[DELETED_REF_KEY]``), so their registries
+        # live here. Each registry maps a deleted-reference token (e.g.
+        # ``"sd001"``) to the canonical title of the deleted source.
+        self._group_deleted_refs: dict[str, dict[str, str]] = {}
 
     def reset_short_ids(self) -> None:
         """Reset short IDs (used for object numbering)
@@ -332,36 +379,170 @@ class ObjectModel:
                 return obj
         return None
 
-    def __render_source_titles(self, title: str, seen: set[str]) -> str:
-        """Return ``title`` with every embedded source short ID replaced by the
-        title of the matching object or group.
-
-        Resolution is recursive (a source title may itself reference other
-        objects) and guarded against cycles. Short IDs that cannot be resolved
-        (e.g. the source object was removed) are left untouched.
+    def __get_registry(
+        self, obj_or_group: SignalObj | ImageObj | ObjectGroup
+    ) -> dict[str, str]:
+        """Return the (read-only) deleted-source reference registry for an
+        object or group, or an empty dict if none exists.
 
         Args:
-            title: title string, in canonical short-ID form (e.g. ``"fft(s001)"``)
-            seen: set of short IDs already being resolved (cycle guard)
+            obj_or_group: object or group whose registry is requested
 
         Returns:
-            Title string with source short IDs replaced by source titles.
+            Mapping ``token -> frozen canonical title`` (may be empty).
         """
-        matches = find_short_ids_in_title(title)
-        if not matches:
+        if isinstance(obj_or_group, ObjectGroup):
+            return self._group_deleted_refs.get(obj_or_group.uuid, {})
+        return obj_or_group.metadata.get(DELETED_REF_KEY, {})
+
+    def __ensure_registry(
+        self, obj_or_group: SignalObj | ImageObj | ObjectGroup
+    ) -> dict[str, str]:
+        """Return the deleted-source reference registry for an object or group,
+        creating it (in metadata or in the model's group registry store) if it
+        does not exist yet.
+
+        Args:
+            obj_or_group: object or group whose registry is requested
+
+        Returns:
+            The mutable registry dict.
+        """
+        if isinstance(obj_or_group, ObjectGroup):
+            return self._group_deleted_refs.setdefault(obj_or_group.uuid, {})
+        return obj_or_group.metadata.setdefault(DELETED_REF_KEY, {})
+
+    def get_deleted_refs(
+        self, obj_or_group: SignalObj | ImageObj | ObjectGroup
+    ) -> dict[str, str]:
+        """Return a copy of the deleted-source reference registry for an object
+        or group (for display/tooltip purposes).
+
+        Args:
+            obj_or_group: object or group whose registry is requested
+
+        Returns:
+            Mapping ``token -> frozen canonical title`` (may be empty).
+        """
+        return dict(self.__get_registry(obj_or_group))
+
+    def __allocate_deleted_token(
+        self, dependent: SignalObj | ImageObj | ObjectGroup, prefix: str
+    ) -> str:
+        """Allocate the next free deleted-reference token for ``prefix`` in the
+        registry of ``dependent`` (numbering starts at 1, per prefix).
+
+        Args:
+            dependent: object or group whose registry receives the token
+            prefix: token prefix (``"sd"``, ``"id"``, ``"gsd"`` or ``"gid"``)
+
+        Returns:
+            A new token, e.g. ``"sd001"``.
+        """
+        registry = self.__get_registry(dependent)
+        pattern = re.compile(r"^" + re.escape(prefix) + r"(\d+)$")
+        max_n = 0
+        for key in registry:
+            match = pattern.match(key)
+            if match:
+                max_n = max(max_n, int(match.group(1)))
+        return f"{prefix}{max_n + 1:03d}"
+
+    def __freeze_deleted_object_refs(
+        self, deleted: SignalObj | ImageObj | ObjectGroup
+    ) -> None:
+        """Freeze every reference to ``deleted`` found in the titles (and in the
+        deleted-reference registries) of all other objects and groups.
+
+        This must be called while titles are in canonical short-ID form, before
+        ``deleted`` is actually removed from the model. Each dependent gets a
+        stable per-object token (e.g. ``"sd001"``) substituted in place of the
+        soon-to-be-invalid short ID, together with a registry entry mapping that
+        token to the canonical title of ``deleted`` (so surviving live sources
+        referenced by that title keep resolving dynamically).
+
+        Args:
+            deleted: object or group about to be removed from the model
+        """
+        short_id = get_short_id(deleted)
+        frozen_title = deleted.title
+        prefix = get_deleted_ref_prefix(deleted)
+        token_re = re.compile(r"\b" + re.escape(short_id) + r"\b")
+        dependents: list[SignalObj | ImageObj | ObjectGroup] = [
+            obj for obj in self._objects.values() if obj is not deleted
+        ]
+        dependents += [group for group in self._groups if group is not deleted]
+        for dependent in dependents:
+            registry = self.__get_registry(dependent)
+            in_title = bool(token_re.search(dependent.title))
+            in_registry = any(token_re.search(value) for value in registry.values())
+            if not (in_title or in_registry):
+                continue
+            token = self.__allocate_deleted_token(dependent, prefix)
+            self.__ensure_registry(dependent)[token] = frozen_title
+            if in_title:
+                dependent.title = token_re.sub(token, dependent.title)
+            if in_registry:
+                for key in registry:
+                    registry[key] = token_re.sub(token, registry[key])
+
+    def __render(
+        self,
+        title: str,
+        registry: dict[str, str],
+        seen: set[str],
+    ) -> str:
+        """Return ``title`` with embedded references resolved to source titles.
+
+        Two kinds of references are resolved:
+
+        - live short IDs (e.g. ``s001``): replaced by the (recursively rendered)
+          title of the matching live object/group, using that source's own
+          registry for nested deleted references;
+        - deleted-source tokens (e.g. ``sd001``): replaced by the (recursively
+          rendered) frozen title stored in ``registry``.
+
+        Unresolved references (missing source, missing registry entry) or cycles
+        are left untouched.
+
+        Args:
+            title: title string to render
+            registry: deleted-reference registry of the object owning ``title``
+            seen: set of references already being resolved (cycle guard)
+
+        Returns:
+            Rendered title string.
+        """
+        events: list[tuple[int, int, str, bool]] = []
+        for start, end, sid in find_short_ids_in_title(title):
+            events.append((start, end, sid, False))
+        for start, end, token in find_deleted_refs_in_title(title):
+            events.append((start, end, token, True))
+        if not events:
             return title
+        events.sort()
         parts: list[str] = []
         last = 0
-        for start, end, short_id in matches:
+        for start, end, ref, is_deleted in events:
             parts.append(title[last:start])
-            source = self.find_by_short_id(short_id)
-            if source is None or short_id in seen:
-                # Unresolved (removed source) or cycle: keep the short ID as-is
+            if ref in seen:
                 parts.append(title[start:end])
+            elif is_deleted:
+                frozen = registry.get(ref)
+                if frozen is None:
+                    parts.append(title[start:end])
+                else:
+                    parts.append(self.__render(frozen, registry, seen | {ref}))
             else:
-                parts.append(
-                    self.__render_source_titles(source.title, seen | {short_id})
-                )
+                source = self.find_by_short_id(ref)
+                if source is None:
+                    parts.append(title[start:end])
+                else:
+                    parts.append(
+                        self.__render(
+                            source.title, self.__get_registry(source), seen | {ref}
+                        )
+                    )
             last = end
         parts.append(title[last:])
         return "".join(parts)
@@ -371,22 +552,25 @@ class ObjectModel:
     ) -> str:
         """Return the title to display for ``obj_or_group``.
 
-        The stored title is always kept in canonical short-ID form (e.g.
-        ``"fft(s001)"``). This method optionally renders it for display by
-        replacing embedded source short IDs with the corresponding source
-        titles, without altering the stored title.
+        The stored title is always kept in canonical form: live source
+        references use short IDs (e.g. ``"fft(s001)"``), and references to
+        deleted sources use stable per-object tokens (e.g. ``"fft(sd001)"``).
+        This method optionally renders it for display by replacing both kinds of
+        references with the corresponding source titles, without altering the
+        stored title.
 
         Args:
             obj_or_group: object or group whose display title is requested
-            use_titles: if True, replace embedded source short IDs by source
-             titles; if False, return the stored (short-ID) title unchanged
+            use_titles: if True, replace embedded references by source titles;
+             if False, return the stored (short-ID/token) title unchanged
 
         Returns:
             Title string to display.
         """
         if not use_titles:
             return obj_or_group.title
-        return self.__render_source_titles(obj_or_group.title, set())
+        registry = self.__get_registry(obj_or_group)
+        return self.__render(obj_or_group.title, registry, set())
 
     @staticmethod
     def __raise_ambiguous_title(
@@ -578,16 +762,21 @@ class ObjectModel:
 
     def remove_group(self, group: ObjectGroup) -> None:
         """Remove group from model"""
+        # Freeze references to the group (and to its orphan objects) into stable
+        # deleted-reference tokens, while titles are still in canonical form:
+        self.__freeze_deleted_object_refs(group)
+        orphans = [
+            obj
+            for obj in group
+            if not any(obj in other for other in self._groups if other is not group)
+        ]
+        for obj in orphans:
+            self.__freeze_deleted_object_refs(obj)
         self.replace_short_ids_by_uuids_in_titles()
         self._groups.remove(group)
-        for obj in group:
-            remove_obj = True
-            for other_group in self._groups:
-                if obj in other_group:
-                    remove_obj = False
-                    break
-            if remove_obj:
-                del self._objects[get_uuid(obj)]
+        self._group_deleted_refs.pop(group.uuid, None)
+        for obj in orphans:
+            del self._objects[get_uuid(obj)]
         self.reset_short_ids()
         self.replace_uuids_by_short_ids_in_titles()
 
@@ -609,6 +798,9 @@ class ObjectModel:
 
     def remove_object(self, obj: SignalObj | ImageObj) -> None:
         """Remove object from model"""
+        # Freeze references to this object into stable deleted-reference tokens,
+        # while titles are still in canonical short-ID form:
+        self.__freeze_deleted_object_refs(obj)
         for group in self._groups:
             if obj in group:
                 group.remove(obj)
@@ -723,6 +915,34 @@ class ObjectModel:
                 mapping[get_uuid(obj)] = get_short_id(obj)
         return mapping
 
+    def __iter_registries(
+        self, other_objects: tuple[SignalObj | ImageObj] | None = None
+    ) -> Iterator[dict[str, str]]:
+        """Iterate over every non-empty deleted-reference registry in the model.
+
+        Frozen titles stored as registry values may themselves contain live
+        short IDs (when a deleted object derived from still-living sources). Those
+        short IDs must be kept in sync through the same uuid swap as regular
+        titles, so the swap methods process registries via this iterator.
+
+        Args:
+            other_objects: extra objects to consider (e.g. an object being added)
+
+        Yields:
+            Mutable registry dicts (``token -> frozen canonical title``).
+        """
+        objs = list(self._objects.values())
+        if other_objects is not None:
+            objs += list(other_objects)
+        for obj in objs:
+            registry = obj.metadata.get(DELETED_REF_KEY)
+            if registry:
+                yield registry
+        for group in self._groups:
+            registry = self._group_deleted_refs.get(group.uuid)
+            if registry:
+                yield registry
+
     def replace_short_ids_by_uuids_in_titles(
         self, other_objects: tuple[SignalObj | ImageObj] | None = None
     ) -> None:
@@ -751,6 +971,11 @@ class ObjectModel:
         for group in self._groups:
             for grp_uuid, short_id in mapping.items():
                 group.title = group.title.replace(short_id, grp_uuid)
+        # Keep live short IDs embedded in frozen (deleted-reference) titles in sync:
+        for registry in self.__iter_registries(other_objects):
+            for token in registry:
+                for obj_uuid, short_id in mapping.items():
+                    registry[token] = registry[token].replace(short_id, obj_uuid)
 
     def replace_uuids_by_short_ids_in_titles(self) -> None:
         """Replace uuids by short IDs in titles
@@ -767,6 +992,11 @@ class ObjectModel:
         for group in self._groups:
             for grp_uuid, short_id in mapping.items():
                 group.title = group.title.replace(grp_uuid, short_id)
+        # Restore live short IDs embedded in frozen (deleted-reference) titles:
+        for registry in self.__iter_registries():
+            for token in registry:
+                for obj_uuid, short_id in mapping.items():
+                    registry[token] = registry[token].replace(obj_uuid, short_id)
         # Replace remaining UUIDs with f"{obj.PREFIX}xxx"
         # (this may happen if groups or objects were removed in the meantime):
         pattern = re.compile(r"\b[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}\b")

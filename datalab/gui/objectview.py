@@ -48,6 +48,7 @@ from sigima.objects import ImageObj, SignalObj
 from datalab.config import Conf, _
 from datalab.objectmodel import (
     ObjectGroup,
+    find_deleted_refs_in_title,
     find_short_ids_in_title,
     get_short_id,
     get_uuid,
@@ -259,6 +260,31 @@ class SimpleObjectTree(QW.QTreeWidget):
             f"{'<br>'.join(rows)}</p>"
         )
 
+    def _build_deleted_ref_tooltip(
+        self, obj: SignalObj | ImageObj | ObjectGroup
+    ) -> str:
+        """Return an HTML tooltip fragment listing the deleted source objects
+        referenced by deleted-reference tokens (e.g. ``sd001``) embedded in the
+        title of ``obj``, or an empty string when no such reference is found."""
+        registry = self.objmodel.get_deleted_refs(obj)
+        if not registry:
+            return ""
+        rows: list[str] = []
+        seen: set[str] = set()
+        for _start, _end, token in find_deleted_refs_in_title(obj.title):
+            if token in seen or token not in registry:
+                continue
+            seen.add(token)
+            name = registry[token]
+            rows.append(f"<b>{token}</b> \u2192 {name} <i>({_('deleted')})</i>")
+        if not rows:
+            return ""
+        title = _("Deleted source objects")
+        return (
+            f"<p style='white-space:pre'><i><u>{title}:</u></i><br>"
+            f"{'<br>'.join(rows)}</p>"
+        )
+
     def __update_item(
         self, item: QW.QTreeWidgetItem, obj: SignalObj | ImageObj | ObjectGroup
     ) -> None:
@@ -278,6 +304,9 @@ class SimpleObjectTree(QW.QTreeWidget):
         sid_tooltip = self._build_short_id_tooltip(canonical_text)
         if sid_tooltip:
             tooltip_parts.append(sid_tooltip)
+        del_tooltip = self._build_deleted_ref_tooltip(obj)
+        if del_tooltip:
+            tooltip_parts.append(del_tooltip)
         if isinstance(obj, (SignalObj, ImageObj)):
             meta_tooltip = metadata_to_html(obj.metadata)
             if meta_tooltip:
