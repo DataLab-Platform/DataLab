@@ -12,6 +12,8 @@ Testing the following:
   - When no existing ROIs are present, ROI creation proceeds normally
   - When the user cancels the confirmation dialog, existing ROIs are preserved
   - The confirmation dialog is shown only when ROIs already exist
+  - contour_shape with create_rois=True creates ROIs in DataLab integration
+  - ROI modification loop is broken (no infinite re-creation cycle)
 """
 
 # guitest: show
@@ -23,6 +25,7 @@ from unittest.mock import patch
 import sigima.params
 import sigima.proc.image as sipi
 from qtpy import QtWidgets as QW
+from sigima.enums import ContourShape
 from sigima.objects import NewImageParam, create_image_roi
 from sigima.tests.data import create_multigaussian_image, create_peak_image
 
@@ -228,6 +231,90 @@ def test_auto_recompute_does_not_replace_rois():
         )
 
 
+def test_contour_shape_creates_rois_in_datalab():
+    """Integration test: contour_shape with create_rois=True creates ROIs via DataLab.
+
+    This verifies the full DataLab integration path for the Sigima
+    feature/20-contour-to-roi feature: the contour_shape computation function
+    is called through run_feature, and the postprocess hook
+    (apply_detection_rois) creates the ROIs on the image object.
+    """
+    with datalab_test_app_context() as win:
+        panel = win.imagepanel
+        newparam = NewImageParam.create(height=200, width=200)
+        ima = create_multigaussian_image(newparam)
+        panel.add_object(ima)
+
+        for shape in ContourShape:
+            # Reset: remove ROIs from previous iteration
+            obj = panel.objview.get_current_object()
+            obj.roi = None
+
+            param = sigima.params.ContourShapeParam.create(
+                shape=shape, create_rois=True
+            )
+            panel.processor.run_feature("contour_shape", param)
+
+            obj = panel.objview.get_current_object()
+            assert obj.roi is not None, (
+                f"contour_shape({shape.name}) with create_rois=True "
+                "must create ROIs in DataLab"
+            )
+            assert not obj.roi.is_empty(), (
+                f"contour_shape({shape.name}) ROI must not be empty"
+            )
+
+
+def test_no_infinite_roi_recreation_loop():
+    """The ROI creation → auto-recompute cycle must not loop infinitely.
+
+    Full scenario matching the real user workflow:
+    1. Run detection with create_rois=True → ROIs are created.
+    2. Simulate what happens when the user edits ROIs: auto_recompute_analysis
+       is called (as DataLab does after ROI graphical editing).
+    3. Verify that auto_recompute_analysis does NOT recreate ROIs.
+    4. Repeat step 2 a second time to confirm stability.
+
+    This test guards against the semi-infinite loop described in issue #329:
+    modifying ROIs triggers auto-recompute, which re-runs the detection
+    function. If create_rois stays True in the recompute path, the detection
+    would overwrite the user's ROI edit, triggering another recompute, etc.
+    """
+    with datalab_test_app_context() as win:
+        panel = win.imagepanel
+        ima = create_peak_image()
+        panel.add_object(ima)
+
+        # Step 1: detection with ROI creation
+        param = sigima.params.Peak2DDetectionParam.create(create_rois=True)
+        panel.processor.compute_peak_detection(param)
+
+        obj = panel.objview.get_current_object()
+        assert obj.roi is not None, "Initial detection should create ROIs"
+        initial_roi = obj.roi
+
+        # Step 2: simulate user editing ROIs (replace with a single rectangle)
+        obj.roi = create_image_roi("rectangle", [10, 10, 50, 50])
+        user_roi = obj.roi
+
+        # Step 3: auto-recompute fires (as DataLab does after ROI edit)
+        panel.processor.auto_recompute_analysis(obj)
+
+        obj = panel.objview.get_current_object()
+        # The ROI must be the user's edited ROI, NOT a new set from detection
+        assert obj.roi is user_roi, (
+            "auto_recompute must not replace the user's manually edited ROI"
+        )
+
+        # Step 4: a second auto-recompute must also be stable
+        panel.processor.auto_recompute_analysis(obj)
+
+        obj = panel.objview.get_current_object()
+        assert obj.roi is user_roi, (
+            "Second auto_recompute must still preserve the user's ROI (no oscillation)"
+        )
+
+
 if __name__ == "__main__":
     test_create_rois_no_existing_roi()
     test_create_rois_with_existing_roi_unattended()
@@ -236,3 +323,5 @@ if __name__ == "__main__":
     test_cancel_dialog_preserves_existing_roi()
     test_preprocess_hook_abort_skipped_in_unattended()
     test_auto_recompute_does_not_replace_rois()
+    test_contour_shape_creates_rois_in_datalab()
+    test_no_infinite_roi_recreation_loop()
