@@ -1,6 +1,6 @@
-# French translations for DataLab.
+# French translations for datalab.
 # Copyright (C) 2026 DataLab Platform Developers
-# This file is distributed under the same license as the DataLab project.
+# This file is distributed under the same license as the datalab project.
 #
 msgid ""
 msgstr ""
@@ -940,6 +940,15 @@ msgstr "Afficher le panneau de contraste"
 msgid "Show or hide contrast adjustment panel"
 msgstr "Afficher ou cacher le panneau de réglage du contraste"
 
+msgid "Command palette"
+msgstr "Palette de commandes"
+
+msgid "Type to search for a command…"
+msgstr "Tapez pour rechercher une commande…"
+
+msgid "Search a command…"
+msgstr "Rechercher une commande…"
+
 msgid "Process signal"
 msgstr "Traiter le signal"
 
@@ -1044,7 +1053,7 @@ msgstr "Ignorer ce message empêchera son affichage ultérieur."
 msgid "Plugins"
 msgstr "Plugins"
 
-msgid "Third-party plugins are disabled. Enable them in the Settings dialog to use this feature."
+msgid "Third-party plugins are disabled. Enable them again from the plugin configuration dialog to use this feature."
 msgstr "Les plugins tiers sont désactivés. Activez-les dans la boîte de dialogue des préférences pour utiliser cette fonctionnalité."
 
 #, python-format
@@ -1075,17 +1084,8 @@ msgstr "Préférences..."
 msgid "Open settings dialog"
 msgstr "Ouvrir la boîte de dialogue des préférences"
 
-msgid "Command palette"
-msgstr "Palette de commandes"
-
 msgid "Command palette..."
 msgstr "Palette de commandes..."
-
-msgid "Search a command…"
-msgstr "Rechercher une commande…"
-
-msgid "Type to search for a command…"
-msgstr "Tapez pour rechercher une commande…"
 
 msgid "Search and run any command by its menu path"
 msgstr "Rechercher et exécuter n'importe quelle commande par son chemin de menu"
@@ -1394,9 +1394,6 @@ msgstr "Propriétés"
 #, python-format
 msgid "Parameters for function `%s`"
 msgstr "Paramètres pour la fonction `%s`"
-
-msgid "Created"
-msgstr "Créé"
 
 msgid "Created"
 msgstr "Créé"
@@ -1872,12 +1869,6 @@ msgstr "Fichiers Python"
 msgid "Clear console"
 msgstr "Effacer la console"
 
-msgid "Python files"
-msgstr "Fichiers Python"
-
-msgid "Clear console"
-msgstr "Effacer la console"
-
 msgid "-***- Macro Console -***-"
 msgstr "-***- Console des macros -***-"
 
@@ -1993,29 +1984,29 @@ msgstr "Modifier le répertoire"
 msgid "Remove directory"
 msgstr "Supprimer le répertoire"
 
+msgid "from"
+msgstr "depuis"
+
 msgid "Plugin Configuration"
 msgstr "Configuration des plugins"
 
 msgid "Enable/disable plugins"
 msgstr "Activer/désactiver les plugins"
 
-msgid "Plugin search paths"
-msgstr "Chemins de recherche des plugins"
+msgid "Plugin settings"
+msgstr "Paramètres des plugins"
 
 msgid "Apply and reload plugins"
 msgstr "Appliquer et recharger les plugins"
+
+msgid "Third-party plugins are globally disabled."
+msgstr "Les plugins tiers sont désactivés globalement."
 
 msgid "Changes will be applied after clicking OK and reloading plugins."
 msgstr "Les modifications seront appliquées après avoir cliqué sur OK et rechargé les plugins."
 
 msgid "The following directories are scanned at startup for plugins:"
 msgstr "Les répertoires suivants sont analysés au démarrage pour détecter les plugins :"
-
-msgid "from"
-msgstr "depuis"
-
-msgid "from"
-msgstr "depuis"
 
 msgid "Default plugin directories"
 msgstr "Répertoires de plugins par défaut"
@@ -2035,6 +2026,15 @@ msgstr "Aucun répertoire de plugins supplémentaire n'est configuré."
 #, python-format
 msgid "Directories provided via the <code>%s</code> environment variable (multiple paths separated by '<code>%s</code>') also appear above as read-only entries. Changes take effect at DataLab startup."
 msgstr "Les répertoires fournis via la variable d'environnement <code>%s</code> (plusieurs chemins séparés par '<code>%s</code>') apparaissent également ci-dessus en lecture seule. Les modifications prennent effet au démarrage de DataLab."
+
+msgid "Compatibility warnings"
+msgstr "Avertissements de compatibilité"
+
+msgid "Hide warnings for incompatible DataLab v0.20 plugins"
+msgstr "Masquer les avertissements pour les plugins DataLab v0.20 incompatibles"
+
+msgid "If enabled, DataLab will not warn you about v0.20 plugins that are no longer compatible with v1.0."
+msgstr "Si activé, DataLab ne vous avertira pas des plugins v0.20 qui ne sont plus compatibles avec v1.0."
 
 msgid "Select plugin directory"
 msgstr "Sélectionner un répertoire de plugins"
@@ -2057,32 +2057,17 @@ msgstr "Plugins désactivés"
 msgid "Plugins with errors"
 msgstr "Plugins en erreur"
 
-msgid "Reload Plugins"
-msgstr "Recharger les plugins"
-
-msgid "Plugin configuration has been saved. Do you want to reload plugins now to apply changes?"
-msgstr "La configuration des plugins a été enregistrée. Voulez-vous recharger les plugins maintenant pour appliquer les modifications ?"
-
-msgid "Plugin settings"
-msgstr "Paramètres des plugins"
-
-msgid "Third-party plugins are globally disabled."
-msgstr "Les plugins tiers sont désactivés globalement."
-
-msgid "Compatibility warnings"
-msgstr "Avertissements de compatibilité"
-
-msgid "Hide warnings for incompatible DataLab v0.20 plugins"
-msgstr "Masquer les avertissements pour les plugins DataLab v0.20 incompatibles"
-
 msgid "Disable plugins globally"
 msgstr "Désactiver globalement les plugins"
 
 msgid "Enable plugins globally"
 msgstr "Activer globalement les plugins"
 
-msgid "Enable them again from the plugin configuration dialog to use this feature."
-msgstr "Réactivez-les depuis la boîte de dialogue de configuration des plugins pour utiliser cette fonctionnalité."
+msgid "Reload Plugins"
+msgstr "Recharger les plugins"
+
+msgid "Plugin configuration has been saved. Do you want to reload plugins now to apply changes?"
+msgstr "La configuration des plugins a été enregistrée. Voulez-vous recharger les plugins maintenant pour appliquer les modifications ?"
 
 msgid "Failed to deserialize processing parameters from JSON."
 msgstr "Échec de la désérialisation des paramètres de traitement depuis le format JSON."
@@ -2941,21 +2926,6 @@ msgstr "Mo"
 msgid "Memory threshold below which a warning is displayed before loading any new data"
 msgstr "Seuil de mémoire en dessous duquel un avertissement est affiché avant de charger de nouvelles données"
 
-msgid "Third-party plugins"
-msgstr "Plugins tiers"
-
-msgid "Enable or disable third-party plugins immediately. Changes are applied without restarting DataLab"
-msgstr "Activer ou désactiver immédiatement les plugins tiers. Les changements sont appliqués sans redémarrer DataLab"
-
-msgid "Ignore compatibility issues warning"
-msgstr "Ignorer l'avertissement de compatibilité"
-
-msgid "DataLab v0.20 plugins"
-msgstr "Plugins DataLab v0.20"
-
-msgid "If enabled, DataLab will not warn you about v0.20 plugins that are no longer compatible with v1.0."
-msgstr "Si activé, DataLab ne vous avertira pas des plugins v0.20 qui ne sont plus compatibles avec v1.0."
-
 msgid "Settings for internal console, used for debugging or advanced users"
 msgstr "Réglages de la console interne, utilisée pour le débogage ou les utilisateurs avancés"
 
@@ -3523,9 +3493,6 @@ msgstr "Créer une image avec un anneau"
 msgid "Create image with a grid of gaussian spots"
 msgstr "Créer une image avec une grille de spots gaussiens"
 
-msgid "New signal"
-msgstr "Nouveau signal"
-
 msgid "Host application"
 msgstr "Application hôte"
 
@@ -3877,29 +3844,11 @@ msgstr "Afficher les détails"
 msgid "Hide details"
 msgstr "Masquer les détails"
 
-msgid "Date and time"
-msgstr "Date et heure"
-
 msgid "Title"
 msgstr "Titre"
 
-msgid "Action is compatible with the current workspace state."
-msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
-
-msgid "Action is not compatible with the current workspace state."
-msgstr "L'action n'est pas compatible avec l'état actuel de l'espace de travail."
-
-msgid "Show details"
-msgstr "Afficher les détails"
-
-msgid "Hide details"
-msgstr "Masquer les détails"
-
 msgid "Date and time"
 msgstr "Date et heure"
-
-msgid "Title"
-msgstr "Titre"
 
 msgid "Action is compatible with the current workspace state."
 msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
@@ -3949,6 +3898,9 @@ msgstr "±{n} points"
 msgid "±{n} rows × ±{n} columns"
 msgstr "±{n} lignes × ±{n} colonnes"
 
+msgid "This image uses an integer data type, so it cannot contain NaN or infinite values. Replace special values is therefore not applicable."
+msgstr "Cette image utilise un type de données entier, elle ne peut donc pas contenir de valeurs NaN ou infinies. Le remplacement des valeurs spéciales n'est donc pas applicable."
+
 msgid "Signal baseline selection"
 msgstr "Sélection de la ligne de base du signal"
 
@@ -3972,9 +3924,6 @@ msgstr "Distance minimale :"
 
 msgid "Signal peak detection"
 msgstr "Détection de pics 1D"
-
-msgid "Peaks:"
-msgstr "Pics :"
 
 msgid "Peaks:"
 msgstr "Pics :"
@@ -4293,9 +4242,6 @@ msgstr "Image"
 msgid "Dimensions"
 msgstr "Dimensions"
 
-msgid "This image uses an integer data type, so it cannot contain NaN or infinite values. Replace special values is therefore not applicable."
-msgstr "Cette image utilise un type de données entier, elle ne peut donc pas contenir de valeurs NaN ou infinies. Le remplacement des valeurs spéciales n'est donc pas applicable."
-
 msgid "Minimum value"
 msgstr "Valeur minimum"
 
@@ -4343,5 +4289,4 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
-
 
