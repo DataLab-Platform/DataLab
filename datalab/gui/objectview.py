@@ -574,6 +574,31 @@ class ObjectView(SimpleObjectTree):
         else:
             self.set_current_item_id(get_uuid(obj))
 
+    def _refresh_sibling_panels(self) -> None:
+        """Refresh sibling panels after a reorder.
+
+        Reordering this panel renumbers its objects, which may change cross-panel
+        short IDs embedded in the *other* panel's titles (e.g. a signal extracted
+        from an image references it as ``i001``). The sibling object models are
+        updated automatically, but their views are not, so refresh the sibling
+        tree and plot here to reflect the new titles (and curve legends).
+        """
+        panel: BaseDataPanel = self.parent()
+        mainwindow = getattr(panel, "mainwindow", None)
+        if mainwindow is None:
+            return
+        own = panel.PANEL_STR_ID
+        for sibling in (
+            getattr(mainwindow, "signalpanel", None),
+            getattr(mainwindow, "imagepanel", None),
+        ):
+            if sibling is None or sibling is panel or sibling.PANEL_STR_ID == own:
+                continue
+            sibling.objview.update_tree()
+            sibling.refresh_plot(
+                "existing", update_items=True, force=True, only_visible=False
+            )
+
     def paintEvent(self, event):  # pylint: disable=C0103
         """Reimplement Qt method"""
         super().paintEvent(event)
@@ -782,6 +807,8 @@ class ObjectView(SimpleObjectTree):
                     self.objmodel.reorder_objects(oids)
                 # Finally, we need to update tree
                 self.update_tree()
+                # Cross-panel references in the sibling panel may have changed:
+                self._refresh_sibling_panels()
                 # Restore expanded states of moved groups
                 for item in self.__dragged_groups:
                     item.setExpanded(
@@ -881,6 +908,7 @@ class ObjectView(SimpleObjectTree):
         self.objmodel.reorder_groups(self.get_all_group_uuids())
         self.objmodel.reorder_objects(self.get_all_object_uuids())
         self.update_tree()
+        self._refresh_sibling_panels()
 
     def move_up(self):
         """Move selected objects/groups up"""

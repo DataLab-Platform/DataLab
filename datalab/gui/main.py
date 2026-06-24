@@ -1465,6 +1465,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         configure_menu_about_to_show(self.tabmenu, self.__update_tab_menu)
         self.signalview = self.__add_signal_panel()
         self.imageview = self.__add_image_panel()
+        # Link the two object models as siblings so that cross-panel references
+        # embedded in titles (e.g. a signal extracted from an image referencing
+        # it as "i001") stay in sync when either panel is renumbered (reordered):
+        self.signalpanel.objmodel.add_sibling_model(self.imagepanel.objmodel)
+        self.imagepanel.objmodel.add_sibling_model(self.signalpanel.objmodel)
         sdock = self.__add_dockwidget(self.signalview, title=_("Signal View"))
         idock = self.__add_dockwidget(self.imageview, title=_("Image View"))
         self.tabifyDockWidget(sdock, idock)

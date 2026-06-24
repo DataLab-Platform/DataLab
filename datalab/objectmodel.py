@@ -265,12 +265,45 @@ class ObjectModel:
         self._objects: dict[str, SignalObj | ImageObj] = {}
         # list of groups:
         self._groups: list[ObjectGroup] = []
+        # Sibling models (e.g. the image model is a sibling of the signal model).
+        # Titles may embed *cross-panel* short IDs (e.g. a signal extracted from
+        # an image keeps a reference like ``i001`` in its title). Such references
+        # are kept in sync when *this* model is renumbered, so they keep pointing
+        # to the same physical source after a reorder.
+        self._sibling_models: list[ObjectModel] = []
         # Per-group "deleted source references" registries, keyed by group uuid.
         # Groups have no metadata dict (unlike SignalObj/ImageObj which store
         # their registry in ``metadata[DELETED_REF_KEY]``), so their registries
         # live here. Each registry maps a deleted-reference token (e.g.
         # ``"sd001"``) to the canonical title of the deleted source.
         self._group_deleted_refs: dict[str, dict[str, str]] = {}
+
+    def add_sibling_model(self, model: ObjectModel) -> None:
+        """Register a sibling model for cross-panel reference synchronization.
+
+        Titles may embed cross-panel short IDs (e.g. a signal extracted from an
+        image references that image as ``i001``). When *this* model is renumbered
+        (e.g. on reorder), such references in the sibling's titles are updated so
+        they keep pointing to the same physical source.
+
+        Args:
+            model: sibling object model (e.g. the image model for the signal one)
+        """
+        if model is not self and model not in self._sibling_models:
+            self._sibling_models.append(model)
+
+    def __iter_sibling_titled_items(
+        self,
+    ) -> Iterator[SignalObj | ImageObj | ObjectGroup]:
+        """Iterate over every titled item (object or group) of sibling models.
+
+        Yields:
+            Sibling objects and groups whose titles may embed this model's short
+            IDs.
+        """
+        for sibling in self._sibling_models:
+            yield from sibling._objects.values()  # pylint: disable=protected-access
+            yield from sibling._groups  # pylint: disable=protected-access
 
     def reset_short_ids(self) -> None:
         """Reset short IDs (used for object numbering)
@@ -986,6 +1019,12 @@ class ObjectModel:
         for group in self._groups:
             for grp_uuid, short_id in mapping.items():
                 group.title = group.title.replace(short_id, grp_uuid)
+        # Cross-panel references: sibling titles may embed *this* model's short
+        # IDs (e.g. a signal extracted from an image references it as "i001").
+        # Freeze them to stable uuids too, so they survive this model's renumbering:
+        for sib_item in self.__iter_sibling_titled_items():
+            for obj_uuid, short_id in mapping.items():
+                sib_item.title = sib_item.title.replace(short_id, obj_uuid)
         # Keep live short IDs embedded in frozen (deleted-reference) titles in sync:
         for registry in self.__iter_registries(other_objects):
             for token in registry:
@@ -1007,6 +1046,12 @@ class ObjectModel:
         for group in self._groups:
             for grp_uuid, short_id in mapping.items():
                 group.title = group.title.replace(grp_uuid, short_id)
+        # Cross-panel references: restore *this* model's (new) short IDs in
+        # sibling titles, so a reference like "i001" follows the physical source
+        # after this model has been renumbered:
+        for sib_item in self.__iter_sibling_titled_items():
+            for obj_uuid, short_id in mapping.items():
+                sib_item.title = sib_item.title.replace(obj_uuid, short_id)
         # Restore live short IDs embedded in frozen (deleted-reference) titles:
         for registry in self.__iter_registries():
             for token in registry:
