@@ -14,14 +14,6 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
 .. only:: html and not latex
 
-    .. dropdown:: Notice for users upgrading from DataLab v0.20
-        :animate: fade-in
-        :icon: alert
-
-        DataLab v1.0 introduces breaking changes. Plugins must be updated to work with the new version. See the :ref:`migration guide <migration_v020_to_v100>` for details.
-
-.. only:: html and not latex
-
     :octicon:`play;1em;sd-text-info` Want to know more?
     See our :bdg-ref-success-line:`Tutorials <tutorials>` --
     Try DataLab online, without installation: :octicon:`rocket;1em;sd-text-info` |binder|.
