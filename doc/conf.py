@@ -109,14 +109,6 @@ def setup(app):
 
             # Suppress warnings about excluded API documents during gettext builds
             app.config.suppress_warnings.extend(["toc.excluded", "ref.doc"])
-            # The HTML/LaTeX builds define per-output image substitutions with
-            # the same names (px for HTML, cm for LaTeX) inside `only::` blocks
-            # -- see doc/index.rst and doc/intro/index.rst. docutils registers
-            # substitution definitions at read time, before `only` filtering, so
-            # it flags them as duplicates. They are harmless for gettext (which
-            # extracts strings, not images); suppress them so the `-W` gettext
-            # build does not fail.
-            app.config.suppress_warnings.append("docutils")
 
     app.connect("builder-inited", exclude_outreach_from_latex)
     app.connect("builder-inited", exclude_api_from_gettext)
@@ -151,6 +143,16 @@ extensions = [
 ]
 templates_path = ["_templates"]
 exclude_patterns = []
+
+# The HTML/LaTeX builds define per-output image substitutions with the same
+# names (px for HTML, cm for LaTeX) inside `only::` blocks -- see
+# doc/index.rst and doc/intro/index.rst. docutils registers substitution
+# definitions at read time, before `only` filtering, so it flags them as
+# duplicates ("Duplicate substitution definition name"). They are harmless
+# (each builder only ever renders one definition); suppress the docutils
+# system messages so every build -- HTML, LaTeX and the `-W` gettext build --
+# stays clean.
+suppress_warnings = ["docutils"]
 
 # Per-language figure resolution: if e.g. ``foo.png`` is referenced, Sphinx
 # will use ``foo.<language>.png`` when available, falling back to ``foo.png``
@@ -225,6 +227,7 @@ intersphinx_mapping = {
     "h5py": ("https://docs.h5py.org/en/stable/", None),
     "guidata": ("https://guidata.readthedocs.io/en/latest/", None),
     "plotpy": ("https://plotpy.readthedocs.io/en/latest/", None),
+    "sigima": ("https://sigima.readthedocs.io/en/latest/", None),
 }
 
 # -- Latex macros for math in docstrings -------------------------------------

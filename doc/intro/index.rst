@@ -26,6 +26,13 @@ DataLab integrates seemlessly into your workflow thanks to three main operating 
     * - |remotemode|
       - **Remotely controlled** from your own software, or from an IDE (e.g., Spyder) or a Jupyter notebook, using the DataLab API.
 
+.. note::
+
+    DataLab is the desktop application at the heart of a broader family, the **DataLab
+    Platform**, which also includes a browser-native edition (**DataLab-Web**) that runs
+    without any installation. See :ref:`ecosystem` to learn about the editions and choose
+    the one that fits your needs.
+
 .. Sphinx converts ``px`` to ``bp`` at 72 dpi for LaTeX, which makes ``64px``
    render at ~22mm in the PDF -- way larger than in HTML. Define separate
    substitutions per output: pixels for HTML, centimetres for LaTeX.
@@ -103,6 +110,12 @@ the following libraries:
 
             Tutorials to learn how to use DataLab
 
+        .. grid-item-card:: :octicon:`browser;1em;sd-text-info`  Editions
+            :link: ecosystem
+            :link-type: doc
+
+            The DataLab Platform and its editions
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -110,5 +123,6 @@ the following libraries:
    installation
    installation_offline
    introduction
+   ecosystem
    keyfeatures
    tutorials/index

@@ -3,7 +3,7 @@ DataLab
 
 .. meta::
     :description: Home of DataLab, the open-source platform for scientific and technical data processing and visualization
-    :keywords: DataLab, scientific, data, processing, visualization, open-source, platform, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, Sigima, CODRA, Pierre Raybaut
+    :keywords: DataLab, scientific, data, processing, visualization, open-source, platform, DataLab Platform, DataLab-Web, browser, WebAssembly, Pyodide, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, Sigima, CODRA, Pierre Raybaut
 
 DataLab is an **open-source platform for signal and image processing and visualization**
 for research, education and industry. Leveraging the richness of the scientific Python
@@ -71,6 +71,15 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
             :link-type: doc
 
             Getting involved in the project
+
+.. only:: html and not latex
+
+    .. card:: :octicon:`browser;1em;sd-text-info`  No installation? Run DataLab in your browser
+        :link: intro/ecosystem
+        :link-type: doc
+
+        **DataLab-Web** runs the entire platform inside your browser tab -- no install, and
+        your data never leaves your machine. Discover the DataLab Platform and its editions.
 
 DataLab has been funded, chronologically, by the following stakeholders:
 

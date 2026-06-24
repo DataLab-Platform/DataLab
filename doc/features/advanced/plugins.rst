@@ -174,6 +174,29 @@ Other examples
 
 Other examples of plugins can be found in the `plugins/examples` directory of the DataLab source code (explore `here on GitHub <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_).
 
+Plugins and DataLab-Web
+-----------------------
+
+Plugins are largely portable between the desktop application and :ref:`DataLab-Web
+<ecosystem>`, the browser-native edition of the platform. The same :class:`datalab.plugins.PluginBase`
+subclass can run in both, because the plugin API is shared. A few constraints apply to the
+browser runtime, however:
+
+- **Parameter dialogs must be opened asynchronously.** In the browser, the synchronous
+  ``param.edit(self.main)`` call cannot block the event loop; use
+  ``await param.edit_async(self.main)`` instead. A plugin written this way still works
+  unchanged on the desktop.
+- **No Qt-only graphical interfaces.** Plugins that embed custom Qt widgets or rely on
+  PlotPy interactive tools are desktop-only; their graphical parts have no equivalent in the
+  browser.
+- **Execution happens inside the browser** (WebAssembly), with no native file-system access
+  beyond the in-memory file system.
+
+As a result, a plugin that relies on a custom graphical user interface may not be fully
+compatible with DataLab-Web. A curated set of web-compatible plugins will be provided
+separately; in the meantime, refer to the DataLab-Web documentation for the practical guide
+to loading plugins in the browser.
+
 Migrating from v0.20 to v1.0
 ----------------------------
 
