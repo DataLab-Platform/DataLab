@@ -1,0 +1,300 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-24 18:47+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+msgid ""
+"DataLab presentation at EuroSciPy 2026 in Kraków, Poland - automatic "
+"reconstruction of X-ray scenes with Python and DataLab"
+msgstr ""
+"Présentation de DataLab à EuroSciPy 2026 à Cracovie, Pologne - reconstruction "
+"automatique de scènes de radiographie avec Python et DataLab"
+
+msgid ""
+"DataLab, EuroSciPy, EuroSciPy 2026, Kraków, Poland, X-ray, scene "
+"reconstruction, homography, blob detection, scientific Python, CEA, "
+"Codra, non-destructive testing"
+msgstr ""
+"DataLab, EuroSciPy, EuroSciPy 2026, Cracovie, Pologne, rayons X, reconstruction "
+"de scène, homographie, détection de taches, Python scientifique, CEA, "
+"Codra, contrôle non destructif"
+
+msgid "EuroSciPy 2026"
+msgstr "EuroSciPy 2026"
+
+msgid "Conference Overview"
+msgstr "Présentation de la conférence"
+
+msgid ""
+"In July 2026, DataLab will be presented at `EuroSciPy 2026 "
+"<https://euroscipy.org/>`_, the 18th European Conference on Python in "
+"Science, held at AGH University of Kraków, Poland. EuroSciPy is the "
+"leading European gathering dedicated to the use and development of the "
+"Python language in scientific research, bringing together users and "
+"developers of scientific tools from both academia and industry. The 2026 "
+"edition is co-located with EuroPython."
+msgstr ""
+"En juillet 2026, DataLab sera présenté à `EuroSciPy 2026 "
+"<https://euroscipy.org/>`_, la 18e conférence européenne sur Python pour la "
+"science, qui se tiendra à l'Université des sciences et technologies AGH de "
+"Cracovie, en Pologne. EuroSciPy is the principal rassemblement européen dédié à "
+"l'utilisation et au développement du langage Python dans la recherche scientifique, "
+"réunissant des utilisateurs et des développeurs d'outils scientifiques issus du "
+"monde universitaire et de l'industrie. L'édition 2026 est co-organisée avec "
+"EuroPython."
+
+msgid "**Event Details:**"
+msgstr "**Détails de l'événement :**"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "July 21, 2026"
+msgstr "21 juillet 2026"
+
+msgid "Time"
+msgstr "Heure"
+
+msgid "09:30 - 10:00"
+msgstr "09h30 - 10h00"
+
+msgid "Location"
+msgstr "Lieu"
+
+msgid "AGH University of Kraków, Poland"
+msgstr "Université des sciences et de la technologie AGH de Cracovie, Pologne"
+
+msgid "Room"
+msgstr "Salle"
+
+msgid "Room 1.19 (Ground Floor, Shannon)"
+msgstr "Salle 1.19 (Rez-de-chaussée, Shannon)"
+
+msgid "Track"
+msgstr "Thématique"
+
+msgid "Computational Tools and Scientific Python Infrastructure"
+msgstr "Outils de calcul et infrastructure Python scientifique"
+
+msgid "Format"
+msgstr "Format"
+
+msgid "Talk (25 minutes + Q&A)"
+msgstr "Présentation (25 minutes + Questions/Réponses)"
+
+msgid "Presentation"
+msgstr "Présentation"
+
+msgid ""
+"**Title:** *Automatic Reconstruction of X-ray Scenes with Python and "
+"DataLab*"
+msgstr ""
+"**Titre :** *Automatic Reconstruction of X-ray Scenes with Python and "
+"DataLab* (Reconstruction automatique de scènes radiographiques avec Python et "
+"DataLab)"
+
+msgid "**Speaker:** Pierre Raybaut"
+msgstr "**Présentateur :** Pierre Raybaut"
+
+msgid "Abstract"
+msgstr "Résumé"
+
+msgid ""
+"In the field of non-destructive testing, the French Alternative Energies "
+"and Atomic Energy Commission (CEA) entrusted CODRA with the specification"
+" and development of software for the automatic reconstruction of "
+"radiographic scenes from partial X-ray images."
+msgstr ""
+"Dans le domaine du contrôle non destructif, le Commissariat à l’énergie "
+"atomique et aux énergies alternatives (CEA) a confié à CODRA la spécification "
+"et le développement d'un logiciel pour la reconstruction automatique de "
+"scènes radiographiques à partir d'images partielles de rayons X."
+
+msgid ""
+"The challenge was to assemble a full-field X-ray scene from multiple "
+"acquisitions obtained by moving a detector or juxtaposing imaging plates,"
+" without any prior metadata regarding position, orientation, or "
+"magnification."
+msgstr ""
+"Le défi consistait à assembler une scène de rayons X à grand champ à partir de "
+"plusieurs acquisitions obtenues en déplaçant un détecteur ou en juxtaposant "
+"des plaques d'imagerie, sans aucune métadonnée préalable concernant la position, "
+"l'orientation ou le grandissement."
+
+msgid "The reconstruction processing pipeline includes several key steps:"
+msgstr ""
+"Le pipeline de traitement pour la reconstruction comprend plusieurs étapes clés :"
+
+msgid "image pre-processing and denoising,"
+msgstr "le pré-traitement des images et le débruitage,"
+
+msgid "robust blob detection,"
+msgstr "la détection robuste de marqueurs (blobs),"
+
+msgid "homography estimation for geometric correction,"
+msgstr "l'estimation de l'homographie pour la correction géométrique,"
+
+msgid "fusion of corrected sub-images into a coherent global scene."
+msgstr "la fusion des sous-images corrigées en une scène globale cohérente."
+
+msgid ""
+"The entire workflow was developed using open-source scientific Python "
+"libraries (NumPy, SciPy, scikit-image, OpenCV) and prototyped "
+"interactively with `DataLab <https://datalab-platform.com>`_, an open-"
+"source platform for signal and image processing. DataLab made it possible"
+" to inspect intermediate results, adjust parameters, and validate "
+"geometric transformations step by step."
+msgstr ""
+"L'ensemble du flux de traitement a été développé à l'aide de bibliothèques "
+"open-source de l'écosystème Python scientifique (NumPy, SciPy, scikit-image, "
+"OpenCV) et prototypé de manière interactive avec `DataLab "
+"<https://datalab-platform.com>`_, une plateforme open-source pour le traitement "
+"et la visualisation de signaux et d'images. DataLab a permis d'inspecter les "
+"résultats intermédiaires, d'ajuster les paramètres et de valider les "
+"transformations géométométriques étape par étape."
+
+#, python-format
+msgid ""
+"This project illustrates how the scientific Python ecosystem enables the "
+"development of industrial-grade imaging software, from interactive "
+"prototyping to automated deployment, using 100% open-source components."
+msgstr ""
+"Ce projet illustre de quelle manière l'écosystème Python scientifique permet le "
+"développement de logiciels d'imagerie de qualité industrielle, du prototypage "
+"interactif au déploiement automatisé, en utilisant des composants 100 % "
+"open-source."
+
+msgid "Why This Matters for DataLab"
+msgstr "Pourquoi cette présentation est importante pour DataLab"
+
+msgid "This presentation is significant for several reasons:"
+msgstr "Cette présentation revêt une importance particulière pour plusieurs raisons :"
+
+msgid "**Real-World Industrial Application**"
+msgstr "**Application industrielle en conditions réelles**"
+
+msgid ""
+"Showcases DataLab in a high-stakes industrial use case developed by CODRA"
+" for CEA, demonstrating the platform's value beyond research and "
+"prototyping."
+msgstr ""
+"Met en valeur l'utilisation de DataLab dans un cas d'application industrielle à fort "
+"enjeux développé par CODRA pour le CEA, démontrant la valeur de la plateforme "
+"au-delà de la recherche et du prototypage."
+
+msgid "**Content-Based Reconstruction**"
+msgstr "**Reconstruction basée sur le contenu**"
+
+msgid ""
+"Unlike traditional image stitching techniques that rely on overlapping "
+"textures or acquisition metadata, this method is entirely driven by "
+"content-based detection of patterns embedded in the scene, with each sub-"
+"image aligned through homography estimation in a global coordinate "
+"system."
+msgstr ""
+"Contrairement aux techniques traditionnelles d'assemblage d'images (panoramas) qui "
+"s'appuient sur d'importantes zones de recouvrement texturées ou sur des "
+"métadonnées d'acquisition, cette méthode est entièrement guidée par la détection "
+"de motifs intégrés dans la scène, chaque sous-image étant alignée par estimation "
+"d'homographie dans un système de coordonnées global."
+
+msgid "**Interactive Prototyping**"
+msgstr "**Prototypage interactif**"
+
+msgid ""
+"Highlights how DataLab's remote control and interactive visualization "
+"accelerated the development and debugging of a highly parameterized image"
+" processing pipeline, enabling rapid iteration before integration into a "
+"production tool."
+msgstr ""
+"Met en lumière la manière dont le contrôle à distance de DataLab et sa "
+"visualisation interactive ont accéléré le développement et la mise au point "
+"d'un flux complexe et fortement paramétrable, facilitant les itérations avant "
+"l'intégration finale dans un outil de production."
+
+msgid "**European Scientific Python Community**"
+msgstr "**Communauté scientifique Python européenne**"
+
+msgid ""
+"Brings DataLab to EuroSciPy, the main European conference for scientific "
+"Python, reinforcing the platform's place in the open-source ecosystem."
+msgstr ""
+"Présente DataLab à EuroSciPy, la principale conférence européenne sur Python dans "
+"la recherche d'intérêt majeur pour l'écosystème open-source."
+
+msgid "Presentation Highlights"
+msgstr "Points forts de la présentation"
+
+msgid "The talk will include:"
+msgstr "La présentation comprendra :"
+
+msgid "a walkthrough of the reconstruction strategy,"
+msgstr "un parcours guidé de l'algorithme de reconstruction,"
+
+msgid "a discussion of the image processing challenges involved,"
+msgstr "une discussion sur les défis de traitement d'images rencontrés,"
+
+msgid ""
+"a live or recorded demonstration of the interactive prototyping "
+"environment with DataLab,"
+msgstr ""
+"une démonstration en direct (ou enregistrée) du prototypage interactif avec DataLab,"
+
+msgid ""
+"reflections on software architecture and reproducibility in scientific "
+"imaging workflows."
+msgstr ""
+"des réflexions sur l'architecture logicielle et la reproductibilité des "
+"traitements d'imagerie scientifique."
+
+msgid ""
+"**Upcoming Event**: This presentation is scheduled for **July 21, 2026**."
+" Presentation materials and additional information may be added here "
+"after the event."
+msgstr ""
+"**Événement à venir** : Cette présentation est programmée pour le "
+"**21 juillet 2026**. Les supports de présentation et des informations "
+"complémentaires seront ajoutés après l'événement."
+
+msgid "Resources"
+msgstr "Ressources"
+
+msgid "`EuroSciPy 2026 website <https://euroscipy.org/>`_"
+msgstr "Site web d'EuroSciPy 2026 <https://euroscipy.org/>"
+
+msgid ""
+"`Talk page on the conference schedule "
+"<https://pretalx.com/euroscipy-2026/talk/E3X9EX/>`_"
+msgstr ""
+"Page de la présentation sur le programme d'EuroSciPy 2026 <https://pretalx.com/euroscipy-2026/talk/E3X9EX/>"
+
+msgid "For more information about DataLab's use in CEA projects, see:"
+msgstr "Pour plus d'informations sur l'usage de DataLab dans les projets du CEA, voir :"
+
+msgid ":doc:`../features/index` - DataLab's validation approach"
+msgstr ":doc:`../features/index` - L'approche de validation de DataLab"
+
+msgid ""
+":doc:`../intro/introduction` - DataLab's operating modes, including "
+"remote control"
+msgstr ""
+":doc:`../intro/introduction` - Les modes de fonctionnement de DataLab, y compris "
+"le contrôle à distance"
+
+msgid ":doc:`osxp2025` - The same X-ray reconstruction case study at OSXP 2025"
+msgstr ":doc:`osxp2025` - La même étude de cas de reconstruction de rayons X à l'OSXP 2025"
