@@ -2068,6 +2068,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             # Refresh dependent items: result titles referencing this object may
             # display its new title (when the "title" result-title mode is on).
             self.objview.update_tree()
+            # Refresh the plot so the renamed object's curve/image legend reflects
+            # its new title (the legend is derived from the stored object title):
+            self.refresh_plot(get_uuid(obj), update_items=True, force=True)
             self.objprop.update_properties_from(obj)
         elif sel_groups:
             group = sel_groups[0]
