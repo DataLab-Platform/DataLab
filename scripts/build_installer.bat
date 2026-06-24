@@ -15,13 +15,10 @@ set ROOTPATH=%SCRIPTPATH%\..
 set RSCPATH=%ROOTPATH%\resources
 set WIXPATH=%ROOTPATH%\wix
 
-echo Generating images for MSI installer...
-set INKSCAPE_PATH="C:\Program Files\Inkscape\bin\inkscape.exe"
-%INKSCAPE_PATH% "%RSCPATH%\WixUIDialog.svg" -o "temp.png" -w 493 -h 312
-magick "temp.png" bmp3:"%WIXPATH%\dialog.bmp"
-%INKSCAPE_PATH% "%RSCPATH%\WixUIBanner.svg" -o "temp.png" -w 493 -h 58
-magick "temp.png" bmp3:"%WIXPATH%\banner.bmp"
-del "temp.png"
+REM Note: WiX UI bitmaps (wix\dialog.bmp, wix\banner.bmp) are committed under
+REM git and regenerated on demand via `scripts\build_resources.bat` when the
+REM source SVG files change. The release pipeline therefore does not require
+REM any external rasteriser.
 
 echo Generating .wxs file for MSI installer...
 %PYTHON% "%WIXPATH%\makewxs.py" DataLab %VERSION%

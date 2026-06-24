@@ -372,41 +372,59 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         return f"{value / 1_000_000:.1f}M".replace(".0M", "M")
 
     @classmethod
-    def _format_usage_badge(cls, usage: TokenUsage | None) -> str:
-        if usage is None or not (
-            usage.prompt_tokens or usage.completion_tokens or usage.total_tokens
+    def _format_usage_badge(
+        cls, turn: TokenUsage | None, cumulative: TokenUsage | None
+    ) -> str:
+        parts: list[str] = []
+        if turn is not None and turn.prompt_tokens:
+            parts.append(f"ctx {cls._format_token_count(turn.prompt_tokens)}")
+        if cumulative is not None and (
+            cumulative.prompt_tokens
+            or cumulative.completion_tokens
+            or cumulative.total_tokens
         ):
-            return ""
-        if usage.prompt_tokens is not None or usage.completion_tokens is not None:
-            return (
-                f"↑{cls._format_token_count(usage.prompt_tokens)} "
-                f"↓{cls._format_token_count(usage.completion_tokens)}"
-            )
-        return f"Σ{cls._format_token_count(usage.total_tokens)}"
+            if (
+                cumulative.prompt_tokens is not None
+                or cumulative.completion_tokens is not None
+            ):
+                parts.append(
+                    f"↑{cls._format_token_count(cumulative.prompt_tokens)} "
+                    f"↓{cls._format_token_count(cumulative.completion_tokens)}"
+                )
+            else:
+                parts.append(f"Σ{cls._format_token_count(cumulative.total_tokens)}")
+        return " · ".join(parts)
 
     @classmethod
-    def _format_usage_tooltip(cls, usage: TokenUsage | None) -> str:
-        if usage is None:
-            return ""
-        lines = [_("Cumulative token usage")]
-        if usage.prompt_tokens is not None:
-            lines.append(_("Prompt: %d") % usage.prompt_tokens)
-        if usage.completion_tokens is not None:
-            lines.append(_("Completion: %d") % usage.completion_tokens)
-        if usage.total_tokens is not None:
-            lines.append(_("Total: %d") % usage.total_tokens)
-        return "\n".join(lines)
+    def _format_usage_tooltip(
+        cls, turn: TokenUsage | None, cumulative: TokenUsage | None
+    ) -> str:
+        lines: list[str] = []
+        if turn is not None and turn.prompt_tokens:
+            lines.append(_("Last request context size: %d tokens") % turn.prompt_tokens)
+            lines.append("")
+        if cumulative is not None:
+            lines.append(_("Cumulative token usage"))
+            if cumulative.prompt_tokens is not None:
+                lines.append(_("Prompt: %d") % cumulative.prompt_tokens)
+            if cumulative.completion_tokens is not None:
+                lines.append(_("Completion: %d") % cumulative.completion_tokens)
+            if cumulative.total_tokens is not None:
+                lines.append(_("Total: %d") % cumulative.total_tokens)
+        return "\n".join(lines).strip()
 
-    def _update_usage_badge(self, usage: TokenUsage | None) -> None:
-        text = self._format_usage_badge(usage)
+    def _update_usage_badge(
+        self, turn: TokenUsage | None, cumulative: TokenUsage | None
+    ) -> None:
+        text = self._format_usage_badge(turn, cumulative)
         self.usage_label.setText(text)
-        self.usage_label.setToolTip(self._format_usage_tooltip(usage))
+        self.usage_label.setToolTip(self._format_usage_tooltip(turn, cumulative))
         self.usage_label.setVisible(bool(text))
 
-    def _on_usage(self, _turn: TokenUsage, cumulative: TokenUsage) -> None:
+    def _on_usage(self, turn: TokenUsage, cumulative: TokenUsage) -> None:
         """Called from a worker thread whenever a provider reports usage."""
         # Marshal to the GUI thread before touching widgets.
-        self._bridge.call_in_gui(lambda: self._update_usage_badge(cumulative))
+        self._bridge.call_in_gui(lambda: self._update_usage_badge(turn, cumulative))
 
     def _on_stop(self) -> None:
         if self._controller is not None and self._controller.is_running:
@@ -429,6 +447,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         temperature = float(Conf.ai.temperature.get(0.2))
         timeout = float(Conf.ai.timeout.get(60.0))
         max_iterations = int(Conf.ai.max_iterations.get(8))
+        max_history_messages = int(Conf.ai.max_history_messages.get(0))
         auto_approve = bool(Conf.ai.auto_approve_readonly.get(True))
 
         try:
@@ -496,6 +515,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
             auto_approve_readonly=auto_approve,
             execute_callback=execute_in_gui,
             usage_callback=self._on_usage,
+            max_history_messages=max_history_messages,
         )
 
     def _confirm_tool(self, tool: Tool, arguments: dict) -> bool:
@@ -508,7 +528,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
             self._controller.reset()
         self._current_conversation = None
         self.history_view.clear()
-        self._update_usage_badge(None)
+        self._update_usage_badge(None, None)
         self._append_system(_("Conversation reset."))
 
     def _on_open_history(self) -> None:
@@ -619,7 +639,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         )
         self._current_conversation = conversation
         self.history_view.clear()
-        self._update_usage_badge(conversation.usage)
+        self._update_usage_badge(None, conversation.usage)
         self._render_messages(conversation.messages)
         self._append_system(
             _("Loaded conversation: %s") % (conversation.title or conversation.id)

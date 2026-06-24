@@ -1,0 +1,450 @@
+# ============================================================================
+# Reusable build workflow for DataLab release artifacts.
+#
+# Decomposed into modular jobs so each artifact is uploaded independently
+# and any individual job can be re-run from the GitHub UI on failure:
+#
+#   preflight             - tag/version check, exports `version` output
+#   compile-translations  - UI + docs .mo files                  (ubuntu)
+#   build-pdf-docs        - DataLab_fr.pdf + DataLab_en.pdf      (ubuntu)
+#   build-python-dists    - sdist + wheel (PDFs embedded)        (ubuntu)
+#   build-msi             - PyInstaller EXE + WiX MSI            (windows)
+#
+# Each job uploads its own artifact (see "Artifacts produced" below) so
+# they can be downloaded individually from the workflow run page even when
+# the workflow as a whole fails.
+#
+# Artifacts produced:
+#   translations-mo   compiled .mo files (datalab/locale/**)
+#   pdf-docs          DataLab_fr.pdf, DataLab_en.pdf
+#   python-dists      *.whl, *.tar.gz
+#   msi-installer     DataLab-X.Y.Z.msi
+#   pyinstaller-exe   DataLab-vX.Y.Z_exe.zip   (debug only)
+# ============================================================================
+name: _build (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: "Git ref to build (default: github.ref)"
+        type: string
+        required: false
+        default: ""
+      skip-tag-check:
+        description: "Skip the tag vs __version__ consistency check"
+        type: boolean
+        required: false
+        default: false
+      skip-tag-branch-check:
+        description: "Skip the 'tag is on main' check"
+        type: boolean
+        required: false
+        default: false
+      build-msi:
+        description: "Build the Windows MSI installer (costly)"
+        type: boolean
+        required: false
+        default: true
+      artifact-retention-days:
+        description: "Retention period for uploaded artifacts (days)"
+        type: number
+        required: false
+        default: 14
+      # SOURCE OF TRUTH for the Python version embedded in the official
+      # Windows executable / MSI installer: the `build-msi` job runs
+      # PyInstaller with this interpreter, so this default *is* the Python
+      # version shipped to end users. The release workflows do not override
+      # it (doc/contributing/environment.md points here rather than
+      # duplicating the value).
+      #
+      # ⚠ Pinned to 3.11 ON PURPOSE: CPython 3.11 is the LAST release that
+      # still runs on Windows 7 (SP1), provided the Wine-built
+      # api-ms-win-core-path-l1-1-0.dll shim is bundled (see the "Windows 7
+      # SP1 compatibility shim" copy in the build-msi job and resources/).
+      # Do NOT bump to 3.12+ without dropping Windows 7 support.
+      python-version:
+        type: string
+        required: false
+        default: "3.11"
+    outputs:
+      version:
+        description: "Version that was built (without leading v)"
+        value: ${{ jobs.preflight.outputs.version }}
+
+permissions:
+  contents: read
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # 0. Preflight: derive version from tag or __version__, optional checks.
+  # ---------------------------------------------------------------------------
+  preflight:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - name: Verify tag is on main branch
+        if: ${{ !inputs.skip-tag-branch-check && startsWith(github.ref, 'refs/tags/') }}
+        run: |
+          git fetch origin main --depth=200
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::Tag ${GITHUB_REF_NAME} (commit $GITHUB_SHA) is not reachable from origin/main."
+            exit 1
+          fi
+          echo "Tag commit is on main branch ✔"
+
+      - name: Verify tag matches datalab.__version__ and export version
+        id: version
+        run: |
+          if [ "${{ inputs.skip-tag-check }}" = "true" ] || [ "${GITHUB_REF_TYPE}" != "tag" ]; then
+            VERSION=$(python -c "import re,sys; t=open('datalab/__init__.py').read(); print(re.search(r'__version__\s*=\s*\"([^\"]+)\"', t).group(1))")
+            echo "Using datalab.__version__=$VERSION (no tag check)"
+          else
+            python scripts/ci_release_helpers.py check-tag "$GITHUB_REF_NAME"
+            VERSION="${GITHUB_REF_NAME#v}"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+  # ---------------------------------------------------------------------------
+  # 1. Compile UI + documentation translations.
+  # ---------------------------------------------------------------------------
+  compile-translations:
+    needs: preflight
+    runs-on: ubuntu-latest
+    env:
+      DISPLAY: ":99.0"
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+          cache: pip
+
+      # `sphinx -b gettext` parses doc/conf.py which transitively imports
+      # `datalab.*` -> `qtpy`. Without a Qt binding installed `qtpy` raises
+      # `QtBindingsNotFoundError` and the build aborts. Installing PyQt5
+      # (no graphical session required thanks to QT_QPA_PLATFORM=offscreen)
+      # is enough to let imports succeed.
+      - name: Install system dependencies (Qt offscreen)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
+            libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade PythonQwt guidata PlotPy Sigima
+          python -m pip install .[doc,qt]
+
+      # Some .rst files use ``.. literalinclude:: ../../../../Sigima/...`` to
+      # quote Sigima source code. In the multi-root dev workspace `Sigima/`
+      # sits next to `DataLab/`; on CI we symlink the installed Sigima's
+      # site-packages dir to the same relative location so paths resolve.
+      - name: Symlink Sigima sibling checkout for doc literalincludes
+        run: |
+          SITE=$(python -c "import sigima, os; print(os.path.dirname(os.path.dirname(sigima.__file__)))")
+          ln -snf "$SITE" "$GITHUB_WORKSPACE/../Sigima"
+          ls -l "$GITHUB_WORKSPACE/../Sigima/sigima/tools/image/detection.py"
+
+      - name: Compile docs gettext + sphinx_intl + UI .mo
+        run: |
+          python -m sphinx build doc build/gettext -b gettext -W
+          python -m sphinx_intl build -d doc/locale
+          python -m guidata.utils.translations compile --name datalab --directory .
+
+      - name: List produced .mo files
+        run: find datalab/locale doc/locale -name '*.mo' | sort
+
+      - name: Upload compiled translations
+        uses: actions/upload-artifact@v4
+        with:
+          name: translations-mo
+          path: |
+            datalab/locale/**/*.mo
+            doc/locale/**/*.mo
+          retention-days: ${{ inputs.artifact-retention-days }}
+
+  # ---------------------------------------------------------------------------
+  # 2. Build PDF documentation (FR + EN) — slow, isolated.
+  # ---------------------------------------------------------------------------
+  build-pdf-docs:
+    needs: [preflight, compile-translations]
+    runs-on: ubuntu-latest
+    env:
+      DISPLAY: ":99.0"
+      QT_COLOR_MODE: light
+      RELEASE: "1"
+      UNATTENDED: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+          cache: pip
+
+      - name: Install system dependencies (Qt + LaTeX + Xvfb)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 \
+            libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xfixes0 \
+            x11-utils xvfb \
+            texlive-latex-base texlive-latex-extra texlive-fonts-recommended \
+            texlive-fonts-extra texlive-lang-french texlive-xetex latexmk \
+            fonts-noto-core fonts-noto-mono fonts-noto-extra \
+            imagemagick librsvg2-bin
+          /sbin/start-stop-daemon --start --quiet \
+            --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background \
+            --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade PythonQwt guidata PlotPy Sigima
+          python -m pip install .[doc,qt]
+          # sigima.proc.validation imports `_pytest` at module level (tech
+          # debt); doc/update_validation_status.py needs it to be importable.
+          python -m pip install pytest
+
+      - name: Symlink Sigima sibling checkout for doc literalincludes
+        run: |
+          SITE=$(python -c "import sigima, os; print(os.path.dirname(os.path.dirname(sigima.__file__)))")
+          ln -snf "$SITE" "$GITHUB_WORKSPACE/../Sigima"
+
+      - name: Download compiled translations
+        uses: actions/download-artifact@v4
+        with:
+          name: translations-mo
+          path: .
+
+      - name: Generate doc assets (requirements + validation status)
+        run: |
+          python -m guidata.utils.genreqs all
+          python doc/update_validation_status.py
+
+      - name: Build PDF documentation (FR + EN)
+        # NOTE: doc/update_screenshots.py is intentionally NOT run here.
+        # Screenshots in doc/images/ are committed assets refreshed locally
+        # by the maintainer (see scripts/update_screenshots.bat). Re-running
+        # them under Xvfb hangs DataLab's GUI startup for unclear reasons
+        # and is not needed: the PDF build consumes the committed PNGs
+        # as-is. Sphinx picks `foo.<lang>.png` automatically when present
+        # (via `figure_language_filename` in doc/conf.py) and falls back to
+        # the unsuffixed `foo.png` otherwise.
+        run: |
+          rm -rf datalab/data/doc
+          mkdir -p datalab/data/doc
+          # NOTE: the loop variable is `LNG` rather than `LANG` on purpose:
+          # `LANG` is the OS locale env var read by Python's `locale.setlocale`,
+          # and setting it to a bare "fr" / "en" (rather than "fr_FR.UTF-8")
+          # makes Sphinx fail with `locale.Error: unsupported locale setting`.
+          for LNG in fr en; do
+            # Dummy PDF so the "?" menu entry would be visible in screenshots
+            # (kept for parity with the local build even though we no longer
+            # regenerate screenshots here).
+            echo "Dummy PDF file" > "datalab/data/doc/DataLab_${LNG}.pdf"
+            rm -rf build/doc
+            python -m sphinx -b latex -D language=$LNG doc build/doc
+            # Use xelatex (configured via ``latex_engine`` in doc/conf.py):
+            # it natively renders the UTF-8 glyphs (emoji, box-drawing,
+            # arrows...) that pdflatex cannot handle. Two passes stabilise
+            # cross-references.
+            ( cd build/doc && \
+              TEX=$(ls *.tex | head -n 1) && \
+              xelatex -interaction=nonstopmode -halt-on-error "$TEX" && \
+              xelatex -interaction=nonstopmode -halt-on-error "$TEX" )
+            # Move the main document PDF (named after the .tex file). The
+            # build dir may also contain converted SVG→PDF assets
+            # (sponsors, icons) produced by sphinxcontrib.cairosvgconverter,
+            # so we cannot rely on a glob here.
+            MAIN_PDF=$(ls build/doc/*.tex | head -n 1)
+            MAIN_PDF="${MAIN_PDF%.tex}.pdf"
+            mv "$MAIN_PDF" "datalab/data/doc/DataLab_${LNG}.pdf"
+          done
+          ls -lh datalab/data/doc/
+
+      - name: Upload PDF documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdf-docs
+          path: datalab/data/doc/DataLab_*.pdf
+          retention-days: ${{ inputs.artifact-retention-days }}
+
+      - name: Upload doc assets (genreqs + validation status)
+        uses: actions/upload-artifact@v4
+        with:
+          name: doc-assets
+          path: |
+            doc/requirements.rst
+            doc/extras_require-*.rst
+            doc/install_requires.txt
+            doc/extras_require-*.txt
+            doc/features/**/validation_status_*.csv
+          if-no-files-found: warn
+          retention-days: ${{ inputs.artifact-retention-days }}
+
+  # ---------------------------------------------------------------------------
+  # 3. Build sdist + wheel (wheel embeds the PDFs).
+  # ---------------------------------------------------------------------------
+  build-python-dists:
+    needs: [preflight, compile-translations, build-pdf-docs]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+          cache: pip
+
+      - name: Install build tool
+        run: python -m pip install --upgrade pip build
+
+      - name: Download compiled translations
+        uses: actions/download-artifact@v4
+        with:
+          name: translations-mo
+          path: .
+
+      - name: Download PDF documentation
+        uses: actions/download-artifact@v4
+        with:
+          name: pdf-docs
+          path: datalab/data/doc
+
+      - name: Build sdist + wheel
+        run: |
+          python -m build --sdist
+          python -m build --wheel
+          ls -lh dist/
+
+      - name: Sanity-check that wheel embeds PDF docs
+        run: |
+          python -m pip install --upgrade wheel
+          WHL=$(ls dist/*.whl | head -n1)
+          echo "Inspecting $WHL"
+          python -m zipfile -l "$WHL" | grep -E 'DataLab_(fr|en)\.pdf' \
+            || { echo "::error::PDF docs missing from wheel"; exit 1; }
+
+      - name: Upload Python distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-dists
+          path: dist/*
+          retention-days: ${{ inputs.artifact-retention-days }}
+
+  # ---------------------------------------------------------------------------
+  # 4. Build PyInstaller EXE + WiX MSI on Windows.
+  #    No external rasteriser is required: graphics resources
+  #    (DataLab.ico, wix/dialog.bmp, wix/banner.bmp) are committed and
+  #    regenerated on demand via `scripts/build_resources.bat`.
+  # ---------------------------------------------------------------------------
+  build-msi:
+    if: ${{ inputs.build-msi }}
+    needs: [preflight, compile-translations, build-pdf-docs]
+    runs-on: windows-latest
+    env:
+      RELEASE: "1"
+      UNATTENDED: "1"
+      VERSION: ${{ needs.preflight.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+          cache: pip
+
+      - name: Download PDF documentation
+        uses: actions/download-artifact@v4
+        with:
+          name: pdf-docs
+          path: datalab/data/doc
+
+      - name: Download compiled translations
+        uses: actions/download-artifact@v4
+        with:
+          name: translations-mo
+          path: .
+
+      - name: Install WiX 4 + UI extension
+        shell: pwsh
+        run: |
+          dotnet tool install --global wix --version 4.*
+          wix extension add -g WixToolset.UI.wixext/4.0.5
+
+      - name: Install Python dependencies (with [exe] extra)
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade PythonQwt guidata PlotPy Sigima
+          python -m pip install .[exe]
+
+      - name: Generate build manifest
+        shell: pwsh
+        run: python scripts/generate_manifest.py
+
+      - name: Build PyInstaller executable
+        shell: pwsh
+        run: |
+          python -m PyInstaller DataLab.spec --noconfirm --clean
+          Copy-Item manifest.json dist/DataLab/manifest.json -Force
+          # Windows 7 SP1 compatibility shim (see python-version note above):
+          # CPython 3.11 needs this Wine-built DLL to run on Windows 7.
+          Copy-Item resources/api-ms-win-core-path-l1-1-0.dll dist/DataLab/_internal/ -Force
+
+      - name: Package executable as zip (internal, required by MSI workflow)
+        shell: pwsh
+        run: |
+          $zip = "dist/DataLab-v$env:VERSION`_exe.zip"
+          Compress-Archive -Path dist/DataLab -DestinationPath $zip -CompressionLevel Fastest
+
+      - name: Generate WiX .wxs
+        shell: pwsh
+        run: python wix/makewxs.py DataLab $env:VERSION
+
+      - name: Build MSI installer
+        shell: pwsh
+        run: wix build "wix/DataLab-$env:VERSION.wxs" -ext WixToolset.UI.wixext
+
+      - name: Upload MSI installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: msi-installer
+          path: wix/DataLab-*.msi
+          retention-days: ${{ inputs.artifact-retention-days }}
+
+      - name: Upload PyInstaller zip (debug only, not for public release)
+        uses: actions/upload-artifact@v4
+        with:
+          name: pyinstaller-exe
+          path: dist/DataLab-v*_exe.zip
+          retention-days: ${{ inputs.artifact-retention-days }}

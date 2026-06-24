@@ -16,3 +16,35 @@
 * Added serialized and replayable history sessions with workspace-state validation
 * Added `.dlhist` import/export support and separated reset sessions from regular history sessions
 * Improved replay compatibility reporting for clearer user feedback
+
+**History Panel sessions:**
+
+* Added serialized and replayable history sessions with workspace-state validation
+* Added `.dlhist` import/export support and separated reset sessions from regular history sessions
+* Improved replay compatibility reporting for clearer user feedback
+
+**Replace special values processing (signal and image):**
+
+DataLab now provides a dedicated **"Replace special values"** processing
+function that detects and replaces `NaN`, `+Inf` and `-Inf` values in both
+signals and images. The feature is available under
+**Processing → Level adjustment → Replace special values** in both the Signal
+and Image panels.
+
+* Each target (`NaN`, `+Inf`, `-Inf`) can be processed independently with its
+  own strategy
+* Signal strategies: do nothing, replace with zero / constant / minimum /
+  maximum / mean / median, delete affected points, forward fill, backward
+  fill, interpolation (linear, spline, quadratic, cubic, PCHIP), N-neighbor
+  minimum / maximum / mean / median
+* Image strategies: do nothing, replace with zero / constant / minimum /
+  maximum / mean / median, N-neighbor minimum / maximum / mean / median
+* The parameter dialog displays **colored badges** showing the number (and
+  percentage) of `NaN`, `+Inf` and `-Inf` samples found in the source object,
+  giving immediate visibility on what will be modified
+* When a neighbor strategy is selected, a **live kernel preview** shows the
+  shape of the neighborhood that will be used for the replacement
+* Integer images are handled explicitly: because `NaN` and infinite values
+  cannot exist in integer data, the dialog explains that the operation is not
+  applicable and prevents accidental processing, while preserving the original
+  image data type without unnecessary float conversion

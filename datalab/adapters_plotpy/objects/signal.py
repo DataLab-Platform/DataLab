@@ -15,7 +15,7 @@ from typing import Generator
 import numpy as np
 from guidata.dataset import restore_dataset, update_dataset
 from plotpy.builder import make
-from plotpy.items import CurveItem
+from plotpy.items import CurveItem, ErrorBarCurveItem
 from sigima.objects import SignalObj
 
 from datalab.adapters_plotpy.objects.base import (
@@ -245,7 +245,12 @@ class SignalObjPlotPyAdapter(BaseObjPlotPyAdapter[SignalObj, CurveItem]):
                     and isinstance(dx, np.ndarray)
                     and isinstance(dy, np.ndarray)
                 )
-                item.set_data(x.real, y.real, dx.real, dy.real)
+                if isinstance(item, ErrorBarCurveItem):
+                    item.set_data(x.real, y.real, dx.real, dy.real)
+                else:
+                    # xydata has 4 rows but dx/dy are all NaN (no real
+                    # error bars) — the plot item is a plain CurveItem
+                    item.set_data(x.real, y.real)
         item.param.label = o.title
         apply_downsampling(item)
         # Reapply linewidth with smart clamping (data size may have changed)

@@ -28,6 +28,7 @@ import sys
 import time
 import traceback
 import webbrowser
+from datetime import datetime
 from typing import TYPE_CHECKING
 
 import guidata.dataset as gds
@@ -57,6 +58,8 @@ from datalab.config import (
     APP_NAME,
     DATAPATH,
     DEBUG,
+    PLOTPY_CONF,
+    PLOTPY_DEFAULTS,
     TEST_SEGFAULT_ERROR,
     Conf,
     _,
@@ -65,6 +68,11 @@ from datalab.control.baseproxy import AbstractDLControl
 from datalab.control.remote import RemoteServer
 from datalab.env import execenv
 from datalab.gui.actionhandler import ActionCategory
+from datalab.gui.commandpalette import (
+    CommandPaletteDialog,
+    CommandSearchField,
+    collect_commands,
+)
 from datalab.gui.docks import DockablePlotWidget
 from datalab.gui.h5io import H5InputOutput
 from datalab.gui.panel import base, history, image, macro, signal
@@ -156,6 +164,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         execenv.log(self, "Starting initialization")
 
         self.ready_flag = True
+        self.started_at = datetime.now().astimezone()
+        self.plugins_last_load_at = self.started_at
 
         self.hide_on_close = hide_on_close
         self.__old_size: tuple[int, int] | None = None
@@ -410,6 +420,16 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """
         panel = self.__get_current_basedatapanel()
         return panel.objview.get_sel_object_uuids(include_groups)
+
+    @remote_controlled
+    def get_current_object_uuid(self) -> str | None:
+        """Return current object uuid in current panel.
+
+        Returns:
+            UUID of the current object, or None if no object is current.
+        """
+        panel = self.__get_current_basedatapanel()
+        return panel.objview.get_current_object_uuid()
 
     @remote_controlled
     def add_group(
@@ -1046,6 +1066,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         # None = all plugins enabled (default), [] = no plugins, list = specific plugins
         enabled_list = Conf.main.plugins_enabled_list.get(None)
 
+        if not Conf.main.plugins_enabled.get():
+            self.plugins_last_load_at = datetime.now().astimezone()
+            return
+
         for plugin_class in PluginRegistry.get_plugin_classes():
             try:
                 # Check if plugin is enabled before instantiation
@@ -1087,6 +1111,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     plugin_class.__name__, filepath or "", tb_text
                 )
 
+        self.plugins_last_load_at = datetime.now().astimezone()
+
     def __flush_startup_errors(self) -> None:
         """Write any buffered startup errors to the internal console.
 
@@ -1124,6 +1150,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         dialog = PluginConfigDialog(self)
         dialog.exec()
 
+    def set_plugins_enabled(self, enabled: bool) -> None:
+        """Apply the global third-party plugin enabled state."""
+        Conf.main.plugins_enabled.set(enabled)
+        self.__apply_plugins_enabled_setting()
+
     def reload_plugins(self) -> None:
         """Reload third-party plugins at runtime.
 
@@ -1138,8 +1169,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     self,
                     _("Plugins"),
                     _(
-                        "Third-party plugins are disabled. Enable them in the "
-                        "Settings dialog to use this feature."
+                        "Third-party plugins are disabled. Enable them again "
+                        "from the plugin configuration dialog to use this "
+                        "feature."
                     ),
                 )
                 return
@@ -1215,6 +1247,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             # Update plugin status in the status bar
             self.pluginstatus.update_status()
             self.__update_plugins_availability()
+            self.plugins_last_load_at = datetime.now().astimezone()
 
     def __configure_statusbar(self, console: bool) -> None:
         """Configure status bar
@@ -1250,12 +1283,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Update plugin-related UI according to third-party plugin setting."""
         plugins_enabled = Conf.main.plugins_enabled.get()
 
-        if self.plugins_menu is not None:
-            self.plugins_menu.setEnabled(plugins_enabled)
+        if self.reload_plugins_action is not None:
+            self.reload_plugins_action.setEnabled(plugins_enabled)
 
-        for action in (self.reload_plugins_action, self.configure_plugins_action):
-            if action is not None:
-                action.setEnabled(plugins_enabled)
+        if self.configure_plugins_action is not None:
+            self.configure_plugins_action.setEnabled(True)
 
         if hasattr(self, "pluginstatus") and self.pluginstatus is not None:
             self.pluginstatus.update_status()
@@ -1271,11 +1303,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.__unregister_plugins()
         for panel in (self.signalpanel, self.imagepanel):
             panel.acthandler.clear_plugin_actions()
-
-        PluginRegistry.clear_plugin_classes()
-        PluginRegistry.clear_failed_plugins()
-        PluginRegistry.clear_discovery_errors()
-        self._startup_errors.clear()
 
         self.__update_actions(update_other_data_panel=True)
         self.__update_plugins_availability()
@@ -1326,6 +1353,15 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             tip=_("Open settings dialog"),
             triggered=self.__edit_settings,
         )
+        self.command_palette_action = create_action(
+            self,
+            _("Command palette..."),
+            shortcut=QG.QKeySequence("Ctrl+Shift+P"),
+            icon=get_icon("command_palette.svg"),
+            tip=_("Search and run any command by its menu path"),
+            triggered=self.show_command_palette,
+        )
+        self.addAction(self.command_palette_action)
         self.main_toolbar = self.__add_toolbar(
             _("Main Toolbar"), "left", "main_toolbar"
         )
@@ -1535,6 +1571,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         ):
             configure_menu_about_to_show(menu, self.__update_generic_menu)
         help_menu_actions = [
+            self.command_palette_action,
+            None,
             create_action(
                 self,
                 _("Online documentation"),
@@ -1611,6 +1649,34 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             ),
         ]
         add_actions(self.help_menu, help_menu_actions)
+
+        # Command palette launcher in the top-right corner of the menu bar:
+        # a search-box-styled field so the palette is discoverable at a
+        # glance (mirrors the DataLab-Web command palette trigger).
+        shortcut_text = self.command_palette_action.shortcut().toString(
+            QG.QKeySequence.NativeText
+        )
+        command_palette_field = CommandSearchField(
+            self, self.show_command_palette, shortcut_text
+        )
+        self.menuBar().setCornerWidget(command_palette_field, QC.Qt.TopRightCorner)
+
+    def show_command_palette(self) -> None:
+        """Show the command palette (searchable list of menu commands).
+
+        Lists every command available for the current panel by its menu
+        path and triggers the one chosen by the user.
+        """
+        panel = self.__get_current_basedatapanel()
+        commands = collect_commands(self, panel)
+        dialog = CommandPaletteDialog(self, commands)
+        # Anchor near the top-center of the main window, VSCode-style.
+        geometry = self.geometry()
+        dialog.move(geometry.center().x() - dialog.width() // 2, geometry.top() + 80)
+        if dialog.exec():
+            action = dialog.get_selected_action()
+            if action is not None:
+                action.trigger()
 
     def __update_console_show_mode(self) -> None:
         """Update console show mode from configuration option
@@ -1870,8 +1936,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         panel.selection_changed()
         self.signalpanel_toolbar.setVisible(is_signal)
         self.imagepanel_toolbar.setVisible(not is_signal)
-        if self.plugins_menu is not None:
-            self.plugins_menu.setEnabled(Conf.main.plugins_enabled.get())
 
     def __tab_index_changed(self, index: int) -> None:
         """Switch from signal to image mode, or vice-versa"""
@@ -1901,12 +1965,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         # no plugin has registered actions yet (so that new plugins can be
         # discovered after they are added on disk).
         if menu is self.plugins_menu:
-            if Conf.main.plugins_enabled.get():
-                actions = list(actions) + [
-                    None,
-                    self.configure_plugins_action,
-                    self.reload_plugins_action,
-                ]
+            actions = list(actions) + [
+                None,
+                self.configure_plugins_action,
+                self.reload_plugins_action,
+            ]
         add_actions(menu, actions)
 
     def __update_file_menu(self) -> None:
@@ -2469,6 +2532,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.setUpdatesEnabled(False)
 
         plotpy_config.set_plotpy_color_mode(mode)
+        PLOTPY_CONF.update_defaults(PLOTPY_DEFAULTS)
 
         if self.console is not None:
             self.console.update_color_mode()
@@ -2537,8 +2601,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 self.__update_color_mode()
             if option == "show_console_on_error":
                 self.__update_console_show_mode()
-            if option == "plugins_enabled":
-                self.__apply_plugins_enabled_setting()
             if option == "plot_toolbar_position":
                 for dock in self.docks.values():
                     widget = dock.widget()

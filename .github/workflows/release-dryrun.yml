@@ -1,0 +1,99 @@
+# ============================================================================
+# Release dry-run.
+#
+# Runs the full modular build pipeline (`_build.yml`) WITHOUT publishing
+# anything: no PyPI, no GitHub Release, no Pages deploy. All intermediate
+# artifacts are uploaded with a long retention period so they can be
+# downloaded and inspected before doing a real release.
+#
+# Use this when you want to:
+#   * Validate the build pipeline on a branch / commit without a tag.
+#   * Inspect the sdist, wheel, PDFs, and MSI produced for a given commit.
+#   * Re-run a single failing build job individually from the GitHub UI.
+#
+# Triggers:
+#   * workflow_dispatch only (manual). Choose the branch from the GitHub
+#     "Run workflow" dropdown. You may also build a specific tag.
+#
+# Optional inputs:
+#   * build-msi  - skip the slow Windows MSI job when not needed.
+#   * pages-dry-build - also exercise the Pages build (no deploy).
+# ============================================================================
+name: Release (dry-run)
+
+on:
+  workflow_dispatch:
+    inputs:
+      build-msi:
+        description: "Build the Windows MSI installer (slow)"
+        type: boolean
+        required: true
+        default: true
+      pages-dry-build:
+        description: "Also run pages.yml in build-only mode (no deploy)"
+        type: boolean
+        required: true
+        default: false
+      artifact-retention-days:
+        description: "Retention for uploaded artifacts (days, max 90)"
+        type: number
+        required: true
+        default: 30
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-dryrun-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: ./.github/workflows/_build.yml
+    with:
+      build-msi: ${{ inputs.build-msi }}
+      # On a dry-run we typically run on a branch (not a tag) so the
+      # tag-related checks must be relaxed.
+      skip-tag-check: true
+      skip-tag-branch-check: true
+      # workflow_dispatch number inputs come through as strings; cast back.
+      artifact-retention-days: ${{ fromJSON(inputs.artifact-retention-days) }}
+
+  # Summary job: collects all artifacts so they appear together at the end
+  # of the run and prints a sanity report. Useful to spot a missing or
+  # zero-byte artifact at a glance.
+  inspect:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download every artifact produced by the build
+        uses: actions/download-artifact@v4
+        with:
+          path: all-artifacts
+
+      - name: Show artifact tree + sizes
+        run: |
+          echo "## Artifacts produced by dry-run" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          ( cd all-artifacts && find . -type f -printf '%10s  %p\n' | sort ) \
+            | tee -a "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Sanity-check expected files
+        run: |
+          set -e
+          test -n "$(ls all-artifacts/python-dists/*.whl 2>/dev/null)"     || { echo "::error::no wheel"; exit 1; }
+          test -n "$(ls all-artifacts/python-dists/*.tar.gz 2>/dev/null)"  || { echo "::error::no sdist"; exit 1; }
+          test -f all-artifacts/pdf-docs/DataLab_fr.pdf                    || { echo "::error::no FR PDF"; exit 1; }
+          test -f all-artifacts/pdf-docs/DataLab_en.pdf                    || { echo "::error::no EN PDF"; exit 1; }
+          if [ "${{ inputs.build-msi }}" = "true" ]; then
+            test -n "$(ls all-artifacts/msi-installer/*.msi 2>/dev/null)"  || { echo "::error::no MSI"; exit 1; }
+          fi
+          echo "All expected artifacts present ✔"
+
+  # Optional: exercise the Pages build pipeline without pushing anywhere.
+  pages-build-only:
+    if: ${{ inputs.pages-dry-build }}
+    uses: ./.github/workflows/pages.yml
+    with:
+      deploy: false

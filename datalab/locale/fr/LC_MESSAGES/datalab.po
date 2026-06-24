@@ -66,7 +66,7 @@ msgid "You"
 msgstr "Vous"
 
 msgid "Assistant"
-msgstr "Assistant"
+msgstr "Assistant IA"
 
 msgid "Save to Macros"
 msgstr "Enregistrer dans les macros"
@@ -84,6 +84,10 @@ msgstr "Macro '%s' enregistrée dans le panneau de macros."
 
 msgid "Thinking…"
 msgstr "Réflexion en cours…"
+
+#, python-format
+msgid "Last request context size: %d tokens"
+msgstr "Taille du contexte de la dernière requête : %d jetons"
 
 msgid "Cumulative token usage"
 msgstr "Utilisation cumulative des jetons"
@@ -953,33 +957,33 @@ msgid "Generate macro"
 msgstr "Générer une macro"
 
 msgid "No compute actions to export."
-msgstr "Aucune action de calcul à exporter."
+msgstr "Pas d'actions de calcul à exporter."
 
 #, python-format
 msgid "Macro script copied to clipboard (%d actions)."
-msgstr "Script macro copié dans le presse-papiers (%d actions)."
+msgstr "Script de macro copié dans le presse-papier (%d actions)."
 
 msgid ""
 "Do you really want to delete the selected items?\n"
 "\n"
 "Note: deleting an action also removes all subsequent actions in the same session."
 msgstr ""
-"Voulez-vous vraiment supprimer les éléments sélectionnés ?\n"
+"Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?\n"
 "\n"
-"Note : la suppression d'une action supprime également toutes les actions suivantes de la même session."
+"Remarque : la suppression d'une action entraîne également la suppression de toutes les actions suivantes dans la même session."
 
 msgid "Do you really want to delete the selected items?"
-msgstr "Voulez-vous vraiment supprimer les éléments sélectionnés ?"
+msgstr "Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?"
 
 msgid "Remove incompatible"
-msgstr "Supprimer les incompatibles"
+msgstr "Supprimer les actions incompatibles"
 
 msgid "All actions are compatible with the current workspace."
-msgstr "Toutes les actions sont compatibles avec l'espace de travail courant."
+msgstr "Toutes les actions sont compatibles avec l'espace de travail actuel."
 
 #, python-format
 msgid "%d incompatible action(s) will be removed. Continue?"
-msgstr "%d action(s) incompatible(s) vont être supprimée(s). Continuer ?"
+msgstr "%d action(s) incompatible(s) seront supprimées. Continuer ?"
 
 msgid "Macro simple example"
 msgstr "Exemple simple de macro"
@@ -1070,6 +1074,21 @@ msgstr "Préférences..."
 
 msgid "Open settings dialog"
 msgstr "Ouvrir la boîte de dialogue des préférences"
+
+msgid "Command palette"
+msgstr "Palette de commandes"
+
+msgid "Command palette..."
+msgstr "Palette de commandes..."
+
+msgid "Search a command…"
+msgstr "Rechercher une commande…"
+
+msgid "Type to search for a command…"
+msgstr "Tapez pour rechercher une commande…"
+
+msgid "Search and run any command by its menu path"
+msgstr "Rechercher et exécuter n'importe quelle commande par son chemin de menu"
 
 msgid "Main Toolbar"
 msgstr "Barre d'outils principale"
@@ -1379,6 +1398,9 @@ msgstr "Paramètres pour la fonction `%s`"
 msgid "Created"
 msgstr "Créé"
 
+msgid "Created"
+msgstr "Créé"
+
 msgid "Original object"
 msgstr "Objet original"
 
@@ -1543,11 +1565,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "New group"
-msgstr "Nouveau groupe"
-
 msgid "Group name:"
 msgstr "Nom du groupe :"
+
+msgid "New group"
+msgstr "Nouveau groupe"
 
 #, python-format
 msgid "New group \"%s\""
@@ -1850,6 +1872,12 @@ msgstr "Fichiers Python"
 msgid "Clear console"
 msgstr "Effacer la console"
 
+msgid "Python files"
+msgstr "Fichiers Python"
+
+msgid "Clear console"
+msgstr "Effacer la console"
+
 msgid "-***- Macro Console -***-"
 msgstr "-***- Console des macros -***-"
 
@@ -1931,6 +1959,16 @@ msgstr "Création des formes géométriques"
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
+msgid "today"
+msgstr "aujourd'hui"
+
+msgid "yesterday"
+msgstr "hier"
+
+#, python-format
+msgid "Last loaded: %s at %s"
+msgstr "Dernier chargement : %s à %s"
+
 msgid "Active"
 msgstr "Actif"
 
@@ -1940,8 +1978,20 @@ msgstr "Désactivé"
 msgid "No description available"
 msgstr "Aucune description disponible"
 
+msgid "Open file"
+msgstr "Ouvrir le fichier"
+
+msgid "Show in folder"
+msgstr "Afficher dans le dossier"
+
 msgid "Import error"
 msgstr "Erreur d'importation"
+
+msgid "Edit directory"
+msgstr "Modifier le répertoire"
+
+msgid "Remove directory"
+msgstr "Supprimer le répertoire"
 
 msgid "Plugin Configuration"
 msgstr "Configuration des plugins"
@@ -1952,8 +2002,8 @@ msgstr "Activer/désactiver les plugins"
 msgid "Plugin search paths"
 msgstr "Chemins de recherche des plugins"
 
-msgid "Manage Plugins"
-msgstr "Gérer les plugins"
+msgid "Apply and reload plugins"
+msgstr "Appliquer et recharger les plugins"
 
 msgid "Changes will be applied after clicking OK and reloading plugins."
 msgstr "Les modifications seront appliquées après avoir cliqué sur OK et rechargé les plugins."
@@ -1964,12 +2014,30 @@ msgstr "Les répertoires suivants sont analysés au démarrage pour détecter le
 msgid "from"
 msgstr "depuis"
 
-msgid "No plugin search path is currently active."
-msgstr "Aucun chemin de recherche de plugins n'est actuellement actif."
+msgid "from"
+msgstr "depuis"
+
+msgid "Default plugin directories"
+msgstr "Répertoires de plugins par défaut"
+
+msgid "Additional plugin directories"
+msgstr "Répertoires de plugins supplémentaires"
+
+msgid "Add"
+msgstr "Ajouter"
+
+msgid "Additional directories are saved in DataLab configuration."
+msgstr "Les répertoires supplémentaires sont enregistrés dans la configuration de DataLab."
+
+msgid "No additional plugin directory is configured."
+msgstr "Aucun répertoire de plugins supplémentaire n'est configuré."
 
 #, python-format
-msgid "Additional directories can be added via the <code>%s</code> environment variable (multiple paths separated by '<code>%s</code>'). Changes take effect at DataLab startup."
-msgstr "Des répertoires supplémentaires peuvent être ajoutés via la variable d'environnement <code>%s</code> (plusieurs chemins séparés par '<code>%s</code>'). Les modifications prennent effet au démarrage de DataLab."
+msgid "Directories provided via the <code>%s</code> environment variable (multiple paths separated by '<code>%s</code>') also appear above as read-only entries. Changes take effect at DataLab startup."
+msgstr "Les répertoires fournis via la variable d'environnement <code>%s</code> (plusieurs chemins séparés par '<code>%s</code>') apparaissent également ci-dessus en lecture seule. Les modifications prennent effet au démarrage de DataLab."
+
+msgid "Select plugin directory"
+msgstr "Sélectionner un répertoire de plugins"
 
 msgid "Enable all plugins"
 msgstr "Activer tous les plugins"
@@ -1994,6 +2062,27 @@ msgstr "Recharger les plugins"
 
 msgid "Plugin configuration has been saved. Do you want to reload plugins now to apply changes?"
 msgstr "La configuration des plugins a été enregistrée. Voulez-vous recharger les plugins maintenant pour appliquer les modifications ?"
+
+msgid "Plugin settings"
+msgstr "Paramètres des plugins"
+
+msgid "Third-party plugins are globally disabled."
+msgstr "Les plugins tiers sont désactivés globalement."
+
+msgid "Compatibility warnings"
+msgstr "Avertissements de compatibilité"
+
+msgid "Hide warnings for incompatible DataLab v0.20 plugins"
+msgstr "Masquer les avertissements pour les plugins DataLab v0.20 incompatibles"
+
+msgid "Disable plugins globally"
+msgstr "Désactiver globalement les plugins"
+
+msgid "Enable plugins globally"
+msgstr "Activer globalement les plugins"
+
+msgid "Enable them again from the plugin configuration dialog to use this feature."
+msgstr "Réactivez-les depuis la boîte de dialogue de configuration des plugins pour utiliser cette fonctionnalité."
 
 msgid "Failed to deserialize processing parameters from JSON."
 msgstr "Échec de la désérialisation des paramètres de traitement depuis le format JSON."
@@ -2069,6 +2158,9 @@ msgstr "Supprimer la ROI"
 #, python-format
 msgid "Are you sure you want to remove ROI '%s'?"
 msgstr "Êtes-vous sûr de vouloir supprimer la ROI '%s' ?"
+
+msgid "Regions of interest are already defined for this image.<br><br>Creating new ROIs from detection will replace the existing ones, which will be lost.<br><br>Do you want to continue?"
+msgstr "Des régions d'intérêt sont déjà définies pour cette image.<br><br>La création de nouvelles ROI par détection remplacera les existantes, qui seront perdues.<br><br>Voulez-vous continuer ?"
 
 msgid "Sum"
 msgstr "Addition"
@@ -2226,6 +2318,9 @@ msgstr "Normaliser"
 
 msgid "Clipping"
 msgstr "Écrêtage"
+
+msgid "Replace special values"
+msgstr "Remplacer les valeurs spéciales"
 
 msgid "Add Gaussian noise"
 msgstr "Ajouter du bruit gaussien"
@@ -2852,12 +2947,6 @@ msgstr "Plugins tiers"
 msgid "Enable or disable third-party plugins immediately. Changes are applied without restarting DataLab"
 msgstr "Activer ou désactiver immédiatement les plugins tiers. Les changements sont appliqués sans redémarrer DataLab"
 
-msgid "Plugins path"
-msgstr "Chemin des plugins"
-
-msgid "Path to third-party plugins.<br><br>DataLab will discover plugins in this path, as well as in your PYTHONPATH."
-msgstr "Chemin d'accès aux plugins tiers.<br><br>DataLab découvrira les plugins dans ce chemin, ainsi que dans votre PYTHONPATH."
-
 msgid "Ignore compatibility issues warning"
 msgstr "Ignorer l'avertissement de compatibilité"
 
@@ -3148,6 +3237,33 @@ msgstr "Étiquettes des marqueurs"
 msgid "Prepend a marker-label column to result tables for marker results (XY/X/Y markers), so each row can be matched with the corresponding cross or dashed cursor drawn on the plot. XY markers use numeric labels (#1, #2, ...), axis markers use letters (a, b, c, ...)."
 msgstr "Ajouter une colonne d'étiquettes de marqueurs aux tables de résultats pour les résultats de marqueurs (marqueurs XY/X/Y), afin que chaque ligne puisse être associée au curseur croisé ou en pointillés correspondant dessiné sur le graphique. Les marqueurs XY utilisent des étiquettes numériques (#1, #2, ...), les marqueurs d'axe utilisent des lettres (a, b, c, ...)."
 
+msgid "Load preset"
+msgstr "Charger un préréglage"
+
+msgid "Choose an OpenAI-compatible endpoint preset:"
+msgstr "Choisir un préréglage de point d'entrée compatible OpenAI :"
+
+msgid "AI Assistant — connection test"
+msgstr "Assistant IA — test de connexion"
+
+msgid "Load preset..."
+msgstr "Charger un préréglage..."
+
+msgid "Pre-fill the Base URL and Model fields with a known OpenAI-compatible endpoint (OpenAI cloud, Ollama, LM Studio, llama.cpp, vLLM)."
+msgstr "Pré-remplit les champs URL de base et Modèle avec un point d'entrée compatible OpenAI connu (OpenAI cloud, Ollama, LM Studio, llama.cpp, vLLM)."
+
+msgid "Test connection"
+msgstr "Tester la connexion"
+
+msgid "Probe the configured endpoint (GET /models) to verify the URL, API key and network reachability. Does not consume any token."
+msgstr "Interroge le point d'entrée configuré (GET /models) pour vérifier l'URL, la clé API et l'accessibilité réseau. Ne consomme aucun jeton."
+
+msgid "Max history messages (0 = unlimited)"
+msgstr "Nombre max. de messages d'historique (0 = illimité)"
+
+msgid "Cap the number of past messages (user + assistant + tool) sent to the provider on each request. Useful with local models that have a small context window (e.g. n_ctx=4096 on llama.cpp): if the conversation grows beyond the model's context, the server returns HTTP 400. Set to 0 to disable the cap. The system prompt and the current user turn are always preserved."
+msgstr "Limite le nombre de messages passés (utilisateur + assistant + outil) envoyés au fournisseur à chaque requête. Utile pour les modèles locaux dont la fenêtre de contexte est faible (par ex. n_ctx=4096 avec llama.cpp) : si la conversation dépasse le contexte du modèle, le serveur renvoie une erreur HTTP 400. Mettre 0 pour désactiver la limite. Le prompt système et le tour utilisateur courant sont toujours préservés."
+
 msgid "Process isolation enable status"
 msgstr "État d'activation de l'isolation de processus"
 
@@ -3156,9 +3272,6 @@ msgstr "État d'activation du serveur XML-RPC"
 
 msgid "Console enable status"
 msgstr "État d'activation de la console"
-
-msgid "Third-party plugins path"
-msgstr "Chemin des plugins tiers"
 
 msgid "General"
 msgstr "Général"
@@ -3410,6 +3523,9 @@ msgstr "Créer une image avec un anneau"
 msgid "Create image with a grid of gaussian spots"
 msgstr "Créer une image avec une grille de spots gaussiens"
 
+msgid "New signal"
+msgstr "Nouveau signal"
+
 msgid "Host application"
 msgstr "Application hôte"
 
@@ -3485,11 +3601,11 @@ msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La dé
 msgid "Click OK to end demo."
 msgstr "Cliquer sur OK pour terminer la démo."
 
-msgid "Error:"
-msgstr "Erreur:"
-
 msgid "Context"
 msgstr "Contexte"
+
+msgid "Error:"
+msgstr "Erreur:"
 
 #, python-format
 msgid "The file %s could not be read:"
@@ -3707,17 +3823,17 @@ msgstr "Déplier la sélection"
 msgid "HDF5 Browser"
 msgstr "Explorateur HDF5"
 
-msgid "Size"
-msgstr "Taille"
-
-msgid "Type"
-msgstr "Type"
-
 msgid "Value"
 msgstr "Valeur"
 
 msgid "Name"
 msgstr "Nom"
+
+msgid "Size"
+msgstr "Taille"
+
+msgid "Type"
+msgstr "Type"
 
 msgid "Unsupported data"
 msgstr "Données non prises en charge"
@@ -3773,6 +3889,24 @@ msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
 msgid "Action is not compatible with the current workspace state."
 msgstr "L'action n'est pas compatible avec l'état actuel de l'espace de travail."
 
+msgid "Show details"
+msgstr "Afficher les détails"
+
+msgid "Hide details"
+msgstr "Masquer les détails"
+
+msgid "Date and time"
+msgstr "Date et heure"
+
+msgid "Title"
+msgstr "Titre"
+
+msgid "Action is compatible with the current workspace state."
+msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
+
+msgid "Action is not compatible with the current workspace state."
+msgstr "L'action n'est pas compatible avec l'état actuel de l'espace de travail."
+
 msgid "Image background selection"
 msgstr "Sélection de l'arrière-plan de l'image"
 
@@ -3800,6 +3934,21 @@ msgstr "Des journaux de bord ont été générés lors de la dernière session."
 msgid "Log files are currently empty."
 msgstr "Les journaux de bord sont vides."
 
+msgid "Kernel / Mask preview"
+msgstr "Aperçu du noyau / masque"
+
+#, python-brace-format
+msgid "{label} — Kernel / Mask preview"
+msgstr "{label} — Aperçu du noyau / masque"
+
+#, python-brace-format
+msgid "±{n} points"
+msgstr "±{n} points"
+
+#, python-brace-format
+msgid "±{n} rows × ±{n} columns"
+msgstr "±{n} lignes × ±{n} colonnes"
+
 msgid "Signal baseline selection"
 msgstr "Sélection de la ligne de base du signal"
 
@@ -3823,6 +3972,9 @@ msgstr "Distance minimale :"
 
 msgid "Signal peak detection"
 msgstr "Détection de pics 1D"
+
+msgid "Peaks:"
+msgstr "Pics :"
 
 msgid "Peaks:"
 msgstr "Pics :"
@@ -4141,6 +4293,9 @@ msgstr "Image"
 msgid "Dimensions"
 msgstr "Dimensions"
 
+msgid "This image uses an integer data type, so it cannot contain NaN or infinite values. Replace special values is therefore not applicable."
+msgstr "Cette image utilise un type de données entier, elle ne peut donc pas contenir de valeurs NaN ou infinies. Le remplacement des valeurs spéciales n'est donc pas applicable."
+
 msgid "Minimum value"
 msgstr "Valeur minimum"
 
@@ -4188,4 +4343,5 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
+
 

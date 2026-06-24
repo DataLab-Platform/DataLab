@@ -21,6 +21,7 @@ from datalab.aiassistant.providers.base import (
     LLMProviderError,
     TokenUsage,
     ToolCall,
+    extract_error_message,
 )
 
 _DEFAULT_BASE_URL = "https://api.openai.com/v1"
@@ -69,9 +70,27 @@ class OpenAIProvider(LLMProvider):
                 detail = exc.read().decode("utf-8", errors="replace")
             except Exception:  # pylint: disable=broad-except
                 detail = str(exc)
-            raise LLMProviderError(f"OpenAI HTTP error {exc.code}: {detail}") from exc
+            friendly = extract_error_message(detail) or exc.reason or detail
+            raise LLMProviderError(f"OpenAI HTTP error {exc.code}: {friendly}") from exc
         except urllib.error.URLError as exc:
-            raise LLMProviderError(f"OpenAI network error: {exc.reason}") from exc
+            reason = exc.reason
+            if isinstance(reason, TimeoutError) or "timed out" in str(reason).lower():
+                raise LLMProviderError(
+                    f"OpenAI request timed out after {self.timeout:.0f} s. "
+                    "Local models can take a long time to process a long "
+                    "prompt before producing the first token. "
+                    "Increase 'HTTP timeout (s)' in the AI Assistant "
+                    "preferences, or shorten the conversation."
+                ) from exc
+            raise LLMProviderError(f"OpenAI network error: {reason}") from exc
+        except TimeoutError as exc:
+            raise LLMProviderError(
+                f"OpenAI request timed out after {self.timeout:.0f} s. "
+                "Local models can take a long time to process a long "
+                "prompt before producing the first token. "
+                "Increase 'HTTP timeout (s)' in the AI Assistant "
+                "preferences, or shorten the conversation."
+            ) from exc
         except Exception as exc:  # pylint: disable=broad-except
             raise LLMProviderError(f"OpenAI request failed: {exc}") from exc
 

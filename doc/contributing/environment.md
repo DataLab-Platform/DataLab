@@ -95,7 +95,7 @@ Specific environment variables
 Enable the "debug" mode (no stdin/stdout redirection towards internal console):
 
     @REM Mode DEBUG
-    set DEBUG=1
+    set DATALAB_DEBUG=1
 
 Building PDF documentation requires LaTeX. On Windows, the following environment:
 
@@ -119,6 +119,8 @@ Visual Studio Code `.env` file:
 
 Windows installer
 -----------------
+
+The official Windows executable and MSI installer are built by the GitHub CI release pipeline. The Python version embedded in the standalone application shipped to end users is defined by the `python-version` input default of the reusable build workflow (`.github/workflows/_build.yml`), consumed by its `build-msi` job; the release workflows do not override it. That workflow is the single source of truth — refer to it for the exact version currently in use.
 
 The Windows installer is built using [WiX Toolset](https://wixtoolset.org/) V4.0.5.
 Using the WiX Toolset requires [.NET SDK](https://dotnet.microsoft.com/download/dotnet/) V6.0 minimum.
@@ -150,6 +152,4 @@ The following software may be required for maintaining the project:
 | -------- | ----------- |
 | [gettext](https://mlocati.github.io/articles/gettext-iconv-windows.html) | Translations |
 | [Git](https://git-scm.com/) | Version control system |
-| [ImageMagick](https://imagemagick.org/) | Image manipulation utilities |
-| [Inkscape](https://inkscape.org/) | Vector graphics editor |
 | [MikTeX](https://miktex.org/) | LaTeX distribution on Windows |

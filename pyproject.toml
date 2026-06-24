@@ -41,9 +41,9 @@ classifiers = [
 ]
 requires-python = ">=3.9, <4"
 dependencies = [
-    "guidata >= 3.13.4",
-    "PlotPy >= 2.8.2",
-    "Sigima >= 1.1.2",
+    "guidata >= 3.14.4",
+    "PlotPy >= 2.10.0",
+    "Sigima >= 1.1.4",
     "NumPy >= 1.22, < 2.5",
     "SciPy >= 1.10.1, < 1.17",
     "scikit-image >= 0.19.2, < 0.27",
@@ -95,6 +95,7 @@ doc = [
     "sphinx_design",
     "sphinx-copybutton",
     "pydata-sphinx-theme",
+    "sphinxcontrib-svg2pdfconverter[CairoSVG]",
 ]
 test = ["pytest", "pytest-xvfb", "httpx"]
 
@@ -112,7 +113,7 @@ include = ["datalab*"]
     "*.dlabroi",
     "*.dlabmeta",
     "*.dlabgrid",
-    "*_test.h5",
+    "*.h5",
     "*.npy",
     "*.dcm",
     "*.scor-data",
@@ -126,6 +127,7 @@ include = ["datalab*"]
     "*.html",
     "*.buildinfo",
     "*.inv",
+    "*.template",
 ]
 
 [tool.setuptools.dynamic]

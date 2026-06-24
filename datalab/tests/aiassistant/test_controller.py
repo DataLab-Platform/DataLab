@@ -198,6 +198,69 @@ def test_max_iterations_safety_cap() -> None:
     assert len(result.tool_executions) == 3
 
 
+def _make_idle_controller(max_history: int = 0) -> AIController:
+    """Build a minimal controller for window-helper unit tests."""
+    return AIController(
+        provider=_ScriptedProvider([]),
+        registry=_registry_with(lambda *a, **k: None),  # noqa: ARG005
+        proxy=mock.MagicMock(),
+        mainwindow=mock.MagicMock(),
+        confirm_callback=lambda *a: True,
+        max_history_messages=max_history,
+    )
+
+
+def test_messages_for_provider_no_cap_returns_full_history() -> None:
+    """With max_history_messages=0, the full history is sent verbatim."""
+    ctrl = _make_idle_controller(max_history=0)
+    ctrl.history.extend(
+        [
+            ChatMessage(role="user", content="q1"),
+            ChatMessage(role="assistant", content="a1"),
+            ChatMessage(role="user", content="q2"),
+        ]
+    )
+    assert ctrl._messages_for_provider() == ctrl.history
+
+
+def test_messages_for_provider_truncates_and_keeps_system() -> None:
+    """The system prompt is always preserved; window starts at a user message."""
+    ctrl = _make_idle_controller(max_history=2)
+    ctrl.history.extend(
+        [
+            ChatMessage(role="user", content="q1"),
+            ChatMessage(role="assistant", content="a1"),
+            ChatMessage(role="user", content="q2"),
+            ChatMessage(role="assistant", content="a2"),
+        ]
+    )
+    msgs = ctrl._messages_for_provider()
+    assert msgs[0].role == "system"
+    assert [m.content for m in msgs[1:]] == ["q2", "a2"]
+
+
+def test_messages_for_provider_drops_leading_tool_orphans() -> None:
+    """A truncation that would leave an orphan tool/assistant_tool_calls is fixed."""
+    ctrl = _make_idle_controller(max_history=2)
+    ctrl.history.extend(
+        [
+            ChatMessage(role="user", content="q1"),
+            ChatMessage(
+                role="assistant",
+                tool_calls=[ToolCall(id="c1", name="t", arguments={})],
+            ),
+            ChatMessage(role="tool", content="r1", tool_call_id="c1"),
+            ChatMessage(role="assistant", content="a1"),
+        ]
+    )
+    msgs = ctrl._messages_for_provider()
+    # Last 2 messages would be [tool, assistant] which starts on a tool
+    # orphan -> the window falls back to "latest user turn ... end".
+    assert msgs[0].role == "system"
+    assert msgs[1].role == "user"
+    assert msgs[1].content == "q1"
+
+
 class _RaisingProvider(LLMProvider):
     """Provider that succeeds for the 1st call then raises on subsequent ones."""
 
@@ -267,6 +330,16 @@ def test_default_system_prompt_unrestricted_when_no_filter() -> None:
     """Backwards compatibility: no filter means all tools are advertised."""
     prompt = build_default_system_prompt()
     assert "create_and_run_macro" in prompt
+
+
+def test_default_system_prompt_forbids_inline_image_payloads() -> None:
+    """The prompt must instruct the model not to embed images or base64 blobs
+    in its prose responses (would bloat tokens and break QTextBrowser rendering)."""
+    prompt = build_default_system_prompt()
+    assert "NEVER embed images" in prompt
+    assert "data:image/" in prompt
+    assert "base64" in prompt
+    assert "capture_view" in prompt
 
 
 def test_cumulative_usage_accumulates_across_iterations() -> None:

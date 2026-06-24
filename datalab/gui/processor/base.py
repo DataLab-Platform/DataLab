@@ -994,6 +994,30 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self.register_analysis()
 
     # pylint: disable=unused-argument
+    def preprocess_1_to_0(
+        self,
+        func: Callable,
+        param: gds.DataSet | None,
+        objs: list[SignalObj | ImageObj],
+    ) -> bool:
+        """Pre-check hook for 1-to-0 operations (hook method).
+
+        This method is called before a 1-to-0 computation starts, before the
+        progress dialog is opened. Subclasses can override this method to perform
+        pre-checks or ask for user confirmation.  Return ``False`` to abort the
+        computation.
+
+        Args:
+            func: The computation function that will be called
+            param: Optional parameter set
+            objs: List of objects that will be processed
+
+        Returns:
+            True to proceed with the computation, False to abort
+        """
+        return True
+
+    # pylint: disable=unused-argument
     def postprocess_1_to_0_result(
         self, obj: SignalObj | ImageObj, result: GeometryResult | TableResult
     ) -> bool:
@@ -1189,6 +1213,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         # Get the parameter from processing parameters
         param = proc_params.param
+
+        # Disable ROI creation during auto-recompute: detection functions store
+        # create_rois=True in their parameters, but auto-recompute should only
+        # update analysis results, not recreate ROIs (which would make them
+        # impossible to delete or modify).
+        if hasattr(param, "create_rois"):
+            param.create_rois = False
 
         # Get the actual function from the function name
         feature = self.get_feature(proc_params.func_name)
@@ -1814,6 +1845,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             if target_objs is not None
             else self.panel.objview.get_sel_objects(include_groups=True)
         )
+        if not self.preprocess_1_to_0(func, param, objs):
+            return None
         current_obj = self.panel.objview.get_current_object()
         title = func.__name__ if title is None else title
         pp_history = build_processing_parameters(func.__name__, "1-to-0", param=param)

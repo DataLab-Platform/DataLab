@@ -1086,6 +1086,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             with self.new_menu(_("Level adjustment"), icon_name="level_adjustment.svg"):
                 self.action_for("normalize")
                 self.action_for("clip")
+                self.action_for("replace_special_values")
                 self.new_action(
                     _("Offset correction"),
                     triggered=self.panel.processor.compute_offset_correction,

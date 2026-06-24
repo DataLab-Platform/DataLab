@@ -53,11 +53,14 @@ def _get_enabled_plugins_option(conf_class):
 
 def main():
     """Create manual test plugins, launch DataLab, then clean them up."""
-    conf_class = import_module("datalab.config").Conf
+    config_module = import_module("datalab.config")
+    conf_class = config_module.Conf
+    get_user_plugin_paths = config_module.get_user_plugin_paths
+    set_user_plugin_paths = config_module.set_user_plugin_paths
     enabled_plugins_option = _get_enabled_plugins_option(conf_class)
 
-    # Save the original plugins_path before any modification
-    original_path = conf_class.main.plugins_path.get()
+    # Save the original extra plugin search paths before any modification.
+    original_paths = get_user_plugin_paths()
     original_enabled_list = None
     if enabled_plugins_option is not None:
         original_enabled_list = enabled_plugins_option.get(None)
@@ -98,12 +101,12 @@ def main():
         print("\nLaunching DataLab...")
         print("=" * 70 + "\n")
 
-        # Configure: enable all plugins, point plugins_path to the managed
-        # dataset under datalab/data/tests. The original path (if any) is
+        # Configure: enable all plugins, point plugin search paths to the managed
+        # dataset under datalab/data/tests. The original paths (if any) are
         # restored afterwards.
         if enabled_plugins_option is not None:
             enabled_plugins_option.set(None)
-        conf_class.main.plugins_path.set(plugin_dir)
+        set_user_plugin_paths([plugin_dir])
 
         # Launch DataLab
         run = import_module("datalab.app").run
@@ -113,7 +116,7 @@ def main():
     finally:
         if enabled_plugins_option is not None:
             enabled_plugins_option.set(original_enabled_list)
-        conf_class.main.plugins_path.set(original_path)
+        set_user_plugin_paths(original_paths)
         clear_plugin_directory(
             plugin_dir,
             module_prefixes=MANUAL_PLUGIN_MODULE_PREFIXES,
