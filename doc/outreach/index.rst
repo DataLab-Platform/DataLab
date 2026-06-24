@@ -51,6 +51,15 @@ Since its public release, DataLab has been introduced at several prestigious con
 
         Advanced use case: Automatic X-ray scene reconstruction with DataLab
 
+    .. grid-item-card:: 🇵🇱 EuroSciPy 2026
+        :link: euroscipy2026
+        :link-type: doc
+        :class-card: sd-border-2
+
+        **Kraków, Poland - July 2026**
+
+        Automatic reconstruction of X-ray scenes with Python and DataLab
+
 .. toctree::
    :maxdepth: 2
    :hidden:
@@ -59,6 +68,7 @@ Since its public release, DataLab has been introduced at several prestigious con
    pydata2024
    osxp2024
    osxp2025
+   euroscipy2026
 
 Why Present DataLab?
 --------------------
