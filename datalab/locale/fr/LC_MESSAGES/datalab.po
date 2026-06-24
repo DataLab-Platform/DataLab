@@ -2050,6 +2050,9 @@ msgstr "En mode 'pairwise', vous devez sélectionner des objets dans au moins de
 msgid "In pairwise mode, you need to select the same number of objects in each group."
 msgstr "En mode 'pairwise', vous devez sélectionner le même nombre d'objets dans chaque groupe."
 
+msgid "Parameters"
+msgstr "Paramètres"
+
 #, python-format
 msgid "Calculating: %s"
 msgstr "Calcul : %s"
@@ -2080,6 +2083,9 @@ msgstr "Supprimer la ROI"
 #, python-format
 msgid "Are you sure you want to remove ROI '%s'?"
 msgstr "Êtes-vous sûr de vouloir supprimer la ROI '%s' ?"
+
+msgid "Regions of interest are already defined for this image.<br><br>Creating new ROIs from detection will replace the existing ones, which will be lost.<br><br>Do you want to continue?"
+msgstr "Des régions d'intérêt sont déjà définies pour cette image.<br><br>La création de nouvelles ROI par détection remplacera les existantes, qui seront perdues.<br><br>Voulez-vous continuer ?"
 
 msgid "Sum"
 msgstr "Addition"
@@ -4089,6 +4095,9 @@ msgstr "Tout sélectionner"
 msgid "Adding data to the plot"
 msgstr "Ajout des données au graphique"
 
+msgid "Title"
+msgstr "Titre"
+
 msgid "X label"
 msgstr "Titre X"
 
@@ -4241,3 +4250,4 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
+

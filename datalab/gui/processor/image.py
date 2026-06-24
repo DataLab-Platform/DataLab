@@ -8,6 +8,7 @@
 
 from __future__ import annotations
 
+import guidata.dataset as gds
 import numpy as np
 import sigima.params
 import sigima.proc.base as sipb
@@ -25,6 +26,7 @@ from sigima.objects import (
 )
 from sigima.objects.scalar import GeometryResult, TableResult
 
+from datalab import env
 from datalab.config import APP_NAME, _
 from datalab.gui.processor.base import BaseProcessor
 from datalab.gui.processor.geometry_postprocess import (
@@ -57,6 +59,50 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             Pickleable wrapped function that applies geometry transformations
         """
         return GeometricTransformWrapper(func, operation)
+
+    def preprocess_1_to_0(
+        self,
+        func,
+        param: gds.DataSet | None,
+        objs: list[ImageObj],
+    ) -> bool:
+        """Override to confirm ROI replacement before the progress bar opens.
+
+        When the parameter has ``create_rois=True`` and at least one selected
+        image already has ROIs, the user is warned that the existing ROIs will
+        be replaced.
+
+        Args:
+            func: The computation function that will be called
+            param: Optional parameter set
+            objs: List of image objects that will be processed
+
+        Returns:
+            True to proceed with the computation, False to abort
+        """
+        if (
+            param is not None
+            and getattr(param, "create_rois", False)
+            and not env.execenv.unattended
+            and any(obj.roi is not None and not obj.roi.is_empty() for obj in objs)
+        ):
+            return (
+                QW.QMessageBox.question(
+                    self.mainwindow,
+                    _("Warning"),
+                    _(
+                        "Regions of interest are already defined for this "
+                        "image.<br><br>"
+                        "Creating new ROIs from detection will replace the "
+                        "existing ones, which will be lost.<br><br>"
+                        "Do you want to continue?"
+                    ),
+                    QW.QMessageBox.Yes | QW.QMessageBox.No,
+                    QW.QMessageBox.No,
+                )
+                == QW.QMessageBox.Yes
+            )
+        return True
 
     def postprocess_1_to_0_result(
         self, obj: ImageObj, result: GeometryResult | TableResult
