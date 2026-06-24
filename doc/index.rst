@@ -14,6 +14,20 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
 .. only:: html and not latex
 
+    .. dropdown:: :octicon:`browser;1em;sd-text-info` DataLab-Web -- the browser-native edition (no install)
+        :animate: fade-in
+        :icon: rocket
+
+        **DataLab-Web** is the browser-native edition of the platform: the full feature set
+        runs inside your browser tab -- no install, and your data never leaves your machine.
+
+        :octicon:`rocket;1em;sd-text-info` **Try it now:** `datalab-platform.com/web <https://datalab-platform.com/web/>`_
+
+        Learn more about the DataLab Platform and its editions in the
+        :doc:`ecosystem overview <intro/ecosystem>`.
+
+.. only:: html and not latex
+
     :octicon:`play;1em;sd-text-info` Want to know more?
     See our :bdg-ref-success-line:`Tutorials <tutorials>` --
     Try DataLab online, without installation: :octicon:`rocket;1em;sd-text-info` |binder|.
@@ -63,15 +77,6 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
             :link-type: doc
 
             Getting involved in the project
-
-.. only:: html and not latex
-
-    .. card:: :octicon:`browser;1em;sd-text-info`  No installation? Run DataLab in your browser
-        :link: intro/ecosystem
-        :link-type: doc
-
-        **DataLab-Web** runs the entire platform inside your browser tab -- no install, and
-        your data never leaves your machine. Discover the DataLab Platform and its editions.
 
 DataLab has been funded, chronologically, by the following stakeholders:
 

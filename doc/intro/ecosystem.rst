@@ -33,7 +33,9 @@ desktop application. To avoid confusion, this documentation uses the following v
         of this documentation describes this product.
     * - **DataLab-Web**
       - The **browser-native** edition: the full platform running inside a web browser tab,
-        with no installation. `Project on GitHub <https://github.com/DataLab-Platform/web>`__.
+        with no installation. Try it at `datalab-platform.com/web
+        <https://datalab-platform.com/web/>`_ --
+        `project on GitHub <https://github.com/DataLab-Platform/web>`__.
     * - **DataLab-Kernel**
       - A **Jupyter kernel** exposing DataLab workspaces to notebooks.
         `Documentation <https://datalab-kernel.readthedocs.io/>`__.
