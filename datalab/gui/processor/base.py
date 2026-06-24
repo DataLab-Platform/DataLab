@@ -1,4 +1,4 @@
-﻿# Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
+# Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
 .. Base processor object (see parent package :mod:`datalab.gui.processor`)
@@ -1510,9 +1510,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         )
         historypanel = self.mainwindow.historypanel
         with historypanel.replaying(), Conf.proc.show_result_dialog.temp(False):
-            self.compute_1_to_0(
-                feature.function, param, edit=False, target_objs=[obj]
-            )
+            self.compute_1_to_0(feature.function, param, edit=False, target_objs=[obj])
 
     def _compute_1_to_1_subroutine(
         self, funcs: list[Callable], params: list, title: str
@@ -1743,9 +1741,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             panel_str=self.panel.PANEL_STR_ID,
             func_names=[f.__name__ for f in funcs],
             params=params if any(p is not None for p in params) else None,
-            plugin_origin=(
-                self._get_plugin_origin_for(funcs[0]) if funcs else None
-            ),
+            plugin_origin=(self._get_plugin_origin_for(funcs[0]) if funcs else None),
         )
         with self.mainwindow.historypanel.capture_outputs(action):
             self._compute_1_to_1_subroutine(funcs, params, title)

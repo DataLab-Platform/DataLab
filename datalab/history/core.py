@@ -1,6 +1,8 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
-"""History core utilities: schema constants, JSON codec, ``@add_to_history`` decorator."""
+"""
+History core utilities: schema constants, JSON codec, ``@add_to_history`` decorator.
+"""
 
 from __future__ import annotations
 

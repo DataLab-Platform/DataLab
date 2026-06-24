@@ -837,7 +837,7 @@ def test_history_replay_patterns(monkeypatch):
         assert captured["obj2"] is obj2
         assert captured["pairwise"] is True
 
-    # --- scenario: replay_restore_actions(replay=True) on 1_to_1 does NOT add output ---
+    # scenario: replay_restore_actions(replay=True) on 1_to_1 does NOT add output
     with datalab_test_app_context() as win:
         history = win.historypanel
         history.toggle_record_mode(True)

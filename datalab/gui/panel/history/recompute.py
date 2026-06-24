@@ -7,7 +7,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
-from coverage.debug import pp
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj
 

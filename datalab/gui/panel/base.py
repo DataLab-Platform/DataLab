@@ -213,9 +213,7 @@ class ObjectProp(QW.QWidget):
         self.__auto_recompute_enabled: bool = False
         self.__auto_recompute_timer = QC.QTimer(self)
         self.__auto_recompute_timer.setSingleShot(True)
-        self.__auto_recompute_timer.timeout.connect(
-            self.__auto_recompute_trigger
-        )
+        self.__auto_recompute_timer.timeout.connect(self.__auto_recompute_trigger)
 
         # Properties tab
         self.properties = gdq.DataSetEditGroupBox("", objclass)
