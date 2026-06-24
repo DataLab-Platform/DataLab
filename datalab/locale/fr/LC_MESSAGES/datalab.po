@@ -1075,6 +1075,21 @@ msgstr "Préférences..."
 msgid "Open settings dialog"
 msgstr "Ouvrir la boîte de dialogue des préférences"
 
+msgid "Command palette"
+msgstr "Palette de commandes"
+
+msgid "Command palette..."
+msgstr "Palette de commandes..."
+
+msgid "Search a command…"
+msgstr "Rechercher une commande…"
+
+msgid "Type to search for a command…"
+msgstr "Tapez pour rechercher une commande…"
+
+msgid "Search and run any command by its menu path"
+msgstr "Rechercher et exécuter n'importe quelle commande par son chemin de menu"
+
 msgid "Main Toolbar"
 msgstr "Barre d'outils principale"
 
@@ -4226,4 +4241,3 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
-

@@ -68,6 +68,11 @@ from datalab.control.baseproxy import AbstractDLControl
 from datalab.control.remote import RemoteServer
 from datalab.env import execenv
 from datalab.gui.actionhandler import ActionCategory
+from datalab.gui.commandpalette import (
+    CommandPaletteDialog,
+    CommandSearchField,
+    collect_commands,
+)
 from datalab.gui.docks import DockablePlotWidget
 from datalab.gui.h5io import H5InputOutput
 from datalab.gui.panel import base, image, macro, signal
@@ -1341,6 +1346,15 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             tip=_("Open settings dialog"),
             triggered=self.__edit_settings,
         )
+        self.command_palette_action = create_action(
+            self,
+            _("Command palette..."),
+            shortcut=QG.QKeySequence("Ctrl+Shift+P"),
+            icon=get_icon("command_palette.svg"),
+            tip=_("Search and run any command by its menu path"),
+            triggered=self.show_command_palette,
+        )
+        self.addAction(self.command_palette_action)
         self.main_toolbar = self.__add_toolbar(
             _("Main Toolbar"), "left", "main_toolbar"
         )
@@ -1550,6 +1564,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         ):
             configure_menu_about_to_show(menu, self.__update_generic_menu)
         help_menu_actions = [
+            self.command_palette_action,
+            None,
             create_action(
                 self,
                 _("Online documentation"),
@@ -1626,6 +1642,34 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             ),
         ]
         add_actions(self.help_menu, help_menu_actions)
+
+        # Command palette launcher in the top-right corner of the menu bar:
+        # a search-box-styled field so the palette is discoverable at a
+        # glance (mirrors the DataLab-Web command palette trigger).
+        shortcut_text = self.command_palette_action.shortcut().toString(
+            QG.QKeySequence.NativeText
+        )
+        command_palette_field = CommandSearchField(
+            self, self.show_command_palette, shortcut_text
+        )
+        self.menuBar().setCornerWidget(command_palette_field, QC.Qt.TopRightCorner)
+
+    def show_command_palette(self) -> None:
+        """Show the command palette (searchable list of menu commands).
+
+        Lists every command available for the current panel by its menu
+        path and triggers the one chosen by the user.
+        """
+        panel = self.__get_current_basedatapanel()
+        commands = collect_commands(self, panel)
+        dialog = CommandPaletteDialog(self, commands)
+        # Anchor near the top-center of the main window, VSCode-style.
+        geometry = self.geometry()
+        dialog.move(geometry.center().x() - dialog.width() // 2, geometry.top() + 80)
+        if dialog.exec():
+            action = dialog.get_selected_action()
+            if action is not None:
+                action.trigger()
 
     def __update_console_show_mode(self) -> None:
         """Update console show mode from configuration option
