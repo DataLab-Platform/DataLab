@@ -2071,6 +2071,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             # Refresh dependent items: result titles referencing this object may
             # display its new title (when the "title" result-title mode is on).
             self.objview.update_tree()
+            # Cross-panel result titles (e.g. a signal extracted from this image)
+            # may reference it, so refresh the sibling panel too:
+            self.objview._refresh_sibling_panels()  # pylint: disable=protected-access
             # Refresh the plot so the renamed object's curve/image legend reflects
             # its new title (the legend is derived from the stored object title):
             self.refresh_plot(get_uuid(obj), update_items=True, force=True)
@@ -2092,6 +2095,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             # Refresh dependent items: result titles referencing this group may
             # display its new title (when the "title" result-title mode is on).
             self.objview.update_tree()
+            # Cross-panel result titles (e.g. a signal group from a projection of
+            # this image group) may reference it, so refresh the sibling panel too:
+            self.objview._refresh_sibling_panels()  # pylint: disable=protected-access
 
     @abc.abstractmethod
     def get_newparam_from_current(

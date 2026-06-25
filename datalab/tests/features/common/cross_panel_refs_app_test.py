@@ -106,3 +106,42 @@ def test_cross_panel_reference_view_follows_image_delete():
         assert "First image" in text
 
         Conf.proc.result_title_mode.set(orig_mode)
+
+
+def test_cross_panel_group_rename_refreshes_sibling_view():
+    """Renaming an image group updates a cross-panel reference shown in the
+    signal panel view, without any manual refresh."""
+    with datalab_test_app_context() as win:
+        orig_mode = Conf.proc.result_title_mode.get()
+        ipanel, spanel = win.imagepanel, win.signalpanel
+
+        # An image group containing one image -> gi001:
+        igroup = ipanel.add_group("My images")
+        img = create_image("First image", np.zeros((8, 8)))
+        ipanel.add_object(img, group_id=get_uuid(igroup))
+        assert get_short_id(igroup) == "gi001"
+
+        # A signal group produced by a projection references the image group:
+        sgroup = spanel.add_group(f"average profile({get_short_id(igroup)})")
+        sig = create_signal(
+            "average profile(i001)", x=[0.0, 1.0, 2.0], y=[1.0, 2.0, 3.0]
+        )
+        spanel.add_object(sig, group_id=get_uuid(sgroup))
+        assert sgroup.title == "average profile(gi001)"
+
+        # In title mode, the signal panel shows the image group's long name:
+        Conf.proc.result_title_mode.set("title")
+        spanel.objview.update_tree()
+        text = spanel.objview.get_item_from_id(get_uuid(sgroup)).text(0)
+        assert "My images" in text
+
+        # Rename the image group in the image panel. The signal panel view must
+        # reflect the new name *without* any manual refresh (the rename refreshes
+        # the sibling panel):
+        ipanel.objview.select_groups([igroup])
+        ipanel.rename_selected_object_or_group("Renamed images")
+        text = spanel.objview.get_item_from_id(get_uuid(sgroup)).text(0)
+        assert "Renamed images" in text
+        assert "My images" not in text
+
+        Conf.proc.result_title_mode.set(orig_mode)

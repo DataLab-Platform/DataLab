@@ -168,3 +168,30 @@ def test_cross_panel_reference_follows_image_delete() -> None:
     imodel.remove_object(img1)
     assert get_short_id(img2) == "i001"
     assert sig.title == "average profile(i001)"
+
+
+def test_cross_panel_group_reference_renders_and_follows_rename() -> None:
+    """A signal group referencing an image group renders its long name and
+    follows the image group's rename (e.g. a projection of an image group)."""
+    smodel, imodel = _linked_models()
+
+    # An image group (e.g. "My images") containing one image -> gi001:
+    igroup = imodel.add_group("My images")
+    img = create_image("First image", np.zeros((4, 4)))
+    imodel.add_object(img, get_uuid(igroup))
+    assert get_short_id(igroup) == "gi001"
+
+    # A signal group produced by a projection keeps a reference to the source
+    # image group in its title (exactly as the processor builds it):
+    sgroup = smodel.add_group(f"average profile({get_short_id(igroup)})")
+    sig = create_signal("average profile(i001)", x=[0.0, 1.0], y=[1.0, 2.0])
+    smodel.add_object(sig, get_uuid(sgroup))
+    assert sgroup.title == "average profile(gi001)"
+
+    # Raw form keeps the short ID; long-name form renders the image group title:
+    assert smodel.get_display_title(sgroup, False) == "average profile(gi001)"
+    assert smodel.get_display_title(sgroup, True) == "average profile(My images)"
+
+    # Renaming the image group is reflected in the signal group's long name:
+    igroup.title = "Renamed images"
+    assert smodel.get_display_title(sgroup, True) == "average profile(Renamed images)"
