@@ -147,27 +147,27 @@ def _record_three_action_session(win):
 def _build_cascade_chain(panel, history):
     """Build chain s001 -> gaussian -> s002 -> derivative -> s003 -> mavg -> s004.
 
-    Returns ``(action_A, action_B, action_C, output_B, output_C)``.
+    Returns ``(action_a, action_b, action_c, output_b, output_c)``.
     """
     panel.add_object(create_paracetamol_signal())
     panel.objview.select_objects([1])
     panel.processor.run_feature(
         sips.gaussian_filter, sigima.params.GaussianParam.create(sigma=1.5)
     )
-    action_A = history[len(history)]
+    action_a = history[len(history)]
 
     panel.objview.select_objects([2])
     panel.processor.run_feature(sips.derivative)
-    action_B = history[len(history)]
-    output_B = panel.objmodel.get_object_from_number(3)
+    action_b = history[len(history)]
+    output_b = panel.objmodel.get_object_from_number(3)
 
     panel.objview.select_objects([3])
     mavg = sigima.params.MovingAverageParam()
     mavg.n = 3
     panel.processor.run_feature(sips.moving_average, mavg)
-    action_C = history[len(history)]
-    output_C = panel.objmodel.get_object_from_number(4)
-    return action_A, action_B, action_C, output_B, output_C
+    action_c = history[len(history)]
+    output_c = panel.objmodel.get_object_from_number(4)
+    return action_a, action_b, action_c, output_b, output_c
 
 
 # ---------------------------------------------------------------------------
@@ -787,7 +787,7 @@ def test_history_replay_patterns(monkeypatch):
             kwargs={"pairwise": True},
             state=WorkspaceState(),
         )
-        action._replay_compute(win, edit=False)  # noqa: SLF001
+        action.replay_compute(win, edit=False)
         assert captured["pairwise"] is True
 
     # --- scenario: 2_to_1 with vanished obj2 raises ValueError ---
@@ -829,7 +829,7 @@ def test_history_replay_patterns(monkeypatch):
             kwargs={"obj2_uuids": ["recorded-obj2"], "pairwise": True},
             state=WorkspaceState(),
         )
-        action._replay_compute(  # noqa: SLF001
+        action.replay_compute(
             win,
             edit=False,
             uuid_remap={panel.PANEL_STR_ID: {"recorded-obj2": obj2_uuid}},
@@ -1209,16 +1209,16 @@ def test_history_stepping_and_selection_sync():
     # --- scenario: step button enabled state reflects position ---
     with datalab_test_app_context() as win:
         history = win.historypanel
-        prev_btn = history._step_prev_action  # noqa: SLF001
-        next_btn = history._step_next_action  # noqa: SLF001
+        prev_btn = history.step_prev_action
+        next_btn = history.step_next_action
         history.update_actions_state()
         assert not prev_btn.isEnabled()
         assert not next_btn.isEnabled()
         _panel, history = _record_three_action_session(win)
         sessions = history.history_sessions
         actions = sessions[-1].actions
-        prev_btn = history._step_prev_action  # noqa: SLF001
-        next_btn = history._step_next_action  # noqa: SLF001
+        prev_btn = history.step_prev_action
+        next_btn = history.step_next_action
         _select_tree_item_for(history, actions[0])
         assert not prev_btn.isEnabled()
         assert next_btn.isEnabled()
@@ -1364,11 +1364,11 @@ def test_history_cascade_recompute():
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
-        action_A, action_B, action_C, _ob, _oc = _build_cascade_chain(panel, history)
-        downstream = history.get_downstream_actions(action_A)
-        assert downstream == [action_B, action_C]
-        assert history.get_downstream_actions(action_C) == []
-        assert history.get_downstream_actions(action_B) == [action_C]
+        action_a, action_b, action_c, _ob, _oc = _build_cascade_chain(panel, history)
+        downstream = history.get_downstream_actions(action_a)
+        assert downstream == [action_b, action_c]
+        assert not history.get_downstream_actions(action_c)
+        assert history.get_downstream_actions(action_b) == [action_c]
 
     # --- scenario: cascade recompute updates downstream outputs in place ---
     with datalab_test_app_context() as win:
@@ -1376,31 +1376,31 @@ def test_history_cascade_recompute():
         history.toggle_record_mode(True)
         history.toggle_edit_mode(True)
         panel = win.signalpanel
-        action_A, action_B, action_C, output_B, output_C = _build_cascade_chain(
+        action_a, action_b, action_c, output_b, output_c = _build_cascade_chain(
             panel, history
         )
-        uuid_B = get_uuid(output_B)
-        uuid_C = get_uuid(output_C)
-        data_B_before = output_B.xydata.copy()
-        data_C_before = output_C.xydata.copy()
+        uuid_b = get_uuid(output_b)
+        uuid_c = get_uuid(output_c)
+        data_b_before = output_b.xydata.copy()
+        data_c_before = output_c.xydata.copy()
         n_objects_before = len(panel.objmodel)
-        result_obj_A = panel.objmodel.get_object_from_number(2)
+        result_obj_a = panel.objmodel.get_object_from_number(2)
         panel.objview.select_objects([2])
-        assert panel.objprop.setup_processing_tab(result_obj_A, reset_params=False)
+        assert panel.objprop.setup_processing_tab(result_obj_a, reset_params=False)
         editor = panel.objprop.processing_param_editor
         assert editor is not None
         editor.dataset.sigma = 6.0
         report = panel.objprop.apply_processing_parameters(
-            result_obj_A, interactive=False
+            result_obj_a, interactive=False
         )
         assert report.success
-        assert action_A.kwargs["param"].sigma == 6.0
+        assert action_a.kwargs["param"].sigma == 6.0
         assert len(panel.objmodel) == n_objects_before
-        assert get_uuid(panel.objmodel[uuid_B]) == uuid_B
-        assert get_uuid(panel.objmodel[uuid_C]) == uuid_C
-        assert not np.array_equal(panel.objmodel[uuid_B].xydata, data_B_before)
-        assert not np.array_equal(panel.objmodel[uuid_C].xydata, data_C_before)
-        for a in (action_A, action_B, action_C):
+        assert get_uuid(panel.objmodel[uuid_b]) == uuid_b
+        assert get_uuid(panel.objmodel[uuid_c]) == uuid_c
+        assert not np.array_equal(panel.objmodel[uuid_b].xydata, data_b_before)
+        assert not np.array_equal(panel.objmodel[uuid_c].xydata, data_c_before)
+        for a in (action_a, action_b, action_c):
             assert a.is_stale is False
 
     # --- scenario: play on stale action triggers cascade ---
@@ -1408,16 +1408,16 @@ def test_history_cascade_recompute():
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
-        action_A, action_B, _aC, output_B, _oC = _build_cascade_chain(panel, history)
-        uuid_B = get_uuid(output_B)
-        output_B.xydata = output_B.xydata * 0.0
-        tampered = output_B.xydata.copy()
-        action_A.is_stale = True
-        _select_tree_item_for(history, action_A)
+        action_a, action_b, _ac, output_b, _oc = _build_cascade_chain(panel, history)
+        uuid_b = get_uuid(output_b)
+        output_b.xydata = output_b.xydata * 0.0
+        tampered = output_b.xydata.copy()
+        action_a.is_stale = True
+        _select_tree_item_for(history, action_a)
         history.replay_restore_actions(replay=True, restore_selection=False)
-        assert action_A.is_stale is False
-        assert action_B.is_stale is False
-        assert not np.array_equal(panel.objmodel[uuid_B].xydata, tampered)
+        assert action_a.is_stale is False
+        assert action_b.is_stale is False
+        assert not np.array_equal(panel.objmodel[uuid_b].xydata, tampered)
 
     # --- scenario: cascade in a duplicated session that is NOT [-1] ---
     with datalab_test_app_context() as win:
@@ -1425,9 +1425,9 @@ def test_history_cascade_recompute():
         history.toggle_record_mode(True)
         history.toggle_edit_mode(True)
         panel = win.signalpanel
-        action_A, _aB, _aC, _oB, output_C = _build_cascade_chain(panel, history)
-        uuid_C_orig = get_uuid(output_C)
-        data_C_orig = output_C.xydata.copy()
+        action_a, _ab, _ac, _ob, output_c = _build_cascade_chain(panel, history)
+        uuid_c_orig = get_uuid(output_c)
+        data_c_orig = output_c.xydata.copy()
         panel.objview.select_objects([4])
         panel.processor.run_feature(sips.derivative)
         sessions = history.history_sessions
@@ -1442,33 +1442,31 @@ def test_history_cascade_recompute():
         assert len(sessions) == 3
         dup_session = sessions[1]
         assert sessions[-1] is not dup_session
-        dup_action_A = next(
-            a for a in dup_session.actions if a.func_name == action_A.func_name
+        dup_action_a = next(
+            a for a in dup_session.actions if a.func_name == action_a.func_name
         )
-        dup_action_C = next(
+        dup_action_c = next(
             a for a in dup_session.actions if a.func_name == "moving_average"
         )
-        dup_output_C_uuid = history._action_output_uuid(dup_action_C)  # noqa: SLF001
-        assert dup_output_C_uuid is not None
-        data_dup_C_before = panel.objmodel[dup_output_C_uuid].xydata.copy()
-        dup_result_obj_A_uuid = history._action_output_uuid(  # noqa: SLF001
-            dup_action_A
-        )
-        assert dup_result_obj_A_uuid is not None
-        dup_result_obj_A = panel.objmodel[dup_result_obj_A_uuid]
-        panel.objview.select_objects([dup_result_obj_A_uuid])
-        assert panel.objprop.setup_processing_tab(dup_result_obj_A, reset_params=False)
+        dup_output_c_uuid = history.action_output_uuid(dup_action_c)
+        assert dup_output_c_uuid is not None
+        data_dup_c_before = panel.objmodel[dup_output_c_uuid].xydata.copy()
+        dup_result_obj_a_uuid = history.action_output_uuid(dup_action_a)
+        assert dup_result_obj_a_uuid is not None
+        dup_result_obj_a = panel.objmodel[dup_result_obj_a_uuid]
+        panel.objview.select_objects([dup_result_obj_a_uuid])
+        assert panel.objprop.setup_processing_tab(dup_result_obj_a, reset_params=False)
         editor = panel.objprop.processing_param_editor
         assert editor is not None
         editor.dataset.sigma = 10.0
         report = panel.objprop.apply_processing_parameters(
-            dup_result_obj_A, interactive=False
+            dup_result_obj_a, interactive=False
         )
         assert report.success
         assert not np.array_equal(
-            panel.objmodel[dup_output_C_uuid].xydata, data_dup_C_before
+            panel.objmodel[dup_output_c_uuid].xydata, data_dup_c_before
         )
-        assert np.array_equal(panel.objmodel[uuid_C_orig].xydata, data_C_orig)
+        assert np.array_equal(panel.objmodel[uuid_c_orig].xydata, data_c_orig)
 
 
 # ---------------------------------------------------------------------------

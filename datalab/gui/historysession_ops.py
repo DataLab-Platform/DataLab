@@ -166,10 +166,10 @@ def register_action_outputs(
          create new objects).
     """
     # Drop previous outputs for this action from the reverse index.
-    previous = panel._action_output_uuids.get(action.uuid, [])
+    previous = panel.action_output_uuids.get(action.uuid, [])
     for prev_uuid in previous:
-        if panel._output_to_action.get(prev_uuid) == action.uuid:
-            panel._output_to_action.pop(prev_uuid, None)
+        if panel.output_to_action.get(prev_uuid) == action.uuid:
+            panel.output_to_action.pop(prev_uuid, None)
     new_outputs = list(output_uuids)
     # Ownership transfer: if an output_uuid already belongs to a
     # *different* action, remove it from that action's output list so the
@@ -178,16 +178,16 @@ def register_action_outputs(
     # sessions to locate the object would be expensive; the panel-level
     # dicts are the source of truth.
     for out_uuid in new_outputs:
-        old_action_uuid = panel._output_to_action.get(out_uuid)
+        old_action_uuid = panel.output_to_action.get(out_uuid)
         if old_action_uuid is not None and old_action_uuid != action.uuid:
-            old_list = panel._action_output_uuids.get(old_action_uuid)
+            old_list = panel.action_output_uuids.get(old_action_uuid)
             if old_list is not None:
                 try:
                     old_list.remove(out_uuid)
                 except ValueError:
                     pass
                 if not old_list:
-                    del panel._action_output_uuids[old_action_uuid]
+                    del panel.action_output_uuids[old_action_uuid]
             _logger.debug(
                 "Output %s transferred from action %s to %s",
                 out_uuid,
@@ -195,9 +195,9 @@ def register_action_outputs(
                 action.uuid,
             )
     action.output_uuids = list(new_outputs)
-    panel._action_output_uuids[action.uuid] = new_outputs
+    panel.action_output_uuids[action.uuid] = new_outputs
     for out_uuid in new_outputs:
-        panel._output_to_action[out_uuid] = action.uuid
+        panel.output_to_action[out_uuid] = action.uuid
 
 
 @contextmanager

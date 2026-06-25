@@ -28,11 +28,11 @@ def replay_restore_actions(
 ) -> None:
     """Replay and/or restore selection for the selected actions."""
     panel.refresh_compatibility_items()
-    selected = panel.tree.get_selected_actions_or_sessions(panel._history_sessions)
+    selected = panel.tree.get_selected_actions_or_sessions(panel.history_sessions)
     if not selected:
-        if not panel._history_sessions:
+        if not panel.history_sessions:
             return
-        selected = [panel._history_sessions[-1]]
+        selected = [panel.history_sessions[-1]]
     for session_or_action in selected:
         if isinstance(session_or_action, HistoryAction) and session_or_action.is_stale:
             hrec.recompute_cascade(panel, session_or_action)
@@ -48,19 +48,19 @@ def replay_restore_actions(
                 )
             return
         if replay:
-            if panel._edit_mode and isinstance(session_or_action, HistoryAction):
+            if panel.edit_mode and isinstance(session_or_action, HistoryAction):
                 edit_mode_replay(panel, session_or_action)
-            elif panel._edit_mode and isinstance(session_or_action, HistorySession):
+            elif panel.edit_mode and isinstance(session_or_action, HistorySession):
                 view_only_session_replay(panel, session_or_action, restore_selection)
             else:
                 with panel.replaying(), panel.output_suppressed():
                     session_or_action.replay(
                         panel.mainwindow,
                         restore_selection=restore_selection,
-                        edit=panel._edit_mode,
+                        edit=panel.edit_mode,
                     )
         elif restore_selection:
-            if panel._edit_mode or panel.has_any_pending_edits():
+            if panel.edit_mode or panel.has_any_pending_edits():
                 restore_action_params(panel, session_or_action)
             else:
                 session_or_action.restore(panel.mainwindow)
@@ -76,23 +76,22 @@ def prompt_edit_action_params(
         if param is None:
             return None
         edited = copy.deepcopy(param)
-        if not edited.edit(parent=panel.mainwindow):
-            return False
-        action.snapshot_kwargs()
-        action.kwargs["param"] = edited
-        return True
-    if pattern == "1_to_n":
+        dialog_target: gds.DataSet | gds.DataSetGroup = edited
+        new_kwargs = {"param": edited}
+    elif pattern == "1_to_n":
         params = action.kwargs.get("params") or []
         if not params:
             return None
         edited_params = [copy.deepcopy(p) for p in params]
-        group = gds.DataSetGroup(edited_params, title=_("Parameters"))
-        if not group.edit(parent=panel.mainwindow):
-            return False
-        action.snapshot_kwargs()
-        action.kwargs["params"] = edited_params
-        return True
-    return None
+        dialog_target = gds.DataSetGroup(edited_params, title=_("Parameters"))
+        new_kwargs = {"params": edited_params}
+    else:
+        return None
+    if not dialog_target.edit(parent=panel.mainwindow):
+        return False
+    action.snapshot_kwargs()
+    action.kwargs.update(new_kwargs)
+    return True
 
 
 def edit_mode_replay(panel: HistoryPanel, action: HistoryAction) -> None:

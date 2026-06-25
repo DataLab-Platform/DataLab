@@ -200,12 +200,12 @@ def import_dlhist_into_new_session(panel: HistoryPanel, reader: NativeH5Reader) 
         new_session.number = panel.session_increment
         new_sessions.append(new_session)
         # Register output mappings for imported actions so that
-        # _resolve_target_outputs / get_downstream_actions work.
+        # resolve_target_outputs / get_downstream_actions work.
         for action in new_session.actions:
             if action.output_uuids:
-                panel._action_output_uuids[action.uuid] = list(action.output_uuids)
+                panel.action_output_uuids[action.uuid] = list(action.output_uuids)
                 for out_uuid in action.output_uuids:
-                    panel._output_to_action[out_uuid] = action.uuid
+                    panel.output_to_action[out_uuid] = action.uuid
     panel.history_sessions.extend(new_sessions)
     panel.tree.populate_tree(panel.history_sessions)
     panel.refresh_compatibility_items()
@@ -236,6 +236,7 @@ def deserialize_from_hdf5(
         reader: HDF5 reader
         reset_all: Unused (kept for compatibility with panel API)
     """
+    del reset_all  # required by the polymorphic panel API; unused here
     if panel.H5_PREFIX not in reader.h5:
         panel.history_sessions = []
         panel.session_increment = 0
@@ -250,14 +251,14 @@ def deserialize_from_hdf5(
     # Rebuild the bijective mapping from the loaded actions. Legacy
     # (v1) actions have empty ``output_uuids`` and contribute nothing
     # to the index — the heuristic fallback handles them.
-    panel._action_output_uuids = {}
-    panel._output_to_action = {}
+    panel.action_output_uuids = {}
+    panel.output_to_action = {}
     for session in panel.history_sessions:
         for action in session.actions:
             if action.output_uuids:
-                panel._action_output_uuids[action.uuid] = list(action.output_uuids)
+                panel.action_output_uuids[action.uuid] = list(action.output_uuids)
                 for out_uuid in action.output_uuids:
-                    panel._output_to_action[out_uuid] = action.uuid
+                    panel.output_to_action[out_uuid] = action.uuid
     panel.tree.populate_tree(panel.history_sessions)
     panel.refresh_compatibility_items()
     panel.update_actions_state()

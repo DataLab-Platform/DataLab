@@ -328,22 +328,7 @@ class HistorySession:
         # (intermediate actions are implicitly "closed" by the next
         # iteration's input restore).
         if self.actions:
-            last = self.actions[-1]
-            if last.kind == HistoryAction.KIND_COMPUTE:
-                hpanel = getattr(mainwindow, "historypanel", None)
-                if hpanel is not None:
-                    output_uuid = hpanel._action_output_uuid(last)
-                    if output_uuid:
-                        panel_str = last.panel_str or ""
-                        panel_map = uuid_remap.get(panel_str, {})
-                        mapped_uuid = panel_map.get(output_uuid, output_uuid)
-                        for panel in panels:
-                            if panel.PANEL_STR_ID == panel_str:
-                                try:
-                                    panel.objview.select_objects([mapped_uuid])
-                                except KeyError:
-                                    pass
-                                break
+            select_last_compute_output(mainwindow, panels, uuid_remap, self.actions[-1])
 
     def serialize(self, writer: NativeH5Writer) -> None:
         """Serialize this history session
@@ -390,3 +375,39 @@ class HistorySession:
         if action in self.actions:
             index = self.actions.index(action)
             self.actions = self.actions[:index]
+
+
+def select_last_compute_output(
+    mainwindow: DLMainWindow,
+    panels: tuple,
+    uuid_remap: dict[str, dict[str, str]],
+    last_action: HistoryAction,
+) -> None:
+    """Select the output of the last compute action after a session replay.
+
+    Visually closes the replay by highlighting the final result in its panel.
+    No-op when the last action is not a compute action or its output is gone.
+
+    Args:
+        mainwindow: DataLab's main window
+        panels: signal and image panels
+        uuid_remap: per-panel ``{old_uuid: new_uuid}`` mapping built during replay
+        last_action: last action of the replayed session
+    """
+    if last_action.kind != HistoryAction.KIND_COMPUTE:
+        return
+    hpanel = getattr(mainwindow, "historypanel", None)
+    if hpanel is None:
+        return
+    output_uuid = hpanel.action_output_uuid(last_action)
+    if not output_uuid:
+        return
+    panel_str = last_action.panel_str or ""
+    mapped_uuid = uuid_remap.get(panel_str, {}).get(output_uuid, output_uuid)
+    target_panel = next((p for p in panels if p.PANEL_STR_ID == panel_str), None)
+    if target_panel is None:
+        return
+    try:
+        target_panel.objview.select_objects([mapped_uuid])
+    except KeyError:
+        pass

@@ -58,15 +58,15 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self.setOrientation(QC.Qt.Vertical)
 
         self._record_mode = False
-        self._edit_mode = False
+        self.edit_mode = False
         self._replaying = False
         self._output_suppressed = False
         self._syncing = False
-        self._cascade_in_progress = False
+        self.cascade_in_progress = False
         self._delete_action: QW.QAction | None = None
         self._duplicate_action: QW.QAction | None = None
-        self._step_prev_action: QW.QAction | None = None
-        self._step_next_action: QW.QAction | None = None
+        self.step_prev_action: QW.QAction | None = None
+        self.step_next_action: QW.QAction | None = None
         self._restore_selection_action: QW.QAction | None = None
         self._edit_action: QW.QAction | None = None
         self._record_action: QW.QAction | None = None
@@ -94,14 +94,14 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
 
         self.addWidget(widget)
 
-        self._history_sessions: list[HistorySession] = []
+        self.history_sessions: list[HistorySession] = []
         self._session_increment = 0
-        self._action_output_uuids: dict[str, list[str]] = {}
-        self._output_to_action: dict[str, str] = {}
-        self._cascade_warnings: list[str] = []
-        self._broken_actions: set[str] = set()
-        self._reconnecting = False
-        self._obj_ids_snapshot: dict[str, set[str]] = {}
+        self.action_output_uuids: dict[str, list[str]] = {}
+        self.output_to_action: dict[str, str] = {}
+        self.cascade_warnings: list[str] = []
+        self.broken_actions: set[str] = set()
+        self.reconnecting = False
+        self.obj_ids_snapshot: dict[str, set[str]] = {}
         for panel in (self.mainwindow.signalpanel, self.mainwindow.imagepanel):
             panel.SIG_OBJECT_ADDED.connect(self.refresh_compatibility_items)
             panel.SIG_OBJECT_ADDED.connect(self.refresh_obj_ids_snapshot)
@@ -120,7 +120,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
 
     def refresh_obj_ids_snapshot(self) -> None:
         """Cache the current object ids of both data panels."""
-        self._obj_ids_snapshot = {
+        self.obj_ids_snapshot = {
             self.mainwindow.signalpanel.PANEL_STR_ID: set(
                 self.mainwindow.signalpanel.objmodel.get_object_ids()
             ),
@@ -135,26 +135,14 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         for action in (self._delete_action, self._duplicate_action):
             if action is not None:
                 action.setEnabled(has_history)
-        if self._step_prev_action is not None:
-            self._step_prev_action.setEnabled(self.can_step_prev())
-        if self._step_next_action is not None:
-            self._step_next_action.setEnabled(self.can_step_next())
+        if self.step_prev_action is not None:
+            self.step_prev_action.setEnabled(self.can_step_prev())
+        if self.step_next_action is not None:
+            self.step_next_action.setEnabled(self.can_step_next())
         if self._restore_selection_action is not None:
             self._restore_selection_action.setEnabled(
-                self._edit_mode or self.has_any_pending_edits()
+                self.edit_mode or self.has_any_pending_edits()
             )
-
-    __update_actions_state = update_actions_state
-
-    @property
-    def history_sessions(self) -> list[HistorySession]:
-        """Return mutable history sessions storage."""
-        return self._history_sessions
-
-    @history_sessions.setter
-    def history_sessions(self, sessions: list[HistorySession]) -> None:
-        """Replace history sessions storage."""
-        self._history_sessions = sessions
 
     @property
     def session_increment(self) -> int:
@@ -176,7 +164,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         mode snapshot (i.e. uncommitted edits that Restore can revert)."""
         return any(
             action.has_pending_edits
-            for session in self._history_sessions
+            for session in self.history_sessions
             for action in session.actions
         )
 
@@ -196,7 +184,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             toggled=self.toggle_edit_mode,
             icon=get_icon("edit_mode.svg"),
         )
-        edit_action.setChecked(self._edit_mode)
+        edit_action.setChecked(self.edit_mode)
         self._edit_action = edit_action
         record_action = create_action(
             self,
@@ -240,7 +228,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             icon=get_icon("duplicate.svg"),
             tip=_("Duplicate selected history action/session"),
         )
-        self._step_prev_action = create_action(
+        self.step_prev_action = create_action(
             self,
             _("Previous step"),
             triggered=self.step_prev,
@@ -248,7 +236,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             tip=_("Select the previous action in the current session"),
             shortcut=QG.QKeySequence("Ctrl+Left"),
         )
-        self._step_next_action = create_action(
+        self.step_next_action = create_action(
             self,
             _("Next step"),
             triggered=self.step_next,
@@ -284,8 +272,8 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             open_action,
             save_action,
             None,
-            self._step_prev_action,
-            self._step_next_action,
+            self.step_prev_action,
+            self.step_next_action,
             None,
             create_action(
                 self,
@@ -334,9 +322,9 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
                     self._edit_action.setChecked(True)
                     self._edit_action.blockSignals(False)
                 return
-        self._edit_mode = checked
+        self.edit_mode = checked
         if not checked:
-            for session in self._history_sessions:
+            for session in self.history_sessions:
                 for action in session.actions:
                     action.discard_snapshot()
         self.update_actions_state()
@@ -347,7 +335,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
 
     def is_edit_mode(self) -> bool:
         """Return True when the History panel is in edit mode."""
-        return self._edit_mode
+        return self.edit_mode
 
     @contextmanager
     def replaying(self) -> Generator[None, None, None]:
@@ -386,7 +374,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
 
     def get_action_from_uuid(self, uuid: str) -> HistoryAction:
         """Get the action from its UUID."""
-        for session in self._history_sessions:
+        for session in self.history_sessions:
             for action in session.actions:
                 if action.uuid == uuid:
                     return action
@@ -456,8 +444,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         """Return the UUID of the object produced by ``action``, or ``None``."""
         return hchain.action_output_uuid(self, action)
 
-    _action_output_uuid = action_output_uuid
-
     def action_consumes_any(self, action: HistoryAction, uuids: set[str]) -> bool:
         """Return True if ``action``'s input UUIDs intersect ``uuids``."""
         return hchain.action_consumes_any(action, uuids)
@@ -483,7 +469,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         return hchain.existing_input_uuids(panel, action)
 
     def prune_output_mapping(self) -> None:
-        """Drop entries of :attr:`_output_to_action` whose object no longer exists."""
+        """Drop entries of :attr:`output_to_action` whose object no longer exists."""
         return hchain.prune_output_mapping(self)
 
     def rewrite_action_source(
@@ -589,21 +575,21 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             return
         if item.parent() is None:
             index = self.tree.indexOfTopLevelItem(item)
-            if index < 0 or index >= len(self._history_sessions):
+            if index < 0 or index >= len(self.history_sessions):
                 return
-            session = self._history_sessions[index]
+            session = self.history_sessions[index]
             action = next(
                 (a for a in session.actions if a.kind == HistoryAction.KIND_COMPUTE),
                 None,
             )
-            if action is None:
-                return
         else:
             uuid = item.data(0, QC.Qt.UserRole)
             try:
-                action = self.tree.get_action_from_uuid(uuid, self._history_sessions)
+                action = self.tree.get_action_from_uuid(uuid, self.history_sessions)
             except ValueError:
-                return
+                action = None
+        if action is None:
+            return
 
         panel = self.resolve_panel_for_action(action)
         if panel is None:
@@ -638,7 +624,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             return None
         uuid = item.data(0, QC.Qt.UserRole)
         try:
-            return self.tree.get_action_from_uuid(uuid, self._history_sessions)
+            return self.tree.get_action_from_uuid(uuid, self.history_sessions)
         except ValueError:
             return None
 
@@ -648,14 +634,14 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         if item is not None:
             if item.parent() is None:
                 index = self.tree.indexOfTopLevelItem(item)
-                if 0 <= index < len(self._history_sessions):
-                    return self._history_sessions[index]
+                if 0 <= index < len(self.history_sessions):
+                    return self.history_sessions[index]
             else:
                 action = self.current_action()
                 if action is not None:
                     return self.find_parent_session(action)
-        if self._history_sessions:
-            return self._history_sessions[-1]
+        if self.history_sessions:
+            return self.history_sessions[-1]
         return None
 
     def can_step_prev(self) -> bool:
@@ -700,8 +686,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self.select_action_in_tree(session.actions[idx - 1])
         self.update_actions_state()
 
-    _step_prev = step_prev
-
     def step_next(self) -> None:
         """Select the next action in the current session."""
         if not self.can_step_next():
@@ -714,8 +698,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             target = session.actions[session.actions.index(action) + 1]
         self.select_action_in_tree(target)
         self.update_actions_state()
-
-    _step_next = step_next
 
     # ------------------------------------------------------------------
     # History tools delegations
@@ -733,7 +715,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         """Select top-level tree items matching ``sessions``."""
         self.tree.clearSelection()
         for session in sessions:
-            index = self._history_sessions.index(session)
+            index = self.history_sessions.index(session)
             item = self.tree.topLevelItem(index)
             item.setSelected(True)
             self.tree.setCurrentItem(item)
@@ -778,11 +760,11 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
 
     def __len__(self) -> int:
         """Return number of objects."""
-        return sum(len(session.actions) for session in self._history_sessions)
+        return sum(len(session.actions) for session in self.history_sessions)
 
     def __getitem__(self, nb: int) -> HistoryAction:
         """Return object from its number (1 to N)."""
-        for session in self._history_sessions:
+        for session in self.history_sessions:
             if nb <= len(session.actions):
                 return session.actions[nb - 1]
             nb -= len(session.actions)
@@ -790,7 +772,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
 
     def __iter__(self) -> Generator[HistoryAction, None, None]:
         """Iterate over objects."""
-        for session in self._history_sessions:
+        for session in self.history_sessions:
             yield from session.actions
 
     # ------------------------------------------------------------------
@@ -898,5 +880,5 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
     def remove_all_objects(self) -> None:
         """Remove all objects."""
         super().remove_all_objects()
-        self._action_output_uuids.clear()
-        self._output_to_action.clear()
+        self.action_output_uuids.clear()
+        self.output_to_action.clear()

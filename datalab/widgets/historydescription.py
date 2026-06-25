@@ -64,11 +64,13 @@ class CollapsibleDescriptionWidget(QW.QWidget):
         return self._html.strip() == html.escape(self._summary).strip()
 
     def on_toggled(self, checked: bool) -> None:
+        """Handle the expand/collapse toggle being toggled."""
         self._expanded = checked
         self.refresh_widget()
         self.toggled.emit(checked)
 
     def refresh_widget(self) -> None:
+        """Refresh the widget contents to match the current expanded state."""
         if self._expanded:
             self._toggle.setArrowType(QC.Qt.DownArrow)
             self._toggle.setToolTip(_("Hide details"))

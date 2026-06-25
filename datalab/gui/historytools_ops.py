@@ -154,13 +154,13 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
         new_sessions.append(new_session)
 
         # Register output mappings for cloned actions so that
-        # _resolve_target_outputs / get_downstream_actions work on
-        # the duplicated session (same logic as read_h5_data).
+        # resolve_target_outputs / get_downstream_actions work on
+        # the duplicated session (same logic as deserialize_from_hdf5).
         for action in new_session.actions:
             if action.output_uuids:
-                panel._action_output_uuids[action.uuid] = list(action.output_uuids)
+                panel.action_output_uuids[action.uuid] = list(action.output_uuids)
                 for out_uuid in action.output_uuids:
-                    panel._output_to_action[out_uuid] = action.uuid
+                    panel.output_to_action[out_uuid] = action.uuid
 
     # Insert each duplicated session immediately after its original.
     offset = 0

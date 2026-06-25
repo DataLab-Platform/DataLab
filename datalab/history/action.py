@@ -9,16 +9,13 @@ import inspect
 import json
 import logging
 import os
+from contextlib import nullcontext
 from typing import TYPE_CHECKING, Any, Callable, Generator
 from uuid import uuid4
 
 import sigima.proc.image
 import sigima.proc.signal
 from guidata.dataset.datatypes import DataSet
-from sigima.objects import (  # noqa: F401  (kept for downstream consumers)
-    ImageObj,
-    SignalObj,
-)
 
 from datalab.config import _
 from datalab.gui import ObjItf
@@ -60,6 +57,11 @@ class HistoryAction(ObjItf):
     # Methods that create new data objects. During non-persistent (output-suppressed)
     # replay, these UI actions are skipped so the panel object count stays stable.
     UI_CREATION_METHODS: frozenset[str] = frozenset({"new_object"})
+    # UI methods that destroy data objects. Replaying these requires that the
+    # captured selection still resolves to existing objects (see ``_replay_ui``).
+    DESTRUCTIVE_METHODS: frozenset[str] = frozenset(
+        {"remove_object", "remove_group", "delete_all_objects"}
+    )
 
     def __init__(
         self,
@@ -375,8 +377,8 @@ class HistoryAction(ObjItf):
             imports.add(f"from {param_module} import {param_class}")
             lines.append(f"{param_var} = {param_class}()")
             # Reconstruct each attribute
-            for item in param._items:  # noqa: SLF001
-                attr_name = item._name  # noqa: SLF001
+            for item in param.get_items():
+                attr_name = item.get_name()
                 value = getattr(param, attr_name, None)
                 if value is not None:
                     lines.append(f"{param_var}.{attr_name} = {value!r}")
@@ -495,8 +497,6 @@ class HistoryAction(ObjItf):
         if hpanel is not None:
             ctx = hpanel.replaying()
         else:
-            from contextlib import nullcontext
-
             ctx = nullcontext()
         with ctx:
             self._replay_inner(mainwindow, restore_selection, edit, uuid_remap)
@@ -523,7 +523,7 @@ class HistoryAction(ObjItf):
             translated = self._translate_state(uuid_remap)
             if translated.is_current_state_compatible(mainwindow, False):
                 translated.restore(mainwindow)
-            self._replay_compute(mainwindow, edit, uuid_remap)
+            self.replay_compute(mainwindow, edit, uuid_remap)
         else:
             if restore_selection:
                 self.state.restore(mainwindow)
@@ -548,7 +548,7 @@ class HistoryAction(ObjItf):
             }
         return translated
 
-    def _replay_compute(
+    def replay_compute(
         self,
         mainwindow: DLMainWindow,
         edit: bool,
@@ -615,8 +615,7 @@ class HistoryAction(ObjItf):
         # objects but the captured selection no longer resolves to existing
         # UUIDs in the target panel, skip the call rather than delete whatever
         # is currently selected (which would silently destroy unrelated data).
-        DESTRUCTIVE_METHODS = {"remove_object", "remove_group", "delete_all_objects"}
-        if self.method_name in DESTRUCTIVE_METHODS:
+        if self.method_name in self.DESTRUCTIVE_METHODS:
             if target is None:
                 _logger.warning(
                     "Skipping destructive replay '%s': target '%s' not found",
@@ -632,7 +631,7 @@ class HistoryAction(ObjItf):
                     if o is not None
                 }
                 captured = set(self.state.selection.get(panel_str, []))
-                if not (captured & existing_uuids):
+                if not captured & existing_uuids:
                     _logger.warning(
                         "Skipping destructive replay '%s': none of the captured "
                         "UUIDs %s exist in panel '%s' anymore",
