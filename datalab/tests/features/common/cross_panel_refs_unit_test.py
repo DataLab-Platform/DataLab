@@ -195,3 +195,27 @@ def test_cross_panel_group_reference_renders_and_follows_rename() -> None:
     # Renaming the image group is reflected in the signal group's long name:
     igroup.title = "Renamed images"
     assert smodel.get_display_title(sgroup, True) == "average profile(Renamed images)"
+
+
+def test_reference_to_empty_name_keeps_short_id() -> None:
+    """When a referenced source has an empty title, its short ID is kept in the
+    rendered (long-name) display instead of rendering an empty name."""
+    smodel, imodel = _linked_models()
+
+    # An image group with no name, containing one image -> gi001:
+    igroup = imodel.add_group("")
+    img = create_image("First image", np.zeros((4, 4)))
+    imodel.add_object(img, get_uuid(igroup))
+    assert get_short_id(igroup) == "gi001"
+
+    sgroup = smodel.add_group("average profile(gi001)")
+    sig = create_signal("average profile(i001)", x=[0.0, 1.0], y=[1.0, 2.0])
+    smodel.add_object(sig, get_uuid(sgroup))
+
+    # The empty image-group name must not blank out the reference: the short ID
+    # stays visible in the long-name display too:
+    assert smodel.get_display_title(sgroup, True) == "average profile(gi001)"
+
+    # Once the image group gets a name, the long-name display uses it:
+    igroup.title = "My images"
+    assert smodel.get_display_title(sgroup, True) == "average profile(My images)"

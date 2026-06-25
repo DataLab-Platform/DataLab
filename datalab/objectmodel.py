@@ -621,17 +621,21 @@ class ObjectModel:
                 if frozen is None:
                     parts.append(title[start:end])
                 else:
-                    parts.append(self.__render(frozen, registry, seen | {ref}))
+                    rendered = self.__render(frozen, registry, seen | {ref})
+                    # Keep the short reference if the source title is empty, so
+                    # the reference stays visible (rather than rendering nothing):
+                    parts.append(rendered if rendered.strip() else title[start:end])
             else:
                 source = self.find_by_short_id(ref, include_siblings=True)
                 if source is None:
                     parts.append(title[start:end])
                 else:
-                    parts.append(
-                        self.__render(
-                            source.title, self.__get_registry(source), seen | {ref}
-                        )
+                    rendered = self.__render(
+                        source.title, self.__get_registry(source), seen | {ref}
                     )
+                    # Keep the short reference if the source title is empty, so
+                    # the reference stays visible (rather than rendering nothing):
+                    parts.append(rendered if rendered.strip() else title[start:end])
             last = end
         parts.append(title[last:])
         return "".join(parts)
