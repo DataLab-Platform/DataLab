@@ -102,3 +102,69 @@ def test_intra_panel_reference_unaffected_by_sibling() -> None:
 
     # Image model has no objects referencing signals: it stays untouched.
     assert not list(imodel)
+
+
+def test_cross_panel_reference_renders_long_name() -> None:
+    """A cross-panel reference is rendered as the source image's long name."""
+    smodel, imodel = _linked_models()
+
+    igroup = imodel.add_group("Images")
+    img = create_image("First image", np.zeros((4, 4)))
+    imodel.add_object(img, get_uuid(igroup))  # i001
+
+    sgroup = smodel.add_group("Signals")
+    sig = create_signal("average profile(i001)", x=[0.0, 1.0], y=[1.0, 2.0])
+    smodel.add_object(sig, get_uuid(sgroup))
+
+    # Raw (short-ID) form is preserved when long names are not requested:
+    assert smodel.get_display_title(sig, False) == "average profile(i001)"
+
+    # When long names are requested, the cross-panel reference resolves to the
+    # referenced image's title:
+    assert smodel.get_display_title(sig, True) == "average profile(First image)"
+
+
+def test_cross_panel_deleted_image_freezes_reference() -> None:
+    """Deleting a referenced image freezes the cross-panel reference (long name)."""
+    smodel, imodel = _linked_models()
+
+    igroup = imodel.add_group("Images")
+    img = create_image("First image", np.zeros((4, 4)))
+    imodel.add_object(img, get_uuid(igroup))  # i001
+
+    sgroup = smodel.add_group("Signals")
+    sig = create_signal("average profile(i001)", x=[0.0, 1.0], y=[1.0, 2.0])
+    smodel.add_object(sig, get_uuid(sgroup))
+
+    # Delete the referenced image: the signal reference is frozen into a stable
+    # deleted token, with the deleted image's title kept in the registry.
+    imodel.remove_object(img)
+
+    assert sig.title == "average profile(id001)"
+    assert smodel.get_deleted_refs(sig) == {"id001": "First image"}
+
+    # Short-ID display keeps the deleted token; long-name display shows the
+    # frozen title of the deleted image:
+    assert smodel.get_display_title(sig, False) == "average profile(id001)"
+    assert smodel.get_display_title(sig, True) == "average profile(First image)"
+
+
+def test_cross_panel_reference_follows_image_delete() -> None:
+    """A surviving cross-panel reference follows renumbering on image deletion."""
+    smodel, imodel = _linked_models()
+
+    igroup = imodel.add_group("Images")
+    img1 = create_image("First image", np.zeros((4, 4)))
+    img2 = create_image("Second image", np.ones((4, 4)))
+    imodel.add_object(img1, get_uuid(igroup))  # i001
+    imodel.add_object(img2, get_uuid(igroup))  # i002
+
+    sgroup = smodel.add_group("Signals")
+    sig = create_signal("average profile(i002)", x=[0.0, 1.0], y=[1.0, 2.0])
+    smodel.add_object(sig, get_uuid(sgroup))
+
+    # Delete the first image: the second image is renumbered i002 -> i001, and
+    # the signal reference must follow the physical source:
+    imodel.remove_object(img1)
+    assert get_short_id(img2) == "i001"
+    assert sig.title == "average profile(i001)"

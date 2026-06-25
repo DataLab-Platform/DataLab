@@ -391,14 +391,18 @@ class ObjectModel:
         raise KeyError(f"Object or group with uuid {uuid} not found")
 
     def find_by_short_id(
-        self, short_id: str
+        self, short_id: str, include_siblings: bool = False
     ) -> SignalObj | ImageObj | ObjectGroup | None:
         """Return the object or group whose short ID matches ``short_id``,
-        or ``None`` if no match is found in this model.
+        or ``None`` if no match is found.
 
         Args:
             short_id: short ID to look up (e.g. ``"s001"``, ``"i012"``,
              ``"gs003"`` or ``"gi007"``).
+            include_siblings: if ``True``, also search the sibling models when
+             no match is found in this model. Defaults to ``False`` (search
+             this model only), which is the contract relied upon by callers
+             that need to know which panel owns the match.
 
         Returns:
             The matching :class:`sigima.SignalObj`, :class:`sigima.ImageObj`
@@ -410,7 +414,31 @@ class ObjectModel:
         for obj in self._objects.values():
             if get_short_id(obj) == short_id:
                 return obj
+        if include_siblings:
+            for sibling in self._sibling_models:
+                source = sibling.find_by_short_id(short_id)
+                if source is not None:
+                    return source
         return None
+
+    def __model_owning_group(self, group: ObjectGroup) -> ObjectModel:
+        """Return the model (this one or a sibling) whose group list contains
+        ``group``. Group deleted-reference registries live in their owning
+        model's store, so cross-panel access must be routed to the right model.
+
+        Args:
+            group: group to locate
+
+        Returns:
+            The owning model (defaults to ``self`` if not found).
+        """
+        if any(group is grp for grp in self._groups):
+            return self
+        for sibling in self._sibling_models:
+            # pylint: disable=protected-access
+            if any(group is grp for grp in sibling._groups):
+                return sibling
+        return self
 
     def __get_registry(
         self, obj_or_group: SignalObj | ImageObj | ObjectGroup
@@ -425,7 +453,9 @@ class ObjectModel:
             Mapping ``token -> frozen canonical title`` (may be empty).
         """
         if isinstance(obj_or_group, ObjectGroup):
-            return self._group_deleted_refs.get(obj_or_group.uuid, {})
+            owner = self.__model_owning_group(obj_or_group)
+            # pylint: disable=protected-access
+            return owner._group_deleted_refs.get(obj_or_group.uuid, {})
         return obj_or_group.metadata.get(DELETED_REF_KEY, {})
 
     def __ensure_registry(
@@ -442,7 +472,9 @@ class ObjectModel:
             The mutable registry dict.
         """
         if isinstance(obj_or_group, ObjectGroup):
-            return self._group_deleted_refs.setdefault(obj_or_group.uuid, {})
+            owner = self.__model_owning_group(obj_or_group)
+            # pylint: disable=protected-access
+            return owner._group_deleted_refs.setdefault(obj_or_group.uuid, {})
         return obj_or_group.metadata.setdefault(DELETED_REF_KEY, {})
 
     def get_deleted_refs(
@@ -520,6 +552,15 @@ class ObjectModel:
             obj for obj in self._objects.values() if obj is not deleted
         ]
         dependents += [group for group in self._groups if group is not deleted]
+        # Cross-panel dependents: a title in the other panel may reference the
+        # object being deleted (e.g. a signal extracted from a deleted image),
+        # so freeze those references too.
+        for sibling in self._sibling_models:
+            # pylint: disable=protected-access
+            dependents += [
+                obj for obj in sibling._objects.values() if obj is not deleted
+            ]
+            dependents += [group for group in sibling._groups if group is not deleted]
         for dependent in dependents:
             registry = self.__get_registry(dependent)
             in_title = bool(token_re.search(dependent.title))
@@ -582,7 +623,7 @@ class ObjectModel:
                 else:
                     parts.append(self.__render(frozen, registry, seen | {ref}))
             else:
-                source = self.find_by_short_id(ref)
+                source = self.find_by_short_id(ref, include_siblings=True)
                 if source is None:
                     parts.append(title[start:end])
                 else:
@@ -849,11 +890,15 @@ class ObjectModel:
         # Freeze references to this object into stable deleted-reference tokens,
         # while titles are still in canonical short-ID form:
         self.__freeze_deleted_object_refs(obj)
+        # Keep references to *surviving* objects valid across the renumbering
+        # (intra-panel and cross-panel), like remove_group does:
+        self.replace_short_ids_by_uuids_in_titles()
         for group in self._groups:
             if obj in group:
                 group.remove(obj)
         del self._objects[get_uuid(obj)]
         self.reset_short_ids()
+        self.replace_uuids_by_short_ids_in_titles()
 
     def get_object_from_number(self, number: int) -> SignalObj | ImageObj:
         """Return object from its number.

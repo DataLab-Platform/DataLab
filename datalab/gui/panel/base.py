@@ -1925,6 +1925,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             self.objview.remove_item(get_uuid(group), refresh=False)
             self.objmodel.remove_group(group)
         self.objview.update_tree()
+        # Deleting objects may freeze or renumber cross-panel references in the
+        # sibling panel's titles, so refresh that panel's view too:
+        self.objview._refresh_sibling_panels()  # pylint: disable=protected-access
         self.selection_changed(update_items=True)
         self.SIG_OBJECT_REMOVED.emit()
 

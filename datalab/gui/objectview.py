@@ -575,13 +575,14 @@ class ObjectView(SimpleObjectTree):
             self.set_current_item_id(get_uuid(obj))
 
     def _refresh_sibling_panels(self) -> None:
-        """Refresh sibling panels after a reorder.
+        """Refresh sibling panels after a reorder or deletion.
 
-        Reordering this panel renumbers its objects, which may change cross-panel
-        short IDs embedded in the *other* panel's titles (e.g. a signal extracted
-        from an image references it as ``i001``). The sibling object models are
-        updated automatically, but their views are not, so refresh the sibling
-        tree and plot here to reflect the new titles (and curve legends).
+        Reordering or deleting objects in this panel renumbers (or freezes) its
+        objects, which may change cross-panel short IDs embedded in the *other*
+        panel's titles (e.g. a signal extracted from an image references it as
+        ``i001``). The sibling object models are updated automatically, but their
+        views are not, so refresh the sibling tree and plot here to reflect the
+        new titles (and curve legends).
         """
         panel: BaseDataPanel = self.parent()
         mainwindow = getattr(panel, "mainwindow", None)

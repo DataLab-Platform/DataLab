@@ -15,6 +15,7 @@ though the reorder happens in the image panel.
 import numpy as np
 from sigima.objects import create_image, create_signal
 
+from datalab.config import Conf
 from datalab.objectmodel import get_short_id, get_uuid
 from datalab.tests import datalab_test_app_context
 
@@ -22,6 +23,7 @@ from datalab.tests import datalab_test_app_context
 def test_cross_panel_reference_view_follows_image_reorder():
     """Reordering images updates a cross-panel reference in a signal title/view."""
     with datalab_test_app_context() as win:
+        orig_mode = Conf.proc.result_title_mode.get()
         ipanel, spanel = win.imagepanel, win.signalpanel
 
         # Two images in the image panel: img1 -> i001, img2 -> i002
@@ -51,7 +53,56 @@ def test_cross_panel_reference_view_follows_image_reorder():
         # Stored signal title follows the physical source:
         assert sig.title == "average profile(i002)"
 
-        # The signal panel view (object tree) reflects the updated reference:
+        # In short-ID mode, the signal panel view (object tree) reflects the
+        # updated short reference:
+        Conf.proc.result_title_mode.set("short_id")
+        spanel.objview.update_tree()
         text = spanel.objview.get_item_from_id(get_uuid(sig)).text(0)
         assert "i002" in text
         assert "i001" not in text
+
+        # In title mode, the cross-panel reference is rendered as the long name
+        # of the (reordered) physical source image:
+        Conf.proc.result_title_mode.set("title")
+        spanel.objview.update_tree()
+        text = spanel.objview.get_item_from_id(get_uuid(sig)).text(0)
+        assert "First image" in text
+        assert "i002" not in text
+
+        Conf.proc.result_title_mode.set(orig_mode)
+
+
+def test_cross_panel_reference_view_follows_image_delete():
+    """Deleting a referenced image updates the cross-panel reference in the view."""
+    with datalab_test_app_context() as win:
+        orig_mode = Conf.proc.result_title_mode.get()
+        ipanel, spanel = win.imagepanel, win.signalpanel
+
+        # One image referenced by a signal:
+        img = create_image("First image", np.zeros((8, 8)))
+        ipanel.add_object(img)
+        assert get_short_id(img) == "i001"
+        sig = create_signal(
+            "average profile(i001)", x=[0.0, 1.0, 2.0], y=[1.0, 2.0, 3.0]
+        )
+        spanel.add_object(sig)
+
+        # Delete the source image (frozen into a stable deleted token):
+        iview = ipanel.objview
+        iview.select_objects([img])
+        ipanel.remove_object(force=True)
+        assert sig.title == "average profile(id001)"
+
+        # In short-ID mode, the signal view shows the deleted token:
+        Conf.proc.result_title_mode.set("short_id")
+        spanel.objview.update_tree()
+        text = spanel.objview.get_item_from_id(get_uuid(sig)).text(0)
+        assert "id001" in text
+
+        # In title mode, the signal view shows the deleted image's long name:
+        Conf.proc.result_title_mode.set("title")
+        spanel.objview.update_tree()
+        text = spanel.objview.get_item_from_id(get_uuid(sig)).text(0)
+        assert "First image" in text
+
+        Conf.proc.result_title_mode.set(orig_mode)
