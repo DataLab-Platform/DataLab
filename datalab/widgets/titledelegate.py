@@ -179,23 +179,17 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
         accent = palette.color(QG.QPalette.Active, QG.QPalette.Highlight)
         if selected:
             text_color = palette.color(QG.QPalette.Active, QG.QPalette.HighlightedText)
-            # On dark themes the selection background *is* the accent color,
-            # so a plain accent-colored link would vanish: blend it 50/50
-            # with ``HighlightedText`` (typically white) to obtain a lighter
-            # tint that still reads as the same hue. On light themes the
-            # accent stays distinguishable on the highlight background, so
-            # we keep the unselected color for visual consistency.
-            base_is_light = (
-                palette.color(QG.QPalette.Active, QG.QPalette.Base).lightness() > 128
+            # The selection background IS the accent colour (QPalette.Highlight),
+            # so using accent directly as link colour makes links invisible on both
+            # light and dark themes. Blend HighlightedText (which always contrasts
+            # with the selection background) with the accent at 2:1 to get a tinted
+            # colour that is both visible against the selection background and
+            # visually distinct from regular selected text:
+            link_color = QG.QColor(
+                (text_color.red() * 2 + accent.red()) // 3,
+                (text_color.green() * 2 + accent.green()) // 3,
+                (text_color.blue() * 2 + accent.blue()) // 3,
             )
-            if base_is_light:
-                link_color = accent
-            else:
-                link_color = QG.QColor(
-                    (accent.red() + text_color.red()) // 2,
-                    (accent.green() + text_color.green()) // 2,
-                    (accent.blue() + text_color.blue()) // 2,
-                )
         else:
             text_color = palette.color(QG.QPalette.Active, QG.QPalette.Text)
             link_color = accent
