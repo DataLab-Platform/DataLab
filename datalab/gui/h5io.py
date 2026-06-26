@@ -96,6 +96,12 @@ class H5InputOutput:
                     if progress.wasCanceled():
                         break
             reader.close()
+            # Both panels are now fully populated: repopulate their trees so that
+            # cross-panel references (e.g. a signal titled "fft(i001)") resolve to
+            # the source object's long name (the panels are deserialized in turn,
+            # so the source may not have existed yet when the reference was first
+            # rendered):
+            self.mainwindow.repopulate_panel_trees()
         except KeyError:
             if progress is not None:
                 # KeyError was encoutered when deserializing datasets (DataLab data
@@ -160,6 +166,12 @@ class H5InputOutput:
                                 break
                             self.__add_object_from_node(node)
                 self.__eventually_show_warnings()
+                # Objects are added incrementally and each panel only refreshes
+                # its own tree on insertion. Cross-panel references (e.g. a
+                # signal titled "fft(i001)") cannot be resolved to the source's
+                # long name until *both* panels are fully populated, so repopulate
+                # both trees once the whole import is done:
+                self.mainwindow.repopulate_panel_trees()
         h5browser.cleanup()
 
     def import_dataset_from_file(self, filename: str, dsetname: str) -> None:

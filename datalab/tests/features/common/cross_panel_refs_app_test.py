@@ -12,12 +12,14 @@ though the reorder happens in the image panel.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
+import os.path as osp
+
 import numpy as np
 from sigima.objects import create_image, create_signal
 
 from datalab.config import Conf
 from datalab.objectmodel import get_short_id, get_uuid
-from datalab.tests import datalab_test_app_context
+from datalab.tests import datalab_test_app_context, helpers
 
 
 def test_cross_panel_reference_view_follows_image_reorder():
@@ -145,3 +147,47 @@ def test_cross_panel_group_rename_refreshes_sibling_view():
         assert "My images" not in text
 
         Conf.proc.result_title_mode.set(orig_mode)
+
+
+def test_cross_panel_reference_resolves_on_workspace_open():
+    """Opening a workspace whose signal references an image renders the image's
+    long name immediately in title mode, without needing to toggle the mode.
+
+    Regression: panels are deserialized in turn (signal before image), so when
+    the signal item is first rendered the referenced image does not exist yet
+    and only the short ID is shown. The load must repopulate both panel trees
+    once every panel is fully loaded, otherwise the stale short ID lingers until
+    the user toggles the result-title mode (which forces a full repopulate).
+    """
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        with datalab_test_app_context() as win:
+            orig_mode = Conf.proc.result_title_mode.get()
+            try:
+                ipanel, spanel = win.imagepanel, win.signalpanel
+
+                img = create_image("First image", np.zeros((8, 8)))
+                ipanel.add_object(img)
+                assert get_short_id(img) == "i001"
+                sig = create_signal(
+                    "average profile(i001)", x=[0.0, 1.0, 2.0], y=[1.0, 2.0, 3.0]
+                )
+                spanel.add_object(sig)
+
+                fname = osp.join(tmpdir, "cross_panel.h5")
+                win.save_h5_workspace(fname)
+
+                # Render long names, then reload through the native deserialize
+                # path used by the GUI (which resets everything first):
+                Conf.proc.result_title_mode.set("title")
+                win.h5inputoutput.open_file(fname, import_all=True, reset_all=True)
+
+                # The reloaded signal view must show the image's long name right
+                # away (no manual mode toggle / tree refresh):
+                loaded_sig = next(iter(win.signalpanel.objmodel))
+                text = win.signalpanel.objview.get_item_from_id(
+                    get_uuid(loaded_sig)
+                ).text(0)
+                assert "First image" in text
+                assert "i001" not in text
+            finally:
+                Conf.proc.result_title_mode.set(orig_mode)
