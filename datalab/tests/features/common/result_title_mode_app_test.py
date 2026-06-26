@@ -68,3 +68,56 @@ def test_result_title_mode_app():
 
 if __name__ == "__main__":
     test_result_title_mode_app()
+
+
+def test_result_title_mode_updates_plot_legend():
+    """Switching result-title mode updates the plot legend label immediately.
+
+    When the mode is "title", the curve's ``param.label`` (shown in the plot
+    legend) must display the resolved long name instead of the raw short ID.
+    Toggling back to "short_id" must restore the canonical short-ID label.
+    """
+    previous_mode = Conf.proc.result_title_mode.get()
+    try:
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            s1 = create_signal_from_param(CosineParam.create(size=100))
+            s1.title = "My cosine"
+            panel.add_object(s1)
+
+            panel.processor.run_feature("fft")
+            result = panel.objmodel.get_all_objects()[-1]
+            result_uuid = get_uuid(result)
+            # Stored title references the source short ID:
+            assert "s001" in result.title
+
+            # Short-ID mode: plot label matches the raw stored title.
+            Conf.proc.result_title_mode.set("short_id")
+            panel.refresh_plot("all", update_items=True, force=True)
+            label_short = panel.plothandler[result_uuid].param.label
+            assert "s001" in label_short
+            assert "My cosine" not in label_short
+
+            # Title mode: plot label shows the resolved source title.
+            Conf.proc.result_title_mode.set("title")
+            panel.refresh_plot("all", update_items=True, force=True)
+            label_long = panel.plothandler[result_uuid].param.label
+            assert "My cosine" in label_long
+            assert "s001" not in label_long
+
+            # Stored title is unchanged in both modes.
+            assert "s001" in result.title
+
+            # Toggle back: plot label returns to short IDs.
+            Conf.proc.result_title_mode.set("short_id")
+            panel.refresh_plot("all", update_items=True, force=True)
+            label_back = panel.plothandler[result_uuid].param.label
+            assert "s001" in label_back
+            assert "My cosine" not in label_back
+    finally:
+        Conf.proc.result_title_mode.set(previous_mode)
+
+
+if __name__ == "__main__":
+    test_result_title_mode_app()
+    test_result_title_mode_updates_plot_legend()

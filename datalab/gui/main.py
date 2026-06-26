@@ -2523,8 +2523,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     )
             if option == "result_title_mode":
                 # Re-render result titles in the object trees (display only)
+                # and update the plot legend labels to match:
                 for panel in (self.signalpanel, self.imagepanel):
                     panel.objview.populate_tree()
+                    panel.refresh_plot("all", update_items=True, force=True)
             if option == "color_mode":
                 self.__update_color_mode()
             if option == "show_console_on_error":

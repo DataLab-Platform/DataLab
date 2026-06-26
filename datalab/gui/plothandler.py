@@ -292,6 +292,12 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         item.set_readonly(True)
         self[oid] = item
         self.plot.add_item(item)
+        # In "title" mode override the raw label set by make_item():
+        if Conf.proc.result_title_mode.get() == "title":
+            if hasattr(item, "param") and hasattr(item.param, "label"):
+                item.param.label = self.panel.objmodel.get_display_title(
+                    obj, use_titles=True
+                )
         return item
 
     def __update_item_on_plot(self, oid: str, just_show: bool = False) -> None:
@@ -310,6 +316,15 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
             self.__cached_hashes[obj] = new_hash
             adapter = create_adapter_from_object(obj)
             adapter.update_item(self[oid], data_changed=data_changed)
+            # In "title" mode the adapter has set item.param.label to the raw
+            # stored title (short IDs). Override it with the rendered long name
+            # so the plot legend matches what the object tree shows:
+            if Conf.proc.result_title_mode.get() == "title":
+                item = self[oid]
+                if hasattr(item, "param") and hasattr(item.param, "label"):
+                    item.param.label = self.panel.objmodel.get_display_title(
+                        obj, use_titles=True
+                    )
 
     def set_auto_refresh(self, auto_refresh: bool) -> None:
         """Set auto refresh mode.
