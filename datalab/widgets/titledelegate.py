@@ -31,34 +31,81 @@ if TYPE_CHECKING:
 #: URL scheme used in anchors emitted by :class:`ClickableTitleDelegate`.
 SHORT_ID_URL_SCHEME = "dlb-shortid"
 
+#: Item data role holding explicit link spans for the display text, as a list of
+#: ``(start, end, target_short_id)`` tuples. Used in "title" (long-name) display
+#: mode, where the resolved long names no longer contain the literal short IDs:
+#: the spans tell the delegate which substrings to render as clickable links and
+#: which short ID each one points to. When this role is empty/absent, the
+#: delegate falls back to detecting literal short IDs in the text.
+LINK_SPANS_ROLE = QC.Qt.UserRole + 100
 
-def _build_html(text: str) -> str:
-    """Build the HTML representation of ``text`` with short IDs wrapped in
-    anchors.
 
-    The first short ID occurrence is always rendered as plain text: object
-    titles in DataLab tree views are formatted as ``"<short_id>: <title>"`` and
-    making the leading ``s001`` clickable would just re-select the current
-    item.
+def _links_from_text(text: str) -> list[tuple[int, int, str]]:
+    """Return the link spans derived from the literal short IDs found in
+    ``text``, skipping the leading ``"<short_id>:"`` prefix (which would just
+    re-select the current item).
 
     Args:
-        text: raw item text (e.g. ``"s003: average(s001, s002)"``).
+        text: item display text
+
+    Returns:
+        List of ``(start, end, target_short_id)`` tuples, sorted by ``start``.
+    """
+    links: list[tuple[int, int, str]] = []
+    for idx, (start, end, sid) in enumerate(find_short_ids_in_title(text)):
+        if idx == 0 and start == 0:
+            # Leading "s001:" — keep as plain text
+            continue
+        links.append((start, end, sid))
+    return links
+
+
+def _links_for_index(index: QC.QModelIndex) -> list[tuple[int, int, str]]:
+    """Return the link spans ``(start, end, target_short_id)`` to render for
+    ``index``.
+
+    Explicit spans stored under :data:`LINK_SPANS_ROLE` take precedence (used in
+    long-name display mode). Otherwise, literal short IDs found in the text are
+    used, skipping the leading ``"<short_id>:"`` prefix (which would just
+    re-select the current item).
+
+    Args:
+        index: model index of the item
+
+    Returns:
+        List of ``(start, end, target_short_id)`` tuples, sorted by ``start``.
+    """
+    spans = index.data(LINK_SPANS_ROLE)
+    if spans:
+        return [(int(start), int(end), str(target)) for start, end, target in spans]
+    text = index.data(QC.Qt.DisplayRole) or ""
+    if not isinstance(text, str):
+        return []
+    return _links_from_text(text)
+
+
+def _build_html(text: str, links: list[tuple[int, int, str]]) -> str:
+    """Build the HTML representation of ``text`` with ``links`` wrapped in
+    anchors.
+
+    Args:
+        text: raw item display text.
+        links: list of ``(start, end, target_short_id)`` spans to turn into
+         anchors (the displayed substring is the anchor text, the target short
+         ID is encoded in the anchor href).
 
     Returns:
         HTML string.
     """
-    matches = find_short_ids_in_title(text)
-    if not matches:
+    if not links:
         return escape(text)
     out: list[str] = []
     cursor = 0
-    for idx, (start, end, sid) in enumerate(matches):
+    for start, end, target in links:
         out.append(escape(text[cursor:start]))
-        if idx == 0 and start == 0:
-            # Leading "s001:" — keep as plain text
-            out.append(escape(sid))
-        else:
-            out.append(f'<a href="{SHORT_ID_URL_SCHEME}:{sid}">{escape(sid)}</a>')
+        out.append(
+            f'<a href="{SHORT_ID_URL_SCHEME}:{target}">{escape(text[start:end])}</a>'
+        )
         cursor = end
     out.append(escape(text[cursor:]))
     return "".join(out)
@@ -68,6 +115,7 @@ def _make_text_document(
     text: str,
     option: QW.QStyleOptionViewItem,
     link_color: QG.QColor,
+    links: list[tuple[int, int, str]],
     text_color: QG.QColor | None = None,
 ) -> QG.QTextDocument:
     """Return a :class:`QTextDocument` rendering ``text`` with the styling
@@ -85,7 +133,7 @@ def _make_text_document(
     if text_color is not None:
         css_parts.append(f"body, p, span {{ color: {text_color.name()}; }}")
     doc.setDefaultStyleSheet(" ".join(css_parts))
-    doc.setHtml(_build_html(text))
+    doc.setHtml(_build_html(text, links))
     return doc
 
 
@@ -109,7 +157,8 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
     ) -> None:
         """Reimplement Qt method to paint the item via a QTextDocument."""
         text = index.data(QC.Qt.DisplayRole) or ""
-        if not isinstance(text, str) or not find_short_ids_in_title(text):
+        links = _links_for_index(index)
+        if not isinstance(text, str) or not links:
             super().paint(painter, option, index)
             return
         opt = QW.QStyleOptionViewItem(option)
@@ -150,7 +199,7 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
         else:
             text_color = palette.color(QG.QPalette.Active, QG.QPalette.Text)
             link_color = accent
-        doc = _make_text_document(text, option, link_color, text_color)
+        doc = _make_text_document(text, option, link_color, links, text_color)
         doc.setTextWidth(text_rect.width())
         painter.save()
         painter.translate(text_rect.topLeft())
@@ -179,7 +228,8 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
             option: style option (already initialized for the item)
         """
         text = index.data(QC.Qt.DisplayRole) or ""
-        if not isinstance(text, str) or not find_short_ids_in_title(text):
+        links = _links_for_index(index)
+        if not isinstance(text, str) or not links:
             return None
         opt = QW.QStyleOptionViewItem(option)
         opt.rect = item_rect
@@ -189,7 +239,7 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
         if not text_rect.contains(pos):
             return None
         # Color does not influence hit-testing — pass any value.
-        doc = _make_text_document(text, option, QG.QColor("black"))
+        doc = _make_text_document(text, option, QG.QColor("black"), links)
         doc.setTextWidth(text_rect.width())
         local = QC.QPointF(pos - text_rect.topLeft())
         href = doc.documentLayout().anchorAt(local)

@@ -54,7 +54,7 @@ from datalab.objectmodel import (
     get_uuid,
 )
 from datalab.utils.qthelpers import block_signals
-from datalab.widgets.titledelegate import ClickableTitleDelegate
+from datalab.widgets.titledelegate import LINK_SPANS_ROLE, ClickableTitleDelegate
 
 if TYPE_CHECKING:
     from typing import Any
@@ -294,12 +294,24 @@ class SimpleObjectTree(QW.QTreeWidget):
         # display text honoring the result-title rendering mode (display-only).
         use_titles = Conf.proc.result_title_mode.get() == "title"
         canonical_text = f"{get_short_id(obj)}: {obj.title}"
-        display_text = (
-            canonical_text
-            if not use_titles
-            else f"{get_short_id(obj)}: {self.objmodel.get_display_title(obj, True)}"
-        )
+        link_spans: list[tuple[int, int, str]] = []
+        if not use_titles:
+            display_text = canonical_text
+        else:
+            prefix = f"{get_short_id(obj)}: "
+            rendered, spans = self.objmodel.get_display_title_and_links(obj)
+            display_text = f"{prefix}{rendered}"
+            # Offset the spans by the leading "<short_id>: " prefix so they line
+            # up with the displayed text, keeping the resolved long names
+            # clickable (they no longer contain the literal short IDs):
+            offset = len(prefix)
+            link_spans = [
+                (start + offset, end + offset, tgt) for start, end, tgt in spans
+            ]
         item.setText(0, display_text)
+        # Explicit link spans drive the clickable hyperlinks in long-name mode;
+        # in short-ID mode the delegate detects the literal short IDs itself:
+        item.setData(0, LINK_SPANS_ROLE, link_spans or None)
         tooltip_parts: list[str] = []
         sid_tooltip = self._build_short_id_tooltip(canonical_text)
         if sid_tooltip:

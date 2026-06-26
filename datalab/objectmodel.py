@@ -580,6 +580,7 @@ class ObjectModel:
         title: str,
         registry: dict[str, str],
         seen: set[str],
+        spans: list[tuple[int, int, str]] | None = None,
     ) -> str:
         """Return ``title`` with embedded references resolved to source titles.
 
@@ -598,6 +599,10 @@ class ObjectModel:
             title: title string to render
             registry: deleted-reference registry of the object owning ``title``
             seen: set of references already being resolved (cycle guard)
+            spans: if not ``None``, a list filled with ``(start, end, short_id)``
+             tuples locating, in the rendered string, each *top-level* live
+             reference that was resolved (used to keep them clickable). Only the
+             top level is recorded (nested references are not).
 
         Returns:
             Rendered title string.
@@ -612,30 +617,37 @@ class ObjectModel:
         events.sort()
         parts: list[str] = []
         last = 0
+        out_len = 0
         for start, end, ref, is_deleted in events:
-            parts.append(title[last:start])
-            if ref in seen:
-                parts.append(title[start:end])
-            elif is_deleted:
-                frozen = registry.get(ref)
-                if frozen is None:
-                    parts.append(title[start:end])
+            prefix = title[last:start]
+            piece = title[start:end]
+            target: str | None = None
+            if ref not in seen:
+                if is_deleted:
+                    frozen = registry.get(ref)
+                    if frozen is not None:
+                        rendered = self.__render(frozen, registry, seen | {ref})
+                        # Keep the short reference if the source title is empty,
+                        # so it stays visible (rather than rendering nothing):
+                        if rendered.strip():
+                            piece = rendered
                 else:
-                    rendered = self.__render(frozen, registry, seen | {ref})
-                    # Keep the short reference if the source title is empty, so
-                    # the reference stays visible (rather than rendering nothing):
-                    parts.append(rendered if rendered.strip() else title[start:end])
-            else:
-                source = self.find_by_short_id(ref, include_siblings=True)
-                if source is None:
-                    parts.append(title[start:end])
-                else:
-                    rendered = self.__render(
-                        source.title, self.__get_registry(source), seen | {ref}
-                    )
-                    # Keep the short reference if the source title is empty, so
-                    # the reference stays visible (rather than rendering nothing):
-                    parts.append(rendered if rendered.strip() else title[start:end])
+                    source = self.find_by_short_id(ref, include_siblings=True)
+                    if source is not None:
+                        rendered = self.__render(
+                            source.title, self.__get_registry(source), seen | {ref}
+                        )
+                        # Keep the short reference if the source title is empty,
+                        # so it stays visible (rather than rendering nothing):
+                        if rendered.strip():
+                            piece = rendered
+                        target = ref
+            parts.append(prefix)
+            parts.append(piece)
+            if spans is not None and target is not None:
+                base = out_len + len(prefix)
+                spans.append((base, base + len(piece), target))
+            out_len += len(prefix) + len(piece)
             last = end
         parts.append(title[last:])
         return "".join(parts)
@@ -664,6 +676,30 @@ class ObjectModel:
             return obj_or_group.title
         registry = self.__get_registry(obj_or_group)
         return self.__render(obj_or_group.title, registry, set())
+
+    def get_display_title_and_links(
+        self, obj_or_group: SignalObj | ImageObj | ObjectGroup
+    ) -> tuple[str, list[tuple[int, int, str]]]:
+        """Return the long-name display title together with its clickable link
+        spans.
+
+        Like :meth:`get_display_title` with ``use_titles=True``, but also returns
+        the spans of the resolved live references, so the view can keep them
+        clickable even though the short IDs are no longer literally present in
+        the displayed text.
+
+        Args:
+            obj_or_group: object or group whose display title is requested
+
+        Returns:
+            A tuple ``(text, spans)`` where ``text`` is the rendered long-name
+            title and ``spans`` is a list of ``(start, end, short_id)`` tuples
+            locating each resolved live reference in ``text``.
+        """
+        registry = self.__get_registry(obj_or_group)
+        spans: list[tuple[int, int, str]] = []
+        text = self.__render(obj_or_group.title, registry, set(), spans)
+        return text, spans
 
     @staticmethod
     def __raise_ambiguous_title(

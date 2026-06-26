@@ -219,3 +219,38 @@ def test_reference_to_empty_name_keeps_short_id() -> None:
     # Once the image group gets a name, the long-name display uses it:
     igroup.title = "My images"
     assert smodel.get_display_title(sgroup, True) == "average profile(My images)"
+
+
+def test_display_title_and_links_locates_resolved_references() -> None:
+    """``get_display_title_and_links`` returns the long-name title together with
+    the spans of the resolved live references, pointing to their short IDs."""
+    smodel, imodel = _linked_models()
+
+    igroup = imodel.add_group("Images")
+    img = create_image("First image", np.zeros((4, 4)))
+    imodel.add_object(img, get_uuid(igroup))  # i001
+
+    sgroup = smodel.add_group("Signals")
+    sig = create_signal("average profile(i001)", x=[0.0, 1.0], y=[1.0, 2.0])
+    smodel.add_object(sig, get_uuid(sgroup))
+
+    text, spans = smodel.get_display_title_and_links(sig)
+    assert text == "average profile(First image)"
+    # One resolved reference, covering the long name and pointing to "i001":
+    assert len(spans) == 1
+    start, end, target = spans[0]
+    assert target == "i001"
+    assert text[start:end] == "First image"
+
+
+def test_display_title_and_links_empty_without_references() -> None:
+    """A title without references yields no link spans."""
+    smodel, _imodel = _linked_models()
+
+    sgroup = smodel.add_group("Signals")
+    sig = create_signal("plain title", x=[0.0, 1.0], y=[1.0, 2.0])
+    smodel.add_object(sig, get_uuid(sgroup))
+
+    text, spans = smodel.get_display_title_and_links(sig)
+    assert text == "plain title"
+    assert spans == []
