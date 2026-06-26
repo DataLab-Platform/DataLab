@@ -44,6 +44,9 @@ def test_group_deleted_refs_persist_and_forward_compatible():
             # Group A (gs001) holding a signal:
             panel.add_object(create_paracetamol_signal())
             group_a = model.get_groups()[0]
+            # Give the group a real (non-empty) title so the rendered reference
+            # is meaningful (an empty title would fall back to the short token):
+            group_a.title = "Group A"
             group_a_title = group_a.title
 
             # Group B whose title references group A (gs001):
