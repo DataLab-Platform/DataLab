@@ -597,16 +597,6 @@ class ObjectProp(QW.QWidget):
         editor = self.creation_param_editor
         if editor is None or self.current_creation_obj is None:
             return
-        if isinstance(self.current_creation_obj, SignalObj):
-            otext = _("Signal was modified in-place.")
-        else:
-            otext = _("Image was modified in-place.")
-        text = f"⚠️ {otext} ⚠️ "
-        text += _(
-            "If computation were performed based on this object, "
-            "they may need to be redone."
-        )
-        self.panel.SIG_STATUS_MESSAGE.emit(text, 20000)
 
         # Recreate object with new parameters
         # (serialization is done automatically in create_signal/image_from_param)
@@ -645,6 +635,20 @@ class ObjectProp(QW.QWidget):
         obj_processor = self.__get_processor_associated_to(self.current_creation_obj)
         obj_processor.auto_recompute_analysis(self.current_creation_obj)
 
+        # Propagate the edited param to the History panel: mutate the matching
+        # creation action (snapshot originals first), refresh its tree display,
+        # then cascade recompute to downstream actions so the chain stays
+        # consistent with the new creation parameters. Creation actions are
+        # KIND_UI without a func_name, so look them up via output_to_action.
+        hpanel = getattr(self.panel.mainwindow, "historypanel", None)
+        if hpanel is not None:
+            action = hpanel.find_creation_action_for_output(obj_uuid)
+            if action is not None:
+                action.snapshot_kwargs()
+                action.kwargs["param"] = copy.deepcopy(param)
+                hpanel.refresh_action(action)
+                hpanel.recompute_cascade(action)
+
         # Update the tree view item (to show new title if it changed)
         self.panel.objview.update_item(obj_uuid)
 
@@ -656,6 +660,12 @@ class ObjectProp(QW.QWidget):
         # Update the Properties tab to reflect the new object properties
         # (e.g., data type, dimensions, etc.)
         self.__update_properties_dataset(self.current_creation_obj)
+
+        if isinstance(self.current_creation_obj, SignalObj):
+            text = _("Signal was recreated.")
+        else:
+            text = _("Image was recreated.")
+        self.panel.SIG_STATUS_MESSAGE.emit("✅ " + text, 5000)
 
         # Refresh the Creation tab with the new parameters
         # Use QTimer to defer this until after the current event is processed

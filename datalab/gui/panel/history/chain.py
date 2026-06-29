@@ -132,6 +132,43 @@ def find_action_for_output(
     return None
 
 
+def find_creation_action_for_output(
+    panel: HistoryPanel, output_uuid: str
+) -> HistoryAction | None:
+    """Find the creation (``new_object``) action that produced ``output_uuid``.
+
+    Creation actions are ``KIND_UI`` entries without a ``func_name`` so the
+    standard :func:`find_action_for_output` lookup cannot match them. The
+    bijective ``output_to_action`` mapping is consulted first; if no mapping
+    exists, a fallback scan looks for a creation action whose registered
+    output UUIDs include ``output_uuid``.
+    """
+    if not panel.history_sessions:
+        return None
+    action_uuid = panel.output_to_action.get(output_uuid)
+    if action_uuid is not None:
+        mapped = next(
+            (
+                action
+                for session in panel.history_sessions
+                for action in session.actions
+                if action.uuid == action_uuid
+            ),
+            None,
+        )
+        if mapped is not None and mapped.kind == HistoryAction.KIND_UI:
+            return mapped
+    for session in reversed(panel.history_sessions):
+        for action in reversed(session.actions):
+            if (
+                action.kind == HistoryAction.KIND_UI
+                and action.method_name in HistoryAction.UI_CREATION_METHODS
+                and output_uuid in panel.action_output_uuids.get(action.uuid, [])
+            ):
+                return action
+    return None
+
+
 def get_session_of(panel: HistoryPanel, action: HistoryAction) -> HistorySession | None:
     """Return the session that contains ``action``, or None."""
     for session in panel.history_sessions:

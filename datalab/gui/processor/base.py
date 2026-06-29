@@ -941,10 +941,17 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if is_new_obj_native:
             self.panel.add_object(new_obj, group_id=group_id)
         else:
-            if use_group_for_non_native:
-                self.panel.mainwindow.add_object(new_obj, group_id=group_id)
+            # Route directly to the target panel to avoid the creation entry
+            # that mainwindow.add_object records (which would duplicate the
+            # compute entry already recorded by the processor).
+            if isinstance(new_obj, SignalObj):
+                target_panel = self.panel.mainwindow.signalpanel
             else:
-                self.panel.mainwindow.add_object(new_obj)
+                target_panel = self.panel.mainwindow.imagepanel
+            if use_group_for_non_native:
+                target_panel.add_object(new_obj, group_id=group_id)
+            else:
+                target_panel.add_object(new_obj)
 
     def _create_group_for_result(
         self, new_obj: SignalObj | ImageObj, group_name: str

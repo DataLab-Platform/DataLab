@@ -78,7 +78,7 @@ from datalab.gui.h5io import H5InputOutput
 from datalab.gui.panel import base, history, image, macro, signal
 from datalab.gui.pluginconfig import PluginConfigDialog
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
-from datalab.objectmodel import ObjectGroup
+from datalab.objectmodel import ObjectGroup, get_uuid
 from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plugins
 from datalab.utils import qthelpers as qth
 from datalab.utils.qthelpers import (
@@ -2337,10 +2337,24 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         if self.confirm_memory_state():
             if isinstance(obj, SignalObj):
                 self.signalpanel.add_object(obj, group_id, set_current)
+                panel_str = "signal"
             elif isinstance(obj, ImageObj):
                 self.imagepanel.add_object(obj, group_id, set_current)
+                panel_str = "image"
             else:
                 raise TypeError(f"Unsupported object type {type(obj)}")
+            # Record a creation entry so objects added programmatically (plugins,
+            # macros, remote control) appear in the history. ``panel.add_object``
+            # deliberately does not record, so creations entering through this
+            # proxy boundary would otherwise be lost (notably the very first one).
+            action = self.historypanel.add_ui_entry(
+                _("New %s") % panel_str,
+                target=panel_str + "panel",
+                method_name="new_object",
+                save_state=False,
+            )
+            if action is not None:
+                self.historypanel.register_action_outputs(action, [get_uuid(obj)])
 
     @remote_controlled
     def set_object(self, obj: SignalObj | ImageObj) -> None:
