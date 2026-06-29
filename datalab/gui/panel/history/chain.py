@@ -41,7 +41,13 @@ def resolve_panel_for_action(
     panel: HistoryPanel, action: HistoryAction
 ) -> BaseDataPanel | None:
     """Return the data panel targeted by ``action``, or ``None``."""
-    if action.kind != HistoryAction.KIND_COMPUTE:
+    if action.kind == HistoryAction.KIND_UI:
+        if action.method_name not in HistoryAction.UI_CREATION_METHODS:
+            return None
+        if action.target == "signalpanel":
+            return panel.mainwindow.signalpanel
+        if action.target == "imagepanel":
+            return panel.mainwindow.imagepanel
         return None
     if action.panel_str == "signal":
         return panel.mainwindow.signalpanel

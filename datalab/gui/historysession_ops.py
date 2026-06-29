@@ -239,7 +239,7 @@ def add_ui_entry(
     method_name: str,
     save_state: bool = True,
     **kwargs: Any,
-) -> None:
+) -> HistoryAction | None:
     """Record a *UI* action in the current history session.
 
     Args:
@@ -250,9 +250,13 @@ def add_ui_entry(
         save_state: If True, capture the workspace state for replay.
         **kwargs: Method keyword arguments. ``DataSet`` instances are
          serialised as JSON; other values must be HDF5-friendly primitives.
+
+    Returns:
+        The created :class:`HistoryAction`, or ``None`` if recording is
+        disabled (record mode off or replay in progress).
     """
     if not panel.record_mode_enabled or panel.is_replaying():
-        return
+        return None
     state = WorkspaceState()
     if save_state:
         state.save(panel.mainwindow)
@@ -267,6 +271,7 @@ def add_ui_entry(
         state=state,
     )
     panel.add_object(action)
+    return action
 
 
 def add_entry(

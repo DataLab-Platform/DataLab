@@ -852,7 +852,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         method_name: str,
         save_state: bool = True,
         **kwargs: Any,
-    ) -> None:
+    ) -> HistoryAction | None:
         """Add a UI entry to the history."""
         return hsess.add_ui_entry(
             self, action_title, target, method_name, save_state, **kwargs

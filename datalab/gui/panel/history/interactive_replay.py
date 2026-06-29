@@ -70,6 +70,19 @@ def prompt_edit_action_params(
     panel: HistoryPanel, action: HistoryAction
 ) -> bool | None:
     """Open the parameter dialog for *action* according to its pattern."""
+    if (
+        action.kind == HistoryAction.KIND_UI
+        and action.method_name in HistoryAction.UI_CREATION_METHODS
+    ):
+        param = action.kwargs.get("param")
+        if param is None:
+            return None
+        edited = copy.deepcopy(param)
+        if not edited.edit(parent=panel.mainwindow):
+            return False
+        action.snapshot_kwargs()
+        action.kwargs["param"] = edited
+        return True
     pattern = action.pattern
     if pattern in {"1_to_1", "1_to_0", "n_to_1", "2_to_1"}:
         param = action.kwargs.get("param")
@@ -96,7 +109,14 @@ def prompt_edit_action_params(
 
 def edit_mode_replay(panel: HistoryPanel, action: HistoryAction) -> None:
     """Replay a single action in edit mode: open param dialog, update kwargs."""
-    if action.kind != HistoryAction.KIND_COMPUTE or action.pattern is None:
+    is_creation = (
+        action.kind == HistoryAction.KIND_UI
+        and action.method_name in HistoryAction.UI_CREATION_METHODS
+    )
+    is_compute = (
+        action.kind == HistoryAction.KIND_COMPUTE and action.pattern is not None
+    )
+    if not is_creation and not is_compute:
         with panel.replaying(), panel.output_suppressed():
             action.replay(panel.mainwindow, restore_selection=True, edit=True)
         return
@@ -181,7 +201,15 @@ def restore_action_params(
     """Restore original kwargs from snapshot and recompute in-place."""
     actions: list[HistoryAction]
     if isinstance(item, HistorySession):
-        actions = [a for a in item.actions if a.kind == HistoryAction.KIND_COMPUTE]
+        actions = [
+            a
+            for a in item.actions
+            if a.kind == HistoryAction.KIND_COMPUTE
+            or (
+                a.kind == HistoryAction.KIND_UI
+                and a.method_name in HistoryAction.UI_CREATION_METHODS
+            )
+        ]
     else:
         actions = [item]
     for action in actions:

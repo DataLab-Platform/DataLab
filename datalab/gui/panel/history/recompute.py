@@ -112,6 +112,12 @@ def record_missing_outputs(
 
 def recompute_action_in_place(panel: HistoryPanel, action: HistoryAction) -> None:
     """Re-run ``action`` on the existing output object(s) (same UUIDs)."""
+    if (
+        action.kind == HistoryAction.KIND_UI
+        and action.method_name in HistoryAction.UI_CREATION_METHODS
+    ):
+        recompute_creation_in_place(panel, action)
+        return
     if action.kind != HistoryAction.KIND_COMPUTE:
         return
     method = {
@@ -177,6 +183,44 @@ def handle_missing_feature(
         )
         % {"name": func_name, "loc": location, "param": paramclass}
     )
+
+
+def recompute_creation_in_place(panel: HistoryPanel, action: HistoryAction) -> None:
+    """Recompute a creation (``new_object``) action in place.
+
+    Rebuild the object from the edited ``param`` and copy it onto the
+    existing output object so its UUID (and downstream references) are kept.
+    """
+    # Local import to avoid a circular dependency at module load time.
+    from datalab.gui.newobject import (
+        create_image_gui,
+        create_signal_gui,
+        insert_creation_parameters,
+    )
+
+    panel_data = panel.resolve_panel_for_action(action)
+    if panel_data is None:
+        return
+    existing, missing = panel.resolve_target_outputs(panel_data, action)
+    record_missing_outputs(panel, action, missing)
+    if not existing:
+        return
+    output_uuid = existing[0]
+    if not panel_data.objmodel.has_uuid(output_uuid):
+        return
+    output_obj = panel_data.objmodel[output_uuid]
+    param = action.kwargs.get("param")
+    if param is None:
+        return
+    if action.target == "signalpanel":
+        new_obj = create_signal_gui(param, edit=False)
+    else:
+        new_obj = create_image_gui(param, edit=False)
+    if new_obj is None:
+        return
+    update_obj_in_place(output_obj, new_obj)
+    insert_creation_parameters(output_obj, param)
+    refresh_target(panel_data, output_uuid)
 
 
 def recompute_1_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> None:

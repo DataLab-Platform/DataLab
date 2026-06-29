@@ -1470,6 +1470,95 @@ def test_history_cascade_recompute():
 
 
 # ---------------------------------------------------------------------------
+# 9b) Creation action editing
+# ---------------------------------------------------------------------------
+
+
+def test_history_edit_creation():
+    """Edit a creation action: update params, cascade downstream, restore."""
+    from datalab.gui.panel.history import recompute as hrec
+
+    # --- scenario: editing a created Gauss signal cascades to downstream ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        history.toggle_edit_mode(True)
+        panel = win.signalpanel
+        gparam = sigima.objects.create_signal_parameters(
+            sigima.objects.SignalTypes.GAUSS, size=200, sigma=20.0
+        )
+        signal = panel.new_object(gparam, edit=False)
+        assert signal is not None
+        creation = history[len(history)]
+        assert creation.kind == HistoryAction.KIND_UI
+        assert creation.method_name == "new_object"
+        creation_uuid = get_uuid(signal)
+        assert history.action_output_uuid(creation) == creation_uuid
+
+        panel.objview.select_objects([1])
+        panel.processor.run_feature(
+            sips.gaussian_filter, sigima.params.GaussianParam.create(sigma=1.5)
+        )
+        filter_action = history[len(history)]
+        output_filter = panel.objmodel.get_object_from_number(2)
+        uuid_filter = get_uuid(output_filter)
+
+        assert history.get_downstream_actions(creation) == [filter_action]
+
+        creation_data_before = signal.xydata.copy()
+        filter_data_before = output_filter.xydata.copy()
+        desc_before = creation.description
+
+        creation.snapshot_kwargs()
+        creation.kwargs["param"].sigma = 60.0
+        hrec.recompute_action_in_place(history, creation)
+        hrec.recompute_cascade(history, creation, descendants=[filter_action])
+
+        assert creation.has_pending_edits
+        assert "60" in creation.description
+        assert creation.description != desc_before
+        assert not np.array_equal(signal.xydata, creation_data_before)
+        assert not np.array_equal(
+            panel.objmodel[uuid_filter].xydata, filter_data_before
+        )
+
+        creation.restore_kwargs()
+        hrec.recompute_action_in_place(history, creation)
+        hrec.recompute_cascade(history, creation, descendants=[filter_action])
+        assert not creation.has_pending_edits
+        assert creation.kwargs["param"].sigma == 20.0
+        assert np.allclose(signal.xydata, creation_data_before)
+
+    # --- scenario: edited snapshot survives HDF5 round-trip ---
+    gparam = sigima.objects.create_signal_parameters(
+        sigima.objects.SignalTypes.GAUSS, size=64, sigma=20.0
+    )
+    action = HistoryAction(
+        title="New signal",
+        kind=HistoryAction.KIND_UI,
+        target="signalpanel",
+        method_name="new_object",
+        kwargs={"param": gparam},
+        state=WorkspaceState(),
+    )
+    action.snapshot_kwargs()
+    action.kwargs["param"].sigma = 50.0
+    session = HistorySession(number=1)
+    session.add_action(action)
+    with tempfile.TemporaryDirectory() as tmpdir:
+        path = os.path.join(tmpdir, "creation_roundtrip.dlhist")
+        with NativeH5Writer(path) as writer:
+            writer.write_object_list([session], "history_session")
+        with NativeH5Reader(path) as reader:
+            restored_sessions = reader.read_object_list(
+                "history_session", HistorySession
+            )
+    restored_action = restored_sessions[0].actions[0]
+    assert restored_action.has_pending_edits
+    assert restored_action.kwargs["param"].sigma == 50.0
+
+
+# ---------------------------------------------------------------------------
 # 10) Chain reconnect after object deletion
 # ---------------------------------------------------------------------------
 
