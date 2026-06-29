@@ -33,6 +33,7 @@ def replay_restore_actions(
         if not panel.history_sessions:
             return
         selected = [panel.history_sessions[-1]]
+    edit_actions: list[HistoryAction] = []
     for session_or_action in selected:
         if isinstance(session_or_action, HistoryAction) and session_or_action.is_stale:
             hrec.recompute_cascade(panel, session_or_action)
@@ -49,7 +50,8 @@ def replay_restore_actions(
             return
         if replay:
             if panel.edit_mode and isinstance(session_or_action, HistoryAction):
-                edit_mode_replay(panel, session_or_action)
+                # Defer: edit only the selected actions, no automatic cascade
+                edit_actions.append(session_or_action)
             elif panel.edit_mode and isinstance(session_or_action, HistorySession):
                 view_only_session_replay(panel, session_or_action, restore_selection)
             else:
@@ -64,6 +66,8 @@ def replay_restore_actions(
                 restore_action_params(panel, session_or_action)
             else:
                 session_or_action.restore(panel.mainwindow)
+    if edit_actions:
+        edit_mode_replay_actions(panel, edit_actions)
 
 
 def prompt_edit_action_params(
@@ -108,41 +112,84 @@ def prompt_edit_action_params(
 
 
 def edit_mode_replay(panel: HistoryPanel, action: HistoryAction) -> None:
-    """Replay a single action in edit mode: open param dialog, update kwargs."""
-    is_creation = (
-        action.kind == HistoryAction.KIND_UI
-        and action.method_name in HistoryAction.UI_CREATION_METHODS
-    )
-    is_compute = (
-        action.kind == HistoryAction.KIND_COMPUTE and action.pattern is not None
-    )
-    if not is_creation and not is_compute:
-        with panel.replaying(), panel.output_suppressed():
-            action.replay(panel.mainwindow, restore_selection=True, edit=True)
+    """Replay a single action in edit mode: open param dialog, update kwargs.
+
+    Only the given action is edited and recomputed in place: no automatic
+    cascade towards unselected downstream actions.
+    """
+    edit_mode_replay_actions(panel, [action])
+
+
+def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) -> None:
+    """Edit and recompute only the selected actions, in session order.
+
+    Each selected action gets exactly one parameter dialog; non-selected
+    downstream actions are left untouched (no automatic cascade). A
+    re-entrance guard prevents nested prompt loops.
+    """
+    if getattr(panel, "_edit_replay_in_progress", False):
         return
+    # Deduplicate and sort the selected actions in their session order
+    ordered = _order_selected_actions(panel, actions)
+    if not ordered:
+        return
+    panel._edit_replay_in_progress = True
+    try:
+        edited_actions: list[HistoryAction] = []
+        recomputable: list[HistoryAction] = []
+        for action in ordered:
+            is_creation = (
+                action.kind == HistoryAction.KIND_UI
+                and action.method_name in HistoryAction.UI_CREATION_METHODS
+            )
+            is_compute = (
+                action.kind == HistoryAction.KIND_COMPUTE and action.pattern is not None
+            )
+            if not is_creation and not is_compute:
+                with panel.replaying(), panel.output_suppressed():
+                    action.replay(panel.mainwindow, restore_selection=True, edit=True)
+                continue
+            result = prompt_edit_action_params(panel, action)
+            if result is False:
+                for done in edited_actions:
+                    done.restore_kwargs()
+                    panel.tree.refresh_action_item(done)
+                return
+            if result is True:
+                edited_actions.append(action)
+            recomputable.append(action)
 
-    chain: list[HistoryAction] = [action] + panel.get_downstream_actions(action)
-    edited_actions: list[HistoryAction] = []
-    for a in chain:
-        result = prompt_edit_action_params(panel, a)
-        if result is False:
-            for done in edited_actions:
-                done.restore_kwargs()
-                panel.tree.refresh_action_item(done)
-            return
-        if result is True:
-            edited_actions.append(a)
+        for action in edited_actions:
+            panel.tree.refresh_action_item(action)
+        for action in recomputable:
+            hrec.recompute_action_in_place(panel, action)
+            panel.tree.refresh_action_item(action)
+        if edited_actions:
+            hrec.recompute_cascade(panel, edited_actions[0])
+        QW.QApplication.processEvents()
+    finally:
+        panel._edit_replay_in_progress = False
 
-    for a in edited_actions:
-        panel.tree.refresh_action_item(a)
 
-    downstream = chain[1:]
-    hrec.recompute_action_in_place(panel, action)
-    hrec.recompute_cascade(panel, action, descendants=downstream)
-
-    for a in chain:
-        panel.tree.refresh_action_item(a)
-    QW.QApplication.processEvents()
+def _order_selected_actions(
+    panel: HistoryPanel, actions: list[HistoryAction]
+) -> list[HistoryAction]:
+    """Deduplicate ``actions`` and sort them by (session, position) order."""
+    rank: dict[str, int] = {}
+    pos = 0
+    for session in panel.history_sessions:
+        for action in session.actions:
+            rank[action.uuid] = pos
+            pos += 1
+    seen: set[str] = set()
+    unique: list[HistoryAction] = []
+    for action in actions:
+        if action.uuid in seen:
+            continue
+        seen.add(action.uuid)
+        unique.append(action)
+    unique.sort(key=lambda a: rank.get(a.uuid, 0))
+    return unique
 
 
 def show_readonly_param_dialog(
