@@ -120,8 +120,8 @@ SHORT_ID_REGEX = re.compile(r"\b(g?[si])(\d{3})\b")
 DELETED_REF_KEY = "deleted_source_refs"
 
 #: Regex matching deleted-source reference tokens embedded in titles
-#: (e.g. ``sd001a`` for a deleted signal, ``id001`` for a deleted image,
-#: ``gsd001`` for  deleted signal group, ``gid001`` for a deleted image group).
+#: (e.g. ``sd001`` for a deleted signal, ``id001`` for a deleted image,
+#: ``gsd001`` for a deleted signal group, ``gid001`` for a deleted image group).
 #: The trailing ``d`` and the 3+ digit count make this disjoint from
 #: :data:`SHORT_ID_REGEX` (live short IDs always have exactly 3 digits and no
 #: ``d`` separator).
