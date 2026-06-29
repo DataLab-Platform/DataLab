@@ -316,27 +316,31 @@ def generate_macro(panel: HistoryPanel) -> None:
         "signal" if obj_type == "SignalObj" else "image"
     )
     script_lines.append(f'    proxy.set_current_panel("{panel_str}")')
-    script_lines.append("    src = proxy.get_object()")
-    script_lines.append("    if src is None:")
-    script_lines.append(
-        f'        raise RuntimeError("No current object in panel: {panel_str}")'
-    )
     if extra_inputs:
         n_extra = len(extra_inputs)
-        script_lines.append(
-            "    _uuids = [u for u in proxy.get_sel_object_uuids() if u != src.uuid]"
-        )
-        script_lines.append(f"    if len(_uuids) < {n_extra}:")
+        script_lines.append("    _uuids = proxy.get_sel_object_uuids()")
+        script_lines.append(f"    if len(_uuids) < {n_extra + 1}:")
         script_lines.append("        raise RuntimeError(")
         script_lines.append(
-            f'            "Pipeline needs {n_extra} extra selected'
-            ' object(s) besides the current one"'
+            f'            "Pipeline needs {n_extra + 1} selected'
+            f' object(s): 1 source + {n_extra} extra"'
         )
         script_lines.append("        )")
+        script_lines.append(f'    src = proxy.get_object(_uuids[0], "{panel_str}")')
+        script_lines.append("    if src is None:")
+        script_lines.append(
+            f'        raise RuntimeError("No current object in panel: {panel_str}")'
+        )
         for idx, extra in enumerate(extra_inputs):
             script_lines.append(
-                f'    {extra} = proxy.get_object(_uuids[{idx}], "{panel_str}")'
+                f'    {extra} = proxy.get_object(_uuids[{idx + 1}], "{panel_str}")'
             )
+    else:
+        script_lines.append("    src = proxy.get_object()")
+        script_lines.append("    if src is None:")
+        script_lines.append(
+            f'        raise RuntimeError("No current object in panel: {panel_str}")'
+        )
     extra_args = "".join(f", {e}" for e in extra_inputs)
     script_lines.append(f"    result = process(src{extra_args})")
     script_lines.append("    proxy.add_object(result)")
