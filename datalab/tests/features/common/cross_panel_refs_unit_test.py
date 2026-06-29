@@ -253,4 +253,4 @@ def test_display_title_and_links_empty_without_references() -> None:
 
     text, spans = smodel.get_display_title_and_links(sig)
     assert text == "plain title"
-    assert spans == []
+    assert not spans
