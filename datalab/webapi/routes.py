@@ -247,6 +247,11 @@ async def get_object_metadata(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Object '{name}' not found",
         ) from e
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(e),
+        ) from e
     except Exception as e:  # pylint: disable=broad-exception-caught
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -279,6 +284,11 @@ async def delete_object(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Object '{name}' not found",
+        ) from e
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(e),
         ) from e
     except Exception as e:  # pylint: disable=broad-exception-caught
         raise HTTPException(
@@ -321,6 +331,11 @@ async def update_object_metadata(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Object '{name}' not found",
+        ) from e
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(e),
         ) from e
 
 
@@ -386,6 +401,11 @@ async def get_object_data(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Object '{name}' not found",
+        ) from e
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(e),
         ) from e
     except Exception as e:  # pylint: disable=broad-exception-caught
         tb = traceback.format_exc()

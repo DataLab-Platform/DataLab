@@ -425,6 +425,16 @@ class TestObjectListing:
         response = client.get("/api/v1/objects/nope", headers=_auth(token))
         assert response.status_code == 404
 
+    def test_metadata_ambiguous_object(self, api_client) -> None:
+        """``GET /objects/{name}`` returns 409 when the title is ambiguous."""
+        client, token, adapter = api_client
+        adapter.add_object(_make_signal("S1"))
+        adapter.get_object = lambda name: (_ for _ in ()).throw(
+            ValueError(f"Title '{name}' is ambiguous (matches several objects)")
+        )
+        response = client.get("/api/v1/objects/S1", headers=_auth(token))
+        assert response.status_code == 409
+
 
 class TestPatchAndDelete:
     """``PATCH /objects/{name}/metadata`` and ``DELETE /objects/{name}``."""

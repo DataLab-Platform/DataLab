@@ -212,6 +212,7 @@ class WorkspaceAdapter(QObject):
 
         Raises:
             KeyError: If object not found.
+            ValueError: If the title is ambiguous (matches several objects).
         """
         self._ensure_main_window()
 
@@ -250,6 +251,10 @@ class WorkspaceAdapter(QObject):
             return True
         except KeyError:
             return False
+        except ValueError:
+            # Ambiguous title: the object exists, it just cannot be uniquely
+            # resolved. It still "exists" for the purpose of this check.
+            return True
 
     def get_object_panel(self, name: str) -> str | None:
         """Get the panel containing an object.
@@ -263,6 +268,9 @@ class WorkspaceAdapter(QObject):
 
         Returns:
             "signal" or "image", or None if not found.
+
+        Raises:
+            ValueError: If the title is ambiguous (matches several objects).
         """
         self._ensure_main_window()
 
