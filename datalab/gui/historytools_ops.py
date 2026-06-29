@@ -386,6 +386,17 @@ def delete_selected(panel: HistoryPanel) -> None:
     )
     if reply != QW.QMessageBox.Yes:
         return
+    # Memorize affected session for post-deletion selection
+    affected_session: HistorySession | None = None
+    for item in selected:
+        if isinstance(item, HistoryAction):
+            for session in panel.history_sessions:
+                if item in session.actions:
+                    affected_session = session
+                    break
+            if affected_session is not None:
+                break
+
     sessions_to_remove: set[int] = set()
     for item in selected:
         if isinstance(item, HistorySession):
@@ -404,11 +415,28 @@ def delete_selected(panel: HistoryPanel) -> None:
     panel.tree.populate_tree(panel.history_sessions)
     panel.refresh_compatibility_items()
     panel.update_actions_state()
-    # Auto-select the first available item after deletion
-    if panel.tree.topLevelItemCount() > 0:
-        first = panel.tree.topLevelItem(0)
-        panel.tree.setCurrentItem(first)
-        first.setSelected(True)
+    # Auto-select an item in the same session to avoid panel switch
+    target_item = None
+    if affected_session is not None and id(affected_session) not in sessions_to_remove:
+        # Find the tree item for the affected session (same index in list)
+        try:
+            session_idx = panel.history_sessions.index(affected_session)
+        except ValueError:
+            session_idx = -1
+        if session_idx >= 0:
+            top = panel.tree.topLevelItem(session_idx)
+            if top is not None:
+                if top.childCount() > 0:
+                    target_item = top.child(top.childCount() - 1)
+                else:
+                    target_item = top
+    if target_item is None and panel.tree.topLevelItemCount() > 0:
+        # Fallback: last top-level item (least likely to switch panels)
+        last_top = panel.tree.topLevelItem(panel.tree.topLevelItemCount() - 1)
+        target_item = last_top
+    if target_item is not None:
+        panel.tree.setCurrentItem(target_item)
+        target_item.setSelected(True)
 
 
 def remove_incompatible_actions(panel: HistoryPanel) -> None:
