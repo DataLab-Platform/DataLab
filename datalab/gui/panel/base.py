@@ -2914,10 +2914,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if progress.wasCanceled():
                     break
 
-                # Temporarily set this object as current to use existing infrastructure
-                self.objview.set_current_object(obj)
+                # Reprocess with the object's stored parameters, passed
+                # explicitly so we no longer need to select the object just
+                # to populate the Processing-tab editor.
+                proc_params = extract_processing_parameters(obj)
                 report = self.objprop.apply_processing_parameters(
-                    obj=obj, interactive=False
+                    obj=obj,
+                    interactive=False,
+                    param=proc_params.param if proc_params is not None else None,
                 )
                 if not report.success and not execenv.unattended:
                     failtxt = _("Failed to recompute object")
