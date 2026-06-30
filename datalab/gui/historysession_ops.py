@@ -317,6 +317,8 @@ def add_ui_entry(
     target_panel_str = {
         "signalpanel": "signal",
         "imagepanel": "image",
+        "signalprocessor": "signal",
+        "imageprocessor": "image",
     }.get(target)
     state = WorkspaceState()
     if save_state:
@@ -330,6 +332,9 @@ def add_ui_entry(
         method_name=method_name,
         kwargs=deepcopy(kwargs),
         state=state,
+        panel_str=target_panel_str
+        if target in ("signalprocessor", "imageprocessor")
+        else None,
     )
     panel.add_object(action)
     return action

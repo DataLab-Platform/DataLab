@@ -434,6 +434,10 @@ class HistoryAction(ObjItf):
         attr = self.target or "mainwindow"
         if attr == "mainwindow":
             return mainwindow
+        if attr == "signalprocessor":
+            return mainwindow.signalpanel.processor
+        if attr == "imageprocessor":
+            return mainwindow.imagepanel.processor
         return getattr(mainwindow, attr)
 
     def _resolve_panel(self, mainwindow: DLMainWindow):
@@ -527,7 +531,7 @@ class HistoryAction(ObjItf):
         else:
             if restore_selection:
                 self.state.restore(mainwindow)
-            self._replay_ui(mainwindow, edit)
+            self._replay_ui(mainwindow, edit, uuid_remap)
 
     def _translate_state(self, uuid_remap: dict[str, dict[str, str]]) -> WorkspaceState:
         """Return a copy of ``self.state`` whose captured UUIDs have been
@@ -601,7 +605,12 @@ class HistoryAction(ObjItf):
             raise ValueError(f"Unknown compute pattern: {self.pattern!r}")
         processor.run_feature(feature, **run_kwargs)
 
-    def _replay_ui(self, mainwindow: DLMainWindow, edit: bool) -> None:
+    def _replay_ui(
+        self,
+        mainwindow: DLMainWindow,
+        edit: bool,
+        uuid_remap: dict[str, dict[str, str]] | None = None,
+    ) -> None:
         """Replay a UI-kind action by calling ``target.method_name(**kwargs)``."""
         hpanel = mainwindow.historypanel
         if (
@@ -642,6 +651,12 @@ class HistoryAction(ObjItf):
                     return
         method = getattr(target, self.method_name)
         call_kwargs = dict(self.kwargs)
+        # Translate a recorded source object UUID through the session uuid_remap
+        # so deterministic replay after save/reload still targets the right object.
+        if uuid_remap and self.panel_str and "source_uuid" in call_kwargs:
+            panel_map = uuid_remap.get(self.panel_str, {})
+            old = call_kwargs["source_uuid"]
+            call_kwargs["source_uuid"] = panel_map.get(old, old)
         # Inject edit mode if the method supports it
         try:
             sig = inspect.signature(method)

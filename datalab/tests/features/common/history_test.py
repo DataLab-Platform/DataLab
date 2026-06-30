@@ -1709,3 +1709,76 @@ def test_history_new_session_prompt_on_input(monkeypatch):
         n_sessions = len(history.history_sessions)
         win.add_object(create_paracetamol_signal())
         assert len(history.history_sessions) == n_sessions
+
+
+def test_history_interactive_fit_replay():
+    """Interactive curve-fit recording and deterministic replay.
+
+    Records an interactive fit as a UI history action targeting the signal
+    processor's ``recompute_fit`` method (exactly as ``__row_compute_fit``
+    does), persists it to a ``.dlhist`` file, then replays it and verifies the
+    reconstructed curve matches the deterministic evaluation -- without any
+    fit dialog.
+    """
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        panel = win.signalpanel
+
+        # --- scenario: record a polynomial interactive fit as a UI action ---
+        history.toggle_record_mode(True)
+        panel.add_object(create_paracetamol_signal())
+        src = panel.objmodel.get_object_from_number(1)
+        src_uuid = get_uuid(src)
+        panel.objview.select_objects([1])
+
+        degree = 3
+        coeffs = np.polyfit(src.x, src.y, degree)  # highest-first == polyval order
+        fit_values = [float(c) for c in coeffs]
+        expected_y = np.polyval(coeffs, src.x)
+        name = _("Polynomial fit")
+
+        result = sigima.objects.create_signal(f"{name}({src.title})", src.x, expected_y)
+        action = history.add_ui_entry(
+            name,
+            target="signalprocessor",
+            method_name="recompute_fit",
+            save_state=True,
+            fit_type="polynomial",
+            fit_values=fit_values,
+            fit_name=name,
+            source_uuid=src_uuid,
+        )
+        assert action is not None
+        with history.capture_outputs(action):
+            panel.add_object(result)
+        assert action.output_uuids == [get_uuid(result)]
+        assert action.target == "signalprocessor"
+        assert action.panel_str == panel.PANEL_STR_ID
+
+        # --- scenario: .dlhist round-trip preserves uuid + fit kwargs ---
+        ser_session = HistorySession(number=1)
+        ser_session.actions.append(action)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "fit.dlhist")
+            with NativeH5Writer(path) as writer:
+                writer.write_object_list([ser_session], "history_session")
+            with NativeH5Reader(path) as reader:
+                restored_sessions = reader.read_object_list(
+                    "history_session", HistorySession
+                )
+        restored = restored_sessions[0].actions[0]
+        assert restored.uuid == action.uuid
+        assert restored.kind == HistoryAction.KIND_UI
+        assert restored.target == "signalprocessor"
+        assert restored.method_name == "recompute_fit"
+        assert restored.kwargs.get("fit_type") == "polynomial"
+        assert restored.kwargs.get("source_uuid") == src_uuid
+        assert restored.kwargs.get("fit_values") == pytest.approx(fit_values)
+
+        # --- scenario: deterministic replay reconstructs the fit curve ---
+        n_before = len(panel.objmodel)
+        restored.replay(win, restore_selection=True, edit=False)
+        assert len(panel.objmodel) == n_before + 1
+        new_obj = panel.objmodel.get_object_from_number(len(panel.objmodel))
+        assert np.allclose(new_obj.x, src.x)
+        assert np.allclose(new_obj.y, expected_y)

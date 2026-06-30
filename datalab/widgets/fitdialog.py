@@ -854,9 +854,7 @@ def evaluate_fit(
     if fit_type in ("multigaussian", "multilorentzian"):
         a_x0 = extra.get("a_x0")
         if a_x0 is None:
-            raise ValueError(
-                f"Missing 'a_x0' in extra for {fit_type!r} fit evaluation"
-            )
+            raise ValueError(f"Missing 'a_x0' in extra for {fit_type!r} fit evaluation")
         a_x0 = np.asarray(a_x0, dtype=float)
         func = multigaussian if fit_type == "multigaussian" else multilorentzian
         return func(x, *vals, a_x0=a_x0)
