@@ -9,10 +9,12 @@
 from __future__ import annotations
 
 import abc
+import inspect
 import multiprocessing
+import os.path as osp
 import time
 import warnings
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from enum import Enum, auto
 from multiprocessing.pool import Pool
 from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, Optional
@@ -193,6 +195,43 @@ def insert_processing_parameters(
     else:
         # Store transformation history
         obj.set_metadata_option(PROCESSING_PARAMETERS_OPTION, pp.to_dict())
+
+
+def build_processing_parameters(
+    func_name: str,
+    pattern: str,
+    *,
+    param: gds.DataSet | list[gds.DataSet] | None = None,
+    source_uuid: str | None = None,
+    source_uuids: list[str] | None = None,
+) -> ProcessingParameters:
+    """Single factory for :class:`ProcessingParameters`.
+
+    Centralises construction so that history-panel entries and per-object
+    metadata always share the same identity (``func_name``, ``pattern``,
+    ``param``).
+
+    Args:
+        func_name: Sigima feature name.
+        pattern: Dash-form pattern (``"1-to-1"``, ``"1-to-0"``,
+         ``"n-to-1"``, ``"2-to-1"``, ``"1-to-n"``).
+        param: Optional parameter dataset (or list of datasets for
+         multi-parameter patterns).
+        source_uuid: Source object UUID for ``"1-to-1"`` / ``"1-to-0"`` /
+         ``"1-to-n"`` patterns.
+        source_uuids: Source object UUIDs for ``"n-to-1"`` / ``"2-to-1"``
+         patterns.
+
+    Returns:
+        Newly constructed :class:`ProcessingParameters`.
+    """
+    return ProcessingParameters(
+        func_name=func_name,
+        pattern=pattern,
+        param=param,
+        source_uuid=source_uuid,
+        source_uuids=source_uuids,
+    )
 
 
 def clear_analysis_parameters(obj: SignalObj | ImageObj) -> None:
@@ -490,6 +529,158 @@ def is_pairwise_mode() -> bool:
     return state
 
 
+class FeatureNotFoundError(ValueError):
+    """Raised when a computing feature cannot be resolved by name or callable.
+
+    Inherits from :class:`ValueError` to preserve backward compatibility with
+    callers that already catch ``ValueError`` on lookup failures.
+
+    Attributes:
+        func_name: Name (or repr) of the missing feature.
+        plugin_origin: Optional plugin origin descriptor captured at registration
+         time. See :func:`_detect_plugin_origin` for the dict shape.
+        paramclass_name: Optional name of the required parameter class (for
+         diagnostic display).
+    """
+
+    def __init__(
+        self,
+        func_name: str,
+        plugin_origin: dict[str, Any] | None = None,
+        paramclass_name: str | None = None,
+    ) -> None:
+        self.func_name = func_name
+        self.plugin_origin = plugin_origin
+        self.paramclass_name = paramclass_name
+        super().__init__(self._build_message())
+
+    def _build_message(self) -> str:
+        """Build the default exception message."""
+        if self.plugin_origin:
+            po = self.plugin_origin
+            param = self.paramclass_name or "—"
+            return (
+                f"Cannot replay action: function '{self.func_name}' from plugin "
+                f"'{po.get('plugin_class')}' (module: {po.get('module')}, "
+                f"directory: {po.get('directory')}) is not available. "
+                f"Required parameter class: {param}. "
+                "Please reinstall or check the plugin."
+            )
+        return f"Unknown computing feature: {self.func_name}"
+
+
+# Module name prefixes considered as built-in (not plugin) origins.
+_BUILTIN_MODULE_PREFIXES: tuple[str, ...] = (
+    "sigima",
+    "datalab",
+    "numpy",
+    "scipy",
+    "skimage",
+    "guidata",
+    "plotpy",
+    "qtpy",
+    "builtins",
+    "__main__",
+)
+
+
+def _detect_plugin_origin(func: Callable) -> dict[str, Any] | None:
+    """Detect whether ``func`` originates from a DataLab plugin.
+
+    Inspects ``func.__module__`` and compares it against registered plugins
+    (:class:`datalab.plugins.PluginRegistry`). Falls back to a heuristic for
+    modules that are clearly not from the DataLab/Sigima/scientific-Python
+    built-in surface (then treated as "anonymous" plugin origin).
+
+    **Wrapper-aware**: when *func* is a Sigima wrapper (e.g.
+    ``Wrap1to1Func``), its ``__module__`` points to the wrapper class's
+    module (``sigima.proc.image.base``), not to the user-supplied function.
+    The method therefore probes ``func.__wrapped__`` (``functools.wraps``
+    convention) and ``func.func`` (Sigima ``Wrap1to1Func`` / signal
+    ``Wrap1to1Func`` attribute) to recover the *inner* function and uses
+    that function's ``__module__`` for origin detection.
+
+    Args:
+        func: Computation function to inspect.
+
+    Returns:
+        A dict ``{"plugin_class", "module", "directory", "version"}`` if the
+        function originates from a plugin, otherwise ``None``.
+    """
+    # Build a list of candidate functions to inspect, starting with the
+    # innermost wrapped function so that plugin origins are detected even
+    # when the outer callable belongs to a built-in module (e.g. sigima).
+    candidates: list[Callable] = []
+    inner = getattr(func, "__wrapped__", None) or getattr(func, "func", None)
+    if inner is not None and callable(inner):
+        candidates.append(inner)
+    candidates.append(func)
+
+    module_name = ""
+    for candidate in candidates:
+        mod = getattr(candidate, "__module__", "") or ""
+        if mod:
+            top = mod.split(".", 1)[0]
+            if top not in _BUILTIN_MODULE_PREFIXES:
+                module_name = mod
+                break
+    if not module_name:
+        # All candidates are built-in; fall back to the outer func's module
+        # so the rest of the logic can still run (and return None).
+        module_name = getattr(func, "__module__", "") or ""
+    if not module_name:
+        return None
+    # Local import to avoid a circular dependency at module load time.
+    try:
+        from datalab.plugins import (  # pylint: disable=import-outside-toplevel
+            PluginRegistry,
+        )
+    except ImportError:
+        PluginRegistry = None  # type: ignore[assignment]
+
+    if PluginRegistry is not None:
+        for plugin in PluginRegistry.get_plugins():
+            plugin_module = plugin.__class__.__module__
+            if module_name == plugin_module or module_name.startswith(
+                plugin_module + "."
+            ):
+                directory: str | None = None
+                try:
+                    directory = osp.basename(
+                        osp.dirname(inspect.getfile(plugin.__class__))
+                    )
+                except (TypeError, OSError):
+                    pass
+                version: str | None = None
+                info = getattr(plugin, "info", None)
+                if info is not None:
+                    version = getattr(info, "version", None)
+                return {
+                    "plugin_class": plugin.__class__.__name__,
+                    "module": module_name,
+                    "directory": directory,
+                    "version": version,
+                }
+
+    # Heuristic fallback: anything not from a known built-in prefix is
+    # treated as an anonymous plugin origin (e.g. user macros, third-party
+    # functions wrapped through ``compute_1_to_1`` directly).
+    top = module_name.split(".", 1)[0]
+    if top and top not in _BUILTIN_MODULE_PREFIXES:
+        directory = None
+        try:
+            directory = osp.basename(osp.dirname(inspect.getfile(func)))
+        except (TypeError, OSError):
+            pass
+        return {
+            "plugin_class": None,
+            "module": module_name,
+            "directory": directory,
+            "version": None,
+        }
+    return None
+
+
 @dataclass
 class ComputingFeature:
     """Computing feature dataclass.
@@ -504,6 +695,9 @@ class ComputingFeature:
         edit: whether to edit the parameters
         obj2_name: name of the second object
         skip_xarray_compat: whether to skip X-array compatibility check for this feature
+        plugin_origin: optional plugin origin descriptor (auto-detected at
+         :meth:`BaseProcessor.add_feature` time). ``None`` for built-in
+         (Sigima/DataLab) features.
     """
 
     pattern: Literal["1_to_1", "1_to_0", "1_to_n", "n_to_1", "2_to_1"]
@@ -515,6 +709,7 @@ class ComputingFeature:
     edit: Optional[bool] = None
     obj2_name: Optional[str] = None
     skip_xarray_compat: Optional[bool] = None
+    plugin_origin: Optional[dict[str, Any]] = field(default=None)
 
     def __post_init__(self):
         """Validate the function after initialization."""
@@ -739,18 +934,28 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
              If False, non-native objects are added to default group. Set to False when
              group_id is from the source panel and object goes to a different panel.
         """
+        hpanel = getattr(self.mainwindow, "historypanel", None)
+        if hpanel is not None and hpanel.is_output_suppressed():
+            return
         is_new_obj_native = isinstance(new_obj, self.panel.PARAMCLASS)
         if is_new_obj_native:
             self.panel.add_object(new_obj, group_id=group_id)
         else:
-            if use_group_for_non_native:
-                self.panel.mainwindow.add_object(new_obj, group_id=group_id)
+            # Route directly to the target panel to avoid the creation entry
+            # that mainwindow.add_object records (which would duplicate the
+            # compute entry already recorded by the processor).
+            if isinstance(new_obj, SignalObj):
+                target_panel = self.panel.mainwindow.signalpanel
             else:
-                self.panel.mainwindow.add_object(new_obj)
+                target_panel = self.panel.mainwindow.imagepanel
+            if use_group_for_non_native:
+                target_panel.add_object(new_obj, group_id=group_id)
+            else:
+                target_panel.add_object(new_obj)
 
     def _create_group_for_result(
         self, new_obj: SignalObj | ImageObj, group_name: str
-    ) -> str:
+    ) -> str | None:
         """Create a group in the appropriate panel for the result object.
 
         For native objects, creates group in current panel. For non-native objects,
@@ -761,8 +966,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             group_name: Name for the new group
 
         Returns:
-            UUID of the created group
+            UUID of the created group.
         """
+        hpanel = getattr(self.mainwindow, "historypanel", None)
+        if hpanel is not None and hpanel.is_output_suppressed():
+            return None
         is_new_obj_native = isinstance(new_obj, self.panel.PARAMCLASS)
         if is_new_obj_native:
             return get_uuid(self.panel.add_group(group_name))
@@ -1024,8 +1232,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         feature = self.get_feature(proc_params.func_name)
 
         # Recompute the analysis operation silently, only for this specific object
-        # (not all selected objects, to avoid O(n²) behavior when called in a loop)
-        with Conf.proc.show_result_dialog.temp(False):
+        # (not all selected objects, to avoid O(nÂ²) behavior when called in a loop).
+        # The history-panel ``replaying()`` guard suppresses the synthetic entry
+        # that ``compute_1_to_0`` would otherwise add for this internally-triggered
+        # recomputation.
+        historypanel = self.panel.mainwindow.historypanel
+        with historypanel.replaying(), Conf.proc.show_result_dialog.temp(False):
             self.compute_1_to_0(feature.function, param, edit=False, target_objs=[obj])
 
         # Update the view
@@ -1073,6 +1285,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         func_name: str,
         obj: SignalObj | ImageObj,
         param: gds.DataSet | None = None,
+        plugin_origin: dict[str, Any] | None = None,
     ) -> SignalObj | ImageObj | None:
         """Recompute a 1-to-1 processing operation without adding result to panel.
 
@@ -1085,18 +1298,22 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             func_name: Name of the processing function
             obj: Source object to process
             param: Processing parameters (optional)
+            plugin_origin: Optional plugin origin descriptor (propagated to
+             :meth:`get_feature` for richer error reporting).
 
         Returns:
             New processed object (not added to panel), or None if cancelled or error
 
         Raises:
-            ValueError: If function is not found in registry
+            FeatureNotFoundError: If function is not found in registry.
         """
         # Get the function from the registry
-        try:
-            feature = self.get_feature(func_name)
-        except ValueError as exc:
-            raise ValueError(f"Function '{func_name}' not found in registry") from exc
+        paramclass_name = type(param).__name__ if param is not None else None
+        feature = self.get_feature(
+            func_name,
+            plugin_origin=plugin_origin,
+            paramclass_name=paramclass_name,
+        )
 
         func = feature.function
 
@@ -1124,6 +1341,183 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
             patch_title_with_ids(new_obj, [obj], get_short_id)
             return new_obj
+
+    # ------------------------------------------------------------------
+    # In-place recompute helpers used by the History panel cascade
+    # (Edit mode tweaks + downstream propagation). They mirror their
+    # ``compute_*`` counterparts but:
+    #   - never add results to a panel (caller updates targets in place);
+    #   - never record a history entry (cascade runs under ``replaying``);
+    #   - never insert :class:`ProcessingParameters` (caller does, so that
+    #     ``source_uuid`` / ``source_uuids`` stay consistent with the
+    #     existing output object identity).
+    # ------------------------------------------------------------------
+
+    def recompute_1_to_n(
+        self,
+        func_name: str,
+        obj: SignalObj | ImageObj,
+        params: list[gds.DataSet],
+        plugin_origin: dict[str, Any] | None = None,
+    ) -> list[SignalObj | ImageObj] | None:
+        """Recompute a 1-to-n processing operation without adding results to panel.
+
+        Args:
+            func_name: Name of the processing function.
+            obj: Source object to process.
+            params: List of N parameter datasets (one per output).
+            plugin_origin: Optional plugin origin descriptor.
+
+        Returns:
+            List of N new objects (in input order), or ``None`` if cancelled
+            or an unrecoverable error occurred. Shorter lists are possible
+            when individual sub-calls return ``None``.
+        """
+        paramclass_name = (
+            type(params[0]).__name__ if params and params[0] is not None else None
+        )
+        feature = self.get_feature(
+            func_name,
+            plugin_origin=plugin_origin,
+            paramclass_name=paramclass_name,
+        )
+        func = feature.function
+        results: list[SignalObj | ImageObj] = []
+        with create_progress_bar(
+            self.panel, _("Recomputing..."), max_=len(params)
+        ) as progress:
+            for idx, param in enumerate(params):
+                progress.setValue(idx)
+                progress.setLabelText(_("Processing object with updated parameters..."))
+                args = (obj, param) if param is not None else (obj,)
+                comp_out = self.__exec_func(func, args, progress)
+                if comp_out is None:
+                    return None
+                new_obj = self.handle_output(comp_out, _("Recomputing"), progress)
+                if new_obj is None:
+                    continue
+                if isinstance(new_obj, (SignalObj, ImageObj)):
+                    self._handle_keep_results(new_obj)
+                    patch_title_with_ids(new_obj, [obj], get_short_id)
+                    results.append(new_obj)
+        return results
+
+    def recompute_n_to_1(
+        self,
+        func_name: str,
+        objs: list[SignalObj | ImageObj],
+        param: gds.DataSet | None = None,
+        plugin_origin: dict[str, Any] | None = None,
+    ) -> SignalObj | ImageObj | None:
+        """Recompute an n-to-1 processing operation without adding result to panel.
+
+        Args:
+            func_name: Name of the processing function.
+            objs: Source object list to aggregate.
+            param: Processing parameters (optional).
+            plugin_origin: Optional plugin origin descriptor.
+
+        Returns:
+            New aggregated object, or ``None`` if cancelled / errored.
+
+        .. note::
+            Pairwise mode is not handled here: each pairwise output is a
+            distinct single-output recompute -- the caller is expected to
+            split the work per output and iterate.
+        """
+        paramclass_name = type(param).__name__ if param is not None else None
+        feature = self.get_feature(
+            func_name,
+            plugin_origin=plugin_origin,
+            paramclass_name=paramclass_name,
+        )
+        func = feature.function
+        with create_progress_bar(self.panel, _("Recomputing..."), max_=1) as progress:
+            progress.setValue(0)
+            progress.setLabelText(_("Processing object with updated parameters..."))
+            args = (objs, param) if param is not None else (objs,)
+            comp_out = self.__exec_func(func, args, progress)
+            if comp_out is None:
+                return None
+            new_obj = self.handle_output(comp_out, _("Recomputing"), progress)
+            if new_obj is None:
+                return None
+            if isinstance(new_obj, (SignalObj, ImageObj)):
+                self._handle_keep_results(new_obj)
+                self._merge_geometry_results_for_n_to_1(new_obj, objs)
+                patch_title_with_ids(new_obj, objs, get_short_id)
+            return new_obj
+
+    def recompute_2_to_1(
+        self,
+        func_name: str,
+        obj1: SignalObj | ImageObj,
+        obj2: SignalObj | ImageObj,
+        param: gds.DataSet | None = None,
+        plugin_origin: dict[str, Any] | None = None,
+    ) -> SignalObj | ImageObj | None:
+        """Recompute a 2-to-1 processing operation without adding result to panel.
+
+        Args:
+            func_name: Name of the processing function.
+            obj1: First source object.
+            obj2: Second source object.
+            param: Processing parameters (optional).
+            plugin_origin: Optional plugin origin descriptor.
+
+        Returns:
+            New combined object, or ``None`` if cancelled / errored.
+        """
+        paramclass_name = type(param).__name__ if param is not None else None
+        feature = self.get_feature(
+            func_name,
+            plugin_origin=plugin_origin,
+            paramclass_name=paramclass_name,
+        )
+        func = feature.function
+        with create_progress_bar(self.panel, _("Recomputing..."), max_=1) as progress:
+            progress.setValue(0)
+            progress.setLabelText(_("Processing object with updated parameters..."))
+            args = (obj1, obj2, param) if param is not None else (obj1, obj2)
+            comp_out = self.__exec_func(func, args, progress)
+            if comp_out is None:
+                return None
+            new_obj = self.handle_output(comp_out, _("Recomputing"), progress)
+            if new_obj is None:
+                return None
+            if isinstance(new_obj, (SignalObj, ImageObj)):
+                self._handle_keep_results(new_obj)
+                patch_title_with_ids(new_obj, [obj1, obj2], get_short_id)
+            return new_obj
+
+    def recompute_1_to_0(
+        self,
+        func_name: str,
+        obj: SignalObj | ImageObj,
+        param: gds.DataSet | None = None,
+        plugin_origin: dict[str, Any] | None = None,
+    ) -> None:
+        """Recompute a 1-to-0 analysis on ``obj`` in place.
+
+        Reuses :meth:`compute_1_to_0` with ``target_objs=[obj]`` under the
+        history-panel ``replaying`` guard so no synthetic history entry is
+        recorded. The analysis result is written to ``obj``'s metadata.
+
+        Args:
+            func_name: Name of the analysis function.
+            obj: Object whose analysis must be refreshed.
+            param: Analysis parameters (optional).
+            plugin_origin: Optional plugin origin descriptor.
+        """
+        paramclass_name = type(param).__name__ if param is not None else None
+        feature = self.get_feature(
+            func_name,
+            plugin_origin=plugin_origin,
+            paramclass_name=paramclass_name,
+        )
+        historypanel = self.mainwindow.historypanel
+        with historypanel.replaying(), Conf.proc.show_result_dialog.temp(False):
+            self.compute_1_to_0(feature.function, param, edit=False, target_objs=[obj])
 
     def _compute_1_to_1_subroutine(
         self, funcs: list[Callable], params: list, title: str
@@ -1269,7 +1663,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         comment: str | None = None,
         edit: bool | None = None,
     ) -> None:
-        """Generic processing method: 1 object in → 1 object out.
+        """Generic processing method: 1 object in â†’ 1 object out.
 
         Applies a function independently to each selected object in the active panel.
         The result of each computation is a new object appended to the same panel.
@@ -1299,7 +1693,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if param is not None:
             if edit and not param.edit(parent=self.mainwindow):
                 return
-        self._compute_1_to_1_subroutine([func], [param], title)
+        pp = build_processing_parameters(func.__name__, "1-to-1", param=param)
+        action = self.mainwindow.historypanel.add_compute_entry_from_pp(
+            title or func.__name__,
+            pp,
+            panel_str=self.panel.PANEL_STR_ID,
+            plugin_origin=self._get_plugin_origin_for(func),
+        )
+        with self.mainwindow.historypanel.capture_outputs(action):
+            self._compute_1_to_1_subroutine([func], [param], title)
 
     def compute_multiple_1_to_1(
         self,
@@ -1308,7 +1710,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         title: str | None = None,
         edit: bool | None = None,
     ) -> None:
-        """Generic processing method: 1 object in → n objects out.
+        """Generic processing method: 1 object in â†’ n objects out.
 
         Applies multiple functions to each selected object, generating multiple
         outputs per object. The resulting objects are appended to the active panel.
@@ -1324,7 +1726,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         .. note::
             With k selected objects and n outputs per function,
-            the method produces k × n outputs.
+            the method produces k Ã— n outputs.
 
         .. note::
             This method does not support pairwise mode.
@@ -1337,7 +1739,19 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 return
             if len(funcs) != len(params):
                 raise ValueError("Number of functions must match number of parameters")
-        self._compute_1_to_1_subroutine(funcs, params, title)
+        pp = build_processing_parameters(
+            funcs[0].__name__ if funcs else "", "multiple-1-to-1"
+        )
+        action = self.mainwindow.historypanel.add_compute_entry_from_pp(
+            title or "compute_multiple_1_to_1",
+            pp,
+            panel_str=self.panel.PANEL_STR_ID,
+            func_names=[f.__name__ for f in funcs],
+            params=params if any(p is not None for p in params) else None,
+            plugin_origin=(self._get_plugin_origin_for(funcs[0]) if funcs else None),
+        )
+        with self.mainwindow.historypanel.capture_outputs(action):
+            self._compute_1_to_1_subroutine(funcs, params, title)
 
     def compute_1_to_n(
         self,
@@ -1346,7 +1760,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         title: str | None = None,
         edit: bool | None = None,
     ) -> None:
-        """Generic processing method: 1 object in → n objects out.
+        """Generic processing method: 1 object in â†’ n objects out.
 
         Applies a single function to each selected object, with n different parameters
         set, thus generating n outputs per object. The resulting objects are appended to
@@ -1363,7 +1777,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         .. note::
             With k selected objects and n parameter sets,
-            the method produces k × n outputs.
+            the method produces k Ã— n outputs.
 
         .. note::
             This method does not support pairwise mode.
@@ -1373,7 +1787,16 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             group = gds.DataSetGroup(params, title=_("Parameters"))
             if not group.edit(parent=self.mainwindow):
                 return
-        self._compute_1_to_1_subroutine([func] * len(params), params, title)
+        pp = build_processing_parameters(func.__name__, "1-to-n")
+        action = self.mainwindow.historypanel.add_compute_entry_from_pp(
+            title or func.__name__,
+            pp,
+            panel_str=self.panel.PANEL_STR_ID,
+            params=params,
+            plugin_origin=self._get_plugin_origin_for(func),
+        )
+        with self.mainwindow.historypanel.capture_outputs(action):
+            self._compute_1_to_1_subroutine([func] * len(params), params, title)
 
     def compute_1_to_0(
         self,
@@ -1385,7 +1808,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         edit: bool | None = None,
         target_objs: list[SignalObj | ImageObj] | None = None,
     ) -> ResultData:
-        """Generic processing method: 1 object in → no object out.
+        """Generic processing method: 1 object in â†’ no object out.
 
         Applies a function to each selected object (or specified target objects),
         returning metadata or measurement results (e.g. peak coordinates, statistical
@@ -1429,6 +1852,17 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             return None
         current_obj = self.panel.objview.get_current_object()
         title = func.__name__ if title is None else title
+        pp_history = build_processing_parameters(func.__name__, "1-to-0", param=param)
+        action = self.mainwindow.historypanel.add_compute_entry_from_pp(
+            title,
+            pp_history,
+            panel_str=self.panel.PANEL_STR_ID,
+            plugin_origin=self._get_plugin_origin_for(func),
+        )
+        # 1-to-0: no data object is produced. Register an empty output list so
+        # the bijective mapping records the action even with zero outputs.
+        if action is not None:
+            self.mainwindow.historypanel.register_action_outputs(action, [])
         refresh_needed = False
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
             rdata = ResultData()
@@ -1504,8 +1938,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        pairwise: bool | None = None,
     ) -> None:
-        """Generic processing method: n objects in → 1 object out.
+        """Generic processing method: n objects in â†’ 1 object out.
 
         Aggregates multiple selected objects into a single result using the provided
         function. In pairwise mode, applies the function to object pairs (grouped by
@@ -1536,202 +1971,224 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         objmodel = self.panel.objmodel
-        pairwise = is_pairwise_mode()
+        pairwise = is_pairwise_mode() if pairwise is None else pairwise
         name = func.__name__
 
-        if pairwise:
-            src_grps, src_gids, src_objs, _nbobj, valid = (
-                self.__get_src_grps_gids_objs_nbobj_valid(min_group_nb=2)
-            )
-            if not valid:
-                return
-            dst_gname = (
-                f"{name}({','.join([get_short_id(grp) for grp in src_grps])})|pairwise"
-            )
-            group_exclusive = len(self.panel.objview.get_sel_groups()) != 0
-            if not group_exclusive:
-                # This is not a group exclusive selection
-                dst_gname += "[...]"
-            # Delay group creation until after first result to determine target panel
-            dst_gid = None
-            n_pairs = len(src_objs[src_gids[0]])
-            max_i_pair = min(
-                n_pairs, max(len(src_objs[get_uuid(grp)]) for grp in src_grps)
-            )
-            # Track "Yes to All" choice for this compute operation
-            auto_interpolate_for_operation = False
+        pp_history = build_processing_parameters(name, "n-to-1", param=param)
+        action = self.mainwindow.historypanel.add_compute_entry_from_pp(
+            name,
+            pp_history,
+            panel_str=self.panel.PANEL_STR_ID,
+            pairwise=pairwise,
+            plugin_origin=self._get_plugin_origin_for(func),
+        )
 
-            with create_progress_bar(self.panel, title, max_=n_pairs) as progress:
-                for i_pair, src_obj1 in enumerate(src_objs[src_gids[0]][:max_i_pair]):
-                    progress.setValue(i_pair + 1)
-                    progress.setLabelText(title)
-                    src_objs_pair = [src_obj1]
-                    for src_gid in src_gids[1:]:
-                        src_obj = src_objs[src_gid][i_pair]
-                        src_objs_pair.append(src_obj)
+        with self.mainwindow.historypanel.capture_outputs(action):
+            if pairwise:
+                src_grps, src_gids, src_objs, _nbobj, valid = (
+                    self.__get_src_grps_gids_objs_nbobj_valid(min_group_nb=2)
+                )
+                if not valid:
+                    return
+                dst_gname = (
+                    f"{name}({','.join([get_short_id(grp) for grp in src_grps])})"
+                    "|pairwise"
+                )
+                group_exclusive = len(self.panel.objview.get_sel_groups()) != 0
+                if not group_exclusive:
+                    # This is not a group exclusive selection
+                    dst_gname += "[...]"
+                # Delay group creation until after first result
+                # to determine target panel
+                dst_gid = None
+                n_pairs = len(src_objs[src_gids[0]])
+                max_i_pair = min(
+                    n_pairs, max(len(src_objs[get_uuid(grp)]) for grp in src_grps)
+                )
+                # Track "Yes to All" choice for this compute operation
+                auto_interpolate_for_operation = False
 
-                    # Check signal x-array compatibility for n-to-1 operations
-                    if auto_interpolate_for_operation:
-                        # "Yes to All" selected, automatically interpolate
-                        # by temporarily changing the configuration
-                        with Conf.proc.xarray_compat_behavior.temp("interpolate"):
+                with create_progress_bar(self.panel, title, max_=n_pairs) as progress:
+                    for i_pair, src_obj1 in enumerate(
+                        src_objs[src_gids[0]][:max_i_pair]
+                    ):
+                        progress.setValue(i_pair + 1)
+                        progress.setLabelText(title)
+                        src_objs_pair = [src_obj1]
+                        for src_gid in src_gids[1:]:
+                            src_obj = src_objs[src_gid][i_pair]
+                            src_objs_pair.append(src_obj)
+
+                        # Check signal x-array compatibility for n-to-1 operations
+                        if auto_interpolate_for_operation:
+                            # "Yes to All" selected, automatically interpolate
+                            # by temporarily changing the configuration
+                            with Conf.proc.xarray_compat_behavior.temp("interpolate"):
+                                result = self._check_signal_xarray_compatibility(
+                                    src_objs_pair, progress=progress
+                                )
+                        else:
+                            # Normal compatibility check with dialog
                             result = self._check_signal_xarray_compatibility(
                                 src_objs_pair, progress=progress
                             )
-                    else:
-                        # Normal compatibility check with dialog
-                        result = self._check_signal_xarray_compatibility(
-                            src_objs_pair, progress=progress
+
+                        if result is None:
+                            # User canceled or compatibility check failed
+                            return
+
+                        checked_objs, yes_to_all_selected = result
+                        if yes_to_all_selected:
+                            auto_interpolate_for_operation = True
+
+                        src_objs_pair = checked_objs
+                        if param is None:
+                            args = (src_objs_pair,)
+                        else:
+                            args = (src_objs_pair, param)
+                        result = self.__exec_func(func, args, progress)
+                        if result is None:
+                            break
+                        new_obj = self.handle_output(
+                            result, _("Calculating: %s") % title, progress
                         )
+                        if new_obj is None:
+                            break
+                        assert isinstance(new_obj, (SignalObj, ImageObj))
 
-                    if result is None:
-                        # User canceled or compatibility check failed
-                        return
+                        patch_title_with_ids(new_obj, src_objs_pair, get_short_id)
 
-                    checked_objs, yes_to_all_selected = result
-                    if yes_to_all_selected:
-                        auto_interpolate_for_operation = True
+                        # Handle keep_results and geometry result merging
+                        self._handle_keep_results(new_obj)
+                        self._merge_geometry_results_for_n_to_1(new_obj, src_objs_pair)
 
-                    src_objs_pair = checked_objs
-                    if param is None:
-                        args = (src_objs_pair,)
-                    else:
-                        args = (src_objs_pair, param)
-                    result = self.__exec_func(func, args, progress)
-                    if result is None:
-                        break
-                    new_obj = self.handle_output(
-                        result, _("Calculating: %s") % title, progress
-                    )
-                    if new_obj is None:
-                        break
-                    assert isinstance(new_obj, (SignalObj, ImageObj))
+                        # Store lightweight processing metadata (non-interactive)
+                        proc_params = ProcessingParameters(
+                            func_name=name,
+                            pattern="n-to-1",
+                            param=param,
+                            source_uuids=[get_uuid(obj) for obj in src_objs_pair],
+                        )
+                        insert_processing_parameters(new_obj, proc_params)
 
-                    patch_title_with_ids(new_obj, src_objs_pair, get_short_id)
+                        # Create destination group on first result, in appropriate panel
+                        if dst_gid is None:
+                            dst_gid = self._create_group_for_result(new_obj, dst_gname)
 
-                    # Handle keep_results and geometry result merging
-                    self._handle_keep_results(new_obj)
-                    self._merge_geometry_results_for_n_to_1(new_obj, src_objs_pair)
+                        self._add_object_to_appropriate_panel(new_obj, group_id=dst_gid)
 
-                    # Store lightweight processing metadata (non-interactive)
-                    proc_params = ProcessingParameters(
-                        func_name=name,
-                        pattern="n-to-1",
-                        param=param,
-                        source_uuids=[get_uuid(obj) for obj in src_objs_pair],
-                    )
-                    insert_processing_parameters(new_obj, proc_params)
-
-                    # Create destination group on first result, in appropriate panel
-                    if dst_gid is None:
-                        dst_gid = self._create_group_for_result(new_obj, dst_gname)
-
-                    self._add_object_to_appropriate_panel(new_obj, group_id=dst_gid)
-
-        else:
-            # In single operand mode, we create a single object for all selected objects
-
-            # [src_objs dictionary] keys: old group id, values: list of old objects
-            src_objs: dict[str, list[SignalObj | ImageObj]] = {}
-
-            grps = self.panel.objview.get_sel_groups()
-            dst_group_name = None
-            if grps:
-                # (Group exclusive selection)
-                # At least one group is selected: create a new group
-                dst_gname = f"{name}({','.join([get_uuid(grp) for grp in grps])})"
-                # Delay group creation until after first result
-                dst_gid = None
-                dst_group_name = dst_gname  # Store name for later use
             else:
-                # (Object exclusive selection)
-                # No group is selected: use each object's group
-                dst_gid = None
+                # In single operand mode, we create a single object
+                # for all selected objects
 
-            for src_obj in objs:
-                src_gid = objmodel.get_object_group_id(src_obj)
-                src_objs.setdefault(src_gid, []).append(src_obj)
+                # [src_objs dictionary] keys: old group id, values: list of old objects
+                src_objs: dict[str, list[SignalObj | ImageObj]] = {}
 
-            # Track "Yes to All" choice for this compute operation
-            auto_interpolate_for_operation = False
+                grps = self.panel.objview.get_sel_groups()
+                dst_group_name = None
+                if grps:
+                    # (Group exclusive selection)
+                    # At least one group is selected: create a new group
+                    dst_gname = f"{name}({','.join([get_uuid(grp) for grp in grps])})"
+                    # Delay group creation until after first result
+                    dst_gid = None
+                    dst_group_name = dst_gname  # Store name for later use
+                else:
+                    # (Object exclusive selection)
+                    # No group is selected: use each object's group
+                    dst_gid = None
 
-            with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
-                progress.setValue(0)
-                progress.setLabelText(title)
-                for src_gid, src_obj_list in src_objs.items():
-                    # Check signal x-array compatibility for n-to-1 operations
-                    if auto_interpolate_for_operation:
-                        # "Yes to All" selected, automatically interpolate
-                        with Conf.proc.xarray_compat_behavior.temp("interpolate"):
+                for src_obj in objs:
+                    src_gid = objmodel.get_object_group_id(src_obj)
+                    src_objs.setdefault(src_gid, []).append(src_obj)
+
+                # Track "Yes to All" choice for this compute operation
+                auto_interpolate_for_operation = False
+
+                with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
+                    progress.setValue(0)
+                    progress.setLabelText(title)
+                    for src_gid, src_obj_list in src_objs.items():
+                        # Check signal x-array compatibility for n-to-1 operations
+                        if auto_interpolate_for_operation:
+                            # "Yes to All" selected, automatically interpolate
+                            with Conf.proc.xarray_compat_behavior.temp("interpolate"):
+                                result = self._check_signal_xarray_compatibility(
+                                    src_obj_list, progress=progress
+                                )
+                        else:
+                            # Normal compatibility check with dialog
                             result = self._check_signal_xarray_compatibility(
                                 src_obj_list, progress=progress
                             )
-                    else:
-                        # Normal compatibility check with dialog
-                        result = self._check_signal_xarray_compatibility(
-                            src_obj_list, progress=progress
+
+                        if result is None:
+                            # User canceled or compatibility check failed
+                            return
+
+                        checked_objs, yes_to_all_selected = result
+                        if yes_to_all_selected:
+                            auto_interpolate_for_operation = True
+
+                        src_obj_list = checked_objs
+
+                        if param is None:
+                            args = (src_obj_list,)
+                        else:
+                            args = (src_obj_list, param)
+                        result = self.__exec_func(func, args, progress)
+                        if result is None:
+                            break
+                        new_obj = self.handle_output(
+                            result, _("Calculating: %s") % title, progress
+                        )
+                        if new_obj is None:
+                            break
+                        assert isinstance(new_obj, (SignalObj, ImageObj))
+
+                        group_id = dst_gid if dst_gid is not None else src_gid
+                        patch_title_with_ids(new_obj, src_obj_list, get_short_id)
+
+                        # Handle keep_results and geometry result merging
+                        self._handle_keep_results(new_obj)
+                        self._merge_geometry_results_for_n_to_1(new_obj, src_obj_list)
+
+                        # Store lightweight processing metadata (non-interactive)
+                        proc_params = ProcessingParameters(
+                            func_name=name,
+                            pattern="n-to-1",
+                            param=param,
+                            source_uuids=[get_uuid(obj) for obj in src_obj_list],
+                        )
+                        insert_processing_parameters(new_obj, proc_params)
+
+                        # Create destination group on first result, in appropriate panel
+                        use_group_for_non_native = False
+                        if dst_gid is None and dst_group_name is not None:
+                            dst_gid = self._create_group_for_result(
+                                new_obj, dst_group_name
+                            )
+                            group_id = dst_gid
+                            use_group_for_non_native = True
+
+                        self._add_object_to_appropriate_panel(
+                            new_obj,
+                            group_id=group_id,
+                            use_group_for_non_native=use_group_for_non_native,
                         )
 
-                    if result is None:
-                        # User canceled or compatibility check failed
-                        return
-
-                    checked_objs, yes_to_all_selected = result
-                    if yes_to_all_selected:
-                        auto_interpolate_for_operation = True
-
-                    src_obj_list = checked_objs
-
-                    if param is None:
-                        args = (src_obj_list,)
-                    else:
-                        args = (src_obj_list, param)
-                    result = self.__exec_func(func, args, progress)
-                    if result is None:
-                        break
-                    new_obj = self.handle_output(
-                        result, _("Calculating: %s") % title, progress
-                    )
-                    if new_obj is None:
-                        break
-                    assert isinstance(new_obj, (SignalObj, ImageObj))
-
-                    group_id = dst_gid if dst_gid is not None else src_gid
-                    patch_title_with_ids(new_obj, src_obj_list, get_short_id)
-
-                    # Handle keep_results and geometry result merging
-                    self._handle_keep_results(new_obj)
-                    self._merge_geometry_results_for_n_to_1(new_obj, src_obj_list)
-
-                    # Store lightweight processing metadata (non-interactive)
-                    proc_params = ProcessingParameters(
-                        func_name=name,
-                        pattern="n-to-1",
-                        param=param,
-                        source_uuids=[get_uuid(obj) for obj in src_obj_list],
-                    )
-                    insert_processing_parameters(new_obj, proc_params)
-
-                    # Create destination group on first result, in appropriate panel
-                    use_group_for_non_native = False
-                    if dst_gid is None and dst_group_name is not None:
-                        dst_gid = self._create_group_for_result(new_obj, dst_group_name)
-                        group_id = dst_gid
-                        use_group_for_non_native = True
-
-                    self._add_object_to_appropriate_panel(
-                        new_obj,
-                        group_id=group_id,
-                        use_group_for_non_native=use_group_for_non_native,
-                    )
-
-        # Select newly created group, if any
-        if dst_gid is not None:
-            self.panel.objview.set_current_item_id(dst_gid)
+            # Select newly created group, if any
+            if dst_gid is not None:
+                self.panel.objview.set_current_item_id(dst_gid)
 
     def compute_2_to_1(
         self,
-        obj2: SignalObj | ImageObj | list[SignalObj | ImageObj] | None,
+        obj2: SignalObj
+        | ImageObj
+        | list[SignalObj | ImageObj]
+        | int
+        | list[int]
+        | None,
         obj2_name: str,
         func: Callable,
         param: gds.DataSet | None = None,
@@ -1740,8 +2197,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         comment: str | None = None,
         edit: bool | None = None,
         skip_xarray_compat: bool | None = None,
+        pairwise: bool | None = None,
     ) -> None:
-        """Generic processing method: binary operation 1+1 → 1.
+        """Generic processing method: binary operation 1+1 â†’ 1.
 
         Applies a binary function between each selected object and a second operand.
         Supports both single operand mode (same operand for all objects)
@@ -1778,7 +2236,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         objmodel = self.panel.objmodel
-        pairwise = is_pairwise_mode()
+        pairwise = is_pairwise_mode() if pairwise is None else pairwise
         name = func.__name__
 
         if obj2 is None:
@@ -1788,6 +2246,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             assert pairwise
         else:
             objs2 = [obj2]
+        if objs2 and all(isinstance(obj, int) for obj in objs2):
+            # If obj2 is a list of object numbers, convert to objects
+            objs2 = [objmodel.get_object_from_number(obj) for obj in objs2]
 
         dlg_title = _("Select %s") % obj2_name
 
@@ -1812,117 +2273,138 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if objs2 is None:
                     return
 
-            n_pairs = len(src_objs[src_gids[0]])
-            max_i_pair = min(
-                n_pairs, max(len(src_objs[get_uuid(grp)]) for grp in src_grps)
+            pp_history = build_processing_parameters(
+                func.__name__, "2-to-1", param=param
             )
-            grp2_id = objmodel.get_object_group_id(objs2[0])
-            grp2 = objmodel.get_group(grp2_id)
+            action = self.mainwindow.historypanel.add_compute_entry_from_pp(
+                title or func.__name__,
+                pp_history,
+                panel_str=self.panel.PANEL_STR_ID,
+                obj2_uuids=[get_uuid(obj) for obj in objs2],
+                obj2_name=obj2_name,
+                pairwise=True,
+                plugin_origin=self._get_plugin_origin_for(func),
+            )
 
-            # Initialize pair mapping for potential interpolations
-            pair_maps = {}
+            with self.mainwindow.historypanel.capture_outputs(action):
+                n_pairs = len(src_objs[src_gids[0]])
+                max_i_pair = min(
+                    n_pairs, max(len(src_objs[get_uuid(grp)]) for grp in src_grps)
+                )
+                grp2_id = objmodel.get_object_group_id(objs2[0])
+                grp2 = objmodel.get_group(grp2_id)
 
-            # Check x-array compatibility for signal processing (pairwise mode)
-            if self._is_signal_panel() and not skip_xarray_compat:
-                # Check compatibility between objects from both groups
-                all_pairs = []
-                for src_gid in src_gids:
-                    for i_pair in range(max_i_pair):
-                        src_obj1 = src_objs[src_gid][i_pair]
-                        src_obj2 = objs2[i_pair]
-                        if isinstance(src_obj1, SignalObj) and isinstance(
-                            src_obj2, SignalObj
-                        ):
-                            all_pairs.append((src_obj1, src_obj2))
+                # Initialize pair mapping for potential interpolations
+                pair_maps = {}
 
-                # Track "Yes to All" choice for this compute operation
-                auto_interpolate_for_operation = False
+                # Check x-array compatibility for signal processing (pairwise mode)
+                if self._is_signal_panel() and not skip_xarray_compat:
+                    # Check compatibility between objects from both groups
+                    all_pairs = []
+                    for src_gid in src_gids:
+                        for i_pair in range(max_i_pair):
+                            src_obj1 = src_objs[src_gid][i_pair]
+                            src_obj2 = objs2[i_pair]
+                            if isinstance(src_obj1, SignalObj) and isinstance(
+                                src_obj2, SignalObj
+                            ):
+                                all_pairs.append((src_obj1, src_obj2))
 
-                # Check all pairs for compatibility and create interpolation maps
-                for src_obj1, src_obj2 in all_pairs:
-                    if auto_interpolate_for_operation:
-                        # "Yes to All" selected, automatically interpolate
-                        with Conf.proc.xarray_compat_behavior.temp("interpolate"):
+                    # Track "Yes to All" choice for this compute operation
+                    auto_interpolate_for_operation = False
+
+                    # Check all pairs for compatibility and create interpolation maps
+                    for src_obj1, src_obj2 in all_pairs:
+                        if auto_interpolate_for_operation:
+                            # "Yes to All" selected, automatically interpolate
+                            with Conf.proc.xarray_compat_behavior.temp("interpolate"):
+                                result = self._check_signal_xarray_compatibility(
+                                    [src_obj1, src_obj2]
+                                )
+                        else:
+                            # Normal compatibility check with dialog
                             result = self._check_signal_xarray_compatibility(
                                 [src_obj1, src_obj2]
                             )
-                    else:
-                        # Normal compatibility check with dialog
-                        result = self._check_signal_xarray_compatibility(
-                            [src_obj1, src_obj2]
-                        )
 
-                    if result is None:
-                        return  # User cancelled or error occurred
-
-                    checked_pair, yes_to_all_selected = result
-                    if yes_to_all_selected:
-                        auto_interpolate_for_operation = True
-
-                    # Store mapping for this specific pair
-                    pair_maps[(src_obj1, src_obj2)] = checked_pair
-
-            with create_progress_bar(self.panel, title, max_=len(src_gids)) as progress:
-                for i_group, src_gid in enumerate(src_gids):
-                    progress.setValue(i_group + 1)
-                    progress.setLabelText(title)
-                    if group_exclusive:
-                        # This is a group exclusive selection
-                        src_grp = objmodel.get_group(src_gid)
-                        grp_short_ids = [get_uuid(grp) for grp in (src_grp, grp2)]
-                        dst_gname = f"{name}({','.join(grp_short_ids)})|pairwise"
-                    else:
-                        dst_gname = f"{name}[...]"
-                    # Delay group creation until after first result
-                    dst_gid = None
-                    for i_pair in range(max_i_pair):
-                        orig_obj1, orig_obj2 = src_objs[src_gid][i_pair], objs2[i_pair]
-
-                        # Use interpolated signals if available, keep original refs
-                        actual_obj1, actual_obj2 = orig_obj1, orig_obj2
-                        if (orig_obj1, orig_obj2) in pair_maps:
-                            interpolated_pair = pair_maps[(orig_obj1, orig_obj2)]
-                            actual_obj1 = interpolated_pair[0]
-                            actual_obj2 = interpolated_pair[1]
-
-                        args = [actual_obj1, actual_obj2]
-                        if param is not None:
-                            args.append(param)
-                        result = self.__exec_func(func, tuple(args), progress)
                         if result is None:
-                            break
-                        new_obj = self.handle_output(
-                            result, _("Calculating: %s") % title, progress
-                        )
-                        if new_obj is None:
-                            continue
-                        assert isinstance(new_obj, (SignalObj, ImageObj))
+                            return  # User cancelled or error occurred
 
-                        # Use original objects for title generation
-                        patch_title_with_ids(
-                            new_obj, [orig_obj1, orig_obj2], get_short_id
-                        )
+                        checked_pair, yes_to_all_selected = result
+                        if yes_to_all_selected:
+                            auto_interpolate_for_operation = True
 
-                        # Handle keep_results logic for 2_to_1 operations
-                        self._handle_keep_results(new_obj)
+                        # Store mapping for this specific pair
+                        pair_maps[(src_obj1, src_obj2)] = checked_pair
 
-                        # Store lightweight processing metadata (non-interactive)
-                        proc_params = ProcessingParameters(
-                            func_name=name,
-                            pattern="2-to-1",
-                            param=param,
-                            source_uuids=[
-                                get_uuid(orig_obj1),
-                                get_uuid(orig_obj2),
-                            ],
-                        )
-                        insert_processing_parameters(new_obj, proc_params)
+                with create_progress_bar(
+                    self.panel, title, max_=len(src_gids)
+                ) as progress:
+                    for i_group, src_gid in enumerate(src_gids):
+                        progress.setValue(i_group + 1)
+                        progress.setLabelText(title)
+                        if group_exclusive:
+                            # This is a group exclusive selection
+                            src_grp = objmodel.get_group(src_gid)
+                            grp_short_ids = [get_uuid(grp) for grp in (src_grp, grp2)]
+                            dst_gname = f"{name}({','.join(grp_short_ids)})|pairwise"
+                        else:
+                            dst_gname = f"{name}[...]"
+                        # Delay group creation until after first result
+                        dst_gid = None
+                        for i_pair in range(max_i_pair):
+                            orig_obj1 = src_objs[src_gid][i_pair]
+                            orig_obj2 = objs2[i_pair]
 
-                        # Create destination group on first result, in appropriate panel
-                        if dst_gid is None:
-                            dst_gid = self._create_group_for_result(new_obj, dst_gname)
+                            # Use interpolated signals if available, keep original refs
+                            actual_obj1, actual_obj2 = orig_obj1, orig_obj2
+                            if (orig_obj1, orig_obj2) in pair_maps:
+                                interpolated_pair = pair_maps[(orig_obj1, orig_obj2)]
+                                actual_obj1 = interpolated_pair[0]
+                                actual_obj2 = interpolated_pair[1]
 
-                        self._add_object_to_appropriate_panel(new_obj, group_id=dst_gid)
+                            args = [actual_obj1, actual_obj2]
+                            if param is not None:
+                                args.append(param)
+                            result = self.__exec_func(func, tuple(args), progress)
+                            if result is None:
+                                break
+                            new_obj = self.handle_output(
+                                result, _("Calculating: %s") % title, progress
+                            )
+                            if new_obj is None:
+                                continue
+                            assert isinstance(new_obj, (SignalObj, ImageObj))
+
+                            # Use original objects for title generation
+                            patch_title_with_ids(
+                                new_obj, [orig_obj1, orig_obj2], get_short_id
+                            )
+
+                            # Handle keep_results logic for 2_to_1 operations
+                            self._handle_keep_results(new_obj)
+
+                            # Store lightweight processing metadata (non-interactive)
+                            proc_params = ProcessingParameters(
+                                func_name=name,
+                                pattern="2-to-1",
+                                param=param,
+                                source_uuids=[
+                                    get_uuid(orig_obj1),
+                                    get_uuid(orig_obj2),
+                                ],
+                            )
+                            insert_processing_parameters(new_obj, proc_params)
+
+                            # Create dest group on first result
+                            if dst_gid is None:
+                                dst_gid = self._create_group_for_result(
+                                    new_obj, dst_gname
+                                )
+
+                            self._add_object_to_appropriate_panel(
+                                new_obj, group_id=dst_gid
+                            )
 
         else:
             if not objs2:
@@ -1937,88 +2419,106 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     return
             obj2 = objs2[0]
 
-            # Initialize signal mapping for potential interpolations
-            signal_map = {}
+            pp_history = build_processing_parameters(
+                func.__name__, "2-to-1", param=param
+            )
+            action = self.mainwindow.historypanel.add_compute_entry_from_pp(
+                title or func.__name__,
+                pp_history,
+                panel_str=self.panel.PANEL_STR_ID,
+                obj2_uuids=[get_uuid(obj2)],
+                obj2_name=obj2_name,
+                pairwise=False,
+                plugin_origin=self._get_plugin_origin_for(func),
+            )
 
-            # Check x-array compatibility for signal processing (single operand mode)
-            orig_obj2 = obj2  # Keep reference to original obj2 for title generation
-            if (
-                self._is_signal_panel()
-                and isinstance(obj2, SignalObj)
-                and not skip_xarray_compat
-            ):
-                signal_objs = [obj for obj in objs if isinstance(obj, SignalObj)]
-                if signal_objs:
-                    # Check compatibility and get potentially interpolated signals
-                    result = self._check_signal_xarray_compatibility(
-                        signal_objs + [obj2]
-                    )
-                    if result is None:
-                        return  # User cancelled or error occurred
+            with self.mainwindow.historypanel.capture_outputs(action):
+                # Initialize signal mapping for potential interpolations
+                signal_map = {}
 
-                    checked_objs, _yes_to_all_selected = result
-                    # Note: In single operand mode, "Yes to All" doesn't apply
-                    # since there's only one compatibility check
+                # Check x-array compatibility for signal processing
+                # (single operand mode)
+                orig_obj2 = obj2  # Keep reference to original obj2 for title generation
+                if (
+                    self._is_signal_panel()
+                    and isinstance(obj2, SignalObj)
+                    and not skip_xarray_compat
+                ):
+                    signal_objs = [obj for obj in objs if isinstance(obj, SignalObj)]
+                    if signal_objs:
+                        # Check compatibility and get potentially interpolated signals
+                        result = self._check_signal_xarray_compatibility(
+                            signal_objs + [obj2]
+                        )
+                        if result is None:
+                            return  # User cancelled or error occurred
 
-                    # Replace obj2 with the potentially interpolated version
-                    obj2 = checked_objs[-1]  # obj2 was added last
+                        checked_objs, _yes_to_all_selected = result
+                        # Note: In single operand mode, "Yes to All" doesn't apply
+                        # since there's only one compatibility check
 
-                    # Create a mapping of original to interpolated signals
-                    for orig_obj, checked_obj in zip(signal_objs, checked_objs[:-1]):
-                        signal_map[orig_obj] = checked_obj
+                        # Replace obj2 with the potentially interpolated version
+                        obj2 = checked_objs[-1]  # obj2 was added last
 
-            with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
-                for index, obj in enumerate(objs):
-                    progress.setValue(index + 1)
-                    progress.setLabelText(title)
+                        # Create a mapping of original to interpolated signals
+                        for orig_obj, checked_obj in zip(
+                            signal_objs, checked_objs[:-1]
+                        ):
+                            signal_map[orig_obj] = checked_obj
 
-                    # Use interpolated signal if available
-                    actual_obj = obj
-                    if (
-                        self._is_signal_panel()
-                        and isinstance(obj, SignalObj)
-                        and obj in signal_map
-                    ):
-                        actual_obj = signal_map[obj]
+                with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
+                    for index, obj in enumerate(objs):
+                        progress.setValue(index + 1)
+                        progress.setLabelText(title)
 
-                    args = (
-                        (actual_obj, obj2)
-                        if param is None
-                        else (actual_obj, obj2, param)
-                    )
-                    result = self.__exec_func(func, args, progress)
-                    if result is None:
-                        break
-                    new_obj = self.handle_output(
-                        result, _("Calculating: %s") % title, progress
-                    )
-                    if new_obj is None:
-                        continue
-                    assert isinstance(new_obj, (SignalObj, ImageObj))
+                        # Use interpolated signal if available
+                        actual_obj = obj
+                        if (
+                            self._is_signal_panel()
+                            and isinstance(obj, SignalObj)
+                            and obj in signal_map
+                        ):
+                            actual_obj = signal_map[obj]
 
-                    group_id = objmodel.get_object_group_id(obj)
-                    # Use original objects for title generation
-                    patch_title_with_ids(new_obj, [obj, orig_obj2], get_short_id)
+                        args = (
+                            (actual_obj, obj2)
+                            if param is None
+                            else (actual_obj, obj2, param)
+                        )
+                        result = self.__exec_func(func, args, progress)
+                        if result is None:
+                            break
+                        new_obj = self.handle_output(
+                            result, _("Calculating: %s") % title, progress
+                        )
+                        if new_obj is None:
+                            continue
+                        assert isinstance(new_obj, (SignalObj, ImageObj))
 
-                    # Handle keep_results logic for 2_to_1 operations
-                    self._handle_keep_results(new_obj)
+                        group_id = objmodel.get_object_group_id(obj)
+                        # Use original objects for title generation
+                        patch_title_with_ids(new_obj, [obj, orig_obj2], get_short_id)
 
-                    # Store lightweight processing metadata (non-interactive)
-                    proc_params = ProcessingParameters(
-                        func_name=name,
-                        pattern="2-to-1",
-                        param=param,
-                        source_uuids=[
-                            get_uuid(obj),
-                            get_uuid(orig_obj2),
-                        ],
-                    )
-                    insert_processing_parameters(new_obj, proc_params)
+                        # Handle keep_results logic for 2_to_1 operations
+                        self._handle_keep_results(new_obj)
 
-                    # group_id is from source panel, don't use for non-native objects
-                    self._add_object_to_appropriate_panel(
-                        new_obj, group_id=group_id, use_group_for_non_native=False
-                    )
+                        # Store lightweight processing metadata (non-interactive)
+                        proc_params = ProcessingParameters(
+                            func_name=name,
+                            pattern="2-to-1",
+                            param=param,
+                            source_uuids=[
+                                get_uuid(obj),
+                                get_uuid(orig_obj2),
+                            ],
+                        )
+                        insert_processing_parameters(new_obj, proc_params)
+
+                        # group_id is from source panel, don't use
+                        # for non-native objects
+                        self._add_object_to_appropriate_panel(
+                            new_obj, group_id=group_id, use_group_for_non_native=False
+                        )
 
     def register_1_to_1(
         self,
@@ -2210,27 +2710,66 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
     def add_feature(self, feature: ComputingFeature) -> None:
         """Add a computing feature to the registry.
 
+        Auto-detects the plugin origin from ``feature.function.__module__`` and
+        stores it on the feature (see :func:`_detect_plugin_origin`).
+
         Args:
             feature: ComputingFeature instance to add.
         """
+        if feature.function is not None and feature.plugin_origin is None:
+            feature.plugin_origin = _detect_plugin_origin(feature.function)
         self.computing_registry[feature.function] = feature
 
-    def get_feature(self, function_or_name: Callable | str) -> ComputingFeature:
+    def _get_plugin_origin_for(self, func: Callable) -> dict[str, Any] | None:
+        """Return the plugin origin descriptor for ``func`` if known.
+
+        Falls back to a fresh detection if ``func`` is not in the registry.
+
+        Args:
+            func: Computation function.
+
+        Returns:
+            Plugin origin dict, or ``None`` for built-in functions.
+        """
+        feature = self.computing_registry.get(func)
+        if feature is not None:
+            return feature.plugin_origin
+        return _detect_plugin_origin(func)
+
+    def get_feature(
+        self,
+        function_or_name: Callable | str,
+        plugin_origin: dict[str, Any] | None = None,
+        paramclass_name: str | None = None,
+    ) -> ComputingFeature:
         """Get a computing feature by name or function.
 
         Args:
             function_or_name: Name of the feature or the function itself.
+            plugin_origin: Optional plugin origin descriptor used to enrich the
+             :class:`FeatureNotFoundError` raised when the feature is unknown.
+            paramclass_name: Optional name of the required parameter class, also
+             used to enrich the error message.
 
         Returns:
             Computing feature instance.
+
+        Raises:
+            FeatureNotFoundError: If no matching feature is registered. The
+             exception subclasses :class:`ValueError` to preserve backward
+             compatibility with existing callers.
         """
         try:
             return self.computing_registry[function_or_name]
-        except KeyError as exc:
+        except KeyError:
             for _func, feature in self.computing_registry.items():
                 if feature.name == function_or_name:
                     return feature
-            raise ValueError(f"Unknown computing feature: {function_or_name}") from exc
+        raise FeatureNotFoundError(
+            str(function_or_name),
+            plugin_origin=plugin_origin,
+            paramclass_name=paramclass_name,
+        )
 
     @qt_try_except()
     def run_feature(
@@ -2297,6 +2836,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             assert isinstance(param, (gds.DataSet, type(None))), (
                 f"For pattern '{pattern}', 'param' must be a DataSet or None"
             )
+            compute_kwargs = {}
+            if pattern == "n_to_1":
+                compute_kwargs["pairwise"] = kwargs.pop("pairwise", None)
             return compute_method(
                 feature.function,
                 param=param,
@@ -2304,6 +2846,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 title=title,
                 comment=comment,
                 edit=edit,
+                **compute_kwargs,
             )
         if pattern == "2_to_1":
             obj2 = kwargs.pop("obj2", args[0] if args else None)
@@ -2315,6 +2858,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             assert isinstance(param, (gds.DataSet, type(None))), (
                 "For pattern '2_to_1', 'param' must be a DataSet or None"
             )
+            pairwise = kwargs.pop("pairwise", None)
             return self.compute_2_to_1(
                 obj2,
                 feature.obj2_name or _("Second operand"),
@@ -2325,6 +2869,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 comment=comment,
                 edit=edit,
                 skip_xarray_compat=feature.skip_xarray_compat,
+                pairwise=pairwise,
             )
         if pattern == "1_to_n":
             params = kwargs.get("params", args[0] if args else [])

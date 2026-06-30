@@ -11,6 +11,18 @@
 * Listed directories are appended to the existing plugin search paths at startup and are picked up automatically by the plugin discovery mechanism
 * Non-existent directories are silently skipped (a warning is recorded in the log file), so a stale environment variable on another machine will not prevent DataLab from starting
 
+**History Panel sessions:**
+
+* Added serialized and replayable history sessions with workspace-state validation
+* Added `.dlhist` import/export support and separated reset sessions from regular history sessions
+* Improved replay compatibility reporting for clearer user feedback
+
+**History Panel sessions:**
+
+* Added serialized and replayable history sessions with workspace-state validation
+* Added `.dlhist` import/export support and separated reset sessions from regular history sessions
+* Improved replay compatibility reporting for clearer user feedback
+
 **Replace special values processing (signal and image):**
 
 DataLab now provides a dedicated **"Replace special values"** processing

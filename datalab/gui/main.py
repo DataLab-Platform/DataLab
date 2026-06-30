@@ -75,10 +75,10 @@ from datalab.gui.commandpalette import (
 )
 from datalab.gui.docks import DockablePlotWidget
 from datalab.gui.h5io import H5InputOutput
-from datalab.gui.panel import base, image, macro, signal
+from datalab.gui.panel import base, history, image, macro, signal
 from datalab.gui.pluginconfig import PluginConfigDialog
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
-from datalab.objectmodel import ObjectGroup
+from datalab.objectmodel import ObjectGroup, get_uuid
 from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plugins
 from datalab.utils import qthelpers as qth
 from datalab.utils.qthelpers import (
@@ -178,6 +178,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.console: DockableConsole | None = None
         self._startup_errors: list[str] = []
         self.macropanel: MacroPanel | None = None
+        self.historypanel: history.HistoryPanel | None = None
         self.aiassistantpanel = None  # type: ignore[assignment]
 
         self.main_toolbar: QW.QToolBar | None = None
@@ -197,6 +198,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.saveh5_action: QW.QAction | None = None
         self.browseh5_action: QW.QAction | None = None
         self.settings_action: QW.QAction | None = None
+        self.command_palette_action: QW.QAction | None = None
         self.quit_action: QW.QAction | None = None
         self.autorefresh_action: QW.QAction | None = None
         self.showfirstonly_action: QW.QAction | None = None
@@ -735,12 +737,17 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     # ------Misc.
     @property
     def panels(self) -> tuple[AbstractPanel, ...]:
-        """Return the tuple of implemented panels (signal, image)
+        """Return the tuple of implemented panels (signal, image, macro, history)
 
         Returns:
             Tuple of panels
         """
-        return (self.signalpanel, self.imagepanel, self.macropanel)
+        return (
+            self.signalpanel,
+            self.imagepanel,
+            self.macropanel,
+            self.historypanel,
+        )
 
     def __set_low_memory_state(self, state: bool) -> None:
         """Set memory warning state"""
@@ -1020,6 +1027,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.__flush_startup_errors()
         self.__update_actions(update_other_data_panel=True)
         self.__add_macro_panel()
+        self.__add_history_panel()
         self.__add_aiassistant_panel()
         self.__configure_panels()
         # Now that everything is set up, we can restore the window state:
@@ -1733,6 +1741,14 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.tabifyDockWidget(self.docks[self.imagepanel], mdock)
         self.docks[self.signalpanel].raise_()
 
+    def __add_history_panel(self) -> None:
+        """Add history panel"""
+        self.historypanel = history.HistoryPanel(self)
+        hdock = self.__add_dockwidget(self.historypanel, _("History Panel"))
+        self.docks[self.historypanel] = hdock
+        self.tabifyDockWidget(self.docks[self.macropanel], hdock)
+        self.docks[self.signalpanel].raise_()
+
     def __add_aiassistant_panel(self) -> None:
         """Add AI Assistant panel"""
         # Local import to keep AI assistant fully optional/loadable on demand
@@ -1927,6 +1943,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         dock = self.docks[self.tabwidget.widget(index)]
         dock.raise_()
         self.__update_actions()
+        if self.historypanel is not None:
+            widget = self.tabwidget.widget(index)
+            if widget is self.signalpanel:
+                self.historypanel.on_current_panel_changed("signal")
+            elif widget is self.imagepanel:
+                self.historypanel.on_current_panel_changed("image")
 
     def __update_generic_menu(self, menu: QW.QMenu | None = None) -> None:
         """Update menu before showing up -- Generic method"""
@@ -2066,8 +2088,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     def reset_all(self) -> None:
         """Reset all application data"""
         for panel in self.panels:
-            if panel is not None:
+            if panel is not None and panel is not self.historypanel:
                 panel.remove_all_objects()
+        if self.historypanel is not None:
+            self.historypanel.start_new_session_after_workspace_reset()
 
     @remote_controlled
     def remove_object(self, force: bool = False) -> None:
@@ -2110,6 +2134,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 )
             if not filename:
                 return
+        self.historypanel.add_ui_entry(
+            _("Save to HDF5 file"),
+            target="mainwindow",
+            method_name="save_to_h5_file",
+            save_state=False,
+            filename=filename,
+        )
         with qth.qt_try_loadsave_file(self, filename, "save"):
             self.save_h5_workspace(filename)
 
@@ -2182,6 +2213,19 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 )
         if not h5files:
             return
+        if len(h5files) > 1:
+            entry_title = _("Open %d HDF5 files") % len(h5files)
+        else:
+            entry_title = _("Open HDF5 file")
+        self.historypanel.add_ui_entry(
+            entry_title,
+            target="mainwindow",
+            method_name="open_h5_files",
+            save_state=False,
+            h5files=h5files,
+            import_all=import_all,
+            reset_all=reset_all,
+        )
         filenames, dsetnames = [], []
         for fname_with_dset in h5files:
             if "," in fname_with_dset:
@@ -2238,17 +2282,20 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         Raises:
             ValueError: If a file is not a valid native DataLab HDF5 file
         """
-        for idx, filename in enumerate(h5files):
-            filename = self.__check_h5file(filename, "load")
-            success = self.h5inputoutput.open_file_headless(
-                filename, reset_all=(reset_all and idx == 0)
-            )
-            if not success:
-                raise ValueError(
-                    f"File '{filename}' is not a native DataLab HDF5 file. "
-                    f"Use the GUI menu or a macro with RemoteProxy to import "
-                    f"arbitrary HDF5 files."
+        # Offer a fresh history session for this load *before* recording anything.
+        self.historypanel.maybe_start_session_for_input(load=True)
+        with self.historypanel.session_prompt_suppressed():
+            for idx, filename in enumerate(h5files):
+                filename = self.__check_h5file(filename, "load")
+                success = self.h5inputoutput.open_file_headless(
+                    filename, reset_all=(reset_all and idx == 0)
                 )
+                if not success:
+                    raise ValueError(
+                        f"File '{filename}' is not a native DataLab HDF5 file. "
+                        f"Use the GUI menu or a macro with RemoteProxy to import "
+                        f"arbitrary HDF5 files."
+                    )
         # Refresh panel trees after loading
         self.repopulate_panel_trees()
 
@@ -2279,9 +2326,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             separated by ":")
             reset_all: Delete all DataLab signals/images before importing data
         """
-        with qth.qt_try_loadsave_file(self, filename, "load"):
-            filename = self.__check_h5file(filename, "load")
-            self.h5inputoutput.import_files([filename], False, reset_all)
+        # Offer a fresh history session for this load *before* importing anything.
+        self.historypanel.maybe_start_session_for_input(load=True)
+        with self.historypanel.session_prompt_suppressed():
+            with qth.qt_try_loadsave_file(self, filename, "load"):
+                filename = self.__check_h5file(filename, "load")
+                self.h5inputoutput.import_files([filename], False, reset_all)
 
     # This method is intentionally *not* remote controlled
     # (see TODO regarding RemoteClient.add_object method)
@@ -2299,10 +2349,24 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         if self.confirm_memory_state():
             if isinstance(obj, SignalObj):
                 self.signalpanel.add_object(obj, group_id, set_current)
+                panel_str = "signal"
             elif isinstance(obj, ImageObj):
                 self.imagepanel.add_object(obj, group_id, set_current)
+                panel_str = "image"
             else:
                 raise TypeError(f"Unsupported object type {type(obj)}")
+            # Record a creation entry so objects added programmatically (plugins,
+            # macros, remote control) appear in the history. ``panel.add_object``
+            # deliberately does not record, so creations entering through this
+            # proxy boundary would otherwise be lost (notably the very first one).
+            action = self.historypanel.add_ui_entry(
+                _("New %s") % panel_str,
+                target=panel_str + "panel",
+                method_name="new_object",
+                save_state=False,
+            )
+            if action is not None:
+                self.historypanel.register_action_outputs(action, [get_uuid(obj)])
 
     @remote_controlled
     def set_object(self, obj: SignalObj | ImageObj) -> None:

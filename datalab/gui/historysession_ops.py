@@ -1,0 +1,418 @@
+# Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
+
+"""Helpers for History panel session recording and indexing."""
+
+from __future__ import annotations
+
+import logging
+from contextlib import contextmanager
+from copy import deepcopy
+from typing import TYPE_CHECKING, Any, Callable, Generator
+
+from qtpy import QtCore as QC
+from qtpy import QtWidgets as QW
+
+from datalab.config import _
+from datalab.env import execenv
+from datalab.history import HistoryAction, HistorySession, WorkspaceState
+from datalab.history.core import _resolve_self_target
+
+if TYPE_CHECKING:
+    from datalab.gui.panel.history import HistoryPanel
+
+_logger = logging.getLogger(__name__)
+
+
+def create_new_session(
+    panel: HistoryPanel, panel_str: str | None = None
+) -> HistorySession:
+    """Create a new history session and make it active for its panel.
+
+    Args:
+        panel_str: Panel the new session belongs to ("signal"/"image").
+            Defaults to the current data panel.
+
+    Returns:
+        The newly created session.
+    """
+    pstr = panel_str or panel._current_panel_str()
+    panel.session_increment += 1
+    session = HistorySession(number=panel.session_increment)
+    panel.history_sessions.append(session)
+    panel.set_active_session(session, pstr)
+    panel.tree.populate_tree(panel.history_sessions)
+    panel.refresh_compatibility_items()
+    return session
+
+
+def start_new_session_after_workspace_reset(panel: HistoryPanel) -> None:
+    """Start a new history session after a workspace reset, when useful."""
+    if panel.history_sessions and panel.history_sessions[-1].actions:
+        panel.create_new_session()
+
+
+def maybe_start_session_for_input(panel: HistoryPanel, *, load: bool = False) -> None:
+    """Offer to start a new history session before a creation/load is recorded.
+
+    When the current session already contains actions, prompt the user to start
+    a fresh session so the new creation/load becomes the root of a clean,
+    self-contained pipeline. A new session is opened *before* the action is
+    recorded when the user accepts.
+
+    Args:
+        load: True when triggered by a file/workspace load, False for an object
+         creation. Only affects the prompt wording.
+    """
+    if not panel.record_mode_enabled or panel.is_replaying():
+        return
+    if panel._suppress_session_prompt:
+        return
+    # Reuse the current session when there is none yet or it has no actions:
+    # there is nothing to preserve, so no need to prompt.
+    if not panel.history_sessions or not panel.history_sessions[-1].actions:
+        return
+    # Debounce: a synchronous burst of creations (plugin/macro) must prompt only
+    # once. The guard is reset on the next event-loop turn.
+    if panel._session_input_pending:
+        return
+    panel._session_input_pending = True
+    QC.QTimer.singleShot(0, lambda: setattr(panel, "_session_input_pending", False))
+    if execenv.unattended:
+        # Headless runs: honor the accept_dialogs flag (default False -> "No"),
+        # so tests can drive the behavior without a real modal dialog.
+        if execenv.accept_dialogs:
+            panel.create_new_session()
+        return
+    if load:
+        message = _("A new object was loaded. Start a new history session?")
+    else:
+        message = _("A new object was created. Start a new history session?")
+    answer = QW.QMessageBox.question(
+        panel.mainwindow,
+        _("New history session"),
+        message,
+        QW.QMessageBox.Yes | QW.QMessageBox.No,
+    )
+    if answer == QW.QMessageBox.Yes:
+        panel.create_new_session()
+
+
+def add_compute_entry(
+    panel: HistoryPanel,
+    action_title: str,
+    panel_str: str,
+    func_name: str,
+    pattern: str,
+    save_state: bool = True,
+    output_uuids: list[str] | None = None,
+    plugin_origin: dict[str, Any] | None = None,
+    **kwargs: Any,
+) -> HistoryAction | None:
+    """Record a *compute* action in the current history session.
+
+    Args:
+        action_title: Title shown in the history tree.
+        panel_str: ``"signal"`` or ``"image"``.
+        func_name: Sigima feature name (resolvable via
+         :meth:`BaseProcessor.get_feature`).
+        pattern: One of ``"1_to_1"``, ``"1_to_0"``, ``"n_to_1"``, ``"2_to_1"``,
+         ``"1_to_n"``, ``"multiple_1_to_1"`` (the latter is recorded for
+         traceability but not replayable).
+        save_state: If True, capture the workspace state for replay.
+        output_uuids: Optional list of UUIDs of the data objects produced by
+         this action. When known at call time, prefer passing it here so the
+         bijective mapping is initialised in one step. Most callers do not
+         know the outputs yet and instead wrap the compute call with
+         :meth:`capture_outputs` (or call :meth:`register_action_outputs`
+         explicitly afterwards) using the returned action.
+        plugin_origin: Optional plugin origin descriptor (see
+         :func:`datalab.gui.processor.base._detect_plugin_origin`). ``None``
+         for built-in Sigima/DataLab features.
+        **kwargs: Extra primitive kwargs (``param``, ``obj2_uuids``,
+         ``obj2_name``, ``pairwise``, ``params`` (list of DataSet),
+         ``func_names`` (list of str), ...). ``DataSet`` instances are
+         serialised as JSON.
+
+    Returns:
+        The created :class:`HistoryAction`, or ``None`` if recording is
+        disabled (record mode off or replay in progress).
+    """
+    if not panel.record_mode_enabled or panel.is_replaying():
+        return None
+    state = WorkspaceState()
+    if save_state:
+        state.save(panel.mainwindow, panel_str=panel_str)
+    # Deep-copy kwargs so each action owns independent parameter
+    # instances. Without this, consecutive applications of the same
+    # function (e.g. two gaussian_filter calls with different sigma)
+    # would share a single DataSet object and editing one action's
+    # parameters would silently mutate the other.
+    action = HistoryAction(
+        title=action_title,
+        kind=HistoryAction.KIND_COMPUTE,
+        panel_str=panel_str,
+        func_name=func_name,
+        pattern=pattern,
+        kwargs=deepcopy(kwargs),
+        state=state,
+        plugin_origin=plugin_origin,
+    )
+    panel.add_object(action)
+    if output_uuids is not None:
+        panel.register_action_outputs(action, output_uuids)
+    return action
+
+
+def add_compute_entry_from_pp(
+    panel: HistoryPanel,
+    action_title: str,
+    pp: Any,  # ProcessingParameters (avoid circular import)
+    panel_str: str,
+    save_state: bool = True,
+    output_uuids: list[str] | None = None,
+    plugin_origin: dict[str, Any] | None = None,
+    **extras: Any,
+) -> HistoryAction | None:
+    """Record a *compute* action derived from a ``ProcessingParameters``.
+
+    Bridges the dash-form pattern used in object metadata
+    (``"1-to-1"`` …) with the underscore form expected by
+    :class:`HistoryAction` (``"1_to_1"`` …) so that both sides share
+    a single identity (``func_name`` / ``pattern`` / ``param``).
+
+    Args:
+        action_title: Title shown in the history tree.
+        pp: :class:`~datalab.gui.processor.base.ProcessingParameters`
+         instance describing the operation.
+        panel_str: ``"signal"`` or ``"image"``.
+        save_state: If True, capture the workspace state for replay.
+        output_uuids: Optional list of UUIDs of the data objects produced
+         by this action (see :meth:`add_compute_entry`).
+        plugin_origin: Optional plugin origin descriptor (see
+         :meth:`add_compute_entry`).
+        **extras: Additional history-only kwargs (``obj2_uuids``,
+         ``obj2_name``, ``pairwise``, ``params``, ``func_names``…).
+
+    Returns:
+        The created :class:`HistoryAction`, or ``None`` if recording is
+        disabled.
+    """
+    hist_pattern = pp.pattern.replace("-", "_")
+    kwargs: dict[str, Any] = {}
+    if pp.param is not None and "param" not in extras and "params" not in extras:
+        kwargs["param"] = pp.param
+    kwargs.update(extras)
+    return panel.add_compute_entry(
+        action_title,
+        panel_str=panel_str,
+        func_name=pp.func_name,
+        pattern=hist_pattern,
+        save_state=save_state,
+        output_uuids=output_uuids,
+        plugin_origin=plugin_origin,
+        **kwargs,
+    )
+
+
+def register_action_outputs(
+    panel: HistoryPanel, action: HistoryAction, output_uuids: list[str]
+) -> None:
+    """Register the data objects produced by ``action``.
+
+    Maintains the bijective ``action → outputs`` and ``output → action``
+    mappings. May be called multiple times for a given action (later calls
+    replace earlier ones, e.g. after a cascade recompute).
+
+    Args:
+        action: The history action that produced the outputs.
+        output_uuids: UUIDs of the produced data objects (empty for
+         ``1_to_0`` analysis patterns and for UI actions that did not
+         create new objects).
+    """
+    # Drop previous outputs for this action from the reverse index.
+    previous = panel.action_output_uuids.get(action.uuid, [])
+    for prev_uuid in previous:
+        if panel.output_to_action.get(prev_uuid) == action.uuid:
+            panel.output_to_action.pop(prev_uuid, None)
+    new_outputs = list(output_uuids)
+    # Ownership transfer: if an output_uuid already belongs to a
+    # *different* action, remove it from that action's output list so the
+    # forward mapping stays consistent.  The HistoryAction object's
+    # ``output_uuids`` attribute is NOT updated here because traversing all
+    # sessions to locate the object would be expensive; the panel-level
+    # dicts are the source of truth.
+    for out_uuid in new_outputs:
+        old_action_uuid = panel.output_to_action.get(out_uuid)
+        if old_action_uuid is not None and old_action_uuid != action.uuid:
+            old_list = panel.action_output_uuids.get(old_action_uuid)
+            if old_list is not None:
+                try:
+                    old_list.remove(out_uuid)
+                except ValueError:
+                    pass
+                if not old_list:
+                    del panel.action_output_uuids[old_action_uuid]
+            _logger.debug(
+                "Output %s transferred from action %s to %s",
+                out_uuid,
+                old_action_uuid,
+                action.uuid,
+            )
+    action.output_uuids = list(new_outputs)
+    panel.action_output_uuids[action.uuid] = new_outputs
+    for out_uuid in new_outputs:
+        panel.output_to_action[out_uuid] = action.uuid
+
+
+@contextmanager
+def capture_outputs(
+    panel: HistoryPanel, action: HistoryAction | None
+) -> Generator[None, None, None]:
+    """Context manager: snapshot panel object IDs and record diffs as outputs.
+
+    Use around any compute call when the produced UUIDs are not known
+    upfront. On exit, every newly-added object (signal or image) is
+    registered as an output of ``action`` via
+    :meth:`register_action_outputs`. No-op when ``action`` is ``None``
+    (recording disabled).
+
+    Args:
+        action: The history action being processed, or ``None``.
+    """
+    if action is None:
+        yield
+        return
+    panels = (panel.mainwindow.signalpanel, panel.mainwindow.imagepanel)
+    before = {p.PANEL_STR_ID: set(p.objmodel.get_object_ids()) for p in panels}
+    try:
+        yield
+    finally:
+        new_uuids: list[str] = []
+        for p in panels:
+            before_p = before[p.PANEL_STR_ID]
+            for uid in p.objmodel.get_object_ids():
+                if uid not in before_p:
+                    new_uuids.append(uid)
+        panel.register_action_outputs(action, new_uuids)
+        if (
+            not new_uuids
+            and action.kind == HistoryAction.KIND_COMPUTE
+            and action.pattern in {"1_to_1", "1_to_n", "n_to_1", "2_to_1"}
+        ):
+            # The compute produced no output object for any selected input:
+            # it failed (or was a full no-op). Do not keep a misleading "OK"
+            # entry in the history — remove the just-recorded action and
+            # refresh the tree so the panel stays consistent.
+            panel.remove_single_action(action)
+            panel.tree.populate_tree(panel.history_sessions)
+            panel.refresh_compatibility_items()
+            panel.update_actions_state()
+
+
+def add_ui_entry(
+    panel: HistoryPanel,
+    action_title: str,
+    target: str,
+    method_name: str,
+    save_state: bool = True,
+    **kwargs: Any,
+) -> HistoryAction | None:
+    """Record a *UI* action in the current history session.
+
+    Args:
+        action_title: Title shown in the history tree.
+        target: One of ``"mainwindow"``, ``"signalpanel"``, ``"imagepanel"``,
+         ``"historypanel"`` -- attribute path on the main window.
+        method_name: Method name to call on ``target`` at replay time.
+        save_state: If True, capture the workspace state for replay.
+        **kwargs: Method keyword arguments. ``DataSet`` instances are
+         serialised as JSON; other values must be HDF5-friendly primitives.
+
+    Returns:
+        The created :class:`HistoryAction`, or ``None`` if recording is
+        disabled (record mode off or replay in progress).
+    """
+    if not panel.record_mode_enabled or panel.is_replaying():
+        return None
+    # When the entry is an object creation, offer to start a fresh history
+    # session first so the creation becomes the root of a clean pipeline.
+    if method_name in HistoryAction.UI_CREATION_METHODS:
+        panel.maybe_start_session_for_input(load=False)
+    # Derive the action's panel from the UI target so the captured state only
+    # constrains the panel the action actually operates on.
+    target_panel_str = {
+        "signalpanel": "signal",
+        "imagepanel": "image",
+        "signalprocessor": "signal",
+        "imageprocessor": "image",
+    }.get(target)
+    state = WorkspaceState()
+    if save_state:
+        state.save(panel.mainwindow, panel_str=target_panel_str)
+    # Deep-copy kwargs to ensure independent parameter ownership
+    # (same rationale as in add_compute_entry).
+    action = HistoryAction(
+        title=action_title,
+        kind=HistoryAction.KIND_UI,
+        target=target,
+        method_name=method_name,
+        kwargs=deepcopy(kwargs),
+        state=state,
+        panel_str=target_panel_str
+        if target in ("signalprocessor", "imageprocessor")
+        else None,
+    )
+    panel.add_object(action)
+    return action
+
+
+def add_entry(
+    panel: HistoryPanel,
+    action_title: str,
+    save_state: bool,
+    func: Callable,
+    **kwargs,
+) -> None:
+    """Legacy entry-point kept as a compatibility shim.
+
+    Most call sites have been migrated to :meth:`add_compute_entry` or
+    :meth:`add_ui_entry`. The remaining paths -- and the
+    :func:`add_to_history` decorator -- still call ``add_entry`` with a
+    bound method; we infer the ``(target, method_name)`` from the bound
+    ``func.__self__`` and route to :meth:`add_ui_entry`.
+    """
+    if not panel.record_mode_enabled or panel.is_replaying():
+        return
+    target = None
+    if hasattr(func, "__self__"):
+        target = _resolve_self_target(func.__self__)
+    if target is None:
+        # Cannot route safely -- skip rather than pickle a Callable.
+        return
+    panel.add_ui_entry(
+        action_title,
+        target=target,
+        method_name=func.__name__,
+        save_state=save_state,
+        **kwargs,
+    )
+
+
+def add_object(panel: HistoryPanel, obj: HistoryAction) -> None:
+    """Add an action to the active session of its panel.
+
+    Routes the action to the active recording session for the action's panel
+    ("signal"/"image"), creating a dedicated session on first use, so signal
+    and image pipelines stay in separate sessions and recording resumes in the
+    user-selected session.
+    """
+    pstr = obj.panel_str or panel._current_panel_str()
+    session = panel.get_active_session(pstr)
+    if session is None:
+        session = panel.create_new_session(panel_str=pstr)
+    session.add_action(obj)
+    session_index = panel.history_sessions.index(session)
+    panel.tree.add_action_to_tree(obj, session_index)
+    panel.tree.rearrange_tree()
+    panel.refresh_compatibility_items()
+    panel.update_actions_state()

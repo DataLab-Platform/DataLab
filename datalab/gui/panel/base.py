@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import abc
+import copy
 import glob
 import os
 import os.path as osp
@@ -90,6 +91,7 @@ from datalab.objectmodel import (
     get_number,
     get_short_id,
     get_uuid,
+    patch_title_with_ids,
     set_number,
     set_uuid,
 )
@@ -207,6 +209,11 @@ class ObjectProp(QW.QWidget):
         self.processing_param_editor: gdq.DataSetEditGroupBox | None = None
         self.current_processing_obj: SignalObj | ImageObj | None = None
         self.processing_scroll: QW.QScrollArea | None = None
+        # Auto-recompute toggle (session-only state, not persisted to Conf).
+        self.__auto_recompute_enabled: bool = False
+        self.__auto_recompute_timer = QC.QTimer(self)
+        self.__auto_recompute_timer.setSingleShot(True)
+        self.__auto_recompute_timer.timeout.connect(self.__auto_recompute_trigger)
 
         # Properties tab
         self.properties = gdq.DataSetEditGroupBox("", objclass)
@@ -590,16 +597,6 @@ class ObjectProp(QW.QWidget):
         editor = self.creation_param_editor
         if editor is None or self.current_creation_obj is None:
             return
-        if isinstance(self.current_creation_obj, SignalObj):
-            otext = _("Signal was modified in-place.")
-        else:
-            otext = _("Image was modified in-place.")
-        text = f"⚠️ {otext} ⚠️ "
-        text += _(
-            "If computation were performed based on this object, "
-            "they may need to be redone."
-        )
-        self.panel.SIG_STATUS_MESSAGE.emit(text, 20000)
 
         # Recreate object with new parameters
         # (serialization is done automatically in create_signal/image_from_param)
@@ -638,6 +635,20 @@ class ObjectProp(QW.QWidget):
         obj_processor = self.__get_processor_associated_to(self.current_creation_obj)
         obj_processor.auto_recompute_analysis(self.current_creation_obj)
 
+        # Propagate the edited param to the History panel: mutate the matching
+        # creation action (snapshot originals first), refresh its tree display,
+        # then cascade recompute to downstream actions so the chain stays
+        # consistent with the new creation parameters. Creation actions are
+        # KIND_UI without a func_name, so look them up via output_to_action.
+        hpanel = getattr(self.panel.mainwindow, "historypanel", None)
+        if hpanel is not None:
+            action = hpanel.find_creation_action_for_output(obj_uuid)
+            if action is not None:
+                action.snapshot_kwargs()
+                action.kwargs["param"] = copy.deepcopy(param)
+                hpanel.refresh_action(action)
+                hpanel.recompute_cascade(action)
+
         # Update the tree view item (to show new title if it changed)
         self.panel.objview.update_item(obj_uuid)
 
@@ -649,6 +660,12 @@ class ObjectProp(QW.QWidget):
         # Update the Properties tab to reflect the new object properties
         # (e.g., data type, dimensions, etc.)
         self.__update_properties_dataset(self.current_creation_obj)
+
+        if isinstance(self.current_creation_obj, SignalObj):
+            text = _("Signal was recreated.")
+        else:
+            text = _("Image was recreated.")
+        self.panel.SIG_STATUS_MESSAGE.emit("✅ " + text, 5000)
 
         # Refresh the Creation tab with the new parameters
         # Use QTimer to defer this until after the current event is processed
@@ -725,6 +742,23 @@ class ObjectProp(QW.QWidget):
         editor.SIG_APPLY_BUTTON_CLICKED.connect(self.apply_processing_parameters)
         editor.set_apply_button_state(False)
 
+        # Hook into the per-edit change callback to support auto-recompute.
+        # ``DataSetEditLayout.change_callback`` is called whenever any widget
+        # value changes; wrap it so we can also (re)start the debounce timer.
+        try:
+            inner_layout = editor.edit  # DataSetEditLayout instance
+            original_change_cb = inner_layout.change_callback
+
+            def _wrapped_change_cb() -> None:
+                if original_change_cb is not None:
+                    original_change_cb()
+                if self.__auto_recompute_enabled:
+                    self.__auto_recompute_timer.start(300)
+
+            inner_layout.change_callback = _wrapped_change_cb
+        except AttributeError:
+            pass
+
         # Store reference to be able to retrieve it later
         self.processing_param_editor = editor
 
@@ -751,7 +785,21 @@ class ObjectProp(QW.QWidget):
             QW.QSizePolicy.Expanding, QW.QSizePolicy.Preferred
         )
 
-        self.processing_scroll.setWidget(editor)
+        # Build the tab content: editor + "Auto-recompute" checkbox.
+        container = QW.QWidget()
+        vbox = QW.QVBoxLayout(container)
+        vbox.setContentsMargins(0, 0, 0, 0)
+        vbox.addWidget(editor)
+        auto_cb = QW.QCheckBox(_("Auto-recompute on edit"), container)
+        auto_cb.setToolTip(
+            _("Automatically re-run processing when parameters are modified")
+        )
+        auto_cb.setChecked(self.__auto_recompute_enabled)
+        auto_cb.toggled.connect(self.__set_auto_recompute_enabled)
+        vbox.addWidget(auto_cb)
+        vbox.addStretch(1)
+
+        self.processing_scroll.setWidget(container)
         self.tabwidget.insertTab(
             insert_index,
             self.processing_scroll,
@@ -781,14 +829,40 @@ class ObjectProp(QW.QWidget):
             return self.panel.mainwindow.signalpanel.processor
         return self.panel.mainwindow.imagepanel.processor
 
+    def __set_auto_recompute_enabled(self, enabled: bool) -> None:
+        """Toggle auto-recompute mode (session-only, not persisted)."""
+        self.__auto_recompute_enabled = bool(enabled)
+        if not self.__auto_recompute_enabled:
+            self.__auto_recompute_timer.stop()
+
+    def __auto_recompute_trigger(self) -> None:
+        """Debounced callback: push widget values then re-run processing."""
+        if not self.__auto_recompute_enabled:
+            return
+        editor = self.processing_param_editor
+        if editor is None:
+            return
+        # ``editor.set()`` synchronises widget values to the dataset and emits
+        # ``SIG_APPLY_BUTTON_CLICKED`` which is already wired to
+        # ``apply_processing_parameters``.
+        editor.set(check=False)
+
     def apply_processing_parameters(
-        self, obj: SignalObj | ImageObj | None = None, interactive: bool = True
+        self,
+        obj: SignalObj | ImageObj | None = None,
+        interactive: bool = True,
+        param: gds.DataSet | None = None,
     ) -> ProcessingReport:
         """Apply processing parameters: re-run processing with updated parameters.
 
         Args:
             obj: Signal or Image object to reprocess. If None, uses the current object.
             interactive: If True, show progress and error messages in the UI.
+            param: Explicit processing parameters to apply. When provided, this
+                takes precedence and makes the call independent of the Processing
+                tab editor state (used e.g. by programmatic recompute paths).
+                When None (default), fall back to the editor dataset or the
+                stored processing parameters.
 
         Returns:
             ProcessingReport with success status, object UUID, and optional message.
@@ -839,8 +913,12 @@ class ObjectProp(QW.QWidget):
                 )
             return report
 
-        # Get updated parameters from editor
-        param = editor.dataset if editor is not None else proc_params.param
+        # Resolve the parameters to apply. An explicit ``param`` argument takes
+        # precedence and makes this method independent of the editor state;
+        # otherwise fall back to the editor (interactive Apply) or the stored
+        # processing parameters.
+        if param is None:
+            param = editor.dataset if editor is not None else proc_params.param
 
         # For cross-panel computations, we need to use the processor from the panel
         # that owns the source object (e.g., radial_profile is in ImageProcessor)
@@ -864,49 +942,106 @@ class ObjectProp(QW.QWidget):
         else:
             report.success = True
 
-            # Update the current object in-place with data from new object
-            obj.title = new_obj.title
-            if isinstance(obj, SignalObj):
-                obj.xydata = new_obj.xydata
-            else:  # ImageObj
-                obj.data = new_obj.data
-                # Invalidate ROI mask cache when image dimensions may have changed
-                # (the mask is computed based on image shape, so it must be recomputed)
-                obj.invalidate_maskdata_cache()
+            hpanel = getattr(self.panel.mainwindow, "historypanel", None)
+            is_edit_mode = hpanel is not None and hpanel.is_edit_mode()
 
-            # Update metadata with new processing parameters
-            updated_proc_params = ProcessingParameters(
-                func_name=proc_params.func_name,
-                pattern=proc_params.pattern,
-                param=param,
-                source_uuid=proc_params.source_uuid,
-            )
-            insert_processing_parameters(obj, updated_proc_params)
+            if is_edit_mode:
+                # --- Edit mode: mutate obj in-place, cascade downstream ---
 
-            # Auto-recompute analysis if the object had analysis parameters
-            # Since the data has changed, any analysis results are now invalid
-            # Use the processor for the current object's type (not source object's type)
-            obj_processor = self.__get_processor_associated_to(obj)
-            obj_processor.auto_recompute_analysis(obj)
+                # Apply the recomputed object in place through the shared
+                # primitive (single source of truth, also used by the
+                # History panel cascade): updates title + data and the
+                # processing parameters, preserves obj's metadata, then
+                # re-runs auto analysis.
+                updated_proc_params = ProcessingParameters(
+                    func_name=proc_params.func_name,
+                    pattern=proc_params.pattern,
+                    param=param,
+                    source_uuid=proc_params.source_uuid,
+                )
+                self.apply_recomputed_object_in_place(obj, new_obj, updated_proc_params)
 
-            # Update the tree view item and refresh plot
-            obj_uuid = get_uuid(obj)
-            self.panel.objview.update_item(obj_uuid)
-            self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+                # Propagate the edited param to the History panel:
+                # Mutate the matching existing action (snapshot originals
+                # first), refresh its tree display, then cascade recompute
+                # to downstream actions so the chain stays consistent with
+                # the new parameters.
+                action = hpanel.find_action_for_output(
+                    get_uuid(obj), proc_params.func_name
+                )
+                if action is not None:
+                    action.snapshot_kwargs()
+                    action.kwargs["param"] = copy.deepcopy(param)
+                    hpanel.refresh_action(action)
+                    hpanel.recompute_cascade(action)
 
-            # Update the Properties tab to reflect the new object properties
-            # (e.g., data type, dimensions, etc.)
-            self.__update_properties_dataset(obj)
+                # Update the tree view item and refresh plot
+                obj_uuid = get_uuid(obj)
+                self.panel.objview.update_item(obj_uuid)
+                self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
 
-            # Refresh the Processing tab with the new parameters
-            # Don't reset parameters from source object - keep the user's values
-            # Set the Processing tab as current to keep it visible after refresh
-            QC.QTimer.singleShot(
-                0,
-                lambda: self.setup_processing_tab(
-                    obj, reset_params=False, set_current=True
-                ),
-            )
+                # Update the Properties tab to reflect the new object
+                self.__update_properties_dataset(obj)
+                # Refresh the displayed processing history (Properties tab
+                # description) so the parameter change is visible immediately
+                self.display_processing_history(obj)
+
+                # Refresh the Processing tab with the new parameters
+                QC.QTimer.singleShot(
+                    0,
+                    lambda: self.setup_processing_tab(
+                        obj, reset_params=False, set_current=True
+                    ),
+                )
+            else:
+                # --- Non-edit mode: create a new independent object ---
+
+                # Patch title with source object IDs (like menu-driven compute)
+                patch_title_with_ids(new_obj, [obj], get_short_id)
+
+                # Store processing metadata on the new object
+                # pylint: disable=import-outside-toplevel
+                from datalab.gui.processor.base import (
+                    build_processing_parameters,
+                )
+
+                new_pp = build_processing_parameters(
+                    proc_params.func_name,
+                    proc_params.pattern,
+                    param=copy.deepcopy(param),
+                    source_uuid=proc_params.source_uuid,
+                )
+                insert_processing_parameters(new_obj, new_pp)
+
+                # Mark as freshly processed so the Processing tab is shown
+                self.mark_as_freshly_processed(new_obj)
+
+                # Add the new object to the same group as the source object
+                group_id = self.panel.objmodel.get_object_group_id(obj)
+                self.panel.add_object(new_obj, group_id=group_id, set_current=True)
+
+                # Record a brand-new history entry with the new object UUID
+                if hpanel is not None:
+                    # Retrieve plugin_origin so replay without the plugin
+                    # produces a rich error message (C3) instead of generic.
+                    plugin_origin = None
+                    try:
+                        processor = self.__get_processor_associated_to(new_obj)
+                        feature = processor.get_feature(proc_params.func_name)
+                        plugin_origin = feature.plugin_origin
+                    except (ValueError, AttributeError):
+                        pass
+                    hpanel.add_compute_entry_from_pp(
+                        new_obj.title,
+                        new_pp,
+                        panel_str=self.panel.PANEL_STR_ID,
+                        output_uuids=[get_uuid(new_obj)],
+                        plugin_origin=plugin_origin,
+                    )
+
+                # Auto-recompute analysis on the new object
+                obj_processor = self.__get_processor_associated_to(new_obj)
+                obj_processor.auto_recompute_analysis(new_obj)
 
             if isinstance(obj, SignalObj):
                 report.message = _("Signal was reprocessed.")
@@ -915,6 +1050,34 @@ class ObjectProp(QW.QWidget):
             self.panel.SIG_STATUS_MESSAGE.emit("✅ " + report.message, 5000)
 
         return report
+
+    def apply_recomputed_object_in_place(
+        self,
+        obj: SignalObj | ImageObj,
+        new_obj: SignalObj | ImageObj,
+        proc_params: ProcessingParameters,
+    ) -> None:
+        """Apply a freshly recomputed object onto ``obj`` in place.
+
+        Single source of truth shared by the interactive Apply callback and
+        the History panel cascade. Copies title + data from ``new_obj`` while
+        preserving ``obj``'s own metadata (only the processing parameters are
+        refreshed), then re-runs auto analysis. This keeps both reprocess
+        paths behaviorally identical (pre-history semantics).
+
+        Args:
+            obj: Existing object to update in place (identity preserved).
+            new_obj: Freshly recomputed object providing title + data.
+            proc_params: Updated processing parameters to store on ``obj``.
+        """
+        obj.title = new_obj.title
+        if isinstance(obj, SignalObj):
+            obj.xydata = new_obj.xydata
+        else:  # ImageObj
+            obj.data = new_obj.data
+            obj.invalidate_maskdata_cache()
+        insert_processing_parameters(obj, proc_params)
+        self.__get_processor_associated_to(obj).auto_recompute_analysis(obj)
 
 
 class AbstractPanelMeta(type(QW.QSplitter), abc.ABCMeta):
@@ -932,6 +1095,7 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     H5_PREFIX = ""
     SIG_OBJECT_ADDED = QC.Signal()
     SIG_OBJECT_REMOVED = QC.Signal()
+    SIG_OBJECT_MODIFIED = QC.Signal()
 
     @abc.abstractmethod
     def __init__(self, parent):
@@ -1117,7 +1281,7 @@ class SaveToDirectoryGUIParam(gds.DataSet, title=_("Save to directory")):
             """,
             ]
         )
-        NonModalInfoDialog(parent, "Pattern help", text).show()
+        NonModalInfoDialog(parent, _("Pattern help"), text).show()
 
     def get_extension_choices(self, _item=None, _value=None):
         """Return list of available extensions for choice item."""
@@ -1258,7 +1422,7 @@ class AddMetadataParam(
             """,
             ]
         )
-        NonModalInfoDialog(parent, "Pattern help", text).show()
+        NonModalInfoDialog(parent, _("Pattern help"), text).show()
 
     def get_conversion_choices(self, _item=None, _value=None):
         """Return list of available conversion choices."""
@@ -1592,6 +1756,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # immediately if the modified object is currently selected.
         self.objview.item_selection_changed()
         self.refresh_plot("selected", update_items=True, force=True)
+        self.SIG_OBJECT_MODIFIED.emit()
 
     def remove_all_objects(self) -> None:
         """Remove all objects"""
@@ -1718,20 +1883,33 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """Duplication signal/image object"""
         if not self.mainwindow.confirm_memory_state():
             return
-        # Duplicate individual objects (exclusive with respect to groups)
-        for oid in self.objview.get_sel_object_uuids():
-            self.__duplicate_individual_obj(oid, set_current=False)
-        # Duplicate groups (exclusive with respect to individual objects)
-        for group in self.objview.get_sel_groups():
-            new_group = self.add_group(group.title)
-            for oid in self.objmodel.get_group_object_ids(get_uuid(group)):
-                self.__duplicate_individual_obj(
-                    oid, get_uuid(new_group), set_current=False
-                )
+        action = self.mainwindow.historypanel.add_ui_entry(
+            _("Duplicate object or group"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="duplicate_object",
+            save_state=False,
+        )
+        with self.mainwindow.historypanel.capture_outputs(action):
+            # Duplicate individual objects (exclusive with respect to groups)
+            for oid in self.objview.get_sel_object_uuids():
+                self.__duplicate_individual_obj(oid, set_current=False)
+            # Duplicate groups (exclusive with respect to individual objects)
+            for group in self.objview.get_sel_groups():
+                new_group = self.add_group(group.title)
+                for oid in self.objmodel.get_group_object_ids(get_uuid(group)):
+                    self.__duplicate_individual_obj(
+                        oid, get_uuid(new_group), set_current=False
+                    )
         self.selection_changed(update_items=True)
 
     def copy_metadata(self) -> None:
         """Copy object metadata"""
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Copy metadata"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="copy_metadata",
+            save_state=False,
+        )
         obj = self.objview.get_sel_objects()[0]
         self.metadata_clipboard = obj.metadata.copy()
 
@@ -1788,6 +1966,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             )
             if not param.edit(parent=self.parentWidget()):
                 return
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Paste metadata"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="paste_metadata",
+            save_state=False,
+            param=param,
+        )
         metadata = {}
         if param.keep_roi and ROI_KEY in self.metadata_clipboard:
             metadata[ROI_KEY] = self.metadata_clipboard[ROI_KEY]
@@ -1840,6 +2025,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Save settings to config
         Conf.io.add_metadata_settings.set(param)
 
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Add metadata"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="add_metadata",
+            save_state=True,
+            param=param,
+        )
+
         # Build values for all selected objects
         values = param.build_values(sel_objects)
 
@@ -1852,19 +2045,49 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             "selected", update_items=True, only_visible=False, only_existing=True
         )
 
-    def copy_roi(self) -> None:
-        """Copy regions of interest"""
-        obj = self.objview.get_sel_objects()[0]
-        self.__roi_clipboard = obj.roi.copy()
+    def copy_roi(self, roi_data=None) -> None:
+        """Copy regions of interest
 
-    def paste_roi(self) -> None:
-        """Paste regions of interest"""
+        Args:
+            roi_data: ROI snapshot for replay. When ``None`` (interactive use),
+                the ROI is read from the currently selected object.
+        """
+        if roi_data is None:
+            obj = self.objview.get_sel_objects()[0]
+            roi_data = obj.roi.copy()
+        self.__roi_clipboard = roi_data.copy()
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Copy regions of interest from selected %s")
+            % (_("signal") if self.PANEL_STR_ID == "signal" else _("image")),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="copy_roi",
+            save_state=True,
+            roi_data=roi_data,
+        )
+
+    def paste_roi(self, roi_data=None) -> None:
+        """Paste regions of interest
+
+        Args:
+            roi_data: ROI snapshot for replay. When ``None`` (interactive use),
+                the clipboard populated by :meth:`copy_roi` is used.
+        """
+        if roi_data is None:
+            roi_data = self.__roi_clipboard
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Paste regions of interest into selected %s")
+            % (_("signal") if self.PANEL_STR_ID == "signal" else _("image")),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="paste_roi",
+            save_state=True,
+            roi_data=roi_data,
+        )
         sel_objects = self.objview.get_sel_objects(include_groups=True)
         for obj in sel_objects:
             if obj.roi is None:
-                obj.roi = self.__roi_clipboard.copy()
+                obj.roi = roi_data.copy()
             else:
-                obj.roi = obj.roi.combine_with(self.__roi_clipboard)
+                obj.roi = obj.roi.combine_with(roi_data)
         self.selection_changed(update_items=True)
         self.refresh_plot(
             "selected", update_items=True, only_visible=False, only_existing=True
@@ -1886,6 +2109,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             )
             if answer == QW.QMessageBox.No:
                 return
+        # IMPORTANT: save_state=True is required so that the selection of objects
+        # being deleted is captured. On replay, the captured selection (translated
+        # through uuid_remap) is restored before remove_object runs, ensuring that
+        # the correct object is removed instead of whatever is currently selected.
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Remove selected objects"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="remove_object",
+            save_state=True,
+            force=force,
+        )
         sel_objects = self.objview.get_sel_objects(include_groups=True)
         for obj in sorted(sel_objects, key=get_short_id, reverse=True):
             dlg_list: list[QW.QDialog] = []
@@ -2011,6 +2245,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Open a message box to enter the group name
         group_name, ok = QW.QInputDialog.getText(self, _("New group"), _("Group name:"))
         if ok:
+            self.mainwindow.historypanel.add_ui_entry(
+                _('New group "%s"') % group_name,
+                target=self.PANEL_STR_ID + "panel",
+                method_name="add_group",
+                save_state=False,
+                title=group_name,
+                select=False,
+            )
             self.add_group(group_name)
 
     def rename_selected_object_or_group(self, new_name: str | None = None) -> None:
@@ -2019,6 +2261,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         Args:
             new_name: new name (default: None, i.e. ask user)
         """
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Rename selected object or group"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="rename_selected_object_or_group",
+            save_state=False,
+            new_name=new_name,
+        )
         sel_objects = self.objview.get_sel_objects(include_groups=False)
         sel_groups = self.objview.get_sel_groups()
         if (not sel_objects and not sel_groups) or len(sel_objects) + len(
@@ -2095,6 +2344,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         obj = self.objview.get_current_object()
         obj.title = title
         self.objview.update_item(get_uuid(obj))
+        self.mainwindow.historypanel.add_ui_entry(
+            _('Set current object title to "%s"') % title,
+            target=self.PANEL_STR_ID + "panel",
+            method_name="set_current_object_title",
+            save_state=False,
+            title=title,
+        )
 
     def __load_from_file(
         self, filename: str, create_group: bool = True, add_objects: bool = True
@@ -2159,42 +2415,47 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 directory = getexistingdirectory(self, _("Open"), basedir)
         if not directory:
             return []
+        # Offer a fresh history session for this batch *before* loading anything.
+        self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
         folders = [
             path
             for path in glob.glob(osp.join(directory, "**"), recursive=True)
             if osp.isdir(path) and len(os.listdir(path)) > 0
         ]
         objs = []
-        with create_progress_bar(
-            self, _("Scanning directory"), max_=len(folders) - 1
-        ) as progress:
-            # Iterate over all subfolders in the directory:
-            for i_path, path in enumerate(folders):
-                progress.setValue(i_path + 1)
-                if progress.wasCanceled():
-                    break
-                path = osp.normpath(path)
-                fnames = sorted(
-                    [
-                        osp.join(path, fname)
-                        for fname in os.listdir(path)
-                        if osp.isfile(osp.join(path, fname))
-                    ]
-                )
-                new_objs = self.load_from_files(
-                    fnames,
-                    create_group=False,
-                    add_objects=False,
-                    ignore_errors=True,
-                )
-                if new_objs:
-                    objs += new_objs
-                    grp_name = osp.relpath(path, directory)
-                    if grp_name == ".":
-                        grp_name = osp.basename(path)
-                    grp = self.add_group(grp_name)
-                    for obj in new_objs:
-                        self.add_object(obj, group_id=get_uuid(grp), set_current=False)
+        with self.mainwindow.historypanel.session_prompt_suppressed():
+            with create_progress_bar(
+                self, _("Scanning directory"), max_=len(folders) - 1
+            ) as progress:
+                # Iterate over all subfolders in the directory:
+                for i_path, path in enumerate(folders):
+                    progress.setValue(i_path + 1)
+                    if progress.wasCanceled():
+                        break
+                    path = osp.normpath(path)
+                    fnames = sorted(
+                        [
+                            osp.join(path, fname)
+                            for fname in os.listdir(path)
+                            if osp.isfile(osp.join(path, fname))
+                        ]
+                    )
+                    new_objs = self.load_from_files(
+                        fnames,
+                        create_group=False,
+                        add_objects=False,
+                        ignore_errors=True,
+                    )
+                    if new_objs:
+                        objs += new_objs
+                        grp_name = osp.relpath(path, directory)
+                        if grp_name == ".":
+                            grp_name = osp.basename(path)
+                        grp = self.add_group(grp_name)
+                        for obj in new_objs:
+                            self.add_object(
+                                obj, group_id=get_uuid(grp), set_current=False
+                            )
         return objs
 
     def load_from_files(
@@ -2226,20 +2487,41 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 filenames, _filt = getopenfilenames(self, _("Open"), basedir, filters)
         # Sort filenames to ensure consistent alphabetical order across all platforms
         filenames = sorted(filenames)
+        nbf = len(filenames)
+        if nbf > 1:
+            entry_title = _("Load from %d files") % nbf
+        else:
+            entry_title = _('Load "%s"') % osp.basename(filenames[0])
+        # Offer a fresh history session for this batch *before* recording any entry.
+        self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
+        action = self.mainwindow.historypanel.add_ui_entry(
+            entry_title,
+            target=self.PANEL_STR_ID + "panel",
+            method_name="load_from_files",
+            save_state=False,
+            filenames=filenames,
+            create_group=create_group,
+            add_objects=add_objects,
+            ignore_errors=ignore_errors,
+        )
         objs = []
-        for filename in filenames:
-            with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
-                Conf.main.base_dir.set(filename)
-                try:
-                    objs += self.__load_from_file(
-                        filename, create_group=create_group, add_objects=add_objects
-                    )
-                except Exception as exc:  # pylint: disable=broad-exception-caught
-                    if ignore_errors:
-                        # Ignore unknown file types
-                        pass
-                    else:
-                        raise exc
+        with self.mainwindow.historypanel.session_prompt_suppressed():
+            with self.mainwindow.historypanel.capture_outputs(action):
+                for filename in filenames:
+                    with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
+                        Conf.main.base_dir.set(filename)
+                        try:
+                            objs += self.__load_from_file(
+                                filename,
+                                create_group=create_group,
+                                add_objects=add_objects,
+                            )
+                        except Exception as exc:  # pylint: disable=broad-exception-caught
+                            if ignore_errors:
+                                # Ignore unknown file types
+                                pass
+                            else:
+                                raise exc
         return objs
 
     def save_to_files(self, filenames: list[str] | str | None = None) -> None:
@@ -2253,6 +2535,18 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             filenames = [None] * len(objs)
         assert len(filenames) == len(objs), (
             "Number of filenames must match number of objects"
+        )
+        nbf = len(filenames)
+        if nbf > 1:
+            entry_title = _("Save to %d different files") % nbf
+        else:
+            entry_title = _('Save to "%s"') % osp.basename(filenames[0])
+        self.mainwindow.historypanel.add_ui_entry(
+            entry_title,
+            target=self.PANEL_STR_ID + "panel",
+            method_name="save_to_files",
+            save_state=False,
+            filenames=filenames,
         )
         for index, obj in enumerate(objs):
             filename = filenames[index]
@@ -2306,6 +2600,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         Conf.io.save_to_directory_settings.set(param)
 
         Conf.main.base_dir.set(param.directory)
+
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Save to directory"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="save_to_directory",
+            save_state=True,
+            param=param,
+        )
 
         with create_progress_bar(self, _("Saving..."), max_=len(objs)) as progress:
             for i, (path, obj) in enumerate(param.generate_filepath_obj_pairs(objs)):
@@ -2540,16 +2842,19 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Get only the properties that have changed from the original values
         changed_props = self.objprop.get_changed_properties()
 
-        # Apply only the changed properties to all selected objects
-        for obj in self.objview.get_sel_objects(include_groups=True):
-            obj.mark_roi_as_changed()
-            # Update only the changed properties instead of all properties
-            update_dataset(obj, changed_props)
-            self.objview.update_item(get_uuid(obj))
+        # Apply only the changed properties to all selected objects.
+        # The ``replaying()`` guard suppresses the synthetic history entries
+        # that the auto-recompute below would otherwise create for each object.
+        with self.mainwindow.historypanel.replaying():
+            for obj in self.objview.get_sel_objects(include_groups=True):
+                obj.mark_roi_as_changed()
+                # Update only the changed properties instead of all properties
+                update_dataset(obj, changed_props)
+                self.objview.update_item(get_uuid(obj))
 
-            # Auto-recompute analysis if the object had analysis parameters
-            # Since properties have changed, any analysis results may now be invalid
-            self.processor.auto_recompute_analysis(obj)
+                # Auto-recompute analysis if the object had analysis parameters
+                # Since properties have changed, any analysis results may now be invalid
+                self.processor.auto_recompute_analysis(obj)
 
         # Refresh all selected items, including non-visible ones (only_visible=False)
         # This ensures that plot items are updated for all selected objects, even if
@@ -2561,6 +2866,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Update the stored original values to reflect the new state
         # This ensures subsequent changes are compared against the current values
         self.objprop.update_original_values()
+        self.SIG_OBJECT_MODIFIED.emit()
 
     def recompute_processing(self) -> None:
         """Recompute/rerun selected objects or group with stored processing parameters.
@@ -2593,20 +2899,29 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 )
             return
 
-        # Recompute each object
-        with create_progress_bar(
-            self, _("Recomputing objects"), max_=len(recomputable_objects)
-        ) as progress:
+        # Recompute each object -- silence history capture while doing so:
+        # the underlying compute_* methods would otherwise re-register
+        # synthetic entries for every recomputed object.
+        with (
+            self.mainwindow.historypanel.replaying(),
+            create_progress_bar(
+                self, _("Recomputing objects"), max_=len(recomputable_objects)
+            ) as progress,
+        ):
             for index, obj in enumerate(recomputable_objects):
                 progress.setValue(index + 1)
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     break
 
-                # Temporarily set this object as current to use existing infrastructure
-                self.objview.set_current_object(obj)
+                # Reprocess with the object's stored parameters, passed
+                # explicitly so we no longer need to select the object just
+                # to populate the Processing-tab editor.
+                proc_params = extract_processing_parameters(obj)
                 report = self.objprop.apply_processing_parameters(
-                    obj=obj, interactive=False
+                    obj=obj,
+                    interactive=False,
+                    param=proc_params.param if proc_params is not None else None,
                 )
                 if not report.success and not execenv.unattended:
                     failtxt = _("Failed to recompute object")
@@ -3308,6 +3623,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
     def delete_results(self) -> None:
         """Delete results"""
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Delete results"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="delete_results",
+            save_state=False,
+        )
         objs = self.objview.get_sel_objects(include_groups=True)
         rdatadict = create_resultdata_dict(objs)
         if rdatadict:
@@ -3355,6 +3676,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
              added as an annotation, and that it can be edited or removed using the
              annotation editing window.
         """
+        if title is None:
+            action_title = _("Add object title to plot")
+        else:
+            action_title = _("Add label with title")
+        self.mainwindow.historypanel.add_ui_entry(
+            action_title,
+            target=self.PANEL_STR_ID + "panel",
+            method_name="add_label_with_title",
+            save_state=False,
+            title=title,
+        )
         objs = self.objview.get_sel_objects(include_groups=True)
         for obj in objs:
             create_adapter_from_object(obj).add_label_with_title(title=title)

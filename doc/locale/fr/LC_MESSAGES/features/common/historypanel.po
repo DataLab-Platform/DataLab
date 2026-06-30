@@ -1,0 +1,231 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "History Panel in DataLab, the open-source scientific data analysis and visualization platform"
+msgstr "Panneau historique de DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
+
+msgid "DataLab, history, record, replay, session, scientific, data, analysis, visualization, platform"
+msgstr "DataLab, historique, enregistrement, rejeu, session, scientifique, données, analyse, visualisation, plateforme"
+
+msgid "History Panel"
+msgstr "Panneau historique"
+
+msgid "Overview"
+msgstr "Vue d'ensemble"
+
+msgid "The \"History Panel\" records the sequence of actions performed by the user on signals and images, organized into **sessions**. Each session is a chronological list of either:"
+msgstr "Le « Panneau historique » enregistre la séquence des actions effectuées par l'utilisateur sur les signaux et les images, organisée en **sessions**. Chaque session est une liste chronologique constituée soit :"
+
+msgid "**UI actions** (creating a new signal, removing selected objects, saving the workspace to HDF5, ...), or"
+msgstr "d'**actions de l'interface** (création d'un nouveau signal, suppression des objets sélectionnés, enregistrement de l'espace de travail au format HDF5, ...), soit"
+
+msgid "**computations** (FFT, average, Gaussian fit, ...) dispatched through the Sigima processor."
+msgstr "de **calculs** (FFT, moyenne, ajustement gaussien, ...) exécutés via le processeur Sigima."
+
+msgid "A recorded session can be:"
+msgstr "Une session enregistrée peut être :"
+
+msgid "**Replayed** in validation mode, without adding new signal/image outputs to the workspace;"
+msgstr "**rejouée** en mode validation, sans ajouter de nouvelles sorties signal/image à l'espace de travail ;"
+
+msgid "**Duplicated and applied**, to create an explicit comparison branch with new outputs in the signal/image panels;"
+msgstr "**dupliquée et appliquée**, afin de créer une branche de comparaison explicite avec de nouvelles sorties dans les panneaux signal/image ;"
+
+msgid "**Restored to a given selection state** without re-executing anything, to quickly jump back to a previous working context;"
+msgstr "**restaurée dans un état de sélection donné** sans rien réexécuter, afin de revenir rapidement à un contexte de travail antérieur ;"
+
+msgid "**Saved to a standalone history file** (``.dlhist``) or **embedded in the workspace** when saving to HDF5, so that the full processing chain travels with the data."
+msgstr "**sauvegardée dans un fichier d'historique autonome** (``.dlhist``) ou **intégrée à l'espace de travail** lors de l'enregistrement au format HDF5, de sorte que toute la chaîne de traitement accompagne les données."
+
+msgid "The History Panel after recording a representative session: create three signals (Voigt, Lorentzian, Lorentzian), remove one of them, create a Gaussian signal, compute the average, add Gaussian noise to the result and run a Gaussian fit."
+msgstr "Le Panneau historique après l'enregistrement d'une session représentative : création de trois signaux (Voigt, lorentzien, lorentzien), suppression de l'un d'eux, création d'un signal gaussien, calcul de la moyenne, ajout d'un bruit gaussien au résultat et ajustement par une gaussienne."
+
+msgid "Toolbar"
+msgstr "Barre d'outils"
+
+msgid "The toolbar at the top of the panel exposes the following actions:"
+msgstr "La barre d'outils en haut du panneau expose les actions suivantes :"
+
+msgid "|record| **Record mode**: toggle the recording of new actions. When off, no new entry is added to the history (existing sessions are preserved)."
+msgstr "|record| **Mode enregistrement** : active ou désactive l'enregistrement des nouvelles actions. Lorsqu'il est désactivé, aucune nouvelle entrée n'est ajoutée à l'historique (les sessions existantes sont conservées)."
+
+msgid "record"
+msgstr "record"
+
+msgid "|open_history| **Open history file**: load recorded sessions from a standalone ``.dlhist`` file."
+msgstr "|open_history| **Ouvrir un fichier d'historique** : charge des sessions enregistrées depuis un fichier ``.dlhist`` autonome."
+
+msgid "open_history"
+msgstr "open_history"
+
+msgid "|save_history| **Save history file**: save the current recorded sessions to a standalone ``.dlhist`` file."
+msgstr "|save_history| **Enregistrer le fichier d'historique** : enregistre les sessions actuellement enregistrées dans un fichier ``.dlhist`` autonome."
+
+msgid "save_history"
+msgstr "save_history"
+
+msgid "|replay| **Replay**: validate/replay the selected action (or the whole session if a session row is selected) without changing the current workspace selection beforehand and without adding new outputs to the signal/image panels."
+msgstr "|replay| **Rejouer** : valide/rejoue l'action sélectionnée (ou la session entière si une ligne de session est sélectionnée) sans modifier au préalable la sélection courante de l'espace de travail et sans ajouter de nouvelles sorties aux panneaux signal/image."
+
+msgid "replay"
+msgstr "replay"
+
+msgid "|restore_selection| **Restore selection**: only re-select the objects that were selected when the action was originally executed; no computation is re-run."
+msgstr "|restore_selection| **Restaurer la sélection** : ré-sélectionne uniquement les objets qui étaient sélectionnés lors de l'exécution initiale de l'action ; aucun calcul n'est ré-exécuté."
+
+msgid "restore_selection"
+msgstr "restore_selection"
+
+msgid "|edit_mode| **Edit mode**: when on, replaying a computation opens the parameters dialog so the user can tweak the parameters before re-running. When replaying a *whole session*, the parameter dialogs open in a **read-only** mode — all fields are shown with their recorded values but cannot be edited."
+msgstr "|edit_mode| **Mode édition** : lorsqu'il est activé, le rejeu d'un calcul ouvre la boîte de dialogue des paramètres afin que l'utilisateur puisse ajuster les paramètres avant de relancer. Lors du rejeu d'une *session entière*, les boîtes de dialogue des paramètres s'ouvrent en mode **lecture seule** — tous les champs affichent les valeurs enregistrées mais ne peuvent pas être édités."
+
+msgid "edit_mode"
+msgstr "edit_mode"
+
+msgid "|duplicate| **Duplicate**: copy the selected action or session into a new history session. The copied parameters are independent from the original record."
+msgstr "|duplicate| **Dupliquer** : copie l'action ou la session sélectionnée dans une nouvelle session d'historique. Les paramètres copiés sont indépendants de l'enregistrement d'origine."
+
+msgid "duplicate"
+msgstr "duplicate"
+
+msgid "|generate_macro| **Generate macro**: generate a Python macro script from the selected actions (or all actions if nothing is selected). The generated script is copied to the clipboard."
+msgstr "|generate_macro| **Générer une macro** : génère un script macro Python à partir des actions sélectionnées (ou de toutes les actions si rien n'est sélectionné). Le script généré est copié dans le presse-papiers."
+
+msgid "generate_macro"
+msgstr "generate_macro"
+
+msgid "|remove_incompatible| **Remove incompatible**: remove all actions whose workspace state is no longer compatible with the current workspace. A confirmation dialog shows how many actions will be removed."
+msgstr "|remove_incompatible| **Supprimer les incompatibles** : supprime toutes les actions dont l'état de l'espace de travail n'est plus compatible avec l'espace de travail actuel. Une boîte de dialogue de confirmation indique combien d'actions seront supprimées."
+
+msgid "remove_incompatible"
+msgstr "remove_incompatible"
+
+msgid "|delete| **Delete**: remove the selected actions or sessions from the history."
+msgstr "|delete| **Supprimer** : retire de l'historique les actions ou sessions sélectionnées."
+
+msgid "delete"
+msgstr "delete"
+
+msgid "|step_prev| **Previous step**: select the preceding action in the current session (keyboard shortcut: :kbd:`Ctrl+Left`)."
+msgstr "|step_prev| **Étape précédente** : sélectionne l'action précédente dans la session courante (raccourci clavier : :kbd:`Ctrl+Gauche`)."
+
+msgid "step_prev"
+msgstr "step_prev"
+
+msgid "|step_next| **Next step**: select the following action in the current session (keyboard shortcut: :kbd:`Ctrl+Right`)."
+msgstr "|step_next| **Étape suivante** : sélectionne l'action suivante dans la session courante (raccourci clavier : :kbd:`Ctrl+Droite`)."
+
+msgid "step_next"
+msgstr "step_next"
+
+msgid "Double-clicking on an action row in the tree is equivalent to **Replay**."
+msgstr "Un double-clic sur la ligne d'une action dans l'arborescence équivaut à **Rejouer**."
+
+msgid "Tree view"
+msgstr "Arborescence"
+
+msgid "The tree view organizes recorded actions into expandable sessions:"
+msgstr "L'arborescence organise les actions enregistrées dans des sessions dépliables :"
+
+msgid "Each top-level row is a **session**, automatically created when recording is enabled and a new application context is started."
+msgstr "Chaque ligne de premier niveau est une **session**, créée automatiquement lorsque l'enregistrement est activé et qu'un nouveau contexte d'application est démarré."
+
+msgid "Each child row is an **action**, with its title, date/time and a description summarising the parameters (for computations) or the call (for UI actions)."
+msgstr "Chaque ligne enfant est une **action**, accompagnée de son titre, de sa date et de son heure, ainsi que d'une description résumant les paramètres (pour les calculs) ou l'appel (pour les actions de l'interface)."
+
+msgid "The selection of one or several rows drives which actions are targeted by the toolbar buttons."
+msgstr "La sélection d'une ou de plusieurs lignes détermine les actions ciblées par les boutons de la barre d'outils."
+
+msgid "Actions that are not compatible with the current workspace state (for example because a referenced object identifier no longer exists, or because its data shape changed) are shown with a disabled foreground and an explanatory tooltip. They cannot be replayed until the workspace matches the recorded state again."
+msgstr "Les actions qui ne sont pas compatibles avec l'état courant de l'espace de travail (par exemple parce qu'un identifiant d'objet référencé n'existe plus, ou parce que la forme de ses données a changé) sont affichées avec un texte désactivé et une infobulle explicative. Elles ne peuvent pas être rejouées tant que l'espace de travail ne correspond pas de nouveau à l'état enregistré."
+
+msgid "Workspace state display"
+msgstr "Affichage de l'état de l'espace de travail"
+
+msgid "Below the action tree, a split-view widget shows the **workspace state** captured at the time of the selected action:"
+msgstr "Sous l'arborescence des actions, un widget en vue divisée affiche l'**état de l'espace de travail** tel qu'il était au moment de l'action sélectionnée :"
+
+msgid "**Left table**: lists the signals that were selected, with their data shape."
+msgstr "**Tableau de gauche** : liste les signaux qui étaient sélectionnés, avec leur forme de données."
+
+msgid "**Right table**: lists the images that were selected, with their dimensions."
+msgstr "**Tableau de droite** : liste les images qui étaient sélectionnées, avec leurs dimensions."
+
+msgid "This information helps the user understand the context in which each action was originally executed and diagnose compatibility issues when replaying sessions on a different workspace."
+msgstr "Ces informations aident l'utilisateur à comprendre le contexte dans lequel chaque action a été exécutée à l'origine et à diagnostiquer les problèmes de compatibilité lors du rejeu de sessions sur un espace de travail différent."
+
+msgid "Session replay across workspaces"
+msgstr "Rejeu d'une session entre espaces de travail"
+
+msgid "A full session can be replayed on a workspace that no longer contains the objects originally referenced by the recorded actions -- typically after loading a saved session into a fresh workspace. In that case, the panel **remaps the recorded object identifiers** to the newly-created ones on the fly:"
+msgstr "Une session complète peut être rejouée sur un espace de travail qui ne contient plus les objets référencés à l'origine par les actions enregistrées -- typiquement après le chargement d'une session sauvegardée dans un espace de travail vierge. Dans ce cas, le panneau **réassocie à la volée les identifiants d'objets enregistrés** aux nouveaux identifiants créés :"
+
+msgid "UI actions creating new objects (e.g. *New signal*) enqueue the freshly created identifiers;"
+msgstr "les actions de l'interface qui créent de nouveaux objets (par exemple *Nouveau signal*) empilent les identifiants fraîchement créés ;"
+
+msgid "subsequent computations claim the identifiers they need from that queue, in the same order as the original recording;"
+msgstr "les calculs ultérieurs récupèrent dans cette file les identifiants dont ils ont besoin, dans l'ordre de l'enregistrement initial ;"
+
+msgid "UI actions removing objects keep the queue in sync with the live workspace contents, so chained creation/removal sequences replay correctly."
+msgstr "les actions de l'interface qui suppriment des objets maintiennent la file synchronisée avec le contenu réel de l'espace de travail, de sorte que les séquences enchaînées de création et de suppression se rejouent correctement."
+
+msgid "This makes it possible, for instance, to record a full processing chain on one dataset, save it, then re-apply the exact same chain on a different but structurally identical input."
+msgstr "Cela permet par exemple d'enregistrer une chaîne de traitement complète sur un jeu de données, de la sauvegarder, puis de la ré-appliquer telle quelle à une entrée différente mais structurellement identique."
+
+msgid "Persistence"
+msgstr "Persistance"
+
+msgid "The history can be persisted in two complementary ways:"
+msgstr "L'historique peut être persisté de deux manières complémentaires :"
+
+msgid "**Embedded in the workspace**: when the workspace is saved to HDF5 (``File > Save to HDF5 file``), the History Panel content is automatically saved alongside the signals and images. Reloading the workspace restores the recorded sessions."
+msgstr "**Intégré à l'espace de travail** : lorsque l'espace de travail est enregistré au format HDF5 (``Fichier > Enregistrer dans un fichier HDF5``), le contenu du Panneau historique est automatiquement sauvegardé aux côtés des signaux et des images. Le rechargement de l'espace de travail restaure les sessions enregistrées."
+
+msgid "**Standalone history file** (``.dlhist``): the file embeds both the recorded sessions **and** all signal/image objects referenced by those sessions. This makes the file fully self-contained:"
+msgstr "**Fichier d'historique autonome** (``.dlhist``) : le fichier embarque à la fois les sessions enregistrées **et** tous les objets signal/image référencés par ces sessions. Cela rend le fichier entièrement autonome :"
+
+msgid "Opening a ``.dlhist`` into an **empty workspace** loads sessions and objects directly, restoring the workspace to its recorded state."
+msgstr "Ouvrir un fichier ``.dlhist`` dans un **espace de travail vide** charge les sessions et les objets directement, restaurant l'espace de travail dans son état enregistré."
+
+msgid "Opening a ``.dlhist`` into a **non-empty workspace** creates new signal/image groups for the imported objects (with remapped identifiers to avoid collisions) and appends new history sessions that reference those fresh identifiers."
+msgstr "Ouvrir un fichier ``.dlhist`` dans un **espace de travail non vide** crée de nouveaux groupes signal/image pour les objets importés (avec des identifiants remappés pour éviter les collisions) et ajoute de nouvelles sessions d'historique référençant ces nouveaux identifiants."
+
+msgid "Replaying a session that depends on external files (e.g. opening a dataset from disk) will only succeed if those files are still available at the same locations as when the session was recorded."
+msgstr "Le rejeu d'une session qui dépend de fichiers externes (par exemple l'ouverture d'un jeu de données depuis le disque) ne réussira que si ces fichiers sont toujours disponibles aux mêmes emplacements qu'au moment de l'enregistrement de la session."
+
+msgid "Chain reconnection on deletion"
+msgstr "Reconnexion de la chaîne lors d'une suppression"
+
+msgid "When a result object is deleted from the **signal or image panel** (not from the History Panel tree), and that object was produced by a recorded processing step, the History Panel automatically reconnects the processing chain:"
+msgstr "Lorsqu'un objet résultat est supprimé depuis le **panneau signal ou image** (et non depuis l'arborescence du panneau historique), et que cet objet a été produit par une étape de traitement enregistrée, le Panneau historique reconnecte automatiquement la chaîne de traitement :"
+
+msgid "All downstream steps that consumed the deleted object are rewired to use the source of the deleted step as their new input."
+msgstr "Toutes les étapes aval qui consommaient l'objet supprimé sont recâblées pour utiliser la source de l'étape supprimée comme nouvelle entrée."
+
+msgid "For ``2_to_1`` operations (e.g. *difference*), the first source is used for reconnection."
+msgstr "Pour les opérations ``2_to_1`` (par exemple *différence*), la première source est utilisée pour la reconnexion."
+
+msgid "If no valid source can be determined (e.g. the source itself was already deleted), a warning is displayed listing the unreconnectable operations, but the deletion is allowed to proceed."
+msgstr "Si aucune source valide ne peut être déterminée (par exemple la source elle-même a déjà été supprimée), un avertissement est affiché listant les opérations non reconnectables, mais la suppression est néanmoins autorisée."
+
+msgid "This behaviour mirrors removing a link from a chain: the adjacent links reconnect to preserve the processing flow."
+msgstr "Ce comportement reproduit la suppression d'un maillon d'une chaîne : les maillons adjacents se reconnectent pour préserver le flux de traitement."
+
+msgid "Reconnection is only triggered by deletions initiated from the signal/image panels. Deleting an action directly from the History Panel tree removes it and all subsequent actions in that session."
+msgstr "La reconnexion n'est déclenchée que par les suppressions initiées depuis les panneaux signal/image. Supprimer une action directement depuis l'arborescence du Panneau historique la retire ainsi que toutes les actions suivantes de cette session."
+
+msgid "Auto-recompute"
+msgstr "Recalcul automatique"
+
+msgid "When a result object is selected in the signal/image panel and it has processing parameters (i.e. was produced by a 1-to-1 computation), a **Processing** tab appears in the Properties panel. Checking **Auto-recompute on edit** in that tab will re-run the computation automatically 300 ms after any parameter modification."
+msgstr "Lorsqu'un objet résultat est sélectionné dans le panneau signal/image et qu'il possède des paramètres de traitement (c'est-à-dire qu'il a été produit par un calcul 1-à-1), un onglet **Traitement** apparaît dans le panneau Propriétés. Cocher **Recalcul automatique lors de l'édition** dans cet onglet relancera automatiquement le calcul 300 ms après toute modification d'un paramètre."
