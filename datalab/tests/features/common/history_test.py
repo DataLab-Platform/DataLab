@@ -1920,3 +1920,50 @@ def test_history_active_session_routing():
         assert len(signal_session.actions) == n_before + 1  # resumed here
         assert len(empty_session.actions) == 0  # NOT the empty session
         assert len(image_session.actions) == 1  # image untouched
+
+
+def test_history_active_session_highlight():
+    """Each panel's active recording session is highlighted (bold) in the tree;
+    the highlight survives a repopulate and follows active-session changes (A2)."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        spanel, ipanel = win.signalpanel, win.imagepanel
+
+        spanel.add_object(create_paracetamol_signal())
+        spanel.objview.select_objects([1])
+        spanel.processor.run_feature(sips.derivative)
+        signal_session = history.get_active_session("signal")
+        assert signal_session is not None
+
+        ipanel.add_object(create_sincos_image())
+        ipanel.objview.select_objects([1])
+        ipanel.processor.run_feature(sipi.inverse)
+        image_session = history.get_active_session("image")
+        assert image_session is not None
+
+        def _is_bold(session):
+            idx = history.history_sessions.index(session)
+            item = history.tree.topLevelItem(idx)
+            return item is not None and item.font(0).bold()
+
+        # Both panels' active sessions are highlighted.
+        assert _is_bold(signal_session)
+        assert _is_bold(image_session)
+
+        # Highlight survives a full repopulate.
+        history.tree.populate_tree(history.history_sessions)
+        assert _is_bold(signal_session)
+        assert _is_bold(image_session)
+
+        # Creating a new signal session moves the signal highlight to it.
+        new_signal = history.create_new_session(panel_str="signal")
+        assert _is_bold(new_signal)
+        assert not _is_bold(signal_session)  # previous signal session no longer active
+        assert _is_bold(image_session)  # image highlight unchanged
+
+        # Switching panels does not crash and keeps the highlight.
+        win.set_current_panel("image")
+        win.set_current_panel("signal")
+        assert _is_bold(new_signal)
+        assert _is_bold(image_session)

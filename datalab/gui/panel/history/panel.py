@@ -641,6 +641,20 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         pstr = self.mainwindow.get_current_panel()
         return pstr if pstr in ("signal", "image") else "signal"
 
+    def on_current_panel_changed(self, panel_str: str) -> None:
+        """React to a Signal/Image panel switch: bring this panel's active
+        recording session into view and refresh the active-session highlight.
+        """
+        if panel_str not in ("signal", "image"):
+            return
+        self.refresh_active_session_highlight()
+        session = self.get_active_session(panel_str)
+        if session is not None and session in self.history_sessions:
+            index = self.history_sessions.index(session)
+            item = self.tree.topLevelItem(index)
+            if item is not None:
+                self.tree.scrollToItem(item)
+
     def session_panel_str(self, session: HistorySession) -> str | None:
         """Return the panel a session belongs to.
 
@@ -669,6 +683,15 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         pstr = panel_str or self.session_panel_str(session)
         if pstr:
             self._active_session_by_panel[pstr] = session
+            self.refresh_active_session_highlight()
+
+    def refresh_active_session_highlight(self) -> None:
+        """Update the tree highlight to mark each panel's active session."""
+        active: dict[int, str] = {}
+        for pstr, session in self._active_session_by_panel.items():
+            if session in self.history_sessions:
+                active[session.number] = pstr
+        self.tree.set_active_sessions(active)
 
     def set_active_session_from_selection(self) -> None:
         """When recording, make the selected session the active one for its panel.

@@ -1943,6 +1943,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         dock = self.docks[self.tabwidget.widget(index)]
         dock.raise_()
         self.__update_actions()
+        if self.historypanel is not None:
+            widget = self.tabwidget.widget(index)
+            if widget is self.signalpanel:
+                self.historypanel.on_current_panel_changed("signal")
+            elif widget is self.imagepanel:
+                self.historypanel.on_current_panel_changed("image")
 
     def __update_generic_menu(self, menu: QW.QMenu | None = None) -> None:
         """Update menu before showing up -- Generic method"""
