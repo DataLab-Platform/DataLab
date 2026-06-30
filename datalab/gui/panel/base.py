@@ -848,13 +848,21 @@ class ObjectProp(QW.QWidget):
         editor.set(check=False)
 
     def apply_processing_parameters(
-        self, obj: SignalObj | ImageObj | None = None, interactive: bool = True
+        self,
+        obj: SignalObj | ImageObj | None = None,
+        interactive: bool = True,
+        param: gds.DataSet | None = None,
     ) -> ProcessingReport:
         """Apply processing parameters: re-run processing with updated parameters.
 
         Args:
             obj: Signal or Image object to reprocess. If None, uses the current object.
             interactive: If True, show progress and error messages in the UI.
+            param: Explicit processing parameters to apply. When provided, this
+                takes precedence and makes the call independent of the Processing
+                tab editor state (used e.g. by programmatic recompute paths).
+                When None (default), fall back to the editor dataset or the
+                stored processing parameters.
 
         Returns:
             ProcessingReport with success status, object UUID, and optional message.
@@ -905,8 +913,12 @@ class ObjectProp(QW.QWidget):
                 )
             return report
 
-        # Get updated parameters from editor
-        param = editor.dataset if editor is not None else proc_params.param
+        # Resolve the parameters to apply. An explicit ``param`` argument takes
+        # precedence and makes this method independent of the editor state;
+        # otherwise fall back to the editor (interactive Apply) or the stored
+        # processing parameters.
+        if param is None:
+            param = editor.dataset if editor is not None else proc_params.param
 
         # For cross-panel computations, we need to use the processor from the panel
         # that owns the source object (e.g., radial_profile is in ImageProcessor)
