@@ -294,6 +294,19 @@ def capture_outputs(
                 if uid not in before_p:
                     new_uuids.append(uid)
         panel.register_action_outputs(action, new_uuids)
+        if (
+            not new_uuids
+            and action.kind == HistoryAction.KIND_COMPUTE
+            and action.pattern in {"1_to_1", "1_to_n", "n_to_1", "2_to_1"}
+        ):
+            # The compute produced no output object for any selected input:
+            # it failed (or was a full no-op). Do not keep a misleading "OK"
+            # entry in the history — remove the just-recorded action and
+            # refresh the tree so the panel stays consistent.
+            panel.remove_single_action(action)
+            panel.tree.populate_tree(panel.history_sessions)
+            panel.refresh_compatibility_items()
+            panel.update_actions_state()
 
 
 def add_ui_entry(

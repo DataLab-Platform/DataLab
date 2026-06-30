@@ -1967,3 +1967,66 @@ def test_history_active_session_highlight():
         win.set_current_panel("signal")
         assert _is_bold(new_signal)
         assert _is_bold(image_session)
+
+
+def test_history_capture_outputs_drops_failed_compute():
+    """A producing compute that creates no object is removed from the history.
+
+    ``capture_outputs`` is the single funnel for object-producing computes:
+    when an object-producing *compute* action yields no new UUID it has failed
+    (or was a full no-op) and must not linger as a misleading "OK" entry. UI
+    actions and ``1_to_0`` analyses legitimately produce no object and must be
+    preserved.
+    """
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+
+        panel.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1])
+
+        # --- scenario: producing compute with no output is dropped ---
+        action = history.add_compute_entry(
+            "Failing op",
+            panel_str="signal",
+            func_name="gaussian_filter",
+            pattern="1_to_1",
+            save_state=True,
+        )
+        assert action is not None
+        len_before = len(history)
+        with history.capture_outputs(action):
+            pass  # simulate a failed compute: no object created
+        assert action not in list(history)
+        assert len(history) == len_before - 1
+        assert action.uuid not in history.action_output_uuids
+
+        # --- control: a UI action producing no object is preserved ---
+        ui_action = history.add_ui_entry(
+            "Some UI",
+            target="signalpanel",
+            method_name="copy_metadata",
+            save_state=False,
+        )
+        assert ui_action is not None
+        ui_len_before = len(history)
+        with history.capture_outputs(ui_action):
+            pass
+        assert ui_action in list(history)
+        assert len(history) == ui_len_before
+
+        # --- control: a 1_to_0 analysis compute producing no object is kept ---
+        analysis_action = history.add_compute_entry(
+            "Analysis op",
+            panel_str="signal",
+            func_name="stats",
+            pattern="1_to_0",
+            save_state=True,
+        )
+        assert analysis_action is not None
+        analysis_len_before = len(history)
+        with history.capture_outputs(analysis_action):
+            pass
+        assert analysis_action in list(history)
+        assert len(history) == analysis_len_before
