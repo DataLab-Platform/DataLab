@@ -2486,9 +2486,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                                 create_group=create_group,
                                 add_objects=add_objects,
                             )
-                        except (
-                            Exception
-                        ) as exc:  # pylint: disable=broad-exception-caught
+                        except Exception as exc:  # pylint: disable=broad-exception-caught
                             if ignore_errors:
                                 # Ignore unknown file types
                                 pass
