@@ -1843,7 +1843,7 @@ def test_history_recompute_invariants():
         # Source object is never mutated by a downstream edit.
         assert np.array_equal(src_obj.xydata, src_data_before)
 
-    # --- scenario: cascade recompute replaces output metadata (current behavior) ---
+    # --- scenario: cascade recompute preserves output metadata ---
     with datalab_test_app_context() as win:
         history = win.historypanel
         history.toggle_record_mode(True)
@@ -1863,9 +1863,7 @@ def test_history_recompute_invariants():
         editor.dataset.sigma = 9.0
         report = panel.objprop.apply_processing_parameters(output_a, interactive=False)
         assert report.success
-        # CHARACTERIZATION (current): the cascade rebuilds the output via
-        # ``update_obj_in_place``, which clears metadata (keeping only
-        # ``__uuid``/``__number``), so the user sentinel is dropped. The
-        # P3c slimming may intentionally change this to the pre-history
-        # behavior (metadata preserved) -- update this assertion then.
-        assert "sentinel_p3a" not in panel.objmodel[uuid_c].metadata
+        # P3b: the cascade now routes through the shared pre-history primitive
+        # (``apply_recomputed_object_in_place``), which PRESERVES the object's
+        # metadata instead of clearing it. The user sentinel survives.
+        assert panel.objmodel[uuid_c].metadata.get("sentinel_p3a") == 123

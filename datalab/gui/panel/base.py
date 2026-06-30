@@ -936,24 +936,18 @@ class ObjectProp(QW.QWidget):
             if is_edit_mode:
                 # --- Edit mode: mutate obj in-place, cascade downstream ---
 
-                # Update the current object in-place with data from new object
-                obj.title = new_obj.title
-                if isinstance(obj, SignalObj):
-                    obj.xydata = new_obj.xydata
-                else:  # ImageObj
-                    obj.data = new_obj.data
-                    # Invalidate ROI mask cache when image dimensions may
-                    # have changed (mask depends on image shape)
-                    obj.invalidate_maskdata_cache()
-
-                # Update metadata with new processing parameters
+                # Apply the recomputed object in place through the shared
+                # primitive (single source of truth, also used by the
+                # History panel cascade): updates title + data and the
+                # processing parameters, preserves obj's metadata, then
+                # re-runs auto analysis.
                 updated_proc_params = ProcessingParameters(
                     func_name=proc_params.func_name,
                     pattern=proc_params.pattern,
                     param=param,
                     source_uuid=proc_params.source_uuid,
                 )
-                insert_processing_parameters(obj, updated_proc_params)
+                self.apply_recomputed_object_in_place(obj, new_obj, updated_proc_params)
 
                 # Propagate the edited param to the History panel:
                 # Mutate the matching existing action (snapshot originals
@@ -968,10 +962,6 @@ class ObjectProp(QW.QWidget):
                     action.kwargs["param"] = copy.deepcopy(param)
                     hpanel.refresh_action(action)
                     hpanel.recompute_cascade(action)
-
-                # Auto-recompute analysis (data changed, results invalid)
-                obj_processor = self.__get_processor_associated_to(obj)
-                obj_processor.auto_recompute_analysis(obj)
 
                 # Update the tree view item and refresh plot
                 obj_uuid = get_uuid(obj)
@@ -1048,6 +1038,34 @@ class ObjectProp(QW.QWidget):
             self.panel.SIG_STATUS_MESSAGE.emit("✅ " + report.message, 5000)
 
         return report
+
+    def apply_recomputed_object_in_place(
+        self,
+        obj: SignalObj | ImageObj,
+        new_obj: SignalObj | ImageObj,
+        proc_params: ProcessingParameters,
+    ) -> None:
+        """Apply a freshly recomputed object onto ``obj`` in place.
+
+        Single source of truth shared by the interactive Apply callback and
+        the History panel cascade. Copies title + data from ``new_obj`` while
+        preserving ``obj``'s own metadata (only the processing parameters are
+        refreshed), then re-runs auto analysis. This keeps both reprocess
+        paths behaviorally identical (pre-history semantics).
+
+        Args:
+            obj: Existing object to update in place (identity preserved).
+            new_obj: Freshly recomputed object providing title + data.
+            proc_params: Updated processing parameters to store on ``obj``.
+        """
+        obj.title = new_obj.title
+        if isinstance(obj, SignalObj):
+            obj.xydata = new_obj.xydata
+        else:  # ImageObj
+            obj.data = new_obj.data
+            obj.invalidate_maskdata_cache()
+        insert_processing_parameters(obj, proc_params)
+        self.__get_processor_associated_to(obj).auto_recompute_analysis(obj)
 
 
 class AbstractPanelMeta(type(QW.QSplitter), abc.ABCMeta):
