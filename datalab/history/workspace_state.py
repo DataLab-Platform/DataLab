@@ -160,16 +160,31 @@ class WorkspaceState:
         """Return *d* with all top-level keys normalized to stable panel IDs."""
         return {cls._normalize_panel_key(k): v for k, v in d.items()}
 
-    def save(self, mainwindow: DLMainWindow) -> None:
+    def save(self, mainwindow: DLMainWindow, panel_str: str | None = None) -> None:
         """Save the current workspace state
 
         Args:
             mainwindow: DataLab's main window
+            panel_str: Stable identifier (``"signal"`` or ``"image"``) of the
+             panel the action operates on. When provided, only that panel's
+             selection/states/titles are captured -- the other panel's entries
+             are left empty so that unrelated objects in the other panel cannot
+             produce false incompatibilities. When ``None`` (default), both
+             panels are captured (backward-compatible behavior). ``object_metadata``
+             is always captured for both panels (used by session-replay
+             positional fallback and harmless for compatibility checks).
         """
-        self.selection = self.get_current_selection(mainwindow)
+        full_selection = self.get_current_selection(mainwindow)
+        if panel_str is None:
+            self.selection = full_selection
+        else:
+            # Restrict the captured selection to the action's own panel; leave
+            # the other panel's selection empty so compatibility checks ignore
+            # unrelated objects in that panel.
+            self.selection = {panel_str: full_selection.get(panel_str, [])}
         self.object_metadata = {}
         for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
-            sel_uuids = self.selection[panel.PANEL_STR_ID]
+            sel_uuids = self.selection.get(panel.PANEL_STR_ID, [])
             self.states[panel.PANEL_STR_ID] = [
                 str(obj.data.shape)
                 for obj in panel.objmodel

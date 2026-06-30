@@ -33,13 +33,14 @@ import numpy as np
 import pytest
 import sigima.objects
 import sigima.params
+import sigima.proc.image as sipi
 import sigima.proc.signal as sips
 from qtpy import QtCore as QC
 from sigima.objects import create_signal_roi
 from sigima.objects.base import BaseROI
 from sigima.objects.signal.creation import NewSignalParam
 from sigima.tests import helpers
-from sigima.tests.data import create_paracetamol_signal
+from sigima.tests.data import create_paracetamol_signal, create_sincos_image
 
 from datalab.config import _
 from datalab.gui.panel.base import AddMetadataParam, BaseDataPanel
@@ -481,6 +482,39 @@ def test_history_action_compatibility():
         item = _get_tree_item_for(history, deriv_entry)
         assert item.data(0, HistoryTree.COMPATIBILITY_ROLE) is False
         assert item.foreground(0).color().isValid()
+
+
+def test_history_action_panel_scoped_state():
+    """An action's WorkspaceState only captures its own panel's selection."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        spanel, ipanel = win.signalpanel, win.imagepanel
+
+        # Create a signal and keep it selected in the signal panel.
+        spanel.add_object(create_paracetamol_signal())
+        sig_uuid = get_uuid(spanel.objmodel.get_object_from_number(1))
+        spanel.objview.select_objects([1])
+
+        # Create an image and run a 1_to_1 image compute action.
+        ipanel.add_object(create_sincos_image())
+        ima_uuid = get_uuid(ipanel.objmodel.get_object_from_number(1))
+        ipanel.objview.select_objects([1])
+        ipanel.processor.run_feature(sipi.inverse)
+
+        # The recorded image action must NOT embed the signal-panel selection.
+        entry = history[len(history)]
+        assert entry.kind == HistoryAction.KIND_COMPUTE
+        assert entry.panel_str == ipanel.PANEL_STR_ID
+        assert entry.state.selection.get("signal", []) == []
+        assert entry.state.selection.get("image") == [ima_uuid]
+
+        # Deleting the unrelated signal must keep the image action compatible.
+        history.toggle_record_mode(False)
+        spanel.objview.select_objects([1])
+        spanel.remove_object(force=True)
+        assert sig_uuid not in spanel.objmodel.get_object_ids()
+        assert entry.is_current_state_compatible(win, restore_selection=False) is True
 
 
 # ---------------------------------------------------------------------------

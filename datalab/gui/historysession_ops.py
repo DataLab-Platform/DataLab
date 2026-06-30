@@ -77,7 +77,7 @@ def add_compute_entry(
         return None
     state = WorkspaceState()
     if save_state:
-        state.save(panel.mainwindow)
+        state.save(panel.mainwindow, panel_str=panel_str)
     # Deep-copy kwargs so each action owns independent parameter
     # instances. Without this, consecutive applications of the same
     # function (e.g. two gaussian_filter calls with different sigma)
@@ -257,9 +257,15 @@ def add_ui_entry(
     """
     if not panel.record_mode_enabled or panel.is_replaying():
         return None
+    # Derive the action's panel from the UI target so the captured state only
+    # constrains the panel the action actually operates on.
+    target_panel_str = {
+        "signalpanel": "signal",
+        "imagepanel": "image",
+    }.get(target)
     state = WorkspaceState()
     if save_state:
-        state.save(panel.mainwindow)
+        state.save(panel.mainwindow, panel_str=target_panel_str)
     # Deep-copy kwargs to ensure independent parameter ownership
     # (same rationale as in add_compute_entry).
     action = HistoryAction(
