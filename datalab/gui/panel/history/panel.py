@@ -116,7 +116,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self.refresh_obj_ids_snapshot()
         self.update_actions_state()
         self.refresh_compatibility_items()
-        if not execenv.unattended and Conf.proc.history_auto_record.get(True):
+        if not execenv.unattended and Conf.proc.history_auto_record.get(False):
             self._record_action.setChecked(True)
             self.create_new_session()
 

@@ -648,7 +648,7 @@ def initialize():
     Conf.proc.keep_results.get(False)
     Conf.proc.show_result_dialog.get(True)
     Conf.proc.ignore_warnings.get(False)
-    Conf.proc.history_auto_record.get(True)
+    Conf.proc.history_auto_record.get(False)
     Conf.proc.xarray_compat_behavior.get("ask")
     Conf.proc.small_mono_font.get((configtools.MONOSPACE, 8, False))
     # View section
