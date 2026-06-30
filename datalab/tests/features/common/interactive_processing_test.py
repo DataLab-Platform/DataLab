@@ -498,6 +498,59 @@ def test_apply_processing_parameters_image():
             assert stored_param.value == v1
 
 
+def test_apply_processing_parameters_explicit_param():
+    """apply_processing_parameters honors an explicit param, ignoring the editor."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            processor = panel.processor
+            objprop = panel.objprop
+
+            param = GaussParam.create(mu=250.0, sigma=20.0, a=100.0, y0=10.0, size=500)
+            panel.new_object(param=param, edit=False)
+            signal = panel.objview.get_current_object()
+            assert signal is not None
+            signal_uuid = get_uuid(signal)
+            original_signal_data = signal.y.copy()
+
+            v0 = 5.0
+            processor.run_feature("addition_constant", ConstantParam.create(value=v0))
+            processed_sig = panel.objview.get_current_object()
+            assert processed_sig is not None
+            processed_uuid = get_uuid(processed_sig)
+            assert np.allclose(processed_sig.y, original_signal_data + v0)
+
+            # Select the processed signal to populate the Processing tab editor.
+            panel.objview.set_current_object(processed_sig)
+            assert objprop.processing_param_editor is not None
+            editor = objprop.processing_param_editor
+
+            # Put a DECOY value in the editor: it must be ignored because an
+            # explicit param is passed to apply_processing_parameters.
+            editor.dataset.value = 99.0
+
+            win.historypanel.toggle_edit_mode(True)
+
+            # Apply with an EXPLICIT param (not the editor's decoy value).
+            v1 = 15.0
+            report = objprop.apply_processing_parameters(
+                param=ConstantParam.create(value=v1)
+            )
+            assert report.success, f"Reprocessing failed: {report.message}"
+            assert report.obj_uuid == processed_uuid
+            assert get_uuid(processed_sig) == processed_uuid
+
+            # Output must reflect the EXPLICIT param (original + 15.0), proving
+            # the editor decoy (99.0) was ignored -> editor-independent.
+            assert np.allclose(processed_sig.y, original_signal_data + v1)
+
+            pp_dict = processed_sig.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
+            assert pp_dict["source_uuid"] == signal_uuid
+            assert pp_dict["func_name"] == "addition_constant"
+            stored_param = json_to_dataset(pp_dict["param_json"])
+            assert stored_param.value == v1
+
+
 def test_no_duplicate_processing_tabs():
     """Test that applying processing parameters multiple times doesn't create
     duplicate tabs.

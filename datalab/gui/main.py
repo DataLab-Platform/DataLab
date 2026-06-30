@@ -1943,6 +1943,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         dock = self.docks[self.tabwidget.widget(index)]
         dock.raise_()
         self.__update_actions()
+        if self.historypanel is not None:
+            widget = self.tabwidget.widget(index)
+            if widget is self.signalpanel:
+                self.historypanel.on_current_panel_changed("signal")
+            elif widget is self.imagepanel:
+                self.historypanel.on_current_panel_changed("image")
 
     def __update_generic_menu(self, menu: QW.QMenu | None = None) -> None:
         """Update menu before showing up -- Generic method"""
@@ -2276,17 +2282,20 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         Raises:
             ValueError: If a file is not a valid native DataLab HDF5 file
         """
-        for idx, filename in enumerate(h5files):
-            filename = self.__check_h5file(filename, "load")
-            success = self.h5inputoutput.open_file_headless(
-                filename, reset_all=(reset_all and idx == 0)
-            )
-            if not success:
-                raise ValueError(
-                    f"File '{filename}' is not a native DataLab HDF5 file. "
-                    f"Use the GUI menu or a macro with RemoteProxy to import "
-                    f"arbitrary HDF5 files."
+        # Offer a fresh history session for this load *before* recording anything.
+        self.historypanel.maybe_start_session_for_input(load=True)
+        with self.historypanel.session_prompt_suppressed():
+            for idx, filename in enumerate(h5files):
+                filename = self.__check_h5file(filename, "load")
+                success = self.h5inputoutput.open_file_headless(
+                    filename, reset_all=(reset_all and idx == 0)
                 )
+                if not success:
+                    raise ValueError(
+                        f"File '{filename}' is not a native DataLab HDF5 file. "
+                        f"Use the GUI menu or a macro with RemoteProxy to import "
+                        f"arbitrary HDF5 files."
+                    )
         # Refresh panel trees after loading
         self.repopulate_panel_trees()
 
@@ -2317,9 +2326,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             separated by ":")
             reset_all: Delete all DataLab signals/images before importing data
         """
-        with qth.qt_try_loadsave_file(self, filename, "load"):
-            filename = self.__check_h5file(filename, "load")
-            self.h5inputoutput.import_files([filename], False, reset_all)
+        # Offer a fresh history session for this load *before* importing anything.
+        self.historypanel.maybe_start_session_for_input(load=True)
+        with self.historypanel.session_prompt_suppressed():
+            with qth.qt_try_loadsave_file(self, filename, "load"):
+                filename = self.__check_h5file(filename, "load")
+                self.h5inputoutput.import_files([filename], False, reset_all)
 
     # This method is intentionally *not* remote controlled
     # (see TODO regarding RemoteClient.add_object method)

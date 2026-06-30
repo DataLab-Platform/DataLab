@@ -9,6 +9,11 @@ from contextlib import contextmanager
 from copy import deepcopy
 from typing import TYPE_CHECKING, Any, Callable, Generator
 
+from qtpy import QtCore as QC
+from qtpy import QtWidgets as QW
+
+from datalab.config import _
+from datalab.env import execenv
 from datalab.history import HistoryAction, HistorySession, WorkspaceState
 from datalab.history.core import _resolve_self_target
 
@@ -18,18 +23,77 @@ if TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 
-def create_new_session(panel: HistoryPanel) -> None:
-    """Create a new history list"""
+def create_new_session(
+    panel: HistoryPanel, panel_str: str | None = None
+) -> HistorySession:
+    """Create a new history session and make it active for its panel.
+
+    Args:
+        panel_str: Panel the new session belongs to ("signal"/"image").
+            Defaults to the current data panel.
+
+    Returns:
+        The newly created session.
+    """
+    pstr = panel_str or panel._current_panel_str()
     panel.session_increment += 1
     session = HistorySession(number=panel.session_increment)
     panel.history_sessions.append(session)
+    panel.set_active_session(session, pstr)
     panel.tree.populate_tree(panel.history_sessions)
     panel.refresh_compatibility_items()
+    return session
 
 
 def start_new_session_after_workspace_reset(panel: HistoryPanel) -> None:
     """Start a new history session after a workspace reset, when useful."""
     if panel.history_sessions and panel.history_sessions[-1].actions:
+        panel.create_new_session()
+
+
+def maybe_start_session_for_input(panel: HistoryPanel, *, load: bool = False) -> None:
+    """Offer to start a new history session before a creation/load is recorded.
+
+    When the current session already contains actions, prompt the user to start
+    a fresh session so the new creation/load becomes the root of a clean,
+    self-contained pipeline. A new session is opened *before* the action is
+    recorded when the user accepts.
+
+    Args:
+        load: True when triggered by a file/workspace load, False for an object
+         creation. Only affects the prompt wording.
+    """
+    if not panel.record_mode_enabled or panel.is_replaying():
+        return
+    if panel._suppress_session_prompt:
+        return
+    # Reuse the current session when there is none yet or it has no actions:
+    # there is nothing to preserve, so no need to prompt.
+    if not panel.history_sessions or not panel.history_sessions[-1].actions:
+        return
+    # Debounce: a synchronous burst of creations (plugin/macro) must prompt only
+    # once. The guard is reset on the next event-loop turn.
+    if panel._session_input_pending:
+        return
+    panel._session_input_pending = True
+    QC.QTimer.singleShot(0, lambda: setattr(panel, "_session_input_pending", False))
+    if execenv.unattended:
+        # Headless runs: honor the accept_dialogs flag (default False -> "No"),
+        # so tests can drive the behavior without a real modal dialog.
+        if execenv.accept_dialogs:
+            panel.create_new_session()
+        return
+    if load:
+        message = _("A new object was loaded. Start a new history session?")
+    else:
+        message = _("A new object was created. Start a new history session?")
+    answer = QW.QMessageBox.question(
+        panel.mainwindow,
+        _("New history session"),
+        message,
+        QW.QMessageBox.Yes | QW.QMessageBox.No,
+    )
+    if answer == QW.QMessageBox.Yes:
         panel.create_new_session()
 
 
@@ -77,7 +141,7 @@ def add_compute_entry(
         return None
     state = WorkspaceState()
     if save_state:
-        state.save(panel.mainwindow)
+        state.save(panel.mainwindow, panel_str=panel_str)
     # Deep-copy kwargs so each action owns independent parameter
     # instances. Without this, consecutive applications of the same
     # function (e.g. two gaussian_filter calls with different sigma)
@@ -230,6 +294,19 @@ def capture_outputs(
                 if uid not in before_p:
                     new_uuids.append(uid)
         panel.register_action_outputs(action, new_uuids)
+        if (
+            not new_uuids
+            and action.kind == HistoryAction.KIND_COMPUTE
+            and action.pattern in {"1_to_1", "1_to_n", "n_to_1", "2_to_1"}
+        ):
+            # The compute produced no output object for any selected input:
+            # it failed (or was a full no-op). Do not keep a misleading "OK"
+            # entry in the history — remove the just-recorded action and
+            # refresh the tree so the panel stays consistent.
+            panel.remove_single_action(action)
+            panel.tree.populate_tree(panel.history_sessions)
+            panel.refresh_compatibility_items()
+            panel.update_actions_state()
 
 
 def add_ui_entry(
@@ -257,9 +334,21 @@ def add_ui_entry(
     """
     if not panel.record_mode_enabled or panel.is_replaying():
         return None
+    # When the entry is an object creation, offer to start a fresh history
+    # session first so the creation becomes the root of a clean pipeline.
+    if method_name in HistoryAction.UI_CREATION_METHODS:
+        panel.maybe_start_session_for_input(load=False)
+    # Derive the action's panel from the UI target so the captured state only
+    # constrains the panel the action actually operates on.
+    target_panel_str = {
+        "signalpanel": "signal",
+        "imagepanel": "image",
+        "signalprocessor": "signal",
+        "imageprocessor": "image",
+    }.get(target)
     state = WorkspaceState()
     if save_state:
-        state.save(panel.mainwindow)
+        state.save(panel.mainwindow, panel_str=target_panel_str)
     # Deep-copy kwargs to ensure independent parameter ownership
     # (same rationale as in add_compute_entry).
     action = HistoryAction(
@@ -269,6 +358,9 @@ def add_ui_entry(
         method_name=method_name,
         kwargs=deepcopy(kwargs),
         state=state,
+        panel_str=target_panel_str
+        if target in ("signalprocessor", "imageprocessor")
+        else None,
     )
     panel.add_object(action)
     return action
@@ -307,11 +399,20 @@ def add_entry(
 
 
 def add_object(panel: HistoryPanel, obj: HistoryAction) -> None:
-    """Add object to panel"""
-    if not panel.history_sessions:
-        panel.create_new_session()
-    panel.history_sessions[-1].add_action(obj)
-    panel.tree.add_action_to_tree(obj)
+    """Add an action to the active session of its panel.
+
+    Routes the action to the active recording session for the action's panel
+    ("signal"/"image"), creating a dedicated session on first use, so signal
+    and image pipelines stay in separate sessions and recording resumes in the
+    user-selected session.
+    """
+    pstr = obj.panel_str or panel._current_panel_str()
+    session = panel.get_active_session(pstr)
+    if session is None:
+        session = panel.create_new_session(panel_str=pstr)
+    session.add_action(obj)
+    session_index = panel.history_sessions.index(session)
+    panel.tree.add_action_to_tree(obj, session_index)
     panel.tree.rearrange_tree()
     panel.refresh_compatibility_items()
     panel.update_actions_state()

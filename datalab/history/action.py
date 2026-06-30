@@ -434,6 +434,10 @@ class HistoryAction(ObjItf):
         attr = self.target or "mainwindow"
         if attr == "mainwindow":
             return mainwindow
+        if attr == "signalprocessor":
+            return mainwindow.signalpanel.processor
+        if attr == "imageprocessor":
+            return mainwindow.imagepanel.processor
         return getattr(mainwindow, attr)
 
     def _resolve_panel(self, mainwindow: DLMainWindow):
@@ -527,7 +531,7 @@ class HistoryAction(ObjItf):
         else:
             if restore_selection:
                 self.state.restore(mainwindow)
-            self._replay_ui(mainwindow, edit)
+            self._replay_ui(mainwindow, edit, uuid_remap)
 
     def _translate_state(self, uuid_remap: dict[str, dict[str, str]]) -> WorkspaceState:
         """Return a copy of ``self.state`` whose captured UUIDs have been
@@ -601,7 +605,12 @@ class HistoryAction(ObjItf):
             raise ValueError(f"Unknown compute pattern: {self.pattern!r}")
         processor.run_feature(feature, **run_kwargs)
 
-    def _replay_ui(self, mainwindow: DLMainWindow, edit: bool) -> None:
+    def _replay_ui(
+        self,
+        mainwindow: DLMainWindow,
+        edit: bool,
+        uuid_remap: dict[str, dict[str, str]] | None = None,
+    ) -> None:
         """Replay a UI-kind action by calling ``target.method_name(**kwargs)``."""
         hpanel = mainwindow.historypanel
         if (
@@ -642,6 +651,12 @@ class HistoryAction(ObjItf):
                     return
         method = getattr(target, self.method_name)
         call_kwargs = dict(self.kwargs)
+        # Translate a recorded source object UUID through the session uuid_remap
+        # so deterministic replay after save/reload still targets the right object.
+        if uuid_remap and self.panel_str and "source_uuid" in call_kwargs:
+            panel_map = uuid_remap.get(self.panel_str, {})
+            old = call_kwargs["source_uuid"]
+            call_kwargs["source_uuid"] = panel_map.get(old, old)
         # Inject edit mode if the method supports it
         try:
             sig = inspect.signature(method)
@@ -663,6 +678,8 @@ class HistoryAction(ObjItf):
             writer.write(self.kind)
         with writer.group("title"):
             writer.write(self.__title)
+        with writer.group("uuid"):
+            writer.write(self.uuid)
         if self.panel_str is not None:
             with writer.group("panel_str"):
                 writer.write(self.panel_str)
@@ -722,6 +739,13 @@ class HistoryAction(ObjItf):
         current = reader.h5
         for option in reader.option:
             current = current.require_group(option)
+        # ``uuid`` is present only in files written after UUID persistence was
+        # added; keep the freshly generated ``self.uuid`` for older files.
+        if "uuid" in current.attrs or "uuid" in current:
+            with reader.group("uuid"):
+                loaded_uuid = reader.read_any()
+            if loaded_uuid:
+                self.uuid = str(loaded_uuid)
         for attr in ("panel_str", "func_name", "pattern", "target", "method_name"):
             if attr in current.attrs or attr in current:
                 with reader.group(attr):

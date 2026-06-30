@@ -33,15 +33,17 @@ import numpy as np
 import pytest
 import sigima.objects
 import sigima.params
+import sigima.proc.image as sipi
 import sigima.proc.signal as sips
 from qtpy import QtCore as QC
 from sigima.objects import create_signal_roi
 from sigima.objects.base import BaseROI
 from sigima.objects.signal.creation import NewSignalParam
 from sigima.tests import helpers
-from sigima.tests.data import create_paracetamol_signal
+from sigima.tests.data import create_paracetamol_signal, create_sincos_image
 
 from datalab.config import _
+from datalab.env import execenv
 from datalab.gui.panel.base import AddMetadataParam, BaseDataPanel
 from datalab.gui.panel.history import (
     HISTORY_ACTION_SCHEMA_VERSION,
@@ -409,6 +411,52 @@ def test_history_schema_and_hdf5_roundtrip():
         shutil.rmtree(tmpdir, ignore_errors=True)
 
 
+def test_history_action_uuid_persisted():
+    """Action UUID is stable across a .dlhist save/reload cycle."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        panel = win.signalpanel
+        history.toggle_record_mode(True)
+        panel.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1])
+        panel.processor.run_feature(
+            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
+        )
+        session = history.history_sessions[-1]
+        original_uuids = [action.uuid for action in session.actions]
+        assert original_uuids
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "uuid_roundtrip.dlhist")
+            with NativeH5Writer(path) as writer:
+                writer.write_object_list([session], "history_session")
+            with NativeH5Reader(path) as reader:
+                restored_sessions = reader.read_object_list(
+                    "history_session", HistorySession
+                )
+        restored_uuids = [action.uuid for action in restored_sessions[0].actions]
+        assert restored_uuids == original_uuids
+
+
+def test_history_duplicate_registers_outputs():
+    """``duplicate_object`` registers duplicated object UUIDs as action outputs."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        panel = win.signalpanel
+        history.toggle_record_mode(True)
+        panel.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1])
+        panel.duplicate_object()
+        session = history.history_sessions[-1]
+        dup_action = next(
+            action
+            for action in session.actions
+            if action.method_name == "duplicate_object"
+        )
+        assert dup_action.output_uuids
+        first_output = dup_action.output_uuids[0]
+        assert history.output_to_action[first_output] == dup_action.uuid
+
+
 # ---------------------------------------------------------------------------
 # 2) HistoryAction / WorkspaceState compatibility
 # ---------------------------------------------------------------------------
@@ -481,6 +529,39 @@ def test_history_action_compatibility():
         item = _get_tree_item_for(history, deriv_entry)
         assert item.data(0, HistoryTree.COMPATIBILITY_ROLE) is False
         assert item.foreground(0).color().isValid()
+
+
+def test_history_action_panel_scoped_state():
+    """An action's WorkspaceState only captures its own panel's selection."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        spanel, ipanel = win.signalpanel, win.imagepanel
+
+        # Create a signal and keep it selected in the signal panel.
+        spanel.add_object(create_paracetamol_signal())
+        sig_uuid = get_uuid(spanel.objmodel.get_object_from_number(1))
+        spanel.objview.select_objects([1])
+
+        # Create an image and run a 1_to_1 image compute action.
+        ipanel.add_object(create_sincos_image())
+        ima_uuid = get_uuid(ipanel.objmodel.get_object_from_number(1))
+        ipanel.objview.select_objects([1])
+        ipanel.processor.run_feature(sipi.inverse)
+
+        # The recorded image action must NOT embed the signal-panel selection.
+        entry = history[len(history)]
+        assert entry.kind == HistoryAction.KIND_COMPUTE
+        assert entry.panel_str == ipanel.PANEL_STR_ID
+        assert entry.state.selection.get("signal", []) == []
+        assert entry.state.selection.get("image") == [ima_uuid]
+
+        # Deleting the unrelated signal must keep the image action compatible.
+        history.toggle_record_mode(False)
+        spanel.objview.select_objects([1])
+        spanel.remove_object(force=True)
+        assert sig_uuid not in spanel.objmodel.get_object_ids()
+        assert entry.is_current_state_compatible(win, restore_selection=False) is True
 
 
 # ---------------------------------------------------------------------------
@@ -1593,3 +1674,359 @@ def test_history_chain_reconnect():
         reconnected_uuids = action_deriv.state.selection.get("signal", [])
         assert s002_uuid not in reconnected_uuids
         assert src_uuid in reconnected_uuids
+
+
+def test_history_new_session_prompt_on_input(monkeypatch):
+    """Creating an object on a non-empty session offers to start a new session."""
+    # --- scenario: user accepts the prompt -> a new session is opened ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+
+        # First creation reuses the (empty) current session: no prompt expected.
+        win.add_object(create_paracetamol_signal())
+        assert len(history.history_sessions) == 1
+        assert len(history.history_sessions[-1].actions) == 1
+
+        # Headless "accept": accept_dialogs drives the prompt to "Yes".
+        monkeypatch.setattr(execenv, "accept_dialogs", True)
+        n_sessions = len(history.history_sessions)
+        win.add_object(create_paracetamol_signal())
+        assert len(history.history_sessions) == n_sessions + 1
+        new_session = history.history_sessions[-1]
+        assert new_session.actions
+        assert new_session.actions[0].method_name == "new_object"
+
+    # --- scenario: user declines the prompt -> no new session is created ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        win.add_object(create_paracetamol_signal())
+        assert len(history.history_sessions) == 1
+
+        # Headless "decline": accept_dialogs stays False -> prompt answered "No".
+        monkeypatch.setattr(execenv, "accept_dialogs", False)
+        n_sessions = len(history.history_sessions)
+        win.add_object(create_paracetamol_signal())
+        assert len(history.history_sessions) == n_sessions
+
+
+def test_history_interactive_fit_replay():
+    """Interactive curve-fit recording and deterministic replay.
+
+    Records an interactive fit as a UI history action targeting the signal
+    processor's ``recompute_fit`` method (exactly as ``__row_compute_fit``
+    does), persists it to a ``.dlhist`` file, then replays it and verifies the
+    reconstructed curve matches the deterministic evaluation -- without any
+    fit dialog.
+    """
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        panel = win.signalpanel
+
+        # --- scenario: record a polynomial interactive fit as a UI action ---
+        history.toggle_record_mode(True)
+        panel.add_object(create_paracetamol_signal())
+        src = panel.objmodel.get_object_from_number(1)
+        src_uuid = get_uuid(src)
+        panel.objview.select_objects([1])
+
+        degree = 3
+        coeffs = np.polyfit(src.x, src.y, degree)  # highest-first == polyval order
+        fit_values = [float(c) for c in coeffs]
+        expected_y = np.polyval(coeffs, src.x)
+        name = _("Polynomial fit")
+
+        result = sigima.objects.create_signal(f"{name}({src.title})", src.x, expected_y)
+        action = history.add_ui_entry(
+            name,
+            target="signalprocessor",
+            method_name="recompute_fit",
+            save_state=True,
+            fit_type="polynomial",
+            fit_values=fit_values,
+            fit_name=name,
+            source_uuid=src_uuid,
+        )
+        assert action is not None
+        with history.capture_outputs(action):
+            panel.add_object(result)
+        assert action.output_uuids == [get_uuid(result)]
+        assert action.target == "signalprocessor"
+        assert action.panel_str == panel.PANEL_STR_ID
+
+        # --- scenario: .dlhist round-trip preserves uuid + fit kwargs ---
+        ser_session = HistorySession(number=1)
+        ser_session.actions.append(action)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "fit.dlhist")
+            with NativeH5Writer(path) as writer:
+                writer.write_object_list([ser_session], "history_session")
+            with NativeH5Reader(path) as reader:
+                restored_sessions = reader.read_object_list(
+                    "history_session", HistorySession
+                )
+        restored = restored_sessions[0].actions[0]
+        assert restored.uuid == action.uuid
+        assert restored.kind == HistoryAction.KIND_UI
+        assert restored.target == "signalprocessor"
+        assert restored.method_name == "recompute_fit"
+        assert restored.kwargs.get("fit_type") == "polynomial"
+        assert restored.kwargs.get("source_uuid") == src_uuid
+        assert restored.kwargs.get("fit_values") == pytest.approx(fit_values)
+
+        # --- scenario: deterministic replay reconstructs the fit curve ---
+        n_before = len(panel.objmodel)
+        restored.replay(win, restore_selection=True, edit=False)
+        assert len(panel.objmodel) == n_before + 1
+        new_obj = panel.objmodel.get_object_from_number(len(panel.objmodel))
+        assert np.allclose(new_obj.x, src.x)
+        assert np.allclose(new_obj.y, expected_y)
+
+
+def test_history_recompute_invariants():
+    """Characterization: lock current cascade-recompute behavior (pre-P3 slimming).
+
+    These assertions document the *current* behavior of the History panel
+    cascade so that the upcoming architecture-slimming refactor (routing
+    recompute through the pre-existing Apply/processor paths) cannot silently
+    change observable results. Update deliberately (with justification) if a
+    refactor intentionally changes a documented behavior.
+    """
+    # --- scenario: cascade recompute call-count is bounded (no infinite loop) ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        history.toggle_edit_mode(True)
+        panel = win.signalpanel
+        action_a, action_b, action_c, output_b, output_c = _build_cascade_chain(
+            panel, history
+        )
+        output_a = panel.objmodel.get_object_from_number(2)
+        src_obj = panel.objmodel.get_object_from_number(1)
+        src_data_before = src_obj.xydata.copy()
+        number_b = panel.objmodel.get_number(output_b)
+        number_c = panel.objmodel.get_number(output_c)
+
+        # Spy on the single shared signal processor recompute entry point.
+        calls = {"n": 0}
+        original_recompute = panel.processor.recompute_1_to_1
+
+        def _counting_recompute(*args, **kwargs):
+            calls["n"] += 1
+            return original_recompute(*args, **kwargs)
+
+        panel.processor.recompute_1_to_1 = _counting_recompute
+        try:
+            panel.objview.select_objects([2])
+            assert panel.objprop.setup_processing_tab(output_a, reset_params=False)
+            editor = panel.objprop.processing_param_editor
+            assert editor is not None
+            editor.dataset.sigma = 7.0
+            report = panel.objprop.apply_processing_parameters(
+                output_a, interactive=False
+            )
+            assert report.success
+        finally:
+            panel.processor.recompute_1_to_1 = original_recompute
+
+        # Editing the root re-runs: the root itself (via apply) + the two
+        # downstream 1-to-1 actions (via cascade). Exactly one call per
+        # affected action -- a bound that fails if a replay loop reappears.
+        assert calls["n"] == 3  # root apply + 2 downstream cascade recomputes
+
+        # Identity invariants: outputs keep their UUID *and* their __number.
+        assert get_uuid(panel.objmodel[get_uuid(output_b)]) == get_uuid(output_b)
+        assert panel.objmodel.get_number(panel.objmodel[get_uuid(output_b)]) == number_b
+        assert panel.objmodel.get_number(panel.objmodel[get_uuid(output_c)]) == number_c
+
+        # Source object is never mutated by a downstream edit.
+        assert np.array_equal(src_obj.xydata, src_data_before)
+
+    # --- scenario: cascade recompute preserves output metadata ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        history.toggle_edit_mode(True)
+        panel = win.signalpanel
+        action_a, _action_b, _action_c, _output_b, output_c = _build_cascade_chain(
+            panel, history
+        )
+        uuid_c = get_uuid(output_c)
+        # Add a user metadata sentinel on the deepest output.
+        panel.objmodel[uuid_c].metadata["sentinel_p3a"] = 123
+        output_a = panel.objmodel.get_object_from_number(2)
+        panel.objview.select_objects([2])
+        assert panel.objprop.setup_processing_tab(output_a, reset_params=False)
+        editor = panel.objprop.processing_param_editor
+        assert editor is not None
+        editor.dataset.sigma = 9.0
+        report = panel.objprop.apply_processing_parameters(output_a, interactive=False)
+        assert report.success
+        # P3b: the cascade now routes through the shared pre-history primitive
+        # (``apply_recomputed_object_in_place``), which PRESERVES the object's
+        # metadata instead of clearing it. The user sentinel survives.
+        assert panel.objmodel[uuid_c].metadata.get("sentinel_p3a") == 123
+
+
+def test_history_active_session_routing():
+    """Recording routes per-panel into separate active sessions; selecting a
+    session resumes recording into it (A1)."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        spanel, ipanel = win.signalpanel, win.imagepanel
+
+        # --- signal pipeline: one signal session ---
+        spanel.add_object(create_paracetamol_signal())
+        spanel.objview.select_objects([1])
+        spanel.processor.run_feature(sips.derivative)
+        assert len(history.history_sessions) == 1
+        signal_session = history.get_active_session("signal")
+        assert signal_session is not None
+        assert len(signal_session.actions) == 1
+
+        # --- image pipeline: lands in a SEPARATE session ---
+        ipanel.add_object(create_sincos_image())
+        ipanel.objview.select_objects([1])
+        ipanel.processor.run_feature(sipi.inverse)
+        image_session = history.get_active_session("image")
+        assert image_session is not None
+        assert image_session is not signal_session
+        assert len(history.history_sessions) == 2
+        assert len(image_session.actions) == 1
+        # The image action did not leak into the signal session.
+        assert len(signal_session.actions) == 1
+
+        # --- back to signal: continue in the SAME signal session (no new one) ---
+        spanel.objview.select_objects([2])
+        spanel.processor.run_feature(sips.derivative)
+        assert len(history.history_sessions) == 2  # no new session created
+        assert len(signal_session.actions) == 2
+        assert len(image_session.actions) == 1
+
+        # --- resume into a SELECTED session ---
+        # Create a fresh (empty) signal session, then select the ORIGINAL signal
+        # session: a subsequent signal action must resume into the selected
+        # session, not the newly created empty one.
+        empty_session = history.create_new_session(panel_str="signal")
+        assert len(history.history_sessions) == 3
+        n_before = len(signal_session.actions)
+        _select_tree_session(history, signal_session)
+        spanel.objview.select_objects([1])
+        spanel.processor.run_feature(
+            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
+        )
+        assert len(signal_session.actions) == n_before + 1  # resumed here
+        assert len(empty_session.actions) == 0  # NOT the empty session
+        assert len(image_session.actions) == 1  # image untouched
+
+
+def test_history_active_session_highlight():
+    """Each panel's active recording session is highlighted (bold) in the tree;
+    the highlight survives a repopulate and follows active-session changes (A2)."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        spanel, ipanel = win.signalpanel, win.imagepanel
+
+        spanel.add_object(create_paracetamol_signal())
+        spanel.objview.select_objects([1])
+        spanel.processor.run_feature(sips.derivative)
+        signal_session = history.get_active_session("signal")
+        assert signal_session is not None
+
+        ipanel.add_object(create_sincos_image())
+        ipanel.objview.select_objects([1])
+        ipanel.processor.run_feature(sipi.inverse)
+        image_session = history.get_active_session("image")
+        assert image_session is not None
+
+        def _is_bold(session):
+            idx = history.history_sessions.index(session)
+            item = history.tree.topLevelItem(idx)
+            return item is not None and item.font(0).bold()
+
+        # Both panels' active sessions are highlighted.
+        assert _is_bold(signal_session)
+        assert _is_bold(image_session)
+
+        # Highlight survives a full repopulate.
+        history.tree.populate_tree(history.history_sessions)
+        assert _is_bold(signal_session)
+        assert _is_bold(image_session)
+
+        # Creating a new signal session moves the signal highlight to it.
+        new_signal = history.create_new_session(panel_str="signal")
+        assert _is_bold(new_signal)
+        assert not _is_bold(signal_session)  # previous signal session no longer active
+        assert _is_bold(image_session)  # image highlight unchanged
+
+        # Switching panels does not crash and keeps the highlight.
+        win.set_current_panel("image")
+        win.set_current_panel("signal")
+        assert _is_bold(new_signal)
+        assert _is_bold(image_session)
+
+
+def test_history_capture_outputs_drops_failed_compute():
+    """A producing compute that creates no object is removed from the history.
+
+    ``capture_outputs`` is the single funnel for object-producing computes:
+    when an object-producing *compute* action yields no new UUID it has failed
+    (or was a full no-op) and must not linger as a misleading "OK" entry. UI
+    actions and ``1_to_0`` analyses legitimately produce no object and must be
+    preserved.
+    """
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+
+        panel.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1])
+
+        # --- scenario: producing compute with no output is dropped ---
+        action = history.add_compute_entry(
+            "Failing op",
+            panel_str="signal",
+            func_name="gaussian_filter",
+            pattern="1_to_1",
+            save_state=True,
+        )
+        assert action is not None
+        len_before = len(history)
+        with history.capture_outputs(action):
+            pass  # simulate a failed compute: no object created
+        assert action not in list(history)
+        assert len(history) == len_before - 1
+        assert action.uuid not in history.action_output_uuids
+
+        # --- control: a UI action producing no object is preserved ---
+        ui_action = history.add_ui_entry(
+            "Some UI",
+            target="signalpanel",
+            method_name="copy_metadata",
+            save_state=False,
+        )
+        assert ui_action is not None
+        ui_len_before = len(history)
+        with history.capture_outputs(ui_action):
+            pass
+        assert ui_action in list(history)
+        assert len(history) == ui_len_before
+
+        # --- control: a 1_to_0 analysis compute producing no object is kept ---
+        analysis_action = history.add_compute_entry(
+            "Analysis op",
+            panel_str="signal",
+            func_name="stats",
+            pattern="1_to_0",
+            save_state=True,
+        )
+        assert analysis_action is not None
+        analysis_len_before = len(history)
+        with history.capture_outputs(analysis_action):
+            pass
+        assert analysis_action in list(history)
+        assert len(history) == analysis_len_before

@@ -962,6 +962,15 @@ msgstr "Troncature de données uint32 en int32."
 msgid "No supported data available in HDF5 file(s)."
 msgstr "Aucune donnée prise en charge dans le(s) fichier(s) HDF5."
 
+msgid "A new object was loaded. Start a new history session?"
+msgstr "Un nouvel objet a été chargé. Démarrer une nouvelle session d'historique ?"
+
+msgid "A new object was created. Start a new history session?"
+msgstr "Un nouvel objet a été créé. Démarrer une nouvelle session d'historique ?"
+
+msgid "New history session"
+msgstr "Nouvelle session d'historique"
+
 msgid "Generate macro"
 msgstr "Générer une macro"
 
@@ -1287,6 +1296,10 @@ msgstr "Ouvrir %d fichiers HDF5"
 msgid "Open HDF5 file"
 msgstr "Ouvrir un fichier HDF5"
 
+#, fuzzy, python-format
+msgid "New %s"
+msgstr "Créer un nouvel objet %s"
+
 msgid "not started"
 msgstr "non démarré"
 
@@ -1413,15 +1426,6 @@ msgstr "Paramètres de création"
 msgid "Creation"
 msgstr "Création"
 
-msgid "Signal was modified in-place."
-msgstr "Le signal a été modifié sur place."
-
-msgid "Image was modified in-place."
-msgstr "L'image a été modifiée sur place."
-
-msgid "If computation were performed based on this object, they may need to be redone."
-msgstr "Si des calculs ont été effectués sur la base de cet objet, ils devront peut-être être refaits."
-
 #, python-format
 msgid ""
 "Failed to recreate object with new parameters:\n"
@@ -1429,6 +1433,14 @@ msgid ""
 msgstr ""
 "Échec de la recréation de l'objet avec les nouveaux paramètres :\n"
 "%s"
+
+#, fuzzy
+msgid "Signal was recreated."
+msgstr "Le signal a été retraité."
+
+#, fuzzy
+msgid "Image was recreated."
+msgstr "L'image a été retraitée."
 
 msgid "Processing Parameters"
 msgstr "Paramètres de traitement"
@@ -1562,11 +1574,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "Group name:"
-msgstr "Nom du groupe :"
-
 msgid "New group"
 msgstr "Nouveau groupe"
+
+msgid "Group name:"
+msgstr "Nom du groupe :"
 
 #, python-format
 msgid "New group \"%s\""
@@ -3568,11 +3580,11 @@ msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La dé
 msgid "Click OK to end demo."
 msgstr "Cliquer sur OK pour terminer la démo."
 
-msgid "Context"
-msgstr "Contexte"
-
 msgid "Error:"
 msgstr "Erreur:"
+
+msgid "Context"
+msgstr "Contexte"
 
 #, python-format
 msgid "The file %s could not be read:"
@@ -3790,17 +3802,17 @@ msgstr "Déplier la sélection"
 msgid "HDF5 Browser"
 msgstr "Explorateur HDF5"
 
-msgid "Value"
-msgstr "Valeur"
-
-msgid "Name"
-msgstr "Nom"
-
 msgid "Size"
 msgstr "Taille"
 
 msgid "Type"
 msgstr "Type"
+
+msgid "Value"
+msgstr "Valeur"
+
+msgid "Name"
+msgstr "Nom"
 
 msgid "Unsupported data"
 msgstr "Données non prises en charge"
@@ -3844,17 +3856,21 @@ msgstr "Afficher les détails"
 msgid "Hide details"
 msgstr "Masquer les détails"
 
-msgid "Title"
-msgstr "Titre"
-
 msgid "Date and time"
 msgstr "Date et heure"
+
+msgid "Title"
+msgstr "Titre"
 
 msgid "Action is compatible with the current workspace state."
 msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
 
 msgid "Action is not compatible with the current workspace state."
 msgstr "L'action n'est pas compatible avec l'état actuel de l'espace de travail."
+
+#, python-brace-format
+msgid "Active recording session ({panel})."
+msgstr "Session d'enregistrement active ({panel})."
 
 msgid "Image background selection"
 msgstr "Sélection de l'arrière-plan de l'image"
@@ -4289,4 +4305,3 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
-

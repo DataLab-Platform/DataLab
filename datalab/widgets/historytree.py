@@ -24,6 +24,7 @@ class HistoryTree(QW.QTreeWidget):
 
     DESCRIPTION_COLUMN = 2
     COMPATIBILITY_ROLE = QC.Qt.UserRole + 1
+    SESSION_NUMBER_ROLE = QC.Qt.UserRole + 2
 
     def __init__(self, parent: QW.QWidget) -> None:
         """Create a new history tree widget"""
@@ -36,6 +37,10 @@ class HistoryTree(QW.QTreeWidget):
         header.setSectionResizeMode(self.DESCRIPTION_COLUMN, QW.QHeaderView.Stretch)
         # Per-action expanded state, preserved across repopulate (delete/replay).
         self.__expanded_state: dict[str, bool] = {}
+        # Session numbers currently flagged as active recording sessions,
+        # mapped to their panel id ('signal'/'image'). Used to highlight the
+        # active session(s) and survive tree repopulation.
+        self.__active_session_numbers: dict[int, str] = {}
 
     def on_description_toggled(self, uuid: str, expanded: bool) -> None:
         """Remember the expanded state of a description cell."""
@@ -138,6 +143,7 @@ class HistoryTree(QW.QTreeWidget):
         for session in history_sessions:
             ritem = QW.QTreeWidgetItem([session.title, session.dtstr])
             ritem.setData(0, self.COMPATIBILITY_ROLE, True)
+            ritem.setData(0, self.SESSION_NUMBER_ROLE, session.number)
             self.addTopLevelItem(ritem)
             for action in session.actions:
                 child = self.action_to_tree_item(action)
@@ -146,6 +152,36 @@ class HistoryTree(QW.QTreeWidget):
         self.expandAll()
         for col in (0, 1):
             self.resizeColumnToContents(col)
+        self.__apply_active_highlight()
+
+    def set_active_sessions(self, active_session_numbers: dict[int, str]) -> None:
+        """Flag the active recording session(s) by session number and panel.
+
+        Args:
+            active_session_numbers: Mapping ``{session.number: panel_str}`` of
+                the active recording session for each panel.
+        """
+        self.__active_session_numbers = dict(active_session_numbers)
+        self.__apply_active_highlight()
+
+    def __apply_active_highlight(self) -> None:
+        """Bold + tint the top-level items of the active recording sessions."""
+        hl = self.palette().color(QG.QPalette.Highlight)
+        hl.setAlpha(60)
+        active_brush = QG.QBrush(hl)
+        normal_brush = QG.QBrush()
+        tip = _("Active recording session ({panel}).")
+        for i in range(self.topLevelItemCount()):
+            item = self.topLevelItem(i)
+            number = item.data(0, self.SESSION_NUMBER_ROLE)
+            panel_str = self.__active_session_numbers.get(number)
+            is_active = panel_str is not None
+            font = item.font(0)
+            font.setBold(is_active)
+            for col in (0, 1):
+                item.setFont(col, font)
+                item.setBackground(col, active_brush if is_active else normal_brush)
+                item.setToolTip(col, tip.format(panel=panel_str) if is_active else "")
 
     def rearrange_tree(self) -> None:
         """Rearrange the history tree widget"""
@@ -153,14 +189,22 @@ class HistoryTree(QW.QTreeWidget):
         for col in (0, 1):
             self.resizeColumnToContents(col)
 
-    def add_action_to_tree(self, action: HistoryAction) -> None:
-        """Add an action to the history tree widget
+    def add_action_to_tree(
+        self, action: HistoryAction, session_index: int | None = None
+    ) -> None:
+        """Add an action under the session item at ``session_index``.
 
         Args:
-            action: Action to add
+            action: Action to add.
+            session_index: Top-level session item index. Defaults to the last
+                session (backward-compatible).
         """
         item = self.action_to_tree_item(action)
-        ritem = self.topLevelItem(self.topLevelItemCount() - 1)
+        if session_index is None:
+            session_index = self.topLevelItemCount() - 1
+        ritem = self.topLevelItem(session_index)
+        if ritem is None:
+            return
         ritem.addChild(item)
         self.install_description_widget(item, action)
 

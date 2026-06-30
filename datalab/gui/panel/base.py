@@ -848,13 +848,21 @@ class ObjectProp(QW.QWidget):
         editor.set(check=False)
 
     def apply_processing_parameters(
-        self, obj: SignalObj | ImageObj | None = None, interactive: bool = True
+        self,
+        obj: SignalObj | ImageObj | None = None,
+        interactive: bool = True,
+        param: gds.DataSet | None = None,
     ) -> ProcessingReport:
         """Apply processing parameters: re-run processing with updated parameters.
 
         Args:
             obj: Signal or Image object to reprocess. If None, uses the current object.
             interactive: If True, show progress and error messages in the UI.
+            param: Explicit processing parameters to apply. When provided, this
+                takes precedence and makes the call independent of the Processing
+                tab editor state (used e.g. by programmatic recompute paths).
+                When None (default), fall back to the editor dataset or the
+                stored processing parameters.
 
         Returns:
             ProcessingReport with success status, object UUID, and optional message.
@@ -905,8 +913,12 @@ class ObjectProp(QW.QWidget):
                 )
             return report
 
-        # Get updated parameters from editor
-        param = editor.dataset if editor is not None else proc_params.param
+        # Resolve the parameters to apply. An explicit ``param`` argument takes
+        # precedence and makes this method independent of the editor state;
+        # otherwise fall back to the editor (interactive Apply) or the stored
+        # processing parameters.
+        if param is None:
+            param = editor.dataset if editor is not None else proc_params.param
 
         # For cross-panel computations, we need to use the processor from the panel
         # that owns the source object (e.g., radial_profile is in ImageProcessor)
@@ -936,24 +948,18 @@ class ObjectProp(QW.QWidget):
             if is_edit_mode:
                 # --- Edit mode: mutate obj in-place, cascade downstream ---
 
-                # Update the current object in-place with data from new object
-                obj.title = new_obj.title
-                if isinstance(obj, SignalObj):
-                    obj.xydata = new_obj.xydata
-                else:  # ImageObj
-                    obj.data = new_obj.data
-                    # Invalidate ROI mask cache when image dimensions may
-                    # have changed (mask depends on image shape)
-                    obj.invalidate_maskdata_cache()
-
-                # Update metadata with new processing parameters
+                # Apply the recomputed object in place through the shared
+                # primitive (single source of truth, also used by the
+                # History panel cascade): updates title + data and the
+                # processing parameters, preserves obj's metadata, then
+                # re-runs auto analysis.
                 updated_proc_params = ProcessingParameters(
                     func_name=proc_params.func_name,
                     pattern=proc_params.pattern,
                     param=param,
                     source_uuid=proc_params.source_uuid,
                 )
-                insert_processing_parameters(obj, updated_proc_params)
+                self.apply_recomputed_object_in_place(obj, new_obj, updated_proc_params)
 
                 # Propagate the edited param to the History panel:
                 # Mutate the matching existing action (snapshot originals
@@ -968,10 +974,6 @@ class ObjectProp(QW.QWidget):
                     action.kwargs["param"] = copy.deepcopy(param)
                     hpanel.refresh_action(action)
                     hpanel.recompute_cascade(action)
-
-                # Auto-recompute analysis (data changed, results invalid)
-                obj_processor = self.__get_processor_associated_to(obj)
-                obj_processor.auto_recompute_analysis(obj)
 
                 # Update the tree view item and refresh plot
                 obj_uuid = get_uuid(obj)
@@ -1048,6 +1050,34 @@ class ObjectProp(QW.QWidget):
             self.panel.SIG_STATUS_MESSAGE.emit("✅ " + report.message, 5000)
 
         return report
+
+    def apply_recomputed_object_in_place(
+        self,
+        obj: SignalObj | ImageObj,
+        new_obj: SignalObj | ImageObj,
+        proc_params: ProcessingParameters,
+    ) -> None:
+        """Apply a freshly recomputed object onto ``obj`` in place.
+
+        Single source of truth shared by the interactive Apply callback and
+        the History panel cascade. Copies title + data from ``new_obj`` while
+        preserving ``obj``'s own metadata (only the processing parameters are
+        refreshed), then re-runs auto analysis. This keeps both reprocess
+        paths behaviorally identical (pre-history semantics).
+
+        Args:
+            obj: Existing object to update in place (identity preserved).
+            new_obj: Freshly recomputed object providing title + data.
+            proc_params: Updated processing parameters to store on ``obj``.
+        """
+        obj.title = new_obj.title
+        if isinstance(obj, SignalObj):
+            obj.xydata = new_obj.xydata
+        else:  # ImageObj
+            obj.data = new_obj.data
+            obj.invalidate_maskdata_cache()
+        insert_processing_parameters(obj, proc_params)
+        self.__get_processor_associated_to(obj).auto_recompute_analysis(obj)
 
 
 class AbstractPanelMeta(type(QW.QSplitter), abc.ABCMeta):
@@ -1853,22 +1883,23 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """Duplication signal/image object"""
         if not self.mainwindow.confirm_memory_state():
             return
-        self.mainwindow.historypanel.add_ui_entry(
+        action = self.mainwindow.historypanel.add_ui_entry(
             _("Duplicate object or group"),
             target=self.PANEL_STR_ID + "panel",
             method_name="duplicate_object",
             save_state=False,
         )
-        # Duplicate individual objects (exclusive with respect to groups)
-        for oid in self.objview.get_sel_object_uuids():
-            self.__duplicate_individual_obj(oid, set_current=False)
-        # Duplicate groups (exclusive with respect to individual objects)
-        for group in self.objview.get_sel_groups():
-            new_group = self.add_group(group.title)
-            for oid in self.objmodel.get_group_object_ids(get_uuid(group)):
-                self.__duplicate_individual_obj(
-                    oid, get_uuid(new_group), set_current=False
-                )
+        with self.mainwindow.historypanel.capture_outputs(action):
+            # Duplicate individual objects (exclusive with respect to groups)
+            for oid in self.objview.get_sel_object_uuids():
+                self.__duplicate_individual_obj(oid, set_current=False)
+            # Duplicate groups (exclusive with respect to individual objects)
+            for group in self.objview.get_sel_groups():
+                new_group = self.add_group(group.title)
+                for oid in self.objmodel.get_group_object_ids(get_uuid(group)):
+                    self.__duplicate_individual_obj(
+                        oid, get_uuid(new_group), set_current=False
+                    )
         self.selection_changed(update_items=True)
 
     def copy_metadata(self) -> None:
@@ -2384,42 +2415,47 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 directory = getexistingdirectory(self, _("Open"), basedir)
         if not directory:
             return []
+        # Offer a fresh history session for this batch *before* loading anything.
+        self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
         folders = [
             path
             for path in glob.glob(osp.join(directory, "**"), recursive=True)
             if osp.isdir(path) and len(os.listdir(path)) > 0
         ]
         objs = []
-        with create_progress_bar(
-            self, _("Scanning directory"), max_=len(folders) - 1
-        ) as progress:
-            # Iterate over all subfolders in the directory:
-            for i_path, path in enumerate(folders):
-                progress.setValue(i_path + 1)
-                if progress.wasCanceled():
-                    break
-                path = osp.normpath(path)
-                fnames = sorted(
-                    [
-                        osp.join(path, fname)
-                        for fname in os.listdir(path)
-                        if osp.isfile(osp.join(path, fname))
-                    ]
-                )
-                new_objs = self.load_from_files(
-                    fnames,
-                    create_group=False,
-                    add_objects=False,
-                    ignore_errors=True,
-                )
-                if new_objs:
-                    objs += new_objs
-                    grp_name = osp.relpath(path, directory)
-                    if grp_name == ".":
-                        grp_name = osp.basename(path)
-                    grp = self.add_group(grp_name)
-                    for obj in new_objs:
-                        self.add_object(obj, group_id=get_uuid(grp), set_current=False)
+        with self.mainwindow.historypanel.session_prompt_suppressed():
+            with create_progress_bar(
+                self, _("Scanning directory"), max_=len(folders) - 1
+            ) as progress:
+                # Iterate over all subfolders in the directory:
+                for i_path, path in enumerate(folders):
+                    progress.setValue(i_path + 1)
+                    if progress.wasCanceled():
+                        break
+                    path = osp.normpath(path)
+                    fnames = sorted(
+                        [
+                            osp.join(path, fname)
+                            for fname in os.listdir(path)
+                            if osp.isfile(osp.join(path, fname))
+                        ]
+                    )
+                    new_objs = self.load_from_files(
+                        fnames,
+                        create_group=False,
+                        add_objects=False,
+                        ignore_errors=True,
+                    )
+                    if new_objs:
+                        objs += new_objs
+                        grp_name = osp.relpath(path, directory)
+                        if grp_name == ".":
+                            grp_name = osp.basename(path)
+                        grp = self.add_group(grp_name)
+                        for obj in new_objs:
+                            self.add_object(
+                                obj, group_id=get_uuid(grp), set_current=False
+                            )
         return objs
 
     def load_from_files(
@@ -2456,7 +2492,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             entry_title = _("Load from %d files") % nbf
         else:
             entry_title = _('Load "%s"') % osp.basename(filenames[0])
-        self.mainwindow.historypanel.add_ui_entry(
+        # Offer a fresh history session for this batch *before* recording any entry.
+        self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
+        action = self.mainwindow.historypanel.add_ui_entry(
             entry_title,
             target=self.PANEL_STR_ID + "panel",
             method_name="load_from_files",
@@ -2467,19 +2505,23 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             ignore_errors=ignore_errors,
         )
         objs = []
-        for filename in filenames:
-            with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
-                Conf.main.base_dir.set(filename)
-                try:
-                    objs += self.__load_from_file(
-                        filename, create_group=create_group, add_objects=add_objects
-                    )
-                except Exception as exc:  # pylint: disable=broad-exception-caught
-                    if ignore_errors:
-                        # Ignore unknown file types
-                        pass
-                    else:
-                        raise exc
+        with self.mainwindow.historypanel.session_prompt_suppressed():
+            with self.mainwindow.historypanel.capture_outputs(action):
+                for filename in filenames:
+                    with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
+                        Conf.main.base_dir.set(filename)
+                        try:
+                            objs += self.__load_from_file(
+                                filename,
+                                create_group=create_group,
+                                add_objects=add_objects,
+                            )
+                        except Exception as exc:  # pylint: disable=broad-exception-caught
+                            if ignore_errors:
+                                # Ignore unknown file types
+                                pass
+                            else:
+                                raise exc
         return objs
 
     def save_to_files(self, filenames: list[str] | str | None = None) -> None:
@@ -2872,10 +2914,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if progress.wasCanceled():
                     break
 
-                # Temporarily set this object as current to use existing infrastructure
-                self.objview.set_current_object(obj)
+                # Reprocess with the object's stored parameters, passed
+                # explicitly so we no longer need to select the object just
+                # to populate the Processing-tab editor.
+                proc_params = extract_processing_parameters(obj)
                 report = self.objprop.apply_processing_parameters(
-                    obj=obj, interactive=False
+                    obj=obj,
+                    interactive=False,
+                    param=proc_params.param if proc_params is not None else None,
                 )
                 if not report.success and not execenv.unattended:
                     failtxt = _("Failed to recompute object")

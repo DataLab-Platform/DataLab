@@ -259,9 +259,9 @@ def recompute_1_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
     )
     if new_obj is None:
         return
-    update_obj_in_place(output_obj, new_obj)
-    insert_processing_parameters(
+    panel_data.objprop.apply_recomputed_object_in_place(
         output_obj,
+        new_obj,
         ProcessingParameters(
             func_name=pp.func_name,
             pattern=pp.pattern,
@@ -269,7 +269,6 @@ def recompute_1_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
             source_uuid=pp.source_uuid,
         ),
     )
-    panel_data.processor.auto_recompute_analysis(output_obj)
     refresh_target(panel_data, output_uuid)
 
 
