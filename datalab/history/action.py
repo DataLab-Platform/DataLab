@@ -663,6 +663,8 @@ class HistoryAction(ObjItf):
             writer.write(self.kind)
         with writer.group("title"):
             writer.write(self.__title)
+        with writer.group("uuid"):
+            writer.write(self.uuid)
         if self.panel_str is not None:
             with writer.group("panel_str"):
                 writer.write(self.panel_str)
@@ -722,6 +724,13 @@ class HistoryAction(ObjItf):
         current = reader.h5
         for option in reader.option:
             current = current.require_group(option)
+        # ``uuid`` is present only in files written after UUID persistence was
+        # added; keep the freshly generated ``self.uuid`` for older files.
+        if "uuid" in current.attrs or "uuid" in current:
+            with reader.group("uuid"):
+                loaded_uuid = reader.read_any()
+            if loaded_uuid:
+                self.uuid = str(loaded_uuid)
         for attr in ("panel_str", "func_name", "pattern", "target", "method_name"):
             if attr in current.attrs or attr in current:
                 with reader.group(attr):

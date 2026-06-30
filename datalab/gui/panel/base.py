@@ -1853,22 +1853,23 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """Duplication signal/image object"""
         if not self.mainwindow.confirm_memory_state():
             return
-        self.mainwindow.historypanel.add_ui_entry(
+        action = self.mainwindow.historypanel.add_ui_entry(
             _("Duplicate object or group"),
             target=self.PANEL_STR_ID + "panel",
             method_name="duplicate_object",
             save_state=False,
         )
-        # Duplicate individual objects (exclusive with respect to groups)
-        for oid in self.objview.get_sel_object_uuids():
-            self.__duplicate_individual_obj(oid, set_current=False)
-        # Duplicate groups (exclusive with respect to individual objects)
-        for group in self.objview.get_sel_groups():
-            new_group = self.add_group(group.title)
-            for oid in self.objmodel.get_group_object_ids(get_uuid(group)):
-                self.__duplicate_individual_obj(
-                    oid, get_uuid(new_group), set_current=False
-                )
+        with self.mainwindow.historypanel.capture_outputs(action):
+            # Duplicate individual objects (exclusive with respect to groups)
+            for oid in self.objview.get_sel_object_uuids():
+                self.__duplicate_individual_obj(oid, set_current=False)
+            # Duplicate groups (exclusive with respect to individual objects)
+            for group in self.objview.get_sel_groups():
+                new_group = self.add_group(group.title)
+                for oid in self.objmodel.get_group_object_ids(get_uuid(group)):
+                    self.__duplicate_individual_obj(
+                        oid, get_uuid(new_group), set_current=False
+                    )
         self.selection_changed(update_items=True)
 
     def copy_metadata(self) -> None:
@@ -2463,7 +2464,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             entry_title = _('Load "%s"') % osp.basename(filenames[0])
         # Offer a fresh history session for this batch *before* recording any entry.
         self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
-        self.mainwindow.historypanel.add_ui_entry(
+        action = self.mainwindow.historypanel.add_ui_entry(
             entry_title,
             target=self.PANEL_STR_ID + "panel",
             method_name="load_from_files",
@@ -2475,19 +2476,24 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         )
         objs = []
         with self.mainwindow.historypanel.session_prompt_suppressed():
-            for filename in filenames:
-                with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
-                    Conf.main.base_dir.set(filename)
-                    try:
-                        objs += self.__load_from_file(
-                            filename, create_group=create_group, add_objects=add_objects
-                        )
-                    except Exception as exc:  # pylint: disable=broad-exception-caught
-                        if ignore_errors:
-                            # Ignore unknown file types
-                            pass
-                        else:
-                            raise exc
+            with self.mainwindow.historypanel.capture_outputs(action):
+                for filename in filenames:
+                    with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
+                        Conf.main.base_dir.set(filename)
+                        try:
+                            objs += self.__load_from_file(
+                                filename,
+                                create_group=create_group,
+                                add_objects=add_objects,
+                            )
+                        except (
+                            Exception
+                        ) as exc:  # pylint: disable=broad-exception-caught
+                            if ignore_errors:
+                                # Ignore unknown file types
+                                pass
+                            else:
+                                raise exc
         return objs
 
     def save_to_files(self, filenames: list[str] | str | None = None) -> None:

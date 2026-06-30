@@ -411,6 +411,52 @@ def test_history_schema_and_hdf5_roundtrip():
         shutil.rmtree(tmpdir, ignore_errors=True)
 
 
+def test_history_action_uuid_persisted():
+    """Action UUID is stable across a .dlhist save/reload cycle."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        panel = win.signalpanel
+        history.toggle_record_mode(True)
+        panel.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1])
+        panel.processor.run_feature(
+            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
+        )
+        session = history.history_sessions[-1]
+        original_uuids = [action.uuid for action in session.actions]
+        assert original_uuids
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "uuid_roundtrip.dlhist")
+            with NativeH5Writer(path) as writer:
+                writer.write_object_list([session], "history_session")
+            with NativeH5Reader(path) as reader:
+                restored_sessions = reader.read_object_list(
+                    "history_session", HistorySession
+                )
+        restored_uuids = [action.uuid for action in restored_sessions[0].actions]
+        assert restored_uuids == original_uuids
+
+
+def test_history_duplicate_registers_outputs():
+    """``duplicate_object`` registers duplicated object UUIDs as action outputs."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        panel = win.signalpanel
+        history.toggle_record_mode(True)
+        panel.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1])
+        panel.duplicate_object()
+        session = history.history_sessions[-1]
+        dup_action = next(
+            action
+            for action in session.actions
+            if action.method_name == "duplicate_object"
+        )
+        assert dup_action.output_uuids
+        first_output = dup_action.output_uuids[0]
+        assert history.output_to_action[first_output] == dup_action.uuid
+
+
 # ---------------------------------------------------------------------------
 # 2) HistoryAction / WorkspaceState compatibility
 # ---------------------------------------------------------------------------
