@@ -1867,3 +1867,56 @@ def test_history_recompute_invariants():
         # (``apply_recomputed_object_in_place``), which PRESERVES the object's
         # metadata instead of clearing it. The user sentinel survives.
         assert panel.objmodel[uuid_c].metadata.get("sentinel_p3a") == 123
+
+
+def test_history_active_session_routing():
+    """Recording routes per-panel into separate active sessions; selecting a
+    session resumes recording into it (A1)."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        spanel, ipanel = win.signalpanel, win.imagepanel
+
+        # --- signal pipeline: one signal session ---
+        spanel.add_object(create_paracetamol_signal())
+        spanel.objview.select_objects([1])
+        spanel.processor.run_feature(sips.derivative)
+        assert len(history.history_sessions) == 1
+        signal_session = history.get_active_session("signal")
+        assert signal_session is not None
+        assert len(signal_session.actions) == 1
+
+        # --- image pipeline: lands in a SEPARATE session ---
+        ipanel.add_object(create_sincos_image())
+        ipanel.objview.select_objects([1])
+        ipanel.processor.run_feature(sipi.inverse)
+        image_session = history.get_active_session("image")
+        assert image_session is not None
+        assert image_session is not signal_session
+        assert len(history.history_sessions) == 2
+        assert len(image_session.actions) == 1
+        # The image action did not leak into the signal session.
+        assert len(signal_session.actions) == 1
+
+        # --- back to signal: continue in the SAME signal session (no new one) ---
+        spanel.objview.select_objects([2])
+        spanel.processor.run_feature(sips.derivative)
+        assert len(history.history_sessions) == 2  # no new session created
+        assert len(signal_session.actions) == 2
+        assert len(image_session.actions) == 1
+
+        # --- resume into a SELECTED session ---
+        # Create a fresh (empty) signal session, then select the ORIGINAL signal
+        # session: a subsequent signal action must resume into the selected
+        # session, not the newly created empty one.
+        empty_session = history.create_new_session(panel_str="signal")
+        assert len(history.history_sessions) == 3
+        n_before = len(signal_session.actions)
+        _select_tree_session(history, signal_session)
+        spanel.objview.select_objects([1])
+        spanel.processor.run_feature(
+            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
+        )
+        assert len(signal_session.actions) == n_before + 1  # resumed here
+        assert len(empty_session.actions) == 0  # NOT the empty session
+        assert len(image_session.actions) == 1  # image untouched

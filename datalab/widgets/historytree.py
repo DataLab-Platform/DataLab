@@ -153,14 +153,22 @@ class HistoryTree(QW.QTreeWidget):
         for col in (0, 1):
             self.resizeColumnToContents(col)
 
-    def add_action_to_tree(self, action: HistoryAction) -> None:
-        """Add an action to the history tree widget
+    def add_action_to_tree(
+        self, action: HistoryAction, session_index: int | None = None
+    ) -> None:
+        """Add an action under the session item at ``session_index``.
 
         Args:
-            action: Action to add
+            action: Action to add.
+            session_index: Top-level session item index. Defaults to the last
+                session (backward-compatible).
         """
         item = self.action_to_tree_item(action)
-        ritem = self.topLevelItem(self.topLevelItemCount() - 1)
+        if session_index is None:
+            session_index = self.topLevelItemCount() - 1
+        ritem = self.topLevelItem(session_index)
+        if ritem is None:
+            return
         ritem.addChild(item)
         self.install_description_widget(item, action)
 

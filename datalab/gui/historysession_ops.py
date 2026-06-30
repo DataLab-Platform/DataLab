@@ -23,13 +23,26 @@ if TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 
-def create_new_session(panel: HistoryPanel) -> None:
-    """Create a new history list"""
+def create_new_session(
+    panel: HistoryPanel, panel_str: str | None = None
+) -> HistorySession:
+    """Create a new history session and make it active for its panel.
+
+    Args:
+        panel_str: Panel the new session belongs to ("signal"/"image").
+            Defaults to the current data panel.
+
+    Returns:
+        The newly created session.
+    """
+    pstr = panel_str or panel._current_panel_str()
     panel.session_increment += 1
     session = HistorySession(number=panel.session_increment)
     panel.history_sessions.append(session)
+    panel.set_active_session(session, pstr)
     panel.tree.populate_tree(panel.history_sessions)
     panel.refresh_compatibility_items()
+    return session
 
 
 def start_new_session_after_workspace_reset(panel: HistoryPanel) -> None:
@@ -373,11 +386,20 @@ def add_entry(
 
 
 def add_object(panel: HistoryPanel, obj: HistoryAction) -> None:
-    """Add object to panel"""
-    if not panel.history_sessions:
-        panel.create_new_session()
-    panel.history_sessions[-1].add_action(obj)
-    panel.tree.add_action_to_tree(obj)
+    """Add an action to the active session of its panel.
+
+    Routes the action to the active recording session for the action's panel
+    ("signal"/"image"), creating a dedicated session on first use, so signal
+    and image pipelines stay in separate sessions and recording resumes in the
+    user-selected session.
+    """
+    pstr = obj.panel_str or panel._current_panel_str()
+    session = panel.get_active_session(pstr)
+    if session is None:
+        session = panel.create_new_session(panel_str=pstr)
+    session.add_action(obj)
+    session_index = panel.history_sessions.index(session)
+    panel.tree.add_action_to_tree(obj, session_index)
     panel.tree.rearrange_tree()
     panel.refresh_compatibility_items()
     panel.update_actions_state()

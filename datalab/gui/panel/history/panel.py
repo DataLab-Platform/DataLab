@@ -81,6 +81,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self.tree.itemSelectionChanged.connect(self.sync_panel_selection)
         self.tree.itemSelectionChanged.connect(self.update_actions_state)
         self.tree.itemSelectionChanged.connect(self.update_state_widget)
+        self.tree.itemSelectionChanged.connect(self.set_active_session_from_selection)
 
         self._state_widget = WorkspaceStateWidget(self)
 
@@ -97,6 +98,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self.addWidget(widget)
 
         self.history_sessions: list[HistorySession] = []
+        self._active_session_by_panel: dict[str, HistorySession] = {}
         self._session_increment = 0
         self.action_output_uuids: dict[str, list[str]] = {}
         self.output_to_action: dict[str, str] = {}
@@ -199,7 +201,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         new_session_action = create_action(
             self,
             _("New session"),
-            self.create_new_session,
+            lambda checked=False: self.create_new_session(),
             icon=get_icon("libre-gui-add.svg"),
             tip=_("Start a new history session"),
         )
@@ -634,6 +636,64 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         except ValueError:
             return None
 
+    def _current_panel_str(self) -> str:
+        """Return the current data panel id ('signal'/'image'); default 'signal'."""
+        pstr = self.mainwindow.get_current_panel()
+        return pstr if pstr in ("signal", "image") else "signal"
+
+    def session_panel_str(self, session: HistorySession) -> str | None:
+        """Return the panel a session belongs to.
+
+        Derived from the panel_str of its first tagged action; falls back to
+        the active-session tracking for freshly created (empty) sessions.
+        """
+        for action in session.actions:
+            if action.panel_str:
+                return action.panel_str
+        for pstr, sess in self._active_session_by_panel.items():
+            if sess is session:
+                return pstr
+        return None
+
+    def get_active_session(self, panel_str: str) -> HistorySession | None:
+        """Return the active recording session for ``panel_str``, if still valid."""
+        session = self._active_session_by_panel.get(panel_str)
+        if session is not None and session in self.history_sessions:
+            return session
+        return None
+
+    def set_active_session(
+        self, session: HistorySession, panel_str: str | None = None
+    ) -> None:
+        """Mark ``session`` as the active recording session for its panel."""
+        pstr = panel_str or self.session_panel_str(session)
+        if pstr:
+            self._active_session_by_panel[pstr] = session
+
+    def set_active_session_from_selection(self) -> None:
+        """When recording, make the selected session the active one for its panel.
+
+        Lets the user resume recording into any session by selecting it (or one
+        of its actions) in the tree.
+        """
+        if not self.record_mode_enabled:
+            return
+        item = self.tree.currentItem()
+        if item is None or not item.isSelected():
+            return
+        if item.parent() is None:
+            index = self.tree.indexOfTopLevelItem(item)
+            if not 0 <= index < len(self.history_sessions):
+                return
+            session = self.history_sessions[index]
+        else:
+            action = self.current_action()
+            if action is None:
+                return
+            session = self.find_parent_session(action)
+        if session is not None:
+            self.set_active_session(session)
+
     def current_session(self) -> HistorySession | None:
         """Return the session relevant for step navigation."""
         item = self.tree.currentItem()
@@ -785,9 +845,9 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
     # Session operations delegations
     # ------------------------------------------------------------------
 
-    def create_new_session(self) -> None:
-        """Create a new history session."""
-        return hsess.create_new_session(self)
+    def create_new_session(self, panel_str: str | None = None) -> HistorySession:
+        """Create a new history session (active for the given/current panel)."""
+        return hsess.create_new_session(self, panel_str=panel_str)
 
     def start_new_session_after_workspace_reset(self) -> None:
         """Start a new history session after a workspace reset."""
