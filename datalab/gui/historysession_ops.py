@@ -9,6 +9,11 @@ from contextlib import contextmanager
 from copy import deepcopy
 from typing import TYPE_CHECKING, Any, Callable, Generator
 
+from qtpy import QtCore as QC
+from qtpy import QtWidgets as QW
+
+from datalab.config import _
+from datalab.env import execenv
 from datalab.history import HistoryAction, HistorySession, WorkspaceState
 from datalab.history.core import _resolve_self_target
 
@@ -30,6 +35,52 @@ def create_new_session(panel: HistoryPanel) -> None:
 def start_new_session_after_workspace_reset(panel: HistoryPanel) -> None:
     """Start a new history session after a workspace reset, when useful."""
     if panel.history_sessions and panel.history_sessions[-1].actions:
+        panel.create_new_session()
+
+
+def maybe_start_session_for_input(panel: HistoryPanel, *, load: bool = False) -> None:
+    """Offer to start a new history session before a creation/load is recorded.
+
+    When the current session already contains actions, prompt the user to start
+    a fresh session so the new creation/load becomes the root of a clean,
+    self-contained pipeline. A new session is opened *before* the action is
+    recorded when the user accepts.
+
+    Args:
+        load: True when triggered by a file/workspace load, False for an object
+         creation. Only affects the prompt wording.
+    """
+    if not panel.record_mode_enabled or panel.is_replaying():
+        return
+    if panel._suppress_session_prompt:
+        return
+    # Reuse the current session when there is none yet or it has no actions:
+    # there is nothing to preserve, so no need to prompt.
+    if not panel.history_sessions or not panel.history_sessions[-1].actions:
+        return
+    # Debounce: a synchronous burst of creations (plugin/macro) must prompt only
+    # once. The guard is reset on the next event-loop turn.
+    if panel._session_input_pending:
+        return
+    panel._session_input_pending = True
+    QC.QTimer.singleShot(0, lambda: setattr(panel, "_session_input_pending", False))
+    if execenv.unattended:
+        # Headless runs: honor the accept_dialogs flag (default False -> "No"),
+        # so tests can drive the behavior without a real modal dialog.
+        if execenv.accept_dialogs:
+            panel.create_new_session()
+        return
+    if load:
+        message = _("A new object was loaded. Start a new history session?")
+    else:
+        message = _("A new object was created. Start a new history session?")
+    answer = QW.QMessageBox.question(
+        panel.mainwindow,
+        _("New history session"),
+        message,
+        QW.QMessageBox.Yes | QW.QMessageBox.No,
+    )
+    if answer == QW.QMessageBox.Yes:
         panel.create_new_session()
 
 
@@ -257,6 +308,10 @@ def add_ui_entry(
     """
     if not panel.record_mode_enabled or panel.is_replaying():
         return None
+    # When the entry is an object creation, offer to start a fresh history
+    # session first so the creation becomes the root of a clean pipeline.
+    if method_name in HistoryAction.UI_CREATION_METHODS:
+        panel.maybe_start_session_for_input(load=False)
     # Derive the action's panel from the UI target so the captured state only
     # constrains the panel the action actually operates on.
     target_panel_str = {

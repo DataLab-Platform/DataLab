@@ -43,6 +43,7 @@ from sigima.tests import helpers
 from sigima.tests.data import create_paracetamol_signal, create_sincos_image
 
 from datalab.config import _
+from datalab.env import execenv
 from datalab.gui.panel.base import AddMetadataParam, BaseDataPanel
 from datalab.gui.panel.history import (
     HISTORY_ACTION_SCHEMA_VERSION,
@@ -1627,3 +1628,38 @@ def test_history_chain_reconnect():
         reconnected_uuids = action_deriv.state.selection.get("signal", [])
         assert s002_uuid not in reconnected_uuids
         assert src_uuid in reconnected_uuids
+
+
+def test_history_new_session_prompt_on_input(monkeypatch):
+    """Creating an object on a non-empty session offers to start a new session."""
+    # --- scenario: user accepts the prompt -> a new session is opened ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+
+        # First creation reuses the (empty) current session: no prompt expected.
+        win.add_object(create_paracetamol_signal())
+        assert len(history.history_sessions) == 1
+        assert len(history.history_sessions[-1].actions) == 1
+
+        # Headless "accept": accept_dialogs drives the prompt to "Yes".
+        monkeypatch.setattr(execenv, "accept_dialogs", True)
+        n_sessions = len(history.history_sessions)
+        win.add_object(create_paracetamol_signal())
+        assert len(history.history_sessions) == n_sessions + 1
+        new_session = history.history_sessions[-1]
+        assert new_session.actions
+        assert new_session.actions[0].method_name == "new_object"
+
+    # --- scenario: user declines the prompt -> no new session is created ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        win.add_object(create_paracetamol_signal())
+        assert len(history.history_sessions) == 1
+
+        # Headless "decline": accept_dialogs stays False -> prompt answered "No".
+        monkeypatch.setattr(execenv, "accept_dialogs", False)
+        n_sessions = len(history.history_sessions)
+        win.add_object(create_paracetamol_signal())
+        assert len(history.history_sessions) == n_sessions

@@ -2384,42 +2384,47 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 directory = getexistingdirectory(self, _("Open"), basedir)
         if not directory:
             return []
+        # Offer a fresh history session for this batch *before* loading anything.
+        self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
         folders = [
             path
             for path in glob.glob(osp.join(directory, "**"), recursive=True)
             if osp.isdir(path) and len(os.listdir(path)) > 0
         ]
         objs = []
-        with create_progress_bar(
-            self, _("Scanning directory"), max_=len(folders) - 1
-        ) as progress:
-            # Iterate over all subfolders in the directory:
-            for i_path, path in enumerate(folders):
-                progress.setValue(i_path + 1)
-                if progress.wasCanceled():
-                    break
-                path = osp.normpath(path)
-                fnames = sorted(
-                    [
-                        osp.join(path, fname)
-                        for fname in os.listdir(path)
-                        if osp.isfile(osp.join(path, fname))
-                    ]
-                )
-                new_objs = self.load_from_files(
-                    fnames,
-                    create_group=False,
-                    add_objects=False,
-                    ignore_errors=True,
-                )
-                if new_objs:
-                    objs += new_objs
-                    grp_name = osp.relpath(path, directory)
-                    if grp_name == ".":
-                        grp_name = osp.basename(path)
-                    grp = self.add_group(grp_name)
-                    for obj in new_objs:
-                        self.add_object(obj, group_id=get_uuid(grp), set_current=False)
+        with self.mainwindow.historypanel.session_prompt_suppressed():
+            with create_progress_bar(
+                self, _("Scanning directory"), max_=len(folders) - 1
+            ) as progress:
+                # Iterate over all subfolders in the directory:
+                for i_path, path in enumerate(folders):
+                    progress.setValue(i_path + 1)
+                    if progress.wasCanceled():
+                        break
+                    path = osp.normpath(path)
+                    fnames = sorted(
+                        [
+                            osp.join(path, fname)
+                            for fname in os.listdir(path)
+                            if osp.isfile(osp.join(path, fname))
+                        ]
+                    )
+                    new_objs = self.load_from_files(
+                        fnames,
+                        create_group=False,
+                        add_objects=False,
+                        ignore_errors=True,
+                    )
+                    if new_objs:
+                        objs += new_objs
+                        grp_name = osp.relpath(path, directory)
+                        if grp_name == ".":
+                            grp_name = osp.basename(path)
+                        grp = self.add_group(grp_name)
+                        for obj in new_objs:
+                            self.add_object(
+                                obj, group_id=get_uuid(grp), set_current=False
+                            )
         return objs
 
     def load_from_files(
@@ -2456,6 +2461,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             entry_title = _("Load from %d files") % nbf
         else:
             entry_title = _('Load "%s"') % osp.basename(filenames[0])
+        # Offer a fresh history session for this batch *before* recording any entry.
+        self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
         self.mainwindow.historypanel.add_ui_entry(
             entry_title,
             target=self.PANEL_STR_ID + "panel",
@@ -2467,19 +2474,20 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             ignore_errors=ignore_errors,
         )
         objs = []
-        for filename in filenames:
-            with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
-                Conf.main.base_dir.set(filename)
-                try:
-                    objs += self.__load_from_file(
-                        filename, create_group=create_group, add_objects=add_objects
-                    )
-                except Exception as exc:  # pylint: disable=broad-exception-caught
-                    if ignore_errors:
-                        # Ignore unknown file types
-                        pass
-                    else:
-                        raise exc
+        with self.mainwindow.historypanel.session_prompt_suppressed():
+            for filename in filenames:
+                with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
+                    Conf.main.base_dir.set(filename)
+                    try:
+                        objs += self.__load_from_file(
+                            filename, create_group=create_group, add_objects=add_objects
+                        )
+                    except Exception as exc:  # pylint: disable=broad-exception-caught
+                        if ignore_errors:
+                            # Ignore unknown file types
+                            pass
+                        else:
+                            raise exc
         return objs
 
     def save_to_files(self, filenames: list[str] | str | None = None) -> None:

@@ -63,6 +63,8 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self._output_suppressed = False
         self._syncing = False
         self.cascade_in_progress = False
+        self._session_input_pending = False
+        self._suppress_session_prompt = False
         self._delete_action: QW.QAction | None = None
         self._duplicate_action: QW.QAction | None = None
         self.step_prev_action: QW.QAction | None = None
@@ -790,6 +792,25 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
     def start_new_session_after_workspace_reset(self) -> None:
         """Start a new history session after a workspace reset."""
         return hsess.start_new_session_after_workspace_reset(self)
+
+    def maybe_start_session_for_input(self, *, load: bool = False) -> None:
+        """Offer to start a new history session before a creation/load is recorded.
+
+        Args:
+            load: True when triggered by a file/workspace load, False for an
+             object creation. Only affects the prompt wording.
+        """
+        return hsess.maybe_start_session_for_input(self, load=load)
+
+    @contextmanager
+    def session_prompt_suppressed(self) -> Generator[None, None, None]:
+        """Context manager suppressing the new-session prompt during a batch load."""
+        previous = self._suppress_session_prompt
+        self._suppress_session_prompt = True
+        try:
+            yield
+        finally:
+            self._suppress_session_prompt = previous
 
     def add_compute_entry(
         self,
