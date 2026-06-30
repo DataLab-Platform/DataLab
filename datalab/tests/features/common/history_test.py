@@ -1782,3 +1782,90 @@ def test_history_interactive_fit_replay():
         new_obj = panel.objmodel.get_object_from_number(len(panel.objmodel))
         assert np.allclose(new_obj.x, src.x)
         assert np.allclose(new_obj.y, expected_y)
+
+
+def test_history_recompute_invariants():
+    """Characterization: lock current cascade-recompute behavior (pre-P3 slimming).
+
+    These assertions document the *current* behavior of the History panel
+    cascade so that the upcoming architecture-slimming refactor (routing
+    recompute through the pre-existing Apply/processor paths) cannot silently
+    change observable results. Update deliberately (with justification) if a
+    refactor intentionally changes a documented behavior.
+    """
+    # --- scenario: cascade recompute call-count is bounded (no infinite loop) ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        history.toggle_edit_mode(True)
+        panel = win.signalpanel
+        action_a, action_b, action_c, output_b, output_c = _build_cascade_chain(
+            panel, history
+        )
+        output_a = panel.objmodel.get_object_from_number(2)
+        src_obj = panel.objmodel.get_object_from_number(1)
+        src_data_before = src_obj.xydata.copy()
+        number_b = panel.objmodel.get_number(output_b)
+        number_c = panel.objmodel.get_number(output_c)
+
+        # Spy on the single shared signal processor recompute entry point.
+        calls = {"n": 0}
+        original_recompute = panel.processor.recompute_1_to_1
+
+        def _counting_recompute(*args, **kwargs):
+            calls["n"] += 1
+            return original_recompute(*args, **kwargs)
+
+        panel.processor.recompute_1_to_1 = _counting_recompute
+        try:
+            panel.objview.select_objects([2])
+            assert panel.objprop.setup_processing_tab(output_a, reset_params=False)
+            editor = panel.objprop.processing_param_editor
+            assert editor is not None
+            editor.dataset.sigma = 7.0
+            report = panel.objprop.apply_processing_parameters(
+                output_a, interactive=False
+            )
+            assert report.success
+        finally:
+            panel.processor.recompute_1_to_1 = original_recompute
+
+        # Editing the root re-runs: the root itself (via apply) + the two
+        # downstream 1-to-1 actions (via cascade). Exactly one call per
+        # affected action -- a bound that fails if a replay loop reappears.
+        assert calls["n"] == 3  # root apply + 2 downstream cascade recomputes
+
+        # Identity invariants: outputs keep their UUID *and* their __number.
+        assert get_uuid(panel.objmodel[get_uuid(output_b)]) == get_uuid(output_b)
+        assert panel.objmodel.get_number(panel.objmodel[get_uuid(output_b)]) == number_b
+        assert panel.objmodel.get_number(panel.objmodel[get_uuid(output_c)]) == number_c
+
+        # Source object is never mutated by a downstream edit.
+        assert np.array_equal(src_obj.xydata, src_data_before)
+
+    # --- scenario: cascade recompute replaces output metadata (current behavior) ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        history.toggle_edit_mode(True)
+        panel = win.signalpanel
+        action_a, _action_b, _action_c, _output_b, output_c = _build_cascade_chain(
+            panel, history
+        )
+        uuid_c = get_uuid(output_c)
+        # Add a user metadata sentinel on the deepest output.
+        panel.objmodel[uuid_c].metadata["sentinel_p3a"] = 123
+        output_a = panel.objmodel.get_object_from_number(2)
+        panel.objview.select_objects([2])
+        assert panel.objprop.setup_processing_tab(output_a, reset_params=False)
+        editor = panel.objprop.processing_param_editor
+        assert editor is not None
+        editor.dataset.sigma = 9.0
+        report = panel.objprop.apply_processing_parameters(output_a, interactive=False)
+        assert report.success
+        # CHARACTERIZATION (current): the cascade rebuilds the output via
+        # ``update_obj_in_place``, which clears metadata (keeping only
+        # ``__uuid``/``__number``), so the user sentinel is dropped. The
+        # P3c slimming may intentionally change this to the pre-history
+        # behavior (metadata preserved) -- update this assertion then.
+        assert "sentinel_p3a" not in panel.objmodel[uuid_c].metadata
