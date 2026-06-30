@@ -4,6 +4,8 @@
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
 import numpy as np
 from guidata.configtools import get_icon
 from guidata.qthelpers import exec_dialog
@@ -786,3 +788,76 @@ def piecewiseexponential_fit(x: np.ndarray, y: np.ndarray, parent=None, name=Non
     )
     if values:
         return fitfunc(x, values), params
+
+
+# --- Deterministic fit evaluation (GUI-free) ----------------------------------
+
+# Canonical fit-type identifiers, used to record and replay curve fits
+# deterministically (without reopening the interactive dialog).
+FIT_TYPE_BY_DLGFUNC = {
+    "polynomial_fit": "polynomial",
+    "linear_fit": "polynomial",
+    "gaussian_fit": "gaussian",
+    "lorentzian_fit": "lorentzian",
+    "voigt_fit": "voigt",
+    "multigaussian_fit": "multigaussian",
+    "multilorentzian_fit": "multilorentzian",
+}
+
+
+def fit_type_from_dlgfunc_name(name: str) -> str | None:
+    """Return the canonical fit-type id for a fit dialog function name.
+
+    Args:
+        name: ``__name__`` of the fit dialog function (e.g. ``"gaussian_fit"``).
+
+    Returns:
+        The canonical fit-type id (e.g. ``"gaussian"``), or ``None`` if the
+        function is not a recognised deterministic fit.
+    """
+    return FIT_TYPE_BY_DLGFUNC.get(name)
+
+
+def evaluate_fit(
+    fit_type: str,
+    x: np.ndarray,
+    values: list[float],
+    extra: dict | None = None,
+) -> np.ndarray:
+    """Evaluate a recorded curve fit deterministically (no GUI).
+
+    Args:
+        fit_type: Canonical fit-type id (see :data:`FIT_TYPE_BY_DLGFUNC`).
+        x: Abscissa values of the source signal.
+        values: Final fit parameter values, in the same order produced by the
+         corresponding interactive fit function.
+        extra: Optional structural data required by some models
+         (``{"a_x0": [...]}`` for multi-peak fits).
+
+    Returns:
+        The fitted ordinate array ``y`` evaluated at ``x``.
+
+    Raises:
+        ValueError: If ``fit_type`` is unknown or required ``extra`` is missing.
+    """
+    x = np.asarray(x, dtype=float)
+    vals = list(values)
+    extra = extra or {}
+    if fit_type == "polynomial":
+        return np.polyval(vals, x)
+    if fit_type == "gaussian":
+        return pulse.GaussianModel.func(x, *vals)
+    if fit_type == "lorentzian":
+        return pulse.LorentzianModel.func(x, *vals)
+    if fit_type == "voigt":
+        return pulse.VoigtModel.func(x, *vals)
+    if fit_type in ("multigaussian", "multilorentzian"):
+        a_x0 = extra.get("a_x0")
+        if a_x0 is None:
+            raise ValueError(
+                f"Missing 'a_x0' in extra for {fit_type!r} fit evaluation"
+            )
+        a_x0 = np.asarray(a_x0, dtype=float)
+        func = multigaussian if fit_type == "multigaussian" else multilorentzian
+        return func(x, *vals, a_x0=a_x0)
+    raise ValueError(f"Unknown fit_type {fit_type!r}")
