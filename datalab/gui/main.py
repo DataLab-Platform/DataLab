@@ -48,6 +48,8 @@ from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilenames, getsavefilename
 from sigima.config import options as sigima_options
 from sigima.objects import ImageObj, SignalObj, create_image, create_signal
+from sigimax.widgets import logviewer, status
+from sigimax.widgets.warningerror import go_to_error
 
 import datalab
 from datalab import __docurl__, __homeurl__, __supporturl__, env
@@ -88,8 +90,8 @@ from datalab.utils.qthelpers import (
 )
 from datalab.webapi import WEBAPI_AVAILABLE, get_webapi_controller
 from datalab.webapi.actions import WebApiActions
-from datalab.widgets import instconfviewer, logviewer, status
-from datalab.widgets.warningerror import go_to_error
+from datalab.widgets import instconfviewer
+from datalab.widgets import status as dl_status
 
 if TYPE_CHECKING:
     from typing import Literal
@@ -171,8 +173,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.__old_size: tuple[int, int] | None = None
         self.__memory_warning = False
         self.memorystatus: status.MemoryStatus | None = None
-        self.webapistatus: status.WebAPIStatus | None = None
-        self.pluginstatus: status.PluginStatus | None = None
+        self.webapistatus: dl_status.WebAPIStatus | None = None
+        self.pluginstatus: dl_status.PluginStatus | None = None
 
         self.consolestatus: status.ConsoleStatus | None = None
         self.console: DockableConsole | None = None
@@ -1254,14 +1256,14 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.consolestatus = status.ConsoleStatus()
             self.statusBar().addPermanentWidget(self.consolestatus)
         # Plugin status
-        self.pluginstatus = status.PluginStatus()
+        self.pluginstatus = dl_status.PluginStatus()
         self.statusBar().addPermanentWidget(self.pluginstatus)
         # XML-RPC server status
-        xmlrpcstatus = status.XMLRPCStatus()
+        xmlrpcstatus = dl_status.XMLRPCStatus()
         xmlrpcstatus.set_port(self.remote_server.port)
         self.statusBar().addPermanentWidget(xmlrpcstatus)
         # Web API server status
-        self.webapistatus = status.WebAPIStatus()
+        self.webapistatus = dl_status.WebAPIStatus()
         self.webapistatus.SIG_SHOW_INFO.connect(self.__show_webapi_info)
         self.webapistatus.SIG_START_SERVER.connect(self.__start_webapi_server)
         self.statusBar().addPermanentWidget(self.webapistatus)
@@ -2624,7 +2626,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def __show_logviewer(self) -> None:
         """Show error logs"""
-        logviewer.exec_datalab_logviewer_dialog(self)
+        logviewer.exec_sigimax_logviewer_dialog(self)
 
     def play_demo(self) -> None:
         """Play demo"""

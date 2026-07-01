@@ -7,14 +7,13 @@ Log viewer test
 # guitest: show
 
 from guidata.qthelpers import qt_app_context
-
-from datalab.widgets.logviewer import exec_datalab_logviewer_dialog
+from sigimax.widgets.logviewer import exec_sigimax_logviewer_dialog
 
 
 def test_logviewer_dialog():
     """Test log viewer window"""
     with qt_app_context():
-        exec_datalab_logviewer_dialog()
+        exec_sigimax_logviewer_dialog()
 
 
 if __name__ == "__main__":

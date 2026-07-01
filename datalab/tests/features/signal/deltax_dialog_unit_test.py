@@ -10,8 +10,7 @@ Signal delta x dialog unit test.
 from guidata.qthelpers import exec_dialog, qt_app_context
 from sigima.tests.data import create_paracetamol_signal
 from sigima.tools.signal.pulse import full_width_at_y
-
-from datalab.widgets.signaldeltax import SignalDeltaXDialog
+from sigimax.widgets.signaldeltax import SignalDeltaXDialog
 
 
 def test_signal_delta_x_dialog():

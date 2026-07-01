@@ -9,9 +9,9 @@ Signal peak detection dialog test.
 
 from guidata.qthelpers import exec_dialog, qt_app_context
 from sigima.tests.data import get_test_signal
+from sigimax.widgets.signalpeak import SignalPeakDetectionDialog
 
 from datalab.env import execenv
-from datalab.widgets.signalpeak import SignalPeakDetectionDialog
 
 
 def test_peak1d_dialog():

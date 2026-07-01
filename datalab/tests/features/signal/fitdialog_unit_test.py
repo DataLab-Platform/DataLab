@@ -12,10 +12,10 @@ from guidata.qthelpers import qt_app_context
 from sigima.objects import NormalDistribution1DParam
 from sigima.tests.data import create_noisy_signal, get_test_signal
 from sigima.tools.signal.peakdetection import peak_indices
+from sigimax.widgets import fitdialog as fdlg
 
 from datalab.env import execenv
 from datalab.tests import helpers
-from datalab.widgets import fitdialog as fdlg
 
 
 def test_fit_dialog():

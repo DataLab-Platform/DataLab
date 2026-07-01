@@ -34,6 +34,7 @@ from sigima.objects import (
 )
 from sigima.proc.decorator import is_computation_function
 from sigima.tools.signal.interpolation import interpolate
+from sigimax.widgets.warningerror import show_warning_error
 
 from datalab import env
 from datalab.adapters_metadata import (
@@ -47,7 +48,6 @@ from datalab.config import Conf, _
 from datalab.gui.processor.catcher import CompOut, wng_err_func
 from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
-from datalab.widgets.warningerror import show_warning_error
 
 if TYPE_CHECKING:
     from multiprocessing.pool import AsyncResult

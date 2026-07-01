@@ -14,9 +14,9 @@ import pytest
 from guidata.qthelpers import exec_dialog, qt_app_context
 from sigima.tests.data import create_paracetamol_signal
 from sigima.tools.signal.features import find_x_values_at_y
+from sigimax.widgets.signalcursor import SignalCursorDialog
 
 from datalab.env import execenv
-from datalab.widgets.signalcursor import SignalCursorDialog
 
 
 @pytest.mark.parametrize("cursor_orientation", ["horizontal", "vertical"])

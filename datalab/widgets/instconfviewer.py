@@ -19,12 +19,12 @@ from guidata.qthelpers import exec_dialog
 from qtpy import QtWidgets as QW
 from sigima.io.image import ImageIORegistry
 from sigima.io.signal import SignalIORegistry
+from sigimax.widgets.fileviewer import FileViewerWidget, get_title_contents
 
 import datalab
 from datalab.config import APP_NAME, IS_FROZEN, Conf, _
 from datalab.plugins import PluginRegistry
 from datalab.utils.qthelpers import show_in_folder as _show_in_folder
-from datalab.widgets.fileviewer import FileViewerWidget, get_title_contents
 
 
 def decode_fs_string(string: bytes) -> str:

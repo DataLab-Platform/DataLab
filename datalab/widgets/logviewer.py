@@ -11,10 +11,10 @@ import os.path as osp
 from guidata.configtools import get_icon
 from guidata.qthelpers import exec_dialog
 from qtpy import QtWidgets as QW
+from sigimax.widgets.fileviewer import FileViewerWidget, get_title_contents
 
 from datalab.config import APP_NAME, Conf, _, get_old_log_fname
 from datalab.env import execenv
-from datalab.widgets.fileviewer import FileViewerWidget, get_title_contents
 
 
 class LogViewerWindow(QW.QDialog):

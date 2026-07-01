@@ -16,10 +16,10 @@ import numpy as np
 import psutil
 from guidata.qthelpers import qt_app_context
 from sigima.viz import view_curves
+from sigimax.widgets.h5browser import H5BrowserDialog
 
 from datalab.env import execenv
 from datalab.tests import helpers
-from datalab.widgets.h5browser import H5BrowserDialog
 
 
 def test_memoryleak(fname, iterations=20):

@@ -28,18 +28,18 @@ from sigima.objects import (
     create_signal,
 )
 from sigima.objects.scalar import GeometryResult, TableResult
-
-from datalab.adapters_metadata.table_adapter import TableAdapter
-from datalab.config import _
-from datalab.gui.processor.base import BaseProcessor
-from datalab.utils.qthelpers import qt_try_except
-from datalab.widgets import (
+from sigimax.widgets import (
     fitdialog,
     signalbaseline,
     signalcursor,
     signaldeltax,
     signalpeak,
 )
+
+from datalab.adapters_metadata.table_adapter import TableAdapter
+from datalab.config import _
+from datalab.gui.processor.base import BaseProcessor
+from datalab.utils.qthelpers import qt_try_except
 from datalab.widgets.replacespecialvalues import (
     ReplaceSpecialValuesSignalParamDL,
 )

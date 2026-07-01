@@ -17,9 +17,9 @@ import sigima.proc.image as sipi
 from guidata.qthelpers import exec_dialog, qt_app_context
 from sigima import viz
 from sigima.tests.data import create_noisy_gaussian_image
+from sigimax.widgets.imagebackground import ImageBackgroundDialog
 
 from datalab.env import execenv
-from datalab.widgets.imagebackground import ImageBackgroundDialog
 
 
 def test_image_background_selection() -> None:

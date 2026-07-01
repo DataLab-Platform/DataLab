@@ -46,6 +46,7 @@ from guidata.qthelpers import add_actions, create_action
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from sigimax.widgets import fitdialog
 
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter, have_results
 from datalab.config import Conf, _
@@ -54,7 +55,6 @@ from datalab.gui.processor.base import (
     clear_analysis_parameters,
     extract_analysis_parameters,
 )
-from datalab.widgets import fitdialog
 
 if TYPE_CHECKING:
     from sigima.objects import ImageObj, SignalObj

@@ -8,8 +8,7 @@ Error message box test
 
 from guidata.qthelpers import exec_dialog, qt_app_context
 from qtpy import QtWidgets as QW
-
-from datalab.widgets.warningerror import WarningErrorMessageBox
+from sigimax.widgets.warningerror import WarningErrorMessageBox
 
 
 def error_message_box(category: str):
