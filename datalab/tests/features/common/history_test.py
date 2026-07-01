@@ -36,6 +36,7 @@ import sigima.params
 import sigima.proc.image as sipi
 import sigima.proc.signal as sips
 from qtpy import QtCore as QC
+from qtpy import QtWidgets as QW
 from sigima.objects import create_signal_roi
 from sigima.objects.base import BaseROI
 from sigima.objects.signal.creation import NewSignalParam
@@ -52,6 +53,11 @@ from datalab.gui.panel.history import (
     HistorySession,
     HistoryTree,
     WorkspaceState,
+)
+from datalab.gui.panel.history.chainmodel import (
+    ProcessingChain,
+    build_processing_chains,
+    build_session_chains,
 )
 from datalab.gui.processor.base import extract_processing_parameters
 from datalab.h5.native import NativeH5Reader, NativeH5Writer
@@ -104,12 +110,12 @@ def _session_action_counts(history) -> list[int]:
 def _get_tree_item_for(history, entry: HistoryAction):
     """Return the tree item matching ``entry`` in the history tree."""
     tree = history.tree
-    for i in range(tree.topLevelItemCount()):
-        sess_item = tree.topLevelItem(i)
-        for j in range(sess_item.childCount()):
-            child = sess_item.child(j)
-            if child.data(0, QC.Qt.UserRole) == entry.uuid:
-                return child
+    iterator = QW.QTreeWidgetItemIterator(tree)
+    while iterator.value():
+        item = iterator.value()
+        if item.data(0, QC.Qt.UserRole) == entry.uuid:
+            return item
+        iterator += 1
     raise AssertionError(f"No tree item found for entry {entry.uuid}")
 
 
@@ -1674,6 +1680,66 @@ def test_history_chain_reconnect():
         reconnected_uuids = action_deriv.state.selection.get("signal", [])
         assert s002_uuid not in reconnected_uuids
         assert src_uuid in reconnected_uuids
+
+
+def test_history_chain_model_grouping():
+    """Derived processing-chain read-model groups actions into ordered chains."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+
+        # Creation via the main-window proxy records a ``new_object`` action and
+        # registers its output UUID. ``panel.add_object`` deliberately does not
+        # record, so it is used below to exercise an externally-rooted chain.
+        win.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1])
+        panel.processor.run_feature(
+            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
+        )
+        panel.objview.select_objects([2])
+        panel.processor.run_feature(sips.derivative)
+
+        # --- invariant: grouping drops no action, per session ---
+        grouped = build_processing_chains(history)
+        assert len(grouped) == len(history.history_sessions)
+        for sess, sess_chains in grouped:
+            assert isinstance(sess, HistorySession)
+            assert sum(len(c.actions) for c in sess_chains) == len(sess.actions)
+
+        # --- creation-rooted chain: creation -> normalize -> derivative ---
+        all_chains = [c for _sess, chains in grouped for c in chains]
+        creation_chains = [
+            c
+            for c in all_chains
+            if c.root.kind == HistoryAction.KIND_UI
+            and c.root.method_name in HistoryAction.UI_CREATION_METHODS
+        ]
+        assert len(creation_chains) == 1
+        chain = creation_chains[0]
+        assert isinstance(chain, ProcessingChain)
+        assert chain.actions[0] is chain.root
+        assert [a.func_name for a in chain.actions] == [None, "normalize", "derivative"]
+        assert all(a in chain.session.actions for a in chain.actions)
+
+        # --- externally-rooted chain: panel.add_object records no creation, so a
+        # compute on such an object roots its own (compute) chain ---
+        panel.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([len(panel.objmodel)])
+        panel.processor.run_feature(sips.derivative)
+        grouped2 = build_processing_chains(history)
+        for sess, sess_chains in grouped2:
+            assert sum(len(c.actions) for c in sess_chains) == len(sess.actions)
+        external_chains = [
+            c
+            for _sess, chains in grouped2
+            for c in chains
+            if c.root.kind == HistoryAction.KIND_COMPUTE
+        ]
+        assert external_chains
+
+        # Keep build_session_chains imported — it is public API under test
+        assert callable(build_session_chains)
 
 
 def test_history_new_session_prompt_on_input(monkeypatch):

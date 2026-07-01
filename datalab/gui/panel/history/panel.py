@@ -727,14 +727,12 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         """Return the session relevant for step navigation."""
         item = self.tree.currentItem()
         if item is not None:
-            if item.parent() is None:
-                index = self.tree.indexOfTopLevelItem(item)
-                if 0 <= index < len(self.history_sessions):
-                    return self.history_sessions[index]
-            else:
-                action = self.current_action()
-                if action is not None:
-                    return self.find_parent_session(action)
+            top = item
+            while top.parent() is not None:
+                top = top.parent()
+            index = self.tree.indexOfTopLevelItem(top)
+            if 0 <= index < len(self.history_sessions):
+                return self.history_sessions[index]
         if self.history_sessions:
             return self.history_sessions[-1]
         return None
@@ -761,15 +759,15 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
 
     def select_action_in_tree(self, action: HistoryAction) -> None:
         """Select ``action`` in the tree (triggers ``sync_panel_selection``)."""
-        for i in range(self.tree.topLevelItemCount()):
-            sess_item = self.tree.topLevelItem(i)
-            for j in range(sess_item.childCount()):
-                child = sess_item.child(j)
-                if child.data(0, QC.Qt.UserRole) == action.uuid:
-                    self.tree.clearSelection()
-                    self.tree.setCurrentItem(child)
-                    child.setSelected(True)
-                    return
+        iterator = QW.QTreeWidgetItemIterator(self.tree)
+        while iterator.value():
+            item = iterator.value()
+            if item.data(0, QC.Qt.UserRole) == action.uuid:
+                self.tree.clearSelection()
+                self.tree.setCurrentItem(item)
+                item.setSelected(True)
+                return
+            iterator += 1
 
     def step_prev(self) -> None:
         """Select the previous action in the current session."""

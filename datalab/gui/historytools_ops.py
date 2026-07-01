@@ -430,10 +430,17 @@ def delete_selected(panel: HistoryPanel) -> None:
         if session_idx >= 0:
             top = panel.tree.topLevelItem(session_idx)
             if top is not None:
-                if top.childCount() > 0:
-                    target_item = top.child(top.childCount() - 1)
-                else:
-                    target_item = top
+                last_action_item = None
+                iterator = QW.QTreeWidgetItemIterator(top)
+                while iterator.value():
+                    node = iterator.value()
+                    if (
+                        node.data(0, panel.tree.ITEM_KIND_ROLE)
+                        == panel.tree.ITEM_ACTION
+                    ):
+                        last_action_item = node
+                    iterator += 1
+                target_item = last_action_item if last_action_item is not None else top
     if target_item is None and panel.tree.topLevelItemCount() > 0:
         # Fallback: last top-level item (least likely to switch panels)
         last_top = panel.tree.topLevelItem(panel.tree.topLevelItemCount() - 1)
