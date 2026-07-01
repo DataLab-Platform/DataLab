@@ -255,6 +255,9 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             icon=get_icon("console.svg"),
             tip=_("Generate a Python macro script from history"),
         )
+        # Temporarily disabled (out of current scope): keep the action and its
+        # implementation, but hide it from the toolbar and context menu.
+        generate_macro_action.setVisible(False)
         remove_incompatible_action = create_action(
             self,
             _("Remove incompatible"),
@@ -269,6 +272,9 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             icon=get_icon("restore_selection.svg"),
             tip=_("Restore original parameters (discard edit-mode changes)"),
         )
+        # Temporarily disabled (out of current scope): keep the action and its
+        # restore logic, but hide it from the toolbar and context menu.
+        self._restore_selection_action.setVisible(False)
         return [
             record_action,
             new_session_action,
