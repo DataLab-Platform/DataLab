@@ -1457,6 +1457,23 @@ msgstr "Recalcul automatique lors de l'édition"
 msgid "Automatically re-run processing when parameters are modified"
 msgstr "Relancer automatiquement le traitement à chaque modification de paramètre"
 
+msgid "Analysis Parameters"
+msgstr "Paramètres d'analyse"
+
+msgid "Analysis metadata is incomplete."
+msgstr "Les métadonnées d'analyse sont incomplètes."
+
+#, python-format
+msgid ""
+"Failed to recompute analysis:\n"
+"%s"
+msgstr ""
+"Échec du recalcul de l'analyse :\n"
+"%s"
+
+msgid "Analysis was recomputed."
+msgstr "L'analyse a été recalculée."
+
 msgid "No processing object available."
 msgstr "Aucun objet de traitement disponible."
 

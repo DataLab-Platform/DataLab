@@ -483,6 +483,12 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         """Find the creation action that produced ``output_uuid``."""
         return hchain.find_creation_action_for_output(self, output_uuid)
 
+    def find_analysis_action(
+        self, obj_uuid: str, func_name: str
+    ) -> HistoryAction | None:
+        """Find the 1-to-0 analysis action for ``obj_uuid`` with ``func_name``."""
+        return hchain.find_analysis_action(self, obj_uuid, func_name)
+
     def get_session_of(self, action: HistoryAction) -> HistorySession | None:
         """Return the session that contains ``action``, or None."""
         return hchain.get_session_of(self, action)

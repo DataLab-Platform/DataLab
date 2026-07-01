@@ -12,6 +12,7 @@ from qtpy import QtWidgets as QW
 from datalab.config import _
 from datalab.env import execenv
 from datalab.gui.panel.history import recompute as hrec
+from datalab.gui.panel.history.chainmodel import action_input_uuids
 from datalab.gui.processor.base import (
     ProcessingParameters,
     extract_processing_parameters,
@@ -165,6 +166,34 @@ def find_creation_action_for_output(
                 and action.method_name in HistoryAction.UI_CREATION_METHODS
                 and output_uuid in panel.action_output_uuids.get(action.uuid, [])
             ):
+                return action
+    return None
+
+
+def find_analysis_action(
+    panel: HistoryPanel, obj_uuid: str, func_name: str
+) -> HistoryAction | None:
+    """Find the 1-to-0 analysis action for ``obj_uuid`` with ``func_name``.
+
+    Analysis operations (1-to-0) do not produce a new output object: they
+    write their result to the input object's metadata. The matching action is
+    therefore identified by its input UUID and function name.
+
+    Args:
+        panel: The history panel providing the sessions.
+        obj_uuid: UUID of the analyzed object.
+        func_name: Sigima analysis feature name.
+
+    Returns:
+        The matching :class:`HistoryAction`, or ``None`` if not found.
+    """
+    for session in reversed(panel.history_sessions):
+        for action in reversed(session.actions):
+            if action.kind != HistoryAction.KIND_COMPUTE:
+                continue
+            if action.func_name != func_name:
+                continue
+            if obj_uuid in action_input_uuids(action):
                 return action
     return None
 
