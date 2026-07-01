@@ -1439,6 +1439,27 @@ def test_history_edit_in_tree():
         assert panel.objview.get_sel_object_uuids() == [src_uuid]
 
 
+def test_history_step_by_step_launch():
+    """Step-by-step launch replays with dialogs then commits edits immediately."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+        panel.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1])
+        panel.processor.run_feature(
+            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
+        )
+        norm_entry = history[len(history)]
+        assert norm_entry.func_name == "normalize"
+        previous_edit_mode = history.edit_mode
+        _select_tree_item_for(history, norm_entry)
+        # Step-by-step launch: parameter dialogs auto-accept in unattended mode.
+        history.replay_step_by_step()
+        assert history.edit_mode is previous_edit_mode
+        assert history.has_any_pending_edits() is False
+
+
 # ---------------------------------------------------------------------------
 # 9) Cascade recompute
 # ---------------------------------------------------------------------------
@@ -1740,6 +1761,65 @@ def test_history_chain_model_grouping():
 
         # Keep build_session_chains imported — it is public API under test
         assert callable(build_session_chains)
+
+
+def test_history_delete_splits_chain():
+    """Deleting an intermediate action splits its chain via a data copy."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+
+        # Creation via the main window records a ``new_object`` creation action;
+        # ``panel.add_object`` deliberately does not, so ``win.add_object`` is
+        # required to obtain a creation-rooted chain.
+        win.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1])
+        panel.processor.run_feature(
+            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
+        )
+        panel.objview.select_objects([2])
+        panel.processor.run_feature(sips.derivative)
+
+        session = history.history_sessions[-1]
+        assert [a.func_name for a in session.actions] == [
+            None,
+            "normalize",
+            "derivative",
+        ]
+        normalize_action = session.actions[1]
+        derivative_action = session.actions[2]
+        n_objects_before = len(panel.objmodel)
+
+        # Delete the MIDDLE action (normalize). Unattended mode auto-confirms and
+        # skips the associated-object removal prompt.
+        _select_tree_item_for(history, normalize_action)
+        history.delete_selected()
+
+        # ``normalize`` is spliced out; creation and ``derivative`` remain.
+        assert normalize_action not in session.actions
+        assert session.actions[0].method_name in HistoryAction.UI_CREATION_METHODS
+        assert derivative_action in session.actions
+
+        # A copy of ``normalize``'s output was added as a new parentless root.
+        assert len(panel.objmodel) == n_objects_before + 1
+
+        # The session now splits into two chains and drops no action.
+        chains = build_session_chains(history, session)
+        assert len(chains) == 2
+        assert sum(len(c.actions) for c in chains) == len(session.actions)
+
+        # ``derivative`` roots a NEW chain (fed by the copy), not the creation one.
+        creation_chain = next(
+            c
+            for c in chains
+            if c.root.kind == HistoryAction.KIND_UI
+            and c.root.method_name in HistoryAction.UI_CREATION_METHODS
+        )
+        assert derivative_action not in creation_chain.actions
+        deriv_chain = next(c for c in chains if derivative_action in c.actions)
+        assert deriv_chain is not creation_chain
+        assert deriv_chain.root is derivative_action
 
 
 def test_history_new_session_prompt_on_input(monkeypatch):

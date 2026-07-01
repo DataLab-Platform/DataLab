@@ -190,6 +190,10 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         )
         edit_action.setChecked(self.edit_mode)
         self._edit_action = edit_action
+        # Temporarily disabled (superseded by the Replay / Step-by-step launch
+        # modes): keep the action and its edit-mode logic, but hide it from the
+        # toolbar and context menu.
+        edit_action.setVisible(False)
         record_action = create_action(
             self,
             _("Record mode"),
@@ -275,6 +279,20 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         # Temporarily disabled (out of current scope): keep the action and its
         # restore logic, but hide it from the toolbar and context menu.
         self._restore_selection_action.setVisible(False)
+        replay_action = create_action(
+            self,
+            _("Replay"),
+            lambda: self.replay_restore_actions(restore_selection=False),
+            icon=get_icon("replay.svg"),
+            tip=_("Replay the selection silently (no parameter dialogs)"),
+        )
+        step_by_step_action = create_action(
+            self,
+            _("Step-by-step"),
+            triggered=lambda checked=False: self.replay_step_by_step(),
+            icon=get_icon("edit_mode.svg"),
+            tip=_("Replay the selection step by step, editing parameters at each step"),
+        )
         return [
             record_action,
             new_session_action,
@@ -285,12 +303,8 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             self.step_prev_action,
             self.step_next_action,
             None,
-            create_action(
-                self,
-                _("Replay"),
-                lambda: self.replay_restore_actions(restore_selection=False),
-                icon=get_icon("replay.svg"),
-            ),
+            replay_action,
+            step_by_step_action,
             self._restore_selection_action,
             edit_action,
             None,
@@ -399,6 +413,25 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
     ) -> None:
         """Replay and/or restore selection for the selected actions."""
         return hreplay.replay_restore_actions(self, replay, restore_selection)
+
+    def replay_step_by_step(self) -> None:
+        """Replay the current selection step by step, prompting for parameters.
+
+        Dialog-driven launch mode: each replayed action opens its parameter
+        dialog (reusing the edit-mode machinery), then recomputes. Edits are
+        committed immediately -- there is no persistent edit session.
+        """
+        previous = self.edit_mode
+        self.edit_mode = True
+        try:
+            self.replay_restore_actions(replay=True, restore_selection=False)
+        finally:
+            self.edit_mode = previous
+            # Commit step-by-step edits immediately (no persistent edit session).
+            for session in self.history_sessions:
+                for action in session.actions:
+                    action.discard_snapshot()
+            self.update_actions_state()
 
     def prompt_edit_action_params(self, action: HistoryAction) -> bool | None:
         """Open the parameter dialog for *action* according to its pattern."""
