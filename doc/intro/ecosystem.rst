@@ -53,6 +53,12 @@ desktop application. To avoid confusion, this documentation uses the following v
 Members of the platform
 -----------------------
 
+.. figure:: ../images/ecosystem.png
+
+    The DataLab Platform: the desktop application, DataLab-Web and DataLab-Kernel are three
+    access modes sharing the same Sigima computation engine and interoperable through HDF5
+    workspaces.
+
 .. only:: html and not latex
 
     .. grid:: 1 1 2 2
