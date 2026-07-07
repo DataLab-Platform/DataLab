@@ -12,6 +12,13 @@ the same scientific core has grown into a small family of complementary tools â€
 **DataLab Platform**. This page clarifies the terminology and helps you choose the edition
 that best fits your needs.
 
+.. figure:: ../images/ecosystem.png
+    :class: dark-light
+
+    The DataLab Platform: the desktop application, DataLab-Web and DataLab-Kernel are three
+    access modes sharing the same Sigima computation engine and interoperable through HDF5
+    workspaces.
+
 .. seealso::
 
     The story behind this evolution â€” the extraction of the Sigima computation engine and
@@ -60,12 +67,6 @@ desktop application. To avoid confusion, this documentation uses the following v
 
 Members of the platform
 -----------------------
-
-.. figure:: ../images/ecosystem.png
-
-    The DataLab Platform: the desktop application, DataLab-Web and DataLab-Kernel are three
-    access modes sharing the same Sigima computation engine and interoperable through HDF5
-    workspaces.
 
 .. only:: html and not latex
 
