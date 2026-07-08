@@ -43,13 +43,20 @@ def fuzzy_score(query: str, text: str) -> int | None:
     consecutive matches and matches at word boundaries are rewarded, while
     gaps between matched characters are penalised.
 
+    A plain subsequence match is too permissive on its own: a short query
+    like "rota" would match unrelated commands such as "impoRt annOTAtions".
+    To cull that noise, a match is only accepted when its matched characters
+    form a single contiguous run (a plain substring, e.g. "rota" in "Rotate")
+    or when every run of matched characters starts at a word boundary
+    (acronym / word-initials style, e.g. "fan" in "Fourier ANalysis").
+
     Args:
         query: Lowercased, trimmed search query.
         text: Lowercased haystack to match against.
 
     Returns:
-        A score (higher is better) when ``query`` is a subsequence of
-        ``text``, otherwise ``None``.
+        A score (higher is better) when ``query`` matches ``text`` under the
+        rule above, otherwise ``None``.
     """
     if not query:
         return 0
@@ -58,19 +65,36 @@ def fuzzy_score(query: str, text: str) -> int | None:
     score = 0
     text_index = 0
     prev = -2
+    # A "run" is a maximal block of contiguous matched characters. We track
+    # how many runs the match spans and how many start at a word boundary,
+    # to reject scattered mid-word noise afterwards.
+    runs = 0
+    boundary_runs = 0
     for char in query:
         found = text.find(char, text_index)
         if found == -1:
             return None
+        contiguous = found == prev + 1
+        at_boundary = found == 0 or text[found - 1] in _BOUNDARY_CHARS
         score += 1
-        if found == prev + 1:
+        if contiguous:
             score += 5
-        if found == 0 or text[found - 1] in _BOUNDARY_CHARS:
+        if at_boundary:
             score += 3
         if prev >= 0:
             score -= min(found - prev - 1, 3)
+        if not contiguous:
+            runs += 1
+            if at_boundary:
+                boundary_runs += 1
         prev = found
         text_index = found + 1
+    # Cull scattered noise: keep the match only when the query occurs as a
+    # plain substring (a single contiguous run — the greedy scan above can miss
+    # it, e.g. "fft" in "… Fourier … fft") or when every run of matched
+    # characters starts at a word boundary (acronym / word-initials style).
+    if boundary_runs != runs and query not in text:
+        return None
     return score
 
 
