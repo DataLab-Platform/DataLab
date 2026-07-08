@@ -195,15 +195,15 @@ def test_preprocess_hook_abort_skipped_in_unattended():
 
 
 def test_auto_recompute_does_not_replace_rois():
-    """auto_recompute_analysis must not recreate ROIs deleted by the user.
+    """recompute_analysis must not recreate ROIs deleted by the user.
 
     Scenario:
     1. Run peak detection with create_rois=True → ROIs are created and the
        analysis parameters (including create_rois=True) are stored in the
        object's metadata.
     2. The user deletes the ROIs manually.
-    3. auto_recompute_analysis is triggered (e.g. after a data change).
-    4. The ROIs must NOT be recreated: auto_recompute_analysis disables
+    3. recompute_analysis is triggered explicitly (manual "Recompute" action).
+    4. The ROIs must NOT be recreated: recompute_analysis disables
        create_rois before calling compute_1_to_0.
     """
     with datalab_test_app_context() as win:
@@ -221,13 +221,13 @@ def test_auto_recompute_does_not_replace_rois():
         # Step 2: user deletes the ROIs
         obj.roi = None
 
-        # Step 3 & 4: auto-recompute must NOT recreate the ROIs
-        panel.processor.auto_recompute_analysis(obj)
+        # Step 3 & 4: recompute must NOT recreate the ROIs
+        panel.processor.recompute_analysis(obj)
 
         obj = panel.objview.get_current_object()
         assert obj.roi is None, (
-            "auto_recompute_analysis must not recreate ROIs "
-            "(create_rois is disabled during auto-recompute)"
+            "recompute_analysis must not recreate ROIs "
+            "(create_rois is disabled during recompute)"
         )
 
 
@@ -266,19 +266,19 @@ def test_contour_shape_creates_rois_in_datalab():
 
 
 def test_no_infinite_roi_recreation_loop():
-    """The ROI creation → auto-recompute cycle must not loop infinitely.
+    """The ROI creation → recompute cycle must not loop infinitely.
 
     Full scenario matching the real user workflow:
     1. Run detection with create_rois=True → ROIs are created.
-    2. Simulate what happens when the user edits ROIs: auto_recompute_analysis
-       is called (as DataLab does after ROI graphical editing).
-    3. Verify that auto_recompute_analysis does NOT recreate ROIs.
+    2. Simulate what happens when the user edits ROIs then triggers a manual
+       recompute: recompute_analysis is called.
+    3. Verify that recompute_analysis does NOT recreate ROIs.
     4. Repeat step 2 a second time to confirm stability.
 
     This test guards against the semi-infinite loop described in issue #329:
-    modifying ROIs triggers auto-recompute, which re-runs the detection
-    function. If create_rois stays True in the recompute path, the detection
-    would overwrite the user's ROI edit, triggering another recompute, etc.
+    recomputing the analysis re-runs the detection function. If create_rois
+    stays True in the recompute path, the detection would overwrite the user's
+    ROI edit, triggering another recompute, etc.
     """
     with datalab_test_app_context() as win:
         panel = win.imagepanel
@@ -296,21 +296,21 @@ def test_no_infinite_roi_recreation_loop():
         obj.roi = create_image_roi("rectangle", [10, 10, 50, 50])
         user_roi = obj.roi
 
-        # Step 3: auto-recompute fires (as DataLab does after ROI edit)
-        panel.processor.auto_recompute_analysis(obj)
+        # Step 3: manual recompute fires
+        panel.processor.recompute_analysis(obj)
 
         obj = panel.objview.get_current_object()
         # The ROI must be the user's edited ROI, NOT a new set from detection
         assert obj.roi is user_roi, (
-            "auto_recompute must not replace the user's manually edited ROI"
+            "recompute must not replace the user's manually edited ROI"
         )
 
-        # Step 4: a second auto-recompute must also be stable
-        panel.processor.auto_recompute_analysis(obj)
+        # Step 4: a second recompute must also be stable
+        panel.processor.recompute_analysis(obj)
 
         obj = panel.objview.get_current_object()
         assert obj.roi is user_roi, (
-            "Second auto_recompute must still preserve the user's ROI (no oscillation)"
+            "Second recompute must still preserve the user's ROI (no oscillation)"
         )
 
 

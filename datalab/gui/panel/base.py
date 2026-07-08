@@ -81,6 +81,7 @@ from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
     ProcessingParameters,
     clear_analysis_parameters,
+    extract_analysis_parameters,
     extract_processing_parameters,
     insert_processing_parameters,
 )
@@ -632,12 +633,6 @@ class ObjectProp(QW.QWidget):
         # Update metadata with new creation parameters
         insert_creation_parameters(self.current_creation_obj, param)
 
-        # Auto-recompute analysis if the object had analysis parameters
-        # Since the data has changed, any analysis results are now invalid
-        # Use the processor for the current object's type
-        obj_processor = self.__get_processor_associated_to(self.current_creation_obj)
-        obj_processor.auto_recompute_analysis(self.current_creation_obj)
-
         # Update the tree view item (to show new title if it changed)
         self.panel.objview.update_item(obj_uuid)
 
@@ -882,12 +877,6 @@ class ObjectProp(QW.QWidget):
                 source_uuid=proc_params.source_uuid,
             )
             insert_processing_parameters(obj, updated_proc_params)
-
-            # Auto-recompute analysis if the object had analysis parameters
-            # Since the data has changed, any analysis results are now invalid
-            # Use the processor for the current object's type (not source object's type)
-            obj_processor = self.__get_processor_associated_to(obj)
-            obj_processor.auto_recompute_analysis(obj)
 
             # Update the tree view item and refresh plot
             obj_uuid = get_uuid(obj)
@@ -2547,10 +2536,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             update_dataset(obj, changed_props)
             self.objview.update_item(get_uuid(obj))
 
-            # Auto-recompute analysis if the object had analysis parameters
-            # Since properties have changed, any analysis results may now be invalid
-            self.processor.auto_recompute_analysis(obj)
-
         # Refresh all selected items, including non-visible ones (only_visible=False)
         # This ensures that plot items are updated for all selected objects, even if
         # they are temporarily hidden behind other objects
@@ -2563,69 +2548,113 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.objprop.update_original_values()
 
     def recompute_processing(self) -> None:
-        """Recompute/rerun selected objects or group with stored processing parameters.
+        """Recompute/rerun selected objects or group with stored parameters.
 
-        This method handles both single objects and groups. For each object, it checks
-        if it has 1-to-1 processing parameters that can be recomputed. Objects without
-        recomputable parameters are skipped.
+        This method handles both single objects and groups. For each object, it
+        recomputes, on demand:
+
+        - 1-to-1 processing operations (in-place data transformations), and
+        - 1-to-0 analysis operations (statistics, measurements, detections, etc.).
+
+        Analysis results are *not* recomputed automatically when data, ROIs or
+        object properties change: this manual action is the single, explicit entry
+        point to refresh them. Objects without recomputable parameters are skipped.
         """
         # Get selected objects (handles both individual selection and groups)
         objects = self.objview.get_sel_objects(include_groups=True)
         if not objects:
             return
 
-        # Filter objects that have recomputable processing parameters
+        # Filter objects that have recomputable 1-to-1 processing parameters
+        # and/or 1-to-0 analysis parameters (an object may have both)
         recomputable_objects: list[SignalObj | ImageObj] = []
+        reanalyzable_objects: list[SignalObj | ImageObj] = []
         for obj in objects:
             proc_params = extract_processing_parameters(obj)
             if proc_params is not None and proc_params.pattern == "1-to-1":
                 recomputable_objects.append(obj)
+            analysis_params = extract_analysis_parameters(obj)
+            if analysis_params is not None and analysis_params.pattern == "1-to-0":
+                reanalyzable_objects.append(obj)
 
-        if not recomputable_objects:
+        if not recomputable_objects and not reanalyzable_objects:
             if not execenv.unattended:
                 QW.QMessageBox.information(
                     self,
                     _("Recompute"),
                     _(
-                        "Selected object(s) do not have processing parameters "
-                        "that can be recomputed."
+                        "Selected object(s) do not have processing or analysis "
+                        "parameters that can be recomputed."
                     ),
                 )
             return
 
-        # Recompute each object
+        # Recompute 1-to-1 processing operations first (they modify data in-place),
+        # so that any subsequent analysis recomputation uses the updated data.
+        self.__recompute_1_to_1_objects(recomputable_objects)
+
+        # Recompute 1-to-0 analysis operations (refresh results on current data).
+        self.__recompute_1_to_0_objects(reanalyzable_objects)
+
+    def __recompute_1_to_1_objects(self, objects: list[SignalObj | ImageObj]) -> None:
+        """Recompute in-place 1-to-1 processing operations for the given objects.
+
+        Args:
+            objects: Objects with stored 1-to-1 processing parameters
+        """
+        if not objects:
+            return
         with create_progress_bar(
-            self, _("Recomputing objects"), max_=len(recomputable_objects)
+            self, _("Recomputing objects"), max_=len(objects)
         ) as progress:
-            for index, obj in enumerate(recomputable_objects):
+            for index, obj in enumerate(objects):
                 progress.setValue(index + 1)
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     break
 
-                # Temporarily set this object as current to use existing infrastructure
+                # Temporarily set as current to use existing infrastructure
                 self.objview.set_current_object(obj)
                 report = self.objprop.apply_processing_parameters(
                     obj=obj, interactive=False
                 )
-                if not report.success and not execenv.unattended:
-                    failtxt = _("Failed to recompute object")
-                    if index == len(recomputable_objects) - 1:
-                        QW.QMessageBox.warning(
-                            self,
-                            _("Recompute"),
-                            f"{failtxt} '{obj.title}':\n{report.message}",
-                        )
-                    else:
-                        conttxt = _("Do you want to continue with the next object?")
-                        answer = QW.QMessageBox.warning(
-                            self,
-                            _("Recompute"),
-                            f"{failtxt} '{obj.title}':\n{report.message}\n\n{conttxt}",
-                            QW.QMessageBox.Yes | QW.QMessageBox.No,
-                        )
-                        if answer == QW.QMessageBox.No:
-                            break
+                if report.success or execenv.unattended:
+                    continue
+                failtxt = _("Failed to recompute object")
+                if index == len(objects) - 1:
+                    QW.QMessageBox.warning(
+                        self,
+                        _("Recompute"),
+                        f"{failtxt} '{obj.title}':\n{report.message}",
+                    )
+                else:
+                    conttxt = _("Do you want to continue with the next object?")
+                    answer = QW.QMessageBox.warning(
+                        self,
+                        _("Recompute"),
+                        f"{failtxt} '{obj.title}':\n{report.message}\n\n{conttxt}",
+                        QW.QMessageBox.Yes | QW.QMessageBox.No,
+                    )
+                    if answer == QW.QMessageBox.No:
+                        break
+
+    def __recompute_1_to_0_objects(self, objects: list[SignalObj | ImageObj]) -> None:
+        """Recompute 1-to-0 analysis operations for the given objects.
+
+        Args:
+            objects: Objects with stored 1-to-0 analysis parameters
+        """
+        if not objects:
+            return
+        with create_progress_bar(
+            self, _("Recomputing analyses"), max_=len(objects)
+        ) as progress:
+            for index, obj in enumerate(objects):
+                progress.setValue(index + 1)
+                QW.QApplication.processEvents()
+                if progress.wasCanceled():
+                    break
+                self.processor.recompute_analysis(obj)
 
     def select_source_objects(self) -> None:
         """Select source objects associated with the selected object's processing.
@@ -3330,8 +3359,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     # Remove all table and geometry results using adapter methods
                     TableAdapter.remove_all_from(obj)
                     GeometryAdapter.remove_all_from(obj)
-                    # Clear analysis parameters to prevent auto-recompute from
-                    # attempting to recompute deleted analyses when ROI changes
+                    # Clear analysis parameters to prevent a manual recompute
+                    # from attempting to recompute deleted analyses
                     clear_analysis_parameters(obj)
                     if obj is self.objview.get_current_object():
                         self.objprop.update_properties_from(obj)

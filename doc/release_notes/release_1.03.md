@@ -36,3 +36,17 @@ and Image panels.
   cannot exist in integer data, the dialog explains that the operation is not
   applicable and prevents accidental processing, while preserving the original
   image data type without unnecessary float conversion
+
+### 🔄 Changes ###
+
+**Analysis results are now refreshed on demand instead of automatically:**
+
+* Analysis results (statistics, FWHM, centroid, peak/contour/blob detection,
+  etc.) are no longer recomputed automatically when you modify a region of
+  interest, transform the data, or edit object properties
+* Existing analysis results are now left untouched after such edits, avoiding
+  surprising side effects and results that could become misleading once the
+  data no longer matches the stored analysis parameters
+* The familiar **"Recompute"** action (Edit menu, `Ctrl+R`) now refreshes both
+  processing *and* analysis results, giving you full control over when analyses
+  are updated

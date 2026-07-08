@@ -363,6 +363,14 @@ msgstr "Retraiter"
 msgid "Recompute selected %s with its processing parameters"
 msgstr "Retraiter l'objet %s sélectionné avec ses paramètres de traitement"
 
+#, python-format
+msgid ""
+"Recompute selected %s: refresh both processing and analysis results with their "
+"stored parameters"
+msgstr ""
+"Retraiter l'objet %s sélectionné : actualiser les résultats de traitement et "
+"d'analyse à partir de leurs paramètres enregistrés"
+
 msgid "Select source objects"
 msgstr "Sélectionner les objets source"
 
@@ -1577,8 +1585,18 @@ msgstr "Exporter une ROI"
 msgid "Selected object(s) do not have processing parameters that can be recomputed."
 msgstr "L'objet (ou les objets) sélectionné(s) n'ont pas de paramètres de traitement pouvant être retraités."
 
+msgid ""
+"Selected object(s) do not have processing or analysis parameters that can be "
+"recomputed."
+msgstr ""
+"L'objet (ou les objets) sélectionné(s) n'ont pas de paramètres de traitement ou "
+"d'analyse pouvant être recalculés."
+
 msgid "Recomputing objects"
 msgstr "Retraitement des objets"
+
+msgid "Recomputing analyses"
+msgstr "Recalcul des analyses"
 
 msgid "Failed to recompute object"
 msgstr "Échec du retraitement de l'objet"
