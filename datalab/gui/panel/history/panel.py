@@ -252,16 +252,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             tip=_("Select the next action in the current session"),
             shortcut=QG.QKeySequence("Ctrl+Right"),
         )
-        generate_macro_action = create_action(
-            self,
-            _("Generate macro"),
-            self.generate_macro,
-            icon=get_icon("console.svg"),
-            tip=_("Generate a Python macro script from history"),
-        )
-        # Temporarily disabled (out of current scope): keep the action and its
-        # implementation, but hide it from the toolbar and context menu.
-        generate_macro_action.setVisible(False)
         remove_incompatible_action = create_action(
             self,
             _("Remove incompatible"),
@@ -309,7 +299,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             edit_action,
             None,
             self._duplicate_action,
-            generate_macro_action,
             None,
             remove_incompatible_action,
             self._delete_action,
@@ -754,10 +743,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
     def duplicate_selected_entries(self) -> None:
         """Duplicate selected entries."""
         return htools.duplicate_selected_entries(self)
-
-    def generate_macro(self) -> None:
-        """Generate a Python macro script from history."""
-        return htools.generate_macro(self)
 
     def select_sessions(self, sessions: list[HistorySession]) -> None:
         """Select top-level tree items matching ``sessions``."""
