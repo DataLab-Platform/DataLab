@@ -69,7 +69,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self._duplicate_action: QW.QAction | None = None
         self.step_prev_action: QW.QAction | None = None
         self.step_next_action: QW.QAction | None = None
-        self._restore_selection_action: QW.QAction | None = None
         self._edit_action: QW.QAction | None = None
         self._record_action: QW.QAction | None = None
         self._menu_actions: list[QW.QAction] = self.create_menu_actions()
@@ -143,10 +142,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             self.step_prev_action.setEnabled(self.can_step_prev())
         if self.step_next_action is not None:
             self.step_next_action.setEnabled(self.can_step_next())
-        if self._restore_selection_action is not None:
-            self._restore_selection_action.setEnabled(
-                self.edit_mode or self.has_any_pending_edits()
-            )
 
     @property
     def session_increment(self) -> int:
@@ -259,16 +254,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             icon=get_icon("edit/delete_all.svg"),
             tip=_("Remove actions incompatible with the current workspace"),
         )
-        self._restore_selection_action = create_action(
-            self,
-            _("Restore parameters"),
-            lambda: self.replay_restore_actions(restore_selection=True, replay=False),
-            icon=get_icon("restore_selection.svg"),
-            tip=_("Restore original parameters (discard edit-mode changes)"),
-        )
-        # Temporarily disabled (out of current scope): keep the action and its
-        # restore logic, but hide it from the toolbar and context menu.
-        self._restore_selection_action.setVisible(False)
         replay_action = create_action(
             self,
             _("Replay"),
@@ -295,7 +280,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             None,
             replay_action,
             step_by_step_action,
-            self._restore_selection_action,
             edit_action,
             None,
             self._duplicate_action,
@@ -425,10 +409,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
     def prompt_edit_action_params(self, action: HistoryAction) -> bool | None:
         """Open the parameter dialog for *action* according to its pattern."""
         return hreplay.prompt_edit_action_params(self, action)
-
-    def restore_action_params(self, item: HistoryAction | HistorySession) -> None:
-        """Restore original kwargs from snapshot and recompute in-place."""
-        return hreplay.restore_action_params(self, item)
 
     # ------------------------------------------------------------------
     # Chain delegations
