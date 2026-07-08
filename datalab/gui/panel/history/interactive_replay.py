@@ -52,9 +52,9 @@ def replay_restore_actions(
             if panel.edit_mode and isinstance(session_or_action, HistoryAction):
                 # Defer: edit only the selected actions, no automatic cascade
                 edit_actions.append(session_or_action)
-            elif panel.edit_mode and isinstance(session_or_action, HistorySession):
-                view_only_session_replay(panel, session_or_action, restore_selection)
             else:
+                # Scope decision: clicking a session in edit mode now replays it
+                # WITH parameter dialogs (view-only session replay disabled).
                 with panel.replaying(), panel.output_suppressed():
                     session_or_action.replay(
                         panel.mainwindow,

@@ -190,6 +190,10 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         )
         edit_action.setChecked(self.edit_mode)
         self._edit_action = edit_action
+        # Temporarily disabled (superseded by the Replay / Step-by-step launch
+        # modes): keep the action and its edit-mode logic, but hide it from the
+        # toolbar and context menu.
+        edit_action.setVisible(False)
         record_action = create_action(
             self,
             _("Record mode"),
@@ -255,6 +259,9 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             icon=get_icon("console.svg"),
             tip=_("Generate a Python macro script from history"),
         )
+        # Temporarily disabled (out of current scope): keep the action and its
+        # implementation, but hide it from the toolbar and context menu.
+        generate_macro_action.setVisible(False)
         remove_incompatible_action = create_action(
             self,
             _("Remove incompatible"),
@@ -269,6 +276,23 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             icon=get_icon("restore_selection.svg"),
             tip=_("Restore original parameters (discard edit-mode changes)"),
         )
+        # Temporarily disabled (out of current scope): keep the action and its
+        # restore logic, but hide it from the toolbar and context menu.
+        self._restore_selection_action.setVisible(False)
+        replay_action = create_action(
+            self,
+            _("Replay"),
+            lambda: self.replay_restore_actions(restore_selection=False),
+            icon=get_icon("replay.svg"),
+            tip=_("Replay the selection silently (no parameter dialogs)"),
+        )
+        step_by_step_action = create_action(
+            self,
+            _("Step-by-step"),
+            triggered=lambda checked=False: self.replay_step_by_step(),
+            icon=get_icon("edit_mode.svg"),
+            tip=_("Replay the selection step by step, editing parameters at each step"),
+        )
         return [
             record_action,
             new_session_action,
@@ -279,12 +303,8 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             self.step_prev_action,
             self.step_next_action,
             None,
-            create_action(
-                self,
-                _("Replay"),
-                lambda: self.replay_restore_actions(restore_selection=False),
-                icon=get_icon("replay.svg"),
-            ),
+            replay_action,
+            step_by_step_action,
             self._restore_selection_action,
             edit_action,
             None,
@@ -394,6 +414,25 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         """Replay and/or restore selection for the selected actions."""
         return hreplay.replay_restore_actions(self, replay, restore_selection)
 
+    def replay_step_by_step(self) -> None:
+        """Replay the current selection step by step, prompting for parameters.
+
+        Dialog-driven launch mode: each replayed action opens its parameter
+        dialog (reusing the edit-mode machinery), then recomputes. Edits are
+        committed immediately -- there is no persistent edit session.
+        """
+        previous = self.edit_mode
+        self.edit_mode = True
+        try:
+            self.replay_restore_actions(replay=True, restore_selection=False)
+        finally:
+            self.edit_mode = previous
+            # Commit step-by-step edits immediately (no persistent edit session).
+            for session in self.history_sessions:
+                for action in session.actions:
+                    action.discard_snapshot()
+            self.update_actions_state()
+
     def prompt_edit_action_params(self, action: HistoryAction) -> bool | None:
         """Open the parameter dialog for *action* according to its pattern."""
         return hreplay.prompt_edit_action_params(self, action)
@@ -443,6 +482,12 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
     def find_creation_action_for_output(self, output_uuid: str) -> HistoryAction | None:
         """Find the creation action that produced ``output_uuid``."""
         return hchain.find_creation_action_for_output(self, output_uuid)
+
+    def find_analysis_action(
+        self, obj_uuid: str, func_name: str
+    ) -> HistoryAction | None:
+        """Find the 1-to-0 analysis action for ``obj_uuid`` with ``func_name``."""
+        return hchain.find_analysis_action(self, obj_uuid, func_name)
 
     def get_session_of(self, action: HistoryAction) -> HistorySession | None:
         """Return the session that contains ``action``, or None."""
@@ -721,14 +766,12 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         """Return the session relevant for step navigation."""
         item = self.tree.currentItem()
         if item is not None:
-            if item.parent() is None:
-                index = self.tree.indexOfTopLevelItem(item)
-                if 0 <= index < len(self.history_sessions):
-                    return self.history_sessions[index]
-            else:
-                action = self.current_action()
-                if action is not None:
-                    return self.find_parent_session(action)
+            top = item
+            while top.parent() is not None:
+                top = top.parent()
+            index = self.tree.indexOfTopLevelItem(top)
+            if 0 <= index < len(self.history_sessions):
+                return self.history_sessions[index]
         if self.history_sessions:
             return self.history_sessions[-1]
         return None
@@ -755,15 +798,15 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
 
     def select_action_in_tree(self, action: HistoryAction) -> None:
         """Select ``action`` in the tree (triggers ``sync_panel_selection``)."""
-        for i in range(self.tree.topLevelItemCount()):
-            sess_item = self.tree.topLevelItem(i)
-            for j in range(sess_item.childCount()):
-                child = sess_item.child(j)
-                if child.data(0, QC.Qt.UserRole) == action.uuid:
-                    self.tree.clearSelection()
-                    self.tree.setCurrentItem(child)
-                    child.setSelected(True)
-                    return
+        iterator = QW.QTreeWidgetItemIterator(self.tree)
+        while iterator.value():
+            item = iterator.value()
+            if item.data(0, QC.Qt.UserRole) == action.uuid:
+                self.tree.clearSelection()
+                self.tree.setCurrentItem(item)
+                item.setSelected(True)
+                return
+            iterator += 1
 
     def step_prev(self) -> None:
         """Select the previous action in the current session."""

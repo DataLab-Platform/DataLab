@@ -981,17 +981,23 @@ msgstr "Pas d'actions de calcul à exporter."
 msgid "Macro script copied to clipboard (%d actions)."
 msgstr "Script de macro copié dans le presse-papier (%d actions)."
 
+msgid "Chain copy"
+msgstr "Copie de chaîne"
+
 msgid ""
 "Do you really want to delete the selected items?\n"
 "\n"
-"Note: deleting an action also removes all subsequent actions in the same session."
+"Note: deleting an intermediate action splits its processing chain; downstream steps become an independent chain."
 msgstr ""
-"Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?\n"
+"Êtes-vous sûr de vouloir supprimer les éléments sélectionnés ?\n"
 "\n"
-"Remarque : la suppression d'une action entraîne également la suppression de toutes les actions suivantes dans la même session."
+"Remarque : la suppression d'une action intermédiaire divise sa chaîne de traitement ; les étapes en aval deviennent une chaîne indépendante."
 
 msgid "Do you really want to delete the selected items?"
 msgstr "Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?"
+
+msgid "The deleted action(s) produced object(s) still present in the workspace. Do you want to remove the associated object(s) as well?"
+msgstr "La ou les actions supprimées ont produit des objets encore présents dans l'espace de travail. Voulez-vous également supprimer le ou les objets associés ?"
 
 msgid "Remove incompatible"
 msgstr "Supprimer les actions incompatibles"
@@ -1451,6 +1457,23 @@ msgstr "Recalcul automatique lors de l'édition"
 msgid "Automatically re-run processing when parameters are modified"
 msgstr "Relancer automatiquement le traitement à chaque modification de paramètre"
 
+msgid "Analysis Parameters"
+msgstr "Paramètres d'analyse"
+
+msgid "Analysis metadata is incomplete."
+msgstr "Les métadonnées d'analyse sont incomplètes."
+
+#, python-format
+msgid ""
+"Failed to recompute analysis:\n"
+"%s"
+msgstr ""
+"Échec du recalcul de l'analyse :\n"
+"%s"
+
+msgid "Analysis was recomputed."
+msgstr "L'analyse a été recalculée."
+
 msgid "No processing object available."
 msgstr "Aucun objet de traitement disponible."
 
@@ -1790,6 +1813,15 @@ msgstr "Restaurer les paramètres d'origine (annuler les modifications du mode d
 
 msgid "Replay"
 msgstr "Rejouer"
+
+msgid "Replay the selection silently (no parameter dialogs)"
+msgstr "Rejouer la sélection silencieusement (sans boîtes de dialogue de paramètres)"
+
+msgid "Step-by-step"
+msgstr "Pas à pas"
+
+msgid "Replay the selection step by step, editing parameters at each step"
+msgstr "Rejouer la sélection pas à pas, en modifiant les paramètres à chaque étape"
 
 msgid "Commit edit mode changes?"
 msgstr "Valider les modifications du mode d'édition ?"
@@ -3868,6 +3900,10 @@ msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
 msgid "Action is not compatible with the current workspace state."
 msgstr "L'action n'est pas compatible avec l'état actuel de l'espace de travail."
 
+#, python-format
+msgid "Processing chain — %d step(s)"
+msgstr "Chaîne de traitement — %d étape(s)"
+
 #, python-brace-format
 msgid "Active recording session ({panel})."
 msgstr "Session d'enregistrement active ({panel})."
@@ -4305,3 +4341,4 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
+

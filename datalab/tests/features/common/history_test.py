@@ -36,6 +36,7 @@ import sigima.params
 import sigima.proc.image as sipi
 import sigima.proc.signal as sips
 from qtpy import QtCore as QC
+from qtpy import QtWidgets as QW
 from sigima.objects import create_signal_roi
 from sigima.objects.base import BaseROI
 from sigima.objects.signal.creation import NewSignalParam
@@ -52,6 +53,11 @@ from datalab.gui.panel.history import (
     HistorySession,
     HistoryTree,
     WorkspaceState,
+)
+from datalab.gui.panel.history.chainmodel import (
+    ProcessingChain,
+    build_processing_chains,
+    build_session_chains,
 )
 from datalab.gui.processor.base import extract_processing_parameters
 from datalab.h5.native import NativeH5Reader, NativeH5Writer
@@ -104,12 +110,12 @@ def _session_action_counts(history) -> list[int]:
 def _get_tree_item_for(history, entry: HistoryAction):
     """Return the tree item matching ``entry`` in the history tree."""
     tree = history.tree
-    for i in range(tree.topLevelItemCount()):
-        sess_item = tree.topLevelItem(i)
-        for j in range(sess_item.childCount()):
-            child = sess_item.child(j)
-            if child.data(0, QC.Qt.UserRole) == entry.uuid:
-                return child
+    iterator = QW.QTreeWidgetItemIterator(tree)
+    while iterator.value():
+        item = iterator.value()
+        if item.data(0, QC.Qt.UserRole) == entry.uuid:
+            return item
+        iterator += 1
     raise AssertionError(f"No tree item found for entry {entry.uuid}")
 
 
@@ -1433,6 +1439,27 @@ def test_history_edit_in_tree():
         assert panel.objview.get_sel_object_uuids() == [src_uuid]
 
 
+def test_history_step_by_step_launch():
+    """Step-by-step launch replays with dialogs then commits edits immediately."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+        panel.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1])
+        panel.processor.run_feature(
+            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
+        )
+        norm_entry = history[len(history)]
+        assert norm_entry.func_name == "normalize"
+        previous_edit_mode = history.edit_mode
+        _select_tree_item_for(history, norm_entry)
+        # Step-by-step launch: parameter dialogs auto-accept in unattended mode.
+        history.replay_step_by_step()
+        assert history.edit_mode is previous_edit_mode
+        assert history.has_any_pending_edits() is False
+
+
 # ---------------------------------------------------------------------------
 # 9) Cascade recompute
 # ---------------------------------------------------------------------------
@@ -1674,6 +1701,125 @@ def test_history_chain_reconnect():
         reconnected_uuids = action_deriv.state.selection.get("signal", [])
         assert s002_uuid not in reconnected_uuids
         assert src_uuid in reconnected_uuids
+
+
+def test_history_chain_model_grouping():
+    """Derived processing-chain read-model groups actions into ordered chains."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+
+        # Creation via the main-window proxy records a ``new_object`` action and
+        # registers its output UUID. ``panel.add_object`` deliberately does not
+        # record, so it is used below to exercise an externally-rooted chain.
+        win.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1])
+        panel.processor.run_feature(
+            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
+        )
+        panel.objview.select_objects([2])
+        panel.processor.run_feature(sips.derivative)
+
+        # --- invariant: grouping drops no action, per session ---
+        grouped = build_processing_chains(history)
+        assert len(grouped) == len(history.history_sessions)
+        for sess, sess_chains in grouped:
+            assert isinstance(sess, HistorySession)
+            assert sum(len(c.actions) for c in sess_chains) == len(sess.actions)
+
+        # --- creation-rooted chain: creation -> normalize -> derivative ---
+        all_chains = [c for _sess, chains in grouped for c in chains]
+        creation_chains = [
+            c
+            for c in all_chains
+            if c.root.kind == HistoryAction.KIND_UI
+            and c.root.method_name in HistoryAction.UI_CREATION_METHODS
+        ]
+        assert len(creation_chains) == 1
+        chain = creation_chains[0]
+        assert isinstance(chain, ProcessingChain)
+        assert chain.actions[0] is chain.root
+        assert [a.func_name for a in chain.actions] == [None, "normalize", "derivative"]
+        assert all(a in chain.session.actions for a in chain.actions)
+
+        # --- externally-rooted chain: panel.add_object records no creation, so a
+        # compute on such an object roots its own (compute) chain ---
+        panel.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([len(panel.objmodel)])
+        panel.processor.run_feature(sips.derivative)
+        grouped2 = build_processing_chains(history)
+        for sess, sess_chains in grouped2:
+            assert sum(len(c.actions) for c in sess_chains) == len(sess.actions)
+        external_chains = [
+            c
+            for _sess, chains in grouped2
+            for c in chains
+            if c.root.kind == HistoryAction.KIND_COMPUTE
+        ]
+        assert external_chains
+
+        # Keep build_session_chains imported — it is public API under test
+        assert callable(build_session_chains)
+
+
+def test_history_delete_splits_chain():
+    """Deleting an intermediate action splits its chain via a data copy."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+
+        # Creation via the main window records a ``new_object`` creation action;
+        # ``panel.add_object`` deliberately does not, so ``win.add_object`` is
+        # required to obtain a creation-rooted chain.
+        win.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1])
+        panel.processor.run_feature(
+            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
+        )
+        panel.objview.select_objects([2])
+        panel.processor.run_feature(sips.derivative)
+
+        session = history.history_sessions[-1]
+        assert [a.func_name for a in session.actions] == [
+            None,
+            "normalize",
+            "derivative",
+        ]
+        normalize_action = session.actions[1]
+        derivative_action = session.actions[2]
+        n_objects_before = len(panel.objmodel)
+
+        # Delete the MIDDLE action (normalize). Unattended mode auto-confirms and
+        # skips the associated-object removal prompt.
+        _select_tree_item_for(history, normalize_action)
+        history.delete_selected()
+
+        # ``normalize`` is spliced out; creation and ``derivative`` remain.
+        assert normalize_action not in session.actions
+        assert session.actions[0].method_name in HistoryAction.UI_CREATION_METHODS
+        assert derivative_action in session.actions
+
+        # A copy of ``normalize``'s output was added as a new parentless root.
+        assert len(panel.objmodel) == n_objects_before + 1
+
+        # The session now splits into two chains and drops no action.
+        chains = build_session_chains(history, session)
+        assert len(chains) == 2
+        assert sum(len(c.actions) for c in chains) == len(session.actions)
+
+        # ``derivative`` roots a NEW chain (fed by the copy), not the creation one.
+        creation_chain = next(
+            c
+            for c in chains
+            if c.root.kind == HistoryAction.KIND_UI
+            and c.root.method_name in HistoryAction.UI_CREATION_METHODS
+        )
+        assert derivative_action not in creation_chain.actions
+        deriv_chain = next(c for c in chains if derivative_action in c.actions)
+        assert deriv_chain is not creation_chain
+        assert deriv_chain.root is derivative_action
 
 
 def test_history_new_session_prompt_on_input(monkeypatch):

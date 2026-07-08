@@ -12,14 +12,18 @@ from qtpy import QtWidgets as QW
 
 from datalab.config import _
 from datalab.env import execenv
+from datalab.gui.panel.history import chain as hchain
 from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
     ProcessingParameters,
+    extract_processing_parameters,
+    insert_processing_parameters,
 )
 from datalab.history import HistoryAction, HistorySession
 from datalab.objectmodel import get_uuid
 
 if TYPE_CHECKING:
+    from datalab.gui.panel.base import BaseDataPanel
     from datalab.gui.panel.history import HistoryPanel
 
 
@@ -357,13 +361,150 @@ def generate_macro(panel: HistoryPanel) -> None:
         )
 
 
+def _data_panel_for(panel: HistoryPanel, panel_str: str) -> BaseDataPanel | None:
+    """Return the data panel matching ``panel_str`` (``"signal"``/``"image"``)."""
+    if panel_str == "signal":
+        return panel.mainwindow.signalpanel
+    if panel_str == "image":
+        return panel.mainwindow.imagepanel
+    return None
+
+
+def _action_input_uuids(action: HistoryAction) -> set[str]:
+    """Return the set of object UUIDs consumed as inputs by ``action``."""
+    captured: set[str] = set(action.state.selection.get(action.panel_str or "", []))
+    obj2 = action.kwargs.get("obj2_uuids")
+    if obj2:
+        if isinstance(obj2, str):
+            captured.add(obj2)
+        else:
+            captured.update(obj2)
+    return captured
+
+
+def _strip_source_links(obj) -> None:
+    """Turn ``obj`` into a parentless creation root (drop source references)."""
+    pp = extract_processing_parameters(obj)
+    if pp is None:
+        return
+    insert_processing_parameters(
+        obj,
+        ProcessingParameters(
+            func_name=pp.func_name,
+            pattern=pp.pattern,
+            param=pp.param,
+            source_uuid=None,
+            source_uuids=None,
+        ),
+    )
+
+
+def _remap_object_source(obj, old_uuid: str, new_uuid: str) -> None:
+    """Replace ``old_uuid`` with ``new_uuid`` in ``obj``'s source references."""
+    pp = extract_processing_parameters(obj)
+    if pp is None:
+        return
+    changed = False
+    if pp.source_uuid == old_uuid:
+        pp.source_uuid = new_uuid
+        changed = True
+    if pp.source_uuids and old_uuid in pp.source_uuids:
+        pp.source_uuids = [new_uuid if u == old_uuid else u for u in pp.source_uuids]
+        changed = True
+    if changed:
+        insert_processing_parameters(obj, pp)
+
+
+def _first_alive_output(
+    panel: HistoryPanel, panel_str: str, output_uuids: list[str]
+) -> str | None:
+    """Return the first ``output_uuids`` entry still present in its data panel."""
+    data_panel = _data_panel_for(panel, panel_str)
+    if data_panel is None:
+        return None
+    for out_uuid in output_uuids:
+        if data_panel.objmodel.has_uuid(out_uuid):
+            return out_uuid
+    return None
+
+
+def _split_chain_on_action_delete(
+    panel: HistoryPanel, action: HistoryAction
+) -> str | None:
+    """Splice ``action`` out of its session and split its processing chain.
+
+    The action is removed from its session (splice, not truncate). If it had
+    downstream compute steps, the first downstream action becomes the head of a
+    new, independent chain: the deleted action's now-orphaned output object is
+    deep-copied into a new ``Chain copy`` group as a parentless creation root,
+    and the downstream head is rewired to consume that copy.
+
+    Args:
+        panel: The history panel owning sessions and the output registry.
+        action: The action to delete.
+
+    Returns:
+        The UUID of the deleted action's output object if it remains present
+        (now truly orphaned) in its data panel, otherwise ``None``.
+    """
+    panel_str = action.panel_str or ""
+    # Compute downstream + captured output UUIDs BEFORE removing the action.
+    downstream = hchain.get_downstream_actions(panel, action)
+    output_uuids = list(panel.action_output_uuids.get(action.uuid, []))
+    # Splice the action out (does not truncate the rest of the session).
+    hchain.remove_single_action(panel, action)
+    if not downstream:
+        return _first_alive_output(panel, panel_str, output_uuids)
+    first = downstream[0]
+    data_panel = _data_panel_for(panel, first.panel_str or "")
+    if data_panel is None:
+        return _first_alive_output(panel, panel_str, output_uuids)
+    # Locate the orphaned output object that ``first`` still consumes.
+    first_inputs = _action_input_uuids(first)
+    orphan_uuid = next((u for u in output_uuids if u in first_inputs), None)
+    if orphan_uuid is None or not data_panel.objmodel.has_uuid(orphan_uuid):
+        return _first_alive_output(panel, panel_str, output_uuids)
+    # §8.2 — autonomy via COPY: clone the orphan as a parentless creation root.
+    orphan_obj = data_panel.objmodel[orphan_uuid]
+    clone = deepcopy(orphan_obj)
+    new_uuid = str(uuid4())
+    try:
+        clone.set_metadata_option("uuid", new_uuid)
+    except AttributeError:
+        clone.uuid = new_uuid
+    _strip_source_links(clone)
+    group_id = get_uuid(data_panel.add_group(_("Chain copy")))
+    data_panel.add_object(clone, group_id=group_id)
+    # Rewire ALL downstream actions that directly consume the orphan onto the copy.
+    for d in downstream:
+        if orphan_uuid not in _action_input_uuids(d):
+            continue
+        hchain.rewrite_action_source(d, d.panel_str or "", orphan_uuid, new_uuid)
+        for out_uuid in panel.action_output_uuids.get(d.uuid, []):
+            if data_panel.objmodel.has_uuid(out_uuid):
+                _remap_object_source(
+                    data_panel.objmodel[out_uuid], orphan_uuid, new_uuid
+                )
+    # The orphan is now consumed by no surviving action: report it as orphaned.
+    return orphan_uuid if data_panel.objmodel.has_uuid(orphan_uuid) else None
+
+
+def _remove_data_object(data_panel: BaseDataPanel, obj_uuid: str) -> None:
+    """Remove a single object from ``data_panel`` without recording history."""
+    obj = data_panel.objmodel[obj_uuid]
+    data_panel.plothandler.remove_item(obj_uuid)
+    data_panel.objview.remove_item(obj_uuid, refresh=False)
+    data_panel.objmodel.remove_object(obj)
+
+
 def delete_selected(panel: HistoryPanel) -> None:
     """Delete the selected actions or sessions (with confirmation).
 
     When a top-level session is selected, the entire session is deleted.
-    When individual actions are selected, they and all subsequent actions
-    in their parent session are removed. After deletion, the first
-    available item in the tree is selected automatically.
+    When individual actions are selected, each action is spliced out of its
+    session and its processing chain is split: downstream steps become an
+    independent chain rooted at a copy of the deleted action's output. After
+    deletion, the last action leaf in the affected session is selected.
     """
     selected = panel.tree.get_selected_actions_or_sessions(panel.history_sessions)
     if not selected:
@@ -372,8 +513,8 @@ def delete_selected(panel: HistoryPanel) -> None:
     if has_individual_actions:
         msg = _(
             "Do you really want to delete the selected items?\n\n"
-            "Note: deleting an action also removes all subsequent "
-            "actions in the same session."
+            "Note: deleting an intermediate action splits its processing "
+            "chain; downstream steps become an independent chain."
         )
     else:
         msg = _("Do you really want to delete the selected items?")
@@ -402,20 +543,45 @@ def delete_selected(panel: HistoryPanel) -> None:
                 break
 
     sessions_to_remove: set[int] = set()
+    orphan_refs: list[tuple[str, str]] = []
     for item in selected:
         if isinstance(item, HistorySession):
             sessions_to_remove.add(id(item))
-        else:
-            # Individual action: remove from its parent session
-            for session in panel.history_sessions:
-                if item in session.actions:
-                    session.remove_action(item)
-                    if not session.actions:
-                        sessions_to_remove.add(id(session))
-                    break
+        elif isinstance(item, HistoryAction):
+            # Individual action: splice it out and split its chain (with copy).
+            orphan_uuid = _split_chain_on_action_delete(panel, item)
+            if orphan_uuid is not None:
+                orphan_refs.append((item.panel_str or "", orphan_uuid))
     panel.history_sessions = [
         s for s in panel.history_sessions if id(s) not in sessions_to_remove
     ]
+    # §8.3 — opt-in: offer to also remove the now-orphaned output object(s).
+    alive_orphans: list[tuple[BaseDataPanel, str]] = []
+    for panel_str, orphan_uuid in orphan_refs:
+        data_panel = _data_panel_for(panel, panel_str)
+        if data_panel is not None and data_panel.objmodel.has_uuid(orphan_uuid):
+            alive_orphans.append((data_panel, orphan_uuid))
+    if alive_orphans and not execenv.unattended:
+        answer = QW.QMessageBox.question(
+            panel.mainwindow,
+            _("Delete"),
+            _(
+                "The deleted action(s) produced object(s) still present in the "
+                "workspace. Do you want to remove the associated object(s) as well?"
+            ),
+            QW.QMessageBox.Yes | QW.QMessageBox.No,
+            QW.QMessageBox.No,
+        )
+        if answer == QW.QMessageBox.Yes:
+            touched: dict[int, BaseDataPanel] = {}
+            for data_panel, orphan_uuid in alive_orphans:
+                if data_panel.objmodel.has_uuid(orphan_uuid):
+                    _remove_data_object(data_panel, orphan_uuid)
+                    touched[id(data_panel)] = data_panel
+            for data_panel in touched.values():
+                data_panel.objview.update_tree()
+                data_panel.selection_changed(update_items=True)
+            panel.refresh_obj_ids_snapshot()
     panel.tree.populate_tree(panel.history_sessions)
     panel.refresh_compatibility_items()
     panel.update_actions_state()
@@ -430,10 +596,17 @@ def delete_selected(panel: HistoryPanel) -> None:
         if session_idx >= 0:
             top = panel.tree.topLevelItem(session_idx)
             if top is not None:
-                if top.childCount() > 0:
-                    target_item = top.child(top.childCount() - 1)
-                else:
-                    target_item = top
+                last_action_item = None
+                iterator = QW.QTreeWidgetItemIterator(top)
+                while iterator.value():
+                    node = iterator.value()
+                    if (
+                        node.data(0, panel.tree.ITEM_KIND_ROLE)
+                        == panel.tree.ITEM_ACTION
+                    ):
+                        last_action_item = node
+                    iterator += 1
+                target_item = last_action_item if last_action_item is not None else top
     if target_item is None and panel.tree.topLevelItemCount() > 0:
         # Fallback: last top-level item (least likely to switch panels)
         last_top = panel.tree.topLevelItem(panel.tree.topLevelItemCount() - 1)
