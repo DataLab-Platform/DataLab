@@ -41,9 +41,6 @@ msgstr "**rejouée** en mode validation, sans ajouter de nouvelles sorties signa
 msgid "**Duplicated and applied**, to create an explicit comparison branch with new outputs in the signal/image panels;"
 msgstr "**dupliquée et appliquée**, afin de créer une branche de comparaison explicite avec de nouvelles sorties dans les panneaux signal/image ;"
 
-msgid "**Restored to a given selection state** without re-executing anything, to quickly jump back to a previous working context;"
-msgstr "**restaurée dans un état de sélection donné** sans rien réexécuter, afin de revenir rapidement à un contexte de travail antérieur ;"
-
 msgid "**Saved to a standalone history file** (``.dlhist``) or **embedded in the workspace** when saving to HDF5, so that the full processing chain travels with the data."
 msgstr "**sauvegardée dans un fichier d'historique autonome** (``.dlhist``) ou **intégrée à l'espace de travail** lors de l'enregistrement au format HDF5, de sorte que toute la chaîne de traitement accompagne les données."
 
@@ -62,6 +59,12 @@ msgstr "|record| **Mode enregistrement** : active ou désactive l'enregistrement
 msgid "record"
 msgstr "record"
 
+msgid "|new_session| **New session**: start a new history session."
+msgstr "|new_session| **Nouvelle session** : démarre une nouvelle session d'historique."
+
+msgid "new_session"
+msgstr "new_session"
+
 msgid "|open_history| **Open history file**: load recorded sessions from a standalone ``.dlhist`` file."
 msgstr "|open_history| **Ouvrir un fichier d'historique** : charge des sessions enregistrées depuis un fichier ``.dlhist`` autonome."
 
@@ -74,35 +77,35 @@ msgstr "|save_history| **Enregistrer le fichier d'historique** : enregistre les 
 msgid "save_history"
 msgstr "save_history"
 
+msgid "|step_prev| **Previous step**: select the preceding action in the current session (keyboard shortcut: :kbd:`Ctrl+Left`)."
+msgstr "|step_prev| **Étape précédente** : sélectionne l'action précédente dans la session courante (raccourci clavier : :kbd:`Ctrl+Gauche`)."
+
+msgid "step_prev"
+msgstr "step_prev"
+
+msgid "|step_next| **Next step**: select the following action in the current session (keyboard shortcut: :kbd:`Ctrl+Right`)."
+msgstr "|step_next| **Étape suivante** : sélectionne l'action suivante dans la session courante (raccourci clavier : :kbd:`Ctrl+Droite`)."
+
+msgid "step_next"
+msgstr "step_next"
+
 msgid "|replay| **Replay**: validate/replay the selected action (or the whole session if a session row is selected) without changing the current workspace selection beforehand and without adding new outputs to the signal/image panels."
 msgstr "|replay| **Rejouer** : valide/rejoue l'action sélectionnée (ou la session entière si une ligne de session est sélectionnée) sans modifier au préalable la sélection courante de l'espace de travail et sans ajouter de nouvelles sorties aux panneaux signal/image."
 
 msgid "replay"
 msgstr "replay"
 
-msgid "|restore_selection| **Restore selection**: only re-select the objects that were selected when the action was originally executed; no computation is re-run."
-msgstr "|restore_selection| **Restaurer la sélection** : ré-sélectionne uniquement les objets qui étaient sélectionnés lors de l'exécution initiale de l'action ; aucun calcul n'est ré-exécuté."
+msgid "|step_by_step| **Step-by-step**: replay the selection one step at a time, opening the parameters dialog at each step so the user can tweak the parameters before re-running."
+msgstr "|step_by_step| **Pas à pas** : rejoue la sélection étape par étape, en ouvrant la boîte de dialogue des paramètres à chaque étape afin que l'utilisateur puisse ajuster les paramètres avant de relancer."
 
-msgid "restore_selection"
-msgstr "restore_selection"
-
-msgid "|edit_mode| **Edit mode**: when on, replaying a computation opens the parameters dialog so the user can tweak the parameters before re-running. When replaying a *whole session*, the parameter dialogs open in a **read-only** mode — all fields are shown with their recorded values but cannot be edited."
-msgstr "|edit_mode| **Mode édition** : lorsqu'il est activé, le rejeu d'un calcul ouvre la boîte de dialogue des paramètres afin que l'utilisateur puisse ajuster les paramètres avant de relancer. Lors du rejeu d'une *session entière*, les boîtes de dialogue des paramètres s'ouvrent en mode **lecture seule** — tous les champs affichent les valeurs enregistrées mais ne peuvent pas être édités."
-
-msgid "edit_mode"
-msgstr "edit_mode"
+msgid "step_by_step"
+msgstr "step_by_step"
 
 msgid "|duplicate| **Duplicate**: copy the selected action or session into a new history session. The copied parameters are independent from the original record."
 msgstr "|duplicate| **Dupliquer** : copie l'action ou la session sélectionnée dans une nouvelle session d'historique. Les paramètres copiés sont indépendants de l'enregistrement d'origine."
 
 msgid "duplicate"
 msgstr "duplicate"
-
-msgid "|generate_macro| **Generate macro**: generate a Python macro script from the selected actions (or all actions if nothing is selected). The generated script is copied to the clipboard."
-msgstr "|generate_macro| **Générer une macro** : génère un script macro Python à partir des actions sélectionnées (ou de toutes les actions si rien n'est sélectionné). Le script généré est copié dans le presse-papiers."
-
-msgid "generate_macro"
-msgstr "generate_macro"
 
 msgid "|remove_incompatible| **Remove incompatible**: remove all actions whose workspace state is no longer compatible with the current workspace. A confirmation dialog shows how many actions will be removed."
 msgstr "|remove_incompatible| **Supprimer les incompatibles** : supprime toutes les actions dont l'état de l'espace de travail n'est plus compatible avec l'espace de travail actuel. Une boîte de dialogue de confirmation indique combien d'actions seront supprimées."
@@ -115,18 +118,6 @@ msgstr "|delete| **Supprimer** : retire de l'historique les actions ou sessions 
 
 msgid "delete"
 msgstr "delete"
-
-msgid "|step_prev| **Previous step**: select the preceding action in the current session (keyboard shortcut: :kbd:`Ctrl+Left`)."
-msgstr "|step_prev| **Étape précédente** : sélectionne l'action précédente dans la session courante (raccourci clavier : :kbd:`Ctrl+Gauche`)."
-
-msgid "step_prev"
-msgstr "step_prev"
-
-msgid "|step_next| **Next step**: select the following action in the current session (keyboard shortcut: :kbd:`Ctrl+Right`)."
-msgstr "|step_next| **Étape suivante** : sélectionne l'action suivante dans la session courante (raccourci clavier : :kbd:`Ctrl+Droite`)."
-
-msgid "step_next"
-msgstr "step_next"
 
 msgid "Double-clicking on an action row in the tree is equivalent to **Replay**."
 msgstr "Un double-clic sur la ligne d'une action dans l'arborescence équivaut à **Rejouer**."
@@ -229,3 +220,24 @@ msgstr "Recalcul automatique"
 
 msgid "When a result object is selected in the signal/image panel and it has processing parameters (i.e. was produced by a 1-to-1 computation), a **Processing** tab appears in the Properties panel. Checking **Auto-recompute on edit** in that tab will re-run the computation automatically 300 ms after any parameter modification."
 msgstr "Lorsqu'un objet résultat est sélectionné dans le panneau signal/image et qu'il possède des paramètres de traitement (c'est-à-dire qu'il a été produit par un calcul 1-à-1), un onglet **Traitement** apparaît dans le panneau Propriétés. Cocher **Recalcul automatique lors de l'édition** dans cet onglet relancera automatiquement le calcul 300 ms après toute modification d'un paramètre."
+
+#~ msgid "**Restored to a given selection state** without re-executing anything, to quickly jump back to a previous working context;"
+#~ msgstr "**restaurée dans un état de sélection donné** sans rien réexécuter, afin de revenir rapidement à un contexte de travail antérieur ;"
+
+#~ msgid "|restore_selection| **Restore selection**: only re-select the objects that were selected when the action was originally executed; no computation is re-run."
+#~ msgstr "|restore_selection| **Restaurer la sélection** : ré-sélectionne uniquement les objets qui étaient sélectionnés lors de l'exécution initiale de l'action ; aucun calcul n'est ré-exécuté."
+
+#~ msgid "restore_selection"
+#~ msgstr "restore_selection"
+
+#~ msgid "|edit_mode| **Edit mode**: when on, replaying a computation opens the parameters dialog so the user can tweak the parameters before re-running. When replaying a *whole session*, the parameter dialogs open in a **read-only** mode — all fields are shown with their recorded values but cannot be edited."
+#~ msgstr "|edit_mode| **Mode édition** : lorsqu'il est activé, le rejeu d'un calcul ouvre la boîte de dialogue des paramètres afin que l'utilisateur puisse ajuster les paramètres avant de relancer. Lors du rejeu d'une *session entière*, les boîtes de dialogue des paramètres s'ouvrent en mode **lecture seule** — tous les champs affichent les valeurs enregistrées mais ne peuvent pas être édités."
+
+#~ msgid "edit_mode"
+#~ msgstr "edit_mode"
+
+#~ msgid "|generate_macro| **Generate macro**: generate a Python macro script from the selected actions (or all actions if nothing is selected). The generated script is copied to the clipboard."
+#~ msgstr "|generate_macro| **Générer une macro** : génère un script macro Python à partir des actions sélectionnées (ou de toutes les actions si rien n'est sélectionné). Le script généré est copié dans le presse-papiers."
+
+#~ msgid "generate_macro"
+#~ msgstr "generate_macro"

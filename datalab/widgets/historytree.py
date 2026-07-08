@@ -12,11 +12,13 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from datalab.config import _
+from datalab.gui.panel.history.chainmodel import build_session_chains
 from datalab.history import HistoryAction, HistorySession
 from datalab.widgets.historydescription import CollapsibleDescriptionWidget
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
+    from datalab.gui.panel.history.panel import HistoryPanel
 
 
 class HistoryTree(QW.QTreeWidget):
@@ -25,10 +27,15 @@ class HistoryTree(QW.QTreeWidget):
     DESCRIPTION_COLUMN = 2
     COMPATIBILITY_ROLE = QC.Qt.UserRole + 1
     SESSION_NUMBER_ROLE = QC.Qt.UserRole + 2
+    ITEM_KIND_ROLE = QC.Qt.UserRole + 3
+    ITEM_SESSION = "session"
+    ITEM_CHAIN = "chain"
+    ITEM_ACTION = "action"
 
     def __init__(self, parent: QW.QWidget) -> None:
         """Create a new history tree widget"""
         super().__init__(parent)
+        self._panel: HistoryPanel = parent
         self.setHeaderLabels([_("Title"), _("Date and time"), _("Description")])
         self.setContextMenuPolicy(QC.Qt.CustomContextMenu)
         self.setSelectionMode(QW.QAbstractItemView.ContiguousSelection)
@@ -86,6 +93,7 @@ class HistoryTree(QW.QTreeWidget):
         item = QW.QTreeWidgetItem([action.title, action.dtstr, ""])
         item.setData(0, QC.Qt.UserRole, action.uuid)
         item.setData(0, cls.COMPATIBILITY_ROLE, True)
+        item.setData(0, cls.ITEM_KIND_ROLE, cls.ITEM_ACTION)
         return item
 
     def update_compatibility_states(
@@ -100,24 +108,37 @@ class HistoryTree(QW.QTreeWidget):
         incompatible_tip = _(
             "Action is not compatible with the current workspace state."
         )
-        for i in range(self.topLevelItemCount()):
-            session_item = self.topLevelItem(i)
-            for j in range(session_item.childCount()):
-                child = session_item.child(j)
-                uuid = child.data(0, QC.Qt.UserRole)
-                action = self.get_action_from_uuid(uuid, history_sessions)
+        actions_by_uuid = {
+            action.uuid: action
+            for session in history_sessions
+            for action in session.actions
+        }
+        iterator = QW.QTreeWidgetItemIterator(self)
+        while iterator.value():
+            item = iterator.value()
+            if item.data(0, self.ITEM_KIND_ROLE) == self.ITEM_ACTION:
+                uuid = item.data(0, QC.Qt.UserRole)
+                action = actions_by_uuid.get(uuid)
+                # The tree can transiently reference an action that was just
+                # removed from the model (e.g. mid-cascade during
+                # reconnect_chain_after_removal, before the final repopulate).
+                # Skip such stale items instead of crashing.
+                if action is None:
+                    iterator += 1
+                    continue
                 compatible = action.is_current_state_compatible(
                     mainwindow, restore_selection=True
                 )
-                child.setData(0, self.COMPATIBILITY_ROLE, compatible)
+                item.setData(0, self.COMPATIBILITY_ROLE, compatible)
                 brush = default_brush if compatible else disabled_brush
                 icon = get_icon("apply.svg") if compatible else get_icon("delete.svg")
-                child.setIcon(0, icon)
+                item.setIcon(0, icon)
                 for col in range(self.columnCount()):
-                    child.setForeground(col, brush)
-                    child.setToolTip(
+                    item.setForeground(col, brush)
+                    item.setToolTip(
                         col, compatible_tip if compatible else incompatible_tip
                     )
+            iterator += 1
 
     def forget_orphan_expanded_states(
         self, history_sessions: list[HistorySession]
@@ -144,15 +165,40 @@ class HistoryTree(QW.QTreeWidget):
             ritem = QW.QTreeWidgetItem([session.title, session.dtstr])
             ritem.setData(0, self.COMPATIBILITY_ROLE, True)
             ritem.setData(0, self.SESSION_NUMBER_ROLE, session.number)
+            ritem.setData(0, self.ITEM_KIND_ROLE, self.ITEM_SESSION)
             self.addTopLevelItem(ritem)
-            for action in session.actions:
-                child = self.action_to_tree_item(action)
-                ritem.addChild(child)
-                self.install_description_widget(child, action)
+            self.build_session_children(ritem, session)
         self.expandAll()
         for col in (0, 1):
             self.resizeColumnToContents(col)
         self.__apply_active_highlight()
+
+    def build_session_children(
+        self, session_item: QW.QTreeWidgetItem, session: HistorySession
+    ) -> None:
+        """(Re)build the chain/action subtree under ``session_item``.
+
+        Args:
+            session_item: Top-level tree item for ``session``.
+            session: History session whose actions are grouped into chains.
+        """
+        session_item.takeChildren()
+        chains = build_session_chains(self._panel, session)
+        for chain in chains:
+            chain_item = QW.QTreeWidgetItem([chain.root.title, ""])
+            chain_item.setData(0, self.ITEM_KIND_ROLE, self.ITEM_CHAIN)
+            chain_item.setData(0, self.COMPATIBILITY_ROLE, True)
+            font = chain_item.font(0)
+            font.setBold(True)
+            chain_item.setFont(0, font)
+            chain_item.setToolTip(
+                0, _("Processing chain \u2014 %d step(s)") % len(chain.actions)
+            )
+            session_item.addChild(chain_item)
+            for action in chain.actions:
+                child = self.action_to_tree_item(action)
+                chain_item.addChild(child)
+                self.install_description_widget(child, action)
 
     def set_active_sessions(self, active_session_numbers: dict[int, str]) -> None:
         """Flag the active recording session(s) by session number and panel.
@@ -199,14 +245,14 @@ class HistoryTree(QW.QTreeWidget):
             session_index: Top-level session item index. Defaults to the last
                 session (backward-compatible).
         """
-        item = self.action_to_tree_item(action)
         if session_index is None:
             session_index = self.topLevelItemCount() - 1
         ritem = self.topLevelItem(session_index)
         if ritem is None:
             return
-        ritem.addChild(item)
-        self.install_description_widget(item, action)
+        session = self._panel.history_sessions[session_index]
+        self.build_session_children(ritem, session)
+        ritem.setExpanded(True)
 
     def refresh_action_item(self, action: HistoryAction) -> None:
         """Refresh the tree item corresponding to ``action``.
@@ -269,25 +315,11 @@ class HistoryTree(QW.QTreeWidget):
             if item.parent() is None:
                 index = self.indexOfTopLevelItem(item)
                 selected.append(history_sessions[index])
-            else:
+            elif item.data(0, self.ITEM_KIND_ROLE) == self.ITEM_ACTION:
                 uuid = item.data(0, QC.Qt.UserRole)
-                selected.append(self.get_action_from_uuid(uuid, history_sessions))
-        return selected
-
-    def get_selected_actions(
-        self, history_sessions: list[HistorySession]
-    ) -> list[HistoryAction]:
-        """Get the selected actions
-
-        Args:
-            history_sessions: List of history sessions
-
-        Returns:
-            list[HistoryAction]: List of selected actions
-        """
-        selected: list[HistoryAction] = []
-        for item in self.selectedItems():
-            if item.parent() is not None:
-                uuid = item.data(0, QC.Qt.UserRole)
-                selected.append(self.get_action_from_uuid(uuid, history_sessions))
+                try:
+                    selected.append(self.get_action_from_uuid(uuid, history_sessions))
+                except ValueError:
+                    continue
+            # chain-header items are containers only: ignored here.
         return selected

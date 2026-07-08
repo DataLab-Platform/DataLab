@@ -12,41 +12,131 @@ from qtpy import QtWidgets as QW
 
 from datalab.config import _
 from datalab.env import execenv
+from datalab.gui.panel.history import chain as hchain
+from datalab.gui.panel.history.chainmodel import (
+    ProcessingChain,
+    build_session_chains,
+)
 from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
     ProcessingParameters,
+    extract_processing_parameters,
+    insert_processing_parameters,
 )
 from datalab.history import HistoryAction, HistorySession
+from datalab.history.workspace_state import WorkspaceState
 from datalab.objectmodel import get_uuid
 
 if TYPE_CHECKING:
+    from datalab.gui.panel.base import BaseDataPanel
     from datalab.gui.panel.history import HistoryPanel
 
 
-def duplicate_selected_entries(panel: HistoryPanel) -> None:
-    """Duplicate selected sessions (with their data) into new independent sessions.
+def action_panel_str(action: HistoryAction) -> str:
+    """Return the panel an action operates on, using target as fallback."""
+    if action.panel_str:
+        return action.panel_str
+    return {"imagepanel": "image", "signalpanel": "signal"}.get(action.target, "signal")
 
-    For each selected session (or the parent session of a selected action),
-    all referenced data objects are deep-copied into a new group and the
-    session is duplicated with all UUID references rewritten to the clones.
+
+def make_initial_state_head(pstr: str, clone_uuid: str, title: str) -> HistoryAction:
+    """Return a synthetic creation-root action for an operation-rooted chain.
+
+    A *Cas B* chain starts from an operation whose input object was created
+    outside the chain (e.g. imported or added programmatically). To make the
+    duplicated chain self-contained and replayable, a synthetic ``new_object``
+    UI action is prepended, standing in for that missing object creation. Its
+    empty workspace state mirrors a real ``new_object`` recorded with
+    ``save_state=False`` (hence always compatible), and its ``new_object``
+    method name places it in :attr:`HistoryAction.UI_CREATION_METHODS` so
+    :func:`build_session_chains` treats it as a genuine chain root.
+
+    Args:
+        pstr: Panel string of the created object (``"signal"``/``"image"``).
+        clone_uuid: UUID of the cloned source object produced as head output.
+        title: Title shown for the synthetic action in the tree.
+
+    Returns:
+        A new :class:`HistoryAction` describing the synthetic creation root.
+    """
+    target = "signalpanel" if pstr == "signal" else "imagepanel"
+    head = HistoryAction(
+        title=title,
+        kind=HistoryAction.KIND_UI,
+        target=target,
+        method_name="new_object",
+        kwargs={},
+        state=WorkspaceState(),
+        panel_str=None,
+    )
+    head.output_uuids = [clone_uuid]
+    return head
+
+
+def duplicate_selected_entries(panel: HistoryPanel) -> None:
+    """Duplicate selected processing chains into new independent sessions.
+
+    Selection is resolved to *processing chains* (see
+    :func:`build_session_chains`): a session **is** a single linear processing
+    chain, so selecting a session duplicates its chain, and selecting an action
+    duplicates the chain of its session. For each source session, exactly one
+    new session is produced containing the duplicate of its chain, with all
+    referenced data objects deep-copied into a new group and every UUID
+    reference rewritten to the clones.
+
+    Two chain shapes are handled:
+
+    * **Cas A** -- creation-rooted chain (root is a ``new_object`` UI action):
+      the chain is copied as-is (root included), no synthetic head is added.
+    * **Cas B** -- operation-rooted chain (root consumes an external object):
+      one synthetic ``new_object`` head is prepended per distinct remapped
+      source object so the duplicated chain remains self-contained and
+      replayable.
+
     The result is an independent, editable and replayable session.
     """
     selected = panel.tree.get_selected_actions_or_sessions(panel.history_sessions)
     if not selected:
         return
-    # Normalise: resolve individual actions to their parent session, deduplicate.
-    sessions_to_dup: list[HistorySession] = []
-    seen: set[int] = set()
+
+    # 1. Resolve selection to a per-session set of chains.
+    session_by_id: dict[int, HistorySession] = {}
+    full_session_ids: set[int] = set()
+    actions_by_session: dict[int, list[HistoryAction]] = {}
     for item in selected:
         if isinstance(item, HistorySession):
-            session = item
+            session_by_id[id(item)] = item
+            full_session_ids.add(id(item))
         else:
             session = panel.find_parent_session(item)
             if session is None:
                 continue
-        if id(session) not in seen:
-            seen.add(id(session))
-            sessions_to_dup.append(session)
+            session_by_id[id(session)] = session
+            actions_by_session.setdefault(id(session), []).append(item)
+
+    # Preserve source-session order (iterate panel.history_sessions).
+    ordered: list[tuple[HistorySession, list[ProcessingChain]]] = []
+    for session in panel.history_sessions:
+        sid = id(session)
+        if sid not in session_by_id:
+            continue
+        all_chains = build_session_chains(panel, session)
+        if sid in full_session_ids:
+            chains = all_chains
+        else:
+            chains = []
+            seen_chains: set[int] = set()
+            for action in actions_by_session.get(sid, []):
+                for chain in all_chains:
+                    if any(a is action or a.uuid == action.uuid for a in chain.actions):
+                        if id(chain) not in seen_chains:
+                            seen_chains.add(id(chain))
+                            chains.append(chain)
+                        break
+        if chains:
+            ordered.append((session, chains))
+    if not ordered:
+        return
 
     copy_suffix = _("Copy")
     new_sessions: list[HistorySession] = []
@@ -55,28 +145,29 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
         "image": panel.mainwindow.imagepanel,
     }
 
-    for session in sessions_to_dup:
-        # 1. Collect all UUIDs referenced by this session
+    for session, chains in ordered:
+        # 2. Collect all UUIDs referenced by the SELECTED chains only.
         uuids_by_panel: dict[str, set[str]] = {}
-        for action in session.actions:
-            for pstr, uuids in action.state.selection.items():
-                uuids_by_panel.setdefault(pstr, set()).update(uuids)
-            for pstr, metadata in action.state.object_metadata.items():
-                uuids_by_panel.setdefault(pstr, set()).update(metadata.keys())
-            obj2 = action.kwargs.get("obj2_uuids")
-            if obj2:
-                pstr = action.panel_str or ""
-                if isinstance(obj2, str):
-                    obj2 = [obj2]
-                uuids_by_panel.setdefault(pstr, set()).update(obj2)
-            # Output UUIDs produced by this action (e.g. result of a
-            # compute step). Without this, the last action's outputs
-            # would be missing because no subsequent state captures them.
-            if action.output_uuids:
-                pstr = action.panel_str or ""
-                uuids_by_panel.setdefault(pstr, set()).update(action.output_uuids)
+        for chain in chains:
+            for action in chain.actions:
+                for pstr, uuids in action.state.selection.items():
+                    uuids_by_panel.setdefault(pstr, set()).update(uuids)
+                for pstr, metadata in action.state.object_metadata.items():
+                    uuids_by_panel.setdefault(pstr, set()).update(metadata.keys())
+                obj2 = action.kwargs.get("obj2_uuids")
+                if obj2:
+                    pstr = action_panel_str(action)
+                    if isinstance(obj2, str):
+                        obj2 = [obj2]
+                    uuids_by_panel.setdefault(pstr, set()).update(obj2)
+                # Output UUIDs produced by this action (e.g. result of a
+                # compute step). Without this, the last action's outputs
+                # would be missing because no subsequent state captures them.
+                if action.output_uuids:
+                    pstr = action_panel_str(action)
+                    uuids_by_panel.setdefault(pstr, set()).update(action.output_uuids)
 
-        # 2. Clone objects and build uuid_remap
+        # 3. Clone objects and build uuid_remap.
         uuid_remap: dict[str, dict[str, str]] = {}
         clones_by_pstr: dict[str, list] = {}
         group_title = f"{copy_suffix} - {session.title}"
@@ -146,11 +237,61 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
                     except (AttributeError, ValueError):
                         pass
 
-        # 3. Build the new session with remapped UUIDs
+        # 4. Build the new session's actions per chain (Cas A / Cas B).
+        new_actions: list[HistoryAction] = []
+        for chain in chains:
+            is_creation_root = (
+                chain.root.kind == HistoryAction.KIND_UI
+                and chain.root.method_name in HistoryAction.UI_CREATION_METHODS
+            )
+            if is_creation_root:
+                # Cas A: creation-rooted chain, copy as-is (root included).
+                new_actions.extend(
+                    action.copy_with_uuid_remap(uuid_remap) for action in chain.actions
+                )
+                continue
+            # Cas B: operation-rooted chain, synthesize one creation head per
+            # distinct remapped source object of the chain root.
+            root_inputs: list[tuple[str, str]] = []
+            for pstr, uuids in chain.root.state.selection.items():
+                for old_uuid in uuids:
+                    root_inputs.append((pstr, old_uuid))
+            obj2 = chain.root.kwargs.get("obj2_uuids")
+            if obj2:
+                pstr = action_panel_str(chain.root)
+                if isinstance(obj2, str):
+                    obj2 = [obj2]
+                for old_uuid in obj2:
+                    root_inputs.append((pstr, old_uuid))
+            heads: list[HistoryAction] = []
+            seen_clones: set[str] = set()
+            for pstr, old_uuid in root_inputs:
+                clone_uuid = uuid_remap.get(pstr, {}).get(old_uuid)
+                if clone_uuid is None or clone_uuid in seen_clones:
+                    # Source object deleted / not clonable, or already headed.
+                    continue
+                seen_clones.add(clone_uuid)
+                head_title = _("Initial state")
+                data_panel = panel_map.get(pstr)
+                if data_panel is not None:
+                    try:
+                        head_title = data_panel.objmodel[clone_uuid].title
+                    except (KeyError, AttributeError):
+                        head_title = _("Initial state")
+                head = make_initial_state_head(pstr, clone_uuid, head_title)
+                heads.append(head)
+                panel.action_output_uuids[head.uuid] = [clone_uuid]
+                panel.output_to_action[clone_uuid] = head.uuid
+            new_actions.extend(heads)
+            new_actions.extend(
+                action.copy_with_uuid_remap(uuid_remap) for action in chain.actions
+            )
+
+        # 5. Assemble the new session and register output mappings.
         panel.session_increment += 1
         title = f"{session.title} {copy_suffix}"
-        new_session = session.copy_with_uuid_remap(title=title, uuid_remap=uuid_remap)
-        new_session.number = panel.session_increment
+        new_session = HistorySession(title=title, number=panel.session_increment)
+        new_session.actions = new_actions
         new_sessions.append(new_session)
 
         # Register output mappings for cloned actions so that
@@ -164,7 +305,8 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
 
     # Insert each duplicated session immediately after its original.
     offset = 0
-    for original_session, new_session in zip(sessions_to_dup, new_sessions):
+    source_sessions = [session for session, _chains in ordered]
+    for original_session, new_session in zip(source_sessions, new_sessions):
         idx = panel.history_sessions.index(original_session)
         panel.history_sessions.insert(idx + 1 + offset, new_session)
         offset += 1
@@ -174,196 +316,150 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
     panel.update_actions_state()
 
 
-def generate_macro(panel: HistoryPanel) -> None:
-    """Generate a standalone Python script from selected history entries.
+def data_panel_for(panel: HistoryPanel, panel_str: str) -> BaseDataPanel | None:
+    """Return the data panel matching ``panel_str`` (``"signal"``/``"image"``)."""
+    if panel_str == "signal":
+        return panel.mainwindow.signalpanel
+    if panel_str == "image":
+        return panel.mainwindow.imagepanel
+    return None
 
-    The generated script uses sigima functions directly with proper variable
-    chaining.  Object references (UUIDs) are resolved to variable names so
-    that 2-to-1 operations reference the correct intermediate result.
-    The script is copied to the clipboard and the user is notified.
-    """
-    selected = panel.tree.get_selected_actions_or_sessions(panel.history_sessions)
-    actions: list[HistoryAction] = []
-    if not selected:
-        for session in panel.history_sessions:
-            actions.extend(session.actions)
-    else:
-        for item in selected:
-            if isinstance(item, HistorySession):
-                actions.extend(item.actions)
-            else:
-                actions.append(item)
-    if not actions:
-        return
 
-    # Filter to compute-only actions for the pipeline
-    compute_actions = [a for a in actions if a.kind == HistoryAction.KIND_COMPUTE]
-    if not compute_actions:
-        if not execenv.unattended:
-            QW.QMessageBox.information(
-                panel.mainwindow,
-                _("Generate macro"),
-                _("No compute actions to export."),
-            )
-        return
-
-    # Determine input type from first action
-    first_panel = compute_actions[0].panel_str
-    if first_panel == "signal":
-        obj_type = "SignalObj"
-        obj_import = "from sigima.objects import SignalObj"
-    else:
-        obj_type = "ImageObj"
-        obj_import = "from sigima.objects import ImageObj"
-
-    imports: set[str] = set()
-    imports.add(obj_import)
-    body_lines: list[str] = []
-
-    # UUID → variable mapping for resolving object references.
-    # Populated with input UUIDs ("src", "src_2", ...) and enriched
-    # with each step's output UUID after code generation.
-    uuid_to_var: dict[str, str] = {}
-
-    # Extra input parameters discovered during generation (second
-    # operands that are not produced by any previous step).
-    extra_inputs: list[str] = []
-
-    # Seed the mapping with the first action's input selection.
-    first_sel = compute_actions[0].state.selection.get(compute_actions[0].panel_str, [])
-    for i, uuid in enumerate(first_sel):
-        var = "src" if i == 0 else f"src_{i + 1}"
-        uuid_to_var[uuid] = var
-
-    step = 0
-    current_var = "src"
-
-    for action in compute_actions:
-        step += 1
-
-        # Resolve input variable from the action's selection UUIDs.
-        sel_uuids = action.state.selection.get(action.panel_str or "", [])
-        if sel_uuids and sel_uuids[0] in uuid_to_var:
-            input_var = uuid_to_var[sel_uuids[0]]
+def action_input_uuids(action: HistoryAction) -> set[str]:
+    """Return the set of object UUIDs consumed as inputs by ``action``."""
+    captured: set[str] = set(action.state.selection.get(action.panel_str or "", []))
+    obj2 = action.kwargs.get("obj2_uuids")
+    if obj2:
+        if isinstance(obj2, str):
+            captured.add(obj2)
         else:
-            input_var = current_var
+            captured.update(obj2)
+    return captured
 
-        # Resolve second operand for 2-to-1 patterns.
-        obj2_var: str | None = None
-        if action.pattern == "2_to_1":
-            obj2_uuids = action.kwargs.get("obj2_uuids", [])
-            if isinstance(obj2_uuids, str):
-                obj2_uuids = [obj2_uuids]
-            if obj2_uuids:
-                obj2_uuid = obj2_uuids[0]
-                if obj2_uuid in uuid_to_var:
-                    obj2_var = uuid_to_var[obj2_uuid]
-                else:
-                    # External input — add as function parameter.
-                    obj2_var = f"obj2_{step}"
-                    uuid_to_var[obj2_uuid] = obj2_var
-                    extra_inputs.append(obj2_var)
 
-        code_lines, output_var = action.to_macro_code(
-            step, input_var, imports, obj2_var=obj2_var
-        )
-        body_lines.extend(code_lines)
-        body_lines.append("")
-
-        if output_var is not None:
-            current_var = output_var
-            # Map the output UUID so subsequent steps can reference it.
-            output_uuid = panel.action_output_uuid(action)
-            if output_uuid:
-                uuid_to_var[output_uuid] = output_var
-            # Also register any new UUIDs from the action's selection
-            # that we haven't seen yet (secondary selections).
-            for uuid in sel_uuids[1:]:
-                if uuid not in uuid_to_var:
-                    uuid_to_var[uuid] = input_var
-
-    # Build the function signature with extra inputs.
-    params_str = f"src: {obj_type}"
-    for extra in extra_inputs:
-        params_str += f", {extra}: {obj_type}"
-
-    # Assemble the full script
-    sorted_imports = sorted(imports)
-    script_lines: list[str] = [
-        '"""',
-        "DataLab — standalone processing pipeline",
-        f"Generated from history ({len(compute_actions)} steps)",
-        '"""',
-        "",
-    ]
-    script_lines.extend(sorted_imports)
-    script_lines.append("")
-    script_lines.append("")
-    script_lines.append(f"def process({params_str}) -> {obj_type}:")
-    script_lines.append('    """Apply the recorded processing pipeline."""')
-    for line in body_lines:
-        script_lines.append(f"    {line}" if line else "")
-    script_lines.append(f"    return {current_var}")
-    script_lines.append("")
-    script_lines.append("")
-    script_lines.append('if __name__ == "__main__":')
-    script_lines.append("    # Standalone execution: run from DataLab's Macro panel.")
-    script_lines.append("    # Operates on the current object of the target panel.")
-    script_lines.append("    from datalab.control.proxy import RemoteProxy")
-    script_lines.append("")
-    script_lines.append("    proxy = RemoteProxy()")
-    panel_str = compute_actions[0].panel_str or (
-        "signal" if obj_type == "SignalObj" else "image"
+def strip_source_links(obj) -> None:
+    """Turn ``obj`` into a parentless creation root (drop source references)."""
+    pp = extract_processing_parameters(obj)
+    if pp is None:
+        return
+    insert_processing_parameters(
+        obj,
+        ProcessingParameters(
+            func_name=pp.func_name,
+            pattern=pp.pattern,
+            param=pp.param,
+            source_uuid=None,
+            source_uuids=None,
+        ),
     )
-    script_lines.append(f'    proxy.set_current_panel("{panel_str}")')
-    if extra_inputs:
-        n_extra = len(extra_inputs)
-        script_lines.append("    _uuids = proxy.get_sel_object_uuids()")
-        script_lines.append(f"    if len(_uuids) < {n_extra + 1}:")
-        script_lines.append("        raise RuntimeError(")
-        script_lines.append(
-            f'            "Pipeline needs {n_extra + 1} selected'
-            f' object(s): 1 source + {n_extra} extra"'
-        )
-        script_lines.append("        )")
-        script_lines.append(f'    src = proxy.get_object(_uuids[0], "{panel_str}")')
-        script_lines.append("    if src is None:")
-        script_lines.append(
-            f'        raise RuntimeError("No current object in panel: {panel_str}")'
-        )
-        for idx, extra in enumerate(extra_inputs):
-            script_lines.append(
-                f'    {extra} = proxy.get_object(_uuids[{idx + 1}], "{panel_str}")'
-            )
-    else:
-        script_lines.append("    src = proxy.get_object()")
-        script_lines.append("    if src is None:")
-        script_lines.append(
-            f'        raise RuntimeError("No current object in panel: {panel_str}")'
-        )
-    extra_args = "".join(f", {e}" for e in extra_inputs)
-    script_lines.append(f"    result = process(src{extra_args})")
-    script_lines.append("    proxy.add_object(result)")
-    script_lines.append('    print(f"Pipeline applied: {result.title}")')
-    script_lines.append("")
 
-    script = "\n".join(script_lines)
-    QW.QApplication.clipboard().setText(script)
-    if not execenv.unattended:
-        QW.QMessageBox.information(
-            panel.mainwindow,
-            _("Generate macro"),
-            _("Macro script copied to clipboard (%d actions).") % len(compute_actions),
-        )
+
+def remap_object_source(obj, old_uuid: str, new_uuid: str) -> None:
+    """Replace ``old_uuid`` with ``new_uuid`` in ``obj``'s source references."""
+    pp = extract_processing_parameters(obj)
+    if pp is None:
+        return
+    changed = False
+    if pp.source_uuid == old_uuid:
+        pp.source_uuid = new_uuid
+        changed = True
+    if pp.source_uuids and old_uuid in pp.source_uuids:
+        pp.source_uuids = [new_uuid if u == old_uuid else u for u in pp.source_uuids]
+        changed = True
+    if changed:
+        insert_processing_parameters(obj, pp)
+
+
+def first_alive_output(
+    panel: HistoryPanel, panel_str: str, output_uuids: list[str]
+) -> str | None:
+    """Return the first ``output_uuids`` entry still present in its data panel."""
+    data_panel = data_panel_for(panel, panel_str)
+    if data_panel is None:
+        return None
+    for out_uuid in output_uuids:
+        if data_panel.objmodel.has_uuid(out_uuid):
+            return out_uuid
+    return None
+
+
+def split_chain_on_action_delete(
+    panel: HistoryPanel, action: HistoryAction
+) -> str | None:
+    """Splice ``action`` out of its session and split its processing chain.
+
+    The action is removed from its session (splice, not truncate). If it had
+    downstream compute steps, the first downstream action becomes the head of a
+    new, independent chain: the deleted action's now-orphaned output object is
+    deep-copied into a new ``Chain copy`` group as a parentless creation root,
+    and the downstream head is rewired to consume that copy.
+
+    Args:
+        panel: The history panel owning sessions and the output registry.
+        action: The action to delete.
+
+    Returns:
+        The UUID of the deleted action's output object if it remains present
+        (now truly orphaned) in its data panel, otherwise ``None``.
+    """
+    panel_str = action.panel_str or ""
+    # Compute downstream + captured output UUIDs BEFORE removing the action.
+    downstream = hchain.get_downstream_actions(panel, action)
+    output_uuids = list(panel.action_output_uuids.get(action.uuid, []))
+    # Splice the action out (does not truncate the rest of the session).
+    hchain.remove_single_action(panel, action)
+    if not downstream:
+        return first_alive_output(panel, panel_str, output_uuids)
+    first = downstream[0]
+    data_panel = data_panel_for(panel, first.panel_str or "")
+    if data_panel is None:
+        return first_alive_output(panel, panel_str, output_uuids)
+    # Locate the orphaned output object that ``first`` still consumes.
+    first_inputs = action_input_uuids(first)
+    orphan_uuid = next((u for u in output_uuids if u in first_inputs), None)
+    if orphan_uuid is None or not data_panel.objmodel.has_uuid(orphan_uuid):
+        return first_alive_output(panel, panel_str, output_uuids)
+    # §8.2 — autonomy via COPY: clone the orphan as a parentless creation root.
+    orphan_obj = data_panel.objmodel[orphan_uuid]
+    clone = deepcopy(orphan_obj)
+    new_uuid = str(uuid4())
+    try:
+        clone.set_metadata_option("uuid", new_uuid)
+    except AttributeError:
+        clone.uuid = new_uuid
+    strip_source_links(clone)
+    group_id = get_uuid(data_panel.add_group(_("Chain copy")))
+    data_panel.add_object(clone, group_id=group_id)
+    # Rewire ALL downstream actions that directly consume the orphan onto the copy.
+    for d in downstream:
+        if orphan_uuid not in action_input_uuids(d):
+            continue
+        hchain.rewrite_action_source(d, d.panel_str or "", orphan_uuid, new_uuid)
+        for out_uuid in panel.action_output_uuids.get(d.uuid, []):
+            if data_panel.objmodel.has_uuid(out_uuid):
+                remap_object_source(
+                    data_panel.objmodel[out_uuid], orphan_uuid, new_uuid
+                )
+    # The orphan is now consumed by no surviving action: report it as orphaned.
+    return orphan_uuid if data_panel.objmodel.has_uuid(orphan_uuid) else None
+
+
+def remove_data_object(data_panel: BaseDataPanel, obj_uuid: str) -> None:
+    """Remove a single object from ``data_panel`` without recording history."""
+    obj = data_panel.objmodel[obj_uuid]
+    data_panel.plothandler.remove_item(obj_uuid)
+    data_panel.objview.remove_item(obj_uuid, refresh=False)
+    data_panel.objmodel.remove_object(obj)
 
 
 def delete_selected(panel: HistoryPanel) -> None:
     """Delete the selected actions or sessions (with confirmation).
 
     When a top-level session is selected, the entire session is deleted.
-    When individual actions are selected, they and all subsequent actions
-    in their parent session are removed. After deletion, the first
-    available item in the tree is selected automatically.
+    When individual actions are selected, each action is spliced out of its
+    session and its processing chain is split: downstream steps become an
+    independent chain rooted at a copy of the deleted action's output. After
+    deletion, the last action leaf in the affected session is selected.
     """
     selected = panel.tree.get_selected_actions_or_sessions(panel.history_sessions)
     if not selected:
@@ -372,8 +468,8 @@ def delete_selected(panel: HistoryPanel) -> None:
     if has_individual_actions:
         msg = _(
             "Do you really want to delete the selected items?\n\n"
-            "Note: deleting an action also removes all subsequent "
-            "actions in the same session."
+            "Note: deleting an intermediate action splits its processing "
+            "chain; downstream steps become an independent chain."
         )
     else:
         msg = _("Do you really want to delete the selected items?")
@@ -402,20 +498,45 @@ def delete_selected(panel: HistoryPanel) -> None:
                 break
 
     sessions_to_remove: set[int] = set()
+    orphan_refs: list[tuple[str, str]] = []
     for item in selected:
         if isinstance(item, HistorySession):
             sessions_to_remove.add(id(item))
-        else:
-            # Individual action: remove from its parent session
-            for session in panel.history_sessions:
-                if item in session.actions:
-                    session.remove_action(item)
-                    if not session.actions:
-                        sessions_to_remove.add(id(session))
-                    break
+        elif isinstance(item, HistoryAction):
+            # Individual action: splice it out and split its chain (with copy).
+            orphan_uuid = split_chain_on_action_delete(panel, item)
+            if orphan_uuid is not None:
+                orphan_refs.append((item.panel_str or "", orphan_uuid))
     panel.history_sessions = [
         s for s in panel.history_sessions if id(s) not in sessions_to_remove
     ]
+    # §8.3 — opt-in: offer to also remove the now-orphaned output object(s).
+    alive_orphans: list[tuple[BaseDataPanel, str]] = []
+    for panel_str, orphan_uuid in orphan_refs:
+        data_panel = data_panel_for(panel, panel_str)
+        if data_panel is not None and data_panel.objmodel.has_uuid(orphan_uuid):
+            alive_orphans.append((data_panel, orphan_uuid))
+    if alive_orphans and not execenv.unattended:
+        answer = QW.QMessageBox.question(
+            panel.mainwindow,
+            _("Delete"),
+            _(
+                "The deleted action(s) produced object(s) still present in the "
+                "workspace. Do you want to remove the associated object(s) as well?"
+            ),
+            QW.QMessageBox.Yes | QW.QMessageBox.No,
+            QW.QMessageBox.No,
+        )
+        if answer == QW.QMessageBox.Yes:
+            touched: dict[int, BaseDataPanel] = {}
+            for data_panel, orphan_uuid in alive_orphans:
+                if data_panel.objmodel.has_uuid(orphan_uuid):
+                    remove_data_object(data_panel, orphan_uuid)
+                    touched[id(data_panel)] = data_panel
+            for data_panel in touched.values():
+                data_panel.objview.update_tree()
+                data_panel.selection_changed(update_items=True)
+            panel.refresh_obj_ids_snapshot()
     panel.tree.populate_tree(panel.history_sessions)
     panel.refresh_compatibility_items()
     panel.update_actions_state()
@@ -430,10 +551,17 @@ def delete_selected(panel: HistoryPanel) -> None:
         if session_idx >= 0:
             top = panel.tree.topLevelItem(session_idx)
             if top is not None:
-                if top.childCount() > 0:
-                    target_item = top.child(top.childCount() - 1)
-                else:
-                    target_item = top
+                last_action_item = None
+                iterator = QW.QTreeWidgetItemIterator(top)
+                while iterator.value():
+                    node = iterator.value()
+                    if (
+                        node.data(0, panel.tree.ITEM_KIND_ROLE)
+                        == panel.tree.ITEM_ACTION
+                    ):
+                        last_action_item = node
+                    iterator += 1
+                target_item = last_action_item if last_action_item is not None else top
     if target_item is None and panel.tree.topLevelItemCount() > 0:
         # Fallback: last top-level item (least likely to switch panels)
         last_top = panel.tree.topLevelItem(panel.tree.topLevelItemCount() - 1)

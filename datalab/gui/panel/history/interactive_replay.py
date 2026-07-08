@@ -9,7 +9,6 @@ import logging
 from typing import TYPE_CHECKING
 
 import guidata.dataset as gds
-from guidata.dataset.qtwidgets import DataSetEditDialog, DataSetGroupEditDialog
 from qtpy import QtWidgets as QW
 
 from datalab.config import _
@@ -52,9 +51,9 @@ def replay_restore_actions(
             if panel.edit_mode and isinstance(session_or_action, HistoryAction):
                 # Defer: edit only the selected actions, no automatic cascade
                 edit_actions.append(session_or_action)
-            elif panel.edit_mode and isinstance(session_or_action, HistorySession):
-                view_only_session_replay(panel, session_or_action, restore_selection)
             else:
+                # Scope decision: clicking a session in edit mode now replays it
+                # WITH parameter dialogs (view-only session replay disabled).
                 with panel.replaying(), panel.output_suppressed():
                     session_or_action.replay(
                         panel.mainwindow,
@@ -111,15 +110,6 @@ def prompt_edit_action_params(
     return True
 
 
-def edit_mode_replay(panel: HistoryPanel, action: HistoryAction) -> None:
-    """Replay a single action in edit mode: open param dialog, update kwargs.
-
-    Only the given action is edited and recomputed in place: no automatic
-    cascade towards unselected downstream actions.
-    """
-    edit_mode_replay_actions(panel, [action])
-
-
 def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) -> None:
     """Edit and recompute only the selected actions, in session order.
 
@@ -127,13 +117,13 @@ def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) 
     downstream actions are left untouched (no automatic cascade). A
     re-entrance guard prevents nested prompt loops.
     """
-    if getattr(panel, "_edit_replay_in_progress", False):
+    if panel.edit_replay_in_progress:
         return
     # Deduplicate and sort the selected actions in their session order
-    ordered = _order_selected_actions(panel, actions)
+    ordered = order_selected_actions(panel, actions)
     if not ordered:
         return
-    panel._edit_replay_in_progress = True
+    panel.edit_replay_in_progress = True
     try:
         edited_actions: list[HistoryAction] = []
         recomputable: list[HistoryAction] = []
@@ -168,10 +158,10 @@ def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) 
             hrec.recompute_cascade(panel, edited_actions[0])
         QW.QApplication.processEvents()
     finally:
-        panel._edit_replay_in_progress = False
+        panel.edit_replay_in_progress = False
 
 
-def _order_selected_actions(
+def order_selected_actions(
     panel: HistoryPanel, actions: list[HistoryAction]
 ) -> list[HistoryAction]:
     """Deduplicate ``actions`` and sort them by (session, position) order."""
@@ -190,56 +180,6 @@ def _order_selected_actions(
         unique.append(action)
     unique.sort(key=lambda a: rank.get(a.uuid, 0))
     return unique
-
-
-def show_readonly_param_dialog(
-    panel: HistoryPanel, dataset: gds.DataSet | gds.DataSetGroup
-) -> None:
-    """Show a parameter dialog identical to the edit dialog but read-only."""
-    if isinstance(dataset, gds.DataSetGroup):
-        dialog = DataSetGroupEditDialog(dataset, parent=panel.mainwindow)
-    else:
-        dialog = DataSetEditDialog(dataset, parent=panel.mainwindow)
-    for edl in dialog.edit_layout:
-        for widget in edl.widgets:
-            if widget.group is not None:
-                widget.group.setEnabled(False)
-            if widget.label is not None:
-                widget.label.setEnabled(False)
-    dialog.exec()
-
-
-def view_only_session_replay(
-    panel: HistoryPanel,
-    session: HistorySession,
-    restore_selection: bool,
-) -> None:
-    """Replay a session in edit mode with read-only parameter dialogs."""
-    for action in session.actions:
-        if action.kind != HistoryAction.KIND_COMPUTE:
-            continue
-        pattern = action.pattern
-        panel.select_action_in_tree(action)
-        QW.QApplication.processEvents()
-        if pattern in {"1_to_1", "1_to_0", "n_to_1", "2_to_1"}:
-            param = action.kwargs.get("param")
-            if param is not None:
-                show_readonly_param_dialog(panel, copy.deepcopy(param))
-        elif pattern == "1_to_n":
-            params = action.kwargs.get("params") or []
-            if params:
-                group = gds.DataSetGroup(
-                    [copy.deepcopy(p) for p in params],
-                    title=_("Parameters"),
-                )
-                show_readonly_param_dialog(panel, group)
-
-    with panel.replaying(), panel.output_suppressed():
-        session.replay(
-            panel.mainwindow,
-            restore_selection=restore_selection,
-            edit=False,
-        )
 
 
 def restore_action_params(

@@ -22,9 +22,9 @@ from datalab.gui import ObjItf
 from datalab.history.core import (
     HISTORY_ACTION_SCHEMA_VERSION,
     HISTORY_SCHEMA_VERSION,
-    _copy_history_value,
-    _decode_kwargs,
-    _encode_kwargs,
+    copy_history_value,
+    decode_kwargs,
+    encode_kwargs,
     get_datetime_str,
 )
 from datalab.history.workspace_state import WorkspaceState
@@ -58,7 +58,7 @@ class HistoryAction(ObjItf):
     # replay, these UI actions are skipped so the panel object count stays stable.
     UI_CREATION_METHODS: frozenset[str] = frozenset({"new_object"})
     # UI methods that destroy data objects. Replaying these requires that the
-    # captured selection still resolves to existing objects (see ``_replay_ui``).
+    # captured selection still resolves to existing objects (see ``replay_ui``).
     DESTRUCTIVE_METHODS: frozenset[str] = frozenset(
         {"remove_object", "remove_group", "delete_all_objects"}
     )
@@ -130,7 +130,7 @@ class HistoryAction(ObjItf):
         """
         if self._saved_kwargs is None:
             self._saved_kwargs = {
-                key: _copy_history_value(value) for key, value in self.kwargs.items()
+                key: copy_history_value(value) for key, value in self.kwargs.items()
             }
 
     def restore_kwargs(self) -> None:
@@ -148,9 +148,6 @@ class HistoryAction(ObjItf):
         """Return True if this action has unsaved edit-mode changes."""
         return self._saved_kwargs is not None
 
-    def regenerate_uuid(self):
-        """Regenerate UUID after loading from a file (no-op: per-action UUID)."""
-
     def copy(self, title_suffix: str | None = None) -> HistoryAction:
         """Return an independent copy of this history action."""
         state = self.state.copy()
@@ -166,7 +163,7 @@ class HistoryAction(ObjItf):
             target=self.target,
             method_name=self.method_name,
             kwargs={
-                key: _copy_history_value(value) for key, value in self.kwargs.items()
+                key: copy_history_value(value) for key, value in self.kwargs.items()
             },
             state=state,
         )
@@ -174,6 +171,17 @@ class HistoryAction(ObjItf):
         # Note: _saved_kwargs is intentionally NOT propagated to the copy.
         # Copying an action acts as an implicit commit (no pending edits).
         return new_action
+
+    def effective_panel_str(self) -> str:
+        """Return the panel this action operates on ("signal"/"image").
+
+        Falls back to the UI ``target`` when ``panel_str`` is unset (the case for
+        creation actions such as ``new_object``, whose ``panel_str`` is ``None``
+        but whose ``target`` identifies the panel).
+        """
+        if self.panel_str:
+            return self.panel_str
+        return {"imagepanel": "image", "signalpanel": "signal"}.get(self.target, "")
 
     def copy_with_uuid_remap(
         self, uuid_remap: dict[str, dict[str, str]]
@@ -204,7 +212,7 @@ class HistoryAction(ObjItf):
         if obj2:
             if isinstance(obj2, str):
                 obj2 = [obj2]
-            pstr = new_action.panel_str or ""
+            pstr = new_action.effective_panel_str()
             pmap = uuid_remap.get(pstr, {})
             rewritten = [pmap.get(u, u) for u in obj2]
             new_action.kwargs["obj2_uuids"] = (
@@ -212,7 +220,7 @@ class HistoryAction(ObjItf):
             )
         # Rewrite output_uuids — they reference the target panel.
         if new_action.output_uuids:
-            pstr = new_action.panel_str or ""
+            pstr = new_action.effective_panel_str()
             pmap = uuid_remap.get(pstr, {})
             new_action.output_uuids = [pmap.get(u, u) for u in new_action.output_uuids]
         return new_action
@@ -251,7 +259,7 @@ class HistoryAction(ObjItf):
     def __fallback_doc(self) -> str:
         """Return a single-line docstring for the underlying call, if available."""
         try:
-            func = self._resolve_callable()
+            func = self.resolve_callable()
         except (
             ImportError,
             ModuleNotFoundError,
@@ -327,90 +335,6 @@ class HistoryAction(ObjItf):
             return html.escape(text).replace("\n", "<br>")
         return ""
 
-    def to_macro_code(
-        self,
-        step_index: int,
-        input_var: str,
-        imports: set[str],
-        obj2_var: str | None = None,
-    ) -> tuple[list[str], str | None]:
-        """Return Python source lines for this action as a standalone sigima call.
-
-        Args:
-            step_index: Step number for variable naming.
-            input_var: Name of the input variable from the previous step.
-            imports: Mutable set of import statements accumulated by the caller.
-            obj2_var: Resolved variable name for the second operand (2-to-1
-                pattern). When ``None``, the second operand is left as a
-                placeholder.
-
-        Returns:
-            Tuple of (code_lines, output_var_name). ``output_var_name`` is
-            ``None`` for UI-kind actions (no data output).
-        """
-        if self.kind != self.KIND_COMPUTE:
-            return [f"# (UI) {self.title}  [skipped]"], None
-
-        lines: list[str] = []
-        output_var = f"result_{step_index}"
-
-        # Determine the sigima module alias
-        if self.panel_str == "signal":
-            mod_alias = "sips"
-            imports.add("import sigima.proc.signal as sips")
-        elif self.panel_str == "image":
-            mod_alias = "sipi"
-            imports.add("import sigima.proc.image as sipi")
-        else:
-            lines.append(f"# {self.title}  [unknown panel: {self.panel_str}]")
-            return lines, None
-
-        lines.append(f"# Step {step_index}: {self.title}")
-
-        param = self.kwargs.get("param")
-        param_var: str | None = None
-
-        if param is not None and isinstance(param, DataSet):
-            param_var = f"param_{step_index}"
-            param_class = type(param).__qualname__
-            param_module = type(param).__module__
-            imports.add(f"from {param_module} import {param_class}")
-            lines.append(f"{param_var} = {param_class}()")
-            # Reconstruct each attribute
-            for item in param.get_items():
-                attr_name = item.get_name()
-                value = getattr(param, attr_name, None)
-                if value is not None:
-                    lines.append(f"{param_var}.{attr_name} = {value!r}")
-
-        # Build the function call
-        func_call = f"{mod_alias}.{self.func_name}"
-        if self.pattern in ("1_to_1", "1_to_0"):
-            if param_var:
-                lines.append(f"{output_var} = {func_call}({input_var}, {param_var})")
-            else:
-                lines.append(f"{output_var} = {func_call}({input_var})")
-        elif self.pattern == "n_to_1":
-            if param_var:
-                lines.append(f"{output_var} = {func_call}([{input_var}], {param_var})")
-            else:
-                lines.append(f"{output_var} = {func_call}([{input_var}])")
-        elif self.pattern == "2_to_1":
-            second = obj2_var or "...  # TODO: provide second operand"
-            if param_var:
-                lines.append(
-                    f"{output_var} = {func_call}({input_var}, {second}, {param_var})"
-                )
-            else:
-                lines.append(f"{output_var} = {func_call}({input_var}, {second})")
-        elif self.pattern == "1_to_n":
-            lines.append(f"{output_var} = {func_call}({input_var})")
-        else:
-            lines.append(f"# Unknown pattern {self.pattern!r}")
-            return lines, None
-
-        return lines, output_var
-
     # ------------------------------------------------------------------
     # Workspace-state delegation
     # ------------------------------------------------------------------
@@ -429,7 +353,7 @@ class HistoryAction(ObjItf):
     # Replay
     # ------------------------------------------------------------------
 
-    def _resolve_target(self, mainwindow: DLMainWindow) -> Any:
+    def resolve_target(self, mainwindow: DLMainWindow) -> Any:
         """Resolve the target object (UI kind) from the mainwindow."""
         attr = self.target or "mainwindow"
         if attr == "mainwindow":
@@ -440,7 +364,7 @@ class HistoryAction(ObjItf):
             return mainwindow.imagepanel.processor
         return getattr(mainwindow, attr)
 
-    def _resolve_panel(self, mainwindow: DLMainWindow):
+    def resolve_panel(self, mainwindow: DLMainWindow):
         """Resolve the data panel for a compute action."""
         if self.panel_str == "signal":
             return mainwindow.signalpanel
@@ -450,7 +374,7 @@ class HistoryAction(ObjItf):
             f"Unknown panel_str {self.panel_str!r} for compute history action"
         )
 
-    def _resolve_callable(self) -> Callable | None:
+    def resolve_callable(self) -> Callable | None:
         """Best-effort lookup of the underlying callable, for description only."""
         if self.kind == self.KIND_COMPUTE and self.func_name:
             for module in (sigima.proc.signal, sigima.proc.image):
@@ -459,7 +383,7 @@ class HistoryAction(ObjItf):
                     return func
         return None
 
-    def _resolve_obj_by_uuid(self, mainwindow: DLMainWindow, uuid: str) -> Any | None:
+    def resolve_obj_by_uuid(self, mainwindow: DLMainWindow, uuid: str) -> Any | None:
         """Look up an object by UUID across both data panels."""
         for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
             try:
@@ -503,9 +427,9 @@ class HistoryAction(ObjItf):
         else:
             ctx = nullcontext()
         with ctx:
-            self._replay_inner(mainwindow, restore_selection, edit, uuid_remap)
+            self.replay_inner(mainwindow, restore_selection, edit, uuid_remap)
 
-    def _replay_inner(
+    def replay_inner(
         self,
         mainwindow: DLMainWindow,
         restore_selection: bool,
@@ -524,16 +448,16 @@ class HistoryAction(ObjItf):
             # back to the current selection -- replay may still fail
             # downstream, but with the native processor error rather than
             # an opaque ``WorkspaceState`` incompatibility.
-            translated = self._translate_state(uuid_remap)
+            translated = self.translate_state(uuid_remap)
             if translated.is_current_state_compatible(mainwindow, False):
                 translated.restore(mainwindow)
             self.replay_compute(mainwindow, edit, uuid_remap)
         else:
             if restore_selection:
                 self.state.restore(mainwindow)
-            self._replay_ui(mainwindow, edit, uuid_remap)
+            self.replay_ui(mainwindow, edit, uuid_remap)
 
-    def _translate_state(self, uuid_remap: dict[str, dict[str, str]]) -> WorkspaceState:
+    def translate_state(self, uuid_remap: dict[str, dict[str, str]]) -> WorkspaceState:
         """Return a copy of ``self.state`` whose captured UUIDs have been
         translated through ``uuid_remap`` (identity when no mapping)."""
         if not uuid_remap:
@@ -563,7 +487,7 @@ class HistoryAction(ObjItf):
             raise NotImplementedError(
                 _("Replaying compound 'multiple_1_to_1' actions is not supported yet.")
             )
-        panel = self._resolve_panel(mainwindow)
+        panel = self.resolve_panel(mainwindow)
         processor = panel.processor
         feature = processor.get_feature(self.func_name)
         run_kwargs: dict[str, Any] = {self.FUNC_EDIT_MODE: edit}
@@ -586,7 +510,7 @@ class HistoryAction(ObjItf):
             uuids = [panel_map.get(u, u) for u in uuids]
             objs2 = [
                 obj
-                for obj in (self._resolve_obj_by_uuid(mainwindow, u) for u in uuids)
+                for obj in (self.resolve_obj_by_uuid(mainwindow, u) for u in uuids)
                 if obj is not None
             ]
             if not objs2:
@@ -605,7 +529,7 @@ class HistoryAction(ObjItf):
             raise ValueError(f"Unknown compute pattern: {self.pattern!r}")
         processor.run_feature(feature, **run_kwargs)
 
-    def _replay_ui(
+    def replay_ui(
         self,
         mainwindow: DLMainWindow,
         edit: bool,
@@ -619,7 +543,7 @@ class HistoryAction(ObjItf):
             and self.method_name in self.UI_CREATION_METHODS
         ):
             return  # Skip creation UI during non-persistent replay
-        target = self._resolve_target(mainwindow)
+        target = self.resolve_target(mainwindow)
         # Safety guard for destructive UI actions: if the action would delete
         # objects but the captured selection no longer resolves to existing
         # UUIDs in the target panel, skip the call rather than delete whatever
@@ -695,7 +619,7 @@ class HistoryAction(ObjItf):
         if self.method_name is not None:
             with writer.group("method_name"):
                 writer.write(self.method_name)
-        encoded = _encode_kwargs(self.kwargs)
+        encoded = encode_kwargs(self.kwargs)
         if encoded:
             with writer.group("kwargs"):
                 writer.write_dict(encoded)
@@ -703,7 +627,7 @@ class HistoryAction(ObjItf):
         # keeps working after save/reload. Group omitted when there are no
         # pending edits.
         if self._saved_kwargs is not None:
-            encoded_saved = _encode_kwargs(self._saved_kwargs)
+            encoded_saved = encode_kwargs(self._saved_kwargs)
             # Write the group unconditionally (even when empty) so that the
             # round-trip preserves the distinction between None (no pending
             # edits) and {} (degenerate empty snapshot, keeps has_pending_edits).
@@ -755,7 +679,7 @@ class HistoryAction(ObjItf):
         if "kwargs" in current.attrs or "kwargs" in current:
             with reader.group("kwargs"):
                 raw = reader.read_dict()
-            self.kwargs = _decode_kwargs(raw)
+            self.kwargs = decode_kwargs(raw)
         else:
             self.kwargs = {}
         # ``saved_kwargs`` group is present only when an Edit mode snapshot
@@ -763,7 +687,7 @@ class HistoryAction(ObjItf):
         if "saved_kwargs" in current.attrs or "saved_kwargs" in current:
             with reader.group("saved_kwargs"):
                 raw_saved = reader.read_dict()
-            self._saved_kwargs = _decode_kwargs(raw_saved)
+            self._saved_kwargs = decode_kwargs(raw_saved)
         else:
             self._saved_kwargs = None
         # ``output_uuids`` is present only when the action produced outputs;

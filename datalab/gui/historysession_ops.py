@@ -7,7 +7,7 @@ from __future__ import annotations
 import logging
 from contextlib import contextmanager
 from copy import deepcopy
-from typing import TYPE_CHECKING, Any, Callable, Generator
+from typing import TYPE_CHECKING, Any, Generator
 
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
@@ -15,7 +15,6 @@ from qtpy import QtWidgets as QW
 from datalab.config import _
 from datalab.env import execenv
 from datalab.history import HistoryAction, HistorySession, WorkspaceState
-from datalab.history.core import _resolve_self_target
 
 if TYPE_CHECKING:
     from datalab.gui.panel.history import HistoryPanel
@@ -35,7 +34,7 @@ def create_new_session(
     Returns:
         The newly created session.
     """
-    pstr = panel_str or panel._current_panel_str()
+    pstr = panel_str or panel.current_panel_str()
     panel.session_increment += 1
     session = HistorySession(number=panel.session_increment)
     panel.history_sessions.append(session)
@@ -65,7 +64,7 @@ def maybe_start_session_for_input(panel: HistoryPanel, *, load: bool = False) ->
     """
     if not panel.record_mode_enabled or panel.is_replaying():
         return
-    if panel._suppress_session_prompt:
+    if panel.suppress_session_prompt:
         return
     # Reuse the current session when there is none yet or it has no actions:
     # there is nothing to preserve, so no need to prompt.
@@ -73,10 +72,10 @@ def maybe_start_session_for_input(panel: HistoryPanel, *, load: bool = False) ->
         return
     # Debounce: a synchronous burst of creations (plugin/macro) must prompt only
     # once. The guard is reset on the next event-loop turn.
-    if panel._session_input_pending:
+    if panel.session_input_pending:
         return
-    panel._session_input_pending = True
-    QC.QTimer.singleShot(0, lambda: setattr(panel, "_session_input_pending", False))
+    panel.session_input_pending = True
+    QC.QTimer.singleShot(0, lambda: setattr(panel, "session_input_pending", False))
     if execenv.unattended:
         # Headless runs: honor the accept_dialogs flag (default False -> "No"),
         # so tests can drive the behavior without a real modal dialog.
@@ -366,38 +365,6 @@ def add_ui_entry(
     return action
 
 
-def add_entry(
-    panel: HistoryPanel,
-    action_title: str,
-    save_state: bool,
-    func: Callable,
-    **kwargs,
-) -> None:
-    """Legacy entry-point kept as a compatibility shim.
-
-    Most call sites have been migrated to :meth:`add_compute_entry` or
-    :meth:`add_ui_entry`. The remaining paths -- and the
-    :func:`add_to_history` decorator -- still call ``add_entry`` with a
-    bound method; we infer the ``(target, method_name)`` from the bound
-    ``func.__self__`` and route to :meth:`add_ui_entry`.
-    """
-    if not panel.record_mode_enabled or panel.is_replaying():
-        return
-    target = None
-    if hasattr(func, "__self__"):
-        target = _resolve_self_target(func.__self__)
-    if target is None:
-        # Cannot route safely -- skip rather than pickle a Callable.
-        return
-    panel.add_ui_entry(
-        action_title,
-        target=target,
-        method_name=func.__name__,
-        save_state=save_state,
-        **kwargs,
-    )
-
-
 def add_object(panel: HistoryPanel, obj: HistoryAction) -> None:
     """Add an action to the active session of its panel.
 
@@ -406,7 +373,7 @@ def add_object(panel: HistoryPanel, obj: HistoryAction) -> None:
     and image pipelines stay in separate sessions and recording resumes in the
     user-selected session.
     """
-    pstr = obj.panel_str or panel._current_panel_str()
+    pstr = obj.panel_str or panel.current_panel_str()
     session = panel.get_active_session(pstr)
     if session is None:
         session = panel.create_new_session(panel_str=pstr)

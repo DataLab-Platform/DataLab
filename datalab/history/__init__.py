@@ -6,7 +6,6 @@ from datalab.history.action import HistoryAction
 from datalab.history.core import (
     HISTORY_ACTION_SCHEMA_VERSION,
     HISTORY_SCHEMA_VERSION,
-    add_to_history,
     get_datetime_str,
 )
 from datalab.history.session import HistorySession
@@ -18,6 +17,5 @@ __all__ = [
     "HistoryAction",
     "HistorySession",
     "WorkspaceState",
-    "add_to_history",
     "get_datetime_str",
 ]

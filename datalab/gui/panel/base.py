@@ -82,6 +82,7 @@ from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
     ProcessingParameters,
     clear_analysis_parameters,
+    extract_analysis_parameters,
     extract_processing_parameters,
     insert_processing_parameters,
 )
@@ -209,6 +210,10 @@ class ObjectProp(QW.QWidget):
         self.processing_param_editor: gdq.DataSetEditGroupBox | None = None
         self.current_processing_obj: SignalObj | ImageObj | None = None
         self.processing_scroll: QW.QScrollArea | None = None
+        # Object analysis tab (editable 1-to-0 analysis parameters)
+        self.analysis_param_editor: gdq.DataSetEditGroupBox | None = None
+        self.current_analysis_obj: SignalObj | ImageObj | None = None
+        self.analysis_scroll: QW.QScrollArea | None = None
         # Auto-recompute toggle (session-only state, not persisted to Conf).
         self.__auto_recompute_enabled: bool = False
         self.__auto_recompute_timer = QC.QTimer(self)
@@ -429,6 +434,10 @@ class ObjectProp(QW.QWidget):
             index = self.tabwidget.indexOf(self.processing_scroll)
             if index >= 0:
                 self.tabwidget.removeTab(index)
+        if self.analysis_scroll is not None:
+            index = self.tabwidget.indexOf(self.analysis_scroll)
+            if index >= 0:
+                self.tabwidget.removeTab(index)
 
         # Reset references for dynamic tabs
         self.creation_param_editor = None
@@ -437,13 +446,18 @@ class ObjectProp(QW.QWidget):
         self.processing_param_editor = None
         self.current_processing_obj = None
         self.processing_scroll = None
+        self.analysis_param_editor = None
+        self.current_analysis_obj = None
+        self.analysis_scroll = None
 
         # Setup Creation and Processing tabs (if applicable)
         has_creation_tab = False
         has_processing_tab = False
+        has_analysis_tab = False
         if obj is not None:
             has_creation_tab = self.setup_creation_tab(obj)
             has_processing_tab = self.setup_processing_tab(obj)  # Processing tab setup
+            has_analysis_tab = self.setup_analysis_tab(obj)  # Analysis tab setup
 
         # Trigger visibility update for History and Analysis parameters tabs
         # (will be called via textChanged signals, but we call explicitly
@@ -459,6 +473,8 @@ class ObjectProp(QW.QWidget):
             self.tabwidget.setCurrentWidget(self.creation_scroll)
         elif force_tab == "processing" and has_processing_tab:
             self.tabwidget.setCurrentWidget(self.processing_scroll)
+        elif force_tab == "analysis" and has_analysis_tab:
+            self.tabwidget.setCurrentWidget(self.analysis_scroll)
         elif force_tab == "analysis" and has_analysis_parameters:
             self.tabwidget.setCurrentWidget(self.analysis_parameters)
         else:
@@ -812,6 +828,177 @@ class ObjectProp(QW.QWidget):
             self.tabwidget.setCurrentWidget(self.processing_scroll)
 
         return True
+
+    def setup_analysis_tab(
+        self, obj: SignalObj | ImageObj, set_current: bool = False
+    ) -> bool:
+        """Setup the Analysis tab with parameter editor for re-running analysis.
+
+        This tab lets the user edit the parameters of a 1-to-0 analysis
+        operation (peak detection, FWHM, segments, etc.) and re-run it in place
+        with the modified parameters.
+
+        Args:
+            obj: Signal or Image object
+            set_current: If True, set the Analysis tab as current after creation
+
+        Returns:
+            True if Analysis tab was set up, False otherwise
+        """
+        # Extract analysis parameters (1-to-0 pattern only)
+        proc_params = extract_analysis_parameters(obj)
+        if proc_params is None or proc_params.pattern != "1-to-0":
+            return False
+
+        param = proc_params.param
+        if param is None or isinstance(param, list):
+            return False
+
+        # Store reference to be able to retrieve it later
+        self.current_analysis_obj = obj
+
+        # Create parameter editor widget
+        editor = gdq.DataSetEditGroupBox(
+            _("Analysis Parameters"), param.__class__, wordwrap=True
+        )
+        update_dataset(editor.dataset, param)
+        editor.get()
+
+        # Connect Apply button to re-analysis handler
+        editor.SIG_APPLY_BUTTON_CLICKED.connect(self.apply_analysis_parameters)
+        editor.set_apply_button_state(False)
+
+        # Store reference to be able to retrieve it later
+        self.analysis_param_editor = editor
+
+        # Remove existing Analysis tab if it exists
+        if self.analysis_scroll is not None:
+            index = self.tabwidget.indexOf(self.analysis_scroll)
+            if index >= 0:
+                self.tabwidget.removeTab(index)
+
+        # Analysis tab comes after Creation and Processing tabs (if they exist)
+        insert_index = 0
+        if (
+            self.creation_scroll is not None
+            and self.tabwidget.indexOf(self.creation_scroll) >= 0
+        ):
+            insert_index += 1
+        if (
+            self.processing_scroll is not None
+            and self.tabwidget.indexOf(self.processing_scroll) >= 0
+        ):
+            insert_index += 1
+
+        # Create new analysis scroll area and tab
+        self.analysis_scroll = QW.QScrollArea()
+        self.analysis_scroll.setWidgetResizable(True)
+        self.analysis_scroll.setHorizontalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
+        self.analysis_scroll.setSizePolicy(
+            QW.QSizePolicy.Expanding, QW.QSizePolicy.Preferred
+        )
+        self.analysis_scroll.setWidget(editor)
+        self.tabwidget.insertTab(
+            insert_index,
+            self.analysis_scroll,
+            get_icon("analysis.svg"),
+            _("Analysis"),
+        )
+
+        # Set as current tab if requested
+        if set_current:
+            self.tabwidget.setCurrentWidget(self.analysis_scroll)
+
+        return True
+
+    def apply_analysis_parameters(
+        self,
+        obj: SignalObj | ImageObj | None = None,
+        interactive: bool = True,
+        param: gds.DataSet | None = None,
+    ) -> None:
+        """Apply analysis parameters: re-run the 1-to-0 analysis in place.
+
+        Args:
+            obj: Signal or Image object to re-analyze. If None, uses the current
+                analysis object.
+            interactive: If True, show error messages in the UI.
+            param: Explicit analysis parameters to apply. When None (default),
+                fall back to the editor dataset or the stored analysis parameters.
+        """
+        if execenv.unattended:
+            interactive = False
+
+        editor = self.analysis_param_editor
+        obj = obj or self.current_analysis_obj
+        if obj is None:
+            return
+
+        # Extract analysis parameters
+        proc_params = extract_analysis_parameters(obj)
+        if proc_params is None:
+            if interactive:
+                QW.QMessageBox.warning(
+                    self, _("Error"), _("Analysis metadata is incomplete.")
+                )
+            return
+
+        func_name = proc_params.func_name
+
+        # Resolve the parameters to apply. An explicit ``param`` argument takes
+        # precedence; otherwise fall back to the editor (interactive Apply) or
+        # the stored analysis parameters.
+        if param is None:
+            param = editor.dataset if editor is not None else proc_params.param
+
+        # Disable ROI creation during re-analysis: detection functions store
+        # create_rois=True in their parameters, but re-running should only
+        # update analysis results, not recreate ROIs (which would make them
+        # impossible to delete or modify).
+        if hasattr(param, "create_rois"):
+            param.create_rois = False
+
+        # Re-run the analysis in place (no history entry: runs under replaying)
+        processor = self.__get_processor_associated_to(obj)
+        try:
+            processor.recompute_1_to_0(func_name, obj, param)
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            if execenv.unattended:
+                raise exc
+            QW.QMessageBox.warning(
+                self,
+                _("Error"),
+                _("Failed to recompute analysis:\n%s") % str(exc),
+            )
+            return
+
+        # Propagate the edited param to the History panel: mutate the matching
+        # analysis action (snapshot originals first) and refresh its tree
+        # display. Analysis is a leaf operation (1-to-0), so no cascade is
+        # needed.
+        hpanel = getattr(self.panel.mainwindow, "historypanel", None)
+        if hpanel is not None:
+            action = hpanel.find_analysis_action(get_uuid(obj), func_name)
+            if action is not None:
+                action.snapshot_kwargs()
+                action.kwargs["param"] = copy.deepcopy(param)
+                hpanel.refresh_action(action)
+
+        # Refresh the object display after re-analysis
+        obj_uuid = get_uuid(obj)
+        self.display_analysis_parameters(obj)
+        self.panel.objview.update_item(obj_uuid)
+        # Analysis results are plot shapes, so force a plot refresh
+        self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+        self.panel.SIG_STATUS_MESSAGE.emit("✅ " + _("Analysis was recomputed."), 5000)
+
+        # Refresh the Analysis tab with the new parameters (defer, keep visible)
+        QC.QTimer.singleShot(
+            0,
+            lambda: self.setup_analysis_tab(
+                self.current_analysis_obj, set_current=True
+            ),
+        )
 
     def __get_processor_associated_to(
         self, obj: SignalObj | ImageObj

@@ -9,7 +9,7 @@ from __future__ import annotations
 import functools
 import logging
 from contextlib import contextmanager
-from typing import TYPE_CHECKING, Any, Callable, Generator
+from typing import TYPE_CHECKING, Any, Generator
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
@@ -63,14 +63,13 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self._output_suppressed = False
         self._syncing = False
         self.cascade_in_progress = False
-        self._session_input_pending = False
-        self._suppress_session_prompt = False
+        self.session_input_pending = False
+        self.suppress_session_prompt = False
+        self.edit_replay_in_progress = False
         self._delete_action: QW.QAction | None = None
         self._duplicate_action: QW.QAction | None = None
         self.step_prev_action: QW.QAction | None = None
         self.step_next_action: QW.QAction | None = None
-        self._restore_selection_action: QW.QAction | None = None
-        self._edit_action: QW.QAction | None = None
         self._record_action: QW.QAction | None = None
         self._menu_actions: list[QW.QAction] = self.create_menu_actions()
 
@@ -143,10 +142,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             self.step_prev_action.setEnabled(self.can_step_prev())
         if self.step_next_action is not None:
             self.step_next_action.setEnabled(self.can_step_next())
-        if self._restore_selection_action is not None:
-            self._restore_selection_action.setEnabled(
-                self.edit_mode or self.has_any_pending_edits()
-            )
 
     @property
     def session_increment(self) -> int:
@@ -182,14 +177,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
 
     def create_menu_actions(self) -> list[QW.QAction]:
         """Create menu actions for the history panel."""
-        edit_action = create_action(
-            self,
-            _("Edit mode"),
-            toggled=self.toggle_edit_mode,
-            icon=get_icon("edit_mode.svg"),
-        )
-        edit_action.setChecked(self.edit_mode)
-        self._edit_action = edit_action
         record_action = create_action(
             self,
             _("Record mode"),
@@ -248,13 +235,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             tip=_("Select the next action in the current session"),
             shortcut=QG.QKeySequence("Ctrl+Right"),
         )
-        generate_macro_action = create_action(
-            self,
-            _("Generate macro"),
-            self.generate_macro,
-            icon=get_icon("console.svg"),
-            tip=_("Generate a Python macro script from history"),
-        )
         remove_incompatible_action = create_action(
             self,
             _("Remove incompatible"),
@@ -262,12 +242,19 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             icon=get_icon("edit/delete_all.svg"),
             tip=_("Remove actions incompatible with the current workspace"),
         )
-        self._restore_selection_action = create_action(
+        replay_action = create_action(
             self,
-            _("Restore parameters"),
-            lambda: self.replay_restore_actions(restore_selection=True, replay=False),
-            icon=get_icon("restore_selection.svg"),
-            tip=_("Restore original parameters (discard edit-mode changes)"),
+            _("Replay"),
+            lambda: self.replay_restore_actions(restore_selection=False),
+            icon=get_icon("replay.svg"),
+            tip=_("Replay the selection silently (no parameter dialogs)"),
+        )
+        step_by_step_action = create_action(
+            self,
+            _("Step-by-step"),
+            triggered=lambda checked=False: self.replay_step_by_step(),
+            icon=get_icon("edit_mode.svg"),
+            tip=_("Replay the selection step by step, editing parameters at each step"),
         )
         return [
             record_action,
@@ -279,17 +266,10 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             self.step_prev_action,
             self.step_next_action,
             None,
-            create_action(
-                self,
-                _("Replay"),
-                lambda: self.replay_restore_actions(restore_selection=False),
-                icon=get_icon("replay.svg"),
-            ),
-            self._restore_selection_action,
-            edit_action,
+            replay_action,
+            step_by_step_action,
             None,
             self._duplicate_action,
-            generate_macro_action,
             None,
             remove_incompatible_action,
             self._delete_action,
@@ -321,10 +301,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
                 )
             )
             if reply != QW.QMessageBox.Yes:
-                if self._edit_action is not None:
-                    self._edit_action.blockSignals(True)
-                    self._edit_action.setChecked(True)
-                    self._edit_action.blockSignals(False)
                 return
         self.edit_mode = checked
         if not checked:
@@ -394,27 +370,28 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         """Replay and/or restore selection for the selected actions."""
         return hreplay.replay_restore_actions(self, replay, restore_selection)
 
+    def replay_step_by_step(self) -> None:
+        """Replay the current selection step by step, prompting for parameters.
+
+        Dialog-driven launch mode: each replayed action opens its parameter
+        dialog (reusing the edit-mode machinery), then recomputes. Edits are
+        committed immediately -- there is no persistent edit session.
+        """
+        previous = self.edit_mode
+        self.edit_mode = True
+        try:
+            self.replay_restore_actions(replay=True, restore_selection=False)
+        finally:
+            self.edit_mode = previous
+            # Commit step-by-step edits immediately (no persistent edit session).
+            for session in self.history_sessions:
+                for action in session.actions:
+                    action.discard_snapshot()
+            self.update_actions_state()
+
     def prompt_edit_action_params(self, action: HistoryAction) -> bool | None:
         """Open the parameter dialog for *action* according to its pattern."""
         return hreplay.prompt_edit_action_params(self, action)
-
-    def edit_mode_replay(self, action: HistoryAction) -> None:
-        """Replay a single action in edit mode."""
-        return hreplay.edit_mode_replay(self, action)
-
-    def show_readonly_param_dialog(self, dataset: Any) -> None:
-        """Show a parameter dialog identical to the edit dialog but read-only."""
-        return hreplay.show_readonly_param_dialog(self, dataset)
-
-    def view_only_session_replay(
-        self, session: HistorySession, restore_selection: bool
-    ) -> None:
-        """Replay a session in edit mode with read-only parameter dialogs."""
-        return hreplay.view_only_session_replay(self, session, restore_selection)
-
-    def restore_action_params(self, item: HistoryAction | HistorySession) -> None:
-        """Restore original kwargs from snapshot and recompute in-place."""
-        return hreplay.restore_action_params(self, item)
 
     # ------------------------------------------------------------------
     # Chain delegations
@@ -444,6 +421,12 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         """Find the creation action that produced ``output_uuid``."""
         return hchain.find_creation_action_for_output(self, output_uuid)
 
+    def find_analysis_action(
+        self, obj_uuid: str, func_name: str
+    ) -> HistoryAction | None:
+        """Find the 1-to-0 analysis action for ``obj_uuid`` with ``func_name``."""
+        return hchain.find_analysis_action(self, obj_uuid, func_name)
+
     def get_session_of(self, action: HistoryAction) -> HistorySession | None:
         """Return the session that contains ``action``, or None."""
         return hchain.get_session_of(self, action)
@@ -451,14 +434,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
     def action_output_uuid(self, action: HistoryAction) -> str | None:
         """Return the UUID of the object produced by ``action``, or ``None``."""
         return hchain.action_output_uuid(self, action)
-
-    def action_consumes_any(self, action: HistoryAction, uuids: set[str]) -> bool:
-        """Return True if ``action``'s input UUIDs intersect ``uuids``."""
-        return hchain.action_consumes_any(action, uuids)
-
-    def collect_downstream_uuids(self, action: HistoryAction) -> set[str]:
-        """Return the transitive closure of output UUIDs descending from ``action``."""
-        return hchain.collect_downstream_uuids(self, action)
 
     def get_downstream_actions(self, action: HistoryAction) -> list[HistoryAction]:
         """Return the actions of the current session that depend on ``action``."""
@@ -480,31 +455,9 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         """Drop entries of :attr:`output_to_action` whose object no longer exists."""
         return hchain.prune_output_mapping(self)
 
-    def rewrite_action_source(
-        self,
-        action: HistoryAction,
-        pstr: str,
-        old_uuid: str,
-        new_uuid: str,
-    ) -> None:
-        """Replace ``old_uuid`` with ``new_uuid`` in an action's recorded inputs."""
-        return hchain.rewrite_action_source(action, pstr, old_uuid, new_uuid)
-
     def remove_single_action(self, action: HistoryAction) -> None:
         """Remove a single action from its session (splice, not truncate)."""
         return hchain.remove_single_action(self, action)
-
-    def reconnect_single_removed(
-        self,
-        panel: BaseDataPanel,
-        x_uuid: str,
-        warnings: list[str],
-        roots_to_recompute: list[HistoryAction],
-    ) -> None:
-        """Reconnect consumers of a single deleted object ``x_uuid``."""
-        return hchain.reconnect_single_removed(
-            self, panel, x_uuid, warnings, roots_to_recompute
-        )
 
     def reconnect_chain_after_removal(self, panel: BaseDataPanel) -> None:
         """Reconnect the processing chain after object(s) were deleted."""
@@ -517,46 +470,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
     def refresh_action(self, action: HistoryAction) -> None:
         """Refresh the tree display for ``action`` after its kwargs were mutated."""
         return hrec.refresh_action(self, action)
-
-    def update_obj_in_place(self, target_obj: Any, new_obj: Any) -> None:
-        """Copy data + title + metadata from ``new_obj`` onto ``target_obj``."""
-        return hrec.update_obj_in_place(target_obj, new_obj)
-
-    def refresh_target(self, panel: BaseDataPanel, output_uuid: str) -> None:
-        """Refresh tree item + plot for ``output_uuid`` in ``panel``."""
-        return hrec.refresh_target(panel, output_uuid)
-
-    def record_missing_outputs(self, action: HistoryAction, missing: list[str]) -> None:
-        """Log + queue a user-facing warning for deleted output objects."""
-        return hrec.record_missing_outputs(self, action, missing)
-
-    def recompute_action_in_place(self, action: HistoryAction) -> None:
-        """Re-run ``action`` on the existing output object(s) (same UUIDs)."""
-        return hrec.recompute_action_in_place(self, action)
-
-    def handle_missing_feature(self, action: HistoryAction, exc: Any) -> None:
-        """Flag ``action`` as broken (missing plugin) and queue a user warning."""
-        return hrec.handle_missing_feature(self, action, exc)
-
-    def recompute_1_to_1_in_place(self, action: HistoryAction) -> None:
-        """Recompute a single 1-to-1 action in place."""
-        return hrec.recompute_1_to_1_in_place(self, action)
-
-    def recompute_1_to_n_in_place(self, action: HistoryAction) -> None:
-        """Recompute a 1-to-n action in place."""
-        return hrec.recompute_1_to_n_in_place(self, action)
-
-    def recompute_n_to_1_in_place(self, action: HistoryAction) -> None:
-        """Recompute an n-to-1 action in place."""
-        return hrec.recompute_n_to_1_in_place(self, action)
-
-    def recompute_2_to_1_in_place(self, action: HistoryAction) -> None:
-        """Recompute a 2-to-1 action in place."""
-        return hrec.recompute_2_to_1_in_place(self, action)
-
-    def recompute_1_to_0_in_place(self, action: HistoryAction) -> None:
-        """Recompute a 1-to-0 analysis on each source object in place."""
-        return hrec.recompute_1_to_0_in_place(self, action)
 
     def recompute_cascade(
         self,
@@ -636,7 +549,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         except ValueError:
             return None
 
-    def _current_panel_str(self) -> str:
+    def current_panel_str(self) -> str:
         """Return the current data panel id ('signal'/'image'); default 'signal'."""
         pstr = self.mainwindow.get_current_panel()
         return pstr if pstr in ("signal", "image") else "signal"
@@ -721,14 +634,12 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         """Return the session relevant for step navigation."""
         item = self.tree.currentItem()
         if item is not None:
-            if item.parent() is None:
-                index = self.tree.indexOfTopLevelItem(item)
-                if 0 <= index < len(self.history_sessions):
-                    return self.history_sessions[index]
-            else:
-                action = self.current_action()
-                if action is not None:
-                    return self.find_parent_session(action)
+            top = item
+            while top.parent() is not None:
+                top = top.parent()
+            index = self.tree.indexOfTopLevelItem(top)
+            if 0 <= index < len(self.history_sessions):
+                return self.history_sessions[index]
         if self.history_sessions:
             return self.history_sessions[-1]
         return None
@@ -755,15 +666,15 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
 
     def select_action_in_tree(self, action: HistoryAction) -> None:
         """Select ``action`` in the tree (triggers ``sync_panel_selection``)."""
-        for i in range(self.tree.topLevelItemCount()):
-            sess_item = self.tree.topLevelItem(i)
-            for j in range(sess_item.childCount()):
-                child = sess_item.child(j)
-                if child.data(0, QC.Qt.UserRole) == action.uuid:
-                    self.tree.clearSelection()
-                    self.tree.setCurrentItem(child)
-                    child.setSelected(True)
-                    return
+        iterator = QW.QTreeWidgetItemIterator(self.tree)
+        while iterator.value():
+            item = iterator.value()
+            if item.data(0, QC.Qt.UserRole) == action.uuid:
+                self.tree.clearSelection()
+                self.tree.setCurrentItem(item)
+                item.setSelected(True)
+                return
+            iterator += 1
 
     def step_prev(self) -> None:
         """Select the previous action in the current session."""
@@ -795,10 +706,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
     def duplicate_selected_entries(self) -> None:
         """Duplicate selected entries."""
         return htools.duplicate_selected_entries(self)
-
-    def generate_macro(self) -> None:
-        """Generate a Python macro script from history."""
-        return htools.generate_macro(self)
 
     def select_sessions(self, sessions: list[HistorySession]) -> None:
         """Select top-level tree items matching ``sessions``."""
@@ -888,12 +795,12 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
     @contextmanager
     def session_prompt_suppressed(self) -> Generator[None, None, None]:
         """Context manager suppressing the new-session prompt during a batch load."""
-        previous = self._suppress_session_prompt
-        self._suppress_session_prompt = True
+        previous = self.suppress_session_prompt
+        self.suppress_session_prompt = True
         try:
             yield
         finally:
-            self._suppress_session_prompt = previous
+            self.suppress_session_prompt = previous
 
     def add_compute_entry(
         self,
@@ -965,16 +872,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         return hsess.add_ui_entry(
             self, action_title, target, method_name, save_state, **kwargs
         )
-
-    def add_entry(
-        self,
-        action_title: str,
-        save_state: bool,
-        func: Callable,
-        **kwargs: Any,
-    ) -> None:
-        """Add a generic entry to the history."""
-        return hsess.add_entry(self, action_title, save_state, func, **kwargs)
 
     # ------ AbstractPanel interface ---------------------------------------------------
     def create_object(self) -> HistoryAction:
