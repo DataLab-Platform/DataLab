@@ -13,6 +13,10 @@ from qtpy import QtWidgets as QW
 from datalab.config import _
 from datalab.env import execenv
 from datalab.gui.panel.history import chain as hchain
+from datalab.gui.panel.history.chainmodel import (
+    ProcessingChain,
+    build_session_chains,
+)
 from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
     ProcessingParameters,
@@ -20,6 +24,7 @@ from datalab.gui.processor.base import (
     insert_processing_parameters,
 )
 from datalab.history import HistoryAction, HistorySession
+from datalab.history.workspace_state import WorkspaceState
 from datalab.objectmodel import get_uuid
 
 if TYPE_CHECKING:
@@ -27,30 +32,104 @@ if TYPE_CHECKING:
     from datalab.gui.panel.history import HistoryPanel
 
 
-def duplicate_selected_entries(panel: HistoryPanel) -> None:
-    """Duplicate selected sessions (with their data) into new independent sessions.
+def _make_initial_state_head(pstr: str, clone_uuid: str, title: str) -> HistoryAction:
+    """Return a synthetic creation-root action for an operation-rooted chain.
 
-    For each selected session (or the parent session of a selected action),
-    all referenced data objects are deep-copied into a new group and the
-    session is duplicated with all UUID references rewritten to the clones.
+    A *Cas B* chain starts from an operation whose input object was created
+    outside the chain (e.g. imported or added programmatically). To make the
+    duplicated chain self-contained and replayable, a synthetic ``new_object``
+    UI action is prepended, standing in for that missing object creation. Its
+    empty workspace state mirrors a real ``new_object`` recorded with
+    ``save_state=False`` (hence always compatible), and its ``new_object``
+    method name places it in :attr:`HistoryAction.UI_CREATION_METHODS` so
+    :func:`build_session_chains` treats it as a genuine chain root.
+
+    Args:
+        pstr: Panel string of the created object (``"signal"``/``"image"``).
+        clone_uuid: UUID of the cloned source object produced as head output.
+        title: Title shown for the synthetic action in the tree.
+
+    Returns:
+        A new :class:`HistoryAction` describing the synthetic creation root.
+    """
+    target = "signalpanel" if pstr == "signal" else "imagepanel"
+    head = HistoryAction(
+        title=title,
+        kind=HistoryAction.KIND_UI,
+        target=target,
+        method_name="new_object",
+        kwargs={},
+        state=WorkspaceState(),
+        panel_str=None,
+    )
+    head.output_uuids = [clone_uuid]
+    return head
+
+
+def duplicate_selected_entries(panel: HistoryPanel) -> None:
+    """Duplicate selected processing chains into new independent sessions.
+
+    Selection is resolved to *processing chains* (see
+    :func:`build_session_chains`): selecting a session duplicates all its
+    chains, while selecting an action duplicates the single chain that
+    contains it. For each source session, exactly one new session is produced
+    containing the duplicates of its selected chains, with all referenced data
+    objects deep-copied into a new group and every UUID reference rewritten to
+    the clones.
+
+    Two chain shapes are handled:
+
+    * **Cas A** -- creation-rooted chain (root is a ``new_object`` UI action):
+      the chain is copied as-is (root included), no synthetic head is added.
+    * **Cas B** -- operation-rooted chain (root consumes an external object):
+      one synthetic ``new_object`` head is prepended per distinct remapped
+      source object so the duplicated chain remains self-contained and
+      replayable.
+
     The result is an independent, editable and replayable session.
     """
     selected = panel.tree.get_selected_actions_or_sessions(panel.history_sessions)
     if not selected:
         return
-    # Normalise: resolve individual actions to their parent session, deduplicate.
-    sessions_to_dup: list[HistorySession] = []
-    seen: set[int] = set()
+
+    # 1. Resolve selection to a per-session set of chains.
+    session_by_id: dict[int, HistorySession] = {}
+    full_session_ids: set[int] = set()
+    actions_by_session: dict[int, list[HistoryAction]] = {}
     for item in selected:
         if isinstance(item, HistorySession):
-            session = item
+            session_by_id[id(item)] = item
+            full_session_ids.add(id(item))
         else:
             session = panel.find_parent_session(item)
             if session is None:
                 continue
-        if id(session) not in seen:
-            seen.add(id(session))
-            sessions_to_dup.append(session)
+            session_by_id[id(session)] = session
+            actions_by_session.setdefault(id(session), []).append(item)
+
+    # Preserve source-session order (iterate panel.history_sessions).
+    ordered: list[tuple[HistorySession, list[ProcessingChain]]] = []
+    for session in panel.history_sessions:
+        sid = id(session)
+        if sid not in session_by_id:
+            continue
+        all_chains = build_session_chains(panel, session)
+        if sid in full_session_ids:
+            chains = all_chains
+        else:
+            chains = []
+            seen_chains: set[int] = set()
+            for action in actions_by_session.get(sid, []):
+                for chain in all_chains:
+                    if any(a is action or a.uuid == action.uuid for a in chain.actions):
+                        if id(chain) not in seen_chains:
+                            seen_chains.add(id(chain))
+                            chains.append(chain)
+                        break
+        if chains:
+            ordered.append((session, chains))
+    if not ordered:
+        return
 
     copy_suffix = _("Copy")
     new_sessions: list[HistorySession] = []
@@ -59,28 +138,29 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
         "image": panel.mainwindow.imagepanel,
     }
 
-    for session in sessions_to_dup:
-        # 1. Collect all UUIDs referenced by this session
+    for session, chains in ordered:
+        # 2. Collect all UUIDs referenced by the SELECTED chains only.
         uuids_by_panel: dict[str, set[str]] = {}
-        for action in session.actions:
-            for pstr, uuids in action.state.selection.items():
-                uuids_by_panel.setdefault(pstr, set()).update(uuids)
-            for pstr, metadata in action.state.object_metadata.items():
-                uuids_by_panel.setdefault(pstr, set()).update(metadata.keys())
-            obj2 = action.kwargs.get("obj2_uuids")
-            if obj2:
-                pstr = action.panel_str or ""
-                if isinstance(obj2, str):
-                    obj2 = [obj2]
-                uuids_by_panel.setdefault(pstr, set()).update(obj2)
-            # Output UUIDs produced by this action (e.g. result of a
-            # compute step). Without this, the last action's outputs
-            # would be missing because no subsequent state captures them.
-            if action.output_uuids:
-                pstr = action.panel_str or ""
-                uuids_by_panel.setdefault(pstr, set()).update(action.output_uuids)
+        for chain in chains:
+            for action in chain.actions:
+                for pstr, uuids in action.state.selection.items():
+                    uuids_by_panel.setdefault(pstr, set()).update(uuids)
+                for pstr, metadata in action.state.object_metadata.items():
+                    uuids_by_panel.setdefault(pstr, set()).update(metadata.keys())
+                obj2 = action.kwargs.get("obj2_uuids")
+                if obj2:
+                    pstr = action.panel_str or "signal"
+                    if isinstance(obj2, str):
+                        obj2 = [obj2]
+                    uuids_by_panel.setdefault(pstr, set()).update(obj2)
+                # Output UUIDs produced by this action (e.g. result of a
+                # compute step). Without this, the last action's outputs
+                # would be missing because no subsequent state captures them.
+                if action.output_uuids:
+                    pstr = action.panel_str or "signal"
+                    uuids_by_panel.setdefault(pstr, set()).update(action.output_uuids)
 
-        # 2. Clone objects and build uuid_remap
+        # 3. Clone objects and build uuid_remap.
         uuid_remap: dict[str, dict[str, str]] = {}
         clones_by_pstr: dict[str, list] = {}
         group_title = f"{copy_suffix} - {session.title}"
@@ -150,11 +230,61 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
                     except (AttributeError, ValueError):
                         pass
 
-        # 3. Build the new session with remapped UUIDs
+        # 4. Build the new session's actions per chain (Cas A / Cas B).
+        new_actions: list[HistoryAction] = []
+        for chain in chains:
+            is_creation_root = (
+                chain.root.kind == HistoryAction.KIND_UI
+                and chain.root.method_name in HistoryAction.UI_CREATION_METHODS
+            )
+            if is_creation_root:
+                # Cas A: creation-rooted chain, copy as-is (root included).
+                new_actions.extend(
+                    action.copy_with_uuid_remap(uuid_remap) for action in chain.actions
+                )
+                continue
+            # Cas B: operation-rooted chain, synthesize one creation head per
+            # distinct remapped source object of the chain root.
+            root_inputs: list[tuple[str, str]] = []
+            for pstr, uuids in chain.root.state.selection.items():
+                for old_uuid in uuids:
+                    root_inputs.append((pstr, old_uuid))
+            obj2 = chain.root.kwargs.get("obj2_uuids")
+            if obj2:
+                pstr = chain.root.panel_str or "signal"
+                if isinstance(obj2, str):
+                    obj2 = [obj2]
+                for old_uuid in obj2:
+                    root_inputs.append((pstr, old_uuid))
+            heads: list[HistoryAction] = []
+            seen_clones: set[str] = set()
+            for pstr, old_uuid in root_inputs:
+                clone_uuid = uuid_remap.get(pstr, {}).get(old_uuid)
+                if clone_uuid is None or clone_uuid in seen_clones:
+                    # Source object deleted / not clonable, or already headed.
+                    continue
+                seen_clones.add(clone_uuid)
+                head_title = _("Initial state")
+                data_panel = panel_map.get(pstr)
+                if data_panel is not None:
+                    try:
+                        head_title = data_panel.objmodel[clone_uuid].title
+                    except (KeyError, AttributeError):
+                        head_title = _("Initial state")
+                head = _make_initial_state_head(pstr, clone_uuid, head_title)
+                heads.append(head)
+                panel.action_output_uuids[head.uuid] = [clone_uuid]
+                panel.output_to_action[clone_uuid] = head.uuid
+            new_actions.extend(heads)
+            new_actions.extend(
+                action.copy_with_uuid_remap(uuid_remap) for action in chain.actions
+            )
+
+        # 5. Assemble the new session and register output mappings.
         panel.session_increment += 1
         title = f"{session.title} {copy_suffix}"
-        new_session = session.copy_with_uuid_remap(title=title, uuid_remap=uuid_remap)
-        new_session.number = panel.session_increment
+        new_session = HistorySession(title=title, number=panel.session_increment)
+        new_session.actions = new_actions
         new_sessions.append(new_session)
 
         # Register output mappings for cloned actions so that
@@ -168,7 +298,8 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
 
     # Insert each duplicated session immediately after its original.
     offset = 0
-    for original_session, new_session in zip(sessions_to_dup, new_sessions):
+    source_sessions = [session for session, _chains in ordered]
+    for original_session, new_session in zip(source_sessions, new_sessions):
         idx = panel.history_sessions.index(original_session)
         panel.history_sessions.insert(idx + 1 + offset, new_session)
         offset += 1

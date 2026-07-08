@@ -1155,7 +1155,12 @@ def test_history_duplication():
         history.duplicate_selected_entries()
         sessions = history.history_sessions
         duplicate_session = sessions[-1]
-        duplicate = duplicate_session.actions[0]
+        # Operation-rooted chain (Cas B): a synthetic creation head is
+        # prepended, so the compute duplicate is no longer at index 0.
+        assert duplicate_session.actions[0].method_name == "new_object"
+        duplicate = next(
+            a for a in duplicate_session.actions if a.kind == HistoryAction.KIND_COMPUTE
+        )
         assert duplicate_session.title.endswith(_("Copy"))
         assert duplicate is not original
         assert duplicate.uuid != original.uuid
@@ -1181,7 +1186,8 @@ def test_history_duplication():
         sessions = history.history_sessions
         duplicate_session = sessions[-1]
         assert duplicate_session is not original_session
-        assert len(duplicate_session.actions) == len(original_session.actions)
+        # One synthetic creation head is prepended (Cas B).
+        assert len(duplicate_session.actions) == len(original_session.actions) + 1
         assert duplicate_session.title.endswith(_("Copy"))
         orig_a = original_session.actions[-1]
         dup_a = duplicate_session.actions[-1]
@@ -1207,9 +1213,12 @@ def test_history_duplication():
         assert dup_session is not original_session
         assert dup_session.title.endswith(_("Copy"))
         assert len(panel.objmodel) > n_obj_before
-        for orig_action, dup_action in zip(
-            original_session.actions, dup_session.actions
-        ):
+        # The duplicate has an extra leading synthetic head (Cas B); compare
+        # only the compute actions against the originals.
+        dup_compute = [
+            a for a in dup_session.actions if a.kind == HistoryAction.KIND_COMPUTE
+        ]
+        for orig_action, dup_action in zip(original_session.actions, dup_compute):
             for pstr in orig_action.state.selection:
                 orig_uuids = set(orig_action.state.selection.get(pstr, []))
                 dup_uuids = set(dup_action.state.selection.get(pstr, []))
@@ -1257,6 +1266,85 @@ def test_history_duplication():
         dup_suffixes = [_suffix(t) for t in dup_titles]
         clonable = orig_suffixes[: len(dup_suffixes)]
         assert clonable == dup_suffixes
+
+
+def test_history_duplication_cas_a_creation_root():
+    """Duplicating a creation-rooted chain copies the creation (no synthetic head)."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+        win.add_object(create_paracetamol_signal())  # records new_object creation
+        panel.objview.select_objects([1])
+        panel.processor.run_feature(sips.derivative)
+        original_session = history.history_sessions[-1]
+        assert original_session.actions[0].method_name == "new_object"
+        _select_tree_session(history, original_session)
+        n_obj_before = len(panel.objmodel)
+        history.duplicate_selected_entries()
+        dup_session = history.history_sessions[-1]
+        assert dup_session is not original_session
+        # Cas A: same number of actions (creation duplicated, NO synthetic head).
+        assert len(dup_session.actions) == len(original_session.actions)
+        dup_root = dup_session.actions[0]
+        orig_root = original_session.actions[0]
+        assert dup_root.method_name == "new_object"
+        assert dup_root is not orig_root
+        assert dup_root.uuid != orig_root.uuid
+        # Objects were cloned.
+        assert len(panel.objmodel) > n_obj_before
+        # UUID remap: duplicated actions share no object uuid with originals.
+        for orig_a, dup_a in zip(original_session.actions, dup_session.actions):
+            for pstr in orig_a.state.selection:
+                o = set(orig_a.state.selection.get(pstr, []))
+                d = set(dup_a.state.selection.get(pstr, []))
+                if o and d:
+                    assert o.isdisjoint(d)
+
+
+def test_history_duplication_cas_b_synthetic_head():
+    """Duplicating an operation-rooted chain synthesizes an initial-state head."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+        panel.add_object(create_paracetamol_signal())  # NO creation recorded
+        panel.objview.select_objects([1])
+        panel.processor.run_feature(sips.derivative)
+        original_session = history.history_sessions[-1]
+        # Operation-rooted: no creation action at the head.
+        assert original_session.actions[0].method_name != "new_object"
+        _select_tree_session(history, original_session)
+        history.duplicate_selected_entries()
+        dup_session = history.history_sessions[-1]
+        assert dup_session is not original_session
+        # Cas B: exactly one synthetic head prepended.
+        assert len(dup_session.actions) == len(original_session.actions) + 1
+        head = dup_session.actions[0]
+        assert head.kind == HistoryAction.KIND_UI
+        assert head.method_name == "new_object"
+        assert head.kwargs == {}
+        assert head.state.selection == {}  # empty state (always compatible)
+        assert len(head.output_uuids) == 1
+        clone_uuid = head.output_uuids[0]
+        # Head output registered in the panel mappings.
+        assert history.action_output_uuids.get(head.uuid) == [clone_uuid]
+        assert history.output_to_action.get(clone_uuid) == head.uuid
+        # Clone materialized in the panel.
+        assert clone_uuid in panel.objmodel.get_object_ids()
+        # Head + ops re-link into a SINGLE chain on the duplicate.
+        dup_chains = build_session_chains(history, dup_session)
+        assert len(dup_chains) == 1
+        assert dup_chains[0].root is head
+        assert sum(len(c.actions) for c in dup_chains) == len(dup_session.actions)
+        # Replay of the duplicate adds no new object (creations skipped under
+        # suppression).
+        _select_tree_session(history, dup_session)
+        n_obj = len(panel.objmodel)
+        n_hist = len(history)
+        history.replay_restore_actions(replay=True, restore_selection=False)
+        assert len(panel.objmodel) == n_obj
+        assert len(history) == n_hist
 
 
 # ---------------------------------------------------------------------------

@@ -971,6 +971,9 @@ msgstr "Un nouvel objet a été créé. Démarrer une nouvelle session d'histori
 msgid "New history session"
 msgstr "Nouvelle session d'historique"
 
+msgid "Initial state"
+msgstr "État initial"
+
 msgid "Generate macro"
 msgstr "Générer une macro"
 
@@ -4341,4 +4344,3 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
-
