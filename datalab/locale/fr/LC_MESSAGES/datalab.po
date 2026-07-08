@@ -974,16 +974,6 @@ msgstr "Nouvelle session d'historique"
 msgid "Initial state"
 msgstr "État initial"
 
-msgid "Generate macro"
-msgstr "Générer une macro"
-
-msgid "No compute actions to export."
-msgstr "Pas d'actions de calcul à exporter."
-
-#, python-format
-msgid "Macro script copied to clipboard (%d actions)."
-msgstr "Script de macro copié dans le presse-papier (%d actions)."
-
 msgid "Chain copy"
 msgstr "Copie de chaîne"
 
@@ -1763,9 +1753,6 @@ msgstr "Panneau d'historique"
 msgid "History files"
 msgstr "Fichiers d'historique"
 
-msgid "Edit mode"
-msgstr "Mode d'édition"
-
 msgid "Record mode"
 msgstr "Mode d'enregistrement"
 
@@ -1802,17 +1789,8 @@ msgstr "Étape suivante"
 msgid "Select the next action in the current session"
 msgstr "Sélectionner l'action suivante dans la session courante"
 
-msgid "Generate a Python macro script from history"
-msgstr "Générer un script macro Python à partir de l'historique"
-
 msgid "Remove actions incompatible with the current workspace"
 msgstr "Supprimer les actions incompatibles avec l'espace de travail courant"
-
-msgid "Restore parameters"
-msgstr "Restaurer les paramètres"
-
-msgid "Restore original parameters (discard edit-mode changes)"
-msgstr "Restaurer les paramètres d'origine (annuler les modifications du mode d'édition)"
 
 msgid "Replay"
 msgstr "Rejouer"
@@ -4344,3 +4322,4 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
+
