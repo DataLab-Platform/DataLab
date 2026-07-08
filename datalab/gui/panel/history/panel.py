@@ -9,7 +9,7 @@ from __future__ import annotations
 import functools
 import logging
 from contextlib import contextmanager
-from typing import TYPE_CHECKING, Any, Callable, Generator
+from typing import TYPE_CHECKING, Any, Generator
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
@@ -437,20 +437,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         """Open the parameter dialog for *action* according to its pattern."""
         return hreplay.prompt_edit_action_params(self, action)
 
-    def edit_mode_replay(self, action: HistoryAction) -> None:
-        """Replay a single action in edit mode."""
-        return hreplay.edit_mode_replay(self, action)
-
-    def show_readonly_param_dialog(self, dataset: Any) -> None:
-        """Show a parameter dialog identical to the edit dialog but read-only."""
-        return hreplay.show_readonly_param_dialog(self, dataset)
-
-    def view_only_session_replay(
-        self, session: HistorySession, restore_selection: bool
-    ) -> None:
-        """Replay a session in edit mode with read-only parameter dialogs."""
-        return hreplay.view_only_session_replay(self, session, restore_selection)
-
     def restore_action_params(self, item: HistoryAction | HistorySession) -> None:
         """Restore original kwargs from snapshot and recompute in-place."""
         return hreplay.restore_action_params(self, item)
@@ -497,14 +483,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         """Return the UUID of the object produced by ``action``, or ``None``."""
         return hchain.action_output_uuid(self, action)
 
-    def action_consumes_any(self, action: HistoryAction, uuids: set[str]) -> bool:
-        """Return True if ``action``'s input UUIDs intersect ``uuids``."""
-        return hchain.action_consumes_any(action, uuids)
-
-    def collect_downstream_uuids(self, action: HistoryAction) -> set[str]:
-        """Return the transitive closure of output UUIDs descending from ``action``."""
-        return hchain.collect_downstream_uuids(self, action)
-
     def get_downstream_actions(self, action: HistoryAction) -> list[HistoryAction]:
         """Return the actions of the current session that depend on ``action``."""
         return hchain.get_downstream_actions(self, action)
@@ -525,31 +503,9 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         """Drop entries of :attr:`output_to_action` whose object no longer exists."""
         return hchain.prune_output_mapping(self)
 
-    def rewrite_action_source(
-        self,
-        action: HistoryAction,
-        pstr: str,
-        old_uuid: str,
-        new_uuid: str,
-    ) -> None:
-        """Replace ``old_uuid`` with ``new_uuid`` in an action's recorded inputs."""
-        return hchain.rewrite_action_source(action, pstr, old_uuid, new_uuid)
-
     def remove_single_action(self, action: HistoryAction) -> None:
         """Remove a single action from its session (splice, not truncate)."""
         return hchain.remove_single_action(self, action)
-
-    def reconnect_single_removed(
-        self,
-        panel: BaseDataPanel,
-        x_uuid: str,
-        warnings: list[str],
-        roots_to_recompute: list[HistoryAction],
-    ) -> None:
-        """Reconnect consumers of a single deleted object ``x_uuid``."""
-        return hchain.reconnect_single_removed(
-            self, panel, x_uuid, warnings, roots_to_recompute
-        )
 
     def reconnect_chain_after_removal(self, panel: BaseDataPanel) -> None:
         """Reconnect the processing chain after object(s) were deleted."""
@@ -562,46 +518,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
     def refresh_action(self, action: HistoryAction) -> None:
         """Refresh the tree display for ``action`` after its kwargs were mutated."""
         return hrec.refresh_action(self, action)
-
-    def update_obj_in_place(self, target_obj: Any, new_obj: Any) -> None:
-        """Copy data + title + metadata from ``new_obj`` onto ``target_obj``."""
-        return hrec.update_obj_in_place(target_obj, new_obj)
-
-    def refresh_target(self, panel: BaseDataPanel, output_uuid: str) -> None:
-        """Refresh tree item + plot for ``output_uuid`` in ``panel``."""
-        return hrec.refresh_target(panel, output_uuid)
-
-    def record_missing_outputs(self, action: HistoryAction, missing: list[str]) -> None:
-        """Log + queue a user-facing warning for deleted output objects."""
-        return hrec.record_missing_outputs(self, action, missing)
-
-    def recompute_action_in_place(self, action: HistoryAction) -> None:
-        """Re-run ``action`` on the existing output object(s) (same UUIDs)."""
-        return hrec.recompute_action_in_place(self, action)
-
-    def handle_missing_feature(self, action: HistoryAction, exc: Any) -> None:
-        """Flag ``action`` as broken (missing plugin) and queue a user warning."""
-        return hrec.handle_missing_feature(self, action, exc)
-
-    def recompute_1_to_1_in_place(self, action: HistoryAction) -> None:
-        """Recompute a single 1-to-1 action in place."""
-        return hrec.recompute_1_to_1_in_place(self, action)
-
-    def recompute_1_to_n_in_place(self, action: HistoryAction) -> None:
-        """Recompute a 1-to-n action in place."""
-        return hrec.recompute_1_to_n_in_place(self, action)
-
-    def recompute_n_to_1_in_place(self, action: HistoryAction) -> None:
-        """Recompute an n-to-1 action in place."""
-        return hrec.recompute_n_to_1_in_place(self, action)
-
-    def recompute_2_to_1_in_place(self, action: HistoryAction) -> None:
-        """Recompute a 2-to-1 action in place."""
-        return hrec.recompute_2_to_1_in_place(self, action)
-
-    def recompute_1_to_0_in_place(self, action: HistoryAction) -> None:
-        """Recompute a 1-to-0 analysis on each source object in place."""
-        return hrec.recompute_1_to_0_in_place(self, action)
 
     def recompute_cascade(
         self,
@@ -1008,16 +924,6 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         return hsess.add_ui_entry(
             self, action_title, target, method_name, save_state, **kwargs
         )
-
-    def add_entry(
-        self,
-        action_title: str,
-        save_state: bool,
-        func: Callable,
-        **kwargs: Any,
-    ) -> None:
-        """Add a generic entry to the history."""
-        return hsess.add_entry(self, action_title, save_state, func, **kwargs)
 
     # ------ AbstractPanel interface ---------------------------------------------------
     def create_object(self) -> HistoryAction:

@@ -229,30 +229,6 @@ def action_consumes_any(action: HistoryAction, uuids: set[str]) -> bool:
     return bool(captured & uuids)
 
 
-def collect_downstream_uuids(panel: HistoryPanel, action: HistoryAction) -> set[str]:
-    """Return the transitive closure of output UUIDs descending from ``action``."""
-    if not panel.history_sessions:
-        return set()
-    current = get_session_of(panel, action)
-    if current is None:
-        return set()
-    root_out = action_output_uuid(panel, action)
-    if root_out is None:
-        return set()
-    closure: set[str] = {root_out}
-    idx = current.actions.index(action)
-    for downstream in current.actions[idx + 1 :]:
-        if downstream.kind != HistoryAction.KIND_COMPUTE:
-            continue
-        if not action_consumes_any(downstream, closure):
-            continue
-        out_uuid = action_output_uuid(panel, downstream)
-        if out_uuid is not None:
-            closure.add(out_uuid)
-    closure.discard(root_out)
-    return closure
-
-
 def get_downstream_actions(
     panel: HistoryPanel, action: HistoryAction
 ) -> list[HistoryAction]:

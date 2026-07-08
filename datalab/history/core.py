@@ -1,18 +1,17 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-History core utilities: schema constants, JSON codec, ``@add_to_history`` decorator.
+History core utilities: schema constants, JSON codec.
 """
 
 from __future__ import annotations
 
-import functools
 import importlib
 import json
 import logging
 import warnings
 from copy import deepcopy
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import numpy as np
 from guidata.dataset.conv import dataset_to_json, json_to_dataset
@@ -21,11 +20,6 @@ from qtpy import QtCore as QC
 from sigima.objects.base import BaseROI
 
 from datalab.config import _
-
-if TYPE_CHECKING:
-    from datalab.gui.panel.base import BaseDataPanel
-    from datalab.gui.panel.history import HistoryPanel
-    from datalab.gui.processor.base import BaseProcessor
 
 _logger = logging.getLogger(__name__)
 _TRUSTED_ROI_MODULE_PREFIX = "sigima."
@@ -185,53 +179,3 @@ def _copy_history_value(value: Any) -> Any:
     if isinstance(value, tuple):
         return tuple(_copy_history_value(item) for item in value)
     return deepcopy(value)
-
-
-def add_to_history(kwargs_names: list[str] | None = None, title: str | None = None):
-    """Method decorator to add the method call to the history panel as a UI entry.
-
-    Args:
-        kwargs_names: List of keyword arguments to add to the history action.
-         Defaults to None.
-        title: Title of the history action. Defaults to None.
-    """
-    if kwargs_names is None:
-        kwargs_names = []
-
-    def add_to_history_decorator(func):
-        """Decorator function"""
-
-        @functools.wraps(func)
-        def method_wrapper(*args, **kwargs):
-            """Decorator wrapper function"""
-            self: BaseDataPanel | BaseProcessor = args[0]
-            history: HistoryPanel = self.mainwindow.historypanel
-            histkwargs = {k: kwargs[k] for k in kwargs_names if k in kwargs}
-            target = _resolve_self_target(self)
-            if target is not None:
-                history.add_ui_entry(
-                    kwargs.get("title", title) or func.__name__,
-                    target=target,
-                    method_name=func.__name__,
-                    save_state=kwargs.get("save_state", True),
-                    **histkwargs,
-                )
-            return func(*args, **kwargs)
-
-        return method_wrapper
-
-    return add_to_history_decorator
-
-
-def _resolve_self_target(self_obj: Any) -> str | None:
-    """Resolve a 'self' instance to a string target understood by replay.
-
-    Used by the legacy ``@add_to_history`` decorator. Returns None when no
-    safe routing is possible (in which case the entry is skipped).
-    """
-    panel_str = getattr(self_obj, "PANEL_STR_ID", None)
-    if panel_str == "signal":
-        return "signalpanel"
-    if panel_str == "image":
-        return "imagepanel"
-    return None

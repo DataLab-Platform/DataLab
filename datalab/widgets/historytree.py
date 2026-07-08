@@ -324,25 +324,3 @@ class HistoryTree(QW.QTreeWidget):
             # chain-header items are containers only: ignored here.
         return selected
 
-    def get_selected_actions(
-        self, history_sessions: list[HistorySession]
-    ) -> list[HistoryAction]:
-        """Get the selected actions
-
-        Args:
-            history_sessions: List of history sessions
-
-        Returns:
-            list[HistoryAction]: List of selected actions
-        """
-        selected: list[HistoryAction] = []
-        for item in self.selectedItems():
-            if item.parent() is not None and (
-                item.data(0, self.ITEM_KIND_ROLE) == self.ITEM_ACTION
-            ):
-                uuid = item.data(0, QC.Qt.UserRole)
-                try:
-                    selected.append(self.get_action_from_uuid(uuid, history_sessions))
-                except ValueError:
-                    continue
-        return selected

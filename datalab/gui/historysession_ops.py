@@ -7,7 +7,7 @@ from __future__ import annotations
 import logging
 from contextlib import contextmanager
 from copy import deepcopy
-from typing import TYPE_CHECKING, Any, Callable, Generator
+from typing import TYPE_CHECKING, Any, Generator
 
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
@@ -15,7 +15,6 @@ from qtpy import QtWidgets as QW
 from datalab.config import _
 from datalab.env import execenv
 from datalab.history import HistoryAction, HistorySession, WorkspaceState
-from datalab.history.core import _resolve_self_target
 
 if TYPE_CHECKING:
     from datalab.gui.panel.history import HistoryPanel
@@ -364,38 +363,6 @@ def add_ui_entry(
     )
     panel.add_object(action)
     return action
-
-
-def add_entry(
-    panel: HistoryPanel,
-    action_title: str,
-    save_state: bool,
-    func: Callable,
-    **kwargs,
-) -> None:
-    """Legacy entry-point kept as a compatibility shim.
-
-    Most call sites have been migrated to :meth:`add_compute_entry` or
-    :meth:`add_ui_entry`. The remaining paths -- and the
-    :func:`add_to_history` decorator -- still call ``add_entry`` with a
-    bound method; we infer the ``(target, method_name)`` from the bound
-    ``func.__self__`` and route to :meth:`add_ui_entry`.
-    """
-    if not panel.record_mode_enabled or panel.is_replaying():
-        return
-    target = None
-    if hasattr(func, "__self__"):
-        target = _resolve_self_target(func.__self__)
-    if target is None:
-        # Cannot route safely -- skip rather than pickle a Callable.
-        return
-    panel.add_ui_entry(
-        action_title,
-        target=target,
-        method_name=func.__name__,
-        save_state=save_state,
-        **kwargs,
-    )
 
 
 def add_object(panel: HistoryPanel, obj: HistoryAction) -> None:
