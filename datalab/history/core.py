@@ -42,22 +42,22 @@ def get_datetime_str() -> str:
     return QC.QDateTime.currentDateTime().toString("yyyy-MM-dd hh:mm:ss")
 
 
-def _numpy_to_json_safe(obj: Any) -> Any:
+def numpy_to_json_safe(obj: Any) -> Any:
     """Recursively convert numpy arrays to lists for JSON serialization."""
     if isinstance(obj, np.ndarray):
         return obj.tolist()
     if isinstance(obj, dict):
-        return {k: _numpy_to_json_safe(v) for k, v in obj.items()}
+        return {k: numpy_to_json_safe(v) for k, v in obj.items()}
     if isinstance(obj, list):
-        return [_numpy_to_json_safe(i) for i in obj]
+        return [numpy_to_json_safe(i) for i in obj]
     return obj
 
 
-def _encode_roi(roi: Any) -> str:
+def encode_roi(roi: Any) -> str:
     """Encode a sigima ROI object to a JSON string via ``to_dict()``."""
     if not isinstance(roi, BaseROI):
         raise TypeError(f"Expected BaseROI instance, got {type(roi)!r}")
-    roi_dict = _numpy_to_json_safe(roi.to_dict())
+    roi_dict = numpy_to_json_safe(roi.to_dict())
     # Store the concrete class so we can reconstruct on decode.
     payload = {
         "module": type(roi).__module__,
@@ -67,7 +67,7 @@ def _encode_roi(roi: Any) -> str:
     return json.dumps(payload)
 
 
-def _decode_roi(encoded: str) -> Any:
+def decode_roi(encoded: str) -> Any:
     """Decode a JSON string back to a sigima ROI object.
 
     Only classes from trusted ``sigima.`` modules that are actual
@@ -96,7 +96,7 @@ def _decode_roi(encoded: str) -> Any:
     return cls.from_dict(payload["data"])
 
 
-def _encode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
+def encode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
     """Encode kwargs for HDF5 storage: replace ``DataSet``, ``list[DataSet]``,
     and sigima ROI values with marker dicts holding their JSON representation.
 
@@ -116,7 +116,7 @@ def _encode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
         if isinstance(value, DataSet):
             encoded[key] = {_DATASET_MARKER: dataset_to_json(value)}
         elif isinstance(value, BaseROI):
-            encoded[key] = {_ROI_MARKER: _encode_roi(value)}
+            encoded[key] = {_ROI_MARKER: encode_roi(value)}
         elif (
             isinstance(value, list)
             and value
@@ -130,8 +130,8 @@ def _encode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
     return encoded
 
 
-def _decode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
-    """Inverse of :func:`_encode_kwargs`."""
+def decode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
+    """Inverse of :func:`encode_kwargs`."""
     decoded: dict[str, Any] = {}
     for key, value in kwargs.items():
         if isinstance(value, dict) and _DATASET_MARKER in value:
@@ -144,7 +144,7 @@ def _decode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
                 decoded[key] = None
         elif isinstance(value, dict) and _ROI_MARKER in value:
             try:
-                decoded[key] = _decode_roi(value[_ROI_MARKER])
+                decoded[key] = decode_roi(value[_ROI_MARKER])
             except Exception as exc:
                 raise ValueError(
                     f"Failed to deserialize history ROI kwarg {key!r}: {exc}"
@@ -164,18 +164,18 @@ def _decode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
     return decoded
 
 
-def _copy_history_value(value: Any) -> Any:
+def copy_history_value(value: Any) -> Any:
     """Return an independent copy of a history-serializable value."""
     if callable(value):
         raise TypeError("History duplication does not support callable kwargs")
     if isinstance(value, DataSet):
         return json_to_dataset(dataset_to_json(value))
     if isinstance(value, BaseROI):
-        return _decode_roi(_encode_roi(value))
+        return decode_roi(encode_roi(value))
     if isinstance(value, dict):
-        return {key: _copy_history_value(item) for key, item in value.items()}
+        return {key: copy_history_value(item) for key, item in value.items()}
     if isinstance(value, list):
-        return [_copy_history_value(item) for item in value]
+        return [copy_history_value(item) for item in value]
     if isinstance(value, tuple):
-        return tuple(_copy_history_value(item) for item in value)
+        return tuple(copy_history_value(item) for item in value)
     return deepcopy(value)

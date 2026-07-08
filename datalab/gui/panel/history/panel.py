@@ -63,8 +63,9 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self._output_suppressed = False
         self._syncing = False
         self.cascade_in_progress = False
-        self._session_input_pending = False
-        self._suppress_session_prompt = False
+        self.session_input_pending = False
+        self.suppress_session_prompt = False
+        self.edit_replay_in_progress = False
         self._delete_action: QW.QAction | None = None
         self._duplicate_action: QW.QAction | None = None
         self.step_prev_action: QW.QAction | None = None
@@ -548,7 +549,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         except ValueError:
             return None
 
-    def _current_panel_str(self) -> str:
+    def current_panel_str(self) -> str:
         """Return the current data panel id ('signal'/'image'); default 'signal'."""
         pstr = self.mainwindow.get_current_panel()
         return pstr if pstr in ("signal", "image") else "signal"
@@ -794,12 +795,12 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
     @contextmanager
     def session_prompt_suppressed(self) -> Generator[None, None, None]:
         """Context manager suppressing the new-session prompt during a batch load."""
-        previous = self._suppress_session_prompt
-        self._suppress_session_prompt = True
+        previous = self.suppress_session_prompt
+        self.suppress_session_prompt = True
         try:
             yield
         finally:
-            self._suppress_session_prompt = previous
+            self.suppress_session_prompt = previous
 
     def add_compute_entry(
         self,

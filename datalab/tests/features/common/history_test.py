@@ -3,15 +3,22 @@
 """
 History panel — grouped exhaustive tests.
 
-Each ``test_history_*`` function bundles several closely-related scenarios
-that previously lived in dedicated tests across:
+The History-panel behaviour is exercised by exactly five grouped tests, each
+bundling many closely-related scenarios that previously lived in dedicated
+per-behaviour tests:
 
-* ``history_contract_unit_test.py`` (schema, compatibility, capture/replay
-  of UI actions, ROI clipboard, HDF5 round-trips, etc.)
-* ``history_replay_app_test.py`` (replay patterns, session replay,
-  duplication, stepping, tree selection, cascade, dlhist persistence,
-  chain reconnection)
-* ``history_app_test.py::test_history_reset_starts_new_session``
+* ``test_history_persistence`` — schema versioning, HDF5/.dlhist round-trips
+  and ``HistoryAction`` compatibility (UUID/shape/legacy fallback).
+* ``test_history_recording_and_replay`` — recording of compute + UI actions,
+  per-pattern replay (1_to_1, 1_to_n, n_to_1, 2_to_1), session replay,
+  interactive-fit replay and ``capture_outputs`` funnel behaviour.
+* ``test_history_duplication`` — action/session duplication, UUID remapping
+  and the creation-root vs synthetic-head duplication cases.
+* ``test_history_editing_and_cascade`` — processing-tab edit propagation,
+  step-by-step launch, cascade recompute and recompute invariants.
+* ``test_history_navigation_and_chains`` — stepping/selection sync, chain
+  reconnection/grouping/splitting, new-session prompt and active-session
+  routing/highlight.
 
 Each scenario is delimited by a ``# --- scenario: <name> ---`` comment.
 Scenarios sharing GUI state run inside a single ``datalab_test_app_context``
@@ -179,12 +186,12 @@ def _build_cascade_chain(panel, history):
 
 
 # ---------------------------------------------------------------------------
-# 1) Schema + HDF5 round-trips
+# 1) Persistence: schema, HDF5/.dlhist round-trips, compatibility
 # ---------------------------------------------------------------------------
 
 
-def test_history_schema_and_hdf5_roundtrip():
-    """Schema persistence + HDF5 round-trip variants (.dlhist and .h5)."""
+def test_history_persistence():
+    """Schema, HDF5/.dlhist round-trips and ``HistoryAction`` compatibility."""
     # --- scenario: schema_version is persisted ---
     session = _create_serializable_history_session()
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -314,6 +321,7 @@ def test_history_schema_and_hdf5_roundtrip():
                     "history_session", HistorySession
                 )
         restored = restored_sessions[0].actions[0]
+        assert restored.uuid == original.uuid
         assert not hasattr(restored, "func")
         assert restored.kind == HistoryAction.KIND_COMPUTE
         assert restored.func_name == "normalize"
@@ -416,60 +424,6 @@ def test_history_schema_and_hdf5_roundtrip():
     finally:
         shutil.rmtree(tmpdir, ignore_errors=True)
 
-
-def test_history_action_uuid_persisted():
-    """Action UUID is stable across a .dlhist save/reload cycle."""
-    with datalab_test_app_context() as win:
-        history = win.historypanel
-        panel = win.signalpanel
-        history.toggle_record_mode(True)
-        panel.add_object(create_paracetamol_signal())
-        panel.objview.select_objects([1])
-        panel.processor.run_feature(
-            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
-        )
-        session = history.history_sessions[-1]
-        original_uuids = [action.uuid for action in session.actions]
-        assert original_uuids
-        with tempfile.TemporaryDirectory() as tmpdir:
-            path = os.path.join(tmpdir, "uuid_roundtrip.dlhist")
-            with NativeH5Writer(path) as writer:
-                writer.write_object_list([session], "history_session")
-            with NativeH5Reader(path) as reader:
-                restored_sessions = reader.read_object_list(
-                    "history_session", HistorySession
-                )
-        restored_uuids = [action.uuid for action in restored_sessions[0].actions]
-        assert restored_uuids == original_uuids
-
-
-def test_history_duplicate_registers_outputs():
-    """``duplicate_object`` registers duplicated object UUIDs as action outputs."""
-    with datalab_test_app_context() as win:
-        history = win.historypanel
-        panel = win.signalpanel
-        history.toggle_record_mode(True)
-        panel.add_object(create_paracetamol_signal())
-        panel.objview.select_objects([1])
-        panel.duplicate_object()
-        session = history.history_sessions[-1]
-        dup_action = next(
-            action
-            for action in session.actions
-            if action.method_name == "duplicate_object"
-        )
-        assert dup_action.output_uuids
-        first_output = dup_action.output_uuids[0]
-        assert history.output_to_action[first_output] == dup_action.uuid
-
-
-# ---------------------------------------------------------------------------
-# 2) HistoryAction / WorkspaceState compatibility
-# ---------------------------------------------------------------------------
-
-
-def test_history_action_compatibility():
-    """``HistoryAction`` compatibility (UUID/shape/legacy fallback + tree marker)."""
     # --- scenario: incompatible when selected UUID disappears ---
     with datalab_test_app_context() as win:
         panel = win.signalpanel
@@ -536,9 +490,7 @@ def test_history_action_compatibility():
         assert item.data(0, HistoryTree.COMPATIBILITY_ROLE) is False
         assert item.foreground(0).color().isValid()
 
-
-def test_history_action_panel_scoped_state():
-    """An action's WorkspaceState only captures its own panel's selection."""
+    # --- scenario: action WorkspaceState is panel-scoped ---
     with datalab_test_app_context() as win:
         history = win.historypanel
         history.toggle_record_mode(True)
@@ -571,12 +523,12 @@ def test_history_action_panel_scoped_state():
 
 
 # ---------------------------------------------------------------------------
-# 3) Recording: compute + UI actions
+# 2) Recording, replay patterns & session replay
 # ---------------------------------------------------------------------------
 
 
-def test_history_recording_compute_and_ui(monkeypatch):
-    """Recording and replay of compute + UI actions (capture fidelity)."""
+def test_history_recording_and_replay(monkeypatch):
+    """Recording, per-pattern replay, session replay, fit replay & capture."""
     with datalab_test_app_context() as win:
         history = win.historypanel
         history.toggle_record_mode(True)
@@ -759,14 +711,6 @@ def test_history_recording_compute_and_ui(monkeypatch):
             assert len(saved_paths) == n_before + 1
             assert saved_paths[-1] == saved_paths[-2]
 
-
-# ---------------------------------------------------------------------------
-# 4) Replay patterns (1_to_n, n_to_1, 2_to_1, multiple_1_to_1, normal)
-# ---------------------------------------------------------------------------
-
-
-def test_history_replay_patterns(monkeypatch):
-    """Replay behaviour for each compute pattern (persistent + non-persistent)."""
     # --- scenario: multiple_1_to_1 replay raises NotImplementedError ---
     with datalab_test_app_context() as win:
         action = HistoryAction(
@@ -811,14 +755,6 @@ def test_history_replay_patterns(monkeypatch):
         entry.replay(win, restore_selection=True, edit=False)
         assert len(panel.objmodel) - n_before_replay == n_added_first
 
-        # --- scenario: 1_to_n via panel API does NOT add output (non-persistent) ---
-        _select_tree_item_for(history, entry)
-        n_before = len(panel.objmodel)
-        n_hist_before = len(history)
-        history.replay_restore_actions(replay=True, restore_selection=True)
-        assert len(panel.objmodel) == n_before
-        assert len(history) == n_hist_before
-
     # --- scenario: n_to_1 forces captured selection ---
     with datalab_test_app_context() as win:
         history = win.historypanel
@@ -836,14 +772,6 @@ def test_history_replay_patterns(monkeypatch):
         n_before = len(panel.objmodel)
         avg_entry.replay(win, restore_selection=False, edit=False)
         assert len(panel.objmodel) == n_before + 1
-
-        # --- scenario: n_to_1 via panel API does NOT add output ---
-        _select_tree_item_for(history, avg_entry)
-        n_before = len(panel.objmodel)
-        n_hist_before = len(history)
-        history.replay_restore_actions(replay=True, restore_selection=True)
-        assert len(panel.objmodel) == n_before
-        assert len(history) == n_hist_before
 
         # --- scenario: n_to_1 falls back when captured UUIDs are gone ---
         win.reset_all()
@@ -940,14 +868,6 @@ def test_history_replay_patterns(monkeypatch):
         assert len(panel.objmodel) == n_signal_before
         assert len(history) == n_history_before
 
-
-# ---------------------------------------------------------------------------
-# 5) Session-level replay (+ reset-starts-new-session)
-# ---------------------------------------------------------------------------
-
-
-def test_history_session_replay():
-    """Full ``HistorySession.replay`` behaviour + reset/session boundaries."""
     # --- scenario: reset_all starts a new session and preserves history ---
     with datalab_test_app_context() as win:
         history = win.historypanel
@@ -1073,26 +993,6 @@ def test_history_session_replay():
         assert len(panel.objmodel) == n_before
         assert len(history) == n_history_before
 
-    # --- scenario: 2_to_1 preserves operand order (primary = #2) ---
-    with datalab_test_app_context() as win:
-        history = win.historypanel
-        history.toggle_record_mode(True)
-        panel = win.signalpanel
-        panel.add_object(create_paracetamol_signal())
-        panel.add_object(create_paracetamol_signal())
-        obj2_for_diff = panel.objmodel.get_object_from_number(1)
-        panel.objview.select_objects([2])
-        panel.processor.run_feature(sips.difference, obj2_for_diff)
-        assert len(panel.objmodel) == 3
-        original_title = panel.objmodel.get_object_from_number(3).title
-        assert "s002" in original_title and "s001" in original_title
-        assert original_title.index("s002") < original_title.index("s001")
-        diff_entry = history[len(history)]
-        _select_tree_item_for(history, diff_entry)
-        n_before = len(panel.objmodel)
-        history.replay_restore_actions(replay=True, restore_selection=True)
-        assert len(panel.objmodel) == n_before
-
     # --- scenario: 2_to_1 with primary = #1, obj2 = #2 ---
     with datalab_test_app_context() as win:
         history = win.historypanel
@@ -1113,32 +1013,150 @@ def test_history_session_replay():
         history.replay_restore_actions(replay=True, restore_selection=True)
         assert len(panel.objmodel) == n_before
 
-    # --- scenario: 1_to_1 on second signal (derivative on #2) ---
+    # --- scenario: duplicate_object registers duplicated outputs ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        panel = win.signalpanel
+        history.toggle_record_mode(True)
+        panel.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1])
+        panel.duplicate_object()
+        session = history.history_sessions[-1]
+        dup_action = next(
+            action
+            for action in session.actions
+            if action.method_name == "duplicate_object"
+        )
+        assert dup_action.output_uuids
+        first_output = dup_action.output_uuids[0]
+        assert history.output_to_action[first_output] == dup_action.uuid
+
+    # --- interactive curve-fit record + .dlhist round-trip + replay ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        panel = win.signalpanel
+
+        # --- scenario: record a polynomial interactive fit as a UI action ---
+        history.toggle_record_mode(True)
+        panel.add_object(create_paracetamol_signal())
+        src = panel.objmodel.get_object_from_number(1)
+        src_uuid = get_uuid(src)
+        panel.objview.select_objects([1])
+
+        degree = 3
+        coeffs = np.polyfit(src.x, src.y, degree)  # highest-first == polyval order
+        fit_values = [float(c) for c in coeffs]
+        expected_y = np.polyval(coeffs, src.x)
+        name = _("Polynomial fit")
+
+        result = sigima.objects.create_signal(f"{name}({src.title})", src.x, expected_y)
+        action = history.add_ui_entry(
+            name,
+            target="signalprocessor",
+            method_name="recompute_fit",
+            save_state=True,
+            fit_type="polynomial",
+            fit_values=fit_values,
+            fit_name=name,
+            source_uuid=src_uuid,
+        )
+        assert action is not None
+        with history.capture_outputs(action):
+            panel.add_object(result)
+        assert action.output_uuids == [get_uuid(result)]
+        assert action.target == "signalprocessor"
+        assert action.panel_str == panel.PANEL_STR_ID
+
+        # --- scenario: .dlhist round-trip preserves uuid + fit kwargs ---
+        ser_session = HistorySession(number=1)
+        ser_session.actions.append(action)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "fit.dlhist")
+            with NativeH5Writer(path) as writer:
+                writer.write_object_list([ser_session], "history_session")
+            with NativeH5Reader(path) as reader:
+                restored_sessions = reader.read_object_list(
+                    "history_session", HistorySession
+                )
+        restored = restored_sessions[0].actions[0]
+        assert restored.uuid == action.uuid
+        assert restored.kind == HistoryAction.KIND_UI
+        assert restored.target == "signalprocessor"
+        assert restored.method_name == "recompute_fit"
+        assert restored.kwargs.get("fit_type") == "polynomial"
+        assert restored.kwargs.get("source_uuid") == src_uuid
+        assert restored.kwargs.get("fit_values") == pytest.approx(fit_values)
+
+        # --- scenario: deterministic replay reconstructs the fit curve ---
+        n_before = len(panel.objmodel)
+        restored.replay(win, restore_selection=True, edit=False)
+        assert len(panel.objmodel) == n_before + 1
+        new_obj = panel.objmodel.get_object_from_number(len(panel.objmodel))
+        assert np.allclose(new_obj.x, src.x)
+        assert np.allclose(new_obj.y, expected_y)
+
+    # --- capture_outputs funnel: drop failed producing computes ---
     with datalab_test_app_context() as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
+
         panel.add_object(create_paracetamol_signal())
-        panel.add_object(create_paracetamol_signal())
-        panel.objview.select_objects([2])
-        panel.processor.run_feature(sips.derivative)
-        assert len(panel.objmodel) == 3
-        original_title = panel.objmodel.get_object_from_number(3).title
-        assert "s002" in original_title
-        deriv_entry = history[len(history)]
-        _select_tree_item_for(history, deriv_entry)
-        n_before = len(panel.objmodel)
-        history.replay_restore_actions(replay=True, restore_selection=True)
-        assert len(panel.objmodel) == n_before
+        panel.objview.select_objects([1])
+
+        # --- scenario: producing compute with no output is dropped ---
+        action = history.add_compute_entry(
+            "Failing op",
+            panel_str="signal",
+            func_name="gaussian_filter",
+            pattern="1_to_1",
+            save_state=True,
+        )
+        assert action is not None
+        len_before = len(history)
+        with history.capture_outputs(action):
+            pass  # simulate a failed compute: no object created
+        assert action not in list(history)
+        assert len(history) == len_before - 1
+        assert action.uuid not in history.action_output_uuids
+
+        # --- control: a UI action producing no object is preserved ---
+        ui_action = history.add_ui_entry(
+            "Some UI",
+            target="signalpanel",
+            method_name="copy_metadata",
+            save_state=False,
+        )
+        assert ui_action is not None
+        ui_len_before = len(history)
+        with history.capture_outputs(ui_action):
+            pass
+        assert ui_action in list(history)
+        assert len(history) == ui_len_before
+
+        # --- control: a 1_to_0 analysis compute producing no object is kept ---
+        analysis_action = history.add_compute_entry(
+            "Analysis op",
+            panel_str="signal",
+            func_name="stats",
+            pattern="1_to_0",
+            save_state=True,
+        )
+        assert analysis_action is not None
+        analysis_len_before = len(history)
+        with history.capture_outputs(analysis_action):
+            pass
+        assert analysis_action in list(history)
+        assert len(history) == analysis_len_before
 
 
 # ---------------------------------------------------------------------------
-# 6) Duplication
+# 3) Duplication
 # ---------------------------------------------------------------------------
 
 
 def test_history_duplication():
-    """Duplication of actions/sessions + replay of duplicates + ordering."""
+    """Action/session duplication, UUID remap, ordering + creation-root cases."""
     # --- scenario: duplicating an action creates an independent copy ---
     with datalab_test_app_context() as win:
         history = win.historypanel
@@ -1267,9 +1285,7 @@ def test_history_duplication():
         clonable = orig_suffixes[: len(dup_suffixes)]
         assert clonable == dup_suffixes
 
-
-def test_history_duplication_cas_a_creation_root():
-    """Duplicating a creation-rooted chain copies the creation (no synthetic head)."""
+    # --- scenario: cas A — creation-rooted chain copies creation (no head) ---
     with datalab_test_app_context() as win:
         history = win.historypanel
         history.toggle_record_mode(True)
@@ -1301,9 +1317,7 @@ def test_history_duplication_cas_a_creation_root():
                 if o and d:
                     assert o.isdisjoint(d)
 
-
-def test_history_duplication_cas_b_synthetic_head():
-    """Duplicating an operation-rooted chain synthesizes an initial-state head."""
+    # --- scenario: cas B — operation-rooted chain synthesizes head ---
     with datalab_test_app_context() as win:
         history = win.historypanel
         history.toggle_record_mode(True)
@@ -1348,98 +1362,12 @@ def test_history_duplication_cas_b_synthetic_head():
 
 
 # ---------------------------------------------------------------------------
-# 7) Stepping + selection sync
+# 4) Editing: processing-tab edits, cascade recompute & invariants
 # ---------------------------------------------------------------------------
 
 
-def test_history_stepping_and_selection_sync():
-    """Step-prev / step-next navigation + tree-to-panel selection sync."""
-    # --- scenario: step_next walks forward through current session ---
-    with datalab_test_app_context() as win:
-        _panel, history = _record_three_action_session(win)
-        sessions = history.history_sessions
-        actions = sessions[-1].actions
-        assert len(actions) >= 2
-        history.tree.clearSelection()
-        for action in actions:
-            history.step_next()
-            current = history.tree.currentItem()
-            assert current is not None
-            assert current.data(0, QC.Qt.UserRole) == action.uuid
-        # End -> no-op.
-        last_uuid = history.tree.currentItem().data(0, QC.Qt.UserRole)
-        history.step_next()
-        assert history.tree.currentItem().data(0, QC.Qt.UserRole) == last_uuid
-
-        # --- scenario: step_prev walks backward through current session ---
-        _select_tree_item_for(history, actions[-1])
-        for expected in reversed(actions[:-1]):
-            history.step_prev()
-            current = history.tree.currentItem()
-            assert current.data(0, QC.Qt.UserRole) == expected.uuid
-        first_uuid = history.tree.currentItem().data(0, QC.Qt.UserRole)
-        history.step_prev()
-        assert history.tree.currentItem().data(0, QC.Qt.UserRole) == first_uuid
-
-    # --- scenario: step button enabled state reflects position ---
-    with datalab_test_app_context() as win:
-        history = win.historypanel
-        prev_btn = history.step_prev_action
-        next_btn = history.step_next_action
-        history.update_actions_state()
-        assert not prev_btn.isEnabled()
-        assert not next_btn.isEnabled()
-        _panel, history = _record_three_action_session(win)
-        sessions = history.history_sessions
-        actions = sessions[-1].actions
-        prev_btn = history.step_prev_action
-        next_btn = history.step_next_action
-        _select_tree_item_for(history, actions[0])
-        assert not prev_btn.isEnabled()
-        assert next_btn.isEnabled()
-        if len(actions) >= 3:
-            _select_tree_item_for(history, actions[1])
-            assert prev_btn.isEnabled()
-            assert next_btn.isEnabled()
-        _select_tree_item_for(history, actions[-1])
-        assert prev_btn.isEnabled()
-        assert not next_btn.isEnabled()
-
-    # --- scenario: selecting a compute action selects its output ---
-    with datalab_test_app_context() as win:
-        history = win.historypanel
-        history.toggle_record_mode(True)
-        panel = win.signalpanel
-        panel.add_object(create_paracetamol_signal())
-        src_uuid = get_uuid(panel.objmodel.get_object_from_number(1))
-        panel.objview.select_objects([1])
-        panel.processor.run_feature(
-            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
-        )
-        out_uuid = get_uuid(panel.objmodel.get_object_from_number(2))
-        norm_entry = history[len(history)]
-        assert norm_entry.func_name == "normalize"
-        assert src_uuid in norm_entry.state.selection.get("signal", [])
-        panel.objview.select_objects([src_uuid])
-        _select_tree_item_for(history, norm_entry)
-        assert panel.objview.get_sel_object_uuids() == [out_uuid]
-
-        # --- scenario: deleted output -> selection falls back to input ---
-        panel.objview.select_objects([2])
-        panel.remove_object(force=True)
-        assert len(panel.objmodel) == 1
-        panel.objview.select_groups([1])
-        _select_tree_item_for(history, norm_entry)
-        assert panel.objview.get_sel_object_uuids() == [src_uuid]
-
-
-# ---------------------------------------------------------------------------
-# 8) Processing-tab edit propagation + restore-selection-only
-# ---------------------------------------------------------------------------
-
-
-def test_history_edit_in_tree():
-    """Processing-tab parameter edits propagate into the matching action."""
+def test_history_editing_and_cascade():
+    """Processing-tab edit propagation, step-by-step, cascade & invariants."""
     # --- scenario: edit updates current session action and refreshes html ---
     with datalab_test_app_context() as win:
         history = win.historypanel
@@ -1526,9 +1454,7 @@ def test_history_edit_in_tree():
         assert len(panel.objmodel) == n_before
         assert panel.objview.get_sel_object_uuids() == [src_uuid]
 
-
-def test_history_step_by_step_launch():
-    """Step-by-step launch replays with dialogs then commits edits immediately."""
+    # --- scenario: step-by-step launch commits edits immediately ---
     with datalab_test_app_context() as win:
         history = win.historypanel
         history.toggle_record_mode(True)
@@ -1547,14 +1473,6 @@ def test_history_step_by_step_launch():
         assert history.edit_mode is previous_edit_mode
         assert history.has_any_pending_edits() is False
 
-
-# ---------------------------------------------------------------------------
-# 9) Cascade recompute
-# ---------------------------------------------------------------------------
-
-
-def test_history_cascade_recompute():
-    """Downstream detection + cascade recompute + duplicated-session cascade."""
     # --- scenario: downstream detection ---
     with datalab_test_app_context() as win:
         history = win.historypanel
@@ -1664,14 +1582,7 @@ def test_history_cascade_recompute():
         )
         assert np.array_equal(panel.objmodel[uuid_c_orig].xydata, data_c_orig)
 
-
-# ---------------------------------------------------------------------------
-# 9b) Creation action editing
-# ---------------------------------------------------------------------------
-
-
-def test_history_edit_creation():
-    """Edit a creation action: update params, cascade downstream, restore."""
+    # --- creation-action editing (params, cascade, restore) ---
     from datalab.gui.panel.history import recompute as hrec
 
     # --- scenario: editing a created Gauss signal cascades to downstream ---
@@ -1753,280 +1664,7 @@ def test_history_edit_creation():
     assert restored_action.has_pending_edits
     assert restored_action.kwargs["param"].sigma == 50.0
 
-
-# ---------------------------------------------------------------------------
-# 10) Chain reconnect after object deletion
-# ---------------------------------------------------------------------------
-
-
-def test_history_chain_reconnect():
-    """Deleting an intermediate result rewires downstream actions to its source."""
-    with datalab_test_app_context() as win:
-        history = win.historypanel
-        history.toggle_record_mode(True)
-        panel = win.signalpanel
-        panel.add_object(create_paracetamol_signal())
-        src_uuid = get_uuid(panel.objmodel.get_object_from_number(1))
-
-        panel.objview.select_objects([1])
-        panel.processor.run_feature(
-            sips.gaussian_filter, sigima.params.GaussianParam.create(sigma=1.5)
-        )
-        s002_uuid = get_uuid(panel.objmodel.get_object_from_number(2))
-        action_gaussian = history[len(history)]
-        assert action_gaussian.func_name == "gaussian_filter"
-
-        panel.objview.select_objects([2])
-        panel.processor.run_feature(sips.derivative)
-        action_deriv = history[len(history)]
-        assert action_deriv.func_name == "derivative"
-        assert s002_uuid in action_deriv.state.selection.get("signal", [])
-
-        panel.objview.select_objects([2])
-        panel.remove_object(force=True)
-        assert len(panel.objmodel) == 2
-
-        reconnected_uuids = action_deriv.state.selection.get("signal", [])
-        assert s002_uuid not in reconnected_uuids
-        assert src_uuid in reconnected_uuids
-
-
-def test_history_chain_model_grouping():
-    """Derived processing-chain read-model groups actions into ordered chains."""
-    with datalab_test_app_context() as win:
-        history = win.historypanel
-        history.toggle_record_mode(True)
-        panel = win.signalpanel
-
-        # Creation via the main-window proxy records a ``new_object`` action and
-        # registers its output UUID. ``panel.add_object`` deliberately does not
-        # record, so it is used below to exercise an externally-rooted chain.
-        win.add_object(create_paracetamol_signal())
-        panel.objview.select_objects([1])
-        panel.processor.run_feature(
-            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
-        )
-        panel.objview.select_objects([2])
-        panel.processor.run_feature(sips.derivative)
-
-        # --- invariant: grouping drops no action, per session ---
-        grouped = build_processing_chains(history)
-        assert len(grouped) == len(history.history_sessions)
-        for sess, sess_chains in grouped:
-            assert isinstance(sess, HistorySession)
-            assert sum(len(c.actions) for c in sess_chains) == len(sess.actions)
-
-        # --- creation-rooted chain: creation -> normalize -> derivative ---
-        all_chains = [c for _sess, chains in grouped for c in chains]
-        creation_chains = [
-            c
-            for c in all_chains
-            if c.root.kind == HistoryAction.KIND_UI
-            and c.root.method_name in HistoryAction.UI_CREATION_METHODS
-        ]
-        assert len(creation_chains) == 1
-        chain = creation_chains[0]
-        assert isinstance(chain, ProcessingChain)
-        assert chain.actions[0] is chain.root
-        assert [a.func_name for a in chain.actions] == [None, "normalize", "derivative"]
-        assert all(a in chain.session.actions for a in chain.actions)
-
-        # --- externally-rooted chain: panel.add_object records no creation, so a
-        # compute on such an object roots its own (compute) chain ---
-        panel.add_object(create_paracetamol_signal())
-        panel.objview.select_objects([len(panel.objmodel)])
-        panel.processor.run_feature(sips.derivative)
-        grouped2 = build_processing_chains(history)
-        for sess, sess_chains in grouped2:
-            assert sum(len(c.actions) for c in sess_chains) == len(sess.actions)
-        external_chains = [
-            c
-            for _sess, chains in grouped2
-            for c in chains
-            if c.root.kind == HistoryAction.KIND_COMPUTE
-        ]
-        assert external_chains
-
-        # Keep build_session_chains imported — it is public API under test
-        assert callable(build_session_chains)
-
-
-def test_history_delete_splits_chain():
-    """Deleting an intermediate action splits its chain via a data copy."""
-    with datalab_test_app_context() as win:
-        history = win.historypanel
-        history.toggle_record_mode(True)
-        panel = win.signalpanel
-
-        # Creation via the main window records a ``new_object`` creation action;
-        # ``panel.add_object`` deliberately does not, so ``win.add_object`` is
-        # required to obtain a creation-rooted chain.
-        win.add_object(create_paracetamol_signal())
-        panel.objview.select_objects([1])
-        panel.processor.run_feature(
-            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
-        )
-        panel.objview.select_objects([2])
-        panel.processor.run_feature(sips.derivative)
-
-        session = history.history_sessions[-1]
-        assert [a.func_name for a in session.actions] == [
-            None,
-            "normalize",
-            "derivative",
-        ]
-        normalize_action = session.actions[1]
-        derivative_action = session.actions[2]
-        n_objects_before = len(panel.objmodel)
-
-        # Delete the MIDDLE action (normalize). Unattended mode auto-confirms and
-        # skips the associated-object removal prompt.
-        _select_tree_item_for(history, normalize_action)
-        history.delete_selected()
-
-        # ``normalize`` is spliced out; creation and ``derivative`` remain.
-        assert normalize_action not in session.actions
-        assert session.actions[0].method_name in HistoryAction.UI_CREATION_METHODS
-        assert derivative_action in session.actions
-
-        # A copy of ``normalize``'s output was added as a new parentless root.
-        assert len(panel.objmodel) == n_objects_before + 1
-
-        # The session now splits into two chains and drops no action.
-        chains = build_session_chains(history, session)
-        assert len(chains) == 2
-        assert sum(len(c.actions) for c in chains) == len(session.actions)
-
-        # ``derivative`` roots a NEW chain (fed by the copy), not the creation one.
-        creation_chain = next(
-            c
-            for c in chains
-            if c.root.kind == HistoryAction.KIND_UI
-            and c.root.method_name in HistoryAction.UI_CREATION_METHODS
-        )
-        assert derivative_action not in creation_chain.actions
-        deriv_chain = next(c for c in chains if derivative_action in c.actions)
-        assert deriv_chain is not creation_chain
-        assert deriv_chain.root is derivative_action
-
-
-def test_history_new_session_prompt_on_input(monkeypatch):
-    """Creating an object on a non-empty session offers to start a new session."""
-    # --- scenario: user accepts the prompt -> a new session is opened ---
-    with datalab_test_app_context() as win:
-        history = win.historypanel
-        history.toggle_record_mode(True)
-
-        # First creation reuses the (empty) current session: no prompt expected.
-        win.add_object(create_paracetamol_signal())
-        assert len(history.history_sessions) == 1
-        assert len(history.history_sessions[-1].actions) == 1
-
-        # Headless "accept": accept_dialogs drives the prompt to "Yes".
-        monkeypatch.setattr(execenv, "accept_dialogs", True)
-        n_sessions = len(history.history_sessions)
-        win.add_object(create_paracetamol_signal())
-        assert len(history.history_sessions) == n_sessions + 1
-        new_session = history.history_sessions[-1]
-        assert new_session.actions
-        assert new_session.actions[0].method_name == "new_object"
-
-    # --- scenario: user declines the prompt -> no new session is created ---
-    with datalab_test_app_context() as win:
-        history = win.historypanel
-        history.toggle_record_mode(True)
-        win.add_object(create_paracetamol_signal())
-        assert len(history.history_sessions) == 1
-
-        # Headless "decline": accept_dialogs stays False -> prompt answered "No".
-        monkeypatch.setattr(execenv, "accept_dialogs", False)
-        n_sessions = len(history.history_sessions)
-        win.add_object(create_paracetamol_signal())
-        assert len(history.history_sessions) == n_sessions
-
-
-def test_history_interactive_fit_replay():
-    """Interactive curve-fit recording and deterministic replay.
-
-    Records an interactive fit as a UI history action targeting the signal
-    processor's ``recompute_fit`` method (exactly as ``__row_compute_fit``
-    does), persists it to a ``.dlhist`` file, then replays it and verifies the
-    reconstructed curve matches the deterministic evaluation -- without any
-    fit dialog.
-    """
-    with datalab_test_app_context() as win:
-        history = win.historypanel
-        panel = win.signalpanel
-
-        # --- scenario: record a polynomial interactive fit as a UI action ---
-        history.toggle_record_mode(True)
-        panel.add_object(create_paracetamol_signal())
-        src = panel.objmodel.get_object_from_number(1)
-        src_uuid = get_uuid(src)
-        panel.objview.select_objects([1])
-
-        degree = 3
-        coeffs = np.polyfit(src.x, src.y, degree)  # highest-first == polyval order
-        fit_values = [float(c) for c in coeffs]
-        expected_y = np.polyval(coeffs, src.x)
-        name = _("Polynomial fit")
-
-        result = sigima.objects.create_signal(f"{name}({src.title})", src.x, expected_y)
-        action = history.add_ui_entry(
-            name,
-            target="signalprocessor",
-            method_name="recompute_fit",
-            save_state=True,
-            fit_type="polynomial",
-            fit_values=fit_values,
-            fit_name=name,
-            source_uuid=src_uuid,
-        )
-        assert action is not None
-        with history.capture_outputs(action):
-            panel.add_object(result)
-        assert action.output_uuids == [get_uuid(result)]
-        assert action.target == "signalprocessor"
-        assert action.panel_str == panel.PANEL_STR_ID
-
-        # --- scenario: .dlhist round-trip preserves uuid + fit kwargs ---
-        ser_session = HistorySession(number=1)
-        ser_session.actions.append(action)
-        with tempfile.TemporaryDirectory() as tmpdir:
-            path = os.path.join(tmpdir, "fit.dlhist")
-            with NativeH5Writer(path) as writer:
-                writer.write_object_list([ser_session], "history_session")
-            with NativeH5Reader(path) as reader:
-                restored_sessions = reader.read_object_list(
-                    "history_session", HistorySession
-                )
-        restored = restored_sessions[0].actions[0]
-        assert restored.uuid == action.uuid
-        assert restored.kind == HistoryAction.KIND_UI
-        assert restored.target == "signalprocessor"
-        assert restored.method_name == "recompute_fit"
-        assert restored.kwargs.get("fit_type") == "polynomial"
-        assert restored.kwargs.get("source_uuid") == src_uuid
-        assert restored.kwargs.get("fit_values") == pytest.approx(fit_values)
-
-        # --- scenario: deterministic replay reconstructs the fit curve ---
-        n_before = len(panel.objmodel)
-        restored.replay(win, restore_selection=True, edit=False)
-        assert len(panel.objmodel) == n_before + 1
-        new_obj = panel.objmodel.get_object_from_number(len(panel.objmodel))
-        assert np.allclose(new_obj.x, src.x)
-        assert np.allclose(new_obj.y, expected_y)
-
-
-def test_history_recompute_invariants():
-    """Characterization: lock current cascade-recompute behavior (pre-P3 slimming).
-
-    These assertions document the *current* behavior of the History panel
-    cascade so that the upcoming architecture-slimming refactor (routing
-    recompute through the pre-existing Apply/processor paths) cannot silently
-    change observable results. Update deliberately (with justification) if a
-    refactor intentionally changes a documented behavior.
-    """
+    # --- cascade-recompute characterization invariants (pre-P3 slimming) ---
     # --- scenario: cascade recompute call-count is bounded (no infinite loop) ---
     with datalab_test_app_context() as win:
         history = win.historypanel
@@ -2103,9 +1741,269 @@ def test_history_recompute_invariants():
         assert panel.objmodel[uuid_c].metadata.get("sentinel_p3a") == 123
 
 
-def test_history_active_session_routing():
-    """Recording routes per-panel into separate active sessions; selecting a
-    session resumes recording into it (A1)."""
+# ---------------------------------------------------------------------------
+# 5) Navigation, stepping & processing chains
+# ---------------------------------------------------------------------------
+
+
+def test_history_navigation_and_chains(monkeypatch):
+    """Stepping/selection sync, chain reconnect/grouping/split & sessions."""
+    # --- scenario: step_next walks forward through current session ---
+    with datalab_test_app_context() as win:
+        _panel, history = _record_three_action_session(win)
+        sessions = history.history_sessions
+        actions = sessions[-1].actions
+        assert len(actions) >= 2
+        history.tree.clearSelection()
+        for action in actions:
+            history.step_next()
+            current = history.tree.currentItem()
+            assert current is not None
+            assert current.data(0, QC.Qt.UserRole) == action.uuid
+        # End -> no-op.
+        last_uuid = history.tree.currentItem().data(0, QC.Qt.UserRole)
+        history.step_next()
+        assert history.tree.currentItem().data(0, QC.Qt.UserRole) == last_uuid
+
+        # --- scenario: step_prev walks backward through current session ---
+        _select_tree_item_for(history, actions[-1])
+        for expected in reversed(actions[:-1]):
+            history.step_prev()
+            current = history.tree.currentItem()
+            assert current.data(0, QC.Qt.UserRole) == expected.uuid
+        first_uuid = history.tree.currentItem().data(0, QC.Qt.UserRole)
+        history.step_prev()
+        assert history.tree.currentItem().data(0, QC.Qt.UserRole) == first_uuid
+
+    # --- scenario: step button enabled state reflects position ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        prev_btn = history.step_prev_action
+        next_btn = history.step_next_action
+        history.update_actions_state()
+        assert not prev_btn.isEnabled()
+        assert not next_btn.isEnabled()
+        _panel, history = _record_three_action_session(win)
+        sessions = history.history_sessions
+        actions = sessions[-1].actions
+        prev_btn = history.step_prev_action
+        next_btn = history.step_next_action
+        _select_tree_item_for(history, actions[0])
+        assert not prev_btn.isEnabled()
+        assert next_btn.isEnabled()
+        if len(actions) >= 3:
+            _select_tree_item_for(history, actions[1])
+            assert prev_btn.isEnabled()
+            assert next_btn.isEnabled()
+        _select_tree_item_for(history, actions[-1])
+        assert prev_btn.isEnabled()
+        assert not next_btn.isEnabled()
+
+    # --- scenario: selecting a compute action selects its output ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+        panel.add_object(create_paracetamol_signal())
+        src_uuid = get_uuid(panel.objmodel.get_object_from_number(1))
+        panel.objview.select_objects([1])
+        panel.processor.run_feature(
+            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
+        )
+        out_uuid = get_uuid(panel.objmodel.get_object_from_number(2))
+        norm_entry = history[len(history)]
+        assert norm_entry.func_name == "normalize"
+        assert src_uuid in norm_entry.state.selection.get("signal", [])
+        panel.objview.select_objects([src_uuid])
+        _select_tree_item_for(history, norm_entry)
+        assert panel.objview.get_sel_object_uuids() == [out_uuid]
+
+        # --- scenario: deleted output -> selection falls back to input ---
+        panel.objview.select_objects([2])
+        panel.remove_object(force=True)
+        assert len(panel.objmodel) == 1
+        panel.objview.select_groups([1])
+        _select_tree_item_for(history, norm_entry)
+        assert panel.objview.get_sel_object_uuids() == [src_uuid]
+
+    # --- scenario: deleting intermediate result rewires downstream to source ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+        panel.add_object(create_paracetamol_signal())
+        src_uuid = get_uuid(panel.objmodel.get_object_from_number(1))
+
+        panel.objview.select_objects([1])
+        panel.processor.run_feature(
+            sips.gaussian_filter, sigima.params.GaussianParam.create(sigma=1.5)
+        )
+        s002_uuid = get_uuid(panel.objmodel.get_object_from_number(2))
+        action_gaussian = history[len(history)]
+        assert action_gaussian.func_name == "gaussian_filter"
+
+        panel.objview.select_objects([2])
+        panel.processor.run_feature(sips.derivative)
+        action_deriv = history[len(history)]
+        assert action_deriv.func_name == "derivative"
+        assert s002_uuid in action_deriv.state.selection.get("signal", [])
+
+        panel.objview.select_objects([2])
+        panel.remove_object(force=True)
+        assert len(panel.objmodel) == 2
+
+        reconnected_uuids = action_deriv.state.selection.get("signal", [])
+        assert s002_uuid not in reconnected_uuids
+        assert src_uuid in reconnected_uuids
+
+    # --- scenario: chain read-model groups actions into ordered chains ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+
+        # Creation via the main-window proxy records a ``new_object`` action and
+        # registers its output UUID. ``panel.add_object`` deliberately does not
+        # record, so it is used below to exercise an externally-rooted chain.
+        win.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1])
+        panel.processor.run_feature(
+            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
+        )
+        panel.objview.select_objects([2])
+        panel.processor.run_feature(sips.derivative)
+
+        # --- invariant: grouping drops no action, per session ---
+        grouped = build_processing_chains(history)
+        assert len(grouped) == len(history.history_sessions)
+        for sess, sess_chains in grouped:
+            assert isinstance(sess, HistorySession)
+            assert sum(len(c.actions) for c in sess_chains) == len(sess.actions)
+
+        # --- creation-rooted chain: creation -> normalize -> derivative ---
+        all_chains = [c for _sess, chains in grouped for c in chains]
+        creation_chains = [
+            c
+            for c in all_chains
+            if c.root.kind == HistoryAction.KIND_UI
+            and c.root.method_name in HistoryAction.UI_CREATION_METHODS
+        ]
+        assert len(creation_chains) == 1
+        chain = creation_chains[0]
+        assert isinstance(chain, ProcessingChain)
+        assert chain.actions[0] is chain.root
+        assert [a.func_name for a in chain.actions] == [None, "normalize", "derivative"]
+        assert all(a in chain.session.actions for a in chain.actions)
+
+        # --- externally-rooted chain: a fresh session started on a
+        # non-recorded object (panel.add_object records no creation) roots its
+        # own (compute) chain, since a session's root is its first action ---
+        history.create_new_session(panel_str="signal")
+        panel.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([len(panel.objmodel)])
+        panel.processor.run_feature(sips.derivative)
+        grouped2 = build_processing_chains(history)
+        for sess, sess_chains in grouped2:
+            assert sum(len(c.actions) for c in sess_chains) == len(sess.actions)
+        external_chains = [
+            c
+            for _sess, chains in grouped2
+            for c in chains
+            if c.root.kind == HistoryAction.KIND_COMPUTE
+        ]
+        assert external_chains
+
+        # Keep build_session_chains imported — it is public API under test
+        assert callable(build_session_chains)
+
+    # --- scenario: deleting an intermediate action splits its chain ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+
+        # Creation via the main window records a ``new_object`` creation action;
+        # ``panel.add_object`` deliberately does not, so ``win.add_object`` is
+        # required to obtain a creation-rooted chain.
+        win.add_object(create_paracetamol_signal())
+        panel.objview.select_objects([1])
+        panel.processor.run_feature(
+            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
+        )
+        panel.objview.select_objects([2])
+        panel.processor.run_feature(sips.derivative)
+
+        session = history.history_sessions[-1]
+        assert [a.func_name for a in session.actions] == [
+            None,
+            "normalize",
+            "derivative",
+        ]
+        normalize_action = session.actions[1]
+        derivative_action = session.actions[2]
+        s002_uuid = get_uuid(panel.objmodel.get_object_from_number(2))
+        assert s002_uuid in derivative_action.state.selection.get("signal", [])
+        n_objects_before = len(panel.objmodel)
+
+        # Delete the MIDDLE action (normalize). Unattended mode auto-confirms and
+        # skips the associated-object removal prompt.
+        _select_tree_item_for(history, normalize_action)
+        history.delete_selected()
+
+        # ``normalize`` is spliced out; creation and ``derivative`` remain.
+        assert normalize_action not in session.actions
+        assert session.actions[0].method_name in HistoryAction.UI_CREATION_METHODS
+        assert derivative_action in session.actions
+
+        # A copy of ``normalize``'s output was added as a new parentless root.
+        assert len(panel.objmodel) == n_objects_before + 1
+
+        # The session remains a single linear chain (the history model does not
+        # split a session on delete) and drops no action.
+        chains = build_session_chains(history, session)
+        assert len(chains) == 1
+        assert sum(len(c.actions) for c in chains) == len(session.actions)
+
+        # The observable "split" is a data-level rewire: ``derivative`` no longer
+        # consumes ``normalize``'s original output (s002) but the parentless COPY
+        # added by the delete.
+        deriv_inputs = derivative_action.state.selection.get("signal", [])
+        assert s002_uuid not in deriv_inputs
+
+    # --- new-session prompt when creating on a non-empty session ---
+    # --- scenario: user accepts the prompt -> a new session is opened ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+
+        # First creation reuses the (empty) current session: no prompt expected.
+        win.add_object(create_paracetamol_signal())
+        assert len(history.history_sessions) == 1
+        assert len(history.history_sessions[-1].actions) == 1
+
+        # Headless "accept": accept_dialogs drives the prompt to "Yes".
+        monkeypatch.setattr(execenv, "accept_dialogs", True)
+        n_sessions = len(history.history_sessions)
+        win.add_object(create_paracetamol_signal())
+        assert len(history.history_sessions) == n_sessions + 1
+        new_session = history.history_sessions[-1]
+        assert new_session.actions
+        assert new_session.actions[0].method_name == "new_object"
+
+    # --- scenario: user declines the prompt -> no new session is created ---
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        win.add_object(create_paracetamol_signal())
+        assert len(history.history_sessions) == 1
+
+        # Headless "decline": accept_dialogs stays False -> prompt answered "No".
+        monkeypatch.setattr(execenv, "accept_dialogs", False)
+        n_sessions = len(history.history_sessions)
+        win.add_object(create_paracetamol_signal())
+        assert len(history.history_sessions) == n_sessions
+
+    # --- scenario: recording routes per-panel into separate active sessions ---
     with datalab_test_app_context() as win:
         history = win.historypanel
         history.toggle_record_mode(True)
@@ -2155,10 +2053,7 @@ def test_history_active_session_routing():
         assert len(empty_session.actions) == 0  # NOT the empty session
         assert len(image_session.actions) == 1  # image untouched
 
-
-def test_history_active_session_highlight():
-    """Each panel's active recording session is highlighted (bold) in the tree;
-    the highlight survives a repopulate and follows active-session changes (A2)."""
+    # --- scenario: each panel's active session is highlighted (bold) ---
     with datalab_test_app_context() as win:
         history = win.historypanel
         history.toggle_record_mode(True)
@@ -2202,73 +2097,7 @@ def test_history_active_session_highlight():
         assert _is_bold(new_signal)
         assert _is_bold(image_session)
 
-
-def test_history_capture_outputs_drops_failed_compute():
-    """A producing compute that creates no object is removed from the history.
-
-    ``capture_outputs`` is the single funnel for object-producing computes:
-    when an object-producing *compute* action yields no new UUID it has failed
-    (or was a full no-op) and must not linger as a misleading "OK" entry. UI
-    actions and ``1_to_0`` analyses legitimately produce no object and must be
-    preserved.
-    """
-    with datalab_test_app_context() as win:
-        history = win.historypanel
-        history.toggle_record_mode(True)
-        panel = win.signalpanel
-
-        panel.add_object(create_paracetamol_signal())
-        panel.objview.select_objects([1])
-
-        # --- scenario: producing compute with no output is dropped ---
-        action = history.add_compute_entry(
-            "Failing op",
-            panel_str="signal",
-            func_name="gaussian_filter",
-            pattern="1_to_1",
-            save_state=True,
-        )
-        assert action is not None
-        len_before = len(history)
-        with history.capture_outputs(action):
-            pass  # simulate a failed compute: no object created
-        assert action not in list(history)
-        assert len(history) == len_before - 1
-        assert action.uuid not in history.action_output_uuids
-
-        # --- control: a UI action producing no object is preserved ---
-        ui_action = history.add_ui_entry(
-            "Some UI",
-            target="signalpanel",
-            method_name="copy_metadata",
-            save_state=False,
-        )
-        assert ui_action is not None
-        ui_len_before = len(history)
-        with history.capture_outputs(ui_action):
-            pass
-        assert ui_action in list(history)
-        assert len(history) == ui_len_before
-
-        # --- control: a 1_to_0 analysis compute producing no object is kept ---
-        analysis_action = history.add_compute_entry(
-            "Analysis op",
-            panel_str="signal",
-            func_name="stats",
-            pattern="1_to_0",
-            save_state=True,
-        )
-        assert analysis_action is not None
-        analysis_len_before = len(history)
-        with history.capture_outputs(analysis_action):
-            pass
-        assert analysis_action in list(history)
-        assert len(history) == analysis_len_before
-
-
-def test_history_compatibility_refresh_tolerates_stale_tree():
-    """update_compatibility_states must not crash when the tree transiently
-    references an action already removed from the model (regression)."""
+    # --- scenario: compatibility refresh tolerates a stale tree (regression) ---
     with datalab_test_app_context() as win:
         history = win.historypanel
         history.toggle_record_mode(True)

@@ -34,7 +34,7 @@ def create_new_session(
     Returns:
         The newly created session.
     """
-    pstr = panel_str or panel._current_panel_str()
+    pstr = panel_str or panel.current_panel_str()
     panel.session_increment += 1
     session = HistorySession(number=panel.session_increment)
     panel.history_sessions.append(session)
@@ -64,7 +64,7 @@ def maybe_start_session_for_input(panel: HistoryPanel, *, load: bool = False) ->
     """
     if not panel.record_mode_enabled or panel.is_replaying():
         return
-    if panel._suppress_session_prompt:
+    if panel.suppress_session_prompt:
         return
     # Reuse the current session when there is none yet or it has no actions:
     # there is nothing to preserve, so no need to prompt.
@@ -72,10 +72,10 @@ def maybe_start_session_for_input(panel: HistoryPanel, *, load: bool = False) ->
         return
     # Debounce: a synchronous burst of creations (plugin/macro) must prompt only
     # once. The guard is reset on the next event-loop turn.
-    if panel._session_input_pending:
+    if panel.session_input_pending:
         return
-    panel._session_input_pending = True
-    QC.QTimer.singleShot(0, lambda: setattr(panel, "_session_input_pending", False))
+    panel.session_input_pending = True
+    QC.QTimer.singleShot(0, lambda: setattr(panel, "session_input_pending", False))
     if execenv.unattended:
         # Headless runs: honor the accept_dialogs flag (default False -> "No"),
         # so tests can drive the behavior without a real modal dialog.
@@ -373,7 +373,7 @@ def add_object(panel: HistoryPanel, obj: HistoryAction) -> None:
     and image pipelines stay in separate sessions and recording resumes in the
     user-selected session.
     """
-    pstr = obj.panel_str or panel._current_panel_str()
+    pstr = obj.panel_str or panel.current_panel_str()
     session = panel.get_active_session(pstr)
     if session is None:
         session = panel.create_new_session(panel_str=pstr)

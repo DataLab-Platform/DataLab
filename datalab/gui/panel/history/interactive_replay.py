@@ -117,13 +117,13 @@ def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) 
     downstream actions are left untouched (no automatic cascade). A
     re-entrance guard prevents nested prompt loops.
     """
-    if getattr(panel, "_edit_replay_in_progress", False):
+    if panel.edit_replay_in_progress:
         return
     # Deduplicate and sort the selected actions in their session order
-    ordered = _order_selected_actions(panel, actions)
+    ordered = order_selected_actions(panel, actions)
     if not ordered:
         return
-    panel._edit_replay_in_progress = True
+    panel.edit_replay_in_progress = True
     try:
         edited_actions: list[HistoryAction] = []
         recomputable: list[HistoryAction] = []
@@ -158,10 +158,10 @@ def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) 
             hrec.recompute_cascade(panel, edited_actions[0])
         QW.QApplication.processEvents()
     finally:
-        panel._edit_replay_in_progress = False
+        panel.edit_replay_in_progress = False
 
 
-def _order_selected_actions(
+def order_selected_actions(
     panel: HistoryPanel, actions: list[HistoryAction]
 ) -> list[HistoryAction]:
     """Deduplicate ``actions`` and sort them by (session, position) order."""

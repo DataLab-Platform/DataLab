@@ -167,13 +167,13 @@ class HistoryTree(QW.QTreeWidget):
             ritem.setData(0, self.SESSION_NUMBER_ROLE, session.number)
             ritem.setData(0, self.ITEM_KIND_ROLE, self.ITEM_SESSION)
             self.addTopLevelItem(ritem)
-            self._build_session_children(ritem, session)
+            self.build_session_children(ritem, session)
         self.expandAll()
         for col in (0, 1):
             self.resizeColumnToContents(col)
         self.__apply_active_highlight()
 
-    def _build_session_children(
+    def build_session_children(
         self, session_item: QW.QTreeWidgetItem, session: HistorySession
     ) -> None:
         """(Re)build the chain/action subtree under ``session_item``.
@@ -251,7 +251,7 @@ class HistoryTree(QW.QTreeWidget):
         if ritem is None:
             return
         session = self._panel.history_sessions[session_index]
-        self._build_session_children(ritem, session)
+        self.build_session_children(ritem, session)
         ritem.setExpanded(True)
 
     def refresh_action_item(self, action: HistoryAction) -> None:

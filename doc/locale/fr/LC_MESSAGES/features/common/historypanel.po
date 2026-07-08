@@ -241,4 +241,3 @@ msgstr "Lorsqu'un objet résultat est sélectionné dans le panneau signal/image
 
 #~ msgid "generate_macro"
 #~ msgstr "generate_macro"
-

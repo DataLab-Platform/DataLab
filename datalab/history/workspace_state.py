@@ -87,10 +87,10 @@ class WorkspaceState:
         else:
             self.object_metadata = {}
         # Normalize legacy translated keys to stable panel identifiers.
-        self.selection = self._normalize_panel_keys(self.selection)
-        self.states = self._normalize_panel_keys(self.states)
-        self.titles = self._normalize_panel_keys(self.titles)
-        self.object_metadata = self._normalize_panel_keys(self.object_metadata)
+        self.selection = self.normalize_panel_keys(self.selection)
+        self.states = self.normalize_panel_keys(self.states)
+        self.titles = self.normalize_panel_keys(self.titles)
+        self.object_metadata = self.normalize_panel_keys(self.object_metadata)
 
     def get_current_selection(self, mainwindow: DLMainWindow) -> dict[str, list[str]]:
         """Get the current selection in the workspace, keyed by panel name and
@@ -122,7 +122,7 @@ class WorkspaceState:
         return {"shape": shape, "ndim": int(ndim)}
 
     @staticmethod
-    def _normalize_object_metadata(metadata: dict[str, Any]) -> dict[str, Any]:
+    def normalize_object_metadata(metadata: dict[str, Any]) -> dict[str, Any]:
         """Normalize object metadata loaded from HDF5 for comparison."""
         shape = metadata.get("shape")
         if shape is None:
@@ -140,7 +140,7 @@ class WorkspaceState:
     }
 
     @classmethod
-    def _normalize_panel_key(cls, key: str) -> str:
+    def normalize_panel_key(cls, key: str) -> str:
         """Map a potentially translated panel key to its stable identifier."""
         if key in ("signal", "image"):
             return key
@@ -156,9 +156,9 @@ class WorkspaceState:
         return key
 
     @classmethod
-    def _normalize_panel_keys(cls, d: dict) -> dict:
+    def normalize_panel_keys(cls, d: dict) -> dict:
         """Return *d* with all top-level keys normalized to stable panel IDs."""
-        return {cls._normalize_panel_key(k): v for k, v in d.items()}
+        return {cls.normalize_panel_key(k): v for k, v in d.items()}
 
     def save(self, mainwindow: DLMainWindow, panel_str: str | None = None) -> None:
         """Save the current workspace state
@@ -236,8 +236,8 @@ class WorkspaceState:
                     return False
                 if uuid in saved_metadata:
                     current = self.get_object_metadata(panel.objmodel[uuid])
-                    current = self._normalize_object_metadata(current)
-                    saved = self._normalize_object_metadata(saved_metadata[uuid])
+                    current = self.normalize_object_metadata(current)
+                    saved = self.normalize_object_metadata(saved_metadata[uuid])
                     if saved and current != saved:
                         return False
         return True

@@ -32,14 +32,14 @@ if TYPE_CHECKING:
     from datalab.gui.panel.history import HistoryPanel
 
 
-def _action_panel_str(action: HistoryAction) -> str:
+def action_panel_str(action: HistoryAction) -> str:
     """Return the panel an action operates on, using target as fallback."""
     if action.panel_str:
         return action.panel_str
     return {"imagepanel": "image", "signalpanel": "signal"}.get(action.target, "signal")
 
 
-def _make_initial_state_head(pstr: str, clone_uuid: str, title: str) -> HistoryAction:
+def make_initial_state_head(pstr: str, clone_uuid: str, title: str) -> HistoryAction:
     """Return a synthetic creation-root action for an operation-rooted chain.
 
     A *Cas B* chain starts from an operation whose input object was created
@@ -156,7 +156,7 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
                     uuids_by_panel.setdefault(pstr, set()).update(metadata.keys())
                 obj2 = action.kwargs.get("obj2_uuids")
                 if obj2:
-                    pstr = _action_panel_str(action)
+                    pstr = action_panel_str(action)
                     if isinstance(obj2, str):
                         obj2 = [obj2]
                     uuids_by_panel.setdefault(pstr, set()).update(obj2)
@@ -164,7 +164,7 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
                 # compute step). Without this, the last action's outputs
                 # would be missing because no subsequent state captures them.
                 if action.output_uuids:
-                    pstr = _action_panel_str(action)
+                    pstr = action_panel_str(action)
                     uuids_by_panel.setdefault(pstr, set()).update(action.output_uuids)
 
         # 3. Clone objects and build uuid_remap.
@@ -258,7 +258,7 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
                     root_inputs.append((pstr, old_uuid))
             obj2 = chain.root.kwargs.get("obj2_uuids")
             if obj2:
-                pstr = _action_panel_str(chain.root)
+                pstr = action_panel_str(chain.root)
                 if isinstance(obj2, str):
                     obj2 = [obj2]
                 for old_uuid in obj2:
@@ -278,7 +278,7 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
                         head_title = data_panel.objmodel[clone_uuid].title
                     except (KeyError, AttributeError):
                         head_title = _("Initial state")
-                head = _make_initial_state_head(pstr, clone_uuid, head_title)
+                head = make_initial_state_head(pstr, clone_uuid, head_title)
                 heads.append(head)
                 panel.action_output_uuids[head.uuid] = [clone_uuid]
                 panel.output_to_action[clone_uuid] = head.uuid
@@ -316,7 +316,7 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
     panel.update_actions_state()
 
 
-def _data_panel_for(panel: HistoryPanel, panel_str: str) -> BaseDataPanel | None:
+def data_panel_for(panel: HistoryPanel, panel_str: str) -> BaseDataPanel | None:
     """Return the data panel matching ``panel_str`` (``"signal"``/``"image"``)."""
     if panel_str == "signal":
         return panel.mainwindow.signalpanel
@@ -325,7 +325,7 @@ def _data_panel_for(panel: HistoryPanel, panel_str: str) -> BaseDataPanel | None
     return None
 
 
-def _action_input_uuids(action: HistoryAction) -> set[str]:
+def action_input_uuids(action: HistoryAction) -> set[str]:
     """Return the set of object UUIDs consumed as inputs by ``action``."""
     captured: set[str] = set(action.state.selection.get(action.panel_str or "", []))
     obj2 = action.kwargs.get("obj2_uuids")
@@ -337,7 +337,7 @@ def _action_input_uuids(action: HistoryAction) -> set[str]:
     return captured
 
 
-def _strip_source_links(obj) -> None:
+def strip_source_links(obj) -> None:
     """Turn ``obj`` into a parentless creation root (drop source references)."""
     pp = extract_processing_parameters(obj)
     if pp is None:
@@ -354,7 +354,7 @@ def _strip_source_links(obj) -> None:
     )
 
 
-def _remap_object_source(obj, old_uuid: str, new_uuid: str) -> None:
+def remap_object_source(obj, old_uuid: str, new_uuid: str) -> None:
     """Replace ``old_uuid`` with ``new_uuid`` in ``obj``'s source references."""
     pp = extract_processing_parameters(obj)
     if pp is None:
@@ -370,11 +370,11 @@ def _remap_object_source(obj, old_uuid: str, new_uuid: str) -> None:
         insert_processing_parameters(obj, pp)
 
 
-def _first_alive_output(
+def first_alive_output(
     panel: HistoryPanel, panel_str: str, output_uuids: list[str]
 ) -> str | None:
     """Return the first ``output_uuids`` entry still present in its data panel."""
-    data_panel = _data_panel_for(panel, panel_str)
+    data_panel = data_panel_for(panel, panel_str)
     if data_panel is None:
         return None
     for out_uuid in output_uuids:
@@ -383,7 +383,7 @@ def _first_alive_output(
     return None
 
 
-def _split_chain_on_action_delete(
+def split_chain_on_action_delete(
     panel: HistoryPanel, action: HistoryAction
 ) -> str | None:
     """Splice ``action`` out of its session and split its processing chain.
@@ -409,16 +409,16 @@ def _split_chain_on_action_delete(
     # Splice the action out (does not truncate the rest of the session).
     hchain.remove_single_action(panel, action)
     if not downstream:
-        return _first_alive_output(panel, panel_str, output_uuids)
+        return first_alive_output(panel, panel_str, output_uuids)
     first = downstream[0]
-    data_panel = _data_panel_for(panel, first.panel_str or "")
+    data_panel = data_panel_for(panel, first.panel_str or "")
     if data_panel is None:
-        return _first_alive_output(panel, panel_str, output_uuids)
+        return first_alive_output(panel, panel_str, output_uuids)
     # Locate the orphaned output object that ``first`` still consumes.
-    first_inputs = _action_input_uuids(first)
+    first_inputs = action_input_uuids(first)
     orphan_uuid = next((u for u in output_uuids if u in first_inputs), None)
     if orphan_uuid is None or not data_panel.objmodel.has_uuid(orphan_uuid):
-        return _first_alive_output(panel, panel_str, output_uuids)
+        return first_alive_output(panel, panel_str, output_uuids)
     # §8.2 — autonomy via COPY: clone the orphan as a parentless creation root.
     orphan_obj = data_panel.objmodel[orphan_uuid]
     clone = deepcopy(orphan_obj)
@@ -427,24 +427,24 @@ def _split_chain_on_action_delete(
         clone.set_metadata_option("uuid", new_uuid)
     except AttributeError:
         clone.uuid = new_uuid
-    _strip_source_links(clone)
+    strip_source_links(clone)
     group_id = get_uuid(data_panel.add_group(_("Chain copy")))
     data_panel.add_object(clone, group_id=group_id)
     # Rewire ALL downstream actions that directly consume the orphan onto the copy.
     for d in downstream:
-        if orphan_uuid not in _action_input_uuids(d):
+        if orphan_uuid not in action_input_uuids(d):
             continue
         hchain.rewrite_action_source(d, d.panel_str or "", orphan_uuid, new_uuid)
         for out_uuid in panel.action_output_uuids.get(d.uuid, []):
             if data_panel.objmodel.has_uuid(out_uuid):
-                _remap_object_source(
+                remap_object_source(
                     data_panel.objmodel[out_uuid], orphan_uuid, new_uuid
                 )
     # The orphan is now consumed by no surviving action: report it as orphaned.
     return orphan_uuid if data_panel.objmodel.has_uuid(orphan_uuid) else None
 
 
-def _remove_data_object(data_panel: BaseDataPanel, obj_uuid: str) -> None:
+def remove_data_object(data_panel: BaseDataPanel, obj_uuid: str) -> None:
     """Remove a single object from ``data_panel`` without recording history."""
     obj = data_panel.objmodel[obj_uuid]
     data_panel.plothandler.remove_item(obj_uuid)
@@ -504,7 +504,7 @@ def delete_selected(panel: HistoryPanel) -> None:
             sessions_to_remove.add(id(item))
         elif isinstance(item, HistoryAction):
             # Individual action: splice it out and split its chain (with copy).
-            orphan_uuid = _split_chain_on_action_delete(panel, item)
+            orphan_uuid = split_chain_on_action_delete(panel, item)
             if orphan_uuid is not None:
                 orphan_refs.append((item.panel_str or "", orphan_uuid))
     panel.history_sessions = [
@@ -513,7 +513,7 @@ def delete_selected(panel: HistoryPanel) -> None:
     # §8.3 — opt-in: offer to also remove the now-orphaned output object(s).
     alive_orphans: list[tuple[BaseDataPanel, str]] = []
     for panel_str, orphan_uuid in orphan_refs:
-        data_panel = _data_panel_for(panel, panel_str)
+        data_panel = data_panel_for(panel, panel_str)
         if data_panel is not None and data_panel.objmodel.has_uuid(orphan_uuid):
             alive_orphans.append((data_panel, orphan_uuid))
     if alive_orphans and not execenv.unattended:
@@ -531,7 +531,7 @@ def delete_selected(panel: HistoryPanel) -> None:
             touched: dict[int, BaseDataPanel] = {}
             for data_panel, orphan_uuid in alive_orphans:
                 if data_panel.objmodel.has_uuid(orphan_uuid):
-                    _remove_data_object(data_panel, orphan_uuid)
+                    remove_data_object(data_panel, orphan_uuid)
                     touched[id(data_panel)] = data_panel
             for data_panel in touched.values():
                 data_panel.objview.update_tree()
