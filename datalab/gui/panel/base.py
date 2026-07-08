@@ -2591,19 +2591,43 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         # Recompute 1-to-1 processing operations first (they modify data in-place),
         # so that any subsequent analysis recomputation uses the updated data.
-        self.__recompute_1_to_1_objects(recomputable_objects)
+        recomputed_uuids, was_interrupted = self.__recompute_1_to_1_objects(
+            recomputable_objects
+        )
+
+        # If user canceled/stopped the 1-to-1 pass, do not continue with analysis
+        # recomputation.
+        if was_interrupted:
+            return
 
         # Recompute 1-to-0 analysis operations (refresh results on current data).
-        self.__recompute_1_to_0_objects(reanalyzable_objects)
+        # For objects that also had a 1-to-1 step, only recompute analysis if that
+        # step actually succeeded.
+        analysis_targets = []
+        for obj in reanalyzable_objects:
+            obj_uuid = get_uuid(obj)
+            if obj in recomputable_objects and obj_uuid not in recomputed_uuids:
+                continue
+            analysis_targets.append(obj)
+        self.__recompute_1_to_0_objects(analysis_targets)
 
-    def __recompute_1_to_1_objects(self, objects: list[SignalObj | ImageObj]) -> None:
+    def __recompute_1_to_1_objects(
+        self, objects: list[SignalObj | ImageObj]
+    ) -> tuple[set[str], bool]:
         """Recompute in-place 1-to-1 processing operations for the given objects.
 
         Args:
             objects: Objects with stored 1-to-1 processing parameters
+
+        Returns:
+            Tuple containing:
+            - Set of object UUIDs successfully recomputed
+            - True if operation was interrupted (progress canceled or user chose
+              to stop after a failure), False otherwise
         """
         if not objects:
-            return
+            return set(), False
+        recomputed_uuids: set[str] = set()
         with create_progress_bar(
             self, _("Recomputing objects"), max_=len(objects)
         ) as progress:
@@ -2611,14 +2635,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 progress.setValue(index + 1)
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
-                    break
+                    return recomputed_uuids, True
 
                 # Temporarily set as current to use existing infrastructure
                 self.objview.set_current_object(obj)
                 report = self.objprop.apply_processing_parameters(
                     obj=obj, interactive=False
                 )
-                if report.success or execenv.unattended:
+                if report.success:
+                    recomputed_uuids.add(get_uuid(obj))
+                    continue
+                if execenv.unattended:
                     continue
                 failtxt = _("Failed to recompute object")
                 if index == len(objects) - 1:
@@ -2636,7 +2663,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         QW.QMessageBox.Yes | QW.QMessageBox.No,
                     )
                     if answer == QW.QMessageBox.No:
-                        break
+                        return recomputed_uuids, True
+        return recomputed_uuids, False
 
     def __recompute_1_to_0_objects(self, objects: list[SignalObj | ImageObj]) -> None:
         """Recompute 1-to-0 analysis operations for the given objects.
