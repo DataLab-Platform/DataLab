@@ -167,7 +167,7 @@ def test_recompute():
             # Recompute with different input signal data
             constant = 1.23098765
             signal.y += constant
-            panel.recompute_processing()
+            panel.recompute_selected()
 
             assert np.allclose(filtered_sig.y, original_data + constant)
 
@@ -675,7 +675,7 @@ def test_cross_panel_image_to_signal():
             original_signal_data = signal.y.copy()
 
             # Recompute the radial profile
-            signal_panel.recompute_processing()
+            signal_panel.recompute_selected()
 
             # The signal should have changed (doubled intensity)
             assert not np.allclose(signal.y, original_signal_data)

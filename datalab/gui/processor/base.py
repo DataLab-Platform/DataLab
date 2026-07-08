@@ -995,7 +995,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         Recomputation is *not* automatic: it is triggered explicitly by the user
         through the manual "Recompute" action (see
-        ``BaseDataPanel.recompute_processing``). Editing ROIs, data or object
+        ``BaseDataPanel.recompute_selected``). Editing ROIs, data or object
         properties no longer implicitly re-runs analyses; existing results are left
         as-is until the user asks for a refresh.
 

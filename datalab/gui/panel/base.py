@@ -2547,7 +2547,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # This ensures subsequent changes are compared against the current values
         self.objprop.update_original_values()
 
-    def recompute_processing(self) -> None:
+    def recompute_selected(self) -> None:
         """Recompute/rerun selected objects or group with stored parameters.
 
         This method handles both single objects and groups. For each object, it

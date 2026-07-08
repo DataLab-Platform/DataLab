@@ -834,7 +834,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                     "analysis results with their stored parameters"
                 )
                 % self.OBJECT_STR,
-                triggered=self.panel.recompute_processing,
+                triggered=self.panel.recompute_selected,
                 select_condition=SelectCond.at_least_one_group_or_one_object,
                 context_menu_pos=-1,
                 toolbar_pos=-1,
