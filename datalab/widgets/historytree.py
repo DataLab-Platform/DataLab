@@ -108,12 +108,24 @@ class HistoryTree(QW.QTreeWidget):
         incompatible_tip = _(
             "Action is not compatible with the current workspace state."
         )
+        actions_by_uuid = {
+            action.uuid: action
+            for session in history_sessions
+            for action in session.actions
+        }
         iterator = QW.QTreeWidgetItemIterator(self)
         while iterator.value():
             item = iterator.value()
             if item.data(0, self.ITEM_KIND_ROLE) == self.ITEM_ACTION:
                 uuid = item.data(0, QC.Qt.UserRole)
-                action = self.get_action_from_uuid(uuid, history_sessions)
+                action = actions_by_uuid.get(uuid)
+                # The tree can transiently reference an action that was just
+                # removed from the model (e.g. mid-cascade during
+                # reconnect_chain_after_removal, before the final repopulate).
+                # Skip such stale items instead of crashing.
+                if action is None:
+                    iterator += 1
+                    continue
                 compatible = action.is_current_state_compatible(
                     mainwindow, restore_selection=True
                 )
@@ -305,7 +317,10 @@ class HistoryTree(QW.QTreeWidget):
                 selected.append(history_sessions[index])
             elif item.data(0, self.ITEM_KIND_ROLE) == self.ITEM_ACTION:
                 uuid = item.data(0, QC.Qt.UserRole)
-                selected.append(self.get_action_from_uuid(uuid, history_sessions))
+                try:
+                    selected.append(self.get_action_from_uuid(uuid, history_sessions))
+                except ValueError:
+                    continue
             # chain-header items are containers only: ignored here.
         return selected
 
@@ -326,5 +341,8 @@ class HistoryTree(QW.QTreeWidget):
                 item.data(0, self.ITEM_KIND_ROLE) == self.ITEM_ACTION
             ):
                 uuid = item.data(0, QC.Qt.UserRole)
-                selected.append(self.get_action_from_uuid(uuid, history_sessions))
+                try:
+                    selected.append(self.get_action_from_uuid(uuid, history_sessions))
+                except ValueError:
+                    continue
         return selected

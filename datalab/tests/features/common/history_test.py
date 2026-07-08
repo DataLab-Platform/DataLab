@@ -2176,3 +2176,30 @@ def test_history_capture_outputs_drops_failed_compute():
             pass
         assert analysis_action in list(history)
         assert len(history) == analysis_len_before
+
+
+def test_history_compatibility_refresh_tolerates_stale_tree():
+    """update_compatibility_states must not crash when the tree transiently
+    references an action already removed from the model (regression)."""
+    with datalab_test_app_context() as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        spanel = win.signalpanel
+        spanel.add_object(create_paracetamol_signal())
+        spanel.objview.select_objects([1])
+        spanel.processor.run_feature(sips.derivative)
+        spanel.objview.select_objects([2])
+        spanel.processor.run_feature(sips.derivative)
+        # Tree is populated and in sync here.
+        session = history.history_sessions[-1]
+        assert session.actions
+        # Simulate a transient desync: drop the last action from the model
+        # WITHOUT repopulating the tree (as happens mid-cascade).
+        removed = session.actions.pop()
+        # The tree still has an item for ``removed``; a compatibility refresh
+        # must skip it gracefully instead of raising ValueError.
+        history.tree.update_compatibility_states(
+            history.history_sessions, history.mainwindow
+        )
+        # Restore invariant for a clean teardown.
+        session.actions.append(removed)
