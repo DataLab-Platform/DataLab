@@ -32,6 +32,13 @@ if TYPE_CHECKING:
     from datalab.gui.panel.history import HistoryPanel
 
 
+def _action_panel_str(action: HistoryAction) -> str:
+    """Return the panel an action operates on, using target as fallback."""
+    if action.panel_str:
+        return action.panel_str
+    return {"imagepanel": "image", "signalpanel": "signal"}.get(action.target, "signal")
+
+
 def _make_initial_state_head(pstr: str, clone_uuid: str, title: str) -> HistoryAction:
     """Return a synthetic creation-root action for an operation-rooted chain.
 
@@ -70,12 +77,12 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
     """Duplicate selected processing chains into new independent sessions.
 
     Selection is resolved to *processing chains* (see
-    :func:`build_session_chains`): selecting a session duplicates all its
-    chains, while selecting an action duplicates the single chain that
-    contains it. For each source session, exactly one new session is produced
-    containing the duplicates of its selected chains, with all referenced data
-    objects deep-copied into a new group and every UUID reference rewritten to
-    the clones.
+    :func:`build_session_chains`): a session **is** a single linear processing
+    chain, so selecting a session duplicates its chain, and selecting an action
+    duplicates the chain of its session. For each source session, exactly one
+    new session is produced containing the duplicate of its chain, with all
+    referenced data objects deep-copied into a new group and every UUID
+    reference rewritten to the clones.
 
     Two chain shapes are handled:
 
@@ -149,7 +156,7 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
                     uuids_by_panel.setdefault(pstr, set()).update(metadata.keys())
                 obj2 = action.kwargs.get("obj2_uuids")
                 if obj2:
-                    pstr = action.panel_str or "signal"
+                    pstr = _action_panel_str(action)
                     if isinstance(obj2, str):
                         obj2 = [obj2]
                     uuids_by_panel.setdefault(pstr, set()).update(obj2)
@@ -157,7 +164,7 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
                 # compute step). Without this, the last action's outputs
                 # would be missing because no subsequent state captures them.
                 if action.output_uuids:
-                    pstr = action.panel_str or "signal"
+                    pstr = _action_panel_str(action)
                     uuids_by_panel.setdefault(pstr, set()).update(action.output_uuids)
 
         # 3. Clone objects and build uuid_remap.
@@ -251,7 +258,7 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
                     root_inputs.append((pstr, old_uuid))
             obj2 = chain.root.kwargs.get("obj2_uuids")
             if obj2:
-                pstr = chain.root.panel_str or "signal"
+                pstr = _action_panel_str(chain.root)
                 if isinstance(obj2, str):
                     obj2 = [obj2]
                 for old_uuid in obj2:

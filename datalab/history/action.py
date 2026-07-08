@@ -148,9 +148,6 @@ class HistoryAction(ObjItf):
         """Return True if this action has unsaved edit-mode changes."""
         return self._saved_kwargs is not None
 
-    def regenerate_uuid(self):
-        """Regenerate UUID after loading from a file (no-op: per-action UUID)."""
-
     def copy(self, title_suffix: str | None = None) -> HistoryAction:
         """Return an independent copy of this history action."""
         state = self.state.copy()
@@ -174,6 +171,17 @@ class HistoryAction(ObjItf):
         # Note: _saved_kwargs is intentionally NOT propagated to the copy.
         # Copying an action acts as an implicit commit (no pending edits).
         return new_action
+
+    def _effective_panel_str(self) -> str:
+        """Return the panel this action operates on ("signal"/"image").
+
+        Falls back to the UI ``target`` when ``panel_str`` is unset (the case for
+        creation actions such as ``new_object``, whose ``panel_str`` is ``None``
+        but whose ``target`` identifies the panel).
+        """
+        if self.panel_str:
+            return self.panel_str
+        return {"imagepanel": "image", "signalpanel": "signal"}.get(self.target, "")
 
     def copy_with_uuid_remap(
         self, uuid_remap: dict[str, dict[str, str]]
@@ -204,7 +212,7 @@ class HistoryAction(ObjItf):
         if obj2:
             if isinstance(obj2, str):
                 obj2 = [obj2]
-            pstr = new_action.panel_str or ""
+            pstr = new_action._effective_panel_str()
             pmap = uuid_remap.get(pstr, {})
             rewritten = [pmap.get(u, u) for u in obj2]
             new_action.kwargs["obj2_uuids"] = (
@@ -212,7 +220,7 @@ class HistoryAction(ObjItf):
             )
         # Rewrite output_uuids — they reference the target panel.
         if new_action.output_uuids:
-            pstr = new_action.panel_str or ""
+            pstr = new_action._effective_panel_str()
             pmap = uuid_remap.get(pstr, {})
             new_action.output_uuids = [pmap.get(u, u) for u in new_action.output_uuids]
         return new_action

@@ -55,41 +55,27 @@ def action_input_uuids(action: HistoryAction) -> set[str]:
 def build_session_chains(
     panel: HistoryPanel, session: HistorySession
 ) -> list[ProcessingChain]:
-    """Group the actions of a single session into ordered processing chains.
+    """Return the session's single processing chain.
+
+    In DataLab's history model a session **is** a single linear processing
+    chain: every action of the session belongs to one chain, the first action
+    being its root. Session boundaries are decided at recording time (the
+    "start a new history session?" prompt shown on object creation), so no
+    per-creation splitting is performed here.
 
     Args:
-        panel: The history panel providing the action→output registry.
-        session: The session whose actions are grouped.
+        panel: The history panel (kept for signature stability; unused).
+        session: The session whose actions form the chain.
 
     Returns:
-        The session's processing chains, in creation order. Each chain lists
-        its actions in session order, the root first.
+        A single-element list with the session's chain, or an empty list when
+        the session has no actions.
     """
-    uuid_to_chain: dict[str, ProcessingChain] = {}
-    chains: list[ProcessingChain] = []
-    for action in session.actions:
-        is_creation = (
-            action.kind == HistoryAction.KIND_UI
-            and action.method_name in HistoryAction.UI_CREATION_METHODS
-        )
-        if is_creation:
-            chain = ProcessingChain(root=action, session=session)
-            chains.append(chain)
-            chain.actions.append(action)
-        else:
-            inputs = action_input_uuids(action)
-            chain = None
-            for uuid in sorted(inputs):
-                if uuid in uuid_to_chain:
-                    chain = uuid_to_chain[uuid]
-                    break
-            if chain is None:
-                chain = ProcessingChain(root=action, session=session)
-                chains.append(chain)
-            chain.actions.append(action)
-        for out in panel.action_output_uuids.get(action.uuid, []):
-            uuid_to_chain[out] = chain
-    return chains
+    if not session.actions:
+        return []
+    chain = ProcessingChain(root=session.actions[0], session=session)
+    chain.actions = list(session.actions)
+    return [chain]
 
 
 def build_processing_chains(
