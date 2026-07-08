@@ -323,4 +323,3 @@ class HistoryTree(QW.QTreeWidget):
                     continue
             # chain-header items are containers only: ignored here.
         return selected
-
