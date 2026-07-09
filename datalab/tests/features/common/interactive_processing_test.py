@@ -209,8 +209,10 @@ def test_recompute_selected_skips_analysis_when_1_to_1_interrupted():
 
             # Patch recompute internals to simulate interrupted 1-to-1 pass and
             # detect whether 1-to-0 pass is called.
-            original_recompute_1_to_1 = panel._BaseDataPanel__recompute_1_to_1_objects
-            original_recompute_1_to_0 = panel._BaseDataPanel__recompute_1_to_0_objects
+            recompute_1_to_1_attr = "_BaseDataPanel__recompute_1_to_1_objects"
+            recompute_1_to_0_attr = "_BaseDataPanel__recompute_1_to_0_objects"
+            original_recompute_1_to_1 = getattr(panel, recompute_1_to_1_attr)
+            original_recompute_1_to_0 = getattr(panel, recompute_1_to_0_attr)
             analysis_called = []
 
             def fake_recompute_1_to_1(objects):
@@ -220,18 +222,14 @@ def test_recompute_selected_skips_analysis_when_1_to_1_interrupted():
             def fake_recompute_1_to_0(objects):
                 analysis_called.append(objects)
 
-            panel._BaseDataPanel__recompute_1_to_1_objects = fake_recompute_1_to_1
-            panel._BaseDataPanel__recompute_1_to_0_objects = fake_recompute_1_to_0
+            setattr(panel, recompute_1_to_1_attr, fake_recompute_1_to_1)
+            setattr(panel, recompute_1_to_0_attr, fake_recompute_1_to_0)
 
             try:
                 panel.recompute_selected()
             finally:
-                panel._BaseDataPanel__recompute_1_to_1_objects = (
-                    original_recompute_1_to_1
-                )
-                panel._BaseDataPanel__recompute_1_to_0_objects = (
-                    original_recompute_1_to_0
-                )
+                setattr(panel, recompute_1_to_1_attr, original_recompute_1_to_1)
+                setattr(panel, recompute_1_to_0_attr, original_recompute_1_to_0)
 
             assert not analysis_called, (
                 "1-to-0 analysis recompute should not run when 1-to-1 pass is "
