@@ -14,7 +14,6 @@ import os
 import os.path as osp
 import re
 import warnings
-from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Generator, Generic, Literal, Type
 
 import guidata.dataset as gds
@@ -79,11 +78,10 @@ from datalab.gui.newobject import (
 )
 from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
-    ProcessingParameters,
+    ProcessingReport,
     clear_analysis_parameters,
     extract_analysis_parameters,
     extract_processing_parameters,
-    insert_processing_parameters,
 )
 from datalab.gui.roieditor import TypeROIEditor
 from datalab.objectmodel import (
@@ -163,21 +161,6 @@ def is_hdf5_file(filename: str, check_content: bool = False) -> bool:
     except (OSError, IOError, ValueError):
         # Not a valid HDF5 file
         return False
-
-
-@dataclass
-class ProcessingReport:
-    """Report of processing operation
-
-    Args:
-        success: True if processing succeeded
-        obj_uuid: UUID of the processed object
-        message: Optional message (error or info)
-    """
-
-    success: bool
-    obj_uuid: str | None = None
-    message: str | None = None
 
 
 class ObjectProp(QW.QWidget):
@@ -760,22 +743,6 @@ class ObjectProp(QW.QWidget):
 
         return True
 
-    def __get_processor_associated_to(
-        self, obj: SignalObj | ImageObj
-    ) -> SignalProcessor | ImageProcessor:
-        """Get the processor associated to the given object type.
-
-        Args:
-            obj: Signal or Image object
-
-        Returns:
-            Processor associated to the object's type
-        """
-        assert isinstance(obj, (SignalObj, ImageObj))
-        if isinstance(obj, SignalObj):
-            return self.panel.mainwindow.signalpanel.processor
-        return self.panel.mainwindow.imagepanel.processor
-
     def apply_processing_parameters(
         self, obj: SignalObj | ImageObj | None = None, interactive: bool = True
     ) -> ProcessingReport:
@@ -791,98 +758,21 @@ class ObjectProp(QW.QWidget):
         if execenv.unattended:
             interactive = False
 
-        report = ProcessingReport(success=False)
         editor = self.processing_param_editor
         obj = obj or self.current_processing_obj
         if obj is None:
-            report.message = _("No processing object available.")
-            return report
-
-        report.obj_uuid = get_uuid(obj)
-
-        # Extract processing parameters
-        proc_params = extract_processing_parameters(obj)
-        if proc_params is None:
-            report.message = _("Processing metadata is incomplete.")
-            if interactive:
-                QW.QMessageBox.critical(self, _("Error"), report.message)
-            return report
-
-        # Check if source object still exists
-        if proc_params.source_uuid is None:
-            report.message = _(
-                "Processing metadata is incomplete (missing source UUID)."
+            return ProcessingReport(
+                success=False, message=_("No processing object available.")
             )
-            if interactive:
-                QW.QMessageBox.critical(self, _("Error"), report.message)
-            return report
 
-        # Find source object
-        source_obj = self.panel.mainwindow.find_object_by_uuid(proc_params.source_uuid)
-        if source_obj is None:
-            report.message = _("Source object no longer exists.")
-            if interactive:
-                QW.QMessageBox.critical(
-                    self,
-                    _("Error"),
-                    report.message
-                    + "\n\n"
-                    + _(
-                        "The object that was used to create this processed object "
-                        "has been deleted and cannot be used for reprocessing."
-                    ),
-                )
-            return report
+        param = editor.dataset if editor is not None else None
+        report = self.panel.processor.recompute_processing(
+            obj=obj,
+            param=param,
+            interactive=interactive,
+        )
 
-        # Get updated parameters from editor
-        param = editor.dataset if editor is not None else proc_params.param
-
-        # For cross-panel computations, we need to use the processor from the panel
-        # that owns the source object (e.g., radial_profile is in ImageProcessor)
-        source_processor = self.__get_processor_associated_to(source_obj)
-
-        # Recompute using the dedicated method (with multiprocessing support)
-        try:
-            new_obj = source_processor.recompute_1_to_1(
-                proc_params.func_name, source_obj, param
-            )
-        except Exception as exc:  # pylint: disable=broad-exception-caught
-            report.message = _("Failed to reprocess object:\n%s") % str(exc)
-            if interactive:
-                QW.QMessageBox.warning(self, _("Error"), report.message)
-            return report
-
-        if new_obj is None:
-            # User cancelled the operation
-            report.message = _("Processing was cancelled.")
-
-        else:
-            report.success = True
-
-            # Update the current object in-place with data from new object
-            obj.title = new_obj.title
-            if isinstance(obj, SignalObj):
-                obj.xydata = new_obj.xydata
-            else:  # ImageObj
-                obj.data = new_obj.data
-                # Invalidate ROI mask cache when image dimensions may have changed
-                # (the mask is computed based on image shape, so it must be recomputed)
-                obj.invalidate_maskdata_cache()
-
-            # Update metadata with new processing parameters
-            updated_proc_params = ProcessingParameters(
-                func_name=proc_params.func_name,
-                pattern=proc_params.pattern,
-                param=param,
-                source_uuid=proc_params.source_uuid,
-            )
-            insert_processing_parameters(obj, updated_proc_params)
-
-            # Update the tree view item and refresh plot
-            obj_uuid = get_uuid(obj)
-            self.panel.objview.update_item(obj_uuid)
-            self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
-
+        if report.success:
             # Update the Properties tab to reflect the new object properties
             # (e.g., data type, dimensions, etc.)
             self.__update_properties_dataset(obj)
@@ -896,12 +786,6 @@ class ObjectProp(QW.QWidget):
                     obj, reset_params=False, set_current=True
                 ),
             )
-
-            if isinstance(obj, SignalObj):
-                report.message = _("Signal was reprocessed.")
-            else:
-                report.message = _("Image was reprocessed.")
-            self.panel.SIG_STATUS_MESSAGE.emit("✅ " + report.message, 5000)
 
         return report
 
@@ -2637,11 +2521,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if progress.wasCanceled():
                     return recomputed_uuids, True
 
-                # Temporarily set as current to use existing infrastructure
                 self.objview.set_current_object(obj)
-                report = self.objprop.apply_processing_parameters(
-                    obj=obj, interactive=False
-                )
+                report = self.processor.recompute_processing(obj, interactive=False)
                 if report.success:
                     recomputed_uuids.add(get_uuid(obj))
                     continue
