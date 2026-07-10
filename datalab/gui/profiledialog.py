@@ -216,15 +216,19 @@ class ProfileExtractionDialog(PlotDialog):
         """Reset to initial"""
         self.param_btn.setEnabled(False)
         self.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(False)
-        if self.mode == "line":
-            self.param = sigima.params.LineProfileParam()
-        elif self.mode == "segment":
-            self.param = sigima.params.SegmentProfileParam()
-        else:
-            self.param = sigima.params.AverageProfileParam()
+        # Reset parameters *in place* instead of replacing `self.param` with a
+        # new instance: callers (e.g. `ImageProcessor.compute_average_profile`)
+        # keep their own reference to the original `param` object and reuse it
+        # once the dialog is closed. Replacing the instance here would break
+        # that reference, so that further updates made by `shape_to_param()`
+        # (triggered when a new selection is drawn) would silently be lost,
+        # and the caller would keep using the discarded selection's
+        # coordinates (see issue #322).
+        self.param.set_defaults()
         plot = self.get_plot()
         if self.shape is not None:
             plot.del_item(self.shape)
+            self.shape = None
         self.cstool.activate()
         self.update_cs_panels_state()
         self.get_plot().replot()
