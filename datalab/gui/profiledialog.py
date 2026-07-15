@@ -231,7 +231,7 @@ class ProfileExtractionDialog(PlotDialog):
             self.shape = None
         self.cstool.activate()
         self.update_cs_panels_state()
-        self.get_plot().replot()
+        plot.replot()
 
     def __tool_job_finished(self):
         """Tool job finished"""
