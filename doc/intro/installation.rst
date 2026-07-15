@@ -47,6 +47,9 @@ DataLab is available in several forms:
 
 -   As a :ref:`install_conda`.
 
+-   :bdg-info-line:`GNU/Linux` :bdg-info-line:`macOS` As a :ref:`install_nixos`, for
+    users of the `NixOS <https://nixos.org/>`_ ecosystem.
+
 -   As a Python package, which can be installed using the :ref:`install_pip`.
 
 -   :bdg-info-line:`Windows` As a stand-alone application, which does not require any
@@ -78,6 +81,35 @@ To install ``datalab`` package from the `conda-forge` channel (https://anaconda.
 .. code-block:: console
 
     $ conda install conda-forge::datalab
+
+.. _install_nixos:
+
+NixOS package
+^^^^^^^^^^^^^
+
+:octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`macOS`
+
+DataLab is packaged for `NixOS <https://nixos.org/>`_ and distributed through the
+`NGI Forge <https://ngi.nixos.org/app/datalab>`_, the software distribution system
+for projects funded by the `Next Generation Internet (NGI) <https://www.ngi.eu/>`_
+initiative. This packaging was contributed by the `Nix@NGI team
+<https://nixos.org/community/teams/ngi/>`_, an NLnet partner, as part of DataLab's
+funding through the NGI0 Commons Fund.
+
+On any system with `Nix <https://nix.dev/>`_ installed, enter the Nix shell that
+provides DataLab (the ready-to-copy command is available on the
+`NGI Forge page <https://ngi.nixos.org/app/datalab>`_), then start the desktop
+application:
+
+.. code-block:: console
+
+    $ datalab
+
+Or, for an automated demonstration of some of DataLab's features:
+
+.. code-block:: console
+
+    $ datalab-demo
 
 .. _install_pip:
 
