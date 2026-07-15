@@ -69,11 +69,12 @@ class ConfigPathOptionField(OptionField):
         if not isinstance(value, str):
             raise ValueError(f"Expected str, got {type(value).__name__}")
 
-    def get(self, sync_env: bool = True) -> str:
+    def get(self, *, sync_env: bool = True) -> str:
         """Return the absolute path inside the configuration directory.
 
         Args:
-            sync_env: Whether to ensure the environment variable is synchronized.
+            sync_env: Whether to ensure the environment variable is synchronized
+             (keyword-only).
 
         Returns:
             The absolute path of the file inside the configuration directory.
@@ -128,11 +129,12 @@ class WorkingDirOptionField(OptionField):
         if not isinstance(value, str):
             raise ValueError(f"Expected str, got {type(value).__name__}")
 
-    def get(self, sync_env: bool = True) -> str:
+    def get(self, *, sync_env: bool = True) -> str:
         """Return the working directory, or an empty string if it is missing.
 
         Args:
-            sync_env: Whether to ensure the environment variable is synchronized.
+            sync_env: Whether to ensure the environment variable is synchronized
+             (keyword-only).
 
         Returns:
             The stored directory if it exists, otherwise an empty string.
@@ -144,12 +146,13 @@ class WorkingDirOptionField(OptionField):
             return path
         return ""
 
-    def set(self, value: str, sync_env: bool = True) -> None:
+    def set(self, value: str, *, sync_env: bool = True) -> None:
         """Set the working directory, validating that it exists.
 
         Args:
             value: The directory (or a file whose parent is used) to store.
-            sync_env: Whether to synchronize the environment variable.
+            sync_env: Whether to synchronize the environment variable
+             (keyword-only).
 
         Raises:
             FileNotFoundError: If neither the value nor its parent is a directory.
@@ -158,7 +161,7 @@ class WorkingDirOptionField(OptionField):
             value = osp.dirname(value)
             if not osp.isdir(value):
                 raise FileNotFoundError(f"Invalid working directory name {value}")
-        super().set(value, sync_env)
+        super().set(value, sync_env=sync_env)
 
     def get_raw(self) -> str:
         """Return the raw stored directory (even if it no longer exists)."""
@@ -284,11 +287,12 @@ class DataSetOptionField(OptionField):
         """
         self.default_instance = default_instance
 
-    def get(self, sync_env: bool = True) -> gds.DataSet | None:
+    def get(self, *, sync_env: bool = True) -> gds.DataSet | None:
         """Return the current DataSet instance, or the default instance.
 
         Args:
-            sync_env: Whether to ensure the environment variable is synchronized.
+            sync_env: Whether to ensure the environment variable is synchronized
+             (keyword-only).
 
         Returns:
             The actively-set DataSet if any, otherwise the default instance.
