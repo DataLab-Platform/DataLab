@@ -7,7 +7,7 @@ Macro Panel application test
 
 # guitest: show
 
-from datalab import config
+from datalab.config import config
 from datalab.gui.main import DLMainWindow
 from datalab.utils import qthelpers as qth
 

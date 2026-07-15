@@ -25,8 +25,8 @@ from pathlib import Path
 
 import pytest
 
-from datalab import config as config_mod
 from datalab import plugins as plugins_mod
+from datalab.config import config as config_mod
 
 
 def test_env_var_unset_leaves_default_paths() -> None:

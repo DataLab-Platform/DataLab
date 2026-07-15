@@ -1,0 +1,271 @@
+# Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
+
+"""
+DataLab configuration persistence (INI <-> options container)
+-------------------------------------------------------------
+
+Bridges the flat, SigimaX-style :class:`datalab.config_options.DataLabOptions`
+container with DataLab's historical INI backend
+(:data:`datalab.utils.conf.CONF`, a guidata ``UserConfig``).
+
+The INI file remains the on-disk format for backward compatibility with existing
+user configurations. The **INI section is derived from each option's category**
+(``field.category``, defined in :mod:`sigimax.config` and extended by
+:mod:`datalab.config_options`). The INI key defaults to the option name, with a
+small set of exceptions (see :data:`INI_KEY_OVERRIDES` and the ``ai_``/``macro_``
+prefix rule).
+
+Encoding is derived from each field's *type*:
+
+- :class:`~datalab.utils.optionfields.DataSetOptionField`: JSON string, with
+  ``%`` escaped for ConfigParser.
+- :class:`~datalab.utils.optionfields.FontOptionField`: three INI keys
+  (``<key>_family`` / ``<key>_size`` / ``<key>_bold``).
+- :class:`~datalab.utils.optionfields.ConfigPathOptionField` /
+  :class:`~datalab.utils.optionfields.WorkingDirOptionField`: the raw stored
+  value (basename / directory), via ``get_raw`` / ``set_raw``.
+- datetime format fields (see :data:`DATETIME_FIELDS`): stored escaped
+  (``%`` -> ``%%``); the in-memory value is kept clean.
+- everything else: relies on ``UserConfig``'s ``repr``/``eval`` type coercion.
+
+Type coercion is delegated to ``UserConfig`` (see
+:meth:`guidata.userconfig.UserConfig.get`): passing each field's raw default as
+the ``default`` argument registers the correct type and preserves the exact
+behaviour of the legacy DataLab configuration system.
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from datalab.config.optionfields import (
+    ConfigPathOptionField,
+    DataSetOptionField,
+    FontOptionField,
+    WorkingDirOptionField,
+)
+from datalab.utils.conf import CONF as _DEFAULT_CONF
+
+if TYPE_CHECKING:
+    from guidata.userconfig import UserConfig
+
+    from datalab.config.config_options import DataLabOptions
+
+#: Fields storing ``strftime`` format strings. Their ``%`` characters must be
+#: escaped as ``%%`` in the INI file (ConfigParser interpolation), while the
+#: in-memory value is kept in clean form (``%H:%M:%S``).
+DATETIME_FIELDS = frozenset({"sig_datetime_format_s", "sig_datetime_format_ms"})
+
+#: Inherited SigimaX options that are set programmatically at startup (or are
+#: purely presentation metadata) and are therefore not persisted to the INI file.
+NON_PERSISTED: frozenset[str] = frozenset(
+    {
+        "app_name",
+        "app_version",
+        "app_logo_path",
+        "app_desc",
+        "app_local_doc_path",
+        "app_docurl",
+        "app_homeurl",
+        "app_supporturl",
+        "app_developer",
+        "app_copyright",
+        "splash_image_path",
+        "splash_show_progress",
+        "datetime_format",
+    }
+)
+
+#: Categories whose fields drop their ``<category>_`` prefix when mapped to the
+#: (historically section-local) INI key.
+_PREFIX_SECTIONS = frozenset({"ai", "macro"})
+
+#: Explicit INI key overrides for fields whose historical INI key differs from
+#: the option name (and is not covered by the prefix rule).
+INI_KEY_OVERRIDES: dict[str, str] = {
+    "console_max_line_count": "max_line_count",
+}
+
+
+def get_ini_location(options: DataLabOptions, name: str) -> tuple[str, str] | None:
+    """Return the ``(section, ini_key)`` INI location of an option field.
+
+    The section is the field's category; the INI key is the option name, unless
+    overridden by :data:`INI_KEY_OVERRIDES` or stripped of its ``ai_``/``macro_``
+    prefix.
+
+    Args:
+        options: The DataLab options container.
+        name: The option field name.
+
+    Returns:
+        The ``(section, ini_key)`` pair, or ``None`` when the field is
+         uncategorized (and therefore not persisted).
+    """
+    section = options.get_field_category(name)
+    if not section:
+        return None
+    if name in INI_KEY_OVERRIDES:
+        ini_key = INI_KEY_OVERRIDES[name]
+    elif section in _PREFIX_SECTIONS and name.startswith(f"{section}_"):
+        ini_key = name[len(section) + 1 :]
+    else:
+        ini_key = name
+    return section, ini_key
+
+
+def _iter_persisted_field_names(options: DataLabOptions):
+    """Yield persisted (categorized) option field names in category order."""
+    for _category, names in options.fields_by_category().items():
+        yield from names
+
+
+def _escape_percent(value: str) -> str:
+    """Escape ``%`` as ``%%`` for ConfigParser interpolation."""
+    return value.replace("%", "%%")
+
+
+def _unescape_percent(value: str) -> str:
+    """Unescape ``%%`` back to ``%``."""
+    return value.replace("%%", "%")
+
+
+def _load_field(options, conf, field_name: str, section: str, ini_key: str) -> None:
+    """Load a single option field value from the INI backend.
+
+    Args:
+        options: The DataLab options container.
+        conf: The ``UserConfig`` INI backend to read from.
+        field_name: The flat option field name.
+        section: The INI section name.
+        ini_key: The INI option key.
+    """
+    field = getattr(options, field_name, None)
+    if field is None:
+        return
+    default_raw = options.get_default_raw(field_name)
+
+    if isinstance(field, DataSetOptionField):
+        raw = conf.get(section, ini_key, default="")
+        if isinstance(raw, str) and raw:
+            try:
+                field.from_json(_unescape_percent(raw))
+            except Exception:  # pylint: disable=broad-except
+                # Corrupted JSON: keep the default instance.
+                pass
+    elif isinstance(field, FontOptionField):
+        fam_d, size_d, bold_d = default_raw
+        family = conf.get(section, f"{ini_key}_family", default=fam_d)
+        size = conf.get(section, f"{ini_key}_size", default=size_d)
+        bold = conf.get(section, f"{ini_key}_bold", default=bold_d)
+        field.set((family, size, bold), sync_env=False)
+    elif isinstance(field, (ConfigPathOptionField, WorkingDirOptionField)):
+        default = default_raw if default_raw is not None else ""
+        field.set_raw(conf.get(section, ini_key, default=default))
+    elif field_name in DATETIME_FIELDS:
+        raw = conf.get(section, ini_key, default=_escape_percent(default_raw))
+        field.set(_unescape_percent(raw), sync_env=False)
+    else:
+        field.set(conf.get(section, ini_key, default=default_raw), sync_env=False)
+
+
+def _save_field(options, conf, field_name: str, section: str, ini_key: str) -> None:
+    """Save a single option field value to the INI backend (no file flush).
+
+    Args:
+        options: The DataLab options container.
+        conf: The ``UserConfig`` INI backend to write to.
+        field_name: The flat option field name.
+        section: The INI section name.
+        ini_key: The INI option key.
+    """
+    field = getattr(options, field_name, None)
+    if field is None:
+        return
+
+    if isinstance(field, DataSetOptionField):
+        json_str = field.to_json()
+        if json_str is None:
+            return  # Never explicitly set: leave the default instance implicit.
+        conf.set(section, ini_key, _escape_percent(json_str), save=False)
+    elif isinstance(field, FontOptionField):
+        family, size, bold = field.get(sync_env=False)
+        conf.set(section, f"{ini_key}_family", family, save=False)
+        conf.set(section, f"{ini_key}_size", size, save=False)
+        conf.set(section, f"{ini_key}_bold", bold, save=False)
+    elif isinstance(field, (ConfigPathOptionField, WorkingDirOptionField)):
+        conf.set(section, ini_key, field.get_raw(), save=False)
+    elif field_name in DATETIME_FIELDS:
+        conf.set(
+            section, ini_key, _escape_percent(field.get(sync_env=False)), save=False
+        )
+    else:
+        conf.set(section, ini_key, field.get(sync_env=False), save=False)
+
+
+def load_options_from_ini(
+    options: DataLabOptions, conf: UserConfig | None = None
+) -> None:
+    """Load all mapped option values from the INI backend into the container.
+
+    Args:
+        options: The DataLab options container to populate.
+        conf: The ``UserConfig`` INI backend to read from (defaults to the
+         module-level DataLab ``CONF``).
+    """
+    conf = _DEFAULT_CONF if conf is None else conf
+    for field_name in _iter_persisted_field_names(options):
+        location = get_ini_location(options, field_name)
+        if location is None:
+            continue
+        _load_field(options, conf, field_name, *location)
+    options.sync_env()
+
+
+def save_options_to_ini(
+    options: DataLabOptions, conf: UserConfig | None = None, save: bool = True
+) -> None:
+    """Save all mapped option values from the container to the INI backend.
+
+    Args:
+        options: The DataLab options container to serialize.
+        conf: The ``UserConfig`` INI backend to write to (defaults to the
+         module-level DataLab ``CONF``).
+        save: If True, flush the configuration file to disk once at the end.
+    """
+    conf = _DEFAULT_CONF if conf is None else conf
+    for field_name in _iter_persisted_field_names(options):
+        location = get_ini_location(options, field_name)
+        if location is None:
+            continue
+        _save_field(options, conf, field_name, *location)
+    if save:
+        conf.save()
+
+
+def get_uncategorized_fields(options: DataLabOptions) -> list[str]:
+    """Return option fields that are uncategorized and not explicitly excluded.
+
+    Used by the configuration completeness test to guarantee that every option
+    is either categorized (hence persisted) or intentionally excluded (in
+    :data:`NON_PERSISTED`).
+
+    Args:
+        options: The DataLab options container to inspect.
+
+    Returns:
+        Sorted list of uncategorized option field names missing from
+         :data:`NON_PERSISTED`.
+    """
+    from sigima.config import OptionField  # pylint: disable=import-outside-toplevel
+
+    unexpected: list[str] = []
+    for name in vars(options):
+        if not isinstance(getattr(options, name), OptionField):
+            continue
+        if options.get_field_category(name):
+            continue
+        if name in NON_PERSISTED:
+            continue
+        unexpected.append(name)
+    return sorted(unexpected)
