@@ -61,11 +61,11 @@ def test_profile_recompute_independence():
         assert profile_b is not None
         data_b = profile_b.y.copy()
 
-        # The two profiles must be different objects with different data
+        # The two profiles must be different objects with different data. A is a
+        # horizontal profile (columns 10..60), B a vertical one (rows 200..400),
+        # so they span different ranges and must have different shapes.
         assert get_uuid(profile_a) != get_uuid(profile_b)
-        assert profile_a.y.shape != profile_b.y.shape or not np.allclose(
-            profile_a.y, profile_b.y
-        )
+        assert profile_a.y.shape != profile_b.y.shape
 
         # Each profile must store its *own* selection parameters (JSON snapshot)
         pp_a = extract_processing_parameters(profile_a)
