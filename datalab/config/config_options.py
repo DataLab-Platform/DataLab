@@ -503,6 +503,14 @@ class DataLabOptions(SigimaXOptions):
         # for config-path, working-dir and DataSet fields.
         self._defaults = self.to_dict()
 
+        # Refresh the environment variable with the final DataLab values. The
+        # base ``SigimaXOptions.__init__`` synchronizes the env var with the
+        # inherited (SigimaX) defaults; without this refresh, the first ``get``
+        # would reload those stale values via ``ensure_loaded_from_env`` and
+        # overwrite the DataLab-specific field replacements (e.g.
+        # ``traceback_log_path``).
+        self.sync_env()
+
     # -- Raw-aware (de)serialization for env-var sync and defaults --
 
     def to_dict(self) -> dict[str, Any]:

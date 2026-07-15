@@ -149,6 +149,11 @@ def datalab_app_context(
     QAPP_INSTANCE.setApplicationVersion(datalab.__version__)
     QAPP_INSTANCE.setOrganizationName(APP_NAME + " project")
 
+    # === Reload persisted settings from the INI backend (session start) -----------
+    # The flat options container is loaded once at import time; refresh it here so
+    # that each application session honours the settings currently on disk.
+    Conf.reload_from_ini()
+
     if enable_logs:
         # === Create a logger for standard exceptions ----------------------------------
         tb_log_fname = Conf.main.traceback_log_path.get()

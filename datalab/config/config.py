@@ -513,18 +513,13 @@ class AISection(conf.Section, metaclass=conf.SectionMeta):
 
 
 # Usage (example): Conf.console.console_enabled.get(True)
-class Conf(conf.Configuration, metaclass=conf.ConfMeta):
-    """Class defining DataLab configuration structure.
-    Each class attribute is a section (metaclass is automatically affecting
-    section names in .INI file based on class attribute names)."""
-
-    main = MainSection()
-    console = ConsoleSection()
-    view = ViewSection()
-    proc = ProcSection()
-    io = IOSection()
-    macro = MacroSection()
-    ai = AISection()
+#
+# The section-style ``Conf`` facade is provided by the transitional legacy bridge
+# over the flat ``DataLabOptions`` container (see
+# :mod:`datalab.config._legacy_bridge`). It keeps historical
+# ``Conf.<section>.<option>`` call sites working while they are migrated to the
+# flat API, and will be removed once the migration is complete.
+from datalab.config._legacy_bridge import Conf  # noqa: E402
 
 
 def normalize_plugin_paths(paths: list[str] | tuple[str, ...] | None) -> list[str]:
@@ -630,7 +625,8 @@ def initialize():
     # Macro section
     Conf.macro.console_max_lines.get(5000)
     Conf.macro.close_tab_keeps_macro.get(True)
-    Conf.macro.templates_path.get(Conf.get_path("macro_templates"))
+    if not Conf.macro.templates_path.get():
+        Conf.macro.templates_path.set(Conf.get_path("macro_templates"))
     # Proc section
     Conf.proc.operation_mode.get("single")
     Conf.proc.use_signal_bounds.get(False)

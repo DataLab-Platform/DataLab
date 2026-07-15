@@ -44,12 +44,26 @@ from datalab.config.optionfields import (
     FontOptionField,
     WorkingDirOptionField,
 )
-from datalab.utils.conf import CONF as _DEFAULT_CONF
+from datalab.utils import conf as _confmod
 
 if TYPE_CHECKING:
     from guidata.userconfig import UserConfig
 
     from datalab.config.config_options import DataLabOptions
+
+
+def _default_conf() -> UserConfig:
+    """Return the live DataLab INI backend (resolved dynamically).
+
+    Resolving the backend lazily (rather than importing it once at module load)
+    is required because :meth:`datalab.utils.conf.Configuration.reset` rebinds
+    the module-level ``CONF`` singleton to a fresh instance.
+
+    Returns:
+        The current ``UserConfig`` INI backend.
+    """
+    return _confmod.CONF
+
 
 #: Fields storing ``strftime`` format strings. Their ``%`` characters must be
 #: escaped as ``%%`` in the INI file (ConfigParser interpolation), while the
@@ -200,7 +214,18 @@ def _save_field(options, conf, field_name: str, section: str, ini_key: str) -> N
             section, ini_key, _escape_percent(field.get(sync_env=False)), save=False
         )
     else:
-        conf.set(section, ini_key, field.get(sync_env=False), save=False)
+        value = field.get(sync_env=False)
+        # ``None`` means "unset": remove any persisted value so that a previously
+        # stored non-None value does not linger in the INI (setting a field back
+        # to None must clear it, e.g. ``plugins_enabled_list``). This also avoids
+        # the INI backend having to coerce None to a numeric type.
+        if value is None:
+            try:
+                conf.remove_option(section, ini_key)
+            except Exception:  # pylint: disable=broad-except
+                pass
+            return
+        conf.set(section, ini_key, value, save=False)
 
 
 def load_options_from_ini(
@@ -213,7 +238,7 @@ def load_options_from_ini(
         conf: The ``UserConfig`` INI backend to read from (defaults to the
          module-level DataLab ``CONF``).
     """
-    conf = _DEFAULT_CONF if conf is None else conf
+    conf = _default_conf() if conf is None else conf
     for field_name in _iter_persisted_field_names(options):
         location = get_ini_location(options, field_name)
         if location is None:
@@ -233,7 +258,7 @@ def save_options_to_ini(
          module-level DataLab ``CONF``).
         save: If True, flush the configuration file to disk once at the end.
     """
-    conf = _DEFAULT_CONF if conf is None else conf
+    conf = _default_conf() if conf is None else conf
     for field_name in _iter_persisted_field_names(options):
         location = get_ini_location(options, field_name)
         if location is None:
