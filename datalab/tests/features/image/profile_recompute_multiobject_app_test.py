@@ -48,7 +48,13 @@ def test_multiobject_recompute_parameter_independence():
             image_panel.add_object(image)
 
             # First profile (selection A: horizontal band)
-            coords_a = dict(direction="horizontal", row1=10, col1=10, row2=40, col2=60)
+            coords_a = {
+                "direction": "horizontal",
+                "row1": 10,
+                "col1": 10,
+                "row2": 40,
+                "col2": 60,
+            }
             proc.compute_average_profile(
                 sigima.params.AverageProfileParam.create(**coords_a)
             )
@@ -57,9 +63,13 @@ def test_multiobject_recompute_parameter_independence():
             data_a = profile_a.y.copy()
 
             # Second profile (selection B: vertical band, different shape)
-            coords_b = dict(
-                direction="vertical", row1=200, col1=150, row2=400, col2=350
-            )
+            coords_b = {
+                "direction": "vertical",
+                "row1": 200,
+                "col1": 150,
+                "row2": 400,
+                "col2": 350,
+            }
             proc.compute_average_profile(
                 sigima.params.AverageProfileParam.create(**coords_b)
             )
