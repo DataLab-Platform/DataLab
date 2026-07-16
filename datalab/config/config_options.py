@@ -38,6 +38,7 @@ from typing import Any
 from guidata import configtools
 from sigimax.config import OptionField, SigimaXOptions, TypedOptionField
 
+from datalab import __docurl__, __homeurl__, __supporturl__, __version__
 from datalab.config.optionfields import (
     ConfigPathOptionField,
     DataSetOptionField,
@@ -497,6 +498,20 @@ class DataLabOptions(SigimaXOptions):
             expected_type=bool,
             description="If True, expose the create-and-run-macro tool to the LLM.",
         )
+
+        # ===================================================================
+        # Application branding — presentation metadata (see NON_PERSISTED)
+        # ===================================================================
+        # Set programmatically so that reused SigimaX widgets and windows display
+        # DataLab's identity (name, version, icon, URLs, splash) when they read
+        # the active configuration via ``sigimax.config.get_conf()``.
+        self.app_name.set(APP_NAME, sync_env=False)
+        self.app_version.set(__version__, sync_env=False)
+        self.app_logo_path.set("DataLab.svg", sync_env=False)
+        self.app_docurl.set(__docurl__, sync_env=False)
+        self.app_homeurl.set(__homeurl__, sync_env=False)
+        self.app_supporturl.set(__supporturl__, sync_env=False)
+        self.splash_image_path.set("DataLab-Splash.png", sync_env=False)
 
         # Recapture defaults now that DataLab-specific fields exist, using the
         # raw-aware serialization (see to_dict) so reset_to_defaults is correct

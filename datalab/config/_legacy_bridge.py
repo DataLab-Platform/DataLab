@@ -25,6 +25,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from sigima.config import OptionField
+from sigimax.config import set_conf
 
 from datalab.config.config_options import DataLabOptions
 from datalab.config.config_persistence import (
@@ -262,6 +263,10 @@ class _ConfFacade:
 
     def __init__(self) -> None:
         self._options = DataLabOptions()
+        # Install the DataLab options as the active SigimaX configuration so that
+        # reused SigimaX widgets/adapters (which read ``sigimax.config.get_conf()``)
+        # operate on the very same container as DataLab's ``Conf``.
+        set_conf(self._options)
         self._sections: dict[str, _SectionProxy] = {}
         self._flat_proxies: dict[str, _OptionProxy] = {}
         self._build_sections()
