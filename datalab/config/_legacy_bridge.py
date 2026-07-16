@@ -378,4 +378,4 @@ class _ConfFacade:
 
 
 #: Singleton legacy-compatible configuration facade.
-Conf = _ConfFacade()
+Conf = _ConfFacade()  # pylint: disable=invalid-name

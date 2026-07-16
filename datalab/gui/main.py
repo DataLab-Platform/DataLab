@@ -199,6 +199,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.saveh5_action: QW.QAction | None = None
         self.browseh5_action: QW.QAction | None = None
         self.settings_action: QW.QAction | None = None
+        self.command_palette_action: QW.QAction | None = None
         self.quit_action: QW.QAction | None = None
         self.autorefresh_action: QW.QAction | None = None
         self.showfirstonly_action: QW.QAction | None = None

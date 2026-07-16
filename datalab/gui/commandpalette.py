@@ -333,7 +333,7 @@ class CommandSearchField(QW.QFrame):
         else:
             self.shortcut_label = None
 
-    def mousePressEvent(  # pylint: disable=invalid-name
+    def mousePressEvent(  # pylint: disable=invalid-name,unused-argument
         self, event: QG.QMouseEvent
     ) -> None:
         """Open the command palette on click."""

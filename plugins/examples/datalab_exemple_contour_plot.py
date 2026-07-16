@@ -14,6 +14,7 @@ from typing import TYPE_CHECKING
 
 import guidata.dataset as gds
 import numpy as np
+from datalab.adapters_plotpy.objects.image import get_obj_coords
 from plotpy.config import CONF
 from plotpy.items import AnnotatedPolygon
 from plotpy.items.contour import compute_contours
@@ -21,7 +22,6 @@ from plotpy.plot import PlotDialog
 from plotpy.styles import AnnotationParam
 
 from datalab.adapters_plotpy import create_adapter_from_object
-from datalab.adapters_plotpy.objects.image import get_obj_coords
 from datalab.config import _
 from datalab.objectmodel import get_uuid
 from datalab.plugins import PluginBase, PluginInfo

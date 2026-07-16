@@ -519,6 +519,7 @@ class AISection(conf.Section, metaclass=conf.SectionMeta):
 # :mod:`datalab.config._legacy_bridge`). It keeps historical
 # ``Conf.<section>.<option>`` call sites working while they are migrated to the
 # flat API, and will be removed once the migration is complete.
+# pylint: disable-next=wrong-import-position
 from datalab.config._legacy_bridge import Conf  # noqa: E402
 
 
