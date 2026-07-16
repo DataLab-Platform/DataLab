@@ -44,7 +44,7 @@ def create_adapter_from_object(object_to_adapt):
         adapter = TablePlotPyAdapter(object_to_adapt)
 
     elif isinstance(object_to_adapt, SignalObj):
-        from datalab.adapters_plotpy.objects.signal import SignalObjPlotPyAdapter
+        from datalab.adapters_plotpy.objects.adapters import SignalObjPlotPyAdapter
 
         adapter = SignalObjPlotPyAdapter(object_to_adapt)
     elif isinstance(object_to_adapt, SignalROI):
@@ -56,7 +56,7 @@ def create_adapter_from_object(object_to_adapt):
 
         adapter = SegmentROIPlotPyAdapter(object_to_adapt)
     elif isinstance(object_to_adapt, ImageObj):
-        from datalab.adapters_plotpy.objects.image import ImageObjPlotPyAdapter
+        from datalab.adapters_plotpy.objects.adapters import ImageObjPlotPyAdapter
 
         adapter = ImageObjPlotPyAdapter(object_to_adapt)
     elif isinstance(object_to_adapt, RectangularROI):

@@ -36,15 +36,16 @@ from .converters import (
     plotitem_to_singleroi,
     singleroi_to_plotitem,
 )
-from .objects.base import TypePlotItem
-from .objects.image import (
+from .objects.adapters import (
+    CURVESTYLES,
     ImageObjPlotPyAdapter,
+    SignalObjPlotPyAdapter,
+    TypePlotItem,
 )
 from .objects.scalar import (
     GeometryPlotPyAdapter,
     TablePlotPyAdapter,
 )
-from .objects.signal import CURVESTYLES, SignalObjPlotPyAdapter
 from .roi.base import TypeROIItem, configure_roi_item
 from .roi.image import (
     CircularROIPlotPyAdapter,
