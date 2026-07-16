@@ -618,7 +618,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     ) -> None:
         """Interactive peak detection.
 
-        Opens :class:`~datalab.widgets.signalpeak.SignalPeakDetectionDialog`
+        Opens :class:`~sigimax.widgets.signalpeak.SignalPeakDetectionDialog`
         to set the detection threshold and minimum distance visually, then
         stores the detected peak positions as an XY-markers
         :class:`~sigima.objects.scalar.TableResult` attached to the signal
