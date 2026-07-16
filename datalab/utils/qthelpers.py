@@ -6,7 +6,6 @@ DataLab Qt utilities
 
 from __future__ import annotations
 
-import faulthandler
 import functools
 import inspect
 import logging
@@ -21,70 +20,19 @@ from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from typing import Any
 
-import guidata
 from guidata.configtools import get_icon
 from guidata.qthelpers import grab_save_window as guidata_grab_save_window
-from guidata.utils.misc import to_string
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from sigimax.utils.qthelpers import sigimax_app_context
 
 from datalab.config import (
     APP_NAME,
-    DATETIME_FORMAT,
     SHOTPATH,
     Conf,
     _,
-    get_old_log_fname,
 )
-from datalab.env import execenv
-
-
-def close_widgets_and_quit(screenshot=False) -> None:
-    """Close Qt top level widgets and quit Qt event loop"""
-    for widget in QW.QApplication.instance().topLevelWidgets():
-        try:
-            wname = widget.objectName()
-        except RuntimeError:
-            # Object has been deleted
-            continue
-        if screenshot and wname and widget.isVisible():  # pragma: no cover
-            grab_save_window(widget, wname.lower())
-        assert widget.close()
-    QW.QApplication.instance().quit()
-
-
-QAPP_INSTANCE = None
-
-
-def get_log_contents(fname: str) -> str | None:
-    """Return True if file exists and something was logged in it"""
-    if osp.exists(fname):
-        with open(fname, "rb") as fdesc:
-            return to_string(fdesc.read()).strip()
-    return None
-
-
-def initialize_log_file(fname: str) -> bool:
-    """Eventually keep the previous log file
-    Returns True if there was a previous log file"""
-    contents = get_log_contents(fname)
-    if contents:
-        try:
-            shutil.move(fname, get_old_log_fname(fname))
-        except Exception:  # pylint: disable=broad-except
-            pass
-        return True
-    return False
-
-
-def remove_empty_log_file(fname: str) -> None:
-    """Eventually remove empty log files"""
-    if not get_log_contents(fname):
-        try:
-            os.remove(fname)
-        except Exception:  # pylint: disable=broad-except
-            pass
 
 
 def open_local_path(path: str) -> bool:
@@ -129,92 +77,24 @@ def show_in_folder(path: str) -> bool:
 def datalab_app_context(
     exec_loop=False, enable_logs=True
 ) -> Generator[QW.QApplication, None, None]:
-    """DataLab Qt application context manager, handling Qt application creation
-    and persistance, faulthandler/traceback logging features, screenshot mode
-    and unattended mode.
+    """DataLab Qt application context manager.
+
+    Thin wrapper around :func:`sigimax.utils.qthelpers.sigimax_app_context`.
+    It first reloads persisted settings from the INI backend (DataLab
+    session-start behaviour); application identity and the
+    faulthandler/traceback logging setup are then handled by SigimaX, which
+    reads DataLab's active configuration through ``get_conf()``.
 
     Args:
         exec_loop: whether to execute Qt event loop (default: False)
         enable_logs: whether to enable logs (default: True)
     """
-    global QAPP_INSTANCE  # pylint: disable=global-statement
-    if QAPP_INSTANCE is None:
-        QAPP_INSTANCE = guidata.qapplication()
-
-    # === Set application name and version ---------------------------------------------
-    # pylint: disable=import-outside-toplevel
-    import datalab
-
-    QAPP_INSTANCE.setApplicationName(APP_NAME)
-    QAPP_INSTANCE.setApplicationVersion(datalab.__version__)
-    QAPP_INSTANCE.setOrganizationName(APP_NAME + " project")
-
-    # === Reload persisted settings from the INI backend (session start) -----------
-    # The flat options container is loaded once at import time; refresh it here so
-    # that each application session honours the settings currently on disk.
+    # Reload persisted settings from the INI backend (session start). The flat
+    # options container is loaded once at import time; refresh it here so that
+    # each application session honours the settings currently on disk.
     Conf.reload_from_ini()
-
-    if enable_logs:
-        # === Create a logger for standard exceptions ----------------------------------
-        tb_log_fname = Conf.main.traceback_log_path.get()
-        Conf.main.traceback_log_available.set(initialize_log_file(tb_log_fname))
-        logger = logging.getLogger(__name__)
-        fmt = "[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s"
-        logging.basicConfig(
-            filename=tb_log_fname,
-            filemode="w",
-            level=logging.ERROR,
-            format=fmt,
-            datefmt=DATETIME_FORMAT,
-        )
-
-        def custom_excepthook(exc_type, exc_value, exc_traceback):
-            "Custom exception hook"
-            logger.critical(
-                "Unhandled exception", exc_info=(exc_type, exc_value, exc_traceback)
-            )
-            return sys.__excepthook__(exc_type, exc_value, exc_traceback)
-
-        sys.excepthook = custom_excepthook
-
-    # === Use faulthandler for other exceptions ------------------------------------
-    fh_log_fname = Conf.main.faulthandler_log_path.get()
-    Conf.main.faulthandler_log_available.set(initialize_log_file(fh_log_fname))
-
-    with open(fh_log_fname, "w", encoding="utf-8") as fh_log_fn:
-        if enable_logs and Conf.main.faulthandler_enabled.get(True):
-            faulthandler.enable(file=fh_log_fn)
-        exception_occured = False
-        try:
-            yield QAPP_INSTANCE
-        except Exception:  # pylint: disable=broad-except
-            exception_occured = True
-        finally:
-            if (
-                execenv.unattended or execenv.screenshot
-            ) and not execenv.do_not_quit:  # pragma: no cover
-                if execenv.delay > 0:
-                    mode = "Screenshot" if execenv.screenshot else "Unattended"
-                    message = f"{mode} mode (delay: {execenv.delay}ms)"
-                    msec = execenv.delay - 200
-                    for widget in QW.QApplication.instance().topLevelWidgets():
-                        if isinstance(widget, QW.QMainWindow):
-                            widget.statusBar().showMessage(message, msec)
-                QC.QTimer.singleShot(
-                    execenv.delay,
-                    lambda: close_widgets_and_quit(screenshot=execenv.screenshot),
-                )
-            if exec_loop and not exception_occured:
-                QAPP_INSTANCE.exec()
-        if exception_occured:
-            raise  # pylint: disable=misplaced-bare-raise
-
-    if enable_logs and Conf.main.faulthandler_enabled.get():
-        faulthandler.disable()
-    remove_empty_log_file(fh_log_fname)
-    if enable_logs:
-        logging.shutdown()
-        remove_empty_log_file(tb_log_fname)
+    with sigimax_app_context(exec_loop=exec_loop, enable_logs=enable_logs) as qapp:
+        yield qapp
 
 
 def is_running_tests() -> bool:
