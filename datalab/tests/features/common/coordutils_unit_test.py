@@ -14,8 +14,7 @@ from sigima.objects import (
     create_image,
     create_signal,
 )
-
-from datalab.adapters_plotpy.coordutils import (
+from sigimax.adapters_plotpy.coordutils import (
     round_image_coords,
     round_image_roi_param,
     round_signal_coords,

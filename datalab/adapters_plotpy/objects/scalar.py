@@ -35,6 +35,12 @@ from sigima.objects.scalar import KindShape
 from sigima.objects.signal import SignalObj
 from sigima.tools import coordinates
 from sigima.tools.signal import pulse
+from sigimax.adapters_plotpy.base import (
+    config_annotated_shape,
+    items_to_json,
+    json_to_items,
+    set_plot_item_editable,
+)
 
 from datalab.adapters_metadata import (
     GeometryAdapter,
@@ -42,12 +48,6 @@ from datalab.adapters_metadata import (
     resultadapter_to_html,
 )
 from datalab.adapters_metadata.common import alpha_label as _alpha_label
-from datalab.adapters_plotpy.base import (
-    config_annotated_shape,
-    items_to_json,
-    json_to_items,
-    set_plot_item_editable,
-)
 from datalab.config import PLOTPY_CONF, Conf, _
 
 if TYPE_CHECKING:

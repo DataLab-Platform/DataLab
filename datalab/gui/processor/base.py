@@ -34,6 +34,7 @@ from sigima.objects import (
 )
 from sigima.proc.decorator import is_computation_function
 from sigima.tools.signal.interpolation import interpolate
+from sigimax.adapters_plotpy import coordutils
 from sigimax.widgets.warningerror import show_warning_error
 
 from datalab import env
@@ -43,7 +44,6 @@ from datalab.adapters_metadata import (
     TableAdapter,
     show_resultdata,
 )
-from datalab.adapters_plotpy import coordutils
 from datalab.config import Conf, _
 from datalab.gui.processor.catcher import CompOut, wng_err_func
 from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids

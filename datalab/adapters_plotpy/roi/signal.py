@@ -17,9 +17,8 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from sigima.objects import SegmentROI, SignalObj, SignalROI
 from sigima.objects.base import GENERIC_ROI_TITLE_REGEXP, get_generic_roi_title
-
-from datalab.adapters_plotpy.coordutils import round_signal_coords
-from datalab.adapters_plotpy.roi.base import (
+from sigimax.adapters_plotpy.coordutils import round_signal_coords
+from sigimax.adapters_plotpy.roi.base import (
     BaseROIPlotPyAdapter,
     BaseSingleROIPlotPyAdapter,
     configure_roi_item,

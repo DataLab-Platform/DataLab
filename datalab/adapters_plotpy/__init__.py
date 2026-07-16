@@ -30,7 +30,14 @@ __all__ = [
 ]
 
 
-from .base import items_to_json, json_to_items
+from sigimax.adapters_plotpy.base import items_to_json, json_to_items
+from sigimax.adapters_plotpy.roi.base import TypeROIItem, configure_roi_item
+from sigimax.adapters_plotpy.roi.image import (
+    CircularROIPlotPyAdapter,
+    PolygonalROIPlotPyAdapter,
+    RectangularROIPlotPyAdapter,
+)
+
 from .converters import (
     create_adapter_from_object,
     plotitem_to_singleroi,
@@ -45,11 +52,5 @@ from .objects.adapters import (
 from .objects.scalar import (
     GeometryPlotPyAdapter,
     TablePlotPyAdapter,
-)
-from .roi.base import TypeROIItem, configure_roi_item
-from .roi.image import (
-    CircularROIPlotPyAdapter,
-    PolygonalROIPlotPyAdapter,
-    RectangularROIPlotPyAdapter,
 )
 from .roi.signal import SegmentROIPlotPyAdapter, SignalROIPlotPyAdapter

@@ -39,19 +39,19 @@ def create_roi_adapter(roi):
 
         return SignalROIPlotPyAdapter(roi)
     if isinstance(roi, RectangularROI):
-        from datalab.adapters_plotpy.roi.image import RectangularROIPlotPyAdapter
+        from sigimax.adapters_plotpy.roi.image import RectangularROIPlotPyAdapter
 
         return RectangularROIPlotPyAdapter(roi)
     if isinstance(roi, CircularROI):
-        from datalab.adapters_plotpy.roi.image import CircularROIPlotPyAdapter
+        from sigimax.adapters_plotpy.roi.image import CircularROIPlotPyAdapter
 
         return CircularROIPlotPyAdapter(roi)
     if isinstance(roi, PolygonalROI):
-        from datalab.adapters_plotpy.roi.image import PolygonalROIPlotPyAdapter
+        from sigimax.adapters_plotpy.roi.image import PolygonalROIPlotPyAdapter
 
         return PolygonalROIPlotPyAdapter(roi)
     if isinstance(roi, ImageROI):
-        from datalab.adapters_plotpy.roi.image import ImageROIPlotPyAdapter
+        from sigimax.adapters_plotpy.roi.image import ImageROIPlotPyAdapter
 
         return ImageROIPlotPyAdapter(roi)
     if isinstance(roi, SegmentROI):
@@ -79,15 +79,15 @@ def create_single_roi_plot_item(single_roi, obj: TypeObj):
     )
 
     if isinstance(single_roi, RectangularROI):
-        from datalab.adapters_plotpy.roi.image import RectangularROIPlotPyAdapter
+        from sigimax.adapters_plotpy.roi.image import RectangularROIPlotPyAdapter
 
         return RectangularROIPlotPyAdapter(single_roi).to_plot_item(obj)
     if isinstance(single_roi, CircularROI):
-        from datalab.adapters_plotpy.roi.image import CircularROIPlotPyAdapter
+        from sigimax.adapters_plotpy.roi.image import CircularROIPlotPyAdapter
 
         return CircularROIPlotPyAdapter(single_roi).to_plot_item(obj)
     if isinstance(single_roi, PolygonalROI):
-        from datalab.adapters_plotpy.roi.image import PolygonalROIPlotPyAdapter
+        from sigimax.adapters_plotpy.roi.image import PolygonalROIPlotPyAdapter
 
         return PolygonalROIPlotPyAdapter(single_roi).to_plot_item(obj)
     raise TypeError(f"Unsupported ROI type: {type(single_roi)}")

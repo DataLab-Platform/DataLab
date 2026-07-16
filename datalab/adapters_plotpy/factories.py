@@ -60,19 +60,19 @@ def create_adapter_from_object(object_to_adapt):
 
         adapter = ImageObjPlotPyAdapter(object_to_adapt)
     elif isinstance(object_to_adapt, RectangularROI):
-        from datalab.adapters_plotpy.roi.image import RectangularROIPlotPyAdapter
+        from sigimax.adapters_plotpy.roi.image import RectangularROIPlotPyAdapter
 
         adapter = RectangularROIPlotPyAdapter(object_to_adapt)
     elif isinstance(object_to_adapt, CircularROI):
-        from datalab.adapters_plotpy.roi.image import CircularROIPlotPyAdapter
+        from sigimax.adapters_plotpy.roi.image import CircularROIPlotPyAdapter
 
         adapter = CircularROIPlotPyAdapter(object_to_adapt)
     elif isinstance(object_to_adapt, PolygonalROI):
-        from datalab.adapters_plotpy.roi.image import PolygonalROIPlotPyAdapter
+        from sigimax.adapters_plotpy.roi.image import PolygonalROIPlotPyAdapter
 
         adapter = PolygonalROIPlotPyAdapter(object_to_adapt)
     elif isinstance(object_to_adapt, ImageROI):
-        from datalab.adapters_plotpy.roi.image import ImageROIPlotPyAdapter
+        from sigimax.adapters_plotpy.roi.image import ImageROIPlotPyAdapter
 
         adapter = ImageROIPlotPyAdapter(object_to_adapt)
     else:
