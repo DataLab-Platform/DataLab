@@ -5,7 +5,7 @@
 HDF5 Utils Unit Tests
 =====================
 
-Headless unit tests for the small helpers in :mod:`datalab.h5.utils`.
+Headless unit tests for the small helpers in :mod:`sigimax.h5.utils`.
 
 These helpers are used to defensively normalize values pulled out of
 heterogeneous HDF5 datasets (LMJ, FXD, etc.). They never touch Qt and were
@@ -17,8 +17,7 @@ from __future__ import annotations
 import h5py
 import numpy as np
 import pytest
-
-from datalab.h5.utils import (
+from sigimax.h5.utils import (
     fix_ldata,
     fix_ndata,
     is_single_str_array,

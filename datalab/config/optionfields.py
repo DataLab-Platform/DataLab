@@ -35,8 +35,7 @@ import guidata.dataset as gds
 from guidata.configtools import get_family
 from sigimax.config import FontOptionField as _BaseFontOptionField
 from sigimax.config import OptionField
-
-from datalab.utils.conf import Configuration
+from sigimax.utils.conf import Configuration
 
 if TYPE_CHECKING:
     from qtpy import QtGui as QG
@@ -48,7 +47,7 @@ class ConfigPathOptionField(OptionField):
 
     The raw stored value is a bare file *basename*. :meth:`get` validates the
     basename and returns the absolute path inside the configuration directory,
-    mirroring the historical ``datalab.utils.conf.ConfigPathOption`` behaviour.
+    mirroring the historical ``sigimax.utils.conf.ConfigPathOption`` behaviour.
 
     Args:
         container: Options container instance to which this option belongs.
@@ -108,7 +107,7 @@ class WorkingDirOptionField(OptionField):
     :meth:`set` validates the directory (falling back to its parent when a file
     path is given) and raises when invalid. :meth:`get` returns an empty string
     when the stored directory no longer exists. This mirrors the historical
-    ``datalab.utils.conf.WorkingDirOption`` behaviour.
+    ``sigimax.utils.conf.WorkingDirOption`` behaviour.
 
     Args:
         container: Options container instance to which this option belongs.

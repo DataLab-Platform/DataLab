@@ -6,6 +6,7 @@ Unit tests for the DataLab configuration persistence layer
 """
 
 import guidata.dataset as gds
+from sigimax.utils.conf import AppUserConfig
 
 from datalab.config.config_options import DataLabOptions
 from datalab.config.config_persistence import (
@@ -14,7 +15,6 @@ from datalab.config.config_persistence import (
     load_options_from_ini,
     save_options_to_ini,
 )
-from datalab.utils.conf import AppUserConfig
 
 
 class _SampleParam(gds.DataSet):

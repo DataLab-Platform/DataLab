@@ -20,7 +20,7 @@ import os.path as osp
 import time
 from typing import Any
 
-from datalab.utils.conf import Configuration
+from sigimax.utils.conf import Configuration
 
 PENDING_FILENAME = "recent_macros_pending.json"
 

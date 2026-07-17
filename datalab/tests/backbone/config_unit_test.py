@@ -13,12 +13,12 @@ import os.path as osp
 
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
+from sigimax.utils.conf import CONF
 
 from datalab import app
 from datalab.config import Conf
 from datalab.env import execenv
 from datalab.tests import helpers
-from datalab.utils.conf import CONF
 from datalab.utils.qthelpers import datalab_app_context
 
 SEC_MAIN = Conf.main

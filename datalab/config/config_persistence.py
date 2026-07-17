@@ -6,7 +6,7 @@ DataLab configuration persistence (INI <-> options container)
 
 Bridges the flat, SigimaX-style :class:`datalab.config_options.DataLabOptions`
 container with DataLab's historical INI backend
-(:data:`datalab.utils.conf.CONF`, a guidata ``UserConfig``).
+(:data:`sigimax.utils.conf.CONF`, a guidata ``UserConfig``).
 
 The INI file remains the on-disk format for backward compatibility with existing
 user configurations. The **INI section is derived from each option's category**
@@ -38,13 +38,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from sigimax.utils import conf as _confmod
+
 from datalab.config.optionfields import (
     ConfigPathOptionField,
     DataSetOptionField,
     FontOptionField,
     WorkingDirOptionField,
 )
-from datalab.utils import conf as _confmod
 
 if TYPE_CHECKING:
     from guidata.userconfig import UserConfig
@@ -56,7 +57,7 @@ def _default_conf() -> UserConfig:
     """Return the live DataLab INI backend (resolved dynamically).
 
     Resolving the backend lazily (rather than importing it once at module load)
-    is required because :meth:`datalab.utils.conf.Configuration.reset` rebinds
+    is required because :meth:`sigimax.utils.conf.Configuration.reset` rebinds
     the module-level ``CONF`` singleton to a fresh instance.
 
     Returns:

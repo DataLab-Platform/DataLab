@@ -9,7 +9,7 @@ macros, surviving across DataLab sessions. It mirrors the cross-workspace
 "recent macros" cache provided by DataLab-Web (``src/storage/recentStore.ts``).
 
 The cache file is stored next to the DataLab user configuration (see
-:func:`datalab.utils.conf.Configuration.get_path`).
+:func:`sigimax.utils.conf.Configuration.get_path`).
 """
 
 from __future__ import annotations
@@ -22,7 +22,7 @@ import time
 import uuid
 from typing import Any
 
-from datalab.utils.conf import Configuration
+from sigimax.utils.conf import Configuration
 
 RECENT_FILENAME = "recent_macros.json"
 MAX_ENTRIES = 50

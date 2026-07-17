@@ -26,6 +26,8 @@ from typing import TYPE_CHECKING, Any
 
 from sigima.config import OptionField
 from sigimax.config import set_conf
+from sigimax.utils import conf as _confmod
+from sigimax.utils.conf import Configuration
 
 from datalab.config.config_options import DataLabOptions
 from datalab.config.config_persistence import (
@@ -37,8 +39,6 @@ from datalab.config.optionfields import (
     DataSetOptionField,
     WorkingDirOptionField,
 )
-from datalab.utils import conf as _confmod
-from datalab.utils.conf import Configuration
 
 if TYPE_CHECKING:
     import guidata.dataset as gds

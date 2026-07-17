@@ -25,9 +25,9 @@ from sigima.proc.title_formatting import (
     PlaceholderTitleFormatter,
     set_default_title_formatter,
 )
+from sigimax.utils import conf
 
 from datalab import __version__
-from datalab.utils import conf
 
 # Configure Sigima to use DataLab-compatible placeholder title formatting
 set_default_title_formatter(PlaceholderTitleFormatter())

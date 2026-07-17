@@ -27,8 +27,9 @@ from datalab.h5.native import NativeH5Reader, NativeH5Writer
 from datalab.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
 
 if TYPE_CHECKING:
+    from sigimax.h5.common import BaseNode
+
     from datalab.gui.main import DLMainWindow
-    from datalab.h5.common import BaseNode
 
 
 class H5InputOutput:
