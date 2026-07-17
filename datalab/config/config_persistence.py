@@ -180,7 +180,17 @@ def _load_field(options, conf, field_name: str, section: str, ini_key: str) -> N
         raw = conf.get(section, ini_key, default=_escape_percent(default_raw))
         field.set(_unescape_percent(raw), sync_env=False)
     else:
-        field.set(conf.get(section, ini_key, default=default_raw), sync_env=False)
+        # ``conf.get`` on a *missing* option re-persists the supplied default
+        # through the INI backend, coercing it to the type inferred from any
+        # previously stored value (e.g. ``int`` for ``rpc_server_port``).
+        # Coercing a ``None`` default that way raises ``TypeError``
+        # (``int(None)``). Read the stored value only when it exists and fall
+        # back to the raw default otherwise (mirroring ``_save_field``, which
+        # clears None-valued options instead of persisting them).
+        if conf.has_option(section, ini_key):
+            field.set(conf.get(section, ini_key), sync_env=False)
+        else:
+            field.set(default_raw, sync_env=False)
 
 
 def _save_field(options, conf, field_name: str, section: str, ini_key: str) -> None:
