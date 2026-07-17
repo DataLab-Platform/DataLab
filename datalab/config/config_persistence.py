@@ -90,6 +90,15 @@ NON_PERSISTED: frozenset[str] = frozenset(
     }
 )
 
+#: Runtime IPC fields that must NOT be written by the bulk container save. They
+#: are shared across processes through the INI (e.g. the XML-RPC server port is
+#: written by the running instance and read by remote clients). A bulk save
+#: triggered by an unrelated option change (e.g. window geometry persisted on
+#: close by another DataLab instance) would otherwise clobber the value written
+#: by the current server. These fields stay categorized and are still *loaded*
+#: from the INI; their owner persists them via :func:`save_runtime_option`.
+RUNTIME_FIELDS: frozenset[str] = frozenset({"rpc_server_port"})
+
 #: Categories whose fields drop their ``<category>_`` prefix when mapped to the
 #: (historically section-local) INI key.
 _PREFIX_SECTIONS = frozenset({"ai", "macro"})
@@ -270,12 +279,40 @@ def save_options_to_ini(
     """
     conf = _default_conf() if conf is None else conf
     for field_name in _iter_persisted_field_names(options):
+        if field_name in RUNTIME_FIELDS:
+            # Runtime IPC value: persisted only by its owner via
+            # ``save_runtime_option`` (see :data:`RUNTIME_FIELDS`).
+            continue
         location = get_ini_location(options, field_name)
         if location is None:
             continue
         _save_field(options, conf, field_name, *location)
     if save:
         conf.save()
+
+
+def save_runtime_option(
+    options: DataLabOptions, name: str, conf: UserConfig | None = None
+) -> None:
+    """Persist a single runtime option directly to the INI (single-key write).
+
+    Runtime IPC fields (see :data:`RUNTIME_FIELDS`) are excluded from the bulk
+    :func:`save_options_to_ini` so that unrelated saves cannot clobber them.
+    Their owner (e.g. the XML-RPC server writing its port) persists them through
+    this authoritative single-key write.
+
+    Args:
+        options: The DataLab options container.
+        name: The option field name to persist.
+        conf: The ``UserConfig`` INI backend to write to (defaults to the
+         module-level DataLab ``CONF``).
+    """
+    conf = _default_conf() if conf is None else conf
+    location = get_ini_location(options, name)
+    if location is None:
+        return
+    _save_field(options, conf, name, *location)
+    conf.save()
 
 
 def get_uncategorized_fields(options: DataLabOptions) -> list[str]:
