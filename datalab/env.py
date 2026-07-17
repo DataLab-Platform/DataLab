@@ -17,6 +17,7 @@ from contextlib import contextmanager
 from typing import Any, Generator
 
 from guidata.env import ExecEnv as GuiDataExecEnv
+from sigimax.env import SGMXExecEnv
 
 # We could import DEBUG from datalab.config, but is it really worth it?
 DEBUG = os.environ.get("DATALAB_DEBUG", "").lower() in ("1", "true")
@@ -139,7 +140,10 @@ class DLExecEnv:
     SCREENSHOT_PATH_ARG = "screenshot_path"
     DELAY_ARG = "delay"
     XMLRPCPORT_ARG = "xmlrpcport"
-    DO_NOT_QUIT_ENV = "DATALAB_DO_NOT_QUIT"
+    # Share SigimaX's DO_NOT_QUIT env var name: the exec-loop/quit decision now
+    # lives in ``sigimax_app_context`` (which reads ``sigimax.env``), so the flag
+    # set for the background DataLab app must be the one SigimaX actually reads.
+    DO_NOT_QUIT_ENV = SGMXExecEnv.DO_NOT_QUIT_ENV
     UNATTENDED_ENV = GuiDataExecEnv.UNATTENDED_ENV
     ACCEPT_DIALOGS_ENV = GuiDataExecEnv.ACCEPT_DIALOGS_ENV
     VERBOSE_ENV = GuiDataExecEnv.VERBOSE_ENV
