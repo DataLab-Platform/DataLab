@@ -36,7 +36,6 @@ import scipy.signal as sps
 from guidata import qthelpers as guidata_qth
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
-from guidata.widgets.console import DockableConsole
 from plotpy import config as plotpy_config
 from plotpy.builder import make
 from plotpy.constants import PlotType
@@ -48,18 +47,16 @@ from sigima.config import options as sigima_options
 from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 from sigimax.mainwindow import SGMXMainWindow, SGMXMainWindowMeta
 from sigimax.utils import qthelpers as sgmx_qth
-from sigimax.widgets import logviewer, status
-from sigimax.widgets.warningerror import go_to_error
+from sigimax.widgets import status
 
 import datalab
-from datalab import __docurl__, __homeurl__, __supporturl__, env
+from datalab import __docurl__, __homeurl__, __supporturl__
 from datalab.adapters_metadata.common import have_geometry_results
 from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import (
     APP_DESC,
     APP_NAME,
     DATAPATH,
-    DEBUG,
     PLOTPY_CONF,
     PLOTPY_DEFAULTS,
     TEST_SEGFAULT_ERROR,
@@ -154,9 +151,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.started_at = datetime.now().astimezone()
         self.plugins_last_load_at = self.started_at
 
-        # Temporary private state retained until the close/modified lifecycle
-        # is fully delegated to SigimaX in Phase D4.
-        self.__old_size: tuple[int, int] | None = None
         self.webapistatus: dl_status.WebAPIStatus | None = None
         self.pluginstatus: dl_status.PluginStatus | None = None
 
@@ -186,9 +180,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.processing_menu: QW.QMenu | None = None
         self.analysis_menu: QW.QMenu | None = None
         self.plugins_menu: QW.QMenu | None = None
-
-        # Temporary private modified state retained until Phase D4.
-        self.__is_modified = False
 
         self.remote_server: RemoteServer | None = None
         super().__init__(console=console, hide_on_close=hide_on_close)
@@ -730,67 +721,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         if self.webapi_actions is not None:
             self.webapi_actions.start_server_from_status_widget()
 
-    def check_stable_release(self) -> None:  # pragma: no cover
-        """Check if this is a stable release"""
-        if datalab.__version__.replace(".", "").isdigit():
-            # This is a stable release
-            return
-        if "b" in datalab.__version__:
-            # This is a beta release
-            rel = _(
-                "This software is in the <b>beta stage</b> of its release cycle. "
-                "The focus of beta testing is providing a feature complete "
-                "software for users interested in trying new features before "
-                "the final release. However, <u>beta software may not behave as "
-                "expected and will probably have more bugs or performance issues "
-                "than completed software</u>."
-            )
-        else:
-            # This is an alpha release
-            rel = _(
-                "This software is in the <b>alpha stage</b> of its release cycle. "
-                "The focus of alpha testing is providing an incomplete software "
-                "for early testing of specific features by users. "
-                "Please note that <u>alpha software was not thoroughly tested</u> "
-                "by the developer before it is released."
-            )
-        txtlist = [
-            f"<b>{APP_NAME}</b> v{datalab.__version__}:",
-            "",
-            _("<i>This is not a stable release.</i>"),
-            "",
-            rel,
-        ]
-        if not env.execenv.unattended:
-            QW.QMessageBox.warning(
-                self, APP_NAME, "<br>".join(txtlist), QW.QMessageBox.Ok
-            )
-
-    def check_for_previous_crash(self) -> None:  # pragma: no cover
-        """Check for previous crash"""
-        if execenv.unattended and not execenv.do_not_quit:
-            # Showing the log viewer for testing purpose (unattended mode) but only
-            # if option 'do_not_quit' is not set, to avoid blocking the test suite
-            self.__show_logviewer()
-        elif execenv.do_not_quit:
-            # If 'do_not_quit' is set, we do not show any message box to avoid blocking
-            # the test suite
-            return
-        elif Conf.main.faulthandler_log_available.get(
-            False
-        ) or Conf.main.traceback_log_available.get(False):
-            txt = "<br>".join(
-                [
-                    logviewer.get_log_prompt_message(),
-                    "",
-                    _("Do you want to see available log files?"),
-                ]
-            )
-            btns = QW.QMessageBox.StandardButton.Yes | QW.QMessageBox.StandardButton.No
-            choice = QW.QMessageBox.warning(self, APP_NAME, txt, btns)
-            if choice == QW.QMessageBox.StandardButton.Yes:
-                self.__show_logviewer()
-
     def check_for_v020_plugins(self) -> None:  # pragma: no cover
         """Check for v0.20 plugins and warn user if any are found"""
         if Conf.main.v020_plugins_warning_ignore.get(False):
@@ -846,8 +776,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def execute_post_show_actions(self) -> None:
         """Execute post-show actions"""
-        self.check_stable_release()
-        self.check_for_previous_crash()
+        super().execute_post_show_actions()
         self.check_for_v020_plugins()
         tour = Conf.main.tour_enabled.get()
         if tour:
@@ -1205,29 +1134,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.__update_actions(update_other_data_panel=True)
         self.__update_plugins_availability()
 
-    def _setup_global_actions(self) -> None:
-        """Setup global actions"""
-        self.openh5_action = create_action(
-            self,
-            _("Open HDF5 files..."),
-            icon=get_icon("fileopen_h5.svg"),
-            tip=_("Open one or more HDF5 files"),
-            triggered=lambda checked=False: self.open_h5_files(import_all=True),
-        )
-        self.saveh5_action = create_action(
-            self,
-            _("Save to HDF5 file..."),
-            icon=get_icon("filesave_h5.svg"),
-            tip=_("Save to HDF5 file"),
-            triggered=self.save_to_h5_file,
-        )
-        self.browseh5_action = create_action(
-            self,
-            _("Browse HDF5 file..."),
-            icon=get_icon("h5browser.svg"),
-            tip=_("Browse an HDF5 file"),
-            triggered=lambda checked=False: self.open_h5_files(import_all=None),
-        )
+    def _create_global_actions(self) -> None:
+        """Create standard and DataLab-specific global actions."""
+        super()._create_global_actions()
         self.settings_action = create_action(
             self,
             _("Settings..."),
@@ -1244,34 +1153,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             triggered=self.show_command_palette,
         )
         self.addAction(self.command_palette_action)
-        self.main_toolbar = self._add_toolbar(_("Main Toolbar"), "left", "main_toolbar")
-        add_actions(
-            self.main_toolbar,
-            [
-                self.openh5_action,
-                self.saveh5_action,
-                self.browseh5_action,
-                None,
-                self.settings_action,
-            ],
-        )
-        # Quit action for "File menu" (added when populating menu on demand)
-        if self.hide_on_close:
-            quit_text = _("Hide window")
-            quit_tip = _("Hide DataLab window")
-        else:
-            quit_text = _("Quit")
-            quit_tip = _("Quit application")
-        if sys.platform != "darwin":
-            # On macOS, the "Quit" action is automatically added to the application menu
-            self.quit_action = create_action(
-                self,
-                quit_text,
-                shortcut=QG.QKeySequence(QG.QKeySequence.Quit),
-                icon=get_icon("libre-gui-close.svg"),
-                tip=quit_tip,
-                triggered=self.close,
-            )
         # View menu actions
         self.autorefresh_action = create_action(
             self,
@@ -1311,6 +1192,16 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             triggered=self.__configure_plugins,
         )
         self.__update_plugins_availability()
+
+    def _get_main_toolbar_actions(self) -> list[QW.QAction | None]:
+        """Return standard HDF5 actions followed by DataLab settings."""
+        return [
+            self.openh5_action,
+            self.saveh5_action,
+            self.browseh5_action,
+            None,
+            self.settings_action,
+        ]
 
     def __add_signal_panel(self) -> None:
         """Setup signal toolbar, widgets and panel"""
@@ -1498,7 +1389,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 self,
                 _("Log files") + "...",
                 icon=get_icon("logs.svg"),
-                triggered=self.__show_logviewer,
+                triggered=self._show_logviewer,
             ),
             create_action(
                 self,
@@ -1558,24 +1449,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             if action is not None:
                 action.trigger()
 
-    def __update_console_show_mode(self) -> None:
-        """Update console show mode from configuration option
-
-        Console show mode is whether the console is shown or not when an error occurs.
-        """
-        if self.console is not None:
-            state = Conf.console.show_console_on_error.get()
-            cdock = self.docks[self.console]
-            if not state and cdock.isVisible():
-                cdock.hide()
-            if state:
-                self.console.exception_occurred.connect(self.console.show_console)
-            else:
-                self.console.exception_occurred.disconnect(self.console.show_console)
-
-    def _setup_console(self) -> None:
-        """Add an internal console"""
-        ns = {
+    def _get_console_namespace(self) -> dict[str, object]:
+        """Return the DataLab internal-console namespace."""
+        return {
             "dl": self,
             "np": np,
             "sps": sps,
@@ -1585,7 +1461,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             "osp": osp,
             "time": time,
         }
-        msg = _(
+
+    def _get_console_message(self) -> str:
+        """Return the DataLab internal-console welcome message."""
+        return _(
             "Welcome to DataLab console!\n"
             "---------------------------\n"
             "You can access the main window with the 'dl' variable.\n"
@@ -1598,19 +1477,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             "os, sys, os.path as osp, time, "
             "numpy as np, scipy.signal as sps, scipy.ndimage as spi"
         )
-        self.console = DockableConsole(self, namespace=ns, message=msg, debug=DEBUG)
-        self.console.setMaximumBlockCount(Conf.console.max_line_count.get(5000))
-        self.console.go_to_error.connect(go_to_error)
-        cdock = self._add_dockwidget(self.console, _("Console"))
-        self.docks[self.console] = cdock
-        cdock.hide()
+
+    def _configure_console(self) -> None:
+        """Connect DataLab-specific console refresh behavior."""
+        super()._configure_console()
         self.console.interpreter.widget_proxy.sig_new_prompt.connect(
             lambda txt: self.repopulate_panel_trees()
         )
-        self.__update_console_show_mode()
-        self.console.exception_occurred.connect(self.consolestatus.exception_occurred)
-        cdock.visibilityChanged.connect(self.consolestatus.console_visibility_changed)
-        self.consolestatus.SIG_SHOW_CONSOLE.connect(self.console.show_console)
 
     def __add_macro_panel(self) -> None:
         """Add macro panel"""
@@ -1766,18 +1639,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Return True if sig/ima panels have any object"""
         return sum(len(panel) for panel in self.panels) > 0
 
-    def set_modified(self, state: bool = True) -> None:
-        """Set mainwindow modified state"""
-        state = state and self.has_objects()
-        self.__is_modified = state
-        title = APP_NAME + ("*" if state else "")
-        if not datalab.__version__.replace(".", "").isdigit():
-            title += f" [{datalab.__version__}]"
-        self.setWindowTitle(title)
-
-    def is_modified(self) -> bool:
-        """Return True if mainwindow is modified"""
-        return self.__is_modified
+    def _normalize_modified_state(self, state: bool) -> bool:
+        """Keep empty DataLab workspaces unmodified."""
+        return state and self.has_objects()
 
     def repopulate_panel_trees(self) -> None:
         """Repopulate all panel trees"""
@@ -2438,7 +2302,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             if option == "color_mode":
                 self._update_color_mode()
             if option == "show_console_on_error":
-                self.__update_console_show_mode()
+                self._update_console_show_mode()
             if option == "plot_toolbar_position":
                 for dock in self.docks.values():
                     widget = dock.widget()
@@ -2497,10 +2361,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         ):
             self.aiassistantpanel.invalidate_controller()
 
-    def __show_logviewer(self) -> None:
-        """Show error logs"""
-        logviewer.exec_sigimax_logviewer_dialog(self)
-
     def play_demo(self) -> None:
         """Play demo"""
         # pylint: disable=import-outside-toplevel
@@ -2517,81 +2377,31 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         tour.start(self)
 
-    @staticmethod
-    def test_segfault_error() -> None:
-        """Generate errors (both fault and traceback)"""
-        import ctypes  # pylint: disable=import-outside-toplevel
-
-        ctypes.string_at(0)
-        raise RuntimeError("!!! Testing RuntimeError !!!")
-
-    def show(self) -> None:
-        """Reimplement QMainWindow method"""
-        super().show()
-        if self.__old_size is not None:
-            self.resize(self.__old_size)
-
     # ------Close window
-    def close_properly(self) -> bool:
-        """Close properly
+    def _get_save_before_quit_message(self) -> str:
+        """Return the DataLab workspace save confirmation message."""
+        return _(
+            "Do you want to save all signals and images "
+            "to an HDF5 file before quitting DataLab?"
+        )
 
-        Returns:
-            True if closed properly, False otherwise
-        """
-        if not env.execenv.unattended and self.is_modified():
-            answer = QW.QMessageBox.warning(
-                self,
-                _("Quit"),
-                _(
-                    "Do you want to save all signals and images "
-                    "to an HDF5 file before quitting DataLab?"
-                ),
-                QW.QMessageBox.Yes | QW.QMessageBox.No | QW.QMessageBox.Cancel,
-            )
-            if answer == QW.QMessageBox.Yes:
-                self.save_to_h5_file()
-                if self.is_modified():
-                    return False
-            elif answer == QW.QMessageBox.Cancel:
-                return False
-        self.hide()  # Avoid showing individual widgets closing one after the other
+    def _close_managed_widgets(self) -> None:
+        """Close DataLab panels and generic shell widgets."""
         for panel in self.panels:
             if panel is not None:
                 panel.close()
-        if self.console is not None:
-            try:
-                self.console.close()
-            except RuntimeError:
-                # Note: investigate further why the following error occurs when
-                # restarting the mainwindow (this is *not* a production case):
-                # "RuntimeError: wrapped C/C++ object of type DockableConsole
-                #  has been deleted".
-                # Another solution to avoid this error would be to really restart
-                # the application (run each unit test in a separate process), but
-                # it would represent too much effort for an error occuring in test
-                # configurations only.
-                pass
+        super()._close_managed_widgets()
+
+    def _cleanup_before_reset(self) -> None:
+        """Clean up DataLab services before clearing panel data."""
+        super()._cleanup_before_reset()
         if self.webapi_actions is not None:
             self.webapi_actions.cleanup()
-        self.reset_all()
-        self._save_pos_size_and_state()
+
+    def _cleanup_after_state_save(self) -> None:
+        """Persist DataLab UI state and unregister plugins after shutdown."""
         self.__unregister_plugins()
 
-        # Saving current tab for next session
         if self.tabwidget is not None:
             Conf.main.current_tab.set(self.tabwidget.currentIndex())
-
-        execenv.log(self, "closed properly")
-        return True
-
-    def closeEvent(self, event: QG.QCloseEvent) -> None:
-        """Reimplement QMainWindow method"""
-        if self.hide_on_close:
-            self.__old_size = self.size()
-            self.hide()
-        else:
-            if self.close_properly():
-                self.SIG_CLOSING.emit()
-                event.accept()
-            else:
-                event.ignore()
+        super()._cleanup_after_state_save()
