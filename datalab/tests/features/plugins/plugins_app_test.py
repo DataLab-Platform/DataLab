@@ -314,7 +314,7 @@ def test_plugin_system():  # pylint: disable=too-many-statements
             #    BUT try_or_log_error re-raises in test mode, so we mock
             #    is_running_tests
             # 3. Valid plugins remain valid
-            with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
+            with patch("sigimax.utils.qthelpers.is_running_tests") as mock_run_tests:
                 mock_run_tests.return_value = False
                 win.reload_plugins()
             QW.QApplication.processEvents()
@@ -443,7 +443,7 @@ def test_plugin_error_handling():
                 "        pass\n"
             )
 
-        with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
+        with patch("sigimax.utils.qthelpers.is_running_tests") as mock_run_tests:
             mock_run_tests.return_value = False
             with datalab_test_app_context(console=False):
                 QW.QApplication.processEvents()
@@ -488,7 +488,7 @@ def test_plugin_duplicate_name():
         )
 
         # Start application - should handle duplicate gracefully
-        with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
+        with patch("sigimax.utils.qthelpers.is_running_tests") as mock_run_tests:
             mock_run_tests.return_value = False
             with datalab_test_app_context(console=False):
                 QW.QApplication.processEvents()

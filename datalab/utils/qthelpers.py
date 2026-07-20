@@ -1,38 +1,63 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
-"""
-DataLab Qt utilities
-"""
+"""DataLab Qt utilities."""
 
 from __future__ import annotations
 
 import functools
-import inspect
-import logging
 import os
 import os.path as osp
 import shutil
 import subprocess
 import sys
-import time
-import traceback
-from collections.abc import Callable, Generator
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Any
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import grab_save_window as guidata_grab_save_window
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
-from sigimax.utils.qthelpers import sigimax_app_context
-
-from datalab.config import (
-    APP_NAME,
-    SHOTPATH,
-    Conf,
-    _,
+from sigimax.utils.qthelpers import (
+    CallbackWorker,
+    add_corner_menu,
+    block_signals,
+    bring_to_front,
+    configure_menu_about_to_show,
+    create_progress_bar,
+    is_running_tests,
+    qt_handle_error_message,
+    qt_long_callback,
+    qt_try_loadsave_file,
+    resize_widget_to_parent,
+    save_restore_stds,
+    sigimax_app_context,
+    try_or_log_error,
 )
+
+from datalab.config import SHOTPATH, Conf
+
+__all__ = [
+    "CallbackWorker",
+    "add_corner_menu",
+    "block_signals",
+    "bring_to_front",
+    "configure_menu_about_to_show",
+    "create_menu_button",
+    "create_progress_bar",
+    "datalab_app_context",
+    "grab_save_window",
+    "is_running_tests",
+    "open_local_path",
+    "qt_handle_error_message",
+    "qt_long_callback",
+    "qt_try_except",
+    "qt_try_loadsave_file",
+    "resize_widget_to_parent",
+    "save_restore_stds",
+    "show_in_folder",
+    "try_or_log_error",
+]
 
 
 def open_local_path(path: str) -> bool:
@@ -75,218 +100,21 @@ def show_in_folder(path: str) -> bool:
 
 @contextmanager
 def datalab_app_context(
-    exec_loop=False, enable_logs=True
+    exec_loop: bool = False, enable_logs: bool = True
 ) -> Generator[QW.QApplication, None, None]:
-    """DataLab Qt application context manager.
-
-    Thin wrapper around :func:`sigimax.utils.qthelpers.sigimax_app_context`.
-    It first reloads persisted settings from the INI backend (DataLab
-    session-start behaviour); application identity and the
-    faulthandler/traceback logging setup are then handled by SigimaX, which
-    reads DataLab's active configuration through ``get_conf()``.
-
-    Args:
-        exec_loop: whether to execute Qt event loop (default: False)
-        enable_logs: whether to enable logs (default: True)
-    """
-    # Reload persisted settings from the INI backend (session start). The flat
-    # options container is loaded once at import time; refresh it here so that
-    # each application session honours the settings currently on disk.
+    """Create a DataLab application context using SigimaX infrastructure."""
     Conf.reload_from_ini()
     with sigimax_app_context(exec_loop=exec_loop, enable_logs=enable_logs) as qapp:
         yield qapp
 
 
-def is_running_tests() -> bool:
-    """Check if code is running during test execution"""
-    return "pytest" in sys.modules
-
-
-@contextmanager
-def try_or_log_error(context: str) -> Generator[None, None, None]:
-    """Try to execute a function and log an error message if it fails"""
-    try:
-        yield
-    except Exception:  # pylint: disable=broad-except
-        if is_running_tests():
-            # If we are running tests, we want to raise the exception
-            raise
-        traceback.print_exc()
-        logger = logging.getLogger(__name__)
-        logger.error("Error in %s", context, exc_info=traceback.format_exc())
-        Conf.main.traceback_log_available.set(True)
-    finally:
-        pass
-
-
-@contextmanager
-def create_progress_bar(
-    parent: QW.QWidget, label: str, max_: int, show_after: int = 1000
-) -> Generator[QW.QProgressDialog, None, None]:
-    """Create modal progress bar
-
-    Args:
-        parent: Parent widget
-        label: Progress dialog title
-        max_: Maximum progress value
-        show_after: Delay before showing the progress dialog (ms, default: 1000)
-    """
-    prog = QW.QProgressDialog(label, _("Cancel"), 0, max_, parent, QC.Qt.SplashScreen)
-    prog.setWindowModality(QC.Qt.WindowModal)
-    prog.setMinimumDuration(show_after)
-    try:
-        yield prog
-    finally:
-        prog.close()
-        prog.deleteLater()
-
-
-class CallbackWorker(QC.QThread):
-    """Worker for executing long operations in a separate thread (this must not be
-    confused with the :py:class:`datalab.gui.processor.base.Worker` class, which
-    handles the execution of computations in a another process)
-
-    Implements `CallbackWorkerProtocol` from `sigima.worker`, used for computations
-    that support cancellation and progress reporting.
-
-    Args:
-        callback: The function to be executed in a separate thread, that takes
-         optionnally 'worker' as argument (instance of this class), and any other
-         argument passed with **kwargs
-        kwargs: Callback keyword arguments
-    """
-
-    SIG_PROGRESS_UPDATE = QC.Signal(int)
-
-    def __init__(self, callback: Callable, **kwargs) -> None:
-        super().__init__()
-        self.callback = callback
-        if "worker" in inspect.signature(callback).parameters:
-            kwargs["worker"] = self
-        self.kwargs = kwargs
-        self.result: Any | None = None
-        self.__canceled = False
-        self.__exc = None
-
-    def run(self) -> None:
-        """Start thread"""
-        # Initialize progress bar: setting progress to 0.0 has the effect of
-        # showing the progress dialog after the `minimumDuration` time has elapsed.
-        # If we don't set the progress to 0.0, the progress dialog will be shown only
-        # after the first call to `set_progress` method even if the `minimumDuration`
-        # time has elapsed.
-        self.set_progress(0.0)
-
-        try:
-            self.result = self.callback(**self.kwargs)
-        except Exception as exc:  # pylint: disable=broad-except
-            self.__exc = exc
-
-    def cancel(self) -> None:
-        """Progress bar was canceled"""
-        self.__canceled = True
-
-    def was_canceled(self) -> bool:
-        """Return whether the progress dialog was canceled by user"""
-        return self.__canceled
-
-    def set_progress(self, value: float) -> None:
-        """Set progress bar value
-
-        Args:
-            value: float between 0.0 and 1.0
-        """
-        self.SIG_PROGRESS_UPDATE.emit(int(100 * value))
-
-    def get_result(self) -> Any:
-        """Return callback result"""
-        if self.__exc is not None:
-            raise self.__exc
-        return self.result
-
-
-def qt_long_callback(
-    parent: QW.QWidget,
-    label: str,
-    worker: CallbackWorker,
-    progress: bool,
-    show_after: int = 500,
-) -> Any:
-    """Handle long callbacks: run in a separate thread while showing a busy bar
-
-    Args:
-        parent: Parent widget
-        label: Progress dialog title
-        worker: Callback worker handling the function execution in a separate thread
-        progress: Whether the progress feature is handled or not. If True, a progress
-         bar and a 'Cancel' button are shown on the progress dialog. The progress value
-         is updated by the `worker.set_progress` method (which takes a float between
-         0.0 and 1.0). Moreover, if `progress` is True, we wait for the callback
-         function to return (it means that the callback function must implement a
-         mechanism to return an intermediate result or `None` if the
-         `worker.was_canceled` method returns True).
-        show_after: Delay before showing the progress dialog (ms, default: 1000)
-
-    Returns:
-        Callback result
-    """
-    if progress:
-        prog = QW.QProgressDialog(
-            label, _("Cancel"), 0, 100, parent, QC.Qt.SplashScreen
-        )
-        prog.setMinimumDuration(show_after)
-        worker.SIG_PROGRESS_UPDATE.connect(prog.setValue)
-        prog.canceled.connect(worker.cancel)
-    else:
-        prog = QW.QProgressDialog(label, None, 0, 0, parent, QC.Qt.SplashScreen)
-        prog.setMinimumDuration(0)
-        prog.setCancelButton(None)
-        prog.setRange(0, 0)
-        prog.show()
-    prog.setWindowModality(QC.Qt.WindowModal)
-
-    worker.start()
-    while worker.isRunning() and not worker.was_canceled():
-        QW.QApplication.processEvents()
-        time.sleep(0.005)
-    if progress:
-        worker.SIG_PROGRESS_UPDATE.disconnect(prog.setValue)
-        worker.wait()
-    try:
-        result = worker.get_result()
-    except Exception as exc:  # pylint: disable=broad-except
-        prog.close()
-        prog.deleteLater()
-        raise exc
-    prog.close()
-    prog.deleteLater()
-    return result
-
-
-def qt_handle_error_message(widget: QW.QWidget, message: str, context: str = None):
-    """Handles application (QWidget) error message"""
-    traceback.print_exc()
-    txt = str(message)
-    msglines = txt.splitlines()
-    firstline = _("Error:") if context is None else f"%s: {context}" % _("Context")
-    msglines.insert(0, firstline)
-    if len(msglines) > 10:
-        msglines = msglines[:10] + ["..."]
-    title = widget.window().objectName()
-    QW.QMessageBox.critical(widget, title, os.linesep.join(msglines))
-
-
 def qt_try_except(message=None, context=None):
-    """Try...except Qt widget method decorator"""
+    """Decorate a DataLab Qt method with status and error handling."""
 
     def qt_try_except_decorator(func):
-        """Try...except Qt widget method decorator"""
-
         @functools.wraps(func)
         def method_wrapper(*args, **kwargs):
-            """Decorator wrapper function"""
-            self = args[0]  # extracting 'self' from method arguments
-            #  If "self" is a BaseProcessor, then we need to get the panel instance
+            self = args[0]
             panel = getattr(self, "panel", self)
             if message is not None:
                 panel.SIG_STATUS_MESSAGE.emit(message, 0)
@@ -297,7 +125,6 @@ def qt_try_except(message=None, context=None):
                 output = func(*args, **kwargs)
             except Exception as msg:  # pylint: disable=broad-except
                 if is_running_tests():
-                    # If we are running tests, we want to raise the exception
                     raise
                 qt_handle_error_message(panel.parentWidget(), msg, context)
             finally:
@@ -311,257 +138,33 @@ def qt_try_except(message=None, context=None):
     return qt_try_except_decorator
 
 
-@contextmanager
-def qt_try_loadsave_file(
-    parent: QW.QWidget, filename: str, operation: str
-) -> Generator[str, None, None]:
-    """Try and open file (operation: "load" or "save")"""
-    if operation not in ("load", "save"):
-        raise ValueError("operation argument must be 'load' or 'save'")
-    try:
-        yield filename
-    except Exception as msg:  # pylint: disable=broad-except
-        if is_running_tests():
-            # If we are running tests, we want to raise the exception
-            raise
-        traceback.print_exc()
-        url = osp.dirname(filename).replace("\\", "/")
-        if operation == "load":
-            text = _("The file %s could not be read:")
-        else:
-            text = _("The file %s could not be written:")
-        in_folder = _("in this folder")
-        message = text % (
-            f"<span style='font-weight:bold;color:#555555;'>{osp.basename(filename)}"
-            f"</span> (<a href='file:///{url}'>{in_folder}</a>)"
-        )
-        QW.QMessageBox.critical(parent, APP_NAME, f"{message}<br><br>{str(msg)}")
-    finally:
-        pass
-
-
 def grab_save_window(
     widget: QW.QWidget, name: str | None = None, add_timestamp: bool = True
 ) -> None:  # pragma: no cover
-    """Grab window screenshot and save it.
-
-    Args:
-        widget: Widget to grab
-        name: Screenshot name (if None, uses widget.objectName())
-        add_timestamp: Whether to add a timestamp to the screenshot name (default: True)
-    """
+    """Save a screenshot using DataLab naming and localization conventions."""
     if name is None:
         name = widget.objectName()
 
-    # DataLab-specific logic: determine if timestamp should be added
-    # based on name patterns and DataLab conventions
     if name.endswith("_"):
-        # Name ending with underscore always gets timestamp
         add_timestamp = True
     elif name[-1].isdigit() or name.startswith(("s_", "i_")):
-        # DataLab screenshot names or numbered items don't get timestamp
         add_timestamp = False
 
-    # Suffix the screenshot name with the active UI language so that the
-    # French and English documentation builds can each pick the right asset
-    # via Sphinx's ``figure_language_filename = "{root}.{language}{ext}"``.
-    # ``LANG`` is set by the screenshot refresh script (scripts/update_screenshots.bat)
-    # to ``fr`` or ``en`` for each pass. Anything else (or unset) is normalised
-    # to ``en``.
     lang_env = (os.environ.get("LANG") or "en").lower()
     lang = "fr" if lang_env.startswith("fr") else "en"
     name = f"{name}.{lang}"
 
-    # Use guidata's grab_save_window with DataLab-specific configuration
     guidata_grab_save_window(
         widget=widget, name=name, save_dir=SHOTPATH, add_timestamp=add_timestamp
     )
 
 
-@contextmanager
-def save_restore_stds() -> Generator[None, None, None]:
-    """Save/restore standard I/O before/after doing some things
-    (e.g. calling Qt open/save dialogs)"""
-    saved_in, saved_out, saved_err = sys.stdin, sys.stdout, sys.stderr
-    sys.stdout = None
-    try:
-        yield
-    finally:
-        sys.stdin, sys.stdout, sys.stderr = saved_in, saved_out, saved_err
-
-
-@contextmanager
-def block_signals(
-    widget: QW.QWidget, enable: bool = True, children: bool = False
-) -> Generator[None, None, None]:
-    """Eventually block/unblock widget Qt signals before/after doing some things
-
-    Args:
-        widget: Widget to block/unblock signals
-        enable: Whether to block/unblock signals (default: True). This is useful
-         to avoid blocking signals when not needed without having to handle it by
-         adding an `if` statement which would require to duplicate the code that is
-         inside the `with` statement in the `else` branch.
-        children: Whether to block/unblock signals for child widgets (default: False).
-
-    Returns:
-        Context manager
-    """
-    if enable:
-        widget.blockSignals(True)
-        if children:
-            for child in widget.findChildren(QW.QWidget):
-                child.blockSignals(True)
-    try:
-        yield
-    finally:
-        if enable:
-            widget.blockSignals(False)
-            if children:
-                for child in widget.findChildren(QW.QWidget):
-                    child.blockSignals(False)
-
-
 def create_menu_button(
     parent: QW.QWidget | None = None, menu: QW.QMenu | None = None
 ) -> QW.QPushButton:
-    """Create a menu button
-
-    Args:
-        parent (QWidget): Parent widget
-        menu (QMenu): Menu to attach to the button
-
-    Returns:
-        QW.QPushButton: Menu button
-    """
+    """Create a DataLab menu button."""
     button = QW.QPushButton(get_icon("libre-gui-menu.svg"), "", parent)
     button.setFlat(True)
     if menu is not None:
         button.setMenu(menu)
     return button
-
-
-def bring_to_front(window: QW.QWidget) -> None:
-    """Bring window to front
-
-    Args:
-        window: Window to bring to front
-    """
-    # Show window on top of others
-    eflags = window.windowFlags()
-    window.setWindowFlags(eflags | QC.Qt.WindowStaysOnTopHint)
-    window.show()
-    window.setWindowFlags(eflags)
-    window.show()
-    # If window is minimized, restore it
-    if window.isMinimized():
-        window.showNormal()
-
-
-def configure_menu_about_to_show(menu: QW.QMenu, slot: Callable) -> None:
-    """Configure menu about to show.
-    This method is only used to connect the "aboutToShow" signal of menus,
-    and more importantly to fix Issue #15 (Part 2) which is the fact that
-    dynamic menus are not supported on MacOS unless an action is added to
-    the menu before it is displayed.
-
-    Args:
-        menu: menu
-        slot: slot
-    """
-    # On MacOS, add an empty action to the menu before connecting the
-    # "aboutToShow" signal to the slot. This is required to fix Issue #15 (Part 2)
-    if sys.platform == "darwin":
-        menu.addAction(QW.QAction(menu))
-    menu.aboutToShow.connect(slot)
-
-
-def resize_widget_to_parent(
-    widget: QW.QWidget,
-    parent: QW.QWidget | None = None,
-    ratio: float = 0.95,
-    aspect_ratio: float = 1.0,
-    min_size: int = 500,
-) -> None:
-    """Resize widget based on parent widget's dimensions
-
-    Args:
-        widget: Widget to resize
-        parent: Parent widget (if None, uses widget.parentWidget())
-        ratio: Ratio of parent size to use (0.0 to 1.0, default: 0.95 for 95%).
-         This represents the percentage of the maximum dimension with respect
-         to the widget.
-        aspect_ratio: Width/height ratio (1.0 for square, >1.0 for landscape,
-         <1.0 for portrait, default: 1.0)
-        min_size: Minimum size in pixels (default: 500)
-    """
-    if parent is None:
-        parent = widget.parentWidget()
-
-    if parent is not None:
-        parent_size = parent.size()
-        parent_width = parent_size.width()
-        parent_height = parent_size.height()
-
-        # Calculate maximum available dimensions
-        max_width = parent_width * ratio
-        max_height = parent_height * ratio
-
-        # Determine which dimension is limiting based on aspect ratio
-        # For aspect_ratio = w/h, we have: w = aspect_ratio * h
-        # Check which constraint is more restrictive
-        width_from_height = max_height * aspect_ratio
-        height_from_width = max_width / aspect_ratio
-
-        if width_from_height <= max_width:
-            # Height is the limiting factor
-            height = int(max_height)
-            width = int(width_from_height)
-        else:
-            # Width is the limiting factor
-            width = int(max_width)
-            height = int(height_from_width)
-
-        # Ensure minimum size while preserving aspect ratio
-        if width < min_size or height < min_size:
-            if aspect_ratio >= 1.0:
-                # Landscape or square: scale up from minimum width
-                width = max(width, min_size)
-                height = max(height, int(min_size / aspect_ratio))
-            else:
-                # Portrait: scale up from minimum height
-                height = max(height, min_size)
-                width = max(width, int(min_size * aspect_ratio))
-
-        # Final check: ensure we don't exceed parent dimensions
-        width = min(width, parent_width)
-        height = min(height, parent_height)
-
-        widget.resize(width, height)
-    else:
-        # Fallback: use square with min_size if no parent
-        widget.resize(min_size, min_size)
-
-
-def add_corner_menu(
-    tabwidget: QW.QTabWidget, corner: QC.Qt.Corner | None = None
-) -> QW.QMenu:
-    """Add menu as corner widget to tab widget
-
-    Args:
-        tabwidget: Tab widget
-        corner: Corner
-
-    Returns:
-        Menu
-    """
-    if corner is None:
-        corner = QC.Qt.TopRightCorner
-    menu = QW.QMenu(tabwidget)
-    btn = QW.QToolButton(tabwidget)
-    btn.setMenu(menu)
-    btn.setPopupMode(QW.QToolButton.InstantPopup)
-    btn.setIcon(get_icon("menu.svg"))
-    btn.setToolTip(_("Open tab menu"))
-    tabwidget.setCornerWidget(btn, corner)
-    return menu

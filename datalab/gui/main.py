@@ -48,6 +48,7 @@ from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilenames, getsavefilename
 from sigima.config import options as sigima_options
 from sigima.objects import ImageObj, SignalObj, create_image, create_signal
+from sigimax.utils import qthelpers as sgmx_qth
 from sigimax.widgets import logviewer, status
 from sigimax.widgets.warningerror import go_to_error
 
@@ -1058,7 +1059,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         # when reloading modules or running tests
         PluginRegistry.clear_plugin_classes()
 
-        with qth.try_or_log_error("Discovering plugins"):
+        with sgmx_qth.try_or_log_error("Discovering plugins"):
             # Discovering plugins
             plugin_nb = len(discover_plugins())
             execenv.log(self, f"{plugin_nb} plugin(s) found")
@@ -1094,7 +1095,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             # isolate any exception here so the failure is still reported in the
             # internal console, log files, and plugin configuration dialog.
             except Exception:  # pylint: disable=broad-except
-                if qth.is_running_tests():
+                if sgmx_qth.is_running_tests():
                     raise
                 # Log to file (same mechanism as try_or_log_error)
                 tb_text = traceback.format_exc()
@@ -1140,13 +1141,15 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         with self.signalpanel.acthandler.new_category(ActionCategory.PLUGINS):
             with self.imagepanel.acthandler.new_category(ActionCategory.PLUGINS):
                 for plugin in PluginRegistry.get_plugins():
-                    with qth.try_or_log_error(f"Create actions for {plugin.info.name}"):
+                    with sgmx_qth.try_or_log_error(
+                        f"Create actions for {plugin.info.name}"
+                    ):
                         plugin.create_actions()
 
     @staticmethod
     def __unregister_plugins() -> None:
         """Unregister all plugins and let them cleanup their hooks"""
-        with qth.try_or_log_error("Unregistering plugins"):
+        with sgmx_qth.try_or_log_error("Unregistering plugins"):
             PluginRegistry.unregister_all_plugins()
 
     def __configure_plugins(self) -> None:
@@ -1167,7 +1170,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         re-registers enabled plugins, then recreates plugin actions and refreshes
         menus.
         """
-        with qth.try_or_log_error("Reloading plugins"):
+        with sgmx_qth.try_or_log_error("Reloading plugins"):
             if not Conf.main.plugins_enabled.get():
                 QW.QMessageBox.information(
                     self,
@@ -1192,7 +1195,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             # discovery step will reload already-imported modules so
             # that code changes are picked up.
             PluginRegistry.clear_plugin_classes()
-            with qth.try_or_log_error("Discovering plugins (reload)"):
+            with sgmx_qth.try_or_log_error("Discovering plugins (reload)"):
                 plugin_nb = len(discover_plugins())
                 execenv.log(self, f"{plugin_nb} plugin(s) found (reloaded)")
 
@@ -1221,7 +1224,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 # isolate any exception here so the failure is still reported in the
                 # internal console, log files, and plugin configuration dialog.
                 except Exception:  # pylint: disable=broad-except
-                    if qth.is_running_tests():
+                    if sgmx_qth.is_running_tests():
                         raise
                     context = (
                         f"Instantiating and registering plugin "
