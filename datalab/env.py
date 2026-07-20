@@ -25,6 +25,14 @@ class DLExecEnv(SGMXExecEnv):
     XMLRPCPORT_ENV = "DATALAB_XMLRPCPORT"
     CATCHER_TEST_ENV = "DATALAB_CATCHER_TEST"
 
+    def __init__(self) -> None:
+        """Initialize DataLab state and parse DataLab command-line options."""
+        super().__init__(parse_args=False)
+        if "pytest" not in sys.argv[0]:
+            self.parse_args()
+        if self.unattended:
+            self.to_dict()
+
     @property
     def xmlrpcport(self) -> int | None:
         """Return the XML-RPC port number."""
