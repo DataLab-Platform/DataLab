@@ -50,3 +50,7 @@ and Image panels.
 * The familiar **"Recompute"** action (Edit menu, `Ctrl+R`) now refreshes both
   processing *and* analysis results, giving you full control over when analyses
   are updated
+* For developers, the former panel-level `recompute_analysis` entry point has
+  been renamed to `recompute_selected`; `recompute_analysis` now refers to a
+  different processor-level helper dedicated to explicit 1-to-0 analysis
+  refresh
