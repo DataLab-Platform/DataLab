@@ -18,9 +18,7 @@ from datalab.tests.scenarios import common
 
 def test_scenario_image2() -> None:
     """Run image unit test scenario 2 (process isolation)"""
-    assert Conf.main.process_isolation_enabled.get(), (
-        "Process isolation must be enabled"
-    )
+    assert Conf.process_isolation_enabled.get(), "Process isolation must be enabled"
 
     with datalab_test_app_context(save=True) as win:
         execenv.print("Testing image features *with* process isolation...")

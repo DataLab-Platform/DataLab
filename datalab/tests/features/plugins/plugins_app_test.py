@@ -36,7 +36,7 @@ from datalab.tests.features.plugins.plugin_test_dataset import (
 def test_plugin_system():  # pylint: disable=too-many-statements
     """Test the entire plugin lifecycle: discovery, reload, cleanup"""
     # Ensure plugins_enabled_list is None (all plugins enabled)
-    Conf.main.plugins_enabled_list.set(None)
+    Conf.plugins_enabled_list.set(None)
 
     # We need to monkeypatch the plugin path or add to sys.path
     # The temporary_plugin_dir context manager handles adding to sys.path
@@ -354,7 +354,7 @@ def test_plugin_config_disabled():
             win: DLMainWindow
 
             # Mock the config to disable plugins
-            with patch("datalab.config.Conf.main.plugins_enabled.get") as mock_enabled:
+            with patch("datalab.config.Conf.plugins_enabled.get") as mock_enabled:
                 mock_enabled.return_value = False
 
                 # Mock QMessageBox to avoid blocking dialog
@@ -379,7 +379,7 @@ def test_plugin_error_handling():
     - Missing create_actions method (abstract)
     - Syntax errors in the source file
     """
-    Conf.main.plugins_enabled_list.set(None)
+    Conf.plugins_enabled_list.set(None)
 
     with temporary_plugin_dir() as plugin_dir:
         execenv.print(f"Using temporary plugin directory: {plugin_dir}")
@@ -511,7 +511,7 @@ def test_plugin_duplicate_name():
 def test_plugin_nested_menus():
     """Test plugin with nested submenus (3 levels deep)"""
     # Ensure plugins_enabled_list is None (all plugins enabled)
-    Conf.main.plugins_enabled_list.set(None)
+    Conf.plugins_enabled_list.set(None)
 
     with temporary_plugin_dir() as plugin_dir:
         execenv.print(f"Using temporary plugin directory: {plugin_dir}")
@@ -609,7 +609,7 @@ def test_plugin_nested_menus():
 def test_plugin_with_dialogs():
     """Test plugin using dialog methods (show_warning, show_info, etc.)"""
     # Ensure plugins_enabled_list is None (all plugins enabled)
-    Conf.main.plugins_enabled_list.set(None)
+    Conf.plugins_enabled_list.set(None)
 
     with temporary_plugin_dir() as plugin_dir:
         execenv.print(f"Using temporary plugin directory: {plugin_dir}")

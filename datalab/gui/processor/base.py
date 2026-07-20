@@ -486,7 +486,7 @@ def is_pairwise_mode() -> bool:
     Returns:
         bool: True if operation mode is pairwise
     """
-    state = Conf.proc.operation_mode.get() == "pairwise"
+    state = Conf.operation_mode.get() == "pairwise"
     return state
 
 
@@ -560,7 +560,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self.mainwindow = panel.mainwindow
         self.plotwidget = plotwidget
         self.worker: Worker | None = None
-        self.set_process_isolation_enabled(Conf.main.process_isolation_enabled.get())
+        self.set_process_isolation_enabled(Conf.process_isolation_enabled.get())
         self.computing_registry: dict[str, ComputingFeature] = {}
         self.register_computations()
 
@@ -649,7 +649,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             return signals, False
 
         # X arrays differ - handle based on configuration
-        behavior = Conf.proc.xarray_compat_behavior.get("ask")
+        behavior = Conf.xarray_compat_behavior.get("ask")
         yes_to_all_selected = False
 
         if behavior == "ask" and not env.execenv.unattended:
@@ -930,7 +930,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             src_obj_list: The list of source objects used in the computation
         """
         # Only merge if keep_results is enabled and we have multiple source objects
-        if not Conf.proc.keep_results.get() or len(src_obj_list) <= 1:
+        if not Conf.keep_results.get() or len(src_obj_list) <= 1:
             return
 
         # Group geometry results by title for merging
@@ -979,7 +979,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         Args:
             result_obj: The result object from the computation
         """
-        if not Conf.proc.keep_results.get():
+        if not Conf.keep_results.get():
             # Remove all table and geometry results when keep_results is disabled
             TableAdapter.remove_all_from(result_obj)
             GeometryAdapter.remove_all_from(result_obj)
@@ -1025,7 +1025,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         # Recompute the analysis operation silently, only for this specific object
         # (not all selected objects, to avoid O(n²) behavior when called in a loop)
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             self.compute_1_to_0(feature.function, param, edit=False, target_objs=[obj])
 
         # Update the view
@@ -1492,7 +1492,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if refresh_needed:
             self.panel.refresh_plot("selected", only_visible=False, only_existing=True)
 
-        if rdata and Conf.proc.show_result_dialog.get():
+        if rdata and Conf.show_result_dialog.get():
             show_resultdata(self.mainwindow, rdata, f"{objs[0].PREFIX}_results")
         return rdata
 
@@ -1574,7 +1574,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     if auto_interpolate_for_operation:
                         # "Yes to All" selected, automatically interpolate
                         # by temporarily changing the configuration
-                        with Conf.proc.xarray_compat_behavior.temp("interpolate"):
+                        with Conf.xarray_compat_behavior.context("interpolate"):
                             result = self._check_signal_xarray_compatibility(
                                 src_objs_pair, progress=progress
                             )
@@ -1662,7 +1662,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     # Check signal x-array compatibility for n-to-1 operations
                     if auto_interpolate_for_operation:
                         # "Yes to All" selected, automatically interpolate
-                        with Conf.proc.xarray_compat_behavior.temp("interpolate"):
+                        with Conf.xarray_compat_behavior.context("interpolate"):
                             result = self._check_signal_xarray_compatibility(
                                 src_obj_list, progress=progress
                             )
@@ -1842,7 +1842,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 for src_obj1, src_obj2 in all_pairs:
                     if auto_interpolate_for_operation:
                         # "Yes to All" selected, automatically interpolate
-                        with Conf.proc.xarray_compat_behavior.temp("interpolate"):
+                        with Conf.xarray_compat_behavior.context("interpolate"):
                             result = self._check_signal_xarray_compatibility(
                                 [src_obj1, src_obj2]
                             )
@@ -2363,7 +2363,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             return
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         params = roi.to_params(obj)
-        if Conf.proc.extract_roi_singleobj.get() and len(params) > 1:
+        if Conf.extract_roi_singleobj.get() and len(params) > 1:
             # Extract multiple ROIs into a single object (remove all the ROIs),
             # if the "Extract all ROIs into a single image object"
             # option is checked and if there are more than one ROI

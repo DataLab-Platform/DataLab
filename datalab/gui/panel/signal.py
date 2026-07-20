@@ -107,7 +107,7 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
             newparam = NewSignalParam()
         if title is not None:
             newparam.title = title
-        if curobj is not None and Conf.proc.use_signal_bounds.get(False):
+        if curobj is not None and Conf.use_signal_bounds.get(False):
             # Use current signal bounds for new signal:
             newparam.size = len(curobj.data)
             # try to set xmin/xmax from current signal data range

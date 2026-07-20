@@ -36,7 +36,7 @@ def test_delete_results_image():
 
         # Run centroid analysis to create results
         execenv.print("  Running centroid analysis...")
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("centroid")
 
         # Verify that results exist
@@ -71,7 +71,7 @@ def test_delete_results_signal():
 
         # Run stats analysis to create table results
         execenv.print("  Running stats analysis...")
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("stats")
 
         # Verify that results exist
@@ -109,7 +109,7 @@ def test_delete_results_clears_analysis_parameters():
 
         # Run centroid analysis to create results and store analysis parameters
         execenv.print("  Running centroid analysis...")
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("centroid")
 
         # Verify that analysis parameters exist
@@ -175,7 +175,7 @@ def test_delete_results_after_roi_removed():
 
         # Run centroid analysis - this stores ROI index in results
         execenv.print("  Running centroid analysis with ROI...")
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("centroid")
 
         # Verify that results exist and contain ROI information

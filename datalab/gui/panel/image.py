@@ -225,7 +225,7 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
             newparam = NewImageParam()
         if title is not None:
             newparam.title = title
-        if curobj is not None and Conf.proc.use_image_dims.get(True):
+        if curobj is not None and Conf.use_image_dims.get(True):
             # Use current image dimensions for new image:
             newparam.height, newparam.width = curobj.data.shape
             newparam.dtype = ImageDatatypes.from_numpy_dtype(curobj.data.dtype)
@@ -261,5 +261,5 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
 
     def toggle_show_contrast(self, state: bool) -> None:
         """Toggle show contrast option"""
-        Conf.view.show_contrast.set(state)
+        Conf.show_contrast.set(state)
         self.refresh_plot("selected", True, False)

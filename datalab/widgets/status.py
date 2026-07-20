@@ -60,7 +60,7 @@ class PluginStatus(sigimax.widgets.status.BaseStatus):
     def update_status(self) -> None:
         """Update status widget"""
         text = _("Plugins:") + " "
-        if Conf.main.plugins_enabled.get():
+        if Conf.plugins_enabled.get():
             nplugins = len(PluginRegistry.get_plugins())
             nfailed = len(PluginRegistry.get_failed_plugins())
             ntotal = nplugins + nfailed

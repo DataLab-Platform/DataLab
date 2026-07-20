@@ -107,7 +107,7 @@ def test_discover_plugins_finds_module_in_env_dir(
     try:
         # Ensure plugins are considered enabled regardless of user config
         monkeypatch.setattr(
-            config_mod.Conf.main.plugins_enabled, "get", lambda *a, **kw: True
+            config_mod.Conf.plugins_enabled, "get", lambda *a, **kw: True
         )
         modules = plugins_mod.discover_plugins()
         discovered_names = {m.__name__ for m in modules}

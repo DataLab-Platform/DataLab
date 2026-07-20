@@ -35,7 +35,7 @@ from sigimax.utils.qthelpers import (
     try_or_log_error,
 )
 
-from datalab.config import SHOTPATH, Conf
+from datalab.config import SHOTPATH, reload_from_ini
 
 __all__ = [
     "CallbackWorker",
@@ -103,7 +103,7 @@ def datalab_app_context(
     exec_loop: bool = False, enable_logs: bool = True
 ) -> Generator[QW.QApplication, None, None]:
     """Create a DataLab application context using SigimaX infrastructure."""
-    Conf.reload_from_ini()
+    reload_from_ini()
     with sigimax_app_context(exec_loop=exec_loop, enable_logs=enable_logs) as qapp:
         yield qapp
 

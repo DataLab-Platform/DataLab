@@ -127,11 +127,11 @@ class DLExecEnv(SGMXExecEnv):
             sys.exit()
         if args.reset:
             # pylint: disable=import-outside-toplevel
-            from datalab.config import Conf
+            from datalab.config import reset
 
             print("Resetting DataLab configuration...", end=" ")
             try:
-                Conf.reset()
+                reset()
             except Exception:  # pylint: disable=broad-except
                 print("Failed.")
                 traceback.print_exc()

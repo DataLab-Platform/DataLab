@@ -367,7 +367,7 @@ def resultadapter_to_html(
 
     # Get max_cells from config if not provided
     if max_cells is None:
-        max_cells = Conf.view.max_cells_in_label.get(100)
+        max_cells = Conf.max_cells_in_label.get(100)
 
     if isinstance(adapter, BaseResultAdapter):
         # Get the dataframe FIRST to check truncation needs
@@ -386,7 +386,7 @@ def resultadapter_to_html(
         marker_labels_injected = False
         result = adapter.result
         if (  # pylint: disable=too-many-boolean-expressions
-            Conf.view.show_marker_labels_in_table.get(True)
+            Conf.show_marker_labels_in_table.get(True)
             and hasattr(result, "is_xy_markers")
             and (
                 result.is_xy_markers()
@@ -403,7 +403,7 @@ def resultadapter_to_html(
             marker_labels_injected = True
 
         # For merged labels, limit display columns for readability
-        max_display_cols = Conf.view.max_cols_in_label.get(20)
+        max_display_cols = Conf.max_cols_in_label.get(20)
         num_cols = len(display_df.columns)
         cols_truncated = num_cols > max_display_cols
 

@@ -113,7 +113,7 @@ def test_geometry_results() -> None:
         panel.show_results()
         panel.plot_results()
         for keep_results in (False, True):
-            with Conf.proc.keep_results.temp(keep_results):
+            with Conf.keep_results.context(keep_results):
                 # Test merging result shapes (duplicate obj, then compute average):
                 for panel in (win.signalpanel, win.imagepanel):
                     src_obj = panel[2]

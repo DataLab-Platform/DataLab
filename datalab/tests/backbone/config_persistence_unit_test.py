@@ -12,7 +12,9 @@ from datalab.config.config_options import DataLabOptions
 from datalab.config.config_persistence import (
     get_ini_location,
     get_uncategorized_fields,
+    has_persisted_option,
     load_options_from_ini,
+    remove_persisted_option,
     save_options_to_ini,
 )
 
@@ -34,6 +36,27 @@ def test_section_map_is_complete() -> None:
     """Every option field is either categorized or explicitly not persisted."""
     opt = DataLabOptions()
     assert get_uncategorized_fields(opt) == []
+
+
+def test_persisted_option_presence_and_removal() -> None:
+    """Flat field names map to the expected INI option for removal."""
+    conf = _make_conf()
+    options = DataLabOptions()
+    conf.set("macro", "console_max_lines", 123, save=False)
+
+    assert has_persisted_option(options, "macro_console_max_lines", conf)
+    assert remove_persisted_option(options, "macro_console_max_lines", conf)
+    assert not has_persisted_option(options, "macro_console_max_lines", conf)
+    assert not remove_persisted_option(options, "macro_console_max_lines", conf)
+
+
+def test_uncategorized_option_has_no_persisted_location() -> None:
+    """Non-persisted application metadata cannot reach the INI backend."""
+    conf = _make_conf()
+    options = DataLabOptions()
+
+    assert not has_persisted_option(options, "app_name", conf)
+    assert not remove_persisted_option(options, "app_name", conf)
 
 
 def test_round_trip_across_types() -> None:

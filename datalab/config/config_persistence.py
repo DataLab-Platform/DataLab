@@ -138,6 +138,52 @@ def get_ini_location(options: DataLabOptions, name: str) -> tuple[str, str] | No
     return section, ini_key
 
 
+def has_persisted_option(
+    options: DataLabOptions, name: str, conf: UserConfig | None = None
+) -> bool:
+    """Return whether an option has a value in the INI backend.
+
+    Args:
+        options: The DataLab options container.
+        name: The flat option field name.
+        conf: The ``UserConfig`` INI backend to inspect (defaults to the
+         module-level DataLab ``CONF``).
+
+    Returns:
+        True if the mapped INI option exists, False otherwise.
+    """
+    location = get_ini_location(options, name)
+    if location is None:
+        return False
+    conf = _default_conf() if conf is None else conf
+    return conf.has_option(*location)
+
+
+def remove_persisted_option(
+    options: DataLabOptions, name: str, conf: UserConfig | None = None
+) -> bool:
+    """Remove an option from the INI backend.
+
+    Args:
+        options: The DataLab options container.
+        name: The flat option field name.
+        conf: The ``UserConfig`` INI backend to update (defaults to the
+         module-level DataLab ``CONF``).
+
+    Returns:
+        True if the mapped INI option existed and was removed, False otherwise.
+    """
+    location = get_ini_location(options, name)
+    if location is None:
+        return False
+    conf = _default_conf() if conf is None else conf
+    if not conf.has_option(*location):
+        return False
+    conf.remove_option(*location)
+    conf.save()
+    return True
+
+
 def _iter_persisted_field_names(options: DataLabOptions):
     """Yield persisted (categorized) option field names in category order."""
     for _category, names in options.fields_by_category().items():

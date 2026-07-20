@@ -26,8 +26,10 @@ from sigima.proc.title_formatting import (
     set_default_title_formatter,
 )
 from sigimax.utils import conf
+from sigimax.utils.conf import Configuration
 
 from datalab import __version__
+from datalab.config.config_persistence import load_options_from_ini
 
 # Configure Sigima to use DataLab-compatible placeholder title formatting
 set_default_title_formatter(PlaceholderTitleFormatter())
@@ -512,7 +514,7 @@ class AISection(conf.Section, metaclass=conf.SectionMeta):
     expose_macro_tool = conf.Option()
 
 
-# Usage (example): Conf.console.console_enabled.get(True)
+# Usage (example): Conf.console_enabled.get(True)
 #
 # The section-style ``Conf`` facade is provided by the transitional legacy bridge
 # over the flat ``DataLabOptions`` container (see
@@ -545,21 +547,21 @@ def get_user_plugin_paths() -> list[str]:
     compatibility, the deprecated ``plugins_path`` single-directory string is
     also merged into ``plugins_path_list`` if this is empty.
     """
-    fixed_default = osp.normpath(Conf.get_path("plugins"))
+    fixed_default = osp.normpath(get_config_path("plugins"))
 
     # New list-based option (primary)
-    path_list = Conf.main.plugins_path_list.get([])
+    path_list = Conf.plugins_path_list.get([])
     if path_list is None:
         path_list = []
     candidates = list(path_list)
 
     # Migrate deprecated single-directory option into the list
-    legacy_path = Conf.main.plugins_path.get("")
+    legacy_path = Conf.plugins_path.get("")
     if legacy_path and isinstance(legacy_path, str):
         norm_legacy = osp.normpath(osp.abspath(osp.expanduser(legacy_path)))
         if not candidates and norm_legacy != fixed_default:
             candidates.append(legacy_path)
-            Conf.main.plugins_path_list.set(candidates)
+            Conf.plugins_path_list.set(candidates)
 
     normalized = normalize_plugin_paths(candidates)
     return [path for path in normalized if path != fixed_default]
@@ -573,12 +575,32 @@ def set_user_plugin_paths(paths: list[str] | tuple[str, ...]) -> None:
     user-configured directory.
     """
     normalized = normalize_plugin_paths(list(paths))
-    Conf.main.plugins_path_list.set(normalized)
+    Conf.plugins_path_list.set(normalized)
 
 
 def get_old_log_fname(fname):
     """Return old log fname from current log fname"""
     return osp.splitext(fname)[0] + ".1.log"
+
+
+def reload_from_ini() -> None:
+    """Reload the active DataLab options from the INI backend."""
+    options = Conf.options
+    options.set_ini_persist_enabled(False)
+    try:
+        load_options_from_ini(options, conf.CONF)
+    finally:
+        options.set_ini_persist_enabled(True)
+
+
+def get_config_path(basename: str) -> str:
+    """Return a path inside the DataLab configuration directory."""
+    return Configuration.get_path(basename)
+
+
+def get_config_filename() -> str:
+    """Return the DataLab INI configuration file name."""
+    return Configuration.get_filename()
 
 
 def initialize():
@@ -592,87 +614,79 @@ def initialize():
     # Setting here the default values only for the most critical options. The other
     # options default values are set when used in the application code.
     #
-    # Main section
-    Conf.main.color_mode.get("auto")
-    Conf.main.process_isolation_enabled.get(True)
-    Conf.main.rpc_server_enabled.get(True)
-    Conf.main.webapi_localhost_no_token.get(
-        True
-    )  # Enabled by default (Web API is off by default)
-    Conf.main.traceback_log_path.get(f".{APP_NAME}_traceback.log")
-    Conf.main.faulthandler_log_path.get(f".{APP_NAME}_faulthandler.log")
-    Conf.main.available_memory_threshold.get(500)
-    Conf.main.plugins_enabled.get(True)
-    Conf.main.plugins_enabled_list.get(
-        None
-    )  # None = all enabled, [] = none, list = specific
-    Conf.main.plugins_path.get("")  # Deprecated: kept for backward compat
-    Conf.main.plugins_path_list.get([])
-    Conf.main.tour_enabled.get(True)
-    Conf.main.v020_plugins_warning_ignore.get(False)
-    # Console section
-    Conf.console.console_enabled.get(True)
-    Conf.console.show_console_on_error.get(False)
-    Conf.console.external_editor_path.get("code")
-    Conf.console.external_editor_args.get("-g {path}:{line_number}")
-    # IO section
-    Conf.io.h5_clear_workspace.get(True)  # Default to avoid objects UUID reset
-    Conf.io.h5_clear_workspace_ask.get(True)
-    Conf.io.h5_fullpath_in_title.get(False)
-    Conf.io.h5_fname_in_title.get(True)
-    iofmts = Conf.io.imageio_formats.get(())
+    # Main options
+    Conf.color_mode.get("auto")
+    Conf.process_isolation_enabled.get(True)
+    Conf.rpc_server_enabled.get(True)
+    Conf.webapi_localhost_no_token.get(True)
+    Conf.traceback_log_path.get(f".{APP_NAME}_traceback.log")
+    Conf.faulthandler_log_path.get(f".{APP_NAME}_faulthandler.log")
+    Conf.available_memory_threshold.get(500)
+    Conf.plugins_enabled.get(True)
+    Conf.plugins_enabled_list.get(None)  # None = all, [] = none, list = specific
+    Conf.plugins_path.get("")  # Deprecated: kept for backward compat
+    Conf.plugins_path_list.get([])
+    Conf.tour_enabled.get(True)
+    Conf.v020_plugins_warning_ignore.get(False)
+    # Console options
+    Conf.console_enabled.get(True)
+    Conf.show_console_on_error.get(False)
+    Conf.external_editor_path.get("code")
+    Conf.external_editor_args.get("-g {path}:{line_number}")
+    # IO options
+    Conf.h5_clear_workspace.get(True)  # Default to avoid objects UUID reset
+    Conf.h5_clear_workspace_ask.get(True)
+    Conf.h5_fullpath_in_title.get(False)
+    Conf.h5_fname_in_title.get(True)
+    iofmts = Conf.imageio_formats.get(())
     if len(iofmts) > 0:
         sigima_options.imageio_formats.set(iofmts)  # Sync with sigima config
-    # Macro section
-    Conf.macro.console_max_lines.get(5000)
-    Conf.macro.close_tab_keeps_macro.get(True)
-    if not Conf.macro.templates_path.get():
-        Conf.macro.templates_path.set(Conf.get_path("macro_templates"))
-    # Proc section
-    Conf.proc.operation_mode.get("single")
-    Conf.proc.use_signal_bounds.get(False)
-    Conf.proc.use_image_dims.get(True)
-    Conf.proc.fft_shift_enabled.get(True)
+    # Macro options
+    Conf.macro_console_max_lines.get(5000)
+    Conf.macro_close_tab_keeps_macro.get(True)
+    Conf.macro_templates_path.get(get_config_path("macro_templates"))
+    # Processing options
+    Conf.operation_mode.get("single")
+    Conf.use_signal_bounds.get(False)
+    Conf.use_image_dims.get(True)
+    Conf.fft_shift_enabled.get(True)
     sigima_options.fft_shift_enabled.set(True)  # Sync with sigima config
-    Conf.proc.auto_normalize_kernel.get(False)
+    Conf.auto_normalize_kernel.get(False)
     sigima_options.auto_normalize_kernel.set(False)  # Sync with sigima config
-    Conf.proc.extract_roi_singleobj.get(False)
-    Conf.proc.keep_results.get(False)
-    Conf.proc.show_result_dialog.get(True)
-    Conf.proc.ignore_warnings.get(False)
-    Conf.proc.xarray_compat_behavior.get("ask")
-    Conf.proc.small_mono_font.get((configtools.MONOSPACE, 8, False))
-    # View section
-    tb_pos = Conf.view.plot_toolbar_position.get("left")
+    Conf.extract_roi_singleobj.get(False)
+    Conf.keep_results.get(False)
+    Conf.show_result_dialog.get(True)
+    Conf.ignore_warnings.get(False)
+    Conf.xarray_compat_behavior.get("ask")
+    Conf.small_mono_font.get((configtools.MONOSPACE, 8, False))
+    # View options
+    tb_pos = Conf.plot_toolbar_position.get("left")
     assert tb_pos in ("top", "bottom", "left", "right")
-    Conf.view.ignore_title_insertion_msg.get(False)
-    Conf.view.sig_linewidth.get(1.0)
-    Conf.view.sig_linewidth_perfs_threshold.get(1000)
-    Conf.view.sig_autodownsampling.get(True)
-    Conf.view.sig_autodownsampling_maxpoints.get(100000)
-    Conf.view.sig_autoscale_margin_percent.get(2.0)
-    Conf.view.ima_autoscale_margin_percent.get(1.0)
-    Conf.view.ima_aspect_ratio_1_1.get(False)
-    Conf.view.ima_eliminate_outliers.get(0.1)
-    Conf.view.sig_def_shade.get(0.0)
-    Conf.view.sig_def_curvestyle.get("Lines")
-    Conf.view.sig_def_baseline.get(0.0)
-    Conf.view.ima_def_colormap.get("viridis")
-    Conf.view.ima_def_invert_colormap.get(False)
-    Conf.view.ima_def_interpolation.get(5)
-    Conf.view.ima_def_alpha.get(1.0)
-    Conf.view.ima_def_alpha_function.get(LUTAlpha.NONE.value)
-    Conf.view.ima_def_keep_lut_range.get(False)
-
-    # Datetime format strings: % must be escaped as %% for ConfigParser
-    Conf.view.sig_datetime_format_s.get("%%H:%%M:%%S")
-    Conf.view.sig_datetime_format_ms.get("%%H:%%M:%%S.%%f")
-
-    Conf.view.max_shapes_to_draw.get(1000)
-    Conf.view.max_cells_in_label.get(100)
-    Conf.view.max_cols_in_label.get(15)
-    Conf.view.show_result_label.get(True)
-    Conf.view.show_marker_labels_in_table.get(True)
+    Conf.ignore_title_insertion_msg.get(False)
+    Conf.sig_linewidth.get(1.0)
+    Conf.sig_linewidth_perfs_threshold.get(1000)
+    Conf.sig_autodownsampling.get(True)
+    Conf.sig_autodownsampling_maxpoints.get(100000)
+    Conf.sig_autoscale_margin_percent.get(2.0)
+    Conf.ima_autoscale_margin_percent.get(1.0)
+    Conf.ima_aspect_ratio_1_1.get(False)
+    Conf.ima_eliminate_outliers.get(0.1)
+    Conf.sig_def_shade.get(0.0)
+    Conf.sig_def_curvestyle.get("Lines")
+    Conf.sig_def_baseline.get(0.0)
+    Conf.ima_def_colormap.get("viridis")
+    Conf.ima_def_invert_colormap.get(False)
+    Conf.ima_def_interpolation.get(5)
+    Conf.ima_def_alpha.get(1.0)
+    Conf.ima_def_alpha_function.get(LUTAlpha.NONE.value)
+    Conf.ima_def_keep_lut_range.get(False)
+    Conf.sig_datetime_format_s.get("%H:%M:%S")
+    Conf.sig_datetime_format_ms.get("%H:%M:%S.%f")
+    Conf.max_shapes_to_draw.get(1000)
+    Conf.max_cells_in_label.get(100)
+    Conf.max_cols_in_label.get(15)
+    Conf.show_result_label.get(True)
+    Conf.show_marker_labels_in_table.get(True)
 
     # Initialize PlotPy configuration with versioned app name
     PLOTPY_CONF.set_application(
@@ -1063,23 +1077,23 @@ def initialize_default_plotpy_instances():
     # Initialize default instances for DataSetOptions now that PLOTPY_DEFAULTS exists
     _sig_shapeparam = DataLabShapeParam()
     _sig_shapeparam.read_config(PLOTPY_CONF, "results", "s/annotation")
-    Conf.view.sig_shape_param.set_default_instance(_sig_shapeparam)
-    Conf.view.sig_shape_param.get()
+    Conf.sig_shape_param.set_default_instance(_sig_shapeparam)
+    Conf.sig_shape_param.get()
 
     _sig_markerparam = MarkerParam()
     _sig_markerparam.read_config(PLOTPY_CONF, "results", "s/marker/cursor")
-    Conf.view.sig_marker_param.set_default_instance(_sig_markerparam)
-    Conf.view.sig_marker_param.get()
+    Conf.sig_marker_param.set_default_instance(_sig_markerparam)
+    Conf.sig_marker_param.get()
 
     _ima_shapeparam = DataLabShapeParam()
     _ima_shapeparam.read_config(PLOTPY_CONF, "results", "i/annotation")
-    Conf.view.ima_shape_param.set_default_instance(_ima_shapeparam)
-    Conf.view.ima_shape_param.get()
+    Conf.ima_shape_param.set_default_instance(_ima_shapeparam)
+    Conf.ima_shape_param.get()
 
     _ima_markerparam = MarkerParam()
     _ima_markerparam.read_config(PLOTPY_CONF, "results", "i/marker/cursor")
-    Conf.view.ima_marker_param.set_default_instance(_ima_markerparam)
-    Conf.view.ima_marker_param.get()
+    Conf.ima_marker_param.set_default_instance(_ima_markerparam)
+    Conf.ima_marker_param.get()
 
 
 initialize_default_plotpy_instances()

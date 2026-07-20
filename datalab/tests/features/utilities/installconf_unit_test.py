@@ -11,7 +11,7 @@ import os
 import pytest
 from guidata.qthelpers import qt_app_context
 
-from datalab.config import Conf
+from datalab.config import get_config_filename
 from datalab.widgets import instconfviewer
 from datalab.widgets.instconfviewer import (
     InstallConfigViewerWindow,
@@ -44,7 +44,7 @@ def test_user_config_tab_can_show_config_in_folder(monkeypatch: pytest.MonkeyPat
 
         widget.show_in_folder_button.click()
 
-        assert calls == [os.path.abspath(Conf.get_filename())]
+        assert calls == [os.path.abspath(get_config_filename())]
 
 
 if __name__ == "__main__":

@@ -22,7 +22,7 @@ from sigima.io.signal import SignalIORegistry
 from sigimax.widgets.fileviewer import FileViewerWidget, get_title_contents
 
 import datalab
-from datalab.config import APP_NAME, IS_FROZEN, Conf, _
+from datalab.config import APP_NAME, IS_FROZEN, _, get_config_filename
 from datalab.plugins import PluginRegistry
 from datalab.utils.qthelpers import show_in_folder as _show_in_folder
 
@@ -162,7 +162,8 @@ class InstallConfigViewerWindow(QW.QDialog):
         self.setWindowTitle(APP_NAME + " - " + _("Installation and configuration"))
         self.setWindowIcon(get_icon("DataLab.svg"))
         self.tabs = QW.QTabWidget(self)
-        uc_title, uc_contents = get_title_contents(Conf.get_filename())
+        config_filename = get_config_filename()
+        uc_title, uc_contents = get_title_contents(config_filename)
         plugins_io_contents = PluginRegistry.get_plugin_info(html=False)
         for registry in (SignalIORegistry, ImageIORegistry):
             plugins_io_contents += os.linesep + ("_" * 80) + os.linesep * 2
@@ -188,7 +189,7 @@ class InstallConfigViewerWindow(QW.QDialog):
             ),
         ):
             viewer = (
-                ConfigFileViewerWidget(Conf.get_filename())
+                ConfigFileViewerWidget(config_filename)
                 if tab_title == _("User configuration")
                 else FileViewerWidget()
             )

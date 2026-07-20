@@ -191,7 +191,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         # Starting XML-RPC server thread
         self.remote_server = RemoteServer(self)
-        if Conf.main.rpc_server_enabled.get():
+        if Conf.rpc_server_enabled.get():
             self.remote_server.SIG_SERVER_PORT.connect(self.xmlrpc_server_started)
             self.remote_server.start()
 
@@ -199,7 +199,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     @staticmethod
     def xmlrpc_server_started(port):
         """XML-RPC server has started, writing comm port in configuration file"""
-        Conf.main.rpc_server_port.set(port)
+        Conf.rpc_server_port.set(port)
         # Persist the port with a direct single-key write: it is a shared IPC
         # value read by remote clients across processes, and must not be
         # clobbered by unrelated bulk saves (e.g. window geometry persisted on
@@ -723,7 +723,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def check_for_v020_plugins(self) -> None:  # pragma: no cover
         """Check for v0.20 plugins and warn user if any are found"""
-        if Conf.main.v020_plugins_warning_ignore.get(False):
+        if Conf.v020_plugins_warning_ignore.get(False):
             return
 
         v020_plugins = discover_v020_plugins()
@@ -772,15 +772,15 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         )
 
         if answer == QW.QMessageBox.Ignore:
-            Conf.main.v020_plugins_warning_ignore.set(True)
+            Conf.v020_plugins_warning_ignore.set(True)
 
     def execute_post_show_actions(self) -> None:
         """Execute post-show actions"""
         super().execute_post_show_actions()
         self.check_for_v020_plugins()
-        tour = Conf.main.tour_enabled.get()
+        tour = Conf.tour_enabled.get()
         if tour:
-            Conf.main.tour_enabled.set(False)
+            Conf.tour_enabled.set(False)
             self.show_tour()
         # Auto-start WebAPI server if environment variable is set
         if os.environ.get("DATALAB_WEBAPI_ENABLED") == "1":
@@ -889,9 +889,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         # Get enabled plugins list from configuration
         # None = all plugins enabled (default), [] = no plugins, list = specific plugins
-        enabled_list = Conf.main.plugins_enabled_list.get(None)
+        enabled_list = Conf.plugins_enabled_list.get(None)
 
-        if not Conf.main.plugins_enabled.get():
+        if not Conf.plugins_enabled.get():
             self.plugins_last_load_at = datetime.now().astimezone()
             return
 
@@ -926,7 +926,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     plugin_class.__name__,
                     exc_info=True,
                 )
-                Conf.main.traceback_log_available.set(True)
+                Conf.traceback_log_available.set(True)
                 # Buffer for replay in console once it is ready
                 self._startup_errors.append(tb_text)
                 # Record structured info about the failed plugin
@@ -979,7 +979,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def set_plugins_enabled(self, enabled: bool) -> None:
         """Apply the global third-party plugin enabled state."""
-        Conf.main.plugins_enabled.set(enabled)
+        Conf.plugins_enabled.set(enabled)
         self.__apply_plugins_enabled_setting()
 
     def reload_plugins(self) -> None:
@@ -991,7 +991,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         menus.
         """
         with sgmx_qth.try_or_log_error("Reloading plugins"):
-            if not Conf.main.plugins_enabled.get():
+            if not Conf.plugins_enabled.get():
                 QW.QMessageBox.information(
                     self,
                     _("Plugins"),
@@ -1021,7 +1021,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
             # Get enabled plugins list from configuration
             # None = all enabled (default), [] = none, list = specific plugins
-            enabled_list = Conf.main.plugins_enabled_list.get(None)
+            enabled_list = Conf.plugins_enabled_list.get(None)
 
             # Instantiate and register plugins again
             for plugin_class in PluginRegistry.get_plugin_classes():
@@ -1054,7 +1054,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     traceback.print_exc()
                     logger = logging.getLogger(__name__)
                     logger.error("Error in %s", context, exc_info=True)
-                    Conf.main.traceback_log_available.set(True)
+                    Conf.traceback_log_available.set(True)
                     # Write error to console (available during reload)
                     if self.console is not None:
                         self.console.write_error(tb_text)
@@ -1100,7 +1100,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.webapistatus.SIG_START_SERVER.connect(self.__start_webapi_server)
         self.statusBar().addPermanentWidget(self.webapistatus)
         # Memory status
-        threshold = Conf.main.available_memory_threshold.get()
+        threshold = Conf.available_memory_threshold.get()
         self.memorystatus = status.MemoryStatus(threshold)
         self.memorystatus.SIG_MEMORY_ALARM.connect(self._set_low_memory_state)
         self.statusBar().addPermanentWidget(self.memorystatus)
@@ -1108,7 +1108,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def __update_plugins_availability(self) -> None:
         """Update plugin-related UI according to third-party plugin setting."""
-        plugins_enabled = Conf.main.plugins_enabled.get()
+        plugins_enabled = Conf.plugins_enabled.get()
 
         if self.reload_plugins_action is not None:
             self.reload_plugins_action.setEnabled(plugins_enabled)
@@ -1121,7 +1121,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def __apply_plugins_enabled_setting(self) -> None:
         """Apply third-party plugin enablement without manual user intervention."""
-        plugins_enabled = Conf.main.plugins_enabled.get()
+        plugins_enabled = Conf.plugins_enabled.get()
 
         if plugins_enabled:
             self.reload_plugins()
@@ -1515,11 +1515,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             panel.SIG_OBJECT_REMOVED.connect(self.set_modified)
         self.macropanel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
         # Initializing common panel actions
-        self.autorefresh_action.setChecked(Conf.view.auto_refresh.get(True))
-        self.showfirstonly_action.setChecked(Conf.view.show_first_only.get(False))
-        self.showlabel_action.setChecked(Conf.view.show_label.get(False))
+        self.autorefresh_action.setChecked(Conf.auto_refresh.get(True))
+        self.showfirstonly_action.setChecked(Conf.show_first_only.get(False))
+        self.showlabel_action.setChecked(Conf.show_label.get(False))
         # Restoring current tab from last session
-        tab_idx = Conf.main.current_tab.get(None)
+        tab_idx = Conf.current_tab.get(None)
         if tab_idx is not None:
             self.tabwidget.setCurrentIndex(tab_idx)
         # Set focus on current panel, so that keyboard shortcuts work (Fixes #10)
@@ -1735,7 +1735,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         Args:
             state: state
         """
-        Conf.view.show_label.set(state)
+        Conf.show_label.set(state)
         for datapanel in (self.signalpanel, self.imagepanel):
             for obj in datapanel.objmodel:
                 obj.set_metadata_option("showlabel", state)
@@ -1790,7 +1790,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         Args:
             state: state
         """
-        Conf.view.auto_refresh.set(state)
+        Conf.auto_refresh.set(state)
         for datapanel in (self.signalpanel, self.imagepanel):
             datapanel.plothandler.set_auto_refresh(state)
 
@@ -1801,7 +1801,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         Args:
             state: state
         """
-        Conf.view.show_first_only.set(state)
+        Conf.show_first_only.set(state)
         for datapanel in (self.signalpanel, self.imagepanel):
             datapanel.plothandler.set_show_first_only(state)
 
@@ -1830,7 +1830,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         bname = osp.basename(filename)
         if operation == "load" and not osp.isfile(filename):
             raise IOError(f'File not found "{bname}"')
-        Conf.main.base_dir.set(filename)
+        Conf.base_dir.set(filename)
         return filename
 
     @remote_controlled
@@ -1844,7 +1844,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             IOError: if filename is invalid or file cannot be saved.
         """
         if filename is None:
-            basedir = Conf.main.base_dir.get()
+            basedir = Conf.base_dir.get()
             with qth.save_restore_stds():
                 filename, _fl = getsavefilename(
                     self,
@@ -1879,8 +1879,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             if not self.has_objects():
                 reset_all = True
             else:
-                reset_all = Conf.io.h5_clear_workspace.get()
-                if Conf.io.h5_clear_workspace_ask.get():
+                reset_all = Conf.h5_clear_workspace.get()
+                if Conf.h5_clear_workspace_ask.get():
                     # Build message with optional note for native workspace import
                     msg = _(
                         "Do you want to clear current workspace "
@@ -1914,9 +1914,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     elif answer == QW.QMessageBox.No:
                         reset_all = False
                     elif answer == QW.QMessageBox.Ignore:
-                        Conf.io.h5_clear_workspace_ask.set(False)
+                        Conf.h5_clear_workspace_ask.set(False)
         if h5files is None:
-            basedir = Conf.main.base_dir.get()
+            basedir = Conf.base_dir.get()
             with qth.save_restore_stds():
                 h5files, _fl = getopenfilenames(
                     self,
@@ -2195,7 +2195,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         else:
             xrpcstate = _("started (port %s)") % self.remote_server.port
             xrpcstate = f"<font color='green'>{xrpcstate}</font>"
-        if Conf.main.process_isolation_enabled.get():
+        if Conf.process_isolation_enabled.get():
             pistate = "<font color='green'>" + _("enabled") + "</font>"
         else:
             pistate = "<font color='red'>" + _("disabled") + "</font>"
@@ -2224,7 +2224,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             startup: True if method is called during application startup (in that case,
              color theme is applied only if mode != "auto")
         """
-        mode = Conf.main.color_mode.get()
+        mode = Conf.color_mode.get()
         if startup and mode == "auto":
             guidata_qth.win32_fix_title_bar_background(self)
             return
@@ -2254,8 +2254,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     def __edit_settings(self) -> None:  # pylint: disable=too-many-branches,too-many-statements
         """Edit settings"""
         changed_options = edit_settings(self)
-        sigima_options.fft_shift_enabled.set(Conf.proc.fft_shift_enabled.get())
-        sigima_options.auto_normalize_kernel.set(Conf.proc.auto_normalize_kernel.get())
+        sigima_options.fft_shift_enabled.set(Conf.fft_shift_enabled.get())
+        sigima_options.auto_normalize_kernel.set(Conf.auto_normalize_kernel.get())
         refresh_signal_panel = refresh_image_panel = False
 
         # Handling changes to shape/marker parameters
@@ -2297,7 +2297,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             if option == "show_result_label":
                 for panel in (self.signalpanel, self.imagepanel):
                     panel.acthandler.show_label_action.setChecked(
-                        Conf.view.show_result_label.get()
+                        Conf.show_result_label.get()
                     )
             if option == "color_mode":
                 self._update_color_mode()
@@ -2312,7 +2312,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 refresh_signal_panel = True
             if option == "sig_autoscale_margin_percent":
                 # Update signal plot widget autoscale margin
-                sig_margin = Conf.view.sig_autoscale_margin_percent.get()
+                sig_margin = Conf.sig_autoscale_margin_percent.get()
                 for dock in self.docks.values():
                     widget: DockablePlotWidget | QW.QWidget = dock.widget()
                     if isinstance(widget, DockablePlotWidget):
@@ -2324,7 +2324,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                             plot.set_autoscale_margin_percent(sig_margin)
             if option == "ima_autoscale_margin_percent":
                 # Update image plot widget autoscale margin
-                ima_margin = Conf.view.ima_autoscale_margin_percent.get()
+                ima_margin = Conf.ima_autoscale_margin_percent.get()
                 for dock in self.docks.values():
                     widget: DockablePlotWidget | QW.QWidget = dock.widget()
                     if isinstance(widget, DockablePlotWidget):
@@ -2403,5 +2403,5 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.__unregister_plugins()
 
         if self.tabwidget is not None:
-            Conf.main.current_tab.set(self.tabwidget.currentIndex())
+            Conf.current_tab.set(self.tabwidget.currentIndex())
         super()._cleanup_after_state_save()

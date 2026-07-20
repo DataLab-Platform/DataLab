@@ -50,8 +50,8 @@ def test_single_operand_mode_compute_n_to_1() -> None:
     """Run single operand mode test scenario
     with `compute_n_to_1` operation (e.g. sum)"""
     h5fname = get_h5fname()
-    original_mode = Conf.proc.operation_mode.get()
-    Conf.proc.operation_mode.set("single")
+    original_mode = Conf.operation_mode.get()
+    Conf.operation_mode.set("single")
 
     with datalab_app_context(exec_loop=True):
         win = app.create(h5files=[h5fname], console=False)
@@ -112,15 +112,15 @@ def test_single_operand_mode_compute_n_to_1() -> None:
             titles.append((groups[idx][-1].title, f"Σ({pfx_orig})"))
         check_titles(f"Single operand mode Σ[{groups[1].title}]", titles)
 
-    Conf.proc.operation_mode.set(original_mode)
+    Conf.operation_mode.set(original_mode)
 
 
 def test_pairwise_operations_mode_compute_n_to_1() -> None:
     """Run pairwise operations mode test scenario
     with `compute_n_to_1` operation (e.g. sum)"""
     h5fname = get_h5fname()
-    original_mode = Conf.proc.operation_mode.get()
-    Conf.proc.operation_mode.set("pairwise")
+    original_mode = Conf.operation_mode.get()
+    Conf.operation_mode.set("pairwise")
 
     with datalab_app_context(exec_loop=True):
         win = app.create(h5files=[h5fname], console=False)
@@ -194,15 +194,15 @@ def test_pairwise_operations_mode_compute_n_to_1() -> None:
             titles.append((obj.title, f"Σ({pfx_orig})"))
         check_titles(f"Pairwise operations mode Σ[{new_group.title}]", titles)
 
-    Conf.proc.operation_mode.set(original_mode)
+    Conf.operation_mode.set(original_mode)
 
 
 def test_single_operand_mode_compute_2_to_1() -> None:
     """Run single operand mode test scenario
     with `compute_2_to_1` operation (e.g. difference)"""
     h5fname = get_h5fname()
-    original_mode = Conf.proc.operation_mode.get()
-    Conf.proc.operation_mode.set("single")
+    original_mode = Conf.operation_mode.get()
+    Conf.operation_mode.set("single")
 
     with datalab_app_context(exec_loop=True):
         win = app.create(h5files=[h5fname], console=False)
@@ -285,15 +285,15 @@ def test_single_operand_mode_compute_2_to_1() -> None:
                 )
             check_titles(f"Single operand mode Δ[{group.title}]", titles)
 
-    Conf.proc.operation_mode.set(original_mode)
+    Conf.operation_mode.set(original_mode)
 
 
 def test_pairwise_operations_mode_compute_2_to_1() -> None:
     """Run pairwise operations mode test scenario
     with `compute_2_to_1` operation (e.g. difference)"""
     h5fname = get_h5fname()
-    original_mode = Conf.proc.operation_mode.get()
-    Conf.proc.operation_mode.set("pairwise")
+    original_mode = Conf.operation_mode.get()
+    Conf.operation_mode.set("pairwise")
 
     with datalab_app_context(exec_loop=True):
         win = app.create(h5files=[h5fname], console=False)
@@ -382,7 +382,7 @@ def test_pairwise_operations_mode_compute_2_to_1() -> None:
                 titles.append((obj.title, f"{get_short_id(obj1)}-{get_short_id(obj2)}"))
             check_titles(f"Pairwise operations mode Δ[{new_grp.title}]", titles)
 
-    Conf.proc.operation_mode.set(original_mode)
+    Conf.operation_mode.set(original_mode)
 
 
 if __name__ == "__main__":

@@ -832,7 +832,7 @@ def get_datalab_xmlrpc_port() -> str:
     #  ``get_datalab_xmlrpc_port`` function from doc/remotecontrol_py27.py.
     initialize()
     try:
-        return Conf.main.rpc_server_port.get()
+        return Conf.rpc_server_port.get()
     except RuntimeError as exc:
         raise ConnectionRefusedError("DataLab has not yet been executed") from exc
 
@@ -882,7 +882,7 @@ class RemoteClient(BaseProxy):
             port_str = f"→[execenv.xmlrpcport:{port}] "
             if port is None:
                 port = get_datalab_xmlrpc_port()
-                port_str = f"→[Conf.main.rpc_server_port:{port}] "
+                port_str = f"→[Conf.rpc_server_port:{port}] "
         execenv.print(port_str, end="")
         self.port = port
         if port is None:

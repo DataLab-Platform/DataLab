@@ -16,6 +16,10 @@ from datalab.config import (
     get_user_plugin_paths,
     set_user_plugin_paths,
 )
+from datalab.config.config_persistence import (
+    has_persisted_option,
+    remove_persisted_option,
+)
 from datalab.env import execenv
 from datalab.gui import pluginconfig
 from datalab.gui.actionhandler import ActionCategory
@@ -92,24 +96,23 @@ def restore_plugin_global_settings():
 
     Most tests in this module assume third-party plugins are enabled.
     """
-    original_plugins_enabled = Conf.main.plugins_enabled.get(True)
-    original_warning_ignore = Conf.main.v020_plugins_warning_ignore.get(False)
-    Conf.main.plugins_enabled.set(True)
-    Conf.main.v020_plugins_warning_ignore.set(False)
+    original_plugins_enabled = Conf.plugins_enabled.get(True)
+    original_warning_ignore = Conf.v020_plugins_warning_ignore.get(False)
+    Conf.plugins_enabled.set(True)
+    Conf.v020_plugins_warning_ignore.set(False)
     try:
         yield
     finally:
-        Conf.main.plugins_enabled.set(original_plugins_enabled)
-        Conf.main.v020_plugins_warning_ignore.set(original_warning_ignore)
+        Conf.plugins_enabled.set(original_plugins_enabled)
+        Conf.v020_plugins_warning_ignore.set(original_warning_ignore)
 
 
 def test_plugin_enable_disable_config():
     """Test plugin enable/disable filtering and configuration dialog."""
     plugin_1_name = "Test Plugin 1"
     plugin_2_name = "Test Plugin 2"
-    main_config = Conf.to_dict().get("main", {})
-    had_config = "plugins_enabled_list" in main_config
-    original_enabled_list = Conf.main.plugins_enabled_list.get(None)
+    had_config = has_persisted_option(Conf.options, "plugins_enabled_list")
+    original_enabled_list = Conf.plugins_enabled_list.get(None)
     plugin_1_path: str | None = None
     plugin_2_path: str | None = None
 
@@ -132,7 +135,7 @@ def test_plugin_enable_disable_config():
                 "Action Two",
                 "action_2",
             )
-            Conf.main.plugins_enabled_list.set(None)
+            Conf.plugins_enabled_list.set(None)
 
             with datalab_test_app_context(console=False) as win:
                 QW.QApplication.processEvents()
@@ -171,7 +174,7 @@ def test_plugin_enable_disable_config():
                 ] == []
                 _close_dialog(dialog)
 
-                Conf.main.plugins_enabled_list.set([plugin_1_name])
+                Conf.plugins_enabled_list.set([plugin_1_name])
                 win.reload_plugins()
                 QW.QApplication.processEvents()
 
@@ -238,9 +241,9 @@ def test_plugin_enable_disable_config():
                 _close_dialog(dialog2)
     finally:
         if had_config:
-            Conf.main.plugins_enabled_list.set(original_enabled_list)
+            Conf.plugins_enabled_list.set(original_enabled_list)
         else:
-            Conf.main.plugins_enabled_list.remove()
+            remove_persisted_option(Conf.options, "plugins_enabled_list")
 
 
 def test_last_load_text_uses_today_yesterday_or_date():
@@ -473,10 +476,10 @@ def test_apply_and_reload_button_keeps_dialog_open_and_saves_changes(
 
 def test_plugins_menu_stays_available_when_plugins_are_globally_disabled():
     """Plugins menu should remain usable to reopen configuration when disabled."""
-    original_plugins_enabled = Conf.main.plugins_enabled.get(True)
+    original_plugins_enabled = Conf.plugins_enabled.get(True)
 
     try:
-        Conf.main.plugins_enabled.set(False)
+        Conf.plugins_enabled.set(False)
 
         with datalab_test_app_context(console=False) as win:
             QW.QApplication.processEvents()
@@ -495,15 +498,14 @@ def test_plugins_menu_stays_available_when_plugins_are_globally_disabled():
             assert "Configure plugins..." in plugin_menu_texts
             assert "Reload plugins" in plugin_menu_texts
     finally:
-        Conf.main.plugins_enabled.set(original_plugins_enabled)
+        Conf.plugins_enabled.set(original_plugins_enabled)
 
 
 def test_disabled_plugins_still_appear_in_configuration_dialog():
     """Globally disabled plugins should remain listed but inactive in the dialog."""
     plugin_name = "Disabled Visible Plugin"
-    main_config = Conf.to_dict().get("main", {})
-    had_config = "plugins_enabled_list" in main_config
-    original_enabled_list = Conf.main.plugins_enabled_list.get(None)
+    had_config = has_persisted_option(Conf.options, "plugins_enabled_list")
+    original_enabled_list = Conf.plugins_enabled_list.get(None)
 
     try:
         with temporary_plugin_dir() as plugin_dir:
@@ -515,7 +517,7 @@ def test_disabled_plugins_still_appear_in_configuration_dialog():
                 "Action Visible",
                 "action_visible",
             )
-            Conf.main.plugins_enabled_list.set(None)
+            Conf.plugins_enabled_list.set(None)
 
             with datalab_test_app_context(console=False) as win:
                 dialog = PluginConfigDialog(win)
@@ -543,19 +545,19 @@ def test_disabled_plugins_still_appear_in_configuration_dialog():
                 _close_dialog(dialog2)
     finally:
         if had_config:
-            Conf.main.plugins_enabled_list.set(original_enabled_list)
+            Conf.plugins_enabled_list.set(original_enabled_list)
         else:
-            Conf.main.plugins_enabled_list.remove()
+            remove_persisted_option(Conf.options, "plugins_enabled_list")
 
 
 def test_plugin_settings_tab_exposes_global_toggle_and_warning_option():
     """Plugin settings tab should host the global toggle and warning option."""
-    original_plugins_enabled = Conf.main.plugins_enabled.get(True)
-    original_warning_ignore = Conf.main.v020_plugins_warning_ignore.get(False)
+    original_plugins_enabled = Conf.plugins_enabled.get(True)
+    original_warning_ignore = Conf.v020_plugins_warning_ignore.get(False)
 
     try:
-        Conf.main.plugins_enabled.set(True)
-        Conf.main.v020_plugins_warning_ignore.set(False)
+        Conf.plugins_enabled.set(True)
+        Conf.v020_plugins_warning_ignore.set(False)
 
         with datalab_test_app_context(console=False) as win:
             dialog = PluginConfigDialog(win)
@@ -597,22 +599,22 @@ def test_plugin_settings_tab_exposes_global_toggle_and_warning_option():
 
             _close_dialog(dialog)
     finally:
-        Conf.main.plugins_enabled.set(original_plugins_enabled)
-        Conf.main.v020_plugins_warning_ignore.set(original_warning_ignore)
+        Conf.plugins_enabled.set(original_plugins_enabled)
+        Conf.v020_plugins_warning_ignore.set(original_warning_ignore)
 
 
 def test_accept_applies_global_plugin_toggle(monkeypatch):
     """Accepting the dialog should apply the global third-party plugin state."""
-    original_plugins_enabled = Conf.main.plugins_enabled.get(True)
-    original_warning_ignore = Conf.main.v020_plugins_warning_ignore.get(False)
+    original_plugins_enabled = Conf.plugins_enabled.get(True)
+    original_warning_ignore = Conf.v020_plugins_warning_ignore.get(False)
 
     def unexpected_reload(*args, **kwargs):
         """Fail if a reload prompt is shown for a pure global toggle change."""
         raise AssertionError("Reload prompt should not be shown")
 
     try:
-        Conf.main.plugins_enabled.set(True)
-        Conf.main.v020_plugins_warning_ignore.set(False)
+        Conf.plugins_enabled.set(True)
+        Conf.v020_plugins_warning_ignore.set(False)
 
         with datalab_test_app_context(console=False) as win:
             dialog = PluginConfigDialog(win)
@@ -629,20 +631,19 @@ def test_accept_applies_global_plugin_toggle(monkeypatch):
             QW.QApplication.processEvents()
 
             assert applied_states == [False]
-            assert Conf.main.plugins_enabled.get() is False
+            assert Conf.plugins_enabled.get() is False
     finally:
-        Conf.main.plugins_enabled.set(original_plugins_enabled)
-        Conf.main.v020_plugins_warning_ignore.set(original_warning_ignore)
+        Conf.plugins_enabled.set(original_plugins_enabled)
+        Conf.v020_plugins_warning_ignore.set(original_warning_ignore)
 
 
 def test_plugin_many_actions_menu_behavior():
     """Test plugin with many actions in dropdown menu."""
-    main_config = Conf.to_dict().get("main", {})
-    had_config = "plugins_enabled_list" in main_config
-    original_enabled_list = Conf.main.plugins_enabled_list.get(None)
+    had_config = has_persisted_option(Conf.options, "plugins_enabled_list")
+    original_enabled_list = Conf.plugins_enabled_list.get(None)
 
     try:
-        Conf.main.plugins_enabled_list.set(None)
+        Conf.plugins_enabled_list.set(None)
         with temporary_template_plugin(
             "datalab_test_plugin_many_actions.py",
             "plugin_many_actions.py.template",
@@ -692,9 +693,9 @@ def test_plugin_many_actions_menu_behavior():
                 assert action_3.isEnabled()
     finally:
         if had_config:
-            Conf.main.plugins_enabled_list.set(original_enabled_list)
+            Conf.plugins_enabled_list.set(original_enabled_list)
         else:
-            Conf.main.plugins_enabled_list.remove()
+            remove_persisted_option(Conf.options, "plugins_enabled_list")
 
 
 def test_plugin_long_description():

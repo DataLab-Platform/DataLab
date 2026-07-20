@@ -34,11 +34,6 @@ from datalab.config.config_persistence import (
     get_ini_location,
     load_options_from_ini,
 )
-from datalab.config.optionfields import (
-    ConfigPathOptionField,
-    DataSetOptionField,
-    WorkingDirOptionField,
-)
 
 if TYPE_CHECKING:
     import guidata.dataset as gds
@@ -61,34 +56,29 @@ class _OptionProxy:
     def get(self, default: Any = _UNSET) -> Any:
         """Return the option value, emulating the legacy ``get(default)``.
 
-        Legacy ``Option.get(default)`` returned the persisted value when the
-        option had been set, and the caller-provided ``default`` otherwise. The
-        flat field always carries a value (its own default), so "unset" is
-        approximated as "the field is still equal to its default": in that case
-        the caller-provided ``default`` is returned. This preserves call sites
-        that pass a meaningful fallback different from the field default (e.g.
-        axis format strings ``sig_format``/``ima_format`` or ``show_label``).
-
-        The substitution is skipped for the specialized DataLab field types
-        (config-path, working-directory, DataSet) whose ``get`` returns a
-        transformed value and which handle their own defaults.
+        Legacy ``UserConfig.get(section, option, default)`` initialized a
+        missing option through ``set``. While the bridge is active, preserve
+        that behavior by checking the actual INI key and setting non-None
+        defaults through the flat field. The field ``set`` synchronizes both
+        the JSON environment variable and the INI backend.
 
         Args:
             default: Optional legacy fallback value.
 
         Returns:
-            The current option value, or ``default`` when the field is still at
-             its default value.
+            The supplied ``default`` after initializing a missing option, or
+             the current configured value otherwise.
         """
-        value = self._field.get()
-        if default is not _UNSET and not isinstance(
-            self._field,
-            (DataSetOptionField, ConfigPathOptionField, WorkingDirOptionField),
-        ):
-            field_default = self._container.get_default_raw(self._field.name)
-            if value == field_default:
+        if default is not _UNSET:
+            location = get_ini_location(self._container, self._field.name)
+            if (
+                location is not None
+                and not _confmod.CONF.has_option(*location)
+                and default is not None
+            ):
+                self._field.set(default)
                 return default
-        return value
+        return self._field.get()
 
     def set(self, value: Any) -> None:
         """Set the option value.
@@ -184,7 +174,7 @@ class _SectionProxy:
         object.__setattr__(self, "_keymap", keymap)
         # Cache one proxy per option name so that repeated accesses return the
         # same object. This is required for monkeypatching to work (e.g.
-        # ``patch("datalab.config.Conf.main.plugins_enabled.get")``), which sets
+        # ``patch("datalab.config.Conf.plugins_enabled.get")``), which sets
         # an attribute on the resolved proxy instance.
         object.__setattr__(self, "_proxies", {})
 

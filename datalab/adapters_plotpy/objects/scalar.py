@@ -105,7 +105,7 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
         Yields:
             Plot item
         """
-        max_shapes = Conf.view.max_shapes_to_draw.get(200)
+        max_shapes = Conf.max_shapes_to_draw.get(200)
         total_coords = len(self.result_adapter.result.coords)
 
         # Yield shapes up to the maximum limit
@@ -217,9 +217,9 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
             # Apply settings for annotated shapes (except AnnotatedPoint)
             if not isinstance(item, AnnotatedPoint):
                 if prefix == "s":
-                    config_param = Conf.view.sig_shape_param.get()
+                    config_param = Conf.sig_shape_param.get()
                 else:
-                    config_param = Conf.view.ima_shape_param.get()
+                    config_param = Conf.ima_shape_param.get()
                 shape_param: ShapeParam = item.shape.shapeparam
                 gds.update_dataset(shape_param, config_param)
                 shape_param.update_item(item.shape)
@@ -228,9 +228,9 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
             item.set_style("results", f"{prefix}/marker")
             # Apply cursor/marker settings from config
             if prefix == "s":
-                config_param = Conf.view.sig_marker_param.get()
+                config_param = Conf.sig_marker_param.get()
             else:
-                config_param = Conf.view.ima_marker_param.get()
+                config_param = Conf.ima_marker_param.get()
             param = item.markerparam
             gds.update_dataset(param, config_param)
             param.update_item(item)

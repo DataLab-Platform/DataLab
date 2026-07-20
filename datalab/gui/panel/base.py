@@ -215,7 +215,7 @@ class ObjectProp(QW.QWidget):
         self.__original_values: dict[str, Any] = {}
 
         # Create Analysis and History widgets
-        font = Conf.proc.small_mono_font.get_font()
+        font = Conf.small_mono_font.get_font()
 
         self.processing_history = QW.QTextEdit()
         self.processing_history.setReadOnly(True)
@@ -1166,7 +1166,7 @@ class SaveToDirectoryGUIParam(gds.DataSet, title=_("Save to directory")):
             # Handle formatting errors gracefully (e.g., incomplete format string)
             self.preview = f"Invalid pattern:{os.linesep}{exc}"
 
-    directory = gds.DirectoryItem(_("Directory"), default=Conf.main.base_dir.get())
+    directory = gds.DirectoryItem(_("Directory"), default=Conf.base_dir.get())
 
     basename = gds.StringItem(
         _("Basename pattern"),
@@ -1830,7 +1830,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if param is None:
             param = AddMetadataParam(sel_objects)
             # Restore settings from config
-            saved_param = Conf.io.add_metadata_settings.get(default=AddMetadataParam())
+            saved_param = Conf.add_metadata_settings.get(default=AddMetadataParam())
             update_dataset(param, saved_param)
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=gds.DataItemValidationWarning)
@@ -1838,7 +1838,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     return
 
         # Save settings to config
-        Conf.io.add_metadata_settings.set(param)
+        Conf.add_metadata_settings.set(param)
 
         # Build values for all selected objects
         values = param.build_values(sel_objects)
@@ -1997,7 +1997,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
     def update_metadata_view_settings(self) -> None:
         """Update metadata view settings"""
-        def_dict = Conf.view.get_def_dict(self.__class__.__name__[:3].lower())
+        def_dict = Conf.options.get_sigima_defaults(self.__class__.__name__[:3].lower())
         for obj in self.objmodel:
             obj.set_metadata_options_defaults(def_dict, overwrite=True)
         self.refresh_plot("all", True, False)
@@ -2154,7 +2154,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if not self.mainwindow.confirm_memory_state():
             return []
         if directory is None:  # pragma: no cover
-            basedir = Conf.main.base_dir.get()
+            basedir = Conf.base_dir.get()
             with save_restore_stds():
                 directory = getexistingdirectory(self, _("Open"), basedir)
         if not directory:
@@ -2220,7 +2220,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if not self.mainwindow.confirm_memory_state():
             return []
         if filenames is None:  # pragma: no cover
-            basedir = Conf.main.base_dir.get()
+            basedir = Conf.base_dir.get()
             filters = self.IO_REGISTRY.get_read_filters()
             with save_restore_stds():
                 filenames, _filt = getopenfilenames(self, _("Open"), basedir, filters)
@@ -2229,7 +2229,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         objs = []
         for filename in filenames:
             with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
-                Conf.main.base_dir.set(filename)
+                Conf.base_dir.set(filename)
                 try:
                     objs += self.__load_from_file(
                         filename, create_group=create_group, add_objects=add_objects
@@ -2257,7 +2257,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         for index, obj in enumerate(objs):
             filename = filenames[index]
             if filename is None:
-                basedir = Conf.main.base_dir.get()
+                basedir = Conf.base_dir.get()
                 filters = self.IO_REGISTRY.get_write_filters()
                 with save_restore_stds():
                     filename, _filt = getsavefilename(
@@ -2265,7 +2265,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     )
             if filename:
                 with qt_try_loadsave_file(self.parentWidget(), filename, "save"):
-                    Conf.main.base_dir.set(filename)
+                    Conf.base_dir.set(filename)
                     self.__save_to_file(obj, filename)
 
     def save_to_directory(self, param: SaveToDirectoryParam | None = None) -> None:
@@ -2285,7 +2285,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 warnings.simplefilter("ignore", category=gds.DataItemValidationWarning)
                 guiparam = SaveToDirectoryGUIParam(objs, extensions)
                 # Restore settings from config
-                saved_param = Conf.io.save_to_directory_settings.get(
+                saved_param = Conf.save_to_directory_settings.get(
                     default=SaveToDirectoryParam()
                 )
                 update_dataset(guiparam, saved_param)
@@ -2303,9 +2303,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             update_dataset(param, guiparam)
 
         # Save settings to config
-        Conf.io.save_to_directory_settings.set(param)
+        Conf.save_to_directory_settings.set(param)
 
-        Conf.main.base_dir.set(param.directory)
+        Conf.base_dir.set(param.directory)
 
         with create_progress_bar(self, _("Saving..."), max_=len(objs)) as progress:
             for i, (path, obj) in enumerate(param.generate_filepath_obj_pairs(objs)):
@@ -2360,14 +2360,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             filename: File name
         """
         if filename is None:  # pragma: no cover
-            basedir = Conf.main.base_dir.get()
+            basedir = Conf.base_dir.get()
             with save_restore_stds():
                 filename, _filter = getopenfilename(
                     self, _("Import metadata"), basedir, "*.dlabmeta"
                 )
         if filename:
             with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
-                Conf.main.base_dir.set(filename)
+                Conf.base_dir.set(filename)
                 obj = self.objview.get_sel_objects(include_groups=True)[0]
                 obj.metadata = read_metadata(filename)
             self.refresh_plot("selected", True, False)
@@ -2380,14 +2380,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """
         obj = self.objview.get_sel_objects(include_groups=True)[0]
         if filename is None:  # pragma: no cover
-            basedir = Conf.main.base_dir.get()
+            basedir = Conf.base_dir.get()
             with save_restore_stds():
                 filename, _filt = getsavefilename(
                     self, _("Export metadata"), basedir, "*.dlabmeta"
                 )
         if filename:
             with qt_try_loadsave_file(self.parentWidget(), filename, "save"):
-                Conf.main.base_dir.set(filename)
+                Conf.base_dir.set(filename)
                 write_metadata(filename, obj.metadata)
 
     def copy_annotations(self) -> None:
@@ -2415,14 +2415,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             filename: File name
         """
         if filename is None:  # pragma: no cover
-            basedir = Conf.main.base_dir.get()
+            basedir = Conf.base_dir.get()
             with save_restore_stds():
                 filename, _filter = getopenfilename(
                     self, _("Import annotations"), basedir, "*.dlabann"
                 )
         if filename:
             with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
-                Conf.main.base_dir.set(filename)
+                Conf.base_dir.set(filename)
                 obj = self.objview.get_sel_objects(include_groups=True)[0]
                 annotations = read_annotations(filename)
                 obj.set_annotations(annotations)
@@ -2438,14 +2438,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """
         obj = self.objview.get_sel_objects(include_groups=True)[0]
         if filename is None:  # pragma: no cover
-            basedir = Conf.main.base_dir.get()
+            basedir = Conf.base_dir.get()
             with save_restore_stds():
                 filename, _filt = getsavefilename(
                     self, _("Export annotations"), basedir, "*.dlabann"
                 )
         if filename:
             with qt_try_loadsave_file(self.parentWidget(), filename, "save"):
-                Conf.main.base_dir.set(filename)
+                Conf.base_dir.set(filename)
                 annotations = obj.get_annotations()
                 write_annotations(filename, annotations)
 
@@ -2465,14 +2465,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             filename: File name
         """
         if filename is None:  # pragma: no cover
-            basedir = Conf.main.base_dir.get()
+            basedir = Conf.base_dir.get()
             with save_restore_stds():
                 filename, _filter = getopenfilename(
                     self, _("Import ROI"), basedir, "*.dlabroi"
                 )
         if filename:
             with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
-                Conf.main.base_dir.set(filename)
+                Conf.base_dir.set(filename)
                 obj = self.objview.get_sel_objects(include_groups=True)[0]
                 roi = read_roi(filename)
                 if obj.roi is None:
@@ -2491,14 +2491,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         obj = self.objview.get_sel_objects(include_groups=True)[0]
         assert obj.roi is not None
         if filename is None:  # pragma: no cover
-            basedir = Conf.main.base_dir.get()
+            basedir = Conf.base_dir.get()
             with save_restore_stds():
                 filename, _filt = getsavefilename(
                     self, _("Export ROI"), basedir, "*.dlabroi"
                 )
         if filename:
             with qt_try_loadsave_file(self.parentWidget(), filename, "save"):
-                Conf.main.base_dir.set(filename)
+                Conf.base_dir.set(filename)
                 write_roi(filename, obj.roi)
 
     # ------Refreshing GUI--------------------------------------------------------------
@@ -3051,7 +3051,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """
         show_label = state
         # Update the configuration
-        Conf.view.show_result_label.set(show_label)
+        Conf.show_result_label.set(show_label)
         # Synchronize the other panel's action state
         for panel in (self.mainwindow.signalpanel, self.mainwindow.imagepanel):
             if panel is not self and panel.acthandler.show_label_action is not None:
@@ -3359,7 +3359,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         for obj in objs:
             create_adapter_from_object(obj).add_label_with_title(title=title)
         if (
-            not Conf.view.ignore_title_insertion_msg.get(False)
+            not Conf.ignore_title_insertion_msg.get(False)
             and not ignore_msg
             and not execenv.unattended
         ):
@@ -3376,5 +3376,5 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 QW.QMessageBox.Ok | QW.QMessageBox.Ignore,
             )
             if answer == QW.QMessageBox.Ignore:
-                Conf.view.ignore_title_insertion_msg.set(True)
+                Conf.ignore_title_insertion_msg.set(True)
         self.refresh_plot("selected", True, False)

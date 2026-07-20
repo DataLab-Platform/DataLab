@@ -20,6 +20,7 @@ from plotpy.styles import BaseImageParam
 from qtpy import QtWidgets as QW
 
 from datalab.config import Conf, _
+from datalab.config.config_persistence import get_ini_location
 
 
 class MainSettings(gds.DataSet):
@@ -28,7 +29,7 @@ class MainSettings(gds.DataSet):
     g0 = gds.BeginGroup(_("Settings for main window and general features"))
     color_mode = gds.ChoiceItem(
         _("Color mode"),
-        zip(Conf.main.color_mode.values, Conf.main.color_mode.values),
+        zip(Conf.color_mode.choices, Conf.color_mode.choices),
         help=_("Color mode for the application"),
     )
     process_isolation_enabled = gds.BoolItem(
@@ -133,7 +134,7 @@ class ProcSettings(gds.DataSet):
     g0 = gds.BeginGroup(_("Settings for computations"))
     operation_mode = gds.ChoiceItem(
         _("Operation mode"),
-        zip(Conf.proc.operation_mode.values, Conf.proc.operation_mode.values),
+        zip(Conf.operation_mode.choices, Conf.operation_mode.choices),
         help=_(
             "Operation mode for computations taking <i>N</i> inputs:"
             "<ul><li><b>single</b>: single operand mode</li>"
@@ -195,7 +196,7 @@ class ProcSettings(gds.DataSet):
     xarray_compat_behavior = gds.ChoiceItem(
         _("X-axis"),
         zip(
-            Conf.proc.xarray_compat_behavior.values,
+            Conf.xarray_compat_behavior.choices,
             [_("Ask before interpolation"), _("Interpolate systematically")],
         ),
         help=_(
@@ -253,11 +254,11 @@ def edit_default_image_settings(
         True if the settings were edited
     """
     param = ImageDefaultSettings(_("Default image visualization settings"))
-    ima_def_dict = Conf.view.get_def_dict("ima")
+    ima_def_dict = Conf.options.get_sigima_defaults("ima")
     update_dataset(param, ima_def_dict)
     if param.edit(parent=parent):
         restore_dataset(param, ima_def_dict)
-        Conf.view.set_def_dict("ima", ima_def_dict)
+        Conf.options.set_sigima_defaults("ima", ima_def_dict)
         return True
     return False
 
@@ -681,39 +682,37 @@ AI_OPTION_NAMES: frozenset[str] = frozenset(
 )
 
 
-# Generator yielding (param, section, option) tuples from configuration dictionary
+# Generator yielding (param, field name, dataset option) tuples
 def _iter_conf(
     paramdict: dict[str, gds.DataSet],
 ) -> Generator[tuple[gds.DataSet, str, str], None, None]:
     """Iterate over configuration parameters"""
-    confdict = Conf.to_dict()
-    for section_name, section in confdict.items():
-        if section_name in paramdict:
-            for option in section:
-                param = paramdict[section_name]
-                if hasattr(param, option):
-                    yield param, section_name, option
+    options = Conf.options
+    for category, field_names in options.fields_by_category().items():
+        if category not in paramdict:
+            continue
+        param = paramdict[category]
+        for field_name in field_names:
+            location = get_ini_location(options, field_name)
+            if location is None:
+                continue
+            _section, option = location
+            if hasattr(param, option):
+                yield param, field_name, option
 
 
 def conf_to_datasets(paramdict: dict[str, gds.DataSet]) -> None:
     """Convert DataLab configuration to datasets"""
-    for param, section, option in _iter_conf(paramdict):
-        value = getattr(getattr(Conf, section), option).get()
-        # ConfigParser automatically unescapes %% to % when reading, but to be safe
-        # we ensure datetime format strings are properly unescaped for display
-        if option in ("sig_datetime_format_s", "sig_datetime_format_ms"):
-            value = value.replace("%%", "%")
+    for param, field_name, option in _iter_conf(paramdict):
+        value = getattr(Conf, field_name).get()
         setattr(param, option, value)
 
 
 def datasets_to_conf(paramdict: dict[str, gds.DataSet]) -> None:
     """Convert datasets to DataLab configuration"""
-    for param, section, option in _iter_conf(paramdict):
+    for param, field_name, option in _iter_conf(paramdict):
         value = getattr(param, option)
-        # Escape % characters for datetime format strings (ConfigParser requirement)
-        if option in ("sig_datetime_format_s", "sig_datetime_format_ms"):
-            value = value.replace("%", "%%")
-        getattr(getattr(Conf, section), option).set(value)
+        getattr(Conf, field_name).set(value)
 
 
 RESTART_OPTIONS = (
@@ -727,7 +726,7 @@ def get_restart_items_values(paramdict: dict[str, gds.DataSet]) -> list:
     """Get restart items values"""
     values = []
     for option, _name in RESTART_OPTIONS:
-        for param, _section, _option in _iter_conf(paramdict):
+        for param, _field_name, _option in _iter_conf(paramdict):
             if option == _option:
                 values.append(getattr(param, option))
     return values
@@ -736,7 +735,7 @@ def get_restart_items_values(paramdict: dict[str, gds.DataSet]) -> list:
 def get_all_values(paramdict: dict[str, gds.DataSet]) -> list:
     """Get all values"""
     values = []
-    for param, _section, _option in _iter_conf(paramdict):
+    for param, _field_name, _option in _iter_conf(paramdict):
         value = getattr(param, _option)
         if isinstance(value, gds.DataSet):
             # For dataset-like options, get a serializable representation
@@ -748,7 +747,7 @@ def get_all_values(paramdict: dict[str, gds.DataSet]) -> list:
 def get_all_options(paramdict: dict[str, gds.DataSet]) -> list:
     """Get all options"""
     options = []
-    for _param, _section, _option in _iter_conf(paramdict):
+    for _param, _field_name, _option in _iter_conf(paramdict):
         options.append(_option)
     return options
 
@@ -763,9 +762,9 @@ def create_dataset_dict() -> dict[str, gds.DataSet]:
     # Tolerate stale config values (e.g. an unknown provider name from a
     # previous DataLab version) so :class:`AISettings`' ChoiceItem does not
     # raise when populated from Conf.
-    provider = str(Conf.ai.provider.get("openai"))
+    provider = str(Conf.ai_provider.get("openai"))
     if provider not in PROVIDERS:
-        Conf.ai.provider.set("openai")
+        Conf.ai_provider.set("openai")
 
     paramdict = {
         "main": MainSettings(_("General"), icon="libre-gui-settings.svg"),

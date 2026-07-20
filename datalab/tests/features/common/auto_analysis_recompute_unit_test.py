@@ -57,7 +57,7 @@ def test_analysis_recompute_after_roi_change():
         panel.add_object(img)
 
         # Compute centroid on the full image
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("centroid")
         centroid = get_centroid_coords(img)
         assert centroid is not None, "Centroid should be computed"
@@ -165,7 +165,7 @@ def test_analysis_recompute_after_recompute_1_to_1():
 
         # Apply a rotation transformation with 45° angle
         rot_param = RotateParam.create(angle=45.0)
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("rotate", rot_param)
 
         # Get the rotated image
@@ -173,7 +173,7 @@ def test_analysis_recompute_after_recompute_1_to_1():
         print(f"\nRotated image title: {img_rotated.title}")
 
         # Compute centroid on the rotated image
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("centroid")
 
         # Get initial centroid (after 45° rotation)
@@ -265,7 +265,7 @@ def test_analysis_recompute_avoids_redundant_calculations():
         assert len(selected) == n_images, f"Should have {n_images} selected objects"
 
         # Compute statistics on all selected images
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("centroid")
 
         # Verify all images have centroid results

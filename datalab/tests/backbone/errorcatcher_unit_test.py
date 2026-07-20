@@ -54,9 +54,9 @@ def test_catcher():
             panel.add_object(sig)
             panel.processor.compute_1_to_1(comp_no_error, title="Test no error")
             panel.processor.compute_1_to_1(comp_error, title="Test error")
-            Conf.proc.ignore_warnings.set(True)
+            Conf.ignore_warnings.set(True)
             panel.processor.compute_1_to_1(comp_warning, title="Test warning (ignored)")
-            Conf.proc.ignore_warnings.set(False)
+            Conf.ignore_warnings.set(False)
             panel.processor.compute_1_to_1(
                 comp_warning, title="Test warning (not ignored)"
             )

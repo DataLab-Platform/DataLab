@@ -547,9 +547,9 @@ class GraphicalRepresentationPage(WizardPage):
         plot_type = "curve" if destination == "signal" else "image"
         # Get appropriate autoscale margin from configuration
         if plot_type == "curve":
-            autoscale_margin = Conf.view.sig_autoscale_margin_percent.get()
+            autoscale_margin = Conf.sig_autoscale_margin_percent.get()
         else:
-            autoscale_margin = Conf.view.ima_autoscale_margin_percent.get()
+            autoscale_margin = Conf.ima_autoscale_margin_percent.get()
         self.plot_widget = PlotWidget(
             self,
             toolbar=True,
