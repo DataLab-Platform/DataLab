@@ -18,8 +18,6 @@ DataLab project.
 
 from __future__ import annotations
 
-import abc
-import base64
 import functools
 import logging
 import os
@@ -48,6 +46,7 @@ from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilenames, getsavefilename
 from sigima.config import options as sigima_options
 from sigima.objects import ImageObj, SignalObj, create_image, create_signal
+from sigimax.mainwindow import SGMXMainWindow, SGMXMainWindowMeta
 from sigimax.utils import qthelpers as sgmx_qth
 from sigimax.widgets import logviewer, status
 from sigimax.widgets.warningerror import go_to_error
@@ -86,7 +85,6 @@ from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plug
 from datalab.utils import qthelpers as qth
 from datalab.utils.qthelpers import (
     add_corner_menu,
-    bring_to_front,
     configure_menu_about_to_show,
 )
 from datalab.webapi import WEBAPI_AVAILABLE, get_webapi_controller
@@ -125,14 +123,14 @@ def remote_controlled(func):
     return method_wrapper
 
 
-class DLMainWindowMeta(type(QW.QMainWindow), abc.ABCMeta):
+class DLMainWindowMeta(SGMXMainWindowMeta):
     """Mixed metaclass to avoid conflicts"""
 
 
 # DLMainWindow is the top-level UI shell, so it legitimately owns many widget
 # references and public control methods used by the rest of the application.
 class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-public-methods
-    QW.QMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
+    SGMXMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
 ):
     """DataLab main window
 
@@ -143,11 +141,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     __instance = None
 
-    SIG_READY = QC.Signal()
-    SIG_SEND_OBJECT = QC.Signal(object)
-    SIG_SEND_OBJECTLIST = QC.Signal(object)
-    SIG_CLOSING = QC.Signal()
-
     @staticmethod
     def get_instance(console=None, hide_on_close=False):
         """Return singleton instance"""
@@ -155,60 +148,37 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             return DLMainWindow(console, hide_on_close)
         return DLMainWindow.__instance
 
-    # Startup wiring is intentionally kept linear here because it assembles the
-    # full application object graph and side effects in a predictable order.
-    def __init__(self, console=None, hide_on_close=False):  # pylint: disable=too-many-statements
+    def __init__(self, console=None, hide_on_close=False):
         """Initialize main window"""
         DLMainWindow.__instance = self
-        super().__init__()
-        self.setObjectName(APP_NAME)
-        self.setWindowIcon(get_icon("DataLab.svg"))
-
-        execenv.log(self, "Starting initialization")
-
-        self.ready_flag = True
         self.started_at = datetime.now().astimezone()
         self.plugins_last_load_at = self.started_at
 
-        self.hide_on_close = hide_on_close
+        # Temporary private state retained until the close/modified lifecycle
+        # is fully delegated to SigimaX in Phase D4.
         self.__old_size: tuple[int, int] | None = None
-        self.__memory_warning = False
-        self.memorystatus: status.MemoryStatus | None = None
         self.webapistatus: dl_status.WebAPIStatus | None = None
         self.pluginstatus: dl_status.PluginStatus | None = None
 
-        self.consolestatus: status.ConsoleStatus | None = None
-        self.console: DockableConsole | None = None
         self._startup_errors: list[str] = []
         self.macropanel: MacroPanel | None = None
         self.aiassistantpanel = None  # type: ignore[assignment]
 
-        self.main_toolbar: QW.QToolBar | None = None
         self.signalpanel_toolbar: QW.QToolBar | None = None
         self.imagepanel_toolbar: QW.QToolBar | None = None
         self.signalpanel: SignalPanel | None = None
         self.imagepanel: ImagePanel | None = None
         self.signalview: DockablePlotWidget | None = None
         self.imageview: DockablePlotWidget | None = None
-        self.tabwidget: QW.QTabWidget | None = None
-        self.tabmenu: QW.QMenu | None = None
-        self.docks: dict[AbstractPanel | DockableConsole, QW.QDockWidget] | None = None
-        self.h5inputoutput = H5InputOutput(self)
+        self.h5inputoutput: H5InputOutput | None = None
         self.webapi_actions: WebApiActions | None = None
 
-        self.openh5_action: QW.QAction | None = None
-        self.saveh5_action: QW.QAction | None = None
-        self.browseh5_action: QW.QAction | None = None
         self.settings_action: QW.QAction | None = None
         self.command_palette_action: QW.QAction | None = None
-        self.quit_action: QW.QAction | None = None
         self.autorefresh_action: QW.QAction | None = None
-        self.showfirstonly_action: QW.QAction | None = None
-        self.showlabel_action: QW.QAction | None = None
         self.reload_plugins_action: QW.QAction | None = None
         self.configure_plugins_action: QW.QAction | None = None
 
-        self.file_menu: QW.QMenu | None = None
         self.create_menu: QW.QMenu | None = None
         self.edit_menu: QW.QMenu | None = None
         self.roi_menu: QW.QMenu | None = None
@@ -216,27 +186,23 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.processing_menu: QW.QMenu | None = None
         self.analysis_menu: QW.QMenu | None = None
         self.plugins_menu: QW.QMenu | None = None
-        self.view_menu: QW.QMenu | None = None
-        self.help_menu: QW.QMenu | None = None
 
-        self.__update_color_mode(startup=True)
-
+        # Temporary private modified state retained until Phase D4.
         self.__is_modified = False
-        self.set_modified(False)
+
+        self.remote_server: RemoteServer | None = None
+        super().__init__(console=console, hide_on_close=hide_on_close)
+
+    def _before_setup(self, console: bool) -> None:
+        """Initialize DataLab-specific services before setting up the UI."""
+        super()._before_setup(console)
+        self.h5inputoutput = H5InputOutput(self)
 
         # Starting XML-RPC server thread
         self.remote_server = RemoteServer(self)
         if Conf.main.rpc_server_enabled.get():
             self.remote_server.SIG_SERVER_PORT.connect(self.xmlrpc_server_started)
             self.remote_server.start()
-
-        # Setup actions and menus
-        if console is None:
-            console = Conf.console.console_enabled.get()
-        self.setup(console)
-
-        self.__restore_pos_and_size()
-        execenv.log(self, "Initialization done")
 
     # ------API related to XML-RPC remote control
     @staticmethod
@@ -754,10 +720,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """
         return (self.signalpanel, self.imagepanel, self.macropanel)
 
-    def __set_low_memory_state(self, state: bool) -> None:
-        """Set memory warning state"""
-        self.__memory_warning = state
-
     def __show_webapi_info(self) -> None:
         """Show Web API connection info when status widget is clicked."""
         if self.webapi_actions is not None:
@@ -767,24 +729,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Start Web API server when status widget is clicked."""
         if self.webapi_actions is not None:
             self.webapi_actions.start_server_from_status_widget()
-
-    def confirm_memory_state(self) -> bool:  # pragma: no cover
-        """Check memory warning state and eventually show a warning dialog
-
-        Returns:
-            True if memory state is ok
-        """
-        if not env.execenv.unattended and self.__memory_warning:
-            threshold = Conf.main.available_memory_threshold.get()
-            answer = QW.QMessageBox.critical(
-                self,
-                _("Warning"),
-                _("Available memory is below %d MB.<br><br>Do you want to continue?")
-                % threshold,
-                QW.QMessageBox.Yes | QW.QMessageBox.No,
-            )
-            return answer == QW.QMessageBox.Yes
-        return True
 
     def check_stable_release(self) -> None:  # pragma: no cover
         """Check if this is a stable release"""
@@ -960,59 +904,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                         submenu.close()
 
     # ------GUI setup
-    def __restore_pos_and_size(self) -> None:
-        """Restore main window position and size from configuration"""
-        pos = Conf.main.window_position.get(None)
-        if pos is not None:
-            posx, posy = pos
-            self.move(QC.QPoint(posx, posy))
-        size = Conf.main.window_size.get(None)
-        if size is None:
-            sgeo = self.screen().availableGeometry()
-            sw, sh = sgeo.width(), sgeo.height()
-            w = max(1200, min(1800, int(sw * 0.8)))
-            h = max(700, min(1100, int(sh * 0.8)))
-            size = (w, h)
-            if pos is None:
-                cx = sgeo.x() + (sw - w) // 2
-                cy = sgeo.y() + (sh - h) // 2
-                self.move(QC.QPoint(cx, cy))
-        width, height = size
-        self.resize(QC.QSize(width, height))
-        if pos is not None and size is not None:
-            sgeo = self.screen().availableGeometry()
-            out_inf = posx < -int(0.9 * width) or posy < -int(0.9 * height)
-            out_sup = posx > int(0.9 * sgeo.width()) or posy > int(0.9 * sgeo.height())
-            if len(QW.QApplication.screens()) == 1 and (out_inf or out_sup):
-                #  Main window is offscreen
-                posx = min(max(posx, 0), sgeo.width() - width)
-                posy = min(max(posy, 0), sgeo.height() - height)
-                self.move(QC.QPoint(posx, posy))
-
-    def __restore_state(self) -> None:
-        """Restore main window state from configuration"""
-        state = Conf.main.window_state.get(None)
-        if state is not None:
-            state = base64.b64decode(state)
-            self.restoreState(QC.QByteArray(state))
-            for widget in self.children():
-                if isinstance(widget, QW.QDockWidget):
-                    self.restoreDockWidget(widget)
-
-    def __save_pos_size_and_state(self) -> None:
-        """Save main window position, size and state to configuration"""
-        is_maximized = self.windowState() == QC.Qt.WindowMaximized
-        Conf.main.window_maximized.set(is_maximized)
-        if not is_maximized:
-            size = self.size()
-            Conf.main.window_size.set((size.width(), size.height()))
-            pos = self.pos()
-            Conf.main.window_position.set((pos.x(), pos.y()))
-        # Encoding window state into base64 string to avoid sending binary data
-        # to the configuration file:
-        state = base64.b64encode(self.saveState().data()).decode("ascii")
-        Conf.main.window_state.set(state)
-
     def setup(self, console: bool = False) -> None:
         """Setup main window
 
@@ -1020,22 +911,22 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             console: True to setup console
         """
         self.__register_plugins()
-        self.__configure_statusbar(console)
-        self.__setup_global_actions()
+        self._configure_statusbar(console)
+        self._setup_global_actions()
         self.__add_signal_image_panels()
         self.__create_plugins_actions()
-        self.__setup_central_widget()
-        self.__add_menus()
+        self._setup_central_widget()
+        self._add_menus()
         self.__setup_webapi()
         if console:
-            self.__setup_console()
+            self._setup_console()
             self.__flush_startup_errors()
         self.__update_actions(update_other_data_panel=True)
         self.__add_macro_panel()
         self.__add_aiassistant_panel()
         self.__configure_panels()
         # Now that everything is set up, we can restore the window state:
-        self.__restore_state()
+        self._restore_state()
 
     def __setup_webapi(self) -> None:
         """Setup Web API actions."""
@@ -1121,7 +1012,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     def __flush_startup_errors(self) -> None:
         """Write any buffered startup errors to the internal console.
 
-        Called right after :meth:`__setup_console` so that plugin-import
+        Called right after :meth:`_setup_console` so that plugin-import
         tracebacks captured during :meth:`__register_plugins` become
         visible to the user in the console widget.
         """
@@ -1256,7 +1147,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.__update_plugins_availability()
             self.plugins_last_load_at = datetime.now().astimezone()
 
-    def __configure_statusbar(self, console: bool) -> None:
+    def _configure_statusbar(self, console: bool) -> None:
         """Configure status bar
 
         Args:
@@ -1282,7 +1173,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         # Memory status
         threshold = Conf.main.available_memory_threshold.get()
         self.memorystatus = status.MemoryStatus(threshold)
-        self.memorystatus.SIG_MEMORY_ALARM.connect(self.__set_low_memory_state)
+        self.memorystatus.SIG_MEMORY_ALARM.connect(self._set_low_memory_state)
         self.statusBar().addPermanentWidget(self.memorystatus)
         self.__update_plugins_availability()
 
@@ -1314,23 +1205,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.__update_actions(update_other_data_panel=True)
         self.__update_plugins_availability()
 
-    def __add_toolbar(
-        self, title: str, position: Literal["top", "bottom", "left", "right"], name: str
-    ) -> QW.QToolBar:
-        """Add toolbar to main window
-
-        Args:
-            title: toolbar title
-            position: toolbar position
-            name: toolbar name (Qt object name)
-        """
-        toolbar = QW.QToolBar(title, self)
-        toolbar.setObjectName(name)
-        area = getattr(QC.Qt, f"{position.capitalize()}ToolBarArea")
-        self.addToolBar(area, toolbar)
-        return toolbar
-
-    def __setup_global_actions(self) -> None:
+    def _setup_global_actions(self) -> None:
         """Setup global actions"""
         self.openh5_action = create_action(
             self,
@@ -1369,9 +1244,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             triggered=self.show_command_palette,
         )
         self.addAction(self.command_palette_action)
-        self.main_toolbar = self.__add_toolbar(
-            _("Main Toolbar"), "left", "main_toolbar"
-        )
+        self.main_toolbar = self._add_toolbar(_("Main Toolbar"), "left", "main_toolbar")
         add_actions(
             self.main_toolbar,
             [
@@ -1441,7 +1314,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def __add_signal_panel(self) -> None:
         """Setup signal toolbar, widgets and panel"""
-        self.signalpanel_toolbar = self.__add_toolbar(
+        self.signalpanel_toolbar = self._add_toolbar(
             _("Signal Panel Toolbar"), "left", "signalpanel_toolbar"
         )
         dpw = DockablePlotWidget(self, PlotType.CURVE)
@@ -1457,7 +1330,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def __add_image_panel(self) -> None:
         """Setup image toolbar, widgets and panel"""
-        self.imagepanel_toolbar = self.__add_toolbar(
+        self.imagepanel_toolbar = self._add_toolbar(
             _("Image Panel Toolbar"), "left", "imagepanel_toolbar"
         )
         dpw = DockablePlotWidget(self, PlotType.IMAGE)
@@ -1493,8 +1366,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         configure_menu_about_to_show(self.tabmenu, self.__update_tab_menu)
         self.signalview = self.__add_signal_panel()
         self.imageview = self.__add_image_panel()
-        sdock = self.__add_dockwidget(self.signalview, title=_("Signal View"))
-        idock = self.__add_dockwidget(self.imageview, title=_("Image View"))
+        sdock = self._add_dockwidget(self.signalview, title=_("Signal View"))
+        idock = self._add_dockwidget(self.imageview, title=_("Image View"))
         self.tabifyDockWidget(sdock, idock)
         self.docks = {self.signalpanel: sdock, self.imagepanel: idock}
         self.tabwidget.currentChanged.connect(self.__tab_index_changed)
@@ -1507,7 +1380,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         for panel in (self.signalpanel, self.imagepanel):
             panel.setup_panel()
 
-    def __setup_central_widget(self) -> None:
+    def _setup_central_widget(self) -> None:
         """Setup central widget (main panel)"""
         self.tabwidget.setMaximumWidth(600)
         s_idx = self.tabwidget.addTab(
@@ -1551,7 +1424,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 return path
         return None
 
-    def __add_menus(self) -> None:
+    def _add_menus(self) -> None:
         """Adding menus"""
         self.file_menu = self.menuBar().addMenu(_("&File"))
         configure_menu_about_to_show(self.file_menu, self.__update_file_menu)
@@ -1700,7 +1573,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             else:
                 self.console.exception_occurred.disconnect(self.console.show_console)
 
-    def __setup_console(self) -> None:
+    def _setup_console(self) -> None:
         """Add an internal console"""
         ns = {
             "dl": self,
@@ -1728,7 +1601,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.console = DockableConsole(self, namespace=ns, message=msg, debug=DEBUG)
         self.console.setMaximumBlockCount(Conf.console.max_line_count.get(5000))
         self.console.go_to_error.connect(go_to_error)
-        cdock = self.__add_dockwidget(self.console, _("Console"))
+        cdock = self._add_dockwidget(self.console, _("Console"))
         self.docks[self.console] = cdock
         cdock.hide()
         self.console.interpreter.widget_proxy.sig_new_prompt.connect(
@@ -1742,7 +1615,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     def __add_macro_panel(self) -> None:
         """Add macro panel"""
         self.macropanel = macro.MacroPanel(self)
-        mdock = self.__add_dockwidget(self.macropanel, _("Macro Panel"))
+        mdock = self._add_dockwidget(self.macropanel, _("Macro Panel"))
         self.docks[self.macropanel] = mdock
         self.tabifyDockWidget(self.docks[self.imagepanel], mdock)
         self.docks[self.signalpanel].raise_()
@@ -1756,7 +1629,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         )
 
         self.aiassistantpanel = AIAssistantPanel(self)
-        adock = self.__add_dockwidget(self.aiassistantpanel, _("AI Assistant"))
+        adock = self._add_dockwidget(self.aiassistantpanel, _("AI Assistant"))
         self.docks[self.aiassistantpanel] = adock
         self.tabifyDockWidget(self.docks[self.macropanel], adock)
         self.docks[self.macropanel].raise_()
@@ -1905,13 +1778,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     def is_modified(self) -> bool:
         """Return True if mainwindow is modified"""
         return self.__is_modified
-
-    def __add_dockwidget(self, child, title: str) -> QW.QDockWidget:
-        """Add QDockWidget and toggleViewAction"""
-        dockwidget, location = child.create_dockwidget(title)
-        dockwidget.setObjectName(title)
-        self.addDockWidget(location, dockwidget)
-        return dockwidget
 
     def repopulate_panel_trees(self) -> None:
         """Repopulate all panel trees"""
@@ -2220,7 +2086,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                         self.h5inputoutput.import_dataset_from_file(filename, dsetname)
             reset_all = False
 
-    def browse_h5_files(self, filenames: list[str], reset_all: bool) -> None:
+    def browse_h5_files(
+        self, filenames: list[str], reset_all: bool | None = None
+    ) -> None:
         """Browse HDF5 files
 
         Args:
@@ -2229,7 +2097,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """
         for filename in filenames:
             self.__check_h5file(filename, "load")
-        self.h5inputoutput.import_files(filenames, False, reset_all)
+        self.h5inputoutput.import_files(filenames, False, bool(reset_all))
 
     @remote_controlled
     def load_h5_workspace(self, h5files: list[str], reset_all: bool = False) -> None:
@@ -2368,14 +2236,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """
         return datalab.__version__
 
-    def close_application(self) -> None:  # Implementing AbstractDLControl interface
-        """Close DataLab application"""
-        self.close()
-
-    def raise_window(self) -> None:  # Implementing AbstractDLControl interface
-        """Raise DataLab window"""
-        bring_to_front(self)
-
     def add_signal(
         self,
         title: str,
@@ -2493,7 +2353,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
               <p>{adv_conf}""",
         )
 
-    def __update_color_mode(self, startup: bool = False) -> None:
+    def _update_color_mode(self, startup: bool = False) -> None:
         """Update color mode
 
         Args:
@@ -2513,8 +2373,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         if self.console is not None:
             self.console.update_color_mode()
-        if self.macropanel is not None:
-            self.macropanel.update_color_mode()
+        macropanel = getattr(self, "macropanel", None)
+        if macropanel is not None:
+            macropanel.update_color_mode()
         if self.docks is not None:
             for dock in self.docks.values():
                 widget = dock.widget()
@@ -2575,7 +2436,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                         Conf.view.show_result_label.get()
                     )
             if option == "color_mode":
-                self.__update_color_mode()
+                self._update_color_mode()
             if option == "show_console_on_error":
                 self.__update_console_show_mode()
             if option == "plot_toolbar_position":
@@ -2713,7 +2574,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         if self.webapi_actions is not None:
             self.webapi_actions.cleanup()
         self.reset_all()
-        self.__save_pos_size_and_state()
+        self._save_pos_size_and_state()
         self.__unregister_plugins()
 
         # Saving current tab for next session
