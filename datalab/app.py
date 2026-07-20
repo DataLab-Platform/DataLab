@@ -9,12 +9,11 @@ from __future__ import annotations
 import atexit
 from typing import TYPE_CHECKING
 
-from guidata.configtools import get_image_file_path
 from qtpy import QtCore as QC
-from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from sigimax.app import create as sigimax_create
 
-from datalab.config import APP_NAME, Conf, _
+from datalab.config import APP_NAME, _
 from datalab.env import execenv
 from datalab.gui.main import DLMainWindow
 from datalab.utils.instancecheck import ApplicationInstanceRegistry
@@ -43,23 +42,13 @@ def create(
     Returns:
         Main window instance
     """
-    if splash:
-        # Showing splash screen
-        pixmap = QG.QPixmap(get_image_file_path("DataLab-Splash.png"))
-        splashscreen = QW.QSplashScreen(pixmap, QC.Qt.WindowStaysOnTopHint)
-        splashscreen.show()
-    window = DLMainWindow(console=console)
-    if size is not None:
-        width, height = size
-        window.resize(width, height)
-    if splash:
-        splashscreen.finish(window)
-    if Conf.main.window_maximized.get(None):
-        window.showMaximized()
-    else:
-        window.showNormal()
-    if h5files is not None:
-        window.open_h5_files(h5files, import_all=True)
+    window = sigimax_create(
+        window_class=DLMainWindow,
+        splash=splash,
+        console=console,
+        h5files=h5files,
+        size=size,
+    )
     if objects is not None:
         for obj in objects:
             window.add_object(obj)
@@ -89,10 +78,8 @@ def run(
         h5files = ([] if h5files is None else h5files) + execenv.h5files
 
     with datalab_app_context(exec_loop=True):
-        # --- Instance detection -------------------------------------------
-        # In unattended mode (tests), skip the lock check entirely so that
-        # tests are never blocked by a running DataLab instance or a stale
-        # lock file.
+        # DataLab-specific protection: concurrent instances share XML-RPC
+        # connection settings and may overwrite each other's network config.
         if not execenv.unattended:
             registry = ApplicationInstanceRegistry()
             running_pid = registry.is_another_instance_running()
@@ -117,7 +104,7 @@ def run(
                     return
             registry.create_lock_file(force=running_pid is not None)
             atexit.register(registry.remove_lock_file)
-        # ------------------------------------------------------------------
+
         window = create(
             splash=True,
             console=console,

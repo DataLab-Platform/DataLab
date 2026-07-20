@@ -512,6 +512,7 @@ class DataLabOptions(SigimaXOptions):
         self.app_homeurl.set(__homeurl__, sync_env=False)
         self.app_supporturl.set(__supporturl__, sync_env=False)
         self.splash_image_path.set("DataLab-Splash.png", sync_env=False)
+        self.splash_show_progress.set(False, sync_env=False)
 
         # Recapture defaults now that DataLab-specific fields exist, using the
         # raw-aware serialization (see to_dict) so reset_to_defaults is correct
