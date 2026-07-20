@@ -111,7 +111,7 @@ def test_plugin_enable_disable_config():
     """Test plugin enable/disable filtering and configuration dialog."""
     plugin_1_name = "Test Plugin 1"
     plugin_2_name = "Test Plugin 2"
-    had_config = has_persisted_option(Conf.options, "plugins_enabled_list")
+    had_config = has_persisted_option(Conf, "plugins_enabled_list")
     original_enabled_list = Conf.plugins_enabled_list.get(None)
     plugin_1_path: str | None = None
     plugin_2_path: str | None = None
@@ -243,7 +243,7 @@ def test_plugin_enable_disable_config():
         if had_config:
             Conf.plugins_enabled_list.set(original_enabled_list)
         else:
-            remove_persisted_option(Conf.options, "plugins_enabled_list")
+            remove_persisted_option(Conf, "plugins_enabled_list")
 
 
 def test_last_load_text_uses_today_yesterday_or_date():
@@ -504,7 +504,7 @@ def test_plugins_menu_stays_available_when_plugins_are_globally_disabled():
 def test_disabled_plugins_still_appear_in_configuration_dialog():
     """Globally disabled plugins should remain listed but inactive in the dialog."""
     plugin_name = "Disabled Visible Plugin"
-    had_config = has_persisted_option(Conf.options, "plugins_enabled_list")
+    had_config = has_persisted_option(Conf, "plugins_enabled_list")
     original_enabled_list = Conf.plugins_enabled_list.get(None)
 
     try:
@@ -547,7 +547,7 @@ def test_disabled_plugins_still_appear_in_configuration_dialog():
         if had_config:
             Conf.plugins_enabled_list.set(original_enabled_list)
         else:
-            remove_persisted_option(Conf.options, "plugins_enabled_list")
+            remove_persisted_option(Conf, "plugins_enabled_list")
 
 
 def test_plugin_settings_tab_exposes_global_toggle_and_warning_option():
@@ -639,7 +639,7 @@ def test_accept_applies_global_plugin_toggle(monkeypatch):
 
 def test_plugin_many_actions_menu_behavior():
     """Test plugin with many actions in dropdown menu."""
-    had_config = has_persisted_option(Conf.options, "plugins_enabled_list")
+    had_config = has_persisted_option(Conf, "plugins_enabled_list")
     original_enabled_list = Conf.plugins_enabled_list.get(None)
 
     try:
@@ -695,7 +695,7 @@ def test_plugin_many_actions_menu_behavior():
         if had_config:
             Conf.plugins_enabled_list.set(original_enabled_list)
         else:
-            remove_persisted_option(Conf.options, "plugins_enabled_list")
+            remove_persisted_option(Conf, "plugins_enabled_list")
 
 
 def test_plugin_long_description():

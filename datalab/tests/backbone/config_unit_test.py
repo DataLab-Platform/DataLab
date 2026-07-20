@@ -21,47 +21,47 @@ from datalab.env import execenv
 from datalab.tests import helpers
 from datalab.utils.qthelpers import datalab_app_context
 
-SEC_MAIN = Conf.main
-OPT_MAX = SEC_MAIN.window_maximized
-OPT_POS = SEC_MAIN.window_position
-OPT_SIZ = SEC_MAIN.window_size
-OPT_DIR = SEC_MAIN.base_dir
+SEC_MAIN = "main"
+OPT_MAX = "window_maximized"
+OPT_POS = "window_position"
+OPT_SIZ = "window_size"
+OPT_DIR = "base_dir"
 
-SEC_CONS = Conf.console
-OPT_CON = SEC_CONS.console_enabled
+SEC_CONS = "console"
+OPT_CON = "console_enabled"
 
 CONFIGS = (
     {
-        SEC_MAIN.get_name(): {
-            OPT_MAX.option: False,
-            OPT_POS.option: (250, 250),
-            OPT_SIZ.option: (1300, 700),
-            OPT_DIR.option: "",
+        SEC_MAIN: {
+            OPT_MAX: False,
+            OPT_POS: (250, 250),
+            OPT_SIZ: (1300, 700),
+            OPT_DIR: "",
         },
-        SEC_CONS.get_name(): {
-            OPT_CON.option: False,
-        },
-    },
-    {
-        SEC_MAIN.get_name(): {
-            OPT_MAX.option: False,
-            OPT_POS.option: (100, 100),
-            OPT_SIZ.option: (810, 600),
-            OPT_DIR.option: osp.dirname(__file__),
-        },
-        SEC_CONS.get_name(): {
-            OPT_CON.option: False,
+        SEC_CONS: {
+            OPT_CON: False,
         },
     },
     {
-        SEC_MAIN.get_name(): {
-            OPT_MAX.option: True,
-            OPT_POS.option: (10, 10),
-            OPT_SIZ.option: (810, 600),
-            OPT_DIR.option: "",
+        SEC_MAIN: {
+            OPT_MAX: False,
+            OPT_POS: (100, 100),
+            OPT_SIZ: (810, 600),
+            OPT_DIR: osp.dirname(__file__),
         },
-        SEC_CONS.get_name(): {
-            OPT_CON.option: True,
+        SEC_CONS: {
+            OPT_CON: False,
+        },
+    },
+    {
+        SEC_MAIN: {
+            OPT_MAX: True,
+            OPT_POS: (10, 10),
+            OPT_SIZ: (810, 600),
+            OPT_DIR: "",
+        },
+        SEC_CONS: {
+            OPT_CON: True,
         },
     },
 )
@@ -114,20 +114,18 @@ def assert_in_interval(val1, val2, interval, context):
 def check_conf(conf, name, win: QW.QMainWindow, h5files):
     """Check configuration"""
     execenv.print(f"  Checking configuration {name}: ")
-    sec_main_name = SEC_MAIN.get_name()
-    sec_cons_name = SEC_CONS.get_name()
+    sec_main_name = SEC_MAIN
+    sec_cons_name = SEC_CONS
     sec_main = conf[sec_main_name]
     sec_cons = conf[sec_cons_name]
-    execenv.print(f"    Checking [{sec_main_name}][{OPT_MAX.option}]: ", end="")
-    assert sec_main[OPT_MAX.option] == (
-        win.windowState() == QC.Qt.WindowState.WindowMaximized
-    )
+    execenv.print(f"    Checking [{sec_main_name}][{OPT_MAX}]: ", end="")
+    assert sec_main[OPT_MAX] == (win.windowState() == QC.Qt.WindowState.WindowMaximized)
     execenv.print("OK")
-    execenv.print(f"    Checking [{sec_main_name}][{OPT_POS.option}]: ", end="")
-    if not sec_main[OPT_MAX.option]:  # Check position/size only when not maximized
+    execenv.print(f"    Checking [{sec_main_name}][{OPT_POS}]: ", end="")
+    if not sec_main[OPT_MAX]:  # Check position/size only when not maximized
         #  Check position, taking into account screen offset (e.g. Linux/Gnome)
-        conf_x, conf_y = sec_main[OPT_POS.option]
-        conf_w, conf_h = sec_main[OPT_SIZ.option]
+        conf_x, conf_y = sec_main[OPT_POS]
+        conf_w, conf_h = sec_main[OPT_SIZ]
         available_go = QW.QApplication.primaryScreen().availableGeometry()
         x_offset, y_offset = available_go.x(), available_go.y()
         assert_in_interval(win.x(), conf_x - x_offset, 2, "X position")
@@ -138,15 +136,15 @@ def check_conf(conf, name, win: QW.QMainWindow, h5files):
         execenv.print(f"OK {win.x(), win.y(), win.width(), win.height()}")
     else:
         execenv.print("Passed (maximized)")
-    execenv.print(f"    Checking [{sec_cons_name}][{OPT_CON.option}]: ", end="")
-    assert sec_cons[OPT_CON.option] == (win.console is not None)
+    execenv.print(f"    Checking [{sec_cons_name}][{OPT_CON}]: ", end="")
+    assert sec_cons[OPT_CON] == (win.console is not None)
     execenv.print("OK")
-    execenv.print(f"    Checking [{sec_main_name}][{OPT_DIR.option}]: ", end="")
+    execenv.print(f"    Checking [{sec_main_name}][{OPT_DIR}]: ", end="")
     if h5files is None:
-        assert conf[SEC_MAIN.get_name()][OPT_DIR.option] == OPT_DIR.get()
+        assert conf[SEC_MAIN][OPT_DIR] == Conf.base_dir.get()
         execenv.print("OK (written in conf file)")
     else:
-        assert OPT_DIR.get() == osp.dirname(h5files[0])
+        assert Conf.base_dir.get() == osp.dirname(h5files[0])
         execenv.print("OK (changed to HDF5 file path)")
 
 

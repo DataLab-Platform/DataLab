@@ -207,7 +207,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         # pylint: disable=import-outside-toplevel
         from datalab.config.config_persistence import save_runtime_option
 
-        save_runtime_option(Conf.options, "rpc_server_port")
+        save_runtime_option(Conf, "rpc_server_port")
 
     def __get_current_basedatapanel(self) -> BaseDataPanel:
         """Return the current BaseDataPanel,

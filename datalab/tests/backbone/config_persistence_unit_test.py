@@ -6,6 +6,7 @@ Unit tests for the DataLab configuration persistence layer
 """
 
 import guidata.dataset as gds
+from sigimax.utils import conf as confmod
 from sigimax.utils.conf import AppUserConfig
 
 from datalab.config.config_options import DataLabOptions
@@ -16,6 +17,7 @@ from datalab.config.config_persistence import (
     load_options_from_ini,
     remove_persisted_option,
     save_options_to_ini,
+    save_runtime_option,
 )
 
 
@@ -95,6 +97,23 @@ def test_round_trip_across_types() -> None:
     assert dst.traceback_log_path.get_raw() == ".DataLab_custom.log"
 
 
+def test_runtime_option_is_not_clobbered_by_bulk_save() -> None:
+    """The XML-RPC port is persisted only through its single-key writer."""
+    conf = _make_conf()
+    options = DataLabOptions()
+    options.rpc_server_port.set(12345)
+
+    save_runtime_option(options, "rpc_server_port", conf)
+    assert conf.get("main", "rpc_server_port") == 12345
+
+    options.rpc_server_port.set(54321)
+    options.color_mode.set("dark")
+    save_options_to_ini(options, conf, save=False)
+
+    assert conf.get("main", "rpc_server_port") == 12345
+    assert conf.get("main", "color_mode") == "dark"
+
+
 def test_datetime_is_escaped_in_ini_but_clean_in_memory() -> None:
     """Datetime formats are stored escaped (%%) but kept clean (%) in memory."""
     conf = _make_conf()
@@ -114,9 +133,10 @@ def test_datetime_is_escaped_in_ini_but_clean_in_memory() -> None:
     assert dst.sig_datetime_format_s.get() == "%H:%M:%S"
 
 
-def test_font_uses_three_ini_keys() -> None:
+def test_font_uses_three_ini_keys(monkeypatch) -> None:
     """Font options are stored as three separate INI keys."""
     conf = _make_conf()
+    monkeypatch.setattr(confmod, "CONF", conf)
     src = DataLabOptions()
     src.small_mono_font.set(("Arial", 12, True))
 
@@ -125,10 +145,19 @@ def test_font_uses_three_ini_keys() -> None:
     assert conf.get("proc", "small_mono_font_family") == "Arial"
     assert conf.get("proc", "small_mono_font_size") == 12
     assert conf.get("proc", "small_mono_font_bold") is True
+    assert has_persisted_option(src, "small_mono_font", conf)
 
     dst = DataLabOptions()
     load_options_from_ini(dst, conf)
     assert dst.small_mono_font.get() == ("Arial", 12, True)
+    assert dst.small_mono_font.get(("Consolas", 8, False)) == (
+        "Arial",
+        12,
+        True,
+    )
+
+    assert remove_persisted_option(dst, "small_mono_font", conf)
+    assert not has_persisted_option(dst, "small_mono_font", conf)
 
 
 def test_dataset_option_round_trip() -> None:

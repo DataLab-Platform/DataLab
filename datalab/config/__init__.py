@@ -1,8 +1,8 @@
-"""DataLab configuration package.
+"""DataLab typed configuration package.
 
-This package keeps backward-compatible package-level symbols for call sites
-that still rely on ``datalab.config`` attributes while the implementation now
-resides in submodules.
+The public :data:`Conf` singleton is a flat
+:class:`~datalab.config.config_options.DataLabOptions` container shared with
+SigimaX. INI persistence and lifecycle helpers remain module-level functions.
 """
 
 from __future__ import annotations
@@ -75,10 +75,5 @@ __all__ = [
 
 
 def __getattr__(name: str):
-    """Delegate unknown package attributes to ``datalab.config.config``.
-
-    This preserves backward compatibility for legacy imports such as
-    ``from datalab.config import PLOTPY_CONF`` while keeping implementation
-    split across submodules.
-    """
+    """Delegate implementation constants to ``datalab.config.config``."""
     return getattr(config, name)

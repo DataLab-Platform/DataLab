@@ -48,7 +48,7 @@ ensure_plugin_dir_on_syspath = PLUGIN_TEST_DATASET.ensure_plugin_dir_on_syspath
 
 def _get_enabled_plugins_option(conf_class):
     """Return the optional enabled-plugins config entry when available."""
-    return getattr(conf_class.main, "plugins_enabled_list", None)
+    return getattr(conf_class, "plugins_enabled_list", None)
 
 
 def main():
@@ -63,7 +63,7 @@ def main():
     original_paths = get_user_plugin_paths()
     original_enabled_list = None
     if enabled_plugins_option is not None:
-        original_enabled_list = enabled_plugins_option.get(None)
+        original_enabled_list = conf_class.plugins_enabled_list.get(None)
 
     plugin_dir = create_plugin_directory(MANUAL_TEST_PLUGINS_DIR)
     ensure_plugin_dir_on_syspath(plugin_dir)

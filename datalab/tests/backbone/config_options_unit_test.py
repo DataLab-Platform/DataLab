@@ -6,8 +6,12 @@ Unit tests for the DataLab options container
 """
 
 import json
+import os
 
 import guidata.dataset as gds
+from sigimax.config import get_conf
+from sigimax.utils import conf as confmod
+from sigimax.utils.conf import AppUserConfig
 
 from datalab.config.config_options import DataLabOptions
 from datalab.config.optionfields import (
@@ -21,6 +25,80 @@ class _SampleParam(gds.DataSet):
     """Simple DataSet used to exercise DataSet options."""
 
     value = gds.IntItem("Value", default=1)
+
+
+def _make_conf() -> AppUserConfig:
+    """Return an isolated in-memory UserConfig backend for tests."""
+    conf = AppUserConfig({})
+    conf.set_application("DataLab_options_pytest", "1.0.0", load=False)
+    return conf
+
+
+def test_field_get_default_initializes_ini_and_json(monkeypatch) -> None:
+    """A missing option default updates both persistence representations."""
+    backend = _make_conf()
+    monkeypatch.setattr(confmod, "CONF", backend)
+    options = DataLabOptions()
+    from datalab.config.config_persistence import (  # pylint: disable=import-outside-toplevel
+        load_options_from_ini,
+    )
+
+    load_options_from_ini(options, backend)
+    options.set_ini_persist_enabled(True)
+    default = [900, 700]
+
+    assert options.window_size.get(default) is default
+    assert options.window_size.get() == (900, 700)
+    assert backend.get("main", "window_size") == (900, 700)
+    assert json.loads(os.environ[options.ENV_VAR])["window_size"] == [900, 700]
+
+
+def test_field_get_default_preserves_existing_value(monkeypatch) -> None:
+    """An existing INI value is returned without being overwritten."""
+    backend = _make_conf()
+    backend.set("view", "max_shapes_to_draw", 777, save=False)
+    monkeypatch.setattr(confmod, "CONF", backend)
+    options = DataLabOptions()
+    from datalab.config.config_persistence import (  # pylint: disable=import-outside-toplevel
+        load_options_from_ini,
+    )
+
+    load_options_from_ini(options, backend)
+
+    assert options.max_shapes_to_draw.get(200) == 777
+    assert backend.get("view", "max_shapes_to_draw") == 777
+
+
+def test_field_get_none_does_not_create_ini_key(monkeypatch) -> None:
+    """A None default returns the field value without creating an INI key."""
+    backend = _make_conf()
+    monkeypatch.setattr(confmod, "CONF", backend)
+    options = DataLabOptions()
+    options.set_ini_persist_enabled(True)
+
+    assert options.plugins_enabled_list.get(None) is None
+    assert not backend.has_option("main", "plugins_enabled_list")
+
+
+def test_field_set_updates_ini_and_json(monkeypatch) -> None:
+    """A field set updates the typed value, JSON environment, and INI backend."""
+    backend = _make_conf()
+    monkeypatch.setattr(confmod, "CONF", backend)
+    options = DataLabOptions()
+    options.set_ini_persist_enabled(True)
+
+    options.available_memory_threshold.set(640)
+
+    assert options.available_memory_threshold.get() == 640
+    assert backend.get("main", "available_memory_threshold") == 640
+    assert json.loads(os.environ[options.ENV_VAR])["available_memory_threshold"] == 640
+
+
+def test_datalab_conf_is_active_sigimax_conf() -> None:
+    """DataLab and reused SigimaX components share the same typed singleton."""
+    from datalab.config import Conf  # pylint: disable=import-outside-toplevel
+
+    assert get_conf() is Conf
 
 
 def test_inherited_and_specific_options() -> None:

@@ -33,8 +33,8 @@ from typing import TYPE_CHECKING, Any
 
 import guidata.dataset as gds
 from guidata.configtools import get_family
+from sigimax.config import NO_DEFAULT, OptionField
 from sigimax.config import FontOptionField as _BaseFontOptionField
-from sigimax.config import OptionField
 from sigimax.utils.conf import Configuration
 
 if TYPE_CHECKING:
@@ -68,10 +68,11 @@ class ConfigPathOptionField(OptionField):
         if not isinstance(value, str):
             raise ValueError(f"Expected str, got {type(value).__name__}")
 
-    def get(self, *, sync_env: bool = True) -> str:
+    def get(self, default: Any = NO_DEFAULT, *, sync_env: bool = True) -> str:
         """Return the absolute path inside the configuration directory.
 
         Args:
+            default: Optional basename used when the option is not initialized.
             sync_env: Whether to ensure the environment variable is synchronized
              (keyword-only).
 
@@ -81,9 +82,7 @@ class ConfigPathOptionField(OptionField):
         Raises:
             ValueError: If the stored value is not a bare basename.
         """
-        if sync_env:
-            self._container.ensure_loaded_from_env()
-        fname = self._value
+        fname = super().get(default, sync_env=sync_env)
         if osp.basename(fname) != fname:
             raise ValueError(f"Invalid configuration file name {fname}")
         return Configuration.get_path(osp.basename(fname))
@@ -128,19 +127,18 @@ class WorkingDirOptionField(OptionField):
         if not isinstance(value, str):
             raise ValueError(f"Expected str, got {type(value).__name__}")
 
-    def get(self, *, sync_env: bool = True) -> str:
+    def get(self, default: Any = NO_DEFAULT, *, sync_env: bool = True) -> str:
         """Return the working directory, or an empty string if it is missing.
 
         Args:
+            default: Optional path used when the option is not initialized.
             sync_env: Whether to ensure the environment variable is synchronized
              (keyword-only).
 
         Returns:
             The stored directory if it exists, otherwise an empty string.
         """
-        if sync_env:
-            self._container.ensure_loaded_from_env()
-        path = self._value
+        path = super().get(default, sync_env=sync_env)
         if osp.isdir(path):
             return path
         return ""
@@ -286,19 +284,21 @@ class DataSetOptionField(OptionField):
         """
         self.default_instance = default_instance
 
-    def get(self, *, sync_env: bool = True) -> gds.DataSet | None:
+    def get(
+        self, default: Any = NO_DEFAULT, *, sync_env: bool = True
+    ) -> gds.DataSet | None:
         """Return the current DataSet instance, or the default instance.
 
         Args:
+            default: Optional DataSet used when the option is not initialized.
             sync_env: Whether to ensure the environment variable is synchronized
              (keyword-only).
 
         Returns:
             The actively-set DataSet if any, otherwise the default instance.
         """
-        if sync_env:
-            self._container.ensure_loaded_from_env()
-        return self._value if self._value is not None else self.default_instance
+        value = super().get(default, sync_env=sync_env)
+        return value if value is not None else self.default_instance
 
     def get_raw(self) -> gds.DataSet | None:
         """Return the raw actively-set DataSet (``None`` if never set)."""

@@ -156,6 +156,13 @@ def has_persisted_option(
     if location is None:
         return False
     conf = _default_conf() if conf is None else conf
+    field = getattr(options, name, None)
+    if isinstance(field, FontOptionField):
+        section, ini_key = location
+        return all(
+            conf.has_option(section, f"{ini_key}_{suffix}")
+            for suffix in ("family", "size", "bold")
+        )
     return conf.has_option(*location)
 
 
@@ -177,6 +184,17 @@ def remove_persisted_option(
     if location is None:
         return False
     conf = _default_conf() if conf is None else conf
+    field = getattr(options, name, None)
+    if isinstance(field, FontOptionField):
+        section, ini_key = location
+        option_names = [f"{ini_key}_{suffix}" for suffix in ("family", "size", "bold")]
+        if not any(conf.has_option(section, key) for key in option_names):
+            return False
+        for key in option_names:
+            if conf.has_option(section, key):
+                conf.remove_option(section, key)
+        conf.save()
+        return True
     if not conf.has_option(*location):
         return False
     conf.remove_option(*location)
@@ -245,8 +263,6 @@ def _load_field(options, conf, field_name: str, section: str, ini_key: str) -> N
         # clears None-valued options instead of persisting them).
         if conf.has_option(section, ini_key):
             field.set(conf.get(section, ini_key), sync_env=False)
-        else:
-            field.set(default_raw, sync_env=False)
 
 
 def _save_field(options, conf, field_name: str, section: str, ini_key: str) -> None:

@@ -1830,7 +1830,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if param is None:
             param = AddMetadataParam(sel_objects)
             # Restore settings from config
-            saved_param = Conf.add_metadata_settings.get(default=AddMetadataParam())
+            saved_param = Conf.add_metadata_settings.get(AddMetadataParam())
             update_dataset(param, saved_param)
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=gds.DataItemValidationWarning)
@@ -1997,7 +1997,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
     def update_metadata_view_settings(self) -> None:
         """Update metadata view settings"""
-        def_dict = Conf.options.get_sigima_defaults(self.__class__.__name__[:3].lower())
+        def_dict = Conf.get_sigima_defaults(self.__class__.__name__[:3].lower())
         for obj in self.objmodel:
             obj.set_metadata_options_defaults(def_dict, overwrite=True)
         self.refresh_plot("all", True, False)
@@ -2286,7 +2286,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 guiparam = SaveToDirectoryGUIParam(objs, extensions)
                 # Restore settings from config
                 saved_param = Conf.save_to_directory_settings.get(
-                    default=SaveToDirectoryParam()
+                    SaveToDirectoryParam()
                 )
                 update_dataset(guiparam, saved_param)
                 # Validate extension: set to first if None or not in available list

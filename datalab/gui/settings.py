@@ -254,11 +254,11 @@ def edit_default_image_settings(
         True if the settings were edited
     """
     param = ImageDefaultSettings(_("Default image visualization settings"))
-    ima_def_dict = Conf.options.get_sigima_defaults("ima")
+    ima_def_dict = Conf.get_sigima_defaults("ima")
     update_dataset(param, ima_def_dict)
     if param.edit(parent=parent):
         restore_dataset(param, ima_def_dict)
-        Conf.options.set_sigima_defaults("ima", ima_def_dict)
+        Conf.set_sigima_defaults("ima", ima_def_dict)
         return True
     return False
 
@@ -687,7 +687,7 @@ def _iter_conf(
     paramdict: dict[str, gds.DataSet],
 ) -> Generator[tuple[gds.DataSet, str, str], None, None]:
     """Iterate over configuration parameters"""
-    options = Conf.options
+    options = Conf
     for category, field_names in options.fields_by_category().items():
         if category not in paramdict:
             continue
