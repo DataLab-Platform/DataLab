@@ -4,22 +4,19 @@
 
 from __future__ import annotations
 
-import logging
 from contextlib import contextmanager
 from copy import deepcopy
 from typing import TYPE_CHECKING, Any, Generator
 
-from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from datalab.config import _
 from datalab.env import execenv
+from datalab.gui.panel.history import chain as hchain
 from datalab.history import HistoryAction, HistorySession, WorkspaceState
 
 if TYPE_CHECKING:
     from datalab.gui.panel.history import HistoryPanel
-
-_logger = logging.getLogger(__name__)
 
 
 def create_new_session(
@@ -34,11 +31,11 @@ def create_new_session(
     Returns:
         The newly created session.
     """
-    pstr = panel_str or panel.current_panel_str()
-    panel.session_increment += 1
-    session = HistorySession(number=panel.session_increment)
+    pstr = panel_str or panel.navigation.current_panel_str()
+    panel.navigation.session_increment += 1
+    session = HistorySession(number=panel.navigation.session_increment)
     panel.history_sessions.append(session)
-    panel.set_active_session(session, pstr)
+    panel.navigation.set_active_session(session, pstr)
     panel.tree.populate_tree(panel.history_sessions)
     panel.refresh_compatibility_items()
     return session
@@ -64,7 +61,7 @@ def maybe_start_session_for_input(panel: HistoryPanel, *, load: bool = False) ->
     """
     if not panel.record_mode_enabled or panel.is_replaying():
         return
-    if panel.suppress_session_prompt:
+    if panel.runtime.execution.suppress_session_prompt:
         return
     # Reuse the current session when there is none yet or it has no actions:
     # there is nothing to preserve, so no need to prompt.
@@ -72,10 +69,8 @@ def maybe_start_session_for_input(panel: HistoryPanel, *, load: bool = False) ->
         return
     # Debounce: a synchronous burst of creations (plugin/macro) must prompt only
     # once. The guard is reset on the next event-loop turn.
-    if panel.session_input_pending:
+    if not panel.runtime.execution.start_session_input_prompt():
         return
-    panel.session_input_pending = True
-    QC.QTimer.singleShot(0, lambda: setattr(panel, "session_input_pending", False))
     if execenv.unattended:
         # Headless runs: honor the accept_dialogs flag (default False -> "No"),
         # so tests can drive the behavior without a real modal dialog.
@@ -154,8 +149,8 @@ def add_compute_entry(
         pattern=pattern,
         kwargs=deepcopy(kwargs),
         state=state,
-        plugin_origin=plugin_origin,
     )
+    action.plugin_origin = deepcopy(plugin_origin)
     panel.add_object(action)
     if output_uuids is not None:
         panel.register_action_outputs(action, output_uuids)
@@ -228,39 +223,7 @@ def register_action_outputs(
          ``1_to_0`` analysis patterns and for UI actions that did not
          create new objects).
     """
-    # Drop previous outputs for this action from the reverse index.
-    previous = panel.action_output_uuids.get(action.uuid, [])
-    for prev_uuid in previous:
-        if panel.output_to_action.get(prev_uuid) == action.uuid:
-            panel.output_to_action.pop(prev_uuid, None)
-    new_outputs = list(output_uuids)
-    # Ownership transfer: if an output_uuid already belongs to a
-    # *different* action, remove it from that action's output list so the
-    # forward mapping stays consistent.  The HistoryAction object's
-    # ``output_uuids`` attribute is NOT updated here because traversing all
-    # sessions to locate the object would be expensive; the panel-level
-    # dicts are the source of truth.
-    for out_uuid in new_outputs:
-        old_action_uuid = panel.output_to_action.get(out_uuid)
-        if old_action_uuid is not None and old_action_uuid != action.uuid:
-            old_list = panel.action_output_uuids.get(old_action_uuid)
-            if old_list is not None:
-                try:
-                    old_list.remove(out_uuid)
-                except ValueError:
-                    pass
-                if not old_list:
-                    del panel.action_output_uuids[old_action_uuid]
-            _logger.debug(
-                "Output %s transferred from action %s to %s",
-                out_uuid,
-                old_action_uuid,
-                action.uuid,
-            )
-    action.output_uuids = list(new_outputs)
-    panel.action_output_uuids[action.uuid] = new_outputs
-    for out_uuid in new_outputs:
-        panel.output_to_action[out_uuid] = action.uuid
+    panel.runtime.objects.register_action_outputs(action, output_uuids)
 
 
 @contextmanager
@@ -302,10 +265,10 @@ def capture_outputs(
             # it failed (or was a full no-op). Do not keep a misleading "OK"
             # entry in the history — remove the just-recorded action and
             # refresh the tree so the panel stays consistent.
-            panel.remove_single_action(action)
+            hchain.remove_single_action(panel, action)
             panel.tree.populate_tree(panel.history_sessions)
             panel.refresh_compatibility_items()
-            panel.update_actions_state()
+            panel.ui.update_actions_state()
 
 
 def add_ui_entry(
@@ -373,13 +336,13 @@ def add_object(panel: HistoryPanel, obj: HistoryAction) -> None:
     and image pipelines stay in separate sessions and recording resumes in the
     user-selected session.
     """
-    pstr = obj.panel_str or panel.current_panel_str()
-    session = panel.get_active_session(pstr)
+    pstr = obj.panel_str or panel.navigation.current_panel_str()
+    session = panel.navigation.get_active_session(pstr)
     if session is None:
         session = panel.create_new_session(panel_str=pstr)
     session.add_action(obj)
     session_index = panel.history_sessions.index(session)
-    panel.tree.add_action_to_tree(obj, session_index)
+    panel.tree.rebuild_session(session_index)
     panel.tree.rearrange_tree()
     panel.refresh_compatibility_items()
-    panel.update_actions_state()
+    panel.ui.update_actions_state()

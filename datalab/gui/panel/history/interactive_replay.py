@@ -6,7 +6,8 @@ from __future__ import annotations
 
 import copy
 import logging
-from typing import TYPE_CHECKING
+from dataclasses import dataclass
+from typing import TYPE_CHECKING, Any
 
 import guidata.dataset as gds
 from qtpy import QtWidgets as QW
@@ -20,6 +21,14 @@ if TYPE_CHECKING:
     from datalab.gui.panel.history.panel import HistoryPanel
 
 _logger = logging.getLogger(__name__)
+
+
+@dataclass
+class ActionParamEdit:
+    """Parameter dialog target and action kwargs to update after acceptance."""
+
+    dialog_target: gds.DataSet | gds.DataSetGroup
+    new_kwargs: dict[str, Any]
 
 
 def replay_restore_actions(
@@ -48,7 +57,9 @@ def replay_restore_actions(
                 )
             return
         if replay:
-            if panel.edit_mode and isinstance(session_or_action, HistoryAction):
+            if panel.runtime.execution.edit_mode and isinstance(
+                session_or_action, HistoryAction
+            ):
                 # Defer: edit only the selected actions, no automatic cascade
                 edit_actions.append(session_or_action)
             else:
@@ -58,10 +69,14 @@ def replay_restore_actions(
                     session_or_action.replay(
                         panel.mainwindow,
                         restore_selection=restore_selection,
-                        edit=panel.edit_mode,
+                        edit=panel.runtime.execution.edit_mode,
                     )
         elif restore_selection:
-            if panel.edit_mode or panel.has_any_pending_edits():
+            if panel.runtime.execution.edit_mode or any(
+                action.has_pending_edits
+                for session in panel.history_sessions
+                for action in session.actions
+            ):
                 restore_action_params(panel, session_or_action)
             else:
                 session_or_action.restore(panel.mainwindow)
@@ -69,44 +84,42 @@ def replay_restore_actions(
         edit_mode_replay_actions(panel, edit_actions)
 
 
-def prompt_edit_action_params(
-    panel: HistoryPanel, action: HistoryAction
-) -> bool | None:
-    """Open the parameter dialog for *action* according to its pattern."""
+def prepare_action_param_edit(action: HistoryAction) -> ActionParamEdit | None:
+    """Prepare the editable parameter copy for ``action``."""
+    result = None
     if (
         action.kind == HistoryAction.KIND_UI
         and action.method_name in HistoryAction.UI_CREATION_METHODS
     ):
         param = action.kwargs.get("param")
-        if param is None:
-            return None
-        edited = copy.deepcopy(param)
-        if not edited.edit(parent=panel.mainwindow):
-            return False
-        action.snapshot_kwargs()
-        action.kwargs["param"] = edited
-        return True
-    pattern = action.pattern
-    if pattern in {"1_to_1", "1_to_0", "n_to_1", "2_to_1"}:
+        if param is not None:
+            edited = copy.deepcopy(param)
+            result = ActionParamEdit(edited, {"param": edited})
+    elif action.pattern in {"1_to_1", "1_to_0", "n_to_1", "2_to_1"}:
         param = action.kwargs.get("param")
-        if param is None:
-            return None
-        edited = copy.deepcopy(param)
-        dialog_target: gds.DataSet | gds.DataSetGroup = edited
-        new_kwargs = {"param": edited}
-    elif pattern == "1_to_n":
+        if param is not None:
+            edited = copy.deepcopy(param)
+            result = ActionParamEdit(edited, {"param": edited})
+    elif action.pattern == "1_to_n":
         params = action.kwargs.get("params") or []
-        if not params:
-            return None
-        edited_params = [copy.deepcopy(p) for p in params]
-        dialog_target = gds.DataSetGroup(edited_params, title=_("Parameters"))
-        new_kwargs = {"params": edited_params}
-    else:
+        if params:
+            edited_params = [copy.deepcopy(p) for p in params]
+            dialog_target = gds.DataSetGroup(edited_params, title=_("Parameters"))
+            result = ActionParamEdit(dialog_target, {"params": edited_params})
+    return result
+
+
+def prompt_edit_action_params(
+    panel: HistoryPanel, action: HistoryAction
+) -> bool | None:
+    """Open the parameter dialog for *action* according to its pattern."""
+    edit = prepare_action_param_edit(action)
+    if edit is None:
         return None
-    if not dialog_target.edit(parent=panel.mainwindow):
+    if not edit.dialog_target.edit(parent=panel.mainwindow):
         return False
     action.snapshot_kwargs()
-    action.kwargs.update(new_kwargs)
+    action.kwargs.update(edit.new_kwargs)
     return True
 
 
@@ -117,14 +130,13 @@ def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) 
     downstream actions are left untouched (no automatic cascade). A
     re-entrance guard prevents nested prompt loops.
     """
-    if panel.edit_replay_in_progress:
-        return
     # Deduplicate and sort the selected actions in their session order
     ordered = order_selected_actions(panel, actions)
     if not ordered:
         return
-    panel.edit_replay_in_progress = True
-    try:
+    with panel.runtime.execution.replaying_edits() as started:
+        if not started:
+            return
         edited_actions: list[HistoryAction] = []
         recomputable: list[HistoryAction] = []
         for action in ordered:
@@ -157,8 +169,6 @@ def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) 
         if edited_actions:
             hrec.recompute_cascade(panel, edited_actions[0])
         QW.QApplication.processEvents()
-    finally:
-        panel.edit_replay_in_progress = False
 
 
 def order_selected_actions(
@@ -206,4 +216,4 @@ def restore_action_params(
         panel.tree.refresh_action_item(action)
         hrec.recompute_action_in_place(panel, action)
         hrec.recompute_cascade(panel, action)
-    panel.update_actions_state()
+    panel.ui.update_actions_state()

@@ -2762,11 +2762,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         if self.webapi_actions is not None:
             self.webapi_actions.cleanup()
         self.reset_all()
-        self.__save_pos_size_and_state()
+        if not env.execenv.unattended:
+            self.__save_pos_size_and_state()
         self.__unregister_plugins()
 
         # Saving current tab for next session
-        if self.tabwidget is not None:
+        if not env.execenv.unattended and self.tabwidget is not None:
             Conf.main.current_tab.set(self.tabwidget.currentIndex())
 
         execenv.log(self, "closed properly")

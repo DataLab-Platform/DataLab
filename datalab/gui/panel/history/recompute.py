@@ -12,6 +12,13 @@ from sigima.objects import ImageObj, SignalObj
 
 from datalab.config import _
 from datalab.env import execenv
+from datalab.gui.creation import (
+    create_image_from_param,
+    create_signal_from_param,
+    insert_creation_parameters,
+    prepare_signal_parameters,
+)
+from datalab.gui.panel.history import chain as hchain
 from datalab.gui.processor.base import (
     FeatureNotFoundError,
     ProcessingParameters,
@@ -101,7 +108,7 @@ def record_missing_outputs(
         action.uuid,
         name,
     )
-    panel.cascade_warnings.append(
+    panel.runtime.execution.cascade_warnings.append(
         _(
             "Action %s has been edited but its target output object(s) "
             "no longer exist — skipping."
@@ -133,7 +140,7 @@ def recompute_action_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
             action.pattern,
             action.uuid,
         )
-        panel.cascade_warnings.append(
+        panel.runtime.execution.cascade_warnings.append(
             _("Action %s uses pattern %r which is not recomputable yet.")
             % (action.func_name or action.uuid, action.pattern)
         )
@@ -149,7 +156,7 @@ def recompute_action_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
             action.func_name,
             exc,
         )
-        panel.cascade_warnings.append(
+        panel.runtime.execution.cascade_warnings.append(
             _("Recompute failed for action %s: %s")
             % (action.func_name or action.uuid, exc)
         )
@@ -160,7 +167,7 @@ def handle_missing_feature(
 ) -> None:
     """Flag ``action`` as broken (missing plugin) and queue a user warning."""
     action.is_stale = True
-    panel.broken_actions.add(action.uuid)
+    panel.runtime.execution.broken_actions.add(action.uuid)
     plugin_origin = action.plugin_origin or exc.plugin_origin or {}
     directory = (plugin_origin.get("directory") if plugin_origin else None) or "?"
     param = action.kwargs.get("param")
@@ -175,7 +182,7 @@ def handle_missing_feature(
         func_name,
         location,
     )
-    panel.cascade_warnings.append(
+    panel.runtime.execution.cascade_warnings.append(
         _(
             "Action %(name)s skipped: plugin '%(loc)s' is missing.\n"
             "Required parameter class: %(param)s\n"
@@ -191,17 +198,10 @@ def recompute_creation_in_place(panel: HistoryPanel, action: HistoryAction) -> N
     Rebuild the object from the edited ``param`` and copy it onto the
     existing output object so its UUID (and downstream references) are kept.
     """
-    # Local import to avoid a circular dependency at module load time.
-    from datalab.gui.newobject import (
-        create_image_gui,
-        create_signal_gui,
-        insert_creation_parameters,
-    )
-
-    panel_data = panel.resolve_panel_for_action(action)
+    panel_data = hchain.resolve_panel_for_action(panel, action)
     if panel_data is None:
         return
-    existing, missing = panel.resolve_target_outputs(panel_data, action)
+    existing, missing = hchain.resolve_target_outputs(panel, panel_data, action)
     record_missing_outputs(panel, action, missing)
     if not existing:
         return
@@ -213,11 +213,12 @@ def recompute_creation_in_place(panel: HistoryPanel, action: HistoryAction) -> N
     if param is None:
         return
     if action.target == "signalpanel":
-        new_obj = create_signal_gui(param, edit=False)
+        prepared = prepare_signal_parameters(param, edit=False)
+        if prepared is None:
+            return
+        new_obj = create_signal_from_param(prepared)
     else:
-        new_obj = create_image_gui(param, edit=False)
-    if new_obj is None:
-        return
+        new_obj = create_image_from_param(param)
     update_obj_in_place(output_obj, new_obj)
     insert_creation_parameters(output_obj, param)
     refresh_target(panel_data, output_uuid)
@@ -225,12 +226,12 @@ def recompute_creation_in_place(panel: HistoryPanel, action: HistoryAction) -> N
 
 def recompute_1_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> None:
     """Recompute a single 1-to-1 action in place."""
-    panel_data = panel.resolve_panel_for_action(action)
+    panel_data = hchain.resolve_panel_for_action(panel, action)
     if panel_data is None:
         return
-    existing, missing = panel.resolve_target_outputs(panel_data, action)
+    existing, missing = hchain.resolve_target_outputs(panel, panel_data, action)
     if not existing and not missing:
-        legacy = panel.find_output_object_uuid(panel_data, action)
+        legacy = hchain.find_output_object_uuid(panel, panel_data, action)
         if legacy is not None:
             existing = [legacy]
     record_missing_outputs(panel, action, missing)
@@ -244,7 +245,7 @@ def recompute_1_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
     if pp is None or pp.source_uuid is None:
         return
     if not panel_data.objmodel.has_uuid(pp.source_uuid):
-        panel.cascade_warnings.append(
+        panel.runtime.execution.cascade_warnings.append(
             _("Action %s: source object was deleted — skipping.")
             % (action.func_name or action.uuid)
         )
@@ -274,10 +275,10 @@ def recompute_1_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
 
 def recompute_1_to_n_in_place(panel: HistoryPanel, action: HistoryAction) -> None:
     """Recompute a 1-to-n action in place: replace each of the N outputs."""
-    panel_data = panel.resolve_panel_for_action(action)
+    panel_data = hchain.resolve_panel_for_action(panel, action)
     if panel_data is None:
         return
-    existing, missing = panel.resolve_target_outputs(panel_data, action)
+    existing, missing = hchain.resolve_target_outputs(panel, panel_data, action)
     record_missing_outputs(panel, action, missing)
     if not existing or not panel_data.objmodel.has_uuid(existing[0]):
         return
@@ -286,7 +287,7 @@ def recompute_1_to_n_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
     if pp is None or pp.source_uuid is None:
         return
     if not panel_data.objmodel.has_uuid(pp.source_uuid):
-        panel.cascade_warnings.append(
+        panel.runtime.execution.cascade_warnings.append(
             _("Action %s: source object was deleted — skipping.")
             % (action.func_name or action.uuid)
         )
@@ -334,10 +335,10 @@ def recompute_1_to_n_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
 
 def recompute_n_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> None:
     """Recompute an n-to-1 action in place."""
-    panel_data = panel.resolve_panel_for_action(action)
+    panel_data = hchain.resolve_panel_for_action(panel, action)
     if panel_data is None:
         return
-    existing, missing = panel.resolve_target_outputs(panel_data, action)
+    existing, missing = hchain.resolve_target_outputs(panel, panel_data, action)
     record_missing_outputs(panel, action, missing)
     if not existing:
         return
@@ -356,7 +357,7 @@ def recompute_n_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
         if panel_data.objmodel.has_uuid(uuid):
             src_objs.append(panel_data.objmodel[uuid])
     if not src_objs:
-        panel.cascade_warnings.append(
+        panel.runtime.execution.cascade_warnings.append(
             _("Action %s: all source objects were deleted — skipping.")
             % (action.func_name or action.uuid)
         )
@@ -386,10 +387,10 @@ def recompute_n_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
 
 def recompute_2_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> None:
     """Recompute a 2-to-1 action in place (single or pairwise)."""
-    panel_data = panel.resolve_panel_for_action(action)
+    panel_data = hchain.resolve_panel_for_action(panel, action)
     if panel_data is None:
         return
-    existing, missing = panel.resolve_target_outputs(panel_data, action)
+    existing, missing = hchain.resolve_target_outputs(panel, panel_data, action)
     record_missing_outputs(panel, action, missing)
     if not existing:
         return
@@ -414,7 +415,7 @@ def recompute_2_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
             )
         )
         if len(src_uuids) < 2:
-            panel.cascade_warnings.append(
+            panel.runtime.execution.cascade_warnings.append(
                 _("Action %s: missing source(s) for output #%d — skipping.")
                 % (action.func_name or action.uuid, idx + 1)
             )
@@ -423,7 +424,7 @@ def recompute_2_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
             panel_data.objmodel.has_uuid(src_uuids[0])
             and panel_data.objmodel.has_uuid(src_uuids[1])
         ):
-            panel.cascade_warnings.append(
+            panel.runtime.execution.cascade_warnings.append(
                 _("Action %s: source object(s) were deleted — skipping.")
                 % (action.func_name or action.uuid)
             )
@@ -455,7 +456,7 @@ def recompute_2_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
 
 def recompute_1_to_0_in_place(panel: HistoryPanel, action: HistoryAction) -> None:
     """Recompute a 1-to-0 analysis on each source object in place."""
-    panel_data = panel.resolve_panel_for_action(action)
+    panel_data = hchain.resolve_panel_for_action(panel, action)
     if panel_data is None:
         return
     sources = list(action.state.selection.get(panel_data.PANEL_STR_ID, []))
@@ -476,7 +477,7 @@ def recompute_1_to_0_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
         )
         refresh_target(panel_data, uuid)
     if missing:
-        panel.cascade_warnings.append(
+        panel.runtime.execution.cascade_warnings.append(
             _("Action %s: %d analysed object(s) were deleted — skipping.")
             % (action.func_name or action.uuid, len(missing))
         )
@@ -489,47 +490,51 @@ def recompute_cascade(
 ) -> None:
     """Recompute ``root_action``'s descendants in the current session in place."""
     if descendants is None:
-        descendants = panel.get_downstream_actions(root_action)
+        descendants = hchain.get_downstream_actions(panel, root_action)
     if root_action.is_stale:
         descendants = [root_action] + descendants
-    if getattr(panel, "cascade_in_progress", False):
+    if panel.runtime.execution.cascade_in_progress:
         flush_cascade_warnings(panel)
         return
     if not descendants:
         flush_cascade_warnings(panel)
         return
-    panel.broken_actions.clear()
-    panel.cascade_in_progress = True
-    try:
+    with panel.runtime.execution.recomputing_cascade() as started:
+        if not started:
+            flush_cascade_warnings(panel)
+            return
         for action in descendants:
             action.is_stale = True
             panel.tree.refresh_action_item(action)
         QW.QApplication.processEvents()
-        for action in descendants:
-            try:
-                recompute_action_in_place(panel, action)
-            finally:
-                if action.uuid not in panel.broken_actions:
+        try:
+            for action in descendants:
+                try:
+                    recompute_action_in_place(panel, action)
+                finally:
+                    if action.uuid not in panel.runtime.execution.broken_actions:
+                        action.is_stale = False
+                    panel.tree.refresh_action_item(action)
+                    QW.QApplication.processEvents()
+        finally:
+            for action in descendants:
+                if (
+                    action.is_stale
+                    and action.uuid not in panel.runtime.execution.broken_actions
+                ):
                     action.is_stale = False
-                panel.tree.refresh_action_item(action)
-                QW.QApplication.processEvents()
-    finally:
-        for action in descendants:
-            if action.is_stale and action.uuid not in panel.broken_actions:
-                action.is_stale = False
-                panel.tree.refresh_action_item(action)
-        panel.cascade_in_progress = False
+                    panel.tree.refresh_action_item(action)
     flush_cascade_warnings(panel)
 
 
 def flush_cascade_warnings(panel: HistoryPanel) -> None:
     """Show + clear accumulated cascade warnings (no-op when empty)."""
-    if panel.cascade_warnings and not execenv.unattended:
+    if panel.runtime.execution.cascade_warnings and not execenv.unattended:
         QW.QMessageBox.warning(
             panel.mainwindow,
             _("Cascade recompute"),
             _("Some downstream actions could not be recomputed:")
             + "\n\n• "
-            + "\n• ".join(panel.cascade_warnings),
+            + "\n• ".join(panel.runtime.execution.cascade_warnings),
         )
-    panel.cascade_warnings = []
+    panel.runtime.execution.cascade_warnings.clear()

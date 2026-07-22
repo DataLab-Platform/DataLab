@@ -5,16 +5,19 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from qtpy import QtWidgets as QW
 
 from datalab.config import _
 from datalab.env import execenv
-from datalab.gui.panel.history import recompute as hrec
-from datalab.gui.panel.history.chainmodel import action_input_uuids
+from datalab.gui.panel.history.chainmodel import (
+    ReconnectionPlan,
+    ReconnectionTarget,
+    action_input_uuids,
+    remap_processing_parameters,
+)
 from datalab.gui.processor.base import (
-    ProcessingParameters,
     extract_processing_parameters,
     insert_processing_parameters,
 )
@@ -38,23 +41,24 @@ def find_parent_session(
     return None
 
 
+def action_panel_target(action: HistoryAction) -> str | None:
+    """Return the main-window data-panel attribute targeted by ``action``."""
+    if action.kind == HistoryAction.KIND_UI:
+        if action.method_name in HistoryAction.UI_CREATION_METHODS:
+            return action.target
+        return None
+    return {"signal": "signalpanel", "image": "imagepanel"}.get(action.panel_str)
+
+
 def resolve_panel_for_action(
     panel: HistoryPanel, action: HistoryAction
 ) -> BaseDataPanel | None:
     """Return the data panel targeted by ``action``, or ``None``."""
-    if action.kind == HistoryAction.KIND_UI:
-        if action.method_name not in HistoryAction.UI_CREATION_METHODS:
-            return None
-        if action.target == "signalpanel":
-            return panel.mainwindow.signalpanel
-        if action.target == "imagepanel":
-            return panel.mainwindow.imagepanel
-        return None
-    if action.panel_str == "signal":
-        return panel.mainwindow.signalpanel
-    if action.panel_str == "image":
-        return panel.mainwindow.imagepanel
-    return None
+    panels = {
+        "signalpanel": panel.mainwindow.signalpanel,
+        "imagepanel": panel.mainwindow.imagepanel,
+    }
+    return panels.get(action_panel_target(action))
 
 
 def find_output_object_uuid(
@@ -65,7 +69,7 @@ def find_output_object_uuid(
     Primary path: consult the bijective ``action_output_uuids`` mapping.
     Fallback path: legacy heuristic on ``processing_parameters`` metadata.
     """
-    registered = panel.action_output_uuids.get(action.uuid)
+    registered = panel.runtime.objects.action_output_uuids.get(action.uuid)
     if registered:
         existing_ids = set(panel_data.objmodel.get_object_ids())
         for out_uuid in registered:
@@ -93,7 +97,7 @@ def find_action_for_output(
     """Find the :class:`HistoryAction` that produced ``output_uuid``."""
     if not panel.history_sessions:
         return None
-    action_uuid = panel.output_to_action.get(output_uuid)
+    action_uuid = panel.runtime.objects.output_to_action.get(output_uuid)
     if action_uuid is not None:
         mapped = next(
             (
@@ -146,7 +150,7 @@ def find_creation_action_for_output(
     """
     if not panel.history_sessions:
         return None
-    action_uuid = panel.output_to_action.get(output_uuid)
+    action_uuid = panel.runtime.objects.output_to_action.get(output_uuid)
     if action_uuid is not None:
         mapped = next(
             (
@@ -164,7 +168,8 @@ def find_creation_action_for_output(
             if (
                 action.kind == HistoryAction.KIND_UI
                 and action.method_name in HistoryAction.UI_CREATION_METHODS
-                and output_uuid in panel.action_output_uuids.get(action.uuid, [])
+                and output_uuid
+                in panel.runtime.objects.action_output_uuids.get(action.uuid, [])
             ):
                 return action
     return None
@@ -218,15 +223,7 @@ def action_consumes_any(action: HistoryAction, uuids: set[str]) -> bool:
     """Return True if ``action``'s input UUIDs intersect ``uuids``."""
     if action.kind != HistoryAction.KIND_COMPUTE:
         return False
-    pstr = action.panel_str or ""
-    captured: set[str] = set(action.state.selection.get(pstr, []))
-    obj2 = action.kwargs.get("obj2_uuids")
-    if obj2:
-        if isinstance(obj2, str):
-            captured.add(obj2)
-        else:
-            captured.update(obj2)
-    return bool(captured & uuids)
+    return bool(action_input_uuids(action) & uuids)
 
 
 def get_downstream_actions(
@@ -260,7 +257,7 @@ def resolve_target_outputs(
     panel: HistoryPanel, panel_data: BaseDataPanel, action: HistoryAction
 ) -> tuple[list[str], list[str]]:
     """Return ``(existing, missing)`` UUIDs registered for ``action``."""
-    registered = list(panel.action_output_uuids.get(action.uuid, []))
+    registered = list(panel.runtime.objects.action_output_uuids.get(action.uuid, []))
     existing_ids = set(panel_data.objmodel.get_object_ids())
     existing: list[str] = [u for u in registered if u in existing_ids]
     missing: list[str] = [u for u in registered if u not in existing_ids]
@@ -275,14 +272,7 @@ def existing_input_uuids(panel_data: BaseDataPanel, action: HistoryAction) -> li
 
 def prune_output_mapping(panel: HistoryPanel) -> None:
     """Drop entries of :attr:`output_to_action` whose object no longer exists."""
-    if not panel.output_to_action:
-        return
-    alive: set[str] = set()
-    for pdata in (panel.mainwindow.signalpanel, panel.mainwindow.imagepanel):
-        alive.update(pdata.objmodel.get_object_ids())
-    stale = [u for u in panel.output_to_action if u not in alive]
-    for u in stale:
-        panel.output_to_action.pop(u, None)
+    panel.runtime.objects.prune_output_mapping()
 
 
 def rewrite_action_source(
@@ -308,118 +298,140 @@ def remove_single_action(panel: HistoryPanel, action: HistoryAction) -> None:
     for session in panel.history_sessions:
         if action in session.actions:
             session.actions.remove(action)
-            outs = panel.action_output_uuids.pop(action.uuid, [])
-            for out_uuid in outs:
-                if panel.output_to_action.get(out_uuid) == action.uuid:
-                    panel.output_to_action.pop(out_uuid, None)
+            panel.runtime.objects.remove_action_outputs(action)
             if not session.actions:
                 panel.history_sessions.remove(session)
             break
 
 
-def reconnect_single_removed(
+def find_reconnection_source(
+    panel: HistoryPanel, panel_str: str, output_uuid: str
+) -> tuple[HistoryAction | None, str | None]:
+    """Return the action and source UUID behind a removed output."""
+    action_uuid = panel.runtime.objects.output_to_action.get(output_uuid)
+    if action_uuid is None:
+        return None, None
+    for session in panel.history_sessions:
+        for action in session.actions:
+            if action.uuid == action_uuid:
+                selection = action.state.selection.get(panel_str, [])
+                source_uuid = selection[0] if selection else None
+                return action, source_uuid
+    return None, None
+
+
+def plan_reconnection(
     panel: HistoryPanel,
     panel_data: BaseDataPanel,
-    x_uuid: str,
-    warnings: list[str],
-    roots_to_recompute: list[HistoryAction],
-) -> None:
-    """Reconnect consumers of a single deleted object ``x_uuid``."""
-    pstr = panel_data.PANEL_STR_ID
-    action_a = None
-    action_a_uuid = panel.output_to_action.get(x_uuid)
-    if action_a_uuid is not None:
-        for session in panel.history_sessions:
-            for a in session.actions:
-                if a.uuid == action_a_uuid:
-                    action_a = a
-                    break
-            if action_a is not None:
-                break
-    consumers: list[tuple[Any, Any]] = []
+    removed_uuid: str,
+) -> ReconnectionPlan:
+    """Build a reconnection plan without mutating history or data objects."""
+    panel_str = panel_data.PANEL_STR_ID
+    producer_action, source_uuid = find_reconnection_source(
+        panel, panel_str, removed_uuid
+    )
+    plan = ReconnectionPlan(
+        panel_str=panel_str,
+        removed_uuid=removed_uuid,
+        source_uuid=source_uuid,
+        producer_action=producer_action,
+    )
     for obj in panel_data.objmodel:
-        pp = extract_processing_parameters(obj)
-        if pp is None:
+        parameters = extract_processing_parameters(obj)
+        if parameters is None:
             continue
-        if pp.source_uuid == x_uuid or (pp.source_uuids and x_uuid in pp.source_uuids):
-            consumers.append((obj, pp))
-    if not consumers:
-        return
-    s_uuid: str | None = None
-    if action_a is not None:
-        sel = action_a.state.selection.get(pstr, [])
-        if sel:
-            s_uuid = sel[0]
+        consumes_removed = parameters.source_uuid == removed_uuid or (
+            parameters.source_uuids and removed_uuid in parameters.source_uuids
+        )
+        if not consumes_removed:
+            continue
+        action = None
+        if parameters.func_name:
+            action = find_action_for_output(panel, get_uuid(obj), parameters.func_name)
+        plan.targets.append(ReconnectionTarget(get_uuid(obj), parameters, action))
+    if not plan.targets:
+        return plan
     alive_ids = set(panel_data.objmodel.get_object_ids())
-    if s_uuid is None or s_uuid not in alive_ids:
-        label = action_a.title or action_a.func_name if action_a is not None else x_uuid
-        warnings.append(
+    if source_uuid is None or source_uuid not in alive_ids:
+        label = removed_uuid
+        if producer_action is not None:
+            label = producer_action.title or producer_action.func_name or removed_uuid
+        plan.warning = (
             _(
                 "“%s” has dependent operations but no valid source to "
                 "reconnect to — downstream results are left unchanged."
             )
             % label
         )
+        return plan
+    if producer_action is not None:
+        outputs = panel.runtime.objects.action_output_uuids.get(
+            producer_action.uuid, []
+        )
+        plan.remove_producer = not any(output in alive_ids for output in outputs)
+    return plan
+
+
+def apply_reconnection_plan(
+    panel: HistoryPanel,
+    panel_data: BaseDataPanel,
+    plan: ReconnectionPlan,
+    roots_to_recompute: list[HistoryAction],
+) -> None:
+    """Apply object and action source rewrites described by ``plan``."""
+    if plan.warning is not None or plan.source_uuid is None:
         return
-    for obj, pp in consumers:
-        new_source_uuid = s_uuid if pp.source_uuid == x_uuid else pp.source_uuid
-        new_source_uuids = pp.source_uuids
-        if pp.source_uuids and x_uuid in pp.source_uuids:
-            new_source_uuids = [s_uuid if u == x_uuid else u for u in pp.source_uuids]
+    for target in plan.targets:
+        if not panel_data.objmodel.has_uuid(target.object_uuid):
+            continue
+        obj = panel_data.objmodel[target.object_uuid]
         insert_processing_parameters(
             obj,
-            ProcessingParameters(
-                func_name=pp.func_name,
-                pattern=pp.pattern,
-                param=pp.param,
-                source_uuid=new_source_uuid,
-                source_uuids=new_source_uuids,
+            remap_processing_parameters(
+                target.parameters, {plan.removed_uuid: plan.source_uuid}
             ),
         )
-        if pp.func_name:
-            action_b = find_action_for_output(panel, get_uuid(obj), pp.func_name)
-            if action_b is not None:
-                rewrite_action_source(action_b, pstr, x_uuid, s_uuid)
-                if action_b not in roots_to_recompute:
-                    roots_to_recompute.append(action_b)
-    if action_a is not None:
-        outs = panel.action_output_uuids.get(action_a.uuid, [])
-        if not any(o in alive_ids for o in outs):
-            remove_single_action(panel, action_a)
+        if target.action is not None:
+            rewrite_action_source(
+                target.action,
+                plan.panel_str,
+                plan.removed_uuid,
+                plan.source_uuid,
+            )
+            if target.action not in roots_to_recompute:
+                roots_to_recompute.append(target.action)
+    if plan.remove_producer and plan.producer_action is not None:
+        remove_single_action(panel, plan.producer_action)
 
 
-def reconnect_chain_after_removal(
-    panel: HistoryPanel, panel_data: BaseDataPanel
+def reconnect_single_removed(
+    panel: HistoryPanel,
+    panel_data: BaseDataPanel,
+    removed_uuid: str,
+    warnings: list[str],
+    roots_to_recompute: list[HistoryAction],
 ) -> None:
-    """Reconnect the processing chain after object(s) were deleted from a data panel."""
-    pstr = panel_data.PANEL_STR_ID
-    previous = panel.obj_ids_snapshot.get(pstr, set())
-    current = set(panel_data.objmodel.get_object_ids())
-    removed = previous - current
-    if not removed or panel.reconnecting:
-        return
-    panel.reconnecting = True
-    try:
-        warnings: list[str] = []
-        roots_to_recompute: list[HistoryAction] = []
-        for x_uuid in removed:
-            reconnect_single_removed(
-                panel, panel_data, x_uuid, warnings, roots_to_recompute
-            )
-        for action in roots_to_recompute:
-            hrec.recompute_action_in_place(panel, action)
-            hrec.recompute_cascade(panel, action)
-        if warnings and not execenv.unattended:
-            QW.QMessageBox.warning(
-                panel.mainwindow,
-                _("Delete"),
-                _("Some operations could not be reconnected after deletion:")
-                + "\n\n• "
-                + "\n• ".join(warnings),
-            )
-        panel.tree.populate_tree(panel.history_sessions)
-        panel.refresh_compatibility_items()
-        panel.update_actions_state()
-    finally:
-        panel.reconnecting = False
-        panel.refresh_obj_ids_snapshot()
+    """Plan and reconnect consumers of one deleted object."""
+    plan = plan_reconnection(panel, panel_data, removed_uuid)
+    apply_reconnection_plan(panel, panel_data, plan, roots_to_recompute)
+    if plan.warning is not None:
+        warnings.append(plan.warning)
+
+
+def show_reconnection_warnings(panel: HistoryPanel, warnings: list[str]) -> None:
+    """Show reconnection warnings at the GUI boundary."""
+    if warnings and not execenv.unattended:
+        QW.QMessageBox.warning(
+            panel.mainwindow,
+            _("Delete"),
+            _("Some operations could not be reconnected after deletion:")
+            + "\n\n• "
+            + "\n• ".join(warnings),
+        )
+
+
+def refresh_reconnected_history(panel: HistoryPanel) -> None:
+    """Refresh the history tree after applying reconnection plans."""
+    panel.tree.populate_tree(panel.history_sessions)
+    panel.refresh_compatibility_items()
+    panel.ui.update_actions_state()
