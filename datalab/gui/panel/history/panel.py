@@ -105,21 +105,44 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self.broken_actions: set[str] = set()
         self.reconnecting = False
         self.obj_ids_snapshot: dict[str, set[str]] = {}
+        self.tracking_enabled = False
+        self.object_tracking_connections: list[tuple[Any, Any]] = []
         for panel in (self.mainwindow.signalpanel, self.mainwindow.imagepanel):
-            panel.SIG_OBJECT_ADDED.connect(self.refresh_compatibility_items)
-            panel.SIG_OBJECT_ADDED.connect(self.refresh_obj_ids_snapshot)
-            panel.SIG_OBJECT_REMOVED.connect(self.refresh_compatibility_items)
-            panel.SIG_OBJECT_REMOVED.connect(
-                functools.partial(self.reconnect_chain_after_removal, panel)
+            self.object_tracking_connections.extend(
+                (
+                    (panel.SIG_OBJECT_ADDED, self.refresh_compatibility_items),
+                    (panel.SIG_OBJECT_ADDED, self.refresh_obj_ids_snapshot),
+                    (panel.SIG_OBJECT_REMOVED, self.refresh_compatibility_items),
+                    (
+                        panel.SIG_OBJECT_REMOVED,
+                        functools.partial(self.reconnect_chain_after_removal, panel),
+                    ),
+                    (panel.SIG_OBJECT_REMOVED, self.prune_output_mapping),
+                    (panel.SIG_OBJECT_MODIFIED, self.refresh_compatibility_items),
+                )
             )
-            panel.SIG_OBJECT_REMOVED.connect(self.prune_output_mapping)
-            panel.SIG_OBJECT_MODIFIED.connect(self.refresh_compatibility_items)
+        self.set_tracking_enabled(True)
         self.refresh_obj_ids_snapshot()
         self.update_actions_state()
         self.refresh_compatibility_items()
         if not execenv.unattended and Conf.proc.history_auto_record.get(False):
             self._record_action.setChecked(True)
             self.create_new_session()
+
+    def set_tracking_enabled(self, enabled: bool) -> None:
+        """Enable or disable synchronization with data panel object changes.
+
+        Args:
+            enabled: Whether object tracking callbacks should be connected
+        """
+        if enabled == self.tracking_enabled:
+            return
+        for signal, callback in self.object_tracking_connections:
+            if enabled:
+                signal.connect(callback)
+            else:
+                signal.disconnect(callback)
+        self.tracking_enabled = enabled
 
     def refresh_obj_ids_snapshot(self) -> None:
         """Cache the current object ids of both data panels."""

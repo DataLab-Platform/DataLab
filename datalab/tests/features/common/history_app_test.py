@@ -43,7 +43,7 @@ def _session_action_counts(history) -> list[int]:
 
 def test_history_app():
     """Run history application test scenario"""
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         dock = win.docks[history]
         win.addDockWidget(QC.Qt.LeftDockWidgetArea, dock)

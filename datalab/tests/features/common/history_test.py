@@ -289,7 +289,7 @@ def test_history_persistence():
     assert rstate.object_metadata["signal"] == {"uuid-1": {"shape": [10], "ndim": 1}}
 
     # GUI-bound HDF5 scenarios run inside one app context.
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         panel = win.signalpanel
 
@@ -397,7 +397,7 @@ def test_history_persistence():
     tmpdir = tempfile.mkdtemp()
     try:
         path = os.path.join(tmpdir, "test.dlhist")
-        with datalab_test_app_context() as win:
+        with datalab_test_app_context(history=True) as win:
             history = win.historypanel
             history.toggle_record_mode(True)
             panel = win.signalpanel
@@ -408,7 +408,7 @@ def test_history_persistence():
             original_func_names = [a.func_name for a in history]
             assert len(original_titles) >= 1
             assert history.save_to_dlhist_file(path)
-        with datalab_test_app_context() as win2:
+        with datalab_test_app_context(history=True) as win2:
             history2 = win2.historypanel
             panel2 = win2.signalpanel
             assert len(panel2.objmodel) == 0
@@ -425,7 +425,7 @@ def test_history_persistence():
         shutil.rmtree(tmpdir, ignore_errors=True)
 
     # --- scenario: incompatible when selected UUID disappears ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         panel = win.signalpanel
         panel.add_object(create_paracetamol_signal())
         obj = panel.objmodel.get_object_from_number(1)
@@ -491,7 +491,7 @@ def test_history_persistence():
         assert item.foreground(0).color().isValid()
 
     # --- scenario: action WorkspaceState is panel-scoped ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         spanel, ipanel = win.signalpanel, win.imagepanel
@@ -529,7 +529,7 @@ def test_history_persistence():
 
 def test_history_recording_and_replay(monkeypatch):
     """Recording, per-pattern replay, session replay, fit replay & capture."""
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -570,7 +570,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert new_pp.source_uuid == src_uuid
 
     # --- scenario: UI rename capture + replay ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -612,7 +612,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert entry.state.selection.get(panel.PANEL_STR_ID) == [obj_uuid]
 
     # --- scenario: add_metadata replay ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -632,7 +632,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert obj.metadata.get("replay_test_key") == "replay_value_1"
 
     # --- scenario: ROI copy/paste capture + deterministic replay ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -677,7 +677,7 @@ def test_history_recording_and_replay(monkeypatch):
     monkeypatch.setattr(
         BaseDataPanel, "_BaseDataPanel__save_to_file", fake_save_to_file
     )
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         with helpers.WorkdirRestoringTempDir() as tmpdir:
             history = win.historypanel
             history.toggle_record_mode(True)
@@ -712,7 +712,7 @@ def test_history_recording_and_replay(monkeypatch):
             assert saved_paths[-1] == saved_paths[-2]
 
     # --- scenario: multiple_1_to_1 replay raises NotImplementedError ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         action = HistoryAction(
             title="dummy multiple_1_to_1",
             kind=HistoryAction.KIND_COMPUTE,
@@ -733,7 +733,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert len(panel.objmodel) == n_before + 1
 
     # --- scenario: 1_to_n extract_roi replay (persistent direct replay) ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -756,7 +756,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert len(panel.objmodel) - n_before_replay == n_added_first
 
     # --- scenario: n_to_1 forces captured selection ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -785,7 +785,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert len(panel.objmodel) == n_before + 1
 
     # --- scenario: n_to_1 passes recorded pairwise flag ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         panel = win.signalpanel
         captured: dict = {}
 
@@ -806,7 +806,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert captured["pairwise"] is True
 
     # --- scenario: 2_to_1 with vanished obj2 raises ValueError ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -823,7 +823,7 @@ def test_history_recording_and_replay(monkeypatch):
             diff_entry.replay(win, restore_selection=False, edit=False)
 
     # --- scenario: 2_to_1 replay translates obj2 UUIDs and passes pairwise ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         panel = win.signalpanel
         panel.add_object(create_paracetamol_signal())
         obj2 = panel.objmodel.get_object_from_number(1)
@@ -853,7 +853,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert captured["pairwise"] is True
 
     # scenario: replay_restore_actions(replay=True) on 1_to_1 does NOT add output
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -869,7 +869,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert len(history) == n_history_before
 
     # --- scenario: reset_all starts a new session and preserves history ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         panel = win.signalpanel
         win.reset_all()
@@ -893,7 +893,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert history[2].title == _("New signal")
 
     # --- scenario: full session replay on existing data ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -910,7 +910,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert len(panel.objmodel) == n_before + 1
 
     # --- scenario: chained compute session replay (output queue remap) ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -929,7 +929,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert len(panel.objmodel) == n_before + 3
 
     # --- scenario: direct HistoryAction.replay() does NOT record new entries ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         panel = win.signalpanel
         history.toggle_record_mode(True)
@@ -947,7 +947,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert sum(len(s.actions) for s in history.history_sessions) == n_before
 
     # --- scenario: direct HistorySession.replay() does NOT record entries ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         panel = win.signalpanel
         history.toggle_record_mode(True)
@@ -963,7 +963,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert sum(len(s.actions) for s in history.history_sessions) == n_before
 
     # --- scenario: panel API session replay skips UI-creation, no output ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -979,7 +979,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert len(history) == n_history_before
 
     # --- scenario: replay whole session when no tree selection ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -994,7 +994,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert len(history) == n_history_before
 
     # --- scenario: 2_to_1 with primary = #1, obj2 = #2 ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -1014,7 +1014,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert len(panel.objmodel) == n_before
 
     # --- scenario: duplicate_object registers duplicated outputs ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         panel = win.signalpanel
         history.toggle_record_mode(True)
@@ -1032,7 +1032,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert history.output_to_action[first_output] == dup_action.uuid
 
     # --- interactive curve-fit record + .dlhist round-trip + replay ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         panel = win.signalpanel
 
@@ -1096,7 +1096,7 @@ def test_history_recording_and_replay(monkeypatch):
         assert np.allclose(new_obj.y, expected_y)
 
     # --- capture_outputs funnel: drop failed producing computes ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -1158,7 +1158,7 @@ def test_history_recording_and_replay(monkeypatch):
 def test_history_duplication():
     """Action/session duplication, UUID remap, ordering + creation-root cases."""
     # --- scenario: duplicating an action creates an independent copy ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -1189,7 +1189,7 @@ def test_history_duplication():
         assert len(panel.objmodel) > n_before
 
     # --- scenario: duplicating a session copies all actions independently ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -1213,7 +1213,7 @@ def test_history_duplication():
         assert dup_a.kwargs["param"] is not orig_a.kwargs["param"]
 
     # --- scenario: duplicate clones data AND remaps UUIDs ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -1252,7 +1252,7 @@ def test_history_duplication():
         assert len(history) == n_history_before
 
     # --- scenario: duplicated session preserves topological object order ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -1286,7 +1286,7 @@ def test_history_duplication():
         assert clonable == dup_suffixes
 
     # --- scenario: cas A — creation-rooted chain copies creation (no head) ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -1318,7 +1318,7 @@ def test_history_duplication():
                     assert o.isdisjoint(d)
 
     # --- scenario: cas B — operation-rooted chain synthesizes head ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -1369,7 +1369,7 @@ def test_history_duplication():
 def test_history_editing_and_cascade():
     """Processing-tab edit propagation, step-by-step, cascade & invariants."""
     # --- scenario: edit updates current session action and refreshes html ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         history.toggle_edit_mode(True)
@@ -1401,7 +1401,7 @@ def test_history_editing_and_cascade():
         assert action.kwargs["param"].sigma == 3.5
 
     # --- scenario: edit does NOT touch a past session ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         history.toggle_edit_mode(True)
@@ -1435,7 +1435,7 @@ def test_history_editing_and_cascade():
         assert past_action.kwargs["param"].sigma == 1.0
 
     # --- scenario: restore selection only (replay=False) ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -1455,7 +1455,7 @@ def test_history_editing_and_cascade():
         assert panel.objview.get_sel_object_uuids() == [src_uuid]
 
     # --- scenario: step-by-step launch commits edits immediately ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -1474,7 +1474,7 @@ def test_history_editing_and_cascade():
         assert history.has_any_pending_edits() is False
 
     # --- scenario: downstream detection ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -1485,7 +1485,7 @@ def test_history_editing_and_cascade():
         assert history.get_downstream_actions(action_b) == [action_c]
 
     # --- scenario: cascade recompute updates downstream outputs in place ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         history.toggle_edit_mode(True)
@@ -1518,7 +1518,7 @@ def test_history_editing_and_cascade():
             assert a.is_stale is False
 
     # --- scenario: play on stale action triggers cascade ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -1534,7 +1534,7 @@ def test_history_editing_and_cascade():
         assert not np.array_equal(panel.objmodel[uuid_b].xydata, tampered)
 
     # --- scenario: cascade in a duplicated session that is NOT [-1] ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         history.toggle_edit_mode(True)
@@ -1586,7 +1586,7 @@ def test_history_editing_and_cascade():
     from datalab.gui.panel.history import recompute as hrec
 
     # --- scenario: editing a created Gauss signal cascades to downstream ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         history.toggle_edit_mode(True)
@@ -1666,7 +1666,7 @@ def test_history_editing_and_cascade():
 
     # --- cascade-recompute characterization invariants (pre-P3 slimming) ---
     # --- scenario: cascade recompute call-count is bounded (no infinite loop) ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         history.toggle_edit_mode(True)
@@ -1716,7 +1716,7 @@ def test_history_editing_and_cascade():
         assert np.array_equal(src_obj.xydata, src_data_before)
 
     # --- scenario: cascade recompute preserves output metadata ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         history.toggle_edit_mode(True)
@@ -1749,7 +1749,7 @@ def test_history_editing_and_cascade():
 def test_history_navigation_and_chains(monkeypatch):
     """Stepping/selection sync, chain reconnect/grouping/split & sessions."""
     # --- scenario: step_next walks forward through current session ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         _panel, history = _record_three_action_session(win)
         sessions = history.history_sessions
         actions = sessions[-1].actions
@@ -1776,7 +1776,7 @@ def test_history_navigation_and_chains(monkeypatch):
         assert history.tree.currentItem().data(0, QC.Qt.UserRole) == first_uuid
 
     # --- scenario: step button enabled state reflects position ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         prev_btn = history.step_prev_action
         next_btn = history.step_next_action
@@ -1800,7 +1800,7 @@ def test_history_navigation_and_chains(monkeypatch):
         assert not next_btn.isEnabled()
 
     # --- scenario: selecting a compute action selects its output ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -1827,7 +1827,7 @@ def test_history_navigation_and_chains(monkeypatch):
         assert panel.objview.get_sel_object_uuids() == [src_uuid]
 
     # --- scenario: deleting intermediate result rewires downstream to source ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -1857,7 +1857,7 @@ def test_history_navigation_and_chains(monkeypatch):
         assert src_uuid in reconnected_uuids
 
     # --- scenario: chain read-model groups actions into ordered chains ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -1917,7 +1917,7 @@ def test_history_navigation_and_chains(monkeypatch):
         assert callable(build_session_chains)
 
     # --- scenario: deleting an intermediate action splits its chain ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         panel = win.signalpanel
@@ -1972,7 +1972,7 @@ def test_history_navigation_and_chains(monkeypatch):
 
     # --- new-session prompt when creating on a non-empty session ---
     # --- scenario: user accepts the prompt -> a new session is opened ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
 
@@ -1991,7 +1991,7 @@ def test_history_navigation_and_chains(monkeypatch):
         assert new_session.actions[0].method_name == "new_object"
 
     # --- scenario: user declines the prompt -> no new session is created ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         win.add_object(create_paracetamol_signal())
@@ -2004,7 +2004,7 @@ def test_history_navigation_and_chains(monkeypatch):
         assert len(history.history_sessions) == n_sessions
 
     # --- scenario: recording routes per-panel into separate active sessions ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         spanel, ipanel = win.signalpanel, win.imagepanel
@@ -2054,7 +2054,7 @@ def test_history_navigation_and_chains(monkeypatch):
         assert len(image_session.actions) == 1  # image untouched
 
     # --- scenario: each panel's active session is highlighted (bold) ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         spanel, ipanel = win.signalpanel, win.imagepanel
@@ -2098,7 +2098,7 @@ def test_history_navigation_and_chains(monkeypatch):
         assert _is_bold(image_session)
 
     # --- scenario: compatibility refresh tolerates a stale tree (regression) ---
-    with datalab_test_app_context() as win:
+    with datalab_test_app_context(history=True) as win:
         history = win.historypanel
         history.toggle_record_mode(True)
         spanel = win.signalpanel

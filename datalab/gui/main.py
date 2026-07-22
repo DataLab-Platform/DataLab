@@ -900,8 +900,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.check_stable_release()
         self.check_for_previous_crash()
         self.check_for_v020_plugins()
-        tour = Conf.main.tour_enabled.get()
-        if tour:
+        if not execenv.unattended and Conf.main.tour_enabled.get():
             Conf.main.tour_enabled.set(False)
             self.show_tour()
         # Auto-start WebAPI server if environment variable is set
