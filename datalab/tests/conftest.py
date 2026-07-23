@@ -137,6 +137,17 @@ def restore_datalab_options_env():
         os.environ[env_var] = original
 
 
+@pytest.fixture(autouse=True)
+def cleanup_background_datalab_process():
+    """Clean background DataLab processes and shared test state per test."""
+    yield
+    # Lazy import avoids a conftest/tests package import cycle.
+    # pylint: disable=import-outside-toplevel
+    from datalab.tests import cleanup_datalab_background
+
+    cleanup_datalab_background()
+
+
 @pytest.hookimpl(tryfirst=True)
 def pytest_runtest_teardown(item, nextitem):  # pylint: disable=unused-argument
     """Run teardown after each test."""
