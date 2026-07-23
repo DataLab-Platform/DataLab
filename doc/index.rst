@@ -3,7 +3,7 @@ DataLab
 
 .. meta::
     :description: Home of DataLab, the open-source platform for scientific and technical data processing and visualization
-    :keywords: DataLab, scientific, data, processing, visualization, open-source, platform, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, Sigima, CODRA, Pierre Raybaut
+    :keywords: DataLab, scientific, data, processing, visualization, open-source, platform, DataLab Platform, DataLab-Web, browser, WebAssembly, Pyodide, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, Sigima, CODRA, Pierre Raybaut
 
 DataLab is an **open-source platform for signal and image processing and visualization**
 for research, education and industry. Leveraging the richness of the scientific Python
@@ -14,11 +14,17 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
 .. only:: html and not latex
 
-    .. dropdown:: Notice for users upgrading from DataLab v0.20
+    .. dropdown:: :octicon:`browser;1em;sd-text-info` DataLab-Web -- the browser-native edition (no install)
         :animate: fade-in
-        :icon: alert
+        :icon: rocket
 
-        DataLab v1.0 introduces breaking changes. Plugins must be updated to work with the new version. See the :ref:`migration guide <migration_v020_to_v100>` for details.
+        **DataLab-Web** is the browser-native edition of the platform: the full feature set
+        runs inside your browser tab -- no install, and your data never leaves your machine.
+
+        :octicon:`rocket;1em;sd-text-info` **Try it now:** `datalab-platform.com/web <https://datalab-platform.com/web/>`_
+
+        Learn more about the DataLab Platform and its editions in the
+        :doc:`ecosystem overview <intro/ecosystem>`.
 
 .. only:: html and not latex
 

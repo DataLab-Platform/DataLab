@@ -109,14 +109,6 @@ def setup(app):
 
             # Suppress warnings about excluded API documents during gettext builds
             app.config.suppress_warnings.extend(["toc.excluded", "ref.doc"])
-            # The HTML/LaTeX builds define per-output image substitutions with
-            # the same names (px for HTML, cm for LaTeX) inside `only::` blocks
-            # -- see doc/index.rst and doc/intro/index.rst. docutils registers
-            # substitution definitions at read time, before `only` filtering, so
-            # it flags them as duplicates. They are harmless for gettext (which
-            # extracts strings, not images); suppress them so the `-W` gettext
-            # build does not fail.
-            app.config.suppress_warnings.append("docutils")
 
     app.connect("builder-inited", exclude_outreach_from_latex)
     app.connect("builder-inited", exclude_api_from_gettext)
@@ -152,6 +144,16 @@ extensions = [
 templates_path = ["_templates"]
 exclude_patterns = []
 
+# The HTML/LaTeX builds define per-output image substitutions with the same
+# names (px for HTML, cm for LaTeX) inside `only::` blocks -- see
+# doc/index.rst and doc/intro/index.rst. docutils registers substitution
+# definitions at read time, before `only` filtering, so it flags them as
+# duplicates ("Duplicate substitution definition name"). They are harmless
+# (each builder only ever renders one definition); suppress the docutils
+# system messages so every build -- HTML, LaTeX and the `-W` gettext build --
+# stays clean.
+suppress_warnings = ["docutils"]
+
 # Per-language figure resolution: if e.g. ``foo.png`` is referenced, Sphinx
 # will use ``foo.<language>.png`` when available, falling back to ``foo.png``
 # otherwise. This is how the maintainer-refreshed UI screenshots under
@@ -172,9 +174,9 @@ html_favicon = "_static/favicon.ico"
 html_show_sourcelink = False
 templates_path = ["_templates"]
 if "language=fr" in sys.argv:
-    ann = "DataLab a été présenté à <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> 🐍, <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>, <a href='https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK'>OSXP 2024</a> et <a href='https://www.youtube.com/watch?v=0D4ffBJIc5Q&list=PLJjbbmRgu6RoVze2tajiPe3zJB5muBcuC'>OSXP 2025</a> 🚀 — <a href='https://datalab-platform.com/fr/outreach/index.html'>En savoir plus</a>"  # noqa: E501
+    ann = "DataLab sera présenté à la conférence <a href='https://pretalx.com/euroscipy-2026/talk/E3X9EX/'>EuroSciPy 2026</a> 🇵🇱 et a été présenté à <a href='https://www.youtube.com/watch?v=0D4ffBJIc5Q&list=PLJjbbmRgu6RoVze2tajiPe3zJB5muBcuC'>OSXP 2025</a> 🚀 — <a href='https://datalab-platform.com/fr/outreach/index.html'>En savoir plus</a>"  # noqa: E501
 else:
-    ann = "DataLab has been presented at <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> 🐍, <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>, <a href='https://www.opensource-experience.com/'>OSXP 2024</a>, and <a href='https://datalab-platform.com/en/outreach/osxp2025.html'>OSXP 2025</a> 🚀 — <a href='https://datalab-platform.com/en/outreach/index.html'>Learn more</a>"  # noqa: E501
+    ann = "DataLab will be presented at the <a href='https://pretalx.com/euroscipy-2026/talk/E3X9EX/'>EuroSciPy 2026</a> conference 🇵🇱 and has been presented at <a href='https://datalab-platform.com/en/outreach/osxp2025.html'>OSXP 2025</a> 🚀 — <a href='https://datalab-platform.com/en/outreach/index.html'>Learn more</a>"  # noqa: E501
 html_theme_options = {
     "show_toc_level": 2,
     "github_url": "https://github.com/DataLab-Platform/DataLab/",
@@ -225,6 +227,7 @@ intersphinx_mapping = {
     "h5py": ("https://docs.h5py.org/en/stable/", None),
     "guidata": ("https://guidata.readthedocs.io/en/latest/", None),
     "plotpy": ("https://plotpy.readthedocs.io/en/latest/", None),
+    "sigima": ("https://sigima.readthedocs.io/en/latest/", None),
 }
 
 # -- Latex macros for math in docstrings -------------------------------------
