@@ -149,7 +149,7 @@ def test_analysis_recompute_after_roi_change():
 
 def test_analysis_recompute_after_recompute_1_to_1():
     """Test automatic recomputation of analysis after processing parameter changes."""
-    with datalab_test_app_context(console=False) as win:
+    with datalab_test_app_context(console=False, history=True) as win:
         panel = win.imagepanel
 
         # Create a Gaussian image offset from center

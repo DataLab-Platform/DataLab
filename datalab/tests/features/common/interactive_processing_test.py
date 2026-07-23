@@ -149,7 +149,7 @@ def test_processing_without_parameters():
 def test_recompute():
     """Test recompute feature for signals"""
     with qt_app_context():
-        with datalab_test_app_context() as win:
+        with datalab_test_app_context(history=True) as win:
             panel = win.signalpanel
             processor = panel.processor
 
@@ -370,7 +370,7 @@ def test_no_creation_parameters_for_base_classes():
 def test_apply_processing_parameters_signal():
     """Test apply_processing_parameters for signals"""
     with qt_app_context():
-        with datalab_test_app_context() as win:
+        with datalab_test_app_context(history=True) as win:
             panel = win.signalpanel
             processor = panel.processor
             objprop = panel.objprop
@@ -436,7 +436,7 @@ def test_apply_processing_parameters_signal():
 def test_apply_processing_parameters_image():
     """Test apply_processing_parameters for images"""
     with qt_app_context():
-        with datalab_test_app_context() as win:
+        with datalab_test_app_context(history=True) as win:
             panel = win.imagepanel
             processor = panel.processor
             objprop = panel.objprop
@@ -501,7 +501,7 @@ def test_apply_processing_parameters_image():
 def test_apply_processing_parameters_explicit_param():
     """apply_processing_parameters honors an explicit param, ignoring the editor."""
     with qt_app_context():
-        with datalab_test_app_context() as win:
+        with datalab_test_app_context(history=True) as win:
             panel = win.signalpanel
             processor = panel.processor
             objprop = panel.objprop
@@ -676,7 +676,7 @@ def test_apply_processing_parameters_missing_source():
 def test_cross_panel_image_to_signal():
     """Test cross-panel processing: Image → Signal (radial profile)"""
     with qt_app_context():
-        with datalab_test_app_context() as win:
+        with datalab_test_app_context(history=True) as win:
             image_panel = win.imagepanel
             signal_panel = win.signalpanel
             image_processor = image_panel.processor
@@ -1094,7 +1094,7 @@ def test_roi_mask_invalidation_on_processing_change():
     5. Verify ROI mask is properly recomputed
     """
     with qt_app_context():
-        with datalab_test_app_context() as win:
+        with datalab_test_app_context(history=True) as win:
             panel = win.imagepanel
             objprop = panel.objprop
 

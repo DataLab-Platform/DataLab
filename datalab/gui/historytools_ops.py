@@ -5,7 +5,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from uuid import uuid4
 
 from qtpy import QtWidgets as QW
@@ -14,8 +14,15 @@ from datalab.config import _
 from datalab.env import execenv
 from datalab.gui.panel.history import chain as hchain
 from datalab.gui.panel.history.chainmodel import (
+    ChainSelectionPlan,
+    DeletionPlan,
+    DeletionResult,
+    DuplicatedSession,
     ProcessingChain,
+    UuidCloneRegistry,
+    action_input_uuids,
     build_session_chains,
+    remap_processing_parameters,
 )
 from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
@@ -73,33 +80,24 @@ def make_initial_state_head(pstr: str, clone_uuid: str, title: str) -> HistoryAc
     return head
 
 
-def duplicate_selected_entries(panel: HistoryPanel) -> None:
-    """Duplicate selected processing chains into new independent sessions.
+def append_action_chain(
+    action: HistoryAction,
+    all_chains: list[ProcessingChain],
+    seen_chains: set[int],
+    chains: list[ProcessingChain],
+) -> None:
+    """Append the unseen processing chain containing the selected action."""
+    for chain in all_chains:
+        if any(item is action or item.uuid == action.uuid for item in chain.actions):
+            if id(chain) not in seen_chains:
+                seen_chains.add(id(chain))
+                chains.append(chain)
+            break
 
-    Selection is resolved to *processing chains* (see
-    :func:`build_session_chains`): a session **is** a single linear processing
-    chain, so selecting a session duplicates its chain, and selecting an action
-    duplicates the chain of its session. For each source session, exactly one
-    new session is produced containing the duplicate of its chain, with all
-    referenced data objects deep-copied into a new group and every UUID
-    reference rewritten to the clones.
 
-    Two chain shapes are handled:
-
-    * **Cas A** -- creation-rooted chain (root is a ``new_object`` UI action):
-      the chain is copied as-is (root included), no synthetic head is added.
-    * **Cas B** -- operation-rooted chain (root consumes an external object):
-      one synthetic ``new_object`` head is prepended per distinct remapped
-      source object so the duplicated chain remains self-contained and
-      replayable.
-
-    The result is an independent, editable and replayable session.
-    """
+def resolve_chain_selection(panel: HistoryPanel) -> list[ChainSelectionPlan]:
+    """Resolve tree selection to ordered processing chains per source session."""
     selected = panel.tree.get_selected_actions_or_sessions(panel.history_sessions)
-    if not selected:
-        return
-
-    # 1. Resolve selection to a per-session set of chains.
     session_by_id: dict[int, HistorySession] = {}
     full_session_ids: set[int] = set()
     actions_by_session: dict[int, list[HistoryAction]] = {}
@@ -108,212 +106,221 @@ def duplicate_selected_entries(panel: HistoryPanel) -> None:
             session_by_id[id(item)] = item
             full_session_ids.add(id(item))
         else:
-            session = panel.find_parent_session(item)
+            session = hchain.find_parent_session(panel, item)
             if session is None:
                 continue
             session_by_id[id(session)] = session
             actions_by_session.setdefault(id(session), []).append(item)
 
     # Preserve source-session order (iterate panel.history_sessions).
-    ordered: list[tuple[HistorySession, list[ProcessingChain]]] = []
+    plans: list[ChainSelectionPlan] = []
     for session in panel.history_sessions:
         sid = id(session)
         if sid not in session_by_id:
             continue
-        all_chains = build_session_chains(panel, session)
+        all_chains = build_session_chains(session)
         if sid in full_session_ids:
             chains = all_chains
         else:
             chains = []
             seen_chains: set[int] = set()
             for action in actions_by_session.get(sid, []):
-                for chain in all_chains:
-                    if any(a is action or a.uuid == action.uuid for a in chain.actions):
-                        if id(chain) not in seen_chains:
-                            seen_chains.add(id(chain))
-                            chains.append(chain)
-                        break
+                append_action_chain(action, all_chains, seen_chains, chains)
         if chains:
-            ordered.append((session, chains))
-    if not ordered:
+            plans.append(ChainSelectionPlan(session, chains))
+    return plans
+
+
+def collect_referenced_uuids(chains: list[ProcessingChain]) -> dict[str, set[str]]:
+    """Collect object UUIDs referenced or produced by selected chains."""
+    uuids_by_panel: dict[str, set[str]] = {}
+    for chain in chains:
+        for action in chain.actions:
+            for panel_str, uuids in action.state.selection.items():
+                uuids_by_panel.setdefault(panel_str, set()).update(uuids)
+            for panel_str, metadata in action.state.object_metadata.items():
+                uuids_by_panel.setdefault(panel_str, set()).update(metadata)
+            obj2_uuids = action.kwargs.get("obj2_uuids")
+            if obj2_uuids:
+                panel_str = action_panel_str(action)
+                if isinstance(obj2_uuids, str):
+                    obj2_uuids = [obj2_uuids]
+                uuids_by_panel.setdefault(panel_str, set()).update(obj2_uuids)
+            if action.output_uuids:
+                panel_str = action_panel_str(action)
+                uuids_by_panel.setdefault(panel_str, set()).update(action.output_uuids)
+    return uuids_by_panel
+
+
+def set_object_uuid(obj: Any, new_uuid: str) -> None:
+    """Set a cloned data object's UUID through its supported storage API."""
+    try:
+        obj.set_metadata_option("uuid", new_uuid)
+    except AttributeError:
+        obj.uuid = new_uuid
+
+
+def clone_referenced_objects(
+    panel: HistoryPanel, plan: ChainSelectionPlan, copy_suffix: str
+) -> UuidCloneRegistry:
+    """Clone a selection plan's objects and register source-to-clone UUIDs."""
+    registry = UuidCloneRegistry()
+    group_title = f"{copy_suffix} - {plan.source_session.title}"
+    for panel_str, referenced in collect_referenced_uuids(plan.chains).items():
+        data_panel = data_panel_for(panel, panel_str)
+        if data_panel is None:
+            continue
+        ordered_uuids = [
+            obj_uuid
+            for obj_uuid in data_panel.objmodel.get_object_ids()
+            if obj_uuid in referenced
+        ]
+        clones: list[Any] = []
+        for old_uuid in ordered_uuids:
+            clone = deepcopy(data_panel.objmodel[old_uuid])
+            new_uuid = str(uuid4())
+            set_object_uuid(clone, new_uuid)
+            registry.register(panel_str, old_uuid, new_uuid, clone)
+            clones.append(clone)
+        if clones:
+            group_id = get_uuid(data_panel.add_group(group_title))
+            for clone in clones:
+                data_panel.add_object(clone, group_id=group_id)
+    return registry
+
+
+def remap_cloned_object_sources(registry: UuidCloneRegistry) -> None:
+    """Rewrite processing-parameter source UUIDs in all cloned objects."""
+    for panel_str, clones in registry.clones_by_panel.items():
+        panel_remap = registry.uuid_remap.get(panel_str, {})
+        for clone in clones:
+            try:
+                parameters_dict = clone.get_metadata_option(
+                    PROCESSING_PARAMETERS_OPTION
+                )
+            except (AttributeError, ValueError):
+                continue
+            if not parameters_dict:
+                continue
+            try:
+                parameters = ProcessingParameters.from_dict(parameters_dict)
+            except (TypeError, ValueError, AttributeError):
+                continue
+            remapped = remap_processing_parameters(parameters, panel_remap)
+            if remapped == parameters:
+                continue
+            try:
+                clone.set_metadata_option(
+                    PROCESSING_PARAMETERS_OPTION, remapped.to_dict()
+                )
+            except (AttributeError, ValueError):
+                continue
+
+
+def chain_root_inputs(action: HistoryAction) -> list[tuple[str, str]]:
+    """Return panel-qualified source UUIDs consumed by a chain root."""
+    inputs = [
+        (panel_str, old_uuid)
+        for panel_str, uuids in action.state.selection.items()
+        for old_uuid in uuids
+    ]
+    obj2_uuids = action.kwargs.get("obj2_uuids")
+    if isinstance(obj2_uuids, str):
+        obj2_uuids = [obj2_uuids]
+    if obj2_uuids:
+        panel_str = action_panel_str(action)
+        inputs.extend((panel_str, old_uuid) for old_uuid in obj2_uuids)
+    return inputs
+
+
+def make_synthetic_heads(
+    panel: HistoryPanel, chain: ProcessingChain, registry: UuidCloneRegistry
+) -> list[HistoryAction]:
+    """Create one independent creation head per cloned external root input."""
+    heads: list[HistoryAction] = []
+    seen_clones: set[str] = set()
+    for panel_str, old_uuid in chain_root_inputs(chain.root):
+        clone_uuid = registry.resolve(panel_str, old_uuid)
+        if clone_uuid is None or clone_uuid in seen_clones:
+            continue
+        seen_clones.add(clone_uuid)
+        head_title = _("Initial state")
+        data_panel = data_panel_for(panel, panel_str)
+        if data_panel is not None:
+            try:
+                head_title = data_panel.objmodel[clone_uuid].title
+            except (KeyError, AttributeError):
+                pass
+        heads.append(make_initial_state_head(panel_str, clone_uuid, head_title))
+    return heads
+
+
+def assemble_duplicated_actions(
+    panel: HistoryPanel, plan: ChainSelectionPlan, registry: UuidCloneRegistry
+) -> list[HistoryAction]:
+    """Copy selected actions and add heads for operation-rooted chains."""
+    new_actions: list[HistoryAction] = []
+    for chain in plan.chains:
+        is_creation_root = (
+            chain.root.kind == HistoryAction.KIND_UI
+            and chain.root.method_name in HistoryAction.UI_CREATION_METHODS
+        )
+        if not is_creation_root:
+            new_actions.extend(make_synthetic_heads(panel, chain, registry))
+        new_actions.extend(
+            action.copy_with_uuid_remap(registry.uuid_remap) for action in chain.actions
+        )
+    return new_actions
+
+
+def register_session_outputs(panel: HistoryPanel, session: HistorySession) -> None:
+    """Register action-to-output mappings for one assembled session."""
+    for action in session.actions:
+        if not action.output_uuids:
+            continue
+        panel.runtime.objects.register_action_outputs(action, action.output_uuids)
+
+
+def duplicate_chain_plan(
+    panel: HistoryPanel, plan: ChainSelectionPlan, copy_suffix: str
+) -> DuplicatedSession:
+    """Clone objects and assemble one independent duplicated session."""
+    registry = clone_referenced_objects(panel, plan, copy_suffix)
+    remap_cloned_object_sources(registry)
+    panel.navigation.session_increment += 1
+    new_session = HistorySession(
+        title=f"{plan.source_session.title} {copy_suffix}",
+        number=panel.navigation.session_increment,
+    )
+    new_session.actions = assemble_duplicated_actions(panel, plan, registry)
+    register_session_outputs(panel, new_session)
+    return DuplicatedSession(plan.source_session, new_session)
+
+
+def insert_duplicated_sessions(
+    panel: HistoryPanel, duplicated_sessions: list[DuplicatedSession]
+) -> None:
+    """Insert duplicates after their sources and refresh/select the tree."""
+    for duplicated in reversed(duplicated_sessions):
+        source_index = panel.history_sessions.index(duplicated.source_session)
+        panel.history_sessions.insert(source_index + 1, duplicated.new_session)
+    panel.tree.populate_tree(panel.history_sessions)
+    panel.navigation.select_sessions([item.new_session for item in duplicated_sessions])
+    panel.refresh_compatibility_items()
+    panel.ui.update_actions_state()
+
+
+def duplicate_selected_entries(panel: HistoryPanel) -> None:
+    """Duplicate selected processing chains into new independent sessions."""
+    selection_plans = resolve_chain_selection(panel)
+    if not selection_plans:
         return
 
     copy_suffix = _("Copy")
-    new_sessions: list[HistorySession] = []
-    panel_map = {
-        "signal": panel.mainwindow.signalpanel,
-        "image": panel.mainwindow.imagepanel,
-    }
-
-    for session, chains in ordered:
-        # 2. Collect all UUIDs referenced by the SELECTED chains only.
-        uuids_by_panel: dict[str, set[str]] = {}
-        for chain in chains:
-            for action in chain.actions:
-                for pstr, uuids in action.state.selection.items():
-                    uuids_by_panel.setdefault(pstr, set()).update(uuids)
-                for pstr, metadata in action.state.object_metadata.items():
-                    uuids_by_panel.setdefault(pstr, set()).update(metadata.keys())
-                obj2 = action.kwargs.get("obj2_uuids")
-                if obj2:
-                    pstr = action_panel_str(action)
-                    if isinstance(obj2, str):
-                        obj2 = [obj2]
-                    uuids_by_panel.setdefault(pstr, set()).update(obj2)
-                # Output UUIDs produced by this action (e.g. result of a
-                # compute step). Without this, the last action's outputs
-                # would be missing because no subsequent state captures them.
-                if action.output_uuids:
-                    pstr = action_panel_str(action)
-                    uuids_by_panel.setdefault(pstr, set()).update(action.output_uuids)
-
-        # 3. Clone objects and build uuid_remap.
-        uuid_remap: dict[str, dict[str, str]] = {}
-        clones_by_pstr: dict[str, list] = {}
-        group_title = f"{copy_suffix} - {session.title}"
-        for pstr, uuids in uuids_by_panel.items():
-            data_panel = panel_map.get(pstr)
-            if data_panel is None:
-                continue
-            uuid_remap[pstr] = {}
-            existing_ids = set(data_panel.objmodel.get_object_ids())
-            clones = []
-            # Iterate in panel order (not set order) to preserve
-            # the topological object ordering in the duplicated group.
-            ordered_ids = [
-                u for u in data_panel.objmodel.get_object_ids() if u in uuids
-            ]
-            for old_uuid in ordered_ids:
-                if old_uuid not in existing_ids:
-                    continue
-                obj = data_panel.objmodel[old_uuid]
-                clone = deepcopy(obj)
-                new_uuid = str(uuid4())
-                # SignalObj/ImageObj store UUID via metadata option
-                try:
-                    clone.set_metadata_option("uuid", new_uuid)
-                except AttributeError:
-                    clone.uuid = new_uuid
-                uuid_remap[pstr][old_uuid] = new_uuid
-                clones.append(clone)
-            clones_by_pstr[pstr] = clones
-            if clones:
-                group_id = get_uuid(data_panel.add_group(group_title))
-                for clone in clones:
-                    data_panel.add_object(clone, group_id=group_id)
-
-        # Second pass: remap source UUIDs in cloned objects'
-        # processing_parameters so reprocessing in the Processing tab
-        # uses the cloned source, not the original.
-        for pstr_inner, clones_inner in clones_by_pstr.items():
-            pmap = uuid_remap.get(pstr_inner, {})
-            if not pmap:
-                continue
-            for clone in clones_inner:
-                try:
-                    pp_dict = clone.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
-                except (AttributeError, ValueError):
-                    continue
-                if not pp_dict:
-                    continue
-                try:
-                    pp = ProcessingParameters.from_dict(pp_dict)
-                except (TypeError, ValueError, AttributeError):
-                    continue
-                changed = False
-                if pp.source_uuid is not None and pp.source_uuid in pmap:
-                    pp.source_uuid = pmap[pp.source_uuid]
-                    changed = True
-                if pp.source_uuids is not None:
-                    new_src = [pmap.get(u, u) for u in pp.source_uuids]
-                    if new_src != pp.source_uuids:
-                        pp.source_uuids = new_src
-                        changed = True
-                if changed:
-                    try:
-                        clone.set_metadata_option(
-                            PROCESSING_PARAMETERS_OPTION, pp.to_dict()
-                        )
-                    except (AttributeError, ValueError):
-                        pass
-
-        # 4. Build the new session's actions per chain (Cas A / Cas B).
-        new_actions: list[HistoryAction] = []
-        for chain in chains:
-            is_creation_root = (
-                chain.root.kind == HistoryAction.KIND_UI
-                and chain.root.method_name in HistoryAction.UI_CREATION_METHODS
-            )
-            if is_creation_root:
-                # Cas A: creation-rooted chain, copy as-is (root included).
-                new_actions.extend(
-                    action.copy_with_uuid_remap(uuid_remap) for action in chain.actions
-                )
-                continue
-            # Cas B: operation-rooted chain, synthesize one creation head per
-            # distinct remapped source object of the chain root.
-            root_inputs: list[tuple[str, str]] = []
-            for pstr, uuids in chain.root.state.selection.items():
-                for old_uuid in uuids:
-                    root_inputs.append((pstr, old_uuid))
-            obj2 = chain.root.kwargs.get("obj2_uuids")
-            if obj2:
-                pstr = action_panel_str(chain.root)
-                if isinstance(obj2, str):
-                    obj2 = [obj2]
-                for old_uuid in obj2:
-                    root_inputs.append((pstr, old_uuid))
-            heads: list[HistoryAction] = []
-            seen_clones: set[str] = set()
-            for pstr, old_uuid in root_inputs:
-                clone_uuid = uuid_remap.get(pstr, {}).get(old_uuid)
-                if clone_uuid is None or clone_uuid in seen_clones:
-                    # Source object deleted / not clonable, or already headed.
-                    continue
-                seen_clones.add(clone_uuid)
-                head_title = _("Initial state")
-                data_panel = panel_map.get(pstr)
-                if data_panel is not None:
-                    try:
-                        head_title = data_panel.objmodel[clone_uuid].title
-                    except (KeyError, AttributeError):
-                        head_title = _("Initial state")
-                head = make_initial_state_head(pstr, clone_uuid, head_title)
-                heads.append(head)
-                panel.action_output_uuids[head.uuid] = [clone_uuid]
-                panel.output_to_action[clone_uuid] = head.uuid
-            new_actions.extend(heads)
-            new_actions.extend(
-                action.copy_with_uuid_remap(uuid_remap) for action in chain.actions
-            )
-
-        # 5. Assemble the new session and register output mappings.
-        panel.session_increment += 1
-        title = f"{session.title} {copy_suffix}"
-        new_session = HistorySession(title=title, number=panel.session_increment)
-        new_session.actions = new_actions
-        new_sessions.append(new_session)
-
-        # Register output mappings for cloned actions so that
-        # resolve_target_outputs / get_downstream_actions work on
-        # the duplicated session (same logic as deserialize_from_hdf5).
-        for action in new_session.actions:
-            if action.output_uuids:
-                panel.action_output_uuids[action.uuid] = list(action.output_uuids)
-                for out_uuid in action.output_uuids:
-                    panel.output_to_action[out_uuid] = action.uuid
-
-    # Insert each duplicated session immediately after its original.
-    offset = 0
-    source_sessions = [session for session, _chains in ordered]
-    for original_session, new_session in zip(source_sessions, new_sessions):
-        idx = panel.history_sessions.index(original_session)
-        panel.history_sessions.insert(idx + 1 + offset, new_session)
-        offset += 1
-    panel.tree.populate_tree(panel.history_sessions)
-    panel.select_sessions(new_sessions)
-    panel.refresh_compatibility_items()
-    panel.update_actions_state()
+    duplicated_sessions = [
+        duplicate_chain_plan(panel, plan, copy_suffix) for plan in selection_plans
+    ]
+    insert_duplicated_sessions(panel, duplicated_sessions)
 
 
 def data_panel_for(panel: HistoryPanel, panel_str: str) -> BaseDataPanel | None:
@@ -325,18 +332,6 @@ def data_panel_for(panel: HistoryPanel, panel_str: str) -> BaseDataPanel | None:
     return None
 
 
-def action_input_uuids(action: HistoryAction) -> set[str]:
-    """Return the set of object UUIDs consumed as inputs by ``action``."""
-    captured: set[str] = set(action.state.selection.get(action.panel_str or "", []))
-    obj2 = action.kwargs.get("obj2_uuids")
-    if obj2:
-        if isinstance(obj2, str):
-            captured.add(obj2)
-        else:
-            captured.update(obj2)
-    return captured
-
-
 def strip_source_links(obj) -> None:
     """Turn ``obj`` into a parentless creation root (drop source references)."""
     pp = extract_processing_parameters(obj)
@@ -344,13 +339,7 @@ def strip_source_links(obj) -> None:
         return
     insert_processing_parameters(
         obj,
-        ProcessingParameters(
-            func_name=pp.func_name,
-            pattern=pp.pattern,
-            param=pp.param,
-            source_uuid=None,
-            source_uuids=None,
-        ),
+        remap_processing_parameters(pp, {}, clear_sources=True),
     )
 
 
@@ -405,7 +394,7 @@ def split_chain_on_action_delete(
     panel_str = action.panel_str or ""
     # Compute downstream + captured output UUIDs BEFORE removing the action.
     downstream = hchain.get_downstream_actions(panel, action)
-    output_uuids = list(panel.action_output_uuids.get(action.uuid, []))
+    output_uuids = list(panel.runtime.objects.action_output_uuids.get(action.uuid, []))
     # Splice the action out (does not truncate the rest of the session).
     hchain.remove_single_action(panel, action)
     if not downstream:
@@ -435,7 +424,7 @@ def split_chain_on_action_delete(
         if orphan_uuid not in action_input_uuids(d):
             continue
         hchain.rewrite_action_source(d, d.panel_str or "", orphan_uuid, new_uuid)
-        for out_uuid in panel.action_output_uuids.get(d.uuid, []):
+        for out_uuid in panel.runtime.objects.action_output_uuids.get(d.uuid, []):
             if data_panel.objmodel.has_uuid(out_uuid):
                 remap_object_source(
                     data_panel.objmodel[out_uuid], orphan_uuid, new_uuid
@@ -452,20 +441,24 @@ def remove_data_object(data_panel: BaseDataPanel, obj_uuid: str) -> None:
     data_panel.objmodel.remove_object(obj)
 
 
-def delete_selected(panel: HistoryPanel) -> None:
-    """Delete the selected actions or sessions (with confirmation).
+def plan_deletion(
+    panel: HistoryPanel, selected: list[HistoryAction | HistorySession]
+) -> DeletionPlan:
+    """Classify selected history entities without mutating panel state."""
+    plan = DeletionPlan()
+    for item in selected:
+        if isinstance(item, HistorySession):
+            plan.session_ids.add(id(item))
+            continue
+        plan.actions.append(item)
+        if plan.affected_session is None:
+            plan.affected_session = hchain.find_parent_session(panel, item)
+    return plan
 
-    When a top-level session is selected, the entire session is deleted.
-    When individual actions are selected, each action is spliced out of its
-    session and its processing chain is split: downstream steps become an
-    independent chain rooted at a copy of the deleted action's output. After
-    deletion, the last action leaf in the affected session is selected.
-    """
-    selected = panel.tree.get_selected_actions_or_sessions(panel.history_sessions)
-    if not selected:
-        return
-    has_individual_actions = any(isinstance(item, HistoryAction) for item in selected)
-    if has_individual_actions:
+
+def confirm_deletion(panel: HistoryPanel, plan: DeletionPlan) -> bool:
+    """Ask the user to confirm a planned history deletion."""
+    if plan.actions:
         msg = _(
             "Do you really want to delete the selected items?\n\n"
             "Note: deleting an intermediate action splits its processing "
@@ -484,66 +477,93 @@ def delete_selected(panel: HistoryPanel) -> None:
             QW.QMessageBox.No,
         )
     )
-    if reply != QW.QMessageBox.Yes:
-        return
-    # Memorize affected session for post-deletion selection
-    affected_session: HistorySession | None = None
-    for item in selected:
-        if isinstance(item, HistoryAction):
-            for session in panel.history_sessions:
-                if item in session.actions:
-                    affected_session = session
-                    break
-            if affected_session is not None:
-                break
+    return reply == QW.QMessageBox.Yes
 
-    sessions_to_remove: set[int] = set()
+
+def apply_deletion(panel: HistoryPanel, plan: DeletionPlan) -> DeletionResult:
+    """Delete planned actions/sessions and return orphan cleanup state."""
     orphan_refs: list[tuple[str, str]] = []
-    for item in selected:
-        if isinstance(item, HistorySession):
-            sessions_to_remove.add(id(item))
-        elif isinstance(item, HistoryAction):
-            # Individual action: splice it out and split its chain (with copy).
-            orphan_uuid = split_chain_on_action_delete(panel, item)
-            if orphan_uuid is not None:
-                orphan_refs.append((item.panel_str or "", orphan_uuid))
+    for action in plan.actions:
+        orphan_uuid = split_chain_on_action_delete(panel, action)
+        if orphan_uuid is not None:
+            orphan_refs.append((action.panel_str or "", orphan_uuid))
+    for session in panel.history_sessions:
+        if id(session) in plan.session_ids:
+            for action in session.actions:
+                panel.runtime.objects.remove_action_outputs(action)
     panel.history_sessions = [
-        s for s in panel.history_sessions if id(s) not in sessions_to_remove
+        session
+        for session in panel.history_sessions
+        if id(session) not in plan.session_ids
     ]
-    # §8.3 — opt-in: offer to also remove the now-orphaned output object(s).
+    return DeletionResult(
+        plan.affected_session,
+        plan.session_ids,
+        orphan_refs,
+    )
+
+
+def collect_alive_orphans(
+    panel: HistoryPanel, orphan_refs: list[tuple[str, str]]
+) -> list[tuple[BaseDataPanel, str]]:
+    """Resolve orphan references that are still present in data panels."""
     alive_orphans: list[tuple[BaseDataPanel, str]] = []
     for panel_str, orphan_uuid in orphan_refs:
         data_panel = data_panel_for(panel, panel_str)
         if data_panel is not None and data_panel.objmodel.has_uuid(orphan_uuid):
             alive_orphans.append((data_panel, orphan_uuid))
-    if alive_orphans and not execenv.unattended:
-        answer = QW.QMessageBox.question(
-            panel.mainwindow,
-            _("Delete"),
-            _(
-                "The deleted action(s) produced object(s) still present in the "
-                "workspace. Do you want to remove the associated object(s) as well?"
-            ),
-            QW.QMessageBox.Yes | QW.QMessageBox.No,
-            QW.QMessageBox.No,
-        )
-        if answer == QW.QMessageBox.Yes:
-            touched: dict[int, BaseDataPanel] = {}
-            for data_panel, orphan_uuid in alive_orphans:
-                if data_panel.objmodel.has_uuid(orphan_uuid):
-                    remove_data_object(data_panel, orphan_uuid)
-                    touched[id(data_panel)] = data_panel
-            for data_panel in touched.values():
-                data_panel.objview.update_tree()
-                data_panel.selection_changed(update_items=True)
-            panel.refresh_obj_ids_snapshot()
+    return alive_orphans
+
+
+def confirm_orphan_removal(
+    panel: HistoryPanel, alive_orphans: list[tuple[BaseDataPanel, str]]
+) -> bool:
+    """Ask whether surviving output objects should also be removed."""
+    if not alive_orphans or execenv.unattended:
+        return False
+    answer = QW.QMessageBox.question(
+        panel.mainwindow,
+        _("Delete"),
+        _(
+            "The deleted action(s) produced object(s) still present in the "
+            "workspace. Do you want to remove the associated object(s) as well?"
+        ),
+        QW.QMessageBox.Yes | QW.QMessageBox.No,
+        QW.QMessageBox.No,
+    )
+    return answer == QW.QMessageBox.Yes
+
+
+def remove_orphan_objects(
+    panel: HistoryPanel, alive_orphans: list[tuple[BaseDataPanel, str]]
+) -> None:
+    """Remove confirmed orphan objects and refresh affected data panels."""
+    touched: dict[int, BaseDataPanel] = {}
+    for data_panel, orphan_uuid in alive_orphans:
+        if data_panel.objmodel.has_uuid(orphan_uuid):
+            remove_data_object(data_panel, orphan_uuid)
+            touched[id(data_panel)] = data_panel
+    for data_panel in touched.values():
+        data_panel.objview.update_tree()
+        data_panel.selection_changed(update_items=True)
+    panel.runtime.objects.refresh_obj_ids_snapshot()
+
+
+def refresh_history_after_deletion(panel: HistoryPanel) -> None:
+    """Refresh history presentation after applying a deletion."""
     panel.tree.populate_tree(panel.history_sessions)
     panel.refresh_compatibility_items()
-    panel.update_actions_state()
-    # Auto-select an item in the same session to avoid panel switch
+    panel.ui.update_actions_state()
+
+
+def select_after_deletion(panel: HistoryPanel, result: DeletionResult) -> None:
+    """Select the last action of the affected surviving session, or a fallback."""
     target_item = None
-    if affected_session is not None and id(affected_session) not in sessions_to_remove:
-        # Find the tree item for the affected session (same index in list)
+    affected_session = result.affected_session
+    if (
+        affected_session is not None
+        and id(affected_session) not in result.removed_session_ids
+    ):
         try:
             session_idx = panel.history_sessions.index(affected_session)
         except ValueError:
@@ -563,12 +583,26 @@ def delete_selected(panel: HistoryPanel) -> None:
                     iterator += 1
                 target_item = last_action_item if last_action_item is not None else top
     if target_item is None and panel.tree.topLevelItemCount() > 0:
-        # Fallback: last top-level item (least likely to switch panels)
-        last_top = panel.tree.topLevelItem(panel.tree.topLevelItemCount() - 1)
-        target_item = last_top
+        target_item = panel.tree.topLevelItem(panel.tree.topLevelItemCount() - 1)
     if target_item is not None:
         panel.tree.setCurrentItem(target_item)
         target_item.setSelected(True)
+
+
+def delete_selected(panel: HistoryPanel) -> None:
+    """Delete selected actions or sessions through explicit GUI/mutation phases."""
+    selected = panel.tree.get_selected_actions_or_sessions(panel.history_sessions)
+    if not selected:
+        return
+    plan = plan_deletion(panel, selected)
+    if not confirm_deletion(panel, plan):
+        return
+    result = apply_deletion(panel, plan)
+    alive_orphans = collect_alive_orphans(panel, result.orphan_refs)
+    if confirm_orphan_removal(panel, alive_orphans):
+        remove_orphan_objects(panel, alive_orphans)
+    refresh_history_after_deletion(panel)
+    select_after_deletion(panel, result)
 
 
 def remove_incompatible_actions(panel: HistoryPanel) -> None:
@@ -608,9 +642,10 @@ def remove_incompatible_actions(panel: HistoryPanel) -> None:
         return
     for session, action in incompatible:
         if action in session.actions:
+            panel.runtime.objects.remove_action_outputs(action)
             session.actions.remove(action)
     # Remove empty sessions
     panel.history_sessions = [s for s in panel.history_sessions if s.actions]
     panel.tree.populate_tree(panel.history_sessions)
     panel.refresh_compatibility_items()
-    panel.update_actions_state()
+    panel.ui.update_actions_state()

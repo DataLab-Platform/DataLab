@@ -183,7 +183,7 @@ class HistoryTree(QW.QTreeWidget):
             session: History session whose actions are grouped into chains.
         """
         session_item.takeChildren()
-        chains = build_session_chains(self._panel, session)
+        chains = build_session_chains(session)
         for chain in chains:
             chain_item = QW.QTreeWidgetItem([chain.root.title, ""])
             chain_item.setData(0, self.ITEM_KIND_ROLE, self.ITEM_CHAIN)
@@ -235,18 +235,12 @@ class HistoryTree(QW.QTreeWidget):
         for col in (0, 1):
             self.resizeColumnToContents(col)
 
-    def add_action_to_tree(
-        self, action: HistoryAction, session_index: int | None = None
-    ) -> None:
-        """Add an action under the session item at ``session_index``.
+    def rebuild_session(self, session_index: int) -> None:
+        """Rebuild the tree subtree for the session at ``session_index``.
 
         Args:
-            action: Action to add.
-            session_index: Top-level session item index. Defaults to the last
-                session (backward-compatible).
+            session_index: Top-level session item index.
         """
-        if session_index is None:
-            session_index = self.topLevelItemCount() - 1
         ritem = self.topLevelItem(session_index)
         if ritem is None:
             return

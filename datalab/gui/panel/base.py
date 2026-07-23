@@ -2378,7 +2378,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         # Delete metadata:
         for index, obj in enumerate(sel_objs):
+            uuid = get_uuid(obj)
             obj.reset_metadata_to_defaults()
+            obj.set_metadata_option("uuid", uuid)
             if not keep_roi:
                 obj.mark_roi_as_changed()
             if obj in roi_backup:
@@ -3238,8 +3240,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     return None
+                existing_item = self.plothandler.get(get_uuid(obj))
                 item = create_adapter_from_object(obj).make_item(
-                    update_from=self.plothandler[get_uuid(obj)]
+                    update_from=existing_item
                 )
                 item.set_readonly(True)
                 plot.add_item(item, z=0)
@@ -3264,18 +3267,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if oids is None:
             oids = self.objview.get_sel_object_uuids(include_groups=True)
         obj = self.objmodel[oids[-1]]  # last selected object
-
-        if not all(oid in self.plothandler for oid in oids):
-            # This happens for example when opening an already saved workspace with
-            # multiple images, and if the user tries to view in a new window a group of
-            # images without having selected any object yet. In this case, only the
-            # last image is actually plotted (because if the other have the same size
-            # and position, they are hidden), and the plot item of every other image is
-            # not created yet. So we need to refresh the plot to create the plot item of
-            # those images.
-            self.plothandler.refresh_plot(
-                "selected", update_items=True, force=True, only_visible=False
-            )
 
         # Create a new dialog and add plot items to it
         dlg = self.create_new_dialog(

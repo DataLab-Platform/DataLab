@@ -10,7 +10,18 @@ import json
 import logging
 import os
 from contextlib import nullcontext
-from typing import TYPE_CHECKING, Any, Callable, Generator
+from dataclasses import dataclass
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Dict,
+    Generator,
+    Generic,
+    Optional,
+    TypeVar,
+    overload,
+)
 from uuid import uuid4
 
 import sigima.proc.image
@@ -35,6 +46,33 @@ if TYPE_CHECKING:
     from datalab.h5.native import NativeH5Reader, NativeH5Writer
 
 _logger = logging.getLogger(__name__)
+
+T = TypeVar("T")
+
+
+class DescriptorField(Generic[T]):
+    """Typed descriptor forwarding access to an action descriptor field."""
+
+    def __init__(self, name: str) -> None:
+        self.name = name
+
+    @overload
+    def __get__(
+        self, instance: None, owner: type[HistoryAction]
+    ) -> DescriptorField[T]: ...
+
+    @overload
+    def __get__(self, instance: HistoryAction, owner: type[HistoryAction]) -> T: ...
+
+    def __get__(
+        self, instance: HistoryAction | None, owner: type[HistoryAction]
+    ) -> DescriptorField[T] | T:
+        if instance is None:
+            return self
+        return getattr(instance.descriptors, self.name)
+
+    def __set__(self, instance: HistoryAction, value: T) -> None:
+        setattr(instance.descriptors, self.name, value)
 
 
 class HistoryAction(ObjItf):
@@ -63,6 +101,26 @@ class HistoryAction(ObjItf):
         {"remove_object", "remove_group", "delete_all_objects"}
     )
 
+    @dataclass
+    class Descriptors:
+        """Operation descriptors persisted by a history action."""
+
+        kind: str
+        panel_str: str | None = None
+        func_name: str | None = None
+        pattern: str | None = None
+        target: str | None = None
+        method_name: str | None = None
+        plugin_origin: dict[str, Any] | None = None
+
+    kind = DescriptorField[str]("kind")
+    panel_str = DescriptorField[Optional[str]]("panel_str")
+    func_name = DescriptorField[Optional[str]]("func_name")
+    pattern = DescriptorField[Optional[str]]("pattern")
+    target = DescriptorField[Optional[str]]("target")
+    method_name = DescriptorField[Optional[str]]("method_name")
+    plugin_origin = DescriptorField[Optional[Dict[str, Any]]]("plugin_origin")
+
     def __init__(
         self,
         title: str = "",
@@ -77,18 +135,17 @@ class HistoryAction(ObjItf):
         # --- common --------------------------------------------------------
         kwargs: dict[str, Any] | None = None,
         state: WorkspaceState | None = None,
-        plugin_origin: dict[str, Any] | None = None,
     ) -> None:
         super().__init__()
         self.__title = title or ""
-        self.kind = kind
-        # Compute kind:
-        self.panel_str = panel_str
-        self.func_name = func_name
-        self.pattern = pattern
-        # UI kind:
-        self.target = target
-        self.method_name = method_name
+        self.descriptors = self.Descriptors(
+            kind=kind,
+            panel_str=panel_str,
+            func_name=func_name,
+            pattern=pattern,
+            target=target,
+            method_name=method_name,
+        )
         # Common:
         self.kwargs: dict[str, Any] = (
             {} if kwargs is None else {k: v for k, v in kwargs.items() if v is not None}
@@ -109,7 +166,6 @@ class HistoryAction(ObjItf):
         # ``add_compute_entry_from_pp``. See
         # :func:`datalab.gui.processor.base._detect_plugin_origin` for shape.
         # Persisted as a JSON string in HDF5.
-        self.plugin_origin: dict[str, Any] | None = plugin_origin
         # Transient flag (NOT serialized): set during a cascade recompute to
         # display a "stale" visual marker in the tree. Cleared once the
         # action has been recomputed.
@@ -120,7 +176,7 @@ class HistoryAction(ObjItf):
         # action still works after a save/reload cycle while Edit mode is
         # active. Cleared by ``discard_snapshot`` (definitive commit when
         # toggling Edit mode off) or ``restore_kwargs`` (Restore button).
-        self._saved_kwargs: dict[str, Any] | None = None
+        self.saved_kwargs: dict[str, Any] | None = None
 
     def snapshot_kwargs(self) -> None:
         """Save a copy of the current kwargs as the pre-edit baseline.
@@ -128,25 +184,25 @@ class HistoryAction(ObjItf):
         No-op if a snapshot already exists (preserves the original baseline
         across multiple edit-mode replays).
         """
-        if self._saved_kwargs is None:
-            self._saved_kwargs = {
+        if self.saved_kwargs is None:
+            self.saved_kwargs = {
                 key: copy_history_value(value) for key, value in self.kwargs.items()
             }
 
     def restore_kwargs(self) -> None:
         """Restore kwargs from the saved snapshot and clear the snapshot."""
-        if self._saved_kwargs is not None:
-            self.kwargs = self._saved_kwargs
-            self._saved_kwargs = None
+        if self.saved_kwargs is not None:
+            self.kwargs = self.saved_kwargs
+            self.saved_kwargs = None
 
     def discard_snapshot(self) -> None:
         """Discard the saved snapshot (accept current kwargs as definitive)."""
-        self._saved_kwargs = None
+        self.saved_kwargs = None
 
     @property
     def has_pending_edits(self) -> bool:
         """Return True if this action has unsaved edit-mode changes."""
-        return self._saved_kwargs is not None
+        return self.saved_kwargs is not None
 
     def copy(self, title_suffix: str | None = None) -> HistoryAction:
         """Return an independent copy of this history action."""
@@ -167,8 +223,9 @@ class HistoryAction(ObjItf):
             },
             state=state,
         )
+        new_action.plugin_origin = copy_history_value(self.plugin_origin)
         new_action.output_uuids = list(self.output_uuids)
-        # Note: _saved_kwargs is intentionally NOT propagated to the copy.
+        # Note: saved_kwargs is intentionally NOT propagated to the copy.
         # Copying an action acts as an implicit commit (no pending edits).
         return new_action
 
@@ -626,8 +683,8 @@ class HistoryAction(ObjItf):
         # ``saved_kwargs``: persisted Edit mode snapshot so the Restore button
         # keeps working after save/reload. Group omitted when there are no
         # pending edits.
-        if self._saved_kwargs is not None:
-            encoded_saved = encode_kwargs(self._saved_kwargs)
+        if self.saved_kwargs is not None:
+            encoded_saved = encode_kwargs(self.saved_kwargs)
             # Write the group unconditionally (even when empty) so that the
             # round-trip preserves the distinction between None (no pending
             # edits) and {} (degenerate empty snapshot, keeps has_pending_edits).
@@ -663,66 +720,87 @@ class HistoryAction(ObjItf):
         current = reader.h5
         for option in reader.option:
             current = current.require_group(option)
-        # ``uuid`` is present only in files written after UUID persistence was
-        # added; keep the freshly generated ``self.uuid`` for older files.
-        if "uuid" in current.attrs or "uuid" in current:
-            with reader.group("uuid"):
-                loaded_uuid = reader.read_any()
-            if loaded_uuid:
-                self.uuid = str(loaded_uuid)
-        for attr in ("panel_str", "func_name", "pattern", "target", "method_name"):
-            if attr in current.attrs or attr in current:
-                with reader.group(attr):
-                    setattr(self, attr, reader.read_any())
-            else:
-                setattr(self, attr, None)
-        if "kwargs" in current.attrs or "kwargs" in current:
-            with reader.group("kwargs"):
-                raw = reader.read_dict()
-            self.kwargs = decode_kwargs(raw)
-        else:
-            self.kwargs = {}
-        # ``saved_kwargs`` group is present only when an Edit mode snapshot
-        # exists; otherwise leave it as ``None``.
-        if "saved_kwargs" in current.attrs or "saved_kwargs" in current:
-            with reader.group("saved_kwargs"):
-                raw_saved = reader.read_dict()
-            self._saved_kwargs = decode_kwargs(raw_saved)
-        else:
-            self._saved_kwargs = None
-        # ``output_uuids`` is present only when the action produced outputs;
-        # otherwise leave it empty and consumers fall back to the heuristic
-        # matcher.
-        if "output_uuids" in current.attrs or "output_uuids" in current:
-            with reader.group("output_uuids"):
-                raw_outputs = reader.read_any()
-            if raw_outputs is None:
-                self.output_uuids = []
-            else:
-                self.output_uuids = [str(u) for u in raw_outputs]
-        else:
-            self.output_uuids = []
-        # ``plugin_origin`` is present only for plugin-originated compute
-        # actions; otherwise leave it as ``None`` (a replay of a missing plugin
-        # function then surfaces a generic ``FeatureNotFoundError``).
-        if "plugin_origin" in current.attrs or "plugin_origin" in current:
-            with reader.group("plugin_origin"):
-                raw_origin = reader.read_any()
-            if raw_origin in (None, ""):
-                self.plugin_origin = None
-            else:
-                try:
-                    self.plugin_origin = json.loads(raw_origin)
-                except (TypeError, ValueError):
-                    _logger.warning(
-                        "Failed to decode plugin_origin for action %s; "
-                        "falling back to None.",
-                        self.uuid,
-                    )
-                    self.plugin_origin = None
-        else:
-            self.plugin_origin = None
+        deserialize_descriptors(self, reader, current)
+        deserialize_kwargs_snapshot(self, reader, current)
+        deserialize_outputs_plugin_origin(self, reader, current)
         with reader.group("state"):
             self.state.deserialize(reader)
         with reader.group("dtstr"):
             self.dtstr = reader.read_any()
+
+
+def deserialize_descriptors(
+    action: HistoryAction, reader: NativeH5Reader, current: Any
+) -> None:
+    """Deserialize optional identity and operation descriptors."""
+    # ``uuid`` is present only in files written after UUID persistence was
+    # added; keep the freshly generated ``action.uuid`` for older files.
+    if "uuid" in current.attrs or "uuid" in current:
+        with reader.group("uuid"):
+            loaded_uuid = reader.read_any()
+        if loaded_uuid:
+            action.uuid = str(loaded_uuid)
+    for attr in ("panel_str", "func_name", "pattern", "target", "method_name"):
+        if attr in current.attrs or attr in current:
+            with reader.group(attr):
+                setattr(action, attr, reader.read_any())
+        else:
+            setattr(action, attr, None)
+
+
+def deserialize_kwargs_snapshot(
+    action: HistoryAction, reader: NativeH5Reader, current: Any
+) -> None:
+    """Deserialize call arguments and the optional edit snapshot."""
+    if "kwargs" in current.attrs or "kwargs" in current:
+        with reader.group("kwargs"):
+            raw = reader.read_dict()
+        action.kwargs = decode_kwargs(raw)
+    else:
+        action.kwargs = {}
+    # ``saved_kwargs`` group is present only when an Edit mode snapshot
+    # exists; otherwise leave it as ``None``.
+    if "saved_kwargs" in current.attrs or "saved_kwargs" in current:
+        with reader.group("saved_kwargs"):
+            raw_saved = reader.read_dict()
+        action.saved_kwargs = decode_kwargs(raw_saved)
+    else:
+        action.saved_kwargs = None
+
+
+def deserialize_outputs_plugin_origin(
+    action: HistoryAction, reader: NativeH5Reader, current: Any
+) -> None:
+    """Deserialize optional outputs and plugin provenance."""
+    # ``output_uuids`` is present only when the action produced outputs;
+    # otherwise leave it empty and consumers fall back to the heuristic
+    # matcher.
+    if "output_uuids" in current.attrs or "output_uuids" in current:
+        with reader.group("output_uuids"):
+            raw_outputs = reader.read_any()
+        if raw_outputs is None:
+            action.output_uuids = []
+        else:
+            action.output_uuids = [str(u) for u in raw_outputs]
+    else:
+        action.output_uuids = []
+    # ``plugin_origin`` is present only for plugin-originated compute
+    # actions; otherwise leave it as ``None`` (a replay of a missing plugin
+    # function then surfaces a generic ``FeatureNotFoundError``).
+    if "plugin_origin" in current.attrs or "plugin_origin" in current:
+        with reader.group("plugin_origin"):
+            raw_origin = reader.read_any()
+        if raw_origin in (None, ""):
+            action.plugin_origin = None
+        else:
+            try:
+                action.plugin_origin = json.loads(raw_origin)
+            except (TypeError, ValueError):
+                _logger.warning(
+                    "Failed to decode plugin_origin for action %s; "
+                    "falling back to None.",
+                    action.uuid,
+                )
+                action.plugin_origin = None
+    else:
+        action.plugin_origin = None
