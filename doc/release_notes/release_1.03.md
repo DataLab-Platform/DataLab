@@ -39,6 +39,12 @@ and Image panels.
 
 ### 🔄 Changes ###
 
+**Detection tools now preserve existing regions of interest:**
+
+* Regions of interest created by peak, blob, Hough circle, and contour
+  detection are now added to existing ROIs instead of replacing them, without
+  displaying a destructive confirmation dialog
+
 **Analysis results are now refreshed on demand instead of automatically:**
 
 * Analysis results (statistics, FWHM, centroid, peak/contour/blob detection,

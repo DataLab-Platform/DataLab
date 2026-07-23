@@ -68,13 +68,36 @@ def test_analysis_recompute_after_roi_change():
         x0, y0 = centroid
         print(f"\nInitial centroid (full image): ({x0:.1f}, {y0:.1f})")
 
+        call_count = [0]
+        original_compute_1_to_0 = panel.processor.compute_1_to_0
+
+        def counting_compute_1_to_0(*args, **kwargs):
+            call_count[0] += 1
+            return original_compute_1_to_0(*args, **kwargs)
+
+        panel.processor.compute_1_to_0 = counting_compute_1_to_0
+
+        new_title = f"{img.title} (edited)"
+        panel.objprop.properties.dataset.title = new_title
+        panel.properties_changed()
+        assert img.title == new_title
+        assert call_count[0] == 0
+        assert get_centroid_coords(img) == (x0, y0), (
+            "Property changes must preserve stale analysis results"
+        )
+
         # Step 1: Add ROI (simulating edit_roi_graphically)
         # Add a rectangular ROI in the upper-left quadrant
         roi = create_image_roi("rectangle", [25, 25, 50, 50])  # x0, y0, width, height
         img.roi = roi
         panel.refresh_plot("selected", update_items=True)
+        assert call_count[0] == 0
+        assert get_centroid_coords(img) == (x0, y0), (
+            "ROI changes must preserve stale analysis results until recomputation"
+        )
         # Explicitly recompute the analysis (manual "Recompute" action)
         panel.processor.recompute_analysis(img)
+        assert call_count[0] == 1
 
         # Verify centroid was updated
         centroid = get_centroid_coords(img)
@@ -97,7 +120,13 @@ def test_analysis_recompute_after_roi_change():
         roi1.add_roi(roi2)  # Combine both ROIs
         img.roi = roi1
         panel.refresh_plot("selected", update_items=True)
+        stale_centroid = get_centroid_coords(img)
+        assert call_count[0] == 1
+        assert stale_centroid == (x1, y1), (
+            "ROI changes must not update existing analysis results automatically"
+        )
         panel.processor.recompute_analysis(img)
+        assert call_count[0] == 2
 
         # Verify centroid now has TWO rows (one for each ROI)
         adapter = GeometryAdapter.from_obj(img, "centroid")
@@ -114,7 +143,12 @@ def test_analysis_recompute_after_roi_change():
 
         # Step 3: Delete the first ROI using delete_single_roi, then recompute
         panel.processor.delete_single_roi(roi_index=0)
+        assert call_count[0] == 2
+        assert np.array_equal(get_centroid_coords(img), coords[0]), (
+            "ROI deletion must preserve stale analysis results until recomputation"
+        )
         panel.processor.recompute_analysis(img)
+        assert call_count[0] == 3
 
         # Verify centroid now has ONE row (for the remaining ROI)
         adapter = GeometryAdapter.from_obj(img, "centroid")
@@ -136,7 +170,12 @@ def test_analysis_recompute_after_roi_change():
         # Step 4: Delete all remaining ROIs using delete_regions_of_interest, then
         # recompute
         panel.processor.delete_regions_of_interest()
+        assert call_count[0] == 3
+        assert get_centroid_coords(img) == (x3, y3), (
+            "Deleting ROIs must not update analysis results automatically"
+        )
         panel.processor.recompute_analysis(img)
+        assert call_count[0] == 4
 
         # Verify centroid was updated back to original
         centroid = get_centroid_coords(img)
@@ -206,15 +245,31 @@ def test_analysis_recompute_after_recompute_1_to_1():
         editor = panel.objprop.processing_param_editor
         editor.dataset.angle = 90.0  # Change from 45° to 90°
 
+        call_count = [0]
+        original_compute_1_to_0 = panel.processor.compute_1_to_0
+
+        def counting_compute_1_to_0(*args, **kwargs):
+            call_count[0] += 1
+            return original_compute_1_to_0(*args, **kwargs)
+
+        panel.processor.compute_1_to_0 = counting_compute_1_to_0
+
         # Apply the modified parameters (this triggers recompute_1_to_1)
         report = panel.objprop.apply_processing_parameters(interactive=False)
 
         assert report.success, f"Recompute failed: {report.message}"
+        assert call_count[0] == 0, (
+            "Processing data/property changes must not recompute analysis automatically"
+        )
+        assert get_centroid_coords(img_rotated) == (x0, y0), (
+            "Processing data/property changes must preserve stale analysis results"
+        )
         print("Processing parameters recomputed with new angle (90°)")
 
         # Analysis results are no longer refreshed automatically: trigger the manual
         # recompute explicitly (as the "Recompute" action does)
         panel.processor.recompute_analysis(img_rotated)
+        assert call_count[0] == 1
 
         # Verify centroid was recomputed on the updated data
         centroid = get_centroid_coords(img_rotated)

@@ -134,11 +134,13 @@ class ProcessingReport:
         success: True if processing succeeded
         obj_uuid: UUID of the processed object
         message: Optional message (error or info)
+        cancelled: True if processing was cancelled by the user
     """
 
     success: bool
     obj_uuid: str | None = None
     message: str | None = None
+    cancelled: bool = False
 
 
 # Metadata options for storing processing parameters (DataLab-specific)
@@ -1121,7 +1123,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         # Recompute using the dedicated method (with multiprocessing support)
         try:
-            new_obj = source_processor.recompute_1_to_1(
+            compout = source_processor.recompute_1_to_1(
                 proc_params.func_name, source_obj, param
             )
         except Exception as exc:  # pylint: disable=broad-exception-caught
@@ -1131,8 +1133,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             return report
 
         # User cancelled the operation
-        if new_obj is None:
+        if compout.cancelled:
             report.message = _("Processing was cancelled.")
+            report.cancelled = True
+            return report
+
+        new_obj = compout.result
+        if new_obj is None:
+            report.message = compout.error_msg or _("Failed to reprocess object.")
             return report
 
         # Update the current object in-place with data from new object
@@ -1206,7 +1214,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         func_name: str,
         obj: SignalObj | ImageObj,
         param: gds.DataSet | None = None,
-    ) -> SignalObj | ImageObj | None:
+    ) -> CompOut:
         """Recompute a 1-to-1 processing operation without adding result to panel.
 
         This method is specifically designed for the interactive re-processing feature
@@ -1220,7 +1228,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             param: Processing parameters (optional)
 
         Returns:
-            New processed object (not added to panel), or None if cancelled or error
+            Computation output containing the new processed object, an error, or an
+             explicit cancellation status
 
         Raises:
             ValueError: If function is not found in registry
@@ -1243,20 +1252,21 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             comp_out = self.__exec_func(func, args, progress)
 
             if comp_out is None:  # Cancelled by user
-                return None
+                return CompOut(cancelled=True)
 
             # Handle the output
             new_obj = self.handle_output(comp_out, _("Recomputing"), progress)
 
             if new_obj is None:
-                return None
+                return comp_out
 
             # Handle keep_results logic
             if isinstance(new_obj, (SignalObj, ImageObj)):
                 self._handle_keep_results(new_obj)
 
             patch_title_with_ids(new_obj, [obj], get_short_id)
-            return new_obj
+            comp_out.result = new_obj
+            return comp_out
 
     def _compute_1_to_1_subroutine(
         self, funcs: list[Callable], params: list, title: str

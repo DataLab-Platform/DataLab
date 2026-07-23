@@ -9,7 +9,7 @@ Testing the following:
     ROIs are appended to the existing ones (non-destructive, no dialog)
   - When create_rois=False, existing ROIs are left untouched
   - contour_shape with create_rois=True creates ROIs in DataLab integration
-  - auto_recompute_analysis does not recreate ROIs deleted/edited by the user
+    - recompute_analysis does not recreate ROIs deleted/edited by the user
   - The ROI modification loop is broken (no infinite re-creation cycle)
 """
 
@@ -90,7 +90,7 @@ def test_create_rois_false_preserves_existing_roi():
         panel.add_object(ima)
 
         obj = panel.objview.get_current_object()
-        roi_before = obj.roi
+        roi_before = obj.roi.copy()
 
         param = sigima.params.Peak2DDetectionParam.create(create_rois=False)
         panel.processor.compute_peak_detection(param)

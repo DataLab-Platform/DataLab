@@ -2475,7 +2475,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         # Recompute 1-to-1 processing operations first (they modify data in-place),
         # so that any subsequent analysis recomputation uses the updated data.
-        recomputed_uuids, was_interrupted = self.__recompute_1_to_1_objects(
+        recomputed_uuids, was_interrupted = self.recompute_1_to_1_objects(
             recomputable_objects
         )
 
@@ -2493,9 +2493,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             if obj in recomputable_objects and obj_uuid not in recomputed_uuids:
                 continue
             analysis_targets.append(obj)
-        self.__recompute_1_to_0_objects(analysis_targets)
+        self.recompute_1_to_0_objects(analysis_targets)
 
-    def __recompute_1_to_1_objects(
+    def recompute_1_to_1_objects(
         self, objects: list[SignalObj | ImageObj]
     ) -> tuple[set[str], bool]:
         """Recompute in-place 1-to-1 processing operations for the given objects.
@@ -2526,6 +2526,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if report.success:
                     recomputed_uuids.add(get_uuid(obj))
                     continue
+                if report.cancelled:
+                    return recomputed_uuids, True
                 if execenv.unattended:
                     continue
                 failtxt = _("Failed to recompute object")
@@ -2547,7 +2549,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         return recomputed_uuids, True
         return recomputed_uuids, False
 
-    def __recompute_1_to_0_objects(self, objects: list[SignalObj | ImageObj]) -> None:
+    def recompute_1_to_0_objects(self, objects: list[SignalObj | ImageObj]) -> None:
         """Recompute 1-to-0 analysis operations for the given objects.
 
         Args:

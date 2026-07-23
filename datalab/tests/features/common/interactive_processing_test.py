@@ -20,9 +20,12 @@ processing patterns (1-to-1, 2-to-1, n-to-1).
 
 from __future__ import annotations
 
+from unittest.mock import patch
+
 import numpy as np
 from guidata.dataset import json_to_dataset
 from guidata.qthelpers import qt_app_context, qt_wait
+from qtpy import QtWidgets as QW
 from sigima.objects import Gauss2DParam, GaussParam, create_image_roi
 from sigima.params import (
     BinningParam,
@@ -33,12 +36,14 @@ from sigima.params import (
 )
 from sigima.proc.image import RadialProfileParam
 
+from datalab.env import execenv
 from datalab.gui.newobject import CREATION_PARAMETERS_OPTION
 from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
     extract_analysis_parameters,
     extract_processing_parameters,
 )
+from datalab.gui.processor.catcher import CompOut
 from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_test_app_context
 
@@ -182,8 +187,8 @@ def test_recompute():
             assert option_dict["func_name"] == "gaussian_filter"
 
 
-def test_recompute_selected_skips_analysis_when_1_to_1_interrupted():
-    """Test that analysis recompute is skipped when 1-to-1 pass is interrupted."""
+def test_recompute_selected_skips_analysis_when_1_to_1_cancelled():
+    """Test that analysis recompute is skipped when 1-to-1 is cancelled."""
     with qt_app_context():
         with datalab_test_app_context() as win:
             panel = win.imagepanel
@@ -207,34 +212,85 @@ def test_recompute_selected_skips_analysis_when_1_to_1_interrupted():
 
             panel.objview.select_objects([processed_image])
 
-            # Patch recompute internals to simulate interrupted 1-to-1 pass and
-            # detect whether 1-to-0 pass is called.
-            recompute_1_to_1_attr = "_BaseDataPanel__recompute_1_to_1_objects"
-            recompute_1_to_0_attr = "_BaseDataPanel__recompute_1_to_0_objects"
-            original_recompute_1_to_1 = getattr(panel, recompute_1_to_1_attr)
-            original_recompute_1_to_0 = getattr(panel, recompute_1_to_0_attr)
+            # Simulate cancellation at the actual low-level contract boundary.
+            original_recompute_1_to_1 = processor.recompute_1_to_1
+            original_recompute_analysis = processor.recompute_analysis
+            processing_called = []
             analysis_called = []
 
-            def fake_recompute_1_to_1(objects):
-                # Simulate successful work started, then interrupted by user.
-                return {get_uuid(obj) for obj in objects}, True
+            def cancel_recompute_1_to_1(*args, **kwargs):
+                processing_called.append((args, kwargs))
+                return CompOut(cancelled=True)
 
-            def fake_recompute_1_to_0(objects):
-                analysis_called.append(objects)
+            def record_recompute_analysis(*args, **kwargs):
+                analysis_called.append((args, kwargs))
 
-            setattr(panel, recompute_1_to_1_attr, fake_recompute_1_to_1)
-            setattr(panel, recompute_1_to_0_attr, fake_recompute_1_to_0)
+            processor.recompute_1_to_1 = cancel_recompute_1_to_1
+            processor.recompute_analysis = record_recompute_analysis
 
             try:
                 panel.recompute_selected()
             finally:
-                setattr(panel, recompute_1_to_1_attr, original_recompute_1_to_1)
-                setattr(panel, recompute_1_to_0_attr, original_recompute_1_to_0)
+                processor.recompute_1_to_1 = original_recompute_1_to_1
+                processor.recompute_analysis = original_recompute_analysis
 
+            assert len(processing_called) == 1
             assert not analysis_called, (
-                "1-to-0 analysis recompute should not run when 1-to-1 pass is "
-                "interrupted"
+                "1-to-0 analysis recompute should not run when 1-to-1 processing "
+                "is cancelled"
             )
+
+
+def test_recompute_selected_continues_after_1_to_1_error():
+    """Test that an ordinary 1-to-1 error is not treated as cancellation."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.imagepanel
+            processor = panel.processor
+            processed_images = []
+            for _index in range(2):
+                panel.new_object()
+                processor.run_feature(
+                    "moving_average", param=MovingAverageParam.create(n=5)
+                )
+                processed_image = panel.objview.get_current_object()
+                processor.run_feature("centroid")
+                processed_images.append(processed_image)
+
+            panel.objview.select_objects(processed_images)
+            original_recompute_1_to_1 = processor.recompute_1_to_1
+            original_recompute_analysis = processor.recompute_analysis
+            processing_count = [0]
+            analysis_objects = []
+
+            def recompute_1_to_1_with_first_error(_func_name, source_obj, _param):
+                processing_count[0] += 1
+                if processing_count[0] == 1:
+                    return CompOut(error_msg="Expected computation error")
+                return CompOut(result=source_obj.copy())
+
+            def record_recompute_analysis(obj, *args, **kwargs):
+                analysis_objects.append(obj)
+
+            processor.recompute_1_to_1 = recompute_1_to_1_with_first_error
+            processor.recompute_analysis = record_recompute_analysis
+
+            try:
+                with (
+                    execenv.context(unattended=False),
+                    patch(
+                        "datalab.gui.panel.base.QW.QMessageBox.warning",
+                        return_value=QW.QMessageBox.Yes,
+                    ) as warning,
+                ):
+                    panel.recompute_selected()
+            finally:
+                processor.recompute_1_to_1 = original_recompute_1_to_1
+                processor.recompute_analysis = original_recompute_analysis
+
+            assert processing_count[0] == 2
+            warning.assert_called_once()
+            assert analysis_objects == [processed_images[1]]
 
 
 def test_apply_creation_parameters_signal():

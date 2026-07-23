@@ -360,10 +360,6 @@ msgid "Recompute"
 msgstr "Retraiter"
 
 #, python-format
-msgid "Recompute selected %s with its processing parameters"
-msgstr "Retraiter l'objet %s sélectionné avec ses paramètres de traitement"
-
-#, python-format
 msgid ""
 "Recompute selected %s: refresh both processing and analysis results with their "
 "stored parameters"
@@ -1581,9 +1577,6 @@ msgstr "Importer une ROI"
 
 msgid "Export ROI"
 msgstr "Exporter une ROI"
-
-msgid "Selected object(s) do not have processing parameters that can be recomputed."
-msgstr "L'objet (ou les objets) sélectionné(s) n'ont pas de paramètres de traitement pouvant être retraités."
 
 msgid ""
 "Selected object(s) do not have processing or analysis parameters that can be "
