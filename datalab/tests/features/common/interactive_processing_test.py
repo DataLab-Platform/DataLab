@@ -34,7 +34,11 @@ from sigima.params import (
 from sigima.proc.image import RadialProfileParam
 
 from datalab.gui.newobject import CREATION_PARAMETERS_OPTION
-from datalab.gui.processor.base import PROCESSING_PARAMETERS_OPTION
+from datalab.gui.processor.base import (
+    PROCESSING_PARAMETERS_OPTION,
+    extract_analysis_parameters,
+    extract_processing_parameters,
+)
 from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_test_app_context
 
@@ -167,7 +171,7 @@ def test_recompute():
             # Recompute with different input signal data
             constant = 1.23098765
             signal.y += constant
-            panel.recompute_processing()
+            panel.recompute_selected()
 
             assert np.allclose(filtered_sig.y, original_data + constant)
 
@@ -176,6 +180,61 @@ def test_recompute():
             option_dict = filtered_sig.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
             assert option_dict["source_uuid"] == signal_uuid
             assert option_dict["func_name"] == "gaussian_filter"
+
+
+def test_recompute_selected_skips_analysis_when_1_to_1_interrupted():
+    """Test that analysis recompute is skipped when 1-to-1 pass is interrupted."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.imagepanel
+            processor = panel.processor
+
+            # Create a source image and a 1-to-1 processed result
+            panel.new_object()
+            processor.run_feature(
+                "moving_average", param=MovingAverageParam.create(n=5)
+            )
+            processed_image = panel.objview.get_current_object()
+
+            # Add a 1-to-0 analysis result to the same object
+            processor.run_feature("centroid")
+
+            # Ensure this object is eligible for both processing and analysis passes
+            proc_params = extract_processing_parameters(processed_image)
+            analysis_params = extract_analysis_parameters(processed_image)
+            assert proc_params is not None and proc_params.pattern == "1-to-1"
+            assert analysis_params is not None and analysis_params.pattern == "1-to-0"
+
+            panel.objview.select_objects([processed_image])
+
+            # Patch recompute internals to simulate interrupted 1-to-1 pass and
+            # detect whether 1-to-0 pass is called.
+            recompute_1_to_1_attr = "_BaseDataPanel__recompute_1_to_1_objects"
+            recompute_1_to_0_attr = "_BaseDataPanel__recompute_1_to_0_objects"
+            original_recompute_1_to_1 = getattr(panel, recompute_1_to_1_attr)
+            original_recompute_1_to_0 = getattr(panel, recompute_1_to_0_attr)
+            analysis_called = []
+
+            def fake_recompute_1_to_1(objects):
+                # Simulate successful work started, then interrupted by user.
+                return {get_uuid(obj) for obj in objects}, True
+
+            def fake_recompute_1_to_0(objects):
+                analysis_called.append(objects)
+
+            setattr(panel, recompute_1_to_1_attr, fake_recompute_1_to_1)
+            setattr(panel, recompute_1_to_0_attr, fake_recompute_1_to_0)
+
+            try:
+                panel.recompute_selected()
+            finally:
+                setattr(panel, recompute_1_to_1_attr, original_recompute_1_to_1)
+                setattr(panel, recompute_1_to_0_attr, original_recompute_1_to_0)
+
+            assert not analysis_called, (
+                "1-to-0 analysis recompute should not run when 1-to-1 pass is "
+                "interrupted"
+            )
 
 
 def test_apply_creation_parameters_signal():
@@ -675,7 +734,7 @@ def test_cross_panel_image_to_signal():
             original_signal_data = signal.y.copy()
 
             # Recompute the radial profile
-            signal_panel.recompute_processing()
+            signal_panel.recompute_selected()
 
             # The signal should have changed (doubled intensity)
             assert not np.allclose(signal.y, original_signal_data)
