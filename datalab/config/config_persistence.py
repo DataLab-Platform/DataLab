@@ -234,7 +234,9 @@ def _load_field(options, conf, field_name: str, section: str, ini_key: str) -> N
     default_raw = options.get_default_raw(field_name)
 
     if isinstance(field, DataSetOptionField):
-        raw = conf.get(section, ini_key, default="")
+        if not conf.has_option(section, ini_key):
+            return
+        raw = conf.get(section, ini_key)
         if isinstance(raw, str) and raw:
             try:
                 field.from_json(_unescape_percent(raw))

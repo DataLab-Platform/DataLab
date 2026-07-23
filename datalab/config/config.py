@@ -9,12 +9,15 @@ This module handles `DataLab` configuration (options, images and icons).
 
 from __future__ import annotations
 
+import configparser
 import logging
 import os
 import os.path as osp
 import sys
+import tempfile
 
 from guidata import configtools
+from guidata.userconfig import get_config_basedir
 from plotpy.config import CONF as PLOTPY_CONF
 from plotpy.config import MAIN_BG_COLOR, MAIN_FG_COLOR
 from plotpy.constants import LUTAlpha
@@ -26,11 +29,14 @@ from sigima.proc.title_formatting import (
 )
 from sigimax.config import set_conf
 from sigimax.utils import conf
-from sigimax.utils.conf import Configuration
+from sigimax.utils.conf import AppUserConfig, Configuration
 
 from datalab import __version__
 from datalab.config.config_options import DataLabOptions
-from datalab.config.config_persistence import load_options_from_ini
+from datalab.config.config_persistence import (
+    load_options_from_ini,
+    save_options_to_ini,
+)
 
 # Configure Sigima to use DataLab-compatible placeholder title formatting
 set_default_title_formatter(PlaceholderTitleFormatter())
@@ -39,6 +45,8 @@ CONF_VERSION = "1.0.0"
 
 APP_NAME = "DataLab"
 MOD_NAME = "datalab"
+TYPED_CONFIG_SUFFIX = "_typed"
+CONFIG_BACKEND_ENV_VAR = "DATALAB_CONFIG_BACKEND"
 
 
 def get_config_app_name() -> str:
@@ -64,6 +72,135 @@ def get_config_app_name() -> str:
         return APP_NAME
 
     return f"{APP_NAME}_v{major_version}"
+
+
+def get_legacy_config_filename() -> str:
+    """Return the configuration filename used by DataLab 1.2 and earlier."""
+    config_name = get_config_app_name()
+    return osp.join(get_config_basedir(), f".{config_name}", f"{config_name}.ini")
+
+
+def get_typed_config_filename() -> str:
+    """Return the typed configuration filename used by DataLab 1.3 and later."""
+    config_name = get_config_app_name()
+    return osp.join(
+        get_config_basedir(),
+        f".{config_name}",
+        f"{config_name}{TYPED_CONFIG_SUFFIX}.ini",
+    )
+
+
+class DataLabUserConfig(AppUserConfig):
+    """DataLab INI backend keeping typed and legacy files side by side."""
+
+    def filename(self) -> str:
+        """Return the typed configuration filename."""
+        return self.get_path(f"{self.name}{TYPED_CONFIG_SUFFIX}.ini")
+
+
+class LegacyConfigSnapshot(AppUserConfig):
+    """Read-only-on-disk snapshot of a legacy DataLab configuration."""
+
+    def __init__(self, name: str) -> None:
+        super().__init__({})
+        self.name = name
+
+    def set(self, section, option, value, verbose=False, save=True) -> None:
+        """Update the snapshot in memory without writing the legacy file."""
+        del save
+        super().set(section, option, value, verbose=verbose, save=False)
+
+    def save(self) -> None:
+        """Keep the legacy configuration read-only from DataLab 1.3."""
+
+    def cleanup(self) -> None:
+        """Never delete the legacy configuration from DataLab 1.3."""
+
+    def remove_option(self, section, option) -> bool:
+        """Remove an option from the in-memory snapshot without saving it."""
+        return configparser.ConfigParser.remove_option(self, section, option)
+
+    def remove_section(self, section) -> bool:
+        """Remove a section from the in-memory snapshot without saving it."""
+        return configparser.ConfigParser.remove_section(self, section)
+
+
+def get_config_backend_mode() -> str:
+    """Return the selected configuration backend mode for development/tests."""
+    mode = os.environ.get(CONFIG_BACKEND_ENV_VAR, "typed").strip().lower()
+    if mode not in ("legacy", "typed"):
+        raise ValueError(
+            f"Invalid {CONFIG_BACKEND_ENV_VAR} value {mode!r}: "
+            "expected 'legacy' or 'typed'"
+        )
+    return mode
+
+
+def create_config_backend(mode: str | None = None) -> AppUserConfig:
+    """Create the selected DataLab configuration backend without loading it."""
+    selected_mode = get_config_backend_mode() if mode is None else mode
+    if selected_mode == "typed":
+        return DataLabUserConfig({})
+    if selected_mode == "legacy":
+        return LegacyConfigSnapshot(get_config_app_name())
+    raise ValueError(f"Invalid configuration backend mode {selected_mode!r}")
+
+
+# Install the DataLab backend before consumers import ``CONF`` directly from
+# ``sigimax.utils.conf``. No file is read or written until ``initialize()``.
+if not isinstance(conf.CONF, (DataLabUserConfig, LegacyConfigSnapshot)):
+    conf.CONF = create_config_backend()
+
+
+def atomic_save_configuration(config: AppUserConfig) -> None:
+    """Atomically write a configuration backend to its target filename."""
+    filename = config.filename()
+    directory = osp.dirname(filename)
+    os.makedirs(directory, mode=0o700, exist_ok=True)
+    descriptor, temporary_filename = tempfile.mkstemp(
+        dir=directory,
+        prefix=f".{osp.basename(filename)}.",
+        suffix=".tmp",
+        text=True,
+    )
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
+            config.write(stream)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary_filename, filename)
+    finally:
+        if osp.exists(temporary_filename):
+            os.remove(temporary_filename)
+
+
+def migrate_legacy_configuration(
+    options: DataLabOptions,
+    legacy_filename: str,
+    typed_conf: AppUserConfig,
+) -> bool:
+    """Initialize a missing typed configuration from a legacy INI file.
+
+    Args:
+        options: Typed DataLab options to initialize.
+        legacy_filename: DataLab 1.2 configuration filename.
+        typed_conf: DataLab 1.3 INI backend.
+
+    Returns:
+        True if the legacy configuration was migrated, False if migration was
+         unnecessary or impossible because a source file was absent.
+    """
+    if osp.isfile(typed_conf.filename()) or not osp.isfile(legacy_filename):
+        return False
+
+    legacy_conf = LegacyConfigSnapshot(get_config_app_name())
+    legacy_conf.read(legacy_filename, encoding="utf-8")
+    load_options_from_ini(options, legacy_conf)
+    migrate_legacy_plugin_paths(options, sync_env=False)
+    typed_conf.set_version(CONF_VERSION, save=False)
+    save_options_to_ini(options, typed_conf, save=False)
+    atomic_save_configuration(typed_conf)
+    return True
 
 
 _ = configtools.get_translation(MOD_NAME)
@@ -205,6 +342,21 @@ def normalize_plugin_paths(paths: list[str] | tuple[str, ...] | None) -> list[st
     return normalized
 
 
+def migrate_legacy_plugin_paths(
+    options: DataLabOptions, *, sync_env: bool = True
+) -> list[str]:
+    """Migrate the deprecated single plugin path into the typed path list."""
+    candidates = list(options.plugins_path_list.get([], sync_env=sync_env) or [])
+    legacy_path = options.plugins_path.get("", sync_env=sync_env)
+    fixed_default = osp.normpath(get_config_path("plugins"))
+    if legacy_path and isinstance(legacy_path, str):
+        normalized_legacy = osp.normpath(osp.abspath(osp.expanduser(legacy_path)))
+        if not candidates and normalized_legacy != fixed_default:
+            candidates.append(legacy_path)
+            options.plugins_path_list.set(candidates, sync_env=sync_env)
+    return normalize_plugin_paths(candidates)
+
+
 def get_user_plugin_paths() -> list[str]:
     """Return user-configured extra plugin directories.
 
@@ -214,21 +366,7 @@ def get_user_plugin_paths() -> list[str]:
     """
     fixed_default = osp.normpath(get_config_path("plugins"))
 
-    # New list-based option (primary)
-    path_list = Conf.plugins_path_list.get([])
-    if path_list is None:
-        path_list = []
-    candidates = list(path_list)
-
-    # Migrate deprecated single-directory option into the list
-    legacy_path = Conf.plugins_path.get("")
-    if legacy_path and isinstance(legacy_path, str):
-        norm_legacy = osp.normpath(osp.abspath(osp.expanduser(legacy_path)))
-        if not candidates and norm_legacy != fixed_default:
-            candidates.append(legacy_path)
-            Conf.plugins_path_list.set(candidates)
-
-    normalized = normalize_plugin_paths(candidates)
+    normalized = migrate_legacy_plugin_paths(Conf)
     return [path for path in normalized if path != fixed_default]
 
 
@@ -270,11 +408,27 @@ def get_config_filename() -> str:
 def initialize():
     """Initialize application configuration"""
     config_app_name = get_config_app_name()
+    backend_mode = get_config_backend_mode()
+    typed_mode = backend_mode == "typed"
+    typed_exists = typed_mode and osp.isfile(get_typed_config_filename())
     Conf.set_ini_persist_enabled(False)
     try:
-        Configuration.initialize(config_app_name, CONF_VERSION, load=not DEBUG)
+        backend_matches = (
+            isinstance(conf.CONF, DataLabUserConfig)
+            if typed_mode
+            else isinstance(conf.CONF, LegacyConfigSnapshot)
+        )
+        if not backend_matches:
+            conf.CONF = create_config_backend(backend_mode)
+        load_active_config = (typed_exists if typed_mode else True) and not DEBUG
+        Configuration.initialize(config_app_name, CONF_VERSION, load=load_active_config)
         if not DEBUG:
-            load_options_from_ini(Conf, conf.CONF)
+            if not typed_mode or typed_exists:
+                load_options_from_ini(Conf, conf.CONF)
+            elif not migrate_legacy_configuration(
+                Conf, get_legacy_config_filename(), conf.CONF
+            ):
+                conf.CONF.set_version(CONF_VERSION, save=False)
     finally:
         Conf.set_ini_persist_enabled(True)
 

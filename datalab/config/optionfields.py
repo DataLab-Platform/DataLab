@@ -28,6 +28,7 @@ path being written back where only a basename is expected).
 
 from __future__ import annotations
 
+import json
 import os.path as osp
 from typing import TYPE_CHECKING, Any
 
@@ -98,6 +99,7 @@ class ConfigPathOptionField(OptionField):
             value: The raw basename to store.
         """
         self._value = value
+        self.mark_initialized()
 
 
 class WorkingDirOptionField(OptionField):
@@ -171,6 +173,7 @@ class WorkingDirOptionField(OptionField):
             value: The raw directory path to store.
         """
         self._value = value
+        self.mark_initialized()
 
 
 class FontOptionField(_BaseFontOptionField):
@@ -311,6 +314,7 @@ class DataSetOptionField(OptionField):
             value: The DataSet instance to store (or None).
         """
         self._value = value
+        self.mark_initialized()
 
     def to_json(self) -> str | None:
         """Serialize the actively-set DataSet to a JSON string.
@@ -329,4 +333,8 @@ class DataSetOptionField(OptionField):
         Args:
             json_str: The JSON string to deserialize.
         """
-        self._value = gds.json_to_dataset(json_str)
+        data = json.loads(json_str)
+        if data.get("class_module") == "datalab.config":
+            data["class_module"] = "datalab.config.config"
+        self._value = gds.json_to_dataset(json.dumps(data))
+        self.mark_initialized()

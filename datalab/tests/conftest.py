@@ -125,6 +125,18 @@ def reset_cwd(request):  # pylint: disable=unused-argument
     os.chdir(INITIAL_CWD)
 
 
+@pytest.fixture(autouse=True)
+def restore_datalab_options_env():
+    """Restore the cross-process options snapshot after each test."""
+    env_var = "DATALAB_OPTIONS_JSON"
+    original = os.environ.get(env_var)
+    yield
+    if original is None:
+        os.environ.pop(env_var, None)
+    else:
+        os.environ[env_var] = original
+
+
 @pytest.hookimpl(tryfirst=True)
 def pytest_runtest_teardown(item, nextitem):  # pylint: disable=unused-argument
     """Run teardown after each test."""

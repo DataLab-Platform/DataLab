@@ -6,9 +6,18 @@ Unit tests for the DataLab configuration persistence layer
 """
 
 import guidata.dataset as gds
+import pytest
 from sigimax.utils import conf as confmod
 from sigimax.utils.conf import AppUserConfig
 
+from datalab.config.config import (
+    CONF_VERSION,
+    DataLabShapeParam,
+    DataLabUserConfig,
+    LegacyConfigSnapshot,
+    atomic_save_configuration,
+    migrate_legacy_configuration,
+)
 from datalab.config.config_options import DataLabOptions
 from datalab.config.config_persistence import (
     get_ini_location,
@@ -32,6 +41,118 @@ def _make_conf() -> AppUserConfig:
     conf = AppUserConfig({})
     conf.set_application("DataLab_pytest", "1.0.0", load=False)
     return conf
+
+
+class _DirectoryConfig(DataLabUserConfig):
+    """DataLab config backend rooted in a temporary test directory."""
+
+    def __init__(self, directory) -> None:
+        self._directory = directory
+        super().__init__({})
+
+    def get_path(self, basename: str) -> str:
+        """Return a path in the temporary test directory."""
+        return str(self._directory / basename)
+
+
+class _DirectoryLegacyConfig(LegacyConfigSnapshot):
+    """Read-only legacy backend rooted in a temporary test directory."""
+
+    def __init__(self, directory) -> None:
+        self._directory = directory
+        super().__init__("DataLab_v1")
+
+    def get_path(self, basename: str) -> str:
+        """Return a path in the temporary test directory."""
+        return str(self._directory / basename)
+
+
+def test_legacy_configuration_migrates_without_modifying_source(tmp_path) -> None:
+    """The first typed startup copies legacy values and preserves downgrade."""
+    legacy_filename = tmp_path / "DataLab_v1.ini"
+    legacy = AppUserConfig({})
+    legacy.name = "DataLab_v1"
+    shape_json = gds.dataset_to_json(DataLabShapeParam()).replace(
+        '"class_module": "datalab.config.config"',
+        '"class_module": "datalab.config"',
+    )
+    legacy.read_dict(
+        {
+            "main": {
+                "version": CONF_VERSION,
+                "plugins_enabled_list": repr(["plugin_x"]),
+                "plugins_path": repr(str(tmp_path / "legacy_plugins")),
+            },
+            "view": {
+                "max_shapes_to_draw": "321",
+                "sig_shape_param": shape_json,
+            },
+        }
+    )
+    with legacy_filename.open("w", encoding="utf-8") as stream:
+        legacy.write(stream)
+    legacy_bytes = legacy_filename.read_bytes()
+
+    typed = _DirectoryConfig(tmp_path)
+    typed.set_application("DataLab_v1", CONF_VERSION, load=False)
+    options = DataLabOptions()
+
+    assert migrate_legacy_configuration(options, str(legacy_filename), typed)
+    assert legacy_filename.read_bytes() == legacy_bytes
+    assert typed.filename().endswith("DataLab_v1_typed.ini")
+    assert options.max_shapes_to_draw.get() == 321
+    assert options.plugins_path.get() == str(tmp_path / "legacy_plugins")
+    assert options.plugins_path_list.get() == [str(tmp_path / "legacy_plugins")]
+    assert options.plugins_enabled_list.get() == ["plugin_x"]
+    assert isinstance(options.sig_shape_param.get_raw(), DataLabShapeParam)
+
+    reloaded_backend = _DirectoryConfig(tmp_path)
+    reloaded_backend.set_application("DataLab_v1", CONF_VERSION, load=True)
+    reloaded_options = DataLabOptions()
+    load_options_from_ini(reloaded_options, reloaded_backend)
+    assert reloaded_options.max_shapes_to_draw.get() == 321
+    assert reloaded_options.plugins_path_list.get() == [
+        str(tmp_path / "legacy_plugins")
+    ]
+    assert reloaded_options.plugins_enabled_list.get() == ["plugin_x"]
+    assert isinstance(reloaded_options.sig_shape_param.get_raw(), DataLabShapeParam)
+    assert not migrate_legacy_configuration(options, str(legacy_filename), typed)
+
+
+def test_atomic_configuration_save_cleans_up_after_replace_error(
+    tmp_path, monkeypatch
+) -> None:
+    """A failed atomic replacement leaves no typed or temporary file."""
+    config = _DirectoryConfig(tmp_path)
+    config.set_application("DataLab_v1", CONF_VERSION, load=False)
+    config.set("main", "color_mode", "dark", save=False)
+
+    def raise_replace_error(_source, _destination) -> None:
+        raise OSError("replace failed")
+
+    monkeypatch.setattr("datalab.config.config.os.replace", raise_replace_error)
+
+    with pytest.raises(OSError, match="replace failed"):
+        atomic_save_configuration(config)
+
+    assert not (tmp_path / "DataLab_v1_typed.ini").exists()
+    assert list(tmp_path.glob("*.tmp")) == []
+
+
+def test_legacy_backend_is_read_only(tmp_path) -> None:
+    """DataLab 1.3 development mode cannot overwrite the DataLab 1.2 INI."""
+    legacy_filename = tmp_path / "DataLab_v1.ini"
+    legacy_filename.write_text("[main]\nversion = 1.0.0\n", encoding="utf-8")
+    original_bytes = legacy_filename.read_bytes()
+    backend = _DirectoryLegacyConfig(tmp_path)
+    backend.set_application("DataLab_v1", CONF_VERSION, load=True)
+
+    backend.set("main", "plugins_enabled", False)
+    backend.remove_option("main", "version")
+    backend.save()
+    backend.cleanup()
+
+    assert legacy_filename.read_bytes() == original_bytes
 
 
 def test_section_map_is_complete() -> None:

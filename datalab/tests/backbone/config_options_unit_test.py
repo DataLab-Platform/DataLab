@@ -94,6 +94,21 @@ def test_field_set_updates_ini_and_json(monkeypatch) -> None:
     assert json.loads(os.environ[options.ENV_VAR])["available_memory_threshold"] == 640
 
 
+def test_field_context_restores_absent_ini_option(monkeypatch) -> None:
+    """A temporary context does not persist a previously absent INI option."""
+    backend = _make_conf()
+    monkeypatch.setattr(confmod, "CONF", backend)
+    options = DataLabOptions()
+    options.set_ini_persist_enabled(True)
+
+    assert not backend.has_option("console", "console_enabled")
+    with options.console_enabled.context(False):
+        assert backend.get("console", "console_enabled") is False
+    assert options.console_enabled.get(sync_env=False) is True
+    assert not backend.has_option("console", "console_enabled")
+    assert not options.is_option_initialized("console_enabled")
+
+
 def test_datalab_conf_is_active_sigimax_conf() -> None:
     """DataLab and reused SigimaX components share the same typed singleton."""
     from datalab.config import Conf  # pylint: disable=import-outside-toplevel
@@ -177,6 +192,38 @@ def test_from_dict_round_trip() -> None:
     assert opt.process_isolation_enabled.get() is False
     assert opt.ai_provider.get() == "local"
     assert opt.sig_shape_param.get().value == 42
+
+
+def test_from_dict_marks_raw_fields_initialized() -> None:
+    """Raw path and DataSet deserialization preserves initialization state."""
+    opt = DataLabOptions()
+    param = _SampleParam()
+    param.value = 17
+
+    opt.from_dict(
+        {
+            "traceback_log_path": ".external.log",
+            "sig_shape_param": gds.dataset_to_json(param),
+        }
+    )
+
+    assert opt.is_option_initialized("traceback_log_path")
+    assert opt.is_option_initialized("sig_shape_param")
+    assert opt.traceback_log_path.get(".fallback.log").endswith(".external.log")
+    assert opt.sig_shape_param.get().value == 17
+
+
+def test_environment_raw_value_is_not_overwritten_by_get_default(
+    monkeypatch,
+) -> None:
+    """An environment-only raw value wins over a later optional default."""
+    opt = DataLabOptions()
+    values = opt.to_dict()
+    values["traceback_log_path"] = ".external.log"
+    monkeypatch.setenv(opt.ENV_VAR, json.dumps(values))
+
+    assert opt.traceback_log_path.get(".fallback.log").endswith(".external.log")
+    assert opt.traceback_log_path.get_raw() == ".external.log"
 
 
 def test_reset_to_defaults() -> None:

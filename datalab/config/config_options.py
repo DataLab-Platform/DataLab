@@ -627,6 +627,23 @@ class DataLabOptions(SigimaXOptions):
         """
         self._ini_persist_enabled = enabled
 
+    def snapshot_option_context_state(self, name: str) -> bool:
+        """Return whether an option was persisted before a temporary context."""
+        # Imported lazily to avoid a config_options/config_persistence cycle.
+        # pylint: disable=import-outside-toplevel
+        from datalab.config.config_persistence import has_persisted_option
+
+        return has_persisted_option(self, name)
+
+    def restore_option_context_state(self, name: str, was_persisted: bool) -> None:
+        """Restore persistence presence after a temporary option context."""
+        if not was_persisted:
+            # Imported lazily to avoid a config_options/config_persistence cycle.
+            # pylint: disable=import-outside-toplevel
+            from datalab.config.config_persistence import remove_persisted_option
+
+            remove_persisted_option(self, name)
+
     def is_option_initialized(self, name: str) -> bool:
         """Return whether an option was loaded, set, or persisted in the INI."""
         # Imported lazily to avoid a config_options/config_persistence cycle.
