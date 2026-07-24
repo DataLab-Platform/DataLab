@@ -895,7 +895,7 @@ class ObjectProp(QW.QWidget):
         obj: SignalObj | ImageObj | None = None,
         interactive: bool = True,
         param: gds.DataSet | None = None,
-    ) -> None:
+    ) -> bool:
         """Apply analysis parameters: re-run the 1-to-0 analysis in place.
 
         Args:
@@ -911,7 +911,7 @@ class ObjectProp(QW.QWidget):
         editor = self.analysis_param_editor
         obj = obj or self.current_analysis_obj
         if obj is None:
-            return
+            return False
 
         # Extract analysis parameters
         proc_params = extract_analysis_parameters(obj)
@@ -920,7 +920,7 @@ class ObjectProp(QW.QWidget):
                 QW.QMessageBox.warning(
                     self, _("Error"), _("Analysis metadata is incomplete.")
                 )
-            return
+            return False
 
         func_name = proc_params.func_name
 
@@ -929,21 +929,22 @@ class ObjectProp(QW.QWidget):
         # the stored analysis parameters.
         if param is None:
             param = editor.dataset if editor is not None else proc_params.param
+        recompute_param = copy.deepcopy(param)
 
         # Disable ROI creation during re-analysis: detection functions store
         # create_rois=True in their parameters, but re-running should only
         # update analysis results, not recreate ROIs (which would make them
         # impossible to delete or modify).
-        if hasattr(param, "create_rois"):
-            param.create_rois = False
+        if hasattr(recompute_param, "create_rois"):
+            recompute_param.create_rois = False
 
         # Re-run the analysis in place (no history entry: runs under replaying)
         processor = self.__get_processor_associated_to(obj)
         try:
-            processor.recompute_1_to_0(
+            success = processor.recompute_1_to_0(
                 func_name,
                 obj,
-                param,
+                recompute_param,
                 plugin_origin=proc_params.plugin_origin,
             )
         except Exception as exc:  # pylint: disable=broad-exception-caught
@@ -954,7 +955,13 @@ class ObjectProp(QW.QWidget):
                 _("Error"),
                 _("Failed to recompute analysis:\n%s") % str(exc),
             )
-            return
+            return False
+        if not success:
+            if interactive:
+                QW.QMessageBox.warning(
+                    self, _("Error"), _("Failed to recompute analysis.")
+                )
+            return False
 
         # Propagate the edited param to the History panel: mutate the matching
         # analysis action (snapshot originals first) and refresh its tree
@@ -965,7 +972,7 @@ class ObjectProp(QW.QWidget):
             action = hpanel.find_analysis_action(get_uuid(obj), func_name)
             if action is not None:
                 action.snapshot_kwargs()
-                action.kwargs["param"] = copy.deepcopy(param)
+                action.kwargs["param"] = copy.deepcopy(recompute_param)
                 hpanel.refresh_action(action)
 
         # Refresh the object display after re-analysis
@@ -983,6 +990,7 @@ class ObjectProp(QW.QWidget):
                 self.current_analysis_obj, set_current=True
             ),
         )
+        return True
 
     def __get_processor_associated_to(
         self, obj: SignalObj | ImageObj
@@ -3111,14 +3119,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         return recomputed_uuids, True
         return recomputed_uuids, False
 
-    def recompute_1_to_0_objects(self, objects: list[SignalObj | ImageObj]) -> None:
+    def recompute_1_to_0_objects(
+        self, objects: list[SignalObj | ImageObj]
+    ) -> tuple[set[str], bool]:
         """Recompute 1-to-0 analysis operations for the given objects.
 
         Args:
             objects: Objects with stored 1-to-0 analysis parameters
         """
         if not objects:
-            return
+            return set(), False
+        recomputed_uuids: set[str] = set()
         with create_progress_bar(
             self, _("Recomputing analyses"), max_=len(objects)
         ) as progress:
@@ -3126,8 +3137,36 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 progress.setValue(index + 1)
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
-                    break
-                self.processor.recompute_analysis(obj)
+                    return recomputed_uuids, True
+                try:
+                    success = self.processor.recompute_analysis(obj)
+                    message = _("Analysis computation failed.")
+                except Exception as exc:  # pylint: disable=broad-exception-caught
+                    success = False
+                    message = str(exc)
+                if success:
+                    recomputed_uuids.add(get_uuid(obj))
+                    continue
+                if execenv.unattended:
+                    continue
+                failtxt = _("Failed to recompute analysis")
+                if index == len(objects) - 1:
+                    QW.QMessageBox.warning(
+                        self,
+                        _("Recompute"),
+                        f"{failtxt} '{obj.title}':\n{message}",
+                    )
+                else:
+                    conttxt = _("Do you want to continue with the next object?")
+                    answer = QW.QMessageBox.warning(
+                        self,
+                        _("Recompute"),
+                        f"{failtxt} '{obj.title}':\n{message}\n\n{conttxt}",
+                        QW.QMessageBox.Yes | QW.QMessageBox.No,
+                    )
+                    if answer == QW.QMessageBox.No:
+                        return recomputed_uuids, True
+        return recomputed_uuids, False
 
     def select_source_objects(self) -> None:
         """Select source objects associated with the selected object's processing.

@@ -1299,7 +1299,7 @@ msgstr "Ouvrir %d fichiers HDF5"
 msgid "Open HDF5 file"
 msgstr "Ouvrir un fichier HDF5"
 
-#, fuzzy, python-format
+#, python-format
 msgid "New %s"
 msgstr "Créer un nouvel objet %s"
 
@@ -1466,6 +1466,9 @@ msgstr ""
 "Échec du recalcul de l'analyse :\n"
 "%s"
 
+msgid "Failed to recompute analysis."
+msgstr "Échec du recalcul de l'analyse."
+
 msgid "Analysis was recomputed."
 msgstr "L'analyse a été recalculée."
 
@@ -1500,6 +1503,9 @@ msgstr "Le signal a été retraité."
 
 msgid "Image was reprocessed."
 msgstr "L'image a été retraitée."
+
+msgid "Failed to reprocess object."
+msgstr "Échec du retraitement de l'objet."
 
 msgid "Geometry results"
 msgstr "Résultats géométriques"
@@ -1674,6 +1680,12 @@ msgstr "Échec du retraitement de l'objet"
 msgid "Do you want to continue with the next object?"
 msgstr "Souhaitez-vous continuer avec l'objet suivant ?"
 
+msgid "Analysis computation failed."
+msgstr "Le calcul de l'analyse a échoué."
+
+msgid "Failed to recompute analysis"
+msgstr "Échec du recalcul de l'analyse"
+
 msgid "Selected object does not have processing metadata."
 msgstr "L'objet sélectionné n'a pas de métadonnées de traitement."
 
@@ -1761,6 +1773,14 @@ msgstr "Panneau d'historique"
 
 msgid "History files"
 msgstr "Fichiers d'historique"
+
+#, python-format
+msgid "Action %s could not be fully recomputed."
+msgstr "L'action %s n'a pas pu être entièrement recalculée."
+
+#, python-format
+msgid "Action %s: recompute returned %d output(s), expected %d."
+msgstr "Action %s : le recalcul a renvoyé %d sortie(s), %d attendue(s)."
 
 msgid "Record mode"
 msgstr "Mode d'enregistrement"
@@ -1856,10 +1876,6 @@ msgstr ""
 #, python-format
 msgid "Action %s: source object was deleted — skipping."
 msgstr "Action %s : l'objet source a été supprimé — ignorée."
-
-#, python-format
-msgid "Action %s: all source objects were deleted — skipping."
-msgstr "Action %s : tous les objets source ont été supprimés — ignorée."
 
 #, python-format
 msgid "Action %s: missing source(s) for output #%d — skipping."

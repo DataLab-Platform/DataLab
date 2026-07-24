@@ -150,6 +150,7 @@ def remap_processing_parameters(
         param=parameters.param,
         source_uuid=source_uuid,
         source_uuids=source_uuids,
+        plugin_origin=parameters.plugin_origin,
     )
 
 

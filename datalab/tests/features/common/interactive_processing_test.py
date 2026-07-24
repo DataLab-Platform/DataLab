@@ -36,15 +36,17 @@ from sigima.params import (
 )
 from sigima.proc.image import RadialProfileParam
 
+from datalab.adapters_metadata.common import ResultData
 from datalab.env import execenv
 from datalab.gui.newobject import CREATION_PARAMETERS_OPTION
 from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
+    _detect_plugin_origin,
     extract_analysis_parameters,
     extract_processing_parameters,
 )
 from datalab.gui.processor.catcher import CompOut
-from datalab.objectmodel import get_uuid
+from datalab.objectmodel import get_short_id, get_uuid
 from datalab.tests import datalab_test_app_context
 
 
@@ -291,6 +293,100 @@ def test_plugin_analysis_origin_is_stored_and_reused():
                 assert kwargs["plugin_origin"] == plugin_origin
 
 
+def test_wrapped_plugin_origin_uses_inner_callable_file() -> None:
+    """Use the origin candidate for both module and directory detection."""
+
+    def plugin_function():
+        pass
+
+    plugin_function.__module__ = "wrapped_plugin.operations"
+
+    def wrapper():
+        pass
+
+    wrapper.__module__ = "datalab.gui.processor.base"
+    wrapper.__wrapped__ = plugin_function
+
+    with (
+        patch("datalab.plugins.PluginRegistry.get_plugins", return_value=[]),
+        patch(
+            "datalab.gui.processor.base.inspect.getfile",
+            return_value="/plugins/wrapped_plugin/operations.py",
+        ) as getfile,
+    ):
+        origin = _detect_plugin_origin(wrapper)
+
+    assert origin is not None
+    assert origin["module"] == "wrapped_plugin.operations"
+    assert origin["directory"] == "wrapped_plugin"
+    getfile.assert_called_once_with(plugin_function)
+
+
+def test_analysis_persistence_failure_is_isolated_per_object() -> None:
+    """Roll back one failed analysis and continue with the next object."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            processor = panel.processor
+            panel.new_object(edit=False)
+            first = panel.objview.get_current_object()
+            panel.new_object(edit=False)
+            second = panel.objview.get_current_object()
+            assert first is not None and second is not None
+            first.metadata["existing"] = {"value": 1}
+            first_metadata = first.metadata.copy()
+            appended = []
+            first_append_lengths = None
+            original_append = ResultData.append
+
+            def fail_after_first_append(rdata, adapter, obj):
+                nonlocal first_append_lengths
+                original_append(rdata, adapter, obj)
+                appended.append((adapter, obj))
+                if obj is first:
+                    first_append_lengths = (
+                        len(rdata.results),
+                        len(rdata.ylabels),
+                        len(rdata.short_ids),
+                    )
+                    raise RuntimeError("Expected persistence error")
+
+            stats_func = processor.get_feature("stats").function
+            with (
+                execenv.context(catcher_test=True),
+                patch.object(
+                    ResultData,
+                    "append",
+                    new=fail_after_first_append,
+                ),
+                patch("datalab.gui.processor.base.show_warning_error") as show_error,
+            ):
+                result = processor.compute_1_to_0(
+                    stats_func,
+                    edit=False,
+                    target_objs=[first, second],
+                )
+
+            assert result is not None
+            assert result.execution_success is False
+            assert [obj for _adapter, obj in appended] == [first, second]
+            assert first_append_lengths is not None
+            assert all(count > 0 for count in first_append_lengths)
+            assert first.metadata == first_metadata
+            assert extract_analysis_parameters(first) is None
+            assert extract_analysis_parameters(second) is not None
+            second_adapter = appended[1][0]
+            second_short_id = get_short_id(second)
+            assert result.results == [second_adapter]
+            assert result.ylabels == [f"{second_adapter.func_name}({second_short_id})"]
+            assert result.short_ids == [second_short_id]
+            error_calls = [
+                call for call in show_error.call_args_list if call.args[1] == "error"
+            ]
+            assert len(error_calls) == 1
+            assert "Expected persistence error" in error_calls[0].args[3]
+
+
 def test_recompute_selected_continues_after_1_to_1_error():
     """Test that an ordinary 1-to-1 error is not treated as cancellation."""
     with qt_app_context():
@@ -324,6 +420,7 @@ def test_recompute_selected_continues_after_1_to_1_error():
 
             def record_recompute_analysis(obj, *args, **kwargs):
                 analysis_objects.append(obj)
+                return True
 
             processor.recompute_1_to_1 = recompute_1_to_1_with_first_error
             processor.recompute_analysis = record_recompute_analysis
@@ -344,6 +441,60 @@ def test_recompute_selected_continues_after_1_to_1_error():
             assert processing_count[0] == 2
             warning.assert_called_once()
             assert analysis_objects == [processed_images[1]]
+
+
+def test_apply_analysis_parameters_failure_preserves_action() -> None:
+    """Do not record or announce a failed direct analysis recomputation."""
+    with qt_app_context():
+        with datalab_test_app_context(history=True) as win:
+            panel = win.signalpanel
+            history = win.historypanel
+            history.toggle_record_mode(True)
+            panel.new_object(edit=False)
+            signal = panel.objview.get_current_object()
+            assert signal is not None
+            panel.processor.run_feature("stats")
+            action = history[len(history)]
+            original_kwargs = action.kwargs.copy()
+            status_messages = []
+            panel.SIG_STATUS_MESSAGE.connect(status_messages.append)
+
+            with patch.object(panel.processor, "recompute_1_to_0", return_value=False):
+                success = panel.objprop.apply_analysis_parameters(
+                    signal, interactive=False
+                )
+
+            assert success is False
+            assert action.kwargs == original_kwargs
+            assert status_messages == []
+
+
+def test_recompute_analyses_continues_after_failure_unattended() -> None:
+    """Continue with later analyses after an unattended object failure."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            panel.new_object(edit=False)
+            first = panel.objview.get_current_object()
+            panel.new_object(edit=False)
+            second = panel.objview.get_current_object()
+            assert first is not None and second is not None
+
+            with (
+                execenv.context(unattended=True),
+                patch.object(
+                    panel.processor,
+                    "recompute_analysis",
+                    side_effect=[False, True],
+                ) as recompute_analysis,
+            ):
+                recomputed, interrupted = panel.recompute_1_to_0_objects(
+                    [first, second]
+                )
+
+            assert recompute_analysis.call_count == 2
+            assert recomputed == {get_uuid(second)}
+            assert interrupted is False
 
 
 def test_apply_creation_parameters_signal():

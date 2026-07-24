@@ -14,8 +14,10 @@ from qtpy import QtWidgets as QW
 
 from datalab.config import _
 from datalab.env import execenv
+from datalab.gui.panel.history import chain as hchain
 from datalab.gui.panel.history import recompute as hrec
 from datalab.history import HistoryAction, HistorySession
+from datalab.history.core import copy_history_value
 
 if TYPE_CHECKING:
     from datalab.gui.panel.history.panel import HistoryPanel
@@ -124,11 +126,13 @@ def prompt_edit_action_params(
 
 
 def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) -> None:
-    """Edit and recompute only the selected actions, in session order.
+    """Edit selected actions and recompute their affected branches once.
 
-    Each selected action gets exactly one parameter dialog; non-selected
-    downstream actions are left untouched (no automatic cascade). A
-    re-entrance guard prevents nested prompt loops.
+    Each selected action gets exactly one parameter dialog. Recomputable
+    selected actions are always included, while accepted parameter edits also
+    include all downstream dependent actions. The resulting global plan is
+    deduplicated and executed in session order. A re-entrance guard prevents
+    nested prompt loops.
     """
     # Deduplicate and sort the selected actions in their session order
     ordered = order_selected_actions(panel, actions)
@@ -137,8 +141,16 @@ def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) 
     with panel.runtime.execution.replaying_edits() as started:
         if not started:
             return
+        entry_states = {
+            action.uuid: (
+                copy_history_value(action.kwargs),
+                copy_history_value(action.saved_kwargs),
+            )
+            for action in ordered
+        }
         edited_actions: list[HistoryAction] = []
         recomputable: list[HistoryAction] = []
+        deferred_actions: list[HistoryAction] = []
         for action in ordered:
             is_creation = (
                 action.kind == HistoryAction.KIND_UI
@@ -148,14 +160,15 @@ def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) 
                 action.kind == HistoryAction.KIND_COMPUTE and action.pattern is not None
             )
             if not is_creation and not is_compute:
-                with panel.replaying(), panel.output_suppressed():
-                    action.replay(panel.mainwindow, restore_selection=True, edit=True)
+                deferred_actions.append(action)
                 continue
             result = prompt_edit_action_params(panel, action)
             if result is False:
-                for done in edited_actions:
-                    done.restore_kwargs()
-                    panel.tree.refresh_action_item(done)
+                for selected_action in ordered:
+                    kwargs, saved_kwargs = entry_states[selected_action.uuid]
+                    selected_action.kwargs = kwargs
+                    selected_action.saved_kwargs = saved_kwargs
+                    panel.tree.refresh_action_item(selected_action)
                 return
             if result is True:
                 edited_actions.append(action)
@@ -163,11 +176,38 @@ def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) 
 
         for action in edited_actions:
             panel.tree.refresh_action_item(action)
-        for action in recomputable:
-            hrec.recompute_action_in_place(panel, action)
+        planned = list(recomputable)
+        for action in edited_actions:
+            planned.extend(hchain.get_downstream_actions(panel, action))
+        planned = order_selected_actions(panel, planned)
+        execution_plan = order_selected_actions(panel, deferred_actions + planned)
+        for action in planned:
+            action.is_stale = True
             panel.tree.refresh_action_item(action)
-        if edited_actions:
-            hrec.recompute_cascade(panel, edited_actions[0])
+        QW.QApplication.processEvents()
+        blocked_outputs: set[str] = set()
+        try:
+            for action in execution_plan:
+                if action in deferred_actions:
+                    with panel.replaying(), panel.output_suppressed():
+                        action.replay(
+                            panel.mainwindow, restore_selection=True, edit=True
+                        )
+                    continue
+                if hchain.action_consumes_any(action, blocked_outputs):
+                    blocked_outputs.update(
+                        panel.runtime.objects.action_output_uuids.get(action.uuid, [])
+                    )
+                    continue
+                success = hrec.recompute_action_in_place(panel, action)
+                action.is_stale = not success
+                panel.tree.refresh_action_item(action)
+                if not success:
+                    blocked_outputs.update(
+                        panel.runtime.objects.action_output_uuids.get(action.uuid, [])
+                    )
+        finally:
+            hrec.flush_cascade_warnings(panel)
         QW.QApplication.processEvents()
 
 
@@ -214,6 +254,11 @@ def restore_action_params(
             continue
         action.restore_kwargs()
         panel.tree.refresh_action_item(action)
-        hrec.recompute_action_in_place(panel, action)
-        hrec.recompute_cascade(panel, action)
+        success = hrec.recompute_action_in_place(panel, action)
+        action.is_stale = not success
+        panel.tree.refresh_action_item(action)
+        if not success:
+            break
+        if not isinstance(item, HistorySession):
+            hrec.recompute_cascade(panel, action)
     panel.ui.update_actions_state()

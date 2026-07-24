@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import abc
+import copy
 import inspect
 import multiprocessing
 import os.path as osp
@@ -639,12 +640,14 @@ def _detect_plugin_origin(func: Callable) -> dict[str, Any] | None:
     candidates.append(func)
 
     module_name = ""
+    origin_candidate = func
     for candidate in candidates:
         mod = getattr(candidate, "__module__", "") or ""
         if mod:
             top = mod.split(".", 1)[0]
             if top not in _BUILTIN_MODULE_PREFIXES:
                 module_name = mod
+                origin_candidate = candidate
                 break
     if not module_name:
         # All candidates are built-in; fall back to the outer func's module
@@ -691,7 +694,7 @@ def _detect_plugin_origin(func: Callable) -> dict[str, Any] | None:
     if top and top not in _BUILTIN_MODULE_PREFIXES:
         directory = None
         try:
-            directory = osp.basename(osp.dirname(inspect.getfile(func)))
+            directory = osp.basename(osp.dirname(inspect.getfile(origin_candidate)))
         except (TypeError, OSError):
             pass
         return {
@@ -1216,7 +1219,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
     def recompute_analysis(
         self, obj: SignalObj | ImageObj, refresh_plot: bool = True
-    ) -> None:
+    ) -> bool:
         """Recompute analysis (1-to-0) operations on demand.
 
         This method checks if the object has 1-to-0 analysis parameters (analysis
@@ -1236,10 +1239,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         # Check if object has 1-to-0 analysis parameters (analysis operations)
         proc_params = extract_analysis_parameters(obj)
         if proc_params is None or proc_params.pattern != "1-to-0":
-            return
+            return False
 
         # Get the parameter from processing parameters
-        param = proc_params.param
+        param = copy.deepcopy(proc_params.param)
 
         # Disable ROI creation during recompute: detection functions store
         # create_rois=True in their parameters, but recompute should only
@@ -1250,18 +1253,21 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         # Recompute the analysis operation silently, only for this specific object
         # (not all selected objects, to avoid O(nÂ²) behavior when called in a loop).
-        self.recompute_1_to_0(
+        success = self.recompute_1_to_0(
             proc_params.func_name,
             obj,
             param,
             plugin_origin=proc_params.plugin_origin,
         )
+        if not success:
+            return False
 
         # Update the view
         obj_uuid = get_uuid(obj)
         self.panel.objview.update_item(obj_uuid)
         if refresh_plot:
             self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+        return True
 
     def recompute_processing(
         self,
@@ -1645,7 +1651,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         obj: SignalObj | ImageObj,
         param: gds.DataSet | None = None,
         plugin_origin: dict[str, Any] | None = None,
-    ) -> None:
+    ) -> bool:
         """Recompute a 1-to-0 analysis on ``obj`` in place.
 
         Reuses :meth:`compute_1_to_0` with ``target_objs=[obj]`` under the
@@ -1657,6 +1663,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             obj: Object whose analysis must be refreshed.
             param: Analysis parameters (optional).
             plugin_origin: Optional plugin origin descriptor.
+
+        Returns:
+            True if the analysis result was refreshed successfully.
         """
         paramclass_name = type(param).__name__ if param is not None else None
         feature = self.get_feature(
@@ -1666,7 +1675,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         )
         historypanel = self.mainwindow.historypanel
         with historypanel.replaying(), Conf.proc.show_result_dialog.temp(False):
-            self.compute_1_to_0(feature.function, param, edit=False, target_objs=[obj])
+            result = self.compute_1_to_0(
+                feature.function, param, edit=False, target_objs=[obj]
+            )
+        return result is not None and result.execution_success
 
     def _compute_1_to_1_subroutine(
         self, funcs: list[Callable], params: list, title: str
@@ -1960,14 +1972,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         comment: str | None = None,
         edit: bool | None = None,
         target_objs: list[SignalObj | ImageObj] | None = None,
-    ) -> ResultData:
+    ) -> ResultData | None:
         """Generic processing method: 1 object in â†’ no object out.
 
         Applies a function to each selected object (or specified target objects),
         returning metadata or measurement results (e.g. peak coordinates, statistical
         properties) without generating new objects. Results are stored in the object's
         metadata and returned as a
-        ResultData instance.
+        ResultData instance, or None if parameter editing is cancelled or
+        preprocessing fails.
 
         Args:
             func: Function to execute, that takes either `(obj)` or `(obj, param)` as
@@ -1982,7 +1995,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
              processes all currently selected objects.
 
         Returns:
-            ResultData instance containing the results for all processed objects.
+            ResultData instance containing the results for all processed objects,
+             or None if the operation is cancelled or cannot be prepared.
 
         .. note::
             With k selected objects, the method performs k analyses and produces
@@ -2028,46 +2042,53 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 # Execute function
                 compout = self.__exec_func(func, args, progress)
                 if compout is None:
+                    rdata.execution_success = False
                     break
                 result = self.handle_output(
                     compout, _("Computing: %s") % title, progress
                 )
                 if result is None:
+                    rdata.execution_success = False
                     continue
 
-                # Using the adapters:
-                if isinstance(result, GeometryResult):
-                    adapter = GeometryAdapter(result)
-                elif isinstance(result, TableResult):
-                    adapter = TableAdapter(result)
-                else:
-                    # For "compute 1 to 0" functions, the result is either a
-                    # GeometryResult or TableResult:
-                    raise TypeError("Unsupported result type")
+                metadata_snapshot = copy.deepcopy(obj.metadata)
+                result_count = len(rdata.results)
+                ylabel_count = len(rdata.ylabels)
+                short_id_count = len(rdata.short_ids)
 
-                # Add result shape to object's metadata
-                # Pass function name for better parameter context in the Analysis tab
-                adapter.add_to(obj, param)
+                def persist_result() -> bool:
+                    if isinstance(result, GeometryResult):
+                        adapter = GeometryAdapter(result)
+                    elif isinstance(result, TableResult):
+                        adapter = TableAdapter(result)
+                    else:
+                        raise TypeError("Unsupported result type")
 
-                # Store analysis parameters to enable on-demand recomputation
-                # via the manual "Recompute" action.
-                # Analysis parameters (1-to-0) are stored separately from
-                # transformation history to avoid overwriting the processing chain
-                # when analyzing objects.
-                pp = ProcessingParameters(
-                    func_name=func.__name__,
-                    pattern="1-to-0",
-                    param=param,
-                    source_uuid=get_uuid(obj),
-                    plugin_origin=self._get_plugin_origin_for(func),
+                    adapter.add_to(obj, param)
+                    pp = ProcessingParameters(
+                        func_name=func.__name__,
+                        pattern="1-to-0",
+                        param=param,
+                        source_uuid=get_uuid(obj),
+                        plugin_origin=self._get_plugin_origin_for(func),
+                    )
+                    insert_processing_parameters(obj, pp)
+                    result_modified = self.postprocess_1_to_0_result(obj, result)
+                    rdata.append(adapter, obj)
+                    return result_modified
+
+                persistence_output = wng_err_func(persist_result, ())
+                result_modified = self.handle_output(
+                    persistence_output, _("Computing: %s") % title, progress
                 )
-                insert_processing_parameters(obj, pp)
-
-                # Apply processor-specific post-processing on the result
-                refresh_needed |= self.postprocess_1_to_0_result(obj, result)
-
-                # Append result to result data for later display
-                rdata.append(adapter, obj)
+                if result_modified is None:
+                    obj.metadata = metadata_snapshot
+                    del rdata.results[result_count:]
+                    del rdata.ylabels[ylabel_count:]
+                    del rdata.short_ids[short_id_count:]
+                    rdata.execution_success = False
+                    continue
+                refresh_needed |= result_modified
 
                 if obj is current_obj:
                     # Mark object as having fresh analysis results to show Analysis tab

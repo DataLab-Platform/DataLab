@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import copy
 import logging
 from typing import TYPE_CHECKING
 
@@ -22,6 +23,7 @@ from datalab.gui.panel.history import chain as hchain
 from datalab.gui.processor.base import (
     FeatureNotFoundError,
     ProcessingParameters,
+    extract_analysis_parameters,
     extract_processing_parameters,
     insert_processing_parameters,
 )
@@ -117,16 +119,15 @@ def record_missing_outputs(
     )
 
 
-def recompute_action_in_place(panel: HistoryPanel, action: HistoryAction) -> None:
+def recompute_action_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
     """Re-run ``action`` on the existing output object(s) (same UUIDs)."""
     if (
         action.kind == HistoryAction.KIND_UI
         and action.method_name in HistoryAction.UI_CREATION_METHODS
     ):
-        recompute_creation_in_place(panel, action)
-        return
+        return recompute_creation_in_place(panel, action)
     if action.kind != HistoryAction.KIND_COMPUTE:
-        return
+        return False
     method = {
         "1_to_1": recompute_1_to_1_in_place,
         "1_to_n": recompute_1_to_n_in_place,
@@ -144,12 +145,24 @@ def recompute_action_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
             _("Action %s uses pattern %r which is not recomputable yet.")
             % (action.func_name or action.uuid, action.pattern)
         )
-        return
+        return False
     try:
-        method(panel, action)
+        warning_count = len(panel.runtime.execution.cascade_warnings)
+        success = method(panel, action)
+        if (
+            not success
+            and len(panel.runtime.execution.cascade_warnings) == warning_count
+        ):
+            panel.runtime.execution.cascade_warnings.append(
+                _("Action %s could not be fully recomputed.")
+                % (action.func_name or action.uuid)
+            )
+        return success
     except FeatureNotFoundError as exc:
         handle_missing_feature(panel, action, exc)
     except (RuntimeError, ValueError, AttributeError, KeyError, TypeError) as exc:
+        action.is_stale = True
+        panel.runtime.execution.broken_actions.add(action.uuid)
         _logger.exception(
             "Cascade recompute failed for action %s (%s): %s",
             action.uuid,
@@ -160,6 +173,7 @@ def recompute_action_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
             _("Recompute failed for action %s: %s")
             % (action.func_name or action.uuid, exc)
         )
+    return False
 
 
 def handle_missing_feature(
@@ -192,7 +206,7 @@ def handle_missing_feature(
     )
 
 
-def recompute_creation_in_place(panel: HistoryPanel, action: HistoryAction) -> None:
+def recompute_creation_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
     """Recompute a creation (``new_object``) action in place.
 
     Rebuild the object from the edited ``param`` and copy it onto the
@@ -200,75 +214,77 @@ def recompute_creation_in_place(panel: HistoryPanel, action: HistoryAction) -> N
     """
     panel_data = hchain.resolve_panel_for_action(panel, action)
     if panel_data is None:
-        return
+        return False
     existing, missing = hchain.resolve_target_outputs(panel, panel_data, action)
     record_missing_outputs(panel, action, missing)
-    if not existing:
-        return
+    if missing or not existing:
+        return False
     output_uuid = existing[0]
     if not panel_data.objmodel.has_uuid(output_uuid):
-        return
+        return False
     output_obj = panel_data.objmodel[output_uuid]
     param = action.kwargs.get("param")
     if param is None:
-        return
+        return False
     if action.target == "signalpanel":
         prepared = prepare_signal_parameters(param, edit=False)
         if prepared is None:
-            return
+            return False
         new_obj = create_signal_from_param(prepared)
     else:
         new_obj = create_image_from_param(param)
     update_obj_in_place(output_obj, new_obj)
     insert_creation_parameters(output_obj, param)
     refresh_target(panel_data, output_uuid)
+    return True
 
 
-def recompute_1_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> None:
+def recompute_1_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
     """Recompute a single 1-to-1 action in place."""
     panel_data = hchain.resolve_panel_for_action(panel, action)
     if panel_data is None:
-        return
+        return False
     existing, missing = hchain.resolve_target_outputs(panel, panel_data, action)
     if not existing and not missing:
         legacy = hchain.find_output_object_uuid(panel, panel_data, action)
         if legacy is not None:
             existing = [legacy]
     record_missing_outputs(panel, action, missing)
-    if not existing:
-        return
+    if missing or not existing:
+        return False
     output_uuid = existing[0]
     if not panel_data.objmodel.has_uuid(output_uuid):
-        return
+        return False
     output_obj = panel_data.objmodel[output_uuid]
     pp = extract_processing_parameters(output_obj)
     if pp is None or pp.source_uuid is None:
-        return
+        return False
     if not panel_data.objmodel.has_uuid(pp.source_uuid):
         panel.runtime.execution.cascade_warnings.append(
             _("Action %s: source object was deleted — skipping.")
             % (action.func_name or action.uuid)
         )
-        return
+        return False
     source_obj = panel_data.objmodel[pp.source_uuid]
     param = action.kwargs.get("param")
+    plugin_origin = action.plugin_origin or pp.plugin_origin
     compout = panel_data.processor.recompute_1_to_1(
         action.func_name,
         source_obj,
         param,
-        plugin_origin=action.plugin_origin,
+        plugin_origin=plugin_origin,
     )
     if compout.cancelled:
-        return
+        return False
     if compout.error_msg:
         panel.runtime.execution.cascade_warnings.append(
             _("Recompute failed for action %s: %s")
             % (action.func_name or action.uuid, compout.error_msg)
         )
-        return
+        return False
     new_obj = compout.result
     if not isinstance(new_obj, (SignalObj, ImageObj)):
-        return
+        return False
     panel_data.objprop.apply_recomputed_object_in_place(
         output_obj,
         new_obj,
@@ -277,82 +293,105 @@ def recompute_1_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
             pattern=pp.pattern,
             param=param if param is not None else pp.param,
             source_uuid=pp.source_uuid,
+            plugin_origin=plugin_origin,
         ),
     )
     refresh_target(panel_data, output_uuid)
+    return True
 
 
-def recompute_1_to_n_in_place(panel: HistoryPanel, action: HistoryAction) -> None:
+def recompute_1_to_n_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
     """Recompute a 1-to-n action in place: replace each of the N outputs."""
     panel_data = hchain.resolve_panel_for_action(panel, action)
     if panel_data is None:
-        return
+        return False
     existing, missing = hchain.resolve_target_outputs(panel, panel_data, action)
     record_missing_outputs(panel, action, missing)
-    if not existing or not panel_data.objmodel.has_uuid(existing[0]):
-        return
+    if missing or not existing or not panel_data.objmodel.has_uuid(existing[0]):
+        return False
     first_obj = panel_data.objmodel[existing[0]]
     pp = extract_processing_parameters(first_obj)
     if pp is None or pp.source_uuid is None:
-        return
+        return False
     if not panel_data.objmodel.has_uuid(pp.source_uuid):
         panel.runtime.execution.cascade_warnings.append(
             _("Action %s: source object was deleted — skipping.")
             % (action.func_name or action.uuid)
         )
-        return
+        return False
     source_obj = panel_data.objmodel[pp.source_uuid]
     params = action.kwargs.get("params") or []
     if not params:
-        return
+        return False
+    plugin_origin = action.plugin_origin or pp.plugin_origin
     new_objs = panel_data.processor.recompute_1_to_n(
         action.func_name,
         source_obj,
         params,
-        plugin_origin=action.plugin_origin,
+        plugin_origin=plugin_origin,
     )
     if not new_objs:
-        return
-    n = min(len(existing), len(new_objs))
-    for idx in range(n):
-        out_uuid = existing[idx]
-        if not panel_data.objmodel.has_uuid(out_uuid):
-            continue
-        out_obj = panel_data.objmodel[out_uuid]
-        new_obj = new_objs[idx]
-        update_obj_in_place(out_obj, new_obj)
-        new_param = params[idx] if idx < len(params) else None
-        insert_processing_parameters(
-            out_obj,
-            ProcessingParameters(
-                func_name=action.func_name,
-                pattern="1-to-n",
-                param=new_param,
-                source_uuid=pp.source_uuid,
-            ),
-        )
-        refresh_target(panel_data, out_uuid)
-    if len(new_objs) != len(existing):
+        return False
+    if len(new_objs) != len(existing) or not all(
+        isinstance(obj, (SignalObj, ImageObj)) for obj in new_objs
+    ):
         _logger.warning(
             "1-to-n cardinality changed for action %s: %d outputs, %d existing.",
             action.uuid,
             len(new_objs),
             len(existing),
         )
+        panel.runtime.execution.cascade_warnings.append(
+            _("Action %s: recompute returned %d output(s), expected %d.")
+            % (action.func_name or action.uuid, len(new_objs), len(existing))
+        )
+        return False
+    snapshots = {
+        out_uuid: copy.deepcopy(panel_data.objmodel[out_uuid]) for out_uuid in existing
+    }
+    try:
+        for idx, out_uuid in enumerate(existing):
+            out_obj = panel_data.objmodel[out_uuid]
+            update_obj_in_place(out_obj, new_objs[idx])
+            insert_processing_parameters(
+                out_obj,
+                ProcessingParameters(
+                    func_name=action.func_name,
+                    pattern="1-to-n",
+                    param=params[idx],
+                    source_uuid=pp.source_uuid,
+                    plugin_origin=plugin_origin,
+                ),
+            )
+        for out_uuid in existing:
+            refresh_target(panel_data, out_uuid)
+    except Exception:
+        for out_uuid, snapshot in snapshots.items():
+            update_obj_in_place(panel_data.objmodel[out_uuid], snapshot)
+        for out_uuid in snapshots:
+            try:
+                refresh_target(panel_data, out_uuid)
+            except Exception:
+                _logger.exception(
+                    "Cascade recompute rollback refresh failed for output %s.",
+                    out_uuid,
+                )
+        raise
+    return True
 
 
-def recompute_n_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> None:
+def recompute_n_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
     """Recompute an n-to-1 action in place."""
     panel_data = hchain.resolve_panel_for_action(panel, action)
     if panel_data is None:
-        return
+        return False
     existing, missing = hchain.resolve_target_outputs(panel, panel_data, action)
     record_missing_outputs(panel, action, missing)
-    if not existing:
-        return
+    if missing or not existing:
+        return False
     output_uuid = existing[0]
     if not panel_data.objmodel.has_uuid(output_uuid):
-        return
+        return False
     output_obj = panel_data.objmodel[output_uuid]
     pp = extract_processing_parameters(output_obj)
     source_uuids: list[str] = []
@@ -360,25 +399,25 @@ def recompute_n_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
         source_uuids = list(pp.source_uuids)
     else:
         source_uuids = list(action.state.selection.get(panel_data.PANEL_STR_ID, []))
-    src_objs: list[SignalObj | ImageObj] = []
-    for uuid in source_uuids:
-        if panel_data.objmodel.has_uuid(uuid):
-            src_objs.append(panel_data.objmodel[uuid])
-    if not src_objs:
+    if not source_uuids or not all(
+        panel_data.objmodel.has_uuid(uuid) for uuid in source_uuids
+    ):
         panel.runtime.execution.cascade_warnings.append(
-            _("Action %s: all source objects were deleted — skipping.")
+            _("Action %s: source object(s) were deleted — skipping.")
             % (action.func_name or action.uuid)
         )
-        return
+        return False
+    src_objs = [panel_data.objmodel[uuid] for uuid in source_uuids]
     param = action.kwargs.get("param")
+    plugin_origin = action.plugin_origin or (pp.plugin_origin if pp else None)
     new_obj = panel_data.processor.recompute_n_to_1(
         action.func_name,
         src_objs,
         param,
-        plugin_origin=action.plugin_origin,
+        plugin_origin=plugin_origin,
     )
-    if new_obj is None:
-        return
+    if not isinstance(new_obj, (SignalObj, ImageObj)):
+        return False
     update_obj_in_place(output_obj, new_obj)
     insert_processing_parameters(
         output_obj,
@@ -387,31 +426,41 @@ def recompute_n_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
             pattern="n-to-1",
             param=param,
             source_uuids=[get_uuid(o) for o in src_objs],
+            plugin_origin=plugin_origin,
         ),
     )
     refresh_target(panel_data, output_uuid)
+    return True
 
 
-def recompute_2_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> None:
+def recompute_2_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
     """Recompute a 2-to-1 action in place (single or pairwise)."""
     panel_data = hchain.resolve_panel_for_action(panel, action)
     if panel_data is None:
-        return
+        return False
     existing, missing = hchain.resolve_target_outputs(panel, panel_data, action)
     record_missing_outputs(panel, action, missing)
-    if not existing:
-        return
+    if missing or not existing:
+        return False
     param = action.kwargs.get("param")
     obj2_uuids = action.kwargs.get("obj2_uuids") or []
     if isinstance(obj2_uuids, str):
         obj2_uuids = [obj2_uuids]
     pairwise = bool(action.kwargs.get("pairwise"))
     recorded_inputs = list(action.state.selection.get(panel_data.PANEL_STR_ID, []))
+    staged: list[
+        tuple[
+            str,
+            SignalObj | ImageObj,
+            SignalObj | ImageObj,
+            SignalObj | ImageObj,
+            dict | None,
+        ]
+    ] = []
     for idx, out_uuid in enumerate(existing):
         if not panel_data.objmodel.has_uuid(out_uuid):
-            continue
-        output_obj = panel_data.objmodel[out_uuid]
-        pp = extract_processing_parameters(output_obj)
+            return False
+        pp = extract_processing_parameters(panel_data.objmodel[out_uuid])
         src_uuids = (
             list(pp.source_uuids)
             if pp is not None and pp.source_uuids
@@ -426,7 +475,7 @@ def recompute_2_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
                 _("Action %s: missing source(s) for output #%d — skipping.")
                 % (action.func_name or action.uuid, idx + 1)
             )
-            continue
+            return False
         if not (
             panel_data.objmodel.has_uuid(src_uuids[0])
             and panel_data.objmodel.has_uuid(src_uuids[1])
@@ -435,58 +484,100 @@ def recompute_2_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
                 _("Action %s: source object(s) were deleted — skipping.")
                 % (action.func_name or action.uuid)
             )
-            continue
+            return False
         obj1 = panel_data.objmodel[src_uuids[0]]
         obj2 = panel_data.objmodel[src_uuids[1]]
+        plugin_origin = action.plugin_origin or (pp.plugin_origin if pp else None)
         new_obj = panel_data.processor.recompute_2_to_1(
             action.func_name,
             obj1,
             obj2,
             param,
-            plugin_origin=action.plugin_origin,
+            plugin_origin=plugin_origin,
         )
-        if new_obj is None:
-            continue
-        update_obj_in_place(output_obj, new_obj)
-        insert_processing_parameters(
-            output_obj,
-            ProcessingParameters(
-                func_name=action.func_name,
-                pattern="2-to-1",
-                param=param,
-                source_uuids=[get_uuid(obj1), get_uuid(obj2)],
-            ),
-        )
-        refresh_target(panel_data, out_uuid)
+        if not isinstance(new_obj, (SignalObj, ImageObj)):
+            return False
+        staged.append((out_uuid, new_obj, obj1, obj2, plugin_origin))
+    snapshots = {
+        out_uuid: copy.deepcopy(panel_data.objmodel[out_uuid])
+        for out_uuid, *_rest in staged
+    }
+    try:
+        for out_uuid, new_obj, obj1, obj2, plugin_origin in staged:
+            output_obj = panel_data.objmodel[out_uuid]
+            update_obj_in_place(output_obj, new_obj)
+            insert_processing_parameters(
+                output_obj,
+                ProcessingParameters(
+                    func_name=action.func_name,
+                    pattern="2-to-1",
+                    param=param,
+                    source_uuids=[get_uuid(obj1), get_uuid(obj2)],
+                    plugin_origin=plugin_origin,
+                ),
+            )
+        for out_uuid, *_rest in staged:
+            refresh_target(panel_data, out_uuid)
+    except Exception:
+        for out_uuid, snapshot in snapshots.items():
+            update_obj_in_place(panel_data.objmodel[out_uuid], snapshot)
+        for out_uuid in snapshots:
+            try:
+                refresh_target(panel_data, out_uuid)
+            except Exception:
+                _logger.exception(
+                    "Cascade recompute rollback refresh failed for output %s.",
+                    out_uuid,
+                )
+        raise
+    return True
 
 
-def recompute_1_to_0_in_place(panel: HistoryPanel, action: HistoryAction) -> None:
+def recompute_1_to_0_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
     """Recompute a 1-to-0 analysis on each source object in place."""
     panel_data = hchain.resolve_panel_for_action(panel, action)
     if panel_data is None:
-        return
+        return False
     sources = list(action.state.selection.get(panel_data.PANEL_STR_ID, []))
     if not sources:
-        return
-    param = action.kwargs.get("param")
-    missing: list[str] = []
-    for uuid in sources:
-        if not panel_data.objmodel.has_uuid(uuid):
-            missing.append(uuid)
-            continue
-        src_obj = panel_data.objmodel[uuid]
-        panel_data.processor.recompute_1_to_0(
-            action.func_name,
-            src_obj,
-            param,
-            plugin_origin=action.plugin_origin,
-        )
-        refresh_target(panel_data, uuid)
+        return False
+    param = copy.deepcopy(action.kwargs.get("param"))
+    if hasattr(param, "create_rois"):
+        param.create_rois = False
+    missing = [uuid for uuid in sources if not panel_data.objmodel.has_uuid(uuid)]
     if missing:
         panel.runtime.execution.cascade_warnings.append(
             _("Action %s: %d analysed object(s) were deleted — skipping.")
             % (action.func_name or action.uuid, len(missing))
         )
+        return False
+    source_objs = [panel_data.objmodel[uuid] for uuid in sources]
+    metadata_snapshots = [copy.deepcopy(obj.metadata) for obj in source_objs]
+    try:
+        for src_obj in source_objs:
+            analysis_parameters = extract_analysis_parameters(src_obj)
+            plugin_origin = action.plugin_origin or (
+                analysis_parameters.plugin_origin if analysis_parameters else None
+            )
+            success = panel_data.processor.recompute_1_to_0(
+                action.func_name,
+                src_obj,
+                param,
+                plugin_origin=plugin_origin,
+            )
+            if not success:
+                for obj, metadata in zip(source_objs, metadata_snapshots):
+                    obj.metadata.clear()
+                    obj.metadata.update(metadata)
+                return False
+    except Exception:
+        for obj, metadata in zip(source_objs, metadata_snapshots):
+            obj.metadata.clear()
+            obj.metadata.update(metadata)
+        raise
+    for uuid in sources:
+        refresh_target(panel_data, uuid)
+    return True
 
 
 def recompute_cascade(
@@ -513,23 +604,14 @@ def recompute_cascade(
             action.is_stale = True
             panel.tree.refresh_action_item(action)
         QW.QApplication.processEvents()
-        try:
-            for action in descendants:
-                try:
-                    recompute_action_in_place(panel, action)
-                finally:
-                    if action.uuid not in panel.runtime.execution.broken_actions:
-                        action.is_stale = False
-                    panel.tree.refresh_action_item(action)
-                    QW.QApplication.processEvents()
-        finally:
-            for action in descendants:
-                if (
-                    action.is_stale
-                    and action.uuid not in panel.runtime.execution.broken_actions
-                ):
-                    action.is_stale = False
-                    panel.tree.refresh_action_item(action)
+        for action in descendants:
+            success = recompute_action_in_place(panel, action)
+            if success:
+                action.is_stale = False
+            panel.tree.refresh_action_item(action)
+            QW.QApplication.processEvents()
+            if not success:
+                break
     flush_cascade_warnings(panel)
 
 

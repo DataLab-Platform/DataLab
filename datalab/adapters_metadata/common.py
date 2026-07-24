@@ -55,6 +55,7 @@ class ResultData:
     results: list[BaseResultAdapter] | None = None
     ylabels: list[str] | None = None
     short_ids: list[str] | None = None
+    execution_success: bool = True
 
     def __bool__(self) -> bool:
         """Return True if there are results stored"""

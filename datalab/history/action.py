@@ -548,10 +548,18 @@ class HistoryAction(ObjItf):
             )
         panel = self.resolve_panel(mainwindow)
         processor = panel.processor
-        feature = processor.get_feature(self.func_name)
+        param = self.kwargs.get("param")
+        params = self.kwargs.get("params") or []
+        paramclass_name = type(param).__name__ if param is not None else None
+        if self.pattern == "1_to_n" and params:
+            paramclass_name = type(params[0]).__name__
+        feature = processor.get_feature(
+            self.func_name,
+            plugin_origin=self.plugin_origin,
+            paramclass_name=paramclass_name,
+        )
         run_kwargs: dict[str, Any] = {self.FUNC_EDIT_MODE: edit}
 
-        param = self.kwargs.get("param")
         if self.pattern in {"1_to_1", "1_to_0", "n_to_1"}:
             if param is not None:
                 run_kwargs["param"] = param
@@ -582,7 +590,6 @@ class HistoryAction(ObjItf):
             if "pairwise" in self.kwargs:
                 run_kwargs["pairwise"] = self.kwargs["pairwise"]
         elif self.pattern == "1_to_n":
-            params = self.kwargs.get("params") or []
             run_kwargs["params"] = params
         else:
             raise ValueError(f"Unknown compute pattern: {self.pattern!r}")
