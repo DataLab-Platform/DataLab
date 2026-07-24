@@ -494,6 +494,8 @@ class HistoryAction(ObjItf):
         uuid_remap: dict[str, dict[str, str]],
     ) -> None:
         """Inner replay logic, always called under the replaying guard."""
+        if self.kind == self.KIND_COMPUTE and self.pattern == "1_to_0" and not edit:
+            return
         if self.kind == self.KIND_COMPUTE:
             # Compute actions are selection-driven: restore the captured
             # selection (translated through ``uuid_remap`` for session

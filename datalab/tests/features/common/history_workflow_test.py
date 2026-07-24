@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import os
 import tempfile
+from unittest.mock import patch
 
 import numpy as np
 import sigima.params
@@ -109,6 +110,23 @@ def test_session_replay_remaps_distinct_processing_patterns() -> None:
         assert len(history) == action_count
         replayed = panel.objmodel.get_object_from_number(len(panel.objmodel))
         assert "s" in replayed.title and "-" in replayed.title
+
+
+def test_analysis_replay_requires_explicit_edit() -> None:
+    """Skip an analysis during ordinary replay but allow explicit edit replay."""
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        history.toggle_record_mode(True)
+        add_paracetamol_signals(panel, 1)
+        panel.objview.select_objects([1])
+        panel.processor.run_feature(sips.stats)
+        analysis_action = history[len(history)]
+        assert analysis_action.pattern == "1_to_0"
+        with patch.object(panel.processor, "run_feature") as run_feature:
+            analysis_action.replay(win, restore_selection=True, edit=False)
+            run_feature.assert_not_called()
+            analysis_action.replay(win, restore_selection=True, edit=True)
+            run_feature.assert_called_once()
 
 
 def test_history_hdf5_pristine_load_and_nonempty_import() -> None:
@@ -225,6 +243,10 @@ def test_edit_cascade_preserves_identity_and_action_state() -> None:
         chain = build_signal_chain(panel, history)
         root_action, _middle_action, leaf_action = chain.actions
         root_output, _middle_output, leaf_output = chain.outputs
+        panel.objview.select_objects([leaf_output])
+        panel.processor.run_feature(sips.stats)
+        analysis_action = history[len(history)]
+        assert analysis_action.pattern == "1_to_0"
         leaf_uuid = get_uuid(leaf_output)
         leaf_number = panel.objmodel.get_number(leaf_output)
         leaf_data = leaf_output.xydata.copy()
@@ -234,9 +256,15 @@ def test_edit_cascade_preserves_identity_and_action_state() -> None:
         editor = panel.objprop.processing_param_editor
         assert editor is not None
         editor.dataset.sigma = 7.0
-        report = panel.objprop.apply_processing_parameters(
-            root_output, interactive=False
-        )
+        with patch.object(
+            panel.processor,
+            "recompute_1_to_0",
+            wraps=panel.processor.recompute_1_to_0,
+        ) as recompute_analysis:
+            report = panel.objprop.apply_processing_parameters(
+                root_output, interactive=False
+            )
+        recompute_analysis.assert_called_once()
         assert report.success and root_action.has_pending_edits
         assert root_action.kwargs["param"].sigma == 7.0
         assert get_uuid(panel.objmodel[leaf_uuid]) == leaf_uuid

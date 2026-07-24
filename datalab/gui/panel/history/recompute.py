@@ -252,13 +252,22 @@ def recompute_1_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
         return
     source_obj = panel_data.objmodel[pp.source_uuid]
     param = action.kwargs.get("param")
-    new_obj = panel_data.processor.recompute_1_to_1(
+    compout = panel_data.processor.recompute_1_to_1(
         action.func_name,
         source_obj,
         param,
         plugin_origin=action.plugin_origin,
     )
-    if new_obj is None:
+    if compout.cancelled:
+        return
+    if compout.error_msg:
+        panel.runtime.execution.cascade_warnings.append(
+            _("Recompute failed for action %s: %s")
+            % (action.func_name or action.uuid, compout.error_msg)
+        )
+        return
+    new_obj = compout.result
+    if not isinstance(new_obj, (SignalObj, ImageObj)):
         return
     panel_data.objprop.apply_recomputed_object_in_place(
         output_obj,
@@ -322,7 +331,6 @@ def recompute_1_to_n_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
                 source_uuid=pp.source_uuid,
             ),
         )
-        panel_data.processor.auto_recompute_analysis(out_obj)
         refresh_target(panel_data, out_uuid)
     if len(new_objs) != len(existing):
         _logger.warning(
@@ -381,7 +389,6 @@ def recompute_n_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
             source_uuids=[get_uuid(o) for o in src_objs],
         ),
     )
-    panel_data.processor.auto_recompute_analysis(output_obj)
     refresh_target(panel_data, output_uuid)
 
 
@@ -450,7 +457,6 @@ def recompute_2_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> Non
                 source_uuids=[get_uuid(obj1), get_uuid(obj2)],
             ),
         )
-        panel_data.processor.auto_recompute_analysis(output_obj)
         refresh_target(panel_data, out_uuid)
 
 

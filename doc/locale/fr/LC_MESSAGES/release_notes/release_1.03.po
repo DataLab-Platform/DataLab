@@ -103,3 +103,30 @@ msgid "Improved replay compatibility reporting for clearer user feedback"
 msgstr ""
 "Amélioration du rapport de compatibilité de relecture pour fournir un retour "
 "utilisateur plus clair"
+
+msgid "🔄 Changes"
+msgstr "🔄 Modifications"
+
+msgid "**Detection tools now preserve existing regions of interest:**"
+msgstr "**Les outils de détection préservent désormais les régions d'intérêt existantes :**"
+
+msgid "Regions of interest created by peak, blob, Hough circle, and contour detection are now added to existing ROIs instead of replacing them, without displaying a destructive confirmation dialog"
+msgstr "Les régions d'intérêt créées par la détection de pics, de blobs, de cercles de Hough et de contours sont désormais ajoutées aux ROI existantes au lieu de les remplacer, sans afficher de boîte de dialogue de confirmation destructive"
+
+msgid "**Analysis results are now refreshed on demand instead of automatically:**"
+msgstr "**Les résultats d'analyse sont désormais actualisés à la demande plutôt qu'automatiquement :**"
+
+msgid "Analysis results (statistics, FWHM, centroid, peak/contour/blob detection, etc.) are no longer recomputed automatically when you modify a region of interest, transform the data, or edit object properties"
+msgstr "Les résultats d'analyse (statistiques, FWHM, centroïde, détection de pics/contours/blobs, etc.) ne sont plus recalculés automatiquement lorsque vous modifiez une région d'intérêt, transformez les données ou modifiez les propriétés de l'objet"
+
+msgid "Existing analysis results are now left untouched after such edits, avoiding surprising side effects and results that could become misleading once the data no longer matches the stored analysis parameters"
+msgstr "Les résultats d'analyse existants sont désormais laissés intacts après de telles modifications, évitant des effets de bord inattendus et des résultats susceptibles de devenir trompeurs lorsque les données ne correspondent plus aux paramètres d'analyse enregistrés"
+
+msgid "Ordinary replay and ordinary mutations do not recompute analyses; however, in History edit mode, editing upstream parameters recomputes downstream analysis actions through the cascade"
+msgstr "La relecture ordinaire et les mutations ordinaires ne recalculent pas les analyses ; toutefois, en mode d'édition de l'historique, la modification de paramètres en amont recalcule les actions d'analyse en aval par propagation en cascade"
+
+msgid "The familiar **\"Recompute\"** action (Edit menu, `Ctrl+R`) now refreshes both processing *and* analysis results, giving you full control over when analyses are updated"
+msgstr "L'action familière **\"Recalculer\"** (menu Édition, `Ctrl+R`) actualise désormais à la fois les résultats de traitement *et* d'analyse, vous permettant de maîtriser pleinement le moment où les analyses sont mises à jour"
+
+msgid "For developers, the former panel-level `recompute_analysis` entry point has been renamed to `recompute_selected`; `recompute_analysis` now refers to a different processor-level helper dedicated to explicit 1-to-0 analysis refresh"
+msgstr "Pour les développeurs, l'ancien point d'entrée `recompute_analysis` au niveau du panneau a été renommé `recompute_selected` ; `recompute_analysis` désigne désormais une autre fonction auxiliaire au niveau du processeur, dédiée à l'actualisation explicite des analyses 1-vers-0"

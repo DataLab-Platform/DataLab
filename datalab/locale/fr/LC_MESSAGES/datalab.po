@@ -360,8 +360,12 @@ msgid "Recompute"
 msgstr "Retraiter"
 
 #, python-format
-msgid "Recompute selected %s with its processing parameters"
-msgstr "Retraiter l'objet %s sélectionné avec ses paramètres de traitement"
+msgid ""
+"Recompute selected %s: refresh both processing and analysis results with their "
+"stored parameters"
+msgstr ""
+"Retraiter l'objet %s sélectionné : actualiser les résultats de traitement et "
+"d'analyse à partir de leurs paramètres enregistrés"
 
 msgid "Select source objects"
 msgstr "Sélectionner les objets source"
@@ -1433,13 +1437,11 @@ msgstr ""
 "Échec de la recréation de l'objet avec les nouveaux paramètres :\n"
 "%s"
 
-#, fuzzy
 msgid "Signal was recreated."
-msgstr "Le signal a été retraité."
+msgstr "Le signal a été recréé."
 
-#, fuzzy
 msgid "Image was recreated."
-msgstr "L'image a été retraitée."
+msgstr "L'image a été recréée."
 
 msgid "Processing Parameters"
 msgstr "Paramètres de traitement"
@@ -1653,11 +1655,18 @@ msgstr "Importer une ROI"
 msgid "Export ROI"
 msgstr "Exporter une ROI"
 
-msgid "Selected object(s) do not have processing parameters that can be recomputed."
-msgstr "L'objet (ou les objets) sélectionné(s) n'ont pas de paramètres de traitement pouvant être retraités."
+msgid ""
+"Selected object(s) do not have processing or analysis parameters that can be "
+"recomputed."
+msgstr ""
+"L'objet (ou les objets) sélectionné(s) n'ont pas de paramètres de traitement ou "
+"d'analyse pouvant être recalculés."
 
 msgid "Recomputing objects"
 msgstr "Retraitement des objets"
+
+msgid "Recomputing analyses"
+msgstr "Recalcul des analyses"
 
 msgid "Failed to recompute object"
 msgstr "Échec du retraitement de l'objet"
@@ -2168,9 +2177,6 @@ msgstr "Supprimer la ROI"
 #, python-format
 msgid "Are you sure you want to remove ROI '%s'?"
 msgstr "Êtes-vous sûr de vouloir supprimer la ROI '%s' ?"
-
-msgid "Regions of interest are already defined for this image.<br><br>Creating new ROIs from detection will replace the existing ones, which will be lost.<br><br>Do you want to continue?"
-msgstr "Des régions d'intérêt sont déjà définies pour cette image.<br><br>La création de nouvelles ROI par détection remplacera les existantes, qui seront perdues.<br><br>Voulez-vous continuer ?"
 
 msgid "Sum"
 msgstr "Addition"
@@ -4322,4 +4328,3 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
-

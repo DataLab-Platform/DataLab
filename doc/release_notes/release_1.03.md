@@ -17,12 +17,6 @@
 * Added `.dlhist` import/export support and separated reset sessions from regular history sessions
 * Improved replay compatibility reporting for clearer user feedback
 
-**History Panel sessions:**
-
-* Added serialized and replayable history sessions with workspace-state validation
-* Added `.dlhist` import/export support and separated reset sessions from regular history sessions
-* Improved replay compatibility reporting for clearer user feedback
-
 **Replace special values processing (signal and image):**
 
 DataLab now provides a dedicated **"Replace special values"** processing
@@ -48,3 +42,30 @@ and Image panels.
   cannot exist in integer data, the dialog explains that the operation is not
   applicable and prevents accidental processing, while preserving the original
   image data type without unnecessary float conversion
+
+### 🔄 Changes ###
+
+**Detection tools now preserve existing regions of interest:**
+
+* Regions of interest created by peak, blob, Hough circle, and contour
+  detection are now added to existing ROIs instead of replacing them, without
+  displaying a destructive confirmation dialog
+
+**Analysis results are now refreshed on demand instead of automatically:**
+
+* Analysis results (statistics, FWHM, centroid, peak/contour/blob detection,
+  etc.) are no longer recomputed automatically when you modify a region of
+  interest, transform the data, or edit object properties
+* Existing analysis results are now left untouched after such edits, avoiding
+  surprising side effects and results that could become misleading once the
+  data no longer matches the stored analysis parameters
+* Ordinary replay and ordinary mutations do not recompute analyses; however,
+  in History edit mode, editing upstream parameters recomputes downstream
+  analysis actions through the cascade
+* The familiar **"Recompute"** action (Edit menu, `Ctrl+R`) now refreshes both
+  processing *and* analysis results, giving you full control over when analyses
+  are updated
+* For developers, the former panel-level `recompute_analysis` entry point has
+  been renamed to `recompute_selected`; `recompute_analysis` now refers to a
+  different processor-level helper dedicated to explicit 1-to-0 analysis
+  refresh
