@@ -1,14 +1,18 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-Unit test for automatic recomputation of 1-to-0 analysis operations.
+Unit test for on-demand recomputation of 1-to-0 analysis operations.
 
-This test verifies that analysis results (like centroid) are automatically updated
-when data changes through various methods:
+Analysis results (like centroid) are no longer recomputed automatically when the
+underlying data changes. Instead, the user refreshes them explicitly through the
+manual "Recompute" action, which is backed by
+``BaseProcessor.recompute_analysis``. This test verifies that, once triggered,
+analysis results are correctly updated after data changes through various methods:
 - ROI modifications (adding, deleting ROIs)
 - Data transformations via recompute_1_to_1 (modifying processing parameters)
 
-The tests create a Gaussian image, compute its centroid, then verify that:
+The tests create a Gaussian image, compute its centroid, then verify that, after an
+explicit recompute:
 1. The centroid changes when a ROI is added to restrict the calculation region
 2. Two centroid rows are generated when two ROIs are added
 3. One centroid row remains after deleting the first ROI
@@ -46,7 +50,7 @@ def get_centroid_coords(obj) -> tuple[float, float] | None:
 
 
 def test_analysis_recompute_after_roi_change():
-    """Test automatic recomputation of analysis results when ROI changes."""
+    """Test on-demand recomputation of analysis results when ROI changes."""
     with datalab_test_app_context(console=False) as win:
         panel = win.imagepanel
 
@@ -64,13 +68,36 @@ def test_analysis_recompute_after_roi_change():
         x0, y0 = centroid
         print(f"\nInitial centroid (full image): ({x0:.1f}, {y0:.1f})")
 
+        call_count = [0]
+        original_compute_1_to_0 = panel.processor.compute_1_to_0
+
+        def counting_compute_1_to_0(*args, **kwargs):
+            call_count[0] += 1
+            return original_compute_1_to_0(*args, **kwargs)
+
+        panel.processor.compute_1_to_0 = counting_compute_1_to_0
+
+        new_title = f"{img.title} (edited)"
+        panel.objprop.properties.dataset.title = new_title
+        panel.properties_changed()
+        assert img.title == new_title
+        assert call_count[0] == 0
+        assert get_centroid_coords(img) == (x0, y0), (
+            "Property changes must preserve stale analysis results"
+        )
+
         # Step 1: Add ROI (simulating edit_roi_graphically)
         # Add a rectangular ROI in the upper-left quadrant
         roi = create_image_roi("rectangle", [25, 25, 50, 50])  # x0, y0, width, height
         img.roi = roi
         panel.refresh_plot("selected", update_items=True)
-        # Trigger auto-recompute by simulating ROI modification
-        panel.processor.auto_recompute_analysis(img)
+        assert call_count[0] == 0
+        assert get_centroid_coords(img) == (x0, y0), (
+            "ROI changes must preserve stale analysis results until recomputation"
+        )
+        # Explicitly recompute the analysis (manual "Recompute" action)
+        panel.processor.recompute_analysis(img)
+        assert call_count[0] == 1
 
         # Verify centroid was updated
         centroid = get_centroid_coords(img)
@@ -93,7 +120,13 @@ def test_analysis_recompute_after_roi_change():
         roi1.add_roi(roi2)  # Combine both ROIs
         img.roi = roi1
         panel.refresh_plot("selected", update_items=True)
-        panel.processor.auto_recompute_analysis(img)
+        stale_centroid = get_centroid_coords(img)
+        assert call_count[0] == 1
+        assert stale_centroid == (x1, y1), (
+            "ROI changes must not update existing analysis results automatically"
+        )
+        panel.processor.recompute_analysis(img)
+        assert call_count[0] == 2
 
         # Verify centroid now has TWO rows (one for each ROI)
         adapter = GeometryAdapter.from_obj(img, "centroid")
@@ -108,8 +141,14 @@ def test_analysis_recompute_after_roi_change():
             f"ROI 1 (lower-right): ({x2_roi1:.1f}, {y2_roi1:.1f})"
         )
 
-        # Step 3: Delete the first ROI using delete_single_roi
+        # Step 3: Delete the first ROI using delete_single_roi, then recompute
         panel.processor.delete_single_roi(roi_index=0)
+        assert call_count[0] == 2
+        assert np.array_equal(get_centroid_coords(img), coords[0]), (
+            "ROI deletion must preserve stale analysis results until recomputation"
+        )
+        panel.processor.recompute_analysis(img)
+        assert call_count[0] == 3
 
         # Verify centroid now has ONE row (for the remaining ROI)
         adapter = GeometryAdapter.from_obj(img, "centroid")
@@ -128,8 +167,15 @@ def test_analysis_recompute_after_roi_change():
             f"Y centroid should be close to {y2_roi1:.1f}, got {y3:.1f}"
         )
 
-        # Step 4: Delete all remaining ROIs using delete_regions_of_interest
+        # Step 4: Delete all remaining ROIs using delete_regions_of_interest, then
+        # recompute
         panel.processor.delete_regions_of_interest()
+        assert call_count[0] == 3
+        assert get_centroid_coords(img) == (x3, y3), (
+            "Deleting ROIs must not update analysis results automatically"
+        )
+        panel.processor.recompute_analysis(img)
+        assert call_count[0] == 4
 
         # Verify centroid was updated back to original
         centroid = get_centroid_coords(img)
@@ -144,12 +190,12 @@ def test_analysis_recompute_after_roi_change():
             f"Y centroid should return to {y0:.1f}, got {y4:.1f}"
         )
 
-        print("\n✓ All ROI auto-recompute tests passed!")
+        print("\n✓ All ROI on-demand recompute tests passed!")
 
 
 def test_analysis_recompute_after_recompute_1_to_1():
-    """Test automatic recomputation of analysis after processing parameter changes."""
-    with datalab_test_app_context(console=False) as win:
+    """Test on-demand recomputation of analysis after processing parameter changes."""
+    with datalab_test_app_context(console=False, history=True) as win:
         panel = win.imagepanel
 
         # Create a Gaussian image offset from center
@@ -199,13 +245,37 @@ def test_analysis_recompute_after_recompute_1_to_1():
         editor = panel.objprop.processing_param_editor
         editor.dataset.angle = 90.0  # Change from 45° to 90°
 
+        # In-place recompute happens when the History panel is in edit mode
+        # (otherwise a new object is created).
+        win.historypanel.toggle_edit_mode(True)
+
+        call_count = [0]
+        original_compute_1_to_0 = panel.processor.compute_1_to_0
+
+        def counting_compute_1_to_0(*args, **kwargs):
+            call_count[0] += 1
+            return original_compute_1_to_0(*args, **kwargs)
+
+        panel.processor.compute_1_to_0 = counting_compute_1_to_0
+
         # Apply the modified parameters (this triggers recompute_1_to_1)
         report = panel.objprop.apply_processing_parameters(interactive=False)
 
         assert report.success, f"Recompute failed: {report.message}"
+        assert call_count[0] == 0, (
+            "Processing data/property changes must not recompute analysis automatically"
+        )
+        assert get_centroid_coords(img_rotated) == (x0, y0), (
+            "Processing data/property changes must preserve stale analysis results"
+        )
         print("Processing parameters recomputed with new angle (90°)")
 
-        # Verify centroid was automatically recomputed
+        # Analysis results are no longer refreshed automatically: trigger the manual
+        # recompute explicitly (as the "Recompute" action does)
+        panel.processor.recompute_analysis(img_rotated)
+        assert call_count[0] == 1
+
+        # Verify centroid was recomputed on the updated data
         centroid = get_centroid_coords(img_rotated)
         assert centroid is not None, "Centroid should still exist after recompute"
         x1, y1 = centroid
@@ -232,18 +302,18 @@ def test_analysis_recompute_after_recompute_1_to_1():
             f"to ({x1:.1f}, {y1:.1f}) after changing rotation angle"
         )
 
-        print("\n✓ Recompute_1_to_1 auto-analysis test passed!")
+        print("\n✓ Recompute_1_to_1 analysis test passed!")
 
 
 def test_analysis_recompute_avoids_redundant_calculations():
-    """Test that auto-recompute doesn't cause O(n²) redundant calculations.
+    """Test that per-object recompute doesn't cause O(n²) redundant calculations.
 
-    This test verifies that when multiple objects have ROIs modified simultaneously,
-    the analysis is recomputed only once per object, not once per object × number
-    of selected objects.
+    This test verifies that when the analysis is recomputed for multiple objects,
+    it is computed only once per object, not once per object × number of selected
+    objects.
 
     Regression test for bug: When N images were selected with statistics computed,
-    adding a ROI would trigger N × N = N² calculations instead of N.
+    recomputing would trigger N × N = N² calculations instead of N.
     """
     with datalab_test_app_context(console=False) as win:
         panel = win.imagepanel
@@ -275,7 +345,7 @@ def test_analysis_recompute_avoids_redundant_calculations():
 
         print(f"\nInitial statistics computed for {n_images} images")
 
-        # Track how many times compute_1_to_0 is called during auto-recompute
+        # Track how many times compute_1_to_0 is called during recompute
         # by counting the calls via a wrapper
         call_count = [0]  # Use list to allow modification in closure
         original_compute_1_to_0 = panel.processor.compute_1_to_0
@@ -292,8 +362,8 @@ def test_analysis_recompute_avoids_redundant_calculations():
             roi = create_image_roi("rectangle", [25, 25, 50, 50])
             for img in images:
                 img.roi = roi
-                # Simulate the auto-recompute that happens after ROI modification
-                panel.processor.auto_recompute_analysis(img)
+                # Explicitly recompute the analysis for this object
+                panel.processor.recompute_analysis(img)
 
             # With the fix, compute_1_to_0 should be called exactly N times
             # (once per object), not N² times
@@ -312,7 +382,7 @@ def test_analysis_recompute_avoids_redundant_calculations():
             # Restore the original method
             panel.processor.compute_1_to_0 = original_compute_1_to_0
 
-        print(f"\n✓ Auto-recompute correctly called {n_images} times (no O(n²) issue)")
+        print(f"\n✓ Recompute correctly called {n_images} times (no O(n²) issue)")
 
 
 if __name__ == "__main__":

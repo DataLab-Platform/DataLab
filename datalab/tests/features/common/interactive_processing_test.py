@@ -20,9 +20,12 @@ processing patterns (1-to-1, 2-to-1, n-to-1).
 
 from __future__ import annotations
 
+from unittest.mock import patch
+
 import numpy as np
 from guidata.dataset import json_to_dataset
 from guidata.qthelpers import qt_app_context, qt_wait
+from qtpy import QtWidgets as QW
 from sigima.objects import Gauss2DParam, GaussParam, create_image_roi
 from sigima.params import (
     BinningParam,
@@ -33,9 +36,17 @@ from sigima.params import (
 )
 from sigima.proc.image import RadialProfileParam
 
+from datalab.adapters_metadata.common import ResultData
+from datalab.env import execenv
 from datalab.gui.newobject import CREATION_PARAMETERS_OPTION
-from datalab.gui.processor.base import PROCESSING_PARAMETERS_OPTION
-from datalab.objectmodel import get_uuid
+from datalab.gui.processor.base import (
+    PROCESSING_PARAMETERS_OPTION,
+    _detect_plugin_origin,
+    extract_analysis_parameters,
+    extract_processing_parameters,
+)
+from datalab.gui.processor.catcher import CompOut
+from datalab.objectmodel import get_short_id, get_uuid
 from datalab.tests import datalab_test_app_context
 
 
@@ -149,7 +160,7 @@ def test_processing_without_parameters():
 def test_recompute():
     """Test recompute feature for signals"""
     with qt_app_context():
-        with datalab_test_app_context() as win:
+        with datalab_test_app_context(history=True) as win:
             panel = win.signalpanel
             processor = panel.processor
 
@@ -164,10 +175,14 @@ def test_recompute():
             filtered_sig = panel.objview.get_current_object()
             original_data = filtered_sig.y.copy()
 
+            # In-place recompute requires History panel edit mode (otherwise a
+            # new object is created instead of mutating the existing one).
+            win.historypanel.toggle_edit_mode(True)
+
             # Recompute with different input signal data
             constant = 1.23098765
             signal.y += constant
-            panel.recompute_processing()
+            panel.recompute_selected()
 
             assert np.allclose(filtered_sig.y, original_data + constant)
 
@@ -176,6 +191,310 @@ def test_recompute():
             option_dict = filtered_sig.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
             assert option_dict["source_uuid"] == signal_uuid
             assert option_dict["func_name"] == "gaussian_filter"
+
+
+def test_recompute_selected_skips_analysis_when_1_to_1_cancelled():
+    """Test that analysis recompute is skipped when 1-to-1 is cancelled."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.imagepanel
+            processor = panel.processor
+
+            # Create a source image and a 1-to-1 processed result
+            panel.new_object()
+            processor.run_feature(
+                "moving_average", param=MovingAverageParam.create(n=5)
+            )
+            processed_image = panel.objview.get_current_object()
+
+            # Add a 1-to-0 analysis result to the same object
+            processor.run_feature("centroid")
+
+            # Ensure this object is eligible for both processing and analysis passes
+            proc_params = extract_processing_parameters(processed_image)
+            analysis_params = extract_analysis_parameters(processed_image)
+            assert proc_params is not None and proc_params.pattern == "1-to-1"
+            assert analysis_params is not None and analysis_params.pattern == "1-to-0"
+
+            panel.objview.select_objects([processed_image])
+
+            # Simulate cancellation at the actual low-level contract boundary.
+            original_recompute_1_to_1 = processor.recompute_1_to_1
+            original_recompute_analysis = processor.recompute_analysis
+            processing_called = []
+            analysis_called = []
+
+            def cancel_recompute_1_to_1(*args, **kwargs):
+                processing_called.append((args, kwargs))
+                return CompOut(cancelled=True)
+
+            def record_recompute_analysis(*args, **kwargs):
+                analysis_called.append((args, kwargs))
+
+            processor.recompute_1_to_1 = cancel_recompute_1_to_1
+            processor.recompute_analysis = record_recompute_analysis
+
+            try:
+                panel.recompute_selected()
+            finally:
+                processor.recompute_1_to_1 = original_recompute_1_to_1
+                processor.recompute_analysis = original_recompute_analysis
+
+            assert len(processing_called) == 1
+            assert not analysis_called, (
+                "1-to-0 analysis recompute should not run when 1-to-1 processing "
+                "is cancelled"
+            )
+
+
+def test_plugin_analysis_origin_is_stored_and_reused():
+    """Test plugin provenance storage and reuse for 1-to-0 analyses."""
+    with qt_app_context():
+        with datalab_test_app_context(history=True) as win:
+            panel = win.signalpanel
+            processor = panel.processor
+            objprop = panel.objprop
+            plugin_origin = {
+                "plugin_class": "TestPlugin",
+                "module": "test_plugin.operations",
+                "directory": "test_plugin",
+                "version": "1.0",
+            }
+
+            stats_func = processor.get_feature("stats").function
+            feature = processor.register_1_to_0(stats_func, "Plugin statistics")
+            feature.plugin_origin = plugin_origin
+
+            panel.new_object(edit=False)
+            signal = panel.objview.get_current_object()
+            assert signal is not None
+            processor.run_feature(feature)
+
+            proc_params = extract_analysis_parameters(signal)
+            assert proc_params is not None
+            assert proc_params.plugin_origin == plugin_origin
+
+            calls = []
+            original_recompute_1_to_0 = processor.recompute_1_to_0
+
+            def record_recompute_1_to_0(*args, **kwargs):
+                calls.append((args, kwargs))
+                return original_recompute_1_to_0(*args, **kwargs)
+
+            processor.recompute_1_to_0 = record_recompute_1_to_0
+            try:
+                objprop.apply_analysis_parameters(signal, interactive=False)
+                processor.recompute_analysis(signal)
+            finally:
+                processor.recompute_1_to_0 = original_recompute_1_to_0
+
+            assert len(calls) == 2
+            for _args, kwargs in calls:
+                assert kwargs["plugin_origin"] == plugin_origin
+
+
+def test_wrapped_plugin_origin_uses_inner_callable_file() -> None:
+    """Use the origin candidate for both module and directory detection."""
+
+    def plugin_function():
+        pass
+
+    plugin_function.__module__ = "wrapped_plugin.operations"
+
+    def wrapper():
+        pass
+
+    wrapper.__module__ = "datalab.gui.processor.base"
+    wrapper.__wrapped__ = plugin_function
+
+    with (
+        patch("datalab.plugins.PluginRegistry.get_plugins", return_value=[]),
+        patch(
+            "datalab.gui.processor.base.inspect.getfile",
+            return_value="/plugins/wrapped_plugin/operations.py",
+        ) as getfile,
+    ):
+        origin = _detect_plugin_origin(wrapper)
+
+    assert origin is not None
+    assert origin["module"] == "wrapped_plugin.operations"
+    assert origin["directory"] == "wrapped_plugin"
+    getfile.assert_called_once_with(plugin_function)
+
+
+def test_analysis_persistence_failure_is_isolated_per_object() -> None:
+    """Roll back one failed analysis and continue with the next object."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            processor = panel.processor
+            panel.new_object(edit=False)
+            first = panel.objview.get_current_object()
+            panel.new_object(edit=False)
+            second = panel.objview.get_current_object()
+            assert first is not None and second is not None
+            first.metadata["existing"] = {"value": 1}
+            first_metadata = first.metadata.copy()
+            appended = []
+            first_append_lengths = None
+            original_append = ResultData.append
+
+            def fail_after_first_append(rdata, adapter, obj):
+                nonlocal first_append_lengths
+                original_append(rdata, adapter, obj)
+                appended.append((adapter, obj))
+                if obj is first:
+                    first_append_lengths = (
+                        len(rdata.results),
+                        len(rdata.ylabels),
+                        len(rdata.short_ids),
+                    )
+                    raise RuntimeError("Expected persistence error")
+
+            stats_func = processor.get_feature("stats").function
+            with (
+                execenv.context(catcher_test=True),
+                patch.object(
+                    ResultData,
+                    "append",
+                    new=fail_after_first_append,
+                ),
+                patch("datalab.gui.processor.base.show_warning_error") as show_error,
+            ):
+                result = processor.compute_1_to_0(
+                    stats_func,
+                    edit=False,
+                    target_objs=[first, second],
+                )
+
+            assert result is not None
+            assert result.execution_success is False
+            assert [obj for _adapter, obj in appended] == [first, second]
+            assert first_append_lengths is not None
+            assert all(count > 0 for count in first_append_lengths)
+            assert first.metadata == first_metadata
+            assert extract_analysis_parameters(first) is None
+            assert extract_analysis_parameters(second) is not None
+            second_adapter = appended[1][0]
+            second_short_id = get_short_id(second)
+            assert result.results == [second_adapter]
+            assert result.ylabels == [f"{second_adapter.func_name}({second_short_id})"]
+            assert result.short_ids == [second_short_id]
+            error_calls = [
+                call for call in show_error.call_args_list if call.args[1] == "error"
+            ]
+            assert len(error_calls) == 1
+            assert "Expected persistence error" in error_calls[0].args[3]
+
+
+def test_recompute_selected_continues_after_1_to_1_error():
+    """Test that an ordinary 1-to-1 error is not treated as cancellation."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.imagepanel
+            processor = panel.processor
+            processed_images = []
+            for _index in range(2):
+                panel.new_object()
+                processor.run_feature(
+                    "moving_average", param=MovingAverageParam.create(n=5)
+                )
+                processed_image = panel.objview.get_current_object()
+                processor.run_feature("centroid")
+                processed_images.append(processed_image)
+
+            panel.objview.select_objects(processed_images)
+            original_recompute_1_to_1 = processor.recompute_1_to_1
+            original_recompute_analysis = processor.recompute_analysis
+            processing_count = [0]
+            analysis_objects = []
+
+            def recompute_1_to_1_with_first_error(
+                _func_name, source_obj, _param, plugin_origin=None
+            ):
+                del plugin_origin
+                processing_count[0] += 1
+                if processing_count[0] == 1:
+                    return CompOut(error_msg="Expected computation error")
+                return CompOut(result=source_obj.copy())
+
+            def record_recompute_analysis(obj, *args, **kwargs):
+                analysis_objects.append(obj)
+                return True
+
+            processor.recompute_1_to_1 = recompute_1_to_1_with_first_error
+            processor.recompute_analysis = record_recompute_analysis
+
+            try:
+                with (
+                    execenv.context(unattended=False),
+                    patch(
+                        "datalab.gui.panel.base.QW.QMessageBox.warning",
+                        return_value=QW.QMessageBox.Yes,
+                    ) as warning,
+                ):
+                    panel.recompute_selected()
+            finally:
+                processor.recompute_1_to_1 = original_recompute_1_to_1
+                processor.recompute_analysis = original_recompute_analysis
+
+            assert processing_count[0] == 2
+            warning.assert_called_once()
+            assert analysis_objects == [processed_images[1]]
+
+
+def test_apply_analysis_parameters_failure_preserves_action() -> None:
+    """Do not record or announce a failed direct analysis recomputation."""
+    with qt_app_context():
+        with datalab_test_app_context(history=True) as win:
+            panel = win.signalpanel
+            history = win.historypanel
+            history.toggle_record_mode(True)
+            panel.new_object(edit=False)
+            signal = panel.objview.get_current_object()
+            assert signal is not None
+            panel.processor.run_feature("stats")
+            action = history[len(history)]
+            original_kwargs = action.kwargs.copy()
+            status_messages = []
+            panel.SIG_STATUS_MESSAGE.connect(status_messages.append)
+
+            with patch.object(panel.processor, "recompute_1_to_0", return_value=False):
+                success = panel.objprop.apply_analysis_parameters(
+                    signal, interactive=False
+                )
+
+            assert success is False
+            assert action.kwargs == original_kwargs
+            assert status_messages == []
+
+
+def test_recompute_analyses_continues_after_failure_unattended() -> None:
+    """Continue with later analyses after an unattended object failure."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            panel.new_object(edit=False)
+            first = panel.objview.get_current_object()
+            panel.new_object(edit=False)
+            second = panel.objview.get_current_object()
+            assert first is not None and second is not None
+
+            with (
+                execenv.context(unattended=True),
+                patch.object(
+                    panel.processor,
+                    "recompute_analysis",
+                    side_effect=[False, True],
+                ) as recompute_analysis,
+            ):
+                recomputed, interrupted = panel.recompute_1_to_0_objects(
+                    [first, second]
+                )
+
+            assert recompute_analysis.call_count == 2
+            assert recomputed == {get_uuid(second)}
+            assert interrupted is False
 
 
 def test_apply_creation_parameters_signal():
@@ -366,7 +685,7 @@ def test_no_creation_parameters_for_base_classes():
 def test_apply_processing_parameters_signal():
     """Test apply_processing_parameters for signals"""
     with qt_app_context():
-        with datalab_test_app_context() as win:
+        with datalab_test_app_context(history=True) as win:
             panel = win.signalpanel
             processor = panel.processor
             objprop = panel.objprop
@@ -402,6 +721,10 @@ def test_apply_processing_parameters_signal():
             # Change constant from 5.0 to 15.0
             editor.dataset.value = v1 = 15.0
 
+            # In-place update requires History panel edit mode (otherwise a new
+            # object is created instead of mutating the existing one).
+            win.historypanel.toggle_edit_mode(True)
+
             # Apply the new processing parameters
             report = objprop.apply_processing_parameters()
 
@@ -428,7 +751,7 @@ def test_apply_processing_parameters_signal():
 def test_apply_processing_parameters_image():
     """Test apply_processing_parameters for images"""
     with qt_app_context():
-        with datalab_test_app_context() as win:
+        with datalab_test_app_context(history=True) as win:
             panel = win.imagepanel
             processor = panel.processor
             objprop = panel.objprop
@@ -463,6 +786,10 @@ def test_apply_processing_parameters_image():
             # Change constant from 7.0 to 20.0
             editor.dataset.value = v1 = 20.0
 
+            # In-place update requires History panel edit mode (otherwise a new
+            # object is created instead of mutating the existing one).
+            win.historypanel.toggle_edit_mode(True)
+
             # Apply the new processing parameters
             report = objprop.apply_processing_parameters()
 
@@ -484,6 +811,99 @@ def test_apply_processing_parameters_image():
             # Verify the parameter was updated
             stored_param = json_to_dataset(pp_dict["param_json"])
             assert stored_param.value == v1
+
+
+def test_apply_processing_parameters_explicit_param():
+    """apply_processing_parameters honors an explicit param, ignoring the editor."""
+    with qt_app_context():
+        with datalab_test_app_context(history=True) as win:
+            panel = win.signalpanel
+            processor = panel.processor
+            objprop = panel.objprop
+
+            param = GaussParam.create(mu=250.0, sigma=20.0, a=100.0, y0=10.0, size=500)
+            panel.new_object(param=param, edit=False)
+            signal = panel.objview.get_current_object()
+            assert signal is not None
+            signal_uuid = get_uuid(signal)
+            original_signal_data = signal.y.copy()
+
+            v0 = 5.0
+            processor.run_feature("addition_constant", ConstantParam.create(value=v0))
+            processed_sig = panel.objview.get_current_object()
+            assert processed_sig is not None
+            processed_uuid = get_uuid(processed_sig)
+            assert np.allclose(processed_sig.y, original_signal_data + v0)
+
+            # Select the processed signal to populate the Processing tab editor.
+            panel.objview.set_current_object(processed_sig)
+            assert objprop.processing_param_editor is not None
+            editor = objprop.processing_param_editor
+
+            # Put a DECOY value in the editor: it must be ignored because an
+            # explicit param is passed to apply_processing_parameters.
+            editor.dataset.value = 99.0
+
+            win.historypanel.toggle_edit_mode(True)
+
+            # Apply with an EXPLICIT param (not the editor's decoy value).
+            v1 = 15.0
+            report = objprop.apply_processing_parameters(
+                param=ConstantParam.create(value=v1)
+            )
+            assert report.success, f"Reprocessing failed: {report.message}"
+            assert report.obj_uuid == processed_uuid
+            assert get_uuid(processed_sig) == processed_uuid
+
+            # Output must reflect the EXPLICIT param (original + 15.0), proving
+            # the editor decoy (99.0) was ignored -> editor-independent.
+            assert np.allclose(processed_sig.y, original_signal_data + v1)
+
+            pp_dict = processed_sig.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
+            assert pp_dict["source_uuid"] == signal_uuid
+            assert pp_dict["func_name"] == "addition_constant"
+            stored_param = json_to_dataset(pp_dict["param_json"])
+            assert stored_param.value == v1
+
+            # When applying parameters to an object other than the one attached
+            # to the editor, use that object's stored parameters and origin.
+            plugin_origin = {
+                "plugin_class": "TestPlugin",
+                "module": "test_plugin.operations",
+                "directory": "test_plugin",
+                "version": "1.0",
+            }
+            pp_dict["plugin_origin"] = plugin_origin
+            processed_sig.set_metadata_option(PROCESSING_PARAMETERS_OPTION, pp_dict)
+            editor.dataset.value = 99.0
+            objprop.current_processing_obj = signal
+
+            calls = []
+            original_recompute_1_to_1 = processor.recompute_1_to_1
+
+            def record_recompute_1_to_1(*args, **kwargs):
+                calls.append((args, kwargs))
+                return original_recompute_1_to_1(*args, **kwargs)
+
+            processor.recompute_1_to_1 = record_recompute_1_to_1
+            try:
+                report = objprop.apply_processing_parameters(
+                    processed_sig, interactive=False
+                )
+                assert report.success, f"Reprocessing failed: {report.message}"
+
+                win.historypanel.toggle_edit_mode(False)
+                report = objprop.apply_processing_parameters(
+                    processed_sig, interactive=False
+                )
+                assert report.success, f"Reprocessing failed: {report.message}"
+            finally:
+                processor.recompute_1_to_1 = original_recompute_1_to_1
+
+            assert len(calls) == 2
+            for args, kwargs in calls:
+                assert args[2].value == v1
+                assert kwargs["plugin_origin"] == plugin_origin
 
 
 def test_no_duplicate_processing_tabs():
@@ -611,7 +1031,7 @@ def test_apply_processing_parameters_missing_source():
 def test_cross_panel_image_to_signal():
     """Test cross-panel processing: Image → Signal (radial profile)"""
     with qt_app_context():
-        with datalab_test_app_context() as win:
+        with datalab_test_app_context(history=True) as win:
             image_panel = win.imagepanel
             signal_panel = win.signalpanel
             image_processor = image_panel.processor
@@ -658,6 +1078,10 @@ def test_cross_panel_image_to_signal():
             editor.dataset.x0 = 40
             editor.dataset.y0 = 40
 
+            # In-place update + in-place recompute require History panel edit
+            # mode (otherwise new objects are created instead of mutating).
+            win.historypanel.toggle_edit_mode(True)
+
             # Apply the new processing parameters
             report = signal_panel.objprop.apply_processing_parameters()
 
@@ -675,7 +1099,7 @@ def test_cross_panel_image_to_signal():
             original_signal_data = signal.y.copy()
 
             # Recompute the radial profile
-            signal_panel.recompute_processing()
+            signal_panel.recompute_selected()
 
             # The signal should have changed (doubled intensity)
             assert not np.allclose(signal.y, original_signal_data)
@@ -1025,7 +1449,7 @@ def test_roi_mask_invalidation_on_processing_change():
     5. Verify ROI mask is properly recomputed
     """
     with qt_app_context():
-        with datalab_test_app_context() as win:
+        with datalab_test_app_context(history=True) as win:
             panel = win.imagepanel
             objprop = panel.objprop
 
@@ -1064,6 +1488,10 @@ def test_roi_mask_invalidation_on_processing_change():
             # Change binning factor from 2x2 to 4x4 (50x50 -> 25x25)
             editor.dataset.sx = 4
             editor.dataset.sy = 4
+
+            # In-place update requires History panel edit mode (otherwise a new
+            # object is created instead of mutating the existing one).
+            win.historypanel.toggle_edit_mode(True)
 
             # Apply the new processing parameters
             report = objprop.apply_processing_parameters(binned)

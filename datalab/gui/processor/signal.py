@@ -32,6 +32,7 @@ from sigima.objects.scalar import GeometryResult, TableResult
 from datalab.adapters_metadata.table_adapter import TableAdapter
 from datalab.config import _
 from datalab.gui.processor.base import BaseProcessor
+from datalab.objectmodel import get_uuid
 from datalab.utils.qthelpers import qt_try_except
 from datalab.widgets import (
     fitdialog,
@@ -705,10 +706,15 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
                 """Polynomial fit dialog function"""
                 return dlgfunc(x, y, param.degree, parent=parent)
 
-            self.compute_fit(txt, polynomialfit)
+            self.compute_fit(txt, polynomialfit, fit_type="polynomial")
 
     def __row_compute_fit(
-        self, obj: SignalObj, name: str, fitdlgfunc: Callable
+        self,
+        obj: SignalObj,
+        name: str,
+        fitdlgfunc: Callable,
+        fit_type: str | None = None,
+        fit_x0: list[float] | None = None,
     ) -> None:
         """Curve fitting computing sub-method"""
         output = fitdlgfunc(obj.x, obj.y, parent=self.mainwindow)
@@ -726,19 +732,79 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             # Creating new signal
             metadata = {fitdlgfunc.__name__: pvalues}
             signal = create_signal(f"{name}({obj.title})", obj.x, y, metadata=metadata)
-            # Creating new plot item
-            self.panel.add_object(signal)
+            # Record a deterministically-replayable history action when the fit
+            # type is supported by the headless evaluator. Falls back to no
+            # recording (interactive-only) for unsupported types.
+            action = None
+            if fit_type is not None:
+                action = self.mainwindow.historypanel.add_ui_entry(
+                    name,
+                    target="signalprocessor",
+                    method_name="recompute_fit",
+                    save_state=True,
+                    fit_type=fit_type,
+                    fit_values=[float(p.value) for p in params],
+                    fit_x0=[float(v) for v in fit_x0] if fit_x0 else None,
+                    fit_name=name,
+                    source_uuid=get_uuid(obj),
+                )
+            # Creating new plot item (capture its UUID as the action output)
+            with self.mainwindow.historypanel.capture_outputs(action):
+                self.panel.add_object(signal)
 
     @qt_try_except()
-    def compute_fit(self, title: str, fitdlgfunc: Callable) -> None:
+    def compute_fit(
+        self, title: str, fitdlgfunc: Callable, fit_type: str | None = None
+    ) -> None:
         """Compute fitting curve using an interactive dialog
 
         Args:
             title: Title of the dialog
             fitdlgfunc: Fitting dialog function
+            fit_type: Optional explicit fit type id for deterministic replay.
+             When None, it is derived from ``fitdlgfunc.__name__``.
         """
+        if fit_type is None:
+            fit_type = fitdialog.fit_type_from_dlgfunc_name(fitdlgfunc.__name__)
         for obj in self.panel.objview.get_sel_objects():
-            self.__row_compute_fit(obj, title, fitdlgfunc)
+            self.__row_compute_fit(obj, title, fitdlgfunc, fit_type=fit_type)
+
+    @qt_try_except()
+    def recompute_fit(
+        self,
+        fit_type: str,
+        fit_values: list[float],
+        fit_x0: list[float] | None = None,
+        fit_name: str = "",
+        source_uuid: str | None = None,
+    ) -> None:
+        """Deterministically recompute an interactive fit result curve.
+
+        Used at history-replay time to reconstruct the fitted curve from the
+        recorded model type and parameter values, without reopening the
+        interactive dialog.
+
+        Args:
+            fit_type: Canonical fit type id (see
+             :func:`datalab.widgets.fitdialog.evaluate_fit`).
+            fit_values: Ordered fitted parameter values.
+            fit_x0: Peak abscissas for multi-peak fits (``None`` otherwise).
+            fit_name: Title prefix used for the produced signal.
+            source_uuid: UUID of the source signal to fit. When missing or no
+             longer present, falls back to the first selected signal.
+        """
+        obj = None
+        if source_uuid is not None and self.panel.objmodel.has_uuid(source_uuid):
+            obj = self.panel.objmodel[source_uuid]
+        if obj is None:
+            selected = self.panel.objview.get_sel_objects(include_groups=True)
+            obj = selected[0] if selected else None
+        if obj is None:
+            return
+        extra = {"a_x0": fit_x0} if fit_x0 else None
+        y = fitdialog.evaluate_fit(fit_type, obj.x, fit_values, extra)
+        signal = create_signal(f"{fit_name}({obj.title})", obj.x, y)
+        self.panel.add_object(signal)
 
     @qt_try_except()
     def compute_multigaussianfit(self) -> None:
@@ -755,7 +821,13 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
                     # pylint: disable=cell-var-from-loop
                     return fitdlgfunc(x, y, peaks, parent=parent)
 
-                self.__row_compute_fit(obj, _("Multi-Gaussian fit"), multigaussianfit)
+                self.__row_compute_fit(
+                    obj,
+                    _("Multi-Gaussian fit"),
+                    multigaussianfit,
+                    fit_type="multigaussian",
+                    fit_x0=[float(v) for v in obj.x[peaks]],
+                )
 
     @qt_try_except()
     def compute_multilorentzianfit(self) -> None:
@@ -773,7 +845,11 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
                     return fitdlgfunc(x, y, peaks, parent=parent)
 
                 self.__row_compute_fit(
-                    obj, _("Multi-Lorentzian fit"), multilorentzianfit
+                    obj,
+                    _("Multi-Lorentzian fit"),
+                    multilorentzianfit,
+                    fit_type="multilorentzian",
+                    fit_x0=[float(v) for v in obj.x[peaks]],
                 )
 
     @qt_try_except()

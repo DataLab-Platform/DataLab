@@ -58,6 +58,7 @@ def datalab_test_app_context(
     save: bool = False,
     console: bool | None = None,
     exec_loop: bool = True,
+    history: bool = False,
 ) -> Generator[DLMainWindow, None, None]:
     """Context manager handling DataLab mainwindow creation and Qt event loop
     with optional HDF5 file save and other options for testing purposes
@@ -68,6 +69,7 @@ def datalab_test_app_context(
         save: whether to save HDF5 file (default: False)
         console: whether to show console (default: None)
         exec_loop: whether to execute Qt event loop (default: True)
+        history: whether to enable and show history tracking (default: False)
     """
     if size is None:
         size = 1200, 700
@@ -75,6 +77,10 @@ def datalab_test_app_context(
         win: DLMainWindow | None = None
         try:
             win = DLMainWindow(console=console)
+            if not history:
+                win.historypanel.set_tracking_enabled(False)
+                win.historypanel.setEnabled(False)
+                win.docks[win.historypanel].hide()
             if maximized:
                 win.showMaximized()
             else:

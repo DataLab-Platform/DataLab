@@ -9,12 +9,12 @@
 from __future__ import annotations
 
 import abc
+import copy
 import glob
 import os
 import os.path as osp
 import re
 import warnings
-from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Generator, Generic, Literal, Type
 
 import guidata.dataset as gds
@@ -80,7 +80,9 @@ from datalab.gui.newobject import (
 from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
     ProcessingParameters,
+    ProcessingReport,
     clear_analysis_parameters,
+    extract_analysis_parameters,
     extract_processing_parameters,
     insert_processing_parameters,
 )
@@ -90,6 +92,7 @@ from datalab.objectmodel import (
     get_number,
     get_short_id,
     get_uuid,
+    patch_title_with_ids,
     set_number,
     set_uuid,
 )
@@ -164,21 +167,6 @@ def is_hdf5_file(filename: str, check_content: bool = False) -> bool:
         return False
 
 
-@dataclass
-class ProcessingReport:
-    """Report of processing operation
-
-    Args:
-        success: True if processing succeeded
-        obj_uuid: UUID of the processed object
-        message: Optional message (error or info)
-    """
-
-    success: bool
-    obj_uuid: str | None = None
-    message: str | None = None
-
-
 class ObjectProp(QW.QWidget):
     """Object handling panel properties
 
@@ -207,6 +195,15 @@ class ObjectProp(QW.QWidget):
         self.processing_param_editor: gdq.DataSetEditGroupBox | None = None
         self.current_processing_obj: SignalObj | ImageObj | None = None
         self.processing_scroll: QW.QScrollArea | None = None
+        # Object analysis tab (editable 1-to-0 analysis parameters)
+        self.analysis_param_editor: gdq.DataSetEditGroupBox | None = None
+        self.current_analysis_obj: SignalObj | ImageObj | None = None
+        self.analysis_scroll: QW.QScrollArea | None = None
+        # Auto-recompute toggle (session-only state, not persisted to Conf).
+        self.__auto_recompute_enabled: bool = False
+        self.__auto_recompute_timer = QC.QTimer(self)
+        self.__auto_recompute_timer.setSingleShot(True)
+        self.__auto_recompute_timer.timeout.connect(self.__auto_recompute_trigger)
 
         # Properties tab
         self.properties = gdq.DataSetEditGroupBox("", objclass)
@@ -422,6 +419,10 @@ class ObjectProp(QW.QWidget):
             index = self.tabwidget.indexOf(self.processing_scroll)
             if index >= 0:
                 self.tabwidget.removeTab(index)
+        if self.analysis_scroll is not None:
+            index = self.tabwidget.indexOf(self.analysis_scroll)
+            if index >= 0:
+                self.tabwidget.removeTab(index)
 
         # Reset references for dynamic tabs
         self.creation_param_editor = None
@@ -430,13 +431,18 @@ class ObjectProp(QW.QWidget):
         self.processing_param_editor = None
         self.current_processing_obj = None
         self.processing_scroll = None
+        self.analysis_param_editor = None
+        self.current_analysis_obj = None
+        self.analysis_scroll = None
 
         # Setup Creation and Processing tabs (if applicable)
         has_creation_tab = False
         has_processing_tab = False
+        has_analysis_tab = False
         if obj is not None:
             has_creation_tab = self.setup_creation_tab(obj)
             has_processing_tab = self.setup_processing_tab(obj)  # Processing tab setup
+            has_analysis_tab = self.setup_analysis_tab(obj)  # Analysis tab setup
 
         # Trigger visibility update for History and Analysis parameters tabs
         # (will be called via textChanged signals, but we call explicitly
@@ -452,6 +458,8 @@ class ObjectProp(QW.QWidget):
             self.tabwidget.setCurrentWidget(self.creation_scroll)
         elif force_tab == "processing" and has_processing_tab:
             self.tabwidget.setCurrentWidget(self.processing_scroll)
+        elif force_tab == "analysis" and has_analysis_tab:
+            self.tabwidget.setCurrentWidget(self.analysis_scroll)
         elif force_tab == "analysis" and has_analysis_parameters:
             self.tabwidget.setCurrentWidget(self.analysis_parameters)
         else:
@@ -590,16 +598,6 @@ class ObjectProp(QW.QWidget):
         editor = self.creation_param_editor
         if editor is None or self.current_creation_obj is None:
             return
-        if isinstance(self.current_creation_obj, SignalObj):
-            otext = _("Signal was modified in-place.")
-        else:
-            otext = _("Image was modified in-place.")
-        text = f"⚠️ {otext} ⚠️ "
-        text += _(
-            "If computation were performed based on this object, "
-            "they may need to be redone."
-        )
-        self.panel.SIG_STATUS_MESSAGE.emit(text, 20000)
 
         # Recreate object with new parameters
         # (serialization is done automatically in create_signal/image_from_param)
@@ -632,11 +630,19 @@ class ObjectProp(QW.QWidget):
         # Update metadata with new creation parameters
         insert_creation_parameters(self.current_creation_obj, param)
 
-        # Auto-recompute analysis if the object had analysis parameters
-        # Since the data has changed, any analysis results are now invalid
-        # Use the processor for the current object's type
-        obj_processor = self.__get_processor_associated_to(self.current_creation_obj)
-        obj_processor.auto_recompute_analysis(self.current_creation_obj)
+        # Propagate the edited param to the History panel: mutate the matching
+        # creation action (snapshot originals first), refresh its tree display,
+        # then cascade recompute to downstream actions so the chain stays
+        # consistent with the new creation parameters. Creation actions are
+        # KIND_UI without a func_name, so look them up via output_to_action.
+        hpanel = getattr(self.panel.mainwindow, "historypanel", None)
+        if hpanel is not None:
+            action = hpanel.find_creation_action_for_output(obj_uuid)
+            if action is not None:
+                action.snapshot_kwargs()
+                action.kwargs["param"] = copy.deepcopy(param)
+                hpanel.refresh_action(action)
+                hpanel.recompute_cascade(action)
 
         # Update the tree view item (to show new title if it changed)
         self.panel.objview.update_item(obj_uuid)
@@ -649,6 +655,12 @@ class ObjectProp(QW.QWidget):
         # Update the Properties tab to reflect the new object properties
         # (e.g., data type, dimensions, etc.)
         self.__update_properties_dataset(self.current_creation_obj)
+
+        if isinstance(self.current_creation_obj, SignalObj):
+            text = _("Signal was recreated.")
+        else:
+            text = _("Image was recreated.")
+        self.panel.SIG_STATUS_MESSAGE.emit("✅ " + text, 5000)
 
         # Refresh the Creation tab with the new parameters
         # Use QTimer to defer this until after the current event is processed
@@ -725,6 +737,23 @@ class ObjectProp(QW.QWidget):
         editor.SIG_APPLY_BUTTON_CLICKED.connect(self.apply_processing_parameters)
         editor.set_apply_button_state(False)
 
+        # Hook into the per-edit change callback to support auto-recompute.
+        # ``DataSetEditLayout.change_callback`` is called whenever any widget
+        # value changes; wrap it so we can also (re)start the debounce timer.
+        try:
+            inner_layout = editor.edit  # DataSetEditLayout instance
+            original_change_cb = inner_layout.change_callback
+
+            def _wrapped_change_cb() -> None:
+                if original_change_cb is not None:
+                    original_change_cb()
+                if self.__auto_recompute_enabled:
+                    self.__auto_recompute_timer.start(300)
+
+            inner_layout.change_callback = _wrapped_change_cb
+        except AttributeError:
+            pass
+
         # Store reference to be able to retrieve it later
         self.processing_param_editor = editor
 
@@ -751,7 +780,21 @@ class ObjectProp(QW.QWidget):
             QW.QSizePolicy.Expanding, QW.QSizePolicy.Preferred
         )
 
-        self.processing_scroll.setWidget(editor)
+        # Build the tab content: editor + "Auto-recompute" checkbox.
+        container = QW.QWidget()
+        vbox = QW.QVBoxLayout(container)
+        vbox.setContentsMargins(0, 0, 0, 0)
+        vbox.addWidget(editor)
+        auto_cb = QW.QCheckBox(_("Auto-recompute on edit"), container)
+        auto_cb.setToolTip(
+            _("Automatically re-run processing when parameters are modified")
+        )
+        auto_cb.setChecked(self.__auto_recompute_enabled)
+        auto_cb.toggled.connect(self.__set_auto_recompute_enabled)
+        vbox.addWidget(auto_cb)
+        vbox.addStretch(1)
+
+        self.processing_scroll.setWidget(container)
         self.tabwidget.insertTab(
             insert_index,
             self.processing_scroll,
@@ -763,6 +806,190 @@ class ObjectProp(QW.QWidget):
         if set_current:
             self.tabwidget.setCurrentWidget(self.processing_scroll)
 
+        return True
+
+    def setup_analysis_tab(
+        self, obj: SignalObj | ImageObj, set_current: bool = False
+    ) -> bool:
+        """Setup the Analysis tab with parameter editor for re-running analysis.
+
+        This tab lets the user edit the parameters of a 1-to-0 analysis
+        operation (peak detection, FWHM, segments, etc.) and re-run it in place
+        with the modified parameters.
+
+        Args:
+            obj: Signal or Image object
+            set_current: If True, set the Analysis tab as current after creation
+
+        Returns:
+            True if Analysis tab was set up, False otherwise
+        """
+        # Extract analysis parameters (1-to-0 pattern only)
+        proc_params = extract_analysis_parameters(obj)
+        if proc_params is None or proc_params.pattern != "1-to-0":
+            return False
+
+        param = proc_params.param
+        if param is None or isinstance(param, list):
+            return False
+
+        # Store reference to be able to retrieve it later
+        self.current_analysis_obj = obj
+
+        # Create parameter editor widget
+        editor = gdq.DataSetEditGroupBox(
+            _("Analysis Parameters"), param.__class__, wordwrap=True
+        )
+        update_dataset(editor.dataset, param)
+        editor.get()
+
+        # Connect Apply button to re-analysis handler
+        editor.SIG_APPLY_BUTTON_CLICKED.connect(self.apply_analysis_parameters)
+        editor.set_apply_button_state(False)
+
+        # Store reference to be able to retrieve it later
+        self.analysis_param_editor = editor
+
+        # Remove existing Analysis tab if it exists
+        if self.analysis_scroll is not None:
+            index = self.tabwidget.indexOf(self.analysis_scroll)
+            if index >= 0:
+                self.tabwidget.removeTab(index)
+
+        # Analysis tab comes after Creation and Processing tabs (if they exist)
+        insert_index = 0
+        if (
+            self.creation_scroll is not None
+            and self.tabwidget.indexOf(self.creation_scroll) >= 0
+        ):
+            insert_index += 1
+        if (
+            self.processing_scroll is not None
+            and self.tabwidget.indexOf(self.processing_scroll) >= 0
+        ):
+            insert_index += 1
+
+        # Create new analysis scroll area and tab
+        self.analysis_scroll = QW.QScrollArea()
+        self.analysis_scroll.setWidgetResizable(True)
+        self.analysis_scroll.setHorizontalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
+        self.analysis_scroll.setSizePolicy(
+            QW.QSizePolicy.Expanding, QW.QSizePolicy.Preferred
+        )
+        self.analysis_scroll.setWidget(editor)
+        self.tabwidget.insertTab(
+            insert_index,
+            self.analysis_scroll,
+            get_icon("analysis.svg"),
+            _("Analysis"),
+        )
+
+        # Set as current tab if requested
+        if set_current:
+            self.tabwidget.setCurrentWidget(self.analysis_scroll)
+
+        return True
+
+    def apply_analysis_parameters(
+        self,
+        obj: SignalObj | ImageObj | None = None,
+        interactive: bool = True,
+        param: gds.DataSet | None = None,
+    ) -> bool:
+        """Apply analysis parameters: re-run the 1-to-0 analysis in place.
+
+        Args:
+            obj: Signal or Image object to re-analyze. If None, uses the current
+                analysis object.
+            interactive: If True, show error messages in the UI.
+            param: Explicit analysis parameters to apply. When None (default),
+                fall back to the editor dataset or the stored analysis parameters.
+        """
+        if execenv.unattended:
+            interactive = False
+
+        editor = self.analysis_param_editor
+        obj = obj or self.current_analysis_obj
+        if obj is None:
+            return False
+
+        # Extract analysis parameters
+        proc_params = extract_analysis_parameters(obj)
+        if proc_params is None:
+            if interactive:
+                QW.QMessageBox.warning(
+                    self, _("Error"), _("Analysis metadata is incomplete.")
+                )
+            return False
+
+        func_name = proc_params.func_name
+
+        # Resolve the parameters to apply. An explicit ``param`` argument takes
+        # precedence; otherwise fall back to the editor (interactive Apply) or
+        # the stored analysis parameters.
+        if param is None:
+            param = editor.dataset if editor is not None else proc_params.param
+        recompute_param = copy.deepcopy(param)
+
+        # Disable ROI creation during re-analysis: detection functions store
+        # create_rois=True in their parameters, but re-running should only
+        # update analysis results, not recreate ROIs (which would make them
+        # impossible to delete or modify).
+        if hasattr(recompute_param, "create_rois"):
+            recompute_param.create_rois = False
+
+        # Re-run the analysis in place (no history entry: runs under replaying)
+        processor = self.__get_processor_associated_to(obj)
+        try:
+            success = processor.recompute_1_to_0(
+                func_name,
+                obj,
+                recompute_param,
+                plugin_origin=proc_params.plugin_origin,
+            )
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            if execenv.unattended:
+                raise exc
+            QW.QMessageBox.warning(
+                self,
+                _("Error"),
+                _("Failed to recompute analysis:\n%s") % str(exc),
+            )
+            return False
+        if not success:
+            if interactive:
+                QW.QMessageBox.warning(
+                    self, _("Error"), _("Failed to recompute analysis.")
+                )
+            return False
+
+        # Propagate the edited param to the History panel: mutate the matching
+        # analysis action (snapshot originals first) and refresh its tree
+        # display. Analysis is a leaf operation (1-to-0), so no cascade is
+        # needed.
+        hpanel = getattr(self.panel.mainwindow, "historypanel", None)
+        if hpanel is not None:
+            action = hpanel.find_analysis_action(get_uuid(obj), func_name)
+            if action is not None:
+                action.snapshot_kwargs()
+                action.kwargs["param"] = copy.deepcopy(recompute_param)
+                hpanel.refresh_action(action)
+
+        # Refresh the object display after re-analysis
+        obj_uuid = get_uuid(obj)
+        self.display_analysis_parameters(obj)
+        self.panel.objview.update_item(obj_uuid)
+        # Analysis results are plot shapes, so force a plot refresh
+        self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+        self.panel.SIG_STATUS_MESSAGE.emit("✅ " + _("Analysis was recomputed."), 5000)
+
+        # Refresh the Analysis tab with the new parameters (defer, keep visible)
+        QC.QTimer.singleShot(
+            0,
+            lambda: self.setup_analysis_tab(
+                self.current_analysis_obj, set_current=True
+            ),
+        )
         return True
 
     def __get_processor_associated_to(
@@ -781,14 +1008,40 @@ class ObjectProp(QW.QWidget):
             return self.panel.mainwindow.signalpanel.processor
         return self.panel.mainwindow.imagepanel.processor
 
+    def __set_auto_recompute_enabled(self, enabled: bool) -> None:
+        """Toggle auto-recompute mode (session-only, not persisted)."""
+        self.__auto_recompute_enabled = bool(enabled)
+        if not self.__auto_recompute_enabled:
+            self.__auto_recompute_timer.stop()
+
+    def __auto_recompute_trigger(self) -> None:
+        """Debounced callback: push widget values then re-run processing."""
+        if not self.__auto_recompute_enabled:
+            return
+        editor = self.processing_param_editor
+        if editor is None:
+            return
+        # ``editor.set()`` synchronises widget values to the dataset and emits
+        # ``SIG_APPLY_BUTTON_CLICKED`` which is already wired to
+        # ``apply_processing_parameters``.
+        editor.set(check=False)
+
     def apply_processing_parameters(
-        self, obj: SignalObj | ImageObj | None = None, interactive: bool = True
+        self,
+        obj: SignalObj | ImageObj | None = None,
+        interactive: bool = True,
+        param: gds.DataSet | None = None,
     ) -> ProcessingReport:
         """Apply processing parameters: re-run processing with updated parameters.
 
         Args:
             obj: Signal or Image object to reprocess. If None, uses the current object.
             interactive: If True, show progress and error messages in the UI.
+            param: Explicit processing parameters to apply. When provided, this
+                takes precedence and makes the call independent of the Processing
+                tab editor state (used e.g. by programmatic recompute paths).
+                When None (default), fall back to the editor dataset or the
+                stored processing parameters.
 
         Returns:
             ProcessingReport with success status, object UUID, and optional message.
@@ -796,35 +1049,25 @@ class ObjectProp(QW.QWidget):
         if execenv.unattended:
             interactive = False
 
-        report = ProcessingReport(success=False)
         editor = self.processing_param_editor
         obj = obj or self.current_processing_obj
         if obj is None:
-            report.message = _("No processing object available.")
-            return report
-
-        report.obj_uuid = get_uuid(obj)
-
-        # Extract processing parameters
-        proc_params = extract_processing_parameters(obj)
-        if proc_params is None:
-            report.message = _("Processing metadata is incomplete.")
-            if interactive:
-                QW.QMessageBox.critical(self, _("Error"), report.message)
-            return report
-
-        # Check if source object still exists
-        if proc_params.source_uuid is None:
-            report.message = _(
-                "Processing metadata is incomplete (missing source UUID)."
+            return ProcessingReport(
+                success=False, message=_("No processing object available.")
             )
-            if interactive:
-                QW.QMessageBox.critical(self, _("Error"), report.message)
-            return report
+
+        proc_params = extract_processing_parameters(obj)
+        if proc_params is None or proc_params.pattern != "1-to-1":
+            return ProcessingReport(
+                success=False,
+                obj_uuid=get_uuid(obj),
+                message=_("Processing metadata is incomplete."),
+            )
 
         # Find source object
         source_obj = self.panel.mainwindow.find_object_by_uuid(proc_params.source_uuid)
         if source_obj is None:
+            report = ProcessingReport(success=False, obj_uuid=get_uuid(obj))
             report.message = _("Source object no longer exists.")
             if interactive:
                 QW.QMessageBox.critical(
@@ -839,82 +1082,143 @@ class ObjectProp(QW.QWidget):
                 )
             return report
 
-        # Get updated parameters from editor
-        param = editor.dataset if editor is not None else proc_params.param
+        # Resolve the parameters to apply. An explicit ``param`` argument takes
+        # precedence and makes this method independent of the editor state;
+        # otherwise fall back to the editor (interactive Apply) or the stored
+        # processing parameters.
+        if param is None:
+            if editor is not None and obj is self.current_processing_obj:
+                param = editor.dataset
+            else:
+                param = proc_params.param
 
-        # For cross-panel computations, we need to use the processor from the panel
-        # that owns the source object (e.g., radial_profile is in ImageProcessor)
-        source_processor = self.__get_processor_associated_to(source_obj)
+        hpanel = getattr(self.panel.mainwindow, "historypanel", None)
+        is_edit_mode = hpanel is not None and hpanel.is_edit_mode()
 
-        # Recompute using the dedicated method (with multiprocessing support)
-        try:
-            new_obj = source_processor.recompute_1_to_1(
-                proc_params.func_name, source_obj, param
+        if is_edit_mode:
+            report = self.panel.processor.recompute_processing(
+                obj=obj,
+                param=param,
+                interactive=interactive,
             )
-        except Exception as exc:  # pylint: disable=broad-exception-caught
-            report.message = _("Failed to reprocess object:\n%s") % str(exc)
-            if interactive:
-                QW.QMessageBox.warning(self, _("Error"), report.message)
-            return report
+            if report.success:
+                # Propagate the edited param to the History panel:
+                # Mutate the matching existing action (snapshot originals
+                # first), refresh its tree display, then cascade recompute
+                # to downstream actions so the chain stays consistent with
+                # the new parameters.
+                action = hpanel.find_action_for_output(
+                    get_uuid(obj), proc_params.func_name
+                )
+                if action is not None:
+                    action.snapshot_kwargs()
+                    action.kwargs["param"] = copy.deepcopy(param)
+                    hpanel.refresh_action(action)
+                    hpanel.recompute_cascade(action)
 
-        if new_obj is None:
-            # User cancelled the operation
-            report.message = _("Processing was cancelled.")
+                # Update the tree view item and refresh plot
+                obj_uuid = get_uuid(obj)
+                self.panel.objview.update_item(obj_uuid)
+                self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
 
+                # Update the Properties tab to reflect the new object
+                self.__update_properties_dataset(obj)
+                # Refresh the displayed processing history (Properties tab
+                # description) so the parameter change is visible immediately
+                self.display_processing_history(obj)
+
+                # Refresh the Processing tab with the new parameters
+                QC.QTimer.singleShot(
+                    0,
+                    lambda: self.setup_processing_tab(
+                        obj, reset_params=False, set_current=True
+                    ),
+                )
         else:
+            source_processor = self.__get_processor_associated_to(source_obj)
+            try:
+                compout = source_processor.recompute_1_to_1(
+                    proc_params.func_name,
+                    source_obj,
+                    param,
+                    plugin_origin=proc_params.plugin_origin,
+                )
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                report = ProcessingReport(success=False, obj_uuid=get_uuid(obj))
+                report.message = _("Failed to reprocess object:\n%s") % str(exc)
+                if interactive:
+                    QW.QMessageBox.warning(self, _("Error"), report.message)
+                return report
+
+            report = ProcessingReport(success=False, obj_uuid=get_uuid(obj))
+            if compout.cancelled:
+                report.cancelled = True
+                report.message = _("Processing was cancelled.")
+                return report
+            new_obj = compout.result
+            if new_obj is None:
+                report.message = compout.error_msg or _("Failed to reprocess object.")
+                return report
             report.success = True
 
-            # Update the current object in-place with data from new object
-            obj.title = new_obj.title
-            if isinstance(obj, SignalObj):
-                obj.xydata = new_obj.xydata
-            else:  # ImageObj
-                obj.data = new_obj.data
-                # Invalidate ROI mask cache when image dimensions may have changed
-                # (the mask is computed based on image shape, so it must be recomputed)
-                obj.invalidate_maskdata_cache()
+            # --- Non-edit mode: create a new independent object ---
+            patch_title_with_ids(new_obj, [obj], get_short_id)
 
-            # Update metadata with new processing parameters
-            updated_proc_params = ProcessingParameters(
-                func_name=proc_params.func_name,
-                pattern=proc_params.pattern,
-                param=param,
+            # Store processing metadata on the new object
+            # pylint: disable=import-outside-toplevel
+            from datalab.gui.processor.base import build_processing_parameters
+
+            new_pp = build_processing_parameters(
+                proc_params.func_name,
+                proc_params.pattern,
+                param=copy.deepcopy(param),
                 source_uuid=proc_params.source_uuid,
+                plugin_origin=proc_params.plugin_origin,
             )
-            insert_processing_parameters(obj, updated_proc_params)
+            insert_processing_parameters(new_obj, new_pp)
 
-            # Auto-recompute analysis if the object had analysis parameters
-            # Since the data has changed, any analysis results are now invalid
-            # Use the processor for the current object's type (not source object's type)
-            obj_processor = self.__get_processor_associated_to(obj)
-            obj_processor.auto_recompute_analysis(obj)
+            # Mark as freshly processed so the Processing tab is shown
+            self.mark_as_freshly_processed(new_obj)
 
-            # Update the tree view item and refresh plot
-            obj_uuid = get_uuid(obj)
-            self.panel.objview.update_item(obj_uuid)
-            self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+            # Add the new object to the same group as the source object
+            group_id = self.panel.objmodel.get_object_group_id(obj)
+            self.panel.add_object(new_obj, group_id=group_id, set_current=True)
 
-            # Update the Properties tab to reflect the new object properties
-            # (e.g., data type, dimensions, etc.)
-            self.__update_properties_dataset(obj)
-
-            # Refresh the Processing tab with the new parameters
-            # Don't reset parameters from source object - keep the user's values
-            # Set the Processing tab as current to keep it visible after refresh
-            QC.QTimer.singleShot(
-                0,
-                lambda: self.setup_processing_tab(
-                    obj, reset_params=False, set_current=True
-                ),
-            )
-
-            if isinstance(obj, SignalObj):
-                report.message = _("Signal was reprocessed.")
-            else:
-                report.message = _("Image was reprocessed.")
-            self.panel.SIG_STATUS_MESSAGE.emit("✅ " + report.message, 5000)
+            # Record a brand-new history entry with the new object UUID
+            if hpanel is not None:
+                hpanel.add_compute_entry_from_pp(
+                    new_obj.title,
+                    new_pp,
+                    panel_str=self.panel.PANEL_STR_ID,
+                    output_uuids=[get_uuid(new_obj)],
+                    plugin_origin=proc_params.plugin_origin,
+                )
 
         return report
+
+    def apply_recomputed_object_in_place(
+        self,
+        obj: SignalObj | ImageObj,
+        new_obj: SignalObj | ImageObj,
+        proc_params: ProcessingParameters,
+    ) -> None:
+        """Apply a freshly recomputed object onto ``obj`` in place.
+
+        Copies title + data from ``new_obj`` while preserving ``obj``'s own
+        metadata (only the processing parameters are refreshed).
+
+        Args:
+            obj: Existing object to update in place (identity preserved).
+            new_obj: Freshly recomputed object providing title + data.
+            proc_params: Updated processing parameters to store on ``obj``.
+        """
+        obj.title = new_obj.title
+        if isinstance(obj, SignalObj):
+            obj.xydata = new_obj.xydata
+        else:  # ImageObj
+            obj.data = new_obj.data
+            obj.invalidate_maskdata_cache()
+        insert_processing_parameters(obj, proc_params)
 
 
 class AbstractPanelMeta(type(QW.QSplitter), abc.ABCMeta):
@@ -932,6 +1236,7 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     H5_PREFIX = ""
     SIG_OBJECT_ADDED = QC.Signal()
     SIG_OBJECT_REMOVED = QC.Signal()
+    SIG_OBJECT_MODIFIED = QC.Signal()
 
     @abc.abstractmethod
     def __init__(self, parent):
@@ -1117,7 +1422,7 @@ class SaveToDirectoryGUIParam(gds.DataSet, title=_("Save to directory")):
             """,
             ]
         )
-        NonModalInfoDialog(parent, "Pattern help", text).show()
+        NonModalInfoDialog(parent, _("Pattern help"), text).show()
 
     def get_extension_choices(self, _item=None, _value=None):
         """Return list of available extensions for choice item."""
@@ -1258,7 +1563,7 @@ class AddMetadataParam(
             """,
             ]
         )
-        NonModalInfoDialog(parent, "Pattern help", text).show()
+        NonModalInfoDialog(parent, _("Pattern help"), text).show()
 
     def get_conversion_choices(self, _item=None, _value=None):
         """Return list of available conversion choices."""
@@ -1592,6 +1897,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # immediately if the modified object is currently selected.
         self.objview.item_selection_changed()
         self.refresh_plot("selected", update_items=True, force=True)
+        self.SIG_OBJECT_MODIFIED.emit()
 
     def remove_all_objects(self) -> None:
         """Remove all objects"""
@@ -1718,20 +2024,33 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """Duplication signal/image object"""
         if not self.mainwindow.confirm_memory_state():
             return
-        # Duplicate individual objects (exclusive with respect to groups)
-        for oid in self.objview.get_sel_object_uuids():
-            self.__duplicate_individual_obj(oid, set_current=False)
-        # Duplicate groups (exclusive with respect to individual objects)
-        for group in self.objview.get_sel_groups():
-            new_group = self.add_group(group.title)
-            for oid in self.objmodel.get_group_object_ids(get_uuid(group)):
-                self.__duplicate_individual_obj(
-                    oid, get_uuid(new_group), set_current=False
-                )
+        action = self.mainwindow.historypanel.add_ui_entry(
+            _("Duplicate object or group"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="duplicate_object",
+            save_state=False,
+        )
+        with self.mainwindow.historypanel.capture_outputs(action):
+            # Duplicate individual objects (exclusive with respect to groups)
+            for oid in self.objview.get_sel_object_uuids():
+                self.__duplicate_individual_obj(oid, set_current=False)
+            # Duplicate groups (exclusive with respect to individual objects)
+            for group in self.objview.get_sel_groups():
+                new_group = self.add_group(group.title)
+                for oid in self.objmodel.get_group_object_ids(get_uuid(group)):
+                    self.__duplicate_individual_obj(
+                        oid, get_uuid(new_group), set_current=False
+                    )
         self.selection_changed(update_items=True)
 
     def copy_metadata(self) -> None:
         """Copy object metadata"""
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Copy metadata"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="copy_metadata",
+            save_state=False,
+        )
         obj = self.objview.get_sel_objects()[0]
         self.metadata_clipboard = obj.metadata.copy()
 
@@ -1788,6 +2107,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             )
             if not param.edit(parent=self.parentWidget()):
                 return
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Paste metadata"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="paste_metadata",
+            save_state=False,
+            param=param,
+        )
         metadata = {}
         if param.keep_roi and ROI_KEY in self.metadata_clipboard:
             metadata[ROI_KEY] = self.metadata_clipboard[ROI_KEY]
@@ -1840,6 +2166,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Save settings to config
         Conf.io.add_metadata_settings.set(param)
 
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Add metadata"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="add_metadata",
+            save_state=True,
+            param=param,
+        )
+
         # Build values for all selected objects
         values = param.build_values(sel_objects)
 
@@ -1852,19 +2186,49 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             "selected", update_items=True, only_visible=False, only_existing=True
         )
 
-    def copy_roi(self) -> None:
-        """Copy regions of interest"""
-        obj = self.objview.get_sel_objects()[0]
-        self.__roi_clipboard = obj.roi.copy()
+    def copy_roi(self, roi_data=None) -> None:
+        """Copy regions of interest
 
-    def paste_roi(self) -> None:
-        """Paste regions of interest"""
+        Args:
+            roi_data: ROI snapshot for replay. When ``None`` (interactive use),
+                the ROI is read from the currently selected object.
+        """
+        if roi_data is None:
+            obj = self.objview.get_sel_objects()[0]
+            roi_data = obj.roi.copy()
+        self.__roi_clipboard = roi_data.copy()
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Copy regions of interest from selected %s")
+            % (_("signal") if self.PANEL_STR_ID == "signal" else _("image")),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="copy_roi",
+            save_state=True,
+            roi_data=roi_data,
+        )
+
+    def paste_roi(self, roi_data=None) -> None:
+        """Paste regions of interest
+
+        Args:
+            roi_data: ROI snapshot for replay. When ``None`` (interactive use),
+                the clipboard populated by :meth:`copy_roi` is used.
+        """
+        if roi_data is None:
+            roi_data = self.__roi_clipboard
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Paste regions of interest into selected %s")
+            % (_("signal") if self.PANEL_STR_ID == "signal" else _("image")),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="paste_roi",
+            save_state=True,
+            roi_data=roi_data,
+        )
         sel_objects = self.objview.get_sel_objects(include_groups=True)
         for obj in sel_objects:
             if obj.roi is None:
-                obj.roi = self.__roi_clipboard.copy()
+                obj.roi = roi_data.copy()
             else:
-                obj.roi = obj.roi.combine_with(self.__roi_clipboard)
+                obj.roi = obj.roi.combine_with(roi_data)
         self.selection_changed(update_items=True)
         self.refresh_plot(
             "selected", update_items=True, only_visible=False, only_existing=True
@@ -1886,6 +2250,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             )
             if answer == QW.QMessageBox.No:
                 return
+        # IMPORTANT: save_state=True is required so that the selection of objects
+        # being deleted is captured. On replay, the captured selection (translated
+        # through uuid_remap) is restored before remove_object runs, ensuring that
+        # the correct object is removed instead of whatever is currently selected.
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Remove selected objects"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="remove_object",
+            save_state=True,
+            force=force,
+        )
         sel_objects = self.objview.get_sel_objects(include_groups=True)
         for obj in sorted(sel_objects, key=get_short_id, reverse=True):
             dlg_list: list[QW.QDialog] = []
@@ -1957,7 +2332,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         # Delete metadata:
         for index, obj in enumerate(sel_objs):
+            uuid = get_uuid(obj)
             obj.reset_metadata_to_defaults()
+            obj.set_metadata_option("uuid", uuid)
             if not keep_roi:
                 obj.mark_roi_as_changed()
             if obj in roi_backup:
@@ -2011,6 +2388,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Open a message box to enter the group name
         group_name, ok = QW.QInputDialog.getText(self, _("New group"), _("Group name:"))
         if ok:
+            self.mainwindow.historypanel.add_ui_entry(
+                _('New group "%s"') % group_name,
+                target=self.PANEL_STR_ID + "panel",
+                method_name="add_group",
+                save_state=False,
+                title=group_name,
+                select=False,
+            )
             self.add_group(group_name)
 
     def rename_selected_object_or_group(self, new_name: str | None = None) -> None:
@@ -2019,6 +2404,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         Args:
             new_name: new name (default: None, i.e. ask user)
         """
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Rename selected object or group"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="rename_selected_object_or_group",
+            save_state=False,
+            new_name=new_name,
+        )
         sel_objects = self.objview.get_sel_objects(include_groups=False)
         sel_groups = self.objview.get_sel_groups()
         if (not sel_objects and not sel_groups) or len(sel_objects) + len(
@@ -2095,6 +2487,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         obj = self.objview.get_current_object()
         obj.title = title
         self.objview.update_item(get_uuid(obj))
+        self.mainwindow.historypanel.add_ui_entry(
+            _('Set current object title to "%s"') % title,
+            target=self.PANEL_STR_ID + "panel",
+            method_name="set_current_object_title",
+            save_state=False,
+            title=title,
+        )
 
     def __load_from_file(
         self, filename: str, create_group: bool = True, add_objects: bool = True
@@ -2159,42 +2558,47 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 directory = getexistingdirectory(self, _("Open"), basedir)
         if not directory:
             return []
+        # Offer a fresh history session for this batch *before* loading anything.
+        self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
         folders = [
             path
             for path in glob.glob(osp.join(directory, "**"), recursive=True)
             if osp.isdir(path) and len(os.listdir(path)) > 0
         ]
         objs = []
-        with create_progress_bar(
-            self, _("Scanning directory"), max_=len(folders) - 1
-        ) as progress:
-            # Iterate over all subfolders in the directory:
-            for i_path, path in enumerate(folders):
-                progress.setValue(i_path + 1)
-                if progress.wasCanceled():
-                    break
-                path = osp.normpath(path)
-                fnames = sorted(
-                    [
-                        osp.join(path, fname)
-                        for fname in os.listdir(path)
-                        if osp.isfile(osp.join(path, fname))
-                    ]
-                )
-                new_objs = self.load_from_files(
-                    fnames,
-                    create_group=False,
-                    add_objects=False,
-                    ignore_errors=True,
-                )
-                if new_objs:
-                    objs += new_objs
-                    grp_name = osp.relpath(path, directory)
-                    if grp_name == ".":
-                        grp_name = osp.basename(path)
-                    grp = self.add_group(grp_name)
-                    for obj in new_objs:
-                        self.add_object(obj, group_id=get_uuid(grp), set_current=False)
+        with self.mainwindow.historypanel.session_prompt_suppressed():
+            with create_progress_bar(
+                self, _("Scanning directory"), max_=len(folders) - 1
+            ) as progress:
+                # Iterate over all subfolders in the directory:
+                for i_path, path in enumerate(folders):
+                    progress.setValue(i_path + 1)
+                    if progress.wasCanceled():
+                        break
+                    path = osp.normpath(path)
+                    fnames = sorted(
+                        [
+                            osp.join(path, fname)
+                            for fname in os.listdir(path)
+                            if osp.isfile(osp.join(path, fname))
+                        ]
+                    )
+                    new_objs = self.load_from_files(
+                        fnames,
+                        create_group=False,
+                        add_objects=False,
+                        ignore_errors=True,
+                    )
+                    if new_objs:
+                        objs += new_objs
+                        grp_name = osp.relpath(path, directory)
+                        if grp_name == ".":
+                            grp_name = osp.basename(path)
+                        grp = self.add_group(grp_name)
+                        for obj in new_objs:
+                            self.add_object(
+                                obj, group_id=get_uuid(grp), set_current=False
+                            )
         return objs
 
     def load_from_files(
@@ -2226,20 +2630,41 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 filenames, _filt = getopenfilenames(self, _("Open"), basedir, filters)
         # Sort filenames to ensure consistent alphabetical order across all platforms
         filenames = sorted(filenames)
+        nbf = len(filenames)
+        if nbf > 1:
+            entry_title = _("Load from %d files") % nbf
+        else:
+            entry_title = _('Load "%s"') % osp.basename(filenames[0])
+        # Offer a fresh history session for this batch *before* recording any entry.
+        self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
+        action = self.mainwindow.historypanel.add_ui_entry(
+            entry_title,
+            target=self.PANEL_STR_ID + "panel",
+            method_name="load_from_files",
+            save_state=False,
+            filenames=filenames,
+            create_group=create_group,
+            add_objects=add_objects,
+            ignore_errors=ignore_errors,
+        )
         objs = []
-        for filename in filenames:
-            with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
-                Conf.main.base_dir.set(filename)
-                try:
-                    objs += self.__load_from_file(
-                        filename, create_group=create_group, add_objects=add_objects
-                    )
-                except Exception as exc:  # pylint: disable=broad-exception-caught
-                    if ignore_errors:
-                        # Ignore unknown file types
-                        pass
-                    else:
-                        raise exc
+        with self.mainwindow.historypanel.session_prompt_suppressed():
+            with self.mainwindow.historypanel.capture_outputs(action):
+                for filename in filenames:
+                    with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
+                        Conf.main.base_dir.set(filename)
+                        try:
+                            objs += self.__load_from_file(
+                                filename,
+                                create_group=create_group,
+                                add_objects=add_objects,
+                            )
+                        except Exception as exc:  # pylint: disable=broad-exception-caught
+                            if ignore_errors:
+                                # Ignore unknown file types
+                                pass
+                            else:
+                                raise exc
         return objs
 
     def save_to_files(self, filenames: list[str] | str | None = None) -> None:
@@ -2253,6 +2678,18 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             filenames = [None] * len(objs)
         assert len(filenames) == len(objs), (
             "Number of filenames must match number of objects"
+        )
+        nbf = len(filenames)
+        if nbf > 1:
+            entry_title = _("Save to %d different files") % nbf
+        else:
+            entry_title = _('Save to "%s"') % osp.basename(filenames[0])
+        self.mainwindow.historypanel.add_ui_entry(
+            entry_title,
+            target=self.PANEL_STR_ID + "panel",
+            method_name="save_to_files",
+            save_state=False,
+            filenames=filenames,
         )
         for index, obj in enumerate(objs):
             filename = filenames[index]
@@ -2306,6 +2743,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         Conf.io.save_to_directory_settings.set(param)
 
         Conf.main.base_dir.set(param.directory)
+
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Save to directory"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="save_to_directory",
+            save_state=True,
+            param=param,
+        )
 
         with create_progress_bar(self, _("Saving..."), max_=len(objs)) as progress:
             for i, (path, obj) in enumerate(param.generate_filepath_obj_pairs(objs)):
@@ -2540,16 +2985,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Get only the properties that have changed from the original values
         changed_props = self.objprop.get_changed_properties()
 
-        # Apply only the changed properties to all selected objects
-        for obj in self.objview.get_sel_objects(include_groups=True):
-            obj.mark_roi_as_changed()
-            # Update only the changed properties instead of all properties
-            update_dataset(obj, changed_props)
-            self.objview.update_item(get_uuid(obj))
-
-            # Auto-recompute analysis if the object had analysis parameters
-            # Since properties have changed, any analysis results may now be invalid
-            self.processor.auto_recompute_analysis(obj)
+        # Apply only the changed properties to all selected objects.
+        # The ``replaying()`` guard suppresses synthetic history capture.
+        with self.mainwindow.historypanel.replaying():
+            for obj in self.objview.get_sel_objects(include_groups=True):
+                obj.mark_roi_as_changed()
+                # Update only the changed properties instead of all properties
+                update_dataset(obj, changed_props)
+                self.objview.update_item(get_uuid(obj))
 
         # Refresh all selected items, including non-visible ones (only_visible=False)
         # This ensures that plot items are updated for all selected objects, even if
@@ -2561,71 +3004,169 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Update the stored original values to reflect the new state
         # This ensures subsequent changes are compared against the current values
         self.objprop.update_original_values()
+        self.SIG_OBJECT_MODIFIED.emit()
 
-    def recompute_processing(self) -> None:
-        """Recompute/rerun selected objects or group with stored processing parameters.
+    def recompute_selected(self) -> None:
+        """Recompute/rerun selected objects or group with stored parameters.
 
-        This method handles both single objects and groups. For each object, it checks
-        if it has 1-to-1 processing parameters that can be recomputed. Objects without
-        recomputable parameters are skipped.
+        This method handles both single objects and groups. For each object, it
+        recomputes, on demand:
+
+        - 1-to-1 processing operations (in-place data transformations), and
+        - 1-to-0 analysis operations (statistics, measurements, detections, etc.).
+
+        Analysis results are *not* recomputed automatically when data, ROIs or
+        object properties change: this manual action is the single, explicit entry
+        point to refresh them. Objects without recomputable parameters are skipped.
         """
         # Get selected objects (handles both individual selection and groups)
         objects = self.objview.get_sel_objects(include_groups=True)
         if not objects:
             return
 
-        # Filter objects that have recomputable processing parameters
+        # Filter objects that have recomputable 1-to-1 processing parameters
+        # and/or 1-to-0 analysis parameters (an object may have both)
         recomputable_objects: list[SignalObj | ImageObj] = []
+        reanalyzable_objects: list[SignalObj | ImageObj] = []
         for obj in objects:
             proc_params = extract_processing_parameters(obj)
             if proc_params is not None and proc_params.pattern == "1-to-1":
                 recomputable_objects.append(obj)
+            analysis_params = extract_analysis_parameters(obj)
+            if analysis_params is not None and analysis_params.pattern == "1-to-0":
+                reanalyzable_objects.append(obj)
 
-        if not recomputable_objects:
+        if not recomputable_objects and not reanalyzable_objects:
             if not execenv.unattended:
                 QW.QMessageBox.information(
                     self,
                     _("Recompute"),
                     _(
-                        "Selected object(s) do not have processing parameters "
-                        "that can be recomputed."
+                        "Selected object(s) do not have processing or analysis "
+                        "parameters that can be recomputed."
                     ),
                 )
             return
 
-        # Recompute each object
+        # Silence history capture while explicitly recomputing the current state.
+        with self.mainwindow.historypanel.replaying():
+            # Recompute 1-to-1 operations first so analyses use updated data.
+            recomputed_uuids, was_interrupted = self.recompute_1_to_1_objects(
+                recomputable_objects
+            )
+            if was_interrupted:
+                return
+
+            analysis_targets = []
+            for obj in reanalyzable_objects:
+                obj_uuid = get_uuid(obj)
+                if obj in recomputable_objects and obj_uuid not in recomputed_uuids:
+                    continue
+                analysis_targets.append(obj)
+            self.recompute_1_to_0_objects(analysis_targets)
+
+    def recompute_1_to_1_objects(
+        self, objects: list[SignalObj | ImageObj]
+    ) -> tuple[set[str], bool]:
+        """Recompute in-place 1-to-1 processing operations for the given objects.
+
+        Args:
+            objects: Objects with stored 1-to-1 processing parameters
+
+        Returns:
+            Tuple containing:
+            - Set of object UUIDs successfully recomputed
+            - True if operation was interrupted (progress canceled or user chose
+              to stop after a failure), False otherwise
+        """
+        if not objects:
+            return set(), False
+        recomputed_uuids: set[str] = set()
         with create_progress_bar(
-            self, _("Recomputing objects"), max_=len(recomputable_objects)
+            self, _("Recomputing objects"), max_=len(objects)
         ) as progress:
-            for index, obj in enumerate(recomputable_objects):
+            for index, obj in enumerate(objects):
                 progress.setValue(index + 1)
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
-                    break
+                    return recomputed_uuids, True
 
-                # Temporarily set this object as current to use existing infrastructure
                 self.objview.set_current_object(obj)
-                report = self.objprop.apply_processing_parameters(
-                    obj=obj, interactive=False
-                )
-                if not report.success and not execenv.unattended:
-                    failtxt = _("Failed to recompute object")
-                    if index == len(recomputable_objects) - 1:
-                        QW.QMessageBox.warning(
-                            self,
-                            _("Recompute"),
-                            f"{failtxt} '{obj.title}':\n{report.message}",
-                        )
-                    else:
-                        conttxt = _("Do you want to continue with the next object?")
-                        answer = QW.QMessageBox.warning(
-                            self,
-                            _("Recompute"),
-                            f"{failtxt} '{obj.title}':\n{report.message}\n\n{conttxt}",
-                            QW.QMessageBox.Yes | QW.QMessageBox.No,
-                        )
-                        if answer == QW.QMessageBox.No:
-                            break
+                report = self.processor.recompute_processing(obj, interactive=False)
+                if report.success:
+                    recomputed_uuids.add(get_uuid(obj))
+                    continue
+                if report.cancelled:
+                    return recomputed_uuids, True
+                if execenv.unattended:
+                    continue
+                failtxt = _("Failed to recompute object")
+                if index == len(objects) - 1:
+                    QW.QMessageBox.warning(
+                        self,
+                        _("Recompute"),
+                        f"{failtxt} '{obj.title}':\n{report.message}",
+                    )
+                else:
+                    conttxt = _("Do you want to continue with the next object?")
+                    answer = QW.QMessageBox.warning(
+                        self,
+                        _("Recompute"),
+                        f"{failtxt} '{obj.title}':\n{report.message}\n\n{conttxt}",
+                        QW.QMessageBox.Yes | QW.QMessageBox.No,
+                    )
+                    if answer == QW.QMessageBox.No:
+                        return recomputed_uuids, True
+        return recomputed_uuids, False
+
+    def recompute_1_to_0_objects(
+        self, objects: list[SignalObj | ImageObj]
+    ) -> tuple[set[str], bool]:
+        """Recompute 1-to-0 analysis operations for the given objects.
+
+        Args:
+            objects: Objects with stored 1-to-0 analysis parameters
+        """
+        if not objects:
+            return set(), False
+        recomputed_uuids: set[str] = set()
+        with create_progress_bar(
+            self, _("Recomputing analyses"), max_=len(objects)
+        ) as progress:
+            for index, obj in enumerate(objects):
+                progress.setValue(index + 1)
+                QW.QApplication.processEvents()
+                if progress.wasCanceled():
+                    return recomputed_uuids, True
+                try:
+                    success = self.processor.recompute_analysis(obj)
+                    message = _("Analysis computation failed.")
+                except Exception as exc:  # pylint: disable=broad-exception-caught
+                    success = False
+                    message = str(exc)
+                if success:
+                    recomputed_uuids.add(get_uuid(obj))
+                    continue
+                if execenv.unattended:
+                    continue
+                failtxt = _("Failed to recompute analysis")
+                if index == len(objects) - 1:
+                    QW.QMessageBox.warning(
+                        self,
+                        _("Recompute"),
+                        f"{failtxt} '{obj.title}':\n{message}",
+                    )
+                else:
+                    conttxt = _("Do you want to continue with the next object?")
+                    answer = QW.QMessageBox.warning(
+                        self,
+                        _("Recompute"),
+                        f"{failtxt} '{obj.title}':\n{message}\n\n{conttxt}",
+                        QW.QMessageBox.Yes | QW.QMessageBox.No,
+                    )
+                    if answer == QW.QMessageBox.No:
+                        return recomputed_uuids, True
+        return recomputed_uuids, False
 
     def select_source_objects(self) -> None:
         """Select source objects associated with the selected object's processing.
@@ -2736,8 +3277,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     return None
+                existing_item = self.plothandler.get(get_uuid(obj))
                 item = create_adapter_from_object(obj).make_item(
-                    update_from=self.plothandler[get_uuid(obj)]
+                    update_from=existing_item
                 )
                 item.set_readonly(True)
                 plot.add_item(item, z=0)
@@ -2762,18 +3304,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if oids is None:
             oids = self.objview.get_sel_object_uuids(include_groups=True)
         obj = self.objmodel[oids[-1]]  # last selected object
-
-        if not all(oid in self.plothandler for oid in oids):
-            # This happens for example when opening an already saved workspace with
-            # multiple images, and if the user tries to view in a new window a group of
-            # images without having selected any object yet. In this case, only the
-            # last image is actually plotted (because if the other have the same size
-            # and position, they are hidden), and the plot item of every other image is
-            # not created yet. So we need to refresh the plot to create the plot item of
-            # those images.
-            self.plothandler.refresh_plot(
-                "selected", update_items=True, force=True, only_visible=False
-            )
 
         # Create a new dialog and add plot items to it
         dlg = self.create_new_dialog(
@@ -3308,6 +3838,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
     def delete_results(self) -> None:
         """Delete results"""
+        self.mainwindow.historypanel.add_ui_entry(
+            _("Delete results"),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="delete_results",
+            save_state=False,
+        )
         objs = self.objview.get_sel_objects(include_groups=True)
         rdatadict = create_resultdata_dict(objs)
         if rdatadict:
@@ -3330,8 +3866,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     # Remove all table and geometry results using adapter methods
                     TableAdapter.remove_all_from(obj)
                     GeometryAdapter.remove_all_from(obj)
-                    # Clear analysis parameters to prevent auto-recompute from
-                    # attempting to recompute deleted analyses when ROI changes
+                    # Clear analysis parameters to prevent a manual recompute
+                    # from attempting to recompute deleted analyses
                     clear_analysis_parameters(obj)
                     if obj is self.objview.get_current_object():
                         self.objprop.update_properties_from(obj)
@@ -3355,6 +3891,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
              added as an annotation, and that it can be edited or removed using the
              annotation editing window.
         """
+        if title is None:
+            action_title = _("Add object title to plot")
+        else:
+            action_title = _("Add label with title")
+        self.mainwindow.historypanel.add_ui_entry(
+            action_title,
+            target=self.PANEL_STR_ID + "panel",
+            method_name="add_label_with_title",
+            save_state=False,
+            title=title,
+        )
         objs = self.objview.get_sel_objects(include_groups=True)
         for obj in objs:
             create_adapter_from_object(obj).add_label_with_title(title=title)
