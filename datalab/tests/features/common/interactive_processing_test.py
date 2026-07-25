@@ -37,6 +37,7 @@ from sigima.params import (
     SignalsToImageParam,
 )
 from sigima.proc.image import RadialProfileParam
+from sigima.tools.signal import fitting
 from sigima.tools.signal.pulse import GaussianModel, LegacyPeakParameterizationError
 
 from datalab.config import Conf
@@ -316,6 +317,57 @@ def test_invalid_creation_parameters_are_visible_but_not_editable():
                 objprop.processing_history.toPlainText()
             )
             assert signal.get_metadata_option(CREATION_PARAMETERS_OPTION) == envelope
+
+
+def test_interactive_fit_processor_preserves_canonical_metadata():
+    """The fit processor keeps multi-peak metadata intact and reusable."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            x = np.linspace(-5.0, 5.0, 201)
+            fit_params = fitting.create_fit_params(
+                "multigaussian",
+                {
+                    "amplitude_1": 2.0,
+                    "sigma_1": 0.6,
+                    "x0_1": -1.5,
+                    "amplitude_2": -0.75,
+                    "sigma_2": 0.9,
+                    "x0_2": 1.25,
+                    "y0": 0.2,
+                },
+                residual_rms=0.01,
+                interactive=True,
+            )
+            y_fitted = fitting.evaluate_fit(x, **fit_params)
+            source = create_signal("Multi-peak source", x, y_fitted)
+            panel.add_object(source)
+
+            def accept_fit(x_values, _y_values, parent=None):
+                assert parent is win
+                np.testing.assert_array_equal(x_values, x)
+                return y_fitted, [], fit_params
+
+            panel.processor.compute_fit("Multi-Gaussian fit", accept_fit)
+
+            result = panel.objview.get_current_object()
+            assert result is not None
+            assert result is not source
+            assert result.metadata["fit_params"] == fit_params
+            new_x = np.linspace(-8.0, 8.0, 321)
+            np.testing.assert_allclose(
+                fitting.evaluate_fit(new_x, **result.metadata["fit_params"]),
+                fitting.MultiGaussianFitComputer.evaluate(
+                    new_x,
+                    amplitude_1=2.0,
+                    sigma_1=0.6,
+                    x0_1=-1.5,
+                    amplitude_2=-0.75,
+                    sigma_2=0.9,
+                    x0_2=1.25,
+                    y0=0.2,
+                ),
+            )
 
 
 def test_convert_legacy_fit_parameters_before_evaluation():
