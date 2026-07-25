@@ -20,10 +20,15 @@ processing patterns (1-to-1, 2-to-1, n-to-1).
 
 from __future__ import annotations
 
+import json
+from unittest.mock import patch
+
 import numpy as np
+import pytest
 from guidata.dataset import json_to_dataset
 from guidata.qthelpers import qt_app_context, qt_wait
-from sigima.objects import Gauss2DParam, GaussParam, create_image_roi
+from qtpy import QtWidgets as QW
+from sigima.objects import Gauss2DParam, GaussParam, create_image_roi, create_signal
 from sigima.params import (
     BinningParam,
     ConstantParam,
@@ -32,8 +37,16 @@ from sigima.params import (
     SignalsToImageParam,
 )
 from sigima.proc.image import RadialProfileParam
+from sigima.tools.signal.pulse import GaussianModel, LegacyPeakParameterizationError
 
-from datalab.gui.newobject import CREATION_PARAMETERS_OPTION
+from datalab.config import Conf
+from datalab.env import execenv
+from datalab.gui.newobject import (
+    CREATION_PARAMETERS_FORMAT_VERSION,
+    CREATION_PARAMETERS_OPTION,
+    LEGACY_CREATION_PARAMETERS_OPTION,
+    extract_creation_parameters,
+)
 from datalab.gui.processor.base import PROCESSING_PARAMETERS_OPTION
 from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_test_app_context
@@ -186,7 +199,9 @@ def test_apply_creation_parameters_signal():
             objprop = panel.objprop
 
             # Create a signal with specific parameters
-            param = GaussParam.create(mu=250.0, sigma=20.0, a=100.0, y0=0.0, size=500)
+            param = GaussParam.create(
+                mu=250.0, sigma=20.0, amplitude=100.0, y0=0.0, size=500
+            )
             panel.new_object(param=param, edit=False)
             signal = panel.objview.get_current_object()
             assert signal is not None
@@ -199,7 +214,7 @@ def test_apply_creation_parameters_signal():
             # Modify the creation parameters in the editor
             editor = objprop.creation_param_editor
             # Change the Gaussian parameters to get a predictable result
-            editor.dataset.a = 200.0  # Double the amplitude from 100.0 to 200.0
+            editor.dataset.amplitude = 200.0
 
             # Apply the new creation parameters
             objprop.apply_creation_parameters()
@@ -209,18 +224,279 @@ def test_apply_creation_parameters_signal():
             assert get_uuid(updated_signal) == signal_uuid
 
             # Get the updated creation parameters from metadata
-            creation_param_json = updated_signal.get_metadata_option(
-                CREATION_PARAMETERS_OPTION
-            )
-            updated_param = json_to_dataset(creation_param_json)
+            updated_param = extract_creation_parameters(updated_signal)
 
             # Verify the parameter was actually updated in metadata
-            assert updated_param.a == 200.0
+            assert updated_param.amplitude == 200.0
 
             # Verify the data has changed
             # Since we're working with very small Gaussian values,
             # just verify they're different
             assert not np.array_equal(updated_signal.y, original_data)
+
+
+def test_convert_legacy_creation_parameters_signal():
+    """Legacy peak parameters are converted only after the explicit action."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            objprop = panel.objprop
+            x = np.linspace(-5.0, 5.0, 200)
+            y = GaussianModel.evaluate(x, -2.5, 0.7, 0.3, 0.75)
+            signal = create_signal("Legacy Gaussian", x, y)
+            legacy_json = json.dumps(
+                {
+                    "class_module": GaussParam.__module__,
+                    "class_name": GaussParam.__name__,
+                    "a": GaussianModel.area_from_amplitude(-2.5, 0.7),
+                    "sigma": 0.7,
+                    "mu": 0.3,
+                    "y0": 0.75,
+                }
+            )
+            signal.set_metadata_option(LEGACY_CREATION_PARAMETERS_OPTION, legacy_json)
+            original_x, original_y = (array.copy() for array in signal.xydata)
+
+            with execenv.context(unattended=False):
+                panel.add_object(signal)
+
+                assert objprop.creation_param_editor is None
+                assert objprop.creation_scroll is not None
+                buttons = {
+                    button.text(): button
+                    for button in objprop.creation_scroll.findChildren(QW.QPushButton)
+                }
+                buttons["Cancel"].click()
+                assert (
+                    LEGACY_CREATION_PARAMETERS_OPTION in signal.get_metadata_options()
+                )
+                assert CREATION_PARAMETERS_OPTION not in signal.get_metadata_options()
+                np.testing.assert_array_equal(signal.x, original_x)
+                np.testing.assert_array_equal(signal.y, original_y)
+
+                buttons["Convert historical parameters"].click()
+
+            assert objprop.creation_param_editor is not None
+            converted = extract_creation_parameters(signal)
+            assert isinstance(converted, GaussParam)
+            assert converted.amplitude == pytest.approx(-2.5)
+            assert (
+                LEGACY_CREATION_PARAMETERS_OPTION not in signal.get_metadata_options()
+            )
+            assert CREATION_PARAMETERS_OPTION in signal.get_metadata_options()
+            np.testing.assert_array_equal(signal.x, original_x)
+            np.testing.assert_array_equal(signal.y, original_y)
+
+
+def test_invalid_creation_parameters_are_visible_but_not_editable():
+    """Future creation metadata produces an explicit read-only tab."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            objprop = panel.objprop
+            signal = create_signal("Future Gaussian")
+            envelope = {
+                "format_version": CREATION_PARAMETERS_FORMAT_VERSION + 1,
+                "dataset_json": "{}",
+            }
+            signal.set_metadata_option(CREATION_PARAMETERS_OPTION, envelope)
+
+            with execenv.context(unattended=False):
+                panel.add_object(signal)
+
+            assert objprop.creation_param_editor is None
+            assert objprop.creation_scroll is not None
+            labels = objprop.creation_scroll.findChildren(QW.QLabel)
+            assert any("cannot be edited" in label.text() for label in labels)
+            assert any(
+                "Unsupported creation parameter format" in label.toolTip()
+                for label in labels
+            )
+            assert "invalid creation parameters" in (
+                objprop.processing_history.toPlainText()
+            )
+            assert signal.get_metadata_option(CREATION_PARAMETERS_OPTION) == envelope
+
+
+def test_convert_legacy_fit_parameters_before_evaluation():
+    """Evaluate fit commits historical conversion only after a result is added."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            x = np.linspace(-5.0, 5.0, 101)
+            original_y = np.linspace(1.0, 2.0, x.size)
+            sigma = 1.5
+            area = -4.0
+            source = create_signal(
+                "Legacy Gaussian fit",
+                x,
+                original_y,
+                metadata={
+                    "fit_params": {
+                        "fit_type": "gaussian",
+                        "amp": area,
+                        "sigma": sigma,
+                        "x0": 0.5,
+                        "y0": 1.0,
+                    }
+                },
+            )
+            target = create_signal("New X", x * 2.0, np.zeros_like(x))
+            panel.add_object(source)
+            panel.add_object(target)
+            panel.objview.select_objects([source])
+            original_x = source.x.copy()
+
+            with execenv.context(unattended=True):
+                with pytest.raises(LegacyPeakParameterizationError):
+                    panel.processor.run_feature("evaluate_fit", target)
+
+            with execenv.context(unattended=False):
+                with (
+                    patch.object(panel, "get_objects_with_dialog", return_value=None),
+                    patch(
+                        "datalab.gui.processor.signal.QW.QMessageBox.question"
+                    ) as question,
+                ):
+                    panel.processor.run_feature("evaluate_fit")
+                question.assert_not_called()
+                assert "amp" in source.metadata["fit_params"]
+
+            with execenv.context(unattended=False):
+                with patch(
+                    "datalab.gui.processor.signal.QW.QMessageBox.question",
+                    return_value=QW.QMessageBox.No,
+                ):
+                    panel.processor.run_feature("evaluate_fit", target)
+                assert "amp" in source.metadata["fit_params"]
+
+                with patch(
+                    "datalab.gui.processor.signal.QW.QMessageBox.question",
+                    return_value=QW.QMessageBox.Yes,
+                ):
+                    with patch.object(
+                        panel.processor,
+                        "_BaseProcessor__exec_func",
+                        return_value=None,
+                    ):
+                        panel.processor.run_feature("evaluate_fit", target)
+                assert "amp" in source.metadata["fit_params"]
+
+                with patch(
+                    "datalab.gui.processor.signal.QW.QMessageBox.question",
+                    return_value=QW.QMessageBox.Yes,
+                ):
+                    panel.processor.run_feature("evaluate_fit", target)
+
+            fit_params = source.metadata["fit_params"]
+            assert fit_params["fit_params_version"] == 2
+            assert fit_params["peak_parameterization"] == "height"
+            assert fit_params["amplitude"] == pytest.approx(
+                GaussianModel.amplitude_from_area(area, sigma)
+            )
+            assert "amp" not in fit_params
+            evaluated = panel.objmodel.get_all_objects()[-1]
+            assert evaluated is not target
+            np.testing.assert_array_equal(evaluated.x, target.x)
+            np.testing.assert_array_equal(source.x, original_x)
+            np.testing.assert_array_equal(source.y, original_y)
+
+
+def test_invalid_fit_parameters_abort_evaluation_without_mutation():
+    """Future fit metadata is reported and never changed or evaluated."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            x = np.linspace(-5.0, 5.0, 101)
+            fit_params = {
+                "fit_type": "gaussian",
+                "fit_params_version": 999,
+                "peak_parameterization": "height",
+                "amplitude": 2.0,
+                "sigma": 1.0,
+                "x0": 0.0,
+                "y0": 0.0,
+            }
+            source = create_signal(
+                "Future Gaussian fit",
+                x,
+                np.zeros_like(x),
+                metadata={"fit_params": fit_params},
+            )
+            target = create_signal("New X", x * 2.0, np.zeros_like(x))
+            panel.add_object(source)
+            panel.add_object(target)
+            panel.objview.select_objects([source])
+            object_count = len(panel.objmodel.get_all_objects())
+
+            with execenv.context(unattended=False):
+                with patch(
+                    "datalab.gui.processor.signal.QW.QMessageBox.warning"
+                ) as warning:
+                    panel.processor.run_feature("evaluate_fit", target)
+
+            warning.assert_called_once()
+            assert len(panel.objmodel.get_all_objects()) == object_count
+            assert source.metadata["fit_params"] == fit_params
+
+
+def test_pairwise_fit_evaluation_commits_each_source_conversion():
+    """Pairwise evaluation commits converted metadata after each result."""
+    original_mode = Conf.proc.operation_mode.get()
+    Conf.proc.operation_mode.set("pairwise")
+    try:
+        with qt_app_context():
+            with datalab_test_app_context() as win:
+                panel = win.signalpanel
+                x = np.linspace(-5.0, 5.0, 101)
+                source_group = panel.add_group("Historical fits")
+                target_group = panel.add_group("Target axes")
+                sources = []
+                targets = []
+                for index, sigma in enumerate((0.7, 1.3)):
+                    area = GaussianModel.area_from_amplitude(index + 1.0, sigma)
+                    source = create_signal(
+                        f"Legacy fit {index}",
+                        x,
+                        np.zeros_like(x),
+                        metadata={
+                            "fit_params": {
+                                "fit_type": "gaussian",
+                                "amp": area,
+                                "sigma": sigma,
+                                "x0": float(index),
+                                "y0": 0.0,
+                            }
+                        },
+                    )
+                    target = create_signal(
+                        f"Target {index}",
+                        x * (index + 2.0),
+                        np.zeros_like(x),
+                    )
+                    panel.add_object(source, group_id=get_uuid(source_group))
+                    panel.add_object(target, group_id=get_uuid(target_group))
+                    sources.append(source)
+                    targets.append(target)
+                panel.objview.select_groups([source_group])
+
+                with execenv.context(unattended=False):
+                    with patch(
+                        "datalab.gui.processor.signal.QW.QMessageBox.question",
+                        return_value=QW.QMessageBox.Yes,
+                    ):
+                        panel.processor.run_feature("evaluate_fit", targets)
+
+                results = panel.objmodel.get_groups()[-1].get_objects()
+                assert len(results) == len(sources)
+                for source, target, result in zip(sources, targets, results):
+                    fit_params = source.metadata["fit_params"]
+                    assert fit_params["fit_params_version"] == 2
+                    assert fit_params["peak_parameterization"] == "height"
+                    assert "amp" not in fit_params
+                    np.testing.assert_array_equal(result.x, target.x)
+    finally:
+        Conf.proc.operation_mode.set(original_mode)
 
 
 def test_apply_creation_parameters_image():
@@ -372,7 +648,9 @@ def test_apply_processing_parameters_signal():
             objprop = panel.objprop
 
             # Create a test signal with some structure
-            param = GaussParam.create(mu=250.0, sigma=20.0, a=100.0, y0=10.0, size=500)
+            param = GaussParam.create(
+                mu=250.0, sigma=20.0, amplitude=100.0, y0=10.0, size=500
+            )
             panel.new_object(param=param, edit=False)
             signal = panel.objview.get_current_object()
             assert signal is not None
@@ -574,7 +852,9 @@ def test_apply_processing_parameters_missing_source():
             objprop = panel.objprop
 
             # Create a test signal with actual data
-            param = GaussParam.create(mu=250.0, sigma=20.0, a=100.0, y0=10.0, size=500)
+            param = GaussParam.create(
+                mu=250.0, sigma=20.0, amplitude=100.0, y0=10.0, size=500
+            )
             panel.new_object(param=param, edit=False)
             signal = panel.objview.get_current_object()
 
@@ -752,7 +1032,11 @@ def test_cross_panel_signal_to_image():
             signal_uuids = []
             for i in range(n_signals):
                 signal_param = GaussParam.create(
-                    mu=250.0 + i * 10, sigma=20.0, a=100.0, y0=float(i), size=500
+                    mu=250.0 + i * 10,
+                    sigma=20.0,
+                    amplitude=100.0,
+                    y0=float(i),
+                    size=500,
                 )
                 signal_panel.new_object(param=signal_param, edit=False)
                 signal = signal_panel.objview.get_current_object()

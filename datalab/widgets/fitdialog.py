@@ -18,6 +18,14 @@ from datalab.config import Conf, _
 DEFAULT_FORMAT = "%g"
 
 
+def create_interactive_fit_params(fit_type, values, y, y_fitted):
+    """Create canonical metadata for a fit committed from a dialog."""
+    residual_rms = np.sqrt(np.mean((y - y_fitted) ** 2))
+    return fitting.create_fit_params(
+        fit_type, values, residual_rms=residual_rms, interactive=True
+    )
+
+
 def guifit(
     x,
     y,
@@ -121,14 +129,20 @@ def gaussian_fit(x, y, parent=None, name=None):
     # Get initial parameter estimates from Sigima GaussianFitComputer
     computer = fitting.GaussianFitComputer(x, y)
     initial_params = computer.compute_initial_params()
-    amp_guess = initial_params["amp"]
+    amplitude_guess = initial_params["amplitude"]
     sigma_guess = initial_params["sigma"]
     mu_guess = initial_params["x0"]
     b_guess = initial_params["y0"]
 
     dy = np.max(y) - np.min(y)
-    max_amp = amp_guess * 2.0 if amp_guess > 0 else dy
-    a = FitParam(_("Amplitude"), amp_guess, 0.0, max_amp, format=DEFAULT_FORMAT)
+    max_amplitude = max(2.0 * dy, 2.0 * abs(amplitude_guess))
+    amplitude = FitParam(
+        _("Amplitude"),
+        amplitude_guess,
+        -max_amplitude,
+        max_amplitude,
+        format=DEFAULT_FORMAT,
+    )
     b = FitParam(
         _("Base line"), b_guess, np.min(y) - 0.1 * dy, np.max(y), format=DEFAULT_FORMAT
     )
@@ -143,16 +157,20 @@ def gaussian_fit(x, y, parent=None, name=None):
         _("Mean") + " (μ)", mu_guess, np.min(x), np.max(x), format=DEFAULT_FORMAT
     )
 
-    params = [a, sigma, mu, b]
+    params = [amplitude, sigma, mu, b]
 
     def fitfunc(x, params):
-        return pulse.GaussianModel.func(x, *params)
+        return pulse.GaussianModel.evaluate(x, *params)
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Gaussian fit"), name=name
     )
     if values:
-        return fitfunc(x, values), params
+        y_fitted = fitfunc(x, values)
+        fit_params = create_interactive_fit_params(
+            "gaussian", dict(zip(computer.get_params_names(), values)), y, y_fitted
+        )
+        return y_fitted, params, fit_params
 
 
 # --- Lorentzian fitting curve -------------------------------------------------
@@ -164,7 +182,7 @@ def lorentzian_fit(x, y, parent=None, name=None):
     # Get initial parameter estimates from Sigima LorentzianFitComputer
     computer = fitting.LorentzianFitComputer(x, y)
     initial_params = computer.compute_initial_params()
-    amp_guess = initial_params["amp"]
+    amplitude_guess = initial_params["amplitude"]
     sigma_guess = initial_params["sigma"]
     mu_guess = initial_params["x0"]
     b_guess = initial_params["y0"]
@@ -172,8 +190,14 @@ def lorentzian_fit(x, y, parent=None, name=None):
     # Create parameter bounds
     dy = np.max(y) - np.min(y)
 
-    max_amp = amp_guess * 2.0 if amp_guess > 0 else dy
-    a = FitParam(_("Amplitude"), amp_guess, 0.0, max_amp, format=DEFAULT_FORMAT)
+    max_amplitude = max(2.0 * dy, 2.0 * abs(amplitude_guess))
+    amplitude = FitParam(
+        _("Amplitude"),
+        amplitude_guess,
+        -max_amplitude,
+        max_amplitude,
+        format=DEFAULT_FORMAT,
+    )
     b = FitParam(
         _("Base line"), b_guess, np.min(y) - 0.1 * dy, np.max(y), format=DEFAULT_FORMAT
     )
@@ -188,16 +212,20 @@ def lorentzian_fit(x, y, parent=None, name=None):
         _("Mean") + " (μ)", mu_guess, np.min(x), np.max(x), format=DEFAULT_FORMAT
     )
 
-    params = [a, sigma, mu, b]
+    params = [amplitude, sigma, mu, b]
 
     def fitfunc(x, params):
-        return pulse.LorentzianModel.func(x, *params)
+        return pulse.LorentzianModel.evaluate(x, *params)
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Lorentzian fit"), name=name
     )
     if values:
-        return fitfunc(x, values), params
+        y_fitted = fitfunc(x, values)
+        fit_params = create_interactive_fit_params(
+            "lorentzian", dict(zip(computer.get_params_names(), values)), y, y_fitted
+        )
+        return y_fitted, params, fit_params
 
 
 # --- Voigt fitting curve ------------------------------------------------------
@@ -209,7 +237,7 @@ def voigt_fit(x, y, parent=None, name=None):
     # Get initial parameter estimates from Sigima VoigtFitComputer
     computer = fitting.VoigtFitComputer(x, y)
     initial_params = computer.compute_initial_params()
-    amp_guess = initial_params["amp"]
+    amplitude_guess = initial_params["amplitude"]
     sigma_guess = initial_params["sigma"]
     mu_guess = initial_params["x0"]
     b_guess = initial_params["y0"]
@@ -217,8 +245,14 @@ def voigt_fit(x, y, parent=None, name=None):
     # Create parameter bounds
     dy = np.max(y) - np.min(y)
 
-    max_amp = amp_guess * 2.0 if amp_guess > 0 else dy
-    a = FitParam(_("Amplitude"), amp_guess, 0.0, max_amp, format=DEFAULT_FORMAT)
+    max_amplitude = max(2.0 * dy, 2.0 * abs(amplitude_guess))
+    amplitude = FitParam(
+        _("Amplitude"),
+        amplitude_guess,
+        -max_amplitude,
+        max_amplitude,
+        format=DEFAULT_FORMAT,
+    )
     b = FitParam(
         _("Base line"), b_guess, np.min(y) - 0.1 * dy, np.max(y), format=DEFAULT_FORMAT
     )
@@ -233,28 +267,32 @@ def voigt_fit(x, y, parent=None, name=None):
         _("Mean") + " (μ)", mu_guess, np.min(x), np.max(x), format=DEFAULT_FORMAT
     )
 
-    params = [a, sigma, mu, b]
+    params = [amplitude, sigma, mu, b]
 
     def fitfunc(x, params):
-        return pulse.VoigtModel.func(x, *params)
+        return pulse.VoigtModel.evaluate(x, *params)
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Voigt fit"), name=name
     )
     if values:
-        return fitfunc(x, values), params
+        y_fitted = fitfunc(x, values)
+        fit_params = create_interactive_fit_params(
+            "voigt", dict(zip(computer.get_params_names(), values)), y, y_fitted
+        )
+        return y_fitted, params, fit_params
 
 
 # --- Multi-Gaussian fitting curve ---------------------------------------------
 def multigaussian(x, *values, **kwargs):
     """Return a 1-dimensional multi-Gaussian function."""
-    a_amp = values[0::2]
+    amplitudes = values[0::2]
     a_sigma = values[1::2]
     y0 = values[-1]
     a_x0 = kwargs["a_x0"]
     y = np.zeros_like(x) + y0
-    for amp, sigma, x0 in zip(a_amp, a_sigma, a_x0):
-        y += amp * np.exp(-0.5 * ((x - x0) / sigma) ** 2)
+    for amplitude, sigma, x0 in zip(amplitudes, a_sigma, a_x0):
+        y += pulse.GaussianModel.evaluate(x, amplitude, sigma, x0, 0.0)
     return y
 
 
@@ -270,9 +308,9 @@ def multigaussian_fit(x, y, peak_indices, parent=None, name=None):
     params = []
     for index, i0 in enumerate(peak_indices):
         stri = f"{index + 1:02d}"
-        amp_key = f"amp_{index + 1}"
+        amplitude_key = f"amplitude_{index + 1}"
         sigma_key = f"sigma_{index + 1}"
-        amp_val = initial_params[amp_key] if amp_key in initial_params else y[i0]
+        amplitude_value = initial_params.get(amplitude_key, y[i0] - np.min(y))
         sigma_val = (
             initial_params[sigma_key]
             if sigma_key in initial_params
@@ -288,13 +326,14 @@ def multigaussian_fit(x, y, peak_indices, parent=None, name=None):
             iend = (peak_indices[index + 1] + i0) // 2
         dx = 0.5 * (x[iend] - x[istart])
         dy = np.max(y[istart:iend]) - np.min(y[istart:iend])
+        amplitude_range = max(dy * 2, abs(amplitude_value) * 2)
 
         params += [
             FitParam(
                 ("A") + stri,
-                amp_val,
-                0.0,
-                max(dy * 2, amp_val * 2),
+                amplitude_value,
+                -amplitude_range,
+                amplitude_range,
                 format=DEFAULT_FORMAT,
             ),
             FitParam("σ" + stri, sigma_val, dx / 100, dx, format=DEFAULT_FORMAT),
@@ -331,19 +370,30 @@ def multigaussian_fit(x, y, peak_indices, parent=None, name=None):
         wintitle=_("Multi-Gaussian fit"),
     )
     if values:
-        return fitfunc(x, values), params
+        y_fitted = fitfunc(x, values)
+        fit_values = {"y0": values[-1]}
+        for index, (amplitude, sigma, x0) in enumerate(
+            zip(values[0::2], values[1::2], kwargs["a_x0"]), start=1
+        ):
+            fit_values[f"amplitude_{index}"] = amplitude
+            fit_values[f"sigma_{index}"] = sigma
+            fit_values[f"x0_{index}"] = x0
+        fit_params = create_interactive_fit_params(
+            "multigaussian", fit_values, y, y_fitted
+        )
+        return y_fitted, params, fit_params
 
 
 # --- Multi-Lorentzian fitting curve -------------------------------------------
 def multilorentzian(x, *values, **kwargs):
     """Return a 1-dimensional multi-Lorentzian function."""
-    a_amp = values[0::2]
+    amplitudes = values[0::2]
     a_sigma = values[1::2]
     y0 = values[-1]
     a_x0 = kwargs["a_x0"]
     y = np.zeros_like(x) + y0
-    for amp, sigma, x0 in zip(a_amp, a_sigma, a_x0):
-        y += pulse.LorentzianModel.func(x, amp, sigma, x0, 0)
+    for amplitude, sigma, x0 in zip(amplitudes, a_sigma, a_x0):
+        y += pulse.LorentzianModel.evaluate(x, amplitude, sigma, x0, 0.0)
     return y
 
 
@@ -359,17 +409,12 @@ def multilorentzian_fit(
     initial_params = computer.compute_initial_params()
     # Use Sigima parameters to populate DataLab params
     params = []
+    dy = np.max(y) - np.min(y)
     for index, i0 in enumerate(peak_indices):
         stri = f"{index + 1:02d}"
-        amp_key = f"amp_{index + 1}"
+        amplitude_key = f"amplitude_{index + 1}"
         sigma_key = f"sigma_{index + 1}"
-        amp_val = (
-            initial_params[amp_key]
-            if amp_key in initial_params
-            else pulse.LorentzianModel.get_amp_from_amplitude(
-                y[i0] - np.min(y), (x.max() - x.min()) / 100
-            )
-        )
+        amplitude_value = initial_params.get(amplitude_key, y[i0] - np.min(y))
         sigma_val = (
             initial_params[sigma_key]
             if sigma_key in initial_params
@@ -379,9 +424,9 @@ def multilorentzian_fit(
         params += [
             FitParam(
                 ("A") + stri,
-                amp_val,
-                0.0,
-                max(amp_val * 1.2, y[i0] * 1.2),
+                amplitude_value,
+                -max(abs(amplitude_value) * 2, dy * 2),
+                max(abs(amplitude_value) * 2, dy * 2),
                 format=DEFAULT_FORMAT,
             ),
             FitParam(
@@ -424,7 +469,18 @@ def multilorentzian_fit(
         wintitle=_("Multi-Lorentzian fit"),
     )
     if values:
-        return fitfunc(x, values), params
+        y_fitted = fitfunc(x, values)
+        fit_values = {"y0": values[-1]}
+        for index, (amplitude, sigma, x0) in enumerate(
+            zip(values[0::2], values[1::2], kwargs["a_x0"]), start=1
+        ):
+            fit_values[f"amplitude_{index}"] = amplitude
+            fit_values[f"sigma_{index}"] = sigma
+            fit_values[f"x0_{index}"] = x0
+        fit_params = create_interactive_fit_params(
+            "multilorentzian", fit_values, y, y_fitted
+        )
+        return y_fitted, params, fit_params
 
 
 # --- Exponential fitting curve ------------------------------------------------

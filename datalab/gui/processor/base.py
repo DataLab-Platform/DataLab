@@ -491,6 +491,16 @@ def is_pairwise_mode() -> bool:
 
 
 @dataclass
+class SourcePreparationTransaction:
+    """Prepare effective sources and commit changes after successful results."""
+
+    source_for_execution: Callable[
+        [SignalObj | ImageObj, SignalObj | ImageObj], SignalObj | ImageObj
+    ]
+    commit: Callable[[SignalObj | ImageObj], None]
+
+
+@dataclass
 class ComputingFeature:
     """Computing feature dataclass.
 
@@ -504,6 +514,7 @@ class ComputingFeature:
         edit: whether to edit the parameters
         obj2_name: name of the second object
         skip_xarray_compat: whether to skip X-array compatibility check for this feature
+        pre_execute_hook: optional transactional source preparation hook
     """
 
     pattern: Literal["1_to_1", "1_to_0", "1_to_n", "n_to_1", "2_to_1"]
@@ -515,6 +526,9 @@ class ComputingFeature:
     edit: Optional[bool] = None
     obj2_name: Optional[str] = None
     skip_xarray_compat: Optional[bool] = None
+    pre_execute_hook: Optional[
+        Callable[[list[SignalObj | ImageObj]], SourcePreparationTransaction | None]
+    ] = None
 
     def __post_init__(self):
         """Validate the function after initialization."""
@@ -1707,6 +1721,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         comment: str | None = None,
         edit: bool | None = None,
         skip_xarray_compat: bool | None = None,
+        pre_execute_hook: Callable[
+            [list[SignalObj | ImageObj]], SourcePreparationTransaction | None
+        ]
+        | None = None,
     ) -> None:
         """Generic processing method: binary operation 1+1 → 1.
 
@@ -1729,6 +1747,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             edit: Whether to open the parameter editor before execution.
             skip_xarray_compat: If True, skip x-array compatibility checks
              (only for signal panels).
+            pre_execute_hook: Optional hook preparing source copies after all dialogs
+             and compatibility checks. Returning None cancels the operation.
 
         .. note::
             With k selected objects:
@@ -1829,6 +1849,17 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     # Store mapping for this specific pair
                     pair_maps[(src_obj1, src_obj2)] = checked_pair
 
+            source_transaction = None
+            if pre_execute_hook is not None:
+                original_sources = [
+                    src_obj
+                    for src_gid in src_gids
+                    for src_obj in src_objs[src_gid][:max_i_pair]
+                ]
+                source_transaction = pre_execute_hook(original_sources)
+                if source_transaction is None:
+                    return
+
             with create_progress_bar(self.panel, title, max_=len(src_gids)) as progress:
                 for i_group, src_gid in enumerate(src_gids):
                     progress.setValue(i_group + 1)
@@ -1851,6 +1882,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             interpolated_pair = pair_maps[(orig_obj1, orig_obj2)]
                             actual_obj1 = interpolated_pair[0]
                             actual_obj2 = interpolated_pair[1]
+                        if source_transaction is not None:
+                            actual_obj1 = source_transaction.source_for_execution(
+                                orig_obj1, actual_obj1
+                            )
 
                         args = [actual_obj1, actual_obj2]
                         if param is not None:
@@ -1890,6 +1925,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             dst_gid = self._create_group_for_result(new_obj, dst_gname)
 
                         self._add_object_to_appropriate_panel(new_obj, group_id=dst_gid)
+                        if source_transaction is not None:
+                            source_transaction.commit(orig_obj1)
 
         else:
             if not objs2:
@@ -1934,6 +1971,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     for orig_obj, checked_obj in zip(signal_objs, checked_objs[:-1]):
                         signal_map[orig_obj] = checked_obj
 
+            source_transaction = None
+            if pre_execute_hook is not None:
+                source_transaction = pre_execute_hook(objs)
+                if source_transaction is None:
+                    return
+
             with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
                 for index, obj in enumerate(objs):
                     progress.setValue(index + 1)
@@ -1947,6 +1990,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         and obj in signal_map
                     ):
                         actual_obj = signal_map[obj]
+                    if source_transaction is not None:
+                        actual_obj = source_transaction.source_for_execution(
+                            obj, actual_obj
+                        )
 
                     args = (
                         (actual_obj, obj2)
@@ -1986,6 +2033,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     self._add_object_to_appropriate_panel(
                         new_obj, group_id=group_id, use_group_for_non_native=False
                     )
+                    if source_transaction is not None:
+                        source_transaction.commit(obj)
 
     def register_1_to_1(
         self,
@@ -2138,6 +2187,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         edit: bool | None = None,
         obj2_name: str | None = None,
         skip_xarray_compat: bool | None = None,
+        pre_execute_hook: Callable[
+            [list[SignalObj | ImageObj]], SourcePreparationTransaction | None
+        ]
+        | None = None,
     ) -> ComputingFeature:
         """Register a 2-to-1 processing function.
 
@@ -2156,6 +2209,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             skip_xarray_compat: whether to skip X-array compatibility check.
              Defaults to None. Set to True for operations like interpolation where
              different X-arrays are expected and desired.
+            pre_execute_hook: optional transactional source preparation hook
 
         Returns:
             Registered feature.
@@ -2170,6 +2224,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             edit=edit,
             obj2_name=obj2_name,
             skip_xarray_compat=skip_xarray_compat,
+            pre_execute_hook=pre_execute_hook,
         )
         self.add_feature(feature)
         return feature
@@ -2292,6 +2347,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 comment=comment,
                 edit=edit,
                 skip_xarray_compat=feature.skip_xarray_compat,
+                pre_execute_hook=feature.pre_execute_hook,
             )
         if pattern == "1_to_n":
             params = kwargs.get("params", args[0] if args else [])
