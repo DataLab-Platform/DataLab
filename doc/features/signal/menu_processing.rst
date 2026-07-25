@@ -355,13 +355,13 @@ This can be done automatically or through an interactive curve fitting dialog.
     * - Multi-Lorentzian
       - :math:`y = y_{0} + \sum_{i=1}^{N} \dfrac{A_{i}}{1 + \left(\dfrac{x - x_{0,i}}{\sigma_{i}}\right)^2}`
     * - Planck
-      - :math:`y = y_{0} + A\cdot \dfrac{2h \cdot c^2}{\lambda^5} \cdot \left(\exp\left(\dfrac{h \cdot c}{\lambda \cdot k \cdot T}\right)-1\right)^{-1}`
+      - :math:`y = y_{0} + A \cdot \left(\dfrac{x}{x_{0}}\right)^{-5} \cdot \left(\exp\left(\dfrac{5 x_{0}}{\sigma \cdot x}\right)-1\right)^{-1}` where :math:`x_{0}` is the peak wavelength and :math:`\sigma` a width factor
     * - Two half Gaussians
-      - | :math:`y = y_{0} + A \cdot \dfrac{1}{\sqrt{2 \pi} \sigma_{0}} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{0}}{\sigma_{0}}\right)^2\right)` if :math:`x < x_{0}`
-        | :math:`y = y_{0} + A \cdot \dfrac{1}{\sqrt{2 \pi} \sigma_{1}} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{1}}{\sigma_{1}}\right)^2\right)` otherwise
+      - | :math:`y = y_{L} + A_{L} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{0}}{\sigma_{L}}\right)^2\right)` if :math:`x < x_{0}`
+        | :math:`y = y_{R} + A_{R} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{0}}{\sigma_{R}}\right)^2\right)` otherwise
     * - Two back-to-back exponentials
-      - | :math:`y = y_{0} + A_{1} \cdot \exp\left(-x/\tau_{1}\right)` if :math:`x < 0`
-        | :math:`y = y_{0} + A_{2} \cdot \exp(-x/\tau_{2})` otherwise
+      - | :math:`y = y_{0} + A_{L} \cdot \exp\left(B_{L} \cdot x\right)` if :math:`x < x_{c}`
+        | :math:`y = y_{0} + A_{R} \cdot \exp\left(B_{R} \cdot x\right)` otherwise
     * - Exponential
       - :math:`y = y_{0} + A \exp\left(B \cdot x\right)`
     * - Sinusoidal
