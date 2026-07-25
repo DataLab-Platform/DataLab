@@ -6,11 +6,18 @@
 #, fuzzy
 msgid ""
 msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-07-25 11:27+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
 
 msgid "Processing Signals"
 msgstr "Traitement des signaux"
@@ -564,32 +571,32 @@ msgstr "Polynomial"
 msgid ":math:`y = c_{0} + c_{1} \\cdot x + c_{2} \\cdot x^2 + ... + c_{n} \\cdot x^n`"
 msgstr ""
 
-msgid ":math:`y = y_{0} + \\dfrac{A}{\\sqrt{2 \\pi} \\sigma} \\exp\\left(-\\dfrac{1}{2} \\left(\\dfrac{x - x_{0}}{\\sigma}\\right)^2\\right)`"
-msgstr ""
+msgid ":math:`y = y_{0} + A \\exp\\left(-\\dfrac{1}{2} \\left(\\dfrac{x - x_{0}}{\\sigma}\\right)^2\\right)`"
+msgstr ":math:`y = y_{0} + A \\exp\\left(-\\dfrac{1}{2} \\left(\\dfrac{x - x_{0}}{\\sigma}\\right)^2\\right)`"
 
 msgid "Lorentzian"
 msgstr "Lorentzien"
 
-msgid ":math:`y = y_{0} + \\dfrac{A}{\\pi \\sigma} \\cdot \\dfrac{1}{1+\\left(\\dfrac{x-x_{0}}{\\sigma}\\right)^2}`"
-msgstr ""
+msgid ":math:`y = y_{0} + \\dfrac{A}{1+\\left(\\dfrac{x-x_{0}}{\\sigma}\\right)^2}`"
+msgstr ":math:`y = y_{0} + \\dfrac{A}{1+\\left(\\dfrac{x-x_{0}}{\\sigma}\\right)^2}`"
 
 msgid "Voigt"
 msgstr "Voigt"
 
-msgid ":math:`y = y_{0} + A \\cdot \\dfrac{\\Re\\left(\\exp(-z^2) \\cdot \\operatorname{erfc}(-j \\cdot z)\\right)}{\\sqrt{2 \\pi} \\sigma}` with :math:`z = \\dfrac{x - x_{0} - j \\cdot \\sigma}{\\sqrt{2} \\sigma}`"
-msgstr ":math:`y = y_{0} + A \\cdot \\dfrac{\\Re\\left(\\exp(-z^2) \\cdot \\operatorname{erfc}(-j \\cdot z)\\right)}{\\sqrt{2 \\pi} \\sigma}` avec :math:`z = \\dfrac{x - x_{0} - j \\cdot \\sigma}{\\sqrt{2} \\sigma}`"
+msgid ":math:`y = y_{0} + A \\cdot \\dfrac{\\Re\\left(w(z)\\right)}{\\Re\\left(w(j/\\sqrt{2})\\right)}` with :math:`w(z) = \\exp(-z^2) \\operatorname{erfc}(-jz)` and :math:`z = \\dfrac{x - x_{0} + j \\sigma}{\\sqrt{2} \\sigma}`"
+msgstr ":math:`y = y_{0} + A \\cdot \\dfrac{\\Re\\left(w(z)\\right)}{\\Re\\left(w(j/\\sqrt{2})\\right)}` avec :math:`w(z) = \\exp(-z^2) \\operatorname{erfc}(-jz)` et :math:`z = \\dfrac{x - x_{0} + j \\sigma}{\\sqrt{2} \\sigma}`"
 
 msgid "Multi-Gaussian"
 msgstr "Multi-gaussien"
 
-msgid ":math:`y = y_{0} + \\sum_{i=0}^{N}\\dfrac{A_{i}}{\\sqrt{2 \\pi} \\sigma_{i}} \\exp\\left(-\\dfrac{1}{2} \\left(\\dfrac{x - x_{0,i}}{\\sigma_{i}}\\right)^2\\right)`"
-msgstr ""
+msgid ":math:`y = y_{0} + \\sum_{i=1}^{N} A_{i} \\exp\\left(-\\dfrac{1}{2} \\left(\\dfrac{x - x_{0,i}}{\\sigma_{i}}\\right)^2\\right)`"
+msgstr ":math:`y = y_{0} + \\sum_{i=1}^{N} A_{i} \\exp\\left(-\\dfrac{1}{2} \\left(\\dfrac{x - x_{0,i}}{\\sigma_{i}}\\right)^2\\right)`"
 
 msgid "Multi-Lorentzian"
 msgstr "Multi-lorentzien"
 
-msgid ":math:`y = y_{0} + \\sum_{i=0}^{N}\\dfrac{A_{i}}{\\pi \\sigma_{i}} \\cdot \\dfrac{1}{1 + \\left(\\dfrac{x - x_{0,i}}{\\sigma_{i}}\\right)^2}`"
-msgstr ""
+msgid ":math:`y = y_{0} + \\sum_{i=1}^{N} \\dfrac{A_{i}}{1 + \\left(\\dfrac{x - x_{0,i}}{\\sigma_{i}}\\right)^2}`"
+msgstr ":math:`y = y_{0} + \\sum_{i=1}^{N} \\dfrac{A_{i}}{1 + \\left(\\dfrac{x - x_{0,i}}{\\sigma_{i}}\\right)^2}`"
 
 msgid "Planck"
 msgstr ""
@@ -637,6 +644,22 @@ msgstr "Fonction de distribution cumulative (CDF)"
 
 msgid ":math:`y = y_{0} + A \\erf\\left(\\dfrac{x - x_{0}}{\\sqrt{2} \\sigma}\\right)`"
 msgstr ""
+
+msgid "For Gaussian, Lorentzian and Voigt models, :math:`A` is the signed peak height above the baseline :math:`y_0`, expressed in the signal's Y unit."
+msgstr "Pour les modèles gaussien, lorentzien et de Voigt, :math:`A` est la hauteur signée du pic au-dessus de la ligne de base :math:`y_0`, exprimée dans l'unité Y du signal."
+
+msgid "Multi-peak fit parameters"
+msgstr "Paramètres d'ajustement multi-pic"
+
+#, python-brace-format
+msgid "For Multi-Gaussian and Multi-Lorentzian fits, the peak-detection dialog first selects the center :math:`x_{0,i}` of each component. These positions remain fixed: the interactive fit dialog only exposes controls for each ``amplitude_i`` and ``sigma_i`` parameter and for the common ``y0`` baseline."
+msgstr "Pour les ajustements multi-gaussien et multi-lorentzien, la boîte de dialogue de détection de pics sélectionne d'abord le centre :math:`x_{0,i}` de chaque composante. Ces positions restent fixes : la boîte de dialogue d'ajustement interactif expose uniquement les paramètres ``amplitude_i`` et ``sigma_i`` de chaque composante ainsi que la ligne de base commune ``y0``."
+
+msgid "When the fit is accepted, the generated signal stores the complete model under ``metadata[\"fit_params\"]``, including every fixed ``x0_i`` center. The metadata may be inspected with the **Metadata** button or exported to a JSON ``.dlabmeta`` file using the :ref:`metadata import/export actions <sig-menu-edit>`."
+msgstr "Lorsque l'ajustement est accepté, le signal généré stocke le modèle complet sous ``metadata[\"fit_params\"]``, y compris chaque centre fixe ``x0_i``. Les métadonnées peuvent être consultées avec le bouton **Métadonnées** ou exportées vers un fichier JSON ``.dlabmeta`` à l'aide des :ref:`actions d'importation et d'exportation des métadonnées <sig-menu-edit>`."
+
+msgid "The exported parameters are sufficient to evaluate the theoretical model on any X axis outside DataLab:"
+msgstr "Les paramètres exportés suffisent pour évaluer le modèle théorique sur n'importe quel axe X en dehors de DataLab :"
 
 msgid "Evaluate fit"
 msgstr "Évaluer l'ajustement"

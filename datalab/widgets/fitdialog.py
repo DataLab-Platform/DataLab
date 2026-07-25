@@ -376,7 +376,7 @@ def multigaussian_fit(x, y, peak_indices, parent=None, name=None):
             zip(values[0::2], values[1::2], kwargs["a_x0"]), start=1
         ):
             fit_values[f"amplitude_{index}"] = amplitude
-            fit_values[f"sigma_{index}"] = sigma
+            fit_values[f"sigma_{index}"] = abs(sigma)
             fit_values[f"x0_{index}"] = x0
         fit_params = create_interactive_fit_params(
             "multigaussian", fit_values, y, y_fitted
@@ -475,7 +475,7 @@ def multilorentzian_fit(
             zip(values[0::2], values[1::2], kwargs["a_x0"]), start=1
         ):
             fit_values[f"amplitude_{index}"] = amplitude
-            fit_values[f"sigma_{index}"] = sigma
+            fit_values[f"sigma_{index}"] = abs(sigma)
             fit_values[f"x0_{index}"] = x0
         fit_params = create_interactive_fit_params(
             "multilorentzian", fit_values, y, y_fitted

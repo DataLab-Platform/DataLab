@@ -13,7 +13,7 @@ import pytest
 from guidata.qthelpers import qt_app_context
 from sigima.objects import NormalDistribution1DParam
 from sigima.tests.data import create_noisy_signal, get_test_signal
-from sigima.tools.signal import pulse
+from sigima.tools.signal import fitting, pulse
 from sigima.tools.signal.peakdetection import peak_indices
 
 from datalab.env import execenv
@@ -78,6 +78,37 @@ def test_peak_fit_metadata(monkeypatch):
     )
     for output in outputs:
         check_peak_fit_output(output)
+
+
+@pytest.mark.parametrize(
+    ("dialog", "fit_type"),
+    [
+        (fdlg.multigaussian_fit, "multigaussian"),
+        (fdlg.multilorentzian_fit, "multilorentzian"),
+    ],
+)
+def test_multi_peak_fit_metadata_preserves_fixed_centers(monkeypatch, dialog, fit_type):
+    """Multi-peak metadata preserves centers without adding fit controls."""
+
+    def accept_initial_values(_x, _y, _fitfunc, fitparams, **_kwargs):
+        values = [param.value for param in fitparams]
+        values[1] = -abs(values[1])
+        return values
+
+    monkeypatch.setattr(fdlg, "guifit", accept_initial_values)
+    signal = get_test_signal("paracetamol.txt")
+    peakidx = peak_indices(signal.y)
+
+    output = dialog(signal.x, signal.y, peakidx)
+
+    assert output is not None
+    y_fitted, params, fit_params = output
+    assert len(params) == 2 * len(peakidx) + 1
+    assert fit_params["fit_type"] == fit_type
+    for index, peak_index in enumerate(peakidx, start=1):
+        assert fit_params[f"x0_{index}"] == pytest.approx(signal.x[peak_index])
+        assert fit_params[f"sigma_{index}"] > 0.0
+    np.testing.assert_allclose(fitting.evaluate_fit(signal.x, **fit_params), y_fitted)
 
 
 @pytest.mark.parametrize(
