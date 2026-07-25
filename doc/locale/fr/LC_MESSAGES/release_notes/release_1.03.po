@@ -58,3 +58,4 @@ msgstr "Lorsqu'une stratégie de voisinage est sélectionnée, un **aperçu en d
 
 msgid "Integer images are handled explicitly: because `NaN` and infinite values cannot exist in integer data, the dialog explains that the operation is not applicable and prevents accidental processing, while preserving the original image data type without unnecessary float conversion"
 msgstr "Les images entières sont traitées explicitement : comme les valeurs `NaN` et infinies ne peuvent pas exister dans les données entières, la boîte de dialogue explique que l'opération n'est pas applicable et empêche un traitement accidentel, tout en préservant le type de données d'image d'origine sans conversion inutile en flottant"
+
