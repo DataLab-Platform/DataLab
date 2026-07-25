@@ -58,6 +58,7 @@ from sigima.objects import (
 )
 from sigima.objects.base import ROI_KEY
 from sigima.params import SaveToDirectoryParam
+from sigima.tools.signal.pulse import LegacyPeakParameterizationError
 
 from datalab import objectmodel
 from datalab.adapters_metadata import (
@@ -73,7 +74,9 @@ from datalab.env import execenv
 from datalab.gui import actionhandler, objectview
 from datalab.gui.newobject import (
     CREATION_PARAMETERS_OPTION,
+    LEGACY_CREATION_PARAMETERS_OPTION,
     NewSignalParam,
+    convert_legacy_creation_parameters,
     extract_creation_parameters,
     insert_creation_parameters,
 )
@@ -122,6 +125,7 @@ METADATA_PASTE_EXCLUSIONS = {
     "__uuid",  # Each object must have a unique identifier
     f"__{PROCESSING_PARAMETERS_OPTION}",  # Object-specific processing history
     f"__{CREATION_PARAMETERS_OPTION}",  # Object-specific creation parameters
+    f"__{LEGACY_CREATION_PARAMETERS_OPTION}",  # Historical creation parameters
 }
 
 
@@ -300,6 +304,7 @@ class ObjectProp(QW.QWidget):
             Processing history as text
         """
         history_items = []
+        has_creation_problem = False
         current_obj = obj
         max_depth = 20  # Prevent infinite loops
 
@@ -309,7 +314,16 @@ class ObjectProp(QW.QWidget):
 
             if proc_params is None:
                 # Check for creation parameters
-                creation_params = extract_creation_parameters(current_obj)
+                try:
+                    creation_params = extract_creation_parameters(current_obj)
+                except LegacyPeakParameterizationError:
+                    history_items.append(_("Created: historical peak parameters"))
+                    has_creation_problem = True
+                    break
+                except ValueError:
+                    history_items.append(_("Created: invalid creation parameters"))
+                    has_creation_problem = True
+                    break
                 if creation_params is not None:
                     text = f"{_('Created')}: {creation_params.title}"
                     history_items.append(text)
@@ -323,7 +337,16 @@ class ObjectProp(QW.QWidget):
                 # For 1-to-0 operations, there's no processing history to show
                 # (they analyze but don't transform the object)
                 # Check if there's any earlier processing
-                creation_params = extract_creation_parameters(current_obj)
+                try:
+                    creation_params = extract_creation_parameters(current_obj)
+                except LegacyPeakParameterizationError:
+                    history_items.append(_("Created: historical peak parameters"))
+                    has_creation_problem = True
+                    break
+                except ValueError:
+                    history_items.append(_("Created: invalid creation parameters"))
+                    has_creation_problem = True
+                    break
                 if creation_params is not None:
                     text = f"{_('Created')}: {creation_params.title}"
                     history_items.append(text)
@@ -349,7 +372,7 @@ class ObjectProp(QW.QWidget):
                     history_items.append(_("(multiple sources)"))
                 break
 
-        if len(history_items) <= 1:
+        if len(history_items) <= 1 and not has_creation_problem:
             return ""  # Shows the history tab only when there is some history
 
         # Reverse to show from oldest to newest, then add indentation
@@ -545,7 +568,16 @@ class ObjectProp(QW.QWidget):
         Returns:
             True if Creation tab was set up, False otherwise
         """
-        param = extract_creation_parameters(obj)
+        try:
+            param = extract_creation_parameters(obj)
+        except LegacyPeakParameterizationError as exc:
+            if execenv.unattended:
+                raise
+            return self.setup_legacy_creation_tab(obj, str(exc), set_current)
+        except ValueError as exc:
+            if execenv.unattended:
+                raise
+            return self.setup_invalid_creation_tab(obj, str(exc), set_current)
         if param is None:
             return False
 
@@ -584,6 +616,105 @@ class ObjectProp(QW.QWidget):
             self.tabwidget.setCurrentWidget(self.creation_scroll)
 
         return True
+
+    def setup_legacy_creation_tab(
+        self,
+        obj: SignalObj | ImageObj,
+        error: str,
+        set_current: bool = False,
+    ) -> bool:
+        """Setup actions for explicitly converting historical peak parameters."""
+        widget = QW.QWidget(self)
+        layout = QW.QVBoxLayout(widget)
+        message = QW.QLabel(
+            _(
+                "This object uses historical area-based peak parameters. "
+                "Convert them to signed peak height before editing."
+            ),
+            widget,
+        )
+        message.setWordWrap(True)
+        message.setToolTip(error)
+        layout.addWidget(message)
+
+        buttons = QW.QHBoxLayout()
+        convert_button = QW.QPushButton(_("Convert historical parameters"), widget)
+        cancel_button = QW.QPushButton(_("Cancel"), widget)
+        buttons.addWidget(convert_button)
+        buttons.addWidget(cancel_button)
+        buttons.addStretch(1)
+        layout.addLayout(buttons)
+        layout.addStretch(1)
+
+        self.creation_param_editor = None
+        self.current_creation_obj = obj
+        self.creation_scroll = QW.QScrollArea()
+        self.creation_scroll.setWidgetResizable(True)
+        self.creation_scroll.setWidget(widget)
+        icon_name = "new_sig.svg" if isinstance(obj, SignalObj) else "new_ima.svg"
+        self.tabwidget.insertTab(
+            0, self.creation_scroll, get_icon(icon_name), _("Creation")
+        )
+        convert_button.clicked.connect(self.convert_current_creation_parameters)
+        cancel_button.clicked.connect(
+            lambda: self.tabwidget.setCurrentWidget(self.properties)
+        )
+        if set_current:
+            self.tabwidget.setCurrentWidget(self.creation_scroll)
+        return True
+
+    def setup_invalid_creation_tab(
+        self,
+        obj: SignalObj | ImageObj,
+        error: str,
+        set_current: bool = False,
+    ) -> bool:
+        """Show a read-only state for invalid creation metadata."""
+        widget = QW.QWidget(self)
+        layout = QW.QVBoxLayout(widget)
+        message = QW.QLabel(
+            _(
+                "Creation parameters cannot be edited because their metadata is "
+                "invalid or was written by a newer DataLab version."
+            ),
+            widget,
+        )
+        message.setWordWrap(True)
+        message.setToolTip(error)
+        layout.addWidget(message)
+        layout.addStretch(1)
+
+        self.creation_param_editor = None
+        self.current_creation_obj = obj
+        self.creation_scroll = QW.QScrollArea()
+        self.creation_scroll.setWidgetResizable(True)
+        self.creation_scroll.setWidget(widget)
+        icon_name = "new_sig.svg" if isinstance(obj, SignalObj) else "new_ima.svg"
+        self.tabwidget.insertTab(
+            0, self.creation_scroll, get_icon(icon_name), _("Creation")
+        )
+        if set_current:
+            self.tabwidget.setCurrentWidget(self.creation_scroll)
+        return True
+
+    def convert_current_creation_parameters(self) -> None:
+        """Convert the current object's historical peak creation parameters."""
+        obj = self.current_creation_obj
+        if obj is None:
+            return
+        try:
+            convert_legacy_creation_parameters(obj)
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            if execenv.unattended:
+                raise
+            QW.QMessageBox.warning(
+                self,
+                _("Error"),
+                _("Failed to convert historical creation parameters:\n%s") % str(exc),
+            )
+            return
+        self.__update_properties_dataset(obj)
+        self.setup_creation_tab(obj, set_current=True)
 
     def apply_creation_parameters(self) -> None:
         """Apply creation parameters: recreate object with updated parameters."""

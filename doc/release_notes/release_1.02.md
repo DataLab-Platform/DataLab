@@ -8,6 +8,11 @@
 
 * Restored the "Linear calibration" entry in the "Processing > Axis transformation" menu of the Signal panel — it had been inadvertently dropped during a menu reorganization and was no longer reachable from the menu bar, even though the underlying computation was still available (fixes [Issue #312](https://github.com/DataLab-Platform/DataLab/issues/312))
 
+**Signal peak creation and fitting:**
+
+* Gaussian, Lorentzian and Voigt creation and fit dialogs now express amplitude as signed peak height above the baseline, in the signal's Y units. Objects carrying historical area-based peak parameters remain displayable and keep their original samples; editing or re-evaluating them now requires an explicit conversion confirmed by the user.
+* Scripts and remote clients may migrate historical fit metadata explicitly by retrieving an object with `get_object()`, converting a copy with Sigima's `convert_legacy_peak_fit_params()`, and updating the existing object with `set_object()`; the conversion never regenerates the signal samples.
+
 **Signal panel — Y range cursor:**
 
 * Fixed the Y range cursor annotation displaying an incorrect inequality (e.g. `5 < y < 2`) and a negative ∆y when the top cursor was dragged below the bottom cursor — the annotation now always shows values in sorted order with a positive range width (fixes [Issue #306](https://github.com/DataLab-Platform/DataLab/issues/306))
@@ -47,7 +52,7 @@
 
 * Updated minimum guidata requirement from 3.14.3 to 3.14.4 (high DPI and screen scaling issue, dataset input field fix, add secure build CLI cmd)
 * Updated minimum PlotPy requirement from 2.8.2 to 2.10.0 (Z-axis log scale fix, toolbar overflow button visibility in dark theme, PythonQwt 0.16.0 optimization)
-* Updated minimum Sigima requirement from 1.1.2 to 1.1.3 (ellipse/circle contour detection fix)
+* Updated minimum Sigima requirement from 1.1.2 to 1.1.6 (ellipse and circle contour fixes available since 1.1.3, later computation fixes, and versioned peak-height parameters in 1.1.6)
 
 ## DataLab Version 1.2.0 (2026-04-20) ##
 
