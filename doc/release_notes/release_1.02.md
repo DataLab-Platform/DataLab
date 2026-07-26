@@ -14,6 +14,8 @@
 * Interactive multi-Gaussian and multi-Lorentzian results now retain every detected peak position (`x0_i`) in canonical fit metadata, allowing complete theoretical models to be exported or re-evaluated on another X axis without adding center controls to the fit dialog.
 * The "Evaluate fit" feature is now available for every interactive fit, not just peak fits: linear, polynomial, exponential, sinusoidal, CDF, Planckian, two half-Gaussian and piecewise exponential fitting curves may now be re-evaluated on another X axis or exported as theoretical models (fixes [Issue #355](https://github.com/DataLab-Platform/DataLab/issues/355)). Fitting curves computed by earlier versions carry parameters that were labelled in the interface language and cannot be re-evaluated: DataLab now reports this explicitly and such curves have to be recomputed.
 * Scripts and remote clients may migrate historical fit metadata explicitly by retrieving an object with `get_object()`, converting a copy with Sigima's `convert_legacy_peak_fit_params()`, and updating the existing object with `set_object()`; the conversion never regenerates the signal samples.
+* Fixed interactive fit parameter sliders whose bounds excluded reachable solutions: the exponential `B` slider could not express a decay, the cumulative distribution function amplitude could not express a descending transition, and the piecewise exponential amplitude bounds were inverted for negative initial guesses (fixes [Issue #352](https://github.com/DataLab-Platform/DataLab/issues/352))
+* Fixed the Planckian fit dialog labelling the `x0` parameter as the peak wavelength — the maximum of the model is located at approximately `1.007 * x0 / sigma`, so the two only coincide when `sigma` equals 1
 
 **Signal panel — Y range cursor:**
 
@@ -44,9 +46,35 @@
 
 * Renamed the debug environment variable from `DEBUG` to `DATALAB_DEBUG` — the generic `DEBUG` name collided with widely-used third-party conventions (Django, Flask, Node.js tooling, CI systems) and could silently reset the user configuration file at startup when set for unrelated reasons. Setting `DATALAB_DEBUG=1` now activates debug mode; the bare `DEBUG` variable is ignored (fixes [Issue #319](https://github.com/DataLab-Platform/DataLab/issues/319))
 
+**HDF5 import:**
+
+* Fixed a crash when running a computation on an object imported from an HDF5 file containing object or region reference attributes (e.g. `DIMENSION_LIST` / `REFERENCE_LIST` arrays produced by `h4toh5convert`) — such attributes cannot be serialized to worker processes and are now skipped instead of being copied to the object metadata (fixes [Issue #346](https://github.com/DataLab-Platform/DataLab/issues/346))
+
+**Text import wizard:**
+
+* Fixed a sporadic application crash when closing the Text Import Wizard — the embedded plot preview is now released deterministically instead of being torn down later by the garbage collector (fixes [Issue #335](https://github.com/DataLab-Platform/DataLab/issues/335))
+
+**Working directory handling:**
+
+* DataLab no longer changes its process working directory when a file is opened or saved. The last used folder is still remembered for file dialogs, but the directory itself is no longer locked for the lifetime of the application on Windows (it can be moved, renamed or deleted while DataLab is running), and macros or scripts started from DataLab no longer inherit an unexpected working directory
+
+**Packaging:**
+
+* Fixed missing data files in the distributed package: all `.h5` test/demo files and `.template` files are now included in the wheel and source distribution
+
 **Remote control API:**
 
 * Exposed `get_current_object_uuid()` on the proxy API, making it available through XML-RPC and Web API
+
+### 📖 Documentation ###
+
+* Added a new "DataLab Platform ecosystem" page positioning DataLab (desktop), DataLab-Web (browser edition), DataLab-Kernel (Jupyter kernel) and Sigima (computation engine) with respect to each other; the browser edition is now surfaced on the home and getting started pages, plugin web compatibility is documented, and the roadmap was refreshed (web frontend and Jupyter kernel delivered)
+* Added NixOS installation instructions: DataLab is packaged for NixOS and distributed through the NGI Forge, thanks to a contribution from the Nix@NGI team as part of DataLab's funding through the NGI0 Commons Fund
+* Added a "Talks & Events" section to the documentation, starting with the EuroSciPy 2026 presentation details
+* Fixed the polynomial signal creation formula, which listed a `y0` term and an arbitrary number of coefficients whereas the parameters actually expose `a0` to `a5`, and documented the sigmoid fit, which was available but undocumented (fixes [Issue #353](https://github.com/DataLab-Platform/DataLab/issues/353))
+* Aligned the documented signal model formulas with the new height-based parameterization of the Gaussian, Lorentzian and Voigt models
+* Refreshed the signal and image "Edit" documentation examples, which still showed object titles produced by older versions (fixes [Issue #354](https://github.com/DataLab-Platform/DataLab/issues/354))
+* Updated French translations across all new and modified documentation pages
 
 ### 🔧 Improvements ###
 
