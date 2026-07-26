@@ -12,6 +12,7 @@
 
 * Gaussian, Lorentzian and Voigt creation and fit dialogs now express amplitude as signed peak height above the baseline, in the signal's Y units. Objects carrying historical area-based peak parameters remain displayable and keep their original samples; editing or re-evaluating them now requires an explicit conversion confirmed by the user.
 * Interactive multi-Gaussian and multi-Lorentzian results now retain every detected peak position (`x0_i`) in canonical fit metadata, allowing complete theoretical models to be exported or re-evaluated on another X axis without adding center controls to the fit dialog.
+* The "Evaluate fit" feature is now available for every interactive fit, not just peak fits: linear, polynomial, exponential, sinusoidal, CDF, Planckian, two half-Gaussian and piecewise exponential fitting curves may now be re-evaluated on another X axis or exported as theoretical models (fixes [Issue #355](https://github.com/DataLab-Platform/DataLab/issues/355)). Fitting curves computed by earlier versions carry parameters that were labelled in the interface language and cannot be re-evaluated: DataLab now reports this explicitly and such curves have to be recomputed.
 * Scripts and remote clients may migrate historical fit metadata explicitly by retrieving an object with `get_object()`, converting a copy with Sigima's `convert_legacy_peak_fit_params()`, and updating the existing object with `set_object()`; the conversion never regenerates the signal samples.
 
 **Signal panel — Y range cursor:**

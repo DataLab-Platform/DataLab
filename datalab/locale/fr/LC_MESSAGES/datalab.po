@@ -4287,3 +4287,7 @@ msgstr "Impossible d'évaluer l'ajustement"
 msgid "One or more selected signals have invalid or unsupported fit parameters:\n%s"
 msgstr "Un ou plusieurs signaux sélectionnés ont des paramètres d'ajustement invalides ou non pris en charge :\n%s"
 
+#, python-format
+msgid "%s: fitting curve was computed by an earlier version and cannot be evaluated (please recompute the fit)"
+msgstr "%s : la courbe d'ajustement a été calculée par une version antérieure et ne peut pas être évaluée (veuillez recalculer l'ajustement)"
+
