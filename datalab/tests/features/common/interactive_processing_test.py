@@ -492,6 +492,41 @@ def test_invalid_fit_parameters_abort_evaluation_without_mutation():
             assert source.metadata["fit_params"] == fit_params
 
 
+def test_legacy_label_keyed_fit_metadata_is_reported_explicitly():
+    """Fitting curves stored by earlier versions ask the user to recompute."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            x = np.linspace(1.0, 5.0, 101)
+            # Before the canonical `fit_params` schema, interactive fits stored
+            # their parameters under the dialog function name, keyed by
+            # translated UI labels. Such metadata cannot be evaluated.
+            source = create_signal(
+                "Legacy Planckian fit",
+                x,
+                np.zeros_like(x),
+                metadata={
+                    "planckian_fit": {
+                        "Amplitude": 1.0,
+                        "Scale factor": 2.0,
+                        "Width factor": 1.0,
+                        "Base line": 0.0,
+                    }
+                },
+            )
+            target = create_signal("New X", x * 2.0, np.zeros_like(x))
+            panel.add_object(source)
+            panel.add_object(target)
+            panel.objview.select_objects([source])
+            object_count = len(panel.objmodel.get_all_objects())
+
+            with execenv.context(unattended=True):
+                with pytest.raises(ValueError, match="recompute the fit"):
+                    panel.processor.run_feature("evaluate_fit", target)
+
+            assert len(panel.objmodel.get_all_objects()) == object_count
+
+
 def test_pairwise_fit_evaluation_commits_each_source_conversion():
     """Pairwise evaluation commits converted metadata after each result."""
     original_mode = Conf.proc.operation_mode.get()
