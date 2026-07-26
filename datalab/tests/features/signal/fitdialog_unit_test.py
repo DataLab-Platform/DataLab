@@ -80,6 +80,56 @@ def test_peak_fit_metadata(monkeypatch):
         check_peak_fit_output(output)
 
 
+NON_PEAK_FIT_CASES = (
+    ("linear", "noisy", lambda x, y: fdlg.linear_fit(x, y)),
+    ("polynomial", "noisy", lambda x, y: fdlg.polynomial_fit(x, y, 4)),
+    ("exponential", "noisy", lambda x, y: fdlg.exponential_fit(x, y)),
+    ("sinusoidal", "noisy", lambda x, y: fdlg.sinusoidal_fit(x, y)),
+    ("cdf", "noisy", lambda x, y: fdlg.cdf_fit(x, y)),
+    ("planckian", "gaussian_fit.txt", lambda x, y: fdlg.planckian_fit(x, y)),
+    (
+        "twohalfgaussian",
+        "gaussian_fit.txt",
+        lambda x, y: fdlg.twohalfgaussian_fit(x, y),
+    ),
+    (
+        "doubleexponential",
+        "piecewiseexponential_fit.txt",
+        lambda x, y: fdlg.piecewiseexponential_fit(x, y),
+    ),
+)
+
+
+@pytest.mark.parametrize(("fit_type", "data", "call_dialog"), NON_PEAK_FIT_CASES)
+def test_non_peak_fit_metadata(monkeypatch, fit_type, data, call_dialog):
+    """Non-peak fit dialogs return evaluable canonical metadata.
+
+    The decisive check is the round-trip: re-evaluating the stored parameters
+    with Sigima must reproduce the curve computed by the dialog. It catches any
+    parameter name, ordering or unit mismatch between the two layers.
+    """
+
+    def accept_initial_values(_x, _y, _fitfunc, fitparams, **_kwargs):
+        return [param.value for param in fitparams]
+
+    monkeypatch.setattr(fdlg, "guifit", accept_initial_values)
+    if data == "noisy":
+        signal = create_noisy_signal(NormalDistribution1DParam.create(sigma=5.0))
+    else:
+        signal = get_test_signal(data)
+
+    output = call_dialog(signal.x, signal.y)
+
+    assert output is not None
+    y_fitted, _params, fit_params = output
+    assert fit_params["fit_type"] == fit_type
+    assert fit_params["interactive"] is True
+    fitting.validate_fit_params(fit_params)
+    np.testing.assert_allclose(
+        fitting.evaluate_fit(signal.x, **fit_params), y_fitted, rtol=1e-10, atol=1e-10
+    )
+
+
 @pytest.mark.parametrize(
     ("dialog", "fit_type"),
     [
