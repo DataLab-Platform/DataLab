@@ -81,11 +81,12 @@ def guifit(
 
 
 # --- Polynomial fitting curve -------------------------------------------------
-def polynomial_fit(x, y, degree, parent=None, name=None):
+def polynomial_fit(x, y, degree, parent=None, name=None, fit_type="polynomial"):
     """Compute polynomial fit
 
-    Returns (yfit, params), where yfit is the fitted curve and params are
-    the fitting parameters"""
+    Returns (yfit, params, fit_params), where yfit is the fitted curve, params are
+    the fitting parameters and fit_params is the canonical metadata dictionary"""
+    computer = fitting.PolynomialFitComputer(x, y, degree)
     ivals = np.polyfit(x, y, degree)
 
     params = []
@@ -108,16 +109,23 @@ def polynomial_fit(x, y, degree, parent=None, name=None):
         x, y, fitfunc, params, parent=parent, wintitle=_("Polymomial fit"), name=name
     )
     if values:
-        return fitfunc(x, values), params
+        y_fitted = fitfunc(x, values)
+        # Both `np.polyfit` and `PolynomialFitComputer` order coefficients from
+        # the highest degree to the lowest, so a plain zip is correct here.
+        fit_values = dict(zip(computer.get_params_names(), values))
+        fit_params = create_interactive_fit_params(fit_type, fit_values, y, y_fitted)
+        return y_fitted, params, fit_params
 
 
 def linear_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     """Compute linear fit using polynomialfit.
 
-    Returns (yfit, params), where yfit is the fitted curve and params are
-    the fitting parameters
+    Returns (yfit, params, fit_params), where yfit is the fitted curve, params are
+    the fitting parameters and fit_params is the canonical metadata dictionary
     """
-    return polynomial_fit(x, y, 1, parent=parent, name=name)
+    # A first-degree polynomial and a linear fit share the same `(a, b)` parameter
+    # names, so only the stored fit type has to be overridden.
+    return polynomial_fit(x, y, 1, parent=parent, name=name, fit_type="linear")
 
 
 # --- Gaussian fitting curve ---------------------------------------------------
@@ -489,8 +497,8 @@ def multilorentzian_fit(
 def exponential_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     """Compute exponential fit
 
-    Returns (yfit, params), where yfit is the fitted curve and params are
-    the fitting parameters"""
+    Returns (yfit, params, fit_params), where yfit is the fitted curve, params are
+    the fitting parameters and fit_params is the canonical metadata dictionary"""
     # Get initial parameter estimates from Sigima ExponentialFitComputer
     computer = fitting.ExponentialFitComputer(x, y)
     initial_params = computer.compute_initial_params()
@@ -521,7 +529,11 @@ def exponential_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
         x, y, fitfunc, params, parent=parent, wintitle=_("Exponential fit"), name=name
     )
     if values:
-        return fitfunc(x, values), params
+        y_fitted = fitfunc(x, values)
+        fit_params = create_interactive_fit_params(
+            "exponential", dict(zip(computer.get_params_names(), values)), y, y_fitted
+        )
+        return y_fitted, params, fit_params
 
 
 # --- Sinusoidal fitting curve ------------------------------------------------
@@ -545,8 +557,8 @@ def dominant_frequency(x: np.ndarray, y: np.ndarray) -> np.floating:
 def sinusoidal_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     """Compute sinusoidal fit
 
-    Returns (yfit, params), where yfit is the fitted curve and params are
-    the fitting parameters"""
+    Returns (yfit, params, fit_params), where yfit is the fitted curve, params are
+    the fitting parameters and fit_params is the canonical metadata dictionary"""
     # Get initial parameter estimates from Sigima SinusoidalFitComputer
     computer = fitting.SinusoidalFitComputer(x, y)
     initial_params = computer.compute_initial_params()
@@ -577,7 +589,20 @@ def sinusoidal_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
         x, y, fitfunc, params, parent=parent, wintitle=_("Sinusoidal fit"), name=name
     )
     if values:
-        return fitfunc(x, values), params
+        y_fitted = fitfunc(x, values)
+        # The phase is edited in degrees but stored in radians, as expected by
+        # Sigima's sinusoidal model.
+        amplitude, frequency, phase, offset = values
+        fit_values = dict(
+            zip(
+                computer.get_params_names(),
+                (amplitude, frequency, np.deg2rad(phase), offset),
+            )
+        )
+        fit_params = create_interactive_fit_params(
+            "sinusoidal", fit_values, y, y_fitted
+        )
+        return y_fitted, params, fit_params
 
 
 # --- Cumulative distribution function fitting curve -----------------------------------
@@ -586,8 +611,8 @@ def sinusoidal_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 def cdf_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     """Compute Cumulative Distribution Function (CDF) fit
 
-    Returns (yfit, params), where yfit is the fitted curve and params are
-    the fitting parameters"""
+    Returns (yfit, params, fit_params), where yfit is the fitted curve, params are
+    the fitting parameters and fit_params is the canonical metadata dictionary"""
     # Get initial parameter estimates from Sigima CDFFitComputer
     computer = fitting.CDFFitComputer(x, y)
     initial_params = computer.compute_initial_params()
@@ -638,15 +663,19 @@ def cdf_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
         name=name,
     )
     if values:
-        return fitfunc(x, values), params
+        y_fitted = fitfunc(x, values)
+        fit_params = create_interactive_fit_params(
+            "cdf", dict(zip(computer.get_params_names(), values)), y, y_fitted
+        )
+        return y_fitted, params, fit_params
 
 
 # --- Planckian fitting curve --------------------------------------------------
 def planckian_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     """Compute Planckian (blackbody radiation) fit
 
-    Returns (yfit, params), where yfit is the fitted curve and params are
-    the fitting parameters"""
+    Returns (yfit, params, fit_params), where yfit is the fitted curve, params are
+    the fitting parameters and fit_params is the canonical metadata dictionary"""
     # Get initial parameter estimates from Sigima PlanckianFitComputer
     computer = fitting.PlanckianFitComputer(x, y)
     initial_params = computer.compute_initial_params()
@@ -688,15 +717,19 @@ def planckian_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
         x, y, fitfunc, params, parent=parent, wintitle=_("Planckian fit"), name=name
     )
     if values:
-        return fitfunc(x, values), params
+        y_fitted = fitfunc(x, values)
+        fit_params = create_interactive_fit_params(
+            "planckian", dict(zip(computer.get_params_names(), values)), y, y_fitted
+        )
+        return y_fitted, params, fit_params
 
 
 # --- Two half-Gaussian fitting curve ------------------------------------------
 def twohalfgaussian_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     """Compute two half-Gaussian fit for asymmetric peaks
 
-    Returns (yfit, params), where yfit is the fitted curve and params are
-    the fitting parameters"""
+    Returns (yfit, params, fit_params), where yfit is the fitted curve, params are
+    the fitting parameters and fit_params is the canonical metadata dictionary"""
     # Get initial parameter estimates from Sigima TwoHalfGaussianFitComputer
     computer = fitting.TwoHalfGaussianFitComputer(x, y)
     initial_params = computer.compute_initial_params()
@@ -768,15 +801,22 @@ def twohalfgaussian_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
         name=name,
     )
     if values:
-        return fitfunc(x, values), params
+        y_fitted = fitfunc(x, values)
+        fit_params = create_interactive_fit_params(
+            "twohalfgaussian",
+            dict(zip(computer.get_params_names(), values)),
+            y,
+            y_fitted,
+        )
+        return y_fitted, params, fit_params
 
 
 # --- Piecewise exponential (raise-decay) fitting curve ------------------------
 def piecewiseexponential_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     """Compute piecewise exponential fit (raise-decay)
 
-    Returns (yfit, params), where yfit is the fitted curve and params are
-    the fitting parameters"""
+    Returns (yfit, params, fit_params), where yfit is the fitted curve, params are
+    the fitting parameters and fit_params is the canonical metadata dictionary"""
     # Get initial parameter estimates from Sigima DoubleExponentialFitComputer
     computer = fitting.DoubleExponentialFitComputer(x, y)
     initial_params = computer.compute_initial_params()
@@ -855,4 +895,13 @@ def piecewiseexponential_fit(x: np.ndarray, y: np.ndarray, parent=None, name=Non
         name=name,
     )
     if values:
-        return fitfunc(x, values), params
+        y_fitted = fitfunc(x, values)
+        # Sigima registers this model under "doubleexponential": the fit type is
+        # not derived from the dialog function name.
+        fit_params = create_interactive_fit_params(
+            "doubleexponential",
+            dict(zip(computer.get_params_names(), values)),
+            y,
+            y_fitted,
+        )
+        return y_fitted, params, fit_params
