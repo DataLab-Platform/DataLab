@@ -667,7 +667,7 @@ def planckian_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
         format=DEFAULT_FORMAT,
     )
     x0 = FitParam(
-        _("Peak wavelength"), x0_guess, np.min(x), np.max(x), format=DEFAULT_FORMAT
+        _("Scale factor"), x0_guess, np.min(x), np.max(x), format=DEFAULT_FORMAT
     )
     sigma = FitParam(_("Width factor"), sigma_guess, 0.1, 5.0, format=DEFAULT_FORMAT)
     y0 = FitParam(

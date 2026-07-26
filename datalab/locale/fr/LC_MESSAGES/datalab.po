@@ -3691,8 +3691,8 @@ msgstr "Fréquence"
 msgid "Continuous component"
 msgstr "Composante continue"
 
-msgid "Peak wavelength"
-msgstr "Longueur d'onde de pic"
+msgid "Scale factor"
+msgstr "Facteur d'échelle"
 
 msgid "Width factor"
 msgstr "Facteur de largeur"
