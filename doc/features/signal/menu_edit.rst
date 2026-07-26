@@ -294,7 +294,7 @@ The "Edit" menu allows you to:
   .. code-block:: text
 
     g001:
-        s001: lorentz(a=1,sigma=1,mu=0,ymin=0)
+        s001: lorentz(A=1,σ=1,μ=0,y0=0)
         s002: derivative(s001)
         s003: wiener(s002)
     g002: derivative(g001)
