@@ -6,18 +6,11 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-25 11:27+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
-"Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.18.0\n"
 
 msgid "Version 1.2"
 msgstr "Version 1.2"
@@ -43,8 +36,17 @@ msgstr "Les boîtes de dialogue de création et d'ajustement gaussien, lorentzie
 msgid "Interactive multi-Gaussian and multi-Lorentzian results now retain every detected peak position (`x0_i`) in canonical fit metadata, allowing complete theoretical models to be exported or re-evaluated on another X axis without adding center controls to the fit dialog."
 msgstr "Les résultats interactifs multi-gaussiens et multi-lorentziens conservent désormais chaque position de pic détectée (`x0_i`) dans les métadonnées d'ajustement canoniques, ce qui permet d'exporter ou de réévaluer les modèles théoriques complets sur un autre axe X sans ajouter de contrôles de centre à la boîte de dialogue d'ajustement."
 
+msgid "The \"Evaluate fit\" feature is now available for every interactive fit, not just peak fits: linear, polynomial, exponential, sinusoidal, CDF, Planckian, two half-Gaussian and piecewise exponential fitting curves may now be re-evaluated on another X axis or exported as theoretical models (fixes [Issue #355](https://github.com/DataLab-Platform/DataLab/issues/355)). Fitting curves computed by earlier versions carry parameters that were labelled in the interface language and cannot be re-evaluated: DataLab now reports this explicitly and such curves have to be recomputed."
+msgstr "La fonctionnalité « Évaluer l'ajustement » est désormais disponible pour tous les ajustements interactifs, et plus seulement pour les ajustements de pics : les courbes d'ajustement linéaire, polynomial, exponentiel, sinusoïdal, CDF, planckien, double demi-gaussienne et exponentiel par morceaux peuvent maintenant être réévaluées sur un autre axe X ou exportées en tant que modèles théoriques (corrige [Issue #355](https://github.com/DataLab-Platform/DataLab/issues/355)). Les courbes d'ajustement calculées par des versions antérieures portent des paramètres nommés dans la langue de l'interface et ne peuvent pas être réévaluées : DataLab le signale désormais explicitement et ces courbes doivent être recalculées."
+
 msgid "Scripts and remote clients may migrate historical fit metadata explicitly by retrieving an object with `get_object()`, converting a copy with Sigima's `convert_legacy_peak_fit_params()`, and updating the existing object with `set_object()`; the conversion never regenerates the signal samples."
 msgstr "Les scripts et les clients distants peuvent migrer explicitement les métadonnées d'ajustement historiques en récupérant un objet avec `get_object()`, en convertissant une copie avec `convert_legacy_peak_fit_params()` de Sigima, puis en mettant à jour l'objet existant avec `set_object()` ; la conversion ne régénère jamais les échantillons du signal."
+
+msgid "Fixed interactive fit parameter sliders whose bounds excluded reachable solutions: the exponential `B` slider could not express a decay, the cumulative distribution function amplitude could not express a descending transition, and the piecewise exponential amplitude bounds were inverted for negative initial guesses (fixes [Issue #352](https://github.com/DataLab-Platform/DataLab/issues/352))"
+msgstr "Correction des curseurs de paramètres des ajustements interactifs dont les bornes excluaient des solutions atteignables : le curseur `B` de l'exponentielle ne permettait pas d'exprimer une décroissance, l'amplitude de la fonction de répartition ne permettait pas d'exprimer une transition descendante, et les bornes d'amplitude de l'exponentielle par morceaux étaient inversées pour des estimations initiales négatives (corrige [Issue #352](https://github.com/DataLab-Platform/DataLab/issues/352))"
+
+msgid "Fixed the Planckian fit dialog labelling the `x0` parameter as the peak wavelength — the maximum of the model is located at approximately `1.007 * x0 / sigma`, so the two only coincide when `sigma` equals 1"
+msgstr "Correction de la boîte de dialogue d'ajustement planckien désignant le paramètre `x0` comme la longueur d'onde du pic — le maximum du modèle se situe à environ `1,007 * x0 / sigma`, les deux ne coïncident donc que lorsque `sigma` vaut 1"
 
 msgid "**Signal panel — Y range cursor:**"
 msgstr "**Panneau Signal — curseur de plage Y :**"
@@ -91,11 +93,59 @@ msgstr "**Renommage de la variable d'environnement de débogage :**"
 msgid "Renamed the debug environment variable from `DEBUG` to `DATALAB_DEBUG` — the generic `DEBUG` name collided with widely-used third-party conventions (Django, Flask, Node.js tooling, CI systems) and could silently reset the user configuration file at startup when set for unrelated reasons. Setting `DATALAB_DEBUG=1` now activates debug mode; the bare `DEBUG` variable is ignored (fixes [Issue #319](https://github.com/DataLab-Platform/DataLab/issues/319))"
 msgstr "Renommage de la variable d'environnement de débogage de `DEBUG` à `DATALAB_DEBUG` — le nom générique `DEBUG` entrait en conflit avec des conventions largement utilisées par des tiers (Django, Flask, outils Node.js, systèmes CI) et pouvait réinitialiser silencieusement le fichier de configuration utilisateur au démarrage lorsqu'il était défini pour des raisons non liées. Définir `DATALAB_DEBUG=1` active désormais le mode débogage ; la variable `DEBUG` seule est ignorée (corrige [Issue #319](https://github.com/DataLab-Platform/DataLab/issues/319))"
 
+msgid "**HDF5 import:**"
+msgstr "**Import HDF5 :**"
+
+msgid "Fixed a crash when running a computation on an object imported from an HDF5 file containing object or region reference attributes (e.g. `DIMENSION_LIST` / `REFERENCE_LIST` arrays produced by `h4toh5convert`) — such attributes cannot be serialized to worker processes and are now skipped instead of being copied to the object metadata (fixes [Issue #346](https://github.com/DataLab-Platform/DataLab/issues/346))"
+msgstr "Correction d'un plantage lors de l'exécution d'un calcul sur un objet importé depuis un fichier HDF5 contenant des attributs de référence d'objet ou de région (par ex. les tableaux `DIMENSION_LIST` / `REFERENCE_LIST` produits par `h4toh5convert`) — ces attributs ne peuvent pas être sérialisés vers les processus de calcul et sont désormais ignorés au lieu d'être copiés dans les métadonnées de l'objet (corrige [Issue #346](https://github.com/DataLab-Platform/DataLab/issues/346))"
+
+msgid "**Text import wizard:**"
+msgstr "**Assistant d'import de texte :**"
+
+msgid "Fixed a sporadic application crash when closing the Text Import Wizard — the embedded plot preview is now released deterministically instead of being torn down later by the garbage collector (fixes [Issue #335](https://github.com/DataLab-Platform/DataLab/issues/335))"
+msgstr "Correction d'un plantage sporadique de l'application à la fermeture de l'assistant d'import de texte — l'aperçu graphique intégré est désormais libéré de manière déterministe au lieu d'être détruit plus tard par le ramasse-miettes (corrige [Issue #335](https://github.com/DataLab-Platform/DataLab/issues/335))"
+
+msgid "**Working directory handling:**"
+msgstr "**Gestion du répertoire de travail :**"
+
+msgid "DataLab no longer changes its process working directory when a file is opened or saved. The last used folder is still remembered for file dialogs, but the directory itself is no longer locked for the lifetime of the application on Windows (it can be moved, renamed or deleted while DataLab is running), and macros or scripts started from DataLab no longer inherit an unexpected working directory"
+msgstr "DataLab ne modifie plus le répertoire de travail de son processus lors de l'ouverture ou de l'enregistrement d'un fichier. Le dernier dossier utilisé reste mémorisé pour les boîtes de dialogue de fichiers, mais le répertoire lui-même n'est plus verrouillé pendant toute la durée de vie de l'application sous Windows (il peut être déplacé, renommé ou supprimé pendant que DataLab s'exécute), et les macros ou scripts lancés depuis DataLab n'héritent plus d'un répertoire de travail inattendu"
+
+msgid "**Packaging:**"
+msgstr "**Empaquetage :**"
+
+msgid "Fixed missing data files in the distributed package: all `.h5` test/demo files and `.template` files are now included in the wheel and source distribution"
+msgstr "Correction de fichiers de données manquants dans le paquet distribué : tous les fichiers `.h5` de test/démonstration et les fichiers `.template` sont désormais inclus dans le wheel et la distribution source"
+
 msgid "**Remote control API:**"
 msgstr "**API de contrôle à distance :**"
 
 msgid "Exposed `get_current_object_uuid()` on the proxy API, making it available through XML-RPC and Web API"
 msgstr "Exposition de `get_current_object_uuid()` sur l'API proxy, la rendant disponible via XML-RPC et l'API Web"
+
+msgid "📖 Documentation"
+msgstr "📖 Documentation"
+
+msgid "Added a new \"DataLab Platform ecosystem\" page positioning DataLab (desktop), DataLab-Web (browser edition), DataLab-Kernel (Jupyter kernel) and Sigima (computation engine) with respect to each other; the browser edition is now surfaced on the home and getting started pages, plugin web compatibility is documented, and the roadmap was refreshed (web frontend and Jupyter kernel delivered)"
+msgstr "Ajout d'une nouvelle page « Écosystème DataLab Platform » situant les uns par rapport aux autres DataLab (bureau), DataLab-Web (édition navigateur), DataLab-Kernel (noyau Jupyter) et Sigima (moteur de calcul) ; l'édition navigateur est désormais mise en avant sur la page d'accueil et la page de prise en main, la compatibilité web des plugins est documentée, et la feuille de route a été actualisée (interface web et noyau Jupyter livrés)"
+
+msgid "Added NixOS installation instructions: DataLab is packaged for NixOS and distributed through the NGI Forge, thanks to a contribution from the Nix@NGI team as part of DataLab's funding through the NGI0 Commons Fund"
+msgstr "Ajout des instructions d'installation sous NixOS : DataLab est empaqueté pour NixOS et distribué via la NGI Forge, grâce à une contribution de l'équipe Nix@NGI dans le cadre du financement de DataLab par le NGI0 Commons Fund"
+
+msgid "Added a \"Talks & Events\" section to the documentation, starting with the EuroSciPy 2026 presentation details"
+msgstr "Ajout d'une section « Événements » à la documentation, en commençant par les détails de la présentation EuroSciPy 2026"
+
+msgid "Fixed the polynomial signal creation formula, which listed a `y0` term and an arbitrary number of coefficients whereas the parameters actually expose `a0` to `a5`, and documented the sigmoid fit, which was available but undocumented (fixes [Issue #353](https://github.com/DataLab-Platform/DataLab/issues/353))"
+msgstr "Correction de la formule de création de signal polynomial, qui mentionnait un terme `y0` et un nombre quelconque de coefficients alors que les paramètres n'exposent en réalité que `a0` à `a5`, et documentation de l'ajustement sigmoïde, disponible mais non documenté (corrige [Issue #353](https://github.com/DataLab-Platform/DataLab/issues/353))"
+
+msgid "Aligned the documented signal model formulas with the new height-based parameterization of the Gaussian, Lorentzian and Voigt models"
+msgstr "Alignement des formules de modèles de signaux documentées sur la nouvelle paramétrisation en hauteur des modèles gaussien, lorentzien et de Voigt"
+
+msgid "Refreshed the signal and image \"Edit\" documentation examples, which still showed object titles produced by older versions (fixes [Issue #354](https://github.com/DataLab-Platform/DataLab/issues/354))"
+msgstr "Actualisation des exemples de la documentation « Édition » des signaux et des images, qui affichaient encore des titres d'objets produits par des versions antérieures (corrige [Issue #354](https://github.com/DataLab-Platform/DataLab/issues/354))"
+
+msgid "Updated French translations across all new and modified documentation pages"
+msgstr "Mise à jour des traductions françaises sur toutes les pages de documentation nouvelles et modifiées"
 
 msgid "🔧 Improvements"
 msgstr "🔧 Améliorations"
@@ -196,9 +246,6 @@ msgstr "Fonctionne pour les objets signal et image : les éléments de résultat
 msgid "The properties panel is automatically refreshed after `set_object`, so updated object properties (title, units, axes, uncertainties, etc.) are immediately visible in the GUI"
 msgstr "Le panneau des propriétés est automatiquement rafraîchi après `set_object`, de sorte que les propriétés modifiées (titre, unités, axes, incertitudes, etc.) sont immédiatement visibles dans l'interface graphique"
 
-msgid "📖 Documentation"
-msgstr "📖 Documentation"
-
 msgid "Added API documentation for the `datalab.objectmodel` module"
 msgstr "Ajout de la documentation de l'API pour le module `datalab.objectmodel`"
 
@@ -214,9 +261,6 @@ msgstr "Mise à jour du guide de développement des plugins tiers avec de nouvel
 #, python-brace-format
 msgid "Expanded Web API reference: documented the binary data transfer options (`?compress=false` for faster uncompressed NPZ downloads, `?overwrite=true` for atomic replacement of existing objects), the in-place `PUT /objects/{name}` endpoint that updates an object while preserving its identity, group membership and position, and the new \"Computation\" section listing the `/select` and `/calc` endpoints used to drive DataLab computations remotely"
 msgstr "Enrichissement de la référence de l'API Web : documentation des options de transfert binaire (`?compress=false` pour des téléchargements NPZ non compressés plus rapides, `?overwrite=true` pour le remplacement atomique d'objets existants), du point d'entrée `PUT /objects/{name}` qui met à jour un objet sur place en préservant son identité, son groupe d'appartenance et sa position, ainsi que de la nouvelle section « Calcul » listant les points d'entrée `/select` et `/calc` permettant de piloter les calculs DataLab à distance"
-
-msgid "Updated French translations across all new and modified documentation pages"
-msgstr "Mise à jour des traductions françaises sur toutes les pages de documentation nouvelles et modifiées"
 
 msgid "Officially support pandas 3.0.x (updated dependency constraint from `< 3.0` to `< 3.1`)"
 msgstr "Prise en charge officielle de pandas 3.0.x (contrainte de dépendance mise à jour de `< 3.0` à `< 3.1`)"
