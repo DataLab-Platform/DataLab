@@ -67,6 +67,26 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         (_("Sigmoid fit"), sips.sigmoid_fit),
     )
 
+    @staticmethod
+    def __has_legacy_fit_metadata(obj: SignalObj) -> bool:
+        """Return whether a signal carries fit metadata keyed by translated labels.
+
+        Interactive fitting curves computed before the canonical ``fit_params``
+        schema stored their parameters under the dialog function name, keyed by
+        translated UI labels. Such metadata is not evaluable and is only detected
+        here to report an explicit message to the user.
+
+        Args:
+            obj: Signal object to inspect.
+
+        Returns:
+            Whether legacy interactive fit metadata was found.
+        """
+        return any(
+            key.endswith("fit") and isinstance(value, dict)
+            for key, value in obj.metadata.items()
+        )
+
     def prepare_fit_evaluation(
         self, objects: list[SignalObj]
     ) -> SourcePreparationTransaction | None:
@@ -76,9 +96,19 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         for obj in objects:
             fit_params = obj.metadata.get("fit_params")
             if not isinstance(fit_params, dict):
-                invalid.append(
-                    _("%s: signal does not contain valid fit parameters") % obj.title
-                )
+                if self.__has_legacy_fit_metadata(obj):
+                    invalid.append(
+                        _(
+                            "%s: fitting curve was computed by an earlier version "
+                            "and cannot be evaluated (please recompute the fit)"
+                        )
+                        % obj.title
+                    )
+                else:
+                    invalid.append(
+                        _("%s: signal does not contain valid fit parameters")
+                        % obj.title
+                    )
                 continue
             try:
                 signal_fitting.validate_fit_params(fit_params)
@@ -797,6 +827,10 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
                 y, _params, fit_params = output
                 metadata = {"fit_params": fit_params}
             else:
+                # Fallback for third-party fitting dialogs that do not return
+                # canonical fit parameters: the metadata is keyed by translated
+                # UI labels, hence it cannot be evaluated by "Evaluate fit".
+                # All built-in dialogs return a 3-tuple.
                 y, params = output
                 params: list[fitdialog.FitParam]
                 pvalues = {}
