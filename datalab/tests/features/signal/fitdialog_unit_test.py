@@ -140,5 +140,75 @@ def test_peak_fit_dialog_supports_negative_amplitude(monkeypatch, dialog, model)
     assert amplitude_param.min < 0.0 < amplitude_param.max
 
 
+def __capture_fit_params(monkeypatch) -> list:
+    """Patch `guifit` so it accepts the initial values and records the controls."""
+    captured: list = []
+
+    def accept_initial_values(_x, _y, _fitfunc, fitparams, **_kwargs):
+        captured.extend(fitparams)
+        return [param.value for param in fitparams]
+
+    monkeypatch.setattr(fdlg, "guifit", accept_initial_values)
+    return captured
+
+
+@pytest.mark.parametrize(
+    ("dialog", "make_data", "true_values"),
+    [
+        # A decaying exponential: the B slider used to be restricted to
+        # positive values, so this optimum was unreachable.
+        # Parameter order: (a, b, y0)
+        (
+            fdlg.exponential_fit,
+            lambda x: 3.0 * np.exp(-0.8 * x) + 1.0,
+            {1: -0.8},
+        ),
+        # A descending transition: the amplitude slider used to start at 0.
+        # Parameter order: (amplitude, mu, sigma, baseline)
+        (
+            fdlg.cdf_fit,
+            lambda x: (
+                -2.0 * fitting.CDFFitComputer.evaluate(x, 1.0, 5.0, 1.0, 0.0) + 4.0
+            ),
+            {0: -2.0},
+        ),
+        # A decay-then-rise shape: the rate sliders used to hard-code the
+        # opposite (rise-then-decay) sign convention.
+        # Parameter order: (x_center, a_left, b_left, a_right, b_right, y0)
+        (
+            fdlg.piecewiseexponential_fit,
+            lambda x: np.where(x < 5.0, np.exp(-(x - 5.0)), np.exp(x - 5.0)) + 0.5,
+            {2: -1.0, 4: 1.0},
+        ),
+    ],
+)
+def test_fit_dialog_bounds_contain_the_optimum(
+    monkeypatch, dialog, make_data, true_values
+):
+    """Interactive fit sliders must be able to reach the true parameters.
+
+    Several dialogs used one-sided bounds that excluded a whole family of
+    shapes, or bounds derived from the magnitude of the initial guess, which
+    could invert into an empty interval.
+    """
+    captured = __capture_fit_params(monkeypatch)
+    x = np.linspace(0.0, 10.0, 400)
+
+    assert dialog(x, make_data(x)) is not None
+
+    for param in captured:
+        assert param.min < param.max, f"{param.name}: inverted bounds"
+        assert param.min <= param.value <= param.max, (
+            f"{param.name}: initial value outside its bounds"
+        )
+
+    for index, true_value in true_values.items():
+        param = captured[index]
+        assert param.min <= true_value <= param.max, (
+            f"{param.name}: true value {true_value} is outside the slider range "
+            f"[{param.min}, {param.max}]"
+        )
+
+
 if __name__ == "__main__":
     test_fit_dialog()

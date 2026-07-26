@@ -503,7 +503,10 @@ def exponential_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     a_p = FitParam(
         _("A coefficient"), oa, -2 * moa, 2 * moa, logscale=True, format=DEFAULT_FORMAT
     )
-    b_p = FitParam(_("B coefficient"), ob, 0.5 * mob, 1.5 * mob, format=DEFAULT_FORMAT)
+    # B must be free to change sign: a positive-only range makes every decaying
+    # exponential unreachable. Sigima uses (-10, 10) for the same parameter.
+    mob = max(10.0, 2 * mob)
+    b_p = FitParam(_("B coefficient"), ob, -mob, mob, format=DEFAULT_FORMAT)
     c_p = FitParam(_("y0 constant"), oc, -2 * moc, 2 * moc, format=DEFAULT_FORMAT)
 
     params = [a_p, b_p, c_p]
@@ -595,22 +598,27 @@ def cdf_fit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 
     # Create parameter bounds
     dy = np.max(y) - np.min(y)
-    abs_values = [abs(a_guess), abs(mu_guess), abs(sigma_guess), abs(b_guess)]
-    iamp, ix0, islope, _ioff = np.maximum(1, abs_values)
-    a = FitParam(_("Amplitude"), a_guess, 0, iamp * 2.0, format=DEFAULT_FORMAT)
+    x_min, x_max = float(np.min(x)), float(np.max(x))
+    dx = x_max - x_min
+    iamp = max(1.0, abs(a_guess))
+    # Amplitude must be free to change sign, otherwise a descending transition
+    # cannot be fitted at all.
+    a = FitParam(
+        _("Amplitude"), a_guess, -iamp * 2.0, iamp * 2.0, format=DEFAULT_FORMAT
+    )
     b = FitParam(
         _("Base line"), b_guess, np.min(y) - 0.1 * dy, np.max(y), format=DEFAULT_FORMAT
     )
+    # Bound sigma and mu to the abscissa range rather than to the magnitude of
+    # the initial guess, which excluded negative and near-zero means.
     sigma = FitParam(
         _("Std-dev") + " (σ)",
         sigma_guess,
-        islope * 0.1,
-        islope * 2,
+        dx * 0.001,
+        dx,
         format=DEFAULT_FORMAT,
     )
-    mu = FitParam(
-        _("Mean") + " (μ)", mu_guess, ix0 * 0.2, ix0 * 2, format=DEFAULT_FORMAT
-    )
+    mu = FitParam(_("Mean") + " (μ)", mu_guess, x_min, x_max, format=DEFAULT_FORMAT)
 
     params = [a, mu, sigma, b]
 
@@ -787,35 +795,41 @@ def piecewiseexponential_fit(x: np.ndarray, y: np.ndarray, parent=None, name=Non
 
     # Parameter bounds with more realistic ranges
     # New model signature: func(x, x_center, a_left, b_left, a_right, b_right, y0)
+    # Amplitudes are bounded symmetrically: a `(0, guess * 10)` range silently
+    # inverts into an empty interval whenever the guess is negative.
+    amp_bound = max(abs(a_left_guess), abs(a_right_guess), y_range) * 10.0
+    # Rates are bounded symmetrically too: forcing b_left > 0 and b_right < 0
+    # assumes a rise-then-decay shape and makes the opposite shape unreachable.
+    rate_bound = 100.0 / x_range
     x_center = FitParam(
         _("Center position"), x_center_guess, x_min, x_max, format=DEFAULT_FORMAT
     )
     a_left = FitParam(
         _("Left amplitude"),
         a_left_guess,
-        0.0,
-        a_left_guess * 10.0,
+        -amp_bound,
+        amp_bound,
         format=DEFAULT_FORMAT,
     )
     b_left = FitParam(
-        _("Left time constant") + " (bL)",
+        _("Left rate") + " (bL)",
         b_left_guess,  # Already in coefficient form
-        0.001 / x_range,  # Slow decay
-        100.0 / x_range,  # Fast decay
+        -rate_bound,
+        rate_bound,
         format=DEFAULT_FORMAT,
     )
     a_right = FitParam(
         _("Right amplitude"),
         a_right_guess,
-        0.0,
-        a_right_guess * 10.0,
+        -amp_bound,
+        amp_bound,
         format=DEFAULT_FORMAT,
     )
     b_right = FitParam(
-        _("Right time constant") + " (bR)",
+        _("Right rate") + " (bR)",
         b_right_guess,  # Already in coefficient form
-        -100.0 / x_range,  # Fast decay
-        -0.001 / x_range,  # Slow decay
+        -rate_bound,
+        rate_bound,
         format=DEFAULT_FORMAT,
     )
     y0 = FitParam(

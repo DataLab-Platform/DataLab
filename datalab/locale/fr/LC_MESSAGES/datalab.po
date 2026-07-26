@@ -3721,11 +3721,11 @@ msgstr "Ligne de base droite"
 msgid "Center position"
 msgstr "Position du centre"
 
-msgid "Left time constant"
-msgstr "Constante de temps gauche"
+msgid "Left rate"
+msgstr "Taux gauche"
 
-msgid "Right time constant"
-msgstr "Constante de temps droite"
+msgid "Right rate"
+msgstr "Taux droit"
 
 msgid "Collapse all"
 msgstr "Replier tout"
