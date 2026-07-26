@@ -397,7 +397,7 @@ This can be done automatically or through an interactive curve fitting dialog.
     * - Multi-Lorentzian
       - :math:`y = y_{0} + \sum_{i=1}^{N} \dfrac{A_{i}}{1 + \left(\dfrac{x - x_{0,i}}{\sigma_{i}}\right)^2}`
     * - Planck
-      - :math:`y = y_{0} + A \cdot \left(\dfrac{x}{x_{0}}\right)^{-5} \cdot \left(\exp\left(\dfrac{5 x_{0}}{\sigma \cdot x}\right)-1\right)^{-1}` where :math:`x_{0}` is the peak wavelength and :math:`\sigma` a width factor
+      - :math:`y = y_{0} + A \cdot \left(\dfrac{x}{x_{0}}\right)^{-5} \cdot \left(\exp\left(\dfrac{5 x_{0}}{\sigma \cdot x}\right)-1\right)^{-1}` where :math:`x_{0}` and :math:`\sigma` are scale and width factors (see the note below)
     * - Two half Gaussians
       - | :math:`y = y_{L} + A_{L} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{0}}{\sigma_{L}}\right)^2\right)` if :math:`x < x_{0}`
         | :math:`y = y_{R} + A_{R} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{0}}{\sigma_{R}}\right)^2\right)` otherwise
@@ -410,9 +410,21 @@ This can be done automatically or through an interactive curve fitting dialog.
       - :math:`y = y_{0} + A \sin\left(2 \pi f \cdot x + \phi\right)`
     * - Cumulative Distribution Function (CDF)
       - :math:`y = y_{0} + A \erf\left(\dfrac{x - x_{0}}{\sqrt{2} \sigma}\right)`
+    * - Sigmoid
+      - :math:`y = y_{0} + \dfrac{A}{1 + \exp\left(-k \left(x - x_{0}\right)\right)}`
 
 For Gaussian, Lorentzian and Voigt models, :math:`A` is the signed peak height
 above the baseline :math:`y_0`, expressed in the signal's Y unit.
+
+.. note::
+
+    The Planck model is over-parameterized: it is invariant under
+    :math:`x_{0} \rightarrow k x_{0}`, :math:`\sigma \rightarrow k \sigma`,
+    :math:`A \rightarrow A/k^5`. Only the ratio :math:`x_{0}/\sigma` and the
+    product :math:`A \cdot x_{0}^5` are determined by the data, so the
+    individual fitted values must not be interpreted on their own. In
+    particular the emission peak is located at approximately
+    :math:`1.007 \, x_{0}/\sigma`, not at :math:`x_{0}`.
 
 Multi-peak fit parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~

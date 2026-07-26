@@ -135,7 +135,7 @@ Create a new signal from various models:
     * - .. image:: ../../../datalab/data/icons/create/polynomial.svg
            :width: 30px
       - Polynomial
-      - :math:`y = y_{0}+A_{0}+A_{1} \cdot x+A_{2} \cdot x^2+\ldots+A_{n} \cdot x^n`
+      - :math:`y = a_{0}+a_{1} \cdot x+a_{2} \cdot x^2+\ldots+a_{5} \cdot x^5`
     * -
       - Custom
       - Manual input of X and Y values
