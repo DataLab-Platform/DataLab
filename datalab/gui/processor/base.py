@@ -1710,7 +1710,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if dst_gid is not None:
             self.panel.objview.set_current_item_id(dst_gid)
 
-    def compute_2_to_1(
+    def compute_2_to_1(  # pylint: disable=too-many-return-statements
         self,
         obj2: SignalObj | ImageObj | list[SignalObj | ImageObj] | None,
         obj2_name: str,
