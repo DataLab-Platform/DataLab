@@ -38,6 +38,7 @@ def iterate_noisy_signals(
     param = sigima.objects.GaussParam.create(amplitude=a)
     for i in range(count):
         param.sigma = 1.0 + (i * 0.1) ** 2
+        # pylint: disable-next=no-member  # astroid cannot resolve the `create` TypeVar
         theoretical_fwhm = param.get_expected_features().fwhm
         sig = test_data.create_noisy_signal(
             noiseparam, param, f"Signal|fwhm_th={theoretical_fwhm:.2f}"

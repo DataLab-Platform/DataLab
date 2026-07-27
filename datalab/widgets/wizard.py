@@ -157,7 +157,7 @@ class Wizard(QW.QDialog):
             if callable(page_cleanup):
                 page_cleanup()
 
-    def closeEvent(self, event: QG.QCloseEvent) -> None:
+    def closeEvent(self, event: QG.QCloseEvent) -> None:  # pylint: disable=invalid-name
         """Release page resources when the dialog is closed"""
         self.cleanup()
         super().closeEvent(event)

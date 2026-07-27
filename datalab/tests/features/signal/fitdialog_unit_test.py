@@ -81,21 +81,17 @@ def test_peak_fit_metadata(monkeypatch):
 
 
 NON_PEAK_FIT_CASES = (
-    ("linear", "noisy", lambda x, y: fdlg.linear_fit(x, y)),
+    ("linear", "noisy", fdlg.linear_fit),
     ("polynomial", "noisy", lambda x, y: fdlg.polynomial_fit(x, y, 4)),
-    ("exponential", "noisy", lambda x, y: fdlg.exponential_fit(x, y)),
-    ("sinusoidal", "noisy", lambda x, y: fdlg.sinusoidal_fit(x, y)),
-    ("cdf", "noisy", lambda x, y: fdlg.cdf_fit(x, y)),
-    ("planckian", "gaussian_fit.txt", lambda x, y: fdlg.planckian_fit(x, y)),
-    (
-        "twohalfgaussian",
-        "gaussian_fit.txt",
-        lambda x, y: fdlg.twohalfgaussian_fit(x, y),
-    ),
+    ("exponential", "noisy", fdlg.exponential_fit),
+    ("sinusoidal", "noisy", fdlg.sinusoidal_fit),
+    ("cdf", "noisy", fdlg.cdf_fit),
+    ("planckian", "gaussian_fit.txt", fdlg.planckian_fit),
+    ("twohalfgaussian", "gaussian_fit.txt", fdlg.twohalfgaussian_fit),
     (
         "doubleexponential",
         "piecewiseexponential_fit.txt",
-        lambda x, y: fdlg.piecewiseexponential_fit(x, y),
+        fdlg.piecewiseexponential_fit,
     ),
 )
 

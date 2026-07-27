@@ -61,6 +61,7 @@ def test_creation_parameters_use_versioned_envelope() -> None:
     assert payload["creation_params_version"] == CREATION_PARAMS_VERSION
     restored = extract_creation_parameters(obj)
     assert isinstance(restored, GaussParam)
+    # pylint: disable-next=no-member  # astroid cannot resolve the `create` TypeVar
     assert restored.amplitude == pytest.approx(param.amplitude)
 
 
