@@ -8,7 +8,7 @@ EuroSciPy 2026
 Conference Overview
 -------------------
 
-In July 2026, DataLab will be presented at `EuroSciPy 2026 <https://euroscipy.org/>`_, the 18th European Conference on Python in Science, held at AGH University of Kraków, Poland. EuroSciPy is the leading European gathering dedicated to the use and development of the Python language in scientific research, bringing together users and developers of scientific tools from both academia and industry. The 2026 edition is co-located with EuroPython.
+In July 2026, DataLab was presented at `EuroSciPy 2026 <https://euroscipy.org/>`_, the 18th European Conference on Python in Science, held at AGH University of Kraków, Poland. EuroSciPy is the leading European gathering dedicated to the use and development of the Python language in scientific research, bringing together users and developers of scientific tools from both academia and industry. The 2026 edition was co-located with EuroPython.
 
 **Event Details:**
 
@@ -64,16 +64,19 @@ This presentation is significant for several reasons:
 Presentation Highlights
 -----------------------
 
-The talk will include:
+The talk included:
 
 - a walkthrough of the reconstruction strategy,
 - a discussion of the image processing challenges involved,
 - a live or recorded demonstration of the interactive prototyping environment with DataLab,
 - reflections on software architecture and reproducibility in scientific imaging workflows.
 
-.. note::
+Slides
+------
 
-   **Upcoming Event**: This presentation is scheduled for **July 21, 2026**. Presentation materials and additional information may be added here after the event.
+The presentation slides are available for download:
+
+- `PDF version <https://github.com/DataLab-Platform/DataLab/wiki/DataLab-Talk_EuroSciPy2026-static.pdf>`_
 
 Resources
 ---------
