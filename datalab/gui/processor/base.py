@@ -1074,7 +1074,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if refresh_plot:
             self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
 
-    def recompute_processing(
+    def recompute_processing(  # pylint: disable=too-many-return-statements
         self,
         obj: SignalObj | ImageObj,
         param: gds.DataSet | None = None,
