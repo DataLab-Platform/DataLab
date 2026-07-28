@@ -31,7 +31,7 @@
       ```python
       with proxy.context_no_refresh():
           # Do something without refreshing the plot view
-          proxy.compute_fft() # (...)
+          proxy.compute_fft()  # (...)
       ```
 
   * Improved curve readability:

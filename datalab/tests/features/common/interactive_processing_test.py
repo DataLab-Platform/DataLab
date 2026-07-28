@@ -48,7 +48,12 @@ from datalab.gui.newobject import (
     LEGACY_CREATION_PARAMETERS_OPTION,
     extract_creation_parameters,
 )
-from datalab.gui.processor.base import PROCESSING_PARAMETERS_OPTION
+from datalab.gui.processor.base import (
+    PROCESSING_PARAMETERS_OPTION,
+    extract_analysis_parameters,
+    extract_processing_parameters,
+)
+from datalab.gui.processor.catcher import CompOut
 from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_test_app_context
 
@@ -181,7 +186,7 @@ def test_recompute():
             # Recompute with different input signal data
             constant = 1.23098765
             signal.y += constant
-            panel.recompute_processing()
+            panel.recompute_selected()
 
             assert np.allclose(filtered_sig.y, original_data + constant)
 
@@ -190,6 +195,112 @@ def test_recompute():
             option_dict = filtered_sig.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
             assert option_dict["source_uuid"] == signal_uuid
             assert option_dict["func_name"] == "gaussian_filter"
+
+
+def test_recompute_selected_skips_analysis_when_1_to_1_cancelled():
+    """Test that analysis recompute is skipped when 1-to-1 is cancelled."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.imagepanel
+            processor = panel.processor
+
+            # Create a source image and a 1-to-1 processed result
+            panel.new_object()
+            processor.run_feature(
+                "moving_average", param=MovingAverageParam.create(n=5)
+            )
+            processed_image = panel.objview.get_current_object()
+
+            # Add a 1-to-0 analysis result to the same object
+            processor.run_feature("centroid")
+
+            # Ensure this object is eligible for both processing and analysis passes
+            proc_params = extract_processing_parameters(processed_image)
+            analysis_params = extract_analysis_parameters(processed_image)
+            assert proc_params is not None and proc_params.pattern == "1-to-1"
+            assert analysis_params is not None and analysis_params.pattern == "1-to-0"
+
+            panel.objview.select_objects([processed_image])
+
+            # Simulate cancellation at the actual low-level contract boundary.
+            original_recompute_1_to_1 = processor.recompute_1_to_1
+            original_recompute_analysis = processor.recompute_analysis
+            processing_called = []
+            analysis_called = []
+
+            def cancel_recompute_1_to_1(*args, **kwargs):
+                processing_called.append((args, kwargs))
+                return CompOut(cancelled=True)
+
+            def record_recompute_analysis(*args, **kwargs):
+                analysis_called.append((args, kwargs))
+
+            processor.recompute_1_to_1 = cancel_recompute_1_to_1
+            processor.recompute_analysis = record_recompute_analysis
+
+            try:
+                panel.recompute_selected()
+            finally:
+                processor.recompute_1_to_1 = original_recompute_1_to_1
+                processor.recompute_analysis = original_recompute_analysis
+
+            assert len(processing_called) == 1
+            assert not analysis_called, (
+                "1-to-0 analysis recompute should not run when 1-to-1 processing "
+                "is cancelled"
+            )
+
+
+def test_recompute_selected_continues_after_1_to_1_error():
+    """Test that an ordinary 1-to-1 error is not treated as cancellation."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.imagepanel
+            processor = panel.processor
+            processed_images = []
+            for _index in range(2):
+                panel.new_object()
+                processor.run_feature(
+                    "moving_average", param=MovingAverageParam.create(n=5)
+                )
+                processed_image = panel.objview.get_current_object()
+                processor.run_feature("centroid")
+                processed_images.append(processed_image)
+
+            panel.objview.select_objects(processed_images)
+            original_recompute_1_to_1 = processor.recompute_1_to_1
+            original_recompute_analysis = processor.recompute_analysis
+            processing_count = [0]
+            analysis_objects = []
+
+            def recompute_1_to_1_with_first_error(_func_name, source_obj, _param):
+                processing_count[0] += 1
+                if processing_count[0] == 1:
+                    return CompOut(error_msg="Expected computation error")
+                return CompOut(result=source_obj.copy())
+
+            def record_recompute_analysis(obj, *_args, **_kwargs):
+                analysis_objects.append(obj)
+
+            processor.recompute_1_to_1 = recompute_1_to_1_with_first_error
+            processor.recompute_analysis = record_recompute_analysis
+
+            try:
+                with (
+                    execenv.context(unattended=False),
+                    patch(
+                        "datalab.gui.panel.base.QW.QMessageBox.warning",
+                        return_value=QW.QMessageBox.Yes,
+                    ) as warning,
+                ):
+                    panel.recompute_selected()
+            finally:
+                processor.recompute_1_to_1 = original_recompute_1_to_1
+                processor.recompute_analysis = original_recompute_analysis
+
+            assert processing_count[0] == 2
+            warning.assert_called_once()
+            assert analysis_objects == [processed_images[1]]
 
 
 def test_apply_creation_parameters_signal():
@@ -1042,7 +1153,7 @@ def test_cross_panel_image_to_signal():
             original_signal_data = signal.y.copy()
 
             # Recompute the radial profile
-            signal_panel.recompute_processing()
+            signal_panel.recompute_selected()
 
             # The signal should have changed (doubled intensity)
             assert not np.allclose(signal.y, original_signal_data)

@@ -95,8 +95,8 @@ def test_delete_results_signal():
 def test_delete_results_clears_analysis_parameters():
     """Test that deleting results also clears analysis parameters.
 
-    This prevents auto_recompute_analysis from attempting to recompute
-    deleted analyses when ROI changes.
+    This prevents recompute_analysis from attempting to recompute
+    deleted analyses when the user triggers a manual recompute.
     """
     with datalab_test_app_context(console=False) as win:
         execenv.print("Test delete_results clears analysis parameters:")
@@ -136,11 +136,11 @@ def test_delete_results_clears_analysis_parameters():
         )
         execenv.print("  ✓ Analysis parameters cleared")
 
-        # Now add a ROI and verify no auto-recompute happens (no new results)
-        execenv.print("  Adding ROI to verify no auto-recompute...")
+        # Now add a ROI and verify no recompute happens (no new results)
+        execenv.print("  Adding ROI to verify no recompute...")
         roi = create_image_roi("rectangle", [25, 25, 100, 100])
         img_after.roi = roi
-        panel.processor.auto_recompute_analysis(img_after)
+        panel.processor.recompute_analysis(img_after)
 
         # Verify that no new results were created
         adapter_after_roi = GeometryAdapter.from_obj(img_after, "centroid")
@@ -148,9 +148,7 @@ def test_delete_results_clears_analysis_parameters():
             "No centroid result should be created after ROI change "
             "because analysis parameters were cleared"
         )
-        execenv.print(
-            "  ✓ No auto-recompute after ROI change (analysis params cleared)"
-        )
+        execenv.print("  ✓ No recompute after ROI change (analysis params cleared)")
         execenv.print("\n✓ All tests passed!")
 
 

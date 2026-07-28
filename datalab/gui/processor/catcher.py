@@ -29,11 +29,13 @@ class CompOut:
         result: computation result
         error_msg: error message
         warning_msg: warning message
+        cancelled: True if computation was cancelled by the user
     """
 
     result: SignalObj | ImageObj | GeometryResult | TableResult | None = None
     error_msg: str | None = None
     warning_msg: str | None = None
+    cancelled: bool = False
 
 
 def wng_err_func(func: Callable, args: tuple[Any]) -> CompOut:
