@@ -11,6 +11,11 @@ executed before running any tests.
 import os
 import os.path as osp
 
+# Prevent DataLab import-time synchronization from exporting the user's typed
+# configuration into isolated option tests.
+os.environ.pop("DATALAB_OPTIONS_JSON", None)
+os.environ.pop("DATALAB_XMLRPCPORT", None)
+
 import guidata
 import h5py
 import numpy

@@ -300,11 +300,6 @@ def get_mod_source_dir() -> str | None:
     return None
 
 
-#: Active typed DataLab configuration shared with reused SigimaX components.
-Conf: DataLabOptions = DataLabOptions()  # pylint: disable=invalid-name
-set_conf(Conf)
-
-
 def normalize_plugin_paths(paths: list[str] | tuple[str, ...] | None) -> list[str]:
     """Normalize a list of plugin directories and drop duplicates/empties."""
     normalized: list[str] = []
@@ -862,6 +857,11 @@ class DataLabShapeParam(ShapeParam):
         for item in self._items:
             if item._name in ("label", "readonly", "private"):
                 item.set_prop("display", hide=True)
+
+
+#: Active typed DataLab configuration shared with reused SigimaX components.
+Conf: DataLabOptions = DataLabOptions()  # pylint: disable=invalid-name
+set_conf(Conf)
 
 
 def initialize_default_plotpy_instances():
