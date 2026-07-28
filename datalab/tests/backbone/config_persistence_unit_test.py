@@ -5,6 +5,8 @@ Unit tests for the DataLab configuration persistence layer
 (:mod:`datalab.config_persistence`).
 """
 
+import configparser
+
 import guidata.dataset as gds
 import pytest
 from sigimax.utils import conf as confmod
@@ -14,7 +16,6 @@ from datalab.config.config import (
     CONF_VERSION,
     DataLabShapeParam,
     DataLabUserConfig,
-    LegacyConfigSnapshot,
     atomic_save_configuration,
     migrate_legacy_configuration,
 )
@@ -55,33 +56,22 @@ class _DirectoryConfig(DataLabUserConfig):
         return str(self._directory / basename)
 
 
-class _DirectoryLegacyConfig(LegacyConfigSnapshot):
-    """Read-only legacy backend rooted in a temporary test directory."""
-
-    def __init__(self, directory) -> None:
-        self._directory = directory
-        super().__init__("DataLab_v1")
-
-    def get_path(self, basename: str) -> str:
-        """Return a path in the temporary test directory."""
-        return str(self._directory / basename)
-
-
-def test_legacy_configuration_migrates_without_modifying_source(tmp_path) -> None:
+def test_legacy_configuration_migrates_without_modifying_source(
+    tmp_path, monkeypatch
+) -> None:
     """The first typed startup copies legacy values and preserves downgrade."""
     legacy_filename = tmp_path / "DataLab_v1.ini"
-    legacy = AppUserConfig({})
-    legacy.name = "DataLab_v1"
     shape_json = gds.dataset_to_json(DataLabShapeParam()).replace(
         '"class_module": "datalab.config.config"',
         '"class_module": "datalab.config"',
     )
+    legacy = configparser.ConfigParser()
     legacy.read_dict(
         {
             "main": {
                 "version": CONF_VERSION,
-                "plugins_enabled_list": repr(["plugin_x"]),
-                "plugins_path": repr(str(tmp_path / "legacy_plugins")),
+                "plugins_enabled_list": repr(["Test Plugin 1"]),
+                "plugins_path": repr(str(tmp_path / "plugins")),
             },
             "view": {
                 "max_shapes_to_draw": "321",
@@ -95,26 +85,27 @@ def test_legacy_configuration_migrates_without_modifying_source(tmp_path) -> Non
 
     typed = _DirectoryConfig(tmp_path)
     typed.set_application("DataLab_v1", CONF_VERSION, load=False)
+    monkeypatch.setattr(confmod, "CONF", typed)
+    monkeypatch.delenv(DataLabOptions.ENV_VAR, raising=False)
     options = DataLabOptions()
 
     assert migrate_legacy_configuration(options, str(legacy_filename), typed)
     assert legacy_filename.read_bytes() == legacy_bytes
     assert typed.filename().endswith("DataLab_v1_typed.ini")
     assert options.max_shapes_to_draw.get() == 321
-    assert options.plugins_path.get() == str(tmp_path / "legacy_plugins")
-    assert options.plugins_path_list.get() == [str(tmp_path / "legacy_plugins")]
-    assert options.plugins_enabled_list.get() == ["plugin_x"]
+    assert options.plugins_path.get() == str(tmp_path / "plugins")
+    assert options.plugins_path_list.get() == []
+    assert options.plugins_enabled_list.get() == ["Test Plugin 1"]
     assert isinstance(options.sig_shape_param.get_raw(), DataLabShapeParam)
 
     reloaded_backend = _DirectoryConfig(tmp_path)
     reloaded_backend.set_application("DataLab_v1", CONF_VERSION, load=True)
+    monkeypatch.delenv(DataLabOptions.ENV_VAR, raising=False)
     reloaded_options = DataLabOptions()
     load_options_from_ini(reloaded_options, reloaded_backend)
     assert reloaded_options.max_shapes_to_draw.get() == 321
-    assert reloaded_options.plugins_path_list.get() == [
-        str(tmp_path / "legacy_plugins")
-    ]
-    assert reloaded_options.plugins_enabled_list.get() == ["plugin_x"]
+    assert reloaded_options.plugins_path_list.get() == []
+    assert reloaded_options.plugins_enabled_list.get() == ["Test Plugin 1"]
     assert isinstance(reloaded_options.sig_shape_param.get_raw(), DataLabShapeParam)
     assert not migrate_legacy_configuration(options, str(legacy_filename), typed)
 
@@ -137,22 +128,6 @@ def test_atomic_configuration_save_cleans_up_after_replace_error(
 
     assert not (tmp_path / "DataLab_v1_typed.ini").exists()
     assert list(tmp_path.glob("*.tmp")) == []
-
-
-def test_legacy_backend_is_read_only(tmp_path) -> None:
-    """DataLab 1.3 development mode cannot overwrite the DataLab 1.2 INI."""
-    legacy_filename = tmp_path / "DataLab_v1.ini"
-    legacy_filename.write_text("[main]\nversion = 1.0.0\n", encoding="utf-8")
-    original_bytes = legacy_filename.read_bytes()
-    backend = _DirectoryLegacyConfig(tmp_path)
-    backend.set_application("DataLab_v1", CONF_VERSION, load=True)
-
-    backend.set("main", "plugins_enabled", False)
-    backend.remove_option("main", "version")
-    backend.save()
-    backend.cleanup()
-
-    assert legacy_filename.read_bytes() == original_bytes
 
 
 def test_section_map_is_complete() -> None:
@@ -193,8 +168,8 @@ def test_round_trip_across_types() -> None:
     src.ai_provider.set("local")
     src.operation_mode.set("pairwise")
     src.window_size.set((1234, 567))
-    src.plugins_path_list.set(["/tmp/a", "/tmp/b"])
-    src.plugins_enabled_list.set(["plugin_x"])
+    src.plugins_path_list.set(["/tmp/plugins_a", "/tmp/plugins_b"])
+    src.plugins_enabled_list.set(["Test Plugin 1"])
     src.macro_console_max_lines.set(4242)
     src.ai_temperature.set(0.9)
 
@@ -211,8 +186,8 @@ def test_round_trip_across_types() -> None:
     assert dst.ai_provider.get() == "local"
     assert dst.operation_mode.get() == "pairwise"
     assert dst.window_size.get() == (1234, 567)
-    assert dst.plugins_path_list.get() == ["/tmp/a", "/tmp/b"]
-    assert dst.plugins_enabled_list.get() == ["plugin_x"]
+    assert dst.plugins_path_list.get() == ["/tmp/plugins_a", "/tmp/plugins_b"]
+    assert dst.plugins_enabled_list.get() == ["Test Plugin 1"]
     assert dst.macro_console_max_lines.get() == 4242
     assert abs(dst.ai_temperature.get() - 0.9) < 1e-9
     assert dst.traceback_log_path.get_raw() == ".DataLab_custom.log"

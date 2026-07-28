@@ -33,6 +33,8 @@ Design notes
 
 from __future__ import annotations
 
+import json
+import os
 from typing import Any
 
 from guidata import configtools
@@ -62,6 +64,7 @@ class DataLabOptions(SigimaXOptions):
     CONF_VERSION = "1.0.0"
 
     def __init__(self) -> None:
+        external_values = os.environ.get(self.ENV_VAR)
         # INI write-through is disabled until the initial load has completed; it
         # is enabled by :mod:`datalab.config` after ``load_options_from_ini``.
         self._ini_persist_enabled = False
@@ -519,13 +522,14 @@ class DataLabOptions(SigimaXOptions):
         # for config-path, working-dir and DataSet fields.
         self._defaults = self.to_dict()
 
-        # Refresh the environment variable with the final DataLab values. The
-        # base ``SigimaXOptions.__init__`` synchronizes the env var with the
-        # inherited (SigimaX) defaults; without this refresh, the first ``get``
-        # would reload those stale values via ``ensure_loaded_from_env`` and
-        # overwrite the DataLab-specific field replacements (e.g.
-        # ``traceback_log_path``).
-        self.sync_env()
+        if external_values and external_values != "{}":
+            try:
+                self.from_dict(json.loads(external_values))
+            except (json.JSONDecodeError, TypeError) as exc:
+                print(f"[datalab] Warning: invalid {self.ENV_VAR}: {exc}")
+                self.sync_env()
+        else:
+            self.sync_env()
 
     # -- Raw-aware (de)serialization for env-var sync and defaults --
 

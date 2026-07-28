@@ -46,7 +46,6 @@ CONF_VERSION = "1.0.0"
 APP_NAME = "DataLab"
 MOD_NAME = "datalab"
 TYPED_CONFIG_SUFFIX = "_typed"
-CONFIG_BACKEND_ENV_VAR = "DATALAB_CONFIG_BACKEND"
 
 
 def get_config_app_name() -> str:
@@ -98,8 +97,8 @@ class DataLabUserConfig(AppUserConfig):
         return self.get_path(f"{self.name}{TYPED_CONFIG_SUFFIX}.ini")
 
 
-class LegacyConfigSnapshot(AppUserConfig):
-    """Read-only-on-disk snapshot of a legacy DataLab configuration."""
+class _LegacyConfigReader(AppUserConfig):
+    """In-memory reader preventing writes to a legacy DataLab INI file."""
 
     def __init__(self, name: str) -> None:
         super().__init__({})
@@ -111,45 +110,24 @@ class LegacyConfigSnapshot(AppUserConfig):
         super().set(section, option, value, verbose=verbose, save=False)
 
     def save(self) -> None:
-        """Keep the legacy configuration read-only from DataLab 1.3."""
+        """Do not persist the in-memory legacy snapshot."""
 
     def cleanup(self) -> None:
-        """Never delete the legacy configuration from DataLab 1.3."""
+        """Do not delete the source legacy configuration."""
 
     def remove_option(self, section, option) -> bool:
-        """Remove an option from the in-memory snapshot without saving it."""
+        """Remove an option from memory without saving."""
         return configparser.ConfigParser.remove_option(self, section, option)
 
     def remove_section(self, section) -> bool:
-        """Remove a section from the in-memory snapshot without saving it."""
+        """Remove a section from memory without saving."""
         return configparser.ConfigParser.remove_section(self, section)
-
-
-def get_config_backend_mode() -> str:
-    """Return the selected configuration backend mode for development/tests."""
-    mode = os.environ.get(CONFIG_BACKEND_ENV_VAR, "typed").strip().lower()
-    if mode not in ("legacy", "typed"):
-        raise ValueError(
-            f"Invalid {CONFIG_BACKEND_ENV_VAR} value {mode!r}: "
-            "expected 'legacy' or 'typed'"
-        )
-    return mode
-
-
-def create_config_backend(mode: str | None = None) -> AppUserConfig:
-    """Create the selected DataLab configuration backend without loading it."""
-    selected_mode = get_config_backend_mode() if mode is None else mode
-    if selected_mode == "typed":
-        return DataLabUserConfig({})
-    if selected_mode == "legacy":
-        return LegacyConfigSnapshot(get_config_app_name())
-    raise ValueError(f"Invalid configuration backend mode {selected_mode!r}")
 
 
 # Install the DataLab backend before consumers import ``CONF`` directly from
 # ``sigimax.utils.conf``. No file is read or written until ``initialize()``.
-if not isinstance(conf.CONF, (DataLabUserConfig, LegacyConfigSnapshot)):
-    conf.CONF = create_config_backend()
+if not isinstance(conf.CONF, DataLabUserConfig):
+    conf.CONF = DataLabUserConfig({})
 
 
 def atomic_save_configuration(config: AppUserConfig) -> None:
@@ -193,7 +171,7 @@ def migrate_legacy_configuration(
     if osp.isfile(typed_conf.filename()) or not osp.isfile(legacy_filename):
         return False
 
-    legacy_conf = LegacyConfigSnapshot(get_config_app_name())
+    legacy_conf = _LegacyConfigReader(get_config_app_name())
     legacy_conf.read(legacy_filename, encoding="utf-8")
     load_options_from_ini(options, legacy_conf)
     migrate_legacy_plugin_paths(options, sync_env=False)
@@ -360,14 +338,11 @@ def migrate_legacy_plugin_paths(
 def get_user_plugin_paths() -> list[str]:
     """Return user-configured extra plugin directories.
 
-    Reads from ``plugins_path_list`` (list of directories).  For backward
-    compatibility, the deprecated ``plugins_path`` single-directory string is
-    also merged into ``plugins_path_list`` if this is empty.
+    The deprecated single ``plugins_path`` value is converted once when the
+    legacy configuration is migrated. Runtime reads only use the typed list so
+    an explicitly empty list remains empty.
     """
-    fixed_default = osp.normpath(get_config_path("plugins"))
-
-    normalized = migrate_legacy_plugin_paths(Conf)
-    return [path for path in normalized if path != fixed_default]
+    return normalize_plugin_paths(Conf.plugins_path_list.get([]) or [])
 
 
 def set_user_plugin_paths(paths: list[str] | tuple[str, ...]) -> None:
@@ -408,22 +383,16 @@ def get_config_filename() -> str:
 def initialize():
     """Initialize application configuration"""
     config_app_name = get_config_app_name()
-    backend_mode = get_config_backend_mode()
-    typed_mode = backend_mode == "typed"
-    typed_exists = typed_mode and osp.isfile(get_typed_config_filename())
+    typed_exists = osp.isfile(get_typed_config_filename())
     Conf.set_ini_persist_enabled(False)
     try:
-        backend_matches = (
-            isinstance(conf.CONF, DataLabUserConfig)
-            if typed_mode
-            else isinstance(conf.CONF, LegacyConfigSnapshot)
+        if not isinstance(conf.CONF, DataLabUserConfig):
+            conf.CONF = DataLabUserConfig({})
+        Configuration.initialize(
+            config_app_name, CONF_VERSION, load=typed_exists and not DEBUG
         )
-        if not backend_matches:
-            conf.CONF = create_config_backend(backend_mode)
-        load_active_config = (typed_exists if typed_mode else True) and not DEBUG
-        Configuration.initialize(config_app_name, CONF_VERSION, load=load_active_config)
         if not DEBUG:
-            if not typed_mode or typed_exists:
+            if typed_exists:
                 load_options_from_ini(Conf, conf.CONF)
             elif not migrate_legacy_configuration(
                 Conf, get_legacy_config_filename(), conf.CONF

@@ -14,6 +14,7 @@ import importlib
 import importlib.util
 import os
 import os.path as osp
+from contextlib import contextmanager
 from unittest.mock import patch
 
 from qtpy import QtWidgets as QW
@@ -31,8 +32,16 @@ from datalab.tests.features.plugins.plugin_test_dataset import (
 )
 
 
+@contextmanager
+def enabled_plugins_context():
+    """Temporarily enable all plugins for plugin-system tests."""
+    with Conf.plugins_enabled.context(True), Conf.plugins_enabled_list.context(None):
+        yield
+
+
 # This end-to-end regression test intentionally keeps the whole plugin
 # lifecycle in one linear scenario: discovery, menu wiring, reload and cleanup.
+@enabled_plugins_context()
 def test_plugin_system():  # pylint: disable=too-many-statements
     """Test the entire plugin lifecycle: discovery, reload, cleanup"""
     # Ensure plugins_enabled_list is None (all plugins enabled)
@@ -370,6 +379,7 @@ def test_plugin_config_disabled():
                     )
 
 
+@enabled_plugins_context()
 def test_plugin_error_handling():
     """Test that various malformed plugins are handled gracefully.
 
@@ -508,6 +518,7 @@ def test_plugin_duplicate_name():
                 )
 
 
+@enabled_plugins_context()
 def test_plugin_nested_menus():
     """Test plugin with nested submenus (3 levels deep)"""
     # Ensure plugins_enabled_list is None (all plugins enabled)
@@ -606,6 +617,7 @@ def test_plugin_nested_menus():
             assert getattr(win, "_test_level_3", None) is True
 
 
+@enabled_plugins_context()
 def test_plugin_with_dialogs():
     """Test plugin using dialog methods (show_warning, show_info, etc.)"""
     # Ensure plugins_enabled_list is None (all plugins enabled)
