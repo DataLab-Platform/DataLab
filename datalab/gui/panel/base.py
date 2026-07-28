@@ -1473,6 +1473,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     if deleted_refs:
                         with writer.group("deleted_source_refs"):
                             writer.write_str(json.dumps(deleted_refs))
+                    # Persist the group's computed (processing-generated) title
+                    # the same way, so a manually renamed group can still be
+                    # reset to it after reloading the workspace.
+                    computed_title = self.objmodel.get_computed_title(group)
+                    if computed_title:
+                        with writer.group("computed_title"):
+                            writer.write_str(computed_title)
                     for obj in group.get_objects():
                         self.serialize_object_to_hdf5(obj, writer)
 
@@ -1498,6 +1505,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     refs_json = reader.read(
                         "deleted_source_refs", func=reader.read_str, default=""
                     )
+                    # Read the group's computed title, if present (absent in
+                    # files written by older versions -> default empty string).
+                    computed_title = reader.read(
+                        "computed_title", func=reader.read_str, default=""
+                    )
                     for obj_name in reader.h5.get(f"{self.H5_PREFIX}/{name}", []):
                         obj = self.deserialize_object_from_hdf5(
                             reader, obj_name, reset_all
@@ -1510,6 +1522,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         self.objmodel.set_group_deleted_refs(
                             group, json.loads(refs_json)
                         )
+                    if computed_title:
+                        self.objmodel.set_computed_title(group, computed_title)
                     self.selection_changed()
 
     def __len__(self) -> int:
@@ -2105,19 +2119,23 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.acthandler.selected_objects_changed(sel_groups, sel_objects)
 
     def reset_selected_title_to_computed(self) -> None:
-        """Restore the selected object's processing-generated title."""
+        """Restore the selected object's or group's processing-generated title."""
         objects = self.objview.get_sel_objects(include_groups=False)
-        if len(objects) != 1 or self.objview.get_sel_groups():
-            raise ValueError("Select one object to reset its title")
-        obj = objects[0]
-        if not self.objmodel.reset_title_to_computed(obj):
+        groups = self.objview.get_sel_groups()
+        if len(objects) + len(groups) != 1:
+            raise ValueError("Select one object or group to reset its title")
+        obj_or_group = objects[0] if objects else groups[0]
+        if not self.objmodel.reset_title_to_computed(obj_or_group):
             return
-        obj_uuid = get_uuid(obj)
-        self.objview.update_item(obj_uuid)
+        item_uuid = get_uuid(obj_or_group)
+        self.objview.update_item(item_uuid)
         self.objview.update_tree()
         self.objview._refresh_sibling_panels()  # pylint: disable=protected-access
-        self.refresh_plot(obj_uuid, update_items=True, force=True)
-        self.objprop.update_properties_from(obj)
+        if objects:
+            # Refresh the plot so the object's curve/image legend reflects its
+            # restored title (groups are not plotted, so this only applies here):
+            self.refresh_plot(item_uuid, update_items=True, force=True)
+            self.objprop.update_properties_from(obj_or_group)
         self.selection_changed(update_items=False)
 
     @abc.abstractmethod

@@ -149,6 +149,43 @@ def test_reset_to_computed_title_action():
         assert not reset_action.isEnabled()
 
 
+def test_reset_to_computed_title_action_for_group():
+    """A group's auto-generated title (n-to-1 processing) may be reset too."""
+    with datalab_test_app_context() as win:
+        panel = win.signalpanel
+        panel.add_object(create_signal_from_param(CosineParam.create(size=100)))
+        panel.add_object(create_signal_from_param(CosineParam.create(size=100)))
+        src_group = panel.objmodel.get_groups()[0]
+
+        panel.objview.select_groups([src_group])
+        panel.processor.run_feature("average")
+
+        new_group = panel.objmodel.get_groups()[-1]
+        computed_title = panel.objmodel.get_computed_title(new_group)
+        assert computed_title is not None
+        assert new_group.title == computed_title
+
+        reset_action = next(
+            action
+            for action in panel.get_category_actions(
+                actionhandler.ActionCategory.CONTEXT_MENU
+            )
+            if action is not None and action.text() == "Reset to computed title"
+        )
+
+        panel.objview.select_groups([new_group])
+        assert not reset_action.isEnabled()
+
+        panel.rename_selected_object_or_group("My results")
+        assert new_group.title == "My results"
+        assert panel.objmodel.get_computed_title(new_group) == computed_title
+        assert reset_action.isEnabled()
+
+        reset_action.trigger()
+        assert new_group.title == computed_title
+        assert not reset_action.isEnabled()
+
+
 if __name__ == "__main__":
     test_result_title_mode_app()
     test_result_title_mode_updates_plot_legend()

@@ -197,6 +197,61 @@ def test_computed_title_freezes_deleted_source() -> None:
     assert result.title == "fft(sd001)"
 
 
+def test_group_computed_title_is_stored_and_rendered() -> None:
+    """Group creation stores a reusable canonical and rendered computed title.
+
+    Groups have no metadata dict (unlike SignalObj/ImageObj), so their computed
+    title lives in the owning ``ObjectModel`` instead of ``obj.metadata``, but
+    the public API (``get_computed_title``/``set_computed_title``) is the same.
+    """
+    model, gid = _build_model()
+    src = _add_signal(model, gid, "Source")  # s001
+    result_group = model.add_group(f"sum({get_short_id(src)})")
+    model.set_computed_title(result_group, result_group.title)
+    assert model.get_computed_title(result_group) == "sum(s001)"
+    assert model.get_computed_title(result_group, use_titles=True) == "sum(Source)"
+
+
+def test_group_computed_title_survives_rename_and_resets() -> None:
+    """A manually renamed group may be reset to its computed title."""
+    model, gid = _build_model()
+    src = _add_signal(model, gid, "Source")  # s001
+    result_group = model.add_group(f"sum({get_short_id(src)})")
+    model.set_computed_title(result_group, result_group.title)
+    result_group.title = "My results"
+    assert model.get_computed_title(result_group) == "sum(s001)"
+    assert model.reset_title_to_computed(result_group)
+    assert result_group.title == "sum(s001)"
+    assert not model.reset_title_to_computed(result_group)
+
+
+def test_group_computed_title_follows_reorder() -> None:
+    """A group's computed source references follow reordering, like objects'."""
+    model, gid = _build_model()
+    src = _add_signal(model, gid, "Source")  # s001
+    other = _add_signal(model, gid, "Other")  # s002
+    result_group = model.add_group(f"sum({get_short_id(src)})")
+    model.set_computed_title(result_group, result_group.title)
+    result_group.title = "My results"
+    model.reorder_objects({gid: [get_uuid(other), get_uuid(src)]})
+    assert result_group.title == "My results"
+    assert model.get_computed_title(result_group) == "sum(s002)"
+
+
+def test_group_computed_title_freezes_deleted_source() -> None:
+    """A group's computed title remains usable after its source is deleted."""
+    model, gid = _build_model()
+    src = _add_signal(model, gid, "Source")  # s001
+    result_group = model.add_group(f"sum({get_short_id(src)})")
+    model.set_computed_title(result_group, result_group.title)
+    result_group.title = "My results"
+    model.remove_object(src)
+    assert model.get_computed_title(result_group) == "sum(sd001)"
+    assert model.get_computed_title(result_group, use_titles=True) == "sum(Source)"
+    assert model.reset_title_to_computed(result_group)
+    assert result_group.title == "sum(sd001)"
+
+
 def test_lookup_by_stored_title() -> None:
     """An object can be looked up by its stored (canonical) title."""
     model, gid = _build_model()

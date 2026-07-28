@@ -294,6 +294,11 @@ class ObjectModel:
         # live here. Each registry maps a deleted-reference token (e.g.
         # ``"sd001"``) to the canonical title of the deleted source.
         self._group_deleted_refs: dict[str, dict[str, str]] = {}
+        # Per-group processing-generated ("computed") titles, keyed by group
+        # uuid. Groups have no metadata dict, so -- like deleted-reference
+        # registries above -- this is stored here instead of in
+        # ``metadata[COMPUTED_TITLE_KEY]``.
+        self._group_computed_titles: dict[str, str] = {}
 
     def add_sibling_model(self, model: ObjectModel) -> None:
         """Register a sibling model for cross-panel reference synchronization.
@@ -523,26 +528,24 @@ class ObjectModel:
         else:
             self._group_deleted_refs.pop(group.uuid, None)
 
-    @staticmethod
     def __replace_in_object_titles(
-        obj: SignalObj | ImageObj, old: str, new: str
+        self, obj_or_group: SignalObj | ImageObj | ObjectGroup, old: str, new: str
     ) -> None:
-        """Replace text in the current and computed object titles."""
-        obj.title = obj.title.replace(old, new)
-        computed_title = get_computed_title(obj)
+        """Replace text in the current and computed titles of an object or group."""
+        obj_or_group.title = obj_or_group.title.replace(old, new)
+        computed_title = self.get_computed_title(obj_or_group)
         if computed_title is not None:
-            set_computed_title(obj, computed_title.replace(old, new))
+            self.set_computed_title(obj_or_group, computed_title.replace(old, new))
 
-    @staticmethod
     def __replace_missing_uuids_in_object_titles(
-        obj: SignalObj | ImageObj, pattern: re.Pattern
+        self, obj: SignalObj | ImageObj, pattern: re.Pattern
     ) -> None:
         """Replace unresolved UUIDs in the current and computed object titles."""
         replacement = f"{obj.PREFIX}xxx"
         obj.title = pattern.sub(replacement, obj.title)
-        computed_title = get_computed_title(obj)
+        computed_title = self.get_computed_title(obj)
         if computed_title is not None:
-            set_computed_title(obj, pattern.sub(replacement, computed_title))
+            self.set_computed_title(obj, pattern.sub(replacement, computed_title))
 
     @staticmethod
     def __get_reference_replacement(
@@ -620,11 +623,7 @@ class ObjectModel:
     ) -> None:
         """Freeze a deleted-source reference in every title field of a dependent."""
         registry = self.__get_registry(dependent)
-        computed_title = (
-            get_computed_title(dependent)
-            if isinstance(dependent, (SignalObj, ImageObj))
-            else None
-        )
+        computed_title = self.get_computed_title(dependent)
         in_title = bool(token_re.search(dependent.title))
         in_computed_title = computed_title is not None and bool(
             token_re.search(computed_title)
@@ -637,7 +636,7 @@ class ObjectModel:
         if in_title:
             dependent.title = token_re.sub(token, dependent.title)
         if in_computed_title:
-            set_computed_title(dependent, token_re.sub(token, computed_title))
+            self.set_computed_title(dependent, token_re.sub(token, computed_title))
         if in_registry:
             for key in registry:
                 registry[key] = token_re.sub(token, registry[key])
@@ -745,32 +744,61 @@ class ObjectModel:
         return self.__render(obj_or_group.title, registry, set())
 
     def get_computed_title(
-        self, obj: SignalObj | ImageObj, use_titles: bool = False
+        self,
+        obj_or_group: SignalObj | ImageObj | ObjectGroup,
+        use_titles: bool = False,
     ) -> str | None:
-        """Return an object's processing-generated title, if available.
+        """Return an object's or group's processing-generated title, if available.
+
+        Groups have no metadata dict (unlike SignalObj/ImageObj), so their
+        computed title is looked up in the owning model's group registry
+        instead of ``metadata[COMPUTED_TITLE_KEY]``.
 
         Args:
-            obj: signal or image object
+            obj_or_group: signal object, image object or group
             use_titles: if True, render source references using source titles
 
         Returns:
             Canonical or rendered computed title, or None when unavailable.
         """
-        computed_title = get_computed_title(obj)
+        if isinstance(obj_or_group, ObjectGroup):
+            owner = self.__model_owning_group(obj_or_group)
+            # pylint: disable=protected-access
+            computed_title = owner._group_computed_titles.get(obj_or_group.uuid)
+        else:
+            computed_title = get_computed_title(obj_or_group)
         if computed_title is None or not use_titles:
             return computed_title
-        return self.__render(computed_title, self.__get_registry(obj), set())
+        return self.__render(computed_title, self.__get_registry(obj_or_group), set())
 
-    def reset_title_to_computed(self, obj: SignalObj | ImageObj) -> bool:
-        """Reset ``obj.title`` to its processing-generated title.
+    def set_computed_title(
+        self, obj_or_group: SignalObj | ImageObj | ObjectGroup, title: str
+    ) -> None:
+        """Store an object's or group's processing-generated title.
+
+        Args:
+            obj_or_group: signal object, image object or group
+            title: canonical (short-ID form) computed title to store
+        """
+        if isinstance(obj_or_group, ObjectGroup):
+            owner = self.__model_owning_group(obj_or_group)
+            # pylint: disable=protected-access
+            owner._group_computed_titles[obj_or_group.uuid] = title
+        else:
+            set_computed_title(obj_or_group, title)
+
+    def reset_title_to_computed(
+        self, obj_or_group: SignalObj | ImageObj | ObjectGroup
+    ) -> bool:
+        """Reset ``obj_or_group.title`` to its processing-generated title.
 
         Returns:
             True if the title changed, False if no reset was possible or needed.
         """
-        computed_title = get_computed_title(obj)
-        if computed_title is None or obj.title == computed_title:
+        computed_title = self.get_computed_title(obj_or_group)
+        if computed_title is None or obj_or_group.title == computed_title:
             return False
-        obj.title = computed_title
+        obj_or_group.title = computed_title
         return True
 
     def get_display_title_and_links(
@@ -1000,6 +1028,7 @@ class ObjectModel:
         self.replace_short_ids_by_uuids_in_titles()
         self._groups.remove(group)
         self._group_deleted_refs.pop(group.uuid, None)
+        self._group_computed_titles.pop(group.uuid, None)
         for obj in orphans:
             del self._objects[get_uuid(obj)]
         self.reset_short_ids()
@@ -1193,7 +1222,7 @@ class ObjectModel:
                 old, new = self.__get_reference_replacement(
                     obj_uuid, short_id, use_short_ids
                 )
-                group.title = group.title.replace(old, new)
+                self.__replace_in_object_titles(group, old, new)
 
     def __replace_sibling_references(
         self, mapping: dict[str, str], use_short_ids: bool
@@ -1204,10 +1233,7 @@ class ObjectModel:
                 old, new = self.__get_reference_replacement(
                     obj_uuid, short_id, use_short_ids
                 )
-                if isinstance(sibling_item, ObjectGroup):
-                    sibling_item.title = sibling_item.title.replace(old, new)
-                else:
-                    self.__replace_in_object_titles(sibling_item, old, new)
+                self.__replace_in_object_titles(sibling_item, old, new)
 
     def __replace_registry_references(
         self,

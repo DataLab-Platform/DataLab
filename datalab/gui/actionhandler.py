@@ -54,7 +54,6 @@ from datalab.gui.processor.base import (
     clear_analysis_parameters,
     extract_analysis_parameters,
 )
-from datalab.objectmodel import get_computed_title
 from datalab.widgets import fitdialog
 
 if TYPE_CHECKING:
@@ -313,17 +312,21 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         # pylint: disable=unused-argument
         return bool(self.panel.annotations_clipboard)
 
-    @staticmethod
     def has_resettable_computed_title(
+        self,
         selected_groups: list[ObjectGroup],
         selected_objects: list[SignalObj | ImageObj],
     ) -> bool:
-        """Return whether one object has a customized computed title."""
-        if selected_groups or len(selected_objects) != 1:
+        """Return whether the single selected object or group has a customized
+        computed title that can be restored."""
+        if len(selected_groups) == 1 and not selected_objects:
+            target = selected_groups[0]
+        elif len(selected_objects) == 1 and not selected_groups:
+            target = selected_objects[0]
+        else:
             return False
-        obj = selected_objects[0]
-        computed_title = get_computed_title(obj)
-        return computed_title is not None and obj.title != computed_title
+        computed_title = self.panel.objmodel.get_computed_title(target)
+        return computed_title is not None and target.title != computed_title
 
     def populate_results_delete_submenu(self) -> None:
         """Populate the Results Delete submenu dynamically based on current selection"""

@@ -791,7 +791,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         """Create a group in the appropriate panel for the result object.
 
         For native objects, creates group in current panel. For non-native objects,
-        creates group in the target panel.
+        creates group in the target panel. The generated name is also stored as the
+        group's computed title, so it can be restored later if the group is renamed
+        (see the "Reset to computed title" action).
 
         Args:
             new_obj: Result object to determine target panel
@@ -801,15 +803,18 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             UUID of the created group
         """
         is_new_obj_native = isinstance(new_obj, self.panel.PARAMCLASS)
-        if is_new_obj_native:
-            return get_uuid(self.panel.add_group(group_name))
-        # Create group in target panel for non-native objects
         target_panel = (
-            self.panel.mainwindow.signalpanel
-            if isinstance(new_obj, SignalObj)
-            else self.panel.mainwindow.imagepanel
+            self.panel
+            if is_new_obj_native
+            else (
+                self.panel.mainwindow.signalpanel
+                if isinstance(new_obj, SignalObj)
+                else self.panel.mainwindow.imagepanel
+            )
         )
-        return get_uuid(target_panel.add_group(group_name))
+        group = target_panel.add_group(group_name)
+        target_panel.objmodel.set_computed_title(group, group_name)
+        return get_uuid(group)
 
     @abc.abstractmethod
     def register_operations(self) -> None:
