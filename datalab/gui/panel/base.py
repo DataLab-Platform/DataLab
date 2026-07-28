@@ -2102,6 +2102,23 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             # Cross-panel result titles (e.g. a signal group from a projection of
             # this image group) may reference it, so refresh the sibling panel too:
             self.objview._refresh_sibling_panels()  # pylint: disable=protected-access
+        self.acthandler.selected_objects_changed(sel_groups, sel_objects)
+
+    def reset_selected_title_to_computed(self) -> None:
+        """Restore the selected object's processing-generated title."""
+        objects = self.objview.get_sel_objects(include_groups=False)
+        if len(objects) != 1 or self.objview.get_sel_groups():
+            raise ValueError("Select one object to reset its title")
+        obj = objects[0]
+        if not self.objmodel.reset_title_to_computed(obj):
+            return
+        obj_uuid = get_uuid(obj)
+        self.objview.update_item(obj_uuid)
+        self.objview.update_tree()
+        self.objview._refresh_sibling_panels()  # pylint: disable=protected-access
+        self.refresh_plot(obj_uuid, update_items=True, force=True)
+        self.objprop.update_properties_from(obj)
+        self.selection_changed(update_items=False)
 
     @abc.abstractmethod
     def get_newparam_from_current(

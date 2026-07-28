@@ -20,7 +20,14 @@ from __future__ import annotations
 import pytest
 from sigima import create_signal
 
-from datalab.objectmodel import ObjectModel, get_uuid
+from datalab.objectmodel import (
+    COMPUTED_TITLE_KEY,
+    ObjectModel,
+    get_computed_title,
+    get_short_id,
+    get_uuid,
+    patch_title_with_ids,
+)
 
 
 def _add_signal(model: ObjectModel, group_id: str, title: str):
@@ -127,6 +134,67 @@ def test_title_mode_cycle_guard() -> None:
     src.title = "loop(s001)"
     # Rendering terminates (no infinite recursion) and keeps the short ID:
     assert model.get_display_title(src, use_titles=True) == "loop(loop(s001))"
+
+
+def test_computed_title_is_stored_and_rendered() -> None:
+    """Processing stores a reusable canonical and rendered computed title."""
+    model, gid = _build_model()
+    src = _add_signal(model, gid, "Source")  # s001
+    result = _add_signal(model, gid, "fft({0})")
+    patch_title_with_ids(result, [src], get_short_id)
+    assert get_computed_title(result) == "fft(s001)"
+    assert model.get_computed_title(result) == "fft(s001)"
+    assert model.get_computed_title(result, use_titles=True) == "fft(Source)"
+
+
+def test_computed_title_survives_rename_and_resets() -> None:
+    """A manual title may be reset to the processing-generated title."""
+    model, gid = _build_model()
+    src = _add_signal(model, gid, "Source")  # s001
+    result = _add_signal(model, gid, "fft({0})")
+    patch_title_with_ids(result, [src], get_short_id)
+    result.title = "Custom result"
+    assert get_computed_title(result) == "fft(s001)"
+    assert model.reset_title_to_computed(result)
+    assert result.title == "fft(s001)"
+    assert not model.reset_title_to_computed(result)
+
+
+def test_computed_title_is_public_copied_metadata() -> None:
+    """Duplicating a result preserves its processing-generated title."""
+    model, gid = _build_model()
+    src = _add_signal(model, gid, "Source")  # s001
+    result = _add_signal(model, gid, "fft({0})")
+    patch_title_with_ids(result, [src], get_short_id)
+    clone = result.copy()
+    assert clone.metadata[COMPUTED_TITLE_KEY] == "fft(s001)"
+
+
+def test_computed_title_follows_reorder() -> None:
+    """Computed source references follow short-ID changes after reordering."""
+    model, gid = _build_model()
+    src = _add_signal(model, gid, "Source")  # s001
+    other = _add_signal(model, gid, "Other")  # s002
+    result = _add_signal(model, gid, "fft({0})")  # s003
+    patch_title_with_ids(result, [src], get_short_id)
+    result.title = "Custom result"
+    model.reorder_objects({gid: [get_uuid(other), get_uuid(src), get_uuid(result)]})
+    assert result.title == "Custom result"
+    assert get_computed_title(result) == "fft(s002)"
+
+
+def test_computed_title_freezes_deleted_source() -> None:
+    """A computed title remains usable after its source is deleted."""
+    model, gid = _build_model()
+    src = _add_signal(model, gid, "Source")  # s001
+    result = _add_signal(model, gid, "fft({0})")
+    patch_title_with_ids(result, [src], get_short_id)
+    result.title = "Custom result"
+    model.remove_object(src)
+    assert get_computed_title(result) == "fft(sd001)"
+    assert model.get_computed_title(result, use_titles=True) == "fft(Source)"
+    assert model.reset_title_to_computed(result)
+    assert result.title == "fft(sd001)"
 
 
 def test_lookup_by_stored_title() -> None:

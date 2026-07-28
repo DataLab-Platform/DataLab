@@ -14,7 +14,8 @@ displays source short IDs or source titles depending on
 from sigima.objects import CosineParam, create_signal_from_param
 
 from datalab.config import Conf
-from datalab.objectmodel import get_uuid
+from datalab.gui import actionhandler
+from datalab.objectmodel import get_computed_title, get_uuid
 from datalab.tests import datalab_test_app_context
 
 
@@ -116,6 +117,36 @@ def test_result_title_mode_updates_plot_legend():
             assert "My cosine" not in label_back
     finally:
         Conf.proc.result_title_mode.set(previous_mode)
+
+
+def test_reset_to_computed_title_action():
+    """A customized result title may be reset from the context-menu action."""
+    with datalab_test_app_context() as win:
+        panel = win.signalpanel
+        source = create_signal_from_param(CosineParam.create(size=100))
+        panel.add_object(source)
+        panel.processor.run_feature("fft")
+        result = panel.objview.get_current_object()
+        computed_title = get_computed_title(result)
+        assert computed_title == result.title
+
+        reset_action = next(
+            action
+            for action in panel.get_category_actions(
+                actionhandler.ActionCategory.CONTEXT_MENU
+            )
+            if action is not None and action.text() == "Reset to computed title"
+        )
+        assert not reset_action.isEnabled()
+
+        panel.rename_selected_object_or_group("Custom FFT")
+        assert result.title == "Custom FFT"
+        assert get_computed_title(result) == computed_title
+        assert reset_action.isEnabled()
+
+        reset_action.trigger()
+        assert result.title == computed_title
+        assert not reset_action.isEnabled()
 
 
 if __name__ == "__main__":

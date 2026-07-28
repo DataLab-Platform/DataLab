@@ -45,7 +45,13 @@ from datalab.adapters_metadata import (
 from datalab.adapters_plotpy import coordutils
 from datalab.config import Conf, _
 from datalab.gui.processor.catcher import CompOut, wng_err_func
-from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids
+from datalab.objectmodel import (
+    get_computed_title,
+    get_short_id,
+    get_uuid,
+    patch_title_with_ids,
+    set_computed_title,
+)
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
 from datalab.widgets.warningerror import show_warning_error
 
@@ -1099,6 +1105,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 QW.QMessageBox.critical(self.panel, _("Error"), report.message)
             return report
 
+        previous_computed_title = get_computed_title(obj)
+        title_was_customized = (
+            previous_computed_title is not None and obj.title != previous_computed_title
+        )
+
         # Check if source object still exists
         if proc_params.source_uuid is None:
             report.message = _(
@@ -1157,8 +1168,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             report.message = compout.error_msg or _("Failed to reprocess object.")
             return report
 
-        # Update the current object in-place with data from new object
-        obj.title = new_obj.title
+        # Update the current object in-place with data from new object. A manual
+        # title survives recomputation, while an unmodified computed title tracks
+        # the newly generated title.
+        new_computed_title = get_computed_title(new_obj) or new_obj.title
+        set_computed_title(obj, new_computed_title)
+        if not title_was_customized:
+            obj.title = new_computed_title
         if isinstance(obj, SignalObj):
             obj.xydata = new_obj.xydata
         else:
