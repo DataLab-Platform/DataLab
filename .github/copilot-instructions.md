@@ -184,6 +184,7 @@ def my_processing_func(src: SignalObj, param: MyParam) -> SignalObj:
     # ... computation logic ...
     return dst
 
+
 # 2. Register in DataLab processor (datalab/gui/processor/signal.py)
 def register_processing(self) -> None:
     self.register_1_to_1(
@@ -307,6 +308,7 @@ generated with `scripts/print_datalab_menus.py`).
 
 ```python
 from datalab.plugins import PluginBase, PluginInfo
+
 
 class MyPlugin(PluginBase):
     """My custom plugin."""
@@ -455,6 +457,7 @@ and remote control from any HTTP client (including WASM/Pyodide environments).
 ```python
 from __future__ import annotations
 
+
 def process_signal(src: SignalObj) -> SignalObj:
     """Process signal."""
     pass
@@ -546,6 +549,7 @@ menu_title = "Processing"  # Not translatable!
 2. **Export from Sigima** (`sigima/proc/signal/__init__.py`):
    ```python
    from sigima.proc.signal.processing import my_feature  # Import
+
    __all__ = [..., "my_feature"]  # Export
    ```
 

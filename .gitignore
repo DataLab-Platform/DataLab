@@ -8,6 +8,11 @@ releases/
 doc/changelog.md
 scenario_*.h5
 
+# Local machine configuration for scripts/Run-DataLabTests.ps1 (interpreter
+# paths). A committed template lives next to it as
+# Run-DataLabTests.config.template.psd1.
+scripts/Run-DataLabTests.config.psd1
+
 # Windows specific
 Thumbs.db
 
@@ -184,6 +189,7 @@ celerybeat.pid
 .env
 .envrc
 .venv
+.venv*/
 env/
 venv/
 ENV/

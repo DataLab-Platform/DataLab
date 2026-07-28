@@ -6,7 +6,6 @@ DataLab Configuration utilities
 
 from __future__ import annotations
 
-import os
 import os.path as osp
 import warnings
 from collections.abc import Generator
@@ -180,7 +179,17 @@ class WorkingDirOption(Option):
             value = osp.dirname(value)
             if not osp.isdir(value):
                 raise FileNotFoundError(f"Invalid working directory name {value}")
-        os.chdir(value)
+        # Note: we intentionally do not ``os.chdir(value)`` here. This side
+        # effect was introduced in the very first commit (V2.0.0, a2b38cc5),
+        # back when file dialogs relied on the process working directory to pick
+        # their start folder. It has since become unnecessary: every dialog now
+        # passes ``base_dir.get()`` (the value persisted just below) explicitly,
+        # so no code reads the process CWD anymore. Worse, on Windows the
+        # ``os.chdir`` had two harmful effects: it kept the last saved/opened
+        # directory locked (undeletable/unrenamable) for the lifetime of the
+        # DataLab process, and it pinned a child process' CWD inside transient
+        # temporary directories, triggering the Python 3.9 ``tempfile`` recursive
+        # cleanup crash (bpo-42796).
         super().set(value)
 
 

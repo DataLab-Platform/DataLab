@@ -25,6 +25,7 @@ import os.path as osp
 import h5py
 import pytest
 from numpy import ma
+from sigima.objects import GaussParam
 from sigima.objects.scalar import NO_ROI, TableResult, TableResultBuilder
 from sigima.tests.data import (
     create_noisy_gaussian_image,
@@ -33,6 +34,7 @@ from sigima.tests.data import (
 )
 
 from datalab.adapters_metadata.table_adapter import TableAdapter
+from datalab.gui.newobject import extract_creation_parameters
 from datalab.tests import datalab_test_app_context, helpers
 
 
@@ -77,6 +79,24 @@ def test_save_and_load_h5_workspace():
             loaded_ima = win.imagepanel.objmodel.get_all_objects()[0]
             assert loaded_sig.title == sig_title
             assert loaded_ima.title == ima_title
+
+
+def test_peak_creation_parameters_h5_roundtrip():
+    """Versioned peak creation parameters survive a workspace round-trip."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        with datalab_test_app_context(console=False) as win:
+            param = GaussParam.create(amplitude=-2.5, sigma=0.7, mu=0.3, y0=0.75)
+            win.signalpanel.new_object(param=param, edit=False)
+            fname = osp.join(tmpdir, "peak_creation_params.h5")
+
+            win.save_h5_workspace(fname)
+            win.signalpanel.remove_all_objects()
+            win.load_h5_workspace([fname], reset_all=True)
+
+            loaded = win.signalpanel.objmodel.get_all_objects()[0]
+            restored = extract_creation_parameters(loaded)
+            assert isinstance(restored, GaussParam)
+            assert restored.amplitude == pytest.approx(-2.5)
 
 
 def test_load_h5_workspace_invalid_file():

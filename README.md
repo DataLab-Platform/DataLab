@@ -73,6 +73,8 @@ From [conda-forge](https://anaconda.org/conda-forge/datalab-platform):
 conda install -c conda-forge datalab-platform
 ```
 
+On [NixOS](https://nixos.org/), DataLab is available from the [NGI Forge](https://ngi.nixos.org/app/datalab), packaged by the [Nix@NGI team](https://nixos.org/community/teams/ngi/) (an NLnet partner) as part of DataLab's NGI0 Commons Fund grant.
+
 See the [installation guide](https://datalab-platform.com/en/intro/installation.html) for
 more options (standalone installer, WinPython, offline installation, etc.).
 

@@ -126,6 +126,23 @@ class ProcessingParameters:
         return instance
 
 
+@dataclass
+class ProcessingReport:
+    """Report of processing recompute operation.
+
+    Args:
+        success: True if processing succeeded
+        obj_uuid: UUID of the processed object
+        message: Optional message (error or info)
+        cancelled: True if processing was cancelled by the user
+    """
+
+    success: bool
+    obj_uuid: str | None = None
+    message: str | None = None
+    cancelled: bool = False
+
+
 # Metadata options for storing processing parameters (DataLab-specific)
 PROCESSING_PARAMETERS_OPTION = "processing_parameters"  # Transformation history
 ANALYSIS_PARAMETERS_OPTION = "analysis_parameters"  # Analysis operation (1-to-0)
@@ -200,7 +217,7 @@ def clear_analysis_parameters(obj: SignalObj | ImageObj) -> None:
 
     This removes the stored analysis parameters (1-to-0 operations) from the object.
     Should be called when all analysis results are deleted to prevent the
-    auto_recompute_analysis function from attempting to recompute deleted analyses.
+    recompute_analysis function from attempting to recompute deleted analyses.
 
     Args:
         obj: Signal or Image object
@@ -491,6 +508,16 @@ def is_pairwise_mode() -> bool:
 
 
 @dataclass
+class SourcePreparationTransaction:
+    """Prepare effective sources and commit changes after successful results."""
+
+    source_for_execution: Callable[
+        [SignalObj | ImageObj, SignalObj | ImageObj], SignalObj | ImageObj
+    ]
+    commit: Callable[[SignalObj | ImageObj], None]
+
+
+@dataclass
 class ComputingFeature:
     """Computing feature dataclass.
 
@@ -504,6 +531,7 @@ class ComputingFeature:
         edit: whether to edit the parameters
         obj2_name: name of the second object
         skip_xarray_compat: whether to skip X-array compatibility check for this feature
+        pre_execute_hook: optional transactional source preparation hook
     """
 
     pattern: Literal["1_to_1", "1_to_0", "1_to_n", "n_to_1", "2_to_1"]
@@ -515,6 +543,9 @@ class ComputingFeature:
     edit: Optional[bool] = None
     obj2_name: Optional[str] = None
     skip_xarray_compat: Optional[bool] = None
+    pre_execute_hook: Optional[
+        Callable[[list[SignalObj | ImageObj]], SourcePreparationTransaction | None]
+    ] = None
 
     def __post_init__(self):
         """Validate the function after initialization."""
@@ -793,6 +824,30 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self.register_analysis()
 
     # pylint: disable=unused-argument
+    def preprocess_1_to_0(
+        self,
+        func: Callable,
+        param: gds.DataSet | None,
+        objs: list[SignalObj | ImageObj],
+    ) -> bool:
+        """Pre-check hook for 1-to-0 operations (hook method).
+
+        This method is called before a 1-to-0 computation starts, before the
+        progress dialog is opened. Subclasses can override this method to perform
+        pre-checks or ask for user confirmation.  Return ``False`` to abort the
+        computation.
+
+        Args:
+            func: The computation function that will be called
+            param: Optional parameter set
+            objs: List of objects that will be processed
+
+        Returns:
+            True to proceed with the computation, False to abort
+        """
+        return True
+
+    # pylint: disable=unused-argument
     def postprocess_1_to_0_result(
         self, obj: SignalObj | ImageObj, result: GeometryResult | TableResult
     ) -> bool:
@@ -960,25 +1015,23 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             TableAdapter.remove_all_from(result_obj)
             GeometryAdapter.remove_all_from(result_obj)
 
-    def auto_recompute_analysis(
+    def recompute_analysis(
         self, obj: SignalObj | ImageObj, refresh_plot: bool = True
     ) -> None:
-        """Automatically recompute analysis (1-to-0) operations after data changes.
+        """Recompute analysis (1-to-0) operations on demand.
 
         This method checks if the object has 1-to-0 analysis parameters (analysis
-        operations like statistics, measurements, etc.) and automatically recomputes
-        the analysis to update the results based on the modified data.
+        operations like statistics, measurements, etc.) and recomputes the analysis
+        to update the results based on the current data.
 
-        This should be called after:
-        - ROI modifications (which change the data to be analyzed)
-        - Data transformations via recompute_1_to_1 (which modify data in-place)
-
-        Note: Should be called explicitly after ROI modifications, not during
-        selection changes, to avoid interfering with the ROI change detection
-        mechanism used by the mask refresh system.
+        Recomputation is *not* automatic: it is triggered explicitly by the user
+        through the manual "Recompute" action (see
+        ``BaseDataPanel.recompute_selected``). Editing ROIs, data or object
+        properties no longer implicitly re-runs analyses; existing results are left
+        as-is until the user asks for a refresh.
 
         Args:
-            obj: The object whose data was modified
+            obj: The object whose analysis results should be recomputed
             refresh_plot: Whether to refresh the plot after recomputation
         """
         # Check if object has 1-to-0 analysis parameters (analysis operations)
@@ -988,6 +1041,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         # Get the parameter from processing parameters
         param = proc_params.param
+
+        # Disable ROI creation during recompute: detection functions store
+        # create_rois=True in their parameters, but recompute should only
+        # update analysis results, not recreate ROIs (which would make them
+        # impossible to delete or modify).
+        if hasattr(param, "create_rois"):
+            param.create_rois = False
 
         # Get the actual function from the function name
         feature = self.get_feature(proc_params.func_name)
@@ -1002,6 +1062,132 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self.panel.objview.update_item(obj_uuid)
         if refresh_plot:
             self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+
+    def recompute_processing(
+        self,
+        obj: SignalObj | ImageObj,
+        param: gds.DataSet | None = None,
+        interactive: bool = True,
+        refresh_plot: bool = True,
+    ) -> ProcessingReport:
+        """Recompute a stored 1-to-1 processing operation on demand.
+
+        This is the processing counterpart of :meth:`recompute_analysis`. It
+        resolves the stored 1-to-1 processing metadata from ``obj``, recomputes
+        the result from its source object, then updates ``obj`` in-place.
+
+        Args:
+            obj: The processed object to recompute in-place.
+            param: Optional parameter override. When None, use the parameters
+             stored in the object's processing metadata.
+            interactive: If True, show UI error messages.
+            refresh_plot: Whether to refresh the plot after recomputation.
+
+        Returns:
+            ProcessingReport describing the result.
+        """
+        if env.execenv.unattended:
+            interactive = False
+
+        report = ProcessingReport(success=False, obj_uuid=get_uuid(obj))
+
+        # Extract processing parameters
+        proc_params = extract_processing_parameters(obj)
+        if proc_params is None or proc_params.pattern != "1-to-1":
+            report.message = _("Processing metadata is incomplete.")
+            if interactive:
+                QW.QMessageBox.critical(self.panel, _("Error"), report.message)
+            return report
+
+        # Check if source object still exists
+        if proc_params.source_uuid is None:
+            report.message = _(
+                "Processing metadata is incomplete (missing source UUID)."
+            )
+            if interactive:
+                QW.QMessageBox.critical(self.panel, _("Error"), report.message)
+            return report
+
+        # Find source object
+        source_obj = self.mainwindow.find_object_by_uuid(proc_params.source_uuid)
+        if source_obj is None:
+            report.message = _("Source object no longer exists.")
+            if interactive:
+                QW.QMessageBox.critical(
+                    self.panel,
+                    _("Error"),
+                    report.message
+                    + "\n\n"
+                    + _(
+                        "The object that was used to create this processed object "
+                        "has been deleted and cannot be used for reprocessing."
+                    ),
+                )
+            return report
+
+        # Get updated parameters from caller/editor override, fallback to metadata
+        param = proc_params.param if param is None else param
+
+        # For cross-panel computations, we need to use the processor from the panel
+        # that owns the source object (e.g., radial_profile is in ImageProcessor)
+        if isinstance(source_obj, SignalObj):
+            source_processor = self.mainwindow.signalpanel.processor
+        else:
+            source_processor = self.mainwindow.imagepanel.processor
+
+        # Recompute using the dedicated method (with multiprocessing support)
+        try:
+            compout = source_processor.recompute_1_to_1(
+                proc_params.func_name, source_obj, param
+            )
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            report.message = _("Failed to reprocess object:\n%s") % str(exc)
+            if interactive:
+                QW.QMessageBox.warning(self.panel, _("Error"), report.message)
+            return report
+
+        # User cancelled the operation
+        if compout.cancelled:
+            report.message = _("Processing was cancelled.")
+            report.cancelled = True
+            return report
+
+        new_obj = compout.result
+        if new_obj is None:
+            report.message = compout.error_msg or _("Failed to reprocess object.")
+            return report
+
+        # Update the current object in-place with data from new object
+        obj.title = new_obj.title
+        if isinstance(obj, SignalObj):
+            obj.xydata = new_obj.xydata
+        else:
+            obj.data = new_obj.data
+            # Invalidate ROI mask cache when image dimensions may have changed
+            # (the mask is computed based on image shape, so it must be recomputed)
+            obj.invalidate_maskdata_cache()
+
+        # Update metadata with new processing parameters
+        updated_proc_params = ProcessingParameters(
+            func_name=proc_params.func_name,
+            pattern=proc_params.pattern,
+            param=param,
+            source_uuid=proc_params.source_uuid,
+        )
+        insert_processing_parameters(obj, updated_proc_params)
+
+        # Update the tree view item and refresh plot
+        self.panel.objview.update_item(report.obj_uuid)
+        if refresh_plot:
+            self.panel.refresh_plot(report.obj_uuid, update_items=True, force=True)
+
+        report.success = True
+        if isinstance(obj, SignalObj):
+            report.message = _("Signal was reprocessed.")
+        else:
+            report.message = _("Image was reprocessed.")
+        self.panel.SIG_STATUS_MESSAGE.emit("✅ " + report.message, 5000)
+        return report
 
     def __exec_func(
         self,
@@ -1042,7 +1228,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         func_name: str,
         obj: SignalObj | ImageObj,
         param: gds.DataSet | None = None,
-    ) -> SignalObj | ImageObj | None:
+    ) -> CompOut:
         """Recompute a 1-to-1 processing operation without adding result to panel.
 
         This method is specifically designed for the interactive re-processing feature
@@ -1056,7 +1242,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             param: Processing parameters (optional)
 
         Returns:
-            New processed object (not added to panel), or None if cancelled or error
+            Computation output containing the new processed object, an error, or an
+             explicit cancellation status
 
         Raises:
             ValueError: If function is not found in registry
@@ -1079,20 +1266,21 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             comp_out = self.__exec_func(func, args, progress)
 
             if comp_out is None:  # Cancelled by user
-                return None
+                return CompOut(cancelled=True)
 
             # Handle the output
             new_obj = self.handle_output(comp_out, _("Recomputing"), progress)
 
             if new_obj is None:
-                return None
+                return comp_out
 
             # Handle keep_results logic
             if isinstance(new_obj, (SignalObj, ImageObj)):
                 self._handle_keep_results(new_obj)
 
             patch_title_with_ids(new_obj, [obj], get_short_id)
-            return new_obj
+            comp_out.result = new_obj
+            return comp_out
 
     def _compute_1_to_1_subroutine(
         self, funcs: list[Callable], params: list, title: str
@@ -1394,6 +1582,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             if target_objs is not None
             else self.panel.objview.get_sel_objects(include_groups=True)
         )
+        if not self.preprocess_1_to_0(func, param, objs):
+            return None
         current_obj = self.panel.objview.get_current_object()
         title = func.__name__ if title is None else title
         refresh_needed = False
@@ -1429,8 +1619,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 # Pass function name for better parameter context in the Analysis tab
                 adapter.add_to(obj, param)
 
-                # Store processing parameters for auto-recompute on ROI change
-                # This enables automatic recalculation when ROI is modified
+                # Store analysis parameters to enable on-demand recomputation
+                # via the manual "Recompute" action.
                 # Analysis parameters (1-to-0) are stored separately from
                 # transformation history to avoid overwriting the processing chain
                 # when analyzing objects.
@@ -1696,7 +1886,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if dst_gid is not None:
             self.panel.objview.set_current_item_id(dst_gid)
 
-    def compute_2_to_1(
+    def compute_2_to_1(  # pylint: disable=too-many-return-statements
         self,
         obj2: SignalObj | ImageObj | list[SignalObj | ImageObj] | None,
         obj2_name: str,
@@ -1707,6 +1897,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         comment: str | None = None,
         edit: bool | None = None,
         skip_xarray_compat: bool | None = None,
+        pre_execute_hook: Callable[
+            [list[SignalObj | ImageObj]], SourcePreparationTransaction | None
+        ]
+        | None = None,
     ) -> None:
         """Generic processing method: binary operation 1+1 → 1.
 
@@ -1729,6 +1923,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             edit: Whether to open the parameter editor before execution.
             skip_xarray_compat: If True, skip x-array compatibility checks
              (only for signal panels).
+            pre_execute_hook: Optional hook preparing source copies after all dialogs
+             and compatibility checks. Returning None cancels the operation.
 
         .. note::
             With k selected objects:
@@ -1829,6 +2025,17 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     # Store mapping for this specific pair
                     pair_maps[(src_obj1, src_obj2)] = checked_pair
 
+            source_transaction = None
+            if pre_execute_hook is not None:
+                original_sources = [
+                    src_obj
+                    for src_gid in src_gids
+                    for src_obj in src_objs[src_gid][:max_i_pair]
+                ]
+                source_transaction = pre_execute_hook(original_sources)
+                if source_transaction is None:
+                    return
+
             with create_progress_bar(self.panel, title, max_=len(src_gids)) as progress:
                 for i_group, src_gid in enumerate(src_gids):
                     progress.setValue(i_group + 1)
@@ -1851,6 +2058,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             interpolated_pair = pair_maps[(orig_obj1, orig_obj2)]
                             actual_obj1 = interpolated_pair[0]
                             actual_obj2 = interpolated_pair[1]
+                        if source_transaction is not None:
+                            actual_obj1 = source_transaction.source_for_execution(
+                                orig_obj1, actual_obj1
+                            )
 
                         args = [actual_obj1, actual_obj2]
                         if param is not None:
@@ -1890,6 +2101,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             dst_gid = self._create_group_for_result(new_obj, dst_gname)
 
                         self._add_object_to_appropriate_panel(new_obj, group_id=dst_gid)
+                        if source_transaction is not None:
+                            source_transaction.commit(orig_obj1)
 
         else:
             if not objs2:
@@ -1934,6 +2147,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     for orig_obj, checked_obj in zip(signal_objs, checked_objs[:-1]):
                         signal_map[orig_obj] = checked_obj
 
+            source_transaction = None
+            if pre_execute_hook is not None:
+                source_transaction = pre_execute_hook(objs)
+                if source_transaction is None:
+                    return
+
             with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
                 for index, obj in enumerate(objs):
                     progress.setValue(index + 1)
@@ -1947,6 +2166,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         and obj in signal_map
                     ):
                         actual_obj = signal_map[obj]
+                    if source_transaction is not None:
+                        actual_obj = source_transaction.source_for_execution(
+                            obj, actual_obj
+                        )
 
                     args = (
                         (actual_obj, obj2)
@@ -1986,6 +2209,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     self._add_object_to_appropriate_panel(
                         new_obj, group_id=group_id, use_group_for_non_native=False
                     )
+                    if source_transaction is not None:
+                        source_transaction.commit(obj)
 
     def register_1_to_1(
         self,
@@ -2138,6 +2363,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         edit: bool | None = None,
         obj2_name: str | None = None,
         skip_xarray_compat: bool | None = None,
+        pre_execute_hook: Callable[
+            [list[SignalObj | ImageObj]], SourcePreparationTransaction | None
+        ]
+        | None = None,
     ) -> ComputingFeature:
         """Register a 2-to-1 processing function.
 
@@ -2156,6 +2385,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             skip_xarray_compat: whether to skip X-array compatibility check.
              Defaults to None. Set to True for operations like interpolation where
              different X-arrays are expected and desired.
+            pre_execute_hook: optional transactional source preparation hook
 
         Returns:
             Registered feature.
@@ -2170,6 +2400,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             edit=edit,
             obj2_name=obj2_name,
             skip_xarray_compat=skip_xarray_compat,
+            pre_execute_hook=pre_execute_hook,
         )
         self.add_feature(feature)
         return feature
@@ -2292,6 +2523,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 comment=comment,
                 edit=edit,
                 skip_xarray_compat=feature.skip_xarray_compat,
+                pre_execute_hook=feature.pre_execute_hook,
             )
         if pattern == "1_to_n":
             params = kwargs.get("params", args[0] if args else [])
@@ -2407,15 +2639,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     only_visible=False,
                     only_existing=True,
                 )
-                # Auto-recompute analysis operations for objects with modified ROIs
-                if mode == "apply":
-                    with create_progress_bar(
-                        self.panel, _("Recomputing..."), max_=len(objs)
-                    ) as progress:
-                        for idx, obj_i in enumerate(objs):
-                            progress.setValue(idx)
-                            self.auto_recompute_analysis(obj_i, refresh_plot=False)
-                    self.panel.manual_refresh()
         return edited_roi
 
     def edit_roi_numerically(self) -> TypeROI:
@@ -2447,8 +2670,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 only_visible=False,
                 only_existing=True,
             )
-            # Auto-recompute analysis operations after ROI modification
-            self.auto_recompute_analysis(obj)
             return edited_roi
         return obj.roi
 
@@ -2463,15 +2684,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             )
             == QW.QMessageBox.Yes
         ):
-            modified_objs = []
             for obj in self.panel.objview.get_sel_objects():
                 if obj.roi is not None:
                     obj.roi = None
-                    modified_objs.append(obj)
                     self.panel.selection_changed(update_items=True)
-            # Auto-recompute analysis operations after ROI deletion
-            for obj in modified_objs:
-                self.auto_recompute_analysis(obj)
 
     def delete_single_roi(self, roi_index: int) -> None:
         """Delete a single ROI by index
@@ -2496,7 +2712,4 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if len(obj.roi.single_rois) == 0:
                     obj.roi = None
                 obj.mark_roi_as_changed()
-                # Auto-recompute analysis operations after ROI modification
-                # (must be done BEFORE selection_changed to avoid stale results)
-                self.auto_recompute_analysis(obj)
                 self.panel.selection_changed(update_items=True)

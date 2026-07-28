@@ -61,6 +61,9 @@ msgstr "DataLab est disponible sous plusieurs formes :"
 msgid "As a :ref:`install_conda`."
 msgstr "En tant que :ref:`install_conda`."
 
+msgid ":bdg-info-line:`GNU/Linux` :bdg-info-line:`macOS` As a :ref:`install_nixos`, for users of the `NixOS <https://nixos.org/>`_ ecosystem."
+msgstr ":bdg-info-line:`GNU/Linux` :bdg-info-line:`macOS` En tant que :ref:`install_nixos`, pour les utilisateurs de l'écosystème `NixOS <https://nixos.org/>`_."
+
 msgid "As a Python package, which can be installed using the :ref:`install_pip`."
 msgstr "Un paquet Python qui peut être installé à l'aide du :ref:`install_pip`."
 
@@ -87,6 +90,21 @@ msgstr ""
 
 msgid "To install ``datalab`` package from the `conda-forge` channel (https://anaconda.org/conda-forge/datalab), run the following command:"
 msgstr "Pour installer le paquet ``datalab`` depuis le canal ``conda-forge`` (https://anaconda.org/conda-forge/datalab), exécutez la commande suivante :"
+
+msgid "NixOS package"
+msgstr "Paquet NixOS"
+
+msgid ":octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`macOS`"
+msgstr ""
+
+msgid "DataLab is packaged for `NixOS <https://nixos.org/>`_ and distributed through the `NGI Forge <https://ngi.nixos.org/app/datalab>`_, the software distribution system for projects funded by the `Next Generation Internet (NGI) <https://www.ngi.eu/>`_ initiative. This packaging was contributed by the `Nix@NGI team <https://nixos.org/community/teams/ngi/>`_, an NLnet partner, as part of DataLab's funding through the NGI0 Commons Fund."
+msgstr "DataLab est packagé pour `NixOS <https://nixos.org/>`_ et distribué via la `NGI Forge <https://ngi.nixos.org/app/datalab>`_, le système de distribution logicielle des projets financés par l'initiative `Next Generation Internet (NGI) <https://www.ngi.eu/>`_. Ce packaging a été réalisé par l'`équipe Nix@NGI <https://nixos.org/community/teams/ngi/>`_, partenaire de NLnet, dans le cadre du financement de DataLab par le NGI0 Commons Fund."
+
+msgid "On any system with `Nix <https://nix.dev/>`_ installed, enter the Nix shell that provides DataLab (the ready-to-copy command is available on the `NGI Forge page <https://ngi.nixos.org/app/datalab>`_), then start the desktop application:"
+msgstr "Sur tout système où `Nix <https://nix.dev/>`_ est installé, entrez dans le shell Nix qui fournit DataLab (la commande prête à copier est disponible sur la `page NGI Forge <https://ngi.nixos.org/app/datalab>`_), puis démarrez l'application de bureau :"
+
+msgid "Or, for an automated demonstration of some of DataLab's features:"
+msgstr "Ou, pour une démonstration automatisée de certaines fonctionnalités de DataLab :"
 
 msgid "Package manager ``pip``"
 msgstr "Gestionnaire de paquets ``pip``"
@@ -441,4 +459,3 @@ msgstr ""
 
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
-

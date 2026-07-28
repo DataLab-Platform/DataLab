@@ -125,13 +125,26 @@ class BaseNode(metaclass=abc.ABCMeta):
         return self.__obj
 
     def collect_attributes(self):
-        """Collect attributes from node"""
+        """Collect attributes from node.
+
+        HDF5 attributes are opportunistically copied to the object metadata.
+        Values that cannot be safely serialized are skipped: HDF5 object or
+        region *reference* attributes (e.g. ``DIMENSION_LIST`` /
+        ``REFERENCE_LIST`` arrays produced by ``h4toh5convert``) are exposed by
+        h5py as ``object``-dtype arrays of :class:`h5py.h5r.Reference`, which
+        raise ``TypeError: no default __reduce__`` when DataLab pickles the
+        object to run a computation in a worker process.
+        """
         for key, value in self.dset.attrs.items():
             if isinstance(value, bytes):
                 value = to_string(value)
-            if isinstance(value, (np.ndarray, str, float, int, bool)) or np.isscalar(
-                value
-            ):
+            if isinstance(value, np.ndarray):
+                # Keep only numeric, boolean and string arrays. ``object`` and
+                # ``void`` dtypes (how h5py exposes reference and compound
+                # attributes) are not picklable, hence skipped.
+                if value.dtype.kind in "biufcSU":
+                    self.metadata[key] = value
+            elif isinstance(value, (str, float, int, bool)) or np.isscalar(value):
                 self.metadata[key] = value
 
     def __process_metadata(self, obj):

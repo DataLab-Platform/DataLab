@@ -48,8 +48,11 @@ msgstr "L'action \"Recalculer\" |recompute| vous permet de recalculer l'image (o
 msgid "recompute"
 msgstr ""
 
-msgid "This action is only available for images that were created through processing operations and have stored processing parameters."
-msgstr "Cette action n'est disponible que pour les images qui ont été créées par des opérations de traitement et qui ont des paramètres de traitement stockés."
+msgid "It also refreshes analysis results (statistics, FWHM, centroid, peak/contour/blob detection, etc.) using their stored parameters. Analysis results are not recomputed automatically when you modify a region of interest, the data, or object properties: existing results are left untouched until you explicitly trigger this action, giving you full control over when analyses are refreshed."
+msgstr "Cette action actualise également les résultats d'analyse (statistiques, FWHM, centroïde, détection de pics, de contours ou de blobs, etc.) à partir de leurs paramètres enregistrés. Les résultats d'analyse ne sont pas recalculés automatiquement lorsque vous modifiez une région d'intérêt, les données ou les propriétés de l'objet : les résultats existants restent inchangés jusqu'à ce que vous déclenchiez explicitement cette action, vous laissant ainsi un contrôle total sur le moment où les analyses sont actualisées."
+
+msgid "This action is only available for images that have stored processing parameters (created through processing operations) or stored analysis parameters (analysis operations previously run on them)."
+msgstr "Cette action n'est disponible que pour les images disposant de paramètres de traitement enregistrés (images créées par des opérations de traitement) ou de paramètres d'analyse enregistrés (opérations d'analyse exécutées précédemment sur celles-ci)."
 
 msgid "Select source objects"
 msgstr "Sélectionner les objets sources"

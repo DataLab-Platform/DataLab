@@ -28,10 +28,14 @@ from sigima.objects import (
     create_signal,
 )
 from sigima.objects.scalar import GeometryResult, TableResult
+from sigima.tools.signal import fitting as signal_fitting
+from sigima.tools.signal.pulse import LegacyPeakParameterizationError
 
 from datalab.adapters_metadata.table_adapter import TableAdapter
 from datalab.config import _
-from datalab.gui.processor.base import BaseProcessor
+from datalab.env import execenv
+from datalab.gui.processor.base import BaseProcessor, SourcePreparationTransaction
+from datalab.objectmodel import get_uuid
 from datalab.utils.qthelpers import qt_try_except
 from datalab.widgets import (
     fitdialog,
@@ -62,6 +66,110 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         (_("CDF fit"), sips.cdf_fit),
         (_("Sigmoid fit"), sips.sigmoid_fit),
     )
+
+    @staticmethod
+    def __has_legacy_fit_metadata(obj: SignalObj) -> bool:
+        """Return whether a signal carries fit metadata keyed by translated labels.
+
+        Interactive fitting curves computed before the canonical ``fit_params``
+        schema stored their parameters under the dialog function name, keyed by
+        translated UI labels. Such metadata is not evaluable and is only detected
+        here to report an explicit message to the user.
+
+        Args:
+            obj: Signal object to inspect.
+
+        Returns:
+            Whether legacy interactive fit metadata was found.
+        """
+        return any(
+            key.endswith("fit") and isinstance(value, dict)
+            for key, value in obj.metadata.items()
+        )
+
+    def prepare_fit_evaluation(
+        self, objects: list[SignalObj]
+    ) -> SourcePreparationTransaction | None:
+        """Prepare historical peak-fit metadata for transactional conversion."""
+        converted: dict[str, signal_fitting.FitParams] = {}
+        invalid = []
+        for obj in objects:
+            fit_params = obj.metadata.get("fit_params")
+            if not isinstance(fit_params, dict):
+                if self.__has_legacy_fit_metadata(obj):
+                    invalid.append(
+                        _(
+                            "%s: fitting curve was computed by an earlier version "
+                            "and cannot be evaluated (please recompute the fit)"
+                        )
+                        % obj.title
+                    )
+                else:
+                    invalid.append(
+                        _("%s: signal does not contain valid fit parameters")
+                        % obj.title
+                    )
+                continue
+            try:
+                signal_fitting.validate_fit_params(fit_params)
+            except LegacyPeakParameterizationError:
+                try:
+                    converted[get_uuid(obj)] = (
+                        signal_fitting.convert_legacy_peak_fit_params(fit_params)
+                    )
+                except ValueError as exc:
+                    invalid.append(f"{obj.title}: {exc}")
+            except (TypeError, ValueError) as exc:
+                invalid.append(f"{obj.title}: {exc}")
+        if invalid:
+            error = "\n".join(invalid)
+            if execenv.unattended:
+                raise ValueError(error)
+            QW.QMessageBox.warning(
+                self.mainwindow,
+                _("Cannot evaluate fit"),
+                _(
+                    "One or more selected signals have invalid or unsupported fit "
+                    "parameters:\n%s"
+                )
+                % error,
+            )
+            return None
+        if converted:
+            if execenv.unattended:
+                raise LegacyPeakParameterizationError(
+                    "Historical area-based peak parameters require explicit conversion"
+                )
+            answer = QW.QMessageBox.question(
+                self.mainwindow,
+                _("Convert historical fit parameters"),
+                _(
+                    "One or more selected fitting curves use historical area-based "
+                    "peak parameters. Convert them to signed peak height before "
+                    "evaluating?"
+                ),
+                QW.QMessageBox.Yes | QW.QMessageBox.No,
+                QW.QMessageBox.No,
+            )
+            if answer == QW.QMessageBox.No:
+                return None
+
+        def source_for_execution(
+            original: SignalObj, effective: SignalObj
+        ) -> SignalObj:
+            fit_params = converted.get(get_uuid(original))
+            if fit_params is None:
+                return effective
+            prepared = effective.copy(all_metadata=True)
+            prepared.metadata["fit_params"] = dict(fit_params)
+            return prepared
+
+        def commit(original: SignalObj) -> None:
+            fit_params = converted.get(get_uuid(original))
+            if fit_params is not None:
+                original.metadata["fit_params"] = dict(fit_params)
+
+        return SourcePreparationTransaction(source_for_execution, commit)
 
     # pylint: disable=duplicate-code
 
@@ -377,6 +485,8 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             _("Evaluate fit"),
             obj2_name=_("signal for X values"),
             comment=_("Evaluate a fitting curve on the x-axis of another signal"),
+            skip_xarray_compat=True,
+            pre_execute_hook=self.prepare_fit_evaluation,
         )
 
         # Other processing
@@ -713,18 +823,26 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         """Curve fitting computing sub-method"""
         output = fitdlgfunc(obj.x, obj.y, parent=self.mainwindow)
         if output is not None:
-            y, params = output
-            params: list[fitdialog.FitParam]
-            pvalues = {}
-            for param in params:
-                if re.match(r"[\S\_]*\d{2}$", param.name):
-                    shname = param.name[:-2]
-                    value = pvalues.get(shname, np.array([]))
-                    pvalues[shname] = np.array(list(value) + [param.value])
-                else:
-                    pvalues[param.name] = param.value
+            if len(output) == 3:
+                y, _params, fit_params = output
+                metadata = {"fit_params": fit_params}
+            else:
+                # Fallback for third-party fitting dialogs that do not return
+                # canonical fit parameters: the metadata is keyed by translated
+                # UI labels, hence it cannot be evaluated by "Evaluate fit".
+                # All built-in dialogs return a 3-tuple.
+                y, params = output
+                params: list[fitdialog.FitParam]
+                pvalues = {}
+                for param in params:
+                    if re.match(r"[\S\_]*\d{2}$", param.name):
+                        shname = param.name[:-2]
+                        value = pvalues.get(shname, np.array([]))
+                        pvalues[shname] = np.array(list(value) + [param.value])
+                    else:
+                        pvalues[param.name] = param.value
+                metadata = {fitdlgfunc.__name__: pvalues}
             # Creating new signal
-            metadata = {fitdlgfunc.__name__: pvalues}
             signal = create_signal(f"{name}({obj.title})", obj.x, y, metadata=metadata)
             # Creating new plot item
             self.panel.add_object(signal)
