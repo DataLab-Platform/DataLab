@@ -1875,7 +1875,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Open a DataLab HDF5 file or import from any other HDF5 file.
 
         Args:
-            h5files: HDF5 filenames (optionally with dataset name, separated by ":")
+            h5files: HDF5 filenames (optionally with dataset name, separated by ",")
             import_all: Import all datasets from HDF5 files
             reset_all: Reset all application data before importing
         """
@@ -2030,7 +2030,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         Args:
             filename: HDF5 filename (optionally with dataset name,
-            separated by ":")
+            separated by ",")
             reset_all: Delete all DataLab signals/images before importing data
         """
         with qth.qt_try_loadsave_file(self, filename, "load"):
