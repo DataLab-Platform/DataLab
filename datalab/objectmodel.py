@@ -528,6 +528,26 @@ class ObjectModel:
         else:
             self._group_deleted_refs.pop(group.uuid, None)
 
+    def copy_group_registries(
+        self, src_group: ObjectGroup, dst_group: ObjectGroup
+    ) -> None:
+        """Copy the group-scoped registries from ``src_group`` to ``dst_group``.
+
+        Groups have no metadata dict, so their deleted-source reference registry
+        and their processing-generated ("computed") title are stored in the
+        model instead of being carried by the group itself. They must therefore
+        be copied explicitly when a group is duplicated, so the copy keeps the
+        same provenance as the original.
+
+        Args:
+            src_group: group to copy the registries from
+            dst_group: group to copy the registries to
+        """
+        self.set_group_deleted_refs(dst_group, self.get_deleted_refs(src_group))
+        computed_title = self.get_computed_title(src_group)
+        if computed_title is not None:
+            self.set_computed_title(dst_group, computed_title)
+
     def __replace_in_object_titles(
         self, obj_or_group: SignalObj | ImageObj | ObjectGroup, old: str, new: str
     ) -> None:

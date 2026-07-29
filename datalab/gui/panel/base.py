@@ -1766,6 +1766,10 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Duplicate groups (exclusive with respect to individual objects)
         for group in self.objview.get_sel_groups():
             new_group = self.add_group(group.title)
+            # Group-scoped registries (deleted-source references and computed
+            # title) are stored in the model, not in the group, so they have to
+            # be copied explicitly to preserve the duplicate's provenance:
+            self.objmodel.copy_group_registries(group, new_group)
             for oid in self.objmodel.get_group_object_ids(get_uuid(group)):
                 self.__duplicate_individual_obj(
                     oid, get_uuid(new_group), set_current=False
