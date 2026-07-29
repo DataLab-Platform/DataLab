@@ -972,6 +972,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         with sgmx_qth.try_or_log_error("Unregistering plugins"):
             PluginRegistry.unregister_all_plugins()
 
+    def __restart_processor_pool(self) -> None:
+        """Restart the shared pool after plugin paths change at runtime."""
+        for processor in (self.imagepanel.processor, self.signalpanel.processor):
+            if processor.worker is not None:
+                processor.worker.restart_pool()
+                return
+
     def __configure_plugins(self) -> None:
         """Open plugin configuration dialog"""
         dialog = PluginConfigDialog(self)
@@ -1018,6 +1025,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             with sgmx_qth.try_or_log_error("Discovering plugins (reload)"):
                 plugin_nb = len(discover_plugins())
                 execenv.log(self, f"{plugin_nb} plugin(s) found (reloaded)")
+            self.__restart_processor_pool()
 
             # Get enabled plugins list from configuration
             # None = all enabled (default), [] = none, list = specific plugins

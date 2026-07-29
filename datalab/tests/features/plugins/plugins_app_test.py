@@ -106,7 +106,11 @@ def test_plugin_system():  # pylint: disable=too-many-statements
             )
 
             # Trigger reload
-            win.reload_plugins()
+            processor = win.imagepanel.processor
+            assert processor.worker is not None
+            with patch.object(processor.worker, "restart_pool") as restart_pool:
+                win.reload_plugins()
+            restart_pool.assert_called_once_with()
             QW.QApplication.processEvents()
 
             # Verify both plugins are present
