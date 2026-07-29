@@ -678,6 +678,29 @@ def test_plugin_with_dialogs():
                 assert result is True
 
 
+def test_contour_plugin_example_import() -> None:
+    """Test that the contour plugin example imports with public adapters."""
+    example_path = osp.abspath(
+        osp.join(
+            osp.dirname(__file__),
+            "..",
+            "..",
+            "..",
+            "..",
+            "plugins",
+            "examples",
+            "datalab_exemple_contour_plot.py",
+        )
+    )
+    spec = importlib.util.spec_from_file_location(
+        "datalab_contour_plugin", example_path
+    )
+    assert spec is not None
+    assert spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+
+
 if __name__ == "__main__":
     _launch_path = osp.join(osp.dirname(__file__), "launch_with_test_plugins.py")
     _spec = importlib.util.spec_from_file_location(
