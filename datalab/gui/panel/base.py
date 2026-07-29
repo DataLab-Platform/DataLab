@@ -2643,6 +2643,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # This ensures subsequent changes are compared against the current values
         self.objprop.update_original_values()
 
+        # Properties may change the action enable state (e.g. editing the title
+        # here makes the "Reset to computed title" action relevant), so refresh
+        # the selection-dependent actions:
+        self.acthandler.selected_objects_changed(
+            self.objview.get_sel_groups(),
+            self.objview.get_sel_objects(include_groups=True),
+        )
+
     def recompute_selected(self) -> None:
         """Recompute/rerun selected objects or group with stored parameters.
 
