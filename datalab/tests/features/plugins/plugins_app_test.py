@@ -15,6 +15,7 @@ import importlib.util
 import os
 import os.path as osp
 from contextlib import contextmanager
+from pathlib import Path
 from unittest.mock import patch
 
 from qtpy import QtWidgets as QW
@@ -678,27 +679,15 @@ def test_plugin_with_dialogs():
                 assert result is True
 
 
-def test_contour_plugin_example_import() -> None:
-    """Test that the contour plugin example imports with public adapters."""
-    example_path = osp.abspath(
-        osp.join(
-            osp.dirname(__file__),
-            "..",
-            "..",
-            "..",
-            "..",
-            "plugins",
-            "examples",
-            "datalab_exemple_contour_plot.py",
-        )
-    )
-    spec = importlib.util.spec_from_file_location(
-        "datalab_contour_plugin", example_path
-    )
-    assert spec is not None
-    assert spec.loader is not None
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+def test_plugin_examples_import() -> None:
+    """Test that all shipped plugin examples import successfully."""
+    examples_dir = Path(__file__).parents[4] / "plugins" / "examples"
+    for example_path in examples_dir.glob("*.py"):
+        spec = importlib.util.spec_from_file_location(example_path.stem, example_path)
+        assert spec is not None
+        assert spec.loader is not None
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
 
 
 if __name__ == "__main__":
