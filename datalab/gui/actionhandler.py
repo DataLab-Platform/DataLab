@@ -318,9 +318,21 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         selected_objects: list[SignalObj | ImageObj],
     ) -> bool:
         """Return whether the single selected object or group has a customized
-        computed title that can be restored."""
-        if len(selected_groups) == 1 and not selected_objects:
-            target = selected_groups[0]
+        computed title that can be restored.
+
+        Note:
+            ``selected_objects`` is usually built with ``include_groups=True``,
+            so selecting a single group also yields that group's objects. Those
+            implicit objects must be ignored, otherwise the action would never
+            be enabled for a group.
+        """
+        if len(selected_groups) == 1:
+            group = selected_groups[0]
+            if any(obj not in group for obj in selected_objects):
+                # Objects outside the selected group are also selected:
+                # the target is ambiguous.
+                return False
+            target = group
         elif len(selected_objects) == 1 and not selected_groups:
             target = selected_objects[0]
         else:
