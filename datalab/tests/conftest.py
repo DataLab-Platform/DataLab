@@ -11,11 +11,6 @@ executed before running any tests.
 import os
 import os.path as osp
 
-# Prevent DataLab import-time synchronization from exporting the user's typed
-# configuration into isolated option tests.
-os.environ.pop("DATALAB_OPTIONS_JSON", None)
-os.environ.pop("DATALAB_XMLRPCPORT", None)
-
 import guidata
 import h5py
 import numpy
@@ -31,8 +26,10 @@ from guidata.utils.gitreport import format_git_info_for_pytest, get_git_info_for
 from sigima.tests import helpers
 
 import datalab
+from datalab.config import Conf, ensure_initialized, reset_to_defaults
 from datalab.env import execenv
 from datalab.plugins import PluginRegistry, get_available_plugins
+from datalab.tests import close_datalab_background
 
 # Set validation mode to STRICT for all tests
 set_validation_mode(ValidationMode.STRICT)
@@ -42,6 +39,18 @@ execenv.unattended = True
 execenv.verbose = "quiet"
 
 INITIAL_CWD = os.getcwd()
+
+
+@pytest.fixture(autouse=True)
+def reset_datalab_configuration():
+    """Start every test with production defaults and no INI persistence."""
+    ensure_initialized(load_user_config=False)
+    reset_to_defaults()
+    Conf.rpc_server_enabled.set(False)
+    try:
+        yield
+    finally:
+        close_datalab_background()
 
 
 def pytest_addoption(parser):
@@ -128,18 +137,6 @@ def reset_cwd(request):  # pylint: disable=unused-argument
     """Reset the current working directory to the initial one after each test."""
     yield
     os.chdir(INITIAL_CWD)
-
-
-@pytest.fixture(autouse=True)
-def restore_datalab_options_env():
-    """Restore the cross-process options snapshot after each test."""
-    env_var = "DATALAB_OPTIONS_JSON"
-    original = os.environ.get(env_var)
-    yield
-    if original is None:
-        os.environ.pop(env_var, None)
-    else:
-        os.environ[env_var] = original
 
 
 @pytest.hookimpl(tryfirst=True)

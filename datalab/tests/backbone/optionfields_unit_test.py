@@ -9,6 +9,7 @@ import os.path as osp
 
 import guidata.dataset as gds
 import pytest
+from sigimax.config import AppOptionsContainer
 
 # Ensure the INI configuration backend (CONF) is initialized with an application
 # name so that Configuration.get_path resolves inside the config directory.
@@ -21,14 +22,8 @@ from datalab.config.optionfields import (
 )
 
 
-class _StubContainer:
+class _StubContainer(AppOptionsContainer):
     """Minimal options container for testing individual option fields."""
-
-    def ensure_loaded_from_env(self) -> None:
-        """No-op: no environment synchronization in unit tests."""
-
-    def sync_env(self) -> None:
-        """No-op: no environment synchronization in unit tests."""
 
 
 class _SampleParam(gds.DataSet):
@@ -136,3 +131,14 @@ def test_dataset_option_field() -> None:
     new_default.value = 99
     field.set_default_instance(new_default)
     assert field.get() is new_default
+
+
+def test_dataset_option_field_invalid_json_uses_default() -> None:
+    """An unresolved DataSet class is discarded and falls back to the default."""
+    container = _StubContainer()
+    default = _SampleParam()
+    field = DataSetOptionField(container, "sample_param", default_instance=default)
+    field.from_json('{"class_module": "missing_module", "class_name": "MissingParam"}')
+
+    assert field.get() is default
+    assert not container.is_option_initialized("sample_param")

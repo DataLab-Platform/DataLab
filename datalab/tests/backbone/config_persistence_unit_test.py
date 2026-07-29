@@ -5,7 +5,8 @@ Unit tests for the DataLab configuration persistence layer
 (:mod:`datalab.config_persistence`).
 """
 
-import configparser
+import shutil
+from pathlib import Path
 
 import guidata.dataset as gds
 import pytest
@@ -44,69 +45,51 @@ def _make_conf() -> AppUserConfig:
     return conf
 
 
-class _DirectoryConfig(DataLabUserConfig):
-    """DataLab config backend rooted in a temporary test directory."""
-
-    def __init__(self, directory) -> None:
-        self._directory = directory
-        super().__init__({})
-
-    def get_path(self, basename: str) -> str:
-        """Return a path in the temporary test directory."""
-        return str(self._directory / basename)
-
-
 def test_legacy_configuration_migrates_without_modifying_source(
     tmp_path, monkeypatch
 ) -> None:
     """The first typed startup copies legacy values and preserves downgrade."""
+    fixture = Path(__file__).parents[2] / "data" / "tests" / "config" / "DataLab_v1.ini"
+    fixture_bytes = fixture.read_bytes()
     legacy_filename = tmp_path / "DataLab_v1.ini"
-    shape_json = gds.dataset_to_json(DataLabShapeParam()).replace(
-        '"class_module": "datalab.config.config"',
-        '"class_module": "datalab.config"',
-    )
-    legacy = configparser.ConfigParser()
-    legacy.read_dict(
-        {
-            "main": {
-                "version": CONF_VERSION,
-                "plugins_enabled_list": repr(["Test Plugin 1"]),
-                "plugins_path": repr(str(tmp_path / "plugins")),
-            },
-            "view": {
-                "max_shapes_to_draw": "321",
-                "sig_shape_param": shape_json,
-            },
-        }
-    )
-    with legacy_filename.open("w", encoding="utf-8") as stream:
-        legacy.write(stream)
+    shutil.copyfile(fixture, legacy_filename)
     legacy_bytes = legacy_filename.read_bytes()
 
-    typed = _DirectoryConfig(tmp_path)
+    typed = DataLabUserConfig({})
+    monkeypatch.setattr(typed, "get_path", lambda basename: str(tmp_path / basename))
     typed.set_application("DataLab_v1", CONF_VERSION, load=False)
     monkeypatch.setattr(confmod, "CONF", typed)
-    monkeypatch.delenv(DataLabOptions.ENV_VAR, raising=False)
     options = DataLabOptions()
 
     assert migrate_legacy_configuration(options, str(legacy_filename), typed)
+    assert fixture.read_bytes() == fixture_bytes
     assert legacy_filename.read_bytes() == legacy_bytes
     assert typed.filename().endswith("DataLab_v1_typed.ini")
-    assert options.max_shapes_to_draw.get() == 321
-    assert options.plugins_path.get() == str(tmp_path / "plugins")
-    assert options.plugins_path_list.get() == []
-    assert options.plugins_enabled_list.get() == ["Test Plugin 1"]
-    assert isinstance(options.sig_shape_param.get_raw(), DataLabShapeParam)
+    assert options.rpc_server_enabled.get() is False
+    assert options.rpc_server_port.get() is None
+    assert options.max_shapes_to_draw.get() == 1000
+    assert options.plugins_path.get() == r"C:\Users\anonymous\.DataLab_v1\plugins"
+    assert options.plugins_path_list.get() == [
+        r"C:\Users\anonymous\.DataLab_v1\plugins"
+    ]
+    assert options.plugins_enabled_list.get() is None
+    assert isinstance(options.sig_shape_param.get(), DataLabShapeParam)
 
-    reloaded_backend = _DirectoryConfig(tmp_path)
+    reloaded_backend = DataLabUserConfig({})
+    monkeypatch.setattr(
+        reloaded_backend, "get_path", lambda basename: str(tmp_path / basename)
+    )
     reloaded_backend.set_application("DataLab_v1", CONF_VERSION, load=True)
-    monkeypatch.delenv(DataLabOptions.ENV_VAR, raising=False)
     reloaded_options = DataLabOptions()
     load_options_from_ini(reloaded_options, reloaded_backend)
-    assert reloaded_options.max_shapes_to_draw.get() == 321
-    assert reloaded_options.plugins_path_list.get() == []
-    assert reloaded_options.plugins_enabled_list.get() == ["Test Plugin 1"]
-    assert isinstance(reloaded_options.sig_shape_param.get_raw(), DataLabShapeParam)
+    assert reloaded_options.rpc_server_enabled.get() is False
+    assert reloaded_options.rpc_server_port.get() is None
+    assert reloaded_options.max_shapes_to_draw.get() == 1000
+    assert reloaded_options.plugins_path_list.get() == [
+        r"C:\Users\anonymous\.DataLab_v1\plugins"
+    ]
+    assert reloaded_options.plugins_enabled_list.get() is None
+    assert isinstance(reloaded_options.sig_shape_param.get(), DataLabShapeParam)
     assert not migrate_legacy_configuration(options, str(legacy_filename), typed)
 
 
@@ -114,7 +97,8 @@ def test_atomic_configuration_save_cleans_up_after_replace_error(
     tmp_path, monkeypatch
 ) -> None:
     """A failed atomic replacement leaves no typed or temporary file."""
-    config = _DirectoryConfig(tmp_path)
+    config = DataLabUserConfig({})
+    monkeypatch.setattr(config, "get_path", lambda basename: str(tmp_path / basename))
     config.set_application("DataLab_v1", CONF_VERSION, load=False)
     config.set("main", "color_mode", "dark", save=False)
 

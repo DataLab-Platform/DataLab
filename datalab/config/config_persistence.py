@@ -248,13 +248,13 @@ def _load_field(options, conf, field_name: str, section: str, ini_key: str) -> N
         family = conf.get(section, f"{ini_key}_family", default=fam_d)
         size = conf.get(section, f"{ini_key}_size", default=size_d)
         bold = conf.get(section, f"{ini_key}_bold", default=bold_d)
-        field.set((family, size, bold), sync_env=False)
+        field.set((family, size, bold))
     elif isinstance(field, (ConfigPathOptionField, WorkingDirOptionField)):
         default = default_raw if default_raw is not None else ""
         field.set_raw(conf.get(section, ini_key, default=default))
     elif field_name in DATETIME_FIELDS:
         raw = conf.get(section, ini_key, default=_escape_percent(default_raw))
-        field.set(_unescape_percent(raw), sync_env=False)
+        field.set(_unescape_percent(raw))
     else:
         # ``conf.get`` on a *missing* option re-persists the supplied default
         # through the INI backend, coercing it to the type inferred from any
@@ -264,7 +264,7 @@ def _load_field(options, conf, field_name: str, section: str, ini_key: str) -> N
         # back to the raw default otherwise (mirroring ``_save_field``, which
         # clears None-valued options instead of persisting them).
         if conf.has_option(section, ini_key):
-            field.set(conf.get(section, ini_key), sync_env=False)
+            field.set(conf.get(section, ini_key))
 
 
 def _save_field(options, conf, field_name: str, section: str, ini_key: str) -> None:
@@ -287,18 +287,16 @@ def _save_field(options, conf, field_name: str, section: str, ini_key: str) -> N
             return  # Never explicitly set: leave the default instance implicit.
         conf.set(section, ini_key, _escape_percent(json_str), save=False)
     elif isinstance(field, FontOptionField):
-        family, size, bold = field.get(sync_env=False)
+        family, size, bold = field.get()
         conf.set(section, f"{ini_key}_family", family, save=False)
         conf.set(section, f"{ini_key}_size", size, save=False)
         conf.set(section, f"{ini_key}_bold", bold, save=False)
     elif isinstance(field, (ConfigPathOptionField, WorkingDirOptionField)):
         conf.set(section, ini_key, field.get_raw(), save=False)
     elif field_name in DATETIME_FIELDS:
-        conf.set(
-            section, ini_key, _escape_percent(field.get(sync_env=False)), save=False
-        )
+        conf.set(section, ini_key, _escape_percent(field.get()), save=False)
     else:
-        value = field.get(sync_env=False)
+        value = field.get()
         # ``None`` means "unset": remove any persisted value so that a previously
         # stored non-None value does not linger in the INI (setting a field back
         # to None must clear it, e.g. ``plugins_enabled_list``). This also avoids
@@ -328,7 +326,6 @@ def load_options_from_ini(
         if location is None:
             continue
         _load_field(options, conf, field_name, *location)
-    options.sync_env()
 
 
 def save_options_to_ini(
@@ -372,6 +369,8 @@ def save_runtime_option(
         conf: The ``UserConfig`` INI backend to write to (defaults to the
          module-level DataLab ``CONF``).
     """
+    if conf is None and not options.is_ini_persist_enabled():
+        return
     conf = _default_conf() if conf is None else conf
     location = get_ini_location(options, name)
     if location is None:

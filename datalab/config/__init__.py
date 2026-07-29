@@ -28,6 +28,7 @@ from .config import (
     Conf,
     DataLabUserConfig,
     _,
+    ensure_initialized,
     get_config_app_name,
     get_config_filename,
     get_config_path,
@@ -40,8 +41,8 @@ from .config import (
     migrate_legacy_configuration,
     migrate_legacy_plugin_paths,
     normalize_plugin_paths,
-    reload_from_ini,
     reset,
+    reset_to_defaults,
     set_user_plugin_paths,
 )
 
@@ -66,6 +67,7 @@ __all__ = [
     "DataLabUserConfig",
     "_",
     "config",
+    "ensure_initialized",
     "get_config_app_name",
     "get_config_filename",
     "get_config_path",
@@ -78,8 +80,8 @@ __all__ = [
     "migrate_legacy_configuration",
     "migrate_legacy_plugin_paths",
     "normalize_plugin_paths",
-    "reload_from_ini",
     "reset",
+    "reset_to_defaults",
     "set_user_plugin_paths",
 ]
 

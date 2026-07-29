@@ -13,10 +13,11 @@ import os.path as osp
 
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
-from sigimax.utils.conf import CONF
+from sigimax.utils import conf as confmod
 
 from datalab import app
-from datalab.config import Conf
+from datalab.config import CONF_VERSION, Conf, DataLabUserConfig
+from datalab.config.config_persistence import load_options_from_ini
 from datalab.env import execenv
 from datalab.tests import helpers
 from datalab.utils.qthelpers import datalab_app_context
@@ -67,20 +68,21 @@ CONFIGS = (
 )
 
 
-def apply_conf(conf, name):
+def apply_conf(backend, settings, name):
     """Apply configuration"""
     execenv.print(f"  Applying configuration {name}:")
-    fname = CONF.filename()
+    fname = backend.filename()
     try:
         os.remove(fname)
         execenv.print(f"    Removed configuration file {fname}")
     except FileNotFoundError:
         execenv.print(f"    Configuration file {fname} was not found")
-    for section, settings in conf.items():
-        for option, value in settings.items():
+    for section, section_settings in settings.items():
+        for option, value in section_settings.items():
             execenv.print(f"    Writing [{section}][{option}] = {value}")
-            CONF.set(section, option, value)
-    CONF.save()
+            backend.set(section, option, value)
+    backend.save()
+    load_options_from_ini(Conf, backend)
 
 
 def is_wsl() -> bool:
@@ -148,20 +150,28 @@ def check_conf(conf, name, win: QW.QMainWindow, h5files):
         execenv.print("OK (changed to HDF5 file path)")
 
 
-def test_config():
+def test_config(tmp_path, monkeypatch):
     """Testing DataLab configuration file"""
-    with execenv.context(unattended=True):
-        h5files = [helpers.get_test_fnames("*.h5")[1]]
-        execenv.print("Testing DataLab configuration settings:")
-        for index, conf in enumerate(CONFIGS):
-            name = f"CONFIG{index}"
-            apply_conf(conf, name)
-            with datalab_app_context(exec_loop=True) as qapp:
-                win = app.create(splash=False, h5files=h5files)
-                qapp.processEvents()
-                check_conf(conf, name, win, h5files)
-            h5files = None
-        execenv.print("=> Everything is OK")
+    backend = DataLabUserConfig({})
+    monkeypatch.setattr(backend, "get_path", lambda basename: str(tmp_path / basename))
+    backend.set_application("DataLab_pytest", CONF_VERSION, load=False)
+    monkeypatch.setattr(confmod, "CONF", backend)
+    original_options = Conf.to_dict()
+    try:
+        with execenv.context(unattended=True):
+            h5files = [helpers.get_test_fnames("*.h5")[1]]
+            execenv.print("Testing DataLab configuration settings:")
+            for index, settings in enumerate(CONFIGS):
+                name = f"CONFIG{index}"
+                apply_conf(backend, settings, name)
+                with datalab_app_context(exec_loop=True) as qapp:
+                    win = app.create(splash=False, h5files=h5files)
+                    qapp.processEvents()
+                    check_conf(settings, name, win, h5files)
+                h5files = None
+            execenv.print("=> Everything is OK")
+    finally:
+        Conf.from_dict(original_options)
 
 
 if __name__ == "__main__":

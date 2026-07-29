@@ -25,16 +25,13 @@ Design notes
   ``macro_``/``ai_`` prefix to avoid generic-name collisions in the flat
   namespace (e.g. ``ai_enabled``, ``ai_provider``).
 - :meth:`DataLabOptions.to_dict` / :meth:`DataLabOptions.from_dict` are
-  overridden so that fields whose ``get``/``set`` transform the stored value
-  (config paths, working directory, DataSet options) are (de)serialized using
-  their *raw* value, keeping the JSON environment-variable synchronization
-  lossless and JSON-compatible.
+    overridden so that fields whose ``get``/``set`` transform the stored value
+    (config paths, working directory, DataSet options) are (de)serialized using
+    their *raw* value.
 """
 
 from __future__ import annotations
 
-import json
-import os
 from typing import Any
 
 from guidata import configtools
@@ -59,12 +56,10 @@ class DataLabOptions(SigimaXOptions):
     and replaces a few inherited fields with DataLab-specific field types.
     """
 
-    ENV_VAR = "DATALAB_OPTIONS_JSON"
     APP_NAME = APP_NAME
     CONF_VERSION = "1.0.0"
 
     def __init__(self) -> None:
-        external_values = os.environ.get(self.ENV_VAR)
         # INI write-through is disabled until the initial load has completed; it
         # is enabled by :mod:`datalab.config` after ``load_options_from_ini``.
         self._ini_persist_enabled = False
@@ -508,30 +503,21 @@ class DataLabOptions(SigimaXOptions):
         # Set programmatically so that reused SigimaX widgets and windows display
         # DataLab's identity (name, version, icon, URLs, splash) when they read
         # the active configuration via ``sigimax.config.get_conf()``.
-        self.app_name.set(APP_NAME, sync_env=False)
-        self.app_version.set(__version__, sync_env=False)
-        self.app_logo_path.set("DataLab.svg", sync_env=False)
-        self.app_docurl.set(__docurl__, sync_env=False)
-        self.app_homeurl.set(__homeurl__, sync_env=False)
-        self.app_supporturl.set(__supporturl__, sync_env=False)
-        self.splash_image_path.set("DataLab-Splash.png", sync_env=False)
-        self.splash_show_progress.set(False, sync_env=False)
+        self.app_name.set(APP_NAME)
+        self.app_version.set(__version__)
+        self.app_logo_path.set("DataLab.svg")
+        self.app_docurl.set(__docurl__)
+        self.app_homeurl.set(__homeurl__)
+        self.app_supporturl.set(__supporturl__)
+        self.splash_image_path.set("DataLab-Splash.png")
+        self.splash_show_progress.set(False)
 
         # Recapture defaults now that DataLab-specific fields exist, using the
         # raw-aware serialization (see to_dict) so reset_to_defaults is correct
         # for config-path, working-dir and DataSet fields.
         self._defaults = self.to_dict()
 
-        if external_values and external_values != "{}":
-            try:
-                self.from_dict(json.loads(external_values))
-            except (json.JSONDecodeError, TypeError) as exc:
-                print(f"[datalab] Warning: invalid {self.ENV_VAR}: {exc}")
-                self.sync_env()
-        else:
-            self.sync_env()
-
-    # -- Raw-aware (de)serialization for env-var sync and defaults --
+    # -- Raw-aware (de)serialization for persistence and defaults --
 
     def to_dict(self) -> dict[str, Any]:
         """Return all option values as a JSON-compatible dictionary.
@@ -554,7 +540,7 @@ class DataLabOptions(SigimaXOptions):
             elif isinstance(field, (ConfigPathOptionField, WorkingDirOptionField)):
                 result[name] = field.get_raw()
             else:
-                result[name] = field.get(sync_env=False)
+                result[name] = field.get()
         return result
 
     def from_dict(self, values: dict[str, Any]) -> None:
@@ -581,14 +567,18 @@ class DataLabOptions(SigimaXOptions):
                 elif isinstance(field, (ConfigPathOptionField, WorkingDirOptionField)):
                     field.set_raw(value)
                 else:
-                    field.set(value, sync_env=False)
+                    field.set(value)
             except (ValueError, TypeError) as exc:  # pylint: disable=broad-except
                 print(f"[datalab] Warning: invalid value for option '{name}': {exc}")
-        self.sync_env()
 
     def reset_to_defaults(self) -> None:
         """Reset all options to their default values (raw-aware)."""
+        self._initialized_options.clear()
         self.from_dict(self._defaults)
+        for name in self._defaults:
+            field = getattr(self, name)
+            field._is_initialized = False  # pylint: disable=protected-access
+        self._initialized_options.clear()
 
     # -- Option categories (DataLab-specific extensions) --
 
@@ -622,17 +612,23 @@ class DataLabOptions(SigimaXOptions):
     def set_ini_persist_enabled(self, enabled: bool) -> None:
         """Enable or disable INI write-through on option changes.
 
-        When enabled, every :meth:`sync_env` (triggered by an option ``set``)
-        also flushes the whole configuration to the INI file. This is disabled
-        during the initial load and enabled afterwards by :mod:`datalab.config`.
+        When enabled, option changes flush the configuration to the INI file.
+        This is disabled during the initial load and enabled afterwards by
+        :mod:`datalab.config`.
 
         Args:
             enabled: Whether INI write-through is active.
         """
         self._ini_persist_enabled = enabled
 
+    def is_ini_persist_enabled(self) -> bool:
+        """Return whether option changes are persisted to the INI file."""
+        return self._ini_persist_enabled
+
     def snapshot_option_context_state(self, name: str) -> bool:
         """Return whether an option was persisted before a temporary context."""
+        if not self._ini_persist_enabled:
+            return False
         # Imported lazily to avoid a config_options/config_persistence cycle.
         # pylint: disable=import-outside-toplevel
         from datalab.config.config_persistence import has_persisted_option
@@ -641,7 +637,7 @@ class DataLabOptions(SigimaXOptions):
 
     def restore_option_context_state(self, name: str, was_persisted: bool) -> None:
         """Restore persistence presence after a temporary option context."""
-        if not was_persisted:
+        if self._ini_persist_enabled and not was_persisted:
             # Imported lazily to avoid a config_options/config_persistence cycle.
             # pylint: disable=import-outside-toplevel
             from datalab.config.config_persistence import remove_persisted_option
@@ -650,15 +646,17 @@ class DataLabOptions(SigimaXOptions):
 
     def is_option_initialized(self, name: str) -> bool:
         """Return whether an option was loaded, set, or persisted in the INI."""
+        if not self._ini_persist_enabled:
+            return super().is_option_initialized(name)
         # Imported lazily to avoid a config_options/config_persistence cycle.
         # pylint: disable=import-outside-toplevel
         from datalab.config.config_persistence import has_persisted_option
 
         return has_persisted_option(self, name) or super().is_option_initialized(name)
 
-    def sync_env(self) -> None:
-        """Synchronize the environment variable and, if enabled, the INI file."""
-        super().sync_env()
+    def option_changed(self, name: str) -> None:
+        """Persist option changes when INI write-through is enabled."""
+        del name
         if self._ini_persist_enabled:
             # Imported lazily to avoid a hard import cycle at module load time.
             # pylint: disable=import-outside-toplevel

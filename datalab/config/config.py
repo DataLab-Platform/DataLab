@@ -20,7 +20,6 @@ from guidata import configtools
 from guidata.userconfig import get_config_basedir
 from plotpy.config import CONF as PLOTPY_CONF
 from plotpy.config import MAIN_BG_COLOR, MAIN_FG_COLOR
-from plotpy.constants import LUTAlpha
 from plotpy.styles import MarkerParam, ShapeParam
 from sigima.config import options as sigima_options
 from sigima.proc.title_formatting import (
@@ -174,7 +173,7 @@ def migrate_legacy_configuration(
     legacy_conf = _LegacyConfigReader(get_config_app_name())
     legacy_conf.read(legacy_filename, encoding="utf-8")
     load_options_from_ini(options, legacy_conf)
-    migrate_legacy_plugin_paths(options, sync_env=False)
+    migrate_legacy_plugin_paths(options)
     typed_conf.set_version(CONF_VERSION, save=False)
     save_options_to_ini(options, typed_conf, save=False)
     atomic_save_configuration(typed_conf)
@@ -316,17 +315,17 @@ def normalize_plugin_paths(paths: list[str] | tuple[str, ...] | None) -> list[st
 
 
 def migrate_legacy_plugin_paths(
-    options: DataLabOptions, *, sync_env: bool = True
+    options: DataLabOptions,
 ) -> list[str]:
     """Migrate the deprecated single plugin path into the typed path list."""
-    candidates = list(options.plugins_path_list.get([], sync_env=sync_env) or [])
-    legacy_path = options.plugins_path.get("", sync_env=sync_env)
+    candidates = list(options.plugins_path_list.get([]) or [])
+    legacy_path = options.plugins_path.get("")
     fixed_default = osp.normpath(get_config_path("plugins"))
     if legacy_path and isinstance(legacy_path, str):
         normalized_legacy = osp.normpath(osp.abspath(osp.expanduser(legacy_path)))
         if not candidates and normalized_legacy != fixed_default:
             candidates.append(legacy_path)
-            options.plugins_path_list.set(candidates, sync_env=sync_env)
+            options.plugins_path_list.set(candidates)
     return normalize_plugin_paths(candidates)
 
 
@@ -356,15 +355,6 @@ def get_old_log_fname(fname):
     return osp.splitext(fname)[0] + ".1.log"
 
 
-def reload_from_ini() -> None:
-    """Reload the active DataLab options from the INI backend."""
-    Conf.set_ini_persist_enabled(False)
-    try:
-        load_options_from_ini(Conf, conf.CONF)
-    finally:
-        Conf.set_ini_persist_enabled(True)
-
-
 def get_config_path(basename: str) -> str:
     """Return a path inside the DataLab configuration directory."""
     return Configuration.get_path(basename)
@@ -375,115 +365,81 @@ def get_config_filename() -> str:
     return Configuration.get_filename()
 
 
-def initialize():
-    """Initialize application configuration"""
+_INITIALIZED_WITH_USER_CONFIG: bool | None = None
+
+
+def _apply_runtime_defaults() -> None:
+    """Apply defaults that depend on initialized application paths."""
+    if not Conf.macro_templates_path.get():
+        Conf.macro_templates_path.set(get_config_path("macro_templates"))
+    sigima_options.imageio_formats.set(Conf.imageio_formats.get())
+    sigima_options.fft_shift_enabled.set(Conf.fft_shift_enabled.get())
+    sigima_options.auto_normalize_kernel.set(Conf.auto_normalize_kernel.get())
+    assert Conf.plot_toolbar_position.get() in ("top", "bottom", "left", "right")
+
+
+def initialize(load_user_config: bool) -> None:
+    """Initialize the shared DataLab options.
+
+    Args:
+        load_user_config: If True, load or migrate the user configuration and
+         enable INI persistence. If False, use production defaults in memory.
+    """
+    global _INITIALIZED_WITH_USER_CONFIG  # pylint: disable=global-statement
+    if _INITIALIZED_WITH_USER_CONFIG is not None:
+        if _INITIALIZED_WITH_USER_CONFIG != load_user_config:
+            raise RuntimeError("DataLab configuration is already initialized")
+        return
+
     config_app_name = get_config_app_name()
-    typed_exists = osp.isfile(get_typed_config_filename())
+    typed_exists = load_user_config and osp.isfile(get_typed_config_filename())
     Conf.set_ini_persist_enabled(False)
     try:
+        Conf.reset_to_defaults()
         if not isinstance(conf.CONF, DataLabUserConfig):
             conf.CONF = DataLabUserConfig({})
         Configuration.initialize(
             config_app_name, CONF_VERSION, load=typed_exists and not DEBUG
         )
-        if not DEBUG:
+        if load_user_config and not DEBUG:
             if typed_exists:
                 load_options_from_ini(Conf, conf.CONF)
             elif not migrate_legacy_configuration(
                 Conf, get_legacy_config_filename(), conf.CONF
             ):
                 conf.CONF.set_version(CONF_VERSION, save=False)
+        _apply_runtime_defaults()
+        _INITIALIZED_WITH_USER_CONFIG = load_user_config
     finally:
-        Conf.set_ini_persist_enabled(True)
+        Conf.set_ini_persist_enabled(
+            _INITIALIZED_WITH_USER_CONFIG is True and load_user_config
+        )
 
-    # Set default values:
-    # -------------------
-    # (do not use "set" method here to avoid overwriting user settings in .INI file)
-    # Setting here the default values only for the most critical options. The other
-    # options default values are set when used in the application code.
-    #
-    defaults = {
-        "color_mode": "auto",
-        "process_isolation_enabled": True,
-        "rpc_server_enabled": True,
-        "webapi_localhost_no_token": True,
-        "traceback_log_path": f".{APP_NAME}_traceback.log",
-        "faulthandler_log_path": f".{APP_NAME}_faulthandler.log",
-        "available_memory_threshold": 500,
-        "plugins_enabled": True,
-        "plugins_enabled_list": None,
-        "plugins_path": "",
-        "plugins_path_list": [],
-        "tour_enabled": True,
-        "v020_plugins_warning_ignore": False,
-        "console_enabled": True,
-        "show_console_on_error": False,
-        "external_editor_path": "code",
-        "external_editor_args": "-g {path}:{line_number}",
-        "h5_clear_workspace": True,
-        "h5_clear_workspace_ask": True,
-        "h5_fullpath_in_title": False,
-        "h5_fname_in_title": True,
-        "imageio_formats": (),
-        "macro_console_max_lines": 5000,
-        "macro_close_tab_keeps_macro": True,
-        "macro_templates_path": get_config_path("macro_templates"),
-        "operation_mode": "single",
-        "use_signal_bounds": False,
-        "use_image_dims": True,
-        "fft_shift_enabled": True,
-        "auto_normalize_kernel": False,
-        "extract_roi_singleobj": False,
-        "keep_results": False,
-        "show_result_dialog": True,
-        "ignore_warnings": False,
-        "xarray_compat_behavior": "ask",
-        "small_mono_font": (configtools.MONOSPACE, 8, False),
-        "plot_toolbar_position": "left",
-        "ignore_title_insertion_msg": False,
-        "sig_linewidth": 1.0,
-        "sig_linewidth_perfs_threshold": 1000,
-        "sig_autodownsampling": True,
-        "sig_autodownsampling_maxpoints": 100000,
-        "sig_autoscale_margin_percent": 2.0,
-        "ima_autoscale_margin_percent": 1.0,
-        "ima_aspect_ratio_1_1": False,
-        "ima_eliminate_outliers": 0.1,
-        "sig_def_shade": 0.0,
-        "sig_def_curvestyle": "Lines",
-        "sig_def_baseline": 0.0,
-        "ima_def_colormap": "viridis",
-        "ima_def_invert_colormap": False,
-        "ima_def_interpolation": 5,
-        "ima_def_alpha": 1.0,
-        "ima_def_alpha_function": LUTAlpha.NONE.value,
-        "ima_def_keep_lut_range": False,
-        "sig_datetime_format_s": "%H:%M:%S",
-        "sig_datetime_format_ms": "%H:%M:%S.%f",
-        "max_shapes_to_draw": 1000,
-        "max_cells_in_label": 100,
-        "max_cols_in_label": 15,
-        "show_result_label": True,
-        "show_marker_labels_in_table": True,
-    }
-    for field_name, default in defaults.items():
-        getattr(Conf, field_name).get(default)
 
-    iofmts = Conf.imageio_formats.get()
-    if len(iofmts) > 0:
-        sigima_options.imageio_formats.set(iofmts)  # Sync with sigima config
-    sigima_options.fft_shift_enabled.set(True)  # Sync with sigima config
-    sigima_options.auto_normalize_kernel.set(False)  # Sync with sigima config
-    tb_pos = Conf.plot_toolbar_position.get()
-    assert tb_pos in ("top", "bottom", "left", "right")
+def ensure_initialized(load_user_config: bool) -> None:
+    """Initialize configuration unless a caller already selected a mode."""
+    if _INITIALIZED_WITH_USER_CONFIG is None:
+        initialize(load_user_config)
+
+
+def reset_to_defaults() -> None:
+    """Reset the shared options to production defaults without loading an INI."""
+    Conf.set_ini_persist_enabled(False)
+    Conf.reset_to_defaults()
+    _apply_runtime_defaults()
 
 
 def reset():
-    """Reset application configuration"""
+    """Reset application configuration in the active initialization mode."""
+    global _INITIALIZED_WITH_USER_CONFIG  # pylint: disable=global-statement
+    if _INITIALIZED_WITH_USER_CONFIG is False:
+        reset_to_defaults()
+        return
+
     Conf.set_ini_persist_enabled(False)
     Configuration.reset()
-    Conf.reset_to_defaults()
-    initialize()
+    _INITIALIZED_WITH_USER_CONFIG = None
+    initialize(load_user_config=True)
 
 
 ROI_LINE_COLOR = "#5555ff"
@@ -889,4 +845,3 @@ def initialize_default_plotpy_instances():
 
 
 initialize_default_plotpy_instances()
-initialize()

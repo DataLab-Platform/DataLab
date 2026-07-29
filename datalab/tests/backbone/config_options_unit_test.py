@@ -6,7 +6,6 @@ Unit tests for the DataLab options container
 """
 
 import json
-import os
 
 import guidata.dataset as gds
 from sigimax.config import get_conf
@@ -34,8 +33,8 @@ def _make_conf() -> AppUserConfig:
     return conf
 
 
-def test_field_get_default_initializes_ini_and_json(monkeypatch) -> None:
-    """A missing option default updates both persistence representations."""
+def test_field_get_default_initializes_ini(monkeypatch) -> None:
+    """A missing option default updates INI persistence."""
     backend = _make_conf()
     monkeypatch.setattr(confmod, "CONF", backend)
     options = DataLabOptions()
@@ -50,7 +49,6 @@ def test_field_get_default_initializes_ini_and_json(monkeypatch) -> None:
     assert options.window_size.get(default) is default
     assert options.window_size.get() == (900, 700)
     assert backend.get("main", "window_size") == (900, 700)
-    assert json.loads(os.environ[options.ENV_VAR])["window_size"] == [900, 700]
 
 
 def test_field_get_default_preserves_existing_value(monkeypatch) -> None:
@@ -80,8 +78,8 @@ def test_field_get_none_does_not_create_ini_key(monkeypatch) -> None:
     assert not backend.has_option("main", "plugins_enabled_list")
 
 
-def test_field_set_updates_ini_and_json(monkeypatch) -> None:
-    """A field set updates the typed value, JSON environment, and INI backend."""
+def test_field_set_updates_ini(monkeypatch) -> None:
+    """A field set updates the typed value and INI backend."""
     backend = _make_conf()
     monkeypatch.setattr(confmod, "CONF", backend)
     options = DataLabOptions()
@@ -91,7 +89,6 @@ def test_field_set_updates_ini_and_json(monkeypatch) -> None:
 
     assert options.available_memory_threshold.get() == 640
     assert backend.get("main", "available_memory_threshold") == 640
-    assert json.loads(os.environ[options.ENV_VAR])["available_memory_threshold"] == 640
 
 
 def test_field_context_restores_absent_ini_option(monkeypatch) -> None:
@@ -104,7 +101,7 @@ def test_field_context_restores_absent_ini_option(monkeypatch) -> None:
     assert not backend.has_option("console", "console_enabled")
     with options.console_enabled.context(False):
         assert backend.get("console", "console_enabled") is False
-    assert options.console_enabled.get(sync_env=False) is True
+    assert options.console_enabled.get() is True
     assert not backend.has_option("console", "console_enabled")
     assert not options.is_option_initialized("console_enabled")
 
@@ -213,19 +210,6 @@ def test_from_dict_marks_raw_fields_initialized() -> None:
     assert opt.sig_shape_param.get().value == 17
 
 
-def test_environment_raw_value_is_not_overwritten_by_get_default(
-    monkeypatch,
-) -> None:
-    """An environment-only raw value wins over a later optional default."""
-    opt = DataLabOptions()
-    values = opt.to_dict()
-    values["traceback_log_path"] = ".external.log"
-    monkeypatch.setenv(opt.ENV_VAR, json.dumps(values))
-
-    assert opt.traceback_log_path.get(".fallback.log").endswith(".external.log")
-    assert opt.traceback_log_path.get_raw() == ".external.log"
-
-
 def test_reset_to_defaults() -> None:
     """reset_to_defaults restores the captured default values."""
     opt = DataLabOptions()
@@ -239,13 +223,6 @@ def test_reset_to_defaults() -> None:
     assert opt.process_isolation_enabled.get() is True
     assert opt.macro_console_max_lines.get() == 5000
     assert opt.base_dir.get_raw() == ""
-
-
-def test_env_sync_is_valid_json() -> None:
-    """Setting an option keeps the environment variable synchronized as JSON."""
-    opt = DataLabOptions()
-    opt.rpc_server_enabled.set(False)
-
-    raw = opt.get_env()
-    parsed = json.loads(raw)
-    assert parsed["rpc_server_enabled"] is False
+    assert not opt.is_option_initialized("process_isolation_enabled")
+    assert not opt.is_option_initialized("macro_console_max_lines")
+    assert not opt.is_option_initialized("base_dir")

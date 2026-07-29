@@ -13,7 +13,7 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from sigimax.app import create as sigimax_create
 
-from datalab.config import APP_NAME, _
+from datalab.config import APP_NAME, Conf, _, ensure_initialized
 from datalab.env import execenv
 from datalab.gui.main import DLMainWindow
 from datalab.utils.instancecheck import ApplicationInstanceRegistry
@@ -42,6 +42,7 @@ def create(
     Returns:
         Main window instance
     """
+    ensure_initialized(load_user_config=True)
     window = sigimax_create(
         window_class=DLMainWindow,
         splash=splash,
@@ -62,6 +63,10 @@ def run(
     objects: list[ImageObj | SignalObj] | None = None,
     h5files: list[str] | None = None,
     size: tuple[int, int] | None = None,
+    *,
+    load_user_config: bool = True,
+    option_overrides: dict[str, object] | None = None,
+    xmlrpc_port: int | None = None,
 ) -> None:
     """Run the DataLab application
 
@@ -73,10 +78,18 @@ def run(
         objects: list of objects to add to the mainwindow
         h5files: list of h5files to open
         size: mainwindow size (width, height)
+        load_user_config: if True, load and persist user settings
+        option_overrides: option values applied after configuration initialization
+        xmlrpc_port: runtime XML-RPC port requested for this application instance
     """
     if execenv.h5files:
         h5files = ([] if h5files is None else h5files) + execenv.h5files
 
+    ensure_initialized(load_user_config=load_user_config)
+    if option_overrides:
+        Conf.from_dict(option_overrides)
+    if xmlrpc_port is not None:
+        execenv.xmlrpcport = xmlrpc_port
     with datalab_app_context(exec_loop=True):
         # DataLab-specific protection: concurrent instances share XML-RPC
         # connection settings and may overwrite each other's network config.

@@ -69,21 +69,18 @@ class ConfigPathOptionField(OptionField):
         if not isinstance(value, str):
             raise ValueError(f"Expected str, got {type(value).__name__}")
 
-    def get(self, default: Any = NO_DEFAULT, *, sync_env: bool = True) -> str:
+    def get(self, default: Any = NO_DEFAULT) -> str:
         """Return the absolute path inside the configuration directory.
 
         Args:
             default: Optional basename used when the option is not initialized.
-            sync_env: Whether to ensure the environment variable is synchronized
-             (keyword-only).
-
         Returns:
             The absolute path of the file inside the configuration directory.
 
         Raises:
             ValueError: If the stored value is not a bare basename.
         """
-        fname = super().get(default, sync_env=sync_env)
+        fname = super().get(default)
         if osp.basename(fname) != fname:
             raise ValueError(f"Invalid configuration file name {fname}")
         return Configuration.get_path(osp.basename(fname))
@@ -129,30 +126,24 @@ class WorkingDirOptionField(OptionField):
         if not isinstance(value, str):
             raise ValueError(f"Expected str, got {type(value).__name__}")
 
-    def get(self, default: Any = NO_DEFAULT, *, sync_env: bool = True) -> str:
+    def get(self, default: Any = NO_DEFAULT) -> str:
         """Return the working directory, or an empty string if it is missing.
 
         Args:
             default: Optional path used when the option is not initialized.
-            sync_env: Whether to ensure the environment variable is synchronized
-             (keyword-only).
-
         Returns:
             The stored directory if it exists, otherwise an empty string.
         """
-        path = super().get(default, sync_env=sync_env)
+        path = super().get(default)
         if osp.isdir(path):
             return path
         return ""
 
-    def set(self, value: str, *, sync_env: bool = True) -> None:
+    def set(self, value: str) -> None:
         """Set the working directory, validating that it exists.
 
         Args:
             value: The directory (or a file whose parent is used) to store.
-            sync_env: Whether to synchronize the environment variable
-             (keyword-only).
-
         Raises:
             FileNotFoundError: If neither the value nor its parent is a directory.
         """
@@ -160,7 +151,7 @@ class WorkingDirOptionField(OptionField):
             value = osp.dirname(value)
             if not osp.isdir(value):
                 raise FileNotFoundError(f"Invalid working directory name {value}")
-        super().set(value, sync_env=sync_env)
+        super().set(value)
 
     def get_raw(self) -> str:
         """Return the raw stored directory (even if it no longer exists)."""
@@ -258,6 +249,7 @@ class DataSetOptionField(OptionField):
         category: str = "",
     ) -> None:
         self.default_instance = default_instance
+        self._serialized_value: str | None = None
         # The actively-set value starts as None; get() falls back to the default
         # instance until an explicit value is assigned.
         super().__init__(
@@ -287,25 +279,50 @@ class DataSetOptionField(OptionField):
         """
         self.default_instance = default_instance
 
-    def get(
-        self, default: Any = NO_DEFAULT, *, sync_env: bool = True
-    ) -> gds.DataSet | None:
+    def get(self, default: Any = NO_DEFAULT) -> gds.DataSet | None:
         """Return the current DataSet instance, or the default instance.
 
         Args:
             default: Optional DataSet used when the option is not initialized.
-            sync_env: Whether to ensure the environment variable is synchronized
-             (keyword-only).
-
         Returns:
             The actively-set DataSet if any, otherwise the default instance.
         """
-        value = super().get(default, sync_env=sync_env)
+        value = super().get(default)
+        if self._serialized_value is not None:
+            try:
+                value = gds.json_to_dataset(self._serialized_value)
+            except Exception:  # pylint: disable=broad-except
+                value = (
+                    default
+                    if default is not NO_DEFAULT and default is not None
+                    else self.default_instance
+                )
+                self._value = None
+                self._is_initialized = False
+                self._container.unmark_option_initialized(self.name)
+                is_persist_enabled = getattr(
+                    self._container, "is_ini_persist_enabled", lambda: False
+                )
+                if is_persist_enabled():
+                    # pylint: disable=import-outside-toplevel
+                    from datalab.config.config_persistence import (
+                        remove_persisted_option,
+                    )
+
+                    remove_persisted_option(self._container, self.name)
+            else:
+                self._value = value
+            self._serialized_value = None
         return value if value is not None else self.default_instance
 
     def get_raw(self) -> gds.DataSet | None:
         """Return the raw actively-set DataSet (``None`` if never set)."""
         return self._value
+
+    def set(self, value: gds.DataSet | None) -> None:
+        """Set a DataSet instance and discard any pending serialized value."""
+        self._serialized_value = None
+        super().set(value)
 
     def set_raw(self, value: gds.DataSet | None) -> None:
         """Set the raw DataSet instance without env sync.
@@ -314,6 +331,7 @@ class DataSetOptionField(OptionField):
             value: The DataSet instance to store (or None).
         """
         self._value = value
+        self._serialized_value = None
         self.mark_initialized()
 
     def to_json(self) -> str | None:
@@ -323,6 +341,8 @@ class DataSetOptionField(OptionField):
             The JSON string of the actively-set DataSet, or ``None`` when no
              value has been explicitly set (so the default instance applies).
         """
+        if self._serialized_value is not None:
+            return self._serialized_value
         if self._value is None:
             return None
         return gds.dataset_to_json(self._value)
@@ -336,5 +356,6 @@ class DataSetOptionField(OptionField):
         data = json.loads(json_str)
         if data.get("class_module") == "datalab.config":
             data["class_module"] = "datalab.config.config"
-        self._value = gds.json_to_dataset(json.dumps(data))
+        self._value = None
+        self._serialized_value = json.dumps(data)
         self.mark_initialized()
