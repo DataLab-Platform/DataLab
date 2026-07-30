@@ -18,7 +18,7 @@ import warnings
 from dataclasses import asdict, dataclass, field
 from enum import Enum, auto
 from multiprocessing.pool import Pool
-from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, Optional
+from typing import TYPE_CHECKING, Any, Callable, Generic, Literal, Optional, cast
 
 import guidata.dataset as gds
 import numpy as np
@@ -31,6 +31,7 @@ from sigima.objects import (
     ImageObj,
     SignalObj,
     TableResult,
+    TypeObj,
     TypeROI,
     TypeROIParam,
     concat_geometries,
@@ -707,7 +708,20 @@ def _detect_plugin_origin(func: Callable) -> dict[str, Any] | None:
 
 
 @dataclass
-class ComputingFeature:
+class SourcePreparationTransaction(Generic[TypeObj]):
+    """Prepare effective sources and commit changes after successful results."""
+
+    source_for_execution: Callable[[TypeObj, TypeObj], TypeObj]
+    commit: Callable[[TypeObj], None]
+
+
+SourcePreparationHook = Callable[
+    [list[TypeObj]], Optional[SourcePreparationTransaction[TypeObj]]
+]
+
+
+@dataclass
+class ComputingFeature(Generic[TypeObj]):
     """Computing feature dataclass.
 
     Args:
@@ -723,6 +737,7 @@ class ComputingFeature:
         plugin_origin: optional plugin origin descriptor (auto-detected at
          :meth:`BaseProcessor.add_feature` time). ``None`` for built-in
          (Sigima/DataLab) features.
+        pre_execute_hook: optional transactional source preparation hook
     """
 
     pattern: Literal["1_to_1", "1_to_0", "1_to_n", "n_to_1", "2_to_1"]
@@ -735,6 +750,7 @@ class ComputingFeature:
     obj2_name: Optional[str] = None
     skip_xarray_compat: Optional[bool] = None
     plugin_origin: Optional[dict[str, Any]] = field(default=None)
+    pre_execute_hook: Optional[SourcePreparationHook[TypeObj]] = None
 
     def __post_init__(self):
         """Validate the function after initialization."""
@@ -1603,6 +1619,75 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 patch_title_with_ids(new_obj, objs, get_short_id)
             return new_obj
 
+    def prepare_2_to_1_pairs(
+        self,
+        object_pairs: list[tuple[TypeObj, TypeObj]],
+        skip_xarray_compat: bool | None,
+        pre_execute_hook: SourcePreparationHook[TypeObj] | None,
+    ) -> (
+        tuple[
+            list[tuple[TypeObj, TypeObj]],
+            SourcePreparationTransaction[TypeObj] | None,
+        ]
+        | None
+    ):
+        """Prepare 2-to-1 source pairs without mutating the original objects.
+
+        Args:
+            object_pairs: Original source pairs.
+            skip_xarray_compat: Whether to skip signal X-array compatibility.
+            pre_execute_hook: Optional transactional source preparation hook.
+
+        Returns:
+            Prepared pairs and their transaction, or ``None`` when cancelled.
+
+        Raises:
+            TypeError: If a pair does not match the processor object type.
+        """
+        expected_type = SignalObj if self._is_signal_panel() else ImageObj
+        prepared_pairs: list[tuple[TypeObj, TypeObj]] = []
+        auto_interpolate_for_operation = False
+        for obj1, obj2 in object_pairs:
+            if not isinstance(obj1, expected_type) or not isinstance(
+                obj2, expected_type
+            ):
+                raise TypeError(
+                    "2-to-1 source objects must match the processor object type"
+                )
+            actual_obj1, actual_obj2 = obj1, obj2
+            if isinstance(obj1, SignalObj) and not skip_xarray_compat:
+                if auto_interpolate_for_operation:
+                    with Conf.proc.xarray_compat_behavior.temp("interpolate"):
+                        result = self._check_signal_xarray_compatibility([obj1, obj2])
+                else:
+                    result = self._check_signal_xarray_compatibility([obj1, obj2])
+                if result is None:
+                    return None
+                checked_pair, yes_to_all_selected = result
+                if yes_to_all_selected:
+                    auto_interpolate_for_operation = True
+                actual_obj1 = cast(TypeObj, checked_pair[0])
+                actual_obj2 = cast(TypeObj, checked_pair[1])
+            prepared_pairs.append((actual_obj1, actual_obj2))
+
+        source_transaction = None
+        if pre_execute_hook is not None:
+            source_transaction = pre_execute_hook(
+                [obj1 for obj1, _obj2 in object_pairs]
+            )
+            if source_transaction is None:
+                return None
+            prepared_pairs = [
+                (
+                    source_transaction.source_for_execution(obj1, actual_obj1),
+                    actual_obj2,
+                )
+                for (obj1, _obj2), (actual_obj1, actual_obj2) in zip(
+                    object_pairs, prepared_pairs
+                )
+            ]
+        return prepared_pairs, source_transaction
+
     def recompute_2_to_1(
         self,
         func_name: str,
@@ -1610,6 +1695,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         obj2: SignalObj | ImageObj,
         param: gds.DataSet | None = None,
         plugin_origin: dict[str, Any] | None = None,
+        prepared_pair: tuple[SignalObj | ImageObj, SignalObj | ImageObj] | None = None,
     ) -> SignalObj | ImageObj | None:
         """Recompute a 2-to-1 processing operation without adding result to panel.
 
@@ -1619,6 +1705,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             obj2: Second source object.
             param: Processing parameters (optional).
             plugin_origin: Optional plugin origin descriptor.
+            prepared_pair: Optional effective pair prepared by a batch caller.
 
         Returns:
             New combined object, or ``None`` if cancelled / errored.
@@ -1630,10 +1717,27 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             paramclass_name=paramclass_name,
         )
         func = feature.function
+        source_transaction = None
+        if prepared_pair is None:
+            preparation = self.prepare_2_to_1_pairs(
+                [(obj1, obj2)],
+                feature.skip_xarray_compat,
+                feature.pre_execute_hook,
+            )
+            if preparation is None:
+                return None
+            prepared_pairs, source_transaction = preparation
+            actual_obj1, actual_obj2 = prepared_pairs[0]
+        else:
+            actual_obj1, actual_obj2 = prepared_pair
         with create_progress_bar(self.panel, _("Recomputing..."), max_=1) as progress:
             progress.setValue(0)
             progress.setLabelText(_("Processing object with updated parameters..."))
-            args = (obj1, obj2, param) if param is not None else (obj1, obj2)
+            args = (
+                (actual_obj1, actual_obj2, param)
+                if param is not None
+                else (actual_obj1, actual_obj2)
+            )
             comp_out = self.__exec_func(func, args, progress)
             if comp_out is None:
                 return None
@@ -1643,6 +1747,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             if isinstance(new_obj, (SignalObj, ImageObj)):
                 self._handle_keep_results(new_obj)
                 patch_title_with_ids(new_obj, [obj1, obj2], get_short_id)
+                if source_transaction is not None:
+                    source_transaction.commit(obj1)
             return new_obj
 
     def recompute_1_to_0(
@@ -2056,7 +2162,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 ylabel_count = len(rdata.ylabels)
                 short_id_count = len(rdata.short_ids)
 
-                def persist_result() -> bool:
+                def persist_result(result=result, obj=obj) -> bool:
                     if isinstance(result, GeometryResult):
                         adapter = GeometryAdapter(result)
                     elif isinstance(result, TableResult):
@@ -2358,7 +2464,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             if dst_gid is not None:
                 self.panel.objview.set_current_item_id(dst_gid)
 
-    def compute_2_to_1(
+    def compute_2_to_1(  # pylint: disable=too-many-return-statements
         self,
         obj2: SignalObj
         | ImageObj
@@ -2375,6 +2481,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         edit: bool | None = None,
         skip_xarray_compat: bool | None = None,
         pairwise: bool | None = None,
+        pre_execute_hook: SourcePreparationHook[TypeObj] | None = None,
     ) -> None:
         """Generic processing method: binary operation 1+1 â†’ 1.
 
@@ -2397,6 +2504,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             edit: Whether to open the parameter editor before execution.
             skip_xarray_compat: If True, skip x-array compatibility checks
              (only for signal panels).
+            pre_execute_hook: Optional hook preparing source copies after all dialogs
+             and compatibility checks. Returning None cancels the operation.
 
         .. note::
             With k selected objects:
@@ -2471,48 +2580,22 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 grp2_id = objmodel.get_object_group_id(objs2[0])
                 grp2 = objmodel.get_group(grp2_id)
 
-                # Initialize pair mapping for potential interpolations
-                pair_maps = {}
-
-                # Check x-array compatibility for signal processing (pairwise mode)
-                if self._is_signal_panel() and not skip_xarray_compat:
-                    # Check compatibility between objects from both groups
-                    all_pairs = []
-                    for src_gid in src_gids:
-                        for i_pair in range(max_i_pair):
-                            src_obj1 = src_objs[src_gid][i_pair]
-                            src_obj2 = objs2[i_pair]
-                            if isinstance(src_obj1, SignalObj) and isinstance(
-                                src_obj2, SignalObj
-                            ):
-                                all_pairs.append((src_obj1, src_obj2))
-
-                    # Track "Yes to All" choice for this compute operation
-                    auto_interpolate_for_operation = False
-
-                    # Check all pairs for compatibility and create interpolation maps
-                    for src_obj1, src_obj2 in all_pairs:
-                        if auto_interpolate_for_operation:
-                            # "Yes to All" selected, automatically interpolate
-                            with Conf.proc.xarray_compat_behavior.temp("interpolate"):
-                                result = self._check_signal_xarray_compatibility(
-                                    [src_obj1, src_obj2]
-                                )
-                        else:
-                            # Normal compatibility check with dialog
-                            result = self._check_signal_xarray_compatibility(
-                                [src_obj1, src_obj2]
-                            )
-
-                        if result is None:
-                            return  # User cancelled or error occurred
-
-                        checked_pair, yes_to_all_selected = result
-                        if yes_to_all_selected:
-                            auto_interpolate_for_operation = True
-
-                        # Store mapping for this specific pair
-                        pair_maps[(src_obj1, src_obj2)] = checked_pair
+                pair_keys = [
+                    (src_gid, i_pair)
+                    for src_gid in src_gids
+                    for i_pair in range(max_i_pair)
+                ]
+                original_pairs = [
+                    (src_objs[src_gid][i_pair], objs2[i_pair])
+                    for src_gid, i_pair in pair_keys
+                ]
+                preparation = self.prepare_2_to_1_pairs(
+                    original_pairs, skip_xarray_compat, pre_execute_hook
+                )
+                if preparation is None:
+                    return
+                prepared_pairs, source_transaction = preparation
+                pair_map = dict(zip(pair_keys, prepared_pairs))
 
                 with create_progress_bar(
                     self.panel, title, max_=len(src_gids)
@@ -2532,13 +2615,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         for i_pair in range(max_i_pair):
                             orig_obj1 = src_objs[src_gid][i_pair]
                             orig_obj2 = objs2[i_pair]
-
-                            # Use interpolated signals if available, keep original refs
-                            actual_obj1, actual_obj2 = orig_obj1, orig_obj2
-                            if (orig_obj1, orig_obj2) in pair_maps:
-                                interpolated_pair = pair_maps[(orig_obj1, orig_obj2)]
-                                actual_obj1 = interpolated_pair[0]
-                                actual_obj2 = interpolated_pair[1]
+                            actual_obj1, actual_obj2 = pair_map[(src_gid, i_pair)]
 
                             args = [actual_obj1, actual_obj2]
                             if param is not None:
@@ -2583,6 +2660,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             self._add_object_to_appropriate_panel(
                                 new_obj, group_id=dst_gid
                             )
+                            if source_transaction is not None:
+                                source_transaction.commit(orig_obj1)
 
         else:
             if not objs2:
@@ -2644,6 +2723,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         ):
                             signal_map[orig_obj] = checked_obj
 
+                source_transaction = None
+                if pre_execute_hook is not None:
+                    source_transaction = pre_execute_hook(objs)
+                    if source_transaction is None:
+                        return
+
                 with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
                     for index, obj in enumerate(objs):
                         progress.setValue(index + 1)
@@ -2657,6 +2742,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             and obj in signal_map
                         ):
                             actual_obj = signal_map[obj]
+                        if source_transaction is not None:
+                            actual_obj = source_transaction.source_for_execution(
+                                obj, actual_obj
+                            )
 
                         args = (
                             (actual_obj, obj2)
@@ -2698,6 +2787,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         self._add_object_to_appropriate_panel(
                             new_obj, group_id=group_id, use_group_for_non_native=False
                         )
+                        if source_transaction is not None:
+                            source_transaction.commit(obj)
 
     def register_1_to_1(
         self,
@@ -2850,6 +2941,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         edit: bool | None = None,
         obj2_name: str | None = None,
         skip_xarray_compat: bool | None = None,
+        pre_execute_hook: SourcePreparationHook[TypeObj] | None = None,
     ) -> ComputingFeature:
         """Register a 2-to-1 processing function.
 
@@ -2868,6 +2960,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             skip_xarray_compat: whether to skip X-array compatibility check.
              Defaults to None. Set to True for operations like interpolation where
              different X-arrays are expected and desired.
+            pre_execute_hook: optional transactional source preparation hook
 
         Returns:
             Registered feature.
@@ -2882,6 +2975,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             edit=edit,
             obj2_name=obj2_name,
             skip_xarray_compat=skip_xarray_compat,
+            pre_execute_hook=pre_execute_hook,
         )
         self.add_feature(feature)
         return feature
@@ -3049,6 +3143,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 edit=edit,
                 skip_xarray_compat=feature.skip_xarray_compat,
                 pairwise=pairwise,
+                pre_execute_hook=feature.pre_execute_hook,
             )
         if pattern == "1_to_n":
             params = kwargs.get("params", args[0] if args else [])

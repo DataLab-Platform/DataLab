@@ -576,7 +576,13 @@
             "label": "🖼️ Refresh doc screenshots",
             "detail": "Maintainer task: regenerate PNG screenshots under doc/images/ by launching DataLab for each language (fr + en). Commit the resulting diff in a dedicated 'docs: refresh screenshots' commit.",
             "type": "shell",
-            "command": "scripts\\update_screenshots.bat",
+            "command": "${command:python.interpreterPath}",
+            "args": [
+                "scripts/run_with_env.py",
+                "cmd",
+                "/c",
+                "scripts\\update_screenshots.bat",
+            ],
             "options": {
                 "cwd": "${workspaceFolder}",
                 "env": {

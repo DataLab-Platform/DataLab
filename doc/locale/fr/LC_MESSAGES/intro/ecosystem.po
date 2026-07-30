@@ -4,18 +4,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  DataLab\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-07-07 10:22+0200\n"
-"PO-Revision-Date: 2026-06-24 16:30+0200\n"
-"Last-Translator: DataLab Platform Developers\n"
 "Language: fr\n"
-"Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.18.0\n"
 
 msgid ""
 "The DataLab Platform ecosystem - desktop application, browser-native "

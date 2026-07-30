@@ -29,7 +29,10 @@ from sigima.objects import (
 
 from datalab.config import _
 from datalab.gui.creation import (
+    CREATION_PARAMETERS_FORMAT_VERSION,
     CREATION_PARAMETERS_OPTION,
+    LEGACY_CREATION_PARAMETERS_OPTION,
+    convert_legacy_creation_parameters,
     create_image_from_param,
     create_signal_from_param,
     extract_creation_parameters,
@@ -39,7 +42,10 @@ from datalab.gui.creation import (
 )
 
 __all__ = [
+    "CREATION_PARAMETERS_FORMAT_VERSION",
     "CREATION_PARAMETERS_OPTION",
+    "LEGACY_CREATION_PARAMETERS_OPTION",
+    "convert_legacy_creation_parameters",
     "create_image_gui",
     "create_signal_gui",
     "extract_creation_parameters",

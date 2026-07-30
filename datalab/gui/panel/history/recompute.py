@@ -448,10 +448,9 @@ def recompute_2_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> boo
         obj2_uuids = [obj2_uuids]
     pairwise = bool(action.kwargs.get("pairwise"))
     recorded_inputs = list(action.state.selection.get(panel_data.PANEL_STR_ID, []))
-    staged: list[
+    resolved: list[
         tuple[
             str,
-            SignalObj | ImageObj,
             SignalObj | ImageObj,
             SignalObj | ImageObj,
             dict | None,
@@ -488,12 +487,40 @@ def recompute_2_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> boo
         obj1 = panel_data.objmodel[src_uuids[0]]
         obj2 = panel_data.objmodel[src_uuids[1]]
         plugin_origin = action.plugin_origin or (pp.plugin_origin if pp else None)
+        resolved.append((out_uuid, obj1, obj2, plugin_origin))
+
+    paramclass_name = type(param).__name__ if param is not None else None
+    feature = panel_data.processor.get_feature(
+        action.func_name,
+        plugin_origin=resolved[0][3],
+        paramclass_name=paramclass_name,
+    )
+    preparation = panel_data.processor.prepare_2_to_1_pairs(
+        [(obj1, obj2) for _out_uuid, obj1, obj2, _origin in resolved],
+        feature.skip_xarray_compat,
+        feature.pre_execute_hook,
+    )
+    if preparation is None:
+        return False
+    prepared_pairs, source_transaction = preparation
+    staged: list[
+        tuple[
+            str,
+            SignalObj | ImageObj,
+            SignalObj | ImageObj,
+            SignalObj | ImageObj,
+            dict | None,
+        ]
+    ] = []
+    for resolved_item, prepared_pair in zip(resolved, prepared_pairs):
+        out_uuid, obj1, obj2, plugin_origin = resolved_item
         new_obj = panel_data.processor.recompute_2_to_1(
             action.func_name,
             obj1,
             obj2,
             param,
             plugin_origin=plugin_origin,
+            prepared_pair=prepared_pair,
         )
         if not isinstance(new_obj, (SignalObj, ImageObj)):
             return False
@@ -518,6 +545,9 @@ def recompute_2_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> boo
             )
         for out_uuid, *_rest in staged:
             refresh_target(panel_data, out_uuid)
+        if source_transaction is not None:
+            for _out_uuid, _new_obj, obj1, _obj2, _origin in staged:
+                source_transaction.commit(obj1)
     except Exception:
         for out_uuid, snapshot in snapshots.items():
             update_obj_in_place(panel_data.objmodel[out_uuid], snapshot)

@@ -387,29 +387,69 @@ This can be done automatically or through an interactive curve fitting dialog.
     * - Polynomial
       - :math:`y = c_{0} + c_{1} \cdot x + c_{2} \cdot x^2 + ... + c_{n} \cdot x^n`
     * - Gaussian
-      - :math:`y = y_{0} + \dfrac{A}{\sqrt{2 \pi} \sigma} \exp\left(-\dfrac{1}{2} \left(\dfrac{x - x_{0}}{\sigma}\right)^2\right)`
+      - :math:`y = y_{0} + A \exp\left(-\dfrac{1}{2} \left(\dfrac{x - x_{0}}{\sigma}\right)^2\right)`
     * - Lorentzian
-      - :math:`y = y_{0} + \dfrac{A}{\pi \sigma} \cdot \dfrac{1}{1+\left(\dfrac{x-x_{0}}{\sigma}\right)^2}`
+      - :math:`y = y_{0} + \dfrac{A}{1+\left(\dfrac{x-x_{0}}{\sigma}\right)^2}`
     * - Voigt
-      - :math:`y = y_{0} + A \cdot \dfrac{\Re\left(\exp(-z^2) \cdot \operatorname{erfc}(-j \cdot z)\right)}{\sqrt{2 \pi} \sigma}` with :math:`z = \dfrac{x - x_{0} - j \cdot \sigma}{\sqrt{2} \sigma}`
+      - :math:`y = y_{0} + A \cdot \dfrac{\Re\left(w(z)\right)}{\Re\left(w(j/\sqrt{2})\right)}` with :math:`w(z) = \exp(-z^2) \operatorname{erfc}(-jz)` and :math:`z = \dfrac{x - x_{0} + j \sigma}{\sqrt{2} \sigma}`
     * - Multi-Gaussian
-      - :math:`y = y_{0} + \sum_{i=0}^{N}\dfrac{A_{i}}{\sqrt{2 \pi} \sigma_{i}} \exp\left(-\dfrac{1}{2} \left(\dfrac{x - x_{0,i}}{\sigma_{i}}\right)^2\right)`
+      - :math:`y = y_{0} + \sum_{i=1}^{N} A_{i} \exp\left(-\dfrac{1}{2} \left(\dfrac{x - x_{0,i}}{\sigma_{i}}\right)^2\right)`
     * - Multi-Lorentzian
-      - :math:`y = y_{0} + \sum_{i=0}^{N}\dfrac{A_{i}}{\pi \sigma_{i}} \cdot \dfrac{1}{1 + \left(\dfrac{x - x_{0,i}}{\sigma_{i}}\right)^2}`
+      - :math:`y = y_{0} + \sum_{i=1}^{N} \dfrac{A_{i}}{1 + \left(\dfrac{x - x_{0,i}}{\sigma_{i}}\right)^2}`
     * - Planck
-      - :math:`y = y_{0} + A\cdot \dfrac{2h \cdot c^2}{\lambda^5} \cdot \left(\exp\left(\dfrac{h \cdot c}{\lambda \cdot k \cdot T}\right)-1\right)^{-1}`
+      - :math:`y = y_{0} + A \cdot \left(\dfrac{x}{x_{0}}\right)^{-5} \cdot \left(\exp\left(\dfrac{5 x_{0}}{\sigma \cdot x}\right)-1\right)^{-1}` where :math:`x_{0}` and :math:`\sigma` are scale and width factors (see the note below)
     * - Two half Gaussians
-      - | :math:`y = y_{0} + A \cdot \dfrac{1}{\sqrt{2 \pi} \sigma_{0}} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{0}}{\sigma_{0}}\right)^2\right)` if :math:`x < x_{0}`
-        | :math:`y = y_{0} + A \cdot \dfrac{1}{\sqrt{2 \pi} \sigma_{1}} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{1}}{\sigma_{1}}\right)^2\right)` otherwise
+      - | :math:`y = y_{L} + A_{L} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{0}}{\sigma_{L}}\right)^2\right)` if :math:`x < x_{0}`
+        | :math:`y = y_{R} + A_{R} \cdot \exp\left(-\dfrac{1}{2}\left(\dfrac{x - x_{0}}{\sigma_{R}}\right)^2\right)` otherwise
     * - Two back-to-back exponentials
-      - | :math:`y = y_{0} + A_{1} \cdot \exp\left(-x/\tau_{1}\right)` if :math:`x < 0`
-        | :math:`y = y_{0} + A_{2} \cdot \exp(-x/\tau_{2})` otherwise
+      - | :math:`y = y_{0} + A_{L} \cdot \exp\left(B_{L} \cdot x\right)` if :math:`x < x_{c}`
+        | :math:`y = y_{0} + A_{R} \cdot \exp\left(B_{R} \cdot x\right)` otherwise
     * - Exponential
       - :math:`y = y_{0} + A \exp\left(B \cdot x\right)`
     * - Sinusoidal
       - :math:`y = y_{0} + A \sin\left(2 \pi f \cdot x + \phi\right)`
     * - Cumulative Distribution Function (CDF)
       - :math:`y = y_{0} + A \erf\left(\dfrac{x - x_{0}}{\sqrt{2} \sigma}\right)`
+    * - Sigmoid
+      - :math:`y = y_{0} + \dfrac{A}{1 + \exp\left(-k \left(x - x_{0}\right)\right)}`
+
+For Gaussian, Lorentzian and Voigt models, :math:`A` is the signed peak height
+above the baseline :math:`y_0`, expressed in the signal's Y unit.
+
+.. note::
+
+    The Planck model is over-parameterized: it is invariant under
+    :math:`x_{0} \rightarrow k x_{0}`, :math:`\sigma \rightarrow k \sigma`,
+    :math:`A \rightarrow A/k^5`. Only the ratio :math:`x_{0}/\sigma` and the
+    product :math:`A \cdot x_{0}^5` are determined by the data, so the
+    individual fitted values must not be interpreted on their own. In
+    particular the emission peak is located at approximately
+    :math:`1.007 \, x_{0}/\sigma`, not at :math:`x_{0}`.
+
+Multi-peak fit parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For Multi-Gaussian and Multi-Lorentzian fits, the peak-detection dialog first
+selects the center :math:`x_{0,i}` of each component. These positions remain fixed:
+the interactive fit dialog only exposes controls for each ``amplitude_i`` and
+``sigma_i`` parameter and for the common ``y0`` baseline.
+
+When the fit is accepted, the generated signal stores the complete model under
+``metadata["fit_params"]``, including every fixed ``x0_i`` center. The metadata may
+be inspected with the **Metadata** button or exported to a JSON ``.dlabmeta`` file
+using the :ref:`metadata import/export actions <sig-menu-edit>`.
+
+The exported parameters are sufficient to evaluate the theoretical model on any
+X axis outside DataLab:
+
+.. code-block:: python
+
+    import numpy as np
+    from sigima.tools.signal import fitting
+
+    fit_params = fitted_signal.metadata["fit_params"]
+    x = np.linspace(xmin, xmax, size)
+    y_theoretical = fitting.evaluate_fit(x, **fit_params)
 
 Evaluate fit
 ~~~~~~~~~~~~
