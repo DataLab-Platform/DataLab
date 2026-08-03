@@ -219,6 +219,19 @@ def action_output_uuid(panel: HistoryPanel, action: HistoryAction) -> str | None
     return find_output_object_uuid(panel, panel_data, action)
 
 
+def recorded_action_output_uuids(
+    panel: HistoryPanel, action: HistoryAction
+) -> list[str]:
+    """Return output UUIDs recorded for ``action``, preferring durable history."""
+    if action.output_uuids:
+        return list(action.output_uuids)
+    runtime_outputs = panel.runtime.objects.action_output_uuids.get(action.uuid, [])
+    if runtime_outputs:
+        return list(runtime_outputs)
+    legacy_output = action_output_uuid(panel, action)
+    return [legacy_output] if legacy_output is not None else []
+
+
 def action_consumes_any(action: HistoryAction, uuids: set[str]) -> bool:
     """Return True if ``action``'s input UUIDs intersect ``uuids``."""
     if action.kind != HistoryAction.KIND_COMPUTE:
@@ -235,10 +248,10 @@ def get_downstream_actions(
     current = get_session_of(panel, action)
     if current is None:
         return []
-    root_out = action_output_uuid(panel, action)
-    if root_out is None:
+    root_outputs = recorded_action_output_uuids(panel, action)
+    if not root_outputs:
         return []
-    closure: set[str] = {root_out}
+    closure: set[str] = set(root_outputs)
     downstream: list[HistoryAction] = []
     idx = current.actions.index(action)
     for candidate in current.actions[idx + 1 :]:
@@ -247,9 +260,7 @@ def get_downstream_actions(
         if not action_consumes_any(candidate, closure):
             continue
         downstream.append(candidate)
-        out_uuid = action_output_uuid(panel, candidate)
-        if out_uuid is not None:
-            closure.add(out_uuid)
+        closure.update(recorded_action_output_uuids(panel, candidate))
     return downstream
 
 

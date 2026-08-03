@@ -17,6 +17,7 @@ from sigima.tests.data import create_paracetamol_signal
 from datalab.adapters_metadata.common import ResultData
 from datalab.gui import historytools_ops as htools
 from datalab.gui.panel.history import HistoryAction
+from datalab.gui.panel.history import chain as hchain
 from datalab.gui.panel.history import interactive_replay as hireplay
 from datalab.gui.panel.history import recompute as hrec
 from datalab.gui.panel.history.chainmodel import (
@@ -36,6 +37,7 @@ from datalab.tests import datalab_test_app_context
 from datalab.tests.features.common.history_test_helpers import (
     add_paracetamol_signals,
     build_signal_chain,
+    get_tree_item,
     read_history_sessions,
     select_tree_entry,
     select_tree_session,
@@ -493,6 +495,87 @@ def test_multi_action_edit_recomputes_selected_descendants_once() -> None:
         assert all(action.is_stale is False for action in expected)
 
 
+def test_edit_mode_selected_session_uses_global_replay_planner() -> None:
+    """Plan a selected session and duplicate stale action exactly once."""
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        history.toggle_record_mode(True)
+        history.toggle_edit_mode(True)
+        build_signal_chain(panel, history)
+        session = history.history_sessions[-1]
+        expected = list(session.actions)
+        stale_action = expected[1]
+        stale_action.is_stale = True
+        select_tree_session(history, session)
+        get_tree_item(history, stale_action.uuid).setSelected(True)
+        selected = history.tree.get_selected_actions_or_sessions(
+            history.history_sessions
+        )
+        assert selected == [session, stale_action]
+
+        with (
+            patch.object(type(session), "replay") as direct_replay,
+            patch.object(hrec, "recompute_cascade") as direct_cascade,
+            patch.object(
+                hireplay,
+                "edit_mode_replay_actions",
+                wraps=hireplay.edit_mode_replay_actions,
+            ) as edit_planner,
+            patch.object(
+                hireplay, "prompt_edit_action_params", return_value=True
+            ) as prompt,
+            patch.object(
+                hrec, "recompute_action_in_place", return_value=True
+            ) as recompute,
+        ):
+            hireplay.replay_restore_actions(history)
+
+        direct_replay.assert_not_called()
+        direct_cascade.assert_not_called()
+        edit_planner.assert_called_once_with(history, [*expected, stale_action])
+        assert [call.args[1] for call in prompt.call_args_list] == expected
+        assert [call.args[1] for call in recompute.call_args_list] == expected
+        assert all(action.is_stale is False for action in expected)
+
+
+def test_downstream_actions_follow_every_registered_output() -> None:
+    """Follow second registered outputs through transitive dependencies."""
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        history.toggle_record_mode(True)
+        producer, consumer, descendant = build_signal_chain(panel, history).actions
+        producer_second_output = "producer-second-output"
+        consumer_second_output = "consumer-second-output"
+        producer.output_uuids.append(producer_second_output)
+        consumer.output_uuids.append(consumer_second_output)
+        history.runtime.objects.action_output_uuids[producer.uuid] = list(
+            producer.output_uuids
+        )
+        history.runtime.objects.action_output_uuids[consumer.uuid] = list(
+            consumer.output_uuids
+        )
+        history.runtime.objects.output_to_action[producer_second_output] = producer.uuid
+        history.runtime.objects.output_to_action[consumer_second_output] = consumer.uuid
+        hchain.prune_output_mapping(history)
+        assert producer_second_output in producer.output_uuids
+        assert consumer_second_output in consumer.output_uuids
+        assert (
+            producer_second_output
+            not in (history.runtime.objects.action_output_uuids[producer.uuid])
+        )
+        assert (
+            consumer_second_output
+            not in (history.runtime.objects.action_output_uuids[consumer.uuid])
+        )
+        consumer.state.selection["signal"] = [producer_second_output]
+        descendant.state.selection["signal"] = [consumer_second_output]
+
+        assert hchain.get_downstream_actions(history, producer) == [
+            consumer,
+            descendant,
+        ]
+
+
 def test_multi_action_edit_cascades_across_independent_sessions() -> None:
     """Recompute edited branches from multiple sessions in global order."""
     with datalab_test_app_context(history=True) as win:
@@ -527,6 +610,20 @@ def test_multi_action_edit_failure_skips_dependents_and_continues() -> None:
         history.create_new_session(panel_str="signal")
         successful_chain = build_independent_signal_branch(panel, history)
         failed_root = failed_chain[0]
+        failed_output_uuid = failed_root.output_uuids[0]
+        failed_root.output_uuids.clear()
+        history.runtime.objects.action_output_uuids.pop(failed_root.uuid)
+        history.runtime.objects.output_to_action.pop(failed_output_uuid)
+        failed_output = panel.objmodel[failed_output_uuid]
+        processing_parameters = extract_processing_parameters(failed_output)
+        assert not failed_root.output_uuids
+        assert failed_root.uuid not in history.runtime.objects.action_output_uuids
+        assert failed_output_uuid not in history.runtime.objects.output_to_action
+        assert processing_parameters is not None
+        assert processing_parameters.func_name == failed_root.func_name
+        assert hchain.recorded_action_output_uuids(history, failed_root) == [
+            failed_output_uuid
+        ]
         recomputed: list[HistoryAction] = []
 
         def recompute_action(_panel, action):

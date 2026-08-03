@@ -43,9 +43,15 @@ def replay_restore_actions(
         if not panel.history_sessions:
             return
         selected = [panel.history_sessions[-1]]
+    edit_mode = panel.runtime.execution.edit_mode
     edit_actions: list[HistoryAction] = []
     for session_or_action in selected:
-        if isinstance(session_or_action, HistoryAction) and session_or_action.is_stale:
+        if (
+            replay
+            and not edit_mode
+            and isinstance(session_or_action, HistoryAction)
+            and session_or_action.is_stale
+        ):
             hrec.recompute_cascade(panel, session_or_action)
             continue
         if not session_or_action.is_current_state_compatible(
@@ -59,22 +65,20 @@ def replay_restore_actions(
                 )
             return
         if replay:
-            if panel.runtime.execution.edit_mode and isinstance(
-                session_or_action, HistoryAction
-            ):
-                # Defer: edit only the selected actions, no automatic cascade
-                edit_actions.append(session_or_action)
+            if edit_mode:
+                if isinstance(session_or_action, HistorySession):
+                    edit_actions.extend(session_or_action.actions)
+                else:
+                    edit_actions.append(session_or_action)
             else:
-                # Scope decision: clicking a session in edit mode now replays it
-                # WITH parameter dialogs (view-only session replay disabled).
                 with panel.replaying(), panel.output_suppressed():
                     session_or_action.replay(
                         panel.mainwindow,
                         restore_selection=restore_selection,
-                        edit=panel.runtime.execution.edit_mode,
+                        edit=edit_mode,
                     )
         elif restore_selection:
-            if panel.runtime.execution.edit_mode or any(
+            if edit_mode or any(
                 action.has_pending_edits
                 for session in panel.history_sessions
                 for action in session.actions
@@ -196,7 +200,7 @@ def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) 
                     continue
                 if hchain.action_consumes_any(action, blocked_outputs):
                     blocked_outputs.update(
-                        panel.runtime.objects.action_output_uuids.get(action.uuid, [])
+                        hchain.recorded_action_output_uuids(panel, action)
                     )
                     continue
                 success = hrec.recompute_action_in_place(panel, action)
@@ -204,7 +208,7 @@ def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) 
                 panel.tree.refresh_action_item(action)
                 if not success:
                     blocked_outputs.update(
-                        panel.runtime.objects.action_output_uuids.get(action.uuid, [])
+                        hchain.recorded_action_output_uuids(panel, action)
                     )
         finally:
             hrec.flush_cascade_warnings(panel)
