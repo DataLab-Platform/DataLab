@@ -2759,6 +2759,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             filters = self.IO_REGISTRY.get_read_filters()
             with save_restore_stds():
                 filenames, _filt = getopenfilenames(self, _("Open"), basedir, filters)
+        if not filenames:  # pragma: no cover
+            return []
         # Sort filenames to ensure consistent alphabetical order across all platforms
         filenames = sorted(filenames)
         nbf = len(filenames)
@@ -2805,26 +2807,18 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             filenames: File names
         """
         objs = self.objview.get_sel_objects(include_groups=True)
+        if isinstance(filenames, str):
+            filenames = [filenames]
         if filenames is None:  # pragma: no cover
             filenames = [None] * len(objs)
         assert len(filenames) == len(objs), (
             "Number of filenames must match number of objects"
         )
-        nbf = len(filenames)
-        if nbf > 1:
-            entry_title = _("Save to %d different files") % nbf
-        else:
-            entry_title = _('Save to "%s"') % osp.basename(filenames[0])
-        self.mainwindow.historypanel.add_ui_entry(
-            entry_title,
-            target=self.PANEL_STR_ID + "panel",
-            method_name="save_to_files",
-            save_state=False,
-            filenames=filenames,
-        )
-        for index, obj in enumerate(objs):
-            filename = filenames[index]
-            if filename is None:
+        # Ask for missing file names first, so that the history entry reflects the
+        # actual files written (and is skipped altogether if the user cancels)
+        pairs: list[tuple[TypeObj, str]] = []
+        for obj, filename in zip(objs, filenames):
+            if filename is None:  # pragma: no cover
                 basedir = Conf.main.base_dir.get()
                 filters = self.IO_REGISTRY.get_write_filters()
                 with save_restore_stds():
@@ -2832,9 +2826,25 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         self, _("Save as"), basedir, filters
                     )
             if filename:
-                with qt_try_loadsave_file(self.parentWidget(), filename, "save"):
-                    Conf.main.base_dir.set(filename)
-                    self.__save_to_file(obj, filename)
+                pairs.append((obj, filename))
+        if not pairs:  # pragma: no cover
+            return
+        nbf = len(pairs)
+        if nbf > 1:
+            entry_title = _("Save to %d different files") % nbf
+        else:
+            entry_title = _('Save to "%s"') % osp.basename(pairs[0][1])
+        self.mainwindow.historypanel.add_ui_entry(
+            entry_title,
+            target=self.PANEL_STR_ID + "panel",
+            method_name="save_to_files",
+            save_state=False,
+            filenames=[filename for _obj, filename in pairs],
+        )
+        for obj, filename in pairs:
+            with qt_try_loadsave_file(self.parentWidget(), filename, "save"):
+                Conf.main.base_dir.set(filename)
+                self.__save_to_file(obj, filename)
 
     def save_to_directory(self, param: SaveToDirectoryParam | None = None) -> None:
         """Save signals or images to directory using a filename pattern.
