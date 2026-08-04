@@ -122,7 +122,9 @@ def action_input_uuids(action: HistoryAction) -> set[str]:
     Returns:
         The set of object UUIDs that the action consumed as inputs.
     """
-    captured: set[str] = set(action.state.selection.get(action.panel_str or "", []))
+    captured: set[str] = set(
+        action.state.selection.get(action.effective_panel_str(), [])
+    )
     obj2 = action.kwargs.get("obj2_uuids")
     if obj2:
         if isinstance(obj2, str):

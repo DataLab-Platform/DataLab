@@ -47,15 +47,19 @@ def start_new_session_after_workspace_reset(panel: HistoryPanel) -> None:
         panel.create_new_session()
 
 
-def maybe_start_session_for_input(panel: HistoryPanel, *, load: bool = False) -> None:
+def maybe_start_session_for_input(
+    panel: HistoryPanel, panel_str: str | None = None, *, load: bool = False
+) -> None:
     """Offer to start a new history session before a creation/load is recorded.
 
-    When the current session already contains actions, prompt the user to start
-    a fresh session so the new creation/load becomes the root of a clean,
-    self-contained pipeline. A new session is opened *before* the action is
-    recorded when the user accepts.
+    When the target panel's active session already contains actions, prompt the
+    user to start a fresh session so the new creation/load becomes the root of
+    a clean, self-contained pipeline. A new session is opened *before* the
+    action is recorded when the user accepts.
 
     Args:
+        panel_str: Target data panel ("signal"/"image"). Defaults to the
+         current data panel for backward-compatible load callers.
         load: True when triggered by a file/workspace load, False for an object
          creation. Only affects the prompt wording.
     """
@@ -63,9 +67,9 @@ def maybe_start_session_for_input(panel: HistoryPanel, *, load: bool = False) ->
         return
     if panel.runtime.execution.suppress_session_prompt:
         return
-    # Reuse the current session when there is none yet or it has no actions:
-    # there is nothing to preserve, so no need to prompt.
-    if not panel.history_sessions or not panel.history_sessions[-1].actions:
+    target_panel_str = panel_str or panel.navigation.current_panel_str()
+    active_session = panel.navigation.get_active_session(target_panel_str)
+    if active_session is None or not active_session.actions:
         return
     # Debounce: a synchronous burst of creations (plugin/macro) must prompt only
     # once. The guard is reset on the next event-loop turn.
@@ -75,7 +79,7 @@ def maybe_start_session_for_input(panel: HistoryPanel, *, load: bool = False) ->
         # Headless runs: honor the accept_dialogs flag (default False -> "No"),
         # so tests can drive the behavior without a real modal dialog.
         if execenv.accept_dialogs:
-            panel.create_new_session()
+            panel.create_new_session(panel_str=target_panel_str)
         return
     if load:
         message = _("A new object was loaded. Start a new history session?")
@@ -88,7 +92,7 @@ def maybe_start_session_for_input(panel: HistoryPanel, *, load: bool = False) ->
         QW.QMessageBox.Yes | QW.QMessageBox.No,
     )
     if answer == QW.QMessageBox.Yes:
-        panel.create_new_session()
+        panel.create_new_session(panel_str=target_panel_str)
 
 
 def add_compute_entry(
@@ -296,18 +300,18 @@ def add_ui_entry(
     """
     if not panel.record_mode_enabled or panel.is_replaying():
         return None
-    # When the entry is an object creation, offer to start a fresh history
-    # session first so the creation becomes the root of a clean pipeline.
-    if method_name in HistoryAction.UI_CREATION_METHODS:
-        panel.maybe_start_session_for_input(load=False)
-    # Derive the action's panel from the UI target so the captured state only
-    # constrains the panel the action actually operates on.
+    # Derive the action's panel from the UI target so prompting and captured
+    # state concern the panel the action actually operates on.
     target_panel_str = {
         "signalpanel": "signal",
         "imagepanel": "image",
         "signalprocessor": "signal",
         "imageprocessor": "image",
     }.get(target)
+    # When the entry is an object creation, offer to start a fresh history
+    # session first so the creation becomes the root of a clean pipeline.
+    if method_name in HistoryAction.UI_CREATION_METHODS:
+        panel.maybe_start_session_for_input(panel_str=target_panel_str, load=False)
     state = WorkspaceState()
     if save_state:
         state.save(panel.mainwindow, panel_str=target_panel_str)
@@ -320,9 +324,7 @@ def add_ui_entry(
         method_name=method_name,
         kwargs=deepcopy(kwargs),
         state=state,
-        panel_str=target_panel_str
-        if target in ("signalprocessor", "imageprocessor")
-        else None,
+        panel_str=target_panel_str,
     )
     panel.add_object(action)
     return action
@@ -336,7 +338,7 @@ def add_object(panel: HistoryPanel, obj: HistoryAction) -> None:
     and image pipelines stay in separate sessions and recording resumes in the
     user-selected session.
     """
-    pstr = obj.panel_str or panel.navigation.current_panel_str()
+    pstr = obj.effective_panel_str() or panel.navigation.current_panel_str()
     session = panel.navigation.get_active_session(pstr)
     if session is None:
         session = panel.create_new_session(panel_str=pstr)

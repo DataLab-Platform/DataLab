@@ -96,8 +96,9 @@ class HistoryNavigation:
     def session_panel_str(self, session: HistorySession) -> str | None:
         """Return the data panel to which a session belongs."""
         for action in session.actions:
-            if action.panel_str:
-                return action.panel_str
+            panel_str = action.effective_panel_str()
+            if panel_str:
+                return panel_str
         for panel_str, active_session in self.active_session_by_panel.items():
             if active_session is session:
                 return panel_str

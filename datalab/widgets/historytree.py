@@ -12,7 +12,6 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from datalab.config import _
-from datalab.gui.panel.history.chainmodel import build_session_chains
 from datalab.history import HistoryAction, HistorySession
 from datalab.widgets.historydescription import CollapsibleDescriptionWidget
 
@@ -29,7 +28,6 @@ class HistoryTree(QW.QTreeWidget):
     SESSION_NUMBER_ROLE = QC.Qt.UserRole + 2
     ITEM_KIND_ROLE = QC.Qt.UserRole + 3
     ITEM_SESSION = "session"
-    ITEM_CHAIN = "chain"
     ITEM_ACTION = "action"
 
     def __init__(self, parent: QW.QWidget) -> None:
@@ -176,29 +174,17 @@ class HistoryTree(QW.QTreeWidget):
     def build_session_children(
         self, session_item: QW.QTreeWidgetItem, session: HistorySession
     ) -> None:
-        """(Re)build the chain/action subtree under ``session_item``.
+        """(Re)build the action rows directly under ``session_item``.
 
         Args:
             session_item: Top-level tree item for ``session``.
-            session: History session whose actions are grouped into chains.
+            session: History session whose actions are displayed in order.
         """
         session_item.takeChildren()
-        chains = build_session_chains(session)
-        for chain in chains:
-            chain_item = QW.QTreeWidgetItem([chain.root.title, ""])
-            chain_item.setData(0, self.ITEM_KIND_ROLE, self.ITEM_CHAIN)
-            chain_item.setData(0, self.COMPATIBILITY_ROLE, True)
-            font = chain_item.font(0)
-            font.setBold(True)
-            chain_item.setFont(0, font)
-            chain_item.setToolTip(
-                0, _("Processing chain \u2014 %d step(s)") % len(chain.actions)
-            )
-            session_item.addChild(chain_item)
-            for action in chain.actions:
-                child = self.action_to_tree_item(action)
-                chain_item.addChild(child)
-                self.install_description_widget(child, action)
+        for action in session.actions:
+            child = self.action_to_tree_item(action)
+            session_item.addChild(child)
+            self.install_description_widget(child, action)
 
     def set_active_sessions(self, active_session_numbers: dict[int, str]) -> None:
         """Flag the active recording session(s) by session number and panel.
@@ -315,5 +301,4 @@ class HistoryTree(QW.QTreeWidget):
                     selected.append(self.get_action_from_uuid(uuid, history_sessions))
                 except ValueError:
                     continue
-            # chain-header items are containers only: ignored here.
         return selected

@@ -28,10 +28,9 @@ class HistorySession:
         number: Number of the history session
     """
 
-    def __init__(self, title: str = "", number: int = 0) -> None:
+    def __init__(self, title: str | None = None, number: int = 0) -> None:
         """Create a new history session"""
-        prefix = _("Session")
-        self.title = title if title else f"{prefix} {number:03d}"
+        self.title = _("Processing") if title is None else title
         self.number = number
         self.dtstr: str = get_datetime_str()
         self.actions: list[HistoryAction] = []

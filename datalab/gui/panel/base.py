@@ -2690,7 +2690,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if not directory:
             return []
         # Offer a fresh history session for this batch *before* loading anything.
-        self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
+        self.mainwindow.historypanel.maybe_start_session_for_input(
+            panel_str=self.PANEL_STR_ID, load=True
+        )
         folders = [
             path
             for path in glob.glob(osp.join(directory, "**"), recursive=True)
@@ -2769,7 +2771,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         else:
             entry_title = _('Load "%s"') % osp.basename(filenames[0])
         # Offer a fresh history session for this batch *before* recording any entry.
-        self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
+        self.mainwindow.historypanel.maybe_start_session_for_input(
+            panel_str=self.PANEL_STR_ID, load=True
+        )
         action = self.mainwindow.historypanel.add_ui_entry(
             entry_title,
             target=self.PANEL_STR_ID + "panel",

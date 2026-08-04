@@ -43,11 +43,9 @@ def find_parent_session(
 
 def action_panel_target(action: HistoryAction) -> str | None:
     """Return the main-window data-panel attribute targeted by ``action``."""
-    if action.kind == HistoryAction.KIND_UI:
-        if action.method_name in HistoryAction.UI_CREATION_METHODS:
-            return action.target
-        return None
-    return {"signal": "signalpanel", "image": "imagepanel"}.get(action.panel_str)
+    return {"signal": "signalpanel", "image": "imagepanel"}.get(
+        action.effective_panel_str()
+    )
 
 
 def resolve_panel_for_action(
@@ -129,7 +127,7 @@ def find_action_for_output(
                 continue
             if action.func_name != func_name:
                 continue
-            if action.panel_str != panel_data.PANEL_STR_ID:
+            if action.effective_panel_str() != panel_data.PANEL_STR_ID:
                 continue
             captured = action.state.selection.get(panel_data.PANEL_STR_ID, [])
             if captured and captured[0] == target_source_uuid:

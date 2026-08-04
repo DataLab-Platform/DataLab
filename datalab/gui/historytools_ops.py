@@ -41,9 +41,7 @@ if TYPE_CHECKING:
 
 def action_panel_str(action: HistoryAction) -> str:
     """Return the panel an action operates on, using target as fallback."""
-    if action.panel_str:
-        return action.panel_str
-    return {"imagepanel": "image", "signalpanel": "signal"}.get(action.target, "signal")
+    return action.effective_panel_str() or "signal"
 
 
 def make_initial_state_head(pstr: str, clone_uuid: str, title: str) -> HistoryAction:
@@ -391,7 +389,7 @@ def split_chain_on_action_delete(
         The UUID of the deleted action's output object if it remains present
         (now truly orphaned) in its data panel, otherwise ``None``.
     """
-    panel_str = action.panel_str or ""
+    panel_str = action.effective_panel_str()
     # Compute downstream + captured output UUIDs BEFORE removing the action.
     downstream = hchain.get_downstream_actions(panel, action)
     output_uuids = list(panel.runtime.objects.action_output_uuids.get(action.uuid, []))
@@ -400,7 +398,7 @@ def split_chain_on_action_delete(
     if not downstream:
         return first_alive_output(panel, panel_str, output_uuids)
     first = downstream[0]
-    data_panel = data_panel_for(panel, first.panel_str or "")
+    data_panel = data_panel_for(panel, first.effective_panel_str())
     if data_panel is None:
         return first_alive_output(panel, panel_str, output_uuids)
     # Locate the orphaned output object that ``first`` still consumes.
@@ -423,7 +421,7 @@ def split_chain_on_action_delete(
     for d in downstream:
         if orphan_uuid not in action_input_uuids(d):
             continue
-        hchain.rewrite_action_source(d, d.panel_str or "", orphan_uuid, new_uuid)
+        hchain.rewrite_action_source(d, d.effective_panel_str(), orphan_uuid, new_uuid)
         for out_uuid in panel.runtime.objects.action_output_uuids.get(d.uuid, []):
             if data_panel.objmodel.has_uuid(out_uuid):
                 remap_object_source(
@@ -486,7 +484,7 @@ def apply_deletion(panel: HistoryPanel, plan: DeletionPlan) -> DeletionResult:
     for action in plan.actions:
         orphan_uuid = split_chain_on_action_delete(panel, action)
         if orphan_uuid is not None:
-            orphan_refs.append((action.panel_str or "", orphan_uuid))
+            orphan_refs.append((action.effective_panel_str(), orphan_uuid))
     for session in panel.history_sessions:
         if id(session) in plan.session_ids:
             for action in session.actions:

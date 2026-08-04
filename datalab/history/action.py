@@ -232,13 +232,18 @@ class HistoryAction(ObjItf):
     def effective_panel_str(self) -> str:
         """Return the panel this action operates on ("signal"/"image").
 
-        Falls back to the UI ``target`` when ``panel_str`` is unset (the case for
-        creation actions such as ``new_object``, whose ``panel_str`` is ``None``
-        but whose ``target`` identifies the panel).
+        Falls back to the UI ``target`` when ``panel_str`` is unset. This covers
+        creation actions targeting a data panel and legacy actions targeting a
+        panel processor.
         """
         if self.panel_str:
             return self.panel_str
-        return {"imagepanel": "image", "signalpanel": "signal"}.get(self.target, "")
+        return {
+            "signalpanel": "signal",
+            "signalprocessor": "signal",
+            "imagepanel": "image",
+            "imageprocessor": "image",
+        }.get(self.target, "")
 
     def copy_with_uuid_remap(
         self, uuid_remap: dict[str, dict[str, str]]
@@ -643,8 +648,9 @@ class HistoryAction(ObjItf):
         call_kwargs = dict(self.kwargs)
         # Translate a recorded source object UUID through the session uuid_remap
         # so deterministic replay after save/reload still targets the right object.
-        if uuid_remap and self.panel_str and "source_uuid" in call_kwargs:
-            panel_map = uuid_remap.get(self.panel_str, {})
+        pstr = self.effective_panel_str()
+        if uuid_remap and pstr and "source_uuid" in call_kwargs:
+            panel_map = uuid_remap.get(pstr, {})
             old = call_kwargs["source_uuid"]
             call_kwargs["source_uuid"] = panel_map.get(old, old)
         # Inject edit mode if the method supports it
