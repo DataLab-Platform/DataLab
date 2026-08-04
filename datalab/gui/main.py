@@ -94,6 +94,7 @@ from datalab.widgets.warningerror import go_to_error
 if TYPE_CHECKING:
     from typing import Literal
 
+    from datalab.gui.historysession_ops import SessionBehavior
     from datalab.gui.panel.base import AbstractPanel, BaseDataPanel
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.macro import MacroPanel
@@ -2336,36 +2337,51 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     # (see TODO regarding RemoteClient.add_object method)
     #  @remote_controlled
     def add_object(
-        self, obj: SignalObj | ImageObj, group_id: str = "", set_current=True
-    ) -> None:
+        self,
+        obj: SignalObj | ImageObj,
+        group_id: str = "",
+        set_current=True,
+        new_session_behavior: SessionBehavior | None = None,
+    ) -> bool:
         """Add object - signal or image
 
         Args:
             obj: object to add (signal or image)
             group_id: group ID (optional)
             set_current: True to set the object as current object
+            new_session_behavior: Optional history session creation policy
+
+        Returns:
+            True if the object was added successfully, False otherwise
         """
-        if self.confirm_memory_state():
-            if isinstance(obj, SignalObj):
-                self.signalpanel.add_object(obj, group_id, set_current)
-                panel_str = "signal"
-            elif isinstance(obj, ImageObj):
-                self.imagepanel.add_object(obj, group_id, set_current)
-                panel_str = "image"
-            else:
-                raise TypeError(f"Unsupported object type {type(obj)}")
-            # Record a creation entry so objects added programmatically (plugins,
-            # macros, remote control) appear in the history. ``panel.add_object``
-            # deliberately does not record, so creations entering through this
-            # proxy boundary would otherwise be lost (notably the very first one).
+        if not self.confirm_memory_state():
+            return False
+        if isinstance(obj, SignalObj):
+            panel = self.signalpanel
+            panel_str = "signal"
+        elif isinstance(obj, ImageObj):
+            panel = self.imagepanel
+            panel_str = "image"
+        else:
+            raise TypeError(f"Unsupported object type {type(obj)}")
+        self.historypanel.maybe_start_session_for_input(
+            panel_str=panel_str, behavior=new_session_behavior
+        )
+        panel.add_object(obj, group_id, set_current)
+        # Record a creation entry so objects added programmatically (plugins,
+        # macros, remote control) appear in the history. ``panel.add_object``
+        # deliberately does not record, so creations entering through this
+        # proxy boundary would otherwise be lost (notably the very first one).
+        with self.historypanel.session_prompt_suppressed():
             action = self.historypanel.add_ui_entry(
                 _("New %s") % panel_str,
                 target=panel_str + "panel",
                 method_name="new_object",
                 save_state=False,
             )
-            if action is not None:
-                self.historypanel.register_action_outputs(action, [get_uuid(obj)])
+        if action is not None:
+            self.historypanel.register_action_outputs(action, [get_uuid(obj)])
+        return True
 
     @remote_controlled
     def set_object(self, obj: SignalObj | ImageObj) -> None:
@@ -2436,6 +2452,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         ylabel: str = "",
         group_id: str = "",
         set_current: bool = True,
+        new_session_behavior: SessionBehavior | None = None,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add signal data to DataLab.
 
@@ -2449,6 +2466,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             ylabel: Y label. Defaults to ""
             group_id: group id in which to add the signal. Defaults to ""
             set_current: if True, set the added signal as current
+            new_session_behavior: Optional history session creation policy
 
         Returns:
             True if signal was added successfully, False otherwise
@@ -2464,8 +2482,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             units=(xunit, yunit),
             labels=(xlabel, ylabel),
         )
-        self.add_object(obj, group_id, set_current)
-        return True
+        return self.add_object(obj, group_id, set_current, new_session_behavior)
 
     # This API mirrors the image metadata accepted by create_image, so the
     # argument count is part of the stable public interface rather than noise.
@@ -2481,6 +2498,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         zlabel: str = "",
         group_id: str = "",
         set_current: bool = True,
+        new_session_behavior: SessionBehavior | None = None,
     ) -> bool:
         """Add image data to DataLab.
 
@@ -2495,6 +2513,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             zlabel: Z label. Defaults to ""
             group_id: group id in which to add the image. Defaults to ""
             set_current: if True, set the added image as current
+            new_session_behavior: Optional history session creation policy
 
         Returns:
             True if image was added successfully, False otherwise
@@ -2508,8 +2527,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             units=(xunit, yunit, zunit),
             labels=(xlabel, ylabel, zlabel),
         )
-        self.add_object(obj, group_id, set_current)
-        return True
+        return self.add_object(obj, group_id, set_current, new_session_behavior)
 
     # ------?
     def __about(self) -> None:  # pragma: no cover

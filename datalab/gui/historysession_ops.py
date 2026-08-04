@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Any, Generator, Literal
 
 from qtpy import QtWidgets as QW
 
-from datalab.config import _
+from datalab.config import Conf, _
 from datalab.env import execenv
 from datalab.gui.panel.history import chain as hchain
 from datalab.history import HistoryAction, HistorySession, WorkspaceState
@@ -56,7 +56,7 @@ def maybe_start_session_for_input(
     panel_str: str | None = None,
     *,
     load: bool = False,
-    behavior: SessionBehavior = "ask",
+    behavior: SessionBehavior | None = None,
 ) -> bool:
     """Offer to start a new history session before a creation/load is recorded.
 
@@ -71,7 +71,7 @@ def maybe_start_session_for_input(
         load: True when triggered by a file/workspace load, False for an object
          creation. Only affects the prompt wording.
         behavior: Session creation policy: ask, always create ("yes"), or keep
-         the current session ("no").
+         the current session ("no"). Defaults to the live general policy.
 
     Returns:
         True if a new session was created.
@@ -79,6 +79,8 @@ def maybe_start_session_for_input(
     Raises:
         ValueError: If ``behavior`` is unsupported.
     """
+    if behavior is None:
+        behavior = Conf.proc.history_new_session_behavior.get()
     if behavior not in SESSION_BEHAVIORS:
         raise ValueError(f"Invalid session behavior: {behavior!r}")
     if not panel.record_mode_enabled or panel.is_replaying():
@@ -96,7 +98,7 @@ def maybe_start_session_for_input(
         return True
     # Debounce: a synchronous burst of creations (plugin/macro) must prompt only
     # once. The guard is reset on the next event-loop turn.
-    if not panel.runtime.execution.start_session_input_prompt():
+    if not panel.runtime.execution.start_session_input_prompt(target_panel_str):
         return False
     if execenv.unattended:
         # Headless runs: honor the accept_dialogs flag (default False -> "No"),

@@ -3092,6 +3092,42 @@ msgstr "Interpoler systématiquement"
 msgid "Behavior when X-axis arrays are incompatible in multi-signal computations:<ul><li><b>Ask</b>: display confirmation dialog (default)</li><li><b>Interpolate</b>: automatically interpolate signals</li></ul>"
 msgstr "Comportement lorsque les tableaux des X sont incompatibles dans les calculs multi-signaux :<ul><li><b>Demander</b> : afficher une boîte de dialogue de confirmation (par défaut)</li><li><b>Interpoler</b> : interpoler automatiquement les signaux</li></ul>"
 
+msgid "History sessions"
+msgstr "Sessions d'historique"
+
+msgid "New object or file"
+msgstr "Nouvel objet ou fichier"
+
+msgid "Ask"
+msgstr "Demander"
+
+msgid "Always start a new session"
+msgstr "Toujours démarrer une nouvelle session"
+
+msgid "Continue in the current session"
+msgstr "Continuer dans la session courante"
+
+msgid "Behavior when a new object or file is added to a populated history session."
+msgstr "Comportement lorsqu'un nouvel objet ou fichier est ajouté à une session d'historique non vide."
+
+msgid "Plugin-created object"
+msgstr "Objet créé par un plugin"
+
+msgid "Behavior when a plugin adds an object to a populated history session."
+msgstr "Comportement lorsqu'un plugin ajoute un objet à une session d'historique non vide."
+
+msgid "Plugin multi-load"
+msgstr "Chargement multiple par un plugin"
+
+msgid "Ask once"
+msgstr "Demander une seule fois"
+
+msgid "Start a new session"
+msgstr "Démarrer une nouvelle session"
+
+msgid "Behavior when a plugin loads multiple objects into a populated history session."
+msgstr "Comportement lorsqu'un plugin charge plusieurs objets dans une session d'historique non vide."
+
 msgid "Settings for results management"
 msgstr "Réglages de la gestion des résultats"
 
@@ -4384,4 +4420,3 @@ msgstr "Un ou plusieurs signaux sélectionnés ont des paramètres d'ajustement 
 #, python-format
 msgid "%s: fitting curve was computed by an earlier version and cannot be evaluated (please recompute the fit)"
 msgstr "%s : la courbe d'ajustement a été calculée par une version antérieure et ne peut pas être évaluée (veuillez recalculer l'ajustement)"
-

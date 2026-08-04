@@ -178,7 +178,7 @@ class HistoryRecordingFacadeMixin:
         panel_str: str | None = None,
         *,
         load: bool = False,
-        behavior: hsess.SessionBehavior = "ask",
+        behavior: hsess.SessionBehavior | None = None,
     ) -> bool:
         """Offer to start a new session before recording an input."""
         return hsess.maybe_start_session_for_input(

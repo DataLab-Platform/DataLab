@@ -22,7 +22,7 @@ class HistoryExecutionState:
     def __init__(self) -> None:
         self.record_mode = False
         self.edit_mode = False
-        self.session_input_pending = False
+        self.session_input_pending_panels: set[str] = set()
         self.suppress_session_prompt = False
         self.replaying_active = False
         self.output_suppressed_active = False
@@ -61,17 +61,19 @@ class HistoryExecutionState:
         finally:
             self.suppress_session_prompt = previous
 
-    def start_session_input_prompt(self) -> bool:
-        """Start the input prompt debounce window if it is not already active."""
-        if self.session_input_pending:
+    def start_session_input_prompt(self, panel_str: str) -> bool:
+        """Start the input prompt debounce window for a data panel."""
+        if panel_str in self.session_input_pending_panels:
             return False
-        self.session_input_pending = True
-        QC.QTimer.singleShot(0, self.finish_session_input_prompt)
+        self.session_input_pending_panels.add(panel_str)
+        QC.QTimer.singleShot(
+            0, functools.partial(self.finish_session_input_prompt, panel_str)
+        )
         return True
 
-    def finish_session_input_prompt(self) -> None:
-        """End the input prompt debounce window."""
-        self.session_input_pending = False
+    def finish_session_input_prompt(self, panel_str: str) -> None:
+        """End the input prompt debounce window for a data panel."""
+        self.session_input_pending_panels.discard(panel_str)
 
     @contextmanager
     def recomputing_cascade(self) -> Generator[bool, None, None]:
