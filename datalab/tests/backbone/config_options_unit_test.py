@@ -8,6 +8,7 @@ Unit tests for the DataLab options container
 import json
 
 import guidata.dataset as gds
+import pytest
 from sigimax.config import get_conf
 from sigimax.utils import conf as confmod
 from sigimax.utils.conf import AppUserConfig
@@ -101,6 +102,25 @@ def test_field_context_restores_absent_ini_option(monkeypatch) -> None:
     assert not backend.has_option("console", "console_enabled")
     with options.console_enabled.context(False):
         assert backend.get("console", "console_enabled") is False
+    assert options.console_enabled.get() is True
+    assert not backend.has_option("console", "console_enabled")
+    assert not options.is_option_initialized("console_enabled")
+
+
+def test_nested_context_restores_absent_ini_option_after_exception(monkeypatch) -> None:
+    """Nested temporary contexts restore an absent INI option after an error."""
+    backend = _make_conf()
+    monkeypatch.setattr(confmod, "CONF", backend)
+    options = DataLabOptions()
+    options.set_ini_persist_enabled(True)
+
+    with pytest.raises(RuntimeError, match="stop"):
+        with options.console_enabled.context(False):
+            assert backend.get("console", "console_enabled") is False
+            with options.console_enabled.context(True):
+                assert backend.get("console", "console_enabled") is True
+                raise RuntimeError("stop")
+
     assert options.console_enabled.get() is True
     assert not backend.has_option("console", "console_enabled")
     assert not options.is_option_initialized("console_enabled")
