@@ -240,9 +240,14 @@ def _load_field(options, conf, field_name: str, section: str, ini_key: str) -> N
         if isinstance(raw, str) and raw:
             try:
                 field.from_json(_unescape_percent(raw))
+                field.get()
             except Exception:  # pylint: disable=broad-except
-                # Corrupted JSON: keep the default instance.
-                pass
+                remove_persisted_option(options, field_name, conf)
+            else:
+                # Deserialization is lazy: a missing DataSet class is detected
+                # by get(), which clears the pending serialized value.
+                if field.to_json() is None:
+                    remove_persisted_option(options, field_name, conf)
     elif isinstance(field, FontOptionField):
         fam_d, size_d, bold_d = default_raw
         family = conf.get(section, f"{ini_key}_family", default=fam_d)

@@ -300,16 +300,6 @@ class DataSetOptionField(OptionField):
                 self._value = None
                 self._is_initialized = False
                 self._container.unmark_option_initialized(self.name)
-                is_persist_enabled = getattr(
-                    self._container, "is_ini_persist_enabled", lambda: False
-                )
-                if is_persist_enabled():
-                    # pylint: disable=import-outside-toplevel
-                    from datalab.config.config_persistence import (
-                        remove_persisted_option,
-                    )
-
-                    remove_persisted_option(self._container, self.name)
             else:
                 self._value = value
             self._serialized_value = None

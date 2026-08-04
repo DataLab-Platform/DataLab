@@ -11,6 +11,7 @@ Checking .ini configuration file management.
 import os
 import os.path as osp
 
+import pytest
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from sigimax.utils import conf as confmod
@@ -175,4 +176,4 @@ def test_config(tmp_path, monkeypatch):
 
 
 if __name__ == "__main__":
-    test_config()
+    pytest.main([__file__])

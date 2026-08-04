@@ -111,7 +111,7 @@ def test_atomic_configuration_save_cleans_up_after_replace_error(
         atomic_save_configuration(config)
 
     assert not (tmp_path / "DataLab_v1_typed.ini").exists()
-    assert list(tmp_path.glob("*.tmp")) == []
+    assert not list(tmp_path.glob("*.tmp"))
 
 
 def test_section_map_is_complete() -> None:
@@ -253,3 +253,22 @@ def test_dataset_option_round_trip() -> None:
     dst = DataLabOptions()
     load_options_from_ini(dst, conf)
     assert dst.sig_shape_param.get().value == 77
+
+
+def test_invalid_dataset_option_is_removed_on_load() -> None:
+    """An unresolved persisted DataSet is discarded from the INI backend."""
+    conf = _make_conf()
+    options = DataLabOptions()
+    section, ini_key = get_ini_location(options, "sig_shape_param")
+    conf.set(
+        section,
+        ini_key,
+        '{"class_module": "missing_module", "class_name": "MissingParam"}',
+        save=False,
+    )
+
+    load_options_from_ini(options, conf)
+
+    assert not conf.has_option(section, ini_key)
+    assert options.sig_shape_param.get() is None
+    assert not options.is_option_initialized("sig_shape_param")
