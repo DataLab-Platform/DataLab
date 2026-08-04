@@ -20,7 +20,6 @@ from .config import (
     MOD_NAME,
     OTHER_PLUGINS_PATHLIST,
     PLOTPY_CONF,
-    PLOTPY_DEFAULTS,
     PLUGIN_ERROR_COLOR,
     PLUGIN_OK_COLOR,
     SHOTPATH,
@@ -33,8 +32,6 @@ from .config import (
     get_config_filename,
     get_config_path,
     get_legacy_config_filename,
-    get_mod_source_dir,
-    get_old_log_fname,
     get_typed_config_filename,
     get_user_plugin_paths,
     initialize,
@@ -58,7 +55,6 @@ __all__ = [
     "MOD_NAME",
     "OTHER_PLUGINS_PATHLIST",
     "PLOTPY_CONF",
-    "PLOTPY_DEFAULTS",
     "PLUGIN_ERROR_COLOR",
     "PLUGIN_OK_COLOR",
     "SHOTPATH",
@@ -72,8 +68,6 @@ __all__ = [
     "get_config_filename",
     "get_config_path",
     "get_legacy_config_filename",
-    "get_mod_source_dir",
-    "get_old_log_fname",
     "get_typed_config_filename",
     "get_user_plugin_paths",
     "initialize",
@@ -84,8 +78,3 @@ __all__ = [
     "reset_to_defaults",
     "set_user_plugin_paths",
 ]
-
-
-def __getattr__(name: str):
-    """Delegate implementation constants to ``datalab.config.config``."""
-    return getattr(config, name)

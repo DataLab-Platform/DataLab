@@ -57,8 +57,6 @@ from datalab.config import (
     APP_DESC,
     APP_NAME,
     DATAPATH,
-    PLOTPY_CONF,
-    PLOTPY_DEFAULTS,
     TEST_SEGFAULT_ERROR,
     Conf,
     _,
@@ -2241,7 +2239,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.setUpdatesEnabled(False)
 
         plotpy_config.set_plotpy_color_mode(mode)
-        PLOTPY_CONF.update_defaults(PLOTPY_DEFAULTS)
+        Conf.apply_plotpy_defaults()
 
         if self.console is not None:
             self.console.update_color_mode()

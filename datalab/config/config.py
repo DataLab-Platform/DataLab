@@ -19,14 +19,12 @@ import tempfile
 from guidata import configtools
 from guidata.userconfig import get_config_basedir
 from plotpy.config import CONF as PLOTPY_CONF
-from plotpy.config import MAIN_BG_COLOR, MAIN_FG_COLOR
 from plotpy.styles import MarkerParam, ShapeParam
-from sigima.config import options as sigima_options
 from sigima.proc.title_formatting import (
     PlaceholderTitleFormatter,
     set_default_title_formatter,
 )
-from sigimax.config import set_conf
+from sigimax.config import is_frozen, set_conf
 from sigimax.utils import conf
 from sigimax.utils.conf import AppUserConfig, Configuration
 
@@ -40,9 +38,9 @@ from datalab.config.config_persistence import (
 # Configure Sigima to use DataLab-compatible placeholder title formatting
 set_default_title_formatter(PlaceholderTitleFormatter())
 
-CONF_VERSION = "1.0.0"
+CONF_VERSION = DataLabOptions.CONF_VERSION
 
-APP_NAME = "DataLab"
+APP_NAME = DataLabOptions.APP_NAME
 MOD_NAME = "datalab"
 TYPED_CONFIG_SUFFIX = "_typed"
 
@@ -183,7 +181,6 @@ def migrate_legacy_configuration(
 _ = configtools.get_translation(MOD_NAME)
 
 APP_DESC = _("""DataLab is a generic signal and image processing platform""")
-APP_PATH = osp.dirname(__file__)
 
 DEBUG = os.environ.get("DATALAB_DEBUG", "").lower() in ("1", "true")
 if DEBUG:
@@ -192,7 +189,6 @@ if DEBUG:
 TEST_SEGFAULT_ERROR = len(os.environ.get("TEST_SEGFAULT_ERROR", "")) > 0
 if TEST_SEGFAULT_ERROR:
     print('*** TEST_SEGFAULT_ERROR mode *** [Enabling test action in "?" menu]')
-DATETIME_FORMAT = "%d/%m/%Y - %H:%M:%S"
 
 
 configtools.add_image_module_path(MOD_NAME, osp.join("data", "logo"))
@@ -203,21 +199,6 @@ SHOTPATH = osp.join(
     configtools.get_module_data_path(MOD_NAME), os.pardir, "doc", "images", "shots"
 )
 OTHER_PLUGINS_PATHLIST = [configtools.get_module_data_path(MOD_NAME, "plugins")]
-
-
-def is_frozen(module_name: str) -> bool:
-    """Test if module has been frozen (py2exe/cx_Freeze/pyinstaller)
-
-    Args:
-        module_name (str): module name
-
-    Returns:
-        bool: True if module has been frozen (py2exe/cx_Freeze/pyinstaller)
-    """
-    datapath = configtools.get_module_path(module_name)
-    parentdir = osp.normpath(osp.join(datapath, osp.pardir))
-    return not osp.isfile(__file__) or osp.isfile(parentdir)  # library.zip
-
 
 IS_FROZEN = is_frozen(MOD_NAME)
 if IS_FROZEN:
@@ -283,22 +264,6 @@ parse_datalab_plugins_env_var(
 )
 
 
-def get_mod_source_dir() -> str | None:
-    """Return module source directory
-
-    Returns:
-        str | None: module source directory, or None if not found
-    """
-    if IS_FROZEN:
-        devdir = osp.abspath(osp.join(sys.prefix, os.pardir, os.pardir))
-    else:
-        devdir = osp.abspath(osp.join(osp.dirname(__file__), os.pardir))
-    if osp.isfile(osp.join(devdir, MOD_NAME, "__init__.py")):
-        return devdir
-    # Unhandled case (this should not happen, but just in case):
-    return None
-
-
 def normalize_plugin_paths(paths: list[str] | tuple[str, ...] | None) -> list[str]:
     """Normalize a list of plugin directories and drop duplicates/empties."""
     normalized: list[str] = []
@@ -350,11 +315,6 @@ def set_user_plugin_paths(paths: list[str] | tuple[str, ...]) -> None:
     Conf.plugins_path_list.set(normalized)
 
 
-def get_old_log_fname(fname):
-    """Return old log fname from current log fname"""
-    return osp.splitext(fname)[0] + ".1.log"
-
-
 def get_config_path(basename: str) -> str:
     """Return a path inside the DataLab configuration directory."""
     return Configuration.get_path(basename)
@@ -372,9 +332,7 @@ def _apply_runtime_defaults() -> None:
     """Apply defaults that depend on initialized application paths."""
     if not Conf.macro_templates_path.get():
         Conf.macro_templates_path.set(get_config_path("macro_templates"))
-    sigima_options.imageio_formats.set(Conf.imageio_formats.get())
-    sigima_options.fft_shift_enabled.set(Conf.fft_shift_enabled.get())
-    sigima_options.auto_normalize_kernel.set(Conf.auto_normalize_kernel.get())
+    Conf.sync_with_sigima()
     assert Conf.plot_toolbar_position.get() in ("top", "bottom", "left", "right")
 
 
@@ -409,6 +367,7 @@ def initialize(load_user_config: bool) -> None:
             ):
                 conf.CONF.set_version(CONF_VERSION, save=False)
         _apply_runtime_defaults()
+        Conf.set_plotpy_application(config_app_name)
         _INITIALIZED_WITH_USER_CONFIG = load_user_config
     finally:
         Conf.set_ini_persist_enabled(
@@ -442,366 +401,8 @@ def reset():
     initialize(load_user_config=True)
 
 
-ROI_LINE_COLOR = "#5555ff"
-ROI_SEL_LINE_COLOR = "#9393ff"
-MARKER_LINE_COLOR = "#A11818"
-MARKER_TEXT_COLOR = "#440909"
-
 PLUGIN_OK_COLOR = "#2ecc71"
 PLUGIN_ERROR_COLOR = "#e74c3c"
-
-PLOTPY_DEFAULTS = {
-    "plot": {
-        #
-        # XXX: If needed in the future, add here the default settings for PlotPy:
-        # that will override the PlotPy settings.
-        # That is the right way to customize the PlotPy settings for shapes and
-        # annotations when they are added using tools from the DataLab application
-        # (see `BaseDataPanel.ANNOTATION_TOOLS`).
-        # For example, for shapes:
-        # "shape/drag/line/color": "#00ffff",
-        #
-        # Overriding default plot settings from PlotPy
-        "title/font/size": 11,
-        "title/font/bold": False,
-        "selected_curve_symbol/marker": "Ellipse",
-        "selected_curve_symbol/edgecolor": "#a0a0a4",
-        "selected_curve_symbol/facecolor": MAIN_FG_COLOR,
-        "selected_curve_symbol/alpha": 0.3,
-        "selected_curve_symbol/size": 5,
-        "marker/curve/text/textcolor": "black",
-        # Cross marker style (shown when pressing Alt key on plot)
-        "marker/cross/symbol/marker": "Cross",
-        "marker/cross/symbol/edgecolor": MAIN_FG_COLOR,
-        "marker/cross/symbol/facecolor": "#ff0000",
-        "marker/cross/symbol/alpha": 1.0,
-        "marker/cross/symbol/size": 8,
-        "marker/cross/text/font/family": "default",
-        "marker/cross/text/font/size": 8,
-        "marker/cross/text/font/bold": False,
-        "marker/cross/text/font/italic": False,
-        "marker/cross/text/textcolor": "#000000",
-        "marker/cross/text/background_color": "#ffffff",
-        "marker/cross/text/background_alpha": 0.7,
-        "marker/cross/line/style": "DashLine",
-        "marker/cross/line/color": MARKER_LINE_COLOR,
-        "marker/cross/line/width": 1.0,
-        "marker/cross/markerstyle": "Cross",
-        "marker/cross/spacing": 7,
-        # Cursor line and symbol style
-        "marker/cursor/line/style": "SolidLine",
-        "marker/cursor/line/color": MARKER_LINE_COLOR,
-        "marker/cursor/line/width": 1.0,
-        "marker/cursor/symbol/marker": "NoSymbol",
-        "marker/cursor/symbol/size": 11,
-        "marker/cursor/symbol/edgecolor": MAIN_BG_COLOR,
-        "marker/cursor/symbol/facecolor": "#ff9393",
-        "marker/cursor/symbol/alpha": 1.0,
-        "marker/cursor/sel_line/style": "SolidLine",
-        "marker/cursor/sel_line/color": MARKER_LINE_COLOR,
-        "marker/cursor/sel_line/width": 2.0,
-        "marker/cursor/sel_symbol/marker": "NoSymbol",
-        "marker/cursor/sel_symbol/size": 11,
-        "marker/cursor/sel_symbol/edgecolor": MAIN_BG_COLOR,
-        "marker/cursor/sel_symbol/facecolor": MARKER_LINE_COLOR,
-        "marker/cursor/sel_symbol/alpha": 0.8,
-        "marker/cursor/text/font/size": 9,
-        "marker/cursor/text/font/family": "default",
-        "marker/cursor/text/font/bold": False,
-        "marker/cursor/text/font/italic": False,
-        "marker/cursor/text/textcolor": MARKER_TEXT_COLOR,
-        "marker/cursor/text/background_color": "#ffffff",
-        "marker/cursor/text/background_alpha": 0.7,
-        "marker/cursor/sel_text/font/size": 9,
-        "marker/cursor/sel_text/font/family": "default",
-        "marker/cursor/sel_text/font/bold": False,
-        "marker/cursor/sel_text/font/italic": False,
-        "marker/cursor/sel_text/textcolor": MARKER_TEXT_COLOR,
-        "marker/cursor/sel_text/background_color": "#ffffff",
-        "marker/cursor/sel_text/background_alpha": 0.7,
-        # Default annotation text style for segments:
-        "shape/segment/line/style": "SolidLine",
-        "shape/segment/line/color": "#00ff55",
-        "shape/segment/line/width": 1.0,
-        "shape/segment/sel_line/style": "SolidLine",
-        "shape/segment/sel_line/color": "#00ff55",
-        "shape/segment/sel_line/width": 2.0,
-        "shape/segment/fill/style": "NoBrush",
-        "shape/segment/sel_fill/style": "NoBrush",
-        "shape/segment/symbol/marker": "XCross",
-        "shape/segment/symbol/size": 9,
-        "shape/segment/symbol/edgecolor": "#00ff55",
-        "shape/segment/symbol/facecolor": "#00ff55",
-        "shape/segment/symbol/alpha": 1.0,
-        "shape/segment/sel_symbol/marker": "XCross",
-        "shape/segment/sel_symbol/size": 12,
-        "shape/segment/sel_symbol/edgecolor": "#00ff55",
-        "shape/segment/sel_symbol/facecolor": "#00ff55",
-        "shape/segment/sel_symbol/alpha": 0.7,
-        # Default style for drag shapes: (global annotations style)
-        "shape/drag/line/style": "SolidLine",
-        "shape/drag/line/color": "#00ff55",
-        "shape/drag/line/width": 1.0,
-        "shape/drag/fill/style": "SolidPattern",
-        "shape/drag/fill/color": MAIN_BG_COLOR,
-        "shape/drag/fill/alpha": 0.1,
-        "shape/drag/symbol/marker": "Rect",
-        "shape/drag/symbol/size": 3,
-        "shape/drag/symbol/edgecolor": "#00ff55",
-        "shape/drag/symbol/facecolor": "#00ff55",
-        "shape/drag/symbol/alpha": 1.0,
-        "shape/drag/sel_line/style": "SolidLine",
-        "shape/drag/sel_line/color": "#00ff55",
-        "shape/drag/sel_line/width": 2.0,
-        "shape/drag/sel_fill/style": "SolidPattern",
-        "shape/drag/sel_fill/color": MAIN_BG_COLOR,
-        "shape/drag/sel_fill/alpha": 0.1,
-        "shape/drag/sel_symbol/marker": "Rect",
-        "shape/drag/sel_symbol/size": 7,
-        "shape/drag/sel_symbol/edgecolor": "#00ff55",
-        "shape/drag/sel_symbol/facecolor": "#00ff00",
-        "shape/drag/sel_symbol/alpha": 0.7,
-    },
-    "results": {
-        # Annotated shape style for result shapes:
-        #   Signals:
-        "s/annotation/line/style": "SolidLine",
-        "s/annotation/line/color": "#00aa00",
-        "s/annotation/line/width": 2,
-        "s/annotation/fill/style": "NoBrush",
-        "s/annotation/fill/color": MAIN_BG_COLOR,
-        "s/annotation/fill/alpha": 0.1,
-        "s/annotation/symbol/marker": "XCross",
-        "s/annotation/symbol/size": 7,
-        "s/annotation/symbol/edgecolor": "#00aa00",
-        "s/annotation/symbol/facecolor": "#00aa00",
-        "s/annotation/symbol/alpha": 1.0,
-        "s/annotation/sel_line/style": "DashLine",
-        "s/annotation/sel_line/color": "#00ff00",
-        "s/annotation/sel_line/width": 1,
-        "s/annotation/sel_fill/style": "SolidPattern",
-        "s/annotation/sel_fill/color": MAIN_BG_COLOR,
-        "s/annotation/sel_fill/alpha": 0.1,
-        "s/annotation/sel_symbol/marker": "Rect",
-        "s/annotation/sel_symbol/size": 9,
-        "s/annotation/sel_symbol/edgecolor": "#00aa00",
-        "s/annotation/sel_symbol/facecolor": "#00ff00",
-        "s/annotation/sel_symbol/alpha": 0.7,
-        #   Images:
-        "i/annotation/line/style": "SolidLine",
-        "i/annotation/line/color": "#ffff00",
-        "i/annotation/line/width": 2,
-        "i/annotation/fill/style": "SolidPattern",
-        "i/annotation/fill/color": MAIN_BG_COLOR,
-        "i/annotation/fill/alpha": 0.1,
-        "i/annotation/symbol/marker": "Rect",
-        "i/annotation/symbol/size": 3,
-        "i/annotation/symbol/edgecolor": "#ffff00",
-        "i/annotation/symbol/facecolor": "#ffff00",
-        "i/annotation/symbol/alpha": 1.0,
-        "i/annotation/sel_line/style": "SolidLine",
-        "i/annotation/sel_line/color": "#00ff00",
-        "i/annotation/sel_line/width": 2,
-        "i/annotation/sel_fill/style": "SolidPattern",
-        "i/annotation/sel_fill/color": MAIN_BG_COLOR,
-        "i/annotation/sel_fill/alpha": 0.1,
-        "i/annotation/sel_symbol/marker": "Rect",
-        "i/annotation/sel_symbol/size": 9,
-        "i/annotation/sel_symbol/edgecolor": "#00aa00",
-        "i/annotation/sel_symbol/facecolor": "#00ff00",
-        "i/annotation/sel_symbol/alpha": 0.7,
-        # Marker styles for results:
-        #   Signals:
-        "s/marker/cursor/line/style": "DashLine",
-        "s/marker/cursor/line/color": MARKER_LINE_COLOR,
-        "s/marker/cursor/line/width": 1.0,
-        "s/marker/cursor/symbol/marker": "Ellipse",
-        "s/marker/cursor/symbol/size": 11,
-        "s/marker/cursor/symbol/edgecolor": MAIN_BG_COLOR,
-        "s/marker/cursor/symbol/facecolor": MARKER_LINE_COLOR,
-        "s/marker/cursor/symbol/alpha": 0.7,
-        "s/marker/cursor/sel_line/style": "DashLine",
-        "s/marker/cursor/sel_line/color": MARKER_LINE_COLOR,
-        "s/marker/cursor/sel_line/width": 2.0,
-        "s/marker/cursor/sel_symbol/marker": "Ellipse",
-        "s/marker/cursor/sel_symbol/size": 11,
-        "s/marker/cursor/sel_symbol/edgecolor": MARKER_LINE_COLOR,
-        "s/marker/cursor/sel_symbol/facecolor": MARKER_LINE_COLOR,
-        "s/marker/cursor/sel_symbol/alpha": 0.7,
-        "s/marker/cursor/text/font/size": 9,
-        "s/marker/cursor/text/font/family": "default",
-        "s/marker/cursor/text/font/bold": False,
-        "s/marker/cursor/text/font/italic": False,
-        "s/marker/cursor/text/textcolor": MARKER_TEXT_COLOR,
-        "s/marker/cursor/text/background_color": "#ffffff",
-        "s/marker/cursor/text/background_alpha": 0.7,
-        "s/marker/cursor/sel_text/font/size": 9,
-        "s/marker/cursor/sel_text/font/family": "default",
-        "s/marker/cursor/sel_text/font/bold": False,
-        "s/marker/cursor/sel_text/font/italic": False,
-        "s/marker/cursor/sel_text/textcolor": MARKER_TEXT_COLOR,
-        "s/marker/cursor/sel_text/background_color": "#ffffff",
-        "s/marker/cursor/sel_text/background_alpha": 0.7,
-        "s/marker/cursor/markerstyle": "Cross",
-        #   Images:
-        "i/marker/cursor/line/style": "DashLine",
-        "i/marker/cursor/line/color": MARKER_LINE_COLOR,
-        "i/marker/cursor/line/width": 1.0,
-        "i/marker/cursor/symbol/marker": "Diamond",
-        "i/marker/cursor/symbol/size": 11,
-        "i/marker/cursor/symbol/edgecolor": MARKER_LINE_COLOR,
-        "i/marker/cursor/symbol/facecolor": MARKER_LINE_COLOR,
-        "i/marker/cursor/symbol/alpha": 0.7,
-        "i/marker/cursor/sel_line/style": "DashLine",
-        "i/marker/cursor/sel_line/color": MARKER_LINE_COLOR,
-        "i/marker/cursor/sel_line/width": 2.0,
-        "i/marker/cursor/sel_symbol/marker": "Diamond",
-        "i/marker/cursor/sel_symbol/size": 11,
-        "i/marker/cursor/sel_symbol/edgecolor": MARKER_LINE_COLOR,
-        "i/marker/cursor/sel_symbol/facecolor": MARKER_LINE_COLOR,
-        "i/marker/cursor/sel_symbol/alpha": 0.7,
-        "i/marker/cursor/text/font/size": 9,
-        "i/marker/cursor/text/font/family": "default",
-        "i/marker/cursor/text/font/bold": False,
-        "i/marker/cursor/text/font/italic": False,
-        "i/marker/cursor/text/textcolor": MARKER_TEXT_COLOR,
-        "i/marker/cursor/text/background_color": "#ffffff",
-        "i/marker/cursor/text/background_alpha": 0.7,
-        "i/marker/cursor/sel_text/font/size": 9,
-        "i/marker/cursor/sel_text/font/family": "default",
-        "i/marker/cursor/sel_text/font/bold": False,
-        "i/marker/cursor/sel_text/font/italic": False,
-        "i/marker/cursor/sel_text/textcolor": MARKER_TEXT_COLOR,
-        "i/marker/cursor/sel_text/background_color": "#ffffff",
-        "i/marker/cursor/sel_text/background_alpha": 0.7,
-        "i/marker/cursor/markerstyle": "Cross",
-        # Style for labels:
-        "label/symbol/marker": "NoSymbol",
-        "label/symbol/size": 0,
-        "label/symbol/edgecolor": MAIN_BG_COLOR,
-        "label/symbol/facecolor": MAIN_BG_COLOR,
-        "label/border/style": "SolidLine",
-        "label/border/color": "#cbcbcb",
-        "label/border/width": 1,
-        "label/font/size": 8,
-        "label/font/family/nt": ["Cascadia Code", "Consolas", "Courier New"],
-        "label/font/family/posix": "Bitstream Vera Sans Mono",
-        "label/font/family/mac": "Monaco",
-        "label/font/bold": False,
-        "label/font/italic": False,
-        "label/color": MAIN_FG_COLOR,
-        "label/bgcolor": MAIN_BG_COLOR,
-        "label/bgalpha": 0.8,
-        "label/anchor": "TL",
-        "label/xc": 10,
-        "label/yc": 10,
-        "label/abspos": True,
-        "label/absg": "TL",
-        "label/xg": 0.0,
-        "label/yg": 0.0,
-    },
-    "roi": {  # Shape style for ROI
-        # Signals:
-        # - Editable ROI (ROI editor):
-        "s/editable/fill": "#ffff00",
-        "s/editable/shade": 0.10,
-        "s/editable/line/style": "SolidLine",
-        "s/editable/line/color": "#ffff00",
-        "s/editable/line/width": 1,
-        "s/editable/fill/style": "SolidPattern",
-        "s/editable/fill/color": MAIN_BG_COLOR,
-        "s/editable/fill/alpha": 0.1,
-        "s/editable/symbol/marker": "Rect",
-        "s/editable/symbol/size": 3,
-        "s/editable/symbol/edgecolor": "#ffff00",
-        "s/editable/symbol/facecolor": "#ffff00",
-        "s/editable/symbol/alpha": 1.0,
-        "s/editable/sel_line/style": "SolidLine",
-        "s/editable/sel_line/color": "#00ff00",
-        "s/editable/sel_line/width": 1,
-        "s/editable/sel_fill/style": "SolidPattern",
-        "s/editable/sel_fill/color": MAIN_BG_COLOR,
-        "s/editable/sel_fill/alpha": 0.1,
-        "s/editable/sel_symbol/marker": "Rect",
-        "s/editable/sel_symbol/size": 9,
-        "s/editable/sel_symbol/edgecolor": "#00aa00",
-        "s/editable/sel_symbol/facecolor": "#00ff00",
-        "s/editable/sel_symbol/alpha": 0.7,
-        # - Readonly ROI (plot):
-        "s/readonly/line/style": "SolidLine",
-        "s/readonly/line/color": ROI_LINE_COLOR,
-        "s/readonly/line/width": 1,
-        "s/readonly/sel_line/style": "SolidLine",
-        "s/readonly/sel_line/color": ROI_SEL_LINE_COLOR,
-        "s/readonly/sel_line/width": 2,
-        "s/readonly/fill": ROI_LINE_COLOR,
-        "s/readonly/shade": 0.10,
-        "s/readonly/symbol/marker": "Ellipse",
-        "s/readonly/symbol/size": 7,
-        "s/readonly/symbol/edgecolor": MAIN_BG_COLOR,
-        "s/readonly/symbol/facecolor": ROI_LINE_COLOR,
-        "s/readonly/symbol/alpha": 1.0,
-        "s/readonly/sel_symbol/marker": "Ellipse",
-        "s/readonly/sel_symbol/size": 9,
-        "s/readonly/sel_symbol/edgecolor": MAIN_BG_COLOR,
-        "s/readonly/sel_symbol/facecolor": ROI_SEL_LINE_COLOR,
-        "s/readonly/sel_symbol/alpha": 0.9,
-        "s/readonly/multi/color": "#806060",
-        # Images:
-        # - Editable ROI (ROI editor):
-        "i/editable/line/style": "SolidLine",
-        "i/editable/line/color": "#ffff00",
-        "i/editable/line/width": 1,
-        "i/editable/fill/style": "SolidPattern",
-        "i/editable/fill/color": MAIN_BG_COLOR,
-        "i/editable/fill/alpha": 0.1,
-        "i/editable/symbol/marker": "Rect",
-        "i/editable/symbol/size": 3,
-        "i/editable/symbol/edgecolor": "#ffff00",
-        "i/editable/symbol/facecolor": "#ffff00",
-        "i/editable/symbol/alpha": 1.0,
-        "i/editable/sel_line/style": "SolidLine",
-        "i/editable/sel_line/color": "#00ff00",
-        "i/editable/sel_line/width": 1,
-        "i/editable/sel_fill/style": "SolidPattern",
-        "i/editable/sel_fill/color": MAIN_BG_COLOR,
-        "i/editable/sel_fill/alpha": 0.1,
-        "i/editable/sel_symbol/marker": "Rect",
-        "i/editable/sel_symbol/size": 9,
-        "i/editable/sel_symbol/edgecolor": "#00aa00",
-        "i/editable/sel_symbol/facecolor": "#00ff00",
-        "i/editable/sel_symbol/alpha": 0.7,
-        # - Readonly ROI (plot):
-        "i/readonly/line/style": "DotLine",
-        "i/readonly/line/color": ROI_LINE_COLOR,
-        "i/readonly/line/width": 1,
-        "i/readonly/fill/style": "SolidPattern",
-        "i/readonly/fill/color": MAIN_BG_COLOR,
-        "i/readonly/fill/alpha": 0.1,
-        "i/readonly/symbol/marker": "NoSymbol",
-        "i/readonly/symbol/size": 5,
-        "i/readonly/symbol/edgecolor": ROI_LINE_COLOR,
-        "i/readonly/symbol/facecolor": ROI_LINE_COLOR,
-        "i/readonly/symbol/alpha": 0.6,
-        "i/readonly/sel_line/style": "DotLine",
-        "i/readonly/sel_line/color": "#0000ff",
-        "i/readonly/sel_line/width": 1,
-        "i/readonly/sel_fill/style": "SolidPattern",
-        "i/readonly/sel_fill/color": MAIN_BG_COLOR,
-        "i/readonly/sel_fill/alpha": 0.1,
-        "i/readonly/sel_symbol/marker": "Rect",
-        "i/readonly/sel_symbol/size": 8,
-        "i/readonly/sel_symbol/edgecolor": "#0000aa",
-        "i/readonly/sel_symbol/facecolor": "#0000ff",
-        "i/readonly/sel_symbol/alpha": 0.7,
-    },
-}
-
-# PlotPy configuration will be initialized in initialize() function
-PLOTPY_CONF.update_defaults(PLOTPY_DEFAULTS)
-PLOTPY_CONF.set_application(
-    osp.join(get_config_app_name(), "plotpy"), CONF_VERSION, load=False
-)
 
 
 class DataLabShapeParam(ShapeParam):
@@ -822,7 +423,7 @@ set_conf(Conf)
 
 def initialize_default_plotpy_instances():
     """Initialize default PlotPy instances for DataLab configuration options"""
-    # Initialize default instances for DataSetOptions now that PLOTPY_DEFAULTS exists
+    # PlotPy defaults have been applied by ``DataLabOptions.__init__`` (SigimaX)
     _sig_shapeparam = DataLabShapeParam()
     _sig_shapeparam.read_config(PLOTPY_CONF, "results", "s/annotation")
     Conf.sig_shape_param.set_default_instance(_sig_shapeparam)
