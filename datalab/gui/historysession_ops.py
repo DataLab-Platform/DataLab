@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 from copy import deepcopy
-from typing import TYPE_CHECKING, Any, Generator
+from typing import TYPE_CHECKING, Any, Generator, Literal
 
 from qtpy import QtWidgets as QW
 
@@ -17,6 +17,10 @@ from datalab.history import HistoryAction, HistorySession, WorkspaceState
 
 if TYPE_CHECKING:
     from datalab.gui.panel.history import HistoryPanel
+
+
+SessionBehavior = Literal["ask", "yes", "no"]
+SESSION_BEHAVIORS: tuple[SessionBehavior, ...] = ("ask", "yes", "no")
 
 
 def create_new_session(
@@ -48,8 +52,12 @@ def start_new_session_after_workspace_reset(panel: HistoryPanel) -> None:
 
 
 def maybe_start_session_for_input(
-    panel: HistoryPanel, panel_str: str | None = None, *, load: bool = False
-) -> None:
+    panel: HistoryPanel,
+    panel_str: str | None = None,
+    *,
+    load: bool = False,
+    behavior: SessionBehavior = "ask",
+) -> bool:
     """Offer to start a new history session before a creation/load is recorded.
 
     When the target panel's active session already contains actions, prompt the
@@ -62,25 +70,41 @@ def maybe_start_session_for_input(
          current data panel for backward-compatible load callers.
         load: True when triggered by a file/workspace load, False for an object
          creation. Only affects the prompt wording.
+        behavior: Session creation policy: ask, always create ("yes"), or keep
+         the current session ("no").
+
+    Returns:
+        True if a new session was created.
+
+    Raises:
+        ValueError: If ``behavior`` is unsupported.
     """
+    if behavior not in SESSION_BEHAVIORS:
+        raise ValueError(f"Invalid session behavior: {behavior!r}")
     if not panel.record_mode_enabled or panel.is_replaying():
-        return
+        return False
     if panel.runtime.execution.suppress_session_prompt:
-        return
+        return False
     target_panel_str = panel_str or panel.navigation.current_panel_str()
     active_session = panel.navigation.get_active_session(target_panel_str)
     if active_session is None or not active_session.actions:
-        return
+        return False
+    if behavior == "no":
+        return False
+    if behavior == "yes":
+        panel.create_new_session(panel_str=target_panel_str)
+        return True
     # Debounce: a synchronous burst of creations (plugin/macro) must prompt only
     # once. The guard is reset on the next event-loop turn.
     if not panel.runtime.execution.start_session_input_prompt():
-        return
+        return False
     if execenv.unattended:
         # Headless runs: honor the accept_dialogs flag (default False -> "No"),
         # so tests can drive the behavior without a real modal dialog.
         if execenv.accept_dialogs:
             panel.create_new_session(panel_str=target_panel_str)
-        return
+            return True
+        return False
     if load:
         message = _("A new object was loaded. Start a new history session?")
     else:
@@ -93,6 +117,8 @@ def maybe_start_session_for_input(
     )
     if answer == QW.QMessageBox.Yes:
         panel.create_new_session(panel_str=target_panel_str)
+        return True
+    return False
 
 
 def add_compute_entry(

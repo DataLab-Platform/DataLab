@@ -11,9 +11,11 @@ import tempfile
 import textwrap
 from contextlib import nullcontext
 from types import SimpleNamespace
+from typing import cast
 from unittest.mock import patch
 
 import numpy as np
+import pytest
 from sigima.objects import Gauss2DParam, ImageObj
 
 from datalab.gui import historysession_ops as hsess
@@ -137,6 +139,7 @@ class PromptPanel:
         self.ui = PromptUI()
         self.created_panel_strs: list[str] = []
         self.prompt_panel_strs: list[str | None] = []
+        self.prompt_behaviors: list[hsess.SessionBehavior] = []
         self.added_actions: list[HistoryAction] = []
         self.compatibility_refresh_count = 0
 
@@ -154,11 +157,18 @@ class PromptPanel:
         return session
 
     def maybe_start_session_for_input(
-        self, panel_str: str | None = None, *, load: bool = False
-    ) -> None:
+        self,
+        panel_str: str | None = None,
+        *,
+        load: bool = False,
+        behavior: hsess.SessionBehavior = "ask",
+    ) -> bool:
         """Forward to the session operation while recording its target."""
         self.prompt_panel_strs.append(panel_str)
-        hsess.maybe_start_session_for_input(self, panel_str=panel_str, load=load)
+        self.prompt_behaviors.append(behavior)
+        return hsess.maybe_start_session_for_input(
+            self, panel_str=panel_str, load=load, behavior=behavior
+        )
 
     def add_object(self, action: HistoryAction) -> None:
         """Route an action through the production session operation."""
@@ -208,6 +218,7 @@ def test_image_creation_routes_to_image_session_when_signal_is_current() -> None
     assert action is panel.added_actions[0]
     assert action.panel_str == "image"
     assert panel.prompt_panel_strs == ["image"]
+    assert panel.prompt_behaviors == ["ask"]
     assert panel.runtime.execution.prompt_count == 0
     assert panel.created_panel_strs == ["image"]
     assert image_session is panel.history_sessions[-1]
@@ -219,9 +230,50 @@ def test_empty_active_image_session_skips_prompt() -> None:
     """Reuse an empty active image session without reaching the debounce."""
     image_session = make_prompt_session("image", populated=False)
     panel = PromptPanel({"image": image_session})
-    hsess.maybe_start_session_for_input(panel, panel_str="image")
+    created = hsess.maybe_start_session_for_input(panel, panel_str="image")
+    assert created is False
     assert panel.runtime.execution.prompt_count == 0
     assert panel.created_panel_strs == []
+
+
+def test_explicit_session_behaviors_bypass_prompt() -> None:
+    """Apply explicit yes/no policies without debounce or a dialog."""
+    cases: tuple[tuple[hsess.SessionBehavior, bool], ...] = (
+        ("yes", True),
+        ("no", False),
+    )
+    attended = SimpleNamespace(unattended=False, accept_dialogs=False)
+    for behavior, expected_created in cases:
+        image_session = make_prompt_session("image", populated=True)
+        panel = PromptPanel({"image": image_session})
+        with (
+            patch.object(hsess, "execenv", attended),
+            patch.object(hsess.QW, "QMessageBox") as message_box,
+        ):
+            created = panel.maybe_start_session_for_input(
+                panel_str="image", behavior=behavior
+            )
+        assert created is expected_created
+        assert panel.runtime.execution.prompt_count == 0
+        assert panel.created_panel_strs == (["image"] if expected_created else [])
+        message_box.question.assert_not_called()
+
+
+def test_invalid_session_behavior_has_no_side_effects() -> None:
+    """Reject an invalid policy before debounce or session creation."""
+    image_session = make_prompt_session("image", populated=True)
+    panel = PromptPanel({"image": image_session})
+
+    with pytest.raises(ValueError, match="Invalid session behavior"):
+        hsess.maybe_start_session_for_input(
+            panel,
+            panel_str="image",
+            behavior=cast(hsess.SessionBehavior, "invalid"),
+        )
+
+    assert panel.runtime.execution.prompt_count == 0
+    assert panel.created_panel_strs == []
+    assert panel.history_sessions == [image_session]
 
 
 def test_accepted_image_prompt_routes_action_to_new_image_session() -> None:
@@ -253,7 +305,8 @@ def test_populated_active_signal_session_is_evaluated_independently() -> None:
     panel = PromptPanel({"signal": signal_session, "image": image_session})
     unattended = SimpleNamespace(unattended=True, accept_dialogs=True)
     with patch.object(hsess, "execenv", unattended):
-        hsess.maybe_start_session_for_input(panel, panel_str="signal")
+        created = hsess.maybe_start_session_for_input(panel, panel_str="signal")
+    assert created is True
     assert panel.runtime.execution.prompt_count == 1
     assert panel.created_panel_strs == ["signal"]
     assert panel.navigation.get_active_session("image") is image_session
@@ -467,7 +520,8 @@ def test_unattended_reject_keeps_populated_target_session() -> None:
     panel = PromptPanel({"image": image_session})
     unattended = SimpleNamespace(unattended=True, accept_dialogs=False)
     with patch.object(hsess, "execenv", unattended):
-        hsess.maybe_start_session_for_input(panel, panel_str="image")
+        created = hsess.maybe_start_session_for_input(panel, panel_str="image")
+    assert created is False
     assert panel.runtime.execution.prompt_count == 1
     assert panel.created_panel_strs == []
     assert panel.navigation.get_active_session("image") is image_session

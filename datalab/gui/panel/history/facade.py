@@ -174,10 +174,16 @@ class HistoryRecordingFacadeMixin:
         hsess.start_new_session_after_workspace_reset(self)
 
     def maybe_start_session_for_input(
-        self, panel_str: str | None = None, *, load: bool = False
-    ) -> None:
+        self,
+        panel_str: str | None = None,
+        *,
+        load: bool = False,
+        behavior: hsess.SessionBehavior = "ask",
+    ) -> bool:
         """Offer to start a new session before recording an input."""
-        hsess.maybe_start_session_for_input(self, panel_str=panel_str, load=load)
+        return hsess.maybe_start_session_for_input(
+            self, panel_str=panel_str, load=load, behavior=behavior
+        )
 
     @contextmanager
     def session_prompt_suppressed(self) -> Generator[None, None, None]:

@@ -302,6 +302,19 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     # - False: user must enable it manually via the History panel toolbar
     history_auto_record = conf.Option()
 
+    # History session behavior for new inputs:
+    history_new_session_behavior = conf.EnumOption(["ask", "yes", "no"], default="ask")
+
+    # History session behavior for plugin-created inputs:
+    history_plugin_new_session_behavior = conf.EnumOption(
+        ["ask", "yes", "no"], default="no"
+    )
+
+    # History session behavior when plugins load multiple inputs:
+    history_plugin_multiload_behavior = conf.EnumOption(
+        ["ask", "yes", "no"], default="no"
+    )
+
     # X-array compatibility behavior for multi-signal computations:
     # - "ask": ask user for confirmation when x-arrays are incompatible (default)
     # - "interpolate": automatically interpolate when x-arrays are incompatible
@@ -649,6 +662,9 @@ def initialize():
     Conf.proc.show_result_dialog.get(True)
     Conf.proc.ignore_warnings.get(False)
     Conf.proc.history_auto_record.get(False)
+    Conf.proc.history_new_session_behavior.get("ask")
+    Conf.proc.history_plugin_new_session_behavior.get("no")
+    Conf.proc.history_plugin_multiload_behavior.get("no")
     Conf.proc.xarray_compat_behavior.get("ask")
     Conf.proc.small_mono_font.get((configtools.MONOSPACE, 8, False))
     # View section
