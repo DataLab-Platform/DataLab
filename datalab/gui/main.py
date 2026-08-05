@@ -1943,12 +1943,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         dock = self.docks[self.tabwidget.widget(index)]
         dock.raise_()
         self.__update_actions()
-        if self.historypanel is not None:
-            widget = self.tabwidget.widget(index)
-            if widget is self.signalpanel:
-                self.historypanel.on_current_panel_changed("signal")
-            elif widget is self.imagepanel:
-                self.historypanel.on_current_panel_changed("image")
 
     def __update_generic_menu(self, menu: QW.QMenu | None = None) -> None:
         """Update menu before showing up -- Generic method"""
@@ -2364,9 +2358,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             panel_str = "image"
         else:
             raise TypeError(f"Unsupported object type {type(obj)}")
-        self.historypanel.maybe_start_session_for_input(
-            panel_str=panel_str, behavior=new_session_behavior
-        )
+        self.historypanel.maybe_start_session_for_input(behavior=new_session_behavior)
         panel.add_object(obj, group_id, set_current)
         # Record a creation entry so objects added programmatically (plugins,
         # macros, remote control) appear in the history. ``panel.add_object``

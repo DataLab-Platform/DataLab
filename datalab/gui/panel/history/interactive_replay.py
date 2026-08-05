@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 import copy
-import logging
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
@@ -21,8 +20,6 @@ from datalab.history.core import copy_history_value
 
 if TYPE_CHECKING:
     from datalab.gui.panel.history.panel import HistoryPanel
-
-_logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -44,16 +41,8 @@ def replay_restore_actions(
             return
         selected = [panel.history_sessions[-1]]
     edit_mode = panel.runtime.execution.edit_mode
-    edit_actions: list[HistoryAction] = []
+    actions_to_replay: list[HistoryAction] = []
     for session_or_action in selected:
-        if (
-            replay
-            and not edit_mode
-            and isinstance(session_or_action, HistoryAction)
-            and session_or_action.is_stale
-        ):
-            hrec.recompute_cascade(panel, session_or_action)
-            continue
         if not session_or_action.is_current_state_compatible(
             panel.mainwindow, restore_selection=restore_selection
         ):
@@ -65,18 +54,10 @@ def replay_restore_actions(
                 )
             return
         if replay:
-            if edit_mode:
-                if isinstance(session_or_action, HistorySession):
-                    edit_actions.extend(session_or_action.actions)
-                else:
-                    edit_actions.append(session_or_action)
+            if isinstance(session_or_action, HistorySession):
+                actions_to_replay.extend(session_or_action.actions)
             else:
-                with panel.replaying(), panel.output_suppressed():
-                    session_or_action.replay(
-                        panel.mainwindow,
-                        restore_selection=restore_selection,
-                        edit=edit_mode,
-                    )
+                actions_to_replay.append(session_or_action)
         elif restore_selection:
             if edit_mode or any(
                 action.has_pending_edits
@@ -86,8 +67,8 @@ def replay_restore_actions(
                 restore_action_params(panel, session_or_action)
             else:
                 session_or_action.restore(panel.mainwindow)
-    if edit_actions:
-        edit_mode_replay_actions(panel, edit_actions)
+    if actions_to_replay:
+        replay_actions(panel, actions_to_replay, prompt=edit_mode)
 
 
 def prepare_action_param_edit(action: HistoryAction) -> ActionParamEdit | None:
@@ -129,14 +110,23 @@ def prompt_edit_action_params(
     return True
 
 
-def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) -> None:
-    """Edit selected actions and recompute their affected branches once.
+def replay_actions(
+    panel: HistoryPanel, actions: list[HistoryAction], prompt: bool = True
+) -> None:
+    """Replay selected actions through the in-place recompute engine.
 
-    Each selected action gets exactly one parameter dialog. Recomputable
-    selected actions are always included, while accepted parameter edits also
-    include all downstream dependent actions. The resulting global plan is
-    deduplicated and executed in session order. A re-entrance guard prevents
-    nested prompt loops.
+    When ``prompt`` is enabled, each selected action gets exactly one
+    parameter dialog. Recomputable selected actions are always included,
+    while accepted parameter edits also include all downstream dependent
+    actions. When ``prompt`` is disabled, actions are recomputed silently
+    with their current parameters (no dialogs anywhere). The resulting
+    global plan is deduplicated and executed in session order. A re-entrance
+    guard prevents nested prompt loops.
+
+    Args:
+        panel: History panel instance
+        actions: Selected actions to replay
+        prompt: Open parameter dialogs before recomputing
     """
     # Deduplicate and sort the selected actions in their session order
     ordered = order_selected_actions(panel, actions)
@@ -145,13 +135,17 @@ def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) 
     with panel.runtime.execution.replaying_edits() as started:
         if not started:
             return
-        entry_states = {
-            action.uuid: (
-                copy_history_value(action.kwargs),
-                copy_history_value(action.saved_kwargs),
-            )
-            for action in ordered
-        }
+        entry_states = (
+            {
+                action.uuid: (
+                    copy_history_value(action.kwargs),
+                    copy_history_value(action.saved_kwargs),
+                )
+                for action in ordered
+            }
+            if prompt
+            else {}
+        )
         edited_actions: list[HistoryAction] = []
         recomputable: list[HistoryAction] = []
         deferred_actions: list[HistoryAction] = []
@@ -163,19 +157,27 @@ def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) 
             is_compute = (
                 action.kind == HistoryAction.KIND_COMPUTE and action.pattern is not None
             )
+            if action.kind == HistoryAction.KIND_COMPUTE and not is_compute:
+                name = action.func_name or action.title or action.uuid
+                panel.runtime.execution.cascade_warnings.append(
+                    _("Action %s has no recorded pattern and cannot be replayed.")
+                    % name
+                )
+                continue
             if not is_creation and not is_compute:
                 deferred_actions.append(action)
                 continue
-            result = prompt_edit_action_params(panel, action)
-            if result is False:
-                for selected_action in ordered:
-                    kwargs, saved_kwargs = entry_states[selected_action.uuid]
-                    selected_action.kwargs = kwargs
-                    selected_action.saved_kwargs = saved_kwargs
-                    panel.tree.refresh_action_item(selected_action)
-                return
-            if result is True:
-                edited_actions.append(action)
+            if prompt:
+                result = prompt_edit_action_params(panel, action)
+                if result is False:
+                    for selected_action in ordered:
+                        kwargs, saved_kwargs = entry_states[selected_action.uuid]
+                        selected_action.kwargs = kwargs
+                        selected_action.saved_kwargs = saved_kwargs
+                        panel.tree.refresh_action_item(selected_action)
+                    return
+                if result is True:
+                    edited_actions.append(action)
             recomputable.append(action)
 
         for action in edited_actions:
@@ -195,7 +197,7 @@ def edit_mode_replay_actions(panel: HistoryPanel, actions: list[HistoryAction]) 
                 if action in deferred_actions:
                     with panel.replaying(), panel.output_suppressed():
                         action.replay(
-                            panel.mainwindow, restore_selection=True, edit=True
+                            panel.mainwindow, restore_selection=True, edit=prompt
                         )
                     continue
                 if hchain.action_consumes_any(action, blocked_outputs):

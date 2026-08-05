@@ -160,17 +160,13 @@ class HistoryReplayFacadeMixin:
         """Recompute descendants of a root action in place."""
         hrec.recompute_cascade(self, root_action, descendants)
 
-    def on_current_panel_changed(self, panel_str: str) -> None:
-        """React to a Signal/Image panel switch."""
-        self.navigation.on_current_panel_changed(panel_str)
-
 
 class HistoryRecordingFacadeMixin:
     """Expose history-session recording operations used by application code."""
 
-    def create_new_session(self, panel_str: str | None = None) -> HistorySession:
-        """Create a new history session for a data panel."""
-        return hsess.create_new_session(self, panel_str=panel_str)
+    def create_new_session(self) -> HistorySession:
+        """Create a new history session and make it active."""
+        return hsess.create_new_session(self)
 
     def start_new_session_after_workspace_reset(self) -> None:
         """Start a history session after a workspace reset when useful."""
@@ -178,15 +174,12 @@ class HistoryRecordingFacadeMixin:
 
     def maybe_start_session_for_input(
         self,
-        panel_str: str | None = None,
         *,
         load: bool = False,
         behavior: hsess.SessionBehavior | None = None,
     ) -> bool:
         """Offer to start a new session before recording an input."""
-        return hsess.maybe_start_session_for_input(
-            self, panel_str=panel_str, load=load, behavior=behavior
-        )
+        return hsess.maybe_start_session_for_input(self, load=load, behavior=behavior)
 
     @contextmanager
     def session_prompt_suppressed(self) -> Generator[None, None, None]:

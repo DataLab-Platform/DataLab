@@ -2385,9 +2385,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             if answer == QW.QMessageBox.No:
                 return
         # IMPORTANT: save_state=True is required so that the selection of objects
-        # being deleted is captured. On replay, the captured selection (translated
-        # through uuid_remap) is restored before remove_object runs, ensuring that
-        # the correct object is removed instead of whatever is currently selected.
+        # being deleted is captured. On replay, the captured selection is restored
+        # before remove_object runs, ensuring that the correct object is removed
+        # instead of whatever is currently selected.
         self.mainwindow.historypanel.add_ui_entry(
             _("Remove selected objects"),
             target=self.PANEL_STR_ID + "panel",
@@ -2693,9 +2693,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if not directory:
             return []
         # Offer a fresh history session for this batch *before* loading anything.
-        self.mainwindow.historypanel.maybe_start_session_for_input(
-            panel_str=self.PANEL_STR_ID, load=True
-        )
+        self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
         folders = [
             path
             for path in glob.glob(osp.join(directory, "**"), recursive=True)
@@ -2774,9 +2772,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         else:
             entry_title = _('Load "%s"') % osp.basename(filenames[0])
         # Offer a fresh history session for this batch *before* recording any entry.
-        self.mainwindow.historypanel.maybe_start_session_for_input(
-            panel_str=self.PANEL_STR_ID, load=True
-        )
+        self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
         action = self.mainwindow.historypanel.add_ui_entry(
             entry_title,
             target=self.PANEL_STR_ID + "panel",

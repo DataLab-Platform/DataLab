@@ -21,11 +21,14 @@ list of either:
 
 A recorded session can be:
 
-- **Replayed** silently or **step by step**, with an opportunity to edit
-  available parameters. New outputs from computation actions are not added to
-  the data panels. Recorded UI actions are invoked through their own methods
-  and may reproduce their side effects, including creating, importing, or
-  duplicating objects, unless an action has a specific replay guard;
+- **Replayed** silently or **step by step**. Replaying recomputes each
+  computation action in place with its recorded parameters: existing output
+  objects are updated, and deleted outputs whose action is still part of the
+  history are re-created under their original identifiers, keeping the
+  downstream processing chain valid. In step-by-step mode, parameters may be
+  reviewed and edited before each step is recomputed. Recorded UI actions are
+  invoked through their own methods and may reproduce their side effects,
+  including creating, importing, or duplicating objects;
 - **Duplicated** as independent processing chains in new history sessions,
   with the required signal/image objects cloned as part of the operation;
 - **Saved to a standalone history file** (``.dlhist``) or **embedded in the
@@ -135,18 +138,30 @@ The toolbar at the top of the panel exposes the following actions:
   session (keyboard shortcut: :kbd:`Ctrl+Left`).
 - |step_next| **Next step**: select the following action in the current
   session (keyboard shortcut: :kbd:`Ctrl+Right`).
-- |replay| **Replay**: selecting an action replays that action directly;
-  selecting a session replays the whole session. Compute actions restore their
-  captured input selection when the translated object identifiers are
-  compatible and resolvable; UI actions are replayed without restoring their
-  recorded workspace selection. New objects returned by computation actions
-  are not added to the data panels. Recorded UI actions may reproduce side
-  effects, including creating, importing, or duplicating objects, unless an
-  action has a specific replay guard.
-- |step_by_step| **Step-by-step**: replay the selection one step at a time.
-  Parameters may be reviewed and edited when the action supports it; supported
-  actions and their dependent branches are then updated or recomputed in
-  place.
+- |replay| **Replay**: recompute the selection in place, silently (no
+  parameter dialogs). Selecting an action replays that action; selecting a
+  session replays all of its actions. A selection spanning several actions or
+  sessions is merged, deduplicated and executed in session order. Each
+  computation action re-runs with its recorded parameters and updates its
+  existing output object(s), keeping the same identifiers so that downstream
+  steps remain valid. Outputs that were deleted from the data panel are
+  re-created under their original identifiers (a typical workflow: delete a
+  bad result, edit its parameters, then replay to regenerate it). Actions
+  whose source objects no longer exist are skipped with a warning, and a
+  failed action blocks its downstream branch. Actions whose parameters were
+  changed (in step-by-step mode or from the **Processing** tab) are marked as
+  outdated; replaying recomputes them and, when parameters were edited, their
+  downstream dependent actions as well. Analysis actions replay by
+  recomputing their results on the source objects. UI actions are replayed by
+  invoking their recorded method and may reproduce side effects, including
+  creating, importing, or duplicating objects; destructive actions are
+  skipped when their captured targets no longer resolve.
+- |step_by_step| **Step-by-step**: replay the same selection one step at a
+  time, opening the parameter dialog for each supported action (object
+  creation, computation, ROI extraction) before recomputing it. Accepted
+  edits propagate to the downstream dependent actions, which are recomputed
+  as well. Cancelling a dialog stops the replay and restores the parameter
+  edits made during that run.
 - |duplicate| **Duplicate**: duplicate the processing chain containing each
   selected action, or the processing chains in each selected session. DataLab
   clones the required objects and creates independent history sessions.
@@ -159,9 +174,8 @@ The toolbar at the top of the panel exposes the following actions:
 
 .. note::
 
-  Double-clicking a tree item invokes **Replay** for the current selection. It
-  uses the same action/session and compute/UI selection semantics documented
-  above.
+  Double-clicking a tree item invokes **Replay** for the current selection,
+  with the same in-place recompute semantics documented above.
 
 Tree view
 ---------

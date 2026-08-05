@@ -360,12 +360,8 @@ msgid "Recompute"
 msgstr "Retraiter"
 
 #, python-format
-msgid ""
-"Recompute selected %s: refresh both processing and analysis results with their "
-"stored parameters"
-msgstr ""
-"Retraiter l'objet %s sélectionné : actualiser les résultats de traitement et "
-"d'analyse à partir de leurs paramètres enregistrés"
+msgid "Recompute selected %s: refresh both processing and analysis results with their stored parameters"
+msgstr "Retraiter l'objet %s sélectionné : actualiser les résultats de traitement et d'analyse à partir de leurs paramètres enregistrés"
 
 msgid "Select source objects"
 msgstr "Sélectionner les objets source"
@@ -953,6 +949,9 @@ msgstr "Tapez pour rechercher une commande…"
 msgid "Search a command…"
 msgstr "Rechercher une commande…"
 
+msgid "Custom signal"
+msgstr "Signal personnalisé"
+
 msgid "Process signal"
 msgstr "Traiter le signal"
 
@@ -1366,9 +1365,6 @@ msgstr "Modifier la courbe graphiquement"
 msgid "Insert point"
 msgstr "Insérer un point"
 
-msgid "Custom signal"
-msgstr "Signal personnalisé"
-
 msgid "Object metadata"
 msgstr "Métadonnées de l'objet"
 
@@ -1411,6 +1407,12 @@ msgstr "Propriétés"
 msgid "Parameters for function `%s`"
 msgstr "Paramètres pour la fonction `%s`"
 
+msgid "Created: historical peak parameters"
+msgstr "Créé : paramètres de pic historiques"
+
+msgid "Created: invalid creation parameters"
+msgstr "Créé : paramètres de création invalides"
+
 msgid "Created"
 msgstr "Créé"
 
@@ -1428,6 +1430,23 @@ msgstr "Paramètres de création"
 
 msgid "Creation"
 msgstr "Création"
+
+msgid "This object uses historical area-based peak parameters. Convert them to signed peak height before editing."
+msgstr "Cet objet utilise des paramètres de pic historiques fondés sur l'aire. Convertissez-les en hauteur de pic signée avant de les modifier."
+
+msgid "Convert historical parameters"
+msgstr "Convertir les paramètres historiques"
+
+msgid "Creation parameters cannot be edited because their metadata is invalid or was written by a newer DataLab version."
+msgstr "Les paramètres de création ne peuvent pas être modifiés, car leurs métadonnées sont invalides ou ont été écrites par une version plus récente de DataLab."
+
+#, python-format
+msgid ""
+"Failed to convert historical creation parameters:\n"
+"%s"
+msgstr ""
+"Échec de la conversion des paramètres de création historiques :\n"
+"%s"
 
 #, python-format
 msgid ""
@@ -1478,9 +1497,6 @@ msgstr "Aucun objet de traitement disponible."
 msgid "Processing metadata is incomplete."
 msgstr "Les métadonnées de traitement sont incomplètes."
 
-msgid "Processing metadata is incomplete (missing source UUID)."
-msgstr "Les métadonnées de traitement sont incomplètes (UUID source manquant)."
-
 msgid "Source object no longer exists."
 msgstr "L'objet source n'existe plus."
 
@@ -1497,12 +1513,6 @@ msgstr ""
 
 msgid "Processing was cancelled."
 msgstr "Le traitement a été annulé."
-
-msgid "Signal was reprocessed."
-msgstr "Le signal a été retraité."
-
-msgid "Image was reprocessed."
-msgstr "L'image a été retraitée."
 
 msgid "Failed to reprocess object."
 msgstr "Échec du retraitement de l'objet."
@@ -1641,6 +1651,9 @@ msgstr "Charger depuis %d fichiers"
 msgid "Load \"%s\""
 msgstr "Charger \"%s\""
 
+msgid "Save as"
+msgstr "Enregistrer sous"
+
 #, python-format
 msgid "Save to %d different files"
 msgstr "Enregistrer dans %d fichiers différents"
@@ -1648,9 +1661,6 @@ msgstr "Enregistrer dans %d fichiers différents"
 #, python-format
 msgid "Save to \"%s\""
 msgstr "Enregistrer dans \"%s\""
-
-msgid "Save as"
-msgstr "Enregistrer sous"
 
 msgid "Saving..."
 msgstr "Enregistrement en cours..."
@@ -1661,24 +1671,20 @@ msgstr "Importer une ROI"
 msgid "Export ROI"
 msgstr "Exporter une ROI"
 
-msgid ""
-"Selected object(s) do not have processing or analysis parameters that can be "
-"recomputed."
-msgstr ""
-"L'objet (ou les objets) sélectionné(s) n'ont pas de paramètres de traitement ou "
-"d'analyse pouvant être recalculés."
+msgid "Selected object(s) do not have processing or analysis parameters that can be recomputed."
+msgstr "L'objet (ou les objets) sélectionné(s) n'ont pas de paramètres de traitement ou d'analyse pouvant être recalculés."
 
 msgid "Recomputing objects"
 msgstr "Retraitement des objets"
-
-msgid "Recomputing analyses"
-msgstr "Recalcul des analyses"
 
 msgid "Failed to recompute object"
 msgstr "Échec du retraitement de l'objet"
 
 msgid "Do you want to continue with the next object?"
 msgstr "Souhaitez-vous continuer avec l'objet suivant ?"
+
+msgid "Recomputing analyses"
+msgstr "Recalcul des analyses"
 
 msgid "Analysis computation failed."
 msgstr "Le calcul de l'analyse a échoué."
@@ -1762,11 +1768,33 @@ msgstr "« %s » possède des opérations dépendantes mais aucune source valide
 msgid "Some operations could not be reconnected after deletion:"
 msgstr "Certaines opérations n'ont pas pu être reconnectées après la suppression :"
 
+msgid "Commit edit mode changes?"
+msgstr "Valider les modifications du mode d'édition ?"
+
+msgid ""
+"You are about to exit Edit mode.\n"
+"\n"
+"All parameter changes made during this session will be permanently kept.\n"
+"This action cannot be undone — Restore will no longer be available.\n"
+"\n"
+"Do you want to continue?"
+msgstr ""
+"Vous êtes sur le point de quitter le mode d'édition.\n"
+"\n"
+"Toutes les modifications de paramètres effectuées lors de cette session seront conservées de façon permanente.\n"
+"Cette action est irréversible — la fonction Restaurer ne sera plus disponible.\n"
+"\n"
+"Souhaitez-vous continuer ?"
+
 msgid "The current workspace state is not compatible with the action."
 msgstr "L'état actuel de l'espace de travail n'est pas compatible avec l'action."
 
 msgid "Parameters"
 msgstr "Paramètres"
+
+#, python-format
+msgid "Action %s has no recorded pattern and cannot be replayed."
+msgstr "L'action %s n'a pas de motif enregistré et ne peut pas être rejouée."
 
 msgid "History panel"
 msgstr "Panneau d'historique"
@@ -1775,12 +1803,56 @@ msgid "History files"
 msgstr "Fichiers d'historique"
 
 #, python-format
+msgid "Action %s has been edited but its target output object(s) no longer exist — skipping."
+msgstr "L'action %s a été modifiée mais son ou ses objets de sortie cibles n'existent plus — ignorée."
+
+#, python-format
+msgid "Action %s uses pattern %r which is not recomputable yet."
+msgstr "L'action %s utilise le motif %r qui n'est pas encore recalculable."
+
+#, python-format
 msgid "Action %s could not be fully recomputed."
 msgstr "L'action %s n'a pas pu être entièrement recalculée."
 
 #, python-format
+msgid "Recompute failed for action %s: %s"
+msgstr "Échec du recalcul pour l'action %s : %s"
+
+#, python-format
+msgid ""
+"Action %(name)s skipped: plugin '%(loc)s' is missing.\n"
+"Required parameter class: %(param)s\n"
+"Reinstall the plugin to re-enable this action."
+msgstr ""
+"Action %(name)s ignorée : le plugin '%(loc)s' est manquant.\n"
+"Classe de paramètre requise : %(param)s\n"
+"Réinstallez le plugin pour réactiver cette action."
+
+#, python-format
+msgid "Action %s: source object was deleted — skipping."
+msgstr "Action %s : l'objet source a été supprimé — ignorée."
+
+#, python-format
 msgid "Action %s: recompute returned %d output(s), expected %d."
 msgstr "Action %s : le recalcul a renvoyé %d sortie(s), %d attendue(s)."
+
+#, python-format
+msgid "Action %s: source object(s) were deleted — skipping."
+msgstr "Action %s : le ou les objets source ont été supprimés — ignorée."
+
+#, python-format
+msgid "Action %s: missing source(s) for output #%d — skipping."
+msgstr "Action %s : source(s) manquante(s) pour la sortie n°%d — ignorée."
+
+#, python-format
+msgid "Action %s: %d analysed object(s) were deleted — skipping."
+msgstr "Action %s : %d objet(s) analysé(s) ont été supprimés — ignorée."
+
+msgid "Cascade recompute"
+msgstr "Recalcul en cascade"
+
+msgid "Some downstream actions could not be recomputed:"
+msgstr "Certaines actions en aval n'ont pas pu être recalculées :"
 
 msgid "Record mode"
 msgstr "Mode d'enregistrement"
@@ -1832,68 +1904,6 @@ msgstr "Pas à pas"
 
 msgid "Replay the selection step by step, editing parameters at each step"
 msgstr "Rejouer la sélection pas à pas, en modifiant les paramètres à chaque étape"
-
-msgid "Commit edit mode changes?"
-msgstr "Valider les modifications du mode d'édition ?"
-
-msgid ""
-"You are about to exit Edit mode.\n"
-"\n"
-"All parameter changes made during this session will be permanently kept.\n"
-"This action cannot be undone — Restore will no longer be available.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Vous êtes sur le point de quitter le mode d'édition.\n"
-"\n"
-"Toutes les modifications de paramètres effectuées lors de cette session seront conservées de façon permanente.\n"
-"Cette action est irréversible — la fonction Restaurer ne sera plus disponible.\n"
-"\n"
-"Souhaitez-vous continuer ?"
-
-#, python-format
-msgid "Action %s has been edited but its target output object(s) no longer exist — skipping."
-msgstr "L'action %s a été modifiée mais son ou ses objets de sortie cibles n'existent plus — ignorée."
-
-#, python-format
-msgid "Action %s uses pattern %r which is not recomputable yet."
-msgstr "L'action %s utilise le motif %r qui n'est pas encore recalculable."
-
-#, python-format
-msgid "Recompute failed for action %s: %s"
-msgstr "Échec du recalcul pour l'action %s : %s"
-
-#, python-format
-msgid ""
-"Action %(name)s skipped: plugin '%(loc)s' is missing.\n"
-"Required parameter class: %(param)s\n"
-"Reinstall the plugin to re-enable this action."
-msgstr ""
-"Action %(name)s ignorée : le plugin '%(loc)s' est manquant.\n"
-"Classe de paramètre requise : %(param)s\n"
-"Réinstallez le plugin pour réactiver cette action."
-
-#, python-format
-msgid "Action %s: source object was deleted — skipping."
-msgstr "Action %s : l'objet source a été supprimé — ignorée."
-
-#, python-format
-msgid "Action %s: missing source(s) for output #%d — skipping."
-msgstr "Action %s : source(s) manquante(s) pour la sortie n°%d — ignorée."
-
-#, python-format
-msgid "Action %s: source object(s) were deleted — skipping."
-msgstr "Action %s : le ou les objets source ont été supprimés — ignorée."
-
-#, python-format
-msgid "Action %s: %d analysed object(s) were deleted — skipping."
-msgstr "Action %s : %d objet(s) analysé(s) ont été supprimés — ignorée."
-
-msgid "Cascade recompute"
-msgstr "Recalcul en cascade"
-
-msgid "Some downstream actions could not be recomputed:"
-msgstr "Certaines actions en aval n'ont pas pu être recalculées :"
 
 msgid "New image"
 msgstr "Nouvelle image"
@@ -2143,6 +2153,15 @@ msgstr ""
 
 msgid "Yes to All"
 msgstr "Oui à tout"
+
+msgid "Processing metadata is incomplete (missing source UUID)."
+msgstr "Les métadonnées de traitement sont incomplètes (UUID source manquant)."
+
+msgid "Signal was reprocessed."
+msgstr "Le signal a été retraité."
+
+msgid "Image was reprocessed."
+msgstr "L'image a été retraitée."
 
 msgid "Recomputing..."
 msgstr "Retraitement en cours..."
@@ -2650,6 +2669,31 @@ msgstr "Ajustement exponentiel par morceaux"
 
 msgid "Sigmoid fit"
 msgstr "Ajustement sigmoïde"
+
+#, python-format
+msgid "%s: fitting curve was computed by an earlier version and cannot be evaluated (please recompute the fit)"
+msgstr "%s : la courbe d'ajustement a été calculée par une version antérieure et ne peut pas être évaluée (veuillez recalculer l'ajustement)"
+
+#, python-format
+msgid "%s: signal does not contain valid fit parameters"
+msgstr "%s : le signal ne contient pas de paramètres d'ajustement valides"
+
+msgid "Cannot evaluate fit"
+msgstr "Impossible d'évaluer l'ajustement"
+
+#, python-format
+msgid ""
+"One or more selected signals have invalid or unsupported fit parameters:\n"
+"%s"
+msgstr ""
+"Un ou plusieurs signaux sélectionnés ont des paramètres d'ajustement invalides ou non pris en charge :\n"
+"%s"
+
+msgid "Convert historical fit parameters"
+msgstr "Convertir les paramètres d'ajustement historiques"
+
+msgid "One or more selected fitting curves use historical area-based peak parameters. Convert them to signed peak height before evaluating?"
+msgstr "Une ou plusieurs courbes d'ajustement sélectionnées utilisent des paramètres de pic historiques fondés sur l'aire. Les convertir en hauteur de pic signée avant l'évaluation ?"
 
 msgid "signal to subtract"
 msgstr "signal à soustraire"
@@ -3493,12 +3537,6 @@ msgstr "Ouvrir un fichier d'historique"
 msgid "Imported"
 msgstr "Importé"
 
-msgid "Replaying compound 'multiple_1_to_1' actions is not supported yet."
-msgstr "La relecture des actions composées 'multiple_1_to_1' n'est pas encore prise en charge."
-
-msgid "Cannot replay 2-to-1 action: source object(s) missing."
-msgstr "Impossible de rejouer une action 2-à-1 : objet(s) source manquant(s)."
-
 #, python-format
 msgid "Failed to deserialize history DataSet kwarg %r."
 msgstr "Échec de la désérialisation de l'argument DataSet de l'historique %r."
@@ -3506,9 +3544,6 @@ msgstr "Échec de la désérialisation de l'argument DataSet de l'historique %r.
 #, python-format
 msgid "Failed to deserialize history DataSet-list kwarg %r."
 msgstr "Échec de la désérialisation de l'argument DataSet-list de l'historique %r."
-
-msgid "Session"
-msgstr "Session"
 
 msgid "Registered plugins:"
 msgstr "Plugins enregistrés :"
@@ -3938,10 +3973,6 @@ msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
 
 msgid "Action is not compatible with the current workspace state."
 msgstr "L'action n'est pas compatible avec l'état actuel de l'espace de travail."
-
-#, python-format
-msgid "Processing chain — %d step(s)"
-msgstr "Chaîne de traitement — %d étape(s)"
 
 #, python-brace-format
 msgid "Active recording session ({panel})."
@@ -4381,42 +4412,3 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
 
-msgid "Created: historical peak parameters"
-msgstr "Créé : paramètres de pic historiques"
-
-msgid "This object uses historical area-based peak parameters. Convert them to signed peak height before editing."
-msgstr "Cet objet utilise des paramètres de pic historiques fondés sur l'aire. Convertissez-les en hauteur de pic signée avant de les modifier."
-
-msgid "Convert historical parameters"
-msgstr "Convertir les paramètres historiques"
-
-#, python-format
-msgid "Failed to convert historical creation parameters:\n%s"
-msgstr "Échec de la conversion des paramètres de création historiques :\n%s"
-
-msgid "Convert historical fit parameters"
-msgstr "Convertir les paramètres d'ajustement historiques"
-
-msgid "One or more selected fitting curves use historical area-based peak parameters. Convert them to signed peak height before evaluating?"
-msgstr "Une ou plusieurs courbes d'ajustement sélectionnées utilisent des paramètres de pic historiques fondés sur l'aire. Les convertir en hauteur de pic signée avant l'évaluation ?"
-
-msgid "Created: invalid creation parameters"
-msgstr "Créé : paramètres de création invalides"
-
-msgid "Creation parameters cannot be edited because their metadata is invalid or was written by a newer DataLab version."
-msgstr "Les paramètres de création ne peuvent pas être modifiés, car leurs métadonnées sont invalides ou ont été écrites par une version plus récente de DataLab."
-
-#, python-format
-msgid "%s: signal does not contain valid fit parameters"
-msgstr "%s : le signal ne contient pas de paramètres d'ajustement valides"
-
-msgid "Cannot evaluate fit"
-msgstr "Impossible d'évaluer l'ajustement"
-
-#, python-format
-msgid "One or more selected signals have invalid or unsupported fit parameters:\n%s"
-msgstr "Un ou plusieurs signaux sélectionnés ont des paramètres d'ajustement invalides ou non pris en charge :\n%s"
-
-#, python-format
-msgid "%s: fitting curve was computed by an earlier version and cannot be evaluated (please recompute the fit)"
-msgstr "%s : la courbe d'ajustement a été calculée par une version antérieure et ne peut pas être évaluée (veuillez recalculer l'ajustement)"

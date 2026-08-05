@@ -74,12 +74,11 @@ class HistoryPromptRecorder:
 
     def __init__(self) -> None:
         self.suppressed = False
-        self.calls: list[tuple[str, bool, hsess.SessionBehavior | None, bool]] = []
+        self.calls: list[tuple[bool, hsess.SessionBehavior | None, bool]] = []
         self.decision_count = 0
 
     def maybe_start_session_for_input(
         self,
-        panel_str: str | None = None,
         *,
         load: bool = False,
         behavior: hsess.SessionBehavior | None = None,
@@ -87,8 +86,7 @@ class HistoryPromptRecorder:
         """Record a validated session-policy evaluation."""
         if behavior is not None and behavior not in hsess.SESSION_BEHAVIORS:
             raise ValueError(f"Invalid session behavior: {behavior!r}")
-        assert panel_str is not None
-        self.calls.append((panel_str, load, behavior, self.suppressed))
+        self.calls.append((load, behavior, self.suppressed))
         if not self.suppressed and behavior != "no":
             self.decision_count += 1
         return False
@@ -101,9 +99,8 @@ class HistoryPromptRecorder:
         save_state: bool = True,
     ) -> None:
         """Record the nested creation evaluation from the main window."""
-        del action_title, method_name, save_state
-        panel_str = "signal" if target == "signalpanel" else "image"
-        self.maybe_start_session_for_input(panel_str=panel_str)
+        del action_title, target, method_name, save_state
+        self.maybe_start_session_for_input()
 
     @contextmanager
     def session_prompt_suppressed(self) -> Generator[None, None, None]:
@@ -291,10 +288,10 @@ def test_plugin_multiload_decides_once_and_suppresses_internal_adds() -> None:
 
     assert mainwindow.added_objects == [first, second]
     assert mainwindow.historypanel.calls == [
-        ("signal", False, "ask", False),
-        ("signal", False, None, True),
-        ("signal", False, "no", False),
-        ("signal", False, None, True),
+        (False, "ask", False),
+        (False, None, True),
+        (False, "no", False),
+        (False, None, True),
     ]
     assert mainwindow.historypanel.decision_count == 1
     assert mainwindow.historypanel.suppressed is False
@@ -374,8 +371,8 @@ def test_multiload_memory_rejection_does_not_consume_first_decision() -> None:
     assert mainwindow.memory_confirmation_count == 2
     assert mainwindow.added_objects == [accepted]
     assert mainwindow.historypanel.calls == [
-        ("signal", False, "ask", False),
-        ("signal", False, None, True),
+        (False, "ask", False),
+        (False, None, True),
     ]
     assert mainwindow.historypanel.decision_count == 1
 

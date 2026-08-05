@@ -131,14 +131,19 @@ def resolve_chain_selection(panel: HistoryPanel) -> list[ChainSelectionPlan]:
 
 
 def collect_referenced_uuids(chains: list[ProcessingChain]) -> dict[str, set[str]]:
-    """Collect referenced/produced UUIDs and all captured metadata UUIDs."""
+    """Collect only chain input/output UUIDs per panel.
+
+    Collected UUIDs are the chain inputs (recorded selections), the second
+    operands of 2-to-1 operations (``obj2_uuids``) and the produced outputs.
+    Captured ``object_metadata`` UUIDs are intentionally ignored: workspace
+    states snapshot every object alive at record time (in both panels), so
+    collecting them would clone unrelated objects.
+    """
     uuids_by_panel: dict[str, set[str]] = {}
     for chain in chains:
         for action in chain.actions:
             for panel_str, uuids in action.state.selection.items():
                 uuids_by_panel.setdefault(panel_str, set()).update(uuids)
-            for panel_str, metadata in action.state.object_metadata.items():
-                uuids_by_panel.setdefault(panel_str, set()).update(metadata)
             obj2_uuids = action.kwargs.get("obj2_uuids")
             if obj2_uuids:
                 panel_str = action_panel_str(action)

@@ -36,11 +36,12 @@ def test_panel_replay_restores_selection_without_outputs() -> None:
         assert panel.objview.get_sel_object_uuids() == [output_uuid]
         object_count, action_count = len(panel.objmodel), len(history)
         history.replay_restore_actions(replay=True, restore_selection=True)
+        # In-place recompute keeps counts unchanged and selects the refreshed output
         assert (
             len(panel.objmodel),
             len(history),
             panel.objview.get_sel_object_uuids(),
-        ) == (object_count, action_count, [source_uuid])
+        ) == (object_count, action_count, [output_uuid])
         assert action in history.history_sessions[-1].actions and (
             history.runtime.objects.action_output_uuids[action.uuid] == [output_uuid]
         )
@@ -105,21 +106,14 @@ def test_cross_panel_sessions_navigation_and_tree_state() -> None:
         image_panel.objview.select_objects([1])
         image_panel.processor.run_feature(sipi.inverse)
         image_action = history[len(history)]
-        image_session = history.navigation.get_active_session("image")
-        assert (
-            history.navigation.get_active_session("signal") is signal_session
-            and image_session is not None
-            and signal_session is not image_session
-        )
-        bold_before = (
-            is_session_bold(history, signal_session),
-            is_session_bold(history, image_session),
-        )
+        # Unified model: the image action is chained into the single active
+        # recording session, alongside the signal actions.
+        assert history.navigation.get_active_session() is signal_session
+        assert image_action in signal_session.actions
+        bold_before = is_session_bold(history, signal_session)
         history.tree.populate_tree(history.history_sessions)
-        assert bold_before == (True, True) and (
-            is_session_bold(history, signal_session),
-            is_session_bold(history, image_session),
-        ) == (True, True)
+        assert bold_before is True
+        assert is_session_bold(history, signal_session) is True
         output_uuid = first_signal_action.output_uuids[0]
         select_tree_entry(history, first_signal_action.uuid)
         assert signal_panel.objview.get_sel_object_uuids() == [output_uuid]

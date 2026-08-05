@@ -1,6 +1,6 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
-"""HistorySession: ordered list of HistoryAction with replay logic."""
+"""HistorySession: ordered list of HistoryAction."""
 
 from __future__ import annotations
 
@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING
 from datalab.config import _
 from datalab.history.action import HistoryAction
 from datalab.history.core import HISTORY_SCHEMA_VERSION, get_datetime_str
-from datalab.history.replaymap import ReplayUuidMap
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
@@ -103,36 +102,6 @@ class HistorySession:
         if self.actions:
             self.actions[0].restore(mainwindow)
 
-    def replay(
-        self, mainwindow: DLMainWindow, restore_selection: bool, edit: bool
-    ) -> None:
-        """Replay the history session
-
-        Args:
-            mainwindow: DataLab's main window
-            restore_selection: True to request restoration of captured selections.
-             Compute actions restore them only when compatible and resolvable.
-            edit: If True, request parameter dialogs for supported actions with
-             editable parameters. If False, use the captured parameters.
-        """
-        panels = (mainwindow.signalpanel, mainwindow.imagepanel)
-        replay_map = ReplayUuidMap(panels)
-        for action in self.actions[:]:
-            before = replay_map.snapshot_object_ids()
-            replay_map.claim_action_inputs(action)
-            action.replay(
-                mainwindow,
-                restore_selection=restore_selection,
-                edit=edit,
-                uuid_remap=replay_map.mapping,
-            )
-            replay_map.capture_changes(action, before)
-
-        if self.actions:
-            select_last_compute_output(
-                mainwindow, panels, replay_map.mapping, self.actions[-1]
-            )
-
     def serialize(self, writer: NativeH5Writer) -> None:
         """Serialize this history session
 
@@ -178,39 +147,3 @@ class HistorySession:
         if action in self.actions:
             index = self.actions.index(action)
             self.actions = self.actions[:index]
-
-
-def select_last_compute_output(
-    mainwindow: DLMainWindow,
-    panels: tuple,
-    uuid_remap: dict[str, dict[str, str]],
-    last_action: HistoryAction,
-) -> None:
-    """Select the output of the last compute action after a session replay.
-
-    Visually closes the replay by highlighting the final result in its panel.
-    No-op when the last action is not a compute action or its output is gone.
-
-    Args:
-        mainwindow: DataLab's main window
-        panels: signal and image panels
-        uuid_remap: per-panel ``{old_uuid: new_uuid}`` mapping built during replay
-        last_action: last action of the replayed session
-    """
-    if last_action.kind != HistoryAction.KIND_COMPUTE:
-        return
-    hpanel = getattr(mainwindow, "historypanel", None)
-    if hpanel is None:
-        return
-    output_uuid = hpanel.action_output_uuid(last_action)
-    if not output_uuid:
-        return
-    panel_str = last_action.panel_str or ""
-    mapped_uuid = uuid_remap.get(panel_str, {}).get(output_uuid, output_uuid)
-    target_panel = next((p for p in panels if p.PANEL_STR_ID == panel_str), None)
-    if target_panel is None:
-        return
-    try:
-        target_panel.objview.select_objects([mapped_uuid])
-    except KeyError:
-        pass

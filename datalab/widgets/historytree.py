@@ -42,10 +42,9 @@ class HistoryTree(QW.QTreeWidget):
         header.setSectionResizeMode(self.DESCRIPTION_COLUMN, QW.QHeaderView.Stretch)
         # Per-action expanded state, preserved across repopulate (delete/replay).
         self.__expanded_state: dict[str, bool] = {}
-        # Session numbers currently flagged as active recording sessions,
-        # mapped to their panel id ('signal'/'image'). Used to highlight the
-        # active session(s) and survive tree repopulation.
-        self.__active_session_numbers: dict[int, str] = {}
+        # Session number currently flagged as the active recording session.
+        # Used to highlight the active session and survive tree repopulation.
+        self.__active_session_number: int | None = None
 
     def on_description_toggled(self, uuid: str, expanded: bool) -> None:
         """Remember the expanded state of a description cell."""
@@ -186,34 +185,33 @@ class HistoryTree(QW.QTreeWidget):
             session_item.addChild(child)
             self.install_description_widget(child, action)
 
-    def set_active_sessions(self, active_session_numbers: dict[int, str]) -> None:
-        """Flag the active recording session(s) by session number and panel.
+    def set_active_session(self, active_session_number: int | None) -> None:
+        """Flag the active recording session by session number.
 
         Args:
-            active_session_numbers: Mapping ``{session.number: panel_str}`` of
-                the active recording session for each panel.
+            active_session_number: Session number of the active recording
+                session, or None when no session is active.
         """
-        self.__active_session_numbers = dict(active_session_numbers)
+        self.__active_session_number = active_session_number
         self.__apply_active_highlight()
 
     def __apply_active_highlight(self) -> None:
-        """Bold + tint the top-level items of the active recording sessions."""
+        """Bold + tint the top-level item of the active recording session."""
         hl = self.palette().color(QG.QPalette.Highlight)
         hl.setAlpha(60)
         active_brush = QG.QBrush(hl)
         normal_brush = QG.QBrush()
-        tip = _("Active recording session ({panel}).")
+        tip = _("Active recording session.")
         for i in range(self.topLevelItemCount()):
             item = self.topLevelItem(i)
             number = item.data(0, self.SESSION_NUMBER_ROLE)
-            panel_str = self.__active_session_numbers.get(number)
-            is_active = panel_str is not None
+            is_active = number is not None and number == self.__active_session_number
             font = item.font(0)
             font.setBold(is_active)
             for col in (0, 1):
                 item.setFont(col, font)
                 item.setBackground(col, active_brush if is_active else normal_brush)
-                item.setToolTip(col, tip.format(panel=panel_str) if is_active else "")
+                item.setToolTip(col, tip if is_active else "")
 
     def rearrange_tree(self) -> None:
         """Rearrange the history tree widget"""

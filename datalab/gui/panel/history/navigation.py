@@ -22,7 +22,7 @@ class HistoryNavigation:
     def __init__(self, panel: HistoryPanel) -> None:
         self.panel = panel
         self.syncing = False
-        self.active_session_by_panel: dict[str, HistorySession] = {}
+        self.active_session: HistorySession | None = None
         self.session_increment = 0
 
     def current_action(self) -> HistoryAction | None:
@@ -93,41 +93,23 @@ class HistoryNavigation:
             action.state if action is not None else None
         )
 
-    def session_panel_str(self, session: HistorySession) -> str | None:
-        """Return the data panel to which a session belongs."""
-        for action in session.actions:
-            panel_str = action.effective_panel_str()
-            if panel_str:
-                return panel_str
-        for panel_str, active_session in self.active_session_by_panel.items():
-            if active_session is session:
-                return panel_str
-        return None
-
-    def get_active_session(self, panel_str: str) -> HistorySession | None:
-        """Return the valid active recording session for a data panel."""
-        session = self.active_session_by_panel.get(panel_str)
+    def get_active_session(self) -> HistorySession | None:
+        """Return the valid active recording session."""
+        session = self.active_session
         if session is not None and session in self.panel.history_sessions:
             return session
         return None
 
-    def set_active_session(
-        self, session: HistorySession, panel_str: str | None = None
-    ) -> None:
-        """Mark a session as active for its data panel."""
-        target = panel_str or self.session_panel_str(session)
-        if target:
-            self.active_session_by_panel[target] = session
-            self.refresh_active_session_highlight()
+    def set_active_session(self, session: HistorySession) -> None:
+        """Mark a session as the single active recording session."""
+        self.active_session = session
+        self.refresh_active_session_highlight()
 
     def refresh_active_session_highlight(self) -> None:
-        """Highlight each data panel's active session in the tree."""
-        active = {
-            session.number: panel_str
-            for panel_str, session in self.active_session_by_panel.items()
-            if session in self.panel.history_sessions
-        }
-        self.panel.tree.set_active_sessions(active)
+        """Highlight the active recording session in the tree."""
+        session = self.get_active_session()
+        number = session.number if session is not None else None
+        self.panel.tree.set_active_session(number)
 
     def set_active_session_from_selection(self) -> None:
         """Make the selected session active while recording."""
@@ -150,18 +132,6 @@ class HistoryNavigation:
             )
         if session is not None:
             self.set_active_session(session)
-
-    def on_current_panel_changed(self, panel_str: str) -> None:
-        """Bring the current data panel's active recording session into view."""
-        if panel_str not in ("signal", "image"):
-            return
-        self.refresh_active_session_highlight()
-        session = self.get_active_session(panel_str)
-        if session is not None and session in self.panel.history_sessions:
-            index = self.panel.history_sessions.index(session)
-            item = self.panel.tree.topLevelItem(index)
-            if item is not None:
-                self.panel.tree.scrollToItem(item)
 
     def current_session(self) -> HistorySession | None:
         """Return the session relevant for step navigation."""

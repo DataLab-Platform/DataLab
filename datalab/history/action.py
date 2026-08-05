@@ -28,7 +28,6 @@ import sigima.proc.image
 import sigima.proc.signal
 from guidata.dataset.datatypes import DataSet
 
-from datalab.config import _
 from datalab.gui import ObjItf
 from datalab.history.core import (
     HISTORY_ACTION_SCHEMA_VERSION,
@@ -434,16 +433,6 @@ class HistoryAction(ObjItf):
             return mainwindow.imagepanel.processor
         return getattr(mainwindow, attr)
 
-    def resolve_panel(self, mainwindow: DLMainWindow):
-        """Resolve the data panel for a compute action."""
-        if self.panel_str == "signal":
-            return mainwindow.signalpanel
-        if self.panel_str == "image":
-            return mainwindow.imagepanel
-        raise ValueError(
-            f"Unknown panel_str {self.panel_str!r} for compute history action"
-        )
-
     def resolve_callable(self) -> Callable | None:
         """Best-effort lookup of the underlying callable, for description only."""
         if self.kind == self.KIND_COMPUTE and self.func_name:
@@ -453,41 +442,34 @@ class HistoryAction(ObjItf):
                     return func
         return None
 
-    def resolve_obj_by_uuid(self, mainwindow: DLMainWindow, uuid: str) -> Any | None:
-        """Look up an object by UUID across both data panels."""
-        for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
-            try:
-                return panel.objmodel[uuid]
-            except KeyError:
-                continue
-        return None
-
     def replay(
         self,
         mainwindow: DLMainWindow,
         restore_selection: bool,
         edit: bool,
-        uuid_remap: dict[str, dict[str, str]] | None = None,
     ) -> None:
-        """Replay the action.
+        """Replay a UI-kind action.
+
+        Compute-kind actions are recomputed in place by the History panel
+        engine (see :mod:`datalab.gui.panel.history.recompute`) and must never
+        reach this method.
 
         Args:
             mainwindow: DataLab's main window
-            restore_selection: True to restore the workspace selection before replaying
-             a UI-kind action. Compute-kind actions restore their captured
-             selection only when its translated UUIDs remain compatible and
-             resolvable; otherwise they retain the current selection.
+            restore_selection: True to restore the captured workspace selection
+             before replaying the action.
             edit: If True, request a parameter dialog for supported actions with
              editable parameters. If False, use the captured parameters.
-            uuid_remap: optional per-panel mapping ``{panel_str: {old_uuid: new_uuid}}``
-             used during full-session replay to translate captured state UUIDs,
-             compute operand UUIDs, and supported UI source UUIDs. Defaults to
-             an empty (identity) mapping.
+
+        Raises:
+            NotImplementedError: If called on a compute-kind action.
         """
-        if uuid_remap is None:
-            uuid_remap = {}
+        if self.kind == self.KIND_COMPUTE:
+            raise NotImplementedError(
+                "Compute actions are recomputed in place and cannot be replayed."
+            )
         # Suppress history capture during replay to avoid recording
-        # synthetic entries when the processor re-executes features.
+        # synthetic entries when the target re-executes features.
         # The context manager is reentrant, so nesting with
         # HistoryPanel.replay_restore_actions() is safe.
         hpanel = getattr(mainwindow, "historypanel", None)
@@ -496,125 +478,14 @@ class HistoryAction(ObjItf):
         else:
             ctx = nullcontext()
         with ctx:
-            self.replay_inner(mainwindow, restore_selection, edit, uuid_remap)
-
-    def replay_inner(
-        self,
-        mainwindow: DLMainWindow,
-        restore_selection: bool,
-        edit: bool,
-        uuid_remap: dict[str, dict[str, str]],
-    ) -> None:
-        """Inner replay logic, always called under the replaying guard."""
-        if self.kind == self.KIND_COMPUTE and self.pattern == "1_to_0" and not edit:
-            return
-        if self.kind == self.KIND_COMPUTE:
-            # Compute actions are selection-driven: restore the captured
-            # selection (translated through ``uuid_remap`` for session
-            # replays) whenever it is still resolvable so chained replays
-            # (especially ``n_to_1`` / ``2_to_1`` / ``1_to_n`` patterns)
-            # operate on the original input objects rather than on whatever
-            # the previous action left selected. When the captured UUIDs no
-            # longer exist (e.g. heuristic remap missed an object), fall
-            # back to the current selection -- replay may still fail
-            # downstream, but with the native processor error rather than
-            # an opaque ``WorkspaceState`` incompatibility.
-            translated = self.translate_state(uuid_remap)
-            if translated.is_current_state_compatible(mainwindow, False):
-                translated.restore(mainwindow)
-            self.replay_compute(mainwindow, edit, uuid_remap)
-        else:
             if restore_selection:
                 self.state.restore(mainwindow)
-            self.replay_ui(mainwindow, edit, uuid_remap)
-
-    def translate_state(self, uuid_remap: dict[str, dict[str, str]]) -> WorkspaceState:
-        """Return ``self.state`` with captured UUIDs translated.
-
-        The original state is returned when no mapping is provided; otherwise a
-        translated copy is returned.
-        """
-        if not uuid_remap:
-            return self.state
-        translated = WorkspaceState()
-        for panel_str, uuids in self.state.selection.items():
-            panel_map = uuid_remap.get(panel_str, {})
-            translated.selection[panel_str] = [panel_map.get(u, u) for u in uuids]
-        translated.states = dict(self.state.states)
-        translated.titles = dict(self.state.titles)
-        for panel_str, metadata in self.state.object_metadata.items():
-            panel_map = uuid_remap.get(panel_str, {})
-            translated.object_metadata[panel_str] = {
-                panel_map.get(uuid, uuid): dict(signature)
-                for uuid, signature in metadata.items()
-            }
-        return translated
-
-    def replay_compute(
-        self,
-        mainwindow: DLMainWindow,
-        edit: bool,
-        uuid_remap: dict[str, dict[str, str]] | None = None,
-    ) -> None:
-        """Replay a compute-kind action via ``processor.run_feature``."""
-        if self.pattern == "multiple_1_to_1":
-            raise NotImplementedError(
-                _("Replaying compound 'multiple_1_to_1' actions is not supported yet.")
-            )
-        panel = self.resolve_panel(mainwindow)
-        processor = panel.processor
-        param = self.kwargs.get("param")
-        params = self.kwargs.get("params") or []
-        paramclass_name = type(param).__name__ if param is not None else None
-        if self.pattern == "1_to_n" and params:
-            paramclass_name = type(params[0]).__name__
-        feature = processor.get_feature(
-            self.func_name,
-            plugin_origin=self.plugin_origin,
-            paramclass_name=paramclass_name,
-        )
-        run_kwargs: dict[str, Any] = {self.FUNC_EDIT_MODE: edit}
-
-        if self.pattern in {"1_to_1", "1_to_0", "n_to_1"}:
-            if param is not None:
-                run_kwargs["param"] = param
-            if self.pattern == "n_to_1" and "pairwise" in self.kwargs:
-                run_kwargs["pairwise"] = self.kwargs["pairwise"]
-        elif self.pattern == "2_to_1":
-            uuids = self.kwargs.get("obj2_uuids") or []
-            if isinstance(uuids, str):
-                uuids = [uuids]
-            # Translate captured UUIDs through ``uuid_remap`` (session replay).
-            # ``uuid_remap`` keys are ``panel.PANEL_STR_ID`` (matches
-            # ``WorkspaceState.selection`` keys and
-            # ``HistoryAction.panel_str``).
-            panel_map = (uuid_remap or {}).get(panel.PANEL_STR_ID, {})
-            uuids = [panel_map.get(u, u) for u in uuids]
-            objs2 = [
-                obj
-                for obj in (self.resolve_obj_by_uuid(mainwindow, u) for u in uuids)
-                if obj is not None
-            ]
-            if not objs2:
-                raise ValueError(
-                    _("Cannot replay 2-to-1 action: source object(s) missing.")
-                )
-            run_kwargs["obj2"] = objs2[0] if len(objs2) == 1 else objs2
-            if param is not None:
-                run_kwargs["param"] = param
-            if "pairwise" in self.kwargs:
-                run_kwargs["pairwise"] = self.kwargs["pairwise"]
-        elif self.pattern == "1_to_n":
-            run_kwargs["params"] = params
-        else:
-            raise ValueError(f"Unknown compute pattern: {self.pattern!r}")
-        processor.run_feature(feature, **run_kwargs)
+            self.replay_ui(mainwindow, edit)
 
     def replay_ui(
         self,
         mainwindow: DLMainWindow,
         edit: bool,
-        uuid_remap: dict[str, dict[str, str]] | None = None,
     ) -> None:
         """Replay a UI-kind action by calling ``target.method_name(**kwargs)``."""
         hpanel = mainwindow.historypanel
@@ -656,13 +527,6 @@ class HistoryAction(ObjItf):
                     return
         method = getattr(target, self.method_name)
         call_kwargs = dict(self.kwargs)
-        # Translate a recorded source object UUID through the session uuid_remap
-        # so deterministic replay after save/reload still targets the right object.
-        pstr = self.effective_panel_str()
-        if uuid_remap and pstr and "source_uuid" in call_kwargs:
-            panel_map = uuid_remap.get(pstr, {})
-            old = call_kwargs["source_uuid"]
-            call_kwargs["source_uuid"] = panel_map.get(old, old)
         # Inject edit mode if the method supports it
         try:
             sig = inspect.signature(method)

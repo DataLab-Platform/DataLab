@@ -1,6 +1,6 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
-"""Pure unit contracts for history persistence, copying and replay mapping."""
+"""Pure unit contracts for history persistence, copying and recompute."""
 
 from __future__ import annotations
 
@@ -26,7 +26,6 @@ from datalab.gui.panel.history import chain as hchain
 from datalab.gui.panel.history import interactive_replay as hireplay
 from datalab.gui.panel.history import recompute as hrec
 from datalab.gui.panel.history import runtime as hruntime
-from datalab.gui.panel.history.navigation import HistoryNavigation
 from datalab.gui.panel.history.ui import HistoryPanelUI
 from datalab.gui.processor.base import (
     BaseProcessor,
@@ -42,8 +41,6 @@ from datalab.history.workspace_state import WorkspaceState
 from datalab.objectmodel import get_uuid, set_uuid
 from datalab.tests.features.common.history_test_helpers import (
     build_history_action,
-    build_replay_map,
-    build_workspace_state,
     delete_hdf5_items_by_name,
     read_history_sessions,
 )
@@ -75,12 +72,10 @@ class PromptExecution:
         self.suppress_session_prompt = False
         self.prompt_allowed = prompt_allowed
         self.prompt_count = 0
-        self.prompt_panel_strs: list[str] = []
 
-    def start_session_input_prompt(self, panel_str: str) -> bool:
+    def start_session_input_prompt(self) -> bool:
         """Record that the debounce guard was reached."""
         self.prompt_count += 1
-        self.prompt_panel_strs.append(panel_str)
         return self.prompt_allowed
 
     @contextmanager
@@ -95,18 +90,18 @@ class PromptExecution:
 
 
 class PromptNavigation:
-    """Minimal active-session registry for prompt tests."""
+    """Minimal single active-session registry for prompt tests."""
 
-    def __init__(self, active_sessions: dict[str, HistorySession]) -> None:
-        self.active_sessions = dict(active_sessions)
+    def __init__(self, active_session: HistorySession | None) -> None:
+        self.active_session = active_session
 
     def current_panel_str(self) -> str:
-        """Return the fallback panel used by legacy load callers."""
+        """Return the fallback panel used for per-action panel resolution."""
         return "signal"
 
-    def get_active_session(self, panel_str: str) -> HistorySession | None:
-        """Return the active session for ``panel_str``."""
-        return self.active_sessions.get(panel_str)
+    def get_active_session(self) -> HistorySession | None:
+        """Return the single active recording session."""
+        return self.active_session
 
 
 class PromptTree:
@@ -141,17 +136,17 @@ class PromptPanel:
 
     def __init__(
         self,
-        active_sessions: dict[str, HistorySession],
+        sessions: list[HistorySession] | None = None,
         prompt_allowed: bool = True,
     ) -> None:
         self.record_mode_enabled = True
-        self.navigation = PromptNavigation(active_sessions)
+        self.history_sessions = list(sessions or [])
+        active = self.history_sessions[-1] if self.history_sessions else None
+        self.navigation = PromptNavigation(active)
         self.runtime = SimpleNamespace(execution=PromptExecution(prompt_allowed))
-        self.history_sessions = list(active_sessions.values())
         self.tree = PromptTree()
         self.ui = PromptUI()
-        self.created_panel_strs: list[str] = []
-        self.prompt_panel_strs: list[str | None] = []
+        self.created_sessions: list[HistorySession] = []
         self.prompt_behaviors: list[hsess.SessionBehavior | None] = []
         self.prompt_suppressed_states: list[bool] = []
         self.added_actions: list[HistoryAction] = []
@@ -163,32 +158,27 @@ class PromptPanel:
         """Return whether history replay is active."""
         return False
 
-    def create_new_session(self, panel_str: str | None = None) -> HistorySession:
+    def create_new_session(self) -> HistorySession:
         """Create and activate a session without constructing GUI objects."""
-        assert panel_str is not None
-        self.created_panel_strs.append(panel_str)
         session = HistorySession(number=len(self.history_sessions) + 1)
         self.history_sessions.append(session)
-        self.navigation.active_sessions[panel_str] = session
+        self.navigation.active_session = session
+        self.created_sessions.append(session)
         return session
 
     def maybe_start_session_for_input(
         self,
-        panel_str: str | None = None,
         *,
         load: bool = False,
         behavior: hsess.SessionBehavior | None = None,
     ) -> bool:
-        """Forward to the session operation while recording its target."""
+        """Forward to the session operation while recording the evaluation."""
         self.events.append("session_decision")
-        self.prompt_panel_strs.append(panel_str)
         self.prompt_behaviors.append(behavior)
         self.prompt_suppressed_states.append(
             self.runtime.execution.suppress_session_prompt
         )
-        return hsess.maybe_start_session_for_input(
-            self, panel_str=panel_str, load=load, behavior=behavior
-        )
+        return hsess.maybe_start_session_for_input(self, load=load, behavior=behavior)
 
     @contextmanager
     def session_prompt_suppressed(self):
@@ -288,15 +278,21 @@ def test_compute_n_to_1_uses_provided_history_title() -> None:
 
 
 @pytest.mark.parametrize("column", (0, 2))
-@pytest.mark.parametrize("selected_row", (HistoryAction(), HistorySession()))
+@pytest.mark.parametrize("selected_kind", ("action", "session"))
 def test_history_tree_double_click_replays_current_selection_without_restoring(
-    selected_row: HistoryAction | HistorySession, column: int
+    selected_kind: str, column: int
 ) -> None:
     """Replay the current action or session selection from either tree column."""
+    if selected_kind == "action":
+        selected_row: HistoryAction | HistorySession = HistoryAction()
+        expected_actions = [selected_row]
+    else:
+        selected_row = HistorySession()
+        selected_row.add_action(HistoryAction())
+        selected_row.add_action(HistoryAction())
+        expected_actions = list(selected_row.actions)
     selected_row.is_current_state_compatible = Mock(return_value=True)
-    selected_row.replay = Mock()
     clicked_row = HistoryAction()
-    clicked_row.replay = Mock()
     tree = SimpleNamespace(
         customContextMenuRequested=Mock(),
         itemDoubleClicked=Mock(),
@@ -326,21 +322,28 @@ def test_history_tree_double_click_replays_current_selection_without_restoring(
 
     ui.setup_connections()
     double_click_slot = tree.itemDoubleClicked.connect.call_args.args[0]
-    double_click_slot(clicked_row, column)
+    with patch.object(hireplay, "replay_actions") as replay_actions_mock:
+        double_click_slot(clicked_row, column)
 
-    selected_row.replay.assert_called_once_with(
-        mainwindow, restore_selection=False, edit=False
+    selected_row.is_current_state_compatible.assert_called_once_with(
+        mainwindow, restore_selection=False
     )
-    clicked_row.replay.assert_not_called()
+    replay_actions_mock.assert_called_once_with(panel, expected_actions, prompt=False)
+    assert clicked_row not in replay_actions_mock.call_args.args[1]
 
 
-def test_image_creation_routes_to_image_session_when_signal_is_current() -> None:
-    """Route an image creation independently of the globally current panel."""
+def test_image_creation_extends_active_signal_session_when_rejected() -> None:
+    """Chain an image creation into the single active recording session."""
     signal_session = make_prompt_session("signal", populated=True)
     signal_actions = list(signal_session.actions)
-    panel = PromptPanel({"signal": signal_session})
-    unattended = SimpleNamespace(unattended=True, accept_dialogs=True)
-    with patch.object(hsess, "execenv", unattended):
+    panel = PromptPanel([signal_session])
+    unattended = SimpleNamespace(unattended=True, accept_dialogs=False)
+    with (
+        patch.object(hsess, "execenv", unattended),
+        patch.object(
+            hsess.Conf.proc.history_new_session_behavior, "get", return_value="ask"
+        ),
+    ):
         action = hsess.add_ui_entry(
             panel,
             "New image",
@@ -348,41 +351,38 @@ def test_image_creation_routes_to_image_session_when_signal_is_current() -> None
             method_name="new_object",
             save_state=False,
         )
-    image_session = panel.navigation.get_active_session("image")
     assert action is panel.added_actions[0]
     assert action.panel_str == "image"
-    assert panel.prompt_panel_strs == ["image"]
     assert panel.prompt_behaviors == [None]
-    assert panel.runtime.execution.prompt_count == 0
-    assert panel.created_panel_strs == ["image"]
-    assert image_session is panel.history_sessions[-1]
-    assert image_session.actions == [action]
-    assert signal_session.actions == signal_actions
+    assert panel.runtime.execution.prompt_count == 1
+    assert panel.created_sessions == []
+    assert panel.navigation.get_active_session() is signal_session
+    assert signal_session.actions == signal_actions + [action]
 
 
-def test_empty_active_image_session_skips_prompt() -> None:
-    """Reuse an empty active image session without reaching the debounce."""
+def test_empty_active_session_skips_prompt() -> None:
+    """Reuse an empty active session without reaching the debounce."""
     image_session = make_prompt_session("image", populated=False)
-    panel = PromptPanel({"image": image_session})
-    created = hsess.maybe_start_session_for_input(panel, panel_str="image")
+    panel = PromptPanel([image_session])
+    created = hsess.maybe_start_session_for_input(panel)
     assert created is False
     assert panel.runtime.execution.prompt_count == 0
-    assert panel.created_panel_strs == []
+    assert panel.created_sessions == []
 
 
 def test_omitted_session_behavior_reads_live_general_policy() -> None:
     """Resolve the general policy on every omitted-behavior call."""
     image_session = make_prompt_session("image", populated=True)
-    panel = PromptPanel({"image": image_session})
+    panel = PromptPanel([image_session])
     option = hsess.Conf.proc.history_new_session_behavior
 
     with patch.object(option, "get", side_effect=["no", "yes"]) as get_behavior:
-        first_created = panel.maybe_start_session_for_input(panel_str="image")
-        second_created = panel.maybe_start_session_for_input(panel_str="image")
+        first_created = panel.maybe_start_session_for_input()
+        second_created = panel.maybe_start_session_for_input()
 
     assert first_created is False
     assert second_created is True
-    assert panel.created_panel_strs == ["image"]
+    assert len(panel.created_sessions) == 1
     assert panel.prompt_behaviors == [None, None]
     assert get_behavior.call_count == 2
 
@@ -396,42 +396,39 @@ def test_explicit_session_behaviors_bypass_prompt() -> None:
     attended = SimpleNamespace(unattended=False, accept_dialogs=False)
     for behavior, expected_created in cases:
         image_session = make_prompt_session("image", populated=True)
-        panel = PromptPanel({"image": image_session})
+        panel = PromptPanel([image_session])
         with (
             patch.object(hsess, "execenv", attended),
             patch.object(hsess.QW, "QMessageBox") as message_box,
         ):
-            created = panel.maybe_start_session_for_input(
-                panel_str="image", behavior=behavior
-            )
+            created = panel.maybe_start_session_for_input(behavior=behavior)
         assert created is expected_created
         assert panel.runtime.execution.prompt_count == 0
-        assert panel.created_panel_strs == (["image"] if expected_created else [])
+        assert len(panel.created_sessions) == (1 if expected_created else 0)
         message_box.question.assert_not_called()
 
 
 def test_invalid_session_behavior_has_no_side_effects() -> None:
     """Reject an invalid policy before debounce or session creation."""
     image_session = make_prompt_session("image", populated=True)
-    panel = PromptPanel({"image": image_session})
+    panel = PromptPanel([image_session])
 
     with pytest.raises(ValueError, match="Invalid session behavior"):
         hsess.maybe_start_session_for_input(
             panel,
-            panel_str="image",
             behavior=cast(hsess.SessionBehavior, "invalid"),
         )
 
     assert panel.runtime.execution.prompt_count == 0
-    assert panel.created_panel_strs == []
+    assert panel.created_sessions == []
     assert panel.history_sessions == [image_session]
 
 
-def test_accepted_image_prompt_routes_action_to_new_image_session() -> None:
-    """Record an image creation in the newly accepted image session."""
+def test_accepted_prompt_routes_action_to_new_session() -> None:
+    """Record an image creation in the newly accepted session."""
     image_session = make_prompt_session("image", populated=True)
     previous_actions = list(image_session.actions)
-    panel = PromptPanel({"image": image_session})
+    panel = PromptPanel([image_session])
     unattended = SimpleNamespace(unattended=True, accept_dialogs=True)
     with (
         patch.object(hsess, "execenv", unattended),
@@ -446,36 +443,31 @@ def test_accepted_image_prompt_routes_action_to_new_image_session() -> None:
             method_name="new_object",
             save_state=False,
         )
-    new_image_session = panel.navigation.get_active_session("image")
+    new_session = panel.navigation.get_active_session()
     assert panel.runtime.execution.prompt_count == 1
-    assert panel.created_panel_strs == ["image"]
-    assert new_image_session is panel.history_sessions[-1]
-    assert new_image_session.actions == [action]
+    assert panel.created_sessions == [new_session]
+    assert new_session is panel.history_sessions[-1]
+    assert new_session.actions == [action]
     assert image_session.actions == previous_actions
 
 
-def test_populated_active_signal_session_is_evaluated_independently() -> None:
-    """Start a signal session without replacing the active image session."""
+def test_accepted_prompt_replaces_active_session() -> None:
+    """Make the freshly created session the single active recording session."""
     signal_session = make_prompt_session("signal", populated=True)
-    image_session = make_prompt_session("image", populated=False)
-    panel = PromptPanel({"signal": signal_session, "image": image_session})
+    panel = PromptPanel([signal_session])
     unattended = SimpleNamespace(unattended=True, accept_dialogs=True)
     with patch.object(hsess, "execenv", unattended):
-        created = hsess.maybe_start_session_for_input(
-            panel, panel_str="signal", behavior="ask"
-        )
+        created = hsess.maybe_start_session_for_input(panel, behavior="ask")
     assert created is True
     assert panel.runtime.execution.prompt_count == 1
-    assert panel.runtime.execution.prompt_panel_strs == ["signal"]
-    assert panel.created_panel_strs == ["signal"]
-    assert panel.navigation.get_active_session("image") is image_session
+    assert panel.created_sessions == [panel.navigation.get_active_session()]
+    assert panel.navigation.get_active_session() is not signal_session
 
 
-def test_input_prompt_debounce_is_panel_scoped() -> None:
-    """Debounce signal and image decisions on independent timer windows."""
+def test_input_prompt_debounce_is_global() -> None:
+    """Debounce a synchronous burst of prompts on a single timer window."""
     signal_session = make_prompt_session("signal", populated=True)
-    image_session = make_prompt_session("image", populated=True)
-    panel = PromptPanel({"signal": signal_session, "image": image_session})
+    panel = PromptPanel([signal_session])
     execution = hruntime.HistoryExecutionState()
     panel.runtime = SimpleNamespace(execution=execution)
     callbacks = []
@@ -489,22 +481,13 @@ def test_input_prompt_debounce_is_panel_scoped() -> None:
         ),
         patch.object(hsess, "execenv", unattended),
     ):
-        assert not hsess.maybe_start_session_for_input(
-            panel, panel_str="signal", behavior="ask"
-        )
-        assert not hsess.maybe_start_session_for_input(
-            panel, panel_str="image", behavior="ask"
-        )
-        assert not hsess.maybe_start_session_for_input(
-            panel, panel_str="signal", behavior="ask"
-        )
+        assert not hsess.maybe_start_session_for_input(panel, behavior="ask")
+        assert not hsess.maybe_start_session_for_input(panel, behavior="ask")
 
-    assert execution.session_input_pending_panels == {"signal", "image"}
-    assert len(callbacks) == 2
+    assert execution.session_input_pending is True
+    assert len(callbacks) == 1
     callbacks[0]()
-    assert execution.session_input_pending_panels == {"image"}
-    callbacks[1]()
-    assert execution.session_input_pending_panels == set()
+    assert execution.session_input_pending is False
 
 
 def test_ui_entries_serialize_data_target_ownership() -> None:
@@ -517,7 +500,7 @@ def test_ui_entries_serialize_data_target_ownership() -> None:
         "mainwindow": None,
         "historypanel": None,
     }
-    panel = PromptPanel({})
+    panel = PromptPanel([])
     actions = []
     for target, panel_str in expected_ownership.items():
         action = hsess.add_ui_entry(
@@ -571,40 +554,6 @@ def test_ui_entries_serialize_data_target_ownership() -> None:
         assert action.effective_panel_str() == panel_str
 
 
-def test_legacy_imageprocessor_replay_remaps_source_uuid() -> None:
-    """Remap a legacy processor UI action through its effective image owner."""
-    replayed_source_uuids: list[str] = []
-
-    def load_from_source(source_uuid: str) -> None:
-        replayed_source_uuids.append(source_uuid)
-
-    mainwindow = SimpleNamespace(
-        historypanel=SimpleNamespace(
-            is_output_suppressed=lambda: False,
-            replaying=nullcontext,
-        ),
-        imagepanel=SimpleNamespace(
-            processor=SimpleNamespace(load_from_source=load_from_source)
-        ),
-    )
-    action = HistoryAction(
-        kind=HistoryAction.KIND_UI,
-        panel_str="",
-        target="imageprocessor",
-        method_name="load_from_source",
-        kwargs={"source_uuid": "old-image"},
-    )
-
-    action.replay(
-        mainwindow,
-        restore_selection=False,
-        edit=False,
-        uuid_remap={"image": {"old-image": "new-image"}},
-    )
-
-    assert replayed_source_uuids == ["new-image"]
-
-
 def test_resolve_panel_for_data_owned_ui_actions() -> None:
     """Resolve legacy processor and data-panel load actions to image data."""
     signal_panel = SimpleNamespace(name="signal")
@@ -652,15 +601,15 @@ def test_history_tools_action_panel_str_uses_effective_ownership() -> None:
     assert hops.action_panel_str(HistoryAction(target="mainwindow")) == "signal"
 
 
-def test_image_histogram_action_keeps_image_session_ownership() -> None:
-    """Keep a signal-valued histogram in its image source session."""
+def test_image_histogram_action_keeps_image_ownership_in_active_session() -> None:
+    """Keep a signal-valued histogram owned by its image source panel."""
     signal_session = make_prompt_session("signal", populated=True)
     image_session = make_prompt_session("image", populated=True)
     signal_actions = list(signal_session.actions)
     image_actions = list(image_session.actions)
     signal_output = SimpleNamespace(uuid="histogram-signal", panel_str="signal")
     image_source_panel = SimpleNamespace(name="image")
-    panel = PromptPanel({"signal": signal_session, "image": image_session})
+    panel = PromptPanel([signal_session, image_session])
     panel.mainwindow = SimpleNamespace(
         signalpanel=SimpleNamespace(name="signal", objects=[signal_output]),
         imagepanel=image_source_panel,
@@ -676,7 +625,6 @@ def test_image_histogram_action_keeps_image_session_ownership() -> None:
 
     panel.add_object(action)
 
-    assert panel.navigation.current_panel_str() == "signal"
     assert signal_output.panel_str == "signal"
     assert action.effective_panel_str() == "image"
     assert hops.action_panel_str(action) == "image"
@@ -686,9 +634,9 @@ def test_image_histogram_action_keeps_image_session_ownership() -> None:
 
 
 def test_debounce_rejection_does_not_start_or_prompt() -> None:
-    """Keep routing in the active target session when debounce rejects."""
+    """Keep routing in the active session when debounce rejects."""
     image_session = make_prompt_session("image", populated=True)
-    panel = PromptPanel({"image": image_session}, prompt_allowed=False)
+    panel = PromptPanel([image_session], prompt_allowed=False)
     attended = SimpleNamespace(unattended=False, accept_dialogs=True)
     with (
         patch.object(hsess, "execenv", attended),
@@ -705,33 +653,31 @@ def test_debounce_rejection_does_not_start_or_prompt() -> None:
             save_state=False,
         )
     assert panel.runtime.execution.prompt_count == 1
-    assert panel.created_panel_strs == []
-    assert panel.navigation.get_active_session("image") is image_session
+    assert panel.created_sessions == []
+    assert panel.navigation.get_active_session() is image_session
     assert image_session.actions[-1] is action
     message_box.question.assert_not_called()
 
 
-def test_unattended_reject_keeps_populated_target_session() -> None:
-    """Leave the active image session untouched after unattended rejection."""
+def test_unattended_reject_keeps_populated_active_session() -> None:
+    """Leave the active session untouched after unattended rejection."""
     image_session = make_prompt_session("image", populated=True)
     previous_actions = list(image_session.actions)
-    panel = PromptPanel({"image": image_session})
+    panel = PromptPanel([image_session])
     unattended = SimpleNamespace(unattended=True, accept_dialogs=False)
     with patch.object(hsess, "execenv", unattended):
-        created = hsess.maybe_start_session_for_input(
-            panel, panel_str="image", behavior="ask"
-        )
+        created = hsess.maybe_start_session_for_input(panel, behavior="ask")
     assert created is False
     assert panel.runtime.execution.prompt_count == 1
-    assert panel.created_panel_strs == []
-    assert panel.navigation.get_active_session("image") is image_session
+    assert panel.created_sessions == []
+    assert panel.navigation.get_active_session() is image_session
     assert image_session.actions == previous_actions
 
 
 def test_mainwindow_add_object_decides_before_mutation_and_suppresses_entry() -> None:
     """Decide before adding and suppress the creation entry's second prompt."""
     image_session = make_prompt_session("image", populated=True)
-    historypanel = PromptPanel({"image": image_session})
+    historypanel = PromptPanel([image_session])
     added_objects = []
 
     def add_to_image_panel(obj, group_id, set_current):
@@ -770,7 +716,7 @@ def test_mainwindow_add_object_decides_before_mutation_and_suppresses_entry() ->
 def test_mainwindow_add_object_preserves_no_record_and_memory_rejection() -> None:
     """Keep data addition without recording and stop entirely on memory refusal."""
     image_session = make_prompt_session("image", populated=True)
-    historypanel = PromptPanel({"image": image_session})
+    historypanel = PromptPanel([image_session])
     historypanel.record_mode_enabled = False
     added_objects = []
 
@@ -796,14 +742,6 @@ def test_mainwindow_add_object_preserves_no_record_and_memory_rejection() -> Non
     )
     assert added_objects == [(image, "", True)]
     assert historypanel.prompt_behaviors == ["no"]
-
-
-def test_navigation_uses_effective_panel_for_ui_only_session() -> None:
-    """Resolve legacy UI-only sessions from their action target."""
-    session = HistorySession(number=1)
-    session.add_action(HistoryAction(kind=HistoryAction.KIND_UI, target="imagepanel"))
-    navigation = HistoryNavigation(SimpleNamespace())
-    assert navigation.session_panel_str(session) == "image"
 
 
 def test_action_hdf5_current_and_legacy_contract() -> None:
@@ -872,63 +810,6 @@ def test_action_copy_remaps_all_uuid_references() -> None:
     copied.plugin_origin["metadata"]["entry_points"].append("average")
     assert action.state.object_metadata["signal"]["source-uuid"]["shape"] == [10]
     assert action.plugin_origin["metadata"]["entry_points"] == ["difference"]
-
-
-def test_replay_uuid_map_matches_exact_title_and_position() -> None:
-    """Match replay inputs by exact UUID, unique title, then panel position."""
-    replay_map, _signal_model, _image_model = build_replay_map(
-        [("same", "Exact"), ("new-position", "Other"), ("new-title", "Named")]
-    )
-    replay_map.unclaimed["signal"] = ["same", "new-position", "new-title"]
-    state = build_workspace_state(
-        ["same", "old-title", "old-position"], ["Exact", "Named", "Recorded"]
-    )
-    action = HistoryAction(
-        kind=HistoryAction.KIND_COMPUTE, panel_str="signal", state=state
-    )
-    replay_map.claim_action_inputs(action)
-    assert replay_map.mapping["signal"] == {
-        "same": "same",
-        "old-title": "new-title",
-        "old-position": "new-position",
-    }
-    assert replay_map.unclaimed["signal"] == []
-
-
-def test_replay_uuid_map_preserves_operands_and_tracks_changes() -> None:
-    """Claim obj2 before primary inputs and track panel-local object changes."""
-    replay_map, signal_model, image_model = build_replay_map(
-        [("new-second", "Second"), ("new-primary", "Primary")],
-        [("image-old", "Image")],
-    )
-    replay_map.unclaimed["signal"] = ["new-second", "new-primary"]
-    action = HistoryAction(
-        kind=HistoryAction.KIND_COMPUTE,
-        panel_str="signal",
-        pattern="2_to_1",
-        kwargs={"obj2_uuids": ["old-second"]},
-        state=build_workspace_state(["old-primary"], ["Primary"]),
-    )
-    replay_map.claim_action_inputs(action)
-    assert replay_map.mapping["signal"] == {
-        "old-second": "new-second",
-        "old-primary": "new-primary",
-    }
-    before = replay_map.snapshot_object_ids()
-    signal_model.add("signal-new", "Created")
-    replay_map.capture_changes(
-        HistoryAction(
-            kind=HistoryAction.KIND_UI,
-            state=build_workspace_state(["old-new"]),
-        ),
-        before,
-    )
-    assert replay_map.mapping["signal"]["old-new"] == "signal-new"
-    before = replay_map.snapshot_object_ids()
-    signal_model.remove("signal-new")
-    replay_map.capture_changes(HistoryAction(), before)
-    assert "old-new" not in replay_map.mapping["signal"]
-    assert image_model.get_object_ids() == ["image-old"]
 
 
 def test_edited_image_creation_recomputes_downstream_in_place() -> None:

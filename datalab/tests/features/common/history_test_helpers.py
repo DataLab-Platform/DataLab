@@ -5,8 +5,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from types import SimpleNamespace
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any
 
 import sigima.params
 import sigima.proc.signal as sips
@@ -16,7 +15,6 @@ from sigima.tests.data import create_paracetamol_signal
 
 from datalab.h5.native import NativeH5Reader
 from datalab.history.action import HistoryAction
-from datalab.history.replaymap import ReplayUuidMap
 from datalab.history.session import HistorySession
 from datalab.history.workspace_state import WorkspaceState
 
@@ -31,42 +29,6 @@ class SignalChain:
 
     actions: tuple[HistoryAction, HistoryAction, HistoryAction]
     outputs: tuple[Any, Any, Any]
-
-
-class ReplayObjectModel:
-    """Minimal ordered object model used by replay-map tests."""
-
-    def __init__(self, objects: list[tuple[str, str]]) -> None:
-        self.objects = {uuid: SimpleNamespace(title=title) for uuid, title in objects}
-
-    def __getitem__(self, uuid: str) -> SimpleNamespace:
-        """Return an object by UUID."""
-        return self.objects[uuid]
-
-    def get_object_ids(self) -> list[str]:
-        """Return object UUIDs in panel order."""
-        return list(self.objects)
-
-    def add(self, uuid: str, title: str) -> None:
-        """Add an object to the model."""
-        self.objects[uuid] = SimpleNamespace(title=title)
-
-    def remove(self, uuid: str) -> None:
-        """Remove an object from the model."""
-        self.objects.pop(uuid)
-
-
-def build_replay_map(
-    signal_objects: list[tuple[str, str]],
-    image_objects: list[tuple[str, str]] | None = None,
-) -> tuple[ReplayUuidMap, ReplayObjectModel, ReplayObjectModel]:
-    """Build a replay map backed by minimal signal and image panels."""
-    signal_model = ReplayObjectModel(signal_objects)
-    image_model = ReplayObjectModel(image_objects or [])
-    signal_panel = SimpleNamespace(PANEL_STR_ID="signal", objmodel=signal_model)
-    image_panel = SimpleNamespace(PANEL_STR_ID="image", objmodel=image_model)
-    panels = cast(Any, (signal_panel, image_panel))
-    return ReplayUuidMap(panels), signal_model, image_model
 
 
 def build_workspace_state(

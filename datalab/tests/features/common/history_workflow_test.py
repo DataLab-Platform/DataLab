@@ -12,7 +12,7 @@ from unittest.mock import patch
 import numpy as np
 import sigima.params
 import sigima.proc.signal as sips
-from sigima.tests.data import create_paracetamol_signal
+from sigima.tests.data import create_paracetamol_signal, create_sincos_image
 
 from datalab.adapters_metadata.common import ResultData
 from datalab.gui import historytools_ops as htools
@@ -104,7 +104,7 @@ def test_remap_processing_parameters_preserves_plugin_origin() -> None:
 
 
 def test_history_recording_contract_and_output_index() -> None:
-    """Record producing patterns and index every output without replay entries."""
+    """Record producing patterns and index every output."""
     with datalab_test_app_context(history=True) as win:
         history, panel = win.historypanel, win.signalpanel
         history.toggle_record_mode(True)
@@ -129,114 +129,6 @@ def test_history_recording_contract_and_output_index() -> None:
                 assert (
                     history.runtime.objects.output_to_action[output_uuid] == action.uuid
                 )
-        count_before = len(history)
-        derivative.replay(win, restore_selection=True, edit=False)
-        assert len(history) == count_before
-
-
-def test_session_replay_remaps_distinct_processing_patterns() -> None:
-    """Replay chained 1-to-1, n-to-1 and ordered 2-to-1 computations."""
-    with datalab_test_app_context(history=True) as win:
-        history, panel = win.historypanel, win.signalpanel
-        history.toggle_record_mode(True)
-        add_paracetamol_signals(panel, 2)
-        panel.objview.select_objects([1])
-        panel.processor.run_feature(sips.derivative)
-        panel.objview.select_objects([2])
-        panel.processor.run_feature(sips.derivative)
-        panel.objview.select_objects([3, 4])
-        panel.processor.run_feature(sips.average)
-        panel.objview.select_objects([3])
-        panel.processor.run_feature(
-            sips.difference, panel.objmodel.get_object_from_number(4)
-        )
-        session = history.history_sessions[-1]
-        difference = session.actions[-1]
-        original_title = panel.objmodel[difference.output_uuids[0]].title
-        assert original_title.index("s003") < original_title.index("s004")
-        object_count = len(panel.objmodel)
-        action_count = len(history)
-        session.replay(win, restore_selection=False, edit=False)
-        assert len(panel.objmodel) == object_count + 4
-        assert len(history) == action_count
-        replayed = panel.objmodel.get_object_from_number(len(panel.objmodel))
-        assert "s" in replayed.title and "-" in replayed.title
-
-
-def test_analysis_replay_requires_explicit_edit() -> None:
-    """Skip an analysis during ordinary replay but allow explicit edit replay."""
-    with datalab_test_app_context(history=True) as win:
-        history, panel = win.historypanel, win.signalpanel
-        history.toggle_record_mode(True)
-        add_paracetamol_signals(panel, 1)
-        panel.objview.select_objects([1])
-        panel.processor.run_feature(sips.stats)
-        analysis_action = history[len(history)]
-        assert analysis_action.pattern == "1_to_0"
-        with patch.object(panel.processor, "run_feature") as run_feature:
-            analysis_action.replay(win, restore_selection=True, edit=False)
-            run_feature.assert_not_called()
-            analysis_action.replay(win, restore_selection=True, edit=True)
-            run_feature.assert_called_once()
-
-
-def test_replay_resolves_feature_with_plugin_origin_and_paramclass() -> None:
-    """Resolve replayed features with their plugin and parameter identities."""
-    with datalab_test_app_context(history=True) as win:
-        history, panel = win.historypanel, win.signalpanel
-        history.toggle_record_mode(True)
-        add_paracetamol_signals(panel, 1)
-        panel.objview.select_objects([1])
-        param = sigima.params.GaussianParam.create(sigma=1.5)
-        panel.processor.run_feature(sips.gaussian_filter, param)
-        action = history[len(history)]
-        plugin_origin = {
-            "module": "test_plugin.operations",
-            "directory": "test_plugin",
-        }
-        action.plugin_origin = plugin_origin
-
-        with patch.object(
-            panel.processor, "get_feature", wraps=panel.processor.get_feature
-        ) as get_feature:
-            action.replay(win, restore_selection=True, edit=False)
-
-        get_feature.assert_called_once_with(
-            action.func_name,
-            plugin_origin=plugin_origin,
-            paramclass_name=type(param).__name__,
-        )
-
-
-def test_replay_1_to_n_resolves_feature_with_first_paramclass() -> None:
-    """Resolve a 1-to-n feature with the first stored parameter identity."""
-    with datalab_test_app_context(history=True) as win:
-        history, panel = win.historypanel, win.signalpanel
-        history.toggle_record_mode(True)
-        add_paracetamol_signals(panel, 1)
-        panel.objview.select_objects([1])
-        params = [sigima.params.GaussianParam.create(sigma=1.5)]
-        action = HistoryAction()
-        action.kind = HistoryAction.KIND_COMPUTE
-        action.pattern = "1_to_n"
-        action.target = "signalpanel"
-        action.panel_str = "signal"
-        action.func_name = sips.gaussian_filter.__name__
-        action.kwargs = {"params": params}
-
-        with (
-            patch.object(
-                panel.processor, "get_feature", return_value=sips.gaussian_filter
-            ) as get_feature,
-            patch.object(panel.processor, "run_feature"),
-        ):
-            action.replay_compute(win, edit=False)
-
-        get_feature.assert_called_once_with(
-            action.func_name,
-            plugin_origin=None,
-            paramclass_name=type(params[0]).__name__,
-        )
 
 
 def test_history_hdf5_pristine_load_and_nonempty_import() -> None:
@@ -288,7 +180,7 @@ def test_duplicate_creation_and_operation_rooted_chains() -> None:
             "module": "example.plugin",
             "metadata": {"entry_points": ["derivative"]},
         }
-        history.create_new_session(panel_str="signal")
+        history.create_new_session()
         win.add_object(create_paracetamol_signal())
         panel.objview.select_objects([3])
         panel.processor.run_feature(sips.derivative)
@@ -342,6 +234,49 @@ def test_duplicate_creation_and_operation_rooted_chains() -> None:
         assert_duplicate_head(history, panel, duplicate)
         chains = build_session_chains(duplicate)
         assert len(chains) == 1 and chains[0].root is duplicate.actions[0]
+
+
+def test_duplicate_clones_only_chain_objects() -> None:
+    """Duplicate clones only chain inputs/outputs, not unrelated objects."""
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        history.toggle_record_mode(True)
+        # Unrelated objects alive at record time (captured in workspace state)
+        unrelated = create_paracetamol_signal()
+        unrelated.title = "Unrelated signal"
+        panel.add_object(unrelated)
+        win.imagepanel.add_object(create_sincos_image())
+        source_uuid = add_paracetamol_signals(panel, 1)[0]
+        panel.objview.select_objects([source_uuid])
+        panel.processor.run_feature(sips.derivative)
+        original = history.history_sessions[-1]
+        signal_count_before = len(panel.objmodel)
+        image_count_before = len(win.imagepanel.objmodel)
+        image_group_count_before = len(win.imagepanel.objmodel.get_groups())
+        title_count_before = sum(
+            panel.objmodel[uuid].title == unrelated.title
+            for uuid in panel.objmodel.get_object_ids()
+        )
+        select_tree_session(history, original)
+        htools.duplicate_selected_entries(history)
+        # Only the chain source and its derivative output are cloned
+        assert len(panel.objmodel) == signal_count_before + 2
+        title_count_after = sum(
+            panel.objmodel[uuid].title == unrelated.title
+            for uuid in panel.objmodel.get_object_ids()
+        )
+        assert title_count_after == title_count_before
+        # Image panel is untouched
+        assert len(win.imagepanel.objmodel) == image_count_before
+        assert len(win.imagepanel.objmodel.get_groups()) == image_group_count_before
+        duplicate = history.history_sessions[-1]
+        original_outputs = {
+            uuid for action in original.actions for uuid in action.output_uuids
+        }
+        duplicate_outputs = {
+            uuid for action in duplicate.actions for uuid in action.output_uuids
+        }
+        assert duplicate_outputs.isdisjoint(original_outputs)
 
 
 def test_edit_cascade_preserves_identity_and_action_state() -> None:
@@ -488,7 +423,7 @@ def test_multi_action_edit_recomputes_selected_descendants_once() -> None:
                 hrec, "recompute_action_in_place", return_value=True
             ) as recompute,
         ):
-            hireplay.edit_mode_replay_actions(history, selected)
+            hireplay.replay_actions(history, selected)
 
         assert [call.args[1] for call in prompt.call_args_list] == selected
         assert [call.args[1] for call in recompute.call_args_list] == expected
@@ -514,12 +449,11 @@ def test_edit_mode_selected_session_uses_global_replay_planner() -> None:
         assert selected == [session, stale_action]
 
         with (
-            patch.object(type(session), "replay") as direct_replay,
             patch.object(hrec, "recompute_cascade") as direct_cascade,
             patch.object(
                 hireplay,
-                "edit_mode_replay_actions",
-                wraps=hireplay.edit_mode_replay_actions,
+                "replay_actions",
+                wraps=hireplay.replay_actions,
             ) as edit_planner,
             patch.object(
                 hireplay, "prompt_edit_action_params", return_value=True
@@ -530,9 +464,10 @@ def test_edit_mode_selected_session_uses_global_replay_planner() -> None:
         ):
             hireplay.replay_restore_actions(history)
 
-        direct_replay.assert_not_called()
         direct_cascade.assert_not_called()
-        edit_planner.assert_called_once_with(history, [*expected, stale_action])
+        edit_planner.assert_called_once_with(
+            history, [*expected, stale_action], prompt=True
+        )
         assert [call.args[1] for call in prompt.call_args_list] == expected
         assert [call.args[1] for call in recompute.call_args_list] == expected
         assert all(action.is_stale is False for action in expected)
@@ -583,7 +518,7 @@ def test_multi_action_edit_cascades_across_independent_sessions() -> None:
         history.toggle_record_mode(True)
         history.toggle_edit_mode(True)
         first_chain = build_independent_signal_branch(panel, history)
-        history.create_new_session(panel_str="signal")
+        history.create_new_session()
         second_chain = build_independent_signal_branch(panel, history)
         selected = [second_chain[0], first_chain[0]]
         expected = [*first_chain, *second_chain]
@@ -594,7 +529,7 @@ def test_multi_action_edit_cascades_across_independent_sessions() -> None:
                 hrec, "recompute_action_in_place", return_value=True
             ) as recompute,
         ):
-            hireplay.edit_mode_replay_actions(history, selected)
+            hireplay.replay_actions(history, selected)
 
         assert [call.args[1] for call in recompute.call_args_list] == expected
         assert all(action.is_stale is False for action in expected)
@@ -607,7 +542,7 @@ def test_multi_action_edit_failure_skips_dependents_and_continues() -> None:
         history.toggle_record_mode(True)
         history.toggle_edit_mode(True)
         failed_chain = build_independent_signal_branch(panel, history)
-        history.create_new_session(panel_str="signal")
+        history.create_new_session()
         successful_chain = build_independent_signal_branch(panel, history)
         failed_root = failed_chain[0]
         failed_output_uuid = failed_root.output_uuids[0]
@@ -636,9 +571,7 @@ def test_multi_action_edit_failure_skips_dependents_and_continues() -> None:
                 hrec, "recompute_action_in_place", side_effect=recompute_action
             ),
         ):
-            hireplay.edit_mode_replay_actions(
-                history, [failed_root, successful_chain[0]]
-            )
+            hireplay.replay_actions(history, [failed_root, successful_chain[0]])
 
         assert recomputed == [failed_root, *successful_chain]
         assert all(action.is_stale is True for action in failed_chain)
@@ -662,7 +595,7 @@ def test_multi_action_edit_cancel_restores_entry_pending_edit() -> None:
             return False
 
         with patch.object(hireplay, "prompt_edit_action_params", side_effect=prompt):
-            hireplay.edit_mode_replay_actions(history, [first_action, second_action])
+            hireplay.replay_actions(history, [first_action, second_action])
 
         assert first_action.kwargs["param"].sigma == 2.5
         assert first_action.saved_kwargs["param"].sigma == 1.5
@@ -686,7 +619,7 @@ def test_multi_action_edit_cancel_skips_deferred_ui_replay() -> None:
             patch.object(ui_action, "replay") as replay,
             patch.object(hireplay, "prompt_edit_action_params", return_value=False),
         ):
-            hireplay.edit_mode_replay_actions(history, [ui_action, compute_action])
+            hireplay.replay_actions(history, [ui_action, compute_action])
 
         replay.assert_not_called()
 
@@ -720,7 +653,7 @@ def test_multi_action_edit_preserves_mixed_ui_compute_order() -> None:
             patch.object(hrec, "recompute_action_in_place", side_effect=recompute),
             patch.object(ui_action, "replay", side_effect=replay_ui),
         ):
-            hireplay.edit_mode_replay_actions(history, [first_compute, ui_action])
+            hireplay.replay_actions(history, [first_compute, ui_action])
 
         assert execution_order == [first_compute, ui_action, second_compute]
 
@@ -746,7 +679,7 @@ def test_multi_action_edit_flushes_cascade_warnings_once() -> None:
                 wraps=hrec.flush_cascade_warnings,
             ) as flush,
         ):
-            hireplay.edit_mode_replay_actions(history, [action])
+            hireplay.replay_actions(history, [action])
 
         flush.assert_called_once_with(history)
         assert history.runtime.execution.cascade_warnings == []
@@ -1034,6 +967,40 @@ def test_1_to_0_cascade_uses_roi_safe_parameter_copy() -> None:
         assert passed_param is not param
         assert passed_param.create_rois is False
         assert action.kwargs["param"].create_rois is True
+
+
+def test_replay_recreates_deleted_output_under_recorded_uuid() -> None:
+    """Re-create a deleted compute output under its recorded UUID on replay."""
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        history.toggle_record_mode(True)
+        source_uuid = add_paracetamol_signals(panel, 1)[0]
+        panel.objview.select_objects([source_uuid])
+        panel.processor.run_feature(sips.derivative)
+        action = history[len(history)]
+        output_uuid = action.output_uuids[0]
+        expected_data = panel.objmodel[output_uuid].xydata.copy()
+        object_count = len(panel.objmodel)
+        panel.objview.select_objects([output_uuid])
+        panel.remove_object(force=True)
+        assert not panel.objmodel.has_uuid(output_uuid)
+        assert action.output_uuids == [output_uuid]
+
+        with patch.object(hrec, "flush_cascade_warnings"):
+            hireplay.replay_actions(history, [action], prompt=False)
+
+        assert history.runtime.execution.cascade_warnings == []
+        assert action.is_stale is False
+        assert len(panel.objmodel) == object_count
+        assert panel.objmodel.has_uuid(output_uuid)
+        recreated = panel.objmodel[output_uuid]
+        assert get_uuid(recreated) == output_uuid
+        assert np.array_equal(recreated.xydata, expected_data)
+        assert history.runtime.objects.output_to_action[output_uuid] == action.uuid
+        assert history.runtime.objects.action_output_uuids[action.uuid] == [output_uuid]
+        parameters = extract_processing_parameters(recreated)
+        assert parameters is not None
+        assert parameters.source_uuid == source_uuid
 
 
 def test_deletion_reconnects_and_splices_chain() -> None:
