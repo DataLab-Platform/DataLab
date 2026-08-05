@@ -17,6 +17,7 @@ import sys
 import tempfile
 
 from guidata import configtools
+from guidata.dataset import BoolItem, StringItem
 from guidata.userconfig import get_config_basedir
 from plotpy.config import CONF as PLOTPY_CONF
 from plotpy.styles import MarkerParam, ShapeParam
@@ -408,12 +409,17 @@ PLUGIN_ERROR_COLOR = "#e74c3c"
 class DataLabShapeParam(ShapeParam):
     """ShapeParam subclass with internal items hidden from settings dialog"""
 
-    def __init__(self):
-        super().__init__()
-        # Hide internal items that should not appear in settings dialog
-        for item in self._items:
-            if item._name in ("label", "readonly", "private"):
-                item.set_prop("display", hide=True)
+    # Items are redeclared rather than hidden in place: guidata shares its
+    # DataItem instances with subclasses, so ``set_prop`` would alter every
+    # ``ShapeParam`` dialog in the application.
+    label = StringItem("Title", default="").set_prop("display", hide=True)
+    readonly = BoolItem("Read-only shape", default=False).set_prop("display", hide=True)
+    private = BoolItem("Private shape", default=False).set_prop("display", hide=True)
+
+
+# Configurations written by DataLab <= 1.2 refer to this class as
+# ``datalab.config.DataLabShapeParam``, when ``datalab.config`` was a module.
+DataLabShapeParam.__module__ = "datalab.config"
 
 
 #: Active typed DataLab configuration shared with reused SigimaX components.

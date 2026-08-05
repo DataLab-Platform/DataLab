@@ -32,6 +32,7 @@ from typing import Any
 
 from guidata import configtools
 from sigimax.config import (
+    DataSetOptionField,
     FontOptionField,
     FormatStringOptionField,
     OptionField,
@@ -40,7 +41,6 @@ from sigimax.config import (
 )
 
 from datalab import __docurl__, __homeurl__, __supporturl__, __version__
-from datalab.config.optionfields import DataSetOptionField
 
 #: Application name used for default log file basenames.
 APP_NAME = "DataLab"

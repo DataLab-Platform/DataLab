@@ -9,12 +9,16 @@ import json
 
 import guidata.dataset as gds
 import pytest
-from sigimax.config import ConfigPathOptionField, WorkingDirOptionField, get_conf
+from sigimax.config import (
+    ConfigPathOptionField,
+    DataSetOptionField,
+    WorkingDirOptionField,
+    get_conf,
+)
 from sigimax.utils import conf as confmod
 from sigimax.utils.conf import AppUserConfig
 
 from datalab.config.config_options import DataLabOptions
-from datalab.config.optionfields import DataSetOptionField
 
 
 class _SampleParam(gds.DataSet):

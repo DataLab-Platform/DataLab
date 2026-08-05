@@ -2,7 +2,7 @@
 
 """
 Unit tests for the configuration option fields used by DataLab
-(:mod:`sigimax.config` and :mod:`datalab.config.optionfields`).
+(:mod:`sigimax.config`).
 """
 
 import os.path as osp
@@ -12,6 +12,7 @@ import pytest
 from sigimax.config import (
     AppOptionsContainer,
     ConfigPathOptionField,
+    DataSetOptionField,
     FontOptionField,
     WorkingDirOptionField,
 )
@@ -19,7 +20,6 @@ from sigimax.config import (
 # Ensure the INI configuration backend (CONF) is initialized with an application
 # name so that Configuration.get_path resolves inside the config directory.
 import datalab.config  # noqa: F401  # pylint: disable=unused-import
-from datalab.config.optionfields import DataSetOptionField
 
 
 class _StubContainer(AppOptionsContainer):
