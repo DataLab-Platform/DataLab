@@ -256,7 +256,7 @@ def _load_field(options, conf, field_name: str, section: str, ini_key: str) -> N
         field.set((family, size, bold))
     elif isinstance(field, (ConfigPathOptionField, WorkingDirOptionField)):
         default = default_raw if default_raw is not None else ""
-        field.set_raw(conf.get(section, ini_key, default=default))
+        field.from_storage(conf.get(section, ini_key, default=default))
     elif field_name in DATETIME_FIELDS:
         raw = conf.get(section, ini_key, default=_escape_percent(default_raw))
         field.set(_unescape_percent(raw))
@@ -297,7 +297,7 @@ def _save_field(options, conf, field_name: str, section: str, ini_key: str) -> N
         conf.set(section, f"{ini_key}_size", size, save=False)
         conf.set(section, f"{ini_key}_bold", bold, save=False)
     elif isinstance(field, (ConfigPathOptionField, WorkingDirOptionField)):
-        conf.set(section, ini_key, field.get_raw(), save=False)
+        conf.set(section, ini_key, field.to_storage(), save=False)
     elif field_name in DATETIME_FIELDS:
         conf.set(section, ini_key, _escape_percent(field.get()), save=False)
     else:

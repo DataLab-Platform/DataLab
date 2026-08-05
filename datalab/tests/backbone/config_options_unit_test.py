@@ -202,7 +202,7 @@ def test_from_dict_round_trip() -> None:
     # Mutate, then restore from the snapshot.
     opt.process_isolation_enabled.set(True)
     opt.ai_provider.set("openai")
-    opt.sig_shape_param.set_raw(None)
+    opt.sig_shape_param.from_storage(None)
 
     opt.from_dict(snapshot)
 
@@ -236,13 +236,13 @@ def test_reset_to_defaults() -> None:
 
     opt.process_isolation_enabled.set(False)
     opt.macro_console_max_lines.set(123)
-    opt.base_dir.set_raw("/some/stale/dir")
+    opt.base_dir.from_storage("/some/stale/dir")
 
     opt.reset_to_defaults()
 
     assert opt.process_isolation_enabled.get() is True
     assert opt.macro_console_max_lines.get() == 5000
-    assert opt.base_dir.get_raw() == ""
+    assert opt.base_dir.to_storage() == ""
     assert not opt.is_option_initialized("process_isolation_enabled")
     assert not opt.is_option_initialized("macro_console_max_lines")
     assert not opt.is_option_initialized("base_dir")

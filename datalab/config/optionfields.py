@@ -19,11 +19,12 @@ provide:
 - :class:`DataSetOptionField`: a :class:`guidata.dataset.DataSet` instance, with
   JSON (de)serialization helpers for INI persistence.
 
-All fields whose ``get``/``set`` transform the stored value expose ``get_raw`` /
-``set_raw`` accessors returning/accepting the *raw* stored value. The INI<->JSON
-converter (see :mod:`datalab.config`) relies on these to avoid the lossy
-round-trips that a naive ``get``/``set`` would cause (e.g. a resolved absolute
-path being written back where only a basename is expected).
+All fields whose ``get``/``set`` transform the stored value override the
+``to_storage`` / ``from_storage`` serialization protocol defined by
+:class:`sigimax.config.OptionField`, returning/accepting the *raw* stored value.
+The INI<->JSON converter (see :mod:`datalab.config`) relies on these to avoid the
+lossy round-trips that a naive ``get``/``set`` would cause (e.g. a resolved
+absolute path being written back where only a basename is expected).
 """
 
 from __future__ import annotations
@@ -85,11 +86,11 @@ class ConfigPathOptionField(OptionField):
             raise ValueError(f"Invalid configuration file name {fname}")
         return Configuration.get_path(osp.basename(fname))
 
-    def get_raw(self) -> str:
+    def to_storage(self) -> str:
         """Return the raw stored basename (bypassing path resolution)."""
         return self._value
 
-    def set_raw(self, value: str) -> None:
+    def from_storage(self, value: str) -> None:
         """Set the raw stored basename without validation or env sync.
 
         Args:
@@ -153,11 +154,11 @@ class WorkingDirOptionField(OptionField):
                 raise FileNotFoundError(f"Invalid working directory name {value}")
         super().set(value)
 
-    def get_raw(self) -> str:
+    def to_storage(self) -> str:
         """Return the raw stored directory (even if it no longer exists)."""
         return self._value
 
-    def set_raw(self, value: str) -> None:
+    def from_storage(self, value: str) -> None:
         """Set the raw stored directory without validation or env sync.
 
         Args:
@@ -314,15 +315,22 @@ class DataSetOptionField(OptionField):
         self._serialized_value = None
         super().set(value)
 
-    def set_raw(self, value: gds.DataSet | None) -> None:
-        """Set the raw DataSet instance without env sync.
+    def to_storage(self) -> str | None:
+        """Return the actively-set DataSet as a JSON string (``None`` if unset)."""
+        return self.to_json()
+
+    def from_storage(self, value: str | None) -> None:
+        """Restore the DataSet from a JSON string (``None`` clears the value).
 
         Args:
-            value: The DataSet instance to store (or None).
+            value: The JSON string to deserialize, or ``None``.
         """
-        self._value = value
-        self._serialized_value = None
-        self.mark_initialized()
+        if value is None:
+            self._value = None
+            self._serialized_value = None
+            self.mark_initialized()
+        else:
+            self.from_json(value)
 
     def to_json(self) -> str | None:
         """Serialize the actively-set DataSet to a JSON string.

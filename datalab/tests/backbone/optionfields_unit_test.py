@@ -41,14 +41,14 @@ def test_config_path_option_field() -> None:
     assert osp.basename(resolved) == ".DataLab_tb.log"
     assert osp.isabs(resolved)
 
-    # Raw accessors expose the bare basename (no path resolution).
-    assert field.get_raw() == ".DataLab_tb.log"
-    field.set_raw(".Other.log")
-    assert field.get_raw() == ".Other.log"
+    # Storage accessors expose the bare basename (no path resolution).
+    assert field.to_storage() == ".DataLab_tb.log"
+    field.from_storage(".Other.log")
+    assert field.to_storage() == ".Other.log"
     assert osp.basename(field.get()) == ".Other.log"
 
     # A full path (not a bare basename) is rejected on get().
-    field.set_raw(osp.join("sub", "dir", "file.log"))
+    field.from_storage(osp.join("sub", "dir", "file.log"))
     with pytest.raises(ValueError):
         field.get()
 
@@ -75,9 +75,9 @@ def test_working_dir_option_field(tmp_path) -> None:
     # get() returns "" when the stored directory no longer exists, but the raw
     # value is preserved.
     missing = str(tmp_path / "gone")
-    field.set_raw(missing)
+    field.from_storage(missing)
     assert field.get() == ""
-    assert field.get_raw() == missing
+    assert field.to_storage() == missing
 
 
 def test_font_option_field() -> None:
@@ -121,12 +121,12 @@ def test_dataset_option_field() -> None:
     # JSON round-trip restores the stored value.
     json_str = field.to_json()
     assert json_str is not None
-    field.set_raw(None)
+    field.from_storage(None)
     field.from_json(json_str)
     assert field.get().value == 42
 
     # set_default_instance updates the fallback used when no value is set.
-    field.set_raw(None)
+    field.from_storage(None)
     new_default = _SampleParam()
     new_default.value = 99
     field.set_default_instance(new_default)

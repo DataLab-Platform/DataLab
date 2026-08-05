@@ -513,72 +513,9 @@ class DataLabOptions(SigimaXOptions):
         self.splash_show_progress.set(False)
 
         # Recapture defaults now that DataLab-specific fields exist, using the
-        # raw-aware serialization (see to_dict) so reset_to_defaults is correct
-        # for config-path, working-dir and DataSet fields.
+        # storage protocol so reset_to_defaults is correct for config-path,
+        # working-dir and DataSet fields.
         self._defaults = self.to_dict()
-
-    # -- Raw-aware (de)serialization for persistence and defaults --
-
-    def to_dict(self) -> dict[str, Any]:
-        """Return all option values as a JSON-compatible dictionary.
-
-        Fields whose ``get`` transforms the stored value are serialized using
-        their raw value: config-path and working-directory fields use
-        :meth:`~datalab.utils.optionfields.ConfigPathOptionField.get_raw`, and
-        DataSet fields are serialized to a JSON string (or ``None`` when unset).
-
-        Returns:
-            A dictionary mapping option names to JSON-compatible values.
-        """
-        result: dict[str, Any] = {}
-        for name in vars(self):
-            field = getattr(self, name)
-            if not isinstance(field, OptionField):
-                continue
-            if isinstance(field, DataSetOptionField):
-                result[name] = field.to_json()
-            elif isinstance(field, (ConfigPathOptionField, WorkingDirOptionField)):
-                result[name] = field.get_raw()
-            else:
-                result[name] = field.get()
-        return result
-
-    def from_dict(self, values: dict[str, Any]) -> None:
-        """Set option values from a JSON-compatible dictionary.
-
-        Unknown keys are ignored. Invalid values are skipped with a warning,
-        leaving the option at its current value.
-
-        Args:
-            values: A dictionary mapping option names to JSON-compatible values.
-        """
-        for name, value in values.items():
-            if not hasattr(self, name):
-                continue
-            field = getattr(self, name)
-            if not isinstance(field, OptionField):
-                continue
-            try:
-                if isinstance(field, DataSetOptionField):
-                    if value is None:
-                        field.set_raw(None)
-                    else:
-                        field.from_json(value)
-                elif isinstance(field, (ConfigPathOptionField, WorkingDirOptionField)):
-                    field.set_raw(value)
-                else:
-                    field.set(value)
-            except (ValueError, TypeError) as exc:  # pylint: disable=broad-except
-                print(f"[datalab] Warning: invalid value for option '{name}': {exc}")
-
-    def reset_to_defaults(self) -> None:
-        """Reset all options to their default values (raw-aware)."""
-        self._initialized_options.clear()
-        self.from_dict(self._defaults)
-        for name in self._defaults:
-            field = getattr(self, name)
-            field._is_initialized = False  # pylint: disable=protected-access
-        self._initialized_options.clear()
 
     # -- Option categories (DataLab-specific extensions) --
 

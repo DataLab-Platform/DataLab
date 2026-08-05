@@ -158,7 +158,7 @@ def test_round_trip_across_types() -> None:
     src.ai_temperature.set(0.9)
 
     # Raw fields (config path / working directory)
-    src.traceback_log_path.set_raw(".DataLab_custom.log")
+    src.traceback_log_path.from_storage(".DataLab_custom.log")
 
     save_options_to_ini(src, conf, save=False)
 
@@ -174,7 +174,7 @@ def test_round_trip_across_types() -> None:
     assert dst.plugins_enabled_list.get() == ["Test Plugin 1"]
     assert dst.macro_console_max_lines.get() == 4242
     assert abs(dst.ai_temperature.get() - 0.9) < 1e-9
-    assert dst.traceback_log_path.get_raw() == ".DataLab_custom.log"
+    assert dst.traceback_log_path.to_storage() == ".DataLab_custom.log"
 
 
 def test_runtime_option_is_not_clobbered_by_bulk_save() -> None:
