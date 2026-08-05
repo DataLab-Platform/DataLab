@@ -118,6 +118,7 @@ class DataLabOptions(SigimaXOptions):
             "rpc_server_port",
             category="main",
             default=None,
+            runtime=True,
             description="XML-RPC server port (None until assigned at startup).",
         )
         self.webapi_localhost_no_token = TypedOptionField(
@@ -497,7 +498,7 @@ class DataLabOptions(SigimaXOptions):
         )
 
         # ===================================================================
-        # Application branding — presentation metadata (see NON_PERSISTED)
+        # Application branding — presentation metadata (see EXPECTED_UNCATEGORIZED)
         # ===================================================================
         # Set programmatically so that reused SigimaX widgets and windows display
         # DataLab's identity (name, version, icon, URLs, splash) when they read

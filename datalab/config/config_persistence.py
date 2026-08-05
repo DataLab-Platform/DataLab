@@ -9,11 +9,14 @@ container with DataLab's historical INI backend
 (:data:`sigimax.utils.conf.CONF`, a guidata ``UserConfig``).
 
 The INI file remains the on-disk format for backward compatibility with existing
-user configurations. The **INI section is derived from each option's category**
-(``field.category``, defined in :mod:`sigimax.config` and extended by
-:mod:`datalab.config_options`). The INI key defaults to the option name, with a
-small set of exceptions (see :data:`INI_KEY_OVERRIDES` and the ``ai_``/``macro_``
-prefix rule).
+user configurations. **Only categorized options are persisted**: the INI section
+is the option's category (``field.category``, defined in :mod:`sigimax.config`
+and extended by :mod:`datalab.config_options`), and an option left uncategorized
+is simply ignored here.
+
+The INI key is the option name, unless the field declares an explicit
+``storage_key``, or its name carries its own category as a prefix
+(``ai_``/``macro_``, historically section-local keys).
 
 Values are (de)serialized through the SigimaX storage protocol
 (:meth:`sigimax.config.OptionField.to_storage` /
@@ -62,8 +65,9 @@ def _default_conf() -> UserConfig:
 
 
 #: Inherited SigimaX options that are set programmatically at startup (or are
-#: purely presentation metadata) and are therefore not persisted to the INI file.
-NON_PERSISTED: frozenset[str] = frozenset(
+#: purely presentation metadata), hence left uncategorized on purpose. Used by
+#: the configuration completeness test as an allowlist.
+EXPECTED_UNCATEGORIZED: frozenset[str] = frozenset(
     {
         "app_name",
         "app_version",
@@ -81,32 +85,13 @@ NON_PERSISTED: frozenset[str] = frozenset(
     }
 )
 
-#: Runtime IPC fields that must NOT be written by the bulk container save. They
-#: are shared across processes through the INI (e.g. the XML-RPC server port is
-#: written by the running instance and read by remote clients). A bulk save
-#: triggered by an unrelated option change (e.g. window geometry persisted on
-#: close by another DataLab instance) would otherwise clobber the value written
-#: by the current server. These fields stay categorized and are still *loaded*
-#: from the INI; their owner persists them via :func:`save_runtime_option`.
-RUNTIME_FIELDS: frozenset[str] = frozenset({"rpc_server_port"})
-
 #: Categories whose fields drop their ``<category>_`` prefix when mapped to the
 #: (historically section-local) INI key.
 _PREFIX_SECTIONS = frozenset({"ai", "macro"})
 
-#: Explicit INI key overrides for fields whose historical INI key differs from
-#: the option name (and is not covered by the prefix rule).
-INI_KEY_OVERRIDES: dict[str, str] = {
-    "console_max_line_count": "max_line_count",
-}
-
 
 def get_ini_location(options: DataLabOptions, name: str) -> tuple[str, str] | None:
     """Return the ``(section, ini_key)`` INI location of an option field.
-
-    The section is the field's category; the INI key is the option name, unless
-    overridden by :data:`INI_KEY_OVERRIDES` or stripped of its ``ai_``/``macro_``
-    prefix.
 
     Args:
         options: The DataLab options container.
@@ -119,8 +104,9 @@ def get_ini_location(options: DataLabOptions, name: str) -> tuple[str, str] | No
     section = options.get_field_category(name)
     if not section:
         return None
-    if name in INI_KEY_OVERRIDES:
-        ini_key = INI_KEY_OVERRIDES[name]
+    storage_key = getattr(getattr(options, name, None), "storage_key", "")
+    if storage_key:
+        ini_key = storage_key
     elif section in _PREFIX_SECTIONS and name.startswith(f"{section}_"):
         ini_key = name[len(section) + 1 :]
     else:
@@ -323,9 +309,9 @@ def save_options_to_ini(
     """
     conf = _default_conf() if conf is None else conf
     for field_name in _iter_persisted_field_names(options):
-        if field_name in RUNTIME_FIELDS:
-            # Runtime IPC value: persisted only by its owner via
-            # ``save_runtime_option`` (see :data:`RUNTIME_FIELDS`).
+        if getattr(getattr(options, field_name, None), "runtime", False):
+            # Runtime IPC value: persisted only by its owner, through
+            # :func:`save_runtime_option`.
             continue
         location = get_ini_location(options, field_name)
         if location is None:
@@ -340,7 +326,7 @@ def save_runtime_option(
 ) -> None:
     """Persist a single runtime option directly to the INI (single-key write).
 
-    Runtime IPC fields (see :data:`RUNTIME_FIELDS`) are excluded from the bulk
+    Fields declared ``runtime=True`` are excluded from the bulk
     :func:`save_options_to_ini` so that unrelated saves cannot clobber them.
     Their owner (e.g. the XML-RPC server writing its port) persists them through
     this authoritative single-key write.
@@ -366,14 +352,14 @@ def get_uncategorized_fields(options: DataLabOptions) -> list[str]:
 
     Used by the configuration completeness test to guarantee that every option
     is either categorized (hence persisted) or intentionally excluded (in
-    :data:`NON_PERSISTED`).
+    :data:`EXPECTED_UNCATEGORIZED`).
 
     Args:
         options: The DataLab options container to inspect.
 
     Returns:
         Sorted list of uncategorized option field names missing from
-         :data:`NON_PERSISTED`.
+         :data:`EXPECTED_UNCATEGORIZED`.
     """
     from sigima.config import OptionField  # pylint: disable=import-outside-toplevel
 
@@ -383,7 +369,7 @@ def get_uncategorized_fields(options: DataLabOptions) -> list[str]:
             continue
         if options.get_field_category(name):
             continue
-        if name in NON_PERSISTED:
+        if name in EXPECTED_UNCATEGORIZED:
             continue
         unexpected.append(name)
     return sorted(unexpected)
