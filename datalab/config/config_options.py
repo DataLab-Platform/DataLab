@@ -16,11 +16,7 @@ Design notes
 
 - Options common to any SigimaX-based application (color mode, window state,
   console, I/O, visualization defaults, processing behaviour) are inherited from
-  :class:`~sigimax.config.SigimaXOptions`. DataLab only *adds* its own options
-  and *replaces* a few inherited fields whose type differs
-  (``traceback_log_path``, ``faulthandler_log_path`` become
-  :class:`~datalab.utils.optionfields.ConfigPathOptionField`; ``base_dir``
-  becomes :class:`~datalab.utils.optionfields.WorkingDirOptionField`).
+  :class:`~sigimax.config.SigimaXOptions`. DataLab only *adds* its own options.
 - The former ``[macro]`` and ``[ai]`` INI sections are flattened with a
   ``macro_``/``ai_`` prefix to avoid generic-name collisions in the flat
   namespace (e.g. ``ai_enabled``, ``ai_provider``).
@@ -35,16 +31,16 @@ from __future__ import annotations
 from typing import Any
 
 from guidata import configtools
-from sigimax.config import OptionField, SigimaXOptions, TypedOptionField
+from sigimax.config import (
+    FontOptionField,
+    FormatStringOptionField,
+    OptionField,
+    SigimaXOptions,
+    TypedOptionField,
+)
 
 from datalab import __docurl__, __homeurl__, __supporturl__, __version__
-from datalab.config.optionfields import (
-    ConfigPathOptionField,
-    DataSetOptionField,
-    FormatStringOptionField,
-    WorkingDirOptionField,
-)
-from datalab.config.optionfields import FontOptionField as _FontOptionField
+from datalab.config.optionfields import DataSetOptionField
 
 #: Application name used for default log file basenames.
 APP_NAME = "DataLab"
@@ -53,8 +49,7 @@ APP_NAME = "DataLab"
 class DataLabOptions(SigimaXOptions):
     """DataLab configuration options (flat, SigimaX-style container).
 
-    Adds DataLab-specific options on top of :class:`sigimax.config.SigimaXOptions`
-    and replaces a few inherited fields with DataLab-specific field types.
+    Adds DataLab-specific options on top of :class:`sigimax.config.SigimaXOptions`.
     """
 
     APP_NAME = APP_NAME
@@ -65,32 +60,6 @@ class DataLabOptions(SigimaXOptions):
         # is enabled by :mod:`datalab.config` after ``load_options_from_ini``.
         self._ini_persist_enabled = False
         super().__init__()
-
-        # ===================================================================
-        # Replace inherited fields whose type differs in DataLab
-        # ===================================================================
-
-        self.traceback_log_path = ConfigPathOptionField(
-            self,
-            "traceback_log_path",
-            f".{APP_NAME}_traceback.log",
-            description="Path to the traceback log file (config-dir basename).",
-            category="main",
-        )
-        self.faulthandler_log_path = ConfigPathOptionField(
-            self,
-            "faulthandler_log_path",
-            f".{APP_NAME}_faulthandler.log",
-            description="Path to the faulthandler log file (config-dir basename).",
-            category="main",
-        )
-        self.base_dir = WorkingDirOptionField(
-            self,
-            "base_dir",
-            "",
-            description="Base working directory for file dialogs.",
-            category="main",
-        )
 
         # ===================================================================
         # Main options — DataLab-specific
@@ -191,7 +160,7 @@ class DataLabOptions(SigimaXOptions):
         # Processing options — DataLab-specific
         # ===================================================================
 
-        self.small_mono_font = _FontOptionField(
+        self.small_mono_font = FontOptionField(
             self,
             "small_mono_font",
             category="proc",

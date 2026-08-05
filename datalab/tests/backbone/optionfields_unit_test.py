@@ -1,25 +1,25 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-Unit tests for DataLab configuration option fields
-(:mod:`datalab.utils.optionfields`).
+Unit tests for the configuration option fields used by DataLab
+(:mod:`sigimax.config` and :mod:`datalab.config.optionfields`).
 """
 
 import os.path as osp
 
 import guidata.dataset as gds
 import pytest
-from sigimax.config import AppOptionsContainer
+from sigimax.config import (
+    AppOptionsContainer,
+    ConfigPathOptionField,
+    FontOptionField,
+    WorkingDirOptionField,
+)
 
 # Ensure the INI configuration backend (CONF) is initialized with an application
 # name so that Configuration.get_path resolves inside the config directory.
 import datalab.config  # noqa: F401  # pylint: disable=unused-import
-from datalab.config.optionfields import (
-    ConfigPathOptionField,
-    DataSetOptionField,
-    FontOptionField,
-    WorkingDirOptionField,
-)
+from datalab.config.optionfields import DataSetOptionField
 
 
 class _StubContainer(AppOptionsContainer):
