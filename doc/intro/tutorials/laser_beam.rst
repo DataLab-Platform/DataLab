@@ -91,6 +91,11 @@ To pan the image, use the middle mouse button while dragging.
         operation sets all image origins to match the first image's origin,
         which means any initial differences in image origins will be lost.
 
+        Both the "Distribute on a grid" and "Reset image positions" options
+        modify the images in place, without creating new images. For this
+        reason, they are not registered in the History Panel, which only
+        lists newly created objects.
+
 .. |distribute_on_grid| image:: ../../../datalab/data/icons/processing/distribute_on_grid.svg
     :width: 24px
     :height: 24px
