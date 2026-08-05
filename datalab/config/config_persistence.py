@@ -15,23 +15,24 @@ user configurations. The **INI section is derived from each option's category**
 small set of exceptions (see :data:`INI_KEY_OVERRIDES` and the ``ai_``/``macro_``
 prefix rule).
 
-Encoding is derived from each field's *type*:
+Values are (de)serialized through the SigimaX storage protocol
+(:meth:`sigimax.config.OptionField.to_storage` /
+:meth:`~sigimax.config.OptionField.from_storage`), so this module never
+introspects field types:
 
-- :class:`~datalab.utils.optionfields.DataSetOptionField`: JSON string, with
-  ``%`` escaped for ConfigParser.
-- :class:`~datalab.utils.optionfields.FontOptionField`: three INI keys
-  (``<key>_family`` / ``<key>_size`` / ``<key>_bold``).
-- :class:`~datalab.utils.optionfields.ConfigPathOptionField` /
-  :class:`~datalab.utils.optionfields.WorkingDirOptionField`: the raw stored
-  value (basename / directory), via ``get_raw`` / ``set_raw``.
-- datetime format fields (see :data:`DATETIME_FIELDS`): stored escaped
-  (``%`` -> ``%%``); the in-memory value is kept clean.
-- everything else: relies on ``UserConfig``'s ``repr``/``eval`` type coercion.
+- ``field.storage_suffixes`` lists the INI keys occupied by the field: empty
+  means a single ``<key>``, otherwise one ``<key>_<suffix>`` per suffix (e.g.
+  ``family`` / ``size`` / ``bold`` for fonts).
+- ``field.storage_escape`` requests ``%`` -> ``%%`` escaping at the INI boundary
+  (ConfigParser interpolation), the in-memory value being kept clean.
+- ``to_storage()`` returning ``None`` means "nothing to persist": the mapped INI
+  keys are removed.
 
 Type coercion is delegated to ``UserConfig`` (see
-:meth:`guidata.userconfig.UserConfig.get`): passing each field's raw default as
-the ``default`` argument registers the correct type and preserves the exact
-behaviour of the legacy DataLab configuration system.
+:meth:`guidata.userconfig.UserConfig.get`) by registering each field's raw
+default with :meth:`~guidata.userconfig.UserConfig.set_default` before reading.
+Unlike passing ``default=`` to ``get``, this registers the type without writing
+the default back to the INI file.
 """
 
 from __future__ import annotations
@@ -40,15 +41,9 @@ from typing import TYPE_CHECKING
 
 from sigimax.utils import conf as _confmod
 
-from datalab.config.optionfields import (
-    ConfigPathOptionField,
-    DataSetOptionField,
-    FontOptionField,
-    WorkingDirOptionField,
-)
-
 if TYPE_CHECKING:
     from guidata.userconfig import UserConfig
+    from sigimax.config import OptionField
 
     from datalab.config.config_options import DataLabOptions
 
@@ -65,11 +60,6 @@ def _default_conf() -> UserConfig:
     """
     return _confmod.CONF
 
-
-#: Fields storing ``strftime`` format strings. Their ``%`` characters must be
-#: escaped as ``%%`` in the INI file (ConfigParser interpolation), while the
-#: in-memory value is kept in clean form (``%H:%M:%S``).
-DATETIME_FIELDS = frozenset({"sig_datetime_format_s", "sig_datetime_format_ms"})
 
 #: Inherited SigimaX options that are set programmatically at startup (or are
 #: purely presentation metadata) and are therefore not persisted to the INI file.
@@ -138,6 +128,23 @@ def get_ini_location(options: DataLabOptions, name: str) -> tuple[str, str] | No
     return section, ini_key
 
 
+def _field_ini_keys(field: OptionField | None, ini_key: str) -> list[str]:
+    """Return the INI keys occupied by an option field.
+
+    Args:
+        field: The option field (``None`` is treated as a single-key field).
+        ini_key: The base INI key of the field.
+
+    Returns:
+        The list of INI keys: ``[ini_key]`` for a single-key field, one
+         ``<ini_key>_<suffix>`` key per declared storage suffix otherwise.
+    """
+    suffixes = getattr(field, "storage_suffixes", ())
+    if not suffixes:
+        return [ini_key]
+    return [f"{ini_key}_{suffix}" for suffix in suffixes]
+
+
 def has_persisted_option(
     options: DataLabOptions, name: str, conf: UserConfig | None = None
 ) -> bool:
@@ -156,14 +163,9 @@ def has_persisted_option(
     if location is None:
         return False
     conf = _default_conf() if conf is None else conf
+    section, ini_key = location
     field = getattr(options, name, None)
-    if isinstance(field, FontOptionField):
-        section, ini_key = location
-        return all(
-            conf.has_option(section, f"{ini_key}_{suffix}")
-            for suffix in ("family", "size", "bold")
-        )
-    return conf.has_option(*location)
+    return all(conf.has_option(section, key) for key in _field_ini_keys(field, ini_key))
 
 
 def remove_persisted_option(
@@ -184,20 +186,15 @@ def remove_persisted_option(
     if location is None:
         return False
     conf = _default_conf() if conf is None else conf
+    section, ini_key = location
     field = getattr(options, name, None)
-    if isinstance(field, FontOptionField):
-        section, ini_key = location
-        option_names = [f"{ini_key}_{suffix}" for suffix in ("family", "size", "bold")]
-        if not any(conf.has_option(section, key) for key in option_names):
-            return False
-        for key in option_names:
-            if conf.has_option(section, key):
-                conf.remove_option(section, key)
-        conf.save()
-        return True
-    if not conf.has_option(*location):
+    keys = [
+        key for key in _field_ini_keys(field, ini_key) if conf.has_option(section, key)
+    ]
+    if not keys:
         return False
-    conf.remove_option(*location)
+    for key in keys:
+        conf.remove_option(section, key)
     conf.save()
     return True
 
@@ -221,6 +218,10 @@ def _unescape_percent(value: str) -> str:
 def _load_field(options, conf, field_name: str, section: str, ini_key: str) -> None:
     """Load a single option field value from the INI backend.
 
+    A stored value that the field cannot restore (invalid or obsolete) is
+    removed from the INI file, so that a corrupted entry heals itself instead of
+    breaking every subsequent startup.
+
     Args:
         options: The DataLab options container.
         conf: The ``UserConfig`` INI backend to read from.
@@ -231,49 +232,41 @@ def _load_field(options, conf, field_name: str, section: str, ini_key: str) -> N
     field = getattr(options, field_name, None)
     if field is None:
         return
+    keys = _field_ini_keys(field, ini_key)
     default_raw = options.get_default_raw(field_name)
-
-    if isinstance(field, DataSetOptionField):
-        if not conf.has_option(section, ini_key):
-            return
-        raw = conf.get(section, ini_key)
-        if isinstance(raw, str) and raw:
-            try:
-                field.from_json(_unescape_percent(raw))
-                field.get()
-            except Exception:  # pylint: disable=broad-except
-                remove_persisted_option(options, field_name, conf)
-            else:
-                # Deserialization is lazy: a missing DataSet class is detected
-                # by get(), which clears the pending serialized value.
-                if field.to_json() is None:
-                    remove_persisted_option(options, field_name, conf)
-    elif isinstance(field, FontOptionField):
-        fam_d, size_d, bold_d = default_raw
-        family = conf.get(section, f"{ini_key}_family", default=fam_d)
-        size = conf.get(section, f"{ini_key}_size", default=size_d)
-        bold = conf.get(section, f"{ini_key}_bold", default=bold_d)
-        field.set((family, size, bold))
-    elif isinstance(field, (ConfigPathOptionField, WorkingDirOptionField)):
-        default = default_raw if default_raw is not None else ""
-        field.from_storage(conf.get(section, ini_key, default=default))
-    elif field_name in DATETIME_FIELDS:
-        raw = conf.get(section, ini_key, default=_escape_percent(default_raw))
-        field.set(_unescape_percent(raw))
+    defaults = list(default_raw) if len(keys) > 1 else [default_raw]
+    values = []
+    found = False
+    for key, key_default in zip(keys, defaults):
+        if key_default is not None:
+            # Register the expected type for ``conf.get`` coercion. Unlike
+            # passing ``default=`` to ``conf.get``, this does not write the
+            # default value back to the INI file.
+            conf.set_default(section, key, key_default)
+        if not conf.has_option(section, key):
+            values.append(key_default)
+            continue
+        found = True
+        value = conf.get(section, key)
+        if field.storage_escape and isinstance(value, str):
+            value = _unescape_percent(value)
+        values.append(value)
+    if not found:
+        return
+    try:
+        field.from_storage(tuple(values) if len(keys) > 1 else values[0])
+    except Exception:  # pylint: disable=broad-except
+        remove_persisted_option(options, field_name, conf)
     else:
-        # ``conf.get`` on a *missing* option re-persists the supplied default
-        # through the INI backend, coercing it to the type inferred from any
-        # previously stored value (e.g. ``int`` for ``rpc_server_port``).
-        # Coercing a ``None`` default that way raises ``TypeError``
-        # (``int(None)``). Read the stored value only when it exists and fall
-        # back to the raw default otherwise (mirroring ``_save_field``, which
-        # clears None-valued options instead of persisting them).
-        if conf.has_option(section, ini_key):
-            field.set(conf.get(section, ini_key))
+        if field.to_storage() is None:
+            remove_persisted_option(options, field_name, conf)
 
 
 def _save_field(options, conf, field_name: str, section: str, ini_key: str) -> None:
     """Save a single option field value to the INI backend (no file flush).
+
+    A field whose storage value is ``None`` has nothing to persist: its INI keys
+    are removed, so that a previously stored value does not linger.
 
     Args:
         options: The DataLab options container.
@@ -285,34 +278,18 @@ def _save_field(options, conf, field_name: str, section: str, ini_key: str) -> N
     field = getattr(options, field_name, None)
     if field is None:
         return
-
-    if isinstance(field, DataSetOptionField):
-        json_str = field.to_json()
-        if json_str is None:
-            return  # Never explicitly set: leave the default instance implicit.
-        conf.set(section, ini_key, _escape_percent(json_str), save=False)
-    elif isinstance(field, FontOptionField):
-        family, size, bold = field.get()
-        conf.set(section, f"{ini_key}_family", family, save=False)
-        conf.set(section, f"{ini_key}_size", size, save=False)
-        conf.set(section, f"{ini_key}_bold", bold, save=False)
-    elif isinstance(field, (ConfigPathOptionField, WorkingDirOptionField)):
-        conf.set(section, ini_key, field.to_storage(), save=False)
-    elif field_name in DATETIME_FIELDS:
-        conf.set(section, ini_key, _escape_percent(field.get()), save=False)
-    else:
-        value = field.get()
-        # ``None`` means "unset": remove any persisted value so that a previously
-        # stored non-None value does not linger in the INI (setting a field back
-        # to None must clear it, e.g. ``plugins_enabled_list``). This also avoids
-        # the INI backend having to coerce None to a numeric type.
-        if value is None:
-            try:
-                conf.remove_option(section, ini_key)
-            except Exception:  # pylint: disable=broad-except
-                pass
-            return
-        conf.set(section, ini_key, value, save=False)
+    keys = _field_ini_keys(field, ini_key)
+    stored = field.to_storage()
+    if stored is None:
+        for key in keys:
+            if conf.has_option(section, key):
+                conf.remove_option(section, key)
+        return
+    values = list(stored) if len(keys) > 1 else [stored]
+    for key, value in zip(keys, values):
+        if field.storage_escape and isinstance(value, str):
+            value = _escape_percent(value)
+        conf.set(section, key, value, save=False)
 
 
 def load_options_from_ini(

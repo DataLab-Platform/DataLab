@@ -16,6 +16,8 @@ provide:
   returning an empty string on ``get`` when the directory no longer exists.
 - :class:`FontOptionField`: a ``(family, size, bold)`` font specification with a
   :meth:`FontOptionField.get_font` helper returning a ``QFont``.
+- :class:`FormatStringOptionField`: a ``strftime``-style format string, whose
+  ``%`` characters must be escaped by format-string-sensitive backends.
 - :class:`DataSetOptionField`: a :class:`guidata.dataset.DataSet` instance, with
   JSON (de)serialization helpers for INI persistence.
 
@@ -35,7 +37,7 @@ from typing import TYPE_CHECKING, Any
 
 import guidata.dataset as gds
 from guidata.configtools import get_family
-from sigimax.config import NO_DEFAULT, OptionField
+from sigimax.config import NO_DEFAULT, OptionField, TypedOptionField
 from sigimax.config import FontOptionField as _BaseFontOptionField
 from sigimax.utils.conf import Configuration
 
@@ -222,6 +224,33 @@ class FontOptionField(_BaseFontOptionField):
         return QG.QFont(family, size, QG.QFont.Bold if bold else QG.QFont.Normal)
 
 
+class FormatStringOptionField(TypedOptionField):
+    """Option field for a ``strftime``-style format string.
+
+    The value is kept in clean form in memory (e.g. ``%H:%M:%S``);
+    format-string-sensitive backends escape it through :attr:`storage_escape`.
+
+    Args:
+        container: Options container instance to which this option belongs.
+        name: Name of the option.
+        default: Default format string.
+        description: Description of the option.
+        category: Category of the option.
+    """
+
+    storage_escape = True
+
+    def __init__(
+        self,
+        container: AppOptionsContainer,
+        name: str,
+        default: str,
+        description: str = "",
+        category: str = "",
+    ) -> None:
+        super().__init__(container, name, default, str, description, category)
+
+
 class DataSetOptionField(OptionField):
     """Option field holding a :class:`guidata.dataset.DataSet` instance.
 
@@ -240,6 +269,8 @@ class DataSetOptionField(OptionField):
          (may be ``None`` and set later via :meth:`set_default_instance`).
         description: Description of the option.
     """
+
+    storage_escape = True
 
     def __init__(
         self,
@@ -322,6 +353,10 @@ class DataSetOptionField(OptionField):
     def from_storage(self, value: str | None) -> None:
         """Restore the DataSet from a JSON string (``None`` clears the value).
 
+        The JSON is resolved immediately, so that an unusable value (e.g. a
+        DataSet class that no longer exists) is reported back to the caller by
+        :meth:`to_storage` returning ``None``.
+
         Args:
             value: The JSON string to deserialize, or ``None``.
         """
@@ -331,6 +366,7 @@ class DataSetOptionField(OptionField):
             self.mark_initialized()
         else:
             self.from_json(value)
+            self.get()
 
     def to_json(self) -> str | None:
         """Serialize the actively-set DataSet to a JSON string.

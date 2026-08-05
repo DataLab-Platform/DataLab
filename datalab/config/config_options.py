@@ -41,6 +41,7 @@ from datalab import __docurl__, __homeurl__, __supporturl__, __version__
 from datalab.config.optionfields import (
     ConfigPathOptionField,
     DataSetOptionField,
+    FormatStringOptionField,
     WorkingDirOptionField,
 )
 from datalab.config.optionfields import FontOptionField as _FontOptionField
@@ -252,20 +253,18 @@ class DataLabOptions(SigimaXOptions):
         )
         # Datetime format strings stored in clean form (%H...); the INI converter
         # handles ConfigParser percent-escaping at the persistence boundary.
-        self.sig_datetime_format_s = TypedOptionField(
+        self.sig_datetime_format_s = FormatStringOptionField(
             self,
             "sig_datetime_format_s",
             category="view",
             default="%H:%M:%S",
-            expected_type=str,
             description="Datetime axis format for s, min, h units.",
         )
-        self.sig_datetime_format_ms = TypedOptionField(
+        self.sig_datetime_format_ms = FormatStringOptionField(
             self,
             "sig_datetime_format_ms",
             category="view",
             default="%H:%M:%S.%f",
-            expected_type=str,
             description="Datetime axis format for ms, us, ns units.",
         )
         self.max_shapes_to_draw = TypedOptionField(
