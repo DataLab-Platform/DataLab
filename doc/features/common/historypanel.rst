@@ -160,8 +160,9 @@ The toolbar at the top of the panel exposes the following actions:
   time, opening the parameter dialog for each supported action (object
   creation, computation, ROI extraction) before recomputing it. Accepted
   edits propagate to the downstream dependent actions, which are recomputed
-  as well. Cancelling a dialog stops the replay and restores the parameter
-  edits made during that run.
+  as well. Cancelling a dialog stops the replay, restores the parameter
+  edits made during that run, and silently recomputes any actions left
+  outdated so the chain stays up to date.
 - |duplicate| **Duplicate**: duplicate the processing chain containing each
   selected action, or the processing chains in each selected session. DataLab
   clones the required objects and creates independent history sessions.

@@ -110,6 +110,25 @@ def prompt_edit_action_params(
     return True
 
 
+def _recompute_stale_actions(panel: HistoryPanel, ordered: list[HistoryAction]) -> None:
+    """Recompute stale actions in place after a dialog rollback.
+
+    Args:
+        panel: History panel instance
+        ordered: Selected actions in session order
+    """
+    stale_actions = [a for a in ordered if a.is_stale]
+    if not stale_actions:
+        return
+    try:
+        for stale_action in stale_actions:
+            success = hrec.recompute_action_in_place(panel, stale_action)
+            stale_action.is_stale = not success
+            panel.tree.refresh_action_item(stale_action)
+    finally:
+        hrec.flush_cascade_warnings(panel)
+
+
 def replay_actions(
     panel: HistoryPanel, actions: list[HistoryAction], prompt: bool = True
 ) -> None:
@@ -175,6 +194,7 @@ def replay_actions(
                         selected_action.kwargs = kwargs
                         selected_action.saved_kwargs = saved_kwargs
                         panel.tree.refresh_action_item(selected_action)
+                    _recompute_stale_actions(panel, ordered)
                     return
                 if result is True:
                     edited_actions.append(action)
@@ -241,7 +261,11 @@ def order_selected_actions(
 def restore_action_params(
     panel: HistoryPanel, item: HistoryAction | HistorySession
 ) -> None:
-    """Restore original kwargs from snapshot and recompute in-place."""
+    """Restore original kwargs from snapshot and recompute in-place.
+
+    Every targeted action is recomputed unconditionally, even when it has no
+    pending parameter edits, so that stale markers are cleared on success.
+    """
     actions: list[HistoryAction]
     if isinstance(item, HistorySession):
         actions = [
@@ -255,16 +279,17 @@ def restore_action_params(
         ]
     else:
         actions = [item]
-    for action in actions:
-        if not action.has_pending_edits:
-            continue
-        action.restore_kwargs()
-        panel.tree.refresh_action_item(action)
-        success = hrec.recompute_action_in_place(panel, action)
-        action.is_stale = not success
-        panel.tree.refresh_action_item(action)
-        if not success:
-            break
-        if not isinstance(item, HistorySession):
-            hrec.recompute_cascade(panel, action)
-    panel.ui.update_actions_state()
+    try:
+        for action in actions:
+            action.restore_kwargs()
+            panel.tree.refresh_action_item(action)
+            success = hrec.recompute_action_in_place(panel, action)
+            action.is_stale = not success
+            panel.tree.refresh_action_item(action)
+            if not success:
+                break
+            if not isinstance(item, HistorySession):
+                hrec.recompute_cascade(panel, action)
+    finally:
+        hrec.flush_cascade_warnings(panel)
+        panel.ui.update_actions_state()

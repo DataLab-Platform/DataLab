@@ -704,6 +704,29 @@ def test_restore_failure_marks_action_stale_without_cascade() -> None:
         assert action.is_stale is True
 
 
+def test_restore_recomputes_stale_action_without_pending_edits() -> None:
+    """Recompute a stale action on restore even without pending edits."""
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        history.toggle_record_mode(True)
+        history.toggle_edit_mode(True)
+        action = build_signal_chain(panel, history).actions[0]
+        action.is_stale = True
+        assert not action.has_pending_edits
+
+        with (
+            patch.object(
+                hrec, "recompute_action_in_place", return_value=True
+            ) as recompute,
+            patch.object(hrec, "recompute_cascade") as recompute_cascade,
+        ):
+            hireplay.restore_action_params(history, action)
+
+        recompute.assert_called_once_with(history, action)
+        recompute_cascade.assert_called_once_with(history, action)
+        assert action.is_stale is False
+
+
 def test_empty_analysis_result_is_successful() -> None:
     """Treat an executed analysis with no detections as successful."""
     with datalab_test_app_context(history=True) as win:
