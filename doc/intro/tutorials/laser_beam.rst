@@ -109,7 +109,8 @@ it beneficial to apply a threshold to the images.
 Several methods are available to estimate the background noise level.
 
 One approach utilizes the "Cross section" tool, which is provided by the
-`PlotPy <https://github.com/PlotPyStack/plotpy>` library that DataLab uses for signal and image visualization.
+`PlotPy <https://github.com/PlotPyStack/plotpy>`__ library that DataLab uses
+for signal and image visualization.
 Select an image from the "Image panel", choose the corresponding image
 in the visualization panel, and activate the "Cross section" tool |cross_section| from
 the vertical toolbar on the left side of the visualization panel. This
@@ -123,7 +124,8 @@ reveals that the background noise level is approximately 30 lsb.
     select the profile curve and right-click to open the context
     menu, then choose "Markers > Bound to active item".
 
-Another method for measuring background noise, also provided by `PlotPy <https://github.com/PlotPyStack/plotpy>`, involves using the "Image statistics" tool
+Another method for measuring background noise, also provided by
+`PlotPy <https://github.com/PlotPyStack/plotpy>`__, involves using the "Image statistics" tool
 |imagestats| from the vertical toolbar on the left side of the visualization panel.
 This tool displays statistical information for a rectangular region that you define by dragging the mouse
 across the image. This analysis confirms that the background noise level is approximately 30 lsb.
