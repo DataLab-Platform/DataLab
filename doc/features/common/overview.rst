@@ -13,12 +13,11 @@ Basic concepts
 Working with DataLab is very easy. The user interface is intuitive and
 self-explanatory. The main window is divided into two main areas:
 
-- The left area shows the list of data sets which are currently loaded in
-  DataLab, distibuted over two tabs: **Signals** and **Images**. The user can
-  switch between the two tabs by clicking on the corresponding tab: this
-  switches the main window to the corresponding panel, as well as the menu
-  and toolbar contents. Below the list of data sets, a **Properties** view
-  shows information about the currently selected data set.
+- The left area contains the **Signals** and **Images** data tabs, which list
+  the data sets currently loaded in each panel. Clicking a tab switches the
+  main window to the corresponding panel, as well as the menu and toolbar
+  contents. Below the list of data sets, a **Properties** view shows
+  information about the currently selected data set.
 
 - The right area shows the visualization of the currently selected data set.
   The visualization is updated automatically when the user selects a new data
@@ -27,6 +26,15 @@ self-explanatory. The main window is divided into two main areas:
 .. figure:: /images/shots/s_app_at_startup.png
 
     DataLab main window, at startup.
+
+History Panel
+^^^^^^^^^^^^^
+
+The :ref:`historypanel` is an additional dockable panel that records signal
+and image actions into separate active sessions for each data panel. It
+supports replay, step-by-step replay, duplication, and compatibility
+diagnostics. Sessions may be saved in standalone ``.dlhist`` files or with
+the workspace in HDF5 format.
 
 Internal data model and workspace
 ---------------------------------
@@ -63,7 +71,7 @@ The following actions are available to manage the workspace from the **File** me
 
     Data sets may also be saved or loaded individually, using data formats
     such as `.txt` or `.npy` for 1D signals (see :ref:`open_signal` for the
-    list of supported formats), , or `.tiff` or `.dcm` for 2D images
+    list of supported formats), or `.tiff` or `.dcm` for 2D images
     (see :ref:`open_image` for the list of supported formats).
 
 Interactive object creation and processing

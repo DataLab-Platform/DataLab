@@ -71,6 +71,10 @@ def save_to_dlhist_file(panel: HistoryPanel, filename: str | None = None) -> boo
 def open_dlhist_file(panel: HistoryPanel, filename: str | None = None) -> bool:
     """Open a standalone ``.dlhist`` file into the History Panel.
 
+    A pristine workspace directly restores the saved signal/image objects and
+    history sessions. In a workspace already in use, objects are restored into
+    new groups and one imported session is appended for each source session.
+
     Args:
         filename: History filename. If None, a file dialog is opened.
 
@@ -100,12 +104,12 @@ def open_dlhist_file(panel: HistoryPanel, filename: str | None = None) -> bool:
                 or bool(panel.history_sessions)
             )
             if workspace_in_use:
-                # Workspace not empty: import the objects into new groups
+                # Workspace already in use: import the objects into new groups
                 # with fresh UUIDs and append the history as new sessions
                 # whose references are remapped to the imported objects.
                 panel.import_dlhist_into_new_session(reader)
             else:
-                # Workspace empty: load directly, preserving original UUIDs
+                # Pristine workspace: load directly, preserving original UUIDs
                 # (reset_all=True) so that history references stay valid.
                 panel.mainwindow.signalpanel.deserialize_from_hdf5(
                     reader, reset_all=True
@@ -260,7 +264,7 @@ def update_imported_history_ui(
 
 
 def import_dlhist_into_new_session(panel: HistoryPanel, reader: NativeH5Reader) -> None:
-    """Import a ``.dlhist`` file into new groups and new history sessions.
+    """Import into new groups and one new session per source history session.
 
     Args:
         reader: HDF5 reader positioned on a ``.dlhist`` file.
@@ -312,9 +316,9 @@ def deserialize_from_hdf5(
     )
     if panel.history_sessions:
         panel.navigation.session_increment = panel.history_sessions[-1].number
-    # Rebuild the bijective mapping from the loaded actions. Legacy
-    # (v1) actions have empty ``output_uuids`` and contribute nothing
-    # to the index — the heuristic fallback handles them.
+    # Rebuild the action-to-outputs mapping and inverse output lookup. Legacy
+    # actions/files without ``output_uuids`` contribute nothing to the index;
+    # the heuristic fallback handles them.
     for session in panel.history_sessions:
         for action in session.actions:
             if action.output_uuids:

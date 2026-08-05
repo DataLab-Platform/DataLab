@@ -1401,7 +1401,8 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
             reader: HDF5 reader
             name: Object name in HDF5 file
             reset_all: If True, preserve original UUIDs (workspace reload).
-                      If False, regenerate UUIDs (importing objects).
+             If False, regenerate only UUIDs that conflict with existing
+             objects (object import).
         """
         with reader.group(name):
             obj = self.create_object()
@@ -1429,7 +1430,8 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
         Args:
             reader: HDF5 reader
             reset_all: If True, preserve original UUIDs (workspace reload).
-                      If False, regenerate UUIDs (importing objects).
+             If False, regenerate only UUIDs that conflict with existing
+             objects (object import).
         """
 
     @abc.abstractmethod
@@ -1905,7 +1907,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         Args:
             reader: HDF5 reader
             reset_all: If True, preserve original UUIDs (workspace reload).
-                      If False, regenerate UUIDs (importing objects).
+             If False, regenerate only UUIDs that conflict with existing
+             objects (object import).
         """
         with reader.group(self.H5_PREFIX):
             for name in reader.h5.get(self.H5_PREFIX, []):
@@ -2629,7 +2632,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
     def __load_from_file(
         self, filename: str, create_group: bool = True, add_objects: bool = True
     ) -> list[SignalObj] | list[ImageObj]:
-        """Open objects from file (signal/image), add them to DataLab and return them.
+        """Open and return objects from file, optionally adding them to DataLab.
 
         Args:
             filename: file name
@@ -2741,7 +2744,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         add_objects: bool = True,
         ignore_errors: bool = False,
     ) -> list[TypeObj]:
-        """Open objects from file (signals/images), add them to DataLab and return them.
+        """Open and return objects from files, optionally adding them to DataLab.
 
         Args:
             filenames: File names

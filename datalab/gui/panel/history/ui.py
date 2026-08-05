@@ -145,7 +145,11 @@ class HistoryPanelUI:
         """Connect history-tree interactions to their owning components."""
         tree = self.panel.tree
         tree.customContextMenuRequested.connect(self.show_context_menu)
-        tree.itemDoubleClicked.connect(self.panel.replay_restore_actions)
+        tree.itemDoubleClicked.connect(
+            lambda _item, _column: self.panel.replay_restore_actions(
+                restore_selection=False
+            )
+        )
         tree.itemSelectionChanged.connect(self.panel.navigation.sync_panel_selection)
         tree.itemSelectionChanged.connect(self.update_actions_state)
         tree.itemSelectionChanged.connect(self.panel.navigation.update_state_widget)

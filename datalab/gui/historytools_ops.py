@@ -53,8 +53,9 @@ def make_initial_state_head(pstr: str, clone_uuid: str, title: str) -> HistoryAc
     UI action is prepended, standing in for that missing object creation. Its
     empty workspace state mirrors a real ``new_object`` recorded with
     ``save_state=False`` (hence always compatible), and its ``new_object``
-    method name places it in :attr:`HistoryAction.UI_CREATION_METHODS` so
-    :func:`build_session_chains` treats it as a genuine chain root.
+    method name places it in :attr:`HistoryAction.UI_CREATION_METHODS`. Because
+    it is prepended, :func:`build_session_chains` treats it as the first
+    chronological action and therefore as the chain root.
 
     Args:
         pstr: Panel string of the created object (``"signal"``/``"image"``).
@@ -130,7 +131,7 @@ def resolve_chain_selection(panel: HistoryPanel) -> list[ChainSelectionPlan]:
 
 
 def collect_referenced_uuids(chains: list[ProcessingChain]) -> dict[str, set[str]]:
-    """Collect object UUIDs referenced or produced by selected chains."""
+    """Collect referenced/produced UUIDs and all captured metadata UUIDs."""
     uuids_by_panel: dict[str, set[str]] = {}
     for chain in chains:
         for action in chain.actions:

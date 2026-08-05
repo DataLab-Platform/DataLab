@@ -57,7 +57,7 @@ class HistorySession:
     def copy_with_uuid_remap(
         self, title: str, uuid_remap: dict[str, dict[str, str]]
     ) -> HistorySession:
-        """Return a copy of this session with all UUIDs rewritten via ``uuid_remap``.
+        """Return a copy with supported UUID references rewritten via ``uuid_remap``.
 
         Used by the Duplicate operation to build an independent session whose
         captured object references point to the cloned data objects.
@@ -67,7 +67,8 @@ class HistorySession:
             uuid_remap: Per-panel mapping ``{panel_str: {old_uuid: new_uuid}}``.
 
         Returns:
-            A new :class:`HistorySession` with all captured UUIDs remapped.
+            A new :class:`HistorySession` with supported object references
+             remapped.
         """
         session = HistorySession(title=title, number=self.number)
         session.actions = [
@@ -109,9 +110,10 @@ class HistorySession:
 
         Args:
             mainwindow: DataLab's main window
-            restore_selection: True to restore the workspace selection before replaying
-            edit: if True, always open the dialog boxes to edit parameters, if False,
-             use the parameters passed when creating the action
+            restore_selection: True to request restoration of captured selections.
+             Compute actions restore them only when compatible and resolvable.
+            edit: If True, request parameter dialogs for supported actions with
+             editable parameters. If False, use the captured parameters.
         """
         panels = (mainwindow.signalpanel, mainwindow.imagepanel)
         replay_map = ReplayUuidMap(panels)

@@ -9,7 +9,7 @@ import tempfile
 from contextlib import contextmanager, nullcontext
 from types import SimpleNamespace
 from typing import cast
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import numpy as np
 import pytest
@@ -23,10 +23,13 @@ from datalab.gui.creation import (
 )
 from datalab.gui.main import DLMainWindow
 from datalab.gui.panel.history import chain as hchain
+from datalab.gui.panel.history import interactive_replay as hireplay
 from datalab.gui.panel.history import recompute as hrec
 from datalab.gui.panel.history import runtime as hruntime
 from datalab.gui.panel.history.navigation import HistoryNavigation
+from datalab.gui.panel.history.ui import HistoryPanelUI
 from datalab.gui.processor.base import (
+    BaseProcessor,
     ProcessingParameters,
     extract_processing_parameters,
     insert_processing_parameters,
@@ -240,6 +243,95 @@ def test_history_session_default_and_explicit_titles() -> None:
     assert explicit_session.title == "Acquisition"
     assert explicit_session.number == 8
     translate.assert_called_once_with("Processing")
+
+
+def test_ui_action_description_is_empty_when_callable_is_unresolved() -> None:
+    """Return no fallback description when UI callable resolution returns None."""
+    action = HistoryAction(kind=HistoryAction.KIND_UI)
+
+    with patch.object(action, "resolve_callable", return_value=None):
+        assert action.description == ""
+
+
+def test_compute_n_to_1_uses_provided_history_title() -> None:
+    """Pass the localized operation title to the history panel."""
+    history_panel = SimpleNamespace(
+        add_compute_entry_from_pp=Mock(return_value=object()),
+        capture_outputs=lambda _action: nullcontext(),
+    )
+    processor = SimpleNamespace(
+        panel=SimpleNamespace(
+            PANEL_STR_ID="signal",
+            objview=SimpleNamespace(
+                get_sel_objects=Mock(return_value=[]),
+                get_sel_groups=Mock(return_value=[]),
+            ),
+            objmodel=object(),
+        ),
+        mainwindow=SimpleNamespace(historypanel=history_panel),
+        _get_plugin_origin_for=Mock(return_value=None),
+    )
+
+    def average(_objects: list[object]) -> None:
+        return None
+
+    with patch(
+        "datalab.gui.processor.base.create_progress_bar",
+        return_value=nullcontext(Mock()),
+    ):
+        BaseProcessor.compute_n_to_1(
+            processor, average, title="Moyenne", pairwise=False
+        )
+
+    history_panel.add_compute_entry_from_pp.assert_called_once()
+    assert history_panel.add_compute_entry_from_pp.call_args.args[0] == "Moyenne"
+
+
+@pytest.mark.parametrize("column", (0, 2))
+@pytest.mark.parametrize("selected_row", (HistoryAction(), HistorySession()))
+def test_history_tree_double_click_replays_current_selection_without_restoring(
+    selected_row: HistoryAction | HistorySession, column: int
+) -> None:
+    """Replay the current action or session selection from either tree column."""
+    selected_row.is_current_state_compatible = Mock(return_value=True)
+    selected_row.replay = Mock()
+    clicked_row = HistoryAction()
+    clicked_row.replay = Mock()
+    tree = SimpleNamespace(
+        customContextMenuRequested=Mock(),
+        itemDoubleClicked=Mock(),
+        itemSelectionChanged=Mock(),
+        get_selected_actions_or_sessions=Mock(return_value=[selected_row]),
+    )
+    mainwindow = object()
+    panel = SimpleNamespace(
+        tree=tree,
+        history_sessions=[],
+        mainwindow=mainwindow,
+        refresh_compatibility_items=Mock(),
+        replaying=nullcontext,
+        output_suppressed=nullcontext,
+        runtime=SimpleNamespace(execution=SimpleNamespace(edit_mode=False)),
+        navigation=SimpleNamespace(
+            sync_panel_selection=Mock(),
+            update_state_widget=Mock(),
+            set_active_session_from_selection=Mock(),
+        ),
+    )
+    panel.replay_restore_actions = lambda **kwargs: hireplay.replay_restore_actions(
+        panel, **kwargs
+    )
+    ui = HistoryPanelUI.__new__(HistoryPanelUI)
+    ui.panel = panel
+
+    ui.setup_connections()
+    double_click_slot = tree.itemDoubleClicked.connect.call_args.args[0]
+    double_click_slot(clicked_row, column)
+
+    selected_row.replay.assert_called_once_with(
+        mainwindow, restore_selection=False, edit=False
+    )
+    clicked_row.replay.assert_not_called()
 
 
 def test_image_creation_routes_to_image_session_when_signal_is_current() -> None:

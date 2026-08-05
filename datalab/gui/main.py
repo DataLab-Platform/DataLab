@@ -2263,11 +2263,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     @remote_controlled
     def load_h5_workspace(self, h5files: list[str], reset_all: bool = False) -> None:
-        """Load native DataLab HDF5 workspace files without any GUI elements.
+        """Load native DataLab HDF5 workspace files programmatically.
 
-        This method can be safely called from the internal console as it does not
-        create any Qt widgets, dialogs, or progress bars. It is designed for
-        programmatic use when loading DataLab workspace files.
+        This method does not create file-selection widgets or progress bars. When
+        history recording is active and the new-session policy is ``"ask"``, a
+        history-session question may still be shown before loading.
 
         .. warning::
 

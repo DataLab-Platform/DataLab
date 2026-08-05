@@ -89,7 +89,10 @@ class HistoryRuntimeFacadeMixin:
             yield
 
     def is_replaying(self) -> bool:
-        """Return whether an external replay or recompute is in progress."""
+        """Return whether the replaying guard is active.
+
+        Cascade recomputation uses separate state and is not reported here.
+        """
         return self.runtime.execution.replaying_active
 
     @contextmanager

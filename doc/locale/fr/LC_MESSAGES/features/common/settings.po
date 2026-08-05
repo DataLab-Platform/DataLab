@@ -20,8 +20,8 @@ msgstr "DataLab, préférences, scientifique, données, analyse, visualisation, 
 msgid "Settings"
 msgstr "Préférences"
 
-msgid "DataLab provides a comprehensive settings dialog to customize the application behavior, visualization defaults, and I/O operations. The settings are organized into five tabs: General, Processing, Visualization, I/O, and Console."
-msgstr "DataLab propose une boîte de dialogue de préférences complète pour personnaliser le comportement de l'application, les paramètres de visualisation par défaut et les opérations d'entrée/sortie. Les préférences sont organisées en cinq onglets : Général, Traitement, Visualisation, Entrée/sortie et Console."
+msgid "DataLab provides a comprehensive settings dialog to customize the application behavior, visualization defaults, and I/O operations. The settings are organized into six tabs: General, Processing, Visualization, I/O, AI Assistant, and Console."
+msgstr "DataLab propose une boîte de dialogue de préférences complète pour personnaliser le comportement de l'application, les paramètres de visualisation par défaut et les opérations d'entrée/sortie. Les préférences sont organisées en six onglets : Général, Traitement, Visualisation, Entrée/sortie, Assistant IA et Console."
 
 msgid "General"
 msgstr "Général"
@@ -93,10 +93,10 @@ msgid "Choose the operation mode for computations taking N inputs:"
 msgstr "Choisir le mode d'opération pour les calculs prenant N entrées :"
 
 msgid "**Single**: single operand mode"
-msgstr "**Single** : mode opérande unique"
+msgstr "**Single** : mode d'opération avec un seul opérande"
 
 msgid "**Pairwise**: pairwise operation mode"
-msgstr "**Pairwise** : mode opération par paire"
+msgstr "**Pairwise** : mode d'opération par paire"
 
 msgid "These operation modes determine how DataLab handles computations involving multiple objects. They apply to two types of operations:"
 msgstr "Ces modes d'opération déterminent comment DataLab gère les calculs impliquant plusieurs objets. Ils s'appliquent à deux types d'opérations :"
@@ -108,7 +108,7 @@ msgid "**N+1→N operations**: Apply an operation between N (≥1) objects and 1
 msgstr "**Opérations N+1→N** : Appliquer une opération entre N (≥1) objets et 1 opérande pour produire N sorties (par exemple différence, division)"
 
 msgid "**Single operand mode** (default): Operations are applied independently within each group."
-msgstr "**Mode opérande unique** (par défaut) : Les opérations sont appliquées indépendamment dans chaque groupe."
+msgstr "**Mode d'opération avec un seul opérande** (par défaut) : Les opérations sont appliquées indépendamment dans chaque groupe."
 
 #, python-brace-format
 msgid "For **N→1 operations**: All objects in each group are combined into one result per group. Example with groups G1={A, B} and G2={C, D}, sum operation:"
@@ -128,7 +128,7 @@ msgid "In G2: C-R, D-R"
 msgstr "Dans G2 : C-R, D-R"
 
 msgid "**Pairwise operation mode**: Objects from different groups are combined at matching positions (all groups must have the same number of objects)."
-msgstr "**Mode opération par paire** : Les objets de différents groupes sont combinés aux positions correspondantes (tous les groupes doivent avoir le même nombre d'objets)."
+msgstr "**Mode d'opération par paire** : Les objets de différents groupes sont combinés aux positions correspondantes (tous les groupes doivent avoir le même nombre d'objets)."
 
 #, python-brace-format
 msgid "For **N→1 operations**: Objects at the same position in each group are combined. Example with groups G1={A, B} and G2={C, D}, sum operation:"
@@ -188,6 +188,63 @@ msgstr "**Demander** : afficher une boîte de dialogue de confirmation (par déf
 
 msgid "**Interpolate**: automatically interpolate signals"
 msgstr "**Interpoler** : interpoler automatiquement les signaux"
+
+msgid "History sessions"
+msgstr "Sessions d'historique"
+
+msgid "These settings control how new inputs are assigned to history sessions. They are evaluated only when **Record mode** is enabled and the target Signals or Images panel has a populated active session. No policy decision is needed when the active session is empty. The two data panels keep separate active sessions; see :ref:`historypanel` for the complete workflow."
+msgstr "Ces paramètres déterminent comment les nouvelles entrées sont affectées aux sessions d'historique. Ils ne sont évalués que lorsque le **Mode d'enregistrement** est activé et que le panneau Signaux ou Images cible possède une session active non vide. Aucune décision de politique n'est nécessaire lorsque la session active est vide. Les deux panneaux de données conservent des sessions actives distinctes ; voir :ref:`historypanel` pour le flux de travail complet."
+
+msgid "**New object or file**"
+msgstr "**Nouvel objet ou fichier**"
+
+msgid "Choose what happens when a new object is created or a file is loaded:"
+msgstr "Choisir ce qui se produit lorsqu'un nouvel objet est créé ou qu'un fichier est chargé :"
+
+msgid "**Ask** (default): ask whether to start a new session"
+msgstr "**Demander** (par défaut) : demander s'il faut démarrer une nouvelle session"
+
+msgid "**Always start a new session**: start a session before recording the input"
+msgstr "**Toujours démarrer une nouvelle session** : démarrer une session avant d'enregistrer l'entrée"
+
+msgid "**Continue in the current session**: append the input to the active session"
+msgstr "**Continuer dans la session courante** : ajouter l'entrée à la session active"
+
+msgid "**Plugin-created object**"
+msgstr "**Objet créé par un plugin**"
+
+msgid "Choose what happens when a plugin adds one object:"
+msgstr "Choisir ce qui se produit lorsqu'un plugin ajoute un objet :"
+
+msgid "**Ask**: ask whether to start a new session"
+msgstr "**Demander** : demander s'il faut démarrer une nouvelle session"
+
+msgid "**Always start a new session**: start a session before recording the object"
+msgstr "**Toujours démarrer une nouvelle session** : démarrer une session avant d'enregistrer l'objet"
+
+msgid "**Continue in the current session** (default): append the object without a modal prompt, so plugin execution is not blocked"
+msgstr "**Continuer dans la session courante** (par défaut) : ajouter l'objet sans afficher de boîte de dialogue modale, afin de ne pas bloquer l'exécution du plugin"
+
+msgid "**Plugin multi-load**"
+msgstr "**Chargement multiple par un plugin**"
+
+msgid "Choose what happens when a plugin explicitly groups several object additions in one multi-load scope:"
+msgstr "Choisir ce qui se produit lorsqu'un plugin regroupe explicitement plusieurs ajouts d'objets dans une même portée de chargement multiple :"
+
+msgid "**Ask once**: ask once whether the whole batch should start a new session"
+msgstr "**Demander une seule fois** : demander une seule fois si l'ensemble du lot doit démarrer une nouvelle session"
+
+msgid "**Start a new session**: start one session for the batch"
+msgstr "**Démarrer une nouvelle session** : démarrer une seule session pour le lot"
+
+msgid "**Continue in the current session** (default): append the whole batch to the active session"
+msgstr "**Continuer dans la session courante** (par défaut) : ajouter l'ensemble du lot à la session active"
+
+msgid "**Ask once** is the UI label for one decision covering the complete"
+msgstr "**Demander une seule fois** est le libellé de l'interface pour une décision unique couvrant l'intégralité de la"
+
+msgid "plugin multi-load scope, rather than one prompt per object. DataLab does not infer a multi-load scope from a sequence of plugin additions."
+msgstr "portée de chargement multiple du plugin, et non pour une demande par objet. DataLab ne déduit pas une telle portée d'une suite d'ajouts effectués par un plugin."
 
 msgid "Result management"
 msgstr "Gestion des résultats"

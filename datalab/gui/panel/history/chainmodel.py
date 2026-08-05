@@ -157,13 +157,12 @@ def remap_processing_parameters(
 
 
 def build_session_chains(session: HistorySession) -> list[ProcessingChain]:
-    """Return the session's single processing chain.
+    """Return the session as one chronological processing chain.
 
-    In DataLab's history model a session **is** a single linear processing
-    chain: every action of the session belongs to one chain, the first action
-    being its root. Session boundaries are decided at recording time (the
-    "start a new history session?" prompt shown on object creation), so no
-    per-creation splitting is performed here.
+    The current History Panel read model treats every non-empty session as one
+    ordered chain rooted at its first action. Recording policy choices can place
+    independent roots in the same session; this function intentionally does not
+    split them.
 
     Args:
         session: The session whose actions form the chain.

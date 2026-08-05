@@ -25,14 +25,20 @@ msgstr "Concepts de base"
 msgid "Working with DataLab is very easy. The user interface is intuitive and self-explanatory. The main window is divided into two main areas:"
 msgstr "Travailler avec DataLab est très simple. L'interface est intuitive et appréhendable facilement. La fenêtre principale est divisée en deux zones principales :"
 
-msgid "The left area shows the list of data sets which are currently loaded in DataLab, distibuted over two tabs: **Signals** and **Images**. The user can switch between the two tabs by clicking on the corresponding tab: this switches the main window to the corresponding panel, as well as the menu and toolbar contents. Below the list of data sets, a **Properties** view shows information about the currently selected data set."
-msgstr "La zone de gauche affiche la liste des jeux de données actuellement chargés dans DataLab, répartis sur deux onglets : **Signaux** et **Images**. L'utilisateur peut basculer entre les deux onglets en cliquant sur l'onglet correspondant : cela bascule la fenêtre principale vers le panneau correspondant, ainsi que le contenu du menu et de la barre d'outils. Sous la liste des jeux de données, une vue **Propriétés** affiche des informations sur le jeu de données actuellement sélectionné."
+msgid "The left area contains the **Signals** and **Images** data tabs, which list the data sets currently loaded in each panel. Clicking a tab switches the main window to the corresponding panel, as well as the menu and toolbar contents. Below the list of data sets, a **Properties** view shows information about the currently selected data set."
+msgstr "La zone de gauche contient les onglets de données **Signaux** et **Images**, qui répertorient les jeux de données actuellement chargés dans chaque panneau. Cliquer sur un onglet fait basculer la fenêtre principale vers le panneau correspondant, ainsi que le contenu du menu et de la barre d'outils. Sous la liste des jeux de données, une vue **Propriétés** affiche des informations sur le jeu de données actuellement sélectionné."
 
 msgid "The right area shows the visualization of the currently selected data set. The visualization is updated automatically when the user selects a new data set in the list of data sets."
 msgstr "La zone de droite affiche la visualisation du jeu de données actuellement sélectionné. La visualisation est mise à jour automatiquement lorsque l'utilisateur sélectionne un nouveau jeu de données dans la liste des jeux de données."
 
 msgid "DataLab main window, at startup."
 msgstr "Fenêtre principale de DataLab, au démarrage."
+
+msgid "History Panel"
+msgstr "Panneau d'historique"
+
+msgid "The :ref:`historypanel` is an additional dockable panel that records signal and image actions into separate active sessions for each data panel. It supports replay, step-by-step replay, duplication, and compatibility diagnostics. Sessions may be saved in standalone ``.dlhist`` files or with the workspace in HDF5 format."
+msgstr "Le :ref:`historypanel` est un panneau ancrable supplémentaire qui enregistre les actions sur les signaux et les images dans des sessions actives distinctes pour chaque panneau de données. Il permet de rejouer les actions, de les rejouer pas à pas, de les dupliquer et de diagnostiquer les incompatibilités. Les sessions peuvent être enregistrées dans des fichiers autonomes ``.dlhist`` ou avec l'espace de travail au format HDF5."
 
 msgid "Internal data model and workspace"
 msgstr "Modèle de données interne et espace de travail"
@@ -61,7 +67,7 @@ msgstr "**Enregistrer dans un fichier HDF5** : enregistrer l'espace de travail a
 msgid "**Browse HDF5 file**: open the :ref:`h5browser` to explore the content of an HDF5 file and import data sets into the workspace."
 msgstr "**Parcourir un fichier HDF5** : ouvrir le :ref:`h5browser` pour explorer le contenu d'un fichier HDF5 et importer des jeux de données dans l'espace de travail."
 
-msgid "Data sets may also be saved or loaded individually, using data formats such as `.txt` or `.npy` for 1D signals (see :ref:`open_signal` for the list of supported formats), , or `.tiff` or `.dcm` for 2D images (see :ref:`open_image` for the list of supported formats)."
+msgid "Data sets may also be saved or loaded individually, using data formats such as `.txt` or `.npy` for 1D signals (see :ref:`open_signal` for the list of supported formats), or `.tiff` or `.dcm` for 2D images (see :ref:`open_image` for the list of supported formats)."
 msgstr "Les jeux de données peuvent également être enregistrés ou chargés individuellement, en utilisant des formats de données tels que `.txt` ou `.npy` pour les signaux 1D (voir :ref:`open_signal` pour la liste des formats pris en charge), ou `.tiff` ou `.dcm` pour les images 2D (voir :ref:`open_image` pour la liste des formats pris en charge)."
 
 msgid "Interactive object creation and processing"

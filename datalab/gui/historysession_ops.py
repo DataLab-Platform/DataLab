@@ -147,10 +147,11 @@ def add_compute_entry(
         save_state: If True, capture the workspace state for replay.
         output_uuids: Optional list of UUIDs of the data objects produced by
          this action. When known at call time, prefer passing it here so the
-         bijective mapping is initialised in one step. Most callers do not
-         know the outputs yet and instead wrap the compute call with
-         :meth:`capture_outputs` (or call :meth:`register_action_outputs`
-         explicitly afterwards) using the returned action.
+         action-to-outputs mapping and inverse output lookup are initialised in
+         one step. Most callers do not know the outputs yet and instead wrap
+         the compute call with :meth:`capture_outputs` (or call
+         :meth:`register_action_outputs` explicitly afterwards) using the
+         returned action.
         plugin_origin: Optional plugin origin descriptor (see
          :func:`datalab.gui.processor.base._detect_plugin_origin`). ``None``
          for built-in Sigima/DataLab features.
@@ -245,15 +246,16 @@ def register_action_outputs(
 ) -> None:
     """Register the data objects produced by ``action``.
 
-    Maintains the bijective ``action → outputs`` and ``output → action``
-    mappings. May be called multiple times for a given action (later calls
-    replace earlier ones, e.g. after a cascade recompute).
+    Maintains the ``action → outputs`` mapping and inverse ``output → action``
+    lookup. One action may produce multiple outputs. May be called multiple
+    times for a given action (later calls replace earlier ones, e.g. after a
+    cascade recompute).
 
     Args:
         action: The history action that produced the outputs.
         output_uuids: UUIDs of the produced data objects (empty for
-         ``1_to_0`` analysis patterns and for UI actions that did not
-         create new objects).
+         ``1_to_0`` analysis patterns and UI actions without new objects;
+         output-producing UI actions may provide one or more UUIDs).
     """
     panel.runtime.objects.register_action_outputs(action, output_uuids)
 
@@ -316,7 +318,7 @@ def add_ui_entry(
     Args:
         action_title: Title shown in the history tree.
         target: One of ``"mainwindow"``, ``"signalpanel"``, ``"imagepanel"``,
-         ``"historypanel"`` -- attribute path on the main window.
+         ``"historypanel"``, ``"signalprocessor"``, or ``"imageprocessor"``.
         method_name: Method name to call on ``target`` at replay time.
         save_state: If True, capture the workspace state for replay.
         **kwargs: Method keyword arguments. ``DataSet`` instances are

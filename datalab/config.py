@@ -298,8 +298,8 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     ignore_warnings = conf.Option()
 
     # Automatically start recording history at DataLab launch:
-    # - True: history recording is enabled at startup (default)
-    # - False: user must enable it manually via the History panel toolbar
+    # - True: history recording is enabled at startup
+    # - False: user must enable it manually via the History panel toolbar (default)
     history_auto_record = conf.Option()
 
     # History session behavior for new inputs:

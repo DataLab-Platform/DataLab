@@ -80,7 +80,8 @@ class HistoryAction(ObjItf):
 
     An action is a serialisable description of either a *compute* call (resolved
     via the panel processor's feature registry) or a *UI* call (resolved as a
-    method on a known target -- ``mainwindow``/``signalpanel``/``imagepanel``).
+    method on a known target: ``mainwindow``, ``signalpanel``, ``imagepanel``,
+    ``historypanel``, ``signalprocessor``, or ``imageprocessor``).
 
     No Python ``Callable`` is ever pickled: a compute action is identified by
     ``(panel_str, func_name, pattern)`` and a UI action by ``(target,
@@ -92,8 +93,8 @@ class HistoryAction(ObjItf):
     KIND_UI = "ui"
 
     FUNC_EDIT_MODE = "edit"  # Name of the function parameter to enable edit mode
-    # Methods that create new data objects. During non-persistent (output-suppressed)
-    # replay, these UI actions are skipped so the panel object count stays stable.
+    # Object-creation actions skipped during non-persistent (output-suppressed)
+    # replay so the panel object count stays stable.
     UI_CREATION_METHODS: frozenset[str] = frozenset({"new_object"})
     # UI methods that destroy data objects. Replaying these requires that the
     # captured selection still resolves to existing objects (see ``replay_ui``).
@@ -154,11 +155,12 @@ class HistoryAction(ObjItf):
         self.dtstr: str = get_datetime_str()
         self.uuid: str = str(uuid4())
         self.schema_version: int = HISTORY_ACTION_SCHEMA_VERSION
-        # UUIDs of the data objects produced by this action (bijective mapping
-        # maintained by :class:`HistoryPanel`). Populated post-compute via
+        # UUIDs of the data objects produced by this action. One action may have
+        # multiple outputs; the history runtime also maintains an inverse output
+        # lookup. Populated after output-producing compute or UI actions via
         # :meth:`HistoryPanel.register_action_outputs`. Empty for ``1_to_0``
-        # patterns, for UI actions, and for sessions loaded without output info
-        # loaded from disk (the heuristic fallback then takes over).
+        # patterns, UI actions without new objects, and legacy actions/files
+        # lacking output information (the heuristic fallback then takes over).
         self.output_uuids: list[str] = []
         # Plugin origin descriptor for compute actions (None for built-in
         # Sigima/DataLab features). Populated at registration time by
@@ -172,10 +174,10 @@ class HistoryAction(ObjItf):
         self.is_stale: bool = False
         # Snapshot of original kwargs before edit-mode modification.
         # Set lazily when the first edit-mode change touches this action.
-        # Persisted to HDF5 so that the Restore
-        # action still works after a save/reload cycle while Edit mode is
-        # active. Cleared by ``discard_snapshot`` (definitive commit when
-        # toggling Edit mode off) or ``restore_kwargs`` (Restore button).
+        # Persisted to HDF5 so the pre-edit values remain available after a
+        # save/reload cycle while Edit mode is active. Cleared by
+        # ``discard_snapshot`` (definitive commit when toggling Edit mode off)
+        # or ``restore_kwargs`` during parameter rollback.
         self.saved_kwargs: dict[str, Any] | None = None
 
     def snapshot_kwargs(self) -> None:
@@ -248,7 +250,10 @@ class HistoryAction(ObjItf):
     def copy_with_uuid_remap(
         self, uuid_remap: dict[str, dict[str, str]]
     ) -> HistoryAction:
-        """Return a copy of this action with all captured UUIDs rewritten.
+        """Return a copy with supported object UUID references rewritten.
+
+        State selections and metadata, ``obj2_uuids``, and ``output_uuids`` are
+        remapped. Other UI keyword arguments are preserved.
 
         Args:
             uuid_remap: Per-panel mapping ``{panel_str: {old_uuid: new_uuid}}``
@@ -256,7 +261,8 @@ class HistoryAction(ObjItf):
              the Duplicate operation.
 
         Returns:
-            A new independent :class:`HistoryAction` with remapped UUIDs.
+            A new independent :class:`HistoryAction` with supported UUID
+             references remapped.
         """
         new_action = self.copy()
         # Rewrite state.selection
@@ -329,6 +335,8 @@ class HistoryAction(ObjItf):
             TypeError,
             ValueError,
         ):
+            return ""
+        if func is None:
             return ""
         doc = getattr(func, "__doc__", None) or ""
         return doc.splitlines()[0] if doc else ""
@@ -466,16 +474,15 @@ class HistoryAction(ObjItf):
         Args:
             mainwindow: DataLab's main window
             restore_selection: True to restore the workspace selection before replaying
-             a UI-kind action. Ignored for compute-kind actions: their semantics
-             depends on which objects are selected (e.g. ``n_to_1`` aggregators
-             such as ``average`` require their captured multi-object selection),
-             so the captured selection is always restored before running the
-             computation.
-            edit: if True, always open the dialog boxes to edit parameters; if False,
-             use the parameters captured when the action was recorded
+             a UI-kind action. Compute-kind actions restore their captured
+             selection only when its translated UUIDs remain compatible and
+             resolvable; otherwise they retain the current selection.
+            edit: If True, request a parameter dialog for supported actions with
+             editable parameters. If False, use the captured parameters.
             uuid_remap: optional per-panel mapping ``{panel_str: {old_uuid: new_uuid}}``
-             used during full-session replay to translate captured UUIDs to the
-             freshly-created ones. Defaults to an empty (identity) mapping.
+             used during full-session replay to translate captured state UUIDs,
+             compute operand UUIDs, and supported UI source UUIDs. Defaults to
+             an empty (identity) mapping.
         """
         if uuid_remap is None:
             uuid_remap = {}
@@ -522,8 +529,11 @@ class HistoryAction(ObjItf):
             self.replay_ui(mainwindow, edit, uuid_remap)
 
     def translate_state(self, uuid_remap: dict[str, dict[str, str]]) -> WorkspaceState:
-        """Return a copy of ``self.state`` whose captured UUIDs have been
-        translated through ``uuid_remap`` (identity when no mapping)."""
+        """Return ``self.state`` with captured UUIDs translated.
+
+        The original state is returned when no mapping is provided; otherwise a
+        translated copy is returned.
+        """
         if not uuid_remap:
             return self.state
         translated = WorkspaceState()
@@ -695,9 +705,8 @@ class HistoryAction(ObjItf):
         if encoded:
             with writer.group("kwargs"):
                 writer.write_dict(encoded)
-        # ``saved_kwargs``: persisted Edit mode snapshot so the Restore button
-        # keeps working after save/reload. Group omitted when there are no
-        # pending edits.
+        # Persist the Edit mode baseline across save/reload while edits are pending.
+        # The group is omitted when there are no pending edits.
         if self.saved_kwargs is not None:
             encoded_saved = encode_kwargs(self.saved_kwargs)
             # Write the group unconditionally (even when empty) so that the
@@ -787,9 +796,9 @@ def deserialize_outputs_plugin_origin(
     action: HistoryAction, reader: NativeH5Reader, current: Any
 ) -> None:
     """Deserialize optional outputs and plugin provenance."""
-    # ``output_uuids`` is present only when the action produced outputs;
-    # otherwise leave it empty and consumers fall back to the heuristic
-    # matcher.
+    # ``output_uuids`` is serialized only when non-empty. Outputless actions and
+    # legacy files without this field leave it empty, so consumers fall back to
+    # the heuristic matcher.
     if "output_uuids" in current.attrs or "output_uuids" in current:
         with reader.group("output_uuids"):
             raw_outputs = reader.read_any()

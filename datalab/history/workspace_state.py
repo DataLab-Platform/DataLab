@@ -18,9 +18,9 @@ class WorkspaceState:
     """Object representing the workspace state at a given time.
 
     The workspace state stores the per-panel selection of objects by **UUID**
-    (robust against reordering, renaming or interleaved insertions). For
-    informative display, it also retains the data shape and title of each
-    selected object at the time of capture.
+    (robust against reordering, renaming or interleaved insertions). Selections
+    remain separate from structured metadata captured for every object in each
+    data panel. Informative shape and title lists cover the selected objects.
     """
 
     def __init__(self) -> None:
@@ -37,8 +37,8 @@ class WorkspaceState:
         # value is the list of titles of the objects in the panel. The title is only
         # informative and is not used to determine if two objects have the same state.
         self.titles: dict[str, list[str]] = {}
-        # Structured data signatures of selected objects, keyed by panel name and UUID.
-        # This is the current schema used for compatibility checks. Missing metadata
+        # Structured data signatures of all objects, keyed by panel name and UUID.
+        # Compatibility checks use entries for selected objects. Missing metadata
         # means a pre-Gate-2 history and falls back to UUID-existence validation.
         self.object_metadata: dict[str, dict[str, dict[str, Any]]] = {}
 
@@ -249,8 +249,8 @@ class WorkspaceState:
             mainwindow: DataLab's main window
 
         Raises:
-            ValueError: If at least one of the saved UUIDs no longer exists in
-             its panel.
+            ValueError: If a saved UUID no longer exists in its panel or its
+             saved metadata (shape/dimensions) is incompatible.
         """
         if not self.selection:
             return

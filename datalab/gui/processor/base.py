@@ -2257,7 +2257,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         pp_history = build_processing_parameters(name, "n-to-1", param=param)
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
-            name,
+            title or name,
             pp_history,
             panel_str=self.panel.PANEL_STR_ID,
             pairwise=pairwise,
