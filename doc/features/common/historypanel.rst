@@ -16,8 +16,8 @@ list of either:
 
 - **UI actions** (creating a new signal, removing selected objects, saving the
   workspace to HDF5, ...), or
-- **computations** (FFT, average, Gaussian fit, ...) dispatched through the
-  Sigima processor.
+- **computations** (FFT, average, Gaussian fit, ...) dispatched by the DataLab
+  processors to Sigima.
 
 A recorded session can be:
 
@@ -54,9 +54,10 @@ between signals and images does not mix their recording contexts.
 When a new object is created or a file is loaded into a populated active
 session, a configurable policy determines whether DataLab asks, starts a new
 session, or continues the current one. Plugin-created objects use separate
-policies. A single decision covers several objects only when the plugin uses
-an explicit plugin multi-load scope; DataLab does not infer such a scope from
-a sequence of additions.
+policies. An explicit plugin multi-load scope supplies one durable session
+policy for the whole batch. With ordinary **Ask** behavior, repeated prompts
+for synchronous additions to the same panel are debounced during the current
+Qt event-loop turn.
 
 These options are available under
 ``File > Settings > Processing > History sessions``. See
@@ -134,13 +135,15 @@ The toolbar at the top of the panel exposes the following actions:
   session (keyboard shortcut: :kbd:`Ctrl+Left`).
 - |step_next| **Next step**: select the following action in the current
   session (keyboard shortcut: :kbd:`Ctrl+Right`).
-- |replay| **Replay**: replay through the selected action, or replay the whole
-  session if a session row is selected. The recorded workspace selection is
-  not restored beforehand. New objects returned by computation actions are
-  not added to the data panels. Recorded UI actions may reproduce side effects,
-  including creating, importing, or duplicating objects, unless an action has
-  a specific replay guard.
-- |step_by_step| **Step-by-step**: process the selection one step at a time.
+- |replay| **Replay**: selecting an action replays that action directly;
+  selecting a session replays the whole session. Compute actions restore their
+  captured input selection when the translated object identifiers are
+  compatible and resolvable; UI actions are replayed without restoring their
+  recorded workspace selection. New objects returned by computation actions
+  are not added to the data panels. Recorded UI actions may reproduce side
+  effects, including creating, importing, or duplicating objects, unless an
+  action has a specific replay guard.
+- |step_by_step| **Step-by-step**: replay the selection one step at a time.
   Parameters may be reviewed and edited when the action supports it; supported
   actions and their dependent branches are then updated or recomputed in
   place.
@@ -156,9 +159,9 @@ The toolbar at the top of the panel exposes the following actions:
 
 .. note::
 
-  Double-clicking a tree item triggers **Replay** for the current selection,
-  using the action/session semantics described for **Replay** above. The
-  recorded workspace selection is not restored before replay.
+  Double-clicking a tree item invokes **Replay** for the current selection. It
+  uses the same action/session and compute/UI selection semantics documented
+  above.
 
 Tree view
 ---------
@@ -185,7 +188,8 @@ for its data panel.
 
 Actions that are not compatible with the current workspace state (for example
 because a referenced object identifier no longer exists, or because its data
-shape changed) are shown with a disabled foreground and an explanatory tooltip.
+array shape changed) are shown with a disabled foreground and an explanatory
+tooltip.
 They cannot be replayed until the workspace matches the recorded state again.
 
 Workspace state display
@@ -194,7 +198,7 @@ Workspace state display
 Below the action tree, a split-view widget shows the **workspace state**
 captured at the time of the selected action:
 
-- **Left table**: lists the signals that were selected, with their data shape.
+- **Left table**: lists the signals that were selected, with their array shape.
 - **Right table**: lists the images that were selected, with their dimensions.
 
 This information helps the user understand the context in which each action
@@ -250,13 +254,12 @@ reconnect to preserve the processing flow.
 
 .. note::
 
-    Reconnection is only triggered by deletions initiated from the
-    signal/image panels. Deleting an action directly from the History Panel
-    tree behaves differently: the selected action is spliced out instead
-    of truncating the session. If downstream steps depend on it, DataLab
-    preserves them as an independent chain by cloning the required intermediate
-    object and reconnecting those steps to the clone. Deleting a session removes
-    that complete session.
+  Reconnection is only triggered by deletions initiated from the signal/image
+  panels. Deleting an action directly from the History Panel tree behaves
+  differently: the selected action is spliced out instead of truncating the
+  session. If downstream steps depend on it, DataLab preserves them as an
+  independent chain by cloning the required intermediate object and reconnecting
+  those steps to the clone. Deleting a session removes that complete session.
 
 Auto-recompute
 --------------

@@ -5,11 +5,18 @@
 #
 msgid ""
 msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-08-05 14:24+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
 
 msgid "Settings of DataLab, the open-source scientific data analysis and visualization platform"
 msgstr "Préférences de DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
@@ -168,8 +175,8 @@ msgstr "Activer le décalage FFT pour centrer la composante de fréquence nulle 
 msgid "**Extract multiple ROIs in a single object**"
 msgstr "**Extraire plusieurs ROI dans un seul objet**"
 
-msgid "When enabled, multiple ROIs (Regions of Interest) are extracted into a single object. When disabled, each ROI is extracted into a separate object."
-msgstr "Si le réglage est activé, plusieurs ROI (Régions d'Intérêt) sont extraites dans un seul objet. Lorsque désactivé, chaque ROI est extraite dans un objet séparé."
+msgid "When enabled, multiple regions of interest (ROIs) are extracted into a single object. When disabled, each ROI is extracted into a separate object."
+msgstr "Lorsque cette option est activée, plusieurs régions d'intérêt (ROI) sont extraites dans un seul objet. Lorsqu'elle est désactivée, chaque ROI est extraite dans un objet distinct."
 
 msgid "**Ignore warnings**"
 msgstr "**Ignorer les avertissements**"
@@ -178,10 +185,10 @@ msgid "Suppress warning messages during computations."
 msgstr "Supprimer les messages d'avertissement pendant les calculs."
 
 msgid "**X-array compatibility behavior**"
-msgstr "**Comportement de compatibilité des tableaux X**"
+msgstr "**Comportement de compatibilité des tableaux des X**"
 
 msgid "Choose the behavior when X arrays are incompatible in multi-signal computations:"
-msgstr "Choisir le comportement lorsque les tableaux X sont incompatibles dans les calculs multi-signaux :"
+msgstr "Choisir le comportement lorsque les tableaux des X sont incompatibles dans les calculs multi-signaux :"
 
 msgid "**Ask**: display a confirmation dialog (default)"
 msgstr "**Demander** : afficher une boîte de dialogue de confirmation (par défaut)"
@@ -240,11 +247,8 @@ msgstr "**Démarrer une nouvelle session** : démarrer une seule session pour le
 msgid "**Continue in the current session** (default): append the whole batch to the active session"
 msgstr "**Continuer dans la session courante** (par défaut) : ajouter l'ensemble du lot à la session active"
 
-msgid "**Ask once** is the UI label for one decision covering the complete"
-msgstr "**Demander une seule fois** est le libellé de l'interface pour une décision unique couvrant l'intégralité de la"
-
-msgid "plugin multi-load scope, rather than one prompt per object. DataLab does not infer a multi-load scope from a sequence of plugin additions."
-msgstr "portée de chargement multiple du plugin, et non pour une demande par objet. DataLab ne déduit pas une telle portée d'une suite d'ajouts effectués par un plugin."
+msgid "**Ask once** is the UI label for one durable session decision covering the complete explicit plugin multi-load scope, rather than one prompt per object. With ordinary **Ask** behavior, repeated prompts for synchronous additions to the same panel are debounced during the current Qt event-loop turn."
+msgstr "**Demander une seule fois** est le libellé de l'interface correspondant à une décision de session unique et durable qui couvre toute la portée explicite de chargement multiple du plugin, plutôt qu'à une demande par objet. Avec le comportement **Demander** ordinaire, un mécanisme anti-rebond évite les demandes répétées pour les ajouts synchrones au même panneau pendant le tour courant de la boucle d'événements Qt."
 
 msgid "Result management"
 msgstr "Gestion des résultats"

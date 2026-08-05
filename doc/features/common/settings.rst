@@ -126,7 +126,7 @@ The Processing settings tab controls computation behavior and default parameters
     for easier visualization and analysis.
 
 **Extract multiple ROIs in a single object**
-    When enabled, multiple ROIs (Regions of Interest) are extracted into a single object.
+    When enabled, multiple regions of interest (ROIs) are extracted into a single object.
     When disabled, each ROI is extracted into a separate object.
 
 **Ignore warnings**
@@ -173,9 +173,11 @@ see :ref:`historypanel` for the complete workflow.
     - **Continue in the current session** (default): append the whole batch to
       the active session
 
-    **Ask once** is the UI label for one decision covering the complete
-    plugin multi-load scope, rather than one prompt per object. DataLab does
-    not infer a multi-load scope from a sequence of plugin additions.
+    **Ask once** is the UI label for one durable session decision covering the
+    complete explicit plugin multi-load scope, rather than one prompt per
+    object. With ordinary **Ask** behavior, repeated prompts for synchronous
+    additions to the same panel are debounced during the current Qt event-loop
+    turn.
 
 Result management
 ^^^^^^^^^^^^^^^^^
