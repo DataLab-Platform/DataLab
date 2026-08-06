@@ -126,6 +126,8 @@ class DLExecEnv(SGMXExecEnv):
             print(f"DataLab {version} on {platform.system()}")
             sys.exit()
         if args.reset:
+            # Local import: `datalab.config` pulls in the PlotPy/Qt stack, which
+            # this module must not require just to parse command line arguments.
             # pylint: disable=import-outside-toplevel
             from datalab.config import reset
 
