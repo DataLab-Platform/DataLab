@@ -4,14 +4,14 @@
 DataLab configuration persistence (INI <-> options container)
 -------------------------------------------------------------
 
-Bridges the flat, SigimaX-style :class:`datalab.config_options.DataLabOptions`
+Bridges the flat, SigimaX-style :class:`datalab.config.options.DataLabOptions`
 container with DataLab's historical INI backend
 (:data:`sigimax.utils.conf.CONF`, a guidata ``UserConfig``).
 
 The INI file remains the on-disk format for backward compatibility with existing
 user configurations. **Only categorized options are persisted**: the INI section
 is the option's category (``field.category``, defined in :mod:`sigimax.config`
-and extended by :mod:`datalab.config_options`), and an option left uncategorized
+and extended by :mod:`datalab.config.options`), and an option left uncategorized
 is simply ignored here.
 
 The INI key is the option name, unless the field declares an explicit
@@ -40,21 +40,33 @@ the default back to the INI file.
 
 from __future__ import annotations
 
+import configparser
+import os
+import os.path as osp
+import tempfile
 from typing import TYPE_CHECKING, Protocol
 
 from sigimax.utils import conf as _confmod
+from sigimax.utils.conf import AppUserConfig
+
+from datalab.config.appinfo import (
+    TYPED_CONFIG_SUFFIX,
+    get_config_app_name,
+    migrate_legacy_plugin_paths,
+)
+from datalab.config.options import DataLabOptions
 
 if TYPE_CHECKING:
     from guidata.userconfig import UserConfig
     from sigimax.config import OptionField
 
-    from datalab.config.config_options import DataLabOptions
+CONF_VERSION = DataLabOptions.CONF_VERSION
 
 
 class OptionStore(Protocol):
     """Persistence backend consulted by :class:`DataLabOptions` option hooks.
 
-    This narrow protocol is what :mod:`datalab.config_options` depends on,
+    This narrow protocol is what :mod:`datalab.config.options` depends on,
     instead of this module's free functions or the ``UserConfig`` backend
     directly, so that the two modules do not import each other.
     """
@@ -425,3 +437,95 @@ class IniOptionStore:
     def remove(self, name: str) -> bool:
         """Remove an option from the INI backend."""
         return remove_persisted_option(self._options, name, self._conf)
+
+
+class DataLabUserConfig(AppUserConfig):
+    """DataLab INI backend keeping typed and legacy files side by side."""
+
+    def filename(self) -> str:
+        """Return the typed configuration filename."""
+        return self.get_path(f"{self.name}{TYPED_CONFIG_SUFFIX}.ini")
+
+
+class _LegacyConfigReader(AppUserConfig):
+    """In-memory reader preventing writes to a legacy DataLab INI file."""
+
+    def __init__(self, name: str) -> None:
+        super().__init__({})
+        self.name = name
+
+    def set(self, section, option, value, verbose=False, save=True) -> None:
+        """Update the snapshot in memory without writing the legacy file."""
+        del save
+        super().set(section, option, value, verbose=verbose, save=False)
+
+    def save(self) -> None:
+        """Do not persist the in-memory legacy snapshot."""
+
+    def cleanup(self) -> None:
+        """Do not delete the source legacy configuration."""
+
+    def remove_option(self, section, option) -> bool:
+        """Remove an option from memory without saving."""
+        return configparser.ConfigParser.remove_option(self, section, option)
+
+    def remove_section(self, section) -> bool:
+        """Remove a section from memory without saving."""
+        return configparser.ConfigParser.remove_section(self, section)
+
+
+# Install the DataLab backend before consumers import ``CONF`` directly from
+# ``sigimax.utils.conf``. No file is read or written until ``initialize()``.
+if not isinstance(_confmod.CONF, DataLabUserConfig):
+    _confmod.CONF = DataLabUserConfig({})
+
+
+def atomic_save_configuration(config: AppUserConfig) -> None:
+    """Atomically write a configuration backend to its target filename."""
+    filename = config.filename()
+    directory = osp.dirname(filename)
+    os.makedirs(directory, mode=0o700, exist_ok=True)
+    descriptor, temporary_filename = tempfile.mkstemp(
+        dir=directory,
+        prefix=f".{osp.basename(filename)}.",
+        suffix=".tmp",
+        text=True,
+    )
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8") as stream:
+            config.write(stream)
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary_filename, filename)
+    finally:
+        if osp.exists(temporary_filename):
+            os.remove(temporary_filename)
+
+
+def migrate_legacy_configuration(
+    options: DataLabOptions,
+    legacy_filename: str,
+    typed_conf: AppUserConfig,
+) -> bool:
+    """Initialize a missing typed configuration from a legacy INI file.
+
+    Args:
+        options: Typed DataLab options to initialize.
+        legacy_filename: DataLab 1.2 configuration filename.
+        typed_conf: DataLab 1.3 INI backend.
+
+    Returns:
+        True if the legacy configuration was migrated, False if migration was
+         unnecessary or impossible because a source file was absent.
+    """
+    if osp.isfile(typed_conf.filename()) or not osp.isfile(legacy_filename):
+        return False
+
+    legacy_conf = _LegacyConfigReader(get_config_app_name())
+    legacy_conf.read(legacy_filename, encoding="utf-8")
+    load_options_from_ini(options, legacy_conf)
+    migrate_legacy_plugin_paths(options)
+    typed_conf.set_version(CONF_VERSION, save=False)
+    save_options_to_ini(options, typed_conf, save=False)
+    atomic_save_configuration(typed_conf)
+    return True

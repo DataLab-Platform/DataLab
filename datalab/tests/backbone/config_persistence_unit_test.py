@@ -2,7 +2,7 @@
 
 """
 Unit tests for the DataLab configuration persistence layer
-(:mod:`datalab.config_persistence`).
+(:mod:`datalab.config.persistence`).
 """
 
 import shutil
@@ -13,19 +13,17 @@ import pytest
 from sigimax.utils import conf as confmod
 from sigimax.utils.conf import AppUserConfig
 
-from datalab.config.config import (
+from datalab.config.core import DataLabShapeParam
+from datalab.config.options import DataLabOptions
+from datalab.config.persistence import (
     CONF_VERSION,
-    DataLabShapeParam,
     DataLabUserConfig,
     atomic_save_configuration,
-    migrate_legacy_configuration,
-)
-from datalab.config.config_options import DataLabOptions
-from datalab.config.config_persistence import (
     get_ini_location,
     get_uncategorized_fields,
     has_persisted_option,
     load_options_from_ini,
+    migrate_legacy_configuration,
     remove_persisted_option,
     save_options_to_ini,
     save_runtime_option,
@@ -105,7 +103,7 @@ def test_atomic_configuration_save_cleans_up_after_replace_error(
     def raise_replace_error(_source, _destination) -> None:
         raise OSError("replace failed")
 
-    monkeypatch.setattr("datalab.config.config.os.replace", raise_replace_error)
+    monkeypatch.setattr("datalab.config.persistence.os.replace", raise_replace_error)
 
     with pytest.raises(OSError, match="replace failed"):
         atomic_save_configuration(config)

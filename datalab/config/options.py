@@ -41,12 +41,10 @@ from sigimax.config import (
 )
 
 from datalab import __docurl__, __homeurl__, __supporturl__, __version__
+from datalab.config.appinfo import APP_NAME
 
 if TYPE_CHECKING:
-    from datalab.config.config_persistence import OptionStore
-
-#: Application name used for default log file basenames.
-APP_NAME = "DataLab"
+    from datalab.config.persistence import OptionStore
 
 #: Categories whose fields drop their ``<category>_`` prefix when mapped to
 #: their (historically section-local) short key, e.g. for the Settings dialog
@@ -527,7 +525,7 @@ class DataLabOptions(SigimaXOptions):
         """Return the short key identifying an option outside its container.
 
         Used to match an option to a Settings-dialog DataSet attribute and, by
-        :mod:`datalab.config_persistence`, as the INI key. Historically
+        :mod:`datalab.config.persistence`, as the INI key. Historically
         section-local names (``ai_``/``macro_`` prefixed) drop their category
         prefix; a field's explicit ``storage_key`` takes precedence.
 

@@ -2,7 +2,7 @@
 
 """
 Unit tests for the DataLab options container
-(:mod:`datalab.config_options`).
+(:mod:`datalab.config.options`).
 """
 
 import json
@@ -18,8 +18,8 @@ from sigimax.config import (
 from sigimax.utils import conf as confmod
 from sigimax.utils.conf import AppUserConfig
 
-from datalab.config.config_options import DataLabOptions
-from datalab.config.config_persistence import IniOptionStore, load_options_from_ini
+from datalab.config.options import DataLabOptions
+from datalab.config.persistence import IniOptionStore, load_options_from_ini
 
 
 class _SampleParam(gds.DataSet):

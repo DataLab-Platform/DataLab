@@ -203,7 +203,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         # clobbered by unrelated bulk saves (e.g. window geometry persisted on
         # close by another DataLab instance sharing the same INI file).
         # pylint: disable=import-outside-toplevel
-        from datalab.config.config_persistence import save_runtime_option
+        from datalab.config.persistence import save_runtime_option
 
         save_runtime_option(Conf, "rpc_server_port")
 

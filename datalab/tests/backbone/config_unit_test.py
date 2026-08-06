@@ -18,7 +18,7 @@ from sigimax.utils import conf as confmod
 
 from datalab import app
 from datalab.config import CONF_VERSION, Conf, DataLabUserConfig
-from datalab.config.config_persistence import load_options_from_ini
+from datalab.config.persistence import load_options_from_ini
 from datalab.env import execenv
 from datalab.tests import helpers
 from datalab.utils.qthelpers import datalab_app_context

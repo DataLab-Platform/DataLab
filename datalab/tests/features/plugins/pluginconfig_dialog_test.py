@@ -16,7 +16,7 @@ from datalab.config import (
     get_user_plugin_paths,
     set_user_plugin_paths,
 )
-from datalab.config.config_persistence import (
+from datalab.config.persistence import (
     has_persisted_option,
     remove_persisted_option,
 )
