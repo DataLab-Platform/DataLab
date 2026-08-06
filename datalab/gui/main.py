@@ -60,6 +60,7 @@ from datalab.config import (
     TEST_SEGFAULT_ERROR,
     Conf,
     _,
+    save_runtime_option,
 )
 from datalab.control.baseproxy import AbstractDLControl
 from datalab.control.remote import RemoteServer
@@ -202,9 +203,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         # value read by remote clients across processes, and must not be
         # clobbered by unrelated bulk saves (e.g. window geometry persisted on
         # close by another DataLab instance sharing the same INI file).
-        # pylint: disable=import-outside-toplevel
-        from datalab.config.persistence import save_runtime_option
-
         save_runtime_option(Conf, "rpc_server_port")
 
     def __get_current_basedatapanel(self) -> BaseDataPanel:

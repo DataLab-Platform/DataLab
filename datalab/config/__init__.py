@@ -23,12 +23,8 @@ from .appinfo import (
     SHOTPATH,
     TEST_SEGFAULT_ERROR,
     _,
-    get_config_app_name,
     get_config_filename,
     get_config_path,
-    get_legacy_config_filename,
-    get_typed_config_filename,
-    migrate_legacy_plugin_paths,
     normalize_plugin_paths,
 )
 from .core import (
@@ -42,12 +38,11 @@ from .core import (
     reset_to_defaults,
     set_user_plugin_paths,
 )
-from .persistence import CONF_VERSION, DataLabUserConfig, migrate_legacy_configuration
+from .persistence import save_runtime_option
 
 __all__ = [
     "APP_DESC",
     "APP_NAME",
-    "CONF_VERSION",
     "DATALAB_PLUGINS_ENV_PATHS",
     "DATALAB_PLUGINS_ENV_VAR",
     "DATAPATH",
@@ -62,21 +57,16 @@ __all__ = [
     "TEST_SEGFAULT_ERROR",
     "Conf",
     "DataLabShapeParam",
-    "DataLabUserConfig",
     "_",
     "core",
     "ensure_initialized",
-    "get_config_app_name",
     "get_config_filename",
     "get_config_path",
-    "get_legacy_config_filename",
-    "get_typed_config_filename",
     "get_user_plugin_paths",
     "initialize",
-    "migrate_legacy_configuration",
-    "migrate_legacy_plugin_paths",
     "normalize_plugin_paths",
     "reset",
     "reset_to_defaults",
+    "save_runtime_option",
     "set_user_plugin_paths",
 ]

@@ -17,8 +17,12 @@ from qtpy import QtWidgets as QW
 from sigimax.utils import conf as confmod
 
 from datalab import app
-from datalab.config import CONF_VERSION, Conf, DataLabUserConfig
-from datalab.config.persistence import load_options_from_ini
+from datalab.config import Conf
+from datalab.config.persistence import (
+    CONF_VERSION,
+    DataLabUserConfig,
+    load_options_from_ini,
+)
 from datalab.env import execenv
 from datalab.tests import helpers
 from datalab.utils.qthelpers import datalab_app_context

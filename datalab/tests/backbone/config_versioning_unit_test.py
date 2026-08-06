@@ -9,7 +9,7 @@ Test that the configuration folder name is versioned correctly.
 import os.path as osp
 
 import datalab
-from datalab.config import (
+from datalab.config.appinfo import (
     get_config_app_name,
     get_legacy_config_filename,
     get_typed_config_filename,
