@@ -48,6 +48,11 @@ if TYPE_CHECKING:
 #: Application name used for default log file basenames.
 APP_NAME = "DataLab"
 
+#: Categories whose fields drop their ``<category>_`` prefix when mapped to
+#: their (historically section-local) short key, e.g. for the Settings dialog
+#: or the INI backend.
+_PREFIX_SECTIONS = frozenset({"ai", "macro"})
+
 
 class DataLabOptions(SigimaXOptions):
     """DataLab configuration options (flat, SigimaX-style container).
@@ -517,6 +522,30 @@ class DataLabOptions(SigimaXOptions):
              when the field name is unknown.
         """
         return self._defaults.get(field_name)
+
+    def get_field_ui_key(self, name: str) -> str | None:
+        """Return the short key identifying an option outside its container.
+
+        Used to match an option to a Settings-dialog DataSet attribute and, by
+        :mod:`datalab.config_persistence`, as the INI key. Historically
+        section-local names (``ai_``/``macro_`` prefixed) drop their category
+        prefix; a field's explicit ``storage_key`` takes precedence.
+
+        Args:
+            name: The option field name.
+
+        Returns:
+            The short key, or ``None`` when the field is uncategorized.
+        """
+        category = self.get_field_category(name)
+        if not category:
+            return None
+        storage_key = getattr(getattr(self, name, None), "storage_key", "")
+        if storage_key:
+            return storage_key
+        if category in _PREFIX_SECTIONS and name.startswith(f"{category}_"):
+            return name[len(category) + 1 :]
+        return name
 
     def attach_store(self, store: OptionStore) -> None:
         """Attach a persistence store; subsequent option changes are persisted.

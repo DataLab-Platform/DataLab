@@ -327,7 +327,10 @@ def get_config_filename() -> str:
     return Configuration.get_filename()
 
 
-_INITIALIZED_WITH_USER_CONFIG: bool | None = None
+#: Active initialization mode: ``None`` (not yet initialized), ``"user"``
+#: (user configuration loaded/migrated, INI persistence enabled) or
+#: ``"defaults"`` (production defaults only, no persistence).
+_MODE: str | None = None
 
 
 def _apply_runtime_defaults() -> None:
@@ -345,9 +348,10 @@ def initialize(load_user_config: bool) -> None:
         load_user_config: If True, load or migrate the user configuration and
          enable INI persistence. If False, use production defaults in memory.
     """
-    global _INITIALIZED_WITH_USER_CONFIG  # pylint: disable=global-statement
-    if _INITIALIZED_WITH_USER_CONFIG is not None:
-        if _INITIALIZED_WITH_USER_CONFIG != load_user_config:
+    global _MODE  # pylint: disable=global-statement
+    requested_mode = "user" if load_user_config else "defaults"
+    if _MODE is not None:
+        if _MODE != requested_mode:
             raise RuntimeError("DataLab configuration is already initialized")
         return
 
@@ -370,9 +374,9 @@ def initialize(load_user_config: bool) -> None:
                 conf.CONF.set_version(CONF_VERSION, save=False)
         _apply_runtime_defaults()
         Conf.set_plotpy_application(config_app_name)
-        _INITIALIZED_WITH_USER_CONFIG = load_user_config
+        _MODE = requested_mode
     finally:
-        if _INITIALIZED_WITH_USER_CONFIG is True and load_user_config:
+        if _MODE == "user":
             Conf.attach_store(IniOptionStore(Conf))
         else:
             Conf.detach_store()
@@ -380,7 +384,7 @@ def initialize(load_user_config: bool) -> None:
 
 def ensure_initialized(load_user_config: bool) -> None:
     """Initialize configuration unless a caller already selected a mode."""
-    if _INITIALIZED_WITH_USER_CONFIG is None:
+    if _MODE is None:
         initialize(load_user_config)
 
 
@@ -393,14 +397,14 @@ def reset_to_defaults() -> None:
 
 def reset():
     """Reset application configuration in the active initialization mode."""
-    global _INITIALIZED_WITH_USER_CONFIG  # pylint: disable=global-statement
-    if _INITIALIZED_WITH_USER_CONFIG is False:
+    global _MODE  # pylint: disable=global-statement
+    if _MODE == "defaults":
         reset_to_defaults()
         return
 
     Conf.detach_store()
     Configuration.reset()
-    _INITIALIZED_WITH_USER_CONFIG = None
+    _MODE = None
     initialize(load_user_config=True)
 
 

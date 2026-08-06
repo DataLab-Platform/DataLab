@@ -20,7 +20,6 @@ from plotpy.styles import BaseImageParam
 from qtpy import QtWidgets as QW
 
 from datalab.config import Conf, _
-from datalab.config.config_persistence import get_ini_location
 
 
 class MainSettings(gds.DataSet):
@@ -693,10 +692,9 @@ def _iter_conf(
             continue
         param = paramdict[category]
         for field_name in field_names:
-            location = get_ini_location(options, field_name)
-            if location is None:
+            option = options.get_field_ui_key(field_name)
+            if option is None:
                 continue
-            _section, option = location
             if hasattr(param, option):
                 yield param, field_name, option
 

@@ -109,10 +109,6 @@ EXPECTED_UNCATEGORIZED: frozenset[str] = frozenset(
     }
 )
 
-#: Categories whose fields drop their ``<category>_`` prefix when mapped to the
-#: (historically section-local) INI key.
-_PREFIX_SECTIONS = frozenset({"ai", "macro"})
-
 
 def get_ini_location(options: DataLabOptions, name: str) -> tuple[str, str] | None:
     """Return the ``(section, ini_key)`` INI location of an option field.
@@ -125,17 +121,10 @@ def get_ini_location(options: DataLabOptions, name: str) -> tuple[str, str] | No
         The ``(section, ini_key)`` pair, or ``None`` when the field is
          uncategorized (and therefore not persisted).
     """
-    section = options.get_field_category(name)
-    if not section:
+    ini_key = options.get_field_ui_key(name)
+    if ini_key is None:
         return None
-    storage_key = getattr(getattr(options, name, None), "storage_key", "")
-    if storage_key:
-        ini_key = storage_key
-    elif section in _PREFIX_SECTIONS and name.startswith(f"{section}_"):
-        ini_key = name[len(section) + 1 :]
-    else:
-        ini_key = name
-    return section, ini_key
+    return options.get_field_category(name), ini_key
 
 
 def _field_ini_keys(field: OptionField | None, ini_key: str) -> list[str]:
