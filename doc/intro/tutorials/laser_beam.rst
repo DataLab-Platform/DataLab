@@ -172,6 +172,20 @@ The intensity profile will be displayed in the "Signal panel". We can then fit t
 to a Gaussian function using "Processing > Fitting > Gaussian fit". Here we have
 selected both signals for comparison.
 
+.. note::
+
+    If history recording is enabled, creating a new signal starts a new history
+    session, separate from the session containing the image operations. Since
+    extracting the intensity profile is an operation performed on an image, the
+    new session starts with the Gaussian fit applied to the resulting signal.
+
+    .. figure:: ../../images/tutorials/laser_beam/07.png
+
+        The image-processing actions are recorded in the first session, while
+        the Gaussian fit starts a separate session for the resulting signal.
+
+
+
 .. figure:: ../../images/tutorials/laser_beam/08.png
 
     The intensity profile fitted to a Gaussian function. Here both signals are
