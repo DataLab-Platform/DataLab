@@ -1249,10 +1249,19 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         configure_menu_about_to_show(self.tabmenu, self.__update_tab_menu)
         self.signalview = self.__add_signal_panel()
         self.imageview = self.__add_image_panel()
-        sdock = self._add_dockwidget(self.signalview, title=_("Signal View"))
-        idock = self._add_dockwidget(self.imageview, title=_("Image View"))
-        self.tabifyDockWidget(sdock, idock)
-        self.docks = {self.signalpanel: sdock, self.imagepanel: idock}
+        self._add_dockwidget(
+            self.signalview,
+            _("Signal View"),
+            name="signal_view",
+            key=self.signalpanel,
+        )
+        self._add_dockwidget(
+            self.imageview,
+            _("Image View"),
+            name="image_view",
+            key=self.imagepanel,
+            tabify_with=self.signalpanel,
+        )
         self.tabwidget.currentChanged.connect(self.__tab_index_changed)
         self.signalpanel.SIG_OBJECT_ADDED.connect(
             lambda: self.set_current_panel("signal")
@@ -1472,9 +1481,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     def __add_macro_panel(self) -> None:
         """Add macro panel"""
         self.macropanel = macro.MacroPanel(self)
-        mdock = self._add_dockwidget(self.macropanel, _("Macro Panel"))
-        self.docks[self.macropanel] = mdock
-        self.tabifyDockWidget(self.docks[self.imagepanel], mdock)
+        self._add_dockwidget(
+            self.macropanel,
+            _("Macro Panel"),
+            name="macro_panel",
+            tabify_with=self.imagepanel,
+        )
         self.docks[self.signalpanel].raise_()
 
     def __add_aiassistant_panel(self) -> None:
@@ -1486,9 +1498,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         )
 
         self.aiassistantpanel = AIAssistantPanel(self)
-        adock = self._add_dockwidget(self.aiassistantpanel, _("AI Assistant"))
-        self.docks[self.aiassistantpanel] = adock
-        self.tabifyDockWidget(self.docks[self.macropanel], adock)
+        self._add_dockwidget(
+            self.aiassistantpanel,
+            _("AI Assistant"),
+            name="ai_assistant",
+            tabify_with=self.macropanel,
+        )
         self.docks[self.macropanel].raise_()
 
     def __configure_panels(self) -> None:
