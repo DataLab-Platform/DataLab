@@ -42,7 +42,7 @@ from plotpy.constants import PlotType
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
-from qtpy.compat import getopenfilenames, getsavefilename
+from qtpy.compat import getopenfilenames
 from sigima.config import options as sigima_options
 from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 from sigimax.mainwindow import SGMXMainWindow, SGMXMainWindowMeta
@@ -785,18 +785,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             except Exception as e:  # pylint: disable=broad-exception-caught
                 print(f"Warning: Failed to auto-start WebAPI server: {e}")
 
-    def take_screenshot(self, name: str) -> None:  # pragma: no cover
-        """Take main window screenshot"""
-        # For esthetic reasons, we set the central widget width to a lower value:
-        old_width = self.tabwidget.maximumWidth()
-        self.tabwidget.setMaximumWidth(500)
-        # To avoid having screenshot depending on memory status, we set demo mode ON:
-        self.memorystatus.set_demo_mode(True)
-        qth.grab_save_window(self, f"{name}")
-        # Restore previous state:
-        self.memorystatus.set_demo_mode(False)
-        self.tabwidget.setMaximumWidth(old_width)
-
     def take_menu_screenshots(self) -> None:  # pragma: no cover
         """Take menu screenshots"""
         for panel in self.panels:
@@ -1297,17 +1285,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         font.setPointSize(10)
         tab_bar.setFont(font)
         # Use QTimer to ensure tab bar is properly sized first
-        QC.QTimer.singleShot(0, self.__update_tab_icon_size)
+        QC.QTimer.singleShot(0, self._update_tab_icon_size)
 
         self.setCentralWidget(self.tabwidget)
-
-    def __update_tab_icon_size(self) -> None:
-        """Update tab icon size based on tab bar height"""
-        tab_bar = self.tabwidget.tabBar()
-        if tab_bar.height() > 0:
-            # Use approximately 80% of tab height for icon size
-            icon_size = int(tab_bar.height() * 0.8)
-            self.tabwidget.setIconSize(QC.QSize(icon_size, icon_size))
 
     @staticmethod
     def __get_local_doc_path() -> str | None:
@@ -1827,18 +1807,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         panel = self.__get_current_basedatapanel()
         panel.remove_object(force)
 
-    @staticmethod
-    def __check_h5file(filename: str, operation: str) -> str:
-        """Check HDF5 filename"""
-        filename = osp.abspath(osp.normpath(filename))
-        bname = osp.basename(filename)
-        if operation == "load" and not osp.isfile(filename):
-            raise IOError(f'File not found "{bname}"')
-        Conf.base_dir.set(filename)
-        return filename
-
     @remote_controlled
-    def save_to_h5_file(self, filename=None) -> None:
+    def save_to_h5_file(self, filename: str | None = None) -> None:
         """Save to a DataLab HDF5 file
 
         Args:
@@ -1847,19 +1817,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         Raises:
             IOError: if filename is invalid or file cannot be saved.
         """
-        if filename is None:
-            basedir = Conf.base_dir.get()
-            with qth.save_restore_stds():
-                filename, _fl = getsavefilename(
-                    self,
-                    _("Save"),
-                    basedir,
-                    "HDF5 (*.h5 *.hdf5 *.hdf *.he5);;All files (*)",
-                )
-            if not filename:
-                return
-        with qth.qt_try_loadsave_file(self, filename, "save"):
-            self.save_h5_workspace(filename)
+        super().save_to_h5_file(filename)
 
     @remote_controlled
     def open_h5_files(
@@ -1947,7 +1905,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 self.import_h5_file(filename, reset_all)
             else:
                 with qth.qt_try_loadsave_file(self, filename, "load"):
-                    filename = self.__check_h5file(filename, "load")
+                    filename = self._check_h5file(filename, "load")
                     if dsetname is None:
                         self.h5inputoutput.open_file(filename, import_all, reset_all)
                     else:
@@ -1964,7 +1922,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             reset_all: Reset all application data before importing
         """
         for filename in filenames:
-            self.__check_h5file(filename, "load")
+            self._check_h5file(filename, "load")
         self.h5inputoutput.import_files(filenames, False, bool(reset_all))
 
     @remote_controlled
@@ -1989,7 +1947,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             ValueError: If a file is not a valid native DataLab HDF5 file
         """
         for idx, filename in enumerate(h5files):
-            filename = self.__check_h5file(filename, "load")
+            filename = self._check_h5file(filename, "load")
             success = self.h5inputoutput.open_file_headless(
                 filename, reset_all=(reset_all and idx == 0)
             )
@@ -2016,7 +1974,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         Raises:
             IOError: If file cannot be saved
         """
-        filename = self.__check_h5file(filename, "save")
+        filename = self._check_h5file(filename, "save")
         self.h5inputoutput.save_file(filename)
         self.set_modified(False)
 
@@ -2030,7 +1988,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             reset_all: Delete all DataLab signals/images before importing data
         """
         with qth.qt_try_loadsave_file(self, filename, "load"):
-            filename = self.__check_h5file(filename, "load")
+            filename = self._check_h5file(filename, "load")
             self.h5inputoutput.import_files([filename], False, reset_all)
 
     # This method is intentionally *not* remote controlled

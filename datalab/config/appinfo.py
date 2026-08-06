@@ -23,6 +23,7 @@ from typing import TYPE_CHECKING
 
 from guidata import configtools
 from guidata.userconfig import get_config_basedir
+from sigimax.config import TEST_SEGFAULT_ERROR as TEST_SEGFAULT_ERROR
 from sigimax.config import is_frozen
 from sigimax.utils.conf import Configuration
 
@@ -95,11 +96,6 @@ APP_DESC = _("""DataLab is a generic signal and image processing platform""")
 DEBUG = os.environ.get("DATALAB_DEBUG", "").lower() in ("1", "true")
 if DEBUG:
     print("*** DEBUG mode *** [Reset configuration file, do not redirect std I/O]")
-
-TEST_SEGFAULT_ERROR = len(os.environ.get("TEST_SEGFAULT_ERROR", "")) > 0
-if TEST_SEGFAULT_ERROR:
-    print('*** TEST_SEGFAULT_ERROR mode *** [Enabling test action in "?" menu]')
-
 
 configtools.add_image_module_path(MOD_NAME, osp.join("data", "logo"))
 configtools.add_image_module_path(MOD_NAME, osp.join("data", "icons"))
