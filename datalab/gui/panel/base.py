@@ -1062,13 +1062,6 @@ class ObjectProp(QW.QWidget):
             param = editor.dataset if editor is not None else proc_params.param
         recompute_param = copy.deepcopy(param)
 
-        # Disable ROI creation during re-analysis: detection functions store
-        # create_rois=True in their parameters, but re-running should only
-        # update analysis results, not recreate ROIs (which would make them
-        # impossible to delete or modify).
-        if hasattr(recompute_param, "create_rois"):
-            recompute_param.create_rois = False
-
         # Re-run the analysis in place (no history entry: runs under replaying)
         processor = self.__get_processor_associated_to(obj)
         try:
@@ -2324,45 +2317,50 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """Copy regions of interest
 
         Args:
-            roi_data: ROI snapshot for replay. When ``None`` (interactive use),
-                the ROI is read from the currently selected object.
+            roi_data: ROI snapshot kept for legacy session replay compatibility.
+                When ``None`` (interactive use), the ROI is read from the
+                currently selected object.
         """
+        # Copying to the clipboard mutates nothing: no history entry is
+        # recorded (the paste operation records the resulting ROI mutation).
         if roi_data is None:
             obj = self.objview.get_sel_objects()[0]
+            if obj.roi is None:
+                return
             roi_data = obj.roi.copy()
         self.__roi_clipboard = roi_data.copy()
-        self.mainwindow.historypanel.add_ui_entry(
-            _("Copy regions of interest from selected %s")
-            % (_("signal") if self.PANEL_STR_ID == "signal" else _("image")),
-            target=self.PANEL_STR_ID + "panel",
-            method_name="copy_roi",
-            save_state=True,
-            roi_data=roi_data,
-        )
 
     def paste_roi(self, roi_data=None) -> None:
         """Paste regions of interest
 
         Args:
-            roi_data: ROI snapshot for replay. When ``None`` (interactive use),
-                the clipboard populated by :meth:`copy_roi` is used.
+            roi_data: ROI snapshot kept for legacy session replay compatibility.
+                When ``None`` (interactive use), the clipboard populated by
+                :meth:`copy_roi` is used.
         """
         if roi_data is None:
             roi_data = self.__roi_clipboard
-        self.mainwindow.historypanel.add_ui_entry(
-            _("Paste regions of interest into selected %s")
-            % (_("signal") if self.PANEL_STR_ID == "signal" else _("image")),
-            target=self.PANEL_STR_ID + "panel",
-            method_name="paste_roi",
-            save_state=True,
-            roi_data=roi_data,
-        )
+            if roi_data is None:
+                return
         sel_objects = self.objview.get_sel_objects(include_groups=True)
+        title = _("Paste regions of interest into selected %s") % (
+            _("signal") if self.PANEL_STR_ID == "signal" else _("image")
+        )
         for obj in sel_objects:
             if obj.roi is None:
                 obj.roi = roi_data.copy()
             else:
                 obj.roi = obj.roi.combine_with(roi_data)
+            # Pasting combines with any existing ROI, whereas mutation replay
+            # replaces the target's ROI: record one entry per object with the
+            # post-combination ROI so replay is deterministic.
+            self.mainwindow.historypanel.add_mutation_entry(
+                title,
+                panel_str=self.PANEL_STR_ID,
+                mutation_key="roi",
+                target_uuids=[get_uuid(obj)],
+                payload=obj.roi,
+            )
         self.selection_changed(update_items=True)
         self.refresh_plot(
             "selected", update_items=True, only_visible=False, only_existing=True

@@ -15,9 +15,11 @@ signals and images, organized into **sessions**. Each session is a chronological
 list of either:
 
 - **UI actions** (creating a new signal, removing selected objects, saving the
-  workspace to HDF5, ...), or
+  workspace to HDF5, ...),
 - **computations** (FFT, average, Gaussian fit, ...) dispatched by the DataLab
-  processors to Sigima.
+  processors to Sigima, or
+- **mutations** (in-place modifications of existing objects, such as editing
+  regions of interest). See :ref:`history-object-mutations`.
 
 A recorded session can be:
 
@@ -43,6 +45,33 @@ A recorded session can be:
    signals (Voigt, Lorentzian, Lorentzian), remove one of them, create a
    Gaussian signal, compute the average, add Gaussian noise to the result
    and run a Gaussian fit.
+
+.. _history-object-mutations:
+
+Object mutations
+----------------
+
+Besides UI actions and computations, the panel records **mutations**:
+in-place modifications of existing objects that do not create new ones.
+Mutations currently cover regions of interest (ROI): defining or editing
+ROIs graphically or numerically, deleting one or all ROIs, and pasting ROIs
+each record a single generic mutation entry holding the affected objects
+and the resulting ROI state.
+
+Replaying a mutation re-applies the recorded ROI state to its target
+objects (an empty state removes the ROIs). In step-by-step mode, the ROI
+parameters can be reviewed and edited in a dialog before being re-applied;
+editing them triggers a recompute of the downstream dependent computations.
+
+When a recomputed action re-creates or updates an object, the mutations
+recorded on that object are re-applied in order, and analyses depending on
+the mutated object are recomputed. User ROIs present on an output object
+are preserved by in-place recomputes, unless the recompute itself produces
+a ROI.
+
+Mutation entries are saved with sessions (standalone ``.dlhist`` files and
+HDF5 workspaces) like any other action; history files created with earlier
+versions of DataLab load unchanged.
 
 Recording and session lifecycle
 -------------------------------
@@ -152,10 +181,15 @@ The toolbar at the top of the panel exposes the following actions:
   changed (in step-by-step mode or from the **Processing** tab) are marked as
   outdated; replaying recomputes them and, when parameters were edited, their
   downstream dependent actions as well. Analysis actions replay by
-  recomputing their results on the source objects. UI actions are replayed by
-  invoking their recorded method and may reproduce side effects, including
-  creating, importing, or duplicating objects; destructive actions are
-  skipped when their captured targets no longer resolve.
+  recomputing their results on the source objects: each analysis records
+  which results it stored on the object (its *effects*), so replaying
+  updates exactly those results — previous values are replaced, and if the
+  recompute fails the previous results are restored. Analyses recorded with
+  earlier versions of DataLab replay using their saved state. UI actions
+  are replayed by invoking their recorded method and may reproduce side
+  effects, including creating, importing, or duplicating objects;
+  destructive actions are skipped when their captured targets no longer
+  resolve.
 - |step_by_step| **Step-by-step**: replay the same selection one step at a
   time, opening the parameter dialog for each supported action (object
   creation, computation, ROI extraction) before recomputing it. Accepted

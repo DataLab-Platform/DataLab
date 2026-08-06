@@ -13,7 +13,8 @@ from unittest.mock import Mock, patch
 
 import numpy as np
 import pytest
-from sigima.objects import Gauss2DParam, ImageObj
+from sigima.objects import Gauss2DParam, ImageObj, create_signal_roi
+from sigima.tests.data import create_paracetamol_signal
 
 from datalab.gui import historysession_ops as hsess
 from datalab.gui import historytools_ops as hops
@@ -36,11 +37,13 @@ from datalab.gui.processor.base import (
 from datalab.h5.native import NativeH5Reader, NativeH5Writer
 from datalab.history.action import HistoryAction
 from datalab.history.core import HISTORY_ACTION_SCHEMA_VERSION, HISTORY_SCHEMA_VERSION
+from datalab.history.effects import AnalysisEffects
 from datalab.history.session import HistorySession
 from datalab.history.workspace_state import WorkspaceState
 from datalab.objectmodel import get_uuid, set_uuid
 from datalab.tests.features.common.history_test_helpers import (
     build_history_action,
+    build_workspace_state,
     delete_hdf5_items_by_name,
     read_history_sessions,
 )
@@ -810,6 +813,88 @@ def test_action_copy_remaps_all_uuid_references() -> None:
     copied.plugin_origin["metadata"]["entry_points"].append("average")
     assert action.state.object_metadata["signal"]["source-uuid"]["shape"] == [10]
     assert action.plugin_origin["metadata"]["entry_points"] == ["difference"]
+
+
+def _make_analysis_action(obj_uuid: str) -> HistoryAction:
+    """Build a 1-to-0 compute action analysing ``obj_uuid``."""
+    return HistoryAction(
+        title="FWHM",
+        kind=HistoryAction.KIND_COMPUTE,
+        panel_str="signal",
+        func_name="fwhm",
+        pattern="1_to_0",
+        state=build_workspace_state([obj_uuid]),
+    )
+
+
+def test_find_analysis_action_two_pass_matching() -> None:
+    """Prefer the effects manifest, then fall back to the input-uuid heuristic."""
+    obj_uuid = "analysed-uuid"
+    older = _make_analysis_action(obj_uuid)
+    newer = _make_analysis_action(obj_uuid)
+    session = HistorySession(number=1)
+    session.add_action(older)
+    session.add_action(newer)
+    panel = SimpleNamespace(history_sessions=[session])
+    manifest = {obj_uuid: AnalysisEffects(metadata_added=["fwhm"]).to_dict()}
+    # Manifest pass: only the older action recorded effects for the object,
+    # so it wins over the more recent heuristic-only match
+    older.effects = manifest
+    assert hchain.find_analysis_action(panel, obj_uuid, "fwhm") is older
+    # Both actions carry a manifest: the most recent one wins
+    newer.effects = dict(manifest)
+    assert hchain.find_analysis_action(panel, obj_uuid, "fwhm") is newer
+    # Legacy pass: without any manifest, the input-uuid heuristic matches the
+    # most recent action
+    older.effects = None
+    newer.effects = None
+    assert hchain.find_analysis_action(panel, obj_uuid, "fwhm") is newer
+    # No match for another function name or another object
+    assert hchain.find_analysis_action(panel, obj_uuid, "fw1e2") is None
+    assert hchain.find_analysis_action(panel, "other-uuid", "fwhm") is None
+
+
+def test_object_metadata_roi_signature_presence_and_stability() -> None:
+    """Expose a stable ROI signature and omit it for ROI-less objects."""
+    obj = create_paracetamol_signal()
+    assert "roi" not in WorkspaceState.get_object_metadata(obj)
+    obj.roi = create_signal_roi([[10, 20]], indices=True)
+    signature = WorkspaceState.get_object_metadata(obj)["roi"]
+    obj.roi = create_signal_roi([[10, 20]], indices=True)
+    assert WorkspaceState.get_object_metadata(obj)["roi"] == signature
+    obj.roi = create_signal_roi([[15, 30]], indices=True)
+    assert WorkspaceState.get_object_metadata(obj)["roi"] != signature
+
+
+def test_state_compatibility_handles_roi_signature_and_legacy_metadata() -> None:
+    """Tolerate legacy metadata without ROI key and flag ROI drift otherwise."""
+    obj = create_paracetamol_signal()
+    obj.roi = create_signal_roi([[10, 20]], indices=True)
+    uuid = get_uuid(obj)
+    mainwindow = cast(
+        DLMainWindow,
+        SimpleNamespace(
+            signalpanel=SimpleNamespace(
+                PANEL_STR_ID="signal", objmodel=CascadeObjectModel([obj])
+            ),
+            imagepanel=SimpleNamespace(
+                PANEL_STR_ID="image", objmodel=CascadeObjectModel([])
+            ),
+        ),
+    )
+    state = WorkspaceState()
+    state.selection = {"signal": [uuid]}
+    recorded = WorkspaceState.get_object_metadata(obj)
+    state.object_metadata = {"signal": {uuid: recorded}}
+    assert state.is_current_state_compatible(mainwindow, False)
+    # Legacy tolerance: metadata recorded without "roi" vs current object with ROI
+    legacy = dict(recorded)
+    del legacy["roi"]
+    state.object_metadata = {"signal": {uuid: legacy}}
+    assert state.is_current_state_compatible(mainwindow, False)
+    # ROI drift against a recorded signature flags incompatibility
+    state.object_metadata = {"signal": {uuid: dict(recorded, roi="0" * 16)}}
+    assert not state.is_current_state_compatible(mainwindow, False)
 
 
 def test_edited_image_creation_recomputes_downstream_in_place() -> None:

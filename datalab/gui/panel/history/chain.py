@@ -179,8 +179,13 @@ def find_analysis_action(
     """Find the 1-to-0 analysis action for ``obj_uuid`` with ``func_name``.
 
     Analysis operations (1-to-0) do not produce a new output object: they
-    write their result to the input object's metadata. The matching action is
-    therefore identified by its input UUID and function name.
+    write their result to the input object's metadata. Matching is two-pass:
+
+    1. Effects manifest: an action whose ``effects`` manifest contains
+       ``obj_uuid`` is a durable, exact record that it wrote to that object.
+       The most recent such action wins.
+    2. Legacy heuristic: for actions recorded before the manifest existed,
+       fall back to matching ``obj_uuid`` against the action's input UUIDs.
 
     Args:
         panel: The history panel providing the sessions.
@@ -190,14 +195,18 @@ def find_analysis_action(
     Returns:
         The matching :class:`HistoryAction`, or ``None`` if not found.
     """
-    for session in reversed(panel.history_sessions):
-        for action in reversed(session.actions):
-            if action.kind != HistoryAction.KIND_COMPUTE:
-                continue
-            if action.func_name != func_name:
-                continue
-            if obj_uuid in action_input_uuids(action):
-                return action
+    candidates = [
+        action
+        for session in reversed(panel.history_sessions)
+        for action in reversed(session.actions)
+        if action.kind == HistoryAction.KIND_COMPUTE and action.func_name == func_name
+    ]
+    for action in candidates:
+        if action.effects is not None and obj_uuid in action.effects:
+            return action
+    for action in candidates:
+        if obj_uuid in action_input_uuids(action):
+            return action
     return None
 
 
@@ -237,6 +246,13 @@ def action_consumes_any(action: HistoryAction, uuids: set[str]) -> bool:
     return bool(action_input_uuids(action) & uuids)
 
 
+def action_mutates_any(action: HistoryAction, uuids: set[str]) -> bool:
+    """Return True if ``action``'s mutation targets intersect ``uuids``."""
+    if action.kind != HistoryAction.KIND_MUTATION:
+        return False
+    return bool(set(action.target_uuids or []) & uuids)
+
+
 def get_downstream_actions(
     panel: HistoryPanel, action: HistoryAction
 ) -> list[HistoryAction]:
@@ -246,13 +262,24 @@ def get_downstream_actions(
     current = get_session_of(panel, action)
     if current is None:
         return []
-    root_outputs = recorded_action_output_uuids(panel, action)
+    if action.kind == HistoryAction.KIND_MUTATION:
+        # Mutations produce no outputs: seed the closure with the mutated
+        # objects so downstream computes consuming them are included.
+        root_outputs = list(action.target_uuids or [])
+    else:
+        root_outputs = recorded_action_output_uuids(panel, action)
     if not root_outputs:
         return []
     closure: set[str] = set(root_outputs)
     downstream: list[HistoryAction] = []
     idx = current.actions.index(action)
     for candidate in current.actions[idx + 1 :]:
+        if candidate.kind == HistoryAction.KIND_MUTATION:
+            # Mutations produce no outputs: they are downstream when they
+            # modify an object already in the closure.
+            if action_mutates_any(candidate, closure):
+                downstream.append(candidate)
+            continue
         if candidate.kind != HistoryAction.KIND_COMPUTE:
             continue
         if not action_consumes_any(candidate, closure):
@@ -300,6 +327,10 @@ def rewrite_action_source(
             action.kwargs["obj2_uuids"] = new_uuid
     elif obj2:
         action.kwargs["obj2_uuids"] = [new_uuid if u == old_uuid else u for u in obj2]
+    if action.target_uuids and action.effective_panel_str() == pstr:
+        action.target_uuids = [
+            new_uuid if u == old_uuid else u for u in action.target_uuids
+        ]
 
 
 def remove_single_action(panel: HistoryPanel, action: HistoryAction) -> None:

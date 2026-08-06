@@ -349,6 +349,55 @@ def add_ui_entry(
     return action
 
 
+def add_mutation_entry(
+    panel: HistoryPanel,
+    action_title: str,
+    panel_str: str,
+    mutation_key: str,
+    target_uuids: list[str],
+    payload: Any = None,
+    save_state: bool = True,
+) -> HistoryAction | None:
+    """Record a *mutation* action in the current history session.
+
+    Mutation actions describe in-place modifications of existing data objects
+    (no new objects created), e.g. ROI assignment or removal. At replay time,
+    the payload is re-applied to each target object still present in the data
+    panel's object model.
+
+    Args:
+        action_title: Title shown in the history tree.
+        panel_str: Data panel the mutation operates on ("signal" or "image").
+        mutation_key: Mutation identifier (currently only "roi" is supported).
+        target_uuids: UUIDs of the data objects modified in place.
+        payload: Mutation payload (e.g. a sigima ROI object). ``None`` means
+         the attribute is removed at replay time (e.g. ROI deletion).
+        save_state: If True, capture the workspace state for replay.
+
+    Returns:
+        The created :class:`HistoryAction`, or ``None`` if recording is
+        disabled (record mode off or replay in progress).
+    """
+    if not panel.record_mode_enabled or panel.is_replaying():
+        return None
+    state = WorkspaceState()
+    if save_state:
+        state.save(panel.mainwindow, panel_str=panel_str)
+    # Deep-copy the payload to ensure independent ownership (same rationale
+    # as in add_compute_entry). A None payload is encoded as a missing kwarg.
+    action = HistoryAction(
+        title=action_title,
+        kind=HistoryAction.KIND_MUTATION,
+        panel_str=panel_str,
+        mutation_key=mutation_key,
+        target_uuids=list(target_uuids),
+        kwargs={"payload": deepcopy(payload)} if payload is not None else {},
+        state=state,
+    )
+    panel.add_object(action)
+    return action
+
+
 def add_object(panel: HistoryPanel, obj: HistoryAction) -> None:
     """Add an action to the single active recording session.
 

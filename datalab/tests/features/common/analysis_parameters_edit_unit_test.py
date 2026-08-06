@@ -80,4 +80,5 @@ def test_analysis_parameters_edit_image():
 
 
 if __name__ == "__main__":
+    execenv.unattended = True  # Auto-close dialogs and event loops (standalone run)
     test_analysis_parameters_edit_image()

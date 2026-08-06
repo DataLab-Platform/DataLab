@@ -215,10 +215,25 @@ def replay_actions(
         try:
             for action in execution_plan:
                 if action in deferred_actions:
+                    if hchain.action_mutates_any(action, blocked_outputs):
+                        # Mutation targeting an object whose recompute failed
+                        # upstream: skip it like a blocked compute.
+                        continue
+                    payload_before = action.kwargs.get("payload")
                     with panel.replaying(), panel.output_suppressed():
                         action.replay(
                             panel.mainwindow, restore_selection=True, edit=prompt
                         )
+                    if (
+                        prompt
+                        and action.kind == HistoryAction.KIND_MUTATION
+                        and action.kwargs.get("payload") is not payload_before
+                    ):
+                        # The mutation payload was edited in the dialog:
+                        # recompute the downstream closure (seeded from the
+                        # mutation targets, see ``get_downstream_actions``).
+                        panel.tree.refresh_action_item(action)
+                        hrec.recompute_cascade(panel, action)
                     continue
                 if hchain.action_consumes_any(action, blocked_outputs):
                     blocked_outputs.update(
@@ -271,7 +286,7 @@ def restore_action_params(
         actions = [
             a
             for a in item.actions
-            if a.kind == HistoryAction.KIND_COMPUTE
+            if a.kind in (HistoryAction.KIND_COMPUTE, HistoryAction.KIND_MUTATION)
             or (
                 a.kind == HistoryAction.KIND_UI
                 and a.method_name in HistoryAction.UI_CREATION_METHODS

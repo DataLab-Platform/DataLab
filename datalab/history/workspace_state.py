@@ -4,9 +4,12 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
 from copy import deepcopy
 from typing import TYPE_CHECKING, Any
 
+from datalab.history.core import numpy_to_json_safe
 from datalab.objectmodel import get_uuid
 
 if TYPE_CHECKING:
@@ -111,6 +114,29 @@ class WorkspaceState:
         return selection
 
     @staticmethod
+    def get_roi_signature(obj: Any) -> str | None:
+        """Return a short stable hash of the object's ROI, or None.
+
+        Args:
+            obj: Signal or image object (any object exposing a ``roi``
+             attribute with a ``to_dict()`` method).
+
+        Returns:
+            16-character hex digest of the JSON-encoded ROI, or ``None``
+            when the object has no ROI or its encoding fails.
+        """
+        roi = getattr(obj, "roi", None)
+        if roi is None:
+            return None
+        try:
+            payload = numpy_to_json_safe(roi.to_dict())
+            serialized = json.dumps(payload, sort_keys=True)
+        except (AttributeError, TypeError, ValueError):
+            # Defensive: ROI classes evolve; omit signature on failure.
+            return None
+        return hashlib.sha1(serialized.encode()).hexdigest()[:16]
+
+    @staticmethod
     def get_object_metadata(obj: Any) -> dict[str, Any]:
         """Return a stable data signature for an object."""
         data = getattr(obj, "data", None)
@@ -119,7 +145,11 @@ class WorkspaceState:
             return {}
         shape = [int(size) for size in shape]
         ndim = getattr(data, "ndim", len(shape))
-        return {"shape": shape, "ndim": int(ndim)}
+        metadata: dict[str, Any] = {"shape": shape, "ndim": int(ndim)}
+        roi_signature = WorkspaceState.get_roi_signature(obj)
+        if roi_signature is not None:
+            metadata["roi"] = roi_signature
+        return metadata
 
     @staticmethod
     def normalize_object_metadata(metadata: dict[str, Any]) -> dict[str, Any]:
@@ -129,7 +159,11 @@ class WorkspaceState:
             return {}
         shape = [int(size) for size in shape]
         ndim = metadata.get("ndim", len(shape))
-        return {"shape": shape, "ndim": int(ndim)}
+        normalized: dict[str, Any] = {"shape": shape, "ndim": int(ndim)}
+        roi = metadata.get("roi")
+        if roi is not None:
+            normalized["roi"] = str(roi)
+        return normalized
 
     # Mapping from legacy translated panel keys to stable identifiers.
     # Covers the English translations; other locales are handled by the
@@ -205,21 +239,30 @@ class WorkspaceState:
             }
 
     def is_current_state_compatible(  # pylint: disable=unused-argument
-        self, mainwindow: DLMainWindow, restore_selection: bool
+        self,
+        mainwindow: DLMainWindow,
+        restore_selection: bool,
+        ignore_roi_uuids: set[str] | None = None,
     ) -> bool:
         """Check if the current workspace state is compatible with the saved state.
 
         Compatibility means that **every** UUID recorded in the saved selection
         still exists in the corresponding panel. When structured object metadata
-        is available (current schema), each selected object's data shape and
-        dimensions must also match the saved signature. Histories without this
-        metadata fall back to legacy UUID-existence validation.
+        is available (current schema), each selected object's data shape,
+        dimensions and ROI signature (when recorded) must also match the saved
+        signature. Histories without this metadata fall back to legacy
+        UUID-existence validation; metadata recorded before ROI signatures
+        existed skips the ROI comparison.
 
         Args:
             mainwindow: DataLab's main window
             restore_selection: Unused (kept for API symmetry). With UUID-based
              identity, the compatibility check no longer depends on the current
              selection -- it only depends on object existence.
+            ignore_roi_uuids: UUIDs whose ROI signature must be excluded from
+             the comparison (both saved and current sides). Used by mutation
+             actions whose state was captured after the mutation was applied:
+             the target's ROI legitimately differs at replay time.
 
         Returns:
             True if every saved UUID still exists in its panel and saved
@@ -238,15 +281,28 @@ class WorkspaceState:
                     current = self.get_object_metadata(panel.objmodel[uuid])
                     current = self.normalize_object_metadata(current)
                     saved = self.normalize_object_metadata(saved_metadata[uuid])
+                    if ignore_roi_uuids and uuid in ignore_roi_uuids:
+                        # Mutation target: the ROI is precisely what the
+                        # action changes, exclude it from both sides.
+                        current.pop("roi", None)
+                        saved.pop("roi", None)
+                    elif "roi" not in saved:
+                        # Legacy tolerance: states recorded before the ROI
+                        # signature existed must not flag incompatibility.
+                        current.pop("roi", None)
                     if saved and current != saved:
                         return False
         return True
 
-    def restore(self, mainwindow: DLMainWindow) -> None:
+    def restore(
+        self, mainwindow: DLMainWindow, ignore_roi_uuids: set[str] | None = None
+    ) -> None:
         """Restore the workspace state by selecting the recorded UUIDs.
 
         Args:
             mainwindow: DataLab's main window
+            ignore_roi_uuids: UUIDs whose ROI signature is excluded from the
+             compatibility check (see :meth:`is_current_state_compatible`).
 
         Raises:
             ValueError: If a saved UUID no longer exists in its panel or its
@@ -254,7 +310,9 @@ class WorkspaceState:
         """
         if not self.selection:
             return
-        if not self.is_current_state_compatible(mainwindow, False):
+        if not self.is_current_state_compatible(
+            mainwindow, False, ignore_roi_uuids=ignore_roi_uuids
+        ):
             raise ValueError(
                 "Current workspace state is not compatible with saved state"
             )

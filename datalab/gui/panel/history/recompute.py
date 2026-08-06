@@ -6,10 +6,11 @@ from __future__ import annotations
 
 import copy
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj
+from sigima.objects.base import ROI_KEY
 
 from datalab.config import _
 from datalab.env import execenv
@@ -28,6 +29,7 @@ from datalab.gui.processor.base import (
     insert_processing_parameters,
 )
 from datalab.history import HistoryAction
+from datalab.history.effects import AnalysisEffects, capture_effects, merge_effects
 from datalab.objectmodel import get_uuid
 
 if TYPE_CHECKING:
@@ -65,12 +67,17 @@ def update_obj_in_place(
     try:
         saved_uuid = target_obj.metadata.get("__uuid")
         saved_number = target_obj.metadata.get("__number")
+        # Align with the 1_to_1 path: keep the target's user ROI when the
+        # freshly computed object does not carry one.
+        saved_roi = target_obj.metadata.get(ROI_KEY)
         target_obj.metadata.clear()
         target_obj.metadata.update(new_obj.metadata)
         if saved_uuid is not None:
             target_obj.metadata["__uuid"] = saved_uuid
         if saved_number is not None:
             target_obj.metadata["__number"] = saved_number
+        if saved_roi is not None and ROI_KEY not in target_obj.metadata:
+            target_obj.metadata[ROI_KEY] = saved_roi
     except AttributeError:
         pass
 
@@ -171,6 +178,54 @@ def apply_output_in_place_or_recreate(
         insert_processing_parameters(target_obj, pparams)
 
 
+def recompute_mutation_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
+    """Re-apply a mutation action to its target object(s) during a cascade.
+
+    The recorded payload is re-applied through
+    :meth:`HistoryAction.replay_mutation`; targets that were deleted are
+    skipped with a cascade warning.
+
+    Args:
+        panel: History panel instance.
+        action: Mutation-kind history action to re-apply.
+
+    Returns:
+        True when at least one target object was mutated.
+    """
+    name = action.title or action.uuid
+    panel_data = hchain.resolve_panel_for_action(panel, action)
+    if panel_data is None:
+        panel.runtime.execution.cascade_warnings.append(
+            _("Action %s: target panel not found — skipping.") % name
+        )
+        return False
+    targets = action.target_uuids or []
+    if not targets:
+        panel.runtime.execution.cascade_warnings.append(
+            _("Action %s: no recorded mutation target — skipping.") % name
+        )
+        return False
+    missing = [uuid for uuid in targets if not panel_data.objmodel.has_uuid(uuid)]
+    if len(missing) == len(targets):
+        panel.runtime.execution.cascade_warnings.append(
+            _("Action %s: target object(s) no longer exist — skipping.") % name
+        )
+        return False
+    if missing:
+        panel.runtime.execution.cascade_warnings.append(
+            _("Action %s: %d target object(s) were deleted — applying to the rest.")
+            % (name, len(missing))
+        )
+    # ``replaying()`` is reentrant: suppress history capture while the
+    # payload is re-applied to the data panel objects. ``refresh=False``
+    # because each mutated target is refreshed individually below.
+    with panel.replaying():
+        mutated = action.replay_mutation(panel.mainwindow, refresh=False)
+    for uuid in mutated:
+        refresh_target(panel_data, uuid)
+    return bool(mutated)
+
+
 def recompute_action_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
     """Re-run ``action`` on the existing output object(s) (same UUIDs)."""
     if (
@@ -178,6 +233,8 @@ def recompute_action_in_place(panel: HistoryPanel, action: HistoryAction) -> boo
         and action.method_name in HistoryAction.UI_CREATION_METHODS
     ):
         return recompute_creation_in_place(panel, action)
+    if action.kind == HistoryAction.KIND_MUTATION:
+        return recompute_mutation_in_place(panel, action)
     if action.kind != HistoryAction.KIND_COMPUTE:
         return False
     method = {
@@ -212,7 +269,7 @@ def recompute_action_in_place(panel: HistoryPanel, action: HistoryAction) -> boo
         return success
     except FeatureNotFoundError as exc:
         handle_missing_feature(panel, action, exc)
-    except (RuntimeError, ValueError, AttributeError, KeyError, TypeError) as exc:
+    except Exception as exc:  # pylint: disable=broad-exception-caught
         action.is_stale = True
         panel.runtime.execution.broken_actions.add(action.uuid)
         _logger.exception(
@@ -670,8 +727,84 @@ def recompute_2_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> boo
     return True
 
 
+def _snapshot_analysis_source(
+    obj: SignalObj | ImageObj, effects_dict: dict | None
+) -> tuple[dict[str, Any], list[str] | None]:
+    """Snapshot the metadata of one analysis source before a recompute.
+
+    When an effects manifest is available, only the keys it lists are deep
+    copied (targeted snapshot) and the manifest keys currently absent are
+    recorded so a failed attempt that recreates them can be rolled back by
+    deletion. Without a manifest (legacy action), the whole metadata
+    dictionary is deep copied.
+
+    Args:
+        obj: Source object about to be recomputed.
+        effects_dict: Serialized :class:`AnalysisEffects` manifest, or None.
+
+    Returns:
+        Tuple ``(saved, absent)`` where ``saved`` maps keys to deep-copied
+        values and ``absent`` lists manifest keys missing before the
+        recompute. ``absent`` is None for the legacy full-metadata snapshot.
+    """
+    if effects_dict is None:
+        return copy.deepcopy(obj.metadata), None
+    manifest = AnalysisEffects.from_dict(effects_dict)
+    keys = manifest.metadata_added + manifest.metadata_replaced
+    saved = {
+        key: copy.deepcopy(obj.metadata[key]) for key in keys if key in obj.metadata
+    }
+    absent = [key for key in keys if key not in obj.metadata]
+    return saved, absent
+
+
+def _restore_analysis_source(
+    obj: SignalObj | ImageObj,
+    saved: dict[str, Any],
+    absent: list[str] | None,
+    attempt_effects: AnalysisEffects | None,
+) -> None:
+    """Restore a source's metadata from its snapshot after a failed recompute.
+
+    Args:
+        obj: Source object to restore.
+        saved: Snapshotted metadata values (full metadata for legacy actions).
+        absent: Manifest keys absent before the recompute (delete them if the
+         failed attempt recreated them), or None for a legacy full restore.
+        attempt_effects: Effects captured during the failed attempt, used to
+         delete keys it created outside the manifest (targeted mode only).
+    """
+    if absent is None:
+        obj.metadata.clear()
+        obj.metadata.update(saved)
+        # Drop any ROI created during the failed recompute so the cache stays
+        # consistent with the restored metadata
+        obj.invalidate_roi_cache()
+        return
+    touched = set(saved) | set(absent)
+    if attempt_effects is not None:
+        for key in attempt_effects.metadata_added:
+            obj.metadata.pop(key, None)
+        touched.update(attempt_effects.metadata_added)
+    obj.metadata.update(saved)
+    for key in absent:
+        obj.metadata.pop(key, None)
+    if ROI_KEY in touched and hasattr(obj, "invalidate_roi_cache"):
+        # Align with the legacy full-restore path: a restored/removed ROI
+        # entry must not leave a stale cached ROI object behind.
+        obj.invalidate_roi_cache()
+
+
 def recompute_1_to_0_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
-    """Recompute a 1-to-0 analysis on each source object in place."""
+    """Recompute a 1-to-0 analysis on each source object in place.
+
+    Sources are snapshotted before the recompute. When the action carries an
+    effects manifest, the snapshot is targeted: only manifest keys are deep
+    copied and a failed attempt rolls back exactly those keys (plus any key
+    the attempt created), leaving unrelated metadata untouched. Legacy
+    actions without a manifest fall back to a full-metadata snapshot.
+    On success, the freshly captured effects are merged into the manifest.
+    """
     panel_data = hchain.resolve_panel_for_action(panel, action)
     if panel_data is None:
         return False
@@ -679,8 +812,6 @@ def recompute_1_to_0_in_place(panel: HistoryPanel, action: HistoryAction) -> boo
     if not sources:
         return False
     param = copy.deepcopy(action.kwargs.get("param"))
-    if hasattr(param, "create_rois"):
-        param.create_rois = False
     missing = [uuid for uuid in sources if not panel_data.objmodel.has_uuid(uuid)]
     if missing:
         panel.runtime.execution.cascade_warnings.append(
@@ -689,29 +820,44 @@ def recompute_1_to_0_in_place(panel: HistoryPanel, action: HistoryAction) -> boo
         )
         return False
     source_objs = [panel_data.objmodel[uuid] for uuid in sources]
-    metadata_snapshots = [copy.deepcopy(obj.metadata) for obj in source_objs]
+    snapshots = [
+        _snapshot_analysis_source(obj, (action.effects or {}).get(uuid))
+        for uuid, obj in zip(sources, source_objs)
+    ]
+    captured: dict[str, AnalysisEffects] = {}
+
+    def rollback() -> None:
+        for uuid, obj, (saved, absent) in zip(sources, source_objs, snapshots):
+            _restore_analysis_source(obj, saved, absent, captured.get(uuid))
+
     try:
-        for src_obj in source_objs:
+        for uuid, src_obj in zip(sources, source_objs):
             analysis_parameters = extract_analysis_parameters(src_obj)
             plugin_origin = action.plugin_origin or (
                 analysis_parameters.plugin_origin if analysis_parameters else None
             )
-            success = panel_data.processor.recompute_1_to_0(
-                action.func_name,
-                src_obj,
-                param,
-                plugin_origin=plugin_origin,
-            )
+            with capture_effects(src_obj) as effects:
+                # Register the (mutable) effects before running so rollback
+                # sees them even when the recompute raises
+                captured[uuid] = effects
+                success = panel_data.processor.recompute_1_to_0(
+                    action.func_name,
+                    src_obj,
+                    param,
+                    plugin_origin=plugin_origin,
+                )
             if not success:
-                for obj, metadata in zip(source_objs, metadata_snapshots):
-                    obj.metadata.clear()
-                    obj.metadata.update(metadata)
+                rollback()
                 return False
     except Exception:
-        for obj, metadata in zip(source_objs, metadata_snapshots):
-            obj.metadata.clear()
-            obj.metadata.update(metadata)
+        rollback()
         raise
+    if action.effects is None:
+        action.effects = {}
+    for uuid in sources:
+        prev_dict = action.effects.get(uuid)
+        previous = AnalysisEffects.from_dict(prev_dict) if prev_dict else None
+        action.effects[uuid] = merge_effects(previous, captured[uuid]).to_dict()
     for uuid in sources:
         refresh_target(panel_data, uuid)
     return True

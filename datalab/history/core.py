@@ -24,11 +24,13 @@ from datalab.config import _
 _logger = logging.getLogger(__name__)
 _TRUSTED_ROI_MODULE_PREFIX = "sigima."
 
-# Schema versions for persisted history sessions/actions. Both start at 1.
+# Schema versions for persisted history sessions/actions.
 # Bump the relevant constant (and add the corresponding optional field
 # handling in serialize/deserialize) when the on-disk layout evolves.
+# Action schema v2: optional ``effects`` manifest for 1_to_0 compute actions,
+# and optional mutation descriptors (``mutation_key``/``target_uuids``).
 HISTORY_SCHEMA_VERSION = 1
-HISTORY_ACTION_SCHEMA_VERSION = 1
+HISTORY_ACTION_SCHEMA_VERSION = 2
 # Keys used in the kwargs dict to mark DataSet payloads, so that the
 # serialization layer can round-trip them as JSON strings instead of pickling
 # arbitrary Python objects.

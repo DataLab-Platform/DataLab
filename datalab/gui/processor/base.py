@@ -44,11 +44,13 @@ from datalab.adapters_metadata import (
     GeometryAdapter,
     ResultData,
     TableAdapter,
+    create_adapter,
     show_resultdata,
 )
 from datalab.adapters_plotpy import coordutils
 from datalab.config import Conf, _
 from datalab.gui.processor.catcher import CompOut, wng_err_func
+from datalab.history.effects import capture_effects
 from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
 from datalab.widgets.warningerror import show_warning_error
@@ -271,6 +273,29 @@ def clear_analysis_parameters(obj: SignalObj | ImageObj) -> None:
     key = f"__{ANALYSIS_PARAMETERS_OPTION}"
     if key in obj.metadata:
         del obj.metadata[key]
+
+
+# Param fields triggering side effects that must only run on first execution
+FIRST_RUN_ONLY_PARAM_FIELDS = ("create_rois",)
+
+
+def disable_first_run_side_effects(param: Any) -> None:
+    """Disable parameter fields whose side effects must only run once.
+
+    Recomputing an analysis must refresh its results, not replay first-run
+    side effects: for instance, detection functions store ``create_rois=True``
+    in their parameters, but re-running should not recreate ROIs (which would
+    overwrite ROIs deleted or edited by the user). Each field listed in
+    :data:`FIRST_RUN_ONLY_PARAM_FIELDS` is set to False when present on
+    ``param``. This is a generic extension point for future side-effect
+    parameters.
+
+    Args:
+        param: Parameter dataset to sanitize in place (None is a no-op).
+    """
+    for field_name in FIRST_RUN_ONLY_PARAM_FIELDS:
+        if hasattr(param, field_name):
+            setattr(param, field_name, False)
 
 
 def run_with_env(func: Callable, args: tuple, env_json: str) -> CompOut:
@@ -1257,22 +1282,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if proc_params is None or proc_params.pattern != "1-to-0":
             return False
 
-        # Get the parameter from processing parameters
-        param = copy.deepcopy(proc_params.param)
-
-        # Disable ROI creation during recompute: detection functions store
-        # create_rois=True in their parameters, but recompute should only
-        # update analysis results, not recreate ROIs (which would make them
-        # impossible to delete or modify).
-        if hasattr(param, "create_rois"):
-            param.create_rois = False
-
         # Recompute the analysis operation silently, only for this specific object
         # (not all selected objects, to avoid O(nÂ²) behavior when called in a loop).
+        # No deepcopy needed here: recompute_1_to_0 deepcopies its param internally.
         success = self.recompute_1_to_0(
             proc_params.func_name,
             obj,
-            param,
+            param=proc_params.param,
             plugin_origin=proc_params.plugin_origin,
         )
         if not success:
@@ -1773,6 +1789,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         Returns:
             True if the analysis result was refreshed successfully.
         """
+        # Work on a local copy so callers' kwargs are never mutated, and
+        # disable side effects that must only run on first execution
+        param = copy.deepcopy(param)
+        disable_first_run_side_effects(param)
         paramclass_name = type(param).__name__ if param is not None else None
         feature = self.get_feature(
             func_name,
@@ -2163,13 +2183,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 short_id_count = len(rdata.short_ids)
 
                 def persist_result(result=result, obj=obj) -> bool:
-                    if isinstance(result, GeometryResult):
-                        adapter = GeometryAdapter(result)
-                    elif isinstance(result, TableResult):
-                        adapter = TableAdapter(result)
-                    else:
-                        raise TypeError("Unsupported result type")
-
+                    adapter = create_adapter(result)
                     adapter.add_to(obj, param)
                     pp = ProcessingParameters(
                         func_name=func.__name__,
@@ -2183,18 +2197,27 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     rdata.append(adapter, obj)
                     return result_modified
 
-                persistence_output = wng_err_func(persist_result, ())
-                result_modified = self.handle_output(
-                    persistence_output, _("Computing: %s") % title, progress
-                )
+                with capture_effects(obj) as effects:
+                    persistence_output = wng_err_func(persist_result, ())
+                    result_modified = self.handle_output(
+                        persistence_output, _("Computing: %s") % title, progress
+                    )
                 if result_modified is None:
+                    # Rollback: discard the captured effects for this object
                     obj.metadata = metadata_snapshot
+                    # Drop any ROI created during the failed computation so the
+                    # cache stays consistent with the restored metadata
+                    obj.invalidate_roi_cache()
                     del rdata.results[result_count:]
                     del rdata.ylabels[ylabel_count:]
                     del rdata.short_ids[short_id_count:]
                     rdata.execution_success = False
                     continue
                 refresh_needed |= result_modified
+                if action is not None:
+                    if action.effects is None:
+                        action.effects = {}
+                    action.effects[get_uuid(obj)] = effects.to_dict()
 
                 if obj is current_obj:
                     # Mark object as having fresh analysis results to show Analysis tab
@@ -3202,6 +3225,22 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
     # ------Analysis-------------------------------------------------------------------
 
+    def _record_roi_mutation(
+        self, title: str, objs: list[TypeObj], roi: TypeROI | None
+    ) -> None:
+        """Record a ROI mutation history entry for ``objs`` (payload may be None)."""
+        # Some tests build processors without a history panel: stay defensive.
+        hpanel = getattr(self.mainwindow, "historypanel", None)
+        if hpanel is None:
+            return
+        hpanel.add_mutation_entry(
+            title,
+            panel_str=self.panel.PANEL_STR_ID,
+            mutation_key="roi",
+            target_uuids=[get_uuid(obj) for obj in objs],
+            payload=roi,
+        )
+
     def edit_roi_graphically(
         self, mode: Literal["apply", "extract", "define"] = "apply"
     ) -> TypeROI | None:
@@ -3245,12 +3284,22 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     # object yet)
                     for obj_i in objs:
                         obj_i.roi = None
+                    # Objects are actually mutated in both "apply" and "extract"
+                    # modes here (mode != "define" is guaranteed above).
+                    self._record_roi_mutation(
+                        _("Edit regions of interest graphically"), objs, None
+                    )
                 else:
                     edited_roi = edited_roi.__class__.from_params(obj, params)
                     if mode == "apply":
                         # Apply ROI to all selected objects
                         for obj_i in objs:
                             obj_i.roi = edited_roi
+                        self._record_roi_mutation(
+                            _("Edit regions of interest graphically"),
+                            objs,
+                            edited_roi,
+                        )
                 self.SIG_ADD_SHAPE.emit(get_uuid(obj))
                 self.panel.selection_changed(update_items=True)
                 self.panel.refresh_plot(
@@ -3283,6 +3332,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if group.edit(parent=self.mainwindow):
             edited_roi = obj.roi.__class__.from_params(obj, params)
             obj.roi = edited_roi
+            self._record_roi_mutation(
+                _("Edit regions of interest numerically"), [obj], edited_roi
+            )
             self.SIG_ADD_SHAPE.emit(get_uuid(obj))
             self.panel.refresh_plot(
                 "selected",
@@ -3304,10 +3356,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             )
             == QW.QMessageBox.Yes
         ):
+            removed_objs: list[TypeObj] = []
             for obj in self.panel.objview.get_sel_objects():
                 if obj.roi is not None:
                     obj.roi = None
+                    removed_objs.append(obj)
                     self.panel.selection_changed(update_items=True)
+            if removed_objs:
+                self._record_roi_mutation(_("Remove all ROIs"), removed_objs, None)
 
     def delete_single_roi(self, roi_index: int) -> None:
         """Delete a single ROI by index
@@ -3332,4 +3388,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if len(obj.roi.single_rois) == 0:
                     obj.roi = None
                 obj.mark_roi_as_changed()
+                self._record_roi_mutation(
+                    _("Remove ROI '%s'") % roi_title, [obj], obj.roi
+                )
                 self.panel.selection_changed(update_items=True)

@@ -976,17 +976,21 @@ def test_1_to_0_cascade_uses_roi_safe_parameter_copy() -> None:
         action.pattern = "1_to_0"
         action.target = "signalpanel"
         action.panel_str = "signal"
-        action.func_name = "analysis"
+        action.func_name = "stats"
         action.kwargs = {"param": param}
         action.state.selection = {panel.PANEL_STR_ID: [source_uuid]}
 
+        # The guard now lives inside recompute_1_to_0: spy on compute_1_to_0
+        # to observe the parameter actually passed to the executed analysis
         with patch.object(
-            panel.processor, "recompute_1_to_0", return_value=True
-        ) as recompute:
+            panel.processor,
+            "compute_1_to_0",
+            return_value=SimpleNamespace(execution_success=True),
+        ) as compute:
             success = hrec.recompute_action_in_place(history, action)
 
         assert success is True
-        passed_param = recompute.call_args.args[2]
+        passed_param = compute.call_args.args[1]
         assert passed_param is not param
         assert passed_param.create_rois is False
         assert action.kwargs["param"].create_rois is True
@@ -1089,3 +1093,32 @@ def test_deletion_reconnects_and_splices_chain() -> None:
             output_uuid not in history.runtime.objects.output_to_action
             for output_uuid in removed_output_uuids
         )
+
+
+def test_replay_survives_unexpected_recompute_exception() -> None:
+    """Contain unexpected exception types raised during an in-place recompute."""
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        history.toggle_record_mode(True)
+        history.toggle_edit_mode(True)
+        acts = list(build_signal_chain(panel, history).actions)
+        original = hrec.recompute_1_to_1_in_place
+
+        def flaky(panel_, action_):
+            if action_ is acts[1]:
+                raise IndexError("boom")
+            return original(panel_, action_)
+
+        with (
+            patch.object(hireplay, "prompt_edit_action_params", return_value=True),
+            patch.object(hrec, "recompute_1_to_1_in_place", flaky),
+            patch.object(hrec, "flush_cascade_warnings") as flush,
+        ):
+            hireplay.replay_actions(history, acts, prompt=True)
+
+        assert acts[0].is_stale is False
+        assert acts[1].is_stale is True  # failed action stays flagged
+        assert acts[2].is_stale is True  # downstream blocked by the failure
+        flush.assert_called()
+        warnings = history.runtime.execution.cascade_warnings
+        assert any("boom" in w for w in warnings)

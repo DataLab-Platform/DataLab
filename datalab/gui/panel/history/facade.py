@@ -258,6 +258,26 @@ class HistoryRecordingFacadeMixin:
             self, action_title, target, method_name, save_state, **kwargs
         )
 
+    def add_mutation_entry(
+        self,
+        action_title: str,
+        panel_str: str,
+        mutation_key: str,
+        target_uuids: list[str],
+        payload: Any = None,
+        save_state: bool = True,
+    ) -> HistoryAction | None:
+        """Add a mutation entry to history."""
+        return hsess.add_mutation_entry(
+            self,
+            action_title,
+            panel_str,
+            mutation_key,
+            target_uuids,
+            payload,
+            save_state,
+        )
+
 
 class HistoryPersistenceFacadeMixin:
     """Expose standalone and workspace HDF5 persistence operations."""

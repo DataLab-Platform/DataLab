@@ -18,6 +18,7 @@ from typing import (
     Dict,
     Generator,
     Generic,
+    List,
     Optional,
     TypeVar,
     overload,
@@ -26,12 +27,13 @@ from uuid import uuid4
 
 import sigima.proc.image
 import sigima.proc.signal
-from guidata.dataset.datatypes import DataSet
+from guidata.dataset.datatypes import DataSet, DataSetGroup
 
+from datalab.config import _
+from datalab.env import execenv
 from datalab.gui import ObjItf
 from datalab.history.core import (
     HISTORY_ACTION_SCHEMA_VERSION,
-    HISTORY_SCHEMA_VERSION,
     copy_history_value,
     decode_kwargs,
     encode_kwargs,
@@ -90,6 +92,11 @@ class HistoryAction(ObjItf):
 
     KIND_COMPUTE = "compute"
     KIND_UI = "ui"
+    # Mutation actions describe in-place modifications of existing data objects
+    # (no new objects created), e.g. ROI assignment/removal.
+    KIND_MUTATION = "mutation"
+    # Mutation keys currently supported by ``replay_mutation``.
+    SUPPORTED_MUTATION_KEYS: frozenset[str] = frozenset({"roi"})
 
     FUNC_EDIT_MODE = "edit"  # Name of the function parameter to enable edit mode
     # Object-creation actions skipped during non-persistent (output-suppressed)
@@ -112,6 +119,9 @@ class HistoryAction(ObjItf):
         target: str | None = None
         method_name: str | None = None
         plugin_origin: dict[str, Any] | None = None
+        # Mutation-only descriptors (``kind == KIND_MUTATION``):
+        mutation_key: str | None = None
+        target_uuids: list[str] | None = None
 
     kind = DescriptorField[str]("kind")
     panel_str = DescriptorField[Optional[str]]("panel_str")
@@ -120,6 +130,8 @@ class HistoryAction(ObjItf):
     target = DescriptorField[Optional[str]]("target")
     method_name = DescriptorField[Optional[str]]("method_name")
     plugin_origin = DescriptorField[Optional[Dict[str, Any]]]("plugin_origin")
+    mutation_key = DescriptorField[Optional[str]]("mutation_key")
+    target_uuids = DescriptorField[Optional[List[str]]]("target_uuids")
 
     def __init__(
         self,
@@ -132,6 +144,9 @@ class HistoryAction(ObjItf):
         # --- ui-only -------------------------------------------------------
         target: str | None = None,
         method_name: str | None = None,
+        # --- mutation-only ---------------------------------------------------
+        mutation_key: str | None = None,
+        target_uuids: list[str] | None = None,
         # --- common --------------------------------------------------------
         kwargs: dict[str, Any] | None = None,
         state: WorkspaceState | None = None,
@@ -145,6 +160,8 @@ class HistoryAction(ObjItf):
             pattern=pattern,
             target=target,
             method_name=method_name,
+            mutation_key=mutation_key,
+            target_uuids=target_uuids,
         )
         # Common:
         self.kwargs: dict[str, Any] = (
@@ -167,6 +184,11 @@ class HistoryAction(ObjItf):
         # ``add_compute_entry_from_pp``. See
         # :func:`datalab.gui.processor.base._detect_plugin_origin` for shape.
         # Persisted as a JSON string in HDF5.
+
+        # Analysis effects manifest, keyed by source object UUID, values are
+        # ``AnalysisEffects.to_dict()`` payloads. Persisted as a JSON string.
+        # Only populated for 1_to_0 compute actions, None otherwise.
+        self.effects: dict[str, dict] | None = None
         # Transient flag (NOT serialized): set during a cascade recompute to
         # display a "stale" visual marker in the tree. Cleared once the
         # action has been recomputed.
@@ -219,6 +241,8 @@ class HistoryAction(ObjItf):
             pattern=self.pattern,
             target=self.target,
             method_name=self.method_name,
+            mutation_key=self.mutation_key,
+            target_uuids=list(self.target_uuids) if self.target_uuids else None,
             kwargs={
                 key: copy_history_value(value) for key, value in self.kwargs.items()
             },
@@ -226,6 +250,7 @@ class HistoryAction(ObjItf):
         )
         new_action.plugin_origin = copy_history_value(self.plugin_origin)
         new_action.output_uuids = list(self.output_uuids)
+        new_action.effects = copy_history_value(self.effects)
         # Note: saved_kwargs is intentionally NOT propagated to the copy.
         # Copying an action acts as an implicit commit (no pending edits).
         return new_action
@@ -290,6 +315,18 @@ class HistoryAction(ObjItf):
             pstr = new_action.effective_panel_str()
             pmap = uuid_remap.get(pstr, {})
             new_action.output_uuids = [pmap.get(u, u) for u in new_action.output_uuids]
+        # Rewrite target_uuids — mutated objects live in the target panel.
+        if new_action.target_uuids:
+            pstr = new_action.effective_panel_str()
+            pmap = uuid_remap.get(pstr, {})
+            new_action.target_uuids = [pmap.get(u, u) for u in new_action.target_uuids]
+        # Rewrite effects keys — they reference source objects in the target panel.
+        if new_action.effects:
+            pstr = new_action.effective_panel_str()
+            pmap = uuid_remap.get(pstr, {})
+            new_action.effects = {
+                pmap.get(u, u): payload for u, payload in new_action.effects.items()
+            }
         return new_action
 
     @property
@@ -408,15 +445,31 @@ class HistoryAction(ObjItf):
     # Workspace-state delegation
     # ------------------------------------------------------------------
 
+    def __roi_exclusions(self) -> set[str] | None:
+        """Return the target UUIDs to exclude from ROI comparison, or None.
+
+        Mutation states are captured after the mutation was applied, so the
+        targets' ROI signatures cannot be expected to match at replay time.
+        """
+        if self.kind == self.KIND_MUTATION:
+            return set(self.target_uuids or [])
+        return None
+
     def is_current_state_compatible(
         self, mainwindow: DLMainWindow, restore_selection: bool
     ) -> bool:
-        """Check if the current workspace state is compatible with the saved state."""
-        return self.state.is_current_state_compatible(mainwindow, restore_selection)
+        """Check if the current workspace state is compatible with the saved state.
+
+        Mutation actions exclude their own targets from the ROI signature
+        comparison (the recorded state contains the post-mutation ROI).
+        """
+        return self.state.is_current_state_compatible(
+            mainwindow, restore_selection, ignore_roi_uuids=self.__roi_exclusions()
+        )
 
     def restore(self, mainwindow: DLMainWindow) -> None:
         """Restore the associated workspace state."""
-        self.state.restore(mainwindow)
+        self.state.restore(mainwindow, ignore_roi_uuids=self.__roi_exclusions())
 
     # ------------------------------------------------------------------
     # Replay
@@ -448,7 +501,7 @@ class HistoryAction(ObjItf):
         restore_selection: bool,
         edit: bool,
     ) -> None:
-        """Replay a UI-kind action.
+        """Replay a UI-kind or mutation-kind action.
 
         Compute-kind actions are recomputed in place by the History panel
         engine (see :mod:`datalab.gui.panel.history.recompute`) and must never
@@ -479,8 +532,80 @@ class HistoryAction(ObjItf):
             ctx = nullcontext()
         with ctx:
             if restore_selection:
-                self.state.restore(mainwindow)
-            self.replay_ui(mainwindow, edit)
+                self.restore(mainwindow)
+            if self.kind == self.KIND_MUTATION:
+                self.replay_mutation(mainwindow, edit=edit)
+            else:
+                self.replay_ui(mainwindow, edit)
+
+    def replay_mutation(
+        self, mainwindow: DLMainWindow, edit: bool = False, refresh: bool = True
+    ) -> list[str]:
+        """Replay a mutation-kind action: re-apply the in-place modification.
+
+        Only ``mutation_key == "roi"`` is supported: the ROI payload (or None
+        for a deletion) is re-applied to each target object still present in
+        the data panel's object model.
+
+        Args:
+            mainwindow: DataLab's main window
+            edit: If True (and not in unattended mode), open the ROI parameter
+             dialog before applying so the recorded payload can be modified.
+             Deletion payloads (None) have nothing to edit and are applied
+             directly. If the dialog is cancelled, the recorded payload is
+             applied as-is.
+            refresh: If True (default), refresh the panel selection and plot
+             after applying the mutation. The cascade engine passes False as
+             it refreshes each target itself.
+
+        Returns:
+            UUIDs of the target objects that were mutated (empty list when
+             the mutation could not be applied to any object).
+        """
+        if self.mutation_key not in self.SUPPORTED_MUTATION_KEYS:
+            _logger.warning(
+                "Skipping mutation replay: unsupported mutation key %r",
+                self.mutation_key,
+            )
+            return []
+        panel_str = self.effective_panel_str()
+        if panel_str == "signal":
+            panel_data = mainwindow.signalpanel
+        elif panel_str == "image":
+            panel_data = mainwindow.imagepanel
+        else:
+            _logger.warning("Skipping mutation replay: unknown panel %r", panel_str)
+            return []
+        # A missing "payload" kwarg means None (ROI deletion): encode_kwargs
+        # skips None values, so deletion payloads are simply not persisted.
+        payload = self.kwargs.get("payload")
+        targets = [
+            uuid
+            for uuid in self.target_uuids or []
+            if panel_data.objmodel.has_uuid(uuid)
+        ]
+        if not targets:
+            return []
+        if edit and payload is not None and not execenv.unattended:
+            # Edit mode: let the user adjust the ROI payload before applying.
+            obj = panel_data.objmodel[targets[0]]
+            params = payload.to_params(obj)
+            group = DataSetGroup(params, title=_("Regions of Interest"))
+            if group.edit(parent=mainwindow):
+                payload = payload.__class__.from_params(obj, params)
+                self.snapshot_kwargs()
+                self.kwargs["payload"] = payload
+        for uuid in targets:
+            obj = panel_data.objmodel[uuid]
+            obj.roi = payload.copy() if payload is not None else None
+            if hasattr(obj, "mark_roi_as_changed"):
+                obj.mark_roi_as_changed()
+        if refresh:
+            panel_data.selection_changed(update_items=True)
+            panel_data.refresh_plot(
+                "selected", update_items=True, only_visible=False, only_existing=True
+            )
+        return targets
 
     def replay_ui(
         self,
@@ -565,6 +690,13 @@ class HistoryAction(ObjItf):
         if self.method_name is not None:
             with writer.group("method_name"):
                 writer.write(self.method_name)
+        if self.mutation_key is not None:
+            with writer.group("mutation_key"):
+                writer.write(self.mutation_key)
+        # Like ``output_uuids``: only emit when non-empty.
+        if self.target_uuids:
+            with writer.group("target_uuids"):
+                writer.write(list(self.target_uuids))
         encoded = encode_kwargs(self.kwargs)
         if encoded:
             with writer.group("kwargs"):
@@ -588,6 +720,11 @@ class HistoryAction(ObjItf):
         if self.plugin_origin is not None:
             with writer.group("plugin_origin"):
                 writer.write(json.dumps(self.plugin_origin))
+        # ``effects``: analysis effects manifest (1_to_0 compute actions only),
+        # stored as a JSON string. Skipped when None.
+        if self.effects is not None:
+            with writer.group("effects"):
+                writer.write(json.dumps(self.effects))
         with writer.group("state"):
             self.state.serialize(writer)
         with writer.group("dtstr"):
@@ -595,9 +732,8 @@ class HistoryAction(ObjItf):
 
     def deserialize(self, reader: NativeH5Reader) -> None:
         """Deserialize this action."""
-        self.schema_version = reader.read(
-            "schema_version", default=HISTORY_SCHEMA_VERSION
-        )
+        # Legacy files predate per-action schema versions: default to 1
+        self.schema_version = reader.read("schema_version", default=1)
         with reader.group("kind"):
             self.kind = reader.read_any()
         with reader.group("title"):
@@ -628,12 +764,29 @@ def deserialize_descriptors(
             loaded_uuid = reader.read_any()
         if loaded_uuid:
             action.uuid = str(loaded_uuid)
-    for attr in ("panel_str", "func_name", "pattern", "target", "method_name"):
+    for attr in (
+        "panel_str",
+        "func_name",
+        "pattern",
+        "target",
+        "method_name",
+        "mutation_key",
+    ):
         if attr in current.attrs or attr in current:
             with reader.group(attr):
                 setattr(action, attr, reader.read_any())
         else:
             setattr(action, attr, None)
+    # ``target_uuids`` is serialized only when non-empty (mutation actions);
+    # legacy files and non-mutation actions leave it as ``None``.
+    if "target_uuids" in current.attrs or "target_uuids" in current:
+        with reader.group("target_uuids"):
+            raw_targets = reader.read_any()
+        action.target_uuids = (
+            [str(u) for u in raw_targets] if raw_targets is not None else None
+        )
+    else:
+        action.target_uuids = None
 
 
 def deserialize_kwargs_snapshot(
@@ -659,7 +812,7 @@ def deserialize_kwargs_snapshot(
 def deserialize_outputs_plugin_origin(
     action: HistoryAction, reader: NativeH5Reader, current: Any
 ) -> None:
-    """Deserialize optional outputs and plugin provenance."""
+    """Deserialize optional outputs, plugin provenance and effects manifest."""
     # ``output_uuids`` is serialized only when non-empty. Outputless actions and
     # legacy files without this field leave it empty, so consumers fall back to
     # the heuristic matcher.
@@ -692,3 +845,21 @@ def deserialize_outputs_plugin_origin(
                 action.plugin_origin = None
     else:
         action.plugin_origin = None
+    # ``effects`` is present only for 1_to_0 compute actions written with
+    # action schema v2+; legacy files leave it as ``None``.
+    if "effects" in current.attrs or "effects" in current:
+        with reader.group("effects"):
+            raw_effects = reader.read_any()
+        if raw_effects in (None, ""):
+            action.effects = None
+        else:
+            try:
+                action.effects = json.loads(raw_effects)
+            except (TypeError, ValueError):
+                _logger.warning(
+                    "Failed to decode effects for action %s; falling back to None.",
+                    action.uuid,
+                )
+                action.effects = None
+    else:
+        action.effects = None
