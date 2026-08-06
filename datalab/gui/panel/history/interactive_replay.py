@@ -131,6 +131,73 @@ def prompt_edit_action_params(
     return True
 
 
+def _load_outputs_still_exist(panel: HistoryPanel, action: HistoryAction) -> bool:
+    """Return True if all recorded load outputs still exist in a data panel.
+
+    Args:
+        panel: History panel instance
+        action: Load action (``UI_LOAD_METHODS``) to check
+
+    Returns:
+        True if the action recorded at least one output UUID and every one of
+        them still exists in either the signal or the image panel.
+    """
+    output_uuids = hchain.recorded_action_output_uuids(panel, action)
+    if not output_uuids:
+        return False
+    panels = (panel.mainwindow.signalpanel, panel.mainwindow.imagepanel)
+    return all(any(p.objmodel.has_uuid(uid) for p in panels) for uid in output_uuids)
+
+
+def confirm_file_output_replay(panel: HistoryPanel, action: HistoryAction) -> bool:
+    """Ask the user to confirm the replay of a file-save action.
+
+    Replaying a file-output action (``FILE_OUTPUT_METHODS``) overwrites the
+    files recorded in the action kwargs, so one confirmation question is asked
+    per action. In unattended mode no dialog is shown: the action is skipped
+    by default and replayed only when ``execenv.accept_dialogs`` is set.
+
+    Args:
+        panel: History panel instance
+        action: File-output action (``FILE_OUTPUT_METHODS``) to confirm
+
+    Returns:
+        True if the action should be replayed.
+    """
+    if execenv.unattended:
+        return bool(execenv.accept_dialogs)
+    names: list[str] = []
+    filename = action.kwargs.get("filename")
+    if isinstance(filename, str):
+        names.append(filename)
+    filenames = action.kwargs.get("filenames")
+    if isinstance(filenames, (list, tuple)):
+        names.extend(str(fname) for fname in filenames)
+    if not names:
+        # ``save_to_directory``: the destination is carried by the recorded
+        # parameter object (inspected defensively, format may evolve).
+        param = action.kwargs.get("param")
+        directory = getattr(param, "directory", None)
+        if directory:
+            pattern = getattr(param, "basename", None)
+            extension = getattr(param, "extension", None)
+            if pattern:
+                names.append(f"{directory} ({pattern}{extension or ''})")
+            else:
+                names.append(str(directory))
+    if not names:
+        names.append(action.title or action.uuid)
+    answer = QW.QMessageBox.question(
+        panel.mainwindow,
+        _("Replay file save"),
+        _("This action will overwrite the following file(s):\n%s\n\nReplay it?")
+        % "\n".join(names),
+        QW.QMessageBox.Yes | QW.QMessageBox.No,
+        QW.QMessageBox.No,
+    )
+    return answer == QW.QMessageBox.Yes
+
+
 def _recompute_stale_actions(panel: HistoryPanel, ordered: list[HistoryAction]) -> None:
     """Recompute stale actions in place after a dialog rollback.
 
@@ -240,11 +307,58 @@ def replay_actions(
                         # Mutation targeting an object whose recompute failed
                         # upstream: skip it like a blocked compute.
                         continue
+                    is_load_action = (
+                        action.kind == HistoryAction.KIND_UI
+                        and action.method_name in HistoryAction.UI_LOAD_METHODS
+                    )
+                    if is_load_action:
+                        if _load_outputs_still_exist(panel, action):
+                            # All loaded objects still exist: replaying would
+                            # duplicate them, so skip the load action.
+                            continue
+                        if action.kwargs.get("add_objects") is False:
+                            # Legacy entries recorded by ``load_from_directory``
+                            # with ``add_objects=False``: self-heal so replay
+                            # actually adds the loaded objects.
+                            action.kwargs["add_objects"] = True
+                    if (
+                        action.kind == HistoryAction.KIND_UI
+                        and action.method_name in HistoryAction.FILE_OUTPUT_METHODS
+                        and not confirm_file_output_replay(panel, action)
+                    ):
+                        # User declined (or unattended default): skip the
+                        # file-save action cleanly, the plan continues.
+                        continue
+                    data_panels = (
+                        panel.mainwindow.signalpanel,
+                        panel.mainwindow.imagepanel,
+                    )
+                    before_ids = (
+                        {
+                            p.PANEL_STR_ID: set(p.objmodel.get_object_ids())
+                            for p in data_panels
+                        }
+                        if is_load_action
+                        else None
+                    )
                     payload_before = action.kwargs.get("payload")
                     with panel.replaying(), panel.output_suppressed():
                         action.replay(
                             panel.mainwindow, restore_selection=True, edit=prompt
                         )
+                    if before_ids is not None:
+                        new_uuids = [
+                            uid
+                            for p in data_panels
+                            for uid in p.objmodel.get_object_ids()
+                            if uid not in before_ids[p.PANEL_STR_ID]
+                        ]
+                        if new_uuids:
+                            # Re-bind the load action to the freshly loaded
+                            # objects: replay assigns new UUIDs, and stale
+                            # recorded outputs would break duplicate detection
+                            # and downstream reconnection.
+                            panel.register_action_outputs(action, new_uuids)
                     if (
                         prompt
                         and action.kind == HistoryAction.KIND_MUTATION

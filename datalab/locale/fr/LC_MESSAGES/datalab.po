@@ -4187,6 +4187,10 @@ msgid "Set current object title to \"%s\""
 msgstr "Définir le titre de l'objet courant à \"%s\""
 
 #, python-format
+msgid "Load from directory \"%s\""
+msgstr "Charger depuis le répertoire \"%s\""
+
+#, python-format
 msgid "Load from %d files"
 msgstr "Charger depuis %d fichiers"
 
@@ -4242,6 +4246,21 @@ msgstr ""
 msgid "The current workspace state is not compatible with the action."
 msgstr "L'état actuel de l'espace de travail n'est pas compatible avec l'action."
 
+msgid "Replay file save"
+msgstr "Rejouer l'enregistrement de fichier"
+
+#, python-format
+msgid ""
+"This action will overwrite the following file(s):\n"
+"%s\n"
+"\n"
+"Replay it?"
+msgstr ""
+"Cette action écrasera le(s) fichier(s) suivant(s) :\n"
+"%s\n"
+"\n"
+"La rejouer ?"
+
 #, python-format
 msgid "Action %s has no recorded pattern and cannot be replayed."
 msgstr "L'action %s n'a pas de motif enregistré et ne peut pas être rejouée."
@@ -4293,6 +4312,18 @@ msgstr ""
 "Action %(name)s ignorée : le plugin '%(loc)s' est manquant.\n"
 "Classe de paramètre requise : %(param)s\n"
 "Réinstallez le plugin pour réactiver cette action."
+
+#, python-format
+msgid "Action %s: no recorded output object — skipping."
+msgstr "Action %s : aucun objet de sortie enregistré — ignorée."
+
+#, python-format
+msgid "Action %s: the initial object was deleted and cannot be re-created (no creation parameters)."
+msgstr "Action %s : l'objet initial a été supprimé et ne peut pas être recréé (aucun paramètre de création)."
+
+#, python-format
+msgid "Action %s: creation parameters could not be prepared — skipping."
+msgstr "Action %s : les paramètres de création n'ont pas pu être préparés — ignorée."
 
 #, python-format
 msgid "Action %s: source object was deleted — skipping."

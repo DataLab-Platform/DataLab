@@ -2692,6 +2692,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             return []
         # Offer a fresh history session for this batch *before* loading anything.
         self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
+        action = self.mainwindow.historypanel.add_ui_entry(
+            _('Load from directory "%s"') % osp.basename(osp.normpath(directory)),
+            target=self.PANEL_STR_ID + "panel",
+            method_name="load_from_directory",
+            save_state=False,
+            directory=directory,
+        )
         folders = [
             path
             for path in glob.glob(osp.join(directory, "**"), recursive=True)
@@ -2699,38 +2706,39 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         ]
         objs = []
         with self.mainwindow.historypanel.session_prompt_suppressed():
-            with create_progress_bar(
-                self, _("Scanning directory"), max_=len(folders) - 1
-            ) as progress:
-                # Iterate over all subfolders in the directory:
-                for i_path, path in enumerate(folders):
-                    progress.setValue(i_path + 1)
-                    if progress.wasCanceled():
-                        break
-                    path = osp.normpath(path)
-                    fnames = sorted(
-                        [
-                            osp.join(path, fname)
-                            for fname in os.listdir(path)
-                            if osp.isfile(osp.join(path, fname))
-                        ]
-                    )
-                    new_objs = self.load_from_files(
-                        fnames,
-                        create_group=False,
-                        add_objects=False,
-                        ignore_errors=True,
-                    )
-                    if new_objs:
-                        objs += new_objs
-                        grp_name = osp.relpath(path, directory)
-                        if grp_name == ".":
-                            grp_name = osp.basename(path)
-                        grp = self.add_group(grp_name)
-                        for obj in new_objs:
-                            self.add_object(
-                                obj, group_id=get_uuid(grp), set_current=False
-                            )
+            with self.mainwindow.historypanel.capture_outputs(action):
+                with create_progress_bar(
+                    self, _("Scanning directory"), max_=len(folders) - 1
+                ) as progress:
+                    # Iterate over all subfolders in the directory:
+                    for i_path, path in enumerate(folders):
+                        progress.setValue(i_path + 1)
+                        if progress.wasCanceled():
+                            break
+                        path = osp.normpath(path)
+                        fnames = sorted(
+                            [
+                                osp.join(path, fname)
+                                for fname in os.listdir(path)
+                                if osp.isfile(osp.join(path, fname))
+                            ]
+                        )
+                        new_objs = self.load_from_files(
+                            fnames,
+                            create_group=False,
+                            add_objects=False,
+                            ignore_errors=True,
+                        )
+                        if new_objs:
+                            objs += new_objs
+                            grp_name = osp.relpath(path, directory)
+                            if grp_name == ".":
+                                grp_name = osp.basename(path)
+                            grp = self.add_group(grp_name)
+                            for obj in new_objs:
+                                self.add_object(
+                                    obj, group_id=get_uuid(grp), set_current=False
+                                )
         return objs
 
     def load_from_files(
@@ -2769,18 +2777,24 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             entry_title = _("Load from %d files") % nbf
         else:
             entry_title = _('Load "%s"') % osp.basename(filenames[0])
-        # Offer a fresh history session for this batch *before* recording any entry.
-        self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
-        action = self.mainwindow.historypanel.add_ui_entry(
-            entry_title,
-            target=self.PANEL_STR_ID + "panel",
-            method_name="load_from_files",
-            save_state=False,
-            filenames=filenames,
-            create_group=create_group,
-            add_objects=add_objects,
-            ignore_errors=ignore_errors,
-        )
+        # Only record a history entry when this call actually adds the objects to
+        # the workspace; otherwise the caller is responsible for adding *and*
+        # recording (e.g. ``load_from_directory``).
+        action = None
+        if add_objects:
+            # Offer a fresh history session for this batch *before* recording
+            # any entry.
+            self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
+            action = self.mainwindow.historypanel.add_ui_entry(
+                entry_title,
+                target=self.PANEL_STR_ID + "panel",
+                method_name="load_from_files",
+                save_state=False,
+                filenames=filenames,
+                create_group=create_group,
+                add_objects=add_objects,
+                ignore_errors=ignore_errors,
+            )
         objs = []
         with self.mainwindow.historypanel.session_prompt_suppressed():
             with self.mainwindow.historypanel.capture_outputs(action):

@@ -102,10 +102,19 @@ class HistoryAction(ObjItf):
     # Object-creation actions skipped during non-persistent (output-suppressed)
     # replay so the panel object count stays stable.
     UI_CREATION_METHODS: frozenset[str] = frozenset({"new_object"})
+    # UI methods that (re)load objects from disk into the workspace.
+    UI_LOAD_METHODS: frozenset[str] = frozenset(
+        {"load_from_files", "load_from_directory"}
+    )
     # UI methods that destroy data objects. Replaying these requires that the
     # captured selection still resolves to existing objects (see ``replay_ui``).
     DESTRUCTIVE_METHODS: frozenset[str] = frozenset(
         {"remove_object", "remove_group", "delete_all_objects"}
+    )
+    # UI methods that write files on disk. Replaying them silently would
+    # overwrite user files, so the replay engine asks for confirmation.
+    FILE_OUTPUT_METHODS: frozenset[str] = frozenset(
+        {"save_to_h5_file", "save_to_files", "save_to_directory"}
     )
 
     @dataclass
