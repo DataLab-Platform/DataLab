@@ -1018,7 +1018,7 @@ def test_recompute_dispatch_guards_and_missing_feature() -> None:
         plugin_origin={"directory": "myplugin"},
         paramclass_name="MyParam",
     )
-    with patch.object(hrec, "recompute_1_to_1_in_place", side_effect=error):
+    with patch.object(hrec, "recompute_compute_in_place", side_effect=error):
         assert hrec.recompute_action_in_place(panel, action) is False
     assert action.is_stale is True
     assert any(

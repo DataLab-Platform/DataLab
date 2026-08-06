@@ -2796,13 +2796,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 ignore_errors=ignore_errors,
             )
         objs = []
+        loaded_filenames: list[str] = []
         with self.mainwindow.historypanel.session_prompt_suppressed():
             with self.mainwindow.historypanel.capture_outputs(action):
                 for filename in filenames:
                     with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
                         Conf.main.base_dir.set(filename)
                         try:
-                            objs += self.__load_from_file(
+                            new_objs = self.__load_from_file(
                                 filename,
                                 create_group=create_group,
                                 add_objects=add_objects,
@@ -2813,6 +2814,21 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                                 pass
                             else:
                                 raise exc
+                        else:
+                            objs += new_objs
+                            if new_objs:
+                                loaded_filenames.append(filename)
+        if action is not None and loaded_filenames and len(loaded_filenames) < nbf:
+            # Some files could not be loaded: make the recorded entry reflect
+            # the files actually loaded, so the title is accurate and replay
+            # does not re-attempt the failed files. (If *no* file was loaded,
+            # ``capture_outputs`` already discarded the entry.)
+            if len(loaded_filenames) > 1:
+                action.title = _("Load from %d files") % len(loaded_filenames)
+            else:
+                action.title = _('Load "%s"') % osp.basename(loaded_filenames[0])
+            action.kwargs["filenames"] = loaded_filenames
+            self.mainwindow.historypanel.tree.refresh_action_item(action)
         return objs
 
     def save_to_files(self, filenames: list[str] | str | None = None) -> None:

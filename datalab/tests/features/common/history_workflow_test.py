@@ -14,7 +14,7 @@ import numpy as np
 import pytest
 import sigima.params
 import sigima.proc.signal as sips
-from sigima.objects import Gauss2DParam, ImageObj, create_signal_roi
+from sigima.objects import Gauss2DParam, create_signal_roi
 from sigima.tests.data import (
     create_paracetamol_signal,
     create_peak_image,
@@ -39,16 +39,12 @@ from datalab.gui.processor.base import (
     extract_processing_parameters,
     insert_processing_parameters,
 )
-from datalab.gui.processor.catcher import CompOut
 from datalab.h5.native import NativeH5Reader, NativeH5Writer
 from datalab.history.core import numpy_to_json_safe
 from datalab.history.effects import AnalysisEffects
-from datalab.history.session import HistorySession
-from datalab.history.workspace_state import WorkspaceState
-from datalab.objectmodel import get_uuid, set_uuid
+from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_test_app_context
 from datalab.tests.features.common.history_test_helpers import (
-    CascadeObjectModel,
     add_paracetamol_signals,
     build_signal_chain,
     get_tree_item,
@@ -403,21 +399,21 @@ def test_edit_cascade_stops_after_failed_descendant() -> None:
         panel.processor.run_feature(sips.stats)
         analysis_action = history[len(history)]
         first_action.is_stale = True
-        original_recompute = panel.processor.recompute_1_to_1
+        original_compute = panel.processor.compute_1_to_1
         call_count = 0
 
-        def fail_second_recompute(*args, **kwargs):
+        def fail_second_compute(*args, **kwargs):
             nonlocal call_count
             call_count += 1
             if call_count == 2:
-                return CompOut(error_msg="expected cascade failure")
-            return original_recompute(*args, **kwargs)
+                return None  # No output produced: the replay reconcile fails
+            return original_compute(*args, **kwargs)
 
         with (
             patch.object(
                 panel.processor,
-                "recompute_1_to_1",
-                side_effect=fail_second_recompute,
+                "compute_1_to_1",
+                side_effect=fail_second_compute,
             ),
             patch.object(panel.processor, "recompute_1_to_0") as recompute_analysis,
         ):
@@ -776,7 +772,7 @@ def test_legacy_resultdata_defaults_execution_success() -> None:
 
 
 def test_2_to_1_failure_does_not_partially_mutate_outputs() -> None:
-    """Stage every pairwise result before mutating existing outputs."""
+    """Discard fresh outputs and warn on a replay cardinality mismatch."""
     with datalab_test_app_context(history=True) as win:
         history, panel = win.historypanel, win.signalpanel
         history.toggle_record_mode(True)
@@ -795,81 +791,56 @@ def test_2_to_1_failure_does_not_partially_mutate_outputs() -> None:
         )
         outputs = [panel.objmodel[uuid] for uuid in action.output_uuids]
         original_data = [obj.xydata.copy() for obj in outputs]
-        staged_result = outputs[0].copy()
-        staged_result.xydata = staged_result.xydata * 0.0
+        object_count = len(panel.objmodel)
 
-        with patch.object(
-            panel.processor,
-            "recompute_2_to_1",
-            side_effect=[staged_result, None],
-        ):
-            success = hrec.recompute_action_in_place(history, action)
+        # The synthetic action records two outputs but its captured selection
+        # only produces one: the replay must discard the fresh output and
+        # leave the recorded outputs untouched
+        success = hrec.recompute_action_in_place(history, action)
 
         assert success is False
+        assert action.is_stale is True
+        assert len(panel.objmodel) == object_count
+        assert any(
+            "expected 2" in warning
+            for warning in history.runtime.execution.cascade_warnings
+        )
+        history.runtime.execution.cascade_warnings.clear()
         for output, data in zip(outputs, original_data):
             assert np.array_equal(output.xydata, data)
 
 
 def test_2_to_1_refresh_failure_rolls_back_and_resyncs_outputs() -> None:
-    """Refresh only after commit and resync every target after rollback."""
+    """Commit all 2-to-1 outputs before refresh and fully roll back on failure."""
     with datalab_test_app_context(history=True) as win:
         history, panel = win.historypanel, win.signalpanel
         history.toggle_record_mode(True)
-        add_paracetamol_signals(panel, 4)
-        actions = []
-        for first, second in ((1, 2), (3, 4)):
-            panel.objview.select_objects([first])
-            panel.processor.run_feature(
-                sips.difference, panel.objmodel.get_object_from_number(second)
-            )
-            actions.append(history[len(history)])
-        action = actions[0]
-        action.output_uuids.extend(actions[1].output_uuids)
-        history.runtime.objects.action_output_uuids[action.uuid] = list(
-            action.output_uuids
+        add_paracetamol_signals(panel, 3)
+        panel.objview.select_objects([1, 2])
+        panel.processor.run_feature(
+            sips.difference, panel.objmodel.get_object_from_number(3)
         )
+        action = history[len(history)]
+        assert len(action.output_uuids) == 2
         outputs = [panel.objmodel[uuid] for uuid in action.output_uuids]
         identities = [id(obj) for obj in outputs]
-        original_titles = [obj.title for obj in outputs]
-        original_data = [obj.xydata.copy() for obj in outputs]
-        original_metadata = [obj.metadata.copy() for obj in outputs]
-        original_sources = [
-            extract_processing_parameters(obj).source_uuids for obj in outputs
-        ]
-        staged_results = [obj.copy() for obj in outputs]
-        staged_titles = []
-        for index, result in enumerate(staged_results):
-            result.title = f"staged-{index}"
-            staged_titles.append(result.title)
-            result.xydata = result.xydata * 0.0
+        # Mutate the outputs so a successful commit is distinguishable from a
+        # rollback restoring the pre-replay state
+        original_titles = []
+        original_data = []
+        for index, output in enumerate(outputs):
+            output.title = f"mutated-{index}"
+            output.xydata = output.xydata * 0.0
+            original_titles.append(output.title)
+            original_data.append(output.xydata.copy())
         refresh_effects = []
 
         def refresh_with_failure(_panel, output_uuid):
-            refresh_effects.append(
-                (
-                    output_uuid,
-                    [obj.title for obj in outputs],
-                    [
-                        extract_processing_parameters(obj).source_uuids
-                        for obj in outputs
-                    ],
-                )
-            )
-            if len(refresh_effects) in (2, 3):
+            refresh_effects.append((output_uuid, [obj.title for obj in outputs]))
+            if len(refresh_effects) == 2:
                 raise RuntimeError(f"refresh failed #{len(refresh_effects)}")
 
-        with (
-            patch.object(
-                panel.processor,
-                "recompute_2_to_1",
-                side_effect=staged_results,
-            ),
-            patch.object(
-                hrec,
-                "refresh_target",
-                side_effect=refresh_with_failure,
-            ),
-        ):
+        with patch.object(hrec, "refresh_target", side_effect=refresh_with_failure):
             success = hrec.recompute_action_in_place(history, action)
 
         assert success is False
@@ -879,14 +850,18 @@ def test_2_to_1_refresh_failure_rolls_back_and_resyncs_outputs() -> None:
             action.output_uuids[0],
             action.output_uuids[1],
         ]
-        assert refresh_effects[0][1] == staged_titles
-        assert refresh_effects[0][2] == original_sources
+        # Both outputs were committed before the first refresh...
+        assert all(
+            title != original
+            for title, original in zip(refresh_effects[0][1], original_titles)
+        )
+        # ...and both were restored before the rollback refreshes
         assert refresh_effects[2][1] == original_titles
         for index, output in enumerate(outputs):
             assert id(output) == identities[index]
             assert output.title == original_titles[index]
             assert np.array_equal(output.xydata, original_data[index])
-            assert output.metadata == original_metadata[index]
+        history.runtime.execution.cascade_warnings.clear()
 
 
 def test_1_to_n_refresh_failure_rolls_back_and_resyncs_outputs() -> None:
@@ -895,49 +870,35 @@ def test_1_to_n_refresh_failure_rolls_back_and_resyncs_outputs() -> None:
         history, panel = win.historypanel, win.signalpanel
         history.toggle_record_mode(True)
         source_uuid = add_paracetamol_signals(panel, 1)[0]
-        actions = []
-        for _index in range(2):
-            panel.objview.select_objects([source_uuid])
-            panel.processor.run_feature(sips.derivative)
-            actions.append(history[len(history)])
-        action = actions[0]
-        action.pattern = "1_to_n"
-        action.kwargs = {
-            "params": [
-                sigima.params.GaussianParam.create(sigma=1.5),
-                sigima.params.GaussianParam.create(sigma=2.5),
-            ]
-        }
-        action.output_uuids.extend(actions[1].output_uuids)
-        history.runtime.objects.action_output_uuids[action.uuid] = list(
-            action.output_uuids
-        )
+        panel.objview.select_objects([source_uuid])
+        feature = panel.processor.get_feature("gaussian_filter")
+        params = [
+            sigima.params.GaussianParam.create(sigma=1.5),
+            sigima.params.GaussianParam.create(sigma=2.5),
+        ]
+        panel.processor.compute_1_to_n(feature.function, params=params, edit=False)
+        action = history[len(history)]
+        assert action.pattern == "1_to_n"
+        assert len(action.output_uuids) == 2
         outputs = [panel.objmodel[uuid] for uuid in action.output_uuids]
         identities = [id(obj) for obj in outputs]
-        original_titles = [obj.title for obj in outputs]
-        original_data = [obj.xydata.copy() for obj in outputs]
-        original_metadata = [obj.metadata.copy() for obj in outputs]
-        staged_results = [obj.copy() for obj in outputs]
-        staged_titles = []
-        for index, result in enumerate(staged_results):
-            result.title = f"staged-{index}"
-            staged_titles.append(result.title)
-            result.xydata = result.xydata * 0.0
+        # Mutate the outputs so a successful commit is distinguishable from a
+        # rollback restoring the pre-replay state
+        original_titles = []
+        original_data = []
+        for index, output in enumerate(outputs):
+            output.title = f"mutated-{index}"
+            output.xydata = output.xydata * 0.0
+            original_titles.append(output.title)
+            original_data.append(output.xydata.copy())
         refresh_effects = []
 
         def refresh_with_failure(_panel, output_uuid):
             refresh_effects.append((output_uuid, [obj.title for obj in outputs]))
-            if len(refresh_effects) in (2, 3):
+            if len(refresh_effects) == 2:
                 raise RuntimeError(f"refresh failed #{len(refresh_effects)}")
 
-        with (
-            patch.object(
-                panel.processor,
-                "recompute_1_to_n",
-                return_value=staged_results,
-            ),
-            patch.object(hrec, "refresh_target", side_effect=refresh_with_failure),
-        ):
+        with patch.object(hrec, "refresh_target", side_effect=refresh_with_failure):
             success = hrec.recompute_action_in_place(history, action)
 
         assert success is False
@@ -947,24 +908,26 @@ def test_1_to_n_refresh_failure_rolls_back_and_resyncs_outputs() -> None:
             action.output_uuids[0],
             action.output_uuids[1],
         ]
-        assert refresh_effects[0][1] == staged_titles
+        assert all(
+            title != original
+            for title, original in zip(refresh_effects[0][1], original_titles)
+        )
         assert refresh_effects[2][1] == original_titles
         for index, output in enumerate(outputs):
             assert id(output) == identities[index]
             assert output.title == original_titles[index]
             assert np.array_equal(output.xydata, original_data[index])
-            assert output.metadata == original_metadata[index]
-
-        # Legacy misaligned recording: with a deleted output and a params list
-        # that cannot be aligned with the recorded outputs, the recompute is
-        # rejected with a missing-outputs warning
         history.runtime.execution.cascade_warnings.clear()
-        panel.objview.select_objects([action.output_uuids[1]])
-        panel.remove_object(force=True)
+
+        # Misaligned recording: with a params list longer than the recorded
+        # outputs, the replay produces more objects than expected and the
+        # cardinality guard rejects the recompute
         action.kwargs["params"].append(sigima.params.GaussianParam.create(sigma=3.5))
+        object_count = len(panel.objmodel)
         assert hrec.recompute_action_in_place(history, action) is False
+        assert len(panel.objmodel) == object_count
         assert any(
-            "no longer exist" in warning
+            "expected 2" in warning
             for warning in history.runtime.execution.cascade_warnings
         )
         history.runtime.execution.cascade_warnings.clear()
@@ -1226,7 +1189,7 @@ def test_replay_survives_unexpected_recompute_exception() -> None:
             pattern=None,
         )
         history.history_sessions[-1].add_action(patternless)
-        original = hrec.recompute_1_to_1_in_place
+        original = hrec.recompute_compute_in_place
 
         def flaky(panel_, action_):
             if action_ is acts[1]:
@@ -1235,7 +1198,7 @@ def test_replay_survives_unexpected_recompute_exception() -> None:
 
         with (
             patch.object(hireplay, "prompt_edit_action_params", return_value=True),
-            patch.object(hrec, "recompute_1_to_1_in_place", flaky),
+            patch.object(hrec, "recompute_compute_in_place", flaky),
             patch.object(hrec, "flush_cascade_warnings") as flush,
         ):
             hireplay.replay_actions(history, [*acts, patternless], prompt=True)
@@ -1453,144 +1416,59 @@ def test_edited_image_creation_recomputes_downstream_in_place() -> None:
         sigma=3.5,
         a=80.0,
     )
-    source = create_image_from_param(initial_param)
-    source_uuid = get_uuid(source)
-    source_identity = id(source)
-    initial_source_data = source.data.copy()
     expected_source = create_image_from_param(edited_param)
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.imagepanel
+        history.toggle_record_mode(True)
+        source = create_image_from_param(initial_param)
+        source_uuid = get_uuid(source)
+        panel.add_object(source)
+        source = panel.objmodel[source_uuid]
+        source_identity = id(source)
+        initial_source_data = source.data.copy()
+        # Synthetic creation action carrying the edited parameters (the
+        # recorded output is the pre-existing source object)
+        creation_action = HistoryAction(
+            title="Create edited Gaussian",
+            kind=HistoryAction.KIND_UI,
+            target="imagepanel",
+            method_name="new_object",
+            kwargs={"param": edited_param},
+        )
+        creation_action.output_uuids = [source_uuid]
+        # Record the real downstream compute through the UI path
+        panel.objview.select_objects([source_uuid])
+        panel.processor.run_feature(
+            "gaussian_filter", sigima.params.GaussianParam.create(sigma=2.0)
+        )
+        downstream_action = history[len(history)]
+        downstream_uuid = downstream_action.output_uuids[0]
+        downstream = panel.objmodel[downstream_uuid]
+        downstream_identity = id(downstream)
+        initial_downstream_data = downstream.data.copy()
 
-    downstream = source.copy()
-    set_uuid(downstream)
-    downstream.title = "Initial downstream"
-    downstream.data = np.full(source.data.shape, -1.0)
-    downstream_uuid = get_uuid(downstream)
-    downstream_identity = id(downstream)
-    initial_downstream_data = downstream.data.copy()
-    insert_processing_parameters(
-        downstream,
-        ProcessingParameters(
-            func_name="unit_transform",
-            pattern="1-to-1",
-            source_uuid=source_uuid,
-        ),
-    )
-
-    creation_action = HistoryAction(
-        title="Create edited Gaussian",
-        kind=HistoryAction.KIND_UI,
-        target="imagepanel",
-        method_name="new_object",
-        kwargs={"param": edited_param},
-    )
-    creation_action.output_uuids = [source_uuid]
-    downstream_state = WorkspaceState()
-    downstream_state.selection = {"image": [source_uuid]}
-    downstream_action = HistoryAction(
-        title="Transform edited Gaussian",
-        kind=HistoryAction.KIND_COMPUTE,
-        panel_str="image",
-        func_name="unit_transform",
-        pattern="1_to_1",
-        state=downstream_state,
-    )
-    downstream_action.output_uuids = [downstream_uuid]
-    session = HistorySession(number=1)
-    session.add_action(creation_action)
-    session.add_action(downstream_action)
-
-    processor_source_objects: list[ImageObj] = []
-    processor_source_data: list[np.ndarray] = []
-
-    def recompute_1_to_1(
-        func_name: str | None,
-        source_obj: ImageObj,
-        param: object,
-        *,
-        plugin_origin: dict[str, object] | None,
-    ) -> SimpleNamespace:
-        assert func_name == "unit_transform"
-        assert param is None
-        assert plugin_origin is None
-        processor_source_objects.append(source_obj)
-        processor_source_data.append(source_obj.data.copy())
-        new_obj = source_obj.copy()
-        new_obj.title = f"unit_transform({source_obj.title})"
-        new_obj.data = source_obj.data.astype(float) * 2.0 + 3.0
-        return SimpleNamespace(cancelled=False, error_msg=None, result=new_obj)
-
-    def apply_recomputed_object_in_place(
-        obj: ImageObj,
-        new_obj: ImageObj,
-        proc_params: ProcessingParameters,
-    ) -> None:
-        hrec.update_obj_in_place(obj, new_obj)
-        insert_processing_parameters(obj, proc_params)
-
-    object_model = CascadeObjectModel([source, downstream])
-    data_panel = SimpleNamespace(
-        PANEL_STR_ID="image",
-        objmodel=object_model,
-        processor=SimpleNamespace(recompute_1_to_1=recompute_1_to_1),
-        objprop=SimpleNamespace(
-            apply_recomputed_object_in_place=apply_recomputed_object_in_place
-        ),
-    )
-    runtime = SimpleNamespace(
-        objects=SimpleNamespace(
-            action_output_uuids={
-                creation_action.uuid: [source_uuid],
-                downstream_action.uuid: [downstream_uuid],
-            }
-        ),
-        execution=SimpleNamespace(cascade_warnings=[]),
-    )
-    history_panel = SimpleNamespace(
-        runtime=runtime,
-        history_sessions=[session],
-    )
-    refreshed_uuids: list[str] = []
-
-    def record_refresh(panel_data: object, output_uuid: str) -> None:
-        assert panel_data is data_panel
-        refreshed_uuids.append(output_uuid)
-
-    descendants = hrec.hchain.get_downstream_actions(history_panel, creation_action)
-    assert descendants == [downstream_action]
-
-    with (
-        patch.object(hrec.hchain, "resolve_panel_for_action", return_value=data_panel),
-        patch.object(
+        with patch.object(
             hrec, "create_image_from_param", wraps=create_image_from_param
-        ) as create_image_mock,
-        patch.object(hrec, "refresh_target", side_effect=record_refresh),
-    ):
-        assert hrec.recompute_creation_in_place(history_panel, creation_action)
-        assert hrec.recompute_1_to_1_in_place(history_panel, downstream_action)
+        ) as create_image_mock:
+            assert hrec.recompute_creation_in_place(history, creation_action)
+            assert hrec.recompute_compute_in_place(history, downstream_action)
 
-    create_image_mock.assert_called_once()
-    assert create_image_mock.call_args.args[0] is edited_param
+        create_image_mock.assert_called_once()
+        assert create_image_mock.call_args.args[0] is edited_param
+        assert history.runtime.execution.cascade_warnings == []
 
-    assert id(source) == source_identity
-    assert object_model[source_uuid] is source
-    assert get_uuid(source) == source_uuid
-    np.testing.assert_allclose(source.data, expected_source.data)
-    assert not np.array_equal(source.data, initial_source_data)
-    creation_param = extract_creation_parameters(source)
-    assert isinstance(creation_param, Gauss2DParam)
-    for name in ("height", "width", "x0", "y0", "sigma", "a"):
-        assert getattr(creation_param, name) == getattr(edited_param, name)
+        assert panel.objmodel[source_uuid] is source
+        assert id(source) == source_identity
+        np.testing.assert_allclose(source.data, expected_source.data)
+        assert not np.array_equal(source.data, initial_source_data)
+        creation_param = extract_creation_parameters(source)
+        assert isinstance(creation_param, Gauss2DParam)
+        for name in ("height", "width", "x0", "y0", "sigma", "a"):
+            assert getattr(creation_param, name) == getattr(edited_param, name)
 
-    assert processor_source_objects == [source]
-    np.testing.assert_allclose(processor_source_data[0], expected_source.data)
-    assert id(downstream) == downstream_identity
-    assert object_model[downstream_uuid] is downstream
-    assert get_uuid(downstream) == downstream_uuid
-    np.testing.assert_allclose(
-        downstream.data, expected_source.data.astype(float) * 2.0 + 3.0
-    )
-    assert not np.array_equal(downstream.data, initial_downstream_data)
-    downstream_params = extract_processing_parameters(downstream)
-    assert downstream_params is not None
-    assert downstream_params.source_uuid == source_uuid
-    assert refreshed_uuids == [source_uuid, downstream_uuid]
-    assert runtime.execution.cascade_warnings == []
+        assert panel.objmodel[downstream_uuid] is downstream
+        assert id(downstream) == downstream_identity
+        assert not np.array_equal(downstream.data, initial_downstream_data)
+        downstream_params = extract_processing_parameters(downstream)
+        assert downstream_params is not None
+        assert downstream_params.source_uuid == source_uuid

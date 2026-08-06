@@ -149,33 +149,6 @@ def resolve_output_panel(
     return fallback
 
 
-def record_missing_outputs(
-    panel: HistoryPanel, action: HistoryAction, missing: list[str]
-) -> None:
-    """Log + queue a user-facing warning for deleted output objects.
-
-    Only used for genuinely irrecoverable cases (e.g. recorded outputs that
-    cannot be aligned with the action's parameters); recoverable deletions
-    are handled by :func:`apply_output_in_place_or_recreate`.
-    """
-    if not missing:
-        return
-    name = action.func_name or action.title or action.uuid
-    _logger.warning(
-        "Cascade recompute: %d output(s) missing for action %s (%s).",
-        len(missing),
-        action.uuid,
-        name,
-    )
-    panel.runtime.execution.cascade_warnings.append(
-        _(
-            "Action %s has been edited but its target output object(s) "
-            "no longer exist — skipping."
-        )
-        % name
-    )
-
-
 def apply_output_in_place_or_recreate(
     panel: HistoryPanel,
     panel_data: BaseDataPanel,
@@ -283,10 +256,11 @@ def recompute_action_in_place(panel: HistoryPanel, action: HistoryAction) -> boo
     if action.kind != HistoryAction.KIND_COMPUTE:
         return False
     method = {
-        "1_to_1": recompute_1_to_1_in_place,
-        "1_to_n": recompute_1_to_n_in_place,
-        "n_to_1": recompute_n_to_1_in_place,
-        "2_to_1": recompute_2_to_1_in_place,
+        "1_to_1": recompute_compute_in_place,
+        "multiple_1_to_1": recompute_compute_in_place,
+        "1_to_n": recompute_compute_in_place,
+        "n_to_1": recompute_compute_in_place,
+        "2_to_1": recompute_compute_in_place,
         "1_to_0": recompute_1_to_0_in_place,
     }.get(action.pattern or "")
     if method is None:
@@ -421,214 +395,282 @@ def recompute_creation_in_place(panel: HistoryPanel, action: HistoryAction) -> b
     return True
 
 
-def recompute_1_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
-    """Recompute a single 1-to-1 action in place.
+def execute_compute_via_ui(
+    panel_data: BaseDataPanel,
+    action: HistoryAction,
+    obj2_uuids: list[str],
+) -> None:
+    """Invoke the public processor entry point matching ``action``'s pattern.
 
-    If the output object was deleted, it is re-created under its recorded
-    UUID; the source is then resolved from the action's captured state.
+    This is the same code path the menus use (``compute_1_to_1``,
+    ``compute_multiple_1_to_1``, ``compute_1_to_n``, ``compute_n_to_1``,
+    ``compute_2_to_1``), so multi-selection batching, group creation,
+    pairwise mode, X-array compatibility, progress bars and error handling
+    are reused by construction. The recorded parameters are deep-copied so
+    replay never mutates (nor shares) the action's own kwargs, and
+    ``edit=False`` suppresses parameter dialogs (edit-mode prompting is
+    handled upstream by the interactive replay).
+
+    Args:
+        panel_data: Data panel targeted by the action.
+        action: Compute-kind history action to re-execute.
+        obj2_uuids: Recorded second-operand UUIDs (2-to-1 pattern only).
+
+    Raises:
+        FeatureNotFoundError: If the feature is not registered (missing
+         plugin), propagated to :func:`recompute_action_in_place`.
     """
-    panel_data = hchain.resolve_panel_for_action(panel, action)
-    if panel_data is None:
-        return False
-    recorded = hchain.recorded_action_output_uuids(panel, action)
-    if not recorded:
-        return False
-    output_uuid = recorded[0]
-    output_panel = resolve_output_panel(panel, output_uuid, None, panel_data)
-    output_obj = (
-        output_panel.objmodel[output_uuid]
-        if output_panel.objmodel.has_uuid(output_uuid)
-        else None
-    )
-    pp = extract_processing_parameters(output_obj) if output_obj is not None else None
-    source_uuid = pp.source_uuid if pp is not None and pp.source_uuid else None
-    if source_uuid is None:
-        selection = action.state.selection.get(panel_data.PANEL_STR_ID, [])
-        source_uuid = selection[0] if selection else None
-    if source_uuid is None:
-        return False
-    if not panel_data.objmodel.has_uuid(source_uuid):
-        panel.runtime.execution.cascade_warnings.append(
-            _("Action %s: source object was deleted — skipping.")
-            % (action.func_name or action.uuid)
+    processor = panel_data.processor
+    title = action.title or action.func_name
+    if action.pattern == "multiple_1_to_1":
+        func_names = action.kwargs.get("func_names") or (
+            [action.func_name] if action.func_name else []
         )
-        return False
-    source_obj = panel_data.objmodel[source_uuid]
-    param = action.kwargs.get("param")
-    plugin_origin = action.plugin_origin or (pp.plugin_origin if pp else None)
-    compout = panel_data.processor.recompute_1_to_1(
+        funcs = [
+            processor.get_feature(
+                func_name, plugin_origin=action.plugin_origin
+            ).function
+            for func_name in func_names
+        ]
+        params = action.kwargs.get("params")
+        processor.compute_multiple_1_to_1(
+            funcs,
+            params=copy.deepcopy(params) if params is not None else None,
+            title=title,
+            edit=False,
+        )
+        return
+    if action.pattern == "1_to_n":
+        params = [copy.deepcopy(param) for param in action.kwargs.get("params") or []]
+        feature = processor.get_feature(
+            action.func_name,
+            plugin_origin=action.plugin_origin,
+            paramclass_name=type(params[0]).__name__ if params else None,
+        )
+        processor.compute_1_to_n(
+            feature.function, params=params, title=title, edit=False
+        )
+        return
+    param = copy.deepcopy(action.kwargs.get("param"))
+    feature = processor.get_feature(
         action.func_name,
-        source_obj,
-        param,
-        plugin_origin=plugin_origin,
+        plugin_origin=action.plugin_origin,
+        paramclass_name=type(param).__name__ if param is not None else None,
     )
-    if compout.cancelled:
-        return False
-    if compout.error_msg:
-        panel.runtime.execution.cascade_warnings.append(
-            _("Recompute failed for action %s: %s")
-            % (action.func_name or action.uuid, compout.error_msg)
+    if action.pattern == "1_to_1":
+        processor.compute_1_to_1(feature.function, param=param, title=title, edit=False)
+    elif action.pattern == "n_to_1":
+        processor.compute_n_to_1(
+            feature.function,
+            param=param,
+            title=title,
+            edit=False,
+            pairwise=bool(action.kwargs.get("pairwise")),
         )
-        return False
-    new_obj = compout.result
-    if not isinstance(new_obj, (SignalObj, ImageObj)):
-        return False
-    pp_new = ProcessingParameters(
-        func_name=pp.func_name if pp is not None else action.func_name,
-        pattern=pp.pattern if pp is not None else "1-to-1",
-        param=param if param is not None else (pp.param if pp is not None else None),
-        source_uuid=source_uuid,
-        plugin_origin=plugin_origin,
-    )
-    output_panel = resolve_output_panel(panel, output_uuid, new_obj, panel_data)
-    if output_obj is not None:
-        # Preserve the existing output's own metadata (ROIs, annotations...)
-        output_panel.objprop.apply_recomputed_object_in_place(
-            output_obj, new_obj, pp_new
+    elif action.pattern == "2_to_1":
+        objs2 = [panel_data.objmodel[uuid] for uuid in obj2_uuids]
+        pairwise = bool(action.kwargs.get("pairwise"))
+        processor.compute_2_to_1(
+            objs2 if pairwise else objs2[0],
+            action.kwargs.get("obj2_name") or feature.obj2_name or _("Second operand"),
+            feature.function,
+            param=param,
+            title=title,
+            edit=False,
+            skip_xarray_compat=feature.skip_xarray_compat,
+            pairwise=pairwise,
+            pre_execute_hook=feature.pre_execute_hook,
         )
     else:
-        apply_output_in_place_or_recreate(
-            panel,
-            output_panel,
-            action,
-            output_uuid,
-            new_obj,
-            pp_new,
-            group_id=(
-                panel_data.objmodel.get_object_group_id(source_obj)
-                if output_panel is panel_data
-                else None
-            ),
-        )
-    refresh_target(output_panel, output_uuid)
-    return True
+        raise ValueError(f"Unsupported compute pattern: {action.pattern!r}")
 
 
-def recompute_1_to_n_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
-    """Recompute a 1-to-n action in place: replace each of the N outputs.
+def _detach_object(panel_data: BaseDataPanel, obj_uuid: str) -> SignalObj | ImageObj:
+    """Remove ``obj_uuid`` from ``panel_data`` and return the live instance.
 
-    Deleted outputs are re-created under their recorded UUIDs; indices of
-    ``action.output_uuids`` align with the recorded ``params`` list.
+    Low-level counterpart of ``BaseDataPanel.remove_object`` used for the
+    temporary objects created by an execute-via-UI replay: no history entry,
+    no removal signal (the object was never a real workspace output).
     """
-    panel_data = hchain.resolve_panel_for_action(panel, action)
-    if panel_data is None:
-        return False
-    params = action.kwargs.get("params") or []
-    recorded = hchain.recorded_action_output_uuids(panel, action)
-    if not recorded or not params:
-        return False
-    # Resolve against the first recorded output still owned by a panel, so a
-    # deleted recorded[0] does not fall back to the wrong (action) panel.
-    resolve_uuid = next(
+    obj = panel_data.objmodel[obj_uuid]
+    panel_data.plothandler.remove_item(obj_uuid)
+    panel_data.objview.remove_item(obj_uuid, refresh=False)
+    panel_data.objmodel.remove_object(obj)
+    panel_data.objview.update_tree()
+    return obj
+
+
+def _discard_new_empty_groups(
+    data_panels: tuple[BaseDataPanel, ...],
+    before_groups: dict[str, set[str]],
+) -> None:
+    """Remove empty groups created by an execute-via-UI replay batch."""
+    for panel_data in data_panels:
+        removed = False
+        for group in list(panel_data.objmodel.get_groups()):
+            group_uuid = get_uuid(group)
+            if group_uuid in before_groups[panel_data.PANEL_STR_ID]:
+                continue
+            if group.get_object_ids():
+                continue
+            panel_data.objview.remove_item(group_uuid, refresh=False)
+            panel_data.objmodel.remove_group(group)
+            removed = True
+        if removed:
+            panel_data.objview.update_tree()
+
+
+def _restore_selection(
+    data_panels: tuple[BaseDataPanel, ...],
+    saved_selection: dict[str, list[str]],
+) -> None:
+    """Best-effort restore of the pre-replay object and group selection."""
+    for panel_data in data_panels:
+        group_uuids = {get_uuid(grp) for grp in panel_data.objmodel.get_groups()}
+        uuids = [
+            uuid
+            for uuid in saved_selection[panel_data.PANEL_STR_ID]
+            if panel_data.objmodel.has_uuid(uuid) or uuid in group_uuids
+        ]
+        for idx, uuid in enumerate(uuids):
+            panel_data.objview.set_current_item_id(uuid, extend=idx > 0)
+
+
+def _commit_outputs(
+    panel: HistoryPanel,
+    panel_data: BaseDataPanel,
+    action: HistoryAction,
+    recorded: list[str],
+    detached: list[tuple[BaseDataPanel, SignalObj | ImageObj]],
+) -> None:
+    """Commit fresh outputs onto the recorded outputs (index-aligned).
+
+    Recorded outputs that still exist are updated in place; deleted outputs
+    are re-created under their original recorded UUIDs, preferring the group
+    of a surviving sibling output, then the first source's group. For 1-to-1
+    family patterns, existing outputs keep their own metadata (ROIs,
+    annotations, analysis results...) and only their processing parameters
+    are refreshed, matching the behavior of a manual re-processing. On
+    failure, previously existing outputs are restored from snapshots before
+    the exception is propagated.
+
+    Args:
+        panel: History panel instance.
+        panel_data: Data panel targeted by the action.
+        action: Compute-kind history action being reconciled.
+        recorded: Recorded output UUIDs, in recording order.
+        detached: Freshly computed objects (with their creation panel), in
+         creation order, index-aligned with ``recorded``.
+    """
+    sources = action.state.selection.get(panel_data.PANEL_STR_ID, [])
+    fallback_gid = None
+    if sources and panel_data.objmodel.has_uuid(sources[0]):
+        fallback_gid = panel_data.objmodel.get_object_group_id(
+            panel_data.objmodel[sources[0]]
+        )
+    preserve_metadata = action.pattern in {"1_to_1", "multiple_1_to_1"}
+    plans: list[tuple[str, BaseDataPanel, SignalObj | ImageObj]] = []
+    snapshots: dict[str, tuple[BaseDataPanel, SignalObj | ImageObj]] = {}
+    for out_uuid, (fresh_panel, fresh_obj) in zip(recorded, detached):
+        output_panel = resolve_output_panel(panel, out_uuid, fresh_obj, fresh_panel)
+        plans.append((out_uuid, output_panel, fresh_obj))
+        if output_panel.objmodel.has_uuid(out_uuid):
+            snapshots[out_uuid] = (
+                output_panel,
+                copy.deepcopy(output_panel.objmodel[out_uuid]),
+            )
+    sibling_gid = next(
         (
-            u
-            for u in recorded
-            if resolve_output_panel(panel, u, None, panel_data).objmodel.has_uuid(u)
+            output_panel.objmodel.get_object_group_id(output_panel.objmodel[out_uuid])
+            for out_uuid, output_panel, _fresh_obj in plans
+            if output_panel is panel_data and out_uuid in snapshots
         ),
-        recorded[0],
+        None,
     )
-    output_panel = resolve_output_panel(panel, resolve_uuid, None, panel_data)
-    if len(recorded) != len(params):
-        # Legacy or inconsistent recording: outputs cannot be aligned with
-        # the parameter list, so recreation is impossible.
-        record_missing_outputs(
-            panel,
-            action,
-            [u for u in recorded if not output_panel.objmodel.has_uuid(u)],
-        )
-        return False
-    existing = [u for u in recorded if output_panel.objmodel.has_uuid(u)]
-    pp = (
-        extract_processing_parameters(output_panel.objmodel[existing[0]])
-        if existing
-        else None
-    )
-    source_uuid = pp.source_uuid if pp is not None and pp.source_uuid else None
-    if source_uuid is None:
-        selection = action.state.selection.get(panel_data.PANEL_STR_ID, [])
-        source_uuid = selection[0] if selection else None
-    if source_uuid is None:
-        return False
-    if not panel_data.objmodel.has_uuid(source_uuid):
-        panel.runtime.execution.cascade_warnings.append(
-            _("Action %s: source object was deleted — skipping.")
-            % (action.func_name or action.uuid)
-        )
-        return False
-    source_obj = panel_data.objmodel[source_uuid]
-    plugin_origin = action.plugin_origin or (pp.plugin_origin if pp else None)
-    new_objs = panel_data.processor.recompute_1_to_n(
-        action.func_name,
-        source_obj,
-        params,
-        plugin_origin=plugin_origin,
-    )
-    if not new_objs:
-        return False
-    if len(new_objs) != len(recorded) or not all(
-        isinstance(obj, (SignalObj, ImageObj)) for obj in new_objs
-    ):
-        _logger.warning(
-            "1-to-n cardinality changed for action %s: %d outputs, %d recorded.",
-            action.uuid,
-            len(new_objs),
-            len(recorded),
-        )
-        panel.runtime.execution.cascade_warnings.append(
-            _("Action %s: recompute returned %d output(s), expected %d.")
-            % (action.func_name or action.uuid, len(new_objs), len(recorded))
-        )
-        return False
-    output_panel = resolve_output_panel(panel, recorded[0], new_objs[0], panel_data)
-    group_id = (
-        panel_data.objmodel.get_object_group_id(source_obj)
-        if output_panel is panel_data
-        else None
-    )
-    snapshots = {
-        out_uuid: copy.deepcopy(output_panel.objmodel[out_uuid])
-        for out_uuid in existing
-        if output_panel.objmodel.has_uuid(out_uuid)
-    }
     try:
-        for idx, out_uuid in enumerate(recorded):
+        for out_uuid, output_panel, fresh_obj in plans:
+            pparams = extract_processing_parameters(fresh_obj)
+            existing_pp = (
+                extract_processing_parameters(output_panel.objmodel[out_uuid])
+                if out_uuid in snapshots
+                else None
+            )
+            if pparams is not None:
+                # The freshly registered feature may not carry the plugin
+                # origin (or a param): fall back to the recorded action, then
+                # to the metadata stored on the target, as the legacy
+                # per-pattern engines did.
+                if pparams.plugin_origin is None:
+                    pparams.plugin_origin = action.plugin_origin or (
+                        existing_pp.plugin_origin if existing_pp else None
+                    )
+                if pparams.param is None and existing_pp is not None:
+                    pparams.param = existing_pp.param
+            if out_uuid in snapshots and preserve_metadata and pparams is not None:
+                # Preserve the existing output's own metadata (ROIs,
+                # annotations, analysis results...)
+                output_panel.objprop.apply_recomputed_object_in_place(
+                    output_panel.objmodel[out_uuid], fresh_obj, pparams
+                )
+                continue
+            group_id = None
+            if output_panel is panel_data and out_uuid not in snapshots:
+                group_id = sibling_gid or fallback_gid
             apply_output_in_place_or_recreate(
                 panel,
                 output_panel,
                 action,
                 out_uuid,
-                new_objs[idx],
-                ProcessingParameters(
-                    func_name=action.func_name,
-                    pattern="1-to-n",
-                    param=params[idx],
-                    source_uuid=source_uuid,
-                    plugin_origin=plugin_origin,
-                ),
+                fresh_obj,
+                pparams,
                 group_id=group_id,
             )
-        for out_uuid in recorded:
+        for out_uuid, output_panel, _fresh_obj in plans:
             refresh_target(output_panel, out_uuid)
     except Exception:
-        for out_uuid, snapshot in snapshots.items():
+        # Outputs re-created during this failed batch (absent from
+        # ``snapshots``) must not survive the rollback: detach them.
+        for out_uuid, output_panel, _fresh_obj in plans:
+            if out_uuid not in snapshots and output_panel.objmodel.has_uuid(out_uuid):
+                _detach_object(output_panel, out_uuid)
+        for out_uuid, (output_panel, snapshot) in snapshots.items():
             update_obj_in_place(output_panel.objmodel[out_uuid], snapshot)
-        for out_uuid in snapshots:
+        for out_uuid, (output_panel, _snapshot) in snapshots.items():
             try:
                 refresh_target(output_panel, out_uuid)
-            except Exception:
+            except Exception:  # pylint: disable=broad-exception-caught
                 _logger.exception(
                     "Cascade recompute rollback refresh failed for output %s.",
                     out_uuid,
                 )
         raise
-    return True
 
 
-def recompute_n_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
-    """Recompute an n-to-1 action in place.
+def recompute_compute_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
+    """Replay a compute action through the real UI entry point, then reconcile.
 
-    If the output object was deleted, it is re-created under its recorded
-    UUID; sources are then resolved from the action's captured state.
+    **Execute**: the recorded selection is restored and the same public
+    processor method the menus use is invoked with the recorded parameters
+    (see :func:`execute_compute_via_ui`), under the ``replaying()`` guard so
+    no new history entry is recorded.
+
+    **Reconcile**: the freshly created objects — diffed from both data
+    panels, in recording order (cross-panel outputs land in the panel
+    matching their type) — are aligned by index with the recorded output
+    UUIDs and committed via :func:`_commit_outputs`. The temporary objects
+    (and any temporary group created by the batch, e.g. pairwise ``dst_gname``
+    groups) are then removed so no duplicates remain.
+
+    If the number of fresh outputs differs from the number of recorded
+    outputs, the temporary objects are discarded, a warning is queued and the
+    action is flagged stale.
+
+    Args:
+        panel: History panel instance.
+        action: Compute-kind history action to recompute.
+
+    Returns:
+        True when every recorded output was reconciled.
     """
     panel_data = hchain.resolve_panel_for_action(panel, action)
     if panel_data is None:
@@ -636,205 +678,89 @@ def recompute_n_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> boo
     recorded = hchain.recorded_action_output_uuids(panel, action)
     if not recorded:
         return False
-    output_uuid = recorded[0]
-    output_panel = resolve_output_panel(panel, output_uuid, None, panel_data)
-    output_obj = (
-        output_panel.objmodel[output_uuid]
-        if output_panel.objmodel.has_uuid(output_uuid)
-        else None
-    )
-    pp = extract_processing_parameters(output_obj) if output_obj is not None else None
-    source_uuids: list[str] = []
-    if pp is not None and pp.source_uuids:
-        source_uuids = list(pp.source_uuids)
-    else:
-        source_uuids = list(action.state.selection.get(panel_data.PANEL_STR_ID, []))
-    if not source_uuids or not all(
-        panel_data.objmodel.has_uuid(uuid) for uuid in source_uuids
-    ):
+    name = action.func_name or action.title or action.uuid
+    sources = list(action.state.selection.get(panel_data.PANEL_STR_ID, []))
+    if not sources:
         panel.runtime.execution.cascade_warnings.append(
-            _("Action %s: source object(s) were deleted — skipping.")
-            % (action.func_name or action.uuid)
+            _("Action %s: no recorded source object — skipping.") % name
         )
         return False
-    src_objs = [panel_data.objmodel[uuid] for uuid in source_uuids]
-    param = action.kwargs.get("param")
-    plugin_origin = action.plugin_origin or (pp.plugin_origin if pp else None)
-    new_obj = panel_data.processor.recompute_n_to_1(
-        action.func_name,
-        src_objs,
-        param,
-        plugin_origin=plugin_origin,
-    )
-    if not isinstance(new_obj, (SignalObj, ImageObj)):
-        return False
-    output_panel = resolve_output_panel(panel, output_uuid, new_obj, panel_data)
-    apply_output_in_place_or_recreate(
-        panel,
-        output_panel,
-        action,
-        output_uuid,
-        new_obj,
-        ProcessingParameters(
-            func_name=action.func_name,
-            pattern="n-to-1",
-            param=param,
-            source_uuids=[get_uuid(o) for o in src_objs],
-            plugin_origin=plugin_origin,
-        ),
-        group_id=(
-            panel_data.objmodel.get_object_group_id(src_objs[0])
-            if output_panel is panel_data
-            else None
-        ),
-    )
-    refresh_target(output_panel, output_uuid)
-    return True
-
-
-def recompute_2_to_1_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
-    """Recompute a 2-to-1 action in place (single or pairwise).
-
-    Deleted outputs are re-created under their recorded UUIDs; sources are
-    then resolved from the action's captured inputs (indices of
-    ``action.output_uuids`` align with the recorded input/operand lists).
-    """
-    panel_data = hchain.resolve_panel_for_action(panel, action)
-    if panel_data is None:
-        return False
-    recorded = hchain.recorded_action_output_uuids(panel, action)
-    if not recorded:
-        return False
-    output_panel = resolve_output_panel(panel, recorded[0], None, panel_data)
-    param = action.kwargs.get("param")
     obj2_uuids = action.kwargs.get("obj2_uuids") or []
     if isinstance(obj2_uuids, str):
         obj2_uuids = [obj2_uuids]
-    pairwise = bool(action.kwargs.get("pairwise"))
-    recorded_inputs = list(action.state.selection.get(panel_data.PANEL_STR_ID, []))
-    resolved: list[
-        tuple[
-            str,
-            SignalObj | ImageObj,
-            SignalObj | ImageObj,
-            dict | None,
-        ]
-    ] = []
-    for idx, out_uuid in enumerate(recorded):
-        pp = (
-            extract_processing_parameters(output_panel.objmodel[out_uuid])
-            if output_panel.objmodel.has_uuid(out_uuid)
-            else None
+    if action.pattern == "2_to_1" and not obj2_uuids:
+        panel.runtime.execution.cascade_warnings.append(
+            _("Action %s: no recorded second operand — skipping.") % name
         )
-        src_uuids = (
-            list(pp.source_uuids)
-            if pp is not None and pp.source_uuids
-            else (
-                recorded_inputs[idx : idx + 1] + obj2_uuids[idx : idx + 1]
-                if pairwise
-                else recorded_inputs[idx : idx + 1] + obj2_uuids[:1]
-            )
-        )
-        if len(src_uuids) < 2:
-            panel.runtime.execution.cascade_warnings.append(
-                _("Action %s: missing source(s) for output #%d — skipping.")
-                % (action.func_name or action.uuid, idx + 1)
-            )
-            return False
-        if not (
-            panel_data.objmodel.has_uuid(src_uuids[0])
-            and panel_data.objmodel.has_uuid(src_uuids[1])
-        ):
-            panel.runtime.execution.cascade_warnings.append(
-                _("Action %s: source object(s) were deleted — skipping.")
-                % (action.func_name or action.uuid)
-            )
-            return False
-        obj1 = panel_data.objmodel[src_uuids[0]]
-        obj2 = panel_data.objmodel[src_uuids[1]]
-        plugin_origin = action.plugin_origin or (pp.plugin_origin if pp else None)
-        resolved.append((out_uuid, obj1, obj2, plugin_origin))
-
-    paramclass_name = type(param).__name__ if param is not None else None
-    feature = panel_data.processor.get_feature(
-        action.func_name,
-        plugin_origin=resolved[0][3],
-        paramclass_name=paramclass_name,
-    )
-    preparation = panel_data.processor.prepare_2_to_1_pairs(
-        [(obj1, obj2) for _out_uuid, obj1, obj2, _origin in resolved],
-        feature.skip_xarray_compat,
-        feature.pre_execute_hook,
-    )
-    if preparation is None:
         return False
-    prepared_pairs, source_transaction = preparation
-    staged: list[
-        tuple[
-            str,
-            SignalObj | ImageObj,
-            SignalObj | ImageObj,
-            SignalObj | ImageObj,
-            dict | None,
-        ]
-    ] = []
-    for resolved_item, prepared_pair in zip(resolved, prepared_pairs):
-        out_uuid, obj1, obj2, plugin_origin = resolved_item
-        new_obj = panel_data.processor.recompute_2_to_1(
-            action.func_name,
-            obj1,
-            obj2,
-            param,
-            plugin_origin=plugin_origin,
-            prepared_pair=prepared_pair,
+    required = sources + (obj2_uuids if action.pattern == "2_to_1" else [])
+    if any(not panel_data.objmodel.has_uuid(uuid) for uuid in required):
+        panel.runtime.execution.cascade_warnings.append(
+            _("Action %s: source object(s) were deleted — skipping.") % name
         )
-        if not isinstance(new_obj, (SignalObj, ImageObj)):
-            return False
-        staged.append((out_uuid, new_obj, obj1, obj2, plugin_origin))
-    output_panel = resolve_output_panel(panel, recorded[0], staged[0][1], panel_data)
-    snapshots = {
-        out_uuid: copy.deepcopy(output_panel.objmodel[out_uuid])
-        for out_uuid, *_rest in staged
-        if output_panel.objmodel.has_uuid(out_uuid)
+        return False
+    data_panels = (panel.mainwindow.signalpanel, panel.mainwindow.imagepanel)
+    before_objs = {
+        p.PANEL_STR_ID: set(p.objmodel.get_object_ids()) for p in data_panels
     }
-    try:
-        for out_uuid, new_obj, obj1, obj2, plugin_origin in staged:
-            apply_output_in_place_or_recreate(
-                panel,
-                output_panel,
-                action,
-                out_uuid,
-                new_obj,
-                ProcessingParameters(
-                    func_name=action.func_name,
-                    pattern="2-to-1",
-                    param=param,
-                    source_uuids=[get_uuid(obj1), get_uuid(obj2)],
-                    plugin_origin=plugin_origin,
-                ),
-                group_id=(
-                    panel_data.objmodel.get_object_group_id(obj1)
-                    if output_panel is panel_data
-                    else None
-                ),
-            )
-        for out_uuid, *_rest in staged:
-            refresh_target(output_panel, out_uuid)
-        if source_transaction is not None:
-            for _out_uuid, _new_obj, obj1, _obj2, _origin in staged:
-                source_transaction.commit(obj1)
-    except Exception:
-        for out_uuid, snapshot in snapshots.items():
-            update_obj_in_place(output_panel.objmodel[out_uuid], snapshot)
-        for out_uuid in snapshots:
+    before_grps = {
+        p.PANEL_STR_ID: {get_uuid(grp) for grp in p.objmodel.get_groups()}
+        for p in data_panels
+    }
+    saved_selection = {
+        p.PANEL_STR_ID: p.objview.get_sel_object_uuids()
+        + p.objview.get_sel_group_uuids()
+        for p in data_panels
+    }
+    # ``replaying()`` suppresses history capture and session prompts for the
+    # whole execute + reconcile scope (temporary insertions included).
+    with panel.replaying():
+        try:
+            panel_data.objview.select_objects(sources)
             try:
-                refresh_target(output_panel, out_uuid)
+                execute_compute_via_ui(panel_data, action, obj2_uuids)
             except Exception:
-                _logger.exception(
-                    "Cascade recompute rollback refresh failed for output %s.",
-                    out_uuid,
+                # A compute failing mid-batch may already have inserted some
+                # fresh temporaries: detach them so no duplicates remain.
+                for p in data_panels:
+                    for uid in list(p.objmodel.get_object_ids()):
+                        if uid not in before_objs[p.PANEL_STR_ID]:
+                            _detach_object(p, uid)
+                _discard_new_empty_groups(data_panels, before_grps)
+                raise
+            fresh = [
+                (p, uid)
+                for p in data_panels
+                for uid in p.objmodel.get_object_ids()
+                if uid not in before_objs[p.PANEL_STR_ID]
+            ]
+            if len(fresh) != len(recorded):
+                for fresh_panel, fresh_uuid in fresh:
+                    _detach_object(fresh_panel, fresh_uuid)
+                _discard_new_empty_groups(data_panels, before_grps)
+                action.is_stale = True
+                _logger.warning(
+                    "Cascade recompute: cardinality changed for action %s: "
+                    "%d output(s), %d recorded.",
+                    action.uuid,
+                    len(fresh),
+                    len(recorded),
                 )
-        raise
+                panel.runtime.execution.cascade_warnings.append(
+                    _("Action %s: recompute returned %d output(s), expected %d.")
+                    % (name, len(fresh), len(recorded))
+                )
+                return False
+            # Detach the fresh objects: they are temporary carriers whose
+            # content is committed onto the recorded outputs below.
+            detached = [
+                (fresh_panel, _detach_object(fresh_panel, fresh_uuid))
+                for fresh_panel, fresh_uuid in fresh
+            ]
+            _discard_new_empty_groups(data_panels, before_grps)
+            _commit_outputs(panel, panel_data, action, recorded, detached)
+        finally:
+            _restore_selection(data_panels, saved_selection)
     return True
 
 

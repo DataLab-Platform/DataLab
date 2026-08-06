@@ -343,6 +343,11 @@ class HistoryAction(ObjItf):
         """Return object title"""
         return self.__title
 
+    @title.setter
+    def title(self, value: str) -> None:
+        """Set object title"""
+        self.__title = value or ""
+
     # ------------------------------------------------------------------
     # Description rendering (used by the tree view)
     # ------------------------------------------------------------------

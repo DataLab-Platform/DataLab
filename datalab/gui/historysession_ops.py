@@ -131,8 +131,8 @@ def add_compute_entry(
         func_name: Sigima feature name (resolvable via
          :meth:`BaseProcessor.get_feature`).
         pattern: One of ``"1_to_1"``, ``"1_to_0"``, ``"n_to_1"``, ``"2_to_1"``,
-         ``"1_to_n"``, ``"multiple_1_to_1"`` (the latter is recorded for
-         traceability but not replayable).
+         ``"1_to_n"``, ``"multiple_1_to_1"`` (the latter is replayable via
+         the generic compute replay, like the other compute patterns).
         save_state: If True, capture the workspace state for replay.
         output_uuids: Optional list of UUIDs of the data objects produced by
          this action. When known at call time, prefer passing it here so the
@@ -279,19 +279,36 @@ def capture_outputs(
                 if uid not in before_p:
                     new_uuids.append(uid)
         panel.register_action_outputs(action, new_uuids)
-        if (
-            not new_uuids
-            and action.kind == HistoryAction.KIND_COMPUTE
-            and action.pattern in {"1_to_1", "1_to_n", "n_to_1", "2_to_1"}
-        ):
-            # The compute produced no output object for any selected input:
-            # it failed (or was a full no-op). Do not keep a misleading "OK"
-            # entry in the history — remove the just-recorded action and
-            # refresh the tree so the panel stays consistent.
-            hchain.remove_single_action(panel, action)
-            panel.tree.populate_tree(panel.history_sessions)
-            panel.refresh_compatibility_items()
-            panel.ui.update_actions_state()
+        if not new_uuids:
+            no_output_compute = action.kind == HistoryAction.KIND_COMPUTE and (
+                action.pattern
+                in {"1_to_1", "multiple_1_to_1", "1_to_n", "n_to_1", "2_to_1"}
+            )
+            no_output_load = (
+                action.kind == HistoryAction.KIND_UI
+                and action.method_name in HistoryAction.UI_LOAD_METHODS
+            )
+            if no_output_compute or no_output_load:
+                # The action produced no output object: either the compute
+                # failed (or was a full no-op), or the load found nothing
+                # readable for the panel. Do not keep a misleading entry in
+                # the history.
+                discard_empty_output_action(panel, action)
+
+
+def discard_empty_output_action(panel: HistoryPanel, action: HistoryAction) -> None:
+    """Remove a just-recorded action that produced no output object.
+
+    Removes the action from the session chain and refreshes the tree so the
+    panel stays consistent.
+
+    Args:
+        action: The history action to discard.
+    """
+    hchain.remove_single_action(panel, action)
+    panel.tree.populate_tree(panel.history_sessions)
+    panel.refresh_compatibility_items()
+    panel.ui.update_actions_state()
 
 
 def add_ui_entry(

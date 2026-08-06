@@ -4272,10 +4272,6 @@ msgid "History files"
 msgstr "Fichiers d'historique"
 
 #, python-format
-msgid "Action %s has been edited but its target output object(s) no longer exist — skipping."
-msgstr "L'action %s a été modifiée mais son ou ses objets de sortie cibles n'existent plus — ignorée."
-
-#, python-format
 msgid "Action %s: target panel not found — skipping."
 msgstr "Action %s : panneau cible introuvable — ignorée."
 
@@ -4326,20 +4322,20 @@ msgid "Action %s: creation parameters could not be prepared — skipping."
 msgstr "Action %s : les paramètres de création n'ont pas pu être préparés — ignorée."
 
 #, python-format
-msgid "Action %s: source object was deleted — skipping."
-msgstr "Action %s : l'objet source a été supprimé — ignorée."
+msgid "Action %s: no recorded source object — skipping."
+msgstr "Action %s : aucun objet source enregistré — ignorée."
 
 #, python-format
-msgid "Action %s: recompute returned %d output(s), expected %d."
-msgstr "Action %s : le recalcul a renvoyé %d sortie(s), %d attendue(s)."
+msgid "Action %s: no recorded second operand — skipping."
+msgstr "Action %s : aucun second opérande enregistré — ignorée."
 
 #, python-format
 msgid "Action %s: source object(s) were deleted — skipping."
 msgstr "Action %s : le ou les objets source ont été supprimés — ignorée."
 
 #, python-format
-msgid "Action %s: missing source(s) for output #%d — skipping."
-msgstr "Action %s : source(s) manquante(s) pour la sortie n°%d — ignorée."
+msgid "Action %s: recompute returned %d output(s), expected %d."
+msgstr "Action %s : le recalcul a renvoyé %d sortie(s), %d attendue(s)."
 
 #, python-format
 msgid "Action %s: %d analysed object(s) were deleted — skipping."

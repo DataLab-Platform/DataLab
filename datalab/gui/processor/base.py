@@ -913,7 +913,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         behavior = Conf.proc.xarray_compat_behavior.get("ask")
         yes_to_all_selected = False
 
-        if behavior == "ask" and not env.execenv.unattended:
+        # History replay must be non-interactive and deterministic: treat
+        # "ask" as automatic interpolation while replaying.
+        hpanel = getattr(self.mainwindow, "historypanel", None)
+        replaying = hpanel is not None and hpanel.is_replaying()
+        if behavior == "ask" and not env.execenv.unattended and not replaying:
             # Create custom message box with "Yes to All" option
             msg_box = QW.QMessageBox(self.mainwindow)
             msg_box.setWindowTitle(_("X-array incompatibility"))
@@ -1529,112 +1533,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             comp_out.result = new_obj
             return comp_out
 
-    # ------------------------------------------------------------------
-    # In-place recompute helpers used by the History panel cascade
-    # (Edit mode tweaks + downstream propagation). They mirror their
-    # ``compute_*`` counterparts but:
-    #   - never add results to a panel (caller updates targets in place);
-    #   - never record a history entry (cascade runs under ``replaying``);
-    #   - never insert :class:`ProcessingParameters` (caller does, so that
-    #     ``source_uuid`` / ``source_uuids`` stay consistent with the
-    #     existing output object identity).
-    # ------------------------------------------------------------------
-
-    def recompute_1_to_n(
-        self,
-        func_name: str,
-        obj: SignalObj | ImageObj,
-        params: list[gds.DataSet],
-        plugin_origin: dict[str, Any] | None = None,
-    ) -> list[SignalObj | ImageObj] | None:
-        """Recompute a 1-to-n processing operation without adding results to panel.
-
-        Args:
-            func_name: Name of the processing function.
-            obj: Source object to process.
-            params: List of N parameter datasets (one per output).
-            plugin_origin: Optional plugin origin descriptor.
-
-        Returns:
-            List of N new objects (in input order), or ``None`` if cancelled
-            or an unrecoverable error occurred. Shorter lists are possible
-            when individual sub-calls return ``None``.
-        """
-        paramclass_name = (
-            type(params[0]).__name__ if params and params[0] is not None else None
-        )
-        feature = self.get_feature(
-            func_name,
-            plugin_origin=plugin_origin,
-            paramclass_name=paramclass_name,
-        )
-        func = feature.function
-        results: list[SignalObj | ImageObj] = []
-        with create_progress_bar(
-            self.panel, _("Recomputing..."), max_=len(params)
-        ) as progress:
-            for idx, param in enumerate(params):
-                progress.setValue(idx)
-                progress.setLabelText(_("Processing object with updated parameters..."))
-                args = (obj, param) if param is not None else (obj,)
-                comp_out = self.__exec_func(func, args, progress)
-                if comp_out is None:
-                    return None
-                new_obj = self.handle_output(comp_out, _("Recomputing"), progress)
-                if new_obj is None:
-                    continue
-                if isinstance(new_obj, (SignalObj, ImageObj)):
-                    self._handle_keep_results(new_obj)
-                    patch_title_with_ids(new_obj, [obj], get_short_id)
-                    results.append(new_obj)
-        return results
-
-    def recompute_n_to_1(
-        self,
-        func_name: str,
-        objs: list[SignalObj | ImageObj],
-        param: gds.DataSet | None = None,
-        plugin_origin: dict[str, Any] | None = None,
-    ) -> SignalObj | ImageObj | None:
-        """Recompute an n-to-1 processing operation without adding result to panel.
-
-        Args:
-            func_name: Name of the processing function.
-            objs: Source object list to aggregate.
-            param: Processing parameters (optional).
-            plugin_origin: Optional plugin origin descriptor.
-
-        Returns:
-            New aggregated object, or ``None`` if cancelled / errored.
-
-        .. note::
-            Pairwise mode is not handled here: each pairwise output is a
-            distinct single-output recompute -- the caller is expected to
-            split the work per output and iterate.
-        """
-        paramclass_name = type(param).__name__ if param is not None else None
-        feature = self.get_feature(
-            func_name,
-            plugin_origin=plugin_origin,
-            paramclass_name=paramclass_name,
-        )
-        func = feature.function
-        with create_progress_bar(self.panel, _("Recomputing..."), max_=1) as progress:
-            progress.setValue(0)
-            progress.setLabelText(_("Processing object with updated parameters..."))
-            args = (objs, param) if param is not None else (objs,)
-            comp_out = self.__exec_func(func, args, progress)
-            if comp_out is None:
-                return None
-            new_obj = self.handle_output(comp_out, _("Recomputing"), progress)
-            if new_obj is None:
-                return None
-            if isinstance(new_obj, (SignalObj, ImageObj)):
-                self._handle_keep_results(new_obj)
-                self._merge_geometry_results_for_n_to_1(new_obj, objs)
-                patch_title_with_ids(new_obj, objs, get_short_id)
-            return new_obj
-
     def prepare_2_to_1_pairs(
         self,
         object_pairs: list[tuple[TypeObj, TypeObj]],
@@ -1703,69 +1601,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 )
             ]
         return prepared_pairs, source_transaction
-
-    def recompute_2_to_1(
-        self,
-        func_name: str,
-        obj1: SignalObj | ImageObj,
-        obj2: SignalObj | ImageObj,
-        param: gds.DataSet | None = None,
-        plugin_origin: dict[str, Any] | None = None,
-        prepared_pair: tuple[SignalObj | ImageObj, SignalObj | ImageObj] | None = None,
-    ) -> SignalObj | ImageObj | None:
-        """Recompute a 2-to-1 processing operation without adding result to panel.
-
-        Args:
-            func_name: Name of the processing function.
-            obj1: First source object.
-            obj2: Second source object.
-            param: Processing parameters (optional).
-            plugin_origin: Optional plugin origin descriptor.
-            prepared_pair: Optional effective pair prepared by a batch caller.
-
-        Returns:
-            New combined object, or ``None`` if cancelled / errored.
-        """
-        paramclass_name = type(param).__name__ if param is not None else None
-        feature = self.get_feature(
-            func_name,
-            plugin_origin=plugin_origin,
-            paramclass_name=paramclass_name,
-        )
-        func = feature.function
-        source_transaction = None
-        if prepared_pair is None:
-            preparation = self.prepare_2_to_1_pairs(
-                [(obj1, obj2)],
-                feature.skip_xarray_compat,
-                feature.pre_execute_hook,
-            )
-            if preparation is None:
-                return None
-            prepared_pairs, source_transaction = preparation
-            actual_obj1, actual_obj2 = prepared_pairs[0]
-        else:
-            actual_obj1, actual_obj2 = prepared_pair
-        with create_progress_bar(self.panel, _("Recomputing..."), max_=1) as progress:
-            progress.setValue(0)
-            progress.setLabelText(_("Processing object with updated parameters..."))
-            args = (
-                (actual_obj1, actual_obj2, param)
-                if param is not None
-                else (actual_obj1, actual_obj2)
-            )
-            comp_out = self.__exec_func(func, args, progress)
-            if comp_out is None:
-                return None
-            new_obj = self.handle_output(comp_out, _("Recomputing"), progress)
-            if new_obj is None:
-                return None
-            if isinstance(new_obj, (SignalObj, ImageObj)):
-                self._handle_keep_results(new_obj)
-                patch_title_with_ids(new_obj, [obj1, obj2], get_short_id)
-                if source_transaction is not None:
-                    source_transaction.commit(obj1)
-            return new_obj
 
     def recompute_1_to_0(
         self,

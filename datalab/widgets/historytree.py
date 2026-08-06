@@ -250,6 +250,7 @@ class HistoryTree(QW.QTreeWidget):
                 # it reflects the mutated ``action.kwargs``.
                 self.removeItemWidget(item, self.DESCRIPTION_COLUMN)
                 self.install_description_widget(item, action)
+                item.setText(0, action.title)
                 brush = stale_brush if action.is_stale else normal_brush
                 for col in range(self.columnCount()):
                     item.setBackground(col, brush)
