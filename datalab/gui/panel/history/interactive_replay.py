@@ -33,7 +33,30 @@ class ActionParamEdit:
 def replay_restore_actions(
     panel: HistoryPanel, replay: bool = True, restore_selection: bool = True
 ) -> None:
-    """Replay and/or restore selection for the selected actions."""
+    """Replay and/or restore selection for the selected actions.
+
+    Entry point of the Replay, Step-by-step and double-click commands. When
+    nothing is selected in the tree, the last session is targeted (no-op if
+    the history is empty). Each selected session or action is first checked
+    against the current workspace state: any incompatibility vetoes the whole
+    command with an error dialog (skipped in unattended mode).
+
+    When ``replay`` is enabled, the selected actions (sessions contribute all
+    of their actions) are forwarded to :func:`replay_actions`, with parameter
+    dialogs when the panel's edit mode is active. When ``replay`` is disabled
+    and ``restore_selection`` is enabled, each selected entry is restored
+    instead: if edit mode is active or any action has pending parameter
+    edits, :func:`restore_action_params` rolls back the edited parameters and
+    recomputes in place; otherwise the recorded workspace selection is simply
+    restored.
+
+    Args:
+        panel: History panel instance
+        replay: Replay the selected actions through the in-place recompute
+         engine
+        restore_selection: When not replaying, restore the recorded workspace
+         selection (or the original parameters when edits are pending)
+    """
     panel.refresh_compatibility_items()
     selected = panel.tree.get_selected_actions_or_sessions(panel.history_sessions)
     if not selected:
@@ -43,9 +66,7 @@ def replay_restore_actions(
     edit_mode = panel.runtime.execution.edit_mode
     actions_to_replay: list[HistoryAction] = []
     for session_or_action in selected:
-        if not session_or_action.is_current_state_compatible(
-            panel.mainwindow, restore_selection=restore_selection
-        ):
+        if not session_or_action.is_current_state_compatible(panel.mainwindow):
             if not execenv.unattended:
                 QW.QMessageBox.critical(
                     panel.mainwindow,

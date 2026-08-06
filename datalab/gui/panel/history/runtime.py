@@ -29,7 +29,6 @@ class HistoryExecutionState:
         self.cascade_in_progress = False
         self.edit_replay_in_progress = False
         self.cascade_warnings: list[str] = []
-        self.broken_actions: set[str] = set()
 
     @contextmanager
     def replaying(self) -> Generator[None, None, None]:
@@ -79,7 +78,6 @@ class HistoryExecutionState:
         if self.cascade_in_progress:
             yield False
             return
-        self.broken_actions.clear()
         self.cascade_in_progress = True
         try:
             yield True

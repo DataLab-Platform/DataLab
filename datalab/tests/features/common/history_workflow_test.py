@@ -4,18 +4,27 @@
 
 from __future__ import annotations
 
+import copy
 import os
 import tempfile
 from types import SimpleNamespace
 from unittest.mock import patch
 
 import numpy as np
+import pytest
 import sigima.params
 import sigima.proc.signal as sips
-from sigima.tests.data import create_paracetamol_signal, create_sincos_image
+from sigima.objects import Gauss2DParam, ImageObj, create_signal_roi
+from sigima.tests.data import (
+    create_paracetamol_signal,
+    create_peak_image,
+    create_sincos_image,
+)
 
 from datalab.adapters_metadata.common import ResultData
+from datalab.config import Conf
 from datalab.gui import historytools_ops as htools
+from datalab.gui.creation import create_image_from_param, extract_creation_parameters
 from datalab.gui.panel.history import HistoryAction
 from datalab.gui.panel.history import chain as hchain
 from datalab.gui.panel.history import interactive_replay as hireplay
@@ -32,9 +41,14 @@ from datalab.gui.processor.base import (
 )
 from datalab.gui.processor.catcher import CompOut
 from datalab.h5.native import NativeH5Reader, NativeH5Writer
-from datalab.objectmodel import get_uuid
+from datalab.history.core import numpy_to_json_safe
+from datalab.history.effects import AnalysisEffects
+from datalab.history.session import HistorySession
+from datalab.history.workspace_state import WorkspaceState
+from datalab.objectmodel import get_uuid, set_uuid
 from datalab.tests import datalab_test_app_context
 from datalab.tests.features.common.history_test_helpers import (
+    CascadeObjectModel,
     add_paracetamol_signals,
     build_signal_chain,
     get_tree_item,
@@ -42,6 +56,10 @@ from datalab.tests.features.common.history_test_helpers import (
     select_tree_entry,
     select_tree_session,
 )
+
+SIZE = 200
+SROI1 = [26, 41]
+SROI2 = [125, 146]
 
 
 def assert_compute_action(
@@ -165,6 +183,16 @@ def test_history_hdf5_pristine_load_and_nonempty_import() -> None:
             assert history.open_dlhist_file(history_path)
             assert len(history.history_sessions) > pristine_counts[0]
             assert len(panel.objmodel) > pristine_counts[1] + 1
+            # Full history reset drops sessions, mappings, navigation and tree
+            assert isinstance(history.create_object(), HistoryAction)
+            history.remove_all_objects()
+            assert len(history) == 0 and not history.history_sessions
+            assert not history.runtime.objects.action_output_uuids
+            assert not history.runtime.objects.output_to_action
+            assert history.navigation.get_active_session() is None
+            assert history.tree.topLevelItemCount() == 0
+            with pytest.raises(IndexError):
+                history[1]  # pylint: disable=pointless-statement
 
 
 def test_duplicate_creation_and_operation_rooted_chains() -> None:
@@ -402,8 +430,13 @@ def test_edit_cascade_stops_after_failed_descendant() -> None:
         assert np.array_equal(failed_output.xydata, failed_data)
 
 
-def test_multi_action_edit_recomputes_selected_descendants_once() -> None:
-    """Recompute selected ancestors and their analysis descendant exactly once."""
+def test_multi_action_edit_single_session_planning() -> None:
+    """Plan selected ancestors, descendants and full-session selections once.
+
+    Selected ancestors are prompted exactly once and their analysis descendant
+    is recomputed once; selecting the whole session plus one of its (stale)
+    actions routes through the global replay planner without duplicates.
+    """
     with datalab_test_app_context(history=True) as win:
         history, panel = win.historypanel, win.signalpanel
         history.toggle_record_mode(True)
@@ -429,24 +462,17 @@ def test_multi_action_edit_recomputes_selected_descendants_once() -> None:
         assert [call.args[1] for call in recompute.call_args_list] == expected
         assert all(action.is_stale is False for action in expected)
 
-
-def test_edit_mode_selected_session_uses_global_replay_planner() -> None:
-    """Plan a selected session and duplicate stale action exactly once."""
-    with datalab_test_app_context(history=True) as win:
-        history, panel = win.historypanel, win.signalpanel
-        history.toggle_record_mode(True)
-        history.toggle_edit_mode(True)
-        build_signal_chain(panel, history)
+        # Selecting the session plus one stale action plans each action once
         session = history.history_sessions[-1]
-        expected = list(session.actions)
-        stale_action = expected[1]
+        session_expected = list(session.actions)
+        stale_action = session_expected[1]
         stale_action.is_stale = True
         select_tree_session(history, session)
         get_tree_item(history, stale_action.uuid).setSelected(True)
-        selected = history.tree.get_selected_actions_or_sessions(
+        selected_items = history.tree.get_selected_actions_or_sessions(
             history.history_sessions
         )
-        assert selected == [session, stale_action]
+        assert selected_items == [session, stale_action]
 
         with (
             patch.object(hrec, "recompute_cascade") as direct_cascade,
@@ -466,11 +492,11 @@ def test_edit_mode_selected_session_uses_global_replay_planner() -> None:
 
         direct_cascade.assert_not_called()
         edit_planner.assert_called_once_with(
-            history, [*expected, stale_action], prompt=True
+            history, [*session_expected, stale_action], prompt=True
         )
-        assert [call.args[1] for call in prompt.call_args_list] == expected
-        assert [call.args[1] for call in recompute.call_args_list] == expected
-        assert all(action.is_stale is False for action in expected)
+        assert [call.args[1] for call in prompt.call_args_list] == session_expected
+        assert [call.args[1] for call in recompute.call_args_list] == session_expected
+        assert all(action.is_stale is False for action in session_expected)
 
 
 def test_downstream_actions_follow_every_registered_output() -> None:
@@ -491,7 +517,7 @@ def test_downstream_actions_follow_every_registered_output() -> None:
         )
         history.runtime.objects.output_to_action[producer_second_output] = producer.uuid
         history.runtime.objects.output_to_action[consumer_second_output] = consumer.uuid
-        hchain.prune_output_mapping(history)
+        history.runtime.objects.prune_output_mapping()
         assert producer_second_output in producer.output_uuids
         assert consumer_second_output in consumer.output_uuids
         assert (
@@ -929,9 +955,23 @@ def test_1_to_n_refresh_failure_rolls_back_and_resyncs_outputs() -> None:
             assert np.array_equal(output.xydata, original_data[index])
             assert output.metadata == original_metadata[index]
 
+        # Legacy misaligned recording: with a deleted output and a params list
+        # that cannot be aligned with the recorded outputs, the recompute is
+        # rejected with a missing-outputs warning
+        history.runtime.execution.cascade_warnings.clear()
+        panel.objview.select_objects([action.output_uuids[1]])
+        panel.remove_object(force=True)
+        action.kwargs["params"].append(sigima.params.GaussianParam.create(sigma=3.5))
+        assert hrec.recompute_action_in_place(history, action) is False
+        assert any(
+            "no longer exist" in warning
+            for warning in history.runtime.execution.cascade_warnings
+        )
+        history.runtime.execution.cascade_warnings.clear()
+
 
 def test_1_to_0_failure_rolls_back_all_source_metadata() -> None:
-    """Restore every analysis source when a later recomputation fails."""
+    """Roll back analysis sources on failure, full-snapshot and targeted alike."""
     with datalab_test_app_context(history=True) as win:
         history, panel = win.historypanel, win.signalpanel
         history.toggle_record_mode(True)
@@ -963,6 +1003,53 @@ def test_1_to_0_failure_rolls_back_all_source_metadata() -> None:
         for index, source in enumerate(sources):
             assert source.metadata["user_marker"] == index
             assert "temporary_analysis" not in source.metadata
+
+        # Manifest-driven analysis: a failed recompute rolls back only the
+        # manifest keys and leaves unrelated user metadata untouched
+        image_panel = win.imagepanel
+        img = create_peak_image()
+        image_panel.add_object(img)
+        det_param = sigima.params.Peak2DDetectionParam.create(
+            create_rois=False, threshold=0.5
+        )
+        with Conf.proc.show_result_dialog.temp(False):
+            image_panel.processor.run_feature("peak_detection", det_param)
+        img_action = history[len(history)]
+        img_uuid = get_uuid(img)
+        manifest = AnalysisEffects.from_dict(img_action.effects[img_uuid])
+        manifest_keys = manifest.metadata_added + manifest.metadata_replaced
+        geometry_key = next(key for key in manifest_keys if key.startswith("Geometry_"))
+        # Simulate a user having deleted one analysis result key beforehand
+        del img.metadata[geometry_key]
+        present_key = next(key for key in manifest_keys if key in img.metadata)
+        value_before = copy.deepcopy(img.metadata[present_key])
+        img.metadata["user_marker"] = 123
+        effects_before = copy.deepcopy(img_action.effects)
+
+        def failing_recompute(_func_name, obj, _param, plugin_origin=None):
+            del plugin_origin
+            obj.metadata[geometry_key] = "recreated-by-failed-attempt"
+            obj.metadata[present_key] = "corrupted"
+            raise RuntimeError("forced recompute failure")
+
+        with patch.object(
+            image_panel.processor, "recompute_1_to_0", side_effect=failing_recompute
+        ):
+            try:
+                hrec.recompute_1_to_0_in_place(history, img_action)
+            except RuntimeError:
+                pass
+            else:
+                raise AssertionError("RuntimeError should have propagated")
+
+        assert img.metadata["user_marker"] == 123, "Unrelated key must be untouched"
+        assert geometry_key not in img.metadata, (
+            "Manifest key absent before the recompute must be deleted on rollback"
+        )
+        assert img.metadata[present_key] == value_before, (
+            "Manifest key must be restored to its pre-recompute value"
+        )
+        assert img_action.effects == effects_before, "Manifest must be unchanged"
 
 
 def test_1_to_0_cascade_uses_roi_safe_parameter_copy() -> None:
@@ -1076,6 +1163,35 @@ def test_deletion_reconnects_and_splices_chain() -> None:
         )
         chains = build_session_chains(session)
         assert sum(len(chain.actions) for chain in chains) == len(session.actions)
+        # Orphan cleanup: unattended runs never auto-remove orphans; explicit
+        # removal purges the surviving output object
+        orphan_uuid = action_to_delete.output_uuids[0]
+        assert panel.objmodel.has_uuid(orphan_uuid)
+        assert not htools.confirm_orphan_removal(history, [(panel, orphan_uuid)])
+        htools.remove_orphan_objects(history, [(panel, orphan_uuid)])
+        assert not panel.objmodel.has_uuid(orphan_uuid)
+        assert len(panel.objmodel) == object_count
+        # Leaf deletion: no downstream chain to split, output object survives
+        leaf_output_uuid = downstream_action.output_uuids[0]
+        select_tree_entry(history, downstream_action.uuid)
+        htools.delete_selected(history)
+        assert downstream_action not in session.actions
+        assert panel.objmodel.has_uuid(leaf_output_uuid)
+        # Deleting a producer whose output is already gone yields no orphan
+        derivative_output_uuid = derivative.output_uuids[0]
+        panel.objview.select_objects([derivative_output_uuid])
+        panel.remove_object(force=True)
+        assert derivative in session.actions
+        # Keep the session alive with a fresh action before splicing the last
+        # original one out
+        panel.objview.select_objects([source_uuid])
+        panel.processor.run_feature(sips.derivative)
+        assert history[len(history)] in session.actions
+        object_count_before = len(panel.objmodel)
+        select_tree_entry(history, derivative.uuid)
+        htools.delete_selected(history)
+        assert derivative not in session.actions
+        assert len(panel.objmodel) == object_count_before
         removed_action_uuids = [action.uuid for action in session.actions]
         removed_output_uuids = [
             output_uuid
@@ -1096,12 +1212,20 @@ def test_deletion_reconnects_and_splices_chain() -> None:
 
 
 def test_replay_survives_unexpected_recompute_exception() -> None:
-    """Contain unexpected exception types raised during an in-place recompute."""
+    """Contain unexpected exceptions and warn about pattern-less computes."""
     with datalab_test_app_context(history=True) as win:
         history, panel = win.historypanel, win.signalpanel
         history.toggle_record_mode(True)
         history.toggle_edit_mode(True)
         acts = list(build_signal_chain(panel, history).actions)
+        patternless = HistoryAction(
+            title="Legacy compute",
+            kind=HistoryAction.KIND_COMPUTE,
+            panel_str="signal",
+            func_name="mystery",
+            pattern=None,
+        )
+        history.history_sessions[-1].add_action(patternless)
         original = hrec.recompute_1_to_1_in_place
 
         def flaky(panel_, action_):
@@ -1114,7 +1238,7 @@ def test_replay_survives_unexpected_recompute_exception() -> None:
             patch.object(hrec, "recompute_1_to_1_in_place", flaky),
             patch.object(hrec, "flush_cascade_warnings") as flush,
         ):
-            hireplay.replay_actions(history, acts, prompt=True)
+            hireplay.replay_actions(history, [*acts, patternless], prompt=True)
 
         assert acts[0].is_stale is False
         assert acts[1].is_stale is True  # failed action stays flagged
@@ -1122,3 +1246,351 @@ def test_replay_survives_unexpected_recompute_exception() -> None:
         flush.assert_called()
         warnings = history.runtime.execution.cascade_warnings
         assert any("boom" in w for w in warnings)
+        assert any("mystery" in w for w in warnings)
+
+
+def test_analysis_effects_manifest_populated_and_recomputed() -> None:
+    """Populate the effects manifest by a 1-to-0 analysis and keep it stable."""
+    with datalab_test_app_context(console=False, history=True) as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.imagepanel
+        img = create_peak_image()
+        panel.add_object(img)
+        det_param = sigima.params.Peak2DDetectionParam.create(
+            create_rois=True, threshold=0.5
+        )
+        with Conf.proc.show_result_dialog.temp(False):
+            panel.processor.run_feature("peak_detection", det_param)
+        action = history[len(history)]
+        assert action.effects is not None, "1-to-0 action must carry effects"
+        src_uuid = get_uuid(img)
+        assert src_uuid in action.effects
+        manifest = AnalysisEffects.from_dict(action.effects[src_uuid])
+        assert any(
+            key.startswith("Geometry_") and key.endswith("_dict")
+            for key in manifest.metadata_added
+        ), f"Expected a Geometry_*_dict key, got {manifest.metadata_added}"
+        assert manifest.roi_modified is True, "Detection ROIs must flag roi_modified"
+        added_before = manifest.metadata_added
+        # A history recompute keeps first-run keys under metadata_added
+        assert hrec.recompute_1_to_0_in_place(history, action) is True
+        manifest = AnalysisEffects.from_dict(action.effects[src_uuid])
+        assert set(added_before) <= set(manifest.metadata_added), (
+            "First-run keys must stay under metadata_added after recompute"
+        )
+        assert not set(added_before) & set(manifest.metadata_replaced)
+
+
+def test_roi_mutation_recording_replay_and_partial_targets() -> None:
+    """Record paste/delete ROI mutations, replay them, tolerate deleted targets."""
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        history.toggle_record_mode(True)
+        sig1 = create_paracetamol_signal(SIZE)
+        sig1.roi = create_signal_roi([SROI1, SROI2], indices=True)
+        panel.add_object(sig1)
+        sig2 = create_paracetamol_signal(SIZE)
+        panel.add_object(sig2)
+        sig2 = panel.objmodel[get_uuid(sig2)]
+        sig3 = create_paracetamol_signal(SIZE)
+        panel.add_object(sig3)
+        sig3 = panel.objmodel[get_uuid(sig3)]
+        # Paste onto two targets: one mutation entry per object carrying the
+        # post-combination ROI payload
+        panel.objview.select_objects([1])
+        panel.copy_roi()
+        panel.objview.select_objects([2, 3])
+        panel.paste_roi()
+        actions = history.history_sessions[-1].actions
+        paste2, paste3 = actions[-2], actions[-1]
+        for action, sig in ((paste2, sig2), (paste3, sig3)):
+            assert action.kind == HistoryAction.KIND_MUTATION
+            assert action.mutation_key == "roi"
+            assert action.target_uuids == [get_uuid(sig)]
+            payload = action.kwargs.get("payload")
+            assert payload is not None
+            assert numpy_to_json_safe(payload.to_dict()) == numpy_to_json_safe(
+                sig.roi.to_dict()
+            )
+        # Direct replay re-applies the payload after the ROI was cleared
+        sig2.roi = None
+        paste2.replay(win, restore_selection=True, edit=False)
+        assert sig2.roi is not None
+        assert numpy_to_json_safe(sig2.roi.to_dict()) == numpy_to_json_safe(
+            paste2.kwargs["payload"].to_dict()
+        )
+        # Deleting ROIs records one empty-payload mutation for both targets
+        panel.objview.select_objects([2, 3])
+        panel.processor.delete_regions_of_interest()
+        assert sig2.roi is None and sig3.roi is None
+        delete_action = history.history_sessions[-1].actions[-1]
+        assert delete_action.kind == HistoryAction.KIND_MUTATION
+        assert delete_action.mutation_key == "roi"
+        assert delete_action.kwargs.get("payload") is None
+        assert set(delete_action.target_uuids) == {get_uuid(sig2), get_uuid(sig3)}
+        # Replaying the recorded sequence restores then removes the ROI
+        paste2.replay(win, restore_selection=True, edit=False)
+        assert sig2.roi is not None
+        delete_action.replay(win, restore_selection=True, edit=False)
+        assert sig2.roi is None
+        # Cascade recompute tolerates a deleted target: warn and apply to the rest
+        sig2.roi = create_signal_roi([SROI1], indices=True)
+        panel.objview.select_objects([get_uuid(sig3)])
+        panel.remove_object(force=True)
+        assert hrec.recompute_mutation_in_place(history, delete_action) is True
+        assert sig2.roi is None
+        assert any(
+            "deleted" in warning
+            for warning in history.runtime.execution.cascade_warnings
+        )
+        history.runtime.execution.cascade_warnings.clear()
+
+
+def test_cascade_reapplies_roi_mutation() -> None:
+    """Cascade recompute re-applies, blocks or edits a downstream ROI mutation."""
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        history.toggle_record_mode(True)
+        sig1 = create_paracetamol_signal(SIZE)
+        sig1.roi = create_signal_roi([SROI1, SROI2], indices=True)
+        panel.add_object(sig1)
+        src = create_paracetamol_signal(SIZE)
+        panel.add_object(src)
+        # Record a compute action producing the output object
+        panel.objview.select_objects([2])
+        panel.processor.run_feature(sips.derivative)
+        compute_action = history[len(history)]
+        output = panel.objmodel[compute_action.output_uuids[0]]
+        # Paste a ROI onto the compute output (records a mutation action)
+        panel.objview.select_objects([1])
+        panel.copy_roi()
+        panel.objview.select_objects([get_uuid(output)])
+        panel.paste_roi()
+        mutation_action = history.history_sessions[-1].actions[-1]
+        assert mutation_action.kind == HistoryAction.KIND_MUTATION
+        # The mutation belongs to the compute action's downstream closure
+        downstream = hchain.get_downstream_actions(history, compute_action)
+        assert mutation_action in downstream
+        # Wipe the ROI, then recompute the cascade from the compute action
+        output.roi = None
+        history.recompute_cascade(compute_action)
+        assert output.roi is not None
+        assert numpy_to_json_safe(output.roi.to_dict()) == numpy_to_json_safe(
+            mutation_action.kwargs["payload"].to_dict()
+        )
+        assert mutation_action.is_stale is False
+        # A failed upstream recompute blocks the deferred mutation replay
+        output.roi = None
+        with (
+            patch.object(hrec, "recompute_action_in_place", return_value=False),
+            patch.object(hrec, "flush_cascade_warnings"),
+        ):
+            hireplay.replay_actions(
+                history, [compute_action, mutation_action], prompt=False
+            )
+        assert output.roi is None
+        assert compute_action.is_stale is True
+        compute_action.is_stale = False
+        history.runtime.execution.cascade_warnings.clear()
+
+        # An edited mutation payload triggers a downstream cascade recompute
+        def edit_payload(_mainwindow, restore_selection=True, edit=False):
+            del restore_selection
+            assert edit is True
+            mutation_action.kwargs["payload"] = mutation_action.kwargs["payload"].copy()
+
+        with (
+            patch.object(mutation_action, "replay", side_effect=edit_payload),
+            patch.object(hrec, "recompute_cascade") as cascade,
+        ):
+            hireplay.replay_actions(history, [mutation_action], prompt=True)
+        cascade.assert_called_once_with(history, mutation_action)
+
+
+def test_mutation_root_has_downstream_computes() -> None:
+    """A mutation root seeds its targets: consuming computes are downstream."""
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        history.toggle_record_mode(True)
+        sig1 = create_paracetamol_signal(SIZE)
+        sig1.roi = create_signal_roi([SROI1], indices=True)
+        panel.add_object(sig1)
+        sig2 = create_paracetamol_signal(SIZE)
+        panel.add_object(sig2)
+        panel.objview.select_objects([1])
+        panel.copy_roi()
+        panel.objview.select_objects([2])
+        panel.paste_roi()
+        mutation_action = history.history_sessions[-1].actions[-1]
+        assert mutation_action.kind == HistoryAction.KIND_MUTATION
+        # Compute consuming the mutated object is downstream of the mutation
+        panel.objview.select_objects([2])
+        panel.processor.run_feature(sips.derivative)
+        compute_action = history.history_sessions[-1].actions[-1]
+        assert compute_action.kind == HistoryAction.KIND_COMPUTE
+        downstream = hchain.get_downstream_actions(history, mutation_action)
+        assert compute_action in downstream
+
+
+def test_edited_image_creation_recomputes_downstream_in_place() -> None:
+    """Regenerate an edited image before recomputing its existing descendant."""
+    initial_param = Gauss2DParam.create(
+        title="Initial Gaussian",
+        height=24,
+        width=28,
+        x0=-4.0,
+        y0=2.0,
+        sigma=1.2,
+        a=25.0,
+    )
+    edited_param = Gauss2DParam.create(
+        title="Edited Gaussian",
+        height=24,
+        width=28,
+        x0=3.0,
+        y0=-2.0,
+        sigma=3.5,
+        a=80.0,
+    )
+    source = create_image_from_param(initial_param)
+    source_uuid = get_uuid(source)
+    source_identity = id(source)
+    initial_source_data = source.data.copy()
+    expected_source = create_image_from_param(edited_param)
+
+    downstream = source.copy()
+    set_uuid(downstream)
+    downstream.title = "Initial downstream"
+    downstream.data = np.full(source.data.shape, -1.0)
+    downstream_uuid = get_uuid(downstream)
+    downstream_identity = id(downstream)
+    initial_downstream_data = downstream.data.copy()
+    insert_processing_parameters(
+        downstream,
+        ProcessingParameters(
+            func_name="unit_transform",
+            pattern="1-to-1",
+            source_uuid=source_uuid,
+        ),
+    )
+
+    creation_action = HistoryAction(
+        title="Create edited Gaussian",
+        kind=HistoryAction.KIND_UI,
+        target="imagepanel",
+        method_name="new_object",
+        kwargs={"param": edited_param},
+    )
+    creation_action.output_uuids = [source_uuid]
+    downstream_state = WorkspaceState()
+    downstream_state.selection = {"image": [source_uuid]}
+    downstream_action = HistoryAction(
+        title="Transform edited Gaussian",
+        kind=HistoryAction.KIND_COMPUTE,
+        panel_str="image",
+        func_name="unit_transform",
+        pattern="1_to_1",
+        state=downstream_state,
+    )
+    downstream_action.output_uuids = [downstream_uuid]
+    session = HistorySession(number=1)
+    session.add_action(creation_action)
+    session.add_action(downstream_action)
+
+    processor_source_objects: list[ImageObj] = []
+    processor_source_data: list[np.ndarray] = []
+
+    def recompute_1_to_1(
+        func_name: str | None,
+        source_obj: ImageObj,
+        param: object,
+        *,
+        plugin_origin: dict[str, object] | None,
+    ) -> SimpleNamespace:
+        assert func_name == "unit_transform"
+        assert param is None
+        assert plugin_origin is None
+        processor_source_objects.append(source_obj)
+        processor_source_data.append(source_obj.data.copy())
+        new_obj = source_obj.copy()
+        new_obj.title = f"unit_transform({source_obj.title})"
+        new_obj.data = source_obj.data.astype(float) * 2.0 + 3.0
+        return SimpleNamespace(cancelled=False, error_msg=None, result=new_obj)
+
+    def apply_recomputed_object_in_place(
+        obj: ImageObj,
+        new_obj: ImageObj,
+        proc_params: ProcessingParameters,
+    ) -> None:
+        hrec.update_obj_in_place(obj, new_obj)
+        insert_processing_parameters(obj, proc_params)
+
+    object_model = CascadeObjectModel([source, downstream])
+    data_panel = SimpleNamespace(
+        PANEL_STR_ID="image",
+        objmodel=object_model,
+        processor=SimpleNamespace(recompute_1_to_1=recompute_1_to_1),
+        objprop=SimpleNamespace(
+            apply_recomputed_object_in_place=apply_recomputed_object_in_place
+        ),
+    )
+    runtime = SimpleNamespace(
+        objects=SimpleNamespace(
+            action_output_uuids={
+                creation_action.uuid: [source_uuid],
+                downstream_action.uuid: [downstream_uuid],
+            }
+        ),
+        execution=SimpleNamespace(cascade_warnings=[]),
+    )
+    history_panel = SimpleNamespace(
+        runtime=runtime,
+        history_sessions=[session],
+    )
+    refreshed_uuids: list[str] = []
+
+    def record_refresh(panel_data: object, output_uuid: str) -> None:
+        assert panel_data is data_panel
+        refreshed_uuids.append(output_uuid)
+
+    descendants = hrec.hchain.get_downstream_actions(history_panel, creation_action)
+    assert descendants == [downstream_action]
+
+    with (
+        patch.object(hrec.hchain, "resolve_panel_for_action", return_value=data_panel),
+        patch.object(
+            hrec, "create_image_from_param", wraps=create_image_from_param
+        ) as create_image_mock,
+        patch.object(hrec, "refresh_target", side_effect=record_refresh),
+    ):
+        assert hrec.recompute_creation_in_place(history_panel, creation_action)
+        assert hrec.recompute_1_to_1_in_place(history_panel, downstream_action)
+
+    create_image_mock.assert_called_once()
+    assert create_image_mock.call_args.args[0] is edited_param
+
+    assert id(source) == source_identity
+    assert object_model[source_uuid] is source
+    assert get_uuid(source) == source_uuid
+    np.testing.assert_allclose(source.data, expected_source.data)
+    assert not np.array_equal(source.data, initial_source_data)
+    creation_param = extract_creation_parameters(source)
+    assert isinstance(creation_param, Gauss2DParam)
+    for name in ("height", "width", "x0", "y0", "sigma", "a"):
+        assert getattr(creation_param, name) == getattr(edited_param, name)
+
+    assert processor_source_objects == [source]
+    np.testing.assert_allclose(processor_source_data[0], expected_source.data)
+    assert id(downstream) == downstream_identity
+    assert object_model[downstream_uuid] is downstream
+    assert get_uuid(downstream) == downstream_uuid
+    np.testing.assert_allclose(
+        downstream.data, expected_source.data.astype(float) * 2.0 + 3.0
+    )
+    assert not np.array_equal(downstream.data, initial_downstream_data)
+    downstream_params = extract_processing_parameters(downstream)
+    assert downstream_params is not None
+    assert downstream_params.source_uuid == source_uuid
+    assert refreshed_uuids == [source_uuid, downstream_uuid]
+    assert runtime.execution.cascade_warnings == []

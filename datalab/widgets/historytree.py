@@ -123,9 +123,7 @@ class HistoryTree(QW.QTreeWidget):
                 if action is None:
                     iterator += 1
                     continue
-                compatible = action.is_current_state_compatible(
-                    mainwindow, restore_selection=True
-                )
+                compatible = action.is_current_state_compatible(mainwindow)
                 item.setData(0, self.COMPATIBILITY_ROLE, compatible)
                 brush = default_brush if compatible else disabled_brush
                 icon = get_icon("apply.svg") if compatible else get_icon("delete.svg")

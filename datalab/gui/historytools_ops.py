@@ -35,6 +35,8 @@ from datalab.history.workspace_state import WorkspaceState
 from datalab.objectmodel import get_uuid
 
 if TYPE_CHECKING:
+    from sigima.objects import ImageObj, SignalObj
+
     from datalab.gui.panel.base import BaseDataPanel
     from datalab.gui.panel.history import HistoryPanel
 
@@ -336,7 +338,7 @@ def data_panel_for(panel: HistoryPanel, panel_str: str) -> BaseDataPanel | None:
     return None
 
 
-def strip_source_links(obj) -> None:
+def strip_source_links(obj: SignalObj | ImageObj) -> None:
     """Turn ``obj`` into a parentless creation root (drop source references)."""
     pp = extract_processing_parameters(obj)
     if pp is None:
@@ -347,7 +349,9 @@ def strip_source_links(obj) -> None:
     )
 
 
-def remap_object_source(obj, old_uuid: str, new_uuid: str) -> None:
+def remap_object_source(
+    obj: SignalObj | ImageObj, old_uuid: str, new_uuid: str
+) -> None:
     """Replace ``old_uuid`` with ``new_uuid`` in ``obj``'s source references."""
     pp = extract_processing_parameters(obj)
     if pp is None:
@@ -412,7 +416,8 @@ def split_chain_on_action_delete(
     orphan_uuid = next((u for u in output_uuids if u in first_inputs), None)
     if orphan_uuid is None or not data_panel.objmodel.has_uuid(orphan_uuid):
         return first_alive_output(panel, panel_str, output_uuids)
-    # §8.2 — autonomy via COPY: clone the orphan as a parentless creation root.
+    # Deep-copying the orphan and stripping its source links makes the copy
+    # autonomous: it no longer references the deleted upstream chain.
     orphan_obj = data_panel.objmodel[orphan_uuid]
     clone = deepcopy(orphan_obj)
     new_uuid = str(uuid4())
@@ -618,9 +623,7 @@ def remove_incompatible_actions(panel: HistoryPanel) -> None:
     incompatible: list[tuple[HistorySession, HistoryAction]] = []
     for session in panel.history_sessions:
         for action in session.actions:
-            if not action.is_current_state_compatible(
-                panel.mainwindow, restore_selection=True
-            ):
+            if not action.is_current_state_compatible(panel.mainwindow):
                 incompatible.append((session, action))
     if not incompatible:
         if not execenv.unattended:

@@ -5,13 +5,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from datalab.gui.processor.base import ProcessingParameters
 from datalab.history import HistoryAction, HistorySession
-
-if TYPE_CHECKING:
-    from datalab.gui.panel.history.panel import HistoryPanel
 
 
 @dataclass
@@ -176,19 +173,3 @@ def build_session_chains(session: HistorySession) -> list[ProcessingChain]:
     chain = ProcessingChain(root=session.actions[0], session=session)
     chain.actions = list(session.actions)
     return [chain]
-
-
-def build_processing_chains(
-    panel: HistoryPanel,
-) -> list[tuple[HistorySession, list[ProcessingChain]]]:
-    """Return, for each session (in order), its ordered list of processing chains.
-
-    Args:
-        panel: The history panel owning sessions and output registry.
-
-    Returns:
-        A list of (session, chains) tuples in session order.
-    """
-    return [
-        (session, build_session_chains(session)) for session in panel.history_sessions
-    ]

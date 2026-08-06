@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import importlib
 import json
-import logging
 import warnings
 from copy import deepcopy
 from typing import Any
@@ -21,7 +20,6 @@ from sigima.objects.base import BaseROI
 
 from datalab.config import _
 
-_logger = logging.getLogger(__name__)
 _TRUSTED_ROI_MODULE_PREFIX = "sigima."
 
 # Schema versions for persisted history sessions/actions.

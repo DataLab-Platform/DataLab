@@ -18,9 +18,12 @@ if TYPE_CHECKING:
 class HistorySession:
     """Object representing a history session, i.e. a list of actions.
 
-    A history session is a list of actions that can be replayed in the same order
-    as they were added to the history session. The history session can be saved to
-    a file and loaded from a file.
+    A history session groups, in chronological order, the actions forming a
+    processing chain. Compute actions are recomputed in place by the History
+    panel recompute engine (:meth:`HistoryAction.replay` raises
+    ``NotImplementedError`` for the compute kind); UI and mutation actions
+    are replayed through :meth:`HistoryAction.replay`. The session can be
+    saved to a file and loaded from a file.
 
     Args:
         title: Title of the history session
@@ -75,22 +78,17 @@ class HistorySession:
         ]
         return session
 
-    def is_current_state_compatible(
-        self, mainwindow: DLMainWindow, restore_selection: bool
-    ) -> bool:
+    def is_current_state_compatible(self, mainwindow: DLMainWindow) -> bool:
         """Check if the current workspace state is compatible with the saved state
 
         Args:
             mainwindow: DataLab's main window
-            restore_selection: True to restore the selection before checking the state
 
         Returns:
             bool: True if the current workspace state is compatible with the saved state
         """
         if self.actions:
-            return self.actions[0].is_current_state_compatible(
-                mainwindow, restore_selection
-            )
+            return self.actions[0].is_current_state_compatible(mainwindow)
         return True
 
     def restore(self, mainwindow: DLMainWindow) -> None:
@@ -134,16 +132,3 @@ class HistorySession:
         with reader.group("dtstr"):
             self.dtstr = reader.read_any()
         self.actions = reader.read_object_list("actions", HistoryAction)
-
-    def remove_action(self, action: HistoryAction) -> None:
-        """Remove an action from the history session
-
-        This implies removing all subsequent actions. If action is not found, this
-        fails silently.
-
-        Args:
-            action: Action to remove
-        """
-        if action in self.actions:
-            index = self.actions.index(action)
-            self.actions = self.actions[:index]

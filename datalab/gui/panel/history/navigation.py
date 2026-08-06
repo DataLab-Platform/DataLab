@@ -38,11 +38,6 @@ class HistoryNavigation:
         except ValueError:
             return None
 
-    def current_panel_str(self) -> str:
-        """Return the current data panel identifier, defaulting to signal."""
-        panel_str = self.panel.mainwindow.get_current_panel()
-        return panel_str if panel_str in ("signal", "image") else "signal"
-
     def sync_panel_selection(self) -> None:
         """Synchronize data-panel selection from the selected history item."""
         if self.panel.runtime.execution.replaying_active or self.syncing:

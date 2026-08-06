@@ -238,10 +238,9 @@ class WorkspaceState:
                 get_uuid(obj): self.get_object_metadata(obj) for obj in panel.objmodel
             }
 
-    def is_current_state_compatible(  # pylint: disable=unused-argument
+    def is_current_state_compatible(
         self,
         mainwindow: DLMainWindow,
-        restore_selection: bool,
         ignore_roi_uuids: set[str] | None = None,
     ) -> bool:
         """Check if the current workspace state is compatible with the saved state.
@@ -256,9 +255,6 @@ class WorkspaceState:
 
         Args:
             mainwindow: DataLab's main window
-            restore_selection: Unused (kept for API symmetry). With UUID-based
-             identity, the compatibility check no longer depends on the current
-             selection -- it only depends on object existence.
             ignore_roi_uuids: UUIDs whose ROI signature must be excluded from
              the comparison (both saved and current sides). Used by mutation
              actions whose state was captured after the mutation was applied:
@@ -311,7 +307,7 @@ class WorkspaceState:
         if not self.selection:
             return
         if not self.is_current_state_compatible(
-            mainwindow, False, ignore_roi_uuids=ignore_roi_uuids
+            mainwindow, ignore_roi_uuids=ignore_roi_uuids
         ):
             raise ValueError(
                 "Current workspace state is not compatible with saved state"

@@ -17,10 +17,34 @@ from datalab.h5.native import NativeH5Reader
 from datalab.history.action import HistoryAction
 from datalab.history.session import HistorySession
 from datalab.history.workspace_state import WorkspaceState
+from datalab.objectmodel import get_uuid
 
 if TYPE_CHECKING:
     from datalab.gui.panel.history import HistoryPanel
     from datalab.gui.panel.signal import SignalPanel
+
+
+class CascadeObjectModel:
+    """Minimal object model for pure cascade recomputation tests."""
+
+    def __init__(self, objects: list[Any]) -> None:
+        self.objects = {get_uuid(obj): obj for obj in objects}
+
+    def __getitem__(self, uuid: str) -> Any:
+        """Return the object identified by ``uuid``."""
+        return self.objects[uuid]
+
+    def __iter__(self):
+        """Iterate over the model's objects."""
+        return iter(self.objects.values())
+
+    def has_uuid(self, uuid: str) -> bool:
+        """Return whether ``uuid`` exists in the model."""
+        return uuid in self.objects
+
+    def get_object_ids(self) -> list[str]:
+        """Return all object UUIDs in insertion order."""
+        return list(self.objects)
 
 
 @dataclass(frozen=True)

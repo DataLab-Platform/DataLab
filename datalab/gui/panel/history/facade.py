@@ -144,10 +144,6 @@ class HistoryReplayFacadeMixin:
         """Return the matching analysis action for an object UUID."""
         return hchain.find_analysis_action(self, obj_uuid, func_name)
 
-    def action_output_uuid(self, action: HistoryAction) -> str | None:
-        """Return the UUID of the object produced by an action."""
-        return hchain.action_output_uuid(self, action)
-
     def refresh_action(self, action: HistoryAction) -> None:
         """Refresh an action after its arguments are mutated."""
         hrec.refresh_action(self, action)

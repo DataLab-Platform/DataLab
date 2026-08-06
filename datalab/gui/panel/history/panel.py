@@ -47,8 +47,6 @@ class HistoryPanel(
 
     H5_PREFIX = "DataLab_His"
 
-    SIG_OBJECT_MODIFIED = QC.Signal()
-
     FILE_FILTERS = f"{_('History files')} (*.dlhist)"
 
     def __init__(self, parent: DLMainWindow) -> None:
@@ -101,3 +99,8 @@ class HistoryPanel(
         """Remove all objects."""
         super().remove_all_objects()
         self.runtime.objects.clear_output_mappings()
+        self.history_sessions = []
+        self.navigation.active_session = None
+        self.navigation.session_increment = 0
+        self.tree.populate_tree(self.history_sessions)
+        self.ui.update_actions_state()

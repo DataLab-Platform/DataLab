@@ -348,15 +348,12 @@ class HistoryAction(ObjItf):
     def description(self) -> str:
         """Return object description (string representing function parameters)"""
         desc = ""
-        no_parameters = True
         for param in self.__iter_param_kwargs():
             if desc:
                 desc += os.linesep
             desc += str(param)
-            no_parameters = False
-        if desc or no_parameters:
-            if desc:
-                return desc
+        if desc:
+            return desc
         # Fall back to a textual hint of the resolved callable
         return self.__fallback_doc()
 
@@ -455,16 +452,14 @@ class HistoryAction(ObjItf):
             return set(self.target_uuids or [])
         return None
 
-    def is_current_state_compatible(
-        self, mainwindow: DLMainWindow, restore_selection: bool
-    ) -> bool:
+    def is_current_state_compatible(self, mainwindow: DLMainWindow) -> bool:
         """Check if the current workspace state is compatible with the saved state.
 
         Mutation actions exclude their own targets from the ROI signature
         comparison (the recorded state contains the post-mutation ROI).
         """
         return self.state.is_current_state_compatible(
-            mainwindow, restore_selection, ignore_roi_uuids=self.__roi_exclusions()
+            mainwindow, ignore_roi_uuids=self.__roi_exclusions()
         )
 
     def restore(self, mainwindow: DLMainWindow) -> None:

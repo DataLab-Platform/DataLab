@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-import logging
 from typing import TYPE_CHECKING
 
 from qtpy import QtWidgets as QW
@@ -27,8 +26,6 @@ from datalab.objectmodel import get_uuid
 if TYPE_CHECKING:
     from datalab.gui.panel.base import BaseDataPanel
     from datalab.gui.panel.history.panel import HistoryPanel
-
-_logger = logging.getLogger(__name__)
 
 
 def find_parent_session(
@@ -69,9 +66,12 @@ def find_output_object_uuid(
     """
     registered = panel.runtime.objects.action_output_uuids.get(action.uuid)
     if registered:
-        existing_ids = set(panel_data.objmodel.get_object_ids())
+        # Outputs of cross-panel features (e.g. image line profile producing
+        # a signal) live in the other panel: check both object models.
         for out_uuid in registered:
-            if out_uuid in existing_ids:
+            if panel.mainwindow.signalpanel.objmodel.has_uuid(
+                out_uuid
+            ) or panel.mainwindow.imagepanel.objmodel.has_uuid(out_uuid):
                 return out_uuid
     if action.func_name is None:
         return None
@@ -210,14 +210,6 @@ def find_analysis_action(
     return None
 
 
-def get_session_of(panel: HistoryPanel, action: HistoryAction) -> HistorySession | None:
-    """Return the session that contains ``action``, or None."""
-    for session in panel.history_sessions:
-        if action in session.actions:
-            return session
-    return None
-
-
 def action_output_uuid(panel: HistoryPanel, action: HistoryAction) -> str | None:
     """Return the UUID of the object produced by ``action``, or ``None``."""
     panel_data = resolve_panel_for_action(panel, action)
@@ -259,7 +251,7 @@ def get_downstream_actions(
     """Return the actions of the current session that depend on ``action``."""
     if not panel.history_sessions:
         return []
-    current = get_session_of(panel, action)
+    current = find_parent_session(panel, action)
     if current is None:
         return []
     if action.kind == HistoryAction.KIND_MUTATION:
@@ -289,26 +281,10 @@ def get_downstream_actions(
     return downstream
 
 
-def resolve_target_outputs(
-    panel: HistoryPanel, panel_data: BaseDataPanel, action: HistoryAction
-) -> tuple[list[str], list[str]]:
-    """Return ``(existing, missing)`` UUIDs registered for ``action``."""
-    registered = list(panel.runtime.objects.action_output_uuids.get(action.uuid, []))
-    existing_ids = set(panel_data.objmodel.get_object_ids())
-    existing: list[str] = [u for u in registered if u in existing_ids]
-    missing: list[str] = [u for u in registered if u not in existing_ids]
-    return existing, missing
-
-
 def existing_input_uuids(panel_data: BaseDataPanel, action: HistoryAction) -> list[str]:
     """Return recorded input UUIDs that still exist in ``panel_data``."""
     recorded = action.state.selection.get(panel_data.PANEL_STR_ID, [])
     return [uuid for uuid in recorded if panel_data.objmodel.has_uuid(uuid)]
-
-
-def prune_output_mapping(panel: HistoryPanel) -> None:
-    """Drop entries of :attr:`output_to_action` whose object no longer exists."""
-    panel.runtime.objects.prune_output_mapping()
 
 
 def rewrite_action_source(
@@ -442,20 +418,6 @@ def apply_reconnection_plan(
                 roots_to_recompute.append(target.action)
     if plan.remove_producer and plan.producer_action is not None:
         remove_single_action(panel, plan.producer_action)
-
-
-def reconnect_single_removed(
-    panel: HistoryPanel,
-    panel_data: BaseDataPanel,
-    removed_uuid: str,
-    warnings: list[str],
-    roots_to_recompute: list[HistoryAction],
-) -> None:
-    """Plan and reconnect consumers of one deleted object."""
-    plan = plan_reconnection(panel, panel_data, removed_uuid)
-    apply_reconnection_plan(panel, panel_data, plan, roots_to_recompute)
-    if plan.warning is not None:
-        warnings.append(plan.warning)
 
 
 def show_reconnection_warnings(panel: HistoryPanel, warnings: list[str]) -> None:

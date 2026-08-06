@@ -4,13 +4,23 @@
 
 from __future__ import annotations
 
+from contextlib import nullcontext
+from types import SimpleNamespace
+from unittest.mock import Mock, patch
+
+import pytest
 import sigima.proc.image as sipi
 import sigima.proc.signal as sips
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from sigima.tests.data import create_paracetamol_signal, create_sincos_image
 
+from datalab.gui import historytools_ops as htools
 from datalab.gui.panel.history import HistoryTree
+from datalab.gui.panel.history import interactive_replay as hireplay
+from datalab.gui.panel.history.ui import HistoryPanelUI
+from datalab.history.action import HistoryAction
+from datalab.history.session import HistorySession
 from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_test_app_context
 from datalab.tests.features.common.history_test_helpers import (
@@ -19,6 +29,59 @@ from datalab.tests.features.common.history_test_helpers import (
     is_session_bold,
     select_tree_entry,
 )
+
+
+@pytest.mark.parametrize("column", (0, 2))
+@pytest.mark.parametrize("selected_kind", ("action", "session"))
+def test_history_tree_double_click_replays_current_selection_without_restoring(
+    selected_kind: str, column: int
+) -> None:
+    """Replay the current action or session selection from either tree column."""
+    if selected_kind == "action":
+        selected_row: HistoryAction | HistorySession = HistoryAction()
+        expected_actions = [selected_row]
+    else:
+        selected_row = HistorySession()
+        selected_row.add_action(HistoryAction())
+        selected_row.add_action(HistoryAction())
+        expected_actions = list(selected_row.actions)
+    selected_row.is_current_state_compatible = Mock(return_value=True)
+    clicked_row = HistoryAction()
+    tree = SimpleNamespace(
+        customContextMenuRequested=Mock(),
+        itemDoubleClicked=Mock(),
+        itemSelectionChanged=Mock(),
+        get_selected_actions_or_sessions=Mock(return_value=[selected_row]),
+    )
+    mainwindow = object()
+    panel = SimpleNamespace(
+        tree=tree,
+        history_sessions=[],
+        mainwindow=mainwindow,
+        refresh_compatibility_items=Mock(),
+        replaying=nullcontext,
+        output_suppressed=nullcontext,
+        runtime=SimpleNamespace(execution=SimpleNamespace(edit_mode=False)),
+        navigation=SimpleNamespace(
+            sync_panel_selection=Mock(),
+            update_state_widget=Mock(),
+            set_active_session_from_selection=Mock(),
+        ),
+    )
+    panel.replay_restore_actions = lambda **kwargs: hireplay.replay_restore_actions(
+        panel, **kwargs
+    )
+    ui = HistoryPanelUI.__new__(HistoryPanelUI)
+    ui.panel = panel
+
+    ui.setup_connections()
+    double_click_slot = tree.itemDoubleClicked.connect.call_args.args[0]
+    with patch.object(hireplay, "replay_actions") as replay_actions_mock:
+        double_click_slot(clicked_row, column)
+
+    selected_row.is_current_state_compatible.assert_called_once_with(mainwindow)
+    replay_actions_mock.assert_called_once_with(panel, expected_actions, prompt=False)
+    assert clicked_row not in replay_actions_mock.call_args.args[1]
 
 
 def test_panel_replay_restores_selection_without_outputs() -> None:
@@ -150,3 +213,23 @@ def test_cross_panel_sessions_navigation_and_tree_state() -> None:
             and image_item.foreground(0).color().isValid()
             and image_item.data(0, QC.Qt.UserRole) == image_action.uuid
         )
+        # Remove-incompatible tool purges flagged actions and keeps the rest
+        incompatible = [
+            action
+            for session in history.history_sessions
+            for action in session.actions
+            if not action.is_current_state_compatible(win)
+        ]
+        assert image_action in incompatible
+        htools.remove_incompatible_actions(history)
+        remaining = [
+            action for session in history.history_sessions for action in session.actions
+        ]
+        assert not [action for action in incompatible if action in remaining]
+        assert all(action.is_current_state_compatible(win) for action in remaining)
+        assert all(session.actions for session in history.history_sessions)
+        # Second run: everything is compatible, nothing changes
+        htools.remove_incompatible_actions(history)
+        assert [
+            action for session in history.history_sessions for action in session.actions
+        ] == remaining

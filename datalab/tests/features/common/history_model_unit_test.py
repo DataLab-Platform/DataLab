@@ -13,59 +13,49 @@ from unittest.mock import Mock, patch
 
 import numpy as np
 import pytest
-from sigima.objects import Gauss2DParam, ImageObj, create_signal_roi
+from sigima.objects import (
+    Gauss2DParam,
+    ImageObj,
+    SignalROI,
+    create_image_from_param,
+    create_image_roi,
+    create_signal_roi,
+)
 from sigima.tests.data import create_paracetamol_signal
 
 from datalab.gui import historysession_ops as hsess
 from datalab.gui import historytools_ops as hops
-from datalab.gui.creation import (
-    create_image_from_param,
-    extract_creation_parameters,
-)
 from datalab.gui.main import DLMainWindow
 from datalab.gui.panel.history import chain as hchain
 from datalab.gui.panel.history import interactive_replay as hireplay
 from datalab.gui.panel.history import recompute as hrec
 from datalab.gui.panel.history import runtime as hruntime
-from datalab.gui.panel.history.ui import HistoryPanelUI
+from datalab.gui.panel.history.chainmodel import ProcessingChain, UuidCloneRegistry
 from datalab.gui.processor.base import (
     BaseProcessor,
+    FeatureNotFoundError,
     ProcessingParameters,
     extract_processing_parameters,
     insert_processing_parameters,
 )
 from datalab.h5.native import NativeH5Reader, NativeH5Writer
 from datalab.history.action import HistoryAction
-from datalab.history.core import HISTORY_ACTION_SCHEMA_VERSION, HISTORY_SCHEMA_VERSION
-from datalab.history.effects import AnalysisEffects
+from datalab.history.core import (
+    HISTORY_ACTION_SCHEMA_VERSION,
+    HISTORY_SCHEMA_VERSION,
+    numpy_to_json_safe,
+)
+from datalab.history.effects import AnalysisEffects, capture_effects, merge_effects
 from datalab.history.session import HistorySession
 from datalab.history.workspace_state import WorkspaceState
-from datalab.objectmodel import get_uuid, set_uuid
+from datalab.objectmodel import get_uuid
 from datalab.tests.features.common.history_test_helpers import (
+    CascadeObjectModel,
     build_history_action,
     build_workspace_state,
     delete_hdf5_items_by_name,
     read_history_sessions,
 )
-
-
-class CascadeObjectModel:
-    """Minimal object model for pure cascade recomputation tests."""
-
-    def __init__(self, objects: list[ImageObj]) -> None:
-        self.objects = {get_uuid(obj): obj for obj in objects}
-
-    def __getitem__(self, uuid: str) -> ImageObj:
-        """Return the image identified by ``uuid``."""
-        return self.objects[uuid]
-
-    def has_uuid(self, uuid: str) -> bool:
-        """Return whether ``uuid`` exists in the model."""
-        return uuid in self.objects
-
-    def get_object_ids(self) -> list[str]:
-        """Return all object UUIDs in insertion order."""
-        return list(self.objects)
 
 
 class PromptExecution:
@@ -97,10 +87,6 @@ class PromptNavigation:
 
     def __init__(self, active_session: HistorySession | None) -> None:
         self.active_session = active_session
-
-    def current_panel_str(self) -> str:
-        """Return the fallback panel used for per-action panel resolution."""
-        return "signal"
 
     def get_active_session(self) -> HistorySession | None:
         """Return the single active recording session."""
@@ -280,61 +266,6 @@ def test_compute_n_to_1_uses_provided_history_title() -> None:
     assert history_panel.add_compute_entry_from_pp.call_args.args[0] == "Moyenne"
 
 
-@pytest.mark.parametrize("column", (0, 2))
-@pytest.mark.parametrize("selected_kind", ("action", "session"))
-def test_history_tree_double_click_replays_current_selection_without_restoring(
-    selected_kind: str, column: int
-) -> None:
-    """Replay the current action or session selection from either tree column."""
-    if selected_kind == "action":
-        selected_row: HistoryAction | HistorySession = HistoryAction()
-        expected_actions = [selected_row]
-    else:
-        selected_row = HistorySession()
-        selected_row.add_action(HistoryAction())
-        selected_row.add_action(HistoryAction())
-        expected_actions = list(selected_row.actions)
-    selected_row.is_current_state_compatible = Mock(return_value=True)
-    clicked_row = HistoryAction()
-    tree = SimpleNamespace(
-        customContextMenuRequested=Mock(),
-        itemDoubleClicked=Mock(),
-        itemSelectionChanged=Mock(),
-        get_selected_actions_or_sessions=Mock(return_value=[selected_row]),
-    )
-    mainwindow = object()
-    panel = SimpleNamespace(
-        tree=tree,
-        history_sessions=[],
-        mainwindow=mainwindow,
-        refresh_compatibility_items=Mock(),
-        replaying=nullcontext,
-        output_suppressed=nullcontext,
-        runtime=SimpleNamespace(execution=SimpleNamespace(edit_mode=False)),
-        navigation=SimpleNamespace(
-            sync_panel_selection=Mock(),
-            update_state_widget=Mock(),
-            set_active_session_from_selection=Mock(),
-        ),
-    )
-    panel.replay_restore_actions = lambda **kwargs: hireplay.replay_restore_actions(
-        panel, **kwargs
-    )
-    ui = HistoryPanelUI.__new__(HistoryPanelUI)
-    ui.panel = panel
-
-    ui.setup_connections()
-    double_click_slot = tree.itemDoubleClicked.connect.call_args.args[0]
-    with patch.object(hireplay, "replay_actions") as replay_actions_mock:
-        double_click_slot(clicked_row, column)
-
-    selected_row.is_current_state_compatible.assert_called_once_with(
-        mainwindow, restore_selection=False
-    )
-    replay_actions_mock.assert_called_once_with(panel, expected_actions, prompt=False)
-    assert clicked_row not in replay_actions_mock.call_args.args[1]
-
-
 def test_image_creation_extends_active_signal_session_when_rejected() -> None:
     """Chain an image creation into the single active recording session."""
     signal_session = make_prompt_session("signal", populated=True)
@@ -373,58 +304,55 @@ def test_empty_active_session_skips_prompt() -> None:
     assert panel.created_sessions == []
 
 
-def test_omitted_session_behavior_reads_live_general_policy() -> None:
-    """Resolve the general policy on every omitted-behavior call."""
+@pytest.mark.parametrize(
+    ("behavior", "policy_values", "expected_created"),
+    (
+        (None, ("no", "yes"), (False, True)),
+        ("yes", ("ask",), (True,)),
+        ("no", ("ask",), (False,)),
+        ("invalid", (), None),
+    ),
+)
+def test_session_behavior_policy_matrix(
+    behavior: str | None,
+    policy_values: tuple[str, ...],
+    expected_created: tuple[bool, ...] | None,
+) -> None:
+    """Resolve omitted, explicit and invalid session policies without dialogs.
+
+    Omitted behaviors re-read the live general policy on every call, explicit
+    yes/no policies bypass both debounce and dialog, and invalid policies are
+    rejected before any side effect.
+    """
     image_session = make_prompt_session("image", populated=True)
     panel = PromptPanel([image_session])
-    option = hsess.Conf.proc.history_new_session_behavior
-
-    with patch.object(option, "get", side_effect=["no", "yes"]) as get_behavior:
-        first_created = panel.maybe_start_session_for_input()
-        second_created = panel.maybe_start_session_for_input()
-
-    assert first_created is False
-    assert second_created is True
-    assert len(panel.created_sessions) == 1
-    assert panel.prompt_behaviors == [None, None]
-    assert get_behavior.call_count == 2
-
-
-def test_explicit_session_behaviors_bypass_prompt() -> None:
-    """Apply explicit yes/no policies without debounce or a dialog."""
-    cases: tuple[tuple[hsess.SessionBehavior, bool], ...] = (
-        ("yes", True),
-        ("no", False),
-    )
     attended = SimpleNamespace(unattended=False, accept_dialogs=False)
-    for behavior, expected_created in cases:
-        image_session = make_prompt_session("image", populated=True)
-        panel = PromptPanel([image_session])
-        with (
-            patch.object(hsess, "execenv", attended),
-            patch.object(hsess.QW, "QMessageBox") as message_box,
-        ):
-            created = panel.maybe_start_session_for_input(behavior=behavior)
-        assert created is expected_created
-        assert panel.runtime.execution.prompt_count == 0
-        assert len(panel.created_sessions) == (1 if expected_created else 0)
-        message_box.question.assert_not_called()
-
-
-def test_invalid_session_behavior_has_no_side_effects() -> None:
-    """Reject an invalid policy before debounce or session creation."""
-    image_session = make_prompt_session("image", populated=True)
-    panel = PromptPanel([image_session])
-
-    with pytest.raises(ValueError, match="Invalid session behavior"):
-        hsess.maybe_start_session_for_input(
-            panel,
-            behavior=cast(hsess.SessionBehavior, "invalid"),
-        )
-
+    option = hsess.Conf.proc.history_new_session_behavior
+    with (
+        patch.object(hsess, "execenv", attended),
+        patch.object(hsess.QW, "QMessageBox") as message_box,
+        patch.object(option, "get", side_effect=list(policy_values)) as get_policy,
+    ):
+        if expected_created is None:
+            with pytest.raises(ValueError, match="Invalid session behavior"):
+                panel.maybe_start_session_for_input(
+                    behavior=cast(hsess.SessionBehavior, behavior)
+                )
+            created = []
+        else:
+            created = [
+                panel.maybe_start_session_for_input(
+                    behavior=cast(hsess.SessionBehavior, behavior)
+                )
+                for _call in policy_values
+            ]
+    assert created == list(expected_created or ())
+    assert len(panel.created_sessions) == sum(created)
     assert panel.runtime.execution.prompt_count == 0
-    assert panel.created_sessions == []
-    assert panel.history_sessions == [image_session]
+    message_box.question.assert_not_called()
+    assert get_policy.call_count == (len(policy_values) if behavior is None else 0)
+    if expected_created is None:
+        assert panel.history_sessions == [image_session]
 
 
 def test_accepted_prompt_routes_action_to_new_session() -> None:
@@ -468,13 +396,19 @@ def test_accepted_prompt_replaces_active_session() -> None:
 
 
 def test_input_prompt_debounce_is_global() -> None:
-    """Debounce a synchronous burst of prompts on a single timer window."""
+    """Debounce a synchronous prompt burst and keep routing in place.
+
+    Only the first prompt of a synchronous burst opens a dialog; while the
+    debounce window is pending, further creations are routed to the active
+    session without starting a new one or prompting again.
+    """
     signal_session = make_prompt_session("signal", populated=True)
     panel = PromptPanel([signal_session])
+    panel.mainwindow = None  # dialog parent for the patched QMessageBox
     execution = hruntime.HistoryExecutionState()
     panel.runtime = SimpleNamespace(execution=execution)
     callbacks = []
-    unattended = SimpleNamespace(unattended=True, accept_dialogs=False)
+    attended = SimpleNamespace(unattended=False, accept_dialogs=False)
 
     with (
         patch.object(
@@ -482,15 +416,42 @@ def test_input_prompt_debounce_is_global() -> None:
             "singleShot",
             side_effect=lambda _delay, callback: callbacks.append(callback),
         ),
-        patch.object(hsess, "execenv", unattended),
+        patch.object(hsess, "execenv", attended),
+        patch.object(hsess.QW, "QMessageBox") as message_box,
+        patch.object(
+            hsess.Conf.proc.history_new_session_behavior, "get", return_value="ask"
+        ),
     ):
+        # First call passes the debounce and opens the (rejected) dialog
         assert not hsess.maybe_start_session_for_input(panel, behavior="ask")
+        # Second call is debounced: no second dialog
         assert not hsess.maybe_start_session_for_input(panel, behavior="ask")
+        # Creation entries routed during the window stay in the active session
+        action = hsess.add_ui_entry(
+            panel,
+            "New image",
+            target="imagepanel",
+            method_name="new_object",
+            save_state=False,
+        )
 
+    assert message_box.question.call_count == 1
     assert execution.session_input_pending is True
     assert len(callbacks) == 1
+    assert panel.created_sessions == []
+    assert panel.navigation.get_active_session() is signal_session
+    assert signal_session.actions[-1] is action
     callbacks[0]()
     assert execution.session_input_pending is False
+    # Re-entrance guards yield False when already active
+    with execution.recomputing_cascade() as started:
+        assert started is True
+        with execution.recomputing_cascade() as nested:
+            assert nested is False
+    with execution.replaying_edits() as started:
+        assert started is True
+        with execution.replaying_edits() as nested:
+            assert nested is False
 
 
 def test_ui_entries_serialize_data_target_ownership() -> None:
@@ -634,32 +595,6 @@ def test_image_histogram_action_keeps_image_ownership_in_active_session() -> Non
     assert hchain.resolve_panel_for_action(panel, action) is image_source_panel
     assert signal_session.actions == signal_actions
     assert image_session.actions == image_actions + [action]
-
-
-def test_debounce_rejection_does_not_start_or_prompt() -> None:
-    """Keep routing in the active session when debounce rejects."""
-    image_session = make_prompt_session("image", populated=True)
-    panel = PromptPanel([image_session], prompt_allowed=False)
-    attended = SimpleNamespace(unattended=False, accept_dialogs=True)
-    with (
-        patch.object(hsess, "execenv", attended),
-        patch.object(hsess.QW, "QMessageBox") as message_box,
-        patch.object(
-            hsess.Conf.proc.history_new_session_behavior, "get", return_value="ask"
-        ),
-    ):
-        action = hsess.add_ui_entry(
-            panel,
-            "New image",
-            target="imagepanel",
-            method_name="new_object",
-            save_state=False,
-        )
-    assert panel.runtime.execution.prompt_count == 1
-    assert panel.created_sessions == []
-    assert panel.navigation.get_active_session() is image_session
-    assert image_session.actions[-1] is action
-    message_box.question.assert_not_called()
 
 
 def test_unattended_reject_keeps_populated_active_session() -> None:
@@ -886,175 +821,383 @@ def test_state_compatibility_handles_roi_signature_and_legacy_metadata() -> None
     state.selection = {"signal": [uuid]}
     recorded = WorkspaceState.get_object_metadata(obj)
     state.object_metadata = {"signal": {uuid: recorded}}
-    assert state.is_current_state_compatible(mainwindow, False)
+    assert state.is_current_state_compatible(mainwindow)
     # Legacy tolerance: metadata recorded without "roi" vs current object with ROI
     legacy = dict(recorded)
     del legacy["roi"]
     state.object_metadata = {"signal": {uuid: legacy}}
-    assert state.is_current_state_compatible(mainwindow, False)
+    assert state.is_current_state_compatible(mainwindow)
     # ROI drift against a recorded signature flags incompatibility
     state.object_metadata = {"signal": {uuid: dict(recorded, roi="0" * 16)}}
-    assert not state.is_current_state_compatible(mainwindow, False)
+    assert not state.is_current_state_compatible(mainwindow)
 
 
-def test_edited_image_creation_recomputes_downstream_in_place() -> None:
-    """Regenerate an edited image before recomputing its existing descendant."""
-    initial_param = Gauss2DParam.create(
-        title="Initial Gaussian",
-        height=24,
-        width=28,
-        x0=-4.0,
-        y0=2.0,
-        sigma=1.2,
-        a=25.0,
-    )
-    edited_param = Gauss2DParam.create(
-        title="Edited Gaussian",
-        height=24,
-        width=28,
-        x0=3.0,
-        y0=-2.0,
-        sigma=3.5,
-        a=80.0,
-    )
-    source = create_image_from_param(initial_param)
-    source_uuid = get_uuid(source)
-    source_identity = id(source)
-    initial_source_data = source.data.copy()
-    expected_source = create_image_from_param(edited_param)
+def test_mutation_action_model_contract() -> None:
+    """Round-trip, copy and remap mutation actions with and without payload."""
 
-    downstream = source.copy()
-    set_uuid(downstream)
-    downstream.title = "Initial downstream"
-    downstream.data = np.full(source.data.shape, -1.0)
-    downstream_uuid = get_uuid(downstream)
-    downstream_identity = id(downstream)
-    initial_downstream_data = downstream.data.copy()
-    insert_processing_parameters(
-        downstream,
-        ProcessingParameters(
-            func_name="unit_transform",
-            pattern="1-to-1",
-            source_uuid=source_uuid,
-        ),
-    )
+    def roi_as_dict(roi: SignalROI) -> dict:
+        return numpy_to_json_safe(roi.to_dict())
 
-    creation_action = HistoryAction(
-        title="Create edited Gaussian",
-        kind=HistoryAction.KIND_UI,
-        target="imagepanel",
-        method_name="new_object",
-        kwargs={"param": edited_param},
+    def build_mutation_action(payload: SignalROI | None) -> HistoryAction:
+        return HistoryAction(
+            title="Edit regions of interest",
+            kind=HistoryAction.KIND_MUTATION,
+            panel_str="signal",
+            mutation_key="roi",
+            target_uuids=["first-uuid", "second-uuid"],
+            kwargs={"payload": payload},
+        )
+
+    def roundtrip(action: HistoryAction) -> HistoryAction:
+        session = HistorySession(number=1)
+        session.add_action(action)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "history.dlhist")
+            with NativeH5Writer(path) as writer:
+                writer.write_object_list([session], "history_session")
+            return read_history_sessions(path)[0].actions[0]
+
+    payload = create_signal_roi([[26, 41], [125, 146]], indices=True)
+    loaded = roundtrip(build_mutation_action(payload))
+    assert loaded.kind == HistoryAction.KIND_MUTATION
+    assert loaded.mutation_key == "roi"
+    assert loaded.target_uuids == ["first-uuid", "second-uuid"]
+    assert loaded.panel_str == "signal"
+    loaded_payload = loaded.kwargs.get("payload")
+    assert isinstance(loaded_payload, SignalROI)
+    assert type(loaded_payload) is type(payload)
+    assert roi_as_dict(loaded_payload) == roi_as_dict(payload)
+    # A None payload (ROI deletion) is dropped at construction time and
+    # decoded back as a missing kwarg
+    deletion = build_mutation_action(None)
+    assert "payload" not in deletion.kwargs
+    loaded = roundtrip(deletion)
+    assert loaded.kind == HistoryAction.KIND_MUTATION
+    assert loaded.target_uuids == ["first-uuid", "second-uuid"]
+    assert loaded.kwargs.get("payload") is None
+    # Copies are independent; UUID remapping rewrites the mutation targets
+    action = build_mutation_action(create_signal_roi([[26, 41]], indices=True))
+    copied = action.copy()
+    assert copied is not action and copied.uuid != action.uuid
+    assert copied.mutation_key == "roi"
+    assert copied.target_uuids == action.target_uuids
+    assert copied.target_uuids is not action.target_uuids
+    assert roi_as_dict(copied.kwargs["payload"]) == roi_as_dict(
+        action.kwargs["payload"]
     )
-    creation_action.output_uuids = [source_uuid]
-    downstream_state = WorkspaceState()
-    downstream_state.selection = {"image": [source_uuid]}
-    downstream_action = HistoryAction(
-        title="Transform edited Gaussian",
-        kind=HistoryAction.KIND_COMPUTE,
-        panel_str="image",
-        func_name="unit_transform",
-        pattern="1_to_1",
-        state=downstream_state,
+    remapped = action.copy_with_uuid_remap(
+        {"signal": {"first-uuid": "new-first", "second-uuid": "new-second"}}
     )
-    downstream_action.output_uuids = [downstream_uuid]
+    assert remapped.target_uuids == ["new-first", "new-second"]
+    assert action.target_uuids == ["first-uuid", "second-uuid"]
+
+
+def test_capture_effects_metadata_and_roi_diff() -> None:
+    """Diff metadata keys and flag only genuine ROI changes."""
+    obj = create_image_from_param(Gauss2DParam.create(height=16, width=16))
+    obj.metadata["untouched"] = 1
+    obj.metadata["changed_scalar"] = 5
+    obj.metadata["changed_array"] = np.arange(3)
+    with capture_effects(obj) as effects:
+        obj.metadata["new_key"] = "hello"
+        obj.metadata["changed_scalar"] = 6
+        obj.metadata["changed_array"] = np.arange(4)
+        obj.metadata["__uuid"] = "synthetic-uuid"
+        obj.metadata["__number"] = 42
+    assert effects.metadata_added == ["new_key"]
+    assert effects.metadata_replaced == ["changed_array", "changed_scalar"]
+    assert "untouched" not in effects.metadata_added + effects.metadata_replaced
+    assert "__uuid" not in effects.metadata_added
+    assert "__number" not in effects.metadata_added
+    assert effects.roi_modified is False
+    # No ROI before/after: unmodified
+    with capture_effects(obj) as effects:
+        pass
+    assert effects.roi_modified is False
+    # ROI creation flags the capture
+    with capture_effects(obj) as effects:
+        obj.roi = create_image_roi("rectangle", [2, 2, 5, 5])
+    assert effects.roi_modified is True
+    # An existing ROI left untouched by the analysis is not modified
+    with capture_effects(obj) as effects:
+        obj.metadata["another_key"] = 0
+    assert effects.roi_modified is False
+    # Re-assigning an equal ROI is not a modification (relies on ROI equality)
+    with capture_effects(obj) as effects:
+        obj.roi = create_image_roi("rectangle", [2, 2, 5, 5])
+    assert effects.roi_modified is False
+    # Changing the ROI geometry is a modification
+    with capture_effects(obj) as effects:
+        obj.roi = create_image_roi("rectangle", [3, 3, 6, 6])
+    assert effects.roi_modified is True
+
+
+def test_analysis_effects_round_trip_merge_and_persistence() -> None:
+    """Round-trip manifests through dict/HDF5 and merge recompute captures."""
+    effects = AnalysisEffects(
+        metadata_added=["Geometry_peak_detection_dict"],
+        metadata_replaced=["analysis_parameters"],
+        roi_modified=True,
+    )
+    payload = effects.to_dict()
+    assert payload == {
+        "metadata_added": ["Geometry_peak_detection_dict"],
+        "metadata_replaced": ["analysis_parameters"],
+        "roi_modified": True,
+    }
+    assert AnalysisEffects.from_dict(payload) == effects
+    assert AnalysisEffects.from_dict({}) == AnalysisEffects()
+    # Merge semantics: added-stays-added, sticky roi_modified, sorted output
+    new = AnalysisEffects(
+        metadata_added=["b", "a"], metadata_replaced=["c"], roi_modified=False
+    )
+    merged = merge_effects(None, new)
+    assert merged == AnalysisEffects(["a", "b"], ["c"], False)
+    previous = AnalysisEffects(metadata_added=["result"], roi_modified=True)
+    recomputed = AnalysisEffects(metadata_replaced=["result", "params"])
+    merged = merge_effects(previous, recomputed)
+    assert merged.metadata_added == ["result"]
+    assert merged.metadata_replaced == ["params"]
+    assert merged.roi_modified is True
+    # HDF5 round-trip on an action, with legacy tolerance (no effects group)
+    action = build_history_action()
+    action.effects = {"source-uuid": payload}
     session = HistorySession(number=1)
-    session.add_action(creation_action)
-    session.add_action(downstream_action)
+    session.add_action(action)
+    with tempfile.TemporaryDirectory() as tmpdir:
+        path = os.path.join(tmpdir, "history.dlhist")
+        with NativeH5Writer(path) as writer:
+            writer.write_object_list([session], "history_session")
+        loaded = read_history_sessions(path)[0].actions[0]
+        assert loaded.effects == action.effects
+        with NativeH5Writer(path) as writer:
+            writer.write_object_list([session], "history_session")
+            delete_hdf5_items_by_name(writer.h5, "effects")
+        legacy = read_history_sessions(path)[0].actions[0]
+        assert legacy.effects is None
 
-    processor_source_objects: list[ImageObj] = []
-    processor_source_data: list[np.ndarray] = []
 
-    def recompute_1_to_1(
-        func_name: str | None,
-        source_obj: ImageObj,
-        param: object,
-        *,
-        plugin_origin: dict[str, object] | None,
-    ) -> SimpleNamespace:
-        assert func_name == "unit_transform"
-        assert param is None
-        assert plugin_origin is None
-        processor_source_objects.append(source_obj)
-        processor_source_data.append(source_obj.data.copy())
-        new_obj = source_obj.copy()
-        new_obj.title = f"unit_transform({source_obj.title})"
-        new_obj.data = source_obj.data.astype(float) * 2.0 + 3.0
-        return SimpleNamespace(cancelled=False, error_msg=None, result=new_obj)
+def test_update_obj_in_place_preserves_roi() -> None:
+    """In-place recompute keeps the target's ROI when the new object has none."""
+    target = create_paracetamol_signal()
+    target.roi = create_signal_roi([[10, 20]], indices=True)
+    saved_roi_dict = numpy_to_json_safe(target.roi.to_dict())
+    new_obj = create_paracetamol_signal()
+    assert new_obj.roi is None
+    hrec.update_obj_in_place(target, new_obj)
+    assert target.roi is not None
+    assert numpy_to_json_safe(target.roi.to_dict()) == saved_roi_dict
 
-    def apply_recomputed_object_in_place(
-        obj: ImageObj,
-        new_obj: ImageObj,
-        proc_params: ProcessingParameters,
-    ) -> None:
-        hrec.update_obj_in_place(obj, new_obj)
-        insert_processing_parameters(obj, proc_params)
 
-    object_model = CascadeObjectModel([source, downstream])
-    data_panel = SimpleNamespace(
-        PANEL_STR_ID="image",
-        objmodel=object_model,
-        processor=SimpleNamespace(recompute_1_to_1=recompute_1_to_1),
-        objprop=SimpleNamespace(
-            apply_recomputed_object_in_place=apply_recomputed_object_in_place
+def test_recompute_dispatch_guards_and_missing_feature() -> None:
+    """Reject non-recomputable actions and diagnose missing plugin features."""
+    warnings: list[str] = []
+    panel = SimpleNamespace(
+        runtime=SimpleNamespace(execution=SimpleNamespace(cascade_warnings=warnings)),
+        mainwindow=SimpleNamespace(
+            signalpanel=SimpleNamespace(objmodel=CascadeObjectModel([])),
+            imagepanel=SimpleNamespace(objmodel=CascadeObjectModel([])),
         ),
     )
+    # Non-creation UI actions are silently not recomputable
+    noncompute = HistoryAction(kind=HistoryAction.KIND_UI, method_name="select_next")
+    assert hrec.recompute_action_in_place(panel, noncompute) is False
+    assert warnings == []
+    # Unsupported compute patterns queue a warning
+    unsupported = HistoryAction(
+        kind=HistoryAction.KIND_COMPUTE, func_name="mystery", pattern="3_to_2"
+    )
+    assert hrec.recompute_action_in_place(panel, unsupported) is False
+    assert any("mystery" in warning for warning in warnings)
+    # A missing plugin feature flags the action and queues a diagnostic
+    action = HistoryAction(
+        kind=HistoryAction.KIND_COMPUTE, func_name="plugin_func", pattern="1_to_1"
+    )
+    error = FeatureNotFoundError(
+        "plugin_func",
+        plugin_origin={"directory": "myplugin"},
+        paramclass_name="MyParam",
+    )
+    with patch.object(hrec, "recompute_1_to_1_in_place", side_effect=error):
+        assert hrec.recompute_action_in_place(panel, action) is False
+    assert action.is_stale is True
+    assert any(
+        "myplugin/plugins:plugin_func" in warning and "MyParam" in warning
+        for warning in warnings
+    )
+    # Mutation guards: unresolved data panel, then no recorded targets
+    orphan_mutation = HistoryAction(
+        title="Edit ROI", kind=HistoryAction.KIND_MUTATION, mutation_key="roi"
+    )
+    assert hrec.recompute_action_in_place(panel, orphan_mutation) is False
+    targetless = HistoryAction(
+        title="Edit ROI",
+        kind=HistoryAction.KIND_MUTATION,
+        panel_str="signal",
+        mutation_key="roi",
+    )
+    assert hrec.recompute_action_in_place(panel, targetless) is False
+    assert sum("Edit ROI" in warning for warning in warnings) == 2
+
+
+def test_find_creation_action_for_output_fallback_scan() -> None:
+    """Fall back to scanning creation outputs when the mapping is stale."""
+    creation = HistoryAction(
+        title="New signal",
+        kind=HistoryAction.KIND_UI,
+        target="signalpanel",
+        method_name="new_object",
+    )
+    compute = HistoryAction(
+        kind=HistoryAction.KIND_COMPUTE, func_name="derivative", pattern="1_to_1"
+    )
+    session = HistorySession(number=1)
+    session.add_action(creation)
+    session.add_action(compute)
     runtime = SimpleNamespace(
         objects=SimpleNamespace(
-            action_output_uuids={
-                creation_action.uuid: [source_uuid],
-                downstream_action.uuid: [downstream_uuid],
-            }
+            output_to_action={"created-uuid": compute.uuid},
+            action_output_uuids={creation.uuid: ["created-uuid"]},
+        )
+    )
+    panel = SimpleNamespace(history_sessions=[session], runtime=runtime)
+    # The mapped action is not a creation: the fallback scan finds the head
+    assert hchain.find_creation_action_for_output(panel, "created-uuid") is creation
+    assert hchain.find_creation_action_for_output(panel, "unknown-uuid") is None
+    empty = SimpleNamespace(history_sessions=[])
+    assert hchain.find_creation_action_for_output(empty, "created-uuid") is None
+
+
+def test_plan_reconnection_dead_source_warning_and_producer_removal() -> None:
+    """Warn on dead sources, then reconnect and remove the dead producer."""
+    source = create_paracetamol_signal()
+    source_uuid = get_uuid(source)
+    removed_uuid = "removed-output"
+    consumer_obj = create_paracetamol_signal()
+    consumer_uuid = get_uuid(consumer_obj)
+    insert_processing_parameters(
+        consumer_obj,
+        ProcessingParameters(
+            func_name="derivative", pattern="1-to-1", source_uuid=removed_uuid
         ),
-        execution=SimpleNamespace(cascade_warnings=[], broken_actions=set()),
     )
-    history_panel = SimpleNamespace(
-        runtime=runtime,
-        history_sessions=[session],
+    producer = HistoryAction(
+        title="Normalize",
+        kind=HistoryAction.KIND_COMPUTE,
+        panel_str="signal",
+        func_name="normalize",
+        pattern="1_to_1",
+        state=build_workspace_state([source_uuid]),
     )
-    refreshed_uuids: list[str] = []
+    producer.output_uuids = [removed_uuid]
+    consumer_action = HistoryAction(
+        title="Derivative",
+        kind=HistoryAction.KIND_COMPUTE,
+        panel_str="signal",
+        func_name="derivative",
+        pattern="1_to_1",
+        state=build_workspace_state([removed_uuid]),
+    )
+    session = HistorySession(number=1)
+    session.add_action(producer)
+    session.add_action(consumer_action)
 
-    def record_refresh(panel_data: object, output_uuid: str) -> None:
-        assert panel_data is data_panel
-        refreshed_uuids.append(output_uuid)
+    def make_panel(objects: list) -> tuple[SimpleNamespace, SimpleNamespace]:
+        signal_panel = SimpleNamespace(
+            PANEL_STR_ID="signal", objmodel=CascadeObjectModel(objects)
+        )
+        panel = SimpleNamespace(
+            history_sessions=[session],
+            runtime=SimpleNamespace(
+                objects=SimpleNamespace(
+                    output_to_action={removed_uuid: producer.uuid},
+                    action_output_uuids={producer.uuid: [removed_uuid]},
+                    remove_action_outputs=Mock(),
+                )
+            ),
+            mainwindow=SimpleNamespace(
+                signalpanel=signal_panel,
+                imagepanel=SimpleNamespace(
+                    PANEL_STR_ID="image", objmodel=CascadeObjectModel([])
+                ),
+            ),
+        )
+        return panel, signal_panel
 
-    descendants = hrec.hchain.get_downstream_actions(history_panel, creation_action)
-    assert descendants == [downstream_action]
-
+    # Dead source: the plan carries a warning and applying it is a no-op
+    panel, signal_panel = make_panel([consumer_obj])
+    plan = hchain.plan_reconnection(panel, signal_panel, removed_uuid)
+    assert plan.warning is not None and "Normalize" in plan.warning
+    assert [target.object_uuid for target in plan.targets] == [consumer_uuid]
+    assert plan.targets[0].action is consumer_action
+    roots: list[HistoryAction] = []
+    hchain.apply_reconnection_plan(panel, signal_panel, plan, roots)
+    assert roots == []
+    assert extract_processing_parameters(consumer_obj).source_uuid == removed_uuid
+    # Reconnection warnings are silenced in unattended mode
     with (
-        patch.object(hrec.hchain, "resolve_panel_for_action", return_value=data_panel),
-        patch.object(
-            hrec, "create_image_from_param", wraps=create_image_from_param
-        ) as create_image_mock,
-        patch.object(hrec, "refresh_target", side_effect=record_refresh),
+        patch.object(hchain, "execenv", SimpleNamespace(unattended=True)),
+        patch.object(hchain.QW, "QMessageBox") as message_box,
     ):
-        assert hrec.recompute_creation_in_place(history_panel, creation_action)
-        assert hrec.recompute_1_to_1_in_place(history_panel, downstream_action)
+        hchain.show_reconnection_warnings(panel, [plan.warning])
+    message_box.warning.assert_not_called()
 
-    create_image_mock.assert_called_once()
-    assert create_image_mock.call_args.args[0] is edited_param
+    # Alive source: reconnect the consumer and remove the outputless producer
+    panel, signal_panel = make_panel([source, consumer_obj])
+    plan = hchain.plan_reconnection(panel, signal_panel, removed_uuid)
+    assert plan.warning is None
+    assert plan.source_uuid == source_uuid
+    assert plan.remove_producer is True
+    roots = []
+    hchain.apply_reconnection_plan(panel, signal_panel, plan, roots)
+    assert roots == [consumer_action]
+    assert extract_processing_parameters(consumer_obj).source_uuid == source_uuid
+    assert consumer_action.state.selection["signal"] == [source_uuid]
+    assert producer not in session.actions
+    panel.runtime.objects.remove_action_outputs.assert_called_once_with(producer)
 
-    assert id(source) == source_identity
-    assert object_model[source_uuid] is source
-    assert get_uuid(source) == source_uuid
-    np.testing.assert_allclose(source.data, expected_source.data)
-    assert not np.array_equal(source.data, initial_source_data)
-    creation_param = extract_creation_parameters(source)
-    assert isinstance(creation_param, Gauss2DParam)
-    for name in ("height", "width", "x0", "y0", "sigma", "a"):
-        assert getattr(creation_param, name) == getattr(edited_param, name)
 
-    assert processor_source_objects == [source]
-    np.testing.assert_allclose(processor_source_data[0], expected_source.data)
-    assert id(downstream) == downstream_identity
-    assert object_model[downstream_uuid] is downstream
-    assert get_uuid(downstream) == downstream_uuid
-    np.testing.assert_allclose(
-        downstream.data, expected_source.data.astype(float) * 2.0 + 3.0
+def test_prepare_action_param_edit_skips_paramless_actions() -> None:
+    """Return no edit target (and skip the dialog) for param-less actions."""
+    paramless = (
+        HistoryAction(kind=HistoryAction.KIND_UI, method_name="new_object"),
+        HistoryAction(kind=HistoryAction.KIND_COMPUTE, pattern="1_to_1"),
+        HistoryAction(kind=HistoryAction.KIND_COMPUTE, pattern="1_to_n"),
+        HistoryAction(kind=HistoryAction.KIND_MUTATION, mutation_key="roi"),
     )
-    assert not np.array_equal(downstream.data, initial_downstream_data)
-    downstream_params = extract_processing_parameters(downstream)
-    assert downstream_params is not None
-    assert downstream_params.source_uuid == source_uuid
-    assert refreshed_uuids == [source_uuid, downstream_uuid]
-    assert runtime.execution.cascade_warnings == []
+    panel = SimpleNamespace(mainwindow=None)
+    for action in paramless:
+        assert hireplay.prepare_action_param_edit(action) is None
+        assert hireplay.prompt_edit_action_params(panel, action) is None
+
+
+def test_make_synthetic_heads_falls_back_to_default_title() -> None:
+    """Use the default head title when the cloned object cannot be resolved."""
+    root = HistoryAction(
+        kind=HistoryAction.KIND_COMPUTE,
+        panel_str="signal",
+        func_name="derivative",
+        pattern="1_to_1",
+        state=build_workspace_state(["external-uuid"]),
+    )
+    chain = ProcessingChain(root=root, session=HistorySession(number=1), actions=[root])
+    registry = UuidCloneRegistry()
+    registry.register("signal", "external-uuid", "clone-uuid", object())
+
+    class RaisingModel:
+        """Object model whose lookups always fail."""
+
+        def __getitem__(self, uuid: str) -> None:
+            raise KeyError(uuid)
+
+    panel = SimpleNamespace(
+        mainwindow=SimpleNamespace(
+            signalpanel=SimpleNamespace(objmodel=RaisingModel()), imagepanel=None
+        )
+    )
+    heads = hops.make_synthetic_heads(panel, chain, registry)
+    assert len(heads) == 1
+    head = heads[0]
+    assert head.method_name == "new_object"
+    assert head.output_uuids == ["clone-uuid"]
+    assert head.title == hops._("Initial state")
