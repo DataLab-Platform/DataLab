@@ -28,7 +28,7 @@ Design notes
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from guidata import configtools
 from sigimax.config import (
@@ -41,6 +41,9 @@ from sigimax.config import (
 )
 
 from datalab import __docurl__, __homeurl__, __supporturl__, __version__
+
+if TYPE_CHECKING:
+    from datalab.config.config_persistence import OptionStore
 
 #: Application name used for default log file basenames.
 APP_NAME = "DataLab"
@@ -56,9 +59,9 @@ class DataLabOptions(SigimaXOptions):
     CONF_VERSION = "1.0.0"
 
     def __init__(self) -> None:
-        # INI write-through is disabled until the initial load has completed; it
-        # is enabled by :mod:`datalab.config` after ``load_options_from_ini``.
-        self._ini_persist_enabled = False
+        # No persistence store until the initial load has completed; one is
+        # attached by :mod:`datalab.config` after ``load_options_from_ini``.
+        self._store: OptionStore | None = None
         super().__init__()
 
         # ===================================================================
@@ -515,57 +518,40 @@ class DataLabOptions(SigimaXOptions):
         """
         return self._defaults.get(field_name)
 
-    def set_ini_persist_enabled(self, enabled: bool) -> None:
-        """Enable or disable INI write-through on option changes.
-
-        When enabled, option changes flush the configuration to the INI file.
-        This is disabled during the initial load and enabled afterwards by
-        :mod:`datalab.config`.
+    def attach_store(self, store: OptionStore) -> None:
+        """Attach a persistence store; subsequent option changes are persisted.
 
         Args:
-            enabled: Whether INI write-through is active.
+            store: The persistence store to attach.
         """
-        self._ini_persist_enabled = enabled
+        self._store = store
+
+    def detach_store(self) -> None:
+        """Detach the persistence store; option changes stay in-memory only."""
+        self._store = None
 
     def is_ini_persist_enabled(self) -> bool:
-        """Return whether option changes are persisted to the INI file."""
-        return self._ini_persist_enabled
+        """Return whether a persistence store is attached."""
+        return self._store is not None
 
     def snapshot_option_context_state(self, name: str) -> bool:
         """Return whether an option was persisted before a temporary context."""
-        if not self._ini_persist_enabled:
+        if self._store is None:
             return False
-        # Imported lazily to avoid a config_options/config_persistence cycle.
-        # pylint: disable=import-outside-toplevel
-        from datalab.config.config_persistence import has_persisted_option
-
-        return has_persisted_option(self, name)
+        return self._store.has(name)
 
     def restore_option_context_state(self, name: str, was_persisted: bool) -> None:
         """Restore persistence presence after a temporary option context."""
-        if self._ini_persist_enabled and not was_persisted:
-            # Imported lazily to avoid a config_options/config_persistence cycle.
-            # pylint: disable=import-outside-toplevel
-            from datalab.config.config_persistence import remove_persisted_option
-
-            remove_persisted_option(self, name)
+        if self._store is not None and not was_persisted:
+            self._store.remove(name)
 
     def is_option_initialized(self, name: str) -> bool:
         """Return whether an option was loaded, set, or persisted in the INI."""
-        if not self._ini_persist_enabled:
+        if self._store is None:
             return super().is_option_initialized(name)
-        # Imported lazily to avoid a config_options/config_persistence cycle.
-        # pylint: disable=import-outside-toplevel
-        from datalab.config.config_persistence import has_persisted_option
-
-        return has_persisted_option(self, name) or super().is_option_initialized(name)
+        return self._store.has(name) or super().is_option_initialized(name)
 
     def option_changed(self, name: str) -> None:
-        """Persist option changes when INI write-through is enabled."""
-        del name
-        if self._ini_persist_enabled:
-            # Imported lazily to avoid a hard import cycle at module load time.
-            # pylint: disable=import-outside-toplevel
-            from datalab.config.config_persistence import save_options_to_ini
-
-            save_options_to_ini(self)
+        """Persist a single option change when a persistence store is attached."""
+        if self._store is not None:
+            self._store.save(name)

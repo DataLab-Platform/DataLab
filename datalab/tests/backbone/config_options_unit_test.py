@@ -19,6 +19,7 @@ from sigimax.utils import conf as confmod
 from sigimax.utils.conf import AppUserConfig
 
 from datalab.config.config_options import DataLabOptions
+from datalab.config.config_persistence import IniOptionStore, load_options_from_ini
 
 
 class _SampleParam(gds.DataSet):
@@ -39,12 +40,9 @@ def test_field_get_default_initializes_ini(monkeypatch) -> None:
     backend = _make_conf()
     monkeypatch.setattr(confmod, "CONF", backend)
     options = DataLabOptions()
-    from datalab.config.config_persistence import (  # pylint: disable=import-outside-toplevel
-        load_options_from_ini,
-    )
 
     load_options_from_ini(options, backend)
-    options.set_ini_persist_enabled(True)
+    options.attach_store(IniOptionStore(options, backend))
     default = [900, 700]
 
     assert options.window_size.get(default) is default
@@ -58,9 +56,6 @@ def test_field_get_default_preserves_existing_value(monkeypatch) -> None:
     backend.set("view", "max_shapes_to_draw", 777, save=False)
     monkeypatch.setattr(confmod, "CONF", backend)
     options = DataLabOptions()
-    from datalab.config.config_persistence import (  # pylint: disable=import-outside-toplevel
-        load_options_from_ini,
-    )
 
     load_options_from_ini(options, backend)
 
@@ -73,7 +68,7 @@ def test_field_get_none_does_not_create_ini_key(monkeypatch) -> None:
     backend = _make_conf()
     monkeypatch.setattr(confmod, "CONF", backend)
     options = DataLabOptions()
-    options.set_ini_persist_enabled(True)
+    options.attach_store(IniOptionStore(options, backend))
 
     assert options.plugins_enabled_list.get(None) is None
     assert not backend.has_option("main", "plugins_enabled_list")
@@ -84,7 +79,7 @@ def test_field_set_updates_ini(monkeypatch) -> None:
     backend = _make_conf()
     monkeypatch.setattr(confmod, "CONF", backend)
     options = DataLabOptions()
-    options.set_ini_persist_enabled(True)
+    options.attach_store(IniOptionStore(options, backend))
 
     options.available_memory_threshold.set(640)
 
@@ -97,7 +92,7 @@ def test_field_context_restores_absent_ini_option(monkeypatch) -> None:
     backend = _make_conf()
     monkeypatch.setattr(confmod, "CONF", backend)
     options = DataLabOptions()
-    options.set_ini_persist_enabled(True)
+    options.attach_store(IniOptionStore(options, backend))
 
     assert not backend.has_option("console", "console_enabled")
     with options.console_enabled.context(False):
@@ -112,7 +107,7 @@ def test_nested_context_restores_absent_ini_option_after_exception(monkeypatch) 
     backend = _make_conf()
     monkeypatch.setattr(confmod, "CONF", backend)
     options = DataLabOptions()
-    options.set_ini_persist_enabled(True)
+    options.attach_store(IniOptionStore(options, backend))
 
     with pytest.raises(RuntimeError, match="stop"):
         with options.console_enabled.context(False):

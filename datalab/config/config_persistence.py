@@ -40,7 +40,7 @@ the default back to the INI file.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Protocol
 
 from sigimax.utils import conf as _confmod
 
@@ -49,6 +49,30 @@ if TYPE_CHECKING:
     from sigimax.config import OptionField
 
     from datalab.config.config_options import DataLabOptions
+
+
+class OptionStore(Protocol):
+    """Persistence backend consulted by :class:`DataLabOptions` option hooks.
+
+    This narrow protocol is what :mod:`datalab.config_options` depends on,
+    instead of this module's free functions or the ``UserConfig`` backend
+    directly, so that the two modules do not import each other.
+    """
+
+    def load_all(self) -> None:
+        """Load all mapped option values from the backend."""
+
+    def save_all(self, save: bool = True) -> None:
+        """Save all mapped option values to the backend."""
+
+    def save(self, name: str) -> None:
+        """Save a single option value to the backend."""
+
+    def has(self, name: str) -> bool:
+        """Return whether an option has a value in the backend."""
+
+    def remove(self, name: str) -> bool:
+        """Remove an option from the backend."""
 
 
 def _default_conf() -> UserConfig:
@@ -373,3 +397,42 @@ def get_uncategorized_fields(options: DataLabOptions) -> list[str]:
             continue
         unexpected.append(name)
     return sorted(unexpected)
+
+
+class IniOptionStore:
+    """:class:`OptionStore` backed by a DataLab INI ``UserConfig``.
+
+    Args:
+        options: The DataLab options container to persist.
+        conf: The ``UserConfig`` INI backend to use (defaults to the live
+         module-level DataLab ``CONF``, resolved dynamically on each call).
+    """
+
+    def __init__(self, options: DataLabOptions, conf: UserConfig | None = None) -> None:
+        self._options = options
+        self._conf = conf
+
+    def load_all(self) -> None:
+        """Load all mapped option values from the INI backend."""
+        load_options_from_ini(self._options, self._conf)
+
+    def save_all(self, save: bool = True) -> None:
+        """Save all mapped option values to the INI backend."""
+        save_options_to_ini(self._options, self._conf, save=save)
+
+    def save(self, name: str) -> None:
+        """Save a single option value to the INI backend."""
+        conf = _default_conf() if self._conf is None else self._conf
+        location = get_ini_location(self._options, name)
+        if location is None:
+            return
+        _save_field(self._options, conf, name, *location)
+        conf.save()
+
+    def has(self, name: str) -> bool:
+        """Return whether an option has a value in the INI backend."""
+        return has_persisted_option(self._options, name, self._conf)
+
+    def remove(self, name: str) -> bool:
+        """Remove an option from the INI backend."""
+        return remove_persisted_option(self._options, name, self._conf)

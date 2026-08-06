@@ -32,6 +32,7 @@ from sigimax.utils.conf import AppUserConfig, Configuration
 from datalab import __version__
 from datalab.config.config_options import DataLabOptions
 from datalab.config.config_persistence import (
+    IniOptionStore,
     load_options_from_ini,
     save_options_to_ini,
 )
@@ -352,7 +353,7 @@ def initialize(load_user_config: bool) -> None:
 
     config_app_name = get_config_app_name()
     typed_exists = load_user_config and osp.isfile(get_typed_config_filename())
-    Conf.set_ini_persist_enabled(False)
+    Conf.detach_store()
     try:
         Conf.reset_to_defaults()
         if not isinstance(conf.CONF, DataLabUserConfig):
@@ -371,9 +372,10 @@ def initialize(load_user_config: bool) -> None:
         Conf.set_plotpy_application(config_app_name)
         _INITIALIZED_WITH_USER_CONFIG = load_user_config
     finally:
-        Conf.set_ini_persist_enabled(
-            _INITIALIZED_WITH_USER_CONFIG is True and load_user_config
-        )
+        if _INITIALIZED_WITH_USER_CONFIG is True and load_user_config:
+            Conf.attach_store(IniOptionStore(Conf))
+        else:
+            Conf.detach_store()
 
 
 def ensure_initialized(load_user_config: bool) -> None:
@@ -384,7 +386,7 @@ def ensure_initialized(load_user_config: bool) -> None:
 
 def reset_to_defaults() -> None:
     """Reset the shared options to production defaults without loading an INI."""
-    Conf.set_ini_persist_enabled(False)
+    Conf.detach_store()
     Conf.reset_to_defaults()
     _apply_runtime_defaults()
 
@@ -396,7 +398,7 @@ def reset():
         reset_to_defaults()
         return
 
-    Conf.set_ini_persist_enabled(False)
+    Conf.detach_store()
     Configuration.reset()
     _INITIALIZED_WITH_USER_CONFIG = None
     initialize(load_user_config=True)
