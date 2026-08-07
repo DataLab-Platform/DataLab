@@ -32,10 +32,8 @@ import guidata.dataset as gds
 import numpy as np
 import scipy.ndimage as spi
 import scipy.signal as sps
-from guidata import qthelpers as guidata_qth
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
-from plotpy import config as plotpy_config
 from plotpy.builder import make
 from plotpy.constants import PlotType
 from qtpy import QtCore as QC
@@ -2104,37 +2102,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
               <p>{adv_conf}""",
         )
 
-    def _update_color_mode(self, startup: bool = False) -> None:
-        """Update color mode
-
-        Args:
-            startup: True if method is called during application startup (in that case,
-             color theme is applied only if mode != "auto")
-        """
-        mode = Conf.color_mode.get()
-        if startup and mode == "auto":
-            guidata_qth.win32_fix_title_bar_background(self)
-            return
-
-        # Prevent Qt from refreshing the window when changing the color mode:
-        self.setUpdatesEnabled(False)
-
-        plotpy_config.set_plotpy_color_mode(mode)
-        Conf.apply_plotpy_defaults()
-
-        if self.console is not None:
-            self.console.update_color_mode()
+    def _update_extra_color_mode(self) -> None:
+        """Update the macro panel color mode"""
         macropanel = getattr(self, "macropanel", None)
         if macropanel is not None:
             macropanel.update_color_mode()
-        if self.docks is not None:
-            for dock in self.docks.values():
-                widget = dock.widget()
-                if isinstance(widget, DockablePlotWidget):
-                    widget.update_color_mode()
-
-        # Allow Qt to refresh the window:
-        self.setUpdatesEnabled(True)
 
     # Settings changes are intentionally dispatched in one place because each
     # option may trigger a specific live UI update or panel refresh.

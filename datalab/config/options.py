@@ -482,6 +482,9 @@ class DataLabOptions(SigimaXOptions):
         self.app_name.set(APP_NAME)
         self.app_version.set(__version__)
         self.app_logo_path.set("DataLab.svg")
+        self.watermark_image_path.set(
+            configtools.get_image_file_path("DataLab-watermark.png")
+        )
         self.app_docurl.set(__docurl__)
         self.app_homeurl.set(__homeurl__)
         self.app_supporturl.set(__supporturl__)
