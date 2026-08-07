@@ -44,7 +44,7 @@ from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilenames
 from sigima.config import options as sigima_options
 from sigima.objects import ImageObj, SignalObj, create_image, create_signal
-from sigimax.mainwindow import SGMXMainWindow, SGMXMainWindowMeta
+from sigimax.mainwindow import SGMXMainWindow
 from sigimax.utils import qthelpers as sgmx_qth
 from sigimax.widgets import status
 
@@ -112,14 +112,10 @@ def remote_controlled(func):
     return method_wrapper
 
 
-class DLMainWindowMeta(SGMXMainWindowMeta):
-    """Mixed metaclass to avoid conflicts"""
-
-
 # DLMainWindow is the top-level UI shell, so it legitimately owns many widget
 # references and public control methods used by the rest of the application.
 class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-public-methods
-    SGMXMainWindow, AbstractDLControl, metaclass=DLMainWindowMeta
+    SGMXMainWindow, AbstractDLControl
 ):
     """DataLab main window
 
