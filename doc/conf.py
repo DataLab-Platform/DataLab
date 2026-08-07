@@ -198,6 +198,8 @@ else:
     ann = "DataLab has been presented at <a href='https://pretalx.com/euroscipy-2026/talk/E3X9EX/'>EuroSciPy 2026</a> 🇵🇱 and at <a href='https://datalab-platform.com/en/outreach/osxp2025.html'>OSXP 2025</a> 🇫🇷 🚀 — <a href='https://datalab-platform.com/en/outreach/index.html'>Learn more</a>"  # noqa: E501
 html_theme_options = {
     "show_toc_level": 2,
+    "navbar_align": "left",
+    "navbar_persistent": ["search-button"],
     "github_url": "https://github.com/DataLab-Platform/DataLab/",
     "logo": {
         "text": f"v{datalab.__version__}",
