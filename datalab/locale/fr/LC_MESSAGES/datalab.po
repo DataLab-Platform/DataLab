@@ -13,9 +13,6 @@ msgstr ""
 msgid "Results"
 msgstr "Résultats"
 
-msgid "Marker"
-msgstr ""
-
 #, python-format
 msgid "%d more rows"
 msgstr "%d lignes supplémentaires"
@@ -31,285 +28,6 @@ msgstr "%s non affichées"
 #, python-format
 msgid "Only %d out of %d shapes are displayed"
 msgstr "Seules %d sur %d formes sont affichées"
-
-#, fuzzy
-msgid "AI Assistant"
-msgstr "Gaussienne"
-
-#, fuzzy
-msgid "New conversation"
-msgstr "Conversion"
-
-#, fuzzy
-msgid "History…"
-msgstr "Historique"
-
-msgid "Browse, load or delete past conversations."
-msgstr ""
-
-#, fuzzy
-msgid "Idle"
-msgstr "Fichier"
-
-msgid "Ask the assistant…  (Ctrl+Enter to send, Ctrl+Up/Down to navigate previous prompts)"
-msgstr ""
-
-#, fuzzy
-msgid "Stop"
-msgstr "Échelon"
-
-msgid "Cancel the in-flight request (Esc)."
-msgstr ""
-
-msgid "Send"
-msgstr ""
-
-msgid "AI Assistant ready. Configure your provider in the Edit > Preferences dialog (AI Assistant tab) before sending the first message."
-msgstr ""
-
-msgid "You"
-msgstr ""
-
-#, fuzzy
-msgid "Save to Macros"
-msgstr "Arrêter la macro"
-
-msgid "This macro is no longer available (already saved or cleared)."
-msgstr ""
-
-#, python-format
-msgid "Failed to save macro: %s"
-msgstr ""
-
-#, python-format
-msgid "Saved macro '%s' to the Macro panel."
-msgstr ""
-
-#, fuzzy
-msgid "Thinking…"
-msgstr "Binning"
-
-#, python-format
-msgid "Last request context size: %d tokens"
-msgstr ""
-
-msgid "Cumulative token usage"
-msgstr ""
-
-#, fuzzy, python-format
-msgid "Prompt: %d"
-msgstr "Calcul en cours : %s"
-
-#, fuzzy, python-format
-msgid "Completion: %d"
-msgstr "Calcul en cours : %s"
-
-#, python-format
-msgid "Total: %d"
-msgstr ""
-
-#, fuzzy
-msgid "Stopping…"
-msgstr "Chaîne de caractères"
-
-#, python-brace-format
-msgid ""
-"\n"
-"\n"
-"Tip: you can also set the {var} environment variable to avoid storing the key in the configuration file."
-msgstr ""
-
-msgid ""
-"No API key configured.\n"
-"\n"
-"Open the Edit > Preferences dialog (AI Assistant tab) to enter your provider credentials, or select the 'mock' provider for offline testing."
-msgstr ""
-
-#, fuzzy
-msgid "Conversation reset."
-msgstr "Conversion"
-
-msgid "Tool execution cancelled by user."
-msgstr ""
-
-msgid "Stopped by user."
-msgstr ""
-
-#, fuzzy, python-format
-msgid "Error: %s"
-msgstr "Erreur:"
-
-#, fuzzy, python-format
-msgid "Failed to save conversation: %s"
-msgstr ""
-"Échec de la conversion des paramètres de création historiques :\n"
-"%s"
-
-#, fuzzy, python-format
-msgid "Failed to load conversation: %s"
-msgstr ""
-"Échec de la conversion des paramètres de création historiques :\n"
-"%s"
-
-#, fuzzy, python-format
-msgid "Loaded conversation: %s"
-msgstr "Configuration avancée :"
-
-#, python-format
-msgid "Tool call: %(name)s(%(args)s)"
-msgstr ""
-
-msgid "AI Assistant — Conversation history"
-msgstr ""
-
-msgid "Double-click a conversation to load it. Loading a conversation replaces the current one."
-msgstr ""
-
-#, fuzzy
-msgid "Load"
-msgstr "Flottant"
-
-#, fuzzy
-msgid "Delete"
-msgstr "Supprimer tout"
-
-msgid "Rename"
-msgstr "Renommer"
-
-msgid "Rename the selected conversation (F2)."
-msgstr ""
-
-#, fuzzy
-msgid "Export…"
-msgstr "Exporter"
-
-msgid "Save the selected conversation as a Markdown file."
-msgstr ""
-
-#, fuzzy
-msgid "Refresh"
-msgstr "Rafraîchissement automatique"
-
-msgid "Close"
-msgstr "Fermer"
-
-#, python-brace-format
-msgid ""
-"Created: {created}\n"
-"Updated: {updated}\n"
-"Messages: {count}"
-msgstr ""
-
-msgid "unknown"
-msgstr ""
-
-#, fuzzy
-msgid "(untitled)"
-msgstr "Titre"
-
-#, fuzzy
-msgid "Delete conversation"
-msgstr "Supprimer les annotations"
-
-msgid "Delete the selected conversation? This cannot be undone."
-msgstr ""
-
-#, fuzzy
-msgid "Rename conversation"
-msgstr "Conversion"
-
-msgid "New title:"
-msgstr "Nouveau titre :"
-
-#, fuzzy
-msgid "Export failed"
-msgstr "Exporter une grille"
-
-#, python-format
-msgid "Could not load conversation: %s"
-msgstr ""
-
-#, fuzzy
-msgid "Export conversation"
-msgstr "Exporter les annotations"
-
-#, fuzzy
-msgid "Markdown files (*.md);;All files (*)"
-msgstr "Fichiers de grille de ROI (*.dlabgrid);;Tous les fichiers (*)"
-
-#, python-format
-msgid "Could not write file: %s"
-msgstr ""
-
-msgid "Enable AI Assistant"
-msgstr ""
-
-#, fuzzy
-msgid "Provider"
-msgstr "Profil"
-
-msgid "Use 'mock' to test the AI assistant pipeline offline without any API key (scripted replies based on simple keywords)."
-msgstr ""
-
-#, fuzzy
-msgid "Model"
-msgstr "Mode X-Y"
-
-msgid "API key"
-msgstr ""
-
-msgid ""
-"Your provider API key. Stored in the DataLab INI file in plain text — keep this file private.\n"
-"\n"
-"Recommended: leave this field empty and set the provider's standard environment variable instead (e.g. OPENAI_API_KEY for OpenAI). This avoids writing the secret to disk and lets the same credential be shared with other tools."
-msgstr ""
-
-msgid "Base URL (optional)"
-msgstr ""
-
-msgid "Override for OpenAI-compatible endpoints. Leave empty for default."
-msgstr ""
-
-msgid "Temperature"
-msgstr ""
-
-msgid "HTTP timeout (s)"
-msgstr ""
-
-msgid "Max tool-call iterations"
-msgstr ""
-
-msgid "Auto-approve read-only inspection tools"
-msgstr ""
-
-msgid "Allow AI to create and run macros (Python code)"
-msgstr ""
-
-msgid ""
-"When enabled, the AI assistant may create and execute Python macros with full access to DataLab through the RemoteProxy API. Each macro execution still requires explicit user confirmation.\n"
-"\n"
-"Disable this option if you do not want the AI to be able to propose arbitrary code execution at all (the macro tool is then hidden from the model entirely)."
-msgstr ""
-
-msgid "AI Assistant — Confirm tool call"
-msgstr ""
-
-msgid "The AI assistant requests to run the following action:"
-msgstr ""
-
-#, fuzzy
-msgid "Parameters:"
-msgstr "Paramètres"
-
-#, fuzzy
-msgid "Macro code:"
-msgstr "Panneau des macros"
-
-msgid "Run"
-msgstr ""
-
-msgid "Cancel"
-msgstr "Annuler"
 
 #, python-format
 msgid ""
@@ -378,6 +96,9 @@ msgstr "Sélectionner les objets source"
 #, python-format
 msgid "Select source object(s) used to create the selected %s"
 msgstr "Sélectionner le ou les objets source utilisés pour créer l'objet %s sélectionné"
+
+msgid "Rename"
+msgstr "Renommer"
 
 #, python-format
 msgid "Edit title of selected %s or group"
@@ -783,19 +504,8 @@ msgstr "Ordonnée à x=..."
 msgid "Compute the ordinate at a given x value (linear interpolation)"
 msgstr "Calcule l'ordonnée à une valeur x donnée (interpolation linéaire)"
 
-#, fuzzy
-msgid "Peak detection..."
+msgid "Peak detection"
 msgstr "Détection de pics"
-
-msgid "Interactive peak detection: adjust threshold and minimum distance visually, then store detected peaks as an XY-markers table result"
-msgstr ""
-
-#, fuzzy
-msgid "Create signal from markers table..."
-msgstr "Importer un signal depuis DataLab"
-
-msgid "Build a sticks signal from an XY-markers table result (e.g. from 'Extract peak positions')"
-msgstr ""
 
 msgid "Curve anti-aliasing"
 msgstr "Anticrénelage des courbes"
@@ -1023,8 +733,7 @@ msgstr "Ignorer ce message empêchera son affichage ultérieur."
 msgid "Plugins"
 msgstr "Plugins"
 
-#, fuzzy
-msgid "Third-party plugins are disabled. Enable them again from the plugin configuration dialog to use this feature."
+msgid "Third-party plugins are disabled. Enable them in the Settings dialog to use this feature."
 msgstr "Les plugins tiers sont désactivés. Activez-les dans la boîte de dialogue des préférences pour utiliser cette fonctionnalité."
 
 #, python-format
@@ -1314,14 +1023,6 @@ msgstr "Métadonnées de l'objet"
 msgid "(click on Metadata button for more details)"
 msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 
-#, fuzzy
-msgid "group"
-msgstr "Groupe"
-
-#, fuzzy
-msgid "Source objects"
-msgstr "Sélectionner les objets source"
-
 msgid "Drag files here to open"
 msgstr "Déposer des fichiers ici pour les ouvrir"
 
@@ -1352,6 +1053,12 @@ msgstr "Propriétés"
 msgid "Parameters for function `%s`"
 msgstr "Paramètres pour la fonction `%s`"
 
+msgid "Created: historical peak parameters"
+msgstr "Créé : paramètres de pic historiques"
+
+msgid "Created: invalid creation parameters"
+msgstr "Créé : paramètres de création invalides"
+
 msgid "Original object"
 msgstr "Objet original"
 
@@ -1366,6 +1073,26 @@ msgstr "Paramètres de création"
 
 msgid "Creation"
 msgstr "Création"
+
+msgid "This object uses historical area-based peak parameters. Convert them to signed peak height before editing."
+msgstr "Cet objet utilise des paramètres de pic historiques fondés sur l'aire. Convertissez-les en hauteur de pic signée avant de les modifier."
+
+msgid "Convert historical parameters"
+msgstr "Convertir les paramètres historiques"
+
+msgid "Cancel"
+msgstr "Annuler"
+
+msgid "Creation parameters cannot be edited because their metadata is invalid or was written by a newer DataLab version."
+msgstr "Les paramètres de création ne peuvent pas être modifiés, car leurs métadonnées sont invalides ou ont été écrites par une version plus récente de DataLab."
+
+#, python-format
+msgid ""
+"Failed to convert historical creation parameters:\n"
+"%s"
+msgstr ""
+"Échec de la conversion des paramètres de création historiques :\n"
+"%s"
 
 msgid "Signal was modified in-place."
 msgstr "Le signal a été modifié sur place."
@@ -1501,11 +1228,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "Group name:"
-msgstr "Nom du groupe :"
-
 msgid "New group"
 msgstr "Nouveau groupe"
+
+msgid "Group name:"
+msgstr "Nom du groupe :"
 
 msgid "Rename object"
 msgstr "Renommer l'objet"
@@ -1612,27 +1339,8 @@ msgstr "Annotation ajoutée"
 msgid "The label has been added as an annotation. You can edit or remove it using the annotation editing window.<br><br>Choosing to ignore this message will prevent it from being displayed again."
 msgstr "L'étiquette a été ajoutée comme annotation. Vous pouvez la modifier ou la supprimer en utilisant la fenêtre d'édition des annotations.<br><br>Ignorer ce message empêchera son affichage ultérieur."
 
-#, fuzzy
-msgid "Recent macros"
-msgstr "Exécuter la macro"
-
-#, fuzzy
-msgid "Clear all"
-msgstr "Replier tout"
-
-#, fuzzy
-msgid "Untitled"
-msgstr "Titre"
-
-msgid "Clear all recent macros?"
-msgstr ""
-
 msgid "Macro panel"
 msgstr "Panneau des macros"
-
-#, fuzzy
-msgid "Clear console"
-msgstr "Console"
 
 msgid "-***- Macro Console -***-"
 msgstr "-***- Console des macros -***-"
@@ -1649,10 +1357,6 @@ msgstr "Nouvelle macro"
 msgid "Rename macro"
 msgstr "Renommer la macro"
 
-#, fuzzy
-msgid "Duplicate macro"
-msgstr "Dupliquer"
-
 msgid "Import macro from file"
 msgstr "Importer la macro depuis un fichier"
 
@@ -1662,47 +1366,11 @@ msgstr "Exporter la macro vers un fichier"
 msgid "Remove macro"
 msgstr "Supprimer la macro"
 
-#, fuzzy
-msgid "Recent macros..."
-msgstr "Renommer la macro"
-
 msgid "Macro editor toolbar"
 msgstr "Barre d'outils des macros"
 
-msgid "Blank macro (empty)"
-msgstr ""
-
-#, fuzzy
-msgid "Create a new empty macro"
-msgstr "Créer un nouveau groupe"
-
-msgid "Templates"
-msgstr ""
-
-msgid "● Macro running"
-msgstr ""
-
-#, fuzzy
-msgid "○ Idle"
-msgstr "Fichier"
-
-#, fuzzy
-msgid "Restore unsaved macros"
-msgstr "Renommer la macro"
-
-#, python-format
-msgid ""
-"%d unsaved macro(s) were found from a previous session.\n"
-"Would you like to restore them?"
-msgstr ""
-
-#, fuzzy
-msgid "Recovered macro"
-msgstr "Supprimer la macro"
-
-#, fuzzy, python-format
-msgid "%s (copy)"
-msgstr "Copier"
+msgid "New title:"
+msgstr "Nouveau titre :"
 
 msgid "When closed, the macro is <u>permanently destroyed</u>, unless it has been exported first."
 msgstr "Lorsqu'elle est fermée, une macro est <u>détruite de manière définitive</u>, sauf si elle a été exportée au préalable."
@@ -1716,16 +1384,6 @@ msgstr "Création des formes géométriques"
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
-msgid "today"
-msgstr ""
-
-msgid "yesterday"
-msgstr ""
-
-#, python-format
-msgid "Last loaded: %s at %s"
-msgstr ""
-
 msgid "Active"
 msgstr "Actif"
 
@@ -1735,83 +1393,17 @@ msgstr "Désactivé"
 msgid "No description available"
 msgstr "Aucune description disponible"
 
-#, fuzzy
-msgid "Open file"
-msgstr "Filtre de Sobel"
-
-#, fuzzy
-msgid "Show in folder"
-msgstr "dans ce dossier"
-
 msgid "Import error"
 msgstr "Erreur d'importation"
-
-#, fuzzy
-msgid "Edit directory"
-msgstr "Répertoire"
-
-#, fuzzy
-msgid "Remove directory"
-msgstr "Enregistrer dans un répertoire"
 
 msgid "Plugin Configuration"
 msgstr "Configuration des plugins"
 
-#, fuzzy
-msgid "Enable/disable plugins"
-msgstr "Activer ou désactiver les plugins"
+msgid "Manage Plugins"
+msgstr "Gérer les plugins"
 
-#, fuzzy
-msgid "Plugin settings"
-msgstr "Préférences"
-
-#, fuzzy
-msgid "Apply and reload plugins"
-msgstr "Recharger les plugins"
-
-#, fuzzy
-msgid "Third-party plugins are globally disabled."
-msgstr "Recharger les plugins tiers depuis le disque"
-
-#, fuzzy
-msgid "Changes will be applied after clicking OK and reloading plugins."
+msgid "Enable or disable plugins. Changes will be applied after clicking OK and reloading plugins."
 msgstr "Activer ou désactiver les plugins. Les modifications seront appliquées après avoir cliqué sur OK et rechargé les plugins."
-
-msgid "The following directories are scanned at startup for plugins:"
-msgstr ""
-
-msgid "Default plugin directories"
-msgstr ""
-
-msgid "Additional plugin directories"
-msgstr ""
-
-msgid "Add"
-msgstr ""
-
-msgid "Additional directories are saved in DataLab configuration."
-msgstr ""
-
-msgid "No additional plugin directory is configured."
-msgstr ""
-
-#, python-format
-msgid "Directories provided via the <code>%s</code> environment variable (multiple paths separated by '<code>%s</code>') also appear above as read-only entries. Changes take effect at DataLab startup."
-msgstr ""
-
-#, fuzzy
-msgid "Compatibility warnings"
-msgstr "Ignorer l'avertissement de compatibilité"
-
-msgid "Hide warnings for incompatible DataLab v0.20 plugins"
-msgstr ""
-
-msgid "If enabled, DataLab will not warn you about v0.20 plugins that are no longer compatible with v1.0."
-msgstr "Si activé, DataLab ne vous avertira pas des plugins v0.20 qui ne sont plus compatibles avec v1.0."
-
-#, fuzzy
-msgid "Select plugin directory"
-msgstr "Analyse du répertoire"
 
 msgid "Enable all plugins"
 msgstr "Activer tous les plugins"
@@ -1830,14 +1422,6 @@ msgstr "Plugins désactivés"
 
 msgid "Plugins with errors"
 msgstr "Plugins en erreur"
-
-#, fuzzy
-msgid "Disable plugins globally"
-msgstr "Plugins désactivés"
-
-#, fuzzy
-msgid "Enable plugins globally"
-msgstr "Plugins activés"
 
 msgid "Reload Plugins"
 msgstr "Recharger les plugins"
@@ -2080,9 +1664,6 @@ msgstr "Normaliser"
 msgid "Clipping"
 msgstr "Écrêtage"
 
-msgid "Replace special values"
-msgstr ""
-
 msgid "Add Gaussian noise"
 msgstr "Ajouter du bruit gaussien"
 
@@ -2305,9 +1886,6 @@ msgstr "Détection de contours"
 msgid "Compute contour shape fit"
 msgstr "Ajustement d'une forme géométrique à un contour"
 
-msgid "Peak detection"
-msgstr "Détection de pics"
-
 msgid "Detect peaks in the image"
 msgstr "Détection de pics dans l'image"
 
@@ -2379,6 +1957,31 @@ msgstr "Ajustement exponentiel par morceaux"
 
 msgid "Sigmoid fit"
 msgstr "Ajustement sigmoïde"
+
+#, python-format
+msgid "%s: fitting curve was computed by an earlier version and cannot be evaluated (please recompute the fit)"
+msgstr "%s : la courbe d'ajustement a été calculée par une version antérieure et ne peut pas être évaluée (veuillez recalculer l'ajustement)"
+
+#, python-format
+msgid "%s: signal does not contain valid fit parameters"
+msgstr "%s : le signal ne contient pas de paramètres d'ajustement valides"
+
+msgid "Cannot evaluate fit"
+msgstr "Impossible d'évaluer l'ajustement"
+
+#, python-format
+msgid ""
+"One or more selected signals have invalid or unsupported fit parameters:\n"
+"%s"
+msgstr ""
+"Un ou plusieurs signaux sélectionnés ont des paramètres d'ajustement invalides ou non pris en charge :\n"
+"%s"
+
+msgid "Convert historical fit parameters"
+msgstr "Convertir les paramètres d'ajustement historiques"
+
+msgid "One or more selected fitting curves use historical area-based peak parameters. Convert them to signed peak height before evaluating?"
+msgstr "Une ou plusieurs courbes d'ajustement sélectionnées utilisent des paramètres de pic historiques fondés sur l'aire. Les convertir en hauteur de pic signée avant l'évaluation ?"
 
 msgid "signal to subtract"
 msgstr "signal à soustraire"
@@ -2526,13 +2129,6 @@ msgstr "Extraire les caractéristiques d'une impulsion"
 msgid "Extract pulse features (amplitude, rise time, fall time...)"
 msgstr "Extraire les caractéristiques d'une impulsion (amplitude, temps de montée, temps de descente...)"
 
-#, fuzzy
-msgid "Extract peak positions"
-msgstr "Réinitialiser les positions des images"
-
-msgid "Extract peak positions as an X-markers table (e.g. for spectral line analysis)"
-msgstr ""
-
 msgid "Abscissa of the minimum and maximum"
 msgstr "Abscisse du minimum et du maximum"
 
@@ -2562,17 +2158,6 @@ msgstr "Contraste"
 
 msgid "Compute contrast of a signal, i.e. (max-min)/(max+min), e.g. for an image profile"
 msgstr "Calcule le contraste d'un signal, c'est-à-dire (max-min)/(max+min), p.ex. pour un profil d'image"
-
-#, fuzzy
-msgid "Create signal from markers table"
-msgstr "Importer un signal depuis DataLab"
-
-#, python-format
-msgid "Signal '%s' has no XY-markers table result. Run 'Extract peak positions' (or another XY-markers analysis) first."
-msgstr ""
-
-msgid "Markers table"
-msgstr ""
 
 msgid "Full width at y"
 msgstr "Largeur à y=..."
@@ -2703,6 +2288,27 @@ msgstr "Mo"
 
 msgid "Memory threshold below which a warning is displayed before loading any new data"
 msgstr "Seuil de mémoire en dessous duquel un avertissement est affiché avant de charger de nouvelles données"
+
+msgid "Third-party plugins"
+msgstr "Plugins tiers"
+
+msgid "Enable or disable third-party plugins immediately. Changes are applied without restarting DataLab"
+msgstr "Activer ou désactiver immédiatement les plugins tiers. Les changements sont appliqués sans redémarrer DataLab"
+
+msgid "Plugins path"
+msgstr "Chemin des plugins"
+
+msgid "Path to third-party plugins.<br><br>DataLab will discover plugins in this path, as well as in your PYTHONPATH."
+msgstr "Chemin d'accès aux plugins tiers.<br><br>DataLab découvrira les plugins dans ce chemin, ainsi que dans votre PYTHONPATH."
+
+msgid "Ignore compatibility issues warning"
+msgstr "Ignorer l'avertissement de compatibilité"
+
+msgid "DataLab v0.20 plugins"
+msgstr "Plugins DataLab v0.20"
+
+msgid "If enabled, DataLab will not warn you about v0.20 plugins that are no longer compatible with v1.0."
+msgstr "Si activé, DataLab ne vous avertira pas des plugins v0.20 qui ne sont plus compatibles avec v1.0."
 
 msgid "Settings for internal console, used for debugging or advanced users"
 msgstr "Réglages de la console interne, utilisée pour le débogage ou les utilisateurs avancés"
@@ -2976,45 +2582,6 @@ msgstr "Étiquette des résultats"
 msgid "Show the merged result label on the plot by default. Can be toggled per-object using the checkbox in the Properties panel."
 msgstr "Etiquette des résultats fusionnés sur le graphique par défaut. Peut être activée ou désactivée par objet à l'aide de la case à cocher dans le panneau des propriétés."
 
-msgid "Show marker labels in result tables"
-msgstr ""
-
-#, fuzzy
-msgid "Marker labels"
-msgstr "Étiquette des résultats"
-
-msgid "Prepend a marker-label column to result tables for marker results (XY/X/Y markers), so each row can be matched with the corresponding cross or dashed cursor drawn on the plot. XY markers use numeric labels (#1, #2, ...), axis markers use letters (a, b, c, ...)."
-msgstr ""
-
-#, fuzzy
-msgid "Load preset"
-msgstr "Tracer les résultats"
-
-msgid "Choose an OpenAI-compatible endpoint preset:"
-msgstr ""
-
-msgid "AI Assistant — connection test"
-msgstr ""
-
-msgid "Load preset..."
-msgstr ""
-
-msgid "Pre-fill the Base URL and Model fields with a known OpenAI-compatible endpoint (OpenAI cloud, Ollama, LM Studio, llama.cpp, vLLM)."
-msgstr ""
-
-#, fuzzy
-msgid "Test connection"
-msgstr "Soustraction d'offset"
-
-msgid "Probe the configured endpoint (GET /models) to verify the URL, API key and network reachability. Does not consume any token."
-msgstr ""
-
-msgid "Max history messages (0 = unlimited)"
-msgstr ""
-
-msgid "Cap the number of past messages (user + assistant + tool) sent to the provider on each request. Useful with local models that have a small context window (e.g. n_ctx=4096 on llama.cpp): if the conversation grows beyond the model's context, the server returns HTTP 400. Set to 0 to disable the cap. The system prompt and the current user turn are always preserved."
-msgstr ""
-
 msgid "Process isolation enable status"
 msgstr "Etat d'activation de l'isolation de processus"
 
@@ -3023,6 +2590,9 @@ msgstr "Etat d'activation du serveur XML-RPC"
 
 msgid "Console enable status"
 msgstr "Etat d'activation de la console"
+
+msgid "Third-party plugins path"
+msgstr "Chemin des plugins tiers"
 
 msgid "General"
 msgstr "Général"
@@ -3055,6 +2625,9 @@ msgstr ""
 
 msgid "Start"
 msgstr "Démarrer"
+
+msgid "Close"
+msgstr "Fermer"
 
 msgid "Hit <b>Enter</b> to continue to the next step, or <b>Esc</b> to close the tour."
 msgstr "Taper <b>Entrée</b> pour passer à l'étape suivante, ou <b>Echap</b> pour fermer la visite guidée."
@@ -3323,11 +2896,11 @@ msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La dé
 msgid "Click OK to end demo."
 msgstr "Cliquer sur OK pour terminer la démo."
 
-msgid "Context"
-msgstr "Contexte"
-
 msgid "Error:"
 msgstr "Erreur:"
+
+msgid "Context"
+msgstr "Contexte"
 
 #, python-format
 msgid "The file %s could not be read:"
@@ -3419,48 +2992,6 @@ msgstr "Afficher moins"
 msgid "Contents of file"
 msgstr "Contenu du fichier"
 
-#, fuzzy
-msgid "Find"
-msgstr "Terminer"
-
-#, fuzzy
-msgid "Replace with"
-msgstr "Largeur gauche"
-
-msgid "Aa"
-msgstr ""
-
-msgid "Match case"
-msgstr ""
-
-msgid "W"
-msgstr ""
-
-msgid "Whole words only"
-msgstr ""
-
-msgid "Next"
-msgstr "Suivant"
-
-#, fuzzy
-msgid "Prev"
-msgstr "Aperçu"
-
-#, fuzzy
-msgid "Replace"
-msgstr "Espace"
-
-#, fuzzy
-msgid "Replace all"
-msgstr "Tout sélectionner"
-
-msgid "Find:"
-msgstr ""
-
-#, fuzzy
-msgid "Replace:"
-msgstr "Espace"
-
 msgid "Polymomial fit"
 msgstr "Ajustement polynomial"
 
@@ -3494,8 +3025,8 @@ msgstr "Fréquence"
 msgid "Continuous component"
 msgstr "Composante continue"
 
-msgid "Peak wavelength"
-msgstr ""
+msgid "Scale factor"
+msgstr "Facteur d'échelle"
 
 msgid "Width factor"
 msgstr "Facteur de largeur"
@@ -3524,13 +3055,11 @@ msgstr "Ligne de base droite"
 msgid "Center position"
 msgstr "Position du centre"
 
-#, fuzzy
-msgid "Left time constant"
-msgstr "Multiplier par une constante"
+msgid "Left rate"
+msgstr "Taux gauche"
 
-#, fuzzy
-msgid "Right time constant"
-msgstr "Diviser par une constante"
+msgid "Right rate"
+msgstr "Taux droit"
 
 msgid "Collapse all"
 msgstr "Replier tout"
@@ -3553,17 +3082,17 @@ msgstr "Déplier la sélection"
 msgid "HDF5 Browser"
 msgstr "Explorateur HDF5"
 
-msgid "Value"
-msgstr "Valeur"
-
-msgid "Name"
-msgstr "Nom"
-
 msgid "Size"
 msgstr "Taille"
 
 msgid "Type"
 msgstr "Type"
+
+msgid "Value"
+msgstr "Valeur"
+
+msgid "Name"
+msgstr "Nom"
 
 msgid "Unsupported data"
 msgstr "Données non prises en charge"
@@ -3627,24 +3156,6 @@ msgstr "Des journaux de bord ont été générés lors de la dernière session."
 
 msgid "Log files are currently empty."
 msgstr "Les journaux de bord sont vides."
-
-msgid "Kernel / Mask preview"
-msgstr ""
-
-#, python-brace-format
-msgid "{label} — Kernel / Mask preview"
-msgstr ""
-
-#, fuzzy, python-brace-format
-msgid "±{n} points"
-msgstr "Point"
-
-#, python-brace-format
-msgid "±{n} rows × ±{n} columns"
-msgstr ""
-
-msgid "This image uses an integer data type, so it cannot contain NaN or infinite values. Replace special values is therefore not applicable."
-msgstr ""
 
 msgid "Signal baseline selection"
 msgstr "Sélection de la ligne de base du signal"
@@ -3945,6 +3456,9 @@ msgstr "Merci de cliquer sur le bouton 'Ignorer' pour ignorer cet avertissement 
 msgid "Back"
 msgstr "Précédent"
 
+msgid "Next"
+msgstr "Suivant"
+
 msgid "Finish"
 msgstr "Terminer"
 
@@ -3974,91 +3488,4 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
-
-msgid "Third-party plugins are disabled. Enable them in the Settings dialog to use this feature."
-msgstr "Les plugins tiers sont désactivés. Activez-les dans la boîte de dialogue des préférences pour utiliser cette fonctionnalité."
-
-msgid "Created: historical peak parameters"
-msgstr "Créé : paramètres de pic historiques"
-
-msgid "Created: invalid creation parameters"
-msgstr "Créé : paramètres de création invalides"
-
-msgid "This object uses historical area-based peak parameters. Convert them to signed peak height before editing."
-msgstr "Cet objet utilise des paramètres de pic historiques fondés sur l'aire. Convertissez-les en hauteur de pic signée avant de les modifier."
-
-msgid "Convert historical parameters"
-msgstr "Convertir les paramètres historiques"
-
-msgid "Creation parameters cannot be edited because their metadata is invalid or was written by a newer DataLab version."
-msgstr "Les paramètres de création ne peuvent pas être modifiés, car leurs métadonnées sont invalides ou ont été écrites par une version plus récente de DataLab."
-
-#, python-format
-msgid ""
-"Failed to convert historical creation parameters:\n"
-"%s"
-msgstr ""
-"Échec de la conversion des paramètres de création historiques :\n"
-"%s"
-
-msgid "Manage Plugins"
-msgstr "Gérer les plugins"
-
-msgid "Enable or disable plugins. Changes will be applied after clicking OK and reloading plugins."
-msgstr "Activer ou désactiver les plugins. Les modifications seront appliquées après avoir cliqué sur OK et rechargé les plugins."
-
-#, python-format
-msgid "%s: fitting curve was computed by an earlier version and cannot be evaluated (please recompute the fit)"
-msgstr "%s : la courbe d'ajustement a été calculée par une version antérieure et ne peut pas être évaluée (veuillez recalculer l'ajustement)"
-
-#, python-format
-msgid "%s: signal does not contain valid fit parameters"
-msgstr "%s : le signal ne contient pas de paramètres d'ajustement valides"
-
-msgid "Cannot evaluate fit"
-msgstr "Impossible d'évaluer l'ajustement"
-
-#, python-format
-msgid ""
-"One or more selected signals have invalid or unsupported fit parameters:\n"
-"%s"
-msgstr ""
-"Un ou plusieurs signaux sélectionnés ont des paramètres d'ajustement invalides ou non pris en charge :\n"
-"%s"
-
-msgid "Convert historical fit parameters"
-msgstr "Convertir les paramètres d'ajustement historiques"
-
-msgid "One or more selected fitting curves use historical area-based peak parameters. Convert them to signed peak height before evaluating?"
-msgstr "Une ou plusieurs courbes d'ajustement sélectionnées utilisent des paramètres de pic historiques fondés sur l'aire. Les convertir en hauteur de pic signée avant l'évaluation ?"
-
-msgid "Third-party plugins"
-msgstr "Plugins tiers"
-
-msgid "Enable or disable third-party plugins immediately. Changes are applied without restarting DataLab"
-msgstr "Activer ou désactiver immédiatement les plugins tiers. Les changements sont appliqués sans redémarrer DataLab"
-
-msgid "Plugins path"
-msgstr "Chemin des plugins"
-
-msgid "Path to third-party plugins.<br><br>DataLab will discover plugins in this path, as well as in your PYTHONPATH."
-msgstr "Chemin d'accès aux plugins tiers.<br><br>DataLab découvrira les plugins dans ce chemin, ainsi que dans votre PYTHONPATH."
-
-msgid "Ignore compatibility issues warning"
-msgstr "Ignorer l'avertissement de compatibilité"
-
-msgid "DataLab v0.20 plugins"
-msgstr "Plugins DataLab v0.20"
-
-msgid "Third-party plugins path"
-msgstr "Chemin des plugins tiers"
-
-msgid "Scale factor"
-msgstr "Facteur d'échelle"
-
-msgid "Left rate"
-msgstr "Taux gauche"
-
-msgid "Right rate"
-msgstr "Taux droit"
 
