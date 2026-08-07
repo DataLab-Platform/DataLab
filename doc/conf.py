@@ -9,6 +9,7 @@ import warnings
 import zipfile
 
 import guidata.config as gcfg
+from docutils import nodes
 
 # Silence Sphinx 10 deprecation warning emitted from cairocffi (third-party,
 # used by sphinxcontrib-svg2pdfconverter during LaTeX builds).
@@ -29,6 +30,17 @@ os.environ["DATALAB_DOC"] = "1"
 # Turn off validation of guidata config
 # (documentation build is not the right place for validation)
 gcfg.set_validation_mode(gcfg.ValidationMode.DISABLED)
+
+
+def open_datalab_web_links_in_new_tab(app, doctree, docname):
+    """Open DataLab-Web links in a separate browser tab."""
+    if app.builder.format != "html":
+        return
+    web_url = "https://datalab-platform.com/web/"
+    for reference in doctree.findall(nodes.reference):
+        if reference.get("refuri", "").startswith(web_url):
+            reference["target"] = "_blank"
+            reference["rel"] = "noopener noreferrer"
 
 
 def compress_tutorials_data(app):
@@ -68,6 +80,7 @@ def compress_tutorials_data(app):
 def setup(app):
     """Setup function for Sphinx."""
     app.connect("builder-inited", compress_tutorials_data)
+    app.connect("doctree-resolved", open_datalab_web_links_in_new_tab)
 
     # Exclude outreach directory from LaTeX/PDF builds
     def exclude_outreach_from_latex(app):
