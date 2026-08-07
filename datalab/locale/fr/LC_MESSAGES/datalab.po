@@ -65,9 +65,6 @@ msgstr "Assistant IA prêt. Configurez votre fournisseur dans le menu Edition > 
 msgid "You"
 msgstr "Vous"
 
-msgid "Assistant"
-msgstr "Assistant IA"
-
 msgid "Save to Macros"
 msgstr "Enregistrer dans les macros"
 
@@ -360,12 +357,8 @@ msgid "Recompute"
 msgstr "Retraiter"
 
 #, python-format
-msgid ""
-"Recompute selected %s: refresh both processing and analysis results with their "
-"stored parameters"
-msgstr ""
-"Retraiter l'objet %s sélectionné : actualiser les résultats de traitement et "
-"d'analyse à partir de leurs paramètres enregistrés"
+msgid "Recompute selected %s: refresh both processing and analysis results with their stored parameters"
+msgstr "Retraiter l'objet %s sélectionné : actualiser les résultats de traitement et d'analyse à partir de leurs paramètres enregistrés"
 
 msgid "Select source objects"
 msgstr "Sélectionner les objets source"
@@ -944,6 +937,15 @@ msgstr "Afficher le panneau de contraste"
 msgid "Show or hide contrast adjustment panel"
 msgstr "Afficher ou cacher le panneau de réglage du contraste"
 
+msgid "Command palette"
+msgstr "Palette de commandes"
+
+msgid "Type to search for a command…"
+msgstr "Tapez pour rechercher une commande…"
+
+msgid "Search a command…"
+msgstr "Rechercher une commande…"
+
 msgid "Process signal"
 msgstr "Traiter le signal"
 
@@ -956,38 +958,6 @@ msgstr "Troncature de données uint32 en int32."
 
 msgid "No supported data available in HDF5 file(s)."
 msgstr "Aucune donnée prise en charge dans le(s) fichier(s) HDF5."
-
-msgid "Generate macro"
-msgstr "Générer une macro"
-
-msgid "No compute actions to export."
-msgstr "Pas d'actions de calcul à exporter."
-
-#, python-format
-msgid "Macro script copied to clipboard (%d actions)."
-msgstr "Script de macro copié dans le presse-papier (%d actions)."
-
-msgid ""
-"Do you really want to delete the selected items?\n"
-"\n"
-"Note: deleting an action also removes all subsequent actions in the same session."
-msgstr ""
-"Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?\n"
-"\n"
-"Remarque : la suppression d'une action entraîne également la suppression de toutes les actions suivantes dans la même session."
-
-msgid "Do you really want to delete the selected items?"
-msgstr "Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?"
-
-msgid "Remove incompatible"
-msgstr "Supprimer les actions incompatibles"
-
-msgid "All actions are compatible with the current workspace."
-msgstr "Toutes les actions sont compatibles avec l'espace de travail actuel."
-
-#, python-format
-msgid "%d incompatible action(s) will be removed. Continue?"
-msgstr "%d action(s) incompatible(s) seront supprimées. Continuer ?"
 
 msgid "Macro simple example"
 msgstr "Exemple simple de macro"
@@ -1048,8 +1018,8 @@ msgstr "Ignorer ce message empêchera son affichage ultérieur."
 msgid "Plugins"
 msgstr "Plugins"
 
-msgid "Third-party plugins are disabled. Enable them in the Settings dialog to use this feature."
-msgstr "Les plugins tiers sont désactivés. Activez-les dans la boîte de dialogue des préférences pour utiliser cette fonctionnalité."
+msgid "Third-party plugins are disabled. Enable them again from the plugin configuration dialog to use this feature."
+msgstr "Les plugins tiers sont désactivés. Réactivez-les depuis la boîte de dialogue de configuration des plugins pour utiliser cette fonctionnalité."
 
 #, python-format
 msgid "Welcome to %s!"
@@ -1079,17 +1049,8 @@ msgstr "Préférences..."
 msgid "Open settings dialog"
 msgstr "Ouvrir la boîte de dialogue des préférences"
 
-msgid "Command palette"
-msgstr "Palette de commandes"
-
 msgid "Command palette..."
 msgstr "Palette de commandes..."
-
-msgid "Search a command…"
-msgstr "Rechercher une commande…"
-
-msgid "Type to search for a command…"
-msgstr "Tapez pour rechercher une commande…"
 
 msgid "Search and run any command by its menu path"
 msgstr "Rechercher et exécuter n'importe quelle commande par son chemin de menu"
@@ -1353,9 +1314,8 @@ msgstr "Métadonnées de l'objet"
 msgid "(click on Metadata button for more details)"
 msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 
-#, fuzzy
 msgid "group"
-msgstr "Groupe"
+msgstr "groupe"
 
 msgid "Source objects"
 msgstr "Objets source"
@@ -1390,8 +1350,11 @@ msgstr "Propriétés"
 msgid "Parameters for function `%s`"
 msgstr "Paramètres pour la fonction `%s`"
 
-msgid "Created"
-msgstr "Créé"
+msgid "Created: historical peak parameters"
+msgstr "Créé : paramètres de pic historiques"
+
+msgid "Created: invalid creation parameters"
+msgstr "Créé : paramètres de création invalides"
 
 msgid "Original object"
 msgstr "Objet original"
@@ -1407,6 +1370,23 @@ msgstr "Paramètres de création"
 
 msgid "Creation"
 msgstr "Création"
+
+msgid "This object uses historical area-based peak parameters. Convert them to signed peak height before editing."
+msgstr "Cet objet utilise des paramètres de pic historiques fondés sur l'aire. Convertissez-les en hauteur de pic signée avant de les modifier."
+
+msgid "Convert historical parameters"
+msgstr "Convertir les paramètres historiques"
+
+msgid "Creation parameters cannot be edited because their metadata is invalid or was written by a newer DataLab version."
+msgstr "Les paramètres de création ne peuvent pas être modifiés, car leurs métadonnées sont invalides ou ont été écrites par une version plus récente de DataLab."
+
+#, python-format
+msgid ""
+"Failed to convert historical creation parameters:\n"
+"%s"
+msgstr ""
+"Échec de la conversion des paramètres de création historiques :\n"
+"%s"
 
 msgid "Signal was modified in-place."
 msgstr "Le signal a été modifié sur place."
@@ -1430,35 +1410,6 @@ msgstr "Paramètres de traitement"
 
 msgid "No processing object available."
 msgstr "Aucun objet de traitement disponible."
-
-msgid "Processing metadata is incomplete."
-msgstr "Les métadonnées de traitement sont incomplètes."
-
-msgid "Processing metadata is incomplete (missing source UUID)."
-msgstr "Les métadonnées de traitement sont incomplètes (UUID source manquant)."
-
-msgid "Source object no longer exists."
-msgstr "L'objet source n'existe plus."
-
-msgid "The object that was used to create this processed object has been deleted and cannot be used for reprocessing."
-msgstr "L'objet qui a été utilisé pour créer cet objet traité a été supprimé et ne peut pas être utilisé pour le retraitement."
-
-#, python-format
-msgid ""
-"Failed to reprocess object:\n"
-"%s"
-msgstr ""
-"Échec du retraitement de l'objet :\n"
-"%s"
-
-msgid "Processing was cancelled."
-msgstr "Le traitement a été annulé."
-
-msgid "Signal was reprocessed."
-msgstr "Le signal a été retraité."
-
-msgid "Image was reprocessed."
-msgstr "L'image a été retraitée."
 
 msgid "Geometry results"
 msgstr "Résultats géométriques"
@@ -1542,11 +1493,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "Group name:"
-msgstr "Nom du groupe :"
-
 msgid "New group"
 msgstr "Nouveau groupe"
+
+msgid "Group name:"
+msgstr "Nom du groupe :"
 
 msgid "Rename object"
 msgstr "Renommer l'objet"
@@ -1578,18 +1529,11 @@ msgstr "Importer une ROI"
 msgid "Export ROI"
 msgstr "Exporter une ROI"
 
-msgid ""
-"Selected object(s) do not have processing or analysis parameters that can be "
-"recomputed."
-msgstr ""
-"L'objet (ou les objets) sélectionné(s) n'ont pas de paramètres de traitement ou "
-"d'analyse pouvant être recalculés."
+msgid "Selected object(s) do not have processing or analysis parameters that can be recomputed."
+msgstr "L'objet (ou les objets) sélectionné(s) n'ont pas de paramètres de traitement ou d'analyse pouvant être recalculés."
 
 msgid "Recomputing objects"
 msgstr "Retraitement des objets"
-
-msgid "Recomputing analyses"
-msgstr "Recalcul des analyses"
 
 msgid "Failed to recompute object"
 msgstr "Échec du retraitement de l'objet"
@@ -1597,11 +1541,17 @@ msgstr "Échec du retraitement de l'objet"
 msgid "Do you want to continue with the next object?"
 msgstr "Souhaitez-vous continuer avec l'objet suivant ?"
 
+msgid "Recomputing analyses"
+msgstr "Recalcul des analyses"
+
 msgid "Selected object does not have processing metadata."
 msgstr "L'objet sélectionné n'a pas de métadonnées de traitement."
 
 msgid "Selected object does not have source object references."
 msgstr "L'objet sélectionné n'a pas de références d'objet source."
+
+msgid "Source object no longer exists."
+msgstr "L'objet source n'existe plus."
 
 msgid "Source objects no longer exist."
 msgstr "Les objets source n'existent plus."
@@ -1660,145 +1610,6 @@ msgstr "Annotation ajoutée"
 msgid "The label has been added as an annotation. You can edit or remove it using the annotation editing window.<br><br>Choosing to ignore this message will prevent it from being displayed again."
 msgstr "L'étiquette a été ajoutée comme annotation. Vous pouvez la modifier ou la supprimer en utilisant la fenêtre d'édition des annotations.<br><br>Ignorer ce message empêchera son affichage ultérieur."
 
-#, python-format
-msgid "“%s” has dependent operations but no valid source to reconnect to — downstream results are left unchanged."
-msgstr "“%s” a des opérations dépendantes mais aucune source valide à reconnecter — les résultats en aval restent inchangés."
-
-msgid "Some operations could not be reconnected after deletion:"
-msgstr "Certaines opérations n'ont pas pu être reconnectées après la suppression :"
-
-msgid "The current workspace state is not compatible with the action."
-msgstr "Le statut actuel de l'espace de travail n'est pas compatible avec l'action."
-
-msgid "Parameters"
-msgstr "Paramètres"
-
-msgid "History panel"
-msgstr "Panneau d'historique"
-
-msgid "History files"
-msgstr "Fichiers d'historique"
-
-msgid "Edit mode"
-msgstr "Mode édition"
-
-msgid "Record mode"
-msgstr "Mode enregistrement"
-
-msgid "New session"
-msgstr "Nouvelle session"
-
-msgid "Start a new history session"
-msgstr "Démarrer une nouvelle session d'historique"
-
-msgid "Open history file..."
-msgstr "Ouvrir des fichiers HDF5..."
-
-msgid "Open history from a standalone .dlhist file"
-msgstr "Ouvrir l'historique depuis un fichier .dlhist autonome"
-
-msgid "Save history file..."
-msgstr "Enregistrer l'historique dans un fichier HDF5..."
-
-msgid "Save history to a standalone .dlhist file"
-msgstr "Enregistrer l'historique dans un fichier .dlhist autonome"
-
-msgid "Duplicate selected history action/session"
-msgstr "Dupliquer l'objet %s sélectionné"
-
-msgid "Previous step"
-msgstr "Étape précédente"
-
-msgid "Select the previous action in the current session"
-msgstr "Sélectionner l'action précédente dans la session en cours"
-
-msgid "Next step"
-msgstr "Étape suivante"
-
-msgid "Select the next action in the current session"
-msgstr "Sélectionner l'action suivante dans la session en cours"
-
-msgid "Generate a Python macro script from history"
-msgstr "Générer un script Python macro à partir de l'historique"
-
-msgid "Remove actions incompatible with the current workspace"
-msgstr "Supprimer les actions incompatibles avec l'espace de travail actuel"
-
-msgid "Restore parameters"
-msgstr "Restaurer les paramètres"
-
-msgid "Restore original parameters (discard edit-mode changes)"
-msgstr "Restaurer les paramètres d'origine (ignorer les modifications en mode édition)"
-
-msgid "Replay"
-msgstr "Rejouer"
-
-msgid "Commit edit mode changes?"
-msgstr "Valider les modifications du mode édition ?"
-
-msgid ""
-"You are about to exit Edit mode.\n"
-"\n"
-"All parameter changes made during this session will be permanently kept.\n"
-"This action cannot be undone — Restore will no longer be available.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Vous êtes sur le point de quitter le mode Édition.\n"
-"\n"
-"Toutes les modifications de paramètres effectuées pendant cette session seront conservées de manière permanente.\n"
-"Cette action est irréversible — la restauration ne sera plus disponible.\n"
-"\n"
-"Voulez-vous continuer ?"
-
-#, python-format
-msgid "Action %s has been edited but its target output object(s) no longer exist — skipping."
-msgstr "L'action %s a été modifiée mais son ou ses objets de sortie cibles n'existent plus — saut de l'action."
-
-#, python-format
-msgid "Action %s uses pattern %r which is not recomputable yet."
-msgstr "L'action %s utilise le modèle %r qui n'est pas encore retraitable."
-
-#, python-format
-msgid "Recompute failed for action %s: %s"
-msgstr "Le recalcul a échoué pour l'action %s : %s"
-
-#, python-format
-msgid ""
-"Action %(name)s skipped: plugin '%(loc)s' is missing.\n"
-"Required parameter class: %(param)s\n"
-"Reinstall the plugin to re-enable this action."
-msgstr ""
-"Action %(name)s ignorée : le plugin '%(loc)s' est manquant.\n"
-"Classe de paramètre requise : %(param)s\n"
-"Réinstallez le plugin pour réactiver cette action."
-
-#, python-format
-msgid "Action %s: source object was deleted — skipping."
-msgstr "L'action %s : l'objet source a été supprimé — saut de l'action."
-
-#, python-format
-msgid "Action %s: all source objects were deleted — skipping."
-msgstr "L'action %s : tous les objets source ont été supprimés — saut de l'action."
-
-#, python-format
-msgid "Action %s: missing source(s) for output #%d — skipping."
-msgstr "L'action %s : source(s) manquante(s) pour la sortie n°%d — saut de l'action."
-
-#, python-format
-msgid "Action %s: source object(s) were deleted — skipping."
-msgstr "L'action %s : objet(s) source supprimé(s) — saut de l'action."
-
-#, python-format
-msgid "Action %s: %d analysed object(s) were deleted — skipping."
-msgstr "L'action %s : %d objet(s) analysé(s) ont été supprimé(s) — saut de l'action."
-
-msgid "Cascade recompute"
-msgstr "Retraiter"
-
-msgid "Some downstream actions could not be recomputed:"
-msgstr "Certaines actions en aval n'ont pas pu être retraitées :"
-
 msgid "Recent macros"
 msgstr "Macros récentes"
 
@@ -1813,9 +1624,6 @@ msgstr "Effacer toutes les macros récentes ?"
 
 msgid "Macro panel"
 msgstr "Panneau des macros"
-
-msgid "Python files"
-msgstr "Fichiers Python"
 
 msgid "Clear console"
 msgstr "Effacer la console"
@@ -1938,11 +1746,14 @@ msgstr "Configuration des plugins"
 msgid "Enable/disable plugins"
 msgstr "Activer/désactiver les plugins"
 
-msgid "Plugin search paths"
-msgstr "Chemins de recherche des plugins"
+msgid "Plugin settings"
+msgstr "Paramètres des plugins"
 
 msgid "Apply and reload plugins"
 msgstr "Appliquer et recharger les plugins"
+
+msgid "Third-party plugins are globally disabled."
+msgstr "Les plugins tiers sont désactivés globalement."
 
 msgid "Changes will be applied after clicking OK and reloading plugins."
 msgstr "Les modifications seront appliquées après avoir cliqué sur OK et rechargé les plugins."
@@ -1969,6 +1780,15 @@ msgstr "Aucun répertoire de plugins supplémentaire n'est configuré."
 msgid "Directories provided via the <code>%s</code> environment variable (multiple paths separated by '<code>%s</code>') also appear above as read-only entries. Changes take effect at DataLab startup."
 msgstr "Les répertoires fournis via la variable d'environnement <code>%s</code> (plusieurs chemins séparés par '<code>%s</code>') apparaissent également ci-dessus en lecture seule. Les modifications prennent effet au démarrage de DataLab."
 
+msgid "Compatibility warnings"
+msgstr "Avertissements de compatibilité"
+
+msgid "Hide warnings for incompatible DataLab v0.20 plugins"
+msgstr "Masquer les avertissements pour les plugins DataLab v0.20 incompatibles"
+
+msgid "If enabled, DataLab will not warn you about v0.20 plugins that are no longer compatible with v1.0."
+msgstr "Si activé, DataLab ne vous avertira pas des plugins v0.20 qui ne sont plus compatibles avec v1.0."
+
 msgid "Select plugin directory"
 msgstr "Sélectionner un répertoire de plugins"
 
@@ -1990,32 +1810,17 @@ msgstr "Plugins désactivés"
 msgid "Plugins with errors"
 msgstr "Plugins en erreur"
 
-msgid "Reload Plugins"
-msgstr "Recharger les plugins"
-
-msgid "Plugin configuration has been saved. Do you want to reload plugins now to apply changes?"
-msgstr "La configuration des plugins a été enregistrée. Voulez-vous recharger les plugins maintenant pour appliquer les modifications ?"
-
-msgid "Plugin settings"
-msgstr "Paramètres des plugins"
-
-msgid "Third-party plugins are globally disabled."
-msgstr "Les plugins tiers sont désactivés globalement."
-
-msgid "Compatibility warnings"
-msgstr "Avertissements de compatibilité"
-
-msgid "Hide warnings for incompatible DataLab v0.20 plugins"
-msgstr "Masquer les avertissements pour les plugins DataLab v0.20 incompatibles"
-
 msgid "Disable plugins globally"
 msgstr "Désactiver globalement les plugins"
 
 msgid "Enable plugins globally"
 msgstr "Activer globalement les plugins"
 
-msgid "Enable them again from the plugin configuration dialog to use this feature."
-msgstr "Réactivez-les depuis la boîte de dialogue de configuration des plugins pour utiliser cette fonctionnalité."
+msgid "Reload Plugins"
+msgstr "Recharger les plugins"
+
+msgid "Plugin configuration has been saved. Do you want to reload plugins now to apply changes?"
+msgstr "La configuration des plugins a été enregistrée. Voulez-vous recharger les plugins maintenant pour appliquer les modifications ?"
 
 msgid "Failed to deserialize processing parameters from JSON."
 msgstr "Échec de la désérialisation des paramètres de traitement depuis le format JSON."
@@ -2041,6 +1846,35 @@ msgstr ""
 
 msgid "Yes to All"
 msgstr "Oui à tout"
+
+msgid "Processing metadata is incomplete."
+msgstr "Les métadonnées de traitement sont incomplètes."
+
+msgid "Processing metadata is incomplete (missing source UUID)."
+msgstr "Les métadonnées de traitement sont incomplètes (UUID source manquant)."
+
+msgid "The object that was used to create this processed object has been deleted and cannot be used for reprocessing."
+msgstr "L'objet qui a été utilisé pour créer cet objet traité a été supprimé et ne peut pas être utilisé pour le retraitement."
+
+#, python-format
+msgid ""
+"Failed to reprocess object:\n"
+"%s"
+msgstr ""
+"Échec du retraitement de l'objet :\n"
+"%s"
+
+msgid "Processing was cancelled."
+msgstr "Le traitement a été annulé."
+
+msgid "Failed to reprocess object."
+msgstr "Échec du retraitement de l'objet."
+
+msgid "Signal was reprocessed."
+msgstr "Le signal a été retraité."
+
+msgid "Image was reprocessed."
+msgstr "L'image a été retraitée."
 
 msgid "Recomputing..."
 msgstr "Retraitement en cours..."
@@ -2552,6 +2386,31 @@ msgstr "Ajustement exponentiel par morceaux"
 msgid "Sigmoid fit"
 msgstr "Ajustement sigmoïde"
 
+#, python-format
+msgid "%s: fitting curve was computed by an earlier version and cannot be evaluated (please recompute the fit)"
+msgstr "%s : la courbe d'ajustement a été calculée par une version antérieure et ne peut pas être évaluée (veuillez recalculer l'ajustement)"
+
+#, python-format
+msgid "%s: signal does not contain valid fit parameters"
+msgstr "%s : le signal ne contient pas de paramètres d'ajustement valides"
+
+msgid "Cannot evaluate fit"
+msgstr "Impossible d'évaluer l'ajustement"
+
+#, python-format
+msgid ""
+"One or more selected signals have invalid or unsupported fit parameters:\n"
+"%s"
+msgstr ""
+"Un ou plusieurs signaux sélectionnés ont des paramètres d'ajustement invalides ou non pris en charge :\n"
+"%s"
+
+msgid "Convert historical fit parameters"
+msgstr "Convertir les paramètres d'ajustement historiques"
+
+msgid "One or more selected fitting curves use historical area-based peak parameters. Convert them to signed peak height before evaluating?"
+msgstr "Une ou plusieurs courbes d'ajustement sélectionnées utilisent des paramètres de pic historiques fondés sur l'aire. Les convertir en hauteur de pic signée avant l'évaluation ?"
+
 msgid "signal to subtract"
 msgstr "signal à soustraire"
 
@@ -2873,21 +2732,6 @@ msgstr "Mo"
 
 msgid "Memory threshold below which a warning is displayed before loading any new data"
 msgstr "Seuil de mémoire en dessous duquel un avertissement est affiché avant de charger de nouvelles données"
-
-msgid "Third-party plugins"
-msgstr "Plugins tiers"
-
-msgid "Enable or disable third-party plugins immediately. Changes are applied without restarting DataLab"
-msgstr "Activer ou désactiver immédiatement les plugins tiers. Les changements sont appliqués sans redémarrer DataLab"
-
-msgid "Ignore compatibility issues warning"
-msgstr "Ignorer l'avertissement de compatibilité"
-
-msgid "DataLab v0.20 plugins"
-msgstr "Plugins DataLab v0.20"
-
-msgid "If enabled, DataLab will not warn you about v0.20 plugins that are no longer compatible with v1.0."
-msgstr "Si activé, DataLab ne vous avertira pas des plugins v0.20 qui ne sont plus compatibles avec v1.0."
 
 msgid "Settings for internal console, used for debugging or advanced users"
 msgstr "Réglages de la console interne, utilisée pour le débogage ou les utilisateurs avancés"
@@ -3364,32 +3208,6 @@ msgstr "C'est la fin de la visite guidée !"
 msgid "You can show the tour again, or close this dialog box."
 msgstr "Vous pouvez afficher la visite guidée à nouveau, ou fermer cette boîte de dialogue."
 
-msgid "Save history file"
-msgstr "Enregistrer le fichier d'historique"
-
-msgid "Open history file"
-msgstr "Ouvrir le fichier d'historique"
-
-msgid "Imported"
-msgstr "Importer"
-
-msgid "Replaying compound 'multiple_1_to_1' actions is not supported yet."
-msgstr "La relecture des actions composées 'multiple_1_to_1' n'est pas encore prise en charge."
-
-msgid "Cannot replay 2-to-1 action: source object(s) missing."
-msgstr "Impossible de relire l'action 2-à-1 : objet(s) source manquant(s)."
-
-#, python-format
-msgid "Failed to deserialize history DataSet kwarg %r."
-msgstr "Echec de la désérialisation de l'argument DataSet de l'historique %r."
-
-#, python-format
-msgid "Failed to deserialize history DataSet-list kwarg %r."
-msgstr "Echec de la désérialisation de l'argument DataSet-list de l'historique %r."
-
-msgid "Session"
-msgstr "Session"
-
 msgid "Registered plugins:"
 msgstr "Plugins enregistrés :"
 
@@ -3455,9 +3273,6 @@ msgstr "Créer une image avec un anneau"
 
 msgid "Create image with a grid of gaussian spots"
 msgstr "Créer une image avec une grille de spots gaussiens"
-
-msgid "New signal"
-msgstr "Nouveau signal"
 
 msgid "Host application"
 msgstr "Application hôte"
@@ -3534,11 +3349,11 @@ msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La dé
 msgid "Click OK to end demo."
 msgstr "Cliquer sur OK pour terminer la démo."
 
-msgid "Context"
-msgstr "Contexte"
-
 msgid "Error:"
 msgstr "Erreur:"
+
+msgid "Context"
+msgstr "Contexte"
 
 #, python-format
 msgid "The file %s could not be read:"
@@ -3756,17 +3571,17 @@ msgstr "Déplier la sélection"
 msgid "HDF5 Browser"
 msgstr "Explorateur HDF5"
 
-msgid "Value"
-msgstr "Valeur"
-
-msgid "Name"
-msgstr "Nom"
-
 msgid "Size"
 msgstr "Taille"
 
 msgid "Type"
 msgstr "Type"
+
+msgid "Value"
+msgstr "Valeur"
+
+msgid "Name"
+msgstr "Nom"
 
 msgid "Unsupported data"
 msgstr "Données non prises en charge"
@@ -3803,24 +3618,6 @@ msgstr "Afficher uniquement les données prises en charge"
 
 msgid "Show values"
 msgstr "Afficher les valeurs"
-
-msgid "Show details"
-msgstr "Afficher les détails"
-
-msgid "Hide details"
-msgstr "Masquer les détails"
-
-msgid "Date and time"
-msgstr "Date et heure"
-
-msgid "Title"
-msgstr "Titre"
-
-msgid "Action is compatible with the current workspace state."
-msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
-
-msgid "Action is not compatible with the current workspace state."
-msgstr "L'action n'est pas compatible avec l'état actuel de l'espace de travail."
 
 msgid "Image background selection"
 msgstr "Sélection de l'arrière-plan de l'image"
@@ -3864,6 +3661,9 @@ msgstr "±{n} points"
 msgid "±{n} rows × ±{n} columns"
 msgstr "±{n} lignes × ±{n} colonnes"
 
+msgid "This image uses an integer data type, so it cannot contain NaN or infinite values. Replace special values is therefore not applicable."
+msgstr "Cette image utilise un type de données entier, elle ne peut donc pas contenir de valeurs NaN ou infinies. Le remplacement des valeurs spéciales n'est donc pas applicable."
+
 msgid "Signal baseline selection"
 msgstr "Sélection de la ligne de base du signal"
 
@@ -3887,9 +3687,6 @@ msgstr "Distance minimale :"
 
 msgid "Signal peak detection"
 msgstr "Détection de pics 1D"
-
-msgid "Peaks:"
-msgstr "Pics :"
 
 msgid "Internal console"
 msgstr "Console interne"
@@ -4196,21 +3993,6 @@ msgstr "Merci de sélectionner le fichier à importer."
 msgid "Example Wizard"
 msgstr "Assistant exemple"
 
-msgid "Signal"
-msgstr "Signal"
-
-msgid "Shape"
-msgstr "Forme"
-
-msgid "Image"
-msgstr "Image"
-
-msgid "Dimensions"
-msgstr "Dimensions"
-
-msgid "This image uses an integer data type, so it cannot contain NaN or infinite values. Replace special values is therefore not applicable."
-msgstr "Cette image utilise un type de données entier, elle ne peut donc pas contenir de valeurs NaN ou infinies. Le remplacement des valeurs spéciales n'est donc pas applicable."
-
 msgid "Minimum value"
 msgstr "Valeur minimum"
 
@@ -4258,44 +4040,3 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
-
-msgid "Created: historical peak parameters"
-msgstr "Créé : paramètres de pic historiques"
-
-msgid "This object uses historical area-based peak parameters. Convert them to signed peak height before editing."
-msgstr "Cet objet utilise des paramètres de pic historiques fondés sur l'aire. Convertissez-les en hauteur de pic signée avant de les modifier."
-
-msgid "Convert historical parameters"
-msgstr "Convertir les paramètres historiques"
-
-#, python-format
-msgid "Failed to convert historical creation parameters:\n%s"
-msgstr "Échec de la conversion des paramètres de création historiques :\n%s"
-
-msgid "Convert historical fit parameters"
-msgstr "Convertir les paramètres d'ajustement historiques"
-
-msgid "One or more selected fitting curves use historical area-based peak parameters. Convert them to signed peak height before evaluating?"
-msgstr "Une ou plusieurs courbes d'ajustement sélectionnées utilisent des paramètres de pic historiques fondés sur l'aire. Les convertir en hauteur de pic signée avant l'évaluation ?"
-
-msgid "Created: invalid creation parameters"
-msgstr "Créé : paramètres de création invalides"
-
-msgid "Creation parameters cannot be edited because their metadata is invalid or was written by a newer DataLab version."
-msgstr "Les paramètres de création ne peuvent pas être modifiés, car leurs métadonnées sont invalides ou ont été écrites par une version plus récente de DataLab."
-
-#, python-format
-msgid "%s: signal does not contain valid fit parameters"
-msgstr "%s : le signal ne contient pas de paramètres d'ajustement valides"
-
-msgid "Cannot evaluate fit"
-msgstr "Impossible d'évaluer l'ajustement"
-
-#, python-format
-msgid "One or more selected signals have invalid or unsupported fit parameters:\n%s"
-msgstr "Un ou plusieurs signaux sélectionnés ont des paramètres d'ajustement invalides ou non pris en charge :\n%s"
-
-#, python-format
-msgid "%s: fitting curve was computed by an earlier version and cannot be evaluated (please recompute the fit)"
-msgstr "%s : la courbe d'ajustement a été calculée par une version antérieure et ne peut pas être évaluée (veuillez recalculer l'ajustement)"
-
