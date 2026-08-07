@@ -77,32 +77,14 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
 .. only:: html and not latex
 
-    .. grid:: 2 2 4 4
-        :gutter: 1 2 3 4
+    .. container:: sd-mt-4
 
-        .. grid-item-card:: :octicon:`rocket;1em;sd-text-info`  Getting started
-            :link: intro/index
-            :link-type: doc
+        **Start with DataLab:** :doc:`Getting started <intro/index>` --
+        installation, tutorials and first use cases.
 
-            Installation, tutorials, use cases...
-
-        .. grid-item-card:: :octicon:`tools;1em;sd-text-info`  Features
-            :link: features/index
-            :link-type: doc
-
-            Detailed description
-
-        .. grid-item-card:: :octicon:`megaphone;1em;sd-text-info`  Talks & Events
-            :link: outreach/index
-            :link-type: doc
-
-            Conference presentations
-
-        .. grid-item-card:: :octicon:`gear;1em;sd-text-info`  Contributing
-            :link: contributing/index
-            :link-type: doc
-
-            Getting involved in the project
+        **Explore the documentation:** :doc:`Features <features/index>` ·
+        :doc:`Contributing <contributing/index>` ·
+        :doc:`Talks & events <outreach/index>`
 
 DataLab has been funded, chronologically, by the following stakeholders:
 
