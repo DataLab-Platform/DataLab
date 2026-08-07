@@ -30,6 +30,12 @@ __all__ = [
 ]
 
 
+from sigimax.adapters_plotpy import (
+    create_adapter_from_object,
+    plotitem_to_singleroi,
+    set_adapter_factory,
+    singleroi_to_plotitem,
+)
 from sigimax.adapters_plotpy.base import items_to_json, json_to_items
 from sigimax.adapters_plotpy.roi.base import TypeROIItem, configure_roi_item
 from sigimax.adapters_plotpy.roi.image import (
@@ -37,12 +43,12 @@ from sigimax.adapters_plotpy.roi.image import (
     PolygonalROIPlotPyAdapter,
     RectangularROIPlotPyAdapter,
 )
-
-from .converters import (
-    create_adapter_from_object,
-    plotitem_to_singleroi,
-    singleroi_to_plotitem,
+from sigimax.adapters_plotpy.roi.signal import (
+    SegmentROIPlotPyAdapter,
+    SignalROIPlotPyAdapter,
 )
+
+from .factories import DataLabPlotPyAdapterFactory
 from .objects.adapters import (
     CURVESTYLES,
     ImageObjPlotPyAdapter,
@@ -53,4 +59,6 @@ from .objects.scalar import (
     GeometryPlotPyAdapter,
     TablePlotPyAdapter,
 )
-from .roi.signal import SegmentROIPlotPyAdapter, SignalROIPlotPyAdapter
+
+#: Make SigimaX components resolve DataLab adapters (geometry results, ...)
+set_adapter_factory(DataLabPlotPyAdapterFactory())

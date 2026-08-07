@@ -57,6 +57,7 @@ from sigima.objects import (
     TypeROI,
 )
 from sigima.objects.base import GENERIC_ROI_TITLE_REGEXP, get_generic_roi_title
+from sigimax.adapters_plotpy.roi.signal import roi_color_for_index
 
 from datalab.adapters_plotpy import (
     TypePlotItem,
@@ -65,7 +66,6 @@ from datalab.adapters_plotpy import (
     create_adapter_from_object,
     plotitem_to_singleroi,
 )
-from datalab.adapters_plotpy.roi.signal import roi_color_for_index
 from datalab.config import Conf, _
 from datalab.env import execenv
 
