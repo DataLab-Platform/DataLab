@@ -1,9 +1,9 @@
-:octicon:`book;1em;sd-text-info` Measuring Laser Beam Size
-==========================================================
+:octicon:`book;1em;sd-text-info` Laser beam profiling: measuring beam size along the propagation axis
+=====================================================================================================
 
 .. meta::
-    :description: Tutorial on how to measure the size of a laser beam using DataLab, the open-source scientific analysis and visualization platform
-    :keywords: DataLab, tutorial, laser beam, size, FWHM, Gaussian fit, radial profile, line profile, thresholding, centroid, image statistics, linear calibration, HDF5, workspace
+    :description: Measure laser beam size (FWHM) from camera images with DataLab, the open-source signal and image analysis platform: thresholding, line and radial intensity profiles, Gaussian fit, and batch analysis of a whole image stack to plot beam size along the propagation axis.
+    :keywords: laser beam profiling, beam size measurement, FWHM, beam waist, Gaussian fit, radial profile, camera image analysis, image stack, batch processing, photonics, DataLab, tutorial
 
 This example shows how to measure the size of a laser beam along the propagation
 axis using DataLab:

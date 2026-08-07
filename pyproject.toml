@@ -90,6 +90,7 @@ doc = [
     "sphinx",
     "sphinx_intl",
     "sphinx-sitemap",
+    "sphinxext-opengraph",
     "myst_parser",
     "sphinx_design",
     "sphinx-copybutton",

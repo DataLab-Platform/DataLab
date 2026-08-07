@@ -1,11 +1,11 @@
-:octicon:`book;1em;sd-text-info` Processing a spectrum
-======================================================
+:octicon:`book;1em;sd-text-info` Spectrum analysis: denoising, baseline correction and peak fitting
+====================================================================================================
 
 .. meta::
-    :description: Tutorial on how to process a spectrum with DataLab, the open-source scientific data analysis and visualization platform
-    :keywords: spectrum, signal processing, data analysis, scientific data, visualization, open-source, software, DataLab, tutorial
+    :description: Analyze a spectrum step by step with DataLab, the open-source signal and image analysis platform: noise filtering, baseline correction (detrending with peak exclusion), region of interest selection and Gaussian peak fitting.
+    :keywords: spectrum analysis software, peak fitting, baseline correction, detrending, Gaussian fit, noise filtering, spectroscopy, Raman, FTIR, X-ray spectrum, DataLab, tutorial
 
-This example shows how to process a spectrum with DataLab:
+This example shows how to analyze a spectrum with DataLab:
 
 -   Read the spectrum from a file
 -   Apply a filter to the spectrum

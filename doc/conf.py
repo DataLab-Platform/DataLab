@@ -136,6 +136,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinxcontrib.cairosvgconverter",
     "sphinx_sitemap",
+    "sphinxext.opengraph",
     "myst_parser",
     "sphinx_design",
     "sphinx_copybutton",
@@ -165,6 +166,11 @@ figure_language_filename = "{root}.{language}{ext}"
 html_baseurl = datalab.__homeurl__  # for sitemap extension
 sitemap_locales = ["en", "fr"]
 sitemap_filename = "../sitemap.xml"
+
+# -- Options for opengraph extension ------------------------------------------
+ogp_site_url = datalab.__homeurl__
+ogp_image = "https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/DataLab-banner.png"
+ogp_enable_meta_description = True
 
 # -- Options for HTML output -------------------------------------------------
 html_theme = "pydata_sphinx_theme"
