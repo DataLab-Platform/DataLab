@@ -79,10 +79,7 @@ from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
 from datalab.objectmodel import ObjectGroup
 from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plugins
 from datalab.utils import qthelpers as qth
-from datalab.utils.qthelpers import (
-    add_corner_menu,
-    configure_menu_about_to_show,
-)
+from datalab.utils.qthelpers import configure_menu_about_to_show
 from datalab.webapi import WEBAPI_AVAILABLE, get_webapi_controller
 from datalab.webapi.actions import WebApiActions
 from datalab.widgets import instconfviewer
@@ -193,6 +190,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         if Conf.rpc_server_enabled.get():
             self.remote_server.SIG_SERVER_PORT.connect(self.xmlrpc_server_started)
             self.remote_server.start()
+
+        self.__register_plugins()
+        self.webapi_actions = WebApiActions(self)
 
     # ------API related to XML-RPC remote control
     @staticmethod
@@ -817,34 +817,16 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                         submenu.close()
 
     # ------GUI setup
-    def setup(self, console: bool = False) -> None:
-        """Setup main window
-
-        Args:
-            console: True to setup console
-        """
-        self.__register_plugins()
-        self._configure_statusbar(console)
-        self._setup_global_actions()
-        self.__add_signal_image_panels()
-        self.__create_plugins_actions()
-        self._setup_central_widget()
-        self._add_menus()
-        self.__setup_webapi()
-        if console:
-            self._setup_console()
-            self.__flush_startup_errors()
-        self.__update_actions(update_other_data_panel=True)
+    def _setup_docks(self) -> None:
+        """Add the macro and AI assistant docks"""
         self.__add_macro_panel()
         self.__add_aiassistant_panel()
-        self.__configure_panels()
-        # Now that everything is set up, we can restore the window state:
-        self._restore_state()
 
-    def __setup_webapi(self) -> None:
-        """Setup Web API actions."""
-        self.webapi_actions = WebApiActions(self)
-        # Note: Menu is added in __update_view_menu since view_menu is cleared each show
+    def _post_setup(self, console: bool) -> None:
+        """Create plugin actions and wire panels, once the whole UI exists"""
+        self.__create_plugins_actions()
+        self.__update_actions(update_other_data_panel=True)
+        self.__configure_panels()
 
     def __register_plugins(self) -> None:
         """Discover and register third-party plugins at startup
@@ -1242,11 +1224,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         current_panel: BaseDataPanel = self.tabwidget.currentWidget()
         add_actions(self.tabmenu, current_panel.get_context_menu().actions())
 
-    def __add_signal_image_panels(self) -> None:
-        """Add signal and image panels"""
-        self.tabwidget = QW.QTabWidget()
-        self.tabmenu = add_corner_menu(self.tabwidget)
-        configure_menu_about_to_show(self.tabmenu, self.__update_tab_menu)
+    def _setup_panels(self) -> None:
+        """Create signal and image panels, with their views and docks"""
         self.signalview = self.__add_signal_panel()
         self.imageview = self.__add_image_panel()
         self._add_dockwidget(
@@ -1262,7 +1241,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             key=self.imagepanel,
             tabify_with=self.signalpanel,
         )
-        self.tabwidget.currentChanged.connect(self.__tab_index_changed)
         self.signalpanel.SIG_OBJECT_ADDED.connect(
             lambda: self.set_current_panel("signal")
         )
@@ -1274,6 +1252,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def _setup_central_widget(self) -> None:
         """Setup central widget (main panel)"""
+        super()._setup_central_widget()
+        configure_menu_about_to_show(self.tabmenu, self.__update_tab_menu)
         self.tabwidget.setMaximumWidth(600)
         s_idx = self.tabwidget.addTab(
             self.signalpanel, get_icon("signal.svg"), _("Signal Panel")
@@ -1287,16 +1267,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.tabwidget.setTabToolTip(
             i_idx, _("2D Images: Manage and process two-dimensional data")
         )
-
-        # Apply enhanced tab bar styling
-        tab_bar = self.tabwidget.tabBar()
-        font = tab_bar.font()
-        font.setPointSize(10)
-        tab_bar.setFont(font)
-        # Use QTimer to ensure tab bar is properly sized first
-        QC.QTimer.singleShot(0, self._update_tab_icon_size)
-
-        self.setCentralWidget(self.tabwidget)
+        self.tabwidget.currentChanged.connect(self.__tab_index_changed)
 
     @staticmethod
     def __get_local_doc_path() -> str | None:
@@ -1477,6 +1448,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.console.interpreter.widget_proxy.sig_new_prompt.connect(
             lambda txt: self.repopulate_panel_trees()
         )
+        self.__flush_startup_errors()
 
     def __add_macro_panel(self) -> None:
         """Add macro panel"""
