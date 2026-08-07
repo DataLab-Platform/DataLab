@@ -1378,7 +1378,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             name="macro_panel",
             tabify_with=self.imagepanel,
         )
-        self.docks[self.signalpanel].raise_()
 
     def __add_aiassistant_panel(self) -> None:
         """Add AI Assistant panel"""
@@ -1395,7 +1394,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             name="ai_assistant",
             tabify_with=self.macropanel,
         )
-        self.docks[self.macropanel].raise_()
 
     def __configure_panels(self) -> None:
         """Configure panels"""
@@ -1414,6 +1412,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.tabwidget.setCurrentIndex(tab_idx)
         # Set focus on current panel, so that keyboard shortcuts work (Fixes #10)
         self.tabwidget.currentWidget().setFocus()
+        # Raise the current panel dock, which is tabified with the macro and AI
+        # assistant docks added afterwards:
+        self.docks[self.tabwidget.currentWidget()].raise_()
 
     def set_process_isolation_enabled(self, state: bool) -> None:
         """Enable/disable process isolation
