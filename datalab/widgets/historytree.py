@@ -235,13 +235,12 @@ class HistoryTree(QW.QTreeWidget):
 
         Re-installs the description widget so it reflects the current
         ``action.kwargs`` (e.g. after the user edited a ``param`` via the
-        Processing tab of the Signal/Image panel). Also applies a light
-        orange background when ``action.is_stale`` is True, to signal that
-        the action is currently being recomputed in a cascade.
+        Processing tab of the Signal/Image panel). Also resets the item
+        background to the default brush on all columns, clearing any
+        highlight previously painted on the row.
         """
         target_uuid = action.uuid
-        stale_brush = QG.QBrush(QG.QColor(255, 220, 150))  # light orange
-        normal_brush = QG.QBrush()
+        default_brush = QG.QBrush()
         iterator = QW.QTreeWidgetItemIterator(self)
         while iterator.value():
             item = iterator.value()
@@ -251,9 +250,8 @@ class HistoryTree(QW.QTreeWidget):
                 self.removeItemWidget(item, self.DESCRIPTION_COLUMN)
                 self.install_description_widget(item, action)
                 item.setText(0, action.title)
-                brush = stale_brush if action.is_stale else normal_brush
                 for col in range(self.columnCount()):
-                    item.setBackground(col, brush)
+                    item.setBackground(col, default_brush)
                 self.scheduleDelayedItemsLayout()
                 return
             iterator += 1
