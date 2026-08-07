@@ -25,7 +25,6 @@ import os.path as osp
 import sys
 import time
 import traceback
-import webbrowser
 from datetime import datetime
 from typing import TYPE_CHECKING
 
@@ -50,14 +49,11 @@ from sigimax.utils import qthelpers as sgmx_qth
 from sigimax.widgets import status
 
 import datalab
-from datalab import __docurl__, __homeurl__, __supporturl__
 from datalab.adapters_metadata.common import have_geometry_results
 from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import (
     APP_DESC,
     APP_NAME,
-    DATAPATH,
-    TEST_SEGFAULT_ERROR,
     Conf,
     _,
     save_runtime_option,
@@ -1269,63 +1265,26 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         )
         self.tabwidget.currentChanged.connect(self.__tab_index_changed)
 
-    @staticmethod
-    def __get_local_doc_path() -> str | None:
-        """Return local documentation path, if it exists"""
-        locale = QC.QLocale.system().name()
-        for suffix in ("_" + locale[:2], "_en"):
-            path = osp.join(DATAPATH, "doc", f"{APP_NAME}{suffix}.pdf")
-            if osp.isfile(path):
-                return path
-        return None
-
-    def _add_menus(self) -> None:
-        """Adding menus"""
-        self.file_menu = self.menuBar().addMenu(_("&File"))
-        configure_menu_about_to_show(self.file_menu, self.__update_file_menu)
-        self.create_menu = self.menuBar().addMenu(_("&Create"))
-        self.edit_menu = self.menuBar().addMenu(_("&Edit"))
-        self.roi_menu = self.menuBar().addMenu(_("ROI"))
-        self.operation_menu = self.menuBar().addMenu(_("Operations"))
-        self.processing_menu = self.menuBar().addMenu(_("Processing"))
-        self.analysis_menu = self.menuBar().addMenu(_("Analysis"))
-        self.plugins_menu = self.menuBar().addMenu(_("Plugins"))
-        # Make plugins menu scrollable to handle many plugins without overflow
-        self.plugins_menu.setStyleSheet("QMenu { menu-scrollable: 1; }")
-        self.view_menu = self.menuBar().addMenu(_("&View"))
-        configure_menu_about_to_show(self.view_menu, self.__update_view_menu)
-        self.help_menu = self.menuBar().addMenu("?")
-        for menu in (
-            self.create_menu,
-            self.edit_menu,
-            self.roi_menu,
-            self.operation_menu,
-            self.processing_menu,
-            self.analysis_menu,
-            self.plugins_menu,
-        ):
-            configure_menu_about_to_show(menu, self.__update_generic_menu)
-        help_menu_actions = [
-            self.command_palette_action,
-            None,
-            create_action(
-                self,
-                _("Online documentation"),
-                icon=get_icon("libre-gui-help.svg"),
-                triggered=lambda: webbrowser.open(__docurl__),
-            ),
-        ]
-        localdocpath = self.__get_local_doc_path()
-        if localdocpath is not None:
-            help_menu_actions += [
-                create_action(
-                    self,
-                    _("PDF documentation"),
-                    icon=get_icon("help_pdf.svg"),
-                    triggered=lambda: webbrowser.open(localdocpath),
-                ),
+    def _get_menubar_layout(self) -> list[tuple[str, str]]:
+        """Insert the DataLab menus between the standard File and View menus."""
+        layout = super()._get_menubar_layout()
+        return (
+            layout[:1]
+            + [
+                ("create", _("&Create")),
+                ("edit", _("&Edit")),
+                ("roi", _("ROI")),
+                ("operation", _("Operations")),
+                ("processing", _("Processing")),
+                ("analysis", _("Analysis")),
+                ("plugins", _("Plugins")),
             ]
-        help_menu_actions += [
+            + layout[1:]
+        )
+
+    def _get_help_doc_actions(self) -> list[QW.QAction | None]:
+        """Append the tour and demo entries to the standard documentation actions."""
+        return super()._get_help_doc_actions() + [
             create_action(
                 self,
                 _("Tour") + "...",
@@ -1340,21 +1299,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             ),
             None,
         ]
-        if TEST_SEGFAULT_ERROR:
-            help_menu_actions += [
-                create_action(
-                    self,
-                    _("Test segfault/Python error"),
-                    triggered=self.test_segfault_error,
-                )
-            ]
-        help_menu_actions += [
-            create_action(
-                self,
-                _("Log files") + "...",
-                icon=get_icon("logs.svg"),
-                triggered=self._show_logviewer,
-            ),
+
+    def _get_help_support_actions(self) -> list[QW.QAction | None]:
+        """Append the installation and configuration viewer."""
+        return super()._get_help_support_actions() + [
             create_action(
                 self,
                 _("Installation and configuration") + "...",
@@ -1363,27 +1311,27 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     self
                 ),
             ),
-            None,
-            create_action(
-                self,
-                _("Project home page"),
-                icon=get_icon("libre-gui-globe.svg"),
-                triggered=lambda: webbrowser.open(__homeurl__),
-            ),
-            create_action(
-                self,
-                _("Bug report or feature request"),
-                icon=get_icon("libre-gui-globe.svg"),
-                triggered=lambda: webbrowser.open(__supporturl__),
-            ),
-            create_action(
-                self,
-                _("About..."),
-                icon=get_icon("libre-gui-about.svg"),
-                triggered=self.__about,
-            ),
         ]
-        add_actions(self.help_menu, help_menu_actions)
+
+    def _get_help_menu_actions(self) -> list[QW.QAction | None]:
+        """Prepend the command palette to the standard help actions."""
+        return [self.command_palette_action, None] + super()._get_help_menu_actions()
+
+    def _add_menus(self) -> None:
+        """Adding menus"""
+        super()._add_menus()
+        # Make plugins menu scrollable to handle many plugins without overflow
+        self.plugins_menu.setStyleSheet("QMenu { menu-scrollable: 1; }")
+        for menu in (
+            self.create_menu,
+            self.edit_menu,
+            self.roi_menu,
+            self.operation_menu,
+            self.processing_menu,
+            self.analysis_menu,
+            self.plugins_menu,
+        ):
+            configure_menu_about_to_show(menu, self.__update_generic_menu)
 
         # Command palette launcher in the top-right corner of the menu bar:
         # a search-box-styled field so the palette is discoverable at a
@@ -1672,21 +1620,15 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             ]
         add_actions(menu, actions)
 
-    def __update_file_menu(self) -> None:
+    def _get_file_menu_actions(self) -> list[QW.QAction | None]:
+        """Append the settings action to the standard HDF5 actions."""
+        return super()._get_file_menu_actions() + [None, self.settings_action]
+
+    def _update_file_menu(self) -> None:
         """Update file menu before showing up"""
         self.saveh5_action.setEnabled(self.has_objects())
         self.__update_generic_menu(self.file_menu)
-        add_actions(
-            self.file_menu,
-            [
-                None,
-                self.openh5_action,
-                self.saveh5_action,
-                self.browseh5_action,
-                None,
-                self.settings_action,
-            ],
-        )
+        add_actions(self.file_menu, self._get_file_menu_actions())
         # Add Web API submenu
         if self.webapi_actions is not None:
             self.file_menu.addSeparator()
@@ -1694,10 +1636,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         if self.quit_action is not None:
             add_actions(self.file_menu, [self.quit_action])
 
-    def __update_view_menu(self) -> None:
+    def _update_view_menu(self) -> None:
         """Update view menu before showing up"""
         self.__update_generic_menu(self.view_menu)
-        add_actions(self.view_menu, [None] + self.createPopupMenu().actions())
+        super()._update_view_menu()
 
     @remote_controlled
     def toggle_show_titles(self, state: bool) -> None:
@@ -2136,7 +2078,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         return True
 
     # ------?
-    def __about(self) -> None:  # pragma: no cover
+    def _about(self) -> None:  # pragma: no cover
         """About dialog box"""
         self.check_stable_release()
         if self.remote_server.port is None:

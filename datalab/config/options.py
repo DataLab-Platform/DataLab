@@ -28,6 +28,7 @@ Design notes
 
 from __future__ import annotations
 
+import os.path as osp
 from typing import TYPE_CHECKING, Any
 
 from guidata import configtools
@@ -41,7 +42,7 @@ from sigimax.config import (
 )
 
 from datalab import __docurl__, __homeurl__, __supporturl__, __version__
-from datalab.config.appinfo import APP_NAME
+from datalab.config.appinfo import APP_NAME, DATAPATH
 
 if TYPE_CHECKING:
     from datalab.config.persistence import OptionStore
@@ -484,6 +485,9 @@ class DataLabOptions(SigimaXOptions):
         self.app_docurl.set(__docurl__)
         self.app_homeurl.set(__homeurl__)
         self.app_supporturl.set(__supporturl__)
+        # "{lang}" is substituted by SGMXMainWindow with the system locale prefix,
+        # then with "en" as a fallback:
+        self.app_local_doc_path.set(osp.join(DATAPATH, "doc", APP_NAME + "_{lang}.pdf"))
         self.splash_image_path.set("DataLab-Splash.png")
         self.splash_show_progress.set(False)
 

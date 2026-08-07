@@ -23,7 +23,6 @@ from typing import TYPE_CHECKING
 
 from guidata import configtools
 from guidata.userconfig import get_config_basedir
-from sigimax.config import TEST_SEGFAULT_ERROR as TEST_SEGFAULT_ERROR
 from sigimax.config import is_frozen
 from sigimax.utils.conf import Configuration
 
