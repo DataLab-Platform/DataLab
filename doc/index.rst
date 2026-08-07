@@ -51,6 +51,32 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
 .. only:: html and not latex
 
+    **What is DataLab used for?** A few examples, with real data and step-by-step tutorials:
+
+    .. grid:: 1 1 3 3
+        :gutter: 1 2 3 4
+
+        .. grid-item-card:: :octicon:`pulse;1em;sd-text-info`  Spectroscopy
+            :link: use_cases/spectroscopy
+            :link-type: doc
+
+            Baseline correction and peak fitting
+
+        .. grid-item-card:: :octicon:`sun;1em;sd-text-info`  Photonics & lasers
+            :link: use_cases/photonics
+            :link-type: doc
+
+            Beam profiling and interferograms
+
+        .. grid-item-card:: :octicon:`search;1em;sd-text-info`  Non-destructive testing
+            :link: use_cases/ndt
+            :link-type: doc
+
+            Automated defect detection
+
+
+.. only:: html and not latex
+
     .. grid:: 2 2 4 4
         :gutter: 1 2 3 4
 
@@ -149,6 +175,7 @@ DataLab has been funded, chronologically, by the following stakeholders:
     :hidden:
 
     intro/index
+    use_cases/index
     features/index
     contributing/index
     release_notes/index

@@ -1,9 +1,14 @@
 .. _tutorial_blobs:
 
-:octicon:`book;1em;sd-text-info` Detecting blobs on an image
-============================================================
+:octicon:`book;1em;sd-text-info` Automated detection of defects and particles on images
+=======================================================================================
 
-This example shows how to detect blobs on an image with DataLab,
+.. meta::
+    :description: Automatically detect defects, particles or spots on images (blob detection) with DataLab, the open-source signal and image analysis platform: image denoising, automated blob detection, and workspace saving. Also introduces the plugin system.
+    :keywords: defect detection, particle detection, blob detection, non-destructive testing, automated inspection, image denoising, image analysis software, plugin, DataLab, tutorial
+
+This example shows how to automatically detect blob-like features -- defects,
+particles, spots -- on an image with DataLab,
 and also covers other features such as the plugin system:
 
 -   Add a new plugin to DataLab
