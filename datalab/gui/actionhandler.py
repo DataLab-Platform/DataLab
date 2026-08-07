@@ -370,8 +370,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             adapter: Adapter for the result to delete
         """
         # Check if this result matches the stored analysis parameters
-        # If so, clear them to prevent auto-recompute from attempting to
-        # recompute the deleted analysis when ROI changes
+        # If so, clear them to prevent a manual recompute from attempting to
+        # recompute the deleted analysis
         analysis_params = extract_analysis_parameters(obj)
         if (
             analysis_params is not None
@@ -829,9 +829,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Recompute"),
                 icon_name="recompute.svg",
                 shortcut="Ctrl+R",
-                tip=_("Recompute selected %s with its processing parameters")
+                tip=_(
+                    "Recompute selected %s: refresh both processing and "
+                    "analysis results with their stored parameters"
+                )
                 % self.OBJECT_STR,
-                triggered=self.panel.recompute_processing,
+                triggered=self.panel.recompute_selected,
                 select_condition=SelectCond.at_least_one_group_or_one_object,
                 context_menu_pos=-1,
                 toolbar_pos=-1,

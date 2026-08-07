@@ -29,17 +29,25 @@ def test_fuzzy_score():
     """Test the fuzzy subsequence matcher."""
     # Empty query matches anything with a neutral score
     assert fuzzy_score("", "anything") == 0
-    # Contiguous and non-contiguous subsequences match
+    # A plain substring (single contiguous run) matches, even mid-word
     assert fuzzy_score("fft", "processing › fourier analysis › fft") is not None
+    assert fuzzy_score("rota", "rotate") is not None
+    assert fuzzy_score("bration", "calibration") is not None
+    # Acronym-style matches where every run starts at a word boundary match
     assert fuzzy_score("fan", "fourier analysis") is not None
     # A missing character or an over-long query does not match
     assert fuzzy_score("xyz", "fourier analysis") is None
     assert fuzzy_score("abcdef", "abc") is None
-    # A contiguous match scores higher than a scattered one
+    # Scattered mid-word noise is rejected: "rota" must not match paths that
+    # merely contain r, o, t, a as scattered mid-word runs
+    assert fuzzy_score("rota", "edit › annotations › import annotations") is None
+    assert fuzzy_score("rota", "analysis › horizontal projection") is None
+    assert fuzzy_score("abc", "a1b2c3 def") is None
+    # A contiguous match scores higher than a boundary-run one
     contiguous = fuzzy_score("abc", "abc def")
-    scattered = fuzzy_score("abc", "a1b2c3 def")
-    assert contiguous is not None and scattered is not None
-    assert contiguous > scattered
+    boundary = fuzzy_score("abc", "a b c")
+    assert contiguous is not None and boundary is not None
+    assert contiguous > boundary
 
 
 def test_collect_commands():

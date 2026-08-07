@@ -43,7 +43,7 @@ requires-python = ">=3.9, <4"
 dependencies = [
     "guidata >= 3.14.4",
     "PlotPy >= 2.10.0",
-    "Sigima >= 1.1.4",
+    "Sigima >= 1.1.6",
     "SigimaX >= 0.1.0",
     "NumPy >= 1.22, < 2.5",
     "SciPy >= 1.10.1, < 1.17",
@@ -92,6 +92,7 @@ doc = [
     "sphinx",
     "sphinx_intl",
     "sphinx-sitemap",
+    "sphinxext-opengraph",
     "myst_parser",
     "sphinx_design",
     "sphinx-copybutton",
