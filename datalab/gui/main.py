@@ -39,7 +39,6 @@ from plotpy.constants import PlotType
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
-from qtpy.compat import getopenfilenames
 from sigima.config import options as sigima_options
 from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 from sigimax.mainwindow import SGMXMainWindow
@@ -1756,84 +1755,69 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             import_all: Import all datasets from HDF5 files
             reset_all: Reset all application data before importing
         """
-        if not self.confirm_memory_state():
-            return
-        if reset_all is None:
-            # When workspace is empty, always preserve UUIDs (reset_all=True)
-            # since there's no risk of conflicts
-            if not self.has_objects():
-                reset_all = True
-            else:
-                reset_all = Conf.h5_clear_workspace.get()
-                if Conf.h5_clear_workspace_ask.get():
-                    # Build message with optional note for native workspace import
-                    msg = _(
-                        "Do you want to clear current workspace "
-                        "(signals and images) before importing data from "
-                        "HDF5 files?"
-                    )
-                    # Only show the UUID conflict note when importing native DataLab
-                    # workspace files (import_all=True), not when using HDF5 browser
-                    if import_all:
-                        msg += "<br><br>" + _(
-                            "<u>Note:</u> If you choose <i>No</i>, when importing "
-                            "DataLab workspace files, objects with conflicting "
-                            "identifiers will have their processing history lost "
-                            "(features like 'Show source' and 'Recompute' will not "
-                            "work for those objects). Non-conflicting objects will "
-                            "preserve their processing history."
-                        )
-                    msg += "<br><br>" + _(
-                        "Choosing to ignore this message will prevent it "
-                        "from being displayed again, and will use the "
-                        "current setting (%s)."
-                    ) % (_("Yes") if reset_all else _("No"))
-                    answer = QW.QMessageBox.question(
-                        self,
-                        _("Warning"),
-                        msg,
-                        QW.QMessageBox.Yes | QW.QMessageBox.No | QW.QMessageBox.Ignore,
-                    )
-                    if answer == QW.QMessageBox.Yes:
-                        reset_all = True
-                    elif answer == QW.QMessageBox.No:
-                        reset_all = False
-                    elif answer == QW.QMessageBox.Ignore:
-                        Conf.h5_clear_workspace_ask.set(False)
-        if h5files is None:
-            basedir = Conf.base_dir.get()
-            with qth.save_restore_stds():
-                h5files, _fl = getopenfilenames(
-                    self,
-                    _("Open"),
-                    basedir,
-                    _("HDF5 files (*.h5 *.hdf5 *.hdf *.he5);;All files (*)"),
-                )
-        if not h5files:
-            return
-        filenames, dsetnames = [], []
-        for fname_with_dset in h5files:
-            if "," in fname_with_dset:
-                filename, dsetname = fname_with_dset.split(",")
-                dsetnames.append(dsetname)
-            else:
-                filename = fname_with_dset
-                dsetnames.append(None)
-            filenames.append(filename)
-        if import_all is None and all(dsetname is None for dsetname in dsetnames):
-            self.browse_h5_files(filenames, reset_all)
-            return
-        for filename, dsetname in zip(filenames, dsetnames):
-            if import_all is None and dsetname is None:
-                self.import_h5_file(filename, reset_all)
-            else:
-                with qth.qt_try_loadsave_file(self, filename, "load"):
-                    filename = self._check_h5file(filename, "load")
-                    if dsetname is None:
-                        self.h5inputoutput.open_file(filename, import_all, reset_all)
-                    else:
-                        self.h5inputoutput.import_dataset_from_file(filename, dsetname)
-            reset_all = False
+        super().open_h5_files(h5files, import_all, reset_all)
+
+    def _is_workspace_empty(self) -> bool:
+        """Return whether the signal and image panels hold no object"""
+        return not self.has_objects()
+
+    def _get_clear_workspace_message(
+        self, import_all: bool | None, reset_all: bool
+    ) -> str:
+        """Return the confirmation message shown before clearing the workspace"""
+        msg = _(
+            "Do you want to clear current workspace "
+            "(signals and images) before importing data from "
+            "HDF5 files?"
+        )
+        # Only show the UUID conflict note when importing native DataLab
+        # workspace files (import_all=True), not when using HDF5 browser
+        if import_all:
+            msg += "<br><br>" + _(
+                "<u>Note:</u> If you choose <i>No</i>, when importing "
+                "DataLab workspace files, objects with conflicting "
+                "identifiers will have their processing history lost "
+                "(features like 'Show source' and 'Recompute' will not "
+                "work for those objects). Non-conflicting objects will "
+                "preserve their processing history."
+            )
+        msg += "<br><br>" + _(
+            "Choosing to ignore this message will prevent it "
+            "from being displayed again, and will use the "
+            "current setting (%s)."
+        ) % (_("Yes") if reset_all else _("No"))
+        return msg
+
+    def import_dataset_from_file(
+        self,
+        filename: str,
+        dsetname: str | None,
+        import_all: bool | None,
+        reset_all: bool,
+    ) -> None:
+        """Open a DataLab workspace file, or import a single dataset from it
+
+        Args:
+            filename: Path to the HDF5 file (already validated)
+            dsetname: Dataset name to import, or ``None`` to import all
+            import_all: If ``True``, import all datasets without browsing
+            reset_all: If ``True``, clear workspace before importing
+        """
+        if dsetname is None:
+            self.h5inputoutput.open_file(filename, import_all, reset_all)
+        else:
+            self.h5inputoutput.import_dataset_from_file(filename, dsetname)
+
+    def import_all_from_h5_file(
+        self, filename: str, reset_all: bool | None = None
+    ) -> None:
+        """Import an HDF5 file through the DataLab HDF5 browser
+
+        Args:
+            filename: HDF5 filename
+            reset_all: Delete all DataLab signals/images before importing data
+        """
+        self.import_h5_file(filename, reset_all)
 
     def browse_h5_files(
         self, filenames: list[str], reset_all: bool | None = None
