@@ -806,6 +806,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.__update_actions(update_other_data_panel=True)
         self.__configure_panels()
 
+    def _restore_state(self) -> None:
+        """Restore the persisted layout, then realign the view with the current tab"""
+        super()._restore_state()
+        # A persisted layout may leave the macro or AI assistant dock raised, which
+        # would hide the view of the current panel tab:
+        self.__raise_view_dock(self.tabwidget.currentWidget())
+
     def __register_plugins(self) -> None:
         """Discover and register third-party plugins at startup
 
@@ -1215,6 +1222,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             lambda: self.set_current_panel("image")
         )
         for panel in (self.signalpanel, self.imagepanel):
+            # Selecting an object must bring its view back to the front, even when
+            # the macro or AI assistant dock is currently raised:
+            panel.objview.SIG_SELECTION_CHANGED.connect(
+                functools.partial(self.__raise_view_dock, panel)
+            )
             panel.setup_panel()
 
     def _setup_central_widget(self) -> None:
@@ -1412,9 +1424,6 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.tabwidget.setCurrentIndex(tab_idx)
         # Set focus on current panel, so that keyboard shortcuts work (Fixes #10)
         self.tabwidget.currentWidget().setFocus()
-        # Raise the current panel dock, which is tabified with the macro and AI
-        # assistant docks added afterwards:
-        self.docks[self.tabwidget.currentWidget()].raise_()
 
     def set_process_isolation_enabled(self, state: bool) -> None:
         """Enable/disable process isolation
@@ -1471,8 +1480,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             return
         if panel == "signal":
             self.tabwidget.setCurrentWidget(self.signalpanel)
+            # setCurrentWidget emits currentChanged only on an actual change, so the
+            # dock is raised explicitly for the already-current tab:
+            self.__raise_view_dock(self.signalpanel)
         elif panel == "image":
             self.tabwidget.setCurrentWidget(self.imagepanel)
+            self.__raise_view_dock(self.imagepanel)
         elif panel == "macro":
             self.docks[self.macropanel].raise_()
         else:
@@ -1562,6 +1575,17 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         dock = self.docks[self.tabwidget.widget(index)]
         dock.raise_()
         self.__update_actions()
+
+    def __raise_view_dock(self, panel: BaseDataPanel) -> None:
+        """Bring the panel view dock to the front, if the panel is the current tab
+
+        Args:
+            panel: signal or image panel
+        """
+        # The guard matters because selection changes are also emitted for the
+        # panel that is not currently shown (see __update_actions).
+        if self.tabwidget.currentWidget() is panel:
+            self.docks[panel].raise_()
 
     def __update_generic_menu(self, menu: QW.QMenu | None = None) -> None:
         """Update menu before showing up -- Generic method"""
