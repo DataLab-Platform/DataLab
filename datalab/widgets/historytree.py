@@ -46,6 +46,42 @@ class HistoryTree(QW.QTreeWidget):
         # Used to highlight the active session and survive tree repopulation.
         self.__active_session_number: int | None = None
 
+    def event(self, event: QC.QEvent) -> bool:
+        """Intercept Delete shortcut overrides while the tree has focus.
+
+        Accepting the ShortcutOverride event prevents window-level Delete
+        shortcuts (e.g. the data panels' Remove action) from being triggered
+        while the history tree has focus; the key is then delivered to
+        :py:meth:`keyPressEvent` instead.
+
+        Args:
+            event: Event to process.
+
+        Returns:
+            True if the event was handled.
+        """
+        if event.type() == QC.QEvent.ShortcutOverride and event.matches(
+            QG.QKeySequence.Delete
+        ):
+            event.accept()
+            return True
+        return super().event(event)
+
+    def keyPressEvent(self, event: QG.QKeyEvent) -> None:
+        """Trigger the panel's Delete action when the Delete key is pressed.
+
+        Args:
+            event: Key event.
+        """
+        if event.matches(QG.QKeySequence.Delete):
+            ui = getattr(self._panel, "ui", None)
+            action = None if ui is None else ui.actions.get("delete")
+            if action is not None and action.isEnabled():
+                action.trigger()
+            event.accept()
+            return
+        super().keyPressEvent(event)
+
     def on_description_toggled(self, uuid: str, expanded: bool) -> None:
         """Remember the expanded state of a description cell."""
         self.__expanded_state[uuid] = expanded
