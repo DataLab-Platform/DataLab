@@ -640,8 +640,8 @@ def test_legacy_label_keyed_fit_metadata_is_reported_explicitly():
 
 def test_pairwise_fit_evaluation_commits_each_source_conversion():
     """Pairwise evaluation commits converted metadata after each result."""
-    original_mode = Conf.proc.operation_mode.get()
-    Conf.proc.operation_mode.set("pairwise")
+    original_mode = Conf.operation_mode.get()
+    Conf.operation_mode.set("pairwise")
     try:
         with qt_app_context():
             with datalab_test_app_context() as win:
@@ -694,7 +694,7 @@ def test_pairwise_fit_evaluation_commits_each_source_conversion():
                     assert "amp" not in fit_params
                     np.testing.assert_array_equal(result.x, target.x)
     finally:
-        Conf.proc.operation_mode.set(original_mode)
+        Conf.operation_mode.set(original_mode)
 
 
 def test_apply_creation_parameters_image():
