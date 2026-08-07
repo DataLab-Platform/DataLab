@@ -43,7 +43,6 @@ from sigima.config import options as sigima_options
 from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 from sigimax.mainwindow import SGMXMainWindow
 from sigimax.utils import qthelpers as sgmx_qth
-from sigimax.widgets import status
 
 import datalab
 from datalab.adapters_metadata.common import have_geometry_results
@@ -121,18 +120,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         hide_on_close: True to hide window on close
     """
 
-    __instance = None
-
-    @staticmethod
-    def get_instance(console=None, hide_on_close=False):
-        """Return singleton instance"""
-        if DLMainWindow.__instance is None:
-            return DLMainWindow(console, hide_on_close)
-        return DLMainWindow.__instance
-
     def __init__(self, console=None, hide_on_close=False):
         """Initialize main window"""
-        DLMainWindow.__instance = self
         self.started_at = datetime.now().astimezone()
         self.plugins_last_load_at = self.started_at
 
@@ -1045,29 +1034,18 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         Args:
             console: True if console is enabled
         """
-        self.statusBar().showMessage(_("Welcome to %s!") % APP_NAME, 5000)
-        if console:
-            # Console status
-            self.consolestatus = status.ConsoleStatus()
-            self.statusBar().addPermanentWidget(self.consolestatus)
-        # Plugin status
+        super()._configure_statusbar(console)
+        self.__update_plugins_availability()
+
+    def _get_extra_status_widgets(self) -> list[QW.QWidget]:
+        """Return the plugin, XML-RPC server and Web API server status widgets"""
         self.pluginstatus = dl_status.PluginStatus()
-        self.statusBar().addPermanentWidget(self.pluginstatus)
-        # XML-RPC server status
         xmlrpcstatus = dl_status.XMLRPCStatus()
         xmlrpcstatus.set_port(self.remote_server.port)
-        self.statusBar().addPermanentWidget(xmlrpcstatus)
-        # Web API server status
         self.webapistatus = dl_status.WebAPIStatus()
         self.webapistatus.SIG_SHOW_INFO.connect(self.__show_webapi_info)
         self.webapistatus.SIG_START_SERVER.connect(self.__start_webapi_server)
-        self.statusBar().addPermanentWidget(self.webapistatus)
-        # Memory status
-        threshold = Conf.available_memory_threshold.get()
-        self.memorystatus = status.MemoryStatus(threshold)
-        self.memorystatus.SIG_MEMORY_ALARM.connect(self._set_low_memory_state)
-        self.statusBar().addPermanentWidget(self.memorystatus)
-        self.__update_plugins_availability()
+        return [self.pluginstatus, xmlrpcstatus, self.webapistatus]
 
     def __update_plugins_availability(self) -> None:
         """Update plugin-related UI according to third-party plugin setting."""
@@ -1166,7 +1144,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.settings_action,
         ]
 
-    def __add_signal_panel(self) -> None:
+    def __add_signal_panel(self) -> DockablePlotWidget:
         """Setup signal toolbar, widgets and panel"""
         self.signalpanel_toolbar = self._add_toolbar(
             _("Signal Panel Toolbar"), "left", "signalpanel_toolbar"
@@ -1182,7 +1160,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         plot.SIG_ITEM_MOVED.connect(self.signalpanel.plot_item_moved)
         return dpw
 
-    def __add_image_panel(self) -> None:
+    def __add_image_panel(self) -> DockablePlotWidget:
         """Setup image toolbar, widgets and panel"""
         self.imagepanel_toolbar = self._add_toolbar(
             _("Image Panel Toolbar"), "left", "imagepanel_toolbar"
@@ -2088,9 +2066,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def _update_extra_color_mode(self) -> None:
         """Update the macro panel color mode"""
-        macropanel = getattr(self, "macropanel", None)
-        if macropanel is not None:
-            macropanel.update_color_mode()
+        if self.macropanel is not None:
+            self.macropanel.update_color_mode()
 
     # Settings changes are intentionally dispatched in one place because each
     # option may trigger a specific live UI update or panel refresh.
