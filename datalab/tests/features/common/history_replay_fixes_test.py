@@ -23,7 +23,10 @@ from datalab.gui.panel.history import interactive_replay as hireplay
 from datalab.gui.panel.history import recompute as hrec
 from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_test_app_context
-from datalab.tests.features.common.history_test_helpers import add_paracetamol_signals
+from datalab.tests.features.common.history_test_helpers import (
+    add_paracetamol_signals,
+    select_tree_entry,
+)
 
 
 def record_line_profile(win) -> tuple:
@@ -305,6 +308,101 @@ def test_replay_load_from_directory_reloads_deleted_objects(tmp_path) -> None:
         }
         assert reloaded_groups.get("suba") == 2
         assert reloaded_groups.get("subb") == 2
+
+
+def test_replay_load_reloads_after_recorded_deletion(tmp_path) -> None:
+    """Reload deleted objects when the deletion itself was recorded.
+
+    Faithful GUI scenario: record mode stays ON during the deletion (so a
+    ``remove_object`` UI action is recorded and the reconnection machinery
+    runs), and the replay goes through the real GUI entry point
+    ``replay_restore_actions`` (Replay button / double-click) with the load
+    action selected in the tree.
+    """
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        populate_signal_directory(win, tmp_path, {"": ["s1.csv", "s2.csv"]})
+        history.toggle_record_mode(True)
+        fnames = [str(tmp_path / "s1.csv"), str(tmp_path / "s2.csv")]
+        objs = panel.load_from_files(fnames)
+        assert len(objs) == 2
+        action = history[len(history)]
+        assert action.method_name == "load_from_files"
+        # Record mode stays ON: the deletion is recorded as a UI action
+        panel.objview.select_objects(panel.objmodel.get_object_ids())
+        panel.remove_object(force=True)
+        assert len(panel.objmodel) == 0
+        remove_action = history[len(history)]
+        assert remove_action.method_name == "remove_object"
+
+        select_tree_entry(history, action.uuid)
+        history.replay_restore_actions(restore_selection=False)
+
+        assert len(panel.objmodel) == 2
+        assert action.is_stale is False
+        assert len(action.output_uuids) == 2
+        assert all(
+            panel.objmodel.has_uuid(output_uuid) for output_uuid in action.output_uuids
+        )
+
+
+def test_replay_directory_load_reloads_after_recorded_deletion(tmp_path) -> None:
+    """Directory-load variant of the recorded-deletion replay scenario."""
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        populate_signal_directory(
+            win, tmp_path, {"suba": ["s1.csv", "s2.csv"], "subb": ["s3.csv"]}
+        )
+        history.toggle_record_mode(True)
+        objs = panel.load_from_directory(str(tmp_path))
+        assert len(objs) == 3
+        action = history[len(history)]
+        assert action.method_name == "load_from_directory"
+        # Record mode stays ON: the deletion is recorded as a UI action
+        panel.objview.select_objects(panel.objmodel.get_object_ids())
+        panel.remove_object(force=True)
+        assert len(panel.objmodel) == 0
+
+        select_tree_entry(history, action.uuid)
+        history.replay_restore_actions(restore_selection=False)
+
+        assert len(panel.objmodel) == 3
+        assert action.is_stale is False
+        assert len(action.output_uuids) == 3
+        assert all(
+            panel.objmodel.has_uuid(output_uuid) for output_uuid in action.output_uuids
+        )
+
+
+def test_replay_session_fallback_after_recorded_deletion(tmp_path) -> None:
+    """Replay with no tree selection after a recorded deletion.
+
+    With nothing selected in the tree, ``replay_restore_actions`` targets the
+    last session, which contains both the load action and the recorded
+    ``remove_object`` action. The load must be replayed and the destructive
+    action skipped (its captured UUIDs no longer exist), leaving the reloaded
+    objects in place.
+    """
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        populate_signal_directory(win, tmp_path, {"": ["s1.csv", "s2.csv"]})
+        history.toggle_record_mode(True)
+        fnames = [str(tmp_path / "s1.csv"), str(tmp_path / "s2.csv")]
+        objs = panel.load_from_files(fnames)
+        assert len(objs) == 2
+        action = history[len(history)]
+        # Record mode stays ON: the deletion is recorded as a UI action
+        panel.objview.select_objects(panel.objmodel.get_object_ids())
+        panel.remove_object(force=True)
+        assert len(panel.objmodel) == 0
+
+        history.tree.clearSelection()
+        history.replay_restore_actions(restore_selection=False)
+
+        assert len(panel.objmodel) == 2
+        assert all(
+            panel.objmodel.has_uuid(output_uuid) for output_uuid in action.output_uuids
+        )
 
 
 def test_replay_load_skipped_when_outputs_still_exist(tmp_path) -> None:

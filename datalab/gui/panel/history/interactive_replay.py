@@ -307,6 +307,24 @@ def replay_actions(
                         # Mutation targeting an object whose recompute failed
                         # upstream: skip it like a blocked compute.
                         continue
+                    if (
+                        action.kind == HistoryAction.KIND_UI
+                        and action.method_name in HistoryAction.DESTRUCTIVE_METHODS
+                        and not action.is_current_state_compatible(panel.mainwindow)
+                    ):
+                        # Destructive action whose captured selection no longer
+                        # resolves (e.g. recorded deletion of objects that a
+                        # replayed load just re-created under new UUIDs): skip
+                        # it instead of failing the whole plan on restore.
+                        name = action.title or action.method_name or action.uuid
+                        panel.runtime.execution.cascade_warnings.append(
+                            _(
+                                "Action %s targets objects that no longer exist "
+                                "and was skipped."
+                            )
+                            % name
+                        )
+                        continue
                     is_load_action = (
                         action.kind == HistoryAction.KIND_UI
                         and action.method_name in HistoryAction.UI_LOAD_METHODS
