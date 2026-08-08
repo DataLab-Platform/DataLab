@@ -178,6 +178,75 @@ image panels exist. Owned features are removed automatically when the plugin is
 disabled, reloaded, or uninstalled. ``create_actions()`` may then reference the
 registered feature by its stable ID.
 
+Headless recipes
+----------------
+
+Plugins may expose versioned scientific workflows through the class-level
+``RECIPES`` tuple. Each :class:`datalab.recipes.RecipeDescriptor` declares a
+stable ID namespaced by the plugin ID, typed input slots, an optional guidata
+``DataSet`` parameter class, and a headless callable:
+
+Recipe descriptors remain owned by the current plugin class and are read
+through :meth:`datalab.plugins.PluginBase.get_recipes`; they are not copied into
+a separate mutable registry. Reloading the plugin class therefore replaces its
+recipe declarations together with its implementation.
+
+.. code-block:: python
+
+  from datalab.plugins import PluginBase, PluginInfo
+  from datalab.recipes import (
+    RecipeDescriptor,
+    RecipeInputSlot,
+    RecipeObjectOutput,
+    RecipeOutcome,
+  )
+
+  def run_quick_check(inputs, parameters, context):
+    source = inputs["source"][0]
+    context.raise_if_cancelled()
+    output = source.copy()
+    context.report_progress(1.0, "Quick check complete")
+    return RecipeOutcome(
+      objects=(RecipeObjectOutput("checked-signal", output),),
+    )
+
+  class MyPlugin(PluginBase):
+    PLUGIN_INFO = PluginInfo(
+      id="org.example.my-plugin",
+      name="My Plugin",
+    )
+    RECIPES = (
+      RecipeDescriptor(
+        recipe_id="org.example.my-plugin:quick-check",
+        title="Quick check",
+        version="1.0.0",
+        inputs=(RecipeInputSlot("source", "signal", "one"),),
+        run=run_quick_check,
+      ),
+    )
+
+    def create_actions(self):
+      pass
+
+The recipe callable receives a mapping from slot IDs to tuples of Sigima
+``SignalObj`` or ``ImageObj`` instances, the parameter ``DataSet`` instance (or
+``None``), and a :class:`datalab.recipes.RecipeExecutionContext`. The context
+provides technology-neutral progress and cancellation callbacks and has no Qt
+dependency.
+
+When ``parameter_class`` is ``None``, the recipe declares no parameters and the
+callable receives ``None``. Otherwise, consumers must provide an instance of the
+declared ``DataSet`` subclass. The recipe runner enforces this rule before
+execution.
+
+A :class:`datalab.recipes.RecipeOutcome` contains named object outputs,
+structured diagnostics, and optional scalar results. A ``TableResult`` or
+``GeometryResult`` is wrapped in :class:`datalab.recipes.RecipeResultOutput` and
+uses ``anchor_id`` to reference the named object output that will own it. The
+contract validates these references without assigning DataLab workspace UUIDs.
+Workspace mutation and atomic commit are responsibilities of the recipe runner,
+not of the recipe callable.
+
 How to develop a plugin?
 ------------------------
 
@@ -275,3 +344,6 @@ Public API
 
 .. automodule:: datalab.plugins
     :members: PluginInfo, PluginBase, FormatInfo, ImageFormatBase, ClassicsImageFormat, SignalFormatBase
+
+.. automodule:: datalab.recipes
+  :members:

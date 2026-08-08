@@ -54,6 +54,7 @@ from datalab.config import (
 )
 from datalab.control.proxy import LocalProxy
 from datalab.env import execenv
+from datalab.recipes import RecipeDescriptor
 
 if TYPE_CHECKING:
     from sigima.objects import NewImageParam, NewSignalParam
@@ -286,6 +287,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
     """Plugin base class"""
 
     PLUGIN_INFO: PluginInfo = None
+    RECIPES: tuple[RecipeDescriptor, ...] = ()
 
     def __init__(self):
         self.main: main.DLMainWindow = None
@@ -311,6 +313,24 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
     def plugin_id(self) -> str:
         """Return the stable plugin ID or a deterministic legacy fallback."""
         return self.get_plugin_id()
+
+    @classmethod
+    def get_recipes(cls) -> tuple[RecipeDescriptor, ...]:
+        """Return validated recipe descriptors exposed by this plugin."""
+        recipes = tuple(cls.RECIPES)
+        if not all(isinstance(recipe, RecipeDescriptor) for recipe in recipes):
+            raise TypeError("Plugin recipes must be RecipeDescriptor values")
+        recipe_ids: set[str] = set()
+        plugin_id = cls.get_plugin_id()
+        for recipe in recipes:
+            if recipe.plugin_id != plugin_id:
+                raise ValueError(
+                    f"Recipe {recipe.recipe_id!r} is not owned by plugin {plugin_id!r}"
+                )
+            if recipe.recipe_id in recipe_ids:
+                raise ValueError(f"Duplicate plugin recipe ID: {recipe.recipe_id!r}")
+            recipe_ids.add(recipe.recipe_id)
+        return recipes
 
     @property
     def signalpanel(self) -> SignalPanel:
