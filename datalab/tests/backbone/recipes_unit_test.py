@@ -4,6 +4,9 @@
 
 from __future__ import annotations
 
+import dataclasses
+import json
+
 import guidata.dataset as gds
 import pytest
 from sigima.objects import TableResult, create_signal
@@ -21,6 +24,8 @@ from datalab.recipes import (
     RecipeObjectType,
     RecipeOutcome,
     RecipeResultOutput,
+    RecipeRunRecord,
+    RecipeRunStatus,
 )
 
 
@@ -28,6 +33,46 @@ class RecipeParameters(gds.DataSet):
     """Minimal parameters used to validate descriptor typing."""
 
     gain = gds.FloatItem("Gain", default=1.0)
+
+
+def test_recipe_run_record_round_trips_as_json() -> None:
+    """Recipe provenance is immutable, versioned, and JSON-serializable."""
+    record = RecipeRunRecord(
+        run_id="d91fce58-eccc-4ffc-8216-4dfd8b0049d4",
+        plugin_id="org.example.camera",
+        plugin_version="2.1.0",
+        recipe_id="org.example.camera:quick-check",
+        recipe_version="1.2.0",
+        parameters_json='{"gain": 2.0}',
+        input_uuids={
+            "frames": (
+                "11111111-1111-4111-8111-111111111111",
+                "22222222-2222-4222-8222-222222222222",
+            )
+        },
+        output_uuids={"summary": "33333333-3333-4333-8333-333333333333"},
+        datalab_version="1.3.0",
+        sigima_version="1.2.0",
+        status="completed",
+        started_at="2026-08-08T10:00:00Z",
+        finished_at="2026-08-08T10:00:01Z",
+    )
+
+    payload = record.to_dict()
+    assert payload["schema_version"] == 1
+    assert payload["status"] == "completed"
+    assert json.loads(json.dumps(payload)) == payload
+    assert RecipeRunRecord.from_dict(payload) == record
+    assert record.status is RecipeRunStatus.COMPLETED
+    with pytest.raises(TypeError):
+        record.input_uuids["frames"] = ("other",)
+    with pytest.raises(TypeError, match="map strings to sequences"):
+        dataclasses.replace(
+            record,
+            input_uuids={"frames": "11111111-1111-4111-8111-111111111111"},
+        )
+    with pytest.raises(ValueError, match="valid UUID"):
+        dataclasses.replace(record, output_uuids={"summary": "not-a-uuid"})
 
 
 def test_recipe_descriptor_normalizes_and_validates_contract() -> None:
@@ -39,6 +84,7 @@ def test_recipe_descriptor_normalizes_and_validates_contract() -> None:
 
     descriptor = RecipeDescriptor(
         recipe_id="org.example.camera:quick-check",
+        plugin_version="2.1.0",
         title="Quick check",
         description="Run a minimal detector check.",
         version="1.2.0",
@@ -60,6 +106,7 @@ def test_recipe_descriptor_normalizes_and_validates_contract() -> None:
     )
 
     assert descriptor.plugin_id == "org.example.camera"
+    assert descriptor.plugin_version == "2.1.0"
     assert descriptor.local_id == "quick-check"
     assert isinstance(descriptor.inputs, tuple)
     assert descriptor.inputs[0].object_type is RecipeObjectType.IMAGE
@@ -67,6 +114,7 @@ def test_recipe_descriptor_normalizes_and_validates_contract() -> None:
 
     prerelease_descriptor = RecipeDescriptor(
         recipe_id="org.example.camera:preview",
+        plugin_version="2.1.0",
         title="Preview",
         version="1.0.0rc1",
         run=run_recipe,
@@ -76,6 +124,7 @@ def test_recipe_descriptor_normalizes_and_validates_contract() -> None:
     with pytest.raises(ValueError, match="namespaced"):
         RecipeDescriptor(
             recipe_id="quick-check",
+            plugin_version="2.1.0",
             title="Quick check",
             version="1.0",
             run=run_recipe,
@@ -83,6 +132,7 @@ def test_recipe_descriptor_normalizes_and_validates_contract() -> None:
     with pytest.raises(ValueError, match="Duplicate recipe input slot"):
         RecipeDescriptor(
             recipe_id="org.example.camera:duplicate-slots",
+            plugin_version="2.1.0",
             title="Duplicate slots",
             version="1.0",
             inputs=(
@@ -94,6 +144,7 @@ def test_recipe_descriptor_normalizes_and_validates_contract() -> None:
     with pytest.raises(TypeError, match="DataSet subclass"):
         RecipeDescriptor(
             recipe_id="org.example.camera:invalid-parameters",
+            plugin_version="2.1.0",
             title="Invalid parameters",
             version="1.0",
             parameter_class=dict,
@@ -102,6 +153,7 @@ def test_recipe_descriptor_normalizes_and_validates_contract() -> None:
     with pytest.raises(ValueError, match="plugin namespace"):
         RecipeDescriptor(
             recipe_id=":quick-check",
+            plugin_version="2.1.0",
             title="Missing namespace",
             version="1.0",
             run=run_recipe,
@@ -109,8 +161,17 @@ def test_recipe_descriptor_normalizes_and_validates_contract() -> None:
     with pytest.raises(ValueError, match="Invalid recipe version"):
         RecipeDescriptor(
             recipe_id="org.example.camera:invalid-version",
+            plugin_version="2.1.0",
             title="Invalid version",
             version="not-a-version",
+            run=run_recipe,
+        )
+    with pytest.raises(ValueError, match="Invalid plugin version"):
+        RecipeDescriptor(
+            recipe_id="org.example.camera:invalid-plugin-version",
+            plugin_version="not-a-version",
+            title="Invalid plugin version",
+            version="1.0",
             run=run_recipe,
         )
 
@@ -196,6 +257,7 @@ def test_plugin_exposes_only_owned_unique_recipes() -> None:
 
     recipe = RecipeDescriptor(
         recipe_id="org.example.recipes:quick-check",
+        plugin_version="2.0.0",
         title="Quick check",
         version="1.0",
         run=run_recipe,
@@ -207,6 +269,7 @@ def test_plugin_exposes_only_owned_unique_recipes() -> None:
         PLUGIN_INFO = PluginInfo(
             id="org.example.recipes",
             name="Recipe plugin",
+            version="2.0.0",
         )
         RECIPES = (recipe,)
 
@@ -224,9 +287,14 @@ def test_plugin_exposes_only_owned_unique_recipes() -> None:
         with pytest.raises(TypeError, match="RecipeDescriptor"):
             RecipePlugin.get_recipes()
 
+        RecipePlugin.RECIPES = (dataclasses.replace(recipe, plugin_version="2.1.0"),)
+        with pytest.raises(ValueError, match="version does not match"):
+            RecipePlugin.get_recipes()
+
         RecipePlugin.RECIPES = (
             RecipeDescriptor(
                 recipe_id="org.example.other:quick-check",
+                plugin_version="2.0.0",
                 title="Wrong owner",
                 version="1.0",
                 run=run_recipe,

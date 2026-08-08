@@ -7,14 +7,19 @@ from __future__ import annotations
 import dataclasses
 from collections.abc import Mapping, Sequence
 from contextlib import ExitStack
+from datetime import datetime, timezone
 from typing import TYPE_CHECKING
+from uuid import uuid4
 
 import guidata.dataset as gds
+import sigima
 from sigima.objects import GeometryResult, ImageObj, SignalObj, TableResult
 
+from datalab import __version__ as datalab_version
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter
 from datalab.objectmodel import ObjectGroup, get_uuid
 from datalab.recipes import (
+    RECIPE_RUN_RECORD_OPTION,
     RecipeCardinality,
     RecipeDescriptor,
     RecipeExecutionContext,
@@ -22,6 +27,8 @@ from datalab.recipes import (
     RecipeObjectType,
     RecipeOutcome,
     RecipeResultOutput,
+    RecipeRunRecord,
+    RecipeRunStatus,
     RecipeValidationError,
 )
 
@@ -112,6 +119,8 @@ class RecipeRunner:
         descriptor: RecipeDescriptor,
         outcome: RecipeOutcome,
         parameters: gds.DataSet | None,
+        inputs: RecipeInputs,
+        started_at: str,
     ) -> RecipeOutcome:
         """Validate outputs and attach scalar results before workspace mutation."""
         anchors = {output.id: output.value for output in outcome.objects}
@@ -149,7 +158,40 @@ class RecipeRunner:
             elif isinstance(result, GeometryResult):
                 GeometryAdapter(result).add_to(anchor, parameters)
             prepared_results.append(dataclasses.replace(output, value=result))
+
+        record = RecipeRunRecord(
+            run_id=str(uuid4()),
+            plugin_id=descriptor.plugin_id,
+            plugin_version=descriptor.plugin_version,
+            recipe_id=descriptor.recipe_id,
+            recipe_version=descriptor.version,
+            parameters_json=(
+                gds.dataset_to_json(parameters) if parameters is not None else "null"
+            ),
+            input_uuids={
+                slot_id: tuple(get_uuid(obj) for obj in objects)
+                for slot_id, objects in inputs.items()
+            },
+            output_uuids={
+                output.id: get_uuid(output.value) for output in outcome.objects
+            },
+            datalab_version=datalab_version,
+            sigima_version=sigima.__version__,
+            status=RecipeRunStatus.COMPLETED,
+            started_at=started_at,
+            finished_at=self._utc_now(),
+        )
+        for output in outcome.objects:
+            output.value.set_metadata_option(
+                RECIPE_RUN_RECORD_OPTION,
+                record.to_dict(),
+            )
         return dataclasses.replace(outcome, results=tuple(prepared_results))
+
+    @staticmethod
+    def _utc_now() -> str:
+        """Return the current UTC time in an ISO 8601 JSON-friendly form."""
+        return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
     def _rollback(
         self,
@@ -243,12 +285,19 @@ class RecipeRunner:
             context = RecipeExecutionContext()
         elif not isinstance(context, RecipeExecutionContext):
             raise TypeError("Recipe context must be a RecipeExecutionContext")
+        started_at = self._utc_now()
         context.raise_if_cancelled()
         outcome = descriptor.run(normalized_inputs, parameters, context)
         if not isinstance(outcome, RecipeOutcome):
             raise TypeError("Recipe callable must return a RecipeOutcome")
         context.raise_if_cancelled()
-        prepared_outcome = self._prepare_outcome(descriptor, outcome, parameters)
+        prepared_outcome = self._prepare_outcome(
+            descriptor,
+            outcome,
+            parameters,
+            normalized_inputs,
+            started_at,
+        )
         context.raise_if_cancelled()
         self._commit(prepared_outcome, title)
         return prepared_outcome

@@ -214,10 +214,12 @@ recipe declarations together with its implementation.
     PLUGIN_INFO = PluginInfo(
       id="org.example.my-plugin",
       name="My Plugin",
+      version="1.0.0",
     )
     RECIPES = (
       RecipeDescriptor(
         recipe_id="org.example.my-plugin:quick-check",
+        plugin_version="1.0.0",
         title="Quick check",
         version="1.0.0",
         inputs=(RecipeInputSlot("source", "signal", "one"),),
@@ -227,6 +229,10 @@ recipe declarations together with its implementation.
 
     def create_actions(self):
       pass
+
+The descriptor's ``plugin_version`` must match ``PLUGIN_INFO.version``. Keeping
+the plugin and recipe versions explicit lets execution records identify both
+the installed implementation and the independently versioned workflow.
 
 The recipe callable receives a mapping from slot IDs to tuples of Sigima
 ``SignalObj`` or ``ImageObj`` instances, the parameter ``DataSet`` instance (or
@@ -278,6 +284,21 @@ objects, so several tables or geometries may coexist without metadata-key
 collisions. A failure during insertion removes every object and group created
 by that invocation and restores the previous workspace modified state and
 current panel.
+
+Local execution provenance
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+After successful headless execution, the Desktop runner stores the same
+:class:`datalab.recipes.RecipeRunRecord` in every output object's metadata.
+Its versioned, JSON-compatible payload contains a shared run UUID, plugin and
+recipe IDs and versions, resolved parameters as JSON, named input and output
+UUIDs, DataLab and Sigima versions, the completed status, and UTC start and
+finish timestamps.
+
+The metadata survives JSON export and HDF5 workspace round-trips. The shared
+run UUID links outputs across the Signal and Image panels without adding group
+metadata or a global workflow history. Failed or cancelled invocations do not
+commit outputs and therefore leave no run record in the workspace.
 
 How to develop a plugin?
 ------------------------

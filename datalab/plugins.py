@@ -327,6 +327,11 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
                 raise ValueError(
                     f"Recipe {recipe.recipe_id!r} is not owned by plugin {plugin_id!r}"
                 )
+            if recipe.plugin_version != cls.PLUGIN_INFO.version:
+                raise ValueError(
+                    f"Recipe {recipe.recipe_id!r} plugin version does not match "
+                    f"plugin {plugin_id!r} version {cls.PLUGIN_INFO.version!r}"
+                )
             if recipe.recipe_id in recipe_ids:
                 raise ValueError(f"Duplicate plugin recipe ID: {recipe.recipe_id!r}")
             recipe_ids.add(recipe.recipe_id)

@@ -6,17 +6,22 @@ from __future__ import annotations
 
 import dataclasses
 import enum
+import json
 import math
 import re
 from collections.abc import Callable, Mapping, Sequence
+from datetime import datetime
 from types import MappingProxyType
-from typing import Optional, Union
+from typing import Any, Optional, Union
+from uuid import UUID
 
 import guidata.dataset as gds
 from packaging.version import InvalidVersion, Version
 from sigima.objects import GeometryResult, ImageObj, SignalObj, TableResult
 
 __all__ = [
+    "RECIPE_RUN_RECORD_OPTION",
+    "RECIPE_RUN_RECORD_SCHEMA_VERSION",
     "RecipeCancellationCallback",
     "RecipeCancellationError",
     "RecipeCardinality",
@@ -32,11 +37,15 @@ __all__ = [
     "RecipeProgressCallback",
     "RecipeResultOutput",
     "RecipeRun",
+    "RecipeRunRecord",
+    "RecipeRunStatus",
     "RecipeValidationError",
 ]
 
 
 _LOCAL_ID_PATTERN = re.compile(r"^[a-z0-9]+(?:[._-][a-z0-9]+)*$")
+RECIPE_RUN_RECORD_OPTION = "recipe_run_record"
+RECIPE_RUN_RECORD_SCHEMA_VERSION = 1
 
 
 def _validate_local_id(value: str, field_name: str) -> None:
@@ -55,6 +64,16 @@ def _find_duplicate(values: Sequence[str]) -> str | None:
             return value
         seen.add(value)
     return None
+
+
+def _validate_uuid(value: object, field_name: str) -> None:
+    """Validate a UUID stored in recipe provenance."""
+    if not isinstance(value, str):
+        raise TypeError(f"{field_name} must be a UUID string")
+    try:
+        UUID(value)
+    except ValueError as exc:
+        raise ValueError(f"{field_name} must be a valid UUID string") from exc
 
 
 class RecipeObjectType(str, enum.Enum):
@@ -79,12 +98,150 @@ class RecipeDiagnosticLevel(str, enum.Enum):
     ERROR = "error"
 
 
+class RecipeRunStatus(str, enum.Enum):
+    """Terminal status persisted on successful recipe outputs."""
+
+    COMPLETED = "completed"
+
+
 class RecipeCancellationError(RuntimeError):
     """Raised when recipe execution observes a cancellation request."""
 
 
 class RecipeValidationError(ValueError):
     """Raised when recipe inputs or parameters violate their descriptor."""
+
+
+@dataclasses.dataclass(frozen=True)
+class RecipeRunRecord:
+    """Versioned local provenance shared by every output of a recipe run."""
+
+    run_id: str
+    plugin_id: str
+    plugin_version: str
+    recipe_id: str
+    recipe_version: str
+    parameters_json: str
+    input_uuids: Mapping[str, Sequence[str]]
+    output_uuids: Mapping[str, str]
+    datalab_version: str
+    sigima_version: str
+    status: RecipeRunStatus
+    started_at: str
+    finished_at: str
+    schema_version: int = RECIPE_RUN_RECORD_SCHEMA_VERSION
+
+    def __post_init__(self) -> None:
+        """Validate and freeze the persisted provenance payload."""
+        if self.schema_version != RECIPE_RUN_RECORD_SCHEMA_VERSION:
+            raise ValueError(
+                f"Unsupported recipe run record schema: {self.schema_version!r}"
+            )
+        _validate_uuid(self.run_id, "Recipe run ID")
+        if not isinstance(self.plugin_id, str) or not self.plugin_id.strip():
+            raise ValueError("Recipe run plugin ID must be non-empty")
+        if not isinstance(self.recipe_id, str) or not self.recipe_id.startswith(
+            f"{self.plugin_id}:"
+        ):
+            raise ValueError("Recipe run recipe ID must belong to its plugin")
+        for name, value in (
+            ("plugin", self.plugin_version),
+            ("recipe", self.recipe_version),
+            ("DataLab", self.datalab_version),
+            ("Sigima", self.sigima_version),
+        ):
+            try:
+                Version(value)
+            except (InvalidVersion, TypeError) as exc:
+                raise ValueError(f"Invalid {name} version: {value!r}") from exc
+        if not isinstance(self.parameters_json, str):
+            raise TypeError("Recipe run parameters must be serialized as JSON")
+        try:
+            json.loads(self.parameters_json)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("Recipe run parameters contain invalid JSON") from exc
+
+        if not isinstance(self.input_uuids, Mapping):
+            raise TypeError("Recipe run input UUIDs must be a mapping")
+        normalized_inputs: dict[str, tuple[str, ...]] = {}
+        for slot_id, uuids in self.input_uuids.items():
+            if (
+                not isinstance(slot_id, str)
+                or isinstance(uuids, (str, bytes))
+                or not isinstance(uuids, Sequence)
+            ):
+                raise TypeError("Recipe run input UUIDs must map strings to sequences")
+            _validate_local_id(slot_id, "Recipe run input slot ID")
+            normalized = tuple(uuids)
+            for value in normalized:
+                _validate_uuid(value, f"Recipe run input {slot_id!r} UUID")
+            normalized_inputs[slot_id] = normalized
+        if not isinstance(self.output_uuids, Mapping):
+            raise TypeError("Recipe run output UUIDs must map strings to strings")
+        normalized_outputs: dict[str, str] = {}
+        for output_id, obj_uuid in self.output_uuids.items():
+            if not isinstance(output_id, str):
+                raise TypeError("Recipe run output UUIDs must map strings to strings")
+            _validate_local_id(output_id, "Recipe run object output ID")
+            _validate_uuid(obj_uuid, f"Recipe run output {output_id!r} UUID")
+            normalized_outputs[output_id] = obj_uuid
+        object.__setattr__(self, "input_uuids", MappingProxyType(normalized_inputs))
+        object.__setattr__(
+            self,
+            "output_uuids",
+            MappingProxyType(normalized_outputs),
+        )
+        try:
+            object.__setattr__(self, "status", RecipeRunStatus(self.status))
+        except ValueError as exc:
+            raise ValueError(f"Unsupported recipe run status: {self.status!r}") from exc
+
+        started_at = self._parse_timestamp(self.started_at, "start")
+        finished_at = self._parse_timestamp(self.finished_at, "finish")
+        if finished_at < started_at:
+            raise ValueError("Recipe run finish timestamp precedes its start")
+
+    @staticmethod
+    def _parse_timestamp(value: str, name: str) -> datetime:
+        """Parse one timezone-aware ISO 8601 timestamp."""
+        if not isinstance(value, str):
+            raise TypeError(f"Recipe run {name} timestamp must be a string")
+        normalized = f"{value[:-1]}+00:00" if value.endswith("Z") else value
+        try:
+            timestamp = datetime.fromisoformat(normalized)
+        except ValueError as exc:
+            raise ValueError(f"Recipe run {name} timestamp must use ISO 8601") from exc
+        if timestamp.tzinfo is None:
+            raise ValueError(f"Recipe run {name} timestamp must include a timezone")
+        return timestamp
+
+    def to_dict(self) -> dict[str, object]:
+        """Return a representation composed only of JSON-compatible values."""
+        return {
+            "schema_version": self.schema_version,
+            "run_id": self.run_id,
+            "plugin_id": self.plugin_id,
+            "plugin_version": self.plugin_version,
+            "recipe_id": self.recipe_id,
+            "recipe_version": self.recipe_version,
+            "parameters_json": self.parameters_json,
+            "input_uuids": {
+                slot_id: list(uuids) for slot_id, uuids in self.input_uuids.items()
+            },
+            "output_uuids": dict(self.output_uuids),
+            "datalab_version": self.datalab_version,
+            "sigima_version": self.sigima_version,
+            "status": self.status.value,
+            "started_at": self.started_at,
+            "finished_at": self.finished_at,
+        }
+
+    @classmethod
+    def from_dict(cls, data: Mapping[str, Any]) -> RecipeRunRecord:
+        """Restore a recipe run record from persisted metadata."""
+        if not isinstance(data, Mapping):
+            raise TypeError("Recipe run record must be a mapping")
+        return cls(**dict(data))
 
 
 RecipeProgressCallback = Callable[[float, Optional[str]], None]
@@ -279,6 +436,7 @@ class RecipeDescriptor:
     """
 
     recipe_id: str
+    plugin_version: str
     title: str
     version: str
     run: RecipeRun
@@ -298,6 +456,14 @@ class RecipeDescriptor:
         ):
             raise ValueError("Recipe ID plugin namespace must be non-empty")
         _validate_local_id(local_id, "Recipe local ID")
+        if not isinstance(self.plugin_version, str) or not self.plugin_version.strip():
+            raise ValueError("Plugin version must be a non-empty string")
+        try:
+            Version(self.plugin_version)
+        except InvalidVersion as exc:
+            raise ValueError(
+                f"Invalid plugin version: {self.plugin_version!r}"
+            ) from exc
         if not isinstance(self.title, str) or not self.title.strip():
             raise ValueError("Recipe title must be a non-empty string")
         if not isinstance(self.description, str):
