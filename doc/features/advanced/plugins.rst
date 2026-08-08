@@ -300,6 +300,42 @@ run UUID links outputs across the Signal and Image panels without adding group
 metadata or a global workflow history. Failed or cancelled invocations do not
 commit outputs and therefore leave no run record in the workspace.
 
+Packaged examples
+~~~~~~~~~~~~~~~~~
+
+Plugins may expose native DataLab workspaces through the class-level
+``EXAMPLES`` tuple. Each :class:`datalab.plugin_examples.PluginExample` uses a
+``package:relative/path`` resource instead of a development filesystem path:
+
+.. code-block:: python
+
+  from datalab.plugin_examples import PluginExample
+
+  class MyPlugin(PluginBase):
+    EXAMPLES = (
+      PluginExample(
+        id="quickstart",
+        title="Quick start",
+        description="Small deterministic workspace",
+        resource="datalab_my_plugin:examples/quickstart.h5",
+        recipe_id="org.example.my-plugin:quick-check",
+        expected_checks=("summary-table",),
+      ),
+    )
+
+    def create_actions(self):
+      pass
+
+The package must include the resource in its wheel. ``resolve()`` returns an
+``importlib.resources`` traversable that also works for packages imported from
+a ZIP archive. For APIs requiring a filesystem path, use ``as_file()`` as a
+context manager and do not retain the returned path after the context exits.
+
+:meth:`datalab.plugins.PluginBase.get_examples` validates unique local IDs and
+recipe references. A registered plugin may call ``open_example("quickstart")``
+to materialize and load a native DataLab HDF5 workspace. Opening clears the
+current workspace by default; pass ``reset_all=False`` to merge it instead.
+
 How to develop a plugin?
 ------------------------
 
@@ -399,6 +435,9 @@ Public API
     :members: PluginInfo, PluginBase, FormatInfo, ImageFormatBase, ClassicsImageFormat, SignalFormatBase
 
 .. automodule:: datalab.recipes
+  :members:
+
+.. automodule:: datalab.plugin_examples
   :members:
 
 .. automodule:: datalab.gui.recipe_runner

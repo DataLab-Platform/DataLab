@@ -54,6 +54,7 @@ from datalab.config import (
 )
 from datalab.control.proxy import LocalProxy
 from datalab.env import execenv
+from datalab.plugin_examples import PluginExample
 from datalab.recipes import RecipeDescriptor
 
 if TYPE_CHECKING:
@@ -288,6 +289,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
 
     PLUGIN_INFO: PluginInfo = None
     RECIPES: tuple[RecipeDescriptor, ...] = ()
+    EXAMPLES: tuple[PluginExample, ...] = ()
 
     def __init__(self):
         self.main: main.DLMainWindow = None
@@ -336,6 +338,49 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
                 raise ValueError(f"Duplicate plugin recipe ID: {recipe.recipe_id!r}")
             recipe_ids.add(recipe.recipe_id)
         return recipes
+
+    @classmethod
+    def get_examples(cls) -> tuple[PluginExample, ...]:
+        """Return validated packaged examples exposed by this plugin."""
+        examples = tuple(cls.EXAMPLES)
+        if not all(isinstance(example, PluginExample) for example in examples):
+            raise TypeError("Plugin examples must be PluginExample values")
+        example_ids: set[str] = set()
+        recipe_ids = {recipe.recipe_id for recipe in cls.get_recipes()}
+        for example in examples:
+            if example.id in example_ids:
+                raise ValueError(f"Duplicate plugin example ID: {example.id!r}")
+            if example.recipe_id is not None and example.recipe_id not in recipe_ids:
+                raise ValueError(
+                    f"Plugin example {example.id!r} references unknown recipe "
+                    f"{example.recipe_id!r}"
+                )
+            example_ids.add(example.id)
+        return examples
+
+    @classmethod
+    def get_example(cls, example_id: str) -> PluginExample:
+        """Return one packaged example by its plugin-local ID."""
+        for example in cls.get_examples():
+            if example.id == example_id:
+                return example
+        raise KeyError(f"Plugin example {example_id!r} not found")
+
+    def open_example(
+        self,
+        example_id: str,
+        reset_all: bool = True,
+    ) -> PluginExample:
+        """Open a packaged native HDF5 example in the Desktop workspace."""
+        if self.main is None:
+            raise RuntimeError("Plugin must be registered before opening an example")
+        example = self.get_example(example_id)
+        with example.as_file() as filename:
+            self.main.load_h5_workspace(
+                [os.fspath(filename)],
+                reset_all=reset_all,
+            )
+        return example
 
     @property
     def signalpanel(self) -> SignalPanel:
