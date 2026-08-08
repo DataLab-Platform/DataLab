@@ -1,6 +1,6 @@
 import sigima.proc.signal as sips
 
-from datalab.plugins import PluginBase, PluginInfo
+from datalab.plugins import PluginBase, PluginCapability, PluginInfo
 
 
 class {class_name}(PluginBase):
@@ -9,6 +9,7 @@ class {class_name}(PluginBase):
         name="{plugin_name}",
         version="1.0.0",
         description="Test plugin with an owned processing feature",
+        capabilities=(PluginCapability.PROCESSING,),
     )
 
     def register_computations(self):

@@ -37,6 +37,7 @@ from datalab.config import (
 )
 from datalab.plugins import (
     PLUGINS_DEFAULT_PATH,
+    PluginCapability,
     PluginRegistry,
     migrate_enabled_plugin_ids,
 )
@@ -76,6 +77,13 @@ PLUGIN_ROW_MARGINS: tuple[int, int, int, int] = (5, 5, 5, 5)
 
 #: Spacing between metadata items (version, state) in the top row
 META_SPACING: int = 12
+
+CAPABILITY_LABELS: dict[PluginCapability, str] = {
+    PluginCapability.PROCESSING: _("Processing"),
+    PluginCapability.IO: _("Input/output"),
+    PluginCapability.VISUALIZATION: _("Visualization"),
+    PluginCapability.APPLICATION: _("Application"),
+}
 
 #: Dialog minimum dimensions
 DIALOG_MIN_WIDTH: int = 600
@@ -181,6 +189,7 @@ class PluginInfoWidget(QW.QWidget):
         self.plugin_filepath = self._get_plugin_filepath()
         self.open_file_button: QW.QPushButton | None = None
         self.show_in_folder_button: QW.QPushButton | None = None
+        self.capabilities_label: QW.QLabel | None = None
         self.setSizePolicy(QW.QSizePolicy.Preferred, QW.QSizePolicy.Maximum)
 
         # Main layout
@@ -189,6 +198,9 @@ class PluginInfoWidget(QW.QWidget):
         self.setLayout(layout)
 
         layout.addLayout(self._create_top_row(enabled, state))
+        self.capabilities_label = self._create_capabilities_label()
+        if self.capabilities_label is not None:
+            layout.addWidget(self.capabilities_label)
         layout.addWidget(self._create_description_widget())
         actions_layout = self._create_actions_layout()
         if actions_layout is not None:
@@ -219,6 +231,23 @@ class PluginInfoWidget(QW.QWidget):
         meta_layout.addWidget(self._create_state_label(state))
         top_layout.addLayout(meta_layout)
         return top_layout
+
+    def _create_capabilities_label(self) -> QW.QLabel | None:
+        """Create the optional wrapping capability summary."""
+        capabilities = getattr(
+            self.plugin_class.PLUGIN_INFO, "capabilities", frozenset()
+        )
+        if not capabilities:
+            return None
+        capabilities_text = ", ".join(
+            CAPABILITY_LABELS[capability]
+            for capability in PluginCapability
+            if capability in capabilities
+        )
+        label = QW.QLabel(capabilities_text)
+        label.setWordWrap(True)
+        apply_subdued_color(label)
+        return label
 
     @staticmethod
     def _create_state_label(state: str) -> QW.QLabel:

@@ -10,6 +10,7 @@ import pytest
 
 from datalab.plugins import (
     PluginBase,
+    PluginCapability,
     PluginInfo,
     PluginRegistry,
     migrate_enabled_plugin_ids,
@@ -71,6 +72,27 @@ def test_legacy_plugin_identity_and_name_lookup() -> None:
     assert PluginRegistry.get_plugin(plugin.plugin_id) is plugin
     assert PluginRegistry.get_plugin("Legacy display name") is plugin
     assert PluginRegistry.get_plugin(plugin_class) is plugin
+
+
+def test_plugin_capabilities_are_typed_and_immutable() -> None:
+    """Capabilities use stable enum values and immutable plugin metadata."""
+    info = PluginInfo(
+        id="org.example.application",
+        name="Application plugin",
+        capabilities=(
+            PluginCapability.APPLICATION,
+            PluginCapability.PROCESSING,
+        ),
+    )
+
+    assert isinstance(info.capabilities, frozenset)
+    assert info.capabilities == frozenset(
+        {PluginCapability.APPLICATION, PluginCapability.PROCESSING}
+    )
+    assert PluginInfo(name="Legacy plugin").capabilities == frozenset()
+
+    with pytest.raises(TypeError, match="PluginCapability"):
+        PluginInfo(name="Invalid plugin", capabilities={"processing"})
 
 
 def test_registry_rejects_id_collisions_not_display_name_collisions() -> None:

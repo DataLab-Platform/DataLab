@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import abc
 import dataclasses
+import enum
 import importlib
 import importlib.util
 import logging
@@ -30,6 +31,7 @@ import os.path as osp
 import pkgutil
 import sys
 import traceback
+from collections.abc import Collection
 from contextlib import ExitStack
 from typing import TYPE_CHECKING
 
@@ -237,6 +239,15 @@ class FailedPluginInfo:
     traceback: str
 
 
+class PluginCapability(str, enum.Enum):
+    """Capability exposed by a plugin to DataLab consumers."""
+
+    PROCESSING = "processing"
+    IO = "io"
+    VISUALIZATION = "visualization"
+    APPLICATION = "application"
+
+
 @dataclasses.dataclass
 class PluginInfo:
     """Plugin info"""
@@ -246,6 +257,18 @@ class PluginInfo:
     description: str = ""
     icon: str = None
     id: str | None = None
+    capabilities: Collection[PluginCapability] = dataclasses.field(
+        default_factory=frozenset
+    )
+
+    def __post_init__(self) -> None:
+        """Validate and freeze declared plugin capabilities."""
+        capabilities = frozenset(self.capabilities)
+        if any(
+            not isinstance(capability, PluginCapability) for capability in capabilities
+        ):
+            raise TypeError("Plugin capabilities must be PluginCapability values")
+        self.capabilities = capabilities
 
 
 class PluginBaseMeta(PluginRegistry, abc.ABCMeta):

@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Collection
 from datetime import datetime
 
 import pytest
@@ -26,7 +27,7 @@ from datalab.gui.pluginconfig import (
     PluginInfoWidget,
     PluginState,
 )
-from datalab.plugins import FailedPluginInfo
+from datalab.plugins import FailedPluginInfo, PluginCapability
 from datalab.tests import datalab_test_app_context
 from datalab.tests.features.plugins.plugin_test_dataset import (
     create_plugin_file,
@@ -35,7 +36,12 @@ from datalab.tests.features.plugins.plugin_test_dataset import (
 )
 
 
-def _make_dummy_plugin_class(name: str, description: str, filepath: str | None = None):
+def _make_dummy_plugin_class(
+    name: str,
+    description: str,
+    filepath: str | None = None,
+    capabilities: Collection[PluginCapability] = (),
+):
     """Create a minimal plugin class for UI-only widget tests."""
 
     class DummyPlugin:
@@ -49,6 +55,7 @@ def _make_dummy_plugin_class(name: str, description: str, filepath: str | None =
             "version": "1.0.0",
             "description": description,
             "icon": None,
+            "capabilities": capabilities,
         },
     )()
     if filepath is not None:
@@ -832,6 +839,31 @@ def test_plugin_widget_can_open_plugin_file_and_show_in_folder(monkeypatch):
 
         assert opened_paths == [__file__]
         assert shown_paths == [__file__]
+
+        widget.close()
+        widget.deleteLater()
+        QW.QApplication.processEvents()
+
+
+def test_plugin_widget_displays_declared_capabilities():
+    """Plugin capabilities should be visible in a stable display order."""
+    with datalab_test_app_context(console=False):
+        widget = PluginInfoWidget(
+            _make_dummy_plugin_class(
+                "Application Plugin",
+                "Domain-specific application plugin.",
+                capabilities=(
+                    PluginCapability.PROCESSING,
+                    PluginCapability.APPLICATION,
+                ),
+            ),
+            enabled=True,
+            state=PluginState.ENABLED,
+        )
+
+        assert widget.capabilities_label is not None
+        assert widget.capabilities_label.text() == "Processing, Application"
+        assert widget.capabilities_label.wordWrap()
 
         widget.close()
         widget.deleteLater()

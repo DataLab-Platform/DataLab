@@ -3056,6 +3056,12 @@ msgstr "Général"
 msgid "Visualization"
 msgstr "Visualisation"
 
+msgid "Input/output"
+msgstr "Entrée/sortie"
+
+msgid "Application"
+msgstr "Application"
+
 msgid "I/O"
 msgstr "Entrée/sortie"
 

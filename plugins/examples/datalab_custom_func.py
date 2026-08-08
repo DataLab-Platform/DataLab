@@ -48,6 +48,7 @@ class CustomFilters(datalab.plugins.PluginBase):
         name="My custom filters",
         version="1.0.0",
         description="This is an example plugin",
+        capabilities=(datalab.plugins.PluginCapability.PROCESSING,),
     )
 
     def register_computations(self) -> None:

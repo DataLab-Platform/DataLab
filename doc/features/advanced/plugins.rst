@@ -29,11 +29,24 @@ but new plugins should not rely on that fallback.
 
 .. code-block:: python
 
+  from datalab.plugins import PluginCapability, PluginInfo
+
   PLUGIN_INFO = PluginInfo(
     id="org.example.my-plugin",
     name="My Plugin",
     version="1.0.0",
+    capabilities=(
+      PluginCapability.APPLICATION,
+      PluginCapability.PROCESSING,
+    ),
   )
+
+``capabilities`` declares how DataLab may present and consume a plugin. Supported
+values are ``PROCESSING``, ``IO``, ``VISUALIZATION`` and ``APPLICATION``. A
+plugin may combine several values; domain applications typically declare
+``APPLICATION`` together with ``PROCESSING``. The plugin configuration dialog
+shows declared capabilities in a stable order. Existing plugins that omit the
+field remain valid and are shown without capability labels.
 
 .. note::
 
