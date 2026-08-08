@@ -286,7 +286,7 @@ class AIController:
          ``n_ctx``).
     """
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-positional-arguments
         self,
         provider: LLMProvider,
         registry: ToolRegistry,

@@ -220,6 +220,7 @@ def test_messages_for_provider_no_cap_returns_full_history() -> None:
             ChatMessage(role="user", content="q2"),
         ]
     )
+    # pylint: disable=protected-access
     assert ctrl._messages_for_provider() == ctrl.history
 
 
@@ -234,7 +235,7 @@ def test_messages_for_provider_truncates_and_keeps_system() -> None:
             ChatMessage(role="assistant", content="a2"),
         ]
     )
-    msgs = ctrl._messages_for_provider()
+    msgs = ctrl._messages_for_provider()  # pylint: disable=protected-access
     assert msgs[0].role == "system"
     assert [m.content for m in msgs[1:]] == ["q2", "a2"]
 
@@ -253,7 +254,7 @@ def test_messages_for_provider_drops_leading_tool_orphans() -> None:
             ChatMessage(role="assistant", content="a1"),
         ]
     )
-    msgs = ctrl._messages_for_provider()
+    msgs = ctrl._messages_for_provider()  # pylint: disable=protected-access
     # Last 2 messages would be [tool, assistant] which starts on a tool
     # orphan -> the window falls back to "latest user turn ... end".
     assert msgs[0].role == "system"
