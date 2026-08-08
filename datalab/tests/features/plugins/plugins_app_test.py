@@ -328,6 +328,14 @@ def test_plugin_system():  # pylint: disable=too-many-statements
             execenv.print(f"Plugins after broken tests: {plugin_names}")
             assert "Test Plugin 2" in plugin_names
             assert "Broken Plugin" not in plugin_names
+            failed_plugin = next(
+                failed
+                for failed in PluginRegistry.get_failed_plugins()
+                if failed.name == "BrokenPlugin"
+            )
+            assert failed_plugin.source == (
+                "module convention 'datalab_test_plugin_init_error'"
+            )
 
             # Verify that the healthy plugin is still functional
             # Reset flag

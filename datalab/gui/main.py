@@ -1056,7 +1056,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         with qth.try_or_log_error("Discovering plugins"):
             # Discovering plugins
-            plugin_nb = len(discover_plugins())
+            discover_plugins()
+            plugin_nb = len(PluginRegistry.get_plugin_classes())
             execenv.log(self, f"{plugin_nb} plugin(s) found")
 
         # Buffer any import errors that occurred during discovery
@@ -1113,7 +1114,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 mod = sys.modules.get(plugin_class.__module__)
                 filepath = getattr(mod, "__file__", "") if mod else ""
                 PluginRegistry.add_failed_plugin(
-                    plugin_class.__name__, filepath or "", tb_text
+                    plugin_class.__name__,
+                    filepath or "",
+                    tb_text,
+                    ", ".join(
+                        getattr(plugin_class, "__plugin_discovery_sources__", ())
+                    ),
                 )
 
         self.plugins_last_load_at = datetime.now().astimezone()
@@ -1198,7 +1204,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             # that code changes are picked up.
             PluginRegistry.clear_plugin_classes()
             with qth.try_or_log_error("Discovering plugins (reload)"):
-                plugin_nb = len(discover_plugins())
+                discover_plugins()
+                plugin_nb = len(PluginRegistry.get_plugin_classes())
                 execenv.log(self, f"{plugin_nb} plugin(s) found (reloaded)")
 
             # Get enabled plugins list from configuration
@@ -1248,7 +1255,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     mod = sys.modules.get(plugin_class.__module__)
                     filepath = getattr(mod, "__file__", "") if mod else ""
                     PluginRegistry.add_failed_plugin(
-                        plugin_class.__name__, filepath or "", tb_text
+                        plugin_class.__name__,
+                        filepath or "",
+                        tb_text,
+                        ", ".join(
+                            getattr(plugin_class, "__plugin_discovery_sources__", ())
+                        ),
                     )
 
             # Recreate plugin actions for the new plugin set

@@ -420,9 +420,15 @@ class FailedPluginInfoWidget(QW.QWidget):
 
     def _create_description_widget(self, failed_info: FailedPluginInfo) -> QW.QWidget:
         """Create the expandable traceback/details area."""
-        description = failed_info.filepath
-        if failed_info.traceback:
-            description += "\n\n" + failed_info.traceback.strip()
+        description = "\n\n".join(
+            part
+            for part in (
+                failed_info.source,
+                failed_info.filepath,
+                failed_info.traceback.strip(),
+            )
+            if part
+        )
 
         mono_font = QG.QFont("Consolas", self.font().pointSize() - MONO_FONT_SIZE_DELTA)
         self.description_widget = ExpandableTextWidget(

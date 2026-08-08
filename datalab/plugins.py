@@ -33,6 +33,8 @@ import sys
 import traceback
 from collections.abc import Collection
 from contextlib import ExitStack
+from importlib import metadata as importlib_metadata
+from types import ModuleType
 from typing import TYPE_CHECKING
 
 from qtpy import QtWidgets as QW
@@ -62,6 +64,7 @@ if TYPE_CHECKING:
 
 
 PLUGINS_DEFAULT_PATH = Conf.get_path("plugins")
+PLUGIN_ENTRY_POINT_GROUP = "datalab.plugins"
 
 if not osp.isdir(PLUGINS_DEFAULT_PATH):
     os.makedirs(PLUGINS_DEFAULT_PATH)
@@ -175,15 +178,18 @@ class PluginRegistry(type):
         cls._discovery_errors.clear()
 
     @classmethod
-    def add_failed_plugin(cls, name: str, filepath: str, tb_text: str) -> None:
+    def add_failed_plugin(
+        cls, name: str, filepath: str, tb_text: str, source: str = ""
+    ) -> None:
         """Record a plugin that failed to load or instantiate.
 
         Args:
             name: Module or plugin class name
             filepath: File path of the plugin module
             tb_text: Formatted traceback string
+            source: Discovery source description
         """
-        cls._failed_plugins.append(FailedPluginInfo(name, filepath, tb_text))
+        cls._failed_plugins.append(FailedPluginInfo(name, filepath, tb_text, source))
 
     @classmethod
     def get_failed_plugins(cls) -> list[FailedPluginInfo]:
@@ -237,6 +243,7 @@ class FailedPluginInfo:
     name: str
     filepath: str
     traceback: str
+    source: str = ""
 
 
 class PluginCapability(str, enum.Enum):
@@ -519,12 +526,183 @@ def _set_plugin_class_filepaths(module) -> None:
             plugin_class.__plugin_filepath__ = filepath
 
 
-def discover_plugins() -> list[type[PluginBase]]:
-    """Discover plugins using naming convention
+def _add_plugin_discovery_source(plugin_class: type[PluginBase], source: str) -> None:
+    """Attach a discovery source to a plugin class without duplicates."""
+    sources = getattr(plugin_class, "__plugin_discovery_sources__", ())
+    plugin_class.__plugin_discovery_sources__ = tuple(dict.fromkeys((*sources, source)))
 
-    This function reloads or imports all modules matching the DataLab
-    plugin naming scheme (``"{MOD_NAME}_*"``). Plugin classes are then
-    registered automatically via the :class:`PluginRegistry` metaclass.
+
+def _get_plugin_entry_points() -> list[importlib_metadata.EntryPoint]:
+    """Return installed DataLab plugin entry points in deterministic order."""
+    entry_points = importlib_metadata.entry_points()
+    if hasattr(entry_points, "select"):
+        selected = entry_points.select(group=PLUGIN_ENTRY_POINT_GROUP)
+    else:  # Python 3.9 compatibility
+        selected = entry_points.get(PLUGIN_ENTRY_POINT_GROUP, ())
+    return sorted(
+        selected, key=lambda entry_point: (entry_point.name, entry_point.value)
+    )
+
+
+def _record_plugin_discovery_failure(
+    name: str,
+    source: str,
+    tb_text: str,
+    filepath: str = "",
+) -> None:
+    """Record and report an isolated plugin discovery failure."""
+    print(f"Error loading plugin {name!r} from {source}")
+    print(tb_text, file=sys.stderr)
+    logging.getLogger(__name__).error(
+        "Error loading plugin %r from %s\n%s", name, source, tb_text
+    )
+    Conf.main.traceback_log_available.set(True)
+    PluginRegistry.add_discovery_error(tb_text)
+    PluginRegistry.add_failed_plugin(name, filepath, tb_text, source)
+
+
+def _discover_entry_point_plugins() -> list[ModuleType]:
+    """Load and register plugin classes declared through package entry points."""
+    try:
+        entry_points = _get_plugin_entry_points()
+    # Installed distribution metadata is external input. A malformed package
+    # must not prevent convention-based plugins from being discovered.
+    except Exception:  # pylint: disable=broad-except
+        source = f"entry point group {PLUGIN_ENTRY_POINT_GROUP!r}"
+        _record_plugin_discovery_failure(
+            PLUGIN_ENTRY_POINT_GROUP, source, traceback.format_exc()
+        )
+        return []
+
+    discovered_modules: list[ModuleType] = []
+    reloadable_modules = set(sys.modules)
+    reloaded_modules: set[str] = set()
+    for entry_point in entry_points:
+        source = f"entry point {entry_point.name!r} ({entry_point.value})"
+        plugin_classes = PluginRegistry.get_plugin_classes()
+        previous_classes = list(plugin_classes)
+        try:
+            try:
+                module_name = getattr(entry_point, "module", None)
+                if (
+                    module_name in reloadable_modules
+                    and module_name not in reloaded_modules
+                ):
+                    importlib.reload(sys.modules[module_name])
+                    reloaded_modules.add(module_name)
+                plugin_class = entry_point.load()
+            finally:
+                # Importing the target module may invoke PluginBaseMeta. The entry
+                # point contract contributes only its explicit target class.
+                plugin_classes[:] = previous_classes
+
+            if not isinstance(plugin_class, type) or not issubclass(
+                plugin_class, PluginBase
+            ):
+                raise TypeError(
+                    f"DataLab plugin {source} must resolve to a PluginBase subclass"
+                )
+        # Entry points execute arbitrary third-party imports. Isolating failures
+        # here lets convention-based and other installed plugins keep loading.
+        except Exception:  # pylint: disable=broad-except
+            _record_plugin_discovery_failure(
+                entry_point.name, source, traceback.format_exc()
+            )
+            continue
+
+        if plugin_class not in plugin_classes:
+            plugin_classes.append(plugin_class)
+        _add_plugin_discovery_source(plugin_class, source)
+        module = sys.modules.get(plugin_class.__module__)
+        if module is not None:
+            _set_plugin_class_filepaths(module)
+            if module not in discovered_modules:
+                discovered_modules.append(module)
+    return discovered_modules
+
+
+def _normalize_discovered_plugin_classes() -> None:
+    """Merge identical targets and reject stable plugin ID collisions."""
+    plugin_classes = PluginRegistry.get_plugin_classes()
+    unique_classes: list[type[PluginBase]] = []
+    target_positions: dict[str, int] = {}
+    for plugin_class in plugin_classes:
+        target = f"{plugin_class.__module__}:{plugin_class.__qualname__}"
+        if target not in target_positions:
+            target_positions[target] = len(unique_classes)
+            unique_classes.append(plugin_class)
+            continue
+
+        position = target_positions[target]
+        previous_class = unique_classes[position]
+        previous_sources = getattr(previous_class, "__plugin_discovery_sources__", ())
+        current_sources = getattr(plugin_class, "__plugin_discovery_sources__", ())
+        plugin_class.__plugin_discovery_sources__ = tuple(
+            dict.fromkeys((*previous_sources, *current_sources))
+        )
+        unique_classes[position] = plugin_class
+
+    classes_by_id: dict[str, list[type[PluginBase]]] = {}
+    invalid_classes: set[type[PluginBase]] = set()
+    for plugin_class in unique_classes:
+        try:
+            plugin_id = plugin_class.get_plugin_id()
+        except ValueError as error:
+            invalid_classes.add(plugin_class)
+            tb_text = "".join(traceback.format_exception_only(type(error), error))
+            PluginRegistry.add_discovery_error(tb_text)
+            logging.getLogger(__name__).error(tb_text.rstrip())
+            Conf.main.traceback_log_available.set(True)
+            sources = getattr(plugin_class, "__plugin_discovery_sources__", ())
+            PluginRegistry.add_failed_plugin(
+                plugin_class.__name__,
+                getattr(plugin_class, "__plugin_filepath__", ""),
+                tb_text,
+                ", ".join(sources),
+            )
+            continue
+        classes_by_id.setdefault(plugin_id, []).append(plugin_class)
+
+    conflicting_classes: set[type[PluginBase]] = set()
+    for plugin_id, classes in classes_by_id.items():
+        if len(classes) < 2:
+            continue
+        conflicting_classes.update(classes)
+        descriptions = []
+        for plugin_class in classes:
+            target = f"{plugin_class.__module__}:{plugin_class.__qualname__}"
+            sources = getattr(plugin_class, "__plugin_discovery_sources__", ())
+            descriptions.append(f"{target} from {', '.join(sources)}")
+        error = ValueError(
+            f"Plugin ID collision for {plugin_id!r}: {'; '.join(descriptions)}"
+        )
+        tb_text = "".join(traceback.format_exception_only(type(error), error))
+        PluginRegistry.add_discovery_error(tb_text)
+        logging.getLogger(__name__).error(tb_text.rstrip())
+        Conf.main.traceback_log_available.set(True)
+        for plugin_class in classes:
+            sources = getattr(plugin_class, "__plugin_discovery_sources__", ())
+            PluginRegistry.add_failed_plugin(
+                plugin_class.__name__,
+                getattr(plugin_class, "__plugin_filepath__", ""),
+                tb_text,
+                ", ".join(sources),
+            )
+
+    plugin_classes[:] = [
+        plugin_class
+        for plugin_class in unique_classes
+        if plugin_class not in conflicting_classes
+        and plugin_class not in invalid_classes
+    ]
+
+
+def discover_plugins() -> list[ModuleType]:
+    """Discover plugins through package entry points and naming convention.
+
+    Installed packages may expose a :class:`PluginBase` subclass through the
+    ``datalab.plugins`` entry-point group. This function also reloads or imports
+    modules matching the historical ``"{MOD_NAME}_*"`` naming scheme.
 
     Import errors for individual plugins are captured and logged so that
     one broken plugin does not prevent the others from loading.  Error
@@ -533,7 +711,7 @@ def discover_plugins() -> list[type[PluginBase]]:
     internal console once it is ready.
 
     Returns:
-        List of imported/reloaded plugin modules
+        Imported/reloaded modules containing discovered plugins
     """
     PluginRegistry.clear_discovery_errors()
     PluginRegistry.clear_failed_plugins()
@@ -549,19 +727,25 @@ def discover_plugins() -> list[type[PluginBase]]:
         if rpath not in sys.path:
             sys.path.append(rpath)
 
-    modules: list[type[PluginBase]] = []
+    modules = _discover_entry_point_plugins()
     for finder, name, _ispkg in pkgutil.iter_modules():
         if not name.startswith(f"{MOD_NAME}_"):
             continue
         try:
+            previous_classes = list(PluginRegistry.get_plugin_classes())
             # If module is already loaded, reload it so that code changes
             # are taken into account (useful for hot-reload in dev).
             if name in sys.modules:
                 module = importlib.reload(sys.modules[name])
             else:
                 module = importlib.import_module(name)
+            source = f"module convention {name!r}"
+            for plugin_class in PluginRegistry.get_plugin_classes():
+                if plugin_class not in previous_classes:
+                    _add_plugin_discovery_source(plugin_class, source)
             _set_plugin_class_filepaths(module)
-            modules.append(module)
+            if module not in modules:
+                modules.append(module)
         # Plugin discovery imports arbitrary third-party modules. We must catch
         # every failure here so discovery can continue and the error is exposed
         # through the console, log files, and plugin configuration dialog.
@@ -586,7 +770,10 @@ def discover_plugins() -> list[type[PluginBase]]:
             except Exception:  # pylint: disable=broad-except
                 if hasattr(finder, "path"):
                     filepath = osp.join(finder.path, name)
-            PluginRegistry.add_failed_plugin(name, filepath, tb_text)
+            PluginRegistry.add_failed_plugin(
+                name, filepath, tb_text, f"module convention {name!r}"
+            )
+    _normalize_discovered_plugin_classes()
     return modules
 
 

@@ -910,6 +910,7 @@ def test_failed_plugin_description_uses_same_expand_collapse_behavior():
         name="bad_plugin.py",
         filepath="C:/plugins/bad_plugin.py",
         traceback=traceback_text,
+        source="entry point 'bad-plugin' (bad_plugin:BadPlugin)",
     )
 
     with datalab_test_app_context(console=False):
@@ -923,6 +924,7 @@ def test_failed_plugin_description_uses_same_expand_collapse_behavior():
         collapsed_height = scroll_area.height()
         assert widget.description_widget.toggle_button.isVisible()
         assert not widget.description_widget.is_expanded()
+        assert failed_info.source in widget.desc_label.toPlainText()
         assert scroll_area.verticalScrollBarPolicy() == QC.Qt.ScrollBarAlwaysOff
 
         widget.description_widget.set_expanded(True)

@@ -14,12 +14,16 @@ What is a plugin?
 
 A plugin is a Python module that is automatically loaded by DataLab at startup. It can define new features or modify existing ones.
 
-To be recognized as a plugin, the file must:
+To be recognized by the historical module scan, a local plugin file must:
 
 - Be a Python module whose name **starts with** ``datalab_`` (e.g. ``datalab_myplugin.py``),
 - Contain a class that **inherits from** :class:`datalab.plugins.PluginBase`,
 - Include a class attribute named ``PLUGIN_INFO``, which must be an instance of :class:`datalab.plugins.PluginInfo`,
 - Implement the ``create_actions`` method.
+
+Plugins distributed as installed Python packages may instead expose their
+``PluginBase`` subclass through the ``datalab.plugins`` entry-point group,
+without relying on the module-name prefix.
 
 The ``PLUGIN_INFO`` object must define a unique, namespaced ``id`` that remains
 stable when the display name or implementation class changes. DataLab uses this
@@ -67,6 +71,17 @@ Where to put a plugin?
 ----------------------
 
 Plugins are automatically discovered at startup from multiple locations:
+
+- An installed Python package may declare its plugin class through the
+  standard ``datalab.plugins`` entry-point group:
+
+  .. code-block:: toml
+
+    [project.entry-points."datalab.plugins"]
+    my-plugin = "my_plugin.plugin:MyPlugin"
+
+  The target must be a :class:`datalab.plugins.PluginBase` subclass. This is
+  the recommended distribution mechanism for plugins installed with ``pip``.
 
 - The user plugin directory:
   Typically `~/.DataLab/plugins` on Linux/macOS or `C:/Users/YourName/.DataLab/plugins` on Windows.
