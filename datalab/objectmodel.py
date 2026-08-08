@@ -470,6 +470,7 @@ class ObjectModel:
 
     def add_object(self, obj: SignalObj | ImageObj, group_id: str) -> None:
         """Add object to model"""
+        self.get_group(group_id)
         self.replace_short_ids_by_uuids_in_titles([obj])
         self._objects[get_uuid(obj)] = obj
         onb = 0

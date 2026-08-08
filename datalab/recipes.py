@@ -32,6 +32,7 @@ __all__ = [
     "RecipeProgressCallback",
     "RecipeResultOutput",
     "RecipeRun",
+    "RecipeValidationError",
 ]
 
 
@@ -80,6 +81,10 @@ class RecipeDiagnosticLevel(str, enum.Enum):
 
 class RecipeCancellationError(RuntimeError):
     """Raised when recipe execution observes a cancellation request."""
+
+
+class RecipeValidationError(ValueError):
+    """Raised when recipe inputs or parameters violate their descriptor."""
 
 
 RecipeProgressCallback = Callable[[float, Optional[str]], None]

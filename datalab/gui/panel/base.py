@@ -14,6 +14,7 @@ import os
 import os.path as osp
 import re
 import warnings
+from contextlib import ExitStack
 from typing import TYPE_CHECKING, Any, Generator, Generic, Literal, Type
 
 import guidata.dataset as gds
@@ -1523,6 +1524,15 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
              the object is added to the current group.
             set_current: if True, set the added object as current
         """
+        self._add_object(obj, group_id, set_current)
+
+    def _add_object(
+        self,
+        obj: TypeObj,
+        group_id: str | None = None,
+        set_current: bool = True,
+    ) -> None:
+        """Add an object while propagating errors to transactional callers."""
         if obj in self.objmodel:
             # Prevent adding the same object twice
             raise ValueError(
@@ -1539,28 +1549,55 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 else:
                     group_id = get_uuid(self.add_group(""))
         obj.check_data()
-        self.objmodel.add_object(obj, group_id)
+        try:
+            self.objmodel.add_object(obj, group_id)
 
-        # Mark this object as newly created to show Creation tab on first selection
-        # BUT: Don't overwrite if this object is already marked as freshly processed
-        # or has fresh analysis results (those take precedence)
+            # Mark this object as newly created to show Creation tab on first selection
+            # BUT: Don't overwrite if this object is already marked as freshly processed
+            # or has fresh analysis results (those take precedence)
+            obj_uuid = get_uuid(obj)
+            if obj_uuid not in (
+                self.objprop.fresh_processing_obj_uuid,
+                self.objprop.fresh_analysis_obj_uuid,
+            ):
+                self.objprop.mark_as_newly_created(obj)
+
+            # Block signals to avoid updating the plot (unnecessary refresh)
+            self.objview.blockSignals(True)
+            try:
+                self.objview.add_object_item(obj, group_id, set_current=set_current)
+            finally:
+                self.objview.blockSignals(False)
+
+            # Emit signal to ensure that the data panel is shown in the main window and
+            # that the plot is updated (trigger a refresh of the plot)
+            self.SIG_OBJECT_ADDED.emit()
+
+            self.objview.update_tree()
+        except Exception:
+            self._remove_added_object(obj)
+            self.objview.update_tree()
+            raise
+
+    def _remove_added_object(self, obj: TypeObj) -> None:
+        """Remove a specifically identified object after a failed transaction."""
         obj_uuid = get_uuid(obj)
-        if obj_uuid not in (
-            self.objprop.fresh_processing_obj_uuid,
-            self.objprop.fresh_analysis_obj_uuid,
+        with ExitStack() as cleanup:
+            cleanup.callback(self._clear_added_object_state, obj_uuid)
+            if obj in self.objmodel:
+                cleanup.callback(self.objmodel.remove_object, obj)
+            cleanup.callback(self.objview.remove_item, obj_uuid, refresh=False)
+            cleanup.callback(self.plothandler.remove_item, obj_uuid)
+
+    def _clear_added_object_state(self, obj_uuid: str) -> None:
+        """Clear transient property-panel references to a removed object."""
+        for attr_name in (
+            "newly_created_obj_uuid",
+            "fresh_processing_obj_uuid",
+            "fresh_analysis_obj_uuid",
         ):
-            self.objprop.mark_as_newly_created(obj)
-
-        # Block signals to avoid updating the plot (unnecessary refresh)
-        self.objview.blockSignals(True)
-        self.objview.add_object_item(obj, group_id, set_current=set_current)
-        self.objview.blockSignals(False)
-
-        # Emit signal to ensure that the data panel is shown in the main window and
-        # that the plot is updated (trigger a refresh of the plot)
-        self.SIG_OBJECT_ADDED.emit()
-
-        self.objview.update_tree()
+            if getattr(self.objprop, attr_name) == obj_uuid:
+                setattr(self.objprop, attr_name, None)
 
     def set_object(self, obj: TypeObj) -> None:
         """Update an existing object in-place with data from ``obj``.
@@ -1704,9 +1741,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             Created group object
         """
         group = self.objmodel.add_group(title)
-        self.objview.add_group_item(group)
-        if select:
-            self.objview.select_groups([group])
+        try:
+            self.objview.add_group_item(group)
+            if select:
+                self.objview.select_groups([group])
+        except Exception:
+            self.objview.remove_item(get_uuid(group), refresh=False)
+            self.objmodel.remove_group(group)
+            raise
         return group
 
     def __duplicate_individual_obj(

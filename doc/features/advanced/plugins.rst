@@ -247,6 +247,38 @@ contract validates these references without assigning DataLab workspace UUIDs.
 Workspace mutation and atomic commit are responsibilities of the recipe runner,
 not of the recipe callable.
 
+Running a recipe on Desktop
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use :class:`datalab.gui.recipe_runner.RecipeRunner` from the GUI thread to
+validate inputs and parameters, execute the headless callable, and commit its
+outcome to the DataLab workspace:
+
+.. code-block:: python
+
+  from datalab.gui.recipe_runner import RecipeRunner
+
+  descriptor = self.get_recipes()[0]
+  outcome = RecipeRunner(self.main).run(
+    descriptor,
+    inputs={"source": (source_signal,)},
+  )
+
+The runner rejects missing, extra, mistyped, or incorrectly sized input slots
+before recipe code is called. It also validates the optional ``DataSet``
+instance and checks cancellation before execution, after execution, and
+immediately before commit. Recipe code must remain headless and must not mutate
+the workspace itself.
+
+Only a validated :class:`datalab.recipes.RecipeOutcome` reaches the commit
+phase. The Desktop runner creates one group per output panel, using the recipe
+title by default, then adds all signal and image outputs. Scalar result IDs are
+persisted as ``<recipe-id>:<result-id>`` function names on their named anchor
+objects, so several tables or geometries may coexist without metadata-key
+collisions. A failure during insertion removes every object and group created
+by that invocation and restores the previous workspace modified state and
+current panel.
+
 How to develop a plugin?
 ------------------------
 
@@ -346,4 +378,7 @@ Public API
     :members: PluginInfo, PluginBase, FormatInfo, ImageFormatBase, ClassicsImageFormat, SignalFormatBase
 
 .. automodule:: datalab.recipes
+  :members:
+
+.. automodule:: datalab.gui.recipe_runner
   :members:
