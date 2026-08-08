@@ -55,6 +55,7 @@ class _FakeResp:
         return None
 
     def read(self) -> bytes:
+        """Return the payload bytes."""
         return self._payload
 
 
@@ -76,6 +77,7 @@ def test_test_connection_sends_bearer_when_api_key_provided() -> None:
     """The ``Authorization`` header is set only when an API key is given."""
     captured: dict[str, object] = {}
 
+    # pylint: disable=unused-argument
     def fake_urlopen(req, timeout):  # noqa: ARG001
         captured["headers"] = dict(req.headers)
         captured["url"] = req.full_url
@@ -93,6 +95,7 @@ def test_test_connection_no_header_without_key() -> None:
     """Without an API key, no ``Authorization`` header is emitted."""
     captured: dict[str, object] = {}
 
+    # pylint: disable=unused-argument
     def fake_urlopen(req, timeout):  # noqa: ARG001
         captured["headers"] = dict(req.headers)
         return _FakeResp(b"{}")
@@ -133,6 +136,7 @@ def test_dataclass_preset_is_immutable() -> None:
     """``BaseUrlPreset`` is a frozen dataclass."""
     preset = BASE_URL_PRESETS[0]
     assert isinstance(preset, BaseUrlPreset)
+    # pylint: disable=broad-exception-caught
     try:
         preset.key = "x"  # type: ignore[misc]
     except Exception:  # dataclasses.FrozenInstanceError

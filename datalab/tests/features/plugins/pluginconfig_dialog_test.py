@@ -257,7 +257,7 @@ def test_plugin_config_preserves_unavailable_enabled_ids():
         Conf.main.plugins_enabled_list.set([unavailable_plugin_id])
         with datalab_test_app_context(console=False) as win:
             dialog = PluginConfigDialog(win)
-            dialog._save_configuration()
+            dialog._save_configuration()  # pylint: disable=protected-access
 
         assert unavailable_plugin_id in Conf.main.plugins_enabled_list.get(None)
     finally:
