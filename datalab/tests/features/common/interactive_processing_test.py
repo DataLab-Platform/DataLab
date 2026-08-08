@@ -194,7 +194,10 @@ def test_recompute():
             assert PROCESSING_PARAMETERS_OPTION in filtered_sig.get_metadata_options()
             option_dict = filtered_sig.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
             assert option_dict["source_uuid"] == signal_uuid
-            assert option_dict["func_name"] == "gaussian_filter"
+            assert (
+                option_dict["func_name"]
+                == processor.get_feature("gaussian_filter").feature_id
+            )
 
 
 def test_recompute_selected_skips_analysis_when_1_to_1_cancelled():
@@ -894,7 +897,10 @@ def test_apply_processing_parameters_signal():
             # Verify metadata still points to the same source
             pp_dict = processed_sig.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
             assert pp_dict["source_uuid"] == signal_uuid
-            assert pp_dict["func_name"] == "addition_constant"
+            assert (
+                pp_dict["func_name"]
+                == processor.get_feature("addition_constant").feature_id
+            )
 
             # Verify the parameter was updated
             stored_param = json_to_dataset(pp_dict["param_json"])
@@ -955,7 +961,10 @@ def test_apply_processing_parameters_image():
             # Verify metadata still points to the same source
             pp_dict = processed_ima.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
             assert pp_dict["source_uuid"] == image_uuid
-            assert pp_dict["func_name"] == "addition_constant"
+            assert (
+                pp_dict["func_name"]
+                == processor.get_feature("addition_constant").feature_id
+            )
 
             # Verify the parameter was updated
             stored_param = json_to_dataset(pp_dict["param_json"])
@@ -1117,7 +1126,10 @@ def test_cross_panel_image_to_signal():
 
             # Verify metadata content
             assert option_dict["source_uuid"] == image_uuid
-            assert option_dict["func_name"] == "radial_profile"
+            assert (
+                option_dict["func_name"]
+                == image_processor.get_feature("radial_profile").feature_id
+            )
             assert option_dict["pattern"] == "1-to-1"
 
             # Verify the parameter can be deserialized
@@ -1259,7 +1271,10 @@ def test_cross_panel_signal_to_image():
             option_dict = image.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
 
             # Verify metadata content for n-to-1 pattern
-            assert option_dict["func_name"] == "signals_to_image"
+            assert (
+                option_dict["func_name"]
+                == signal_processor.get_feature("signals_to_image").feature_id
+            )
             assert option_dict["pattern"] == "n-to-1"
             assert len(option_dict["source_uuids"]) == n_signals
             assert all(uuid in signal_uuids for uuid in option_dict["source_uuids"])

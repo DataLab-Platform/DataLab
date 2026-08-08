@@ -55,8 +55,13 @@ def __compute_1_to_1_operations(panel: SignalPanel | ImagePanel, number: int) ->
     )
     panel.processor.run_feature("log10")
     panel.processor.run_feature("exp")
-    panel.processor.run_feature("transpose")
-    panel.processor.run_feature("transpose")
+    transpose_feature = (
+        "org.datalab.image.geometry.transpose"
+        if isinstance(panel, ImagePanel)
+        else "transpose"
+    )
+    panel.processor.run_feature(transpose_feature)
+    panel.processor.run_feature(transpose_feature)
 
 
 def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:

@@ -646,7 +646,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             feature.action_title,
             position=position,
             separator=separator,
-            triggered=lambda: self.panel.processor.run_feature(feature.function),
+            triggered=lambda: self.panel.processor.run_feature(feature.feature_id),
             select_condition=condition,
             icon_name=feature.icon_name,
             tip=feature.comment,
@@ -1511,7 +1511,9 @@ class ImageActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.PROCESSING):
             with self.new_menu(_("Geometry"), icon_name="rotate_right.svg"):
                 self.action_for("fliph", context_menu_pos=-1, context_menu_sep=True)
-                self.action_for("transpose", context_menu_pos=-1)
+                self.action_for(
+                    "org.datalab.image.geometry.transpose", context_menu_pos=-1
+                )
                 self.action_for("flipv", context_menu_pos=-1)
                 self.action_for("rotate270", context_menu_pos=-1)
                 self.action_for("rotate90", context_menu_pos=-1)

@@ -39,8 +39,8 @@ def create_plugin_class(
 ) -> type[PluginBase]:
     """Create an isolated concrete plugin class for registry tests."""
 
-    def create_actions(self: PluginBase) -> None:
-        pass
+    def create_actions(self: PluginBase) -> None:  # pylint: disable=unused-argument
+        """Dummy action creation method for test plugin."""
 
     return type(
         class_name,
@@ -141,3 +141,72 @@ def test_enabled_plugin_names_migrate_to_ids_without_losing_unknowns() -> None:
         == migrated_plugins
     )
     assert migrate_enabled_plugin_ids(None, [first_class, second_class]) is None
+
+
+def test_unregister_all_plugins_continues_after_hook_error() -> None:
+    """Bulk unregistration leaves the registry coherent after a hook error."""
+    unregistered_plugin_ids: list[str] = []
+
+    def unregister_hooks(self: PluginBase) -> None:
+        unregistered_plugin_ids.append(self.plugin_id)
+        if self.plugin_id == "org.example.failing":
+            raise RuntimeError("unregister hook failed")
+
+    failing_class = create_plugin_class(
+        "FailingPlugin",
+        "datalab_failing_plugin",
+        plugin_id="org.example.failing",
+        display_name="Failing plugin",
+    )
+    succeeding_class = create_plugin_class(
+        "SucceedingPlugin",
+        "datalab_succeeding_plugin",
+        plugin_id="org.example.succeeding",
+        display_name="Succeeding plugin",
+    )
+    failing_class.unregister_hooks = unregister_hooks
+    succeeding_class.unregister_hooks = unregister_hooks
+    failing_plugin = failing_class()
+    succeeding_plugin = succeeding_class()
+    main = object()
+    failing_plugin.register(main)
+    succeeding_plugin.register(main)
+
+    with pytest.raises(RuntimeError, match="unregister hook failed"):
+        PluginRegistry.unregister_all_plugins()
+
+    assert unregistered_plugin_ids == [
+        "org.example.failing",
+        "org.example.succeeding",
+    ]
+    assert not PluginRegistry.get_plugins()
+    assert not failing_plugin.is_registered()
+    assert not succeeding_plugin.is_registered()
+
+
+def test_plugin_registration_rollback_on_hook_abort() -> None:
+    """An interrupted registration leaves neither instance nor stale state."""
+
+    class RegistrationAbort(BaseException):
+        """Custom exception to simulate a registration abort."""
+
+    plugin_class = create_plugin_class(
+        "InterruptedPlugin",
+        "datalab_interrupted_plugin",
+        plugin_id="org.example.interrupted",
+        display_name="Interrupted plugin",
+    )
+
+    def register_hooks(self: PluginBase) -> None:
+        raise RegistrationAbort
+
+    plugin_class.register_hooks = register_hooks
+    plugin = plugin_class()
+
+    with pytest.raises(RegistrationAbort):
+        plugin.register(object())
+
+    assert PluginRegistry.get_plugin(plugin.plugin_id) is None
+    assert not plugin.is_registered()
+    assert plugin.main is None
+    assert plugin.proxy is None

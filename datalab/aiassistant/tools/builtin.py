@@ -156,6 +156,8 @@ def _tool_list_available_operations(
                 param_fields = [{"name": "?", "info": "introspection failed"}]
         ops.append(
             {
+                "feature_id": feature.feature_id,
+                "owner_plugin_id": feature.owner_plugin_id,
                 "name": feature.name,
                 "title": feature.title,
                 "pattern": feature.pattern,
@@ -448,8 +450,12 @@ def _tool_apply_operation(
                     f"Cannot set parameter {key!r} on "
                     f"{feature.paramclass.__name__}: {exc}"
                 ) from exc
-    proxy.calc(name, param_obj)
-    return {"operation": name, "panel": proxy.get_current_panel()}
+    proxy.calc(feature.feature_id, param_obj)
+    return {
+        "operation": name,
+        "feature_id": feature.feature_id,
+        "panel": proxy.get_current_panel(),
+    }
 
 
 # =============================================================================

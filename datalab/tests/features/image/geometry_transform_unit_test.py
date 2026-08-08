@@ -298,10 +298,15 @@ def __create_app_test(
 
             # Apply operation using app workflow
             param = param_creator() if param_creator else None
+            feature_key = (
+                "org.datalab.image.geometry.transpose"
+                if operation == "transpose"
+                else operation
+            )
             if param is None:
-                proc.run_feature(operation)
+                proc.run_feature(feature_key)
             else:
-                proc.run_feature(operation, param=param)
+                proc.run_feature(feature_key, param=param)
             tr_obj = panel[len(panel)]
 
             # # Validate basic transformation requirements

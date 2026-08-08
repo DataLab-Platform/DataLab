@@ -187,26 +187,31 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             self._wrap_geometric_transform(sipi.fliph, "fliph"),
             _("Flip horizontally"),
             icon_name="flip_horizontally.svg",
+            feature_id="org.datalab.image.geometry.fliph",
         )
         self.register_1_to_1(
             self._wrap_geometric_transform(sipi.transpose, "transpose"),
             _("Flip diagonally"),
             icon_name="swap_x_y.svg",
+            feature_id="org.datalab.image.geometry.transpose",
         )
         self.register_1_to_1(
             self._wrap_geometric_transform(sipi.flipv, "flipv"),
             _("Flip vertically"),
             icon_name="flip_vertically.svg",
+            feature_id="org.datalab.image.geometry.flipv",
         )
         self.register_1_to_1(
             self._wrap_geometric_transform(sipi.rotate270, "rotate270"),
             _("Rotate %s right") % "90°",
             icon_name="rotate_right.svg",
+            feature_id="org.datalab.image.geometry.rotate270",
         )
         self.register_1_to_1(
             self._wrap_geometric_transform(sipi.rotate90, "rotate90"),
             _("Rotate %s left") % "90°",
             icon_name="rotate_left.svg",
+            feature_id="org.datalab.image.geometry.rotate90",
         )
         self.register_1_to_1(sipi.rotate, _("Rotate by"), sipi.RotateParam)
         # Intensity profiles

@@ -30,6 +30,7 @@ import os.path as osp
 import pkgutil
 import sys
 import traceback
+from contextlib import ExitStack
 from typing import TYPE_CHECKING
 
 from qtpy import QtWidgets as QW
@@ -127,11 +128,18 @@ class PluginRegistry(type):
     @classmethod
     def unregister_all_plugins(cls):
         """Unregister all plugins"""
-        for plugin in cls._plugin_instances:
-            execenv.log(cls, f"Unregistering plugin {plugin.info.name}")
-            plugin.unregister()
-        cls._plugin_instances.clear()
-        execenv.log(cls, "All plugins unregistered")
+        try:
+            with ExitStack() as stack:
+                for plugin in reversed(list(cls._plugin_instances)):
+                    stack.callback(plugin.unregister)
+                    stack.callback(
+                        execenv.log,
+                        cls,
+                        f"Unregistering plugin {plugin.info.name}",
+                    )
+        finally:
+            cls._plugin_instances.clear()
+            execenv.log(cls, "All plugins unregistered")
 
     @classmethod
     def clear_plugin_classes(cls) -> None:
@@ -370,6 +378,12 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         """Return True if plugin is registered"""
         return self._is_registered
 
+    def _reset_registration_state(self) -> None:
+        """Reset references and flags associated with plugin registration."""
+        self._is_registered = False
+        self.main = None
+        self.proxy = None
+
     def register(self, main: main.DLMainWindow) -> None:
         """Register plugin"""
         if self._is_registered:
@@ -378,23 +392,41 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         self._is_registered = True
         self.main = main
         self.proxy = LocalProxy(main)
-        self.register_hooks()
+        with ExitStack() as rollback_stack:
+            rollback_stack.callback(self._reset_registration_state)
+            rollback_stack.callback(PluginRegistry.unregister_plugin, self)
+            rollback_stack.callback(self.remove_owned_features)
+            self.register_hooks()
+            rollback_stack.pop_all()
 
     def unregister(self):
         """Unregister plugin"""
         if not self._is_registered:
             return
-        PluginRegistry.unregister_plugin(self)
-        self._is_registered = False
-        self.unregister_hooks()
-        self.main = None
-        self.proxy = None
+        with ExitStack() as cleanup_stack:
+            cleanup_stack.callback(self._reset_registration_state)
+            cleanup_stack.callback(PluginRegistry.unregister_plugin, self)
+            cleanup_stack.callback(self.remove_owned_features)
+            self.unregister_hooks()
+
+    def remove_owned_features(self) -> None:
+        """Remove this plugin's computing features from available processors."""
+        if self.main is None:
+            return
+        for panel_name in ("signalpanel", "imagepanel"):
+            panel = getattr(self.main, panel_name, None)
+            processor = getattr(panel, "processor", None)
+            if processor is not None:
+                processor.remove_features_by_owner(self.plugin_id)
 
     def register_hooks(self):
         """Register plugin hooks"""
 
     def unregister_hooks(self):
         """Unregister plugin hooks"""
+
+    def register_computations(self) -> None:
+        """Register owned computations after signal and image panels exist."""
 
     @abc.abstractmethod
     def create_actions(self):

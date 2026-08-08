@@ -100,11 +100,12 @@ The **Plugins** menu provides two dedicated actions:
 
 When reloading plugins, DataLab performs the following steps:
 
-1. Unregister currently active plugins,
+1. Unregister currently active plugins and their owned computations,
 2. Clear plugin actions from signal and image panels,
 3. Re-discover and reload plugin modules,
 4. Re-register enabled plugins,
-5. Recreate plugin actions and refresh menus.
+5. Re-register owned computations,
+6. Recreate plugin actions and refresh menus.
 
 This workflow allows iterative plugin development while DataLab is running.
 
@@ -142,6 +143,13 @@ Plugins inheriting from :class:`datalab.plugins.PluginBase` have direct access t
 
 These helpers simplify plugin code and keep it consistent with DataLab behavior.
 
+Processing plugins should override ``register_computations()`` and register each
+feature with a stable, namespaced ``feature_id`` and
+``owner_plugin_id=self.plugin_id``. DataLab calls this hook after the signal and
+image panels exist. Owned features are removed automatically when the plugin is
+disabled, reloaded, or uninstalled. ``create_actions()`` may then reference the
+registered feature by its stable ID.
+
 How to develop a plugin?
 ------------------------
 
@@ -173,9 +181,10 @@ To develop in your usual Python environment (e.g., with an IDE like `Spyder <htt
 Example: processing plugin
 --------------------------
 
-Here is a minimal example of a plugin that prints a message when activated:
+This example registers a processing feature with stable identity and ownership,
+then creates an action which dispatches it through the processor registry:
 
-.. literalinclude:: ../../../datalab/plugins/datalab_testdata.py
+.. literalinclude:: ../../../plugins/examples/datalab_custom_func.py
 
 Example: input/output plugin
 ----------------------------

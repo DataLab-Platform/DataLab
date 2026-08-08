@@ -63,7 +63,7 @@ class ProcessingParameters:
     """Processing parameters stored in object metadata.
 
     Attributes:
-        func_name: Processing function name
+        func_name: Stable feature ID or legacy processing function name
         pattern: Processing pattern ("1-to-1", "n-to-1", or "2-to-1")
         param: Processing parameter dataset (optional, for 1-to-1 only)
         source_uuid: Source object UUID (for 1-to-1 pattern)
@@ -532,6 +532,8 @@ class ComputingFeature:
         obj2_name: name of the second object
         skip_xarray_compat: whether to skip X-array compatibility check for this feature
         pre_execute_hook: optional transactional source preparation hook
+        feature_id: stable namespaced feature identifier
+        owner_plugin_id: stable identifier of the owning plugin, if any
     """
 
     pattern: Literal["1_to_1", "1_to_0", "1_to_n", "n_to_1", "2_to_1"]
@@ -546,13 +548,25 @@ class ComputingFeature:
     pre_execute_hook: Optional[
         Callable[[list[SignalObj | ImageObj]], SourcePreparationTransaction | None]
     ] = None
+    feature_id: str | None = None
+    owner_plugin_id: str | None = None
 
     def __post_init__(self):
-        """Validate the function after initialization."""
+        """Validate the function and resolve the stable feature identifier."""
         if self.function is not None and not is_computation_function(self.function):
             raise ValueError(
                 f"'{self.function.__name__}' is not a valid computation function."
             )
+        if self.feature_id is None:
+            if self.function is None:
+                raise ValueError(
+                    "ComputingFeature must have a 'feature_id' or a 'function'."
+                )
+            self.feature_id = f"{self.function.__module__}.{self.function.__qualname__}"
+        elif not self.feature_id.strip():
+            raise ValueError("ComputingFeature feature_id must not be empty.")
+        if self.owner_plugin_id is not None and not self.owner_plugin_id.strip():
+            raise ValueError("ComputingFeature owner_plugin_id must not be empty.")
 
     @property
     def name(self) -> str:
@@ -1283,7 +1297,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             return comp_out
 
     def _compute_1_to_1_subroutine(
-        self, funcs: list[Callable], params: list, title: str
+        self,
+        funcs: list[Callable],
+        params: list,
+        title: str,
+        feature_ids: list[str] | None = None,
     ) -> None:
         """Generic subroutine for 1-to-1 processing.
 
@@ -1291,15 +1309,21 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             funcs: list of functions to execute
             params: list of parameters
             title: title of progress bar
+            feature_ids: stable identifiers stored in processing metadata
         """
         assert len(funcs) == len(params)
+        if feature_ids is None:
+            feature_ids = [func.__name__ for func in funcs]
+        assert len(funcs) == len(feature_ids)
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         grps = self.panel.objview.get_sel_groups()
         n_glob = len(objs) * len(params)
         new_gids = {}
         with create_progress_bar(self.panel, title, max_=n_glob) as progress:
             for i_row, obj in enumerate(objs):
-                for i_param, (param, func) in enumerate(zip(params, funcs)):
+                for i_param, (param, func, feature_id) in enumerate(
+                    zip(params, funcs, feature_ids)
+                ):
                     name = func.__name__
                     pvalue = (i_row + 1) * (i_param + 1)
                     pvalue = 0 if pvalue == 1 else pvalue
@@ -1324,7 +1348,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                     # Store processing metadata for interactive re-processing
                     pp = ProcessingParameters(
-                        func_name=name,
+                        func_name=feature_id,
                         pattern="1-to-1",
                         param=param,
                         source_uuid=get_uuid(obj),
@@ -1425,6 +1449,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        feature_id: str | None = None,
     ) -> None:
         """Generic processing method: 1 object in → 1 object out.
 
@@ -1441,6 +1466,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             title: Optional progress bar title.
             comment: Optional comment for parameter dialog.
             edit: Whether to open the parameter editor before execution.
+            feature_id: Stable feature identifier stored in processing metadata.
 
         .. note::
             With k selected objects, the method produces k outputs (one per input).
@@ -1456,7 +1482,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if param is not None:
             if edit and not param.edit(parent=self.mainwindow):
                 return
-        self._compute_1_to_1_subroutine([func], [param], title)
+        self._compute_1_to_1_subroutine(
+            [func], [param], title, feature_ids=[feature_id or func.__name__]
+        )
 
     def compute_multiple_1_to_1(
         self,
@@ -1502,6 +1530,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         params: list[gds.DataSet],
         title: str | None = None,
         edit: bool | None = None,
+        feature_id: str | None = None,
     ) -> None:
         """Generic processing method: 1 object in → n objects out.
 
@@ -1517,6 +1546,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             params: List of parameter instances.
             title: Optional progress bar title.
             edit: Whether to open the parameter editor before execution.
+            feature_id: Stable feature identifier stored in processing metadata.
 
         .. note::
             With k selected objects and n parameter sets,
@@ -1530,7 +1560,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             group = gds.DataSetGroup(params, title=_("Parameters"))
             if not group.edit(parent=self.mainwindow):
                 return
-        self._compute_1_to_1_subroutine([func] * len(params), params, title)
+        self._compute_1_to_1_subroutine(
+            [func] * len(params),
+            params,
+            title,
+            feature_ids=[feature_id or func.__name__] * len(params),
+        )
 
     def compute_1_to_0(
         self,
@@ -1541,6 +1576,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         comment: str | None = None,
         edit: bool | None = None,
         target_objs: list[SignalObj | ImageObj] | None = None,
+        feature_id: str | None = None,
     ) -> ResultData:
         """Generic processing method: 1 object in → no object out.
 
@@ -1561,6 +1597,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             edit: Whether to open the parameter editor before execution.
             target_objs: Optional list of specific objects to process. If None,
              processes all currently selected objects.
+            feature_id: Stable feature identifier stored in analysis metadata.
 
         Returns:
             ResultData instance containing the results for all processed objects.
@@ -1625,7 +1662,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 # transformation history to avoid overwriting the processing chain
                 # when analyzing objects.
                 pp = ProcessingParameters(
-                    func_name=func.__name__,
+                    func_name=feature_id or func.__name__,
                     pattern="1-to-0",
                     param=param,
                     source_uuid=get_uuid(obj),
@@ -1661,6 +1698,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        feature_id: str | None = None,
     ) -> None:
         """Generic processing method: n objects in → 1 object out.
 
@@ -1678,6 +1716,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             title: Optional progress bar title.
             comment: Optional comment for parameter dialog.
             edit: Whether to open the parameter editor before execution.
+            feature_id: Stable feature identifier stored in processing metadata.
 
         .. note::
             With n selected objects:
@@ -1772,7 +1811,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                     # Store lightweight processing metadata (non-interactive)
                     proc_params = ProcessingParameters(
-                        func_name=name,
+                        func_name=feature_id or name,
                         pattern="n-to-1",
                         param=param,
                         source_uuids=[get_uuid(obj) for obj in src_objs_pair],
@@ -1862,7 +1901,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                     # Store lightweight processing metadata (non-interactive)
                     proc_params = ProcessingParameters(
-                        func_name=name,
+                        func_name=feature_id or name,
                         pattern="n-to-1",
                         param=param,
                         source_uuids=[get_uuid(obj) for obj in src_obj_list],
@@ -1901,6 +1940,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             [list[SignalObj | ImageObj]], SourcePreparationTransaction | None
         ]
         | None = None,
+        feature_id: str | None = None,
     ) -> None:
         """Generic processing method: binary operation 1+1 → 1.
 
@@ -1925,6 +1965,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
              (only for signal panels).
             pre_execute_hook: Optional hook preparing source copies after all dialogs
              and compatibility checks. Returning None cancels the operation.
+            feature_id: Stable feature identifier stored in processing metadata.
 
         .. note::
             With k selected objects:
@@ -2086,7 +2127,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                         # Store lightweight processing metadata (non-interactive)
                         proc_params = ProcessingParameters(
-                            func_name=name,
+                            func_name=feature_id or name,
                             pattern="2-to-1",
                             param=param,
                             source_uuids=[
@@ -2195,7 +2236,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                     # Store lightweight processing metadata (non-interactive)
                     proc_params = ProcessingParameters(
-                        func_name=name,
+                        func_name=feature_id or name,
                         pattern="2-to-1",
                         param=param,
                         source_uuids=[
@@ -2220,6 +2261,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         icon_name: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        feature_id: str | None = None,
+        owner_plugin_id: str | None = None,
     ) -> ComputingFeature:
         """Register a 1-to-1 processing function.
 
@@ -2235,6 +2278,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             icon_name: icon name. Defaults to None.
             comment: comment. Defaults to None.
             edit: whether to open the parameter editor before execution.
+            feature_id: stable namespaced feature identifier.
+            owner_plugin_id: stable identifier of the owning plugin.
 
         Returns:
             Registered feature.
@@ -2247,6 +2292,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             icon_name=icon_name,
             comment=comment,
             edit=edit,
+            feature_id=feature_id,
+            owner_plugin_id=owner_plugin_id,
         )
         self.add_feature(feature)
         return feature
@@ -2259,6 +2306,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         icon_name: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        feature_id: str | None = None,
+        owner_plugin_id: str | None = None,
     ) -> ComputingFeature:
         """Register a 1-to-0 processing function.
 
@@ -2273,6 +2322,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             icon_name: icon name. Defaults to None.
             comment: comment. Defaults to None.
             edit: whether to open the parameter editor before execution.
+            feature_id: stable namespaced feature identifier.
+            owner_plugin_id: stable identifier of the owning plugin.
 
         Returns:
             Registered feature.
@@ -2285,12 +2336,19 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             icon_name=icon_name,
             comment=comment,
             edit=edit,
+            feature_id=feature_id,
+            owner_plugin_id=owner_plugin_id,
         )
         self.add_feature(feature)
         return feature
 
     def register_1_to_n(
-        self, function: Callable, title: str, icon_name: str | None = None
+        self,
+        function: Callable,
+        title: str,
+        icon_name: str | None = None,
+        feature_id: str | None = None,
+        owner_plugin_id: str | None = None,
     ) -> ComputingFeature:
         """Register a 1-to-n processing function.
 
@@ -2302,6 +2360,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             function: function to register
             title: title of the function
             icon_name: icon name. Defaults to None.
+            feature_id: stable namespaced feature identifier.
+            owner_plugin_id: stable identifier of the owning plugin.
 
         Returns:
             Registered feature.
@@ -2311,6 +2371,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             function=function,
             title=title,
             icon_name=icon_name,
+            feature_id=feature_id,
+            owner_plugin_id=owner_plugin_id,
         )
         self.add_feature(feature)
         return feature
@@ -2323,6 +2385,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         icon_name: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        feature_id: str | None = None,
+        owner_plugin_id: str | None = None,
     ) -> ComputingFeature:
         """Register a n-to-1 processing function.
 
@@ -2337,6 +2401,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             icon_name: icon name. Defaults to None.
             comment: comment. Defaults to None.
             edit: whether to open the parameter editor before execution.
+            feature_id: stable namespaced feature identifier.
+            owner_plugin_id: stable identifier of the owning plugin.
 
         Returns:
             Registered feature.
@@ -2349,6 +2415,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             icon_name=icon_name,
             comment=comment,
             edit=edit,
+            feature_id=feature_id,
+            owner_plugin_id=owner_plugin_id,
         )
         self.add_feature(feature)
         return feature
@@ -2367,6 +2435,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             [list[SignalObj | ImageObj]], SourcePreparationTransaction | None
         ]
         | None = None,
+        feature_id: str | None = None,
+        owner_plugin_id: str | None = None,
     ) -> ComputingFeature:
         """Register a 2-to-1 processing function.
 
@@ -2386,6 +2456,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
              Defaults to None. Set to True for operations like interpolation where
              different X-arrays are expected and desired.
             pre_execute_hook: optional transactional source preparation hook
+            feature_id: stable namespaced feature identifier.
+            owner_plugin_id: stable identifier of the owning plugin.
 
         Returns:
             Registered feature.
@@ -2401,20 +2473,73 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             obj2_name=obj2_name,
             skip_xarray_compat=skip_xarray_compat,
             pre_execute_hook=pre_execute_hook,
+            feature_id=feature_id,
+            owner_plugin_id=owner_plugin_id,
         )
         self.add_feature(feature)
         return feature
 
-    def add_feature(self, feature: ComputingFeature) -> None:
+    def add_feature(self, feature: ComputingFeature, owner: str | None = None) -> None:
         """Add a computing feature to the registry.
 
         Args:
             feature: ComputingFeature instance to add.
+            owner: Stable ID of the owning plugin, if any.
+
+        Raises:
+            ValueError: If ownership conflicts or the feature ID already exists.
         """
-        self.computing_registry[feature.function] = feature
+        if owner is not None:
+            if not owner.strip():
+                raise ValueError("Computing feature owner must not be empty.")
+            if feature.owner_plugin_id not in (None, owner):
+                raise ValueError(
+                    f"Computing feature {feature.feature_id!r} already belongs to "
+                    f"plugin {feature.owner_plugin_id!r}."
+                )
+            feature.owner_plugin_id = owner
+
+        feature_id = feature.feature_id
+        assert feature_id is not None
+        if feature_id in self.computing_registry:
+            raise ValueError(f"Computing feature ID {feature_id!r} already registered")
+        self.computing_registry[feature_id] = feature
+
+    def remove_feature(self, feature_id: str) -> ComputingFeature:
+        """Remove and return a computing feature by stable ID.
+
+        Args:
+            feature_id: Stable identifier of the feature to remove.
+
+        Returns:
+            Removed computing feature.
+
+        Raises:
+            ValueError: If the feature ID is unknown.
+        """
+        try:
+            return self.computing_registry.pop(feature_id)
+        except KeyError as exc:
+            raise ValueError(f"Unknown computing feature ID: {feature_id}") from exc
+
+    def remove_features_by_owner(self, owner_plugin_id: str) -> list[ComputingFeature]:
+        """Remove and return every feature owned by a plugin.
+
+        Args:
+            owner_plugin_id: Stable identifier of the owning plugin.
+
+        Returns:
+            Removed computing features, in registration order.
+        """
+        feature_ids = [
+            feature_id
+            for feature_id, feature in self.computing_registry.items()
+            if feature.owner_plugin_id == owner_plugin_id
+        ]
+        return [self.computing_registry.pop(feature_id) for feature_id in feature_ids]
 
     def get_feature(self, function_or_name: Callable | str) -> ComputingFeature:
-        """Get a computing feature by name or function.
+        """Get a computing feature by stable ID, legacy name, or function.
 
         Args:
             function_or_name: Name of the feature or the function itself.
@@ -2422,13 +2547,26 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         Returns:
             Computing feature instance.
         """
-        try:
-            return self.computing_registry[function_or_name]
-        except KeyError as exc:
-            for _func, feature in self.computing_registry.items():
-                if feature.name == function_or_name:
-                    return feature
-            raise ValueError(f"Unknown computing feature: {function_or_name}") from exc
+        if isinstance(function_or_name, str):
+            feature = self.computing_registry.get(function_or_name)
+            if feature is not None:
+                return feature
+            matches = [
+                registered_feature
+                for registered_feature in self.computing_registry.values()
+                if registered_feature.name == function_or_name
+            ]
+        else:
+            matches = [
+                registered_feature
+                for registered_feature in self.computing_registry.values()
+                if registered_feature.function is function_or_name
+            ]
+        if len(matches) == 1:
+            return matches[0]
+        if len(matches) > 1:
+            raise ValueError(f"Ambiguous computing feature alias: {function_or_name}")
+        raise ValueError(f"Unknown computing feature: {function_or_name}")
 
     @qt_try_except()
     def run_feature(
@@ -2502,6 +2640,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 title=title,
                 comment=comment,
                 edit=edit,
+                feature_id=feature.feature_id,
             )
         if pattern == "2_to_1":
             obj2 = kwargs.pop("obj2", args[0] if args else None)
@@ -2524,6 +2663,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 edit=edit,
                 skip_xarray_compat=feature.skip_xarray_compat,
                 pre_execute_hook=feature.pre_execute_hook,
+                feature_id=feature.feature_id,
             )
         if pattern == "1_to_n":
             params = kwargs.get("params", args[0] if args else [])
@@ -2539,6 +2679,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 params=params,
                 title=title,
                 edit=edit,
+                feature_id=feature.feature_id,
             )
         raise ValueError(f"Unsupported compute pattern: {pattern}")
 

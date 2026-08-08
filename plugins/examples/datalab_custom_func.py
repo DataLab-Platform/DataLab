@@ -42,6 +42,7 @@ def weighted_average_denoise(data: np.ndarray) -> np.ndarray:
 class CustomFilters(datalab.plugins.PluginBase):
     """DataLab Custom Filters Plugin"""
 
+    FEATURE_ID = "org.datalab.examples.custom-filters.weighted-average-denoise"
     PLUGIN_INFO = datalab.plugins.PluginInfo(
         id="org.datalab.examples.custom-filters",
         name="My custom filters",
@@ -49,15 +50,18 @@ class CustomFilters(datalab.plugins.PluginBase):
         description="This is an example plugin",
     )
 
+    def register_computations(self) -> None:
+        """Register computations owned by this plugin."""
+        wrapped_func = sipi.Wrap1to1Func(weighted_average_denoise)
+        self.imagepanel.processor.register_1_to_1(
+            wrapped_func,
+            "Weighted average denoise",
+            feature_id=self.FEATURE_ID,
+            owner_plugin_id=self.plugin_id,
+        )
+
     def create_actions(self) -> None:
         """Create actions"""
         acth = self.imagepanel.acthandler
-        proc = self.imagepanel.processor
         with acth.new_menu(self.PLUGIN_INFO.name):
-            for name, func in (("Weighted average denoise", weighted_average_denoise),):
-                # Wrap function to handle ``ImageObj`` objects instead of NumPy arrays
-                wrapped_func = sipi.Wrap1to1Func(func)
-                acth.new_action(
-                    name,
-                    triggered=lambda: proc.compute_1_to_1(wrapped_func, title=name),
-                )
+            acth.action_for(self.FEATURE_ID)

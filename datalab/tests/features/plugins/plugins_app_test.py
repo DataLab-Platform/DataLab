@@ -16,12 +16,15 @@ import os
 import os.path as osp
 from unittest.mock import patch
 
+import pytest
 from qtpy import QtWidgets as QW
+from sigima.tests.data import create_paracetamol_signal
 
 from datalab.config import Conf
 from datalab.env import execenv
 from datalab.gui.actionhandler import ActionCategory
 from datalab.gui.main import DLMainWindow
+from datalab.gui.processor.base import extract_processing_parameters
 from datalab.plugins import PluginRegistry
 from datalab.tests import datalab_test_app_context
 from datalab.tests.features.plugins.plugin_test_dataset import (
@@ -512,6 +515,100 @@ def test_plugin_duplicate_name():
                     PluginRegistry.get_plugin("datalab_test_plugin_dup2.TestPluginDup2")
                     is not None
                 )
+
+
+def test_plugin_owned_feature_lifecycle():
+    """Owned processing survives reload once and disappears on plugin removal."""
+    plugin_id = "org.example.owned-processing"
+    feature_id = f"{plugin_id}.derivative"
+    plugin_filename = "datalab_test_plugin_owned_processing.py"
+    Conf.main.plugins_enabled_list.set(None)
+
+    with temporary_plugin_dir() as plugin_dir:
+        create_plugin_from_template(
+            plugin_dir,
+            plugin_filename,
+            "plugin_owned_processing.py.template",
+            {
+                "{class_name}": "OwnedProcessingPlugin",
+                "{plugin_id}": plugin_id,
+                "{plugin_name}": "Owned Processing Plugin",
+                "{feature_id}": feature_id,
+            },
+        )
+
+        with datalab_test_app_context(console=False) as win:
+            processor = win.signalpanel.processor
+            assert list(processor.computing_registry).count(feature_id) == 1
+            assert processor.get_feature(feature_id).owner_plugin_id == plugin_id
+
+            win.signalpanel.add_object(create_paracetamol_signal(50))
+            object_count = len(win.signalpanel)
+            processor.run_feature(feature_id)
+            assert len(win.signalpanel) == object_count + 1
+            proc_params = extract_processing_parameters(
+                win.signalpanel[len(win.signalpanel)]
+            )
+            assert proc_params is not None
+            assert proc_params.func_name == feature_id
+
+            win.reload_plugins()
+            QW.QApplication.processEvents()
+
+            assert list(processor.computing_registry).count(feature_id) == 1
+            assert processor.get_feature(feature_id).owner_plugin_id == plugin_id
+            object_count = len(win.signalpanel)
+            processor.run_feature(feature_id)
+            assert len(win.signalpanel) == object_count + 1
+            processed_signal = win.signalpanel[len(win.signalpanel)]
+
+            os.remove(osp.join(plugin_dir, plugin_filename))
+            win.reload_plugins()
+            QW.QApplication.processEvents()
+
+            assert feature_id not in processor.computing_registry
+            with pytest.raises(ValueError, match=feature_id):
+                processor.get_feature(feature_id)
+            report = processor.recompute_processing(processed_signal, interactive=False)
+            assert not report.success
+            assert feature_id in report.message
+
+
+def test_plugin_computation_registration_rollback():
+    """A failing computation hook leaves no partially registered feature."""
+    plugin_id = "org.example.failing-processing"
+    feature_id = f"{plugin_id}.derivative"
+    plugin_filename = "datalab_test_plugin_failing_processing.py"
+    Conf.main.plugins_enabled_list.set(None)
+
+    with temporary_plugin_dir() as plugin_dir:
+        with open(
+            osp.join(plugin_dir, plugin_filename), "w", encoding="utf-8"
+        ) as plugin_file:
+            plugin_file.write(
+                "import sigima.proc.signal as sips\n"
+                "from datalab.plugins import PluginBase, PluginInfo\n\n"
+                "class FailingProcessingPlugin(PluginBase):\n"
+                "    PLUGIN_INFO = PluginInfo(\n"
+                f'        id="{plugin_id}",\n'
+                '        name="Failing Processing Plugin",\n'
+                "    )\n\n"
+                "    def register_computations(self):\n"
+                "        self.signalpanel.processor.register_1_to_1(\n"
+                "            sips.derivative,\n"
+                '            "Partial derivative",\n'
+                f'            feature_id="{feature_id}",\n'
+                "            owner_plugin_id=self.plugin_id,\n"
+                "        )\n"
+                '        raise RuntimeError("Planned computation failure")\n\n'
+                "    def create_actions(self):\n"
+                "        pass\n"
+            )
+
+        with patch("datalab.utils.qthelpers.is_running_tests", return_value=False):
+            with datalab_test_app_context(console=False) as win:
+                assert PluginRegistry.get_plugin(plugin_id) is not None
+                assert feature_id not in win.signalpanel.processor.computing_registry
 
 
 def test_plugin_nested_menus():

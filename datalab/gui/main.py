@@ -28,6 +28,7 @@ import sys
 import time
 import traceback
 import webbrowser
+from contextlib import ExitStack
 from datetime import datetime
 from typing import TYPE_CHECKING
 
@@ -1140,7 +1141,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             with self.imagepanel.acthandler.new_category(ActionCategory.PLUGINS):
                 for plugin in PluginRegistry.get_plugins():
                     with qth.try_or_log_error(f"Create actions for {plugin.info.name}"):
-                        plugin.create_actions()
+                        with ExitStack() as rollback_stack:
+                            rollback_stack.callback(plugin.remove_owned_features)
+                            plugin.register_computations()
+                            plugin.create_actions()
+                            rollback_stack.pop_all()
 
     @staticmethod
     def __unregister_plugins() -> None:

@@ -1,0 +1,23 @@
+import sigima.proc.signal as sips
+
+from datalab.plugins import PluginBase, PluginInfo
+
+
+class {class_name}(PluginBase):
+    PLUGIN_INFO = PluginInfo(
+        id="{plugin_id}",
+        name="{plugin_name}",
+        version="1.0.0",
+        description="Test plugin with an owned processing feature",
+    )
+
+    def register_computations(self):
+        self.signalpanel.processor.register_1_to_1(
+            sips.derivative,
+            "Owned derivative",
+            feature_id="{feature_id}",
+            owner_plugin_id=self.plugin_id,
+        )
+
+    def create_actions(self):
+        pass

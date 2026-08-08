@@ -545,26 +545,6 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             paramclass=sigima.params.AllanVarianceParam,
         )
         self.register_1_to_1(
-            sips.modified_allan_variance,
-            _("Modified Allan variance"),
-            paramclass=sigima.params.AllanVarianceParam,
-        )
-        self.register_1_to_1(
-            sips.hadamard_variance,
-            _("Hadamard variance"),
-            paramclass=sigima.params.AllanVarianceParam,
-        )
-        self.register_1_to_1(
-            sips.modified_allan_variance,
-            _("Modified Allan variance"),
-            paramclass=sigima.params.AllanVarianceParam,
-        )
-        self.register_1_to_1(
-            sips.hadamard_variance,
-            _("Hadamard variance"),
-            paramclass=sigima.params.AllanVarianceParam,
-        )
-        self.register_1_to_1(
             sips.total_variance,
             _("Total variance"),
             paramclass=sigima.params.AllanVarianceParam,

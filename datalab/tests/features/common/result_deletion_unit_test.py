@@ -118,9 +118,10 @@ def test_delete_results_clears_analysis_parameters():
         assert analysis_params is not None, (
             "Analysis parameters should exist after running centroid"
         )
-        assert analysis_params.func_name == "centroid", (
-            "Analysis parameters should store the centroid function name"
-        )
+        assert (
+            analysis_params.func_name
+            == panel.processor.get_feature("centroid").feature_id
+        ), "Analysis parameters should store the stable centroid feature ID"
         execenv.print("  ✓ Analysis parameters stored")
 
         # Delete all results
