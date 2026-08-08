@@ -1493,11 +1493,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "New group"
-msgstr "Nouveau groupe"
-
 msgid "Group name:"
 msgstr "Nom du groupe :"
+
+msgid "New group"
+msgstr "Nouveau groupe"
 
 msgid "Rename object"
 msgstr "Renommer l'objet"
@@ -1705,6 +1705,15 @@ msgstr "Création des formes géométriques"
 
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
+
+msgid "Input/output"
+msgstr "Entrée/sortie"
+
+msgid "Visualization"
+msgstr "Visualisation"
+
+msgid "Application"
+msgstr "Application"
 
 msgid "today"
 msgstr "aujourd'hui"
@@ -3053,15 +3062,6 @@ msgstr "État d'activation de la console"
 msgid "General"
 msgstr "Général"
 
-msgid "Visualization"
-msgstr "Visualisation"
-
-msgid "Input/output"
-msgstr "Entrée/sortie"
-
-msgid "Application"
-msgstr "Application"
-
 msgid "I/O"
 msgstr "Entrée/sortie"
 
@@ -3355,11 +3355,11 @@ msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La dé
 msgid "Click OK to end demo."
 msgstr "Cliquer sur OK pour terminer la démo."
 
-msgid "Error:"
-msgstr "Erreur:"
-
 msgid "Context"
 msgstr "Contexte"
+
+msgid "Error:"
+msgstr "Erreur:"
 
 #, python-format
 msgid "The file %s could not be read:"
@@ -3577,17 +3577,17 @@ msgstr "Déplier la sélection"
 msgid "HDF5 Browser"
 msgstr "Explorateur HDF5"
 
-msgid "Size"
-msgstr "Taille"
-
-msgid "Type"
-msgstr "Type"
-
 msgid "Value"
 msgstr "Valeur"
 
 msgid "Name"
 msgstr "Nom"
+
+msgid "Size"
+msgstr "Taille"
+
+msgid "Type"
+msgstr "Type"
 
 msgid "Unsupported data"
 msgstr "Données non prises en charge"
@@ -3998,6 +3998,91 @@ msgstr "Merci de sélectionner le fichier à importer."
 
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+
+msgid "Plugin name must be a non-empty single line"
+msgstr "Le nom du plugin doit être une ligne non vide"
+
+msgid "Package name must start with a lowercase letter and contain only lowercase letters, digits, and underscores"
+msgstr "Le nom du package doit commencer par une lettre minuscule et ne contenir que des lettres minuscules, des chiffres et des tirets bas"
+
+msgid "Package name must not be a Python keyword"
+msgstr "Le nom du package ne doit pas être un mot-clé Python"
+
+msgid "Plugin ID must be a lowercase dotted identifier such as 'org.example.my-plugin'"
+msgstr "L'ID du plugin doit être un identifiant en minuscules séparé par des points, comme 'org.example.mon-plugin'"
+
+msgid "Description must be a single line"
+msgstr "La description doit tenir sur une seule ligne"
+
+msgid "Plugin capabilities are invalid"
+msgstr "Les capacités du plugin ne sont pas valides"
+
+msgid "Plugin capabilities must be unique"
+msgstr "Les capacités du plugin doivent être uniques"
+
+msgid "Object kind must be 'signal' or 'image'"
+msgstr "Le type d'objet doit être 'signal' ou 'image'"
+
+msgid "The minimal template currently supports BSD-3-Clause"
+msgstr "Le modèle minimal prend actuellement en charge BSD-3-Clause"
+
+msgid "Plugin name must contain letters or digits"
+msgstr "Le nom du plugin doit contenir des lettres ou des chiffres"
+
+#, python-format
+msgid "Destination already exists: %s"
+msgstr "La destination existe déjà : %s"
+
+#, python-format
+msgid "%s is required"
+msgstr "%s est requis"
+
+msgid "Plugin name"
+msgstr "Nom du plugin"
+
+msgid "Package name"
+msgstr "Nom du package"
+
+msgid "Plugin ID"
+msgstr "ID du plugin"
+
+msgid "Destination"
+msgstr "Destination"
+
+#, python-format
+msgid "%s plugin for DataLab"
+msgstr "Plugin %s pour DataLab"
+
+msgid "Create and maintain DataLab plugin projects."
+msgstr "Créer et maintenir des projets de plugins DataLab."
+
+msgid "Create a minimal installable plugin project."
+msgstr "Créer un projet de plugin minimal et installable."
+
+msgid "Plugin display name"
+msgstr "Nom d'affichage du plugin"
+
+msgid "Python import package name"
+msgstr "Nom du package d'import Python"
+
+msgid "Stable reverse-domain ID"
+msgstr "ID stable en notation de domaine inversé"
+
+msgid "One-line description"
+msgstr "Description sur une ligne"
+
+msgid "Plugin capability; may be repeated"
+msgstr "Capacité du plugin ; l'option peut être répétée"
+
+msgid "Object type used by the sample processing"
+msgstr "Type d'objet utilisé par le traitement d'exemple"
+
+msgid "Project license"
+msgstr "Licence du projet"
+
+#, python-format
+msgid "Created DataLab plugin project at %s"
+msgstr "Projet de plugin DataLab créé dans %s"
 
 msgid "Minimum value"
 msgstr "Valeur minimum"

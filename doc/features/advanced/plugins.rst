@@ -336,6 +336,49 @@ recipe references. A registered plugin may call ``open_example("quickstart")``
 to materialize and load a native DataLab HDF5 workspace. Opening clears the
 current workspace by default; pass ``reset_all=False`` to merge it instead.
 
+Creating a minimal plugin project
+---------------------------------
+
+The installed ``datalab-plugin`` command creates a small, installable project
+that follows the stable plugin and feature ownership contracts. Run it without
+options for an interactive setup:
+
+.. code-block:: bash
+
+  datalab-plugin create
+
+The command asks for the display name and offers defaults for the Python
+package, reverse-domain plugin ID, description, and destination. For scripts or
+reproducible setup, pass the values explicitly:
+
+.. code-block:: bash
+
+  datalab-plugin create datalab-camera-characterization \
+    --name "Camera Characterization" \
+    --package datalab_camera_characterization \
+    --plugin-id org.datalab.camera-characterization \
+    --description "Characterize scientific cameras" \
+    --capability application \
+    --capability processing \
+    --object-kind image
+
+The generated ``src``-layout project contains ``pyproject.toml`` with a
+``datalab.plugins`` entry point, a stable :class:`datalab.plugins.PluginInfo`,
+an owned sample processing when the ``processing`` capability is selected, a
+headless descriptor test, Ruff settings, a README, and a BSD-3-Clause license.
+The command refuses to overwrite an existing destination.
+
+This first template is deliberately small. Keep scientific algorithms outside
+the generated DataLab adapter, then add recipes, parameters, packaged examples,
+CI configuration, and specialized documentation only when the plugin needs
+them. From the generated directory, install and validate the project with:
+
+.. code-block:: bash
+
+  python -m pip install -e ".[test]"
+  python -m pytest
+  python -m ruff check .
+
 How to develop a plugin?
 ------------------------
 
