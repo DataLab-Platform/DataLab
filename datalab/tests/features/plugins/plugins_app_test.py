@@ -463,7 +463,7 @@ def test_plugin_error_handling():
 
 
 def test_plugin_duplicate_name():
-    """Test that duplicate plugin names are detected and handled"""
+    """Test that duplicate display names remain distinct by plugin ID."""
     with temporary_plugin_dir() as plugin_dir:
         execenv.print(f"Using temporary plugin directory: {plugin_dir}")
 
@@ -487,7 +487,7 @@ def test_plugin_duplicate_name():
             "action_dup_2",
         )
 
-        # Start application - should handle duplicate gracefully
+        # Start application - both plugins have distinct legacy fallback IDs
         with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
             mock_run_tests.return_value = False
             with datalab_test_app_context(console=False):
@@ -502,9 +502,15 @@ def test_plugin_duplicate_name():
                 duplicate_count = plugin_names.count("Duplicate Name Plugin")
                 execenv.print(f"Duplicate name count: {duplicate_count}")
 
-                # Should be 1 or 0 (second should fail to register)
-                assert duplicate_count <= 1, (
-                    f"Duplicate plugin name should be rejected, found {duplicate_count}"
+                assert duplicate_count == 2
+                assert PluginRegistry.get_plugin("Duplicate Name Plugin") is None
+                assert (
+                    PluginRegistry.get_plugin("datalab_test_plugin_dup1.TestPluginDup1")
+                    is not None
+                )
+                assert (
+                    PluginRegistry.get_plugin("datalab_test_plugin_dup2.TestPluginDup2")
+                    is not None
                 )
 
 

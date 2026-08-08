@@ -79,7 +79,12 @@ from datalab.gui.panel import base, image, macro, signal
 from datalab.gui.pluginconfig import PluginConfigDialog
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
 from datalab.objectmodel import ObjectGroup
-from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plugins
+from datalab.plugins import (
+    PluginRegistry,
+    discover_plugins,
+    discover_v020_plugins,
+    migrate_enabled_plugin_ids,
+)
 from datalab.utils import qthelpers as qth
 from datalab.utils.qthelpers import (
     add_corner_menu,
@@ -1057,7 +1062,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         # Get enabled plugins list from configuration
         # None = all plugins enabled (default), [] = no plugins, list = specific plugins
-        enabled_list = Conf.main.plugins_enabled_list.get(None)
+        configured_enabled_list = Conf.main.plugins_enabled_list.get(None)
+        enabled_list = migrate_enabled_plugin_ids(configured_enabled_list)
+        if enabled_list != configured_enabled_list:
+            Conf.main.plugins_enabled_list.set(enabled_list)
 
         if not Conf.main.plugins_enabled.get():
             self.plugins_last_load_at = datetime.now().astimezone()
@@ -1069,10 +1077,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 # None means all plugins are enabled
                 if enabled_list is not None:
                     plugin_name = plugin_class.PLUGIN_INFO.name
-                    if plugin_name not in enabled_list:
+                    plugin_id = plugin_class.get_plugin_id()
+                    if plugin_id not in enabled_list:
                         execenv.log(
                             self,
-                            f"Plugin {plugin_name} is disabled, skipping registration",
+                            f"Plugin {plugin_name} ({plugin_id}) is disabled, "
+                            "skipping registration",
                         )
                         continue
 
@@ -1187,7 +1197,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
             # Get enabled plugins list from configuration
             # None = all enabled (default), [] = none, list = specific plugins
-            enabled_list = Conf.main.plugins_enabled_list.get(None)
+            configured_enabled_list = Conf.main.plugins_enabled_list.get(None)
+            enabled_list = migrate_enabled_plugin_ids(configured_enabled_list)
+            if enabled_list != configured_enabled_list:
+                Conf.main.plugins_enabled_list.set(enabled_list)
 
             # Instantiate and register plugins again
             for plugin_class in PluginRegistry.get_plugin_classes():
@@ -1196,10 +1209,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     # None means all plugins are enabled
                     if enabled_list is not None:
                         plugin_name = plugin_class.PLUGIN_INFO.name
-                        if plugin_name not in enabled_list:
+                        plugin_id = plugin_class.get_plugin_id()
+                        if plugin_id not in enabled_list:
                             execenv.log(
                                 self,
-                                f"Plugin {plugin_name} is disabled, "
+                                f"Plugin {plugin_name} ({plugin_id}) is disabled, "
                                 "skipping registration (reload)",
                             )
                             continue

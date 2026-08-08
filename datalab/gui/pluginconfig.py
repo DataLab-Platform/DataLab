@@ -35,7 +35,11 @@ from datalab.config import (
     normalize_plugin_paths,
     set_user_plugin_paths,
 )
-from datalab.plugins import PLUGINS_DEFAULT_PATH, PluginRegistry
+from datalab.plugins import (
+    PLUGINS_DEFAULT_PATH,
+    PluginRegistry,
+    migrate_enabled_plugin_ids,
+)
 from datalab.utils.qthelpers import (
     open_local_path as _open_local_path,
 )
@@ -991,11 +995,23 @@ class PluginConfigDialog(QW.QDialog):
         """Persist current plugin enablement and search path settings."""
         Conf.main.plugins_enabled.set(self.plugins_enabled)
         Conf.main.v020_plugins_warning_ignore.set(self.v020_plugins_warning_ignore)
+        configured_plugins = migrate_enabled_plugin_ids(
+            Conf.main.plugins_enabled_list.get(None)
+        )
+        available_plugin_ids = {
+            widget.plugin_class.get_plugin_id() for widget in self.plugin_widgets
+        }
         enabled_plugins = [
-            widget.plugin_class.PLUGIN_INFO.name
+            widget.plugin_class.get_plugin_id()
             for widget in self.plugin_widgets
             if widget.is_enabled()
         ]
+        if configured_plugins is not None:
+            enabled_plugins.extend(
+                plugin_id
+                for plugin_id in configured_plugins
+                if plugin_id not in available_plugin_ids
+            )
         Conf.main.plugins_enabled_list.set(enabled_plugins)
         set_user_plugin_paths(self.extra_plugin_paths)
 
@@ -1079,11 +1095,14 @@ class PluginConfigDialog(QW.QDialog):
     def populate_plugins(self):
         """Populate the dialog with all discovered plugins"""
         self._update_load_info_label()
-        registered_names = {p.info.name for p in PluginRegistry.get_plugins()}
-        enabled_plugins = Conf.main.plugins_enabled_list.get(None)
+        registered_ids = {plugin.plugin_id for plugin in PluginRegistry.get_plugins()}
+        configured_enabled_plugins = Conf.main.plugins_enabled_list.get(None)
+        enabled_plugins = migrate_enabled_plugin_ids(configured_enabled_plugins)
+        if enabled_plugins != configured_enabled_plugins:
+            Conf.main.plugins_enabled_list.set(enabled_plugins)
 
         self._add_failed_plugins()
-        self._add_plugin_widgets(registered_names, enabled_plugins)
+        self._add_plugin_widgets(registered_ids, enabled_plugins)
 
         # Add stretch at the end
         self.plugins_layout.addStretch()
@@ -1098,15 +1117,15 @@ class PluginConfigDialog(QW.QDialog):
             self.plugins_layout.addWidget(failed_widget)
 
     def _add_plugin_widgets(
-        self, registered_names: set[str], enabled_plugins: list[str] | None
+        self, registered_ids: set[str], enabled_plugins: list[str] | None
     ) -> None:
         """Add widgets for discovered plugins."""
         for plugin_class in PluginRegistry.get_plugin_classes():
-            plugin_name = plugin_class.PLUGIN_INFO.name
-            enabled = enabled_plugins is None or plugin_name in enabled_plugins
+            plugin_id = plugin_class.get_plugin_id()
+            enabled = enabled_plugins is None or plugin_id in enabled_plugins
             state = (
                 PluginState.ENABLED
-                if plugin_name in registered_names
+                if plugin_id in registered_ids
                 else PluginState.DISABLED
             )
             widget = PluginInfoWidget(plugin_class, enabled, state)

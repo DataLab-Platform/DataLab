@@ -87,6 +87,7 @@ class ContourPlotPlugin(PluginBase):
     """DataLab plugin exposing PlotPy contour plots for images."""
 
     PLUGIN_INFO = PluginInfo(
+        id="org.datalab.examples.contour-plot",
         name=_("Contour isoline plot"),
         version="1.0.0",
         description=_(

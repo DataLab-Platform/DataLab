@@ -43,6 +43,7 @@ class CustomFilters(datalab.plugins.PluginBase):
     """DataLab Custom Filters Plugin"""
 
     PLUGIN_INFO = datalab.plugins.PluginInfo(
+        id="org.datalab.examples.custom-filters",
         name="My custom filters",
         version="1.0.0",
         description="This is an example plugin",

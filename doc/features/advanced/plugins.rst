@@ -21,7 +21,19 @@ To be recognized as a plugin, the file must:
 - Include a class attribute named ``PLUGIN_INFO``, which must be an instance of :class:`datalab.plugins.PluginInfo`,
 - Implement the ``create_actions`` method.
 
-This `PLUGIN_INFO` object is used by DataLab to retrieve metadata such as the plugin name, type, and menu integration.
+The ``PLUGIN_INFO`` object must define a unique, namespaced ``id`` that remains
+stable when the display name or implementation class changes. DataLab uses this
+ID for registration and persisted enablement settings. Plugins without an ID
+remain supported through a module-and-class fallback for backward compatibility,
+but new plugins should not rely on that fallback.
+
+.. code-block:: python
+
+  PLUGIN_INFO = PluginInfo(
+    id="org.example.my-plugin",
+    name="My Plugin",
+    version="1.0.0",
+  )
 
 .. note::
 

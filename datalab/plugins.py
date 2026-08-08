@@ -90,19 +90,32 @@ class PluginRegistry(type):
 
     @classmethod
     def get_plugin(cls, name_or_class: str | type[PluginBase]) -> PluginBase | None:
-        """Return plugin instance"""
+        """Return a plugin by stable ID, legacy name, or class.
+
+        Legacy display names are accepted only when they identify a single plugin.
+        """
         for plugin in cls._plugin_instances:
-            if name_or_class in (plugin.info.name, plugin.__class__):
+            if name_or_class in (plugin.plugin_id, plugin.__class__):
                 return plugin
+        if isinstance(name_or_class, str):
+            matching_plugins = [
+                plugin
+                for plugin in cls._plugin_instances
+                if plugin.info.name == name_or_class
+            ]
+            if len(matching_plugins) == 1:
+                return matching_plugins[0]
         return None
 
     @classmethod
     def register_plugin(cls, plugin: PluginBase):
         """Register plugin"""
-        if plugin.info.name in [plug.info.name for plug in cls._plugin_instances]:
-            raise ValueError(f"Plugin {plugin.info.name} already registered")
+        if plugin.plugin_id in [
+            registered.plugin_id for registered in cls._plugin_instances
+        ]:
+            raise ValueError(f"Plugin ID {plugin.plugin_id!r} already registered")
         cls._plugin_instances.append(plugin)
-        execenv.log(cls, f"Plugin {plugin.info.name} registered")
+        execenv.log(cls, f"Plugin {plugin.info.name} ({plugin.plugin_id}) registered")
 
     @classmethod
     def unregister_plugin(cls, plugin: PluginBase):
@@ -224,6 +237,7 @@ class PluginInfo:
     version: str = "0.0.0"
     description: str = ""
     icon: str = None
+    id: str | None = None
 
 
 class PluginBaseMeta(PluginRegistry, abc.ABCMeta):
@@ -242,6 +256,23 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         self.info = self.PLUGIN_INFO
         if self.info is None:
             raise ValueError(f"Plugin info not set for {self.__class__.__name__}")
+        self.get_plugin_id()
+
+    @classmethod
+    def get_plugin_id(cls) -> str:
+        """Return the stable plugin ID or a deterministic legacy fallback."""
+        if cls.PLUGIN_INFO is None:
+            raise ValueError(f"Plugin info not set for {cls.__name__}")
+        if cls.PLUGIN_INFO.id is not None:
+            if not cls.PLUGIN_INFO.id.strip():
+                raise ValueError(f"Plugin ID not set for {cls.__name__}")
+            return cls.PLUGIN_INFO.id
+        return f"{cls.__module__}.{cls.__qualname__}"
+
+    @property
+    def plugin_id(self) -> str:
+        """Return the stable plugin ID or a deterministic legacy fallback."""
+        return self.get_plugin_id()
 
     @property
     def signalpanel(self) -> SignalPanel:
@@ -368,6 +399,57 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
     @abc.abstractmethod
     def create_actions(self):
         """Create actions"""
+
+
+def migrate_enabled_plugin_ids(
+    enabled_plugins: list[str] | None,
+    plugin_classes: list[type[PluginBase]] | None = None,
+) -> list[str] | None:
+    """Migrate enabled plugin display names to stable IDs.
+
+    Unknown entries are retained so temporarily unavailable plugins do not lose
+    their activation state. A legacy name shared by multiple plugins enables all
+    matching IDs because the old setting cannot distinguish between them.
+
+    Args:
+        enabled_plugins: Configured stable IDs or legacy display names
+        plugin_classes: Classes available for migration (registry by default)
+
+    Returns:
+        Enabled stable IDs and retained unknown entries, or None for all plugins
+    """
+    if enabled_plugins is None:
+        return None
+    if plugin_classes is None:
+        plugin_classes = PluginRegistry.get_plugin_classes()
+
+    known_plugin_ids: set[str] = set()
+    plugin_ids_by_name: dict[str, list[str]] = {}
+    for plugin_class in plugin_classes:
+        plugin_info = plugin_class.PLUGIN_INFO
+        if plugin_info is None:
+            continue
+        try:
+            plugin_id = plugin_class.get_plugin_id()
+        except ValueError:
+            continue
+        known_plugin_ids.add(plugin_id)
+        plugin_ids_by_name.setdefault(plugin_info.name, []).append(plugin_id)
+
+    migrated_plugins: list[str] = []
+    seen_plugins: set[str] = set()
+    for configured_plugin in enabled_plugins:
+        if configured_plugin in known_plugin_ids:
+            resolved_ids = [configured_plugin]
+        else:
+            resolved_ids = plugin_ids_by_name.get(
+                configured_plugin, [configured_plugin]
+            )
+        for plugin_id in resolved_ids:
+            if plugin_id not in seen_plugins:
+                migrated_plugins.append(plugin_id)
+                seen_plugins.add(plugin_id)
+    return migrated_plugins
 
 
 def _set_plugin_class_filepaths(module) -> None:

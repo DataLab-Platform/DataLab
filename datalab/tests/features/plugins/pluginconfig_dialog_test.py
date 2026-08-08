@@ -174,6 +174,9 @@ def test_plugin_enable_disable_config():
                 Conf.main.plugins_enabled_list.set([plugin_1_name])
                 win.reload_plugins()
                 QW.QApplication.processEvents()
+                assert Conf.main.plugins_enabled_list.get(None) == [
+                    "datalab_test_plugin_1.TestPluginOne"
+                ]
 
                 dialog2 = PluginConfigDialog(win)
                 _show_dialog(dialog2)
@@ -236,6 +239,27 @@ def test_plugin_enable_disable_config():
                     widget.checkbox.isChecked() for widget in dialog2.plugin_widgets
                 )
                 _close_dialog(dialog2)
+    finally:
+        if had_config:
+            Conf.main.plugins_enabled_list.set(original_enabled_list)
+        else:
+            Conf.main.plugins_enabled_list.remove()
+
+
+def test_plugin_config_preserves_unavailable_enabled_ids():
+    """Saving the dialog keeps activation state for unavailable plugins."""
+    unavailable_plugin_id = "org.example.temporarily-unavailable"
+    main_config = Conf.to_dict().get("main", {})
+    had_config = "plugins_enabled_list" in main_config
+    original_enabled_list = Conf.main.plugins_enabled_list.get(None)
+
+    try:
+        Conf.main.plugins_enabled_list.set([unavailable_plugin_id])
+        with datalab_test_app_context(console=False) as win:
+            dialog = PluginConfigDialog(win)
+            dialog._save_configuration()
+
+        assert unavailable_plugin_id in Conf.main.plugins_enabled_list.get(None)
     finally:
         if had_config:
             Conf.main.plugins_enabled_list.set(original_enabled_list)

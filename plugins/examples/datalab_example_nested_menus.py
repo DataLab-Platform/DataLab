@@ -81,6 +81,7 @@ class NestedMenusExample(datalab.plugins.PluginBase):
     """DataLab Nested Menus Example Plugin"""
 
     PLUGIN_INFO = datalab.plugins.PluginInfo(
+        id="org.datalab.examples.nested-menus",
         name="Nested Menus (example)",
         version="1.0.0",
         description="Example plugin demonstrating nested menu structures",

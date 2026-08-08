@@ -205,7 +205,7 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     available_memory_threshold = conf.Option()
     current_tab = conf.Option()
     plugins_enabled = conf.Option()
-    plugins_enabled_list = conf.Option()  # List of enabled plugin names
+    plugins_enabled_list = conf.Option()  # List of enabled plugin IDs
     plugins_path = conf.Option()  # Deprecated: single-directory string, kept for
     # backward compatibility. Use plugins_path_list instead.
     plugins_path_list = conf.Option()  # List of extra plugin directories
