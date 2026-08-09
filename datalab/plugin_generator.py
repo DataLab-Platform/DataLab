@@ -89,6 +89,15 @@ def _toml_string(value: str) -> str:
     return json.dumps(value, ensure_ascii=True)
 
 
+def _render_python_string_assignment(name: str, value: str) -> str:
+    """Render a string constant without requiring formatter changes."""
+    literal = _toml_string(value)
+    assignment = f"{name} = {literal}"
+    if len(assignment) <= 88:
+        return assignment
+    return f"{name} = (\n    {literal}\n)"
+
+
 def _render_pyproject(project: PluginProject) -> str:
     """Render generated project metadata and plugin entry point."""
     return f'''[build-system]
@@ -193,11 +202,16 @@ class {project.class_name}(PluginBase):
 
 def _render_init(project: PluginProject) -> str:
     """Render host-independent package identity."""
+    description = _render_python_string_assignment(
+        "PLUGIN_DESCRIPTION", project.description
+    )
+    plugin_id = _render_python_string_assignment("PLUGIN_ID", project.plugin_id)
+    plugin_name = _render_python_string_assignment("PLUGIN_NAME", project.name)
     return f'''"""DataLab plugin package."""
 
-PLUGIN_DESCRIPTION = {_toml_string(project.description)}
-PLUGIN_ID = "{project.plugin_id}"
-PLUGIN_NAME = {_toml_string(project.name)}
+{description}
+{plugin_id}
+{plugin_name}
 __version__ = "0.1.0"
 
 __all__ = [

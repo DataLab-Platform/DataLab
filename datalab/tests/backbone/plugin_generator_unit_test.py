@@ -312,3 +312,37 @@ def test_create_interactive_defaults(
     assert 'PLUGIN_ID = "org.datalab.pulse-characterization"' in package
     assert 'PLUGIN_DESCRIPTION = "Pulse Characterization plugin for DataLab"' in package
     assert "id=PLUGIN_ID" in plugin
+
+
+def test_create_pulse_project_with_long_metadata_passes_checks(tmp_path: Path) -> None:
+    """The hardened template formats the roadmap's full Pulse metadata."""
+    destination = tmp_path / "datalab-pulse-characterization"
+
+    assert (
+        main(
+            [
+                "create",
+                str(destination),
+                "--name",
+                "Pulse & Transient Characterization",
+                "--package",
+                "datalab_pulse_characterization",
+                "--plugin-id",
+                "org.datalab.pulse-characterization",
+                "--description",
+                (
+                    "Analyze repeated pulse acquisitions, timing and "
+                    "shot-to-shot stability"
+                ),
+                "--capability",
+                "application",
+                "--capability",
+                "processing",
+                "--object-kind",
+                "signal",
+            ]
+        )
+        == 0
+    )
+
+    _run_generated_project_checks(destination)

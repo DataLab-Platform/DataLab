@@ -14,6 +14,8 @@
   explicitly marked unsupported
 * Every generated project includes an executable architecture regression test,
   contribution and architecture documentation, and a changelog
+* Long plugin names and descriptions are now formatted so newly generated
+  projects pass their bundled Ruff checks without manual source edits
 
 **Third-party plugin discovery via environment variable:**
 
