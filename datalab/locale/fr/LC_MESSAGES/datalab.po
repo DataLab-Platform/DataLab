@@ -4046,18 +4046,18 @@ msgstr "Nom du package"
 msgid "Plugin ID"
 msgstr "ID du plugin"
 
-msgid "Destination"
-msgstr "Destination"
-
 #, python-format
 msgid "%s plugin for DataLab"
 msgstr "Plugin %s pour DataLab"
 
+msgid "Destination"
+msgstr "Destination"
+
 msgid "Create and maintain DataLab plugin projects."
 msgstr "Créer et maintenir des projets de plugins DataLab."
 
-msgid "Create a minimal installable plugin project."
-msgstr "Créer un projet de plugin minimal et installable."
+msgid "Create a layered installable plugin project."
+msgstr "Créer un projet de plugin installable structuré en couches."
 
 msgid "Plugin display name"
 msgstr "Nom d'affichage du plugin"

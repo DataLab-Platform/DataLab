@@ -336,8 +336,8 @@ recipe references. A registered plugin may call ``open_example("quickstart")``
 to materialize and load a native DataLab HDF5 workspace. Opening clears the
 current workspace by default; pass ``reset_all=False`` to merge it instead.
 
-Creating a minimal plugin project
----------------------------------
+Creating a layered plugin project
+----------------------------------
 
 The installed ``datalab-plugin`` command creates a small, installable project
 that follows the stable plugin and feature ownership contracts. Run it without
@@ -362,15 +362,32 @@ reproducible setup, pass the values explicitly:
     --capability processing \
     --object-kind image
 
-The generated ``src``-layout project contains ``pyproject.toml`` with a
-``datalab.plugins`` entry point, a stable :class:`datalab.plugins.PluginInfo`,
-an owned sample processing when the ``processing`` capability is selected, a
-headless descriptor test, Ruff settings, a README, and a BSD-3-Clause license.
-The command refuses to overwrite an existing destination.
+The generated ``src``-layout project applies the architecture validated by the
+Camera pilot:
 
-This first template is deliberately small. Keep scientific algorithms outside
-the generated DataLab adapter, then add recipes, parameters, packaged examples,
-CI configuration, and specialized documentation only when the plugin needs
+.. code-block:: text
+
+  package root (host-independent identity)
+  ├── core
+  ├── workflow
+  └── adapters
+      ├── desktop.py
+      └── web.py
+
+``core`` holds host-independent domain behavior, ``workflow`` may use DataLab's
+headless recipe contracts, and ``adapters`` owns host integration. The
+``datalab.plugins`` entry point targets the Desktop adapter; Web support starts
+explicitly as ``unsupported``. A generated AST test prevents ``core`` and
+``workflow`` from importing GUI, browser, or adapter modules.
+
+The project also includes a stable :class:`datalab.plugins.PluginInfo`, an owned
+sample processing when the ``processing`` capability is selected, Ruff
+settings, architecture and contribution documentation, a changelog, a README,
+and a BSD-3-Clause license. The command refuses to overwrite an existing
+destination.
+
+The template remains deliberately small. Add domain recipes, DataSet
+parameters, packaged examples, and specialized CI only when the plugin needs
 them. From the generated directory, install and validate the project with:
 
 .. code-block:: bash

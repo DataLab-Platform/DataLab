@@ -8,6 +8,7 @@ import importlib
 import sys
 import textwrap
 from collections.abc import Iterator
+from importlib import metadata as importlib_metadata
 from pathlib import Path
 from types import ModuleType
 
@@ -201,6 +202,11 @@ def test_real_distribution_entry_point_is_discovered(
     monkeypatch.syspath_prepend(str(tmp_path))
     monkeypatch.setattr("datalab.plugins.pkgutil.iter_modules", lambda: [])
     monkeypatch.setattr("datalab.plugins.Conf.main.plugins_enabled.get", lambda: True)
+    distribution = next(importlib_metadata.distributions(path=[str(tmp_path)]))
+    entry_points = list(distribution.entry_points)
+    monkeypatch.setattr(
+        "datalab.plugins._get_plugin_entry_points", lambda: entry_points
+    )
     PluginRegistry.clear_plugin_classes()
     sys.modules.pop(module_name, None)
     importlib.invalidate_caches()

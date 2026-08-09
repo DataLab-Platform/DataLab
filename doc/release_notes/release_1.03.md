@@ -4,6 +4,17 @@
 
 ### ✨ New Features ###
 
+**Plugin project generator:**
+
+* Hardened ``datalab-plugin create`` from the Camera pilot feedback: generated
+  projects now separate host-independent ``core`` code, headless ``workflow``
+  orchestration, and Desktop/Web ``adapters`` from the first commit
+* Generated package roots expose stable identity without importing Qt; the
+  installed entry point targets the Desktop adapter while Web support is
+  explicitly marked unsupported
+* Every generated project includes an executable architecture regression test,
+  contribution and architecture documentation, and a changelog
+
 **Third-party plugin discovery via environment variable:**
 
 * Added support for the `DATALAB_PLUGINS` environment variable, allowing one or more directories to be specified as additional plugin search paths

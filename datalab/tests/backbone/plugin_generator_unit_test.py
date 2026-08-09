@@ -1,10 +1,12 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
-"""Unit tests for the minimal DataLab plugin project generator."""
+"""Unit tests for the layered DataLab plugin project generator."""
 
 from __future__ import annotations
 
 import importlib
+import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -13,11 +15,36 @@ import pytest
 from datalab.plugin_generator import main
 from datalab.plugins import PluginCapability, PluginRegistry
 
+PROJECT_ROOT = Path(__file__).parents[3]
 
-def test_create_minimal_plugin_project(
+
+def _run_generated_project_checks(destination: Path) -> None:
+    """Run the quality checks advertised by a generated project."""
+    environment = os.environ.copy()
+    environment["PYTHONPATH"] = os.pathsep.join(
+        (str(PROJECT_ROOT), environment.get("PYTHONPATH", ""))
+    )
+    commands = (
+        ("ruff", "format", "--check", "."),
+        ("ruff", "check", "."),
+        ("pytest", "-q"),
+    )
+    for module_args in commands:
+        completed = subprocess.run(
+            [sys.executable, "-m", *module_args],
+            cwd=destination,
+            env=environment,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        assert completed.returncode == 0, completed.stdout + completed.stderr
+
+
+def test_create_layered_plugin_project(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture
 ) -> None:
-    """The CLI creates an importable project with stable owned metadata."""
+    """The CLI creates an importable layered project with stable metadata."""
     destination = tmp_path / "camera-plugin"
 
     assert (
@@ -47,12 +74,21 @@ def test_create_minimal_plugin_project(
 
     expected_files = {
         ".gitignore",
+        "CHANGELOG.md",
+        "CONTRIBUTING.md",
         "LICENSE",
         "README.md",
+        "doc/architecture.md",
         "pyproject.toml",
         "src/datalab_camera_characterization/__init__.py",
-        "src/datalab_camera_characterization/plugin.py",
-        "tests/test_plugin.py",
+        "src/datalab_camera_characterization/adapters/__init__.py",
+        "src/datalab_camera_characterization/adapters/desktop.py",
+        "src/datalab_camera_characterization/adapters/web.py",
+        "src/datalab_camera_characterization/core/__init__.py",
+        "src/datalab_camera_characterization/workflow/__init__.py",
+        "src/datalab_camera_characterization/workflow/recipes.py",
+        "tests/integration/test_desktop_adapter.py",
+        "tests/unit/test_architecture.py",
     }
     assert {
         path.relative_to(destination).as_posix()
@@ -73,27 +109,86 @@ def test_create_minimal_plugin_project(
     assert '[project.entry-points."datalab.plugins"]' in pyproject
     assert (
         "datalab_camera_characterization = "
-        '"datalab_camera_characterization.plugin:CameraCharacterizationPlugin"'
-        in pyproject
+        '"datalab_camera_characterization.adapters.desktop:'
+        'CameraCharacterizationPlugin"' in pyproject
     )
 
-    monkeypatch.syspath_prepend(str(destination / "src"))
-    module = importlib.import_module("datalab_camera_characterization")
-    plugin_class = module.CameraCharacterizationPlugin
+    _run_generated_project_checks(destination)
+
+    web_adapter = (
+        destination / "src/datalab_camera_characterization/adapters/web.py"
+    ).read_text(encoding="utf-8")
+    assert 'WEB_STATUS = "unsupported"' in web_adapter
+
+    package_name = "datalab_camera_characterization"
+    existing_modules = {
+        module_name: module
+        for module_name, module in tuple(sys.modules.items())
+        if module_name == package_name or module_name.startswith(f"{package_name}.")
+    }
+    for module_name in existing_modules:
+        sys.modules.pop(module_name)
+
+    plugin_class = None
     try:
+        monkeypatch.syspath_prepend(str(destination / "src"))
+        module = importlib.import_module(package_name)
+        assert module.PLUGIN_ID == "org.datalab.camera-characterization"
+        assert f"{package_name}.adapters.desktop" not in sys.modules
+        desktop_adapter = importlib.import_module(f"{package_name}.adapters.desktop")
+        plugin_class = desktop_adapter.CameraCharacterizationPlugin
         assert plugin_class.get_plugin_id() == "org.datalab.camera-characterization"
         assert plugin_class.PLUGIN_INFO.capabilities == frozenset(
             {PluginCapability.APPLICATION, PluginCapability.PROCESSING}
         )
-        plugin_source = destination / "src/datalab_camera_characterization/plugin.py"
+        plugin_source = (
+            destination / "src/datalab_camera_characterization/adapters/desktop.py"
+        )
         assert "self.imagepanel.processor.register_1_to_1" in plugin_source.read_text(
             encoding="utf-8"
         )
         assert '            _("Inverse"),' in plugin_source.read_text(encoding="utf-8")
     finally:
-        PluginRegistry.get_plugin_classes().remove(plugin_class)
-        sys.modules.pop("datalab_camera_characterization.plugin", None)
-        sys.modules.pop("datalab_camera_characterization", None)
+        if plugin_class in PluginRegistry.get_plugin_classes():
+            PluginRegistry.get_plugin_classes().remove(plugin_class)
+        for module_name in tuple(sys.modules):
+            is_generated_module = module_name == package_name or module_name.startswith(
+                f"{package_name}."
+            )
+            if is_generated_module:
+                sys.modules.pop(module_name)
+        sys.modules.update(existing_modules)
+
+
+def test_create_application_only_project(tmp_path: Path) -> None:
+    """A project without sample processing passes its advertised checks."""
+    destination = tmp_path / "application-plugin"
+
+    assert (
+        main(
+            [
+                "create",
+                str(destination),
+                "--name",
+                "Application Plugin",
+                "--package",
+                "datalab_application_plugin",
+                "--plugin-id",
+                "org.datalab.application-plugin",
+                "--description",
+                "Application-only plugin",
+                "--capability",
+                "application",
+            ]
+        )
+        == 0
+    )
+
+    _run_generated_project_checks(destination)
+    desktop_adapter = (
+        destination / "src/datalab_application_plugin/adapters/desktop.py"
+    ).read_text(encoding="utf-8")
+    assert "register_computations" not in desktop_adapter
 
 
 def test_create_refuses_existing_destination(tmp_path: Path) -> None:
@@ -207,9 +302,13 @@ def test_create_interactive_defaults(
 
     destination = tmp_path / "datalab-pulse-characterization"
     pyproject = (destination / "pyproject.toml").read_text(encoding="utf-8")
-    plugin = (destination / "src/datalab_pulse_characterization/plugin.py").read_text(
-        encoding="utf-8"
-    )
+    plugin = (
+        destination / "src/datalab_pulse_characterization/adapters/desktop.py"
+    ).read_text(encoding="utf-8")
+    package = (
+        destination / "src/datalab_pulse_characterization/__init__.py"
+    ).read_text(encoding="utf-8")
     assert 'name = "datalab-pulse-characterization"' in pyproject
-    assert 'id="org.datalab.pulse-characterization"' in plugin
-    assert 'description="Pulse Characterization plugin for DataLab"' in plugin
+    assert 'PLUGIN_ID = "org.datalab.pulse-characterization"' in package
+    assert 'PLUGIN_DESCRIPTION = "Pulse Characterization plugin for DataLab"' in package
+    assert "id=PLUGIN_ID" in plugin
