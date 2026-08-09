@@ -69,6 +69,7 @@ from datalab.control.baseproxy import AbstractDLControl
 from datalab.control.remote import RemoteServer
 from datalab.env import execenv
 from datalab.gui.actionhandler import ActionCategory
+from datalab.gui.applications import ApplicationsDialog
 from datalab.gui.commandpalette import (
     CommandPaletteDialog,
     CommandSearchField,
@@ -208,6 +209,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.autorefresh_action: QW.QAction | None = None
         self.showfirstonly_action: QW.QAction | None = None
         self.showlabel_action: QW.QAction | None = None
+        self.applications_action: QW.QAction | None = None
         self.reload_plugins_action: QW.QAction | None = None
         self.configure_plugins_action: QW.QAction | None = None
 
@@ -1165,6 +1167,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         dialog = PluginConfigDialog(self)
         dialog.exec()
 
+    def __show_applications(self) -> None:
+        """Open the application plugin catalog."""
+        dialog = ApplicationsDialog(self)
+        dialog.exec()
+
     def set_plugins_enabled(self, enabled: bool) -> None:
         """Apply the global third-party plugin enabled state."""
         Conf.main.plugins_enabled.set(enabled)
@@ -1441,6 +1448,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         )
 
         # Plugins menu actions
+        self.applications_action = create_action(
+            self,
+            _("Applications..."),
+            icon=get_icon("libre-gui-plugin.svg"),
+            tip=_("Browse application plugins, recipes and examples"),
+            triggered=self.__show_applications,
+        )
         self.reload_plugins_action = create_action(
             self,
             _("Reload plugins"),
@@ -1579,6 +1593,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.operation_menu = self.menuBar().addMenu(_("Operations"))
         self.processing_menu = self.menuBar().addMenu(_("Processing"))
         self.analysis_menu = self.menuBar().addMenu(_("Analysis"))
+        self.menuBar().addAction(self.applications_action)
         self.plugins_menu = self.menuBar().addMenu(_("Plugins"))
         # Make plugins menu scrollable to handle many plugins without overflow
         self.plugins_menu.setStyleSheet("QMenu { menu-scrollable: 1; }")

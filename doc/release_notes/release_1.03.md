@@ -4,6 +4,14 @@
 
 ### ✨ New Features ###
 
+**Application plugins:**
+
+* Added a top-level **Applications** entry that presents active scientific
+  application plugins in a dedicated catalog
+* Each application displays its description, identity, version, available
+  recipes, and packaged examples; processing-only plugins remain outside this
+  focused view
+
 **Plugin project generator:**
 
 * Hardened ``datalab-plugin create`` from the Camera pilot feedback: generated

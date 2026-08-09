@@ -3999,6 +3999,38 @@ msgstr "Merci de sélectionner le fichier à importer."
 msgid "Example Wizard"
 msgstr "Assistant exemple"
 
+#, python-format
+msgid "Plugin ID: %s"
+msgstr "ID du plugin : %s"
+
+#, python-format
+msgid "Version: %s"
+msgstr "Version : %s"
+
+msgid "Recipes"
+msgstr "Recettes"
+
+msgid "No recipes declared"
+msgstr "Aucune recette déclarée"
+
+msgid "Examples"
+msgstr "Exemples"
+
+msgid "No examples declared"
+msgstr "Aucun exemple déclaré"
+
+msgid "Applications"
+msgstr "Applications"
+
+msgid "No application plugins are currently loaded."
+msgstr "Aucun plugin d'application n'est actuellement chargé."
+
+msgid "Applications..."
+msgstr "Applications..."
+
+msgid "Browse application plugins, recipes and examples"
+msgstr "Parcourir les plugins d'application, les recettes et les exemples"
+
 msgid "Plugin name must be a non-empty single line"
 msgstr "Le nom du plugin doit être une ligne non vide"
 
