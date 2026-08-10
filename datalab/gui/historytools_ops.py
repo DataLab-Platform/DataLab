@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import logging
 from copy import deepcopy
 from typing import TYPE_CHECKING, Any
 from uuid import uuid4
@@ -39,6 +40,8 @@ if TYPE_CHECKING:
 
     from datalab.gui.panel.base import BaseDataPanel
     from datalab.gui.panel.history import HistoryPanel
+
+logger = logging.getLogger(__name__)
 
 
 def action_panel_str(action: HistoryAction) -> str:
@@ -196,7 +199,13 @@ def clone_referenced_objects(
 
 
 def remap_cloned_object_sources(registry: UuidCloneRegistry) -> None:
-    """Rewrite processing-parameter source UUIDs in all cloned objects."""
+    """Rewrite processing-parameter source UUIDs in all cloned objects.
+
+    Any failure to read, parse or write a clone's processing parameters is
+    logged: a clone silently keeping ``source_uuid``/``source_uuids``
+    references to the original objects would break the independence of the
+    duplicated chain.
+    """
     for panel_str, clones in registry.clones_by_panel.items():
         panel_remap = registry.uuid_remap.get(panel_str, {})
         for clone in clones:
@@ -204,13 +213,25 @@ def remap_cloned_object_sources(registry: UuidCloneRegistry) -> None:
                 parameters_dict = clone.get_metadata_option(
                     PROCESSING_PARAMETERS_OPTION
                 )
-            except (AttributeError, ValueError):
+            except ValueError:
+                # Normal case: source objects carry no processing parameters.
+                continue
+            except AttributeError:
+                logger.warning(
+                    "Duplicate: cannot read processing parameters of clone %r.",
+                    getattr(clone, "title", clone),
+                )
                 continue
             if not parameters_dict:
                 continue
             try:
                 parameters = ProcessingParameters.from_dict(parameters_dict)
             except (TypeError, ValueError, AttributeError):
+                logger.warning(
+                    "Duplicate: unparsable processing parameters on clone %r "
+                    "— source UUIDs were not remapped.",
+                    getattr(clone, "title", clone),
+                )
                 continue
             remapped = remap_processing_parameters(parameters, panel_remap)
             if remapped == parameters:
@@ -220,6 +241,11 @@ def remap_cloned_object_sources(registry: UuidCloneRegistry) -> None:
                     PROCESSING_PARAMETERS_OPTION, remapped.to_dict()
                 )
             except (AttributeError, ValueError):
+                logger.warning(
+                    "Duplicate: failed to store remapped processing "
+                    "parameters on clone %r.",
+                    getattr(clone, "title", clone),
+                )
                 continue
 
 
@@ -287,6 +313,69 @@ def register_session_outputs(panel: HistoryPanel, session: HistorySession) -> No
         panel.runtime.objects.register_action_outputs(action, action.output_uuids)
 
 
+def action_referenced_uuids(action: HistoryAction) -> set[str]:
+    """Return every object UUID referenced by an action (inputs and outputs)."""
+    referenced: set[str] = set()
+    for uuids in action.state.selection.values():
+        referenced.update(uuids)
+    obj2_uuids = action.kwargs.get("obj2_uuids") or []
+    if isinstance(obj2_uuids, str):
+        obj2_uuids = [obj2_uuids]
+    referenced.update(obj2_uuids)
+    referenced.update(action.output_uuids)
+    referenced.update(action.target_uuids or [])
+    if action.effects:
+        referenced.update(action.effects)
+    return referenced
+
+
+def verify_duplicated_session_independence(
+    session: HistorySession, registry: UuidCloneRegistry
+) -> None:
+    """Log a warning when a duplicated session still references source UUIDs.
+
+    Post-duplication invariant: no duplicated action and no clone processing
+    parameters may reference a UUID from the original (remapped) mapping. A
+    violation means the duplicated chain is not fully independent from the
+    original one; it is logged (not raised) so the duplication still succeeds.
+
+    Args:
+        session: The freshly assembled duplicated session.
+        registry: Clone registry holding the source-to-clone UUID mapping.
+    """
+    source_uuids = {
+        old_uuid for pmap in registry.uuid_remap.values() for old_uuid in pmap
+    }
+    if not source_uuids:
+        return
+    for action in session.actions:
+        leaked = action_referenced_uuids(action) & source_uuids
+        if leaked:
+            logger.warning(
+                "Duplicate: action %r of session %r still references original "
+                "object UUID(s) %s.",
+                action.title,
+                session.title,
+                sorted(leaked),
+            )
+    for clones in registry.clones_by_panel.values():
+        for clone in clones:
+            parameters = extract_processing_parameters(clone)
+            if parameters is None:
+                continue
+            sources = set(parameters.source_uuids or [])
+            if parameters.source_uuid is not None:
+                sources.add(parameters.source_uuid)
+            leaked = sources & source_uuids
+            if leaked:
+                logger.warning(
+                    "Duplicate: clone %r still references original object "
+                    "UUID(s) %s in its processing parameters.",
+                    getattr(clone, "title", clone),
+                    sorted(leaked),
+                )
+
+
 def duplicate_chain_plan(
     panel: HistoryPanel, plan: ChainSelectionPlan, copy_suffix: str
 ) -> DuplicatedSession:
@@ -300,6 +389,7 @@ def duplicate_chain_plan(
     )
     new_session.actions = assemble_duplicated_actions(panel, plan, registry)
     register_session_outputs(panel, new_session)
+    verify_duplicated_session_independence(new_session, registry)
     return DuplicatedSession(plan.source_session, new_session)
 
 

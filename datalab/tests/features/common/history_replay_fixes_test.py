@@ -13,19 +13,23 @@ import os.path as osp
 from unittest.mock import patch
 
 import numpy as np
+import sigima.objects
 import sigima.params
 import sigima.proc.signal as sips
 from sigima.tests.data import create_paracetamol_signal, create_sincos_image
 
 from datalab.config import _
 from datalab.env import execenv
+from datalab.gui import historytools_ops as htools
 from datalab.gui.panel.history import interactive_replay as hireplay
 from datalab.gui.panel.history import recompute as hrec
+from datalab.gui.processor.base import extract_processing_parameters
 from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_test_app_context
 from datalab.tests.features.common.history_test_helpers import (
     add_paracetamol_signals,
     select_tree_entry,
+    select_tree_session,
 )
 
 
@@ -653,3 +657,180 @@ def test_replay_recreates_deleted_pairwise_n_to_1_output() -> None:
         assert action.output_uuids == recorded
         assert panel.objmodel.has_uuid(deleted_uuid)
         assert np.array_equal(panel.objmodel[deleted_uuid].xydata, expected_data)
+
+
+def assert_no_original_reference(action, original_uuids: set[str]) -> None:
+    """Assert that a duplicated action references no original object UUID.
+
+    Args:
+        action: Duplicated history action to inspect
+        original_uuids: UUIDs of the original (source) chain objects
+    """
+    captured = set(action.state.selection.get("signal", []))
+    assert not captured & original_uuids, action.title
+    obj2 = action.kwargs.get("obj2_uuids") or []
+    if isinstance(obj2, str):
+        obj2 = [obj2]
+    assert not set(obj2) & original_uuids, action.title
+    assert not set(action.output_uuids) & original_uuids, action.title
+
+
+def test_duplicated_chain_independent_after_original_group_deletion() -> None:
+    """Keep a duplicated chain fully independent after deleting the originals.
+
+    User scenario: build a chain (recorded creation + two computes), duplicate
+    it from the History panel, re-run the duplicated chain with different
+    parameters, then delete the ORIGINAL objects group from the Signal panel.
+    Replaying each session afterwards must only touch that session's own
+    objects: the duplicate is a fully standalone deep copy.
+    """
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        history.toggle_record_mode(True)
+        # Original chain: recorded creation + two 1-to-1 computes
+        panel.new_object(param=sigima.objects.GaussParam(), edit=False)
+        source_uuid = get_uuid(panel.objmodel.get_object_from_number(1))
+        panel.objview.select_objects([source_uuid])
+        panel.processor.run_feature(
+            sips.gaussian_filter, sigima.params.GaussianParam.create(sigma=1.5)
+        )
+        gaussian = history[len(history)]
+        panel.objview.select_objects(gaussian.output_uuids)
+        panel.processor.run_feature(sips.derivative)
+        original = history.history_sessions[-1]
+        original_uuids = [
+            uuid for action in original.actions for uuid in action.output_uuids
+        ]
+        assert original_uuids[0] == source_uuid
+        # Duplicate the whole session (History panel "Duplicate" command)
+        select_tree_session(history, original)
+        htools.duplicate_selected_entries(history)
+        duplicate = history.history_sessions[-1]
+        assert duplicate is not original
+        clone_uuids = [
+            uuid for action in duplicate.actions for uuid in action.output_uuids
+        ]
+        assert set(clone_uuids).isdisjoint(original_uuids)
+        # No duplicated action nor clone object references an original UUID
+        for action in duplicate.actions:
+            assert_no_original_reference(action, set(original_uuids))
+        for uuid in clone_uuids:
+            parameters = extract_processing_parameters(panel.objmodel[uuid])
+            if parameters is None:
+                continue
+            sources = list(parameters.source_uuids or [])
+            if parameters.source_uuid is not None:
+                sources.append(parameters.source_uuid)
+            assert not set(sources) & set(original_uuids), uuid
+        # Re-run the duplicated chain with a different parameter
+        dup_gaussian = next(
+            action
+            for action in duplicate.actions
+            if action.func_name == "gaussian_filter"
+        )
+        dup_gaussian.kwargs["param"] = sigima.params.GaussianParam.create(sigma=4.0)
+        with patch.object(hrec, "flush_cascade_warnings"):
+            hireplay.replay_actions(history, list(duplicate.actions), prompt=False)
+        # Delete the ORIGINAL objects group from the Signal panel
+        original_group_id = panel.objmodel.get_object_group_id(
+            panel.objmodel[source_uuid]
+        )
+        panel.objview.select_groups([original_group_id])
+        panel.remove_object(force=True)
+        assert all(not panel.objmodel.has_uuid(uuid) for uuid in original_uuids)
+        clone_data = {uuid: panel.objmodel[uuid].xydata.copy() for uuid in clone_uuids}
+        # The deletion must not rewire the duplicated session onto originals
+        for action in duplicate.actions:
+            if action.kind == action.KIND_COMPUTE:
+                assert_no_original_reference(action, set(original_uuids))
+        # Replay the ORIGINAL session: it must only touch its own objects
+        select_tree_session(history, original)
+        with patch.object(hrec, "flush_cascade_warnings"):
+            hireplay.replay_restore_actions(history)
+        for uuid in clone_uuids:
+            assert panel.objmodel.has_uuid(uuid), "clone deleted by original replay"
+            assert np.array_equal(panel.objmodel[uuid].xydata, clone_data[uuid]), (
+                "original session replay modified a clone object"
+            )
+        for uuid in original_uuids:
+            assert panel.objmodel.has_uuid(uuid), (
+                "original session replay did not recreate its own objects"
+            )
+        original_data = {
+            uuid: panel.objmodel[uuid].xydata.copy() for uuid in original_uuids
+        }
+        # Replay the DUPLICATED session: original objects must stay untouched
+        select_tree_session(history, duplicate)
+        with patch.object(hrec, "flush_cascade_warnings"):
+            hireplay.replay_restore_actions(history)
+        for uuid in original_uuids:
+            assert panel.objmodel.has_uuid(uuid), (
+                "duplicate session replay deleted an original object"
+            )
+            assert np.array_equal(panel.objmodel[uuid].xydata, original_data[uuid]), (
+                "duplicate session replay modified an original object"
+            )
+        for uuid in clone_uuids:
+            assert np.array_equal(panel.objmodel[uuid].xydata, clone_data[uuid])
+
+
+def test_replay_skips_recorded_deletion_of_another_session_objects() -> None:
+    """Skip a recorded deletion targeting objects owned by another session.
+
+    Variant of the duplication scenario where the duplicated session is the
+    active recording session when the ORIGINAL objects group is deleted: the
+    ``remove_object`` action lands in the duplicated session but captures the
+    original session's objects. Replaying the duplicated session must never
+    delete the original session's (recreated) objects.
+    """
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        history.toggle_record_mode(True)
+        panel.new_object(param=sigima.objects.GaussParam(), edit=False)
+        source_uuid = get_uuid(panel.objmodel.get_object_from_number(1))
+        panel.objview.select_objects([source_uuid])
+        panel.processor.run_feature(
+            sips.gaussian_filter, sigima.params.GaussianParam.create(sigma=1.5)
+        )
+        original = history.history_sessions[-1]
+        original_uuids = [
+            uuid for action in original.actions for uuid in action.output_uuids
+        ]
+        select_tree_session(history, original)
+        htools.duplicate_selected_entries(history)
+        duplicate = history.history_sessions[-1]
+        # The duplicated session is the active recording session when the
+        # original group is deleted: the remove action lands in it.
+        history.navigation.set_active_session(duplicate)
+        original_group_id = panel.objmodel.get_object_group_id(
+            panel.objmodel[source_uuid]
+        )
+        panel.objview.select_groups([original_group_id])
+        panel.remove_object(force=True)
+        remove_action = duplicate.actions[-1]
+        assert remove_action.method_name == "remove_object"
+        # Replay the ORIGINAL session: its objects are recreated
+        select_tree_session(history, original)
+        with patch.object(hrec, "flush_cascade_warnings"):
+            hireplay.replay_restore_actions(history)
+        assert all(panel.objmodel.has_uuid(uuid) for uuid in original_uuids)
+        # Replay the DUPLICATED session: the recorded deletion of the original
+        # session's objects must be skipped
+        select_tree_session(history, duplicate)
+        history.runtime.execution.cascade_warnings.clear()
+        with patch.object(hrec, "flush_cascade_warnings"):
+            hireplay.replay_restore_actions(history)
+        assert all(panel.objmodel.has_uuid(uuid) for uuid in original_uuids), (
+            "duplicate session replay deleted another session's objects"
+        )
+        # The skip must come from guard 3 (objects produced by another session)
+        remove_name = (
+            remove_action.title or remove_action.method_name or remove_action.uuid
+        )
+        guard3_message = (
+            _("Action %s targets objects produced by another session and was skipped.")
+            % remove_name
+        )
+        assert guard3_message in history.runtime.execution.cascade_warnings, (
+            "recorded deletion was not skipped by the cross-session guard"
+        )

@@ -62,7 +62,11 @@ def find_output_object_uuid(
     """Find the UUID of the output object produced by ``action`` in ``panel_data``.
 
     Primary path: consult the bijective ``action_output_uuids`` mapping.
-    Fallback path: legacy heuristic on ``processing_parameters`` metadata.
+    Fallback path: legacy heuristic on ``processing_parameters`` metadata,
+    scoped to ``action``'s own session: an object whose producing action
+    (via the ``output_to_action`` registry) belongs to a different session is
+    never matched, so an action can never resolve onto an object produced by
+    another session (e.g. a duplicated chain's clone).
     """
     registered = panel.runtime.objects.action_output_uuids.get(action.uuid)
     if registered:
@@ -78,21 +82,42 @@ def find_output_object_uuid(
     recorded_uuids = set(action.state.selection.get(panel_data.PANEL_STR_ID, []))
     if not recorded_uuids:
         return None
+    own_session = find_parent_session(panel, action)
+    own_action_uuids = (
+        {act.uuid for act in own_session.actions} if own_session is not None else None
+    )
     for obj in panel_data.objmodel:
+        obj_uuid = get_uuid(obj)
+        producer_uuid = panel.runtime.objects.output_to_action.get(obj_uuid)
+        if (
+            producer_uuid is not None
+            and own_action_uuids is not None
+            and producer_uuid not in own_action_uuids
+        ):
+            # Produced by another session's action: out of scope.
+            continue
         pp = extract_processing_parameters(obj)
         if pp is None or pp.func_name != action.func_name:
             continue
         if pp.source_uuid is not None and pp.source_uuid in recorded_uuids:
-            return get_uuid(obj)
+            return obj_uuid
         if pp.source_uuids is not None and recorded_uuids.intersection(pp.source_uuids):
-            return get_uuid(obj)
+            return obj_uuid
     return None
 
 
 def find_action_for_output(
     panel: HistoryPanel, output_uuid: str, func_name: str
 ) -> HistoryAction | None:
-    """Find the :class:`HistoryAction` that produced ``output_uuid``."""
+    """Find the :class:`HistoryAction` that produced ``output_uuid``.
+
+    Primary path: consult the ``output_to_action`` registry. Fallback path:
+    legacy heuristic matching ``func_name`` and the output's recorded source
+    UUID; when the source object's own producing action is registered, the
+    scan is scoped to that action's session so the output is never attributed
+    to an action of a different session (e.g. matching an original-session
+    action for a duplicated chain's clone, or vice versa).
+    """
     if not panel.history_sessions:
         return None
     action_uuid = panel.runtime.objects.output_to_action.get(output_uuid)
@@ -121,7 +146,20 @@ def find_action_for_output(
     if pp is None or pp.func_name != func_name or pp.source_uuid is None:
         return None
     target_source_uuid = pp.source_uuid
-    for current_session in reversed(panel.history_sessions):
+    sessions = list(panel.history_sessions)
+    source_action_uuid = panel.runtime.objects.output_to_action.get(target_source_uuid)
+    if source_action_uuid is not None:
+        owner_session = next(
+            (
+                session
+                for session in sessions
+                if any(act.uuid == source_action_uuid for act in session.actions)
+            ),
+            None,
+        )
+        if owner_session is not None:
+            sessions = [owner_session]
+    for current_session in reversed(sessions):
         for action in reversed(current_session.actions):
             if action.kind != HistoryAction.KIND_COMPUTE:
                 continue

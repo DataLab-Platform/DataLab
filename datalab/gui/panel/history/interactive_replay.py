@@ -217,6 +217,68 @@ def _recompute_stale_actions(panel: HistoryPanel, ordered: list[HistoryAction]) 
         hrec.flush_cascade_warnings(panel)
 
 
+def destructive_replay_skip_reason(
+    panel: HistoryPanel,
+    action: HistoryAction,
+    recreated_outputs: set[str],
+) -> str | None:
+    """Return a warning when a destructive action must not be replayed.
+
+    A destructive UI action (``DESTRUCTIVE_METHODS``) is skipped when:
+
+    1. Its captured selection no longer resolves (e.g. recorded deletion of
+       objects that a replayed load just re-created under new UUIDs).
+    2. It targets objects that were (re)computed earlier in the same
+       execution plan: replaying the recorded deletion would immediately
+       destroy the outputs this replay just restored.
+    3. It targets outputs produced by another session's actions: replaying
+       one session must never delete objects owned by a different session
+       (e.g. a deletion of the original chain recorded while a duplicated
+       session was active).
+
+    Args:
+        panel: History panel instance
+        action: Destructive UI action about to be replayed
+        recreated_outputs: Output UUIDs already (re)computed by this plan
+
+    Returns:
+        The warning message when the action must be skipped, ``None`` when
+        the action may be replayed.
+    """
+    name = action.title or action.method_name or action.uuid
+    if not action.is_current_state_compatible(panel.mainwindow):
+        return (
+            _(
+                "Action %s was skipped: its recorded workspace state no "
+                "longer matches the current workspace."
+            )
+            % name
+        )
+    captured = {uuid for uuids in action.state.selection.values() for uuid in uuids}
+    if captured & recreated_outputs:
+        return (
+            _(
+                "Action %s would delete objects that this replay just "
+                "recomputed and was skipped."
+            )
+            % name
+        )
+    own_session = hchain.find_parent_session(panel, action)
+    if own_session is not None:
+        own_action_uuids = {act.uuid for act in own_session.actions}
+        for uuid in captured:
+            producer_uuid = panel.runtime.objects.output_to_action.get(uuid)
+            if producer_uuid is not None and producer_uuid not in own_action_uuids:
+                return (
+                    _(
+                        "Action %s targets objects produced by another "
+                        "session and was skipped."
+                    )
+                    % name
+                )
+    return None
+
+
 def replay_actions(
     panel: HistoryPanel, actions: list[HistoryAction], prompt: bool = True
 ) -> None:
@@ -300,6 +362,7 @@ def replay_actions(
             panel.tree.refresh_action_item(action)
         QW.QApplication.processEvents()
         blocked_outputs: set[str] = set()
+        recreated_outputs: set[str] = set()
         try:
             for action in execution_plan:
                 if action in deferred_actions:
@@ -310,21 +373,13 @@ def replay_actions(
                     if (
                         action.kind == HistoryAction.KIND_UI
                         and action.method_name in HistoryAction.DESTRUCTIVE_METHODS
-                        and not action.is_current_state_compatible(panel.mainwindow)
                     ):
-                        # Destructive action whose captured selection no longer
-                        # resolves (e.g. recorded deletion of objects that a
-                        # replayed load just re-created under new UUIDs): skip
-                        # it instead of failing the whole plan on restore.
-                        name = action.title or action.method_name or action.uuid
-                        panel.runtime.execution.cascade_warnings.append(
-                            _(
-                                "Action %s targets objects that no longer exist "
-                                "and was skipped."
-                            )
-                            % name
+                        skip_reason = destructive_replay_skip_reason(
+                            panel, action, recreated_outputs
                         )
-                        continue
+                        if skip_reason is not None:
+                            panel.runtime.execution.cascade_warnings.append(skip_reason)
+                            continue
                     is_load_action = (
                         action.kind == HistoryAction.KIND_UI
                         and action.method_name in HistoryAction.UI_LOAD_METHODS
@@ -398,6 +453,10 @@ def replay_actions(
                 panel.tree.refresh_action_item(action)
                 if not success:
                     blocked_outputs.update(
+                        hchain.recorded_action_output_uuids(panel, action)
+                    )
+                else:
+                    recreated_outputs.update(
                         hchain.recorded_action_output_uuids(panel, action)
                     )
         finally:
