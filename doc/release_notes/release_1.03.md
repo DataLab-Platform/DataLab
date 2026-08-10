@@ -16,6 +16,8 @@
 * Added serialized and replayable history sessions with workspace-state validation
 * Added `.dlhist` import/export support and separated reset sessions from regular history sessions
 * Improved replay compatibility reporting for clearer user feedback
+* The Delete key now removes the selected entries in the History panel (same behavior as in the Signal and Image panels), and only applies while the history tree has focus
+* Added a resolution dialog when replaying a processing chain broken by deleted objects: choose "Repair and continue" to prune the broken steps and replay the remaining valid ones, or cancel without modifying anything
 
 **Replace special values processing (signal and image):**
 
@@ -69,3 +71,12 @@ and Image panels.
   been renamed to `recompute_selected`; `recompute_analysis` now refers to a
   different processor-level helper dedicated to explicit 1-to-0 analysis
   refresh
+
+### 🛠️ Bug Fixes ###
+
+**History Panel:**
+
+* Fixed replay of load actions doing nothing when the loaded objects had been deleted while recording was active — the objects are now reloaded from their files
+* Fixed duplicated processing chains interfering with their source chain: replaying either session now only affects its own objects
+* Fixed session replay aborting when the session contained a recorded object deletion — recorded deletions that can no longer be safely applied (captured state mismatch, targets re-created earlier in the same replay, or targets belonging to another session) are now skipped with a warning
+* Removed the yellow highlight that could persist on history entries after a failed replay

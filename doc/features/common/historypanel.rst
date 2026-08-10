@@ -187,9 +187,14 @@ The toolbar at the top of the panel exposes the following actions:
   recompute fails the previous results are restored. Analyses recorded with
   earlier versions of DataLab replay using their saved state. UI actions
   are replayed by invoking their recorded method and may reproduce side
-  effects, including creating, importing, or duplicating objects;
-  destructive actions are skipped when their captured targets no longer
-  resolve.
+  effects, including creating, importing, or duplicating objects; load
+  actions reload their objects even if these were deleted after being
+  recorded. Recorded destructive actions (e.g. object removals) are skipped
+  with a warning whenever replaying them would be unsafe: when their
+  captured state no longer matches the current workspace, when their targets
+  were re-created earlier in the same replay, or when their targets belong
+  to another session. As a consequence, a replayed session may intentionally
+  not reproduce a recorded end state that included such deletions.
 - |step_by_step| **Step-by-step**: replay the same selection one step at a
   time, opening the parameter dialog for each supported action (object
   creation, computation, ROI extraction) before recomputing it. Accepted
@@ -199,13 +204,18 @@ The toolbar at the top of the panel exposes the following actions:
   outdated so the chain stays up to date.
 - |duplicate| **Duplicate**: duplicate the processing chain containing each
   selected action, or the processing chains in each selected session. DataLab
-  clones the required objects and creates independent history sessions.
+  clones the required objects and creates independent history sessions. The
+  duplicate is a standalone deep copy of the chain — as if the recorded
+  operations had been redone by hand on the cloned objects — so replaying
+  either the original or the duplicated session only affects its own objects.
 - |remove_incompatible| **Remove incompatible**: remove all actions whose
   workspace state is no longer compatible with the current workspace. A
   confirmation dialog shows how many actions will be removed.
 - |delete| **Delete**: remove the selected actions or sessions from the
-  history. Removing an intermediate action splices it out and preserves its
-  downstream steps as an independent chain.
+  history (keyboard shortcut: :kbd:`Del`, active only while the history tree
+  has focus, so it never deletes signal or image objects instead). Removing
+  an intermediate action splices it out and preserves its downstream steps
+  as an independent chain.
 
 .. note::
 
@@ -239,7 +249,23 @@ Actions that are not compatible with the current workspace state (for example
 because a referenced object identifier no longer exists, or because its data
 array shape changed) are shown with a disabled foreground and an explanatory
 tooltip.
-They cannot be replayed until the workspace matches the recorded state again.
+Attempting to replay them opens the broken chain resolution dialog described
+below.
+
+Broken chain resolution
+-----------------------
+
+Starting **Replay** or **Step-by-step** (or double-clicking a tree item) on a
+selection containing actions that are incompatible with the current workspace
+— typically because the objects they rely on were deleted — opens a
+resolution dialog. Two choices are offered:
+
+- **Repair and continue**: the broken actions and all their downstream
+  descendants are removed from the history, then the remaining valid actions
+  of the selection are replayed.
+- **Cancel**: nothing is modified, neither the history nor the workspace. The
+  dialog is shown again on the next replay attempt until the chain is
+  repaired.
 
 Workspace state display
 -----------------------
