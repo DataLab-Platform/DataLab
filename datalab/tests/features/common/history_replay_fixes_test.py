@@ -834,3 +834,96 @@ def test_replay_skips_recorded_deletion_of_another_session_objects() -> None:
         assert guard3_message in history.runtime.execution.cascade_warnings, (
             "recorded deletion was not skipped by the cross-session guard"
         )
+
+
+def build_broken_signal_chain(win) -> tuple:
+    """Record a compute chain, then delete its root input (record mode OFF).
+
+    The root signals are created with record mode disabled so no producer
+    action is registered: deleting ``root1`` afterwards cannot be reconnected
+    and the recorded chain is genuinely broken. The session records three
+    computes: a Gaussian filter and its derivative (both depending on
+    ``root1``) plus an independent normalize on ``root2``.
+
+    Args:
+        win: DataLab main window
+
+    Returns:
+        Tuple (session, broken actions, still-valid action)
+    """
+    history, panel = win.historypanel, win.signalpanel
+    root1, root2 = add_paracetamol_signals(panel, 2)
+    history.toggle_record_mode(True)
+    panel.objview.select_objects([root1])
+    panel.processor.run_feature(
+        sips.gaussian_filter, sigima.params.GaussianParam.create(sigma=1.5)
+    )
+    gaussian = history[len(history)]
+    panel.objview.select_objects(gaussian.output_uuids)
+    panel.processor.run_feature(sips.derivative)
+    derivative = history[len(history)]
+    panel.objview.select_objects([root2])
+    panel.processor.run_feature(sips.normalize, sigima.params.NormalizeParam.create())
+    normalize = history[len(history)]
+    history.toggle_record_mode(False)
+    panel.objview.select_objects([root1])
+    panel.remove_object(force=True)
+    history.toggle_record_mode(True)
+    session = history.history_sessions[-1]
+    assert not session.is_current_state_compatible(win)
+    return session, [gaussian, derivative], normalize
+
+
+def test_replay_broken_chain_repair_and_continue() -> None:
+    """Repair a broken chain on replay, then replay the remaining actions.
+
+    With ``accept_dialogs`` enabled, the broken-chain resolution dialog
+    defaults to "Repair and continue": the incompatible actions and their
+    downstream dependents are pruned from the history, the tree is refreshed
+    and the remaining valid action of the selection is replayed.
+    """
+    with datalab_test_app_context(history=True) as win:
+        history = win.historypanel
+        session, broken_actions, valid_action = build_broken_signal_chain(win)
+        select_tree_session(history, session)
+        saved_accept_dialogs = execenv.accept_dialogs
+        execenv.accept_dialogs = True
+        try:
+            with patch.object(hrec, "flush_cascade_warnings"):
+                history.replay_restore_actions(restore_selection=False)
+        finally:
+            execenv.accept_dialogs = saved_accept_dialogs
+        # Broken actions and their downstream dependents were pruned
+        assert session in history.history_sessions
+        assert session.actions == [valid_action]
+        for action in broken_actions:
+            assert all(
+                action not in other.actions for other in history.history_sessions
+            )
+        # The tree reflects the pruned history
+        assert history.tree.topLevelItemCount() == len(history.history_sessions)
+        # The remaining valid action was replayed
+        assert valid_action.is_stale is False
+        history.runtime.execution.cascade_warnings.clear()
+
+
+def test_replay_broken_chain_cancel_keeps_history_intact() -> None:
+    """Cancel the broken-chain dialog: nothing is modified, nothing replayed.
+
+    In unattended mode without ``accept_dialogs``, the resolution dialog
+    defaults to "Cancel": the history is left untouched and no action is
+    replayed. The dialog will simply reappear on the next replay attempt.
+    """
+    with datalab_test_app_context(history=True) as win:
+        history = win.historypanel
+        session, broken_actions, valid_action = build_broken_signal_chain(win)
+        actions_before = list(session.actions)
+        select_tree_session(history, session)
+        assert execenv.unattended and not execenv.accept_dialogs
+        with patch.object(hireplay, "replay_actions") as replay_mock:
+            history.replay_restore_actions(restore_selection=False)
+        replay_mock.assert_not_called()
+        assert session in history.history_sessions
+        assert session.actions == actions_before
+        assert all(action in session.actions for action in broken_actions)
+        assert valid_action in session.actions

@@ -38,8 +38,11 @@ def replay_restore_actions(
     Entry point of the Replay, Step-by-step and double-click commands. When
     nothing is selected in the tree, the last session is targeted (no-op if
     the history is empty). Each selected session or action is first checked
-    against the current workspace state: any incompatibility vetoes the whole
-    command with an error dialog (skipped in unattended mode).
+    against the current workspace state: any incompatibility (e.g. an input
+    object was deleted, breaking the chain) triggers a resolution dialog
+    proposing to repair the history — remove the broken actions and their
+    downstream dependents, then continue with the remaining actions — or to
+    cancel the whole command (see :func:`confirm_broken_chain_repair`).
 
     When ``replay`` is enabled, the selected actions (sessions contribute all
     of their actions) are forwarded to :func:`replay_actions`, with parameter
@@ -63,17 +66,27 @@ def replay_restore_actions(
         if not panel.history_sessions:
             return
         selected = [panel.history_sessions[-1]]
+    broken = [
+        entry
+        for entry in selected
+        if not entry.is_current_state_compatible(panel.mainwindow)
+    ]
+    if broken:
+        if not confirm_broken_chain_repair(panel, broken):
+            return
+        repair_broken_entries(panel, broken)
+        hchain.refresh_reconnected_history(panel)
+        selected = [
+            entry
+            for entry in selected
+            if _entry_still_in_history(panel, entry)
+            and entry.is_current_state_compatible(panel.mainwindow)
+        ]
+        if not selected:
+            return
     edit_mode = panel.runtime.execution.edit_mode
     actions_to_replay: list[HistoryAction] = []
     for session_or_action in selected:
-        if not session_or_action.is_current_state_compatible(panel.mainwindow):
-            if not execenv.unattended:
-                QW.QMessageBox.critical(
-                    panel.mainwindow,
-                    _("Error"),
-                    _("The current workspace state is not compatible with the action."),
-                )
-            return
         if replay:
             if isinstance(session_or_action, HistorySession):
                 actions_to_replay.extend(session_or_action.actions)
@@ -90,6 +103,121 @@ def replay_restore_actions(
                 session_or_action.restore(panel.mainwindow)
     if actions_to_replay:
         replay_actions(panel, actions_to_replay, prompt=edit_mode)
+
+
+def confirm_broken_chain_repair(
+    panel: HistoryPanel, broken: list[HistorySession | HistoryAction]
+) -> bool:
+    """Propose repairing the history when the selected chain is broken.
+
+    One or more selected sessions or actions reference objects that no longer
+    exist in the workspace (deleted inputs), so their processing chain is no
+    longer guaranteed. The user may repair the history — remove the broken
+    actions and their downstream dependents, then continue with the remaining
+    actions — or cancel (nothing is modified). In unattended mode no dialog
+    is shown: repair is chosen when ``execenv.accept_dialogs`` is set,
+    otherwise the command is cancelled.
+
+    Args:
+        panel: History panel instance
+        broken: Selected sessions or actions whose recorded workspace state
+         no longer matches the current workspace
+
+    Returns:
+        True if the history should be repaired and the command continued.
+    """
+    if execenv.unattended:
+        return bool(execenv.accept_dialogs)
+    names: list[str] = []
+    for entry in broken:
+        if isinstance(entry, HistorySession):
+            names.append(entry.title)
+        else:
+            names.append(entry.title or entry.func_name or entry.uuid)
+    msgbox = QW.QMessageBox(panel.mainwindow)
+    msgbox.setWindowTitle(_("Broken processing chain"))
+    msgbox.setIcon(QW.QMessageBox.Icon.Warning)
+    msgbox.setText(
+        _(
+            "One or more objects used by the selected processing chain were "
+            "deleted: the chain is broken and the following entries can no "
+            "longer be replayed:\n%s\n\n"
+            "Repair the history by removing the broken actions (and the "
+            "actions depending on them), then continue with the remaining "
+            "actions?"
+        )
+        % "\n".join("• " + name for name in names)
+    )
+    repair_button = msgbox.addButton(
+        _("Repair and continue"), QW.QMessageBox.ButtonRole.YesRole
+    )
+    cancel_button = msgbox.addButton(QW.QMessageBox.Cancel)
+    msgbox.setDefaultButton(cancel_button)
+    msgbox.exec()
+    return msgbox.clickedButton() is repair_button
+
+
+def collect_broken_chain_actions(
+    panel: HistoryPanel, broken: list[HistorySession | HistoryAction]
+) -> list[HistoryAction]:
+    """Return the incompatible actions of ``broken`` plus their dependents.
+
+    For a selected session, every action whose recorded workspace state is
+    incompatible with the current workspace is included; a directly selected
+    action is included as is. The downstream closure of each broken action
+    (actions consuming its outputs, transitively) is appended through
+    :func:`datalab.gui.panel.history.chain.get_downstream_actions`.
+
+    Args:
+        panel: History panel instance
+        broken: Selected sessions or actions flagged as incompatible
+
+    Returns:
+        Actions to remove from the history, in discovery order
+    """
+    roots: list[HistoryAction] = []
+    for entry in broken:
+        candidates = (
+            [
+                action
+                for action in entry.actions
+                if not action.is_current_state_compatible(panel.mainwindow)
+            ]
+            if isinstance(entry, HistorySession)
+            else [entry]
+        )
+        for action in candidates:
+            if action not in roots:
+                roots.append(action)
+    to_remove = list(roots)
+    for action in roots:
+        # Same-session closure only: later sessions survive (objects not deleted)
+        for downstream in hchain.get_downstream_actions(panel, action):
+            if downstream not in to_remove:
+                to_remove.append(downstream)
+    return to_remove
+
+
+def repair_broken_entries(
+    panel: HistoryPanel, broken: list[HistorySession | HistoryAction]
+) -> None:
+    """Remove broken actions and their downstream dependents from the history.
+
+    Args:
+        panel: History panel instance
+        broken: Selected sessions or actions flagged as incompatible
+    """
+    for action in collect_broken_chain_actions(panel, broken):
+        hchain.remove_single_action(panel, action)
+
+
+def _entry_still_in_history(
+    panel: HistoryPanel, entry: HistorySession | HistoryAction
+) -> bool:
+    """Return True if ``entry`` survived the history repair."""
+    if isinstance(entry, HistorySession):
+        return entry in panel.history_sessions and bool(entry.actions)
+    return hchain.find_parent_session(panel, entry) is not None
 
 
 def prepare_action_param_edit(action: HistoryAction) -> ActionParamEdit | None:
