@@ -14,6 +14,7 @@ from qtpy import QtWidgets as QW
 
 from datalab.config import _
 from datalab.plugins import PluginCapability, PluginRegistry
+from datalab.utils.qthelpers import qt_handle_error_message
 from datalab.widgets.expandabletext import apply_subdued_color
 
 if TYPE_CHECKING:
@@ -262,12 +263,23 @@ class ApplicationsDialog(QW.QDialog):
     def _start_recipe(self, plugin: PluginBase, recipe_id: str) -> None:
         """Close the catalog and delegate to a plugin-owned recipe launcher."""
         self.accept()
-        plugin.launch_recipe(recipe_id)
+        try:
+            plugin.launch_recipe(recipe_id)
+        except Exception as exc:  # pylint: disable=broad-except
+            # Plugin-owned launchers are third-party code: never crash the app
+            qt_handle_error_message(
+                self.parent() or self, exc, _("Starting analysis '%s'") % recipe_id
+            )
 
     def _open_example(self, plugin: PluginBase, example_id: str) -> None:
         """Close the catalog and delegate packaged-example opening."""
         self.accept()
-        plugin.launch_example(example_id)
+        try:
+            plugin.launch_example(example_id)
+        except Exception as exc:  # pylint: disable=broad-except
+            qt_handle_error_message(
+                self.parent() or self, exc, _("Opening example '%s'") % example_id
+            )
 
     @staticmethod
     def _open_documentation(plugin: PluginBase) -> None:

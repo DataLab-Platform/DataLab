@@ -4031,6 +4031,14 @@ msgstr "Applications"
 msgid "No application plugins are currently loaded."
 msgstr "Aucun plugin d'application n'est actuellement chargé."
 
+#, python-format
+msgid "Starting analysis '%s'"
+msgstr "Lancement de l'analyse '%s'"
+
+#, python-format
+msgid "Opening example '%s'"
+msgstr "Ouverture de l'exemple '%s'"
+
 msgid "Applications..."
 msgstr "Applications..."
 
@@ -4175,3 +4183,4 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
+

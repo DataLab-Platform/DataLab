@@ -221,3 +221,59 @@ def test_application_commands_delegate_to_plugin_contracts(monkeypatch) -> None:
         registry[:] = previous_plugins
         if "dialog" in locals():
             dialog.deleteLater()
+
+
+def test_application_command_failures_are_reported_not_raised(monkeypatch) -> None:
+    """A failing plugin launcher shows an error dialog instead of crashing."""
+    qt_app = QW.QApplication.instance() or QW.QApplication([])
+    recipe = SimpleNamespace(
+        recipe_id="org.example.camera:quick-check",
+        title="Quick camera check",
+        version="2.0.0",
+        description="Run the quick workflow",
+    )
+    example = SimpleNamespace(
+        id="quickstart",
+        title="Scientific camera quickstart",
+        description="Open the packaged workspace",
+    )
+    application = _plugin(
+        "org.example.camera",
+        "Camera Characterization",
+        frozenset({PluginCapability.APPLICATION}),
+        recipes=(recipe,),
+        examples=(example,),
+    )
+
+    def failing_launch_recipe(recipe_id: str) -> None:
+        raise RuntimeError("launcher exploded")
+
+    def failing_launch_example(example_id: str) -> None:
+        raise RuntimeError("example exploded")
+
+    application.launch_recipe = failing_launch_recipe
+    application.launch_example = failing_launch_example
+    reported: list[tuple[str, str]] = []
+    monkeypatch.setattr(
+        applications_module,
+        "qt_handle_error_message",
+        lambda _widget, message, context=None: reported.append((str(message), context)),
+    )
+    registry = PluginRegistry.get_plugins()
+    previous_plugins = list(registry)
+    registry[:] = [application]
+    try:
+        dialog = ApplicationsDialog()
+        dialog.application_pages[0].start_button.click()
+        dialog = ApplicationsDialog()
+        dialog.application_pages[0].open_example_button.click()
+        assert [message for message, _context in reported] == [
+            "launcher exploded",
+            "example exploded",
+        ]
+        assert all(_context for _message, _context in reported)
+        assert qt_app is not None
+    finally:
+        registry[:] = previous_plugins
+        if "dialog" in locals():
+            dialog.deleteLater()
