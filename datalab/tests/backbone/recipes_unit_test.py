@@ -304,3 +304,63 @@ def test_plugin_exposes_only_owned_unique_recipes() -> None:
             RecipePlugin.get_recipes()
     finally:
         PluginRegistry.get_plugin_classes().remove(RecipePlugin)
+
+
+def test_plugin_recipe_launchers_delegate_to_owned_desktop_methods() -> None:
+    """Desktop launchers stay explicit, recipe-owned, and outcome-typed."""
+
+    def run_recipe(*_args, **_kwargs) -> RecipeOutcome:
+        """Return an empty headless outcome."""
+        return RecipeOutcome()
+
+    recipe = RecipeDescriptor(
+        recipe_id="org.example.launcher:quick-check",
+        plugin_version="1.0.0",
+        title="Quick check",
+        version="1.0.0",
+        run=run_recipe,
+    )
+
+    class LauncherPlugin(PluginBase):
+        """Plugin exposing one explicit Desktop recipe launcher."""
+
+        PLUGIN_INFO = PluginInfo(
+            id="org.example.launcher",
+            name="Launcher plugin",
+            version="1.0.0",
+        )
+        RECIPES = (recipe,)
+        RECIPE_LAUNCHERS = {recipe.recipe_id: "run_quick_check"}
+
+        def create_actions(self) -> None:
+            """Create no actions for this contract test."""
+
+        def run_quick_check(self) -> RecipeOutcome:
+            """Return a visible-launch outcome."""
+            return RecipeOutcome()
+
+    try:
+        plugin = LauncherPlugin()
+        plugin.main = object()
+        assert dict(plugin.get_recipe_launchers()) == {
+            recipe.recipe_id: "run_quick_check"
+        }
+        assert isinstance(plugin.launch_recipe(recipe.recipe_id), RecipeOutcome)
+
+        plugin.main = None
+        with pytest.raises(RuntimeError, match="registered"):
+            plugin.launch_recipe(recipe.recipe_id)
+        plugin.main = object()
+        with pytest.raises(KeyError, match="No Desktop launcher"):
+            plugin.launch_recipe("org.example.launcher:missing")
+
+        LauncherPlugin.RECIPE_LAUNCHERS = {
+            "org.example.launcher:unknown": "run_quick_check"
+        }
+        with pytest.raises(ValueError, match="unknown recipe"):
+            LauncherPlugin.get_recipe_launchers()
+        LauncherPlugin.RECIPE_LAUNCHERS = {recipe.recipe_id: "missing_method"}
+        with pytest.raises(ValueError, match="not callable"):
+            LauncherPlugin.get_recipe_launchers()
+    finally:
+        PluginRegistry.get_plugin_classes().remove(LauncherPlugin)

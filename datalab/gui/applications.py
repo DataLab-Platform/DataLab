@@ -1,9 +1,10 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
-"""Read-only catalog of application plugins and their declared workflows."""
+"""Catalog of application plugins and their declared workflows."""
 
 from __future__ import annotations
 
+import webbrowser
 from typing import TYPE_CHECKING
 
 from guidata.configtools import get_icon
@@ -35,11 +36,31 @@ def get_application_plugins() -> tuple[PluginBase, ...]:
 class ApplicationPage(QW.QWidget):
     """Display one application plugin's recipes and packaged examples."""
 
+    start_requested = QC.Signal(object, str)
+    open_example_requested = QC.Signal(object, str)
+    documentation_requested = QC.Signal(object)
+
     def __init__(self, plugin: PluginBase, parent: QW.QWidget | None = None):
         super().__init__(parent)
         self.plugin = plugin
         self.recipe_list = QW.QListWidget()
         self.example_list = QW.QListWidget()
+        self.start_button = QW.QPushButton(
+            get_icon("analysis.svg"), _("Start analysis")
+        )
+        self.open_example_button = QW.QPushButton(
+            get_icon("io/fileopen_h5.svg"), _("Open example")
+        )
+        self.documentation_button = QW.QPushButton(
+            get_icon("libre-gui-help.svg"), _("Documentation")
+        )
+        for button in (
+            self.start_button,
+            self.open_example_button,
+            self.documentation_button,
+        ):
+            button.setAutoDefault(False)
+            button.setDefault(False)
 
         layout = QW.QVBoxLayout(self)
         layout.setContentsMargins(18, 12, 18, 12)
@@ -61,6 +82,20 @@ class ApplicationPage(QW.QWidget):
 
         layout.addWidget(self._create_recipes_group(), 1)
         layout.addWidget(self._create_examples_group(), 1)
+        layout.addLayout(self._create_actions_layout())
+
+        self.recipe_list.currentItemChanged.connect(self._update_action_states)
+        self.example_list.currentItemChanged.connect(self._update_action_states)
+        self.start_button.clicked.connect(self._request_start)
+        self.open_example_button.clicked.connect(self._request_open_example)
+        self.documentation_button.clicked.connect(
+            lambda: self.documentation_requested.emit(self.plugin)
+        )
+        if self.recipe_list.count():
+            self.recipe_list.setCurrentRow(0)
+        if self.example_list.count():
+            self.example_list.setCurrentRow(0)
+        self._update_action_states()
 
     def _create_header(self) -> QW.QHBoxLayout:
         """Create the application title row."""
@@ -77,8 +112,7 @@ class ApplicationPage(QW.QWidget):
     @staticmethod
     def _configure_list(widget: QW.QListWidget) -> None:
         """Configure a descriptor list as a read-only catalog."""
-        widget.setSelectionMode(QW.QAbstractItemView.NoSelection)
-        widget.setFocusPolicy(QC.Qt.NoFocus)
+        widget.setSelectionMode(QW.QAbstractItemView.SingleSelection)
         widget.setAlternatingRowColors(True)
 
     def _create_recipes_group(self) -> QW.QGroupBox:
@@ -118,6 +152,46 @@ class ApplicationPage(QW.QWidget):
             apply_subdued_color(label)
             layout.addWidget(label)
         return group
+
+    def _create_actions_layout(self) -> QW.QHBoxLayout:
+        """Create the application workflow command row."""
+        layout = QW.QHBoxLayout()
+        layout.addWidget(self.start_button)
+        layout.addWidget(self.open_example_button)
+        layout.addStretch()
+        layout.addWidget(self.documentation_button)
+        return layout
+
+    @staticmethod
+    def _current_id(widget: QW.QListWidget) -> str | None:
+        """Return the stable identifier stored on the current list item."""
+        item = widget.currentItem()
+        return None if item is None else item.data(QC.Qt.UserRole)
+
+    def _update_action_states(self, *_args: object) -> None:
+        """Enable commands only when their declared target is available."""
+        recipe_id = self._current_id(self.recipe_list)
+        self.start_button.setEnabled(
+            recipe_id is not None and recipe_id in self.plugin.get_recipe_launchers()
+        )
+        self.open_example_button.setEnabled(
+            self._current_id(self.example_list) is not None
+        )
+        documentation_url = self.plugin.info.documentation_url
+        self.documentation_button.setEnabled(documentation_url is not None)
+        self.documentation_button.setToolTip(documentation_url or "")
+
+    def _request_start(self) -> None:
+        """Request execution of the selected recipe."""
+        recipe_id = self._current_id(self.recipe_list)
+        if recipe_id is not None:
+            self.start_requested.emit(self.plugin, recipe_id)
+
+    def _request_open_example(self) -> None:
+        """Request opening of the selected packaged example."""
+        example_id = self._current_id(self.example_list)
+        if example_id is not None:
+            self.open_example_requested.emit(self.plugin, example_id)
 
 
 class ApplicationsDialog(QW.QDialog):
@@ -178,6 +252,26 @@ class ApplicationsDialog(QW.QDialog):
                 item.setToolTip(plugin.info.description)
             self.application_list.addItem(item)
             page = ApplicationPage(plugin)
+            page.start_requested.connect(self._start_recipe)
+            page.open_example_requested.connect(self._open_example)
+            page.documentation_requested.connect(self._open_documentation)
             self.application_pages.append(page)
             self.application_stack.addWidget(page)
         self.application_list.setCurrentRow(0)
+
+    def _start_recipe(self, plugin: PluginBase, recipe_id: str) -> None:
+        """Close the catalog and delegate to a plugin-owned recipe launcher."""
+        self.accept()
+        plugin.launch_recipe(recipe_id)
+
+    def _open_example(self, plugin: PluginBase, example_id: str) -> None:
+        """Close the catalog and delegate packaged-example opening."""
+        self.accept()
+        plugin.launch_example(example_id)
+
+    @staticmethod
+    def _open_documentation(plugin: PluginBase) -> None:
+        """Open the plugin's declared documentation URL."""
+        documentation_url = plugin.info.documentation_url
+        if documentation_url is not None:
+            webbrowser.open(documentation_url)

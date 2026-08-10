@@ -118,6 +118,24 @@ def test_plugin_capabilities_are_typed_and_immutable() -> None:
         PluginInfo(name="Invalid plugin", capabilities={"processing"})
 
 
+def test_plugin_documentation_url_is_explicit_and_web_safe() -> None:
+    """Application documentation uses an optional absolute HTTP(S) URL."""
+    url = "https://example.org/plugin/docs"
+
+    assert (
+        PluginInfo(name="Documented plugin", documentation_url=url).documentation_url
+        == url
+    )
+    assert PluginInfo(name="Undocumented plugin").documentation_url is None
+
+    with pytest.raises(ValueError, match="HTTP or HTTPS"):
+        PluginInfo(name="Local documentation", documentation_url="docs/index.html")
+    with pytest.raises(ValueError, match="HTTP or HTTPS"):
+        PluginInfo(name="File documentation", documentation_url="file:///tmp/docs")
+    with pytest.raises(TypeError, match="string or None"):
+        PluginInfo(name="Invalid documentation", documentation_url=42)
+
+
 def test_entry_point_discovers_plugin_class_once_with_source(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

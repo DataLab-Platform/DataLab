@@ -3999,6 +3999,12 @@ msgstr "Merci de sélectionner le fichier à importer."
 msgid "Example Wizard"
 msgstr "Assistant exemple"
 
+msgid "Start analysis"
+msgstr "Lancer l'analyse"
+
+msgid "Documentation"
+msgstr "Documentation"
+
 #, python-format
 msgid "Plugin ID: %s"
 msgstr "ID du plugin : %s"
@@ -4115,6 +4121,12 @@ msgstr "Licence du projet"
 #, python-format
 msgid "Created DataLab plugin project at %s"
 msgstr "Projet de plugin DataLab créé dans %s"
+
+msgid "Opening this example replaces the current workspace. Continue?"
+msgstr "L'ouverture de cet exemple remplace l'espace de travail actuel. Continuer ?"
+
+msgid "Open example"
+msgstr "Ouvrir l'exemple"
 
 msgid "Minimum value"
 msgstr "Valeur minimum"

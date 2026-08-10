@@ -31,11 +31,12 @@ import os.path as osp
 import pkgutil
 import sys
 import traceback
-from collections.abc import Collection
+from collections.abc import Collection, Mapping
 from contextlib import ExitStack
 from importlib import metadata as importlib_metadata
-from types import ModuleType
+from types import MappingProxyType, ModuleType
 from typing import TYPE_CHECKING
+from urllib.parse import urlparse
 
 from qtpy import QtWidgets as QW
 
@@ -55,7 +56,7 @@ from datalab.config import (
 from datalab.control.proxy import LocalProxy
 from datalab.env import execenv
 from datalab.plugin_examples import PluginExample
-from datalab.recipes import RecipeDescriptor
+from datalab.recipes import RecipeDescriptor, RecipeOutcome
 
 if TYPE_CHECKING:
     from sigima.objects import NewImageParam, NewSignalParam
@@ -269,6 +270,7 @@ class PluginInfo:
     capabilities: Collection[PluginCapability] = dataclasses.field(
         default_factory=frozenset
     )
+    documentation_url: str | None = None
 
     def __post_init__(self) -> None:
         """Validate and freeze declared plugin capabilities."""
@@ -278,6 +280,12 @@ class PluginInfo:
         ):
             raise TypeError("Plugin capabilities must be PluginCapability values")
         self.capabilities = capabilities
+        if self.documentation_url is not None:
+            if not isinstance(self.documentation_url, str):
+                raise TypeError("Plugin documentation URL must be a string or None")
+            parsed_url = urlparse(self.documentation_url)
+            if parsed_url.scheme not in ("http", "https") or not parsed_url.netloc:
+                raise ValueError("Plugin documentation URL must use HTTP or HTTPS")
 
 
 class PluginBaseMeta(PluginRegistry, abc.ABCMeta):
@@ -290,6 +298,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
     PLUGIN_INFO: PluginInfo = None
     RECIPES: tuple[RecipeDescriptor, ...] = ()
     EXAMPLES: tuple[PluginExample, ...] = ()
+    RECIPE_LAUNCHERS: Mapping[str, str] = MappingProxyType({})
 
     def __init__(self):
         self.main: main.DLMainWindow = None
@@ -340,6 +349,39 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         return recipes
 
     @classmethod
+    def get_recipe_launchers(cls) -> Mapping[str, str]:
+        """Return validated recipe-to-method bindings for the Desktop UI."""
+        if not isinstance(cls.RECIPE_LAUNCHERS, Mapping):
+            raise TypeError("Plugin recipe launchers must be a mapping")
+        launchers = dict(cls.RECIPE_LAUNCHERS)
+        recipe_ids = {recipe.recipe_id for recipe in cls.get_recipes()}
+        for recipe_id, method_name in launchers.items():
+            if recipe_id not in recipe_ids:
+                raise ValueError(
+                    f"Recipe launcher references unknown recipe {recipe_id!r}"
+                )
+            if not isinstance(method_name, str) or not method_name.strip():
+                raise TypeError("Plugin recipe launcher names must be strings")
+            if not callable(getattr(cls, method_name, None)):
+                raise ValueError(
+                    f"Recipe launcher method {method_name!r} is not callable"
+                )
+        return MappingProxyType(launchers)
+
+    def launch_recipe(self, recipe_id: str) -> RecipeOutcome | None:
+        """Launch a recipe through its plugin-owned Desktop interaction."""
+        if self.main is None:
+            raise RuntimeError("Plugin must be registered before launching a recipe")
+        try:
+            method_name = self.get_recipe_launchers()[recipe_id]
+        except KeyError as exc:
+            raise KeyError(f"No Desktop launcher for recipe {recipe_id!r}") from exc
+        outcome = getattr(self, method_name)()
+        if outcome is not None and not isinstance(outcome, RecipeOutcome):
+            raise TypeError("Plugin recipe launchers must return RecipeOutcome or None")
+        return outcome
+
+    @classmethod
     def get_examples(cls) -> tuple[PluginExample, ...]:
         """Return validated packaged examples exposed by this plugin."""
         examples = tuple(cls.EXAMPLES)
@@ -365,6 +407,20 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
             if example.id == example_id:
                 return example
         raise KeyError(f"Plugin example {example_id!r} not found")
+
+    def launch_example(self, example_id: str) -> PluginExample | None:
+        """Confirm and open a packaged example from the Applications view."""
+        if self.main is None:
+            raise RuntimeError("Plugin must be registered before launching an example")
+        self.get_example(example_id)
+        if not self.main.confirm_memory_state():
+            return None
+        if any(len(panel) for panel in self.main.panels) and not self.ask_yesno(
+            _("Opening this example replaces the current workspace. Continue?"),
+            title=_("Open example"),
+        ):
+            return None
+        return self.open_example(example_id, reset_all=True)
 
     def open_example(
         self,
