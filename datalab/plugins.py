@@ -274,6 +274,8 @@ class PluginInfo:
 
     def __post_init__(self) -> None:
         """Validate and freeze declared plugin capabilities."""
+        if self.id is not None and not self.id.strip():
+            raise ValueError("Plugin ID must be None or a non-blank string")
         capabilities = frozenset(self.capabilities)
         if any(
             not isinstance(capability, PluginCapability) for capability in capabilities

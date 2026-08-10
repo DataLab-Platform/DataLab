@@ -118,6 +118,14 @@ def test_plugin_capabilities_are_typed_and_immutable() -> None:
         PluginInfo(name="Invalid plugin", capabilities={"processing"})
 
 
+def test_blank_plugin_id_is_rejected_at_declaration() -> None:
+    """A blank plugin ID fails fast instead of silently falling back."""
+    with pytest.raises(ValueError, match="non-blank"):
+        PluginInfo(id="", name="Blank ID plugin")
+    with pytest.raises(ValueError, match="non-blank"):
+        PluginInfo(id="   ", name="Whitespace ID plugin")
+
+
 def test_plugin_documentation_url_is_explicit_and_web_safe() -> None:
     """Application documentation uses an optional absolute HTTP(S) URL."""
     url = "https://example.org/plugin/docs"
@@ -397,9 +405,11 @@ def test_invalid_plugin_id_is_rejected_during_discovery(
     plugin_class = create_plugin_class(
         "InvalidIdPlugin",
         "invalid_id_plugin",
-        plugin_id=" ",
+        plugin_id="org.example.valid",
         display_name="Invalid ID plugin",
     )
+    # Bypass declaration-time validation to exercise the discovery-time guard
+    plugin_class.PLUGIN_INFO.id = " "
     PluginRegistry.clear_plugin_classes()
 
     class EntryPoint:
