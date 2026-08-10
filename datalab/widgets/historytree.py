@@ -239,7 +239,9 @@ class HistoryTree(QW.QTreeWidget):
         for i in range(self.topLevelItemCount()):
             item = self.topLevelItem(i)
             number = item.data(0, self.SESSION_NUMBER_ROLE)
-            is_active = number is not None and number == self.__active_session_number
+            is_active = bool(
+                number is not None and number == self.__active_session_number
+            )
             font = item.font(0)
             font.setBold(is_active)
             for col in (0, 1):

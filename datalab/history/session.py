@@ -128,7 +128,8 @@ class HistorySession:
         with reader.group("title"):
             self.title = reader.read_any()
         with reader.group("number"):
-            self.number = reader.read_any()
+            # HDF5 readers return NumPy scalars: coerce to a plain Python int
+            self.number = int(reader.read_any())
         with reader.group("dtstr"):
             self.dtstr = reader.read_any()
         self.actions = reader.read_object_list("actions", HistoryAction)
