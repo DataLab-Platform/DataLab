@@ -114,7 +114,33 @@ class RecipeValidationError(ValueError):
 
 @dataclasses.dataclass(frozen=True)
 class RecipeRunRecord:
-    """Versioned local provenance shared by every output of a recipe run."""
+    """Versioned local provenance shared by every output of a recipe run.
+
+    The record is persisted as JSON metadata (see :meth:`to_dict`) under the
+    ``RECIPE_RUN_RECORD_OPTION`` metadata option of every output object, so
+    external consumers (DataLab-Web, HDF5 workspaces, tooling) can rely on
+    the following schema (version ``1``):
+
+    - ``schema_version`` (int): always ``RECIPE_RUN_RECORD_SCHEMA_VERSION``
+    - ``run_id`` (str): UUID shared by all outputs of one recipe invocation
+    - ``plugin_id`` / ``plugin_version`` (str): owning plugin and its version
+    - ``recipe_id`` / ``recipe_version`` (str): recipe (``<plugin_id>:<name>``)
+      and its contract version
+    - ``parameters_json`` (str): guidata DataSet serialized with
+      ``dataset_to_json`` (``"null"`` for parameterless recipes)
+    - ``input_uuids`` (dict[str, list[str]]): object UUIDs consumed per input
+      slot — a mapping (not a flat list) so slot roles survive round-trips
+    - ``output_uuids`` (dict[str, str]): object UUID produced per output ID
+    - ``datalab_version`` / ``sigima_version`` (str): environment versions
+    - ``status`` (str): a ``RecipeRunStatus`` value
+    - ``started_at`` / ``finished_at`` (str): timezone-aware ISO 8601
+
+    Compatibility policy: readers must reject records whose
+    ``schema_version`` they do not know (as :meth:`from_dict` does); any
+    field addition, removal, or semantic change requires bumping
+    ``RECIPE_RUN_RECORD_SCHEMA_VERSION`` and providing an explicit migration
+    path for persisted workspaces.
+    """
 
     run_id: str
     plugin_id: str

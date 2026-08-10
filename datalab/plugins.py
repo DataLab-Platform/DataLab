@@ -578,17 +578,38 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
                 processor.remove_features_by_owner(self.plugin_id)
 
     def register_hooks(self):
-        """Register plugin hooks"""
+        """Register plugin hooks.
+
+        Called by :meth:`register` during application startup or plugin
+        reload, before the panels' PLUGINS action category exists: use this
+        for non-GUI side effects only (I/O format registration, listeners).
+        ``self.main`` and ``self.proxy`` are already set. Raising here rolls
+        back the whole registration (the plugin stays unregistered).
+        """
 
     def unregister_hooks(self):
-        """Unregister plugin hooks"""
+        """Unregister plugin hooks.
+
+        Called by :meth:`unregister`; must undo :meth:`register_hooks`.
+        Owned computing features are removed automatically afterwards.
+        """
 
     def register_computations(self) -> None:
-        """Register owned computations after signal and image panels exist."""
+        """Register owned computations after signal and image panels exist.
+
+        Called once per registered plugin, right before
+        :meth:`create_actions`; raising here removes the plugin's owned
+        features but keeps the plugin registered.
+        """
 
     @abc.abstractmethod
     def create_actions(self):
-        """Create actions"""
+        """Create actions.
+
+        Called immediately after :meth:`register_computations`, inside the
+        panels' PLUGINS action category: actions created here populate the
+        *Plugins* menu.
+        """
 
 
 def migrate_enabled_plugin_ids(
@@ -838,6 +859,9 @@ def discover_plugins() -> list[ModuleType]:
     so that callers (e.g. the main window) can replay them into the
     internal console once it is ready.
 
+    This function mutates ``sys.modules`` and the plugin registry without
+    synchronization: call it from the Qt main thread only.
+
     Returns:
         Imported/reloaded modules containing discovered plugins
     """
@@ -913,6 +937,9 @@ def reload_plugin_modules() -> None:
     - Updates the plugin search path
     - Clears the plugin class registry
     - Reloads or imports all modules matching the plugin naming convention
+
+    Like :func:`discover_plugins`, this is not thread-safe: call it from
+    the Qt main thread only.
     """
     if not Conf.main.plugins_enabled.get():
         return
