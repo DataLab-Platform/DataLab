@@ -40,7 +40,16 @@ __all__ = ["RecipeCommitError", "RecipeRunner"]
 
 
 class RecipeCommitError(RuntimeError):
-    """Raised after a failed recipe workspace commit has been rolled back."""
+    """Raised after a failed recipe workspace commit has been rolled back.
+
+    Attributes:
+        rollback_error: Exception raised by the rollback itself, or None when
+         the workspace was successfully restored.
+    """
+
+    def __init__(self, message: str, rollback_error: Exception | None = None) -> None:
+        super().__init__(message)
+        self.rollback_error = rollback_error
 
 
 class RecipeRunner:
@@ -261,7 +270,8 @@ class RecipeRunner:
                     self.mainwindow.set_current_panel(current_panel_before)
             if rollback_error is not None:
                 raise RecipeCommitError(
-                    f"{exc} (rollback also failed: {rollback_error})"
+                    f"{exc} (rollback also failed: {rollback_error})",
+                    rollback_error=rollback_error,
                 ) from exc
             raise RecipeCommitError(str(exc)) from exc
 

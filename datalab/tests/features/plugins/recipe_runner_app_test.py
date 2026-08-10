@@ -301,8 +301,13 @@ def test_recipe_runner_finishes_rollback_after_plot_cleanup_error(monkeypatch) -
             fail_plot_cleanup,
         )
 
-        with pytest.raises(RecipeCommitError, match="rollback also failed"):
+        with pytest.raises(RecipeCommitError, match="rollback also failed") as excinfo:
             RecipeRunner(win).run(descriptor, {})
+
+        assert isinstance(excinfo.value.__cause__, RuntimeError)
+        assert str(excinfo.value.__cause__) == "injected image commit failure"
+        assert isinstance(excinfo.value.rollback_error, RuntimeError)
+        assert str(excinfo.value.rollback_error) == "injected plot cleanup failure"
 
         assert len(win.signalpanel) == 0
         assert len(win.imagepanel) == 0
