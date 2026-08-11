@@ -80,6 +80,10 @@ class HistoryTree(QW.QTreeWidget):
             event: Key event.
         """
         if event.matches(QG.QKeySequence.Delete):
+            runtime = getattr(self._panel, "runtime", None)
+            if runtime is not None and runtime.execution.is_busy():
+                event.accept()
+                return
             ui = getattr(self._panel, "ui", None)
             action = None if ui is None else ui.actions.get("delete")
             if action is not None and action.isEnabled():

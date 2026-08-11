@@ -916,19 +916,23 @@ def recompute_cascade(
     if not descendants:
         flush_cascade_warnings(panel)
         return
-    with panel.runtime.execution.recomputing_cascade():
-        for action in descendants:
-            action.is_stale = True
-            panel.tree.refresh_action_item(action)
-        QW.QApplication.processEvents()
-        for action in descendants:
-            success = recompute_action_in_place(panel, action)
-            if success:
-                action.is_stale = False
-            panel.tree.refresh_action_item(action)
+    try:
+        with panel.runtime.execution.recomputing_cascade():
+            panel.ui.update_actions_state()
+            for action in descendants:
+                action.is_stale = True
+                panel.tree.refresh_action_item(action)
             QW.QApplication.processEvents()
-            if not success:
-                break
+            for action in descendants:
+                success = recompute_action_in_place(panel, action)
+                if success:
+                    action.is_stale = False
+                panel.tree.refresh_action_item(action)
+                QW.QApplication.processEvents()
+                if not success:
+                    break
+    finally:
+        panel.ui.update_actions_state()
     flush_cascade_warnings(panel)
 
 

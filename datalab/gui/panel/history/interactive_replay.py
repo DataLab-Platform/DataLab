@@ -425,6 +425,22 @@ def replay_actions(
         actions: Selected actions to replay
         prompt: Open parameter dialogs before recomputing
     """
+    try:
+        run_replay_actions(panel, actions, prompt)
+    finally:
+        panel.ui.update_actions_state()
+
+
+def run_replay_actions(
+    panel: HistoryPanel, actions: list[HistoryAction], prompt: bool
+) -> None:
+    """Execute the replay plan (engine core of :func:`replay_actions`).
+
+    Args:
+        panel: History panel instance
+        actions: Selected actions to replay
+        prompt: Open parameter dialogs before recomputing
+    """
     # Deduplicate and sort the selected actions in their session order
     ordered = order_selected_actions(panel, actions)
     if not ordered:
@@ -432,6 +448,7 @@ def replay_actions(
     with panel.runtime.execution.replaying_edits() as started:
         if not started:
             return
+        panel.ui.update_actions_state()
         entry_states = (
             {
                 action.uuid: (

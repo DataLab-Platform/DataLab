@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Callable
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
@@ -32,6 +32,24 @@ class HistoryPanelUI:
         self.setup_connections()
         self.setup_layout()
 
+    def guarded(self, callback: Callable[[], None]) -> Callable[..., None]:
+        """Wrap a user-facing slot so it is ignored while a replay/recompute runs.
+
+        Args:
+            callback: Slot to invoke when the panel is not busy.
+
+        Returns:
+            Wrapper suitable for Qt signal connections (extra signal
+             arguments are discarded).
+        """
+
+        def wrapper(*args: Any, **kwargs: Any) -> None:  # pylint: disable=W0613
+            if self.panel.runtime.execution.is_busy():
+                return
+            callback()
+
+        return wrapper
+
     def create_actions(self) -> dict[str, QW.QAction]:
         """Create named actions used by history menus and toolbar."""
         panel = self.panel
@@ -45,34 +63,34 @@ class HistoryPanelUI:
             "new_session": create_action(
                 panel,
                 _("New session"),
-                lambda checked=False: panel.create_new_session(),
+                self.guarded(lambda: panel.create_new_session()),
                 icon=get_icon("libre-gui-add.svg"),
                 tip=_("Start a new history session"),
             ),
             "open": create_action(
                 panel,
                 _("Open history file..."),
-                triggered=lambda checked=False: panel.open_dlhist_file(),
+                triggered=self.guarded(lambda: panel.open_dlhist_file()),
                 icon=get_icon("fileopen_h5.svg"),
                 tip=_("Open history from a standalone .dlhist file"),
             ),
             "save": create_action(
                 panel,
                 _("Save history file..."),
-                triggered=lambda checked=False: panel.save_to_dlhist_file(),
+                triggered=self.guarded(lambda: panel.save_to_dlhist_file()),
                 icon=get_icon("filesave_h5.svg"),
                 tip=_("Save history to a standalone .dlhist file"),
             ),
             "delete": create_action(
                 panel,
                 _("Delete"),
-                lambda: htools.delete_selected(panel),
+                self.guarded(lambda: htools.delete_selected(panel)),
                 icon=get_icon("delete.svg"),
             ),
             "duplicate": create_action(
                 panel,
                 _("Duplicate"),
-                lambda: htools.duplicate_selected_entries(panel),
+                self.guarded(lambda: htools.duplicate_selected_entries(panel)),
                 icon=get_icon("duplicate.svg"),
                 tip=_("Duplicate selected history action/session"),
             ),
@@ -95,21 +113,23 @@ class HistoryPanelUI:
             "remove_incompatible": create_action(
                 panel,
                 _("Remove incompatible"),
-                lambda: htools.remove_incompatible_actions(panel),
+                self.guarded(lambda: htools.remove_incompatible_actions(panel)),
                 icon=get_icon("edit/delete_all.svg"),
                 tip=_("Remove actions incompatible with the current workspace"),
             ),
             "replay": create_action(
                 panel,
                 _("Replay"),
-                lambda: panel.replay_restore_actions(restore_selection=False),
+                self.guarded(
+                    lambda: panel.replay_restore_actions(restore_selection=False)
+                ),
                 icon=get_icon("replay.svg"),
                 tip=_("Replay the selection silently (no parameter dialogs)"),
             ),
             "step_by_step": create_action(
                 panel,
                 _("Step-by-step"),
-                triggered=lambda checked=False: panel.replay_step_by_step(),
+                triggered=self.guarded(lambda: panel.replay_step_by_step()),
                 icon=get_icon("edit_mode.svg"),
                 tip=_(
                     "Replay the selection step by step, editing parameters at each step"
@@ -146,8 +166,8 @@ class HistoryPanelUI:
         tree = self.panel.tree
         tree.customContextMenuRequested.connect(self.show_context_menu)
         tree.itemDoubleClicked.connect(
-            lambda _item, _column: self.panel.replay_restore_actions(
-                restore_selection=False
+            self.guarded(
+                lambda: self.panel.replay_restore_actions(restore_selection=False)
             )
         )
         tree.itemSelectionChanged.connect(self.panel.navigation.sync_panel_selection)
@@ -171,15 +191,31 @@ class HistoryPanelUI:
         self.panel.addWidget(widget)
 
     def update_actions_state(self) -> None:
-        """Update action availability from history and step state."""
+        """Update action availability from history, step and busy state."""
+        busy = self.panel.runtime.execution.is_engine_busy()
         has_history = len(self.panel) > 0
-        self.actions["delete"].setEnabled(has_history)
-        self.actions["duplicate"].setEnabled(has_history)
-        self.actions["step_prev"].setEnabled(self.panel.navigation.can_step_prev())
-        self.actions["step_next"].setEnabled(self.panel.navigation.can_step_next())
+        for name in (
+            "new_session",
+            "open",
+            "save",
+            "replay",
+            "step_by_step",
+            "remove_incompatible",
+        ):
+            self.actions[name].setEnabled(not busy)
+        self.actions["delete"].setEnabled(has_history and not busy)
+        self.actions["duplicate"].setEnabled(has_history and not busy)
+        self.actions["step_prev"].setEnabled(
+            not busy and self.panel.navigation.can_step_prev()
+        )
+        self.actions["step_next"].setEnabled(
+            not busy and self.panel.navigation.can_step_next()
+        )
 
     def show_context_menu(self, pos: QC.QPoint) -> None:
         """Show the history context menu at a tree position."""
+        if self.panel.runtime.execution.is_busy():
+            return
         self.panel.refresh_compatibility_items()
         menu = QW.QMenu()
         add_actions(menu, self.menu_actions)

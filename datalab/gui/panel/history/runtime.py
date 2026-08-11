@@ -30,6 +30,31 @@ class HistoryExecutionState:
         self.edit_replay_in_progress = False
         self.cascade_warnings: list[str] = []
 
+    def is_busy(self) -> bool:
+        """Return whether a replay or cascade recompute is currently running.
+
+        Returns:
+            True when user-facing History panel commands must be ignored.
+        """
+        return (
+            self.replaying_active
+            or self.cascade_in_progress
+            or self.edit_replay_in_progress
+        )
+
+    def is_engine_busy(self) -> bool:
+        """Return whether a history engine run is currently in progress.
+
+        Drives the visual disabling of toolbar actions: it only covers flags
+        set by code paths with a guaranteed `update_actions_state` epilogue,
+        unlike :meth:`is_busy` (which also includes `replaying_active`) used
+        for the functional no-op guards.
+
+        Returns:
+            True when a cascade recompute or edit-mode replay is running.
+        """
+        return self.cascade_in_progress or self.edit_replay_in_progress
+
     @contextmanager
     def replaying(self) -> Generator[None, None, None]:
         """Suppress history capture during the context scope."""
