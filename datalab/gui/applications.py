@@ -5,11 +5,13 @@
 from __future__ import annotations
 
 import webbrowser
+from math import ceil
 from typing import TYPE_CHECKING
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import win32_fix_title_bar_background
 from qtpy import QtCore as QC
+from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from datalab.config import _
@@ -22,6 +24,157 @@ if TYPE_CHECKING:
 
 
 __all__ = ["ApplicationPage", "ApplicationsDialog", "get_application_plugins"]
+
+
+CATALOG_TITLE_ROLE = QC.Qt.UserRole + 1
+CATALOG_DESCRIPTION_ROLE = QC.Qt.UserRole + 2
+CATALOG_VERSION_ROLE = QC.Qt.UserRole + 3
+
+
+class CatalogItemDelegate(QW.QStyledItemDelegate):
+    """Render a catalog entry with a title and a subdued description."""
+
+    HORIZONTAL_MARGIN = 8
+    VERTICAL_MARGIN = 6
+    DESCRIPTION_SPACING = 2
+
+    @staticmethod
+    def _blend(foreground: QG.QColor, background: QG.QColor) -> QG.QColor:
+        """Return a subdued color that remains legible on its background."""
+        return QG.QColor(
+            (3 * foreground.red() + background.red()) // 4,
+            (3 * foreground.green() + background.green()) // 4,
+            (3 * foreground.blue() + background.blue()) // 4,
+        )
+
+    def _document(
+        self,
+        option: QW.QStyleOptionViewItem,
+        index: QC.QModelIndex,
+        width: int,
+    ) -> QG.QTextDocument:
+        """Build the wrapped text document for one catalog entry."""
+        selected = bool(option.state & QW.QStyle.State_Selected)
+        palette = option.palette
+        if selected:
+            text_color = palette.color(QG.QPalette.HighlightedText)
+            background_color = palette.color(QG.QPalette.Highlight)
+            subdued_color = self._blend(text_color, background_color)
+        else:
+            text_color = palette.color(QG.QPalette.Text)
+            subdued_color = palette.color(QG.QPalette.Disabled, QG.QPalette.Text)
+
+        document = QG.QTextDocument()
+        document.setDefaultFont(option.font)
+        document.setDocumentMargin(0)
+        text_option = document.defaultTextOption()
+        text_option.setWrapMode(QG.QTextOption.WrapAtWordBoundaryOrAnywhere)
+        document.setDefaultTextOption(text_option)
+
+        cursor = QG.QTextCursor(document)
+        title_format = QG.QTextCharFormat()
+        title_format.setFontWeight(QG.QFont.Bold)
+        title_format.setForeground(text_color)
+        title = index.data(CATALOG_TITLE_ROLE) or index.data(QC.Qt.DisplayRole) or ""
+        cursor.insertText(title, title_format)
+
+        secondary_format = QG.QTextCharFormat()
+        secondary_format.setForeground(subdued_color)
+        point_size = option.font.pointSizeF()
+        if point_size > 1:
+            secondary_format.setFontPointSize(point_size - 1)
+        version = index.data(CATALOG_VERSION_ROLE) or ""
+        if version:
+            cursor.insertText(f"  v{version}", secondary_format)
+
+        description = index.data(CATALOG_DESCRIPTION_ROLE) or ""
+        if description:
+            cursor.insertBlock()
+            block_format = cursor.blockFormat()
+            block_format.setTopMargin(self.DESCRIPTION_SPACING)
+            cursor.setBlockFormat(block_format)
+            cursor.insertText(description, secondary_format)
+
+        document.setTextWidth(max(1, width))
+        return document
+
+    @classmethod
+    def _content_width(cls, option: QW.QStyleOptionViewItem) -> int:
+        """Return the available text width for a view item."""
+        width = option.rect.width()
+        if width <= 0 and isinstance(option.widget, QW.QAbstractItemView):
+            width = option.widget.viewport().width()
+        return max(1, width - 2 * cls.HORIZONTAL_MARGIN)
+
+    def paint(
+        self,
+        painter: QG.QPainter,
+        option: QW.QStyleOptionViewItem,
+        index: QC.QModelIndex,
+    ) -> None:
+        """Paint the native item background and the formatted catalog text."""
+        styled_option = QW.QStyleOptionViewItem(option)
+        self.initStyleOption(styled_option, index)
+        styled_option.text = ""
+        style = (
+            styled_option.widget.style()
+            if styled_option.widget is not None
+            else QW.QApplication.style()
+        )
+        style.drawControl(
+            QW.QStyle.CE_ItemViewItem,
+            styled_option,
+            painter,
+            styled_option.widget,
+        )
+
+        text_rect = option.rect.adjusted(
+            self.HORIZONTAL_MARGIN,
+            self.VERTICAL_MARGIN,
+            -self.HORIZONTAL_MARGIN,
+            -self.VERTICAL_MARGIN,
+        )
+        document = self._document(option, index, text_rect.width())
+        painter.save()
+        painter.translate(text_rect.topLeft())
+        context = QG.QAbstractTextDocumentLayout.PaintContext()
+        context.clip = QC.QRectF(0, 0, text_rect.width(), text_rect.height())
+        document.documentLayout().draw(painter, context)
+        painter.restore()
+
+    def sizeHint(
+        self,
+        option: QW.QStyleOptionViewItem,
+        index: QC.QModelIndex,
+    ) -> QC.QSize:
+        """Return the height required by the wrapped catalog text."""
+        width = self._content_width(option)
+        document = self._document(option, index, width)
+        height = ceil(document.size().height()) + 2 * self.VERTICAL_MARGIN
+        return QC.QSize(width + 2 * self.HORIZONTAL_MARGIN, height)
+
+
+def _configure_catalog_list(widget: QW.QListWidget) -> None:
+    """Configure a descriptor list as a read-only, multiline catalog."""
+    widget.setSelectionMode(QW.QAbstractItemView.SingleSelection)
+    widget.setAlternatingRowColors(True)
+    widget.setHorizontalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
+    widget.setWordWrap(True)
+    widget.setResizeMode(QW.QListView.Adjust)
+    widget.setSpacing(2)
+    widget.setItemDelegate(CatalogItemDelegate(widget))
+
+
+def _set_catalog_data(
+    item: QW.QListWidgetItem,
+    title: str,
+    description: str,
+    version: str = "",
+) -> None:
+    """Store structured display metadata on a catalog item."""
+    item.setData(CATALOG_TITLE_ROLE, title)
+    item.setData(CATALOG_DESCRIPTION_ROLE, description)
+    item.setData(CATALOG_VERSION_ROLE, version)
 
 
 def get_application_plugins() -> tuple[PluginBase, ...]:
@@ -67,11 +220,6 @@ class ApplicationPage(QW.QWidget):
         layout.setContentsMargins(18, 12, 18, 12)
         layout.addLayout(self._create_header())
 
-        if plugin.info.description:
-            description = QW.QLabel(plugin.info.description)
-            description.setWordWrap(True)
-            layout.addWidget(description)
-
         metadata = QW.QLabel(
             _("Plugin ID: %s") % plugin.plugin_id
             + "\n"
@@ -110,22 +258,21 @@ class ApplicationPage(QW.QWidget):
         layout.addStretch()
         return layout
 
-    @staticmethod
-    def _configure_list(widget: QW.QListWidget) -> None:
-        """Configure a descriptor list as a read-only catalog."""
-        widget.setSelectionMode(QW.QAbstractItemView.SingleSelection)
-        widget.setAlternatingRowColors(True)
-
     def _create_recipes_group(self) -> QW.QGroupBox:
         """Create the recipe descriptor section."""
         group = QW.QGroupBox(_("Recipes"))
         layout = QW.QVBoxLayout(group)
-        self._configure_list(self.recipe_list)
+        _configure_catalog_list(self.recipe_list)
         recipes = self.plugin.get_recipes()
         for recipe in recipes:
             item = QW.QListWidgetItem(f"{recipe.title}  v{recipe.version}")
             item.setData(QC.Qt.UserRole, recipe.recipe_id)
-            item.setToolTip(recipe.description)
+            _set_catalog_data(
+                item,
+                recipe.title,
+                recipe.description,
+                recipe.version,
+            )
             self.recipe_list.addItem(item)
         if recipes:
             layout.addWidget(self.recipe_list)
@@ -139,12 +286,12 @@ class ApplicationPage(QW.QWidget):
         """Create the packaged example section."""
         group = QW.QGroupBox(_("Examples"))
         layout = QW.QVBoxLayout(group)
-        self._configure_list(self.example_list)
+        _configure_catalog_list(self.example_list)
         examples = self.plugin.get_examples()
         for example in examples:
             item = QW.QListWidgetItem(example.title)
             item.setData(QC.Qt.UserRole, example.id)
-            item.setToolTip(example.description)
+            _set_catalog_data(item, example.title, example.description)
             self.example_list.addItem(item)
         if examples:
             layout.addWidget(self.example_list)
@@ -207,9 +354,10 @@ class ApplicationsDialog(QW.QDialog):
 
         self.setWindowTitle(_("Applications"))
         self.setWindowIcon(get_icon("libre-gui-plugin.svg"))
-        self.setMinimumSize(760, 520)
-        self.application_list.setMinimumWidth(220)
-        self.application_list.setMaximumWidth(320)
+        self.setMinimumSize(800, 540)
+        self.application_list.setMinimumWidth(260)
+        self.application_list.setMaximumWidth(360)
+        _configure_catalog_list(self.application_list)
 
         layout = QW.QVBoxLayout(self)
         splitter = QW.QSplitter(QC.Qt.Horizontal)
@@ -217,7 +365,7 @@ class ApplicationsDialog(QW.QDialog):
         splitter.addWidget(self.application_stack)
         splitter.setStretchFactor(0, 0)
         splitter.setStretchFactor(1, 1)
-        splitter.setSizes([240, 520])
+        splitter.setSizes([280, 520])
         layout.addWidget(splitter, 1)
 
         button_box = QW.QDialogButtonBox(QW.QDialogButtonBox.Close)
@@ -249,8 +397,7 @@ class ApplicationsDialog(QW.QDialog):
         for plugin in plugins:
             item = QW.QListWidgetItem(plugin.info.name)
             item.setData(QC.Qt.UserRole, plugin.plugin_id)
-            if plugin.info.description:
-                item.setToolTip(plugin.info.description)
+            _set_catalog_data(item, plugin.info.name, plugin.info.description)
             self.application_list.addItem(item)
             page = ApplicationPage(plugin)
             page.start_requested.connect(self._start_recipe)
