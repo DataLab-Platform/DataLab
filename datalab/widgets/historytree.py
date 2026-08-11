@@ -19,6 +19,12 @@ if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
     from datalab.gui.panel.history.panel import HistoryPanel
 
+# Amber warning tint painted on stale (outdated) action rows. The alpha
+# matches the active-session highlight technique so the tint blends with
+# both light and dark themes.
+STALE_TINT_COLOR = "#ffa500"
+STALE_TINT_ALPHA = 60
+
 
 class HistoryTree(QW.QTreeWidget):
     """Tree widget for the history panel"""
@@ -169,7 +175,40 @@ class HistoryTree(QW.QTreeWidget):
                     item.setToolTip(
                         col, compatible_tip if compatible else incompatible_tip
                     )
+                self.apply_stale_style(item, action)
             iterator += 1
+
+    def apply_stale_style(
+        self, item: QW.QTreeWidgetItem, action: HistoryAction
+    ) -> None:
+        """Apply or clear the stale visual marker on an action row.
+
+        When ``action.is_stale`` is True, the whole row is tinted with a
+        warning color and an explanatory tooltip is appended on the Title
+        column (after the compatibility tooltip, if any). Otherwise, the
+        default background is restored and the stale tooltip is removed;
+        the compatibility tooltip is preserved in both cases.
+
+        Args:
+            item: Tree item associated with ``action``.
+            action: History action driving the stale state.
+        """
+        stale_tip = _("This step is outdated: replay it to refresh its result.")
+        # Strip any previously appended stale message from the Title tooltip,
+        # keeping the compatibility tooltip (or any other base text) intact.
+        tip = "\n".join(
+            line for line in item.toolTip(0).split("\n") if line != stale_tip
+        )
+        if action.is_stale:
+            color = QG.QColor(STALE_TINT_COLOR)
+            color.setAlpha(STALE_TINT_ALPHA)
+            brush = QG.QBrush(color)
+            tip = f"{tip}\n{stale_tip}" if tip else stale_tip
+        else:
+            brush = QG.QBrush()
+        item.setToolTip(0, tip)
+        for col in range(self.columnCount()):
+            item.setBackground(col, brush)
 
     def forget_orphan_expanded_states(
         self, history_sessions: list[HistorySession]
@@ -218,6 +257,7 @@ class HistoryTree(QW.QTreeWidget):
             child = self.action_to_tree_item(action)
             session_item.addChild(child)
             self.install_description_widget(child, action)
+            self.apply_stale_style(child, action)
 
     def set_active_session(self, active_session_number: int | None) -> None:
         """Flag the active recording session by session number.
@@ -273,12 +313,11 @@ class HistoryTree(QW.QTreeWidget):
 
         Re-installs the description widget so it reflects the current
         ``action.kwargs`` (e.g. after the user edited a ``param`` via the
-        Processing tab of the Signal/Image panel). Also resets the item
-        background to the default brush on all columns, clearing any
-        highlight previously painted on the row.
+        Processing tab of the Signal/Image panel). Also updates the stale
+        visual marker: a warning tint and tooltip when ``action.is_stale``
+        is True, or the default background otherwise.
         """
         target_uuid = action.uuid
-        default_brush = QG.QBrush()
         iterator = QW.QTreeWidgetItemIterator(self)
         while iterator.value():
             item = iterator.value()
@@ -288,8 +327,7 @@ class HistoryTree(QW.QTreeWidget):
                 self.removeItemWidget(item, self.DESCRIPTION_COLUMN)
                 self.install_description_widget(item, action)
                 item.setText(0, action.title)
-                for col in range(self.columnCount()):
-                    item.setBackground(col, default_brush)
+                self.apply_stale_style(item, action)
                 self.scheduleDelayedItemsLayout()
                 return
             iterator += 1
