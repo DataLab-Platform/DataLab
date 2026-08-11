@@ -47,6 +47,50 @@ class CatalogItemDelegate(QW.QStyledItemDelegate):
             (3 * foreground.blue() + background.blue()) // 4,
         )
 
+    @staticmethod
+    def _midpoint(first: QG.QColor, second: QG.QColor) -> QG.QColor:
+        """Return the midpoint between two colors."""
+        return QG.QColor(
+            (first.red() + second.red()) // 2,
+            (first.green() + second.green()) // 2,
+            (first.blue() + second.blue()) // 2,
+        )
+
+    @staticmethod
+    def _is_light_theme(palette: QG.QPalette) -> bool:
+        """Return whether a palette uses a light base color."""
+        return palette.color(QG.QPalette.Base).lightness() > 128
+
+    @classmethod
+    def _foreground_colors(
+        cls, option: QW.QStyleOptionViewItem
+    ) -> tuple[QG.QColor, QG.QColor]:
+        """Return title and secondary colors for the current item state."""
+        palette = option.palette
+        selected = bool(option.state & QW.QStyle.State_Selected)
+        if not selected:
+            return (
+                palette.color(QG.QPalette.Text),
+                palette.color(QG.QPalette.Disabled, QG.QPalette.Text),
+            )
+
+        text_color = palette.color(QG.QPalette.HighlightedText)
+        background_color = palette.color(QG.QPalette.Highlight)
+        if not cls._is_light_theme(palette):
+            if not option.state & QW.QStyle.State_HasFocus:
+                return (
+                    palette.color(QG.QPalette.Text),
+                    palette.color(QG.QPalette.Disabled, QG.QPalette.Text),
+                )
+            return text_color, cls._blend(text_color, background_color)
+        if option.state & QW.QStyle.State_HasFocus:
+            text_color = palette.color(QG.QPalette.Text)
+            return text_color, text_color
+        return (
+            palette.color(QG.QPalette.Text),
+            palette.color(QG.QPalette.Disabled, QG.QPalette.Text),
+        )
+
     def _document(
         self,
         option: QW.QStyleOptionViewItem,
@@ -54,15 +98,7 @@ class CatalogItemDelegate(QW.QStyledItemDelegate):
         width: int,
     ) -> QG.QTextDocument:
         """Build the wrapped text document for one catalog entry."""
-        selected = bool(option.state & QW.QStyle.State_Selected)
-        palette = option.palette
-        if selected:
-            text_color = palette.color(QG.QPalette.HighlightedText)
-            background_color = palette.color(QG.QPalette.Highlight)
-            subdued_color = self._blend(text_color, background_color)
-        else:
-            text_color = palette.color(QG.QPalette.Text)
-            subdued_color = palette.color(QG.QPalette.Disabled, QG.QPalette.Text)
+        text_color, subdued_color = self._foreground_colors(option)
 
         document = QG.QTextDocument()
         document.setDefaultFont(option.font)
@@ -116,6 +152,16 @@ class CatalogItemDelegate(QW.QStyledItemDelegate):
         styled_option = QW.QStyleOptionViewItem(option)
         self.initStyleOption(styled_option, index)
         styled_option.text = ""
+        selected_without_focus = (
+            styled_option.state & QW.QStyle.State_Selected
+            and not styled_option.state & QW.QStyle.State_HasFocus
+        )
+        if selected_without_focus and not self._is_light_theme(styled_option.palette):
+            inactive_highlight = self._midpoint(
+                styled_option.palette.color(QG.QPalette.Highlight),
+                styled_option.palette.color(QG.QPalette.Base),
+            )
+            styled_option.palette.setColor(QG.QPalette.Highlight, inactive_highlight)
         style = (
             styled_option.widget.style()
             if styled_option.widget is not None
