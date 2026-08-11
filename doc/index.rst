@@ -51,32 +51,40 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
 .. only:: html and not latex
 
-    .. grid:: 2 2 4 4
+    **What is DataLab used for?** A few examples, with real data and step-by-step tutorials:
+
+    .. grid:: 1 1 3 3
         :gutter: 1 2 3 4
 
-        .. grid-item-card:: :octicon:`rocket;1em;sd-text-info`  Getting started
-            :link: intro/index
+        .. grid-item-card:: :octicon:`pulse;1em;sd-text-info`  Spectroscopy
+            :link: use_cases/spectroscopy
             :link-type: doc
 
-            Installation, tutorials, use cases...
+            Baseline correction and peak fitting
 
-        .. grid-item-card:: :octicon:`tools;1em;sd-text-info`  Features
-            :link: features/index
+        .. grid-item-card:: :octicon:`sun;1em;sd-text-info`  Photonics & lasers
+            :link: use_cases/photonics
             :link-type: doc
 
-            Detailed description
+            Beam profiling and interferograms
 
-        .. grid-item-card:: :octicon:`megaphone;1em;sd-text-info`  Talks & Events
-            :link: outreach/index
+        .. grid-item-card:: :octicon:`search;1em;sd-text-info`  Non-destructive testing
+            :link: use_cases/ndt
             :link-type: doc
 
-            Conference presentations
+            Automated defect detection
 
-        .. grid-item-card:: :octicon:`gear;1em;sd-text-info`  Contributing
-            :link: contributing/index
-            :link-type: doc
 
-            Getting involved in the project
+.. only:: html and not latex
+
+    .. container:: sd-mt-4
+
+        **Start with DataLab:** :doc:`Getting started <intro/index>` --
+        installation, tutorials and first use cases.
+
+        **Explore the documentation:** :doc:`Features <features/index>` ·
+        :doc:`Contributing <contributing/index>` ·
+        :doc:`Talks & events <outreach/index>`
 
 DataLab has been funded, chronologically, by the following stakeholders:
 
@@ -149,6 +157,7 @@ DataLab has been funded, chronologically, by the following stakeholders:
     :hidden:
 
     intro/index
+    use_cases/index
     features/index
     contributing/index
     release_notes/index

@@ -6,7 +6,6 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2026-08-05 10:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -64,7 +63,7 @@ msgstr ""
 msgid ""
 "Scientific computing engine for 1D signals and 2D images, part of the "
 "DataLab open-source platform."
-msgstr ""
+msgstr "Moteur de calcul scientifique pour signaux 1D et images 2D, faisant partie de la plateforme open-source DataLab."
 
 msgid "NumPy"
 msgstr ""
@@ -127,7 +126,7 @@ msgid ">= 21.3"
 msgstr ""
 
 msgid "Core utilities for Python packages"
-msgstr ""
+msgstr "Utilitaires de base pour les paquets Python"
 
 msgid "fastapi"
 msgstr ""
@@ -138,7 +137,7 @@ msgstr ""
 msgid ""
 "FastAPI framework, high performance, easy to learn, fast to code, ready "
 "for production"
-msgstr ""
+msgstr "Framework FastAPI, haute performance, facile à apprendre, rapide à coder, prêt pour la production"
 
 msgid "uvicorn[standard]"
 msgstr ""
@@ -153,7 +152,7 @@ msgid ">= 2.0"
 msgstr ""
 
 msgid "Data validation using Python type hints"
-msgstr ""
+msgstr "Validation de données en utilisant les annotations de type Python"
 
 msgid "Optional modules for GUI support (Qt):"
 msgstr "Modules optionnels pour le support de l'interface graphique (Qt) :"
@@ -174,7 +173,7 @@ msgid "build"
 msgstr ""
 
 msgid "A simple, correct Python build frontend"
-msgstr ""
+msgstr "Un frontend de construction Python simple et correct"
 
 msgid "babel"
 msgstr ""
@@ -206,7 +205,7 @@ msgid "pre-commit"
 msgstr ""
 
 msgid "A framework for managing and maintaining multi-language pre-commit hooks."
-msgstr ""
+msgstr "Un framework pour gérer et maintenir des hooks multi-langages pour pre-commit."
 
 msgid "Optional modules for building the documentation:"
 msgstr "Modules optionnels pour construire la documentation :"
@@ -281,7 +280,7 @@ msgid "httpx"
 msgstr ""
 
 msgid "The next generation HTTP client."
-msgstr ""
+msgstr "Client HTTP de nouvelle génération."
 
 #~ msgid ">= 1.1.4"
 #~ msgstr ""

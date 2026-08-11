@@ -65,9 +65,6 @@ msgstr "Assistant IA prêt. Configurez votre fournisseur dans le menu Edition > 
 msgid "You"
 msgstr "Vous"
 
-msgid "Assistant"
-msgstr "Assistant IA"
-
 msgid "Save to Macros"
 msgstr "Enregistrer dans les macros"
 
@@ -1028,7 +1025,7 @@ msgid "Plugins"
 msgstr "Plugins"
 
 msgid "Third-party plugins are disabled. Enable them again from the plugin configuration dialog to use this feature."
-msgstr "Les plugins tiers sont désactivés. Activez-les dans la boîte de dialogue des préférences pour utiliser cette fonctionnalité."
+msgstr "Les plugins tiers sont désactivés. Réactivez-les depuis la boîte de dialogue de configuration des plugins pour utiliser cette fonctionnalité."
 
 #, python-format
 msgid "Welcome to %s!"
@@ -1511,11 +1508,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "Group name:"
-msgstr "Nom du groupe :"
-
 msgid "New group"
 msgstr "Nouveau groupe"
+
+msgid "Group name:"
+msgstr "Nom du groupe :"
 
 msgid "Rename object"
 msgstr "Renommer l'objet"
@@ -1642,9 +1639,6 @@ msgstr "Effacer toutes les macros récentes ?"
 
 msgid "Macro panel"
 msgstr "Panneau des macros"
-
-msgid "Python files"
-msgstr "Fichiers Python"
 
 msgid "Clear console"
 msgstr "Effacer la console"
@@ -3385,11 +3379,11 @@ msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La dé
 msgid "Click OK to end demo."
 msgstr "Cliquer sur OK pour terminer la démo."
 
-msgid "Context"
-msgstr "Contexte"
-
 msgid "Error:"
 msgstr "Erreur:"
+
+msgid "Context"
+msgstr "Contexte"
 
 #, python-format
 msgid "The file %s could not be read:"
@@ -3607,17 +3601,17 @@ msgstr "Déplier la sélection"
 msgid "HDF5 Browser"
 msgstr "Explorateur HDF5"
 
-msgid "Value"
-msgstr "Valeur"
-
-msgid "Name"
-msgstr "Nom"
-
 msgid "Size"
 msgstr "Taille"
 
 msgid "Type"
 msgstr "Type"
+
+msgid "Value"
+msgstr "Valeur"
+
+msgid "Name"
+msgstr "Nom"
 
 msgid "Unsupported data"
 msgstr "Données non prises en charge"
@@ -3723,9 +3717,6 @@ msgstr "Distance minimale :"
 
 msgid "Signal peak detection"
 msgstr "Détection de pics 1D"
-
-msgid "Peaks:"
-msgstr "Pics :"
 
 msgid "Internal console"
 msgstr "Console interne"

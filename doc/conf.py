@@ -9,6 +9,7 @@ import warnings
 import zipfile
 
 import guidata.config as gcfg
+from docutils import nodes
 
 # Silence Sphinx 10 deprecation warning emitted from cairocffi (third-party,
 # used by sphinxcontrib-svg2pdfconverter during LaTeX builds).
@@ -29,6 +30,17 @@ os.environ["DATALAB_DOC"] = "1"
 # Turn off validation of guidata config
 # (documentation build is not the right place for validation)
 gcfg.set_validation_mode(gcfg.ValidationMode.DISABLED)
+
+
+def open_datalab_web_links_in_new_tab(app, doctree, docname):
+    """Open DataLab-Web links in a separate browser tab."""
+    if app.builder.format != "html":
+        return
+    web_url = "https://datalab-platform.com/web/"
+    for reference in doctree.findall(nodes.reference):
+        if reference.get("refuri", "").startswith(web_url):
+            reference["target"] = "_blank"
+            reference["rel"] = "noopener noreferrer"
 
 
 def compress_tutorials_data(app):
@@ -68,6 +80,7 @@ def compress_tutorials_data(app):
 def setup(app):
     """Setup function for Sphinx."""
     app.connect("builder-inited", compress_tutorials_data)
+    app.connect("doctree-resolved", open_datalab_web_links_in_new_tab)
 
     # Exclude outreach directory from LaTeX/PDF builds
     def exclude_outreach_from_latex(app):
@@ -136,6 +149,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinxcontrib.cairosvgconverter",
     "sphinx_sitemap",
+    "sphinxext.opengraph",
     "myst_parser",
     "sphinx_design",
     "sphinx_copybutton",
@@ -166,6 +180,11 @@ html_baseurl = datalab.__homeurl__  # for sitemap extension
 sitemap_locales = ["en", "fr"]
 sitemap_filename = "../sitemap.xml"
 
+# -- Options for opengraph extension ------------------------------------------
+ogp_site_url = datalab.__homeurl__
+ogp_image = "https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/DataLab-banner.png"
+ogp_enable_meta_description = True
+
 # -- Options for HTML output -------------------------------------------------
 html_theme = "pydata_sphinx_theme"
 html_logo = "_static/DataLab-Title.svg"
@@ -179,6 +198,7 @@ else:
     ann = "DataLab has been presented at <a href='https://pretalx.com/euroscipy-2026/talk/E3X9EX/'>EuroSciPy 2026</a> 🇵🇱 and at <a href='https://datalab-platform.com/en/outreach/osxp2025.html'>OSXP 2025</a> 🇫🇷 🚀 — <a href='https://datalab-platform.com/en/outreach/index.html'>Learn more</a>"  # noqa: E501
 html_theme_options = {
     "show_toc_level": 2,
+    "navbar_persistent": ["search-button"],
     "github_url": "https://github.com/DataLab-Platform/DataLab/",
     "logo": {
         "text": f"v{datalab.__version__}",

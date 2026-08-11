@@ -157,6 +157,7 @@ def extract_error_message(raw: str) -> str | None:
         The extracted message, or ``None`` when the body is not JSON or has
         no recognisable error string.
     """
+    # pylint: disable=too-many-return-statements
     if not raw:
         return None
     try:
