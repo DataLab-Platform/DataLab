@@ -36,7 +36,7 @@ Object view
 from __future__ import annotations
 
 import os
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 from typing import TYPE_CHECKING
 
 from guidata.configtools import get_icon
@@ -375,10 +375,38 @@ class SimpleObjectTree(QW.QTreeWidget):
         self, obj: SignalObj | ImageObj, group_id: str, set_current: bool = True
     ) -> None:
         """Add item"""
+        self.add_object_items((obj,), group_id, set_current)
+
+    def add_object_items(
+        self,
+        objects: Sequence[SignalObj | ImageObj],
+        group_id: str,
+        set_current: bool = True,
+    ) -> None:
+        """Add multiple object items with a single tree update cycle.
+
+        Args:
+            objects: Objects to add, in insertion order
+            group_id: UUID of the parent group
+            set_current: If True, set the last object as current
+        """
+        objects = tuple(objects)
+        if not objects:
+            return
         group_item = self.get_item_from_id(group_id)
-        self.__add_to_group_item(obj, group_item)
-        if set_current:
-            self.set_current_item_id(get_uuid(obj))
+        if group_item is None:
+            raise KeyError(f"Group with uuid '{group_id}' not found in tree")
+        signals_blocked = self.blockSignals(True)
+        updates_enabled = self.updatesEnabled()
+        self.setUpdatesEnabled(False)
+        try:
+            for obj in objects:
+                self.__add_to_group_item(obj, group_item)
+            if set_current:
+                self.set_current_item_id(get_uuid(objects[-1]))
+        finally:
+            self.setUpdatesEnabled(updates_enabled)
+            self.blockSignals(signals_blocked)
         self.resizeColumnToContents(0)
 
     def update_item(self, uuid: str) -> None:
@@ -774,6 +802,18 @@ class ObjectView(SimpleObjectTree):
         """Set current object"""
         self.set_current_item_id(get_uuid(obj))
 
+    def __select_uuids(self, uuids: list[str]) -> None:
+        """Select UUIDs atomically and publish the complete final state once."""
+        if not uuids:
+            return
+        signals_blocked = self.blockSignals(True)
+        try:
+            for idx, uuid in enumerate(uuids):
+                self.set_current_item_id(uuid, extend=idx > 0)
+        finally:
+            self.blockSignals(signals_blocked)
+        self.item_selection_changed()
+
     def item_selection_changed(self) -> None:
         """Refreshing the selection of objects and groups, emitting the
         SIG_SELECTION_CHANGED signal which triggers the update of the
@@ -816,8 +856,7 @@ class ObjectView(SimpleObjectTree):
         else:
             assert all(isinstance(obj, (SignalObj, ImageObj)) for obj in selection)
             uuids = [get_uuid(obj) for obj in selection]
-        for idx, uuid in enumerate(uuids):
-            self.set_current_item_id(uuid, extend=idx > 0)
+        self.__select_uuids(uuids)
 
     def select_groups(
         self, groups: list[ObjectGroup | int | str] | None = None
@@ -835,8 +874,7 @@ class ObjectView(SimpleObjectTree):
         elif all(isinstance(group, str) for group in groups):
             groups = self.objmodel.get_groups(groups)
         assert all(isinstance(group, ObjectGroup) for group in groups)
-        for idx, group in enumerate(groups):
-            self.set_current_item_id(get_uuid(group), extend=idx > 0)
+        self.__select_uuids([get_uuid(group) for group in groups])
 
     def __reorder_model(self) -> None:
         """Reorder model"""

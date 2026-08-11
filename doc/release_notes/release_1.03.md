@@ -60,6 +60,14 @@ and Image panels.
 
 ### 🔄 Changes ###
 
+**Large campaign responsiveness:**
+
+* Opening, selecting, and displaying large generated campaigns no longer
+  repeats a complete workspace and plot refresh for every object
+* Native HDF5 workspaces and multi-object recipe results now load in groups,
+  making large signal and image collections available substantially faster
+  while preserving every selected and visible object
+
 **Detection tools now preserve existing regions of interest:**
 
 * Regions of interest created by peak, blob, Hough circle, and contour

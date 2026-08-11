@@ -55,6 +55,7 @@ from datalab.config import (
 )
 from datalab.control.proxy import LocalProxy
 from datalab.env import execenv
+from datalab.objectmodel import get_uuid
 from datalab.plugin_examples import PluginExample, PluginExampleData
 from datalab.recipes import RecipeDescriptor, RecipeOutcome
 
@@ -451,20 +452,69 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         data = self.materialize_example(example_id)
         self.last_example_data = data
         if data is not None:
-            from sigima.objects import SignalObj
+            from sigima.objects import ImageObj, SignalObj
 
             if reset_all:
                 self.main.reset_all()
+            modified_before = self.main.is_modified()
+            current_panel_before = self.main.get_current_panel()
+            objects_by_panel: dict[
+                SignalPanel | ImagePanel, list[SignalObj | ImageObj]
+            ] = {}
+            for obj in data.objects:
+                panel = (
+                    self.signalpanel if isinstance(obj, SignalObj) else self.imagepanel
+                )
+                objects_by_panel.setdefault(panel, []).append(obj)
+            groups_before = {
+                panel: {get_uuid(group) for group in panel.objmodel.get_groups()}
+                for panel in objects_by_panel
+            }
+            committed_batches: list[
+                tuple[
+                    SignalPanel | ImagePanel,
+                    tuple[SignalObj | ImageObj, ...],
+                    tuple[object, ...],
+                ]
+            ] = []
             # Suspend plot refresh: generated campaigns may hold hundreds
             # of objects.
             with self.main.context_no_refresh():
-                for obj in data.objects:
-                    panel = (
-                        self.signalpanel
-                        if isinstance(obj, SignalObj)
-                        else self.imagepanel
-                    )
-                    panel.add_object(obj)
+                try:
+                    for panel, objects in objects_by_panel.items():
+                        batch = tuple(objects)
+                        panel._add_objects(batch)  # pylint: disable=protected-access
+                        new_groups = tuple(
+                            group
+                            for group in panel.objmodel.get_groups()
+                            if get_uuid(group) not in groups_before[panel]
+                        )
+                        committed_batches.append((panel, batch, new_groups))
+                except Exception:
+                    try:
+                        with ExitStack() as rollback:
+                            for panel, objects, new_groups in committed_batches:
+                                rollback.callback(panel.SIG_OBJECT_REMOVED.emit)
+                                rollback.callback(panel.objview.update_tree)
+                                for group in new_groups:
+                                    rollback.callback(
+                                        panel.objmodel.remove_group,
+                                        group,
+                                    )
+                                    rollback.callback(
+                                        panel.objview.remove_item,
+                                        get_uuid(group),
+                                        False,
+                                    )
+                                for obj in objects:
+                                    rollback.callback(
+                                        panel._remove_added_object,  # pylint: disable=protected-access
+                                        obj,
+                                    )
+                    finally:
+                        self.main.set_modified(modified_before)
+                        self.main.set_current_panel(current_panel_before)
+                    raise
             self.main.set_current_panel(
                 "signal" if isinstance(data.objects[0], SignalObj) else "image"
             )

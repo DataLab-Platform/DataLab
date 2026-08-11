@@ -150,6 +150,62 @@ def test_recipe_runner_commits_cross_panel_outputs_and_anchored_results() -> Non
         assert win.is_modified()
 
 
+def test_recipe_runner_batches_outputs_by_panel(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Each panel receives one ordered atomic batch from a recipe commit."""
+
+    def run_recipe(*_args) -> RecipeOutcome:
+        return RecipeOutcome(
+            objects=(
+                RecipeObjectOutput("signal-1", create_signal("S1", [0.0], [1.0])),
+                RecipeObjectOutput("image-1", create_image("I1", np.ones((2, 2)))),
+                RecipeObjectOutput("signal-2", create_signal("S2", [0.0], [2.0])),
+                RecipeObjectOutput("image-2", create_image("I2", np.zeros((2, 2)))),
+            )
+        )
+
+    descriptor = RecipeDescriptor(
+        recipe_id="org.example.recipes:batch",
+        plugin_version="1.0.0",
+        title="Batch",
+        version="1.0.0",
+        run=run_recipe,
+    )
+
+    with datalab_test_app_context(console=False) as win:
+        calls: dict[object, list[tuple]] = {
+            win.signalpanel: [],
+            win.imagepanel: [],
+        }
+        signal_add_objects = win.signalpanel._add_objects
+        image_add_objects = win.imagepanel._add_objects
+
+        def track_signal_batch(objects, *args, **kwargs) -> None:
+            batch = tuple(objects)
+            calls[win.signalpanel].append(batch)
+            signal_add_objects(batch, *args, **kwargs)
+
+        def track_image_batch(objects, *args, **kwargs) -> None:
+            batch = tuple(objects)
+            calls[win.imagepanel].append(batch)
+            image_add_objects(batch, *args, **kwargs)
+
+        monkeypatch.setattr(win.signalpanel, "_add_objects", track_signal_batch)
+        monkeypatch.setattr(win.imagepanel, "_add_objects", track_image_batch)
+
+        RecipeRunner(win).run(descriptor, {})
+
+        assert [[obj.title for obj in batch] for batch in calls[win.signalpanel]] == [
+            ["S1", "S2"]
+        ]
+        assert [[obj.title for obj in batch] for batch in calls[win.imagepanel]] == [
+            ["I1", "I2"]
+        ]
+        assert len(win.signalpanel.objmodel.get_groups()) == 1
+        assert len(win.imagepanel.objmodel.get_groups()) == 1
+
+
 def test_recipe_runner_validates_inputs_before_execution() -> None:
     """Invalid slot assignments neither call recipe code nor mutate the workspace."""
     called = False
@@ -219,7 +275,7 @@ def test_recipe_runner_rolls_back_partial_cross_panel_commit(monkeypatch) -> Non
         def fail_image_add(*_args, **_kwargs) -> None:
             raise RuntimeError("injected image commit failure")
 
-        monkeypatch.setattr(win.imagepanel, "_add_object", fail_image_add)
+        monkeypatch.setattr(win.imagepanel, "_add_objects", fail_image_add)
 
         with pytest.raises(RecipeCommitError, match="injected image commit failure"):
             RecipeRunner(win).run(descriptor, {})
@@ -294,7 +350,7 @@ def test_recipe_runner_finishes_rollback_after_plot_cleanup_error(monkeypatch) -
         def fail_plot_cleanup(*_args, **_kwargs) -> None:
             raise RuntimeError("injected plot cleanup failure")
 
-        monkeypatch.setattr(win.imagepanel, "_add_object", fail_image_add)
+        monkeypatch.setattr(win.imagepanel, "_add_objects", fail_image_add)
         monkeypatch.setattr(
             win.signalpanel.plothandler,
             "remove_item",

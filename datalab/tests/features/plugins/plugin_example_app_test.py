@@ -102,7 +102,9 @@ def test_plugin_launch_example_confirms_workspace_replacement(
             PluginRegistry.get_plugin_classes().remove(ExamplePlugin)
 
 
-def test_plugin_opens_generated_example_in_panels() -> None:
+def test_plugin_opens_generated_example_in_panels(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """A generated example loads its in-memory objects without any resource."""
     import numpy as np
     from sigima.objects import create_signal
@@ -141,9 +143,24 @@ def test_plugin_opens_generated_example_in_panels() -> None:
             plugin = GeneratedExamplePlugin()
             plugin.register(win)
             try:
+                batches: list[tuple] = []
+                original_add_objects = win.signalpanel._add_objects
+
+                def track_add_objects(objects, *args, **kwargs) -> None:
+                    batch = tuple(objects)
+                    batches.append(batch)
+                    original_add_objects(batch, *args, **kwargs)
+
+                monkeypatch.setattr(
+                    win.signalpanel,
+                    "_add_objects",
+                    track_add_objects,
+                )
                 opened = plugin.open_example("generated", reset_all=True)
                 assert opened is example
                 assert len(win.signalpanel) == 2
+                assert len(batches) == 1
+                assert len(batches[0]) == 2
                 assert win.get_current_panel() == "signal"
                 assert plugin.last_example_data is not None
                 assert plugin.last_example_data.parameter_values == {"gain": 2.0}
@@ -152,3 +169,67 @@ def test_plugin_opens_generated_example_in_panels() -> None:
     finally:
         if GeneratedExamplePlugin in PluginRegistry.get_plugin_classes():
             PluginRegistry.get_plugin_classes().remove(GeneratedExamplePlugin)
+
+
+def test_generated_example_rolls_back_cross_panel_failure(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A failed second panel leaves no generated objects or implicit groups."""
+    import numpy as np
+    from sigima.objects import create_image, create_signal
+
+    from datalab.plugin_examples import PluginExampleData
+
+    example = PluginExample(id="mixed", title="Mixed campaign")
+
+    class MixedExamplePlugin(PluginBase):
+        """Plugin materializing objects in both data panels."""
+
+        PLUGIN_INFO = PluginInfo(
+            id="org.example.mixed-application",
+            name="Mixed example application",
+            version="1.0.0",
+        )
+        EXAMPLES = (example,)
+
+        @classmethod
+        def materialize_example(cls, example_id: str) -> PluginExampleData | None:
+            cls.get_example(example_id)
+            return PluginExampleData(
+                (
+                    create_signal("Signal", [0.0], [1.0]),
+                    create_image("Image", np.ones((2, 2))),
+                )
+            )
+
+        def create_actions(self) -> None:
+            """Create no actions for this integration test."""
+
+    try:
+        with datalab_test_app_context(console=False) as win:
+            plugin = MixedExamplePlugin()
+            plugin.register(win)
+            try:
+
+                def fail_image_batch(*_args, **_kwargs) -> None:
+                    raise RuntimeError("injected image example failure")
+
+                monkeypatch.setattr(win.imagepanel, "_add_objects", fail_image_batch)
+
+                with pytest.raises(
+                    RuntimeError, match="injected image example failure"
+                ):
+                    plugin.open_example("mixed", reset_all=True)
+
+                assert len(win.signalpanel) == 0
+                assert len(win.imagepanel) == 0
+                assert win.signalpanel.objmodel.get_groups() == []
+                assert win.imagepanel.objmodel.get_groups() == []
+                assert win.signalpanel.objview.topLevelItemCount() == 0
+                assert win.imagepanel.objview.topLevelItemCount() == 0
+                assert not win.is_modified()
+            finally:
+                plugin.unregister()
+    finally:
+        if MixedExamplePlugin in PluginRegistry.get_plugin_classes():
+            PluginRegistry.get_plugin_classes().remove(MixedExamplePlugin)

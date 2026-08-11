@@ -241,22 +241,23 @@ class RecipeRunner:
         added_groups: list[tuple[BaseDataPanel, ObjectGroup]] = []
         added_objects: list[tuple[BaseDataPanel, SignalObj | ImageObj]] = []
         groups_by_panel: dict[BaseDataPanel, ObjectGroup] = {}
+        objects_by_panel: dict[BaseDataPanel, list[SignalObj | ImageObj]] = {}
         try:
             for output in outcome.objects:
                 panel = self._panel_for_object(output.value)
-                if panel not in groups_by_panel:
-                    group = panel.add_group(group_title)
-                    groups_by_panel[panel] = group
-                    added_groups.append((panel, group))
-            for output in outcome.objects:
-                panel = self._panel_for_object(output.value)
+                objects_by_panel.setdefault(panel, []).append(output.value)
+            for panel in objects_by_panel:
+                group = panel.add_group(group_title)
+                groups_by_panel[panel] = group
+                added_groups.append((panel, group))
+            for panel, objects in objects_by_panel.items():
                 group = groups_by_panel[panel]
-                panel._add_object(  # pylint: disable=protected-access
-                    output.value,
+                panel._add_objects(  # pylint: disable=protected-access
+                    objects,
                     group_id=get_uuid(group),
                     set_current=False,
                 )
-                added_objects.append((panel, output.value))
+                added_objects.extend((panel, obj) for obj in objects)
         except Exception as exc:
             rollback_error: Exception | None = None
             try:

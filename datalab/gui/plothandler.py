@@ -44,7 +44,6 @@ from datalab.adapters_metadata import GeometryAdapter, TableAdapter
 from datalab.adapters_plotpy import TypePlotItem, create_adapter_from_object
 from datalab.adapters_plotpy.objects.scalar import MergedResultPlotPyAdapter
 from datalab.config import Conf, _
-from datalab.objectmodel import get_uuid
 from datalab.utils.qthelpers import block_signals, create_progress_bar
 
 if TYPE_CHECKING:
@@ -84,6 +83,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
 
         # Plot items: key = object uuid, value = plot item
         self.__plotitems: dict[str, TypePlotItem] = {}
+        self.__plotitem_oids: dict[int, str] = {}
 
         self.__shapeitems = []
         self.__cached_hashes: WeakKeyDictionary[TypeObj, list[int]] = (
@@ -128,14 +128,21 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         Returns:
             Object associated to plot item
         """
-        for obj in self.panel.objmodel:
-            if self.get(get_uuid(obj)) is item:
-                return obj
-        return None
+        oid = self.__plotitem_oids.get(id(item))
+        if oid is None:
+            return None
+        try:
+            return self.panel.objmodel[oid]
+        except KeyError:
+            return None
 
     def __setitem__(self, oid: str, item: TypePlotItem) -> None:
         """Set item associated to object uuid"""
+        previous_item = self.__plotitems.get(oid)
+        if previous_item is not None:
+            self.__plotitem_oids.pop(id(previous_item), None)
         self.__plotitems[oid] = item
+        self.__plotitem_oids[id(item)] = oid
 
     def __iter__(self) -> Iterator[TypePlotItem]:
         """Return an iterator over plothandler values (plot items)"""
@@ -154,11 +161,13 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
             # only for the first object in group, and this exception would be raised
             # for the second one (which does not have a plot item yet).
             return
+        self.__plotitem_oids.pop(id(item), None)
         self.plot.del_item(item)
 
     def clear(self) -> None:
         """Clear plot items"""
         self.__plotitems = {}
+        self.__plotitem_oids = {}
         self.__merged_result_adapters = {}
         self.cleanup_dataview()
         self.remove_all_shape_items()
@@ -236,7 +245,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
 
     def remove_all_shape_items(self) -> None:
         """Remove all geometric shapes associated to result items"""
-        if set(self.__shapeitems).issubset(set(self.plot.items)):
+        if self.__shapeitems and set(self.__shapeitems).issubset(set(self.plot.items)):
             self.plot.del_items(self.__shapeitems)
         self.__shapeitems = []
         # Clear cached labels in merged result adapters since they were removed
@@ -389,18 +398,45 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         """
         if not self.__auto_refresh and not force:
             return
+        auto_replot = self.plot.autoReplot()
+        self.plot.setAutoReplot(False)
+        try:
+            self.__refresh_plot(
+                what,
+                update_items=update_items,
+                only_visible=only_visible,
+                only_existing=only_existing,
+            )
+        finally:
+            self.plot.setAutoReplot(auto_replot)
+            self.plot.replot()
+
+    def __refresh_plot(
+        self,
+        what: str,
+        update_items: bool,
+        only_visible: bool,
+        only_existing: bool,
+    ) -> None:
+        """Refresh plot items while automatic replots are suspended.
+
+        Raises:
+            ValueError: if `what` is not a valid value
+        """
         if what == "selected":
             # Refresh selected objects
             oids = self.panel.objview.get_sel_object_uuids(include_groups=True)
-            if len(oids) <= 1:
-                # Cleanup data view when there is 0 or 1 selected object.
-                # This removes stray plot items (like XRangeSelection, DataInfoLabel)
-                # that were created by PlotPy tools but are not managed by DataLab.
-                self.cleanup_dataview()
-            self.remove_all_shape_items()
-            for item in self:
-                if item is not None:
-                    item.hide()
+            with block_signals(self.plot):
+                if len(oids) <= 1:
+                    # Cleanup data view when there is 0 or 1 selected object.
+                    # This removes stray plot items (like XRangeSelection,
+                    # DataInfoLabel) that were created by PlotPy tools but are not
+                    # managed by DataLab.
+                    self.cleanup_dataview()
+                self.remove_all_shape_items()
+                for item in self:
+                    if item is not None:
+                        item.hide()
         elif what == "existing":
             # Refresh existing objects
             oids = self.get_existing_oids()
@@ -434,50 +470,62 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
             if what != "existing" and only_visible:
                 # Remove hidden items from the list of objects to refresh
                 oids = self.reduce_shown_oids(oids)
-            with create_progress_bar(
-                self.panel, _("Creating plot items"), max_=len(oids)
-            ) as progress:
-                # Iterate over objects
-                for i_obj, oid in enumerate(oids):
-                    progress.setValue(i_obj + 1)
-                    if progress.wasCanceled():
-                        break
-                    obj = self.panel.objmodel[oid]
+            active_item = None
+            plot_signals_blocked = self.plot.blockSignals(True)
+            try:
+                with create_progress_bar(
+                    self.panel, _("Creating plot items"), max_=len(oids)
+                ) as progress:
+                    # Iterate over objects
+                    for i_obj, oid in enumerate(oids):
+                        progress_step = i_obj + 1
+                        if progress_step % 10 == 0 or progress_step == len(oids):
+                            progress.setValue(progress_step)
+                            if progress.wasCanceled():
+                                break
+                        obj = self.panel.objmodel[oid]
 
-                    # Collecting titles information
-                    for key in title_keys:
-                        title = getattr(obj, key, "")
-                        value = titles_dict.get(key)
-                        if value is None:
-                            titles_dict[key] = title
-                        elif value != title:
-                            titles_dict[key] = ""
+                        # Collecting titles information
+                        for key in title_keys:
+                            title = getattr(obj, key, "")
+                            value = titles_dict.get(key)
+                            if value is None:
+                                titles_dict[key] = title
+                            elif value != title:
+                                titles_dict[key] = ""
 
-                    # Collecting scales information
-                    autoscale = autoscale or obj.autoscale
-                    for key in scale_keys:
-                        scale = getattr(obj, key, None)
-                        if scale is not None:
-                            cmp = min if "min" in key else max
-                            scales_dict[key] = cmp(scales_dict.get(key, scale), scale)
+                        # Collecting scales information
+                        autoscale = autoscale or obj.autoscale
+                        for key in scale_keys:
+                            scale = getattr(obj, key, None)
+                            if scale is not None:
+                                cmp = min if "min" in key else max
+                                scales_dict[key] = cmp(
+                                    scales_dict.get(key, scale), scale
+                                )
 
-                    # Update or add item to plot
-                    item = self.get(oid)
-                    if item is None:
-                        if only_existing:
-                            continue
-                        item = self.__add_item_to_plot(oid)
-                    else:
-                        self.__update_item_on_plot(oid, just_show=not update_items)
-                    if what != "existing" or item.isVisible():
-                        self.plot.set_item_visible(item, True, replot=False)
-                        self.plot.set_active_item(item)
-                        item.unselect()
+                        # Update or add item to plot
+                        item = self.get(oid)
+                        if item is None:
+                            if only_existing:
+                                continue
+                            item = self.__add_item_to_plot(oid)
+                        else:
+                            self.__update_item_on_plot(oid, just_show=not update_items)
+                        if what != "existing" or item.isVisible():
+                            self.plot.set_item_visible(item, True, replot=False)
+                            active_item = item
 
-                    # Add geometric shapes
-                    self.add_shapes(oid, do_autoscale=autoscale)
+                        # Add geometric shapes
+                        self.add_shapes(oid, do_autoscale=autoscale)
+                        self.plot.blockSignals(True)
+            finally:
+                self.plot.blockSignals(plot_signals_blocked)
 
-            self.plot.replot()
+            self.plot.SIG_ITEMS_CHANGED.emit(self.plot)
+            if active_item is not None:
+                self.plot.set_active_item(active_item)
+                active_item.unselect()
 
         else:
             # No object to refresh: clean up titles
@@ -491,16 +539,14 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         self.plot.set_titles(**titles_dict)
 
         # Set scales
-        replot = False
         for axis_name, axis in (("bottom", "x"), ("left", "y")):
             axis_id = self.plot.get_axis_id(axis_name)
             scalelog = scales_dict.get(f"{axis}scalelog")
             if scalelog is not None:
                 new_scale = "log" if scalelog else "lin"
                 self.plot.set_axis_scale(axis_id, new_scale, autoscale=False)
-                replot = True
         if autoscale:
-            self.plot.do_autoscale()
+            self.plot.do_autoscale(replot=False)
         else:
             for axis_name, axis in (("bottom", "x"), ("left", "y")):
                 axis_id = self.plot.get_axis_id(axis_name)
@@ -512,9 +558,6 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
                     new_vmin = new_vmin if new_vmin is not None else vmin
                     new_vmax = new_vmax if new_vmax is not None else vmax
                     self.plot.set_axis_limits(axis_id, new_vmin, new_vmax)
-                    replot = True
-            if replot:
-                self.plot.replot()
 
     def cleanup_dataview(self) -> None:
         """Clean up data view"""
