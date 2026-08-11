@@ -1450,7 +1450,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         # Plugins menu actions
         self.applications_action = create_action(
             self,
-            _("Applications..."),
+            "",
             icon=get_icon("libre-gui-plugin.svg"),
             tip=_("Browse application plugins, recipes and examples"),
             triggered=self.__show_applications,

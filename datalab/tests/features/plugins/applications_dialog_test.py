@@ -217,7 +217,7 @@ def test_main_window_exposes_applications_catalog(monkeypatch) -> None:
     with datalab_test_app_context(console=False) as window:
         menu_actions = window.menuBar().actions()
         assert window.applications_action in menu_actions
-        assert window.applications_action.text() == "Applications..."
+        assert window.applications_action.text() == ""
 
         window.applications_action.trigger()
         assert len(opened) == 1
