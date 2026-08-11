@@ -186,6 +186,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self._startup_errors: list[str] = []
         self.macropanel: MacroPanel | None = None
         self.aiassistantpanel = None  # type: ignore[assignment]
+        self.__applications_dialog: ApplicationsDialog | None = None
 
         self.main_toolbar: QW.QToolBar | None = None
         self.signalpanel_toolbar: QW.QToolBar | None = None
@@ -1169,8 +1170,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def __show_applications(self) -> None:
         """Open the application plugin catalog."""
-        dialog = ApplicationsDialog(self)
-        dialog.exec()
+        if self.__applications_dialog is None:
+            self.__applications_dialog = ApplicationsDialog(self)
+        else:
+            self.__applications_dialog.refresh()
+        self.__applications_dialog.show()
+        self.__applications_dialog.raise_()
+        self.__applications_dialog.activateWindow()
 
     def set_plugins_enabled(self, enabled: bool) -> None:
         """Apply the global third-party plugin enabled state."""

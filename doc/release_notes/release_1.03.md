@@ -11,6 +11,10 @@
 * Each application displays its description, identity, version, available
   recipes, and packaged examples; processing-only plugins remain outside this
   focused view
+* The catalog is non-modal and remains open after starting a method or opening
+  an example, so users may continue interacting with the DataLab workspace
+* Completed application methods select their last generated object, consistently
+  with standard DataLab processing
 
 **Plugin project generator:**
 

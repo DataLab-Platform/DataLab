@@ -206,6 +206,35 @@ def test_recipe_runner_batches_outputs_by_panel(
         assert len(win.imagepanel.objmodel.get_groups()) == 1
 
 
+def test_recipe_runner_selects_last_output_like_standard_processing() -> None:
+    """A recipe finishes with its last output selected in the active panel."""
+
+    def run_recipe(*_args) -> RecipeOutcome:
+        return RecipeOutcome(
+            objects=(
+                RecipeObjectOutput("response", create_signal("S1", [0.0], [1.0])),
+                RecipeObjectOutput("map", create_image("I1", np.ones((2, 2)))),
+                RecipeObjectOutput("profile", create_signal("S2", [0.0], [2.0])),
+            )
+        )
+
+    descriptor = RecipeDescriptor(
+        recipe_id="org.example.recipes:selection",
+        plugin_version="1.0.0",
+        title="Selection",
+        version="1.0.0",
+        run=run_recipe,
+    )
+
+    with datalab_test_app_context(console=False) as win:
+        outcome = RecipeRunner(win).run(descriptor, {})
+        last_output = outcome.objects[-1].value
+
+        assert win.get_current_panel() == "signal"
+        assert win.signalpanel.objview.get_sel_objects() == [last_output]
+        assert win.signalpanel.objview.get_current_object() is last_output
+
+
 def test_recipe_runner_validates_inputs_before_execution() -> None:
     """Invalid slot assignments neither call recipe code nor mutate the workspace."""
     called = False

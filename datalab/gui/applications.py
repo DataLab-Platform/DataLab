@@ -394,6 +394,8 @@ class ApplicationsDialog(QW.QDialog):
     def __init__(self, parent: QW.QWidget | None = None):
         super().__init__(parent)
         win32_fix_title_bar_background(self)
+        self.setWindowModality(QC.Qt.NonModal)
+        self.setModal(False)
         self.application_list = QW.QListWidget()
         self.application_stack = QW.QStackedWidget()
         self.application_pages: list[ApplicationPage] = []
@@ -454,8 +456,7 @@ class ApplicationsDialog(QW.QDialog):
         self.application_list.setCurrentRow(0)
 
     def _start_recipe(self, plugin: PluginBase, recipe_id: str) -> None:
-        """Close the catalog and delegate to a plugin-owned recipe launcher."""
-        self.accept()
+        """Delegate to a plugin-owned recipe launcher."""
         try:
             plugin.launch_recipe(recipe_id)
         except Exception as exc:  # pylint: disable=broad-except
@@ -465,8 +466,7 @@ class ApplicationsDialog(QW.QDialog):
             )
 
     def _open_example(self, plugin: PluginBase, example_id: str) -> None:
-        """Close the catalog and delegate packaged-example opening."""
-        self.accept()
+        """Delegate packaged-example opening."""
         try:
             plugin.launch_example(example_id)
         except Exception as exc:  # pylint: disable=broad-except

@@ -258,6 +258,11 @@ class RecipeRunner:
                     set_current=False,
                 )
                 added_objects.extend((panel, obj) for obj in objects)
+            if outcome.objects:
+                last_object = outcome.objects[-1].value
+                last_panel = self._panel_for_object(last_object)
+                self.mainwindow.set_current_panel(last_panel)
+                last_panel.objview.select_objects([last_object])
         except Exception as exc:
             rollback_error: Exception | None = None
             try:

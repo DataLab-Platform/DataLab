@@ -172,22 +172,38 @@ def test_application_commands_require_declared_targets() -> None:
 
 
 def test_main_window_exposes_applications_catalog(monkeypatch) -> None:
-    """The catalog has a visible main-menu entry independent of plugin actions."""
-    opened: list[ApplicationsDialog] = []
+    """The catalog action reuses one modeless window without blocking DataLab."""
+    executed: list[ApplicationsDialog] = []
     monkeypatch.setattr(
         main.ApplicationsDialog,
         "exec",
-        lambda dialog: opened.append(dialog),
+        lambda dialog: executed.append(dialog),
     )
 
-    with datalab_test_app_context(console=False) as window:
+    with datalab_test_app_context(console=False, exec_loop=False) as window:
         menu_actions = window.menuBar().actions()
         assert window.applications_action in menu_actions
         assert window.applications_action.text() == ""
 
         window.applications_action.trigger()
-        assert len(opened) == 1
-        assert opened[0].parent() is window
+        QW.QApplication.processEvents()
+        dialogs = window.findChildren(ApplicationsDialog)
+
+        assert executed == []
+        assert len(dialogs) == 1
+        dialog = dialogs[0]
+        assert dialog.isVisible()
+        assert dialog.windowModality() == QC.Qt.NonModal
+        assert window.isEnabled()
+
+        window.set_current_panel("image")
+        assert window.get_current_panel() == "image"
+        assert dialog.isVisible()
+
+        window.applications_action.trigger()
+        QW.QApplication.processEvents()
+
+        assert window.findChildren(ApplicationsDialog) == [dialog]
 
 
 def test_application_commands_delegate_to_plugin_contracts(monkeypatch) -> None:
@@ -227,15 +243,18 @@ def test_application_commands_delegate_to_plugin_contracts(monkeypatch) -> None:
     )
     try:
         dialog = ApplicationsDialog()
+        dialog.show()
+        QW.QApplication.processEvents()
         page = dialog.application_pages[0]
         page.documentation_button.click()
         page.start_button.click()
         assert launched_recipes == [recipe.recipe_id]
         assert opened_urls == ["https://example.org/camera/docs"]
+        assert dialog.isVisible()
 
-        dialog = ApplicationsDialog()
-        dialog.application_pages[0].open_example_button.click()
+        page.open_example_button.click()
         assert opened_examples == [example.id]
+        assert dialog.isVisible()
         assert qt_app is not None
     finally:
         registry[:] = previous_plugins
