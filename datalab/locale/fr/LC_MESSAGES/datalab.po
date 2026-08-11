@@ -4014,10 +4014,10 @@ msgid "Version: %s"
 msgstr "Version : %s"
 
 msgid "Recipes"
-msgstr "Recettes"
+msgstr "Méthodes"
 
 msgid "No recipes declared"
-msgstr "Aucune recette déclarée"
+msgstr "Aucune méthode déclarée"
 
 msgid "Examples"
 msgstr "Exemples"
@@ -4043,7 +4043,7 @@ msgid "Applications..."
 msgstr "Applications..."
 
 msgid "Browse application plugins, recipes and examples"
-msgstr "Parcourir les plugins d'application, les recettes et les exemples"
+msgstr "Parcourir les plugins d'application, les méthodes et les exemples"
 
 msgid "Plugin name must be a non-empty single line"
 msgstr "Le nom du plugin doit être une ligne non vide"
