@@ -4243,8 +4243,23 @@ msgstr ""
 "\n"
 "Souhaitez-vous continuer ?"
 
-msgid "The current workspace state is not compatible with the action."
-msgstr "L'état actuel de l'espace de travail n'est pas compatible avec l'action."
+msgid "Broken processing chain"
+msgstr "Chaîne de traitement rompue"
+
+#, python-format
+msgid ""
+"One or more objects used by the selected processing chain were deleted: the chain is broken and the following entries can no longer be replayed:\n"
+"%s\n"
+"\n"
+"Repair the history by removing the broken actions (and the actions depending on them), then continue with the remaining actions?"
+msgstr ""
+"Un ou plusieurs objets utilisés par la chaîne de traitement sélectionnée ont été supprimés : la chaîne est rompue et les entrées suivantes ne peuvent plus être rejouées :\n"
+"%s\n"
+"\n"
+"Réparer l'historique en supprimant les actions rompues (ainsi que les actions qui en dépendent), puis continuer avec les actions restantes ?"
+
+msgid "Repair and continue"
+msgstr "Réparer et continuer"
 
 msgid "Replay file save"
 msgstr "Rejouer l'enregistrement de fichier"
@@ -4260,6 +4275,18 @@ msgstr ""
 "%s\n"
 "\n"
 "La rejouer ?"
+
+#, python-format
+msgid "Action %s was skipped: its recorded workspace state no longer matches the current workspace."
+msgstr "L'action %s a été ignorée : l'état de l'espace de travail enregistré ne correspond plus à l'espace de travail actuel."
+
+#, python-format
+msgid "Action %s would delete objects that this replay just recomputed and was skipped."
+msgstr "L'action %s supprimerait des objets que ce rejeu vient de recalculer ; elle a été ignorée."
+
+#, python-format
+msgid "Action %s targets objects produced by another session and was skipped."
+msgstr "L'action %s cible des objets produits par une autre session ; elle a été ignorée."
 
 #, python-format
 msgid "Action %s has no recorded pattern and cannot be replayed."
