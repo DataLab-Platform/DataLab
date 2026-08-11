@@ -8,9 +8,11 @@ import importlib
 import sys
 import zipfile
 
+import numpy as np
 import pytest
+from sigima.objects import create_signal
 
-from datalab.plugin_examples import PluginExample
+from datalab.plugin_examples import PluginExample, PluginExampleData
 from datalab.plugins import PluginBase, PluginInfo, PluginRegistry
 from datalab.recipes import RecipeDescriptor, RecipeOutcome
 
@@ -107,6 +109,24 @@ def test_plugin_validates_owned_examples_and_recipe_references() -> None:
             ExamplePlugin.get_examples()
     finally:
         PluginRegistry.get_plugin_classes().remove(ExamplePlugin)
+
+
+def test_plugin_example_data_supports_generated_workspaces() -> None:
+    """Generated examples carry scientific objects and immutable defaults."""
+    signal = create_signal(
+        "Generated",
+        np.asarray([0.0, 1.0]),
+        np.asarray([2.0, 3.0]),
+    )
+    data = PluginExampleData((signal,), {"gain": 2.0})
+    example = PluginExample(id="generated", title="Generated campaign")
+
+    assert data.objects == (signal,)
+    assert data.parameter_values == {"gain": 2.0}
+    with pytest.raises(TypeError):
+        data.parameter_values["gain"] = 3.0
+    with pytest.raises(ValueError, match="no package resource"):
+        _ = example.resource_path
 
 
 @pytest.mark.parametrize(

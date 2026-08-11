@@ -55,7 +55,7 @@ from datalab.config import (
 )
 from datalab.control.proxy import LocalProxy
 from datalab.env import execenv
-from datalab.plugin_examples import PluginExample
+from datalab.plugin_examples import PluginExample, PluginExampleData
 from datalab.recipes import RecipeDescriptor, RecipeOutcome
 
 if TYPE_CHECKING:
@@ -409,6 +409,12 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
             if example.id == example_id:
                 return example
         raise KeyError(f"Plugin example {example_id!r} not found")
+
+    @classmethod
+    def materialize_example(cls, example_id: str) -> PluginExampleData | None:
+        """Generate one example in memory, or defer to its package resource."""
+        cls.get_example(example_id)
+        return None
 
     def launch_example(self, example_id: str) -> PluginExample | None:
         """Confirm and open a packaged example from the Applications view."""
