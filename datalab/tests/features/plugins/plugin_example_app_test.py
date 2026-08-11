@@ -100,3 +100,55 @@ def test_plugin_launch_example_confirms_workspace_replacement(
     finally:
         if ExamplePlugin in PluginRegistry.get_plugin_classes():
             PluginRegistry.get_plugin_classes().remove(ExamplePlugin)
+
+
+def test_plugin_opens_generated_example_in_panels() -> None:
+    """A generated example loads its in-memory objects without any resource."""
+    import numpy as np
+    from sigima.objects import create_signal
+
+    from datalab.plugin_examples import PluginExampleData
+
+    example = PluginExample(id="generated", title="Generated campaign")
+
+    class GeneratedExamplePlugin(PluginBase):
+        """Plugin materializing a two-signal campaign in memory."""
+
+        PLUGIN_INFO = PluginInfo(
+            id="org.example.generated-application",
+            name="Generated example application",
+            version="1.0.0",
+        )
+        EXAMPLES = (example,)
+
+        @classmethod
+        def materialize_example(cls, example_id: str) -> PluginExampleData | None:
+            cls.get_example(example_id)
+            x = np.linspace(0.0, 1.0, 11)
+            return PluginExampleData(
+                tuple(
+                    create_signal(f"Generated {index}", x, x * index)
+                    for index in (1, 2)
+                ),
+                {"gain": 2.0},
+            )
+
+        def create_actions(self) -> None:
+            """Create no actions for this integration test."""
+
+    try:
+        with datalab_test_app_context(console=False) as win:
+            plugin = GeneratedExamplePlugin()
+            plugin.register(win)
+            try:
+                opened = plugin.open_example("generated", reset_all=True)
+                assert opened is example
+                assert len(win.signalpanel) == 2
+                assert win.get_current_panel() == "signal"
+                assert plugin.last_example_data is not None
+                assert plugin.last_example_data.parameter_values == {"gain": 2.0}
+            finally:
+                plugin.unregister()
+    finally:
+        if GeneratedExamplePlugin in PluginRegistry.get_plugin_classes():
+            PluginRegistry.get_plugin_classes().remove(GeneratedExamplePlugin)

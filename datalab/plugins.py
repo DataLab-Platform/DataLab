@@ -301,6 +301,8 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
     RECIPES: tuple[RecipeDescriptor, ...] = ()
     EXAMPLES: tuple[PluginExample, ...] = ()
     RECIPE_LAUNCHERS: Mapping[str, str] = MappingProxyType({})
+    #: Data of the last opened generated example (``None`` for packaged ones)
+    last_example_data: PluginExampleData | None = None
 
     def __init__(self):
         self.main: main.DLMainWindow = None
@@ -417,7 +419,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         return None
 
     def launch_example(self, example_id: str) -> PluginExample | None:
-        """Confirm and open a packaged example from the Applications view."""
+        """Confirm and open a generated or packaged example."""
         if self.main is None:
             raise RuntimeError("Plugin must be registered before launching an example")
         self.get_example(example_id)
@@ -435,10 +437,38 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         example_id: str,
         reset_all: bool = True,
     ) -> PluginExample:
-        """Open a packaged native HDF5 example in the Desktop workspace."""
+        """Open a generated or packaged HDF5 example in the Desktop workspace.
+
+        Generated examples (``materialize_example()`` returning data) are
+        loaded directly into the signal/image panels; packaged examples are
+        opened through their native HDF5 resource. The materialized data is
+        kept in :attr:`last_example_data` so plugin launchers can reuse the
+        example's recipe parameter values.
+        """
         if self.main is None:
             raise RuntimeError("Plugin must be registered before opening an example")
         example = self.get_example(example_id)
+        data = self.materialize_example(example_id)
+        self.last_example_data = data
+        if data is not None:
+            from sigima.objects import SignalObj
+
+            if reset_all:
+                self.main.reset_all()
+            # Suspend plot refresh: generated campaigns may hold hundreds
+            # of objects.
+            with self.main.context_no_refresh():
+                for obj in data.objects:
+                    panel = (
+                        self.signalpanel
+                        if isinstance(obj, SignalObj)
+                        else self.imagepanel
+                    )
+                    panel.add_object(obj)
+            self.main.set_current_panel(
+                "signal" if isinstance(data.objects[0], SignalObj) else "image"
+            )
+            return example
         with example.as_file() as filename:
             self.main.load_h5_workspace(
                 [os.fspath(filename)],
