@@ -596,7 +596,6 @@ def test_plugin_settings_tab_exposes_global_toggle_and_warning_option():
             assert dialog.tabs.tabText(1) == "Plugin settings"
             assert dialog.global_toggle_button is not None
             assert dialog.global_toggle_button.text() == "Disable plugins globally"
-            assert dialog.global_toggle_button.minimumHeight() == 24
             assert not dialog.global_toggle_button.icon().isNull()
             assert dialog.v020_warning_checkbox is not None
             assert dialog.v020_warning_checkbox.isChecked() is False

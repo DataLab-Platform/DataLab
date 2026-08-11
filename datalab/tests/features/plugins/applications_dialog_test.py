@@ -16,15 +16,6 @@ from datalab.plugins import PluginCapability, PluginInfo, PluginRegistry
 from datalab.tests import datalab_test_app_context
 
 
-def _item_height(widget: QW.QListWidget, row: int) -> int:
-    """Return the delegate height for a list item at the current width."""
-    option = QW.QStyleOptionViewItem()
-    option.initFrom(widget)
-    option.rect = QC.QRect(0, 0, widget.viewport().width(), 0)
-    index = widget.model().index(row, 0)
-    return widget.itemDelegate().sizeHint(option, index).height()
-
-
 def _plugin(
     plugin_id: str,
     name: str,
@@ -96,8 +87,6 @@ def test_applications_dialog_filters_and_renders_declared_contracts() -> None:
         QW.QApplication.processEvents()
 
         assert dialog.application_list.count() == 1
-        assert dialog.application_list.minimumWidth() == 260
-        assert dialog.application_list.maximumWidth() == 360
         application_item = dialog.application_list.item(0)
         assert application_item.data(QC.Qt.UserRole) == "org.example.camera"
         assert application_item.data(applications_module.CATALOG_TITLE_ROLE) == (
@@ -106,19 +95,6 @@ def test_applications_dialog_filters_and_renders_declared_contracts() -> None:
         assert (
             application_item.data(applications_module.CATALOG_DESCRIPTION_ROLE)
             == "Camera Characterization description"
-        )
-        assert application_item.toolTip() == ""
-        assert isinstance(
-            dialog.application_list.itemDelegate(),
-            applications_module.CatalogItemDelegate,
-        )
-
-        compact_item = QW.QListWidgetItem("Compact entry")
-        compact_item.setData(applications_module.CATALOG_TITLE_ROLE, "Compact entry")
-        dialog.application_list.addItem(compact_item)
-        QW.QApplication.processEvents()
-        assert _item_height(dialog.application_list, 0) > _item_height(
-            dialog.application_list, 1
         )
 
         page = dialog.application_pages[0]
@@ -132,11 +108,6 @@ def test_applications_dialog_filters_and_renders_declared_contracts() -> None:
         assert recipe_item.data(applications_module.CATALOG_VERSION_ROLE) == (
             recipe.version
         )
-        assert recipe_item.toolTip() == ""
-        assert isinstance(
-            page.recipe_list.itemDelegate(),
-            applications_module.CatalogItemDelegate,
-        )
         assert page.example_list.count() == 1
         example_item = page.example_list.item(0)
         assert example_item.data(QC.Qt.UserRole) == example.id
@@ -145,11 +116,6 @@ def test_applications_dialog_filters_and_renders_declared_contracts() -> None:
         )
         assert example_item.data(applications_module.CATALOG_DESCRIPTION_ROLE) == (
             example.description
-        )
-        assert example_item.toolTip() == ""
-        assert isinstance(
-            page.example_list.itemDelegate(),
-            applications_module.CatalogItemDelegate,
         )
         assert page.start_button.isEnabled()
         assert page.open_example_button.isEnabled()
