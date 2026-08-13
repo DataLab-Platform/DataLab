@@ -137,6 +137,7 @@ class HistoryObjectIndex:
         self.action_output_uuids: dict[str, list[str]] = {}
         self.output_to_action: dict[str, str] = {}
         self.tracking_enabled = False
+        self.compatibility_refresh_pending = False
         self.object_tracking_connections: list[tuple[Any, Any]] = []
         self.build_tracking_connections()
 
@@ -150,12 +151,12 @@ class HistoryObjectIndex:
                 (
                     (
                         data_panel.SIG_OBJECT_ADDED,
-                        self.panel.refresh_compatibility_items,
+                        self.schedule_compatibility_refresh,
                     ),
                     (data_panel.SIG_OBJECT_ADDED, self.refresh_obj_ids_snapshot),
                     (
                         data_panel.SIG_OBJECT_REMOVED,
-                        self.panel.refresh_compatibility_items,
+                        self.schedule_compatibility_refresh,
                     ),
                     (
                         data_panel.SIG_OBJECT_REMOVED,
@@ -164,10 +165,37 @@ class HistoryObjectIndex:
                     (data_panel.SIG_OBJECT_REMOVED, self.prune_output_mapping),
                     (
                         data_panel.SIG_OBJECT_MODIFIED,
-                        self.panel.refresh_compatibility_items,
+                        self.schedule_compatibility_refresh,
                     ),
                 )
             )
+
+    def schedule_compatibility_refresh(self, *args: Any) -> None:
+        """Coalesce signal-driven compatibility refreshes within an event-loop turn.
+
+        Data panel object signals (added/removed/modified) may fire many times
+        in a row (file loading, cascade recompute); a single
+        :meth:`HistoryPanel.refresh_compatibility_items` run is deferred until
+        control returns to the event loop. Explicit epilogue refreshes remain
+        synchronous and do not go through this debounce.
+
+        Args:
+            args: Signal payload, ignored
+        """
+        del args
+        if self.compatibility_refresh_pending:
+            return
+        self.compatibility_refresh_pending = True
+        QC.QTimer.singleShot(0, self.run_pending_compatibility_refresh)
+
+    def run_pending_compatibility_refresh(self) -> None:
+        """Run the deferred compatibility refresh scheduled by data panel signals."""
+        self.compatibility_refresh_pending = False
+        try:
+            self.panel.refresh_compatibility_items()
+        except RuntimeError:
+            # Panel widgets were destroyed before the timer fired (shutdown)
+            pass
 
     def set_tracking_enabled(self, enabled: bool) -> None:
         """Enable or disable synchronization with data panel object changes."""
