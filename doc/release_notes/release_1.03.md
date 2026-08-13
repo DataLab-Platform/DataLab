@@ -80,3 +80,8 @@ and Image panels.
 * Fixed duplicated processing chains interfering with their source chain: replaying either session now only affects its own objects
 * Fixed session replay aborting when the session contained a recorded object deletion — recorded deletions that can no longer be safely applied (captured state mismatch, targets re-created earlier in the same replay, or targets belonging to another session) are now skipped with a warning
 * Removed the yellow highlight that could persist on history entries after a failed replay
+* Fixed outdated steps having no visual indication in the history tree — actions left outdated by a failed or interrupted recompute, or by parameter edits pending propagation, are now highlighted with an amber background and a tooltip suggesting to replay them
+* Fixed potential crashes or corrupted histories when clicking History panel commands (Replay, Delete, Duplicate, ...) while a long replay or recompute was still running — commands are now unavailable until the run completes
+* Fixed a single corrupted history entry (e.g. a ROI saved by an incompatible version) preventing an entire `.dlhist` file or HDF5 workspace history from loading — the affected action now loads as incompatible while the rest of the history loads normally
+* Fixed recording aborting the user's operation when a selected object had no data
+* Improved performance: opening many files or replaying long processing chains no longer freezes the interface while the History panel repeatedly rechecks action compatibility

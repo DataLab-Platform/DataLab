@@ -79,9 +79,12 @@ Recording and session lifecycle
 Actions are recorded only while **Record mode** is enabled. Turning record
 mode off preserves existing sessions but does not add new entries.
 
-The Signals and Images panels each have their own active session. New actions
-are added to the active session of the data panel they concern, so switching
-between signals and images does not mix their recording contexts.
+There is a single active recording session, shared by the Signals and Images
+panels. New actions from both panels are chained into that session (one is
+created on first use), so mixed signal/image pipelines are recorded together
+and recording resumes in the user-selected session. Each session remains
+associated with the Signals or Images panel for display purposes, through the
+actions it contains.
 
 When a new object is created or a file is loaded into a populated active
 session, a configurable policy determines whether DataLab asks, starts a new
@@ -157,8 +160,8 @@ The toolbar at the top of the panel exposes the following actions:
 
 - |record| **Record mode**: toggle the recording of new actions. When off, no
   new entry is added to the history (existing sessions are preserved).
-- |new_session| **New session**: start a new active history session for the
-  current data panel.
+- |new_session| **New session**: start a new history session and make it the
+  active recording session.
 - |open_history| **Open history file**: load recorded sessions from a standalone
   ``.dlhist`` file.
 - |save_history| **Save history file**: save the current recorded sessions to a
@@ -222,14 +225,22 @@ The toolbar at the top of the panel exposes the following actions:
   Double-clicking a tree item invokes **Replay** for the current selection,
   with the same in-place recompute semantics documented above.
 
+.. note::
+
+  While a replay or recompute is in progress, History Panel commands are
+  unavailable: the toolbar actions are disabled, and tree interactions
+  (context menu, double-click, :kbd:`Del` key) are ignored until the run
+  completes.
+
 Tree view
 ---------
 
 The tree view organizes recorded actions into expandable sessions:
 
-- Each top-level row is a **session** associated with the Signals or Images
-  panel. Sessions may be started when recording is enabled, with **New
-  session**, or according to the configured session policy.
+- Each top-level row is a **session**; the panel(s) it relates to are
+  determined by the actions it contains. Sessions may be started when
+  recording is enabled, with **New session**, or according to the configured
+  session policy.
 - Each child row is an **action**, with its title, date/time and a description
   summarising its parameters or resolved call when available. A UI action whose
   call cannot be resolved may have an empty description.
@@ -242,8 +253,8 @@ When an action row is selected, its result object is selected in the
 corresponding data panel when available; otherwise, its existing input objects
 are selected. DataLab then switches to that data panel.
 
-While Record mode is enabled, selecting a session row makes that session active
-for its data panel.
+While Record mode is enabled, selecting a session row (or one of its actions)
+makes that session the active recording session.
 
 Actions that are not compatible with the current workspace state (for example
 because a referenced object identifier no longer exists, or because its data
@@ -251,6 +262,11 @@ array shape changed) are shown with a disabled foreground and an explanatory
 tooltip.
 Attempting to replay them opens the broken chain resolution dialog described
 below.
+
+Actions left **outdated** by a failed or interrupted recompute, or by
+parameter edits whose propagation to downstream steps is still pending, are
+highlighted with an amber background and carry an explanatory tooltip.
+Replaying them refreshes their result and clears the marker.
 
 Broken chain resolution
 -----------------------
@@ -301,6 +317,15 @@ The history can be persisted in two complementary ways:
     history session), DataLab imports the objects into new signal/image groups,
     remaps their identifiers to avoid collisions, and appends imported history
     sessions that reference those fresh identifiers.
+
+.. note::
+
+   A history entry whose saved parameters can no longer be decoded (for
+   example a ROI payload written by an incompatible version of DataLab) does
+   not prevent the rest of the file from loading: the affected action is
+   loaded as incompatible — shown as a disabled row with an explanatory
+   tooltip, and never replayed — while all other sessions and actions load
+   normally. Such entries can be cleaned up with **Remove incompatible**.
 
 .. warning::
 
