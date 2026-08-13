@@ -34,6 +34,7 @@ from datalab.env import execenv
 from datalab.gui import ObjItf
 from datalab.history.core import (
     HISTORY_ACTION_SCHEMA_VERSION,
+    HistoryDecodeError,
     copy_history_value,
     decode_kwargs,
     encode_kwargs,
@@ -202,6 +203,12 @@ class HistoryAction(ObjItf):
         # display a "stale" visual marker in the tree. Cleared once the
         # action has been recomputed.
         self.is_stale: bool = False
+        # Transient flag (NOT serialized): set when a persisted kwarg payload
+        # could not be decoded at load time (e.g. corrupt or untrusted ROI).
+        # A broken action is permanently incompatible (see
+        # :meth:`is_current_state_compatible`) so it can never be replayed
+        # with altered semantics.
+        self.decode_failed: bool = False
         # Snapshot of original kwargs before edit-mode modification.
         # Set lazily when the first edit-mode change touches this action.
         # Persisted to HDF5 so the pre-edit values remain available after a
@@ -260,6 +267,8 @@ class HistoryAction(ObjItf):
         new_action.plugin_origin = copy_history_value(self.plugin_origin)
         new_action.output_uuids = list(self.output_uuids)
         new_action.effects = copy_history_value(self.effects)
+        # A broken action stays broken: its copy must not become replayable.
+        new_action.decode_failed = self.decode_failed
         # Note: saved_kwargs is intentionally NOT propagated to the copy.
         # Copying an action acts as an implicit commit (no pending edits).
         return new_action
@@ -471,7 +480,12 @@ class HistoryAction(ObjItf):
 
         Mutation actions exclude their own targets from the ROI signature
         comparison (the recorded state contains the post-mutation ROI).
+
+        Actions whose persisted kwargs could not be decoded at load time are
+        never compatible: replaying them would use degraded parameters.
         """
+        if self.decode_failed:
+            return False
         return self.state.is_current_state_compatible(
             mainwindow, ignore_roi_uuids=self.__roi_exclusions()
         )
@@ -801,11 +815,31 @@ def deserialize_descriptors(
 def deserialize_kwargs_snapshot(
     action: HistoryAction, reader: NativeH5Reader, current: Any
 ) -> None:
-    """Deserialize call arguments and the optional edit snapshot."""
+    """Deserialize call arguments and the optional edit snapshot.
+
+    A payload decode failure (:class:`HistoryDecodeError`) is degraded locally
+    instead of aborting the whole file load: kwargs are reset to an empty dict,
+    a corrupted edit snapshot is dropped (``saved_kwargs = None``, no rollback
+    value) and the action is flagged as broken (``decode_failed``), routing it
+    into the existing incompatible-action UX.
+    """
     if "kwargs" in current.attrs or "kwargs" in current:
         with reader.group("kwargs"):
             raw = reader.read_dict()
-        action.kwargs = decode_kwargs(raw)
+        try:
+            action.kwargs = decode_kwargs(raw)
+        except HistoryDecodeError as exc:
+            # ``decode_kwargs`` already emitted a user-visible warning:
+            # keep only a debug trace here to avoid double reporting.
+            _logger.debug(
+                "Failed to decode kwargs for action %s (%s): %s; "
+                "marking the action as incompatible.",
+                action.uuid,
+                action.func_name or action.method_name or action.title,
+                exc,
+            )
+            action.kwargs = {}
+            action.decode_failed = True
     else:
         action.kwargs = {}
     # ``saved_kwargs`` group is present only when an Edit mode snapshot
@@ -813,7 +847,21 @@ def deserialize_kwargs_snapshot(
     if "saved_kwargs" in current.attrs or "saved_kwargs" in current:
         with reader.group("saved_kwargs"):
             raw_saved = reader.read_dict()
-        action.saved_kwargs = decode_kwargs(raw_saved)
+        try:
+            action.saved_kwargs = decode_kwargs(raw_saved)
+        except HistoryDecodeError as exc:
+            _logger.debug(
+                "Failed to decode saved_kwargs for action %s (%s): %s; "
+                "marking the action as incompatible.",
+                action.uuid,
+                action.func_name or action.method_name or action.title,
+                exc,
+            )
+            # No usable rollback value: drop the snapshot entirely so
+            # ``has_pending_edits`` stays False (``decode_failed`` already
+            # marks the damage).
+            action.saved_kwargs = None
+            action.decode_failed = True
     else:
         action.saved_kwargs = None
 

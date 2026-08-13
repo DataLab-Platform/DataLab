@@ -246,6 +246,19 @@ def recompute_mutation_in_place(panel: HistoryPanel, action: HistoryAction) -> b
 
 def recompute_action_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
     """Re-run ``action`` on the existing output object(s) (same UUIDs)."""
+    if getattr(action, "decode_failed", False):
+        # Broken persisted parameters: executing would silently change
+        # semantics (e.g. a mutation payload degraded to None deletes ROIs).
+        # Not marked stale: the action is permanently non-recomputable.
+        panel.runtime.execution.cascade_warnings.append(
+            _(
+                "Action %s was skipped: its recorded parameters could not "
+                "be read from the history file."
+            )
+            % (action.title or action.func_name or action.uuid)
+        )
+        panel.tree.refresh_action_item(action)
+        return False
     if (
         action.kind == HistoryAction.KIND_UI
         and action.method_name in HistoryAction.UI_CREATION_METHODS

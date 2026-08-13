@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import tempfile
 from contextlib import contextmanager, nullcontext
@@ -718,6 +719,60 @@ def test_action_hdf5_current_and_legacy_contract() -> None:
     assert legacy.state.selection == {"signal": ["source-uuid"]}
     assert legacy.state.states == {"signal": ["(10,)"]}
     assert legacy.state.titles == {"signal": ["Source"]}
+
+
+def test_action_hdf5_roi_decode_failure_degrades_locally() -> None:
+    """Degrade a corrupt ROI kwarg locally instead of aborting the file load."""
+    action = build_history_action()
+    # Raw marker dict passes through encode_kwargs untouched, simulating a
+    # persisted ROI payload referencing an untrusted (non-sigima) module.
+    corrupt_payload = {
+        "__roi_json__": json.dumps(
+            {"module": "evil.module", "class": "FakeROI", "data": {}}
+        )
+    }
+    action.kwargs["payload"] = corrupt_payload
+    # A corrupted edit snapshot must be dropped (no usable rollback value).
+    action.saved_kwargs = {"payload": dict(corrupt_payload)}
+    valid_action = build_history_action()
+    session = HistorySession(number=1)
+    session.add_action(action)
+    session.add_action(valid_action)
+    with tempfile.TemporaryDirectory() as tmpdir:
+        path = os.path.join(tmpdir, "history.dlhist")
+        with NativeH5Writer(path) as writer:
+            writer.write_object_list([session], "history_session")
+        with pytest.warns(UserWarning, match="ROI kwarg"):
+            loaded = read_history_sessions(path)[0]
+    broken, intact = loaded.actions
+    # The broken action loads with degraded kwargs and is permanently
+    # incompatible, so it can never be replayed with altered semantics.
+    assert broken.decode_failed is True
+    assert broken.kwargs == {}
+    assert broken.saved_kwargs is None
+    assert broken.has_pending_edits is False
+    assert broken.is_current_state_compatible(Mock()) is False
+    assert broken.copy().decode_failed is True
+    # The rest of the file loads normally.
+    assert intact.decode_failed is False
+    assert intact.kwargs == {"obj2_uuids": ["second-uuid"], "pairwise": False}
+
+
+def test_recompute_in_place_skips_decode_failed_action() -> None:
+    """Never execute an action whose persisted parameters failed to decode."""
+    warnings: list[str] = []
+    panel = SimpleNamespace(
+        runtime=SimpleNamespace(execution=SimpleNamespace(cascade_warnings=warnings)),
+        tree=SimpleNamespace(refresh_action_item=lambda action: None),
+    )
+    action = HistoryAction(
+        title="Edit ROI", kind=HistoryAction.KIND_MUTATION, mutation_key="roi"
+    )
+    action.decode_failed = True
+    assert hrec.recompute_action_in_place(panel, action) is False
+    # Not marked stale: the action is permanently non-recomputable.
+    assert action.is_stale is False
+    assert any("Edit ROI" in warning for warning in warnings)
 
 
 def test_action_copy_remaps_all_uuid_references() -> None:

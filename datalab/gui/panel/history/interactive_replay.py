@@ -511,6 +511,19 @@ def run_replay_actions(
         try:
             for action in execution_plan:
                 if action in deferred_actions:
+                    if getattr(action, "decode_failed", False):
+                        # Deferred actions bypass ``recompute_action_in_place``
+                        # (direct ``action.replay``): apply the same guard so
+                        # broken persisted parameters are never executed.
+                        panel.runtime.execution.cascade_warnings.append(
+                            _(
+                                "Action %s was skipped: its recorded "
+                                "parameters could not be read from the "
+                                "history file."
+                            )
+                            % (action.title or action.method_name or action.uuid)
+                        )
+                        continue
                     if hchain.action_mutates_any(action, blocked_outputs):
                         # Mutation targeting an object whose recompute failed
                         # upstream: skip it like a blocked compute.

@@ -37,6 +37,20 @@ _DATASET_LIST_MARKER = "__dataset_list_json__"
 _ROI_MARKER = "__roi_json__"
 
 
+class HistoryDecodeError(Exception):
+    """Raised when a persisted history kwarg payload cannot be safely decoded.
+
+    Args:
+        key: Name of the kwarg whose payload failed to decode.
+        error: Original exception raised by the low-level decoder.
+    """
+
+    def __init__(self, key: str, error: Exception) -> None:
+        super().__init__(f"Failed to deserialize history ROI kwarg {key!r}: {error}")
+        self.key = key
+        self.error = error
+
+
 def get_datetime_str() -> str:
     """Return current date and time as a string"""
     return QC.QDateTime.currentDateTime().toString("yyyy-MM-dd hh:mm:ss")
@@ -131,7 +145,15 @@ def encode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
 
 
 def decode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
-    """Inverse of :func:`encode_kwargs`."""
+    """Inverse of :func:`encode_kwargs`.
+
+    Raises:
+        HistoryDecodeError: If a ROI payload cannot be decoded (untrusted
+            module, unknown class, corrupted payload). A degraded ROI value
+            would silently change replay semantics (None means "delete ROIs"
+            for mutations), so the caller must flag the owning action as
+            broken instead of substituting a default value.
+    """
     decoded: dict[str, Any] = {}
     for key, value in kwargs.items():
         if isinstance(value, dict) and _DATASET_MARKER in value:
@@ -145,10 +167,15 @@ def decode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
         elif isinstance(value, dict) and _ROI_MARKER in value:
             try:
                 decoded[key] = decode_roi(value[_ROI_MARKER])
-            except Exception as exc:
-                raise ValueError(
-                    f"Failed to deserialize history ROI kwarg {key!r}: {exc}"
-                ) from exc
+            except (
+                TypeError,
+                ValueError,
+                KeyError,
+                ImportError,
+                AttributeError,
+            ) as exc:
+                warnings.warn(_("Failed to deserialize history ROI kwarg %r.") % key)
+                raise HistoryDecodeError(key, exc) from exc
         elif isinstance(value, dict) and _DATASET_LIST_MARKER in value:
             try:
                 decoded[key] = [
