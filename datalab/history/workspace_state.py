@@ -220,7 +220,7 @@ class WorkspaceState:
         for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
             sel_uuids = self.selection.get(panel.PANEL_STR_ID, [])
             self.states[panel.PANEL_STR_ID] = [
-                str(obj.data.shape)
+                str(getattr(getattr(obj, "data", None), "shape", ""))
                 for obj in panel.objmodel
                 if get_uuid(obj) in sel_uuids
             ]

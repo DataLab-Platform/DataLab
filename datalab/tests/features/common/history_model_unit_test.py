@@ -17,6 +17,7 @@ import pytest
 from sigima.objects import (
     Gauss2DParam,
     ImageObj,
+    SignalObj,
     SignalROI,
     create_image_from_param,
     create_image_roi,
@@ -885,6 +886,32 @@ def test_state_compatibility_handles_roi_signature_and_legacy_metadata() -> None
     # ROI drift against a recorded signature flags incompatibility
     state.object_metadata = {"signal": {uuid: dict(recorded, roi="0" * 16)}}
     assert not state.is_current_state_compatible(mainwindow)
+
+
+def test_workspace_state_save_tolerates_object_without_data() -> None:
+    """Capture states without crashing when a selected object has no data."""
+    obj = create_paracetamol_signal()
+    empty_obj = SignalObj()
+    empty_obj.title = "Empty"
+
+    def make_panel(panel_id: str, objs: list) -> SimpleNamespace:
+        return SimpleNamespace(
+            PANEL_STR_ID=panel_id,
+            objmodel=CascadeObjectModel(objs),
+            objview=SimpleNamespace(get_sel_objects=lambda include_groups=True: objs),
+        )
+
+    mainwindow = cast(
+        DLMainWindow,
+        SimpleNamespace(
+            signalpanel=make_panel("signal", [obj, empty_obj]),
+            imagepanel=make_panel("image", []),
+        ),
+    )
+    state = WorkspaceState()
+    state.save(mainwindow)
+    assert state.states["signal"] == [str(obj.data.shape), ""]
+    assert state.object_metadata["signal"][get_uuid(empty_obj)] == {}
 
 
 def test_mutation_action_model_contract() -> None:
