@@ -51,5 +51,6 @@ on a specific aspect of the software and is intended to be self-contained.
    blobs
    fabry_perot
    laser_beam
+   history_panel
    custom_func
    work_with_spyder
