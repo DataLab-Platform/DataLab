@@ -205,7 +205,7 @@ images the history is recorded at the same way that it is for signals.
     The new image and its moving-average result are recorded in the same
     History Panel session.
 
-Select the filtered image and choose **Processing > Intensity profiles > Line
+Select the filtered image and choose **Analysis > Intensity profiles > Line
 profile...**. Set the horizontal line in the profile dialog, then
 confirm it. DataLab adds the extracted profile to the Signal Panel, while the
 History Panel appends the **Line profile** action to the same session after the
