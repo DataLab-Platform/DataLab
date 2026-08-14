@@ -4,7 +4,6 @@
 #
 msgid ""
 msgstr ""
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -64,6 +63,9 @@ msgstr "Assistant IA prêt. Configurez votre fournisseur dans le menu Edition > 
 
 msgid "You"
 msgstr "Vous"
+
+msgid "Assistant"
+msgstr "Assistant"
 
 msgid "Save to Macros"
 msgstr "Enregistrer dans les macros"
@@ -1508,11 +1510,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "New group"
-msgstr "Nouveau groupe"
-
 msgid "Group name:"
 msgstr "Nom du groupe :"
+
+msgid "New group"
+msgstr "Nouveau groupe"
 
 msgid "Rename object"
 msgstr "Renommer l'objet"
@@ -1639,6 +1641,9 @@ msgstr "Effacer toutes les macros récentes ?"
 
 msgid "Macro panel"
 msgstr "Panneau des macros"
+
+msgid "Python files"
+msgstr "Fichiers Python"
 
 msgid "Clear console"
 msgstr "Effacer la console"
@@ -3379,11 +3384,11 @@ msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La dé
 msgid "Click OK to end demo."
 msgstr "Cliquer sur OK pour terminer la démo."
 
-msgid "Error:"
-msgstr "Erreur:"
-
 msgid "Context"
 msgstr "Contexte"
+
+msgid "Error:"
+msgstr "Erreur:"
 
 #, python-format
 msgid "The file %s could not be read:"
@@ -3601,17 +3606,17 @@ msgstr "Déplier la sélection"
 msgid "HDF5 Browser"
 msgstr "Explorateur HDF5"
 
-msgid "Size"
-msgstr "Taille"
-
-msgid "Type"
-msgstr "Type"
-
 msgid "Value"
 msgstr "Valeur"
 
 msgid "Name"
 msgstr "Nom"
+
+msgid "Size"
+msgstr "Taille"
+
+msgid "Type"
+msgstr "Type"
 
 msgid "Unsupported data"
 msgstr "Données non prises en charge"
@@ -3717,6 +3722,9 @@ msgstr "Distance minimale :"
 
 msgid "Signal peak detection"
 msgstr "Détection de pics 1D"
+
+msgid "Peaks:"
+msgstr "Pics :"
 
 msgid "Internal console"
 msgstr "Console interne"
@@ -4283,6 +4291,10 @@ msgstr "L'action %s cible des objets produits par une autre session ; elle a ét
 msgid "Action %s has no recorded pattern and cannot be replayed."
 msgstr "L'action %s n'a pas de motif enregistré et ne peut pas être rejouée."
 
+#, python-format
+msgid "Action %s was skipped: its recorded parameters could not be read from the history file."
+msgstr "L'action %s a été ignorée : ses paramètres enregistrés n'ont pas pu être lus depuis le fichier d'historique."
+
 msgid "History panel"
 msgstr "Panneau d'historique"
 
@@ -4476,6 +4488,10 @@ msgid "Failed to deserialize history DataSet kwarg %r."
 msgstr "Échec de la désérialisation de l'argument DataSet de l'historique %r."
 
 #, python-format
+msgid "Failed to deserialize history ROI kwarg %r."
+msgstr "Échec de la désérialisation de l'argument ROI de l'historique %r."
+
+#, python-format
 msgid "Failed to deserialize history DataSet-list kwarg %r."
 msgstr "Échec de la désérialisation de l'argument DataSet-list de l'historique %r."
 
@@ -4494,6 +4510,9 @@ msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
 msgid "Action is not compatible with the current workspace state."
 msgstr "L'action n'est pas compatible avec l'état actuel de l'espace de travail."
 
+msgid "This step is outdated: replay it to refresh its result."
+msgstr "Cette étape est obsolète : rejouez-la pour actualiser son résultat."
+
 msgid "Active recording session."
 msgstr "Session d'enregistrement active."
 
@@ -4508,3 +4527,4 @@ msgstr "Image"
 
 msgid "Dimensions"
 msgstr "Dimensions"
+
