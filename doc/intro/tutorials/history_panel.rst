@@ -17,7 +17,6 @@ workflow reproducible:
 -   Inspect the recorded actions and their workspace state
 -   Replay the chain, and replay it step-by-step with modified parameters
 -   Duplicate a session to compare two processing variants
--   Save the session and re-apply it to a different dataset
 
 .. seealso::
 
@@ -135,8 +134,9 @@ deleted, so the action cannot be directly applied in the current workspace.
 
 .. figure:: ../../images/tutorials/history_panel/06.png
 
-    The deleted fitted signal is no longer listed in the Signal Panel. The recorded deletion is grayed in the History Panel because
-    they cannot be replayed in the current workspace.
+    The deleted fitted signal is no longer listed in the Signal Panel. The
+    recorded deletion is grayed in the History Panel because it cannot be
+    replayed in the current workspace.
 
 We can now replay the fitting action: the resulting signal is recreated in the
 Signal Panel and the "delete" action is no longer grayed, as it can now be
@@ -153,11 +153,11 @@ Duplicating the chain to compare variants
 -----------------------------------------
 
 We can now duplicate the chain to compare two processing variants. First of all,
-delete the "Remove selected objects" history record using the Delete key. Then
-select the **Processing** session in the History Panel and click **Duplicate**.
+select the "Remove selected objects" entry in the History Panel and press the
+Delete key. Then select the **Processing** session and click **Duplicate**.
 DataLab creates a new **Processing Copy** session and a ``Copy - Processing``
-group in the Signal Panel. This group contains independent copies of the signals
-used and produced by the original chain.
+group in the Signal Panel. This group contains independent copies of the
+signals used and produced by the original chain.
 
 .. figure:: ../../images/tutorials/history_panel/08.png
 
@@ -197,7 +197,7 @@ In both cases, activate the history recording and switch to the **Image Panel**.
 
 Create or open a test image and apply a first noise-reduction operation, for
 example **Processing > Noise reduction > Moving Average**. As you can see, for
-images the history is recorded at the same way that it is for signals.
+images the history is recorded in the same way that it is for signals.
 
 .. figure:: ../../images/tutorials/history_panel/10.png
 
