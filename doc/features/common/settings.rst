@@ -144,9 +144,8 @@ History sessions
 ^^^^^^^^^^^^^^^^
 
 These settings control how new inputs are assigned to history sessions. They
-are evaluated only when **Record mode** is enabled and the target Signals or
-Images panel has a populated active session. No policy decision is needed when
-the active session is empty. The two data panels keep separate active sessions;
+are evaluated only when **Record mode** is enabled and the shared active session
+contains actions. No policy decision is needed when the active session is empty;
 see :ref:`historypanel` for the complete workflow.
 
 **New object or file**
