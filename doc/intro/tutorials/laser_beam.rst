@@ -93,8 +93,7 @@ To pan the image, use the middle mouse button while dragging.
 
         Both the "Distribute on a grid" and "Reset image positions" options
         modify the images in place, without creating new images. For this
-        reason, they are not registered in the History Panel, which only
-        lists newly created objects.
+        reason, these operations are not recorded in the History Panel.
 
 .. |distribute_on_grid| image:: ../../../datalab/data/icons/processing/distribute_on_grid.svg
     :width: 24px
@@ -174,15 +173,9 @@ selected both signals for comparison.
 
 .. note::
 
-    If history recording is enabled, creating a new signal starts a new history
-    session, separate from the session containing the image operations. Since
-    extracting the intensity profile is an operation performed on an image, the
-    new session starts with the Gaussian fit applied to the resulting signal.
-
-    .. figure:: ../../images/tutorials/laser_beam/07.png
-
-        The image-processing actions are recorded in the first session, while
-        the Gaussian fit starts a separate session for the resulting signal.
+    If history recording is enabled, the image-processing actions, extracted
+    profile, and Gaussian fit are recorded in the same active history session.
+    See :ref:`tutorial_history_panel` for a cross-panel workflow example.
 
 
 

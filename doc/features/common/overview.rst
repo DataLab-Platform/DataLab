@@ -31,10 +31,9 @@ History Panel
 ^^^^^^^^^^^^^
 
 The :ref:`historypanel` is an additional dockable panel that records signal
-and image actions into separate active sessions for each data panel. It
-supports replay, step-by-step replay, duplication, and compatibility
-diagnostics. Sessions may be saved in standalone ``.dlhist`` files or with
-the workspace in HDF5 format.
+and image actions in a shared active session. It supports replay, step-by-step
+replay, duplication, and compatibility diagnostics. Sessions may be saved in
+standalone ``.dlhist`` files or with the workspace in HDF5 format.
 
 Internal data model and workspace
 ---------------------------------
