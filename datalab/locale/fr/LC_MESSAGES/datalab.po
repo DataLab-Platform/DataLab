@@ -4527,4 +4527,3 @@ msgstr "Image"
 
 msgid "Dimensions"
 msgstr "Dimensions"
-

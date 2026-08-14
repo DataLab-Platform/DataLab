@@ -61,7 +61,13 @@ def test_history_tree_double_click_replays_current_selection_without_restoring(
         refresh_compatibility_items=Mock(),
         replaying=nullcontext,
         output_suppressed=nullcontext,
-        runtime=SimpleNamespace(execution=SimpleNamespace(edit_mode=False)),
+        runtime=SimpleNamespace(
+            execution=SimpleNamespace(
+                edit_mode=False,
+                is_busy=lambda: False,
+                is_engine_busy=lambda: False,
+            )
+        ),
         navigation=SimpleNamespace(
             sync_panel_selection=Mock(),
             update_state_widget=Mock(),
