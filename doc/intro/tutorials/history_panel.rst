@@ -135,8 +135,7 @@ deleted, so the action cannot be directly applied in the current workspace.
 
 .. figure:: ../../images/tutorials/history_panel/06.png
 
-    The deleted fitted signal is no longer listed in the Signal Panel. Its fit
-    action and the recorded deletion are grayed in the History Panel because
+    The deleted fitted signal is no longer listed in the Signal Panel. The recorded deletion is grayed in the History Panel because
     they cannot be replayed in the current workspace.
 
 We can now replay the fitting action: the resulting signal is recreated in the
