@@ -4,8 +4,11 @@
 ==========================================================================
 
 .. meta::
-    :description: Tutorial on how to record, replay and share a processing chain with the History Panel of DataLab, the open-source scientific data analysis and visualization platform
-    :keywords: DataLab, tutorial, history, record, replay, session, reproducibility, processing chain, dlhist, HDF5
+    :description: Tutorial on how to record, replay and share a processing
+        chain with the History Panel of DataLab, the open-source scientific
+        data analysis and visualization platform
+    :keywords: DataLab, tutorial, history, record, replay, session,
+        reproducibility, processing chain, dlhist, HDF5
 
 This tutorial shows how to use the **History Panel** to make a processing
 workflow reproducible:
@@ -24,8 +27,9 @@ workflow reproducible:
 Showing the History Panel
 -------------------------
 
-The History Panel is visible by default, but could be hidden in your configuration.
- In this case, to display it, check the "History Panel" entry in the "View" menu.
+The History Panel is visible by default, but could be hidden in your
+configuration. In this case, to display it, check the "History Panel" entry in
+the "View" menu.
 
 .. figure:: ../../images/tutorials/history_panel/01.png
 
@@ -45,8 +49,9 @@ workspace state tables at the bottom ("Signal" / "Shape" on the left,
 Like the other panels of DataLab, the History Panel is dockable: it can be
 moved to any side of the main window, or detached as a floating window. Here,
 it is docked on the left side, next to the Signal Panel, so that the recorded
-actions remain visible while working on the data. We use this configuration in the rest
- of the tutorial, but you can choose any layout that suits your workflow.
+actions remain visible while working on the data. We use this configuration in
+the rest of the tutorial, but you can choose any layout that suits your
+workflow.
 
 .. figure:: ../../images/tutorials/history_panel/03.png
 
@@ -88,9 +93,9 @@ Signal Panel shows both the original and resulting signals, while the
 Processing Parameters panel displays the seed, mean and standard deviation
 used for the selected action.
 
-To create a longer chain, we can apply a few more processing steps, for example a
-fitting. Once done, the action is recorded in the History Panel, and the resulting
-signal is displayed in the Signal Panel.
+To create a longer chain, we can apply a few more processing steps, for example
+a fitting. Once done, the action is recorded in the History Panel, and the
+resulting signal is displayed in the Signal Panel.
 
 .. figure:: ../../images/tutorials/history_panel/05.png
 
@@ -99,30 +104,34 @@ signal is displayed in the Signal Panel.
 Familiarizing with the history panel commands
 ---------------------------------------------
 
-Now we have a very simple processing chain, which is enough to illustrate the main
-features of the History Panel.
+Now we have a very simple processing chain, which is enough to illustrate the
+main features of the History Panel.
 The toolbar provides the following commands:
 
 -   **Record mode** toggles the recording of subsequent actions.
 -   **New session** starts a separate history session.
 -   **Open history file** and **Save history file** load or save a standalone
     ``.dlhist`` history file.
--   **Previous step** and **Next step** select the adjacent action in the current
-    session.
+-   **Previous step** and **Next step** select the adjacent action in the
+    current session.
 -   **Replay** applies the selected session or action without showing parameter
     dialogs, whereas **Step-by-step** replays it while allowing parameters to be
     edited at each step.
 -   **Duplicate** copies the selected session, or the complete session
     containing the selected action, to compare a processing variant.
--   **Remove incompatible** removes actions that cannot be directly applied in the
-    current workspace (i.e. because a signal has been deleted), and **Delete** removes
-    the selected history entry.
+-   **Remove incompatible** removes actions that cannot be directly applied in
+    the current workspace (i.e. because a signal has been deleted), and
+    **Delete** removes the selected history entry.
 
-When an action is selected in the tree, the corresponding resulting signal is displayed
-in the Signal Panel.
+When an action is selected in the tree, the corresponding resulting signal is
+displayed in the Signal Panel.
 
-Now select the fitting signal in the signal panel, and delete it using the "Delete"
-button in the toolbar or pressing the "Delete" key. The fitting action is still available in the History Panel, as it can be replayed using the **Replay** button.  In addition the delete action has been recorded in the history, but it is grayed: the reason it that the fitting signal has been deleted, so the action cannot be directly applied in the current workspace.
+Now select the fitting signal in the Signal Panel, and delete it using the
+"Delete" button in the toolbar or pressing the "Delete" key. The fitting action
+is still available in the History Panel, as it can be replayed using the
+**Replay** button. In addition, the delete action has been recorded in the
+history, but it is grayed: the reason is that the fitting signal has been
+deleted, so the action cannot be directly applied in the current workspace.
 
 .. figure:: ../../images/tutorials/history_panel/06.png
 
@@ -130,7 +139,9 @@ button in the toolbar or pressing the "Delete" key. The fitting action is still 
     action and the recorded deletion are grayed in the History Panel because
     they cannot be replayed in the current workspace.
 
-We can now replay the fitting action: the resulting signal is recreated in the signal panel and the "delete" action is no longer grayed, as it can now be applied to the newly created signal.
+We can now replay the fitting action: the resulting signal is recreated in the
+Signal Panel and the "delete" action is no longer grayed, as it can now be
+applied to the newly created signal.
 
 .. figure:: ../../images/tutorials/history_panel/07.png
 
@@ -142,11 +153,12 @@ We can now replay the fitting action: the resulting signal is recreated in the s
 Duplicating the chain to compare variants
 -----------------------------------------
 
-We can now duplicate the chain to compare two processing variants. First of all, delete the "Remove selected objects" history record using the delete key. Then Select the
-**Processing** session in the History Panel and click **Duplicate**. DataLab
-creates a new **Processing Copy** session and a ``Copy - Processing`` group in
-the Signal Panel. This group contains independent copies of the signals used
-and produced by the original chain.
+We can now duplicate the chain to compare two processing variants. First of all,
+delete the "Remove selected objects" history record using the Delete key. Then
+select the **Processing** session in the History Panel and click **Duplicate**.
+DataLab creates a new **Processing Copy** session and a ``Copy - Processing``
+group in the Signal Panel. This group contains independent copies of the signals
+used and produced by the original chain.
 
 .. figure:: ../../images/tutorials/history_panel/08.png
 
@@ -178,9 +190,9 @@ Unlike the Signal Panel and Image Panel, it is not divided by data type: its
 chronological tree shows image operations and any signals that they produce
 together.
 
-To illustrate this behavior, we will start from a clean workspace. Alternatively,
-click **New session** in the History Panel to record it in a new session of your
-current workspace.
+To illustrate this behavior, we will start from a clean workspace.
+Alternatively, click **New session** in the History Panel to record it in a new
+session of your current workspace.
 
 In both cases, activate the history recording and switch to the **Image Panel**.
 
