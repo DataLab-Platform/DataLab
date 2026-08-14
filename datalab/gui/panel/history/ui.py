@@ -63,21 +63,21 @@ class HistoryPanelUI:
             "new_session": create_action(
                 panel,
                 _("New session"),
-                self.guarded(lambda: panel.create_new_session()),
+                self.guarded(panel.create_new_session),
                 icon=get_icon("libre-gui-add.svg"),
                 tip=_("Start a new history session"),
             ),
             "open": create_action(
                 panel,
                 _("Open history file..."),
-                triggered=self.guarded(lambda: panel.open_dlhist_file()),
+                triggered=self.guarded(panel.open_dlhist_file),
                 icon=get_icon("fileopen_h5.svg"),
                 tip=_("Open history from a standalone .dlhist file"),
             ),
             "save": create_action(
                 panel,
                 _("Save history file..."),
-                triggered=self.guarded(lambda: panel.save_to_dlhist_file()),
+                triggered=self.guarded(panel.save_to_dlhist_file),
                 icon=get_icon("filesave_h5.svg"),
                 tip=_("Save history to a standalone .dlhist file"),
             ),
@@ -129,7 +129,7 @@ class HistoryPanelUI:
             "step_by_step": create_action(
                 panel,
                 _("Step-by-step"),
-                triggered=self.guarded(lambda: panel.replay_step_by_step()),
+                triggered=self.guarded(panel.replay_step_by_step),
                 icon=get_icon("edit_mode.svg"),
                 tip=_(
                     "Replay the selection step by step, editing parameters at each step"

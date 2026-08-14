@@ -244,7 +244,9 @@ def recompute_mutation_in_place(panel: HistoryPanel, action: HistoryAction) -> b
     return bool(mutated)
 
 
-def recompute_action_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
+def recompute_action_in_place(  # pylint: disable=too-many-return-statements
+    panel: HistoryPanel, action: HistoryAction
+) -> bool:
     """Re-run ``action`` on the existing output object(s) (same UUIDs)."""
     if getattr(action, "decode_failed", False):
         # Broken persisted parameters: executing would silently change
