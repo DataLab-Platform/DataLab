@@ -165,9 +165,51 @@ level, while the original **Processing** session remains unchanged.
     The selected noise action in **Processing Copy** uses ``sigma = 0.05``.
     The original chain and the modified copy remain available side by side.
 
-This can be useful to compare the effect of the noise level on the fitting result, or
-to explore other processing variants. In this example, selecting both the original and
-copied fitting signals in the Signal Panel we can see that there is a difference between
-them, but is quite slight.
+This can be useful to compare the effect of the noise level on the fitting
+result, or to explore other processing variants. In this example, selecting both
+the original and copied fitting signals in the Signal Panel shows a difference
+between them, but it is quite slight.
 
+Recording an image-to-signal workflow
+-------------------------------------
 
+The History Panel records workflows across both data panels in the same session.
+Unlike the Signal Panel and Image Panel, it is not divided by data type: its
+chronological tree shows image operations and any signals that they produce
+together.
+
+To illustrate this behavior, we will start from a clean workspace. Alternatively,
+click **New session** in the History Panel to record it in a new session of your
+current workspace.
+
+In both cases, activate the history recording and switch to the **Image Panel**.
+
+Create or open a test image and apply a first noise-reduction operation, for
+example **Processing > Noise reduction > Moving Average**. As you can see, for
+images the history is recorded at the same way that it is for signals.
+
+.. figure:: ../../images/tutorials/history_panel/10.png
+
+    The new image and its moving-average result are recorded in the same
+    History Panel session.
+
+Select the filtered image and choose **Processing > Intensity profiles > Line
+profile...**. Set the horizontal line in the profile dialog, then
+confirm it. DataLab adds the extracted profile to the Signal Panel, while the
+History Panel appends the **Line profile** action to the same session after the
+image-processing actions.
+
+.. figure:: ../../images/tutorials/history_panel/11.png
+
+    Choose the horizontal line used to extract the profile from the filtered
+    image.
+
+This single history session therefore captures the full workflow: image
+creation, noise reduction, and conversion of image data into a signal. Selecting
+the image actions in the History Panel activates the Image Panel; selecting the
+profile action activates the Signal Panel and selects the resulting signal.
+
+.. figure:: ../../images/tutorials/history_panel/12.png
+
+    The History Panel records the image operations and the resulting signal in
+    one chronological session.
