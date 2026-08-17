@@ -255,8 +255,20 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
         image = create_image_gui(param, edit=edit, parent=self.parentWidget())
         if image is None:
             return None
+        action = self.mainwindow.historypanel.add_ui_entry(
+            _("New image"),
+            target="imagepanel",
+            method_name="new_object",
+            save_state=False,
+            param=param,
+            add_to_panel=add_to_panel,
+        )
         if add_to_panel:
             self.add_object(image)
+            if action is not None:
+                self.mainwindow.historypanel.register_action_outputs(
+                    action, [get_uuid(image)]
+                )
         return image
 
     def toggle_show_contrast(self, state: bool) -> None:

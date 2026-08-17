@@ -8,8 +8,8 @@ Settings
     :keywords: DataLab, settings, scientific, data, analysis, visualization, platform
 
 DataLab provides a comprehensive settings dialog to customize the application behavior,
-visualization defaults, and I/O operations. The settings are organized into five tabs:
-General, Processing, Visualization, I/O, and Console.
+visualization defaults, and I/O operations. The settings are organized into six tabs:
+General, Processing, Visualization, I/O, AI Assistant, and Console.
 
 General
 -------
@@ -126,7 +126,7 @@ The Processing settings tab controls computation behavior and default parameters
     for easier visualization and analysis.
 
 **Extract multiple ROIs in a single object**
-    When enabled, multiple ROIs (Regions of Interest) are extracted into a single object.
+    When enabled, multiple regions of interest (ROIs) are extracted into a single object.
     When disabled, each ROI is extracted into a separate object.
 
 **Ignore warnings**
@@ -137,6 +137,46 @@ The Processing settings tab controls computation behavior and default parameters
 
     - **Ask**: display a confirmation dialog (default)
     - **Interpolate**: automatically interpolate signals
+
+.. _history-session-settings:
+
+History sessions
+^^^^^^^^^^^^^^^^
+
+These settings control how new inputs are assigned to history sessions. They
+are evaluated only when **Record mode** is enabled and the shared active session
+contains actions. No policy decision is needed when the active session is empty;
+see :ref:`historypanel` for the complete workflow.
+
+**New object or file**
+    Choose what happens when a new object is created or a file is loaded:
+
+    - **Ask** (default): ask whether to start a new session
+    - **Always start a new session**: start a session before recording the input
+    - **Continue in the current session**: append the input to the active session
+
+**Plugin-created object**
+    Choose what happens when a plugin adds one object:
+
+    - **Ask**: ask whether to start a new session
+    - **Always start a new session**: start a session before recording the object
+    - **Continue in the current session** (default): append the object without a
+      modal prompt, so plugin execution is not blocked
+
+**Plugin multi-load**
+    Choose what happens when a plugin explicitly groups several object
+    additions in one multi-load scope:
+
+    - **Ask once**: ask once whether the whole batch should start a new session
+    - **Start a new session**: start one session for the batch
+    - **Continue in the current session** (default): append the whole batch to
+      the active session
+
+    **Ask once** is the UI label for one durable session decision covering the
+    complete explicit plugin multi-load scope, rather than one prompt per
+    object. With ordinary **Ask** behavior, repeated prompts for synchronous
+    additions to the same panel are debounced during the current Qt event-loop
+    turn.
 
 Result management
 ^^^^^^^^^^^^^^^^^

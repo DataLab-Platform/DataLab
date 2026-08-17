@@ -62,10 +62,20 @@ def set_number(obj: SignalObj | ImageObj | ObjectGroup, number: int) -> None:
 
 
 def get_uuid(obj: SignalObj | ImageObj | ObjectGroup) -> str:
-    """Get object UUID"""
+    """Get object UUID.
+
+    For data objects (signals/images), the UUID is stored in metadata under
+    the ``__uuid`` option. It is materialized on first access (via
+    :func:`set_uuid`) so that the returned value is stable across calls and
+    survives serialization.
+    """
     if isinstance(obj, ObjectGroup):
         return obj.uuid
-    return obj.get_metadata_option("uuid", str(uuid4()))
+    uuid = obj.metadata.get("__uuid")
+    if not uuid:
+        set_uuid(obj)
+        uuid = obj.metadata["__uuid"]
+    return uuid
 
 
 def set_uuid(obj: SignalObj | ImageObj | ObjectGroup) -> None:

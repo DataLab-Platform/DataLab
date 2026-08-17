@@ -6,7 +6,8 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Language: fr\n"
+"POT-Creation-Date: 2026-08-05 10:58+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -40,7 +41,9 @@ msgid ">= 3.14.4"
 msgstr ""
 
 msgid "Automatic GUI generation for easy dataset editing and display"
-msgstr "Génération automatique d'interface graphique pour l'édition et l'affichage de jeux de données"
+msgstr ""
+"Génération automatique d'interface graphique pour l'édition et "
+"l'affichage de jeux de données"
 
 msgid "PlotPy"
 msgstr ""
@@ -57,7 +60,9 @@ msgstr ""
 msgid ">= 1.1.6"
 msgstr ""
 
-msgid "Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform."
+msgid ""
+"Scientific computing engine for 1D signals and 2D images, part of the "
+"DataLab open-source platform."
 msgstr "Moteur de calcul scientifique pour signaux 1D et images 2D, faisant partie de la plateforme open-source DataLab."
 
 msgid "NumPy"
@@ -129,7 +134,9 @@ msgstr ""
 msgid ">= 0.110.0"
 msgstr ""
 
-msgid "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
+msgid ""
+"FastAPI framework, high performance, easy to learn, fast to code, ready "
+"for production"
 msgstr "Framework FastAPI, haute performance, facile à apprendre, rapide à coder, prêt pour la production"
 
 msgid "uvicorn[standard]"
@@ -190,7 +197,9 @@ msgid "ruff"
 msgstr ""
 
 msgid "An extremely fast Python linter and code formatter, written in Rust."
-msgstr "Analyseur de code et formateur de code Python extrêmement rapide, écrit en Rust."
+msgstr ""
+"Analyseur de code et formateur de code Python extrêmement rapide, écrit "
+"en Rust."
 
 msgid "pre-commit"
 msgstr ""
@@ -211,7 +220,9 @@ msgid "sphinx_intl"
 msgstr ""
 
 msgid "Sphinx utility that make it easy to translate and to apply translation."
-msgstr "Utilitaire Sphinx qui facilite la traduction et l'application de la traduction."
+msgstr ""
+"Utilitaire Sphinx qui facilite la traduction et l'application de la "
+"traduction."
 
 msgid "sphinx-sitemap"
 msgstr ""
@@ -228,8 +239,12 @@ msgstr "Un analyseur étendu compatible [CommonMark](https://spec.commonmark.org
 msgid "sphinx_design"
 msgstr ""
 
-msgid "A sphinx extension for designing beautiful, view size responsive web components."
-msgstr "Une extension sphinx pour concevoir des composants web soignés et adaptés à la taille de l'écran."
+msgid ""
+"A sphinx extension for designing beautiful, view size responsive web "
+"components."
+msgstr ""
+"Une extension sphinx pour concevoir des composants web soignés et adaptés"
+" à la taille de l'écran."
 
 msgid "sphinx-copybutton"
 msgstr ""
@@ -266,3 +281,6 @@ msgstr ""
 
 msgid "The next generation HTTP client."
 msgstr "Client HTTP de nouvelle génération."
+
+#~ msgid ">= 1.1.4"
+#~ msgstr ""

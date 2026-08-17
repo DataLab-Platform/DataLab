@@ -30,6 +30,7 @@ from qtpy import QtWidgets as QW
 from datalab.aiassistant.providers.base import ChatMessage
 from datalab.aiassistant.tools.registry import Tool, ToolRegistry, ToolResult
 from datalab.gui.actionhandler import ActionCategory
+from datalab.objectmodel import get_uuid
 
 if TYPE_CHECKING:
     from datalab.control.proxy import LocalProxy
@@ -412,7 +413,7 @@ def _tool_load_file(
     return {
         "filename": filename,
         "panel": panel_widget.PANEL_STR_ID,
-        "loaded": [{"uuid": o.uuid, "title": o.title} for o in objs],
+        "loaded": [{"uuid": get_uuid(o), "title": o.title} for o in objs],
     }
 
 

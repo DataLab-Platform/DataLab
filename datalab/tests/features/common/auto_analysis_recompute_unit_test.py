@@ -195,7 +195,7 @@ def test_analysis_recompute_after_roi_change():
 
 def test_analysis_recompute_after_recompute_1_to_1():
     """Test on-demand recomputation of analysis after processing parameter changes."""
-    with datalab_test_app_context(console=False) as win:
+    with datalab_test_app_context(console=False, history=True) as win:
         panel = win.imagepanel
 
         # Create a Gaussian image offset from center
@@ -244,6 +244,10 @@ def test_analysis_recompute_after_recompute_1_to_1():
         assert panel.objprop.processing_param_editor is not None
         editor = panel.objprop.processing_param_editor
         editor.dataset.angle = 90.0  # Change from 45° to 90°
+
+        # In-place recompute happens when the History panel is in edit mode
+        # (otherwise a new object is created).
+        win.historypanel.toggle_edit_mode(True)
 
         call_count = [0]
         original_compute_1_to_0 = panel.processor.compute_1_to_0

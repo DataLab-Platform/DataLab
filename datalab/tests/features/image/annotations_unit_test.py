@@ -14,11 +14,13 @@ Annotations unit test:
 from plotpy.builder import make
 from plotpy.items import AnnotatedShape, PolygonShape
 from plotpy.plot import BasePlot
+from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from sigima.tests import data as test_data
 
 from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.env import execenv
+from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_test_app_context
 
 
@@ -74,6 +76,37 @@ def test_annotations_unit():
             # open("after.json", mode="wb").write(ima.annotations.encode())
             assert orig_ann == ima.annotations
             execenv.print("OK")
+
+
+def test_open_separate_view_without_main_plot_item() -> None:
+    """Open a separate view when the object has no item in the main plot."""
+    with datalab_test_app_context() as win:
+        panel = win.imagepanel
+        reference = test_data.create_multigaussian_image()
+        target = test_data.create_annotated_image()
+        panel.add_object(reference)
+        panel.add_object(target)
+
+        target_uuid = get_uuid(target)
+        panel.plothandler.remove_item(target_uuid)
+        assert panel.plothandler.get(target_uuid) is None
+
+        existing_uuids = panel.plothandler.get_existing_oids()
+        existing_items = {uuid: panel.plothandler.get(uuid) for uuid in existing_uuids}
+        visibility = {uuid: item.isVisible() for uuid, item in existing_items.items()}
+        dialog = panel.open_separate_view(oids=[target_uuid])
+        assert dialog is not None
+        dialog.close()
+        QW.QApplication.sendPostedEvents(None, QC.QEvent.Type.DeferredDelete)
+        QW.QApplication.processEvents()
+
+        assert panel.plothandler.get_existing_oids() == existing_uuids
+        assert all(
+            panel.plothandler.get(uuid) is item for uuid, item in existing_items.items()
+        )
+        assert {
+            uuid: panel.plothandler.get(uuid).isVisible() for uuid in existing_uuids
+        } == visibility
 
 
 if __name__ == "__main__":

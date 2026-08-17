@@ -346,7 +346,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         PluginRegistry.register_plugin(self)
         self._is_registered = True
         self.main = main
-        self.proxy = LocalProxy(main)
+        self.proxy = LocalProxy(main, input_source="plugin")
         self.register_hooks()
 
     def unregister(self):

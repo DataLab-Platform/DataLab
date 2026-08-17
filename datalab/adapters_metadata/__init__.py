@@ -9,9 +9,11 @@ and image objects.
 from .base_adapter import BaseResultAdapter
 from .common import (
     ResultData,
+    create_adapter,
     create_resultdata_dict,
     have_geometry_results,
     have_results,
+    register_result_adapter,
     resultadapter_to_html,
     show_resultdata,
 )
@@ -23,9 +25,11 @@ __all__ = [
     "GeometryAdapter",
     "ResultData",
     "TableAdapter",
+    "create_adapter",
     "create_resultdata_dict",
     "have_geometry_results",
     "have_results",
+    "register_result_adapter",
     "resultadapter_to_html",
     "show_resultdata",
 ]

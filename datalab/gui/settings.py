@@ -205,7 +205,51 @@ class ProcSettings(gds.DataSet):
         ),
     )
     _g0 = gds.EndGroup("")
-    g1 = gds.BeginGroup(_("Settings for results management"))
+    g1 = gds.BeginGroup(_("History sessions"))
+    history_new_session_behavior = gds.ChoiceItem(
+        _("New object or file"),
+        zip(
+            Conf.proc.history_new_session_behavior.values,
+            [
+                _("Ask"),
+                _("Always start a new session"),
+                _("Continue in the current session"),
+            ],
+        ),
+        help=_(
+            "Behavior when a new object or file is added to a populated history "
+            "session."
+        ),
+    )
+    history_plugin_new_session_behavior = gds.ChoiceItem(
+        _("Plugin-created object"),
+        zip(
+            Conf.proc.history_plugin_new_session_behavior.values,
+            [
+                _("Ask"),
+                _("Always start a new session"),
+                _("Continue in the current session"),
+            ],
+        ),
+        help=_("Behavior when a plugin adds an object to a populated history session."),
+    )
+    history_plugin_multiload_behavior = gds.ChoiceItem(
+        _("Plugin multi-load"),
+        zip(
+            Conf.proc.history_plugin_multiload_behavior.values,
+            [
+                _("Ask once"),
+                _("Start a new session"),
+                _("Continue in the current session"),
+            ],
+        ),
+        help=_(
+            "Behavior when a plugin loads multiple objects into a populated history "
+            "session."
+        ),
+    )
+    _g1 = gds.EndGroup("")
+    g2 = gds.BeginGroup(_("Settings for results management"))
     keep_results = gds.BoolItem(
         _("Keep results in metadata after computation"),
         _("Keep results"),
@@ -228,7 +272,7 @@ class ProcSettings(gds.DataSet):
             "If disabled, the results dialog will not be shown automatically."
         ),
     )
-    _g1 = gds.EndGroup("")
+    _g2 = gds.EndGroup("")
 
 
 class ImageDefaultSettings(BaseImageParam):

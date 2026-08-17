@@ -28,6 +28,22 @@ from datalab.gui.processor.base import Worker, WorkerState, WorkerStateMachine
 from datalab.gui.processor.catcher import CompOut
 
 
+@pytest.fixture(autouse=True)
+def drain_pending_qt_timers():
+    """Fire stale unattended auto-close timers before leaving each test.
+
+    In unattended mode, ``qt_app_context`` schedules a zero-delay
+    ``close_widgets_and_quit`` timer on exit. Tests here never run the Qt
+    event loop afterwards, so without this drain the timer stays pending in
+    the shared ``QApplication`` and fires during a later test, closing that
+    test's freshly created main window (e.g. unregistering its plugins).
+    """
+    yield
+    if QW.QApplication.instance() is not None:
+        for _ in range(3):
+            QW.QApplication.processEvents()
+
+
 class TestWorkerStateMachine:
     """Test suite for WorkerStateMachine class - independent from Worker class."""
 
