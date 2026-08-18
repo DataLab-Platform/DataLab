@@ -823,6 +823,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         """Curve fitting computing sub-method"""
         output = fitdlgfunc(obj.x, obj.y, parent=self.mainwindow)
         if output is not None:
+            fit_params = None
             if len(output) == 3:
                 y, _params, fit_params = output
                 metadata = {"fit_params": fit_params}
@@ -844,8 +845,27 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
                 metadata = {fitdlgfunc.__name__: pvalues}
             # Creating new signal
             signal = create_signal(f"{name}({obj.title})", obj.x, y, metadata=metadata)
-            # Creating new plot item
-            self.panel.add_object(signal)
+            # Record a replayable history action when the dialog returned
+            # canonical fit parameters (third-party dialogs returning legacy
+            # 2-tuples cannot be replayed deterministically).
+            action = None
+            if fit_params is not None:
+                action = self.mainwindow.historypanel.add_ui_entry(
+                    name,
+                    target="signalprocessor",
+                    method_name="recompute_fit",
+                    save_state=True,
+                    fit_params=dict(fit_params),
+                    fit_name=name,
+                    source_uuid=get_uuid(obj),
+                )
+            # Creating new plot item (capturing its UUID as the action output)
+            with self.mainwindow.historypanel.capture_outputs(action):
+                self.panel.add_object(signal)
+            if action is not None and action.output_uuids:
+                # Persist the output UUID so that replay updates the fitted
+                # curve in place instead of duplicating it
+                action.kwargs["output_uuid"] = action.output_uuids[0]
 
     @qt_try_except()
     def compute_fit(self, title: str, fitdlgfunc: Callable) -> None:
@@ -857,6 +877,74 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         """
         for obj in self.panel.objview.get_sel_objects():
             self.__row_compute_fit(obj, title, fitdlgfunc)
+
+    @qt_try_except()
+    def recompute_fit(
+        self,
+        fit_params: dict,
+        fit_name: str = "",
+        source_uuid: str | None = None,
+        output_uuid: str | None = None,
+        edit: bool = False,
+    ) -> None:
+        """Recompute an interactive fit result curve at history-replay time.
+
+        Rebuilds the fitted curve from the recorded canonical fit parameters
+        without reopening the interactive dialog (evaluation is delegated to
+        :func:`sigima.tools.signal.fitting.evaluate_fit`).
+
+        Args:
+            fit_params: Canonical fit parameters, as produced by
+             :func:`sigima.tools.signal.fitting.create_fit_params`.
+            fit_name: Title prefix used for the fitted curve.
+            source_uuid: UUID of the source signal. When missing or no longer
+             present, falls back to the first selected signal.
+            output_uuid: Recorded UUID of the fitted curve. When it still
+             exists, the curve is updated in place; when it was deleted, it is
+             re-created under this UUID so downstream references stay valid.
+            edit: If True, the replay was requested in edit mode. The
+             interactive fit dialog cannot be reopened with the recorded
+             parameters, so nothing is recomputed and the recorded fit is
+             preserved as is.
+        """
+        if edit:
+            if not execenv.unattended:
+                QW.QMessageBox.information(
+                    self.mainwindow,
+                    _("Recompute fit"),
+                    _(
+                        "Interactive fits cannot be edited from the History "
+                        "panel: the fit dialog cannot be reopened with the "
+                        "recorded parameters. The recorded fit is kept as is."
+                    ),
+                )
+            return
+        obj = None
+        if source_uuid is not None and self.panel.objmodel.has_uuid(source_uuid):
+            obj = self.panel.objmodel[source_uuid]
+        if obj is None:
+            selected = self.panel.objview.get_sel_objects(include_groups=True)
+            obj = selected[0] if selected else None
+        if obj is None:
+            return
+        y = signal_fitting.evaluate_fit(obj.x, **fit_params)
+        title = f"{fit_name}({obj.title})"
+        if output_uuid is not None and self.panel.objmodel.has_uuid(output_uuid):
+            # Update the recorded output in place (no duplicate on replay)
+            target = self.panel.objmodel[output_uuid]
+            target.title = title
+            target.set_xydata(obj.x, y)
+            target.metadata["fit_params"] = dict(fit_params)
+            self.panel.objview.update_item(output_uuid)
+            self.panel.refresh_plot(output_uuid, update_items=True, force=True)
+            return
+        signal = create_signal(
+            title, obj.x, y, metadata={"fit_params": dict(fit_params)}
+        )
+        if output_uuid is not None:
+            # Re-create the deleted output under its recorded UUID
+            signal.set_metadata_option("uuid", output_uuid)
+        self.panel.add_object(signal)
 
     @qt_try_except()
     def compute_multigaussianfit(self) -> None:
