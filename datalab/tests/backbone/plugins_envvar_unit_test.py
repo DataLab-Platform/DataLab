@@ -25,8 +25,9 @@ from pathlib import Path
 
 import pytest
 
-from datalab import config as config_mod
 from datalab import plugins as plugins_mod
+from datalab.config import appinfo
+from datalab.config import core as config_mod
 
 
 def test_env_var_unset_leaves_default_paths() -> None:
@@ -34,8 +35,8 @@ def test_env_var_unset_leaves_default_paths() -> None:
     pathlist: list[str] = ["/initial/path"]
     env_paths: list[str] = []
 
-    config_mod.parse_datalab_plugins_env_var(None, pathlist, env_paths)
-    config_mod.parse_datalab_plugins_env_var("", pathlist, env_paths)
+    appinfo.parse_datalab_plugins_env_var(None, pathlist, env_paths)
+    appinfo.parse_datalab_plugins_env_var("", pathlist, env_paths)
 
     assert pathlist == ["/initial/path"]
     assert not env_paths
@@ -51,7 +52,7 @@ def test_env_var_adds_existing_directories(tmp_path: Path) -> None:
 
     pathlist: list[str] = []
     env_paths: list[str] = []
-    config_mod.parse_datalab_plugins_env_var(env_value, pathlist, env_paths)
+    appinfo.parse_datalab_plugins_env_var(env_value, pathlist, env_paths)
 
     expected = [os.path.normpath(str(dir1)), os.path.normpath(str(dir2))]
     assert [os.path.normpath(p) for p in pathlist] == expected
@@ -69,8 +70,8 @@ def test_env_var_skips_missing_directories(
 
     pathlist: list[str] = []
     env_paths: list[str] = []
-    with caplog.at_level("WARNING", logger="datalab.config"):
-        config_mod.parse_datalab_plugins_env_var(env_value, pathlist, env_paths)
+    with caplog.at_level("WARNING", logger="datalab.config.appinfo"):
+        appinfo.parse_datalab_plugins_env_var(env_value, pathlist, env_paths)
 
     paths = [os.path.normpath(p) for p in pathlist]
     assert os.path.normpath(str(existing)) in paths
@@ -102,19 +103,19 @@ def test_discover_plugins_finds_module_in_env_dir(
     )
 
     extra_path = str(plugin_dir)
-    config_mod.OTHER_PLUGINS_PATHLIST.append(extra_path)
+    appinfo.OTHER_PLUGINS_PATHLIST.append(extra_path)
     sys.modules.pop(plugin_name, None)
     try:
         # Ensure plugins are considered enabled regardless of user config
         monkeypatch.setattr(
-            config_mod.Conf.main.plugins_enabled, "get", lambda *a, **kw: True
+            config_mod.Conf.plugins_enabled, "get", lambda *a, **kw: True
         )
         modules = plugins_mod.discover_plugins()
         discovered_names = {m.__name__ for m in modules}
         assert plugin_name in discovered_names
     finally:
         try:
-            config_mod.OTHER_PLUGINS_PATHLIST.remove(extra_path)
+            appinfo.OTHER_PLUGINS_PATHLIST.remove(extra_path)
         except ValueError:
             pass
         sys.modules.pop(plugin_name, None)

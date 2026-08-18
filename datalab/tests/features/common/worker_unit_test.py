@@ -16,6 +16,8 @@ Tests cover:
 
 # pylint: disable=protected-access
 
+import importlib
+import sys
 import time
 from unittest.mock import Mock, patch
 
@@ -206,6 +208,28 @@ class TestWorker:
             assert result.result == 15  # 10 + 5
             assert result.error_msg is None
             assert worker.state_machine.current_state == WorkerState.IDLE
+
+    def test_pool_restart_loads_runtime_plugin_module(self, tmp_path):
+        """Test that a restarted spawn worker imports a runtime plugin module."""
+        module_name = "datalab_test_runtime_plugin"
+        plugin_file = tmp_path / f"{module_name}.py"
+        plugin_file.write_text(
+            "def increment(value):\n    return value + 1\n",
+            encoding="utf-8",
+        )
+        sys.path.insert(0, str(tmp_path))
+        try:
+            plugin_module = importlib.import_module(module_name)
+            worker = Worker()
+            worker.restart_pool()
+            worker.run(plugin_module.increment, (1,))
+            while not worker.is_computation_finished():
+                time.sleep(0.001)
+            result = worker.get_result()
+            assert result.result == 2
+        finally:
+            sys.modules.pop(module_name, None)
+            sys.path.remove(str(tmp_path))
 
     def test_computation_exception_case(self):
         """Test Case 2b: Computation raises an exception."""

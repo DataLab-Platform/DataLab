@@ -213,7 +213,7 @@ class LocalProxy(BaseProxy):
         if multiload_state is None:
             behavior = new_session_behavior
             if behavior is None and self.input_source == "plugin":
-                behavior = Conf.proc.history_plugin_new_session_behavior.get()
+                behavior = Conf.history_plugin_new_session_behavior.get()
         else:
             behavior = multiload_state.behavior_for("signal")
         added = self._datalab.add_signal(
@@ -271,7 +271,7 @@ class LocalProxy(BaseProxy):
         if multiload_state is None:
             behavior = new_session_behavior
             if behavior is None and self.input_source == "plugin":
-                behavior = Conf.proc.history_plugin_new_session_behavior.get()
+                behavior = Conf.history_plugin_new_session_behavior.get()
         else:
             behavior = multiload_state.behavior_for("image")
         added = self._datalab.add_image(
@@ -313,7 +313,7 @@ class LocalProxy(BaseProxy):
         if multiload_state is None:
             behavior = new_session_behavior
             if behavior is None and self.input_source == "plugin":
-                behavior = Conf.proc.history_plugin_new_session_behavior.get()
+                behavior = Conf.history_plugin_new_session_behavior.get()
         else:
             if isinstance(obj, SignalObj):
                 panel = "signal"
@@ -349,7 +349,7 @@ class LocalProxy(BaseProxy):
             raise ValueError(f"Invalid data panel: {panel!r}")
         behavior = new_session_behavior
         if behavior is None and self.input_source == "plugin":
-            behavior = Conf.proc.history_plugin_multiload_behavior.get()
+            behavior = Conf.history_plugin_multiload_behavior.get()
         if behavior is not None and behavior not in ("ask", "yes", "no"):
             raise ValueError(f"Invalid session behavior: {behavior!r}")
         if self.multiload_state is not None:

@@ -24,6 +24,7 @@ from sigima.objects import (
     UniformDistributionParam,
 )
 from sigima.objects.scalar import GeometryResult, TableResult
+from sigimax.widgets import imagebackground
 
 from datalab.config import APP_NAME, _
 from datalab.gui.processor.base import BaseProcessor
@@ -35,7 +36,6 @@ from datalab.gui.profiledialog import ProfileExtractionDialog
 from datalab.gui.roigrideditor import ImageGridROIEditor
 from datalab.objectmodel import get_uuid
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
-from datalab.widgets import imagebackground
 from datalab.widgets.replacespecialvalues import (
     ReplaceSpecialValuesImageParamDL,
 )

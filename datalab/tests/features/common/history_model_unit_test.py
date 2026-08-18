@@ -277,7 +277,7 @@ def test_image_creation_extends_active_signal_session_when_rejected() -> None:
     with (
         patch.object(hsess, "execenv", unattended),
         patch.object(
-            hsess.Conf.proc.history_new_session_behavior, "get", return_value="ask"
+            hsess.Conf.history_new_session_behavior, "get", return_value="ask"
         ),
     ):
         action = hsess.add_ui_entry(
@@ -329,7 +329,7 @@ def test_session_behavior_policy_matrix(
     image_session = make_prompt_session("image", populated=True)
     panel = PromptPanel([image_session])
     attended = SimpleNamespace(unattended=False, accept_dialogs=False)
-    option = hsess.Conf.proc.history_new_session_behavior
+    option = hsess.Conf.history_new_session_behavior
     with (
         patch.object(hsess, "execenv", attended),
         patch.object(hsess.QW, "QMessageBox") as message_box,
@@ -366,7 +366,7 @@ def test_accepted_prompt_routes_action_to_new_session() -> None:
     with (
         patch.object(hsess, "execenv", unattended),
         patch.object(
-            hsess.Conf.proc.history_new_session_behavior, "get", return_value="ask"
+            hsess.Conf.history_new_session_behavior, "get", return_value="ask"
         ),
     ):
         action = hsess.add_ui_entry(
@@ -421,7 +421,7 @@ def test_input_prompt_debounce_is_global() -> None:
         patch.object(hsess, "execenv", attended),
         patch.object(hsess.QW, "QMessageBox") as message_box,
         patch.object(
-            hsess.Conf.proc.history_new_session_behavior, "get", return_value="ask"
+            hsess.Conf.history_new_session_behavior, "get", return_value="ask"
         ),
     ):
         # First call passes the debounce and opens the (rejected) dialog
@@ -635,7 +635,7 @@ def test_mainwindow_add_object_decides_before_mutation_and_suppresses_entry() ->
     with (
         patch.object(hsess, "execenv", unattended),
         patch.object(
-            hsess.Conf.proc.history_new_session_behavior, "get", return_value="ask"
+            hsess.Conf.history_new_session_behavior, "get", return_value="ask"
         ),
     ):
         added = DLMainWindow.add_object(mainwindow, image, new_session_behavior="ask")

@@ -19,7 +19,7 @@ Additional templates can be dropped into the user templates directory
 (by default ``<USER_CONFIG_DIR>/macro_templates`` — typically
 ``~/.DataLab/macro_templates`` on Linux/macOS and
 ``%APPDATA%\\.DataLab\\macro_templates`` on Windows). The location can be
-overridden through ``Conf.macro.templates_path``.
+overridden through ``Conf.macro_templates_path``.
 
 Any ``*.py`` file placed in that directory is exposed in the "New macro"
 dropdown after the bundled templates. Filenames starting with an
@@ -82,7 +82,7 @@ def _user_templates_dir() -> str | None:
     except ImportError:
         return None
     try:
-        return Conf.macro.templates_path.get(None)
+        return Conf.macro_templates_path.get(None)
     except Exception:  # pragma: no cover - defensive
         return None
 

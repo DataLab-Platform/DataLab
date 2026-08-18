@@ -26,8 +26,10 @@ from guidata.utils.gitreport import format_git_info_for_pytest, get_git_info_for
 from sigima.tests import helpers
 
 import datalab
+from datalab.config import Conf, ensure_initialized, reset_to_defaults
 from datalab.env import execenv
 from datalab.plugins import PluginRegistry, get_available_plugins
+from datalab.tests import close_datalab_background
 
 # Set validation mode to STRICT for all tests
 set_validation_mode(ValidationMode.STRICT)
@@ -37,6 +39,18 @@ execenv.unattended = True
 execenv.verbose = "quiet"
 
 INITIAL_CWD = os.getcwd()
+
+
+@pytest.fixture(autouse=True)
+def reset_datalab_configuration():
+    """Start every test with production defaults and no INI persistence."""
+    ensure_initialized(load_user_config=False)
+    reset_to_defaults()
+    Conf.rpc_server_enabled.set(False)
+    try:
+        yield
+    finally:
+        close_datalab_background()
 
 
 def pytest_addoption(parser):

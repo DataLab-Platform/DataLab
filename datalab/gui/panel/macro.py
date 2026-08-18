@@ -282,7 +282,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
         self.console = PythonShellWidget(self, read_only=True)
         try:
-            max_lines = int(Conf.macro.console_max_lines.get(5000))
+            max_lines = int(Conf.macro_console_max_lines.get(5000))
         except (TypeError, ValueError):
             max_lines = 5000
         self.console.setMaximumBlockCount(max_lines)
@@ -447,7 +447,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         if not self._active_tab_restored:
             self._restore_active_tab()
             try:
-                stored_uid = Conf.macro.active_tab_uid.get(None)
+                stored_uid = Conf.macro_active_tab_uid.get(None)
             except Exception:  # pylint: disable=broad-except
                 stored_uid = None
             if stored_uid:
@@ -732,7 +732,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
     def _restore_splitter_state(self) -> None:
         """Restore splitter sizes from persisted configuration."""
         try:
-            raw = Conf.macro.splitter_state.get(None)
+            raw = Conf.macro_splitter_state.get(None)
             if raw:
                 ba = QC.QByteArray.fromBase64(raw.encode("ascii"))
                 self.restoreState(ba)
@@ -743,7 +743,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         """Persist current splitter sizes."""
         try:
             raw = bytes(self.saveState().toBase64()).decode("ascii")
-            Conf.macro.splitter_state.set(raw)
+            Conf.macro_splitter_state.set(raw)
         except Exception:  # pylint: disable=broad-except
             pass
 
@@ -753,14 +753,14 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         if macro is None:
             return
         try:
-            Conf.macro.active_tab_uid.set(macro.uid)
+            Conf.macro_active_tab_uid.set(macro.uid)
         except Exception:  # pylint: disable=broad-except
             pass
 
     def _restore_active_tab(self) -> None:
         """Restore the active tab from the persisted uid (best-effort)."""
         try:
-            uid = Conf.macro.active_tab_uid.get(None)
+            uid = Conf.macro_active_tab_uid.get(None)
         except Exception:  # pylint: disable=broad-except
             uid = None
         if not uid:
@@ -958,14 +958,14 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         macro = self.get_macro(number_or_title)
         assert isinstance(macro, Macro)
         if filename is None:
-            basedir = Conf.main.base_dir.get()
+            basedir = Conf.base_dir.get()
             with save_restore_stds():
                 filename, _filt = getsavefilename(
                     self, _("Save as"), basedir, self.FILE_FILTERS
                 )
         if filename:
             with qt_try_loadsave_file(self.parentWidget(), filename, "save"):
-                Conf.main.base_dir.set(filename)
+                Conf.base_dir.set(filename)
                 macro.title = osp.basename(filename)
                 macro.to_file(filename)
 
@@ -979,14 +979,14 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             Number of the macro (starting at 1)
         """
         if filename is None:
-            basedir = Conf.main.base_dir.get()
+            basedir = Conf.base_dir.get()
             with save_restore_stds():
                 filename, _filt = getopenfilename(
                     self, _("Open"), basedir, self.FILE_FILTERS
                 )
         if filename:
             with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
-                Conf.main.base_dir.set(filename)
+                Conf.base_dir.set(filename)
                 macro = self.add_macro()
                 macro.from_file(filename)
                 try:

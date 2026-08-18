@@ -975,7 +975,7 @@ def test_1_to_0_failure_rolls_back_all_source_metadata() -> None:
         det_param = sigima.params.Peak2DDetectionParam.create(
             create_rois=False, threshold=0.5
         )
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             image_panel.processor.run_feature("peak_detection", det_param)
         img_action = history[len(history)]
         img_uuid = get_uuid(img)
@@ -1223,7 +1223,7 @@ def test_analysis_effects_manifest_populated_and_recomputed() -> None:
         det_param = sigima.params.Peak2DDetectionParam.create(
             create_rois=True, threshold=0.5
         )
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("peak_detection", det_param)
         action = history[len(history)]
         assert action.effects is not None, "1-to-0 action must carry effects"

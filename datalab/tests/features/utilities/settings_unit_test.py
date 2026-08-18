@@ -37,13 +37,13 @@ def test_proc_history_policy_settings_round_trip() -> None:
         "history_plugin_new_session_behavior",
         "history_plugin_multiload_behavior",
     )
-    original_values = tuple(getattr(Conf.proc, name).get() for name in option_names)
+    original_values = tuple(getattr(Conf, name).get() for name in option_names)
     loaded_values = ("yes", "ask", "no")
     saved_values = ("no", "yes", "ask")
 
     try:
         for name, value in zip(option_names, loaded_values):
-            getattr(Conf.proc, name).set(value)
+            getattr(Conf, name).set(value)
 
         settings = ProcSettings()
         paramdict = {"proc": settings}
@@ -53,13 +53,10 @@ def test_proc_history_policy_settings_round_trip() -> None:
         for name, value in zip(option_names, saved_values):
             setattr(settings, name, value)
         datasets_to_conf(paramdict)
-        assert (
-            tuple(getattr(Conf.proc, name).get() for name in option_names)
-            == saved_values
-        )
+        assert tuple(getattr(Conf, name).get() for name in option_names) == saved_values
     finally:
         for name, value in zip(option_names, original_values):
-            getattr(Conf.proc, name).set(value)
+            getattr(Conf, name).set(value)
 
 
 def capture_settings_screenshots():

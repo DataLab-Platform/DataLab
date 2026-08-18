@@ -14,6 +14,8 @@ import importlib
 import importlib.util
 import os
 import os.path as osp
+from contextlib import contextmanager
+from pathlib import Path
 from unittest.mock import patch
 
 from qtpy import QtWidgets as QW
@@ -31,12 +33,20 @@ from datalab.tests.features.plugins.plugin_test_dataset import (
 )
 
 
+@contextmanager
+def enabled_plugins_context():
+    """Temporarily enable all plugins for plugin-system tests."""
+    with Conf.plugins_enabled.context(True), Conf.plugins_enabled_list.context(None):
+        yield
+
+
 # This end-to-end regression test intentionally keeps the whole plugin
 # lifecycle in one linear scenario: discovery, menu wiring, reload and cleanup.
+@enabled_plugins_context()
 def test_plugin_system():  # pylint: disable=too-many-statements
     """Test the entire plugin lifecycle: discovery, reload, cleanup"""
     # Ensure plugins_enabled_list is None (all plugins enabled)
-    Conf.main.plugins_enabled_list.set(None)
+    Conf.plugins_enabled_list.set(None)
 
     # We need to monkeypatch the plugin path or add to sys.path
     # The temporary_plugin_dir context manager handles adding to sys.path
@@ -96,7 +106,11 @@ def test_plugin_system():  # pylint: disable=too-many-statements
             )
 
             # Trigger reload
-            win.reload_plugins()
+            processor = win.imagepanel.processor
+            assert processor.worker is not None
+            with patch.object(processor.worker, "restart_pool") as restart_pool:
+                win.reload_plugins()
+            restart_pool.assert_called_once_with()
             QW.QApplication.processEvents()
 
             # Verify both plugins are present
@@ -314,7 +328,7 @@ def test_plugin_system():  # pylint: disable=too-many-statements
             #    BUT try_or_log_error re-raises in test mode, so we mock
             #    is_running_tests
             # 3. Valid plugins remain valid
-            with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
+            with patch("sigimax.utils.qthelpers.is_running_tests") as mock_run_tests:
                 mock_run_tests.return_value = False
                 win.reload_plugins()
             QW.QApplication.processEvents()
@@ -354,7 +368,7 @@ def test_plugin_config_disabled():
             win: DLMainWindow
 
             # Mock the config to disable plugins
-            with patch("datalab.config.Conf.main.plugins_enabled.get") as mock_enabled:
+            with patch("datalab.config.Conf.plugins_enabled.get") as mock_enabled:
                 mock_enabled.return_value = False
 
                 # Mock QMessageBox to avoid blocking dialog
@@ -370,6 +384,7 @@ def test_plugin_config_disabled():
                     )
 
 
+@enabled_plugins_context()
 def test_plugin_error_handling():
     """Test that various malformed plugins are handled gracefully.
 
@@ -379,7 +394,7 @@ def test_plugin_error_handling():
     - Missing create_actions method (abstract)
     - Syntax errors in the source file
     """
-    Conf.main.plugins_enabled_list.set(None)
+    Conf.plugins_enabled_list.set(None)
 
     with temporary_plugin_dir() as plugin_dir:
         execenv.print(f"Using temporary plugin directory: {plugin_dir}")
@@ -443,7 +458,7 @@ def test_plugin_error_handling():
                 "        pass\n"
             )
 
-        with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
+        with patch("sigimax.utils.qthelpers.is_running_tests") as mock_run_tests:
             mock_run_tests.return_value = False
             with datalab_test_app_context(console=False):
                 QW.QApplication.processEvents()
@@ -488,7 +503,7 @@ def test_plugin_duplicate_name():
         )
 
         # Start application - should handle duplicate gracefully
-        with patch("datalab.utils.qthelpers.is_running_tests") as mock_run_tests:
+        with patch("sigimax.utils.qthelpers.is_running_tests") as mock_run_tests:
             mock_run_tests.return_value = False
             with datalab_test_app_context(console=False):
                 QW.QApplication.processEvents()
@@ -508,10 +523,11 @@ def test_plugin_duplicate_name():
                 )
 
 
+@enabled_plugins_context()
 def test_plugin_nested_menus():
     """Test plugin with nested submenus (3 levels deep)"""
     # Ensure plugins_enabled_list is None (all plugins enabled)
-    Conf.main.plugins_enabled_list.set(None)
+    Conf.plugins_enabled_list.set(None)
 
     with temporary_plugin_dir() as plugin_dir:
         execenv.print(f"Using temporary plugin directory: {plugin_dir}")
@@ -606,10 +622,11 @@ def test_plugin_nested_menus():
             assert getattr(win, "_test_level_3", None) is True
 
 
+@enabled_plugins_context()
 def test_plugin_with_dialogs():
     """Test plugin using dialog methods (show_warning, show_info, etc.)"""
     # Ensure plugins_enabled_list is None (all plugins enabled)
-    Conf.main.plugins_enabled_list.set(None)
+    Conf.plugins_enabled_list.set(None)
 
     with temporary_plugin_dir() as plugin_dir:
         execenv.print(f"Using temporary plugin directory: {plugin_dir}")
@@ -664,6 +681,17 @@ def test_plugin_with_dialogs():
                 result = plugin.ask_yesno("Test question?")
                 assert mock_question.called
                 assert result is True
+
+
+def test_plugin_examples_import() -> None:
+    """Test that all shipped plugin examples import successfully."""
+    examples_dir = Path(__file__).parents[4] / "plugins" / "examples"
+    for example_path in examples_dir.glob("*.py"):
+        spec = importlib.util.spec_from_file_location(example_path.stem, example_path)
+        assert spec is not None
+        assert spec.loader is not None
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
 
 
 if __name__ == "__main__":

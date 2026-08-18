@@ -20,9 +20,7 @@ from datalab.tests.scenarios import common
 
 def test_scenario_signal1() -> None:
     """Run signal unit test scenario 1 (no process isolation)"""
-    assert Conf.main.process_isolation_enabled.get(), (
-        "Process isolation must be enabled"
-    )
+    assert Conf.process_isolation_enabled.get(), "Process isolation must be enabled"
     with datalab_test_app_context(save=True) as win:
         with win.context_no_refresh():
             execenv.print("Testing signal features (process isolation: off)...")

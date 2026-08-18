@@ -57,6 +57,7 @@ from sigima.objects import (
     TypeROI,
 )
 from sigima.objects.base import GENERIC_ROI_TITLE_REGEXP, get_generic_roi_title
+from sigimax.adapters_plotpy.roi.signal import roi_color_for_index
 
 from datalab.adapters_plotpy import (
     TypePlotItem,
@@ -65,7 +66,6 @@ from datalab.adapters_plotpy import (
     create_adapter_from_object,
     plotitem_to_singleroi,
 )
-from datalab.adapters_plotpy.roi.signal import roi_color_for_index
 from datalab.config import Conf, _
 from datalab.env import execenv
 
@@ -360,7 +360,7 @@ class BaseROIEditor(
                 self,
             )
             self.editor_layout.addWidget(self.singleobj_btn)
-            self.singleobj_btn.setChecked(Conf.proc.extract_roi_singleobj.get())
+            self.singleobj_btn.setChecked(Conf.extract_roi_singleobj.get())
         self.editor_layout.addStretch()
 
     def setup_items(self) -> None:
@@ -406,7 +406,7 @@ class BaseROIEditor(
         for roi_item in self.roi_items:
             self.__roi.add_roi(plotitem_to_singleroi(roi_item, self.obj))
         if self.singleobj_btn is not None:
-            Conf.proc.extract_roi_singleobj.set(self.singleobj_btn.isChecked())
+            Conf.extract_roi_singleobj.set(self.singleobj_btn.isChecked())
 
     def get_roieditor_results(self) -> tuple[TypeROI, bool]:
         """Get ROI editor results

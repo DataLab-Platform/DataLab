@@ -45,6 +45,7 @@ from datalab.config import (
     OTHER_PLUGINS_PATHLIST,
     Conf,
     _,
+    get_config_path,
     get_user_plugin_paths,
 )
 from datalab.control.proxy import LocalProxy
@@ -58,7 +59,7 @@ if TYPE_CHECKING:
     from datalab.gui.panel.signal import SignalPanel
 
 
-PLUGINS_DEFAULT_PATH = Conf.get_path("plugins")
+PLUGINS_DEFAULT_PATH = get_config_path("plugins")
 
 if not osp.isdir(PLUGINS_DEFAULT_PATH):
     os.makedirs(PLUGINS_DEFAULT_PATH)
@@ -190,7 +191,7 @@ class PluginRegistry(type):
             """Return italic text"""
             return f"<i>{text}</i>" if html else text
 
-        if Conf.main.plugins_enabled.get():
+        if Conf.plugins_enabled.get():
             plugins = cls.get_plugins()
             if plugins:
                 text = italic(_("Registered plugins:"))
@@ -401,7 +402,7 @@ def discover_plugins() -> list[type[PluginBase]]:
     PluginRegistry.clear_discovery_errors()
     PluginRegistry.clear_failed_plugins()
 
-    if not Conf.main.plugins_enabled.get():
+    if not Conf.plugins_enabled.get():
         return []
 
     # Ensure plugin search paths are present in sys.path
@@ -435,7 +436,7 @@ def discover_plugins() -> list[type[PluginBase]]:
             # Log to file so it appears in Log Files viewer
             logger = logging.getLogger(__name__)
             logger.error("Error loading plugin '%s'", name, exc_info=True)
-            Conf.main.traceback_log_available.set(True)
+            Conf.traceback_log_available.set(True)
             # Accumulate for replay in internal console
             PluginRegistry.add_discovery_error(tb_text)
             # Record structured info about the failed plugin
@@ -462,7 +463,7 @@ def reload_plugin_modules() -> None:
     - Clears the plugin class registry
     - Reloads or imports all modules matching the plugin naming convention
     """
-    if not Conf.main.plugins_enabled.get():
+    if not Conf.plugins_enabled.get():
         return
 
     # Reset class registry before re-executing modules so that plugin
@@ -481,7 +482,7 @@ def discover_v020_plugins() -> list[tuple[str, str]]:
         List of tuples (plugin_name, directory_path) for discovered v0.20 plugins
     """
     v020_plugins = []
-    if Conf.main.plugins_enabled.get():
+    if Conf.plugins_enabled.get():
         for path in (
             get_user_plugin_paths() + [PLUGINS_DEFAULT_PATH] + OTHER_PLUGINS_PATHLIST
         ):

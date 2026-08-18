@@ -8,8 +8,8 @@ are properly applied when creating geometry results:
 1. Centroid produces a marker (MARKER kind from sigima)
 2. Contour detection produces annotated shapes (CIRCLE, ELLIPSE, or POLYGON kind)
 
-The test uses the Conf.view.def*.temp() context manager to temporarily modify
-settings and verify they're applied to new results.
+The test uses flat visualization option contexts to temporarily modify settings
+and verify they're applied to new results.
 """
 
 from __future__ import annotations
@@ -49,9 +49,9 @@ def test_ima_shape_param():
 
         # Temporarily set the annotated shape settings
         # Note: enclosing_circle is an image feature, so we use ima_shape_param
-        with Conf.view.ima_shape_param.temp(def_param):
+        with Conf.ima_shape_param.context(def_param):
             # Compute enclosing circle with the custom settings
-            with Conf.proc.show_result_dialog.temp(False):
+            with Conf.show_result_dialog.context(False):
                 panel.processor.run_feature("enclosing_circle")
 
             # Get the geometry adapter and create plot items
@@ -113,9 +113,9 @@ def test_ima_marker_param():
         def_symbol.alpha = 0.87
 
         # Temporarily set the marker settings
-        with Conf.view.ima_marker_param.temp(def_param):
+        with Conf.ima_marker_param.context(def_param):
             # Compute centroid with the custom settings
-            with Conf.proc.show_result_dialog.temp(False):
+            with Conf.show_result_dialog.context(False):
                 panel.processor.run_feature("centroid")
 
             # Get the geometry adapter and create plot items
@@ -172,7 +172,7 @@ def test_refresh_shape_items_after_settings_change():
         panel.add_object(img)
 
         # Compute enclosing circle with initial settings
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("enclosing_circle")
 
         # Get initial shape item styling
@@ -189,7 +189,7 @@ def test_refresh_shape_items_after_settings_change():
         new_param = ShapeParam()
         new_param.line.width = 5
         new_param.line.color = "#00ff00"
-        with Conf.view.ima_shape_param.temp(new_param):
+        with Conf.ima_shape_param.context(new_param):
             # Call refresh_all_shape_items() to apply new settings
             panel.plothandler.refresh_all_shape_items()
 

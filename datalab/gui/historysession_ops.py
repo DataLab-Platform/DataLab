@@ -70,7 +70,7 @@ def maybe_start_session_for_input(
         ValueError: If ``behavior`` is unsupported.
     """
     if behavior is None:
-        behavior = Conf.proc.history_new_session_behavior.get()
+        behavior = Conf.history_new_session_behavior.get()
     if behavior not in SESSION_BEHAVIORS:
         raise ValueError(f"Invalid session behavior: {behavior!r}")
     if not panel.record_mode_enabled or panel.is_replaying():

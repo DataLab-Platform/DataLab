@@ -109,8 +109,8 @@ def run_blob_detection_on_flower_image(screenshots: bool = False) -> None:
         param.max_area = 1000
         param.filter_by_circularity = True
         param.min_circularity = 0.7
-        with Conf.proc.show_result_dialog.temp(False):
-            with Conf.view.show_result_label.temp(False):
+        with Conf.show_result_dialog.context(False):
+            with Conf.show_result_label.context(False):
                 panel.processor.run_feature("blob_opencv", param)
                 if screenshots:
                     win.statusBar().hide()

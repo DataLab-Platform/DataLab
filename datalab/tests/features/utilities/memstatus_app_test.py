@@ -10,14 +10,14 @@ import numpy as np
 import psutil
 from sigima.objects import Gauss2DParam
 
-from datalab import config
+from datalab.config import core as config
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
 
 
 def memory_alarm(threshold):
     """Memory alarm test"""
-    config.Conf.main.available_memory_threshold.set(threshold)
+    config.Conf.available_memory_threshold.set(threshold)
     rng = np.random.default_rng()
     with datalab_test_app_context() as win:
         panel = win.imagepanel

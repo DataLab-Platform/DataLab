@@ -45,7 +45,7 @@ def save_to_dlhist_file(panel: HistoryPanel, filename: str | None = None) -> boo
         True if the history was saved, False if the operation was canceled.
     """
     if filename is None:
-        basedir = Conf.main.base_dir.get()
+        basedir = Conf.base_dir.get()
         with save_restore_stds():
             filename, _filt = getsavefilename(
                 panel, _("Save history file"), basedir, panel.FILE_FILTERS
@@ -55,7 +55,7 @@ def save_to_dlhist_file(panel: HistoryPanel, filename: str | None = None) -> boo
     if osp.splitext(filename)[1] == "":
         filename += ".dlhist"
     with qt_try_loadsave_file(panel.parentWidget(), filename, "save"):
-        Conf.main.base_dir.set(filename)
+        Conf.base_dir.set(filename)
         with NativeH5Writer(filename) as writer:
             # Make the .dlhist file panel-contained: store the signal and
             # image panel objects (all of them) alongside the history, so
@@ -82,7 +82,7 @@ def open_dlhist_file(panel: HistoryPanel, filename: str | None = None) -> bool:
         True if the history was loaded, False if the operation was canceled.
     """
     if filename is None:
-        basedir = Conf.main.base_dir.get()
+        basedir = Conf.base_dir.get()
         with save_restore_stds():
             filename, _filt = getopenfilename(
                 panel, _("Open history file"), basedir, panel.FILE_FILTERS
@@ -90,7 +90,7 @@ def open_dlhist_file(panel: HistoryPanel, filename: str | None = None) -> bool:
     if not filename:
         return False
     with qt_try_loadsave_file(panel.parentWidget(), filename, "load"):
-        Conf.main.base_dir.set(filename)
+        Conf.base_dir.set(filename)
         with NativeH5Reader(filename) as reader:
             # A panel-contained .dlhist file stores the signal and image
             # panel objects in addition to the history sessions. The way

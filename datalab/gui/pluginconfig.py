@@ -540,10 +540,10 @@ class PluginConfigDialog(QW.QDialog):
         self.failed_plugin_widgets: list[FailedPluginInfoWidget] = []
         self.fixed_path_widgets: list[SearchPathItemWidget] = []
         self.extra_path_widgets: list[SearchPathItemWidget] = []
-        self.original_plugins_enabled = Conf.main.plugins_enabled.get(True)
+        self.original_plugins_enabled = Conf.plugins_enabled.get(True)
         self.plugins_enabled = self.original_plugins_enabled
         self.original_v020_plugins_warning_ignore = (
-            Conf.main.v020_plugins_warning_ignore.get(False)
+            Conf.v020_plugins_warning_ignore.get(False)
         )
         self.v020_plugins_warning_ignore = self.original_v020_plugins_warning_ignore
         self.original_extra_plugin_paths = get_user_plugin_paths()
@@ -834,7 +834,7 @@ class PluginConfigDialog(QW.QDialog):
 
     def _browse_plugin_directory(self, initial_path: str | None = None) -> str | None:
         """Open a directory chooser for a plugin search path."""
-        basedir = initial_path or Conf.main.base_dir.get(osp.expanduser("~"))
+        basedir = initial_path or Conf.base_dir.get(osp.expanduser("~"))
         directory = getexistingdirectory(self, _("Select plugin directory"), basedir)
         normalized = normalize_plugin_paths([directory])
         return normalized[0] if normalized else None
@@ -989,14 +989,14 @@ class PluginConfigDialog(QW.QDialog):
 
     def _save_configuration(self) -> None:
         """Persist current plugin enablement and search path settings."""
-        Conf.main.plugins_enabled.set(self.plugins_enabled)
-        Conf.main.v020_plugins_warning_ignore.set(self.v020_plugins_warning_ignore)
+        Conf.plugins_enabled.set(self.plugins_enabled)
+        Conf.v020_plugins_warning_ignore.set(self.v020_plugins_warning_ignore)
         enabled_plugins = [
             widget.plugin_class.PLUGIN_INFO.name
             for widget in self.plugin_widgets
             if widget.is_enabled()
         ]
-        Conf.main.plugins_enabled_list.set(enabled_plugins)
+        Conf.plugins_enabled_list.set(enabled_plugins)
         set_user_plugin_paths(self.extra_plugin_paths)
 
     def _mark_current_state_as_saved(self) -> None:
@@ -1080,7 +1080,7 @@ class PluginConfigDialog(QW.QDialog):
         """Populate the dialog with all discovered plugins"""
         self._update_load_info_label()
         registered_names = {p.info.name for p in PluginRegistry.get_plugins()}
-        enabled_plugins = Conf.main.plugins_enabled_list.get(None)
+        enabled_plugins = Conf.plugins_enabled_list.get(None)
 
         self._add_failed_plugins()
         self._add_plugin_widgets(registered_names, enabled_plugins)

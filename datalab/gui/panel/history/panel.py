@@ -65,7 +65,7 @@ class HistoryPanel(
         self.runtime.objects.refresh_obj_ids_snapshot()
         self.ui.update_actions_state()
         self.refresh_compatibility_items()
-        if not execenv.unattended and Conf.proc.history_auto_record.get(False):
+        if not execenv.unattended and Conf.history_auto_record.get(False):
             self.ui.actions["record"].setChecked(True)
             self.create_new_session()
 

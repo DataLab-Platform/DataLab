@@ -22,7 +22,7 @@ from datalab.utils import qthelpers as qth
 def test_history_panel(screenshots: bool = False) -> None:
     """Record a representative session and grab the History Panel screenshot."""
     config.reset()  # Reset configuration (remove configuration file and initialize it)
-    config.Conf.proc.history_new_session_behavior.set("no")
+    config.Conf.history_new_session_behavior.set("no")
     with datalab_test_app_context(
         console=False, exec_loop=not screenshots, history=True
     ) as win:

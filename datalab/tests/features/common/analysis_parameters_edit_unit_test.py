@@ -39,7 +39,7 @@ def test_analysis_parameters_edit_image():
         det_param = sigima_param.Peak2DDetectionParam.create(
             create_rois=False, threshold=0.5
         )
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("peak_detection", det_param)
 
         # The analysis parameters must be stored as a single 1-to-0 dataset

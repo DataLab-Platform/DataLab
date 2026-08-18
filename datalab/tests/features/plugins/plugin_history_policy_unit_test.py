@@ -232,7 +232,7 @@ def test_local_proxy_resolves_plugin_policy_live_and_explicit_wins() -> None:
     """Read plugin policy per add while preserving explicit priority."""
     mainwindow = AddCallRecorder()
     proxy = LocalProxy(as_mainwindow(mainwindow), input_source="plugin")
-    option = Conf.proc.history_plugin_new_session_behavior
+    option = Conf.history_plugin_new_session_behavior
     xdata = np.array([0.0, 1.0])
     ydata = np.array([1.0, 2.0])
 
@@ -257,7 +257,7 @@ def test_plugin_registration_marks_proxy_for_live_plugin_policy() -> None:
     """Create plugin proxies with the plugin input source marker."""
     plugin = PluginTestData()
     mainwindow = AddCallRecorder()
-    option = Conf.proc.history_plugin_new_session_behavior
+    option = Conf.history_plugin_new_session_behavior
 
     with patch.object(PluginRegistry, "register_plugin"):
         plugin.register(as_mainwindow(mainwindow))
@@ -273,8 +273,8 @@ def test_plugin_multiload_decides_once_and_suppresses_internal_adds() -> None:
     """Apply the batch policy once and use no for later additions."""
     mainwindow = MultiLoadMainRecorder()
     proxy = LocalProxy(as_mainwindow(mainwindow), input_source="plugin")
-    multiload_option = Conf.proc.history_plugin_multiload_behavior
-    add_option = Conf.proc.history_plugin_new_session_behavior
+    multiload_option = Conf.history_plugin_multiload_behavior
+    add_option = Conf.history_plugin_new_session_behavior
     first = SignalObj()
     second = SignalObj()
 
@@ -304,7 +304,7 @@ def test_multiload_validates_inputs_and_explicit_policy_wins() -> None:
     """Validate batch inputs before yielding and prioritize explicit policy."""
     mainwindow = MultiLoadMainRecorder()
     proxy = LocalProxy(as_mainwindow(mainwindow), input_source="plugin")
-    option = Conf.proc.history_plugin_multiload_behavior
+    option = Conf.history_plugin_multiload_behavior
 
     with patch.object(option, "get") as get_behavior:
         with proxy.multiload_session("image", new_session_behavior="no"):
@@ -336,7 +336,7 @@ def test_multiload_defers_empty_and_pre_add_exception_decisions() -> None:
     """Leave history untouched when a batch never attempts an insertion."""
     mainwindow = MultiLoadMainRecorder()
     proxy = LocalProxy(as_mainwindow(mainwindow), input_source="plugin")
-    option = Conf.proc.history_plugin_multiload_behavior
+    option = Conf.history_plugin_multiload_behavior
 
     with patch.object(option, "get", return_value="ask") as get_behavior:
         with proxy.multiload_session("signal"):
