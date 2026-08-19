@@ -20,6 +20,7 @@ from sigima.tests.data import (
     create_peak_image,
     create_sincos_image,
 )
+from sigima.tools.signal import fitting as signal_fitting
 
 from datalab.adapters_metadata.common import ResultData
 from datalab.config import Conf
@@ -1472,3 +1473,71 @@ def test_edited_image_creation_recomputes_downstream_in_place() -> None:
         downstream_params = extract_processing_parameters(downstream)
         assert downstream_params is not None
         assert downstream_params.source_uuid == source_uuid
+
+
+def test_interactive_fit_records_replays_in_place_and_refuses_edit() -> None:
+    """Record an interactive fit, replay it in place, refuse edit mode."""
+
+    def fake_gaussian_dialog(x, y, parent=None):
+        """Deterministic stand-in for the interactive Gaussian fit dialog."""
+        del parent, y
+        fit_params = signal_fitting.create_fit_params(
+            "gaussian",
+            {"amplitude": 1200.0, "sigma": 20.0, "x0": 100.0, "y0": 5.0},
+            interactive=True,
+        )
+        return signal_fitting.evaluate_fit(x, **fit_params), [], fit_params
+
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        history.toggle_record_mode(True)
+        add_paracetamol_signals(panel, 1)
+        panel.objview.select_objects([1])
+        panel.processor.compute_fit("Gaussian fit", fake_gaussian_dialog)
+        # The fit is recorded as a replayable UI action with its output UUID
+        action = history[len(history)]
+        assert action.kind == HistoryAction.KIND_UI
+        assert action.target == "signalprocessor"
+        assert action.method_name == "recompute_fit"
+        fit_params = action.kwargs["fit_params"]
+        assert fit_params["fit_type"] == "gaussian"
+        assert len(action.output_uuids) == 1
+        fitted_uuid = action.output_uuids[0]
+        assert action.kwargs["output_uuid"] == fitted_uuid
+        fitted = panel.objmodel[fitted_uuid]
+        expected_y = fitted.y.copy()
+        object_count = len(panel.objmodel)
+        # Headless replay updates the fitted curve in place (no duplicate)
+        fitted.set_xydata(fitted.x, np.zeros_like(fitted.y))
+        action.replay(win, restore_selection=True, edit=False)
+        assert len(panel.objmodel) == object_count
+        assert panel.objmodel[fitted_uuid] is fitted
+        np.testing.assert_allclose(fitted.y, expected_y)
+        assert fitted.metadata["fit_params"] == fit_params
+        # Edit mode is refused: the recorded fit is preserved untouched
+        fitted.set_xydata(fitted.x, np.full_like(fitted.y, 3.0))
+        action.replay(win, restore_selection=True, edit=True)
+        assert len(panel.objmodel) == object_count
+        np.testing.assert_allclose(fitted.y, 3.0)
+        assert action.kwargs["fit_params"] == fit_params
+        # A deleted output is re-created under its recorded UUID at replay
+        panel.objview.select_objects([fitted_uuid])
+        panel.remove_object(force=True)
+        assert not panel.objmodel.has_uuid(fitted_uuid)
+        action.replay(win, restore_selection=True, edit=False)
+        assert panel.objmodel.has_uuid(fitted_uuid)
+        np.testing.assert_allclose(panel.objmodel[fitted_uuid].y, expected_y)
+        # The nested fit parameters survive a .dlhist round-trip
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "fit.dlhist")
+            assert history.save_to_dlhist_file(path)
+            sessions = read_history_sessions(path, history.H5_PREFIX)
+        restored = next(
+            restored_action
+            for session in sessions
+            for restored_action in session.actions
+            if restored_action.uuid == action.uuid
+        )
+        assert restored.method_name == "recompute_fit"
+        assert restored.kwargs["fit_params"] == fit_params
+        assert restored.kwargs["output_uuid"] == fitted_uuid
