@@ -1,14 +1,15 @@
 Coverage
 NumPy >= 1.22, < 2.5
-PlotPy >= 2.10.0
+PlotPy >= 2.11.0
 PyQt5 >= 5.15.6
 PyWavelets >= 1.2, < 2.0
 SciPy >= 1.10.1, < 1.17
-Sigima >= 1.1.6
+Sigima >= 1.2.0
+SigimaX >= 1.0.1
 babel
 build
 fastapi >= 0.110.0
-guidata >= 3.14.4
+guidata >= 3.15.0
 httpx
 jedi >= 0.18.2
 myst_parser
@@ -31,4 +32,5 @@ sphinx-sitemap
 sphinx_design
 sphinx_intl
 sphinxcontrib-svg2pdfconverter[CairoSVG]
+sphinxext-opengraph
 uvicorn[standard] >= 0.27.0
