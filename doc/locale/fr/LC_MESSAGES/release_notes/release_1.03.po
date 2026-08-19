@@ -228,6 +228,9 @@ msgstr "Toutes les parties génériques et au niveau de l'application de DataLab
 msgid "This is an internal refactoring: existing workflows, settings and files are unchanged, but it considerably reduces duplicated code and makes it possible to build other Qt scientific applications on the same foundation"
 msgstr "Il s'agit d'un refactoring interne : les flux de travail, les paramètres et les fichiers existants ne sont pas modifiés, mais cela réduit considérablement le code dupliqué et permet de créer d'autres applications scientifiques Qt sur la même base"
 
+msgid "As a consequence, DataLab now requires SigimaX ≥ 1.0.1, and its minimum requirements are aligned with it: Sigima ≥ 1.2.0, guidata ≥ 3.15.0 and PlotPy ≥ 2.11.0"
+msgstr "Par conséquent, DataLab nécessite désormais SigimaX ≥ 1.0.1, et ses versions minimales sont alignées sur celles qu'impose SigimaX : Sigima ≥ 1.2.0, guidata ≥ 3.15.0 et PlotPy ≥ 2.11.0"
+
 msgid "**Configuration system:**"
 msgstr "**Système de configuration :**"
 
@@ -240,8 +243,14 @@ msgstr "Les paramètres enregistrés par les versions précédentes sont migrés
 msgid "**`cdlclient` package archived:**"
 msgstr "**Package `cdlclient` archivé :**"
 
-msgid "The standalone `cdlclient` package is deprecated and archived. Its lightweight XML-RPC client is now provided by the DataLab packages themselves, and the documentation no longer refers to it (implements [Issue #183](https://github.com/DataLab-Platform/DataLab/issues/183))"
-msgstr "Le package autonome `cdlclient` est obsolète et archivé. Son client XML-RPC léger est désormais fourni par les packages DataLab eux-mêmes, et la documentation ne s'y réfère plus (implémente [Issue #183](https://github.com/DataLab-Platform/DataLab/issues/183))"
+msgid "The standalone `cdlclient` package is deprecated and archived. Its lightweight XML-RPC client is now provided by Sigima, as `sigima.client.SimpleRemoteProxy` (implements [Issue #183](https://github.com/DataLab-Platform/DataLab/issues/183))"
+msgstr "Le package autonome `cdlclient` est obsolète et archivé. Son client XML-RPC léger est désormais fourni par Sigima, sous la forme de `sigima.client.SimpleRemoteProxy` (implémente [Issue #183](https://github.com/DataLab-Platform/DataLab/issues/183))"
+
+msgid "Its Qt companion widgets have been taken over by SigimaX: the connection progress dialog is now `sigimax.widgets.connection.ConnectionDialog`, usable with any remote proxy exposing a blocking `connect()` method"
+msgstr "Ses widgets Qt compagnons ont été repris par SigimaX : la boîte de dialogue de progression de connexion est désormais `sigimax.widgets.connection.ConnectionDialog`, utilisable avec tout proxy distant exposant une méthode `connect()` bloquante"
+
+msgid "The documentation no longer refers to `cdlclient`"
+msgstr "La documentation ne fait plus référence à `cdlclient`"
 
 msgid "**Detection tools now preserve existing regions of interest:**"
 msgstr "**Les outils de détection préservent désormais les régions d'intérêt existantes :**"

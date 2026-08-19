@@ -129,6 +129,7 @@ and Image panels (implements
 
 * All the generic, application-level parts of DataLab (main window skeleton, configuration system, dockable plot widgets, HDF5 workspace and browser, log viewer, splash screen, status bar, scientific dialogs and PlotPy adapters) have been extracted into a new reusable library, **SigimaX**, and DataLab now derives from it instead of maintaining its own copies (implements [Issue #182](https://github.com/DataLab-Platform/DataLab/issues/182))
 * This is an internal refactoring: existing workflows, settings and files are unchanged, but it considerably reduces duplicated code and makes it possible to build other Qt scientific applications on the same foundation
+* As a consequence, DataLab now requires SigimaX ≥ 1.0.1, and its minimum requirements are aligned with it: Sigima ≥ 1.2.0, guidata ≥ 3.15.0 and PlotPy ≥ 2.11.0
 
 **Configuration system:**
 
@@ -137,7 +138,9 @@ and Image panels (implements
 
 **`cdlclient` package archived:**
 
-* The standalone `cdlclient` package is deprecated and archived. Its lightweight XML-RPC client is now provided by the DataLab packages themselves, and the documentation no longer refers to it (implements [Issue #183](https://github.com/DataLab-Platform/DataLab/issues/183))
+* The standalone `cdlclient` package is deprecated and archived. Its lightweight XML-RPC client is now provided by Sigima, as `sigima.client.SimpleRemoteProxy` (implements [Issue #183](https://github.com/DataLab-Platform/DataLab/issues/183))
+* Its Qt companion widgets have been taken over by SigimaX: the connection progress dialog is now `sigimax.widgets.connection.ConnectionDialog`, usable with any remote proxy exposing a blocking `connect()` method
+* The documentation no longer refers to `cdlclient`
 
 **Detection tools now preserve existing regions of interest:**
 

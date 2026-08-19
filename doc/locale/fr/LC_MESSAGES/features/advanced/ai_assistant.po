@@ -1,0 +1,220 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "The built-in AI Assistant of DataLab, the open-source scientific data analysis and visualization platform"
+msgstr "L'assistant IA intégré de DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
+
+msgid "DataLab, AI, assistant, LLM, OpenAI, Ollama, chat, macro, automation"
+msgstr "DataLab, IA, assistant, LLM, OpenAI, Ollama, discussion, macro, automatisation"
+
+msgid "AI Assistant"
+msgstr "Assistant IA"
+
+msgid "DataLab embeds an optional **AI Assistant**: a dockable chat panel connected to a Large Language Model (LLM) that can inspect your workspace, create and process signals and images, and write and run Python macros on your behalf."
+msgstr "DataLab intègre un **assistant IA** optionnel : un panneau de discussion ancrable, connecté à un grand modèle de langage (LLM), capable d'inspecter votre espace de travail, de créer et de traiter des signaux et des images, et d'écrire puis d'exécuter des macros Python à votre place."
+
+msgid "The AI Assistant sends your messages — and, when you ask for it, information about the objects of your workspace — to the configured provider. Nothing is sent as long as the assistant is disabled or as long as you do not start a conversation. Review the :ref:`ai-assistant-privacy` section before using a remote provider on sensitive data."
+msgstr "L'assistant IA transmet vos messages — et, lorsque vous le lui demandez, des informations sur les objets de votre espace de travail — au fournisseur configuré. Rien n'est envoyé tant que l'assistant est désactivé ou tant que vous n'avez pas démarré de conversation. Consultez la section :ref:`ai-assistant-privacy` avant d'utiliser un fournisseur distant sur des données sensibles."
+
+msgid "Getting started"
+msgstr "Premiers pas"
+
+msgid "Open ``File > Settings``, go to the **AI Assistant** tab and enable the assistant (see :ref:`ai-assistant-settings` for the complete list of options)."
+msgstr "Ouvrez ``Fichier > Préférences``, allez dans l'onglet **Assistant IA** et activez l'assistant (voir :ref:`ai-assistant-settings` pour la liste complète des options)."
+
+msgid "Choose a provider and a model, then set the API key — or, better, leave the field empty and export the provider's standard environment variable."
+msgstr "Choisissez un fournisseur et un modèle, puis renseignez la clé d'API — ou, de préférence, laissez le champ vide et définissez la variable d'environnement standard du fournisseur."
+
+msgid "Click **Test connection** to check the endpoint before starting."
+msgstr "Cliquez sur **Tester la connexion** pour vérifier le point d'accès avant de commencer."
+
+msgid "Show the **AI Assistant** panel from the ``View`` menu if it is hidden. It is docked on the right side of the main window, tabified with the Macro panel."
+msgstr "Affichez le panneau **Assistant IA** depuis le menu ``Affichage`` s'il est masqué. Il est ancré sur le côté droit de la fenêtre principale, en onglet avec le panneau de macros."
+
+msgid "To discover the assistant without any account or API key, select the ``mock`` provider: it replies with scripted answers triggered by simple keywords, and exercises the whole pipeline (tool calls, confirmation dialogs, conversation storage) offline."
+msgstr "Pour découvrir l'assistant sans compte ni clé d'API, sélectionnez le fournisseur ``mock`` : il répond par des réponses scriptées déclenchées par de simples mots-clés, et met en œuvre toute la chaîne de traitement (appels d'outils, boîtes de dialogue de confirmation, stockage des conversations) hors ligne."
+
+msgid "Supported providers"
+msgstr "Fournisseurs pris en charge"
+
+msgid "The assistant talks to any service exposing an **OpenAI-compatible** chat completion API. This covers, among others:"
+msgstr "L'assistant dialogue avec tout service exposant une API de complétion de conversation **compatible OpenAI**. Cela couvre notamment :"
+
+msgid "**OpenAI** (``https://api.openai.com/v1``)"
+msgstr ""
+
+msgid "**GitHub Models** (``https://models.github.ai/inference``)"
+msgstr ""
+
+msgid "**Azure OpenAI**"
+msgstr ""
+
+msgid "Local runtimes such as **Ollama**, **LM Studio**, **llama.cpp** or **vLLM**"
+msgstr "Des environnements d'exécution locaux tels que **Ollama**, **LM Studio**, **llama.cpp** ou **vLLM**"
+
+msgid "The **Load preset...** button of the settings dialog pre-fills the *Base URL* and *Model* fields for the most common endpoints."
+msgstr "Le bouton **Charger un préréglage...** de la boîte de dialogue des préférences pré-remplit les champs *URL de base* et *Modèle* pour les points d'accès les plus courants."
+
+msgid "Using the chat panel"
+msgstr "Utilisation du panneau de discussion"
+
+msgid "The panel is made of a toolbar, the conversation view and an input box:"
+msgstr "Le panneau se compose d'une barre d'outils, de la vue de conversation et d'une zone de saisie :"
+
+msgid "**New conversation**: start a fresh conversation. The previous one is kept in the conversation store."
+msgstr "**Nouvelle conversation** : démarrer une nouvelle conversation. La précédente est conservée dans l'espace de stockage des conversations."
+
+msgid "**History...**: browse past conversations, load, rename or delete them, and **export** one as a Markdown file. Conversations are stored in the DataLab user configuration directory."
+msgstr "**Historique...** : parcourir les conversations passées, les charger, les renommer ou les supprimer, et en **exporter** une au format Markdown. Les conversations sont stockées dans le répertoire de configuration utilisateur de DataLab."
+
+msgid "**Send** / **Stop**: send the current message, or interrupt an ongoing request. Requests run in a background thread, so the interface stays responsive."
+msgstr "**Envoyer** / **Arrêter** : envoyer le message courant, ou interrompre une requête en cours. Les requêtes s'exécutent dans un fil d'exécution en arrière-plan, si bien que l'interface reste réactive."
+
+msgid "The token counter on the right of the toolbar shows the context size of the last request and the cumulated usage of the conversation."
+msgstr "Le compteur de jetons à droite de la barre d'outils indique la taille du contexte de la dernière requête et la consommation cumulée de la conversation."
+
+msgid "The input box keeps a history of previously sent messages, navigable with the keyboard like a shell prompt."
+msgstr "La zone de saisie conserve un historique des messages précédemment envoyés, navigable au clavier comme dans un terminal."
+
+msgid "When the assistant proposes a macro, the generated code is **transient**: it is executed without cluttering the Macro panel. A **Save to Macros** link is offered after the run if you want to keep it."
+msgstr "Lorsque l'assistant propose une macro, le code généré est **temporaire** : il est exécuté sans encombrer le panneau de macros. Un lien **Enregistrer dans les macros** est proposé après l'exécution si vous souhaitez la conserver."
+
+msgid "Tools available to the assistant"
+msgstr "Outils à la disposition de l'assistant"
+
+msgid "The assistant does not act directly on DataLab: it may only call a fixed set of declared **tools**. Tools marked as read-only never modify the workspace and may be auto-approved (see the corresponding setting); every other tool requires an explicit confirmation."
+msgstr "L'assistant n'agit pas directement sur DataLab : il ne peut appeler qu'un ensemble fixe d'**outils** déclarés. Les outils marqués comme étant en lecture seule ne modifient jamais l'espace de travail et peuvent être approuvés automatiquement (voir l'option correspondante) ; tous les autres outils exigent une confirmation explicite."
+
+msgid "Tool"
+msgstr "Outil"
+
+msgid "Read-only"
+msgstr "Lecture seule"
+
+msgid "Purpose"
+msgstr "Rôle"
+
+msgid "``list_objects``"
+msgstr ""
+
+msgid "✓"
+msgstr ""
+
+msgid "List the signals or images of a panel"
+msgstr "Lister les signaux ou les images d'un panneau"
+
+msgid "``get_current_panel``"
+msgstr ""
+
+msgid "Return the currently active panel"
+msgstr "Renvoyer le panneau actuellement actif"
+
+msgid "``get_object_info``"
+msgstr ""
+
+msgid "Inspect a specific object (shape, units, metadata, ...)"
+msgstr "Inspecter un objet particulier (dimensions, unités, métadonnées, etc.)"
+
+msgid "``list_available_operations``"
+msgstr ""
+
+msgid "Introspect the processing catalog exposed by Sigima"
+msgstr "Explorer le catalogue de traitements exposé par Sigima"
+
+msgid "``list_plugin_actions``"
+msgstr ""
+
+msgid "List the actions contributed by third-party plugins"
+msgstr "Lister les actions apportées par les plugins tiers"
+
+msgid "``get_macro_console_output``"
+msgstr ""
+
+msgid "Read back the Macro panel console"
+msgstr "Relire la console du panneau de macros"
+
+msgid "``get_api_help``"
+msgstr ""
+
+msgid "Return the public API of the proxy, ``SignalObj``, ``ImageObj`` or ``sigima.params``, so the model does not invent method names"
+msgstr "Renvoyer l'API publique du proxy, de ``SignalObj``, d'``ImageObj`` ou de ``sigima.params``, afin que le modèle n'invente pas de noms de méthodes"
+
+msgid "``capture_view``"
+msgstr ""
+
+msgid "Grab a screenshot of the current plot and inject it in the conversation, so a multimodal model can visually inspect the data"
+msgstr "Capturer une image de la vue graphique courante et l'injecter dans la conversation, afin qu'un modèle multimodal puisse inspecter visuellement les données"
+
+msgid "``trigger_plugin_action``"
+msgstr ""
+
+msgid "Trigger a plugin action by its menu path"
+msgstr "Déclencher une action de plugin par son chemin de menu"
+
+msgid "``create_synthetic_signal``"
+msgstr ""
+
+msgid "Create a synthetic signal (sine, cosine, Gaussian, noise, ramp)"
+msgstr "Créer un signal synthétique (sinus, cosinus, gaussienne, bruit, rampe)"
+
+msgid "``create_synthetic_image``"
+msgstr ""
+
+msgid "Create a synthetic image (2D Gaussian, ramp, noise, checkerboard)"
+msgstr "Créer une image synthétique (gaussienne 2D, rampe, bruit, damier)"
+
+msgid "``load_file``"
+msgstr ""
+
+msgid "Load a file into a panel"
+msgstr "Charger un fichier dans un panneau"
+
+msgid "``apply_operation``"
+msgstr ""
+
+msgid "Run any registered processing feature"
+msgstr "Exécuter n'importe quelle fonctionnalité de traitement enregistrée"
+
+msgid "``create_and_run_macro``"
+msgstr ""
+
+msgid "Create and execute a Python macro"
+msgstr "Créer et exécuter une macro Python"
+
+msgid "The ``create_and_run_macro`` tool is only exposed to the model when the **Allow AI to create and run macros** option is enabled. When it is disabled, the assistant cannot even propose arbitrary code execution."
+msgstr "L'outil ``create_and_run_macro`` n'est exposé au modèle que si l'option **Autoriser l'IA à créer et exécuter des macros** est activée. Lorsqu'elle est désactivée, l'assistant ne peut même pas proposer l'exécution de code arbitraire."
+
+msgid "Confirming tool calls"
+msgstr "Confirmation des appels d'outils"
+
+msgid "Whenever the assistant wants to run a tool that modifies the workspace, a confirmation dialog shows the tool name and the parameter values. When a macro is proposed, the dialog also displays its **syntax-highlighted source code**, so that the code can be reviewed before being executed. Rejecting the call returns the refusal to the model, which may then propose something else."
+msgstr "Chaque fois que l'assistant souhaite exécuter un outil modifiant l'espace de travail, une boîte de dialogue de confirmation affiche le nom de l'outil et la valeur des paramètres. Lorsqu'une macro est proposée, la boîte de dialogue affiche également son **code source avec coloration syntaxique**, afin que le code puisse être relu avant d'être exécuté. Refuser l'appel renvoie ce refus au modèle, qui peut alors proposer autre chose."
+
+msgid "Privacy and security"
+msgstr "Confidentialité et sécurité"
+
+msgid "**No telemetry**: DataLab does not log or forward the content of your conversations anywhere else than to the provider you configured."
+msgstr "**Aucune télémétrie** : DataLab n'enregistre ni ne transmet le contenu de vos conversations ailleurs qu'au fournisseur que vous avez configuré."
+
+msgid "**Local providers**: to keep everything on your machine, point the *Base URL* to a local runtime (Ollama, LM Studio, llama.cpp, vLLM). Data then never leaves your computer."
+msgstr "**Fournisseurs locaux** : pour que tout reste sur votre machine, faites pointer l'*URL de base* vers un environnement d'exécution local (Ollama, LM Studio, llama.cpp, vLLM). Les données ne quittent alors jamais votre ordinateur."
+
+msgid "**API key storage**: the key is stored in plain text in the DataLab configuration file. Prefer the provider's environment variable."
+msgstr "**Stockage de la clé d'API** : la clé est stockée en clair dans le fichier de configuration de DataLab. Préférez la variable d'environnement du fournisseur."
+
+msgid "**Explicit confirmation**: every action modifying the workspace — and every macro execution — requires an explicit user confirmation by default."
+msgstr "**Confirmation explicite** : toute action modifiant l'espace de travail — et toute exécution de macro — exige par défaut une confirmation explicite de l'utilisateur."
+
+msgid "**Iteration cap**: the number of chained tool calls is bounded by the **Max tool-call iterations** setting, so a misbehaving model cannot loop indefinitely."
+msgstr "**Limite d'itérations** : le nombre d'appels d'outils enchaînés est borné par l'option **Nombre maximum d'itérations d'appels d'outils**, de sorte qu'un modèle défaillant ne puisse pas boucler indéfiniment."
+
+msgid "The macro system used by the assistant is described in :ref:`about_macros`, and the underlying control API in :ref:`ref-to-remote-control`."
+msgstr "Le système de macros utilisé par l'assistant est décrit dans :ref:`about_macros`, et l'API de contrôle sous-jacente dans :ref:`ref-to-remote-control`."

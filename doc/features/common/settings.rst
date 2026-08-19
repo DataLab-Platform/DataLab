@@ -344,6 +344,12 @@ performance issues with large datasets:
     objects. This setting can be toggled per-object using the checkbox in the
     Properties panel.
 
+**Show marker labels in result tables**
+    When enabled, a marker-label column is prepended to result tables for marker
+    results (XY, X or Y markers), so that each row can be matched with the
+    corresponding cross or dashed cursor drawn on the plot. XY markers use numeric
+    labels (``#1``, ``#2``, ...), axis markers use letters (``a``, ``b``, ``c``, ...).
+
 .. note::
 
     These settings affect only the visualization of results on plots. They do not
@@ -371,6 +377,78 @@ The I/O settings tab controls input/output operations:
 **HDF5 file name in title**
     When enabled, the HDF5 file name is appended as a suffix to the title of the
     signal/image object.
+
+.. _ai-assistant-settings:
+
+AI Assistant
+------------
+
+The AI Assistant settings tab configures the built-in conversational assistant
+(see :ref:`ai_assistant`). All fields are inactive as long as **Enable AI
+Assistant** is unchecked.
+
+**Enable AI Assistant**
+    Enable the AI Assistant panel. When disabled, no request is ever sent to an
+    external service.
+
+**Provider**
+    Backend used to serve the model. ``openai`` covers every OpenAI-compatible
+    endpoint (OpenAI, GitHub Models, Azure OpenAI, Ollama, LM Studio, llama.cpp,
+    vLLM, ...). Use ``mock`` to try the assistant offline, without any API key:
+    it replies with scripted answers triggered by simple keywords.
+
+**Model**
+    Name of the model to use, as expected by the provider (e.g. ``gpt-4o-mini``).
+
+**API key**
+    Provider API key.
+
+    .. warning::
+
+        This value is stored **in plain text** in the DataLab configuration file.
+        It is recommended to leave the field empty and to set the provider's
+        standard environment variable instead (e.g. ``OPENAI_API_KEY``): the
+        secret is then never written to disk and can be shared with other tools.
+
+**Base URL (optional)**
+    Endpoint override for OpenAI-compatible services. Leave empty to use the
+    provider default.
+
+**Load preset...**
+    Pre-fill *Base URL* and *Model* with a known OpenAI-compatible endpoint
+    (OpenAI cloud, Ollama, LM Studio, llama.cpp, vLLM).
+
+**Test connection**
+    Probe the configured endpoint to check the URL, the API key and network
+    reachability. This does not consume any token.
+
+**Temperature**
+    Sampling temperature passed to the model (0 = deterministic).
+
+**HTTP timeout (s)**
+    Maximum duration of a single request to the provider.
+
+**Max tool-call iterations**
+    Safety cap on the number of tool calls the assistant may chain to answer a
+    single question.
+
+**Max history messages (0 = unlimited)**
+    Cap the number of past messages sent to the provider on each request. Useful
+    with local models having a small context window, where an over-long
+    conversation is rejected by the server. The system prompt and the current
+    user message are always preserved.
+
+**Auto-approve read-only inspection tools**
+    When enabled, tools that only *read* the workspace (listing objects,
+    inspecting an object, listing available operations) run without asking for a
+    confirmation. Tools that modify the workspace always require an explicit
+    confirmation.
+
+**Allow AI to create and run macros (Python code)**
+    When enabled, the assistant may propose Python macros, executed with full
+    access to DataLab through the proxy API — each execution still requires an
+    explicit confirmation. Disable this option to hide the macro tool from the
+    model entirely.
 
 Console
 -------

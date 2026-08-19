@@ -27,6 +27,32 @@ self-explanatory. The main window is divided into two main areas:
 
     DataLab main window, at startup.
 
+Additional panels are available as dockable widgets, and may be shown or hidden
+from the "View" menu: the :ref:`historypanel`, the Macro panel (see
+:ref:`about_macros`) and the :ref:`ai_assistant`.
+
+.. _command_palette:
+
+Command palette
+^^^^^^^^^^^^^^^
+
+Rather than navigating through nested menus, any command may be reached by
+typing part of its name or of its menu path in the **command palette**. It
+lists every command available for the currently active panel, identified by its
+localised menu path (e.g. "Processing › Fourier analysis › FFT").
+
+The palette may be opened in three ways:
+
+- with the :kbd:`Ctrl+Shift+P` keyboard shortcut,
+- by clicking the search box in the top-right corner of the menu bar,
+- from the "Command palette..." entry at the top of the "?" (Help) menu.
+
+Type a few characters to filter the list: the matching is *fuzzy*, so "fft"
+or "fan" both reach the "Fourier analysis" entries. Results are navigated with
+:kbd:`Up` / :kbd:`Down` and triggered with :kbd:`Enter`, exactly as if the
+command had been selected in the menu bar. With an empty query, all commands
+are listed alphabetically by path.
+
 History Panel
 ^^^^^^^^^^^^^
 
