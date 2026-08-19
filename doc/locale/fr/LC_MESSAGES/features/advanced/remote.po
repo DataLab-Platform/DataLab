@@ -124,11 +124,11 @@ msgstr "Voici une réimplémentation de cette classe en Python 2.7 :"
 msgid "Connection dialog"
 msgstr "Boîte de dialogue de connexion"
 
-msgid "The DataLab package also provides a connection dialog that may be used to connect to a running DataLab instance. It is exposed by the :py:class:`datalab.widgets.connection.ConnectionDialog` class."
-msgstr "Le package DataLab fournit également une boîte de dialogue de connexion qui peut être utilisée pour se connecter à une instance de DataLab en cours d'exécution. Elle est exposée par la classe :py:class:`datalab.widgets.connection.ConnectionDialog`."
+msgid "A connection dialog may be used to connect to a running DataLab instance. It is exposed by the :py:class:`sigimax.widgets.connection.ConnectionDialog` class, and takes optional ``icon`` and ``banner`` arguments to carry the branding of the client application."
+msgstr "Une boîte de dialogue de connexion peut être utilisée pour se connecter à une instance de DataLab en cours d'exécution. Elle est exposée par la classe :py:class:`sigimax.widgets.connection.ConnectionDialog`, et accepte les arguments optionnels ``icon`` et ``banner`` pour porter l'identité visuelle de l'application cliente."
 
-msgid "Screenshot of connection dialog (``datalab.widgets.connection.ConnectionDialog``)"
-msgstr "Capture d'écran de la boîte de dialogue de connexion (``datalab.widgets.connection.ConnectionDialog``)"
+msgid "Screenshot of connection dialog (``sigimax.widgets.connection.ConnectionDialog``)"
+msgstr "Capture d'écran de la boîte de dialogue de connexion (``sigimax.widgets.connection.ConnectionDialog``)"
 
 msgid "Example of use:"
 msgstr "Exemple d'utilisation :"

@@ -114,13 +114,14 @@ Here is a Python 2.7 reimplementation of this class:
 Connection dialog
 ^^^^^^^^^^^^^^^^^
 
-The DataLab package also provides a connection dialog that may be used
-to connect to a running DataLab instance. It is exposed by the
-:py:class:`datalab.widgets.connection.ConnectionDialog` class.
+A connection dialog may be used to connect to a running DataLab instance.
+It is exposed by the :py:class:`sigimax.widgets.connection.ConnectionDialog`
+class, and takes optional ``icon`` and ``banner`` arguments to carry the
+branding of the client application.
 
 .. figure:: ../../images/shots/connect_dialog.png
 
-    Screenshot of connection dialog (``datalab.widgets.connection.ConnectionDialog``)
+    Screenshot of connection dialog (``sigimax.widgets.connection.ConnectionDialog``)
 
 Example of use:
 
