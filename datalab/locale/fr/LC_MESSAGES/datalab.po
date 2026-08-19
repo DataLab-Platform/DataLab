@@ -1027,22 +1027,6 @@ msgstr "Arrêt de la macro '%s'"
 msgid "# <== '%s' macro has finished"
 msgstr "# <== La macro '%s' a terminé son exécution"
 
-#, python-format
-msgid "Available memory is below %d MB.<br><br>Do you want to continue?"
-msgstr "La mémoire disponible est inférieure à %d Mo.<br><br>Souhaitez-vous néanmoins continuer ?"
-
-msgid "This software is in the <b>beta stage</b> of its release cycle. The focus of beta testing is providing a feature complete software for users interested in trying new features before the final release. However, <u>beta software may not behave as expected and will probably have more bugs or performance issues than completed software</u>."
-msgstr "Ce logiciel est en <b>phase beta</b> de son cycle de développement. L'objectif de la phase de beta test est de fournir une version du logiciel disposant de toutes les fonctionnalités prévues dans la version finale, à l'attention d'utilisateurs intéressés de tester en avance de phase ces fonctionnalités. Cependant, <u>un logiciel en version beta peut ne pas fonctionner correctement et présente plus d'anomalies résiduelles et de problèmes de performance que la version finale</u>."
-
-msgid "This software is in the <b>alpha stage</b> of its release cycle. The focus of alpha testing is providing an incomplete software for early testing of specific features by users. Please note that <u>alpha software was not thoroughly tested</u> by the developer before it is released."
-msgstr "Ce logiciel est en <b>phase alpha</b> de son cycle de développement. L'objectif de la phase d'alpha test est de fournir une version incomplète du logiciel pour des tests réalisés en amont par des utilisateurs intéressés ou concernés par de nouvelles fonctionnalités ou des corrections d'anomalies. Notez que <u>la version alpha d'un logiciel ne fait pas l'objet de tests poussés avant sa diffusion</u>."
-
-msgid "<i>This is not a stable release.</i>"
-msgstr "<i>Ceci n'est pas une version stable.</i>"
-
-msgid "Do you want to see available log files?"
-msgstr "Souhaitez-vous consulter les journaux de bord disponibles ?"
-
 msgid "DataLab v0.20 plugins detected"
 msgstr "Plugins DataLab v0.20 détectés"
 
@@ -1067,28 +1051,6 @@ msgstr "Plugins"
 msgid "Third-party plugins are disabled. Enable them again from the plugin configuration dialog to use this feature."
 msgstr "Les plugins tiers sont désactivés. Réactivez-les depuis la boîte de dialogue de configuration des plugins pour utiliser cette fonctionnalité."
 
-#, python-format
-msgid "Welcome to %s!"
-msgstr "Bienvenue dans %s !"
-
-msgid "Open HDF5 files..."
-msgstr "Ouvrir des fichiers HDF5..."
-
-msgid "Open one or more HDF5 files"
-msgstr "Ouvrir un ou plusieurs fichiers HDF5"
-
-msgid "Save to HDF5 file..."
-msgstr "Enregistrer dans un fichier HDF5..."
-
-msgid "Save to HDF5 file"
-msgstr "Enregistrer dans un fichier HDF5"
-
-msgid "Browse HDF5 file..."
-msgstr "Parcourir un fichier HDF5..."
-
-msgid "Browse an HDF5 file"
-msgstr "Parcourir un fichier HDF5"
-
 msgid "Settings..."
 msgstr "Préférences..."
 
@@ -1100,21 +1062,6 @@ msgstr "Palette de commandes..."
 
 msgid "Search and run any command by its menu path"
 msgstr "Rechercher et exécuter n'importe quelle commande par son chemin de menu"
-
-msgid "Main Toolbar"
-msgstr "Barre d'outils principale"
-
-msgid "Hide window"
-msgstr "Cacher la fenêtre"
-
-msgid "Hide DataLab window"
-msgstr "Cacher la fenêtre de DataLab"
-
-msgid "Quit"
-msgstr "Quitter"
-
-msgid "Quit application"
-msgstr "Quitter l'application"
 
 msgid "Auto-refresh"
 msgstr "Rafraîchissement automatique"
@@ -1170,9 +1117,6 @@ msgstr "Signaux 1D : Gérer et traiter des données unidimensionnelles"
 msgid "2D Images: Manage and process two-dimensional data"
 msgstr "Images 2D : Gérer et traiter des données bidimensionnelles"
 
-msgid "&File"
-msgstr "&Fichier"
-
 msgid "&Create"
 msgstr "&Création"
 
@@ -1191,38 +1135,14 @@ msgstr "Traitement"
 msgid "Analysis"
 msgstr "Analyse"
 
-msgid "&View"
-msgstr "&Affichage"
-
-msgid "Online documentation"
-msgstr "Documentation en ligne"
-
-msgid "PDF documentation"
-msgstr "Documentation PDF"
-
 msgid "Tour"
 msgstr "Visite guidée"
 
 msgid "Demo"
 msgstr "Démo"
 
-msgid "Test segfault/Python error"
-msgstr "Tester un plantage/une erreur Python"
-
-msgid "Log files"
-msgstr "Journaux de bord"
-
 msgid "Installation and configuration"
 msgstr "Installation et configuration"
-
-msgid "Project home page"
-msgstr "Page d'accueil du projet"
-
-msgid "Bug report or feature request"
-msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
-
-msgid "About..."
-msgstr "À propos..."
 
 msgid ""
 "Welcome to DataLab console!\n"
@@ -1245,9 +1165,6 @@ msgstr ""
 "  o.data  # retourne les données de l'objet\n"
 "Modules importés au démarrage : os, sys, os.path as osp, time, numpy as np, scipy.signal as sps, scipy.ndimage as spi"
 
-msgid "Console"
-msgstr "Console"
-
 msgid "Macro Panel"
 msgstr "Gestionnaire de Macros"
 
@@ -1266,8 +1183,15 @@ msgstr "Vous devrez cliquer manuellement sur le bouton de rafraîchissement pour
 msgid "Are you sure you want to disable auto-refresh?"
 msgstr "Êtes-vous sûr de vouloir désactiver le rafraîchissement automatique ?"
 
-msgid "Save"
-msgstr "Enregistrer"
+msgid "Save to HDF5 file"
+msgstr "Enregistrer dans un fichier HDF5"
+
+#, python-format
+msgid "Open %d HDF5 files"
+msgstr "Ouvrir %d fichiers HDF5"
+
+msgid "Open HDF5 file"
+msgstr "Ouvrir un fichier HDF5"
 
 msgid "Do you want to clear current workspace (signals and images) before importing data from HDF5 files?"
 msgstr "Souhaitez-vous vider l'espace de travail actuel (signaux et images) avant d'importer des données depuis des fichiers HDF5 ?"
@@ -1284,19 +1208,6 @@ msgstr "Oui"
 
 msgid "No"
 msgstr "Non"
-
-msgid "Open"
-msgstr "Ouvrir"
-
-msgid "HDF5 files (*.h5 *.hdf5 *.hdf *.he5);;All files (*)"
-msgstr "Fichiers HDF5 (*.h5 *.hdf5 *.hdf *.he5);;Tous les fichiers (*)"
-
-#, python-format
-msgid "Open %d HDF5 files"
-msgstr "Ouvrir %d fichiers HDF5"
-
-msgid "Open HDF5 file"
-msgstr "Ouvrir un fichier HDF5"
 
 #, python-format
 msgid "New %s"
@@ -1608,11 +1519,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "New group"
-msgstr "Nouveau groupe"
-
 msgid "Group name:"
 msgstr "Nom du groupe :"
+
+msgid "New group"
+msgstr "Nouveau groupe"
 
 #, python-format
 msgid "New group \"%s\""
@@ -1639,6 +1550,9 @@ msgstr "Lecture des objets depuis le fichier"
 
 msgid "Adding objects to workspace"
 msgstr "Ajout d'objets à l'espace de travail"
+
+msgid "Open"
+msgstr "Ouvrir"
 
 #, python-format
 msgid "Load from directory \"%s\""
@@ -2965,6 +2879,12 @@ msgstr "Le signal '%s' ne possède aucun résultat de type table de marqueurs XY
 msgid "Markers table"
 msgstr "Table de marqueurs"
 
+msgid "Recompute fit"
+msgstr "Retraiter l'ajustement"
+
+msgid "Interactive fits cannot be edited from the History panel: the fit dialog cannot be reopened with the recorded parameters. The recorded fit is kept as is."
+msgstr "Les ajustements interactifs ne peuvent pas être modifiés depuis le panneau Historique : la boîte de dialogue d'ajustement ne peut pas être rouverte avec les paramètres enregistrés. L'ajustement enregistré est conservé tel quel."
+
 msgid "Full width at y"
 msgstr "Largeur à y=..."
 
@@ -3457,6 +3377,9 @@ msgstr "Visualisation"
 msgid "I/O"
 msgstr "Entrée/sortie"
 
+msgid "Console"
+msgstr "Console"
+
 msgid "Settings"
 msgstr "Préférences"
 
@@ -3768,26 +3691,6 @@ msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La dé
 msgid "Click OK to end demo."
 msgstr "Cliquer sur OK pour terminer la démo."
 
-msgid "Error:"
-msgstr "Erreur:"
-
-msgid "Context"
-msgstr "Contexte"
-
-#, python-format
-msgid "The file %s could not be read:"
-msgstr "Le fichier %s n'a pas pu être ouvert :"
-
-#, python-format
-msgid "The file %s could not be written:"
-msgstr "Le fichier %s n'a pas pu être enregistré :"
-
-msgid "in this folder"
-msgstr "dans ce dossier"
-
-msgid "Open tab menu"
-msgstr "Ouvrir le menu des onglets"
-
 msgid "Start Web API Server"
 msgstr "Démarrer le serveur API Web"
 
@@ -4026,6 +3929,9 @@ msgstr "Aperçu textuel"
 msgid "Select HDF5 file"
 msgstr "Sélectionner un fichier HDF5"
 
+msgid "HDF5 files (*.h5 *.hdf5 *.hdf *.he5);;All files (*)"
+msgstr "Fichiers HDF5 (*.h5 *.hdf5 *.hdf *.he5);;Tous les fichiers (*)"
+
 msgid "Check all"
 msgstr "Cocher tout"
 
@@ -4044,11 +3950,11 @@ msgstr "Afficher les détails"
 msgid "Hide details"
 msgstr "Masquer les détails"
 
-msgid "Date and time"
-msgstr "Date et heure"
-
 msgid "Title"
 msgstr "Titre"
+
+msgid "Date and time"
+msgstr "Date et heure"
 
 msgid "Action is compatible with the current workspace state."
 msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
@@ -4079,6 +3985,9 @@ msgstr "Configuration utilisateur"
 
 msgid "Plugins and I/O features"
 msgstr "Plugins et fonctionnalités d'entrée/sortie"
+
+msgid "Log files"
+msgstr "Journaux de bord"
 
 msgid "Log files were generated during current session."
 msgstr "Des journaux de bord ont été générés lors de la session en cours."
@@ -4133,42 +4042,6 @@ msgstr "Détection de pics 1D"
 
 msgid "Peaks:"
 msgstr "Pics :"
-
-msgid "Internal console"
-msgstr "Console interne"
-
-msgid ""
-"Click to show the internal console.\n"
-"The icon will turn red if an error or warning is logged."
-msgstr ""
-"Cliquer pour afficher la console interne.\n"
-"L'icône deviendra rouge si une erreur ou un avertissement est enregistré."
-
-msgid ""
-"Click to show the internal console.\n"
-"An error or warning has been logged."
-msgstr ""
-"Cliquer pour afficher la console interne.\n"
-"Une erreur ou un avertissement a été enregistré."
-
-msgid ""
-"Click to show the internal console.\n"
-"No error or warning has been logged."
-msgstr ""
-"Cliquer pour afficher la console interne.\n"
-"Aucune erreur ou avertissement n'a été enregistré."
-
-msgid "Memory available:"
-msgstr "Mémoire disponible :"
-
-msgid "Memory used:"
-msgstr "Mémoire utilisée :"
-
-msgid "Alarm threshold:"
-msgstr "Seuil d'alarme :"
-
-msgid "Memory:"
-msgstr "Mémoire :"
 
 msgid "Plugins:"
 msgstr "Plugins :"
@@ -4397,6 +4270,9 @@ msgstr "Merci de prendre en compte le message d'avertissement suivant :"
 msgid "An error has occured during the following context:"
 msgstr "Une erreur est survenue dans le contexte suivant:"
 
+msgid "Context"
+msgstr "Contexte"
+
 msgid "Tip"
 msgstr "Astuce"
 
@@ -4495,452 +4371,3 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
-
-msgid "A new object was loaded. Start a new history session?"
-msgstr "Un nouvel objet a été chargé. Démarrer une nouvelle session d'historique ?"
-
-msgid "A new object was created. Start a new history session?"
-msgstr "Un nouvel objet a été créé. Démarrer une nouvelle session d'historique ?"
-
-msgid "New history session"
-msgstr "Nouvelle session d'historique"
-
-msgid "Initial state"
-msgstr "État initial"
-
-msgid "Chain copy"
-msgstr "Copie de chaîne"
-
-msgid ""
-"Do you really want to delete the selected items?\n"
-"\n"
-"Note: deleting an intermediate action splits its processing chain; downstream steps become an independent chain."
-msgstr ""
-"Êtes-vous sûr de vouloir supprimer les éléments sélectionnés ?\n"
-"\n"
-"Remarque : la suppression d'une action intermédiaire divise sa chaîne de traitement ; les étapes en aval deviennent une chaîne indépendante."
-
-msgid "Do you really want to delete the selected items?"
-msgstr "Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?"
-
-msgid "The deleted action(s) produced object(s) still present in the workspace. Do you want to remove the associated object(s) as well?"
-msgstr "La ou les actions supprimées ont produit des objets encore présents dans l'espace de travail. Voulez-vous également supprimer le ou les objets associés ?"
-
-msgid "Remove incompatible"
-msgstr "Supprimer les actions incompatibles"
-
-msgid "All actions are compatible with the current workspace."
-msgstr "Toutes les actions sont compatibles avec l'espace de travail actuel."
-
-#, python-format
-msgid "%d incompatible action(s) will be removed. Continue?"
-msgstr "%d action(s) incompatible(s) seront supprimées. Continuer ?"
-
-msgid "History Panel"
-msgstr "Historique"
-
-#, python-format
-msgid "Open %d HDF5 files"
-msgstr "Ouvrir %d fichiers HDF5"
-
-msgid "Open HDF5 file"
-msgstr "Ouvrir un fichier HDF5"
-
-#, python-format
-msgid "New %s"
-msgstr "Créer un nouvel objet %s"
-
-msgid "Signal was recreated."
-msgstr "Le signal a été recréé."
-
-msgid "Image was recreated."
-msgstr "L'image a été recréée."
-
-msgid "Auto-recompute on edit"
-msgstr "Recalcul automatique lors de l'édition"
-
-msgid "Automatically re-run processing when parameters are modified"
-msgstr "Relancer automatiquement le traitement à chaque modification de paramètre"
-
-msgid "Analysis Parameters"
-msgstr "Paramètres d'analyse"
-
-msgid "Analysis metadata is incomplete."
-msgstr "Les métadonnées d'analyse sont incomplètes."
-
-#, python-format
-msgid ""
-"Failed to recompute analysis:\n"
-"%s"
-msgstr ""
-"Échec du recalcul de l'analyse :\n"
-"%s"
-
-msgid "Failed to recompute analysis."
-msgstr "Échec du recalcul de l'analyse."
-
-msgid "Analysis was recomputed."
-msgstr "L'analyse a été recalculée."
-
-msgid "Pattern help"
-msgstr "Aide sur le motif"
-
-msgid "Duplicate object or group"
-msgstr "Dupliquer l'objet ou le groupe"
-
-msgid "Remove selected objects"
-msgstr "Supprimer les objets sélectionnés"
-
-#, python-format
-msgid "New group \"%s\""
-msgstr "Nouveau groupe \"%s\""
-
-msgid "Rename selected object or group"
-msgstr "Renommer l'objet ou le groupe sélectionné"
-
-#, python-format
-msgid "Set current object title to \"%s\""
-msgstr "Définir le titre de l'objet courant à \"%s\""
-
-#, python-format
-msgid "Load from directory \"%s\""
-msgstr "Charger depuis le répertoire \"%s\""
-
-#, python-format
-msgid "Load from %d files"
-msgstr "Charger depuis %d fichiers"
-
-#, python-format
-msgid "Load \"%s\""
-msgstr "Charger \"%s\""
-
-#, python-format
-msgid "Save to %d different files"
-msgstr "Enregistrer dans %d fichiers différents"
-
-#, python-format
-msgid "Save to \"%s\""
-msgstr "Enregistrer dans \"%s\""
-
-msgid "Analysis computation failed."
-msgstr "Le calcul de l'analyse a échoué."
-
-msgid "Failed to recompute analysis"
-msgstr "Échec du recalcul de l'analyse"
-
-msgid "Add object title to plot"
-msgstr "Ajouter le titre de l'objet au graphique"
-
-msgid "Add label with title"
-msgstr "Ajouter une étiquette avec le titre"
-
-#, python-format
-msgid "“%s” has dependent operations but no valid source to reconnect to — downstream results are left unchanged."
-msgstr "« %s » possède des opérations dépendantes mais aucune source valide à laquelle se reconnecter — les résultats en aval restent inchangés."
-
-msgid "Some operations could not be reconnected after deletion:"
-msgstr "Certaines opérations n'ont pas pu être reconnectées après la suppression :"
-
-msgid "Commit edit mode changes?"
-msgstr "Valider les modifications du mode d'édition ?"
-
-msgid ""
-"You are about to exit Edit mode.\n"
-"\n"
-"All parameter changes made during this session will be permanently kept.\n"
-"This action cannot be undone — Restore will no longer be available.\n"
-"\n"
-"Do you want to continue?"
-msgstr ""
-"Vous êtes sur le point de quitter le mode d'édition.\n"
-"\n"
-"Toutes les modifications de paramètres effectuées lors de cette session seront conservées de façon permanente.\n"
-"Cette action est irréversible — la fonction Restaurer ne sera plus disponible.\n"
-"\n"
-"Souhaitez-vous continuer ?"
-
-msgid "Broken processing chain"
-msgstr "Chaîne de traitement rompue"
-
-#, python-format
-msgid ""
-"One or more objects used by the selected processing chain were deleted: the chain is broken and the following entries can no longer be replayed:\n"
-"%s\n"
-"\n"
-"Repair the history by removing the broken actions (and the actions depending on them), then continue with the remaining actions?"
-msgstr ""
-"Un ou plusieurs objets utilisés par la chaîne de traitement sélectionnée ont été supprimés : la chaîne est rompue et les entrées suivantes ne peuvent plus être rejouées :\n"
-"%s\n"
-"\n"
-"Réparer l'historique en supprimant les actions rompues (ainsi que les actions qui en dépendent), puis continuer avec les actions restantes ?"
-
-msgid "Repair and continue"
-msgstr "Réparer et continuer"
-
-msgid "Replay file save"
-msgstr "Rejouer l'enregistrement de fichier"
-
-#, python-format
-msgid ""
-"This action will overwrite the following file(s):\n"
-"%s\n"
-"\n"
-"Replay it?"
-msgstr ""
-"Cette action écrasera le(s) fichier(s) suivant(s) :\n"
-"%s\n"
-"\n"
-"La rejouer ?"
-
-#, python-format
-msgid "Action %s was skipped: its recorded workspace state no longer matches the current workspace."
-msgstr "L'action %s a été ignorée : l'état de l'espace de travail enregistré ne correspond plus à l'espace de travail actuel."
-
-#, python-format
-msgid "Action %s would delete objects that this replay just recomputed and was skipped."
-msgstr "L'action %s supprimerait des objets que ce rejeu vient de recalculer ; elle a été ignorée."
-
-#, python-format
-msgid "Action %s targets objects produced by another session and was skipped."
-msgstr "L'action %s cible des objets produits par une autre session ; elle a été ignorée."
-
-#, python-format
-msgid "Action %s has no recorded pattern and cannot be replayed."
-msgstr "L'action %s n'a pas de motif enregistré et ne peut pas être rejouée."
-
-#, python-format
-msgid "Action %s was skipped: its recorded parameters could not be read from the history file."
-msgstr "L'action %s a été ignorée : ses paramètres enregistrés n'ont pas pu être lus depuis le fichier d'historique."
-
-msgid "History panel"
-msgstr "Panneau d'historique"
-
-msgid "History files"
-msgstr "Fichiers d'historique"
-
-#, python-format
-msgid "Action %s: target panel not found — skipping."
-msgstr "Action %s : panneau cible introuvable — ignorée."
-
-#, python-format
-msgid "Action %s: no recorded mutation target — skipping."
-msgstr "Action %s : aucune cible de mutation enregistrée — ignorée."
-
-#, python-format
-msgid "Action %s: target object(s) no longer exist — skipping."
-msgstr "Action %s : le ou les objets cibles n'existent plus — ignorée."
-
-#, python-format
-msgid "Action %s: %d target object(s) were deleted — applying to the rest."
-msgstr "Action %s : %d objet(s) cible(s) ont été supprimés — appliquée aux autres."
-
-#, python-format
-msgid "Action %s uses pattern %r which is not recomputable yet."
-msgstr "L'action %s utilise le motif %r qui n'est pas encore recalculable."
-
-#, python-format
-msgid "Action %s could not be fully recomputed."
-msgstr "L'action %s n'a pas pu être entièrement recalculée."
-
-#, python-format
-msgid "Recompute failed for action %s: %s"
-msgstr "Échec du recalcul pour l'action %s : %s"
-
-#, python-format
-msgid ""
-"Action %(name)s skipped: plugin '%(loc)s' is missing.\n"
-"Required parameter class: %(param)s\n"
-"Reinstall the plugin to re-enable this action."
-msgstr ""
-"Action %(name)s ignorée : le plugin '%(loc)s' est manquant.\n"
-"Classe de paramètre requise : %(param)s\n"
-"Réinstallez le plugin pour réactiver cette action."
-
-#, python-format
-msgid "Action %s: no recorded output object — skipping."
-msgstr "Action %s : aucun objet de sortie enregistré — ignorée."
-
-#, python-format
-msgid "Action %s: the initial object was deleted and cannot be re-created (no creation parameters)."
-msgstr "Action %s : l'objet initial a été supprimé et ne peut pas être recréé (aucun paramètre de création)."
-
-#, python-format
-msgid "Action %s: creation parameters could not be prepared — skipping."
-msgstr "Action %s : les paramètres de création n'ont pas pu être préparés — ignorée."
-
-#, python-format
-msgid "Action %s: no recorded source object — skipping."
-msgstr "Action %s : aucun objet source enregistré — ignorée."
-
-#, python-format
-msgid "Action %s: no recorded second operand — skipping."
-msgstr "Action %s : aucun second opérande enregistré — ignorée."
-
-#, python-format
-msgid "Action %s: source object(s) were deleted — skipping."
-msgstr "Action %s : le ou les objets source ont été supprimés — ignorée."
-
-#, python-format
-msgid "Action %s: recompute returned %d output(s), expected %d."
-msgstr "Action %s : le recalcul a renvoyé %d sortie(s), %d attendue(s)."
-
-#, python-format
-msgid "Action %s: %d analysed object(s) were deleted — skipping."
-msgstr "Action %s : %d objet(s) analysé(s) ont été supprimés — ignorée."
-
-msgid "Cascade recompute"
-msgstr "Recalcul en cascade"
-
-msgid "Some downstream actions could not be recomputed:"
-msgstr "Certaines actions en aval n'ont pas pu être recalculées :"
-
-msgid "Record mode"
-msgstr "Mode d'enregistrement"
-
-msgid "New session"
-msgstr "Nouvelle session"
-
-msgid "Start a new history session"
-msgstr "Démarrer une nouvelle session d'historique"
-
-msgid "Open history file..."
-msgstr "Ouvrir un fichier d'historique..."
-
-msgid "Open history from a standalone .dlhist file"
-msgstr "Ouvrir l'historique depuis un fichier .dlhist autonome"
-
-msgid "Save history file..."
-msgstr "Enregistrer un fichier d'historique..."
-
-msgid "Save history to a standalone .dlhist file"
-msgstr "Enregistrer l'historique dans un fichier .dlhist autonome"
-
-msgid "Duplicate selected history action/session"
-msgstr "Dupliquer l'action ou la session d'historique sélectionnée"
-
-msgid "Previous step"
-msgstr "Étape précédente"
-
-msgid "Select the previous action in the current session"
-msgstr "Sélectionner l'action précédente dans la session courante"
-
-msgid "Next step"
-msgstr "Étape suivante"
-
-msgid "Select the next action in the current session"
-msgstr "Sélectionner l'action suivante dans la session courante"
-
-msgid "Remove actions incompatible with the current workspace"
-msgstr "Supprimer les actions incompatibles avec l'espace de travail courant"
-
-msgid "Replay"
-msgstr "Rejouer"
-
-msgid "Replay the selection silently (no parameter dialogs)"
-msgstr "Rejouer la sélection silencieusement (sans boîtes de dialogue de paramètres)"
-
-msgid "Step-by-step"
-msgstr "Pas à pas"
-
-msgid "Replay the selection step by step, editing parameters at each step"
-msgstr "Rejouer la sélection pas à pas, en modifiant les paramètres à chaque étape"
-
-msgid "New image"
-msgstr "Nouvelle image"
-
-msgid "New signal"
-msgstr "Nouveau signal"
-
-#, python-format
-msgid "Remove ROI '%s'"
-msgstr "Supprimer la ROI '%s'"
-
-msgid "History sessions"
-msgstr "Sessions d'historique"
-
-msgid "New object or file"
-msgstr "Nouvel objet ou fichier"
-
-msgid "Ask"
-msgstr "Demander"
-
-msgid "Always start a new session"
-msgstr "Toujours démarrer une nouvelle session"
-
-msgid "Continue in the current session"
-msgstr "Continuer dans la session courante"
-
-msgid "Behavior when a new object or file is added to a populated history session."
-msgstr "Comportement lorsqu'un nouvel objet ou fichier est ajouté à une session d'historique non vide."
-
-msgid "Plugin-created object"
-msgstr "Objet créé par un plugin"
-
-msgid "Behavior when a plugin adds an object to a populated history session."
-msgstr "Comportement lorsqu'un plugin ajoute un objet à une session d'historique non vide."
-
-msgid "Plugin multi-load"
-msgstr "Chargement multiple par un plugin"
-
-msgid "Ask once"
-msgstr "Demander une seule fois"
-
-msgid "Start a new session"
-msgstr "Démarrer une nouvelle session"
-
-msgid "Behavior when a plugin loads multiple objects into a populated history session."
-msgstr "Comportement lorsqu'un plugin charge plusieurs objets dans une session d'historique non vide."
-
-msgid "Save history file"
-msgstr "Enregistrer un fichier d'historique"
-
-msgid "Open history file"
-msgstr "Ouvrir un fichier d'historique"
-
-msgid "Imported"
-msgstr "Importé"
-
-#, python-format
-msgid "Failed to deserialize history DataSet kwarg %r."
-msgstr "Échec de la désérialisation de l'argument DataSet de l'historique %r."
-
-#, python-format
-msgid "Failed to deserialize history ROI kwarg %r."
-msgstr "Échec de la désérialisation de l'argument ROI de l'historique %r."
-
-#, python-format
-msgid "Failed to deserialize history DataSet-list kwarg %r."
-msgstr "Échec de la désérialisation de l'argument DataSet-list de l'historique %r."
-
-msgid "Show details"
-msgstr "Afficher les détails"
-
-msgid "Hide details"
-msgstr "Masquer les détails"
-
-msgid "Date and time"
-msgstr "Date et heure"
-
-msgid "Action is compatible with the current workspace state."
-msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
-
-msgid "Action is not compatible with the current workspace state."
-msgstr "L'action n'est pas compatible avec l'état actuel de l'espace de travail."
-
-msgid "This step is outdated: replay it to refresh its result."
-msgstr "Cette étape est obsolète : rejouez-la pour actualiser son résultat."
-
-msgid "Active recording session."
-msgstr "Session d'enregistrement active."
-
-msgid "Signal"
-msgstr "Signal"
-
-msgid "Shape"
-msgstr "Forme"
-
-msgid "Image"
-msgstr "Image"
-
-msgid "Dimensions"
-msgstr "Dimensions"
