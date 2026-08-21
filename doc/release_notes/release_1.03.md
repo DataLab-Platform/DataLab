@@ -125,11 +125,17 @@ and Image panels (implements
 
 ### 🔄 Changes ###
 
+**Portable plot annotations:**
+
+* Plot annotations are now stored in a renderer-independent format shared with DataLab-Web, so annotations in workspaces and `.dlabann` files are no longer tied to PlotPy
+* Existing PlotPy annotations remain readable and are converted only after an annotation edit is accepted; simply opening a workspace or cancelling the editor leaves its data unchanged
+* Annotation identifiers, lock state, custom metadata and extension data are preserved across edits, while unknown third-party payloads are retained without modification
+
 **DataLab now builds on SigimaX:**
 
 * All the generic, application-level parts of DataLab (main window skeleton, configuration system, dockable plot widgets, HDF5 workspace and browser, log viewer, splash screen, status bar, scientific dialogs and PlotPy adapters) have been extracted into a new reusable library, **SigimaX**, and DataLab now derives from it instead of maintaining its own copies (implements [Issue #182](https://github.com/DataLab-Platform/DataLab/issues/182))
 * This is an internal refactoring: existing workflows, settings and files are unchanged, but it considerably reduces duplicated code and makes it possible to build other Qt scientific applications on the same foundation
-* As a consequence, DataLab now requires SigimaX ≥ 1.0.1, and its minimum requirements are aligned with it: Sigima ≥ 1.2.0, guidata ≥ 3.15.0 and PlotPy ≥ 2.11.0
+* As a consequence, DataLab now requires SigimaX ≥ 1.1.0, and its minimum requirements are aligned with it: Sigima ≥ 1.3.0, guidata ≥ 3.15.0 and PlotPy ≥ 2.11.0
 
 **Configuration system:**
 
