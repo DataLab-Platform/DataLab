@@ -29,6 +29,7 @@ from datalab.gui.processor.base import (
     insert_processing_parameters,
 )
 from datalab.history import HistoryAction
+from datalab.history.core import decode_roi
 from datalab.history.effects import AnalysisEffects, capture_effects, merge_effects
 from datalab.objectmodel import get_uuid
 
@@ -855,6 +856,10 @@ def recompute_1_to_0_in_place(panel: HistoryPanel, action: HistoryAction) -> boo
     copied and a failed attempt rolls back exactly those keys (plus any key
     the attempt created), leaving unrelated metadata untouched. Legacy
     actions without a manifest fall back to a full-metadata snapshot.
+    Sources whose manifest records a pre-analysis ROI (``roi_before``) are
+    restored to it and re-run with first-run semantics, regenerating
+    detection ROIs; user ROI edits recorded as later mutation actions are
+    then re-applied by the replay/cascade sequence.
     On success, the freshly captured effects are merged into the manifest.
     """
     panel_data = hchain.resolve_panel_for_action(panel, action)
@@ -877,10 +882,16 @@ def recompute_1_to_0_in_place(panel: HistoryPanel, action: HistoryAction) -> boo
         for uuid, obj in zip(sources, source_objs)
     ]
     captured: dict[str, AnalysisEffects] = {}
+    roi_snapshots: dict[str, Any] = {}
 
     def rollback() -> None:
         for uuid, obj, (saved, absent) in zip(sources, source_objs, snapshots):
             _restore_analysis_source(obj, saved, absent, captured.get(uuid))
+        # Undo the pre-analysis ROI restoration after the metadata restore so
+        # the ROI setter leaves both metadata and cache consistent.
+        for uuid, obj in zip(sources, source_objs):
+            if uuid in roi_snapshots:
+                obj.roi = roi_snapshots[uuid]
 
     try:
         for uuid, src_obj in zip(sources, source_objs):
@@ -888,6 +899,17 @@ def recompute_1_to_0_in_place(panel: HistoryPanel, action: HistoryAction) -> boo
             plugin_origin = action.plugin_origin or (
                 analysis_parameters.plugin_origin if analysis_parameters else None
             )
+            # Restore the recorded pre-analysis ROI so the detection re-runs
+            # on the same region as the first run, with ROI creation enabled
+            # ("" encodes "no ROI before", None means legacy/not recorded).
+            roi_before = AnalysisEffects.from_dict(
+                (action.effects or {}).get(uuid) or {}
+            ).roi_before
+            if roi_before is not None:
+                roi_snapshots[uuid] = (
+                    src_obj.roi.copy() if src_obj.roi is not None else None
+                )
+                src_obj.roi = decode_roi(roi_before) if roi_before else None
             with capture_effects(src_obj) as effects:
                 # Register the (mutable) effects before running so rollback
                 # sees them even when the recompute raises
@@ -897,6 +919,7 @@ def recompute_1_to_0_in_place(panel: HistoryPanel, action: HistoryAction) -> boo
                     src_obj,
                     param,
                     plugin_origin=plugin_origin,
+                    first_run_side_effects=roi_before is not None,
                 )
             if not success:
                 rollback()

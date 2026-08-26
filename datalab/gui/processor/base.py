@@ -1608,6 +1608,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         obj: SignalObj | ImageObj,
         param: gds.DataSet | None = None,
         plugin_origin: dict[str, Any] | None = None,
+        first_run_side_effects: bool = False,
     ) -> bool:
         """Recompute a 1-to-0 analysis on ``obj`` in place.
 
@@ -1620,6 +1621,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             obj: Object whose analysis must be refreshed.
             param: Analysis parameters (optional).
             plugin_origin: Optional plugin origin descriptor.
+            first_run_side_effects: If True, keep first-run-only side effects
+             enabled (e.g. ``create_rois``) so detection ROIs are regenerated.
+             Used by the history replay engine after restoring the object's
+             pre-analysis ROI; the default (False) protects user-edited ROIs.
 
         Returns:
             True if the analysis result was refreshed successfully.
@@ -1627,7 +1632,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         # Work on a local copy so callers' kwargs are never mutated, and
         # disable side effects that must only run on first execution
         param = copy.deepcopy(param)
-        disable_first_run_side_effects(param)
+        if not first_run_side_effects:
+            disable_first_run_side_effects(param)
         paramclass_name = type(param).__name__ if param is not None else None
         feature = self.get_feature(
             func_name,
