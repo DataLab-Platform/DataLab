@@ -294,8 +294,6 @@ def prompt_edit_action_params(
     """Open the parameter dialog for *action* according to its pattern."""
     edit = prepare_action_param_edit(action)
     if edit is None:
-        if action_has_roi_params(action):
-            inform_roi_edit_unsupported(panel)
         return None
     if not edit.dialog_target.edit(parent=panel.mainwindow):
         return False
@@ -490,6 +488,10 @@ def run_replay_actions(
     ordered = order_selected_actions(panel, actions)
     if not ordered:
         return
+    # Non-editable actions (ROIs, interactive fits) only report their refusal
+    # when a single action was selected: replaying a session or a batch keeps
+    # their recorded parameters silently.
+    report_non_editable = prompt and len(ordered) == 1
     with panel.runtime.execution.replaying_edits() as started:
         if not started:
             return
@@ -528,6 +530,12 @@ def run_replay_actions(
                 continue
             if prompt:
                 result = prompt_edit_action_params(panel, action)
+                if (
+                    result is None
+                    and report_non_editable
+                    and action_has_roi_params(action)
+                ):
+                    inform_roi_edit_unsupported(panel)
                 if result is False:
                     for selected_action in ordered:
                         kwargs, saved_kwargs = entry_states[selected_action.uuid]
@@ -619,7 +627,9 @@ def run_replay_actions(
                     )
                     with panel.replaying(), panel.output_suppressed():
                         action.replay(
-                            panel.mainwindow, restore_selection=True, edit=prompt
+                            panel.mainwindow,
+                            restore_selection=True,
+                            edit=report_non_editable,
                         )
                     if before_ids is not None:
                         new_uuids = [
