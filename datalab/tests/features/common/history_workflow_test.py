@@ -1359,7 +1359,7 @@ def test_roi_mutation_recording_replay_and_partial_targets() -> None:
 
 
 def test_cascade_reapplies_roi_mutation() -> None:
-    """Cascade recompute re-applies, blocks or edits a downstream ROI mutation."""
+    """Cascade recompute re-applies or blocks a downstream ROI mutation."""
     with datalab_test_app_context(history=True) as win:
         history, panel = win.historypanel, win.signalpanel
         history.toggle_record_mode(True)
@@ -1405,18 +1405,18 @@ def test_cascade_reapplies_roi_mutation() -> None:
         compute_action.is_stale = False
         history.runtime.execution.cascade_warnings.clear()
 
-        # An edited mutation payload triggers a downstream cascade recompute
-        def edit_payload(_mainwindow, restore_selection=True, edit=False):
-            del restore_selection
-            assert edit is True
-            mutation_action.kwargs["payload"] = mutation_action.kwargs["payload"].copy()
-
-        with (
-            patch.object(mutation_action, "replay", side_effect=edit_payload),
-            patch.object(hrec, "recompute_cascade") as cascade,
-        ):
+        # Edit mode is refused for ROI mutations: the payload is kept as is
+        # and no downstream cascade is triggered
+        output.roi = None
+        payload_before = mutation_action.kwargs["payload"]
+        with patch.object(hrec, "recompute_cascade") as cascade:
             hireplay.replay_actions(history, [mutation_action], prompt=True)
-        cascade.assert_called_once_with(history, mutation_action)
+        cascade.assert_not_called()
+        assert mutation_action.kwargs["payload"] is payload_before
+        assert output.roi is not None
+        assert numpy_to_json_safe(output.roi.to_dict()) == numpy_to_json_safe(
+            payload_before.to_dict()
+        )
 
 
 def test_mutation_root_has_downstream_computes() -> None:
