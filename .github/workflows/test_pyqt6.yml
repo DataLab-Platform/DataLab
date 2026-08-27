@@ -52,18 +52,21 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install ruff pytest httpx
         pip install PyQt6
-        if [ "${{ github.ref_name }}" = "develop" ]; then
+        if [ "${{ github.base_ref || github.ref_name }}" = "develop" ]; then
            # Clone and install development versions of key dependencies with editable install
            cd ..
            git clone --depth 1 https://github.com/PlotPyStack/PythonQwt.git
            git clone --depth 1 --branch develop https://github.com/PlotPyStack/guidata.git
            git clone --depth 1 --branch develop https://github.com/PlotPyStack/plotpy.git
-           git clone --depth 1 --branch develop https://github.com/DataLab-Platform/sigima.git
+           DEPENDENCY_BRANCH="${{ github.head_ref || github.ref_name }}"
+           git clone --depth 1 --branch "$DEPENDENCY_BRANCH" https://github.com/DataLab-Platform/sigima.git || git clone --depth 1 --branch develop https://github.com/DataLab-Platform/sigima.git
+           git clone --depth 1 --branch "$DEPENDENCY_BRANCH" https://github.com/DataLab-Platform/SigimaX.git || git clone --depth 1 --branch develop https://github.com/DataLab-Platform/SigimaX.git
            cd DataLab
            pip install -e ../guidata
            pip install -e ../PythonQwt
            pip install -e ../plotpy
            pip install -e ../sigima
+           pip install -e ../SigimaX --no-deps
            # Install tomli for TOML parsing (safe if already present)
            pip install tomli
            # Extract dependencies and save to file, then install
@@ -71,7 +74,7 @@ jobs:
            pip install -r deps.txt
            # Install DataLab without dependencies
            pip install --no-deps .
-        elif [ "${{ github.ref_name }}" = "release" ]; then
+        elif [ "${{ github.base_ref || github.ref_name }}" = "release" ]; then
            # Clone dependencies from release branches (with fallback to main/master)
            cd ..
            # Try cloning PythonQwt from main or master
