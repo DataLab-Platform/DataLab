@@ -27,7 +27,8 @@ from uuid import uuid4
 
 import sigima.proc.image
 import sigima.proc.signal
-from guidata.dataset.datatypes import DataSet, DataSetGroup
+from guidata.dataset.datatypes import DataSet
+from qtpy import QtWidgets as QW
 
 from datalab.config import _
 from datalab.env import execenv
@@ -572,11 +573,10 @@ class HistoryAction(ObjItf):
 
         Args:
             mainwindow: DataLab's main window
-            edit: If True (and not in unattended mode), open the ROI parameter
-             dialog before applying so the recorded payload can be modified.
-             Deletion payloads (None) have nothing to edit and are applied
-             directly. If the dialog is cancelled, the recorded payload is
-             applied as-is.
+            edit: If True, the replay was requested in edit mode. Regions of
+             interest are defined with the interactive ROI editor, which
+             cannot be reopened with the recorded payload, so nothing is
+             edited and the recorded ROI is re-applied as is.
             refresh: If True (default), refresh the panel selection and plot
              after applying the mutation. The cascade engine passes False as
              it refreshes each target itself.
@@ -610,14 +610,16 @@ class HistoryAction(ObjItf):
         if not targets:
             return []
         if edit and payload is not None and not execenv.unattended:
-            # Edit mode: let the user adjust the ROI payload before applying.
-            obj = panel_data.objmodel[targets[0]]
-            params = payload.to_params(obj)
-            group = DataSetGroup(params, title=_("Regions of Interest"))
-            if group.edit(parent=mainwindow):
-                payload = payload.__class__.from_params(obj, params)
-                self.snapshot_kwargs()
-                self.kwargs["payload"] = payload
+            QW.QMessageBox.information(
+                mainwindow,
+                _("Recompute regions of interest"),
+                _(
+                    "Regions of interest cannot be edited from the History "
+                    "panel: the ROI editor cannot be reopened with the "
+                    "recorded parameters. The recorded regions of interest "
+                    "are kept as is."
+                ),
+            )
         for uuid in targets:
             obj = panel_data.objmodel[uuid]
             obj.roi = payload.copy() if payload is not None else None

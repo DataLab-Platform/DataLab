@@ -45,6 +45,7 @@ from datalab.history.action import HistoryAction
 from datalab.history.core import (
     HISTORY_ACTION_SCHEMA_VERSION,
     HISTORY_SCHEMA_VERSION,
+    decode_roi,
     numpy_to_json_safe,
 )
 from datalab.history.effects import AnalysisEffects, capture_effects, merge_effects
@@ -1000,10 +1001,13 @@ def test_capture_effects_metadata_and_roi_diff() -> None:
     with capture_effects(obj) as effects:
         obj.roi = create_image_roi("rectangle", [2, 2, 5, 5])
     assert effects.roi_modified is True
+    # No ROI existed before: recorded as the restorable "no ROI" sentinel
+    assert effects.roi_before == ""
     # An existing ROI left untouched by the analysis is not modified
     with capture_effects(obj) as effects:
         obj.metadata["another_key"] = 0
     assert effects.roi_modified is False
+    assert effects.roi_before is None
     # Re-assigning an equal ROI is not a modification (relies on ROI equality)
     with capture_effects(obj) as effects:
         obj.roi = create_image_roi("rectangle", [2, 2, 5, 5])
@@ -1012,6 +1016,11 @@ def test_capture_effects_metadata_and_roi_diff() -> None:
     with capture_effects(obj) as effects:
         obj.roi = create_image_roi("rectangle", [3, 3, 6, 6])
     assert effects.roi_modified is True
+    # The pre-execution ROI payload round-trips through encode/decode
+    restored = decode_roi(effects.roi_before)
+    assert numpy_to_json_safe(restored.to_dict()) == numpy_to_json_safe(
+        create_image_roi("rectangle", [2, 2, 5, 5]).to_dict()
+    )
 
 
 def test_analysis_effects_round_trip_merge_and_persistence() -> None:
@@ -1029,6 +1038,11 @@ def test_analysis_effects_round_trip_merge_and_persistence() -> None:
     }
     assert AnalysisEffects.from_dict(payload) == effects
     assert AnalysisEffects.from_dict({}) == AnalysisEffects()
+    # roi_before round-trips only when recorded (legacy payloads unchanged)
+    recorded = AnalysisEffects(roi_modified=True, roi_before="")
+    recorded_payload = recorded.to_dict()
+    assert "roi_before" in recorded_payload
+    assert AnalysisEffects.from_dict(recorded_payload) == recorded
     # Merge semantics: added-stays-added, sticky roi_modified, sorted output
     new = AnalysisEffects(
         metadata_added=["b", "a"], metadata_replaced=["c"], roi_modified=False
@@ -1041,6 +1055,15 @@ def test_analysis_effects_round_trip_merge_and_persistence() -> None:
     assert merged.metadata_added == ["result"]
     assert merged.metadata_replaced == ["params"]
     assert merged.roi_modified is True
+    # roi_before is first-run sticky: recompute captures never overwrite it
+    previous = AnalysisEffects(roi_modified=True, roi_before="first-run-payload")
+    recomputed = AnalysisEffects(roi_modified=True, roi_before="recompute-payload")
+    merged = merge_effects(previous, recomputed)
+    assert merged.roi_before == "first-run-payload"
+    # A legacy previous manifest adopts the freshly recorded roi_before
+    legacy_previous = AnalysisEffects(roi_modified=True)
+    merged = merge_effects(legacy_previous, recomputed)
+    assert merged.roi_before == "recompute-payload"
     # HDF5 round-trip on an action, with legacy tolerance (no effects group)
     action = build_history_action()
     action.effects = {"source-uuid": payload}

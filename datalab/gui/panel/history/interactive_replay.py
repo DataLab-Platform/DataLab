@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING, Any
 
 import guidata.dataset as gds
 from qtpy import QtWidgets as QW
+from sigima.objects.base import BaseROIParam
 
 from datalab.config import _
 from datalab.env import execenv
@@ -220,9 +221,51 @@ def _entry_still_in_history(
     return hchain.find_parent_session(panel, entry) is not None
 
 
+def action_has_roi_params(action: HistoryAction) -> bool:
+    """Return whether ``action`` was recorded with region-of-interest parameters.
+
+    Args:
+        action: Recorded action to inspect
+
+    Returns:
+        True if at least one recorded parameter is a ROI parameter.
+    """
+    values: list[Any] = []
+    for key in ("param", "params"):
+        value = action.kwargs.get(key)
+        if isinstance(value, (list, tuple)):
+            values.extend(value)
+        elif value is not None:
+            values.append(value)
+    return any(isinstance(value, BaseROIParam) for value in values)
+
+
+def inform_roi_edit_unsupported(panel: HistoryPanel) -> None:
+    """Tell the user that ROI parameters cannot be edited from the history.
+
+    Args:
+        panel: History panel instance
+    """
+    if execenv.unattended:
+        return
+    QW.QMessageBox.information(
+        panel.mainwindow,
+        _("Recompute regions of interest"),
+        _(
+            "Regions of interest cannot be edited from the History panel: "
+            "the ROI editor cannot be reopened with the recorded parameters. "
+            "The recorded regions of interest are kept as is."
+        ),
+    )
+
+
 def prepare_action_param_edit(action: HistoryAction) -> ActionParamEdit | None:
     """Prepare the editable parameter copy for ``action``."""
     result = None
+    if action_has_roi_params(action):
+        # ROIs are defined with the interactive ROI editor, which cannot be
+        # reopened with the recorded parameters.
+        return None
     if (
         action.kind == HistoryAction.KIND_UI
         and action.method_name in HistoryAction.UI_CREATION_METHODS
@@ -445,6 +488,10 @@ def run_replay_actions(
     ordered = order_selected_actions(panel, actions)
     if not ordered:
         return
+    # Non-editable actions (ROIs, interactive fits) only report their refusal
+    # when a single action was selected: replaying a session or a batch keeps
+    # their recorded parameters silently.
+    report_non_editable = prompt and len(ordered) == 1
     with panel.runtime.execution.replaying_edits() as started:
         if not started:
             return
@@ -483,6 +530,12 @@ def run_replay_actions(
                 continue
             if prompt:
                 result = prompt_edit_action_params(panel, action)
+                if (
+                    result is None
+                    and report_non_editable
+                    and action_has_roi_params(action)
+                ):
+                    inform_roi_edit_unsupported(panel)
                 if result is False:
                     for selected_action in ordered:
                         kwargs, saved_kwargs = entry_states[selected_action.uuid]
@@ -572,10 +625,11 @@ def run_replay_actions(
                         if is_load_action
                         else None
                     )
-                    payload_before = action.kwargs.get("payload")
                     with panel.replaying(), panel.output_suppressed():
                         action.replay(
-                            panel.mainwindow, restore_selection=True, edit=prompt
+                            panel.mainwindow,
+                            restore_selection=True,
+                            edit=report_non_editable,
                         )
                     if before_ids is not None:
                         new_uuids = [
@@ -590,16 +644,6 @@ def run_replay_actions(
                             # recorded outputs would break duplicate detection
                             # and downstream reconnection.
                             panel.register_action_outputs(action, new_uuids)
-                    if (
-                        prompt
-                        and action.kind == HistoryAction.KIND_MUTATION
-                        and action.kwargs.get("payload") is not payload_before
-                    ):
-                        # The mutation payload was edited in the dialog:
-                        # recompute the downstream closure (seeded from the
-                        # mutation targets, see ``get_downstream_actions``).
-                        panel.tree.refresh_action_item(action)
-                        hrec.recompute_cascade(panel, action)
                     continue
                 if hchain.action_consumes_any(action, blocked_outputs):
                     blocked_outputs.update(

@@ -949,8 +949,7 @@ def test_1_to_0_failure_rolls_back_all_source_metadata() -> None:
 
         call_count = 0
 
-        def fail_second_analysis(_func_name, source, _param, plugin_origin=None):
-            del plugin_origin
+        def fail_second_analysis(_func_name, source, _param, **_kwargs):
             nonlocal call_count
             call_count += 1
             source.metadata["temporary_analysis"] = call_count
@@ -990,8 +989,7 @@ def test_1_to_0_failure_rolls_back_all_source_metadata() -> None:
         img.metadata["user_marker"] = 123
         effects_before = copy.deepcopy(img_action.effects)
 
-        def failing_recompute(_func_name, obj, _param, plugin_origin=None):
-            del plugin_origin
+        def failing_recompute(_func_name, obj, _param, **_kwargs):
             obj.metadata[geometry_key] = "recreated-by-failed-attempt"
             obj.metadata[present_key] = "corrupted"
             raise RuntimeError("forced recompute failure")
@@ -1236,6 +1234,14 @@ def test_analysis_effects_manifest_populated_and_recomputed() -> None:
             for key in manifest.metadata_added
         ), f"Expected a Geometry_*_dict key, got {manifest.metadata_added}"
         assert manifest.roi_modified is True, "Detection ROIs must flag roi_modified"
+        # The image had no ROI before the detection: recorded as "" sentinel
+        assert manifest.roi_before == ""
+        assert img.roi is not None, "Detection must have created ROIs"
+        roi_dict_first = numpy_to_json_safe(img.roi.to_dict())
+        geometry_key = next(
+            key for key in manifest.metadata_added if key.startswith("Geometry_")
+        )
+        geometry_first = copy.deepcopy(img.metadata[geometry_key])
         added_before = manifest.metadata_added
         # A history recompute keeps first-run keys under metadata_added
         assert hrec.recompute_1_to_0_in_place(history, action) is True
@@ -1244,6 +1250,47 @@ def test_analysis_effects_manifest_populated_and_recomputed() -> None:
             "First-run keys must stay under metadata_added after recompute"
         )
         assert not set(added_before) & set(manifest.metadata_replaced)
+        # The recompute restored the pre-analysis ROI (none) and re-ran the
+        # detection with first-run semantics: ROIs and results are identical
+        # to the first run instead of being detected inside their own ROIs
+        assert manifest.roi_before == ""
+        assert img.roi is not None, "Recompute must regenerate detection ROIs"
+        assert numpy_to_json_safe(img.roi.to_dict()) == roi_dict_first, (
+            "Regenerated ROIs must match the first run"
+        )
+        assert numpy_to_json_safe(img.metadata[geometry_key]) == numpy_to_json_safe(
+            geometry_first
+        ), "Recomputed detection results must match the first run"
+
+
+def test_replay_reapplies_user_roi_edits_after_detection_recompute() -> None:
+    """Regenerate detection ROIs on recompute, then re-apply user ROI edits."""
+    with datalab_test_app_context(console=False, history=True) as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.imagepanel
+        img = create_peak_image()
+        panel.add_object(img)
+        det_param = sigima.params.Peak2DDetectionParam.create(
+            create_rois=True, threshold=0.5
+        )
+        with Conf.show_result_dialog.context(False):
+            panel.processor.run_feature("peak_detection", det_param)
+        detection = history[len(history)]
+        assert img.roi is not None
+        # User deletes the detection ROIs: recorded as a mutation entry
+        panel.objview.select_objects([get_uuid(img)])
+        panel.processor.delete_regions_of_interest()
+        assert img.roi is None
+        mutation = history[len(history)]
+        assert mutation.kind == HistoryAction.KIND_MUTATION
+        # Recomputing the detection regenerates the ROIs from the recorded
+        # pre-analysis state (instead of re-detecting inside the ROIs)...
+        assert hrec.recompute_1_to_0_in_place(history, detection) is True
+        assert img.roi is not None, "Detection recompute must regenerate ROIs"
+        # ...and replaying the recorded sequence re-applies the user's edit
+        mutation.replay(win, restore_selection=True, edit=False)
+        assert img.roi is None, "Replay must re-apply the user's ROI edit"
 
 
 def test_roi_mutation_recording_replay_and_partial_targets() -> None:
@@ -1312,7 +1359,7 @@ def test_roi_mutation_recording_replay_and_partial_targets() -> None:
 
 
 def test_cascade_reapplies_roi_mutation() -> None:
-    """Cascade recompute re-applies, blocks or edits a downstream ROI mutation."""
+    """Cascade recompute re-applies or blocks a downstream ROI mutation."""
     with datalab_test_app_context(history=True) as win:
         history, panel = win.historypanel, win.signalpanel
         history.toggle_record_mode(True)
@@ -1358,18 +1405,18 @@ def test_cascade_reapplies_roi_mutation() -> None:
         compute_action.is_stale = False
         history.runtime.execution.cascade_warnings.clear()
 
-        # An edited mutation payload triggers a downstream cascade recompute
-        def edit_payload(_mainwindow, restore_selection=True, edit=False):
-            del restore_selection
-            assert edit is True
-            mutation_action.kwargs["payload"] = mutation_action.kwargs["payload"].copy()
-
-        with (
-            patch.object(mutation_action, "replay", side_effect=edit_payload),
-            patch.object(hrec, "recompute_cascade") as cascade,
-        ):
+        # Edit mode is refused for ROI mutations: the payload is kept as is
+        # and no downstream cascade is triggered
+        output.roi = None
+        payload_before = mutation_action.kwargs["payload"]
+        with patch.object(hrec, "recompute_cascade") as cascade:
             hireplay.replay_actions(history, [mutation_action], prompt=True)
-        cascade.assert_called_once_with(history, mutation_action)
+        cascade.assert_not_called()
+        assert mutation_action.kwargs["payload"] is payload_before
+        assert output.roi is not None
+        assert numpy_to_json_safe(output.roi.to_dict()) == numpy_to_json_safe(
+            payload_before.to_dict()
+        )
 
 
 def test_mutation_root_has_downstream_computes() -> None:
