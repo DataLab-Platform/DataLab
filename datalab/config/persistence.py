@@ -479,6 +479,12 @@ class _LegacyConfigReader(AppUserConfig):
 if not isinstance(_confmod.CONF, DataLabUserConfig):
     _confmod.CONF = DataLabUserConfig({})
 
+# The configuration directory name only depends on the application version, so it is
+# bound as soon as the backend is installed: ``get_config_path`` may be called at
+# import time - e.g. by ``datalab.plugins`` - long before ``initialize()`` has run, and
+# an unnamed guidata ``UserConfig`` would silently resolve to ``~/.none``.
+_confmod.CONF.set_application(get_config_app_name(), CONF_VERSION, load=False)
+
 
 def atomic_save_configuration(config: AppUserConfig) -> None:
     """Atomically write a configuration backend to its target filename."""

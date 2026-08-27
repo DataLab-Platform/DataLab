@@ -5,7 +5,10 @@ Unit tests for the DataLab configuration persistence layer
 (:mod:`datalab.config.persistence`).
 """
 
+import os
 import shutil
+import subprocess
+import sys
 from pathlib import Path
 
 import guidata.dataset as gds
@@ -270,3 +273,36 @@ def test_invalid_dataset_option_is_removed_on_load() -> None:
     assert not conf.has_option(section, ini_key)
     assert options.sig_shape_param.get() is None
     assert not options.is_option_initialized("sig_shape_param")
+
+
+def test_config_app_name_is_bound_at_import_time(tmp_path) -> None:
+    """Import-time consumers resolve paths under the application directory.
+
+    ``datalab.plugins`` resolves its default path when imported, which happens long
+    before ``initialize()`` runs: an unnamed backend would silently relocate user
+    plugins to ``~/.none/plugins``. A fresh interpreter is required, as the import
+    order cannot be reproduced in the current one.
+    """
+    env = dict(
+        os.environ,
+        HOME=str(tmp_path),
+        USERPROFILE=str(tmp_path),
+        XDG_CONFIG_HOME=str(tmp_path),
+        QT_QPA_PLATFORM="offscreen",
+    )
+    code = (
+        "import datalab.plugins;"
+        "from datalab.config.appinfo import get_config_app_name;"
+        "print(datalab.plugins.PLUGINS_DEFAULT_PATH);"
+        "print(get_config_app_name())"
+    )
+    stdout = subprocess.run(
+        [sys.executable, "-c", code],
+        env=env,
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout
+    plugin_path, app_name = stdout.splitlines()[-2:]
+
+    assert Path(plugin_path).parent.name == f".{app_name}"
