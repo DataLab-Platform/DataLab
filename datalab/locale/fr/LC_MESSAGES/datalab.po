@@ -4390,3 +4390,9 @@ msgstr "Type de données cible"
 #, python-format
 msgid "Skipping export: object %r no longer exists."
 msgstr "Export ignoré : l'objet %r n'existe plus."
+
+msgid "RAW image import"
+msgstr "Importation d'image RAW"
+
+msgid "Open all RAW files in the same folder"
+msgstr "Ouvrir tous les fichiers RAW du même dossier"

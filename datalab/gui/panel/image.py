@@ -8,6 +8,8 @@
 
 from __future__ import annotations
 
+import copy
+import os
 import os.path as osp
 from typing import TYPE_CHECKING, Type
 from weakref import ReferenceType, ref
@@ -24,7 +26,12 @@ from plotpy.tools import (
     AnnotatedSegmentTool,
     LabelTool,
 )
-from sigima.io import ImageExportParam, get_supported_export_dtypes, write_image
+from sigima.io import (
+    ImageExportParam,
+    RawImageImportParam,
+    get_supported_export_dtypes,
+    write_image,
+)
 from sigima.io.image import ImageIORegistry
 from sigima.objects import ImageDatatypes, ImageObj, ImageROI, NewImageParam
 
@@ -60,6 +67,14 @@ class ImageExportGUIParam(ImageExportParam, title=_("Image export")):
     supported_dtypes: tuple[str, ...] = ("auto",)
     target_dtype = gds.ChoiceItem(
         _("Target data type"), get_image_export_dtype_choices, default="auto"
+    )
+
+
+class RawImageImportGUIParam(RawImageImportParam, title=_("RAW image import")):
+    """RAW image import parameters extended with DataLab batch options."""
+
+    open_all_files = gds.BoolItem(
+        _("Open all RAW files in the same folder"), default=False
     )
 
 
@@ -124,6 +139,65 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
     def get_roieditor_class() -> Type[roieditor.ImageROIEditor]:
         """Return ROI editor class"""
         return roieditor.ImageROIEditor
+
+    def edit_import_parameters(
+        self, filename: str
+    ) -> tuple[bool, RawImageImportGUIParam | None]:
+        """Edit RAW image import parameters when required by the file format.
+
+        Args:
+            filename: Source file name.
+
+        Returns:
+            A tuple containing the confirmation state and optional import parameters.
+        """
+        if osp.splitext(filename)[1].lower() != ".raw":
+            return True, None
+        param = RawImageImportGUIParam()
+        if not param.edit(parent=self.parentWidget()):
+            return False, None
+        return True, param
+
+    def prepare_import_parameters(
+        self, filename: str, param: gds.DataSet | None
+    ) -> list[tuple[str, gds.DataSet | None]]:
+        """Prepare RAW file names and backend parameters for import.
+
+        Args:
+            filename: Selected file name.
+            param: Optional GUI or backend import parameters.
+
+        Returns:
+            File names and aligned backend import parameters.
+        """
+        if not isinstance(param, RawImageImportGUIParam):
+            return [(filename, param)]
+        backend_param = RawImageImportParam()
+        update_dataset(backend_param, param)
+        filenames = [filename]
+        if param.open_all_files:
+            directory = osp.dirname(filename) or "."
+            filenames = sorted(
+                osp.join(directory, name)
+                for name in os.listdir(directory)
+                if osp.isfile(osp.join(directory, name))
+                and osp.splitext(name)[1].lower() == ".raw"
+            )
+        return [(path, copy.deepcopy(backend_param)) for path in filenames]
+
+    def apply_import_parameters(
+        self, objs: list[ImageObj], param: gds.DataSet | None
+    ) -> None:
+        """Apply RAW display semantics without changing imported values.
+
+        Args:
+            objs: Imported image objects.
+            param: Optional format-specific import parameters.
+        """
+        if isinstance(param, RawImageImportParam) and param.white_is_zero:
+            for obj in objs:
+                obj.set_metadata_option("colormap", "gray")
+                obj.set_metadata_option("invert_colormap", True)
 
     def edit_export_parameters(
         self, obj: ImageObj, filename: str
