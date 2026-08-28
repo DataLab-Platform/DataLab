@@ -3516,8 +3516,10 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         plot = dlg.get_plot()
         for item in plot.items:
             item.set_selectable(False)
-        for item in create_adapter_from_object(obj).iterate_shape_items(editable=True):
+        adapter = create_adapter_from_object(obj)
+        for item in adapter.iterate_shape_items(editable=True):
             plot.add_item(item)
+            adapter.annotation_adapter.capture_item_reference(item)
         self.__separate_views[dlg] = obj
         toggle_annotations(edit_annotations)
         if len(oids) > 1:
@@ -3539,13 +3541,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """
         dlg: PlotDialog = self.sender()
         if result == QW.QDialog.DialogCode.Accepted:
+            obj = self.__separate_views[dlg]
+            adapter = create_adapter_from_object(obj)
             rw_items = []
             for item in dlg.get_plot().get_items():
-                if not item.is_readonly() and is_plot_item_serializable(item):
+                if adapter.annotation_adapter.is_annotation_item(
+                    item
+                ) and is_plot_item_serializable(item):
                     rw_items.append(item)
-            obj = self.__separate_views[dlg]
-            # Use the annotation adapter to set annotations in the new format
-            adapter = create_adapter_from_object(obj)
             adapter.set_annotations_from_items(rw_items)
             self.selection_changed(update_items=True)
         self.__separate_views.pop(dlg)
