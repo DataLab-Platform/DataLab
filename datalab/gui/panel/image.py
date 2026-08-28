@@ -8,9 +8,13 @@
 
 from __future__ import annotations
 
+import os.path as osp
 from typing import TYPE_CHECKING, Type
 from weakref import ReferenceType, ref
 
+import guidata.dataset as gds
+import numpy as np
+from guidata.dataset import update_dataset
 from plotpy.interfaces import IVoiImageItemType
 from plotpy.tools import (
     AnnotatedCircleTool,
@@ -20,6 +24,7 @@ from plotpy.tools import (
     AnnotatedSegmentTool,
     LabelTool,
 )
+from sigima.io import ImageExportParam, get_supported_export_dtypes, write_image
 from sigima.io.image import ImageIORegistry
 from sigima.objects import ImageDatatypes, ImageObj, ImageROI, NewImageParam
 
@@ -37,6 +42,51 @@ if TYPE_CHECKING:
     from qtpy import QtWidgets as QW
 
     from datalab.gui.docks import DockablePlotWidget
+
+
+def get_image_export_dtype_choices(
+    param: ImageExportGUIParam, _item: gds.ChoiceItem, _value: str
+) -> list[tuple[str, str, None]]:
+    """Return target dtype choices supported by the selected image format."""
+    return [
+        (dtype, _("Automatic") if dtype == "auto" else dtype, None)
+        for dtype in param.supported_dtypes
+    ]
+
+
+class ImageExportGUIParam(ImageExportParam, title=_("Image export")):
+    """Image export parameters restricted to the selected file format."""
+
+    supported_dtypes: tuple[str, ...] = ("auto",)
+    target_dtype = gds.ChoiceItem(
+        _("Target data type"), get_image_export_dtype_choices, default="auto"
+    )
+
+
+def create_image_export_gui_param(obj: ImageObj, filename: str) -> ImageExportGUIParam:
+    """Create format-aware image export parameters with practical defaults.
+
+    Args:
+        obj: Source image
+        filename: Destination file name
+
+    Returns:
+        Image export GUI parameters
+    """
+    param = ImageExportGUIParam()
+    param.supported_dtypes = get_supported_export_dtypes(filename)
+    source_dtype = np.dtype(obj.data.dtype)
+    concrete_dtypes = param.supported_dtypes[1:]
+    source_is_supported = source_dtype.name in concrete_dtypes
+    preserves_source = osp.splitext(filename)[1].lower() == ".npy"
+    forces_integer_conversion = concrete_dtypes and all(
+        np.issubdtype(np.dtype(dtype), np.integer) for dtype in concrete_dtypes
+    )
+    if not (source_is_supported or preserves_source) and forces_integer_conversion:
+        param.normalization = "minmax"
+        param.behavior = "rescale"
+        param.target_dtype = "auto"
+    return param
 
 
 class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
@@ -74,6 +124,43 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
     def get_roieditor_class() -> Type[roieditor.ImageROIEditor]:
         """Return ROI editor class"""
         return roieditor.ImageROIEditor
+
+    def edit_export_parameters(
+        self, obj: ImageObj, filename: str
+    ) -> tuple[bool, ImageExportParam | None]:
+        """Edit image export parameters for the selected file format.
+
+        Args:
+            obj: Image to export
+            filename: Destination file name
+
+        Returns:
+            A tuple containing the confirmation state and export parameters
+        """
+        try:
+            guiparam = create_image_export_gui_param(obj, filename)
+        except ValueError:
+            return True, None
+        if not guiparam.edit(parent=self.parentWidget()):
+            return False, None
+        param = ImageExportParam()
+        update_dataset(param, guiparam)
+        return True, param
+
+    def write_object_to_file(
+        self,
+        obj: ImageObj,
+        filename: str,
+        param: ImageExportParam | None = None,
+    ) -> None:
+        """Write an image with optional format-aware export parameters.
+
+        Args:
+            obj: Image to export
+            filename: Destination file name
+            param: Optional image export parameters
+        """
+        write_image(filename, obj, param)
 
     def __init__(
         self,

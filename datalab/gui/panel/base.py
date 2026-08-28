@@ -111,6 +111,7 @@ from datalab.widgets.textimport import TextImportWizard
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, LabelItem, MaskedXYImageItem
+    from sigima.io import ImageExportParam
     from sigima.io.image import ImageIORegistry
     from sigima.io.signal import SignalIORegistry
 
@@ -2662,13 +2663,34 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.selection_changed()
         return objs
 
-    def __save_to_file(self, obj: TypeObj, filename: str) -> None:
+    def edit_export_parameters(
+        self, obj: TypeObj, filename: str
+    ) -> tuple[bool, ImageExportParam | None]:
+        """Edit optional object export parameters.
+
+        Args:
+            obj: Object to export
+            filename: File name
+
+        Returns:
+            A tuple containing the confirmation state and optional export parameters
+        """
+        return True, None
+
+    def write_object_to_file(
+        self,
+        obj: TypeObj,
+        filename: str,
+        param: ImageExportParam | None = None,
+    ) -> None:
         """Save object to file (signal/image).
 
         Args:
             obj: object
             filename: file name
+            param: optional image export parameters
         """
+        del param
         self.IO_REGISTRY.write(filename, obj)
 
     def load_from_directory(self, directory: str | None = None) -> list[TypeObj]:
@@ -2831,24 +2853,57 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             self.mainwindow.historypanel.tree.refresh_action_item(action)
         return objs
 
-    def save_to_files(self, filenames: list[str] | str | None = None) -> None:
+    def save_to_files(
+        self,
+        filenames: list[str] | str | None = None,
+        export_params: list[ImageExportParam | None] | None = None,
+        object_uuids: list[str] | None = None,
+    ) -> None:
         """Save selected objects to files (signal/image).
 
         Args:
             filenames: File names
+            export_params: Optional image export parameters aligned with file names
+            object_uuids: Optional object UUIDs aligned with file names
         """
-        objs = self.objview.get_sel_objects(include_groups=True)
         if isinstance(filenames, str):
             filenames = [filenames]
-        if filenames is None:  # pragma: no cover
-            filenames = [None] * len(objs)
-        assert len(filenames) == len(objs), (
+        interactive = filenames is None
+        if object_uuids is None:
+            objs = self.objview.get_sel_objects(include_groups=True)
+            object_uuids = [get_uuid(obj) for obj in objs]
+        else:
+            objs = None
+        object_count = len(object_uuids)
+        if interactive:  # pragma: no cover
+            filenames = [None] * object_count
+        assert len(filenames) == object_count, (
             "Number of filenames must match number of objects"
         )
+        if export_params is None:
+            export_params = [None] * object_count
+        assert len(export_params) == object_count, (
+            "Number of export parameters must match number of objects"
+        )
+        aligned: list[tuple[TypeObj, str | None, ImageExportParam | None, str]] = []
+        if objs is not None:
+            aligned = list(zip(objs, filenames, export_params, object_uuids))
+        else:
+            for object_uuid, filename, param in zip(
+                object_uuids, filenames, export_params
+            ):
+                if not self.objmodel.has_uuid(object_uuid):
+                    warnings.warn(
+                        _("Skipping export: object %r no longer exists.") % object_uuid
+                    )
+                    continue
+                aligned.append(
+                    (self.objmodel[object_uuid], filename, param, object_uuid)
+                )
         # Ask for missing file names first, so that the history entry reflects the
         # actual files written (and is skipped altogether if the user cancels)
-        pairs: list[tuple[TypeObj, str]] = []
-        for obj, filename in zip(objs, filenames):
+        pairs: list[tuple[TypeObj, str, ImageExportParam | None, str]] = []
+        for obj, filename, param, object_uuid in aligned:
             if filename is None:  # pragma: no cover
                 basedir = Conf.base_dir.get()
                 filters = self.IO_REGISTRY.get_write_filters()
@@ -2857,25 +2912,45 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         self, _("Save as"), basedir, filters
                     )
             if filename:
-                pairs.append((obj, filename))
+                confirmed = True
+                if interactive:  # pragma: no cover
+                    confirmed, param = self.edit_export_parameters(obj, filename)
+                if confirmed:
+                    pairs.append((obj, filename, param, object_uuid))
         if not pairs:  # pragma: no cover
             return
-        nbf = len(pairs)
+        successful_pairs: list[tuple[TypeObj, str, ImageExportParam | None, str]] = []
+        for obj, filename, param, object_uuid in pairs:
+            with qt_try_loadsave_file(self.parentWidget(), filename, "save"):
+                Conf.base_dir.set(filename)
+                self.write_object_to_file(obj, filename, param)
+                successful_pairs.append((obj, filename, param, object_uuid))
+        if not successful_pairs:
+            return
+        nbf = len(successful_pairs)
         if nbf > 1:
             entry_title = _("Save to %d different files") % nbf
         else:
-            entry_title = _('Save to "%s"') % osp.basename(pairs[0][1])
+            entry_title = _('Save to "%s"') % osp.basename(successful_pairs[0][1])
+        history_kwargs: dict[str, Any] = {
+            "filenames": [
+                filename for _obj, filename, _param, _uuid in successful_pairs
+            ],
+            "object_uuids": [
+                object_uuid for _obj, _filename, _param, object_uuid in successful_pairs
+            ],
+        }
+        if any(param is not None for _obj, _filename, param, _uuid in successful_pairs):
+            history_kwargs["export_params"] = [
+                param for _obj, _filename, param, _uuid in successful_pairs
+            ]
         self.mainwindow.historypanel.add_ui_entry(
             entry_title,
             target=self.PANEL_STR_ID + "panel",
             method_name="save_to_files",
             save_state=False,
-            filenames=[filename for _obj, filename in pairs],
+            **history_kwargs,
         )
-        for obj, filename in pairs:
-            with qt_try_loadsave_file(self.parentWidget(), filename, "save"):
-                Conf.base_dir.set(filename)
-                self.__save_to_file(obj, filename)
 
     def save_to_directory(self, param: SaveToDirectoryParam | None = None) -> None:
         """Save signals or images to directory using a filename pattern.
@@ -2930,7 +3005,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if progress.wasCanceled():
                     break
                 with qt_try_loadsave_file(self.parentWidget(), path, "save"):
-                    self.__save_to_file(obj, path)
+                    self.write_object_to_file(obj, path)
 
     def handle_dropped_files(self, filenames: list[str] | None = None) -> None:
         """Handle dropped files

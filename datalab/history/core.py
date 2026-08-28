@@ -34,6 +34,7 @@ HISTORY_ACTION_SCHEMA_VERSION = 2
 # arbitrary Python objects.
 _DATASET_MARKER = "__dataset_json__"
 _DATASET_LIST_MARKER = "__dataset_list_json__"
+_DATASET_LIST_NONE_SENTINEL = "__datalab_history_dataset_none__"
 _ROI_MARKER = "__roi_json__"
 
 
@@ -111,7 +112,7 @@ def decode_roi(encoded: str) -> Any:
 
 
 def encode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
-    """Encode kwargs for HDF5 storage: replace ``DataSet``, ``list[DataSet]``,
+    """Encode kwargs for HDF5 storage: replace ``DataSet``, DataSet lists,
     and sigima ROI values with marker dicts holding their JSON representation.
 
     All other values must already be HDF5-friendly primitives (str, int, float,
@@ -134,10 +135,16 @@ def encode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
         elif (
             isinstance(value, list)
             and value
-            and all(isinstance(item, DataSet) for item in value)
+            and any(isinstance(item, DataSet) for item in value)
+            and all(item is None or isinstance(item, DataSet) for item in value)
         ):
             encoded[key] = {
-                _DATASET_LIST_MARKER: [dataset_to_json(item) for item in value]
+                _DATASET_LIST_MARKER: [
+                    dataset_to_json(item)
+                    if item is not None
+                    else _DATASET_LIST_NONE_SENTINEL
+                    for item in value
+                ]
             }
         else:
             encoded[key] = value
@@ -179,7 +186,10 @@ def decode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
         elif isinstance(value, dict) and _DATASET_LIST_MARKER in value:
             try:
                 decoded[key] = [
-                    json_to_dataset(item) for item in value[_DATASET_LIST_MARKER]
+                    None
+                    if item in (None, "", _DATASET_LIST_NONE_SENTINEL)
+                    else json_to_dataset(item)
+                    for item in value[_DATASET_LIST_MARKER]
                 ]
             except (TypeError, ValueError, KeyError):
                 warnings.warn(

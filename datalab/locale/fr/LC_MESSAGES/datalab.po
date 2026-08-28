@@ -4378,3 +4378,15 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
 
+msgid "Automatic"
+msgstr "Automatique"
+
+msgid "Image export"
+msgstr "Exportation d'image"
+
+msgid "Target data type"
+msgstr "Type de données cible"
+
+#, python-format
+msgid "Skipping export: object %r no longer exists."
+msgstr "Export ignoré : l'objet %r n'existe plus."
