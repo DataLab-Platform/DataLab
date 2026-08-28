@@ -4,7 +4,6 @@
 #
 msgid ""
 msgstr ""
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -4386,6 +4385,129 @@ msgstr "Exportation d'image"
 
 msgid "Target data type"
 msgstr "Type de données cible"
+
+msgid "Compression level"
+msgstr "Niveau de compression"
+
+msgid "Compression"
+msgstr "Compression"
+
+msgid "MAT compression"
+msgstr "Compression MAT"
+
+msgid "Quality"
+msgstr "Qualité"
+
+msgid "Subsampling"
+msgstr "Sous-échantillonnage"
+
+msgid "Progressive"
+msgstr "Progressif"
+
+msgid "Optimize"
+msgstr "Optimiser"
+
+msgid "Smoothing"
+msgstr "Lissage"
+
+msgid "Quality mode"
+msgstr "Mode de qualité"
+
+msgid "Quality layers"
+msgstr "Couches de qualité"
+
+msgid "Irreversible"
+msgstr "Irréversible"
+
+msgid "Progression order"
+msgstr "Ordre de progression"
+
+msgid "Number of resolutions"
+msgstr "Nombre de résolutions"
+
+msgid "Tile size"
+msgstr "Taille des tuiles"
+
+msgid "PLT markers"
+msgstr "Marqueurs PLT"
+
+msgid "Predictor"
+msgstr "Prédicteur"
+
+msgid "Rows per strip"
+msgstr "Lignes par bande"
+
+msgid "Resolution"
+msgstr "Résolution"
+
+msgid "Resolution unit"
+msgstr "Unité de résolution"
+
+msgid "Photometric interpretation"
+msgstr "Interprétation photométrique"
+
+msgid "Precision"
+msgstr "Précision"
+
+msgid "Rates"
+msgstr "Taux"
+
+msgid "Deflate"
+msgstr "Deflate"
+
+msgid "Zstandard"
+msgstr "Zstandard"
+
+msgid "Whitespace"
+msgstr "Espaces blancs"
+
+msgid "Semicolon"
+msgstr "Point-virgule"
+
+msgid "Inch"
+msgstr "Pouce"
+
+msgid "Centimeter"
+msgstr "Centimètre"
+
+msgid "Horizontal"
+msgstr "Horizontal"
+
+msgid "Floating-point"
+msgstr "Virgule flottante"
+
+msgid "Black is zero"
+msgstr "Le noir vaut zéro"
+
+msgid "White is zero"
+msgstr "Le blanc vaut zéro"
+
+msgid "Gamma"
+msgstr "Gamma"
+
+msgid "Invert"
+msgstr "Inverser"
+
+#, python-format
+msgid "%s may not be empty"
+msgstr "%s ne peut pas être vide"
+
+#, python-format
+msgid "%s must contain 2 values"
+msgstr "%s doit contenir 2 valeurs"
+
+#, python-format
+msgid "%s contains invalid numbers"
+msgstr "%s contient des nombres non valides"
+
+msgid "Export options"
+msgstr "Options d'exportation"
+
+msgid "Export image"
+msgstr "Exporter l'image"
+
+msgid "Some required entries are incorrect."
+msgstr "Certaines entrées obligatoires sont incorrectes."
 
 #, python-format
 msgid "Skipping export: object %r no longer exists."
