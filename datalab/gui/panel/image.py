@@ -15,9 +15,13 @@ from typing import TYPE_CHECKING, Type
 from weakref import ReferenceType, ref
 
 import guidata.dataset as gds
+import guidata.dataset.qtwidgets as gdq
 import numpy as np
 from guidata.dataset import update_dataset
+from guidata.qthelpers import exec_dialog
+from plotpy.builder import make
 from plotpy.interfaces import IVoiImageItemType
+from plotpy.plot import PlotDialog, PlotOptions
 from plotpy.tools import (
     AnnotatedCircleTool,
     AnnotatedEllipseTool,
@@ -26,10 +30,14 @@ from plotpy.tools import (
     AnnotatedSegmentTool,
     LabelTool,
 )
+from qtpy import QtWidgets as QW
 from sigima.io import (
+    ImageExportOptionSpec,
     ImageExportParam,
     RawImageImportParam,
+    get_image_export_capabilities,
     get_supported_export_dtypes,
+    prepare_image_export_preview,
     write_image,
 )
 from sigima.io.image import ImageIORegistry
@@ -46,9 +54,54 @@ from datalab.objectmodel import get_uuid
 
 if TYPE_CHECKING:
     from plotpy.plot import BasePlot
-    from qtpy import QtWidgets as QW
 
     from datalab.gui.docks import DockablePlotWidget
+
+
+IMAGE_EXPORT_OPTION_LABELS = {
+    "compress_level": _("Compression level"),
+    "compression": _("Compression"),
+    "compression_level": _("Compression level"),
+    "do_compression": _("MAT compression"),
+    "quality": _("Quality"),
+    "subsampling": _("Subsampling"),
+    "progressive": _("Progressive"),
+    "optimize": _("Optimize"),
+    "smooth": _("Smoothing"),
+    "quality_mode": _("Quality mode"),
+    "quality_layers": _("Quality layers"),
+    "irreversible": _("Irreversible"),
+    "progression": _("Progression order"),
+    "num_resolutions": _("Number of resolutions"),
+    "tile_size": _("Tile size"),
+    "plt": _("PLT markers"),
+    "predictor": _("Predictor"),
+    "rows_per_strip": _("Rows per strip"),
+    "resolution": _("Resolution"),
+    "resolution_unit": _("Resolution unit"),
+    "photometric": _("Photometric interpretation"),
+    "delimiter": _("Delimiter"),
+    "precision": _("Precision"),
+}
+
+IMAGE_EXPORT_CHOICE_LABELS = {
+    "none": _("None"),
+    "rates": _("Rates"),
+    "lzw": "LZW",
+    "deflate": _("Deflate"),
+    "zstd": _("Zstandard"),
+    "jpeg": "JPEG",
+    "whitespace": _("Whitespace"),
+    "tab": _("Tab"),
+    "comma": _("Comma"),
+    "semicolon": _("Semicolon"),
+    "inch": _("Inch"),
+    "centimeter": _("Centimeter"),
+    "horizontal": _("Horizontal"),
+    "floatingpoint": _("Floating-point"),
+    "minisblack": _("Black is zero"),
+    "miniswhite": _("White is zero"),
+}
 
 
 def get_image_export_dtype_choices(
@@ -65,9 +118,143 @@ class ImageExportGUIParam(ImageExportParam, title=_("Image export")):
     """Image export parameters restricted to the selected file format."""
 
     supported_dtypes: tuple[str, ...] = ("auto",)
+    format_extension = ""
+    format_option_specs: tuple[ImageExportOptionSpec, ...] = ()
     target_dtype = gds.ChoiceItem(
         _("Target data type"), get_image_export_dtype_choices, default="auto"
     )
+    gamma = gds.FloatItem(
+        _("Gamma"), default=None, min=0.01, check=False, allow_none=True
+    ).set_prop(
+        "display",
+        active=gds.FuncProp(
+            ImageExportParam.normalization_prop, lambda value: value != "none"
+        ),
+    )
+    invert = gds.BoolItem(_("Invert"), default=False).set_prop(
+        "display",
+        active=gds.FuncProp(
+            ImageExportParam.normalization_prop, lambda value: value != "none"
+        ),
+    )
+
+    def get_format_options(self) -> dict[str, object]:
+        """Return writer options exposed by this format parameter class."""
+        options = {}
+        for spec in self.format_option_specs:
+            value = getattr(self, spec.key)
+            if spec.value_kind in ("int_pair", "float_pair", "float_list"):
+                value = serialize_image_export_sequence(value, spec)
+            options[spec.key] = value
+        return options
+
+
+def get_image_export_choice_label(value: object) -> str:
+    """Return a translated human-readable label for an option choice."""
+    return IMAGE_EXPORT_CHOICE_LABELS.get(value, str(value))
+
+
+def serialize_image_export_sequence(
+    value: object, spec: ImageExportOptionSpec
+) -> tuple[int, int] | tuple[float, float] | list[float] | None:
+    """Serialize a pair or list option from its editable GUI representation."""
+    if value is None or (isinstance(value, str) and not value.strip()):
+        if spec.allow_none:
+            return None
+        label = IMAGE_EXPORT_OPTION_LABELS[spec.key]
+        raise ValueError(_("%s may not be empty") % label)
+    if isinstance(value, str):
+        values = [part.strip() for part in value.split(",")]
+    else:
+        values = list(value)
+    if spec.value_kind in ("int_pair", "float_pair") and len(values) != 2:
+        label = IMAGE_EXPORT_OPTION_LABELS[spec.key]
+        raise ValueError(_("%s must contain 2 values") % label)
+    try:
+        if spec.value_kind == "int_pair":
+            return tuple(int(item) for item in values)
+        converted = [float(item) for item in values]
+    except (TypeError, ValueError) as exc:
+        label = IMAGE_EXPORT_OPTION_LABELS[spec.key]
+        raise ValueError(_("%s contains invalid numbers") % label) from exc
+    if spec.value_kind == "float_pair":
+        return tuple(converted)
+    return converted
+
+
+def create_image_export_option_item(spec: ImageExportOptionSpec) -> gds.DataItem:
+    """Create a guidata item for an image export capability option."""
+    label = IMAGE_EXPORT_OPTION_LABELS[spec.key]
+    if spec.value_kind == "bool":
+        return gds.BoolItem(label, default=spec.default, allow_none=spec.allow_none)
+    if spec.value_kind == "int":
+        return gds.IntItem(
+            label,
+            default=spec.default,
+            min=spec.minimum,
+            max=spec.maximum,
+            nonzero=spec.minimum == 0 and not spec.minimum_inclusive,
+            allow_none=spec.allow_none,
+        )
+    if spec.value_kind == "float":
+        return gds.FloatItem(
+            label,
+            default=spec.default,
+            min=spec.minimum,
+            max=spec.maximum,
+            nonzero=spec.minimum == 0 and not spec.minimum_inclusive,
+            allow_none=spec.allow_none,
+        )
+    if spec.value_kind == "choice":
+        choices = [
+            (choice, get_image_export_choice_label(choice)) for choice in spec.choices
+        ]
+        return gds.ChoiceItem(
+            label, choices, default=spec.default, allow_none=spec.allow_none
+        )
+    if spec.value_kind in ("int_pair", "float_pair", "float_list"):
+        default = (
+            ""
+            if spec.default is None
+            else ", ".join(str(value) for value in spec.default)
+        )
+        return gds.StringItem(label, default=default)
+    if spec.value_kind == "string":
+        return gds.StringItem(label, default=spec.default, allow_none=spec.allow_none)
+    raise AssertionError(f"Unknown image export option kind: {spec.value_kind!r}")
+
+
+IMAGE_EXPORT_PARAM_CLASSES: dict[str, type[ImageExportGUIParam]] = {}
+
+
+def get_image_export_param_class(filename: str) -> type[ImageExportGUIParam]:
+    """Return the cached GUI parameter class for an export format."""
+    capabilities = get_image_export_capabilities(filename)
+    canonical_extension = capabilities.canonical_extension
+    paramclass = IMAGE_EXPORT_PARAM_CLASSES.get(canonical_extension)
+    if paramclass is None:
+        class_name = "".join(
+            character
+            for character in capabilities.format_name.title()
+            if character.isalnum()
+        )
+        class_attributes = {
+            "__doc__": f"{capabilities.format_name} export parameters.",
+            "format_option_specs": capabilities.option_specs,
+        }
+        class_attributes.update(
+            {
+                spec.key: create_image_export_option_item(spec)
+                for spec in capabilities.option_specs
+            }
+        )
+        paramclass = type(
+            f"{class_name}ImageExportGUIParam",
+            (ImageExportGUIParam,),
+            class_attributes,
+        )
+        IMAGE_EXPORT_PARAM_CLASSES[canonical_extension] = paramclass
+    return paramclass
 
 
 class RawImageImportGUIParam(RawImageImportParam, title=_("RAW image import")):
@@ -88,20 +275,110 @@ def create_image_export_gui_param(obj: ImageObj, filename: str) -> ImageExportGU
     Returns:
         Image export GUI parameters
     """
-    param = ImageExportGUIParam()
+    capabilities = get_image_export_capabilities(filename)
+    paramclass = get_image_export_param_class(filename)
+    param = paramclass()
+    param.format_extension = capabilities.canonical_extension
     param.supported_dtypes = get_supported_export_dtypes(filename)
     source_dtype = np.dtype(obj.data.dtype)
     concrete_dtypes = param.supported_dtypes[1:]
     source_is_supported = source_dtype.name in concrete_dtypes
-    preserves_source = osp.splitext(filename)[1].lower() == ".npy"
     forces_integer_conversion = concrete_dtypes and all(
         np.issubdtype(np.dtype(dtype), np.integer) for dtype in concrete_dtypes
     )
-    if not (source_is_supported or preserves_source) and forces_integer_conversion:
+    if (
+        not capabilities.raw_preserving
+        and not source_is_supported
+        and forces_integer_conversion
+    ):
         param.normalization = "minmax"
         param.behavior = "rescale"
         param.target_dtype = "auto"
     return param
+
+
+class ImageExportDialog(PlotDialog):
+    """Format-aware image export dialog with an in-memory graphical preview."""
+
+    def __init__(
+        self,
+        parent: QW.QWidget | None,
+        obj: ImageObj,
+        filename: str,
+        param: ImageExportGUIParam,
+    ) -> None:
+        self.obj = obj
+        self.filename = filename
+        self.preview_item = None
+        self.param_widget = gdq.DataSetEditGroupBox(
+            _("Export options"),
+            param.__class__,
+            button_text=_("Preview"),
+            button_icon="reload.svg",
+        )
+        update_dataset(self.param_widget.dataset, param)
+        self.param_widget.dataset.supported_dtypes = param.supported_dtypes
+        self.param_widget.dataset.format_extension = param.format_extension
+        super().__init__(
+            parent=parent,
+            title=_("Export image"),
+            icon="export.svg",
+            toolbar=False,
+            edit=True,
+            options=PlotOptions(type="image", show_contrast=True),
+            size=(900, 600),
+        )
+        self.param_widget.SIG_APPLY_BUTTON_CLICKED.connect(self.update_preview)
+        self.param_widget.set_apply_button_state(True)
+        self.update_preview()
+
+    def setup_layout(self) -> None:
+        """Add export controls beside the graphical preview."""
+        super().setup_layout()
+        self.plot_layout.addWidget(self.param_widget, 0, 1)
+        self.plot_layout.setColumnStretch(0, 2)
+        self.plot_layout.setColumnStretch(1, 1)
+
+    def get_export_param(self) -> ImageExportParam:
+        """Return backend parameters from the current GUI values."""
+        guiparam = self.param_widget.dataset
+        param = ImageExportParam()
+        update_dataset(param, guiparam)
+        param.format_options = guiparam.get_format_options()
+        return param
+
+    def update_preview(self) -> bool:
+        """Render current export preparation directly in the preview plot."""
+        try:
+            data = prepare_image_export_preview(
+                self.obj.data, self.filename, self.get_export_param()
+            )
+        except (TypeError, ValueError, OSError) as exc:
+            QW.QMessageBox.warning(self, _("Export image"), str(exc))
+            return False
+        plot = self.manager.get_plot()
+        if self.preview_item is None:
+            self.preview_item = make.image(data, colormap="gray")
+            plot.add_item(self.preview_item)
+            plot.set_active_item(self.preview_item)
+            plot.do_autoscale()
+        else:
+            self.preview_item.set_data(data)
+            plot.replot()
+        return True
+
+    def accept(self) -> None:
+        """Validate controls and preview preparation before accepting."""
+        if not self.param_widget.edit.check_all_values():
+            QW.QMessageBox.warning(
+                self,
+                _("Export image"),
+                _("Some required entries are incorrect."),
+            )
+            return
+        self.param_widget.edit.accept_changes()
+        if self.update_preview():
+            QW.QDialog.accept(self)
 
 
 class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
@@ -215,11 +492,10 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
             guiparam = create_image_export_gui_param(obj, filename)
         except ValueError:
             return True, None
-        if not guiparam.edit(parent=self.parentWidget()):
+        dialog = ImageExportDialog(self.parentWidget(), obj, filename, guiparam)
+        if not exec_dialog(dialog):
             return False, None
-        param = ImageExportParam()
-        update_dataset(param, guiparam)
-        return True, param
+        return True, dialog.get_export_param()
 
     def write_object_to_file(
         self,
