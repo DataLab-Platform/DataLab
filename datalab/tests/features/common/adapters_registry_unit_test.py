@@ -62,9 +62,9 @@ def make_table_result() -> TableResult:
 def test_create_adapter_resolves_registered_typologies() -> None:
     """Resolve GeometryResult and TableResult to their respective adapters."""
     geometry_adapter = create_adapter(make_geometry_result())
-    assert geometry_adapter.isinstance(GeometryAdapter)
+    assert isinstance(geometry_adapter, GeometryAdapter)
     table_adapter = create_adapter(make_table_result())
-    assert table_adapter.isinstance(TableAdapter)
+    assert isinstance(table_adapter, TableAdapter)
     execenv.print("test_create_adapter_resolves_registered_typologies: ✓")
 
 
@@ -82,7 +82,7 @@ def test_create_adapter_falls_back_to_isinstance() -> None:
         """Subclass without a dedicated adapter registration."""
 
     adapter = create_adapter(make_geometry_result(CustomGeometryResult))
-    assert adapter.isinstance(GeometryAdapter)
+    assert isinstance(adapter, GeometryAdapter)
     execenv.print("test_create_adapter_falls_back_to_isinstance: ✓")
 
 
@@ -98,9 +98,9 @@ def test_register_result_adapter_custom_typology() -> None:
     register_result_adapter(CustomGeometryResult, CustomAdapter)
     try:
         adapter = create_adapter(make_geometry_result(CustomGeometryResult))
-        assert adapter.isinstance(CustomAdapter)
+        assert isinstance(adapter, CustomAdapter)
         # Base typology resolution is unaffected by the extra registration
-        assert create_adapter(make_geometry_result()).isinstance(GeometryAdapter)
+        assert isinstance(create_adapter(make_geometry_result()), GeometryAdapter)
     finally:
         _ADAPTER_REGISTRY.pop(CustomGeometryResult, None)
     execenv.print("test_register_result_adapter_custom_typology: ✓")
@@ -121,7 +121,7 @@ def test_create_adapter_fallback_prefers_most_specific_base() -> None:
     register_result_adapter(CustomGeometryResult, CustomAdapter)
     try:
         adapter = create_adapter(make_geometry_result(UnregisteredSubResult))
-        assert adapter.isinstance(CustomAdapter)
+        assert isinstance(adapter, CustomAdapter)
     finally:
         _ADAPTER_REGISTRY.pop(CustomGeometryResult, None)
     execenv.print("test_create_adapter_fallback_prefers_most_specific_base: ✓")
