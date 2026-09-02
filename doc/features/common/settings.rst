@@ -49,16 +49,12 @@ The General settings tab contains main window and general feature settings:
     This helps prevent out-of-memory errors when working with large datasets. Set to 0
     to disable the warning.
 
-**Third-party plugins**
-    Enable or disable third-party plugins immediately.
-    Changes are applied without restarting DataLab.
-    When disabled, third-party plugins are not discovered or loaded.
+.. note::
 
-**Plugins path**
-    Specify the directory path where DataLab should look for third-party plugins.
-    DataLab will also discover plugins in your PYTHONPATH.
-    To enable or disable individual plugins, use the ``Plugins > Configure plugins...``
-    menu action. DataLab then proposes reloading plugins automatically.
+    Plugin-related settings (global enabling of third-party plugins, per-plugin
+    enabling and additional plugin directories) are not part of this dialog:
+    they are grouped in the plugin configuration dialog, available from the
+    ``Plugins > Configure plugins...`` menu action (see :ref:`about_plugins`).
 
 Processing
 ----------

@@ -3,7 +3,7 @@ DataLab
 
 .. meta::
     :description: Home of DataLab, the open-source platform for scientific and technical data processing and visualization
-    :keywords: DataLab, scientific, data, processing, visualization, open-source, platform, DataLab Platform, DataLab-Web, browser, WebAssembly, Pyodide, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, Sigima, CODRA, Pierre Raybaut
+    :keywords: DataLab, scientific, data, processing, visualization, open-source, platform, DataLab Platform, DataLab-Web, browser, WebAssembly, Pyodide, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, Sigima, SigimaX, CODRA, Pierre Raybaut
 
 DataLab is an **open-source platform for signal and image processing and visualization**
 for research, education and industry. Leveraging the richness of the scientific Python
@@ -152,6 +152,11 @@ DataLab has been funded, chronologically, by the following stakeholders:
     DataLab processing features are based on `Sigima <https://sigima.readthedocs.io/>`_,
     the open-source signal and image processing library (part of the DataLab Platform).
 
+The desktop application itself is built on `SigimaX <https://sigimax.readthedocs.io/>`_,
+the Qt application framework of the DataLab Platform: main window skeleton,
+configuration system, dockable plot widgets, HDF5 workspace and browser, log viewer
+and scientific dialogs (see :ref:`ecosystem`).
+
 .. toctree::
     :maxdepth: 2
     :hidden:
@@ -188,6 +193,8 @@ DataLab has been funded, chronologically, by the following stakeholders:
    for building scientific applications with Qt graphical user interfaces.
    DataLab advanced and specialized processing features are based on `Sigima <https://sigima.readthedocs.io/>`_,
    the open-source signal and image processing library (part of the DataLab Platform).
+   Its graphical user interface is built on `SigimaX <https://sigimax.readthedocs.io/>`_,
+   the Qt application framework of the DataLab Platform.
 
 .. _NumPy: https://numpy.org/
 .. _SciPy: https://www.scipy.org/
