@@ -1722,6 +1722,12 @@ msgstr ""
 msgid "Repair and continue"
 msgstr "Réparer et continuer"
 
+msgid "Recompute regions of interest"
+msgstr "Retraiter les régions d'intérêt"
+
+msgid "Regions of interest cannot be edited from the History panel: the ROI editor cannot be reopened with the recorded parameters. The recorded regions of interest are kept as is."
+msgstr "Les régions d'intérêt ne peuvent pas être modifiées depuis le panneau Historique : l'éditeur de ROI ne peut pas être rouvert avec les paramètres enregistrés. Les régions d'intérêt enregistrées sont conservées telles quelles."
+
 msgid "Parameters"
 msgstr "Paramètres"
 
@@ -2884,12 +2890,6 @@ msgstr "Retraiter l'ajustement"
 
 msgid "Interactive fits cannot be edited from the History panel: the fit dialog cannot be reopened with the recorded parameters. The recorded fit is kept as is."
 msgstr "Les ajustements interactifs ne peuvent pas être modifiés depuis le panneau Historique : la boîte de dialogue d'ajustement ne peut pas être rouverte avec les paramètres enregistrés. L'ajustement enregistré est conservé tel quel."
-
-msgid "Recompute regions of interest"
-msgstr "Retraiter les régions d'intérêt"
-
-msgid "Regions of interest cannot be edited from the History panel: the ROI editor cannot be reopened with the recorded parameters. The recorded regions of interest are kept as is."
-msgstr "Les régions d'intérêt ne peuvent pas être modifiées depuis le panneau Historique : l'éditeur de ROI ne peut pas être rouvert avec les paramètres enregistrés. Les régions d'intérêt enregistrées sont conservées telles quelles."
 
 msgid "Full width at y"
 msgstr "Largeur à y=..."

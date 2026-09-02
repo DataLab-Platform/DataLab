@@ -63,17 +63,8 @@ msgstr "**Seuil de mémoire**"
 msgid "Set a threshold (in MB) below which a warning is displayed before loading new data. This helps prevent out-of-memory errors when working with large datasets. Set to 0 to disable the warning."
 msgstr "Définir un seuil (en Mo) en dessous duquel un avertissement est affiché avant de charger de nouvelles données. Cela permet d'éviter les erreurs de mémoire insuffisante lors du travail avec de grands ensembles de données. Mettre à 0 pour désactiver l'avertissement."
 
-msgid "**Third-party plugins**"
-msgstr "**Plugins tiers**"
-
-msgid "Enable or disable third-party plugins immediately. Changes are applied without restarting DataLab. When disabled, third-party plugins are not discovered or loaded."
-msgstr "Activer ou désactiver immédiatement les plugins tiers. Les modifications sont appliquées sans redémarrer DataLab. Lorsqu'ils sont désactivés, les plugins tiers ne sont ni détectés ni chargés."
-
-msgid "**Plugins path**"
-msgstr "**Chemin des plugins**"
-
-msgid "Specify the directory path where DataLab should look for third-party plugins. DataLab will also discover plugins in your PYTHONPATH. To enable or disable individual plugins, use the ``Plugins > Configure plugins...`` menu action. DataLab then proposes reloading plugins automatically."
-msgstr "Indiquer le répertoire dans lequel DataLab doit rechercher les plugins tiers. DataLab détectera également les plugins présents dans votre PYTHONPATH. Pour activer ou désactiver des plugins individuellement, utilisez l'action de menu ``Plugins > Configurer les plugins...``. DataLab proposera ensuite de recharger automatiquement les plugins."
+msgid "Plugin-related settings (global enabling of third-party plugins, per-plugin enabling and additional plugin directories) are not part of this dialog: they are grouped in the plugin configuration dialog, available from the ``Plugins > Configure plugins...`` menu action (see :ref:`about_plugins`)."
+msgstr "Paramètres liés aux plugins (activation globale des plugins tiers, activation par plugin et répertoires de plugins supplémentaires) ne font pas partie de cette boîte de dialogue : ils sont regroupés dans la boîte de dialogue de configuration des plugins, accessible depuis l'action de menu ``Plugins > Configurer les plugins...`` (voir :ref:`about_plugins`)."
 
 msgid "Processing"
 msgstr "Traitement"

@@ -226,7 +226,7 @@ msgstr "Langage de programmation Python"
 msgid "guidata"
 msgstr ""
 
-msgid ">= 3.15.0"
+msgid ">= 3.15.1"
 msgstr ""
 
 msgid "Automatic GUI generation for easy dataset editing and display"
@@ -253,7 +253,7 @@ msgstr ""
 msgid "SigimaX"
 msgstr ""
 
-msgid ">= 1.0.1"
+msgid ">= 1.0.2"
 msgstr ""
 
 msgid "Reusable GUI components and application utilities, part of the DataLab platform for signal and image processing"
@@ -483,4 +483,3 @@ msgstr ""
 
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
-
