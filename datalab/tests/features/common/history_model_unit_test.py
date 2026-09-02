@@ -292,7 +292,7 @@ def test_image_creation_extends_active_signal_session_when_rejected() -> None:
     assert action.panel_str == "image"
     assert panel.prompt_behaviors == [None]
     assert panel.runtime.execution.prompt_count == 1
-    assert panel.created_sessions == []
+    assert not panel.created_sessions
     assert panel.navigation.get_active_session() is signal_session
     assert signal_session.actions == signal_actions + [action]
 
@@ -304,7 +304,7 @@ def test_empty_active_session_skips_prompt() -> None:
     created = hsess.maybe_start_session_for_input(panel)
     assert created is False
     assert panel.runtime.execution.prompt_count == 0
-    assert panel.created_sessions == []
+    assert not panel.created_sessions
 
 
 @pytest.mark.parametrize(
@@ -407,6 +407,7 @@ def test_input_prompt_debounce_is_global() -> None:
     """
     signal_session = make_prompt_session("signal", populated=True)
     panel = PromptPanel([signal_session])
+    # pylint: disable=attribute-defined-outside-init
     panel.mainwindow = None  # dialog parent for the patched QMessageBox
     execution = hruntime.HistoryExecutionState()
     panel.runtime = SimpleNamespace(execution=execution)
@@ -441,7 +442,7 @@ def test_input_prompt_debounce_is_global() -> None:
     assert message_box.question.call_count == 1
     assert execution.session_input_pending is True
     assert len(callbacks) == 1
-    assert panel.created_sessions == []
+    assert not panel.created_sessions
     assert panel.navigation.get_active_session() is signal_session
     assert signal_session.actions[-1] is action
     callbacks[0]()
@@ -577,6 +578,7 @@ def test_image_histogram_action_keeps_image_ownership_in_active_session() -> Non
     signal_output = SimpleNamespace(uuid="histogram-signal", panel_str="signal")
     image_source_panel = SimpleNamespace(name="image")
     panel = PromptPanel([signal_session, image_session])
+    # pylint: disable=attribute-defined-outside-init
     panel.mainwindow = SimpleNamespace(
         signalpanel=SimpleNamespace(name="signal", objects=[signal_output]),
         imagepanel=image_source_panel,
@@ -610,7 +612,7 @@ def test_unattended_reject_keeps_populated_active_session() -> None:
         created = hsess.maybe_start_session_for_input(panel, behavior="ask")
     assert created is False
     assert panel.runtime.execution.prompt_count == 1
-    assert panel.created_sessions == []
+    assert not panel.created_sessions
     assert panel.navigation.get_active_session() is image_session
     assert image_session.actions == previous_actions
 
@@ -673,8 +675,8 @@ def test_mainwindow_add_object_preserves_no_record_and_memory_rejection() -> Non
     image = ImageObj()
     assert DLMainWindow.add_object(mainwindow, image, new_session_behavior="no") is True
     assert added_objects == [(image, "", True)]
-    assert historypanel.added_actions == []
-    assert historypanel.registered_outputs == []
+    assert not historypanel.added_actions
+    assert not historypanel.registered_outputs
 
     mainwindow.confirm_memory_state = lambda: False
     assert (
@@ -1107,7 +1109,7 @@ def test_recompute_dispatch_guards_and_missing_feature() -> None:
     # Non-creation UI actions are silently not recomputable
     noncompute = HistoryAction(kind=HistoryAction.KIND_UI, method_name="select_next")
     assert hrec.recompute_action_in_place(panel, noncompute) is False
-    assert warnings == []
+    assert not warnings
     # Unsupported compute patterns queue a warning
     unsupported = HistoryAction(
         kind=HistoryAction.KIND_COMPUTE, func_name="mystery", pattern="3_to_2"
@@ -1237,7 +1239,7 @@ def test_plan_reconnection_dead_source_warning_and_producer_removal() -> None:
     assert plan.targets[0].action is consumer_action
     roots: list[HistoryAction] = []
     hchain.apply_reconnection_plan(panel, signal_panel, plan, roots)
-    assert roots == []
+    assert not roots
     assert extract_processing_parameters(consumer_obj).source_uuid == removed_uuid
     # Reconnection warnings are silenced in unattended mode
     with (

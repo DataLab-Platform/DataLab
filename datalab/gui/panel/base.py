@@ -1156,6 +1156,7 @@ class ObjectProp(QW.QWidget):
         interactive: bool = True,
         param: gds.DataSet | None = None,
     ) -> ProcessingReport:
+        # pylint: disable=too-many-return-statements
         """Apply processing parameters: re-run processing with updated parameters.
 
         Args:

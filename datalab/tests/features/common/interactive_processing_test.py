@@ -476,7 +476,7 @@ def test_apply_analysis_parameters_failure_preserves_action() -> None:
 
             assert success is False
             assert action.kwargs == original_kwargs
-            assert status_messages == []
+            assert not status_messages
 
 
 def test_recompute_analyses_continues_after_failure_unattended() -> None:

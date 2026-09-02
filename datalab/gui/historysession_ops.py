@@ -50,6 +50,7 @@ def maybe_start_session_for_input(
     load: bool = False,
     behavior: SessionBehavior | None = None,
 ) -> bool:
+    # pylint: disable=too-many-return-statements
     """Offer to start a new history session before a creation/load is recorded.
 
     When the active recording session already contains actions, prompt the user

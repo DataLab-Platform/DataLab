@@ -662,7 +662,7 @@ def _commit_outputs(
         raise
 
 
-def recompute_compute_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
+def recompute_compute_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:  # pylint: disable=too-many-return-statements
     """Replay a compute action through the real UI entry point, then reconcile.
 
     **Execute**: the recorded selection is restored and the same public

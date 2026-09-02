@@ -1312,6 +1312,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         interactive: bool = True,
         refresh_plot: bool = True,
     ) -> ProcessingReport:
+        # pylint: disable=too-many-return-statements
         """Recompute a stored 1-to-1 processing operation on demand.
 
         This is the processing counterpart of :meth:`recompute_analysis`. It

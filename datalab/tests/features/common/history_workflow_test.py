@@ -705,7 +705,7 @@ def test_multi_action_edit_flushes_cascade_warnings_once() -> None:
             hireplay.replay_actions(history, [action])
 
         flush.assert_called_once_with(history)
-        assert history.runtime.execution.cascade_warnings == []
+        assert not history.runtime.execution.cascade_warnings
 
 
 def test_restore_failure_marks_action_stale_without_cascade() -> None:
@@ -1065,7 +1065,7 @@ def test_replay_recreates_deleted_output_under_recorded_uuid() -> None:
         with patch.object(hrec, "flush_cascade_warnings"):
             hireplay.replay_actions(history, [action], prompt=False)
 
-        assert history.runtime.execution.cascade_warnings == []
+        assert not history.runtime.execution.cascade_warnings
         assert action.is_stale is False
         assert len(panel.objmodel) == object_count
         assert panel.objmodel.has_uuid(output_uuid)
@@ -1503,7 +1503,7 @@ def test_edited_image_creation_recomputes_downstream_in_place() -> None:
 
         create_image_mock.assert_called_once()
         assert create_image_mock.call_args.args[0] is edited_param
-        assert history.runtime.execution.cascade_warnings == []
+        assert not history.runtime.execution.cascade_warnings
 
         assert panel.objmodel[source_uuid] is source
         assert id(source) == source_identity

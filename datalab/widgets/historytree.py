@@ -73,7 +73,7 @@ class HistoryTree(QW.QTreeWidget):
             return True
         return super().event(event)
 
-    def keyPressEvent(self, event: QG.QKeyEvent) -> None:
+    def keyPressEvent(self, event: QG.QKeyEvent) -> None:  # pylint: disable=invalid-name
         """Trigger the panel's Delete action when the Delete key is pressed.
 
         Args:

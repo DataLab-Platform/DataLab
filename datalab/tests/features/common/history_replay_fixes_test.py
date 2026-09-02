@@ -89,7 +89,7 @@ def test_replay_recreates_deleted_cross_panel_output_in_destination_panel() -> N
         with patch.object(hrec, "flush_cascade_warnings"):
             hireplay.replay_actions(history, [action], prompt=False)
 
-        assert history.runtime.execution.cascade_warnings == []
+        assert not history.runtime.execution.cascade_warnings
         assert action.is_stale is False
         assert spanel.objmodel.has_uuid(output_uuid)
         assert not ipanel.objmodel.has_uuid(output_uuid)
@@ -164,7 +164,7 @@ def test_replay_synthetic_head_without_param_is_noop_success() -> None:
         with patch.object(hrec, "flush_cascade_warnings"):
             hireplay.replay_actions(history, actions, prompt=False)
 
-        assert history.runtime.execution.cascade_warnings == []
+        assert not history.runtime.execution.cascade_warnings
         assert all(not action.is_stale for action in actions)
 
 
@@ -581,7 +581,7 @@ def test_replay_recreates_single_deleted_1_to_1_output() -> None:
         with patch.object(hrec, "flush_cascade_warnings"):
             hireplay.replay_actions(history, [action], prompt=False)
 
-        assert history.runtime.execution.cascade_warnings == []
+        assert not history.runtime.execution.cascade_warnings
         assert action.is_stale is False
         assert len(panel.objmodel) == object_count
         assert action.output_uuids == recorded
@@ -612,7 +612,7 @@ def test_replay_recreates_all_deleted_1_to_1_outputs() -> None:
         with patch.object(hrec, "flush_cascade_warnings"):
             hireplay.replay_actions(history, [action], prompt=False)
 
-        assert history.runtime.execution.cascade_warnings == []
+        assert not history.runtime.execution.cascade_warnings
         assert action.is_stale is False
         assert len(panel.objmodel) == object_count
         assert action.output_uuids == recorded
@@ -651,7 +651,7 @@ def test_replay_recreates_deleted_pairwise_n_to_1_output() -> None:
         with patch.object(hrec, "flush_cascade_warnings"):
             hireplay.replay_actions(history, [action], prompt=False)
 
-        assert history.runtime.execution.cascade_warnings == []
+        assert not history.runtime.execution.cascade_warnings
         assert action.is_stale is False
         assert len(panel.objmodel) == object_count
         assert action.output_uuids == recorded
