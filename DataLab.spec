@@ -7,7 +7,7 @@ from PyInstaller.utils.hooks import collect_submodules, collect_data_files, copy
 all_hidden_imports = collect_submodules('datalab')
 datas = collect_data_files('datalab') + [('datalab\\plugins', 'datalab\\plugins')]
 datas += collect_data_files('guidata') + collect_data_files('plotpy')
-datas += collect_data_files('sigima')
+datas += collect_data_files('sigima') + collect_data_files('sigimax')
 datas += copy_metadata('imageio')
 
 a = Analysis(
