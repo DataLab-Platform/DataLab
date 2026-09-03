@@ -71,7 +71,7 @@ def test_image_roi_app(screenshots: bool = False):
         __run_image_computations(panel)
         ima2 = create_test_image_with_roi(param)
         for singleobj in (False, True):
-            with Conf.proc.extract_roi_singleobj.temp(singleobj):
+            with Conf.extract_roi_singleobj.context(singleobj):
                 ima2_i = ima2.copy()
                 panel.add_object(ima2_i)
                 helpers.print_obj_data_dimensions(ima2_i)

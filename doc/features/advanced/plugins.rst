@@ -44,10 +44,14 @@ Where to put a plugin?
 Plugins are automatically discovered at startup from multiple locations:
 
 - The user plugin directory:
-  Typically `~/.DataLab/plugins` on Linux/macOS or `C:/Users/YourName/.DataLab/plugins` on Windows.
+  Typically `~/.DataLab_v1/plugins` on Linux/macOS or
+  `C:/Users/YourName/.DataLab_v1/plugins` on Windows.
 
-- A custom plugin directory:
-  Configurable in DataLab's preferences.
+- Additional plugin directories:
+  Any number of extra directories may be declared from
+  **Plugins > Configure plugins...**, in the **Plugin settings** tab (see
+  :ref:`plugin_search_paths`). They are saved in the DataLab configuration and
+  scanned at every startup.
 
 - The standalone distribution directory:
   If using a frozen (standalone) build, the `plugins` folder located next to the executable is scanned.
@@ -55,17 +59,72 @@ Plugins are automatically discovered at startup from multiple locations:
 - The internal `datalab/plugins` folder (not recommended for user plugins):
   This location is reserved for built-in or bundled plugins and should not be modified manually.
 
+- Additional directories listed in the ``DATALAB_PLUGINS`` environment variable:
+  One or more directories may be specified, separated by the OS path separator
+  (``;`` on Windows, ``:`` on Linux/macOS), following the same convention as
+  ``PYTHONPATH``. All listed directories are appended to the plugin search path
+  at startup; non-existent paths are silently skipped (a warning is written to
+  the log file). Examples:
+
+  .. code-block:: bash
+
+     # Linux/macOS
+     export DATALAB_PLUGINS="/opt/my_plugins:/home/alice/datalab_plugins"
+
+  .. code-block:: bat
+
+     :: Windows
+     set DATALAB_PLUGINS=C:\my_plugins;D:\shared\datalab_plugins
+
+  Changes to this variable are only taken into account at DataLab startup.
+
 Managing plugins in DataLab
 ---------------------------
 
 The **Plugins** menu provides two dedicated actions:
 
 - **Configure plugins...**
-  Opens the plugin configuration dialog where you can enable or disable plugins individually.
-  After saving changes, DataLab can reload plugins immediately without restarting the application.
+  Opens the plugin configuration dialog, organized in two tabs:
+  **Enable/disable plugins** and **Plugin settings**.
 
 - **Reload plugins**
   Reloads plugin modules from disk without restarting DataLab.
+
+Enable/disable plugins
+~~~~~~~~~~~~~~~~~~~~~~
+
+This tab lists all discovered plugins with their name, version, description and
+file path, as well as the plugins that failed to import. For each entry:
+
+- an individual checkbox enables or disables the plugin,
+- **Open file** opens the plugin source in your editor,
+- **Show in folder** reveals the plugin file in the system file manager.
+
+An **Enable all plugins** checkbox and a **Filter** combo box (*All plugins*,
+*Enabled plugins*, *Disabled plugins*, *Plugins with errors*) help navigating a
+large plugin collection. A **Last loaded: ...** indicator shows when plugins
+were last loaded during the current session, and the **Apply and reload
+plugins** button applies the changes without leaving the dialog.
+
+.. _plugin_search_paths:
+
+Plugin settings
+~~~~~~~~~~~~~~~
+
+This tab lists every directory scanned at startup, in two groups:
+
+- **Default plugin directories** (read-only): the user plugin directory, the
+  bundled `datalab/plugins` folder, the standalone distribution folder when
+  applicable, and the directories declared through the ``DATALAB_PLUGINS``
+  environment variable (identified by a *(from DATALAB_PLUGINS)* suffix).
+
+- **Additional plugin directories**: your own directories, added with the
+  **Add** button and managed with the *Edit directory* and *Remove directory*
+  buttons. Unlike the environment variable, these directories are saved in the
+  DataLab configuration and therefore persist across sessions.
+
+The tab also holds a **Compatibility warnings** option to hide warnings for
+incompatible DataLab v0.20 plugins.
 
 When reloading plugins, DataLab performs the following steps:
 
@@ -89,15 +148,14 @@ Here is the recommended workflow:
 
 1. Start DataLab normally.
 2. Create or edit your plugin file (e.g. ``datalab_myplugin.py``) in one of the
-   plugin directories (e.g. ``~/.DataLab/plugins``).
+   plugin directories (e.g. ``~/.DataLab_v1/plugins``).
 3. In DataLab, use **Plugins > Reload plugins** to pick up your changes instantly.
 4. Test your plugin actions directly in the running application.
 5. Iterate: edit the file, reload, test — without restarting DataLab.
 
 To selectively enable or disable specific plugins during development, use
-**Plugins > Configure plugins...**. The dialog lists all discovered plugins
-with their name, version, description, and file path. Toggling a plugin
-takes effect immediately after closing the dialog.
+**Plugins > Configure plugins...** and its **Apply and reload plugins** button,
+so that changes take effect without leaving the dialog.
 
 Plugin API helpers
 ------------------
@@ -166,7 +224,7 @@ DataLab also provides plugin templates used by integration tests in
 - plugins with long descriptions.
 
 The corresponding feature tests are located in
-``datalab/tests/features/plugins/test_plugins.py`` and cover plugin lifecycle,
+``datalab/tests/features/plugins/plugins_app_test.py`` and cover plugin lifecycle,
 hot-reload behavior, error handling, duplicate names, and configuration filtering.
 
 Other examples

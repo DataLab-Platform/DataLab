@@ -6,8 +6,6 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -257,6 +255,9 @@ msgstr "Permet le traitement ultérieur des régions détectées individuellemen
 
 msgid "To use this feature, enable \"Create regions of interest\" in the detection parameters dialog and choose the desired ROI geometry."
 msgstr "Pour utiliser cette fonctionnalité, activez \"Créer des régions d'intérêt\" dans la boîte de dialogue des paramètres de détection et choisissez la géométrie de ROI souhaitée."
+
+msgid "The created ROIs are **added to the regions of interest already defined** on the image, instead of replacing them: running several detections in a row accumulates their results, and no destructive confirmation dialog is shown. They are ordinary ROIs, which may be moved, resized, or deleted afterwards like any manually defined region."
+msgstr "Les ROI créées sont **ajoutées aux régions d'intérêt déjà définies** sur l'image, au lieu de les remplacer : enchaîner plusieurs détections cumule leurs résultats, et aucune boîte de dialogue de confirmation destructive n'est affichée. Il s'agit de ROI ordinaires, qui peuvent ensuite être déplacées, redimensionnées ou supprimées comme toute région définie manuellement."
 
 msgid "Show results"
 msgstr "Afficher les résultats"

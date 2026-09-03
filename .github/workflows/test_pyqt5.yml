@@ -36,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.13"]
+        python-version: ["3.9", "3.14"]
 
     steps:
     - uses: actions/checkout@v4
@@ -52,26 +52,29 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install ruff pytest httpx
         pip install PyQt5
-        if [ "${{ github.ref_name }}" = "develop" ]; then
+        if [ "${{ github.base_ref || github.ref_name }}" = "develop" ]; then
            # Clone and install development versions of key dependencies with editable install
            cd ..
            git clone --depth 1 https://github.com/PlotPyStack/PythonQwt.git
            git clone --depth 1 --branch develop https://github.com/PlotPyStack/guidata.git
            git clone --depth 1 --branch develop https://github.com/PlotPyStack/plotpy.git
-           git clone --depth 1 --branch develop https://github.com/DataLab-Platform/sigima.git
+           DEPENDENCY_BRANCH="${{ github.head_ref || github.ref_name }}"
+           git clone --depth 1 --branch "$DEPENDENCY_BRANCH" https://github.com/DataLab-Platform/sigima.git || git clone --depth 1 --branch develop https://github.com/DataLab-Platform/sigima.git
+           git clone --depth 1 --branch "$DEPENDENCY_BRANCH" https://github.com/DataLab-Platform/SigimaX.git || git clone --depth 1 --branch develop https://github.com/DataLab-Platform/SigimaX.git
            cd DataLab
            pip install -e ../guidata
            pip install -e ../PythonQwt
            pip install -e ../plotpy
            pip install -e ../sigima
+           pip install -e ../SigimaX --no-deps
            # Install tomli for TOML parsing (safe if already present)
            pip install tomli
            # Extract dependencies and save to file, then install
-           python -c "import tomli; f=open('pyproject.toml','rb'); data=tomli.load(f); deps=[d for d in data['project']['dependencies'] if not any(p in d for p in ['guidata','PlotPy','Sigima'])]; open('deps.txt','w').write('\n'.join(deps))"
+           python -c "import tomli; f=open('pyproject.toml','rb'); data=tomli.load(f); deps=[d for d in data['project']['dependencies'] if not any(p in d for p in ['guidata','PlotPy','Sigima', 'SigimaX'])]; open('deps.txt','w').write('\n'.join(deps))"
            pip install -r deps.txt
            # Install DataLab without dependencies
            pip install --no-deps .
-        elif [ "${{ github.ref_name }}" = "release" ]; then
+        elif [ "${{ github.base_ref || github.ref_name }}" = "release" ]; then
            # Clone dependencies from release branches (with fallback to main/master)
            cd ..
            # Try cloning PythonQwt from main or master
@@ -82,15 +85,18 @@ jobs:
            git clone --depth 1 --branch release https://github.com/PlotPyStack/plotpy.git || git clone --depth 1 https://github.com/PlotPyStack/plotpy.git || git clone --depth 1 --branch master https://github.com/PlotPyStack/plotpy.git
            # Try cloning sigima from release, fallback to main
            git clone --depth 1 --branch release https://github.com/DataLab-Platform/sigima.git || git clone --depth 1 https://github.com/DataLab-Platform/sigima.git
+           # Try cloning SigimaX from release, fallback to main
+           git clone --depth 1 --branch release https://github.com/DataLab-Platform/SigimaX.git || git clone --depth 1 https://github.com/DataLab-Platform/SigimaX.git
            cd DataLab
            pip install -e ../guidata
            pip install -e ../PythonQwt
            pip install -e ../plotpy
            pip install -e ../sigima
+           pip install -e ../SigimaX --no-deps
            # Install tomli for TOML parsing (safe if already present)
            pip install tomli
            # Extract dependencies and save to file, then install
-           python -c "import tomli; f=open('pyproject.toml','rb'); data=tomli.load(f); deps=[d for d in data['project']['dependencies'] if not any(p in d for p in ['guidata','PlotPy','Sigima'])]; open('deps.txt','w').write('\n'.join(deps))"
+           python -c "import tomli; f=open('pyproject.toml','rb'); data=tomli.load(f); deps=[d for d in data['project']['dependencies'] if not any(p in d for p in ['guidata','PlotPy','Sigima', 'SigimaX'])]; open('deps.txt','w').write('\n'.join(deps))"
            pip install -r deps.txt
            # Install DataLab without dependencies
            pip install --no-deps .
@@ -112,10 +118,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python 3.13
+    - name: Set up Python 3.14
       uses: actions/setup-python@v5
       with:
-        python-version: "3.13"
+        python-version: "3.14"
 
     - name: Install dependencies (latest)
       run: |
@@ -133,19 +139,24 @@ jobs:
         python -m pip install ruff pytest httpx
         python -m pip install PyQt5
 
-        # Clone and install Sigima from the same branch as DataLab
+        # Clone and install Sigima and SigimaX from the same branch as DataLab
         cd ..
         git clone --depth 1 --branch ${{ github.ref_name }} https://github.com/DataLab-Platform/sigima.git || git clone --depth 1 https://github.com/DataLab-Platform/sigima.git
+        git clone --depth 1 --branch ${{ github.ref_name }} https://github.com/DataLab-Platform/SigimaX.git || git clone --depth 1 https://github.com/DataLab-Platform/SigimaX.git
         cd DataLab
 
         # Install DataLab itself, but do NOT install its pinned deps
         python -m pip install -e . --no-deps
 
-        # Install Sigima from local clone
+        # Install Sigima and SigimaX from local clones. `--no-deps` for SigimaX
+        # only: it requires Sigima, which pip would otherwise resolve from PyPI,
+        # overwriting the editable clone installed just above.
         python -m pip install -e ../sigima
+        python -m pip install -e ../SigimaX --no-deps
 
-        # Extract dependency names from pyproject.toml (excluding Sigima) and install latest versions
-        python -m pip install -U --upgrade-strategy eager $(python -c "import tomllib, re; print(' '.join(re.sub(r'[\[\]<>=!~,.\s].*$', '', d).strip() for d in tomllib.loads(open('pyproject.toml', 'rb').read().decode())['project']['dependencies'] if 'Sigima' not in d))")
+        # Extract dependency names from pyproject.toml (excluding Sigima and
+        # SigimaX, installed from local clones above) and install latest versions
+        python -m pip install -U --upgrade-strategy eager $(python -c "import tomllib, re; print(' '.join(re.sub(r'[\[\]<>=!~,.\s].*$', '', d).strip() for d in tomllib.loads(open('pyproject.toml', 'rb').read().decode())['project']['dependencies'] if not any(p in d for p in ['Sigima', 'SigimaX'])))")
 
     - name: Lint with Ruff (latest)
       run: ruff check --output-format=github datalab

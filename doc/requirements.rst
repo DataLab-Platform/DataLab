@@ -11,14 +11,17 @@ The `datalab-platform` package requires the following Python modules:
       - >=3.9, <4
       - Python programming language
     * - guidata
-      - >= 3.14.4
+      - >= 3.15.1
       - Automatic GUI generation for easy dataset editing and display
     * - PlotPy
-      - >= 2.10.0
+      - >= 2.11.0
       - Curve and image plotting tools for Python/Qt applications
     * - Sigima
-      - >= 1.1.6
+      - >= 1.2.0
       - Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform.
+    * - SigimaX
+      - >= 1.0.2
+      - Reusable GUI components and application utilities, part of the DataLab platform for signal and image processing
     * - NumPy
       - >= 1.22, < 2.5
       - Fundamental package for array computing in Python
@@ -40,6 +43,9 @@ The `datalab-platform` package requires the following Python modules:
     * - packaging
       - >= 21.3
       - Core utilities for Python packages
+    * - jedi
+      - >= 0.18.2
+      - An autocompletion tool for Python that can be used for text editors.
     * - fastapi
       - >= 0.110.0
       - FastAPI framework, high performance, easy to learn, fast to code, ready for production
@@ -109,6 +115,9 @@ Optional modules for building the documentation:
     * - sphinx-sitemap
       - 
       - Sitemap generator for Sphinx
+    * - sphinxext-opengraph
+      - 
+      - Sphinx Extension to enable OGP support
     * - myst_parser
       - 
       - An extended [CommonMark](https://spec.commonmark.org/) compliant parser,

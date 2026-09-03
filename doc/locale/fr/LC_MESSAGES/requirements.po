@@ -6,8 +6,6 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -36,7 +34,7 @@ msgstr "Langage de programmation Python"
 msgid "guidata"
 msgstr ""
 
-msgid ">= 3.14.4"
+msgid ">= 3.15.1"
 msgstr ""
 
 msgid "Automatic GUI generation for easy dataset editing and display"
@@ -45,7 +43,7 @@ msgstr "Génération automatique d'interface graphique pour l'édition et l'affi
 msgid "PlotPy"
 msgstr ""
 
-msgid ">= 2.10.0"
+msgid ">= 2.11.0"
 msgstr ""
 
 msgid "Curve and image plotting tools for Python/Qt applications"
@@ -54,10 +52,19 @@ msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
 msgid "Sigima"
 msgstr ""
 
-msgid ">= 1.1.6"
+msgid ">= 1.2.0"
 msgstr ""
 
 msgid "Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform."
+msgstr "Moteur de calcul scientifique pour signaux 1D et images 2D, faisant partie de la plateforme open-source DataLab."
+
+msgid "SigimaX"
+msgstr ""
+
+msgid ">= 1.0.2"
+msgstr ""
+
+msgid "Reusable GUI components and application utilities, part of the DataLab platform for signal and image processing"
 msgstr ""
 
 msgid "NumPy"
@@ -121,6 +128,15 @@ msgid ">= 21.3"
 msgstr ""
 
 msgid "Core utilities for Python packages"
+msgstr "Utilitaires de base pour les paquets Python"
+
+msgid "jedi"
+msgstr ""
+
+msgid ">= 0.18.2"
+msgstr ""
+
+msgid "An autocompletion tool for Python that can be used for text editors."
 msgstr ""
 
 msgid "fastapi"
@@ -130,7 +146,7 @@ msgid ">= 0.110.0"
 msgstr ""
 
 msgid "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
-msgstr ""
+msgstr "Framework FastAPI, haute performance, facile à apprendre, rapide à coder, prêt pour la production"
 
 msgid "uvicorn[standard]"
 msgstr ""
@@ -145,7 +161,7 @@ msgid ">= 2.0"
 msgstr ""
 
 msgid "Data validation using Python type hints"
-msgstr ""
+msgstr "Validation de données en utilisant les annotations de type Python"
 
 msgid "Optional modules for GUI support (Qt):"
 msgstr "Modules optionnels pour le support de l'interface graphique (Qt) :"
@@ -166,7 +182,7 @@ msgid "build"
 msgstr ""
 
 msgid "A simple, correct Python build frontend"
-msgstr ""
+msgstr "Un frontend de construction Python simple et correct"
 
 msgid "babel"
 msgstr ""
@@ -196,7 +212,7 @@ msgid "pre-commit"
 msgstr ""
 
 msgid "A framework for managing and maintaining multi-language pre-commit hooks."
-msgstr ""
+msgstr "Un framework pour gérer et maintenir des hooks multi-langages pour pre-commit."
 
 msgid "Optional modules for building the documentation:"
 msgstr "Modules optionnels pour construire la documentation :"
@@ -218,6 +234,12 @@ msgstr ""
 
 msgid "Sitemap generator for Sphinx"
 msgstr "Générateur de plan de site pour Sphinx"
+
+msgid "sphinxext-opengraph"
+msgstr ""
+
+msgid "Sphinx Extension to enable OGP support"
+msgstr ""
 
 msgid "myst_parser"
 msgstr ""
@@ -265,5 +287,4 @@ msgid "httpx"
 msgstr ""
 
 msgid "The next generation HTTP client."
-msgstr ""
-
+msgstr "Client HTTP de nouvelle génération."

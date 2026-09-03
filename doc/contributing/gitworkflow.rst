@@ -308,5 +308,5 @@ This workflow ensures a structured yet flexible development process while keepin
 The ``release`` branch provides a dedicated maintenance line for patch releases,
 allowing ``develop`` to proceed with new features without interference. This solves
 the problem of coordinating unreleased changes across the PlotPyStack ecosystem
-(DataLab, Sigima, PlotPy, guidata, PythonQwt) by providing a stable branch for
-CI testing during maintenance cycles.
+(DataLab, SigimaX, Sigima, PlotPy, guidata, PythonQwt) by providing a stable branch
+for CI testing during maintenance cycles.

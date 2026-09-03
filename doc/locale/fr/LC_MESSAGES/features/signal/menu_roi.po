@@ -6,8 +6,6 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -44,6 +42,9 @@ msgstr "Les actions du menu \"Analyse\" sont effectuées uniquement sur la ROI s
 
 msgid "ROI are stored as metadata, and thus attached to signal."
 msgstr "Les ROI sont stockées en tant que métadonnées et sont donc attachées au signal."
+
+msgid "On the plot, each ROI is drawn as a translucent area **clipped to the signal curve** (with a baseline at ``y = 0``, or at the bottom of the canvas on a logarithmic Y axis), instead of a rectangle spanning the whole canvas height. Successive ROIs use different colors, taken from a cyclic ten-color palette: the color is derived from the ``ROI<n>`` title index, so a given ROI keeps the same color across deletions, reorderings and editor reopenings. Only the coordinates are stored: these visual properties are recomputed each time the ROIs are drawn."
+msgstr "Sur le graphique, chaque ROI est dessinée comme une zone translucide **découpée le long de la courbe du signal** (avec une ligne de base à ``y = 0``, ou au bas de la zone de tracé sur un axe Y logarithmique), au lieu d'un rectangle occupant toute la hauteur. Les ROI successives utilisent des couleurs différentes, prises dans une palette cyclique de dix couleurs : la couleur est déduite de l'indice du titre ``ROI<n>``, si bien qu'une ROI donnée conserve la même couleur à travers les suppressions, les réorganisations et les réouvertures de l'éditeur. Seules les coordonnées sont enregistrées : ces propriétés visuelles sont recalculées à chaque tracé des ROI."
 
 msgid "The \"ROI\" menu allows you to:"
 msgstr "Le menu \"ROI\" vous permet de :"

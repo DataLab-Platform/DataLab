@@ -40,7 +40,14 @@ from sigima.io.image.base import ImageFormatBase  # noqa: F401
 from sigima.io.image.formats import ClassicsImageFormat  # noqa: F401
 from sigima.io.signal.base import SignalFormatBase  # noqa: F401
 
-from datalab.config import MOD_NAME, OTHER_PLUGINS_PATHLIST, Conf, _
+from datalab.config import (
+    MOD_NAME,
+    OTHER_PLUGINS_PATHLIST,
+    Conf,
+    _,
+    get_config_path,
+    get_user_plugin_paths,
+)
 from datalab.control.proxy import LocalProxy
 from datalab.env import execenv
 
@@ -52,7 +59,7 @@ if TYPE_CHECKING:
     from datalab.gui.panel.signal import SignalPanel
 
 
-PLUGINS_DEFAULT_PATH = Conf.get_path("plugins")
+PLUGINS_DEFAULT_PATH = get_config_path("plugins")
 
 if not osp.isdir(PLUGINS_DEFAULT_PATH):
     os.makedirs(PLUGINS_DEFAULT_PATH)
@@ -184,7 +191,7 @@ class PluginRegistry(type):
             """Return italic text"""
             return f"<i>{text}</i>" if html else text
 
-        if Conf.main.plugins_enabled.get():
+        if Conf.plugins_enabled.get():
             plugins = cls.get_plugins()
             if plugins:
                 text = italic(_("Registered plugins:"))
@@ -340,7 +347,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         PluginRegistry.register_plugin(self)
         self._is_registered = True
         self.main = main
-        self.proxy = LocalProxy(main)
+        self.proxy = LocalProxy(main, input_source="plugin")
         self.register_hooks()
 
     def unregister(self):
@@ -364,6 +371,18 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         """Create actions"""
 
 
+def _set_plugin_class_filepaths(module) -> None:
+    """Attach the module file path to plugin classes defined in that module."""
+    filepath = getattr(module, "__file__", None)
+    if not filepath:
+        return
+
+    filepath = osp.abspath(filepath)
+    for plugin_class in PluginRegistry.get_plugin_classes():
+        if plugin_class.__module__ == module.__name__:
+            plugin_class.__plugin_filepath__ = filepath
+
+
 def discover_plugins() -> list[type[PluginBase]]:
     """Discover plugins using naming convention
 
@@ -383,14 +402,13 @@ def discover_plugins() -> list[type[PluginBase]]:
     PluginRegistry.clear_discovery_errors()
     PluginRegistry.clear_failed_plugins()
 
-    if not Conf.main.plugins_enabled.get():
+    if not Conf.plugins_enabled.get():
         return []
 
     # Ensure plugin search paths are present in sys.path
-    for path in [
-        Conf.main.plugins_path.get(),
-        PLUGINS_DEFAULT_PATH,
-    ] + OTHER_PLUGINS_PATHLIST:
+    for path in (
+        get_user_plugin_paths() + [PLUGINS_DEFAULT_PATH] + OTHER_PLUGINS_PATHLIST
+    ):
         rpath = osp.realpath(path)
         if rpath not in sys.path:
             sys.path.append(rpath)
@@ -406,6 +424,7 @@ def discover_plugins() -> list[type[PluginBase]]:
                 module = importlib.reload(sys.modules[name])
             else:
                 module = importlib.import_module(name)
+            _set_plugin_class_filepaths(module)
             modules.append(module)
         # Plugin discovery imports arbitrary third-party modules. We must catch
         # every failure here so discovery can continue and the error is exposed
@@ -417,7 +436,7 @@ def discover_plugins() -> list[type[PluginBase]]:
             # Log to file so it appears in Log Files viewer
             logger = logging.getLogger(__name__)
             logger.error("Error loading plugin '%s'", name, exc_info=True)
-            Conf.main.traceback_log_available.set(True)
+            Conf.traceback_log_available.set(True)
             # Accumulate for replay in internal console
             PluginRegistry.add_discovery_error(tb_text)
             # Record structured info about the failed plugin
@@ -444,7 +463,7 @@ def reload_plugin_modules() -> None:
     - Clears the plugin class registry
     - Reloads or imports all modules matching the plugin naming convention
     """
-    if not Conf.main.plugins_enabled.get():
+    if not Conf.plugins_enabled.get():
         return
 
     # Reset class registry before re-executing modules so that plugin
@@ -463,11 +482,10 @@ def discover_v020_plugins() -> list[tuple[str, str]]:
         List of tuples (plugin_name, directory_path) for discovered v0.20 plugins
     """
     v020_plugins = []
-    if Conf.main.plugins_enabled.get():
-        for path in [
-            Conf.main.plugins_path.get(),
-            PLUGINS_DEFAULT_PATH,
-        ] + OTHER_PLUGINS_PATHLIST:
+    if Conf.plugins_enabled.get():
+        for path in (
+            get_user_plugin_paths() + [PLUGINS_DEFAULT_PATH] + OTHER_PLUGINS_PATHLIST
+        ):
             rpath = osp.realpath(path)
             if rpath not in sys.path:
                 sys.path.append(rpath)

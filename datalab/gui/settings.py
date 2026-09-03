@@ -28,7 +28,7 @@ class MainSettings(gds.DataSet):
     g0 = gds.BeginGroup(_("Settings for main window and general features"))
     color_mode = gds.ChoiceItem(
         _("Color mode"),
-        zip(Conf.main.color_mode.values, Conf.main.color_mode.values),
+        zip(Conf.color_mode.choices, Conf.color_mode.choices),
         help=_("Color mode for the application"),
     )
     process_isolation_enabled = gds.BoolItem(
@@ -64,31 +64,6 @@ class MainSettings(gds.DataSet):
         help=_(
             "Memory threshold below which a warning is displayed "
             "before loading any new data"
-        ),
-    )
-    plugins_enabled = gds.BoolItem(
-        "",
-        _("Third-party plugins"),
-        help=_(
-            "Enable or disable third-party plugins immediately. "
-            "Changes are applied without restarting DataLab"
-        ),
-    )
-    plugins_path = gds.DirectoryItem(
-        _("Plugins path"),
-        allow_none=True,
-        help=_(
-            "Path to third-party plugins.<br><br>"
-            "DataLab will discover plugins in this path, "
-            "as well as in your PYTHONPATH."
-        ),
-    )
-    v020_plugins_warning_ignore = gds.BoolItem(
-        _("Ignore compatibility issues warning"),
-        _("DataLab v0.20 plugins"),
-        help=_(
-            "If enabled, DataLab will not warn you about v0.20 plugins that are "
-            "no longer compatible with v1.0."
         ),
     )
     _g0 = gds.EndGroup("")
@@ -158,7 +133,7 @@ class ProcSettings(gds.DataSet):
     g0 = gds.BeginGroup(_("Settings for computations"))
     operation_mode = gds.ChoiceItem(
         _("Operation mode"),
-        zip(Conf.proc.operation_mode.values, Conf.proc.operation_mode.values),
+        zip(Conf.operation_mode.choices, Conf.operation_mode.choices),
         help=_(
             "Operation mode for computations taking <i>N</i> inputs:"
             "<ul><li><b>single</b>: single operand mode</li>"
@@ -220,7 +195,7 @@ class ProcSettings(gds.DataSet):
     xarray_compat_behavior = gds.ChoiceItem(
         _("X-axis"),
         zip(
-            Conf.proc.xarray_compat_behavior.values,
+            Conf.xarray_compat_behavior.choices,
             [_("Ask before interpolation"), _("Interpolate systematically")],
         ),
         help=_(
@@ -230,7 +205,51 @@ class ProcSettings(gds.DataSet):
         ),
     )
     _g0 = gds.EndGroup("")
-    g1 = gds.BeginGroup(_("Settings for results management"))
+    g1 = gds.BeginGroup(_("History sessions"))
+    history_new_session_behavior = gds.ChoiceItem(
+        _("New object or file"),
+        zip(
+            Conf.history_new_session_behavior.choices,
+            [
+                _("Ask"),
+                _("Always start a new session"),
+                _("Continue in the current session"),
+            ],
+        ),
+        help=_(
+            "Behavior when a new object or file is added to a populated history "
+            "session."
+        ),
+    )
+    history_plugin_new_session_behavior = gds.ChoiceItem(
+        _("Plugin-created object"),
+        zip(
+            Conf.history_plugin_new_session_behavior.choices,
+            [
+                _("Ask"),
+                _("Always start a new session"),
+                _("Continue in the current session"),
+            ],
+        ),
+        help=_("Behavior when a plugin adds an object to a populated history session."),
+    )
+    history_plugin_multiload_behavior = gds.ChoiceItem(
+        _("Plugin multi-load"),
+        zip(
+            Conf.history_plugin_multiload_behavior.choices,
+            [
+                _("Ask once"),
+                _("Start a new session"),
+                _("Continue in the current session"),
+            ],
+        ),
+        help=_(
+            "Behavior when a plugin loads multiple objects into a populated history "
+            "session."
+        ),
+    )
+    _g1 = gds.EndGroup("")
+    g2 = gds.BeginGroup(_("Settings for results management"))
     keep_results = gds.BoolItem(
         _("Keep results in metadata after computation"),
         _("Keep results"),
@@ -253,7 +272,7 @@ class ProcSettings(gds.DataSet):
             "If disabled, the results dialog will not be shown automatically."
         ),
     )
-    _g1 = gds.EndGroup("")
+    _g2 = gds.EndGroup("")
 
 
 class ImageDefaultSettings(BaseImageParam):
@@ -266,7 +285,7 @@ class ImageDefaultSettings(BaseImageParam):
 def edit_default_image_settings(
     dataset: gds.DataSet, item: gds.DataItem, value: Any, parent: QW.QWidget
 ) -> bool:
-    """Edit default image settings
+    """Edit default image settings.
 
     Args:
         dataset: dataset
@@ -278,11 +297,11 @@ def edit_default_image_settings(
         True if the settings were edited
     """
     param = ImageDefaultSettings(_("Default image visualization settings"))
-    ima_def_dict = Conf.view.get_def_dict("ima")
+    ima_def_dict = Conf.get_sigima_defaults("ima")
     update_dataset(param, ima_def_dict)
     if param.edit(parent=parent):
         restore_dataset(param, ima_def_dict)
-        Conf.view.set_def_dict("ima", ima_def_dict)
+        Conf.set_sigima_defaults("ima", ima_def_dict)
         return True
     return False
 
@@ -480,51 +499,268 @@ class ViewSettings(gds.DataSet):
             "Can be toggled per-object using the checkbox in the Properties panel."
         ),
     )
+    show_marker_labels_in_table = gds.BoolItem(
+        _("Show marker labels in result tables"),
+        _("Marker labels"),
+        default=True,
+        help=_(
+            "Prepend a marker-label column to result tables for marker results "
+            "(XY/X/Y markers), so each row can be matched with the corresponding "
+            "cross or dashed cursor drawn on the plot. XY markers use numeric "
+            "labels (#1, #2, ...), axis markers use letters (a, b, c, ...)."
+        ),
+    )
     _g3 = gds.EndGroup("")
 
     _end_view_tabs = gds.EndTabGroup("")
 
 
-# Generator yielding (param, section, option) tuples from configuration dictionary
+def _ai_provider_choices(*_args: Any) -> list[tuple[str, str]]:
+    """Return the list of available AI providers as ChoiceItem entries.
+
+    Used as a deferred callable for :class:`AISettings.provider`'s
+    ``choices``, so the AI assistant package is only imported when the
+    Settings dialog is actually built.
+    """
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.aiassistant.providers import PROVIDERS  # noqa: WPS433
+
+    return [(name, name, None) for name in PROVIDERS]
+
+
+def _ai_refresh_parent(parent: QW.QWidget | None) -> None:
+    """Walk ``parent`` up looking for a guidata layout and refresh its widgets.
+
+    Used after a ButtonItem callback mutates several sibling fields, so the
+    UI reflects the change without requiring the user to reopen the dialog.
+    Silently no-ops when the layout cannot be located (worst case: the user
+    sees the updated values only after closing/reopening Preferences).
+    """
+    widget = parent
+    while widget is not None:
+        layout = getattr(widget, "edit", None)
+        update = getattr(layout, "update_widgets", None)
+        if callable(update):
+            try:
+                update()
+            except Exception:  # pylint: disable=broad-except
+                pass
+            return
+        widget = widget.parent()
+
+
+def _ai_load_preset(
+    dataset: gds.DataSet,
+    _item: Any,
+    _value: Any,
+    parent: QW.QWidget | None,
+) -> bool:
+    """Pop a list of OpenAI-compatible presets and apply the chosen one."""
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.aiassistant.presets import (  # noqa: WPS433
+        BASE_URL_PRESETS,
+        detect_preset,
+    )
+
+    labels = [p.label for p in BASE_URL_PRESETS]
+    current = detect_preset(getattr(dataset, "base_url", "") or "")
+    current_index = (
+        next((i for i, p in enumerate(BASE_URL_PRESETS) if p.key == current.key), 0)
+        if current is not None
+        else 0
+    )
+    label, ok = QW.QInputDialog.getItem(
+        parent,
+        _("Load preset"),
+        _("Choose an OpenAI-compatible endpoint preset:"),
+        labels,
+        current_index,
+        False,
+    )
+    if not ok:
+        return False
+    preset = next(p for p in BASE_URL_PRESETS if p.label == label)
+    dataset.base_url = preset.base_url
+    dataset.model = preset.default_model
+    _ai_refresh_parent(parent)
+    return True
+
+
+def _ai_test_connection(
+    dataset: gds.DataSet,
+    _item: Any,
+    _value: Any,
+    parent: QW.QWidget | None,
+) -> bool:
+    """Probe the configured endpoint and display the outcome in a dialog."""
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.aiassistant.presets import test_connection  # noqa: WPS433
+
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.aiassistant.providers import get_provider  # noqa: WPS433
+
+    base_url = (getattr(dataset, "base_url", "") or "").strip()
+    configured_key = (getattr(dataset, "api_key", "") or "").strip()
+    # Apply the same env-var fallback as the live provider so users who set
+    # OPENAI_API_KEY (recommended) are not forced to also paste the key into
+    # the dialog just to test the connection.
+    try:
+        provider_cls = get_provider(str(getattr(dataset, "provider", "openai")))
+        api_key = provider_cls.resolve_api_key(configured_key)
+    except Exception:  # pylint: disable=broad-except
+        api_key = configured_key
+    # Cap probe timeout at 10 s so the modal dialog never feels stuck.
+    timeout = min(float(getattr(dataset, "timeout", 10.0) or 10.0), 10.0)
+    result = test_connection(base_url, api_key, timeout=timeout)
+    title = _("AI Assistant — connection test")
+    box = QW.QMessageBox(parent)
+    box.setWindowTitle(title)
+    box.setIcon(
+        QW.QMessageBox.Icon.Information if result.ok else QW.QMessageBox.Icon.Warning
+    )
+    box.setText(result.message)
+    if result.details:
+        box.setDetailedText(result.details)
+    box.setStandardButtons(QW.QMessageBox.StandardButton.Ok)
+    box.exec()
+    return result.ok
+
+
+class AISettings(gds.DataSet):
+    """DataLab AI Assistant settings"""
+
+    enabled = gds.BoolItem(_("Enable AI Assistant"), default=True)
+    provider = gds.ChoiceItem(
+        _("Provider"),
+        _ai_provider_choices,
+        default="openai",
+        help=_(
+            "Use 'mock' to test the AI assistant pipeline offline without "
+            "any API key (scripted replies based on simple keywords)."
+        ),
+    )
+    model = gds.StringItem(_("Model"), default="gpt-4o-mini")
+    api_key = gds.StringItem(
+        _("API key"),
+        default="",
+        notempty=False,
+        help=_(
+            "Your provider API key. Stored in the DataLab INI file in plain "
+            "text — keep this file private.\n\n"
+            "Recommended: leave this field empty and set the provider's "
+            "standard environment variable instead (e.g. OPENAI_API_KEY for "
+            "OpenAI). This avoids writing the secret to disk and lets the "
+            "same credential be shared with other tools."
+        ),
+    )
+    base_url = gds.StringItem(
+        _("Base URL (optional)"),
+        default="",
+        notempty=False,
+        help=_("Override for OpenAI-compatible endpoints. Leave empty for default."),
+    )
+    load_preset = gds.ButtonItem(
+        _("Load preset..."),
+        _ai_load_preset,
+        icon="libre-gui-settings.svg",
+        help=_(
+            "Pre-fill the Base URL and Model fields with a known OpenAI-"
+            "compatible endpoint (OpenAI cloud, Ollama, LM Studio, llama.cpp, "
+            "vLLM)."
+        ),
+    )
+    test_connection = gds.ButtonItem(
+        _("Test connection"),
+        _ai_test_connection,
+        icon="libre-gui-link.svg",
+        help=_(
+            "Probe the configured endpoint (GET /models) to verify the URL, "
+            "API key and network reachability. Does not consume any token."
+        ),
+    )
+    temperature = gds.FloatItem(
+        _("Temperature"), default=0.2, min=0.0, max=2.0, step=0.1
+    )
+    timeout = gds.FloatItem(_("HTTP timeout (s)"), default=60.0, min=5.0, max=600.0)
+    max_iterations = gds.IntItem(
+        _("Max tool-call iterations"), default=8, min=1, max=64
+    )
+    max_history_messages = gds.IntItem(
+        _("Max history messages (0 = unlimited)"),
+        default=0,
+        min=0,
+        max=1024,
+        help=_(
+            "Cap the number of past messages (user + assistant + tool) sent "
+            "to the provider on each request. Useful with local models "
+            "that have a small context window (e.g. n_ctx=4096 on "
+            "llama.cpp): if the conversation grows beyond the model's "
+            "context, the server returns HTTP 400. Set to 0 to disable "
+            "the cap. The system prompt and the current user turn are "
+            "always preserved."
+        ),
+    )
+    auto_approve_readonly = gds.BoolItem(
+        _("Auto-approve read-only inspection tools"), default=True
+    )
+    expose_macro_tool = gds.BoolItem(
+        _("Allow AI to create and run macros (Python code)"),
+        default=True,
+        help=_(
+            "When enabled, the AI assistant may create and execute Python "
+            "macros with full access to DataLab through the RemoteProxy API. "
+            "Each macro execution still requires explicit user confirmation.\n\n"
+            "Disable this option if you do not want the AI to be able to "
+            "propose arbitrary code execution at all (the macro tool is then "
+            "hidden from the model entirely)."
+        ),
+    )
+
+
+# Names of all options exposed by :class:`AISettings`. Used to detect whether
+# the AI assistant configuration was modified through the global Settings
+# dialog (so callers can rebuild the AI controller).
+AI_OPTION_NAMES: frozenset[str] = frozenset(
+    item.get_name() for item in AISettings().get_items()
+)
+
+
+# Generator yielding (param, field name, dataset option) tuples
 def _iter_conf(
     paramdict: dict[str, gds.DataSet],
 ) -> Generator[tuple[gds.DataSet, str, str], None, None]:
     """Iterate over configuration parameters"""
-    confdict = Conf.to_dict()
-    for section_name, section in confdict.items():
-        if section_name in paramdict:
-            for option in section:
-                param = paramdict[section_name]
-                if hasattr(param, option):
-                    yield param, section_name, option
+    options = Conf
+    for category, field_names in options.fields_by_category().items():
+        if category not in paramdict:
+            continue
+        param = paramdict[category]
+        for field_name in field_names:
+            option = options.get_field_ui_key(field_name)
+            if option is None:
+                continue
+            if hasattr(param, option):
+                yield param, field_name, option
 
 
 def conf_to_datasets(paramdict: dict[str, gds.DataSet]) -> None:
     """Convert DataLab configuration to datasets"""
-    for param, section, option in _iter_conf(paramdict):
-        value = getattr(getattr(Conf, section), option).get()
-        # ConfigParser automatically unescapes %% to % when reading, but to be safe
-        # we ensure datetime format strings are properly unescaped for display
-        if option in ("sig_datetime_format_s", "sig_datetime_format_ms"):
-            value = value.replace("%%", "%")
+    for param, field_name, option in _iter_conf(paramdict):
+        value = getattr(Conf, field_name).get()
         setattr(param, option, value)
 
 
 def datasets_to_conf(paramdict: dict[str, gds.DataSet]) -> None:
     """Convert datasets to DataLab configuration"""
-    for param, section, option in _iter_conf(paramdict):
+    for param, field_name, option in _iter_conf(paramdict):
         value = getattr(param, option)
-        # Escape % characters for datetime format strings (ConfigParser requirement)
-        if option in ("sig_datetime_format_s", "sig_datetime_format_ms"):
-            value = value.replace("%", "%%")
-        getattr(getattr(Conf, section), option).set(value)
+        getattr(Conf, field_name).set(value)
 
 
 RESTART_OPTIONS = (
     ("process_isolation_enabled", _("Process isolation enable status")),
     ("rpc_server_enabled", _("RPC server enable status")),
     ("console_enabled", _("Console enable status")),
-    ("plugins_path", _("Third-party plugins path")),
 )
 
 
@@ -532,7 +768,7 @@ def get_restart_items_values(paramdict: dict[str, gds.DataSet]) -> list:
     """Get restart items values"""
     values = []
     for option, _name in RESTART_OPTIONS:
-        for param, _section, _option in _iter_conf(paramdict):
+        for param, _field_name, _option in _iter_conf(paramdict):
             if option == _option:
                 values.append(getattr(param, option))
     return values
@@ -541,7 +777,7 @@ def get_restart_items_values(paramdict: dict[str, gds.DataSet]) -> list:
 def get_all_values(paramdict: dict[str, gds.DataSet]) -> list:
     """Get all values"""
     values = []
-    for param, _section, _option in _iter_conf(paramdict):
+    for param, _field_name, _option in _iter_conf(paramdict):
         value = getattr(param, _option)
         if isinstance(value, gds.DataSet):
             # For dataset-like options, get a serializable representation
@@ -553,18 +789,31 @@ def get_all_values(paramdict: dict[str, gds.DataSet]) -> list:
 def get_all_options(paramdict: dict[str, gds.DataSet]) -> list:
     """Get all options"""
     options = []
-    for _param, _section, _option in _iter_conf(paramdict):
+    for _param, _field_name, _option in _iter_conf(paramdict):
         options.append(_option)
     return options
 
 
 def create_dataset_dict() -> dict[str, gds.DataSet]:
     """Create a dictionary of datasets for each settings tab, populate it from Conf."""
+    # Local import to keep the AI assistant package optional and avoid loading
+    # its provider stack until the Settings dialog is actually opened.
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.aiassistant.providers import PROVIDERS  # noqa: WPS433
+
+    # Tolerate stale config values (e.g. an unknown provider name from a
+    # previous DataLab version) so :class:`AISettings`' ChoiceItem does not
+    # raise when populated from Conf.
+    provider = str(Conf.ai_provider.get("openai"))
+    if provider not in PROVIDERS:
+        Conf.ai_provider.set("openai")
+
     paramdict = {
         "main": MainSettings(_("General"), icon="libre-gui-settings.svg"),
         "proc": ProcSettings(_("Processing"), icon="libre-tech-ram.svg"),
         "view": ViewSettings(_("Visualization"), icon="visualization.svg"),
         "io": IOSettings(_("I/O"), icon="io.svg"),
+        "ai": AISettings(_("AI Assistant"), icon="ai-assistant.svg"),
         "console": ConsoleSettings(_("Console"), icon="console.svg"),
     }
     conf_to_datasets(paramdict)

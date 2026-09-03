@@ -34,7 +34,7 @@ from typing import Dict, Union
 
 import psutil
 
-from datalab.config import APP_NAME, Conf
+from datalab.config import APP_NAME, get_config_path
 
 logger = logging.getLogger(__name__)
 
@@ -208,7 +208,7 @@ class ApplicationInstanceRegistry:
         Returns:
             Absolute path to the lock file inside the configuration directory.
         """
-        return Conf.get_path(self.lock_filename)
+        return get_config_path(self.lock_filename)
 
     def is_pid_alive(self, pid: int) -> bool:
         """Check if a process with the given PID is still running.

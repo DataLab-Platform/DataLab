@@ -248,6 +248,7 @@ intersphinx_mapping = {
     "guidata": ("https://guidata.readthedocs.io/en/latest/", None),
     "plotpy": ("https://plotpy.readthedocs.io/en/latest/", None),
     "sigima": ("https://sigima.readthedocs.io/en/latest/", None),
+    "sigimax": ("https://sigimax.readthedocs.io/en/latest/", None),
 }
 
 # -- Latex macros for math in docstrings -------------------------------------

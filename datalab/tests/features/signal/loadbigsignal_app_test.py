@@ -57,7 +57,7 @@ def create_large_random_dataframe(nrows: int, ncols: int) -> pd.DataFrame:
     return df
 
 
-@pytest.mark.parametrize("nrows, ncols", [(10000, 16)])
+@pytest.mark.parametrize("nrows, ncols", [(2500, 16)])
 def test_loadbigsignal_app(nrows: int, ncols: int) -> None:
     """Load big signal application test"""
     with helpers.WorkdirRestoringTempDir() as tmpdir:

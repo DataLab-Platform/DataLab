@@ -16,6 +16,8 @@ Tests cover:
 
 # pylint: disable=protected-access
 
+import importlib
+import sys
 import time
 from unittest.mock import Mock, patch
 
@@ -26,6 +28,22 @@ from qtpy import QtWidgets as QW
 import datalab.gui.processor.base as base_module
 from datalab.gui.processor.base import Worker, WorkerState, WorkerStateMachine
 from datalab.gui.processor.catcher import CompOut
+
+
+@pytest.fixture(autouse=True)
+def drain_pending_qt_timers():
+    """Fire stale unattended auto-close timers before leaving each test.
+
+    In unattended mode, ``qt_app_context`` schedules a zero-delay
+    ``close_widgets_and_quit`` timer on exit. Tests here never run the Qt
+    event loop afterwards, so without this drain the timer stays pending in
+    the shared ``QApplication`` and fires during a later test, closing that
+    test's freshly created main window (e.g. unregistering its plugins).
+    """
+    yield
+    if QW.QApplication.instance() is not None:
+        for _ in range(3):
+            QW.QApplication.processEvents()
 
 
 class TestWorkerStateMachine:
@@ -190,6 +208,28 @@ class TestWorker:
             assert result.result == 15  # 10 + 5
             assert result.error_msg is None
             assert worker.state_machine.current_state == WorkerState.IDLE
+
+    def test_pool_restart_loads_runtime_plugin_module(self, tmp_path):
+        """Test that a restarted spawn worker imports a runtime plugin module."""
+        module_name = "datalab_test_runtime_plugin"
+        plugin_file = tmp_path / f"{module_name}.py"
+        plugin_file.write_text(
+            "def increment(value):\n    return value + 1\n",
+            encoding="utf-8",
+        )
+        sys.path.insert(0, str(tmp_path))
+        try:
+            plugin_module = importlib.import_module(module_name)
+            worker = Worker()
+            worker.restart_pool()
+            worker.run(plugin_module.increment, (1,))
+            while not worker.is_computation_finished():
+                time.sleep(0.001)
+            result = worker.get_result()
+            assert result.result == 2
+        finally:
+            sys.modules.pop(module_name, None)
+            sys.path.remove(str(tmp_path))
 
     def test_computation_exception_case(self):
         """Test Case 2b: Computation raises an exception."""

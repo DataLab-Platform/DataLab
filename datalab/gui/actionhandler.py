@@ -46,6 +46,7 @@ from guidata.qthelpers import add_actions, create_action
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from sigimax.widgets import fitdialog
 
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter, have_results
 from datalab.config import Conf, _
@@ -54,7 +55,6 @@ from datalab.gui.processor.base import (
     clear_analysis_parameters,
     extract_analysis_parameters,
 )
-from datalab.widgets import fitdialog
 
 if TYPE_CHECKING:
     from sigima.objects import ImageObj, SignalObj
@@ -370,8 +370,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             adapter: Adapter for the result to delete
         """
         # Check if this result matches the stored analysis parameters
-        # If so, clear them to prevent auto-recompute from attempting to
-        # recompute the deleted analysis when ROI changes
+        # If so, clear them to prevent a manual recompute from attempting to
+        # recompute the deleted analysis
         analysis_params = extract_analysis_parameters(obj)
         if (
             analysis_params is not None
@@ -829,9 +829,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Recompute"),
                 icon_name="recompute.svg",
                 shortcut="Ctrl+R",
-                tip=_("Recompute selected %s with its processing parameters")
+                tip=_(
+                    "Recompute selected %s: refresh both processing and "
+                    "analysis results with their stored parameters"
+                )
                 % self.OBJECT_STR,
-                triggered=self.panel.recompute_processing,
+                triggered=self.panel.recompute_selected,
                 select_condition=SelectCond.at_least_one_group_or_one_object,
                 context_menu_pos=-1,
                 toolbar_pos=-1,
@@ -1086,6 +1089,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             with self.new_menu(_("Level adjustment"), icon_name="level_adjustment.svg"):
                 self.action_for("normalize")
                 self.action_for("clip")
+                self.action_for("replace_special_values")
                 self.new_action(
                     _("Offset correction"),
                     triggered=self.panel.processor.compute_offset_correction,
@@ -1196,7 +1200,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 select_condition=SelectCond.with_results,
             )
             self.show_label_action.setCheckable(True)
-            self.show_label_action.setChecked(Conf.view.show_result_label.get())
+            self.show_label_action.setChecked(Conf.show_result_label.get())
             self.new_action(
                 _("Plot results") + "...",
                 triggered=self.panel.plot_results,
@@ -1441,11 +1445,16 @@ class SignalActionHandler(BaseActionHandler):
                 tip=_("Compute the ordinate at a given x value (linear interpolation)"),
             )
             self.action_for("extract_pulse_features")
+            self.action_for("extract_peak_positions")
             self.new_action(
-                _("Peak detection"),
-                separator=True,
+                _("Peak detection..."),
                 triggered=self.panel.processor.compute_peak_detection,
                 icon_name="peak_detect.svg",
+                tip=_(
+                    "Interactive peak detection: adjust threshold and minimum "
+                    "distance visually, then store detected peaks as an "
+                    "XY-markers table result"
+                ),
             )
             self.action_for("sampling_rate_period", separator=True)
             self.action_for("dynamic_parameters", context_menu_pos=-1)
@@ -1456,6 +1465,16 @@ class SignalActionHandler(BaseActionHandler):
         """Create actions that are added to the menus in the end"""
         super().create_last_actions()
         with self.new_category(ActionCategory.OPERATION):
+            self.new_action(
+                _("Create signal from markers table..."),
+                separator=True,
+                triggered=self.panel.processor.compute_markers_to_signal,
+                icon_name="peak_detect.svg",
+                tip=_(
+                    "Build a sticks signal from an XY-markers table result "
+                    "(e.g. from 'Extract peak positions')"
+                ),
+            )
             self.action_for("signals_to_image", separator=True)
 
         with self.new_category(ActionCategory.VIEW):
@@ -1466,7 +1485,7 @@ class SignalActionHandler(BaseActionHandler):
                 tip=_("Toggle curve anti-aliasing on/off (may slow down plotting)"),
                 toolbar_pos=-1,
             )
-            antialiasing_action.setChecked(Conf.view.sig_antialiasing.get(True))
+            antialiasing_action.setChecked(Conf.sig_antialiasing.get(True))
             self.new_action(
                 _("Reset curve styles"),
                 select_condition=SelectCond.always,
@@ -1749,4 +1768,4 @@ class ImageActionHandler(BaseActionHandler):
                 toggled=self.panel.toggle_show_contrast,
                 toolbar_pos=-1,
             )
-            showcontrast_action.setChecked(Conf.view.show_contrast.get(True))
+            showcontrast_action.setChecked(Conf.show_contrast.get(True))

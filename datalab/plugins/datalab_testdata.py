@@ -42,18 +42,24 @@ class PluginTestData(PluginBase):
         Args:
             registry_class: Registry class (SignalIORegistry or ImageIORegistry)
             title: Progress bar title
-
-        Returns:
-            List of (filename, object) tuples
         """
+        if issubclass(registry_class, SignalIORegistry):
+            panel_str = "signal"
+            panel = self.signalpanel
+        elif issubclass(registry_class, ImageIORegistry):
+            panel_str = "image"
+            panel = self.imagepanel
+        else:
+            raise TypeError(f"Unsupported I/O registry class: {registry_class!r}")
         test_objs = list(helpers.read_test_objects(registry_class))
-        with create_progress_bar(self.signalpanel, title, max_=len(test_objs)) as prog:
-            for i_obj, (_fname, obj) in enumerate(test_objs):
-                prog.setValue(i_obj + 1)
-                if prog.wasCanceled():
-                    break
-                if obj is not None:
-                    self.proxy.add_object(obj)
+        with self.proxy.multiload_session(panel_str):
+            with create_progress_bar(panel, title, max_=len(test_objs)) as prog:
+                for i_obj, (_fname, obj) in enumerate(test_objs):
+                    prog.setValue(i_obj + 1)
+                    if prog.wasCanceled():
+                        break
+                    if obj is not None:
+                        self.proxy.add_object(obj)
 
     # Signal processing features ------------------------------------------------
     def create_paracetamol_signal(self) -> None:

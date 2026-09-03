@@ -3,92 +3,383 @@
 # This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Version 1.3"
-msgstr ""
+msgstr "Version 1.3"
 
 msgid "DataLab Version 1.3.0"
-msgstr ""
+msgstr "DataLab Version 1.3.0"
 
 msgid "✨ New Features"
-msgstr ""
+msgstr "✨ Nouvelles fonctionnalités"
+
+msgid "**History Panel:**"
+msgstr "**Panneau d'historique :**"
+
+msgid "DataLab now records what you do and lets you replay it. A new **History** panel keeps track of every action applied to signals and images, from object creation and file loading to processing, analysis and region-of-interest edits (implements [Issue #90](https://github.com/DataLab-Platform/DataLab/issues/90))."
+msgstr "DataLab enregistre désormais vos actions et vous permet de les rejouer. Un nouveau panneau **Historique** suit chaque action appliquée aux signaux et aux images, de la création d'objets et du chargement de fichiers au traitement, à l'analyse et aux modifications des régions d'intérêt (implémente [Issue #90](https://github.com/DataLab-Platform/DataLab/issues/90))."
+
+msgid "**Recording sessions**: actions are grouped into sessions, one active session per panel. Recording is disabled by default and is proposed when you create or load an object; configurable session policies control how plugin and macro objects are attached to sessions"
+msgstr "**Sessions d'enregistrement** : les actions sont regroupées en sessions, une session active par panneau. L'enregistrement est désactivé par défaut et est proposé lors de la création ou du chargement d'un objet ; les politiques de session configurables contrôlent la manière dont les objets plugin et macro sont attachés aux sessions"
+
+msgid "**Processing chains**: each session is presented as a linear processing chain, making the lineage of a result immediately readable"
+msgstr "**Chaînes de traitement** : chaque session est présentée comme une chaîne de traitement linéaire, rendant immédiatement lisible la filiation d'un résultat"
+
+msgid "**Replay**: replay a whole session, or step through it action by action, to reproduce a workflow on new data. Interactive curve fits and intensity profiles are recorded as deterministic actions and replay without reopening their dialogs"
+msgstr "**Relecture** : relire une session entière, ou la parcourir action par action, pour reproduire un flux de travail sur de nouvelles données. Les ajustements de courbes interactifs et les profils d'intensité sont enregistrés comme des actions déterministes et rejoués sans rouvrir leurs boîtes de dialogue"
+
+msgid "**In-place editing**: processing, analysis and object-creation parameters can be edited directly from the history, and downstream steps are recomputed through the cascade"
+msgstr "**Édition sur place** : les paramètres de traitement, d'analyse et de création d'objets peuvent être modifiés directement depuis l'historique, et les étapes en aval sont recalculées en cascade"
+
+msgid "**Duplication**: duplicate a chain to explore a variant without touching the original one"
+msgstr "**Duplication** : dupliquer une chaîne pour explorer une variante sans toucher à l'originale"
+
+msgid "**Persistence**: histories are stored in the HDF5 workspace and can also be exported and imported as standalone `.dlhist` files"
+msgstr "**Persistance** : les historiques sont stockés dans l'espace de travail HDF5 et peuvent également être exportés et importés en tant que fichiers `.dlhist` autonomes"
+
+msgid "**Compatibility checks**: before replaying, DataLab validates the recorded actions against the current workspace state and reports what can or cannot be applied"
+msgstr "**Vérifications de compatibilité** : avant la relecture, DataLab valide les actions enregistrées par rapport à l'état actuel de l'espace de travail et signale ce qui peut ou ne peut pas être appliqué"
+
+msgid "The Delete key removes the selected entries in the History panel (same behavior as in the Signal and Image panels), and only applies while the history tree has focus"
+msgstr "La touche Suppr supprime les entrées sélectionnées dans le panneau Historique (même comportement que dans les panneaux Signal et Image), et ne s'applique que lorsque l'arborescence de l'historique a le focus"
+
+msgid "A resolution dialog is displayed when replaying a processing chain broken by deleted objects: choose \"Repair and continue\" to prune the broken steps and replay the remaining valid ones, or cancel without modifying anything"
+msgstr "Une boîte de dialogue de résolution s'affiche lors de la relecture d'une chaîne de traitement interrompue par des objets supprimés : choisissez « Réparer et continuer » pour élaguer les étapes cassées et rejouer les étapes valides restantes, ou annulez sans rien modifier"
+
+msgid "A dedicated documentation page and a step-by-step tutorial are available"
+msgstr "Une page de documentation dédiée et un tutoriel pas à pas sont disponibles"
+
+msgid "**Built-in AI Assistant:**"
+msgstr "**Assistant IA intégré :**"
+
+msgid "DataLab now ships an optional **AI Assistant** dock panel that can converse with you, inspect the workspace, create and process signals and images, and write and run Python macros (implements [Issue #316](https://github.com/DataLab-Platform/DataLab/issues/316))."
+msgstr "DataLab est désormais livré avec un panneau d'ancrage optionnel **Assistant IA** qui peut converser avec vous, inspecter l'espace de travail, créer et traiter des signaux et des images, et écrire et exécuter des macros Python (implémente [Issue #316](https://github.com/DataLab-Platform/DataLab/issues/316))."
+
+msgid "Works with any **OpenAI-compatible endpoint**: OpenAI, GitHub Models, Azure OpenAI, Ollama, LM Studio, etc. A **mock provider** is available to try the assistant offline, without any API key"
+msgstr "Fonctionne avec n'importe quel **endpoint compatible OpenAI** : OpenAI, GitHub Models, Azure OpenAI, Ollama, LM Studio, etc. Un **fournisseur factice** est disponible pour essayer l'assistant hors ligne, sans clé API"
+
+msgid "The assistant can call a set of **built-in tools**: list and inspect objects, introspect the available operations, create synthetic signals and images, load files, apply any registered processing, trigger plugin actions, and create and run macros"
+msgstr "L'assistant peut appeler un ensemble d'**outils intégrés** : lister et inspecter les objets, introspecter les opérations disponibles, créer des signaux et des images synthétiques, charger des fichiers, appliquer tout traitement enregistré, déclencher des actions de plugins, et créer et exécuter des macros"
+
+msgid "**Every action that modifies the workspace requires an explicit confirmation**, with a parameter preview and a syntax-highlighted preview of the macro source when a macro is proposed. Read-only tools may be auto-approved"
+msgstr "**Chaque action modifiant l'espace de travail nécessite une confirmation explicite**, avec un aperçu des paramètres et un aperçu du code source de la macro avec coloration syntaxique lorsque une macro est proposée. Les outils en lecture seule peuvent être approuvés automatiquement"
+
+msgid "Conversations are persisted, can be browsed and reloaded, and exported to Markdown; token usage and context size are displayed"
+msgstr "Les conversations sont conservées, peuvent être consultées et rechargées, et exportées en Markdown ; l'utilisation des jetons et la taille du contexte sont affichées"
+
+msgid "Settings (provider, model, API key, base URL, temperature, timeout, iteration cap, auto-approval) are grouped in a dedicated **AI Assistant** tab of the preferences dialog, with a connection test button"
+msgstr "Les paramètres (fournisseur, modèle, clé API, URL de base, température, délai d'attente, limite d'itérations, approbation automatique) sont regroupés dans un onglet dédié **Assistant IA** de la boîte de dialogue des préférences, avec un bouton de test de connexion"
+
+msgid "The API key is stored in clear text in the DataLab configuration file, and the settings dialog states it explicitly"
+msgstr "La clé API est stockée en clair dans le fichier de configuration de DataLab, et la boîte de dialogue des paramètres l'indique explicitement"
+
+msgid "**Command palette:**"
+msgstr "**Palette de commandes :**"
+
+msgid "A VSCode-style **command palette** lets you search and run any menu command by typing part of its name or of its menu path, e.g. \"Processing ‣ Fourier analysis ‣ FFT\" (implements [Issue #337](https://github.com/DataLab-Platform/DataLab/issues/337))"
+msgstr "Une **palette de commandes** de style VSCode vous permet de rechercher et d'exécuter n'importe quelle commande de menu en tapant une partie de son nom ou de son chemin de menu, par exemple \"Traitement ‣ Analyse de Fourier ‣ FFT\" (implémente [Issue #337](https://github.com/DataLab-Platform/DataLab/issues/337))"
+
+msgid "Three entry points: a search box in the top-right corner of the menu bar, a \"Command palette...\" entry at the top of the Help menu, and the `Ctrl+Shift+P` keyboard shortcut"
+msgstr "Trois points d'entrée : une zone de recherche dans le coin supérieur droit de la barre de menu, une entrée \"Palette de commandes...\" en haut du menu Aide, et le raccourci clavier `Ctrl+Shift+P`"
+
+msgid "Fuzzy matching ranks the results, so a few characters are enough to reach the right command, with full keyboard navigation"
+msgstr "La correspondance approximative classe les résultats, donc quelques caractères suffisent pour atteindre la bonne commande, avec une navigation complète au clavier"
+
+msgid "**Spectral analysis support:**"
+msgstr "**Support de l'analyse spectrale :**"
+
+msgid "Following the spectral analysis work carried out in Sigima, DataLab gains the matching interface (implements [Issue #309](https://github.com/DataLab-Platform/DataLab/issues/309))."
+msgstr "Suite au travail d'analyse spectrale réalisé dans Sigima, DataLab bénéficie de l'interface correspondante (implémente [Issue #309](https://github.com/DataLab-Platform/DataLab/issues/309))."
+
+msgid "New **Analysis > Extract peak positions** feature, storing the detected peaks as an XY-markers table result rendered as cross markers on the plot"
+msgstr "Nouvelle fonctionnalité **Analyse > Extraire les positions des pics**, stockant les pics détectés sous forme de tableau de marqueurs XY rendu sous forme de croix sur le graphique"
+
+msgid "New **Analysis > Peak detection...** interactive dialog, to adjust threshold and minimum distance visually before storing the result"
+msgstr "Nouvelle boîte de dialogue interactive **Analyse > Détection de pics...**, pour ajuster visuellement le seuil et la distance minimale avant de stocker le résultat"
+
+msgid "New **Operations > Create signal from markers table...** feature, building a sticks signal from an XY-markers table result — convenient to overlay reference lines on a spectrum"
+msgstr "Nouvelle fonctionnalité **Opérations > Créer un signal à partir d'un tableau de marqueurs...**, construisant un signal en bâtons à partir d'un tableau de marqueurs XY — pratique pour superposer des lignes de référence sur un spectre"
+
+msgid "Marker results can be labelled in result tables (`#1`, `#2`, ... for XY markers, `a`, `b`, `c`, ... for axis markers), so each row can be matched with the corresponding marker drawn on the plot. This is controlled by a new \"Show marker labels in result tables\" option in the settings"
+msgstr "Les résultats des marqueurs peuvent être étiquetés dans les tableaux de résultats (`#1`, `#2`, ... pour les marqueurs XY, `a`, `b`, `c`, ... pour les marqueurs d'axe), de sorte que chaque ligne peut être associée au marqueur correspondant tracé sur le graphique. Cela est contrôlé par une nouvelle option \"Afficher les étiquettes des marqueurs dans les tableaux de résultats\" dans les paramètres"
+
+msgid "Result labels now support a customizable position and offset"
+msgstr "Les étiquettes de résultat prennent désormais en charge une position et un décalage personnalisables"
+
+msgid "**Signal regions of interest rendered along the curve:**"
+msgstr "**Régions d'intérêt du signal tracées le long de la courbe :**"
+
+msgid "Signal ROIs are no longer drawn as a single full-height yellow rectangle: the translucent fill is now **clipped to the signal curve** with a baseline at `y = 0`, and each ROI uses a **different color** taken from a cyclic ten-color palette (implements [Issue #314](https://github.com/DataLab-Platform/DataLab/issues/314))"
+msgstr "Les ROI du signal ne sont plus tracées sous forme d'un seul rectangle jaune pleine hauteur : le remplissage translucide est désormais **découpé selon la courbe du signal** avec une ligne de base à `y = 0`, et chaque ROI utilise une **couleur différente** tirée d'une palette cyclique de dix couleurs (implémente [Issue #314](https://github.com/DataLab-Platform/DataLab/issues/314))"
+
+msgid "Colors are derived from the ROI index, so a given ROI keeps the same color across deletions, reorderings and editor reopenings"
+msgstr "Les couleurs sont dérivées de l'indice de la ROI, de sorte qu'une ROI donnée conserve la même couleur malgré les suppressions, les réorganisations et la réouverture de l'éditeur"
+
+msgid "Non-finite samples are filtered out before drawing, so signals with gaps render cleanly; on a logarithmic Y axis, the baseline falls back to the canvas bottom"
+msgstr "Les échantillons non finis sont filtrés avant le tracé, de sorte que les signaux avec des lacunes sont rendus proprement ; sur un axe Y logarithmique, la ligne de base revient au bas de la zone de dessin"
+
+msgid "ROI persistence is unchanged: only coordinates are stored, visual properties are recomputed at render time"
+msgstr "La persistance des ROI reste inchangée : seules les coordonnées sont stockées, les propriétés visuelles sont recalculées au moment du rendu"
+
+msgid "**Regions of interest from detection (auto mask):**"
+msgstr "**Régions d'intérêt issues de la détection (masque automatique) :**"
+
+msgid "Contour, blob, peak and Hough circle detection can create regions of interest directly from the detected features, turning intensity contours into editable polygon ROIs usable by every ROI-aware processing feature (implements [Issue #294](https://github.com/DataLab-Platform/DataLab/issues/294))"
+msgstr "La détection de contours, de blobs, de pics et de cercles de Hough peut créer des régions d'intérêt directement à partir des caractéristiques détectées, transformant les contours d'intensité en ROI polygonales éditables utilisables par toutes les fonctionnalités de traitement prenant en charge les ROI (implémente [Issue #294](https://github.com/DataLab-Platform/DataLab/issues/294))"
 
 msgid "**Third-party plugin discovery via environment variable:**"
-msgstr ""
+msgstr "**Découverte des plugins tiers via une variable d'environnement :**"
 
-msgid ""
-"Added support for the `DATALAB_PLUGINS` environment variable, allowing "
-"one or more directories to be specified as additional plugin search paths"
-msgstr ""
+msgid "Added support for the `DATALAB_PLUGINS` environment variable, allowing one or more directories to be specified as additional plugin search paths (implements [Issue #311](https://github.com/DataLab-Platform/DataLab/issues/311))"
+msgstr "Ajout de la prise en charge de la variable d'environnement `DATALAB_PLUGINS`, permettant de spécifier un ou plusieurs répertoires comme chemins de recherche supplémentaires pour les plugins"
 
-msgid ""
-"Multiple directories can be listed using the OS path separator (`;` on "
-"Windows, `:` on Linux/macOS), following the same convention as "
-"`PYTHONPATH`"
-msgstr ""
+msgid "Multiple directories can be listed using the OS path separator (`;` on Windows, `:` on Linux/macOS), following the same convention as `PYTHONPATH`"
+msgstr "Plusieurs répertoires peuvent être listés en utilisant le séparateur de chemin du système d'exploitation (`;` sous Windows, `:` sous Linux/macOS), selon la même convention que `PYTHONPATH`"
 
-msgid ""
-"Listed directories are appended to the existing plugin search paths at "
-"startup and are picked up automatically by the plugin discovery mechanism"
-msgstr ""
+msgid "Listed directories are appended to the existing plugin search paths at startup and are picked up automatically by the plugin discovery mechanism"
+msgstr "Les répertoires listés sont ajoutés aux chemins de recherche existants au démarrage et sont automatiquement pris en compte par le mécanisme de découverte des plugins"
 
-msgid ""
-"Non-existent directories are silently skipped (a warning is recorded in "
-"the log file), so a stale environment variable on another machine will "
-"not prevent DataLab from starting"
-msgstr ""
+msgid "Non-existent directories are silently skipped (a warning is recorded in the log file), so a stale environment variable on another machine will not prevent DataLab from starting"
+msgstr "Les répertoires inexistants sont ignorés silencieusement (un avertissement est consigné dans le fichier journal), ainsi une variable d'environnement obsolète sur une autre machine n'empêchera pas le démarrage de DataLab"
+
+msgid "**Plugin management user experience:**"
+msgstr "**Expérience utilisateur de gestion des plugins :**"
+
+msgid "The plugin configuration dialog has been reworked to make third-party plugins easier to install, inspect and troubleshoot (implements [Issue #302](https://github.com/DataLab-Platform/DataLab/issues/302))."
+msgstr "La boîte de dialogue de configuration des plugins a été repensée pour faciliter l'installation, l'inspection et le dépannage des plugins tiers (implémente [Issue #302](https://github.com/DataLab-Platform/DataLab/issues/302))."
+
+msgid "**Persistent additional plugin directories**: several extra directories can be added, edited and removed from the dialog and are saved in the DataLab configuration, next to the read-only list of default directories"
+msgstr "**Répertoires de plugins supplémentaires persistants** : plusieurs répertoires supplémentaires peuvent être ajoutés, modifiés et supprimés depuis la boîte de dialogue et sont enregistrés dans la configuration de DataLab, à côté de la liste en lecture seule des répertoires par défaut"
+
+msgid "**Open file** and **Show in folder** buttons per plugin, to inspect or edit a plugin script without hunting through the file system"
+msgstr "Boutons **Ouvrir le fichier** et **Afficher dans le dossier** par plugin, pour inspecter ou modifier un script de plugin sans parcourir le système de fichiers"
+
+msgid "An **\"Apply and reload plugins\"** button and a **Plugins > Reload plugins** menu entry, to pick up plugin changes without restarting DataLab"
+msgstr "Un bouton **\"Appliquer et recharger les plugins\"** et une entrée de menu **Plugins > Recharger les plugins**, pour prendre en compte les modifications des plugins sans redémarrer DataLab"
+
+msgid "A **last load timestamp** displayed for the current session, to confirm that changes have been taken into account"
+msgstr "Un **horodatage de dernier chargement** affiché pour la session en cours, pour confirmer que les modifications ont été prises en compte"
+
+msgid "Plugin list **filtering** (all / enabled / disabled / with errors), a global enable/disable switch, and an option to hide compatibility warnings for legacy v0.20 plugins"
+msgstr "Filtrage de la liste des plugins (tous / activés / désactivés / avec erreurs), un interrupteur global activer/désactiver, et une option pour masquer les avertissements de compatibilité pour les plugins hérités v0.20"
+
+msgid "A **Show in folder** action is now available for the DataLab configuration file, from the installation and configuration viewer"
+msgstr "Une action **Afficher dans le dossier** est désormais disponible pour le fichier de configuration de DataLab, depuis le visualiseur d'installation et de configuration"
+
+msgid "**Macro editor:**"
+msgstr "**Éditeur de macros :**"
+
+msgid "**Crash recovery**: unsaved macros are auto-saved, and DataLab proposes to recover them at the next start"
+msgstr "**Récupération après plantage** : les macros non enregistrées sont automatiquement sauvegardées, et DataLab propose de les récupérer au prochain démarrage"
+
+msgid "**Recent macros** dialog, listing the macros used in previous sessions and allowing to reopen one in a single click"
+msgstr "Boîte de dialogue **Macros récentes**, listant les macros utilisées lors des sessions précédentes et permettant d'en rouvrir une en un seul clic"
+
+msgid "**Macro templates**, to start from a working skeleton (simple macro, image processing, generic method call)"
+msgstr "**Modèles de macros**, pour commencer à partir d'un squelette fonctionnel (macro simple, traitement d'image, appel de méthode générique)"
+
+msgid "**Code completion** and a **find & replace** widget in the macro editor"
+msgstr "**Complétion de code** et un widget **chercher & remplacer** dans l'éditeur de macros"
+
+msgid "**Object titles:**"
+msgstr "**Titres d'objets :**"
+
+msgid "Short identifiers embedded in object titles (e.g. `s001`, `i012`) are now rendered as **clickable links** in the signal and image trees, so the source objects of a computation can be selected in a single click"
+msgstr "Les identifiants courts intégrés dans les titres d'objets (par ex. `s001`, `i012`) sont désormais rendus comme des **liens cliquables** dans les arbres de signaux et d'images, de sorte que les objets sources d'un calcul peuvent être sélectionnés en un seul clic"
 
 msgid "**Replace special values processing (signal and image):**"
-msgstr ""
+msgstr "**Traitement de remplacement des valeurs spéciales (signal et image) :**"
 
-msgid ""
-"DataLab now provides a dedicated **\"Replace special values\"** "
-"processing function that detects and replaces `NaN`, `+Inf` and `-Inf` "
-"values in both signals and images. The feature is available under "
-"**Processing → Level adjustment → Replace special values** in both the "
-"Signal and Image panels."
-msgstr ""
+msgid "DataLab now provides a dedicated **\"Replace special values\"** processing function that detects and replaces `NaN`, `+Inf` and `-Inf` values in both signals and images. The feature is available under **Processing → Level adjustment → Replace special values** in both the Signal and Image panels (implements [Issue #142](https://github.com/DataLab-Platform/DataLab/issues/142))."
+msgstr "DataLab fournit désormais une fonction de traitement dédiée **\"Remplacer les valeurs spéciales\"** qui détecte et remplace les valeurs `NaN`, `+Inf` et `-Inf` dans les signaux et les images. La fonctionnalité est disponible sous **Traitement → Ajustement des niveaux → Remplacer les valeurs spéciales** dans les panneaux Signal et Image."
 
-msgid ""
-"Each target (`NaN`, `+Inf`, `-Inf`) can be processed independently with "
-"its own strategy"
-msgstr ""
+msgid "Each target (`NaN`, `+Inf`, `-Inf`) can be processed independently with its own strategy"
+msgstr "Chaque cible (`NaN`, `+Inf`, `-Inf`) peut être traitée indépendamment avec sa propre stratégie"
 
-msgid ""
-"Signal strategies: do nothing, replace with zero / constant / minimum / "
-"maximum / mean / median, delete affected points, forward fill, backward "
-"fill, interpolation (linear, spline, quadratic, cubic, PCHIP), N-neighbor"
-" minimum / maximum / mean / median"
-msgstr ""
+msgid "Signal strategies: do nothing, replace with zero / constant / minimum / maximum / mean / median, delete affected points, forward fill, backward fill, interpolation (linear, spline, quadratic, cubic, PCHIP), N-neighbor minimum / maximum / mean / median"
+msgstr "Stratégies pour les signaux : ne rien faire, remplacer par zéro / constante / minimum / maximum / moyenne / médiane, supprimer les points affectés, remplissage avant, remplissage arrière, interpolation (linéaire, spline, quadratique, cubique, PCHIP), minimum / maximum / moyenne / médiane des N voisins"
 
-msgid ""
-"Image strategies: do nothing, replace with zero / constant / minimum / "
-"maximum / mean / median, N-neighbor minimum / maximum / mean / median"
-msgstr ""
+msgid "Image strategies: do nothing, replace with zero / constant / minimum / maximum / mean / median, N-neighbor minimum / maximum / mean / median"
+msgstr "Stratégies pour les images : ne rien faire, remplacer par zéro / constante / minimum / maximum / moyenne / médiane, minimum / maximum / moyenne / médiane des N voisins"
 
-msgid ""
-"The parameter dialog displays **colored badges** showing the number (and "
-"percentage) of `NaN`, `+Inf` and `-Inf` samples found in the source "
-"object, giving immediate visibility on what will be modified"
-msgstr ""
+msgid "The parameter dialog displays **colored badges** showing the number (and percentage) of `NaN`, `+Inf` and `-Inf` samples found in the source object, giving immediate visibility on what will be modified"
+msgstr "La boîte de dialogue des paramètres affiche des **badges colorés** indiquant le nombre (et le pourcentage) d'échantillons `NaN`, `+Inf` et `-Inf` trouvés dans l'objet source, offrant une visibilité immédiate sur ce qui sera modifié"
 
-msgid ""
-"When a neighbor strategy is selected, a **live kernel preview** shows the"
-" shape of the neighborhood that will be used for the replacement"
-msgstr ""
+msgid "When a neighbor strategy is selected, a **live kernel preview** shows the shape of the neighborhood that will be used for the replacement"
+msgstr "Lorsqu'une stratégie de voisinage est sélectionnée, un **aperçu en direct du noyau** montre la forme du voisinage qui sera utilisé pour le remplacement"
 
-msgid ""
-"Integer images are handled explicitly: because `NaN` and infinite values "
-"cannot exist in integer data, the dialog explains that the operation is "
-"not applicable and prevents accidental processing, while preserving the "
-"original image data type without unnecessary float conversion"
-msgstr ""
+msgid "Integer images are handled explicitly: because `NaN` and infinite values cannot exist in integer data, the dialog explains that the operation is not applicable and prevents accidental processing, while preserving the original image data type without unnecessary float conversion"
+msgstr "Les images entières sont traitées explicitement : comme les valeurs `NaN` et infinies ne peuvent pas exister dans les données entières, la boîte de dialogue explique que l'opération n'est pas applicable et empêche un traitement accidentel, tout en préservant le type de données d'image d'origine sans conversion inutile en flottant"
 
+msgid "🔄 Changes"
+msgstr "🔄 Modifications"
+
+msgid "**DataLab now builds on SigimaX:**"
+msgstr "**DataLab repose désormais sur SigimaX :**"
+
+msgid "All the generic, application-level parts of DataLab (main window skeleton, configuration system, dockable plot widgets, HDF5 workspace and browser, log viewer, splash screen, status bar, scientific dialogs and PlotPy adapters) have been extracted into a new reusable library, **SigimaX**, and DataLab now derives from it instead of maintaining its own copies (implements [Issue #182](https://github.com/DataLab-Platform/DataLab/issues/182))"
+msgstr "Toutes les parties génériques et au niveau de l'application de DataLab (squelette de la fenêtre principale, système de configuration, widgets de tracé amovibles, espace de travail et navigateur HDF5, visualiseur de journal, écran de démarrage, barre d'état, boîtes de dialogue scientifiques et adaptateurs PlotPy) ont été extraites dans une nouvelle bibliothèque réutilisable, **SigimaX**, et DataLab en dérive désormais au lieu de maintenir ses propres copies (implémente [Issue #182](https://github.com/DataLab-Platform/DataLab/issues/182))"
+
+msgid "This is an internal refactoring: existing workflows, settings and files are unchanged, but it considerably reduces duplicated code and makes it possible to build other Qt scientific applications on the same foundation"
+msgstr "Il s'agit d'un refactoring interne : les flux de travail, les paramètres et les fichiers existants ne sont pas modifiés, mais cela réduit considérablement le code dupliqué et permet de créer d'autres applications scientifiques Qt sur la même base"
+
+msgid "As a consequence, DataLab now requires SigimaX ≥ 1.0.1, and its minimum requirements are aligned with it: Sigima ≥ 1.2.0, guidata ≥ 3.15.0 and PlotPy ≥ 2.11.0"
+msgstr "Par conséquent, DataLab nécessite désormais SigimaX ≥ 1.0.1, et ses versions minimales sont alignées sur celles qu'impose SigimaX : Sigima ≥ 1.2.0, guidata ≥ 3.15.0 et PlotPy ≥ 2.11.0"
+
+msgid "**Configuration system:**"
+msgstr "**Système de configuration :**"
+
+msgid "DataLab's configuration has been migrated to the typed option system provided by SigimaX: options now carry an explicit type, default value and description, and are validated when read or written"
+msgstr "La configuration de DataLab a été migrée vers le système d'options typées fourni par SigimaX : les options ont désormais un type explicite, une valeur par défaut et une description, et sont validées lors de la lecture ou de l'écriture"
+
+msgid "Settings recorded by earlier versions are migrated automatically at first start; the configuration file layout is otherwise preserved"
+msgstr "Les paramètres enregistrés par les versions précédentes sont migrés automatiquement au premier démarrage ; la disposition du fichier de configuration est sinon préservée"
+
+msgid "**`cdlclient` package archived:**"
+msgstr "**Package `cdlclient` archivé :**"
+
+msgid "The standalone `cdlclient` package is deprecated and archived. Its lightweight XML-RPC client is now provided by Sigima, as `sigima.client.SimpleRemoteProxy` (implements [Issue #183](https://github.com/DataLab-Platform/DataLab/issues/183))"
+msgstr "Le package autonome `cdlclient` est obsolète et archivé. Son client XML-RPC léger est désormais fourni par Sigima, sous la forme de `sigima.client.SimpleRemoteProxy` (implémente [Issue #183](https://github.com/DataLab-Platform/DataLab/issues/183))"
+
+msgid "Its Qt companion widgets have been taken over by SigimaX: the connection progress dialog is now `sigimax.widgets.connection.ConnectionDialog`, usable with any remote proxy exposing a blocking `connect()` method"
+msgstr "Ses widgets Qt compagnons ont été repris par SigimaX : la boîte de dialogue de progression de connexion est désormais `sigimax.widgets.connection.ConnectionDialog`, utilisable avec tout proxy distant exposant une méthode `connect()` bloquante"
+
+msgid "The documentation no longer refers to `cdlclient`"
+msgstr "La documentation ne fait plus référence à `cdlclient`"
+
+msgid "**Detection tools now preserve existing regions of interest:**"
+msgstr "**Les outils de détection préservent désormais les régions d'intérêt existantes :**"
+
+msgid "Regions of interest created by peak, blob, Hough circle, and contour detection are now added to existing ROIs instead of replacing them, without displaying a destructive confirmation dialog (implements [Issue #340](https://github.com/DataLab-Platform/DataLab/issues/340))"
+msgstr "Les régions d'intérêt créées par la détection de pics, de blobs, de cercles de Hough et de contours sont désormais ajoutées aux ROI existantes au lieu de les remplacer, sans afficher de boîte de dialogue de confirmation destructive"
+
+msgid "**Analysis results are now refreshed on demand instead of automatically:**"
+msgstr "**Les résultats d'analyse sont désormais actualisés à la demande plutôt qu'automatiquement :**"
+
+msgid "Analysis results (statistics, FWHM, centroid, peak/contour/blob detection, etc.) are no longer recomputed automatically when you modify a region of interest, transform the data, or edit object properties (implements [Issue #341](https://github.com/DataLab-Platform/DataLab/issues/341))"
+msgstr "Les résultats d'analyse (statistiques, FWHM, centroïde, détection de pics/contours/blobs, etc.) ne sont plus recalculés automatiquement lorsque vous modifiez une région d'intérêt, transformez les données ou modifiez les propriétés de l'objet"
+
+msgid "Existing analysis results are now left untouched after such edits, avoiding surprising side effects and results that could become misleading once the data no longer matches the stored analysis parameters"
+msgstr "Les résultats d'analyse existants sont désormais laissés intacts après de telles modifications, évitant des effets de bord inattendus et des résultats susceptibles de devenir trompeurs lorsque les données ne correspondent plus aux paramètres d'analyse enregistrés"
+
+msgid "Ordinary replay and ordinary mutations do not recompute analyses; however, in History edit mode, editing upstream parameters recomputes downstream analysis actions through the cascade"
+msgstr "La relecture ordinaire et les mutations ordinaires ne recalculent pas les analyses ; toutefois, en mode d'édition de l'historique, la modification de paramètres en amont recalcule les actions d'analyse en aval par propagation en cascade"
+
+msgid "The familiar **\"Recompute\"** action (Edit menu, `Ctrl+R`) now refreshes both processing *and* analysis results, giving you full control over when analyses are updated"
+msgstr "L'action familière **\"Recalculer\"** (menu Édition, `Ctrl+R`) actualise désormais à la fois les résultats de traitement *et* d'analyse, vous permettant de maîtriser pleinement le moment où les analyses sont mises à jour"
+
+msgid "For developers, the former panel-level `recompute_analysis` entry point has been renamed to `recompute_selected`; `recompute_analysis` now refers to a different processor-level helper dedicated to explicit 1-to-0 analysis refresh"
+msgstr "Pour les développeurs, l'ancien point d'entrée `recompute_analysis` au niveau du panneau a été renommé `recompute_selected` ; `recompute_analysis` désigne désormais une autre fonction auxiliaire au niveau du processeur, dédiée à l'actualisation explicite des analyses 1-vers-0"
+
+msgid "🛠️ Bug Fixes"
+msgstr "🛠️ Corrections de bugs"
+
+msgid "**Regions of interest:**"
+msgstr "**Régions d'intérêt :**"
+
+msgid "Fixed regions of interest created by a detection function (blob, contour, peak or Hough circle detection) reappearing immediately after being deleted or modified — detection ROIs are now ordinary, fully editable ROIs (fixes [Issue #329](https://github.com/DataLab-Platform/DataLab/issues/329))"
+msgstr "Les régions d'intérêt créées par une fonction de détection (blob, contour, pic ou détection de cercle de Hough) réapparaissant immédiatement après avoir été supprimées ou modifiées — les ROI de détection sont désormais des ROI ordinaires, entièrement modifiables (corrige [Issue #329](https://github.com/DataLab-Platform/DataLab/issues/329))"
+
+msgid "Fixed deleted regions of interest reappearing after a post-processing automatic recompute"
+msgstr "Les régions d'intérêt supprimées réapparaissant après un recalcul automatique en post-traitement"
+
+msgid "Fixed a crash when the region-of-interest index was out of bounds while building an ROI title"
+msgstr "Correction d'un plantage lorsque l'index de la région d'intérêt était hors limites lors de la création d'un titre de ROI"
+
+msgid "**Intensity profiles:**"
+msgstr "**Profils d'intensité :**"
+
+msgid "Fixed the \"Reset selection\" button of the intensity profile dialogs not clearing the previous selection: after resetting and drawing a new region, the extracted profile still corresponded to the first selection (fixes [Issue #322](https://github.com/DataLab-Platform/DataLab/issues/322))"
+msgstr "Correction du bouton \"Réinitialiser la sélection\" des dialogues de profil d'intensité ne supprimant pas la sélection précédente : après réinitialisation et dessin d'une nouvelle région, le profil extrait correspondait toujours à la première sélection (corrige [Issue #322](https://github.com/DataLab-Platform/DataLab/issues/322))"
+
+msgid "Fixed profile recompute using the parameters of another object when several objects were selected"
+msgstr "Correction du recalcul du profil utilisant les paramètres d'un autre objet lorsque plusieurs objets étaient sélectionnés"
+
+msgid "Fixed search results being irrelevant for short queries — typing \"rota\" no longer returns unrelated commands before the rotation entries (fixes [Issue #345](https://github.com/DataLab-Platform/DataLab/issues/345))"
+msgstr "Correction des résultats de recherche étant non pertinents pour les requêtes courtes — taper \"rota\" ne renvoie plus de commandes non liées avant les entrées de rotation (corrige [Issue #345](https://github.com/DataLab-Platform/DataLab/issues/345))"
+
+msgid "**Full width at half maximum:**"
+msgstr "**Largeur à mi-hauteur :**"
+
+msgid "A user-reported FWHM regression observed in DataLab v0.20.1 (an aberrant, far too small width) has been pinned down by a non-regression test built on the original signal, now part of Sigima's test data. The computation was already correct in v1.2.x and remains correct in this version (fixes [Issue #356](https://github.com/DataLab-Platform/DataLab/issues/356))"
+msgstr "Une régression FWHM signalée par un utilisateur et observée dans DataLab v0.20.1 (une largeur aberrante, beaucoup trop petite) a été identifiée grâce à un test de non-régression basé sur le signal original, désormais inclus dans les données de test de Sigima. Le calcul était déjà correct dans la v1.2.x et reste correct dans cette version (corrige [Issue #356](https://github.com/DataLab-Platform/DataLab/issues/356))"
+
+msgid "**Plugins:**"
+msgstr "**Plugins :**"
+
+msgid "Fixed plugin processing functions failing in spawned worker processes after a plugin reload"
+msgstr "Correction des fonctions de traitement des plugins échouant dans les processus workers générés après un rechargement de plugin"
+
+msgid "**Main window:**"
+msgstr "**Fenêtre principale :**"
+
+msgid "Fixed the visible plot dock not following the current panel tab in some situations, in particular when a persisted layout left the Macro, History or AI Assistant dock raised at startup"
+msgstr "Correction du dock de tracé visible ne suivant pas l'onglet du panneau actuel dans certaines situations, en particulier lorsqu'une disposition persistante laissait le dock Macro, Historique ou Assistant IA levé au démarrage"
+
+msgid "**File saving:**"
+msgstr "**Enregistrement de fichiers :**"
+
+msgid "Fixed an error raised when saving a signal to a file in some situations"
+msgstr "Correction d'une erreur levée lors de l'enregistrement d'un signal dans un fichier dans certaines situations"
+
+msgid "Fixed replay of load actions doing nothing when the loaded objects had been deleted while recording was active — the objects are now reloaded from their files"
+msgstr "Correction de la lecture des actions de chargement ne faisant rien lorsque les objets chargés avaient été supprimés alors que l'enregistrement était actif — les objets sont maintenant rechargés à partir de leurs fichiers"
+
+msgid "Fixed duplicated processing chains interfering with their source chain: replaying either session now only affects its own objects"
+msgstr "Correction des chaînes de traitement dupliquées interférant avec leur chaîne source : la lecture de session n'affecte désormais que ses propres objets"
+
+msgid "Fixed session replay aborting when the session contained a recorded object deletion — recorded deletions that can no longer be safely applied (captured state mismatch, targets re-created earlier in the same replay, or targets belonging to another session) are now skipped with a warning"
+msgstr "Correction de l'abandon de la lecture de session lorsque la session contenait une suppression d'objet enregistrée — les suppressions enregistrées qui ne peuvent plus être appliquées en toute sécurité (incohérence de l'état capturé, cibles recréées plus tôt dans la même lecture, ou cibles appartenant à une autre session) sont maintenant ignorées avec un avertissement"
+
+msgid "Removed the yellow highlight that could persist on history entries after a failed replay"
+msgstr "Suppression de la mise en évidence jaune pouvant persister sur les entrées de l'historique après une lecture échouée"
+
+msgid "Fixed outdated steps having no visual indication in the history tree — actions left outdated by a failed or interrupted recompute, or by parameter edits pending propagation, are now highlighted with an amber background and a tooltip suggesting to replay them"
+msgstr "Correction des étapes obsolètes n'ayant aucune indication visuelle dans l'arborescence de l'historique — les actions laissées obsolètes par un recalcul échoué ou interrompu, ou par des modifications de paramètres en attente de propagation, sont maintenant mises en évidence avec un arrière-plan ambre et une info-bulle suggérant de les relire"
+
+msgid "Fixed potential crashes or corrupted histories when clicking History panel commands (Replay, Delete, Duplicate, ...) while a long replay or recompute was still running — commands are now unavailable until the run completes"
+msgstr "Correction des plantages potentiels ou des historiques corrompus lors du clic sur les commandes du panneau Historique (Rejouer, Supprimer, Dupliquer, ...) alors qu'une longue lecture ou un recalcul était encore en cours — les commandes sont maintenant indisponibles jusqu'à la fin de l'exécution"
+
+msgid "Fixed a single corrupted history entry (e.g. a ROI saved by an incompatible version) preventing an entire `.dlhist` file or HDF5 workspace history from loading — the affected action now loads as incompatible while the rest of the history loads normally"
+msgstr "Correction d'une seule entrée d'historique corrompue (par exemple, une ROI enregistrée par une version incompatible) empêchant le chargement d'un fichier `.dlhist` entier ou de l'historique d'un espace de travail HDF5 — l'action affectée se charge maintenant comme incompatible tandis que le reste de l'historique se charge normalement"
+
+msgid "Fixed recording aborting the user's operation when a selected object had no data"
+msgstr "Correction de l'arrêt de l'enregistrement de l'opération de l'utilisateur lorsqu'un objet sélectionné n'avait pas de données"
+
+msgid "Fixed the active session remaining highlighted after loading an HDF5 file"
+msgstr "Correction du maintien en surbrillance de la session active après le chargement d'un fichier HDF5"
+
+msgid "Fixed deleting an image history action switching to the Signal panel"
+msgstr "Correction du changement vers le panneau Signal lors de la suppression d'une action d'historique d'image"
+
+msgid "Fixed a macro generation error (`object has no attribute uuid`) for 2-to-1 processing pipelines"
+msgstr "Correction d'une erreur de génération de macro (`object has no attribute uuid`) pour les chaînes de traitement 2-à-1"
+
+msgid "Improved performance: opening many files or replaying long processing chains no longer freezes the interface while the History panel repeatedly rechecks action compatibility"
+msgstr "Amélioration des performances : l'ouverture de nombreux fichiers ou la relecture de longues chaînes de traitement ne bloque plus l'interface pendant que le panneau Historique vérifie à plusieurs reprises la compatibilité des actions"
+
+msgid "📖 Documentation"
+msgstr "📖 Documentation"
+
+msgid "Added a complete **History Panel** feature page and a step-by-step tutorial covering recording, replay, parameter editing and session import/export"
+msgstr "Ajout d'une page complète sur la **panneau Historique** et d'un tutoriel étape par étape couvrant l'enregistrement, la relecture, la modification des paramètres et l'import/export de session"
+
+msgid "Added **use case** pages illustrating DataLab in photonics, spectroscopy and non-destructive testing"
+msgstr "Ajout de pages **cas d'utilisation** illustrant DataLab en photonique, spectroscopie et contrôle non destructif"
+
+msgid "Documented the legacy HDF5 dataset selector syntax"
+msgstr "Documentation de l'ancien syntaxe du sélecteur de jeux de données HDF5"
+
+msgid "Reworked the documentation layout: more compact navigation bar, Open Graph metadata, and software citation metadata"
+msgstr "Refonte de la mise en page de la documentation : barre de navigation plus compacte, métadonnées Open Graph et métadonnées de citation logicielle"
+
+msgid "Added a plugin example showing iso-level contour lines on an image"
+msgstr "Ajout d'un exemple de plugin montrant des lignes de contour iso-niveau sur une image"
+
+msgid "Updated French translations across all new and modified documentation pages"
+msgstr "Mise à jour des traductions françaises sur toutes les nouvelles pages de documentation et celles modifiées"

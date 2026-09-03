@@ -5,8 +5,6 @@
 #
 msgid ""
 msgstr ""
-"Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,8 +18,8 @@ msgstr "DataLab, préférences, scientifique, données, analyse, visualisation, 
 msgid "Settings"
 msgstr "Préférences"
 
-msgid "DataLab provides a comprehensive settings dialog to customize the application behavior, visualization defaults, and I/O operations. The settings are organized into five tabs: General, Processing, Visualization, I/O, and Console."
-msgstr "DataLab propose une boîte de dialogue de préférences complète pour personnaliser le comportement de l'application, les paramètres de visualisation par défaut et les opérations d'entrée/sortie. Les préférences sont organisées en cinq onglets : Général, Traitement, Visualisation, Entrée/sortie et Console."
+msgid "DataLab provides a comprehensive settings dialog to customize the application behavior, visualization defaults, and I/O operations. The settings are organized into six tabs: General, Processing, Visualization, I/O, AI Assistant, and Console."
+msgstr "DataLab propose une boîte de dialogue de préférences complète pour personnaliser le comportement de l'application, les paramètres de visualisation par défaut et les opérations d'entrée/sortie. Les préférences sont organisées en six onglets : Général, Traitement, Visualisation, Entrée/sortie, Assistant IA et Console."
 
 msgid "General"
 msgstr "Général"
@@ -65,17 +63,8 @@ msgstr "**Seuil de mémoire**"
 msgid "Set a threshold (in MB) below which a warning is displayed before loading new data. This helps prevent out-of-memory errors when working with large datasets. Set to 0 to disable the warning."
 msgstr "Définir un seuil (en Mo) en dessous duquel un avertissement est affiché avant de charger de nouvelles données. Cela permet d'éviter les erreurs de mémoire insuffisante lors du travail avec de grands ensembles de données. Mettre à 0 pour désactiver l'avertissement."
 
-msgid "**Third-party plugins**"
-msgstr "**Plugins tiers**"
-
-msgid "Enable or disable third-party plugins immediately. Changes are applied without restarting DataLab. When disabled, third-party plugins are not discovered or loaded."
-msgstr "Activer ou désactiver immédiatement les plugins tiers. Les modifications sont appliquées sans redémarrer DataLab. Lorsqu'ils sont désactivés, les plugins tiers ne sont ni détectés ni chargés."
-
-msgid "**Plugins path**"
-msgstr "**Chemin des plugins**"
-
-msgid "Specify the directory path where DataLab should look for third-party plugins. DataLab will also discover plugins in your PYTHONPATH. To enable or disable individual plugins, use the ``Plugins > Configure plugins...`` menu action. DataLab then proposes reloading plugins automatically."
-msgstr "Indiquer le répertoire dans lequel DataLab doit rechercher les plugins tiers. DataLab détectera également les plugins présents dans votre PYTHONPATH. Pour activer ou désactiver des plugins individuellement, utilisez l'action de menu ``Plugins > Configurer les plugins...``. DataLab proposera ensuite de recharger automatiquement les plugins."
+msgid "Plugin-related settings (global enabling of third-party plugins, per-plugin enabling and additional plugin directories) are not part of this dialog: they are grouped in the plugin configuration dialog, available from the ``Plugins > Configure plugins...`` menu action (see :ref:`about_plugins`)."
+msgstr "Paramètres liés aux plugins (activation globale des plugins tiers, activation par plugin et répertoires de plugins supplémentaires) ne font pas partie de cette boîte de dialogue : ils sont regroupés dans la boîte de dialogue de configuration des plugins, accessible depuis l'action de menu ``Plugins > Configurer les plugins...`` (voir :ref:`about_plugins`)."
 
 msgid "Processing"
 msgstr "Traitement"
@@ -93,10 +82,10 @@ msgid "Choose the operation mode for computations taking N inputs:"
 msgstr "Choisir le mode d'opération pour les calculs prenant N entrées :"
 
 msgid "**Single**: single operand mode"
-msgstr "**Single** : mode opérande unique"
+msgstr "**Single** : mode d'opération avec un seul opérande"
 
 msgid "**Pairwise**: pairwise operation mode"
-msgstr "**Pairwise** : mode opération par paire"
+msgstr "**Pairwise** : mode d'opération par paire"
 
 msgid "These operation modes determine how DataLab handles computations involving multiple objects. They apply to two types of operations:"
 msgstr "Ces modes d'opération déterminent comment DataLab gère les calculs impliquant plusieurs objets. Ils s'appliquent à deux types d'opérations :"
@@ -108,7 +97,7 @@ msgid "**N+1→N operations**: Apply an operation between N (≥1) objects and 1
 msgstr "**Opérations N+1→N** : Appliquer une opération entre N (≥1) objets et 1 opérande pour produire N sorties (par exemple différence, division)"
 
 msgid "**Single operand mode** (default): Operations are applied independently within each group."
-msgstr "**Mode opérande unique** (par défaut) : Les opérations sont appliquées indépendamment dans chaque groupe."
+msgstr "**Mode d'opération avec un seul opérande** (par défaut) : Les opérations sont appliquées indépendamment dans chaque groupe."
 
 #, python-brace-format
 msgid "For **N→1 operations**: All objects in each group are combined into one result per group. Example with groups G1={A, B} and G2={C, D}, sum operation:"
@@ -128,7 +117,7 @@ msgid "In G2: C-R, D-R"
 msgstr "Dans G2 : C-R, D-R"
 
 msgid "**Pairwise operation mode**: Objects from different groups are combined at matching positions (all groups must have the same number of objects)."
-msgstr "**Mode opération par paire** : Les objets de différents groupes sont combinés aux positions correspondantes (tous les groupes doivent avoir le même nombre d'objets)."
+msgstr "**Mode d'opération par paire** : Les objets de différents groupes sont combinés aux positions correspondantes (tous les groupes doivent avoir le même nombre d'objets)."
 
 #, python-brace-format
 msgid "For **N→1 operations**: Objects at the same position in each group are combined. Example with groups G1={A, B} and G2={C, D}, sum operation:"
@@ -168,8 +157,8 @@ msgstr "Activer le décalage FFT pour centrer la composante de fréquence nulle 
 msgid "**Extract multiple ROIs in a single object**"
 msgstr "**Extraire plusieurs ROI dans un seul objet**"
 
-msgid "When enabled, multiple ROIs (Regions of Interest) are extracted into a single object. When disabled, each ROI is extracted into a separate object."
-msgstr "Si le réglage est activé, plusieurs ROI (Régions d'Intérêt) sont extraites dans un seul objet. Lorsque désactivé, chaque ROI est extraite dans un objet séparé."
+msgid "When enabled, multiple regions of interest (ROIs) are extracted into a single object. When disabled, each ROI is extracted into a separate object."
+msgstr "Lorsque cette option est activée, plusieurs régions d'intérêt (ROI) sont extraites dans un seul objet. Lorsqu'elle est désactivée, chaque ROI est extraite dans un objet distinct."
 
 msgid "**Ignore warnings**"
 msgstr "**Ignorer les avertissements**"
@@ -178,16 +167,70 @@ msgid "Suppress warning messages during computations."
 msgstr "Supprimer les messages d'avertissement pendant les calculs."
 
 msgid "**X-array compatibility behavior**"
-msgstr "**Comportement de compatibilité des tableaux X**"
+msgstr "**Comportement de compatibilité des tableaux des X**"
 
 msgid "Choose the behavior when X arrays are incompatible in multi-signal computations:"
-msgstr "Choisir le comportement lorsque les tableaux X sont incompatibles dans les calculs multi-signaux :"
+msgstr "Choisir le comportement lorsque les tableaux des X sont incompatibles dans les calculs multi-signaux :"
 
 msgid "**Ask**: display a confirmation dialog (default)"
 msgstr "**Demander** : afficher une boîte de dialogue de confirmation (par défaut)"
 
 msgid "**Interpolate**: automatically interpolate signals"
 msgstr "**Interpoler** : interpoler automatiquement les signaux"
+
+msgid "History sessions"
+msgstr "Sessions d'historique"
+
+msgid "These settings control how new inputs are assigned to history sessions. They are evaluated only when **Record mode** is enabled and the shared active session contains actions. No policy decision is needed when the active session is empty; see :ref:`historypanel` for the complete workflow."
+msgstr "Ces paramètres déterminent comment les nouvelles entrées sont affectées aux sessions d'historique. Ils ne sont évalués que lorsque le **Mode d'enregistrement** est activé et que la session active partagée contient des actions. Aucune décision de politique n'est nécessaire lorsque la session active est vide ; voir :ref:`historypanel` pour le flux de travail complet."
+
+msgid "**New object or file**"
+msgstr "**Nouvel objet ou fichier**"
+
+msgid "Choose what happens when a new object is created or a file is loaded:"
+msgstr "Choisir ce qui se produit lorsqu'un nouvel objet est créé ou qu'un fichier est chargé :"
+
+msgid "**Ask** (default): ask whether to start a new session"
+msgstr "**Demander** (par défaut) : demander s'il faut démarrer une nouvelle session"
+
+msgid "**Always start a new session**: start a session before recording the input"
+msgstr "**Toujours démarrer une nouvelle session** : démarrer une session avant d'enregistrer l'entrée"
+
+msgid "**Continue in the current session**: append the input to the active session"
+msgstr "**Continuer dans la session courante** : ajouter l'entrée à la session active"
+
+msgid "**Plugin-created object**"
+msgstr "**Objet créé par un plugin**"
+
+msgid "Choose what happens when a plugin adds one object:"
+msgstr "Choisir ce qui se produit lorsqu'un plugin ajoute un objet :"
+
+msgid "**Ask**: ask whether to start a new session"
+msgstr "**Demander** : demander s'il faut démarrer une nouvelle session"
+
+msgid "**Always start a new session**: start a session before recording the object"
+msgstr "**Toujours démarrer une nouvelle session** : démarrer une session avant d'enregistrer l'objet"
+
+msgid "**Continue in the current session** (default): append the object without a modal prompt, so plugin execution is not blocked"
+msgstr "**Continuer dans la session courante** (par défaut) : ajouter l'objet sans afficher de boîte de dialogue modale, afin de ne pas bloquer l'exécution du plugin"
+
+msgid "**Plugin multi-load**"
+msgstr "**Chargement multiple par un plugin**"
+
+msgid "Choose what happens when a plugin explicitly groups several object additions in one multi-load scope:"
+msgstr "Choisir ce qui se produit lorsqu'un plugin regroupe explicitement plusieurs ajouts d'objets dans une même portée de chargement multiple :"
+
+msgid "**Ask once**: ask once whether the whole batch should start a new session"
+msgstr "**Demander une seule fois** : demander une seule fois si l'ensemble du lot doit démarrer une nouvelle session"
+
+msgid "**Start a new session**: start one session for the batch"
+msgstr "**Démarrer une nouvelle session** : démarrer une seule session pour le lot"
+
+msgid "**Continue in the current session** (default): append the whole batch to the active session"
+msgstr "**Continuer dans la session courante** (par défaut) : ajouter l'ensemble du lot à la session active"
+
+msgid "**Ask once** is the UI label for one durable session decision covering the complete explicit plugin multi-load scope, rather than one prompt per object. With ordinary **Ask** behavior, repeated prompts for synchronous additions to the same panel are debounced during the current Qt event-loop turn."
+msgstr "**Demander une seule fois** est le libellé de l'interface correspondant à une décision de session unique et durable qui couvre toute la portée explicite de chargement multiple du plugin, plutôt qu'à une demande par objet. Avec le comportement **Demander** ordinaire, un mécanisme anti-rebond évite les demandes répétées pour les ajouts synchrones au même panneau pendant le tour courant de la boucle d'événements Qt."
 
 msgid "Result management"
 msgstr "Gestion des résultats"
@@ -393,6 +436,12 @@ msgstr "**Afficher l'étiquette de résultat fusionné par défaut**"
 msgid "When enabled, the merged result label is shown on the plot by default for new objects. This setting can be toggled per-object using the checkbox in the Properties panel."
 msgstr "Si le réglage est activé, l'étiquette de résultat fusionné est affichée sur le graphique par défaut pour les nouveaux objets. Ce paramètre peut être basculé par objet à l'aide de la case à cocher dans le panneau Propriétés."
 
+msgid "**Show marker labels in result tables**"
+msgstr "**Afficher les étiquettes de marqueurs dans les tableaux de résultats**"
+
+msgid "When enabled, a marker-label column is prepended to result tables for marker results (XY, X or Y markers), so that each row can be matched with the corresponding cross or dashed cursor drawn on the plot. XY markers use numeric labels (``#1``, ``#2``, ...), axis markers use letters (``a``, ``b``, ``c``, ...)."
+msgstr "Lorsque cette option est activée, une colonne d'étiquettes de marqueurs est ajoutée en tête des tableaux de résultats de type marqueurs (marqueurs XY, X ou Y), afin que chaque ligne puisse être mise en correspondance avec la croix ou le curseur en pointillés correspondant sur le graphique. Les marqueurs XY utilisent des étiquettes numériques (``#1``, ``#2``, etc.), les marqueurs d'axe des lettres (``a``, ``b``, ``c``, etc.)."
+
 msgid "These settings affect only the visualization of results on plots. They do not affect the actual computation or storage of results in metadata."
 msgstr "Ces paramètres n'affectent que la visualisation des résultats sur les graphiques. Ils n'affectent pas le calcul réel ou le stockage des résultats dans les métadonnées."
 
@@ -428,6 +477,93 @@ msgstr "**Nom de fichier HDF5 dans le titre**"
 
 msgid "When enabled, the HDF5 file name is appended as a suffix to the title of the signal/image object."
 msgstr "Si le réglage est activé, le nom du fichier HDF5 est ajouté comme suffixe au titre de l'objet signal/image."
+
+msgid "AI Assistant"
+msgstr "Assistant IA"
+
+msgid "The AI Assistant settings tab configures the built-in conversational assistant (see :ref:`ai_assistant`). All fields are inactive as long as **Enable AI Assistant** is unchecked."
+msgstr "L'onglet Assistant IA configure l'assistant conversationnel intégré (voir :ref:`ai_assistant`). Tous les champs sont inactifs tant que l'option **Activer l'assistant IA** n'est pas cochée."
+
+msgid "**Enable AI Assistant**"
+msgstr "**Activer l'assistant IA**"
+
+msgid "Enable the AI Assistant panel. When disabled, no request is ever sent to an external service."
+msgstr "Active le panneau Assistant IA. Lorsque l'option est désactivée, aucune requête n'est jamais envoyée à un service externe."
+
+msgid "**Provider**"
+msgstr "**Fournisseur**"
+
+msgid "Backend used to serve the model. ``openai`` covers every OpenAI-compatible endpoint (OpenAI, GitHub Models, Azure OpenAI, Ollama, LM Studio, llama.cpp, vLLM, ...). Use ``mock`` to try the assistant offline, without any API key: it replies with scripted answers triggered by simple keywords."
+msgstr "Service utilisé pour servir le modèle. ``openai`` couvre tous les points d'accès compatibles OpenAI (OpenAI, GitHub Models, Azure OpenAI, Ollama, LM Studio, llama.cpp, vLLM, etc.). Utilisez ``mock`` pour essayer l'assistant hors ligne, sans aucune clé d'API : il répond par des réponses scriptées déclenchées par de simples mots-clés."
+
+msgid "**Model**"
+msgstr "**Modèle**"
+
+msgid "Name of the model to use, as expected by the provider (e.g. ``gpt-4o-mini``)."
+msgstr "Nom du modèle à utiliser, tel qu'attendu par le fournisseur (par exemple ``gpt-4o-mini``)."
+
+msgid "**API key**"
+msgstr "**Clé d'API**"
+
+msgid "Provider API key."
+msgstr "Clé d'API du fournisseur."
+
+msgid "This value is stored **in plain text** in the DataLab configuration file. It is recommended to leave the field empty and to set the provider's standard environment variable instead (e.g. ``OPENAI_API_KEY``): the secret is then never written to disk and can be shared with other tools."
+msgstr "Cette valeur est stockée **en clair** dans le fichier de configuration de DataLab. Il est recommandé de laisser le champ vide et de définir à la place la variable d'environnement standard du fournisseur (par exemple ``OPENAI_API_KEY``) : le secret n'est alors jamais écrit sur le disque et peut être partagé avec d'autres outils."
+
+msgid "**Base URL (optional)**"
+msgstr "**URL de base (optionnel)**"
+
+msgid "Endpoint override for OpenAI-compatible services. Leave empty to use the provider default."
+msgstr "Remplacement du point d'accès pour les services compatibles OpenAI. Laisser vide pour utiliser la valeur par défaut du fournisseur."
+
+msgid "**Load preset...**"
+msgstr "**Charger un préréglage...**"
+
+msgid "Pre-fill *Base URL* and *Model* with a known OpenAI-compatible endpoint (OpenAI cloud, Ollama, LM Studio, llama.cpp, vLLM)."
+msgstr "Pré-remplit l'*URL de base* et le *Modèle* avec un point d'accès compatible OpenAI connu (OpenAI cloud, Ollama, LM Studio, llama.cpp, vLLM)."
+
+msgid "**Test connection**"
+msgstr "**Tester la connexion**"
+
+msgid "Probe the configured endpoint to check the URL, the API key and network reachability. This does not consume any token."
+msgstr "Interroge le point d'accès configuré afin de vérifier l'URL, la clé d'API et l'accessibilité réseau. Cette opération ne consomme aucun jeton."
+
+msgid "**Temperature**"
+msgstr "**Température**"
+
+msgid "Sampling temperature passed to the model (0 = deterministic)."
+msgstr "Température d'échantillonnage transmise au modèle (0 = déterministe)."
+
+msgid "**HTTP timeout (s)**"
+msgstr "**Délai d'expiration HTTP (s)**"
+
+msgid "Maximum duration of a single request to the provider."
+msgstr "Durée maximale d'une requête au fournisseur."
+
+msgid "**Max tool-call iterations**"
+msgstr "**Nombre maximum d'itérations d'appels d'outils**"
+
+msgid "Safety cap on the number of tool calls the assistant may chain to answer a single question."
+msgstr "Limite de sécurité sur le nombre d'appels d'outils que l'assistant peut enchaîner pour répondre à une seule question."
+
+msgid "**Max history messages (0 = unlimited)**"
+msgstr "**Nombre max. de messages d'historique (0 = illimité)**"
+
+msgid "Cap the number of past messages sent to the provider on each request. Useful with local models having a small context window, where an over-long conversation is rejected by the server. The system prompt and the current user message are always preserved."
+msgstr "Limite le nombre de messages passés envoyés au fournisseur à chaque requête. Utile avec les modèles locaux disposant d'une petite fenêtre de contexte, où une conversation trop longue est rejetée par le serveur. L'invite système et le message utilisateur courant sont toujours préservés."
+
+msgid "**Auto-approve read-only inspection tools**"
+msgstr "**Approuver automatiquement les outils d'inspection en lecture seule**"
+
+msgid "When enabled, tools that only *read* the workspace (listing objects, inspecting an object, listing available operations) run without asking for a confirmation. Tools that modify the workspace always require an explicit confirmation."
+msgstr "Lorsque cette option est activée, les outils qui se contentent de *lire* l'espace de travail (lister les objets, inspecter un objet, lister les opérations disponibles) s'exécutent sans demander de confirmation. Les outils qui modifient l'espace de travail exigent toujours une confirmation explicite."
+
+msgid "**Allow AI to create and run macros (Python code)**"
+msgstr "**Autoriser l'IA à créer et exécuter des macros (code Python)**"
+
+msgid "When enabled, the assistant may propose Python macros, executed with full access to DataLab through the proxy API — each execution still requires an explicit confirmation. Disable this option to hide the macro tool from the model entirely."
+msgstr "Lorsque cette option est activée, l'assistant peut proposer des macros Python, exécutées avec un accès complet à DataLab via l'API du proxy — chaque exécution exige néanmoins une confirmation explicite. Désactivez cette option pour masquer complètement l'outil de macro au modèle."
 
 msgid "Console"
 msgstr "Console"

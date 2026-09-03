@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from sigima.tests.data import get_test_image, get_test_signal
 
+from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_in_background_context
 
 
@@ -28,13 +29,18 @@ def test_set_object() -> None:
         proxy.set_current_panel("signal")
         sig_uuid = proxy.get_object_uuids("signal")[0]
 
+        proxy.select_objects([sig_uuid], panel="signal")
+        proxy.delete_metadata(refresh_plot=False, keep_roi=False)
         sig = proxy.get_object(sig_uuid)
+        assert get_uuid(sig) == sig_uuid
+        assert sig_uuid in proxy.get_object_uuids("signal")
         original_title = sig.title
         sig.title = "Modified signal title"
         sig.yunit = "modified_unit"
         proxy.set_object(sig)
 
         sig_back = proxy.get_object(sig_uuid)
+        assert get_uuid(sig_back) == sig_uuid
         assert sig_back.title == "Modified signal title"
         assert sig_back.yunit == "modified_unit"
 

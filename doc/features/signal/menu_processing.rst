@@ -141,6 +141,48 @@ Clipping
 
 Create a new signal which is the result of clipping each selected signal.
 
+Replace special values
+~~~~~~~~~~~~~~~~~~~~~~
+
+Create a new signal where ``NaN``, ``+Inf`` and ``-Inf`` samples are replaced
+using a configurable strategy per target value.
+
+Each of the three targets (``NaN``, ``+Inf``, ``-Inf``) is handled
+independently. For each target the user selects one of the following
+strategies (or *Do nothing* to leave the target untouched):
+
+.. list-table::
+    :header-rows: 1
+    :widths: 35, 65
+
+    * - Strategy
+      - Description
+    * - Do nothing
+      - Leave the target values untouched.
+    * - Replace with zero
+      - Replace by ``0``.
+    * - Replace with constant
+      - Replace by a user-defined constant value.
+    * - Replace with minimum / maximum
+      - Replace by the minimum / maximum of the finite samples.
+    * - Replace with mean / median
+      - Replace by the mean / median of the finite samples.
+    * - Delete points
+      - Remove the affected samples from the signal (the X array is also
+        shrunk). A warning is emitted if the signal was uniformly sampled.
+    * - Forward fill / Backward fill
+      - Propagate the last (resp. next) valid value.
+    * - Interpolation: Linear / Spline / Quadratic / Cubic / PCHIP
+      - Reconstruct missing samples by interpolating the surrounding valid
+        samples.
+    * - N-neighbor minimum / maximum / mean / median
+      - Replace by the corresponding statistic computed on the ``2N+1``
+        neighboring samples around each affected position.
+
+Before opening the standard parameter form, the dialog displays a count of
+each target found in the signal (e.g. *NaN: 17 (1.7 %)*). When a neighbor
+strategy is selected, a small preview shows the kernel that will be used.
+
 Offset correction
 ~~~~~~~~~~~~~~~~~
 

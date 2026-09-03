@@ -14,7 +14,7 @@ import numpy as np
 import pandas as pd
 from guidata.qthelpers import exec_dialog
 from guidata.widgets.dataframeeditor import DataFrameEditor
-from sigima.objects import ImageObj, SignalObj
+from sigima.objects import GeometryResult, ImageObj, SignalObj, TableResult
 
 from datalab.adapters_metadata.base_adapter import BaseResultAdapter
 from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
@@ -25,6 +25,76 @@ from datalab.objectmodel import get_short_id
 if TYPE_CHECKING:
     from qtpy.QtWidgets import QWidget
 
+# Registry mapping result typologies to their metadata adapter classes
+_ADAPTER_REGISTRY: dict[type, type[BaseResultAdapter]] = {
+    GeometryResult: GeometryAdapter,
+    TableResult: TableAdapter,
+}
+
+
+def register_result_adapter(
+    result_class: type, adapter_class: type[BaseResultAdapter]
+) -> None:
+    """Register an adapter class for a result typology (extension point for
+    new result typologies, e.g. from plugins).
+
+    Args:
+        result_class: Result typology to associate with the adapter.
+        adapter_class: Adapter class instantiated for results of that typology.
+    """
+    _ADAPTER_REGISTRY[result_class] = adapter_class
+
+
+def create_adapter(result: GeometryResult | TableResult) -> BaseResultAdapter:
+    """Create the metadata adapter matching the result's typology.
+
+    Resolution first looks up the exact type in the registry, then walks the
+    result type's MRO so subclasses of registered typologies are accepted:
+    the most specific registered base class wins, regardless of registration
+    order.
+
+    Args:
+        result: Analysis result to wrap.
+
+    Returns:
+        Adapter instance wrapping ``result``.
+
+    Raises:
+        TypeError: If no adapter is registered for the result's type.
+    """
+    adapter_class = _ADAPTER_REGISTRY.get(type(result))
+    if adapter_class is None:
+        for base in type(result).__mro__[1:]:
+            adapter_class = _ADAPTER_REGISTRY.get(base)
+            if adapter_class is not None:
+                break
+    if adapter_class is None:
+        raise TypeError(
+            f"No result adapter registered for type {type(result).__name__!r}"
+        )
+    return adapter_class(result)
+
+
+def alpha_label(index: int) -> str:
+    """Return an alphabetic label for a 0-based index.
+
+    Mapping: ``0 → "a"``, ``1 → "b"``, ..., ``25 → "z"``, ``26 → "aa"``, ...
+
+    Used to label axis-marker cursors (X_MARKERS / Y_MARKERS) and the
+    corresponding rows in the merged result label, so they can be matched
+    to the dashed cursors drawn on the plot.
+    """
+    if index < 0:
+        return ""
+    label = ""
+    n = index
+    while True:
+        label = chr(ord("a") + (n % 26)) + label
+        n = n // 26 - 1
+        if n < 0:
+            break
+    return label
+
 
 @dataclasses.dataclass
 class ResultData:
@@ -34,6 +104,7 @@ class ResultData:
     results: list[BaseResultAdapter] | None = None
     ylabels: list[str] | None = None
     short_ids: list[str] | None = None
+    execution_success: bool = True
 
     def __bool__(self) -> bool:
         """Return True if there are results stored"""
@@ -88,7 +159,7 @@ class ResultData:
             if "roi_index" in df.columns:
                 i_roi = int(df.iloc[i_row_res]["roi_index"])
                 roititle = ""
-                if i_roi >= 0 and obj.roi is not None:
+                if obj.roi is not None and 0 <= i_roi < len(obj.roi):
                     roititle = obj.roi.get_single_roi_title(i_roi)
                     ylabel += f"|{roititle}"
             self.ylabels.append(ylabel)
@@ -346,7 +417,7 @@ def resultadapter_to_html(
 
     # Get max_cells from config if not provided
     if max_cells is None:
-        max_cells = Conf.view.max_cells_in_label.get(100)
+        max_cells = Conf.max_cells_in_label.get(100)
 
     if isinstance(adapter, BaseResultAdapter):
         # Get the dataframe FIRST to check truncation needs
@@ -355,8 +426,34 @@ def resultadapter_to_html(
         # Remove roi_index column for display calculations
         display_df = df.drop(columns=["roi_index"]) if "roi_index" in df.columns else df
 
+        # If this is a marker result (XY/X/Y_MARKERS) and the user opted in,
+        # prepend a "marker label" column so each row in the displayed table
+        # can be matched with the cross / dashed cursor drawn on the plot
+        # (XY markers use numeric labels ``#1, #2, ...``; axis markers use
+        # alphabetic labels ``a, b, c, ...``). Forces the fast HTML path
+        # below to honor the injected column (the standard ``adapter.to_html``
+        # path does not see DataFrame mutations made here).
+        marker_labels_injected = False
+        result = adapter.result
+        if (  # pylint: disable=too-many-boolean-expressions
+            Conf.show_marker_labels_in_table.get(True)
+            and hasattr(result, "is_xy_markers")
+            and (
+                result.is_xy_markers()
+                or result.is_x_markers()
+                or (hasattr(result, "is_y_markers") and result.is_y_markers())
+            )
+        ):
+            if result.is_xy_markers():
+                marker_col = [f"#{i + 1}" for i in range(len(display_df))]
+            else:
+                marker_col = [alpha_label(i) for i in range(len(display_df))]
+            display_df = display_df.copy()
+            display_df.insert(0, _("Marker"), marker_col)
+            marker_labels_injected = True
+
         # For merged labels, limit display columns for readability
-        max_display_cols = Conf.view.max_cols_in_label.get(20)
+        max_display_cols = Conf.max_cols_in_label.get(20)
         num_cols = len(display_df.columns)
         cols_truncated = num_cols > max_display_cols
 
@@ -369,7 +466,7 @@ def resultadapter_to_html(
         num_cells = num_rows * num_cols
 
         # Check if truncation is needed BEFORE calling to_html()
-        if num_cells > max_cells or cols_truncated:
+        if num_cells > max_cells or cols_truncated or marker_labels_injected:
             # Calculate how many rows we can display given max_cells
             max_rows = max(1, max_cells // num_cols) if num_cols > 0 else num_rows
 
@@ -379,6 +476,10 @@ def resultadapter_to_html(
             # Generate HTML directly from truncated DataFrame for performance
             # This is MUCH faster than calling adapter.to_html() on full data
             html_kwargs = {"border": 0}
+            if marker_labels_injected:
+                # Hide pandas' numeric index since the injected "Marker"
+                # column already provides per-row identification.
+                html_kwargs["index"] = False
             html_kwargs.update(kwargs)
 
             # Format numeric columns efficiently

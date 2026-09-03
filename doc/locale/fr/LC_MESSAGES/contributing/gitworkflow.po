@@ -6,8 +6,6 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -240,5 +238,5 @@ msgstr "Conclusion"
 msgid "This workflow ensures a structured yet flexible development process while keeping ``main`` stable and ``develop`` always updated with the latest changes."
 msgstr "Ce workflow garantit un processus de développement structuré mais flexible tout en maintenant ``main`` stable et ``develop`` toujours à jour avec les dernières modifications."
 
-msgid "The ``release`` branch provides a dedicated maintenance line for patch releases, allowing ``develop`` to proceed with new features without interference. This solves the problem of coordinating unreleased changes across the PlotPyStack ecosystem (DataLab, Sigima, PlotPy, guidata, PythonQwt) by providing a stable branch for CI testing during maintenance cycles."
-msgstr "La branche ``release`` fournit une ligne de maintenance dédiée pour les versions correctives, permettant à ``develop`` de poursuivre avec de nouvelles fonctionnalités sans interférence. Cela résout le problème de la coordination des modifications non publiées à travers l'écosystème PlotPyStack (DataLab, Sigima, PlotPy, guidata, PythonQwt) en fournissant une branche stable pour les tests CI pendant les cycles de maintenance."
+msgid "The ``release`` branch provides a dedicated maintenance line for patch releases, allowing ``develop`` to proceed with new features without interference. This solves the problem of coordinating unreleased changes across the PlotPyStack ecosystem (DataLab, SigimaX, Sigima, PlotPy, guidata, PythonQwt) by providing a stable branch for CI testing during maintenance cycles."
+msgstr "La branche ``release`` fournit une ligne de maintenance dédiée pour les versions correctives, permettant à ``develop`` de poursuivre avec de nouvelles fonctionnalités sans interférence. Cela résout le problème de la coordination des modifications non publiées à travers l'écosystème PlotPyStack (DataLab, SigimaX, Sigima, PlotPy, guidata, PythonQwt) en fournissant une branche stable pour les tests CI pendant les cycles de maintenance."

@@ -36,7 +36,7 @@ def test_delete_results_image():
 
         # Run centroid analysis to create results
         execenv.print("  Running centroid analysis...")
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("centroid")
 
         # Verify that results exist
@@ -71,7 +71,7 @@ def test_delete_results_signal():
 
         # Run stats analysis to create table results
         execenv.print("  Running stats analysis...")
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("stats")
 
         # Verify that results exist
@@ -95,8 +95,8 @@ def test_delete_results_signal():
 def test_delete_results_clears_analysis_parameters():
     """Test that deleting results also clears analysis parameters.
 
-    This prevents auto_recompute_analysis from attempting to recompute
-    deleted analyses when ROI changes.
+    This prevents recompute_analysis from attempting to recompute
+    deleted analyses when the user triggers a manual recompute.
     """
     with datalab_test_app_context(console=False) as win:
         execenv.print("Test delete_results clears analysis parameters:")
@@ -109,7 +109,7 @@ def test_delete_results_clears_analysis_parameters():
 
         # Run centroid analysis to create results and store analysis parameters
         execenv.print("  Running centroid analysis...")
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("centroid")
 
         # Verify that analysis parameters exist
@@ -136,11 +136,11 @@ def test_delete_results_clears_analysis_parameters():
         )
         execenv.print("  ✓ Analysis parameters cleared")
 
-        # Now add a ROI and verify no auto-recompute happens (no new results)
-        execenv.print("  Adding ROI to verify no auto-recompute...")
+        # Now add a ROI and verify no recompute happens (no new results)
+        execenv.print("  Adding ROI to verify no recompute...")
         roi = create_image_roi("rectangle", [25, 25, 100, 100])
         img_after.roi = roi
-        panel.processor.auto_recompute_analysis(img_after)
+        panel.processor.recompute_analysis(img_after)
 
         # Verify that no new results were created
         adapter_after_roi = GeometryAdapter.from_obj(img_after, "centroid")
@@ -148,9 +148,7 @@ def test_delete_results_clears_analysis_parameters():
             "No centroid result should be created after ROI change "
             "because analysis parameters were cleared"
         )
-        execenv.print(
-            "  ✓ No auto-recompute after ROI change (analysis params cleared)"
-        )
+        execenv.print("  ✓ No recompute after ROI change (analysis params cleared)")
         execenv.print("\n✓ All tests passed!")
 
 
@@ -175,7 +173,7 @@ def test_delete_results_after_roi_removed():
 
         # Run centroid analysis - this stores ROI index in results
         execenv.print("  Running centroid analysis with ROI...")
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("centroid")
 
         # Verify that results exist and contain ROI information

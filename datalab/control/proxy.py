@@ -75,14 +75,38 @@ from __future__ import annotations
 
 from collections.abc import Generator
 from contextlib import contextmanager
+from dataclasses import dataclass
+from typing import TYPE_CHECKING, Literal
 
 import guidata.dataset as gds
 import numpy as np
 from sigima import ImageObj, SignalObj
 
+from datalab.config import Conf
 from datalab.control.baseproxy import BaseProxy
 from datalab.control.remote import RemoteClient
 from datalab.utils import qthelpers as qth
+
+if TYPE_CHECKING:
+    from datalab.gui.historysession_ops import SessionBehavior
+    from datalab.gui.main import DLMainWindow
+
+
+@dataclass
+class MultiLoadState:
+    """Track a local proxy multi-object load."""
+
+    panel: Literal["signal", "image"]
+    behavior: SessionBehavior | None
+    decision_applied: bool = False
+
+    def behavior_for(self, panel: Literal["signal", "image"]) -> SessionBehavior | None:
+        """Return the session behavior for an object added to ``panel``."""
+        if panel != self.panel:
+            raise ValueError(
+                f"Cannot add a {panel} object during a {self.panel} multiload session"
+            )
+        return "no" if self.decision_applied else self.behavior
 
 
 class RemoteProxy(RemoteClient):
@@ -137,7 +161,19 @@ class LocalProxy(BaseProxy):
 
     Args:
         datalab (DLMainWindow): DLMainWindow instance.
+        input_source: Source of objects added through this proxy.
     """
+
+    def __init__(
+        self,
+        datalab: DLMainWindow | None = None,
+        input_source: Literal["local", "plugin"] = "local",
+    ) -> None:
+        if input_source not in ("local", "plugin"):
+            raise ValueError(f"Invalid local proxy input source: {input_source!r}")
+        super().__init__(datalab)
+        self.input_source = input_source
+        self.multiload_state: MultiLoadState | None = None
 
     def add_signal(
         self,
@@ -150,6 +186,7 @@ class LocalProxy(BaseProxy):
         ylabel: str = "",
         group_id: str = "",
         set_current: bool = True,
+        new_session_behavior: SessionBehavior | None = None,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add signal data to DataLab.
 
@@ -163,6 +200,7 @@ class LocalProxy(BaseProxy):
             ylabel: Y label. Defaults to ""
             group_id: group id in which to add the signal. Defaults to ""
             set_current: if True, set the added signal as current
+            new_session_behavior: Optional history session creation policy
 
         Returns:
             True if signal was added successfully, False otherwise
@@ -171,9 +209,28 @@ class LocalProxy(BaseProxy):
             ValueError: Invalid xdata dtype
             ValueError: Invalid ydata dtype
         """
-        return self._datalab.add_signal(
-            title, xdata, ydata, xunit, yunit, xlabel, ylabel, group_id, set_current
+        multiload_state = self.multiload_state
+        if multiload_state is None:
+            behavior = new_session_behavior
+            if behavior is None and self.input_source == "plugin":
+                behavior = Conf.history_plugin_new_session_behavior.get()
+        else:
+            behavior = multiload_state.behavior_for("signal")
+        added = self._datalab.add_signal(
+            title,
+            xdata,
+            ydata,
+            xunit,
+            yunit,
+            xlabel,
+            ylabel,
+            group_id,
+            set_current,
+            new_session_behavior=behavior,
         )
+        if added and multiload_state is not None:
+            multiload_state.decision_applied = True
+        return added
 
     def add_image(
         self,
@@ -187,6 +244,7 @@ class LocalProxy(BaseProxy):
         zlabel: str = "",
         group_id: str = "",
         set_current: bool = True,
+        new_session_behavior: SessionBehavior | None = None,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add image data to DataLab.
 
@@ -201,6 +259,7 @@ class LocalProxy(BaseProxy):
             zlabel: Z label. Defaults to ""
             group_id: group id in which to add the image. Defaults to ""
             set_current: if True, set the added image as current
+            new_session_behavior: Optional history session creation policy
 
         Returns:
             True if image was added successfully, False otherwise
@@ -208,7 +267,14 @@ class LocalProxy(BaseProxy):
         Raises:
             ValueError: Invalid data dtype
         """
-        return self._datalab.add_image(
+        multiload_state = self.multiload_state
+        if multiload_state is None:
+            behavior = new_session_behavior
+            if behavior is None and self.input_source == "plugin":
+                behavior = Conf.history_plugin_new_session_behavior.get()
+        else:
+            behavior = multiload_state.behavior_for("image")
+        added = self._datalab.add_image(
             title,
             data,
             xunit,
@@ -219,19 +285,81 @@ class LocalProxy(BaseProxy):
             zlabel,
             group_id,
             set_current,
+            new_session_behavior=behavior,
         )
+        if added and multiload_state is not None:
+            multiload_state.decision_applied = True
+        return added
 
     def add_object(
-        self, obj: SignalObj | ImageObj, group_id: str = "", set_current: bool = True
-    ) -> None:
+        self,
+        obj: SignalObj | ImageObj,
+        group_id: str = "",
+        set_current: bool = True,
+        new_session_behavior: SessionBehavior | None = None,
+    ) -> bool:
         """Add object to DataLab.
 
         Args:
             obj: Signal or image object
             group_id: group id in which to add the object. Defaults to ""
             set_current: if True, set the added object as current
+            new_session_behavior: Optional history session creation policy
+
+        Returns:
+            True if the object was added successfully, False otherwise
         """
-        self._datalab.add_object(obj, group_id, set_current)
+        multiload_state = self.multiload_state
+        if multiload_state is None:
+            behavior = new_session_behavior
+            if behavior is None and self.input_source == "plugin":
+                behavior = Conf.history_plugin_new_session_behavior.get()
+        else:
+            if isinstance(obj, SignalObj):
+                panel = "signal"
+            elif isinstance(obj, ImageObj):
+                panel = "image"
+            else:
+                raise TypeError(f"Unsupported object type {type(obj)}")
+            behavior = multiload_state.behavior_for(panel)
+        added = self._datalab.add_object(
+            obj, group_id, set_current, new_session_behavior=behavior
+        )
+        if added and multiload_state is not None:
+            multiload_state.decision_applied = True
+        return added
+
+    @contextmanager
+    def multiload_session(
+        self,
+        panel: Literal["signal", "image"],
+        new_session_behavior: SessionBehavior | None = None,
+    ) -> Generator[None, None, None]:
+        """Apply one lazy session decision to a multi-object load.
+
+        Args:
+            panel: Target data panel ("signal" or "image")
+            new_session_behavior: Optional history session creation policy
+
+        Raises:
+            ValueError: If the panel or session behavior is invalid
+            RuntimeError: If another multiload session is already active
+        """
+        if panel not in ("signal", "image"):
+            raise ValueError(f"Invalid data panel: {panel!r}")
+        behavior = new_session_behavior
+        if behavior is None and self.input_source == "plugin":
+            behavior = Conf.history_plugin_multiload_behavior.get()
+        if behavior is not None and behavior not in ("ask", "yes", "no"):
+            raise ValueError(f"Invalid session behavior: {behavior!r}")
+        if self.multiload_state is not None:
+            raise RuntimeError("Nested multiload sessions are not supported")
+        previous_state = self.multiload_state
+        self.multiload_state = MultiLoadState(panel, behavior)
+        try:
+            yield
+        finally:
+            self.multiload_state = previous_state
 
     def calc(self, name: str, param: gds.DataSet | None = None) -> None:
         """Call computation feature ``name``

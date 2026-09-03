@@ -72,7 +72,8 @@ def test_signal_features(win: DLMainWindow, data_size: int = 500) -> None:
     sig3 = panel.objview.get_current_object()
 
     param = sigima.params.PeakDetectionParam()
-    panel.processor.run_feature("peak_detection", param)
+    panel.processor.compute_peak_detection(param)
+    panel.processor.compute_markers_to_signal()
     sig4 = panel.objview.get_current_object()
     panel.objview.select_objects([sig3, sig4])
 

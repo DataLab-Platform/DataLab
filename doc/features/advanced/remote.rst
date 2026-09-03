@@ -21,11 +21,16 @@ allows to access DataLab main features from a separate process.
 
 .. note::
 
-    If you are looking for a lighweight alternative solution to remote control
-    DataLab (i.e. without having to install the whole DataLab package and its
-    dependencies on your environment), you may use the `Sigima`_ package that
-    provides a simple remote client for DataLab. To install it, just run:
-    ``pip install sigima``.
+    If you are looking for a lightweight alternative to remote control DataLab
+    (i.e. without installing the whole DataLab package and its dependencies in
+    your environment), use the :py:class:`sigima.client.SimpleRemoteProxy` class
+    provided by the `Sigima`_ package (``pip install sigima``). It exposes the
+    same XML-RPC entry points as the ``RemoteProxy`` class described below, with
+    a minimal set of dependencies.
+
+    This class supersedes ``cdlclient.SimpleRemoteProxy``: the ``cdlclient``
+    package is deprecated and archived since DataLab 1.3. Its connection dialog
+    is now provided by SigimaX (see `Connection dialog`_ below).
 
 .. _Sigima: https://github.com/DataLab-Platform/Sigima
 
@@ -114,13 +119,16 @@ Here is a Python 2.7 reimplementation of this class:
 Connection dialog
 ^^^^^^^^^^^^^^^^^
 
-The DataLab package also provides a connection dialog that may be used
-to connect to a running DataLab instance. It is exposed by the
-:py:class:`datalab.widgets.connection.ConnectionDialog` class.
+A connection dialog may be used to connect to a running DataLab instance.
+It is exposed by the :py:class:`sigimax.widgets.connection.ConnectionDialog`
+class, and takes optional ``icon`` and ``banner`` arguments to carry the
+branding of the client application. It works with any proxy exposing a
+blocking ``connect()`` method, i.e. both ``RemoteProxy`` and
+:py:class:`sigima.client.SimpleRemoteProxy`.
 
 .. figure:: ../../images/shots/connect_dialog.png
 
-    Screenshot of connection dialog (``datalab.widgets.connection.ConnectionDialog``)
+    Screenshot of connection dialog (``sigimax.widgets.connection.ConnectionDialog``)
 
 Example of use:
 

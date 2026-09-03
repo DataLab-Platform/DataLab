@@ -33,6 +33,12 @@ their original processing parameters. This is useful when you want to re-execute
 processing chain that was used to create a signal, for example after modifying global
 settings or dependencies.
 
+It also refreshes **analysis results** (statistics, FWHM, centroid, peak/contour
+detection, etc.) using their stored parameters. Analysis results are **not** recomputed
+automatically when you modify a region of interest, the data, or object properties:
+existing results are left untouched until you explicitly trigger this action, giving you
+full control over when analyses are refreshed.
+
 .. |recompute| image:: ../../../datalab/data/icons/edit/recompute.svg
     :width: 24px
     :height: 24px
@@ -40,8 +46,9 @@ settings or dependencies.
 
 .. note::
 
-    This action is only available for signals that were created through processing
-    operations and have stored processing parameters.
+    This action is only available for signals that have stored processing parameters
+    (created through processing operations) or stored analysis parameters (analysis
+    operations previously run on them).
 
 Select source objects
 ---------------------

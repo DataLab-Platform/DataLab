@@ -6,8 +6,6 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -84,13 +82,13 @@ msgstr "Total"
 msgid "Number of compute functions"
 msgstr "Nombre de fonctions de calcul"
 
-msgid "96"
+msgid "98"
 msgstr ""
 
-msgid "115"
+msgid "116"
 msgstr ""
 
-msgid "211"
+msgid "214"
 msgstr ""
 
 msgid "Number of validated compute functions"
@@ -121,57 +119,57 @@ msgid "Test function"
 msgstr "Fonction de test"
 
 msgid ":py:func:`absolute <sigima.proc.signal.absolute>`"
-msgstr ""
+msgstr "Calculer la valeur absolue avec :py:data:`numpy.absolute`"
 
 msgid "Compute absolute value with :py:data:`numpy.absolute`"
-msgstr ""
+msgstr "Calculer la valeur absolue avec :py:data:`numpy.absolute`"
 
-msgid "`test_signal_absolute <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L229>`_"
+msgid "`test_signal_absolute <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L229>`_"
 msgstr ""
 
 msgid ":py:func:`add_gaussian_noise <sigima.proc.signal.add_gaussian_noise>`"
 msgstr ""
 
 msgid "Add normal noise to the input signal"
-msgstr ""
+msgstr "Ajouter un bruit normal au signal d'entrée"
 
-msgid "`test_signal_add_gaussian_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/noise_unit_test.py#L21>`_"
+msgid "`test_signal_add_gaussian_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/noise_unit_test.py#L21>`_"
 msgstr ""
 
 msgid ":py:func:`add_poisson_noise <sigima.proc.signal.add_poisson_noise>`"
 msgstr ""
 
 msgid "Add Poisson noise to the input signal"
-msgstr ""
+msgstr "Ajouter un bruit de Poisson au signal d'entrée"
 
-msgid "`test_signal_add_poisson_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/noise_unit_test.py#L54>`_"
+msgid "`test_signal_add_poisson_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/noise_unit_test.py#L54>`_"
 msgstr ""
 
 msgid ":py:func:`add_uniform_noise <sigima.proc.signal.add_uniform_noise>`"
 msgstr ""
 
 msgid "Add uniform noise to the input signal"
-msgstr ""
+msgstr "Ajouter un bruit uniforme au signal d'entrée"
 
-msgid "`test_signal_add_uniform_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/noise_unit_test.py#L88>`_"
+msgid "`test_signal_add_uniform_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/noise_unit_test.py#L88>`_"
 msgstr ""
 
 msgid ":py:func:`addition <sigima.proc.signal.addition>`"
 msgstr ""
 
 msgid "Compute the element-wise sum of multiple signals"
-msgstr ""
+msgstr "Calculer la somme élément par élément de plusieurs signaux"
 
-msgid "`test_signal_addition <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L78>`_"
+msgid "`test_signal_addition <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L78>`_"
 msgstr ""
 
 msgid ":py:func:`addition_constant <sigima.proc.signal.addition_constant>`"
 msgstr ""
 
 msgid "Compute the sum of a signal and a constant value"
-msgstr ""
+msgstr "Calculer la somme d'un signal et d'une valeur constante"
 
-msgid "`test_signal_addition_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L171>`_"
+msgid "`test_signal_addition_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L171>`_"
 msgstr ""
 
 msgid ":py:func:`allan_deviation <sigima.proc.signal.allan_deviation>`"
@@ -180,124 +178,124 @@ msgstr ""
 msgid "Compute Allan deviation"
 msgstr "Calculer la déviation d'Allan"
 
-msgid "`test_signal_allan_deviation <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/stability_unit_test.py#L157>`_"
+msgid "`test_signal_allan_deviation <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/stability_unit_test.py#L157>`_"
 msgstr ""
 
 msgid ":py:func:`allan_variance <sigima.proc.signal.allan_variance>`"
 msgstr ""
 
 msgid "Compute Allan variance"
-msgstr ""
+msgstr "Calculer la variance d'Allan"
 
-msgid "`test_signal_allan_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/stability_unit_test.py#L140>`_"
+msgid "`test_signal_allan_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/stability_unit_test.py#L140>`_"
 msgstr ""
 
 msgid ":py:func:`apply_window <sigima.proc.signal.apply_window>`"
 msgstr ""
 
 msgid "Compute windowing"
-msgstr "Calculer la fenêtrage"
+msgstr "Calcul d'un fenêtrage"
 
-msgid "`test_signal_apply_window <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L564>`_"
+msgid "`test_signal_apply_window <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L564>`_"
 msgstr ""
 
 msgid ":py:func:`arithmetic <sigima.proc.signal.arithmetic>`"
 msgstr ""
 
 msgid "Perform an arithmetic operation on two signals"
-msgstr ""
+msgstr "Effectuer une opération arithmétique sur deux signaux"
 
-msgid "`test_signal_arithmetic <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L398>`_"
+msgid "`test_signal_arithmetic <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L398>`_"
 msgstr ""
 
 msgid ":py:func:`astype <sigima.proc.signal.astype>`"
 msgstr ""
 
 msgid "Convert data type"
-msgstr ""
+msgstr "Convertir le type de données"
 
-msgid "`test_signal_astype <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L355>`_"
+msgid "`test_signal_astype <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L355>`_"
 msgstr ""
 
 msgid ":py:func:`average <sigima.proc.signal.average>`"
 msgstr ""
 
 msgid "Compute the element-wise average of multiple signals"
-msgstr ""
+msgstr "Calculer la moyenne élément par élément de plusieurs signaux"
 
-msgid "`test_signal_average <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L92>`_"
+msgid "`test_signal_average <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L92>`_"
 msgstr ""
 
 msgid ":py:func:`bandpass <sigima.proc.signal.bandpass>`"
 msgstr ""
 
 msgid "Compute band-pass filter"
-msgstr ""
+msgstr "Calculer le filtre passe-bande"
 
-msgid "`test_signal_bandpass <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/filters_unit_test.py#L290>`_"
+msgid "`test_signal_bandpass <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/filters_unit_test.py#L290>`_"
 msgstr ""
 
 msgid ":py:func:`bandstop <sigima.proc.signal.bandstop>`"
 msgstr ""
 
 msgid "Compute band-stop filter"
-msgstr ""
+msgstr "Calculer le filtre coupe-bande"
 
-msgid "`test_signal_bandstop <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/filters_unit_test.py#L248>`_"
+msgid "`test_signal_bandstop <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/filters_unit_test.py#L248>`_"
 msgstr ""
 
 msgid ":py:func:`bandwidth_3db <sigima.proc.signal.bandwidth_3db>`"
 msgstr ""
 
 msgid "Compute bandwidth at -3 dB"
-msgstr ""
+msgstr "Calculer la largeur de bande à -3 dB"
 
-msgid "`test_signal_bandwidth_3db <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/analysis_unit_test.py#L33>`_"
+msgid "`test_signal_bandwidth_3db <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/analysis_unit_test.py#L33>`_"
 msgstr ""
 
 msgid ":py:func:`calibration <sigima.proc.signal.calibration>`"
 msgstr ""
 
 msgid "Compute linear calibration"
-msgstr ""
+msgstr "Calculer l'étalonnage linéaire"
 
-msgid "`test_signal_calibration <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L38>`_"
+msgid "`test_signal_calibration <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L38>`_"
 msgstr ""
 
 msgid ":py:func:`cdf_fit <sigima.proc.signal.cdf_fit>`"
 msgstr ""
 
 msgid "Compute CDF fit"
-msgstr ""
+msgstr "Calculer l'ajustement CDF"
 
-msgid "`test_signal_cdf_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fitting_unit_test.py#L503>`_"
+msgid "`test_signal_cdf_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fitting_unit_test.py#L503>`_"
 msgstr ""
 
 msgid ":py:func:`clip <sigima.proc.signal.clip>`"
 msgstr ""
 
 msgid "Compute maximum data clipping"
-msgstr ""
+msgstr "Calculer le découpage maximal des données"
 
-msgid "`test_signal_clip <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L192>`_"
+msgid "`test_signal_clip <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L192>`_"
 msgstr ""
 
 msgid ":py:func:`complex_from_magnitude_phase <sigima.proc.signal.complex_from_magnitude_phase>`"
 msgstr ""
 
 msgid "Combine magnitude and phase signals into a complex signal"
-msgstr ""
+msgstr "Combiner les signaux de magnitude et de phase en un signal complexe"
 
-msgid "`test_signal_complex_from_magnitude_phase <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L320>`_"
+msgid "`test_signal_complex_from_magnitude_phase <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L320>`_"
 msgstr ""
 
 msgid ":py:func:`complex_from_real_imag <sigima.proc.signal.complex_from_real_imag>`"
 msgstr ""
 
 msgid "Combine two real signals into a complex signal using real + i * imag"
-msgstr ""
+msgstr "Combiner deux signaux réels en un signal complexe en utilisant réel + i * imag"
 
-msgid "`test_signal_complex_from_real_imag <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L253>`_"
+msgid "`test_signal_complex_from_real_imag <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L253>`_"
 msgstr ""
 
 msgid ":py:func:`contrast <sigima.proc.signal.contrast>`"
@@ -306,25 +304,25 @@ msgstr ""
 msgid "Compute contrast"
 msgstr "Calculer le contraste"
 
-msgid "`test_signal_contrast <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/analysis_unit_test.py#L88>`_"
+msgid "`test_signal_contrast <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/analysis_unit_test.py#L88>`_"
 msgstr ""
 
 msgid ":py:func:`convolution <sigima.proc.signal.convolution>`"
 msgstr ""
 
 msgid "Compute convolution of two signals"
-msgstr ""
+msgstr "Calculer la convolution de deux signaux"
 
-msgid "`test_signal_convolution <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/convolution_unit_test.py#L106>`_"
+msgid "`test_signal_convolution <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/convolution_unit_test.py#L106>`_"
 msgstr ""
 
 msgid ":py:func:`deconvolution <sigima.proc.signal.deconvolution>`"
 msgstr ""
 
 msgid "Compute deconvolution"
-msgstr "Calculer la déconvolution"
+msgstr "Calculer la déconvolution de deux signaux"
 
-msgid "`test_signal_deconvolution <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/convolution_unit_test.py#L267>`_"
+msgid "`test_signal_deconvolution <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/convolution_unit_test.py#L267>`_"
 msgstr ""
 
 msgid ":py:func:`derivative <sigima.proc.signal.derivative>`"
@@ -333,79 +331,79 @@ msgstr ""
 msgid "Compute derivative"
 msgstr "Calculer la dérivée"
 
-msgid "`test_signal_derivative <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L205>`_"
+msgid "`test_signal_derivative <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L205>`_"
 msgstr ""
 
 msgid ":py:func:`detrending <sigima.proc.signal.detrending>`"
 msgstr ""
 
 msgid "Detrend data"
-msgstr ""
+msgstr "Supprimer la tendance des données"
 
-msgid "`test_signal_detrending <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L248>`_"
+msgid "`test_signal_detrending <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L248>`_"
 msgstr ""
 
 msgid ":py:func:`difference <sigima.proc.signal.difference>`"
 msgstr ""
 
 msgid "Compute the element-wise difference between two signals"
-msgstr ""
+msgstr "Calculer la différence élément par élément entre deux signaux"
 
-msgid "`test_signal_difference <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L141>`_"
+msgid "`test_signal_difference <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L141>`_"
 msgstr ""
 
 msgid ":py:func:`difference_constant <sigima.proc.signal.difference_constant>`"
 msgstr ""
 
 msgid "Compute the difference between a signal and a constant value"
-msgstr ""
+msgstr "Calculer la différence entre un signal et une valeur constante"
 
-msgid "`test_signal_difference_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L193>`_"
+msgid "`test_signal_difference_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L193>`_"
 msgstr ""
 
 msgid ":py:func:`division <sigima.proc.signal.division>`"
 msgstr ""
 
 msgid "Compute the element-wise division between two signals"
-msgstr ""
+msgstr "Calculer la division élément par élément entre deux signaux"
 
-msgid "`test_signal_division <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L159>`_"
+msgid "`test_signal_division <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L159>`_"
 msgstr ""
 
 msgid ":py:func:`division_constant <sigima.proc.signal.division_constant>`"
 msgstr ""
 
 msgid "Compute the division of a signal by a constant value"
-msgstr ""
+msgstr "Calculer la division d'un signal par une valeur constante"
 
-msgid "`test_signal_division_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L203>`_"
+msgid "`test_signal_division_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L203>`_"
 msgstr ""
 
 msgid ":py:func:`dynamic_parameters <sigima.proc.signal.dynamic_parameters>`"
 msgstr ""
 
 msgid "Compute Dynamic parameters"
-msgstr ""
+msgstr "Calculer les paramètres dynamiques"
 
-msgid "`test_dynamic_parameters <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/analysis_unit_test.py#L62>`_"
+msgid "`test_dynamic_parameters <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/analysis_unit_test.py#L62>`_"
 msgstr ""
 
 msgid ":py:func:`evaluate_fit <sigima.proc.signal.evaluate_fit>`"
 msgstr ""
 
 msgid "Evaluate fit function from src1 on the x-axis of src2"
-msgstr ""
+msgstr "Évaluer la fonction d'ajustement de src1 sur l'axe des x de src2"
 
-msgid "`test_signal_evaluate_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fitting_unit_test.py#L931>`_"
+msgid "`test_signal_evaluate_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fitting_unit_test.py#L931>`_"
 msgstr ""
 
 msgid ":py:func:`exp <sigima.proc.signal.exp>`"
 msgstr ""
 
 msgid "Compute exponential with :py:data:`numpy.exp`"
-msgstr ""
+msgstr "Calculer l'exponentielle avec :py:data:`numpy.exp`"
 
-msgid "`test_signal_exp <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L365>`_"
+msgid "`test_signal_exp <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L365>`_"
 msgstr ""
 
 msgid ":py:func:`exponential_fit <sigima.proc.signal.exponential_fit>`"
@@ -414,34 +412,43 @@ msgstr ""
 msgid "Compute exponential fit"
 msgstr "Calculer l'ajustement exponentiel"
 
-msgid "`test_signal_exponential_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fitting_unit_test.py#L354>`_"
+msgid "`test_signal_exponential_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fitting_unit_test.py#L354>`_"
+msgstr ""
+
+msgid ":py:func:`extract_peak_positions <sigima.proc.signal.extract_peak_positions>`"
+msgstr ""
+
+msgid "Extract peak positions as an XY-markers table"
+msgstr "Extraire les positions des pics sous forme de tableau de marqueurs XY"
+
+msgid "`test_signal_extract_peak_positions <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/peak_positions_unit_test.py#L51>`_"
 msgstr ""
 
 msgid ":py:func:`extract_pulse_features <sigima.proc.signal.extract_pulse_features>`"
 msgstr ""
 
 msgid "Extract pulse features"
-msgstr ""
+msgstr "Extraire les caractéristiques des impulsions"
 
-msgid "`test_signal_extract_pulse_features <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/pulse/pulse_unit_test.py#L1729>`_"
+msgid "`test_signal_extract_pulse_features <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/pulse/pulse_unit_test.py#L1750>`_"
 msgstr ""
 
 msgid ":py:func:`extract_roi <sigima.proc.signal.extract_roi>`"
 msgstr ""
 
 msgid "Extract single region of interest from data"
-msgstr ""
+msgstr "Extraire une seule région d'intérêt à partir des données"
 
-msgid "`test_signal_extract_roi <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/roi_advanced_unit_test.py#L198>`_"
+msgid "`test_signal_extract_roi <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/roi_advanced_unit_test.py#L198>`_"
 msgstr ""
 
 msgid ":py:func:`extract_rois <sigima.proc.signal.extract_rois>`"
 msgstr ""
 
 msgid "Extract multiple regions of interest from data"
-msgstr ""
+msgstr "Extraire plusieurs régions d'intérêt à partir des données"
 
-msgid "`test_signal_extract_rois <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/roi_advanced_unit_test.py#L169>`_"
+msgid "`test_signal_extract_rois <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/roi_advanced_unit_test.py#L169>`_"
 msgstr ""
 
 msgid ":py:func:`fft <sigima.proc.signal.fft>`"
@@ -450,67 +457,67 @@ msgstr ""
 msgid "Compute FFT"
 msgstr "Calculer la FFT"
 
-msgid "`test_signal_fft <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fft1d_unit_test.py#L138>`_"
+msgid "`test_signal_fft <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fft1d_unit_test.py#L138>`_"
 msgstr ""
 
 msgid ":py:func:`full_width_at_y <sigima.proc.signal.full_width_at_y>`"
 msgstr ""
 
-msgid "`test_signal_full_width_at_y <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fwhm_unit_test.py#L172>`_"
+msgid "`test_signal_full_width_at_y <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fwhm_unit_test.py#L187>`_"
 msgstr ""
 
 msgid ":py:func:`fw1e2 <sigima.proc.signal.fw1e2>`"
 msgstr ""
 
 msgid "Compute FW at 1/e²"
-msgstr ""
+msgstr "Calculer la largeur à 1/e²"
 
-msgid "`test_signal_fw1e2 <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fwhm_unit_test.py#L134>`_"
+msgid "`test_signal_fw1e2 <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fwhm_unit_test.py#L149>`_"
 msgstr ""
 
 msgid ":py:func:`fwhm <sigima.proc.signal.fwhm>`"
 msgstr ""
 
 msgid "Compute FWHM"
-msgstr "Fonctions de calcul"
+msgstr "Calculer la largeur à mi-hauteur"
 
-msgid "`test_signal_fwhm <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fwhm_unit_test.py#L62>`_"
+msgid "`test_signal_fwhm <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fwhm_unit_test.py#L62>`_"
 msgstr ""
 
 msgid ":py:func:`gaussian_filter <sigima.proc.signal.gaussian_filter>`"
 msgstr ""
 
 msgid "Compute gaussian filter"
-msgstr ""
+msgstr "Calculer le filtre gaussien"
 
-msgid "`test_signal_gaussian_filter <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L271>`_"
+msgid "`test_signal_gaussian_filter <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L271>`_"
 msgstr ""
 
 msgid ":py:func:`gaussian_fit <sigima.proc.signal.gaussian_fit>`"
 msgstr ""
 
 msgid "Compute Gaussian fit"
-msgstr "Calculer la déviation d'Allan"
+msgstr "Calculer l'ajustement gaussien"
 
-msgid "`test_signal_gaussian_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fitting_unit_test.py#L220>`_"
+msgid "`test_signal_gaussian_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fitting_unit_test.py#L220>`_"
 msgstr ""
 
 msgid ":py:func:`hadamard_variance <sigima.proc.signal.hadamard_variance>`"
 msgstr ""
 
 msgid "Compute Hadamard variance"
-msgstr ""
+msgstr "Calculer la variance d'Hadamard"
 
-msgid "`test_signal_hadamard_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/stability_unit_test.py#L215>`_"
+msgid "`test_signal_hadamard_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/stability_unit_test.py#L215>`_"
 msgstr ""
 
 msgid ":py:func:`highpass <sigima.proc.signal.highpass>`"
 msgstr ""
 
 msgid "Compute high-pass filter"
-msgstr ""
+msgstr "Calculer le filtre passe-haut"
 
-msgid "`test_signal_highpass <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/filters_unit_test.py#L209>`_"
+msgid "`test_signal_highpass <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/filters_unit_test.py#L209>`_"
 msgstr ""
 
 msgid ":py:func:`histogram <sigima.proc.signal.histogram>`"
@@ -519,25 +526,25 @@ msgstr ""
 msgid "Compute histogram"
 msgstr "Calculer l'histogramme"
 
-msgid "`test_signal_histogram <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L388>`_"
+msgid "`test_signal_histogram <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L388>`_"
 msgstr ""
 
 msgid ":py:func:`ifft <sigima.proc.signal.ifft>`"
 msgstr ""
 
 msgid "Compute the inverse FFT"
-msgstr ""
+msgstr "Calculer la FFT inverse"
 
-msgid "`test_signal_ifft <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fft1d_unit_test.py#L158>`_"
+msgid "`test_signal_ifft <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fft1d_unit_test.py#L158>`_"
 msgstr ""
 
 msgid ":py:func:`imag <sigima.proc.signal.imag>`"
 msgstr ""
 
 msgid "Compute imaginary part"
-msgstr ""
+msgstr "Calculer la partie imaginaire"
 
-msgid "`test_signal_imag <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L245>`_"
+msgid "`test_signal_imag <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L245>`_"
 msgstr ""
 
 msgid ":py:func:`integral <sigima.proc.signal.integral>`"
@@ -546,25 +553,25 @@ msgstr ""
 msgid "Compute integral"
 msgstr "Calculer l'intégrale"
 
-msgid "`test_signal_integral <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L224>`_"
+msgid "`test_signal_integral <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L224>`_"
 msgstr ""
 
 msgid ":py:func:`interpolate <sigima.proc.signal.interpolate>`"
 msgstr ""
 
 msgid "Interpolate data"
-msgstr ""
+msgstr "Interpoler les données"
 
-msgid "`test_signal_interpolate <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L486>`_"
+msgid "`test_signal_interpolate <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L486>`_"
 msgstr ""
 
 msgid ":py:func:`inverse <sigima.proc.signal.inverse>`"
 msgstr ""
 
 msgid "Compute the element-wise inverse of a signal"
-msgstr ""
+msgstr "Calculer l'inverse élément par élément d'un signal"
 
-msgid "`test_signal_inverse <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L214>`_"
+msgid "`test_signal_inverse <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L214>`_"
 msgstr ""
 
 msgid ":py:func:`linear_fit <sigima.proc.signal.linear_fit>`"
@@ -573,16 +580,16 @@ msgstr ""
 msgid "Compute linear fit"
 msgstr "Calculer l'ajustement linéaire"
 
-msgid "`test_signal_linear_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fitting_unit_test.py#L137>`_"
+msgid "`test_signal_linear_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fitting_unit_test.py#L137>`_"
 msgstr ""
 
 msgid ":py:func:`log10 <sigima.proc.signal.log10>`"
 msgstr ""
 
 msgid "Compute Log10 with :py:data:`numpy.log10`"
-msgstr ""
+msgstr "Calculer Log10 avec :py:data:`numpy.log10`"
 
-msgid "`test_signal_log10 <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L373>`_"
+msgid "`test_signal_log10 <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L373>`_"
 msgstr ""
 
 msgid ":py:func:`lorentzian_fit <sigima.proc.signal.lorentzian_fit>`"
@@ -591,106 +598,106 @@ msgstr ""
 msgid "Compute Lorentzian fit"
 msgstr "Calculer l'ajustement lorentzien"
 
-msgid "`test_signal_lorentzian_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fitting_unit_test.py#L260>`_"
+msgid "`test_signal_lorentzian_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fitting_unit_test.py#L260>`_"
 msgstr ""
 
 msgid ":py:func:`lowpass <sigima.proc.signal.lowpass>`"
 msgstr ""
 
 msgid "Compute low-pass filter"
-msgstr ""
+msgstr "Calculer le filtre passe-bas"
 
-msgid "`test_signal_lowpass <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/filters_unit_test.py#L177>`_"
+msgid "`test_signal_lowpass <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/filters_unit_test.py#L177>`_"
 msgstr ""
 
 msgid ":py:func:`magnitude_spectrum <sigima.proc.signal.magnitude_spectrum>`"
 msgstr ""
 
 msgid "Compute magnitude spectrum"
-msgstr ""
+msgstr "Calculer le spectre de magnitude"
 
-msgid "`test_signal_magnitude_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fft1d_unit_test.py#L203>`_"
+msgid "`test_signal_magnitude_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fft1d_unit_test.py#L203>`_"
 msgstr ""
 
 msgid ":py:func:`modified_allan_variance <sigima.proc.signal.modified_allan_variance>`"
 msgstr ""
 
 msgid "Compute Modified Allan variance"
-msgstr ""
+msgstr "Calculer la variance d'Allan modifiée"
 
-msgid "`test_signal_modified_allan_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/stability_unit_test.py#L192>`_"
+msgid "`test_signal_modified_allan_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/stability_unit_test.py#L192>`_"
 msgstr ""
 
 msgid ":py:func:`moving_average <sigima.proc.signal.moving_average>`"
 msgstr ""
 
 msgid "Compute moving average"
-msgstr ""
+msgstr "Calculer la moyenne mobile"
 
-msgid "`test_signal_moving_average <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L282>`_"
+msgid "`test_signal_moving_average <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L282>`_"
 msgstr ""
 
 msgid ":py:func:`moving_median <sigima.proc.signal.moving_median>`"
 msgstr ""
 
 msgid "Compute moving median"
-msgstr ""
+msgstr "Calculer la médiane mobile"
 
-msgid "`test_signal_moving_median <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L307>`_"
+msgid "`test_signal_moving_median <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L307>`_"
 msgstr ""
 
 msgid ":py:func:`normalize <sigima.proc.signal.normalize>`"
 msgstr ""
 
 msgid "Normalize data"
-msgstr ""
+msgstr "Normaliser les données"
 
-msgid "`test_signal_normalize <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L157>`_"
+msgid "`test_signal_normalize <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L157>`_"
 msgstr ""
 
 msgid ":py:func:`offset_correction <sigima.proc.signal.offset_correction>`"
 msgstr ""
 
 msgid "Correct offset: subtract the mean value of the signal in the specified range"
-msgstr ""
+msgstr "Corriger le décalage : soustraire la valeur moyenne du signal dans la plage spécifiée"
 
-msgid "`test_signal_offset_correction <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/offset_correction_unit_test.py#L20>`_"
+msgid "`test_signal_offset_correction <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/offset_correction_unit_test.py#L20>`_"
 msgstr ""
 
 msgid ":py:func:`overlapping_allan_variance <sigima.proc.signal.overlapping_allan_variance>`"
 msgstr ""
 
 msgid "Compute Overlapping Allan variance"
-msgstr ""
+msgstr "Calculer la variance d'Allan chevauchante"
 
-msgid "`test_signal_overlapping_allan_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/stability_unit_test.py#L174>`_"
+msgid "`test_signal_overlapping_allan_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/stability_unit_test.py#L174>`_"
 msgstr ""
 
 msgid ":py:func:`peak_detection <sigima.proc.signal.peak_detection>`"
 msgstr ""
 
 msgid "Peak detection"
-msgstr ""
+msgstr "Détection des pics"
 
-msgid "`test_signal_peak_detection <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/peakdetection_unit_test.py#L23>`_"
+msgid "`test_signal_peak_detection <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/peakdetection_unit_test.py#L36>`_"
 msgstr ""
 
 msgid ":py:func:`phase <sigima.proc.signal.phase>`"
 msgstr ""
 
 msgid "Compute the phase (argument) of a complex signal"
-msgstr ""
+msgstr "Calculer la phase (argument) d'un signal complexe"
 
-msgid "`test_signal_phase <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L273>`_"
+msgid "`test_signal_phase <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L273>`_"
 msgstr ""
 
 msgid ":py:func:`phase_spectrum <sigima.proc.signal.phase_spectrum>`"
 msgstr ""
 
 msgid "Compute phase spectrum"
-msgstr ""
+msgstr "Calculer le spectre de phase"
 
-msgid "`test_signal_phase_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fft1d_unit_test.py#L244>`_"
+msgid "`test_signal_phase_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fft1d_unit_test.py#L244>`_"
 msgstr ""
 
 msgid ":py:func:`piecewiseexponential_fit <sigima.proc.signal.piecewiseexponential_fit>`"
@@ -699,7 +706,7 @@ msgstr ""
 msgid "Compute piecewise exponential fit (raise-decay)"
 msgstr "Calculer l'ajustement exponentiel par morceaux (augmentation-décroissance)"
 
-msgid "`test_signal_piecewiseexponential_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fitting_unit_test.py#L387>`_"
+msgid "`test_signal_piecewiseexponential_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fitting_unit_test.py#L387>`_"
 msgstr ""
 
 msgid ":py:func:`planckian_fit <sigima.proc.signal.planckian_fit>`"
@@ -708,7 +715,7 @@ msgstr ""
 msgid "Compute Planckian fit"
 msgstr "Calculer l'ajustement de Planck"
 
-msgid "`test_signal_planckian_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fitting_unit_test.py#L423>`_"
+msgid "`test_signal_planckian_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fitting_unit_test.py#L423>`_"
 msgstr ""
 
 msgid ":py:func:`polynomial_fit <sigima.proc.signal.polynomial_fit>`"
@@ -717,52 +724,52 @@ msgstr ""
 msgid "Compute polynomial fit"
 msgstr "Calculer l'ajustement polynomial"
 
-msgid "`test_polynomial_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fitting_unit_test.py#L171>`_"
+msgid "`test_polynomial_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fitting_unit_test.py#L171>`_"
 msgstr ""
 
 msgid ":py:func:`power <sigima.proc.signal.power>`"
 msgstr ""
 
 msgid "Compute power with :py:data:`numpy.power`"
-msgstr ""
+msgstr "Calculer la puissance avec :py:data:`numpy.power`"
 
-msgid "`test_signal_power <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L389>`_"
+msgid "`test_signal_power <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L389>`_"
 msgstr ""
 
 msgid ":py:func:`product <sigima.proc.signal.product>`"
 msgstr ""
 
 msgid "Compute the element-wise product of multiple signals"
-msgstr ""
+msgstr "Calculer le produit élément par élément de plusieurs signaux"
 
-msgid "`test_signal_product <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L127>`_"
+msgid "`test_signal_product <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L127>`_"
 msgstr ""
 
 msgid ":py:func:`product_constant <sigima.proc.signal.product_constant>`"
 msgstr ""
 
 msgid "Compute the product of a signal and a constant value"
-msgstr ""
+msgstr "Calculer le produit d'un signal et d'une valeur constante"
 
-msgid "`test_signal_product_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L181>`_"
+msgid "`test_signal_product_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L181>`_"
 msgstr ""
 
 msgid ":py:func:`psd <sigima.proc.signal.psd>`"
 msgstr ""
 
 msgid "Compute power spectral density"
-msgstr ""
+msgstr "Calculer la densité spectrale de puissance"
 
-msgid "`test_signal_psd <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fft1d_unit_test.py#L270>`_"
+msgid "`test_signal_psd <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fft1d_unit_test.py#L270>`_"
 msgstr ""
 
 msgid ":py:func:`quadratic_difference <sigima.proc.signal.quadratic_difference>`"
 msgstr ""
 
 msgid "Compute the normalized difference between two signals"
-msgstr ""
+msgstr "Calculer la différence normalisée entre deux signaux"
 
-msgid "`test_signal_quadratic_difference <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L151>`_"
+msgid "`test_signal_quadratic_difference <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L151>`_"
 msgstr ""
 
 msgid ":py:func:`real <sigima.proc.signal.real>`"
@@ -771,43 +778,52 @@ msgstr ""
 msgid "Compute real part"
 msgstr "Calculer la partie réelle"
 
-msgid "`test_signal_real <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L237>`_"
+msgid "`test_signal_real <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L237>`_"
+msgstr ""
+
+msgid ":py:func:`replace_special_values <sigima.proc.signal.replace_special_values>`"
+msgstr ""
+
+msgid "Replace NaN, +Inf and -Inf values in a signal"
+msgstr "Remplacer les valeurs NaN, +Inf et -Inf dans un signal"
+
+msgid "`test_signal_replace_special_values <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/replace_special_values_unit_test.py#L383>`_"
 msgstr ""
 
 msgid ":py:func:`replace_x_by_other_y <sigima.proc.signal.replace_x_by_other_y>`"
 msgstr ""
 
 msgid "Create a new signal using Y from src1 and Y from src2 as X coordinates"
-msgstr ""
+msgstr "Créer un nouveau signal en utilisant Y de src1 et Y de src2 comme coordonnées X"
 
-msgid "`test_replace_x_by_other_y <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/replace_x_by_other_y_unit_test.py#L28>`_"
+msgid "`test_replace_x_by_other_y <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/replace_x_by_other_y_unit_test.py#L28>`_"
 msgstr ""
 
 msgid ":py:func:`resampling <sigima.proc.signal.resampling>`"
 msgstr ""
 
 msgid "Resample data"
-msgstr ""
+msgstr "Rééchantillonner les données"
 
-msgid "`test_signal_resampling <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L332>`_"
+msgid "`test_signal_resampling <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L332>`_"
 msgstr ""
 
 msgid ":py:func:`reverse_x <sigima.proc.signal.reverse_x>`"
 msgstr ""
 
 msgid "Reverse x-axis"
-msgstr ""
+msgstr "Inverser l'axe des x"
 
-msgid "`test_signal_reverse_x <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L78>`_"
+msgid "`test_signal_reverse_x <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L78>`_"
 msgstr ""
 
 msgid ":py:func:`sampling_rate_period <sigima.proc.signal.sampling_rate_period>`"
 msgstr ""
 
 msgid "Compute sampling rate and period"
-msgstr ""
+msgstr "Calculer la fréquence d'échantillonnage et la période"
 
-msgid "`test_signal_sampling_rate_period <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/analysis_unit_test.py#L78>`_"
+msgid "`test_signal_sampling_rate_period <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/analysis_unit_test.py#L78>`_"
 msgstr ""
 
 msgid ":py:func:`sigmoid_fit <sigima.proc.signal.sigmoid_fit>`"
@@ -816,7 +832,7 @@ msgstr ""
 msgid "Compute sigmoid fit"
 msgstr "Calculer l'ajustement sigmoïde"
 
-msgid "`test_signal_sigmoid_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fitting_unit_test.py#L540>`_"
+msgid "`test_signal_sigmoid_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fitting_unit_test.py#L540>`_"
 msgstr ""
 
 msgid ":py:func:`signals_to_image <sigima.proc.signal.signals_to_image>`"
@@ -825,7 +841,7 @@ msgstr ""
 msgid "Combine multiple signals into an image"
 msgstr ""
 
-msgid "`test_signal_signals_to_image <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L424>`_"
+msgid "`test_signal_signals_to_image <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L424>`_"
 msgstr ""
 
 msgid ":py:func:`sinusoidal_fit <sigima.proc.signal.sinusoidal_fit>`"
@@ -834,88 +850,88 @@ msgstr ""
 msgid "Compute sinusoidal fit"
 msgstr "Calculer l'ajustement sinusoïdal"
 
-msgid "`test_sinusoidal_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fitting_unit_test.py#L825>`_"
+msgid "`test_sinusoidal_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fitting_unit_test.py#L825>`_"
 msgstr ""
 
 msgid ":py:func:`sqrt <sigima.proc.signal.sqrt>`"
 msgstr ""
 
 msgid "Compute square root with :py:data:`numpy.sqrt`"
-msgstr ""
+msgstr "Calculer la racine carrée avec :py:data:`numpy.sqrt`"
 
-msgid "`test_signal_sqrt <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L381>`_"
+msgid "`test_signal_sqrt <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L381>`_"
 msgstr ""
 
 msgid ":py:func:`standard_deviation <sigima.proc.signal.standard_deviation>`"
 msgstr ""
 
 msgid "Compute the element-wise standard deviation of multiple signals"
-msgstr ""
+msgstr "Calculer l'écart-type élément par élément de plusieurs signaux"
 
-msgid "`test_signal_standard_deviation <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/operation_unit_test.py#L107>`_"
+msgid "`test_signal_standard_deviation <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L107>`_"
 msgstr ""
 
 msgid ":py:func:`stats <sigima.proc.signal.stats>`"
 msgstr ""
 
 msgid "Compute statistics on a signal"
-msgstr ""
+msgstr "Calculer les statistiques sur un signal"
 
-msgid "`test_signal_stats_unit <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/common/stat_unit_test.py#L81>`_"
+msgid "`test_signal_stats_unit <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/common/stat_unit_test.py#L81>`_"
 msgstr ""
 
 msgid ":py:func:`time_deviation <sigima.proc.signal.time_deviation>`"
 msgstr ""
 
 msgid "Compute Time Deviation (TDEV)"
-msgstr ""
+msgstr "Calculer la déviation temporelle (TDEV)"
 
-msgid "`test_signal_time_deviation <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/stability_unit_test.py#L254>`_"
+msgid "`test_signal_time_deviation <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/stability_unit_test.py#L254>`_"
 msgstr ""
 
 msgid ":py:func:`to_cartesian <sigima.proc.signal.to_cartesian>`"
 msgstr ""
 
 msgid "Convert polar coordinates to Cartesian coordinates"
-msgstr ""
+msgstr "Convertir des coordonnées polaires en coordonnées cartésiennes"
 
-msgid "`test_signal_to_cartesian <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L139>`_"
+msgid "`test_signal_to_cartesian <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L139>`_"
 msgstr ""
 
 msgid ":py:func:`to_polar <sigima.proc.signal.to_polar>`"
 msgstr ""
 
 msgid "Convert Cartesian coordinates to polar coordinates"
-msgstr ""
+msgstr "Convertir des coordonnées cartésiennes en coordonnées polaires"
 
-msgid "`test_signal_to_polar <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L123>`_"
+msgid "`test_signal_to_polar <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L123>`_"
 msgstr ""
 
 msgid ":py:func:`total_variance <sigima.proc.signal.total_variance>`"
 msgstr ""
 
 msgid "Compute Total variance"
-msgstr ""
+msgstr "Calculer la variance totale"
 
-msgid "`test_signal_total_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/stability_unit_test.py#L233>`_"
+msgid "`test_signal_total_variance <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/stability_unit_test.py#L233>`_"
 msgstr ""
 
 msgid ":py:func:`transpose <sigima.proc.signal.transpose>`"
 msgstr ""
 
 msgid "Transpose signal (swap X and Y axes)"
-msgstr ""
+msgstr "Transposer le signal (échanger les axes X et Y)"
 
-msgid "`test_signal_transpose <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L68>`_"
+msgid "`test_signal_transpose <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L68>`_"
 msgstr ""
 
 msgid ":py:func:`twohalfgaussian_fit <sigima.proc.signal.twohalfgaussian_fit>`"
 msgstr ""
 
 msgid "Compute two-half-Gaussian fit"
-msgstr ""
+msgstr "Calculer l'ajustement à deux demi-Gaussiennes"
 
-msgid "`test_signal_twohalfgaussian_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fitting_unit_test.py#L576>`_"
+msgid "`test_signal_twohalfgaussian_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fitting_unit_test.py#L576>`_"
 msgstr ""
 
 msgid ":py:func:`voigt_fit <sigima.proc.signal.voigt_fit>`"
@@ -924,52 +940,52 @@ msgstr ""
 msgid "Compute Voigt fit"
 msgstr "Calculer l'ajustement de Voigt"
 
-msgid "`test_signal_voigt_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fitting_unit_test.py#L291>`_"
+msgid "`test_signal_voigt_fit <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fitting_unit_test.py#L291>`_"
 msgstr ""
 
 msgid ":py:func:`wiener <sigima.proc.signal.wiener>`"
 msgstr ""
 
 msgid "Compute Wiener filter"
-msgstr ""
+msgstr "Calculer le filtre de Wiener"
 
-msgid "`test_signal_wiener <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L323>`_"
+msgid "`test_signal_wiener <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L323>`_"
 msgstr ""
 
 msgid ":py:func:`x_at_minmax <sigima.proc.signal.x_at_minmax>`"
 msgstr ""
 
-msgid "`test_signal_x_at_minmax <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/analysis_unit_test.py#L143>`_"
+msgid "`test_signal_x_at_minmax <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/analysis_unit_test.py#L143>`_"
 msgstr ""
 
 msgid ":py:func:`x_at_y <sigima.proc.signal.x_at_y>`"
 msgstr ""
 
-msgid "`test_signal_x_at_y <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/analysis_unit_test.py#L153>`_"
+msgid "`test_signal_x_at_y <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/analysis_unit_test.py#L153>`_"
 msgstr ""
 
 msgid ":py:func:`xy_mode <sigima.proc.signal.xy_mode>`"
 msgstr ""
 
 msgid "Simulate the X-Y mode of an oscilloscope"
-msgstr ""
+msgstr "Simuler le mode X-Y d'un oscilloscope"
 
-msgid "`test_signal_xy_mode <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/processing_unit_test.py#L360>`_"
+msgid "`test_signal_xy_mode <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/processing_unit_test.py#L360>`_"
 msgstr ""
 
 msgid ":py:func:`y_at_x <sigima.proc.signal.y_at_x>`"
 msgstr ""
 
-msgid "`test_signal_y_at_x <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/analysis_unit_test.py#L166>`_"
+msgid "`test_signal_y_at_x <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/analysis_unit_test.py#L166>`_"
 msgstr ""
 
 msgid ":py:func:`zero_padding <sigima.proc.signal.zero_padding>`"
 msgstr ""
 
 msgid "Compute zero padding"
-msgstr ""
+msgstr "Calculer le remplissage nul"
 
-msgid "`test_signal_zero_padding <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/signal/fft1d_unit_test.py#L26>`_"
+msgid "`test_signal_zero_padding <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/fft1d_unit_test.py#L26>`_"
 msgstr ""
 
 msgid "Image Compute Functions"
@@ -984,61 +1000,61 @@ msgstr "Etat de validation des fonctions de calcul image"
 msgid ":py:func:`absolute <sigima.proc.image.absolute>`"
 msgstr ""
 
-msgid "`test_image_absolute <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L284>`_"
+msgid "`test_image_absolute <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L284>`_"
 msgstr ""
 
 msgid ":py:func:`add_gaussian_noise <sigima.proc.image.add_gaussian_noise>`"
 msgstr ""
 
 msgid "Add Gaussian (normal) noise to the input image"
-msgstr ""
+msgstr "Ajouter du bruit gaussien (normal) à l'image d'entrée"
 
-msgid "`test_image_add_gaussian_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/noise_unit_test.py#L21>`_"
+msgid "`test_image_add_gaussian_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/noise_unit_test.py#L21>`_"
 msgstr ""
 
 msgid ":py:func:`add_poisson_noise <sigima.proc.image.add_poisson_noise>`"
 msgstr ""
 
 msgid "Add Poisson noise to the input image"
-msgstr ""
+msgstr "Ajouter du bruit de Poisson à l'image d'entrée"
 
-msgid "`test_image_add_poisson_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/noise_unit_test.py#L59>`_"
+msgid "`test_image_add_poisson_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/noise_unit_test.py#L59>`_"
 msgstr ""
 
 msgid ":py:func:`add_uniform_noise <sigima.proc.image.add_uniform_noise>`"
 msgstr ""
 
 msgid "Add uniform noise to the input image"
-msgstr ""
+msgstr "Ajouter du bruit uniforme à l'image d'entrée"
 
-msgid "`test_image_add_uniform_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/noise_unit_test.py#L97>`_"
+msgid "`test_image_add_uniform_noise <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/noise_unit_test.py#L97>`_"
 msgstr ""
 
 msgid ":py:func:`addition <sigima.proc.image.addition>`"
 msgstr ""
 
 msgid "Add images in the list and return the result image object"
-msgstr ""
+msgstr "Ajouter les images de la liste et retourner l'objet image résultant"
 
-msgid "`test_image_addition <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L47>`_"
+msgid "`test_image_addition <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L47>`_"
 msgstr ""
 
 msgid ":py:func:`addition_constant <sigima.proc.image.addition_constant>`"
 msgstr ""
 
 msgid "Add **dst** and a constant value and return the new result image object"
-msgstr ""
+msgstr "Ajouter **dst** et une valeur constante et retourner le nouvel objet image résultant"
 
-msgid "`test_image_addition_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L184>`_"
+msgid "`test_image_addition_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L184>`_"
 msgstr ""
 
 msgid ":py:func:`adjust_gamma <sigima.proc.image.adjust_gamma>`"
 msgstr ""
 
 msgid "Gamma correction"
-msgstr ""
+msgstr "Correction gamma"
 
-msgid "`test_adjust_gamma <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/exposure_unit_test.py#L21>`_"
+msgid "`test_adjust_gamma <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/exposure_unit_test.py#L21>`_"
 msgstr ""
 
 msgid ":py:func:`adjust_log <sigima.proc.image.adjust_log>`"
@@ -1047,7 +1063,7 @@ msgstr ""
 msgid "Compute log correction"
 msgstr "Calculer l'ajustement logarithmique"
 
-msgid "`test_adjust_log <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/exposure_unit_test.py#L33>`_"
+msgid "`test_adjust_log <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/exposure_unit_test.py#L33>`_"
 msgstr ""
 
 msgid ":py:func:`adjust_sigmoid <sigima.proc.image.adjust_sigmoid>`"
@@ -1056,106 +1072,106 @@ msgstr ""
 msgid "Compute sigmoid correction"
 msgstr "Calculer l'ajustement sigmoïde"
 
-msgid "`test_adjust_sigmoid <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/exposure_unit_test.py#L45>`_"
+msgid "`test_adjust_sigmoid <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/exposure_unit_test.py#L45>`_"
 msgstr ""
 
 msgid ":py:func:`arithmetic <sigima.proc.image.arithmetic>`"
 msgstr ""
 
 msgid "Compute arithmetic operation on two images"
-msgstr ""
+msgstr "Effectuer une opération arithmétique sur deux images"
 
-msgid "`test_image_arithmetic <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L234>`_"
+msgid "`test_image_arithmetic <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L234>`_"
 msgstr ""
 
 msgid ":py:func:`astype <sigima.proc.image.astype>`"
 msgstr ""
 
 msgid "Convert image data type"
-msgstr ""
+msgstr "Convertir le type de données de l'image"
 
-msgid "`test_image_astype <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L438>`_"
+msgid "`test_image_astype <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L438>`_"
 msgstr ""
 
 msgid ":py:func:`average <sigima.proc.image.average>`"
 msgstr ""
 
 msgid "Compute the average of images in the list and return the result image object"
-msgstr ""
+msgstr "Calculer la moyenne des images dans la liste et retourner l'objet image résultant"
 
-msgid "`test_image_average <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L67>`_"
+msgid "`test_image_average <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L67>`_"
 msgstr ""
 
 msgid ":py:func:`average_profile <sigima.proc.image.average_profile>`"
 msgstr ""
 
 msgid "Compute horizontal or vertical average profile"
-msgstr ""
+msgstr "Calculer le profil moyen horizontal ou vertical"
 
-msgid "`test_average_profile <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/profile_unit_test.py#L70>`_"
+msgid "`test_average_profile <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/profile_unit_test.py#L70>`_"
 msgstr ""
 
 msgid ":py:func:`binning <sigima.proc.image.binning>`"
 msgstr ""
 
 msgid "Binning: image pixel binning (or aggregation)"
-msgstr ""
+msgstr "Regroupement : regroupement (ou agrégation) des pixels de l'image"
 
-msgid "`test_binning <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/binning_unit_test.py#L71>`_"
+msgid "`test_binning <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/binning_unit_test.py#L71>`_"
 msgstr ""
 
 msgid ":py:func:`black_tophat <sigima.proc.image.black_tophat>`"
 msgstr ""
 
 msgid "Compute Black Top-Hat"
-msgstr ""
+msgstr "Calculer le Black Top-Hat"
 
-msgid "`test_black_tophat <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/morphology_unit_test.py#L43>`_"
+msgid "`test_black_tophat <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/morphology_unit_test.py#L43>`_"
 msgstr ""
 
 msgid ":py:func:`blob_dog <sigima.proc.image.blob_dog>`"
 msgstr ""
 
 msgid "Compute blobs using Difference of Gaussian method"
-msgstr ""
+msgstr "Calculer les blobs en utilisant la méthode de la différence de Gaussienne"
 
-msgid "`test_image_blob_dog <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/blob_detection_unit_test.py#L110>`_"
+msgid "`test_image_blob_dog <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/blob_detection_unit_test.py#L110>`_"
 msgstr ""
 
 msgid ":py:func:`blob_doh <sigima.proc.image.blob_doh>`"
 msgstr ""
 
 msgid "Compute blobs using Determinant of Hessian method"
-msgstr ""
+msgstr "Calculer les blobs en utilisant la méthode du déterminant de Hessian"
 
-msgid "`test_image_blob_doh <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/blob_detection_unit_test.py#L187>`_"
+msgid "`test_image_blob_doh <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/blob_detection_unit_test.py#L187>`_"
 msgstr ""
 
 msgid ":py:func:`blob_log <sigima.proc.image.blob_log>`"
 msgstr ""
 
 msgid "Compute blobs using Laplacian of Gaussian method"
-msgstr ""
+msgstr "Calculer les blobs en utilisant la méthode du Laplacien de Gaussienne"
 
-msgid "`test_image_blob_log <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/blob_detection_unit_test.py#L226>`_"
+msgid "`test_image_blob_log <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/blob_detection_unit_test.py#L226>`_"
 msgstr ""
 
 msgid ":py:func:`blob_opencv <sigima.proc.image.blob_opencv>`"
 msgstr ""
 
 msgid "Compute blobs using OpenCV"
-msgstr ""
+msgstr "Calculer les blobs en utilisant OpenCV"
 
-msgid "`test_image_blob_opencv <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/blob_detection_unit_test.py#L266>`_"
+msgid "`test_image_blob_opencv <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/blob_detection_unit_test.py#L266>`_"
 msgstr ""
 
 msgid ":py:func:`butterworth <sigima.proc.image.butterworth>`"
 msgstr ""
 
 msgid "Compute Butterworth filter"
-msgstr ""
+msgstr "Calculer le filtre de Butterworth"
 
-msgid "`test_butterworth <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/filtering_unit_test.py#L70>`_"
+msgid "`test_butterworth <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/filtering_unit_test.py#L70>`_"
 msgstr ""
 
 msgid ":py:func:`calibration <sigima.proc.image.calibration>`"
@@ -1164,143 +1180,142 @@ msgstr ""
 msgid "Compute polynomial calibration"
 msgstr "Calculer l'étalonnage polynomial"
 
-msgid "`test_image_calibration <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/geometry_unit_test.py#L658>`_"
+msgid "`test_image_calibration <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/geometry_unit_test.py#L658>`_"
 msgstr ""
 
 msgid ":py:func:`canny <sigima.proc.image.canny>`"
 msgstr ""
 
 msgid "Compute Canny filter"
-msgstr ""
+msgstr "Calculer le filtre de Canny"
 
-msgid "`test_canny <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/edges_unit_test.py#L21>`_"
+msgid "`test_canny <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/edges_unit_test.py#L21>`_"
 msgstr ""
 
 msgid ":py:func:`centroid <sigima.proc.image.centroid>`"
 msgstr ""
 
 msgid "Compute centroid"
-msgstr ""
+msgstr "Calculer le centroïde"
 
-msgid "`test_image_centroid <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/centroid_unit_test.py#L147>`_"
+msgid "`test_image_centroid <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/centroid_unit_test.py#L147>`_"
 msgstr ""
 
 msgid ":py:func:`clip <sigima.proc.image.clip>`"
 msgstr ""
 
 msgid "Apply clipping"
-msgstr ""
+msgstr "Appliquer le clipping"
 
-msgid "`test_image_clip <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/exposure_unit_test.py#L158>`_"
+msgid "`test_image_clip <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/exposure_unit_test.py#L158>`_"
 msgstr ""
 
 msgid ":py:func:`closing <sigima.proc.image.closing>`"
 msgstr ""
 
 msgid "Compute morphological closing"
-msgstr ""
+msgstr "Calculer la fermeture morphologique"
 
-msgid "`test_closing <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/morphology_unit_test.py#L67>`_"
+msgid "`test_closing <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/morphology_unit_test.py#L67>`_"
 msgstr ""
 
 msgid ":py:func:`complex_from_magnitude_phase <sigima.proc.image.complex_from_magnitude_phase>`"
 msgstr ""
 
 msgid "Combine magnitude and phase images into a complex image"
-msgstr ""
+msgstr "Combiner les images de magnitude et de phase en une image complexe"
 
-msgid "`test_image_complex_from_magnitude_phase <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L399>`_"
+msgid "`test_image_complex_from_magnitude_phase <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L399>`_"
 msgstr ""
 
 msgid ":py:func:`complex_from_real_imag <sigima.proc.image.complex_from_real_imag>`"
 msgstr ""
 
 msgid "Combine two real images into a complex image using real + i * imag"
-msgstr ""
+msgstr "Combiner deux images réelles en une image complexe en utilisant réel + i * imag"
 
-msgid "`test_image_complex_from_real_imag <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L317>`_"
+msgid "`test_image_complex_from_real_imag <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L317>`_"
 msgstr ""
 
 msgid ":py:func:`contour_shape <sigima.proc.image.contour_shape>`"
 msgstr ""
 
-#, fuzzy
 msgid "Compute contour shape"
-msgstr "Calculer le contraste"
+msgstr "Calculer la forme du contour"
 
-msgid "`test_contour_shape <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/contour_unit_test.py#L55>`_"
+msgid "`test_contour_shape <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/contour_unit_test.py#L61>`_"
 msgstr ""
 
 msgid ":py:func:`convolution <sigima.proc.image.convolution>`"
 msgstr ""
 
 msgid "Convolve an image with a kernel"
-msgstr ""
+msgstr "Convoluer une image avec un noyau"
 
-msgid "`test_image_convolution <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/convolution_unit_test.py#L107>`_"
+msgid "`test_image_convolution <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/convolution_unit_test.py#L107>`_"
 msgstr ""
 
 msgid ":py:func:`deconvolution <sigima.proc.image.deconvolution>`"
 msgstr ""
 
 msgid "Deconvolve a kernel from an image using Fast Fourier Transform (FFT)"
-msgstr ""
+msgstr "Déconvoluer un noyau d'une image en utilisant la Transformée de Fourier Rapide (FFT)"
 
-msgid "`test_image_deconvolution <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/convolution_unit_test.py#L139>`_"
+msgid "`test_image_deconvolution <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/convolution_unit_test.py#L139>`_"
 msgstr ""
 
 msgid ":py:func:`denoise_bilateral <sigima.proc.image.denoise_bilateral>`"
 msgstr ""
 
 msgid "Compute bilateral filter denoising"
-msgstr ""
+msgstr "Calculer le débruitage par filtre bilatéral"
 
-msgid "`test_denoise_bilateral <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/restoration_unit_test.py#L41>`_"
+msgid "`test_denoise_bilateral <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/restoration_unit_test.py#L41>`_"
 msgstr ""
 
 msgid ":py:func:`denoise_tophat <sigima.proc.image.denoise_tophat>`"
 msgstr ""
 
 msgid "Denoise using White Top-Hat"
-msgstr ""
+msgstr "Débruiter en utilisant le White Top-Hat"
 
-msgid "`test_denoise_tophat <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/restoration_unit_test.py#L81>`_"
+msgid "`test_denoise_tophat <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/restoration_unit_test.py#L81>`_"
 msgstr ""
 
 msgid ":py:func:`denoise_tv <sigima.proc.image.denoise_tv>`"
 msgstr ""
 
 msgid "Compute Total Variation denoising"
-msgstr ""
+msgstr "Calculer le débruitage par variation totale"
 
-msgid "`test_denoise_tv <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/restoration_unit_test.py#L22>`_"
+msgid "`test_denoise_tv <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/restoration_unit_test.py#L22>`_"
 msgstr ""
 
 msgid ":py:func:`denoise_wavelet <sigima.proc.image.denoise_wavelet>`"
 msgstr ""
 
 msgid "Compute Wavelet denoising"
-msgstr ""
+msgstr "Calculer le débruitage par ondelettes"
 
-msgid "`test_denoise_wavelet <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/restoration_unit_test.py#L58>`_"
+msgid "`test_denoise_wavelet <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/restoration_unit_test.py#L58>`_"
 msgstr ""
 
 msgid ":py:func:`difference <sigima.proc.image.difference>`"
 msgstr ""
 
 msgid "Compute difference between two images"
-msgstr ""
+msgstr "Calculer la différence entre deux images"
 
-msgid "`test_image_difference <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L103>`_"
+msgid "`test_image_difference <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L103>`_"
 msgstr ""
 
 msgid ":py:func:`difference_constant <sigima.proc.image.difference_constant>`"
 msgstr ""
 
 msgid "Subtract a constant value from an image and return the new result image object"
-msgstr ""
+msgstr "Soustraire une valeur constante d'une image et retourner le nouvel objet image résultant"
 
-msgid "`test_image_difference_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L197>`_"
+msgid "`test_image_difference_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L197>`_"
 msgstr ""
 
 msgid ":py:func:`dilation <sigima.proc.image.dilation>`"
@@ -1309,61 +1324,61 @@ msgstr ""
 msgid "Compute Dilation"
 msgstr "Calculer la dilatation"
 
-msgid "`test_dilation <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/morphology_unit_test.py#L55>`_"
+msgid "`test_dilation <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/morphology_unit_test.py#L55>`_"
 msgstr ""
 
 msgid ":py:func:`division <sigima.proc.image.division>`"
 msgstr ""
 
 msgid "Compute division between two images"
-msgstr ""
+msgstr "Calculer la division entre deux images"
 
-msgid "`test_image_division <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L147>`_"
+msgid "`test_image_division <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L147>`_"
 msgstr ""
 
 msgid ":py:func:`division_constant <sigima.proc.image.division_constant>`"
 msgstr ""
 
 msgid "Divide an image by a constant value and return the new result image object"
-msgstr ""
+msgstr "Diviser une image par une valeur constante et retourner le nouvel objet image résultant"
 
-msgid "`test_image_division_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L222>`_"
+msgid "`test_image_division_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L222>`_"
 msgstr ""
 
 msgid ":py:func:`enclosing_circle <sigima.proc.image.enclosing_circle>`"
 msgstr ""
 
 msgid "Compute minimum enclosing circle"
-msgstr ""
+msgstr "Calculer le cercle circonscrit minimum"
 
-msgid "`test_image_enclosing_circle <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/enclosingcircle_unit_test.py#L55>`_"
+msgid "`test_image_enclosing_circle <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/enclosingcircle_unit_test.py#L55>`_"
 msgstr ""
 
 msgid ":py:func:`equalize_adapthist <sigima.proc.image.equalize_adapthist>`"
 msgstr ""
 
 msgid "Adaptive histogram equalization"
-msgstr ""
+msgstr "Égalisation adaptative de l'histogramme"
 
-msgid "`test_equalize_adapthist <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/exposure_unit_test.py#L84>`_"
+msgid "`test_equalize_adapthist <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/exposure_unit_test.py#L84>`_"
 msgstr ""
 
 msgid ":py:func:`equalize_hist <sigima.proc.image.equalize_hist>`"
 msgstr ""
 
 msgid "Histogram equalization"
-msgstr ""
+msgstr "Égalisation de l'histogramme"
 
-msgid "`test_equalize_hist <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/exposure_unit_test.py#L72>`_"
+msgid "`test_equalize_hist <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/exposure_unit_test.py#L72>`_"
 msgstr ""
 
 msgid ":py:func:`erase <sigima.proc.image.erase>`"
 msgstr ""
 
 msgid "Erase an area of the image using the mean value of the image"
-msgstr ""
+msgstr "Effacer une zone de l'image en utilisant la valeur moyenne de l'image"
 
-msgid "`test_erase <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/restoration_unit_test.py#L93>`_"
+msgid "`test_erase <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/restoration_unit_test.py#L93>`_"
 msgstr ""
 
 msgid ":py:func:`erosion <sigima.proc.image.erosion>`"
@@ -1372,13 +1387,13 @@ msgstr ""
 msgid "Compute Erosion"
 msgstr "Calculer l'érosion"
 
-msgid "`test_erosion <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/morphology_unit_test.py#L49>`_"
+msgid "`test_erosion <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/morphology_unit_test.py#L49>`_"
 msgstr ""
 
 msgid ":py:func:`exp <sigima.proc.image.exp>`"
 msgstr ""
 
-msgid "`test_image_exp <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L459>`_"
+msgid "`test_image_exp <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L459>`_"
 msgstr ""
 
 msgid ":py:func:`extract_roi <sigima.proc.image.extract_roi>`"
@@ -1387,46 +1402,46 @@ msgstr ""
 msgid "Extract single ROI"
 msgstr ""
 
-msgid "`test_image_extract_roi <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/roi_advanced_unit_test.py#L231>`_"
+msgid "`test_image_extract_roi <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/roi_advanced_unit_test.py#L231>`_"
 msgstr ""
 
 msgid ":py:func:`extract_rois <sigima.proc.image.extract_rois>`"
 msgstr ""
 
-msgid "`test_image_extract_rois <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/roi_advanced_unit_test.py#L201>`_"
+msgid "`test_image_extract_rois <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/roi_advanced_unit_test.py#L201>`_"
 msgstr ""
 
 msgid ":py:func:`farid <sigima.proc.image.farid>`"
 msgstr ""
 
 msgid "Compute Farid filter"
-msgstr ""
+msgstr "Calculer le filtre de Farid"
 
-msgid "`test_farid <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/edges_unit_test.py#L118>`_"
+msgid "`test_farid <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/edges_unit_test.py#L118>`_"
 msgstr ""
 
 msgid ":py:func:`farid_h <sigima.proc.image.farid_h>`"
 msgstr ""
 
 msgid "Compute horizontal Farid filter"
-msgstr ""
+msgstr "Calculer le filtre de Farid horizontal"
 
-msgid "`test_farid_h <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/edges_unit_test.py#L124>`_"
+msgid "`test_farid_h <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/edges_unit_test.py#L124>`_"
 msgstr ""
 
 msgid ":py:func:`farid_v <sigima.proc.image.farid_v>`"
 msgstr ""
 
 msgid "Compute vertical Farid filter"
-msgstr ""
+msgstr "Calculer le filtre de Farid vertical"
 
-msgid "`test_farid_v <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/edges_unit_test.py#L130>`_"
+msgid "`test_farid_v <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/edges_unit_test.py#L130>`_"
 msgstr ""
 
 msgid ":py:func:`fft <sigima.proc.image.fft>`"
 msgstr ""
 
-msgid "`test_image_fft <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/fft2d_unit_test.py#L118>`_"
+msgid "`test_image_fft <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/fft2d_unit_test.py#L118>`_"
 msgstr ""
 
 msgid ":py:func:`flatfield <sigima.proc.image.flatfield>`"
@@ -1435,543 +1450,551 @@ msgstr ""
 msgid "Compute flat field correction"
 msgstr "Calculer la correction de champ plat"
 
-msgid "`test_flatfield <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/exposure_unit_test.py#L96>`_"
+msgid "`test_flatfield <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/exposure_unit_test.py#L96>`_"
 msgstr ""
 
 msgid ":py:func:`fliph <sigima.proc.image.fliph>`"
 msgstr ""
 
 msgid "Flip data horizontally"
-msgstr ""
+msgstr "Retourner les données horizontalement"
 
-msgid "`test_image_fliph <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/geometry_unit_test.py#L48>`_"
+msgid "`test_image_fliph <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/geometry_unit_test.py#L48>`_"
 msgstr ""
 
 msgid ":py:func:`flipv <sigima.proc.image.flipv>`"
 msgstr ""
 
 msgid "Flip data vertically"
-msgstr ""
+msgstr "Retourner les données verticalement"
 
-msgid "`test_image_flipv <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/geometry_unit_test.py#L54>`_"
+msgid "`test_image_flipv <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/geometry_unit_test.py#L54>`_"
 msgstr ""
 
 msgid ":py:func:`gaussian_filter <sigima.proc.image.gaussian_filter>`"
 msgstr ""
 
-msgid "`test_image_gaussian_filter <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/filtering_unit_test.py#L26>`_"
+msgid "`test_image_gaussian_filter <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/filtering_unit_test.py#L26>`_"
 msgstr ""
 
 msgid ":py:func:`gaussian_freq_filter <sigima.proc.image.gaussian_freq_filter>`"
 msgstr ""
 
 msgid "Apply a Gaussian filter in the frequency domain"
-msgstr ""
+msgstr "Appliquer un filtre gaussien dans le domaine fréquentiel"
 
-msgid "`test_gaussian_freq_filter <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/filtering_unit_test.py#L116>`_"
+msgid "`test_gaussian_freq_filter <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/filtering_unit_test.py#L116>`_"
 msgstr ""
 
 msgid ":py:func:`histogram <sigima.proc.image.histogram>`"
 msgstr ""
 
 msgid "Compute histogram of the image data,"
-msgstr ""
+msgstr "Calculer l'histogramme des données de l'image"
 
-msgid "`test_image_histogram <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/exposure_unit_test.py#L171>`_"
+msgid "`test_image_histogram <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/exposure_unit_test.py#L171>`_"
 msgstr ""
 
 msgid ":py:func:`horizontal_projection <sigima.proc.image.horizontal_projection>`"
 msgstr ""
 
 msgid "Compute the sum of pixel intensities along each col. (projection on the x-axis)"
-msgstr ""
+msgstr "Calculer la somme des intensités des pixels le long de chaque colonne (projection sur l'axe x)"
 
-msgid "`test_image_horizontal_projection <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/projections_unit_test.py#L17>`_"
+msgid "`test_image_horizontal_projection <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/projections_unit_test.py#L17>`_"
 msgstr ""
 
 msgid ":py:func:`hough_circle_peaks <sigima.proc.image.hough_circle_peaks>`"
 msgstr ""
 
 msgid "Compute Hough circles"
-msgstr ""
+msgstr "Calculer les cercles de Hough"
 
-msgid "`test_image_hough_circle_peaks <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/hough_circle_unit_test.py#L60>`_"
+msgid "`test_image_hough_circle_peaks <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/hough_circle_unit_test.py#L60>`_"
 msgstr ""
 
 msgid ":py:func:`ifft <sigima.proc.image.ifft>`"
 msgstr ""
 
 msgid "Compute inverse FFT"
-msgstr ""
+msgstr "Calculer la transformée de Fourier inverse"
 
-msgid "`test_image_ifft <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/fft2d_unit_test.py#L134>`_"
+msgid "`test_image_ifft <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/fft2d_unit_test.py#L134>`_"
 msgstr ""
 
 msgid ":py:func:`imag <sigima.proc.image.imag>`"
 msgstr ""
 
-msgid "`test_image_imag <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L306>`_"
+msgid "`test_image_imag <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L306>`_"
 msgstr ""
 
 msgid ":py:func:`inverse <sigima.proc.image.inverse>`"
 msgstr ""
 
 msgid "Compute the inverse of an image and return the new result image object"
-msgstr ""
+msgstr "Calculer l'inverse d'une image et retourner le nouvel objet image résultant"
 
-msgid "`test_image_inverse <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L270>`_"
+msgid "`test_image_inverse <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L270>`_"
 msgstr ""
 
 msgid ":py:func:`laplace <sigima.proc.image.laplace>`"
 msgstr ""
 
 msgid "Compute Laplace filter"
-msgstr ""
+msgstr "Calculer le filtre de Laplace"
 
-msgid "`test_laplace <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/edges_unit_test.py#L136>`_"
+msgid "`test_laplace <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/edges_unit_test.py#L136>`_"
 msgstr ""
 
 msgid ":py:func:`line_profile <sigima.proc.image.line_profile>`"
 msgstr ""
 
 msgid "Compute horizontal or vertical profile"
-msgstr ""
+msgstr "Calculer le profil horizontal ou vertical"
 
-msgid "`test_line_profile <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/profile_unit_test.py#L19>`_"
+msgid "`test_line_profile <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/profile_unit_test.py#L19>`_"
 msgstr ""
 
 msgid ":py:func:`log10 <sigima.proc.image.log10>`"
 msgstr ""
 
 msgid "Compute log10 with :py:data:`numpy.log10`"
-msgstr ""
+msgstr "Calculer le logarithme en base 10 avec :py:data:`numpy.log10`"
 
-msgid "`test_image_log10 <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L471>`_"
+msgid "`test_image_log10 <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L471>`_"
 msgstr ""
 
 msgid ":py:func:`log10_z_plus_n <sigima.proc.image.log10_z_plus_n>`"
 msgstr ""
 
 msgid "Compute log10(z+n) with :py:data:`numpy.log10`"
-msgstr ""
+msgstr "Calculer le logarithme en base 10 de (z+n) avec :py:data:`numpy.log10`"
 
-msgid "`test_image_log10_z_plus_n <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L483>`_"
+msgid "`test_image_log10_z_plus_n <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L483>`_"
 msgstr ""
 
 msgid ":py:func:`magnitude_spectrum <sigima.proc.image.magnitude_spectrum>`"
 msgstr ""
 
-msgid "`test_image_magnitude_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/fft2d_unit_test.py#L143>`_"
+msgid "`test_image_magnitude_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/fft2d_unit_test.py#L143>`_"
 msgstr ""
 
 msgid ":py:func:`moving_average <sigima.proc.image.moving_average>`"
 msgstr ""
 
-msgid "`test_image_moving_average <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/filtering_unit_test.py#L37>`_"
+msgid "`test_image_moving_average <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/filtering_unit_test.py#L37>`_"
 msgstr ""
 
 msgid ":py:func:`moving_median <sigima.proc.image.moving_median>`"
 msgstr ""
 
-msgid "`test_image_moving_median <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/filtering_unit_test.py#L49>`_"
+msgid "`test_image_moving_median <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/filtering_unit_test.py#L49>`_"
 msgstr ""
 
 msgid ":py:func:`normalize <sigima.proc.image.normalize>`"
 msgstr ""
 
-msgid "`test_image_normalize <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/exposure_unit_test.py#L122>`_"
+msgid "`test_image_normalize <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/exposure_unit_test.py#L122>`_"
 msgstr ""
 
 msgid ":py:func:`offset_correction <sigima.proc.image.offset_correction>`"
 msgstr ""
 
 msgid "Apply offset correction"
-msgstr ""
+msgstr "Appliquer la correction de l'offset"
 
-msgid "`test_image_offset_correction <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/exposure_unit_test.py#L199>`_"
+msgid "`test_image_offset_correction <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/exposure_unit_test.py#L199>`_"
 msgstr ""
 
 msgid ":py:func:`opening <sigima.proc.image.opening>`"
 msgstr ""
 
 msgid "Compute morphological opening"
-msgstr ""
+msgstr "Calculer l'ouverture morphologique"
 
-msgid "`test_opening <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/morphology_unit_test.py#L61>`_"
+msgid "`test_opening <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/morphology_unit_test.py#L61>`_"
 msgstr ""
 
 msgid ":py:func:`peak_detection <sigima.proc.image.peak_detection>`"
 msgstr ""
 
 msgid "Compute 2D peak detection"
-msgstr ""
+msgstr "Calculer la détection de pics 2D"
 
-msgid "`test_image_peak_detection <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/peak2d_unit_test.py#L84>`_"
+msgid "`test_image_peak_detection <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/peak2d_unit_test.py#L84>`_"
 msgstr ""
 
 msgid ":py:func:`phase <sigima.proc.image.phase>`"
 msgstr ""
 
 msgid "Compute the phase (argument) of a complex image"
-msgstr ""
+msgstr "Calculer la phase (argument) d'une image complexe"
 
-msgid "`test_image_phase <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L334>`_"
+msgid "`test_image_phase <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L334>`_"
 msgstr ""
 
 msgid ":py:func:`phase_spectrum <sigima.proc.image.phase_spectrum>`"
 msgstr ""
 
-msgid "`test_image_phase_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/fft2d_unit_test.py#L158>`_"
+msgid "`test_image_phase_spectrum <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/fft2d_unit_test.py#L158>`_"
 msgstr ""
 
 msgid ":py:func:`prewitt <sigima.proc.image.prewitt>`"
 msgstr ""
 
 msgid "Compute Prewitt filter"
-msgstr ""
+msgstr "Calculer le filtre de Prewitt"
 
-msgid "`test_prewitt <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/edges_unit_test.py#L64>`_"
+msgid "`test_prewitt <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/edges_unit_test.py#L64>`_"
 msgstr ""
 
 msgid ":py:func:`prewitt_h <sigima.proc.image.prewitt_h>`"
 msgstr ""
 
 msgid "Compute horizontal Prewitt filter"
-msgstr ""
+msgstr "Calculer le filtre de Prewitt horizontal"
 
-msgid "`test_prewitt_h <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/edges_unit_test.py#L70>`_"
+msgid "`test_prewitt_h <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/edges_unit_test.py#L70>`_"
 msgstr ""
 
 msgid ":py:func:`prewitt_v <sigima.proc.image.prewitt_v>`"
 msgstr ""
 
 msgid "Compute vertical Prewitt filter"
-msgstr ""
+msgstr "Calculer le filtre de Prewitt vertical"
 
-msgid "`test_prewitt_v <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/edges_unit_test.py#L76>`_"
+msgid "`test_prewitt_v <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/edges_unit_test.py#L76>`_"
 msgstr ""
 
 msgid ":py:func:`product <sigima.proc.image.product>`"
 msgstr ""
 
 msgid "Multiply images in the list and return the result image object"
-msgstr ""
+msgstr "Multiplier les images de la liste et retourner le nouvel objet image résultant"
 
-msgid "`test_image_product <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L127>`_"
+msgid "`test_image_product <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L127>`_"
 msgstr ""
 
 msgid ":py:func:`product_constant <sigima.proc.image.product_constant>`"
 msgstr ""
 
 msgid "Multiply **dst** by a constant value and return the new result image object"
-msgstr ""
+msgstr "Multiplier **dst** par une valeur constante et retourner le nouvel objet image résultant"
 
-msgid "`test_image_product_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L210>`_"
+msgid "`test_image_product_constant <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L210>`_"
 msgstr ""
 
 msgid ":py:func:`psd <sigima.proc.image.psd>`"
 msgstr ""
 
-msgid "`test_image_psd <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/fft2d_unit_test.py#L170>`_"
+msgid "`test_image_psd <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/fft2d_unit_test.py#L170>`_"
 msgstr ""
 
 msgid ":py:func:`quadratic_difference <sigima.proc.image.quadratic_difference>`"
 msgstr ""
 
 msgid "Compute quadratic difference between two images"
-msgstr ""
+msgstr "Calculer la différence quadratique entre deux images"
 
-msgid "`test_image_quadratic_difference <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L115>`_"
+msgid "`test_image_quadratic_difference <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L115>`_"
 msgstr ""
 
 msgid ":py:func:`radial_profile <sigima.proc.image.radial_profile>`"
 msgstr ""
 
 msgid "Compute radial profile around the centroid"
-msgstr ""
+msgstr "Calculer le profil radial autour du centroïde"
 
-msgid "`test_radial_profile <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/profile_unit_test.py#L123>`_"
+msgid "`test_radial_profile <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/profile_unit_test.py#L123>`_"
 msgstr ""
 
 msgid ":py:func:`real <sigima.proc.image.real>`"
 msgstr ""
 
-msgid "`test_image_real <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L295>`_"
+msgid "`test_image_real <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L295>`_"
+msgstr ""
+
+msgid ":py:func:`replace_special_values <sigima.proc.image.replace_special_values>`"
+msgstr ""
+
+msgid "Replace NaN, +Inf and -Inf values in an image"
+msgstr "Remplacer les valeurs NaN, +Inf et -Inf dans une image"
+
+msgid "`test_image_replace_special_values <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/replace_special_values_unit_test.py#L284>`_"
 msgstr ""
 
 msgid ":py:func:`resampling <sigima.proc.image.resampling>`"
 msgstr ""
 
 msgid "Resample image to new coordinate grid using interpolation"
-msgstr ""
+msgstr "Rééchantillonner l'image sur une nouvelle grille de coordonnées en utilisant l'interpolation"
 
-msgid "`test_image_resampling <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/geometry_unit_test.py#L295>`_"
+msgid "`test_image_resampling <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/geometry_unit_test.py#L295>`_"
 msgstr ""
 
 msgid ":py:func:`rescale_intensity <sigima.proc.image.rescale_intensity>`"
 msgstr ""
 
 msgid "Rescale image intensity levels"
-msgstr ""
+msgstr "Recaler les niveaux d'intensité de l'image"
 
-msgid "`test_rescale_intensity <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/exposure_unit_test.py#L59>`_"
+msgid "`test_rescale_intensity <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/exposure_unit_test.py#L59>`_"
 msgstr ""
 
 msgid ":py:func:`resize <sigima.proc.image.resize>`"
 msgstr ""
 
 msgid "Zooming function"
-msgstr "Fonction de zoom"
+msgstr "Fonction de zoom de l'image"
 
-msgid "`test_image_resize <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/geometry_unit_test.py#L479>`_"
+msgid "`test_image_resize <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/geometry_unit_test.py#L479>`_"
 msgstr ""
 
 msgid ":py:func:`roberts <sigima.proc.image.roberts>`"
 msgstr ""
 
 msgid "Compute Roberts filter"
-msgstr ""
+msgstr "Calculer le filtre de Roberts"
 
-msgid "`test_roberts <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/edges_unit_test.py#L58>`_"
+msgid "`test_roberts <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/edges_unit_test.py#L58>`_"
 msgstr ""
 
 msgid ":py:func:`rotate <sigima.proc.image.rotate>`"
 msgstr ""
 
 msgid "Rotate data"
-msgstr ""
+msgstr "Faire pivoter l'image"
 
-msgid "`test_image_rotate <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/geometry_unit_test.py#L242>`_"
+msgid "`test_image_rotate <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/geometry_unit_test.py#L242>`_"
 msgstr ""
 
 msgid ":py:func:`rotate270 <sigima.proc.image.rotate270>`"
 msgstr ""
 
 msgid "Rotate data 270°"
-msgstr ""
+msgstr "Faire pivoter l'image de 270°"
 
-msgid "`test_image_rotate270 <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/geometry_unit_test.py#L80>`_"
+msgid "`test_image_rotate270 <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/geometry_unit_test.py#L80>`_"
 msgstr ""
 
 msgid ":py:func:`rotate90 <sigima.proc.image.rotate90>`"
 msgstr ""
 
 msgid "Rotate data 90°"
-msgstr ""
+msgstr "Faire pivoter l'image de 90°"
 
-msgid "`test_image_rotate90 <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/geometry_unit_test.py#L74>`_"
+msgid "`test_image_rotate90 <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/geometry_unit_test.py#L74>`_"
 msgstr ""
 
 msgid ":py:func:`scharr <sigima.proc.image.scharr>`"
 msgstr ""
 
 msgid "Compute Scharr filter"
-msgstr ""
+msgstr "Calculer le filtre de Scharr"
 
-msgid "`test_scharr <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/edges_unit_test.py#L100>`_"
+msgid "`test_scharr <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/edges_unit_test.py#L100>`_"
 msgstr ""
 
 msgid ":py:func:`scharr_h <sigima.proc.image.scharr_h>`"
 msgstr ""
 
 msgid "Compute horizontal Scharr filter"
-msgstr ""
+msgstr "Calculer le filtre de Scharr horizontal"
 
-msgid "`test_scharr_h <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/edges_unit_test.py#L106>`_"
+msgid "`test_scharr_h <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/edges_unit_test.py#L106>`_"
 msgstr ""
 
 msgid ":py:func:`scharr_v <sigima.proc.image.scharr_v>`"
 msgstr ""
 
 msgid "Compute vertical Scharr filter"
-msgstr ""
+msgstr "Calculer le filtre de Scharr vertical"
 
-msgid "`test_scharr_v <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/edges_unit_test.py#L112>`_"
+msgid "`test_scharr_v <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/edges_unit_test.py#L112>`_"
 msgstr ""
 
 msgid ":py:func:`segment_profile <sigima.proc.image.segment_profile>`"
 msgstr ""
 
 msgid "Compute segment profile"
-msgstr ""
+msgstr "Calculer le profil de segment"
 
-msgid "`test_segment_profile <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/profile_unit_test.py#L48>`_"
+msgid "`test_segment_profile <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/profile_unit_test.py#L48>`_"
 msgstr ""
 
 msgid ":py:func:`set_uniform_coords <sigima.proc.image.set_uniform_coords>`"
 msgstr ""
 
 msgid "Convert image to uniform coordinate system"
-msgstr ""
+msgstr "Convertir l'image en un système de coordonnées uniforme"
 
-msgid "`test_set_uniform_coords <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/geometry_unit_test.py#L583>`_"
+msgid "`test_set_uniform_coords <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/geometry_unit_test.py#L583>`_"
 msgstr ""
 
 msgid ":py:func:`sobel <sigima.proc.image.sobel>`"
 msgstr ""
 
 msgid "Compute Sobel filter"
-msgstr ""
+msgstr "Calculer le filtre de Sobel"
 
-msgid "`test_sobel <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/edges_unit_test.py#L82>`_"
+msgid "`test_sobel <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/edges_unit_test.py#L82>`_"
 msgstr ""
 
 msgid ":py:func:`sobel_h <sigima.proc.image.sobel_h>`"
 msgstr ""
 
 msgid "Compute horizontal Sobel filter"
-msgstr ""
+msgstr "Calculer le filtre de Sobel horizontal"
 
-msgid "`test_sobel_h <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/edges_unit_test.py#L88>`_"
+msgid "`test_sobel_h <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/edges_unit_test.py#L88>`_"
 msgstr ""
 
 msgid ":py:func:`sobel_v <sigima.proc.image.sobel_v>`"
 msgstr ""
 
 msgid "Compute vertical Sobel filter"
-msgstr ""
+msgstr "Calculer le filtre de Sobel vertical"
 
-msgid "`test_sobel_v <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/edges_unit_test.py#L94>`_"
+msgid "`test_sobel_v <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/edges_unit_test.py#L94>`_"
 msgstr ""
 
 msgid ":py:func:`standard_deviation <sigima.proc.image.standard_deviation>`"
 msgstr ""
 
 msgid "Compute the element-wise standard deviation of multiple images"
-msgstr ""
+msgstr "Calculer l'écart-type élément par élément de plusieurs images"
 
-msgid "`test_image_standard_deviation <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/operation_unit_test.py#L88>`_"
+msgid "`test_image_standard_deviation <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/operation_unit_test.py#L88>`_"
 msgstr ""
 
 msgid ":py:func:`stats <sigima.proc.image.stats>`"
 msgstr ""
 
 msgid "Compute statistics on an image"
-msgstr ""
+msgstr "Calculer les statistiques sur une image"
 
-msgid "`test_image_stats_unit <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/common/stat_unit_test.py#L102>`_"
+msgid "`test_image_stats_unit <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/common/stat_unit_test.py#L102>`_"
 msgstr ""
 
 msgid ":py:func:`threshold <sigima.proc.image.threshold>`"
 msgstr ""
 
 msgid "Compute the threshold, using one of the available algorithms"
-msgstr ""
+msgstr "Calculer le seuil, en utilisant l'un des algorithmes disponibles"
 
-msgid "`test_threshold <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/threshold_unit_test.py#L21>`_"
+msgid "`test_threshold <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/threshold_unit_test.py#L21>`_"
 msgstr ""
 
 msgid ":py:func:`threshold_isodata <sigima.proc.image.threshold_isodata>`"
 msgstr ""
 
 msgid "Compute the threshold using the Isodata algorithm with default parameters"
-msgstr ""
+msgstr "Calculer le seuil en utilisant l'algorithme Isodata avec les paramètres par défaut"
 
-msgid "`test_threshold_isodata <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/threshold_unit_test.py#L52>`_"
+msgid "`test_threshold_isodata <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/threshold_unit_test.py#L52>`_"
 msgstr ""
 
 msgid ":py:func:`threshold_li <sigima.proc.image.threshold_li>`"
 msgstr ""
 
 msgid "Compute the threshold using the Li algorithm with default parameters"
-msgstr ""
+msgstr "Calculer le seuil en utilisant l'algorithme Li avec les paramètres par défaut"
 
-msgid "`test_threshold_li <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/threshold_unit_test.py#L58>`_"
+msgid "`test_threshold_li <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/threshold_unit_test.py#L58>`_"
 msgstr ""
 
 msgid ":py:func:`threshold_mean <sigima.proc.image.threshold_mean>`"
 msgstr ""
 
 msgid "Compute the threshold using the Mean algorithm"
-msgstr ""
+msgstr "Calculer le seuil en utilisant l'algorithme de la moyenne"
 
-msgid "`test_threshold_mean <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/threshold_unit_test.py#L64>`_"
+msgid "`test_threshold_mean <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/threshold_unit_test.py#L64>`_"
 msgstr ""
 
 msgid ":py:func:`threshold_minimum <sigima.proc.image.threshold_minimum>`"
 msgstr ""
 
 msgid "Compute the threshold using the Minimum algorithm with default parameters"
-msgstr ""
+msgstr "Calculer le seuil en utilisant l'algorithme du minimum avec les paramètres par défaut"
 
-msgid "`test_threshold_minimum <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/threshold_unit_test.py#L70>`_"
+msgid "`test_threshold_minimum <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/threshold_unit_test.py#L70>`_"
 msgstr ""
 
 msgid ":py:func:`threshold_otsu <sigima.proc.image.threshold_otsu>`"
 msgstr ""
 
 msgid "Compute the threshold using the Otsu algorithm with default parameters"
-msgstr ""
+msgstr "Calculer le seuil en utilisant l'algorithme d'Otsu avec les paramètres par défaut"
 
-msgid "`test_threshold_otsu <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/threshold_unit_test.py#L76>`_"
+msgid "`test_threshold_otsu <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/threshold_unit_test.py#L76>`_"
 msgstr ""
 
 msgid ":py:func:`threshold_triangle <sigima.proc.image.threshold_triangle>`"
 msgstr ""
 
 msgid "Compute the threshold using the Triangle algorithm with default parameters"
-msgstr ""
+msgstr "Calculer le seuil en utilisant l'algorithme du triangle avec les paramètres par défaut"
 
-msgid "`test_threshold_triangle <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/threshold_unit_test.py#L82>`_"
+msgid "`test_threshold_triangle <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/threshold_unit_test.py#L82>`_"
 msgstr ""
 
 msgid ":py:func:`threshold_yen <sigima.proc.image.threshold_yen>`"
 msgstr ""
 
 msgid "Compute the threshold using the Yen algorithm with default parameters"
-msgstr ""
+msgstr "Calculer le seuil en utilisant l'algorithme de Yen avec les paramètres par défaut"
 
-msgid "`test_threshold_yen <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/threshold_unit_test.py#L88>`_"
+msgid "`test_threshold_yen <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/threshold_unit_test.py#L88>`_"
 msgstr ""
 
 msgid ":py:func:`translate <sigima.proc.image.translate>`"
 msgstr ""
 
 msgid "Translate data"
-msgstr ""
+msgstr "Translater les données"
 
-msgid "`test_image_translate <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/geometry_unit_test.py#L25>`_"
+msgid "`test_image_translate <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/geometry_unit_test.py#L25>`_"
 msgstr ""
 
 msgid ":py:func:`transpose <sigima.proc.image.transpose>`"
 msgstr ""
 
 msgid "Transpose image"
-msgstr ""
+msgstr "Transposer l'image"
 
-msgid "`test_image_transpose <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/geometry_unit_test.py#L256>`_"
+msgid "`test_image_transpose <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/geometry_unit_test.py#L256>`_"
 msgstr ""
 
 msgid ":py:func:`vertical_projection <sigima.proc.image.vertical_projection>`"
 msgstr ""
 
 msgid "Compute the sum of pixel intensities along each row (projection on the y-axis)"
-msgstr ""
+msgstr "Calculer la somme des intensités des pixels le long de chaque ligne (projection sur l'axe y)"
 
-msgid "`test_image_vertical_projection <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/projections_unit_test.py#L68>`_"
+msgid "`test_image_vertical_projection <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/projections_unit_test.py#L68>`_"
 msgstr ""
 
 msgid ":py:func:`white_tophat <sigima.proc.image.white_tophat>`"
 msgstr ""
 
 msgid "Compute White Top-Hat"
-msgstr ""
+msgstr "Calculer le White Top-Hat"
 
-msgid "`test_white_tophat <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/morphology_unit_test.py#L37>`_"
+msgid "`test_white_tophat <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/morphology_unit_test.py#L37>`_"
 msgstr ""
 
 msgid ":py:func:`wiener <sigima.proc.image.wiener>`"
 msgstr ""
 
-msgid "`test_image_wiener <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/filtering_unit_test.py#L61>`_"
+msgid "`test_image_wiener <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/filtering_unit_test.py#L61>`_"
 msgstr ""
 
 msgid ":py:func:`zero_padding <sigima.proc.image.zero_padding>`"
 msgstr ""
 
 msgid "Zero-padding: add zeros to image borders"
-msgstr ""
+msgstr "Zero-padding : ajouter des zéros aux bords de l'image"
 
-msgid "`test_image_zero_padding <https://github.com/DataLab-Platform/Sigima/blob/v1.1.6/sigima/tests/image/fft2d_unit_test.py#L50>`_"
+msgid "`test_image_zero_padding <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/fft2d_unit_test.py#L50>`_"
 msgstr ""
-

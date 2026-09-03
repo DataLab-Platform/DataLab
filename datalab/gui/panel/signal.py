@@ -32,6 +32,7 @@ from datalab.gui.newobject import NewSignalParam, create_signal_gui
 from datalab.gui.panel.base import BaseDataPanel
 from datalab.gui.plothandler import SignalPlotHandler
 from datalab.gui.processor.signal import SignalProcessor
+from datalab.objectmodel import get_uuid
 
 if TYPE_CHECKING:
     from qtpy import QtWidgets as QW
@@ -107,7 +108,7 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
             newparam = NewSignalParam()
         if title is not None:
             newparam.title = title
-        if curobj is not None and Conf.proc.use_signal_bounds.get(False):
+        if curobj is not None and Conf.use_signal_bounds.get(False):
             # Use current signal bounds for new signal:
             newparam.size = len(curobj.data)
             # try to set xmin/xmax from current signal data range
@@ -146,8 +147,20 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
         signal = create_signal_gui(param, edit=edit, parent=self.parentWidget())
         if signal is None:
             return None
+        action = self.mainwindow.historypanel.add_ui_entry(
+            _("New signal"),
+            target="signalpanel",
+            method_name="new_object",
+            save_state=False,
+            param=param,
+            add_to_panel=add_to_panel,
+        )
         if add_to_panel:
             self.add_object(signal)
+            if action is not None:
+                self.mainwindow.historypanel.register_action_outputs(
+                    action, [get_uuid(signal)]
+                )
         return signal
 
     # ------Plotting--------------------------------------------------------------------

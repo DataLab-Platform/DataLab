@@ -113,13 +113,36 @@ If there are multiple solutions, the displayed result is the smallest value.
 Peak detection
 ^^^^^^^^^^^^^^
 
-Create a new signal from semi-automatic peak detection of each selected signal.
+DataLab offers two complementary ways to detect peaks. Both produce the
+same result: an *XY-markers* :class:`~sigima.objects.scalar.TableResult`
+attached to the signal (visible from *View ▸ Show results* and overlayed
+on the curve).
+
+.. list-table::
+    :header-rows: 1
+    :widths: 30, 70
+
+    * - Entry point
+      - Description
+    * - **Extract peak positions**
+      - Parametric entry: fill the standard parameter dialog
+        (threshold, minimum distance) and run.
+    * - **Peak detection...**
+      - Interactive entry: opens a dedicated dialog where the threshold
+        is adjusted by moving a horizontal marker and the minimum
+        distance by a slider. Detected peaks update live as vertical
+        markers.
 
 .. figure:: /images/shots/s_peak_detection.png
 
-    Peak detection dialog: threshold is adjustable by moving the
+    *Peak detection* dialog: threshold is adjustable by moving the
     horizontal marker, peaks are detected automatically (see vertical
-    markers with labels indicating peak position)
+    markers with labels indicating peak position).
+
+.. tip::
+
+    To rebuild the historical *sticks* signal from the detected peaks, use
+    *Operations ▸ Create signal from markers table…* on the selected signal.
 
 Sampling rate and period
 ^^^^^^^^^^^^^^^^^^^^^^^^

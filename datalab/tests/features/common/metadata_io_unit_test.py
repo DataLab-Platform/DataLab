@@ -19,6 +19,7 @@ from sigima.tests import data as test_data
 
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter
 from datalab.env import execenv
+from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_test_app_context, helpers
 
 
@@ -42,12 +43,19 @@ def test_metadata_io_unit():
                     TableAdapter(table).add_to(ima)
 
                 panel.add_object(ima)
+                orig_uuid = get_uuid(ima)
                 orig_metadata = ima.metadata.copy()
                 panel.export_metadata_from_file(fname)
                 panel.delete_metadata()
 
-                # The +1 is for the "number" metadata option which has no default:
-                assert len(ima.metadata) == len(ima.get_metadata_options_defaults()) + 1
+                assert get_uuid(ima) == orig_uuid
+                assert panel.objmodel[orig_uuid] is ima
+                assert ima.metadata["__number"] == panel.objmodel.get_number(ima)
+                expected_options = {
+                    f"__{name}" for name in ima.get_metadata_options_defaults()
+                }
+                expected_options.update({"__uuid", "__number"})
+                assert set(ima.metadata) == expected_options
 
                 panel.import_metadata_from_file(fname)
                 execenv.print("Check metadata export <--> import features:")
