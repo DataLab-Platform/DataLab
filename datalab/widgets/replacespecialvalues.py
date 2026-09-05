@@ -56,8 +56,8 @@ _BADGE_LABELS: dict[str, str] = {
 # -- Helper widgets -------------------------------------------------------------
 
 
-def _make_count_badge(key: str, count: int, total: int) -> QW.QLabel:
-    """Create a rich-text label with a colored dot and count information."""
+def _count_badge_text(key: str, count: int, total: int) -> str:
+    """Format one special-value counter."""
     color = _BADGE_COLORS[key]
     label = _BADGE_LABELS[key]
     if total > 0 and count > 0:
@@ -68,7 +68,12 @@ def _make_count_badge(key: str, count: int, total: int) -> QW.QLabel:
         )
     else:
         text = f'<span style="color:{color}">\u25cf</span> {label}: <b>{count}</b>'
-    lbl = QW.QLabel(text)
+    return text
+
+
+def _make_count_badge(key: str, count: int, total: int) -> QW.QLabel:
+    """Create a rich-text label with a colored dot and count information."""
+    lbl = QW.QLabel(_count_badge_text(key, count, total))
     lbl.setTextFormat(QC.Qt.RichText)
     return lbl
 
@@ -201,6 +206,7 @@ class ReplaceSpecialValuesDialog(QW.QDialog):
         self._is_image = is_image
         self._info_message = info_message
         self._can_apply = can_apply
+        self.preview = None
         self.setWindowTitle(instance.get_title())
         self.setMinimumWidth(480)
 
@@ -208,8 +214,11 @@ class ReplaceSpecialValuesDialog(QW.QDialog):
 
         # --- Count badges ---
         count_row = QW.QHBoxLayout()
+        self._count_badges = {}
         for key in ("nan", "posinf", "neginf"):
-            count_row.addWidget(_make_count_badge(key, counts[key], total_size))
+            badge = _make_count_badge(key, counts[key], total_size)
+            self._count_badges[key] = badge
+            count_row.addWidget(badge)
         count_row.addStretch()
         main_layout.addLayout(count_row)
 
@@ -231,7 +240,12 @@ class ReplaceSpecialValuesDialog(QW.QDialog):
         grid = QW.QGridLayout()
         self.edit_layout: DataSetEditLayout | None = None
         edit_layout = DataSetEditLayout(
-            self, instance, grid, change_callback=self._on_change
+            self,
+            instance,
+            grid,
+            change_callback=self._on_change,
+            auto_sliders=True,
+            slider_callback=self._slider_gesture,
         )
         self.edit_layout = edit_layout
         main_layout.addLayout(grid)
@@ -268,9 +282,58 @@ class ReplaceSpecialValuesDialog(QW.QDialog):
         """Slot called whenever a DataSet widget value changes."""
         if self.edit_layout is None:
             return
-        # Sync current widget values → DataSet so the preview reads live data
+        if self.preview is not None:
+            self.preview.changed()
+        if not self.edit_layout.check_all_values():
+            return
         self.edit_layout.accept_changes()
         self._refresh_preview()
+
+    def _slider_gesture(self, pressed: bool) -> None:
+        """Forward a slider gesture to the optional processing preview."""
+        if self.preview is not None:
+            self.preview.slider_gesture(pressed)
+
+    def attach_preview(self, function, sources) -> None:
+        """Compose the shared preview without replacing this custom editor."""
+        from datalab.widgets.processingpreview import ProcessingPreviewWidget
+
+        self.preview = ProcessingPreviewWidget(function, sources, self)
+        self.preview.editor = self.edit_layout
+        self.preview.enabled.setEnabled(self._can_apply)
+        self.preview.source_combo.currentIndexChanged.connect(self._update_counts)
+        main_layout = self.layout()
+        form = QW.QWidget()
+        form_layout = QW.QVBoxLayout(form)
+        while main_layout.count() > 1:
+            form_layout.addItem(main_layout.takeAt(0))
+        form_layout.addStretch()
+        scroll = QW.QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(form)
+        splitter = QW.QSplitter(QC.Qt.Horizontal)
+        splitter.addWidget(scroll)
+        splitter.addWidget(self.preview)
+        main_layout.insertWidget(0, splitter, 1)
+        self.finished.connect(self.preview.close_preview)
+        screen = self.screen().availableGeometry()
+        self.resize(min(1000, screen.width()), min(700, screen.height()))
+
+    def _update_counts(self) -> None:
+        """Refresh source-specific counters without resetting common parameters."""
+        source = self.preview.sources[self.preview.source_combo.currentIndex()]
+        if self._is_image:
+            data = source.data
+            counts = count_special_values_2d(data)
+        else:
+            _, data = source.get_data()
+            counts = count_special_values(data)
+        for key, badge in self._count_badges.items():
+            badge.setText(_count_badge_text(key, counts[key], data.size))
+
+    def child_title(self, item) -> str:
+        """Provide the standard title for guidata nested editors."""
+        return f"{self.windowTitle()} - {item.label()}"
 
     def _refresh_preview(self) -> None:
         """Update every kernel preview independently."""

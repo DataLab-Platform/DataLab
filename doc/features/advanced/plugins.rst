@@ -38,6 +38,22 @@ DataLab supports three categories of plugins, each with its own purpose and regi
 - **HDF5 plugins**
   Special plugins that support HDF5 files with domain-specific tree structures. These allow DataLab to interpret signals or images organized in non-standard ways.
 
+Live preview compatibility
+--------------------------
+
+.. note::
+
+  Standard parameterized functions registered with ``register_1_to_1`` can
+  participate in live preview without a custom renderer. They must return a
+  ``SignalObj`` or ``ImageObj``, be importable in a spawned process, and accept
+  serializable source/parameter copies. Preview uses a private process and does
+  not publish results to the workspace. It is not a sandbox for filesystem,
+  network or other external side effects. Register functions that must not run
+  speculatively with ``preview_enabled=False``. Serialization or computation
+  failures are reported in the preview; the normal OK path remains available.
+  Unknown custom ``DataSet.edit`` implementations and alternate guidata
+  backends are not replaced.
+
 Where to put a plugin?
 ----------------------
 

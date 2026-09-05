@@ -434,6 +434,9 @@ class ObjectProp(QW.QWidget):
 
         # Remove only Creation and Processing tabs (dynamic tabs)
         # Use widget references instead of text labels for reliable identification
+        self.__auto_recompute_timer.stop()
+        if self.processing_param_editor is not None:
+            self.processing_param_editor.on_change = None
         if self.creation_scroll is not None:
             index = self.tabwidget.indexOf(self.creation_scroll)
             if index >= 0:
@@ -442,6 +445,7 @@ class ObjectProp(QW.QWidget):
             index = self.tabwidget.indexOf(self.processing_scroll)
             if index >= 0:
                 self.tabwidget.removeTab(index)
+            self.processing_scroll.deleteLater()
         if self.analysis_scroll is not None:
             index = self.tabwidget.indexOf(self.analysis_scroll)
             if index >= 0:
@@ -820,6 +824,10 @@ class ObjectProp(QW.QWidget):
         Returns:
             True if Processing tab was set up, False otherwise
         """
+        self.__auto_recompute_timer.stop()
+        if self.processing_param_editor is not None:
+            self.processing_param_editor.on_change = None
+
         # Extract processing parameters
         proc_params = extract_processing_parameters(obj)
         if proc_params is None:
@@ -858,7 +866,9 @@ class ObjectProp(QW.QWidget):
                     param.update_from_obj(source_obj)
 
         # Create parameter editor widget
-        editor = gdq.DataSetEditGroupBox(
+        from datalab.widgets.processingparameters import ProcessingParametersEditor
+
+        editor = ProcessingParametersEditor(
             _("Processing Parameters"), param.__class__, wordwrap=True
         )
         update_dataset(editor.dataset, param)
@@ -868,22 +878,7 @@ class ObjectProp(QW.QWidget):
         editor.SIG_APPLY_BUTTON_CLICKED.connect(self.apply_processing_parameters)
         editor.set_apply_button_state(False)
 
-        # Hook into the per-edit change callback to support auto-recompute.
-        # ``DataSetEditLayout.change_callback`` is called whenever any widget
-        # value changes; wrap it so we can also (re)start the debounce timer.
-        try:
-            inner_layout = editor.edit  # DataSetEditLayout instance
-            original_change_cb = inner_layout.change_callback
-
-            def _wrapped_change_cb() -> None:
-                if original_change_cb is not None:
-                    original_change_cb()
-                if self.__auto_recompute_enabled:
-                    self.__auto_recompute_timer.start(300)
-
-            inner_layout.change_callback = _wrapped_change_cb
-        except AttributeError:
-            pass
+        editor.on_change = lambda: self.__processing_parameters_changed(editor)
 
         # Store reference to be able to retrieve it later
         self.processing_param_editor = editor
@@ -1138,17 +1133,29 @@ class ObjectProp(QW.QWidget):
         if not self.__auto_recompute_enabled:
             self.__auto_recompute_timer.stop()
 
+    def __processing_parameters_changed(self, editor) -> None:
+        """Debounce real processing only for the current valid, released editor."""
+        if editor is not self.processing_param_editor:
+            return
+        self.__auto_recompute_timer.stop()
+        if (
+            self.__auto_recompute_enabled
+            and not editor.dragging
+            and editor.edit.check_all_values()
+        ):
+            self.__auto_recompute_timer.start(300)
+
     def __auto_recompute_trigger(self) -> None:
         """Debounced callback: push widget values then re-run processing."""
         if not self.__auto_recompute_enabled:
             return
         editor = self.processing_param_editor
-        if editor is None:
+        if editor is None or editor.dragging or not editor.edit.check_all_values():
             return
         # ``editor.set()`` synchronises widget values to the dataset and emits
         # ``SIG_APPLY_BUTTON_CLICKED`` which is already wired to
         # ``apply_processing_parameters``.
-        editor.set(check=False)
+        editor.set()
 
     def apply_processing_parameters(
         self,

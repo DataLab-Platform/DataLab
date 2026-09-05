@@ -18,6 +18,15 @@ msgstr "DataLab Version 1.3.0"
 msgid "✨ New Features"
 msgstr "✨ Nouvelles fonctionnalités"
 
+msgid "**Live processing preview:**"
+msgstr "**Aperçu interactif des traitements :**"
+
+msgid "Parameter dialogs for compatible 1-to-1 processing now offer an optional live preview for signals and images, including image-to-signal operations. Preview is off by default; Cancel leaves the workspace unchanged and OK performs the normal processing on the original selection."
+msgstr "Les boîtes de dialogue des traitements 1-vers-1 compatibles proposent désormais un aperçu interactif facultatif pour les signaux et images, y compris les opérations image-vers-signal. L'aperçu est désactivé par défaut ; Annuler laisse l'espace de travail inchangé et OK exécute le traitement normal sur la sélection initiale."
+
+msgid "Bounded numeric parameters now offer sliders alongside precise text entry. The Processing tab retains Apply and automatic re-processing, with updates deferred until slider release and valid input."
+msgstr "Les paramètres numériques bornés proposent désormais des curseurs en complément d'une saisie textuelle précise. L'onglet Traitement conserve Appliquer et le retraitement automatique, avec des mises à jour différées jusqu'au relâchement du curseur et à une saisie valide."
+
 msgid "**History Panel:**"
 msgstr "**Panneau d'historique :**"
 

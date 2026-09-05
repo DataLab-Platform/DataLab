@@ -4,6 +4,11 @@
 
 ### ✨ New Features ###
 
+**Live processing preview:**
+
+* Parameter dialogs for compatible 1-to-1 processing now offer an optional live preview for signals and images, including image-to-signal operations. Preview is off by default; Cancel leaves the workspace unchanged and OK performs the normal processing on the original selection.
+* Bounded numeric parameters now offer sliders alongside precise text entry. The Processing tab retains Apply and automatic re-processing, with updates deferred until slider release and valid input.
+
 **History Panel:**
 
 DataLab now records what you do and lets you replay it. A new **History** panel keeps track of every action applied to signals

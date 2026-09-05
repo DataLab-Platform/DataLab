@@ -4081,6 +4081,30 @@ msgstr "Image"
 msgid "Dimensions"
 msgstr "Dimensions"
 
+msgid "A preview source was removed. The processing was cancelled."
+msgstr "Un objet source de l'aperçu a été supprimé. Le traitement a été annulé."
+
+msgid "Preview source"
+msgstr "Source de l'aperçu"
+
+msgid "Invalid parameters"
+msgstr "Paramètres invalides"
+
+msgid "Updating preview..."
+msgstr "Mise à jour de l'aperçu..."
+
+msgid "Computing preview..."
+msgstr "Calcul de l'aperçu..."
+
+msgid "Preview failed"
+msgstr "Échec de l'aperçu"
+
+msgid "This result cannot be previewed."
+msgstr "Ce résultat ne peut pas être prévisualisé."
+
+msgid "Preview up to date"
+msgstr "Aperçu à jour"
+
 msgid "Minimum value"
 msgstr "Valeur minimum"
 
@@ -4128,4 +4152,3 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
-

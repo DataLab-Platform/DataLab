@@ -763,6 +763,7 @@ class ComputingFeature(Generic[TypeObj]):
          :meth:`BaseProcessor.add_feature` time). ``None`` for built-in
          (Sigima/DataLab) features.
         pre_execute_hook: optional transactional source preparation hook
+        preview_enabled: allow speculative execution in standard 1-to-1 dialogs
     """
 
     pattern: Literal["1_to_1", "1_to_0", "1_to_n", "n_to_1", "2_to_1"]
@@ -776,6 +777,7 @@ class ComputingFeature(Generic[TypeObj]):
     skip_xarray_compat: Optional[bool] = None
     plugin_origin: Optional[dict[str, Any]] = field(default=None)
     pre_execute_hook: Optional[SourcePreparationHook[TypeObj]] = None
+    preview_enabled: bool = True
 
     def __post_init__(self):
         """Validate the function after initialization."""
@@ -1792,6 +1794,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        preview_enabled: bool = True,
     ) -> None:
         """Generic processing method: 1 object in â†’ 1 object out.
 
@@ -1808,6 +1811,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             title: Optional progress bar title.
             comment: Optional comment for parameter dialog.
             edit: Whether to open the parameter editor before execution.
+            preview_enabled: Allow an optional live preview in the parameter dialog.
 
         .. note::
             With k selected objects, the method produces k outputs (one per input).
@@ -1815,14 +1819,47 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         .. note::
             This method does not support pairwise mode.
         """
-        if (edit is None or param is None) and paramclass is not None:
-            old_edit = edit
-            edit, param = self.init_param(param, paramclass, title, comment)
-            if old_edit is not None:
-                edit = old_edit
-        if param is not None:
-            if edit and not param.edit(parent=self.mainwindow):
+        sources = self.panel.objview.get_sel_objects(include_groups=True)
+        groups = self.panel.objview.get_sel_groups()
+        if not sources:
+            return
+        remember_defaults = param is None and paramclass is not None
+        if remember_defaults:
+            param = paramclass(title, comment)
+            defaults = self.PARAM_DEFAULTS.get(paramclass.__name__)
+            if defaults is not None:
+                gds.update_dataset(param, copy.deepcopy(defaults))
+            if hasattr(param, "update_from_obj"):
+                param.update_from_obj(copy.deepcopy(sources[0]))
+            if edit is None:
+                edit = True
+        if param is not None and edit:
+            from datalab.widgets.processingpreview import edit_processing_parameters
+
+            draft = copy.deepcopy(param)
+            feature = self.computing_registry.get(func.__name__)
+            allowed = preview_enabled and (feature is None or feature.preview_enabled)
+            if not edit_processing_parameters(
+                draft, func, sources, self.mainwindow, allowed
+            ):
                 return
+            if any(
+                get_uuid(source) not in self.panel.objmodel.get_object_ids()
+                for source in sources
+            ):
+                QW.QMessageBox.warning(
+                    self.mainwindow,
+                    _("Warning"),
+                    _("A preview source was removed. The processing was cancelled."),
+                )
+                return
+            gds.update_dataset(param, draft)
+            for index, selected in enumerate(groups or sources):
+                self.panel.objview.set_current_item_id(
+                    get_uuid(selected), extend=index > 0
+                )
+        if remember_defaults:
+            self.PARAM_DEFAULTS[type(param).__name__] = copy.deepcopy(param)
         plugin_origin = self._get_plugin_origin_for(func)
         pp = build_processing_parameters(
             func.__name__, "1-to-1", param=param, plugin_origin=plugin_origin
@@ -2663,6 +2700,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         icon_name: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        preview_enabled: bool = True,
     ) -> ComputingFeature:
         """Register a 1-to-1 processing function.
 
@@ -2678,6 +2716,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             icon_name: icon name. Defaults to None.
             comment: comment. Defaults to None.
             edit: whether to open the parameter editor before execution.
+            preview_enabled: allow speculative execution before accepting parameters.
 
         Returns:
             Registered feature.
@@ -2690,6 +2729,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             icon_name=icon_name,
             comment=comment,
             edit=edit,
+            preview_enabled=preview_enabled,
         )
         self.add_feature(feature)
         return feature
@@ -2975,6 +3015,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 f"For pattern '{pattern}', 'param' must be a DataSet or None"
             )
             compute_kwargs = {}
+            if pattern == "1_to_1":
+                compute_kwargs["preview_enabled"] = kwargs.pop(
+                    "preview_enabled", feature.preview_enabled
+                )
             if pattern == "n_to_1":
                 compute_kwargs["pairwise"] = kwargs.pop("pairwise", None)
             return compute_method(

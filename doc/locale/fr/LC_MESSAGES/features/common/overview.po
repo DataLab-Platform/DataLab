@@ -138,6 +138,24 @@ msgstr "La création interactive n'est disponible que pour les objets créés av
 msgid "Interactive 1-to-1 processing"
 msgstr "Traitement interactif 1-vers-1"
 
+msgid "Live preview before applying a processing"
+msgstr "Aperçu avant l'application d'un traitement"
+
+msgid "Standard parameter dialogs for 1-to-1 processing offer a **Preview** checkbox, unchecked each time the dialog opens. Enable it to display a temporary result while adjusting the parameters. With several signals, images or groups selected, choose one source in the preview selector; **OK** still processes the whole original selection with the common parameters."
+msgstr "Les boîtes de dialogue standard des traitements 1-vers-1 proposent une case **Aperçu**, décochée à chaque ouverture. Cochez-la pour afficher un résultat temporaire pendant le réglage des paramètres. Si plusieurs signaux, images ou groupes sont sélectionnés, choisissez une source dans le sélecteur d'aperçu ; **OK** traite toujours toute la sélection initiale avec les paramètres communs."
+
+msgid "The preview uses the complete source data, including its regions of interest, without adding objects or history entries. Invalid entries suspend updates. Warnings and errors appear inside the dialog. Typing is debounced and slider drags are throttled; large data and expensive algorithms may take longer to update. The preview shows only the result, with its own axes and units, including when an image processing returns a signal."
+msgstr "L'aperçu utilise toutes les données sources, y compris leurs régions d'intérêt, sans ajouter d'objet ni d'entrée d'historique. Une saisie invalide suspend les mises à jour. Les avertissements et erreurs s'affichent dans la boîte de dialogue. Les saisies rapprochées sont regroupées et la cadence des curseurs est limitée ; les données volumineuses et les algorithmes coûteux peuvent prendre davantage de temps. L'aperçu affiche uniquement le résultat, avec ses propres axes et unités, y compris lorsqu'un traitement d'image produit un signal."
+
+msgid "**Cancel** discards the draft parameters and stops the preview. **OK** runs the normal processing again: it does not reuse the temporary result. Random processing without a fixed seed may therefore produce a different final result. Analysis, multi-input operations, operations without parameters and unknown custom parameter dialogs retain their existing workflow."
+msgstr "**Annuler** abandonne les paramètres en cours d'édition et arrête l'aperçu. **OK** exécute à nouveau le traitement normal : le résultat temporaire n'est pas réutilisé. Un traitement aléatoire sans graine fixée peut donc produire un résultat final différent. Les analyses, les opérations à plusieurs entrées, les opérations sans paramètres et les éditeurs personnalisés non pris en charge conservent leur fonctionnement habituel."
+
+msgid "Bounded numeric fields automatically offer sliders in compatible processing forms and in the **Processing** tab. The exact text field remains authoritative; moving its slider does not limit the precision of values entered by keyboard. Fields without two usable bounds remain text-only. Sliders alone never enable preview or automatic re-processing."
+msgstr "Les champs numériques bornés proposent automatiquement des curseurs dans les formulaires de traitement compatibles et dans l'onglet **Traitement**. La valeur exacte du champ texte fait foi ; le curseur ne limite pas la précision des valeurs saisies au clavier. Les champs sans deux bornes utilisables restent textuels. Les curseurs n'activent jamais à eux seuls l'aperçu ou le retraitement automatique."
+
+msgid "Re-processing an existing result"
+msgstr "Retraiter un résultat existant"
+
 msgid "When applying a 1-to-1 processing operation that has configurable parameters (e.g., Gaussian filter, threshold, morphological operations), DataLab stores the processing metadata, enabling parameter adjustment and re-processing:"
 msgstr "Lors de l'application d'une opération de traitement 1-vers-1 qui a des paramètres configurables (par exemple, filtre gaussien, seuil, opérations morphologiques), DataLab stocke les métadonnées de traitement, permettant l'ajustement des paramètres et le retraitement :"
 
@@ -159,8 +177,8 @@ msgstr "Modifier les paramètres de traitement (par exemple, valeur du sigma du 
 msgid "Click **Apply** to re-process with updated parameters"
 msgstr "Cliquer sur **Appliquer** pour retraiter avec les paramètres mis à jour"
 
-msgid "The processed object is updated in place with the new results. This workflow is ideal for:"
-msgstr "L'objet traité est mis à jour sur place avec les nouveaux résultats. Ce flux de travail est idéal pour :"
+msgid "Normally, **Apply** creates a new result and history entry. In the History panel's edit mode it updates the existing result and recomputes dependent actions. The optional **Auto-recompute on edit** checkbox follows the same rules, waits for slider release and valid input, and does not apply edits from a previously selected object. This workflow is ideal for:"
+msgstr "Normalement, **Appliquer** crée un nouveau résultat et une entrée d'historique. En mode édition du panneau Historique, le résultat existant est mis à jour et les actions dépendantes sont recalculées. La case facultative **Retraiter automatiquement à la modification** suit les mêmes règles, attend le relâchement du curseur et une saisie valide, et n'applique pas les modifications d'un objet précédemment sélectionné. Ce fonctionnement convient notamment pour :"
 
 msgid "Iteratively tuning filter parameters while observing results in real time"
 msgstr "Ajuster de manière itérative les paramètres du filtre tout en observant les résultats en temps réel"
@@ -201,8 +219,8 @@ msgstr "Ces modèles ne bénéficient pas de manière significative de l'ajustem
 msgid "Example workflow"
 msgstr "Exemple de flux de travail"
 
-msgid "Here's a typical workflow using interactive processing:"
-msgstr "Voici un flux de travail typique utilisant le traitement interactif :"
+msgid "Here's a typical workflow using interactive processing, with History edit mode enabled:"
+msgstr "Voici un flux de travail typique utilisant le traitement interactif, avec le mode édition de l'historique activé :"
 
 msgid "**Create a test signal**: Create > Gaussian signal"
 msgstr "**Créer un signal de test** : Création > Signal gaussien"

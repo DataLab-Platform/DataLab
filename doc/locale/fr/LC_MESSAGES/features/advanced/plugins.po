@@ -19,6 +19,12 @@ msgstr "DataLab, plugin, traitement, entrée/sortie, HDF5, format de fichier, an
 msgid "Plugins"
 msgstr "Plugins"
 
+msgid "Live preview compatibility"
+msgstr "Compatibilité avec l'aperçu interactif"
+
+msgid "Standard parameterized functions registered with ``register_1_to_1`` can participate in live preview without a custom renderer. They must return a ``SignalObj`` or ``ImageObj``, be importable in a spawned process, and accept serializable source/parameter copies. Preview uses a private process and does not publish results to the workspace. It is not a sandbox for filesystem, network or other external side effects. Register functions that must not run speculatively with ``preview_enabled=False``. Serialization or computation failures are reported in the preview; the normal OK path remains available. Unknown custom ``DataSet.edit`` implementations and alternate guidata backends are not replaced."
+msgstr "Les fonctions paramétrées standard enregistrées avec ``register_1_to_1`` peuvent utiliser l'aperçu interactif sans moteur de rendu personnalisé. Elles doivent retourner un ``SignalObj`` ou un ``ImageObj``, être importables dans un processus démarré par spawn et accepter des copies sérialisables des sources et paramètres. L'aperçu utilise un processus privé et ne publie aucun résultat dans l'espace de travail. Il ne protège pas des effets externes sur les fichiers, le réseau ou d'autres ressources. Enregistrez les fonctions qui ne doivent pas être exécutées provisoirement avec ``preview_enabled=False``. Les erreurs de sérialisation ou de calcul sont signalées dans l'aperçu ; le chemin normal via OK reste disponible. Les implémentations personnalisées de ``DataSet.edit`` non prises en charge et les backends alternatifs de guidata ne sont pas remplacés."
+
 msgid "DataLab supports a robust plugin architecture, allowing users to extend the application’s features without modifying its core. Plugins can introduce new processing tools, data import/export formats, or custom GUI elements — all seamlessly integrated into the platform."
 msgstr "DataLab prend en charge une architecture de plugin robuste, permettant aux utilisateurs d'étendre les fonctionnalités de l'application sans modifier son noyau. Les plugins peuvent introduire de nouveaux outils de traitement, des formats d'importation/exportation de données ou des éléments d'interface graphique personnalisés, le tout intégré de manière transparente dans la plateforme."
 
