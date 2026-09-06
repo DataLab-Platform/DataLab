@@ -4087,6 +4087,9 @@ msgstr "Un objet source de l'aperçu a été supprimé. Le traitement a été an
 msgid "Preview source"
 msgstr "Source de l'aperçu"
 
+msgid "Preview disabled"
+msgstr "Aperçu désactivé"
+
 msgid "Invalid parameters"
 msgstr "Paramètres invalides"
 

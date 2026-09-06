@@ -99,6 +99,31 @@ class ProcessingPreviewWidget(QW.QWidget):
         self.source_combo.setEnabled(False)
         controls.addWidget(self.source_combo, 1)
         self._layout.addLayout(controls)
+        self._stage = QW.QWidget()
+        self._stage.setMinimumSize(300, 240)
+        self._stage_layout = QW.QGridLayout(self._stage)
+        self._stage_layout.setContentsMargins(0, 0, 0, 0)
+        self._layout.addWidget(self._stage, 1)
+        self.disabled_overlay = QW.QFrame(self._stage)
+        self.disabled_overlay.setObjectName("preview_disabled_overlay")
+        self.disabled_overlay.setStyleSheet(
+            "QFrame#preview_disabled_overlay {"
+            " background-color: rgba(128, 128, 128, 150);"
+            " border: none;"
+            "}"
+        )
+        disabled_layout = QW.QVBoxLayout(self.disabled_overlay)
+        disabled_layout.addStretch()
+        disabled_icon = QW.QLabel()
+        disabled_icon.setAlignment(QC.Qt.AlignCenter)
+        disabled_icon.setPixmap(get_icon("visualization.svg").pixmap(42, 42))
+        disabled_layout.addWidget(disabled_icon)
+        disabled_label = QW.QLabel(_("Preview disabled"))
+        disabled_label.setAlignment(QC.Qt.AlignCenter)
+        disabled_label.setStyleSheet("font-weight: 600;")
+        disabled_layout.addWidget(disabled_label)
+        disabled_layout.addStretch()
+        self._stage_layout.addWidget(self.disabled_overlay, 0, 0)
         self.status = QW.QLabel()
         self.status.setWordWrap(True)
         self.status.setTextFormat(QC.Qt.PlainText)
@@ -112,14 +137,22 @@ class ProcessingPreviewWidget(QW.QWidget):
         self.source_combo.currentIndexChanged.connect(self._source_changed)
         self.controller.SIG_RESULT.connect(self._show_result)
         self.controller.SIG_ERROR.connect(self._show_error)
+        if self.sources:
+            self._render(self.sources[0])
+        self._set_disabled_appearance(True)
+
+    def _set_disabled_appearance(self, disabled: bool) -> None:
+        """Dim the current graph while live preview is disabled."""
+        self.disabled_overlay.setVisible(disabled)
+        if disabled:
+            self.disabled_overlay.raise_()
 
     def _toggle(self, checked: bool) -> None:
         self._timer.stop()
         self.controller.set_enabled(checked)
         self.source_combo.setEnabled(checked)
         self.details.hide()
-        if self.plotwidget is not None:
-            self.plotwidget.hide()
+        self._set_disabled_appearance(not checked)
         self.status.clear()
         if checked:
             self._request()
@@ -127,8 +160,8 @@ class ProcessingPreviewWidget(QW.QWidget):
     def _source_changed(self) -> None:
         self.controller.invalidate()
         self._plot_signature = None
-        if self.plotwidget is not None:
-            self.plotwidget.hide()
+        if self.sources:
+            self._render(self.sources[self.source_combo.currentIndex()])
         self.changed()
 
     def changed(self) -> None:
@@ -193,12 +226,12 @@ class ProcessingPreviewWidget(QW.QWidget):
         kind = "image" if isinstance(result, ImageObj) else "curve"
         if self._plot_kind != kind:
             if self.plotwidget is not None:
-                self._layout.removeWidget(self.plotwidget)
+                self._stage_layout.removeWidget(self.plotwidget)
                 self.plotwidget.hide()
                 self.plotwidget.deleteLater()
-            self.plotwidget = PlotWidget(self, options=PlotOptions(type=kind))
+            self.plotwidget = PlotWidget(self._stage, options=PlotOptions(type=kind))
             self.plotwidget.setMinimumSize(300, 240)
-            self._layout.addWidget(self.plotwidget, 1)
+            self._stage_layout.addWidget(self.plotwidget, 0, 0)
             self._plot_kind = kind
             self._plot_signature = None
             self.item = None
@@ -247,6 +280,7 @@ class ProcessingPreviewWidget(QW.QWidget):
         self._plot_signature = signature
         self.plotwidget.show()
         plot.replot()
+        self._set_disabled_appearance(not self.enabled.isChecked())
 
     def close_preview(self) -> None:
         """Cancel work before the containing dialog is hidden or destroyed."""

@@ -98,10 +98,15 @@ def test_dialog_is_opt_in_and_transactional():
             ),
         )
         assert not executor.requests
+        assert dialog.preview.plotwidget is not None
+        assert not dialog.preview.plotwidget.isHidden()
+        assert not dialog.preview.disabled_overlay.isHidden()
+        np.testing.assert_allclose(dialog.preview.item.get_data()[1], source.y)
         field = dialog.edit_layout.get_terminal_widgets()[0]
         field.edit.setText("2.5")
         assert param.sigma == 1.0
         dialog.preview.enabled.setChecked(True)
+        assert dialog.preview.disabled_overlay.isHidden()
         assert len(executor.requests) == 1
         assert executor.requests[0][2][1].sigma == 2.5
         result = gaussian_filter(source, dialog.instance)
@@ -116,6 +121,12 @@ def test_dialog_is_opt_in_and_transactional():
         dialog.preview._show_result(
             CompOut(result=create_image("Image", np.arange(12.0).reshape(3, 4))), True
         )
+        np.testing.assert_array_equal(
+            dialog.preview.item.data, np.arange(12.0).reshape(3, 4)
+        )
+        dialog.preview.enabled.setChecked(False)
+        assert not dialog.preview.plotwidget.isHidden()
+        assert not dialog.preview.disabled_overlay.isHidden()
         np.testing.assert_array_equal(
             dialog.preview.item.data, np.arange(12.0).reshape(3, 4)
         )
