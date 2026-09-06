@@ -207,6 +207,7 @@ class ReplaceSpecialValuesDialog(QW.QDialog):
         self._info_message = info_message
         self._can_apply = can_apply
         self.preview = None
+        self.preview_result = None
         self.setWindowTitle(instance.get_title())
         self.setMinimumWidth(480)
 
@@ -413,6 +414,8 @@ class ReplaceSpecialValuesDialog(QW.QDialog):
             if not self.edit_layout.check_all_values():
                 return
             self.edit_layout.accept_changes()
+        if self.preview is not None:
+            self.preview_result = self.preview.take_current_result()
         super().accept()
 
 

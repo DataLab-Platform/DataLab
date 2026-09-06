@@ -1651,7 +1651,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         return result is not None and result.execution_success
 
     def _compute_1_to_1_subroutine(
-        self, funcs: list[Callable], params: list, title: str
+        self,
+        funcs: list[Callable],
+        params: list,
+        title: str,
+        preview_result: tuple[SignalObj | ImageObj, CompOut] | None = None,
     ) -> None:
         """Generic subroutine for 1-to-1 processing.
 
@@ -1674,8 +1678,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     i_title = f"{title} ({pvalue}/{n_glob})"
                     progress.setLabelText(i_title)
                     progress.setValue(pvalue)
-                    args = (obj,) if param is None else (obj, param)
-                    result = self.__exec_func(func, args, progress)
+                    if preview_result is not None and preview_result[0] is obj:
+                        result = preview_result[1]
+                        preview_result = None
+                    else:
+                        args = (obj,) if param is None else (obj, param)
+                        result = self.__exec_func(func, args, progress)
                     if result is None:
                         break
                     new_obj = self.handle_output(
@@ -1837,10 +1845,16 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             from datalab.widgets.processingpreview import edit_processing_parameters
 
             draft = copy.deepcopy(param)
+            preview_results = []
             feature = self.computing_registry.get(func.__name__)
             allowed = preview_enabled and (feature is None or feature.preview_enabled)
             if not edit_processing_parameters(
-                draft, func, sources, self.mainwindow, allowed
+                draft,
+                func,
+                sources,
+                self.mainwindow,
+                allowed,
+                preview_results,
             ):
                 return
             if any(
@@ -1858,6 +1872,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 self.panel.objview.set_current_item_id(
                     get_uuid(selected), extend=index > 0
                 )
+        else:
+            preview_results = []
         if remember_defaults:
             self.PARAM_DEFAULTS[type(param).__name__] = copy.deepcopy(param)
         plugin_origin = self._get_plugin_origin_for(func)
@@ -1871,7 +1887,16 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             plugin_origin=plugin_origin,
         )
         with self.mainwindow.historypanel.capture_outputs(action):
-            self._compute_1_to_1_subroutine([func], [param], title)
+            self._compute_1_to_1_subroutine(
+                [func],
+                [param],
+                title,
+                preview_result=(
+                    preview_results[0]
+                    if len(sources) == 1 and not groups and preview_results
+                    else None
+                ),
+            )
 
     def compute_multiple_1_to_1(
         self,

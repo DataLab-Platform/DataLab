@@ -74,6 +74,13 @@ def test_preview_latest_request_and_invalidation():
         executor.requests[-1][0].set_result(CompOut(result=source.copy()))
         controller.poll()
         assert outputs[-1][1] is True
+        assert controller.take_current_result(source) is outputs[-1][0]
+        assert controller.take_current_result(source) is None
+        controller.request(source, param)
+        executor.requests[-1][0].set_result(CompOut(result=source.copy()))
+        controller.poll()
+        controller.mark_dirty()
+        assert controller.take_current_result(source) is None
         controller.close()
         assert executor.closed
 
@@ -200,6 +207,81 @@ def test_processor_cancel_and_accept(monkeypatch):
             )
             assert processor.PARAM_DEFAULTS["GaussianParam"] is remembered
             assert remembered.sigma == 2.0
+
+
+def test_processor_reuses_only_current_single_object_preview(monkeypatch):
+    """OK reuses one current preview but computes a multi-selection normally."""
+    from datalab.config import Conf
+    from datalab.tests import datalab_test_app_context
+    from datalab.widgets import processingpreview
+
+    with qt_app_context(), Conf.process_isolation_enabled.context(False):
+        with datalab_test_app_context(history=True) as window:
+            panel = window.signalpanel
+            source = create_signal("Source", np.arange(20.0), np.sin(np.arange(20.0)))
+            panel.add_object(source)
+            executor = FakeExecutor()
+            nominal_calls = []
+
+            def counted_filter(src, param):
+                nominal_calls.append((src, param))
+                return gaussian_filter(src, param)
+
+            def accept_current_preview(dialog):
+                dialog.preview.controller._executor_factory = lambda: executor
+                dialog.preview.enabled.setChecked(True)
+                assert len(executor.requests) == 1
+                preview_result = gaussian_filter(source, dialog.instance)
+                executor.requests[0][0].set_result(CompOut(result=preview_result))
+                dialog.preview.controller.poll()
+                dialog.accept()
+                return 1
+
+            monkeypatch.setattr(
+                processingpreview, "exec_dialog", accept_current_preview
+            )
+            window.historypanel.toggle_record_mode(True)
+            history_count = len(window.historypanel)
+            panel.processor.compute_1_to_1(
+                counted_filter,
+                param=GaussianParam.create(sigma=2.0),
+                title="Gaussian filter",
+                edit=True,
+            )
+
+            assert nominal_calls == []
+            assert len(panel.objmodel) == 2
+            assert len(window.historypanel) == history_count + 1
+            result = panel.objmodel[panel.objmodel.get_object_ids()[-1]]
+            np.testing.assert_allclose(result.y, gaussian_filter(source, sigma=2.0).y)
+
+            other = create_signal("Other", np.arange(20.0), np.cos(np.arange(20.0)))
+            panel.add_object(other)
+            panel.objview.select_objects([source, other])
+            multi_executor = FakeExecutor()
+
+            def accept_multi_preview(dialog):
+                dialog.preview.controller._executor_factory = lambda: multi_executor
+                dialog.preview.enabled.setChecked(True)
+                assert len(multi_executor.requests) == 1
+                preview_source = dialog.preview.sources[0]
+                preview_result = gaussian_filter(preview_source, dialog.instance)
+                multi_executor.requests[0][0].set_result(CompOut(result=preview_result))
+                dialog.preview.controller.poll()
+                dialog.accept()
+                return 1
+
+            monkeypatch.setattr(processingpreview, "exec_dialog", accept_multi_preview)
+            panel.processor.compute_1_to_1(
+                counted_filter,
+                param=GaussianParam.create(sigma=3.0),
+                title="Gaussian filter",
+                edit=True,
+            )
+
+            assert len(nominal_calls) == 2
+            assert nominal_calls[0][0] is source
+            assert nominal_calls[1][0] is other
 
 
 def test_special_dialog_preserves_counters_and_validation():

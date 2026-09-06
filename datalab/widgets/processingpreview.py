@@ -30,7 +30,12 @@ __all__ = [
 
 
 def edit_processing_parameters(
-    instance, function, sources, parent, preview_enabled=True
+    instance,
+    function,
+    sources,
+    parent,
+    preview_enabled=True,
+    preview_result=None,
 ) -> bool:
     """Preserve alternate backends and custom editors outside the standard form."""
     from datalab.widgets.replacespecialvalues import (
@@ -51,7 +56,14 @@ def edit_processing_parameters(
     else:
         return bool(instance.edit(parent=parent))
     try:
-        return bool(exec_dialog(dialog))
+        accepted = bool(exec_dialog(dialog))
+        if (
+            accepted
+            and preview_result is not None
+            and dialog.preview_result is not None
+        ):
+            preview_result.append(dialog.preview_result)
+        return accepted
     finally:
         dialog.preview.close_preview()
         dialog.deleteLater()
@@ -208,19 +220,31 @@ class ProcessingPreviewWidget(QW.QWidget):
         if not isinstance(result, (SignalObj, ImageObj)):
             self._show_error(_("This result cannot be previewed."))
             return
+        original_title = result.title
         try:
             patch_title_with_ids(
                 result, [self.sources[self.source_combo.currentIndex()]], get_short_id
             )
             self._render(result)
         except Exception as error:
+            self.controller.invalidate()
             self._show_error(str(error))
             return
+        finally:
+            result.title = original_title
         self.status.setText(
             _("Preview up to date") if current else _("Updating preview...")
         )
         self.details.setPlainText(output.warning_msg or "")
         self.details.setVisible(bool(output.warning_msg))
+
+    def take_current_result(self) -> tuple[SignalObj | ImageObj, CompOut] | None:
+        """Detach the current computation for one-shot nominal publication."""
+        if not self.enabled.isChecked() or not self.sources:
+            return None
+        source = self.sources[self.source_combo.currentIndex()]
+        output = self.controller.take_current_result(source)
+        return None if output is None else (source, output)
 
     def _render(self, result: SignalObj | ImageObj) -> None:
         kind = "image" if isinstance(result, ImageObj) else "curve"
@@ -303,6 +327,7 @@ class ProcessingPreviewDialog(QW.QDialog):
         win32_fix_title_bar_background(self)
         self.instance = copy.deepcopy(instance)
         self._original = instance
+        self.preview_result = None
         self.setModal(True)
         self.setWindowTitle(instance.get_title())
         if instance.get_icon():
@@ -359,10 +384,11 @@ class ProcessingPreviewDialog(QW.QDialog):
         return f"{title} - {item.label()}"
 
     def accept(self) -> None:
-        """Publish only validated parameter values, never the preview result."""
+        """Commit validated parameters and detach a reusable current preview."""
         if not self.edit_layout.check_all_values():
             self.preview.status.setText(_("Invalid parameters"))
             return
         self.edit_layout.accept_changes()
         update_dataset(self._original, self.instance)
+        self.preview_result = self.preview.take_current_result()
         super().accept()

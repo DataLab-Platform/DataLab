@@ -96,6 +96,8 @@ class PreviewController(QC.QObject):
         self._future = None
         self._pending = None
         self._active_key = None
+        self._active_source = None
+        self._current_result = None
         self._epoch = 0
         self._revision = 0
         self._enabled = False
@@ -114,6 +116,7 @@ class PreviewController(QC.QObject):
         """Forget pending parameters without publishing older ones as current."""
         self._revision += 1
         self._pending = None
+        self._current_result = None
 
     def invalidate(self) -> None:
         """Invalidate even provisional results after a source/validity change."""
@@ -131,14 +134,15 @@ class PreviewController(QC.QObject):
             self.invalidate()
             self.SIG_ERROR.emit(traceback.format_exc())
             return
-        self._pending = ((self._epoch, self._revision), args)
+        self._pending = ((self._epoch, self._revision), args, source)
+        self._current_result = None
         if self._future is None:
             self._start_pending()
 
     def _start_pending(self) -> None:
         if self._pending is None or not self._enabled:
             return
-        self._active_key, args = self._pending
+        self._active_key, args, self._active_source = self._pending
         self._pending = None
         try:
             if self._executor is None:
@@ -167,11 +171,28 @@ class PreviewController(QC.QObject):
             if output.error_msg and current:
                 self.SIG_ERROR.emit(output.error_msg)
             elif not output.cancelled and output.result is not None:
+                if current:
+                    self._current_result = (
+                        key,
+                        self._active_source,
+                        output,
+                    )
                 self.SIG_RESULT.emit(output, current)
         if self._pending is not None:
             self._start_pending()
         else:
             self.SIG_BUSY.emit(False)
+
+    def take_current_result(self, source: SignalObj | ImageObj) -> CompOut | None:
+        """Detach the completed result when it still matches *source*."""
+        candidate = self._current_result
+        self._current_result = None
+        if candidate is None or not self._enabled:
+            return None
+        key, candidate_source, output = candidate
+        if key != (self._epoch, self._revision) or candidate_source is not source:
+            return None
+        return output
 
     def close(self) -> None:
         """Disconnect the view from outstanding work and cancel privately."""
@@ -179,6 +200,8 @@ class PreviewController(QC.QObject):
         self.invalidate()
         self._timer.stop()
         self._future = None
+        self._active_source = None
+        self._current_result = None
         if self._executor is not None:
             self._executor.close()
             self._executor = None

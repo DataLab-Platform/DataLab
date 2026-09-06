@@ -149,11 +149,12 @@ drags are throttled; large data and expensive algorithms may take longer to
 update. The preview shows only the result, with its own axes and units, including
 when an image processing returns a signal.
 
-**Cancel** discards the draft parameters and stops the preview. **OK** runs the
-normal processing again: it does not reuse the temporary result. Random
-processing without a fixed seed may therefore produce a different final result.
-Analysis, multi-input operations, operations without parameters and unknown
-custom parameter dialogs retain their existing workflow.
+**Cancel** discards the draft parameters and stops the preview. With one source,
+**OK** reuses a completed, up-to-date preview once and publishes it through the
+normal processing path, including history. If the preview is still running or
+stale, or if several objects or groups are selected, DataLab runs the normal
+processing instead. Analysis, multi-input operations, operations without
+parameters and unknown custom parameter dialogs retain their existing workflow.
 
 Bounded numeric fields automatically offer sliders in compatible processing
 forms and in the **Processing** tab. The exact text field remains authoritative;
