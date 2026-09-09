@@ -529,11 +529,20 @@ msgstr "L'option \"Toutes les méthodes de seuillage\" permet d'appliquer toutes
 msgid "Exposure"
 msgstr "Exposition"
 
-msgid "Create a new image which is the result of exposure correction on each selected image."
-msgstr "Crée une image à partir du résultat d'une correction d'exposition sur chaque image sélectionnée."
+msgid "Create new images by applying exposure corrections. Brightness and contrast uses the first selected image to initialize one shared input window, then applies that window independently to every selected image. Each result retains the output range of its own source image."
+msgstr "Crée de nouvelles images en appliquant des corrections d'exposition. Le réglage de la luminosité et du contraste utilise la première image sélectionnée pour initialiser une plage d'entrée commune, puis applique cette plage indépendamment à chaque image sélectionnée. Chaque résultat conserve la plage de sortie propre à son image source."
 
 msgid "Comments"
 msgstr "Commentaires"
+
+msgid "Brightness and contrast"
+msgstr "Luminosité et contraste"
+
+msgid ":py:func:`sigima.proc.image.adjust_brightness_contrast`"
+msgstr ""
+
+msgid "Histogram-driven clipped linear remapping, initialized from the first selected image"
+msgstr "Remappage linéaire écrêté piloté par histogramme, initialisé à partir de la première image sélectionnée"
 
 msgid "Gamma correction"
 msgstr "Correction gamma"

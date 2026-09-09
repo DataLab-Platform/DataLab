@@ -18,6 +18,12 @@ msgstr "DataLab Version 1.3.0"
 msgid "✨ New Features"
 msgstr "✨ Nouvelles fonctionnalités"
 
+msgid "**Brightness and contrast:**"
+msgstr "**Luminosité et contraste :**"
+
+msgid "A new **Processing > Exposure > Brightness and contrast** operation provides a histogram with synchronized minimum, maximum, brightness and contrast controls, deterministic Auto and Reset actions, ROI-aware remapping, and live preview. One input window is initialized from the first selected image and applied to the full selection, with each result preserving its source image and data type."
+msgstr "Une nouvelle opération **Traitement > Exposition > Luminosité et contraste** fournit un histogramme avec des contrôles synchronisés du minimum, du maximum, de la luminosité et du contraste, des actions Auto et Réinitialiser déterministes, un remappage tenant compte des ROI et un aperçu interactif. Une plage d'entrée est initialisée à partir de la première image sélectionnée et appliquée à toute la sélection, chaque résultat conservant son image source et son type de données."
+
 msgid "**Live processing preview:**"
 msgstr "**Aperçu interactif des traitements :**"
 

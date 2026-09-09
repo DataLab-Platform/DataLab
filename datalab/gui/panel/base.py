@@ -850,20 +850,22 @@ class ObjectProp(QW.QWidget):
         if isinstance(param, list):
             return False
 
-        # Eventually call the `update_from_obj` method to properly initialize
-        # the parameter object from the current object state.
-        # Only do this when reset_params is True (initial setup), not when
-        # refreshing after user has modified parameters.
-        if reset_params and hasattr(param, "update_from_obj"):
-            # Warning: the `update_from_obj` method takes the input object as argument,
-            # not the output object (`obj` is the processed object here):
-            # Retrieve the input object from the source UUID
-            if proc_params.source_uuid is not None:
-                source_obj = self.panel.mainwindow.find_object_by_uuid(
-                    proc_params.source_uuid
-                )
-                if source_obj is not None:
-                    param.update_from_obj(source_obj)
+        # Source-aware parameters may refresh transient editor context without
+        # replacing their persisted values. Legacy parameters keep the previous
+        # reset-only initialization behavior.
+        source_obj = None
+        if proc_params.source_uuid is not None:
+            source_obj = self.panel.mainwindow.find_object_by_uuid(
+                proc_params.source_uuid
+            )
+        if hasattr(param, "update_editor_context"):
+            param.update_editor_context(source_obj)
+        elif (
+            reset_params
+            and source_obj is not None
+            and hasattr(param, "update_from_obj")
+        ):
+            param.update_from_obj(source_obj)
 
         # Create parameter editor widget
         from datalab.widgets.processingparameters import ProcessingParametersEditor

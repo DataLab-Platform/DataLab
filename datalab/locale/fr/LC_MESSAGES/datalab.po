@@ -4155,3 +4155,9 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
+
+msgid "Brightness and contrast"
+msgstr "Luminosité et contraste"
+
+msgid "This feature requires exactly one selected object."
+msgstr "Cette fonctionnalité nécessite de sélectionner exactement un objet."
