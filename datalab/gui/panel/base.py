@@ -906,21 +906,32 @@ class ObjectProp(QW.QWidget):
             QW.QSizePolicy.Expanding, QW.QSizePolicy.Preferred
         )
 
-        # Build the tab content: editor + "Auto-recompute" checkbox.
-        container = QW.QWidget()
-        vbox = QW.QVBoxLayout(container)
-        vbox.setContentsMargins(0, 0, 0, 0)
-        vbox.addWidget(editor)
-        auto_cb = QW.QCheckBox(_("Auto-recompute on edit"), container)
+        # Add the auto-recompute option below Apply, aligned with input fields.
+        auto_cb = QW.QCheckBox(_("Auto-recompute on edit"), editor)
+        auto_cb.setObjectName("auto_recompute_on_edit")
+        auto_cb.setIcon(get_icon("replay.svg"))
         auto_cb.setToolTip(
             _("Automatically re-run processing when parameters are modified")
         )
         auto_cb.setChecked(self.__auto_recompute_enabled)
         auto_cb.toggled.connect(self.__set_auto_recompute_enabled)
-        vbox.addWidget(auto_cb)
-        vbox.addStretch(1)
+        form_layout = editor.edit.layout
+        apply_index = form_layout.indexOf(editor.apply_button)
+        apply_row, _column, _row_span, _column_span = form_layout.getItemPosition(
+            apply_index
+        )
+        input_column = 1
+        input_column_span = max(1, form_layout.columnCount() - input_column)
+        form_layout.addWidget(
+            auto_cb,
+            apply_row + 1,
+            input_column,
+            1,
+            input_column_span,
+            QC.Qt.AlignLeft,
+        )
 
-        self.processing_scroll.setWidget(container)
+        self.processing_scroll.setWidget(editor)
         self.tabwidget.insertTab(
             insert_index,
             self.processing_scroll,

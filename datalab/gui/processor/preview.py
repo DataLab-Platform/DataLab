@@ -17,7 +17,7 @@ from sigima.objects import ImageObj, SignalObj
 from datalab.gui.processor.base import run_with_env
 from datalab.gui.processor.catcher import CompOut
 
-__all__ = ["PreviewController", "PreviewExecutor"]
+__all__ = ["PreviewController", "PreviewExecutor", "PreviewExecutorCache"]
 
 
 class PreviewExecutor:
@@ -71,6 +71,65 @@ class PreviewExecutor:
         self._threads.shutdown(wait=wait)
 
 
+class PreviewExecutorCache:
+    """Retain at most one idle preview executor between dialogs."""
+
+    def __init__(self, executor_factory: Callable = PreviewExecutor) -> None:
+        self._executor_factory = executor_factory
+        self._idle = None
+        self._leased = {}
+        self._generation = 0
+        self._closed = False
+
+    def acquire(self) -> PreviewExecutor:
+        """Return an executor owned exclusively by the caller."""
+        if self._closed:
+            raise RuntimeError("Preview executor cache is closed")
+        executor = self._idle
+        if executor is None:
+            executor = self._executor_factory()
+        else:
+            self._idle = None
+        self._leased[executor] = self._generation
+        return executor
+
+    def release(self, executor: PreviewExecutor, reusable: bool = True) -> None:
+        """Return an executor to the idle slot or close it."""
+        if executor not in self._leased:
+            return
+        generation = self._leased.pop(executor)
+        if (
+            self._closed
+            or not reusable
+            or generation != self._generation
+            or self._idle is not None
+        ):
+            executor.close()
+        else:
+            self._idle = executor
+
+    def reset(self) -> None:
+        """Discard idle state and reject executors from the previous generation."""
+        self._generation += 1
+        if self._idle is not None:
+            self._idle.close()
+            self._idle = None
+
+    def close(self) -> None:
+        """Close every owned executor and reject future acquisitions."""
+        if self._closed:
+            return
+        self._closed = True
+        self._generation += 1
+        executors = list(self._leased)
+        self._leased.clear()
+        if self._idle is not None:
+            executors.append(self._idle)
+            self._idle = None
+        for executor in executors:
+            executor.close()
+
+
 class PreviewController(QC.QObject):
     """Keep one active computation and only the latest pending snapshot.
 
@@ -88,10 +147,12 @@ class PreviewController(QC.QObject):
         function: Callable,
         parent: QC.QObject | None = None,
         executor_factory: Callable = PreviewExecutor,
+        executor_cache: PreviewExecutorCache | None = None,
     ) -> None:
         super().__init__(parent)
         self.function = function
         self._executor_factory = executor_factory
+        self._executor_cache = executor_cache
         self._executor = None
         self._future = None
         self._pending = None
@@ -146,10 +207,14 @@ class PreviewController(QC.QObject):
         self._pending = None
         try:
             if self._executor is None:
-                self._executor = self._executor_factory()
+                if self._executor_cache is None:
+                    self._executor = self._executor_factory()
+                else:
+                    self._executor = self._executor_cache.acquire()
             self._future = self._executor.submit(self.function, args)
         except Exception:
             self._future = None
+            self._release_executor(reusable=False)
             self.SIG_ERROR.emit(traceback.format_exc())
             return
         self._timer.start()
@@ -196,13 +261,23 @@ class PreviewController(QC.QObject):
 
     def close(self) -> None:
         """Disconnect the view from outstanding work and cancel privately."""
+        reusable = self._future is None or self._future.done()
         self._enabled = False
         self.invalidate()
         self._timer.stop()
         self._future = None
         self._active_source = None
         self._current_result = None
-        if self._executor is not None:
-            self._executor.close()
-            self._executor = None
+        self._release_executor(reusable=reusable)
         self.SIG_BUSY.emit(False)
+
+    def _release_executor(self, reusable: bool) -> None:
+        """Release the current executor according to its completion state."""
+        executor = self._executor
+        self._executor = None
+        if executor is None:
+            return
+        if self._executor_cache is None:
+            executor.close()
+        else:
+            self._executor_cache.release(executor, reusable=reusable)

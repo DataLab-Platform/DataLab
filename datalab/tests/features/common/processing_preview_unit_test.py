@@ -7,12 +7,13 @@ from concurrent.futures import Future
 import numpy as np
 import pytest
 from guidata.qthelpers import qt_app_context
+from qtpy import QtWidgets as QW
 from sigima.objects import create_signal
 from sigima.params import GaussianParam
 from sigima.proc.signal import gaussian_filter
 
 from datalab.gui.processor.catcher import CompOut
-from datalab.gui.processor.preview import PreviewController
+from datalab.gui.processor.preview import PreviewController, PreviewExecutorCache
 from datalab.objectmodel import set_number
 from datalab.widgets.processingpreview import ProcessingPreviewDialog
 
@@ -31,6 +32,15 @@ class FakeExecutor:
 
     def close(self):
         self.closed = True
+
+
+@pytest.fixture(autouse=True)
+def drain_pending_qt_timers():
+    """Prevent unattended close timers from affecting the next preview test."""
+    yield
+    if QW.QApplication.instance() is not None:
+        for _index in range(3):
+            QW.QApplication.processEvents()
 
 
 def test_preview_latest_request_and_invalidation():
@@ -83,6 +93,41 @@ def test_preview_latest_request_and_invalidation():
         assert controller.take_current_result(source) is None
         controller.close()
         assert executor.closed
+
+
+def test_controller_caches_only_completed_executors():
+    """Completed work is reusable while active work keeps cancellation semantics."""
+    with qt_app_context():
+        executors = []
+
+        def create_executor():
+            executor = FakeExecutor()
+            executors.append(executor)
+            return executor
+
+        cache = PreviewExecutorCache(create_executor)
+        source = create_signal("Source", np.arange(10.0), np.arange(10.0))
+        param = GaussianParam.create(sigma=1.0)
+
+        completed = PreviewController(gaussian_filter, executor_cache=cache)
+        completed.set_enabled(True)
+        completed.request(source, param)
+        executors[0].requests[0][0].set_result(CompOut(result=source.copy()))
+        completed.close()
+
+        active = PreviewController(gaussian_filter, executor_cache=cache)
+        active.set_enabled(True)
+        active.request(source, param)
+        assert len(executors) == 1
+        active.close()
+        assert executors[0].closed
+
+        replacement = PreviewController(gaussian_filter, executor_cache=cache)
+        replacement.set_enabled(True)
+        replacement.request(source, param)
+        assert len(executors) == 2
+        replacement.close()
+        cache.close()
 
 
 def test_dialog_is_opt_in_and_transactional():
@@ -148,6 +193,78 @@ def test_dialog_is_opt_in_and_transactional():
         assert accepted.preview.controller._executor is None
 
 
+def test_preview_busy_overlay_tracks_request_queue():
+    """Delayed progress avoids flicker and covers the full request queue."""
+    from qtpy.QtTest import QTest
+
+    with qt_app_context():
+        executor = FakeExecutor()
+        source = create_signal("Source", np.arange(10.0), np.arange(10.0))
+        set_number(source, 1)
+        dialog = ProcessingPreviewDialog(
+            GaussianParam.create(sigma=1.0),
+            gaussian_filter,
+            [source],
+            controller_factory=lambda function, parent: PreviewController(
+                function, parent, executor_factory=lambda: executor
+            ),
+        )
+        preview = dialog.preview
+        assert preview.busy_overlay.isHidden()
+        assert preview.busy_progress.minimum() == 0
+        assert preview.busy_progress.maximum() == 0
+
+        preview.enabled.setChecked(True)
+        assert preview.busy_overlay.isHidden()
+        assert preview._busy_overlay_timer.isActive()
+        executor.requests[0][0].set_result(CompOut(result=source.copy()))
+        preview.controller.poll()
+        assert preview.busy_overlay.isHidden()
+        assert not preview._busy_overlay_timer.isActive()
+        QTest.qWait(preview._busy_overlay_timer.interval() + 50)
+        assert preview.busy_overlay.isHidden()
+
+        field = dialog.edit_layout.get_terminal_widgets()[0]
+        field.edit.setText("2.0")
+        preview._timer.stop()
+        preview._request()
+        assert preview.busy_overlay.isHidden()
+        QTest.qWait(preview._busy_overlay_timer.interval() + 50)
+        assert not preview.busy_overlay.isHidden()
+
+        field.edit.setText("3.0")
+        preview._timer.stop()
+        preview._request()
+        executor.requests[1][0].set_result(CompOut(result=source.copy()))
+        preview.controller.poll()
+        assert len(executor.requests) == 3
+        assert not preview.busy_overlay.isHidden()
+
+        executor.requests[2][0].set_result(CompOut(result=source.copy()))
+        preview.controller.poll()
+        assert preview.busy_overlay.isHidden()
+
+        field.edit.setText("4.0")
+        preview._timer.stop()
+        preview._request()
+        preview._show_busy_overlay()
+        assert not preview.busy_overlay.isHidden()
+        executor.requests[3][0].set_result(CompOut(error_msg="preview error"))
+        preview.controller.poll()
+        assert preview.busy_overlay.isHidden()
+        assert not preview.details.isHidden()
+
+        field.edit.setText("5.0")
+        preview._timer.stop()
+        preview._request()
+        assert preview._busy_overlay_timer.isActive()
+        preview.close_preview()
+        assert preview.busy_overlay.isHidden()
+        assert not preview._busy_overlay_timer.isActive()
+        assert executor.closed
+        dialog.reject()
+
+
 def test_processor_cancel_and_accept(monkeypatch):
     """Cancel keeps defaults and objects; OK uses normal processing for the lot."""
     from datalab.config import Conf
@@ -209,6 +326,45 @@ def test_processor_cancel_and_accept(monkeypatch):
             assert remembered.sigma == 2.0
 
 
+def test_processor_reuses_completed_executor_between_dialogs(monkeypatch):
+    """Successive processor dialogs share the window's idle executor."""
+    from datalab.config import Conf
+    from datalab.tests import datalab_test_app_context
+    from datalab.widgets import processingpreview
+
+    executor = FakeExecutor()
+    with qt_app_context(), Conf.process_isolation_enabled.context(False):
+        with datalab_test_app_context() as window:
+            panel = window.signalpanel
+            source = create_signal("Source", np.arange(20.0), np.sin(np.arange(20.0)))
+            panel.add_object(source)
+            window.preview_executor_cache.reset()
+            window.preview_executor_cache._executor_factory = lambda: executor
+
+            def complete_and_reject(dialog):
+                dialog.preview.enabled.setChecked(True)
+                future = executor.requests[-1][0]
+                future.set_result(
+                    CompOut(result=gaussian_filter(source, dialog.instance))
+                )
+                dialog.preview.controller.poll()
+                dialog.reject()
+                return 0
+
+            monkeypatch.setattr(processingpreview, "exec_dialog", complete_and_reject)
+            for sigma in (1.0, 2.0):
+                panel.processor.compute_1_to_1(
+                    gaussian_filter,
+                    param=GaussianParam.create(sigma=sigma),
+                    title="Gaussian filter",
+                    edit=True,
+                )
+
+            assert len(executor.requests) == 2
+            assert not executor.closed
+        assert executor.closed
+
+
 def test_processor_reuses_only_current_single_object_preview(monkeypatch):
     """OK reuses one current preview but computes a multi-selection normally."""
     from datalab.config import Conf
@@ -221,6 +377,8 @@ def test_processor_reuses_only_current_single_object_preview(monkeypatch):
             source = create_signal("Source", np.arange(20.0), np.sin(np.arange(20.0)))
             panel.add_object(source)
             executor = FakeExecutor()
+            window.preview_executor_cache.reset()
+            window.preview_executor_cache._executor_factory = lambda: executor
             nominal_calls = []
 
             def counted_filter(src, param):
@@ -228,7 +386,6 @@ def test_processor_reuses_only_current_single_object_preview(monkeypatch):
                 return gaussian_filter(src, param)
 
             def accept_current_preview(dialog):
-                dialog.preview.controller._executor_factory = lambda: executor
                 dialog.preview.enabled.setChecked(True)
                 assert len(executor.requests) == 1
                 preview_result = gaussian_filter(source, dialog.instance)
@@ -259,9 +416,10 @@ def test_processor_reuses_only_current_single_object_preview(monkeypatch):
             panel.add_object(other)
             panel.objview.select_objects([source, other])
             multi_executor = FakeExecutor()
+            window.preview_executor_cache.reset()
+            window.preview_executor_cache._executor_factory = lambda: multi_executor
 
             def accept_multi_preview(dialog):
-                dialog.preview.controller._executor_factory = lambda: multi_executor
                 dialog.preview.enabled.setChecked(True)
                 assert len(multi_executor.requests) == 1
                 preview_source = dialog.preview.sources[0]
@@ -337,9 +495,25 @@ def test_processing_tab_debounces_valid_released_editor(monkeypatch):
             applied = []
             editor.SIG_APPLY_BUTTON_CLICKED.disconnect()
             editor.SIG_APPLY_BUTTON_CLICKED.connect(lambda: applied.append(True))
-            prop._ObjectProp__set_auto_recompute_enabled(True)
-            timer = prop._ObjectProp__auto_recompute_timer
+            auto_cb = editor.findChild(QW.QCheckBox, "auto_recompute_on_edit")
+            assert auto_cb is not None
+            assert not auto_cb.icon().isNull()
+            form_layout = editor.edit.layout
+            auto_row, auto_column, _row_span, auto_column_span = (
+                form_layout.getItemPosition(form_layout.indexOf(auto_cb))
+            )
+            apply_row, _column, _row_span, _column_span = form_layout.getItemPosition(
+                form_layout.indexOf(editor.apply_button)
+            )
             field = editor.edit.get_terminal_widgets()[0]
+            _row, field_column, _row_span, _column_span = form_layout.getItemPosition(
+                form_layout.indexOf(field.group)
+            )
+            assert auto_row == apply_row + 1
+            assert auto_column == field_column
+            assert auto_column_span == form_layout.columnCount() - auto_column
+            auto_cb.setChecked(True)
+            timer = prop._ObjectProp__auto_recompute_timer
             field.edit.setText("2.0")
             assert timer.isActive()
             editor._slider_gesture(True)

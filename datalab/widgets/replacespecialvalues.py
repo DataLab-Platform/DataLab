@@ -295,11 +295,16 @@ class ReplaceSpecialValuesDialog(QW.QDialog):
         if self.preview is not None:
             self.preview.slider_gesture(pressed)
 
-    def attach_preview(self, function, sources) -> None:
+    def attach_preview(self, function, sources, controller_factory=None) -> None:
         """Compose the shared preview without replacing this custom editor."""
         from datalab.widgets.processingpreview import ProcessingPreviewWidget
 
-        self.preview = ProcessingPreviewWidget(function, sources, self)
+        if controller_factory is None:
+            self.preview = ProcessingPreviewWidget(function, sources, self)
+        else:
+            self.preview = ProcessingPreviewWidget(
+                function, sources, self, controller_factory
+            )
         self.preview.editor = self.edit_layout
         self.preview.enabled.setEnabled(self._can_apply)
         self.preview.source_combo.currentIndexChanged.connect(self._update_counts)

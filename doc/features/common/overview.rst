@@ -149,6 +149,12 @@ drags are throttled; large data and expensive algorithms may take longer to
 update. The preview shows only the result, with its own axes and units, including
 when an image processing returns a signal.
 
+Starting the first preview creates a dedicated process. After a preview has
+finished, DataLab keeps this process ready for later preview dialogs, including
+when switching between signal and image processing. Closing a dialog while a
+preview is still running stops that process; the next preview then performs a
+fresh startup. Reloading plugins also discards the cached preview process.
+
 **Cancel** discards the draft parameters and stops the preview. With one source,
 **OK** reuses a completed, up-to-date preview once and publishes it through the
 normal processing path, including history. If the preview is still running or

@@ -54,6 +54,11 @@ Live preview compatibility
   Unknown custom ``DataSet.edit`` implementations and alternate guidata
   backends are not replaced.
 
+  The dedicated preview process may be reused between dialogs. Plugin functions
+  must not assume a fresh Python interpreter for each preview: process-local
+  module state may persist until a preview is cancelled while running, plugins
+  are reloaded, or DataLab exits.
+
 Where to put a plugin?
 ----------------------
 

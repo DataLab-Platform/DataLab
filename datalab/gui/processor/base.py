@@ -1855,6 +1855,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 self.mainwindow,
                 allowed,
                 preview_results,
+                executor_cache=self.mainwindow.preview_executor_cache,
             ):
                 return
             if any(

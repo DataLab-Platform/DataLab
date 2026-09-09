@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import multiprocessing
+import os
 import time
 
 import numpy as np
@@ -11,7 +12,30 @@ from sigima.params import GaussianParam
 from sigima.proc.signal import gaussian_filter
 
 from datalab.gui.processor import base
-from datalab.gui.processor.preview import PreviewExecutor
+from datalab.gui.processor.preview import PreviewExecutor, PreviewExecutorCache
+
+
+class FakePreviewExecutor:
+    """Record cache lifecycle operations without starting processes."""
+
+    def __init__(self):
+        self.close_count = 0
+
+    def close(self):
+        """Record resource disposal."""
+        self.close_count += 1
+
+
+class ExecutorFactory:
+    """Create and retain fake executors for assertions."""
+
+    def __init__(self):
+        self.executors = []
+
+    def __call__(self):
+        executor = FakePreviewExecutor()
+        self.executors.append(executor)
+        return executor
 
 
 def slow_identity(source, started):
@@ -19,6 +43,82 @@ def slow_identity(source, started):
     started.send(True)
     time.sleep(30)
     return source
+
+
+def get_process_id():
+    """Return the spawned worker process identifier."""
+    return os.getpid()
+
+
+def test_cache_reuses_one_idle_executor():
+    """An idle executor is reused and never leased to two callers."""
+    factory = ExecutorFactory()
+    cache = PreviewExecutorCache(factory)
+
+    first = cache.acquire()
+    second = cache.acquire()
+    assert first is not second
+    cache.release(first)
+    cache.release(second)
+    assert first.close_count == 0
+    assert second.close_count == 1
+
+    assert cache.acquire() is first
+    cache.release(first)
+    cache.release(first)
+    assert first.close_count == 0
+    cache.close()
+    cache.close()
+    assert first.close_count == 1
+
+
+def test_cache_reset_rejects_previous_generation():
+    """Reset closes idle state and prevents late returns from repopulating it."""
+    factory = ExecutorFactory()
+    cache = PreviewExecutorCache(factory)
+
+    leased = cache.acquire()
+    cache.reset()
+    cache.release(leased)
+    assert leased.close_count == 1
+
+    idle = cache.acquire()
+    cache.release(idle)
+    cache.reset()
+    assert idle.close_count == 1
+    replacement = cache.acquire()
+    assert replacement not in (leased, idle)
+
+    cache.close()
+    assert replacement.close_count == 1
+    try:
+        cache.acquire()
+    except RuntimeError:
+        pass
+    else:
+        raise AssertionError("Closed cache accepted an acquisition")
+
+
+def test_cache_reuses_spawned_process():
+    """Completed leases preserve the process across preview sessions."""
+    cache = PreviewExecutorCache()
+    production_pool = base.POOL
+    executor = cache.acquire()
+    try:
+        first = executor.submit(get_process_id, ()).result(timeout=60)
+        assert not first.error_msg, first.error_msg
+        cache.release(executor)
+
+        reused = cache.acquire()
+        assert reused is executor
+        second = reused.submit(get_process_id, ()).result(timeout=60)
+        assert not second.error_msg, second.error_msg
+        assert second.result == first.result
+        cache.release(reused)
+        assert base.POOL is production_pool
+    finally:
+        cache.close()
+        executor.close(wait=True)
 
 
 def test_private_pool_result_and_cleanup():

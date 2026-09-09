@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import functools
 from collections.abc import Callable, Sequence
 
 from guidata.configtools import get_icon
@@ -36,6 +37,7 @@ def edit_processing_parameters(
     parent,
     preview_enabled=True,
     preview_result=None,
+    executor_cache=None,
 ) -> bool:
     """Preserve alternate backends and custom editors outside the standard form."""
     from datalab.widgets.replacespecialvalues import (
@@ -45,14 +47,19 @@ def edit_processing_parameters(
 
     if not preview_enabled or get_handler("edit_dataset") is not None:
         return bool(instance.edit(parent=parent))
+    controller_factory = functools.partial(
+        PreviewController, executor_cache=executor_cache
+    )
     if type(instance) in (
         ReplaceSpecialValuesSignalParamDL,
         ReplaceSpecialValuesImageParamDL,
     ):
         dialog = instance.create_dialog(parent=parent)
-        dialog.attach_preview(function, sources)
+        dialog.attach_preview(function, sources, controller_factory)
     elif type(instance).edit is DataSet.edit:
-        dialog = ProcessingPreviewDialog(instance, function, sources, parent)
+        dialog = ProcessingPreviewDialog(
+            instance, function, sources, parent, controller_factory
+        )
     else:
         return bool(instance.edit(parent=parent))
     try:
@@ -136,6 +143,41 @@ class ProcessingPreviewWidget(QW.QWidget):
         disabled_layout.addWidget(disabled_label)
         disabled_layout.addStretch()
         self._stage_layout.addWidget(self.disabled_overlay, 0, 0)
+        self.busy_overlay = QW.QFrame(self._stage)
+        self.busy_overlay.setObjectName("preview_busy_overlay")
+        self.busy_overlay.setStyleSheet(
+            "QFrame#preview_busy_overlay {"
+            " background-color: rgba(64, 80, 96, 112);"
+            " border: none;"
+            "}"
+        )
+        busy_layout = QW.QVBoxLayout(self.busy_overlay)
+        busy_layout.addStretch()
+        busy_panel = QW.QFrame(self.busy_overlay)
+        busy_panel.setObjectName("preview_busy_panel")
+        busy_panel.setFrameShape(QW.QFrame.StyledPanel)
+        busy_panel.setFrameShadow(QW.QFrame.Raised)
+        busy_panel.setAutoFillBackground(True)
+        busy_panel_layout = QW.QVBoxLayout(busy_panel)
+        busy_label = QW.QLabel(_("Computing preview..."), busy_panel)
+        busy_label.setAlignment(QC.Qt.AlignCenter)
+        busy_label.setStyleSheet("font-weight: 600;")
+        busy_panel_layout.addWidget(busy_label)
+        self.busy_progress = QW.QProgressBar(busy_panel)
+        self.busy_progress.setObjectName("preview_busy_progress")
+        self.busy_progress.setRange(0, 0)
+        self.busy_progress.setTextVisible(False)
+        self.busy_progress.setMinimumWidth(220)
+        busy_panel_layout.addWidget(self.busy_progress)
+        busy_layout.addWidget(busy_panel, 0, QC.Qt.AlignCenter)
+        busy_layout.addStretch()
+        self._stage_layout.addWidget(self.busy_overlay, 0, 0)
+        self.busy_overlay.hide()
+        self._busy = False
+        self._busy_overlay_timer = QC.QTimer(self)
+        self._busy_overlay_timer.setSingleShot(True)
+        self._busy_overlay_timer.setInterval(200)
+        self._busy_overlay_timer.timeout.connect(self._show_busy_overlay)
         self.status = QW.QLabel()
         self.status.setWordWrap(True)
         self.status.setTextFormat(QC.Qt.PlainText)
@@ -149,6 +191,7 @@ class ProcessingPreviewWidget(QW.QWidget):
         self.source_combo.currentIndexChanged.connect(self._source_changed)
         self.controller.SIG_RESULT.connect(self._show_result)
         self.controller.SIG_ERROR.connect(self._show_error)
+        self.controller.SIG_BUSY.connect(self._set_busy)
         if self.sources:
             self._render(self.sources[0])
         self._set_disabled_appearance(True)
@@ -157,7 +200,27 @@ class ProcessingPreviewWidget(QW.QWidget):
         """Dim the current graph while live preview is disabled."""
         self.disabled_overlay.setVisible(disabled)
         if disabled:
+            self._busy = False
+            self._busy_overlay_timer.stop()
+            self.busy_overlay.hide()
             self.disabled_overlay.raise_()
+
+    def _set_busy(self, busy: bool) -> None:
+        """Delay progress feedback so fast previews do not cause flicker."""
+        if busy:
+            if not self._busy:
+                self._busy = True
+                self._busy_overlay_timer.start()
+            return
+        self._busy = False
+        self._busy_overlay_timer.stop()
+        self.busy_overlay.hide()
+
+    def _show_busy_overlay(self) -> None:
+        """Show delayed progress feedback while computation is still active."""
+        if self._busy and self.enabled.isChecked():
+            self.busy_overlay.show()
+            self.busy_overlay.raise_()
 
     def _toggle(self, checked: bool) -> None:
         self._timer.stop()
