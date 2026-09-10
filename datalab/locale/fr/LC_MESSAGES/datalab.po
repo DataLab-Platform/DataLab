@@ -2179,6 +2179,9 @@ msgstr "En mode 'pairwise', vous devez sélectionner des objets dans au moins de
 msgid "In pairwise mode, you need to select the same number of objects in each group."
 msgstr "En mode 'pairwise', vous devez sélectionner le même nombre d'objets dans chaque groupe."
 
+msgid "A preview source was removed. The processing was cancelled."
+msgstr "Un objet source de l'aperçu a été supprimé. Le traitement a été annulé."
+
 #, python-format
 msgid "Calculating: %s"
 msgstr "Calcul : %s"
@@ -2460,6 +2463,9 @@ msgstr "Seuillage Triangle"
 
 msgid "Yen thresholding"
 msgstr "Seuillage Yen"
+
+msgid "Brightness and contrast"
+msgstr "Luminosité et contraste"
 
 msgid "Gamma correction"
 msgstr "Correction gamma"
@@ -3839,6 +3845,30 @@ msgstr "Configuration utilisateur"
 msgid "Plugins and I/O features"
 msgstr "Plugins et fonctionnalités d'entrée/sortie"
 
+msgid "Preview source"
+msgstr "Source de l'aperçu"
+
+msgid "Preview disabled"
+msgstr "Aperçu désactivé"
+
+msgid "Computing preview..."
+msgstr "Calcul de l'aperçu..."
+
+msgid "Invalid parameters"
+msgstr "Paramètres invalides"
+
+msgid "Updating preview..."
+msgstr "Mise à jour de l'aperçu..."
+
+msgid "Preview failed"
+msgstr "Échec de l'aperçu"
+
+msgid "This result cannot be previewed."
+msgstr "Ce résultat ne peut pas être prévisualisé."
+
+msgid "Preview up to date"
+msgstr "Aperçu à jour"
+
 msgid "Kernel / Mask preview"
 msgstr "Aperçu du noyau / masque"
 
@@ -4081,33 +4111,6 @@ msgstr "Image"
 msgid "Dimensions"
 msgstr "Dimensions"
 
-msgid "A preview source was removed. The processing was cancelled."
-msgstr "Un objet source de l'aperçu a été supprimé. Le traitement a été annulé."
-
-msgid "Preview source"
-msgstr "Source de l'aperçu"
-
-msgid "Preview disabled"
-msgstr "Aperçu désactivé"
-
-msgid "Invalid parameters"
-msgstr "Paramètres invalides"
-
-msgid "Updating preview..."
-msgstr "Mise à jour de l'aperçu..."
-
-msgid "Computing preview..."
-msgstr "Calcul de l'aperçu..."
-
-msgid "Preview failed"
-msgstr "Échec de l'aperçu"
-
-msgid "This result cannot be previewed."
-msgstr "Ce résultat ne peut pas être prévisualisé."
-
-msgid "Preview up to date"
-msgstr "Aperçu à jour"
-
 msgid "Minimum value"
 msgstr "Valeur minimum"
 
@@ -4156,8 +4159,3 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
 
-msgid "Brightness and contrast"
-msgstr "Luminosité et contraste"
-
-msgid "This feature requires exactly one selected object."
-msgstr "Cette fonctionnalité nécessite de sélectionner exactement un objet."
