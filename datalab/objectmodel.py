@@ -36,8 +36,7 @@ a container for `SignalObj` and `ImageObj` instances.
 from __future__ import annotations
 
 import re
-from collections.abc import Iterator
-from typing import Callable
+from collections.abc import Callable, Iterator
 from uuid import uuid4
 
 from sigima import ImageObj, SignalObj
@@ -93,12 +92,72 @@ def get_short_id(obj: SignalObj | ImageObj | ObjectGroup) -> str:
     return f"{obj.PREFIX}{get_number(obj):03d}"
 
 
+UUID_DISPLAY_LENGTH = 8
+UUID_REGEX = re.compile(
+    r"\b[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\b", re.IGNORECASE
+)
+
+
+def get_short_uuid(obj_or_uuid: SignalObj | ImageObj | ObjectGroup | str) -> str:
+    """Return the eight-character display prefix of an UUID."""
+    uuid = obj_or_uuid if isinstance(obj_or_uuid, str) else get_uuid(obj_or_uuid)
+    return uuid[:UUID_DISPLAY_LENGTH]
+
+
+def get_uuid_display_id(obj: SignalObj | ImageObj | ObjectGroup) -> str:
+    """Return an object's own display identity in ``#<UUID8>`` form."""
+    return f"#{get_short_uuid(obj)}"
+
+
+def find_uuids_in_title(title: str) -> list[tuple[int, int, str]]:
+    """Return UUID references found in a canonical object title.
+
+    Args:
+        title: Title string to scan
+
+    Returns:
+        List of ``(start, end, uuid)`` tuples sorted by ``start``.
+    """
+    return [
+        (match.start(), match.end(), match.group(0))
+        for match in UUID_REGEX.finditer(title)
+    ]
+
+
+def render_title(
+    title: str, uuid_title_resolver: Callable[[str], str | None] | None = None
+) -> str:
+    """Render UUID references as prefixes or resolved source titles.
+
+    Args:
+        title: Canonical title containing full UUID references
+        uuid_title_resolver: Optional callback returning a source title for a UUID
+
+    Returns:
+        Display title containing source titles or shortened UUID references.
+    """
+    for start, end, uuid in reversed(find_uuids_in_title(title)):
+        replacement = None
+        if uuid_title_resolver is not None:
+            replacement = uuid_title_resolver(uuid)
+        if replacement:
+            replacement = shorten_uuids_in_title(replacement)
+        else:
+            replacement = get_short_uuid(uuid)
+        title = title[:start] + replacement + title[end:]
+    return title
+
+
+def shorten_uuids_in_title(title: str) -> str:
+    """Render canonical UUID references as eight-character prefixes."""
+    return render_title(title)
+
+
 def patch_title_with_ids(
     dst_obj: SignalObj | ImageObj,
     src_objs: list[SignalObj] | list[ImageObj],
-    id_func: Callable,
 ) -> None:
-    """Patch object title with short IDs of source objects
+    """Patch an object title with canonical source UUIDs.
 
     Destination object's title has been set to a string containing placeholders
     (e.g. "integral({0})"), by `sigima` computation function using a generic mecanism
@@ -107,9 +166,8 @@ def patch_title_with_ids(
     Args:
         dst_obj: destination object
         src_objs: list of source objects
-        id_func: function to get ID from object (e.g. `short_id` or `get_uuid`)
     """
-    ids = [id_func(obj) for obj in src_objs]
+    ids = [get_uuid(obj) for obj in src_objs]
     title = dst_obj.title
     assert isinstance(title, str), "Title must be a string"
     try:
@@ -123,6 +181,7 @@ def patch_title_with_ids(
 #: Regex matching short IDs as embedded in computation titles
 #: (e.g. ``s001``, ``i012``, ``gs003``, ``gi007``).
 SHORT_ID_REGEX = re.compile(r"\b(g?[si])(\d{3})\b")
+LEGACY_GROUP_SHORT_ID_REGEX = re.compile(r"\bg\d{3}\b")
 
 
 def find_short_ids_in_title(title: str) -> list[tuple[int, int, str]]:
@@ -138,6 +197,36 @@ def find_short_ids_in_title(title: str) -> list[tuple[int, int, str]]:
     return [(m.start(), m.end(), m.group(0)) for m in SHORT_ID_REGEX.finditer(title)]
 
 
+def find_legacy_group_short_ids_in_title(
+    title: str,
+) -> list[tuple[int, int, str]]:
+    """Return legacy ``gNNN`` group references found in a title."""
+    return [
+        (match.start(), match.end(), match.group(0))
+        for match in LEGACY_GROUP_SHORT_ID_REGEX.finditer(title)
+    ]
+
+
+def remap_title_references(title: str, reference_remap: dict[str, str]) -> str:
+    """Replace known UUID and legacy short-ID references in a title.
+
+    Args:
+        title: Canonical or legacy title to update
+        reference_remap: Mapping from serialized references to canonical UUIDs
+
+    Returns:
+        Title with every known reference replaced by its canonical UUID.
+    """
+    matches = find_short_ids_in_title(title)
+    matches.extend(find_legacy_group_short_ids_in_title(title))
+    matches.extend(find_uuids_in_title(title))
+    for start, end, reference in sorted(matches, reverse=True):
+        replacement = reference_remap.get(reference)
+        if replacement is not None:
+            title = title[:start] + replacement + title[end:]
+    return title
+
+
 class ObjectGroup:
     """Represents a DataLab object group
 
@@ -145,12 +234,19 @@ class ObjectGroup:
         title: group title
         model: object model
         prefix: prefix for short ID ("gs" for signal groups, "gi" for image groups)
+        group_uuid: optional group UUID. If None, a new UUID is generated.
     """
 
-    def __init__(self, title: str, model: ObjectModel, prefix: str) -> None:
+    def __init__(
+        self,
+        title: str,
+        model: ObjectModel,
+        prefix: str,
+        group_uuid: str | None = None,
+    ) -> None:
         self.model = model
         self.prefix = prefix  # Instance-specific prefix
-        self.uuid: str = str(uuid4())  # Group uuid
+        self.uuid: str = group_uuid or str(uuid4())  # Group uuid
         self.number: int = 0  # Group number (used for short ID)
         self.__objects: list[str] = []  # list of object uuids
         self.__title: str = title
@@ -195,17 +291,13 @@ class ObjectGroup:
 
     def insert(self, index: int, obj: SignalObj | ImageObj) -> None:
         """Insert object at index"""
-        self.model.replace_short_ids_by_uuids_in_titles([obj])
         self.__objects.insert(index, get_uuid(obj))
         self.model.reset_short_ids()
-        self.model.replace_uuids_by_short_ids_in_titles()
 
     def remove(self, obj: SignalObj | ImageObj) -> None:
         """Remove object from group"""
-        self.model.replace_short_ids_by_uuids_in_titles()
         self.__objects.remove(get_uuid(obj))
         self.model.reset_short_ids()
-        self.model.replace_uuids_by_short_ids_in_titles()
 
     def clear(self) -> None:
         """Clear group"""
@@ -276,15 +368,17 @@ class ObjectModel:
         return get_uuid(obj) in self._objects
 
     def has_uuid(self, uuid: str) -> bool:
-        """Check if an object with the given UUID exists in the model
+        """Check if an object or group with the given UUID exists in the model.
 
         Args:
             uuid: UUID string to check
 
         Returns:
-            True if an object with this UUID exists, False otherwise
+            True if an object or group with this UUID exists, False otherwise
         """
-        return uuid in self._objects
+        return uuid in self._objects or any(
+            group.uuid == uuid for group in self._groups
+        )
 
     def clear(self) -> None:
         """Clear model"""
@@ -399,11 +493,17 @@ class ObjectModel:
 
         Raises:
             KeyError: if group with title not found
+            ValueError: if multiple groups have the same title
         """
-        for group in self._groups:
-            if group.title == title:
-                return group
-        raise KeyError(f"Group with title '{title}' not found")
+        matches = [group for group in self._groups if group.title == title]
+        if not matches:
+            raise KeyError(f"Group with title '{title}' not found")
+        if len(matches) > 1:
+            match_ids = ", ".join(get_short_id(group) for group in matches)
+            raise ValueError(
+                f"Group title '{title}' is ambiguous; matches: {match_ids}"
+            )
+        return matches[0]
 
     def get_group_from_object(self, obj: SignalObj | ImageObj) -> ObjectGroup:
         """Return group containing object
@@ -428,16 +528,17 @@ class ObjectModel:
             return self._groups
         return [group for group in self._groups if get_uuid(group) in uuids]
 
-    def add_group(self, title: str) -> ObjectGroup:
+    def add_group(self, title: str, group_uuid: str | None = None) -> ObjectGroup:
         """Add group to model
 
         Args:
             title: group title
+            group_uuid: optional group UUID. If None, a new UUID is generated.
 
         Returns:
             Created group object
         """
-        group = ObjectGroup(title, self, self._group_prefix)
+        group = ObjectGroup(title, self, self._group_prefix, group_uuid)
         self._groups.append(group)
         self.reset_short_ids()
         return group
@@ -465,7 +566,6 @@ class ObjectModel:
 
     def remove_group(self, group: ObjectGroup) -> None:
         """Remove group from model"""
-        self.replace_short_ids_by_uuids_in_titles()
         self._groups.remove(group)
         for obj in group:
             remove_obj = True
@@ -476,11 +576,9 @@ class ObjectModel:
             if remove_obj:
                 del self._objects[get_uuid(obj)]
         self.reset_short_ids()
-        self.replace_uuids_by_short_ids_in_titles()
 
     def add_object(self, obj: SignalObj | ImageObj, group_id: str) -> None:
         """Add object to model"""
-        self.replace_short_ids_by_uuids_in_titles([obj])
         self._objects[get_uuid(obj)] = obj
         onb = 0
         for group in self._groups:
@@ -492,7 +590,6 @@ class ObjectModel:
         else:
             raise KeyError(f"Group with uuid '{group_id}' not found")
         self.reset_short_ids()
-        self.replace_uuids_by_short_ids_in_titles()
 
     def remove_object(self, obj: SignalObj | ImageObj) -> None:
         """Remove object from model"""
@@ -587,73 +684,17 @@ class ObjectModel:
 
         Raises:
             KeyError: if object with title not found
+            ValueError: if multiple objects have the same title
         """
-        for obj in self._objects.values():
-            if obj.title == title:
-                return obj
-        raise KeyError(f"Object with title '{title}' not found")
-
-    def __get_group_object_mapping_to_shortid(self) -> dict[str, str]:
-        """Return dictionary mapping group/object uuids to their short ID"""
-        mapping = {}
-        for group in self._groups:
-            mapping[get_uuid(group)] = get_short_id(group)
-            for obj in group:
-                mapping[get_uuid(obj)] = get_short_id(obj)
-        return mapping
-
-    def replace_short_ids_by_uuids_in_titles(
-        self, other_objects: tuple[SignalObj | ImageObj] | None = None
-    ) -> None:
-        """Replace short IDs by uuids in titles
-
-        Args:
-            other_objects: tuple of other objects to consider for short ID replacement
-
-        .. note::
-
-            This method is called before reorganizing groups or objects. It replaces the
-            short IDs in titles by the uuids. This is needed because the short IDs are
-            used to reflect in the title the operation performed on the object/group,
-            e.g. "fft(s001)" or "g001 + g002". But when reorganizing groups or objects,
-            the short IDs may change, so we need to replace them by the uuids, which are
-            stable. Once the reorganization is done, we will replace the uuids by the
-            new short IDs thanks to the `__replace_uuids_by_short_ids_in_titles` method.
-        """
-        mapping = self.__get_group_object_mapping_to_shortid()
-        objs = self._objects.values()
-        if other_objects is not None:
-            objs = list(objs) + list(other_objects)
-        for obj in objs:
-            for obj_uuid, short_id in mapping.items():
-                obj.title = obj.title.replace(short_id, obj_uuid)
-        for group in self._groups:
-            for grp_uuid, short_id in mapping.items():
-                group.title = group.title.replace(short_id, grp_uuid)
-
-    def replace_uuids_by_short_ids_in_titles(self) -> None:
-        """Replace uuids by short IDs in titles
-
-        .. note::
-
-            This method is called after reorganizing groups or objects. It replaces
-            the uuids in titles by the short IDs.
-        """
-        mapping = self.__get_group_object_mapping_to_shortid()
-        for obj in self._objects.values():
-            for obj_uuid, short_id in mapping.items():
-                obj.title = obj.title.replace(obj_uuid, short_id)
-        for group in self._groups:
-            for grp_uuid, short_id in mapping.items():
-                group.title = group.title.replace(grp_uuid, short_id)
-        # Replace remaining UUIDs with f"{obj.PREFIX}xxx"
-        # (this may happen if groups or objects were removed in the meantime):
-        pattern = re.compile(r"\b[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}\b")
-        for obj in self._objects.values():
-            obj.title = pattern.sub(f"{obj.PREFIX}xxx", obj.title)
-        for group in self._groups:
-            for obj in group:
-                obj.title = pattern.sub(f"{obj.PREFIX}xxx", obj.title)
+        matches = [obj for obj in self._objects.values() if obj.title == title]
+        if not matches:
+            raise KeyError(f"Object with title '{title}' not found")
+        if len(matches) > 1:
+            match_ids = ", ".join(get_uuid_display_id(obj) for obj in matches)
+            raise ValueError(
+                f"Object title '{title}' is ambiguous; matches: {match_ids}"
+            )
+        return matches[0]
 
     def reorder_groups(self, group_ids: list[str]) -> None:
         """Reorder groups.
@@ -661,14 +702,8 @@ class ObjectModel:
         Args:
             group_ids: list of group uuids
         """
-        # Replace short IDs by uuids in titles:
-        self.replace_short_ids_by_uuids_in_titles()
-        # Reordering groups:
         self._groups = [self.get_group(group_id) for group_id in group_ids]
-        # Reset short IDs:
         self.reset_short_ids()
-        # Replace uuids by short IDs in titles:
-        self.replace_uuids_by_short_ids_in_titles()
 
     def reorder_objects(self, obj_ids: dict[str, list[str]]) -> None:
         """Reorder objects in groups.
@@ -676,15 +711,9 @@ class ObjectModel:
         Args:
             obj_ids: dict of group uuids and list of object uuids
         """
-        # Replace short IDs by uuids in titles:
-        self.replace_short_ids_by_uuids_in_titles()
-        # Reordering objects in groups:
         for group_id, obj_uuids in obj_ids.items():
             group = self.get_group(group_id)
             group.clear()
             for obj_uuid in obj_uuids:
                 group.append(self._objects[obj_uuid])
-        # Reset short IDs:
         self.reset_short_ids()
-        # Replace uuids by short IDs in titles:
-        self.replace_uuids_by_short_ids_in_titles()

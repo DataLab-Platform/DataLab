@@ -14,6 +14,7 @@ from __future__ import annotations
 from collections.abc import Iterator
 from typing import Any
 
+from plotpy.items import CurveItem, MaskedXYImageItem
 from sigimax.adapters_plotpy.objects.base import BaseObjPlotPyAdapter, TypePlotItem
 from sigimax.adapters_plotpy.objects.image import (
     ImageObjPlotPyAdapter as SGMXImageObjPlotPyAdapter,
@@ -28,6 +29,8 @@ from sigimax.adapters_plotpy.objects.signal import (
 from sigimax.adapters_plotpy.objects.signal import (
     SignalObjPlotPyAdapter as SGMXSignalObjPlotPyAdapter,
 )
+
+from datalab.objectmodel import shorten_uuids_in_title
 
 __all__ = [
     "CURVESTYLES",
@@ -83,6 +86,24 @@ class SignalObjPlotPyAdapter(SGMXSignalObjPlotPyAdapter):
     Extends the SigimaX signal adapter with DataLab geometry-result rendering.
     """
 
+    def make_item(self, update_from: CurveItem | None = None) -> CurveItem:
+        """Make a curve item with a display-safe title."""
+        item = super().make_item(update_from)
+        item.param.label = shorten_uuids_in_title(self.obj.title)
+        item.param.update_item(item)
+        return item
+
+    def update_item(self, item: CurveItem, data_changed: bool = True) -> None:
+        """Update a curve item and its displayed title."""
+        super().update_item(item, data_changed)
+        item.param.label = shorten_uuids_in_title(self.obj.title)
+        item.param.update_item(item)
+
+    def add_label_with_title(self, title: str | None = None) -> None:
+        """Add a title annotation with shortened UUID references."""
+        title = self.obj.title if title is None else title
+        super().add_label_with_title(shorten_uuids_in_title(title))
+
     def iterate_metadata_shape_items(
         self, key: str, value: Any, fmt: str, lbl: bool
     ) -> Iterator:
@@ -95,6 +116,26 @@ class ImageObjPlotPyAdapter(SGMXImageObjPlotPyAdapter):
 
     Extends the SigimaX image adapter with DataLab geometry-result rendering.
     """
+
+    def make_item(
+        self, update_from: MaskedXYImageItem | None = None
+    ) -> MaskedXYImageItem:
+        """Make an image item with a display-safe title."""
+        item = super().make_item(update_from)
+        item.param.label = shorten_uuids_in_title(self.obj.title)
+        item.param.update_item(item)
+        return item
+
+    def update_item(self, item: MaskedXYImageItem, data_changed: bool = True) -> None:
+        """Update an image item and its displayed title."""
+        super().update_item(item, data_changed)
+        item.param.label = shorten_uuids_in_title(self.obj.title)
+        item.param.update_item(item)
+
+    def add_label_with_title(self, title: str | None = None) -> None:
+        """Add a title annotation with shortened UUID references."""
+        title = self.obj.title if title is None else title
+        super().add_label_with_title(shorten_uuids_in_title(title))
 
     def iterate_metadata_shape_items(
         self, key: str, value: Any, fmt: str, lbl: bool
