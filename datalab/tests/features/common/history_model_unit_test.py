@@ -782,6 +782,8 @@ def test_recompute_in_place_skips_decode_failed_action() -> None:
 def test_action_copy_remaps_all_uuid_references() -> None:
     """Copy an action independently and rewrite every captured UUID field."""
     action = build_history_action()
+    action.kwargs["source_uuid"] = "source-uuid"
+    action.kwargs["output_uuid"] = "output-uuid"
     action.plugin_origin = {
         "module": "example.plugin",
         "metadata": {"entry_points": ["difference"]},
@@ -801,12 +803,39 @@ def test_action_copy_remaps_all_uuid_references() -> None:
         "signal": {"new-source": {"shape": [10], "ndim": 1, "title": "Source"}}
     }
     assert copied.kwargs["obj2_uuids"] == "new-second"
+    assert copied.kwargs["source_uuid"] == "new-source"
+    assert copied.kwargs["output_uuid"] == "new-output"
     assert copied.output_uuids == ["new-output"]
     assert copied.plugin_origin == action.plugin_origin
     copied.state.object_metadata["signal"]["new-source"]["shape"] = [20]
     copied.plugin_origin["metadata"]["entry_points"].append("average")
     assert action.state.object_metadata["signal"]["source-uuid"]["shape"] == [10]
     assert action.plugin_origin["metadata"]["entry_points"] == ["difference"]
+
+
+def test_action_copy_remaps_cross_panel_outputs() -> None:
+    """Remap image processing outputs from their owning signal panel."""
+    state = WorkspaceState()
+    state.selection = {"image": ["image-source"]}
+    action = HistoryAction(
+        title="Line profile",
+        kind=HistoryAction.KIND_COMPUTE,
+        panel_str="image",
+        func_name="line_profile",
+        pattern="1_to_1",
+        state=state,
+    )
+    action.output_uuids = ["signal-output"]
+
+    copied = action.copy_with_uuid_remap(
+        {
+            "image": {"image-source": "new-image-source"},
+            "signal": {"signal-output": "new-signal-output"},
+        }
+    )
+
+    assert copied.state.selection == {"image": ["new-image-source"]}
+    assert copied.output_uuids == ["new-signal-output"]
 
 
 def _make_analysis_action(obj_uuid: str) -> HistoryAction:
