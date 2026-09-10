@@ -12,13 +12,14 @@ from uuid import uuid4
 from qtpy.compat import getopenfilename, getsavefilename
 
 from datalab.config import Conf, _
-from datalab.gui.processor.base import (
-    PROCESSING_PARAMETERS_OPTION,
-    ProcessingParameters,
-)
+from datalab.gui.panel.base import H5ImportBatch
 from datalab.h5.native import NativeH5Reader, NativeH5Writer
 from datalab.history import HistorySession
-from datalab.objectmodel import get_uuid
+from datalab.objectmodel import (
+    LEGACY_GROUP_SHORT_ID_REGEX,
+    SHORT_ID_REGEX,
+    get_uuid,
+)
 from datalab.utils.qthelpers import qt_try_loadsave_file, save_restore_stds
 
 if TYPE_CHECKING:
@@ -28,11 +29,11 @@ if TYPE_CHECKING:
 
 @dataclass
 class HistoryImportRegistry:
-    """Imported objects and their old-to-new UUID mappings."""
+    """Per-panel import batches and their old-to-new UUID mappings."""
 
     panel_map: dict[str, BaseDataPanel]
     uuid_remap: dict[str, dict[str, str]]
-    imported_by_pstr: dict[str, list[Any]]
+    import_batches: dict[str, H5ImportBatch]
 
 
 def save_to_dlhist_file(panel: HistoryPanel, filename: str | None = None) -> bool:
@@ -111,12 +112,15 @@ def open_dlhist_file(panel: HistoryPanel, filename: str | None = None) -> bool:
             else:
                 # Pristine workspace: load directly, preserving original UUIDs
                 # (reset_all=True) so that history references stay valid.
-                panel.mainwindow.signalpanel.deserialize_from_hdf5(
-                    reader, reset_all=True
-                )
-                panel.mainwindow.imagepanel.deserialize_from_hdf5(
-                    reader, reset_all=True
-                )
+                batches = [
+                    panel.mainwindow.signalpanel.deserialize_from_hdf5(
+                        reader, reset_all=True
+                    ),
+                    panel.mainwindow.imagepanel.deserialize_from_hdf5(
+                        reader, reset_all=True
+                    ),
+                ]
+                H5ImportBatch.finalize_imports(batches, refresh_panels=True)
                 panel.deserialize_from_hdf5(reader)
     return True
 
@@ -130,7 +134,10 @@ def create_import_registry(panel: HistoryPanel) -> HistoryImportRegistry:
     return HistoryImportRegistry(
         panel_map=panel_map,
         uuid_remap={panel_str: {} for panel_str in panel_map},
-        imported_by_pstr={panel_str: [] for panel_str in panel_map},
+        import_batches={
+            panel_str: H5ImportBatch(data_panel, {}, [], [])
+            for panel_str, data_panel in panel_map.items()
+        },
     )
 
 
@@ -153,10 +160,22 @@ def read_imported_group(
     registry: HistoryImportRegistry,
 ) -> None:
     """Read one object group and register its regenerated UUIDs."""
+    batch = registry.import_batches[panel_str]
     with reader.group(group_name):
         group = data_panel.add_group("")
         with reader.group("title"):
             group.title = reader.read_str()
+        new_group_uuid = get_uuid(group)
+        serialized_group_uuid = reader.read("uuid", default=None)
+        if isinstance(serialized_group_uuid, str) and serialized_group_uuid:
+            registry.uuid_remap[panel_str][serialized_group_uuid] = new_group_uuid
+            batch.reference_remap[serialized_group_uuid] = new_group_uuid
+        group_short_id = group_name.partition(":")[0]
+        if SHORT_ID_REGEX.fullmatch(
+            group_short_id
+        ) or LEGACY_GROUP_SHORT_ID_REGEX.fullmatch(group_short_id):
+            batch.reference_remap[group_short_id] = new_group_uuid
+        batch.groups.append(group)
         path = f"{data_panel.H5_PREFIX}/{group_name}"
         for object_name in reader.h5.get(path, []):
             obj = data_panel.deserialize_object_from_hdf5(
@@ -164,8 +183,12 @@ def read_imported_group(
             )
             old_uuid, new_uuid = assign_imported_uuid(obj)
             registry.uuid_remap[panel_str][old_uuid] = new_uuid
-            data_panel.add_object(obj, get_uuid(group), set_current=False)
-            registry.imported_by_pstr[panel_str].append(obj)
+            batch.reference_remap[old_uuid] = new_uuid
+            object_short_id = object_name.partition(":")[0]
+            if SHORT_ID_REGEX.fullmatch(object_short_id):
+                batch.reference_remap[object_short_id] = new_uuid
+            data_panel.add_object(obj, new_group_uuid, set_current=False)
+            batch.objects.append(obj)
         data_panel.selection_changed()
 
 
@@ -179,44 +202,6 @@ def read_imported_objects(
         with reader.group(data_panel.H5_PREFIX):
             for group_name in reader.h5.get(data_panel.H5_PREFIX, []):
                 read_imported_group(reader, data_panel, panel_str, group_name, registry)
-
-
-def remap_imported_object_sources(obj: Any, uuid_remap: dict[str, str]) -> None:
-    """Remap processing source UUIDs stored on one imported object."""
-    try:
-        parameters_dict = obj.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
-    except (AttributeError, ValueError):
-        return
-    if not parameters_dict:
-        return
-    try:
-        parameters = ProcessingParameters.from_dict(parameters_dict)
-    except (TypeError, ValueError, AttributeError):
-        return
-    changed = False
-    if parameters.source_uuid is not None and parameters.source_uuid in uuid_remap:
-        parameters.source_uuid = uuid_remap[parameters.source_uuid]
-        changed = True
-    if parameters.source_uuids is not None:
-        new_sources = [uuid_remap.get(uuid, uuid) for uuid in parameters.source_uuids]
-        if new_sources != parameters.source_uuids:
-            parameters.source_uuids = new_sources
-            changed = True
-    if changed:
-        try:
-            obj.set_metadata_option(PROCESSING_PARAMETERS_OPTION, parameters.to_dict())
-        except (AttributeError, ValueError):
-            pass
-
-
-def remap_imported_sources(registry: HistoryImportRegistry) -> None:
-    """Remap processing sources for all imported objects."""
-    for panel_str, objects in registry.imported_by_pstr.items():
-        uuid_remap = registry.uuid_remap.get(panel_str, {})
-        if not uuid_remap:
-            continue
-        for obj in objects:
-            remap_imported_object_sources(obj, uuid_remap)
 
 
 def assemble_imported_sessions(
@@ -271,7 +256,9 @@ def import_dlhist_into_new_session(panel: HistoryPanel, reader: NativeH5Reader) 
     """
     registry = create_import_registry(panel)
     read_imported_objects(reader, registry)
-    remap_imported_sources(registry)
+    H5ImportBatch.finalize_imports(
+        list(registry.import_batches.values()), refresh_panels=True
+    )
     sessions = assemble_imported_sessions(panel, reader, registry)
     if sessions is None:
         return

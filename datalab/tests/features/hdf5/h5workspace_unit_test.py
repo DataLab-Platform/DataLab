@@ -21,6 +21,8 @@ Also includes integration tests for the ``fix/HDF5_format`` Sigima changes:
 
 import enum
 import os.path as osp
+from types import SimpleNamespace
+from unittest.mock import Mock
 
 import h5py
 import pytest
@@ -34,8 +36,50 @@ from sigima.tests.data import (
 )
 
 from datalab.adapters_metadata.table_adapter import TableAdapter
+from datalab.gui.h5io import H5InputOutput
 from datalab.gui.newobject import extract_creation_parameters
+from datalab.gui.panel.base import H5ImportBatch
 from datalab.tests import datalab_test_app_context, helpers
+
+
+def test_finalize_imports_keeps_colliding_legacy_references_panel_local() -> None:
+    """Resolve legacy gNNN collisions in their owning panel batch."""
+    signal_group = SimpleNamespace(title="derivative(g001)")
+    image_group = SimpleNamespace(title="normalize(g001)")
+    cross_panel_group = SimpleNamespace(title="profile(i001)")
+    signal_batch = H5ImportBatch(
+        SimpleNamespace(),
+        {"g001": "signal-group-uuid"},
+        [],
+        [signal_group, cross_panel_group],
+    )
+    image_batch = H5ImportBatch(
+        SimpleNamespace(),
+        {"g001": "image-group-uuid", "i001": "image-object-uuid"},
+        [],
+        [image_group],
+    )
+
+    H5ImportBatch.finalize_imports([signal_batch, image_batch])
+
+    assert signal_group.title == "derivative(signal-group-uuid)"
+    assert image_group.title == "normalize(image-group-uuid)"
+    assert cross_panel_group.title == "profile(image-object-uuid)"
+
+
+def test_open_file_headless_refreshes_reference_displays(monkeypatch) -> None:
+    """Refresh existing titles and legends after a headless HDF5 import."""
+    panel = SimpleNamespace(refresh_after_reference_remap=Mock())
+    batch = H5ImportBatch(panel, {}, [], [])
+    panel.deserialize_from_hdf5 = Mock(return_value=batch)
+    mainwindow = SimpleNamespace(panels=[panel], reset_all=Mock())
+    reader = SimpleNamespace(close=Mock())
+    monkeypatch.setattr("datalab.gui.h5io.NativeH5Reader", lambda _filename: reader)
+
+    assert H5InputOutput(mainwindow).open_file_headless("workspace.h5", False)
+
+    panel.refresh_after_reference_remap.assert_called_once_with()
+    reader.close.assert_called_once_with()
 
 
 def test_save_and_load_h5_workspace():
