@@ -183,6 +183,8 @@ def test_plot_results_with_group_selection():
             assert len(sel_groups) == 1, (
                 f"Expected 1 selected group, got {len(sel_groups)}"
             )
+            source_uuids = ", ".join(get_uuid(obj) for obj in sel_groups[0])
+            expected_source_uuids = f"({source_uuids})"
 
             # Plot results - this should create or reuse a "Results" group
             panel.plot_results(kind="one_curve_per_title", xaxis="indices", yaxis="Δx")
@@ -206,12 +208,11 @@ def test_plot_results_with_group_selection():
                 "Results group should contain at least one result signal"
             )
 
-            # Verify that the result signal title includes source object short IDs
+            # Verify that the result title includes the selected source object UUIDs
             result_signal = list(result_group)[0]
-            # Should contain all three source signal IDs: s001, s002, s003
-            # (s000 is the default group, so signals start at s001)
-            assert "(s001, s002, s003)" in result_signal.title, (
-                f"Result signal title should include source IDs (s001, s002, s003), "
+            assert expected_source_uuids in result_signal.title, (
+                "Result signal title should include the full UUIDs of the selected "
+                f"source objects {expected_source_uuids}, "
                 f"got '{result_signal.title}'"
             )
 

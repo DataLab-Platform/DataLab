@@ -844,7 +844,9 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
                         pvalues[param.name] = param.value
                 metadata = {fitdlgfunc.__name__: pvalues}
             # Creating new signal
-            signal = create_signal(f"{name}({obj.title})", obj.x, y, metadata=metadata)
+            signal = create_signal(
+                f"{name}({get_uuid(obj)})", obj.x, y, metadata=metadata
+            )
             # Record a replayable history action when the dialog returned
             # canonical fit parameters (third-party dialogs returning legacy
             # 2-tuples cannot be replayed deterministically).
@@ -928,7 +930,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         if obj is None:
             return
         y = signal_fitting.evaluate_fit(obj.x, **fit_params)
-        title = f"{fit_name}({obj.title})"
+        title = f"{fit_name}({get_uuid(obj)})"
         if output_uuid is not None and self.panel.objmodel.has_uuid(output_uuid):
             # Update the recorded output in place (no duplicate on replay)
             target = self.panel.objmodel[output_uuid]
