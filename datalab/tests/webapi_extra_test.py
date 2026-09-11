@@ -19,7 +19,9 @@ from __future__ import annotations
 import io
 import json
 import zipfile
+from types import SimpleNamespace
 from typing import Union
+from unittest.mock import Mock
 
 import numpy as np
 import pytest
@@ -27,6 +29,9 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sigima import ImageObj, SignalObj
 
+from datalab.gui.processor.base import PROCESSING_PARAMETERS_OPTION
+from datalab.objectmodel import get_uuid
+from datalab.webapi.adapter import WorkspaceAdapter
 from datalab.webapi.routes import (
     router,
     set_adapter,
@@ -66,6 +71,80 @@ def _make_image(title: str = "I", shape: tuple[int, int] = (16, 24)) -> ImageObj
     obj.data = np.arange(shape[0] * shape[1], dtype=np.uint16).reshape(shape)
     obj.title = title
     return obj
+
+
+class ObjectListModel(list):
+    """Minimal object model used to exercise the real workspace adapter."""
+
+    def remove_object(self, obj: DataObject) -> None:
+        """Remove an object from the model."""
+        self.remove(obj)
+
+
+def make_panel(objects: list[DataObject]) -> SimpleNamespace:
+    """Build the panel surface required by :class:`WorkspaceAdapter`."""
+    return SimpleNamespace(
+        objmodel=ObjectListModel(objects),
+        plothandler=SimpleNamespace(remove_item=Mock()),
+        objview=SimpleNamespace(
+            remove_item=Mock(), update_tree=Mock(), select_objects=Mock()
+        ),
+        SIG_OBJECT_REMOVED=SimpleNamespace(emit=Mock()),
+        SIG_OBJECT_MODIFIED=SimpleNamespace(emit=Mock()),
+        SIG_REFRESH_PLOT=SimpleNamespace(emit=Mock()),
+    )
+
+
+def test_workspace_adapter_resolves_uuid_and_rejects_ambiguous_titles() -> None:
+    """Use stable UUIDs for mutations and reject ambiguous title lookups."""
+    signal = _make_signal("Duplicate", n=10)
+    image = _make_image("Duplicate")
+    signal_panel = make_panel([signal])
+    image_panel = make_panel([image])
+    adapter = WorkspaceAdapter(
+        SimpleNamespace(signalpanel=signal_panel, imagepanel=image_panel)
+    )
+    signal_uuid = get_uuid(signal)
+    image_uuid = get_uuid(image)
+    processing_parameters = {
+        "func_name": "derivative",
+        "pattern": "1-to-1",
+        "source_uuid": signal_uuid,
+    }
+    signal.set_metadata_option(PROCESSING_PARAMETERS_OPTION, processing_parameters)
+
+    assert adapter.get_object_panel(signal_uuid) == "signal"
+    fetched = adapter.get_object(signal_uuid)
+    assert fetched.get_metadata_option(PROCESSING_PARAMETERS_OPTION) == (
+        processing_parameters
+    )
+    with pytest.raises(ValueError, match="ambiguous"):
+        adapter.get_object_panel("Duplicate")
+    with pytest.raises(ValueError, match="ambiguous"):
+        adapter.select_objects(["Duplicate"])
+
+    selected, panel_str = adapter.select_objects([image_uuid], "image")
+    assert selected == [image_uuid]
+    assert panel_str == "image"
+    image_panel.objview.select_objects.assert_called_once_with([1])
+
+    assert adapter.update_metadata(signal_uuid, {"title": "Renamed"}) == signal_uuid
+    assert adapter.get_object(signal_uuid).title == "Renamed"
+    replacement = _make_signal("Ignored payload title", n=20)
+    replacement.set_metadata_option(PROCESSING_PARAMETERS_OPTION, processing_parameters)
+    assert adapter.set_object(signal_uuid, replacement) == signal_uuid
+    updated = adapter.get_object(signal_uuid)
+    assert updated.title == "Renamed"
+    assert updated.y.shape == (20,)
+    assert get_uuid(updated) == signal_uuid
+    assert updated.get_metadata_option(PROCESSING_PARAMETERS_OPTION) == (
+        processing_parameters
+    )
+    assert signal_panel.SIG_OBJECT_MODIFIED.emit.call_count == 2
+
+    adapter.remove_object(image_uuid)
+    assert image not in image_panel.objmodel
+    image_panel.SIG_OBJECT_REMOVED.emit.assert_called_once_with()
 
 
 # =============================================================================
@@ -297,22 +376,33 @@ class FullMockAdapter:
         self._objects: dict[str, DataObject] = {}
 
     # --- queries ------------------------------------------------------------
-    def list_objects(self) -> list[tuple[str, str]]:
-        """Return ``(name, type)`` pairs for every stored object."""
+    def list_objects(self) -> list[tuple[str, str, str]]:
+        """Return ``(uuid, name, type)`` tuples for every stored object."""
         return [
-            (name, "signal" if isinstance(obj, SignalObj) else "image")
+            (
+                get_uuid(obj),
+                name,
+                "signal" if isinstance(obj, SignalObj) else "image",
+            )
             for name, obj in self._objects.items()
         ]
 
     def get_object(self, name: str) -> DataObject:
-        """Return the stored object for ``name`` or raise ``KeyError``."""
-        if name not in self._objects:
-            raise KeyError(f"Object '{name}' not found")
-        return self._objects[name]
+        """Return the stored object for ``name`` or its UUID."""
+        if name in self._objects:
+            return self._objects[name]
+        for obj in self._objects.values():
+            if get_uuid(obj) == name:
+                return obj
+        raise KeyError(f"Object '{name}' not found")
 
     def object_exists(self, name: str) -> bool:
         """Return whether an object named ``name`` is stored."""
-        return name in self._objects
+        try:
+            self.get_object(name)
+            return True
+        except KeyError:
+            return False
 
     # --- mutations ----------------------------------------------------------
     def add_object(self, obj: DataObject, overwrite: bool = False) -> None:
@@ -324,26 +414,33 @@ class FullMockAdapter:
 
     def remove_object(self, name: str) -> None:
         """Remove the object stored under ``name`` or raise ``KeyError``."""
-        if name not in self._objects:
-            raise KeyError(f"Object '{name}' not found")
-        del self._objects[name]
+        obj = self.get_object(name)
+        stored_name = next(key for key, value in self._objects.items() if value is obj)
+        del self._objects[stored_name]
 
-    def update_metadata(self, name: str, metadata: dict) -> None:
+    def update_metadata(self, name: str, metadata: dict) -> str:
         """Update non-``None`` attributes of the object stored under ``name``."""
-        if name not in self._objects:
-            raise KeyError(f"Object '{name}' not found")
-        obj = self._objects[name]
+        obj = self.get_object(name)
+        stored_name = next(key for key, value in self._objects.items() if value is obj)
         for k, v in metadata.items():
             if v is not None and hasattr(obj, k):
                 setattr(obj, k, v)
+        if obj.title != stored_name:
+            del self._objects[stored_name]
+            self._objects[obj.title] = obj
+        return get_uuid(obj)
 
-    def set_object(self, name: str, obj: DataObject) -> None:
+    def set_object(self, name: str, obj: DataObject) -> str:
         """Replace the data of the object stored under ``name``."""
-        if name not in self._objects:
-            raise KeyError(f"Object '{name}' not found")
-        # Replace the underlying data while keeping the entry.
-        obj.title = name
-        self._objects[name] = obj
+        existing = self.get_object(name)
+        stored_name = next(
+            key for key, value in self._objects.items() if value is existing
+        )
+        object_uuid = get_uuid(existing)
+        obj.title = existing.title
+        obj.set_metadata_option("uuid", object_uuid)
+        self._objects[stored_name] = obj
+        return object_uuid
 
 
 @pytest.fixture(name="api_client")
@@ -415,6 +512,17 @@ class TestObjectListing:
         assert body["name"] == "S1"
         assert body["type"] == "signal"
 
+    def test_metadata_by_uuid_returns_title_as_name(self, api_client) -> None:
+        """``GET`` by UUID keeps title and UUID response fields distinct."""
+        client, token, adapter = api_client
+        obj = _make_signal("S1")
+        adapter.add_object(obj)
+        object_uuid = get_uuid(obj)
+        response = client.get(f"/api/v1/objects/{object_uuid}", headers=_auth(token))
+        assert response.status_code == 200
+        assert response.json()["name"] == "S1"
+        assert response.json()["uuid"] == object_uuid
+
     def test_metadata_missing_object(self, api_client) -> None:
         """``GET /objects/{name}`` returns 404 for an unknown object."""
         client, token, _adapter = api_client
@@ -439,6 +547,19 @@ class TestPatchAndDelete:
         assert body["xlabel"] == "Time"
         assert body["ylabel"] == "Volts"
 
+    def test_patch_rename_returns_updated_metadata(self, api_client) -> None:
+        """``PATCH`` reloads a renamed object through its stable UUID."""
+        client, token, adapter = api_client
+        adapter.add_object(_make_signal("Old"))
+        response = client.patch(
+            "/api/v1/objects/Old/metadata",
+            json={"title": "New"},
+            headers=_auth(token),
+        )
+        assert response.status_code == 200
+        assert response.json()["name"] == "New"
+        assert adapter.object_exists("New")
+
     def test_patch_missing_object(self, api_client) -> None:
         """``PATCH`` on an unknown object returns 404."""
         client, token, _adapter = api_client
@@ -454,6 +575,17 @@ class TestPatchAndDelete:
         client, token, adapter = api_client
         adapter.add_object(_make_signal("S1"))
         response = client.delete("/api/v1/objects/S1", headers=_auth(token))
+        assert response.status_code == 204
+        assert not adapter.object_exists("S1")
+
+    def test_delete_by_uuid(self, api_client) -> None:
+        """``DELETE`` removes an object addressed by full UUID."""
+        client, token, adapter = api_client
+        obj = _make_signal("S1")
+        adapter.add_object(obj)
+        response = client.delete(
+            f"/api/v1/objects/{get_uuid(obj)}", headers=_auth(token)
+        )
         assert response.status_code == 204
         assert not adapter.object_exists("S1")
 
@@ -578,6 +710,23 @@ class TestBinaryDataEndpoints:
         assert response.status_code == 200
         # Adapter now has the updated object
         assert adapter.get_object("Live").y.shape == (20,)
+
+    def test_set_object_by_uuid(self, api_client) -> None:
+        """``PUT /objects/{uuid}`` preserves title and stable identity."""
+        client, token, adapter = api_client
+        original = _make_signal("Live", n=10)
+        adapter.add_object(original)
+        object_uuid = get_uuid(original)
+        payload = serialize_object_to_npz(_make_signal("Payload", n=20))
+        response = client.put(
+            f"/api/v1/objects/{object_uuid}",
+            content=payload,
+            headers={**_auth(token), "Content-Type": "application/x-npz"},
+        )
+        assert response.status_code == 200
+        assert response.json()["name"] == "Live"
+        assert response.json()["uuid"] == object_uuid
+        assert adapter.get_object(object_uuid).y.shape == (20,)
 
 
 if __name__ == "__main__":

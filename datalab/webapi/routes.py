@@ -197,10 +197,10 @@ async def list_objects(
         objects_list = adapter.list_objects()
         result = []
 
-        for name, _panel in objects_list:
+        for object_uuid, title, _panel in objects_list:
             try:
-                obj = adapter.get_object(name)
-                meta = object_to_metadata(obj, name)
+                obj = adapter.get_object(object_uuid)
+                meta = object_to_metadata(obj, title)
                 result.append(ObjectMetadata(**meta))
             except Exception:  # pylint: disable=broad-exception-caught
                 # Skip objects that can't be serialized
@@ -239,13 +239,18 @@ async def get_object_metadata(
     """
     try:
         obj = adapter.get_object(name)
-        meta = object_to_metadata(obj, name)
+        meta = object_to_metadata(obj, obj.title)
         return ObjectMetadata(**meta)
 
     except KeyError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Object '{name}' not found",
+        ) from e
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(e),
         ) from e
     except Exception as e:  # pylint: disable=broad-exception-caught
         raise HTTPException(
@@ -280,6 +285,11 @@ async def delete_object(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Object '{name}' not found",
         ) from e
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(e),
+        ) from e
     except Exception as e:  # pylint: disable=broad-exception-caught
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -310,17 +320,22 @@ async def update_object_metadata(
     try:
         # Convert patch to dict, excluding None values
         updates = patch.model_dump(exclude_none=True)
-        adapter.update_metadata(name, updates)
+        object_uuid = adapter.update_metadata(name, updates)
 
         # Return updated metadata
-        obj = adapter.get_object(name)
-        meta = object_to_metadata(obj, name)
+        obj = adapter.get_object(object_uuid)
+        meta = object_to_metadata(obj, obj.title)
         return ObjectMetadata(**meta)
 
     except KeyError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Object '{name}' not found",
+        ) from e
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(e),
         ) from e
 
 
@@ -386,6 +401,11 @@ async def get_object_data(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Object '{name}' not found",
+        ) from e
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(e),
         ) from e
     except Exception as e:  # pylint: disable=broad-exception-caught
         tb = traceback.format_exc()
@@ -495,15 +515,22 @@ async def set_object(
     """
     try:
         body = await request.body()
-        obj = deserialize_object_from_npz(body)
-        obj.title = name
-        adapter.set_object(name, obj)
+        try:
+            obj = deserialize_object_from_npz(body)
+        except ValueError as e:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=f"Invalid NPZ format: {e}",
+            ) from e
+        object_uuid = adapter.set_object(name, obj)
 
         # Return updated metadata
-        updated = adapter.get_object(name)
-        meta = object_to_metadata(updated, name)
+        updated = adapter.get_object(object_uuid)
+        meta = object_to_metadata(updated, updated.title)
         return ObjectMetadata(**meta)
 
+    except HTTPException:
+        raise
     except KeyError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -511,8 +538,8 @@ async def set_object(
         ) from e
     except ValueError as e:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=f"Invalid NPZ format: {e}",
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(e),
         ) from e
     except Exception as e:  # pylint: disable=broad-exception-caught
         raise HTTPException(

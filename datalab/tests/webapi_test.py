@@ -19,6 +19,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sigima import ImageObj, SignalObj
 
+from datalab.objectmodel import get_uuid
 from datalab.webapi.routes import (
     generate_auth_token,
     router,
@@ -271,19 +272,22 @@ class MockWorkspaceAdapter:
         """Add an object to the mock workspace."""
         self._objects[name] = obj
 
-    def list_objects(self) -> list[tuple[str, str]]:
+    def list_objects(self) -> list[tuple[str, str, str]]:
         """List all objects in the mock workspace."""
         result = []
         for name, obj in self._objects.items():
             panel = "signal" if type(obj).__name__ == "SignalObj" else "image"
-            result.append((name, panel))
+            result.append((get_uuid(obj), name, panel))
         return result
 
     def get_object(self, name: str) -> SignalObj | ImageObj:
-        """Get an object by name."""
-        if name not in self._objects:
-            raise KeyError(f"Object '{name}' not found")
-        return self._objects[name]
+        """Get an object by name or UUID."""
+        if name in self._objects:
+            return self._objects[name]
+        for obj in self._objects.values():
+            if get_uuid(obj) == name:
+                return obj
+        raise KeyError(f"Object '{name}' not found")
 
 
 class TestAPIEndpointsWithMock:
