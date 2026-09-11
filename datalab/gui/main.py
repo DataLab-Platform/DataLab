@@ -68,7 +68,7 @@ from datalab.gui.h5io import H5InputOutput
 from datalab.gui.panel import base, history, image, macro, signal
 from datalab.gui.pluginconfig import PluginConfigDialog
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
-from datalab.objectmodel import ObjectGroup, get_uuid
+from datalab.objectmodel import UUID_REGEX, ObjectGroup, get_uuid, render_title
 from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plugins
 from datalab.utils import qthelpers as qth
 from datalab.utils.qthelpers import configure_menu_about_to_show
@@ -276,8 +276,18 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         Raises:
             KeyError: if object not found
+            ValueError: if multiple objects have the same title
             TypeError: if index_id_title type is invalid
         """
+        if (
+            isinstance(nb_id_title, str)
+            and panel is None
+            and UUID_REGEX.fullmatch(nb_id_title)
+        ):
+            obj = self.find_object_by_uuid(nb_id_title)
+            if obj is None or isinstance(obj, ObjectGroup):
+                raise KeyError(f"Invalid object index, id or title: {nb_id_title}")
+            return obj
         panelw = self.__get_datapanel(panel)
         if nb_id_title is None:
             return panelw.objview.get_current_object()
@@ -317,10 +327,28 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         for panel in (self.signalpanel, self.imagepanel):
             if panel is not None:
                 try:
-                    return panel.objmodel[uuid]
+                    return panel.objmodel.get_object_or_group(uuid)
                 except KeyError:
                     continue
         return None
+
+    def render_object_title(self, title: str) -> str:
+        """Render a canonical object title according to user settings."""
+
+        def resolve_uuid_title(uuid: str) -> str | None:
+            obj = self.find_object_by_uuid(uuid)
+            return None if obj is None else obj.title
+
+        resolver = (
+            resolve_uuid_title if Conf.result_title_mode.get() == "title" else None
+        )
+        return render_title(title, resolver)
+
+    def refresh_object_title_displays(self) -> None:
+        """Refresh object titles in trees and existing plot items."""
+        for panel in (self.signalpanel, self.imagepanel):
+            panel.objview.update_tree()
+            panel.refresh_plot("existing", update_items=True, force=True)
 
     @remote_controlled
     def get_object_uuids(
@@ -1434,6 +1462,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         for panel in self.panels:
             panel.SIG_OBJECT_ADDED.connect(self.set_modified)
             panel.SIG_OBJECT_REMOVED.connect(self.set_modified)
+        for panel in (self.signalpanel, self.imagepanel):
+            panel.SIG_OBJECT_MODIFIED.connect(self.refresh_object_title_displays)
+            panel.SIG_OBJECT_REMOVED.connect(self.refresh_object_title_displays)
         self.macropanel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
         # Initializing common panel actions
         self.autorefresh_action.setChecked(Conf.auto_refresh.get(True))
@@ -2108,9 +2139,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         )
         return self.add_object(obj, group_id, set_current, new_session_behavior)
 
-    # This API mirrors the image metadata accepted by create_image, so the
-    # argument count is part of the stable public interface rather than noise.
-    def add_image(  # pylint: disable=too-many-arguments
+    def add_image(
         self,
         title: str,
         data: np.ndarray,
@@ -2122,6 +2151,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         zlabel: str = "",
         group_id: str = "",
         set_current: bool = True,
+        *,
         new_session_behavior: SessionBehavior | None = None,
     ) -> bool:
         """Add image data to DataLab.
@@ -2234,6 +2264,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 "max_cols_in_label",
             ):
                 refresh_signal_panel = refresh_image_panel = True
+            if option == "result_title_mode":
+                self.refresh_object_title_displays()
             if option == "show_result_label":
                 for panel in (self.signalpanel, self.imagepanel):
                     panel.acthandler.show_label_action.setChecked(

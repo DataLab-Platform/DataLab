@@ -18,6 +18,7 @@ from sigima.proc.image import generate_image_grid_roi
 
 from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import _
+from datalab.objectmodel import shorten_uuids_in_title
 from datalab.utils.qthelpers import block_signals
 
 
@@ -75,6 +76,12 @@ class ImageGridROIEditor(PlotDialog):
         self.__is_ready = False
         self.obj = obj = obj.copy()  # Avoid modifying the original object
         obj.roi = None  # Clear the ROI to avoid conflicts with the editor
+        mainwindow = getattr(parent, "mainwindow", None)
+        self.rendered_title = (
+            mainwindow.render_object_title(obj.title)
+            if mainwindow is not None
+            else shorten_uuids_in_title(obj.title)
+        )
         gridparam = gridparam or ROIGridParam()
         displayparam = displayparam or DisplayParam()
         self.gridparamwidget = gdq.DataSetEditGroupBox(
@@ -96,7 +103,7 @@ class ImageGridROIEditor(PlotDialog):
             parent=parent,
             toolbar=False,
             options=options,
-            title=f"{roi_s} - {obj.title}",
+            title=f"{roi_s} - {self.rendered_title}",
             icon="DataLab.svg",
             edit=True,
             size=size,
@@ -187,6 +194,8 @@ class ImageGridROIEditor(PlotDialog):
         plot = self.get_plot()
         plot.del_all_items()
         item = create_adapter_from_object(obj).make_item()
+        item.param.label = self.rendered_title
+        item.param.update_item(item)
         item.set_mask_visible(dp.show_mask)
         item.set_selectable(False)
         item.set_readonly(True)

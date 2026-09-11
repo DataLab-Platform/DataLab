@@ -68,6 +68,7 @@ from datalab.adapters_plotpy import (
 )
 from datalab.config import Conf, _
 from datalab.env import execenv
+from datalab.objectmodel import shorten_uuids_in_title
 
 if TYPE_CHECKING:
     from plotpy.plot import BasePlot
@@ -270,8 +271,16 @@ class BaseROIEditor(
         self.obj = obj
         self.mode = mode
         self.source_panel = source_panel
+        mainwindow = getattr(source_panel, "mainwindow", None)
+        rendered_title = (
+            mainwindow.render_object_title(obj.title)
+            if mainwindow is not None
+            else shorten_uuids_in_title(obj.title)
+        )
         if item is None:
             item = create_adapter_from_object(obj).make_item()
+        item.param.label = rendered_title
+        item.param.update_item(item)
         self.main_item = item
         self.__modified: bool | None = None
         self._tools: list[InteractiveTool] = []
@@ -299,7 +308,7 @@ class BaseROIEditor(
             parent=parent,
             toolbar=mode != "define",
             options=options,
-            title=f"{roi_s} - {obj.title}",
+            title=f"{roi_s} - {rendered_title}",
             icon="DataLab.svg",
             edit=True,
             size=size,

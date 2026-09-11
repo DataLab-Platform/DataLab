@@ -1588,3 +1588,55 @@ def test_interactive_fit_records_replays_in_place_and_refuses_edit() -> None:
         assert restored.method_name == "recompute_fit"
         assert restored.kwargs["fit_params"] == fit_params
         assert restored.kwargs["output_uuid"] == fitted_uuid
+
+
+def test_nonempty_dlhist_import_remaps_interactive_fit_references() -> None:
+    """Replay an imported fit only against its cloned source and output."""
+
+    def fake_gaussian_dialog(x, y, parent=None):
+        del parent, y
+        fit_params = signal_fitting.create_fit_params(
+            "gaussian",
+            {"amplitude": 1200.0, "sigma": 20.0, "x0": 100.0, "y0": 5.0},
+            interactive=True,
+        )
+        return signal_fitting.evaluate_fit(x, **fit_params), [], fit_params
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        path = os.path.join(tmpdir, "fit-import.dlhist")
+        with datalab_test_app_context(history=True) as source:
+            history, panel = source.historypanel, source.signalpanel
+            history.toggle_record_mode(True)
+            original_source_uuid = add_paracetamol_signals(panel, 1)[0]
+            panel.objview.select_objects([original_source_uuid])
+            panel.processor.compute_fit("Gaussian fit", fake_gaussian_dialog)
+            original_action = history[len(history)]
+            original_output_uuid = original_action.output_uuids[0]
+            exported_session_count = len(history.history_sessions)
+            assert history.save_to_dlhist_file(path)
+
+        with datalab_test_app_context(history=True) as target:
+            target.signalpanel.add_object(create_paracetamol_signal())
+            assert target.historypanel.open_dlhist_file(path)
+            imported_sessions = target.historypanel.history_sessions[
+                -exported_session_count:
+            ]
+            imported_action = next(
+                action
+                for session in imported_sessions
+                for action in session.actions
+                if action.method_name == "recompute_fit"
+            )
+            imported_source_uuid = imported_action.kwargs["source_uuid"]
+            imported_output_uuid = imported_action.kwargs["output_uuid"]
+            assert imported_source_uuid != original_source_uuid
+            assert imported_output_uuid != original_output_uuid
+            assert imported_action.output_uuids == [imported_output_uuid]
+            assert target.signalpanel.objmodel.has_uuid(imported_source_uuid)
+            assert target.signalpanel.objmodel.has_uuid(imported_output_uuid)
+
+            output = target.signalpanel.objmodel[imported_output_uuid]
+            object_count = len(target.signalpanel.objmodel)
+            imported_action.replay(target, restore_selection=True, edit=False)
+            assert len(target.signalpanel.objmodel) == object_count
+            assert target.signalpanel.objmodel[imported_output_uuid] is output
