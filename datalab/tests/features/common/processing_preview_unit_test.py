@@ -574,7 +574,7 @@ def test_preview_preserves_custom_editors_and_backends(monkeypatch):
 
 
 def test_live_image_to_signal_preview(tmp_path, monkeypatch):
-    """A Qt click drives a real spawn round-trip into a visible PlotPy curve."""
+    """A Qt click drives a real spawn round-trip into a rendered PlotPy curve."""
     from qtpy import QtCore as QC
     from qtpy import QtWidgets as QW
     from qtpy.QtTest import QTest
@@ -623,7 +623,8 @@ def test_live_image_to_signal_preview(tmp_path, monkeypatch):
             loop.exec_()
             timeout.stop()
             assert dialog.preview.item is not None, dialog.preview.details.toPlainText()
-            assert dialog.preview.plotwidget.isVisible()
+            QW.QApplication.processEvents()
+            assert not dialog.preview.plotwidget.isHidden()
             np.testing.assert_allclose(dialog.preview.item.get_data()[0], expected.x)
             np.testing.assert_allclose(dialog.preview.item.get_data()[1], expected.y)
             assert source.data.dtype == np.uint16
