@@ -1615,6 +1615,7 @@ class ImageActionHandler(BaseActionHandler):
                     tip=_("Apply all thresholding methods"),
                 )
             with self.new_menu(_("Exposure"), icon_name="exposure.svg"):
+                self.action_for("adjust_brightness_contrast")
                 self.action_for("adjust_gamma")
                 self.action_for("adjust_log")
                 self.action_for("adjust_sigmoid")
