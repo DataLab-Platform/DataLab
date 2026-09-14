@@ -15,14 +15,20 @@ turns embedded short IDs (e.g. ``s001``, ``i012``) into clickable hyperlinks.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from html import escape
+from math import ceil
 from typing import TYPE_CHECKING
 
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from datalab.objectmodel import find_short_ids_in_title
+from datalab.objectmodel import (
+    UUID_DISPLAY_LENGTH,
+    find_short_ids_in_title,
+    find_uuids_in_title,
+)
 
 if TYPE_CHECKING:
     pass
@@ -30,11 +36,16 @@ if TYPE_CHECKING:
 
 #: URL scheme used in anchors emitted by :class:`ClickableTitleDelegate`.
 SHORT_ID_URL_SCHEME = "dlb-shortid"
+UUID_URL_SCHEME = "dlb-uuid"
+TITLE_UUID_ROLE = QC.Qt.UserRole + 1
+TITLE_META_FONT_SIZE = "90%"
+TITLE_ROW_VERTICAL_PADDING = 2
 
 
-def _build_html(text: str) -> str:
-    """Build the HTML representation of ``text`` with short IDs wrapped in
-    anchors.
+def _build_html(
+    text: str, uuid_title_resolver: Callable[[str], str | None] | None = None
+) -> str:
+    """Build the HTML representation of ``text`` with references as anchors.
 
     The first short ID occurrence is always rendered as plain text: object
     titles in DataLab tree views are formatted as ``"<short_id>: <title>"`` and
@@ -47,18 +58,36 @@ def _build_html(text: str) -> str:
     Returns:
         HTML string.
     """
-    matches = find_short_ids_in_title(text)
+    matches: list[tuple[int, int, str, str | None, str]] = [
+        (*match, SHORT_ID_URL_SCHEME, match[2])
+        for match in find_short_ids_in_title(text)
+    ]
+    for match in find_uuids_in_title(text):
+        uuid = match[2]
+        display_reference = uuid[:UUID_DISPLAY_LENGTH]
+        resolved_display = (
+            uuid_title_resolver(uuid)
+            if uuid_title_resolver is not None
+            else display_reference
+        )
+        if resolved_display is not None:
+            display_reference = resolved_display
+        scheme = UUID_URL_SCHEME if resolved_display is not None else None
+        matches.append((*match, scheme, display_reference))
+    matches.sort(key=lambda match: match[0])
     if not matches:
         return escape(text)
     out: list[str] = []
     cursor = 0
-    for idx, (start, end, sid) in enumerate(matches):
+    for start, end, reference, scheme, display_reference in matches:
         out.append(escape(text[cursor:start]))
-        if idx == 0 and start == 0:
+        if scheme is None or (scheme == SHORT_ID_URL_SCHEME and start == 0):
             # Leading "s001:" — keep as plain text
-            out.append(escape(sid))
+            out.append(escape(display_reference))
         else:
-            out.append(f'<a href="{SHORT_ID_URL_SCHEME}:{sid}">{escape(sid)}</a>')
+            out.append(
+                f'<a href="{scheme}:{reference}">{escape(display_reference)}</a>'
+            )
         cursor = end
     out.append(escape(text[cursor:]))
     return "".join(out)
@@ -69,6 +98,9 @@ def _make_text_document(
     option: QW.QStyleOptionViewItem,
     link_color: QG.QColor,
     text_color: QG.QColor | None = None,
+    uuid_title_resolver: Callable[[str], str | None] | None = None,
+    item_uuid: str | None = None,
+    meta_color: QG.QColor | None = None,
 ) -> QG.QTextDocument:
     """Return a :class:`QTextDocument` rendering ``text`` with the styling
     inherited from ``option``.
@@ -84,13 +116,24 @@ def _make_text_document(
     css_parts = [f"a {{ color: {link_color.name()}; text-decoration: underline; }}"]
     if text_color is not None:
         css_parts.append(f"body, p, span {{ color: {text_color.name()}; }}")
+    if meta_color is not None:
+        css_parts.append(
+            ".title-meta { "
+            f"color: {meta_color.name()}; font-size: {TITLE_META_FONT_SIZE}; "
+            "}"
+        )
     doc.setDefaultStyleSheet(" ".join(css_parts))
-    doc.setHtml(_build_html(text))
+    title_html = _build_html(text, uuid_title_resolver)
+    if item_uuid:
+        short_uuid = escape(item_uuid[:UUID_DISPLAY_LENGTH])
+        own_id_html = f'<span class="title-meta">#{short_uuid}</span>'
+        title_html = f"{title_html}<br>{own_id_html}" if title_html else own_id_html
+    doc.setHtml(title_html)
     return doc
 
 
 class ClickableTitleDelegate(QW.QStyledItemDelegate):
-    """Item delegate that renders object titles with clickable short IDs.
+    """Item delegate that renders object titles with clickable references.
 
     The delegate uses a :class:`QTextDocument` to render an HTML version of the
     item's display text in which each embedded short ID — apart from the
@@ -99,6 +142,14 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
     Hit-testing is performed by :meth:`anchor_at`, which is meant to be called
     from the host view's ``mousePressEvent`` / ``mouseMoveEvent``.
     """
+
+    def __init__(
+        self,
+        parent: QW.QWidget,
+        uuid_title_resolver: Callable[[str], str | None] | None = None,
+    ) -> None:
+        super().__init__(parent)
+        self.uuid_title_resolver = uuid_title_resolver
 
     # pylint: disable=invalid-name
     def paint(
@@ -109,7 +160,13 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
     ) -> None:
         """Reimplement Qt method to paint the item via a QTextDocument."""
         text = index.data(QC.Qt.DisplayRole) or ""
-        if not isinstance(text, str) or not find_short_ids_in_title(text):
+        item_uuid = index.data(TITLE_UUID_ROLE)
+        has_references = bool(
+            find_short_ids_in_title(text) or find_uuids_in_title(text)
+        )
+        if not isinstance(text, str) or not (
+            has_references or isinstance(item_uuid, str)
+        ):
             super().paint(painter, option, index)
             return
         opt = QW.QStyleOptionViewItem(option)
@@ -130,27 +187,24 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
         accent = palette.color(QG.QPalette.Active, QG.QPalette.Highlight)
         if selected:
             text_color = palette.color(QG.QPalette.Active, QG.QPalette.HighlightedText)
-            # On dark themes the selection background *is* the accent color,
-            # so a plain accent-colored link would vanish: blend it 50/50
-            # with ``HighlightedText`` (typically white) to obtain a lighter
-            # tint that still reads as the same hue. On light themes the
-            # accent stays distinguishable on the highlight background, so
-            # we keep the unselected color for visual consistency.
-            base_is_light = (
-                palette.color(QG.QPalette.Active, QG.QPalette.Base).lightness() > 128
-            )
-            if base_is_light:
-                link_color = accent
-            else:
-                link_color = QG.QColor(
-                    (accent.red() + text_color.red()) // 2,
-                    (accent.green() + text_color.green()) // 2,
-                    (accent.blue() + text_color.blue()) // 2,
-                )
+            # The selection background uses ``Highlight`` itself, so links must
+            # use the theme's contrasting text role. Underlining preserves the
+            # link affordance even when link and selected text share a color.
+            link_color = text_color
+            meta_color = text_color
         else:
             text_color = palette.color(QG.QPalette.Active, QG.QPalette.Text)
             link_color = accent
-        doc = _make_text_document(text, option, link_color, text_color)
+            meta_color = palette.color(QG.QPalette.Active, QG.QPalette.Mid)
+        doc = _make_text_document(
+            text,
+            option,
+            link_color,
+            text_color,
+            self.uuid_title_resolver,
+            item_uuid if isinstance(item_uuid, str) else None,
+            meta_color,
+        )
         doc.setTextWidth(text_rect.width())
         painter.save()
         painter.translate(text_rect.topLeft())
@@ -160,6 +214,42 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
         painter.setClipRect(clip)
         doc.documentLayout().draw(painter, ctx)
         painter.restore()
+
+    def sizeHint(
+        self, option: QW.QStyleOptionViewItem, index: QC.QModelIndex
+    ) -> QC.QSize:
+        """Return a size accommodating the title and own UUID metadata line."""
+        text = index.data(QC.Qt.DisplayRole) or ""
+        item_uuid = index.data(TITLE_UUID_ROLE)
+        has_references = isinstance(text, str) and bool(
+            find_short_ids_in_title(text) or find_uuids_in_title(text)
+        )
+        if not isinstance(text, str) or not (
+            has_references or isinstance(item_uuid, str)
+        ):
+            return super().sizeHint(option, index)
+        opt = QW.QStyleOptionViewItem(option)
+        self.initStyleOption(opt, index)
+        doc = _make_text_document(
+            text,
+            opt,
+            QG.QColor("black"),
+            uuid_title_resolver=self.uuid_title_resolver,
+            item_uuid=item_uuid if isinstance(item_uuid, str) else None,
+            meta_color=QG.QColor("gray"),
+        )
+        base_size = super().sizeHint(opt, index)
+        raw_text_width = opt.fontMetrics.horizontalAdvance(text)
+        horizontal_chrome = max(0, base_size.width() - raw_text_width)
+        width = max(base_size.width(), ceil(doc.idealWidth()) + horizontal_chrome)
+        style = opt.widget.style() if opt.widget else QW.QApplication.style()
+        text_rect = style.subElementRect(QW.QStyle.SE_ItemViewItemText, opt, opt.widget)
+        if text_rect.width() > 0:
+            doc.setTextWidth(text_rect.width())
+        height = max(
+            base_size.height(), ceil(doc.size().height()) + TITLE_ROW_VERTICAL_PADDING
+        )
+        return QC.QSize(width, height)
 
     def anchor_at(
         self,
@@ -179,7 +269,11 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
             option: style option (already initialized for the item)
         """
         text = index.data(QC.Qt.DisplayRole) or ""
-        if not isinstance(text, str) or not find_short_ids_in_title(text):
+        item_uuid = index.data(TITLE_UUID_ROLE)
+        has_references = bool(
+            find_short_ids_in_title(text) or find_uuids_in_title(text)
+        )
+        if not isinstance(text, str) or not has_references:
             return None
         opt = QW.QStyleOptionViewItem(option)
         opt.rect = item_rect
@@ -189,10 +283,18 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
         if not text_rect.contains(pos):
             return None
         # Color does not influence hit-testing — pass any value.
-        doc = _make_text_document(text, option, QG.QColor("black"))
+        doc = _make_text_document(
+            text,
+            option,
+            QG.QColor("black"),
+            uuid_title_resolver=self.uuid_title_resolver,
+            item_uuid=item_uuid if isinstance(item_uuid, str) else None,
+            meta_color=QG.QColor("gray"),
+        )
         doc.setTextWidth(text_rect.width())
         local = QC.QPointF(pos - text_rect.topLeft())
         href = doc.documentLayout().anchorAt(local)
-        if href and href.startswith(f"{SHORT_ID_URL_SCHEME}:"):
-            return href[len(SHORT_ID_URL_SCHEME) + 1 :]
+        for scheme in (SHORT_ID_URL_SCHEME, UUID_URL_SCHEME):
+            if href and href.startswith(f"{scheme}:"):
+                return href[len(scheme) + 1 :]
         return None
