@@ -175,6 +175,14 @@ class DataLabOptions(SigimaXOptions):
             default=(configtools.MONOSPACE, 8, False),
             description="Monospace font used by history and analysis tabs.",
         )
+        self.result_title_mode = EnumOptionField(
+            self,
+            "result_title_mode",
+            category="proc",
+            default="uuid",
+            choices=["uuid", "title"],
+            description="Reference display mode in generated object titles.",
+        )
         self.history_auto_record = TypedOptionField(
             self,
             "history_auto_record",

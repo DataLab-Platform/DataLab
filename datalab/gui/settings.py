@@ -144,6 +144,18 @@ class ProcSettings(gds.DataSet):
         )
         % ("→", "→"),
     )
+    result_title_mode = gds.ChoiceItem(
+        _("References in result titles"),
+        zip(
+            Conf.result_title_mode.choices,
+            [_("Source UUID"), _("Source title")],
+        ),
+        help=_(
+            "Display source references in generated titles as short UUIDs or "
+            "as the current source titles. This setting does not change the "
+            "stored UUID references."
+        ),
+    )
     use_signal_bounds = gds.BoolItem(
         _("Use current signal bounds"),
         _("New signals"),

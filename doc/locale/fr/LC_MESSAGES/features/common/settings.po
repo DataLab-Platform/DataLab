@@ -136,6 +136,21 @@ msgstr "Nouveau groupe 1 : A-E, B-F"
 msgid "New group 2: C-E, D-F"
 msgstr "Nouveau groupe 2 : C-E, D-F"
 
+msgid "**References in result titles**"
+msgstr "**Références dans les titres de résultats**"
+
+msgid "Choose how source objects are represented in titles generated for computation results:"
+msgstr "Choisir comment les objets sources sont représentés dans les titres générés pour les résultats des calculs :"
+
+msgid "**Source UUID** (default): use stable 8-character references derived from each source object's UUID."
+msgstr "**UUID source** (par défaut) : utiliser des références stables de 8 caractères dérivées de l'UUID de chaque objet source."
+
+msgid "**Source title**: use the source objects' live current titles, so references follow later renames."
+msgstr "**Titre de la source** : utiliser les titres actuels des objets sources, afin que les références suivent les renommages ultérieurs."
+
+msgid "This setting changes only the displayed reference. Each object's canonical identity remains its full UUID. Object items in the signal and image trees always show their own ``#UUID8`` reference, while group headers keep the ``gsNNN`` and ``giNNN`` identifiers."
+msgstr "Ce réglage modifie uniquement la référence affichée. L'identité canonique de chaque objet reste son UUID complet. Les objets dans les arborescences des signaux et des images affichent toujours leur propre référence ``#UUID8``, tandis que les en-têtes de groupes conservent les identifiants ``gsNNN`` et ``giNNN``."
+
 msgid "**Use signal bounds for new signals**"
 msgstr "**Utiliser les bornes du signal pour les nouveaux signaux**"
 

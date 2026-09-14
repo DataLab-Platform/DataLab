@@ -4,7 +4,6 @@
 #
 msgid ""
 msgstr ""
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -1519,11 +1518,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "Group name:"
-msgstr "Nom du groupe :"
-
 msgid "New group"
 msgstr "Nouveau groupe"
+
+msgid "Group name:"
+msgstr "Nom du groupe :"
 
 #, python-format
 msgid "New group \"%s\""
@@ -3077,6 +3076,18 @@ msgstr "Mode d'opération"
 msgid "Operation mode for computations taking <i>N</i> inputs:<ul><li><b>single</b>: single operand mode</li><li><b>pairwise</b>: pairwise operation mode</li></ul><br>Computations taking <i>N</i> inputs are the ones where:<ul><li>N(>=2) objects in %s 1 object out</li><li>N(>=1) objects + 1 object in %s N objects out</li></ul>"
 msgstr "Mode d'opération pour les calculs prenant <i>N</i> entrées:<ul><li><b>single</b>: mode d'opération avec un seul opérande</li><li><b>pairwise</b>: mode d'opération par paire</li></ul><br>Les calculs prenant <i>N</i> entrées sont ceux où :<ul><li>N(>=2) objets en %s 1 objet en sortie</li><li>N(>=1) objets + 1 objet en %s N objets en sortie</li></ul>"
 
+msgid "References in result titles"
+msgstr "Références dans les titres de résultats"
+
+msgid "Source UUID"
+msgstr "UUID source"
+
+msgid "Source title"
+msgstr "Titre de la source"
+
+msgid "Display source references in generated titles as short UUIDs or as the current source titles. This setting does not change the stored UUID references."
+msgstr "Afficher les références aux sources dans les titres générés sous forme d'UUID courts ou avec les titres actuels des sources. Ce réglage ne modifie pas les références UUID enregistrées."
+
 msgid "Use current signal bounds"
 msgstr "Utiliser les bornes du signal courant"
 
@@ -3761,17 +3772,11 @@ msgstr ""
 "\n"
 "Cela permettra aux applications externes de se connecter à DataLab et de le contrôler à distance via HTTP/JSON."
 
-msgid "Connection to DataLab"
-msgstr "Connexion à DataLab"
-
 msgid "Show more"
 msgstr "Afficher plus"
 
 msgid "Show less"
 msgstr "Afficher moins"
-
-msgid "Contents of file"
-msgstr "Contenu du fichier"
 
 msgid "Find"
 msgstr "Rechercher"
@@ -3809,158 +3814,20 @@ msgstr "Rechercher :"
 msgid "Replace:"
 msgstr "Remplacer :"
 
-msgid "Polymomial fit"
-msgstr "Ajustement polynomial"
-
-msgid "Amplitude"
-msgstr "Amplitude"
-
-msgid "Base line"
-msgstr "Ligne de base"
-
-msgid "Std-dev"
-msgstr "Écart-type"
-
-msgid "Mean"
-msgstr "Moyenne"
-
-msgid "Y0"
-msgstr "Y0"
-
-msgid "A coefficient"
-msgstr "Coefficient A"
-
-msgid "B coefficient"
-msgstr "Coefficient B"
-
-msgid "y0 constant"
-msgstr "Constante y0"
-
-msgid "Frequency"
-msgstr "Fréquence"
-
-msgid "Continuous component"
-msgstr "Composante continue"
-
-msgid "Scale factor"
-msgstr "Facteur d'échelle"
-
-msgid "Width factor"
-msgstr "Facteur de largeur"
-
-msgid "Left amplitude"
-msgstr "Amplitude gauche"
-
-msgid "Right amplitude"
-msgstr "Amplitude droite"
-
-msgid "Left width"
-msgstr "Largeur gauche"
-
-msgid "Right width"
-msgstr "Largeur droite"
-
-msgid "Center"
-msgstr "Centre"
-
-msgid "Left baseline"
-msgstr "Ligne de base gauche"
-
-msgid "Right baseline"
-msgstr "Ligne de base droite"
-
-msgid "Center position"
-msgstr "Position du centre"
-
-msgid "Left rate"
-msgstr "Taux gauche"
-
-msgid "Right rate"
-msgstr "Taux droit"
-
-msgid "Collapse all"
-msgstr "Replier tout"
-
-msgid "Expand all"
-msgstr "Déplier tout"
-
-msgid "Restore"
-msgstr "Restaurer"
-
-msgid "Restore original tree layout"
-msgstr "Restaurer l'organisation initiale de l'arbre"
-
-msgid "Collapse selection"
-msgstr "Replier la sélection"
-
-msgid "Expand selection"
-msgstr "Déplier la sélection"
-
-msgid "HDF5 Browser"
-msgstr "Explorateur HDF5"
-
-msgid "Size"
-msgstr "Taille"
-
-msgid "Type"
-msgstr "Type"
-
-msgid "Value"
-msgstr "Valeur"
-
-msgid "Name"
-msgstr "Nom"
-
-msgid "Unsupported data"
-msgstr "Données non prises en charge"
-
-msgid "Group"
-msgstr "Groupe"
-
-msgid "Attributes"
-msgstr "Attributs"
-
-msgid "Show array"
-msgstr "Afficher le tableau"
-
-msgid "Path"
-msgstr "Chemin"
-
-msgid "Description"
-msgstr "Description"
-
-msgid "Textual preview"
-msgstr "Aperçu textuel"
-
-msgid "Select HDF5 file"
-msgstr "Sélectionner un fichier HDF5"
-
-msgid "HDF5 files (*.h5 *.hdf5 *.hdf *.he5);;All files (*)"
-msgstr "Fichiers HDF5 (*.h5 *.hdf5 *.hdf *.he5);;Tous les fichiers (*)"
-
-msgid "Check all"
-msgstr "Cocher tout"
-
-msgid "Uncheck all"
-msgstr "Décocher tout"
-
-msgid "Show only supported data"
-msgstr "Afficher uniquement les données prises en charge"
-
-msgid "Show values"
-msgstr "Afficher les valeurs"
-
 msgid "Show details"
 msgstr "Afficher les détails"
 
 msgid "Hide details"
 msgstr "Masquer les détails"
 
-msgid "Title"
-msgstr "Titre"
-
 msgid "Date and time"
 msgstr "Date et heure"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Title"
+msgstr "Titre"
 
 msgid "Action is compatible with the current workspace state."
 msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
@@ -3974,15 +3841,6 @@ msgstr "Cette étape est obsolète : rejouez-la pour actualiser son résultat."
 msgid "Active recording session."
 msgstr "Session d'enregistrement active."
 
-msgid "Image background selection"
-msgstr "Sélection de l'arrière-plan de l'image"
-
-msgid "Background area"
-msgstr "Zone d'arrière-plan"
-
-msgid "Background value:"
-msgstr "Valeur de l'arrière-plan :"
-
 msgid "Installation configuration"
 msgstr "Configuration d'installation"
 
@@ -3991,18 +3849,6 @@ msgstr "Configuration utilisateur"
 
 msgid "Plugins and I/O features"
 msgstr "Plugins et fonctionnalités d'entrée/sortie"
-
-msgid "Log files"
-msgstr "Journaux de bord"
-
-msgid "Log files were generated during current session."
-msgstr "Des journaux de bord ont été générés lors de la session en cours."
-
-msgid "Log files were generated during last session."
-msgstr "Des journaux de bord ont été générés lors de la dernière session."
-
-msgid "Log files are currently empty."
-msgstr "Les journaux de bord sont vides."
 
 msgid "Kernel / Mask preview"
 msgstr "Aperçu du noyau / masque"
@@ -4021,33 +3867,6 @@ msgstr "±{n} lignes × ±{n} colonnes"
 
 msgid "This image uses an integer data type, so it cannot contain NaN or infinite values. Replace special values is therefore not applicable."
 msgstr "Cette image utilise un type de données entier, elle ne peut donc pas contenir de valeurs NaN ou infinies. Le remplacement des valeurs spéciales n'est donc pas applicable."
-
-msgid "Signal baseline selection"
-msgstr "Sélection de la ligne de base du signal"
-
-msgid "Select X value with cursor"
-msgstr "Sélectionner la valeur X avec le curseur"
-
-msgid "Select Y value with cursor"
-msgstr "Sélectionner la valeur Y avec le curseur"
-
-msgid "Apply"
-msgstr "Appliquer"
-
-msgid "Apply cursor position"
-msgstr "Appliquer la position du curseur"
-
-msgid "Cursor position"
-msgstr "Position du curseur"
-
-msgid "Minimum distance:"
-msgstr "Distance minimale :"
-
-msgid "Signal peak detection"
-msgstr "Détection de pics 1D"
-
-msgid "Peaks:"
-msgstr "Pics :"
 
 msgid "Plugins:"
 msgstr "Plugins :"
@@ -4073,11 +3892,11 @@ msgstr "Cliquer pour voir les infos de connexion"
 msgid "Source"
 msgstr "Source"
 
-msgid "File"
-msgstr "Fichier"
-
 msgid "Clipboard"
 msgstr "Presse-papiers"
+
+msgid "File"
+msgstr "Fichier"
 
 msgid "Source of the data"
 msgstr "Source des données"
@@ -4260,63 +4079,6 @@ msgstr "Importer depuis :"
 
 msgid "DataLab Import Wizard"
 msgstr "Assistant d'importation de DataLab"
-
-msgid "Error message"
-msgstr "Message d'erreur"
-
-msgid "The following traceback may help to understand the problem:"
-msgstr "Le traceback suivant peut aider à comprendre le problème :"
-
-msgid "Warning message"
-msgstr "Message d'avertissement"
-
-msgid "Please take into account the following warning message:"
-msgstr "Merci de prendre en compte le message d'avertissement suivant :"
-
-msgid "An error has occured during the following context:"
-msgstr "Une erreur est survenue dans le contexte suivant:"
-
-msgid "Context"
-msgstr "Contexte"
-
-msgid "Tip"
-msgstr "Astuce"
-
-msgid "Please click on the 'Ignore' button to ignore this warning next time."
-msgstr "Merci de cliquer sur le bouton 'Ignorer' pour ignorer cet avertissement la prochaine fois."
-
-msgid "Back"
-msgstr "Précédent"
-
-msgid "Finish"
-msgstr "Terminer"
-
-msgid "Welcome to the Example Wizard"
-msgstr "Bienvenue dans l'assistant exemple"
-
-msgid "This wizard will guide you through the process of importing data."
-msgstr "Cet assistant vous guidera à travers le processus d'importation de données."
-
-msgid "Select the Source of the Data"
-msgstr "Sélectionner la source des données"
-
-msgid "Select the source of the data to be imported (clipboard or file)."
-msgstr "Sélectionner la source des données à importer (presse-papiers ou fichier)."
-
-msgid "Browse..."
-msgstr "Parcourir..."
-
-msgid "Select the File to Import"
-msgstr "Sélectionner le fichier à importer"
-
-msgid "CSV Files (*.csv);;Text Files (*.txt);;All Files (*)"
-msgstr "Fichiers CSV (*.csv);;Fichiers texte (*.txt);;Tous les fichiers (*)"
-
-msgid "Please select the file to import."
-msgstr "Merci de sélectionner le fichier à importer."
-
-msgid "Example Wizard"
-msgstr "Assistant exemple"
 
 msgid "Signal"
 msgstr "Signal"

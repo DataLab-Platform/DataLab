@@ -94,7 +94,15 @@ easier to install, inspect and troubleshoot (implements
 
 **Object titles:**
 
-* Short identifiers embedded in object titles (e.g. `s001`, `i012`) are now rendered as **clickable links** in the signal and image trees, so the source objects of a computation can be selected in a single click
+DataLab now uses UUID-backed object references consistently across object trees,
+result titles, plot legends, and HDF5 imports (implements [Issue #367](https://github.com/DataLab-Platform/DataLab/issues/367) and consolidates [Issue #149](https://github.com/DataLab-Platform/DataLab/issues/149), [Issue #323](https://github.com/DataLab-Platform/DataLab/issues/323), [Issue #357](https://github.com/DataLab-Platform/DataLab/issues/357), and [Issue #358](https://github.com/DataLab-Platform/DataLab/issues/358)).
+
+* Object items in the signal and image trees now show their current title followed by their own stable `#UUID8` reference; group headers keep the familiar `gsNNN` and `giNNN` identifiers
+* Source references embedded in computed result titles are stable and clickable, so selecting the originating object no longer depends on its position or title
+* The new **References in result titles** setting lets users choose between **Source UUID** (the default, using 8-character references) and **Source title** (using live current source titles), without changing the canonical full UUID identity
+* Renaming an object now immediately updates its entry in the object tree and its plot legend, while existing source relationships remain intact
+* Selected object entries now have stronger foreground and background contrast, keeping titles and references readable in both signal and image trees
+* Loading legacy HDF5 files and appending projects now remap object identities and references safely; appending the same file twice also creates distinct identities, avoiding collisions and stale links
 
 **Replace special values processing (signal and image):**
 
