@@ -543,6 +543,7 @@ def test_processing_tab_debounces_valid_released_editor(monkeypatch):
 @pytest.mark.parametrize("record_history", [False, True])
 def test_processing_tab_updates_result_in_place(automatic, record_history):
     """Real Apply and timer callbacks update the selected result without publishing."""
+    from qtpy import QtCore as QC
     from qtpy.QtTest import QTest
 
     from datalab.gui.processor.base import extract_processing_parameters
@@ -597,6 +598,125 @@ def test_processing_tab_updates_result_in_place(automatic, record_history):
                     assert action.kwargs["param"].sigma == 1.0
                     assert not action.has_pending_edits
                 QW.QApplication.processEvents()
+                QW.QApplication.sendPostedEvents(None, QC.QEvent.DeferredDelete)
+                assert len(prop.findChildren(type(prop.processing_param_editor))) == 1
+
+
+@pytest.mark.parametrize(
+    "invalid_kind", ["image_1d", "empty", "signal_rows", "coords", "pitch"]
+)
+def test_recompute_rejects_invalid_output(monkeypatch, invalid_kind):
+    """Invalid scientific output must not mutate a saved destination."""
+    import copy
+
+    from sigima.objects import create_image
+    from sigima.params import ConstantParam
+
+    from datalab.gui.processor.catcher import CompOut
+    from datalab.tests import datalab_test_app_context
+
+    with qt_app_context(), datalab_test_app_context() as window:
+        is_signal = invalid_kind == "signal_rows"
+        panel = window.signalpanel if is_signal else window.imagepanel
+        panel.processor.set_process_isolation_enabled(False)
+        source = (
+            create_signal("Source", np.arange(5.0), np.ones(5))
+            if is_signal
+            else create_image("Source", np.ones((4, 4)))
+        )
+        panel.add_object(source)
+        panel.processor.run_feature(
+            "addition_constant", ConstantParam.create(value=1.0)
+        )
+        target = panel.objview.get_current_object()
+        original_data = target.xydata.copy() if is_signal else target.data.copy()
+        original_metadata = copy.deepcopy(target.metadata)
+        original_title = target.title
+        invalid = target.copy()
+        invalid.title = "Invalid result"
+        if invalid_kind == "signal_rows":
+            invalid.xydata = np.ones((5, 5))
+        elif invalid_kind == "image_1d":
+            invalid.data = np.ones(5)
+        elif invalid_kind == "empty":
+            invalid.data = np.empty((0, 4))
+        elif invalid_kind == "coords":
+            invalid.set_coords(np.arange(3.0), np.arange(4.0))
+        else:
+            invalid.dx = 0.0
+        monkeypatch.setattr(
+            panel.processor,
+            "recompute_1_to_1",
+            lambda *args, **kwargs: CompOut(result=invalid),
+        )
+        window.set_modified(False)
+        report = panel.objprop.apply_processing_parameters(
+            param=ConstantParam.create(value=9.0)
+        )
+        assert not report.success
+        assert not window.is_modified()
+        assert target.title == original_title
+        assert target.metadata == original_metadata
+        np.testing.assert_array_equal(
+            target.xydata if is_signal else target.data, original_data
+        )
+
+
+def test_recompute_signal_roi_and_selection(monkeypatch):
+    """Resampling invalidates ROI masks without restoring a previous selection."""
+    from sigima.objects import create_signal_roi
+    from sigima.params import Resampling1DParam
+
+    from datalab.objectmodel import get_uuid
+    from datalab.tests import datalab_test_app_context
+
+    with qt_app_context(), datalab_test_app_context() as window:
+        panel = window.signalpanel
+        panel.processor.set_process_isolation_enabled(False)
+        source = create_signal(
+            "Source", np.linspace(0, 10, 20), np.sin(np.linspace(0, 10, 20))
+        )
+        panel.add_object(source)
+        panel.processor.run_feature(
+            "resampling",
+            Resampling1DParam.create(mode="nbpts", xmin=0.0, xmax=10.0, nbpts=10),
+        )
+        target = panel.objview.get_current_object()
+        target.roi = create_signal_roi([2.0, 7.0])
+        assert target.maskdata.shape == (2, 10)
+        report = panel.objprop.apply_processing_parameters(
+            param=Resampling1DParam.create(mode="nbpts", xmin=0.0, xmax=10.0, nbpts=30)
+        )
+        assert report.success
+        np.testing.assert_array_equal(target.maskdata, target.roi.to_mask(target))
+        filtered = gaussian_filter(target, sigma=2.0)
+        np.testing.assert_array_equal(
+            filtered.xydata[target.maskdata], target.xydata[target.maskdata]
+        )
+        QW.QApplication.processEvents()
+        original_recompute = panel.processor.recompute_1_to_1
+
+        def recompute_and_switch(*args, **kwargs):
+            output = original_recompute(*args, **kwargs)
+            panel.objview.select_objects([get_uuid(source)])
+            return output
+
+        monkeypatch.setattr(panel.processor, "recompute_1_to_1", recompute_and_switch)
+        report = panel.objprop.apply_processing_parameters(
+            param=Resampling1DParam.create(mode="nbpts", xmin=0.0, xmax=10.0, nbpts=40)
+        )
+        QW.QApplication.processEvents()
+        assert report.success
+        assert panel.objview.get_current_object() is source
+        assert not panel.plothandler[get_uuid(target)].isVisible()
+        assert (
+            panel.plothandler.plot.get_active_item()
+            is panel.plothandler[get_uuid(source)]
+        )
+        panel.objview.select_objects([get_uuid(target)])
+        np.testing.assert_array_equal(
+            panel.plothandler[get_uuid(target)].get_data()[0], target.x
+        )
 
 
 def test_processing_result_scientific_state():

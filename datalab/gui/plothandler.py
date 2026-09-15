@@ -294,7 +294,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         self.plot.add_item(item)
         return item
 
-    def __update_item_on_plot(self, oid: str, just_show: bool = False) -> None:
+    def update_item_on_plot(self, oid: str, just_show: bool = False) -> None:
         """Update plot item.
 
         Args:
@@ -468,7 +468,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
                             continue
                         item = self.__add_item_to_plot(oid)
                     else:
-                        self.__update_item_on_plot(oid, just_show=not update_items)
+                        self.update_item_on_plot(oid, just_show=not update_items)
                     if what != "existing" or item.isVisible():
                         self.plot.set_item_visible(item, True, replot=False)
                         self.plot.set_active_item(item)

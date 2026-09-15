@@ -238,18 +238,37 @@ def apply_processing_result(
     """
     if type(result) is not type(obj):
         raise TypeError("Processing result must have the destination object's type")
+    data = result.data if isinstance(result, ImageObj) else result.xydata
+    if (
+        not isinstance(data, np.ndarray)
+        or data.ndim != 2
+        or data.size == 0
+        or (isinstance(result, SignalObj) and data.shape[0] not in (2, 3, 4))
+    ):
+        raise ValueError("Invalid processing result data dimensions")
     prepared = result.copy()
     prepared.check_data()
     stored_parameters = parameters.to_dict()
     attributes = ["title", "xlabel", "ylabel", "xunit", "yunit"]
     if isinstance(prepared, ImageObj):
         attributes += ["data", "zlabel", "zunit"]
-        if not prepared.is_uniform_coords:
+        if prepared.is_uniform_coords:
+            if (
+                not np.all(
+                    np.isfinite([prepared.dx, prepared.dy, prepared.x0, prepared.y0])
+                )
+                or prepared.dx == 0
+                or prepared.dy == 0
+            ):
+                raise ValueError("Invalid uniform image coordinates")
+        else:
             if (
                 prepared.xcoords.ndim != 1
                 or prepared.ycoords.ndim != 1
                 or prepared.xcoords.size != prepared.data.shape[1]
                 or prepared.ycoords.size != prepared.data.shape[0]
+                or not np.all(np.isfinite(prepared.xcoords))
+                or not np.all(np.isfinite(prepared.ycoords))
             ):
                 raise ValueError("Image coordinates must match the data dimensions")
     else:
@@ -262,7 +281,7 @@ def apply_processing_result(
             obj.set_uniform_coords(prepared.dx, prepared.dy, prepared.x0, prepared.y0)
         else:
             obj.set_coords(prepared.xcoords, prepared.ycoords)
-        obj.invalidate_maskdata_cache()
+    obj.invalidate_maskdata_cache()
     obj.set_metadata_option(PROCESSING_PARAMETERS_OPTION, stored_parameters)
 
 
@@ -1476,7 +1495,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         # Update the tree view item and refresh plot
         self.panel.objview.update_item(report.obj_uuid)
         if refresh_plot:
-            self.panel.refresh_plot(report.obj_uuid, update_items=True, force=True)
+            if self.panel.plothandler.get(report.obj_uuid) is not None:
+                self.panel.plothandler.update_item_on_plot(report.obj_uuid)
+            self.panel.refresh_plot("selected", update_items=True, force=True)
 
         report.success = True
         if isinstance(obj, SignalObj):

@@ -889,6 +889,7 @@ class ObjectProp(QW.QWidget):
             index = self.tabwidget.indexOf(self.processing_scroll)
             if index >= 0:
                 self.tabwidget.removeTab(index)
+            self.processing_scroll.deleteLater()
 
         # Processing tab comes after Creation tab (if it exists)
         # Find the correct insertion index: after Creation (index 0) if it exists,
