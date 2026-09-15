@@ -220,6 +220,52 @@ def insert_processing_parameters(
         obj.set_metadata_option(PROCESSING_PARAMETERS_OPTION, pp.to_dict())
 
 
+def apply_processing_result(
+    obj: SignalObj | ImageObj,
+    result: SignalObj | ImageObj,
+    parameters: ProcessingParameters,
+) -> None:
+    """Copy scientific output in place, preserving identity and user properties.
+
+    Args:
+        obj: Existing destination object.
+        result: Fresh output with data, coordinates, labels and units.
+        parameters: Updated processing provenance.
+
+    Raises:
+        TypeError: If the result type differs from the destination type.
+        ValueError: If output data or coordinates are invalid.
+    """
+    if type(result) is not type(obj):
+        raise TypeError("Processing result must have the destination object's type")
+    prepared = result.copy()
+    prepared.check_data()
+    stored_parameters = parameters.to_dict()
+    attributes = ["title", "xlabel", "ylabel", "xunit", "yunit"]
+    if isinstance(prepared, ImageObj):
+        attributes += ["data", "zlabel", "zunit"]
+        if not prepared.is_uniform_coords:
+            if (
+                prepared.xcoords.ndim != 1
+                or prepared.ycoords.ndim != 1
+                or prepared.xcoords.size != prepared.data.shape[1]
+                or prepared.ycoords.size != prepared.data.shape[0]
+            ):
+                raise ValueError("Image coordinates must match the data dimensions")
+    else:
+        attributes.append("xydata")
+    values = {name: getattr(prepared, name) for name in attributes}
+    for name, value in values.items():
+        setattr(obj, name, value)
+    if isinstance(obj, ImageObj):
+        if prepared.is_uniform_coords:
+            obj.set_uniform_coords(prepared.dx, prepared.dy, prepared.x0, prepared.y0)
+        else:
+            obj.set_coords(prepared.xcoords, prepared.ycoords)
+        obj.invalidate_maskdata_cache()
+    obj.set_metadata_option(PROCESSING_PARAMETERS_OPTION, stored_parameters)
+
+
 def build_processing_parameters(
     func_name: str,
     pattern: str,
@@ -1405,16 +1451,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             report.message = compout.error_msg or _("Failed to reprocess object.")
             return report
 
-        # Update the current object in-place with data from new object
-        obj.title = new_obj.title
-        if isinstance(obj, SignalObj):
-            obj.xydata = new_obj.xydata
-        else:
-            obj.data = new_obj.data
-            # Invalidate ROI mask cache when image dimensions may have changed
-            # (the mask is computed based on image shape, so it must be recomputed)
-            obj.invalidate_maskdata_cache()
-
         # Update metadata with new processing parameters
         updated_proc_params = ProcessingParameters(
             func_name=proc_params.func_name,
@@ -1423,7 +1459,19 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             source_uuid=proc_params.source_uuid,
             plugin_origin=proc_params.plugin_origin,
         )
-        insert_processing_parameters(obj, updated_proc_params)
+        try:
+            if (
+                not self.panel.objmodel.has_uuid(report.obj_uuid)
+                or self.panel.objmodel[report.obj_uuid] is not obj
+            ):
+                raise ValueError("Processing destination no longer exists")
+            apply_processing_result(obj, new_obj, updated_proc_params)
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            report.message = _("Failed to reprocess object:\n%s") % str(exc)
+            if interactive:
+                QW.QMessageBox.warning(self.panel, _("Error"), report.message)
+            return report
+        self.panel.SIG_OBJECT_MODIFIED.emit()
 
         # Update the tree view item and refresh plot
         self.panel.objview.update_item(report.obj_uuid)

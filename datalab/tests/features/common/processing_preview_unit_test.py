@@ -539,6 +539,140 @@ def test_processing_tab_debounces_valid_released_editor(monkeypatch):
             assert not timer.isActive()
 
 
+@pytest.mark.parametrize("automatic", [False, True])
+@pytest.mark.parametrize("record_history", [False, True])
+def test_processing_tab_updates_result_in_place(automatic, record_history):
+    """Real Apply and timer callbacks update the selected result without publishing."""
+    from qtpy.QtTest import QTest
+
+    from datalab.gui.processor.base import extract_processing_parameters
+    from datalab.objectmodel import get_uuid
+    from datalab.tests import datalab_test_app_context
+
+    with qt_app_context():
+        with datalab_test_app_context(history=True) as window:
+            panel = window.signalpanel
+            panel.processor.set_process_isolation_enabled(False)
+            history = window.historypanel
+            history.toggle_record_mode(record_history)
+            source = create_signal("Source", np.arange(20.0), np.sin(np.arange(20.0)))
+            source_data = source.xydata.copy()
+            panel.add_object(source)
+            panel.processor.run_feature(
+                "gaussian_filter", GaussianParam.create(sigma=1.0)
+            )
+            prop = panel.objprop
+            result = prop.current_processing_obj
+            result_uuid = get_uuid(result)
+            result.metadata["user_marker"] = 123
+            history_count = len(history)
+            action = history.find_action_for_output(result_uuid, "gaussian_filter")
+            assert not history.is_edit_mode()
+            for sigma in (2.0, 3.0):
+                window.set_modified(False)
+                editor = prop.processing_param_editor
+                editor.findChild(QW.QCheckBox, "auto_recompute_on_edit").setChecked(
+                    automatic
+                )
+                editor.edit.get_terminal_widgets()[0].edit.setText(str(sigma))
+                if automatic:
+                    for _attempt in range(100):
+                        QTest.qWait(20)
+                        if extract_processing_parameters(result).param.sigma == sigma:
+                            break
+                else:
+                    editor.apply_button.click()
+                assert len(panel.objmodel) == 2
+                assert window.is_modified()
+                assert panel.objmodel[result_uuid] is result
+                assert panel.objview.get_current_object() is result
+                assert result.metadata["user_marker"] == 123
+                np.testing.assert_allclose(
+                    result.y, gaussian_filter(source, sigma=sigma).y
+                )
+                np.testing.assert_array_equal(source.xydata, source_data)
+                assert extract_processing_parameters(result).param.sigma == sigma
+                assert len(history) == history_count
+                if action is not None:
+                    assert action.kwargs["param"].sigma == 1.0
+                    assert not action.has_pending_edits
+                QW.QApplication.processEvents()
+
+
+def test_processing_result_scientific_state():
+    """Copy scientific fields without replacing destination-owned properties."""
+    from sigima.objects import create_image, create_signal
+
+    from datalab.gui.processor.base import ProcessingParameters, apply_processing_result
+
+    parameters = ProcessingParameters("test", "1-to-1")
+    target = create_signal("Old", np.arange(4.0), np.zeros(4))
+    target.metadata["user"] = {"value": 42}
+    target.annotations = "retained"
+    fresh = create_signal("New", np.arange(4.0), np.ones(4))
+    fresh.set_xydata(fresh.x, fresh.y, np.ones(4), np.full(4, 2.0))
+    fresh.xlabel, fresh.xunit = "Time", "s"
+    apply_processing_result(target, fresh, parameters)
+    np.testing.assert_array_equal(target.xydata, fresh.xydata)
+    assert not np.shares_memory(target.xydata, fresh.xydata)
+    assert (target.xlabel, target.xunit) == ("Time", "s")
+    assert target.metadata["user"] == {"value": 42}
+    assert target.annotations == "retained"
+
+    image = create_image("Old", np.zeros((2, 3)))
+    image.metadata["user"] = 42
+    fresh_image = create_image("New", np.ones((3, 4)))
+    fresh_image.set_coords(np.array([0.0, 1.0, 3.0, 6.0]), np.array([0.0, 2.0, 5.0]))
+    apply_processing_result(image, fresh_image, parameters)
+    assert not image.is_uniform_coords
+    np.testing.assert_array_equal(image.xcoords, fresh_image.xcoords)
+    assert not np.shares_memory(image.xcoords, fresh_image.xcoords)
+    assert image.metadata["user"] == 42
+    snapshot = image.data.copy()
+    with pytest.raises(TypeError):
+        apply_processing_result(image, fresh, parameters)
+    np.testing.assert_array_equal(image.data, snapshot)
+    fresh_image.set_uniform_coords(2.0, 3.0, 4.0, 5.0)
+    apply_processing_result(image, fresh_image, parameters)
+    assert image.is_uniform_coords
+    assert image.xcoords.size == image.ycoords.size == 0
+    assert (image.dx, image.dy, image.x0, image.y0) == (2.0, 3.0, 4.0, 5.0)
+
+
+def test_recompute_binning_coordinates():
+    """Reprocessing keeps pixel geometry consistent with the freshly computed data."""
+    from sigima.objects import create_image
+    from sigima.params import BinningParam
+    from sigima.proc.image import binning
+
+    from datalab.objectmodel import get_uuid
+    from datalab.tests import datalab_test_app_context
+
+    with qt_app_context(), datalab_test_app_context() as window:
+        panel = window.imagepanel
+        panel.processor.set_process_isolation_enabled(False)
+        source = create_image("Source", np.arange(144.0).reshape(12, 12))
+        source.set_uniform_coords(0.5, 2.0, 10.0, -3.0)
+        panel.add_object(source)
+        panel.processor.run_feature(
+            "binning", BinningParam.create(sx=2, sy=2, change_pixel_size=True)
+        )
+        result = panel.objview.get_current_object()
+        result_uuid = get_uuid(result)
+        param = BinningParam.create(sx=3, sy=4, change_pixel_size=True)
+        expected = binning(source, param)
+        report = panel.objprop.apply_processing_parameters(param=param)
+        assert report.success
+        assert panel.objmodel[result_uuid] is result
+        np.testing.assert_allclose(result.data, expected.data)
+        assert (result.dx, result.dy, result.x0, result.y0) == (
+            expected.dx,
+            expected.dy,
+            expected.x0,
+            expected.y0,
+        )
+
+
 def test_preview_preserves_custom_editors_and_backends(monkeypatch):
     """Unknown editors, alternate backends and feature vetoes retain their path."""
     from guidata.dataset import backends
@@ -574,7 +708,7 @@ def test_preview_preserves_custom_editors_and_backends(monkeypatch):
 
 
 def test_live_image_to_signal_preview(tmp_path, monkeypatch):
-    """A Qt click drives a real spawn round-trip into a rendered PlotPy curve."""
+    """A Qt click drives a real spawn round-trip into a visible PlotPy curve."""
     from qtpy import QtCore as QC
     from qtpy import QtWidgets as QW
     from qtpy.QtTest import QTest
@@ -623,8 +757,7 @@ def test_live_image_to_signal_preview(tmp_path, monkeypatch):
             loop.exec_()
             timeout.stop()
             assert dialog.preview.item is not None, dialog.preview.details.toPlainText()
-            QW.QApplication.processEvents()
-            assert not dialog.preview.plotwidget.isHidden()
+            assert dialog.preview.plotwidget.isVisible()
             np.testing.assert_allclose(dialog.preview.item.get_data()[0], expected.x)
             np.testing.assert_allclose(dialog.preview.item.get_data()[1], expected.y)
             assert source.data.dtype == np.uint16
@@ -640,7 +773,7 @@ def test_live_image_to_signal_preview(tmp_path, monkeypatch):
 
 @pytest.mark.parametrize("edit_mode", [False, True])
 def test_processing_apply_preserves_history_modes(edit_mode):
-    """Apply creates a result normally, but edits in place in history edit mode."""
+    """Apply updates in place, changing recorded parameters only in edit mode."""
     from datalab.config import Conf
     from datalab.objectmodel import get_uuid
     from datalab.tests import datalab_test_app_context
@@ -661,11 +794,15 @@ def test_processing_apply_preserves_history_modes(edit_mode):
             editor = panel.objprop.processing_param_editor
             editor.edit.get_terminal_widgets()[0].edit.setText("3.0")
             editor.set()
-            assert len(panel.objmodel) == (2 if edit_mode else 3)
-            assert len(window.historypanel) == history_count + (0 if edit_mode else 1)
-            result = (
-                panel.objmodel[original_id]
-                if edit_mode
-                else panel.objview.get_current_object()
+            assert len(panel.objmodel) == 2
+            assert len(window.historypanel) == history_count
+            result = panel.objmodel[original_id]
+            assert result is original
+            assert panel.objview.get_current_object() is original
+            action = window.historypanel.find_action_for_output(
+                original_id, "gaussian_filter"
             )
+            assert action is not None
+            assert action.kwargs["param"].sigma == (3.0 if edit_mode else 1.0)
+            assert action.has_pending_edits == edit_mode
             np.testing.assert_allclose(result.y, gaussian_filter(source, sigma=3.0).y)

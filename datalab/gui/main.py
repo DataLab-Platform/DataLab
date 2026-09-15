@@ -1438,7 +1438,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         for panel in self.panels:
             panel.SIG_OBJECT_ADDED.connect(self.set_modified)
             panel.SIG_OBJECT_REMOVED.connect(self.set_modified)
-        self.macropanel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
+            panel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
         # Initializing common panel actions
         self.autorefresh_action.setChecked(Conf.auto_refresh.get(True))
         self.showfirstonly_action.setChecked(Conf.show_first_only.get(False))

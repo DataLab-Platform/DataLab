@@ -84,10 +84,10 @@ from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
     ProcessingParameters,
     ProcessingReport,
+    apply_processing_result,
     clear_analysis_parameters,
     extract_analysis_parameters,
     extract_processing_parameters,
-    insert_processing_parameters,
 )
 from datalab.gui.roieditor import TypeROIEditor
 from datalab.objectmodel import (
@@ -95,7 +95,6 @@ from datalab.objectmodel import (
     get_number,
     get_short_id,
     get_uuid,
-    patch_title_with_ids,
     set_number,
     set_uuid,
 )
@@ -1177,7 +1176,7 @@ class ObjectProp(QW.QWidget):
         param: gds.DataSet | None = None,
     ) -> ProcessingReport:
         # pylint: disable=too-many-return-statements
-        """Apply processing parameters: re-run processing with updated parameters.
+        """Apply processing parameters by recomputing the existing object in place.
 
         Args:
             obj: Signal or Image object to reprocess. If None, uses the current object.
@@ -1194,6 +1193,7 @@ class ObjectProp(QW.QWidget):
         if execenv.unattended:
             interactive = False
 
+        self.__auto_recompute_timer.stop()
         editor = self.processing_param_editor
         obj = obj or self.current_processing_obj
         if obj is None:
@@ -1240,13 +1240,13 @@ class ObjectProp(QW.QWidget):
         hpanel = getattr(self.panel.mainwindow, "historypanel", None)
         is_edit_mode = hpanel is not None and hpanel.is_edit_mode()
 
-        if is_edit_mode:
-            report = self.panel.processor.recompute_processing(
-                obj=obj,
-                param=param,
-                interactive=interactive,
-            )
-            if report.success:
+        report = self.panel.processor.recompute_processing(
+            obj=obj,
+            param=param,
+            interactive=interactive,
+        )
+        if report.success:
+            if is_edit_mode:
                 # Propagate the edited param to the History panel:
                 # Mutate the matching existing action (snapshot originals
                 # first), refresh its tree display, then cascade recompute
@@ -1261,83 +1261,18 @@ class ObjectProp(QW.QWidget):
                     hpanel.refresh_action(action)
                     hpanel.recompute_cascade(action)
 
-                # Update the tree view item and refresh plot
-                obj_uuid = get_uuid(obj)
-                self.panel.objview.update_item(obj_uuid)
-                self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+            def refresh_current_processing_tab() -> None:
+                if (
+                    self.current_processing_obj is obj
+                    and self.panel.objview.get_current_object() is obj
+                    and self.panel.objmodel.has_uuid(get_uuid(obj))
+                ):
+                    self.__update_properties_dataset(obj)
+                    self.update_original_values()
+                    self.display_processing_history(obj)
+                    self.setup_processing_tab(obj, reset_params=False, set_current=True)
 
-                # Update the Properties tab to reflect the new object
-                self.__update_properties_dataset(obj)
-                # Refresh the displayed processing history (Properties tab
-                # description) so the parameter change is visible immediately
-                self.display_processing_history(obj)
-
-                # Refresh the Processing tab with the new parameters
-                QC.QTimer.singleShot(
-                    0,
-                    lambda: self.setup_processing_tab(
-                        obj, reset_params=False, set_current=True
-                    ),
-                )
-        else:
-            source_processor = self.__get_processor_associated_to(source_obj)
-            try:
-                compout = source_processor.recompute_1_to_1(
-                    proc_params.func_name,
-                    source_obj,
-                    param,
-                    plugin_origin=proc_params.plugin_origin,
-                )
-            except Exception as exc:  # pylint: disable=broad-exception-caught
-                report = ProcessingReport(success=False, obj_uuid=get_uuid(obj))
-                report.message = _("Failed to reprocess object:\n%s") % str(exc)
-                if interactive:
-                    QW.QMessageBox.warning(self, _("Error"), report.message)
-                return report
-
-            report = ProcessingReport(success=False, obj_uuid=get_uuid(obj))
-            if compout.cancelled:
-                report.cancelled = True
-                report.message = _("Processing was cancelled.")
-                return report
-            new_obj = compout.result
-            if new_obj is None:
-                report.message = compout.error_msg or _("Failed to reprocess object.")
-                return report
-            report.success = True
-
-            # --- Non-edit mode: create a new independent object ---
-            patch_title_with_ids(new_obj, [obj], get_short_id)
-
-            # Store processing metadata on the new object
-            # pylint: disable=import-outside-toplevel
-            from datalab.gui.processor.base import build_processing_parameters
-
-            new_pp = build_processing_parameters(
-                proc_params.func_name,
-                proc_params.pattern,
-                param=copy.deepcopy(param),
-                source_uuid=proc_params.source_uuid,
-                plugin_origin=proc_params.plugin_origin,
-            )
-            insert_processing_parameters(new_obj, new_pp)
-
-            # Mark as freshly processed so the Processing tab is shown
-            self.mark_as_freshly_processed(new_obj)
-
-            # Add the new object to the same group as the source object
-            group_id = self.panel.objmodel.get_object_group_id(obj)
-            self.panel.add_object(new_obj, group_id=group_id, set_current=True)
-
-            # Record a brand-new history entry with the new object UUID
-            if hpanel is not None:
-                hpanel.add_compute_entry_from_pp(
-                    new_obj.title,
-                    new_pp,
-                    panel_str=self.panel.PANEL_STR_ID,
-                    output_uuids=[get_uuid(new_obj)],
-                    plugin_origin=proc_params.plugin_origin,
-                )
+            QC.QTimer.singleShot(0, refresh_current_processing_tab)
 
         return report
 
@@ -1349,21 +1284,15 @@ class ObjectProp(QW.QWidget):
     ) -> None:
         """Apply a freshly recomputed object onto ``obj`` in place.
 
-        Copies title + data from ``new_obj`` while preserving ``obj``'s own
-        metadata (only the processing parameters are refreshed).
+        Copies scientific data, coordinates, labels and units while preserving
+        metadata, annotations and display settings. Only processing metadata changes.
 
         Args:
             obj: Existing object to update in place (identity preserved).
             new_obj: Freshly recomputed object providing title + data.
             proc_params: Updated processing parameters to store on ``obj``.
         """
-        obj.title = new_obj.title
-        if isinstance(obj, SignalObj):
-            obj.xydata = new_obj.xydata
-        else:  # ImageObj
-            obj.data = new_obj.data
-            obj.invalidate_maskdata_cache()
-        insert_processing_parameters(obj, proc_params)
+        apply_processing_result(obj, new_obj, proc_params)
 
 
 class AbstractPanelMeta(type(QW.QSplitter), abc.ABCMeta):
