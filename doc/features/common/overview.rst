@@ -133,6 +133,44 @@ This is particularly useful for:
 Interactive 1-to-1 processing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Live preview before applying a processing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Standard parameter dialogs for 1-to-1 processing offer a **Preview** checkbox,
+unchecked each time the dialog opens. Enable it to display a temporary result
+while adjusting the parameters. With several signals, images or groups selected,
+choose one source in the preview selector; **OK** still processes the whole
+original selection with the common parameters.
+
+The preview uses the complete source data, including its regions of interest,
+without adding objects or history entries. Invalid entries suspend updates.
+Warnings and errors appear inside the dialog. Typing is debounced and slider
+drags are throttled; large data and expensive algorithms may take longer to
+update. The preview shows only the result, with its own axes and units, including
+when an image processing returns a signal.
+
+Starting the first preview creates a dedicated process. After a preview has
+finished, DataLab keeps this process ready for later preview dialogs, including
+when switching between signal and image processing. Closing a dialog while a
+preview is still running stops that process; the next preview then performs a
+fresh startup. Reloading plugins also discards the cached preview process.
+
+**Cancel** discards the draft parameters and stops the preview. With one source,
+**OK** reuses a completed, up-to-date preview once and publishes it through the
+normal processing path, including history. If the preview is still running or
+stale, or if several objects or groups are selected, DataLab runs the normal
+processing instead. Analysis, multi-input operations, operations without
+parameters and unknown custom parameter dialogs retain their existing workflow.
+
+Bounded numeric fields automatically offer sliders in compatible processing
+forms and in the **Processing** tab. The exact text field remains authoritative;
+moving its slider does not limit the precision of values entered by keyboard.
+Fields without two usable bounds remain text-only. Sliders alone never enable
+preview or automatic re-processing.
+
+Re-processing an existing result
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 When applying a 1-to-1 processing operation that has configurable parameters (e.g.,
 Gaussian filter, threshold, morphological operations), DataLab stores the processing
 metadata, enabling parameter adjustment and re-processing:
@@ -144,7 +182,11 @@ metadata, enabling parameter adjustment and re-processing:
 5. Modify processing parameters (e.g., filter sigma value)
 6. Click **Apply** to re-process with updated parameters
 
-The processed object is updated in place with the new results. This workflow is ideal for:
+Normally, **Apply** creates a new result and history entry. In the History panel's
+edit mode it updates the existing result and recomputes dependent actions. The
+optional **Auto-recompute on edit** checkbox follows the same rules, waits for
+slider release and valid input, and does not apply edits from a previously
+selected object. This workflow is ideal for:
 
 - Iteratively tuning filter parameters while observing results in real time
 - Adjusting threshold values without creating multiple intermediate objects
@@ -168,7 +210,7 @@ The processed object is updated in place with the new results. This workflow is 
 Example workflow
 ^^^^^^^^^^^^^^^^
 
-Here's a typical workflow using interactive processing:
+Here's a typical workflow using interactive processing, with History edit mode enabled:
 
 1. **Create a test signal**: Create > Gaussian signal
 
