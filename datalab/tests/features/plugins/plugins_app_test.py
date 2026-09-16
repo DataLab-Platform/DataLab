@@ -108,9 +108,13 @@ def test_plugin_system():  # pylint: disable=too-many-statements
             # Trigger reload
             processor = win.imagepanel.processor
             assert processor.worker is not None
-            with patch.object(processor.worker, "restart_pool") as restart_pool:
+            with (
+                patch.object(processor.worker, "restart_pool") as restart_pool,
+                patch.object(win.preview_executor_cache, "reset") as reset_cache,
+            ):
                 win.reload_plugins()
             restart_pool.assert_called_once_with()
+            reset_cache.assert_called_once_with()
             QW.QApplication.processEvents()
 
             # Verify both plugins are present
@@ -382,6 +386,10 @@ def test_plugin_config_disabled():
                         "disabled" in args[0][2].lower()
                         or "désactivés" in args[0][2].lower()
                     )
+
+                with patch.object(win.preview_executor_cache, "reset") as reset_cache:
+                    win.set_plugins_enabled(False)
+                reset_cache.assert_called_once_with()
 
 
 @enabled_plugins_context()

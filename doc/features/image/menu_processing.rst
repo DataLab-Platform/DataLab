@@ -361,7 +361,7 @@ The following thresholding methods are available:
 Exposure
 ^^^^^^^^
 
-Create a new image which is the result of exposure correction on each selected image.
+Create new images by applying exposure corrections. Brightness and contrast uses the first selected image to initialize one shared input window, then applies that window independently to every selected image. Each result retains the output range of its own source image.
 
 The following functions are available:
 
@@ -372,6 +372,9 @@ The following functions are available:
     * - Function
       - Implementation
       - Comments
+    * - Brightness and contrast
+      - :py:func:`sigima.proc.image.adjust_brightness_contrast`
+      - Histogram-driven clipped linear remapping, initialized from the first selected image
     * - Gamma correction
       - `skimage.exposure.adjust_gamma <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_gamma>`_
       -

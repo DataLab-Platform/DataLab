@@ -383,3 +383,4 @@ msgstr "Ajout d'un exemple de plugin montrant des lignes de contour iso-niveau s
 
 msgid "Updated French translations across all new and modified documentation pages"
 msgstr "Mise à jour des traductions françaises sur toutes les nouvelles pages de documentation et celles modifiées"
+

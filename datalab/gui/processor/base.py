@@ -220,6 +220,71 @@ def insert_processing_parameters(
         obj.set_metadata_option(PROCESSING_PARAMETERS_OPTION, pp.to_dict())
 
 
+def apply_processing_result(
+    obj: SignalObj | ImageObj,
+    result: SignalObj | ImageObj,
+    parameters: ProcessingParameters,
+) -> None:
+    """Copy scientific output in place, preserving identity and user properties.
+
+    Args:
+        obj: Existing destination object.
+        result: Fresh output with data, coordinates, labels and units.
+        parameters: Updated processing provenance.
+
+    Raises:
+        TypeError: If the result type differs from the destination type.
+        ValueError: If output data or coordinates are invalid.
+    """
+    if type(result) is not type(obj):
+        raise TypeError("Processing result must have the destination object's type")
+    data = result.data if isinstance(result, ImageObj) else result.xydata
+    if (
+        not isinstance(data, np.ndarray)
+        or data.ndim != 2
+        or data.size == 0
+        or (isinstance(result, SignalObj) and data.shape[0] not in (2, 3, 4))
+    ):
+        raise ValueError("Invalid processing result data dimensions")
+    prepared = result.copy()
+    prepared.check_data()
+    stored_parameters = parameters.to_dict()
+    attributes = ["title", "xlabel", "ylabel", "xunit", "yunit"]
+    if isinstance(prepared, ImageObj):
+        attributes += ["data", "zlabel", "zunit"]
+        if prepared.is_uniform_coords:
+            if (
+                not np.all(
+                    np.isfinite([prepared.dx, prepared.dy, prepared.x0, prepared.y0])
+                )
+                or prepared.dx == 0
+                or prepared.dy == 0
+            ):
+                raise ValueError("Invalid uniform image coordinates")
+        else:
+            if (
+                prepared.xcoords.ndim != 1
+                or prepared.ycoords.ndim != 1
+                or prepared.xcoords.size != prepared.data.shape[1]
+                or prepared.ycoords.size != prepared.data.shape[0]
+                or not np.all(np.isfinite(prepared.xcoords))
+                or not np.all(np.isfinite(prepared.ycoords))
+            ):
+                raise ValueError("Image coordinates must match the data dimensions")
+    else:
+        attributes.append("xydata")
+    values = {name: getattr(prepared, name) for name in attributes}
+    for name, value in values.items():
+        setattr(obj, name, value)
+    if isinstance(obj, ImageObj):
+        if prepared.is_uniform_coords:
+            obj.set_uniform_coords(prepared.dx, prepared.dy, prepared.x0, prepared.y0)
+        else:
+            obj.set_coords(prepared.xcoords, prepared.ycoords)
+    obj.invalidate_maskdata_cache()
+    obj.set_metadata_option(PROCESSING_PARAMETERS_OPTION, stored_parameters)
+
+
 def build_processing_parameters(
     func_name: str,
     pattern: str,
@@ -763,6 +828,7 @@ class ComputingFeature(Generic[TypeObj]):
          :meth:`BaseProcessor.add_feature` time). ``None`` for built-in
          (Sigima/DataLab) features.
         pre_execute_hook: optional transactional source preparation hook
+        preview_enabled: allow speculative execution in standard 1-to-1 dialogs
     """
 
     pattern: Literal["1_to_1", "1_to_0", "1_to_n", "n_to_1", "2_to_1"]
@@ -776,6 +842,7 @@ class ComputingFeature(Generic[TypeObj]):
     skip_xarray_compat: Optional[bool] = None
     plugin_origin: Optional[dict[str, Any]] = field(default=None)
     pre_execute_hook: Optional[SourcePreparationHook[TypeObj]] = None
+    preview_enabled: bool = True
 
     def __post_init__(self):
         """Validate the function after initialization."""
@@ -915,8 +982,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         # History replay must be non-interactive and deterministic: treat
         # "ask" as automatic interpolation while replaying.
-        hpanel = getattr(self.mainwindow, "historypanel", None)
-        replaying = hpanel is not None and hpanel.is_replaying()
+        hpanel = self.mainwindow.historypanel
+        replaying = hpanel.is_replaying()
         if behavior == "ask" and not env.execenv.unattended and not replaying:
             # Create custom message box with "Yes to All" option
             msg_box = QW.QMessageBox(self.mainwindow)
@@ -1004,8 +1071,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
              If False, non-native objects are added to default group. Set to False when
              group_id is from the source panel and object goes to a different panel.
         """
-        hpanel = getattr(self.mainwindow, "historypanel", None)
-        if hpanel is not None and hpanel.is_output_suppressed():
+        hpanel = self.mainwindow.historypanel
+        if hpanel.is_output_suppressed():
             return
         is_new_obj_native = isinstance(new_obj, self.panel.PARAMCLASS)
         if is_new_obj_native:
@@ -1038,8 +1105,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         Returns:
             UUID of the created group.
         """
-        hpanel = getattr(self.mainwindow, "historypanel", None)
-        if hpanel is not None and hpanel.is_output_suppressed():
+        hpanel = self.mainwindow.historypanel
+        if hpanel.is_output_suppressed():
             return None
         is_new_obj_native = isinstance(new_obj, self.panel.PARAMCLASS)
         if is_new_obj_native:
@@ -1403,16 +1470,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             report.message = compout.error_msg or _("Failed to reprocess object.")
             return report
 
-        # Update the current object in-place with data from new object
-        obj.title = new_obj.title
-        if isinstance(obj, SignalObj):
-            obj.xydata = new_obj.xydata
-        else:
-            obj.data = new_obj.data
-            # Invalidate ROI mask cache when image dimensions may have changed
-            # (the mask is computed based on image shape, so it must be recomputed)
-            obj.invalidate_maskdata_cache()
-
         # Update metadata with new processing parameters
         updated_proc_params = ProcessingParameters(
             func_name=proc_params.func_name,
@@ -1421,12 +1478,26 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             source_uuid=proc_params.source_uuid,
             plugin_origin=proc_params.plugin_origin,
         )
-        insert_processing_parameters(obj, updated_proc_params)
+        try:
+            if (
+                not self.panel.objmodel.has_uuid(report.obj_uuid)
+                or self.panel.objmodel[report.obj_uuid] is not obj
+            ):
+                raise ValueError("Processing destination no longer exists")
+            apply_processing_result(obj, new_obj, updated_proc_params)
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            report.message = _("Failed to reprocess object:\n%s") % str(exc)
+            if interactive:
+                QW.QMessageBox.warning(self.panel, _("Error"), report.message)
+            return report
+        self.panel.SIG_OBJECT_MODIFIED.emit()
 
         # Update the tree view item and refresh plot
         self.panel.objview.update_item(report.obj_uuid)
         if refresh_plot:
-            self.panel.refresh_plot(report.obj_uuid, update_items=True, force=True)
+            if self.panel.plothandler.get(report.obj_uuid) is not None:
+                self.panel.plothandler.update_item_on_plot(report.obj_uuid)
+            self.panel.refresh_plot("selected", update_items=True, force=True)
 
         report.success = True
         if isinstance(obj, SignalObj):
@@ -1649,7 +1720,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         return result is not None and result.execution_success
 
     def _compute_1_to_1_subroutine(
-        self, funcs: list[Callable], params: list, title: str
+        self,
+        funcs: list[Callable],
+        params: list,
+        title: str,
+        preview_result: tuple[SignalObj | ImageObj, CompOut] | None = None,
     ) -> None:
         """Generic subroutine for 1-to-1 processing.
 
@@ -1672,8 +1747,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     i_title = f"{title} ({pvalue}/{n_glob})"
                     progress.setLabelText(i_title)
                     progress.setValue(pvalue)
-                    args = (obj,) if param is None else (obj, param)
-                    result = self.__exec_func(func, args, progress)
+                    if preview_result is not None and preview_result[0] is obj:
+                        result = preview_result[1]
+                        preview_result = None
+                    else:
+                        args = (obj,) if param is None else (obj, param)
+                        result = self.__exec_func(func, args, progress)
                     if result is None:
                         break
                     new_obj = self.handle_output(
@@ -1792,6 +1871,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        preview_enabled: bool = True,
     ) -> None:
         """Generic processing method: 1 object in â†’ 1 object out.
 
@@ -1808,6 +1888,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             title: Optional progress bar title.
             comment: Optional comment for parameter dialog.
             edit: Whether to open the parameter editor before execution.
+            preview_enabled: Allow an optional live preview in the parameter dialog.
 
         .. note::
             With k selected objects, the method produces k outputs (one per input).
@@ -1815,14 +1896,56 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         .. note::
             This method does not support pairwise mode.
         """
-        if (edit is None or param is None) and paramclass is not None:
-            old_edit = edit
-            edit, param = self.init_param(param, paramclass, title, comment)
-            if old_edit is not None:
-                edit = old_edit
-        if param is not None:
-            if edit and not param.edit(parent=self.mainwindow):
+        sources = self.panel.objview.get_sel_objects(include_groups=True)
+        groups = self.panel.objview.get_sel_groups()
+        if not sources:
+            return
+        remember_defaults = param is None and paramclass is not None
+        if remember_defaults:
+            param = paramclass(title, comment)
+            defaults = self.PARAM_DEFAULTS.get(paramclass.__name__)
+            if defaults is not None:
+                gds.update_dataset(param, copy.deepcopy(defaults))
+            if hasattr(param, "update_from_obj"):
+                param.update_from_obj(copy.deepcopy(sources[0]))
+            if edit is None:
+                edit = True
+        if param is not None and edit:
+            from datalab.widgets.processingpreview import edit_processing_parameters
+
+            draft = copy.deepcopy(param)
+            preview_results = []
+            feature = self.computing_registry.get(func.__name__)
+            allowed = preview_enabled and (feature is None or feature.preview_enabled)
+            if not edit_processing_parameters(
+                draft,
+                func,
+                sources,
+                self.mainwindow,
+                allowed,
+                preview_results,
+                executor_cache=self.mainwindow.preview_executor_cache,
+            ):
                 return
+            if any(
+                get_uuid(source) not in self.panel.objmodel.get_object_ids()
+                for source in sources
+            ):
+                QW.QMessageBox.warning(
+                    self.mainwindow,
+                    _("Warning"),
+                    _("A preview source was removed. The processing was cancelled."),
+                )
+                return
+            gds.update_dataset(param, draft)
+            for index, selected in enumerate(groups or sources):
+                self.panel.objview.set_current_item_id(
+                    get_uuid(selected), extend=index > 0
+                )
+        else:
+            preview_results = []
+        if remember_defaults:
+            self.PARAM_DEFAULTS[type(param).__name__] = copy.deepcopy(param)
         plugin_origin = self._get_plugin_origin_for(func)
         pp = build_processing_parameters(
             func.__name__, "1-to-1", param=param, plugin_origin=plugin_origin
@@ -1834,7 +1957,16 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             plugin_origin=plugin_origin,
         )
         with self.mainwindow.historypanel.capture_outputs(action):
-            self._compute_1_to_1_subroutine([func], [param], title)
+            self._compute_1_to_1_subroutine(
+                [func],
+                [param],
+                title,
+                preview_result=(
+                    preview_results[0]
+                    if len(sources) == 1 and not groups and preview_results
+                    else None
+                ),
+            )
 
     def compute_multiple_1_to_1(
         self,
@@ -2663,6 +2795,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         icon_name: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
+        preview_enabled: bool = True,
     ) -> ComputingFeature:
         """Register a 1-to-1 processing function.
 
@@ -2678,6 +2811,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             icon_name: icon name. Defaults to None.
             comment: comment. Defaults to None.
             edit: whether to open the parameter editor before execution.
+            preview_enabled: allow speculative execution before accepting parameters.
 
         Returns:
             Registered feature.
@@ -2690,6 +2824,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             icon_name=icon_name,
             comment=comment,
             edit=edit,
+            preview_enabled=preview_enabled,
         )
         self.add_feature(feature)
         return feature
@@ -2975,6 +3110,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 f"For pattern '{pattern}', 'param' must be a DataSet or None"
             )
             compute_kwargs = {}
+            if pattern == "1_to_1":
+                compute_kwargs["preview_enabled"] = kwargs.pop(
+                    "preview_enabled", feature.preview_enabled
+                )
             if pattern == "n_to_1":
                 compute_kwargs["pairwise"] = kwargs.pop("pairwise", None)
             return compute_method(
@@ -3071,10 +3210,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self, title: str, objs: list[TypeObj], roi: TypeROI | None
     ) -> None:
         """Record a ROI mutation history entry for ``objs`` (payload may be None)."""
-        # Some tests build processors without a history panel: stay defensive.
-        hpanel = getattr(self.mainwindow, "historypanel", None)
-        if hpanel is None:
-            return
+        hpanel = self.mainwindow.historypanel
         hpanel.add_mutation_entry(
             title,
             panel_str=self.panel.PANEL_STR_ID,

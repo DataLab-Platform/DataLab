@@ -416,6 +416,11 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.register_1_to_1(sipi.threshold_yen, _("Yen thresholding"))
         # Exposure
         self.register_1_to_1(
+            sipi.adjust_brightness_contrast,
+            _("Brightness and contrast"),
+            sipi.BrightnessContrastParam,
+        )
+        self.register_1_to_1(
             sipi.adjust_gamma,
             _("Gamma correction"),
             sipi.AdjustGammaParam,

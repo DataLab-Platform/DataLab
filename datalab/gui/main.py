@@ -67,6 +67,7 @@ from datalab.gui.docks import DockablePlotWidget
 from datalab.gui.h5io import H5InputOutput
 from datalab.gui.panel import base, history, image, macro, signal
 from datalab.gui.pluginconfig import PluginConfigDialog
+from datalab.gui.processor.preview import PreviewExecutorCache
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
 from datalab.objectmodel import ObjectGroup, get_uuid
 from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plugins
@@ -125,6 +126,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Initialize main window"""
         self.started_at = datetime.now().astimezone()
         self.plugins_last_load_at = self.started_at
+        self.preview_executor_cache = PreviewExecutorCache()
 
         self.webapistatus: dl_status.WebAPIStatus | None = None
         self.pluginstatus: dl_status.PluginStatus | None = None
@@ -936,6 +938,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def __restart_processor_pool(self) -> None:
         """Restart the shared pool after plugin paths change at runtime."""
+        self.preview_executor_cache.reset()
         for processor in (self.imagepanel.processor, self.signalpanel.processor):
             if processor.worker is not None:
                 processor.worker.restart_pool()
@@ -1086,6 +1089,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.reload_plugins()
             return
 
+        self.preview_executor_cache.reset()
         self.__unregister_plugins()
         for panel in (self.signalpanel, self.imagepanel):
             panel.acthandler.clear_plugin_actions()
@@ -1434,7 +1438,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         for panel in self.panels:
             panel.SIG_OBJECT_ADDED.connect(self.set_modified)
             panel.SIG_OBJECT_REMOVED.connect(self.set_modified)
-        self.macropanel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
+            panel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
         # Initializing common panel actions
         self.autorefresh_action.setChecked(Conf.auto_refresh.get(True))
         self.showfirstonly_action.setChecked(Conf.show_first_only.get(False))
@@ -2327,6 +2331,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def _close_managed_widgets(self) -> None:
         """Close DataLab panels and generic shell widgets."""
+        self.preview_executor_cache.close()
         for panel in self.panels:
             if panel is not None:
                 panel.close()
