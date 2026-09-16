@@ -982,8 +982,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
         # History replay must be non-interactive and deterministic: treat
         # "ask" as automatic interpolation while replaying.
-        hpanel = getattr(self.mainwindow, "historypanel", None)
-        replaying = hpanel is not None and hpanel.is_replaying()
+        hpanel = self.mainwindow.historypanel
+        replaying = hpanel.is_replaying()
         if behavior == "ask" and not env.execenv.unattended and not replaying:
             # Create custom message box with "Yes to All" option
             msg_box = QW.QMessageBox(self.mainwindow)
@@ -1071,8 +1071,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
              If False, non-native objects are added to default group. Set to False when
              group_id is from the source panel and object goes to a different panel.
         """
-        hpanel = getattr(self.mainwindow, "historypanel", None)
-        if hpanel is not None and hpanel.is_output_suppressed():
+        hpanel = self.mainwindow.historypanel
+        if hpanel.is_output_suppressed():
             return
         is_new_obj_native = isinstance(new_obj, self.panel.PARAMCLASS)
         if is_new_obj_native:
@@ -1105,8 +1105,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         Returns:
             UUID of the created group.
         """
-        hpanel = getattr(self.mainwindow, "historypanel", None)
-        if hpanel is not None and hpanel.is_output_suppressed():
+        hpanel = self.mainwindow.historypanel
+        if hpanel.is_output_suppressed():
             return None
         is_new_obj_native = isinstance(new_obj, self.panel.PARAMCLASS)
         if is_new_obj_native:
@@ -3210,10 +3210,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self, title: str, objs: list[TypeObj], roi: TypeROI | None
     ) -> None:
         """Record a ROI mutation history entry for ``objs`` (payload may be None)."""
-        # Some tests build processors without a history panel: stay defensive.
-        hpanel = getattr(self.mainwindow, "historypanel", None)
-        if hpanel is None:
-            return
+        hpanel = self.mainwindow.historypanel
         hpanel.add_mutation_entry(
             title,
             panel_str=self.panel.PANEL_STR_ID,

@@ -133,10 +133,7 @@ def resolve_output_panel(
     Returns:
         Data panel that owns (or must own) the output object.
     """
-    # Stub panels in unit tests have no mainwindow: no cross-panel routing
-    mainwindow = getattr(panel, "mainwindow", None)
-    if mainwindow is None:
-        return fallback
+    mainwindow = panel.mainwindow
     signalpanel = mainwindow.signalpanel
     imagepanel = mainwindow.imagepanel
     if signalpanel.objmodel.has_uuid(out_uuid):
