@@ -769,14 +769,13 @@ class ObjectProp(QW.QWidget):
         # then cascade recompute to downstream actions so the chain stays
         # consistent with the new creation parameters. Creation actions are
         # KIND_UI without a func_name, so look them up via output_to_action.
-        hpanel = getattr(self.panel.mainwindow, "historypanel", None)
-        if hpanel is not None:
-            action = hpanel.find_creation_action_for_output(obj_uuid)
-            if action is not None:
-                action.snapshot_kwargs()
-                action.kwargs["param"] = copy.deepcopy(param)
-                hpanel.refresh_action(action)
-                hpanel.recompute_cascade(action)
+        hpanel = self.panel.mainwindow.historypanel
+        action = hpanel.find_creation_action_for_output(obj_uuid)
+        if action is not None:
+            action.snapshot_kwargs()
+            action.kwargs["param"] = copy.deepcopy(param)
+            hpanel.refresh_action(action)
+            hpanel.recompute_cascade(action)
 
         # Update the tree view item (to show new title if it changed)
         self.panel.objview.update_item(obj_uuid)
@@ -1099,13 +1098,12 @@ class ObjectProp(QW.QWidget):
         # analysis action (snapshot originals first) and refresh its tree
         # display. Analysis is a leaf operation (1-to-0), so no cascade is
         # needed.
-        hpanel = getattr(self.panel.mainwindow, "historypanel", None)
-        if hpanel is not None:
-            action = hpanel.find_analysis_action(get_uuid(obj), func_name)
-            if action is not None:
-                action.snapshot_kwargs()
-                action.kwargs["param"] = copy.deepcopy(recompute_param)
-                hpanel.refresh_action(action)
+        hpanel = self.panel.mainwindow.historypanel
+        action = hpanel.find_analysis_action(get_uuid(obj), func_name)
+        if action is not None:
+            action.snapshot_kwargs()
+            action.kwargs["param"] = copy.deepcopy(recompute_param)
+            hpanel.refresh_action(action)
 
         # Refresh the object display after re-analysis
         obj_uuid = get_uuid(obj)
@@ -1238,8 +1236,8 @@ class ObjectProp(QW.QWidget):
             else:
                 param = proc_params.param
 
-        hpanel = getattr(self.panel.mainwindow, "historypanel", None)
-        is_edit_mode = hpanel is not None and hpanel.is_edit_mode()
+        hpanel = self.panel.mainwindow.historypanel
+        is_edit_mode = hpanel.is_edit_mode()
 
         report = self.panel.processor.recompute_processing(
             obj=obj,
