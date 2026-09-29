@@ -88,7 +88,7 @@ class ContourPlotPlugin(PluginBase):
 
     PLUGIN_INFO = PluginInfo(
         name=_("Contour isoline plot"),
-        version="1.0.0",
+        version="1.1.0",
         description=_(
             "Display isolines (contour lines) overlaid on the selected image, "
             "with configurable level range, step, and optional value labels"
