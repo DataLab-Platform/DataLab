@@ -1414,20 +1414,6 @@ msgstr "L'objet source n'existe plus."
 msgid "The object that was used to create this processed object has been deleted and cannot be used for reprocessing."
 msgstr "L'objet qui a été utilisé pour créer cet objet traité a été supprimé et ne peut pas être utilisé pour le retraitement."
 
-#, python-format
-msgid ""
-"Failed to reprocess object:\n"
-"%s"
-msgstr ""
-"Échec du retraitement de l'objet :\n"
-"%s"
-
-msgid "Processing was cancelled."
-msgstr "Le traitement a été annulé."
-
-msgid "Failed to reprocess object."
-msgstr "Échec du retraitement de l'objet."
-
 msgid "Geometry results"
 msgstr "Résultats géométriques"
 
@@ -1519,11 +1505,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "New group"
-msgstr "Nouveau groupe"
-
 msgid "Group name:"
 msgstr "Nom du groupe :"
+
+msgid "New group"
+msgstr "Nouveau groupe"
 
 #, python-format
 msgid "New group \"%s\""
@@ -2153,6 +2139,20 @@ msgstr "Oui à tout"
 
 msgid "Processing metadata is incomplete (missing source UUID)."
 msgstr "Les métadonnées de traitement sont incomplètes (UUID source manquant)."
+
+#, python-format
+msgid ""
+"Failed to reprocess object:\n"
+"%s"
+msgstr ""
+"Échec du retraitement de l'objet :\n"
+"%s"
+
+msgid "Processing was cancelled."
+msgstr "Le traitement a été annulé."
+
+msgid "Failed to reprocess object."
+msgstr "Échec du retraitement de l'objet."
 
 msgid "Signal was reprocessed."
 msgstr "Le signal a été retraité."
@@ -3815,14 +3815,14 @@ msgstr "Afficher les détails"
 msgid "Hide details"
 msgstr "Masquer les détails"
 
+msgid "Title"
+msgstr "Titre"
+
 msgid "Date and time"
 msgstr "Date et heure"
 
 msgid "Description"
 msgstr "Description"
-
-msgid "Title"
-msgstr "Titre"
 
 msgid "Action is compatible with the current workspace state."
 msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
@@ -3911,11 +3911,11 @@ msgstr "Cliquer pour voir les infos de connexion"
 msgid "Source"
 msgstr "Source"
 
-msgid "Clipboard"
-msgstr "Presse-papiers"
-
 msgid "File"
 msgstr "Fichier"
+
+msgid "Clipboard"
+msgstr "Presse-papiers"
 
 msgid "Source of the data"
 msgstr "Source des données"

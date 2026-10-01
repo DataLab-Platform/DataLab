@@ -24,8 +24,11 @@ import os.path as osp
 
 import h5py
 import pytest
+from guidata.io import JSONWriter
 from numpy import ma
-from sigima.objects import GaussParam
+from plotpy.builder import make
+from plotpy.io import save_items
+from sigima.objects import GaussParam, RectangleAnnotation, annotation_to_dict
 from sigima.objects.scalar import NO_ROI, TableResult, TableResultBuilder
 from sigima.tests.data import (
     create_noisy_gaussian_image,
@@ -44,6 +47,28 @@ def test_save_and_load_h5_workspace():
         with datalab_test_app_context(console=False) as win:
             # === Create test objects
             sig1 = create_paracetamol_signal()
+            legacy_item = make.annotated_segment(1.0, 2.0, 5.0, 8.0, title="Historical")
+            writer = JSONWriter(None)
+            save_items(writer, [legacy_item])
+            annotations = [
+                annotation_to_dict(
+                    RectangleAnnotation(
+                        x=1.0,
+                        y=2.0,
+                        width=3.0,
+                        height=4.0,
+                        title="Canonical",
+                        extensions={"vendor": {"keep": True}},
+                    )
+                ),
+                {
+                    "type": "plotpy_item",
+                    "item_class": type(legacy_item).__name__,
+                    "plotpy_json": writer.get_json(),
+                },
+                {"consumer": "custom", "payload": {"keep": True}},
+            ]
+            sig1.set_annotations(annotations)
             win.signalpanel.add_object(sig1)
 
             ima1 = create_noisy_gaussian_image()
@@ -79,6 +104,7 @@ def test_save_and_load_h5_workspace():
             loaded_ima = win.imagepanel.objmodel.get_all_objects()[0]
             assert loaded_sig.title == sig_title
             assert loaded_ima.title == ima_title
+            assert loaded_sig.get_annotations() == annotations
 
 
 def test_peak_creation_parameters_h5_roundtrip():

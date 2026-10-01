@@ -11,11 +11,14 @@ Annotations unit test:
 
 # guitest: show
 
+from guidata.io import JSONWriter
 from plotpy.builder import make
+from plotpy.io import save_items
 from plotpy.items import AnnotatedShape, PolygonShape
 from plotpy.plot import BasePlot
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
+from sigima.objects import RectangleAnnotation, annotation_to_dict, create_image_roi
 from sigima.tests import data as test_data
 
 from datalab.adapters_plotpy import create_adapter_from_object
@@ -56,6 +59,10 @@ def test_annotations_unit():
         label = make.label("Test", (1000, 1000), (0, 0), "BR")
         adapter = create_adapter_from_object(ima1)
         adapter.add_annotations_from_items([rect, circ, elli, segm, label])
+        assert all(
+            payload["format"] == "sigima.annotation"
+            for payload in ima1.get_annotations()
+        )
         panel.add_object(ima1)
 
         # Create another image with annotations
@@ -76,6 +83,62 @@ def test_annotations_unit():
             # open("after.json", mode="wb").write(ima.annotations.encode())
             assert orig_ann == ima.annotations
             execenv.print("OK")
+
+
+def test_separate_view_migrates_annotations_only_when_accepted() -> None:
+    """The annotation dialog migrates lazily and preserves opaque state."""
+    with datalab_test_app_context() as win:
+        panel = win.imagepanel
+        image = test_data.create_multigaussian_image()
+        canonical = annotation_to_dict(
+            RectangleAnnotation(
+                x=3.0,
+                y=5.0,
+                width=4.0,
+                height=6.0,
+                locked=True,
+                title="Locked",
+                metadata={"owner": "test"},
+                extensions={"vendor": {"keep": True}},
+            )
+        )
+        legacy_item = make.annotated_segment(1.0, 2.0, 5.0, 8.0, title="Legacy")
+        writer = JSONWriter(None)
+        save_items(writer, [legacy_item])
+        legacy = {
+            "type": "plotpy_item",
+            "item_class": type(legacy_item).__name__,
+            "plotpy_json": writer.get_json(),
+        }
+        opaque = {"consumer": "custom", "payload": {"keep": True}}
+        image.set_annotations([canonical, legacy, opaque])
+        image.roi = create_image_roi("rectangle", [10, 20, 30, 40])
+        original_roi = image.roi.to_dict()
+        panel.add_object(image)
+        original = image.annotations
+
+        dialog = panel.open_separate_view(edit_annotations=True)
+        assert dialog is not None
+        locked_items = [
+            item
+            for item in dialog.get_plot().get_items()
+            if isinstance(item, AnnotatedShape) and str(item.title().text()) == "Locked"
+        ]
+        assert len(locked_items) == 1
+        assert locked_items[0].is_readonly()
+        dialog.done(QW.QDialog.DialogCode.Rejected)
+        assert image.annotations == original
+
+        dialog = panel.open_separate_view(edit_annotations=True)
+        assert dialog is not None
+        dialog.done(QW.QDialog.DialogCode.Accepted)
+
+        preserved, migrated, preserved_opaque = image.get_annotations()
+        assert preserved == canonical
+        assert migrated["format"] == "sigima.annotation"
+        assert "plotpy_json" not in migrated
+        assert preserved_opaque == opaque
+        assert image.roi.to_dict() == original_roi
 
 
 def test_open_separate_view_without_main_plot_item() -> None:
