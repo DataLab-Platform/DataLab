@@ -71,6 +71,7 @@ from datalab.gui.processor.preview import PreviewExecutorCache
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
 from datalab.objectmodel import ObjectGroup, get_uuid
 from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plugins
+from datalab.provenance import ProvenanceService
 from datalab.utils import qthelpers as qth
 from datalab.utils.qthelpers import configure_menu_about_to_show
 from datalab.webapi import WEBAPI_AVAILABLE, get_webapi_controller
@@ -127,6 +128,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.started_at = datetime.now().astimezone()
         self.plugins_last_load_at = self.started_at
         self.preview_executor_cache = PreviewExecutorCache()
+        self.provenance = ProvenanceService(self.find_object_by_uuid)
 
         self.webapistatus: dl_status.WebAPIStatus | None = None
         self.pluginstatus: dl_status.PluginStatus | None = None
@@ -1746,8 +1748,23 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         for panel in self.panels:
             if panel is not None and panel is not self.historypanel:
                 panel.remove_all_objects()
+        self.provenance.reset()
         if self.historypanel is not None:
             self.historypanel.start_new_session_after_workspace_reset()
+
+    def verify_provenance_activity(self, activity_id: str) -> dict:
+        """Recompute a recorded activity as a separate candidate and compare it.
+
+        Nothing is inserted in the workspace and the ledger is not modified.
+
+        Args:
+            activity_id: Identifier of the recorded activity.
+
+        Returns:
+            Verification report (JSON-compatible).
+        """
+        execution = self.signalpanel.processor.execution
+        return self.provenance.verify(activity_id, execution.execute_candidate)
 
     @remote_controlled
     def remove_object(self, force: bool = False) -> None:

@@ -14,6 +14,7 @@ import inspect
 import multiprocessing
 import os.path as osp
 import time
+import uuid
 import warnings
 from dataclasses import asdict, dataclass, field
 from enum import Enum, auto
@@ -51,6 +52,7 @@ from datalab.adapters_metadata import (
 )
 from datalab.config import Conf, _
 from datalab.gui.processor.catcher import CompOut, wng_err_func
+from datalab.gui.processor.execution import CANCELLED, ExecutionService
 from datalab.history.effects import capture_effects
 from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
@@ -890,6 +892,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self.worker: Worker | None = None
         self.set_process_isolation_enabled(Conf.process_isolation_enabled.get())
         self.computing_registry: dict[str, ComputingFeature] = {}
+        self.execution = ExecutionService(self, self.__exec_func)
         self.register_computations()
 
     def close(self):
@@ -1446,7 +1449,16 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             source_processor = self.mainwindow.imagepanel.processor
 
         # Recompute using the dedicated method (with multiprocessing support)
+        pending = None
         try:
+            feature = source_processor.get_feature(
+                proc_params.func_name,
+                plugin_origin=proc_params.plugin_origin,
+                paramclass_name=type(param).__name__ if param is not None else None,
+            )
+            pending = self.mainwindow.provenance.begin(
+                feature.function, param, source_obj, origin="recompute_in_place"
+            )
             compout = source_processor.recompute_1_to_1(
                 proc_params.func_name,
                 source_obj,
@@ -1490,6 +1502,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             if interactive:
                 QW.QMessageBox.warning(self.panel, _("Error"), report.message)
             return report
+        self.mainwindow.provenance.complete(pending, obj)
         self.panel.SIG_OBJECT_MODIFIED.emit()
 
         # Update the tree view item and refresh plot
@@ -1738,6 +1751,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         grps = self.panel.objview.get_sel_groups()
         n_glob = len(objs) * len(params)
         new_gids = {}
+        command_id = str(uuid.uuid4())
         with create_progress_bar(self.panel, title, max_=n_glob) as progress:
             for i_row, obj in enumerate(objs):
                 for i_param, (param, func) in enumerate(zip(params, funcs)):
@@ -1747,55 +1761,38 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     i_title = f"{title} ({pvalue}/{n_glob})"
                     progress.setLabelText(i_title)
                     progress.setValue(pvalue)
+                    preview = None
                     if preview_result is not None and preview_result[0] is obj:
-                        result = preview_result[1]
+                        preview = preview_result[1]
                         preview_result = None
-                    else:
-                        args = (obj,) if param is None else (obj, param)
-                        result = self.__exec_func(func, args, progress)
-                    if result is None:
-                        break
-                    new_obj = self.handle_output(
-                        result, _("Computing: %s") % i_title, progress
-                    )
-                    if new_obj is None:
-                        continue
-                    assert isinstance(new_obj, (SignalObj, ImageObj))
 
-                    patch_title_with_ids(new_obj, [obj], get_short_id)
-
-                    # Handle keep_results logic for 1_to_1 operations
-                    self._handle_keep_results(new_obj)
-
-                    # Store processing metadata for interactive re-processing
-                    pp = ProcessingParameters(
-                        func_name=name,
-                        pattern="1-to-1",
-                        param=param,
-                        source_uuid=get_uuid(obj),
-                        plugin_origin=self._get_plugin_origin_for(func),
-                    )
-                    insert_processing_parameters(new_obj, pp)
-
-                    # Mark object as freshly processed to show Processing tab
-                    self.panel.objprop.mark_as_freshly_processed(new_obj)
-
-                    new_gid = None
-                    if grps:
-                        # If groups are selected, then it means that there is no
-                        # individual object selected: we work on groups only
+                    def place(new_obj, obj=obj, name=name) -> str | None:
+                        if not grps:
+                            return None
+                        # Groups selected: no individual object is selected, so
+                        # each source group gets its own result group
                         old_gid = self.panel.objmodel.get_object_group_id(obj)
                         new_gid = new_gids.get(old_gid)
                         if new_gid is None:
-                            # Create a new group for each selected group
                             old_g = self.panel.objmodel.get_group(old_gid)
                             new_gid = self._create_group_for_result(
                                 new_obj, f"{name}({get_short_id(old_g)})"
                             )
                             new_gids[old_gid] = new_gid
-                    self._add_object_to_appropriate_panel(
-                        new_obj, group_id=new_gid, use_group_for_non_native=True
+                        return new_gid
+
+                    outcome = self.execution.run_1_to_1(
+                        obj,
+                        func,
+                        param,
+                        progress,
+                        i_title,
+                        command_id,
+                        place,
+                        preview=preview,
                     )
+                    if outcome == CANCELLED:
+                        break
         # Select newly created groups, if any
         for group_id in new_gids.values():
             self.panel.objview.set_current_item_id(group_id, extend=True)

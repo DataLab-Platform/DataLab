@@ -727,7 +727,8 @@ def recompute_compute_in_place(panel: HistoryPanel, action: HistoryAction) -> bo
     }
     # ``replaying()`` suppresses history capture and session prompts for the
     # whole execute + reconcile scope (temporary insertions included).
-    with panel.replaying():
+    provenance = panel.mainwindow.provenance
+    with panel.replaying(), provenance.deferred("history_replay") as deferred:
         try:
             panel_data.objview.select_objects(sources)
             try:
@@ -772,6 +773,13 @@ def recompute_compute_in_place(panel: HistoryPanel, action: HistoryAction) -> bo
             ]
             _discard_new_empty_groups(data_panels, before_grps)
             _commit_outputs(panel, panel_data, action, recorded, detached)
+            provenance.finalize_deferred(
+                deferred,
+                {
+                    fresh_uuid: out_uuid
+                    for (_p, fresh_uuid), out_uuid in zip(fresh, recorded)
+                },
+            )
         finally:
             _restore_selection(data_panels, saved_selection)
     return True
