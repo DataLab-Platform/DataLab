@@ -15,6 +15,7 @@ from __future__ import annotations
 import os.path as osp
 from typing import TYPE_CHECKING
 
+from datalab_capsule.hdf5 import ProvenanceFormatError, load_ledger
 from guidata.qthelpers import exec_dialog
 from qtpy import QtWidgets as QW
 from sigima.objects import SignalObj
@@ -27,6 +28,7 @@ from datalab.h5.native import NativeH5Reader, NativeH5Writer
 from datalab.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
 
 if TYPE_CHECKING:
+    from datalab_capsule.ledger import Ledger
     from sigimax.h5.common import BaseNode
 
     from datalab.gui.main import DLMainWindow
@@ -53,7 +55,26 @@ class H5InputOutput:
         writer = NativeH5Writer(filename)
         for panel in self.mainwindow.panels:
             panel.serialize_to_hdf5(writer)
+        self.mainwindow.provenance.save(writer.h5)
         writer.close()
+
+    @staticmethod
+    def __read_provenance(
+        reader: NativeH5Reader,
+    ) -> tuple[Ledger, dict[str, str]] | None:
+        """Read and validate the provenance block before anything is replaced.
+
+        Raises:
+            ProvenanceFormatError: If the block is invalid (never a KeyError, which
+             would turn the file into a generic HDF5 import).
+        """
+        try:
+            return load_ledger(reader.h5)
+        except ProvenanceFormatError as exc:
+            reader.close()
+            raise ProvenanceFormatError(
+                _("The provenance data of this workspace are invalid: %s") % exc
+            ) from exc
 
     def open_file_headless(self, filename: str, reset_all: bool) -> bool:
         """Open native DataLab HDF5 file without any GUI elements.
@@ -68,14 +89,20 @@ class H5InputOutput:
         Returns:
             True if file was successfully opened as a native DataLab file,
             False if the file format is not compatible (KeyError was raised)
+
+        Raises:
+            ProvenanceFormatError: If the provenance block is invalid (raised
+             before the workspace is replaced).
         """
         try:
             reader = NativeH5Reader(filename)
+            block = self.__read_provenance(reader)
             if reset_all:
                 self.mainwindow.reset_all()
             for panel in self.mainwindow.panels:
                 panel.deserialize_from_hdf5(reader, reset_all)
             reader.close()
+            self.mainwindow.provenance.load(block, reset_all)
             return True
         except KeyError:
             return False
@@ -85,6 +112,7 @@ class H5InputOutput:
         progress = None
         try:
             reader = NativeH5Reader(filename)
+            block = self.__read_provenance(reader)
             if reset_all:
                 self.mainwindow.reset_all()
             with create_progress_bar(
@@ -97,6 +125,7 @@ class H5InputOutput:
                     if progress.wasCanceled():
                         break
             reader.close()
+            self.mainwindow.provenance.load(block, reset_all)
         except KeyError:
             if progress is not None:
                 # KeyError was encoutered when deserializing datasets (DataLab data

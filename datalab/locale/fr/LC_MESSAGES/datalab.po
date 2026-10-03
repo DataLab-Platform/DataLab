@@ -4159,3 +4159,6 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
 
+#, python-format
+msgid "The provenance data of this workspace are invalid: %s"
+msgstr "Les données de provenance de cet espace de travail sont invalides : %s"

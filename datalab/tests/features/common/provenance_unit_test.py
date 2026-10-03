@@ -15,6 +15,7 @@ import sigima.params
 import sigima.proc.image as sipi
 import sigima.proc.signal as sips
 from guidata.qthelpers import qt_app_context
+from qtpy import QtWidgets as QW
 from sigima.objects import SignalObj, create_signal
 from sigima.tests.data import create_sincos_image
 
@@ -43,9 +44,16 @@ def isolated_param_defaults(monkeypatch):
 @contextlib.contextmanager
 def app(history: bool = False, isolation: bool = False):
     """Return a DataLab main window for one test."""
-    with qt_app_context(), Conf.process_isolation_enabled.context(isolation):
-        with datalab_test_app_context(console=False, history=history) as win:
-            yield win
+    try:
+        with qt_app_context(), Conf.process_isolation_enabled.context(isolation):
+            with datalab_test_app_context(
+                console=False, history=history, exec_loop=False
+            ) as win:
+                yield win
+    finally:
+        # Unattended close timers scheduled on exit would close the next window.
+        for _index in range(3):
+            QW.QApplication.processEvents()
 
 
 def add_signal(win, y=Y, title: str = "S0") -> SignalObj:

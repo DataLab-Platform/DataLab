@@ -29,6 +29,7 @@ import guidata.dataset as gds
 from datalab_capsule.calls import make_call
 from datalab_capsule.compare import build_report, compare_environments, compare_exact
 from datalab_capsule.environment import collect_environment, environment_id
+from datalab_capsule.hdf5 import save_ledger
 from datalab_capsule.integrity import signal_state_facts
 from datalab_capsule.ledger import Ledger, utc_timestamp
 from datalab_capsule.replay import IneligibleError, Plan, prepare_activity
@@ -132,12 +133,15 @@ class ProvenanceService:
         self.state_status: dict[str, str] = {}
         self.notices: list[str] = []
         self.capture_failures = 0
+        #: ``"loaded"`` or ``"absent"`` after opening a workspace file, else None.
+        self.file_status: str | None = None
 
     # -- Workspace lifecycle ------------------------------------------------
 
     def reset(self) -> None:
         """Start an empty ledger for a new workspace."""
         self.ledger = Ledger()
+        self.file_status = None
         self.state_status = {}
         self.notices = []
         self._deferred = None
@@ -148,6 +152,34 @@ class ProvenanceService:
         if self._environment is None:
             self._environment = collect_environment(EDITION, datalab.__version__)
         return self._environment
+
+    def save(self, h5file: Any) -> None:
+        """Write the ledger block into a workspace file, after its panels."""
+        save_ledger(h5file, self.ledger)
+
+    def load(self, block: tuple[Ledger, dict[str, str]] | None, replaced: bool) -> None:
+        """Adopt the ledger read from a workspace file, after its objects.
+
+        Args:
+            block: ``(ledger, state_status)`` read before the workspace was
+             replaced, or None when the file has no provenance block.
+            replaced: False when the file was appended to the current workspace:
+             ledgers are not merged and the file's block is ignored.
+        """
+        if not replaced:
+            if block is not None:
+                message = (
+                    "Provenance import into an existing workspace is not supported yet"
+                )
+                _logger.warning(message)
+                self.notices.append(message)
+            return
+        self.reset()
+        if block is None:
+            self.file_status = "absent"
+            return
+        self.ledger, self.state_status = block
+        self.file_status = "loaded"
 
     # -- Capture ------------------------------------------------------------
 
