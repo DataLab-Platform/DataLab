@@ -18,6 +18,7 @@ import numpy as np
 import pytest
 import sigima.params
 import sigima.proc.signal as sips
+from datalab_capsule.archive import create_from_hdf5, read_capsule
 from datalab_capsule.hdf5 import ProvenanceFormatError
 from sigima.objects import SignalObj, create_signal
 
@@ -150,6 +151,21 @@ def test_desktop_round_trip() -> None:
             assert win.provenance.ledger.to_dict() == saved
             assert len(win.provenance.ledger.activities) == 4
             check_chain(win, "desktop")
+
+
+@pytest.mark.parametrize(
+    "path, edition", [(DESKTOP_FIXTURE, "desktop"), (WEB_FIXTURE, "web")]
+)
+def test_capsules_reopen(path: str, edition: str) -> None:
+    """A capsule's workspace, validated by the library, reopens and replays."""
+    capsule = read_capsule(create_from_hdf5(path))
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        workspace = osp.join(tmpdir, "workspace.h5")
+        with open(workspace, "wb") as file:
+            file.write(capsule.workspace)
+        with app() as win:
+            _open(win, workspace)
+            check_chain(win, edition)
 
 
 @pytest.mark.parametrize(
