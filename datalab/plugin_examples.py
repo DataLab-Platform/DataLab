@@ -6,14 +6,21 @@ from __future__ import annotations
 
 import dataclasses
 import re
+import sys
 from collections.abc import Iterator, Mapping, Sequence
 from contextlib import contextmanager
 from importlib import resources
-from importlib.abc import Traversable
 from pathlib import Path, PurePosixPath
 from types import MappingProxyType
+from typing import TYPE_CHECKING
 
 from sigima.objects import ImageObj, SignalObj
+
+if TYPE_CHECKING:
+    if sys.version_info >= (3, 11):
+        from importlib.resources.abc import Traversable
+    else:
+        from importlib.abc import Traversable
 
 __all__ = ["PluginExample", "PluginExampleData"]
 
