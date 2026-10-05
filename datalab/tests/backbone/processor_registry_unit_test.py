@@ -29,15 +29,31 @@ def test_feature_registry_uses_stable_ids_and_legacy_aliases() -> None:
         pattern="1_to_1",
         function=sips.derivative,
         title="Derivative",
-        feature_id="org.example.derivative",
+        feature_id="org.example.plugin:derivative",
     )
 
     processor.add_feature(feature, owner="org.example.plugin")
 
     assert feature.owner_plugin_id == "org.example.plugin"
-    assert processor.get_feature("org.example.derivative") is feature
+    assert processor.get_feature("org.example.plugin:derivative") is feature
     assert processor.get_feature("derivative") is feature
     assert processor.get_feature(sips.derivative) is feature
+
+
+def test_owned_feature_id_must_use_owner_namespace() -> None:
+    """Owned feature IDs follow the ``<plugin_id>:<local_id>`` grammar."""
+    processor = ProcessorRegistryHarness()
+    for feature_id in ("org.example.derivative", "org.example.other:derivative"):
+        feature = ComputingFeature(
+            pattern="1_to_1",
+            function=sips.derivative,
+            title="Derivative",
+            feature_id=feature_id,
+            owner_plugin_id="org.example.plugin",
+        )
+        with pytest.raises(ValueError, match="org.example.plugin:<local_id>"):
+            processor.add_feature(feature)
+    assert not processor.computing_registry
 
 
 def test_feature_collision_is_atomic_and_owner_removal_is_scoped() -> None:
@@ -52,31 +68,31 @@ def test_feature_collision_is_atomic_and_owner_removal_is_scoped() -> None:
         pattern="1_to_1",
         function=sips.derivative,
         title="Derivative",
-        feature_id="org.example.derivative",
+        feature_id="org.example.plugin:derivative",
         owner_plugin_id="org.example.plugin",
     )
     conflicting_feature = ComputingFeature(
         pattern="1_to_1",
         function=sips.absolute,
         title="Absolute value",
-        feature_id="org.example.derivative",
-        owner_plugin_id="org.example.other-plugin",
+        feature_id="org.example.plugin:derivative",
+        owner_plugin_id="org.example.plugin",
     )
     processor.add_feature(internal_feature)
     processor.add_feature(plugin_feature)
 
-    with pytest.raises(ValueError, match="org.example.derivative"):
+    with pytest.raises(ValueError, match="org.example.plugin:derivative"):
         processor.add_feature(conflicting_feature)
 
     assert len(processor.computing_registry) == 2
-    assert processor.get_feature("org.example.derivative") is plugin_feature
+    assert processor.get_feature("org.example.plugin:derivative") is plugin_feature
 
     removed = processor.remove_features_by_owner("org.example.plugin")
 
     assert removed == [plugin_feature]
     assert processor.get_feature(sips.inverse) is internal_feature
-    with pytest.raises(ValueError, match="org.example.derivative"):
-        processor.get_feature("org.example.derivative")
+    with pytest.raises(ValueError, match="org.example.plugin:derivative"):
+        processor.get_feature("org.example.plugin:derivative")
 
 
 def test_builtin_feature_owns_function_and_name_aliases() -> None:

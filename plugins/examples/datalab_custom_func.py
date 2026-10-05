@@ -42,7 +42,7 @@ def weighted_average_denoise(data: np.ndarray) -> np.ndarray:
 class CustomFilters(datalab.plugins.PluginBase):
     """DataLab Custom Filters Plugin"""
 
-    FEATURE_ID = "org.datalab.examples.custom-filters.weighted-average-denoise"
+    FEATURE_ID = "org.datalab.examples.custom-filters:weighted-average-denoise"
     PLUGIN_INFO = datalab.plugins.PluginInfo(
         id="org.datalab.examples.custom-filters",
         name="My custom filters",

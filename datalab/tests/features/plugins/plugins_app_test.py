@@ -552,7 +552,7 @@ def test_plugin_duplicate_name():
 def test_plugin_owned_feature_lifecycle():
     """Owned processing survives reload once and disappears on plugin removal."""
     plugin_id = "org.example.owned-processing"
-    feature_id = f"{plugin_id}.derivative"
+    feature_id = f"{plugin_id}:derivative"
     plugin_filename = "datalab_test_plugin_owned_processing.py"
 
     with temporary_plugin_dir() as plugin_dir:
@@ -582,6 +582,7 @@ def test_plugin_owned_feature_lifecycle():
             )
             assert proc_params is not None
             assert proc_params.func_name == feature_id
+            assert proc_params.plugin_origin["plugin_class"] == "OwnedProcessingPlugin"
 
             win.reload_plugins()
             QW.QApplication.processEvents()
@@ -609,7 +610,7 @@ def test_plugin_owned_feature_lifecycle():
 def test_plugin_computation_registration_rollback():
     """A failing computation hook leaves no partially registered feature."""
     plugin_id = "org.example.failing-processing"
-    feature_id = f"{plugin_id}.derivative"
+    feature_id = f"{plugin_id}:derivative"
     plugin_filename = "datalab_test_plugin_failing_processing.py"
 
     with temporary_plugin_dir() as plugin_dir:

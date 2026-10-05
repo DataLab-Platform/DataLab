@@ -760,23 +760,7 @@ def _detect_plugin_origin(func: Callable) -> dict[str, Any] | None:
             if module_name == plugin_module or module_name.startswith(
                 plugin_module + "."
             ):
-                directory: str | None = None
-                try:
-                    directory = osp.basename(
-                        osp.dirname(inspect.getfile(plugin.__class__))
-                    )
-                except (TypeError, OSError):
-                    pass
-                version: str | None = None
-                info = getattr(plugin, "info", None)
-                if info is not None:
-                    version = getattr(info, "version", None)
-                return {
-                    "plugin_class": plugin.__class__.__name__,
-                    "module": module_name,
-                    "directory": directory,
-                    "version": version,
-                }
+                return _plugin_origin_from_instance(plugin, module_name)
 
     # Heuristic fallback: anything not from a known built-in prefix is
     # treated as an anonymous plugin origin (e.g. user macros, third-party
@@ -795,6 +779,46 @@ def _detect_plugin_origin(func: Callable) -> dict[str, Any] | None:
             "version": None,
         }
     return None
+
+
+def _plugin_origin_from_instance(plugin: Any, module_name: str) -> dict[str, Any]:
+    """Return the origin descriptor of a registered plugin instance.
+
+    Args:
+        plugin: Registered plugin instance.
+        module_name: Module recorded as the origin of the computation.
+
+    Returns:
+        A dict ``{"plugin_class", "module", "directory", "version"}``.
+    """
+    directory: str | None = None
+    try:
+        directory = osp.basename(osp.dirname(inspect.getfile(plugin.__class__)))
+    except (TypeError, OSError):
+        pass
+    version: str | None = None
+    info = getattr(plugin, "info", None)
+    if info is not None:
+        version = getattr(info, "version", None)
+    return {
+        "plugin_class": plugin.__class__.__name__,
+        "module": module_name,
+        "directory": directory,
+        "version": version,
+    }
+
+
+def _owner_plugin_origin(owner_plugin_id: str) -> dict[str, Any] | None:
+    """Return the origin descriptor of the registered plugin owning a feature."""
+    # Local import to avoid a circular dependency at module load time.
+    from datalab.plugins import (  # pylint: disable=import-outside-toplevel
+        PluginRegistry,
+    )
+
+    plugin = PluginRegistry.get_plugin(owner_plugin_id)
+    if plugin is None:
+        return None
+    return _plugin_origin_from_instance(plugin, plugin.__class__.__module__)
 
 
 @dataclass
@@ -833,6 +857,7 @@ class ComputingFeature(Generic[TypeObj]):
          History. Defaults to the function name for built-in features and to
          ``<namespace>:<function name>`` for plugin features, where the namespace
          is the owning plugin ID (or the plugin module for unowned features).
+         Features owned by a plugin must use ``<owner_plugin_id>:<local_id>``.
         owner_plugin_id: stable identifier of the owning plugin, if any
     """
 
@@ -3089,7 +3114,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             owner: Stable ID of the owning plugin, if any.
 
         Raises:
-            ValueError: If ownership conflicts or the feature ID already exists.
+            ValueError: If ownership conflicts, if an owned feature ID is not of
+             the form ``<plugin_id>:<local_id>``, or if the feature ID already
+             exists.
         """
         if owner is not None:
             if not owner.strip():
@@ -3102,10 +3129,19 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             feature.owner_plugin_id = owner
         if feature.function is not None and feature.plugin_origin is None:
             feature.plugin_origin = _detect_plugin_origin(feature.function)
+        if feature.plugin_origin is None and feature.owner_plugin_id is not None:
+            feature.plugin_origin = _owner_plugin_origin(feature.owner_plugin_id)
         feature.update_implicit_id()
 
         feature_id = feature.feature_id
         assert feature_id is not None
+        if feature.owner_plugin_id is not None:
+            prefix = f"{feature.owner_plugin_id}:"
+            if not feature_id.startswith(prefix) or feature_id == prefix:
+                raise ValueError(
+                    f"Plugin feature ID {feature_id!r} must have the form "
+                    f"'{prefix}<local_id>'."
+                )
         if feature_id in self.computing_registry:
             raise ValueError(f"Computing feature ID {feature_id!r} already registered")
         self.computing_registry[feature_id] = feature

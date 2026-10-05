@@ -232,7 +232,7 @@ Plugins inheriting from :class:`datalab.plugins.PluginBase` have direct access t
 These helpers simplify plugin code and keep it consistent with DataLab behavior.
 
 Processing plugins should override ``register_computations()`` and register each
-feature with a stable, namespaced ``feature_id`` and
+feature with a stable ``feature_id`` of the form ``<plugin_id>:<local_id>`` and
 ``owner_plugin_id=self.plugin_id``. DataLab calls this hook after the signal and
 image panels exist. Owned features are removed automatically when the plugin is
 disabled, reloaded, or uninstalled. ``create_actions()`` may then reference the
