@@ -20,8 +20,10 @@ The following subpackages are available:
 
 from __future__ import annotations
 
+import multiprocessing
 import os
 import os.path as osp
+import socket
 import sys
 import time
 from contextlib import contextmanager
@@ -33,7 +35,7 @@ from guidata.guitest import run_testlauncher
 from sigima.tests import helpers
 
 import datalab.config  # Loading icons
-from datalab.config import MOD_NAME, SHOTPATH
+from datalab.config import MOD_NAME, SHOTPATH, ensure_initialized
 from datalab.control.proxy import RemoteProxy, proxy_context
 from datalab.env import execenv
 from datalab.gui.main import DLMainWindow
@@ -50,6 +52,8 @@ helpers.add_test_module_path(MOD_NAME, osp.join("data", "tests"))
 # Set default screenshot path for tests
 execenv.screenshot_path = SHOTPATH
 
+_BACKGROUND_PROCESS: multiprocessing.Process | None = None
+
 
 @contextmanager
 def datalab_test_app_context(
@@ -58,6 +62,7 @@ def datalab_test_app_context(
     save: bool = False,
     console: bool | None = None,
     exec_loop: bool = True,
+    history: bool = False,
 ) -> Generator[DLMainWindow, None, None]:
     """Context manager handling DataLab mainwindow creation and Qt event loop
     with optional HDF5 file save and other options for testing purposes
@@ -68,13 +73,19 @@ def datalab_test_app_context(
         save: whether to save HDF5 file (default: False)
         console: whether to show console (default: None)
         exec_loop: whether to execute Qt event loop (default: True)
+        history: whether to enable and show history tracking (default: False)
     """
     if size is None:
         size = 1200, 700
+    ensure_initialized(load_user_config=False)
     with qth.datalab_app_context(exec_loop=exec_loop):
         win: DLMainWindow | None = None
         try:
             win = DLMainWindow(console=console)
+            if not history:
+                win.historypanel.set_tracking_enabled(False)
+                win.historypanel.setEnabled(False)
+                win.docks[win.historypanel].hide()
             if maximized:
                 win.showMaximized()
             else:
@@ -133,15 +144,41 @@ def run_datalab_in_background(wait_until_ready: bool = True) -> None:
     Raises:
         RuntimeError: If the DataLab application fails to start
     """
-    env = os.environ.copy()
-    env[execenv.DO_NOT_QUIT_ENV] = "1"
-    if execenv.XMLRPCPORT_ENV in env:
-        # May happen when executing other tests before
-        env.pop(execenv.XMLRPCPORT_ENV)
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.bind(("127.0.0.1", 0))
+        port = sock.getsockname()[1]
 
-    proc = helpers.exec_script(
-        "-m", args=["datalab.app"], wait=False, env=env, verbose=False
+    global _BACKGROUND_PROCESS  # pylint: disable=global-statement
+    if _BACKGROUND_PROCESS is not None:
+        if _BACKGROUND_PROCESS.is_alive():
+            raise RuntimeError("A background DataLab process is already running")
+        _BACKGROUND_PROCESS.close()
+        _BACKGROUND_PROCESS = None
+
+    execenv.xmlrpcport = port
+    from datalab import app  # pylint: disable=import-outside-toplevel
+
+    proc = multiprocessing.Process(
+        target=app.run,
+        kwargs={
+            "load_user_config": False,
+            "option_overrides": {
+                "rpc_server_enabled": True,
+                "tour_enabled": False,
+            },
+            "xmlrpc_port": port,
+        },
     )
+    previous_do_not_quit = os.environ.get(execenv.DO_NOT_QUIT_ENV)
+    os.environ[execenv.DO_NOT_QUIT_ENV] = "1"
+    try:
+        proc.start()
+    finally:
+        if previous_do_not_quit is None:
+            os.environ.pop(execenv.DO_NOT_QUIT_ENV, None)
+        else:
+            os.environ[execenv.DO_NOT_QUIT_ENV] = previous_do_not_quit
+    _BACKGROUND_PROCESS = proc
     # If the process fails to start, it will raise the `AssertionError` exception
     # with the message "Unable to start DataLab application".
     # In that case, it might be useful to set `wait=True` and `verbose=True` in the
@@ -153,7 +190,7 @@ def run_datalab_in_background(wait_until_ready: bool = True) -> None:
 
     # Give the process a moment to actually start
     time.sleep(1)
-    if not is_pid_alive(proc.pid):
+    if not proc.is_alive():
         raise RuntimeError("DataLab process terminated immediately after start")
 
     if wait_until_ready:
@@ -161,18 +198,17 @@ def run_datalab_in_background(wait_until_ready: bool = True) -> None:
         # DataLab startup: Python imports, Qt init, GUI creation, XML-RPC server
         try:
             proxy = RemoteProxy(autoconnect=False)
-            proxy.connect(timeout=30.0)  # 30 seconds max for DataLab to be ready
+            proxy.connect(port=str(port), timeout=30.0)
             proxy.disconnect()
         except ConnectionRefusedError as exc:
-            if is_pid_alive(proc.pid):
-                proc.kill()
+            close_datalab_background(request_close=False)
             raise RuntimeError(
                 "Failed to connect to DataLab application. "
                 "Process may have started but XML-RPC server is not responding."
             ) from exc
 
 
-def close_datalab_background() -> None:
+def close_datalab_background(request_close: bool = True) -> None:
     """Close DataLab application running as a service.
 
     This function connects to the DataLab application running in the background
@@ -180,27 +216,46 @@ def close_datalab_background() -> None:
     It uses the `RemoteProxy` class to establish the connection and send the
     close command.
 
-    Raises:
-        ConnectionRefusedError: If unable to connect to the DataLab application.
+    Args:
+        request_close: If True, first request a graceful shutdown through XML-RPC.
     """
-    proxy = RemoteProxy(autoconnect=False)
-    proxy.connect(timeout=5.0)  # 5 seconds max to connect
-    proxy.close_application()
-    proxy.disconnect()
+    global _BACKGROUND_PROCESS  # pylint: disable=global-statement
+    process = _BACKGROUND_PROCESS
+    if process is None:
+        execenv.xmlrpcport = None
+        return
+    try:
+        if request_close and process.is_alive():
+            try:
+                proxy = RemoteProxy(autoconnect=False)
+                proxy.connect(timeout=5.0)
+                proxy.close_application()
+                proxy.disconnect()
+            except (ConnectionRefusedError, OSError):
+                pass
+        process.join(10.0)
+        if process.is_alive():
+            process.terminate()
+            process.join(5.0)
+        if process.is_alive():
+            process.kill()
+            process.join(5.0)
+    finally:
+        if not process.is_alive():
+            process.close()
+        _BACKGROUND_PROCESS = None
+        execenv.xmlrpcport = None
 
 
 @contextmanager
 def datalab_in_background_context() -> Generator[RemoteProxy, None, None]:
     """Context manager for DataLab instance with proxy connection"""
     run_datalab_in_background()
-    with proxy_context("remote") as proxy:
-        try:
+    try:
+        with proxy_context("remote") as proxy:
             yield proxy
-        except Exception as exc:  # pylint: disable=broad-except
-            proxy.close_application()
-            raise exc
-        # Cleanup
-        proxy.close_application()
+    finally:
+        close_datalab_background()
 
 
 @contextmanager

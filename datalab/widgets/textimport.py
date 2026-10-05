@@ -33,6 +33,7 @@ from qtpy import QtWidgets as QW
 from sigima import ImageObj, SignalObj, create_image, create_signal
 from sigima.io.common.textreader import count_lines, read_first_n_lines
 from sigima.io.signal.funcs import get_labels_units_from_dataframe, read_csv_by_chunks
+from sigimax.widgets.wizard import Wizard, WizardPage
 
 from datalab.adapters_plotpy import CURVESTYLES, create_adapter_from_object
 from datalab.config import Conf, _
@@ -41,7 +42,6 @@ from datalab.utils.qthelpers import (
     create_progress_bar,
     qt_long_callback,
 )
-from datalab.widgets.wizard import Wizard, WizardPage
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, MaskedXYImageItem
@@ -547,9 +547,9 @@ class GraphicalRepresentationPage(WizardPage):
         plot_type = "curve" if destination == "signal" else "image"
         # Get appropriate autoscale margin from configuration
         if plot_type == "curve":
-            autoscale_margin = Conf.view.sig_autoscale_margin_percent.get()
+            autoscale_margin = Conf.sig_autoscale_margin_percent.get()
         else:
-            autoscale_margin = Conf.view.ima_autoscale_margin_percent.get()
+            autoscale_margin = Conf.ima_autoscale_margin_percent.get()
         self.plot_widget = PlotWidget(
             self,
             toolbar=True,

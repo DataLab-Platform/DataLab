@@ -14,7 +14,7 @@ import numpy as np
 import pandas as pd
 from guidata.qthelpers import exec_dialog
 from guidata.widgets.dataframeeditor import DataFrameEditor
-from sigima.objects import ImageObj, SignalObj
+from sigima.objects import GeometryResult, ImageObj, SignalObj, TableResult
 
 from datalab.adapters_metadata.base_adapter import BaseResultAdapter
 from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
@@ -24,6 +24,55 @@ from datalab.objectmodel import get_short_id
 
 if TYPE_CHECKING:
     from qtpy.QtWidgets import QWidget
+
+# Registry mapping result typologies to their metadata adapter classes
+_ADAPTER_REGISTRY: dict[type, type[BaseResultAdapter]] = {
+    GeometryResult: GeometryAdapter,
+    TableResult: TableAdapter,
+}
+
+
+def register_result_adapter(
+    result_class: type, adapter_class: type[BaseResultAdapter]
+) -> None:
+    """Register an adapter class for a result typology (extension point for
+    new result typologies, e.g. from plugins).
+
+    Args:
+        result_class: Result typology to associate with the adapter.
+        adapter_class: Adapter class instantiated for results of that typology.
+    """
+    _ADAPTER_REGISTRY[result_class] = adapter_class
+
+
+def create_adapter(result: GeometryResult | TableResult) -> BaseResultAdapter:
+    """Create the metadata adapter matching the result's typology.
+
+    Resolution first looks up the exact type in the registry, then walks the
+    result type's MRO so subclasses of registered typologies are accepted:
+    the most specific registered base class wins, regardless of registration
+    order.
+
+    Args:
+        result: Analysis result to wrap.
+
+    Returns:
+        Adapter instance wrapping ``result``.
+
+    Raises:
+        TypeError: If no adapter is registered for the result's type.
+    """
+    adapter_class = _ADAPTER_REGISTRY.get(type(result))
+    if adapter_class is None:
+        for base in type(result).__mro__[1:]:
+            adapter_class = _ADAPTER_REGISTRY.get(base)
+            if adapter_class is not None:
+                break
+    if adapter_class is None:
+        raise TypeError(
+            f"No result adapter registered for type {type(result).__name__!r}"
+        )
+    return adapter_class(result)
 
 
 def alpha_label(index: int) -> str:
@@ -55,6 +104,7 @@ class ResultData:
     results: list[BaseResultAdapter] | None = None
     ylabels: list[str] | None = None
     short_ids: list[str] | None = None
+    execution_success: bool = True
 
     def __bool__(self) -> bool:
         """Return True if there are results stored"""
@@ -367,7 +417,7 @@ def resultadapter_to_html(
 
     # Get max_cells from config if not provided
     if max_cells is None:
-        max_cells = Conf.view.max_cells_in_label.get(100)
+        max_cells = Conf.max_cells_in_label.get(100)
 
     if isinstance(adapter, BaseResultAdapter):
         # Get the dataframe FIRST to check truncation needs
@@ -386,7 +436,7 @@ def resultadapter_to_html(
         marker_labels_injected = False
         result = adapter.result
         if (  # pylint: disable=too-many-boolean-expressions
-            Conf.view.show_marker_labels_in_table.get(True)
+            Conf.show_marker_labels_in_table.get(True)
             and hasattr(result, "is_xy_markers")
             and (
                 result.is_xy_markers()
@@ -403,7 +453,7 @@ def resultadapter_to_html(
             marker_labels_injected = True
 
         # For merged labels, limit display columns for readability
-        max_display_cols = Conf.view.max_cols_in_label.get(20)
+        max_display_cols = Conf.max_cols_in_label.get(20)
         num_cols = len(display_df.columns)
         cols_truncated = num_cols > max_display_cols
 

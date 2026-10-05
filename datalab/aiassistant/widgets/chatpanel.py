@@ -30,7 +30,7 @@ from datalab.aiassistant.tools.builtin import build_default_registry
 from datalab.aiassistant.widgets.markdown import markdown_to_html
 from datalab.aiassistant.widgets.toolconfirmdialog import ToolConfirmDialog
 from datalab.aiassistant.worker import AIWorker
-from datalab.config import Conf, _
+from datalab.config import Conf, _, get_config_path
 from datalab.control.proxy import LocalProxy
 
 if TYPE_CHECKING:
@@ -108,7 +108,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         self._controller: AIController | None = None
         self._worker: AIWorker | None = None
         self._bridge = _GuiBridge(self)
-        base_dir = Conf.get_path(_AI_CONFIG_SUBDIR)
+        base_dir = get_config_path(_AI_CONFIG_SUBDIR)
         self._conv_store = ConversationStore(
             osp.join(base_dir, _CONVERSATIONS_SUBDIR),
             max_conversations=_CONVERSATIONS_MAX,
@@ -438,17 +438,17 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         # pylint: disable-next=import-outside-toplevel
         from datalab.aiassistant.providers import PROVIDERS  # noqa: WPS433
 
-        provider_name = Conf.ai.provider.get("openai")
+        provider_name = Conf.ai_provider.get("openai")
         if provider_name not in PROVIDERS:
             provider_name = "openai"
-        configured_key = Conf.ai.api_key.get("")
-        model = Conf.ai.model.get("gpt-4o-mini")
-        base_url = Conf.ai.base_url.get("") or None
-        temperature = float(Conf.ai.temperature.get(0.2))
-        timeout = float(Conf.ai.timeout.get(60.0))
-        max_iterations = int(Conf.ai.max_iterations.get(8))
-        max_history_messages = int(Conf.ai.max_history_messages.get(0))
-        auto_approve = bool(Conf.ai.auto_approve_readonly.get(True))
+        configured_key = Conf.ai_api_key.get("")
+        model = Conf.ai_model.get("gpt-4o-mini")
+        base_url = Conf.ai_base_url.get("") or None
+        temperature = float(Conf.ai_temperature.get(0.2))
+        timeout = float(Conf.ai_timeout.get(60.0))
+        max_iterations = int(Conf.ai_max_iterations.get(8))
+        max_history_messages = int(Conf.ai_max_history_messages.get(0))
+        auto_approve = bool(Conf.ai_auto_approve_readonly.get(True))
 
         try:
             provider_cls = get_provider(provider_name)
@@ -492,7 +492,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
             timeout=timeout,
         )
         registry = build_default_registry(
-            expose_macro_tool=bool(Conf.ai.expose_macro_tool.get(True))
+            expose_macro_tool=bool(Conf.ai_expose_macro_tool.get(True))
         )
 
         def confirm_in_gui(tool: Tool, arguments: dict) -> bool:

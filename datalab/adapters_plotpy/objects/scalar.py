@@ -35,6 +35,12 @@ from sigima.objects.scalar import KindShape
 from sigima.objects.signal import SignalObj
 from sigima.tools import coordinates
 from sigima.tools.signal import pulse
+from sigimax.adapters_plotpy.base import (
+    config_annotated_shape,
+    items_to_json,
+    json_to_items,
+    set_plot_item_editable,
+)
 
 from datalab.adapters_metadata import (
     GeometryAdapter,
@@ -42,12 +48,6 @@ from datalab.adapters_metadata import (
     resultadapter_to_html,
 )
 from datalab.adapters_metadata.common import alpha_label as _alpha_label
-from datalab.adapters_plotpy.base import (
-    config_annotated_shape,
-    items_to_json,
-    json_to_items,
-    set_plot_item_editable,
-)
 from datalab.config import PLOTPY_CONF, Conf, _
 
 if TYPE_CHECKING:
@@ -105,7 +105,7 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
         Yields:
             Plot item
         """
-        max_shapes = Conf.view.max_shapes_to_draw.get(200)
+        max_shapes = Conf.max_shapes_to_draw.get(200)
         total_coords = len(self.result_adapter.result.coords)
 
         # Yield shapes up to the maximum limit
@@ -217,9 +217,9 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
             # Apply settings for annotated shapes (except AnnotatedPoint)
             if not isinstance(item, AnnotatedPoint):
                 if prefix == "s":
-                    config_param = Conf.view.sig_shape_param.get()
+                    config_param = Conf.sig_shape_param.get()
                 else:
-                    config_param = Conf.view.ima_shape_param.get()
+                    config_param = Conf.ima_shape_param.get()
                 shape_param: ShapeParam = item.shape.shapeparam
                 gds.update_dataset(shape_param, config_param)
                 shape_param.update_item(item.shape)
@@ -228,9 +228,9 @@ class GeometryPlotPyAdapter(ResultPlotPyAdapter):
             item.set_style("results", f"{prefix}/marker")
             # Apply cursor/marker settings from config
             if prefix == "s":
-                config_param = Conf.view.sig_marker_param.get()
+                config_param = Conf.sig_marker_param.get()
             else:
-                config_param = Conf.view.ima_marker_param.get()
+                config_param = Conf.ima_marker_param.get()
             param = item.markerparam
             gds.update_dataset(param, config_param)
             param.update_item(item)

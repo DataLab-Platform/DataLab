@@ -11,9 +11,15 @@ from guidata.dataset.qtwidgets import DataSetGroupEditDialog
 from guidata.qthelpers import qt_app_context
 from qtpy import QtWidgets as QW
 
-from datalab.config import _
+from datalab.config import Conf, _
 from datalab.env import execenv
-from datalab.gui.settings import create_dataset_dict, edit_settings
+from datalab.gui.settings import (
+    ProcSettings,
+    conf_to_datasets,
+    create_dataset_dict,
+    datasets_to_conf,
+    edit_settings,
+)
 from datalab.utils import qthelpers as qth
 
 
@@ -22,6 +28,35 @@ def test_edit_settings():
     with qt_app_context():
         changed = edit_settings(None)
         execenv.print(changed)
+
+
+def test_proc_history_policy_settings_round_trip() -> None:
+    """Load and save history policies through generic settings machinery."""
+    option_names = (
+        "history_new_session_behavior",
+        "history_plugin_new_session_behavior",
+        "history_plugin_multiload_behavior",
+    )
+    original_values = tuple(getattr(Conf, name).get() for name in option_names)
+    loaded_values = ("yes", "ask", "no")
+    saved_values = ("no", "yes", "ask")
+
+    try:
+        for name, value in zip(option_names, loaded_values):
+            getattr(Conf, name).set(value)
+
+        settings = ProcSettings()
+        paramdict = {"proc": settings}
+        conf_to_datasets(paramdict)
+        assert tuple(getattr(settings, name) for name in option_names) == loaded_values
+
+        for name, value in zip(option_names, saved_values):
+            setattr(settings, name, value)
+        datasets_to_conf(paramdict)
+        assert tuple(getattr(Conf, name).get() for name in option_names) == saved_values
+    finally:
+        for name, value in zip(option_names, original_values):
+            getattr(Conf, name).set(value)
 
 
 def capture_settings_screenshots():

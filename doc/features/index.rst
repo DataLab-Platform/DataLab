@@ -35,6 +35,7 @@ Overview & Common features
    common/overview
    common/settings
    common/h5browser
+   common/historypanel
 
 .. raw:: latex
 
@@ -136,6 +137,7 @@ This section describes the advanced features of DataLab.
    advanced/plugins
    advanced/migration_v020_to_v100
    advanced/macros
+   advanced/ai_assistant
    advanced/webapi
    advanced/remote
    advanced/model

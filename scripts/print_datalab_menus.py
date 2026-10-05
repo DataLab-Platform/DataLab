@@ -58,9 +58,9 @@ def parse_menu_as_text(win: DLMainWindow) -> str:
             menu = getattr(win, f"{name}_menu")
             # Update menu content before parsing
             if name == "file":
-                win._DLMainWindow__update_file_menu()
+                win._update_file_menu()
             elif name == "view":
-                win._DLMainWindow__update_view_menu()
+                win._update_view_menu()
             elif name != "help":
                 win._DLMainWindow__update_generic_menu(menu)
             txtlist.append(f"  {menu.title().replace('&', '')}:")

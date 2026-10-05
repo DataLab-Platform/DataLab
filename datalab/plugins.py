@@ -51,6 +51,7 @@ from datalab.config import (
     OTHER_PLUGINS_PATHLIST,
     Conf,
     _,
+    get_config_path,
     get_user_plugin_paths,
 )
 from datalab.control.proxy import LocalProxy
@@ -67,7 +68,7 @@ if TYPE_CHECKING:
     from datalab.gui.panel.signal import SignalPanel
 
 
-PLUGINS_DEFAULT_PATH = Conf.get_path("plugins")
+PLUGINS_DEFAULT_PATH = get_config_path("plugins")
 PLUGIN_ENTRY_POINT_GROUP = "datalab.plugins"
 
 if not osp.isdir(PLUGINS_DEFAULT_PATH):
@@ -223,7 +224,7 @@ class PluginRegistry(type):
             """Return italic text"""
             return f"<i>{text}</i>" if html else text
 
-        if Conf.main.plugins_enabled.get():
+        if Conf.plugins_enabled.get():
             plugins = cls.get_plugins()
             if plugins:
                 text = italic(_("Registered plugins:"))
@@ -426,9 +427,11 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         self.get_example(example_id)
         if not self.main.confirm_memory_state():
             return None
-        if any(len(panel) for panel in self.main.panels) and not self.ask_yesno(
-            _("Opening this example replaces the current workspace. Continue?"),
-            title=_("Open example"),
+        if any(len(panel) for panel in (self.signalpanel, self.imagepanel)) and not (
+            self.ask_yesno(
+                _("Opening this example replaces the current workspace. Continue?"),
+                title=_("Open example"),
+            )
         ):
             return None
         return self.open_example(example_id, reset_all=True)
@@ -635,7 +638,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         PluginRegistry.register_plugin(self)
         self._is_registered = True
         self.main = main
-        self.proxy = LocalProxy(main)
+        self.proxy = LocalProxy(main, input_source="plugin")
         with ExitStack() as rollback_stack:
             rollback_stack.callback(self._reset_registration_state)
             rollback_stack.callback(PluginRegistry.unregister_plugin, self)
@@ -791,7 +794,7 @@ def _record_plugin_discovery_failure(
     logging.getLogger(__name__).error(
         "Error loading plugin %r from %s\n%s", name, source, tb_text
     )
-    Conf.main.traceback_log_available.set(True)
+    Conf.traceback_log_available.set(True)
     PluginRegistry.add_discovery_error(tb_text)
     PluginRegistry.add_failed_plugin(name, filepath, tb_text, source)
 
@@ -887,7 +890,7 @@ def _normalize_discovered_plugin_classes() -> None:
             tb_text = "".join(traceback.format_exception_only(type(error), error))
             PluginRegistry.add_discovery_error(tb_text)
             logging.getLogger(__name__).error(tb_text.rstrip())
-            Conf.main.traceback_log_available.set(True)
+            Conf.traceback_log_available.set(True)
             sources = getattr(plugin_class, "__plugin_discovery_sources__", ())
             PluginRegistry.add_failed_plugin(
                 plugin_class.__name__,
@@ -914,7 +917,7 @@ def _normalize_discovered_plugin_classes() -> None:
         tb_text = "".join(traceback.format_exception_only(type(error), error))
         PluginRegistry.add_discovery_error(tb_text)
         logging.getLogger(__name__).error(tb_text.rstrip())
-        Conf.main.traceback_log_available.set(True)
+        Conf.traceback_log_available.set(True)
         for plugin_class in classes:
             sources = getattr(plugin_class, "__plugin_discovery_sources__", ())
             PluginRegistry.add_failed_plugin(
@@ -954,7 +957,7 @@ def discover_plugins() -> list[ModuleType]:
     PluginRegistry.clear_discovery_errors()
     PluginRegistry.clear_failed_plugins()
 
-    if not Conf.main.plugins_enabled.get():
+    if not Conf.plugins_enabled.get():
         return []
 
     # Ensure plugin search paths are present in sys.path
@@ -994,7 +997,7 @@ def discover_plugins() -> list[ModuleType]:
             # Log to file so it appears in Log Files viewer
             logger = logging.getLogger(__name__)
             logger.error("Error loading plugin '%s'", name, exc_info=True)
-            Conf.main.traceback_log_available.set(True)
+            Conf.traceback_log_available.set(True)
             # Accumulate for replay in internal console
             PluginRegistry.add_discovery_error(tb_text)
             # Record structured info about the failed plugin
@@ -1027,7 +1030,7 @@ def reload_plugin_modules() -> None:
     Like :func:`discover_plugins`, this is not thread-safe: call it from
     the Qt main thread only.
     """
-    if not Conf.main.plugins_enabled.get():
+    if not Conf.plugins_enabled.get():
         return
 
     # Reset class registry before re-executing modules so that plugin
@@ -1046,7 +1049,7 @@ def discover_v020_plugins() -> list[tuple[str, str]]:
         List of tuples (plugin_name, directory_path) for discovered v0.20 plugins
     """
     v020_plugins = []
-    if Conf.main.plugins_enabled.get():
+    if Conf.plugins_enabled.get():
         for path in (
             get_user_plugin_paths() + [PLUGINS_DEFAULT_PATH] + OTHER_PLUGINS_PATHLIST
         ):

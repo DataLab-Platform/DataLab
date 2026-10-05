@@ -195,7 +195,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
                 merged_label = merged_adapter.get_merged_label()
                 if merged_label is not None:
                     # Set initial visibility based on configuration
-                    merged_label.setVisible(Conf.view.show_result_label.get())
+                    merged_label.setVisible(Conf.show_result_label.get())
                     items.append(merged_label)
 
                 # Add other items from the merged adapter (e.g., geometric shapes)
@@ -303,7 +303,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         self.plot.add_item(item)
         return item
 
-    def __update_item_on_plot(self, oid: str, just_show: bool = False) -> None:
+    def update_item_on_plot(self, oid: str, just_show: bool = False) -> None:
         """Update plot item.
 
         Args:
@@ -511,7 +511,7 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
                                 continue
                             item = self.__add_item_to_plot(oid)
                         else:
-                            self.__update_item_on_plot(oid, just_show=not update_items)
+                            self.update_item_on_plot(oid, just_show=not update_items)
                         if what != "existing" or item.isVisible():
                             self.plot.set_item_visible(item, True, replot=False)
                             active_item = item
@@ -649,13 +649,11 @@ class SignalPlotHandler(BasePlotHandler[SignalObj, CurveItem]):
                         # Use configured format based on time unit
                         unit = obj.xunit if obj.xunit else "s"
                         if unit in ("ns", "us", "ms"):
-                            datetime_format = Conf.view.sig_datetime_format_ms.get(
+                            datetime_format = Conf.sig_datetime_format_ms.get(
                                 "%H:%M:%S.%f"
                             )
                         else:
-                            datetime_format = Conf.view.sig_datetime_format_s.get(
-                                "%H:%M:%S"
-                            )
+                            datetime_format = Conf.sig_datetime_format_s.get("%H:%M:%S")
                     break
 
         # Configure X-axis for datetime or restore default
@@ -803,11 +801,11 @@ class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedXYImageItem]):
             only_visible=only_visible,
             only_existing=only_existing,
         )
-        self.plotwidget.contrast.setVisible(Conf.view.show_contrast.get(True))
+        self.plotwidget.contrast.setVisible(Conf.show_contrast.get(True))
         plot = self.plotwidget.get_plot()
         new_aspect_ratio = current_aspect_ratio = plot.get_aspect_ratio()
         new_lock = current_lock = plot.lock_aspect_ratio
-        if Conf.view.ima_aspect_ratio_1_1.get():
+        if Conf.ima_aspect_ratio_1_1.get():
             # Lock aspect ratio to 1:1
             new_aspect_ratio = 1.0
             new_lock = True

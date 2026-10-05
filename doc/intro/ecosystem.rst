@@ -4,8 +4,8 @@ The DataLab Platform
 ====================
 
 .. meta::
-    :description: The DataLab Platform ecosystem - desktop application, browser-native DataLab-Web, DataLab-Kernel Jupyter kernel and the Sigima computation engine
-    :keywords: DataLab, DataLab Platform, DataLab-Web, browser, WebAssembly, Pyodide, DataLab-Kernel, Jupyter, Sigima, desktop, ecosystem, editions
+    :description: The DataLab Platform ecosystem - desktop application, browser-native DataLab-Web, DataLab-Kernel Jupyter kernel, the Sigima computation engine and the SigimaX application framework
+    :keywords: DataLab, DataLab Platform, DataLab-Web, browser, WebAssembly, Pyodide, DataLab-Kernel, Jupyter, Sigima, SigimaX, desktop, ecosystem, editions
 
 When DataLab started in 2023, it was a single product: a desktop application. Since then,
 the same scientific core has grown into a small family of complementary tools — the
@@ -57,6 +57,11 @@ desktop application. To avoid confusion, this documentation uses the following v
     * - **Sigima**
       - The headless **computation engine** (signal and image processing) shared by all of
         the above. `Documentation <https://sigima.readthedocs.io/>`__.
+    * - **SigimaX**
+      - The **Qt application framework** on which the desktop application is built: generic
+        main window, configuration system, dockable plot widgets, HDF5 workspace and
+        browser, log viewer and scientific dialogs. Aimed at developers building their own
+        Qt scientific application. `Documentation <https://sigimax.readthedocs.io/>`__.
 
 .. note::
 
@@ -97,6 +102,13 @@ Members of the platform
             The open-source computation engine that powers every edition. See the
             `Sigima documentation <https://sigima.readthedocs.io/>`_.
 
+        .. grid-item-card:: :octicon:`stack;1em;sd-text-info`  SigimaX
+
+            The Qt application framework extracted from DataLab: main window skeleton,
+            configuration system, plot docks, HDF5 workspace and scientific dialogs — the
+            foundation of the desktop application, reusable for your own Qt application.
+            See the `SigimaX documentation <https://sigimax.readthedocs.io/>`_.
+
 .. only:: latex and not html
 
     - **DataLab (desktop)** — the reference application, with a native Qt graphical user
@@ -108,6 +120,9 @@ Members of the platform
       (`documentation <https://datalab-kernel.readthedocs.io/>`_).
     - **Sigima** — the open-source computation engine that powers every edition
       (`documentation <https://sigima.readthedocs.io/>`_).
+    - **SigimaX** — the Qt application framework on which the desktop application is built,
+      reusable to create other scientific Qt applications
+      (`documentation <https://sigimax.readthedocs.io/>`_).
 
 Which one should I use?
 -----------------------

@@ -22,6 +22,7 @@ from sigima.enums import ContourShape
 from sigima.objects import NewImageParam, create_image_roi
 from sigima.tests.data import create_multigaussian_image, create_peak_image
 
+from datalab.env import execenv
 from datalab.tests import datalab_test_app_context
 from datalab.tests.features.image.roi_app_test import IROI1, IROI2
 
@@ -221,6 +222,7 @@ def test_no_infinite_roi_recreation_loop():
 
 
 if __name__ == "__main__":
+    execenv.unattended = True  # Auto-close dialogs and event loops (standalone run)
     test_create_rois_no_existing_roi()
     test_create_rois_appends_to_existing_roi()
     test_create_rois_false_preserves_existing_roi()

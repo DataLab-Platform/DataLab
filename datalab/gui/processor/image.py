@@ -24,6 +24,7 @@ from sigima.objects import (
     UniformDistributionParam,
 )
 from sigima.objects.scalar import GeometryResult, TableResult
+from sigimax.widgets import imagebackground
 
 from datalab.config import APP_NAME, _
 from datalab.gui.processor.base import BaseProcessor
@@ -35,7 +36,6 @@ from datalab.gui.profiledialog import ProfileExtractionDialog
 from datalab.gui.roigrideditor import ImageGridROIEditor
 from datalab.objectmodel import get_uuid
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
-from datalab.widgets import imagebackground
 from datalab.widgets.replacespecialvalues import (
     ReplaceSpecialValuesImageParamDL,
 )
@@ -187,31 +187,26 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             self._wrap_geometric_transform(sipi.fliph, "fliph"),
             _("Flip horizontally"),
             icon_name="flip_horizontally.svg",
-            feature_id="org.datalab.image.geometry.fliph",
         )
         self.register_1_to_1(
             self._wrap_geometric_transform(sipi.transpose, "transpose"),
             _("Flip diagonally"),
             icon_name="swap_x_y.svg",
-            feature_id="org.datalab.image.geometry.transpose",
         )
         self.register_1_to_1(
             self._wrap_geometric_transform(sipi.flipv, "flipv"),
             _("Flip vertically"),
             icon_name="flip_vertically.svg",
-            feature_id="org.datalab.image.geometry.flipv",
         )
         self.register_1_to_1(
             self._wrap_geometric_transform(sipi.rotate270, "rotate270"),
             _("Rotate %s right") % "90°",
             icon_name="rotate_right.svg",
-            feature_id="org.datalab.image.geometry.rotate270",
         )
         self.register_1_to_1(
             self._wrap_geometric_transform(sipi.rotate90, "rotate90"),
             _("Rotate %s left") % "90°",
             icon_name="rotate_left.svg",
-            feature_id="org.datalab.image.geometry.rotate90",
         )
         self.register_1_to_1(sipi.rotate, _("Rotate by"), sipi.RotateParam)
         # Intensity profiles
@@ -273,11 +268,6 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                 "  • y' = a0 + a1*y + a2*y^2 + ...\n"
                 "  • z' = a0 + a1*z + a2*z^2 + ..."
             ),
-        )
-        self.register_1_to_1(
-            sipi.transpose,
-            _("Swap X/Y axes"),
-            icon_name="swap_x_y.svg",
         )
         # Level adjustment
         self.register_1_to_1(
@@ -420,6 +410,11 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.register_1_to_1(sipi.threshold_triangle, _("Triangle thresholding"))
         self.register_1_to_1(sipi.threshold_yen, _("Yen thresholding"))
         # Exposure
+        self.register_1_to_1(
+            sipi.adjust_brightness_contrast,
+            _("Brightness and contrast"),
+            sipi.BrightnessContrastParam,
+        )
         self.register_1_to_1(
             sipi.adjust_gamma,
             _("Gamma correction"),

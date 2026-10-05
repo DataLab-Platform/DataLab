@@ -64,7 +64,7 @@ def test_xarray_compatibility_app():
         panel.add_object(s_different := create_signal_from_param(p_different))
 
         # Test with addition operation:
-        with Conf.proc.xarray_compat_behavior.temp("interpolate"):
+        with Conf.xarray_compat_behavior.context("interpolate"):
             # Select signals with the same number of points but different X ranges:
             panel.objview.select_objects([s_ref, s_same_nbp])
             panel.processor.run_feature("addition")
@@ -101,7 +101,7 @@ def test_xarray_compatibility_app():
             )
 
         # Test with subtraction operation:
-        with Conf.proc.xarray_compat_behavior.temp("interpolate"):
+        with Conf.xarray_compat_behavior.context("interpolate"):
             # Select signals with the same number of points but different X ranges:
             panel.objview.select_objects([s_ref])
             panel.processor.run_feature("difference", obj2=s_same_nbp)

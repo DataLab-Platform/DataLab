@@ -8,7 +8,6 @@ Remote client test
 # pylint: disable=duplicate-code
 # guitest: skip
 
-import os
 import os.path as osp
 
 import numpy as np
@@ -17,10 +16,9 @@ from plotpy.builder import make
 from sigima.params import XYCalibrateParam
 from sigima.tests.data import create_2d_gaussian, create_paracetamol_signal
 
-from datalab import app
 from datalab.control.proxy import RemoteProxy
 from datalab.env import execenv
-from datalab.tests import helpers
+from datalab.tests import datalab_in_background_context, helpers
 
 
 def multiple_commands(remote: RemoteProxy):
@@ -36,12 +34,31 @@ def multiple_commands(remote: RemoteProxy):
         remote.add_annotations_from_items([rect])
         uuid = remote.get_sel_object_uuids()[0]
         assert remote.get_current_object_uuid() == uuid
+        canonical_annotations = remote.get_object(uuid).get_annotations()
+        assert len(canonical_annotations) == 1
+        assert canonical_annotations[0]["format"] == "sigima.annotation"
+        assert "plotpy_json" not in canonical_annotations[0]
         items = remote.get_object_shapes()
         assert len(items) == 1 and items[0].get_rect() == area
         remote.add_label_with_title(f"Image uuid: {uuid}")
         remote.select_groups([1])
         remote.select_objects([uuid])
         remote.delete_metadata()
+        canonical_annotations = remote.get_object(uuid).get_annotations()
+
+        annotations_workspace = osp.join(tmpdir, "annotations_workspace.h5")
+        remote.save_h5_workspace(annotations_workspace)
+        remote.reset_all()
+        remote.load_h5_workspace([annotations_workspace], reset_all=True)
+        remote.set_current_panel("image")
+        restored_annotations = [
+            remote.get_object(image_uuid).get_annotations()
+            for image_uuid in remote.get_object_uuids()
+        ]
+        assert canonical_annotations in restored_annotations, (
+            "Canonical annotations were not restored from the workspace: "
+            f"expected {canonical_annotations!r}, got {restored_annotations!r}"
+        )
 
         fname = osp.join(tmpdir, osp.basename("remote_test.h5"))
         remote.save_to_h5_file(fname)
@@ -82,14 +99,10 @@ def multiple_commands(remote: RemoteProxy):
 
 def test_remoteclient_unit():
     """Remote client test"""
-    env = os.environ.copy()
-    env[execenv.DO_NOT_QUIT_ENV] = "1"
-    execenv.print("Launching DataLab in a separate process")
-    helpers.exec_script(app.__file__, wait=False, env=env)
-    remote = RemoteProxy()
     execenv.print("Executing multiple commands...", end="")
     with qt_app_context():  # needed for building plot items
-        multiple_commands(remote)
+        with datalab_in_background_context() as remote:
+            multiple_commands(remote)
     execenv.print("OK")
 
 

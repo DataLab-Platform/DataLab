@@ -31,7 +31,7 @@ from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 
 import datalab
 from datalab.adapters_plotpy import items_to_json, json_to_items
-from datalab.config import Conf, initialize
+from datalab.config import Conf, ensure_initialized
 from datalab.control.baseproxy import AbstractDLControl, BaseProxy
 from datalab.env import execenv
 
@@ -148,7 +148,9 @@ class RemoteServer(QC.QThread):
     def serve(self) -> None:
         """Start server and serve forever"""
         with SimpleXMLRPCServer(
-            ("127.0.0.1", 0), logRequests=False, allow_none=True
+            ("127.0.0.1", execenv.xmlrpcport or 0),
+            logRequests=False,
+            allow_none=True,
         ) as server:
             self.server = server
             server.register_introspection_functions()
@@ -830,9 +832,9 @@ def get_datalab_xmlrpc_port() -> str:
     #  The following is valid only when using Python 3.9+ with DataLab
     #  installed on the client side. In any other situation, please use the
     #  ``get_datalab_xmlrpc_port`` function from doc/remotecontrol_py27.py.
-    initialize()
+    ensure_initialized(load_user_config=True)
     try:
-        return Conf.main.rpc_server_port.get()
+        return Conf.rpc_server_port.get()
     except RuntimeError as exc:
         raise ConnectionRefusedError("DataLab has not yet been executed") from exc
 
@@ -882,7 +884,7 @@ class RemoteClient(BaseProxy):
             port_str = f"→[execenv.xmlrpcport:{port}] "
             if port is None:
                 port = get_datalab_xmlrpc_port()
-                port_str = f"→[Conf.main.rpc_server_port:{port}] "
+                port_str = f"→[Conf.rpc_server_port:{port}] "
         execenv.print(port_str, end="")
         self.port = port
         if port is None:

@@ -4,10 +4,29 @@
 
 import os.path as osp
 
+from sigima.objects import RectangleAnnotation, annotation_to_dict
 from sigima.tests import data as test_data
 
 from datalab.env import execenv
 from datalab.tests import datalab_test_app_context, helpers
+
+
+def make_portable_annotations() -> list[dict]:
+    """Return canonical and opaque annotations for persistence tests."""
+    return [
+        annotation_to_dict(
+            RectangleAnnotation(
+                x=1.0,
+                y=2.0,
+                width=3.0,
+                height=4.0,
+                title="Portable",
+                metadata={"owner": "test"},
+                extensions={"vendor": {"keep": True}},
+            )
+        ),
+        {"consumer": "custom", "payload": {"keep": True}},
+    ]
 
 
 def test_annotations_copy_paste():
@@ -21,10 +40,7 @@ def test_annotations_copy_paste():
             sig2 = test_data.create_paracetamol_signal()
 
             # Add annotations to first signal
-            orig_annotations = [
-                {"type": "label", "text": "Peak 1"},
-                {"type": "label", "text": "Peak 2"},
-            ]
+            orig_annotations = make_portable_annotations()
             sig1.set_annotations(orig_annotations)
 
             # Add objects to panel - sig1 will be selected after this
@@ -53,7 +69,7 @@ def test_annotations_import_export():
 
                 # Create signal with annotations
                 sig = test_data.create_paracetamol_signal()
-                orig_annotations = [{"type": "label", "text": "Test annotation"}]
+                orig_annotations = make_portable_annotations()
                 sig.set_annotations(orig_annotations)
 
                 panel.add_object(sig)

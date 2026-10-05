@@ -79,8 +79,8 @@ def test_feature_collision_is_atomic_and_owner_removal_is_scoped() -> None:
         processor.get_feature("org.example.derivative")
 
 
-def test_duplicate_function_alias_requires_stable_id() -> None:
-    """A function reused by multiple contributions is addressable only by ID."""
+def test_builtin_feature_owns_function_and_name_aliases() -> None:
+    """Built-in IDs are function names; plugin reuse is addressed by plugin ID."""
     processor = ProcessorRegistryHarness()
     built_in = ComputingFeature(
         pattern="1_to_1",
@@ -91,15 +91,42 @@ def test_duplicate_function_alias_requires_stable_id() -> None:
         pattern="1_to_1",
         function=sips.derivative,
         title="Plugin derivative",
-        feature_id="org.example.derivative",
+        feature_id="org.example.plugin:derivative",
         owner_plugin_id="org.example.plugin",
+    )
+    other_feature = ComputingFeature(
+        pattern="1_to_1",
+        function=sips.derivative,
+        title="Other derivative",
+        feature_id="org.example.other:derivative",
+        owner_plugin_id="org.example.other",
     )
     processor.add_feature(built_in)
     processor.add_feature(plugin_feature)
 
-    assert processor.get_feature(built_in.feature_id) is built_in
+    assert built_in.feature_id == "derivative"
+    assert processor.get_feature("derivative") is built_in
+    assert processor.get_feature(sips.derivative) is built_in
     assert processor.get_feature(plugin_feature.feature_id) is plugin_feature
+
+    processor.remove_feature(built_in.feature_id)
+    processor.add_feature(other_feature)
     with pytest.raises(ValueError, match="Ambiguous"):
         processor.get_feature(sips.derivative)
     with pytest.raises(ValueError, match="Ambiguous"):
         processor.get_feature("derivative")
+
+
+def test_implicit_plugin_feature_id_is_namespaced() -> None:
+    """An owned feature without explicit ID is namespaced by its owner."""
+    processor = ProcessorRegistryHarness()
+    feature = ComputingFeature(
+        pattern="1_to_1",
+        function=sips.derivative,
+        title="Derivative",
+    )
+
+    processor.add_feature(feature, owner="org.example.plugin")
+
+    assert feature.feature_id == "org.example.plugin:derivative"
+    assert processor.get_feature("derivative") is feature

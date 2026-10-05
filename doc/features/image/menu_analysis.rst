@@ -223,6 +223,12 @@ Blob detection (OpenCV)
     To use this feature, enable "Create regions of interest" in the detection
     parameters dialog and choose the desired ROI geometry.
 
+    The created ROIs are **added to the regions of interest already defined** on
+    the image, instead of replacing them: running several detections in a row
+    accumulates their results, and no destructive confirmation dialog is shown.
+    They are ordinary ROIs, which may be moved, resized, or deleted afterwards
+    like any manually defined region.
+
 Show results
 ^^^^^^^^^^^^
 

@@ -151,7 +151,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --upgrade PythonQwt guidata PlotPy Sigima
+          python -m pip install --upgrade PythonQwt guidata PlotPy Sigima SigimaX
           python -m pip install .[doc,qt]
 
       # Some .rst files use ``.. literalinclude:: ../../../../Sigima/...`` to
@@ -222,7 +222,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install --upgrade PythonQwt guidata PlotPy Sigima
+          python -m pip install --upgrade PythonQwt guidata PlotPy Sigima SigimaX
           python -m pip install .[doc,qt]
           # sigima.proc.validation imports `_pytest` at module level (tech
           # debt); doc/update_validation_status.py needs it to be importable.
@@ -405,7 +405,7 @@ jobs:
         shell: pwsh
         run: |
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install --upgrade PythonQwt guidata PlotPy Sigima
+          python -m pip install --upgrade PythonQwt guidata PlotPy Sigima SigimaX
           python -m pip install .[exe]
 
       - name: Generate build manifest

@@ -6,8 +6,6 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,3 +24,6 @@ msgstr "L'interface de programmation d'application (API) publique de DataLab off
 
 msgid "For more details about the `sigima` package, please refer to the `Sigima documentation <https://sigima.readthedocs.io/en/latest/>`_. The Sigima API is especially useful to write scripts that can be run in DataLab (see :ref:`about_macros`) or to develop plugins (see :ref:`about_plugins`)."
 msgstr "Pour plus de détails sur le package `sigima`, veuillez vous référer à la `documentation de Sigima <https://sigima.readthedocs.io/en/latest/>`_. L'API de Sigima est particulièrement utile pour écrire des scripts pouvant être exécutés dans DataLab (voir :ref:`about_macros`) ou pour développer des plugins (voir :ref:`about_plugins`)."
+
+msgid "A significant part of the DataLab graphical layer is provided by the `sigimax` package: generic main window, configuration system, dockable plot widgets, HDF5 workspace and browser, log viewer and scientific dialogs. Those classes are documented in the `SigimaX documentation <https://sigimax.readthedocs.io/>`_, and are the ones to look at when building a Qt scientific application on the same foundation (see :ref:`ecosystem`)."
+msgstr "Une partie significative de la couche graphique de DataLab est fournie par le package `sigimax` : fenêtre principale générique, système de configuration, widgets de tracé amovibles, espace de travail et navigateur HDF5, visionneuse de journaux et dialogues scientifiques. Ces classes sont documentées dans la `documentation de SigimaX <https://sigimax.readthedocs.io/>`_, et sont celles à consulter lors de la construction d'une application scientifique Qt sur la même base (voir :ref:`ecosystem`)."

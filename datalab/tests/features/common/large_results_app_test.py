@@ -115,7 +115,7 @@ def test_large_results_scenario(measure_execution_time: bool = False) -> None:
         # Run contour detection which should produce a large set of results
         param = sigima_param.ContourShapeParam()
         param.shape = sigima.enums.ContourShape.POLYGON
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("contour_shape", param)
 
         # Create geometry results manually using many polygons (we generate results

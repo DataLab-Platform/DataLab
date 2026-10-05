@@ -168,14 +168,14 @@ def _serialize_signal(obj, buffer: io.BytesIO, *, compress: bool = True) -> None
     # Build metadata dict
     metadata = {
         "type": "signal",
-        "title": getattr(obj, "title", None),
-        "xlabel": getattr(obj, "xlabel", None),
-        "ylabel": getattr(obj, "ylabel", None),
-        "xunit": getattr(obj, "xunit", None),
-        "yunit": getattr(obj, "yunit", None),
+        "title": obj.title,
+        "xlabel": obj.xlabel,
+        "ylabel": obj.ylabel,
+        "xunit": obj.xunit,
+        "yunit": obj.yunit,
     }
     # Include object metadata (contains Geometry_*, Table_* results)
-    obj_metadata = getattr(obj, "metadata", None)
+    obj_metadata = obj.metadata
     if obj_metadata:
         metadata["obj_metadata"] = _serialize_obj_metadata(obj_metadata)
 
@@ -201,20 +201,20 @@ def _serialize_image(obj, buffer: io.BytesIO, *, compress: bool = True) -> None:
     # numpy scalars after HDF5 deserialization
     metadata = {
         "type": "image",
-        "title": getattr(obj, "title", None),
-        "xlabel": getattr(obj, "xlabel", None),
-        "ylabel": getattr(obj, "ylabel", None),
-        "zlabel": getattr(obj, "zlabel", None),
-        "xunit": getattr(obj, "xunit", None),
-        "yunit": getattr(obj, "yunit", None),
-        "zunit": getattr(obj, "zunit", None),
-        "x0": _to_python_scalar(getattr(obj, "x0", 0.0)),
-        "y0": _to_python_scalar(getattr(obj, "y0", 0.0)),
-        "dx": _to_python_scalar(getattr(obj, "dx", 1.0)),
-        "dy": _to_python_scalar(getattr(obj, "dy", 1.0)),
+        "title": obj.title,
+        "xlabel": obj.xlabel,
+        "ylabel": obj.ylabel,
+        "zlabel": obj.zlabel,
+        "xunit": obj.xunit,
+        "yunit": obj.yunit,
+        "zunit": obj.zunit,
+        "x0": _to_python_scalar(obj.x0),
+        "y0": _to_python_scalar(obj.y0),
+        "dx": _to_python_scalar(obj.dx),
+        "dy": _to_python_scalar(obj.dy),
     }
     # Include object metadata (contains Geometry_*, Table_* results)
-    obj_metadata = getattr(obj, "metadata", None)
+    obj_metadata = obj.metadata
     if obj_metadata:
         metadata["obj_metadata"] = _serialize_obj_metadata(obj_metadata)
 
@@ -358,11 +358,11 @@ def object_to_metadata(obj: DataObject, name: str) -> dict:
             "type": "signal",
             "shape": list(obj.y.shape),
             "dtype": str(obj.y.dtype),
-            "title": getattr(obj, "title", None),
-            "xlabel": getattr(obj, "xlabel", None),
-            "ylabel": getattr(obj, "ylabel", None),
-            "xunit": getattr(obj, "xunit", None),
-            "yunit": getattr(obj, "yunit", None),
+            "title": obj.title,
+            "xlabel": obj.xlabel,
+            "ylabel": obj.ylabel,
+            "xunit": obj.xunit,
+            "yunit": obj.yunit,
             "attributes": {},
         }
     if obj_type == "ImageObj":
@@ -371,18 +371,18 @@ def object_to_metadata(obj: DataObject, name: str) -> dict:
             "type": "image",
             "shape": list(obj.data.shape),
             "dtype": str(obj.data.dtype),
-            "title": getattr(obj, "title", None),
-            "xlabel": getattr(obj, "xlabel", None),
-            "ylabel": getattr(obj, "ylabel", None),
-            "zlabel": getattr(obj, "zlabel", None),
-            "xunit": getattr(obj, "xunit", None),
-            "yunit": getattr(obj, "yunit", None),
-            "zunit": getattr(obj, "zunit", None),
+            "title": obj.title,
+            "xlabel": obj.xlabel,
+            "ylabel": obj.ylabel,
+            "zlabel": obj.zlabel,
+            "xunit": obj.xunit,
+            "yunit": obj.yunit,
+            "zunit": obj.zunit,
             "attributes": {
-                "x0": _to_python_scalar(getattr(obj, "x0", 0.0)),
-                "y0": _to_python_scalar(getattr(obj, "y0", 0.0)),
-                "dx": _to_python_scalar(getattr(obj, "dx", 1.0)),
-                "dy": _to_python_scalar(getattr(obj, "dy", 1.0)),
+                "x0": _to_python_scalar(obj.x0),
+                "y0": _to_python_scalar(obj.y0),
+                "dx": _to_python_scalar(obj.dx),
+                "dy": _to_python_scalar(obj.dy),
             },
         }
     raise TypeError(f"Unsupported object type: {obj_type}")

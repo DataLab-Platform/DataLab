@@ -46,6 +46,7 @@ from guidata.qthelpers import add_actions, create_action
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from sigimax.widgets import fitdialog
 
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter, have_results
 from datalab.config import Conf, _
@@ -54,7 +55,6 @@ from datalab.gui.processor.base import (
     clear_analysis_parameters,
     extract_analysis_parameters,
 )
-from datalab.widgets import fitdialog
 
 if TYPE_CHECKING:
     from sigima.objects import ImageObj, SignalObj
@@ -1200,7 +1200,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 select_condition=SelectCond.with_results,
             )
             self.show_label_action.setCheckable(True)
-            self.show_label_action.setChecked(Conf.view.show_result_label.get())
+            self.show_label_action.setChecked(Conf.show_result_label.get())
             self.new_action(
                 _("Plot results") + "...",
                 triggered=self.panel.plot_results,
@@ -1485,7 +1485,7 @@ class SignalActionHandler(BaseActionHandler):
                 tip=_("Toggle curve anti-aliasing on/off (may slow down plotting)"),
                 toolbar_pos=-1,
             )
-            antialiasing_action.setChecked(Conf.view.sig_antialiasing.get(True))
+            antialiasing_action.setChecked(Conf.sig_antialiasing.get(True))
             self.new_action(
                 _("Reset curve styles"),
                 select_condition=SelectCond.always,
@@ -1511,9 +1511,7 @@ class ImageActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.PROCESSING):
             with self.new_menu(_("Geometry"), icon_name="rotate_right.svg"):
                 self.action_for("fliph", context_menu_pos=-1, context_menu_sep=True)
-                self.action_for(
-                    "org.datalab.image.geometry.transpose", context_menu_pos=-1
-                )
+                self.action_for("transpose", context_menu_pos=-1)
                 self.action_for("flipv", context_menu_pos=-1)
                 self.action_for("rotate270", context_menu_pos=-1)
                 self.action_for("rotate90", context_menu_pos=-1)
@@ -1617,6 +1615,7 @@ class ImageActionHandler(BaseActionHandler):
                     tip=_("Apply all thresholding methods"),
                 )
             with self.new_menu(_("Exposure"), icon_name="exposure.svg"):
+                self.action_for("adjust_brightness_contrast")
                 self.action_for("adjust_gamma")
                 self.action_for("adjust_log")
                 self.action_for("adjust_sigmoid")
@@ -1770,4 +1769,4 @@ class ImageActionHandler(BaseActionHandler):
                 toggled=self.panel.toggle_show_contrast,
                 toolbar_pos=-1,
             )
-            showcontrast_action.setChecked(Conf.view.show_contrast.get(True))
+            showcontrast_action.setChecked(Conf.show_contrast.get(True))
