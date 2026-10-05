@@ -856,11 +856,16 @@ def test_live_image_to_signal_preview(tmp_path, monkeypatch):
         assert expected.x.size == 8
         dialog = ProcessingPreviewDialog(param, line_profile, [source])
         loop = QW.QApplication.instance()
+
+        def stop_loop(*_args) -> None:
+            # Unlike quit(), exit() does not close top-level windows with Qt 6
+            loop.exit()
+
         timeout = QC.QTimer()
         timeout.setSingleShot(True)
-        timeout.timeout.connect(loop.quit)
-        dialog.preview.controller.SIG_RESULT.connect(loop.quit)
-        dialog.preview.controller.SIG_ERROR.connect(loop.quit)
+        timeout.timeout.connect(stop_loop)
+        dialog.preview.controller.SIG_RESULT.connect(stop_loop)
+        dialog.preview.controller.SIG_ERROR.connect(stop_loop)
         dialog.show()
         executor = None
         try:
