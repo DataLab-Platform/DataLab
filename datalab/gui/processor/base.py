@@ -861,6 +861,15 @@ class ComputingFeature(Generic[TypeObj]):
         return self.function.__name__
 
     @property
+    def feature_id(self) -> str:
+        """Return the identifier persisted in processing metadata and History.
+
+        Built-in feature identifiers are computation function names, which must be
+        unique within a processor.
+        """
+        return self.name
+
+    @property
     def action_title(self) -> str:
         """Return the action title of the computing feature."""
         title = self.title
@@ -1769,7 +1778,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                     # Store processing metadata for interactive re-processing
                     pp = ProcessingParameters(
-                        func_name=name,
+                        func_name=self.get_feature_id(func),
                         pattern="1-to-1",
                         param=param,
                         source_uuid=get_uuid(obj),
@@ -1915,7 +1924,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
             draft = copy.deepcopy(param)
             preview_results = []
-            feature = self.computing_registry.get(func.__name__)
+            feature = self.computing_registry.get(func)
             allowed = preview_enabled and (feature is None or feature.preview_enabled)
             if not edit_processing_parameters(
                 draft,
@@ -1948,7 +1957,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             self.PARAM_DEFAULTS[type(param).__name__] = copy.deepcopy(param)
         plugin_origin = self._get_plugin_origin_for(func)
         pp = build_processing_parameters(
-            func.__name__, "1-to-1", param=param, plugin_origin=plugin_origin
+            self.get_feature_id(func),
+            "1-to-1",
+            param=param,
+            plugin_origin=plugin_origin,
         )
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
             title or func.__name__,
@@ -2004,14 +2016,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 return
             if len(funcs) != len(params):
                 raise ValueError("Number of functions must match number of parameters")
+        func_names = [self.get_feature_id(func) for func in funcs]
         pp = build_processing_parameters(
-            funcs[0].__name__ if funcs else "", "multiple-1-to-1"
+            func_names[0] if func_names else "", "multiple-1-to-1"
         )
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
             title or "compute_multiple_1_to_1",
             pp,
             panel_str=self.panel.PANEL_STR_ID,
-            func_names=[f.__name__ for f in funcs],
+            func_names=func_names,
             params=params if any(p is not None for p in params) else None,
             plugin_origin=(self._get_plugin_origin_for(funcs[0]) if funcs else None),
         )
@@ -2052,7 +2065,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             group = gds.DataSetGroup(params, title=_("Parameters"))
             if not group.edit(parent=self.mainwindow):
                 return
-        pp = build_processing_parameters(func.__name__, "1-to-n")
+        pp = build_processing_parameters(self.get_feature_id(func), "1-to-n")
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
             title or func.__name__,
             pp,
@@ -2119,7 +2132,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             return None
         current_obj = self.panel.objview.get_current_object()
         title = func.__name__ if title is None else title
-        pp_history = build_processing_parameters(func.__name__, "1-to-0", param=param)
+        feature_id = self.get_feature_id(func)
+        pp_history = build_processing_parameters(feature_id, "1-to-0", param=param)
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
             title,
             pp_history,
@@ -2160,7 +2174,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     adapter = create_adapter(result)
                     adapter.add_to(obj, param)
                     pp = ProcessingParameters(
-                        func_name=func.__name__,
+                        func_name=feature_id,
                         pattern="1-to-0",
                         param=param,
                         source_uuid=get_uuid(obj),
@@ -2251,8 +2265,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         objmodel = self.panel.objmodel
         pairwise = is_pairwise_mode() if pairwise is None else pairwise
         name = func.__name__
+        feature_id = self.get_feature_id(func)
 
-        pp_history = build_processing_parameters(name, "n-to-1", param=param)
+        pp_history = build_processing_parameters(feature_id, "n-to-1", param=param)
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
             title or name,
             pp_history,
@@ -2342,7 +2357,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                         # Store lightweight processing metadata (non-interactive)
                         proc_params = ProcessingParameters(
-                            func_name=name,
+                            func_name=feature_id,
                             pattern="n-to-1",
                             param=param,
                             source_uuids=[get_uuid(obj) for obj in src_objs_pair],
@@ -2434,7 +2449,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                         # Store lightweight processing metadata (non-interactive)
                         proc_params = ProcessingParameters(
-                            func_name=name,
+                            func_name=feature_id,
                             pattern="n-to-1",
                             param=param,
                             source_uuids=[get_uuid(obj) for obj in src_obj_list],
@@ -2521,6 +2536,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         objmodel = self.panel.objmodel
         pairwise = is_pairwise_mode() if pairwise is None else pairwise
         name = func.__name__
+        feature_id = self.get_feature_id(func)
 
         if obj2 is None:
             objs2 = []
@@ -2556,9 +2572,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if objs2 is None:
                     return
 
-            pp_history = build_processing_parameters(
-                func.__name__, "2-to-1", param=param
-            )
+            pp_history = build_processing_parameters(feature_id, "2-to-1", param=param)
             action = self.mainwindow.historypanel.add_compute_entry_from_pp(
                 title or func.__name__,
                 pp_history,
@@ -2637,7 +2651,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                             # Store lightweight processing metadata (non-interactive)
                             proc_params = ProcessingParameters(
-                                func_name=name,
+                                func_name=feature_id,
                                 pattern="2-to-1",
                                 param=param,
                                 source_uuids=[
@@ -2673,9 +2687,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     return
             obj2 = objs2[0]
 
-            pp_history = build_processing_parameters(
-                func.__name__, "2-to-1", param=param
-            )
+            pp_history = build_processing_parameters(feature_id, "2-to-1", param=param)
             action = self.mainwindow.historypanel.add_compute_entry_from_pp(
                 title or func.__name__,
                 pp_history,
@@ -2768,7 +2780,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                         # Store lightweight processing metadata (non-interactive)
                         proc_params = ProcessingParameters(
-                            func_name=name,
+                            func_name=feature_id,
                             pattern="2-to-1",
                             param=param,
                             source_uuids=[
@@ -3009,6 +3021,19 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             return feature.plugin_origin
         return _detect_plugin_origin(func)
 
+    def get_feature_id(self, func: Callable) -> str:
+        """Return the identifier persisted for ``func``.
+
+        Args:
+            func: Computation function.
+
+        Returns:
+            Identifier of the registered feature, or the function name if ``func``
+            is not registered.
+        """
+        feature = self.computing_registry.get(func)
+        return func.__name__ if feature is None else feature.feature_id
+
     def get_feature(
         self,
         function_or_name: Callable | str,
@@ -3017,10 +3042,15 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
     ) -> ComputingFeature:
         """Get a computing feature by name or function.
 
+        When several features share the same identifier, built-in features are
+        preferred unless ``plugin_origin`` is given, in which case features from
+        the same plugin module are preferred.
+
         Args:
-            function_or_name: Name of the feature or the function itself.
-            plugin_origin: Optional plugin origin descriptor used to enrich the
-             :class:`FeatureNotFoundError` raised when the feature is unknown.
+            function_or_name: Identifier of the feature or the function itself.
+            plugin_origin: Optional plugin origin descriptor used to select the
+             plugin feature and to enrich the :class:`FeatureNotFoundError` raised
+             when the feature is unknown.
             paramclass_name: Optional name of the required parameter class, also
              used to enrich the error message.
 
@@ -3032,12 +3062,26 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
              exception subclasses :class:`ValueError` to preserve backward
              compatibility with existing callers.
         """
-        try:
+        if isinstance(function_or_name, str):
+            candidates = [
+                feature
+                for feature in self.computing_registry.values()
+                if feature.feature_id == function_or_name
+            ]
+            if plugin_origin is None:
+                preferred = [f for f in candidates if f.plugin_origin is None]
+            else:
+                module = plugin_origin.get("module")
+                preferred = [
+                    f
+                    for f in candidates
+                    if f.plugin_origin is not None
+                    and f.plugin_origin.get("module") == module
+                ]
+            if preferred or candidates:
+                return (preferred or candidates)[0]
+        elif function_or_name in self.computing_registry:
             return self.computing_registry[function_or_name]
-        except KeyError:
-            for _func, feature in self.computing_registry.items():
-                if feature.name == function_or_name:
-                    return feature
         raise FeatureNotFoundError(
             str(function_or_name),
             plugin_origin=plugin_origin,
