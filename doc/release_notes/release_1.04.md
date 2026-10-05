@@ -23,3 +23,9 @@
 * Existing PlotPy annotations remain readable and are converted only after an annotation edit is accepted; simply opening a workspace or cancelling the editor leaves its data unchanged
 * Annotation identifiers, lock state, custom metadata and extension data are preserved across edits, while unknown third-party payloads are retained without modification
 * DataLab now requires Sigima ≥ 1.3.0 and SigimaX ≥ 1.1.0
+
+### 🛠️ Bug Fixes ###
+
+**Plugins and History:**
+
+* Replaying a History action or re-processing a result created by a plugin feature that shares its name with a built-in feature now runs the plugin feature instead of the built-in one
