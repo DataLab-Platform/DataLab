@@ -2046,6 +2046,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         params: list[gds.DataSet] | None = None,
         title: str | None = None,
         edit: bool | None = None,
+        feature_ids: list[str] | None = None,
     ) -> None:
         """Generic processing method: 1 object in â†’ n objects out.
 
@@ -2060,6 +2061,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             params: List of parameter instances corresponding to each function.
             title: Optional progress bar title.
             edit: Whether to open the parameter editor before execution.
+            feature_ids: Stable feature identifiers stored in processing metadata,
+             one per function.
 
         .. note::
             With k selected objects and n outputs per function,
@@ -2076,7 +2079,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 return
             if len(funcs) != len(params):
                 raise ValueError("Number of functions must match number of parameters")
-        func_names = [self.get_feature_id(func) for func in funcs]
+        if feature_ids is None:
+            feature_ids = [None] * len(funcs)
+        func_names = [
+            self.get_feature_id(func, feature_id)
+            for func, feature_id in zip(funcs, feature_ids)
+        ]
         pp = build_processing_parameters(
             func_names[0] if func_names else "", "multiple-1-to-1"
         )
@@ -2086,7 +2094,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             panel_str=self.panel.PANEL_STR_ID,
             func_names=func_names,
             params=params if any(p is not None for p in params) else None,
-            plugin_origin=(self._get_plugin_origin_for(funcs[0]) if funcs else None),
+            plugin_origin=(
+                self._get_plugin_origin_for(funcs[0], func_names[0]) if funcs else None
+            ),
         )
         with self.mainwindow.historypanel.capture_outputs(action):
             self._compute_1_to_1_subroutine(

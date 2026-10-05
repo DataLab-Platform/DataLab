@@ -439,18 +439,17 @@ def execute_compute_via_ui(
         func_names = action.kwargs.get("func_names") or (
             [action.func_name] if action.func_name else []
         )
-        funcs = [
-            processor.get_feature(
-                func_name, plugin_origin=action.plugin_origin
-            ).function
+        features = [
+            processor.get_feature(func_name, plugin_origin=action.plugin_origin)
             for func_name in func_names
         ]
         params = action.kwargs.get("params")
         processor.compute_multiple_1_to_1(
-            funcs,
+            [feature.function for feature in features],
             params=copy.deepcopy(params) if params is not None else None,
             title=title,
             edit=False,
+            feature_ids=[feature.feature_id for feature in features],
         )
         return
     if action.pattern == "1_to_n":

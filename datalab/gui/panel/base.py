@@ -352,8 +352,9 @@ class ObjectProp(QW.QWidget):
                     history_items.append(_("Original object"))
                 break
 
-            # Add current processing step
-            func_name = proc_params.func_name.replace("_", " ").title()
+            # Add current processing step (without any plugin namespace)
+            local_name = proc_params.func_name.rsplit(":", 1)[-1]
+            func_name = local_name.replace("_", " ").title()
             history_items.append(func_name)
 
             # Try to find source object

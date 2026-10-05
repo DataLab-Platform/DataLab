@@ -61,6 +61,7 @@ if TYPE_CHECKING:
 
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
+    from datalab.gui.processor.base import ProcessingParameters
     from datalab.objectmodel import ObjectGroup
 
 
@@ -375,7 +376,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         analysis_params = extract_analysis_parameters(obj)
         if (
             analysis_params is not None
-            and analysis_params.func_name == adapter.func_name
+            and self.__get_analysis_function_name(analysis_params) == adapter.func_name
         ):
             clear_analysis_parameters(obj)
         adapter.remove_from(obj)
@@ -389,6 +390,27 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         # Refresh the plot to update the display
         # Use the same refresh pattern as delete_results() method
         self.panel.refresh_plot("selected", True, False)
+
+    def __get_analysis_function_name(self, params: ProcessingParameters) -> str:
+        """Return the computation function name behind stored analysis parameters.
+
+        Results are named after their computation function, whereas analysis
+        parameters store the feature ID, which is namespaced for plugin features.
+
+        Args:
+            params: Stored analysis parameters
+
+        Returns:
+            Function name of the registered feature, or the local part of the
+            stored feature ID if the feature is not registered.
+        """
+        try:
+            feature = self.panel.processor.get_feature(
+                params.func_name, plugin_origin=params.plugin_origin
+            )
+        except ValueError:
+            return params.func_name.rsplit(":", 1)[-1]
+        return feature.name
 
     def clear_plugin_actions(self) -> None:
         """Clear plugin actions and submenus"""
