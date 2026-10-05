@@ -540,7 +540,8 @@ def test_h5_workspace_builder_column_formats():
 
 
 if __name__ == "__main__":
-    test_save_and_load_h5_workspace()
+    with pytest.MonkeyPatch.context() as mp:
+        test_save_and_load_h5_workspace(mp)
     test_load_h5_workspace_invalid_file()
     test_load_h5_workspace_append()
     test_save_h5_workspace_modified_flag()
