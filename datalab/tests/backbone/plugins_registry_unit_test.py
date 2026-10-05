@@ -181,7 +181,7 @@ def test_entry_point_discovers_plugin_class_once_with_source(
         lambda: EntryPoints([EntryPoint()]),
     )
     monkeypatch.setattr("datalab.plugins.pkgutil.iter_modules", lambda: [])
-    monkeypatch.setattr("datalab.plugins.Conf.plugins_enabled.get", lambda: True)
+    monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
 
     discovered = discover_plugins()
 
@@ -227,7 +227,7 @@ def test_real_distribution_entry_point_is_discovered(
     )
     monkeypatch.syspath_prepend(str(tmp_path))
     monkeypatch.setattr("datalab.plugins.pkgutil.iter_modules", lambda: [])
-    monkeypatch.setattr("datalab.plugins.Conf.plugins_enabled.get", lambda: True)
+    monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
     distribution = next(importlib_metadata.distributions(path=[str(tmp_path)]))
     entry_points = list(distribution.entry_points)
     monkeypatch.setattr(
@@ -279,7 +279,7 @@ def test_python39_entry_point_mapping_is_supported(
         lambda: {"datalab.plugins": [EntryPoint()]},
     )
     monkeypatch.setattr("datalab.plugins.pkgutil.iter_modules", lambda: [])
-    monkeypatch.setattr("datalab.plugins.Conf.plugins_enabled.get", lambda: True)
+    monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
 
     discover_plugins()
 
@@ -342,7 +342,7 @@ def test_shared_entry_point_module_is_reloaded_once(
     )
     monkeypatch.setattr("datalab.plugins.importlib.reload", reload_module)
     monkeypatch.setattr("datalab.plugins.pkgutil.iter_modules", lambda: [])
-    monkeypatch.setattr("datalab.plugins.Conf.plugins_enabled.get", lambda: True)
+    monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
     try:
         discover_plugins()
     finally:
@@ -388,7 +388,7 @@ def test_entry_point_metadata_failure_preserves_convention_discovery(
         lambda: [(object(), module_name, False)],
     )
     monkeypatch.setattr("datalab.plugins.importlib.import_module", import_module)
-    monkeypatch.setattr("datalab.plugins.Conf.plugins_enabled.get", lambda: True)
+    monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
 
     assert discover_plugins() == [module]
     assert len(PluginRegistry.get_plugin_classes()) == 1
@@ -427,7 +427,7 @@ def test_invalid_plugin_id_is_rejected_during_discovery(
         "datalab.plugins._get_plugin_entry_points", lambda: [EntryPoint()]
     )
     monkeypatch.setattr("datalab.plugins.pkgutil.iter_modules", lambda: [])
-    monkeypatch.setattr("datalab.plugins.Conf.plugins_enabled.get", lambda: True)
+    monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
 
     discover_plugins()
 
@@ -460,7 +460,7 @@ def test_broken_entry_point_does_not_abort_discovery(
         "datalab.plugins._get_plugin_entry_points", lambda: [BrokenEntryPoint()]
     )
     monkeypatch.setattr("datalab.plugins.pkgutil.iter_modules", lambda: [])
-    monkeypatch.setattr("datalab.plugins.Conf.plugins_enabled.get", lambda: True)
+    monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
 
     assert not discover_plugins()
     failed_plugin = PluginRegistry.get_failed_plugins()[0]
@@ -518,7 +518,7 @@ def test_entry_point_id_collision_rejects_all_contributions(
         ],
     )
     monkeypatch.setattr("datalab.plugins.pkgutil.iter_modules", lambda: [])
-    monkeypatch.setattr("datalab.plugins.Conf.plugins_enabled.get", lambda: True)
+    monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
 
     discover_plugins()
 
@@ -581,7 +581,7 @@ def test_same_target_from_entry_point_and_convention_is_merged(
         lambda: [(object(), module_name, False)],
     )
     monkeypatch.setattr("datalab.plugins.importlib.import_module", import_module)
-    monkeypatch.setattr("datalab.plugins.Conf.plugins_enabled.get", lambda: True)
+    monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
 
     discovered = discover_plugins()
 
