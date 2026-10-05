@@ -65,9 +65,6 @@ msgstr "Assistant IA prêt. Configurez votre fournisseur dans le menu Edition > 
 msgid "You"
 msgstr "Vous"
 
-msgid "Assistant"
-msgstr "Assistant"
-
 msgid "Save to Macros"
 msgstr "Enregistrer dans les macros"
 
@@ -940,6 +937,46 @@ msgstr "Afficher le panneau de contraste"
 msgid "Show or hide contrast adjustment panel"
 msgstr "Afficher ou cacher le panneau de réglage du contraste"
 
+msgid "Start analysis"
+msgstr "Lancer l'analyse"
+
+msgid "Documentation"
+msgstr "Documentation"
+
+#, python-format
+msgid "Plugin ID: %s"
+msgstr "ID du plugin : %s"
+
+#, python-format
+msgid "Version: %s"
+msgstr "Version : %s"
+
+msgid "Recipes"
+msgstr "Méthodes"
+
+msgid "No recipes declared"
+msgstr "Aucune méthode déclarée"
+
+msgid "Examples"
+msgstr "Exemples"
+
+msgid "No examples declared"
+msgstr "Aucun exemple déclaré"
+
+msgid "Applications"
+msgstr "Applications"
+
+msgid "No application plugins are currently loaded."
+msgstr "Aucun plugin d'application n'est actuellement chargé."
+
+#, python-format
+msgid "Starting analysis '%s'"
+msgstr "Lancement de l'analyse '%s'"
+
+#, python-format
+msgid "Opening example '%s'"
+msgstr "Ouverture de l'exemple '%s'"
+
 msgid "Command palette"
 msgstr "Palette de commandes"
 
@@ -1080,6 +1117,9 @@ msgstr "Afficher les titres des objets graphiques"
 
 msgid "Show or hide ROI and other graphical object titles or subtitles"
 msgstr "Afficher ou cacher les titres (et sous-titres) des régions d'intérêt et autres objets graphiques"
+
+msgid "Browse application plugins, recipes and examples"
+msgstr "Parcourir les plugins d'application, les méthodes et les exemples"
 
 msgid "Reload plugins"
 msgstr "Recharger les plugins"
@@ -1324,9 +1364,6 @@ msgstr "Créé : paramètres de pic historiques"
 msgid "Created: invalid creation parameters"
 msgstr "Créé : paramètres de création invalides"
 
-msgid "Created"
-msgstr "Créé"
-
 msgid "Original object"
 msgstr "Objet original"
 
@@ -1505,11 +1542,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "Group name:"
-msgstr "Nom du groupe :"
-
 msgid "New group"
 msgstr "Nouveau groupe"
+
+msgid "Group name:"
+msgstr "Nom du groupe :"
 
 #, python-format
 msgid "New group \"%s\""
@@ -1755,9 +1792,6 @@ msgstr "L'action %s a été ignorée : ses paramètres enregistrés n'ont pas pu
 msgid "History panel"
 msgstr "Panneau d'historique"
 
-msgid "History files"
-msgstr "Fichiers d'historique"
-
 #, python-format
 msgid "Action %s: target panel not found — skipping."
 msgstr "Action %s : panneau cible introuvable — ignorée."
@@ -1906,9 +1940,6 @@ msgstr "Effacer toutes les macros récentes ?"
 msgid "Macro panel"
 msgstr "Panneau des macros"
 
-msgid "Python files"
-msgstr "Fichiers Python"
-
 msgid "Clear console"
 msgstr "Effacer la console"
 
@@ -1993,6 +2024,15 @@ msgstr "Création des formes géométriques"
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
+msgid "Input/output"
+msgstr "Entrée/sortie"
+
+msgid "Visualization"
+msgstr "Visualisation"
+
+msgid "Application"
+msgstr "Application"
+
 msgid "today"
 msgstr "aujourd'hui"
 
@@ -2026,9 +2066,6 @@ msgstr "Modifier le répertoire"
 
 msgid "Remove directory"
 msgstr "Supprimer le répertoire"
-
-msgid "from"
-msgstr "depuis"
 
 msgid "Plugin Configuration"
 msgstr "Configuration des plugins"
@@ -2361,9 +2398,6 @@ msgstr ""
 "  • x' = a0 + a1*x + a2*x^2 + ...\n"
 "  • y' = a0 + a1*y + a2*y^2 + ...\n"
 "  • z' = a0 + a1*z + a2*z^2 + ..."
-
-msgid "Swap X/Y axes"
-msgstr "Permuter les axes X/Y"
 
 msgid "Normalize"
 msgstr "Normaliser"
@@ -2757,6 +2791,9 @@ msgstr ""
 "Appliquer un étalonnage linéaire à l'axe X ou Y :\n"
 "  • x' = ax + b\n"
 "  • y' = ay + b"
+
+msgid "Swap X/Y axes"
+msgstr "Permuter les axes X/Y"
 
 msgid "Reverse X-axis"
 msgstr "Inverser l'axe des X"
@@ -3383,9 +3420,6 @@ msgstr "État d'activation de la console"
 msgid "General"
 msgstr "Général"
 
-msgid "Visualization"
-msgstr "Visualisation"
-
 msgid "I/O"
 msgstr "Entrée/sortie"
 
@@ -3562,6 +3596,94 @@ msgstr "Échec de la désérialisation de l'argument ROI de l'historique %r."
 msgid "Failed to deserialize history DataSet-list kwarg %r."
 msgstr "Échec de la désérialisation de l'argument DataSet-list de l'historique %r."
 
+msgid "Plugin name must be a non-empty single line"
+msgstr "Le nom du plugin doit être une ligne non vide"
+
+msgid "Package name must start with a lowercase letter and contain only lowercase letters, digits, and underscores"
+msgstr "Le nom du package doit commencer par une lettre minuscule et ne contenir que des lettres minuscules, des chiffres et des tirets bas"
+
+msgid "Package name must not be a Python keyword"
+msgstr "Le nom du package ne doit pas être un mot-clé Python"
+
+msgid "Plugin ID must be a lowercase dotted identifier such as 'org.example.my-plugin'"
+msgstr "L'ID du plugin doit être un identifiant en minuscules séparé par des points, comme 'org.example.mon-plugin'"
+
+msgid "Description must be a single line"
+msgstr "La description doit tenir sur une seule ligne"
+
+msgid "Plugin capabilities are invalid"
+msgstr "Les capacités du plugin ne sont pas valides"
+
+msgid "Plugin capabilities must be unique"
+msgstr "Les capacités du plugin doivent être uniques"
+
+msgid "Object kind must be 'signal' or 'image'"
+msgstr "Le type d'objet doit être 'signal' ou 'image'"
+
+msgid "The minimal template currently supports BSD-3-Clause"
+msgstr "Le modèle minimal prend actuellement en charge BSD-3-Clause"
+
+msgid "Plugin name must contain letters or digits"
+msgstr "Le nom du plugin doit contenir des lettres ou des chiffres"
+
+#, python-format
+msgid "Destination already exists: %s"
+msgstr "La destination existe déjà : %s"
+
+#, python-format
+msgid "%s is required"
+msgstr "%s est requis"
+
+msgid "Plugin name"
+msgstr "Nom du plugin"
+
+msgid "Package name"
+msgstr "Nom du package"
+
+msgid "Plugin ID"
+msgstr "ID du plugin"
+
+#, python-format
+msgid "%s plugin for DataLab"
+msgstr "Plugin %s pour DataLab"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Destination"
+msgstr "Destination"
+
+msgid "Create and maintain DataLab plugin projects."
+msgstr "Créer et maintenir des projets de plugins DataLab."
+
+msgid "Create a layered installable plugin project."
+msgstr "Créer un projet de plugin installable structuré en couches."
+
+msgid "Plugin display name"
+msgstr "Nom d'affichage du plugin"
+
+msgid "Python import package name"
+msgstr "Nom du package d'import Python"
+
+msgid "Stable reverse-domain ID"
+msgstr "ID stable en notation de domaine inversé"
+
+msgid "One-line description"
+msgstr "Description sur une ligne"
+
+msgid "Plugin capability; may be repeated"
+msgstr "Capacité du plugin ; l'option peut être répétée"
+
+msgid "Object type used by the sample processing"
+msgstr "Type d'objet utilisé par le traitement d'exemple"
+
+msgid "Project license"
+msgstr "Licence du projet"
+
+#, python-format
+msgid "Created DataLab plugin project at %s"
+msgstr "Projet de plugin DataLab créé dans %s"
+
 msgid "Registered plugins:"
 msgstr "Plugins enregistrés :"
 
@@ -3570,6 +3692,12 @@ msgstr "Aucun plugin disponible"
 
 msgid "Plugins are disabled (see DataLab settings)"
 msgstr "Les plugins sont désactivés (voir les préférences de DataLab)"
+
+msgid "Opening this example replaces the current workspace. Continue?"
+msgstr "L'ouverture de cet exemple remplace l'espace de travail actuel. Continuer ?"
+
+msgid "Open example"
+msgstr "Ouvrir l'exemple"
 
 msgid "Warning"
 msgstr "Attention"
@@ -3815,14 +3943,11 @@ msgstr "Afficher les détails"
 msgid "Hide details"
 msgstr "Masquer les détails"
 
-msgid "Title"
-msgstr "Titre"
-
 msgid "Date and time"
 msgstr "Date et heure"
 
-msgid "Description"
-msgstr "Description"
+msgid "Title"
+msgstr "Titre"
 
 msgid "Action is compatible with the current workspace state."
 msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
@@ -3911,11 +4036,11 @@ msgstr "Cliquer pour voir les infos de connexion"
 msgid "Source"
 msgstr "Source"
 
-msgid "File"
-msgstr "Fichier"
-
 msgid "Clipboard"
 msgstr "Presse-papiers"
+
+msgid "File"
+msgstr "Fichier"
 
 msgid "Source of the data"
 msgstr "Source des données"
