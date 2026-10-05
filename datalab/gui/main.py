@@ -69,6 +69,7 @@ from datalab.gui.docks import DockablePlotWidget
 from datalab.gui.h5io import H5InputOutput
 from datalab.gui.panel import base, history, image, macro, signal
 from datalab.gui.pluginconfig import PluginConfigDialog
+from datalab.gui.processor.base import FeatureNotFoundError
 from datalab.gui.processor.preview import PreviewExecutorCache
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
 from datalab.objectmodel import ObjectGroup, get_uuid
@@ -1612,10 +1613,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 # registered feature:
                 try:
                     feature = panel.processor.get_feature(name)
-                    panel.processor.run_feature(feature, param, edit=edit)
-                    return
-                except ValueError:
+                except FeatureNotFoundError:
                     continue
+                panel.processor.run_feature(feature, param, edit=edit)
+                return
         raise ValueError(f"Unknown computation function {name}")
 
     # ------GUI refresh
