@@ -770,8 +770,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         if not execenv.unattended:
             if not Conf.welcome_on_startup.get():
                 self.docks[self.welcomepanel].hide()
-            elif not any(len(p) for p in (self.signalpanel, self.imagepanel)):
-                self.show_welcome_page()
+            self.__raise_view_dock(self.tabwidget.currentWidget())
         # Auto-start WebAPI server if environment variable is set
         if os.environ.get("DATALAB_WEBAPI_ENABLED") == "1":
             try:
@@ -1247,6 +1246,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             panel.objview.SIG_SELECTION_CHANGED.connect(
                 functools.partial(self.__raise_view_dock, panel)
             )
+            panel.SIG_OBJECT_REMOVED.connect(
+                functools.partial(self.__raise_view_dock, panel)
+            )
             panel.setup_panel()
 
     def _setup_central_widget(self) -> None:
@@ -1624,12 +1626,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def __tab_index_changed(self, index: int) -> None:
         """Switch from signal to image mode, or vice-versa"""
-        dock = self.docks[self.tabwidget.widget(index)]
-        dock.raise_()
+        self.__raise_view_dock(self.tabwidget.widget(index))
         self.__update_actions()
 
     def __raise_view_dock(self, panel: BaseDataPanel) -> None:
         """Bring the panel view dock to the front, if the panel is the current tab
+
+        An empty panel shows the welcome page instead, unless it is disabled.
 
         Args:
             panel: signal or image panel
@@ -1637,7 +1640,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         # The guard matters because selection changes are also emitted for the
         # panel that is not currently shown (see __update_actions).
         if self.tabwidget.currentWidget() is panel:
-            self.docks[panel].raise_()
+            if len(panel) == 0 and Conf.welcome_on_startup.get():
+                self.show_welcome_page()
+            else:
+                self.docks[panel].raise_()
 
     def __update_generic_menu(self, menu: QW.QMenu | None = None) -> None:
         """Update menu before showing up -- Generic method"""

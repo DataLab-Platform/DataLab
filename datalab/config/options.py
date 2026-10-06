@@ -153,7 +153,10 @@ class DataLabOptions(SigimaXOptions):
             category="main",
             default=True,
             expected_type=bool,
-            description="If True, show the welcome page at startup.",
+            description=(
+                "If True, show the welcome page at startup and whenever the "
+                "current signal or image panel is empty."
+            ),
         )
         self.v020_plugins_warning_ignore = TypedOptionField(
             self,

@@ -6,7 +6,9 @@ Welcome page unit tests
 
 from __future__ import annotations
 
+import numpy as np
 from qtpy import QtWidgets as QW
+from sigima.objects import create_signal
 
 import datalab
 from datalab.config import Conf, _
@@ -106,3 +108,38 @@ def test_welcome_page(monkeypatch) -> None:
             assert Conf.welcome_on_startup.get() is (not initial)
         finally:
             Conf.welcome_on_startup.set(initial)
+
+
+def test_welcome_page_follows_empty_current_panel() -> None:
+    """The welcome page replaces the view of an empty current panel"""
+    x = np.linspace(0.0, 1.0, 10)
+    with datalab_test_app_context(console=False) as win:
+        docks = [win.docks[win.welcomepanel]]
+        docks += [win.docks[panel] for panel in (win.signalpanel, win.imagepanel)]
+        welcome_dock, signal_dock, image_dock = docks
+
+        def front_dock() -> QW.QDockWidget:
+            QW.QApplication.processEvents()
+            (dock,) = [dock for dock in docks if is_in_front(dock)]
+            return dock
+
+        assert front_dock() is welcome_dock
+        win.signalpanel.add_object(create_signal("Signal 1", x, x))
+        assert front_dock() is signal_dock
+        win.set_current_panel("image")
+        assert front_dock() is welcome_dock
+        win.set_current_panel("signal")
+        assert front_dock() is signal_dock
+        win.signalpanel.remove_all_objects()
+        assert front_dock() is welcome_dock
+
+        # A closed welcome page is opened again when the current panel is empty
+        win.signalpanel.add_object(create_signal("Signal 2", x, x))
+        welcome_dock.close()
+        win.set_current_panel("image")
+        assert welcome_dock.isVisible() and front_dock() is welcome_dock
+
+        Conf.welcome_on_startup.set(False)
+        win.set_current_panel("signal")
+        win.set_current_panel("image")
+        assert front_dock() is image_dock

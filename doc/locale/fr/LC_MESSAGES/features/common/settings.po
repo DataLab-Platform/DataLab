@@ -36,11 +36,11 @@ msgstr "**Mode couleur**"
 msgid "Choose the color mode for the application interface (e.g., light, dark, or auto)."
 msgstr "Choisir le mode couleur de l'interface de l'application (par exemple, clair, sombre ou automatique)."
 
-msgid "**Show welcome page on startup**"
-msgstr "**Afficher la page d'accueil au démarrage**"
+msgid "**Show welcome page when the current panel is empty**"
+msgstr "**Afficher la page d'accueil lorsque le panneau courant est vide**"
 
-msgid "When enabled (default), the welcome page is shown when DataLab starts with an empty workspace (see :ref:`welcome_page`)."
-msgstr "Lorsque cette option est activée (par défaut), la page d'accueil est affichée lorsque DataLab démarre avec un espace de travail vide (voir :ref:`welcome_page`)."
+msgid "When enabled (default), the welcome page is shown when DataLab starts and whenever the current signal or image panel is empty (see :ref:`welcome_page`)."
+msgstr "Lorsque cette option est activée (par défaut), la page d'accueil est affichée au démarrage de DataLab et chaque fois que le panneau signal ou image courant est vide (voir :ref:`welcome_page`)."
 
 msgid "**Process isolation**"
 msgstr "**Isolation des processus**"

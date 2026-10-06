@@ -142,7 +142,9 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
         self.entries: dict[str, WelcomeEntry] = {}
         self.start_title = self.__create_section_title("")
         self.columns_layout = QW.QBoxLayout(QW.QBoxLayout.LeftToRight)
-        self.startup_checkbox = QW.QCheckBox(_("Show welcome page on startup"))
+        self.startup_checkbox = QW.QCheckBox(
+            _("Show welcome page when the current panel is empty")
+        )
         self.startup_checkbox.setChecked(Conf.welcome_on_startup.get())
         self.startup_checkbox.toggled.connect(Conf.welcome_on_startup.set)
         self.__setup_ui()
