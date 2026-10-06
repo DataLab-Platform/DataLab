@@ -4159,3 +4159,89 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
 
+msgid "Show welcome page on startup"
+msgstr "Afficher la page d'accueil au démarrage"
+
+msgid "The welcome page gathers the main actions to get started (create or open data, guided tour, documentation...)."
+msgstr "La page d'accueil rassemble les principales actions pour bien démarrer (créer ou ouvrir des données, visite guidée, documentation...)."
+
+msgid "Welcome"
+msgstr "Accueil"
+
+msgid "Welcome page"
+msgstr "Page d'accueil"
+
+#, python-format
+msgid "Version %s"
+msgstr "Version %s"
+
+msgid "Create..."
+msgstr "Créer..."
+
+msgid "Generate a 1D signal or 2D image from a template."
+msgstr "Générez un signal 1D ou une image 2D à partir d'un modèle."
+
+msgid "Open file..."
+msgstr "Ouvrir un fichier..."
+
+msgid "Load a signal or image from your computer."
+msgstr "Chargez un signal ou une image depuis votre ordinateur."
+
+msgid "Browse HDF5 file..."
+msgstr "Parcourir un fichier HDF5..."
+
+msgid "Inspect any HDF5 file and import selected datasets as signals or images."
+msgstr "Inspectez n'importe quel fichier HDF5 et importez les jeux de données choisis comme signaux ou images."
+
+msgid "Open HDF5 workspace..."
+msgstr "Ouvrir un espace de travail HDF5..."
+
+msgid "Resume a previously saved DataLab workspace."
+msgstr "Reprenez un espace de travail DataLab précédemment enregistré."
+
+msgid "Import text data..."
+msgstr "Importer des données texte..."
+
+msgid "Bring in CSV / TSV / column data with the wizard."
+msgstr "Importez des données CSV / TSV / en colonnes avec l'assistant."
+
+msgid "Walkthroughs"
+msgstr "Visites guidées"
+
+msgid "Ask the AI assistant"
+msgstr "Interroger l'assistant IA"
+
+msgid "Chat with the built-in assistant to inspect, create and process your data."
+msgstr "Dialoguez avec l'assistant intégré pour inspecter, créer et traiter vos données."
+
+msgid "Take the guided tour"
+msgstr "Suivre la visite guidée"
+
+msgid "A short interactive walk-through of the DataLab workspace."
+msgstr "Une courte visite interactive de l'espace de travail DataLab."
+
+msgid "Run the demo"
+msgstr "Lancer la démo"
+
+msgid "Watch DataLab create, process and analyze signals and images."
+msgstr "Regardez DataLab créer, traiter et analyser des signaux et des images."
+
+msgid "Read the documentation"
+msgstr "Lire la documentation"
+
+msgid "Open the online user guide, tutorials and reference."
+msgstr "Ouvrez le guide utilisateur en ligne, les tutoriels et la référence."
+
+#, python-format
+msgid "What's new in version %s"
+msgstr "Nouveautés de la version %s"
+
+msgid "Browse the release notes of this version."
+msgstr "Consultez les nouveautés et corrections de cette version."
+
+msgid "Get started"
+msgstr "Pour commencer"
+
+msgid "Quick actions"
+msgstr "Actions rapides"
+
