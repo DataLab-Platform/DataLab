@@ -23,6 +23,10 @@ The General settings tab contains main window and general feature settings:
 **Color mode**
     Choose the color mode for the application interface (e.g., light, dark, or auto).
 
+**Show welcome page on startup**
+    When enabled (default), the welcome page is shown when DataLab starts with an empty
+    workspace (see :ref:`welcome_page`).
+
 **Process isolation**
     When enabled, each computation runs in a separate process, preventing the application
     from freezing during long computations. This is the recommended setting for better

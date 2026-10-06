@@ -72,6 +72,7 @@ from datalab.gui.pluginconfig import PluginConfigDialog
 from datalab.gui.processor.base import FeatureNotFoundError
 from datalab.gui.processor.preview import PreviewExecutorCache
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
+from datalab.gui.welcome import WelcomePanel
 from datalab.objectmodel import ObjectGroup, get_uuid
 from datalab.plugins import (
     PluginRegistry,
@@ -144,6 +145,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.historypanel: history.HistoryPanel | None = None
         self.aiassistantpanel = None  # type: ignore[assignment]
         self.__applications_dialog: ApplicationsDialog | None = None
+        self.welcomepanel: WelcomePanel | None = None
 
         self.signalpanel_toolbar: QW.QToolBar | None = None
         self.imagepanel_toolbar: QW.QToolBar | None = None
@@ -776,9 +778,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Execute post-show actions"""
         super().execute_post_show_actions()
         self.check_for_v020_plugins()
-        if not execenv.unattended and Conf.tour_enabled.get():
-            Conf.tour_enabled.set(False)
-            self.show_tour()
+        if not execenv.unattended:
+            if not Conf.welcome_on_startup.get():
+                self.docks[self.welcomepanel].hide()
+            elif not any(len(p) for p in (self.signalpanel, self.imagepanel)):
+                self.show_welcome_page()
         # Auto-start WebAPI server if environment variable is set
         if os.environ.get("DATALAB_WEBAPI_ENABLED") == "1":
             try:
@@ -819,10 +823,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     # ------GUI setup
     def _setup_docks(self) -> None:
-        """Add the macro, history and AI assistant docks"""
+        """Add the macro, history, AI assistant and welcome page docks"""
         self.__add_macro_panel()
         self.__add_history_panel()
         self.__add_aiassistant_panel()
+        self.__add_welcome_panel()
 
     def _post_setup(self, console: bool) -> None:
         """Create plugin actions and wire panels, once the whole UI exists"""
@@ -1334,22 +1339,34 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         )
 
     def _get_help_doc_actions(self) -> list[QW.QAction | None]:
-        """Append the tour and demo entries to the standard documentation actions."""
-        return super()._get_help_doc_actions() + [
-            create_action(
-                self,
-                _("Tour") + "...",
-                icon=get_icon("tour.svg"),
-                triggered=self.show_tour,
-            ),
-            create_action(
-                self,
-                _("Demo") + "...",
-                icon=get_icon("play_demo.svg"),
-                triggered=self.play_demo,
-            ),
-            None,
-        ]
+        """Add the welcome page, tour and demo entries to the documentation actions"""
+        return (
+            [
+                create_action(
+                    self,
+                    _("Welcome page"),
+                    icon=get_icon("DataLab.svg"),
+                    triggered=self.show_welcome_page,
+                ),
+                None,
+            ]
+            + super()._get_help_doc_actions()
+            + [
+                create_action(
+                    self,
+                    _("Tour") + "...",
+                    icon=get_icon("tour.svg"),
+                    triggered=self.show_tour,
+                ),
+                create_action(
+                    self,
+                    _("Demo") + "...",
+                    icon=get_icon("play_demo.svg"),
+                    triggered=self.play_demo,
+                ),
+                None,
+            ]
+        )
 
     def _get_help_support_actions(self) -> list[QW.QAction | None]:
         """Append the installation and configuration viewer."""
@@ -1486,6 +1503,16 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             _("AI Assistant"),
             name="ai_assistant",
             tabify_with=self.macropanel,
+        )
+
+    def __add_welcome_panel(self) -> None:
+        """Add welcome page panel"""
+        self.welcomepanel = WelcomePanel(self)
+        self._add_dockwidget(
+            self.welcomepanel,
+            _("Welcome"),
+            name="welcome_page",
+            tabify_with=self.signalpanel,
         )
 
     def __configure_panels(self) -> None:
@@ -2376,6 +2403,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         from datalab.gui import tour
 
         tour.start(self)
+
+    def show_welcome_page(self) -> None:
+        """Show the welcome page and bring it to the front"""
+        dock = self.docks[self.welcomepanel]
+        dock.show()
+        dock.raise_()
 
     # ------Close window
     def _get_save_before_quit_message(self) -> str:

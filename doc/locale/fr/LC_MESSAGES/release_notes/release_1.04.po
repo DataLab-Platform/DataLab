@@ -21,6 +21,18 @@ msgstr "DataLab Version 1.4.0"
 msgid "✨ New Features"
 msgstr "✨ Nouvelles fonctionnalités"
 
+msgid "**Welcome page:**"
+msgstr "**Page d'accueil :**"
+
+msgid "A new **Welcome** page, similar to the one of DataLab-Web, is shown at startup when the workspace is empty. It gathers the main actions to get started: create a signal or an image, open files, browse an HDF5 file, open an HDF5 workspace, import text data, ask the AI Assistant, take the guided tour, run the demo, read the documentation or browse the release notes"
+msgstr "Une nouvelle page d'**Accueil**, semblable à celle de DataLab-Web, est affichée au démarrage lorsque l'espace de travail est vide. Elle rassemble les principales actions pour bien démarrer : créer un signal ou une image, ouvrir des fichiers, parcourir un fichier HDF5, ouvrir un espace de travail HDF5, importer des données texte, interroger l'assistant IA, suivre la visite guidée, lancer la démo, lire la documentation ou consulter les notes de version"
+
+msgid "The page is a dockable panel, tabbed with the signal and image views: it remains available after data is created or opened, and can be reopened at any time from the **?** menu (**Welcome page**) or from the **View** menu"
+msgstr "La page est un panneau ancrable, en onglet avec les vues signal et image : elle reste disponible après la création ou l'ouverture de données, et peut être rouverte à tout moment depuis le menu **?** (**Page d'accueil**) ou depuis le menu **Affichage**"
+
+msgid "A **Show welcome page on startup** option, available on the page itself and in the General settings, controls whether the page is shown at startup"
+msgstr "Une option **Afficher la page d'accueil au démarrage**, disponible sur la page elle-même et dans les paramètres généraux, détermine si la page est affichée au démarrage"
+
 msgid "**Brightness and contrast:**"
 msgstr "**Luminosité et contraste :**"
 
@@ -75,6 +87,12 @@ msgstr "Les noms et descriptions de plugins longs sont désormais mis en forme a
 msgid "🔄 Changes"
 msgstr "🔄 Changements"
 
+msgid "**Guided tour:**"
+msgstr "**Visite guidée :**"
+
+msgid "The guided tour no longer starts automatically at first launch: it is now offered from the welcome page, and remains available from the **?** menu"
+msgstr "La visite guidée ne démarre plus automatiquement au premier lancement : elle est désormais proposée depuis la page d'accueil, et reste disponible depuis le menu **?**"
+
 msgid "**Large campaign responsiveness:**"
 msgstr "**Réactivité avec les grandes campagnes :**"
 
@@ -106,5 +124,5 @@ msgid "**Plugins and History:**"
 msgstr "**Plugins et historique :**"
 
 msgid "Replaying a History action or re-processing a result created by a plugin feature that shares its name with a built-in feature now runs the plugin feature instead of the built-in one"
-msgstr "Le rejeu d'une action de l'historique ou le retraitement d'un résultat créé par une fonctionnalité de plugin portant le même nom qu'une fonctionnalité intégrée exécute désormais la fonctionnalité du plugin et non la fonctionnalité intégrée"
+msgstr "Le rejeu d'une action de l'historique ou le recalcul d'un résultat créé par une fonctionnalité de plugin portant le même nom qu'une fonctionnalité intégrée exécute désormais la fonctionnalité du plugin au lieu de la fonctionnalité intégrée"
 
