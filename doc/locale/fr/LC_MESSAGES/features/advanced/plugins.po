@@ -280,6 +280,18 @@ msgstr "Le package doit inclure la ressource dans sa wheel. ``resolve()`` renvoi
 msgid ":meth:`datalab.plugins.PluginBase.get_examples` validates unique local IDs and recipe references. A registered plugin may call ``open_example(\"quickstart\")`` to materialize and load a native DataLab HDF5 workspace. Opening clears the current workspace by default; pass ``reset_all=False`` to merge it instead."
 msgstr ":meth:`datalab.plugins.PluginBase.get_examples` valide l'unicité des ID locaux et les références aux recettes. Un plugin enregistré peut appeler ``open_example(\"quickstart\")`` pour matérialiser et charger un workspace HDF5 DataLab natif. L'ouverture efface le workspace courant par défaut ; passez ``reset_all=False`` pour le fusionner à la place."
 
+msgid "Welcome page tiles"
+msgstr "Tuiles de la page d'accueil"
+
+msgid "Every active plugin declaring the ``APPLICATION`` capability adds tiles to the **Applications** section, at the top of the :ref:`welcome_page`. By default, a plugin shows one tile, built from its ``PluginInfo`` name, description and icon. Clicking this tile opens the plugin page of the **Applications** catalog."
+msgstr "Chaque plugin actif déclarant la capacité ``APPLICATION`` ajoute des tuiles à la section **Applications**, en haut de la :ref:`welcome_page`. Par défaut, un plugin affiche une tuile, construite à partir du nom, de la description et de l'icône de son ``PluginInfo``. Un clic sur cette tuile ouvre la page du plugin dans le catalogue **Applications**."
+
+msgid "The plugin icon is declared with ``PluginInfo.icon``, either as a ``package:relative/path`` resource (SVG or bitmap image shipped in the plugin wheel) or as the file name of a DataLab icon. To show several tiles, for example to open an example directly, declare the class-level ``WELCOME_TILES`` tuple of :class:`datalab.plugin_tiles.WelcomeTile` values:"
+msgstr "L'icône du plugin est déclarée avec ``PluginInfo.icon``, soit sous la forme d'une ressource ``package:relative/path`` (image SVG ou bitmap fournie dans la wheel du plugin), soit sous la forme du nom de fichier d'une icône de DataLab. Pour afficher plusieurs tuiles, par exemple pour ouvrir directement un exemple, déclarez le tuple de classe ``WELCOME_TILES`` de valeurs :class:`datalab.plugin_tiles.WelcomeTile` :"
+
+msgid "Declared tiles replace the default tile. A tile without ``launcher`` opens the plugin page of the **Applications** catalog; otherwise, the named plugin method is called without arguments. A tile without ``icon`` uses the plugin icon. :meth:`datalab.plugins.PluginBase.get_welcome_tiles` validates unique local IDs and launcher methods, and rejects tiles declared by plugins without the ``APPLICATION`` capability. The welcome page refreshes its tiles when plugins are loaded, reloaded or disabled, and reports errors raised by a launcher without closing DataLab."
+msgstr "Les tuiles déclarées remplacent la tuile par défaut. Une tuile sans ``launcher`` ouvre la page du plugin dans le catalogue **Applications** ; sinon, la méthode du plugin indiquée est appelée sans argument. Une tuile sans ``icon`` utilise l'icône du plugin. :meth:`datalab.plugins.PluginBase.get_welcome_tiles` valide l'unicité des ID locaux et les méthodes de lancement, et rejette les tuiles déclarées par des plugins sans la capacité ``APPLICATION``. La page d'accueil actualise ses tuiles lorsque les plugins sont chargés, rechargés ou désactivés, et signale les erreurs levées par une méthode de lancement sans fermer DataLab."
+
 msgid "Creating a layered plugin project"
 msgstr "Créer un projet de plugin structuré en couches"
 
@@ -556,6 +568,21 @@ msgstr "Ouvre un exemple HDF5 généré ou empaqueté dans l'espace de travail D
 msgid "Generated examples (``materialize_example()`` returning data) are loaded directly into the signal/image panels; packaged examples are opened through their native HDF5 resource. The materialized data is kept in :attr:`last_example_data` so plugin launchers can reuse the example's recipe parameter values."
 msgstr "Les exemples générés (lorsque ``materialize_example()`` renvoie des données) sont chargés directement dans les panneaux Signal et Image ; les exemples empaquetés sont ouverts via leur ressource HDF5 native. Les données matérialisées sont conservées dans :attr:`last_example_data` afin que les lanceurs du plugin puissent réutiliser les valeurs des paramètres de recette de l'exemple."
 
+msgid "Return validated welcome page tiles exposed by this application plugin."
+msgstr "Renvoie les tuiles validées de la page d'accueil exposées par ce plugin d'application."
+
+msgid "Without declared ``WELCOME_TILES``, an application plugin exposes one default tile built from its :class:`PluginInfo`. Declared tiles without icon inherit the plugin icon."
+msgstr "Sans ``WELCOME_TILES`` déclarées, un plugin d'application expose une tuile par défaut construite à partir de son :class:`PluginInfo`. Les tuiles déclarées sans icône héritent de l'icône du plugin."
+
+msgid "Launch a welcome page tile."
+msgstr "Lance une tuile de la page d'accueil."
+
+msgid "A tile without launcher opens the plugin page of the Applications catalog; otherwise, its plugin method is called without arguments."
+msgstr "Une tuile sans méthode de lancement ouvre la page du plugin dans le catalogue Applications ; sinon, sa méthode de plugin est appelée sans argument."
+
+msgid "Value returned by the launcher method (None for the catalog page)"
+msgstr "Valeur renvoyée par la méthode de lancement (None pour la page du catalogue)"
+
 msgid "Return signal panel"
 msgstr "Retourne le panneau de signal"
 
@@ -826,6 +853,30 @@ msgstr "Matérialise la ressource pour les API qui nécessitent un chemin dans l
 
 msgid "Scientific objects and recipe defaults generated by a plugin."
 msgstr "Objets scientifiques et valeurs par défaut de recette générés par un plugin."
+
+msgid "Portable declarations for plugin-provided welcome page tiles."
+msgstr "Déclarations portables des tuiles de la page d'accueil fournies par les plugins."
+
+msgid "Welcome page tile exposed by an application plugin"
+msgstr "Tuile de la page d'accueil exposée par un plugin d'application"
+
+msgid "plugin-local tile ID (lowercase letters, digits, ``.``, ``_``, ``-``)"
+msgstr "ID de la tuile, local au plugin (lettres minuscules, chiffres, ``.``, ``_``, ``-``)"
+
+msgid "tile title"
+msgstr "titre de la tuile"
+
+msgid "short description shown below the title"
+msgstr "description courte affichée sous le titre"
+
+msgid "``package:path`` resource (SVG or bitmap) or DataLab icon file name; ``None`` falls back to the plugin icon"
+msgstr "ressource ``package:path`` (SVG ou bitmap) ou nom de fichier d'une icône de DataLab ; ``None`` utilise l'icône du plugin"
+
+msgid "name of the plugin method called when the tile is clicked; ``None`` opens the plugin page of the **Applications** catalog"
+msgstr "nom de la méthode du plugin appelée lors d'un clic sur la tuile ; ``None`` ouvre la page du plugin dans le catalogue **Applications**"
+
+msgid "Return True if the icon is a ``package:path`` resource"
+msgstr "Renvoie True si l'icône est une ressource ``package:path``"
 
 msgid "Transactional Desktop runner for plugin-provided scientific recipes."
 msgstr "Exécuteur transactionnel Desktop pour les recettes scientifiques fournies par les plugins."

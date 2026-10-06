@@ -46,6 +46,8 @@ the signal and image views. It gathers the main actions to get started:
 - ask the :ref:`ai_assistant`, take the guided tour, run the demo, read the
   online documentation, or browse the release notes of the running version.
 
+When application plugins are installed, an **Applications** section at the top of the page shows their tiles: a tile opens the application page in the **Applications** catalog, or starts an action provided by the plugin, such as opening an example. The "Browse all applications..." button opens the catalog itself (see :ref:`about_plugins`).
+
 The Welcome page is a regular dockable panel: as soon as a signal or an image is
 created or opened, the corresponding view is brought to the front, and the
 Welcome page remains available as a tab. It may be closed like any other panel,

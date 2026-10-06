@@ -455,6 +455,21 @@ class ApplicationsDialog(QW.QDialog):
             self.application_stack.addWidget(page)
         self.application_list.setCurrentRow(0)
 
+    def select_plugin(self, plugin_id: str) -> None:
+        """Show the page of an application plugin
+
+        Args:
+            plugin_id: ID of the application plugin
+
+        Raises:
+            KeyError: if no active application plugin has this ID
+        """
+        for row in range(self.application_list.count()):
+            if self.application_list.item(row).data(QC.Qt.UserRole) == plugin_id:
+                self.application_list.setCurrentRow(row)
+                return
+        raise KeyError(f"Application plugin {plugin_id!r} not found")
+
     def _start_recipe(self, plugin: PluginBase, recipe_id: str) -> None:
         """Delegate to a plugin-owned recipe launcher."""
         try:

@@ -27,6 +27,7 @@
 * Each application displays its description, identity, version, available recipes, and packaged examples; processing-only plugins remain outside this focused view
 * The catalog is non-modal and remains open after starting a method or opening an example, so users may continue interacting with the DataLab workspace
 * Completed application methods select their last generated object, consistently with standard DataLab processing
+* Application plugins add tiles to a new **Applications** section of the welcome page: by default, one tile per plugin opens its page in the catalog, and plugins may declare additional tiles, for example to open an example directly
 
 **Plugin project generator:**
 

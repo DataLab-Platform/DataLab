@@ -832,6 +832,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     def _post_setup(self, console: bool) -> None:
         """Create plugin actions and wire panels, once the whole UI exists"""
         self.__create_plugins_actions()
+        self.welcomepanel.refresh_application_tiles()
         self.__update_actions(update_other_data_panel=True)
         self.__configure_panels()
 
@@ -980,12 +981,18 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         dialog = PluginConfigDialog(self)
         dialog.exec()
 
-    def __show_applications(self) -> None:
-        """Open the application plugin catalog."""
+    def show_applications(self, plugin_id: str | None = None) -> None:
+        """Open the application plugin catalog
+
+        Args:
+            plugin_id: ID of the application plugin to show (default: first one)
+        """
         if self.__applications_dialog is None:
             self.__applications_dialog = ApplicationsDialog(self)
         else:
             self.__applications_dialog.refresh()
+        if plugin_id is not None:
+            self.__applications_dialog.select_plugin(plugin_id)
         self.__applications_dialog.show()
         self.__applications_dialog.raise_()
         self.__applications_dialog.activateWindow()
@@ -1091,6 +1098,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
             # Recreate plugin actions for the new plugin set
             self.__create_plugins_actions()
+            self.welcomepanel.refresh_application_tiles()
 
             # Update actions and menus to reflect new plugin set
             self.__update_actions(update_other_data_panel=True)
@@ -1144,6 +1152,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.__unregister_plugins()
         for panel in (self.signalpanel, self.imagepanel):
             panel.acthandler.clear_plugin_actions()
+        self.welcomepanel.refresh_application_tiles()
 
         self.__update_actions(update_other_data_panel=True)
         self.__update_plugins_availability()
@@ -1196,7 +1205,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             "",
             icon=get_icon("libre-gui-plugin.svg"),
             tip=_("Browse application plugins, recipes and examples"),
-            triggered=self.__show_applications,
+            # The lambda drops the "checked" argument, which is not a plugin ID
+            triggered=lambda: self.show_applications(),  # pylint: disable=unnecessary-lambda
         )
         self.reload_plugins_action = create_action(
             self,

@@ -396,6 +396,43 @@ recipe references. A registered plugin may call ``open_example("quickstart")``
 to materialize and load a native DataLab HDF5 workspace. Opening clears the
 current workspace by default; pass ``reset_all=False`` to merge it instead.
 
+Welcome page tiles
+------------------
+
+Every active plugin declaring the ``APPLICATION`` capability adds tiles to the **Applications** section, at the top of the :ref:`welcome_page`. By default, a plugin shows one tile, built from its ``PluginInfo`` name, description and icon. Clicking this tile opens the plugin page of the **Applications** catalog.
+
+The plugin icon is declared with ``PluginInfo.icon``, either as a ``package:relative/path`` resource (SVG or bitmap image shipped in the plugin wheel) or as the file name of a DataLab icon. To show several tiles, for example to open an example directly, declare the class-level ``WELCOME_TILES`` tuple of :class:`datalab.plugin_tiles.WelcomeTile` values:
+
+.. code-block:: python
+
+  from datalab.plugin_tiles import WelcomeTile
+
+  class MyPlugin(PluginBase):
+    PLUGIN_INFO = PluginInfo(
+      id="org.example.my-plugin",
+      name="My Plugin",
+      icon="datalab_my_plugin:icons/my_plugin.svg",
+      capabilities=(PluginCapability.APPLICATION,),
+    )
+    WELCOME_TILES = (
+      WelcomeTile(id="application", title="My Plugin"),
+      WelcomeTile(
+        id="quickstart",
+        title="Open quick start",
+        description="Open the packaged quick start workspace",
+        icon="datalab_my_plugin:icons/quickstart.svg",
+        launcher="open_quickstart",
+      ),
+    )
+
+    def open_quickstart(self):
+      self.launch_example("quickstart")
+
+    def create_actions(self):
+      pass
+
+Declared tiles replace the default tile. A tile without ``launcher`` opens the plugin page of the **Applications** catalog; otherwise, the named plugin method is called without arguments. A tile without ``icon`` uses the plugin icon. :meth:`datalab.plugins.PluginBase.get_welcome_tiles` validates unique local IDs and launcher methods, and rejects tiles declared by plugins without the ``APPLICATION`` capability. The welcome page refreshes its tiles when plugins are loaded, reloaded or disabled, and reports errors raised by a launcher without closing DataLab.
+
 Creating a layered plugin project
 ----------------------------------
 
@@ -558,6 +595,9 @@ Public API
   :members:
 
 .. automodule:: datalab.plugin_examples
+  :members:
+
+.. automodule:: datalab.plugin_tiles
   :members:
 
 .. automodule:: datalab.gui.recipe_runner

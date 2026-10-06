@@ -5,16 +5,21 @@
 from __future__ import annotations
 
 import dataclasses
-import re
 import sys
 from collections.abc import Iterator, Mapping, Sequence
 from contextlib import contextmanager
 from importlib import resources
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from sigima.objects import ImageObj, SignalObj
+
+from datalab.plugin_resources import (
+    LOCAL_ID_PATTERN,
+    resolve_package_resource,
+    split_package_resource,
+)
 
 if TYPE_CHECKING:
     if sys.version_info >= (3, 11):
@@ -25,11 +30,7 @@ if TYPE_CHECKING:
 __all__ = ["PluginExample", "PluginExampleData"]
 
 
-_LOCAL_ID_PATTERN = re.compile(r"^[a-z0-9]+(?:[._-][a-z0-9]+)*$")
-_PACKAGE_PATTERN = re.compile(
-    r"^[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*$",
-    flags=re.ASCII,
-)
+_RESOURCE_LABEL = "Plugin example resource"
 
 
 @dataclasses.dataclass(frozen=True)
@@ -71,7 +72,7 @@ class PluginExample:
 
     def __post_init__(self) -> None:
         """Validate identity, package resource, and optional workflow metadata."""
-        if not isinstance(self.id, str) or not _LOCAL_ID_PATTERN.fullmatch(self.id):
+        if not isinstance(self.id, str) or not LOCAL_ID_PATTERN.fullmatch(self.id):
             raise ValueError(
                 "Plugin example ID must contain lowercase letters, digits, '.', "
                 "'_' or '-'"
@@ -80,21 +81,8 @@ class PluginExample:
             raise ValueError("Plugin example title must be a non-empty string")
         if not isinstance(self.description, str):
             raise TypeError("Plugin example description must be a string")
-        if self.resource is not None and (
-            not isinstance(self.resource, str) or self.resource.count(":") != 1
-        ):
-            raise ValueError("Plugin example resource must use 'package:path' syntax")
         if self.resource is not None:
-            if not _PACKAGE_PATTERN.fullmatch(self.package):
-                raise ValueError("Plugin example resource package is invalid")
-            path = PurePosixPath(self.resource_path)
-            if (
-                not self.resource_path
-                or "\\" in self.resource_path
-                or path.is_absolute()
-                or ".." in path.parts
-            ):
-                raise ValueError("Plugin example resource path must be relative")
+            split_package_resource(self.resource, _RESOURCE_LABEL)
         if self.recipe_id is not None and (
             not isinstance(self.recipe_id, str) or self.recipe_id.count(":") != 1
         ):
@@ -126,14 +114,9 @@ class PluginExample:
 
     def resolve(self) -> Traversable:
         """Resolve the declared resource without requiring a filesystem path."""
-        resource = resources.files(self.package)
-        for part in PurePosixPath(self.resource_path).parts:
-            resource = resource.joinpath(part)
-        if not resource.is_file():
-            raise FileNotFoundError(
-                f"Plugin example resource not found: {self.resource}"
-            )
-        return resource
+        if self.resource is None:
+            raise ValueError("Generated plugin example has no package resource")
+        return resolve_package_resource(self.resource, _RESOURCE_LABEL)
 
     @contextmanager
     def as_file(self) -> Iterator[Path]:

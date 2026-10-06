@@ -977,6 +977,13 @@ msgstr "Lancement de l'analyse '%s'"
 msgid "Opening example '%s'"
 msgstr "Ouverture de l'exemple '%s'"
 
+msgid "Browse all applications..."
+msgstr "Parcourir toutes les applications..."
+
+#, python-format
+msgid "Launching '%s'"
+msgstr "Lancement de '%s'"
+
 msgid "Command palette"
 msgstr "Palette de commandes"
 

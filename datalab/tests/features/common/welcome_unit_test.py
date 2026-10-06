@@ -6,13 +6,22 @@ Welcome page unit tests
 
 from __future__ import annotations
 
+from types import SimpleNamespace
+
+from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
+from sigimax.utils import qthelpers as sgmx_qth
 
 import datalab
 from datalab.config import Conf, _
 from datalab.gui import welcome
+from datalab.gui.applications import ApplicationsDialog
 from datalab.gui.main import DLMainWindow
+from datalab.plugin_tiles import WelcomeTile
+from datalab.plugins import PluginBase, PluginCapability, PluginInfo, PluginRegistry
 from datalab.tests import datalab_test_app_context
+
+PLUGIN_ICON = "datalab:data/icons/libre-gui-plugin.svg"
 
 
 def test_release_notes_url(monkeypatch) -> None:
@@ -106,3 +115,177 @@ def test_welcome_page(monkeypatch) -> None:
             assert Conf.welcome_on_startup.get() is (not initial)
         finally:
             Conf.welcome_on_startup.set(initial)
+
+
+def _application_plugin(
+    plugin_id: str,
+    tiles: tuple[WelcomeTile, ...] | Exception,
+    launched: list[tuple[str, str]],
+    capability: PluginCapability = PluginCapability.APPLICATION,
+) -> object:
+    """Build the minimal active-plugin surface consumed by the welcome page"""
+
+    def get_welcome_tiles() -> tuple[WelcomeTile, ...]:
+        if isinstance(tiles, Exception):
+            raise tiles
+        return tiles
+
+    def launch_welcome_tile(tile_id: str) -> None:
+        launched.append((plugin_id, tile_id))
+        if tile_id == "broken":
+            raise RuntimeError("Broken launcher")
+
+    return SimpleNamespace(
+        plugin_id=plugin_id,
+        info=PluginInfo(
+            id=plugin_id,
+            name=plugin_id.rsplit(".", maxsplit=1)[-1].title(),
+            capabilities=(capability,),
+        ),
+        get_welcome_tiles=get_welcome_tiles,
+        launch_welcome_tile=launch_welcome_tile,
+    )
+
+
+def test_welcome_page_application_tiles(monkeypatch) -> None:
+    """Application plugins add tiles launching their declared entry points"""
+    launched: list[tuple[str, str]] = []
+    errors: list[tuple[str, str]] = []
+    shown: list[str | None] = []
+    monkeypatch.setattr(
+        welcome,
+        "qt_handle_error_message",
+        lambda _widget, exc, context: errors.append((str(exc), context)),
+    )
+    camera = _application_plugin(
+        "org.example.camera",
+        (WelcomeTile(id="application", title="Camera", icon=PLUGIN_ICON),),
+        launched,
+    )
+    pulse = _application_plugin(
+        "org.example.pulse",
+        (
+            WelcomeTile(id="application", title="Pulse"),
+            WelcomeTile(
+                id="demo", title="Demo", icon="play_demo.svg", launcher="open_demo"
+            ),
+            WelcomeTile(id="broken", title="Broken"),
+        ),
+        launched,
+    )
+    processing = _application_plugin(
+        "org.example.processing", (), launched, PluginCapability.PROCESSING
+    )
+    registry = PluginRegistry.get_plugins()
+    with datalab_test_app_context(console=False) as win:
+        monkeypatch.setattr(
+            win, "show_applications", lambda plugin_id=None: shown.append(plugin_id)
+        )
+        page = win.welcomepanel
+        previous_plugins = list(registry)
+        try:
+            registry[:] = [pulse, processing, camera]
+            page.refresh_application_tiles()
+            win.show_welcome_page()
+            QW.QApplication.processEvents()
+
+            keys = [
+                ("org.example.camera", "application"),
+                ("org.example.pulse", "application"),
+                ("org.example.pulse", "demo"),
+                ("org.example.pulse", "broken"),
+            ]
+            assert not page.applications_section.isHidden()
+            assert list(page.application_tiles) == keys
+            for entry in page.application_tiles.values():
+                assert not entry.icon_label.pixmap().isNull()
+                entry.SIG_CLICKED.emit()
+            assert launched == keys
+            assert errors == [("Broken launcher", _("Launching '%s'") % "Broken")]
+            page.browse_applications_button.click()
+            assert shown == [None]
+
+            grid = page.tile_grid
+            grid.arrange(welcome.TILE_WIDTH)
+            assert grid.columns == 1
+            assert grid.layout().getItemPosition(3)[:2] == (3, 0)
+            grid.arrange(3 * welcome.TILE_WIDTH + 2 * welcome.TILE_SPACING)
+            assert grid.columns == 3
+            assert grid.layout().getItemPosition(3)[:2] == (1, 0)
+
+            registry[:] = [processing]
+            page.refresh_application_tiles()
+            assert page.application_tiles == {}
+            assert page.applications_section.isHidden()
+        finally:
+            registry[:] = previous_plugins
+
+
+def test_welcome_page_isolates_invalid_application_tiles(monkeypatch) -> None:
+    """A failing plugin or a missing icon does not hide the other tiles"""
+    broken = _application_plugin("org.example.broken", RuntimeError("Invalid"), [])
+    missing_icon = _application_plugin(
+        "org.example.icon",
+        (
+            WelcomeTile(
+                id="application", title="Icon", icon="datalab:data/icons/missing.svg"
+            ),
+        ),
+        [],
+    )
+    registry = PluginRegistry.get_plugins()
+    with datalab_test_app_context(console=False) as win:
+        page = win.welcomepanel
+        previous_plugins = list(registry)
+        try:
+            registry[:] = [broken, missing_icon]
+            # Outside tests, plugin errors are logged instead of raised
+            monkeypatch.setattr(sgmx_qth, "is_running_tests", lambda: False)
+            page.refresh_application_tiles()
+            assert list(page.application_tiles) == [("org.example.icon", "application")]
+            assert not page.applications_section.isHidden()
+        finally:
+            monkeypatch.undo()
+            registry[:] = previous_plugins
+
+
+def test_welcome_page_application_plugin_lifecycle() -> None:
+    """A registered plugin tile opens its catalog page until plugins are disabled"""
+    plugin_id = "org.example.welcome-tiles"
+    with datalab_test_app_context(console=False) as win:
+        # Defined after startup, which clears the registered plugin classes
+        class TileApplicationPlugin(PluginBase):
+            """Application plugin relying on the default welcome page tile"""
+
+            PLUGIN_INFO = PluginInfo(
+                id=plugin_id,
+                name="Welcome tiles application",
+                description="Application exposed on the welcome page",
+                icon=PLUGIN_ICON,
+                capabilities=(PluginCapability.APPLICATION,),
+            )
+
+            def create_actions(self) -> None:
+                """Create no actions for this welcome page test"""
+
+        try:
+            TileApplicationPlugin().register(win)
+            page = win.welcomepanel
+            page.refresh_application_tiles()
+            entry = page.application_tiles[(plugin_id, "application")]
+            assert entry.title_label.text() == "Welcome tiles application"
+
+            entry.SIG_CLICKED.emit()
+            QW.QApplication.processEvents()
+            (dialog,) = win.findChildren(ApplicationsDialog)
+            assert dialog.isVisible()
+            assert dialog.application_list.currentItem().data(QC.Qt.UserRole) == (
+                plugin_id
+            )
+            dialog.close()
+
+            win.set_plugins_enabled(False)
+            assert page.application_tiles == {}
+            assert page.applications_section.isHidden()
+        finally:
+            PluginRegistry.get_plugin_classes().remove(TileApplicationPlugin)

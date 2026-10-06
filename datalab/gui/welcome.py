@@ -10,11 +10,14 @@ the DataLab-Web welcome page).
 
 .. autoclass:: WelcomeEntry
 
+.. autoclass:: TileGrid
+
 .. autoclass:: WelcomePanel
 """
 
 from __future__ import annotations
 
+import functools
 import re
 import urllib.parse
 import webbrowser
@@ -30,20 +33,36 @@ from qtpy import QtWidgets as QW
 import datalab
 from datalab.config import APP_DESC, Conf, _
 from datalab.gui.actionhandler import ActionCategory
+from datalab.gui.applications import get_application_plugins
+from datalab.plugin_resources import resolve_package_resource
+from datalab.utils.qthelpers import qt_handle_error_message, try_or_log_error
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
     from datalab.gui.panel.base import BaseDataPanel
+    from datalab.plugin_tiles import WelcomeTile
+    from datalab.plugins import PluginBase
 
 #: Width below which the two columns of the welcome page are stacked
 SINGLE_COLUMN_WIDTH = 720
+#: Width of an application tile
+TILE_WIDTH = 200
+#: Spacing between application tiles
+TILE_SPACING = 12
+#: Size of an application tile icon
+TILE_ICON_SIZE = 48
 
 ENTRY_STYLESHEET = """
 QFrame#welcome_entry {
     border: 1px solid transparent;
     border-radius: 4px;
 }
-QFrame#welcome_entry:hover, QFrame#welcome_entry:focus {
+QFrame#welcome_tile {
+    border: 1px solid palette(mid);
+    border-radius: 6px;
+}
+QFrame#welcome_entry:hover, QFrame#welcome_entry:focus,
+QFrame#welcome_tile:hover, QFrame#welcome_tile:focus {
     border-color: palette(highlight);
     background-color: palette(alternate-base);
 }
@@ -61,27 +80,60 @@ def get_release_notes_url() -> str:
     return urllib.parse.urljoin(datalab.__docurl__, page)
 
 
+def get_tile_icon(tile: WelcomeTile) -> QG.QIcon:
+    """Return the icon of an application tile
+
+    Args:
+        tile: welcome page tile
+
+    Returns:
+        Tile icon, or the generic plugin icon if the tile has no icon or if its
+         icon cannot be loaded
+    """
+    if tile.icon is not None:
+        with try_or_log_error(f"Loading welcome tile icon {tile.icon!r}"):
+            if not tile.is_package_icon:
+                return get_icon(tile.icon)
+            resource = resolve_package_resource(tile.icon, "Welcome tile icon")
+            buffer = QC.QBuffer()
+            buffer.setData(resource.read_bytes())
+            reader = QG.QImageReader(buffer)
+            if tile.icon.lower().endswith(".svg"):
+                # Render vector icons at twice their size for high-DPI screens
+                reader.setScaledSize(reader.size() * 2)
+            image = reader.read()
+            if image.isNull():
+                raise ValueError(
+                    f"Invalid welcome tile icon {tile.icon!r}: {reader.errorString()}"
+                )
+            return QG.QIcon(QG.QPixmap.fromImage(image))
+    return get_icon("libre-gui-plugin.svg")
+
+
 class WelcomeEntry(QW.QFrame):
     """Clickable welcome page entry, showing an icon, a title and a description
 
     Args:
-        icon_name: icon file name
+        icon: icon or icon file name
         title: entry title
         description: entry description
         parent: parent widget
+        tile: if True, show the entry as a fixed-width application tile, with a
+         larger icon above its title
     """
 
     SIG_CLICKED = QC.Signal()
 
     def __init__(
         self,
-        icon_name: str,
+        icon: QG.QIcon | str,
         title: str,
         description: str,
         parent: QW.QWidget | None = None,
+        tile: bool = False,
     ) -> None:
         super().__init__(parent)
-        self.setObjectName("welcome_entry")
+        self.setObjectName("welcome_tile" if tile else "welcome_entry")
         self.setStyleSheet(ENTRY_STYLESHEET)
         self.setAttribute(QC.Qt.WA_Hover)
         self.setFocusPolicy(QC.Qt.StrongFocus)
@@ -89,8 +141,11 @@ class WelcomeEntry(QW.QFrame):
         self.setAccessibleName(title)
         self.setAccessibleDescription(description)
 
-        icon_label = QW.QLabel()
-        icon_label.setPixmap(get_icon(icon_name).pixmap(32, 32))
+        if isinstance(icon, str):
+            icon = get_icon(icon)
+        icon_size = TILE_ICON_SIZE if tile else 32
+        self.icon_label = QW.QLabel()
+        self.icon_label.setPixmap(icon.pixmap(icon_size, icon_size))
         self.title_label = QW.QLabel(title)
         font = self.title_label.font()
         font.setBold(True)
@@ -102,11 +157,21 @@ class WelcomeEntry(QW.QFrame):
         text_layout.setSpacing(2)
         text_layout.addWidget(self.title_label)
         text_layout.addWidget(description_label)
-        layout = QW.QHBoxLayout(self)
-        layout.setContentsMargins(8, 6, 8, 6)
-        layout.setSpacing(10)
-        layout.addWidget(icon_label, 0, QC.Qt.AlignTop)
-        layout.addLayout(text_layout, 1)
+        if tile:
+            self.title_label.setWordWrap(True)
+            self.setFixedWidth(TILE_WIDTH)
+            layout = QW.QVBoxLayout(self)
+            layout.setContentsMargins(12, 10, 12, 10)
+            layout.setSpacing(8)
+            layout.addWidget(self.icon_label)
+            layout.addLayout(text_layout)
+            layout.addStretch(1)
+        else:
+            layout = QW.QHBoxLayout(self)
+            layout.setContentsMargins(8, 6, 8, 6)
+            layout.setSpacing(10)
+            layout.addWidget(self.icon_label, 0, QC.Qt.AlignTop)
+            layout.addLayout(text_layout, 1)
 
     def mouseReleaseEvent(self, event: QG.QMouseEvent) -> None:  # pylint: disable=invalid-name
         """Emit the clicked signal on left button release"""
@@ -120,6 +185,59 @@ class WelcomeEntry(QW.QFrame):
             self.SIG_CLICKED.emit()
         else:
             super().keyPressEvent(event)
+
+
+class TileGrid(QW.QWidget):
+    """Grid of fixed-width tiles, wrapped on as many rows as the width requires
+
+    Args:
+        parent: parent widget
+    """
+
+    def __init__(self, parent: QW.QWidget | None = None) -> None:
+        super().__init__(parent)
+        # Follow the available width instead of imposing the current grid width
+        self.setSizePolicy(QW.QSizePolicy.Ignored, QW.QSizePolicy.Preferred)
+        self.tiles: list[QW.QWidget] = []
+        self.columns = 0
+        layout = QW.QGridLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(TILE_SPACING)
+        layout.setAlignment(QC.Qt.AlignLeft | QC.Qt.AlignTop)
+
+    def set_tiles(self, tiles: list[QW.QWidget]) -> None:
+        """Replace the tiles of the grid
+
+        Args:
+            tiles: new tiles, in display order
+        """
+        for tile in self.tiles:
+            self.layout().removeWidget(tile)
+            tile.deleteLater()
+        self.tiles = list(tiles)
+        self.columns = 0
+        self.arrange(self.width())
+
+    def arrange(self, width: int) -> None:
+        """Place the tiles on as many columns as the width allows
+
+        Args:
+            width: available width
+        """
+        columns = max(1, (width + TILE_SPACING) // (TILE_WIDTH + TILE_SPACING))
+        if columns == self.columns:
+            return
+        self.columns = columns
+        layout = self.layout()
+        for tile in self.tiles:
+            layout.removeWidget(tile)
+        for index, tile in enumerate(self.tiles):
+            layout.addWidget(tile, index // columns, index % columns)
+
+    def resizeEvent(self, event: QG.QResizeEvent) -> None:  # pylint: disable=invalid-name
+        """Rearrange the tiles for the new width"""
+        super().resizeEvent(event)
+        self.arrange(event.size().width())
 
 
 class WelcomePanel(QW.QWidget, DockableWidgetMixin):
@@ -140,6 +258,12 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
         DockableWidgetMixin.__init__(self)
         self.mainwindow = mainwindow
         self.entries: dict[str, WelcomeEntry] = {}
+        self.application_tiles: dict[tuple[str, str], WelcomeEntry] = {}
+        self.applications_section = QW.QWidget()
+        self.tile_grid = TileGrid()
+        self.browse_applications_button = QW.QPushButton(
+            get_icon("libre-gui-plugin.svg"), _("Browse all applications...")
+        )
         self.start_title = self.__create_section_title("")
         self.columns_layout = QW.QBoxLayout(QW.QBoxLayout.LeftToRight)
         self.startup_checkbox = QW.QCheckBox(_("Show welcome page on startup"))
@@ -171,6 +295,56 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
         entry.SIG_CLICKED.connect(callback)
         self.entries[key] = entry
         layout.addWidget(entry)
+
+    def __setup_applications_section(self) -> None:
+        """Setup the section gathering the application plugin tiles"""
+        button = self.browse_applications_button
+        button.setFlat(True)
+        button.setCursor(QC.Qt.PointingHandCursor)
+        # The lambda drops the "checked" argument, which is not a plugin ID
+        button.clicked.connect(lambda: self.mainwindow.show_applications())  # pylint: disable=unnecessary-lambda
+        header_layout = QW.QHBoxLayout()
+        header_layout.addWidget(self.__create_section_title(_("Applications")))
+        header_layout.addStretch(1)
+        header_layout.addWidget(button)
+        layout = QW.QVBoxLayout(self.applications_section)
+        layout.setContentsMargins(0, 0, 0, 12)
+        layout.addLayout(header_layout)
+        layout.addWidget(self.tile_grid)
+        self.applications_section.hide()
+
+    def refresh_application_tiles(self) -> None:
+        """Rebuild the application tiles from the active application plugins"""
+        self.application_tiles.clear()
+        for plugin in get_application_plugins():
+            with try_or_log_error(f"Creating welcome tiles for {plugin.info.name}"):
+                plugin_tiles = {}
+                for tile in plugin.get_welcome_tiles():
+                    entry = WelcomeEntry(
+                        get_tile_icon(tile), tile.title, tile.description, tile=True
+                    )
+                    entry.SIG_CLICKED.connect(
+                        functools.partial(self.__launch_tile, plugin, tile)
+                    )
+                    plugin_tiles[(plugin.plugin_id, tile.id)] = entry
+                self.application_tiles.update(plugin_tiles)
+        self.tile_grid.set_tiles(list(self.application_tiles.values()))
+        self.applications_section.setVisible(bool(self.application_tiles))
+
+    def __launch_tile(self, plugin: PluginBase, tile: WelcomeTile) -> None:
+        """Launch an application tile, reporting errors raised by the plugin
+
+        Args:
+            plugin: application plugin
+            tile: welcome page tile of this plugin
+        """
+        try:
+            plugin.launch_welcome_tile(tile.id)
+        except Exception as exc:  # pylint: disable=broad-except
+            # Plugin-owned launchers are third-party code: never crash the app
+            qt_handle_error_message(
+                self.mainwindow, exc, _("Launching '%s'") % tile.title
+            )
 
     def __setup_ui(self) -> None:
         """Setup welcome page widgets"""
@@ -284,6 +458,8 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
         content_layout.addWidget(description)
         content_layout.addWidget(version)
         content_layout.addSpacing(12)
+        self.__setup_applications_section()
+        content_layout.addWidget(self.applications_section)
         content_layout.addLayout(self.columns_layout)
         content_layout.addSpacing(12)
         content_layout.addWidget(self.startup_checkbox)

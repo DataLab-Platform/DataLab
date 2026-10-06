@@ -58,6 +58,7 @@ from datalab.control.proxy import LocalProxy
 from datalab.env import execenv
 from datalab.objectmodel import get_uuid
 from datalab.plugin_examples import PluginExample, PluginExampleData
+from datalab.plugin_tiles import WelcomeTile
 from datalab.recipes import RecipeDescriptor, RecipeOutcome
 
 if TYPE_CHECKING:
@@ -303,6 +304,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
     RECIPES: tuple[RecipeDescriptor, ...] = ()
     EXAMPLES: tuple[PluginExample, ...] = ()
     RECIPE_LAUNCHERS: Mapping[str, str] = MappingProxyType({})
+    WELCOME_TILES: tuple[WelcomeTile, ...] = ()
     #: Data of the last opened generated example (``None`` for packaged ones)
     last_example_data: PluginExampleData | None = None
 
@@ -528,6 +530,72 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
                 reset_all=reset_all,
             )
         return example
+
+    @classmethod
+    def get_welcome_tiles(cls) -> tuple[WelcomeTile, ...]:
+        """Return validated welcome page tiles exposed by this application plugin.
+
+        Without declared ``WELCOME_TILES``, an application plugin exposes one
+        default tile built from its :class:`PluginInfo`. Declared tiles without
+        icon inherit the plugin icon.
+        """
+        tiles = tuple(cls.WELCOME_TILES)
+        info = cls.PLUGIN_INFO
+        if PluginCapability.APPLICATION not in info.capabilities:
+            if tiles:
+                raise ValueError("Welcome tiles require the APPLICATION capability")
+            return ()
+        if not tiles:
+            return (
+                WelcomeTile(
+                    id="application",
+                    title=info.name,
+                    description=info.description,
+                    icon=info.icon,
+                ),
+            )
+        if not all(isinstance(tile, WelcomeTile) for tile in tiles):
+            raise TypeError("Plugin welcome tiles must be WelcomeTile values")
+        tile_ids: set[str] = set()
+        for tile in tiles:
+            if tile.id in tile_ids:
+                raise ValueError(f"Duplicate welcome tile ID: {tile.id!r}")
+            if tile.launcher is not None and not callable(
+                getattr(cls, tile.launcher, None)
+            ):
+                raise ValueError(
+                    f"Welcome tile launcher method {tile.launcher!r} is not callable"
+                )
+            tile_ids.add(tile.id)
+        return tuple(
+            dataclasses.replace(tile, icon=info.icon)
+            if tile.icon is None and info.icon is not None
+            else tile
+            for tile in tiles
+        )
+
+    def launch_welcome_tile(self, tile_id: str) -> object:
+        """Launch a welcome page tile.
+
+        A tile without launcher opens the plugin page of the Applications
+        catalog; otherwise, its plugin method is called without arguments.
+
+        Returns:
+            Value returned by the launcher method (None for the catalog page)
+        """
+        if self.main is None:
+            raise RuntimeError(
+                "Plugin must be registered before launching a welcome tile"
+            )
+        tile = next(
+            (tile for tile in self.get_welcome_tiles() if tile.id == tile_id), None
+        )
+        if tile is None:
+            raise KeyError(f"Welcome tile {tile_id!r} not found")
+        if tile.launcher is None:
+            self.main.show_applications(self.plugin_id)
+            return None
+        return getattr(self, tile.launcher)()
 
     @property
     def signalpanel(self) -> SignalPanel:

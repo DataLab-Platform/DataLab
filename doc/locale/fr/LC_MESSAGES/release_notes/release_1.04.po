@@ -69,6 +69,9 @@ msgstr "Le catalogue est non modal et reste ouvert après le lancement d'une mé
 msgid "Completed application methods select their last generated object, consistently with standard DataLab processing"
 msgstr "Les méthodes d'application terminées sélectionnent le dernier objet qu'elles ont généré, de manière cohérente avec les traitements standard de DataLab"
 
+msgid "Application plugins add tiles to a new **Applications** section of the welcome page: by default, one tile per plugin opens its page in the catalog, and plugins may declare additional tiles, for example to open an example directly"
+msgstr "Les plugins d'application ajoutent des tuiles à une nouvelle section **Applications** de la page d'accueil : par défaut, une tuile par plugin ouvre sa page dans le catalogue, et les plugins peuvent déclarer des tuiles supplémentaires, par exemple pour ouvrir directement un exemple"
+
 msgid "**Plugin project generator:**"
 msgstr "**Générateur de projets de plugins :**"
 
