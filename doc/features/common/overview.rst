@@ -36,8 +36,7 @@ panel (see :ref:`about_macros`) and the :ref:`ai_assistant`.
 Welcome page
 ^^^^^^^^^^^^
 
-When DataLab starts with an empty workspace, a **Welcome** page is shown next to
-the signal and image views. It gathers the main actions to get started:
+A **Welcome** page is shown next to the signal and image views when DataLab starts, and whenever the current signal or image panel is empty (for example after switching to an empty panel or deleting its last object). It gathers the main actions to get started:
 
 - create a signal or an image from a template, open signal or image files,
   browse an HDF5 file, open a previously saved HDF5 workspace, or import text
@@ -46,13 +45,7 @@ the signal and image views. It gathers the main actions to get started:
 - ask the :ref:`ai_assistant`, take the guided tour, run the demo, read the
   online documentation, or browse the release notes of the running version.
 
-The Welcome page is a regular dockable panel: as soon as a signal or an image is
-created or opened, the corresponding view is brought to the front, and the
-Welcome page remains available as a tab. It may be closed like any other panel,
-and reopened at any time from the "Welcome page" entry of the "?" (Help) menu or
-from the "View" menu. The "Show welcome page on startup" check box, at the bottom
-of the page, controls whether the page is shown when DataLab starts (this option
-is also available in the :ref:`settings`).
+The Welcome page is a regular dockable panel: as soon as a signal or an image is created or opened, the corresponding view is brought to the front, and the Welcome page remains available as a tab. It may be closed like any other panel, and reopened at any time from the "Welcome page" entry of the "?" (Help) menu or from the "View" menu; it is also reopened automatically when the current panel becomes empty. The "Show welcome page when the current panel is empty" check box, at the bottom of the page, controls this automatic display, including at startup (this option is also available in the :ref:`settings`).
 
 .. _command_palette:
 

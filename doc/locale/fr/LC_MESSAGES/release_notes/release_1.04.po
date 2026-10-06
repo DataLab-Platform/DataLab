@@ -24,14 +24,14 @@ msgstr "✨ Nouvelles fonctionnalités"
 msgid "**Welcome page:**"
 msgstr "**Page d'accueil :**"
 
-msgid "A new **Welcome** page, similar to the one of DataLab-Web, is shown at startup when the workspace is empty. It gathers the main actions to get started: create a signal or an image, open files, browse an HDF5 file, open an HDF5 workspace, import text data, ask the AI Assistant, take the guided tour, run the demo, read the documentation or browse the release notes"
-msgstr "Une nouvelle page d'**Accueil**, semblable à celle de DataLab-Web, est affichée au démarrage lorsque l'espace de travail est vide. Elle rassemble les principales actions pour bien démarrer : créer un signal ou une image, ouvrir des fichiers, parcourir un fichier HDF5, ouvrir un espace de travail HDF5, importer des données texte, interroger l'assistant IA, suivre la visite guidée, lancer la démo, lire la documentation ou consulter les notes de version"
+msgid "A new **Welcome** page, similar to the one of DataLab-Web, is shown at startup and whenever the current signal or image panel is empty. It gathers the main actions to get started: create a signal or an image, open files, browse an HDF5 file, open an HDF5 workspace, import text data, ask the AI Assistant, take the guided tour, run the demo, read the documentation or browse the release notes"
+msgstr "Une nouvelle page d'**Accueil**, semblable à celle de DataLab-Web, est affichée au démarrage et chaque fois que le panneau signal ou image courant est vide. Elle rassemble les principales actions pour bien démarrer : créer un signal ou une image, ouvrir des fichiers, parcourir un fichier HDF5, ouvrir un espace de travail HDF5, importer des données texte, interroger l'assistant IA, suivre la visite guidée, lancer la démo, lire la documentation ou consulter les notes de version"
 
 msgid "The page is a dockable panel, tabbed with the signal and image views: it remains available after data is created or opened, and can be reopened at any time from the **?** menu (**Welcome page**) or from the **View** menu"
 msgstr "La page est un panneau ancrable, en onglet avec les vues signal et image : elle reste disponible après la création ou l'ouverture de données, et peut être rouverte à tout moment depuis le menu **?** (**Page d'accueil**) ou depuis le menu **Affichage**"
 
-msgid "A **Show welcome page on startup** option, available on the page itself and in the General settings, controls whether the page is shown at startup"
-msgstr "Une option **Afficher la page d'accueil au démarrage**, disponible sur la page elle-même et dans les paramètres généraux, détermine si la page est affichée au démarrage"
+msgid "A **Show welcome page when the current panel is empty** option, available on the page itself and in the General settings, controls whether the page is shown automatically, including at startup"
+msgstr "Une option **Afficher la page d'accueil lorsque le panneau courant est vide**, disponible sur la page elle-même et dans les paramètres généraux, détermine si la page est affichée automatiquement, y compris au démarrage"
 
 msgid "**Brightness and contrast:**"
 msgstr "**Luminosité et contraste :**"
