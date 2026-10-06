@@ -40,6 +40,16 @@ class MainSettings(gds.DataSet):
             "at startup and whenever the current signal or image panel is empty."
         ),
     )
+    welcome_application_rows = gds.IntItem(
+        _("Welcome page application rows"),
+        default=2,
+        min=1,
+        max=10,
+        help=_(
+            "Maximum number of application tile rows on the welcome page. Other "
+            "applications remain available from the Applications catalog."
+        ),
+    )
     process_isolation_enabled = gds.BoolItem(
         "",
         _("Process isolation"),

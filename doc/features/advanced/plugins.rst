@@ -399,9 +399,9 @@ current workspace by default; pass ``reset_all=False`` to merge it instead.
 Welcome page tiles
 ------------------
 
-Every active plugin declaring the ``APPLICATION`` capability adds tiles to the **Applications** section, at the top of the :ref:`welcome_page`. By default, a plugin shows one tile, built from its ``PluginInfo`` name, description and icon. Clicking this tile opens the plugin page of the **Applications** catalog.
+Every active plugin declaring the ``APPLICATION`` capability adds a tile to the **Applications** section, at the top of the :ref:`welcome_page`. By default, this tile is built from the plugin's ``PluginInfo`` name, description and icon. Clicking this tile opens the plugin page of the **Applications** catalog.
 
-The plugin icon is declared with ``PluginInfo.icon``, either as a ``package:relative/path`` resource (SVG or bitmap image shipped in the plugin wheel) or as the file name of a DataLab icon. It is shown on the default tile, in the **Applications** catalog and in the plugin configuration dialog; plugins without icon use a generic plugin icon. To show several tiles, for example to open an example directly, declare the class-level ``WELCOME_TILES`` tuple of :class:`datalab.plugin_tiles.WelcomeTile` values:
+The plugin icon is declared with ``PluginInfo.icon``, either as a ``package:relative/path`` resource (SVG or bitmap image shipped in the plugin wheel) or as the file name of a DataLab icon. It is shown on the default tile, in the **Applications** catalog and in the plugin configuration dialog; plugins without icon use a generic plugin icon. To offer other entry points, for example to open an example directly, declare the class-level ``WELCOME_TILES`` tuple of :class:`datalab.plugin_tiles.WelcomeTile` values:
 
 .. code-block:: python
 
@@ -431,7 +431,9 @@ The plugin icon is declared with ``PluginInfo.icon``, either as a ``package:rela
     def create_actions(self):
       pass
 
-Declared tiles replace the default tile. A tile without ``launcher`` opens the plugin page of the **Applications** catalog; otherwise, the named plugin method is called without arguments. A tile without ``icon`` uses the plugin icon. :meth:`datalab.plugins.PluginBase.get_welcome_tiles` validates unique local IDs and launcher methods, and rejects tiles declared by plugins without the ``APPLICATION`` capability. The welcome page refreshes its tiles when plugins are loaded, reloaded or disabled, and reports errors raised by a launcher without closing DataLab.
+Declared tiles replace the default tile. The first one is the main tile of the plugin; the others are shown next to it when the **Applications** section has room for them, and otherwise become actions of its menu, opened from its "…" button or by right-clicking it. A tile without ``launcher`` opens the plugin page of the **Applications** catalog; otherwise, the named plugin method is called without arguments. A tile without ``icon`` uses the plugin icon. :meth:`datalab.plugins.PluginBase.get_welcome_tiles` validates unique local IDs and launcher methods, and rejects tiles declared by plugins without the ``APPLICATION`` capability. The welcome page refreshes its tiles when plugins are loaded, reloaded or disabled, and reports errors raised by a launcher without closing DataLab.
+
+The user decides which applications are shown and in which order: the welcome page shows a limited number of tile rows, pinned applications first, then recently used ones, then the others by name (see :ref:`welcome_page`). A plugin therefore cannot rely on its tile being visible: its features must remain available from the **Applications** catalog.
 
 Creating a layered plugin project
 ----------------------------------

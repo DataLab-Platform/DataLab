@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import webbrowser
 from math import ceil
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Iterable
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import win32_fix_title_bar_background
@@ -14,7 +14,7 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from datalab.config import _
+from datalab.config import Conf, _
 from datalab.plugin_resources import resolve_package_resource
 from datalab.plugins import PluginCapability, PluginRegistry
 from datalab.utils.qthelpers import qt_handle_error_message, try_or_log_error
@@ -29,12 +29,19 @@ __all__ = [
     "ApplicationsDialog",
     "get_application_plugins",
     "get_plugin_icon",
+    "record_application_use",
+    "set_application_hidden",
+    "set_application_pinned",
+    "sort_welcome_applications",
 ]
 
 
 CATALOG_TITLE_ROLE = QC.Qt.UserRole + 1
 CATALOG_DESCRIPTION_ROLE = QC.Qt.UserRole + 2
 CATALOG_VERSION_ROLE = QC.Qt.UserRole + 3
+
+#: Number of recently used applications remembered to order the welcome page
+MAX_RECENT_APPLICATIONS = 20
 
 
 def get_plugin_icon(icon: str | None) -> QG.QIcon:
@@ -293,12 +300,89 @@ def get_application_plugins() -> tuple[PluginBase, ...]:
     return tuple(sorted(plugins, key=lambda plugin: plugin.info.name.casefold()))
 
 
+def record_application_use(plugin_id: str) -> None:
+    """Remember an application as the most recently used one
+
+    Args:
+        plugin_id: ID of the application plugin
+    """
+    recent = [
+        other for other in Conf.welcome_recent_applications.get() if other != plugin_id
+    ]
+    Conf.welcome_recent_applications.set([plugin_id, *recent][:MAX_RECENT_APPLICATIONS])
+
+
+def set_application_pinned(plugin_id: str, pinned: bool) -> None:
+    """Pin an application to the top of the welcome page, or unpin it
+
+    Pinning an application also shows it again if it was hidden.
+
+    Args:
+        plugin_id: ID of the application plugin
+        pinned: True to pin the application, False to unpin it
+    """
+    pinned_ids = [
+        other for other in Conf.welcome_pinned_applications.get() if other != plugin_id
+    ]
+    if pinned:
+        pinned_ids.append(plugin_id)
+        set_application_hidden(plugin_id, False)
+    Conf.welcome_pinned_applications.set(pinned_ids)
+
+
+def set_application_hidden(plugin_id: str, hidden: bool) -> None:
+    """Hide an application from the welcome page, or show it again
+
+    Hiding an application also unpins it.
+
+    Args:
+        plugin_id: ID of the application plugin
+        hidden: True to hide the application, False to show it
+    """
+    hidden_ids = [
+        other for other in Conf.welcome_hidden_applications.get() if other != plugin_id
+    ]
+    if hidden:
+        hidden_ids.append(plugin_id)
+        set_application_pinned(plugin_id, False)
+    Conf.welcome_hidden_applications.set(hidden_ids)
+
+
+def sort_welcome_applications(plugins: Iterable[PluginBase]) -> list[PluginBase]:
+    """Return the applications shown on the welcome page, in display order
+
+    Pinned applications come first (in pinning order), then recently used ones
+    (most recent first), then the others by name. Hidden applications are
+    excluded.
+
+    Args:
+        plugins: Application plugins
+
+    Returns:
+        Visible application plugins, in display order
+    """
+    hidden = set(Conf.welcome_hidden_applications.get())
+    pinned = Conf.welcome_pinned_applications.get()
+    recent = Conf.welcome_recent_applications.get()
+
+    def sort_key(plugin: PluginBase) -> tuple[int, int, str]:
+        if plugin.plugin_id in pinned:
+            return 0, pinned.index(plugin.plugin_id), ""
+        if plugin.plugin_id in recent:
+            return 1, recent.index(plugin.plugin_id), ""
+        return 2, 0, plugin.info.name.casefold()
+
+    visible = (plugin for plugin in plugins if plugin.plugin_id not in hidden)
+    return sorted(visible, key=sort_key)
+
+
 class ApplicationPage(QW.QWidget):
     """Display one application plugin's recipes and packaged examples."""
 
     start_requested = QC.Signal(object, str)
     open_example_requested = QC.Signal(object, str)
     documentation_requested = QC.Signal(object)
+    welcome_preferences_changed = QC.Signal()
 
     HEADER_ICON_SIZE = 48
 
@@ -307,6 +391,8 @@ class ApplicationPage(QW.QWidget):
         self.plugin = plugin
         self.icon = get_plugin_icon(plugin.info.icon)
         self.icon_label = QW.QLabel()
+        self.show_on_welcome_checkbox = QW.QCheckBox(_("Show on welcome page"))
+        self.pin_on_welcome_checkbox = QW.QCheckBox(_("Pin to the welcome page"))
         self.recipe_list = QW.QListWidget()
         self.example_list = QW.QListWidget()
         self.start_button = QW.QPushButton(
@@ -338,6 +424,7 @@ class ApplicationPage(QW.QWidget):
         metadata.setTextInteractionFlags(QC.Qt.TextSelectableByMouse)
         apply_subdued_color(metadata)
         layout.addWidget(metadata)
+        layout.addLayout(self._create_welcome_layout())
 
         layout.addWidget(self._create_recipes_group(), 1)
         layout.addWidget(self._create_examples_group(), 1)
@@ -370,6 +457,51 @@ class ApplicationPage(QW.QWidget):
         layout.addWidget(title)
         layout.addStretch()
         return layout
+
+    def _create_welcome_layout(self) -> QW.QHBoxLayout:
+        """Create the welcome page preference row."""
+        layout = QW.QHBoxLayout()
+        layout.addWidget(self.show_on_welcome_checkbox)
+        layout.addWidget(self.pin_on_welcome_checkbox)
+        layout.addStretch()
+        self.sync_welcome_preferences()
+        self.show_on_welcome_checkbox.toggled.connect(self._set_shown_on_welcome)
+        self.pin_on_welcome_checkbox.toggled.connect(self._set_pinned_on_welcome)
+        return layout
+
+    def sync_welcome_preferences(self) -> None:
+        """Update the welcome page check boxes from the user preferences."""
+        plugin_id = self.plugin.plugin_id
+        for checkbox, checked in (
+            (
+                self.show_on_welcome_checkbox,
+                plugin_id not in Conf.welcome_hidden_applications.get(),
+            ),
+            (
+                self.pin_on_welcome_checkbox,
+                plugin_id in Conf.welcome_pinned_applications.get(),
+            ),
+        ):
+            checkbox.blockSignals(True)
+            checkbox.setChecked(checked)
+            checkbox.blockSignals(False)
+
+    def _set_shown_on_welcome(self, checked: bool) -> None:
+        """Show the application on the welcome page, or hide it."""
+        set_application_hidden(self.plugin.plugin_id, not checked)
+        self.sync_welcome_preferences()
+        self.welcome_preferences_changed.emit()
+
+    def _set_pinned_on_welcome(self, checked: bool) -> None:
+        """Pin the application to the welcome page, or unpin it."""
+        set_application_pinned(self.plugin.plugin_id, checked)
+        self.sync_welcome_preferences()
+        self.welcome_preferences_changed.emit()
+
+    def showEvent(self, event: QG.QShowEvent) -> None:  # pylint: disable=invalid-name
+        """Reflect preferences changed from the welcome page."""
+        self.sync_welcome_preferences()
+        super().showEvent(event)
 
     def _create_recipes_group(self) -> QW.QGroupBox:
         """Create the recipe descriptor section."""
@@ -458,11 +590,15 @@ class ApplicationPage(QW.QWidget):
 class ApplicationsDialog(QW.QDialog):
     """Browse active plugins that expose the application capability."""
 
+    #: Emitted when an application is shown, hidden, pinned or used
+    SIG_WELCOME_PREFERENCES_CHANGED = QC.Signal()
+
     def __init__(self, parent: QW.QWidget | None = None):
         super().__init__(parent)
         win32_fix_title_bar_background(self)
         self.setWindowModality(QC.Qt.NonModal)
         self.setModal(False)
+        self.search_edit = QW.QLineEdit()
         self.application_list = QW.QListWidget()
         self.application_stack = QW.QStackedWidget()
         self.application_pages: list[ApplicationPage] = []
@@ -470,13 +606,21 @@ class ApplicationsDialog(QW.QDialog):
         self.setWindowTitle(_("Applications"))
         self.setWindowIcon(get_icon("libre-gui-plugin.svg"))
         self.setMinimumSize(800, 540)
-        self.application_list.setMinimumWidth(260)
-        self.application_list.setMaximumWidth(360)
+        self.search_edit.setPlaceholderText(_("Search applications..."))
+        self.search_edit.setClearButtonEnabled(True)
         _configure_catalog_list(self.application_list)
+
+        catalog = QW.QWidget()
+        catalog.setMinimumWidth(260)
+        catalog.setMaximumWidth(360)
+        catalog_layout = QW.QVBoxLayout(catalog)
+        catalog_layout.setContentsMargins(0, 0, 0, 0)
+        catalog_layout.addWidget(self.search_edit)
+        catalog_layout.addWidget(self.application_list)
 
         layout = QW.QVBoxLayout(self)
         splitter = QW.QSplitter(QC.Qt.Horizontal)
-        splitter.addWidget(self.application_list)
+        splitter.addWidget(catalog)
         splitter.addWidget(self.application_stack)
         splitter.setStretchFactor(0, 0)
         splitter.setStretchFactor(1, 1)
@@ -490,6 +634,7 @@ class ApplicationsDialog(QW.QDialog):
         self.application_list.currentRowChanged.connect(
             self.application_stack.setCurrentIndex
         )
+        self.search_edit.textChanged.connect(self.filter_applications)
         self.refresh()
 
     def refresh(self) -> None:
@@ -518,9 +663,33 @@ class ApplicationsDialog(QW.QDialog):
             page.start_requested.connect(self._start_recipe)
             page.open_example_requested.connect(self._open_example)
             page.documentation_requested.connect(self._open_documentation)
+            page.welcome_preferences_changed.connect(
+                self.SIG_WELCOME_PREFERENCES_CHANGED.emit
+            )
             self.application_pages.append(page)
             self.application_stack.addWidget(page)
         self.application_list.setCurrentRow(0)
+        self.filter_applications(self.search_edit.text())
+
+    def filter_applications(self, text: str) -> None:
+        """Show only the applications matching a search text
+
+        Args:
+            text: Words to find in the application names and descriptions
+        """
+        words = text.casefold().split()
+        first_visible = None
+        for row in range(self.application_list.count()):
+            item = self.application_list.item(row)
+            haystack = (
+                f"{item.data(CATALOG_TITLE_ROLE)} {item.data(CATALOG_DESCRIPTION_ROLE)}"
+            ).casefold()
+            item.setHidden(not all(word in haystack for word in words))
+            if first_visible is None and not item.isHidden():
+                first_visible = item
+        current = self.application_list.currentItem()
+        if first_visible is not None and (current is None or current.isHidden()):
+            self.application_list.setCurrentItem(first_visible)
 
     def select_plugin(self, plugin_id: str) -> None:
         """Show the page of an application plugin
@@ -532,13 +701,22 @@ class ApplicationsDialog(QW.QDialog):
             KeyError: if no active application plugin has this ID
         """
         for row in range(self.application_list.count()):
-            if self.application_list.item(row).data(QC.Qt.UserRole) == plugin_id:
+            item = self.application_list.item(row)
+            if item.data(QC.Qt.UserRole) == plugin_id:
+                if item.isHidden():
+                    self.search_edit.clear()
                 self.application_list.setCurrentRow(row)
                 return
         raise KeyError(f"Application plugin {plugin_id!r} not found")
 
+    def _record_use(self, plugin: PluginBase) -> None:
+        """Remember an application use to order the welcome page."""
+        record_application_use(plugin.plugin_id)
+        self.SIG_WELCOME_PREFERENCES_CHANGED.emit()
+
     def _start_recipe(self, plugin: PluginBase, recipe_id: str) -> None:
         """Delegate to a plugin-owned recipe launcher."""
+        self._record_use(plugin)
         try:
             plugin.launch_recipe(recipe_id)
         except Exception as exc:  # pylint: disable=broad-except
@@ -549,6 +727,7 @@ class ApplicationsDialog(QW.QDialog):
 
     def _open_example(self, plugin: PluginBase, example_id: str) -> None:
         """Delegate packaged-example opening."""
+        self._record_use(plugin)
         try:
             plugin.launch_example(example_id)
         except Exception as exc:  # pylint: disable=broad-except

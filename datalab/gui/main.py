@@ -988,6 +988,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """
         if self.__applications_dialog is None:
             self.__applications_dialog = ApplicationsDialog(self)
+            self.__applications_dialog.SIG_WELCOME_PREFERENCES_CHANGED.connect(
+                self.welcomepanel.update_application_tiles
+            )
         else:
             self.__applications_dialog.refresh()
         if plugin_id is not None:
@@ -2346,6 +2349,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 self._update_color_mode()
             if option == "show_console_on_error":
                 self._update_console_show_mode()
+            if option == "welcome_application_rows":
+                self.welcomepanel.update_application_tiles()
             if option == "plot_toolbar_position":
                 for dock in self.docks.values():
                     widget = dock.widget()

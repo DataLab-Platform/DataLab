@@ -963,6 +963,15 @@ msgstr "Exemples"
 msgid "No examples declared"
 msgstr "Aucun exemple déclaré"
 
+msgid "Show on welcome page"
+msgstr "Afficher sur la page d'accueil"
+
+msgid "Pin to the welcome page"
+msgstr "Épingler sur la page d'accueil"
+
+msgid "Search applications..."
+msgstr "Rechercher des applications..."
+
 msgid "Applications"
 msgstr "Applications"
 
@@ -979,6 +988,25 @@ msgstr "Ouverture de l'exemple '%s'"
 
 msgid "Browse all applications..."
 msgstr "Parcourir toutes les applications..."
+
+msgid "More actions"
+msgstr "Plus d'actions"
+
+#, python-format
+msgid "More applications (%d)"
+msgstr "Autres applications (%d)"
+
+msgid "Browse all applications in the catalog."
+msgstr "Parcourir toutes les applications du catalogue."
+
+msgid "Unpin"
+msgstr "Désépingler"
+
+msgid "Pin to the top"
+msgstr "Épingler en tête"
+
+msgid "Hide from welcome page"
+msgstr "Masquer de la page d'accueil"
 
 #, python-format
 msgid "Launching '%s'"
@@ -4296,6 +4324,12 @@ msgstr "Afficher la page d'accueil lorsque le panneau courant est vide"
 
 msgid "The welcome page gathers the main actions to get started (create or open data, guided tour, documentation...). It is shown at startup and whenever the current signal or image panel is empty."
 msgstr "La page d'accueil rassemble les principales actions pour bien démarrer (créer ou ouvrir des données, visite guidée, documentation...). Elle est affichée au démarrage et chaque fois que le panneau signal ou image courant est vide."
+
+msgid "Welcome page application rows"
+msgstr "Lignes d'applications de la page d'accueil"
+
+msgid "Maximum number of application tile rows on the welcome page. Other applications remain available from the Applications catalog."
+msgstr "Nombre maximal de lignes de tuiles d'applications sur la page d'accueil. Les autres applications restent accessibles depuis le catalogue des applications."
 
 msgid "Welcome"
 msgstr "Accueil"

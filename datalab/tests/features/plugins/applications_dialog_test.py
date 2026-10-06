@@ -12,9 +12,17 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from sigimax.utils import qthelpers as sgmx_qth
 
+from datalab.config import Conf
 from datalab.gui import applications as applications_module
 from datalab.gui import main
-from datalab.gui.applications import ApplicationsDialog, get_application_plugins
+from datalab.gui.applications import (
+    ApplicationsDialog,
+    get_application_plugins,
+    record_application_use,
+    set_application_hidden,
+    set_application_pinned,
+    sort_welcome_applications,
+)
 from datalab.plugins import PluginCapability, PluginInfo, PluginRegistry
 from datalab.tests import datalab_test_app_context
 
@@ -223,6 +231,108 @@ def test_application_commands_require_declared_targets() -> None:
             dialog.deleteLater()
 
 
+def test_welcome_application_preferences() -> None:
+    """Welcome page order: pinned, then recently used, then by name"""
+    plugins = [
+        SimpleNamespace(
+            plugin_id=f"org.example.{name}", info=SimpleNamespace(name=name)
+        )
+        for name in ("delta", "Alpha", "charlie", "Bravo", "echo")
+    ]
+    ids = {plugin.info.name: plugin.plugin_id for plugin in plugins}
+
+    def order() -> list[str]:
+        return [plugin.info.name for plugin in sort_welcome_applications(plugins)]
+
+    assert order() == ["Alpha", "Bravo", "charlie", "delta", "echo"]
+    record_application_use(ids["delta"])
+    record_application_use(ids["echo"])
+    record_application_use(ids["delta"])
+    assert Conf.welcome_recent_applications.get() == [ids["delta"], ids["echo"]]
+    set_application_pinned(ids["charlie"], True)
+    set_application_pinned(ids["Bravo"], True)
+    assert order() == ["charlie", "Bravo", "delta", "echo", "Alpha"]
+
+    # Hiding an application unpins it, pinning it shows it again
+    set_application_hidden(ids["charlie"], True)
+    assert order() == ["Bravo", "delta", "echo", "Alpha"]
+    assert Conf.welcome_pinned_applications.get() == [ids["Bravo"]]
+    set_application_pinned(ids["charlie"], True)
+    assert order() == ["Bravo", "charlie", "delta", "echo", "Alpha"]
+    assert Conf.welcome_hidden_applications.get() == []
+    set_application_pinned(ids["Bravo"], False)
+    assert order() == ["charlie", "delta", "echo", "Alpha", "Bravo"]
+
+    for index in range(applications_module.MAX_RECENT_APPLICATIONS + 5):
+        record_application_use(f"org.example.other{index}")
+    recent = Conf.welcome_recent_applications.get()
+    assert len(recent) == applications_module.MAX_RECENT_APPLICATIONS
+    assert (
+        recent[0]
+        == f"org.example.other{applications_module.MAX_RECENT_APPLICATIONS + 4}"
+    )
+
+
+def test_applications_dialog_search_and_welcome_preferences() -> None:
+    """The catalog filters applications and edits their welcome page options"""
+    qt_app = QW.QApplication.instance() or QW.QApplication([])
+    capabilities = frozenset({PluginCapability.APPLICATION})
+    camera = _plugin("org.example.camera", "Camera Characterization", capabilities)
+    pulse = _plugin("org.example.pulse", "Pulse Characterization", capabilities)
+    registry = PluginRegistry.get_plugins()
+    previous_plugins = list(registry)
+    registry[:] = [camera, pulse]
+    changes: list[None] = []
+    try:
+        dialog = ApplicationsDialog()
+        dialog.SIG_WELCOME_PREFERENCES_CHANGED.connect(lambda: changes.append(None))
+        items = [dialog.application_list.item(row) for row in range(2)]
+
+        def selected() -> str:
+            return dialog.application_list.currentItem().data(QC.Qt.UserRole)
+
+        # Search words match names and descriptions, whatever their case
+        dialog.search_edit.setText("PULSE description")
+        assert [item.isHidden() for item in items] == [True, False]
+        assert selected() == "org.example.pulse"
+        assert dialog.application_stack.currentWidget().plugin is pulse
+        dialog.search_edit.setText("characterization")
+        assert [item.isHidden() for item in items] == [False, False]
+        assert selected() == "org.example.pulse"
+        dialog.search_edit.setText("pulse")
+        dialog.select_plugin("org.example.camera")
+        assert dialog.search_edit.text() == ""
+        assert selected() == "org.example.camera"
+
+        page = dialog.application_pages[0]
+        assert page.show_on_welcome_checkbox.isChecked()
+        assert not page.pin_on_welcome_checkbox.isChecked()
+        page.pin_on_welcome_checkbox.setChecked(True)
+        assert Conf.welcome_pinned_applications.get() == ["org.example.camera"]
+        page.show_on_welcome_checkbox.setChecked(False)
+        assert Conf.welcome_hidden_applications.get() == ["org.example.camera"]
+        assert Conf.welcome_pinned_applications.get() == []
+        assert not page.pin_on_welcome_checkbox.isChecked()
+        page.pin_on_welcome_checkbox.setChecked(True)
+        assert page.show_on_welcome_checkbox.isChecked()
+        assert Conf.welcome_hidden_applications.get() == []
+        assert len(changes) == 3
+
+        # Preferences changed elsewhere are shown when the page is shown again
+        set_application_hidden("org.example.camera", True)
+        dialog.show()
+        QW.QApplication.processEvents()
+        assert not page.show_on_welcome_checkbox.isChecked()
+        assert not page.pin_on_welcome_checkbox.isChecked()
+        assert qt_app is not None
+    finally:
+        registry[:] = previous_plugins
+        if "dialog" in locals():
+            dialog.close()
+            dialog.deleteLater()
+            QW.QApplication.processEvents()
+
+
 def test_main_window_exposes_applications_catalog(monkeypatch) -> None:
     """The catalog action reuses one modeless window without blocking DataLab."""
     executed: list[ApplicationsDialog] = []
@@ -307,6 +417,7 @@ def test_application_commands_delegate_to_plugin_contracts(monkeypatch) -> None:
         page.open_example_button.click()
         assert opened_examples == [example.id]
         assert dialog.isVisible()
+        assert Conf.welcome_recent_applications.get() == ["org.example.camera"]
         assert qt_app is not None
     finally:
         registry[:] = previous_plugins
