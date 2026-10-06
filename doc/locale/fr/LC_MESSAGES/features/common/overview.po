@@ -33,8 +33,23 @@ msgstr "La zone de droite affiche la visualisation du jeu de données actuelleme
 msgid "DataLab main window, at startup."
 msgstr "Fenêtre principale de DataLab, au démarrage."
 
-msgid "Additional panels are available as dockable widgets, and may be shown or hidden from the \"View\" menu: the :ref:`historypanel`, the Macro panel (see :ref:`about_macros`) and the :ref:`ai_assistant`."
-msgstr "D'autres panneaux sont disponibles sous forme de widgets ancrables, et peuvent être affichés ou masqués depuis le menu « Affichage » : le :ref:`historypanel`, le panneau de macros (voir :ref:`about_macros`) et l':ref:`ai_assistant`."
+msgid "Additional panels are available as dockable widgets, and may be shown or hidden from the \"View\" menu: the :ref:`welcome_page`, the :ref:`historypanel`, the Macro panel (see :ref:`about_macros`) and the :ref:`ai_assistant`."
+msgstr "D'autres panneaux sont disponibles sous forme de widgets ancrables, et peuvent être affichés ou masqués depuis le menu « Affichage » : la :ref:`welcome_page`, le :ref:`historypanel`, le panneau de macros (voir :ref:`about_macros`) et l':ref:`ai_assistant`."
+
+msgid "Welcome page"
+msgstr "Page d'accueil"
+
+msgid "When DataLab starts with an empty workspace, a **Welcome** page is shown next to the signal and image views. It gathers the main actions to get started:"
+msgstr "Lorsque DataLab démarre avec un espace de travail vide, une page d'**Accueil** est affichée à côté des vues signal et image. Elle rassemble les principales actions pour bien démarrer :"
+
+msgid "create a signal or an image from a template, open signal or image files, browse an HDF5 file, open a previously saved HDF5 workspace, or import text data (CSV, TSV, ...) with the import wizard. When needed, a menu lets you choose between signals and images;"
+msgstr "créer un signal ou une image à partir d'un modèle, ouvrir des fichiers de signaux ou d'images, parcourir un fichier HDF5, ouvrir un espace de travail HDF5 précédemment enregistré, ou importer des données texte (CSV, TSV, ...) avec l'assistant d'importation. Si nécessaire, un menu permet de choisir entre signaux et images ;"
+
+msgid "ask the :ref:`ai_assistant`, take the guided tour, run the demo, read the online documentation, or browse the release notes of the running version."
+msgstr "interroger l':ref:`ai_assistant`, suivre la visite guidée, lancer la démo, lire la documentation en ligne, ou consulter les notes de version de la version en cours d'exécution."
+
+msgid "The Welcome page is a regular dockable panel: as soon as a signal or an image is created or opened, the corresponding view is brought to the front, and the Welcome page remains available as a tab. It may be closed like any other panel, and reopened at any time from the \"Welcome page\" entry of the \"?\" (Help) menu or from the \"View\" menu. The \"Show welcome page on startup\" check box, at the bottom of the page, controls whether the page is shown when DataLab starts (this option is also available in the :ref:`settings`)."
+msgstr "La page d'accueil est un panneau ancrable comme les autres : dès qu'un signal ou une image est créé ou ouvert, la vue correspondante passe au premier plan, et la page d'accueil reste disponible sous forme d'onglet. Elle peut être fermée comme n'importe quel autre panneau, et rouverte à tout moment depuis l'entrée « Page d'accueil » du menu « ? » (Aide) ou depuis le menu « Affichage ». La case à cocher « Afficher la page d'accueil au démarrage », en bas de la page, détermine si la page est affichée au démarrage de DataLab (cette option est également disponible dans les :ref:`settings`)."
 
 msgid "Command palette"
 msgstr "Palette de commandes"
@@ -254,3 +269,4 @@ msgstr "Comparer différents niveaux de lissage sans créer plusieurs objets"
 
 msgid "This interactive approach provides immediate visual feedback and keeps your workspace organized by avoiding proliferation of test objects with slightly different parameters."
 msgstr "Cette approche interactive fournit un retour visuel immédiat et garde votre espace de travail organisé en évitant la prolifération d'objets de test avec des paramètres légèrement différents."
+

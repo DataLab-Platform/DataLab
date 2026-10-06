@@ -36,6 +36,12 @@ msgstr "**Mode couleur**"
 msgid "Choose the color mode for the application interface (e.g., light, dark, or auto)."
 msgstr "Choisir le mode couleur de l'interface de l'application (par exemple, clair, sombre ou automatique)."
 
+msgid "**Show welcome page on startup**"
+msgstr "**Afficher la page d'accueil au démarrage**"
+
+msgid "When enabled (default), the welcome page is shown when DataLab starts with an empty workspace (see :ref:`welcome_page`)."
+msgstr "Lorsque cette option est activée (par défaut), la page d'accueil est affichée lorsque DataLab démarre avec un espace de travail vide (voir :ref:`welcome_page`)."
+
 msgid "**Process isolation**"
 msgstr "**Isolation des processus**"
 
@@ -597,3 +603,4 @@ msgstr "**Arguments de l'éditeur externe**"
 
 msgid "Command-line arguments to pass to the external editor."
 msgstr "Arguments de ligne de commande à passer à l'éditeur externe."
+

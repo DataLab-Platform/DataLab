@@ -28,8 +28,31 @@ self-explanatory. The main window is divided into two main areas:
     DataLab main window, at startup.
 
 Additional panels are available as dockable widgets, and may be shown or hidden
-from the "View" menu: the :ref:`historypanel`, the Macro panel (see
-:ref:`about_macros`) and the :ref:`ai_assistant`.
+from the "View" menu: the :ref:`welcome_page`, the :ref:`historypanel`, the Macro
+panel (see :ref:`about_macros`) and the :ref:`ai_assistant`.
+
+.. _welcome_page:
+
+Welcome page
+^^^^^^^^^^^^
+
+When DataLab starts with an empty workspace, a **Welcome** page is shown next to
+the signal and image views. It gathers the main actions to get started:
+
+- create a signal or an image from a template, open signal or image files,
+  browse an HDF5 file, open a previously saved HDF5 workspace, or import text
+  data (CSV, TSV, ...) with the import wizard. When needed, a menu lets you choose
+  between signals and images;
+- ask the :ref:`ai_assistant`, take the guided tour, run the demo, read the
+  online documentation, or browse the release notes of the running version.
+
+The Welcome page is a regular dockable panel: as soon as a signal or an image is
+created or opened, the corresponding view is brought to the front, and the
+Welcome page remains available as a tab. It may be closed like any other panel,
+and reopened at any time from the "Welcome page" entry of the "?" (Help) menu or
+from the "View" menu. The "Show welcome page on startup" check box, at the bottom
+of the page, controls whether the page is shown when DataLab starts (this option
+is also available in the :ref:`settings`).
 
 .. _command_palette:
 
