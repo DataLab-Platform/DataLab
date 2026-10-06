@@ -4291,11 +4291,11 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
 
-msgid "Show welcome page on startup"
-msgstr "Afficher la page d'accueil au démarrage"
+msgid "Show welcome page when the current panel is empty"
+msgstr "Afficher la page d'accueil lorsque le panneau courant est vide"
 
-msgid "The welcome page gathers the main actions to get started (create or open data, guided tour, documentation...)."
-msgstr "La page d'accueil rassemble les principales actions pour bien démarrer (créer ou ouvrir des données, visite guidée, documentation...)."
+msgid "The welcome page gathers the main actions to get started (create or open data, guided tour, documentation...). It is shown at startup and whenever the current signal or image panel is empty."
+msgstr "La page d'accueil rassemble les principales actions pour bien démarrer (créer ou ouvrir des données, visite guidée, documentation...). Elle est affichée au démarrage et chaque fois que le panneau signal ou image courant est vide."
 
 msgid "Welcome"
 msgstr "Accueil"
