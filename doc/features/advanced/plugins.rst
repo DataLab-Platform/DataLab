@@ -154,7 +154,7 @@ The **Plugins** menu provides two dedicated actions:
 Enable/disable plugins
 ~~~~~~~~~~~~~~~~~~~~~~
 
-This tab lists all discovered plugins with their name, version, description and
+This tab lists all discovered plugins with their icon, name, version, description and
 file path, as well as the plugins that failed to import. For each entry:
 
 - an individual checkbox enables or disables the plugin,
@@ -401,7 +401,7 @@ Welcome page tiles
 
 Every active plugin declaring the ``APPLICATION`` capability adds tiles to the **Applications** section, at the top of the :ref:`welcome_page`. By default, a plugin shows one tile, built from its ``PluginInfo`` name, description and icon. Clicking this tile opens the plugin page of the **Applications** catalog.
 
-The plugin icon is declared with ``PluginInfo.icon``, either as a ``package:relative/path`` resource (SVG or bitmap image shipped in the plugin wheel) or as the file name of a DataLab icon. To show several tiles, for example to open an example directly, declare the class-level ``WELCOME_TILES`` tuple of :class:`datalab.plugin_tiles.WelcomeTile` values:
+The plugin icon is declared with ``PluginInfo.icon``, either as a ``package:relative/path`` resource (SVG or bitmap image shipped in the plugin wheel) or as the file name of a DataLab icon. It is shown on the default tile, in the **Applications** catalog and in the plugin configuration dialog; plugins without icon use a generic plugin icon. To show several tiles, for example to open an example directly, declare the class-level ``WELCOME_TILES`` tuple of :class:`datalab.plugin_tiles.WelcomeTile` values:
 
 .. code-block:: python
 

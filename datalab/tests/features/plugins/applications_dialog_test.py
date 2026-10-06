@@ -6,8 +6,11 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
+from guidata.configtools import get_icon
 from qtpy import QtCore as QC
+from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from sigimax.utils import qthelpers as sgmx_qth
 
 from datalab.gui import applications as applications_module
 from datalab.gui import main
@@ -24,6 +27,7 @@ def _plugin(
     recipes: tuple[object, ...] = (),
     examples: tuple[object, ...] = (),
     documentation_url: str | None = None,
+    icon: str | None = None,
     launched_recipes: list[str] | None = None,
     opened_examples: list[str] | None = None,
 ) -> object:
@@ -35,6 +39,7 @@ def _plugin(
             name=name,
             version="1.2.3",
             description=f"{name} description",
+            icon=icon,
             capabilities=capabilities,
             documentation_url=documentation_url,
         ),
@@ -140,6 +145,53 @@ def test_applications_dialog_has_an_explicit_empty_state() -> None:
         assert dialog.application_list.count() == 0
         assert dialog.application_pages == []
         assert dialog.application_stack.count() == 1
+        assert qt_app is not None
+    finally:
+        registry[:] = previous_plugins
+        if "dialog" in locals():
+            dialog.deleteLater()
+
+
+def _icon_image(icon: QG.QIcon) -> QG.QImage:
+    """Render an icon to compare it with another one."""
+    return icon.pixmap(32, 32).toImage()
+
+
+def test_applications_dialog_shows_plugin_icons(monkeypatch) -> None:
+    """Entries and pages show the declared plugin icon, or the generic one."""
+    qt_app = QW.QApplication.instance() or QW.QApplication([])
+    capabilities = frozenset({PluginCapability.APPLICATION})
+    declared = _plugin(
+        "org.example.camera",
+        "Camera Characterization",
+        capabilities,
+        icon="datalab:data/icons/analysis.svg",
+    )
+    missing = _plugin(
+        "org.example.pulse",
+        "Pulse Characterization",
+        capabilities,
+        icon="datalab:data/icons/missing.svg",
+    )
+    registry = PluginRegistry.get_plugins()
+    previous_plugins = list(registry)
+    registry[:] = [declared, missing]
+    # Outside tests, icon loading errors are logged instead of raised
+    monkeypatch.setattr(sgmx_qth, "is_running_tests", lambda: False)
+    generic_image = _icon_image(get_icon("libre-gui-plugin.svg"))
+    try:
+        dialog = ApplicationsDialog()
+        declared_item = dialog.application_list.item(0)
+        missing_item = dialog.application_list.item(1)
+        assert _icon_image(declared_item.icon()) != generic_image
+        assert _icon_image(missing_item.icon()) == generic_image
+        assert all(
+            not page.icon_label.pixmap().isNull() for page in dialog.application_pages
+        )
+        delegate = dialog.application_list.itemDelegate()
+        assert dialog.application_list.sizeHintForRow(0) >= (
+            delegate.ICON_SIZE + 2 * delegate.VERTICAL_MARGIN
+        )
         assert qt_app is not None
     finally:
         registry[:] = previous_plugins

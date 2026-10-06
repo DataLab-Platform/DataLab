@@ -28,6 +28,7 @@
 * The catalog is non-modal and remains open after starting a method or opening an example, so users may continue interacting with the DataLab workspace
 * Completed application methods select their last generated object, consistently with standard DataLab processing
 * Application plugins add tiles to a new **Applications** section of the welcome page: by default, one tile per plugin opens its page in the catalog, and plugins may declare additional tiles, for example to open an example directly
+* Plugins may declare an icon, shown in the **Applications** catalog, on their welcome page tile and in the **Configure plugins...** dialog
 
 **Plugin project generator:**
 

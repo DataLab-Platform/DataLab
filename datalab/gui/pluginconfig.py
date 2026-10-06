@@ -35,6 +35,7 @@ from datalab.config import (
     normalize_plugin_paths,
     set_user_plugin_paths,
 )
+from datalab.gui.applications import get_plugin_icon
 from datalab.plugins import (
     PLUGINS_DEFAULT_PATH,
     PluginCapability,
@@ -77,6 +78,9 @@ PLUGIN_ROW_MARGINS: tuple[int, int, int, int] = (5, 5, 5, 5)
 
 #: Spacing between metadata items (version, state) in the top row
 META_SPACING: int = 12
+
+#: Size of the plugin icon in the top row
+PLUGIN_ICON_SIZE: int = 24
 
 CAPABILITY_LABELS: dict[PluginCapability, str] = {
     PluginCapability.PROCESSING: _("Processing"),
@@ -214,6 +218,11 @@ class PluginInfoWidget(QW.QWidget):
         self.checkbox = QW.QCheckBox()
         self.checkbox.setChecked(enabled)
         top_layout.addWidget(self.checkbox)
+
+        self.icon_label = QW.QLabel()
+        icon = get_plugin_icon(self.plugin_class.PLUGIN_INFO.icon)
+        self.icon_label.setPixmap(icon.pixmap(PLUGIN_ICON_SIZE, PLUGIN_ICON_SIZE))
+        top_layout.addWidget(self.icon_label)
 
         name_label = QW.QLabel(self.plugin_class.PLUGIN_INFO.name)
         name_font = name_label.font()
@@ -402,6 +411,10 @@ class FailedPluginInfoWidget(QW.QWidget):
         checkbox.setChecked(False)
         checkbox.setEnabled(False)
         top_layout.addWidget(checkbox)
+        # No icon is known for a plugin that failed to import: keep names aligned
+        icon_placeholder = QW.QLabel()
+        icon_placeholder.setFixedWidth(PLUGIN_ICON_SIZE)
+        top_layout.addWidget(icon_placeholder)
 
         file_name = osp.basename(failed_info.name)
         name_label = QW.QLabel(file_name)

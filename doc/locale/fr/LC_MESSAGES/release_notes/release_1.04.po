@@ -72,6 +72,9 @@ msgstr "Les méthodes d'application terminées sélectionnent le dernier objet q
 msgid "Application plugins add tiles to a new **Applications** section of the welcome page: by default, one tile per plugin opens its page in the catalog, and plugins may declare additional tiles, for example to open an example directly"
 msgstr "Les plugins d'application ajoutent des tuiles à une nouvelle section **Applications** de la page d'accueil : par défaut, une tuile par plugin ouvre sa page dans le catalogue, et les plugins peuvent déclarer des tuiles supplémentaires, par exemple pour ouvrir directement un exemple"
 
+msgid "Plugins may declare an icon, shown in the **Applications** catalog, on their welcome page tile and in the **Configure plugins...** dialog"
+msgstr "Les plugins peuvent déclarer une icône, affichée dans le catalogue **Applications**, sur leur tuile de la page d'accueil et dans la boîte de dialogue **Configurer les plugins...**"
+
 msgid "**Plugin project generator:**"
 msgstr "**Générateur de projets de plugins :**"
 
@@ -128,4 +131,3 @@ msgstr "**Plugins et historique :**"
 
 msgid "Replaying a History action or re-processing a result created by a plugin feature that shares its name with a built-in feature now runs the plugin feature instead of the built-in one"
 msgstr "Le rejeu d'une action de l'historique ou le recalcul d'un résultat créé par une fonctionnalité de plugin portant le même nom qu'une fonctionnalité intégrée exécute désormais la fonctionnalité du plugin au lieu de la fonctionnalité intégrée"
-

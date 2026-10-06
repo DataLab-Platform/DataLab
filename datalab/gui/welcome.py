@@ -33,8 +33,7 @@ from qtpy import QtWidgets as QW
 import datalab
 from datalab.config import APP_DESC, Conf, _
 from datalab.gui.actionhandler import ActionCategory
-from datalab.gui.applications import get_application_plugins
-from datalab.plugin_resources import resolve_package_resource
+from datalab.gui.applications import get_application_plugins, get_plugin_icon
 from datalab.utils.qthelpers import qt_handle_error_message, try_or_log_error
 
 if TYPE_CHECKING:
@@ -78,36 +77,6 @@ def get_release_notes_url() -> str:
     major, minor = re.match(r"(\d+)\.(\d+)", datalab.__version__).groups()
     page = f"en/release_notes/release_{major}.{int(minor):02d}.html"
     return urllib.parse.urljoin(datalab.__docurl__, page)
-
-
-def get_tile_icon(tile: WelcomeTile) -> QG.QIcon:
-    """Return the icon of an application tile
-
-    Args:
-        tile: welcome page tile
-
-    Returns:
-        Tile icon, or the generic plugin icon if the tile has no icon or if its
-         icon cannot be loaded
-    """
-    if tile.icon is not None:
-        with try_or_log_error(f"Loading welcome tile icon {tile.icon!r}"):
-            if not tile.is_package_icon:
-                return get_icon(tile.icon)
-            resource = resolve_package_resource(tile.icon, "Welcome tile icon")
-            buffer = QC.QBuffer()
-            buffer.setData(resource.read_bytes())
-            reader = QG.QImageReader(buffer)
-            if tile.icon.lower().endswith(".svg"):
-                # Render vector icons at twice their size for high-DPI screens
-                reader.setScaledSize(reader.size() * 2)
-            image = reader.read()
-            if image.isNull():
-                raise ValueError(
-                    f"Invalid welcome tile icon {tile.icon!r}: {reader.errorString()}"
-                )
-            return QG.QIcon(QG.QPixmap.fromImage(image))
-    return get_icon("libre-gui-plugin.svg")
 
 
 class WelcomeEntry(QW.QFrame):
@@ -321,7 +290,10 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
                 plugin_tiles = {}
                 for tile in plugin.get_welcome_tiles():
                     entry = WelcomeEntry(
-                        get_tile_icon(tile), tile.title, tile.description, tile=True
+                        get_plugin_icon(tile.icon),
+                        tile.title,
+                        tile.description,
+                        tile=True,
                     )
                     entry.SIG_CLICKED.connect(
                         functools.partial(self.__launch_tile, plugin, tile)

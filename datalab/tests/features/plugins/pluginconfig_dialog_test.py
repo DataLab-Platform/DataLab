@@ -8,6 +8,7 @@ from collections.abc import Collection
 from datetime import datetime
 
 import pytest
+from guidata.configtools import get_icon
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
@@ -45,6 +46,7 @@ def _make_dummy_plugin_class(
     description: str,
     filepath: str | None = None,
     capabilities: Collection[PluginCapability] = (),
+    icon: str | None = None,
 ):
     """Create a minimal plugin class for UI-only widget tests."""
 
@@ -58,7 +60,7 @@ def _make_dummy_plugin_class(
             "name": name,
             "version": "1.0.0",
             "description": description,
-            "icon": None,
+            "icon": icon,
             "capabilities": capabilities,
         },
     )()
@@ -866,6 +868,31 @@ def test_plugin_widget_displays_declared_capabilities():
 
         widget.close()
         widget.deleteLater()
+        QW.QApplication.processEvents()
+
+
+def test_plugin_widget_displays_plugin_icon():
+    """Plugin rows show the declared plugin icon, or the generic one."""
+    with datalab_test_app_context(console=False):
+        widgets = [
+            PluginInfoWidget(
+                _make_dummy_plugin_class("Plugin", "Plugin with icon.", icon=icon),
+                enabled=True,
+                state=PluginState.ENABLED,
+            )
+            for icon in ("datalab:data/icons/analysis.svg", None)
+        ]
+        size = pluginconfig.PLUGIN_ICON_SIZE
+        declared, generic = (widget.icon_label.pixmap().toImage() for widget in widgets)
+        expected = get_icon("libre-gui-plugin.svg").pixmap(size, size).toImage()
+
+        assert not declared.isNull()
+        assert declared != expected
+        assert generic == expected
+
+        for widget in widgets:
+            widget.close()
+            widget.deleteLater()
         QW.QApplication.processEvents()
 
 

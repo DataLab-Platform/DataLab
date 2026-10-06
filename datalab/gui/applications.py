@@ -15,15 +15,21 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from datalab.config import _
+from datalab.plugin_resources import resolve_package_resource
 from datalab.plugins import PluginCapability, PluginRegistry
-from datalab.utils.qthelpers import qt_handle_error_message
+from datalab.utils.qthelpers import qt_handle_error_message, try_or_log_error
 from datalab.widgets.expandabletext import apply_subdued_color
 
 if TYPE_CHECKING:
     from datalab.plugins import PluginBase
 
 
-__all__ = ["ApplicationPage", "ApplicationsDialog", "get_application_plugins"]
+__all__ = [
+    "ApplicationPage",
+    "ApplicationsDialog",
+    "get_application_plugins",
+    "get_plugin_icon",
+]
 
 
 CATALOG_TITLE_ROLE = QC.Qt.UserRole + 1
@@ -31,12 +37,45 @@ CATALOG_DESCRIPTION_ROLE = QC.Qt.UserRole + 2
 CATALOG_VERSION_ROLE = QC.Qt.UserRole + 3
 
 
+def get_plugin_icon(icon: str | None) -> QG.QIcon:
+    """Return a plugin icon
+
+    Args:
+        icon: ``package:path`` resource (SVG or bitmap), DataLab icon file name,
+         or None
+
+    Returns:
+        Plugin icon, or the generic plugin icon if ``icon`` is None or cannot be
+         loaded
+    """
+    if icon is not None:
+        with try_or_log_error(f"Loading plugin icon {icon!r}"):
+            if ":" not in icon:
+                return get_icon(icon)
+            resource = resolve_package_resource(icon, "Plugin icon")
+            buffer = QC.QBuffer()
+            buffer.setData(resource.read_bytes())
+            reader = QG.QImageReader(buffer)
+            if icon.lower().endswith(".svg"):
+                # Render vector icons at twice their size for high-DPI screens
+                reader.setScaledSize(reader.size() * 2)
+            image = reader.read()
+            if image.isNull():
+                raise ValueError(
+                    f"Invalid plugin icon {icon!r}: {reader.errorString()}"
+                )
+            return QG.QIcon(QG.QPixmap.fromImage(image))
+    return get_icon("libre-gui-plugin.svg")
+
+
 class CatalogItemDelegate(QW.QStyledItemDelegate):
-    """Render a catalog entry with a title and a subdued description."""
+    """Render a catalog entry with an optional icon, a title and a description."""
 
     HORIZONTAL_MARGIN = 8
     VERTICAL_MARGIN = 6
     DESCRIPTION_SPACING = 2
+    ICON_SIZE = 32
+    ICON_SPACING = 8
 
     @staticmethod
     def _blend(foreground: QG.QColor, background: QG.QColor) -> QG.QColor:
@@ -142,16 +181,26 @@ class CatalogItemDelegate(QW.QStyledItemDelegate):
             width = option.widget.viewport().width()
         return max(1, width - 2 * cls.HORIZONTAL_MARGIN)
 
+    @classmethod
+    def _icon_offset(cls, index: QC.QModelIndex) -> int:
+        """Return the horizontal space taken by the item icon, if any."""
+        icon = index.data(QC.Qt.DecorationRole)
+        if isinstance(icon, QG.QIcon) and not icon.isNull():
+            return cls.ICON_SIZE + cls.ICON_SPACING
+        return 0
+
     def paint(
         self,
         painter: QG.QPainter,
         option: QW.QStyleOptionViewItem,
         index: QC.QModelIndex,
     ) -> None:
-        """Paint the native item background and the formatted catalog text."""
+        """Paint the native item background, the icon and the formatted text."""
         styled_option = QW.QStyleOptionViewItem(option)
         self.initStyleOption(styled_option, index)
         styled_option.text = ""
+        # The icon is painted next to the formatted text, not by the style
+        styled_option.icon = QG.QIcon()
         selected_without_focus = (
             styled_option.state & QW.QStyle.State_Selected
             and not styled_option.state & QW.QStyle.State_HasFocus
@@ -180,6 +229,13 @@ class CatalogItemDelegate(QW.QStyledItemDelegate):
             -self.HORIZONTAL_MARGIN,
             -self.VERTICAL_MARGIN,
         )
+        icon_offset = self._icon_offset(index)
+        if icon_offset:
+            icon_rect = QC.QRect(
+                text_rect.topLeft(), QC.QSize(self.ICON_SIZE, self.ICON_SIZE)
+            )
+            index.data(QC.Qt.DecorationRole).paint(painter, icon_rect)
+            text_rect.setLeft(text_rect.left() + icon_offset)
         document = self._document(option, index, text_rect.width())
         painter.save()
         painter.translate(text_rect.topLeft())
@@ -193,11 +249,15 @@ class CatalogItemDelegate(QW.QStyledItemDelegate):
         option: QW.QStyleOptionViewItem,
         index: QC.QModelIndex,
     ) -> QC.QSize:
-        """Return the height required by the wrapped catalog text."""
-        width = self._content_width(option)
+        """Return the height required by the icon and the wrapped catalog text."""
+        icon_offset = self._icon_offset(index)
+        width = max(1, self._content_width(option) - icon_offset)
         document = self._document(option, index, width)
-        height = ceil(document.size().height()) + 2 * self.VERTICAL_MARGIN
-        return QC.QSize(width + 2 * self.HORIZONTAL_MARGIN, height)
+        content_height = ceil(document.size().height())
+        if icon_offset:
+            content_height = max(content_height, self.ICON_SIZE)
+        height = content_height + 2 * self.VERTICAL_MARGIN
+        return QC.QSize(width + icon_offset + 2 * self.HORIZONTAL_MARGIN, height)
 
 
 def _configure_catalog_list(widget: QW.QListWidget) -> None:
@@ -240,9 +300,13 @@ class ApplicationPage(QW.QWidget):
     open_example_requested = QC.Signal(object, str)
     documentation_requested = QC.Signal(object)
 
+    HEADER_ICON_SIZE = 48
+
     def __init__(self, plugin: PluginBase, parent: QW.QWidget | None = None):
         super().__init__(parent)
         self.plugin = plugin
+        self.icon = get_plugin_icon(plugin.info.icon)
+        self.icon_label = QW.QLabel()
         self.recipe_list = QW.QListWidget()
         self.example_list = QW.QListWidget()
         self.start_button = QW.QPushButton(
@@ -295,6 +359,9 @@ class ApplicationPage(QW.QWidget):
     def _create_header(self) -> QW.QHBoxLayout:
         """Create the application title row."""
         layout = QW.QHBoxLayout()
+        size = self.HEADER_ICON_SIZE
+        self.icon_label.setPixmap(self.icon.pixmap(size, size))
+        layout.addWidget(self.icon_label)
         title = QW.QLabel(self.plugin.info.name)
         font = title.font()
         font.setBold(True)
@@ -443,11 +510,11 @@ class ApplicationsDialog(QW.QDialog):
             return
 
         for plugin in plugins:
-            item = QW.QListWidgetItem(plugin.info.name)
+            page = ApplicationPage(plugin)
+            item = QW.QListWidgetItem(page.icon, plugin.info.name)
             item.setData(QC.Qt.UserRole, plugin.plugin_id)
             _set_catalog_data(item, plugin.info.name, plugin.info.description)
             self.application_list.addItem(item)
-            page = ApplicationPage(plugin)
             page.start_requested.connect(self._start_recipe)
             page.open_example_requested.connect(self._open_example)
             page.documentation_requested.connect(self._open_documentation)
