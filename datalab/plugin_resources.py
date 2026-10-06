@@ -73,6 +73,8 @@ def resolve_package_resource(
     traversable = resources.files(package)
     for part in PurePosixPath(path).parts:
         traversable = traversable.joinpath(part)
-    if not traversable.is_file():
+    # Python 3.9's zipfile.Path.is_file() is also True for missing entries
+    missing = sys.version_info < (3, 10) and not traversable.exists()
+    if missing or not traversable.is_file():
         raise FileNotFoundError(f"{label} not found: {resource}")
     return traversable
