@@ -4551,3 +4551,9 @@ msgstr "Outils (%d)"
 
 msgid "Datasets (%d)"
 msgstr "Jeux de données (%d)"
+
+msgid "Scientific signal and image processing — version %s"
+msgstr "Traitement scientifique du signal et de l'image — version %s"
+
+msgid "Desktop edition of DataLab"
+msgstr "Édition Desktop de DataLab"
