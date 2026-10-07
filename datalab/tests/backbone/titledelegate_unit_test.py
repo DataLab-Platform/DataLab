@@ -10,20 +10,20 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from datalab.widgets.titledelegate import TITLE_UUID_ROLE, ClickableTitleDelegate
+from datalab.widgets.titledelegate import TITLE_REFERENCE_ROLE, ClickableTitleDelegate
 
 
 @pytest.mark.parametrize("with_item_uuid", [False, True])
 def test_size_hint_height_tracks_painted_wrapping(with_item_uuid: bool) -> None:
     """Increase row height when the same rich title is painted more narrowly."""
     with qt_app_context():
-        referenced_uuid = "12345678-1234-5678-1234-567812345678"
+        referenced_uuid = "12345678"
         model = QG.QStandardItemModel()
         item = QG.QStandardItem(
             f"A deliberately long computed title referencing {referenced_uuid}"
         )
         if with_item_uuid:
-            item.setData("87654321-4321-8765-4321-876543218765", TITLE_UUID_ROLE)
+            item.setData("87654321", TITLE_REFERENCE_ROLE)
         model.appendRow(item)
         parent = QW.QWidget()
         delegate = ClickableTitleDelegate(parent)

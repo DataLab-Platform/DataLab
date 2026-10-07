@@ -42,7 +42,7 @@ from datalab.adapters_metadata.table_adapter import TableAdapter
 from datalab.config import _
 from datalab.env import execenv
 from datalab.gui.processor.base import BaseProcessor, SourcePreparationTransaction
-from datalab.objectmodel import get_uuid
+from datalab.objectmodel import get_title_reference, get_uuid
 from datalab.utils.qthelpers import qt_try_except
 from datalab.widgets.replacespecialvalues import (
     ReplaceSpecialValuesSignalParamDL,
@@ -825,7 +825,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
                 metadata = {fitdlgfunc.__name__: pvalues}
             # Creating new signal
             signal = create_signal(
-                f"{name}({get_uuid(obj)})", obj.x, y, metadata=metadata
+                f"{name}({get_title_reference(obj)})", obj.x, y, metadata=metadata
             )
             # Record a replayable history action when the dialog returned
             # canonical fit parameters (third-party dialogs returning legacy
@@ -910,7 +910,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         if obj is None:
             return
         y = signal_fitting.evaluate_fit(obj.x, **fit_params)
-        title = f"{fit_name}({get_uuid(obj)})"
+        title = f"{fit_name}({get_title_reference(obj)})"
         if output_uuid is not None and self.panel.objmodel.has_uuid(output_uuid):
             # Update the recorded output in place (no duplicate on replay)
             target = self.panel.objmodel[output_uuid]

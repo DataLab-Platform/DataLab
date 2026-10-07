@@ -30,10 +30,11 @@
 
 DataLab now uses stable UUID-based object references across object trees, result titles, plot legends and HDF5 workspaces (implements [Issue #367](https://github.com/DataLab-Platform/DataLab/issues/367) and [Issue #149](https://github.com/DataLab-Platform/DataLab/issues/149)).
 
-* Object items in the signal and image trees now show their current title followed by their own stable `#UUID8` reference; group headers keep the familiar `gsNNN` and `giNNN` identifiers
+* Signal, image and group items in the trees now show their current title followed by their own stable `#UUID8` reference (`#gUUID8` for groups), replacing the former `s001`, `i001` and `gs001` identifiers
 * Source references embedded in result titles no longer change when objects are reordered, removed or renumbered, and remain clickable to select the source object
 * The new **References in result titles** setting lets you display these references either as 8-character UUIDs (default) or as the current source titles, which follow later renames
 * When a source object is deleted, its reference falls back to its 8-character UUID instead of becoming an anonymous placeholder
+* Titles of workspaces saved by previous versions keep their former `s001`-style references as plain text
 
 ### 🔄 Changes ###
 

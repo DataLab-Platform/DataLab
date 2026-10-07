@@ -15,11 +15,7 @@ from datalab.config import Conf, _
 from datalab.gui.panel.base import H5ImportBatch
 from datalab.h5.native import NativeH5Reader, NativeH5Writer
 from datalab.history import HistorySession
-from datalab.objectmodel import (
-    LEGACY_GROUP_SHORT_ID_REGEX,
-    SHORT_ID_REGEX,
-    get_uuid,
-)
+from datalab.objectmodel import get_uuid
 from datalab.utils.qthelpers import qt_try_loadsave_file, save_restore_stds
 
 if TYPE_CHECKING:
@@ -170,11 +166,6 @@ def read_imported_group(
         if isinstance(serialized_group_uuid, str) and serialized_group_uuid:
             registry.uuid_remap[panel_str][serialized_group_uuid] = new_group_uuid
             batch.reference_remap[serialized_group_uuid] = new_group_uuid
-        group_short_id = group_name.partition(":")[0]
-        if SHORT_ID_REGEX.fullmatch(
-            group_short_id
-        ) or LEGACY_GROUP_SHORT_ID_REGEX.fullmatch(group_short_id):
-            batch.reference_remap[group_short_id] = new_group_uuid
         batch.groups.append(group)
         path = f"{data_panel.H5_PREFIX}/{group_name}"
         for object_name in reader.h5.get(path, []):
@@ -184,9 +175,6 @@ def read_imported_group(
             old_uuid, new_uuid = assign_imported_uuid(obj)
             registry.uuid_remap[panel_str][old_uuid] = new_uuid
             batch.reference_remap[old_uuid] = new_uuid
-            object_short_id = object_name.partition(":")[0]
-            if SHORT_ID_REGEX.fullmatch(object_short_id):
-                batch.reference_remap[object_short_id] = new_uuid
             data_panel.add_object(obj, new_group_uuid, set_current=False)
             batch.objects.append(obj)
         data_panel.selection_changed()

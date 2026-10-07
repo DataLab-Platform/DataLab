@@ -93,17 +93,15 @@ from datalab.gui.processor.base import (
 )
 from datalab.gui.roieditor import TypeROIEditor
 from datalab.objectmodel import (
-    LEGACY_GROUP_SHORT_ID_REGEX,
-    SHORT_ID_REGEX,
     ObjectGroup,
     get_number,
     get_short_id,
     get_short_uuid,
+    get_title_reference,
     get_uuid,
     remap_title_references,
     set_number,
     set_uuid,
-    shorten_uuids_in_title,
 )
 from datalab.utils.qthelpers import (
     CallbackWorker,
@@ -1327,19 +1325,26 @@ class ObjectProp(QW.QWidget):
 
 @dataclass
 class H5ImportBatch:
-    """References and objects created by one native HDF5 import."""
+    """Objects and UUID remapping created by one native HDF5 import."""
 
     panel: BaseDataPanel
     reference_remap: dict[str, str]
     objects: list[TypeObj]
     groups: list[ObjectGroup]
 
-    def apply_reference_remap(self, reference_remap: dict[str, str]) -> None:
-        """Canonicalize title and processing references in this imported batch."""
+    def apply_reference_remap(
+        self, reference_remap: dict[str, str], title_remap: dict[str, str]
+    ) -> None:
+        """Remap title and processing references in this imported batch.
+
+        Args:
+            reference_remap: serialized UUID to imported UUID mapping
+            title_remap: serialized title reference to imported title reference
+        """
         for group in self.groups:
-            group.title = remap_title_references(group.title, reference_remap)
+            group.title = remap_title_references(group.title, title_remap)
         for obj in self.objects:
-            obj.title = remap_title_references(obj.title, reference_remap)
+            obj.title = remap_title_references(obj.title, title_remap)
             for extract_parameters in (
                 extract_processing_parameters,
                 extract_analysis_parameters,
@@ -1366,20 +1371,19 @@ class H5ImportBatch:
     def finalize_imports(
         cls, batches: list[H5ImportBatch], refresh_panels: bool = False
     ) -> None:
-        """Apply the combined signal/image reference map to imported batches."""
-        remap_values: dict[str, set[str]] = {}
+        """Apply the combined signal/image UUID remapping to imported batches."""
+        reference_remap: dict[str, str] = {}
         for batch in batches:
-            for reference, uuid in batch.reference_remap.items():
-                remap_values.setdefault(reference, set()).add(uuid)
-        shared_remap = {
-            reference: next(iter(uuids))
-            for reference, uuids in remap_values.items()
-            if len(uuids) == 1
-        }
-        for batch in batches:
-            reference_remap = shared_remap.copy()
             reference_remap.update(batch.reference_remap)
-            batch.apply_reference_remap(reference_remap)
+        group_uuids = {get_uuid(group) for batch in batches for group in batch.groups}
+        title_remap: dict[str, str] = {}
+        for old_uuid, new_uuid in reference_remap.items():
+            if old_uuid != new_uuid:
+                prefix = "g" if new_uuid in group_uuids else ""
+                old_reference = prefix + get_short_uuid(old_uuid)
+                title_remap[old_reference] = prefix + get_short_uuid(new_uuid)
+        for batch in batches:
+            batch.apply_reference_remap(reference_remap, title_remap)
         if refresh_panels:
             for batch in batches:
                 batch.panel.refresh_after_reference_remap()
@@ -1535,9 +1539,7 @@ class SaveToDirectoryGUIParam(gds.DataSet, title=_("Save to directory")):
         super().__init__()
         self.__objs = objs or []
         self.__extensions = extensions or []
-        self.__labels = labels or [
-            shorten_uuids_in_title(obj.title) for obj in self.__objs
-        ]
+        self.__labels = labels or [obj.title for obj in self.__objs]
 
     def on_button_click(
         self: SaveToDirectoryGUIParam,
@@ -1864,7 +1866,7 @@ class AddMetadataParam(
             values = self.build_values()
             preview_lines = []
             for obj, value in zip(self.__objs, values):
-                label = shorten_uuids_in_title(obj.title)
+                label = obj.title
                 if value is None:
                     preview_lines.append(f"{label}: " + _("unchanged"))
                 else:
@@ -2076,11 +2078,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     group = self.add_group(group_title, group_uuid=group_uuid)
                     if serialized_group_uuid:
                         batch.reference_remap[serialized_group_uuid] = get_uuid(group)
-                    group_short_id = name.partition(":")[0]
-                    if SHORT_ID_REGEX.fullmatch(
-                        group_short_id
-                    ) or LEGACY_GROUP_SHORT_ID_REGEX.fullmatch(group_short_id):
-                        batch.reference_remap[group_short_id] = get_uuid(group)
                     batch.groups.append(group)
                     for obj_name in reader.h5.get(f"{self.H5_PREFIX}/{name}", []):
                         obj = self.deserialize_object_from_hdf5(
@@ -2099,9 +2096,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                             set_uuid(obj)
                         if serialized_obj_uuid is not None:
                             batch.reference_remap[serialized_obj_uuid] = get_uuid(obj)
-                        obj_short_id = obj_name.partition(":")[0]
-                        if SHORT_ID_REGEX.fullmatch(obj_short_id):
-                            batch.reference_remap[obj_short_id] = get_uuid(obj)
                         self.add_object(obj, get_uuid(group), set_current=False)
                         batch.objects.append(obj)
                     self.selection_changed()
@@ -3116,10 +3110,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 labels = []
                 for obj in objs:
                     group = self.objmodel.get_group_from_object(obj)
-                    labels.append(
-                        f"[{shorten_uuids_in_title(group.title)}] "
-                        f"{shorten_uuids_in_title(obj.title)}"
-                    )
+                    labels.append(f"[{group.title}] {obj.title}")
                 guiparam = SaveToDirectoryGUIParam(objs, extensions, labels)
                 # Restore settings from config
                 saved_param = Conf.save_to_directory_settings.get(
@@ -4156,17 +4147,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     )
                 return
             obj = objs[0]
-            # Build a string with source object UUIDs (max 3, then use "...")
+            # Build a string with source object references (max 3, then use "...")
             max_ids_to_show = 3
-            source_uuids = [get_uuid(obj) for obj in objs]
-            if len(source_uuids) <= max_ids_to_show:
-                source_ids = ", ".join(source_uuids)
+            source_refs = [get_title_reference(obj) for obj in objs]
+            if len(source_refs) <= max_ids_to_show:
+                source_ids = ", ".join(source_refs)
             else:
-                # Show first 2, "...", then the last UUID.
+                # Show first 2, "...", then the last reference.
                 source_ids = (
-                    ", ".join(source_uuids[: max_ids_to_show - 1])
+                    ", ".join(source_refs[: max_ids_to_show - 1])
                     + ", ..., "
-                    + source_uuids[-1]
+                    + source_refs[-1]
                 )
             for i_roi in all_roi_indexes[0]:
                 roi_suffix = f"|ROI{int(i_roi + 1)}" if i_roi >= 0 else ""
@@ -4205,8 +4196,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         else:
                             x = roi_data[param.xaxis].values
                         y = roi_data[param.yaxis].values
-                        source_uuid = get_uuid(objs[index])
-                        stitle = f"{title} ({source_uuid}){roi_suffix}"
+                        source_ref = get_title_reference(objs[index])
+                        stitle = f"{title} ({source_ref}){roi_suffix}"
                         self.__add_result_signal(
                             x, y, stitle, param.xaxis, param.yaxis, result_group_id
                         )

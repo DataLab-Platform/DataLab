@@ -26,6 +26,7 @@ from unittest.mock import Mock
 
 import h5py
 import pytest
+import sigima.proc.signal as sips
 from guidata.io import JSONWriter
 from numpy import ma
 from plotpy.builder import make
@@ -42,32 +43,36 @@ from datalab.adapters_metadata.table_adapter import TableAdapter
 from datalab.gui.h5io import H5InputOutput
 from datalab.gui.newobject import extract_creation_parameters
 from datalab.gui.panel.base import H5ImportBatch
+from datalab.objectmodel import get_title_reference, get_uuid
 from datalab.tests import datalab_test_app_context, helpers
 
 
-def test_finalize_imports_keeps_colliding_legacy_references_panel_local() -> None:
-    """Resolve legacy gNNN collisions in their owning panel batch."""
-    signal_group = SimpleNamespace(title="derivative(g001)")
-    image_group = SimpleNamespace(title="normalize(g001)")
-    cross_panel_group = SimpleNamespace(title="profile(i001)")
-    signal_batch = H5ImportBatch(
-        SimpleNamespace(),
-        {"g001": "signal-group-uuid"},
-        [],
-        [signal_group, cross_panel_group],
-    )
-    image_batch = H5ImportBatch(
-        SimpleNamespace(),
-        {"g001": "image-group-uuid", "i001": "image-object-uuid"},
-        [],
-        [image_group],
-    )
+def test_h5_append_twice_remaps_title_references() -> None:
+    """Appending a workspace twice keeps each copy's title references local."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        with datalab_test_app_context(console=False) as win:
+            panel = win.signalpanel
+            src = create_paracetamol_signal()
+            src.title = "Run s001 20260107"
+            panel.add_object(src)
+            panel.processor.run_feature(sips.derivative)
+            panel.objview.select_groups([get_uuid(panel.objmodel.get_groups()[0])])
+            panel.processor.run_feature(sips.derivative)
+            fname = osp.join(tmpdir, "references.h5")
+            win.save_h5_workspace(fname)
 
-    H5ImportBatch.finalize_imports([signal_batch, image_batch])
+            for _index in range(2):
+                win.load_h5_workspace([fname], reset_all=False)
 
-    assert signal_group.title == "derivative(signal-group-uuid)"
-    assert image_group.title == "normalize(image-group-uuid)"
-    assert cross_panel_group.title == "profile(image-object-uuid)"
+            groups = panel.objmodel.get_groups()
+            assert len(groups) == 6
+            for src_group, result_group in (groups[2:4], groups[4:6]):
+                source, derived = src_group.get_objects()
+                assert source.title == "Run s001 20260107"
+                assert derived.title == f"derivative({get_title_reference(source)})"
+                assert result_group.title.endswith(
+                    f"({get_title_reference(src_group)})"
+                )
 
 
 def test_open_file_headless_refreshes_reference_displays(monkeypatch) -> None:

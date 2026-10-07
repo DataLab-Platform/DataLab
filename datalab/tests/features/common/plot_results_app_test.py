@@ -24,7 +24,7 @@ from sigima.tests import data as test_data
 
 from datalab.config import _
 from datalab.env import execenv
-from datalab.objectmodel import get_uuid
+from datalab.objectmodel import get_title_reference, get_uuid
 from datalab.tests import datalab_test_app_context
 
 
@@ -183,7 +183,7 @@ def test_plot_results_with_group_selection():
             assert len(sel_groups) == 1, (
                 f"Expected 1 selected group, got {len(sel_groups)}"
             )
-            source_uuids = ", ".join(get_uuid(obj) for obj in sel_groups[0])
+            source_uuids = ", ".join(get_title_reference(obj) for obj in sel_groups[0])
             expected_source_uuids = f"({source_uuids})"
 
             # Plot results - this should create or reuse a "Results" group
@@ -211,7 +211,7 @@ def test_plot_results_with_group_selection():
             # Verify that the result title includes the selected source object UUIDs
             result_signal = list(result_group)[0]
             assert expected_source_uuids in result_signal.title, (
-                "Result signal title should include the full UUIDs of the selected "
+                "Result signal title should include the references of the selected "
                 f"source objects {expected_source_uuids}, "
                 f"got '{result_signal.title}'"
             )

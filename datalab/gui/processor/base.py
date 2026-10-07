@@ -52,7 +52,7 @@ from datalab.adapters_metadata import (
 from datalab.config import Conf, _
 from datalab.gui.processor.catcher import CompOut, wng_err_func
 from datalab.history.effects import capture_effects
-from datalab.objectmodel import get_uuid, patch_title_with_ids
+from datalab.objectmodel import get_title_reference, get_uuid, patch_title_with_ids
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
 
 if TYPE_CHECKING:
@@ -1799,7 +1799,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             # Create a new group for each selected group
                             old_g = self.panel.objmodel.get_group(old_gid)
                             new_gid = self._create_group_for_result(
-                                new_obj, f"{name}({get_uuid(old_g)})"
+                                new_obj, f"{name}({get_title_reference(old_g)})"
                             )
                             new_gids[old_gid] = new_gid
                     self._add_object_to_appropriate_panel(
@@ -2283,9 +2283,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 )
                 if not valid:
                     return
-                dst_gname = (
-                    f"{name}({','.join(get_uuid(grp) for grp in src_grps)})|pairwise"
-                )
+                src_refs = ",".join(get_title_reference(grp) for grp in src_grps)
+                dst_gname = f"{name}({src_refs})|pairwise"
                 group_exclusive = len(self.panel.objview.get_sel_groups()) != 0
                 if not group_exclusive:
                     # This is not a group exclusive selection
@@ -2382,7 +2381,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if grps:
                     # (Group exclusive selection)
                     # At least one group is selected: create a new group
-                    dst_gname = f"{name}({','.join([get_uuid(grp) for grp in grps])})"
+                    grp_refs = ",".join(get_title_reference(grp) for grp in grps)
+                    dst_gname = f"{name}({grp_refs})"
                     # Delay group creation until after first result
                     dst_gid = None
                     dst_group_name = dst_gname  # Store name for later use
@@ -2617,8 +2617,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         if group_exclusive:
                             # This is a group exclusive selection
                             src_grp = objmodel.get_group(src_gid)
-                            group_uuids = [get_uuid(grp) for grp in (src_grp, grp2)]
-                            dst_gname = f"{name}({','.join(group_uuids)})|pairwise"
+                            group_refs = [
+                                get_title_reference(grp) for grp in (src_grp, grp2)
+                            ]
+                            dst_gname = f"{name}({','.join(group_refs)})|pairwise"
                         else:
                             dst_gname = f"{name}[...]"
                         # Delay group creation until after first result

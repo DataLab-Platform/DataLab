@@ -69,8 +69,8 @@ msgstr "**Références aux objets dans les titres :**"
 msgid "DataLab now uses stable UUID-based object references across object trees, result titles, plot legends and HDF5 workspaces (implements [Issue #367](https://github.com/DataLab-Platform/DataLab/issues/367) and [Issue #149](https://github.com/DataLab-Platform/DataLab/issues/149))."
 msgstr "DataLab utilise désormais des références aux objets stables, fondées sur les UUID, dans les arborescences d'objets, les titres de résultats, les légendes des graphiques et les espaces de travail HDF5 (implémente [Issue #367](https://github.com/DataLab-Platform/DataLab/issues/367) et [Issue #149](https://github.com/DataLab-Platform/DataLab/issues/149))."
 
-msgid "Object items in the signal and image trees now show their current title followed by their own stable `#UUID8` reference; group headers keep the familiar `gsNNN` and `giNNN` identifiers"
-msgstr "Les objets des arborescences signal et image affichent désormais leur titre courant suivi de leur propre référence stable `#UUID8` ; les en-têtes de groupe conservent les identifiants habituels `gsNNN` et `giNNN`"
+msgid "Signal, image and group items in the trees now show their current title followed by their own stable `#UUID8` reference (`#gUUID8` for groups), replacing the former `s001`, `i001` and `gs001` identifiers"
+msgstr "Les signaux, images et groupes des arborescences affichent désormais leur titre courant suivi de leur propre référence stable `#UUID8` (`#gUUID8` pour les groupes), à la place des anciens identifiants `s001`, `i001` et `gs001`"
 
 msgid "Source references embedded in result titles no longer change when objects are reordered, removed or renumbered, and remain clickable to select the source object"
 msgstr "Les références aux sources intégrées dans les titres de résultats ne changent plus lorsque des objets sont réordonnés, supprimés ou renumérotés, et restent cliquables pour sélectionner l'objet source"
@@ -80,6 +80,9 @@ msgstr "Le nouveau paramètre **Références dans les titres de résultats** per
 
 msgid "When a source object is deleted, its reference falls back to its 8-character UUID instead of becoming an anonymous placeholder"
 msgstr "Lorsqu'un objet source est supprimé, sa référence est affichée sous la forme de son UUID à 8 caractères au lieu de devenir un espace réservé anonyme"
+
+msgid "Titles of workspaces saved by previous versions keep their former `s001`-style references as plain text"
+msgstr "Les titres des espaces de travail enregistrés par les versions précédentes conservent leurs anciennes références de type `s001` sous forme de texte simple"
 
 msgid "🔄 Changes"
 msgstr "🔄 Changements"

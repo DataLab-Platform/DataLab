@@ -18,7 +18,6 @@ from sigima.proc.image import generate_image_grid_roi
 
 from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import _
-from datalab.objectmodel import shorten_uuids_in_title
 from datalab.utils.qthelpers import block_signals
 
 
@@ -80,7 +79,7 @@ class ImageGridROIEditor(PlotDialog):
         self.rendered_title = (
             mainwindow.render_object_title(obj.title)
             if mainwindow is not None
-            else shorten_uuids_in_title(obj.title)
+            else obj.title
         )
         gridparam = gridparam or ROIGridParam()
         displayparam = displayparam or DisplayParam()

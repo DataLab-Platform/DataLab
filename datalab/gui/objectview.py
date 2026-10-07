@@ -48,15 +48,15 @@ from sigima.objects import ImageObj, SignalObj
 from datalab.config import Conf, _
 from datalab.objectmodel import (
     ObjectGroup,
-    find_short_ids_in_title,
-    find_uuids_in_title,
-    get_short_id,
-    get_short_uuid,
+    find_title_references,
+    get_title_reference,
     get_uuid,
-    shorten_uuids_in_title,
 )
 from datalab.utils.qthelpers import block_signals
-from datalab.widgets.titledelegate import TITLE_UUID_ROLE, ClickableTitleDelegate
+from datalab.widgets.titledelegate import (
+    TITLE_REFERENCE_ROLE,
+    ClickableTitleDelegate,
+)
 
 if TYPE_CHECKING:
     from typing import Any
@@ -107,7 +107,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         self.header().setSectionResizeMode(QW.QHeaderView.Interactive)
         self.itemChanged.connect(lambda item: self.resizeColumnToContents(0))
         self.title_delegate = ClickableTitleDelegate(
-            self, self.get_uuid_reference_display
+            self, self.get_title_reference_display
         )
         self.setItemDelegateForColumn(0, self.title_delegate)
         self.viewport().setMouseTracking(True)
@@ -224,40 +224,26 @@ class SimpleObjectTree(QW.QTreeWidget):
         an empty ``panel_str``. Subclasses with access to several panels
         should override this method.
         """
-        try:
-            obj = self.objmodel.get_object_or_group(reference)
-        except KeyError:
-            obj = self.objmodel.find_by_short_id(reference)
-        if obj is None:
-            return None
-        return ("", obj)
+        matches = self.objmodel.find_by_title_reference(reference)
+        return ("", matches[0]) if len(matches) == 1 else None
 
-    def get_uuid_reference_display(self, uuid: str) -> str | None:
-        """Return the configured display text for an UUID reference."""
-        resolved = self.resolve_title_reference(uuid)
+    def get_title_reference_display(self, reference: str) -> str | None:
+        """Return the configured display text for a resolvable title reference."""
+        resolved = self.resolve_title_reference(reference)
         if resolved is None:
             return None
         _panel_str, obj = resolved
         if Conf.result_title_mode.get() == "title":
-            return shorten_uuids_in_title(obj.title)
-        return get_short_uuid(uuid)
+            return obj.title
+        return reference
 
     def build_title_reference_tooltip(self, text: str) -> str:
         """Return an HTML tooltip fragment listing the source objects
         referenced in ``text``, or an empty string when no such reference is
         found."""
-        short_id_matches = find_short_ids_in_title(text)
-        matches = short_id_matches.copy()
-        matches.extend(find_uuids_in_title(text))
-        matches.sort(key=lambda match: match[0])
         rows: list[str] = []
         seen: set[str] = set()
-        for start, _end, reference in matches:
-            if start == 0 and any(
-                reference == short_id for _start, _end, short_id in short_id_matches
-            ):
-                # Skip the leading "<short_id>:" prefix
-                continue
+        for _start, _end, reference in find_title_references(text):
             if reference in seen:
                 continue
             seen.add(reference)
@@ -273,11 +259,8 @@ class SimpleObjectTree(QW.QTreeWidget):
                 else _("image")
             )
             suffix = f" &middot; {panel_str}" if panel_str else ""
-            display_reference = self.get_uuid_reference_display(
-                reference
-            ) or shorten_uuids_in_title(reference)
             rows.append(
-                f"<b>{display_reference}</b> &rarr; {obj.title} <i>({kind}{suffix})</i>"
+                f"<b>{reference}</b> &rarr; {obj.title} <i>({kind}{suffix})</i>"
             )
         if not rows:
             return ""
@@ -291,11 +274,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         self, item: QW.QTreeWidgetItem, obj: SignalObj | ImageObj | ObjectGroup
     ) -> None:
         """Update item"""
-        if isinstance(obj, ObjectGroup):
-            text = f"{get_short_id(obj)}: {obj.title}"
-            item.setData(0, TITLE_UUID_ROLE, None)
-        else:
-            text = obj.title
+        text = obj.title
         item.setText(0, text)
         tooltip_parts: list[str] = []
         reference_tooltip = self.build_title_reference_tooltip(text)
@@ -306,10 +285,8 @@ class SimpleObjectTree(QW.QTreeWidget):
             if meta_tooltip:
                 tooltip_parts.append(meta_tooltip)
         item.setToolTip(0, "".join(tooltip_parts))
-        uuid = get_uuid(obj)
-        item.setData(0, QC.Qt.UserRole, uuid)
-        if not isinstance(obj, ObjectGroup):
-            item.setData(0, TITLE_UUID_ROLE, uuid)
+        item.setData(0, QC.Qt.UserRole, get_uuid(obj))
+        item.setData(0, TITLE_REFERENCE_ROLE, get_title_reference(obj))
 
     def handle_title_reference_click(self, reference: str) -> None:
         """Handle a click on a title-reference hyperlink. Default implementation
@@ -537,28 +514,9 @@ class ObjectView(SimpleObjectTree):
         """
         panel: BaseDataPanel = self.parent()
         mainwindow = getattr(panel, "mainwindow", None)
-        candidates: list[tuple[str, ObjectModel]] = []
-        if mainwindow is not None:
-            sigpanel = getattr(mainwindow, "signalpanel", None)
-            if sigpanel is not None:
-                candidates.append(("signal", sigpanel.objmodel))
-            imgpanel = getattr(mainwindow, "imagepanel", None)
-            if imgpanel is not None:
-                candidates.append(("image", imgpanel.objmodel))
-        else:
-            candidates.append((panel.PANEL_STR_ID, self.objmodel))
-        # Prefer the panel that owns this view (so a self-reference resolves
-        # locally), then fall back to the other panel.
-        own = panel.PANEL_STR_ID
-        candidates.sort(key=lambda c: 0 if c[0] == own else 1)
-        for panel_str, model in candidates:
-            try:
-                obj = model.get_object_or_group(reference)
-            except KeyError:
-                obj = model.find_by_short_id(reference)
-            if obj is not None:
-                return (panel_str, obj)
-        return None
+        if mainwindow is None:
+            return super().resolve_title_reference(reference)
+        return mainwindow.resolve_title_reference(reference)
 
     def handle_title_reference_click(self, reference: str) -> None:
         """Select the referenced object, switching active panel if needed."""

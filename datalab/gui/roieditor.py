@@ -68,7 +68,6 @@ from datalab.adapters_plotpy import (
 )
 from datalab.config import Conf, _
 from datalab.env import execenv
-from datalab.objectmodel import shorten_uuids_in_title
 
 if TYPE_CHECKING:
     from plotpy.plot import BasePlot
@@ -275,7 +274,7 @@ class BaseROIEditor(
         rendered_title = (
             mainwindow.render_object_title(obj.title)
             if mainwindow is not None
-            else shorten_uuids_in_title(obj.title)
+            else obj.title
         )
         if item is None:
             item = create_adapter_from_object(obj).make_item()

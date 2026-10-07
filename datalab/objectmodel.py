@@ -96,6 +96,8 @@ UUID_DISPLAY_LENGTH = 8
 UUID_REGEX = re.compile(
     r"\b[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\b", re.IGNORECASE
 )
+#: Title references: ``1a2b3c4d`` for objects, ``g1a2b3c4d`` for groups
+TITLE_REFERENCE_REGEX = re.compile(r"\bg?[0-9a-f]{8}\b")
 
 
 def get_short_uuid(obj_or_uuid: SignalObj | ImageObj | ObjectGroup | str) -> str:
@@ -104,60 +106,54 @@ def get_short_uuid(obj_or_uuid: SignalObj | ImageObj | ObjectGroup | str) -> str
     return uuid[:UUID_DISPLAY_LENGTH]
 
 
+def get_title_reference(obj: SignalObj | ImageObj | ObjectGroup) -> str:
+    """Return the reference embedded in titles: ``<UUID8>`` or ``g<UUID8>``."""
+    prefix = "g" if isinstance(obj, ObjectGroup) else ""
+    return f"{prefix}{get_short_uuid(obj)}"
+
+
 def get_uuid_display_id(obj: SignalObj | ImageObj | ObjectGroup) -> str:
-    """Return an object's own display identity in ``#<UUID8>`` form."""
-    return f"#{get_short_uuid(obj)}"
+    """Return an object's own display identity in ``#<reference>`` form."""
+    return f"#{get_title_reference(obj)}"
 
 
-def find_uuids_in_title(title: str) -> list[tuple[int, int, str]]:
-    """Return UUID references found in a canonical object title.
+def find_title_references(title: str) -> list[tuple[int, int, str]]:
+    """Return object and group references found in a title.
 
     Args:
         title: Title string to scan
 
     Returns:
-        List of ``(start, end, uuid)`` tuples sorted by ``start``.
+        List of ``(start, end, reference)`` tuples sorted by ``start``.
     """
     return [
         (match.start(), match.end(), match.group(0))
-        for match in UUID_REGEX.finditer(title)
+        for match in TITLE_REFERENCE_REGEX.finditer(title)
     ]
 
 
-def render_title(
-    title: str, uuid_title_resolver: Callable[[str], str | None] | None = None
-) -> str:
-    """Render UUID references as prefixes or resolved source titles.
+def render_title(title: str, resolver: Callable[[str], str | None]) -> str:
+    """Replace the title references that ``resolver`` resolves.
 
     Args:
-        title: Canonical title containing full UUID references
-        uuid_title_resolver: Optional callback returning a source title for a UUID
+        title: Title containing object and group references
+        resolver: Callback returning a replacement for a reference, or None
 
     Returns:
-        Display title containing source titles or shortened UUID references.
+        Title with resolved references replaced, others left unchanged.
     """
-    for start, end, uuid in reversed(find_uuids_in_title(title)):
-        replacement = None
-        if uuid_title_resolver is not None:
-            replacement = uuid_title_resolver(uuid)
+    for start, end, reference in reversed(find_title_references(title)):
+        replacement = resolver(reference)
         if replacement:
-            replacement = shorten_uuids_in_title(replacement)
-        else:
-            replacement = get_short_uuid(uuid)
-        title = title[:start] + replacement + title[end:]
+            title = title[:start] + replacement + title[end:]
     return title
-
-
-def shorten_uuids_in_title(title: str) -> str:
-    """Render canonical UUID references as eight-character prefixes."""
-    return render_title(title)
 
 
 def patch_title_with_ids(
     dst_obj: SignalObj | ImageObj,
     src_objs: list[SignalObj] | list[ImageObj],
 ) -> None:
-    """Patch an object title with canonical source UUIDs.
+    """Patch an object title with source references.
 
     Destination object's title has been set to a string containing placeholders
     (e.g. "integral({0})"), by `sigima` computation function using a generic mecanism
@@ -167,7 +163,7 @@ def patch_title_with_ids(
         dst_obj: destination object
         src_objs: list of source objects
     """
-    ids = [get_uuid(obj) for obj in src_objs]
+    ids = [get_title_reference(obj) for obj in src_objs]
     title = dst_obj.title
     assert isinstance(title, str), "Title must be a string"
     try:
@@ -178,53 +174,9 @@ def patch_title_with_ids(
         ) from exc
 
 
-#: Regex matching short IDs as embedded in computation titles
-#: (e.g. ``s001``, ``i012``, ``gs003``, ``gi007``).
-SHORT_ID_REGEX = re.compile(r"\b(g?[si])(\d{3})\b")
-LEGACY_GROUP_SHORT_ID_REGEX = re.compile(r"\bg\d{3}\b")
-
-
-def find_short_ids_in_title(title: str) -> list[tuple[int, int, str]]:
-    """Return a list of ``(start, end, short_id)`` tuples for every short ID
-    occurrence found in ``title``.
-
-    Args:
-        title: title string to scan
-
-    Returns:
-        List of ``(start, end, short_id)`` tuples, sorted by ``start``.
-    """
-    return [(m.start(), m.end(), m.group(0)) for m in SHORT_ID_REGEX.finditer(title)]
-
-
-def find_legacy_group_short_ids_in_title(
-    title: str,
-) -> list[tuple[int, int, str]]:
-    """Return legacy ``gNNN`` group references found in a title."""
-    return [
-        (match.start(), match.end(), match.group(0))
-        for match in LEGACY_GROUP_SHORT_ID_REGEX.finditer(title)
-    ]
-
-
 def remap_title_references(title: str, reference_remap: dict[str, str]) -> str:
-    """Replace known UUID and legacy short-ID references in a title.
-
-    Args:
-        title: Canonical or legacy title to update
-        reference_remap: Mapping from serialized references to canonical UUIDs
-
-    Returns:
-        Title with every known reference replaced by its canonical UUID.
-    """
-    matches = find_short_ids_in_title(title)
-    matches.extend(find_legacy_group_short_ids_in_title(title))
-    matches.extend(find_uuids_in_title(title))
-    for start, end, reference in sorted(matches, reverse=True):
-        replacement = reference_remap.get(reference)
-        if replacement is not None:
-            title = title[:start] + replacement + title[end:]
-    return title
+    """Replace the title references listed in ``reference_remap``."""
+    return render_title(title, reference_remap.get)
 
 
 class ObjectGroup:
@@ -414,27 +366,19 @@ class ObjectModel:
                 return group
         raise KeyError(f"Object or group with uuid {uuid} not found")
 
-    def find_by_short_id(
-        self, short_id: str
-    ) -> SignalObj | ImageObj | ObjectGroup | None:
-        """Return the object or group whose short ID matches ``short_id``,
-        or ``None`` if no match is found in this model.
+    def find_by_title_reference(
+        self, reference: str
+    ) -> list[SignalObj | ImageObj | ObjectGroup]:
+        """Return the objects or groups matching a title reference.
 
         Args:
-            short_id: short ID to look up (e.g. ``"s001"``, ``"i012"``,
-             ``"gs003"`` or ``"gi007"``).
+            reference: ``<UUID8>`` (object) or ``g<UUID8>`` (group) reference
 
         Returns:
-            The matching :class:`sigima.SignalObj`, :class:`sigima.ImageObj`
-            or :class:`ObjectGroup` instance, or ``None``.
+            Matching objects or groups (more than one only on prefix collision).
         """
-        for group in self._groups:
-            if get_short_id(group) == short_id:
-                return group
-        for obj in self._objects.values():
-            if get_short_id(obj) == short_id:
-                return obj
-        return None
+        items = self._groups if reference.startswith("g") else self._objects.values()
+        return [item for item in items if get_title_reference(item) == reference]
 
     def get_group(self, uuid: str) -> ObjectGroup:
         """Return group with uuid"""
@@ -499,7 +443,7 @@ class ObjectModel:
         if not matches:
             raise KeyError(f"Group with title '{title}' not found")
         if len(matches) > 1:
-            match_ids = ", ".join(get_short_id(group) for group in matches)
+            match_ids = ", ".join(get_uuid_display_id(group) for group in matches)
             raise ValueError(
                 f"Group title '{title}' is ambiguous; matches: {match_ids}"
             )

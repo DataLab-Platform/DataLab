@@ -121,10 +121,10 @@ The Processing settings tab controls computation behavior and default parameters
     - **Source title**: use the source objects' live current titles, so references
       follow later renames.
 
-    This setting changes only the displayed reference. Each object's canonical
-    identity remains its full UUID. Object items in the signal and image trees always
-    show their own ``#UUID8`` reference, while group headers keep the ``gsNNN`` and
-    ``giNNN`` identifiers.
+    This setting changes only the displayed reference. Result titles store
+    8-character references (``g``-prefixed for groups), while each object's identity
+    remains its full UUID. Signal, image and group items in the trees show their own
+    ``#UUID8`` (or ``#gUUID8``) reference below their title.
 
 **Use signal bounds for new signals**
     When enabled, the xmin and xmax values for new signals are initialized from

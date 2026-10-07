@@ -336,17 +336,35 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     continue
         return None
 
+    def resolve_title_reference(
+        self, reference: str
+    ) -> tuple[str, SignalObj | ImageObj | ObjectGroup] | None:
+        """Resolve a title reference to ``(panel_str, object or group)``.
+
+        Args:
+            reference: ``<UUID8>`` (object) or ``g<UUID8>`` (group) reference
+
+        Returns:
+            The unique match across signal and image panels, or None if the
+            reference matches nothing or is ambiguous.
+        """
+        matches = [
+            (panel.PANEL_STR_ID, obj)
+            for panel in (self.signalpanel, self.imagepanel)
+            for obj in panel.objmodel.find_by_title_reference(reference)
+        ]
+        return matches[0] if len(matches) == 1 else None
+
     def render_object_title(self, title: str) -> str:
-        """Render a canonical object title according to user settings."""
+        """Render an object title according to user settings."""
+        if Conf.result_title_mode.get() != "title":
+            return title
 
-        def resolve_uuid_title(uuid: str) -> str | None:
-            obj = self.find_object_by_uuid(uuid)
-            return None if obj is None else obj.title
+        def resolve_source_title(reference: str) -> str | None:
+            resolved = self.resolve_title_reference(reference)
+            return None if resolved is None else resolved[1].title
 
-        resolver = (
-            resolve_uuid_title if Conf.result_title_mode.get() == "title" else None
-        )
-        return render_title(title, resolver)
+        return render_title(title, resolve_source_title)
 
     def refresh_object_title_displays(self) -> None:
         """Refresh object titles in trees and existing plot items."""

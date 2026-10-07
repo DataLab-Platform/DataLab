@@ -6,7 +6,8 @@ Title delegate
 
 The :mod:`datalab.widgets.titledelegate` module provides a
 :class:`QStyledItemDelegate` that renders object tree titles as rich text and
-turns embedded short IDs (e.g. ``s001``, ``i012``) into clickable hyperlinks.
+turns embedded object references (e.g. ``1a2b3c4d``, ``g1a2b3c4d``) into
+clickable hyperlinks.
 
 .. autoclass:: ClickableTitleDelegate
 """
@@ -24,69 +25,46 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from datalab.objectmodel import (
-    UUID_DISPLAY_LENGTH,
-    find_short_ids_in_title,
-    find_uuids_in_title,
-)
+from datalab.objectmodel import find_title_references
 
 if TYPE_CHECKING:
     pass
 
 
 #: URL scheme used in anchors emitted by :class:`ClickableTitleDelegate`.
-SHORT_ID_URL_SCHEME = "dlb-shortid"
-UUID_URL_SCHEME = "dlb-uuid"
-TITLE_UUID_ROLE = QC.Qt.UserRole + 1
+REFERENCE_URL_SCHEME = "dlb-ref"
+#: Item data role holding the item's own title reference (``<UUID8>``/``g<UUID8>``)
+TITLE_REFERENCE_ROLE = QC.Qt.UserRole + 1
 TITLE_META_FONT_SIZE = "90%"
 TITLE_ROW_VERTICAL_PADDING = 2
 
 
 def _build_html(
-    text: str, uuid_title_resolver: Callable[[str], str | None] | None = None
+    text: str, reference_resolver: Callable[[str], str | None] | None = None
 ) -> str:
     """Build the HTML representation of ``text`` with references as anchors.
 
-    The first short ID occurrence is always rendered as plain text: object
-    titles in DataLab tree views are formatted as ``"<short_id>: <title>"`` and
-    making the leading ``s001`` clickable would just re-select the current
-    item.
+    Only references resolved by ``reference_resolver`` become links; the others
+    are kept as plain text.
 
     Args:
-        text: raw item text (e.g. ``"s003: average(s001, s002)"``).
+        text: raw item text (e.g. ``"1a2b3c4d-5e6f7a8b"``).
+        reference_resolver: callback returning the display text of a reference,
+         or None when the reference cannot be resolved.
 
     Returns:
         HTML string.
     """
-    matches: list[tuple[int, int, str, str | None, str]] = [
-        (*match, SHORT_ID_URL_SCHEME, match[2])
-        for match in find_short_ids_in_title(text)
-    ]
-    for match in find_uuids_in_title(text):
-        uuid = match[2]
-        display_reference = uuid[:UUID_DISPLAY_LENGTH]
-        resolved_display = (
-            uuid_title_resolver(uuid)
-            if uuid_title_resolver is not None
-            else display_reference
-        )
-        if resolved_display is not None:
-            display_reference = resolved_display
-        scheme = UUID_URL_SCHEME if resolved_display is not None else None
-        matches.append((*match, scheme, display_reference))
-    matches.sort(key=lambda match: match[0])
-    if not matches:
-        return escape(text)
     out: list[str] = []
     cursor = 0
-    for start, end, reference, scheme, display_reference in matches:
+    for start, end, reference in find_title_references(text):
         out.append(escape(text[cursor:start]))
-        if scheme is None or (scheme == SHORT_ID_URL_SCHEME and start == 0):
-            # Leading "s001:" — keep as plain text
-            out.append(escape(display_reference))
+        display = None if reference_resolver is None else reference_resolver(reference)
+        if display is None:
+            out.append(escape(reference))
         else:
             out.append(
-                f'<a href="{scheme}:{reference}">{escape(display_reference)}</a>'
+                f'<a href="{REFERENCE_URL_SCHEME}:{reference}">{escape(display)}</a>'
             )
         cursor = end
     out.append(escape(text[cursor:]))
@@ -98,8 +76,8 @@ def _make_text_document(
     option: QW.QStyleOptionViewItem,
     link_color: QG.QColor,
     text_color: QG.QColor | None = None,
-    uuid_title_resolver: Callable[[str], str | None] | None = None,
-    item_uuid: str | None = None,
+    reference_resolver: Callable[[str], str | None] | None = None,
+    item_reference: str | None = None,
     meta_color: QG.QColor | None = None,
 ) -> QG.QTextDocument:
     """Return a :class:`QTextDocument` rendering ``text`` with the styling
@@ -123,10 +101,9 @@ def _make_text_document(
             "}"
         )
     doc.setDefaultStyleSheet(" ".join(css_parts))
-    title_html = _build_html(text, uuid_title_resolver)
-    if item_uuid:
-        short_uuid = escape(item_uuid[:UUID_DISPLAY_LENGTH])
-        own_id_html = f'<span class="title-meta">#{short_uuid}</span>'
+    title_html = _build_html(text, reference_resolver)
+    if item_reference:
+        own_id_html = f'<span class="title-meta">#{escape(item_reference)}</span>'
         title_html = f"{title_html}<br>{own_id_html}" if title_html else own_id_html
     doc.setHtml(title_html)
     return doc
@@ -136,8 +113,8 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
     """Item delegate that renders object titles with clickable references.
 
     The delegate uses a :class:`QTextDocument` to render an HTML version of the
-    item's display text in which each embedded short ID — apart from the
-    leading one — is wrapped in an anchor pointing at ``dlb-shortid:<id>``.
+    item's display text in which each resolvable object or group reference is
+    wrapped in an anchor pointing at ``dlb-ref:<reference>``.
 
     Hit-testing is performed by :meth:`anchor_at`, which is meant to be called
     from the host view's ``mousePressEvent`` / ``mouseMoveEvent``.
@@ -146,10 +123,10 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
     def __init__(
         self,
         parent: QW.QWidget,
-        uuid_title_resolver: Callable[[str], str | None] | None = None,
+        reference_resolver: Callable[[str], str | None] | None = None,
     ) -> None:
         super().__init__(parent)
-        self.uuid_title_resolver = uuid_title_resolver
+        self.reference_resolver = reference_resolver
 
     # pylint: disable=invalid-name
     def paint(
@@ -160,12 +137,9 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
     ) -> None:
         """Reimplement Qt method to paint the item via a QTextDocument."""
         text = index.data(QC.Qt.DisplayRole) or ""
-        item_uuid = index.data(TITLE_UUID_ROLE)
-        has_references = bool(
-            find_short_ids_in_title(text) or find_uuids_in_title(text)
-        )
+        item_reference = index.data(TITLE_REFERENCE_ROLE)
         if not isinstance(text, str) or not (
-            has_references or isinstance(item_uuid, str)
+            find_title_references(text) or isinstance(item_reference, str)
         ):
             super().paint(painter, option, index)
             return
@@ -201,8 +175,8 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
             option,
             link_color,
             text_color,
-            self.uuid_title_resolver,
-            item_uuid if isinstance(item_uuid, str) else None,
+            self.reference_resolver,
+            item_reference if isinstance(item_reference, str) else None,
             meta_color,
         )
         doc.setTextWidth(text_rect.width())
@@ -218,14 +192,11 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
     def sizeHint(
         self, option: QW.QStyleOptionViewItem, index: QC.QModelIndex
     ) -> QC.QSize:
-        """Return a size accommodating the title and own UUID metadata line."""
+        """Return a size accommodating the title and own identity line."""
         text = index.data(QC.Qt.DisplayRole) or ""
-        item_uuid = index.data(TITLE_UUID_ROLE)
-        has_references = isinstance(text, str) and bool(
-            find_short_ids_in_title(text) or find_uuids_in_title(text)
-        )
+        item_reference = index.data(TITLE_REFERENCE_ROLE)
         if not isinstance(text, str) or not (
-            has_references or isinstance(item_uuid, str)
+            find_title_references(text) or isinstance(item_reference, str)
         ):
             return super().sizeHint(option, index)
         opt = QW.QStyleOptionViewItem(option)
@@ -234,8 +205,8 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
             text,
             opt,
             QG.QColor("black"),
-            uuid_title_resolver=self.uuid_title_resolver,
-            item_uuid=item_uuid if isinstance(item_uuid, str) else None,
+            reference_resolver=self.reference_resolver,
+            item_reference=item_reference if isinstance(item_reference, str) else None,
             meta_color=QG.QColor("gray"),
         )
         base_size = super().sizeHint(opt, index)
@@ -258,7 +229,7 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
         pos: QC.QPoint,
         option: QW.QStyleOptionViewItem,
     ) -> str | None:
-        """Return the short ID under cursor position ``pos`` (in viewport
+        """Return the reference under cursor position ``pos`` (in viewport
         coordinates) for ``index``, or ``None`` if the cursor is not over any
         anchor.
 
@@ -269,11 +240,8 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
             option: style option (already initialized for the item)
         """
         text = index.data(QC.Qt.DisplayRole) or ""
-        item_uuid = index.data(TITLE_UUID_ROLE)
-        has_references = bool(
-            find_short_ids_in_title(text) or find_uuids_in_title(text)
-        )
-        if not isinstance(text, str) or not has_references:
+        item_reference = index.data(TITLE_REFERENCE_ROLE)
+        if not isinstance(text, str) or not find_title_references(text):
             return None
         opt = QW.QStyleOptionViewItem(option)
         opt.rect = item_rect
@@ -287,14 +255,13 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
             text,
             option,
             QG.QColor("black"),
-            uuid_title_resolver=self.uuid_title_resolver,
-            item_uuid=item_uuid if isinstance(item_uuid, str) else None,
+            reference_resolver=self.reference_resolver,
+            item_reference=item_reference if isinstance(item_reference, str) else None,
             meta_color=QG.QColor("gray"),
         )
         doc.setTextWidth(text_rect.width())
         local = QC.QPointF(pos - text_rect.topLeft())
         href = doc.documentLayout().anchorAt(local)
-        for scheme in (SHORT_ID_URL_SCHEME, UUID_URL_SCHEME):
-            if href and href.startswith(f"{scheme}:"):
-                return href[len(scheme) + 1 :]
+        if href and href.startswith(f"{REFERENCE_URL_SCHEME}:"):
+            return href[len(REFERENCE_URL_SCHEME) + 1 :]
         return None
