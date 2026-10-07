@@ -63,6 +63,24 @@ msgstr "**Édition > Métadonnées > Ajouter une métadonnée...** peut désorma
 msgid "Metadata keys may now contain dots and hyphens, as used by plugin keys, and a **Known keys** list copies a key already present on the selected objects"
 msgstr "Les clés de métadonnées peuvent désormais contenir des points et des tirets, comme les clés des plugins, et une liste **Clés connues** copie une clé déjà présente sur les objets sélectionnés"
 
+msgid "**Object references in titles:**"
+msgstr "**Références aux objets dans les titres :**"
+
+msgid "DataLab now uses stable UUID-based object references across object trees, result titles, plot legends and HDF5 workspaces (implements [Issue #367](https://github.com/DataLab-Platform/DataLab/issues/367) and [Issue #149](https://github.com/DataLab-Platform/DataLab/issues/149))."
+msgstr "DataLab utilise désormais des références aux objets stables, fondées sur les UUID, dans les arborescences d'objets, les titres de résultats, les légendes des graphiques et les espaces de travail HDF5 (implémente [Issue #367](https://github.com/DataLab-Platform/DataLab/issues/367) et [Issue #149](https://github.com/DataLab-Platform/DataLab/issues/149))."
+
+msgid "Object items in the signal and image trees now show their current title followed by their own stable `#UUID8` reference; group headers keep the familiar `gsNNN` and `giNNN` identifiers"
+msgstr "Les objets des arborescences signal et image affichent désormais leur titre courant suivi de leur propre référence stable `#UUID8` ; les en-têtes de groupe conservent les identifiants habituels `gsNNN` et `giNNN`"
+
+msgid "Source references embedded in result titles no longer change when objects are reordered, removed or renumbered, and remain clickable to select the source object"
+msgstr "Les références aux sources intégrées dans les titres de résultats ne changent plus lorsque des objets sont réordonnés, supprimés ou renumérotés, et restent cliquables pour sélectionner l'objet source"
+
+msgid "The new **References in result titles** setting lets you display these references either as 8-character UUIDs (default) or as the current source titles, which follow later renames"
+msgstr "Le nouveau paramètre **Références dans les titres de résultats** permet d'afficher ces références soit sous forme d'UUID à 8 caractères (par défaut), soit avec les titres actuels des sources, qui suivent les renommages ultérieurs"
+
+msgid "When a source object is deleted, its reference falls back to its 8-character UUID instead of becoming an anonymous placeholder"
+msgstr "Lorsqu'un objet source est supprimé, sa référence est affichée sous la forme de son UUID à 8 caractères au lieu de devenir un espace réservé anonyme"
+
 msgid "🔄 Changes"
 msgstr "🔄 Changements"
 
@@ -108,3 +126,14 @@ msgstr "**Plugins et historique :**"
 msgid "Replaying a History action or re-processing a result created by a plugin feature that shares its name with a built-in feature now runs the plugin feature instead of the built-in one"
 msgstr "Le rejeu d'une action de l'historique ou le recalcul d'un résultat créé par une fonctionnalité de plugin portant le même nom qu'une fonctionnalité intégrée exécute désormais la fonctionnalité du plugin au lieu de la fonctionnalité intégrée"
 
+msgid "**Object titles:**"
+msgstr "**Titres des objets :**"
+
+msgid "Fixed plot legends still showing the original generated title after renaming an object, e.g. a profile extracted from an image (fixes [Issue #323](https://github.com/DataLab-Platform/DataLab/issues/323))"
+msgstr "Correction des légendes des graphiques qui affichaient toujours le titre généré d'origine après le renommage d'un objet, par exemple un profil extrait d'une image (corrige [Issue #323](https://github.com/DataLab-Platform/DataLab/issues/323))"
+
+msgid "Fixed source references in titles being unreadable when the object is selected in the signal or image tree, notably on Linux (fixes [Issue #358](https://github.com/DataLab-Platform/DataLab/issues/358))"
+msgstr "Correction des références aux sources illisibles dans les titres lorsque l'objet est sélectionné dans l'arborescence signal ou image, notamment sous Linux (corrige [Issue #358](https://github.com/DataLab-Platform/DataLab/issues/358))"
+
+msgid "Fixed result titles pointing to the wrong source objects after appending an HDF5 workspace to a non-empty session; appending the same workspace twice now also keeps each imported processing chain independent, so **Recompute** and **Select source objects** use the sources of the same import (fixes [Issue #357](https://github.com/DataLab-Platform/DataLab/issues/357))"
+msgstr "Correction des titres de résultats qui désignaient de mauvais objets sources après l'ajout d'un espace de travail HDF5 à une session non vide ; ajouter deux fois le même espace de travail conserve désormais aussi des chaînes de traitement importées indépendantes, de sorte que **Retraiter** et **Sélectionner les objets source** utilisent les sources issues du même import (corrige [Issue #357](https://github.com/DataLab-Platform/DataLab/issues/357))"

@@ -26,6 +26,15 @@
 * **Edit > Metadata > Add metadata...** can now extract the value from the formatted text with a regular expression, for example an exposure time or a shot number read from object titles. Objects without a match are left unchanged unless you ask for an error, and a scale factor converts numeric values (e.g. milliseconds to seconds)
 * Metadata keys may now contain dots and hyphens, as used by plugin keys, and a **Known keys** list copies a key already present on the selected objects
 
+**Object references in titles:**
+
+DataLab now uses stable UUID-based object references across object trees, result titles, plot legends and HDF5 workspaces (implements [Issue #367](https://github.com/DataLab-Platform/DataLab/issues/367) and [Issue #149](https://github.com/DataLab-Platform/DataLab/issues/149)).
+
+* Object items in the signal and image trees now show their current title followed by their own stable `#UUID8` reference; group headers keep the familiar `gsNNN` and `giNNN` identifiers
+* Source references embedded in result titles no longer change when objects are reordered, removed or renumbered, and remain clickable to select the source object
+* The new **References in result titles** setting lets you display these references either as 8-character UUIDs (default) or as the current source titles, which follow later renames
+* When a source object is deleted, its reference falls back to its 8-character UUID instead of becoming an anonymous placeholder
+
 ### 🔄 Changes ###
 
 **Guided tour:**
@@ -52,3 +61,9 @@
 **Plugins and History:**
 
 * Replaying a History action or re-processing a result created by a plugin feature that shares its name with a built-in feature now runs the plugin feature instead of the built-in one
+
+**Object titles:**
+
+* Fixed plot legends still showing the original generated title after renaming an object, e.g. a profile extracted from an image (fixes [Issue #323](https://github.com/DataLab-Platform/DataLab/issues/323))
+* Fixed source references in titles being unreadable when the object is selected in the signal or image tree, notably on Linux (fixes [Issue #358](https://github.com/DataLab-Platform/DataLab/issues/358))
+* Fixed result titles pointing to the wrong source objects after appending an HDF5 workspace to a non-empty session; appending the same workspace twice now also keeps each imported processing chain independent, so **Recompute** and **Select source objects** use the sources of the same import (fixes [Issue #357](https://github.com/DataLab-Platform/DataLab/issues/357))
