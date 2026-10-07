@@ -36,6 +36,10 @@
 
 ### 🛠️ Bug Fixes ###
 
+**Window layout:**
+
+* Fixed the width of the signal/image panels not being restored at startup: after narrowing the panels and restarting DataLab, they came back wider (up to their maximum width) instead of keeping the width chosen by the user
+
 **Plugins and History:**
 
 * Replaying a History action or re-processing a result created by a plugin feature that shares its name with a built-in feature now runs the plugin feature instead of the built-in one
