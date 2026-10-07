@@ -190,6 +190,14 @@ class DataLabOptions(SigimaXOptions):
             expected_type=list,
             description="IDs of the recently used applications, most recent first.",
         )
+        self.applications_list_collapsed = TypedOptionField(
+            self,
+            "applications_list_collapsed",
+            category="main",
+            default=False,
+            expected_type=bool,
+            description="If True, hide the application list of the catalog.",
+        )
         self.v020_plugins_warning_ignore = TypedOptionField(
             self,
             "v020_plugins_warning_ignore",

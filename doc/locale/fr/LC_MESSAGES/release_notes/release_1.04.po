@@ -81,6 +81,12 @@ msgstr "Les développeurs de plugins décrivent les entrées des recettes de man
 msgid "The catalog is non-modal and remains open after starting a method or opening an example, so users may continue interacting with the DataLab workspace"
 msgstr "Le catalogue est non modal et reste ouvert après le lancement d'une méthode ou l'ouverture d'un exemple, de sorte que l'utilisateur peut continuer à interagir avec l'espace de travail DataLab"
 
+msgid "The methods, tools and datasets of an application form an accordion: one section is open at a time, and a colored dot tells, without opening it, whether each method can run on the current selection"
+msgstr "Les méthodes, outils et jeux de données d'une application forment un accordéon : une seule section est ouverte à la fois, et une pastille de couleur indique, sans l'ouvrir, si chaque méthode peut s'exécuter sur la sélection courante"
+
+msgid "The application list of the catalog may be hidden with the strip separating it from the application page: the window shrinks accordingly, and the choice is remembered"
+msgstr "La liste des applications du catalogue peut être masquée à l'aide de la bande qui la sépare de la page de l'application : la fenêtre se réduit en conséquence, et ce choix est mémorisé"
+
 msgid "Completed application methods select their last generated object, consistently with standard DataLab processing"
 msgstr "Les méthodes d'application terminées sélectionnent le dernier objet qu'elles ont généré, de manière cohérente avec les traitements standard de DataLab"
 

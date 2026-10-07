@@ -31,7 +31,7 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 import datalab
-from datalab.config import APP_DESC, Conf, _
+from datalab.config import Conf, _
 from datalab.gui.actionhandler import ActionCategory
 from datalab.gui.applications import (
     get_application_plugins,
@@ -42,6 +42,7 @@ from datalab.gui.applications import (
     sort_welcome_applications,
 )
 from datalab.utils.qthelpers import qt_handle_error_message, try_or_log_error
+from datalab.widgets.expandabletext import apply_subdued_color
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
@@ -57,20 +58,28 @@ TILE_WIDTH = 200
 TILE_SPACING = 12
 #: Size of an application tile icon
 TILE_ICON_SIZE = 48
+#: Size of an action entry icon
+ENTRY_ICON_SIZE = 24
 
 ENTRY_STYLESHEET = """
 QFrame#welcome_entry {
     border: 1px solid transparent;
-    border-radius: 4px;
+    border-radius: 6px;
 }
-QFrame#welcome_tile {
+QFrame#welcome_tile, QFrame#welcome_card {
     border: 1px solid palette(mid);
     border-radius: 6px;
+}
+QFrame#welcome_card {
+    background-color: palette(alternate-base);
 }
 QFrame#welcome_entry:hover, QFrame#welcome_entry:focus,
 QFrame#welcome_tile:hover, QFrame#welcome_tile:focus {
     border-color: palette(highlight);
     background-color: palette(alternate-base);
+}
+QFrame#welcome_card:hover, QFrame#welcome_card:focus {
+    border-color: palette(highlight);
 }
 """
 
@@ -98,6 +107,8 @@ class WelcomeEntry(QW.QFrame):
          larger icon above its title
         menu: if True (tile only), add a button requesting a menu of actions,
          also available from the context menu
+        card: if True, show the entry as a framed card
+        caret: if True, show a caret telling that the entry opens a menu
     """
 
     SIG_CLICKED = QC.Signal()
@@ -112,9 +123,14 @@ class WelcomeEntry(QW.QFrame):
         parent: QW.QWidget | None = None,
         tile: bool = False,
         menu: bool = False,
+        card: bool = False,
+        caret: bool = False,
     ) -> None:
         super().__init__(parent)
-        self.setObjectName("welcome_tile" if tile else "welcome_entry")
+        if tile:
+            self.setObjectName("welcome_tile")
+        else:
+            self.setObjectName("welcome_card" if card else "welcome_entry")
         self.setStyleSheet(ENTRY_STYLESHEET)
         self.setAttribute(QC.Qt.WA_Hover)
         self.setFocusPolicy(QC.Qt.StrongFocus)
@@ -125,7 +141,7 @@ class WelcomeEntry(QW.QFrame):
 
         if isinstance(icon, str):
             icon = get_icon(icon)
-        icon_size = TILE_ICON_SIZE if tile else 32
+        icon_size = TILE_ICON_SIZE if tile else ENTRY_ICON_SIZE
         self.icon_label = QW.QLabel()
         self.icon_label.setPixmap(icon.pixmap(icon_size, icon_size))
         self.title_label = QW.QLabel(title)
@@ -165,11 +181,22 @@ class WelcomeEntry(QW.QFrame):
             layout.addLayout(text_layout)
             layout.addStretch(1)
         else:
+            apply_subdued_color(description_label)
             layout = QW.QHBoxLayout(self)
-            layout.setContentsMargins(8, 6, 8, 6)
-            layout.setSpacing(10)
+            if card:
+                layout.setContentsMargins(14, 12, 14, 12)
+            else:
+                layout.setContentsMargins(10, 8, 10, 8)
+            layout.setSpacing(12)
             layout.addWidget(self.icon_label, 0, QC.Qt.AlignTop)
             layout.addLayout(text_layout, 1)
+            if caret:
+                caret_label = QW.QLabel("\u25be")
+                caret_font = caret_label.font()
+                caret_font.setPointSizeF(caret_font.pointSizeF() * 1.4)
+                caret_label.setFont(caret_font)
+                apply_subdued_color(caret_label)
+                layout.addWidget(caret_label, 0, QC.Qt.AlignVCenter)
 
     def set_title(self, title: str) -> None:
         """Change the entry title
@@ -369,6 +396,7 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
             get_icon("libre-gui-plugin.svg"), _("Browse all applications...")
         )
         self.start_title = self.__create_section_title("")
+        self.header_layout = QW.QBoxLayout(QW.QBoxLayout.LeftToRight)
         self.columns_layout = QW.QBoxLayout(QW.QBoxLayout.LeftToRight)
         self.startup_checkbox = QW.QCheckBox(
             _("Show welcome page when the current panel is empty")
@@ -379,12 +407,14 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
 
     @staticmethod
     def __create_section_title(text: str) -> QW.QLabel:
-        """Create a section title label"""
+        """Create a small uppercase section title label"""
         label = QW.QLabel(text)
         font = label.font()
-        font.setPointSizeF(font.pointSizeF() * 1.3)
         font.setBold(True)
+        font.setCapitalization(QG.QFont.AllUppercase)
+        font.setLetterSpacing(QG.QFont.PercentageSpacing, 104)
         label.setFont(font)
+        apply_subdued_color(label)
         return label
 
     def __add_entry(
@@ -395,9 +425,13 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
         title: str,
         description: str,
         callback: Callable[[], None],
+        **kwargs: bool,
     ) -> None:
-        """Create an entry, register it under ``key`` and add it to ``layout``"""
-        entry = WelcomeEntry(icon_name, title, description, self)
+        """Create an entry, register it under ``key`` and add it to ``layout``
+
+        Keyword arguments (``card``, ``caret``) are passed to the entry.
+        """
+        entry = WelcomeEntry(icon_name, title, description, self, **kwargs)
         entry.SIG_CLICKED.connect(callback)
         self.entries[key] = entry
         layout.addWidget(entry)
@@ -551,62 +585,106 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
                 self.mainwindow, exc, _("Launching '%s'") % tile.title
             )
 
-    def __setup_ui(self) -> None:
-        """Setup welcome page widgets"""
+    def __setup_header(self) -> None:
+        """Setup the header: logo, slogan with version, and edition"""
         logo = QW.QLabel()
         logo.setPixmap(QG.QPixmap(get_image_file_path("DataLab-Banner-200.png")))
-        description = QW.QLabel(APP_DESC)
-        description.setWordWrap(True)
-        version = QW.QLabel(_("Version %s") % datalab.__version__)
+        slogan = QW.QLabel(
+            _("Scientific signal and image processing \u2014 version %s")
+            % datalab.__version__
+        )
+        slogan.setWordWrap(True)
+        font = slogan.font()
+        font.setPointSizeF(font.pointSizeF() * 1.15)
+        slogan.setFont(font)
+        apply_subdued_color(slogan)
+        edition = QW.QLabel(_("Desktop edition of DataLab"))
+        font = edition.font()
+        font.setItalic(True)
+        font.setPointSizeF(font.pointSizeF() * 0.9)
+        edition.setFont(font)
+        apply_subdued_color(edition)
+        title_layout = QW.QVBoxLayout()
+        title_layout.setSpacing(2)
+        title_layout.addStretch(1)
+        title_layout.addWidget(slogan)
+        title_layout.addWidget(edition)
+        title_layout.addStretch(1)
+        self.header_layout.setSpacing(18)
+        self.header_layout.addWidget(logo, 0, QC.Qt.AlignLeft | QC.Qt.AlignVCenter)
+        self.header_layout.addLayout(title_layout, 1)
+
+    def __setup_ui(self) -> None:
+        """Setup welcome page widgets"""
+        self.__setup_header()
 
         mw = self.mainwindow
         start_layout = QW.QVBoxLayout()
+        start_layout.setSpacing(6)
         start_layout.addWidget(self.start_title)
-        for args in (
+        start_layout.addSpacing(4)
+        for args, caret in (
             (
-                "create",
-                "new_sig.svg",
-                _("Create..."),
-                _("Generate a 1D signal or 2D image from a template."),
-                self.__popup_create_menu,
-            ),
-            (
-                "open",
-                "fileopen_sig.svg",
-                _("Open file..."),
-                _("Load a signal or image from your computer."),
-                self.__open_files,
-            ),
-            (
-                "browse_h5",
-                "h5browser.svg",
-                _("Browse HDF5 file..."),
-                _(
-                    "Inspect any HDF5 file and import selected datasets "
-                    "as signals or images."
+                (
+                    "create",
+                    "new_sig.svg",
+                    _("Create..."),
+                    _("Generate a 1D signal or 2D image from a template."),
+                    self.__popup_create_menu,
                 ),
-                mw.browseh5_action.trigger,
+                True,
             ),
             (
-                "open_h5",
-                "fileopen_h5.svg",
-                _("Open HDF5 workspace..."),
-                _("Resume a previously saved DataLab workspace."),
-                mw.openh5_action.trigger,
+                (
+                    "open",
+                    "fileopen_sig.svg",
+                    _("Open file..."),
+                    _("Load a signal or image from your computer."),
+                    self.__open_files,
+                ),
+                True,
             ),
             (
-                "import_text",
-                "import_text.svg",
-                _("Import text data..."),
-                _("Bring in CSV / TSV / column data with the wizard."),
-                self.__import_text,
+                (
+                    "browse_h5",
+                    "h5browser.svg",
+                    _("Browse HDF5 file..."),
+                    _(
+                        "Inspect any HDF5 file and import selected datasets "
+                        "as signals or images."
+                    ),
+                    mw.browseh5_action.trigger,
+                ),
+                False,
+            ),
+            (
+                (
+                    "open_h5",
+                    "fileopen_h5.svg",
+                    _("Open HDF5 workspace..."),
+                    _("Resume a previously saved DataLab workspace."),
+                    mw.openh5_action.trigger,
+                ),
+                False,
+            ),
+            (
+                (
+                    "import_text",
+                    "import_text.svg",
+                    _("Import text data..."),
+                    _("Bring in CSV / TSV / column data with the wizard."),
+                    self.__import_text,
+                ),
+                True,
             ),
         ):
-            self.__add_entry(start_layout, *args)
+            self.__add_entry(start_layout, *args, caret=caret)
         start_layout.addStretch(1)
 
         learn_layout = QW.QVBoxLayout()
+        learn_layout.setSpacing(6)
         learn_layout.addWidget(self.__create_section_title(_("Walkthroughs")))
+        learn_layout.addSpacing(4)
         for args in (
             (
                 "ai_assistant",
@@ -647,26 +725,32 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
                 lambda: webbrowser.open(get_release_notes_url()),
             ),
         ):
-            self.__add_entry(learn_layout, *args)
+            self.__add_entry(learn_layout, *args, card=True)
         learn_layout.addStretch(1)
 
-        self.columns_layout.setSpacing(24)
+        self.columns_layout.setSpacing(28)
         self.columns_layout.addLayout(start_layout, 1)
         self.columns_layout.addLayout(learn_layout, 1)
+
+        separator = QW.QFrame()
+        separator.setObjectName("welcome_separator")
+        separator.setFixedHeight(1)
+        separator.setStyleSheet(
+            "QFrame#welcome_separator { background-color: palette(mid); }"
+        )
 
         content = QW.QWidget()
         content.setMaximumWidth(880)
         content_layout = QW.QVBoxLayout(content)
         content_layout.setContentsMargins(16, 24, 16, 16)
         content_layout.setSpacing(12)
-        content_layout.addWidget(logo)
-        content_layout.addWidget(description)
-        content_layout.addWidget(version)
-        content_layout.addSpacing(12)
+        content_layout.addLayout(self.header_layout)
+        content_layout.addSpacing(16)
         self.__setup_applications_section()
         content_layout.addWidget(self.applications_section)
         content_layout.addLayout(self.columns_layout)
-        content_layout.addSpacing(12)
+        content_layout.addSpacing(16)
+        content_layout.addWidget(separator)
         content_layout.addWidget(self.startup_checkbox)
         content_layout.addStretch(1)
 
@@ -764,6 +848,7 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
             direction = QW.QBoxLayout.TopToBottom
         else:
             direction = QW.QBoxLayout.LeftToRight
-        if self.columns_layout.direction() != direction:
-            self.columns_layout.setDirection(direction)
+        for layout in (self.header_layout, self.columns_layout):
+            if layout.direction() != direction:
+                layout.setDirection(direction)
         super().resizeEvent(event)

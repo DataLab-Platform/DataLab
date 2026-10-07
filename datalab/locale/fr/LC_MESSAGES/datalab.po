@@ -4539,3 +4539,21 @@ msgstr "Entrées attendues :"
 
 msgid "Running '%s'"
 msgstr "Exécution de '%s'"
+
+msgid "Hide the application list"
+msgstr "Masquer la liste des applications"
+
+msgid "Show the application list"
+msgstr "Afficher la liste des applications"
+
+msgid "Tools (%d)"
+msgstr "Outils (%d)"
+
+msgid "Datasets (%d)"
+msgstr "Jeux de données (%d)"
+
+msgid "Scientific signal and image processing — version %s"
+msgstr "Traitement scientifique du signal et de l'image — version %s"
+
+msgid "Desktop edition of DataLab"
+msgstr "Édition Desktop de DataLab"

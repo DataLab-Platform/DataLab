@@ -396,14 +396,17 @@ def _command_button(icon_name: str, text: str) -> QW.QPushButton:
     return button
 
 
-def _section_label(text: str) -> QW.QLabel:
-    """Create the title of a catalog page section."""
-    label = QW.QLabel(text)
-    font = label.font()
-    font.setBold(True)
-    font.setPointSize(font.pointSize() + 1)
-    label.setFont(font)
-    return label
+def _status_icon(color: str) -> QG.QIcon:
+    """Return a round status icon of the given color."""
+    pixmap = QG.QPixmap(32, 32)
+    pixmap.fill(QC.Qt.transparent)
+    painter = QG.QPainter(pixmap)
+    painter.setRenderHint(QG.QPainter.Antialiasing)
+    painter.setPen(QC.Qt.NoPen)
+    painter.setBrush(QG.QColor(color))
+    painter.drawEllipse(6, 6, 20, 20)
+    painter.end()
+    return QG.QIcon(pixmap)
 
 
 def _entry_layout(
@@ -429,13 +432,15 @@ def _entry_layout(
     return layout
 
 
-class RecipeCard(QW.QFrame):
+class RecipeCard(QW.QWidget):
     """Present one recipe: expected inputs, readiness, and dedicated examples."""
 
     #: Emitted with the recipe ID when running the recipe on the selection
     run_requested = QC.Signal(str)
     #: Emitted with the example ID and the recipe ID when trying an example
     try_example_requested = QC.Signal(str, str)
+    #: Emitted when the shown readiness changes
+    readiness_changed = QC.Signal()
 
     READINESS_COLORS = {
         RecipeReadinessStatus.READY: "#2e7d32",
@@ -454,15 +459,13 @@ class RecipeCard(QW.QFrame):
         super().__init__(parent)
         self.recipe = recipe
         self.readiness: RecipeReadiness | None = None
-        self.setFrameShape(QW.QFrame.StyledPanel)
+        self.status_color = self.READINESS_COLORS[RecipeReadinessStatus.NO_INPUT]
+        self.status_summary = ""
         layout = QW.QVBoxLayout(self)
 
-        title = QW.QLabel(
-            f"<b>{html.escape(recipe.title)}</b>&nbsp;&nbsp;"
-            f"v{html.escape(recipe.version)}"
-        )
-        title.setTextFormat(QC.Qt.RichText)
-        layout.addWidget(title)
+        version = QW.QLabel(_("Version: %s") % recipe.version)
+        apply_subdued_color(version)
+        layout.addWidget(version)
         if recipe.description:
             description = QW.QLabel(recipe.description)
             description.setWordWrap(True)
@@ -505,6 +508,7 @@ class RecipeCard(QW.QFrame):
             )
             self.example_buttons[example.id] = button
             layout.addLayout(_entry_layout(example.title, example.description, button))
+        layout.addStretch()
 
     def set_readiness(
         self, readiness: RecipeReadiness | None, error: str | None = None
@@ -529,6 +533,9 @@ class RecipeCard(QW.QFrame):
                 f"&nbsp;&nbsp;• {html.escape(reason)}" for reason in reasons
             )
         self.readiness_label.setText(text)
+        self.status_color = color
+        self.status_summary = summary
+        self.readiness_changed.emit()
 
 
 class ApplicationPage(QW.QWidget):
@@ -557,6 +564,7 @@ class ApplicationPage(QW.QWidget):
         self.recipe_cards: dict[str, RecipeCard] = {}
         self.tool_buttons: dict[str, QW.QPushButton] = {}
         self.dataset_buttons: dict[str, QW.QPushButton] = {}
+        self.toolbox = QW.QToolBox()
         self.documentation_button = _command_button(
             "libre-gui-help.svg", _("Documentation")
         )
@@ -579,18 +587,13 @@ class ApplicationPage(QW.QWidget):
         layout.addWidget(metadata)
         layout.addLayout(self._create_welcome_layout())
 
-        content = QW.QWidget()
-        content_layout = QW.QVBoxLayout(content)
-        content_layout.setContentsMargins(0, 0, 0, 0)
-        self._add_methods(content_layout)
-        self._add_tools(content_layout)
-        self._add_datasets(content_layout)
-        content_layout.addStretch()
-        scroll_area = QW.QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setFrameShape(QW.QFrame.NoFrame)
-        scroll_area.setWidget(content)
-        layout.addWidget(scroll_area, 1)
+        self._add_methods(layout)
+        self._add_tools()
+        self._add_datasets()
+        layout.addWidget(self.toolbox, 1)
+        if not self.toolbox.count():
+            self.toolbox.hide()
+            layout.addStretch()
         layout.addWidget(self.status_label)
 
         bottom_layout = QW.QHBoxLayout()
@@ -665,8 +668,7 @@ class ApplicationPage(QW.QWidget):
         super().showEvent(event)
 
     def _add_methods(self, layout: QW.QVBoxLayout) -> None:
-        """Add one card per recipe, with the examples designed for it."""
-        layout.addWidget(_section_label(_("Methods")))
+        """Add one item per recipe, with the examples designed for it."""
         recipes = self.plugin.get_recipes()
         examples = self.plugin.get_examples()
         for recipe in recipes:
@@ -686,20 +688,39 @@ class ApplicationPage(QW.QWidget):
                     self.plugin, example_id, recipe_id
                 )
             )
+            card.readiness_changed.connect(
+                lambda card=card: self._show_readiness_of(card)
+            )
             self.recipe_cards[recipe.recipe_id] = card
-            layout.addWidget(card)
+            self.toolbox.addItem(card, _status_icon(card.status_color), recipe.title)
         if not recipes:
             label = QW.QLabel(_("No methods declared"))
             apply_subdued_color(label)
             layout.addWidget(label)
 
-    def _add_tools(self, layout: QW.QVBoxLayout) -> None:
+    def _show_readiness_of(self, card: RecipeCard) -> None:
+        """Reflect the readiness of a recipe on its toolbox item."""
+        index = self.toolbox.indexOf(card)
+        self.toolbox.setItemIcon(index, _status_icon(card.status_color))
+        self.toolbox.setItemToolTip(index, card.status_summary)
+
+    def _add_entries_item(
+        self, title: str, icon_name: str, layouts: list[QW.QHBoxLayout]
+    ) -> None:
+        """Add a toolbox item listing entries, if any."""
+        if not layouts:
+            return
+        page = QW.QWidget()
+        page_layout = QW.QVBoxLayout(page)
+        for entry_layout in layouts:
+            page_layout.addLayout(entry_layout)
+        page_layout.addStretch()
+        self.toolbox.addItem(page, get_icon(icon_name), title)
+
+    def _add_tools(self) -> None:
         """Add the plugin-owned tools, if any."""
         tools = self.plugin.get_tools()
-        if not tools:
-            return
-        layout.addSpacing(8)
-        layout.addWidget(_section_label(_("Tools")))
+        layouts = []
         for tool in tools:
             button = _command_button("libre-toolbox.svg", _("Open tool"))
             button.clicked.connect(
@@ -708,21 +729,21 @@ class ApplicationPage(QW.QWidget):
                 )
             )
             self.tool_buttons[tool.id] = button
-            layout.addLayout(
+            layouts.append(
                 _entry_layout(
                     tool.title, tool.description, button, get_plugin_icon(tool.icon)
                 )
             )
+        self._add_entries_item(
+            _("Tools (%d)") % len(tools), "libre-toolbox.svg", layouts
+        )
 
-    def _add_datasets(self, layout: QW.QVBoxLayout) -> None:
+    def _add_datasets(self) -> None:
         """Add the examples that are not designed for a specific recipe."""
         datasets = [
             example for example in self.plugin.get_examples() if not example.recipe_ids
         ]
-        if not datasets:
-            return
-        layout.addSpacing(8)
-        layout.addWidget(_section_label(_("Datasets")))
+        layouts = []
         for example in datasets:
             button = _command_button("io/fileopen_h5.svg", _("Open dataset"))
             button.clicked.connect(
@@ -731,7 +752,10 @@ class ApplicationPage(QW.QWidget):
                 )
             )
             self.dataset_buttons[example.id] = button
-            layout.addLayout(_entry_layout(example.title, example.description, button))
+            layouts.append(_entry_layout(example.title, example.description, button))
+        self._add_entries_item(
+            _("Datasets (%d)") % len(datasets), "io/fileopen_h5.svg", layouts
+        )
 
     def refresh_readiness(self) -> None:
         """Assess every recipe on the current selection."""
@@ -761,6 +785,11 @@ class ApplicationsDialog(QW.QDialog):
     #: Emitted when an application is shown, hidden, pinned or used
     SIG_WELCOME_PREFERENCES_CHANGED = QC.Signal()
 
+    #: Minimum window width when the application list is shown
+    MINIMUM_WIDTH = 860
+    CATALOG_MINIMUM_WIDTH = 260
+    CATALOG_DEFAULT_WIDTH = 280
+
     def __init__(self, parent: QW.QWidget | None = None):
         super().__init__(parent)
         win32_fix_title_bar_background(self)
@@ -770,10 +799,14 @@ class ApplicationsDialog(QW.QDialog):
         self.application_list = QW.QListWidget()
         self.application_stack = QW.QStackedWidget()
         self.application_pages: list[ApplicationPage] = []
+        self.catalog_widget = QW.QWidget()
+        self.list_toggle_button = QW.QToolButton()
+        self.__splitter = QW.QSplitter(QC.Qt.Horizontal)
+        self.__catalog_width = self.CATALOG_DEFAULT_WIDTH
 
         self.setWindowTitle(_("Applications"))
         self.setWindowIcon(get_icon("libre-gui-plugin.svg"))
-        self.setMinimumSize(860, 600)
+        self.setMinimumSize(self.MINIMUM_WIDTH, 600)
         self.__readiness_timer = QC.QTimer(self)
         self.__readiness_timer.setSingleShot(True)
         self.__readiness_timer.setInterval(150)
@@ -782,21 +815,42 @@ class ApplicationsDialog(QW.QDialog):
         self.search_edit.setClearButtonEnabled(True)
         _configure_catalog_list(self.application_list)
 
-        catalog = QW.QWidget()
-        catalog.setMinimumWidth(260)
+        catalog = self.catalog_widget
+        catalog.setMinimumWidth(self.CATALOG_MINIMUM_WIDTH)
         catalog.setMaximumWidth(360)
         catalog_layout = QW.QVBoxLayout(catalog)
         catalog_layout.setContentsMargins(0, 0, 0, 0)
         catalog_layout.addWidget(self.search_edit)
         catalog_layout.addWidget(self.application_list)
 
+        toggle = self.list_toggle_button
+        toggle.setFixedWidth(16)
+        toggle.setSizePolicy(QW.QSizePolicy.Fixed, QW.QSizePolicy.Expanding)
+        toggle.setStyleSheet(
+            "QToolButton { border: none; border-left: 1px solid palette(midlight);"
+            " border-right: 1px solid palette(midlight);"
+            " background: palette(alternate-base); }"
+            "QToolButton:hover { background: palette(midlight); }"
+        )
+        font = toggle.font()
+        font.setPointSize(font.pointSize() + 8)
+        toggle.setFont(font)
+        toggle.clicked.connect(self.toggle_application_list)
+        pages = QW.QWidget()
+        pages_layout = QW.QHBoxLayout(pages)
+        pages_layout.setContentsMargins(0, 0, 0, 0)
+        pages_layout.setSpacing(0)
+        pages_layout.addWidget(toggle)
+        pages_layout.addWidget(self.application_stack, 1)
+
         layout = QW.QVBoxLayout(self)
-        splitter = QW.QSplitter(QC.Qt.Horizontal)
+        splitter = self.__splitter
         splitter.addWidget(catalog)
-        splitter.addWidget(self.application_stack)
+        splitter.addWidget(pages)
+        splitter.setCollapsible(0, False)
         splitter.setStretchFactor(0, 0)
         splitter.setStretchFactor(1, 1)
-        splitter.setSizes([280, 580])
+        splitter.setSizes([self.CATALOG_DEFAULT_WIDTH, 580])
         layout.addWidget(splitter, 1)
 
         button_box = QW.QDialogButtonBox(QW.QDialogButtonBox.Close)
@@ -808,7 +862,58 @@ class ApplicationsDialog(QW.QDialog):
         )
         self.application_list.currentRowChanged.connect(self.schedule_readiness_update)
         self.search_edit.textChanged.connect(self.filter_applications)
+        self.set_application_list_visible(not Conf.applications_list_collapsed.get())
         self.refresh()
+
+    def is_application_list_visible(self) -> bool:
+        """Return whether the application list is shown."""
+        return not self.catalog_widget.isHidden()
+
+    def toggle_application_list(self) -> None:
+        """Hide the application list if it is shown, show it otherwise."""
+        self.set_application_list_visible(not self.is_application_list_visible())
+
+    def set_application_list_visible(self, visible: bool) -> None:
+        """Show or hide the application list, and remember this choice.
+
+        The application page keeps its width: the window shrinks when the list
+        is hidden and grows back when the list is shown again.
+
+        Args:
+            visible: True to show the application list, False to hide it
+        """
+        if visible != self.is_application_list_visible():
+            handle_width = self.__splitter.handleWidth()
+            width = self.width()
+            resize = self.isVisible() and not (
+                self.isMaximized() or self.isFullScreen()
+            )
+            if visible:
+                self.catalog_widget.show()
+                self.setMinimumWidth(self.MINIMUM_WIDTH)
+                if resize:
+                    self.resize(
+                        width + self.__catalog_width + handle_width, self.height()
+                    )
+                pages_width = self.__splitter.widget(1).width()
+                self.__splitter.setSizes([self.__catalog_width, pages_width])
+            else:
+                if self.isVisible():
+                    self.__catalog_width = self.catalog_widget.width()
+                self.catalog_widget.hide()
+                self.setMinimumWidth(self.MINIMUM_WIDTH - self.CATALOG_MINIMUM_WIDTH)
+                if resize:
+                    self.resize(
+                        width - self.__catalog_width - handle_width, self.height()
+                    )
+        Conf.applications_list_collapsed.set(not visible)
+        if visible:
+            text, tooltip = "\u2039", _("Hide the application list")
+        else:
+            text, tooltip = "\u203a", _("Show the application list")
+        self.list_toggle_button.setText(text)
+        self.list_toggle_button.setToolTip(tooltip)
+        self.list_toggle_button.setAccessibleName(tooltip)
 
     def refresh(self) -> None:
         """Rebuild the catalog from the currently registered plugins."""
