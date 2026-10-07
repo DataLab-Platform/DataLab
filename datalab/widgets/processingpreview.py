@@ -21,7 +21,12 @@ from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import _
 from datalab.gui.processor.catcher import CompOut
 from datalab.gui.processor.preview import PreviewController
-from datalab.objectmodel import get_short_id, patch_title_with_ids, render_title
+from datalab.objectmodel import (
+    get_short_uuid,
+    patch_title_with_ids,
+    render_title,
+    shorten_uuids_in_title,
+)
 
 __all__ = [
     "ProcessingPreviewDialog",
@@ -113,7 +118,9 @@ class ProcessingPreviewWidget(QW.QWidget):
         self.source_combo.setMinimumContentsLength(16)
         self.source_combo.setToolTip(_("Preview source"))
         for source in sources:
-            self.source_combo.addItem(f"{get_short_id(source)}: {source.title}")
+            self.source_combo.addItem(
+                f"{get_short_uuid(source)}: {shorten_uuids_in_title(source.title)}"
+            )
         self.source_combo.setVisible(len(sources) > 1)
         self.source_combo.setEnabled(False)
         controls.addWidget(self.source_combo, 1)

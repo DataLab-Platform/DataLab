@@ -98,10 +98,12 @@ from datalab.objectmodel import (
     ObjectGroup,
     get_number,
     get_short_id,
+    get_short_uuid,
     get_uuid,
     remap_title_references,
     set_number,
     set_uuid,
+    shorten_uuids_in_title,
 )
 from datalab.utils.qthelpers import (
     CallbackWorker,
@@ -1525,11 +1527,17 @@ class SaveToDirectoryGUIParam(gds.DataSet, title=_("Save to directory")):
     """Save to directory parameters"""
 
     def __init__(
-        self, objs: list[TypeObj] | None = None, extensions: list[str] | None = None
+        self,
+        objs: list[TypeObj] | None = None,
+        extensions: list[str] | None = None,
+        labels: list[str] | None = None,
     ) -> None:
         super().__init__()
         self.__objs = objs or []
         self.__extensions = extensions or []
+        self.__labels = labels or [
+            shorten_uuids_in_title(obj.title) for obj in self.__objs
+        ]
 
     def on_button_click(
         self: SaveToDirectoryGUIParam,
@@ -1617,15 +1625,10 @@ class SaveToDirectoryGUIParam(gds.DataSet, title=_("Save to directory")):
         """Update preview."""
         try:
             filenames = self.build_filenames()
-            preview_lines = []
-            for i, (obj, filename) in enumerate(zip(self.__objs, filenames), start=1):
-                # Try to get short ID if object has been added to panel
-                try:
-                    obj_id = get_short_id(obj)
-                except (ValueError, KeyError):
-                    # Fallback to simple index for objects not yet in panel
-                    obj_id = str(i)
-                preview_lines.append(f"{obj_id}: {filename}")
+            preview_lines = [
+                f"{label}: {filename}"
+                for label, filename in zip(self.__labels, filenames)
+            ]
             self.preview = "\n".join(preview_lines)
         except (ValueError, KeyError, TypeError) as exc:
             # Handle formatting errors gracefully (e.g., incomplete format string)
@@ -1860,17 +1863,12 @@ class AddMetadataParam(
         try:
             values = self.build_values()
             preview_lines = []
-            for i, (obj, value) in enumerate(zip(self.__objs, values), start=1):
-                # Try to get short ID if object has been added to panel
-                try:
-                    obj_id = get_short_id(obj)
-                except (ValueError, KeyError):
-                    # Fallback to simple index for objects not yet in panel
-                    obj_id = str(i)
+            for obj, value in zip(self.__objs, values):
+                label = shorten_uuids_in_title(obj.title)
                 if value is None:
-                    preview_lines.append(f"{obj_id}: " + _("unchanged"))
+                    preview_lines.append(f"{label}: " + _("unchanged"))
                 else:
-                    preview_lines.append(f"{obj_id}: {self.metadata_key} = {value!r}")
+                    preview_lines.append(f"{label}: {self.metadata_key} = {value!r}")
             self.preview = "\n".join(preview_lines)
         except ValueError as exc:
             # Handle conversion errors
@@ -2381,7 +2379,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.metadata_clipboard = obj.metadata.copy()
 
         # Rename geometry results to avoid conflicts when pasting to same object type
-        new_pref = get_short_id(obj) + "_"
+        new_pref = get_short_uuid(obj) + "_"
         self._rename_results_in_clipboard(new_pref)
 
         # Update action states (e.g., "Paste metadata" should now be enabled)
@@ -3115,7 +3113,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             extensions = get_file_extensions(self.IO_REGISTRY.get_write_filters())
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=gds.DataItemValidationWarning)
-                guiparam = SaveToDirectoryGUIParam(objs, extensions)
+                labels = []
+                for obj in objs:
+                    group = self.objmodel.get_group_from_object(obj)
+                    labels.append(
+                        f"[{shorten_uuids_in_title(group.title)}] "
+                        f"{shorten_uuids_in_title(obj.title)}"
+                    )
+                guiparam = SaveToDirectoryGUIParam(objs, extensions, labels)
                 # Restore settings from config
                 saved_param = Conf.save_to_directory_settings.get(
                     SaveToDirectoryParam()
