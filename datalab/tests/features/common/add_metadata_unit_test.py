@@ -19,7 +19,7 @@ import pytest
 from sigima.objects import create_image, create_signal
 
 from datalab.env import execenv
-from datalab.gui.panel.base import AddMetadataParam
+from datalab.gui.panel.base import AddMetadataParam, collect_metadata_keys
 
 if TYPE_CHECKING:
     from sigima.objects import ImageObj, SignalObj
@@ -261,6 +261,83 @@ class TestAddMetadata:
         execenv.print("  ✓ Invalid pattern error handled")
 
         execenv.print(f"{self.test_error_handling.__doc__}: OK")
+
+    def test_namespaced_key(self) -> None:
+        """Test that plugin-style namespaced keys are accepted."""
+        p = AddMetadataParam()
+        item = AddMetadataParam.metadata_key
+        for key in ("plugin.org.example.my-plugin.exposure_time_s", "custom_key"):
+            assert item.check_value(key), key
+        for key in ("1st_key", "bad key", ".hidden"):
+            assert not item.check_value(key), key
+        del p
+
+    def test_extraction_with_scale(self) -> None:
+        """Test extracting a numeric value from titles, with a scale factor."""
+        frames = [
+            create_signal(title=title, x=np.arange(3.0), y=np.zeros(3))
+            for title in ("Flat 5 ms 01", "Dark 01", "Flat 40ms 02")
+        ]
+        p = AddMetadataParam(frames)
+        p.metadata_key = "plugin.org.example.camera.exposure_time_s"
+        p.value_pattern = "{title}"
+        p.extraction_pattern = r"([\d.]+)\s*ms"
+        p.conversion = "float"
+        p.scale = 0.001
+
+        assert p.build_values() == [0.005, None, 0.04]
+        p.update_preview()
+        assert "unchanged" in p.preview and "0.005" in p.preview
+
+        p.if_no_match = "error"
+        with pytest.raises(ValueError, match="No match"):
+            p.build_values()
+        p.update_preview()
+        assert p.preview.startswith("Invalid")
+
+    def test_extraction_without_group_and_integer_scale(self) -> None:
+        """Test whole-match extraction, integer scaling and invalid patterns."""
+        shots = [
+            create_signal(title=title, x=np.arange(3.0), y=np.zeros(3))
+            for title in ("CH1 shot 042", "CH2 shot 7")
+        ]
+        p = AddMetadataParam(shots)
+        p.value_pattern = "{title}"
+        p.extraction_pattern = r"CH\d"
+        p.conversion = "string"
+        assert p.build_values() == ["CH1", "CH2"]
+
+        p.extraction_pattern = r"shot\s*(\d+)"
+        p.conversion = "int"
+        assert p.build_values() == [42, 7]
+        p.scale = 10.0
+        assert p.build_values() == [420, 70]
+        p.scale = 0.5
+        with pytest.raises(ValueError, match="not an integer"):
+            p.build_values()
+
+        p.extraction_pattern = "shot("
+        with pytest.raises(ValueError, match="Invalid extraction pattern"):
+            p.build_values()
+
+    def test_known_keys(self) -> None:
+        """Test suggested keys and their copy into the metadata key."""
+        signals = create_test_signals()
+        signals[0].metadata["__internal"] = 1
+        signals[0].metadata["array"] = np.arange(3)
+        known = collect_metadata_keys(signals)
+        assert [key for key, _description in known] == [
+            "frequency",
+            "time_constant",
+            "type",
+        ]
+
+        p = AddMetadataParam(signals, known)
+        choices = [choice[0] for choice in p.get_known_key_choices()]
+        assert choices == ["", "frequency", "time_constant", "type"]
+        p.on_known_key_changed(None, "frequency")
+        assert p.metadata_key == "frequency"
+        assert "frequency" in p.preview
 
 
 if __name__ == "__main__":

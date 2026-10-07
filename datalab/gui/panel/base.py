@@ -111,6 +111,8 @@ from datalab.utils.qthelpers import (
 from datalab.widgets.textimport import TextImportWizard
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from plotpy.items import CurveItem, LabelItem, MaskedXYImageItem
     from sigima.io.image import ImageIORegistry
     from sigima.io.signal import SignalIORegistry
@@ -131,6 +133,28 @@ METADATA_PASTE_EXCLUSIONS = {
     f"__{CREATION_PARAMETERS_OPTION}",  # Object-specific creation parameters
     f"__{LEGACY_CREATION_PARAMETERS_OPTION}",  # Historical creation parameters
 }
+
+
+def collect_metadata_keys(objs: Sequence[TypeObj]) -> list[tuple[str, str]]:
+    """Return the user-visible scalar metadata keys of objects.
+
+    Args:
+        objs: objects to inspect
+
+    Returns:
+        Sorted ``(key, description)`` pairs, the description showing an example
+         value; internal options, ROIs and analysis results are excluded.
+    """
+    examples: dict[str, object] = {}
+    for obj in objs:
+        for key, value in obj.metadata.items():
+            if key in examples or key.startswith("_") or key == ROI_KEY:
+                continue
+            if GeometryAdapter.match(key, value) or TableAdapter.match(key, value):
+                continue
+            if isinstance(value, (str, bool, int, float, np.integer, np.floating)):
+                examples[key] = value
+    return [(key, _("e.g. %s") % repr(examples[key])) for key in sorted(examples)]
 
 
 def is_plot_item_serializable(item: Any) -> bool:
@@ -1580,15 +1604,26 @@ class AddMetadataParam(
     comment=_(
         "Add a new metadata item to the selected objects.<br><br>"
         "The metadata key will be the same for all objects, "
-        "but the value can use a pattern to generate different values.<br>"
+        "but the value can use a pattern to generate different values, "
+        "optionally extracted with a regular expression.<br>"
         "Click the <b>Help</b> button for details on the pattern syntax.<br>"
     ),
 ):
-    """Add metadata parameters"""
+    """Add metadata parameters
 
-    def __init__(self, objs: list[TypeObj] | None = None) -> None:
+    Args:
+        objs: objects receiving the metadata item
+        known_keys: suggested ``(key, description)`` pairs
+    """
+
+    def __init__(
+        self,
+        objs: list[TypeObj] | None = None,
+        known_keys: Sequence[tuple[str, str]] | None = None,
+    ) -> None:
         super().__init__()
         self.__objs = objs or []
+        self.__known_keys = list(known_keys or [])
 
     def on_help_button_click(
         self: AddMetadataParam,
@@ -1639,9 +1674,50 @@ class AddMetadataParam(
                 </tr>
             </table>
             """,
+                "",
+                "<b>Extraction:</b>",
+                """When an extraction pattern (Python regular expression) is set,
+                it is searched in the formatted value: its first group, or the
+                whole match if it has no group, becomes the value. Objects without
+                a match are left unchanged, unless 'If no match' asks to report an
+                error. Numeric values are then multiplied by the scale factor.""",
+                "",
+                """
+            <table border="1" cellspacing="0" cellpadding="4">
+                <tr><th>Pattern</th><th>Extraction</th><th>Conversion</th>
+                    <th>Scale</th><th>Result</th></tr>
+                <tr>
+                    <td>{title}</td>
+                    <td>([\\d.]+)\\s*ms</td>
+                    <td>Float</td>
+                    <td>0.001</td>
+                    <td>'Flat 5 ms 01' &rarr; 0.005<br>'Dark 01' &rarr; unchanged</td>
+                </tr>
+                <tr>
+                    <td>{title}</td>
+                    <td>shot\\s*(\\d+)</td>
+                    <td>Integer</td>
+                    <td>1</td>
+                    <td>'CH1 shot 042' &rarr; 42</td>
+                </tr>
+            </table>
+            """,
             ]
         )
         NonModalInfoDialog(parent, _("Pattern help"), text).show()
+
+    def get_known_key_choices(self, _item=None, _value=None):
+        """Return the suggested metadata keys."""
+        return [("", _("Select a key..."), None)] + [
+            (key, f"{key} — {description}" if description else key, None)
+            for key, description in self.__known_keys
+        ]
+
+    def on_known_key_changed(self, _item=None, value=None) -> None:
+        """Copy the selected suggestion into the metadata key."""
+        if value:
+            self.metadata_key = value
+        self.update_preview()
 
     def get_conversion_choices(self, _item=None, _value=None):
         """Return list of available conversion choices."""
@@ -1654,41 +1730,72 @@ class AddMetadataParam(
 
     def build_values(
         self, objs: list[TypeObj] | None = None
-    ) -> list[str | float | int | bool]:
+    ) -> list[str | float | int | bool | None]:
         """Build values according to current parameters.
 
+        Returns:
+            One value per object; ``None`` for objects left unchanged because
+             the extraction pattern does not match.
+
         Raises:
-            ValueError: If a value cannot be converted to the target type.
+            ValueError: If the extraction pattern is invalid or does not match
+             (when asked to report it), or if a value cannot be converted.
         """
         objs = objs or self.__objs
         # Generate values using the pattern
         raw_values = format_basenames(objs, self.value_pattern)
+        regex = None
+        if self.extraction_pattern:
+            try:
+                regex = re.compile(self.extraction_pattern)
+            except re.error as exc:
+                raise ValueError(f"Invalid extraction pattern: {exc}") from exc
 
-        # Convert values according to the selected conversion type
-        converted_values = []
+        converted_values: list[str | float | int | bool | None] = []
         for i, value_str in enumerate(raw_values, start=1):
-            if self.conversion == "string":
-                converted_values.append(value_str)
-            elif self.conversion == "float":
-                try:
-                    converted_values.append(float(value_str))
-                except ValueError as exc:
-                    raise ValueError(
-                        f"Cannot convert value at index {i} to float: '{value_str}'"
-                    ) from exc
-            elif self.conversion == "int":
-                try:
-                    converted_values.append(int(value_str))
-                except ValueError as exc:
-                    raise ValueError(
-                        f"Cannot convert value at index {i} to integer: '{value_str}'"
-                    ) from exc
-            elif self.conversion == "bool":
-                # Convert to boolean: "true", "1", "yes" -> True, others -> False
-                lower_val = value_str.lower()
-                converted_values.append(lower_val in ("true", "1", "yes", "on"))
-
+            if regex is not None:
+                match = regex.search(value_str)
+                extracted = None
+                if match is not None:
+                    extracted = match.group(1) if regex.groups else match.group(0)
+                if extracted is None:
+                    if self.if_no_match == "error":
+                        raise ValueError(
+                            f"No match for the value at index {i}: '{value_str}'"
+                        )
+                    converted_values.append(None)
+                    continue
+                value_str = extracted
+            converted_values.append(self.__convert(i, value_str))
         return converted_values
+
+    def __convert(self, index: int, value_str: str) -> str | float | int | bool:
+        """Convert one formatted value according to the selected conversion."""
+        if self.conversion == "float":
+            try:
+                return float(value_str) * self.scale
+            except ValueError as exc:
+                raise ValueError(
+                    f"Cannot convert value at index {index} to float: '{value_str}'"
+                ) from exc
+        if self.conversion == "int":
+            try:
+                value = int(value_str)
+            except ValueError as exc:
+                raise ValueError(
+                    f"Cannot convert value at index {index} to integer: '{value_str}'"
+                ) from exc
+            if self.scale == 1.0:
+                return value
+            scaled = value * self.scale
+            if not float(scaled).is_integer():
+                raise ValueError(
+                    f"Scaled value at index {index} is not an integer: {scaled}"
+                )
+            return int(scaled)
+        if self.conversion == "bool":
+            return value_str.lower() in ("true", "1", "yes", "on")
+        return value_str
 
     def update_preview(self, _item=None, _value=None) -> None:
         """Update preview."""
@@ -1702,7 +1809,10 @@ class AddMetadataParam(
                 except (ValueError, KeyError):
                     # Fallback to simple index for objects not yet in panel
                     obj_id = str(i)
-                preview_lines.append(f"{obj_id}: {self.metadata_key} = {value!r}")
+                if value is None:
+                    preview_lines.append(f"{obj_id}: " + _("unchanged"))
+                else:
+                    preview_lines.append(f"{obj_id}: {self.metadata_key} = {value!r}")
             self.preview = "\n".join(preview_lines)
         except ValueError as exc:
             # Handle conversion errors
@@ -1715,9 +1825,16 @@ class AddMetadataParam(
         _("Metadata key"),
         default="custom_key",
         notempty=True,
-        regexp=r"^[a-zA-Z_][a-zA-Z0-9_]*$",
+        regexp=r"^[a-zA-Z_][a-zA-Z0-9_.\-]*$",
         help=_("The key name for the metadata item"),
     ).set_prop("display", callback=update_preview)
+
+    known_key = gds.ChoiceItem(
+        _("Known keys"),
+        get_known_key_choices,
+        default="",
+        help=_("Copy a key found on the selected objects into the metadata key"),
+    ).set_prop("display", callback=on_known_key_changed)
 
     value_pattern = gds.StringItem(
         _("Value pattern"),
@@ -1729,9 +1846,38 @@ class AddMetadataParam(
         _("Help"), on_help_button_click, "MessageBoxInformation"
     ).set_pos(col=1)
 
+    extraction_pattern = gds.StringItem(
+        _("Extraction pattern"),
+        default="",
+        help=_(
+            "Optional regular expression searched in the formatted value: "
+            "its first group, or the whole match, becomes the value"
+        ),
+    ).set_prop("display", callback=update_preview)
+
+    if_no_match = gds.ChoiceItem(
+        _("If no match"),
+        [
+            ("skip", _("Leave the object unchanged")),
+            ("error", _("Report an error")),
+        ],
+        default="skip",
+    ).set_prop("display", callback=update_preview)
+
+    _prop_conversion = gds.GetAttrProp("conversion")
     conversion = gds.ChoiceItem(
         _("Conversion"), get_conversion_choices, default="string"
-    ).set_prop("display", callback=update_preview)
+    ).set_prop("display", store=_prop_conversion, callback=update_preview)
+
+    scale = gds.FloatItem(
+        _("Scale factor"),
+        default=1.0,
+        help=_("Multiplies numeric values, e.g. 0.001 to convert ms to s"),
+    ).set_prop(
+        "display",
+        active=gds.FuncProp(_prop_conversion, lambda value: value in ("float", "int")),
+        callback=update_preview,
+    )
 
     preview = gds.TextItem(_("Preview"), default="", regexp=r"^(?!Invalid).*").set_prop(
         "display", readonly=True
@@ -2337,6 +2483,19 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.refresh_plot(
             "selected", update_items=True, only_visible=False, only_existing=True
         )
+        if sel_objects:
+            self.SIG_OBJECT_MODIFIED.emit()
+
+    def get_known_metadata_keys(self, objs: Sequence[TypeObj]) -> list[tuple[str, str]]:
+        """Return the metadata keys suggested by the Add metadata dialog.
+
+        Args:
+            objs: selected objects
+
+        Returns:
+            ``(key, description)`` pairs
+        """
+        return collect_metadata_keys(objs)
 
     def add_metadata(self, param: AddMetadataParam | None = None) -> None:
         """Add metadata item to selected object(s)
@@ -2349,10 +2508,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             return
 
         if param is None:
-            param = AddMetadataParam(sel_objects)
+            param = AddMetadataParam(
+                sel_objects, self.get_known_metadata_keys(sel_objects)
+            )
             # Restore settings from config
             saved_param = Conf.add_metadata_settings.get(AddMetadataParam())
             update_dataset(param, saved_param)
+            param.known_key = ""
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=gds.DataItemValidationWarning)
                 if not param.edit(parent=self.parentWidget(), wordwrap=False):
@@ -2372,14 +2534,19 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Build values for all selected objects
         values = param.build_values(sel_objects)
 
-        # Add metadata to each object
+        # Add metadata to each object, except those left unchanged by extraction
+        modified = False
         for obj, value in zip(sel_objects, values):
-            obj.metadata[param.metadata_key] = value
+            if value is not None:
+                obj.metadata[param.metadata_key] = value
+                modified = True
 
         # Refresh the plot to update any changes
         self.refresh_plot(
             "selected", update_items=True, only_visible=False, only_existing=True
         )
+        if modified:
+            self.SIG_OBJECT_MODIFIED.emit()
 
     def copy_roi(self, roi_data=None) -> None:
         """Copy regions of interest
@@ -2557,6 +2724,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             self.refresh_plot(
                 "selected", update_items=True, only_visible=False, only_existing=True
             )
+        if sel_objs:
+            self.SIG_OBJECT_MODIFIED.emit()
 
     def add_annotations_from_items(
         self, items: list, refresh_plot: bool = True

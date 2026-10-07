@@ -114,6 +114,15 @@ msgstr "Chaque projet généré comprend un test de non-régression exécutable 
 msgid "Long plugin names and descriptions are now formatted so newly generated projects pass their bundled Ruff checks without manual source edits"
 msgstr "Les noms et descriptions de plugins longs sont désormais mis en forme afin que les projets nouvellement générés réussissent leurs contrôles Ruff intégrés sans modification manuelle du code source"
 
+msgid "**Add metadata:**"
+msgstr "**Ajout de métadonnées :**"
+
+msgid "**Edit > Metadata > Add metadata...** can now extract the value from the formatted text with a regular expression, for example an exposure time or a shot number read from object titles. Objects without a match are left unchanged unless you ask for an error, and a scale factor converts numeric values (e.g. milliseconds to seconds)"
+msgstr "**Édition > Métadonnées > Ajouter une métadonnée...** peut désormais extraire la valeur du texte formaté avec une expression régulière, par exemple un temps d'exposition ou un numéro de tir lu dans les titres des objets. Les objets sans correspondance restent inchangés, sauf si vous demandez une erreur, et un facteur d'échelle convertit les valeurs numériques (par exemple des millisecondes en secondes)"
+
+msgid "Metadata keys may now contain dots and hyphens, as used by plugin keys, and a **Known keys** list copies a key already present on the selected objects"
+msgstr "Les clés de métadonnées peuvent désormais contenir des points et des tirets, comme les clés des plugins, et une liste **Clés connues** copie une clé déjà présente sur les objets sélectionnés"
+
 msgid "🔄 Changes"
 msgstr "🔄 Changements"
 
@@ -149,6 +158,18 @@ msgstr "DataLab nécessite désormais Sigima ≥ 1.3.0 et SigimaX ≥ 1.1.0"
 
 msgid "🛠️ Bug Fixes"
 msgstr "🛠️ Corrections de bugs"
+
+msgid "**Window layout:**"
+msgstr "**Disposition de la fenêtre :**"
+
+msgid "Fixed the width of the signal/image panels not being restored at startup: after narrowing the panels and restarting DataLab, they came back wider (up to their maximum width) instead of keeping the width chosen by the user"
+msgstr "Correction de la largeur des panneaux Signal/Image non restaurée au démarrage : après avoir réduit les panneaux puis redémarré DataLab, ils réapparaissaient plus larges (jusqu'à leur largeur maximale) au lieu de conserver la largeur choisie par l'utilisateur"
+
+msgid "**Metadata:**"
+msgstr "**Métadonnées :**"
+
+msgid "Adding, pasting or deleting metadata now marks the workspace as modified, so DataLab asks to save these changes before closing"
+msgstr "L'ajout, le collage ou la suppression de métadonnées marque désormais l'espace de travail comme modifié : DataLab propose donc d'enregistrer ces changements avant de se fermer"
 
 msgid "**Plugins and History:**"
 msgstr "**Plugins et historique :**"

@@ -45,6 +45,11 @@
 * Every generated project includes an executable architecture regression test, contribution and architecture documentation, and a changelog
 * Long plugin names and descriptions are now formatted so newly generated projects pass their bundled Ruff checks without manual source edits
 
+**Add metadata:**
+
+* **Edit > Metadata > Add metadata...** can now extract the value from the formatted text with a regular expression, for example an exposure time or a shot number read from object titles. Objects without a match are left unchanged unless you ask for an error, and a scale factor converts numeric values (e.g. milliseconds to seconds)
+* Metadata keys may now contain dots and hyphens, as used by plugin keys, and a **Known keys** list copies a key already present on the selected objects
+
 ### 🔄 Changes ###
 
 **Guided tour:**
@@ -64,6 +69,14 @@
 * DataLab now requires Sigima ≥ 1.3.0 and SigimaX ≥ 1.1.0
 
 ### 🛠️ Bug Fixes ###
+
+**Window layout:**
+
+* Fixed the width of the signal/image panels not being restored at startup: after narrowing the panels and restarting DataLab, they came back wider (up to their maximum width) instead of keeping the width chosen by the user
+
+**Metadata:**
+
+* Adding, pasting or deleting metadata now marks the workspace as modified, so DataLab asks to save these changes before closing
 
 **Plugins and History:**
 
