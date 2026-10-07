@@ -59,7 +59,7 @@ from datalab.control.baseproxy import AbstractDLControl
 from datalab.control.remote import RemoteServer
 from datalab.env import execenv
 from datalab.gui.actionhandler import ActionCategory
-from datalab.gui.applications import ApplicationsDialog
+from datalab.gui.applications import ApplicationsDialog, get_plugin_icon
 from datalab.gui.commandpalette import (
     CommandPaletteDialog,
     CommandSearchField,
@@ -67,6 +67,7 @@ from datalab.gui.commandpalette import (
 )
 from datalab.gui.docks import DockablePlotWidget
 from datalab.gui.h5io import H5InputOutput
+from datalab.gui.instrument import InstrumentWindow
 from datalab.gui.panel import base, history, image, macro, signal
 from datalab.gui.pluginconfig import PluginConfigDialog
 from datalab.gui.processor.base import FeatureNotFoundError
@@ -74,6 +75,7 @@ from datalab.gui.processor.preview import PreviewExecutorCache
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
 from datalab.gui.welcome import WelcomePanel
 from datalab.objectmodel import ObjectGroup, get_uuid
+from datalab.plugin_tools import tool_accepts_selection
 from datalab.plugins import (
     PluginRegistry,
     discover_plugins,
@@ -81,7 +83,10 @@ from datalab.plugins import (
     migrate_enabled_plugin_ids,
 )
 from datalab.utils import qthelpers as qth
-from datalab.utils.qthelpers import configure_menu_about_to_show
+from datalab.utils.qthelpers import (
+    configure_menu_about_to_show,
+    qt_handle_error_message,
+)
 from datalab.webapi import WEBAPI_AVAILABLE, get_webapi_controller
 from datalab.webapi.actions import WebApiActions
 from datalab.widgets import instconfviewer
@@ -95,6 +100,7 @@ if TYPE_CHECKING:
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.macro import MacroPanel
     from datalab.gui.panel.signal import SignalPanel
+    from datalab.plugin_tools import PluginTool
     from datalab.plugins import PluginBase
 
 
@@ -145,6 +151,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.historypanel: history.HistoryPanel | None = None
         self.aiassistantpanel = None  # type: ignore[assignment]
         self.__applications_dialog: ApplicationsDialog | None = None
+        self.__instrument_windows: dict[tuple[str, str], InstrumentWindow] = {}
         self.welcomepanel: WelcomePanel | None = None
 
         self.signalpanel_toolbar: QW.QToolBar | None = None
@@ -960,10 +967,91 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                             plugin.register_computations()
                             plugin.create_actions()
                             rollback_stack.pop_all()
+                    with sgmx_qth.try_or_log_error(
+                        f"Create tool actions for {plugin.info.name}"
+                    ):
+                        self.__create_plugin_tool_actions(plugin)
+
+    def __create_plugin_tool_actions(self, plugin: PluginBase) -> None:
+        """Add the plugin's tools to its submenu of the *Plugins* menu
+
+        Each tool is listed in the panel of its object type (both panels when
+        it has none), after the plugin's own actions.
+        """
+        title = plugin.info.name.replace("&", "&&")
+        for panel in (self.signalpanel, self.imagepanel):
+            tools = [
+                tool
+                for tool in plugin.get_tools()
+                if tool.object_type is None
+                or tool.object_type.value == panel.PANEL_STR_ID
+            ]
+            if not tools:
+                continue
+            handler = panel.acthandler
+            with handler.new_menu(title):
+                for index, tool in enumerate(tools):
+                    action = handler.new_action(
+                        tool.title,
+                        separator=index == 0,
+                        triggered=functools.partial(
+                            self.__launch_plugin_tool, plugin, tool.id
+                        ),
+                        tip=tool.description or None,
+                        select_condition=functools.partial(
+                            self.__tool_selection_condition, tool
+                        ),
+                    )
+                    action.setIcon(get_plugin_icon(tool.icon))
 
     @staticmethod
-    def __unregister_plugins() -> None:
+    def __tool_selection_condition(
+        tool: PluginTool,
+        _selected_groups: list[ObjectGroup],
+        selected_objects: list,
+    ) -> bool:
+        """Return True if a tool's menu action is enabled on the selection."""
+        return tool_accepts_selection(tool, selected_objects)
+
+    def __launch_plugin_tool(self, plugin: PluginBase, tool_id: str) -> None:
+        """Open a plugin tool from the menu, reporting its failures."""
+        try:
+            plugin.launch_tool(tool_id)
+        except Exception as exc:  # pylint: disable=broad-except
+            # Plugin-owned tools are third-party code: never crash the app
+            qt_handle_error_message(self, exc, _("Opening tool '%s'") % tool_id)
+
+    def open_plugin_instrument(
+        self, plugin: PluginBase, tool: PluginTool
+    ) -> InstrumentWindow:
+        """Show the instrument window of a plugin tool, creating it if needed."""
+        key = (plugin.plugin_id, tool.id)
+        window = self.__instrument_windows.get(key)
+        if window is None:
+            window = InstrumentWindow(self, plugin.get_instrument(tool.id), tool.title)
+            window.finished.connect(
+                functools.partial(self.__forget_instrument_window, key)
+            )
+            self.__instrument_windows[key] = window
+        window.show()
+        window.raise_()
+        window.activateWindow()
+        return window
+
+    def __forget_instrument_window(self, key: tuple[str, str], *_args) -> None:
+        """Release a closed instrument window."""
+        window = self.__instrument_windows.pop(key, None)
+        if window is not None:
+            window.deleteLater()
+
+    def close_plugin_instruments(self) -> None:
+        """Close all plugin instrument windows."""
+        for window in list(self.__instrument_windows.values()):
+            window.close()
+
+    def __unregister_plugins(self) -> None:
         """Unregister all plugins and let them cleanup their hooks"""
+        self.close_plugin_instruments()
         with sgmx_qth.try_or_log_error("Unregistering plugins"):
             PluginRegistry.unregister_all_plugins()
 

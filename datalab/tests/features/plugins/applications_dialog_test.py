@@ -114,6 +114,7 @@ def _plugin(
         get_examples=lambda: examples,
         get_tools=lambda: tools,
         assess_recipe=lambda recipe_id: readiness,
+        assess_tool=lambda tool_id: None,
         launch_recipe=lambda recipe_id: calls.append(("recipe", recipe_id)),
         try_example=lambda example_id, recipe_id: calls.append(
             ("try", example_id, recipe_id)
@@ -187,6 +188,39 @@ def test_applications_dialog_filters_and_renders_declared_contracts() -> None:
         assert card.run_button.isEnabled()
         assert page.documentation_button.isEnabled()
         assert qt_app is not None
+    finally:
+        registry[:] = previous_plugins
+        if "dialog" in locals():
+            dialog.close()
+            dialog.deleteLater()
+            QW.QApplication.processEvents()
+
+
+def test_tool_buttons_follow_the_tool_selection() -> None:
+    """A tool that cannot be opened on the selection has a disabled button."""
+    QW.QApplication.instance() or QW.QApplication([])
+    issues = {"annotate": "Select one image"}
+    application = _plugin(
+        "org.example.camera",
+        "Camera Characterization",
+        frozenset({PluginCapability.APPLICATION}),
+        tools=(TOOL,),
+    )
+    application.assess_tool = issues.get
+    registry = PluginRegistry.get_plugins()
+    previous_plugins = list(registry)
+    registry[:] = [application]
+    try:
+        dialog = ApplicationsDialog()
+        dialog.show()
+        QW.QApplication.processEvents()
+        button = dialog.application_pages[0].tool_buttons[TOOL.id]
+        assert not button.isEnabled()
+        assert button.toolTip() == "Select one image"
+        issues.clear()
+        dialog.refresh_readiness()
+        assert button.isEnabled()
+        assert button.toolTip() == ""
     finally:
         registry[:] = previous_plugins
         if "dialog" in locals():

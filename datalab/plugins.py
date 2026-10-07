@@ -58,8 +58,9 @@ from datalab.control.proxy import LocalProxy
 from datalab.env import execenv
 from datalab.objectmodel import get_uuid
 from datalab.plugin_examples import PluginExample, PluginExampleData
+from datalab.plugin_instruments import PluginInstrument
 from datalab.plugin_tiles import WelcomeTile
-from datalab.plugin_tools import PluginTool
+from datalab.plugin_tools import PluginTool, ToolSelection, tool_accepts_selection
 from datalab.recipe_binding import (
     RecipeReadiness,
     assess_recipe_inputs,
@@ -300,6 +301,23 @@ class PluginInfo:
                 raise ValueError("Plugin documentation URL must use HTTP or HTTPS")
 
 
+def format_tool_requirement(tool: PluginTool) -> str:
+    """Return the message telling which objects to select to open a tool."""
+    object_type = None if tool.object_type is None else tool.object_type.value
+    messages = {
+        (ToolSelection.EXACTLY_ONE, "signal"): _("Select one signal"),
+        (ToolSelection.EXACTLY_ONE, "image"): _("Select one image"),
+        (ToolSelection.EXACTLY_ONE, None): _("Select one object"),
+        (ToolSelection.AT_LEAST_ONE, "signal"): _("Select at least one signal"),
+        (ToolSelection.AT_LEAST_ONE, "image"): _("Select at least one image"),
+        (ToolSelection.AT_LEAST_ONE, None): _("Select at least one object"),
+        (ToolSelection.AT_LEAST_TWO, "signal"): _("Select at least two signals"),
+        (ToolSelection.AT_LEAST_TWO, "image"): _("Select at least two images"),
+        (ToolSelection.AT_LEAST_TWO, None): _("Select at least two objects"),
+    }
+    return messages.get((tool.selection, object_type), "")
+
+
 class PluginBaseMeta(PluginRegistry, abc.ABCMeta):
     """Mixed metaclass to avoid conflicts"""
 
@@ -322,6 +340,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         self.main: main.DLMainWindow = None
         self.proxy: LocalProxy = None
         self._is_registered = False
+        self._instruments: dict[str, PluginInstrument] = {}
         self.info = self.PLUGIN_INFO
         if self.info is None:
             raise ValueError(f"Plugin info not set for {self.__class__.__name__}")
@@ -521,9 +540,11 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         for tool in tools:
             if tool.id in tool_ids:
                 raise ValueError(f"Duplicate plugin tool ID: {tool.id!r}")
-            if not callable(getattr(cls, tool.launcher, None)):
+            method_name = tool.launcher or tool.instrument
+            if not callable(getattr(cls, method_name, None)):
+                kind = "launcher" if tool.launcher else "instrument"
                 raise ValueError(
-                    f"Plugin tool launcher method {tool.launcher!r} is not callable"
+                    f"Plugin tool {kind} method {method_name!r} is not callable"
                 )
             tool_ids.add(tool.id)
         return tuple(
@@ -533,14 +554,65 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
             for tool in tools
         )
 
+    @classmethod
+    def get_tool(cls, tool_id: str) -> PluginTool:
+        """Return one tool by its plugin-local ID."""
+        for tool in cls.get_tools():
+            if tool.id == tool_id:
+                return tool
+        raise KeyError(f"Plugin tool {tool_id!r} not found")
+
+    def assess_tool(
+        self,
+        tool_id: str,
+        objects: Sequence[SignalObj | ImageObj] | None = None,
+    ) -> str | None:
+        """Return why a tool cannot be opened on objects (default: selection).
+
+        Returns:
+            Message telling which objects to select, or None if the tool
+            can be opened
+        """
+        tool = self.get_tool(tool_id)
+        if tool.selection is ToolSelection.NONE:
+            return None
+        if objects is None:
+            objects = self.get_selected_objects()
+        if tool_accepts_selection(tool, objects):
+            return None
+        return format_tool_requirement(tool)
+
     def launch_tool(self, tool_id: str) -> object:
-        """Open a plugin tool by calling its launcher method."""
+        """Open a plugin tool: call its launcher, or show its instrument.
+
+        Raises:
+            ValueError: if the selection does not allow opening the tool
+        """
         if self.main is None:
             raise RuntimeError("Plugin must be registered before launching a tool")
-        tool = next((tool for tool in self.get_tools() if tool.id == tool_id), None)
-        if tool is None:
-            raise KeyError(f"Plugin tool {tool_id!r} not found")
-        return getattr(self, tool.launcher)()
+        tool = self.get_tool(tool_id)
+        issue = self.assess_tool(tool_id)
+        if issue is not None:
+            raise ValueError(issue)
+        if tool.launcher is not None:
+            return getattr(self, tool.launcher)()
+        return self.main.open_plugin_instrument(self, tool)
+
+    def get_instrument(self, tool_id: str) -> PluginInstrument:
+        """Return the instrument of a tool, created once per registration."""
+        tool = self.get_tool(tool_id)
+        if tool.instrument is None:
+            raise ValueError(f"Plugin tool {tool_id!r} has no instrument")
+        instruments = self._instruments
+        if tool_id not in instruments:
+            instrument = getattr(self, tool.instrument)()
+            if not isinstance(instrument, PluginInstrument):
+                raise TypeError(
+                    f"Plugin tool instrument method {tool.instrument!r} must "
+                    "return a PluginInstrument"
+                )
+            instruments[tool_id] = instrument
+        return instruments[tool_id]
 
     @classmethod
     def get_examples(cls) -> tuple[PluginExample, ...]:
@@ -871,6 +943,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         self._is_registered = False
         self.main = None
         self.proxy = None
+        self._instruments.clear()
 
     def register(self, main: main.DLMainWindow) -> None:
         """Register plugin"""

@@ -78,6 +78,12 @@ msgstr "Les exemples sont listés sous les méthodes pour lesquelles ils sont co
 msgid "Application plugins may also list tools, such as wizards or editors, in the catalog"
 msgstr "Les plugins d'application peuvent aussi lister des outils, comme des assistants ou des éditeurs, dans le catalogue"
 
+msgid "Plugin tools also appear in the plugin's submenu of the **Plugins** menu, in the Signal or Image panel they work on. A tool that needs a selection is disabled until the right objects are selected, and its catalog button tells what to select"
+msgstr "Les outils de plugin apparaissent aussi dans le sous-menu du plugin du menu **Plugins**, dans le panneau Signal ou Image sur lequel ils travaillent. Un outil qui a besoin d'une sélection est désactivé jusqu'à ce que les bons objets soient sélectionnés, et son bouton dans le catalogue indique quoi sélectionner"
+
+msgid "Application plugins may provide instruments, such as simulated cameras or oscilloscopes, without writing any user interface: DataLab shows a window with a live view and the instrument settings, refreshed as settings change or continuously in **Live** mode, and **Acquire** adds the acquired objects to a new group, ready for the application's methods"
+msgstr "Les plugins d'application peuvent fournir des instruments, comme des caméras ou des oscilloscopes simulés, sans écrire d'interface utilisateur : DataLab affiche une fenêtre avec une vue en direct et les réglages de l'instrument, rafraîchie à chaque modification des réglages ou en continu en mode **En direct**, et **Acquérir** ajoute les objets acquis dans un nouveau groupe, prêts pour les méthodes de l'application"
+
 msgid "Plugin developers describe recipe inputs declaratively (titles, minimum counts, metadata requirements) and may add binding suggestions and fast input checks; every recipe then runs through DataLab's generic launcher, without plugin-specific input dialogs"
 msgstr "Les développeurs de plugins décrivent les entrées des recettes de manière déclarative (titres, effectifs minimaux, métadonnées requises) et peuvent ajouter des suggestions d'affectation et des vérifications rapides des entrées ; chaque recette s'exécute alors via le lanceur générique de DataLab, sans boîte de dialogue d'entrées propre au plugin"
 
