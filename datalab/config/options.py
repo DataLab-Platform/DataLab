@@ -147,13 +147,16 @@ class DataLabOptions(SigimaXOptions):
             expected_type=list,
             description="List of extra plugin directories.",
         )
-        self.tour_enabled = TypedOptionField(
+        self.welcome_on_startup = TypedOptionField(
             self,
-            "tour_enabled",
+            "welcome_on_startup",
             category="main",
             default=True,
             expected_type=bool,
-            description="If True, offer the guided tour on first startup.",
+            description=(
+                "If True, show the welcome page at startup and whenever the "
+                "current signal or image panel is empty."
+            ),
         )
         self.v020_plugins_warning_ignore = TypedOptionField(
             self,

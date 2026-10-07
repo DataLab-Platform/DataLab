@@ -450,6 +450,13 @@ and remote control from any HTTP client (including WASM/Pyodide environments).
 - **UI text**: User-friendly, explicit (e.g., _("Replace X by other signal's Y"))
 - **French translation**: Natural phrasing (e.g., "Remplacer X par le Y d'un autre signal")
 
+### Attribute Contracts
+
+- Before adding `getattr(obj, "attribute", default)`, `hasattr`, or an `AttributeError` fallback, inspect the owning class, initialization order, and relevant call sites to establish whether the attribute can legitimately be absent.
+- Use direct access for attributes guaranteed by the object's contract (e.g., `mainwindow.historypanel` after window setup). Do not silently skip required behavior or add `None` guards to compensate for an unverified assumption.
+- If a test double lacks a required attribute, fix the test double to satisfy the production contract; do not weaken production code solely to accommodate incomplete mocks.
+- Defensive attribute access is appropriate only for verified optional capabilities, supported compatibility paths, or genuinely dynamic attribute names. Make the reason clear and cover the supported absence case in tests. If access occurs too early, fix the initialization order or call timing instead of hiding the defect.
+
 ### Type Annotations
 
 **Always use** `from __future__ import annotations` for forward references:

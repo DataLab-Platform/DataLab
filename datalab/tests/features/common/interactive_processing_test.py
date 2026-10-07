@@ -1083,9 +1083,7 @@ def test_apply_processing_parameters_signal():
             # Change constant from 5.0 to 15.0
             editor.dataset.value = v1 = 15.0
 
-            # In-place update requires History panel edit mode (otherwise a new
-            # object is created instead of mutating the existing one).
-            win.historypanel.toggle_edit_mode(True)
+            assert not win.historypanel.is_edit_mode()
 
             # Apply the new processing parameters
             report = objprop.apply_processing_parameters()
@@ -1098,6 +1096,8 @@ def test_apply_processing_parameters_signal():
             assert get_uuid(processed_sig) == processed_uuid
 
             # Verify the new constant was applied: data should now be original + 15.0
+            assert len(panel.objmodel) == 2
+            assert panel.objmodel[processed_uuid] is processed_sig
             assert np.allclose(processed_sig.y, original_signal_data + v1)
 
             # Verify metadata still points to the same source
@@ -1148,9 +1148,7 @@ def test_apply_processing_parameters_image():
             # Change constant from 7.0 to 20.0
             editor.dataset.value = v1 = 20.0
 
-            # In-place update requires History panel edit mode (otherwise a new
-            # object is created instead of mutating the existing one).
-            win.historypanel.toggle_edit_mode(True)
+            assert not win.historypanel.is_edit_mode()
 
             # Apply the new processing parameters
             report = objprop.apply_processing_parameters()
@@ -1163,6 +1161,8 @@ def test_apply_processing_parameters_image():
             assert get_uuid(processed_ima) == processed_uuid
 
             # Verify the new constant was applied: data should now be original + 20.0
+            assert len(panel.objmodel) == 2
+            assert panel.objmodel[processed_uuid] is processed_ima
             assert np.allclose(processed_ima.data, original_image_data + v1)
 
             # Verify metadata still points to the same source
@@ -1261,6 +1261,9 @@ def test_apply_processing_parameters_explicit_param():
                     processed_sig, interactive=False
                 )
                 assert report.success, f"Reprocessing failed: {report.message}"
+                assert report.obj_uuid == processed_uuid
+                assert len(panel.objmodel) == 2
+                assert panel.objmodel[processed_uuid] is processed_sig
             finally:
                 processor.recompute_1_to_1 = original_recompute_1_to_1
 

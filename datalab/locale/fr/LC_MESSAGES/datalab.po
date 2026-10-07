@@ -1413,20 +1413,6 @@ msgstr "L'objet source n'existe plus."
 msgid "The object that was used to create this processed object has been deleted and cannot be used for reprocessing."
 msgstr "L'objet qui a été utilisé pour créer cet objet traité a été supprimé et ne peut pas être utilisé pour le retraitement."
 
-#, python-format
-msgid ""
-"Failed to reprocess object:\n"
-"%s"
-msgstr ""
-"Échec du retraitement de l'objet :\n"
-"%s"
-
-msgid "Processing was cancelled."
-msgstr "Le traitement a été annulé."
-
-msgid "Failed to reprocess object."
-msgstr "Échec du retraitement de l'objet."
-
 msgid "Geometry results"
 msgstr "Résultats géométriques"
 
@@ -1466,8 +1452,8 @@ msgstr "Écraser les fichiers existants"
 msgid "Preview"
 msgstr "Aperçu"
 
-msgid "Add a new metadata item to the selected objects.<br><br>The metadata key will be the same for all objects, but the value can use a pattern to generate different values.<br>Click the <b>Help</b> button for details on the pattern syntax.<br>"
-msgstr "Ajouter un nouvel élément de métadonnée aux objets sélectionnés.<br><br>La clé de métadonnée sera la même pour tous les objets, mais la valeur peut utiliser un modèle pour générer des valeurs différentes.<br>Cliquez sur le bouton <b>Aide</b> pour plus de détails sur la syntaxe du modèle.<br>"
+msgid "Add a new metadata item to the selected objects.<br><br>The metadata key will be the same for all objects, but the value can use a pattern to generate different values, optionally extracted with a regular expression.<br>Click the <b>Help</b> button for details on the pattern syntax.<br>"
+msgstr "Ajouter un nouvel élément de métadonnée aux objets sélectionnés.<br><br>La clé de métadonnée sera la même pour tous les objets, mais la valeur peut utiliser un modèle pour générer des valeurs différentes, éventuellement extraites par une expression régulière.<br>Cliquez sur le bouton <b>Aide</b> pour plus de détails sur la syntaxe du modèle.<br>"
 
 msgid "String"
 msgstr "Chaîne de caractères"
@@ -2153,6 +2139,20 @@ msgstr "Oui à tout"
 msgid "Processing metadata is incomplete (missing source UUID)."
 msgstr "Les métadonnées de traitement sont incomplètes (UUID source manquant)."
 
+#, python-format
+msgid ""
+"Failed to reprocess object:\n"
+"%s"
+msgstr ""
+"Échec du retraitement de l'objet :\n"
+"%s"
+
+msgid "Processing was cancelled."
+msgstr "Le traitement a été annulé."
+
+msgid "Failed to reprocess object."
+msgstr "Échec du retraitement de l'objet."
+
 msgid "Signal was reprocessed."
 msgstr "Le signal a été retraité."
 
@@ -2177,6 +2177,9 @@ msgstr "En mode 'pairwise', vous devez sélectionner des objets dans au moins de
 
 msgid "In pairwise mode, you need to select the same number of objects in each group."
 msgstr "En mode 'pairwise', vous devez sélectionner le même nombre d'objets dans chaque groupe."
+
+msgid "A preview source was removed. The processing was cancelled."
+msgstr "Un objet source de l'aperçu a été supprimé. Le traitement a été annulé."
 
 #, python-format
 msgid "Calculating: %s"
@@ -2459,6 +2462,9 @@ msgstr "Seuillage Triangle"
 
 msgid "Yen thresholding"
 msgstr "Seuillage Yen"
+
+msgid "Brightness and contrast"
+msgstr "Luminosité et contraste"
 
 msgid "Gamma correction"
 msgstr "Correction gamma"
@@ -3850,6 +3856,30 @@ msgstr "Configuration utilisateur"
 msgid "Plugins and I/O features"
 msgstr "Plugins et fonctionnalités d'entrée/sortie"
 
+msgid "Preview source"
+msgstr "Source de l'aperçu"
+
+msgid "Preview disabled"
+msgstr "Aperçu désactivé"
+
+msgid "Computing preview..."
+msgstr "Calcul de l'aperçu..."
+
+msgid "Invalid parameters"
+msgstr "Paramètres invalides"
+
+msgid "Updating preview..."
+msgstr "Mise à jour de l'aperçu..."
+
+msgid "Preview failed"
+msgstr "Échec de l'aperçu"
+
+msgid "This result cannot be previewed."
+msgstr "Ce résultat ne peut pas être prévisualisé."
+
+msgid "Preview up to date"
+msgstr "Aperçu à jour"
+
 msgid "Kernel / Mask preview"
 msgstr "Aperçu du noyau / masque"
 
@@ -4140,3 +4170,124 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
 
+msgid "Show welcome page when the current panel is empty"
+msgstr "Afficher la page d'accueil lorsque le panneau courant est vide"
+
+msgid "The welcome page gathers the main actions to get started (create or open data, guided tour, documentation...). It is shown at startup and whenever the current signal or image panel is empty."
+msgstr "La page d'accueil rassemble les principales actions pour bien démarrer (créer ou ouvrir des données, visite guidée, documentation...). Elle est affichée au démarrage et chaque fois que le panneau signal ou image courant est vide."
+
+msgid "Welcome"
+msgstr "Accueil"
+
+msgid "Welcome page"
+msgstr "Page d'accueil"
+
+#, python-format
+msgid "Version %s"
+msgstr "Version %s"
+
+msgid "Create..."
+msgstr "Créer..."
+
+msgid "Generate a 1D signal or 2D image from a template."
+msgstr "Générez un signal 1D ou une image 2D à partir d'un modèle."
+
+msgid "Open file..."
+msgstr "Ouvrir un fichier..."
+
+msgid "Load a signal or image from your computer."
+msgstr "Chargez un signal ou une image depuis votre ordinateur."
+
+msgid "Browse HDF5 file..."
+msgstr "Parcourir un fichier HDF5..."
+
+msgid "Inspect any HDF5 file and import selected datasets as signals or images."
+msgstr "Inspectez n'importe quel fichier HDF5 et importez les jeux de données choisis comme signaux ou images."
+
+msgid "Open HDF5 workspace..."
+msgstr "Ouvrir un espace de travail HDF5..."
+
+msgid "Resume a previously saved DataLab workspace."
+msgstr "Reprenez un espace de travail DataLab précédemment enregistré."
+
+msgid "Import text data..."
+msgstr "Importer des données texte..."
+
+msgid "Bring in CSV / TSV / column data with the wizard."
+msgstr "Importez des données CSV / TSV / en colonnes avec l'assistant."
+
+msgid "Walkthroughs"
+msgstr "Visites guidées"
+
+msgid "Ask the AI assistant"
+msgstr "Interroger l'assistant IA"
+
+msgid "Chat with the built-in assistant to inspect, create and process your data."
+msgstr "Dialoguez avec l'assistant intégré pour inspecter, créer et traiter vos données."
+
+msgid "Take the guided tour"
+msgstr "Suivre la visite guidée"
+
+msgid "A short interactive walk-through of the DataLab workspace."
+msgstr "Une courte visite interactive de l'espace de travail DataLab."
+
+msgid "Run the demo"
+msgstr "Lancer la démo"
+
+msgid "Watch DataLab create, process and analyze signals and images."
+msgstr "Regardez DataLab créer, traiter et analyser des signaux et des images."
+
+msgid "Read the documentation"
+msgstr "Lire la documentation"
+
+msgid "Open the online user guide, tutorials and reference."
+msgstr "Ouvrez le guide utilisateur en ligne, les tutoriels et la référence."
+
+#, python-format
+msgid "What's new in version %s"
+msgstr "Nouveautés de la version %s"
+
+msgid "Browse the release notes of this version."
+msgstr "Consultez les nouveautés et corrections de cette version."
+
+msgid "Get started"
+msgstr "Pour commencer"
+
+msgid "Quick actions"
+msgstr "Actions rapides"
+
+msgid "e.g. %s"
+msgstr "ex. %s"
+
+msgid "Select a key..."
+msgstr "Choisir une clé..."
+
+msgid "Known keys"
+msgstr "Clés connues"
+
+msgid "Copy a key found on the selected objects into the metadata key"
+msgstr "Copier dans la clé de métadonnée une clé présente sur les objets sélectionnés"
+
+msgid "Extraction pattern"
+msgstr "Motif d'extraction"
+
+msgid "Optional regular expression searched in the formatted value: its first group, or the whole match, becomes the value"
+msgstr "Expression régulière facultative recherchée dans la valeur formatée : son premier groupe, ou toute la correspondance, devient la valeur"
+
+msgid "If no match"
+msgstr "Sans correspondance"
+
+msgid "Leave the object unchanged"
+msgstr "Laisser l'objet inchangé"
+
+msgid "Report an error"
+msgstr "Signaler une erreur"
+
+msgid "Scale factor"
+msgstr "Facteur d'échelle"
+
+msgid "Multiplies numeric values, e.g. 0.001 to convert ms to s"
+msgstr "Multiplie les valeurs numériques, par ex. 0.001 pour convertir des ms en s"
+
+msgid "unchanged"
+msgstr "inchangé"

@@ -252,6 +252,7 @@ def test_compute_n_to_1_uses_provided_history_title() -> None:
         ),
         mainwindow=SimpleNamespace(historypanel=history_panel),
         _get_plugin_origin_for=Mock(return_value=None),
+        get_feature_id=lambda func: func.__name__,
     )
 
     def average(_objects: list[object]) -> None:

@@ -67,7 +67,9 @@ from datalab.gui.docks import DockablePlotWidget
 from datalab.gui.h5io import H5InputOutput
 from datalab.gui.panel import base, history, image, macro, signal
 from datalab.gui.pluginconfig import PluginConfigDialog
+from datalab.gui.processor.preview import PreviewExecutorCache
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
+from datalab.gui.welcome import WelcomePanel
 from datalab.objectmodel import UUID_REGEX, ObjectGroup, get_uuid, render_title
 from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plugins
 from datalab.utils import qthelpers as qth
@@ -125,6 +127,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Initialize main window"""
         self.started_at = datetime.now().astimezone()
         self.plugins_last_load_at = self.started_at
+        self.preview_executor_cache = PreviewExecutorCache()
 
         self.webapistatus: dl_status.WebAPIStatus | None = None
         self.pluginstatus: dl_status.PluginStatus | None = None
@@ -133,6 +136,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.macropanel: MacroPanel | None = None
         self.historypanel: history.HistoryPanel | None = None
         self.aiassistantpanel = None  # type: ignore[assignment]
+        self.welcomepanel: WelcomePanel | None = None
 
         self.signalpanel_toolbar: QW.QToolBar | None = None
         self.imagepanel_toolbar: QW.QToolBar | None = None
@@ -791,9 +795,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Execute post-show actions"""
         super().execute_post_show_actions()
         self.check_for_v020_plugins()
-        if not execenv.unattended and Conf.tour_enabled.get():
-            Conf.tour_enabled.set(False)
-            self.show_tour()
+        if not execenv.unattended:
+            if not Conf.welcome_on_startup.get():
+                self.docks[self.welcomepanel].hide()
+            self.__raise_view_dock(self.tabwidget.currentWidget())
         # Auto-start WebAPI server if environment variable is set
         if os.environ.get("DATALAB_WEBAPI_ENABLED") == "1":
             try:
@@ -834,10 +839,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     # ------GUI setup
     def _setup_docks(self) -> None:
-        """Add the macro, history and AI assistant docks"""
+        """Add the macro, history, AI assistant and welcome page docks"""
         self.__add_macro_panel()
         self.__add_history_panel()
         self.__add_aiassistant_panel()
+        self.__add_welcome_panel()
 
     def _post_setup(self, console: bool) -> None:
         """Create plugin actions and wire panels, once the whole UI exists"""
@@ -964,6 +970,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def __restart_processor_pool(self) -> None:
         """Restart the shared pool after plugin paths change at runtime."""
+        self.preview_executor_cache.reset()
         for processor in (self.imagepanel.processor, self.signalpanel.processor):
             if processor.worker is not None:
                 processor.worker.restart_pool()
@@ -1114,6 +1121,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.reload_plugins()
             return
 
+        self.preview_executor_cache.reset()
         self.__unregister_plugins()
         for panel in (self.signalpanel, self.imagepanel):
             panel.acthandler.clear_plugin_actions()
@@ -1266,6 +1274,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             panel.objview.SIG_SELECTION_CHANGED.connect(
                 functools.partial(self.__raise_view_dock, panel)
             )
+            panel.SIG_OBJECT_REMOVED.connect(
+                functools.partial(self.__raise_view_dock, panel)
+            )
             panel.setup_panel()
 
     def _setup_central_widget(self) -> None:
@@ -1305,22 +1316,34 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         )
 
     def _get_help_doc_actions(self) -> list[QW.QAction | None]:
-        """Append the tour and demo entries to the standard documentation actions."""
-        return super()._get_help_doc_actions() + [
-            create_action(
-                self,
-                _("Tour") + "...",
-                icon=get_icon("tour.svg"),
-                triggered=self.show_tour,
-            ),
-            create_action(
-                self,
-                _("Demo") + "...",
-                icon=get_icon("play_demo.svg"),
-                triggered=self.play_demo,
-            ),
-            None,
-        ]
+        """Add the welcome page, tour and demo entries to the documentation actions"""
+        return (
+            [
+                create_action(
+                    self,
+                    _("Welcome page"),
+                    icon=get_icon("DataLab.svg"),
+                    triggered=self.show_welcome_page,
+                ),
+                None,
+            ]
+            + super()._get_help_doc_actions()
+            + [
+                create_action(
+                    self,
+                    _("Tour") + "...",
+                    icon=get_icon("tour.svg"),
+                    triggered=self.show_tour,
+                ),
+                create_action(
+                    self,
+                    _("Demo") + "...",
+                    icon=get_icon("play_demo.svg"),
+                    triggered=self.play_demo,
+                ),
+                None,
+            ]
+        )
 
     def _get_help_support_actions(self) -> list[QW.QAction | None]:
         """Append the installation and configuration viewer."""
@@ -1456,16 +1479,26 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             tabify_with=self.macropanel,
         )
 
+    def __add_welcome_panel(self) -> None:
+        """Add welcome page panel"""
+        self.welcomepanel = WelcomePanel(self)
+        self._add_dockwidget(
+            self.welcomepanel,
+            _("Welcome"),
+            name="welcome_page",
+            tabify_with=self.signalpanel,
+        )
+
     def __configure_panels(self) -> None:
         """Configure panels"""
         # Connectings signals
         for panel in self.panels:
             panel.SIG_OBJECT_ADDED.connect(self.set_modified)
             panel.SIG_OBJECT_REMOVED.connect(self.set_modified)
+            panel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
         for panel in (self.signalpanel, self.imagepanel):
             panel.SIG_OBJECT_MODIFIED.connect(self.refresh_object_title_displays)
             panel.SIG_OBJECT_REMOVED.connect(self.refresh_object_title_displays)
-        self.macropanel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
         # Initializing common panel actions
         self.autorefresh_action.setChecked(Conf.auto_refresh.get(True))
         self.showfirstonly_action.setChecked(Conf.show_first_only.get(False))
@@ -1624,12 +1657,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def __tab_index_changed(self, index: int) -> None:
         """Switch from signal to image mode, or vice-versa"""
-        dock = self.docks[self.tabwidget.widget(index)]
-        dock.raise_()
+        self.__raise_view_dock(self.tabwidget.widget(index))
         self.__update_actions()
 
     def __raise_view_dock(self, panel: BaseDataPanel) -> None:
         """Bring the panel view dock to the front, if the panel is the current tab
+
+        An empty panel shows the welcome page instead, unless it is disabled.
 
         Args:
             panel: signal or image panel
@@ -1637,7 +1671,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         # The guard matters because selection changes are also emitted for the
         # panel that is not currently shown (see __update_actions).
         if self.tabwidget.currentWidget() is panel:
-            self.docks[panel].raise_()
+            if len(panel) == 0 and Conf.welcome_on_startup.get():
+                self.show_welcome_page()
+            else:
+                self.docks[panel].raise_()
 
     def __update_generic_menu(self, menu: QW.QMenu | None = None) -> None:
         """Update menu before showing up -- Generic method"""
@@ -2349,6 +2386,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         tour.start(self)
 
+    def show_welcome_page(self) -> None:
+        """Show the welcome page and bring it to the front"""
+        dock = self.docks[self.welcomepanel]
+        dock.show()
+        dock.raise_()
+
     # ------Close window
     def _get_save_before_quit_message(self) -> str:
         """Return the DataLab workspace save confirmation message."""
@@ -2359,6 +2402,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def _close_managed_widgets(self) -> None:
         """Close DataLab panels and generic shell widgets."""
+        self.preview_executor_cache.close()
         for panel in self.panels:
             if panel is not None:
                 panel.close()
