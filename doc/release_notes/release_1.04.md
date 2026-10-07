@@ -21,6 +21,11 @@
 * Completed previews keep their dedicated process ready for later dialogs, avoiding repeated process startup. Cancelling a preview that is still running stops its process so speculative work cannot continue in the background.
 * Bounded numeric parameters now offer sliders alongside precise text entry. The Processing tab retains Apply and automatic re-processing, with updates deferred until slider release and valid input.
 
+**Add metadata:**
+
+* **Edit > Metadata > Add metadata...** can now extract the value from the formatted text with a regular expression, for example an exposure time or a shot number read from object titles. Objects without a match are left unchanged unless you ask for an error, and a scale factor converts numeric values (e.g. milliseconds to seconds)
+* Metadata keys may now contain dots and hyphens, as used by plugin keys, and a **Known keys** list copies a key already present on the selected objects
+
 ### 🔄 Changes ###
 
 **Guided tour:**
@@ -39,6 +44,10 @@
 **Window layout:**
 
 * Fixed the width of the signal/image panels not being restored at startup: after narrowing the panels and restarting DataLab, they came back wider (up to their maximum width) instead of keeping the width chosen by the user
+
+**Metadata:**
+
+* Adding, pasting or deleting metadata now marks the workspace as modified, so DataLab asks to save these changes before closing
 
 **Plugins and History:**
 
