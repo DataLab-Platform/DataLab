@@ -316,11 +316,29 @@ msgstr "Le catalogue **Applications** présente chaque recette comme une méthod
 msgid "Plugin tools"
 msgstr "Outils de plugin"
 
-msgid "A recipe covers a headless analysis run by DataLab. Any other interaction owned by an application plugin, such as a wizard, an interactive editor or a data preparation step, is a tool. Declare tools in the class-level ``TOOLS`` tuple of :class:`datalab.plugin_tools.PluginTool` values; the **Applications** catalog lists them in a **Tools** section:"
-msgstr "Une recette couvre une analyse sans interface exécutée par DataLab. Toute autre interaction propre à un plugin d'application, comme un assistant, un éditeur interactif ou une étape de préparation des données, est un outil. Déclarez les outils dans le tuple de classe ``TOOLS`` de valeurs :class:`datalab.plugin_tools.PluginTool` ; le catalogue **Applications** les liste dans une section **Outils** :"
+msgid "A recipe covers a headless analysis run by DataLab. Any other interaction owned by an application plugin, such as a wizard, an interactive editor, a data preparation step or a simulated instrument, is a tool. Declare tools in the class-level ``TOOLS`` tuple of :class:`datalab.plugin_tools.PluginTool` values:"
+msgstr "Une recette couvre une analyse sans interface exécutée par DataLab. Toute autre interaction propre à un plugin d'application, comme un assistant, un éditeur interactif, une étape de préparation des données ou un instrument simulé, est un outil. Déclarez les outils dans le tuple de classe ``TOOLS`` de valeurs :class:`datalab.plugin_tools.PluginTool` :"
 
-msgid "The launcher is called without arguments. :meth:`datalab.plugins.PluginBase.get_tools` validates unique local IDs and launcher methods, and rejects tools declared by plugins without the ``APPLICATION`` capability. Tools are a Desktop feature: DataLab-Web does not list them."
-msgstr "Le lanceur est appelé sans argument. :meth:`datalab.plugins.PluginBase.get_tools` vérifie l'unicité des identifiants locaux et l'existence des méthodes de lancement, et rejette les outils déclarés par des plugins sans la capacité ``APPLICATION``. Les outils sont une fonctionnalité Desktop : DataLab-Web ne les liste pas."
+msgid "DataLab lists each tool in two places: in the **Tools** section of the **Applications** catalog, and in the plugin's submenu of the **Plugins** menu, after the plugin's own actions. ``object_type`` gives the panel whose menu shows the tool; with ``None``, both panels show it. ``selection`` states which selection the tool needs: ``NONE`` (the default), ``EXACTLY_ONE``, ``AT_LEAST_ONE`` or ``AT_LEAST_TWO`` objects of ``object_type``. When the selection does not match, DataLab disables the menu entry and the catalog button, and the button tooltip tells what to select. ``icon`` takes a ``package:path`` resource or a DataLab icon file name; by default, the tool uses the plugin icon."
+msgstr "DataLab liste chaque outil à deux endroits : dans la section **Outils** du catalogue **Applications**, et dans le sous-menu du plugin du menu **Plugins**, après les actions propres au plugin. ``object_type`` indique le panneau dont le menu affiche l'outil ; avec ``None``, les deux panneaux l'affichent. ``selection`` indique la sélection dont l'outil a besoin : ``NONE`` (par défaut), ``EXACTLY_ONE``, ``AT_LEAST_ONE`` ou ``AT_LEAST_TWO`` objets de type ``object_type``. Lorsque la sélection ne convient pas, DataLab désactive l'entrée de menu et le bouton du catalogue, et l'info-bulle du bouton indique quoi sélectionner. ``icon`` accepte une ressource ``package:path`` ou un nom de fichier d'icône DataLab ; par défaut, l'outil utilise l'icône du plugin."
+
+msgid "The launcher is called without arguments. :meth:`datalab.plugins.PluginBase.get_tools` validates unique local IDs and the tool methods, and rejects tools declared by plugins without the ``APPLICATION`` capability. :meth:`datalab.plugins.PluginBase.assess_tool` returns the reason why a tool cannot be opened for the current selection, or ``None``."
+msgstr "Le lanceur est appelé sans argument. :meth:`datalab.plugins.PluginBase.get_tools` vérifie l'unicité des identifiants locaux et les méthodes des outils, et rejette les outils déclarés par des plugins sans la capacité ``APPLICATION``. :meth:`datalab.plugins.PluginBase.assess_tool` renvoie la raison pour laquelle un outil ne peut pas être ouvert pour la sélection courante, ou ``None``."
+
+msgid "Instruments"
+msgstr "Instruments"
+
+msgid "A tool may name an ``instrument`` method instead of a ``launcher``. This method returns a :class:`datalab.plugin_instruments.PluginInstrument`, and DataLab opens a window for it: a live view on the left, the instrument settings on the right, a **Live** button that refreshes the view continuously, and an **Acquire** button. The plugin writes no user interface code:"
+msgstr "Un outil peut désigner une méthode ``instrument`` au lieu d'un ``launcher``. Cette méthode renvoie un :class:`datalab.plugin_instruments.PluginInstrument`, et DataLab ouvre une fenêtre pour lui : une vue en direct à gauche, les réglages de l'instrument à droite, un bouton **En direct** qui rafraîchit la vue en continu et un bouton **Acquérir**. Le plugin n'écrit aucun code d'interface utilisateur :"
+
+msgid "DataLab edits :attr:`~datalab.plugin_instruments.PluginInstrument.settings` in place, with the active state, groups and tabs of the guidata DataSet, then calls :meth:`~datalab.plugin_instruments.PluginInstrument.preview` after each change and, in live mode, every ``live_interval_ms`` milliseconds. An :class:`~datalab.plugin_instruments.InstrumentFrame` holds signals drawn together or a single image, a short summary shown below the view, and an optional fixed Y range (signals) or color range (image). :meth:`~datalab.plugin_instruments.PluginInstrument.acquire` returns an :class:`~datalab.plugin_instruments.InstrumentAcquisition`: DataLab adds its objects to a new group of the matching panel and selects them, so that a recipe can run on them at once. Both methods raise ``ValueError`` with a user-facing message when the settings cannot be used; DataLab shows the message in the window."
+msgstr "DataLab modifie :attr:`~datalab.plugin_instruments.PluginInstrument.settings` sur place, en respectant l'état actif, les groupes et les onglets du DataSet guidata, puis appelle :meth:`~datalab.plugin_instruments.PluginInstrument.preview` après chaque modification et, en mode direct, toutes les ``live_interval_ms`` millisecondes. Un :class:`~datalab.plugin_instruments.InstrumentFrame` contient des signaux tracés ensemble ou une seule image, un court résumé affiché sous la vue, et une plage fixe facultative en Y (signaux) ou de couleurs (image). :meth:`~datalab.plugin_instruments.PluginInstrument.acquire` renvoie un :class:`~datalab.plugin_instruments.InstrumentAcquisition` : DataLab ajoute ses objets dans un nouveau groupe du panneau correspondant et les sélectionne, afin qu'une recette puisse s'exécuter aussitôt sur eux. Les deux méthodes lèvent ``ValueError`` avec un message destiné à l'utilisateur lorsque les réglages ne peuvent pas être utilisés ; DataLab affiche ce message dans la fenêtre."
+
+msgid "DataLab creates the instrument once per tool and keeps it until the plugins are reloaded, so the settings remain from one opening to the next."
+msgstr "DataLab crée l'instrument une seule fois par outil et le conserve jusqu'au rechargement des plugins : les réglages sont ainsi conservés d'une ouverture à l'autre."
+
+msgid "DataLab-Web supports tools too: it lists them in the same places, opens instruments in the same window, and calls launchers in the plugin's Pyodide host."
+msgstr "DataLab-Web prend aussi en charge les outils : il les liste aux mêmes endroits, ouvre les instruments dans la même fenêtre et appelle les lanceurs dans l'hôte Pyodide du plugin."
 
 msgid "Welcome page tiles"
 msgstr "Tuiles de la page d'accueil"
@@ -637,8 +655,29 @@ msgstr "Ouvre un exemple, puis lance l'une des recettes pour lesquelles il est c
 msgid "Return validated tools listed in the Applications catalog."
 msgstr "Renvoie les outils validés listés dans le catalogue Applications."
 
-msgid "Open a plugin tool by calling its launcher method."
-msgstr "Ouvre un outil du plugin en appelant sa méthode de lancement."
+msgid "Return the message telling which objects to select to open a tool."
+msgstr "Renvoie le message indiquant quels objets sélectionner pour ouvrir un outil."
+
+msgid "Return one tool by its plugin-local ID."
+msgstr "Renvoie un outil à partir de son identifiant local au plugin."
+
+msgid "Return why a tool cannot be opened on objects (default: selection)."
+msgstr "Renvoie la raison pour laquelle un outil ne peut pas être ouvert sur des objets (par défaut : la sélection)."
+
+msgid "Message telling which objects to select, or None if the tool can be opened"
+msgstr "Message indiquant quels objets sélectionner, ou None si l'outil peut être ouvert"
+
+msgid "Open a plugin tool: call its launcher, or show its instrument."
+msgstr "Ouvre un outil du plugin : appelle sa méthode de lancement, ou affiche son instrument."
+
+msgid "Raises"
+msgstr "Lève"
+
+msgid "if the selection does not allow opening the tool"
+msgstr "si la sélection ne permet pas d'ouvrir l'outil"
+
+msgid "Return the instrument of a tool, created once per registration."
+msgstr "Renvoie l'instrument d'un outil, créé une seule fois par enregistrement."
 
 msgid "Return validated packaged examples exposed by this plugin."
 msgstr "Renvoie les exemples empaquetés validés exposés par ce plugin."
@@ -1027,6 +1066,102 @@ msgstr "nom de la méthode du plugin appelée lors d'un clic sur la tuile ; ``No
 
 msgid "Return True if the icon is a ``package:path`` resource"
 msgstr "Renvoie True si l'icône est une ressource ``package:path``"
+
+msgid "Declarations of plugin-owned tools listed in the Applications catalog."
+msgstr "Déclarations des outils propres aux plugins listés dans le catalogue Applications."
+
+msgid "DataLab Desktop and DataLab-Web share this module."
+msgstr "DataLab Desktop et DataLab-Web partagent ce module."
+
+msgid "Tool with its own user interface, exposed by an application plugin"
+msgstr "Outil doté de sa propre interface utilisateur, exposé par un plugin d'application"
+
+msgid "Recipes cover headless analyses run by DataLab; a tool covers any other interaction owned by the plugin (wizard, interactive editor, data preparation, instrument...). DataLab lists tools in the Applications catalog and in the plugin's submenu of the *Plugins* menu."
+msgstr "Les recettes couvrent les analyses sans interface exécutées par DataLab ; un outil couvre toute autre interaction propre au plugin (assistant, éditeur interactif, préparation des données, instrument...). DataLab liste les outils dans le catalogue Applications et dans le sous-menu du plugin du menu *Plugins*."
+
+msgid "A tool is opened either by a ``launcher`` method, called without arguments, or by an ``instrument`` method returning a :class:`datalab.plugin_instruments.PluginInstrument`, which DataLab shows in a window with a live view and the instrument settings."
+msgstr "Un outil est ouvert soit par une méthode ``launcher``, appelée sans argument, soit par une méthode ``instrument`` renvoyant un :class:`datalab.plugin_instruments.PluginInstrument`, que DataLab affiche dans une fenêtre avec une vue en direct et les réglages de l'instrument."
+
+msgid "plugin-local tool ID (lowercase letters, digits, ``.``, ``_``, ``-``)"
+msgstr "identifiant de l'outil local au plugin (lettres minuscules, chiffres, ``.``, ``_``, ``-``)"
+
+msgid "tool title"
+msgstr "titre de l'outil"
+
+msgid "name of the plugin method called, without arguments, to open the tool"
+msgstr "nom de la méthode du plugin appelée, sans argument, pour ouvrir l'outil"
+
+msgid "short description of what the tool does"
+msgstr "courte description de ce que fait l'outil"
+
+msgid "name of the plugin method returning the instrument shown by DataLab (exclusive with ``launcher``)"
+msgstr "nom de la méthode du plugin renvoyant l'instrument affiché par DataLab (exclusif avec ``launcher``)"
+
+msgid "type of the objects the tool works on or creates; the tool is listed in the menu of that panel (``None``: both panels)"
+msgstr "type des objets sur lesquels l'outil travaille ou qu'il crée ; l'outil est listé dans le menu de ce panneau (``None`` : les deux panneaux)"
+
+msgid "selection needed to open the tool, counting objects of ``object_type`` only"
+msgstr "sélection nécessaire pour ouvrir l'outil, en ne comptant que les objets de type ``object_type``"
+
+msgid "Selection a tool needs to be opened (names follow DataLab's conditions)."
+msgstr "Sélection nécessaire à l'ouverture d'un outil (les noms suivent les conditions de DataLab)."
+
+msgid "Return True if the selected objects allow opening the tool."
+msgstr "Renvoie True si les objets sélectionnés permettent d'ouvrir l'outil."
+
+msgid "tool to open"
+msgstr "outil à ouvrir"
+
+msgid "selected objects"
+msgstr "objets sélectionnés"
+
+msgid "True if the number of selected objects of the tool's object type matches the tool's selection"
+msgstr "True si le nombre d'objets sélectionnés du type de l'outil correspond à la sélection de l'outil"
+
+msgid "Instruments exposed by application plugins as tools."
+msgstr "Instruments exposés comme outils par les plugins d'application."
+
+msgid "An instrument is a headless object: it holds settings (a guidata DataSet), returns a live frame for these settings, and acquires objects. DataLab shows it in a window with the live view on the left and the settings on the right. DataLab Desktop and DataLab-Web share this module."
+msgstr "Un instrument est un objet sans interface : il porte des réglages (un DataSet guidata), renvoie une image en direct pour ces réglages et acquiert des objets. DataLab l'affiche dans une fenêtre avec la vue en direct à gauche et les réglages à droite. DataLab Desktop et DataLab-Web partagent ce module."
+
+msgid "Objects acquired by an instrument, added by DataLab in a new group."
+msgstr "Objets acquis par un instrument, ajoutés par DataLab dans un nouveau groupe."
+
+msgid "title of the group created for the acquisition"
+msgstr "titre du groupe créé pour l'acquisition"
+
+msgid "acquired signals, or acquired images"
+msgstr "signaux acquis, ou images acquises"
+
+msgid "Live frame shown by DataLab for the current instrument settings."
+msgstr "Image en direct affichée par DataLab pour les réglages courants de l'instrument."
+
+msgid "signals drawn together, or a single image"
+msgstr "signaux tracés ensemble, ou une seule image"
+
+msgid "short text shown below the view (e.g. measured levels)"
+msgstr "court texte affiché sous la vue (par exemple les niveaux mesurés)"
+
+msgid "fixed Y range of signals, or color range of the image (``None``: automatic)"
+msgstr "plage fixe en Y des signaux, ou plage de couleurs de l'image (``None`` : automatique)"
+
+msgid "Instrument opened by a plugin tool."
+msgstr "Instrument ouvert par un outil de plugin."
+
+msgid "DataLab writes the edited values into :attr:`settings` before calling :meth:`preview` or :meth:`acquire`. Both methods raise ``ValueError`` with a user-facing message when the settings cannot be used. The plugin keeps one instance per tool during the session, so settings are kept from one opening to the next."
+msgstr "DataLab écrit les valeurs modifiées dans :attr:`settings` avant d'appeler :meth:`preview` ou :meth:`acquire`. Les deux méthodes lèvent ``ValueError`` avec un message destiné à l'utilisateur lorsque les réglages ne peuvent pas être utilisés. Le plugin conserve une instance par outil pendant la session : les réglages sont ainsi conservés d'une ouverture à l'autre."
+
+msgid "instrument settings, edited by DataLab"
+msgstr "réglages de l'instrument, modifiés par DataLab"
+
+msgid "Interval between two frames in live mode, in milliseconds"
+msgstr "Intervalle entre deux images en mode direct, en millisecondes"
+
+msgid "Return a live frame for the current settings."
+msgstr "Renvoie une image en direct pour les réglages courants."
+
+msgid "Acquire objects with the current settings."
+msgstr "Acquiert des objets avec les réglages courants."
 
 msgid "Transactional Desktop runner for plugin-provided scientific recipes."
 msgstr "Exécuteur transactionnel Desktop pour les recettes scientifiques fournies par les plugins."

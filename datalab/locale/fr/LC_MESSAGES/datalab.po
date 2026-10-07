@@ -4596,3 +4596,48 @@ msgstr "inchangé"
 
 msgid "To set it, use Edit > Metadata > Add metadata..."
 msgstr "Pour la définir, utilisez Édition > Métadonnées > Ajouter des métadonnées..."
+
+msgid "Select one signal"
+msgstr "Sélectionnez un signal"
+
+msgid "Select one image"
+msgstr "Sélectionnez une image"
+
+msgid "Select one object"
+msgstr "Sélectionnez un objet"
+
+msgid "Select at least one signal"
+msgstr "Sélectionnez au moins un signal"
+
+msgid "Select at least one image"
+msgstr "Sélectionnez au moins une image"
+
+msgid "Select at least one object"
+msgstr "Sélectionnez au moins un objet"
+
+msgid "Select at least two signals"
+msgstr "Sélectionnez au moins deux signaux"
+
+msgid "Select at least two images"
+msgstr "Sélectionnez au moins deux images"
+
+msgid "Select at least two objects"
+msgstr "Sélectionnez au moins deux objets"
+
+msgid "Live"
+msgstr "En direct"
+
+msgid "Refresh the view continuously"
+msgstr "Rafraîchir la vue en continu"
+
+msgid "Acquire"
+msgstr "Acquérir"
+
+msgid "Add an acquisition to the workspace, in a new group"
+msgstr "Ajouter une acquisition à l'espace de travail, dans un nouveau groupe"
+
+msgid "Invalid settings"
+msgstr "Réglages non valides"
+
+msgid "%d objects added to group '%s'"
+msgstr "%d objets ajoutés au groupe '%s'"

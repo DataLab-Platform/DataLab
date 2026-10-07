@@ -780,13 +780,17 @@ class ApplicationPage(QW.QWidget):
         )
 
     def refresh_readiness(self) -> None:
-        """Assess every recipe on the current selection."""
+        """Assess every recipe and tool on the current selection."""
         for recipe_id, card in self.recipe_cards.items():
             try:
                 card.set_readiness(self.plugin.assess_recipe(recipe_id))
             except Exception as exc:  # pylint: disable=broad-except
                 # Binding suggestions are third-party code: keep the catalog usable
                 card.set_readiness(None, str(exc))
+        for tool_id, button in self.tool_buttons.items():
+            issue = self.plugin.assess_tool(tool_id)
+            button.setEnabled(issue is None)
+            button.setToolTip(issue or "")
 
     def show_outcome(self, outcome: RecipeOutcome) -> None:
         """Show the number of created objects and the diagnostics of a run."""

@@ -445,11 +445,12 @@ The **Applications** catalog presents each recipe as a method with its expected 
 Plugin tools
 ~~~~~~~~~~~~
 
-A recipe covers a headless analysis run by DataLab. Any other interaction owned by an application plugin, such as a wizard, an interactive editor or a data preparation step, is a tool. Declare tools in the class-level ``TOOLS`` tuple of :class:`datalab.plugin_tools.PluginTool` values; the **Applications** catalog lists them in a **Tools** section:
+A recipe covers a headless analysis run by DataLab. Any other interaction owned by an application plugin, such as a wizard, an interactive editor, a data preparation step or a simulated instrument, is a tool. Declare tools in the class-level ``TOOLS`` tuple of :class:`datalab.plugin_tools.PluginTool` values:
 
 .. code-block:: python
 
-  from datalab.plugin_tools import PluginTool
+  from datalab.plugin_tools import PluginTool, ToolSelection
+  from datalab.recipes import RecipeObjectType
 
   class MyPlugin(PluginBase):
     TOOLS = (
@@ -458,13 +459,68 @@ A recipe covers a headless analysis run by DataLab. Any other interaction owned 
         title="Annotate frames...",
         launcher="annotate_frames",
         description="Set the acquisition metadata of the selected frames",
+        object_type=RecipeObjectType.IMAGE,
+        selection=ToolSelection.AT_LEAST_ONE,
       ),
     )
 
     def annotate_frames(self):
       ...
 
-The launcher is called without arguments. :meth:`datalab.plugins.PluginBase.get_tools` validates unique local IDs and launcher methods, and rejects tools declared by plugins without the ``APPLICATION`` capability. Tools are a Desktop feature: DataLab-Web does not list them.
+DataLab lists each tool in two places: in the **Tools** section of the **Applications** catalog, and in the plugin's submenu of the **Plugins** menu, after the plugin's own actions. ``object_type`` gives the panel whose menu shows the tool; with ``None``, both panels show it. ``selection`` states which selection the tool needs: ``NONE`` (the default), ``EXACTLY_ONE``, ``AT_LEAST_ONE`` or ``AT_LEAST_TWO`` objects of ``object_type``. When the selection does not match, DataLab disables the menu entry and the catalog button, and the button tooltip tells what to select. ``icon`` takes a ``package:path`` resource or a DataLab icon file name; by default, the tool uses the plugin icon.
+
+The launcher is called without arguments. :meth:`datalab.plugins.PluginBase.get_tools` validates unique local IDs and the tool methods, and rejects tools declared by plugins without the ``APPLICATION`` capability. :meth:`datalab.plugins.PluginBase.assess_tool` returns the reason why a tool cannot be opened for the current selection, or ``None``.
+
+Instruments
+^^^^^^^^^^^
+
+A tool may name an ``instrument`` method instead of a ``launcher``. This method returns a :class:`datalab.plugin_instruments.PluginInstrument`, and DataLab opens a window for it: a live view on the left, the instrument settings on the right, a **Live** button that refreshes the view continuously, and an **Acquire** button. The plugin writes no user interface code:
+
+.. code-block:: python
+
+  import guidata.dataset as gds
+  from datalab.plugin_instruments import (
+    InstrumentAcquisition,
+    InstrumentFrame,
+    PluginInstrument,
+  )
+
+  class SourceSettings(gds.DataSet):
+    amplitude = gds.FloatItem("Amplitude", default=1.0, unit="V")
+    count = gds.IntItem("Signals per acquisition", default=10, min=1)
+
+  class Source(PluginInstrument):
+    live_interval_ms = 200
+
+    def __init__(self):
+      super().__init__(SourceSettings())
+
+    def preview(self):
+      signal = self.make_signal()
+      return InstrumentFrame([signal], summary="...", value_range=(-2.0, 2.0))
+
+    def acquire(self):
+      signals = [self.make_signal() for _ in range(self.settings.count)]
+      return InstrumentAcquisition("Source - acquisition 001", signals)
+
+  class MyPlugin(PluginBase):
+    TOOLS = (
+      PluginTool(
+        id="source",
+        title="Signal source...",
+        instrument="signal_source",
+        object_type=RecipeObjectType.SIGNAL,
+      ),
+    )
+
+    def signal_source(self):
+      return Source()
+
+DataLab edits :attr:`~datalab.plugin_instruments.PluginInstrument.settings` in place, with the active state, groups and tabs of the guidata DataSet, then calls :meth:`~datalab.plugin_instruments.PluginInstrument.preview` after each change and, in live mode, every ``live_interval_ms`` milliseconds. An :class:`~datalab.plugin_instruments.InstrumentFrame` holds signals drawn together or a single image, a short summary shown below the view, and an optional fixed Y range (signals) or color range (image). :meth:`~datalab.plugin_instruments.PluginInstrument.acquire` returns an :class:`~datalab.plugin_instruments.InstrumentAcquisition`: DataLab adds its objects to a new group of the matching panel and selects them, so that a recipe can run on them at once. Both methods raise ``ValueError`` with a user-facing message when the settings cannot be used; DataLab shows the message in the window.
+
+DataLab creates the instrument once per tool and keeps it until the plugins are reloaded, so the settings remain from one opening to the next.
+
+DataLab-Web supports tools too: it lists them in the same places, opens instruments in the same window, and calls launchers in the plugin's Pyodide host.
 
 Welcome page tiles
 ------------------
@@ -670,6 +726,12 @@ Public API
   :members:
 
 .. automodule:: datalab.plugin_tiles
+  :members:
+
+.. automodule:: datalab.plugin_tools
+  :members:
+
+.. automodule:: datalab.plugin_instruments
   :members:
 
 .. automodule:: datalab.gui.recipe_runner
