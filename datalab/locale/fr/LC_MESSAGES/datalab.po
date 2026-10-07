@@ -1453,8 +1453,8 @@ msgstr "Écraser les fichiers existants"
 msgid "Preview"
 msgstr "Aperçu"
 
-msgid "Add a new metadata item to the selected objects.<br><br>The metadata key will be the same for all objects, but the value can use a pattern to generate different values.<br>Click the <b>Help</b> button for details on the pattern syntax.<br>"
-msgstr "Ajouter un nouvel élément de métadonnée aux objets sélectionnés.<br><br>La clé de métadonnée sera la même pour tous les objets, mais la valeur peut utiliser un modèle pour générer des valeurs différentes.<br>Cliquez sur le bouton <b>Aide</b> pour plus de détails sur la syntaxe du modèle.<br>"
+msgid "Add a new metadata item to the selected objects.<br><br>The metadata key will be the same for all objects, but the value can use a pattern to generate different values, optionally extracted with a regular expression.<br>Click the <b>Help</b> button for details on the pattern syntax.<br>"
+msgstr "Ajouter un nouvel élément de métadonnée aux objets sélectionnés.<br><br>La clé de métadonnée sera la même pour tous les objets, mais la valeur peut utiliser un modèle pour générer des valeurs différentes, éventuellement extraites par une expression régulière.<br>Cliquez sur le bouton <b>Aide</b> pour plus de détails sur la syntaxe du modèle.<br>"
 
 msgid "String"
 msgstr "Chaîne de caractères"
@@ -4244,4 +4244,40 @@ msgstr "Pour commencer"
 
 msgid "Quick actions"
 msgstr "Actions rapides"
+
+msgid "e.g. %s"
+msgstr "ex. %s"
+
+msgid "Select a key..."
+msgstr "Choisir une clé..."
+
+msgid "Known keys"
+msgstr "Clés connues"
+
+msgid "Copy a key found on the selected objects into the metadata key"
+msgstr "Copier dans la clé de métadonnée une clé présente sur les objets sélectionnés"
+
+msgid "Extraction pattern"
+msgstr "Motif d'extraction"
+
+msgid "Optional regular expression searched in the formatted value: its first group, or the whole match, becomes the value"
+msgstr "Expression régulière facultative recherchée dans la valeur formatée : son premier groupe, ou toute la correspondance, devient la valeur"
+
+msgid "If no match"
+msgstr "Sans correspondance"
+
+msgid "Leave the object unchanged"
+msgstr "Laisser l'objet inchangé"
+
+msgid "Report an error"
+msgstr "Signaler une erreur"
+
+msgid "Scale factor"
+msgstr "Facteur d'échelle"
+
+msgid "Multiplies numeric values, e.g. 0.001 to convert ms to s"
+msgstr "Multiplie les valeurs numériques, par ex. 0.001 pour convertir des ms en s"
+
+msgid "unchanged"
+msgstr "inchangé"
 
