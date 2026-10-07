@@ -6,6 +6,8 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
+import numpy as np
+import sigima.objects
 from guidata.configtools import get_icon
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -18,6 +20,7 @@ from datalab.gui import main
 from datalab.gui.applications import (
     ApplicationsDialog,
     get_application_plugins,
+    get_declared_metadata_keys,
     record_application_use,
     set_application_hidden,
     set_application_pinned,
@@ -314,6 +317,7 @@ def test_application_page_shows_readiness_of_each_method() -> None:
         text = card.readiness_label.text()
         assert "cannot be analyzed" in text
         assert "Flat frames: metadata &#x27;exposure_s&#x27; missing on 2" in text
+        assert "Edit &gt; Metadata &gt; Add metadata..." in text
         # The method item shows the readiness without being opened
         toolbox = dialog.application_pages[0].toolbox
         assert "cannot be analyzed" in toolbox.itemToolTip(0)
@@ -515,6 +519,12 @@ def test_main_window_exposes_applications_catalog(monkeypatch) -> None:
         "exec",
         lambda dialog: executed.append(dialog),
     )
+    updates: list[tuple] = []
+    monkeypatch.setattr(
+        main.ApplicationsDialog,
+        "schedule_readiness_update",
+        lambda _dialog, *args: updates.append(args),
+    )
 
     with datalab_test_app_context(console=False, exec_loop=False) as window:
         menu_actions = window.menuBar().actions()
@@ -540,6 +550,40 @@ def test_main_window_exposes_applications_catalog(monkeypatch) -> None:
         QW.QApplication.processEvents()
 
         assert window.findChildren(ApplicationsDialog) == [dialog]
+
+        # Editing objects (e.g. their metadata) re-assesses the methods
+        updates.clear()
+        window.imagepanel.SIG_OBJECT_MODIFIED.emit()
+        assert updates
+
+
+def test_add_metadata_suggests_keys_declared_by_applications() -> None:
+    """Add metadata offers the keys expected by application methods"""
+    application = _plugin(
+        "org.example.camera",
+        "Camera Characterization",
+        frozenset({PluginCapability.APPLICATION}),
+        recipes=(RECIPE,),
+    )
+    with datalab_test_app_context(console=False, exec_loop=False) as window:
+        # DataLab unregisters the plugins on close: restore the registry first
+        registry = PluginRegistry.get_plugins()
+        previous_plugins = list(registry)
+        registry[:] = [application]
+        try:
+            assert get_declared_metadata_keys("image") == [
+                ("exposure_s", "Exposure time")
+            ]
+            assert get_declared_metadata_keys("signal") == []
+            image = sigima.objects.create_image("Flat", np.zeros((2, 2)))
+            image.metadata["gain"] = 2
+            assert window.imagepanel.get_known_metadata_keys([image]) == [
+                ("gain", "e.g. 2"),
+                ("exposure_s", "Exposure time"),
+            ]
+            assert window.signalpanel.get_known_metadata_keys([]) == []
+        finally:
+            registry[:] = previous_plugins
 
 
 def test_application_commands_delegate_to_plugin_contracts(monkeypatch) -> None:

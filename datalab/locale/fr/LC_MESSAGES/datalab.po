@@ -4593,3 +4593,6 @@ msgstr "Multiplie les valeurs numériques, par ex. 0.001 pour convertir des ms e
 
 msgid "unchanged"
 msgstr "inchangé"
+
+msgid "To set it, use Edit > Metadata > Add metadata..."
+msgstr "Pour la définir, utilisez Édition > Métadonnées > Ajouter des métadonnées..."

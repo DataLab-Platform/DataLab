@@ -995,6 +995,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 panel.objview.SIG_SELECTION_CHANGED.connect(
                     self.__applications_dialog.schedule_readiness_update
                 )
+                # Metadata edits change readiness without changing the selection
+                panel.SIG_OBJECT_MODIFIED.connect(
+                    self.__applications_dialog.schedule_readiness_update
+                )
             self.tabwidget.currentChanged.connect(
                 self.__applications_dialog.schedule_readiness_update
             )

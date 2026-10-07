@@ -40,6 +40,7 @@ __all__ = [
     "ApplicationsDialog",
     "RecipeCard",
     "get_application_plugins",
+    "get_declared_metadata_keys",
     "get_plugin_icon",
     "record_application_use",
     "set_application_hidden",
@@ -310,6 +311,27 @@ def get_application_plugins() -> tuple[PluginBase, ...]:
         if PluginCapability.APPLICATION in plugin.info.capabilities
     )
     return tuple(sorted(plugins, key=lambda plugin: plugin.info.name.casefold()))
+
+
+def get_declared_metadata_keys(object_type: str) -> list[tuple[str, str]]:
+    """Return the metadata keys expected by the methods of application plugins
+
+    Args:
+        object_type: type of the objects carrying the metadata ("signal" or
+         "image")
+
+    Returns:
+        ``(key, description)`` pairs, in declaration order, without duplicates
+    """
+    keys: dict[str, str] = {}
+    for plugin in get_application_plugins():
+        for recipe in plugin.get_recipes():
+            for slot in recipe.inputs:
+                if slot.object_type.value != object_type:
+                    continue
+                for requirement in slot.metadata:
+                    keys.setdefault(requirement.key, requirement.description)
+    return list(keys.items())
 
 
 def record_application_use(plugin_id: str) -> None:
