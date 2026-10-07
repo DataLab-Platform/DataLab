@@ -42,6 +42,12 @@ msgstr "**Afficher la page d'accueil lorsque le panneau courant est vide**"
 msgid "When enabled (default), the welcome page is shown when DataLab starts and whenever the current signal or image panel is empty (see :ref:`welcome_page`)."
 msgstr "Lorsque cette option est activée (par défaut), la page d'accueil est affichée au démarrage de DataLab et chaque fois que le panneau signal ou image courant est vide (voir :ref:`welcome_page`)."
 
+msgid "**Welcome page application rows**"
+msgstr "**Lignes d'applications de la page d'accueil**"
+
+msgid "Maximum number of application tile rows on the welcome page, from 1 to 10 (default: 2). Other applications remain available from the **Applications** catalog (see :ref:`welcome_page`)."
+msgstr "Nombre maximal de lignes de tuiles d'applications sur la page d'accueil, de 1 à 10 (par défaut : 2). Les autres applications restent accessibles depuis le catalogue **Applications** (voir :ref:`welcome_page`)."
+
 msgid "**Process isolation**"
 msgstr "**Isolation des processus**"
 

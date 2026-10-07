@@ -1,0 +1,447 @@
+# Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
+
+"""Unit tests for the headless plugin recipe contracts."""
+
+from __future__ import annotations
+
+import dataclasses
+import json
+
+import guidata.dataset as gds
+import pytest
+from sigima.objects import TableResult, create_signal
+
+from datalab.plugins import PluginBase, PluginInfo, PluginRegistry
+from datalab.recipes import (
+    RecipeCancellationError,
+    RecipeCardinality,
+    RecipeDescriptor,
+    RecipeDiagnostic,
+    RecipeDiagnosticLevel,
+    RecipeExecutionContext,
+    RecipeInputSlot,
+    RecipeMetadataRequirement,
+    RecipeObjectOutput,
+    RecipeObjectType,
+    RecipeOutcome,
+    RecipeResultOutput,
+    RecipeRunRecord,
+    RecipeRunStatus,
+)
+
+
+class RecipeParameters(gds.DataSet):
+    """Minimal parameters used to validate descriptor typing."""
+
+    gain = gds.FloatItem("Gain", default=1.0)
+
+
+def test_recipe_run_record_round_trips_as_json() -> None:
+    """Recipe provenance is immutable, versioned, and JSON-serializable."""
+    record = RecipeRunRecord(
+        run_id="d91fce58-eccc-4ffc-8216-4dfd8b0049d4",
+        plugin_id="org.example.camera",
+        plugin_version="2.1.0",
+        recipe_id="org.example.camera:quick-check",
+        recipe_version="1.2.0",
+        parameters_json='{"gain": 2.0}',
+        input_uuids={
+            "frames": (
+                "11111111-1111-4111-8111-111111111111",
+                "22222222-2222-4222-8222-222222222222",
+            )
+        },
+        output_uuids={"summary": "33333333-3333-4333-8333-333333333333"},
+        datalab_version="1.3.0",
+        sigima_version="1.2.0",
+        status="completed",
+        started_at="2026-08-08T10:00:00Z",
+        finished_at="2026-08-08T10:00:01Z",
+    )
+
+    payload = record.to_dict()
+    assert payload["schema_version"] == 1
+    assert payload["status"] == "completed"
+    assert json.loads(json.dumps(payload)) == payload
+    assert RecipeRunRecord.from_dict(payload) == record
+    assert record.status is RecipeRunStatus.COMPLETED
+    with pytest.raises(TypeError):
+        record.input_uuids["frames"] = ("other",)
+    with pytest.raises(TypeError, match="map strings to sequences"):
+        dataclasses.replace(
+            record,
+            input_uuids={"frames": "11111111-1111-4111-8111-111111111111"},
+        )
+    with pytest.raises(ValueError, match="valid UUID"):
+        dataclasses.replace(record, output_uuids={"summary": "not-a-uuid"})
+
+
+def test_recipe_descriptor_normalizes_and_validates_contract() -> None:
+    """Descriptors expose immutable typed slots and a namespaced identity."""
+
+    def run_recipe(*_args, **_kwargs) -> RecipeOutcome:
+        """Return an empty outcome for descriptor validation."""
+        return RecipeOutcome()
+
+    descriptor = RecipeDescriptor(
+        recipe_id="org.example.camera:quick-check",
+        plugin_version="2.1.0",
+        title="Quick check",
+        description="Run a minimal detector check.",
+        version="1.2.0",
+        inputs=[
+            RecipeInputSlot(
+                id="frames",
+                object_type="image",
+                cardinality="many",
+            ),
+            RecipeInputSlot(
+                id="reference",
+                object_type=RecipeObjectType.IMAGE,
+                cardinality=RecipeCardinality.ONE,
+                required=False,
+            ),
+        ],
+        parameter_class=RecipeParameters,
+        run=run_recipe,
+    )
+
+    assert descriptor.plugin_id == "org.example.camera"
+    assert descriptor.plugin_version == "2.1.0"
+    assert descriptor.local_id == "quick-check"
+    assert isinstance(descriptor.inputs, tuple)
+    assert descriptor.inputs[0].object_type is RecipeObjectType.IMAGE
+    assert descriptor.inputs[0].cardinality is RecipeCardinality.MANY
+
+    prerelease_descriptor = RecipeDescriptor(
+        recipe_id="org.example.camera:preview",
+        plugin_version="2.1.0",
+        title="Preview",
+        version="1.0.0rc1",
+        run=run_recipe,
+    )
+    assert prerelease_descriptor.version == "1.0.0rc1"
+
+    with pytest.raises(ValueError, match="namespaced"):
+        RecipeDescriptor(
+            recipe_id="quick-check",
+            plugin_version="2.1.0",
+            title="Quick check",
+            version="1.0",
+            run=run_recipe,
+        )
+    with pytest.raises(ValueError, match="Duplicate recipe input slot"):
+        RecipeDescriptor(
+            recipe_id="org.example.camera:duplicate-slots",
+            plugin_version="2.1.0",
+            title="Duplicate slots",
+            version="1.0",
+            inputs=(
+                RecipeInputSlot("frames", "image", "one"),
+                RecipeInputSlot("frames", "image", "many"),
+            ),
+            run=run_recipe,
+        )
+    with pytest.raises(TypeError, match="DataSet subclass"):
+        RecipeDescriptor(
+            recipe_id="org.example.camera:invalid-parameters",
+            plugin_version="2.1.0",
+            title="Invalid parameters",
+            version="1.0",
+            parameter_class=dict,
+            run=run_recipe,
+        )
+    with pytest.raises(ValueError, match="plugin namespace"):
+        RecipeDescriptor(
+            recipe_id=":quick-check",
+            plugin_version="2.1.0",
+            title="Missing namespace",
+            version="1.0",
+            run=run_recipe,
+        )
+    with pytest.raises(ValueError, match="Invalid recipe version"):
+        RecipeDescriptor(
+            recipe_id="org.example.camera:invalid-version",
+            plugin_version="2.1.0",
+            title="Invalid version",
+            version="not-a-version",
+            run=run_recipe,
+        )
+    with pytest.raises(ValueError, match="Invalid plugin version"):
+        RecipeDescriptor(
+            recipe_id="org.example.camera:invalid-plugin-version",
+            plugin_version="not-a-version",
+            title="Invalid plugin version",
+            version="1.0",
+            run=run_recipe,
+        )
+
+
+def test_recipe_outcome_requires_named_objects_and_valid_anchors() -> None:
+    """Scalar outputs reference named object outputs without GUI UUIDs."""
+    signal = create_signal("Summary", x=[0.0, 1.0], y=[1.0, 2.0])
+    table = TableResult(
+        title="Summary metrics",
+        headers=["Mean"],
+        data=[[1.5]],
+    )
+    diagnostic = RecipeDiagnostic(
+        level="warning",
+        code="limited-sample-count",
+        message="Only two samples were available.",
+        details={"sample_count": 2},
+    )
+
+    outcome = RecipeOutcome(
+        objects=[RecipeObjectOutput("summary", signal)],
+        results=[RecipeResultOutput("metrics", table, anchor_id="summary")],
+        diagnostics=[diagnostic],
+    )
+
+    assert isinstance(outcome.objects, tuple)
+    assert isinstance(outcome.results, tuple)
+    assert outcome.results[0].anchor_id == "summary"
+    assert outcome.diagnostics[0].level is RecipeDiagnosticLevel.WARNING
+    with pytest.raises(TypeError):
+        outcome.diagnostics[0].details["sample_count"] = 3
+
+    with pytest.raises(ValueError, match="unknown object output"):
+        RecipeOutcome(
+            objects=(RecipeObjectOutput("summary", signal),),
+            results=(RecipeResultOutput("metrics", table, anchor_id="missing"),),
+        )
+    with pytest.raises(ValueError, match="Duplicate recipe object output"):
+        RecipeOutcome(
+            objects=(
+                RecipeObjectOutput("summary", signal),
+                RecipeObjectOutput("summary", signal),
+            )
+        )
+    with pytest.raises(ValueError, match="Recipe diagnostic code"):
+        RecipeDiagnostic(
+            level="error",
+            code="INVALID CODE",
+            message="Invalid diagnostic code",
+        )
+
+
+def test_recipe_execution_context_reports_progress_and_cancellation() -> None:
+    """Execution context stays independent from threading and UI technology."""
+    progress_events: list[tuple[float, str | None]] = []
+    cancelled = False
+    context = RecipeExecutionContext(
+        progress_callback=lambda progress, message: progress_events.append(
+            (progress, message)
+        ),
+        cancellation_callback=lambda: cancelled,
+    )
+
+    context.report_progress(0.25, "Loading inputs")
+    assert progress_events == [(0.25, "Loading inputs")]
+    assert not context.is_cancelled
+
+    cancelled = True
+    assert context.is_cancelled
+    with pytest.raises(RecipeCancellationError):
+        context.raise_if_cancelled()
+    for invalid_progress in (True, float("nan"), float("inf"), -0.1, 1.1):
+        with pytest.raises(ValueError, match="between 0.0 and 1.0"):
+            context.report_progress(invalid_progress)
+
+
+def test_plugin_exposes_only_owned_unique_recipes() -> None:
+    """Plugin recipe declarations stay namespaced by their stable plugin ID."""
+
+    def run_recipe(*_args, **_kwargs) -> RecipeOutcome:
+        """Return an empty recipe outcome."""
+        return RecipeOutcome()
+
+    recipe = RecipeDescriptor(
+        recipe_id="org.example.recipes:quick-check",
+        plugin_version="2.0.0",
+        title="Quick check",
+        version="1.0",
+        run=run_recipe,
+    )
+
+    class RecipePlugin(PluginBase):
+        """Plugin exposing one headless recipe."""
+
+        PLUGIN_INFO = PluginInfo(
+            id="org.example.recipes",
+            name="Recipe plugin",
+            version="2.0.0",
+        )
+        RECIPES = (recipe,)
+
+        def create_actions(self) -> None:
+            """Create no actions for this contract test."""
+
+    try:
+        assert RecipePlugin.get_recipes() == (recipe,)
+
+        RecipePlugin.RECIPES = (recipe, recipe)
+        with pytest.raises(ValueError, match="Duplicate plugin recipe ID"):
+            RecipePlugin.get_recipes()
+
+        RecipePlugin.RECIPES = ("not-a-recipe",)
+        with pytest.raises(TypeError, match="RecipeDescriptor"):
+            RecipePlugin.get_recipes()
+
+        RecipePlugin.RECIPES = (dataclasses.replace(recipe, plugin_version="2.1.0"),)
+        with pytest.raises(ValueError, match="version does not match"):
+            RecipePlugin.get_recipes()
+
+        RecipePlugin.RECIPES = (
+            RecipeDescriptor(
+                recipe_id="org.example.other:quick-check",
+                plugin_version="2.0.0",
+                title="Wrong owner",
+                version="1.0",
+                run=run_recipe,
+            ),
+        )
+        with pytest.raises(ValueError, match="not owned by plugin"):
+            RecipePlugin.get_recipes()
+    finally:
+        PluginRegistry.get_plugin_classes().remove(RecipePlugin)
+
+
+def test_plugin_recipe_launchers_override_the_generic_interaction(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Declared launchers replace the generic interaction of their recipe."""
+
+    def run_recipe(*_args, **_kwargs) -> RecipeOutcome:
+        """Return an empty headless outcome."""
+        return RecipeOutcome()
+
+    recipe = RecipeDescriptor(
+        recipe_id="org.example.launcher:quick-check",
+        plugin_version="1.0.0",
+        title="Quick check",
+        version="1.0.0",
+        run=run_recipe,
+    )
+    generic_recipe = dataclasses.replace(
+        recipe, recipe_id="org.example.launcher:generic", title="Generic"
+    )
+
+    class LauncherPlugin(PluginBase):
+        """Plugin exposing one explicit Desktop recipe launcher."""
+
+        PLUGIN_INFO = PluginInfo(
+            id="org.example.launcher",
+            name="Launcher plugin",
+            version="1.0.0",
+        )
+        RECIPES = (recipe, generic_recipe)
+        RECIPE_LAUNCHERS = {recipe.recipe_id: "run_quick_check"}
+
+        def create_actions(self) -> None:
+            """Create no actions for this contract test."""
+
+        def run_quick_check(self) -> RecipeOutcome:
+            """Return a visible-launch outcome."""
+            return RecipeOutcome()
+
+    started: list[str] = []
+    monkeypatch.setattr(
+        LauncherPlugin,
+        "start_recipe",
+        lambda _plugin, recipe_id: started.append(recipe_id),
+    )
+    try:
+        plugin = LauncherPlugin()
+        plugin.main = object()
+        assert dict(plugin.get_recipe_launchers()) == {
+            recipe.recipe_id: "run_quick_check"
+        }
+        assert isinstance(plugin.launch_recipe(recipe.recipe_id), RecipeOutcome)
+        assert started == []
+        assert plugin.launch_recipe(generic_recipe.recipe_id) is None
+        assert started == [generic_recipe.recipe_id]
+
+        plugin.main = None
+        with pytest.raises(RuntimeError, match="registered"):
+            plugin.launch_recipe(recipe.recipe_id)
+        plugin.main = object()
+        with pytest.raises(KeyError, match="not found"):
+            plugin.launch_recipe("org.example.launcher:missing")
+
+        LauncherPlugin.RECIPE_LAUNCHERS = {
+            "org.example.launcher:unknown": "run_quick_check"
+        }
+        with pytest.raises(ValueError, match="unknown recipe"):
+            LauncherPlugin.get_recipe_launchers()
+        LauncherPlugin.RECIPE_LAUNCHERS = {recipe.recipe_id: "missing_method"}
+        with pytest.raises(ValueError, match="not callable"):
+            LauncherPlugin.get_recipe_launchers()
+    finally:
+        PluginRegistry.get_plugin_classes().remove(LauncherPlugin)
+
+
+def test_recipe_input_slot_declares_human_requirements() -> None:
+    """Slots describe their data, minimum count and expected metadata."""
+    slot = RecipeInputSlot(
+        id="flat_frames",
+        object_type="image",
+        cardinality="many",
+        description="Uniformly illuminated frames",
+        min_count=2,
+        metadata=[
+            RecipeMetadataRequirement("exposure_time_s", "Exposure time (s)"),
+            RecipeMetadataRequirement("frame_role", required=False),
+        ],
+    )
+    assert slot.display_title == "Flat frames"
+    assert dataclasses.replace(slot, title="Flats").display_title == "Flats"
+    assert isinstance(slot.metadata, tuple)
+    assert [item.required for item in slot.metadata] == [True, False]
+
+    for kwargs, message in (
+        ({"min_count": 0}, "minimum count"),
+        ({"min_count": True}, "minimum count"),
+        ({"cardinality": "one", "min_count": 2}, "minimum of 1"),
+        ({"metadata": "exposure_time_s"}, "metadata must be a sequence"),
+        ({"metadata": ("exposure_time_s",)}, "RecipeMetadataRequirement"),
+        (
+            {
+                "metadata": (
+                    RecipeMetadataRequirement("key"),
+                    RecipeMetadataRequirement("key"),
+                )
+            },
+            "Duplicate recipe input metadata key",
+        ),
+        ({"title": 1}, "title must be a string"),
+    ):
+        with pytest.raises((TypeError, ValueError), match=message):
+            dataclasses.replace(slot, **kwargs)
+    with pytest.raises(ValueError, match="metadata key"):
+        RecipeMetadataRequirement(" ")
+
+
+def test_recipe_descriptor_hooks_must_be_callable() -> None:
+    """Binding suggestions and input checks are optional callables."""
+
+    def run_recipe(*_args, **_kwargs) -> RecipeOutcome:
+        """Return an empty outcome."""
+        return RecipeOutcome()
+
+    descriptor = RecipeDescriptor(
+        recipe_id="org.example.camera:hooks",
+        plugin_version="1.0.0",
+        title="Hooks",
+        version="1.0.0",
+        run=run_recipe,
+        inputs=(RecipeInputSlot("frames", "image", "many"),),
+        suggest_bindings=lambda candidates: {"frames": candidates},
+        check_inputs=lambda inputs, parameters: (),
+    )
+    assert descriptor.get_input("frames").id == "frames"
+    with pytest.raises(KeyError, match="no input slot"):
+        descriptor.get_input("missing")
+    for name in ("suggest_bindings", "check_inputs"):
+        with pytest.raises(TypeError, match=f"{name} must be callable"):
+            dataclasses.replace(descriptor, **{name: "not callable"})

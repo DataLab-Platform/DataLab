@@ -25,6 +25,7 @@ import os.path as osp
 import sys
 import time
 import traceback
+from contextlib import ExitStack
 from datetime import datetime
 from typing import TYPE_CHECKING
 
@@ -58,6 +59,7 @@ from datalab.control.baseproxy import AbstractDLControl
 from datalab.control.remote import RemoteServer
 from datalab.env import execenv
 from datalab.gui.actionhandler import ActionCategory
+from datalab.gui.applications import ApplicationsDialog, get_plugin_icon
 from datalab.gui.commandpalette import (
     CommandPaletteDialog,
     CommandSearchField,
@@ -65,15 +67,26 @@ from datalab.gui.commandpalette import (
 )
 from datalab.gui.docks import DockablePlotWidget
 from datalab.gui.h5io import H5InputOutput
+from datalab.gui.instrument import InstrumentWindow
 from datalab.gui.panel import base, history, image, macro, signal
 from datalab.gui.pluginconfig import PluginConfigDialog
+from datalab.gui.processor.base import FeatureNotFoundError
 from datalab.gui.processor.preview import PreviewExecutorCache
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
 from datalab.gui.welcome import WelcomePanel
 from datalab.objectmodel import ObjectGroup, get_uuid
-from datalab.plugins import PluginRegistry, discover_plugins, discover_v020_plugins
+from datalab.plugin_tools import tool_accepts_selection
+from datalab.plugins import (
+    PluginRegistry,
+    discover_plugins,
+    discover_v020_plugins,
+    migrate_enabled_plugin_ids,
+)
 from datalab.utils import qthelpers as qth
-from datalab.utils.qthelpers import configure_menu_about_to_show
+from datalab.utils.qthelpers import (
+    configure_menu_about_to_show,
+    qt_handle_error_message,
+)
 from datalab.webapi import WEBAPI_AVAILABLE, get_webapi_controller
 from datalab.webapi.actions import WebApiActions
 from datalab.widgets import instconfviewer
@@ -87,6 +100,7 @@ if TYPE_CHECKING:
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.macro import MacroPanel
     from datalab.gui.panel.signal import SignalPanel
+    from datalab.plugin_tools import PluginTool
     from datalab.plugins import PluginBase
 
 
@@ -136,6 +150,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.macropanel: MacroPanel | None = None
         self.historypanel: history.HistoryPanel | None = None
         self.aiassistantpanel = None  # type: ignore[assignment]
+        self.__applications_dialog: ApplicationsDialog | None = None
+        self.__instrument_windows: dict[tuple[str, str], InstrumentWindow] = {}
         self.welcomepanel: WelcomePanel | None = None
 
         self.signalpanel_toolbar: QW.QToolBar | None = None
@@ -149,11 +165,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         self.openh5_action: QW.QAction | None = None
         self.saveh5_action: QW.QAction | None = None
+        self.command_palette_action: QW.QAction | None = None
         self.browseh5_action: QW.QAction | None = None
         self.settings_action: QW.QAction | None = None
         self.command_palette_action: QW.QAction | None = None
         self.quit_action: QW.QAction | None = None
         self.autorefresh_action: QW.QAction | None = None
+        self.applications_action: QW.QAction | None = None
         self.reload_plugins_action: QW.QAction | None = None
         self.configure_plugins_action: QW.QAction | None = None
 
@@ -820,6 +838,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     def _post_setup(self, console: bool) -> None:
         """Create plugin actions and wire panels, once the whole UI exists"""
         self.__create_plugins_actions()
+        self.welcomepanel.refresh_application_tiles()
         self.__update_actions(update_other_data_panel=True)
         self.__configure_panels()
 
@@ -849,7 +868,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         with sgmx_qth.try_or_log_error("Discovering plugins"):
             # Discovering plugins
-            plugin_nb = len(discover_plugins())
+            discover_plugins()
+            plugin_nb = len(PluginRegistry.get_plugin_classes())
             execenv.log(self, f"{plugin_nb} plugin(s) found")
 
         # Buffer any import errors that occurred during discovery
@@ -857,7 +877,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         # Get enabled plugins list from configuration
         # None = all plugins enabled (default), [] = no plugins, list = specific plugins
-        enabled_list = Conf.plugins_enabled_list.get(None)
+        configured_enabled_list = Conf.plugins_enabled_list.get(None)
+        enabled_list = migrate_enabled_plugin_ids(configured_enabled_list)
+        if enabled_list != configured_enabled_list:
+            Conf.plugins_enabled_list.set(enabled_list)
 
         if not Conf.plugins_enabled.get():
             self.plugins_last_load_at = datetime.now().astimezone()
@@ -869,10 +892,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 # None means all plugins are enabled
                 if enabled_list is not None:
                     plugin_name = plugin_class.PLUGIN_INFO.name
-                    if plugin_name not in enabled_list:
+                    plugin_id = plugin_class.get_plugin_id()
+                    if plugin_id not in enabled_list:
                         execenv.log(
                             self,
-                            f"Plugin {plugin_name} is disabled, skipping registration",
+                            f"Plugin {plugin_name} ({plugin_id}) is disabled, "
+                            "skipping registration",
                         )
                         continue
 
@@ -901,7 +926,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 mod = sys.modules.get(plugin_class.__module__)
                 filepath = getattr(mod, "__file__", "") if mod else ""
                 PluginRegistry.add_failed_plugin(
-                    plugin_class.__name__, filepath or "", tb_text
+                    plugin_class.__name__,
+                    filepath or "",
+                    tb_text,
+                    ", ".join(
+                        getattr(plugin_class, "__plugin_discovery_sources__", ())
+                    ),
                 )
 
         self.plugins_last_load_at = datetime.now().astimezone()
@@ -932,11 +962,96 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     with sgmx_qth.try_or_log_error(
                         f"Create actions for {plugin.info.name}"
                     ):
-                        plugin.create_actions()
+                        with ExitStack() as rollback_stack:
+                            rollback_stack.callback(plugin.remove_owned_features)
+                            plugin.register_computations()
+                            plugin.create_actions()
+                            rollback_stack.pop_all()
+                    with sgmx_qth.try_or_log_error(
+                        f"Create tool actions for {plugin.info.name}"
+                    ):
+                        self.__create_plugin_tool_actions(plugin)
+
+    def __create_plugin_tool_actions(self, plugin: PluginBase) -> None:
+        """Add the plugin's tools to its submenu of the *Plugins* menu
+
+        Each tool is listed in the panel of its object type (both panels when
+        it has none), after the plugin's own actions.
+        """
+        title = plugin.info.name.replace("&", "&&")
+        for panel in (self.signalpanel, self.imagepanel):
+            tools = [
+                tool
+                for tool in plugin.get_tools()
+                if tool.object_type is None
+                or tool.object_type.value == panel.PANEL_STR_ID
+            ]
+            if not tools:
+                continue
+            handler = panel.acthandler
+            with handler.new_menu(title):
+                for index, tool in enumerate(tools):
+                    action = handler.new_action(
+                        tool.title,
+                        separator=index == 0,
+                        triggered=functools.partial(
+                            self.__launch_plugin_tool, plugin, tool.id
+                        ),
+                        tip=tool.description or None,
+                        select_condition=functools.partial(
+                            self.__tool_selection_condition, tool
+                        ),
+                    )
+                    action.setIcon(get_plugin_icon(tool.icon))
 
     @staticmethod
-    def __unregister_plugins() -> None:
+    def __tool_selection_condition(
+        tool: PluginTool,
+        _selected_groups: list[ObjectGroup],
+        selected_objects: list,
+    ) -> bool:
+        """Return True if a tool's menu action is enabled on the selection."""
+        return tool_accepts_selection(tool, selected_objects)
+
+    def __launch_plugin_tool(self, plugin: PluginBase, tool_id: str) -> None:
+        """Open a plugin tool from the menu, reporting its failures."""
+        try:
+            plugin.launch_tool(tool_id)
+        except Exception as exc:  # pylint: disable=broad-except
+            # Plugin-owned tools are third-party code: never crash the app
+            qt_handle_error_message(self, exc, _("Opening tool '%s'") % tool_id)
+
+    def open_plugin_instrument(
+        self, plugin: PluginBase, tool: PluginTool
+    ) -> InstrumentWindow:
+        """Show the instrument window of a plugin tool, creating it if needed."""
+        key = (plugin.plugin_id, tool.id)
+        window = self.__instrument_windows.get(key)
+        if window is None:
+            window = InstrumentWindow(self, plugin.get_instrument(tool.id), tool.title)
+            window.finished.connect(
+                functools.partial(self.__forget_instrument_window, key)
+            )
+            self.__instrument_windows[key] = window
+        window.show()
+        window.raise_()
+        window.activateWindow()
+        return window
+
+    def __forget_instrument_window(self, key: tuple[str, str], *_args) -> None:
+        """Release a closed instrument window."""
+        window = self.__instrument_windows.pop(key, None)
+        if window is not None:
+            window.deleteLater()
+
+    def close_plugin_instruments(self) -> None:
+        """Close all plugin instrument windows."""
+        for window in list(self.__instrument_windows.values()):
+            window.close()
+
+    def __unregister_plugins(self) -> None:
         """Unregister all plugins and let them cleanup their hooks"""
+        self.close_plugin_instruments()
         with sgmx_qth.try_or_log_error("Unregistering plugins"):
             PluginRegistry.unregister_all_plugins()
 
@@ -952,6 +1067,36 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Open plugin configuration dialog"""
         dialog = PluginConfigDialog(self)
         dialog.exec()
+
+    def show_applications(self, plugin_id: str | None = None) -> None:
+        """Open the application plugin catalog
+
+        Args:
+            plugin_id: ID of the application plugin to show (default: first one)
+        """
+        if self.__applications_dialog is None:
+            self.__applications_dialog = ApplicationsDialog(self)
+            self.__applications_dialog.SIG_WELCOME_PREFERENCES_CHANGED.connect(
+                self.welcomepanel.update_application_tiles
+            )
+            for panel in (self.signalpanel, self.imagepanel):
+                panel.objview.SIG_SELECTION_CHANGED.connect(
+                    self.__applications_dialog.schedule_readiness_update
+                )
+                # Metadata edits change readiness without changing the selection
+                panel.SIG_OBJECT_MODIFIED.connect(
+                    self.__applications_dialog.schedule_readiness_update
+                )
+            self.tabwidget.currentChanged.connect(
+                self.__applications_dialog.schedule_readiness_update
+            )
+        else:
+            self.__applications_dialog.refresh()
+        if plugin_id is not None:
+            self.__applications_dialog.select_plugin(plugin_id)
+        self.__applications_dialog.show()
+        self.__applications_dialog.raise_()
+        self.__applications_dialog.activateWindow()
 
     def set_plugins_enabled(self, enabled: bool) -> None:
         """Apply the global third-party plugin enabled state."""
@@ -992,13 +1137,17 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             # that code changes are picked up.
             PluginRegistry.clear_plugin_classes()
             with sgmx_qth.try_or_log_error("Discovering plugins (reload)"):
-                plugin_nb = len(discover_plugins())
+                discover_plugins()
+                plugin_nb = len(PluginRegistry.get_plugin_classes())
                 execenv.log(self, f"{plugin_nb} plugin(s) found (reloaded)")
             self.__restart_processor_pool()
 
             # Get enabled plugins list from configuration
             # None = all enabled (default), [] = none, list = specific plugins
-            enabled_list = Conf.plugins_enabled_list.get(None)
+            configured_enabled_list = Conf.plugins_enabled_list.get(None)
+            enabled_list = migrate_enabled_plugin_ids(configured_enabled_list)
+            if enabled_list != configured_enabled_list:
+                Conf.plugins_enabled_list.set(enabled_list)
 
             # Instantiate and register plugins again
             for plugin_class in PluginRegistry.get_plugin_classes():
@@ -1007,10 +1156,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     # None means all plugins are enabled
                     if enabled_list is not None:
                         plugin_name = plugin_class.PLUGIN_INFO.name
-                        if plugin_name not in enabled_list:
+                        plugin_id = plugin_class.get_plugin_id()
+                        if plugin_id not in enabled_list:
                             execenv.log(
                                 self,
-                                f"Plugin {plugin_name} is disabled, "
+                                f"Plugin {plugin_name} ({plugin_id}) is disabled, "
                                 "skipping registration (reload)",
                             )
                             continue
@@ -1039,11 +1189,17 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     mod = sys.modules.get(plugin_class.__module__)
                     filepath = getattr(mod, "__file__", "") if mod else ""
                     PluginRegistry.add_failed_plugin(
-                        plugin_class.__name__, filepath or "", tb_text
+                        plugin_class.__name__,
+                        filepath or "",
+                        tb_text,
+                        ", ".join(
+                            getattr(plugin_class, "__plugin_discovery_sources__", ())
+                        ),
                     )
 
             # Recreate plugin actions for the new plugin set
             self.__create_plugins_actions()
+            self.welcomepanel.refresh_application_tiles()
 
             # Update actions and menus to reflect new plugin set
             self.__update_actions(update_other_data_panel=True)
@@ -1097,6 +1253,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.__unregister_plugins()
         for panel in (self.signalpanel, self.imagepanel):
             panel.acthandler.clear_plugin_actions()
+        self.welcomepanel.refresh_application_tiles()
 
         self.__update_actions(update_other_data_panel=True)
         self.__update_plugins_availability()
@@ -1144,6 +1301,14 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         )
 
         # Plugins menu actions
+        self.applications_action = create_action(
+            self,
+            "",
+            icon=get_icon("libre-gui-plugin.svg"),
+            tip=_("Browse application plugins, recipes and examples"),
+            # The lambda drops the "checked" argument, which is not a plugin ID
+            triggered=lambda: self.show_applications(),  # pylint: disable=unnecessary-lambda
+        )
         self.reload_plugins_action = create_action(
             self,
             _("Reload plugins"),
@@ -1337,6 +1502,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     def _add_menus(self) -> None:
         """Adding menus"""
         super()._add_menus()
+        self.menuBar().insertAction(
+            self.plugins_menu.menuAction(), self.applications_action
+        )
         # Make plugins menu scrollable to handle many plugins without overflow
         self.plugins_menu.setStyleSheet("QMenu { menu-scrollable: 1; }")
         for menu in (
@@ -1586,10 +1754,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 # registered feature:
                 try:
                     feature = panel.processor.get_feature(name)
-                    panel.processor.run_feature(feature, param, edit=edit)
-                    return
-                except ValueError:
+                except FeatureNotFoundError:
                     continue
+                panel.processor.run_feature(feature, param, edit=edit)
+                return
         raise ValueError(f"Unknown computation function {name}")
 
     # ------GUI refresh
@@ -2280,6 +2448,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 self._update_color_mode()
             if option == "show_console_on_error":
                 self._update_console_show_mode()
+            if option == "welcome_application_rows":
+                self.welcomepanel.update_application_tiles()
             if option == "plot_toolbar_position":
                 for dock in self.docks.values():
                     widget = dock.widget()

@@ -35,9 +35,11 @@ def test_builtin_feature_ids_are_unique(monkeypatch) -> None:
     registrations: list[tuple[str, str]] = []
     add_feature = BaseProcessor.add_feature
 
-    def record_feature(self: BaseProcessor, feature: ComputingFeature) -> None:
-        add_feature(self, feature)
-        if feature.plugin_origin is None:
+    def record_feature(
+        self: BaseProcessor, feature: ComputingFeature, owner: str | None = None
+    ) -> None:
+        add_feature(self, feature, owner)
+        if feature.plugin_origin is None and feature.owner_plugin_id is None:
             registrations.append((self.panel.PANEL_STR_ID, feature.feature_id))
 
     monkeypatch.setattr(BaseProcessor, "add_feature", record_feature)
@@ -59,7 +61,7 @@ def test_get_feature_prefers_builtin_or_matching_plugin() -> None:
             plugin_origin=dict(PLUGIN_ORIGIN),
         )
         processor.computing_registry = {
-            normalize: plugin_feature,
+            plugin_feature.feature_id: plugin_feature,
             **processor.computing_registry,
         }
 
@@ -67,7 +69,10 @@ def test_get_feature_prefers_builtin_or_matching_plugin() -> None:
         feature = processor.get_feature("normalize", plugin_origin=PLUGIN_ORIGIN)
         assert feature is plugin_feature
         assert processor.get_feature(normalize) is plugin_feature
-        assert processor.get_feature_id(normalize) == "normalize"
+        assert (
+            processor.get_feature_id(normalize)
+            == "datalab_identity_test_plugin:normalize"
+        )
 
 
 def test_compute_1_to_1_honours_registered_preview_flag(monkeypatch) -> None:
@@ -85,6 +90,7 @@ def test_compute_1_to_1_honours_registered_preview_flag(monkeypatch) -> None:
         panel = win.signalpanel
         processor = panel.processor
         feature = processor.get_feature(sips.moving_average)
+        processor.remove_feature(feature.feature_id)
         processor.add_feature(dataclasses.replace(feature, preview_enabled=False))
         source = create_signal("Source", np.arange(10.0), np.arange(10.0))
         panel.add_object(source)

@@ -644,6 +644,9 @@ class WorkspaceAdapter(QObject):
         """
         import guidata.dataset as gds  # pylint: disable=import-outside-toplevel
 
+        # pylint: disable-next=import-outside-toplevel
+        from datalab.gui.processor.base import FeatureNotFoundError
+
         # Try to find the parameter class from the processor
         # First, look in the current panel's processor
         panel = self._main_window.tabwidget.currentWidget()
@@ -657,7 +660,7 @@ class WorkspaceAdapter(QObject):
                         if hasattr(param_obj, key):
                             setattr(param_obj, key, value)
                     return param_obj
-            except ValueError:
+            except FeatureNotFoundError:
                 pass
 
         # Fallback: try to import common parameter classes from sigima

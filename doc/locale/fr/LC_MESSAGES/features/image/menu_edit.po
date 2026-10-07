@@ -143,8 +143,8 @@ msgstr "Lorsque vous sélectionnez \"Ajouter des métadonnées...\" dans le menu
 msgid "**Metadata key**: Enter the name of the metadata field to add (letters, digits, ``_``, ``.`` and ``-``, e.g. a plugin key such as ``plugin.org.example.my-plugin.gain``)"
 msgstr "**Clé de métadonnée** : Saisir le nom du champ de métadonnée à ajouter (lettres, chiffres, ``_``, ``.`` et ``-``, par exemple une clé de plugin telle que ``plugin.org.example.my-plugin.gain``)"
 
-msgid "**Known keys**: Pick a key already present on the selected images to copy it into the metadata key"
-msgstr "**Clés connues** : Choisir une clé déjà présente sur les images sélectionnées pour la copier dans la clé de métadonnée"
+msgid "**Known keys**: Pick a key already present on the selected images, or a key expected by the methods of the installed application plugins, to copy it into the metadata key"
+msgstr "**Clés connues** : Choisir une clé déjà présente sur les images sélectionnées, ou une clé attendue par les méthodes des plugins d'application installés, pour la copier dans la clé de métadonnée"
 
 msgid "**Value pattern**: Define a pattern for the metadata value using Python format strings"
 msgstr "**Modèle de valeur** : Définir un modèle pour la valeur des métadonnées en utilisant des chaînes de format Python"

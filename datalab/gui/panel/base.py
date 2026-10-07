@@ -15,6 +15,8 @@ import os
 import os.path as osp
 import re
 import warnings
+from collections.abc import Sequence
+from contextlib import ExitStack
 from typing import TYPE_CHECKING, Any, Generator, Generic, Literal, Type
 
 import guidata.dataset as gds
@@ -72,6 +74,7 @@ from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import APP_NAME, Conf, _
 from datalab.env import execenv
 from datalab.gui import actionhandler, objectview
+from datalab.gui.applications import get_declared_metadata_keys
 from datalab.gui.newobject import (
     CREATION_PARAMETERS_OPTION,
     LEGACY_CREATION_PARAMETERS_OPTION,
@@ -374,8 +377,9 @@ class ObjectProp(QW.QWidget):
                     history_items.append(_("Original object"))
                 break
 
-            # Add current processing step
-            func_name = proc_params.func_name.replace("_", " ").title()
+            # Add current processing step (without any plugin namespace)
+            local_name = proc_params.func_name.rsplit(":", 1)[-1]
+            func_name = local_name.replace("_", " ").title()
             history_items.append(func_name)
 
             # Try to find source object
@@ -1998,18 +2002,29 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
              If False, regenerate only UUIDs that conflict with existing
              objects (object import).
         """
-        with reader.group(self.H5_PREFIX):
-            for name in reader.h5.get(self.H5_PREFIX, []):
-                with reader.group(name):
-                    group = self.add_group("")
-                    with reader.group("title"):
-                        group.title = reader.read_str()
-                    for obj_name in reader.h5.get(f"{self.H5_PREFIX}/{name}", []):
-                        obj = self.deserialize_object_from_hdf5(
-                            reader, obj_name, reset_all
-                        )
-                        self.add_object(obj, get_uuid(group), set_current=False)
-                    self.selection_changed()
+        objects_added = False
+        signals_blocked = self.blockSignals(True)
+        try:
+            with reader.group(self.H5_PREFIX):
+                for name in reader.h5.get(self.H5_PREFIX, []):
+                    with reader.group(name):
+                        group = self.add_group("")
+                        with reader.group("title"):
+                            group.title = reader.read_str()
+                        objects: list[TypeObj] = []
+                        for obj_name in reader.h5.get(f"{self.H5_PREFIX}/{name}", []):
+                            obj = self.deserialize_object_from_hdf5(
+                                reader, obj_name, reset_all
+                            )
+                            objects.append(obj)
+                        self._add_objects(objects, get_uuid(group), set_current=False)
+                        objects_added = objects_added or bool(objects)
+        finally:
+            self.blockSignals(signals_blocked)
+            if objects_added:
+                self.SIG_OBJECT_ADDED.emit()
+        if not objects_added:
+            self.selection_changed()
 
     def __len__(self) -> int:
         """Return number of objects"""
@@ -2046,13 +2061,57 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
              the object is added to the current group.
             set_current: if True, set the added object as current
         """
-        if obj in self.objmodel:
-            # Prevent adding the same object twice
-            raise ValueError(
-                f"Object {hex(id(obj))} already in panel. "
-                f"The same object cannot be added twice: "
-                f"please use a copy of the object."
-            )
+        self._add_object(obj, group_id, set_current)
+
+    @qt_try_except()
+    def add_objects(
+        self,
+        objects: Sequence[TypeObj],
+        group_id: str | None = None,
+        set_current: bool = True,
+    ) -> None:
+        """Add multiple objects atomically.
+
+        Args:
+            objects: Objects to add, in insertion order
+            group_id: Group ID to which the objects belong. If None or empty,
+             the objects are added to the current group.
+            set_current: If True, set the last added object as current
+        """
+        self._add_objects(objects, group_id, set_current)
+
+    def _add_object(
+        self,
+        obj: TypeObj,
+        group_id: str | None = None,
+        set_current: bool = True,
+    ) -> None:
+        """Add an object while propagating errors to transactional callers."""
+        self._add_objects((obj,), group_id, set_current)
+
+    def _add_objects(
+        self,
+        objects: Sequence[TypeObj],
+        group_id: str | None = None,
+        set_current: bool = True,
+    ) -> None:
+        """Add objects atomically while propagating transactional errors."""
+        objects = tuple(objects)
+        if not objects:
+            return
+        object_ids: set[str] = set()
+        for obj in objects:
+            obj_uuid = get_uuid(obj)
+            if obj in self.objmodel or obj_uuid in object_ids:
+                raise ValueError(
+                    f"Object {hex(id(obj))} already in panel. "
+                    f"The same object cannot be added twice: "
+                    f"please use a copy of the object."
+                )
+            object_ids.add(obj_uuid)
+            obj.check_data()
+
+        created_group: ObjectGroup | None = None
         if group_id is None or group_id == "":
             group_id = self.objview.get_current_group_id()
             if group_id is None:
@@ -2060,30 +2119,86 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if groups:
                     group_id = get_uuid(groups[0])
                 else:
-                    group_id = get_uuid(self.add_group(""))
-        obj.check_data()
-        self.objmodel.add_object(obj, group_id)
+                    created_group = self.add_group("")
+                    group_id = get_uuid(created_group)
+        else:
+            self.objmodel.get_group(group_id)
 
-        # Mark this object as newly created to show Creation tab on first selection
-        # BUT: Don't overwrite if this object is already marked as freshly processed
-        # or has fresh analysis results (those take precedence)
+        current_item_id = self.objview.get_current_item_id()
+        transient_attributes = (
+            "newly_created_obj_uuid",
+            "fresh_processing_obj_uuid",
+            "fresh_analysis_obj_uuid",
+        )
+        transient_state = {
+            name: getattr(self.objprop, name) for name in transient_attributes
+        }
+        added_to_model = False
+        try:
+            self.objmodel.add_objects(objects, group_id)
+            added_to_model = True
+
+            for obj in objects:
+                # Don't overwrite fresh processing or analysis state: those tabs take
+                # precedence over the Creation tab on first selection.
+                obj_uuid = get_uuid(obj)
+                if obj_uuid not in (
+                    self.objprop.fresh_processing_obj_uuid,
+                    self.objprop.fresh_analysis_obj_uuid,
+                ):
+                    self.objprop.mark_as_newly_created(obj)
+
+            self.objview.add_object_items(
+                objects,
+                group_id,
+                set_current=set_current,
+            )
+            self.objview.update_tree()
+
+            # Emit signal to ensure that the data panel is shown in the main window and
+            # that the plot is updated (trigger a refresh of the plot)
+            self.SIG_OBJECT_ADDED.emit()
+        except Exception:
+            if added_to_model:
+                for obj in reversed(objects):
+                    self._remove_added_object(obj)
+            if created_group is not None:
+                self.objview.remove_item(get_uuid(created_group), refresh=False)
+                if created_group in self.objmodel.get_groups():
+                    self.objmodel.remove_group(created_group)
+            for name, value in transient_state.items():
+                setattr(self.objprop, name, value)
+            signals_blocked = self.objview.blockSignals(True)
+            try:
+                if current_item_id is None:
+                    self.objview.clearSelection()
+                    self.objview.setCurrentItem(None)
+                elif self.objview.get_item_from_id(current_item_id) is not None:
+                    self.objview.set_current_item_id(current_item_id)
+            finally:
+                self.objview.blockSignals(signals_blocked)
+            self.objview.update_tree()
+            raise
+
+    def _remove_added_object(self, obj: TypeObj) -> None:
+        """Remove a specifically identified object after a failed transaction."""
         obj_uuid = get_uuid(obj)
-        if obj_uuid not in (
-            self.objprop.fresh_processing_obj_uuid,
-            self.objprop.fresh_analysis_obj_uuid,
+        with ExitStack() as cleanup:
+            cleanup.callback(self._clear_added_object_state, obj_uuid)
+            if obj in self.objmodel:
+                cleanup.callback(self.objmodel.remove_object, obj)
+            cleanup.callback(self.objview.remove_item, obj_uuid, refresh=False)
+            cleanup.callback(self.plothandler.remove_item, obj_uuid)
+
+    def _clear_added_object_state(self, obj_uuid: str) -> None:
+        """Clear transient property-panel references to a removed object."""
+        for attr_name in (
+            "newly_created_obj_uuid",
+            "fresh_processing_obj_uuid",
+            "fresh_analysis_obj_uuid",
         ):
-            self.objprop.mark_as_newly_created(obj)
-
-        # Block signals to avoid updating the plot (unnecessary refresh)
-        self.objview.blockSignals(True)
-        self.objview.add_object_item(obj, group_id, set_current=set_current)
-        self.objview.blockSignals(False)
-
-        # Emit signal to ensure that the data panel is shown in the main window and
-        # that the plot is updated (trigger a refresh of the plot)
-        self.SIG_OBJECT_ADDED.emit()
-
-        self.objview.update_tree()
+            if getattr(self.objprop, attr_name) == obj_uuid:
+                setattr(self.objprop, attr_name, None)
 
     def set_object(self, obj: TypeObj) -> None:
         """Update an existing object in-place with data from ``obj``.
@@ -2228,9 +2343,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             Created group object
         """
         group = self.objmodel.add_group(title)
-        self.objview.add_group_item(group)
-        if select:
-            self.objview.select_groups([group])
+        try:
+            self.objview.add_group_item(group)
+            if select:
+                self.objview.select_groups([group])
+        except Exception:
+            self.objview.remove_item(get_uuid(group), refresh=False)
+            self.objmodel.remove_group(group)
+            raise
         return group
 
     def __duplicate_individual_obj(
@@ -2374,9 +2494,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             objs: selected objects
 
         Returns:
-            ``(key, description)`` pairs
+            ``(key, description)`` pairs: the keys found on the objects, then the
+             keys expected by the methods of application plugins
         """
-        return collect_metadata_keys(objs)
+        keys = collect_metadata_keys(objs)
+        found = {key for key, _description in keys}
+        keys.extend(
+            (key, description)
+            for key, description in get_declared_metadata_keys(self.PANEL_STR_ID)
+            if key not in found
+        )
+        return keys
 
     def add_metadata(self, param: AddMetadataParam | None = None) -> None:
         """Add metadata item to selected object(s)

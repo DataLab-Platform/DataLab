@@ -128,7 +128,7 @@ class DataLabOptions(SigimaXOptions):
             "plugins_enabled_list",
             category="main",
             default=None,
-            description="Enabled plugin names (None = all, [] = none, or a list).",
+            description="Enabled plugin IDs (None = all, [] = none, or a list).",
         )
         self.plugins_path = TypedOptionField(
             self,
@@ -157,6 +157,46 @@ class DataLabOptions(SigimaXOptions):
                 "If True, show the welcome page at startup and whenever the "
                 "current signal or image panel is empty."
             ),
+        )
+        self.welcome_application_rows = TypedOptionField(
+            self,
+            "welcome_application_rows",
+            category="main",
+            default=2,
+            expected_type=int,
+            description="Maximum number of application tile rows on the welcome page.",
+        )
+        self.welcome_pinned_applications = TypedOptionField(
+            self,
+            "welcome_pinned_applications",
+            category="main",
+            default=[],
+            expected_type=list,
+            description="IDs of the applications pinned on the welcome page.",
+        )
+        self.welcome_hidden_applications = TypedOptionField(
+            self,
+            "welcome_hidden_applications",
+            category="main",
+            default=[],
+            expected_type=list,
+            description="IDs of the applications hidden from the welcome page.",
+        )
+        self.welcome_recent_applications = TypedOptionField(
+            self,
+            "welcome_recent_applications",
+            category="main",
+            default=[],
+            expected_type=list,
+            description="IDs of the recently used applications, most recent first.",
+        )
+        self.applications_list_collapsed = TypedOptionField(
+            self,
+            "applications_list_collapsed",
+            category="main",
+            default=False,
+            expected_type=bool,
+            description="If True, hide the application list of the catalog.",
         )
         self.v020_plugins_warning_ignore = TypedOptionField(
             self,

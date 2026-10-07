@@ -35,7 +35,13 @@ from datalab.config import (
     normalize_plugin_paths,
     set_user_plugin_paths,
 )
-from datalab.plugins import PLUGINS_DEFAULT_PATH, PluginRegistry
+from datalab.gui.applications import get_plugin_icon
+from datalab.plugins import (
+    PLUGINS_DEFAULT_PATH,
+    PluginCapability,
+    PluginRegistry,
+    migrate_enabled_plugin_ids,
+)
 from datalab.utils.qthelpers import (
     open_local_path as _open_local_path,
 )
@@ -72,6 +78,16 @@ PLUGIN_ROW_MARGINS: tuple[int, int, int, int] = (5, 5, 5, 5)
 
 #: Spacing between metadata items (version, state) in the top row
 META_SPACING: int = 12
+
+#: Size of the plugin icon in the top row
+PLUGIN_ICON_SIZE: int = 24
+
+CAPABILITY_LABELS: dict[PluginCapability, str] = {
+    PluginCapability.PROCESSING: _("Processing"),
+    PluginCapability.IO: _("Input/output"),
+    PluginCapability.VISUALIZATION: _("Visualization"),
+    PluginCapability.APPLICATION: _("Application"),
+}
 
 #: Dialog minimum dimensions
 DIALOG_MIN_WIDTH: int = 600
@@ -177,6 +193,7 @@ class PluginInfoWidget(QW.QWidget):
         self.plugin_filepath = self._get_plugin_filepath()
         self.open_file_button: QW.QPushButton | None = None
         self.show_in_folder_button: QW.QPushButton | None = None
+        self.capabilities_label: QW.QLabel | None = None
         self.setSizePolicy(QW.QSizePolicy.Preferred, QW.QSizePolicy.Maximum)
 
         # Main layout
@@ -185,6 +202,9 @@ class PluginInfoWidget(QW.QWidget):
         self.setLayout(layout)
 
         layout.addLayout(self._create_top_row(enabled, state))
+        self.capabilities_label = self._create_capabilities_label()
+        if self.capabilities_label is not None:
+            layout.addWidget(self.capabilities_label)
         layout.addWidget(self._create_description_widget())
         actions_layout = self._create_actions_layout()
         if actions_layout is not None:
@@ -198,6 +218,11 @@ class PluginInfoWidget(QW.QWidget):
         self.checkbox = QW.QCheckBox()
         self.checkbox.setChecked(enabled)
         top_layout.addWidget(self.checkbox)
+
+        self.icon_label = QW.QLabel()
+        icon = get_plugin_icon(self.plugin_class.PLUGIN_INFO.icon)
+        self.icon_label.setPixmap(icon.pixmap(PLUGIN_ICON_SIZE, PLUGIN_ICON_SIZE))
+        top_layout.addWidget(self.icon_label)
 
         name_label = QW.QLabel(self.plugin_class.PLUGIN_INFO.name)
         name_font = name_label.font()
@@ -215,6 +240,23 @@ class PluginInfoWidget(QW.QWidget):
         meta_layout.addWidget(self._create_state_label(state))
         top_layout.addLayout(meta_layout)
         return top_layout
+
+    def _create_capabilities_label(self) -> QW.QLabel | None:
+        """Create the optional wrapping capability summary."""
+        capabilities = getattr(
+            self.plugin_class.PLUGIN_INFO, "capabilities", frozenset()
+        )
+        if not capabilities:
+            return None
+        capabilities_text = ", ".join(
+            CAPABILITY_LABELS[capability]
+            for capability in PluginCapability
+            if capability in capabilities
+        )
+        label = QW.QLabel(capabilities_text)
+        label.setWordWrap(True)
+        apply_subdued_color(label)
+        return label
 
     @staticmethod
     def _create_state_label(state: str) -> QW.QLabel:
@@ -369,6 +411,10 @@ class FailedPluginInfoWidget(QW.QWidget):
         checkbox.setChecked(False)
         checkbox.setEnabled(False)
         top_layout.addWidget(checkbox)
+        # No icon is known for a plugin that failed to import: keep names aligned
+        icon_placeholder = QW.QLabel()
+        icon_placeholder.setFixedWidth(PLUGIN_ICON_SIZE)
+        top_layout.addWidget(icon_placeholder)
 
         file_name = osp.basename(failed_info.name)
         name_label = QW.QLabel(file_name)
@@ -387,9 +433,15 @@ class FailedPluginInfoWidget(QW.QWidget):
 
     def _create_description_widget(self, failed_info: FailedPluginInfo) -> QW.QWidget:
         """Create the expandable traceback/details area."""
-        description = failed_info.filepath
-        if failed_info.traceback:
-            description += "\n\n" + failed_info.traceback.strip()
+        description = "\n\n".join(
+            part
+            for part in (
+                failed_info.source,
+                failed_info.filepath,
+                failed_info.traceback.strip(),
+            )
+            if part
+        )
 
         mono_font = QG.QFont("Consolas", self.font().pointSize() - MONO_FONT_SIZE_DELTA)
         self.description_widget = ExpandableTextWidget(
@@ -991,11 +1043,23 @@ class PluginConfigDialog(QW.QDialog):
         """Persist current plugin enablement and search path settings."""
         Conf.plugins_enabled.set(self.plugins_enabled)
         Conf.v020_plugins_warning_ignore.set(self.v020_plugins_warning_ignore)
+        configured_plugins = migrate_enabled_plugin_ids(
+            Conf.plugins_enabled_list.get(None)
+        )
+        available_plugin_ids = {
+            widget.plugin_class.get_plugin_id() for widget in self.plugin_widgets
+        }
         enabled_plugins = [
-            widget.plugin_class.PLUGIN_INFO.name
+            widget.plugin_class.get_plugin_id()
             for widget in self.plugin_widgets
             if widget.is_enabled()
         ]
+        if configured_plugins is not None:
+            enabled_plugins.extend(
+                plugin_id
+                for plugin_id in configured_plugins
+                if plugin_id not in available_plugin_ids
+            )
         Conf.plugins_enabled_list.set(enabled_plugins)
         set_user_plugin_paths(self.extra_plugin_paths)
 
@@ -1079,11 +1143,14 @@ class PluginConfigDialog(QW.QDialog):
     def populate_plugins(self):
         """Populate the dialog with all discovered plugins"""
         self._update_load_info_label()
-        registered_names = {p.info.name for p in PluginRegistry.get_plugins()}
-        enabled_plugins = Conf.plugins_enabled_list.get(None)
+        registered_ids = {plugin.plugin_id for plugin in PluginRegistry.get_plugins()}
+        configured_enabled_plugins = Conf.plugins_enabled_list.get(None)
+        enabled_plugins = migrate_enabled_plugin_ids(configured_enabled_plugins)
+        if enabled_plugins != configured_enabled_plugins:
+            Conf.plugins_enabled_list.set(enabled_plugins)
 
         self._add_failed_plugins()
-        self._add_plugin_widgets(registered_names, enabled_plugins)
+        self._add_plugin_widgets(registered_ids, enabled_plugins)
 
         # Add stretch at the end
         self.plugins_layout.addStretch()
@@ -1098,15 +1165,15 @@ class PluginConfigDialog(QW.QDialog):
             self.plugins_layout.addWidget(failed_widget)
 
     def _add_plugin_widgets(
-        self, registered_names: set[str], enabled_plugins: list[str] | None
+        self, registered_ids: set[str], enabled_plugins: list[str] | None
     ) -> None:
         """Add widgets for discovered plugins."""
         for plugin_class in PluginRegistry.get_plugin_classes():
-            plugin_name = plugin_class.PLUGIN_INFO.name
-            enabled = enabled_plugins is None or plugin_name in enabled_plugins
+            plugin_id = plugin_class.get_plugin_id()
+            enabled = enabled_plugins is None or plugin_id in enabled_plugins
             state = (
                 PluginState.ENABLED
-                if plugin_name in registered_names
+                if plugin_id in registered_ids
                 else PluginState.DISABLED
             )
             widget = PluginInfoWidget(plugin_class, enabled, state)
