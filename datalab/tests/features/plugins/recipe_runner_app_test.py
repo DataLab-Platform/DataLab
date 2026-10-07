@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 import json
 import os.path as osp
 
@@ -26,8 +27,10 @@ from datalab.recipes import (
     RecipeCancellationError,
     RecipeCardinality,
     RecipeDescriptor,
+    RecipeDiagnostic,
     RecipeExecutionContext,
     RecipeInputSlot,
+    RecipeMetadataRequirement,
     RecipeObjectOutput,
     RecipeObjectType,
     RecipeOutcome,
@@ -269,6 +272,41 @@ def test_recipe_runner_validates_inputs_before_execution() -> None:
                 RunnerParameters(),
                 group_title="",
             )
+
+        frames = dataclasses.replace(
+            descriptor,
+            inputs=(
+                RecipeInputSlot(
+                    "frames",
+                    "image",
+                    "many",
+                    min_count=2,
+                    metadata=(RecipeMetadataRequirement("exposure"),),
+                ),
+            ),
+            check_inputs=lambda inputs, parameters: [
+                RecipeDiagnostic("warning", "noisy", "Noisy frames"),
+                *(
+                    [RecipeDiagnostic("error", "low-gain", "Gain too low")]
+                    if parameters.gain < 1.0
+                    else []
+                ),
+            ],
+        )
+        image = create_image("Frame", np.ones((2, 2)))
+        with pytest.raises(RecipeValidationError, match="at least 2 objects"):
+            RecipeRunner(win).run(frames, {"frames": (image,)}, RunnerParameters())
+        labeled = create_image("Labeled frame", np.ones((2, 2)))
+        labeled.metadata["exposure"] = 1.0
+        with pytest.raises(RecipeValidationError, match="metadata 'exposure'"):
+            RecipeRunner(win).run(
+                frames, {"frames": (labeled, image)}, RunnerParameters()
+            )
+        image.metadata["exposure"] = 2.0
+        low_gain = RunnerParameters()
+        low_gain.gain = 0.5
+        with pytest.raises(RecipeValidationError, match="Gain too low"):
+            RecipeRunner(win).run(frames, {"frames": (labeled, image)}, low_gain)
 
         assert not called
         assert len(win.signalpanel) == 0

@@ -31,7 +31,7 @@ import os.path as osp
 import pkgutil
 import sys
 import traceback
-from collections.abc import Collection, Mapping
+from collections.abc import Collection, Mapping, Sequence
 from contextlib import ExitStack
 from importlib import metadata as importlib_metadata
 from types import MappingProxyType, ModuleType
@@ -59,10 +59,17 @@ from datalab.env import execenv
 from datalab.objectmodel import get_uuid
 from datalab.plugin_examples import PluginExample, PluginExampleData
 from datalab.plugin_tiles import WelcomeTile
+from datalab.plugin_tools import PluginTool
+from datalab.recipe_binding import (
+    RecipeReadiness,
+    assess_recipe_inputs,
+    create_recipe_parameters,
+    is_compatible,
+)
 from datalab.recipes import RecipeDescriptor, RecipeOutcome
 
 if TYPE_CHECKING:
-    from sigima.objects import NewImageParam, NewSignalParam
+    from sigima.objects import ImageObj, NewImageParam, NewSignalParam, SignalObj
 
     from datalab.gui import main
     from datalab.gui.panel.image import ImagePanel
@@ -305,8 +312,11 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
     EXAMPLES: tuple[PluginExample, ...] = ()
     RECIPE_LAUNCHERS: Mapping[str, str] = MappingProxyType({})
     WELCOME_TILES: tuple[WelcomeTile, ...] = ()
+    TOOLS: tuple[PluginTool, ...] = ()
     #: Data of the last opened generated example (``None`` for packaged ones)
     last_example_data: PluginExampleData | None = None
+    #: UUIDs of the objects of the last opened generated example
+    _last_example_uuids: frozenset[str] = frozenset()
 
     def __init__(self):
         self.main: main.DLMainWindow = None
@@ -357,8 +367,16 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         return recipes
 
     @classmethod
+    def get_recipe(cls, recipe_id: str) -> RecipeDescriptor:
+        """Return one recipe descriptor by its namespaced ID."""
+        for recipe in cls.get_recipes():
+            if recipe.recipe_id == recipe_id:
+                return recipe
+        raise KeyError(f"Plugin recipe {recipe_id!r} not found")
+
+    @classmethod
     def get_recipe_launchers(cls) -> Mapping[str, str]:
-        """Return validated recipe-to-method bindings for the Desktop UI."""
+        """Return validated recipe-to-method bindings overriding the Desktop UI."""
         if not isinstance(cls.RECIPE_LAUNCHERS, Mapping):
             raise TypeError("Plugin recipe launchers must be a mapping")
         launchers = dict(cls.RECIPE_LAUNCHERS)
@@ -377,17 +395,152 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         return MappingProxyType(launchers)
 
     def launch_recipe(self, recipe_id: str) -> RecipeOutcome | None:
-        """Launch a recipe through its plugin-owned Desktop interaction."""
+        """Launch a recipe on the current selection.
+
+        A plugin method declared in ``RECIPE_LAUNCHERS`` replaces the generic
+        interaction of :meth:`start_recipe`.
+        """
         if self.main is None:
             raise RuntimeError("Plugin must be registered before launching a recipe")
-        try:
-            method_name = self.get_recipe_launchers()[recipe_id]
-        except KeyError as exc:
-            raise KeyError(f"No Desktop launcher for recipe {recipe_id!r}") from exc
+        self.get_recipe(recipe_id)
+        method_name = self.get_recipe_launchers().get(recipe_id)
+        if method_name is None:
+            return self.start_recipe(recipe_id)
         outcome = getattr(self, method_name)()
         if outcome is not None and not isinstance(outcome, RecipeOutcome):
             raise TypeError("Plugin recipe launchers must return RecipeOutcome or None")
         return outcome
+
+    def get_selected_objects(self) -> list[SignalObj | ImageObj]:
+        """Return the objects selected in the current signal or image panel."""
+        if self.main is None:
+            raise RuntimeError("Plugin must be registered to access the selection")
+        panel = {"signal": self.signalpanel, "image": self.imagepanel}.get(
+            self.main.get_current_panel()
+        )
+        if panel is None:
+            return []
+        return list(panel.objview.get_sel_objects(include_groups=True))
+
+    def example_parameter_values(
+        self,
+        recipe_id: str,
+        objects: Sequence[SignalObj | ImageObj],
+    ) -> Mapping[str, object]:
+        """Return the last example's parameter values for a recipe and objects.
+
+        Values are returned only when all objects come from the last opened
+        generated example: they are suited to that data only.
+        """
+        data = self.last_example_data
+        if data is None or not objects:
+            return MappingProxyType({})
+        if any(get_uuid(obj) not in self._last_example_uuids for obj in objects):
+            return MappingProxyType({})
+        return data.values_for(recipe_id)
+
+    def assess_recipe(
+        self,
+        recipe_id: str,
+        objects: Sequence[SignalObj | ImageObj] | None = None,
+    ) -> RecipeReadiness:
+        """Assess whether a recipe can run on objects (default: selection)."""
+        recipe = self.get_recipe(recipe_id)
+        if objects is None:
+            objects = self.get_selected_objects()
+        parameters = create_recipe_parameters(
+            recipe, self.example_parameter_values(recipe_id, objects)
+        )
+        return assess_recipe_inputs(recipe, objects, parameters)
+
+    def start_recipe(
+        self,
+        recipe_id: str,
+        objects: Sequence[SignalObj | ImageObj] | None = None,
+        parameter_values: Mapping[str, object] | None = None,
+    ) -> RecipeOutcome | None:
+        """Run a recipe through the generic DataLab interaction.
+
+        DataLab assigns the objects (default: selection) to the recipe inputs,
+        asking the user when needed, checks them, edits the parameters, then
+        runs the recipe.
+
+        Args:
+            recipe_id: namespaced recipe ID
+            objects: candidate objects (default: current selection)
+            parameter_values: initial parameter values (default: those of the
+             last opened example, when the objects come from it)
+
+        Returns:
+            Recipe outcome, or None if cancelled or failed
+        """
+        if self.main is None:
+            raise RuntimeError("Plugin must be registered before starting a recipe")
+        # pylint: disable=import-outside-toplevel
+        from datalab.gui.recipe_launcher import RecipeLauncher
+
+        return RecipeLauncher(self).start(recipe_id, objects, parameter_values)
+
+    def try_example(self, example_id: str, recipe_id: str) -> RecipeOutcome | None:
+        """Open an example, then start one of the recipes it was designed for."""
+        if self.main is None:
+            raise RuntimeError("Plugin must be registered before trying an example")
+        example = self.get_example(example_id)
+        if recipe_id not in example.recipe_ids:
+            raise ValueError(
+                f"Plugin example {example_id!r} is not designed for recipe "
+                f"{recipe_id!r}"
+            )
+        recipe = self.get_recipe(recipe_id)
+        if self.launch_example(example_id) is None:
+            return None
+        objects = [
+            obj
+            for panel in (self.signalpanel, self.imagepanel)
+            for obj in panel.objmodel.get_all_objects()
+            if any(is_compatible(slot, obj) for slot in recipe.inputs)
+        ]
+        return self.start_recipe(
+            recipe_id,
+            objects,
+            self.example_parameter_values(recipe_id, objects),
+        )
+
+    @classmethod
+    def get_tools(cls) -> tuple[PluginTool, ...]:
+        """Return validated tools listed in the Applications catalog."""
+        tools = tuple(cls.TOOLS)
+        if not tools:
+            return ()
+        info = cls.PLUGIN_INFO
+        if PluginCapability.APPLICATION not in info.capabilities:
+            raise ValueError("Plugin tools require the APPLICATION capability")
+        if not all(isinstance(tool, PluginTool) for tool in tools):
+            raise TypeError("Plugin tools must be PluginTool values")
+        tool_ids: set[str] = set()
+        for tool in tools:
+            if tool.id in tool_ids:
+                raise ValueError(f"Duplicate plugin tool ID: {tool.id!r}")
+            if not callable(getattr(cls, tool.launcher, None)):
+                raise ValueError(
+                    f"Plugin tool launcher method {tool.launcher!r} is not callable"
+                )
+            tool_ids.add(tool.id)
+        return tuple(
+            dataclasses.replace(tool, icon=info.icon)
+            if tool.icon is None and info.icon is not None
+            else tool
+            for tool in tools
+        )
+
+    def launch_tool(self, tool_id: str) -> object:
+        """Open a plugin tool by calling its launcher method."""
+        if self.main is None:
+            raise RuntimeError("Plugin must be registered before launching a tool")
+        tool = next((tool for tool in self.get_tools() if tool.id == tool_id), None)
+        if tool is None:
+            raise KeyError(f"Plugin tool {tool_id!r} not found")
+        return getattr(self, tool.launcher)()
 
     @classmethod
     def get_examples(cls) -> tuple[PluginExample, ...]:
@@ -400,11 +553,12 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         for example in examples:
             if example.id in example_ids:
                 raise ValueError(f"Duplicate plugin example ID: {example.id!r}")
-            if example.recipe_id is not None and example.recipe_id not in recipe_ids:
-                raise ValueError(
-                    f"Plugin example {example.id!r} references unknown recipe "
-                    f"{example.recipe_id!r}"
-                )
+            for recipe_id in example.recipe_ids:
+                if recipe_id not in recipe_ids:
+                    raise ValueError(
+                        f"Plugin example {example.id!r} references unknown recipe "
+                        f"{recipe_id!r}"
+                    )
             example_ids.add(example.id)
         return examples
 
@@ -423,7 +577,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         return None
 
     def launch_example(self, example_id: str) -> PluginExample | None:
-        """Confirm and open a generated or packaged example."""
+        """Confirm and open a generated or packaged example, then select it."""
         if self.main is None:
             raise RuntimeError("Plugin must be registered before launching an example")
         self.get_example(example_id)
@@ -436,7 +590,13 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
             )
         ):
             return None
-        return self.open_example(example_id, reset_all=True)
+        example = self.open_example(example_id, reset_all=True)
+        panel = {"signal": self.signalpanel, "image": self.imagepanel}.get(
+            self.main.get_current_panel()
+        )
+        if panel is not None:
+            panel.objview.select_objects(panel.objmodel.get_all_objects())
+        return example
 
     def open_example(
         self,
@@ -448,16 +608,29 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         Generated examples (``materialize_example()`` returning data) are
         loaded directly into the signal/image panels; packaged examples are
         opened through their native HDF5 resource. The materialized data is
-        kept in :attr:`last_example_data` so plugin launchers can reuse the
-        example's recipe parameter values.
+        kept in :attr:`last_example_data`, so that recipes started on these
+        objects reuse the example's parameter values
+        (see :meth:`example_parameter_values`).
         """
         if self.main is None:
             raise RuntimeError("Plugin must be registered before opening an example")
         example = self.get_example(example_id)
         data = self.materialize_example(example_id)
-        self.last_example_data = data
         if data is not None:
-            from sigima.objects import ImageObj, SignalObj
+            unknown = set(data.parameter_values).difference(example.recipe_ids)
+            if unknown:
+                raise ValueError(
+                    f"Plugin example {example_id!r} provides parameters for "
+                    f"recipes it is not designed for: {', '.join(sorted(unknown))}"
+                )
+        self.last_example_data = data
+        self._last_example_uuids = (
+            frozenset()
+            if data is None
+            else frozenset(get_uuid(obj) for obj in data.objects)
+        )
+        if data is not None:
+            from sigima.objects import SignalObj
 
             if reset_all:
                 self.main.reset_all()

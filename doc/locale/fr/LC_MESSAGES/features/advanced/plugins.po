@@ -247,14 +247,41 @@ msgstr "Lorsque ``parameter_class`` vaut ``None``, la recette ne déclare aucun 
 msgid "A :class:`datalab.recipes.RecipeOutcome` contains named object outputs, structured diagnostics, and optional scalar results. A ``TableResult`` or ``GeometryResult`` is wrapped in :class:`datalab.recipes.RecipeResultOutput` and uses ``anchor_id`` to reference the named object output that will own it. The contract validates these references without assigning DataLab workspace UUIDs. Workspace mutation and atomic commit are responsibilities of the recipe runner, not of the recipe callable."
 msgstr "Un :class:`datalab.recipes.RecipeOutcome` contient des sorties d'objets nommées, des diagnostics structurés et des résultats scalaires facultatifs. Un ``TableResult`` ou ``GeometryResult`` est encapsulé dans un :class:`datalab.recipes.RecipeResultOutput` et utilise ``anchor_id`` pour référencer la sortie d'objet nommée qui en sera propriétaire. Le contrat valide ces références sans attribuer d'UUID du workspace DataLab. La mutation du workspace et le commit atomique relèvent du runner de recettes, pas de la fonction de la recette."
 
+msgid "Describing recipe inputs"
+msgstr "Décrire les entrées d'une recette"
+
+msgid "DataLab shows users what each recipe expects and whether the current selection suits it. Describe every input slot accordingly:"
+msgstr "DataLab montre aux utilisateurs ce qu'attend chaque recette et si la sélection courante lui convient. Décrivez chaque emplacement d'entrée en conséquence :"
+
+msgid "``min_count`` is the minimum number of objects bound to a ``many`` slot. Required metadata keys must be present on every bound object; optional keys are hints shown to the user. The recipe runner enforces both rules before the recipe callable is called."
+msgstr "``min_count`` est le nombre minimal d'objets affectés à un emplacement ``many``. Les clés de métadonnées requises doivent être présentes sur chaque objet affecté ; les clés facultatives sont des indications montrées à l'utilisateur. L'exécuteur de recettes applique ces deux règles avant d'appeler la fonction de la recette."
+
+msgid "Two optional hooks of :class:`datalab.recipes.RecipeDescriptor` refine these declarations:"
+msgstr "Deux points d'extension facultatifs de :class:`datalab.recipes.RecipeDescriptor` affinent ces déclarations :"
+
+msgid "``suggest_bindings(candidates)`` returns a mapping from slot IDs to some of the candidate objects, for example to split frames by role from their metadata. Without it, compatible candidates go to the only slot accepting their type, and slots sharing a type are left for the user to assign."
+msgstr "``suggest_bindings(candidates)`` renvoie une correspondance entre identifiants d'emplacements et une partie des objets candidats, par exemple pour répartir des images selon leur rôle à partir de leurs métadonnées. Sans lui, les candidats compatibles vont au seul emplacement acceptant leur type, et les emplacements partageant un même type sont laissés à l'affectation de l'utilisateur."
+
+msgid "``check_inputs(inputs, parameters)`` returns a list of :class:`datalab.recipes.RecipeDiagnostic` values for fast, recipe-specific checks such as shapes, counts per level, or units. It must not compute results. Error diagnostics block the run and warnings are shown before it. An exception raised by the hook is reported as an ``input-check-failed`` error."
+msgstr "``check_inputs(inputs, parameters)`` renvoie une liste de :class:`datalab.recipes.RecipeDiagnostic` pour des vérifications rapides propres à la recette, comme les dimensions, les effectifs par niveau ou les unités. Il ne doit pas calculer de résultats. Les diagnostics d'erreur bloquent l'exécution et les avertissements sont affichés avant celle-ci. Une exception levée par ce point d'extension est signalée comme une erreur ``input-check-failed``."
+
+msgid ":func:`datalab.recipe_binding.assess_recipe_inputs` combines the slot declarations and both hooks. It returns a :class:`datalab.recipe_binding.RecipeReadiness` with a status (``no_input``, ``needs_assignment``, ``not_ready``, ``warnings`` or ``ready``), the proposed bindings, structured issues that hosts translate, and the recipe diagnostics. The module has no Qt dependency, so DataLab-Web uses the same code."
+msgstr ":func:`datalab.recipe_binding.assess_recipe_inputs` combine les déclarations des emplacements et ces deux points d'extension. Elle renvoie un :class:`datalab.recipe_binding.RecipeReadiness` comprenant un statut (``no_input``, ``needs_assignment``, ``not_ready``, ``warnings`` ou ``ready``), les affectations proposées, des problèmes structurés que les hôtes traduisent, et les diagnostics de la recette. Le module ne dépend pas de Qt : DataLab-Web utilise donc le même code."
+
 msgid "Running a recipe on Desktop"
 msgstr "Exécuter une recette sur Desktop"
 
-msgid "Use :class:`datalab.gui.recipe_runner.RecipeRunner` from the GUI thread to validate inputs and parameters, execute the headless callable, and commit its outcome to the DataLab workspace:"
-msgstr "Utilisez :class:`datalab.gui.recipe_runner.RecipeRunner` depuis le thread de l'interface graphique pour valider les entrées et les paramètres, exécuter la fonction sans interface et committer son résultat dans le workspace DataLab :"
+msgid "Most plugins do not call the runner directly. :meth:`datalab.plugins.PluginBase.start_recipe` runs a recipe on the current selection with DataLab's generic launcher. It assesses the selection, opens an input assignment dialog only when the bindings are ambiguous or invalid, edits the declared parameters, and then calls the runner. A plugin menu action therefore only needs:"
+msgstr "La plupart des plugins n'appellent pas directement l'exécuteur. :meth:`datalab.plugins.PluginBase.start_recipe` exécute une recette sur la sélection courante avec le lanceur générique de DataLab. Il évalue la sélection, n'ouvre une boîte de dialogue d'affectation des entrées que si les affectations sont ambiguës ou invalides, édite les paramètres déclarés, puis appelle l'exécuteur. Une action de menu de plugin se résume donc à :"
 
-msgid "The runner rejects missing, extra, mistyped, or incorrectly sized input slots before recipe code is called. It also validates the optional ``DataSet`` instance and checks cancellation before execution, after execution, and immediately before commit. Recipe code must remain headless and must not mutate the workspace itself."
-msgstr "Le runner rejette les emplacements d'entrée manquants, supplémentaires, mal typés ou de cardinalité incorrecte avant d'appeler le code de la recette. Il valide également l'instance ``DataSet`` facultative et vérifie l'annulation avant l'exécution, après l'exécution et juste avant le commit. Le code de la recette doit rester sans interface et ne doit pas modifier lui-même le workspace."
+msgid "The **Run on selection...** buttons of the **Applications** catalog use the same launcher. A plugin that needs a dedicated interface for one recipe may map its recipe ID to a plugin method name in the class-level ``RECIPE_LAUNCHERS`` mapping; the catalog then calls this method, without arguments, instead of the generic launcher."
+msgstr "Les boutons **Exécuter sur la sélection...** du catalogue **Applications** utilisent le même lanceur. Un plugin qui a besoin d'une interface dédiée pour une recette peut associer son identifiant de recette au nom d'une méthode du plugin dans la correspondance de classe ``RECIPE_LAUNCHERS`` ; le catalogue appelle alors cette méthode, sans argument, à la place du lanceur générique."
+
+msgid "Use :class:`datalab.gui.recipe_runner.RecipeRunner` from the GUI thread to run a recipe on explicit inputs. It validates inputs and parameters, executes the headless callable, and commits its outcome to the DataLab workspace:"
+msgstr "Utilisez :class:`datalab.gui.recipe_runner.RecipeRunner` depuis le thread de l'interface graphique pour exécuter une recette sur des entrées explicites. Il valide les entrées et les paramètres, exécute la fonction sans interface et committe son résultat dans le workspace DataLab :"
+
+msgid "The runner rejects missing, extra, mistyped, or incorrectly sized input slots before recipe code is called. It also enforces ``min_count``, required metadata and the error diagnostics of ``check_inputs``, validates the optional ``DataSet`` instance and checks cancellation before execution, after execution, and immediately before commit. Recipe code must remain headless and must not mutate the workspace itself."
+msgstr "Le runner rejette les emplacements d'entrée manquants, supplémentaires, mal typés ou de cardinalité incorrecte avant d'appeler le code de la recette. Il applique également ``min_count``, les métadonnées requises et les diagnostics d'erreur de ``check_inputs``, valide l'instance ``DataSet`` facultative et vérifie l'annulation avant l'exécution, après l'exécution et juste avant le commit. Le code de la recette doit rester sans interface et ne doit pas modifier lui-même le workspace."
 
 msgid "Only a validated :class:`datalab.recipes.RecipeOutcome` reaches the commit phase. The Desktop runner creates one group per output panel, using the recipe title by default, then adds all signal and image outputs. Scalar result IDs are persisted as ``<recipe-id>:<result-id>`` function names on their named anchor objects, so several tables or geometries may coexist without metadata-key collisions. A failure during insertion removes every object and group created by that invocation and restores the previous workspace modified state and current panel."
 msgstr "Seul un :class:`datalab.recipes.RecipeOutcome` validé atteint la phase de commit. Le runner Desktop crée un groupe par panneau de sortie, en utilisant par défaut le titre de la recette, puis ajoute toutes les sorties signal et image. Les ID des résultats scalaires sont conservés sous forme de noms de fonction ``<recipe-id>:<result-id>`` sur leurs objets ancres nommés, afin que plusieurs tables ou géométries coexistent sans collision de clés de métadonnées. Un échec pendant l'insertion supprime chaque objet et groupe créé par cette invocation, puis restaure l'état modifié précédent du workspace et le panneau courant."
@@ -279,6 +306,21 @@ msgstr "Le package doit inclure la ressource dans sa wheel. ``resolve()`` renvoi
 
 msgid ":meth:`datalab.plugins.PluginBase.get_examples` validates unique local IDs and recipe references. A registered plugin may call ``open_example(\"quickstart\")`` to materialize and load a native DataLab HDF5 workspace. Opening clears the current workspace by default; pass ``reset_all=False`` to merge it instead."
 msgstr ":meth:`datalab.plugins.PluginBase.get_examples` valide l'unicité des ID locaux et les références aux recettes. Un plugin enregistré peut appeler ``open_example(\"quickstart\")`` pour matérialiser et charger un workspace HDF5 DataLab natif. L'ouverture efface le workspace courant par défaut ; passez ``reset_all=False`` pour le fusionner à la place."
+
+msgid "``recipe_ids`` lists the recipes an example is designed for. One example may serve several recipes, for instance a dark ramp analyzed by two methods. A plugin may also generate an example in memory by overriding ``materialize_example()`` to return a :class:`datalab.plugin_examples.PluginExampleData`; its ``parameter_values`` mapping gives, for each recipe ID, the parameter values suited to the generated objects."
+msgstr "``recipe_ids`` liste les recettes pour lesquelles un exemple est conçu. Un exemple peut servir plusieurs recettes, par exemple une rampe d'obscurité analysée par deux méthodes. Un plugin peut aussi générer un exemple en mémoire en surchargeant ``materialize_example()`` pour renvoyer un :class:`datalab.plugin_examples.PluginExampleData` ; sa correspondance ``parameter_values`` donne, pour chaque identifiant de recette, les valeurs de paramètres adaptées aux objets générés."
+
+msgid "The **Applications** catalog presents each recipe as a method with its expected inputs, a live status for the current selection, a **Run on selection...** button, and the examples designed for it. **Try with this example** calls :meth:`datalab.plugins.PluginBase.try_example`: it opens the example, prefills the recipe parameters with the example values, and runs the recipe once the user accepts them. Examples without ``recipe_ids`` are listed as datasets, which only open."
+msgstr "Le catalogue **Applications** présente chaque recette comme une méthode, avec ses entrées attendues, un statut mis à jour pour la sélection courante, un bouton **Exécuter sur la sélection...** et les exemples conçus pour elle. **Essayer avec cet exemple** appelle :meth:`datalab.plugins.PluginBase.try_example` : il ouvre l'exemple, préremplit les paramètres de la recette avec les valeurs de l'exemple et exécute la recette une fois qu'ils sont acceptés par l'utilisateur. Les exemples sans ``recipe_ids`` sont listés comme jeux de données, qui s'ouvrent seulement."
+
+msgid "Plugin tools"
+msgstr "Outils de plugin"
+
+msgid "A recipe covers a headless analysis run by DataLab. Any other interaction owned by an application plugin, such as a wizard, an interactive editor or a data preparation step, is a tool. Declare tools in the class-level ``TOOLS`` tuple of :class:`datalab.plugin_tools.PluginTool` values; the **Applications** catalog lists them in a **Tools** section:"
+msgstr "Une recette couvre une analyse sans interface exécutée par DataLab. Toute autre interaction propre à un plugin d'application, comme un assistant, un éditeur interactif ou une étape de préparation des données, est un outil. Déclarez les outils dans le tuple de classe ``TOOLS`` de valeurs :class:`datalab.plugin_tools.PluginTool` ; le catalogue **Applications** les liste dans une section **Outils** :"
+
+msgid "The launcher is called without arguments. :meth:`datalab.plugins.PluginBase.get_tools` validates unique local IDs and launcher methods, and rejects tools declared by plugins without the ``APPLICATION`` capability. Tools are a Desktop feature: DataLab-Web does not list them."
+msgstr "Le lanceur est appelé sans argument. :meth:`datalab.plugins.PluginBase.get_tools` vérifie l'unicité des identifiants locaux et l'existence des méthodes de lancement, et rejette les outils déclarés par des plugins sans la capacité ``APPLICATION``. Les outils sont une fonctionnalité Desktop : DataLab-Web ne les liste pas."
 
 msgid "Welcome page tiles"
 msgstr "Tuiles de la page d'accueil"
@@ -547,11 +589,56 @@ msgstr "Renvoie l'identifiant stable du plugin ou un identifiant de repli hérit
 msgid "Return validated recipe descriptors exposed by this plugin."
 msgstr "Renvoie les descripteurs de recettes validés exposés par ce plugin."
 
-msgid "Return validated recipe-to-method bindings for the Desktop UI."
-msgstr "Renvoie les associations validées entre recettes et méthodes pour l'interface Desktop."
+msgid "Return one recipe descriptor by its namespaced ID."
+msgstr "Renvoie un descripteur de recette à partir de son identifiant qualifié."
 
-msgid "Launch a recipe through its plugin-owned Desktop interaction."
-msgstr "Lance une recette via l'interaction Desktop propre au plugin."
+msgid "Return validated recipe-to-method bindings overriding the Desktop UI."
+msgstr "Renvoie les associations validées entre recettes et méthodes remplaçant l'interface Desktop."
+
+msgid "Launch a recipe on the current selection."
+msgstr "Lance une recette sur la sélection courante."
+
+msgid "A plugin method declared in ``RECIPE_LAUNCHERS`` replaces the generic interaction of :meth:`start_recipe`."
+msgstr "Une méthode du plugin déclarée dans ``RECIPE_LAUNCHERS`` remplace l'interaction générique de :meth:`start_recipe`."
+
+msgid "Return the objects selected in the current signal or image panel."
+msgstr "Renvoie les objets sélectionnés dans le panneau Signal ou Image courant."
+
+msgid "Return the last example's parameter values for a recipe and objects."
+msgstr "Renvoie les valeurs de paramètres du dernier exemple pour une recette et des objets."
+
+msgid "Values are returned only when all objects come from the last opened generated example: they are suited to that data only."
+msgstr "Les valeurs ne sont renvoyées que si tous les objets proviennent du dernier exemple généré ouvert : elles ne conviennent qu'à ces données."
+
+msgid "Assess whether a recipe can run on objects (default: selection)."
+msgstr "Évalue si une recette peut s'exécuter sur des objets (par défaut : la sélection)."
+
+msgid "Run a recipe through the generic DataLab interaction."
+msgstr "Exécute une recette via l'interaction générique de DataLab."
+
+msgid "DataLab assigns the objects (default: selection) to the recipe inputs, asking the user when needed, checks them, edits the parameters, then runs the recipe."
+msgstr "DataLab affecte les objets (par défaut : la sélection) aux entrées de la recette, en interrogeant l'utilisateur si nécessaire, les vérifie, édite les paramètres, puis exécute la recette."
+
+msgid "namespaced recipe ID"
+msgstr "identifiant qualifié de la recette"
+
+msgid "candidate objects (default: current selection)"
+msgstr "objets candidats (par défaut : sélection courante)"
+
+msgid "initial parameter values (default: those of the last opened example, when the objects come from it)"
+msgstr "valeurs initiales des paramètres (par défaut : celles du dernier exemple ouvert, lorsque les objets en proviennent)"
+
+msgid "Recipe outcome, or None if cancelled or failed"
+msgstr "Résultat de la recette, ou None en cas d'annulation ou d'échec"
+
+msgid "Open an example, then start one of the recipes it was designed for."
+msgstr "Ouvre un exemple, puis lance l'une des recettes pour lesquelles il est conçu."
+
+msgid "Return validated tools listed in the Applications catalog."
+msgstr "Renvoie les outils validés listés dans le catalogue Applications."
+
+msgid "Open a plugin tool by calling its launcher method."
+msgstr "Ouvre un outil du plugin en appelant sa méthode de lancement."
 
 msgid "Return validated packaged examples exposed by this plugin."
 msgstr "Renvoie les exemples empaquetés validés exposés par ce plugin."
@@ -562,14 +649,14 @@ msgstr "Renvoie un exemple empaqueté à partir de son identifiant local au plug
 msgid "Generate one example in memory, or defer to its package resource."
 msgstr "Génère un exemple en mémoire, ou s'en remet à sa ressource de paquet."
 
-msgid "Confirm and open a generated or packaged example."
-msgstr "Demande confirmation puis ouvre un exemple généré ou empaqueté."
+msgid "Confirm and open a generated or packaged example, then select it."
+msgstr "Demande confirmation, ouvre un exemple généré ou empaqueté, puis le sélectionne."
 
 msgid "Open a generated or packaged HDF5 example in the Desktop workspace."
 msgstr "Ouvre un exemple HDF5 généré ou empaqueté dans l'espace de travail Desktop."
 
-msgid "Generated examples (``materialize_example()`` returning data) are loaded directly into the signal/image panels; packaged examples are opened through their native HDF5 resource. The materialized data is kept in :attr:`last_example_data` so plugin launchers can reuse the example's recipe parameter values."
-msgstr "Les exemples générés (lorsque ``materialize_example()`` renvoie des données) sont chargés directement dans les panneaux Signal et Image ; les exemples empaquetés sont ouverts via leur ressource HDF5 native. Les données matérialisées sont conservées dans :attr:`last_example_data` afin que les lanceurs du plugin puissent réutiliser les valeurs des paramètres de recette de l'exemple."
+msgid "Generated examples (``materialize_example()`` returning data) are loaded directly into the signal/image panels; packaged examples are opened through their native HDF5 resource. The materialized data is kept in :attr:`last_example_data`, so that recipes started on these objects reuse the example's parameter values (see :meth:`example_parameter_values`)."
+msgstr "Les exemples générés (lorsque ``materialize_example()`` renvoie des données) sont chargés directement dans les panneaux Signal et Image ; les exemples empaquetés sont ouverts via leur ressource HDF5 native. Les données matérialisées sont conservées dans :attr:`last_example_data`, afin que les recettes lancées sur ces objets réutilisent les valeurs de paramètres de l'exemple (voir :meth:`example_parameter_values`)."
 
 msgid "Return validated welcome page tiles exposed by this application plugin."
 msgstr "Renvoie les tuiles validées de la page d'accueil exposées par ce plugin d'application."
@@ -746,11 +833,20 @@ msgstr "Déclaration typée et versionnée d'une recette sans interface graphiqu
 msgid "A missing ``parameter_class`` declares a parameterless recipe whose run callable receives ``None`` as its second argument. Otherwise, that argument must be an instance of the declared ``DataSet`` subclass."
 msgstr "L'absence de ``parameter_class`` déclare une recette sans paramètre dont la fonction d'exécution reçoit ``None`` comme second argument. Dans le cas contraire, cet argument doit être une instance de la sous-classe ``DataSet`` déclarée."
 
+msgid "``suggest_bindings`` receives the candidate objects and returns a proposed assignment of some of them to input slots (e.g. from metadata). Hosts use it to bind inputs without asking the user."
+msgstr "``suggest_bindings`` reçoit les objets candidats et renvoie une proposition d'affectation de certains d'entre eux aux emplacements d'entrée (par exemple à partir des métadonnées). Les hôtes l'utilisent pour affecter les entrées sans interroger l'utilisateur."
+
+msgid "``check_inputs`` receives complete inputs and parameters (defaults when assessing a selection) and returns diagnostics: errors block the run, warnings are shown. It must stay fast (metadata, shapes, counts) because hosts call it whenever the selection changes."
+msgstr "``check_inputs`` reçoit des entrées complètes et les paramètres (ceux par défaut lors de l'évaluation d'une sélection) et renvoie des diagnostics : les erreurs bloquent l'exécution, les avertissements sont affichés. Il doit rester rapide (métadonnées, dimensions, effectifs) car les hôtes l'appellent à chaque changement de sélection."
+
 msgid "Return the owning plugin ID encoded in the recipe ID."
 msgstr "Renvoie l'identifiant du plugin propriétaire encodé dans l'identifiant de la recette."
 
 msgid "Return the recipe-local ID encoded in the recipe ID."
 msgstr "Renvoie l'identifiant local de la recette encodé dans l'identifiant de la recette."
+
+msgid "Return one declared input slot by its ID."
+msgstr "Renvoie un emplacement d'entrée déclaré à partir de son identifiant."
 
 msgid "Structured, machine-identifiable diagnostic emitted by a recipe."
 msgstr "Diagnostic structuré et identifiable par une machine, émis par une recette."
@@ -772,6 +868,45 @@ msgstr "Signale une progression normalisée entre zéro et un."
 
 msgid "Typed input slot declared by a recipe."
 msgstr "Emplacement d'entrée typé déclaré par une recette."
+
+msgid "slot ID, local to the recipe"
+msgstr "identifiant de l'emplacement, local à la recette"
+
+msgid "type of the accepted objects"
+msgstr "type des objets acceptés"
+
+msgid "one object, or several objects"
+msgstr "un objet, ou plusieurs objets"
+
+msgid "True if the slot cannot be left empty"
+msgstr "True si l'emplacement ne peut pas rester vide"
+
+msgid "human-readable slot name (derived from ``id`` if empty)"
+msgstr "nom lisible de l'emplacement (dérivé de ``id`` s'il est vide)"
+
+msgid "what the objects must represent and how they are acquired"
+msgstr "ce que les objets doivent représenter et comment ils sont acquis"
+
+msgid "minimum number of objects of a non-empty ``MANY`` slot"
+msgstr "nombre minimal d'objets d'un emplacement ``MANY`` non vide"
+
+msgid "metadata entries expected on every bound object"
+msgstr "entrées de métadonnées attendues sur chaque objet affecté"
+
+msgid "Return the declared title, or one derived from the slot ID."
+msgstr "Renvoie le titre déclaré, ou un titre dérivé de l'identifiant de l'emplacement."
+
+msgid "Metadata entry expected on the objects bound to a recipe input slot."
+msgstr "Entrée de métadonnées attendue sur les objets affectés à un emplacement d'entrée de recette."
+
+msgid "metadata key"
+msgstr "clé de métadonnée"
+
+msgid "meaning of the value (unit, allowed values...)"
+msgstr "signification de la valeur (unité, valeurs autorisées...)"
+
+msgid "True if objects lacking the key cannot be analyzed; False documents an optional hint, e.g. used to assign objects to slots"
+msgstr "True si les objets dépourvus de la clé ne peuvent pas être analysés ; False documente une indication facultative, utilisée par exemple pour affecter les objets aux emplacements"
 
 msgid "Named signal or image produced by a recipe."
 msgstr "Signal ou image nommé produit par une recette."
@@ -839,8 +974,11 @@ msgstr "Levée lorsque les entrées ou les paramètres d'une recette ne respecte
 msgid "Portable declarations for plugin-provided example workspaces."
 msgstr "Déclarations portables des espaces de travail d'exemple fournis par les plugins."
 
-msgid "Packaged workspace and optional recipe exposed by a plugin."
-msgstr "Espace de travail empaqueté et recette facultative exposés par un plugin."
+msgid "Packaged or generated example, and the recipes it was designed for."
+msgstr "Exemple empaqueté ou généré, et recettes pour lesquelles il est conçu."
+
+msgid "An example without recipe is presented as a plain dataset."
+msgstr "Un exemple sans recette est présenté comme un simple jeu de données."
 
 msgid "Return the importable package containing the example resource."
 msgstr "Renvoie le paquet importable contenant la ressource de l'exemple."
@@ -854,8 +992,17 @@ msgstr "Résout la ressource déclarée sans nécessiter de chemin dans le syst�
 msgid "Materialize the resource for APIs that require a filesystem path."
 msgstr "Matérialise la ressource pour les API qui nécessitent un chemin dans le système de fichiers."
 
-msgid "Scientific objects and recipe defaults generated by a plugin."
-msgstr "Objets scientifiques et valeurs par défaut de recette générés par un plugin."
+msgid "Scientific objects and per-recipe defaults generated by a plugin."
+msgstr "Objets scientifiques et valeurs par défaut par recette générés par un plugin."
+
+msgid "generated signals and images"
+msgstr "signaux et images générés"
+
+msgid "recipe ID to parameter values suited to these objects"
+msgstr "identifiant de recette vers les valeurs de paramètres adaptées à ces objets"
+
+msgid "Return the parameter values suited to one recipe (empty if none)."
+msgstr "Renvoie les valeurs de paramètres adaptées à une recette (vide s'il n'y en a pas)."
 
 msgid "Portable declarations for plugin-provided welcome page tiles."
 msgstr "Déclarations portables des tuiles de la page d'accueil fournies par les plugins."

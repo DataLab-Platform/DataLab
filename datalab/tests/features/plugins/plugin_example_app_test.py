@@ -110,8 +110,19 @@ def test_plugin_opens_generated_example_in_panels(
     from sigima.objects import create_signal
 
     from datalab.plugin_examples import PluginExampleData
+    from datalab.recipes import RecipeDescriptor, RecipeOutcome
 
-    example = PluginExample(id="generated", title="Generated campaign")
+    recipe = RecipeDescriptor(
+        recipe_id="org.example.generated-application:analysis",
+        plugin_version="1.0.0",
+        title="Analysis",
+        version="1.0.0",
+        run=lambda *_args: RecipeOutcome(),
+    )
+    example = PluginExample(
+        id="generated", title="Generated campaign", recipe_ids=(recipe.recipe_id,)
+    )
+    parameter_values = {recipe.recipe_id: {"gain": 2.0}}
 
     class GeneratedExamplePlugin(PluginBase):
         """Plugin materializing a two-signal campaign in memory."""
@@ -121,6 +132,7 @@ def test_plugin_opens_generated_example_in_panels(
             name="Generated example application",
             version="1.0.0",
         )
+        RECIPES = (recipe,)
         EXAMPLES = (example,)
 
         @classmethod
@@ -132,7 +144,7 @@ def test_plugin_opens_generated_example_in_panels(
                     create_signal(f"Generated {index}", x, x * index)
                     for index in (1, 2)
                 ),
-                {"gain": 2.0},
+                parameter_values,
             )
 
         def create_actions(self) -> None:
@@ -163,7 +175,22 @@ def test_plugin_opens_generated_example_in_panels(
                 assert len(batches[0]) == 2
                 assert win.get_current_panel() == "signal"
                 assert plugin.last_example_data is not None
-                assert plugin.last_example_data.parameter_values == {"gain": 2.0}
+                signals = win.signalpanel.objmodel.get_all_objects()
+                # Example values only apply to the example's own objects
+                assert plugin.example_parameter_values(recipe.recipe_id, signals) == {
+                    "gain": 2.0
+                }
+                other = create_signal("Other", [0.0, 1.0], [0.0, 1.0])
+                assert (
+                    plugin.example_parameter_values(recipe.recipe_id, [*signals, other])
+                    == {}
+                )
+                assert plugin.example_parameter_values(recipe.recipe_id, []) == {}
+
+                parameter_values.clear()
+                parameter_values["org.example.generated-application:other"] = {}
+                with pytest.raises(ValueError, match="not designed for"):
+                    plugin.open_example("generated", reset_all=True)
             finally:
                 plugin.unregister()
     finally:

@@ -23,8 +23,60 @@ from datalab.gui.applications import (
     set_application_pinned,
     sort_welcome_applications,
 )
+from datalab.plugin_examples import PluginExample
+from datalab.plugin_tools import PluginTool
 from datalab.plugins import PluginCapability, PluginInfo, PluginRegistry
+from datalab.recipe_binding import (
+    RecipeInputIssue,
+    RecipeReadiness,
+    RecipeReadinessStatus,
+)
+from datalab.recipes import (
+    RecipeDescriptor,
+    RecipeDiagnostic,
+    RecipeInputSlot,
+    RecipeMetadataRequirement,
+    RecipeOutcome,
+)
 from datalab.tests import datalab_test_app_context
+
+RECIPE = RecipeDescriptor(
+    recipe_id="org.example.camera:quick-check",
+    plugin_version="1.2.3",
+    title="Quick camera check",
+    version="2.0.0",
+    description="Run the quick workflow",
+    run=lambda *_args: RecipeOutcome(),
+    inputs=(
+        RecipeInputSlot(
+            "flat_frames",
+            "image",
+            "many",
+            description="Uniformly illuminated frames",
+            min_count=2,
+            metadata=(RecipeMetadataRequirement("exposure_s", "Exposure time"),),
+        ),
+    ),
+)
+EXAMPLE = PluginExample(
+    id="quickstart",
+    title="Scientific camera quickstart",
+    description="Open the packaged workspace",
+    resource="datalab:data/tests/reordering_test.h5",
+    recipe_ids=(RECIPE.recipe_id,),
+)
+DATASET = PluginExample(
+    id="raw-frames",
+    title="Raw frames",
+    description="Frames without a dedicated method",
+    resource="datalab:data/tests/reordering_test.h5",
+)
+TOOL = PluginTool(
+    id="annotate",
+    title="Annotate frames",
+    launcher="annotate_frames",
+    description="Set frame roles",
+)
 
 
 def _plugin(
@@ -32,14 +84,18 @@ def _plugin(
     name: str,
     capabilities: frozenset[PluginCapability],
     *,
-    recipes: tuple[object, ...] = (),
-    examples: tuple[object, ...] = (),
+    recipes: tuple[RecipeDescriptor, ...] = (),
+    examples: tuple[PluginExample, ...] = (),
+    tools: tuple[PluginTool, ...] = (),
     documentation_url: str | None = None,
     icon: str | None = None,
-    launched_recipes: list[str] | None = None,
-    opened_examples: list[str] | None = None,
+    calls: list[tuple] | None = None,
+    readiness: RecipeReadiness | None = None,
 ) -> object:
     """Build the minimal active-plugin surface consumed by the catalog."""
+    calls = [] if calls is None else calls
+    if readiness is None:
+        readiness = RecipeReadiness(RecipeReadinessStatus.NO_INPUT, {})
     return SimpleNamespace(
         plugin_id=plugin_id,
         info=PluginInfo(
@@ -53,36 +109,27 @@ def _plugin(
         ),
         get_recipes=lambda: recipes,
         get_examples=lambda: examples,
-        get_recipe_launchers=lambda: {recipe.recipe_id: "launch" for recipe in recipes},
-        launch_recipe=lambda recipe_id: (
-            None if launched_recipes is None else launched_recipes.append(recipe_id)
+        get_tools=lambda: tools,
+        assess_recipe=lambda recipe_id: readiness,
+        launch_recipe=lambda recipe_id: calls.append(("recipe", recipe_id)),
+        try_example=lambda example_id, recipe_id: calls.append(
+            ("try", example_id, recipe_id)
         ),
-        launch_example=lambda example_id: (
-            None if opened_examples is None else opened_examples.append(example_id)
-        ),
+        launch_example=lambda example_id: calls.append(("example", example_id)),
+        launch_tool=lambda tool_id: calls.append(("tool", tool_id)),
     )
 
 
 def test_applications_dialog_filters_and_renders_declared_contracts() -> None:
-    """Only application plugins expose their recipes and examples."""
+    """Methods show their inputs and examples; tools and datasets are listed."""
     qt_app = QW.QApplication.instance() or QW.QApplication([])
-    recipe = SimpleNamespace(
-        recipe_id="org.example.camera:quick-check",
-        title="Quick camera check",
-        version="2.0.0",
-        description="Run the quick workflow",
-    )
-    example = SimpleNamespace(
-        id="quickstart",
-        title="Scientific camera quickstart",
-        description="Open the packaged workspace",
-    )
     application = _plugin(
         "org.example.camera",
         "Camera Characterization",
         frozenset({PluginCapability.APPLICATION, PluginCapability.PROCESSING}),
-        recipes=(recipe,),
-        examples=(example,),
+        recipes=(RECIPE,),
+        examples=(EXAMPLE, DATASET),
+        tools=(TOOL,),
         documentation_url="https://example.org/camera/docs",
     )
     processing = _plugin(
@@ -111,27 +158,22 @@ def test_applications_dialog_filters_and_renders_declared_contracts() -> None:
         )
 
         page = dialog.application_pages[0]
-        assert page.recipe_list.count() == 1
-        recipe_item = page.recipe_list.item(0)
-        assert recipe_item.data(QC.Qt.UserRole) == recipe.recipe_id
-        assert recipe_item.data(applications_module.CATALOG_TITLE_ROLE) == recipe.title
-        assert recipe_item.data(applications_module.CATALOG_DESCRIPTION_ROLE) == (
-            recipe.description
-        )
-        assert recipe_item.data(applications_module.CATALOG_VERSION_ROLE) == (
-            recipe.version
-        )
-        assert page.example_list.count() == 1
-        example_item = page.example_list.item(0)
-        assert example_item.data(QC.Qt.UserRole) == example.id
-        assert (
-            example_item.data(applications_module.CATALOG_TITLE_ROLE) == example.title
-        )
-        assert example_item.data(applications_module.CATALOG_DESCRIPTION_ROLE) == (
-            example.description
-        )
-        assert page.start_button.isEnabled()
-        assert page.open_example_button.isEnabled()
+        assert list(page.recipe_cards) == [RECIPE.recipe_id]
+        card = page.recipe_cards[RECIPE.recipe_id]
+        inputs_text = card.inputs_label.text()
+        for text in (
+            "Flat frames",
+            "Uniformly illuminated frames",
+            "exposure_s",
+            "Exposure time",
+        ):
+            assert text in inputs_text
+        # Examples are listed under the methods they were designed for
+        assert list(card.example_buttons) == [EXAMPLE.id]
+        assert list(page.dataset_buttons) == [DATASET.id]
+        assert list(page.tool_buttons) == [TOOL.id]
+        assert "Select the input data" in card.readiness_label.text()
+        assert card.run_button.isEnabled()
         assert page.documentation_button.isEnabled()
         assert qt_app is not None
     finally:
@@ -207,8 +249,8 @@ def test_applications_dialog_shows_plugin_icons(monkeypatch) -> None:
             dialog.deleteLater()
 
 
-def test_application_commands_require_declared_targets() -> None:
-    """Commands stay disabled without a launcher, example, or documentation."""
+def test_application_page_has_explicit_empty_states() -> None:
+    """A page without methods says so; commands need a declared target."""
     qt_app = QW.QApplication.instance() or QW.QApplication([])
     application = _plugin(
         "org.example.catalog-only",
@@ -221,14 +263,72 @@ def test_application_commands_require_declared_targets() -> None:
     try:
         dialog = ApplicationsDialog()
         page = dialog.application_pages[0]
-        assert not page.start_button.isEnabled()
-        assert not page.open_example_button.isEnabled()
+        assert page.recipe_cards == {}
+        assert page.tool_buttons == {}
+        assert page.dataset_buttons == {}
         assert not page.documentation_button.isEnabled()
         assert qt_app is not None
     finally:
         registry[:] = previous_plugins
         if "dialog" in locals():
             dialog.deleteLater()
+
+
+def test_application_page_shows_readiness_of_each_method() -> None:
+    """Method cards summarize whether the current selection can be analyzed."""
+    qt_app = QW.QApplication.instance() or QW.QApplication([])
+    readiness = RecipeReadiness(
+        RecipeReadinessStatus.NOT_READY,
+        {},
+        (
+            RecipeInputIssue(
+                "missing_metadata",
+                "flat_frames",
+                {"key": "exposure_s", "count": 2, "titles": ("A", "B")},
+            ),
+        ),
+    )
+    application = _plugin(
+        "org.example.camera",
+        "Camera Characterization",
+        frozenset({PluginCapability.APPLICATION}),
+        recipes=(RECIPE,),
+        readiness=readiness,
+    )
+    registry = PluginRegistry.get_plugins()
+    previous_plugins = list(registry)
+    registry[:] = [application]
+    try:
+        dialog = ApplicationsDialog()
+        dialog.show()
+        QW.QApplication.processEvents()
+        card = dialog.application_pages[0].recipe_cards[RECIPE.recipe_id]
+        text = card.readiness_label.text()
+        assert "cannot be analyzed" in text
+        assert "Flat frames: metadata &#x27;exposure_s&#x27; missing on 2" in text
+
+        def failing_assessment(_recipe_id: str) -> RecipeReadiness:
+            raise RuntimeError("suggestion exploded")
+
+        application.assess_recipe = failing_assessment
+        dialog.refresh_readiness()
+        text = card.readiness_label.text()
+        assert "could not be assessed" in text
+        assert "suggestion exploded" in text
+
+        application.assess_recipe = lambda _recipe_id: RecipeReadiness(
+            RecipeReadinessStatus.READY, {}
+        )
+        dialog.schedule_readiness_update()
+        QC.QTimer.singleShot(300, qt_app.quit)
+        qt_app.exec()
+        assert "Ready to run on the current selection" in card.readiness_label.text()
+    finally:
+        registry[:] = previous_plugins
+        if "dialog" in locals():
+            dialog.close()
+            dialog.deleteLater()
+            QW.QApplication.processEvents()
 
 
 def test_welcome_application_preferences() -> None:
@@ -369,31 +469,19 @@ def test_main_window_exposes_applications_catalog(monkeypatch) -> None:
 
 
 def test_application_commands_delegate_to_plugin_contracts(monkeypatch) -> None:
-    """Catalog commands preserve plugin-owned interactions and documentation."""
+    """Each catalog command calls its plugin entry point and keeps the dialog."""
     qt_app = QW.QApplication.instance() or QW.QApplication([])
-    recipe = SimpleNamespace(
-        recipe_id="org.example.camera:quick-check",
-        title="Quick camera check",
-        version="2.0.0",
-        description="Run the quick workflow",
-    )
-    example = SimpleNamespace(
-        id="quickstart",
-        title="Scientific camera quickstart",
-        description="Open the packaged workspace",
-    )
-    launched_recipes: list[str] = []
-    opened_examples: list[str] = []
+    calls: list[tuple] = []
     opened_urls: list[str] = []
     application = _plugin(
         "org.example.camera",
         "Camera Characterization",
         frozenset({PluginCapability.APPLICATION}),
-        recipes=(recipe,),
-        examples=(example,),
+        recipes=(RECIPE,),
+        examples=(EXAMPLE, DATASET),
+        tools=(TOOL,),
         documentation_url="https://example.org/camera/docs",
-        launched_recipes=launched_recipes,
-        opened_examples=opened_examples,
+        calls=calls,
     )
     registry = PluginRegistry.get_plugins()
     previous_plugins = list(registry)
@@ -408,53 +496,63 @@ def test_application_commands_delegate_to_plugin_contracts(monkeypatch) -> None:
         dialog.show()
         QW.QApplication.processEvents()
         page = dialog.application_pages[0]
+        card = page.recipe_cards[RECIPE.recipe_id]
         page.documentation_button.click()
-        page.start_button.click()
-        assert launched_recipes == [recipe.recipe_id]
+        card.run_button.click()
+        card.example_buttons[EXAMPLE.id].click()
+        page.dataset_buttons[DATASET.id].click()
+        page.tool_buttons[TOOL.id].click()
+        assert calls == [
+            ("recipe", RECIPE.recipe_id),
+            ("try", EXAMPLE.id, RECIPE.recipe_id),
+            ("example", DATASET.id),
+            ("tool", TOOL.id),
+        ]
         assert opened_urls == ["https://example.org/camera/docs"]
         assert dialog.isVisible()
-
-        page.open_example_button.click()
-        assert opened_examples == [example.id]
-        assert dialog.isVisible()
         assert Conf.welcome_recent_applications.get() == ["org.example.camera"]
+        assert page.status_label.isHidden()
+
+        application.launch_recipe = lambda _recipe_id: RecipeOutcome(
+            diagnostics=(
+                RecipeDiagnostic("warning", "excluded-shots", "2 shots excluded"),
+            )
+        )
+        card.run_button.click()
+        assert not page.status_label.isHidden()
+        assert "Created 0 objects" in page.status_label.text()
+        assert "Warning: 2 shots excluded" in page.status_label.text()
         assert qt_app is not None
     finally:
         registry[:] = previous_plugins
         if "dialog" in locals():
+            dialog.close()
             dialog.deleteLater()
+            QW.QApplication.processEvents()
 
 
 def test_application_command_failures_are_reported_not_raised(monkeypatch) -> None:
-    """A failing plugin launcher shows an error dialog instead of crashing."""
+    """A failing plugin entry point shows an error dialog instead of crashing."""
     qt_app = QW.QApplication.instance() or QW.QApplication([])
-    recipe = SimpleNamespace(
-        recipe_id="org.example.camera:quick-check",
-        title="Quick camera check",
-        version="2.0.0",
-        description="Run the quick workflow",
-    )
-    example = SimpleNamespace(
-        id="quickstart",
-        title="Scientific camera quickstart",
-        description="Open the packaged workspace",
-    )
     application = _plugin(
         "org.example.camera",
         "Camera Characterization",
         frozenset({PluginCapability.APPLICATION}),
-        recipes=(recipe,),
-        examples=(example,),
+        recipes=(RECIPE,),
+        examples=(EXAMPLE, DATASET),
+        tools=(TOOL,),
     )
 
-    def failing_launch_recipe(recipe_id: str) -> None:
-        raise RuntimeError("launcher exploded")
+    def fail(message: str):
+        def failing(*_args) -> None:
+            raise RuntimeError(message)
 
-    def failing_launch_example(example_id: str) -> None:
-        raise RuntimeError("example exploded")
+        return failing
 
-    application.launch_recipe = failing_launch_recipe
-    application.launch_example = failing_launch_example
+    application.launch_recipe = fail("launcher exploded")
+    application.try_example = fail("try exploded")
+    application.launch_example = fail("example exploded")
+    application.launch_tool = fail("tool exploded")
     reported: list[tuple[str, str]] = []
     monkeypatch.setattr(
         applications_module,
@@ -466,12 +564,17 @@ def test_application_command_failures_are_reported_not_raised(monkeypatch) -> No
     registry[:] = [application]
     try:
         dialog = ApplicationsDialog()
-        dialog.application_pages[0].start_button.click()
-        dialog = ApplicationsDialog()
-        dialog.application_pages[0].open_example_button.click()
+        page = dialog.application_pages[0]
+        card = page.recipe_cards[RECIPE.recipe_id]
+        card.run_button.click()
+        card.example_buttons[EXAMPLE.id].click()
+        page.dataset_buttons[DATASET.id].click()
+        page.tool_buttons[TOOL.id].click()
         assert [message for message, _context in reported] == [
             "launcher exploded",
+            "try exploded",
             "example exploded",
+            "tool exploded",
         ]
         assert all(_context for _message, _context in reported)
         assert qt_app is not None

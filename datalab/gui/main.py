@@ -991,6 +991,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.__applications_dialog.SIG_WELCOME_PREFERENCES_CHANGED.connect(
                 self.welcomepanel.update_application_tiles
             )
+            for panel in (self.signalpanel, self.imagepanel):
+                panel.objview.SIG_SELECTION_CHANGED.connect(
+                    self.__applications_dialog.schedule_readiness_update
+                )
+            self.tabwidget.currentChanged.connect(
+                self.__applications_dialog.schedule_readiness_update
+            )
         else:
             self.__applications_dialog.refresh()
         if plugin_id is not None:

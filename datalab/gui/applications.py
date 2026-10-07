@@ -4,9 +4,11 @@
 
 from __future__ import annotations
 
+import html
 import webbrowser
+from collections.abc import Callable, Iterable
 from math import ceil
-from typing import TYPE_CHECKING, Iterable
+from typing import TYPE_CHECKING
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import win32_fix_title_bar_background
@@ -15,18 +17,28 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from datalab.config import Conf, _
+from datalab.gui.recipe_inputs import (
+    format_diagnostic,
+    format_inputs_html,
+    format_readiness,
+)
 from datalab.plugin_resources import resolve_package_resource
 from datalab.plugins import PluginCapability, PluginRegistry
+from datalab.recipe_binding import RecipeReadiness, RecipeReadinessStatus
+from datalab.recipes import RecipeOutcome
 from datalab.utils.qthelpers import qt_handle_error_message, try_or_log_error
 from datalab.widgets.expandabletext import apply_subdued_color
 
 if TYPE_CHECKING:
+    from datalab.plugin_examples import PluginExample
     from datalab.plugins import PluginBase
+    from datalab.recipes import RecipeDescriptor
 
 
 __all__ = [
     "ApplicationPage",
     "ApplicationsDialog",
+    "RecipeCard",
     "get_application_plugins",
     "get_plugin_icon",
     "record_application_use",
@@ -376,11 +388,160 @@ def sort_welcome_applications(plugins: Iterable[PluginBase]) -> list[PluginBase]
     return sorted(visible, key=sort_key)
 
 
-class ApplicationPage(QW.QWidget):
-    """Display one application plugin's recipes and packaged examples."""
+def _command_button(icon_name: str, text: str) -> QW.QPushButton:
+    """Create a catalog command button that never acts as the dialog default."""
+    button = QW.QPushButton(get_icon(icon_name), text)
+    button.setAutoDefault(False)
+    button.setDefault(False)
+    return button
 
+
+def _section_label(text: str) -> QW.QLabel:
+    """Create the title of a catalog page section."""
+    label = QW.QLabel(text)
+    font = label.font()
+    font.setBold(True)
+    font.setPointSize(font.pointSize() + 1)
+    label.setFont(font)
+    return label
+
+
+def _entry_layout(
+    title: str,
+    description: str,
+    button: QW.QPushButton,
+    icon: QG.QIcon | None = None,
+) -> QW.QHBoxLayout:
+    """Return a row presenting a catalog entry and its command."""
+    layout = QW.QHBoxLayout()
+    if icon is not None:
+        icon_label = QW.QLabel()
+        icon_label.setPixmap(icon.pixmap(24, 24))
+        layout.addWidget(icon_label, 0, QC.Qt.AlignTop)
+    text = f"<b>{html.escape(title)}</b>"
+    if description:
+        text += f"<br>{html.escape(description)}"
+    label = QW.QLabel(text)
+    label.setTextFormat(QC.Qt.RichText)
+    label.setWordWrap(True)
+    layout.addWidget(label, 1)
+    layout.addWidget(button, 0, QC.Qt.AlignTop)
+    return layout
+
+
+class RecipeCard(QW.QFrame):
+    """Present one recipe: expected inputs, readiness, and dedicated examples."""
+
+    #: Emitted with the recipe ID when running the recipe on the selection
+    run_requested = QC.Signal(str)
+    #: Emitted with the example ID and the recipe ID when trying an example
+    try_example_requested = QC.Signal(str, str)
+
+    READINESS_COLORS = {
+        RecipeReadinessStatus.READY: "#2e7d32",
+        RecipeReadinessStatus.WARNINGS: "#b26a00",
+        RecipeReadinessStatus.NEEDS_ASSIGNMENT: "#1565c0",
+        RecipeReadinessStatus.NOT_READY: "#c62828",
+        RecipeReadinessStatus.NO_INPUT: "#808080",
+    }
+
+    def __init__(
+        self,
+        recipe: RecipeDescriptor,
+        examples: Iterable[PluginExample],
+        parent: QW.QWidget | None = None,
+    ) -> None:
+        super().__init__(parent)
+        self.recipe = recipe
+        self.readiness: RecipeReadiness | None = None
+        self.setFrameShape(QW.QFrame.StyledPanel)
+        layout = QW.QVBoxLayout(self)
+
+        title = QW.QLabel(
+            f"<b>{html.escape(recipe.title)}</b>&nbsp;&nbsp;"
+            f"v{html.escape(recipe.version)}"
+        )
+        title.setTextFormat(QC.Qt.RichText)
+        layout.addWidget(title)
+        if recipe.description:
+            description = QW.QLabel(recipe.description)
+            description.setWordWrap(True)
+            layout.addWidget(description)
+
+        inputs_title = QW.QLabel(_("Expected inputs"))
+        apply_subdued_color(inputs_title)
+        layout.addWidget(inputs_title)
+        self.inputs_label = QW.QLabel(format_inputs_html(recipe))
+        self.inputs_label.setTextFormat(QC.Qt.RichText)
+        self.inputs_label.setWordWrap(True)
+        self.inputs_label.setTextInteractionFlags(QC.Qt.TextSelectableByMouse)
+        self.inputs_label.setContentsMargins(12, 0, 0, 0)
+        layout.addWidget(self.inputs_label)
+
+        self.readiness_label = QW.QLabel()
+        self.readiness_label.setTextFormat(QC.Qt.RichText)
+        self.readiness_label.setWordWrap(True)
+        self.run_button = _command_button("analysis.svg", _("Run on selection..."))
+        self.run_button.clicked.connect(
+            lambda _checked=False: self.run_requested.emit(recipe.recipe_id)
+        )
+        run_layout = QW.QHBoxLayout()
+        run_layout.addWidget(self.readiness_label, 1)
+        run_layout.addWidget(self.run_button, 0, QC.Qt.AlignTop)
+        layout.addLayout(run_layout)
+
+        self.example_buttons: dict[str, QW.QPushButton] = {}
+        examples = tuple(examples)
+        if examples:
+            examples_title = QW.QLabel(_("Examples designed for this method"))
+            apply_subdued_color(examples_title)
+            layout.addWidget(examples_title)
+        for example in examples:
+            button = _command_button("play_demo.svg", _("Try with this example"))
+            button.clicked.connect(
+                lambda _checked=False, example_id=example.id: (
+                    self.try_example_requested.emit(example_id, recipe.recipe_id)
+                )
+            )
+            self.example_buttons[example.id] = button
+            layout.addLayout(_entry_layout(example.title, example.description, button))
+
+    def set_readiness(
+        self, readiness: RecipeReadiness | None, error: str | None = None
+    ) -> None:
+        """Show whether the recipe can run on the current selection.
+
+        Args:
+            readiness: assessment of the current selection, or None on failure
+            error: message explaining why the selection could not be assessed
+        """
+        self.readiness = readiness
+        if readiness is None:
+            color = self.READINESS_COLORS[RecipeReadinessStatus.NOT_READY]
+            summary = _("The current selection could not be assessed")
+            reasons = [error] if error else []
+        else:
+            color = self.READINESS_COLORS[readiness.status]
+            summary, reasons = format_readiness(readiness, self.recipe)
+        text = f'<span style="color:{color}">●</span> <b>{html.escape(summary)}</b>'
+        if reasons:
+            text += "<br>" + "<br>".join(
+                f"&nbsp;&nbsp;• {html.escape(reason)}" for reason in reasons
+            )
+        self.readiness_label.setText(text)
+
+
+class ApplicationPage(QW.QWidget):
+    """Display one application plugin's methods, tools, and datasets."""
+
+    #: Emitted with the plugin and a recipe ID to run it on the selection
     start_requested = QC.Signal(object, str)
+    #: Emitted with the plugin, an example ID and a recipe ID to try an example
+    try_example_requested = QC.Signal(object, str, str)
+    #: Emitted with the plugin and the ID of an example without recipe
     open_example_requested = QC.Signal(object, str)
+    #: Emitted with the plugin and a tool ID
+    tool_requested = QC.Signal(object, str)
     documentation_requested = QC.Signal(object)
     welcome_preferences_changed = QC.Signal()
 
@@ -393,24 +554,16 @@ class ApplicationPage(QW.QWidget):
         self.icon_label = QW.QLabel()
         self.show_on_welcome_checkbox = QW.QCheckBox(_("Show on welcome page"))
         self.pin_on_welcome_checkbox = QW.QCheckBox(_("Pin to the welcome page"))
-        self.recipe_list = QW.QListWidget()
-        self.example_list = QW.QListWidget()
-        self.start_button = QW.QPushButton(
-            get_icon("analysis.svg"), _("Start analysis")
+        self.recipe_cards: dict[str, RecipeCard] = {}
+        self.tool_buttons: dict[str, QW.QPushButton] = {}
+        self.dataset_buttons: dict[str, QW.QPushButton] = {}
+        self.documentation_button = _command_button(
+            "libre-gui-help.svg", _("Documentation")
         )
-        self.open_example_button = QW.QPushButton(
-            get_icon("io/fileopen_h5.svg"), _("Open example")
-        )
-        self.documentation_button = QW.QPushButton(
-            get_icon("libre-gui-help.svg"), _("Documentation")
-        )
-        for button in (
-            self.start_button,
-            self.open_example_button,
-            self.documentation_button,
-        ):
-            button.setAutoDefault(False)
-            button.setDefault(False)
+        self.status_label = QW.QLabel()
+        self.status_label.setTextFormat(QC.Qt.RichText)
+        self.status_label.setWordWrap(True)
+        self.status_label.hide()
 
         layout = QW.QVBoxLayout(self)
         layout.setContentsMargins(18, 12, 18, 12)
@@ -426,22 +579,30 @@ class ApplicationPage(QW.QWidget):
         layout.addWidget(metadata)
         layout.addLayout(self._create_welcome_layout())
 
-        layout.addWidget(self._create_recipes_group(), 1)
-        layout.addWidget(self._create_examples_group(), 1)
-        layout.addLayout(self._create_actions_layout())
+        content = QW.QWidget()
+        content_layout = QW.QVBoxLayout(content)
+        content_layout.setContentsMargins(0, 0, 0, 0)
+        self._add_methods(content_layout)
+        self._add_tools(content_layout)
+        self._add_datasets(content_layout)
+        content_layout.addStretch()
+        scroll_area = QW.QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setFrameShape(QW.QFrame.NoFrame)
+        scroll_area.setWidget(content)
+        layout.addWidget(scroll_area, 1)
+        layout.addWidget(self.status_label)
 
-        self.recipe_list.currentItemChanged.connect(self._update_action_states)
-        self.example_list.currentItemChanged.connect(self._update_action_states)
-        self.start_button.clicked.connect(self._request_start)
-        self.open_example_button.clicked.connect(self._request_open_example)
+        bottom_layout = QW.QHBoxLayout()
+        bottom_layout.addStretch()
+        bottom_layout.addWidget(self.documentation_button)
+        layout.addLayout(bottom_layout)
+        documentation_url = plugin.info.documentation_url
+        self.documentation_button.setEnabled(documentation_url is not None)
+        self.documentation_button.setToolTip(documentation_url or "")
         self.documentation_button.clicked.connect(
-            lambda: self.documentation_requested.emit(self.plugin)
+            lambda _checked=False: self.documentation_requested.emit(self.plugin)
         )
-        if self.recipe_list.count():
-            self.recipe_list.setCurrentRow(0)
-        if self.example_list.count():
-            self.example_list.setCurrentRow(0)
-        self._update_action_states()
 
     def _create_header(self) -> QW.QHBoxLayout:
         """Create the application title row."""
@@ -503,88 +664,95 @@ class ApplicationPage(QW.QWidget):
         self.sync_welcome_preferences()
         super().showEvent(event)
 
-    def _create_recipes_group(self) -> QW.QGroupBox:
-        """Create the recipe descriptor section."""
-        group = QW.QGroupBox(_("Recipes"))
-        layout = QW.QVBoxLayout(group)
-        _configure_catalog_list(self.recipe_list)
+    def _add_methods(self, layout: QW.QVBoxLayout) -> None:
+        """Add one card per recipe, with the examples designed for it."""
+        layout.addWidget(_section_label(_("Methods")))
         recipes = self.plugin.get_recipes()
-        for recipe in recipes:
-            item = QW.QListWidgetItem(f"{recipe.title}  v{recipe.version}")
-            item.setData(QC.Qt.UserRole, recipe.recipe_id)
-            _set_catalog_data(
-                item,
-                recipe.title,
-                recipe.description,
-                recipe.version,
-            )
-            self.recipe_list.addItem(item)
-        if recipes:
-            layout.addWidget(self.recipe_list)
-        else:
-            label = QW.QLabel(_("No recipes declared"))
-            apply_subdued_color(label)
-            layout.addWidget(label)
-        return group
-
-    def _create_examples_group(self) -> QW.QGroupBox:
-        """Create the packaged example section."""
-        group = QW.QGroupBox(_("Examples"))
-        layout = QW.QVBoxLayout(group)
-        _configure_catalog_list(self.example_list)
         examples = self.plugin.get_examples()
-        for example in examples:
-            item = QW.QListWidgetItem(example.title)
-            item.setData(QC.Qt.UserRole, example.id)
-            _set_catalog_data(item, example.title, example.description)
-            self.example_list.addItem(item)
-        if examples:
-            layout.addWidget(self.example_list)
-        else:
-            label = QW.QLabel(_("No examples declared"))
+        for recipe in recipes:
+            card = RecipeCard(
+                recipe,
+                (
+                    example
+                    for example in examples
+                    if recipe.recipe_id in example.recipe_ids
+                ),
+            )
+            card.run_requested.connect(
+                lambda recipe_id: self.start_requested.emit(self.plugin, recipe_id)
+            )
+            card.try_example_requested.connect(
+                lambda example_id, recipe_id: self.try_example_requested.emit(
+                    self.plugin, example_id, recipe_id
+                )
+            )
+            self.recipe_cards[recipe.recipe_id] = card
+            layout.addWidget(card)
+        if not recipes:
+            label = QW.QLabel(_("No methods declared"))
             apply_subdued_color(label)
             layout.addWidget(label)
-        return group
 
-    def _create_actions_layout(self) -> QW.QHBoxLayout:
-        """Create the application workflow command row."""
-        layout = QW.QHBoxLayout()
-        layout.addWidget(self.start_button)
-        layout.addWidget(self.open_example_button)
-        layout.addStretch()
-        layout.addWidget(self.documentation_button)
-        return layout
+    def _add_tools(self, layout: QW.QVBoxLayout) -> None:
+        """Add the plugin-owned tools, if any."""
+        tools = self.plugin.get_tools()
+        if not tools:
+            return
+        layout.addSpacing(8)
+        layout.addWidget(_section_label(_("Tools")))
+        for tool in tools:
+            button = _command_button("libre-toolbox.svg", _("Open tool"))
+            button.clicked.connect(
+                lambda _checked=False, tool_id=tool.id: self.tool_requested.emit(
+                    self.plugin, tool_id
+                )
+            )
+            self.tool_buttons[tool.id] = button
+            layout.addLayout(
+                _entry_layout(
+                    tool.title, tool.description, button, get_plugin_icon(tool.icon)
+                )
+            )
 
-    @staticmethod
-    def _current_id(widget: QW.QListWidget) -> str | None:
-        """Return the stable identifier stored on the current list item."""
-        item = widget.currentItem()
-        return None if item is None else item.data(QC.Qt.UserRole)
+    def _add_datasets(self, layout: QW.QVBoxLayout) -> None:
+        """Add the examples that are not designed for a specific recipe."""
+        datasets = [
+            example for example in self.plugin.get_examples() if not example.recipe_ids
+        ]
+        if not datasets:
+            return
+        layout.addSpacing(8)
+        layout.addWidget(_section_label(_("Datasets")))
+        for example in datasets:
+            button = _command_button("io/fileopen_h5.svg", _("Open dataset"))
+            button.clicked.connect(
+                lambda _checked=False, example_id=example.id: (
+                    self.open_example_requested.emit(self.plugin, example_id)
+                )
+            )
+            self.dataset_buttons[example.id] = button
+            layout.addLayout(_entry_layout(example.title, example.description, button))
 
-    def _update_action_states(self, *_args: object) -> None:
-        """Enable commands only when their declared target is available."""
-        recipe_id = self._current_id(self.recipe_list)
-        self.start_button.setEnabled(
-            recipe_id is not None and recipe_id in self.plugin.get_recipe_launchers()
-        )
-        self.open_example_button.setEnabled(
-            self._current_id(self.example_list) is not None
-        )
-        documentation_url = self.plugin.info.documentation_url
-        self.documentation_button.setEnabled(documentation_url is not None)
-        self.documentation_button.setToolTip(documentation_url or "")
+    def refresh_readiness(self) -> None:
+        """Assess every recipe on the current selection."""
+        for recipe_id, card in self.recipe_cards.items():
+            try:
+                card.set_readiness(self.plugin.assess_recipe(recipe_id))
+            except Exception as exc:  # pylint: disable=broad-except
+                # Binding suggestions are third-party code: keep the catalog usable
+                card.set_readiness(None, str(exc))
 
-    def _request_start(self) -> None:
-        """Request execution of the selected recipe."""
-        recipe_id = self._current_id(self.recipe_list)
-        if recipe_id is not None:
-            self.start_requested.emit(self.plugin, recipe_id)
-
-    def _request_open_example(self) -> None:
-        """Request opening of the selected packaged example."""
-        example_id = self._current_id(self.example_list)
-        if example_id is not None:
-            self.open_example_requested.emit(self.plugin, example_id)
+    def show_outcome(self, outcome: RecipeOutcome) -> None:
+        """Show the number of created objects and the diagnostics of a run."""
+        lines = [
+            html.escape(_("Created %d objects") % len(outcome.objects)),
+            *(
+                f"• {html.escape(format_diagnostic(diagnostic))}"
+                for diagnostic in outcome.diagnostics
+            ),
+        ]
+        self.status_label.setText("<br>".join(lines))
+        self.status_label.show()
 
 
 class ApplicationsDialog(QW.QDialog):
@@ -605,7 +773,11 @@ class ApplicationsDialog(QW.QDialog):
 
         self.setWindowTitle(_("Applications"))
         self.setWindowIcon(get_icon("libre-gui-plugin.svg"))
-        self.setMinimumSize(800, 540)
+        self.setMinimumSize(860, 600)
+        self.__readiness_timer = QC.QTimer(self)
+        self.__readiness_timer.setSingleShot(True)
+        self.__readiness_timer.setInterval(150)
+        self.__readiness_timer.timeout.connect(self.refresh_readiness)
         self.search_edit.setPlaceholderText(_("Search applications..."))
         self.search_edit.setClearButtonEnabled(True)
         _configure_catalog_list(self.application_list)
@@ -624,7 +796,7 @@ class ApplicationsDialog(QW.QDialog):
         splitter.addWidget(self.application_stack)
         splitter.setStretchFactor(0, 0)
         splitter.setStretchFactor(1, 1)
-        splitter.setSizes([280, 520])
+        splitter.setSizes([280, 580])
         layout.addWidget(splitter, 1)
 
         button_box = QW.QDialogButtonBox(QW.QDialogButtonBox.Close)
@@ -634,6 +806,7 @@ class ApplicationsDialog(QW.QDialog):
         self.application_list.currentRowChanged.connect(
             self.application_stack.setCurrentIndex
         )
+        self.application_list.currentRowChanged.connect(self.schedule_readiness_update)
         self.search_edit.textChanged.connect(self.filter_applications)
         self.refresh()
 
@@ -661,7 +834,9 @@ class ApplicationsDialog(QW.QDialog):
             _set_catalog_data(item, plugin.info.name, plugin.info.description)
             self.application_list.addItem(item)
             page.start_requested.connect(self._start_recipe)
+            page.try_example_requested.connect(self._try_example)
             page.open_example_requested.connect(self._open_example)
+            page.tool_requested.connect(self._launch_tool)
             page.documentation_requested.connect(self._open_documentation)
             page.welcome_preferences_changed.connect(
                 self.SIG_WELCOME_PREFERENCES_CHANGED.emit
@@ -670,6 +845,7 @@ class ApplicationsDialog(QW.QDialog):
             self.application_stack.addWidget(page)
         self.application_list.setCurrentRow(0)
         self.filter_applications(self.search_edit.text())
+        self.schedule_readiness_update()
 
     def filter_applications(self, text: str) -> None:
         """Show only the applications matching a search text
@@ -709,31 +885,83 @@ class ApplicationsDialog(QW.QDialog):
                 return
         raise KeyError(f"Application plugin {plugin_id!r} not found")
 
+    def schedule_readiness_update(self, *_args: object) -> None:
+        """Assess the methods of the shown application after a short delay.
+
+        Connected to selection changes, which may come in bursts.
+        """
+        if self.isVisible():
+            self.__readiness_timer.start()
+
+    def refresh_readiness(self) -> None:
+        """Assess the methods of the shown application on the selection."""
+        page = self.application_stack.currentWidget()
+        if isinstance(page, ApplicationPage):
+            page.refresh_readiness()
+
+    def showEvent(self, event: QG.QShowEvent) -> None:  # pylint: disable=invalid-name
+        """Assess the methods on the current selection when shown."""
+        super().showEvent(event)
+        self.refresh_readiness()
+
+    def _page_of(self, plugin: PluginBase) -> ApplicationPage | None:
+        """Return the page of an application plugin."""
+        return next(
+            (page for page in self.application_pages if page.plugin is plugin), None
+        )
+
     def _record_use(self, plugin: PluginBase) -> None:
         """Remember an application use to order the welcome page."""
         record_application_use(plugin.plugin_id)
         self.SIG_WELCOME_PREFERENCES_CHANGED.emit()
 
-    def _start_recipe(self, plugin: PluginBase, recipe_id: str) -> None:
-        """Delegate to a plugin-owned recipe launcher."""
+    def _run_command(
+        self, plugin: PluginBase, command: Callable[[], object], context: str
+    ) -> None:
+        """Run a plugin command, report its failure, and show its outcome."""
         self._record_use(plugin)
         try:
-            plugin.launch_recipe(recipe_id)
+            result = command()
         except Exception as exc:  # pylint: disable=broad-except
-            # Plugin-owned launchers are third-party code: never crash the app
-            qt_handle_error_message(
-                self.parent() or self, exc, _("Starting analysis '%s'") % recipe_id
-            )
+            # Plugin-owned commands are third-party code: never crash the app
+            qt_handle_error_message(self.parent() or self, exc, context)
+            return
+        page = self._page_of(plugin)
+        if page is not None and isinstance(result, RecipeOutcome):
+            page.show_outcome(result)
+        self.schedule_readiness_update()
+
+    def _start_recipe(self, plugin: PluginBase, recipe_id: str) -> None:
+        """Run a recipe on the current selection."""
+        self._run_command(
+            plugin,
+            lambda: plugin.launch_recipe(recipe_id),
+            _("Starting analysis '%s'") % recipe_id,
+        )
+
+    def _try_example(self, plugin: PluginBase, example_id: str, recipe_id: str) -> None:
+        """Open an example, then run one of the recipes designed for it."""
+        self._run_command(
+            plugin,
+            lambda: plugin.try_example(example_id, recipe_id),
+            _("Trying example '%s'") % example_id,
+        )
 
     def _open_example(self, plugin: PluginBase, example_id: str) -> None:
-        """Delegate packaged-example opening."""
-        self._record_use(plugin)
-        try:
-            plugin.launch_example(example_id)
-        except Exception as exc:  # pylint: disable=broad-except
-            qt_handle_error_message(
-                self.parent() or self, exc, _("Opening example '%s'") % example_id
-            )
+        """Open an example that is not designed for a specific recipe."""
+        self._run_command(
+            plugin,
+            lambda: plugin.launch_example(example_id),
+            _("Opening example '%s'") % example_id,
+        )
+
+    def _launch_tool(self, plugin: PluginBase, tool_id: str) -> None:
+        """Open a plugin-owned tool."""
+        self._run_command(
+            plugin,
+            lambda: plugin.launch_tool(tool_id),
+            _("Opening tool '%s'") % tool_id,
+        )
 
     @staticmethod
     def _open_documentation(plugin: PluginBase) -> None:

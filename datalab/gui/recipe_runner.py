@@ -18,10 +18,12 @@ from sigima.objects import GeometryResult, ImageObj, SignalObj, TableResult
 from datalab import __version__ as datalab_version
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter
 from datalab.objectmodel import ObjectGroup, get_uuid
+from datalab.recipe_binding import check_recipe_inputs
 from datalab.recipes import (
     RECIPE_RUN_RECORD_OPTION,
     RecipeCardinality,
     RecipeDescriptor,
+    RecipeDiagnosticLevel,
     RecipeExecutionContext,
     RecipeInputs,
     RecipeObjectType,
@@ -112,6 +114,19 @@ class RecipeRunner:
                     f"Recipe input slot {slot.id!r} accepts only "
                     f"{slot.object_type.value} objects"
                 )
+            if objects and len(objects) < slot.min_count:
+                raise RecipeValidationError(
+                    f"Recipe input slot {slot.id!r} requires at least "
+                    f"{slot.min_count} objects"
+                )
+            for requirement in slot.metadata:
+                if requirement.required and any(
+                    obj.metadata.get(requirement.key) is None for obj in objects
+                ):
+                    raise RecipeValidationError(
+                        f"Recipe input slot {slot.id!r} requires metadata "
+                        f"{requirement.key!r} on every object"
+                    )
             normalized[slot.id] = objects
         return normalized
 
@@ -294,6 +309,15 @@ class RecipeRunner:
             raise TypeError("Recipe runner requires a RecipeDescriptor")
         self._validate_parameters(descriptor, parameters)
         normalized_inputs = self._normalize_inputs(descriptor, inputs)
+        errors = [
+            diagnostic.message
+            for diagnostic in check_recipe_inputs(
+                descriptor, normalized_inputs, parameters
+            )
+            if diagnostic.level is RecipeDiagnosticLevel.ERROR
+        ]
+        if errors:
+            raise RecipeValidationError("\n".join(errors))
         title = descriptor.title if group_title is None else group_title
         if not isinstance(title, str) or not title.strip():
             raise RecipeValidationError("Recipe output group title must be non-empty")

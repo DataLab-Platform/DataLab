@@ -20,6 +20,7 @@ from datalab.recipes import (
     RecipeDiagnosticLevel,
     RecipeExecutionContext,
     RecipeInputSlot,
+    RecipeMetadataRequirement,
     RecipeObjectOutput,
     RecipeObjectType,
     RecipeOutcome,
@@ -306,8 +307,10 @@ def test_plugin_exposes_only_owned_unique_recipes() -> None:
         PluginRegistry.get_plugin_classes().remove(RecipePlugin)
 
 
-def test_plugin_recipe_launchers_delegate_to_owned_desktop_methods() -> None:
-    """Desktop launchers stay explicit, recipe-owned, and outcome-typed."""
+def test_plugin_recipe_launchers_override_the_generic_interaction(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Declared launchers replace the generic interaction of their recipe."""
 
     def run_recipe(*_args, **_kwargs) -> RecipeOutcome:
         """Return an empty headless outcome."""
@@ -320,6 +323,9 @@ def test_plugin_recipe_launchers_delegate_to_owned_desktop_methods() -> None:
         version="1.0.0",
         run=run_recipe,
     )
+    generic_recipe = dataclasses.replace(
+        recipe, recipe_id="org.example.launcher:generic", title="Generic"
+    )
 
     class LauncherPlugin(PluginBase):
         """Plugin exposing one explicit Desktop recipe launcher."""
@@ -329,7 +335,7 @@ def test_plugin_recipe_launchers_delegate_to_owned_desktop_methods() -> None:
             name="Launcher plugin",
             version="1.0.0",
         )
-        RECIPES = (recipe,)
+        RECIPES = (recipe, generic_recipe)
         RECIPE_LAUNCHERS = {recipe.recipe_id: "run_quick_check"}
 
         def create_actions(self) -> None:
@@ -339,6 +345,12 @@ def test_plugin_recipe_launchers_delegate_to_owned_desktop_methods() -> None:
             """Return a visible-launch outcome."""
             return RecipeOutcome()
 
+    started: list[str] = []
+    monkeypatch.setattr(
+        LauncherPlugin,
+        "start_recipe",
+        lambda _plugin, recipe_id: started.append(recipe_id),
+    )
     try:
         plugin = LauncherPlugin()
         plugin.main = object()
@@ -346,12 +358,15 @@ def test_plugin_recipe_launchers_delegate_to_owned_desktop_methods() -> None:
             recipe.recipe_id: "run_quick_check"
         }
         assert isinstance(plugin.launch_recipe(recipe.recipe_id), RecipeOutcome)
+        assert started == []
+        assert plugin.launch_recipe(generic_recipe.recipe_id) is None
+        assert started == [generic_recipe.recipe_id]
 
         plugin.main = None
         with pytest.raises(RuntimeError, match="registered"):
             plugin.launch_recipe(recipe.recipe_id)
         plugin.main = object()
-        with pytest.raises(KeyError, match="No Desktop launcher"):
+        with pytest.raises(KeyError, match="not found"):
             plugin.launch_recipe("org.example.launcher:missing")
 
         LauncherPlugin.RECIPE_LAUNCHERS = {
@@ -364,3 +379,69 @@ def test_plugin_recipe_launchers_delegate_to_owned_desktop_methods() -> None:
             LauncherPlugin.get_recipe_launchers()
     finally:
         PluginRegistry.get_plugin_classes().remove(LauncherPlugin)
+
+
+def test_recipe_input_slot_declares_human_requirements() -> None:
+    """Slots describe their data, minimum count and expected metadata."""
+    slot = RecipeInputSlot(
+        id="flat_frames",
+        object_type="image",
+        cardinality="many",
+        description="Uniformly illuminated frames",
+        min_count=2,
+        metadata=[
+            RecipeMetadataRequirement("exposure_time_s", "Exposure time (s)"),
+            RecipeMetadataRequirement("frame_role", required=False),
+        ],
+    )
+    assert slot.display_title == "Flat frames"
+    assert dataclasses.replace(slot, title="Flats").display_title == "Flats"
+    assert isinstance(slot.metadata, tuple)
+    assert [item.required for item in slot.metadata] == [True, False]
+
+    for kwargs, message in (
+        ({"min_count": 0}, "minimum count"),
+        ({"min_count": True}, "minimum count"),
+        ({"cardinality": "one", "min_count": 2}, "minimum of 1"),
+        ({"metadata": "exposure_time_s"}, "metadata must be a sequence"),
+        ({"metadata": ("exposure_time_s",)}, "RecipeMetadataRequirement"),
+        (
+            {
+                "metadata": (
+                    RecipeMetadataRequirement("key"),
+                    RecipeMetadataRequirement("key"),
+                )
+            },
+            "Duplicate recipe input metadata key",
+        ),
+        ({"title": 1}, "title must be a string"),
+    ):
+        with pytest.raises((TypeError, ValueError), match=message):
+            dataclasses.replace(slot, **kwargs)
+    with pytest.raises(ValueError, match="metadata key"):
+        RecipeMetadataRequirement(" ")
+
+
+def test_recipe_descriptor_hooks_must_be_callable() -> None:
+    """Binding suggestions and input checks are optional callables."""
+
+    def run_recipe(*_args, **_kwargs) -> RecipeOutcome:
+        """Return an empty outcome."""
+        return RecipeOutcome()
+
+    descriptor = RecipeDescriptor(
+        recipe_id="org.example.camera:hooks",
+        plugin_version="1.0.0",
+        title="Hooks",
+        version="1.0.0",
+        run=run_recipe,
+        inputs=(RecipeInputSlot("frames", "image", "many"),),
+        suggest_bindings=lambda candidates: {"frames": candidates},
+        check_inputs=lambda inputs, parameters: (),
+    )
+    assert descriptor.get_input("frames").id == "frames"
+    with pytest.raises(KeyError, match="no input slot"):
+        descriptor.get_input("missing")
+    for name in ("suggest_bindings", "check_inputs"):
+        with pytest.raises(TypeError, match=f"{name} must be callable"):
+            dataclasses.replace(descriptor, **{name: "not callable"})

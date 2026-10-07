@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 import importlib
 import sys
 import zipfile
@@ -35,12 +36,13 @@ def test_plugin_example_resolves_resource_from_zip_package(
         title="Quick start",
         description="Packaged test workspace",
         resource=f"{package_name}:examples/quickstart.h5",
-        recipe_id="org.example.application:quick-check",
+        recipe_ids=["org.example.application:quick-check"],
         expected_checks=["signal-count", "summary-table"],
     )
 
     try:
         assert example.package == package_name
+        assert example.recipe_ids == ("org.example.application:quick-check",)
         assert example.resource_path == "examples/quickstart.h5"
         assert example.expected_checks == ("signal-count", "summary-table")
         assert example.resolve().read_bytes() == payload
@@ -54,7 +56,7 @@ def test_plugin_example_resolves_resource_from_zip_package(
 
 
 def test_plugin_validates_owned_examples_and_recipe_references() -> None:
-    """Example IDs are unique and optional recipe links stay plugin-owned."""
+    """Example IDs are unique and recipe links stay plugin-owned."""
 
     def run_recipe(*_args) -> RecipeOutcome:
         return RecipeOutcome()
@@ -66,11 +68,19 @@ def test_plugin_validates_owned_examples_and_recipe_references() -> None:
         version="1.0.0",
         run=run_recipe,
     )
+    other_recipe = dataclasses.replace(
+        recipe, recipe_id="org.example.application:other-check", title="Other"
+    )
     example = PluginExample(
         id="quickstart",
         title="Quick start",
         resource="datalab:data/tests/reordering_test.h5",
-        recipe_id=recipe.recipe_id,
+        recipe_ids=(recipe.recipe_id, other_recipe.recipe_id),
+    )
+    dataset = PluginExample(
+        id="dataset",
+        title="Dataset without recipe",
+        resource="datalab:data/tests/reordering_test.h5",
     )
 
     class ExamplePlugin(PluginBase):
@@ -81,15 +91,16 @@ def test_plugin_validates_owned_examples_and_recipe_references() -> None:
             name="Example application",
             version="1.2.0",
         )
-        RECIPES = (recipe,)
-        EXAMPLES = (example,)
+        RECIPES = (recipe, other_recipe)
+        EXAMPLES = (example, dataset)
 
         def create_actions(self) -> None:
             """Create no actions for this contract test."""
 
     try:
-        assert ExamplePlugin.get_examples() == (example,)
+        assert ExamplePlugin.get_examples() == (example, dataset)
         assert ExamplePlugin.get_example("quickstart") is example
+        assert dataset.recipe_ids == ()
         with pytest.raises(KeyError, match="missing"):
             ExamplePlugin.get_example("missing")
 
@@ -102,7 +113,7 @@ def test_plugin_validates_owned_examples_and_recipe_references() -> None:
                 id="orphan",
                 title="Orphan",
                 resource="datalab:data/tests/reordering_test.h5",
-                recipe_id="org.example.application:missing",
+                recipe_ids=(recipe.recipe_id, "org.example.application:missing"),
             ),
         )
         with pytest.raises(ValueError, match="unknown recipe"):
@@ -112,21 +123,27 @@ def test_plugin_validates_owned_examples_and_recipe_references() -> None:
 
 
 def test_plugin_example_data_supports_generated_workspaces() -> None:
-    """Generated examples carry scientific objects and immutable defaults."""
+    """Generated examples carry scientific objects and per-recipe defaults."""
     signal = create_signal(
         "Generated",
         np.asarray([0.0, 1.0]),
         np.asarray([2.0, 3.0]),
     )
-    data = PluginExampleData((signal,), {"gain": 2.0})
+    recipe_id = "org.example.application:quick-check"
+    data = PluginExampleData((signal,), {recipe_id: {"gain": 2.0}})
     example = PluginExample(id="generated", title="Generated campaign")
 
     assert data.objects == (signal,)
-    assert data.parameter_values == {"gain": 2.0}
+    assert data.values_for(recipe_id) == {"gain": 2.0}
+    assert data.values_for("org.example.application:other") == {}
     with pytest.raises(TypeError):
-        data.parameter_values["gain"] = 3.0
+        data.parameter_values[recipe_id]["gain"] = 3.0
     with pytest.raises(ValueError, match="no package resource"):
         _ = example.resource_path
+    with pytest.raises(ValueError, match="recipe IDs"):
+        PluginExampleData((signal,), {"gain": 2.0})
+    with pytest.raises(TypeError, match="string keys"):
+        PluginExampleData((signal,), {recipe_id: {1: 2.0}})
 
 
 @pytest.mark.parametrize(
@@ -137,6 +154,9 @@ def test_plugin_example_data_supports_generated_workspaces() -> None:
         ({"resource": "datalab:/absolute.h5"}, "relative"),
         ({"resource": "datalab:data/../secret.h5"}, "relative"),
         ({"expected_checks": "not-a-sequence"}, "expected checks"),
+        ({"recipe_ids": "org.example.application:quick-check"}, "recipe IDs"),
+        ({"recipe_ids": ("not-namespaced",)}, "namespaced"),
+        ({"recipe_ids": ("org.example:a", "org.example:a")}, "unique"),
     ],
 )
 def test_plugin_example_rejects_invalid_declarations(kwargs, message) -> None:

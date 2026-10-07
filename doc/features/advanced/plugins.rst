@@ -313,12 +313,54 @@ contract validates these references without assigning DataLab workspace UUIDs.
 Workspace mutation and atomic commit are responsibilities of the recipe runner,
 not of the recipe callable.
 
+Describing recipe inputs
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+DataLab shows users what each recipe expects and whether the current selection suits it. Describe every input slot accordingly:
+
+.. code-block:: python
+
+  from datalab.recipes import RecipeInputSlot, RecipeMetadataRequirement
+
+  FLAT_FRAMES = RecipeInputSlot(
+    "flat_frames",
+    "image",
+    "many",
+    title="Flat frames",
+    description="Uniformly illuminated frames, two or more per exposure level",
+    min_count=4,
+    metadata=(
+      RecipeMetadataRequirement(
+        "org.example.my-plugin.exposure_time_s", "Exposure time in seconds"
+      ),
+      RecipeMetadataRequirement(
+        "org.example.my-plugin.frame_role", "dark or flat", required=False
+      ),
+    ),
+  )
+
+``min_count`` is the minimum number of objects bound to a ``many`` slot. Required metadata keys must be present on every bound object; optional keys are hints shown to the user. The recipe runner enforces both rules before the recipe callable is called.
+
+Two optional hooks of :class:`datalab.recipes.RecipeDescriptor` refine these declarations:
+
+- ``suggest_bindings(candidates)`` returns a mapping from slot IDs to some of the candidate objects, for example to split frames by role from their metadata. Without it, compatible candidates go to the only slot accepting their type, and slots sharing a type are left for the user to assign.
+- ``check_inputs(inputs, parameters)`` returns a list of :class:`datalab.recipes.RecipeDiagnostic` values for fast, recipe-specific checks such as shapes, counts per level, or units. It must not compute results. Error diagnostics block the run and warnings are shown before it. An exception raised by the hook is reported as an ``input-check-failed`` error.
+
+:func:`datalab.recipe_binding.assess_recipe_inputs` combines the slot declarations and both hooks. It returns a :class:`datalab.recipe_binding.RecipeReadiness` with a status (``no_input``, ``needs_assignment``, ``not_ready``, ``warnings`` or ``ready``), the proposed bindings, structured issues that hosts translate, and the recipe diagnostics. The module has no Qt dependency, so DataLab-Web uses the same code.
+
 Running a recipe on Desktop
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use :class:`datalab.gui.recipe_runner.RecipeRunner` from the GUI thread to
-validate inputs and parameters, execute the headless callable, and commit its
-outcome to the DataLab workspace:
+Most plugins do not call the runner directly. :meth:`datalab.plugins.PluginBase.start_recipe` runs a recipe on the current selection with DataLab's generic launcher. It assesses the selection, opens an input assignment dialog only when the bindings are ambiguous or invalid, edits the declared parameters, and then calls the runner. A plugin menu action therefore only needs:
+
+.. code-block:: python
+
+  def run_quick_check(self):
+    return self.start_recipe("org.example.my-plugin:quick-check")
+
+The **Run on selection...** buttons of the **Applications** catalog use the same launcher. A plugin that needs a dedicated interface for one recipe may map its recipe ID to a plugin method name in the class-level ``RECIPE_LAUNCHERS`` mapping; the catalog then calls this method, without arguments, instead of the generic launcher.
+
+Use :class:`datalab.gui.recipe_runner.RecipeRunner` from the GUI thread to run a recipe on explicit inputs. It validates inputs and parameters, executes the headless callable, and commits its outcome to the DataLab workspace:
 
 .. code-block:: python
 
@@ -331,7 +373,7 @@ outcome to the DataLab workspace:
   )
 
 The runner rejects missing, extra, mistyped, or incorrectly sized input slots
-before recipe code is called. It also validates the optional ``DataSet``
+before recipe code is called. It also enforces ``min_count``, required metadata and the error diagnostics of ``check_inputs``, validates the optional ``DataSet``
 instance and checks cancellation before execution, after execution, and
 immediately before commit. Recipe code must remain headless and must not mutate
 the workspace itself.
@@ -378,7 +420,7 @@ Plugins may expose native DataLab workspaces through the class-level
         title="Quick start",
         description="Small deterministic workspace",
         resource="datalab_my_plugin:examples/quickstart.h5",
-        recipe_id="org.example.my-plugin:quick-check",
+        recipe_ids=("org.example.my-plugin:quick-check",),
         expected_checks=("summary-table",),
       ),
     )
@@ -395,6 +437,34 @@ context manager and do not retain the returned path after the context exits.
 recipe references. A registered plugin may call ``open_example("quickstart")``
 to materialize and load a native DataLab HDF5 workspace. Opening clears the
 current workspace by default; pass ``reset_all=False`` to merge it instead.
+
+``recipe_ids`` lists the recipes an example is designed for. One example may serve several recipes, for instance a dark ramp analyzed by two methods. A plugin may also generate an example in memory by overriding ``materialize_example()`` to return a :class:`datalab.plugin_examples.PluginExampleData`; its ``parameter_values`` mapping gives, for each recipe ID, the parameter values suited to the generated objects.
+
+The **Applications** catalog presents each recipe as a method with its expected inputs, a live status for the current selection, a **Run on selection...** button, and the examples designed for it. **Try with this example** calls :meth:`datalab.plugins.PluginBase.try_example`: it opens the example, prefills the recipe parameters with the example values, and runs the recipe once the user accepts them. Examples without ``recipe_ids`` are listed as datasets, which only open.
+
+Plugin tools
+~~~~~~~~~~~~
+
+A recipe covers a headless analysis run by DataLab. Any other interaction owned by an application plugin, such as a wizard, an interactive editor or a data preparation step, is a tool. Declare tools in the class-level ``TOOLS`` tuple of :class:`datalab.plugin_tools.PluginTool` values; the **Applications** catalog lists them in a **Tools** section:
+
+.. code-block:: python
+
+  from datalab.plugin_tools import PluginTool
+
+  class MyPlugin(PluginBase):
+    TOOLS = (
+      PluginTool(
+        id="annotate",
+        title="Annotate frames...",
+        launcher="annotate_frames",
+        description="Set the acquisition metadata of the selected frames",
+      ),
+    )
+
+    def annotate_frames(self):
+      ...
+
+The launcher is called without arguments. :meth:`datalab.plugins.PluginBase.get_tools` validates unique local IDs and launcher methods, and rejects tools declared by plugins without the ``APPLICATION`` capability. Tools are a Desktop feature: DataLab-Web does not list them.
 
 Welcome page tiles
 ------------------

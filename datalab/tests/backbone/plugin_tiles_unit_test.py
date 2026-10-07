@@ -13,6 +13,7 @@ import pytest
 
 from datalab.plugin_resources import resolve_package_resource
 from datalab.plugin_tiles import WelcomeTile
+from datalab.plugin_tools import PluginTool
 from datalab.plugins import PluginBase, PluginCapability, PluginInfo, PluginRegistry
 
 PLUGIN_ICON = "datalab:data/icons/libre-gui-plugin.svg"
@@ -151,3 +152,80 @@ def test_plugin_validates_and_launches_welcome_tiles() -> None:
         assert TilePlugin.get_welcome_tiles() == ()
     finally:
         PluginRegistry.get_plugin_classes().remove(TilePlugin)
+
+
+@pytest.mark.parametrize(
+    ("kwargs", "message"),
+    [
+        ({"id": "Invalid ID"}, "tool ID"),
+        ({"title": " "}, "title"),
+        ({"launcher": "open tool"}, "method name"),
+        ({"description": None}, "description"),
+        ({"icon": ""}, "icon"),
+        ({"icon": "datalab:/absolute.svg"}, "relative"),
+    ],
+)
+def test_plugin_tool_rejects_invalid_declarations(kwargs, message) -> None:
+    """Invalid tool declarations fail at import time."""
+    values = {"id": "annotate", "title": "Annotate", "launcher": "annotate"}
+    values.update(kwargs)
+    with pytest.raises((TypeError, ValueError), match=message):
+        PluginTool(**values)
+
+
+def test_plugin_validates_and_launches_tools() -> None:
+    """Application plugins expose validated, plugin-owned tools."""
+
+    class ToolPlugin(PluginBase):
+        """Application plugin used to check tool contracts."""
+
+        PLUGIN_INFO = PluginInfo(
+            id="org.example.tools",
+            name="Tool application",
+            version="1.0.0",
+            icon=PLUGIN_ICON,
+            capabilities=(PluginCapability.APPLICATION,),
+        )
+        TOOLS = (PluginTool(id="annotate", title="Annotate", launcher="annotate"),)
+
+        def annotate(self) -> str:
+            """Return a marker instead of opening a tool."""
+            return "tool opened"
+
+        def create_actions(self) -> None:
+            """Create no actions for this contract test."""
+
+    try:
+        (tool,) = ToolPlugin.get_tools()
+        assert tool.icon == PLUGIN_ICON
+        plugin = ToolPlugin()
+        with pytest.raises(RuntimeError, match="registered"):
+            plugin.launch_tool("annotate")
+        plugin.main = SimpleNamespace()
+        assert plugin.launch_tool("annotate") == "tool opened"
+        with pytest.raises(KeyError, match="missing"):
+            plugin.launch_tool("missing")
+
+        for tools, error, message in (
+            ((tool, tool), ValueError, "Duplicate plugin tool ID"),
+            (
+                (PluginTool(id="broken", title="Broken", launcher="missing"),),
+                ValueError,
+                "not callable",
+            ),
+            (("not a tool",), TypeError, "PluginTool"),
+        ):
+            ToolPlugin.TOOLS = tools
+            with pytest.raises(error, match=message):
+                ToolPlugin.get_tools()
+
+        ToolPlugin.TOOLS = (tool,)
+        ToolPlugin.PLUGIN_INFO = PluginInfo(
+            id="org.example.tools",
+            name="Processing only",
+            capabilities=(PluginCapability.PROCESSING,),
+        )
+        with pytest.raises(ValueError, match="APPLICATION capability"):
+            ToolPlugin.get_tools()
+    finally:
+        PluginRegistry.get_plugin_classes().remove(ToolPlugin)

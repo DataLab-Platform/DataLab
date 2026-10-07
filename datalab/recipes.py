@@ -22,6 +22,7 @@ from sigima.objects import GeometryResult, ImageObj, SignalObj, TableResult
 __all__ = [
     "RECIPE_RUN_RECORD_OPTION",
     "RECIPE_RUN_RECORD_SCHEMA_VERSION",
+    "RecipeBindingSuggester",
     "RecipeCancellationCallback",
     "RecipeCancellationError",
     "RecipeCardinality",
@@ -29,8 +30,10 @@ __all__ = [
     "RecipeDiagnostic",
     "RecipeDiagnosticLevel",
     "RecipeExecutionContext",
+    "RecipeInputChecker",
     "RecipeInputSlot",
     "RecipeInputs",
+    "RecipeMetadataRequirement",
     "RecipeObjectOutput",
     "RecipeObjectType",
     "RecipeOutcome",
@@ -313,13 +316,53 @@ class RecipeExecutionContext:
 
 
 @dataclasses.dataclass(frozen=True)
+class RecipeMetadataRequirement:
+    """Metadata entry expected on the objects bound to a recipe input slot.
+
+    Args:
+        key: metadata key
+        description: meaning of the value (unit, allowed values...)
+        required: True if objects lacking the key cannot be analyzed; False
+         documents an optional hint, e.g. used to assign objects to slots
+    """
+
+    key: str
+    description: str = ""
+    required: bool = True
+
+    def __post_init__(self) -> None:
+        """Validate the metadata requirement."""
+        if not isinstance(self.key, str) or not self.key.strip():
+            raise ValueError("Recipe metadata key must be a non-empty string")
+        if not isinstance(self.description, str):
+            raise TypeError("Recipe metadata description must be a string")
+        if not isinstance(self.required, bool):
+            raise TypeError("Recipe metadata required flag must be a bool")
+
+
+@dataclasses.dataclass(frozen=True)
 class RecipeInputSlot:
-    """Typed input slot declared by a recipe."""
+    """Typed input slot declared by a recipe.
+
+    Args:
+        id: slot ID, local to the recipe
+        object_type: type of the accepted objects
+        cardinality: one object, or several objects
+        required: True if the slot cannot be left empty
+        title: human-readable slot name (derived from ``id`` if empty)
+        description: what the objects must represent and how they are acquired
+        min_count: minimum number of objects of a non-empty ``MANY`` slot
+        metadata: metadata entries expected on every bound object
+    """
 
     id: str
     object_type: RecipeObjectType
     cardinality: RecipeCardinality
     required: bool = True
+    title: str = ""
+    description: str = ""
+    min_count: int = 1
+    metadata: Sequence[RecipeMetadataRequirement] = ()
 
     def __post_init__(self) -> None:
         """Validate and normalize the slot declaration."""
@@ -338,6 +381,39 @@ class RecipeInputSlot:
             ) from exc
         if not isinstance(self.required, bool):
             raise TypeError("Recipe input slot required flag must be a bool")
+        if not isinstance(self.title, str):
+            raise TypeError("Recipe input slot title must be a string")
+        if not isinstance(self.description, str):
+            raise TypeError("Recipe input slot description must be a string")
+        if (
+            isinstance(self.min_count, bool)
+            or not isinstance(self.min_count, int)
+            or self.min_count < 1
+        ):
+            raise ValueError("Recipe input slot minimum count must be at least 1")
+        if self.cardinality is RecipeCardinality.ONE and self.min_count != 1:
+            raise ValueError("A single-object recipe input slot has a minimum of 1")
+        if isinstance(self.metadata, (str, bytes)) or not isinstance(
+            self.metadata, Sequence
+        ):
+            raise TypeError("Recipe input slot metadata must be a sequence")
+        metadata = tuple(self.metadata)
+        if not all(isinstance(item, RecipeMetadataRequirement) for item in metadata):
+            raise TypeError(
+                "Recipe input slot metadata must be RecipeMetadataRequirement values"
+            )
+        duplicate_key = _find_duplicate([item.key for item in metadata])
+        if duplicate_key is not None:
+            raise ValueError(f"Duplicate recipe input metadata key: {duplicate_key!r}")
+        object.__setattr__(self, "metadata", metadata)
+
+    @property
+    def display_title(self) -> str:
+        """Return the declared title, or one derived from the slot ID."""
+        if self.title.strip():
+            return self.title
+        words = re.split(r"[._-]+", self.id)
+        return " ".join(words).capitalize()
 
 
 @dataclasses.dataclass(frozen=True)
@@ -450,6 +526,13 @@ RecipeInputs = Mapping[str, tuple[Union[SignalObj, ImageObj], ...]]
 RecipeRun = Callable[
     [RecipeInputs, Optional[gds.DataSet], RecipeExecutionContext], RecipeOutcome
 ]
+RecipeBindingSuggester = Callable[
+    [tuple[Union[SignalObj, ImageObj], ...]],
+    Mapping[str, Sequence[Union[SignalObj, ImageObj]]],
+]
+RecipeInputChecker = Callable[
+    [RecipeInputs, Optional[gds.DataSet]], Sequence[RecipeDiagnostic]
+]
 
 
 @dataclasses.dataclass(frozen=True)
@@ -459,6 +542,15 @@ class RecipeDescriptor:
     A missing ``parameter_class`` declares a parameterless recipe whose run
     callable receives ``None`` as its second argument. Otherwise, that argument
     must be an instance of the declared ``DataSet`` subclass.
+
+    ``suggest_bindings`` receives the candidate objects and returns a proposed
+    assignment of some of them to input slots (e.g. from metadata). Hosts use
+    it to bind inputs without asking the user.
+
+    ``check_inputs`` receives complete inputs and parameters (defaults when
+    assessing a selection) and returns diagnostics: errors block the run,
+    warnings are shown. It must stay fast (metadata, shapes, counts) because
+    hosts call it whenever the selection changes.
     """
 
     recipe_id: str
@@ -469,6 +561,8 @@ class RecipeDescriptor:
     description: str = ""
     inputs: Sequence[RecipeInputSlot] = ()
     parameter_class: type[gds.DataSet] | None = None
+    suggest_bindings: RecipeBindingSuggester | None = None
+    check_inputs: RecipeInputChecker | None = None
 
     def __post_init__(self) -> None:
         """Validate identity, metadata, input slots, parameters, and callable."""
@@ -502,6 +596,9 @@ class RecipeDescriptor:
             raise ValueError(f"Invalid recipe version: {self.version!r}") from exc
         if not callable(self.run):
             raise TypeError("Recipe run must be callable")
+        for name in ("suggest_bindings", "check_inputs"):
+            if getattr(self, name) is not None and not callable(getattr(self, name)):
+                raise TypeError(f"Recipe {name} must be callable or None")
 
         inputs = tuple(self.inputs)
         if not all(isinstance(slot, RecipeInputSlot) for slot in inputs):
@@ -525,3 +622,10 @@ class RecipeDescriptor:
     def local_id(self) -> str:
         """Return the recipe-local ID encoded in the recipe ID."""
         return self.recipe_id.split(":", maxsplit=1)[1]
+
+    def get_input(self, slot_id: str) -> RecipeInputSlot:
+        """Return one declared input slot by its ID."""
+        for slot in self.inputs:
+            if slot.id == slot_id:
+                return slot
+        raise KeyError(f"Recipe {self.recipe_id!r} has no input slot {slot_id!r}")

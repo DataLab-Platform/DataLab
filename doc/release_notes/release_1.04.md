@@ -24,7 +24,12 @@
 **Application plugins:**
 
 * Added a top-level **Applications** entry that presents active scientific application plugins in a dedicated catalog
-* Each application displays its description, identity, version, available recipes, and packaged examples; processing-only plugins remain outside this focused view
+* Each application displays its description, identity, version, methods, tools, and examples; processing-only plugins remain outside this focused view
+* Each method shows the inputs it expects (object type and count, required metadata) and a live status telling whether the current selection can be analyzed, and why not
+* **Run on selection...** starts a method directly when the selection is ready, and asks for the input assignment only when it is ambiguous or invalid; the assignment dialog checks the chosen objects before the run can continue
+* Examples are listed under the methods they are designed for: **Try with this example** opens the example, prefills the method parameters, and runs the method once they are accepted. One example may serve several methods, and examples designed for no method are listed as datasets
+* Application plugins may also list tools, such as wizards or editors, in the catalog
+* Plugin developers describe recipe inputs declaratively (titles, minimum counts, metadata requirements) and may add binding suggestions and fast input checks; every recipe then runs through DataLab's generic launcher, without plugin-specific input dialogs
 * The catalog is non-modal and remains open after starting a method or opening an example, so users may continue interacting with the DataLab workspace
 * Completed application methods select their last generated object, consistently with standard DataLab processing
 * Application plugins add tiles to a new **Applications** section of the welcome page: by default, one tile per plugin opens its page in the catalog, and plugins may declare additional tiles, for example to open an example directly. Additional tiles are shown when there is room for them, and otherwise move to the menu of the main tile

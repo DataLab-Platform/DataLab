@@ -4411,3 +4411,131 @@ msgstr "Pour commencer"
 msgid "Quick actions"
 msgstr "Actions rapides"
 
+msgid "Expected inputs"
+msgstr "Entrées attendues"
+
+msgid "Run on selection..."
+msgstr "Exécuter sur la sélection..."
+
+msgid "Examples designed for this method"
+msgstr "Exemples conçus pour cette méthode"
+
+msgid "Try with this example"
+msgstr "Essayer avec cet exemple"
+
+msgid "The current selection could not be assessed"
+msgstr "La sélection courante n'a pas pu être évaluée"
+
+msgid "Methods"
+msgstr "Méthodes"
+
+msgid "No methods declared"
+msgstr "Aucune méthode déclarée"
+
+msgid "Tools"
+msgstr "Outils"
+
+msgid "Open tool"
+msgstr "Ouvrir l'outil"
+
+msgid "Datasets"
+msgstr "Jeux de données"
+
+msgid "Open dataset"
+msgstr "Ouvrir le jeu de données"
+
+msgid "Created %d objects"
+msgstr "%d objets créés"
+
+msgid "Trying example '%s'"
+msgstr "Essai de l'exemple '%s'"
+
+msgid "Opening tool '%s'"
+msgstr "Ouverture de l'outil '%s'"
+
+msgid "One signal"
+msgstr "Un signal"
+
+msgid "One image"
+msgstr "Une image"
+
+msgid "At least %d signals"
+msgstr "Au moins %d signaux"
+
+msgid "At least %d images"
+msgstr "Au moins %d images"
+
+msgid "One or more signals"
+msgstr "Un ou plusieurs signaux"
+
+msgid "One or more images"
+msgstr "Une ou plusieurs images"
+
+msgid "%s (optional)"
+msgstr "%s (facultatif)"
+
+msgid "required metadata"
+msgstr "métadonnée requise"
+
+msgid "hint"
+msgstr "indicative"
+
+msgid "No input data"
+msgstr "Aucune donnée d'entrée"
+
+msgid "%(slot)s: no object assigned"
+msgstr "%(slot)s : aucun objet affecté"
+
+msgid "%(slot)s: choose the objects to use"
+msgstr "%(slot)s : choisir les objets à utiliser"
+
+msgid "%(slot)s: %(count)d object(s) assigned, at least %(min_count)d required"
+msgstr "%(slot)s : %(count)d objet(s) affecté(s), au moins %(min_count)d requis"
+
+msgid "%(slot)s: accepts only one object (%(count)d assigned)"
+msgstr "%(slot)s : un seul objet accepté (%(count)d affectés)"
+
+msgid "%(slot)s: %(count)d object(s) of the wrong type (%(titles)s)"
+msgstr "%(slot)s : %(count)d objet(s) de type incorrect (%(titles)s)"
+
+msgid "%(slot)s: metadata '%(key)s' missing on %(count)d object(s) (%(titles)s)"
+msgstr "%(slot)s : métadonnée '%(key)s' absente de %(count)d objet(s) (%(titles)s)"
+
+msgid "%(slot)s: %(count)d object(s) assigned twice (%(titles)s)"
+msgstr "%(slot)s : %(count)d objet(s) affecté(s) deux fois (%(titles)s)"
+
+msgid "Ready to run on the current selection"
+msgstr "Exécutable sur la sélection courante"
+
+msgid "Ready to run, with warnings"
+msgstr "Exécutable, avec des avertissements"
+
+msgid "Ready to run once the inputs are assigned"
+msgstr "Exécutable une fois les entrées affectées"
+
+msgid "The current selection cannot be analyzed"
+msgstr "La sélection courante ne peut pas être analysée"
+
+msgid "Select the input data in the workspace"
+msgstr "Sélectionner les données d'entrée dans l'espace de travail"
+
+msgid "Inputs of '%s'"
+msgstr "Entrées de '%s'"
+
+msgid "(missing: %s)"
+msgstr "(manquant : %s)"
+
+msgid "Not assigned"
+msgstr "Non assigné"
+
+msgid "No compatible object"
+msgstr "Aucun objet compatible"
+
+msgid "No selected object can be used by '%s'."
+msgstr "Aucun objet sélectionné n'est utilisable par '%s'."
+
+msgid "Expected inputs:"
+msgstr "Entrées attendues :"
+
+msgid "Running '%s'"
+msgstr "Exécution de '%s'"
