@@ -56,7 +56,7 @@ from datalab.gui.processor.base import (
     extract_processing_parameters,
 )
 from datalab.gui.processor.catcher import CompOut
-from datalab.objectmodel import get_short_id, get_uuid
+from datalab.objectmodel import get_short_uuid, get_uuid
 from datalab.tests import datalab_test_app_context
 
 
@@ -386,10 +386,12 @@ def test_analysis_persistence_failure_is_isolated_per_object() -> None:
             assert extract_analysis_parameters(first) is None
             assert extract_analysis_parameters(second) is not None
             second_adapter = appended[1][0]
-            second_short_id = get_short_id(second)
+            second_short_uuid = get_short_uuid(second)
             assert result.results == [second_adapter]
-            assert result.ylabels == [f"{second_adapter.func_name}({second_short_id})"]
-            assert result.short_ids == [second_short_id]
+            assert result.ylabels == [
+                f"{second_adapter.func_name}({second_short_uuid})"
+            ]
+            assert result.short_ids == [second_short_uuid]
             error_calls = [
                 call for call in show_error.call_args_list if call.args[1] == "error"
             ]

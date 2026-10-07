@@ -60,6 +60,8 @@ def numpy_to_json_safe(obj: Any) -> Any:
     """Recursively convert numpy arrays to lists for JSON serialization."""
     if isinstance(obj, np.ndarray):
         return obj.tolist()
+    if isinstance(obj, np.generic):
+        return obj.item()
     if isinstance(obj, dict):
         return {k: numpy_to_json_safe(v) for k, v in obj.items()}
     if isinstance(obj, list):
@@ -187,7 +189,7 @@ def decode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
                 )
                 decoded[key] = []
         else:
-            decoded[key] = value
+            decoded[key] = numpy_to_json_safe(value)
     return decoded
 
 

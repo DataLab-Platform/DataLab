@@ -15,6 +15,7 @@ import os
 import os.path as osp
 import re
 import warnings
+from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Generator, Generic, Literal, Type
 
 import guidata.dataset as gds
@@ -88,13 +89,17 @@ from datalab.gui.processor.base import (
     clear_analysis_parameters,
     extract_analysis_parameters,
     extract_processing_parameters,
+    insert_processing_parameters,
 )
 from datalab.gui.roieditor import TypeROIEditor
 from datalab.objectmodel import (
     ObjectGroup,
     get_number,
     get_short_id,
+    get_short_uuid,
+    get_title_reference,
     get_uuid,
+    remap_title_references,
     set_number,
     set_uuid,
 )
@@ -1318,6 +1323,72 @@ class ObjectProp(QW.QWidget):
         apply_processing_result(obj, new_obj, proc_params)
 
 
+@dataclass
+class H5ImportBatch:
+    """Objects and UUID remapping created by one native HDF5 import."""
+
+    panel: BaseDataPanel
+    reference_remap: dict[str, str]
+    objects: list[TypeObj]
+    groups: list[ObjectGroup]
+
+    def apply_reference_remap(
+        self, reference_remap: dict[str, str], title_remap: dict[str, str]
+    ) -> None:
+        """Remap title and processing references in this imported batch.
+
+        Args:
+            reference_remap: serialized UUID to imported UUID mapping
+            title_remap: serialized title reference to imported title reference
+        """
+        for group in self.groups:
+            group.title = remap_title_references(group.title, title_remap)
+        for obj in self.objects:
+            obj.title = remap_title_references(obj.title, title_remap)
+            for extract_parameters in (
+                extract_processing_parameters,
+                extract_analysis_parameters,
+            ):
+                parameters = extract_parameters(obj)
+                if parameters is None:
+                    continue
+                changed = False
+                if parameters.source_uuid in reference_remap:
+                    parameters.source_uuid = reference_remap[parameters.source_uuid]
+                    changed = True
+                if parameters.source_uuids is not None:
+                    source_uuids = [
+                        reference_remap.get(uuid, uuid)
+                        for uuid in parameters.source_uuids
+                    ]
+                    if source_uuids != parameters.source_uuids:
+                        parameters.source_uuids = source_uuids
+                        changed = True
+                if changed:
+                    insert_processing_parameters(obj, parameters)
+
+    @classmethod
+    def finalize_imports(
+        cls, batches: list[H5ImportBatch], refresh_panels: bool = False
+    ) -> None:
+        """Apply the combined signal/image UUID remapping to imported batches."""
+        reference_remap: dict[str, str] = {}
+        for batch in batches:
+            reference_remap.update(batch.reference_remap)
+        group_uuids = {get_uuid(group) for batch in batches for group in batch.groups}
+        title_remap: dict[str, str] = {}
+        for old_uuid, new_uuid in reference_remap.items():
+            if old_uuid != new_uuid:
+                prefix = "g" if new_uuid in group_uuids else ""
+                old_reference = prefix + get_short_uuid(old_uuid)
+                title_remap[old_reference] = prefix + get_short_uuid(new_uuid)
+        for batch in batches:
+            batch.apply_reference_remap(reference_remap, title_remap)
+        if refresh_panels:
+            for batch in batches:
+                batch.panel.refresh_after_reference_remap()
+
+
 class AbstractPanelMeta(type(QW.QSplitter), abc.ABCMeta):
     """Mixed metaclass to avoid conflicts"""
 
@@ -1350,7 +1421,8 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     def get_serializable_name(self, obj: ObjItf) -> str:
         """Return serializable name of object"""
         title = re.sub("[^-a-zA-Z0-9_.() ]+", "", obj.title.replace("/", "_"))
-        name = f"{get_short_id(obj)}: {title}"
+        identifier = get_short_id(obj)
+        name = f"{identifier}: {title}"
         return name
 
     def serialize_object_to_hdf5(self, obj: ObjItf, writer: NativeH5Writer) -> None:
@@ -1373,14 +1445,9 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
         with reader.group(name):
             obj = self.create_object()
             obj.deserialize(reader)
-            # Only regenerate UUIDs when importing objects (reset_all=False).
-            # When reopening a workspace (reset_all=True), preserve original UUIDs
-            # so that processing parameter references (source_uuid, source_uuids)
-            # remain valid and features like "Show source" and "Recompute" work.
-            # When importing, only regenerate UUID if it conflicts with an existing one.
-            if not reset_all and isinstance(obj, (SignalObj, ImageObj, ObjectGroup)):
-                if self.objmodel.has_uuid(get_uuid(obj)):
-                    set_uuid(obj)
+            # UUID collision handling is deferred until the complete imported batch
+            # can record old-to-new references for titles and processing metadata.
+            del reset_all
         return obj
 
     @abc.abstractmethod
@@ -1390,7 +1457,7 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     @abc.abstractmethod
     def deserialize_from_hdf5(
         self, reader: NativeH5Reader, reset_all: bool = False
-    ) -> None:
+    ) -> H5ImportBatch | None:
         """Deserialize whole panel from a HDF5 file
 
         Args:
@@ -1464,11 +1531,15 @@ class SaveToDirectoryGUIParam(gds.DataSet, title=_("Save to directory")):
     """Save to directory parameters"""
 
     def __init__(
-        self, objs: list[TypeObj] | None = None, extensions: list[str] | None = None
+        self,
+        objs: list[TypeObj] | None = None,
+        extensions: list[str] | None = None,
+        labels: list[str] | None = None,
     ) -> None:
         super().__init__()
         self.__objs = objs or []
         self.__extensions = extensions or []
+        self.__labels = labels or [obj.title for obj in self.__objs]
 
     def on_button_click(
         self: SaveToDirectoryGUIParam,
@@ -1556,15 +1627,10 @@ class SaveToDirectoryGUIParam(gds.DataSet, title=_("Save to directory")):
         """Update preview."""
         try:
             filenames = self.build_filenames()
-            preview_lines = []
-            for i, (obj, filename) in enumerate(zip(self.__objs, filenames), start=1):
-                # Try to get short ID if object has been added to panel
-                try:
-                    obj_id = get_short_id(obj)
-                except (ValueError, KeyError):
-                    # Fallback to simple index for objects not yet in panel
-                    obj_id = str(i)
-                preview_lines.append(f"{obj_id}: {filename}")
+            preview_lines = [
+                f"{label}: {filename}"
+                for label, filename in zip(self.__labels, filenames)
+            ]
             self.preview = "\n".join(preview_lines)
         except (ValueError, KeyError, TypeError) as exc:
             # Handle formatting errors gracefully (e.g., incomplete format string)
@@ -1799,17 +1865,12 @@ class AddMetadataParam(
         try:
             values = self.build_values()
             preview_lines = []
-            for i, (obj, value) in enumerate(zip(self.__objs, values), start=1):
-                # Try to get short ID if object has been added to panel
-                try:
-                    obj_id = get_short_id(obj)
-                except (ValueError, KeyError):
-                    # Fallback to simple index for objects not yet in panel
-                    obj_id = str(i)
+            for obj, value in zip(self.__objs, values):
+                label = obj.title
                 if value is None:
-                    preview_lines.append(f"{obj_id}: " + _("unchanged"))
+                    preview_lines.append(f"{label}: " + _("unchanged"))
                 else:
-                    preview_lines.append(f"{obj_id}: {self.metadata_key} = {value!r}")
+                    preview_lines.append(f"{label}: {self.metadata_key} = {value!r}")
             self.preview = "\n".join(preview_lines)
         except ValueError as exc:
             # Handle conversion errors
@@ -1984,12 +2045,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 with writer.group(self.get_serializable_name(group)):
                     with writer.group("title"):
                         writer.write_str(group.title)
+                    with writer.group("uuid"):
+                        writer.write_str(get_uuid(group))
                     for obj in group.get_objects():
                         self.serialize_object_to_hdf5(obj, writer)
 
     def deserialize_from_hdf5(
         self, reader: NativeH5Reader, reset_all: bool = False
-    ) -> None:
+    ) -> H5ImportBatch:
         """Deserialize whole panel from a HDF5 file
 
         Args:
@@ -1998,18 +2061,45 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
              If False, regenerate only UUIDs that conflict with existing
              objects (object import).
         """
+        batch = H5ImportBatch(self, {}, [], [])
         with reader.group(self.H5_PREFIX):
             for name in reader.h5.get(self.H5_PREFIX, []):
                 with reader.group(name):
-                    group = self.add_group("")
                     with reader.group("title"):
-                        group.title = reader.read_str()
+                        group_title = reader.read_str()
+                    serialized_group_uuid = reader.read("uuid", default=None)
+                    if not isinstance(serialized_group_uuid, str):
+                        serialized_group_uuid = None
+                    group_uuid = None
+                    if serialized_group_uuid and (
+                        reset_all or not self.objmodel.has_uuid(serialized_group_uuid)
+                    ):
+                        group_uuid = serialized_group_uuid
+                    group = self.add_group(group_title, group_uuid=group_uuid)
+                    if serialized_group_uuid:
+                        batch.reference_remap[serialized_group_uuid] = get_uuid(group)
+                    batch.groups.append(group)
                     for obj_name in reader.h5.get(f"{self.H5_PREFIX}/{name}", []):
                         obj = self.deserialize_object_from_hdf5(
                             reader, obj_name, reset_all
                         )
+                        serialized_obj_uuid = obj.metadata.get("__uuid")
+                        if (
+                            not isinstance(serialized_obj_uuid, str)
+                            or not serialized_obj_uuid
+                        ):
+                            serialized_obj_uuid = None
+                        if serialized_obj_uuid is None or (
+                            not reset_all
+                            and self.objmodel.has_uuid(serialized_obj_uuid)
+                        ):
+                            set_uuid(obj)
+                        if serialized_obj_uuid is not None:
+                            batch.reference_remap[serialized_obj_uuid] = get_uuid(obj)
                         self.add_object(obj, get_uuid(group), set_current=False)
+                        batch.objects.append(obj)
                     self.selection_changed()
+        return batch
 
     def __len__(self) -> int:
         """Return number of objects"""
@@ -2106,7 +2196,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Copy all public DataSet item values from obj to existing.
         # Skip computed (read-only) items such as ImageObj.xmin/xmax/ymin/ymax,
         # which would raise ValueError on assignment (see Issue #305).
-        for item in existing._items:  # pylint: disable=protected-access
+        for item in existing.get_items():
             name = item.get_name()
             if name.startswith("_"):
                 continue
@@ -2217,17 +2307,23 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         menu.popup(position)
 
     # ------Creating, adding, removing objects------------------------------------------
-    def add_group(self, title: str, select: bool = False) -> objectmodel.ObjectGroup:
+    def add_group(
+        self,
+        title: str,
+        select: bool = False,
+        group_uuid: str | None = None,
+    ) -> objectmodel.ObjectGroup:
         """Add group
 
         Args:
             title: group title
             select: if True, select the group in the tree view. Defaults to False.
+            group_uuid: optional group UUID. If None, a new UUID is generated.
 
         Returns:
             Created group object
         """
-        group = self.objmodel.add_group(title)
+        group = self.objmodel.add_group(title, group_uuid)
         self.objview.add_group_item(group)
         if select:
             self.objview.select_groups([group])
@@ -2277,7 +2373,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.metadata_clipboard = obj.metadata.copy()
 
         # Rename geometry results to avoid conflicts when pasting to same object type
-        new_pref = get_short_id(obj) + "_"
+        new_pref = get_short_uuid(obj) + "_"
         self._rename_results_in_clipboard(new_pref)
 
         # Update action states (e.g., "Paste metadata" should now be enabled)
@@ -2698,6 +2794,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     return
             group.title = new_name
             self.objview.update_item(get_uuid(group))
+        self.SIG_OBJECT_MODIFIED.emit()
 
     @abc.abstractmethod
     def get_newparam_from_current(
@@ -3010,7 +3107,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             extensions = get_file_extensions(self.IO_REGISTRY.get_write_filters())
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=gds.DataItemValidationWarning)
-                guiparam = SaveToDirectoryGUIParam(objs, extensions)
+                labels = []
+                for obj in objs:
+                    group = self.objmodel.get_group_from_object(obj)
+                    labels.append(f"[{group.title}] {obj.title}")
+                guiparam = SaveToDirectoryGUIParam(objs, extensions, labels)
                 # Restore settings from config
                 saved_param = Conf.save_to_directory_settings.get(
                     SaveToDirectoryParam()
@@ -3237,6 +3338,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 write_roi(filename, obj.roi)
 
     # ------Refreshing GUI--------------------------------------------------------------
+    def refresh_after_reference_remap(self) -> None:
+        """Refresh cached presentation after imported references are remapped."""
+        self.objview.update_tree()
+        self.selection_changed(update_items=True)
+
     def selection_changed(self, update_items: bool = False) -> None:
         """Object selection changed: update object properties, refresh plot and update
         object view.
@@ -3571,6 +3677,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 item = create_adapter_from_object(obj).make_item(
                     update_from=existing_item
                 )
+                item.param.label = self.mainwindow.render_object_title(obj.title)
+                item.param.update_item(item)
                 item.set_readonly(True)
                 plot.add_item(item, z=0)
         plot.set_active_item(item)
@@ -3597,7 +3705,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         # Create a new dialog and add plot items to it
         dlg = self.create_new_dialog(
-            title=obj.title if len(oids) == 1 else None,
+            title=(
+                self.mainwindow.render_object_title(obj.title)
+                if len(oids) == 1
+                else None
+            ),
             edit=True,
             name=f"{obj.PREFIX}_new_window",
         )
@@ -3702,11 +3814,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             col = idx % num_cols
 
             # Create plot with title
-            plot = BasePlot(options=BasePlotOptions(title=obj.title, type="image"))
+            rendered_title = self.mainwindow.render_object_title(obj.title)
+            plot = BasePlot(options=BasePlotOptions(title=rendered_title, type="image"))
 
             # Create plot item from object
             adapter = create_adapter_from_object(obj)
             item = adapter.make_item()
+            item.param.label = rendered_title
+            item.param.update_item(item)
             item.set_readonly(True)
             plot.add_item(item, z=0)
 
@@ -4032,17 +4147,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     )
                 return
             obj = objs[0]
-            # Build a string with source object short IDs (max 3, then use "...")
+            # Build a string with source object references (max 3, then use "...")
             max_ids_to_show = 3
-            short_ids = [get_short_id(obj) for obj in objs]
-            if len(short_ids) <= max_ids_to_show:
-                source_ids = ", ".join(short_ids)
+            source_refs = [get_title_reference(obj) for obj in objs]
+            if len(source_refs) <= max_ids_to_show:
+                source_ids = ", ".join(source_refs)
             else:
-                # Show first 2, "...", then last one: "s001, s002, ..., s010"
+                # Show first 2, "...", then the last reference.
                 source_ids = (
-                    ", ".join(short_ids[: max_ids_to_show - 1])
+                    ", ".join(source_refs[: max_ids_to_show - 1])
                     + ", ..., "
-                    + short_ids[-1]
+                    + source_refs[-1]
                 )
             for i_roi in all_roi_indexes[0]:
                 roi_suffix = f"|ROI{int(i_roi + 1)}" if i_roi >= 0 else ""
@@ -4081,8 +4196,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         else:
                             x = roi_data[param.xaxis].values
                         y = roi_data[param.yaxis].values
-                        shid = get_short_id(objs[index])
-                        stitle = f"{title} ({shid}){roi_suffix}"
+                        source_ref = get_title_reference(objs[index])
+                        stitle = f"{title} ({source_ref}){roi_suffix}"
                         self.__add_result_signal(
                             x, y, stitle, param.xaxis, param.yaxis, result_group_id
                         )

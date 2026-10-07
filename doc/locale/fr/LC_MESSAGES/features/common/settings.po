@@ -142,6 +142,21 @@ msgstr "Nouveau groupe 1 : A-E, B-F"
 msgid "New group 2: C-E, D-F"
 msgstr "Nouveau groupe 2 : C-E, D-F"
 
+msgid "**References in result titles**"
+msgstr "**Références dans les titres de résultats**"
+
+msgid "Choose how source objects are represented in titles generated for computation results:"
+msgstr "Choisir comment les objets sources sont représentés dans les titres générés pour les résultats des calculs :"
+
+msgid "**Source UUID** (default): use stable 8-character references derived from each source object's UUID."
+msgstr "**UUID source** (par défaut) : utiliser des références stables de 8 caractères dérivées de l'UUID de chaque objet source."
+
+msgid "**Source title**: use the source objects' live current titles, so references follow later renames."
+msgstr "**Titre de la source** : utiliser les titres actuels des objets sources, afin que les références suivent les renommages ultérieurs."
+
+msgid "This setting changes only the displayed reference. Result titles store 8-character references (``g``-prefixed for groups), while each object's identity remains its full UUID. Signal, image and group items in the trees show their own ``#UUID8`` (or ``#gUUID8``) reference below their title."
+msgstr "Ce réglage modifie uniquement la référence affichée. Les titres de résultats stockent des références de 8 caractères (préfixées par ``g`` pour les groupes), tandis que l'identité de chaque objet reste son UUID complet. Les signaux, images et groupes des arborescences affichent leur propre référence ``#UUID8`` (ou ``#gUUID8``) sous leur titre."
+
 msgid "**Use signal bounds for new signals**"
 msgstr "**Utiliser les bornes du signal pour les nouveaux signaux**"
 
@@ -603,4 +618,3 @@ msgstr "**Arguments de l'éditeur externe**"
 
 msgid "Command-line arguments to pass to the external editor."
 msgstr "Arguments de ligne de commande à passer à l'éditeur externe."
-

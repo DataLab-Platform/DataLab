@@ -21,7 +21,7 @@ from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import _
 from datalab.gui.processor.catcher import CompOut
 from datalab.gui.processor.preview import PreviewController
-from datalab.objectmodel import get_short_id, patch_title_with_ids
+from datalab.objectmodel import get_title_reference, patch_title_with_ids
 
 __all__ = [
     "ProcessingPreviewDialog",
@@ -113,7 +113,7 @@ class ProcessingPreviewWidget(QW.QWidget):
         self.source_combo.setMinimumContentsLength(16)
         self.source_combo.setToolTip(_("Preview source"))
         for source in sources:
-            self.source_combo.addItem(f"{get_short_id(source)}: {source.title}")
+            self.source_combo.addItem(f"{get_title_reference(source)}: {source.title}")
         self.source_combo.setVisible(len(sources) > 1)
         self.source_combo.setEnabled(False)
         controls.addWidget(self.source_combo, 1)
@@ -286,7 +286,7 @@ class ProcessingPreviewWidget(QW.QWidget):
         original_title = result.title
         try:
             patch_title_with_ids(
-                result, [self.sources[self.source_combo.currentIndex()]], get_short_id
+                result, [self.sources[self.source_combo.currentIndex()]]
             )
             self._render(result)
         except Exception as error:

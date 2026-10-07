@@ -289,6 +289,8 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         obj = self.panel.objmodel[oid]
         self.__cached_hashes[obj] = calc_data_hash(obj)
         item: TypePlotItem = create_adapter_from_object(obj).make_item()
+        item.param.label = self.panel.mainwindow.render_object_title(obj.title)
+        item.param.update_item(item)
         item.set_readonly(True)
         self[oid] = item
         self.plot.add_item(item)
@@ -310,6 +312,9 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
             self.__cached_hashes[obj] = new_hash
             adapter = create_adapter_from_object(obj)
             adapter.update_item(self[oid], data_changed=data_changed)
+            item = self[oid]
+            item.param.label = self.panel.mainwindow.render_object_title(obj.title)
+            item.param.update_item(item)
 
     def set_auto_refresh(self, auto_refresh: bool) -> None:
         """Set auto refresh mode.
@@ -447,6 +452,8 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
                     # Collecting titles information
                     for key in title_keys:
                         title = getattr(obj, key, "")
+                        if key == "title":
+                            title = self.panel.mainwindow.render_object_title(title)
                         value = titles_dict.get(key)
                         if value is None:
                             titles_dict[key] = title

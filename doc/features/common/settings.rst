@@ -112,6 +112,20 @@ The Processing settings tab controls computation behavior and default parameters
           - New group 1: A-E, B-F
           - New group 2: C-E, D-F
 
+**References in result titles**
+    Choose how source objects are represented in titles generated for computation
+    results:
+
+    - **Source UUID** (default): use stable 8-character references derived from each
+      source object's UUID.
+    - **Source title**: use the source objects' live current titles, so references
+      follow later renames.
+
+    This setting changes only the displayed reference. Result titles store
+    8-character references (``g``-prefixed for groups), while each object's identity
+    remains its full UUID. Signal, image and group items in the trees show their own
+    ``#UUID8`` (or ``#gUUID8``) reference below their title.
+
 **Use signal bounds for new signals**
     When enabled, the xmin and xmax values for new signals are initialized from
     the current signal's bounds. When disabled, default values are used.
