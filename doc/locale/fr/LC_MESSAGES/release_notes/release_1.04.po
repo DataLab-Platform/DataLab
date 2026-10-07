@@ -66,6 +66,9 @@ msgstr "Chaque application affiche sa description, son identité, sa version, se
 msgid "Each method shows the inputs it expects (object type and count, required metadata) and a live status telling whether the current selection can be analyzed, and why not"
 msgstr "Chaque méthode présente les entrées qu'elle attend (type et nombre d'objets, métadonnées requises) et un statut mis à jour indiquant si la sélection courante peut être analysée, et sinon pourquoi"
 
+msgid "When required metadata are missing, the status points to **Edit > Metadata > Add metadata...**, whose **Known keys** list also offers the keys expected by application methods; the status is updated as soon as objects are modified"
+msgstr "Lorsque des métadonnées requises manquent, le statut renvoie vers **Édition > Métadonnées > Ajouter des métadonnées...**, dont la liste **Clés connues** propose aussi les clés attendues par les méthodes des applications ; le statut est mis à jour dès que des objets sont modifiés"
+
 msgid "**Run on selection...** starts a method directly when the selection is ready, and asks for the input assignment only when it is ambiguous or invalid; the assignment dialog checks the chosen objects before the run can continue"
 msgstr "**Exécuter sur la sélection...** lance directement une méthode lorsque la sélection convient, et ne demande l'affectation des entrées que si elle est ambiguë ou invalide ; la boîte de dialogue d'affectation vérifie les objets choisis avant de permettre l'exécution"
 

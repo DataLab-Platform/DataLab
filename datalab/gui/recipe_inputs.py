@@ -144,6 +144,11 @@ def format_readiness(
         RecipeReadinessStatus.NO_INPUT: _("Select the input data in the workspace"),
     }
     reasons = [format_input_issue(issue, descriptor) for issue in readiness.issues]
+    if any(
+        issue.code is RecipeInputIssueCode.MISSING_METADATA
+        for issue in readiness.issues
+    ):
+        reasons.append(_("To set it, use Edit > Metadata > Add metadata..."))
     if readiness.status is not RecipeReadinessStatus.NO_INPUT:
         reasons.extend(
             format_diagnostic(diagnostic) for diagnostic in readiness.diagnostics

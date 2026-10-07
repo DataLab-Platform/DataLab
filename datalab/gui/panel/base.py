@@ -74,6 +74,7 @@ from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import APP_NAME, Conf, _
 from datalab.env import execenv
 from datalab.gui import actionhandler, objectview
+from datalab.gui.applications import get_declared_metadata_keys
 from datalab.gui.newobject import (
     CREATION_PARAMETERS_OPTION,
     LEGACY_CREATION_PARAMETERS_OPTION,
@@ -2493,9 +2494,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             objs: selected objects
 
         Returns:
-            ``(key, description)`` pairs
+            ``(key, description)`` pairs: the keys found on the objects, then the
+             keys expected by the methods of application plugins
         """
-        return collect_metadata_keys(objs)
+        keys = collect_metadata_keys(objs)
+        found = {key for key, _description in keys}
+        keys.extend(
+            (key, description)
+            for key, description in get_declared_metadata_keys(self.PANEL_STR_ID)
+            if key not in found
+        )
+        return keys
 
     def add_metadata(self, param: AddMetadataParam | None = None) -> None:
         """Add metadata item to selected object(s)

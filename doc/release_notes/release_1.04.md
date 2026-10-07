@@ -26,6 +26,7 @@
 * Added a top-level **Applications** entry that presents active scientific application plugins in a dedicated catalog
 * Each application displays its description, identity, version, methods, tools, and examples; processing-only plugins remain outside this focused view
 * Each method shows the inputs it expects (object type and count, required metadata) and a live status telling whether the current selection can be analyzed, and why not
+* When required metadata are missing, the status points to **Edit > Metadata > Add metadata...**, whose **Known keys** list also offers the keys expected by application methods; the status is updated as soon as objects are modified
 * **Run on selection...** starts a method directly when the selection is ready, and asks for the input assignment only when it is ambiguous or invalid; the assignment dialog checks the chosen objects before the run can continue
 * Examples are listed under the methods they are designed for: **Try with this example** opens the example, prefills the method parameters, and runs the method once they are accepted. One example may serve several methods, and examples designed for no method are listed as datasets
 * Application plugins may also list tools, such as wizards or editors, in the catalog
