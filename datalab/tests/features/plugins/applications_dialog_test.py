@@ -160,6 +160,14 @@ def test_applications_dialog_filters_and_renders_declared_contracts() -> None:
         page = dialog.application_pages[0]
         assert list(page.recipe_cards) == [RECIPE.recipe_id]
         card = page.recipe_cards[RECIPE.recipe_id]
+        # Methods, tools and datasets are the items of a single accordion
+        toolbox = page.toolbox
+        assert [toolbox.itemText(index) for index in range(toolbox.count())] == [
+            RECIPE.title,
+            "Tools (1)",
+            "Datasets (1)",
+        ]
+        assert toolbox.currentWidget() is card
         inputs_text = card.inputs_label.text()
         for text in (
             "Flat frames",
@@ -306,6 +314,16 @@ def test_application_page_shows_readiness_of_each_method() -> None:
         text = card.readiness_label.text()
         assert "cannot be analyzed" in text
         assert "Flat frames: metadata &#x27;exposure_s&#x27; missing on 2" in text
+        # The method item shows the readiness without being opened
+        toolbox = dialog.application_pages[0].toolbox
+        assert "cannot be analyzed" in toolbox.itemToolTip(0)
+        center = toolbox.itemIcon(0).pixmap(32, 32).toImage().pixelColor(16, 16)
+        assert (
+            center.name()
+            == applications_module.RecipeCard.READINESS_COLORS[
+                RecipeReadinessStatus.NOT_READY
+            ]
+        )
 
         def failing_assessment(_recipe_id: str) -> RecipeReadiness:
             raise RuntimeError("suggestion exploded")
@@ -329,6 +347,62 @@ def test_application_page_shows_readiness_of_each_method() -> None:
             dialog.close()
             dialog.deleteLater()
             QW.QApplication.processEvents()
+
+
+def test_applications_dialog_collapses_the_application_list() -> None:
+    """Hiding the list shrinks the window, keeps the page width and persists"""
+    qt_app = QW.QApplication.instance() or QW.QApplication([])
+    camera = _plugin(
+        "org.example.camera",
+        "Camera Characterization",
+        frozenset({PluginCapability.APPLICATION}),
+    )
+    registry = PluginRegistry.get_plugins()
+    previous_plugins = list(registry)
+    registry[:] = [camera]
+    previous_collapsed = Conf.applications_list_collapsed.get()
+    dialogs: list[ApplicationsDialog] = []
+    try:
+        Conf.applications_list_collapsed.set(False)
+        dialog = ApplicationsDialog()
+        dialogs.append(dialog)
+        dialog.resize(1000, 650)
+        dialog.show()
+        QW.QApplication.processEvents()
+        width = dialog.width()
+        list_width = dialog.catalog_widget.width()
+        page_width = dialog.application_stack.width()
+        toggle = dialog.list_toggle_button
+        assert toggle.toolTip() == "Hide the application list"
+
+        toggle.click()
+        QW.QApplication.processEvents()
+        assert not dialog.is_application_list_visible()
+        assert Conf.applications_list_collapsed.get()
+        assert toggle.toolTip() == "Show the application list"
+        assert dialog.width() < width - list_width
+        assert dialog.application_stack.width() == page_width
+
+        toggle.click()
+        QW.QApplication.processEvents()
+        assert dialog.is_application_list_visible()
+        assert not Conf.applications_list_collapsed.get()
+        assert dialog.width() == width
+        assert dialog.catalog_widget.width() == list_width
+        assert dialog.application_stack.width() == page_width
+
+        # The choice is restored by the next window
+        dialog.set_application_list_visible(False)
+        dialogs.append(ApplicationsDialog())
+        assert not dialogs[-1].is_application_list_visible()
+        assert qt_app is not None
+    finally:
+        registry[:] = previous_plugins
+        Conf.applications_list_collapsed.set(previous_collapsed)
+        for dialog in dialogs:
+            dialog.close()
+            dialog.deleteLater()
+        QW.QApplication.processEvents()
 
 
 def test_welcome_application_preferences() -> None:

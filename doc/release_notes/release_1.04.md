@@ -31,6 +31,8 @@
 * Application plugins may also list tools, such as wizards or editors, in the catalog
 * Plugin developers describe recipe inputs declaratively (titles, minimum counts, metadata requirements) and may add binding suggestions and fast input checks; every recipe then runs through DataLab's generic launcher, without plugin-specific input dialogs
 * The catalog is non-modal and remains open after starting a method or opening an example, so users may continue interacting with the DataLab workspace
+* The methods, tools and datasets of an application form an accordion: one section is open at a time, and a colored dot tells, without opening it, whether each method can run on the current selection
+* The application list of the catalog may be hidden with the strip separating it from the application page: the window shrinks accordingly, and the choice is remembered
 * Completed application methods select their last generated object, consistently with standard DataLab processing
 * Application plugins add tiles to a new **Applications** section of the welcome page: by default, one tile per plugin opens its page in the catalog, and plugins may declare additional tiles, for example to open an example directly. Additional tiles are shown when there is room for them, and otherwise move to the menu of the main tile
 * The welcome page stays tidy when many applications are installed: tiles are limited to a configurable number of rows (two by default), with a last tile opening the catalog for the others. Applications may be pinned to the top or hidden, and recently used ones come first; the catalog offers a search field and the same welcome page options
