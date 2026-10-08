@@ -120,6 +120,9 @@ msgstr "Avant l'installation, DataLab vérifie le fichier sans l'exécuter et af
 msgid "Installed plugins are listed in the same tab, where they can be uninstalled; a newly installed plugin is enabled and loaded after a plugin reload, and a new version of an already loaded plugin is used at the next start"
 msgstr "Les plugins installés sont listés dans le même onglet, où ils peuvent être désinstallés ; un plugin nouvellement installé est activé et chargé après un rechargement des plugins, et une nouvelle version d'un plugin déjà chargé est utilisée au prochain démarrage"
 
+msgid "The new **Available plugins** tab lists the plugins of the [DataLab plugin catalog](https://datalab-platform.com/plugins/), official or from the community, with a search field: **Install** and **Update** download the wheel, check it against the catalog and install it after confirmation. The catalog address may be changed to use a private copy"
+msgstr "Le nouvel onglet **Plugins disponibles** liste les plugins du [catalogue de plugins DataLab](https://datalab-platform.com/plugins/), officiels ou issus de la communauté, avec un champ de recherche : **Installer** et **Mettre à jour** téléchargent le wheel, le vérifient par rapport au catalogue et l'installent après confirmation. L'adresse du catalogue peut être modifiée pour utiliser une copie privée"
+
 msgid "**Plugin project generator:**"
 msgstr "**Générateur de projets de plugins :**"
 

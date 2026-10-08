@@ -148,8 +148,7 @@ Managing plugins in DataLab
 The **Plugins** menu provides two dedicated actions:
 
 - **Configure plugins...**
-  Opens the plugin configuration dialog, organized in three tabs:
-  **Enable/disable plugins**, **Plugin settings** and **Install plugins**.
+  Opens the plugin configuration dialog, organized in four tabs: **Enable/disable plugins**, **Plugin settings**, **Available plugins** and **Install plugins**.
 
 - **Reload plugins**
   Reloads plugin modules from disk without restarting DataLab.
@@ -189,6 +188,17 @@ This tab lists every directory scanned at startup, in two groups:
 
 The tab also holds a **Compatibility warnings** option to hide warnings for
 incompatible DataLab v0.20 plugins.
+
+.. _plugin_catalog:
+
+Available plugins
+~~~~~~~~~~~~~~~~~
+
+This tab lists the plugins of the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_, with their description, license and source code link. Plugins maintained by the DataLab team are marked **Official**; the others are **Community** plugins, maintained by their authors. A search field filters the list.
+
+**Install** downloads the newest release available for DataLab desktop, checks that its size and SHA-256 digest match the catalog, then installs it as described in :ref:`plugin_install_from_file`, after the same confirmation. When the catalog offers a newer version of a plugin installed this way, the button becomes **Update to...**. Plugins installed with ``pip`` in the Python environment are shown as such and are not modified.
+
+The catalog is downloaded only when the tab is shown or refreshed. Its address is the ``plugins_catalog_url`` option of the DataLab configuration file: it may point to a private copy of the catalog, including a ``file:`` URL for a folder shared on the network, or be emptied to disable the catalog.
 
 .. _plugin_install_from_file:
 

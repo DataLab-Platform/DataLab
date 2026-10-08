@@ -61,9 +61,15 @@ class PluginConsentDialog(QW.QDialog):
     Args:
         manifest: Wheel or module manifest returned by the installed plugin store
         parent: Parent widget
+        origin: Where the file comes from, when not chosen by the user
     """
 
-    def __init__(self, manifest: dict, parent: QW.QWidget | None = None) -> None:
+    def __init__(
+        self,
+        manifest: dict,
+        parent: QW.QWidget | None = None,
+        origin: str | None = None,
+    ) -> None:
         super().__init__(parent)
         win32_fix_title_bar_background(self)
         self.setWindowTitle(_("Install plugin"))
@@ -71,6 +77,8 @@ class PluginConsentDialog(QW.QDialog):
         self.setLayout(layout)
 
         form = QW.QFormLayout()
+        if origin:
+            form.addRow(_("Source:"), QW.QLabel(origin))
         if "distribution" in manifest:
             form.addRow(_("Plugin:"), QW.QLabel(manifest["distribution"]))
             form.addRow(_("Version:"), QW.QLabel(manifest["version"]))
@@ -249,9 +257,9 @@ class InstalledPluginsWidget(QW.QWidget):
         )
         return filename or None
 
-    def confirm_installation(self, manifest: dict) -> bool:
+    def confirm_installation(self, manifest: dict, origin: str | None = None) -> bool:
         """Return True if the user agrees to install the inspected file."""
-        return bool(PluginConsentDialog(manifest, self).exec())
+        return bool(PluginConsentDialog(manifest, self, origin).exec())
 
     def install_from_file(self) -> InstallResult | None:
         """Install a plugin file chosen by the user.
@@ -262,13 +270,27 @@ class InstalledPluginsWidget(QW.QWidget):
         path = self.select_file()
         if not path:
             return None
+        return self.install_path(path)
+
+    def install_path(
+        self, path: str, origin: str | None = None
+    ) -> InstallResult | None:
+        """Install a plugin file after the user's consent.
+
+        Args:
+            path: Wheel or module file path
+            origin: Where the file comes from, shown in the consent dialog
+
+        Returns:
+            Installation result, or None if refused
+        """
         is_wheel = path.lower().endswith(".whl")
         try:
             if is_wheel:
                 manifest = self.store.inspect_wheel_file(path)
             else:
                 manifest = self.store.inspect_module_file(path)
-            if not self.confirm_installation(manifest):
+            if not self.confirm_installation(manifest, origin=origin):
                 return None
             install = (
                 self.store.install_wheel if is_wheel else self.store.install_module
