@@ -177,10 +177,10 @@ def test_entry_point_discovers_plugin_class_once_with_source(
             return self
 
     monkeypatch.setattr(
-        "datalab.plugins.importlib_metadata.entry_points",
+        "datalab.plugins.base.importlib_metadata.entry_points",
         lambda: EntryPoints([EntryPoint()]),
     )
-    monkeypatch.setattr("datalab.plugins.pkgutil.iter_modules", lambda: [])
+    monkeypatch.setattr("datalab.plugins.base.pkgutil.iter_modules", lambda: [])
     monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
 
     discovered = discover_plugins()
@@ -226,12 +226,12 @@ def test_real_distribution_entry_point_is_discovered(
         encoding="utf-8",
     )
     monkeypatch.syspath_prepend(str(tmp_path))
-    monkeypatch.setattr("datalab.plugins.pkgutil.iter_modules", lambda: [])
+    monkeypatch.setattr("datalab.plugins.base.pkgutil.iter_modules", lambda: [])
     monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
     distribution = next(importlib_metadata.distributions(path=[str(tmp_path)]))
     entry_points = list(distribution.entry_points)
     monkeypatch.setattr(
-        "datalab.plugins._get_plugin_entry_points", lambda: entry_points
+        "datalab.plugins.base._get_plugin_entry_points", lambda: entry_points
     )
     PluginRegistry.clear_plugin_classes()
     sys.modules.pop(module_name, None)
@@ -275,10 +275,10 @@ def test_python39_entry_point_mapping_is_supported(
             return plugin_class
 
     monkeypatch.setattr(
-        "datalab.plugins.importlib_metadata.entry_points",
+        "datalab.plugins.base.importlib_metadata.entry_points",
         lambda: {"datalab.plugins": [EntryPoint()]},
     )
-    monkeypatch.setattr("datalab.plugins.pkgutil.iter_modules", lambda: [])
+    monkeypatch.setattr("datalab.plugins.base.pkgutil.iter_modules", lambda: [])
     monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
 
     discover_plugins()
@@ -334,14 +334,14 @@ def test_shared_entry_point_module_is_reloaded_once(
     previous_module = sys.modules.get(module_name)
     sys.modules[module_name] = module
     monkeypatch.setattr(
-        "datalab.plugins._get_plugin_entry_points",
+        "datalab.plugins.base._get_plugin_entry_points",
         lambda: [
             EntryPoint("first-plugin", "FirstPlugin"),
             EntryPoint("second-plugin", "SecondPlugin"),
         ],
     )
-    monkeypatch.setattr("datalab.plugins.importlib.reload", reload_module)
-    monkeypatch.setattr("datalab.plugins.pkgutil.iter_modules", lambda: [])
+    monkeypatch.setattr("datalab.plugins.base.importlib.reload", reload_module)
+    monkeypatch.setattr("datalab.plugins.base.pkgutil.iter_modules", lambda: [])
     monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
     try:
         discover_plugins()
@@ -382,12 +382,14 @@ def test_entry_point_metadata_failure_preserves_convention_discovery(
         return module
 
     PluginRegistry.clear_plugin_classes()
-    monkeypatch.setattr("datalab.plugins.importlib_metadata.entry_points", entry_points)
     monkeypatch.setattr(
-        "datalab.plugins.pkgutil.iter_modules",
+        "datalab.plugins.base.importlib_metadata.entry_points", entry_points
+    )
+    monkeypatch.setattr(
+        "datalab.plugins.base.pkgutil.iter_modules",
         lambda: [(object(), module_name, False)],
     )
-    monkeypatch.setattr("datalab.plugins.importlib.import_module", import_module)
+    monkeypatch.setattr("datalab.plugins.base.importlib.import_module", import_module)
     monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
 
     assert discover_plugins() == [module]
@@ -424,9 +426,9 @@ def test_invalid_plugin_id_is_rejected_during_discovery(
             return plugin_class
 
     monkeypatch.setattr(
-        "datalab.plugins._get_plugin_entry_points", lambda: [EntryPoint()]
+        "datalab.plugins.base._get_plugin_entry_points", lambda: [EntryPoint()]
     )
-    monkeypatch.setattr("datalab.plugins.pkgutil.iter_modules", lambda: [])
+    monkeypatch.setattr("datalab.plugins.base.pkgutil.iter_modules", lambda: [])
     monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
 
     discover_plugins()
@@ -457,9 +459,9 @@ def test_broken_entry_point_does_not_abort_discovery(
             raise RuntimeError("broken entry point")
 
     monkeypatch.setattr(
-        "datalab.plugins._get_plugin_entry_points", lambda: [BrokenEntryPoint()]
+        "datalab.plugins.base._get_plugin_entry_points", lambda: [BrokenEntryPoint()]
     )
-    monkeypatch.setattr("datalab.plugins.pkgutil.iter_modules", lambda: [])
+    monkeypatch.setattr("datalab.plugins.base.pkgutil.iter_modules", lambda: [])
     monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
 
     assert not discover_plugins()
@@ -503,7 +505,7 @@ def test_entry_point_id_collision_rejects_all_contributions(
             return self.plugin_class
 
     monkeypatch.setattr(
-        "datalab.plugins._get_plugin_entry_points",
+        "datalab.plugins.base._get_plugin_entry_points",
         lambda: [
             EntryPoint(
                 "first-plugin",
@@ -517,7 +519,7 @@ def test_entry_point_id_collision_rejects_all_contributions(
             ),
         ],
     )
-    monkeypatch.setattr("datalab.plugins.pkgutil.iter_modules", lambda: [])
+    monkeypatch.setattr("datalab.plugins.base.pkgutil.iter_modules", lambda: [])
     monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
 
     discover_plugins()
@@ -574,13 +576,13 @@ def test_same_target_from_entry_point_and_convention_is_merged(
         return module
 
     monkeypatch.setattr(
-        "datalab.plugins._get_plugin_entry_points", lambda: [EntryPoint()]
+        "datalab.plugins.base._get_plugin_entry_points", lambda: [EntryPoint()]
     )
     monkeypatch.setattr(
-        "datalab.plugins.pkgutil.iter_modules",
+        "datalab.plugins.base.pkgutil.iter_modules",
         lambda: [(object(), module_name, False)],
     )
-    monkeypatch.setattr("datalab.plugins.importlib.import_module", import_module)
+    monkeypatch.setattr("datalab.plugins.base.importlib.import_module", import_module)
     monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
 
     discovered = discover_plugins()

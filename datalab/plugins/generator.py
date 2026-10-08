@@ -239,7 +239,7 @@ def _render_workflow_recipes() -> str:
 
 from __future__ import annotations
 
-from datalab.recipes import RecipeDescriptor
+from datalab.plugins.recipes import RecipeDescriptor
 
 RECIPES: tuple[RecipeDescriptor, ...] = ()
 

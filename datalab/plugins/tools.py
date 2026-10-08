@@ -13,8 +13,8 @@ from collections.abc import Sequence
 
 from sigima.objects import ImageObj, SignalObj
 
-from datalab.plugin_resources import LOCAL_ID_PATTERN, split_package_resource
-from datalab.recipes import RecipeObjectType
+from datalab.plugins.recipes import RecipeObjectType
+from datalab.plugins.resources import LOCAL_ID_PATTERN, split_package_resource
 
 __all__ = ["PluginTool", "ToolSelection", "tool_accepts_selection"]
 
@@ -39,7 +39,7 @@ class PluginTool:
 
     A tool is opened either by a ``launcher`` method, called without
     arguments, or by an ``instrument`` method returning a
-    :class:`datalab.plugin_instruments.PluginInstrument`, which DataLab shows
+    :class:`datalab.plugins.instruments.PluginInstrument`, which DataLab shows
     in a window with a live view and the instrument settings.
 
     Args:

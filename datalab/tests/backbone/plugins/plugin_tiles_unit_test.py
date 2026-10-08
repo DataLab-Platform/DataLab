@@ -14,14 +14,6 @@ import numpy as np
 import pytest
 from sigima.objects import create_image, create_signal
 
-from datalab.plugin_instruments import (
-    InstrumentAcquisition,
-    InstrumentFrame,
-    PluginInstrument,
-)
-from datalab.plugin_resources import resolve_package_resource
-from datalab.plugin_tiles import WelcomeTile
-from datalab.plugin_tools import PluginTool, ToolSelection, tool_accepts_selection
 from datalab.plugins import (
     PluginBase,
     PluginCapability,
@@ -29,6 +21,14 @@ from datalab.plugins import (
     PluginRegistry,
     format_tool_requirement,
 )
+from datalab.plugins.instruments import (
+    InstrumentAcquisition,
+    InstrumentFrame,
+    PluginInstrument,
+)
+from datalab.plugins.resources import resolve_package_resource
+from datalab.plugins.tiles import WelcomeTile
+from datalab.plugins.tools import PluginTool, ToolSelection, tool_accepts_selection
 
 PLUGIN_ICON = "datalab:data/icons/libre-gui-plugin.svg"
 

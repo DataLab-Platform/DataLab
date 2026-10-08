@@ -10,11 +10,11 @@ import pytest
 from qtpy import QtCore as QC
 from sigima.objects import create_image
 
-from datalab.gui.recipe_inputs import RecipeInputDialog
-from datalab.plugin_examples import PluginExample, PluginExampleData
+from datalab.gui.plugins.recipe_inputs import RecipeInputDialog
 from datalab.plugins import PluginBase, PluginCapability, PluginInfo, PluginRegistry
-from datalab.recipe_binding import RecipeReadinessStatus
-from datalab.recipes import (
+from datalab.plugins.examples import PluginExample, PluginExampleData
+from datalab.plugins.recipe_binding import RecipeReadinessStatus
+from datalab.plugins.recipes import (
     RecipeDescriptor,
     RecipeDiagnostic,
     RecipeInputSlot,

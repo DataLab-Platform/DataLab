@@ -13,9 +13,9 @@ import numpy as np
 import pytest
 from sigima.objects import create_signal
 
-from datalab.plugin_examples import PluginExample, PluginExampleData
 from datalab.plugins import PluginBase, PluginInfo, PluginRegistry
-from datalab.recipes import RecipeDescriptor, RecipeOutcome
+from datalab.plugins.examples import PluginExample, PluginExampleData
+from datalab.plugins.recipes import RecipeDescriptor, RecipeOutcome
 
 
 def test_plugin_example_resolves_resource_from_zip_package(

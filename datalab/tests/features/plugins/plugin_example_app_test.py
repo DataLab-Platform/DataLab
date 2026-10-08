@@ -6,8 +6,8 @@ from __future__ import annotations
 
 import pytest
 
-from datalab.plugin_examples import PluginExample
 from datalab.plugins import PluginBase, PluginInfo, PluginRegistry
+from datalab.plugins.examples import PluginExample
 from datalab.tests import datalab_test_app_context
 
 
@@ -109,8 +109,8 @@ def test_plugin_opens_generated_example_in_panels(
     import numpy as np
     from sigima.objects import create_signal
 
-    from datalab.plugin_examples import PluginExampleData
-    from datalab.recipes import RecipeDescriptor, RecipeOutcome
+    from datalab.plugins.examples import PluginExampleData
+    from datalab.plugins.recipes import RecipeDescriptor, RecipeOutcome
 
     recipe = RecipeDescriptor(
         recipe_id="org.example.generated-application:analysis",
@@ -205,7 +205,7 @@ def test_generated_example_rolls_back_cross_panel_failure(
     import numpy as np
     from sigima.objects import create_image, create_signal
 
-    from datalab.plugin_examples import PluginExampleData
+    from datalab.plugins.examples import PluginExampleData
 
     example = PluginExample(id="mixed", title="Mixed campaign")
 

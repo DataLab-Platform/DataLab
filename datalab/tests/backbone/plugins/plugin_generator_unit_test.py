@@ -12,10 +12,10 @@ from pathlib import Path
 
 import pytest
 
-from datalab.plugin_generator import main
 from datalab.plugins import PluginCapability, PluginRegistry
+from datalab.plugins.generator import main
 
-PROJECT_ROOT = Path(__file__).parents[3]
+PROJECT_ROOT = Path(__file__).parents[4]
 
 
 def _run_generated_project_checks(destination: Path) -> None:

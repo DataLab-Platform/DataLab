@@ -117,7 +117,7 @@ Plugins are automatically discovered at startup from multiple locations:
 - The standalone distribution directory:
   If using a frozen (standalone) build, the `plugins` folder located next to the executable is scanned.
 
-- The internal `datalab/plugins` folder (not recommended for user plugins):
+- The internal `datalab/plugins/builtin` folder (not recommended for user plugins):
   This location is reserved for built-in or bundled plugins and should not be modified manually.
 
 - Additional directories listed in the ``DATALAB_PLUGINS`` environment variable:
@@ -175,7 +175,7 @@ Plugin settings
 This tab lists every directory scanned at startup, in two groups:
 
 - **Default plugin directories** (read-only): the user plugin directory, the
-  bundled `datalab/plugins` folder, the standalone distribution folder when
+  bundled `datalab/plugins/builtin` folder, the standalone distribution folder when
   applicable, and the directories declared through the ``DATALAB_PLUGINS``
   environment variable (identified by a *(from DATALAB_PLUGINS)* suffix).
 
@@ -242,7 +242,7 @@ Headless recipes
 ----------------
 
 Plugins may expose versioned scientific workflows through the class-level
-``RECIPES`` tuple. Each :class:`datalab.recipes.RecipeDescriptor` declares a
+``RECIPES`` tuple. Each :class:`datalab.plugins.recipes.RecipeDescriptor` declares a
 stable ID namespaced by the plugin ID, typed input slots, an optional guidata
 ``DataSet`` parameter class, and a headless callable:
 
@@ -254,7 +254,7 @@ recipe declarations together with its implementation.
 .. code-block:: python
 
   from datalab.plugins import PluginBase, PluginInfo
-  from datalab.recipes import (
+  from datalab.plugins.recipes import (
     RecipeDescriptor,
     RecipeInputSlot,
     RecipeObjectOutput,
@@ -296,7 +296,7 @@ the installed implementation and the independently versioned workflow.
 
 The recipe callable receives a mapping from slot IDs to tuples of Sigima
 ``SignalObj`` or ``ImageObj`` instances, the parameter ``DataSet`` instance (or
-``None``), and a :class:`datalab.recipes.RecipeExecutionContext`. The context
+``None``), and a :class:`datalab.plugins.recipes.RecipeExecutionContext`. The context
 provides technology-neutral progress and cancellation callbacks and has no Qt
 dependency.
 
@@ -305,9 +305,9 @@ callable receives ``None``. Otherwise, consumers must provide an instance of the
 declared ``DataSet`` subclass. The recipe runner enforces this rule before
 execution.
 
-A :class:`datalab.recipes.RecipeOutcome` contains named object outputs,
+A :class:`datalab.plugins.recipes.RecipeOutcome` contains named object outputs,
 structured diagnostics, and optional scalar results. A ``TableResult`` or
-``GeometryResult`` is wrapped in :class:`datalab.recipes.RecipeResultOutput` and
+``GeometryResult`` is wrapped in :class:`datalab.plugins.recipes.RecipeResultOutput` and
 uses ``anchor_id`` to reference the named object output that will own it. The
 contract validates these references without assigning DataLab workspace UUIDs.
 Workspace mutation and atomic commit are responsibilities of the recipe runner,
@@ -320,7 +320,7 @@ DataLab shows users what each recipe expects and whether the current selection s
 
 .. code-block:: python
 
-  from datalab.recipes import RecipeInputSlot, RecipeMetadataRequirement
+  from datalab.plugins.recipes import RecipeInputSlot, RecipeMetadataRequirement
 
   FLAT_FRAMES = RecipeInputSlot(
     "flat_frames",
@@ -341,12 +341,12 @@ DataLab shows users what each recipe expects and whether the current selection s
 
 ``min_count`` is the minimum number of objects bound to a ``many`` slot. Required metadata keys must be present on every bound object; optional keys are hints shown to the user. The recipe runner enforces both rules before the recipe callable is called.
 
-Two optional hooks of :class:`datalab.recipes.RecipeDescriptor` refine these declarations:
+Two optional hooks of :class:`datalab.plugins.recipes.RecipeDescriptor` refine these declarations:
 
 - ``suggest_bindings(candidates)`` returns a mapping from slot IDs to some of the candidate objects, for example to split frames by role from their metadata. Without it, compatible candidates go to the only slot accepting their type, and slots sharing a type are left for the user to assign.
-- ``check_inputs(inputs, parameters)`` returns a list of :class:`datalab.recipes.RecipeDiagnostic` values for fast, recipe-specific checks such as shapes, counts per level, or units. It must not compute results. Error diagnostics block the run and warnings are shown before it. An exception raised by the hook is reported as an ``input-check-failed`` error.
+- ``check_inputs(inputs, parameters)`` returns a list of :class:`datalab.plugins.recipes.RecipeDiagnostic` values for fast, recipe-specific checks such as shapes, counts per level, or units. It must not compute results. Error diagnostics block the run and warnings are shown before it. An exception raised by the hook is reported as an ``input-check-failed`` error.
 
-:func:`datalab.recipe_binding.assess_recipe_inputs` combines the slot declarations and both hooks. It returns a :class:`datalab.recipe_binding.RecipeReadiness` with a status (``no_input``, ``needs_assignment``, ``not_ready``, ``warnings`` or ``ready``), the proposed bindings, structured issues that hosts translate, and the recipe diagnostics. The module has no Qt dependency, so DataLab-Web uses the same code.
+:func:`datalab.plugins.recipe_binding.assess_recipe_inputs` combines the slot declarations and both hooks. It returns a :class:`datalab.plugins.recipe_binding.RecipeReadiness` with a status (``no_input``, ``needs_assignment``, ``not_ready``, ``warnings`` or ``ready``), the proposed bindings, structured issues that hosts translate, and the recipe diagnostics. The module has no Qt dependency, so DataLab-Web uses the same code.
 
 Running a recipe on Desktop
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -360,11 +360,11 @@ Most plugins do not call the runner directly. :meth:`datalab.plugins.PluginBase.
 
 The **Run on selection...** buttons of the **Applications** catalog use the same launcher. A plugin that needs a dedicated interface for one recipe may map its recipe ID to a plugin method name in the class-level ``RECIPE_LAUNCHERS`` mapping; the catalog then calls this method, without arguments, instead of the generic launcher.
 
-Use :class:`datalab.gui.recipe_runner.RecipeRunner` from the GUI thread to run a recipe on explicit inputs. It validates inputs and parameters, executes the headless callable, and commits its outcome to the DataLab workspace:
+Use :class:`datalab.gui.plugins.recipe_runner.RecipeRunner` from the GUI thread to run a recipe on explicit inputs. It validates inputs and parameters, executes the headless callable, and commits its outcome to the DataLab workspace:
 
 .. code-block:: python
 
-  from datalab.gui.recipe_runner import RecipeRunner
+  from datalab.gui.plugins.recipe_runner import RecipeRunner
 
   descriptor = self.get_recipes()[0]
   outcome = RecipeRunner(self.main).run(
@@ -378,7 +378,7 @@ instance and checks cancellation before execution, after execution, and
 immediately before commit. Recipe code must remain headless and must not mutate
 the workspace itself.
 
-Only a validated :class:`datalab.recipes.RecipeOutcome` reaches the commit
+Only a validated :class:`datalab.plugins.recipes.RecipeOutcome` reaches the commit
 phase. The Desktop runner creates one group per output panel, using the recipe
 title by default, then adds all signal and image outputs. Scalar result IDs are
 persisted as ``<recipe-id>:<result-id>`` function names on their named anchor
@@ -391,7 +391,7 @@ Local execution provenance
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 After successful headless execution, the Desktop runner stores the same
-:class:`datalab.recipes.RecipeRunRecord` in every output object's metadata.
+:class:`datalab.plugins.recipes.RecipeRunRecord` in every output object's metadata.
 Its versioned, JSON-compatible payload contains a shared run UUID, plugin and
 recipe IDs and versions, resolved parameters as JSON, named input and output
 UUIDs, DataLab and Sigima versions, the completed status, and UTC start and
@@ -406,12 +406,12 @@ Packaged examples
 ~~~~~~~~~~~~~~~~~
 
 Plugins may expose native DataLab workspaces through the class-level
-``EXAMPLES`` tuple. Each :class:`datalab.plugin_examples.PluginExample` uses a
+``EXAMPLES`` tuple. Each :class:`datalab.plugins.examples.PluginExample` uses a
 ``package:relative/path`` resource instead of a development filesystem path:
 
 .. code-block:: python
 
-  from datalab.plugin_examples import PluginExample
+  from datalab.plugins.examples import PluginExample
 
   class MyPlugin(PluginBase):
     EXAMPLES = (
@@ -438,19 +438,19 @@ recipe references. A registered plugin may call ``open_example("quickstart")``
 to materialize and load a native DataLab HDF5 workspace. Opening clears the
 current workspace by default; pass ``reset_all=False`` to merge it instead.
 
-``recipe_ids`` lists the recipes an example is designed for. One example may serve several recipes, for instance a dark ramp analyzed by two methods. A plugin may also generate an example in memory by overriding ``materialize_example()`` to return a :class:`datalab.plugin_examples.PluginExampleData`; its ``parameter_values`` mapping gives, for each recipe ID, the parameter values suited to the generated objects.
+``recipe_ids`` lists the recipes an example is designed for. One example may serve several recipes, for instance a dark ramp analyzed by two methods. A plugin may also generate an example in memory by overriding ``materialize_example()`` to return a :class:`datalab.plugins.examples.PluginExampleData`; its ``parameter_values`` mapping gives, for each recipe ID, the parameter values suited to the generated objects.
 
 The **Applications** catalog presents each recipe as a method with its expected inputs, a live status for the current selection, a **Run on selection...** button, and the examples designed for it. **Try with this example** calls :meth:`datalab.plugins.PluginBase.try_example`: it opens the example, prefills the recipe parameters with the example values, and runs the recipe once the user accepts them. Examples without ``recipe_ids`` are listed as datasets, which only open.
 
 Plugin tools
 ~~~~~~~~~~~~
 
-A recipe covers a headless analysis run by DataLab. Any other interaction owned by an application plugin, such as a wizard, an interactive editor, a data preparation step or a simulated instrument, is a tool. Declare tools in the class-level ``TOOLS`` tuple of :class:`datalab.plugin_tools.PluginTool` values:
+A recipe covers a headless analysis run by DataLab. Any other interaction owned by an application plugin, such as a wizard, an interactive editor, a data preparation step or a simulated instrument, is a tool. Declare tools in the class-level ``TOOLS`` tuple of :class:`datalab.plugins.tools.PluginTool` values:
 
 .. code-block:: python
 
-  from datalab.plugin_tools import PluginTool, ToolSelection
-  from datalab.recipes import RecipeObjectType
+  from datalab.plugins.recipes import RecipeObjectType
+  from datalab.plugins.tools import PluginTool, ToolSelection
 
   class MyPlugin(PluginBase):
     TOOLS = (
@@ -474,12 +474,12 @@ The launcher is called without arguments. :meth:`datalab.plugins.PluginBase.get_
 Instruments
 ^^^^^^^^^^^
 
-A tool may name an ``instrument`` method instead of a ``launcher``. This method returns a :class:`datalab.plugin_instruments.PluginInstrument`, and DataLab opens a window for it: a live view on the left, the instrument settings on the right, a **Live** button that refreshes the view continuously, and an **Acquire** button. The plugin writes no user interface code:
+A tool may name an ``instrument`` method instead of a ``launcher``. This method returns a :class:`datalab.plugins.instruments.PluginInstrument`, and DataLab opens a window for it: a live view on the left, the instrument settings on the right, a **Live** button that refreshes the view continuously, and an **Acquire** button. The plugin writes no user interface code:
 
 .. code-block:: python
 
   import guidata.dataset as gds
-  from datalab.plugin_instruments import (
+  from datalab.plugins.instruments import (
     InstrumentAcquisition,
     InstrumentFrame,
     PluginInstrument,
@@ -516,7 +516,7 @@ A tool may name an ``instrument`` method instead of a ``launcher``. This method 
     def signal_source(self):
       return Source()
 
-DataLab edits :attr:`~datalab.plugin_instruments.PluginInstrument.settings` in place, with the active state, groups and tabs of the guidata DataSet, then calls :meth:`~datalab.plugin_instruments.PluginInstrument.preview` after each change and, in live mode, every ``live_interval_ms`` milliseconds. An :class:`~datalab.plugin_instruments.InstrumentFrame` holds signals drawn together or a single image, a short summary shown below the view, and an optional fixed Y range (signals) or color range (image). :meth:`~datalab.plugin_instruments.PluginInstrument.acquire` returns an :class:`~datalab.plugin_instruments.InstrumentAcquisition`: DataLab adds its objects to a new group of the matching panel and selects them, so that a recipe can run on them at once. Both methods raise ``ValueError`` with a user-facing message when the settings cannot be used; DataLab shows the message in the window.
+DataLab edits :attr:`~datalab.plugins.instruments.PluginInstrument.settings` in place, with the active state, groups and tabs of the guidata DataSet, then calls :meth:`~datalab.plugins.instruments.PluginInstrument.preview` after each change and, in live mode, every ``live_interval_ms`` milliseconds. An :class:`~datalab.plugins.instruments.InstrumentFrame` holds signals drawn together or a single image, a short summary shown below the view, and an optional fixed Y range (signals) or color range (image). :meth:`~datalab.plugins.instruments.PluginInstrument.acquire` returns an :class:`~datalab.plugins.instruments.InstrumentAcquisition`: DataLab adds its objects to a new group of the matching panel and selects them, so that a recipe can run on them at once. Both methods raise ``ValueError`` with a user-facing message when the settings cannot be used; DataLab shows the message in the window.
 
 DataLab creates the instrument once per tool and keeps it until the plugins are reloaded, so the settings remain from one opening to the next.
 
@@ -527,11 +527,11 @@ Welcome page tiles
 
 Every active plugin declaring the ``APPLICATION`` capability adds a tile to the **Applications** section, at the top of the :ref:`welcome_page`. By default, this tile is built from the plugin's ``PluginInfo`` name, description and icon. Clicking this tile opens the plugin page of the **Applications** catalog.
 
-The plugin icon is declared with ``PluginInfo.icon``, either as a ``package:relative/path`` resource (SVG or bitmap image shipped in the plugin wheel) or as the file name of a DataLab icon. It is shown on the default tile, in the **Applications** catalog and in the plugin configuration dialog; plugins without icon use a generic plugin icon. To offer other entry points, for example to open an example directly, declare the class-level ``WELCOME_TILES`` tuple of :class:`datalab.plugin_tiles.WelcomeTile` values:
+The plugin icon is declared with ``PluginInfo.icon``, either as a ``package:relative/path`` resource (SVG or bitmap image shipped in the plugin wheel) or as the file name of a DataLab icon. It is shown on the default tile, in the **Applications** catalog and in the plugin configuration dialog; plugins without icon use a generic plugin icon. To offer other entry points, for example to open an example directly, declare the class-level ``WELCOME_TILES`` tuple of :class:`datalab.plugins.tiles.WelcomeTile` values:
 
 .. code-block:: python
 
-  from datalab.plugin_tiles import WelcomeTile
+  from datalab.plugins.tiles import WelcomeTile
 
   class MyPlugin(PluginBase):
     PLUGIN_INFO = PluginInfo(
@@ -624,7 +624,7 @@ them. From the generated directory, install and validate the project with:
 How to develop a plugin?
 ------------------------
 
-The recommended approach to developing a plugin is to derive from an existing example and adapt it to your needs. You can explore the source code in the `datalab/plugins` folder or refer to community-contributed examples.
+The recommended approach to developing a plugin is to derive from an existing example and adapt it to your needs. You can explore the source code in the `datalab/plugins/builtin` folder or refer to community-contributed examples.
 
 .. note::
 
@@ -662,7 +662,7 @@ Example: input/output plugin
 
 Here is a simple example of a plugin that adds new file formats to DataLab.
 
-.. literalinclude:: ../../../datalab/plugins/datalab_imageformats.py
+.. literalinclude:: ../../../datalab/plugins/builtin/datalab_imageformats.py
 
 Example templates used by the test suite
 ----------------------------------------
@@ -719,20 +719,20 @@ Public API
 .. automodule:: datalab.plugins
     :members: PluginInfo, PluginBase, FormatInfo, ImageFormatBase, ClassicsImageFormat, SignalFormatBase
 
-.. automodule:: datalab.recipes
+.. automodule:: datalab.plugins.recipes
   :members:
 
-.. automodule:: datalab.plugin_examples
+.. automodule:: datalab.plugins.examples
   :members:
 
-.. automodule:: datalab.plugin_tiles
+.. automodule:: datalab.plugins.tiles
   :members:
 
-.. automodule:: datalab.plugin_tools
+.. automodule:: datalab.plugins.tools
   :members:
 
-.. automodule:: datalab.plugin_instruments
+.. automodule:: datalab.plugins.instruments
   :members:
 
-.. automodule:: datalab.gui.recipe_runner
+.. automodule:: datalab.gui.plugins.recipe_runner
   :members:

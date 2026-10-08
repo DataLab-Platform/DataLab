@@ -5,7 +5,7 @@
 
 from PyInstaller.utils.hooks import collect_submodules, collect_data_files, copy_metadata
 all_hidden_imports = collect_submodules('datalab')
-datas = collect_data_files('datalab') + [('datalab\\plugins', 'datalab\\plugins')]
+datas = collect_data_files('datalab') + [('datalab\\plugins\\builtin', 'datalab\\plugins\\builtin')]
 # Macro templates are read with ``pkgutil.get_data`` and must exist on disk,
 # not only inside the PYZ archive (``collect_data_files`` skips ``.py`` files):
 datas += [('datalab\\gui\\macros_templates', 'datalab\\gui\\macros_templates')]

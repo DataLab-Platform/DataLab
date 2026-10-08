@@ -15,9 +15,9 @@ from qtpy import QtWidgets as QW
 from sigimax.utils import qthelpers as sgmx_qth
 
 from datalab.config import Conf
-from datalab.gui import applications as applications_module
 from datalab.gui import main
-from datalab.gui.applications import (
+from datalab.gui.plugins import applications as applications_module
+from datalab.gui.plugins.applications import (
     ApplicationsDialog,
     get_application_plugins,
     get_declared_metadata_keys,
@@ -26,21 +26,21 @@ from datalab.gui.applications import (
     set_application_pinned,
     sort_welcome_applications,
 )
-from datalab.plugin_examples import PluginExample
-from datalab.plugin_tools import PluginTool
 from datalab.plugins import PluginCapability, PluginInfo, PluginRegistry
-from datalab.recipe_binding import (
+from datalab.plugins.examples import PluginExample
+from datalab.plugins.recipe_binding import (
     RecipeInputIssue,
     RecipeReadiness,
     RecipeReadinessStatus,
 )
-from datalab.recipes import (
+from datalab.plugins.recipes import (
     RecipeDescriptor,
     RecipeDiagnostic,
     RecipeInputSlot,
     RecipeMetadataRequirement,
     RecipeOutcome,
 )
+from datalab.plugins.tools import PluginTool
 from datalab.tests import datalab_test_app_context
 
 RECIPE = RecipeDescriptor(

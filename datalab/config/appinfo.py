@@ -103,7 +103,9 @@ DATAPATH = configtools.get_module_data_path(MOD_NAME, "data")
 SHOTPATH = osp.join(
     configtools.get_module_data_path(MOD_NAME), os.pardir, "doc", "images", "shots"
 )
-OTHER_PLUGINS_PATHLIST = [configtools.get_module_data_path(MOD_NAME, "plugins")]
+OTHER_PLUGINS_PATHLIST = [
+    configtools.get_module_data_path(MOD_NAME, osp.join("plugins", "builtin"))
+]
 
 IS_FROZEN = is_frozen(MOD_NAME)
 if IS_FROZEN:

@@ -9,7 +9,7 @@ import numpy as np
 import pytest
 from sigima.objects import create_image, create_signal
 
-from datalab.recipe_binding import (
+from datalab.plugins.recipe_binding import (
     INPUT_CHECK_FAILED_CODE,
     RecipeInputIssueCode,
     RecipeReadinessStatus,
@@ -18,7 +18,7 @@ from datalab.recipe_binding import (
     find_input_issues,
     propose_bindings,
 )
-from datalab.recipes import (
+from datalab.plugins.recipes import (
     RecipeDescriptor,
     RecipeDiagnostic,
     RecipeInputSlot,

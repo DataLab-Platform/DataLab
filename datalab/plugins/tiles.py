@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import dataclasses
 
-from datalab.plugin_resources import LOCAL_ID_PATTERN, split_package_resource
+from datalab.plugins.resources import LOCAL_ID_PATTERN, split_package_resource
 
 __all__ = ["WelcomeTile"]
 

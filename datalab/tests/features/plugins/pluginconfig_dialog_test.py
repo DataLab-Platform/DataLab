@@ -23,9 +23,9 @@ from datalab.config.persistence import (
     remove_persisted_option,
 )
 from datalab.env import execenv
-from datalab.gui import pluginconfig
 from datalab.gui.actionhandler import ActionCategory
-from datalab.gui.pluginconfig import (
+from datalab.gui.plugins import config as pluginconfig
+from datalab.gui.plugins.config import (
     ExpandableTextWidget,
     FailedPluginInfoWidget,
     PluginConfigDialog,

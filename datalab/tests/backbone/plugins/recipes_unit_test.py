@@ -12,7 +12,7 @@ import pytest
 from sigima.objects import TableResult, create_signal
 
 from datalab.plugins import PluginBase, PluginInfo, PluginRegistry
-from datalab.recipes import (
+from datalab.plugins.recipes import (
     RecipeCancellationError,
     RecipeCardinality,
     RecipeDescriptor,

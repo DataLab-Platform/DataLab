@@ -35,7 +35,7 @@ from datalab.config import (
     normalize_plugin_paths,
     set_user_plugin_paths,
 )
-from datalab.gui.applications import get_plugin_icon
+from datalab.gui.plugins.applications import get_plugin_icon
 from datalab.plugins import (
     PLUGINS_DEFAULT_PATH,
     PluginCapability,

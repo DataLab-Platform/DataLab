@@ -1,21 +1,10 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-DataLab plugin system
----------------------
+DataLab plugin host: plugin registry, base class and discovery.
 
-DataLab plugin system provides a way to extend the application with new
-functionalities.
-
-Plugins are Python modules that relies on two classes:
-
-    - :class:`PluginInfo`, which stores information about the plugin
-    - :class:`PluginBase`, which is the base class for all plugins
-
-Plugins may also extends DataLab I/O features by providing new image or
-signal formats. To do so, they must provide a subclass of :class:`ImageFormatBase`
-or :class:`SignalFormatBase`, in which format information is defined using the
-:class:`FormatInfo` class.
+Public names of this module are re-exported by :mod:`datalab.plugins`, which is
+the import path to use in plugins.
 """
 
 from __future__ import annotations
@@ -57,17 +46,17 @@ from datalab.config import (
 from datalab.control.proxy import LocalProxy
 from datalab.env import execenv
 from datalab.objectmodel import get_uuid
-from datalab.plugin_examples import PluginExample, PluginExampleData
-from datalab.plugin_instruments import PluginInstrument
-from datalab.plugin_tiles import WelcomeTile
-from datalab.plugin_tools import PluginTool, ToolSelection, tool_accepts_selection
-from datalab.recipe_binding import (
+from datalab.plugins.examples import PluginExample, PluginExampleData
+from datalab.plugins.instruments import PluginInstrument
+from datalab.plugins.recipe_binding import (
     RecipeReadiness,
     assess_recipe_inputs,
     create_recipe_parameters,
     is_compatible,
 )
-from datalab.recipes import RecipeDescriptor, RecipeOutcome
+from datalab.plugins.recipes import RecipeDescriptor, RecipeOutcome
+from datalab.plugins.tiles import WelcomeTile
+from datalab.plugins.tools import PluginTool, ToolSelection, tool_accepts_selection
 
 if TYPE_CHECKING:
     from sigima.objects import ImageObj, NewImageParam, NewSignalParam, SignalObj
@@ -496,7 +485,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         if self.main is None:
             raise RuntimeError("Plugin must be registered before starting a recipe")
         # pylint: disable=import-outside-toplevel
-        from datalab.gui.recipe_launcher import RecipeLauncher
+        from datalab.gui.plugins.recipe_launcher import RecipeLauncher
 
         return RecipeLauncher(self).start(recipe_id, objects, parameter_values)
 

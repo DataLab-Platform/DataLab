@@ -33,7 +33,7 @@ from qtpy import QtWidgets as QW
 import datalab
 from datalab.config import Conf, _
 from datalab.gui.actionhandler import ActionCategory
-from datalab.gui.applications import (
+from datalab.gui.plugins.applications import (
     get_application_plugins,
     get_plugin_icon,
     record_application_use,
@@ -47,8 +47,8 @@ from datalab.widgets.expandabletext import apply_subdued_color
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
     from datalab.gui.panel.base import BaseDataPanel
-    from datalab.plugin_tiles import WelcomeTile
     from datalab.plugins import PluginBase
+    from datalab.plugins.tiles import WelcomeTile
 
 #: Width below which the two columns of the welcome page are stacked
 SINGLE_COLUMN_WIDTH = 720
