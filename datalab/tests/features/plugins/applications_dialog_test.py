@@ -198,7 +198,7 @@ def test_applications_dialog_filters_and_renders_declared_contracts() -> None:
 
 def test_tool_buttons_follow_the_tool_selection() -> None:
     """A tool that cannot be opened on the selection has a disabled button."""
-    QW.QApplication.instance() or QW.QApplication([])
+    qt_app = QW.QApplication.instance() or QW.QApplication([])
     issues = {"annotate": "Select one image"}
     application = _plugin(
         "org.example.camera",
@@ -221,6 +221,7 @@ def test_tool_buttons_follow_the_tool_selection() -> None:
         dialog.refresh_readiness()
         assert button.isEnabled()
         assert button.toolTip() == ""
+        assert qt_app is not None
     finally:
         registry[:] = previous_plugins
         if "dialog" in locals():
