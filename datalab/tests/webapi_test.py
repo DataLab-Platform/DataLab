@@ -42,7 +42,8 @@ from datalab.webapi.serialization import (
 class TestNPZSerialization:
     """Tests for NPZ serialization module."""
 
-    def test_signal_round_trip(self):
+    @pytest.mark.parametrize("compress", [False, True])
+    def test_signal_round_trip(self, compress):
         """Test serializing and deserializing a SignalObj."""
         # Create a signal
         x = np.linspace(0, 10, 100)
@@ -54,9 +55,10 @@ class TestNPZSerialization:
         obj.ylabel = "Amplitude"
         obj.xunit = "s"
         obj.yunit = "V"
+        obj.metadata["acquisition"] = {"sample": "signal", "gain": 2.5}
 
         # Serialize
-        data = serialize_object_to_npz(obj)
+        data = serialize_object_to_npz(obj, compress=compress)
         assert isinstance(data, bytes)
         assert len(data) > 0
 
@@ -79,6 +81,9 @@ class TestNPZSerialization:
         assert result.ylabel == "Amplitude"
         assert result.xunit == "s"
         assert result.yunit == "V"
+        assert result.metadata["acquisition"] == obj.metadata["acquisition"]
+        assert result.dx is None
+        assert result.dy is None
 
     def test_signal_with_uncertainties(self):
         """Test signal with dx/dy uncertainties."""
@@ -97,7 +102,8 @@ class TestNPZSerialization:
         np.testing.assert_array_equal(result.dx, dx)
         np.testing.assert_array_equal(result.dy, dy)
 
-    def test_image_round_trip(self):
+    @pytest.mark.parametrize("compress", [False, True])
+    def test_image_round_trip(self, compress):
         """Test serializing and deserializing an ImageObj."""
         # Create an image
         data = np.random.rand(128, 128).astype(np.float32)
@@ -107,13 +113,17 @@ class TestNPZSerialization:
         obj.xlabel = "X"
         obj.ylabel = "Y"
         obj.zlabel = "Intensity"
+        obj.xunit = "mm"
+        obj.yunit = "mm"
+        obj.zunit = "counts"
+        obj.metadata["acquisition"] = {"sample": "image", "gain": 2.5}
         obj.x0 = 10.0
         obj.y0 = 20.0
         obj.dx = 0.5
         obj.dy = 0.5
 
         # Serialize
-        npz_data = serialize_object_to_npz(obj)
+        npz_data = serialize_object_to_npz(obj, compress=compress)
         assert isinstance(npz_data, bytes)
 
         # Verify structure
@@ -129,6 +139,13 @@ class TestNPZSerialization:
         assert type(result).__name__ == "ImageObj"
         np.testing.assert_array_equal(result.data, data)
         assert result.title == "Test Image"
+        assert result.xlabel == "X"
+        assert result.ylabel == "Y"
+        assert result.zlabel == "Intensity"
+        assert result.xunit == "mm"
+        assert result.yunit == "mm"
+        assert result.zunit == "counts"
+        assert result.metadata["acquisition"] == obj.metadata["acquisition"]
         assert result.x0 == 10.0
         assert result.y0 == 20.0
         assert result.dx == 0.5

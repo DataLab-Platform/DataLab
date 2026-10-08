@@ -5,7 +5,6 @@
 #
 msgid ""
 msgstr ""
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -815,5 +814,5 @@ msgstr "Si vous rencontrez des problèmes pendant la migration :"
 msgid "Check the `GitHub issue tracker <https://github.com/DataLab-Platform/DataLab/issues>`_"
 msgstr "Consultez le `suivi des problèmes GitHub <https://github.com/DataLab-Platform/DataLab/issues>`_"
 
-msgid "Consult the built-in plugin examples in the ``datalab/plugins`` directory"
-msgstr "Consultez les exemples de plugins intégrés dans le répertoire ``datalab/plugins``"
+msgid "Consult the built-in plugin examples in the ``datalab/plugins/builtin`` directory"
+msgstr "Consultez les exemples de plugins intégrés dans le répertoire ``datalab/plugins/builtin``"

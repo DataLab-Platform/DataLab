@@ -51,6 +51,7 @@ def assert_two_dicts_are_equal(
         dict2 (dict): second dict
         exceptions (tuple[str] | None): keys to ignore
     """
+    exceptions = (*(() if exceptions is None else exceptions), "screenshot_path")
     diff_keys = []
     for key in dict1:
         if key in exceptions:
@@ -70,7 +71,7 @@ def test_cli():
     execenv.print("  Default values: ", end="")
     execenvdict = get_subprocess_execenv_dict([])
     execenv.print("OK")
-    assert execenvdict == execenv.to_dict()
+    assert_two_dicts_are_equal(execenvdict, execenv.to_dict())
     # Testing boolean arguments
     execenv.print("  Testing boolean arguments:")
     for argname in ("unattended", "accept_dialogs", "screenshot"):
@@ -221,6 +222,10 @@ def test_envvar():
     assert execenv.unattended is False, "This test must be run with unattended=False"
     print("Testing DataLab execution environment:")
     for attrname, envvar in execenv.iterate_over_attrs_envvars():
+        # The test harness sets this path during package import in each process,
+        # so it is not stable across the parent/subprocess comparison.
+        if attrname == "screenshot_path":
+            continue
         attr_to_envvar = ATTR_TO_ENVVAR[attrname]
         print(f"  Testing {attrname}:")
         for value, envvals in attr_to_envvar:

@@ -125,6 +125,15 @@ def test_import_wizard():
             elif exec_dialog(wizard):
                 for obj in wizard.get_objs():
                     execenv.print(obj)
+            # Deterministically release each wizard (and its embedded PlotPy
+            # preview) before creating the next one. Otherwise the four wizards
+            # are torn down lazily by the garbage collector; in native
+            # (on-screen) mode that teardown race occasionally triggers a
+            # Qt/PlotPy access violation (0xC0000005). Closing + deleting +
+            # flushing pending events makes each teardown happen in order.
+            wizard.close()
+            wizard.deleteLater()
+            QW.QApplication.processEvents()
 
 
 if __name__ == "__main__":

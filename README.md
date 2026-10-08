@@ -17,7 +17,7 @@ See [DataLab website](https://datalab-platform.com/) for more details.
 
 ℹ️ Created by [CODRA](https://codra.net/)/[Pierre Raybaut](https://github.com/PierreRaybaut) in 2023, developed and maintained by DataLab Platform Developers.
 
-![DataLab](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/shots/i_blob_detection_flower.png)
+![DataLab](https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/shots/i_blob_detection_flower.en.png)
 
 🧮 DataLab's processing power comes from the advanced algorithms of the object-oriented signal and image processing library [Sigima](https://github.com/DataLab-Platform/Sigima) 🚀 which is part of the DataLab Platform.
 
@@ -72,6 +72,8 @@ From [conda-forge](https://anaconda.org/conda-forge/datalab-platform):
 ```bash
 conda install -c conda-forge datalab-platform
 ```
+
+On [NixOS](https://nixos.org/), DataLab is available from the [NGI Forge](https://ngi.nixos.org/app/datalab), packaged by the [Nix@NGI team](https://nixos.org/community/teams/ngi/) (an NLnet partner) as part of DataLab's NGI0 Commons Fund grant.
 
 See the [installation guide](https://datalab-platform.com/en/intro/installation.html) for
 more options (standalone installer, WinPython, offline installation, etc.).

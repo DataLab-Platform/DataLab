@@ -28,4 +28,11 @@
     "python.testing.pytestPath": "pytest",
     "python.testing.unittestEnabled": false,
     "terminal.integrated.tabs.description": "${workspaceFolder}",
+    "python-envs.pythonProjects": [
+        {
+            "path": ".",
+            "envManager": "ms-python.python:venv",
+            "packageManager": "ms-python.python:pip"
+        }
+    ],
 }

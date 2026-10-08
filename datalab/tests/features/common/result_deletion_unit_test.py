@@ -36,7 +36,7 @@ def test_delete_results_image():
 
         # Run centroid analysis to create results
         execenv.print("  Running centroid analysis...")
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("centroid")
 
         # Verify that results exist
@@ -71,7 +71,7 @@ def test_delete_results_signal():
 
         # Run stats analysis to create table results
         execenv.print("  Running stats analysis...")
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("stats")
 
         # Verify that results exist
@@ -95,8 +95,8 @@ def test_delete_results_signal():
 def test_delete_results_clears_analysis_parameters():
     """Test that deleting results also clears analysis parameters.
 
-    This prevents auto_recompute_analysis from attempting to recompute
-    deleted analyses when ROI changes.
+    This prevents recompute_analysis from attempting to recompute
+    deleted analyses when the user triggers a manual recompute.
     """
     with datalab_test_app_context(console=False) as win:
         execenv.print("Test delete_results clears analysis parameters:")
@@ -109,7 +109,7 @@ def test_delete_results_clears_analysis_parameters():
 
         # Run centroid analysis to create results and store analysis parameters
         execenv.print("  Running centroid analysis...")
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("centroid")
 
         # Verify that analysis parameters exist
@@ -118,9 +118,10 @@ def test_delete_results_clears_analysis_parameters():
         assert analysis_params is not None, (
             "Analysis parameters should exist after running centroid"
         )
-        assert analysis_params.func_name == "centroid", (
-            "Analysis parameters should store the centroid function name"
-        )
+        assert (
+            analysis_params.func_name
+            == panel.processor.get_feature("centroid").feature_id
+        ), "Analysis parameters should store the stable centroid feature ID"
         execenv.print("  ✓ Analysis parameters stored")
 
         # Delete all results
@@ -136,11 +137,11 @@ def test_delete_results_clears_analysis_parameters():
         )
         execenv.print("  ✓ Analysis parameters cleared")
 
-        # Now add a ROI and verify no auto-recompute happens (no new results)
-        execenv.print("  Adding ROI to verify no auto-recompute...")
+        # Now add a ROI and verify no recompute happens (no new results)
+        execenv.print("  Adding ROI to verify no recompute...")
         roi = create_image_roi("rectangle", [25, 25, 100, 100])
         img_after.roi = roi
-        panel.processor.auto_recompute_analysis(img_after)
+        panel.processor.recompute_analysis(img_after)
 
         # Verify that no new results were created
         adapter_after_roi = GeometryAdapter.from_obj(img_after, "centroid")
@@ -148,10 +149,38 @@ def test_delete_results_clears_analysis_parameters():
             "No centroid result should be created after ROI change "
             "because analysis parameters were cleared"
         )
-        execenv.print(
-            "  ✓ No auto-recompute after ROI change (analysis params cleared)"
-        )
+        execenv.print("  ✓ No recompute after ROI change (analysis params cleared)")
         execenv.print("\n✓ All tests passed!")
+
+
+def test_delete_single_plugin_result_clears_analysis_parameters():
+    """Deleting a namespaced plugin analysis result clears its parameters."""
+    with datalab_test_app_context(console=False) as win:
+        panel = win.imagepanel
+        img = create_image_from_param(
+            Gauss2DParam.create(height=200, width=200, sigma=20)
+        )
+        panel.add_object(img)
+        feature = panel.processor.register_1_to_0(
+            panel.processor.get_feature("centroid").function,
+            "Plugin centroid",
+            feature_id="test_plugin:centroid",
+            owner_plugin_id="test_plugin",
+        )
+        with Conf.show_result_dialog.context(False):
+            panel.processor.run_feature(feature)
+
+        analysis_params = extract_analysis_parameters(img)
+        assert analysis_params is not None
+        assert analysis_params.func_name == "test_plugin:centroid"
+        adapter = GeometryAdapter.from_obj(img, "centroid")
+        assert adapter is not None
+
+        # pylint: disable-next=protected-access
+        panel.acthandler._delete_single_result(img, adapter)
+
+        assert GeometryAdapter.from_obj(img, "centroid") is None
+        assert extract_analysis_parameters(img) is None
 
 
 def test_delete_results_after_roi_removed():
@@ -175,7 +204,7 @@ def test_delete_results_after_roi_removed():
 
         # Run centroid analysis - this stores ROI index in results
         execenv.print("  Running centroid analysis with ROI...")
-        with Conf.proc.show_result_dialog.temp(False):
+        with Conf.show_result_dialog.context(False):
             panel.processor.run_feature("centroid")
 
         # Verify that results exist and contain ROI information

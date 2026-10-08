@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use DataLab in your research, please cite it using the metadata below."
+type: software
+title: "DataLab: an open-source platform for signal and image processing"
+abstract: >-
+  DataLab is an open-source platform for scientific and technical data
+  processing and visualization, handling 1D signals and 2D images in a single
+  workspace. It is extensible with Python plugins and macros, and can be
+  remotely controlled from Jupyter, Spyder or any IDE.
+authors:
+  - family-names: Raybaut
+    given-names: Pierre
+    email: p.raybaut@codra.fr
+  - name: "DataLab Platform Developers"
+license: BSD-3-Clause
+repository-code: "https://github.com/DataLab-Platform/DataLab"
+url: "https://datalab-platform.com/"
+keywords:
+  - signal processing
+  - image processing
+  - data analysis
+  - scientific software
+  - visualization
+  - Python
+  - Qt

@@ -48,7 +48,9 @@ def make_wxs(product_name: str, version: str) -> None:
     # MSI Version does not support labels, at least not in a way compatible with
     # Python packaging (e.g., "0.16.dev0" is not a valid MSI version).
     #
-    # Here is the conversion we must do:
+    # Here is the conversion we must do (the pre-release / dev / post separator
+    # may be absent, a dot, or a hyphen depending on the source -- e.g. the
+    # PEP 440 normalised "1.2.1rc99" or the git tag form "1.2.1-rc99"):
     # - "0.16.post1" -> "0.16.1"
     # - "0.16.post2" -> "0.16.1"
     # - "0.16.dev0" -> "0.16.0"
@@ -57,12 +59,14 @@ def make_wxs(product_name: str, version: str) -> None:
     # - "0.16.alpha2" -> "0.16.0"
     # - "0.16.beta1" -> "0.16.0"
     # - "0.16.beta2" -> "0.16.0"
-    # - "0.16.rc1" -> "0.16.0"
-    # - "0.16.rc2" -> "0.16.0"
+    # - "0.16rc1" / "0.16-rc1" -> "0.16.0"
+    # - "1.2.1-rc99" -> "1.2.1.0"
     #
-    version_msi = re.sub(r"\.post\d+$", ".1", version)
-    version_msi = re.sub(r"\.dev\d+$", ".0", version_msi)
-    version_msi = re.sub(r"(rc|a|b)\d+$", ".0", version_msi)
+    version_msi = re.sub(r"[._-]?post\d+$", ".1", version)
+    version_msi = re.sub(r"[._-]?dev\d+$", ".0", version_msi)
+    version_msi = re.sub(
+        r"[._-]?(?:rc|alpha|beta|pre|preview|a|b|c)\d+$", ".0", version_msi
+    )
 
     # Generate version-based names for folders
     # Extract major.minor version (e.g., "1.0" from "1.0.0")

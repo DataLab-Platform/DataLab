@@ -8,6 +8,11 @@ releases/
 doc/changelog.md
 scenario_*.h5
 
+# Local machine configuration for scripts/Run-DataLabTests.ps1 (interpreter
+# paths). A committed template lives next to it as
+# Run-DataLabTests.config.template.psd1.
+scripts/Run-DataLabTests.config.psd1
+
 # Windows specific
 Thumbs.db
 
@@ -33,7 +38,9 @@ DataLab_*.pdf
 wix/DataLab-*.wxs
 wix/bin/
 wix/obj/
-wix/*.bmp
+# Note: wix/dialog.bmp and wix/banner.bmp are intentionally committed; they are
+# generated from SVG sources by `scripts/build_resources.bat` only when needed,
+# so the release pipeline does not depend on any external rasteriser.
 *.wixpdb
 *.msi
 
@@ -182,6 +189,7 @@ celerybeat.pid
 .env
 .envrc
 .venv
+.venv*/
 env/
 venv/
 ENV/

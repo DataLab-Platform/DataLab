@@ -35,9 +35,10 @@ def iterate_noisy_signals(
 ) -> Generator[tuple[sigima.objects.SignalObj, float], None, None]:
     """Generate noisy signals for testing."""
     noiseparam = sigima.objects.NormalDistribution1DParam.create(sigma=sigma, mu=0.0)
-    param = sigima.objects.GaussParam.create(a=a)
+    param = sigima.objects.GaussParam.create(amplitude=a)
     for i in range(count):
         param.sigma = 1.0 + (i * 0.1) ** 2
+        # pylint: disable-next=no-member  # astroid cannot resolve the `create` TypeVar
         theoretical_fwhm = param.get_expected_features().fwhm
         sig = test_data.create_noisy_signal(
             noiseparam, param, f"Signal|fwhm_th={theoretical_fwhm:.2f}"

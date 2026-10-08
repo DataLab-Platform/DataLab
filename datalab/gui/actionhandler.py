@@ -46,6 +46,7 @@ from guidata.qthelpers import add_actions, create_action
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from sigimax.widgets import fitdialog
 
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter, have_results
 from datalab.config import Conf, _
@@ -54,13 +55,13 @@ from datalab.gui.processor.base import (
     clear_analysis_parameters,
     extract_analysis_parameters,
 )
-from datalab.widgets import fitdialog
 
 if TYPE_CHECKING:
     from sigima.objects import ImageObj, SignalObj
 
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
+    from datalab.gui.processor.base import ProcessingParameters
     from datalab.objectmodel import ObjectGroup
 
 
@@ -370,12 +371,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             adapter: Adapter for the result to delete
         """
         # Check if this result matches the stored analysis parameters
-        # If so, clear them to prevent auto-recompute from attempting to
-        # recompute the deleted analysis when ROI changes
+        # If so, clear them to prevent a manual recompute from attempting to
+        # recompute the deleted analysis
         analysis_params = extract_analysis_parameters(obj)
         if (
             analysis_params is not None
-            and analysis_params.func_name == adapter.func_name
+            and self.__get_analysis_function_name(analysis_params) == adapter.func_name
         ):
             clear_analysis_parameters(obj)
         adapter.remove_from(obj)
@@ -389,6 +390,27 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         # Refresh the plot to update the display
         # Use the same refresh pattern as delete_results() method
         self.panel.refresh_plot("selected", True, False)
+
+    def __get_analysis_function_name(self, params: ProcessingParameters) -> str:
+        """Return the computation function name behind stored analysis parameters.
+
+        Results are named after their computation function, whereas analysis
+        parameters store the feature ID, which is namespaced for plugin features.
+
+        Args:
+            params: Stored analysis parameters
+
+        Returns:
+            Function name of the registered feature, or the local part of the
+            stored feature ID if the feature is not registered.
+        """
+        try:
+            feature = self.panel.processor.get_feature(
+                params.func_name, plugin_origin=params.plugin_origin
+            )
+        except ValueError:
+            return params.func_name.rsplit(":", 1)[-1]
+        return feature.name
 
     def clear_plugin_actions(self) -> None:
         """Clear plugin actions and submenus"""
@@ -646,7 +668,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             feature.action_title,
             position=position,
             separator=separator,
-            triggered=lambda: self.panel.processor.run_feature(feature.function),
+            triggered=lambda: self.panel.processor.run_feature(feature.feature_id),
             select_condition=condition,
             icon_name=feature.icon_name,
             tip=feature.comment,
@@ -829,9 +851,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Recompute"),
                 icon_name="recompute.svg",
                 shortcut="Ctrl+R",
-                tip=_("Recompute selected %s with its processing parameters")
+                tip=_(
+                    "Recompute selected %s: refresh both processing and "
+                    "analysis results with their stored parameters"
+                )
                 % self.OBJECT_STR,
-                triggered=self.panel.recompute_processing,
+                triggered=self.panel.recompute_selected,
                 select_condition=SelectCond.at_least_one_group_or_one_object,
                 context_menu_pos=-1,
                 toolbar_pos=-1,
@@ -1086,6 +1111,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             with self.new_menu(_("Level adjustment"), icon_name="level_adjustment.svg"):
                 self.action_for("normalize")
                 self.action_for("clip")
+                self.action_for("replace_special_values")
                 self.new_action(
                     _("Offset correction"),
                     triggered=self.panel.processor.compute_offset_correction,
@@ -1196,7 +1222,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 select_condition=SelectCond.with_results,
             )
             self.show_label_action.setCheckable(True)
-            self.show_label_action.setChecked(Conf.view.show_result_label.get())
+            self.show_label_action.setChecked(Conf.show_result_label.get())
             self.new_action(
                 _("Plot results") + "...",
                 triggered=self.panel.plot_results,
@@ -1320,6 +1346,7 @@ class SignalActionHandler(BaseActionHandler):
                 self.action_for("reverse_x")
                 self.action_for("replace_x_by_other_y")
                 self.action_for("xy_mode")
+                self.action_for("calibration", separator=True)
                 self.action_for("to_cartesian", separator=True)
                 self.action_for("to_polar")
             with self.new_menu(_("Frequency filters"), icon_name="highpass.svg"):
@@ -1440,11 +1467,16 @@ class SignalActionHandler(BaseActionHandler):
                 tip=_("Compute the ordinate at a given x value (linear interpolation)"),
             )
             self.action_for("extract_pulse_features")
+            self.action_for("extract_peak_positions")
             self.new_action(
-                _("Peak detection"),
-                separator=True,
+                _("Peak detection..."),
                 triggered=self.panel.processor.compute_peak_detection,
                 icon_name="peak_detect.svg",
+                tip=_(
+                    "Interactive peak detection: adjust threshold and minimum "
+                    "distance visually, then store detected peaks as an "
+                    "XY-markers table result"
+                ),
             )
             self.action_for("sampling_rate_period", separator=True)
             self.action_for("dynamic_parameters", context_menu_pos=-1)
@@ -1455,6 +1487,16 @@ class SignalActionHandler(BaseActionHandler):
         """Create actions that are added to the menus in the end"""
         super().create_last_actions()
         with self.new_category(ActionCategory.OPERATION):
+            self.new_action(
+                _("Create signal from markers table..."),
+                separator=True,
+                triggered=self.panel.processor.compute_markers_to_signal,
+                icon_name="peak_detect.svg",
+                tip=_(
+                    "Build a sticks signal from an XY-markers table result "
+                    "(e.g. from 'Extract peak positions')"
+                ),
+            )
             self.action_for("signals_to_image", separator=True)
 
         with self.new_category(ActionCategory.VIEW):
@@ -1465,7 +1507,7 @@ class SignalActionHandler(BaseActionHandler):
                 tip=_("Toggle curve anti-aliasing on/off (may slow down plotting)"),
                 toolbar_pos=-1,
             )
-            antialiasing_action.setChecked(Conf.view.sig_antialiasing.get(True))
+            antialiasing_action.setChecked(Conf.sig_antialiasing.get(True))
             self.new_action(
                 _("Reset curve styles"),
                 select_condition=SelectCond.always,
@@ -1595,6 +1637,7 @@ class ImageActionHandler(BaseActionHandler):
                     tip=_("Apply all thresholding methods"),
                 )
             with self.new_menu(_("Exposure"), icon_name="exposure.svg"):
+                self.action_for("adjust_brightness_contrast")
                 self.action_for("adjust_gamma")
                 self.action_for("adjust_log")
                 self.action_for("adjust_sigmoid")
@@ -1748,4 +1791,4 @@ class ImageActionHandler(BaseActionHandler):
                 toggled=self.panel.toggle_show_contrast,
                 toolbar_pos=-1,
             )
-            showcontrast_action.setChecked(Conf.view.show_contrast.get(True))
+            showcontrast_action.setChecked(Conf.show_contrast.get(True))

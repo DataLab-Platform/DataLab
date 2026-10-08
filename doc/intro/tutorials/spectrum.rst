@@ -1,11 +1,11 @@
-:octicon:`book;1em;sd-text-info` Processing a spectrum
-======================================================
+:octicon:`book;1em;sd-text-info` Spectrum analysis: denoising, baseline correction and peak fitting
+====================================================================================================
 
 .. meta::
-    :description: Tutorial on how to process a spectrum with DataLab, the open-source scientific data analysis and visualization platform
-    :keywords: spectrum, signal processing, data analysis, scientific data, visualization, open-source, software, DataLab, tutorial
+    :description: Analyze a spectrum step by step with DataLab, the open-source signal and image analysis platform: noise filtering, baseline correction (detrending with peak exclusion), region of interest selection and Gaussian peak fitting.
+    :keywords: spectrum analysis software, peak fitting, baseline correction, detrending, Gaussian fit, noise filtering, spectroscopy, Raman, FTIR, X-ray spectrum, DataLab, tutorial
 
-This example shows how to process a spectrum with DataLab:
+This example shows how to analyze a spectrum with DataLab:
 
 -   Read the spectrum from a file
 -   Apply a filter to the spectrum
@@ -197,10 +197,10 @@ and fit multiple peaks in the spectrum by selecting
     spectrum and the fit in the "Signals" panel on the right, so both are displayed
     in the visualization panel on the left.
 
-Alternatively, we could use the "Peak detection" feature from the "Analysis" menu to
-detect peaks in the spectrum. This is the first step of the "Multi-Gaussian fit"
-function and can be used independently to detect peaks without performing a fit,
-creating a signal with a delta function at each detected peak position.
+Alternatively, we could use the "Peak detection" feature from the "Analysis" menu
+to detect peaks in the spectrum. This is the first step of the "Multi-Gaussian fit"
+function and can be used independently to extract peak positions as a result table
+attached to the signal.
 
 .. figure:: ../../images/tutorials/spectrum/19.png
 
@@ -209,9 +209,13 @@ creating a signal with a delta function at each detected peak position.
 .. figure:: ../../images/tutorials/spectrum/21.png
 
     After adjusting the peak detection parameters (using the same dialog as
-    for the multi-Gaussian fit), click "OK". Then select both the
-    "peak_detection" result and the original spectrum in the "Signals" panel
-    to display them together in the visualization panel on the left.
+    for the multi-Gaussian fit), click "OK". The detected peak positions are
+    stored as an XY-markers result and overlayed on the spectrum.
+
+To rebuild the historical *sticks* signal — a delta function at each detected
+peak position — apply *Operations ▸ Create signal from markers table…* to the
+spectrum: this creates a child signal whose samples are the ``(x, y)`` couples
+of the markers table, rendered as sticks.
 
 Saving the workspace
 --------------------

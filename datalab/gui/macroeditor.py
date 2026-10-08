@@ -17,6 +17,7 @@ import os.path as osp
 import re
 import sys
 import time
+import uuid
 
 from guidata.io import BaseIOHandler
 from guidata.utils.misc import to_string
@@ -29,8 +30,12 @@ import datalab
 from datalab.config import _
 from datalab.env import execenv
 from datalab.gui import ObjItf
+from datalab.utils import macrorecovery
 
 UNTITLED_NB = 0
+
+# Debounce delay before persisting a modified macro to the recovery cache.
+_AUTOSAVE_DELAY_MS = 500
 
 
 class MacroMeta(type(QC.QObject), abc.ABCMeta):
@@ -88,10 +93,15 @@ print("All done!")
         super().__init__()
         self.console = console
         self.title = self.get_untitled_title() if title is None else title
+        self.uid = uuid.uuid4().hex
         self.editor = CodeEditor(language="python")
         self.editor.setLineWrapMode(QW.QPlainTextEdit.NoWrap)
         self.set_code(self.MACRO_SAMPLE)
         self.editor.modificationChanged.connect(self.modification_changed)
+        self._autosave_timer = QC.QTimer(self)
+        self._autosave_timer.setSingleShot(True)
+        self._autosave_timer.setInterval(_AUTOSAVE_DELAY_MS)
+        self._autosave_timer.timeout.connect(self._autosave_pending)
         self.process = None
         self.__last_exit_code = None
 
@@ -117,6 +127,10 @@ print("All done!")
             code: Code to be executed
         """
         self.editor.setPlainText(code)
+        # ``setPlainText`` leaves the document in the *modified* state, which
+        # would suppress the very first ``modificationChanged(True)`` emission
+        # on a real user edit and thus break the autosave/recovery cache.
+        self.editor.document().setModified(False)
 
     def serialize(self, writer: BaseIOHandler) -> None:
         """Serialize this macro
@@ -128,6 +142,8 @@ print("All done!")
             writer.write(self.title)
         with writer.group("contents"):
             writer.write(self.get_code())
+        with writer.group("uid"):
+            writer.write(self.uid)
 
     def deserialize(self, reader: BaseIOHandler) -> None:
         """Deserialize this macro
@@ -139,6 +155,15 @@ print("All done!")
             self.title = reader.read_any()
         with reader.group("contents"):
             self.set_code(reader.read_any())
+        # Backward-compat: ``uid`` was added in v1.4; fall back to a fresh
+        # UUID when reading older workspaces.
+        try:
+            with reader.group("uid"):
+                stored_uid = reader.read_any()
+            if stored_uid:
+                self.uid = stored_uid
+        except Exception:  # pylint: disable=broad-except
+            pass
 
     def to_file(self, filename: str) -> None:
         """Save macro to file
@@ -209,6 +234,29 @@ print("All done!")
         """
         if state:
             self.MODIFIED.emit()
+            self._autosave_timer.start()
+
+    def _autosave_pending(self) -> None:
+        """Persist the current code to the recovery cache (best-effort)."""
+        try:
+            macrorecovery.save_pending(self.uid, self.title, self.get_code())
+        except OSError:
+            pass
+
+    def flush_autosave(self) -> None:
+        """Force an immediate write to the recovery cache (if pending)."""
+        if self._autosave_timer.isActive():
+            self._autosave_timer.stop()
+        self._autosave_pending()
+
+    def clear_autosave(self) -> None:
+        """Remove this macro from the recovery cache."""
+        if self._autosave_timer.isActive():
+            self._autosave_timer.stop()
+        try:
+            macrorecovery.clear_pending(self.uid)
+        except OSError:
+            pass
 
     @staticmethod
     def transcode(bytearr: QC.QByteArray) -> str:
@@ -271,6 +319,7 @@ print("All done!")
 
     def run(self) -> None:
         """Run macro"""
+        self.flush_autosave()
         self.process = QC.QProcess()
         code = self.get_code()
         datalab_path = osp.abspath(osp.join(osp.dirname(datalab.__file__), os.pardir))

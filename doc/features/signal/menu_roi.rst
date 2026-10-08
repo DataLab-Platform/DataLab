@@ -29,6 +29,17 @@ ROI are taken into account almost in all computing features in DataLab:
 
     ROI are stored as metadata, and thus attached to signal.
 
+.. note::
+
+    On the plot, each ROI is drawn as a translucent area **clipped to the signal
+    curve** (with a baseline at ``y = 0``, or at the bottom of the canvas on a
+    logarithmic Y axis), instead of a rectangle spanning the whole canvas height.
+    Successive ROIs use different colors, taken from a cyclic ten-color palette:
+    the color is derived from the ``ROI<n>`` title index, so a given ROI keeps
+    the same color across deletions, reorderings and editor reopenings. Only the
+    coordinates are stored: these visual properties are recomputed each time the
+    ROIs are drawn.
+
 The "ROI" menu allows you to:
 
 - "Edit graphically" |edit_roi|: open a dialog box to manage ROI associated with the selected signal (add, remove, move, resize, etc.). The ROI definition dialog is exactly the same as ROI extraction (see below): the ROI is defined by moving the position and adjusting the width of an horizontal range.

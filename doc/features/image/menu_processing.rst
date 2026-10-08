@@ -124,6 +124,45 @@ Clipping
 
 Apply the clipping to each selected image.
 
+Replace special values
+~~~~~~~~~~~~~~~~~~~~~~
+
+Create a new image where ``NaN``, ``+Inf`` and ``-Inf`` pixels are replaced
+using a configurable strategy per target value.
+
+Each of the three targets (``NaN``, ``+Inf``, ``-Inf``) is handled
+independently. For each target the user selects one of the following
+strategies (or *Do nothing* to leave the target untouched):
+
+.. list-table::
+    :header-rows: 1
+    :widths: 35, 65
+
+    * - Strategy
+      - Description
+    * - Do nothing
+      - Leave the target values untouched.
+    * - Replace with zero
+      - Replace by ``0``.
+    * - Replace with constant
+      - Replace by a user-defined constant value.
+    * - Replace with minimum / maximum
+      - Replace by the minimum / maximum of the finite pixels.
+    * - Replace with mean / median
+      - Replace by the mean / median of the finite pixels.
+    * - N-neighbor minimum / maximum / mean / median
+      - Replace by the corresponding statistic computed on the
+        ``(2N+1) × (2N+1)`` neighborhood around each affected pixel.
+
+Before opening the standard parameter form, the dialog displays a count of
+each target found in the image (e.g. *NaN: 124 (0.5 %)*). When a neighbor
+strategy is selected, a small preview shows the 2D kernel that will be used.
+
+.. note::
+
+    Unlike for signals, no interpolation strategy is currently available
+    for images.
+
 Offset correction
 ~~~~~~~~~~~~~~~~~
 
@@ -322,7 +361,7 @@ The following thresholding methods are available:
 Exposure
 ^^^^^^^^
 
-Create a new image which is the result of exposure correction on each selected image.
+Create new images by applying exposure corrections. Brightness and contrast uses the first selected image to initialize one shared input window, then applies that window independently to every selected image. Each result retains the output range of its own source image.
 
 The following functions are available:
 
@@ -333,6 +372,9 @@ The following functions are available:
     * - Function
       - Implementation
       - Comments
+    * - Brightness and contrast
+      - :py:func:`sigima.proc.image.adjust_brightness_contrast`
+      - Histogram-driven clipped linear remapping, initialized from the first selected image
     * - Gamma correction
       - `skimage.exposure.adjust_gamma <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_gamma>`_
       -

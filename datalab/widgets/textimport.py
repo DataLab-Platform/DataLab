@@ -33,6 +33,7 @@ from qtpy import QtWidgets as QW
 from sigima import ImageObj, SignalObj, create_image, create_signal
 from sigima.io.common.textreader import count_lines, read_first_n_lines
 from sigima.io.signal.funcs import get_labels_units_from_dataframe, read_csv_by_chunks
+from sigimax.widgets.wizard import Wizard, WizardPage
 
 from datalab.adapters_plotpy import CURVESTYLES, create_adapter_from_object
 from datalab.config import Conf, _
@@ -41,7 +42,6 @@ from datalab.utils.qthelpers import (
     create_progress_bar,
     qt_long_callback,
 )
-from datalab.widgets.wizard import Wizard, WizardPage
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, MaskedXYImageItem
@@ -547,9 +547,9 @@ class GraphicalRepresentationPage(WizardPage):
         plot_type = "curve" if destination == "signal" else "image"
         # Get appropriate autoscale margin from configuration
         if plot_type == "curve":
-            autoscale_margin = Conf.view.sig_autoscale_margin_percent.get()
+            autoscale_margin = Conf.sig_autoscale_margin_percent.get()
         else:
-            autoscale_margin = Conf.view.ima_autoscale_margin_percent.get()
+            autoscale_margin = Conf.ima_autoscale_margin_percent.get()
         self.plot_widget = PlotWidget(
             self,
             toolbar=True,
@@ -578,6 +578,23 @@ class GraphicalRepresentationPage(WizardPage):
         """Item selection changed"""
         objs = self.get_objs()
         self.set_valid(len(objs) > 0)
+
+    def cleanup(self) -> None:
+        """Release native plot resources deterministically.
+
+        Disconnect the item-change signal and drop every plot item before the
+        page (and its embedded PlotPy plot) is destroyed. Creating and tearing
+        down several wizards in sequence in native (on-screen) mode otherwise
+        leaves the cleanup to the garbage collector, whose ordering
+        occasionally triggers a Qt/PlotPy access violation (0xC0000005).
+        """
+        plot = self.plot_widget.get_plot()
+        try:
+            plot.SIG_ITEMS_CHANGED.disconnect(self.items_changed)
+        except (TypeError, RuntimeError):
+            pass
+        plot.del_all_items()
+        self.__objitmlist = []
 
     def get_objs(self) -> list[SignalObj | ImageObj]:
         """Return the objects"""

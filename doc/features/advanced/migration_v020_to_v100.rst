@@ -709,7 +709,15 @@ Some complex features still have dedicated methods:
    # These still use dedicated methods in v1.0
    proc.compute_roi_extraction(roi)
    proc.compute_multigaussianfit()
-   proc.compute_peak_detection(param)
+
+   # Peak detection (signal): ``compute_peak_detection`` still exists and
+   # opens the interactive threshold dialog as before, but it now stores
+   # the result as an XY-markers table (no sticks signal is created
+   # automatically). To rebuild the legacy sticks signal, chain with
+   # ``compute_markers_to_signal`` (or call ``run_feature("extract_peak_positions",
+   # param)`` directly when no interactive dialog is needed):
+   proc.compute_peak_detection(param)        # interactive, XY-markers result
+   proc.compute_markers_to_signal()          # optional: rebuild sticks signal
 
 Testing your plugin
 -------------------
@@ -794,4 +802,4 @@ Getting help
 If you encounter issues during migration:
 
 1. Check the `GitHub issue tracker <https://github.com/DataLab-Platform/DataLab/issues>`_
-2. Consult the built-in plugin examples in the ``datalab/plugins`` directory
+2. Consult the built-in plugin examples in the ``datalab/plugins/builtin`` directory

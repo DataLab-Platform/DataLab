@@ -52,7 +52,7 @@ def test_signal_roi_app(screenshots: bool = False) -> None:
         sig2 = create_paracetamol_signal(SIZE)
         sig2.roi = create_signal_roi([SROI1, SROI2], indices=True)
         for singleobj in (False, True):
-            with Conf.proc.extract_roi_singleobj.temp(singleobj):
+            with Conf.extract_roi_singleobj.context(singleobj):
                 sig2_i = sig2.copy()
                 panel.add_object(sig2_i)
                 helpers.print_obj_data_dimensions(sig2_i, indent=1)

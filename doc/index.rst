@@ -3,7 +3,7 @@ DataLab
 
 .. meta::
     :description: Home of DataLab, the open-source platform for scientific and technical data processing and visualization
-    :keywords: DataLab, scientific, data, processing, visualization, open-source, platform, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, Sigima, CODRA, Pierre Raybaut
+    :keywords: DataLab, scientific, data, processing, visualization, open-source, platform, DataLab Platform, DataLab-Web, browser, WebAssembly, Pyodide, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, Sigima, SigimaX, CODRA, Pierre Raybaut
 
 DataLab is an **open-source platform for signal and image processing and visualization**
 for research, education and industry. Leveraging the richness of the scientific Python
@@ -14,11 +14,17 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
 .. only:: html and not latex
 
-    .. dropdown:: Notice for users upgrading from DataLab v0.20
+    .. dropdown:: :octicon:`browser;1em;sd-text-info` DataLab-Web -- the browser-native edition (no install)
         :animate: fade-in
-        :icon: alert
+        :icon: rocket
 
-        DataLab v1.0 introduces breaking changes. Plugins must be updated to work with the new version. See the :ref:`migration guide <migration_v020_to_v100>` for details.
+        **DataLab-Web** is the browser-native edition of the platform: the full feature set
+        runs inside your browser tab -- no install, and your data never leaves your machine.
+
+        :octicon:`rocket;1em;sd-text-info` **Try it now:** `datalab-platform.com/web <https://datalab-platform.com/web/>`_
+
+        Learn more about the DataLab Platform and its editions in the
+        :doc:`ecosystem overview <intro/ecosystem>`.
 
 .. only:: html and not latex
 
@@ -45,35 +51,44 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
 .. only:: html and not latex
 
-    .. grid:: 2 2 4 4
+    **What is DataLab used for?** A few examples, with real data and step-by-step tutorials:
+
+    .. grid:: 1 1 3 3
         :gutter: 1 2 3 4
 
-        .. grid-item-card:: :octicon:`rocket;1em;sd-text-info`  Getting started
-            :link: intro/index
+        .. grid-item-card:: :octicon:`pulse;1em;sd-text-info`  Spectroscopy
+            :link: use_cases/spectroscopy
             :link-type: doc
 
-            Installation, tutorials, use cases...
+            Baseline correction and peak fitting
 
-        .. grid-item-card:: :octicon:`tools;1em;sd-text-info`  Features
-            :link: features/index
+        .. grid-item-card:: :octicon:`sun;1em;sd-text-info`  Photonics & lasers
+            :link: use_cases/photonics
             :link-type: doc
 
-            Detailed description
+            Beam profiling and interferograms
 
-        .. grid-item-card:: :octicon:`megaphone;1em;sd-text-info`  Talks & Events
-            :link: outreach/index
+        .. grid-item-card:: :octicon:`search;1em;sd-text-info`  Non-destructive testing
+            :link: use_cases/ndt
             :link-type: doc
 
-            Conference presentations
+            Automated defect detection
 
-        .. grid-item-card:: :octicon:`gear;1em;sd-text-info`  Contributing
-            :link: contributing/index
-            :link-type: doc
 
-            Getting involved in the project
+.. only:: html and not latex
+
+    .. container:: sd-mt-4
+
+        **Start with DataLab:** :doc:`Getting started <intro/index>` --
+        installation, tutorials and first use cases.
+
+        **Explore the documentation:** :doc:`Features <features/index>` ·
+        :doc:`Contributing <contributing/index>` ·
+        :doc:`Talks & events <outreach/index>`
 
 DataLab has been funded, chronologically, by the following stakeholders:
 
+.. tabularcolumns:: |>{\centering\arraybackslash}m{1.2cm}|m{\dimexpr\linewidth-1.2cm-4\tabcolsep\relax}|
 .. list-table::
     :header-rows: 0
 
@@ -86,23 +101,40 @@ DataLab has been funded, chronologically, by the following stakeholders:
     * - |nlnet_logo|
       - `NLnet Foundation <https://nlnet.nl>`_, as part of the NGI0 Commons Fund, backed by the European Commission, has funded the `redesign of DataLab's core architecture <https://nlnet.nl/project/DataLab/>`_.
 
-.. |cea_logo| image:: images/logos/cea.svg
-    :width: 64px
-    :height: 64px
-    :target: https://www.cea.fr
-    :class: dark-light no-scaled-link
+.. Sphinx converts ``px`` to ``bp`` at 72 dpi for LaTeX, which makes ``64px``
+   render at ~22mm in the PDF -- way larger than in HTML. Define separate
+   substitutions per output: pixels for HTML, centimetres for LaTeX.
 
-.. |codra_logo| image:: images/logos/codra.svg
-    :width: 64px
-    :height: 64px
-    :target: https://codra.net
-    :class: dark-light no-scaled-link
+.. only:: html
 
-.. |nlnet_logo| image:: images/logos/nlnet.svg
-    :width: 64px
-    :height: 64px
-    :target: https://nlnet.nl
-    :class: dark-light no-scaled-link
+    .. |cea_logo| image:: images/logos/cea.svg
+        :width: 64px
+        :height: 64px
+        :target: https://www.cea.fr
+        :class: dark-light no-scaled-link
+
+    .. |codra_logo| image:: images/logos/codra.svg
+        :width: 64px
+        :height: 64px
+        :target: https://codra.net
+        :class: dark-light no-scaled-link
+
+    .. |nlnet_logo| image:: images/logos/nlnet.svg
+        :width: 64px
+        :height: 64px
+        :target: https://nlnet.nl
+        :class: dark-light no-scaled-link
+
+.. only:: latex
+
+    .. |cea_logo| image:: images/logos/cea.svg
+        :width: 1cm
+
+    .. |codra_logo| image:: images/logos/codra.svg
+        :width: 1cm
+
+    .. |nlnet_logo| image:: images/logos/nlnet.svg
+        :width: 1cm
 
 .. figure:: _static/plotpy-stack-powered.png
     :align: center
@@ -120,11 +152,17 @@ DataLab has been funded, chronologically, by the following stakeholders:
     DataLab processing features are based on `Sigima <https://sigima.readthedocs.io/>`_,
     the open-source signal and image processing library (part of the DataLab Platform).
 
+The desktop application itself is built on `SigimaX <https://sigimax.readthedocs.io/>`_,
+the Qt application framework of the DataLab Platform: main window skeleton,
+configuration system, dockable plot widgets, HDF5 workspace and browser, log viewer
+and scientific dialogs (see :ref:`ecosystem`).
+
 .. toctree::
     :maxdepth: 2
     :hidden:
 
     intro/index
+    use_cases/index
     features/index
     contributing/index
     release_notes/index
@@ -155,6 +193,8 @@ DataLab has been funded, chronologically, by the following stakeholders:
    for building scientific applications with Qt graphical user interfaces.
    DataLab advanced and specialized processing features are based on `Sigima <https://sigima.readthedocs.io/>`_,
    the open-source signal and image processing library (part of the DataLab Platform).
+   Its graphical user interface is built on `SigimaX <https://sigimax.readthedocs.io/>`_,
+   the Qt application framework of the DataLab Platform.
 
 .. _NumPy: https://numpy.org/
 .. _SciPy: https://www.scipy.org/

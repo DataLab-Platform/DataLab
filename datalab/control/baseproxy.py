@@ -381,6 +381,14 @@ class AbstractDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
+    def get_current_object_uuid(self) -> str | None:
+        """Return current object uuid in current panel.
+
+        Returns:
+            UUID of the current object, or None if no object is current.
+        """
+
+    @abc.abstractmethod
     def select_objects(
         self,
         selection: list[int | str],
@@ -814,6 +822,14 @@ class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
             List of selected objects uuids.
         """
         return self._datalab.get_sel_object_uuids(include_groups)
+
+    def get_current_object_uuid(self) -> str | None:
+        """Return current object uuid in current panel.
+
+        Returns:
+            UUID of the current object, or None if no object is current.
+        """
+        return self._datalab.get_current_object_uuid()
 
     def add_group(
         self, title: str, panel: str | None = None, select: bool = False

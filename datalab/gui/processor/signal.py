@@ -11,11 +11,13 @@ from __future__ import annotations
 import re
 from collections.abc import Callable
 
+import guidata.dataset as gds
 import numpy as np
 import sigima.params
 import sigima.proc.base as sigima_base
 import sigima.proc.signal as sips
 from guidata.qthelpers import exec_dialog
+from qtpy import QtWidgets as QW
 from sigima.objects import (
     NormalDistributionParam,
     PoissonDistributionParam,
@@ -26,16 +28,24 @@ from sigima.objects import (
     create_signal,
 )
 from sigima.objects.scalar import GeometryResult, TableResult
-
-from datalab.config import _
-from datalab.gui.processor.base import BaseProcessor
-from datalab.utils.qthelpers import qt_try_except
-from datalab.widgets import (
+from sigima.tools.signal import fitting as signal_fitting
+from sigima.tools.signal.pulse import LegacyPeakParameterizationError
+from sigimax.widgets import (
     fitdialog,
     signalbaseline,
     signalcursor,
     signaldeltax,
     signalpeak,
+)
+
+from datalab.adapters_metadata.table_adapter import TableAdapter
+from datalab.config import _
+from datalab.env import execenv
+from datalab.gui.processor.base import BaseProcessor, SourcePreparationTransaction
+from datalab.objectmodel import get_uuid
+from datalab.utils.qthelpers import qt_try_except
+from datalab.widgets.replacespecialvalues import (
+    ReplaceSpecialValuesSignalParamDL,
 )
 
 
@@ -56,6 +66,110 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         (_("CDF fit"), sips.cdf_fit),
         (_("Sigmoid fit"), sips.sigmoid_fit),
     )
+
+    @staticmethod
+    def __has_legacy_fit_metadata(obj: SignalObj) -> bool:
+        """Return whether a signal carries fit metadata keyed by translated labels.
+
+        Interactive fitting curves computed before the canonical ``fit_params``
+        schema stored their parameters under the dialog function name, keyed by
+        translated UI labels. Such metadata is not evaluable and is only detected
+        here to report an explicit message to the user.
+
+        Args:
+            obj: Signal object to inspect.
+
+        Returns:
+            Whether legacy interactive fit metadata was found.
+        """
+        return any(
+            key.endswith("fit") and isinstance(value, dict)
+            for key, value in obj.metadata.items()
+        )
+
+    def prepare_fit_evaluation(
+        self, objects: list[SignalObj]
+    ) -> SourcePreparationTransaction | None:
+        """Prepare historical peak-fit metadata for transactional conversion."""
+        converted: dict[str, signal_fitting.FitParams] = {}
+        invalid = []
+        for obj in objects:
+            fit_params = obj.metadata.get("fit_params")
+            if not isinstance(fit_params, dict):
+                if self.__has_legacy_fit_metadata(obj):
+                    invalid.append(
+                        _(
+                            "%s: fitting curve was computed by an earlier version "
+                            "and cannot be evaluated (please recompute the fit)"
+                        )
+                        % obj.title
+                    )
+                else:
+                    invalid.append(
+                        _("%s: signal does not contain valid fit parameters")
+                        % obj.title
+                    )
+                continue
+            try:
+                signal_fitting.validate_fit_params(fit_params)
+            except LegacyPeakParameterizationError:
+                try:
+                    converted[get_uuid(obj)] = (
+                        signal_fitting.convert_legacy_peak_fit_params(fit_params)
+                    )
+                except ValueError as exc:
+                    invalid.append(f"{obj.title}: {exc}")
+            except (TypeError, ValueError) as exc:
+                invalid.append(f"{obj.title}: {exc}")
+        if invalid:
+            error = "\n".join(invalid)
+            if execenv.unattended:
+                raise ValueError(error)
+            QW.QMessageBox.warning(
+                self.mainwindow,
+                _("Cannot evaluate fit"),
+                _(
+                    "One or more selected signals have invalid or unsupported fit "
+                    "parameters:\n%s"
+                )
+                % error,
+            )
+            return None
+        if converted:
+            if execenv.unattended:
+                raise LegacyPeakParameterizationError(
+                    "Historical area-based peak parameters require explicit conversion"
+                )
+            answer = QW.QMessageBox.question(
+                self.mainwindow,
+                _("Convert historical fit parameters"),
+                _(
+                    "One or more selected fitting curves use historical area-based "
+                    "peak parameters. Convert them to signed peak height before "
+                    "evaluating?"
+                ),
+                QW.QMessageBox.Yes | QW.QMessageBox.No,
+                QW.QMessageBox.No,
+            )
+            if answer == QW.QMessageBox.No:
+                return None
+
+        def source_for_execution(
+            original: SignalObj, effective: SignalObj
+        ) -> SignalObj:
+            fit_params = converted.get(get_uuid(original))
+            if fit_params is None:
+                return effective
+            prepared = effective.copy(all_metadata=True)
+            prepared.metadata["fit_params"] = dict(fit_params)
+            return prepared
+
+        def commit(original: SignalObj) -> None:
+            fit_params = converted.get(get_uuid(original))
+            if fit_params is not None:
+                original.metadata["fit_params"] = dict(fit_params)
+
+        return SourcePreparationTransaction(source_for_execution, commit)
 
     # pylint: disable=duplicate-code
 
@@ -234,6 +348,12 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             sips.clip, _("Clipping"), sigima_base.ClipParam, "clip.svg"
         )
         self.register_1_to_1(
+            sips.replace_special_values,
+            _("Replace special values"),
+            ReplaceSpecialValuesSignalParamDL,
+            "replace_nan.svg",
+        )
+        self.register_1_to_1(
             sips.offset_correction,
             _("Offset correction"),
             icon_name="offset_correction.svg",
@@ -329,12 +449,6 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             paramclass=sigima.params.PowerParam,
             icon_name="power.svg",
         )
-        self.register_1_to_1(
-            sips.peak_detection,
-            _("Peak detection"),
-            paramclass=sigima.params.PeakDetectionParam,
-            icon_name="peak_detect.svg",
-        )
         # Frequency filters
         self.register_1_to_1(
             sips.lowpass,
@@ -371,6 +485,8 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             _("Evaluate fit"),
             obj2_name=_("signal for X values"),
             comment=_("Evaluate a fitting curve on the x-axis of another signal"),
+            skip_xarray_compat=True,
+            pre_execute_hook=self.prepare_fit_evaluation,
         )
 
         # Other processing
@@ -416,26 +532,6 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         self.register_1_to_1(
             sips.overlapping_allan_variance,
             _("Overlapping Allan variance"),
-            paramclass=sigima.params.AllanVarianceParam,
-        )
-        self.register_1_to_1(
-            sips.modified_allan_variance,
-            _("Modified Allan variance"),
-            paramclass=sigima.params.AllanVarianceParam,
-        )
-        self.register_1_to_1(
-            sips.hadamard_variance,
-            _("Hadamard variance"),
-            paramclass=sigima.params.AllanVarianceParam,
-        )
-        self.register_1_to_1(
-            sips.modified_allan_variance,
-            _("Modified Allan variance"),
-            paramclass=sigima.params.AllanVarianceParam,
-        )
-        self.register_1_to_1(
-            sips.hadamard_variance,
-            _("Hadamard variance"),
             paramclass=sigima.params.AllanVarianceParam,
         )
         self.register_1_to_1(
@@ -512,6 +608,15 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             _("Extract pulse features"),
             paramclass=sips.PulseFeaturesParam,
             comment=_("Extract pulse features (amplitude, rise time, fall time...)"),
+        )
+        self.register_1_to_0(
+            sips.extract_peak_positions,
+            _("Extract peak positions"),
+            paramclass=sips.PeakDetectionParam,
+            comment=_(
+                "Extract peak positions as an X-markers table "
+                "(e.g. for spectral line analysis)"
+            ),
         )
         self.register_1_to_0(
             sips.x_at_minmax,
@@ -601,8 +706,18 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
     def compute_peak_detection(
         self, param: sigima.params.PeakDetectionParam | None = None
     ) -> None:
-        """Detect peaks from data
-        with :py:func:`sigima.proc.signal.peak_detection`"""
+        """Interactive peak detection.
+
+        Opens :class:`~sigimax.widgets.signalpeak.SignalPeakDetectionDialog`
+        to set the detection threshold and minimum distance visually, then
+        stores the detected peak positions as an XY-markers
+        :class:`~sigima.objects.scalar.TableResult` attached to the signal
+        (via :py:func:`sigima.proc.signal.extract_peak_positions`).
+
+        To rebuild the historical *sticks* signal from the detected peaks,
+        use :py:meth:`compute_markers_to_signal` afterwards (menu
+        *Operations ▸ Create signal from markers table…*).
+        """
         obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         edit, param = self.init_param(
             param, sips.PeakDetectionParam, _("Peak detection")
@@ -614,7 +729,57 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
                 param.min_dist = dlg.get_min_dist()
             else:
                 return
-        self.run_feature("peak_detection", param)
+        self.run_feature("extract_peak_positions", param)
+
+    @qt_try_except()
+    def compute_markers_to_signal(self) -> None:
+        """Build a sticks signal from an XY-markers table result
+        with :py:func:`sigima.proc.signal.markers_table_to_signal`.
+        """
+        selected = self.panel.objview.get_sel_objects(include_groups=True)
+        if not selected:
+            return
+        title = _("Create signal from markers table")
+        last_choice: str | None = None
+        for obj in selected:
+            adapters = [
+                a
+                for a in TableAdapter.iterate_from_obj(obj)
+                if a.result.is_xy_markers()
+            ]
+            if not adapters:
+                QW.QMessageBox.information(
+                    self.mainwindow,
+                    title,
+                    _(
+                        "Signal '%s' has no XY-markers table result. "
+                        "Run 'Extract peak positions' (or another XY-markers "
+                        "analysis) first."
+                    )
+                    % obj.title,
+                )
+                continue
+            if len(adapters) == 1:
+                adapter = adapters[0]
+            else:
+                titles = [a.result.title for a in adapters]
+                default_idx = titles.index(last_choice) if last_choice in titles else 0
+                choices = list(enumerate(titles))
+
+                class _MarkersChoice(gds.DataSet):
+                    """Markers table selection."""
+
+                    index = gds.ChoiceItem(
+                        _("Markers table"), choices, default=default_idx
+                    )
+
+                choice = _MarkersChoice(title)
+                if not choice.edit(self.mainwindow):
+                    continue
+                adapter = adapters[choice.index]
+                last_choice = titles[choice.index]
+            signal = sips.markers_table_to_signal(adapter.result, ref=obj)
+            self.panel.add_object(signal)
 
     @qt_try_except()
     def compute_polyfit(
@@ -638,21 +803,49 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         """Curve fitting computing sub-method"""
         output = fitdlgfunc(obj.x, obj.y, parent=self.mainwindow)
         if output is not None:
-            y, params = output
-            params: list[fitdialog.FitParam]
-            pvalues = {}
-            for param in params:
-                if re.match(r"[\S\_]*\d{2}$", param.name):
-                    shname = param.name[:-2]
-                    value = pvalues.get(shname, np.array([]))
-                    pvalues[shname] = np.array(list(value) + [param.value])
-                else:
-                    pvalues[param.name] = param.value
+            fit_params = None
+            if len(output) == 3:
+                y, _params, fit_params = output
+                metadata = {"fit_params": fit_params}
+            else:
+                # Fallback for third-party fitting dialogs that do not return
+                # canonical fit parameters: the metadata is keyed by translated
+                # UI labels, hence it cannot be evaluated by "Evaluate fit".
+                # All built-in dialogs return a 3-tuple.
+                y, params = output
+                params: list[fitdialog.FitParam]
+                pvalues = {}
+                for param in params:
+                    if re.match(r"[\S\_]*\d{2}$", param.name):
+                        shname = param.name[:-2]
+                        value = pvalues.get(shname, np.array([]))
+                        pvalues[shname] = np.array(list(value) + [param.value])
+                    else:
+                        pvalues[param.name] = param.value
+                metadata = {fitdlgfunc.__name__: pvalues}
             # Creating new signal
-            metadata = {fitdlgfunc.__name__: pvalues}
             signal = create_signal(f"{name}({obj.title})", obj.x, y, metadata=metadata)
-            # Creating new plot item
-            self.panel.add_object(signal)
+            # Record a replayable history action when the dialog returned
+            # canonical fit parameters (third-party dialogs returning legacy
+            # 2-tuples cannot be replayed deterministically).
+            action = None
+            if fit_params is not None:
+                action = self.mainwindow.historypanel.add_ui_entry(
+                    name,
+                    target="signalprocessor",
+                    method_name="recompute_fit",
+                    save_state=True,
+                    fit_params=dict(fit_params),
+                    fit_name=name,
+                    source_uuid=get_uuid(obj),
+                )
+            # Creating new plot item (capturing its UUID as the action output)
+            with self.mainwindow.historypanel.capture_outputs(action):
+                self.panel.add_object(signal)
+            if action is not None and action.output_uuids:
+                # Persist the output UUID so that replay updates the fitted
+                # curve in place instead of duplicating it
+                action.kwargs["output_uuid"] = action.output_uuids[0]
 
     @qt_try_except()
     def compute_fit(self, title: str, fitdlgfunc: Callable) -> None:
@@ -664,6 +857,74 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
         """
         for obj in self.panel.objview.get_sel_objects():
             self.__row_compute_fit(obj, title, fitdlgfunc)
+
+    @qt_try_except()
+    def recompute_fit(
+        self,
+        fit_params: dict,
+        fit_name: str = "",
+        source_uuid: str | None = None,
+        output_uuid: str | None = None,
+        edit: bool = False,
+    ) -> None:
+        """Recompute an interactive fit result curve at history-replay time.
+
+        Rebuilds the fitted curve from the recorded canonical fit parameters
+        without reopening the interactive dialog (evaluation is delegated to
+        :func:`sigima.tools.signal.fitting.evaluate_fit`).
+
+        Args:
+            fit_params: Canonical fit parameters, as produced by
+             :func:`sigima.tools.signal.fitting.create_fit_params`.
+            fit_name: Title prefix used for the fitted curve.
+            source_uuid: UUID of the source signal. When missing or no longer
+             present, falls back to the first selected signal.
+            output_uuid: Recorded UUID of the fitted curve. When it still
+             exists, the curve is updated in place; when it was deleted, it is
+             re-created under this UUID so downstream references stay valid.
+            edit: If True, the replay was requested in edit mode. The
+             interactive fit dialog cannot be reopened with the recorded
+             parameters, so nothing is recomputed and the recorded fit is
+             preserved as is.
+        """
+        if edit:
+            if not execenv.unattended:
+                QW.QMessageBox.information(
+                    self.mainwindow,
+                    _("Recompute fit"),
+                    _(
+                        "Interactive fits cannot be edited from the History "
+                        "panel: the fit dialog cannot be reopened with the "
+                        "recorded parameters. The recorded fit is kept as is."
+                    ),
+                )
+            return
+        obj = None
+        if source_uuid is not None and self.panel.objmodel.has_uuid(source_uuid):
+            obj = self.panel.objmodel[source_uuid]
+        if obj is None:
+            selected = self.panel.objview.get_sel_objects(include_groups=True)
+            obj = selected[0] if selected else None
+        if obj is None:
+            return
+        y = signal_fitting.evaluate_fit(obj.x, **fit_params)
+        title = f"{fit_name}({obj.title})"
+        if output_uuid is not None and self.panel.objmodel.has_uuid(output_uuid):
+            # Update the recorded output in place (no duplicate on replay)
+            target = self.panel.objmodel[output_uuid]
+            target.title = title
+            target.set_xydata(obj.x, y)
+            target.metadata["fit_params"] = dict(fit_params)
+            self.panel.objview.update_item(output_uuid)
+            self.panel.refresh_plot(output_uuid, update_items=True, force=True)
+            return
+        signal = create_signal(
+            title, obj.x, y, metadata={"fit_params": dict(fit_params)}
+        )
+        if output_uuid is not None:
+            # Re-create the deleted output under its recorded UUID
+            signal.set_metadata_option("uuid", output_uuid)
+        self.panel.add_object(signal)
 
     @qt_try_except()
     def compute_multigaussianfit(self) -> None:

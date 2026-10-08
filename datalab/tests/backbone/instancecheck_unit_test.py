@@ -249,11 +249,11 @@ class TestIntegrationLockFile:
         """Lock path must be inside the DataLab config directory, not '.none'."""
         from datalab.config import (  # pylint: disable=import-outside-toplevel
             APP_NAME,
-            Conf,
+            get_config_path,
         )
 
         registry = instancecheck.ApplicationInstanceRegistry()
-        lock_path = Conf.get_path(registry.lock_filename)
+        lock_path = get_config_path(registry.lock_filename)
         assert registry.lock_filename == f"{APP_NAME}.lock"
         assert ".none" not in lock_path, (
             f"Lock path points to uninitialized config dir: {lock_path}"

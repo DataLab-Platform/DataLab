@@ -12,6 +12,7 @@ covered by other tests.
 
 import os
 
+import pytest
 import sigima.params
 import sigima.proc.signal as sips
 from sigima.tests.data import create_paracetamol_signal
@@ -19,6 +20,26 @@ from sigima.tests.data import create_paracetamol_signal
 from datalab.env import execenv
 from datalab.objectmodel import get_short_id, get_uuid
 from datalab.tests import datalab_test_app_context
+
+
+def test_calc_reports_feature_errors_without_trying_other_panels(monkeypatch):
+    """A failing feature is reported instead of being retried on another panel."""
+    with datalab_test_app_context(console=False) as win:
+        win.set_current_panel("signal")
+        image_calls = []
+
+        def fail(*args, **kwargs):
+            raise ValueError("feature failed")
+
+        monkeypatch.setattr(win.signalpanel.processor, "run_feature", fail)
+        monkeypatch.setattr(
+            win.imagepanel.processor,
+            "run_feature",
+            lambda *args, **kwargs: image_calls.append(args),
+        )
+        with pytest.raises(ValueError, match="feature failed"):
+            win.calc("normalize", edit=False)
+        assert image_calls == []
 
 
 def test_main_app():

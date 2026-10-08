@@ -61,6 +61,7 @@ class EmptyPlugin(datalab.plugins.PluginBase):
     """DataLab Example Plugin"""
 
     PLUGIN_INFO = datalab.plugins.PluginInfo(
+        id="org.datalab.examples.empty",
         name="Empty plugin (example)",
         version="1.0.0",
         description="This is an empty example plugin",

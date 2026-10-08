@@ -55,11 +55,17 @@ msgstr ""
 msgid "**Remotely controlled** from your own software, or from an IDE (e.g., Spyder) or a Jupyter notebook, using the DataLab API."
 msgstr "**Piloté à distance** depuis votre propre logiciel, ou depuis un IDE (par exemple Spyder) ou un notebook Jupyter, en utilisant l'API de DataLab."
 
+msgid "DataLab is the desktop application at the heart of a broader family, the **DataLab Platform**, which also includes a browser-native edition (**DataLab-Web**) that runs without any installation. See :ref:`ecosystem` to learn about the editions and choose the one that fits your needs."
+msgstr "DataLab est l'application de bureau au cœur d'une famille plus large, la **plateforme DataLab**, qui comprend également une édition native pour navigateur (**DataLab-Web**) s'exécutant sans aucune installation. Voir :ref:`ecosystem` pour découvrir les éditions et choisir celle qui correspond à vos besoins."
+
 msgid "DataLab leverages the power of Python and its scientific ecosystem, through the use of the following libraries:"
 msgstr "DataLab s'appuie sur la puissance de Python et de son écosystème scientifique, grâce à l'utilisation des bibliothèques suivantes :"
 
 msgid "`Sigima <https://github.com/DataLab-Platform/Sigima>`_ for signal and image processing (part of the DataLab Platform)"
 msgstr "`Sigima <https://github.com/DataLab-Platform/Sigima>`_ pour le traitement du signal et de l'image (faisant partie de la plateforme DataLab)"
+
+msgid "`SigimaX <https://github.com/DataLab-Platform/SigimaX>`_ for the Qt application framework the desktop application is built upon (part of the DataLab Platform)"
+msgstr "`SigimaX <https://github.com/DataLab-Platform/SigimaX>`_ pour le framework applicatif Qt sur lequel repose l'application de bureau (faisant partie de la plateforme DataLab)"
 
 msgid "`NumPy <https://numpy.org/>`_ for numerical computing (arrays, linear algebra, etc.)"
 msgstr "`NumPy <https://numpy.org/>`_ pour le calcul numérique (tableaux, algèbre linéaire, etc.)"
@@ -105,3 +111,9 @@ msgstr "Tutoriels"
 
 msgid "Tutorials to learn how to use DataLab"
 msgstr "Tutoriels pour apprendre à utiliser DataLab"
+
+msgid "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon sd-octicon-browser sd-text-info\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25ZM14.5 6h-13v7.25c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25Zm-6-3.5v2h6V2.75a.25.25 0 0 0-.25-.25ZM5 2.5v2h2v-2Zm-3.25 0a.25.25 0 0 0-.25.25V4.5h2v-2Z\"></path></svg>  Editions"
+msgstr "Éditions"
+
+msgid "The DataLab Platform and its editions"
+msgstr "La plateforme DataLab et ses éditions"

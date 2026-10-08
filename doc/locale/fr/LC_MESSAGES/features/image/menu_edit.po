@@ -6,7 +6,6 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -48,8 +47,11 @@ msgstr "L'action \"Recalculer\" |recompute| vous permet de recalculer l'image (o
 msgid "recompute"
 msgstr ""
 
-msgid "This action is only available for images that were created through processing operations and have stored processing parameters."
-msgstr "Cette action n'est disponible que pour les images qui ont été créées par des opérations de traitement et qui ont des paramètres de traitement stockés."
+msgid "It also refreshes analysis results (statistics, FWHM, centroid, peak/contour/blob detection, etc.) using their stored parameters. Analysis results are not recomputed automatically when you modify a region of interest, the data, or object properties: existing results are left untouched until you explicitly trigger this action, giving you full control over when analyses are refreshed."
+msgstr "Cette action actualise également les résultats d'analyse (statistiques, FWHM, centroïde, détection de pics, de contours ou de blobs, etc.) à partir de leurs paramètres enregistrés. Les résultats d'analyse ne sont pas recalculés automatiquement lorsque vous modifiez une région d'intérêt, les données ou les propriétés de l'objet : les résultats existants restent inchangés jusqu'à ce que vous déclenchiez explicitement cette action, vous laissant ainsi un contrôle total sur le moment où les analyses sont actualisées."
+
+msgid "This action is only available for images that have stored processing parameters (created through processing operations) or stored analysis parameters (analysis operations previously run on them)."
+msgstr "Cette action n'est disponible que pour les images disposant de paramètres de traitement enregistrés (images créées par des opérations de traitement) ou de paramètres d'analyse enregistrés (opérations d'analyse exécutées précédemment sur celles-ci)."
 
 msgid "Select source objects"
 msgstr "Sélectionner les objets sources"
@@ -138,17 +140,29 @@ msgstr "Boîte de dialogue Ajouter des métadonnées."
 msgid "When you select \"Add metadata...\" from the Edit menu, a dialog appears where you can:"
 msgstr "Lorsque vous sélectionnez \"Ajouter des métadonnées...\" dans le menu Édition, une boîte de dialogue apparaît où vous pouvez :"
 
-msgid "**Metadata key**: Enter the name of the metadata field to add"
-msgstr "**Clé de métadonnées** : Entrez le nom du champ de métadonnées à ajouter"
+msgid "**Metadata key**: Enter the name of the metadata field to add (letters, digits, ``_``, ``.`` and ``-``, e.g. a plugin key such as ``plugin.org.example.my-plugin.gain``)"
+msgstr "**Clé de métadonnée** : Saisir le nom du champ de métadonnée à ajouter (lettres, chiffres, ``_``, ``.`` et ``-``, par exemple une clé de plugin telle que ``plugin.org.example.my-plugin.gain``)"
+
+msgid "**Known keys**: Pick a key already present on the selected images, or a key expected by the methods of the installed application plugins, to copy it into the metadata key"
+msgstr "**Clés connues** : Choisir une clé déjà présente sur les images sélectionnées, ou une clé attendue par les méthodes des plugins d'application installés, pour la copier dans la clé de métadonnée"
 
 msgid "**Value pattern**: Define a pattern for the metadata value using Python format strings"
 msgstr "**Modèle de valeur** : Définir un modèle pour la valeur des métadonnées en utilisant des chaînes de format Python"
 
+msgid "**Extraction pattern**: Optionally, extract the value from the formatted text with a Python regular expression: its first group, or the whole match if it has no group, becomes the value"
+msgstr "**Motif d'extraction** : Facultativement, extraire la valeur du texte formaté avec une expression régulière Python : son premier groupe, ou toute la correspondance si elle n'a pas de groupe, devient la valeur"
+
+msgid "**If no match**: Leave images without a match unchanged (default), or report an error"
+msgstr "**Sans correspondance** : Laisser inchangées les images sans correspondance (par défaut), ou signaler une erreur"
+
 msgid "**Conversion**: Choose how to store the value (string, float, integer, or boolean)"
 msgstr "**Conversion** : Choisissez comment stocker la valeur (chaîne, flottant, entier ou booléen)"
 
-msgid "**Preview**: See how the metadata will be added to each selected image"
-msgstr "**Aperçu** : Voir comment les métadonnées seront ajoutées à chaque image sélectionnée"
+msgid "**Scale factor**: Multiply numeric values, e.g. ``0.001`` to convert milliseconds to seconds"
+msgstr "**Facteur d'échelle** : Multiplier les valeurs numériques, par exemple ``0.001`` pour convertir des millisecondes en secondes"
+
+msgid "**Preview**: See how the metadata will be added to each selected image, and which images are left unchanged"
+msgstr "**Aperçu** : Voir comment les métadonnées seront ajoutées à chaque image sélectionnée, et quelles images restent inchangées"
 
 msgid "The value pattern supports the following placeholders:"
 msgstr "Le modèle de valeur prend en charge les espaces réservés suivants :"
@@ -201,6 +215,10 @@ msgstr "Ajouter le temps d'exposition : clé=``exposure_ms``, modèle=``{metadat
 
 msgid "Flag calibrated images: key=``is_calibrated``, pattern=``true``, conversion=bool → Sets ``is_calibrated=True`` for all selected images"
 msgstr "Identifier les images étalonnées : clé=``is_calibrated``, modèle=``true``, conversion=bool → Définit ``is_calibrated=True`` pour toutes les images sélectionnées."
+
+#, python-brace-format
+msgid "Read exposure times from titles: key=``exposure_time_s``, pattern=``{title}``, extraction=``([\\d.]+)\\s*ms``, conversion=float, scale factor=``0.001`` → Sets ``exposure_time_s=0.005`` on an image titled \"Flat 5 ms 01\" and leaves \"Dark 01\" unchanged"
+msgstr "Lire les temps d'exposition dans les titres : clé=``exposure_time_s``, modèle=``{title}``, extraction=``([\\d.]+)\\s*ms``, conversion=flottant, facteur d'échelle=``0.001`` → Définit ``exposure_time_s=0.005`` sur une image intitulée « Flat 5 ms 01 » et laisse « Dark 01 » inchangée"
 
 msgid "Annotations"
 msgstr "Annotations"

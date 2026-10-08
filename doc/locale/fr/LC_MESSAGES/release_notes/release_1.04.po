@@ -1,0 +1,187 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Version 1.4"
+msgstr "Version 1.4"
+
+msgid "DataLab Version 1.4.0"
+msgstr "DataLab Version 1.4.0"
+
+msgid "✨ New Features"
+msgstr "✨ Nouvelles fonctionnalités"
+
+msgid "**Welcome page:**"
+msgstr "**Page d'accueil :**"
+
+msgid "A new **Welcome** page, similar to the one of DataLab-Web, is shown at startup and whenever the current signal or image panel is empty. It gathers the main actions to get started: create a signal or an image, open files, browse an HDF5 file, open an HDF5 workspace, import text data, ask the AI Assistant, take the guided tour, run the demo, read the documentation or browse the release notes"
+msgstr "Une nouvelle page d'**Accueil**, semblable à celle de DataLab-Web, est affichée au démarrage et chaque fois que le panneau signal ou image courant est vide. Elle rassemble les principales actions pour bien démarrer : créer un signal ou une image, ouvrir des fichiers, parcourir un fichier HDF5, ouvrir un espace de travail HDF5, importer des données texte, interroger l'assistant IA, suivre la visite guidée, lancer la démo, lire la documentation ou consulter les notes de version"
+
+msgid "The page is a dockable panel, tabbed with the signal and image views: it remains available after data is created or opened, and can be reopened at any time from the **?** menu (**Welcome page**) or from the **View** menu"
+msgstr "La page est un panneau ancrable, en onglet avec les vues signal et image : elle reste disponible après la création ou l'ouverture de données, et peut être rouverte à tout moment depuis le menu **?** (**Page d'accueil**) ou depuis le menu **Affichage**"
+
+msgid "A **Show welcome page when the current panel is empty** option, available on the page itself and in the General settings, controls whether the page is shown automatically, including at startup"
+msgstr "Une option **Afficher la page d'accueil lorsque le panneau courant est vide**, disponible sur la page elle-même et dans les paramètres généraux, détermine si la page est affichée automatiquement, y compris au démarrage"
+
+msgid "**Brightness and contrast:**"
+msgstr "**Luminosité et contraste :**"
+
+msgid "A new **Processing > Exposure > Brightness and contrast** operation provides a histogram with synchronized minimum, maximum, brightness and contrast controls, deterministic Auto and Reset actions, ROI-aware remapping, and live preview. One input window is initialized from the first selected image and applied to the full selection, with each result preserving its source image and data type."
+msgstr "Une nouvelle opération **Traitement > Exposition > Luminosité et contraste** fournit un histogramme avec des contrôles synchronisés du minimum, du maximum, de la luminosité et du contraste, des actions Auto et Réinitialiser déterministes, un remappage tenant compte des ROI et un aperçu interactif. Une plage d'entrée est initialisée à partir de la première image sélectionnée et appliquée à toute la sélection, chaque résultat conservant son image source et son type de données."
+
+msgid "Intensity windows may extend beyond the observed data range. Exact floating-point bounds survive editing and reapplication, while declared parameter constraints remain enforced and Cancel preserves the original parameters."
+msgstr "La fenêtre d'intensité peut s'étendre au-delà de la plage de données observée. Les limites en virgule flottante exactes survivent à l'édition et à la réapplication, tandis que les contraintes de paramètres déclarées restent appliquées et Annuler préserve les paramètres d'origine."
+
+msgid "**Live processing preview:**"
+msgstr "**Aperçu interactif des traitements :**"
+
+msgid "Parameter dialogs for compatible 1-to-1 processing now offer an optional live preview for signals and images, including image-to-signal operations. Preview is off by default; Cancel leaves the workspace unchanged, while OK reuses a completed current preview for a single source and otherwise performs the normal processing on the original selection."
+msgstr "Les boîtes de dialogue des traitements 1-vers-1 compatibles proposent désormais un aperçu interactif facultatif pour les signaux et images, y compris les opérations image-vers-signal. L'aperçu est désactivé par défaut ; Annuler laisse l'espace de travail inchangé, tandis que OK réutilise un aperçu courant terminé pour une source unique et exécute sinon le traitement normal sur la sélection initiale."
+
+msgid "Completed previews keep their dedicated process ready for later dialogs, avoiding repeated process startup. Cancelling a preview that is still running stops its process so speculative work cannot continue in the background."
+msgstr "Les aperçus terminés conservent leur processus dédié prêt pour les boîtes de dialogue suivantes, ce qui évite des démarrages de processus répétés. L'annulation d'un aperçu encore en cours arrête son processus afin qu'aucun calcul spéculatif ne se poursuive en arrière-plan."
+
+msgid "Bounded numeric parameters now offer sliders alongside precise text entry. The Processing tab retains Apply and automatic re-processing, with updates deferred until slider release and valid input."
+msgstr "Les paramètres numériques bornés proposent désormais des curseurs en complément d'une saisie textuelle précise. L'onglet Traitement conserve Appliquer et le retraitement automatique, avec des mises à jour différées jusqu'au relâchement du curseur et à une saisie valide."
+
+msgid "**Application plugins:**"
+msgstr "**Plugins d'application :**"
+
+msgid "Added a top-level **Applications** entry that presents active scientific application plugins in a dedicated catalog"
+msgstr "Ajout d'une entrée de premier niveau **Applications** qui présente les plugins d'application scientifique actifs dans un catalogue dédié"
+
+msgid "Each application displays its description, identity, version, methods, tools, and examples; processing-only plugins remain outside this focused view"
+msgstr "Chaque application affiche sa description, son identité, sa version, ses méthodes, ses outils et ses exemples ; les plugins de traitement seul restent en dehors de cette vue ciblée"
+
+msgid "Each method shows the inputs it expects (object type and count, required metadata) and a live status telling whether the current selection can be analyzed, and why not"
+msgstr "Chaque méthode présente les entrées qu'elle attend (type et nombre d'objets, métadonnées requises) et un statut mis à jour indiquant si la sélection courante peut être analysée, et sinon pourquoi"
+
+msgid "When required metadata are missing, the status points to **Edit > Metadata > Add metadata...**, whose **Known keys** list also offers the keys expected by application methods; the status is updated as soon as objects are modified"
+msgstr "Lorsque des métadonnées requises manquent, le statut renvoie vers **Édition > Métadonnées > Ajouter des métadonnées...**, dont la liste **Clés connues** propose aussi les clés attendues par les méthodes des applications ; le statut est mis à jour dès que des objets sont modifiés"
+
+msgid "**Run on selection...** starts a method directly when the selection is ready, and asks for the input assignment only when it is ambiguous or invalid; the assignment dialog checks the chosen objects before the run can continue"
+msgstr "**Exécuter sur la sélection...** lance directement une méthode lorsque la sélection convient, et ne demande l'affectation des entrées que si elle est ambiguë ou invalide ; la boîte de dialogue d'affectation vérifie les objets choisis avant de permettre l'exécution"
+
+msgid "Examples are listed under the methods they are designed for: **Try with this example** opens the example, prefills the method parameters, and runs the method once they are accepted. One example may serve several methods, and examples designed for no method are listed as datasets"
+msgstr "Les exemples sont listés sous les méthodes pour lesquelles ils sont conçus : **Essayer avec cet exemple** ouvre l'exemple, préremplit les paramètres de la méthode et exécute celle-ci une fois qu'ils sont acceptés. Un exemple peut servir plusieurs méthodes, et les exemples conçus pour aucune méthode sont listés comme jeux de données"
+
+msgid "Application plugins may also list tools, such as wizards or editors, in the catalog"
+msgstr "Les plugins d'application peuvent aussi lister des outils, comme des assistants ou des éditeurs, dans le catalogue"
+
+msgid "Plugin tools also appear in the plugin's submenu of the **Plugins** menu, in the Signal or Image panel they work on. A tool that needs a selection is disabled until the right objects are selected, and its catalog button tells what to select"
+msgstr "Les outils de plugin apparaissent aussi dans le sous-menu du plugin du menu **Plugins**, dans le panneau Signal ou Image sur lequel ils travaillent. Un outil qui a besoin d'une sélection est désactivé jusqu'à ce que les bons objets soient sélectionnés, et son bouton dans le catalogue indique quoi sélectionner"
+
+msgid "Application plugins may provide instruments, such as simulated cameras or oscilloscopes, without writing any user interface: DataLab shows a window with a live view and the instrument settings, refreshed as settings change or continuously in **Live** mode, and **Acquire** adds the acquired objects to a new group, ready for the application's methods"
+msgstr "Les plugins d'application peuvent fournir des instruments, comme des caméras ou des oscilloscopes simulés, sans écrire d'interface utilisateur : DataLab affiche une fenêtre avec une vue en direct et les réglages de l'instrument, rafraîchie à chaque modification des réglages ou en continu en mode **En direct**, et **Acquérir** ajoute les objets acquis dans un nouveau groupe, prêts pour les méthodes de l'application"
+
+msgid "Plugin developers describe recipe inputs declaratively (titles, minimum counts, metadata requirements) and may add binding suggestions and fast input checks; every recipe then runs through DataLab's generic launcher, without plugin-specific input dialogs"
+msgstr "Les développeurs de plugins décrivent les entrées des recettes de manière déclarative (titres, effectifs minimaux, métadonnées requises) et peuvent ajouter des suggestions d'affectation et des vérifications rapides des entrées ; chaque recette s'exécute alors via le lanceur générique de DataLab, sans boîte de dialogue d'entrées propre au plugin"
+
+msgid "The catalog is non-modal and remains open after starting a method or opening an example, so users may continue interacting with the DataLab workspace"
+msgstr "Le catalogue est non modal et reste ouvert après le lancement d'une méthode ou l'ouverture d'un exemple, de sorte que l'utilisateur peut continuer à interagir avec l'espace de travail DataLab"
+
+msgid "The methods, tools and datasets of an application form an accordion: one section is open at a time, and a colored dot tells, without opening it, whether each method can run on the current selection"
+msgstr "Les méthodes, outils et jeux de données d'une application forment un accordéon : une seule section est ouverte à la fois, et une pastille de couleur indique, sans l'ouvrir, si chaque méthode peut s'exécuter sur la sélection courante"
+
+msgid "The application list of the catalog may be hidden with the strip separating it from the application page: the window shrinks accordingly, and the choice is remembered"
+msgstr "La liste des applications du catalogue peut être masquée à l'aide de la bande qui la sépare de la page de l'application : la fenêtre se réduit en conséquence, et ce choix est mémorisé"
+
+msgid "Completed application methods select their last generated object, consistently with standard DataLab processing"
+msgstr "Les méthodes d'application terminées sélectionnent le dernier objet qu'elles ont généré, de manière cohérente avec les traitements standard de DataLab"
+
+msgid "Application plugins add tiles to a new **Applications** section of the welcome page: by default, one tile per plugin opens its page in the catalog, and plugins may declare additional tiles, for example to open an example directly. Additional tiles are shown when there is room for them, and otherwise move to the menu of the main tile"
+msgstr "Les plugins d'application ajoutent des tuiles à une nouvelle section **Applications** de la page d'accueil : par défaut, une tuile par plugin ouvre sa page dans le catalogue, et les plugins peuvent déclarer des tuiles supplémentaires, par exemple pour ouvrir directement un exemple. Les tuiles supplémentaires sont affichées lorsqu'il y a la place nécessaire, et passent sinon dans le menu de la tuile principale"
+
+msgid "The welcome page stays tidy when many applications are installed: tiles are limited to a configurable number of rows (two by default), with a last tile opening the catalog for the others. Applications may be pinned to the top or hidden, and recently used ones come first; the catalog offers a search field and the same welcome page options"
+msgstr "La page d'accueil reste lisible lorsque de nombreuses applications sont installées : les tuiles sont limitées à un nombre de lignes configurable (deux par défaut), une dernière tuile ouvrant le catalogue pour les autres. Les applications peuvent être épinglées en tête ou masquées, et celles utilisées récemment viennent en premier ; le catalogue propose un champ de recherche et les mêmes options de page d'accueil"
+
+msgid "Plugins may declare an icon, shown in the **Applications** catalog, on their welcome page tile and in the **Configure plugins...** dialog"
+msgstr "Les plugins peuvent déclarer une icône, affichée dans le catalogue **Applications**, sur leur tuile de la page d'accueil et dans la boîte de dialogue **Configurer les plugins...**"
+
+msgid "**Plugin project generator:**"
+msgstr "**Générateur de projets de plugins :**"
+
+msgid "Hardened ``datalab-plugin create`` from the Camera pilot feedback: generated projects now separate host-independent ``core`` code, headless ``workflow`` orchestration, and Desktop/Web ``adapters`` from the first commit"
+msgstr "Durcissement de ``datalab-plugin create`` à partir du retour du pilote Camera : les projets générés séparent désormais dès le premier commit le code ``core`` indépendant de l'hôte, l'orchestration ``workflow`` sans interface et les ``adapters`` Desktop/Web"
+
+msgid "Generated package roots expose stable identity without importing Qt; the installed entry point targets the Desktop adapter while Web support is explicitly marked unsupported"
+msgstr "La racine des packages générés expose une identité stable sans importer Qt ; le point d'entrée installé cible l'adaptateur Desktop, tandis que la prise en charge Web est explicitement marquée comme non prise en charge"
+
+msgid "Every generated project includes an executable architecture regression test, contribution and architecture documentation, and a changelog"
+msgstr "Chaque projet généré comprend un test de non-régression exécutable de l'architecture, une documentation de contribution et d'architecture, ainsi qu'un changelog"
+
+msgid "Long plugin names and descriptions are now formatted so newly generated projects pass their bundled Ruff checks without manual source edits"
+msgstr "Les noms et descriptions de plugins longs sont désormais mis en forme afin que les projets nouvellement générés réussissent leurs contrôles Ruff intégrés sans modification manuelle du code source"
+
+msgid "**Add metadata:**"
+msgstr "**Ajout de métadonnées :**"
+
+msgid "**Edit > Metadata > Add metadata...** can now extract the value from the formatted text with a regular expression, for example an exposure time or a shot number read from object titles. Objects without a match are left unchanged unless you ask for an error, and a scale factor converts numeric values (e.g. milliseconds to seconds)"
+msgstr "**Édition > Métadonnées > Ajouter une métadonnée...** peut désormais extraire la valeur du texte formaté avec une expression régulière, par exemple un temps d'exposition ou un numéro de tir lu dans les titres des objets. Les objets sans correspondance restent inchangés, sauf si vous demandez une erreur, et un facteur d'échelle convertit les valeurs numériques (par exemple des millisecondes en secondes)"
+
+msgid "Metadata keys may now contain dots and hyphens, as used by plugin keys, and a **Known keys** list copies a key already present on the selected objects"
+msgstr "Les clés de métadonnées peuvent désormais contenir des points et des tirets, comme les clés des plugins, et une liste **Clés connues** copie une clé déjà présente sur les objets sélectionnés"
+
+msgid "🔄 Changes"
+msgstr "🔄 Changements"
+
+msgid "**Guided tour:**"
+msgstr "**Visite guidée :**"
+
+msgid "The guided tour no longer starts automatically at first launch: it is now offered from the welcome page, and remains available from the **?** menu"
+msgstr "La visite guidée ne démarre plus automatiquement au premier lancement : elle est désormais proposée depuis la page d'accueil, et reste disponible depuis le menu **?**"
+
+msgid "**Large campaign responsiveness:**"
+msgstr "**Réactivité avec les grandes campagnes :**"
+
+msgid "Opening, selecting, and displaying large generated campaigns no longer repeats a complete workspace and plot refresh for every object"
+msgstr "L'ouverture, la sélection et l'affichage de grandes campagnes générées ne répètent plus un rafraîchissement complet de l'espace de travail et des graphiques pour chaque objet"
+
+msgid "Native HDF5 workspaces and multi-object recipe results now load in groups, making large signal and image collections available substantially faster while preserving every selected and visible object"
+msgstr "Les espaces de travail HDF5 natifs et les résultats de méthodes multi-objets se chargent désormais par lots, ce qui rend les grandes collections de signaux et d'images disponibles nettement plus vite tout en préservant chaque objet sélectionné et visible"
+
+msgid "**Portable plot annotations:**"
+msgstr "**Annotations de tracé portables :**"
+
+msgid "Plot annotations are now stored in a renderer-independent format shared with DataLab-Web, so annotations in workspaces and `.dlabann` files are no longer tied to PlotPy"
+msgstr "Les annotations de tracé sont désormais stockées dans un format indépendant du moteur de rendu, partagé avec DataLab-Web, de sorte que les annotations dans les espaces de travail et les fichiers `.dlabann` ne sont plus liées à PlotPy"
+
+msgid "Existing PlotPy annotations remain readable and are converted only after an annotation edit is accepted; simply opening a workspace or cancelling the editor leaves its data unchanged"
+msgstr "Les annotations PlotPy existantes restent lisibles et ne sont converties qu'après qu'une modification d'annotation a été acceptée ; ouvrir simplement un espace de travail ou annuler l'éditeur laisse ses données inchangées"
+
+msgid "Annotation identifiers, lock state, custom metadata and extension data are preserved across edits, while unknown third-party payloads are retained without modification"
+msgstr "Les identifiants d'annotation, l'état de verrouillage, les métadonnées personnalisées et les données d'extension sont conservés lors des modifications, tandis que les charges utiles tierces inconnues sont conservées sans modification"
+
+msgid "DataLab now requires Sigima ≥ 1.3.0 and SigimaX ≥ 1.1.0"
+msgstr "DataLab nécessite désormais Sigima ≥ 1.3.0 et SigimaX ≥ 1.1.0"
+
+msgid "🛠️ Bug Fixes"
+msgstr "🛠️ Corrections de bugs"
+
+msgid "**Window layout:**"
+msgstr "**Disposition de la fenêtre :**"
+
+msgid "Fixed the width of the signal/image panels not being restored at startup: after narrowing the panels and restarting DataLab, they came back wider (up to their maximum width) instead of keeping the width chosen by the user"
+msgstr "Correction de la largeur des panneaux Signal/Image non restaurée au démarrage : après avoir réduit les panneaux puis redémarré DataLab, ils réapparaissaient plus larges (jusqu'à leur largeur maximale) au lieu de conserver la largeur choisie par l'utilisateur"
+
+msgid "**Metadata:**"
+msgstr "**Métadonnées :**"
+
+msgid "Adding, pasting or deleting metadata now marks the workspace as modified, so DataLab asks to save these changes before closing"
+msgstr "L'ajout, le collage ou la suppression de métadonnées marque désormais l'espace de travail comme modifié : DataLab propose donc d'enregistrer ces changements avant de se fermer"
+
+msgid "**Plugins and History:**"
+msgstr "**Plugins et historique :**"
+
+msgid "Replaying a History action or re-processing a result created by a plugin feature that shares its name with a built-in feature now runs the plugin feature instead of the built-in one"
+msgstr "Le rejeu d'une action de l'historique ou le recalcul d'un résultat créé par une fonctionnalité de plugin portant le même nom qu'une fonctionnalité intégrée exécute désormais la fonctionnalité du plugin au lieu de la fonctionnalité intégrée"

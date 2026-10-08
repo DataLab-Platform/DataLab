@@ -24,7 +24,11 @@ import os.path as osp
 
 import h5py
 import pytest
+from guidata.io import JSONWriter
 from numpy import ma
+from plotpy.builder import make
+from plotpy.io import save_items
+from sigima.objects import GaussParam, RectangleAnnotation, annotation_to_dict
 from sigima.objects.scalar import NO_ROI, TableResult, TableResultBuilder
 from sigima.tests.data import (
     create_noisy_gaussian_image,
@@ -33,16 +37,42 @@ from sigima.tests.data import (
 )
 
 from datalab.adapters_metadata.table_adapter import TableAdapter
+from datalab.gui.newobject import extract_creation_parameters
 from datalab.tests import datalab_test_app_context, helpers
 
 
-def test_save_and_load_h5_workspace():
+def test_save_and_load_h5_workspace(monkeypatch: pytest.MonkeyPatch):
     """Test save_h5_workspace and load_h5_workspace methods"""
     with helpers.WorkdirRestoringTempDir() as tmpdir:
         with datalab_test_app_context(console=False) as win:
             # === Create test objects
             sig1 = create_paracetamol_signal()
+            legacy_item = make.annotated_segment(1.0, 2.0, 5.0, 8.0, title="Historical")
+            writer = JSONWriter(None)
+            save_items(writer, [legacy_item])
+            annotations = [
+                annotation_to_dict(
+                    RectangleAnnotation(
+                        x=1.0,
+                        y=2.0,
+                        width=3.0,
+                        height=4.0,
+                        title="Canonical",
+                        extensions={"vendor": {"keep": True}},
+                    )
+                ),
+                {
+                    "type": "plotpy_item",
+                    "item_class": type(legacy_item).__name__,
+                    "plotpy_json": writer.get_json(),
+                },
+                {"consumer": "custom", "payload": {"keep": True}},
+            ]
+            sig1.set_annotations(annotations)
             win.signalpanel.add_object(sig1)
+            sig2 = create_paracetamol_signal()
+            sig2.title = "Second signal"
+            win.signalpanel.add_object(sig2)
 
             ima1 = create_noisy_gaussian_image()
             win.imagepanel.add_object(ima1)
@@ -50,7 +80,7 @@ def test_save_and_load_h5_workspace():
             # Store object counts and titles for verification
             sig_count_before = len(win.signalpanel.objmodel)
             ima_count_before = len(win.imagepanel.objmodel)
-            sig_title = sig1.title
+            sig_titles = [obj.title for obj in win.signalpanel]
             ima_title = ima1.title
 
             # === Test save_h5_workspace
@@ -66,6 +96,70 @@ def test_save_and_load_h5_workspace():
             assert len(win.imagepanel.objmodel) == 0
 
             # === Test load_h5_workspace
+            signal_batches: list[int] = []
+            image_batches: list[int] = []
+            selection_calls = {win.signalpanel: 0, win.imagepanel: 0}
+            signal_add_objects = win.signalpanel._add_objects
+            image_add_objects = win.imagepanel._add_objects
+            signal_selection_changed = win.signalpanel.selection_changed
+            image_selection_changed = win.imagepanel.selection_changed
+            signal_deserialize = win.signalpanel.deserialize_from_hdf5
+            image_deserialize = win.imagepanel.deserialize_from_hdf5
+            deserialize_selection_calls = {
+                win.signalpanel: [],
+                win.imagepanel: [],
+            }
+
+            def track_signal_batch(objects, *args, **kwargs) -> None:
+                batch = tuple(objects)
+                signal_batches.append(len(batch))
+                signal_add_objects(batch, *args, **kwargs)
+
+            def track_image_batch(objects, *args, **kwargs) -> None:
+                batch = tuple(objects)
+                image_batches.append(len(batch))
+                image_add_objects(batch, *args, **kwargs)
+
+            def track_signal_selection(*args, **kwargs) -> None:
+                selection_calls[win.signalpanel] += 1
+                signal_selection_changed(*args, **kwargs)
+
+            def track_image_selection(*args, **kwargs) -> None:
+                selection_calls[win.imagepanel] += 1
+                image_selection_changed(*args, **kwargs)
+
+            def track_signal_deserialize(*args, **kwargs) -> None:
+                before = selection_calls[win.signalpanel]
+                signal_deserialize(*args, **kwargs)
+                deserialize_selection_calls[win.signalpanel].append(
+                    selection_calls[win.signalpanel] - before
+                )
+
+            def track_image_deserialize(*args, **kwargs) -> None:
+                before = selection_calls[win.imagepanel]
+                image_deserialize(*args, **kwargs)
+                deserialize_selection_calls[win.imagepanel].append(
+                    selection_calls[win.imagepanel] - before
+                )
+
+            monkeypatch.setattr(win.signalpanel, "_add_objects", track_signal_batch)
+            monkeypatch.setattr(win.imagepanel, "_add_objects", track_image_batch)
+            monkeypatch.setattr(
+                win.signalpanel, "selection_changed", track_signal_selection
+            )
+            monkeypatch.setattr(
+                win.imagepanel, "selection_changed", track_image_selection
+            )
+            monkeypatch.setattr(
+                win.signalpanel,
+                "deserialize_from_hdf5",
+                track_signal_deserialize,
+            )
+            monkeypatch.setattr(
+                win.imagepanel,
+                "deserialize_from_hdf5",
+                track_image_deserialize,
+            )
             win.load_h5_workspace([fname], reset_all=True)
 
             # Verify objects were restored
@@ -73,10 +167,35 @@ def test_save_and_load_h5_workspace():
             assert len(win.imagepanel.objmodel) == ima_count_before
 
             # Verify titles (get objects in order from groups)
-            loaded_sig = win.signalpanel.objmodel.get_all_objects()[0]
+            loaded_signals = win.signalpanel.objmodel.get_all_objects()
             loaded_ima = win.imagepanel.objmodel.get_all_objects()[0]
-            assert loaded_sig.title == sig_title
+            assert [obj.title for obj in loaded_signals] == sig_titles
             assert loaded_ima.title == ima_title
+            assert loaded_signals[0].get_annotations() == annotations
+            assert signal_batches == [2]
+            assert image_batches == [1]
+            assert deserialize_selection_calls == {
+                win.signalpanel: [1],
+                win.imagepanel: [1],
+            }
+
+
+def test_peak_creation_parameters_h5_roundtrip():
+    """Versioned peak creation parameters survive a workspace round-trip."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        with datalab_test_app_context(console=False) as win:
+            param = GaussParam.create(amplitude=-2.5, sigma=0.7, mu=0.3, y0=0.75)
+            win.signalpanel.new_object(param=param, edit=False)
+            fname = osp.join(tmpdir, "peak_creation_params.h5")
+
+            win.save_h5_workspace(fname)
+            win.signalpanel.remove_all_objects()
+            win.load_h5_workspace([fname], reset_all=True)
+
+            loaded = win.signalpanel.objmodel.get_all_objects()[0]
+            restored = extract_creation_parameters(loaded)
+            assert isinstance(restored, GaussParam)
+            assert restored.amplitude == pytest.approx(-2.5)
 
 
 def test_load_h5_workspace_invalid_file():
@@ -421,7 +540,8 @@ def test_h5_workspace_builder_column_formats():
 
 
 if __name__ == "__main__":
-    test_save_and_load_h5_workspace()
+    with pytest.MonkeyPatch.context() as mp:
+        test_save_and_load_h5_workspace(mp)
     test_load_h5_workspace_invalid_file()
     test_load_h5_workspace_append()
     test_save_h5_workspace_modified_flag()

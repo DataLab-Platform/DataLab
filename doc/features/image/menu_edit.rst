@@ -37,6 +37,12 @@ their original processing parameters. This is useful when you want to re-execute
 processing chain that was used to create an image, for example after modifying global
 settings or dependencies.
 
+It also refreshes analysis results (statistics, FWHM, centroid, peak/contour/blob
+detection, etc.) using their stored parameters. Analysis results are not recomputed
+automatically when you modify a region of interest, the data, or object properties:
+existing results are left untouched until you explicitly trigger this action, giving you
+full control over when analyses are refreshed.
+
 .. |recompute| image:: ../../../datalab/data/icons/edit/recompute.svg
     :width: 24px
     :height: 24px
@@ -44,8 +50,9 @@ settings or dependencies.
 
 .. note::
 
-    This action is only available for images that were created through processing
-    operations and have stored processing parameters.
+    This action is only available for images that have stored processing parameters
+    (created through processing operations) or stored analysis parameters (analysis
+    operations previously run on them).
 
 Select source objects
 ---------------------
@@ -163,10 +170,14 @@ sample names, processing steps, or any other custom information.
 
 When you select "Add metadata..." from the Edit menu, a dialog appears where you can:
 
-- **Metadata key**: Enter the name of the metadata field to add
+- **Metadata key**: Enter the name of the metadata field to add (letters, digits, ``_``, ``.`` and ``-``, e.g. a plugin key such as ``plugin.org.example.my-plugin.gain``)
+- **Known keys**: Pick a key already present on the selected images, or a key expected by the methods of the installed application plugins, to copy it into the metadata key
 - **Value pattern**: Define a pattern for the metadata value using Python format strings
+- **Extraction pattern**: Optionally, extract the value from the formatted text with a Python regular expression: its first group, or the whole match if it has no group, becomes the value
+- **If no match**: Leave images without a match unchanged (default), or report an error
 - **Conversion**: Choose how to store the value (string, float, integer, or boolean)
-- **Preview**: See how the metadata will be added to each selected image
+- **Scale factor**: Multiply numeric values, e.g. ``0.001`` to convert milliseconds to seconds
+- **Preview**: See how the metadata will be added to each selected image, and which images are left unchanged
 
 The value pattern supports the following placeholders:
 
@@ -192,6 +203,9 @@ You can also use format modifiers:
 
 - Flag calibrated images: key=``is_calibrated``, pattern=``true``, conversion=bool
   → Sets ``is_calibrated=True`` for all selected images
+
+- Read exposure times from titles: key=``exposure_time_s``, pattern=``{title}``, extraction=``([\d.]+)\s*ms``, conversion=float, scale factor=``0.001``
+  → Sets ``exposure_time_s=0.005`` on an image titled "Flat 5 ms 01" and leaves "Dark 01" unchanged
 
 Annotations
 -----------
@@ -300,7 +314,7 @@ The "Edit" menu allows you to:
   .. code-block:: text
 
     g001:
-        s001: lorentz(a=1,sigma=1,mu=0,ymin=0)
+        s001: lorentz(A=1,σ=1,μ=0,y0=0)
         s002: derivative(s001)
         s003: wiener(s002)
     g002: derivative(g001)

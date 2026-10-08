@@ -19,11 +19,12 @@ from guidata.qthelpers import exec_dialog
 from qtpy import QtWidgets as QW
 from sigima.io.image import ImageIORegistry
 from sigima.io.signal import SignalIORegistry
+from sigimax.widgets.fileviewer import FileViewerWidget, get_title_contents
 
 import datalab
-from datalab.config import APP_NAME, IS_FROZEN, Conf, _
+from datalab.config import APP_NAME, IS_FROZEN, _, get_config_filename
 from datalab.plugins import PluginRegistry
-from datalab.widgets.fileviewer import FileViewerWidget, get_title_contents
+from datalab.utils.qthelpers import show_in_folder as _show_in_folder
 
 
 def decode_fs_string(string: bytes) -> str:
@@ -126,6 +127,32 @@ def get_install_info() -> str:
     return info
 
 
+class ConfigFileViewerWidget(FileViewerWidget):
+    """File viewer with actions for the displayed configuration file."""
+
+    def __init__(self, filepath: str, parent: QW.QWidget | None = None) -> None:
+        super().__init__(parent=parent)
+        self.filepath = os.path.abspath(filepath)
+        self.show_in_folder_button = QW.QPushButton(
+            get_icon("show_in_folder.svg"), _("Show in folder")
+        )
+        self.show_in_folder_button.clicked.connect(self.show_file_in_folder)
+
+        header_layout = QW.QHBoxLayout()
+        header_layout.setContentsMargins(0, 0, 0, 0)
+        header_layout.addWidget(self.label)
+        header_layout.addStretch(1)
+        header_layout.addWidget(self.show_in_folder_button)
+
+        layout = self.layout()
+        layout.removeWidget(self.label)
+        layout.insertLayout(0, header_layout)
+
+    def show_file_in_folder(self) -> None:
+        """Open the folder containing the displayed configuration file."""
+        _show_in_folder(self.filepath)
+
+
 class InstallConfigViewerWindow(QW.QDialog):
     """Installation configuration window"""
 
@@ -135,7 +162,8 @@ class InstallConfigViewerWindow(QW.QDialog):
         self.setWindowTitle(APP_NAME + " - " + _("Installation and configuration"))
         self.setWindowIcon(get_icon("DataLab.svg"))
         self.tabs = QW.QTabWidget(self)
-        uc_title, uc_contents = get_title_contents(Conf.get_filename())
+        config_filename = get_config_filename()
+        uc_title, uc_contents = get_title_contents(config_filename)
         plugins_io_contents = PluginRegistry.get_plugin_info(html=False)
         for registry in (SignalIORegistry, ImageIORegistry):
             plugins_io_contents += os.linesep + ("_" * 80) + os.linesep * 2
@@ -160,7 +188,11 @@ class InstallConfigViewerWindow(QW.QDialog):
                 _("Plugins and I/O features"),
             ),
         ):
-            viewer = FileViewerWidget()
+            viewer = (
+                ConfigFileViewerWidget(config_filename)
+                if tab_title == _("User configuration")
+                else FileViewerWidget()
+            )
             viewer.set_data(title, contents)
             self.tabs.addTab(viewer, tab_icon, tab_title)
         layout = QW.QVBoxLayout()

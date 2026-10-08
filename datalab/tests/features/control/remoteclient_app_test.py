@@ -14,8 +14,11 @@ from __future__ import annotations
 import functools
 from contextlib import contextmanager
 
+from guidata.configtools import get_icon, get_image_file_path
 from guidata.qthelpers import qt_app_context, qt_wait
+from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from sigimax.widgets.connection import ConnectionDialog
 
 from datalab.config import _
 from datalab.control.proxy import RemoteProxy
@@ -24,7 +27,6 @@ from datalab.tests import close_datalab_background, run_datalab_in_background
 from datalab.tests.features.control import embedded1_unit_test
 from datalab.tests.features.control.remoteclient_unit import multiple_commands
 from datalab.utils.qthelpers import bring_to_front
-from datalab.widgets.connection import ConnectionDialog
 
 APP_NAME = _("Remote client test")
 
@@ -72,7 +74,12 @@ class HostWindow(embedded1_unit_test.AbstractClientWindow):
                 ok = True
             else:
                 self.datalab = RemoteProxy(autoconnect=False)
-                connect_dlg = ConnectionDialog(self.datalab.connect, self)
+                connect_dlg = ConnectionDialog(
+                    self.datalab.connect,
+                    self,
+                    icon=get_icon("DataLab.svg"),
+                    banner=QG.QPixmap(get_image_file_path("DataLab-Banner-200.png")),
+                )
                 ok = connect_dlg.exec()
             if ok:
                 self.host.log("✨ Initialized DataLab connection ✨")

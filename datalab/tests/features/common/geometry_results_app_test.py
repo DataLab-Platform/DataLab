@@ -113,14 +113,23 @@ def test_geometry_results() -> None:
         panel.show_results()
         panel.plot_results()
         for keep_results in (False, True):
-            with Conf.proc.keep_results.temp(keep_results):
+            with Conf.keep_results.context(keep_results):
                 # Test merging result shapes (duplicate obj, then compute average):
                 for panel in (win.signalpanel, win.imagepanel):
-                    panel.objview.select_objects((2,))
+                    src_obj = panel[2]
+                    group_id = panel.objmodel.get_object_group_id(src_obj)
+                    panel.objview.select_objects([src_obj])
                     panel.duplicate_object()
-                    panel.objview.select_objects((2, len(panel)))
+                    # The duplicate is the last object of the source object's group
+                    duplicate = panel.objmodel[
+                        panel.objmodel.get_group_object_ids(group_id)[-1]
+                    ]
+                    panel.objview.select_objects([src_obj, duplicate])
                     panel.processor.run_feature("average")
-                    last_obj = panel[len(panel)]
+                    # The average result is the last object of the source group
+                    last_obj = panel.objmodel[
+                        panel.objmodel.get_group_object_ids(group_id)[-1]
+                    ]
                     if keep_results:
                         __check_geometry_results_merge(panel[2], last_obj)
                         if panel is win.imagepanel:

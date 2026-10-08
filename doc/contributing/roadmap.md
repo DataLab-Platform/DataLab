@@ -29,7 +29,7 @@ The following table summarizes the future evolutions and maintenance plans for D
 
 | Milestone type       | Description                                  |
 |----------------------|----------------------------------------------|
-| 🔄 Future Evolutions | • Support for data acquisition<br>• Web frontend<br>• Support for time series<br>• Database connectors<br>• Jupyter plugin for interactive data analysis<br>• Spyder plugin for interactive data analysis<br>• Jupyter kernel interface for DataLab |
+| 🔄 Future Evolutions | • Support for data acquisition<br>• Support for time series<br>• Database connectors<br>• Spyder plugin for interactive data analysis |
 | 🛠️ Maintenance      | • Transition to gRPC for remote control<br>• Drop Qt5 support and migrate to Qt6 |
 | 🧱 Other Tasks       | • Create a DataLab plugin template          |
 
@@ -47,22 +47,9 @@ While no formal design has been established yet, a viable approach could be to:
 
 A potential **collaboration with the PyMoDAQ development team** could be explored, to benefit from their ecosystem and avoid duplicating efforts. This would also help foster interoperability and promote open standards in the Python scientific instrumentation community.
 
-### 🌐 Web Frontend
+### 🌐 Web Frontend ✅ Delivered
 
-As DataLab's modular architecture evolves, a natural next step is to provide a **web-based frontend** to complement the existing desktop application.
-
-A web frontend would allow users to:
-
-* **Run DataLab remotely** (e.g. from a server) and access it via a browser;
-* Perform processing and visualization tasks without needing a local Python environment;
-* Facilitate **collaborative data analysis**, sharing sessions or results with colleagues;
-* Integrate with JupyterHub, dashboards, or lab management tools for centralized usage.
-
-This frontend could be built on top of the [Sigima](https://sigima.readthedocs.io/en/latest/) library (that was recently created from the externalization of DataLab's processing functionalities), exposing its features through a web interface — possibly leveraging tools like **JupyterLab extensions**, **Panel**, or **Dash**, depending on the chosen stack.
-
-While still exploratory, this direction would increase **accessibility and portability** of DataLab, especially in academic and industrial environments.
-
-> ℹ️ The web frontend shall not replace the desktop application, but rather complement it by providing a different access mode. DataLab's philosophy is to remain a **local application** that does not require a server to run, ensuring data privacy and security. More precisely, the web frontend will empower users to run DataLab on a server and access it remotely - typically on a local network, but it will not be a cloud-based solution or a first step towards a fully cloud-based application which would be against the project's philosophy.
+A web frontend has been delivered as **DataLab-Web**, the browser-native edition of the platform (see the {ref}`ecosystem overview <ecosystem>`). Rather than running on a server, it runs the [Sigima](https://sigima.readthedocs.io/en/latest/) computation engine **entirely inside the browser** — CPython compiled to WebAssembly via [Pyodide](https://pyodide.org/) — paired with a React user interface. This keeps DataLab a **local application**: no server, no account, and the data never leaves the user's machine, consistent with the project's privacy-first philosophy. Try it at [datalab-platform.com/web](https://datalab-platform.com/web/).
 
 ### ⏱️ Support for Time Series
 
@@ -126,7 +113,9 @@ As with the Jupyter integration, this plugin could be implemented by leveraging 
 
 Such a plugin would enhance DataLab's usability for scientists and engineers who prefer Spyder’s integrated development environment for exploratory analysis.
 
-### 🧠 Jupyter Kernel Interface for DataLab
+### 🧠 Jupyter Kernel Interface for DataLab ✅ Delivered
+
+> ℹ️ A Jupyter kernel has been delivered as **DataLab-Kernel** (see its [documentation](https://datalab-kernel.readthedocs.io/) and the {ref}`ecosystem overview <ecosystem>`), providing notebook-driven access to DataLab workspaces with optional live synchronization to the desktop GUI. The original exploration notes are kept below for context.
 
 Implementing a native **Jupyter kernel interface** for DataLab would provide a more integrated way to use it from other environments such as **Jupyter notebooks, Spyder, or Visual Studio Code**.
 

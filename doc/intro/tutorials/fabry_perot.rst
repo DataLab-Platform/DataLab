@@ -1,11 +1,11 @@
 .. _tutorial_fabry_perot:
 
-:octicon:`book;1em;sd-text-info` Measuring Fabry-Perot fringes
-==============================================================
+:octicon:`book;1em;sd-text-info` Analyzing Fabry-Perot interferograms: ring detection and circle fitting
+========================================================================================================
 
 .. meta::
-    :description: Tutorial on how to measure Fabry-Perot fringes using DataLab, the open-source scientific data analysis and visualization platform
-    :keywords: DataLab, fabry-perot, interferometer, fringe, image processing, contour detection, circle fitting, intensity profile, signal processing, metadata, annotations, workspace, hdf5
+    :description: Analyze Fabry-Perot interferometer images with DataLab, the open-source signal and image analysis platform: circular region of interest, contour detection, circle fitting to measure fringe radii, annotations and intensity profiles.
+    :keywords: Fabry-Perot, interferogram analysis, fringe measurement, ring detection, circle fitting, contour detection, interferometry, optical metrology, image processing, DataLab, tutorial
 
 This example shows how to measure Fabry-Perot fringes using the image processing
 features of DataLab:

@@ -13,6 +13,7 @@ and image analysis tasks.
 
 DataLab integrates seemlessly into your workflow thanks to three main operating modes:
 
+.. tabularcolumns:: |>{\centering\arraybackslash}m{1.2cm}|m{\dimexpr\linewidth-1.2cm-4\tabcolsep\relax}|
 .. list-table::
     :header-rows: 0
 
@@ -25,25 +26,50 @@ DataLab integrates seemlessly into your workflow thanks to three main operating 
     * - |remotemode|
       - **Remotely controlled** from your own software, or from an IDE (e.g., Spyder) or a Jupyter notebook, using the DataLab API.
 
-.. |appmode| image:: ../../resources/DataLab-app.svg
-    :width: 64px
-    :height: 64px
-    :class: dark-light no-scaled-link
+.. note::
 
-.. |libmode| image:: ../../resources/DataLab-lib.svg
-    :width: 64px
-    :height: 64px
-    :class: dark-light no-scaled-link
+    DataLab is the desktop application at the heart of a broader family, the **DataLab
+    Platform**, which also includes a browser-native edition (**DataLab-Web**) that runs
+    without any installation. See :ref:`ecosystem` to learn about the editions and choose
+    the one that fits your needs.
 
-.. |remotemode| image:: ../../resources/DataLab-remote.svg
-    :width: 64px
-    :height: 64px
-    :class: dark-light no-scaled-link
+.. Sphinx converts ``px`` to ``bp`` at 72 dpi for LaTeX, which makes ``64px``
+   render at ~22mm in the PDF -- way larger than in HTML. Define separate
+   substitutions per output: pixels for HTML, centimetres for LaTeX.
+
+.. only:: html
+
+    .. |appmode| image:: ../../resources/DataLab-app.svg
+        :width: 64px
+        :height: 64px
+        :class: dark-light no-scaled-link
+
+    .. |libmode| image:: ../../resources/DataLab-lib.svg
+        :width: 64px
+        :height: 64px
+        :class: dark-light no-scaled-link
+
+    .. |remotemode| image:: ../../resources/DataLab-remote.svg
+        :width: 64px
+        :height: 64px
+        :class: dark-light no-scaled-link
+
+.. only:: latex
+
+    .. |appmode| image:: ../../resources/DataLab-app.svg
+        :width: 1cm
+
+    .. |libmode| image:: ../../resources/DataLab-lib.svg
+        :width: 1cm
+
+    .. |remotemode| image:: ../../resources/DataLab-remote.svg
+        :width: 1cm
 
 DataLab leverages the power of Python and its scientific ecosystem, through the use of
 the following libraries:
 
 - `Sigima <https://github.com/DataLab-Platform/Sigima>`_ for signal and image processing (part of the DataLab Platform)
+- `SigimaX <https://github.com/DataLab-Platform/SigimaX>`_ for the Qt application framework the desktop application is built upon (part of the DataLab Platform)
 - `NumPy <https://numpy.org/>`_ for numerical computing (arrays, linear algebra, etc.)
 - `SciPy <https://www.scipy.org/>`_ for scientific computing (interpolation, special functions, etc.)
 - `scikit-image <https://scikit-image.org/>`_ and `OpenCV <https://opencv.org/>`_ for image processing
@@ -85,6 +111,12 @@ the following libraries:
 
             Tutorials to learn how to use DataLab
 
+        .. grid-item-card:: :octicon:`browser;1em;sd-text-info`  Editions
+            :link: ecosystem
+            :link-type: doc
+
+            The DataLab Platform and its editions
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
@@ -92,5 +124,6 @@ the following libraries:
    installation
    installation_offline
    introduction
+   ecosystem
    keyfeatures
    tutorials/index

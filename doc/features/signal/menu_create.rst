@@ -46,15 +46,15 @@ Create a new signal from various models:
     * - .. image:: ../../../datalab/data/icons/create/gaussian.svg
            :width: 30px
       - Gaussian
-      - :math:`y = y_{0}+\dfrac{A}{\sqrt{2\pi} \cdot \sigma} \cdot \exp\left(-\dfrac{1}{2} \cdot \left(\dfrac{x-x_{0}}{\sigma}\right)^2\right)`
+      - :math:`y = y_{0}+A \cdot \exp\left(-\dfrac{1}{2} \cdot \left(\dfrac{x-\mu}{\sigma}\right)^2\right)`
     * - .. image:: ../../../datalab/data/icons/create/lorentzian.svg
            :width: 30px
       - Lorentzian
-      - :math:`y = y_{0}+\dfrac{A}{\sigma \cdot \pi} \cdot \dfrac{1}{1+\left(\dfrac{x-x_{0}}{\sigma}\right)^2}`
+      - :math:`y = y_{0}+\dfrac{A}{1+\left(\dfrac{x-\mu}{\sigma}\right)^2}`
     * - .. image:: ../../../datalab/data/icons/create/voigt.svg
            :width: 30px
       - Voigt
-      - :math:`y = y_{0}+A \cdot \dfrac{\Re\left(\exp\left(-z^2\right) \cdot \erfc(-j \cdot z)\right)}{\sqrt{2\pi} \cdot \sigma}` with :math:`z = \dfrac{x-x_{0}-j \cdot \sigma}{\sqrt{2} \cdot \sigma}`
+      - :math:`y = y_{0}+A \cdot \dfrac{\Re\left(w(z)\right)}{\Re\left(w(j/\sqrt{2})\right)}` with :math:`w(z) = \exp\left(-z^2\right) \cdot \erfc(-j \cdot z)` and :math:`z = \dfrac{x-\mu+j \cdot \sigma}{\sqrt{2} \cdot \sigma}`
     * - .. image:: ../../../datalab/data/icons/create/planck.svg
            :width: 30px
       - Blackbody (Planck's law)
@@ -135,7 +135,10 @@ Create a new signal from various models:
     * - .. image:: ../../../datalab/data/icons/create/polynomial.svg
            :width: 30px
       - Polynomial
-      - :math:`y = y_{0}+A_{0}+A_{1} \cdot x+A_{2} \cdot x^2+\ldots+A_{n} \cdot x^n`
+      - :math:`y = a_{0}+a_{1} \cdot x+a_{2} \cdot x^2+\ldots+a_{5} \cdot x^5`
     * -
       - Custom
       - Manual input of X and Y values
+
+For Gaussian, Lorentzian and Voigt models, :math:`A` is the signed peak height
+above the baseline :math:`y_0`, expressed in the signal's Y unit.

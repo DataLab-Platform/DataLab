@@ -1,3 +1,6 @@
+[MASTER]
+ignore-paths=^datalab/gui/macros_templates/.*$
+
 [FORMAT]
 # Essential to be able to compare code side-by-side (`black` default setting)
 # and best compromise to minimize file size

@@ -102,6 +102,7 @@ This command downloads:
 
 - ``datalab-platform``
 - ``sigima``
+- ``sigimax``
 - ``plotpy``
 - ``guidata``
 - ``pythonqwt``
@@ -117,6 +118,7 @@ After downloading, your folder should contain files similar to:
     datalab-offline/
     ├─ datalab_platform‑1.x.x‑py3‑none‑any.whl
     ├─ sigima‑1.x.x‑py3‑none‑any.whl
+    ├─ sigimax‑1.x.x‑py3‑none‑any.whl
     ├─ plotpy‑x.x.x‑py3‑none‑any.whl
     ├─ guidata‑3.x.x‑py3‑none‑any.whl
     ├─ pythonqwt‑x.x.x‑py3‑none‑any.whl

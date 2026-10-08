@@ -108,7 +108,7 @@ def reinstall_packages(packages: list[str]) -> None:
 
 if __name__ == "__main__":
     # ⭐ Fixed, editable local libraries to manage (edit as needed)
-    PACKAGES = ["guidata", "plotpy", "sigima"]
+    PACKAGES = ["guidata", "plotpy", "sigima", "sigimax"]
 
     print("🏃 Reinstalling editable packages:", ", ".join(PACKAGES))
     reinstall_packages(PACKAGES)

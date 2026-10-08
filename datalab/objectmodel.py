@@ -36,7 +36,7 @@ a container for `SignalObj` and `ImageObj` instances.
 from __future__ import annotations
 
 import re
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 from typing import Callable
 from uuid import uuid4
 
@@ -62,10 +62,20 @@ def set_number(obj: SignalObj | ImageObj | ObjectGroup, number: int) -> None:
 
 
 def get_uuid(obj: SignalObj | ImageObj | ObjectGroup) -> str:
-    """Get object UUID"""
+    """Get object UUID.
+
+    For data objects (signals/images), the UUID is stored in metadata under
+    the ``__uuid`` option. It is materialized on first access (via
+    :func:`set_uuid`) so that the returned value is stable across calls and
+    survives serialization.
+    """
     if isinstance(obj, ObjectGroup):
         return obj.uuid
-    return obj.get_metadata_option("uuid", str(uuid4()))
+    uuid = obj.metadata.get("__uuid")
+    if not uuid:
+        set_uuid(obj)
+        uuid = obj.metadata["__uuid"]
+    return uuid
 
 
 def set_uuid(obj: SignalObj | ImageObj | ObjectGroup) -> None:
@@ -108,6 +118,24 @@ def patch_title_with_ids(
         raise ValueError(
             f"Not enough source objects to fill title placeholders: {title}"
         ) from exc
+
+
+#: Regex matching short IDs as embedded in computation titles
+#: (e.g. ``s001``, ``i012``, ``gs003``, ``gi007``).
+SHORT_ID_REGEX = re.compile(r"\b(g?[si])(\d{3})\b")
+
+
+def find_short_ids_in_title(title: str) -> list[tuple[int, int, str]]:
+    """Return a list of ``(start, end, short_id)`` tuples for every short ID
+    occurrence found in ``title``.
+
+    Args:
+        title: title string to scan
+
+    Returns:
+        List of ``(start, end, short_id)`` tuples, sorted by ``start``.
+    """
+    return [(m.start(), m.end(), m.group(0)) for m in SHORT_ID_REGEX.finditer(title)]
 
 
 class ObjectGroup:
@@ -292,6 +320,28 @@ class ObjectModel:
                 return group
         raise KeyError(f"Object or group with uuid {uuid} not found")
 
+    def find_by_short_id(
+        self, short_id: str
+    ) -> SignalObj | ImageObj | ObjectGroup | None:
+        """Return the object or group whose short ID matches ``short_id``,
+        or ``None`` if no match is found in this model.
+
+        Args:
+            short_id: short ID to look up (e.g. ``"s001"``, ``"i012"``,
+             ``"gs003"`` or ``"gi007"``).
+
+        Returns:
+            The matching :class:`sigima.SignalObj`, :class:`sigima.ImageObj`
+            or :class:`ObjectGroup` instance, or ``None``.
+        """
+        for group in self._groups:
+            if get_short_id(group) == short_id:
+                return group
+        for obj in self._objects.values():
+            if get_short_id(obj) == short_id:
+                return obj
+        return None
+
     def get_group(self, uuid: str) -> ObjectGroup:
         """Return group with uuid"""
         for group in self._groups:
@@ -430,19 +480,73 @@ class ObjectModel:
 
     def add_object(self, obj: SignalObj | ImageObj, group_id: str) -> None:
         """Add object to model"""
-        self.replace_short_ids_by_uuids_in_titles([obj])
-        self._objects[get_uuid(obj)] = obj
-        onb = 0
-        for group in self._groups:
-            onb += len(group)
-            if get_uuid(group) == group_id:
-                set_number(obj, onb + 1)
+        self.add_objects((obj,), group_id)
+
+    def add_objects(
+        self,
+        objects: Sequence[SignalObj | ImageObj],
+        group_id: str,
+    ) -> None:
+        """Add objects to the model atomically.
+
+        Args:
+            objects: Objects to add, in insertion order
+            group_id: UUID of the target group
+
+        Raises:
+            KeyError: If the target group does not exist
+            ValueError: If an object UUID is duplicated or already exists
+        """
+        objects = tuple(objects)
+        if not objects:
+            return
+        group = self.get_group(group_id)
+        object_ids = [get_uuid(obj) for obj in objects]
+        if len(set(object_ids)) != len(object_ids):
+            raise ValueError("The same object cannot be added twice")
+        existing_ids = set(self._objects).intersection(object_ids)
+        if existing_ids:
+            raise ValueError(
+                f"Object UUID already exists in model: {sorted(existing_ids)[0]}"
+            )
+
+        tracked_objects = (*self._objects.values(), *objects)
+        tracked_titles = tuple(
+            (obj_or_group, obj_or_group.title)
+            for obj_or_group in (*self._groups, *tracked_objects)
+        )
+        missing = object()
+        tracked_numbers = tuple(
+            (obj, obj.metadata.get("__number", missing)) for obj in tracked_objects
+        )
+        tracked_group_numbers = tuple(
+            (tracked_group, tracked_group.number) for tracked_group in self._groups
+        )
+        objects_before = self._objects.copy()
+        group_objects_before = group.get_object_ids()
+
+        try:
+            self.replace_short_ids_by_uuids_in_titles(objects)
+            for obj, obj_uuid in zip(objects, object_ids):
+                self._objects[obj_uuid] = obj
                 group.append(obj)
-                break
-        else:
-            raise KeyError(f"Group with uuid '{group_id}' not found")
-        self.reset_short_ids()
-        self.replace_uuids_by_short_ids_in_titles()
+            self.reset_short_ids()
+            self.replace_uuids_by_short_ids_in_titles()
+        except Exception:
+            self._objects = objects_before
+            group.clear()
+            for obj_uuid in group_objects_before:
+                group.append(objects_before[obj_uuid])
+            for obj_or_group, title in tracked_titles:
+                obj_or_group.title = title
+            for obj, number in tracked_numbers:
+                if number is missing:
+                    obj.metadata.pop("__number", None)
+                else:
+                    obj.metadata["__number"] = number
+            for tracked_group, number in tracked_group_numbers:
+                tracked_group.number = number
+            raise
 
     def remove_object(self, obj: SignalObj | ImageObj) -> None:
         """Remove object from model"""

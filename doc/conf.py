@@ -5,9 +5,18 @@
 import os
 import os.path as osp
 import sys
+import warnings
 import zipfile
 
 import guidata.config as gcfg
+from docutils import nodes
+
+# Silence Sphinx 10 deprecation warning emitted from cairocffi (third-party,
+# used by sphinxcontrib-svg2pdfconverter during LaTeX builds).
+warnings.filterwarnings(
+    "ignore",
+    message=r".*Sphinx 10 will drop support for representing paths as strings.*",
+)
 
 sys.path.insert(0, os.path.abspath(".."))
 
@@ -21,6 +30,17 @@ os.environ["DATALAB_DOC"] = "1"
 # Turn off validation of guidata config
 # (documentation build is not the right place for validation)
 gcfg.set_validation_mode(gcfg.ValidationMode.DISABLED)
+
+
+def open_datalab_web_links_in_new_tab(app, doctree, docname):
+    """Open DataLab-Web links in a separate browser tab."""
+    if app.builder.format != "html":
+        return
+    web_url = "https://datalab-platform.com/web/"
+    for reference in doctree.findall(nodes.reference):
+        if reference.get("refuri", "").startswith(web_url):
+            reference["target"] = "_blank"
+            reference["rel"] = "noopener noreferrer"
 
 
 def compress_tutorials_data(app):
@@ -60,6 +80,7 @@ def compress_tutorials_data(app):
 def setup(app):
     """Setup function for Sphinx."""
     app.connect("builder-inited", compress_tutorials_data)
+    app.connect("doctree-resolved", open_datalab_web_links_in_new_tab)
 
     # Exclude outreach directory from LaTeX/PDF builds
     def exclude_outreach_from_latex(app):
@@ -126,7 +147,9 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx.ext.githubpages",
     "sphinx.ext.viewcode",
+    "sphinxcontrib.cairosvgconverter",
     "sphinx_sitemap",
+    "sphinxext.opengraph",
     "myst_parser",
     "sphinx_design",
     "sphinx_copybutton",
@@ -135,10 +158,32 @@ extensions = [
 templates_path = ["_templates"]
 exclude_patterns = []
 
+# The HTML/LaTeX builds define per-output image substitutions with the same
+# names (px for HTML, cm for LaTeX) inside `only::` blocks -- see
+# doc/index.rst and doc/intro/index.rst. docutils registers substitution
+# definitions at read time, before `only` filtering, so it flags them as
+# duplicates ("Duplicate substitution definition name"). They are harmless
+# (each builder only ever renders one definition); suppress the docutils
+# system messages so every build -- HTML, LaTeX and the `-W` gettext build --
+# stays clean.
+suppress_warnings = ["docutils"]
+
+# Per-language figure resolution: if e.g. ``foo.png`` is referenced, Sphinx
+# will use ``foo.<language>.png`` when available, falling back to ``foo.png``
+# otherwise. This is how the maintainer-refreshed UI screenshots under
+# ``doc/images/shots/`` (foo.fr.png / foo.en.png) get picked up automatically
+# in each language build.
+figure_language_filename = "{root}.{language}{ext}"
+
 # -- Options for sitemap extension -------------------------------------------
 html_baseurl = datalab.__homeurl__  # for sitemap extension
 sitemap_locales = ["en", "fr"]
 sitemap_filename = "../sitemap.xml"
+
+# -- Options for opengraph extension ------------------------------------------
+ogp_site_url = datalab.__homeurl__
+ogp_image = "https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/DataLab-banner.png"
+ogp_enable_meta_description = True
 
 # -- Options for HTML output -------------------------------------------------
 html_theme = "pydata_sphinx_theme"
@@ -148,11 +193,12 @@ html_favicon = "_static/favicon.ico"
 html_show_sourcelink = False
 templates_path = ["_templates"]
 if "language=fr" in sys.argv:
-    ann = "DataLab a été présenté à <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> 🐍, <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>, <a href='https://www.youtube.com/watch?v=lBEu-DeHyz0&list=PLJjbbmRgu6RqGMOhahm2iE6NUkIYIaEDK'>OSXP 2024</a> et <a href='https://www.youtube.com/watch?v=0D4ffBJIc5Q&list=PLJjbbmRgu6RoVze2tajiPe3zJB5muBcuC'>OSXP 2025</a> 🚀 — <a href='https://datalab-platform.com/fr/outreach/index.html'>En savoir plus</a>"  # noqa: E501
+    ann = "DataLab a été présenté à <a href='https://pretalx.com/euroscipy-2026/talk/E3X9EX/'>EuroSciPy 2026</a> 🇵🇱 et à <a href='https://www.youtube.com/watch?v=0D4ffBJIc5Q&list=PLJjbbmRgu6RoVze2tajiPe3zJB5muBcuC'>OSXP 2025</a> 🇫🇷 🚀 — <a href='https://datalab-platform.com/fr/outreach/index.html'>En savoir plus</a>"  # noqa: E501
 else:
-    ann = "DataLab has been presented at <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> 🐍, <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>, <a href='https://www.opensource-experience.com/'>OSXP 2024</a>, and <a href='https://datalab-platform.com/en/outreach/osxp2025.html'>OSXP 2025</a> 🚀 — <a href='https://datalab-platform.com/en/outreach/index.html'>Learn more</a>"  # noqa: E501
+    ann = "DataLab has been presented at <a href='https://pretalx.com/euroscipy-2026/talk/E3X9EX/'>EuroSciPy 2026</a> 🇵🇱 and at <a href='https://datalab-platform.com/en/outreach/osxp2025.html'>OSXP 2025</a> 🇫🇷 🚀 — <a href='https://datalab-platform.com/en/outreach/index.html'>Learn more</a>"  # noqa: E501
 html_theme_options = {
     "show_toc_level": 2,
+    "navbar_persistent": ["search-button"],
     "github_url": "https://github.com/DataLab-Platform/DataLab/",
     "logo": {
         "text": f"v{datalab.__version__}",
@@ -201,6 +247,8 @@ intersphinx_mapping = {
     "h5py": ("https://docs.h5py.org/en/stable/", None),
     "guidata": ("https://guidata.readthedocs.io/en/latest/", None),
     "plotpy": ("https://plotpy.readthedocs.io/en/latest/", None),
+    "sigima": ("https://sigima.readthedocs.io/en/latest/", None),
+    "sigimax": ("https://sigimax.readthedocs.io/en/latest/", None),
 }
 
 # -- Latex macros for math in docstrings -------------------------------------
@@ -215,12 +263,163 @@ macros = {
 }
 
 latex_elements = {
+    # Drop the cmap package: it is a pdflatex-only helper, emits a noisy
+    # "pdftex not detected" warning under xelatex, and the resulting PDF
+    # remains fully searchable thanks to fontspec/XeTeX.
+    "cmappkg": "",
+    # Use xelatex (set via ``latex_engine`` below): pdflatex chokes on the
+    # emoji / box-drawing / arrow glyphs sprinkled across the docs. The
+    # ``ucharclasses`` package automatically routes whole Unicode blocks
+    # to the Noto fallback fonts (SIL OFL, fully redistributable):
+    #   * Noto Sans Symbols 2 -- miscellaneous symbols, arrows, dingbats,
+    #     box drawing, geometric shapes...
+    #   * Noto Emoji -- monochrome emoji (XeLaTeX does not render the
+    #     COLR/CPAL color tables of Noto Color Emoji reliably).
+    # Install:
+    #   * Debian/Ubuntu: ``apt install fonts-noto-core fonts-noto-mono
+    #     fonts-noto-extra`` (``fonts-noto-extra`` ships the monochrome
+    #     ``NotoEmoji-Regular.ttf``; ``fonts-noto-color-emoji`` is *not*
+    #     usable because XeTeX rejects CBDT/CBLC color-bitmap fonts).
+    #   * Windows: MiKTeX fetches the ``noto`` and ``noto-emoji`` packages
+    #     on demand (``xelatex -enable-installer ...``).
     "preamble": r"""
     \usepackage{amsmath}
     \usepackage{amssymb}
-    \usepackage{mathrsfs}"""
+    \usepackage{mathrsfs}
+    \usepackage{fontspec}
+    % Three complementary Noto fallbacks -- a single one does NOT cover every
+    % Unicode sub-block we hit in the docs:
+    %   * Noto Sans Symbols  -- arrows, box drawing, geometric shapes,
+    %     misc. symbols (info, check mark, sparkles, ...), dingbats.
+    %   * Noto Sans Symbols 2 -- box drawing extensions, transport, misc
+    %     technical (⏱), and a number of pictographs (🛠 🏗 📁 ...) the
+    %     monochrome Noto Emoji does NOT include.
+    %   * Noto Sans Mono     -- box drawing characters (─..╿), which
+    %     none of the Symbols fonts cover.
+    %   * Noto Emoji (mono)  -- emoji-presentation chars (✅ ✨ ❌ ⚠ ℹ).
+    %     Noto Color Emoji is not used because XeTeX rejects CBDT/CBLC bitmap
+    %     fonts. A few extended pictographs (🧱 🧠 🧩 🧹) live ONLY in Noto
+    %     Color Emoji and remain reported as missing -- acceptable cosmetic
+    %     limitation.
+    \newfontfamily\symbolsfallback{NotoSansSymbols-Regular.ttf}[Scale=MatchLowercase]
+    \newfontfamily\symbolstwofallback{NotoSansSymbols2-Regular.ttf}[Scale=MatchLowercase]
+    \newfontfamily\monofallback{NotoSansMono-Regular.ttf}[Scale=MatchLowercase]
+    \newfontfamily\emojifallback{NotoEmoji-Regular.ttf}[Scale=MatchLowercase]
+    \usepackage[Latin,Arrows,LetterlikeSymbols,BoxDrawing,GeometricShapes,Dingbats,MiscellaneousSymbols,MiscellaneousSymbolsAndArrows,MiscellaneousTechnical,Emoticons,MiscellaneousSymbolsAndPictographs,SupplementalSymbolsAndPictographs,TransportAndMapSymbols,SymbolsAndPictographsExtendedA]{ucharclasses}
+    % Restore the *current* family (rm / sf / tt) instead of an unconditional
+    % \normalfont, which would break monospace rendering inside verbatim and
+    % inline code whenever a Unicode symbol appears nearby.
+    \makeatletter
+    \newcommand{\dlrestorefont}{%
+      \ifx\f@family\ttdefault\ttfamily\else
+      \ifx\f@family\sfdefault\sffamily\else
+      \normalfont\fi\fi}
+    \makeatother
+    % Force an explicit transition back to the surrounding family whenever we
+    % re-enter a Latin block. Without this, XeTeX keeps the last font set by
+    % a Symbols/Emoji transition for every following Latin character,
+    % producing thousands of "Missing character: There is no <letter> in font
+    % Noto Emoji" warnings and a broken PDF.
+    \setTransitionsForLatin{\dlrestorefont}{}
+    % Route blocks to the font that actually covers them. Coverage notes:
+    %   * Box Drawing / Block Elements / Misc Technical live in Symbols 2.
+    %   * ⚠ ✅ ✨ ➝ (Misc Symbols / Dingbats with emoji presentation)
+    %     are only in Noto Emoji.
+    \setTransitionsFor{Arrows}{\symbolsfallback}{\dlrestorefont}
+    \setTransitionsFor{LetterlikeSymbols}{\emojifallback}{\dlrestorefont}
+    \setTransitionsFor{BoxDrawing}{\monofallback}{\dlrestorefont}
+    \setTransitionsFor{GeometricShapes}{\symbolsfallback}{\dlrestorefont}
+    \setTransitionsFor{Dingbats}{\emojifallback}{\dlrestorefont}
+    \setTransitionsFor{MiscellaneousSymbols}{\emojifallback}{\dlrestorefont}
+    \setTransitionsFor{MiscellaneousSymbolsAndArrows}{\symbolstwofallback}{\dlrestorefont}
+    \setTransitionsFor{MiscellaneousTechnical}{\symbolstwofallback}{\dlrestorefont}
+    \setTransitionsFor{Emoticons}{\emojifallback}{\dlrestorefont}
+    \setTransitionsFor{MiscellaneousSymbolsAndPictographs}{\emojifallback}{\dlrestorefont}
+    \setTransitionsFor{SupplementalSymbolsAndPictographs}{\emojifallback}{\dlrestorefont}
+    \setTransitionsFor{TransportAndMapSymbols}{\emojifallback}{\dlrestorefont}
+    \setTransitionsFor{SymbolsAndPictographsExtendedA}{\emojifallback}{\dlrestorefont}
+    % Individual overrides for codepoints that are NOT in the block-routed
+    % font but exist in another installed Noto. The strategy is:
+    %   1. Reset the codepoint's XeTeX charclass to 0 so the broader block's
+    %      \setTransitionsFor (which would switch to Noto Emoji and miss
+    %      the glyph) no longer fires for it.
+    %   2. Use \newunicodechar to redefine the character as a macro that
+    %      locally switches to Symbols 2 and emits the glyph via \char to
+    %      avoid the infinite recursion that would occur if the macro body
+    %      contained the active character itself.
+    %   * ➝ HEAVY ROUND-TIPPED RIGHTWARDS ARROW (Dingbats).
+    %   * 🛠 🏗 🗃 🖼: pictographs missing from Noto Emoji but present
+    %     in Symbols 2.
+    \XeTeXcharclass"279D=0
+    \XeTeXcharclass"1F6E0=0
+    \XeTeXcharclass"1F3D7=0
+    \XeTeXcharclass"1F5C3=0
+    \XeTeXcharclass"1F5BC=0
+    \usepackage{newunicodechar}
+    \newunicodechar{➝}{{\symbolstwofallback\char"279D\relax}}
+    \newunicodechar{🛠}{{\symbolstwofallback\char"1F6E0\relax}}
+    \newunicodechar{🏗}{{\symbolstwofallback\char"1F3D7\relax}}
+    \newunicodechar{🗃}{{\symbolstwofallback\char"1F5C3\relax}}
+    \newunicodechar{🖼}{{\symbolstwofallback\char"1F5BC\relax}}
+    % Discard U+FE0F (VARIATION SELECTOR-16) at the input layer: it has no
+    % visible glyph, only requests the emoji presentation of the preceding
+    % codepoint. catcode 9 means "ignored character", so XeTeX drops it before
+    % font selection -- no more "Missing character" warnings for it.
+    \catcode"FE0F=9\relax
+    % Silence cosmetic xelatex/LaTeX warnings that are inherent to the
+    % current Sphinx 9 + XeTeX + Noto fallback setup and do not affect the
+    % visible PDF output. We deliberately keep real errors and undefined
+    % cross-references visible.
+    %   * \tracinglostchars=0 mutes the XeTeX "Missing character" terminal
+    %     messages for the handful of color-bitmap-only emoji (🧱🧩🧠🧹)
+    %     that no monochrome Noto font ships.
+    %   * \hbadness / \vbadness raise the threshold so the engine no longer
+    %     reports Underfull \hbox/\vbox notices caused by long identifier
+    %     names in narrow table columns and code-style paragraphs.
+    %   * The silence filters drop predictable, harmless package messages.
+    \tracinglostchars=0
+    % Sphinx resets \hbadness/\vbadness at \begin{document}, so we re-apply
+    % the thresholds inside an \AtBeginDocument hook to silence Underfull
+    % \hbox/\vbox reports. Note: residual Overfull \hbox notices inside
+    % Sphinx tabulary/varwidth cells are not suppressible from here (Sphinx
+    % resets \hfuzz locally) and remain as informative typographic notices.
+    \AtBeginDocument{%
+      \hbadness=99999\relax
+      \vbadness=99999\relax
+    }
+    \usepackage{silence}
+    \WarningFilter{latexfont}{Font shape}
+    \WarningFilter{latexfont}{Some font shapes were not available}
+    \WarningFilter{cmap}{pdftex not detected}
+    \WarningFilter{longtable}{Table widths have changed}
+    \WarningFilter{rerunfilecheck}{File}
+    % Prevent orphan section headings at the bottom of a page: force a page
+    % break if there is not enough room for the heading plus a few lines of
+    % its following paragraph.
+    \usepackage{needspace}
+    \usepackage{etoolbox}
+    \pretocmd{\section}{\Needspace{12\baselineskip}}{}{}
+    \pretocmd{\subsection}{\Needspace{10\baselineskip}}{}{}
+    \pretocmd{\subsubsection}{\Needspace{8\baselineskip}}{}{}
+    % Sphinx 9 wraps every table cell content in \begin{varwidth}[t]{...}.
+    % Combined with our `m{}` column specs (e.g. intro/operating-modes and
+    % stakeholders tables), the [t] reference point makes short single-line
+    % cells sit at the row bottom instead of the visual centre. Forcing the
+    % varwidth alignment to [c] makes m{} truly centre the content; it is a
+    % no-op for p{}-style columns where Sphinx ignores the box reference.
+    \usepackage{varwidth}
+    \let\dlorigvarwidth\varwidth
+    \let\dlorigendvarwidth\endvarwidth
+    \renewenvironment{varwidth}[2][c]{\dlorigvarwidth[c]{#2}}{\dlorigendvarwidth}
+    """
     + "\n".join(f"\\newcommand{{\\{cmd}}}{{{defn}}}" for cmd, defn in macros.items()),
 }
+latex_engine = "xelatex"
+# Sphinx 9 emits the Python Module Index with a \detokenize/\sphinxstyleindexpageref
+# pattern whose key does not match the corresponding \label definitions, producing
+# spurious "undefined reference" warnings on every entry. The HTML build keeps a
+# fully functional modindex; the PDF one is not worth its bogus warnings.
+latex_domain_indices = False
 
 # -- MathJax configuration for HTML output -----------------------------------
 mathjax3_config = {

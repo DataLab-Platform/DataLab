@@ -13,12 +13,11 @@ Basic concepts
 Working with DataLab is very easy. The user interface is intuitive and
 self-explanatory. The main window is divided into two main areas:
 
-- The left area shows the list of data sets which are currently loaded in
-  DataLab, distibuted over two tabs: **Signals** and **Images**. The user can
-  switch between the two tabs by clicking on the corresponding tab: this
-  switches the main window to the corresponding panel, as well as the menu
-  and toolbar contents. Below the list of data sets, a **Properties** view
-  shows information about the currently selected data set.
+- The left area contains the **Signals** and **Images** data tabs, which list
+  the data sets currently loaded in each panel. Clicking a tab switches the
+  main window to the corresponding panel, as well as the menu and toolbar
+  contents. Below the list of data sets, a **Properties** view shows
+  information about the currently selected data set.
 
 - The right area shows the visualization of the currently selected data set.
   The visualization is updated automatically when the user selects a new data
@@ -28,6 +27,60 @@ self-explanatory. The main window is divided into two main areas:
 
     DataLab main window, at startup.
 
+Additional panels are available as dockable widgets, and may be shown or hidden
+from the "View" menu: the :ref:`welcome_page`, the :ref:`historypanel`, the Macro
+panel (see :ref:`about_macros`) and the :ref:`ai_assistant`.
+
+.. _welcome_page:
+
+Welcome page
+^^^^^^^^^^^^
+
+A **Welcome** page is shown next to the signal and image views when DataLab starts, and whenever the current signal or image panel is empty (for example after switching to an empty panel or deleting its last object). It gathers the main actions to get started:
+
+- create a signal or an image from a template, open signal or image files,
+  browse an HDF5 file, open a previously saved HDF5 workspace, or import text
+  data (CSV, TSV, ...) with the import wizard. When needed, a menu lets you choose
+  between signals and images;
+- ask the :ref:`ai_assistant`, take the guided tour, run the demo, read the
+  online documentation, or browse the release notes of the running version.
+
+When application plugins are installed, an **Applications** section at the top of the page shows their tiles: clicking the main tile of an application opens its page in the **Applications** catalog, or starts the main action provided by the plugin. An application may provide other tiles, for example to open an example directly: they are shown next to its main tile when the section has room for them, and otherwise move to the menu of the main tile. This menu, opened from the "…" button of the main tile or by right-clicking it, also lets you pin the application to the top of the section or hide it from the welcome page. Pinned applications come first, then recently used ones, then the others by name. The section is limited to two rows of tiles by default (this number may be changed in the :ref:`settings`): when more applications are installed, the last tile gives the number of applications left out and opens the catalog. The "Browse all applications..." button also opens the catalog, where a search field filters applications by name or description, and where the "Show on welcome page" and "Pin to the welcome page" check boxes of each application change the same preferences (see :ref:`about_plugins`).
+
+On the page of an application, the methods are listed one below the other, followed by the tools and datasets of the application, if any: clicking a title opens its section and closes the one previously open. The colored dot before each method tells whether the current selection can be analyzed, and its tooltip gives the reason. The open method presents the inputs it expects and this status in detail. When metadata are missing, the status points to "Edit > Metadata > Add metadata...", and it is updated as soon as objects are modified. "Run on selection..." starts the method, and asks you to assign the selected objects to its inputs only when needed. The examples designed for a method are listed below it: "Try with this example" opens the example and runs the method with suitable parameters. The vertical strip between the application list and the page hides the list, or shows it again: the window shrinks or grows accordingly, and DataLab remembers this choice.
+
+The Welcome page is a regular dockable panel: as soon as a signal or an image is created or opened, the corresponding view is brought to the front, and the Welcome page remains available as a tab. It may be closed like any other panel, and reopened at any time from the "Welcome page" entry of the "?" (Help) menu or from the "View" menu; it is also reopened automatically when the current panel becomes empty. The "Show welcome page when the current panel is empty" check box, at the bottom of the page, controls this automatic display, including at startup (this option is also available in the :ref:`settings`).
+
+.. _command_palette:
+
+Command palette
+^^^^^^^^^^^^^^^
+
+Rather than navigating through nested menus, any command may be reached by
+typing part of its name or of its menu path in the **command palette**. It
+lists every command available for the currently active panel, identified by its
+localised menu path (e.g. "Processing › Fourier analysis › FFT").
+
+The palette may be opened in three ways:
+
+- with the :kbd:`Ctrl+Shift+P` keyboard shortcut,
+- by clicking the search box in the top-right corner of the menu bar,
+- from the "Command palette..." entry at the top of the "?" (Help) menu.
+
+Type a few characters to filter the list: the matching is *fuzzy*, so "fft"
+or "fan" both reach the "Fourier analysis" entries. Results are navigated with
+:kbd:`Up` / :kbd:`Down` and triggered with :kbd:`Enter`, exactly as if the
+command had been selected in the menu bar. With an empty query, all commands
+are listed alphabetically by path.
+
+History Panel
+^^^^^^^^^^^^^
+
+The :ref:`historypanel` is an additional dockable panel that records signal
+and image actions in a shared active session. It supports replay, step-by-step
+replay, duplication, and compatibility diagnostics. Sessions may be saved in
+standalone ``.dlhist`` files or with the workspace in HDF5 format.
+
 Internal data model and workspace
 ---------------------------------
 
@@ -35,14 +88,14 @@ DataLab has its own internal data model, in which data sets are organized around
 a tree structure. Each panel in the main window corresponds to a branch of the
 tree. Each data set shown in the panels corresponds to a leaf of the tree. Inside
 the data set, the data is organized in an object-oriented way, with a set of
-attributes and methods. The data model is described in more details in the
+attributes and methods. The data model is described in more detail in the
 API section (see :mod:`sigima.objects`).
 
-For each data set (1D signal or 2D image), not only the data itself is stored,
-but also a set of metadata, which describes the data or the way it has to be
-displayed. The metadata is stored in a dictionary, which is accessible through
-the ``metadata`` attribute of the data set (and may also be browsed in the
-**Properties** view, with the **Metadata** button).
+For each signal or image object, DataLab stores not only the data itself but
+also a set of metadata describing the data and how it should be displayed. The
+metadata is stored in a dictionary accessible through the object's ``metadata``
+attribute (and may also be browsed in the **Properties** view, with the
+**Metadata** button).
 
 The DataLab **Workspace** is defined as the collection of all data sets which
 are currently loaded in DataLab, in both the **Signals** and **Images** panels.
@@ -63,7 +116,7 @@ The following actions are available to manage the workspace from the **File** me
 
     Data sets may also be saved or loaded individually, using data formats
     such as `.txt` or `.npy` for 1D signals (see :ref:`open_signal` for the
-    list of supported formats), , or `.tiff` or `.dcm` for 2D images
+    list of supported formats), or `.tiff` or `.dcm` for 2D images
     (see :ref:`open_image` for the list of supported formats).
 
 Interactive object creation and processing
@@ -75,17 +128,17 @@ parameters, allowing you to fine-tune results without creating multiple objects.
 Interactive object creation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When creating a new signal or image using the creation functions (e.g., Gaussian signal,
-2D peak image, etc.), DataLab stores the creation parameters in the object's metadata.
-This enables interactive parameter adjustment after creation:
+When creating a new signal or image object using the creation functions (e.g., Gaussian
+signal, 2D peak image, etc.), DataLab stores the creation parameters in the object's
+metadata. This enables interactive parameter adjustment after creation:
 
-1. Create a signal or image using **Operations** > **Create** menu
+1. Create a signal or image object from the **Create** menu
 2. Select the created object in the list
 3. A **Creation** tab appears in the Properties panel (bottom-left)
 4. Modify any creation parameter (amplitude, frequency, size, etc.)
 5. Click **Apply** to regenerate the object with new parameters
 
-The object is updated in-place, preserving any subsequent processing or analysis results.
+The object is updated in place, preserving any subsequent processing or analysis results.
 This is particularly useful for:
 
 - Exploring different parameter values without cluttering the workspace
@@ -100,22 +153,64 @@ This is particularly useful for:
 Interactive 1-to-1 processing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Live preview before applying a processing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Standard parameter dialogs for 1-to-1 processing offer a **Preview** checkbox,
+unchecked each time the dialog opens. Enable it to display a temporary result
+while adjusting the parameters. With several signals, images or groups selected,
+choose one source in the preview selector; **OK** still processes the whole
+original selection with the common parameters.
+
+The preview uses the complete source data, including its regions of interest,
+without adding objects or history entries. Invalid entries suspend updates.
+Warnings and errors appear inside the dialog. Typing is debounced and slider
+drags are throttled; large data and expensive algorithms may take longer to
+update. The preview shows only the result, with its own axes and units, including
+when an image processing returns a signal.
+
+Starting the first preview creates a dedicated process. After a preview has
+finished, DataLab keeps this process ready for later preview dialogs, including
+when switching between signal and image processing. Closing a dialog while a
+preview is still running stops that process; the next preview then performs a
+fresh startup. Reloading plugins also discards the cached preview process.
+
+**Cancel** discards the draft parameters and stops the preview. With one source,
+**OK** reuses a completed, up-to-date preview once and publishes it through the
+normal processing path, including history. If the preview is still running or
+stale, or if several objects or groups are selected, DataLab runs the normal
+processing instead. Analysis, multi-input operations, operations without
+parameters and unknown custom parameter dialogs retain their existing workflow.
+
+Bounded numeric fields automatically offer sliders in compatible processing
+forms and in the **Processing** tab. The exact text field remains authoritative;
+moving its slider does not limit the precision of values entered by keyboard.
+Fields without two usable bounds remain text-only. Sliders alone never enable
+preview or automatic re-processing.
+
+Re-processing an existing result
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 When applying a 1-to-1 processing operation that has configurable parameters (e.g.,
 Gaussian filter, threshold, morphological operations), DataLab stores the processing
 metadata, enabling parameter adjustment and re-processing:
 
-1. Apply a processing operation with parameters (e.g., **Processing** > **Filtering** > **Gaussian filter**)
+1. Apply a processing operation with parameters (e.g., **Processing** > **Noise reduction** > **Gaussian filter**)
 2. The result object contains processing metadata (parameters, source object, function name)
 3. Select the processed object in the list
 4. A **Processing** tab appears in the Properties panel
 5. Modify processing parameters (e.g., filter sigma value)
 6. Click **Apply** to re-process with updated parameters
 
-The processed object is updated in-place with the new results. This workflow is ideal for:
+Normally, **Apply** creates a new result and history entry. In the History panel's
+edit mode it updates the existing result and recomputes dependent actions. The
+optional **Auto-recompute on edit** checkbox follows the same rules, waits for
+slider release and valid input, and does not apply edits from a previously
+selected object. This workflow is ideal for:
 
-- Iteratively tuning filter parameters while observing results in real-time
+- Iteratively tuning filter parameters while observing results in real time
 - Adjusting threshold values without creating multiple intermediate objects
-- Experimenting with different morphological structure element sizes
+- Experimenting with different morphological structuring element sizes
 - Educational demonstrations of parameter effects on processing results
 
 .. note::
@@ -135,9 +230,9 @@ The processed object is updated in-place with the new results. This workflow is 
 Example workflow
 ^^^^^^^^^^^^^^^^
 
-Here's a typical workflow using interactive processing:
+Here's a typical workflow using interactive processing, with History edit mode enabled:
 
-1. **Create a test signal**: Operations > Create > Gaussian signal
+1. **Create a test signal**: Create > Gaussian signal
 
    - Initial parameters: amplitude=1.0, mu=50, sigma=10
 
@@ -145,7 +240,7 @@ Here's a typical workflow using interactive processing:
 
    - Signal is regenerated with new width
 
-3. **Apply Gaussian filter**: Processing > Filtering > Gaussian filter
+3. **Apply Gaussian filter**: Processing > Noise reduction > Gaussian filter
 
    - Initial sigma=2.0
 

@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "MIME-Version: 1.0\n"
@@ -25,8 +24,8 @@ msgstr "Concepts de base"
 msgid "Working with DataLab is very easy. The user interface is intuitive and self-explanatory. The main window is divided into two main areas:"
 msgstr "Travailler avec DataLab est très simple. L'interface est intuitive et appréhendable facilement. La fenêtre principale est divisée en deux zones principales :"
 
-msgid "The left area shows the list of data sets which are currently loaded in DataLab, distibuted over two tabs: **Signals** and **Images**. The user can switch between the two tabs by clicking on the corresponding tab: this switches the main window to the corresponding panel, as well as the menu and toolbar contents. Below the list of data sets, a **Properties** view shows information about the currently selected data set."
-msgstr "La zone de gauche affiche la liste des jeux de données actuellement chargés dans DataLab, répartis sur deux onglets : **Signaux** et **Images**. L'utilisateur peut basculer entre les deux onglets en cliquant sur l'onglet correspondant : cela bascule la fenêtre principale vers le panneau correspondant, ainsi que le contenu du menu et de la barre d'outils. Sous la liste des jeux de données, une vue **Propriétés** affiche des informations sur le jeu de données actuellement sélectionné."
+msgid "The left area contains the **Signals** and **Images** data tabs, which list the data sets currently loaded in each panel. Clicking a tab switches the main window to the corresponding panel, as well as the menu and toolbar contents. Below the list of data sets, a **Properties** view shows information about the currently selected data set."
+msgstr "La zone de gauche contient les onglets de données **Signaux** et **Images**, qui répertorient les jeux de données actuellement chargés dans chaque panneau. Cliquer sur un onglet fait basculer la fenêtre principale vers le panneau correspondant, ainsi que le contenu du menu et de la barre d'outils. Sous la liste des jeux de données, une vue **Propriétés** affiche des informations sur le jeu de données actuellement sélectionné."
 
 msgid "The right area shows the visualization of the currently selected data set. The visualization is updated automatically when the user selects a new data set in the list of data sets."
 msgstr "La zone de droite affiche la visualisation du jeu de données actuellement sélectionné. La visualisation est mise à jour automatiquement lorsque l'utilisateur sélectionne un nouveau jeu de données dans la liste des jeux de données."
@@ -34,14 +33,65 @@ msgstr "La zone de droite affiche la visualisation du jeu de données actuelleme
 msgid "DataLab main window, at startup."
 msgstr "Fenêtre principale de DataLab, au démarrage."
 
+msgid "Additional panels are available as dockable widgets, and may be shown or hidden from the \"View\" menu: the :ref:`welcome_page`, the :ref:`historypanel`, the Macro panel (see :ref:`about_macros`) and the :ref:`ai_assistant`."
+msgstr "D'autres panneaux sont disponibles sous forme de widgets ancrables, et peuvent être affichés ou masqués depuis le menu « Affichage » : la :ref:`welcome_page`, le :ref:`historypanel`, le panneau de macros (voir :ref:`about_macros`) et l':ref:`ai_assistant`."
+
+msgid "Welcome page"
+msgstr "Page d'accueil"
+
+msgid "A **Welcome** page is shown next to the signal and image views when DataLab starts, and whenever the current signal or image panel is empty (for example after switching to an empty panel or deleting its last object). It gathers the main actions to get started:"
+msgstr "Une page d'**Accueil** est affichée à côté des vues signal et image au démarrage de DataLab, et chaque fois que le panneau signal ou image courant est vide (par exemple après le passage à un panneau vide ou la suppression de son dernier objet). Elle rassemble les principales actions pour bien démarrer :"
+
+msgid "create a signal or an image from a template, open signal or image files, browse an HDF5 file, open a previously saved HDF5 workspace, or import text data (CSV, TSV, ...) with the import wizard. When needed, a menu lets you choose between signals and images;"
+msgstr "créer un signal ou une image à partir d'un modèle, ouvrir des fichiers de signaux ou d'images, parcourir un fichier HDF5, ouvrir un espace de travail HDF5 précédemment enregistré, ou importer des données texte (CSV, TSV, ...) avec l'assistant d'importation. Si nécessaire, un menu permet de choisir entre signaux et images ;"
+
+msgid "ask the :ref:`ai_assistant`, take the guided tour, run the demo, read the online documentation, or browse the release notes of the running version."
+msgstr "interroger l':ref:`ai_assistant`, suivre la visite guidée, lancer la démo, lire la documentation en ligne, ou consulter les notes de version de la version en cours d'exécution."
+
+msgid "When application plugins are installed, an **Applications** section at the top of the page shows their tiles: clicking the main tile of an application opens its page in the **Applications** catalog, or starts the main action provided by the plugin. An application may provide other tiles, for example to open an example directly: they are shown next to its main tile when the section has room for them, and otherwise move to the menu of the main tile. This menu, opened from the \"…\" button of the main tile or by right-clicking it, also lets you pin the application to the top of the section or hide it from the welcome page. Pinned applications come first, then recently used ones, then the others by name. The section is limited to two rows of tiles by default (this number may be changed in the :ref:`settings`): when more applications are installed, the last tile gives the number of applications left out and opens the catalog. The \"Browse all applications...\" button also opens the catalog, where a search field filters applications by name or description, and where the \"Show on welcome page\" and \"Pin to the welcome page\" check boxes of each application change the same preferences (see :ref:`about_plugins`)."
+msgstr "Lorsque des plugins d'application sont installés, une section **Applications** en haut de la page affiche leurs tuiles : un clic sur la tuile principale d'une application ouvre sa page dans le catalogue **Applications**, ou lance l'action principale fournie par le plugin. Une application peut proposer d'autres tuiles, par exemple pour ouvrir directement un exemple : elles sont affichées à côté de sa tuile principale lorsque la section a la place nécessaire, et passent sinon dans le menu de la tuile principale. Ce menu, ouvert depuis le bouton « … » de la tuile principale ou par un clic droit sur celle-ci, permet aussi d'épingler l'application en tête de la section ou de la masquer de la page d'accueil. Les applications épinglées viennent en premier, puis celles utilisées récemment, puis les autres par ordre alphabétique. La section est limitée par défaut à deux lignes de tuiles (ce nombre peut être modifié dans les :ref:`settings`) : lorsque davantage d'applications sont installées, la dernière tuile indique le nombre d'applications non affichées et ouvre le catalogue. Le bouton « Parcourir toutes les applications... » ouvre également le catalogue, où un champ de recherche filtre les applications par nom ou par description, et où les cases à cocher « Afficher sur la page d'accueil » et « Épingler sur la page d'accueil » de chaque application modifient ces mêmes préférences (voir :ref:`about_plugins`)."
+
+msgid "On the page of an application, the methods are listed one below the other, followed by the tools and datasets of the application, if any: clicking a title opens its section and closes the one previously open. The colored dot before each method tells whether the current selection can be analyzed, and its tooltip gives the reason. The open method presents the inputs it expects and this status in detail. When metadata are missing, the status points to \"Edit > Metadata > Add metadata...\", and it is updated as soon as objects are modified. \"Run on selection...\" starts the method, and asks you to assign the selected objects to its inputs only when needed. The examples designed for a method are listed below it: \"Try with this example\" opens the example and runs the method with suitable parameters. The vertical strip between the application list and the page hides the list, or shows it again: the window shrinks or grows accordingly, and DataLab remembers this choice."
+msgstr "Sur la page d'une application, les méthodes sont listées les unes sous les autres, suivies le cas échéant des outils et des jeux de données de l'application : cliquer sur un titre ouvre sa section et referme celle qui était ouverte. La pastille de couleur placée devant chaque méthode indique si la sélection courante peut être analysée, et son infobulle en donne la raison. La méthode ouverte présente les entrées qu'elle attend et ce statut en détail. Lorsque des métadonnées manquent, le statut renvoie vers « Édition > Métadonnées > Ajouter des métadonnées... », et il est mis à jour dès que des objets sont modifiés. « Exécuter sur la sélection... » lance la méthode et ne vous demande d'affecter les objets sélectionnés à ses entrées qu'en cas de besoin. Les exemples conçus pour une méthode sont listés en dessous : « Essayer avec cet exemple » ouvre l'exemple et exécute la méthode avec des paramètres adaptés. La bande verticale située entre la liste des applications et la page masque la liste, ou l'affiche à nouveau : la fenêtre se réduit ou s'agrandit en conséquence, et DataLab mémorise ce choix."
+
+msgid "The Welcome page is a regular dockable panel: as soon as a signal or an image is created or opened, the corresponding view is brought to the front, and the Welcome page remains available as a tab. It may be closed like any other panel, and reopened at any time from the \"Welcome page\" entry of the \"?\" (Help) menu or from the \"View\" menu; it is also reopened automatically when the current panel becomes empty. The \"Show welcome page when the current panel is empty\" check box, at the bottom of the page, controls this automatic display, including at startup (this option is also available in the :ref:`settings`)."
+msgstr "La page d'accueil est un panneau ancrable comme les autres : dès qu'un signal ou une image est créé ou ouvert, la vue correspondante passe au premier plan, et la page d'accueil reste disponible sous forme d'onglet. Elle peut être fermée comme n'importe quel autre panneau, et rouverte à tout moment depuis l'entrée « Page d'accueil » du menu « ? » (Aide) ou depuis le menu « Affichage » ; elle est aussi rouverte automatiquement lorsque le panneau courant devient vide. La case à cocher « Afficher la page d'accueil lorsque le panneau courant est vide », en bas de la page, détermine cet affichage automatique, y compris au démarrage (cette option est également disponible dans les :ref:`settings`)."
+
+msgid "Command palette"
+msgstr "Palette de commandes"
+
+msgid "Rather than navigating through nested menus, any command may be reached by typing part of its name or of its menu path in the **command palette**. It lists every command available for the currently active panel, identified by its localised menu path (e.g. \"Processing › Fourier analysis › FFT\")."
+msgstr "Plutôt que de naviguer dans des menus imbriqués, n'importe quelle commande peut être atteinte en saisissant une partie de son nom ou de son chemin de menu dans la **palette de commandes**. Celle-ci répertorie toutes les commandes disponibles pour le panneau actif, identifiées par leur chemin de menu localisé (par exemple « Traitement › Analyse de Fourier › FFT »)."
+
+msgid "The palette may be opened in three ways:"
+msgstr "La palette peut être ouverte de trois façons :"
+
+msgid "with the :kbd:`Ctrl+Shift+P` keyboard shortcut,"
+msgstr "avec le raccourci clavier :kbd:`Ctrl+Maj+P`,"
+
+msgid "by clicking the search box in the top-right corner of the menu bar,"
+msgstr "en cliquant sur la zone de recherche située dans le coin supérieur droit de la barre de menus,"
+
+msgid "from the \"Command palette...\" entry at the top of the \"?\" (Help) menu."
+msgstr "depuis l'entrée « Palette de commandes... » en haut du menu « ? » (Aide)."
+
+msgid "Type a few characters to filter the list: the matching is *fuzzy*, so \"fft\" or \"fan\" both reach the \"Fourier analysis\" entries. Results are navigated with :kbd:`Up` / :kbd:`Down` and triggered with :kbd:`Enter`, exactly as if the command had been selected in the menu bar. With an empty query, all commands are listed alphabetically by path."
+msgstr "Saisissez quelques caractères pour filtrer la liste : la correspondance est *approximative*, si bien que « fft » comme « fan » atteignent les entrées « Analyse de Fourier ». Les résultats se parcourent avec :kbd:`Haut` / :kbd:`Bas` et se déclenchent avec :kbd:`Entrée`, exactement comme si la commande avait été sélectionnée dans la barre de menus. Avec une requête vide, toutes les commandes sont listées par ordre alphabétique de chemin."
+
+msgid "History Panel"
+msgstr "Panneau d'historique"
+
+msgid "The :ref:`historypanel` is an additional dockable panel that records signal and image actions in a shared active session. It supports replay, step-by-step replay, duplication, and compatibility diagnostics. Sessions may be saved in standalone ``.dlhist`` files or with the workspace in HDF5 format."
+msgstr "Le :ref:`historypanel` est un panneau ancrable supplémentaire qui enregistre les actions sur les signaux et les images dans une session active partagée. Il permet de rejouer les actions, de les rejouer pas à pas, de les dupliquer et de diagnostiquer les incompatibilités. Les sessions peuvent être enregistrées dans des fichiers autonomes ``.dlhist`` ou avec l'espace de travail au format HDF5."
+
 msgid "Internal data model and workspace"
 msgstr "Modèle de données interne et espace de travail"
 
-msgid "DataLab has its own internal data model, in which data sets are organized around a tree structure. Each panel in the main window corresponds to a branch of the tree. Each data set shown in the panels corresponds to a leaf of the tree. Inside the data set, the data is organized in an object-oriented way, with a set of attributes and methods. The data model is described in more details in the API section (see :mod:`sigima.objects`)."
+msgid "DataLab has its own internal data model, in which data sets are organized around a tree structure. Each panel in the main window corresponds to a branch of the tree. Each data set shown in the panels corresponds to a leaf of the tree. Inside the data set, the data is organized in an object-oriented way, with a set of attributes and methods. The data model is described in more detail in the API section (see :mod:`sigima.objects`)."
 msgstr "DataLab a son propre modèle de données interne, dans lequel les jeux de données sont organisés autour d'une structure arborescente. Chaque panneau de la fenêtre principale correspond à une branche de l'arbre. Chaque jeu de données affiché dans les panneaux correspond à une feuille de l'arbre. À l'intérieur du jeu de données, les données sont organisées de manière orientée objet, avec un ensemble d'attributs et de méthodes. Le modèle de données est décrit plus en détail dans la section API (voir :mod:`sigima.objects`)."
 
-msgid "For each data set (1D signal or 2D image), not only the data itself is stored, but also a set of metadata, which describes the data or the way it has to be displayed. The metadata is stored in a dictionary, which is accessible through the ``metadata`` attribute of the data set (and may also be browsed in the **Properties** view, with the **Metadata** button)."
-msgstr "Pour chaque jeu de données (signal 1D ou image 2D), non seulement les données elles-mêmes sont stockées, mais aussi un ensemble de métadonnées, qui décrit les données ou la façon dont elles doivent être affichées. Les métadonnées sont stockées dans un dictionnaire, qui est accessible via l'attribut ``metadata`` du jeu de données (et peuvent également être parcourues dans la vue **Propriétés**, avec le bouton **Métadonnées**)."
+msgid "For each signal or image object, DataLab stores not only the data itself but also a set of metadata describing the data and how it should be displayed. The metadata is stored in a dictionary accessible through the object's ``metadata`` attribute (and may also be browsed in the **Properties** view, with the **Metadata** button)."
+msgstr "Pour chaque objet signal ou image, DataLab stocke non seulement les données elles-mêmes, mais aussi un ensemble de métadonnées décrivant les données et la manière dont elles doivent être affichées. Ces métadonnées sont stockées dans un dictionnaire accessible par l'attribut ``metadata`` de l'objet (et peuvent également être consultées dans la vue **Propriétés**, à l'aide du bouton **Métadonnées**)."
 
 msgid "The DataLab **Workspace** is defined as the collection of all data sets which are currently loaded in DataLab, in both the **Signals** and **Images** panels."
 msgstr "L'**Espace de travail** de DataLab est défini comme l'ensemble de tous les jeux de données actuellement chargés dans DataLab, dans les panneaux **Signaux** et **Images**."
@@ -61,7 +111,7 @@ msgstr "**Enregistrer dans un fichier HDF5** : enregistrer l'espace de travail a
 msgid "**Browse HDF5 file**: open the :ref:`h5browser` to explore the content of an HDF5 file and import data sets into the workspace."
 msgstr "**Parcourir un fichier HDF5** : ouvrir le :ref:`h5browser` pour explorer le contenu d'un fichier HDF5 et importer des jeux de données dans l'espace de travail."
 
-msgid "Data sets may also be saved or loaded individually, using data formats such as `.txt` or `.npy` for 1D signals (see :ref:`open_signal` for the list of supported formats), , or `.tiff` or `.dcm` for 2D images (see :ref:`open_image` for the list of supported formats)."
+msgid "Data sets may also be saved or loaded individually, using data formats such as `.txt` or `.npy` for 1D signals (see :ref:`open_signal` for the list of supported formats), or `.tiff` or `.dcm` for 2D images (see :ref:`open_image` for the list of supported formats)."
 msgstr "Les jeux de données peuvent également être enregistrés ou chargés individuellement, en utilisant des formats de données tels que `.txt` ou `.npy` pour les signaux 1D (voir :ref:`open_signal` pour la liste des formats pris en charge), ou `.tiff` ou `.dcm` pour les images 2D (voir :ref:`open_image` pour la liste des formats pris en charge)."
 
 msgid "Interactive object creation and processing"
@@ -71,13 +121,13 @@ msgid "DataLab provides an interactive workflow for creating objects and adjusti
 msgstr "DataLab fournit un flux de travail interactif pour créer des objets et ajuster les paramètres de traitement, vous permettant d'affiner les résultats sans créer plusieurs objets."
 
 msgid "Interactive object creation"
-msgstr "Création d'objets interactifs"
+msgstr "Création interactive d'objets"
 
-msgid "When creating a new signal or image using the creation functions (e.g., Gaussian signal, 2D peak image, etc.), DataLab stores the creation parameters in the object's metadata. This enables interactive parameter adjustment after creation:"
+msgid "When creating a new signal or image object using the creation functions (e.g., Gaussian signal, 2D peak image, etc.), DataLab stores the creation parameters in the object's metadata. This enables interactive parameter adjustment after creation:"
 msgstr "Lors de la création d'un nouveau signal ou d'une nouvelle image à l'aide des fonctions de création (par exemple, signal gaussien, image de pic 2D, etc.), DataLab stocke les paramètres de création dans les métadonnées de l'objet. Cela permet d'ajuster les paramètres de manière interactive après la création :"
 
-msgid "Create a signal or image using **Operations** > **Create** menu"
-msgstr "Créer un signal ou une image en utilisant le menu **Opérations** > **Créer**"
+msgid "Create a signal or image object from the **Create** menu"
+msgstr "Créer un objet signal ou image depuis le menu **Création**"
 
 msgid "Select the created object in the list"
 msgstr "Sélectionner l'objet créé dans la liste"
@@ -91,7 +141,7 @@ msgstr "Modifier n'importe quel paramètre de création (amplitude, fréquence, 
 msgid "Click **Apply** to regenerate the object with new parameters"
 msgstr "Cliquer sur **Appliquer** pour régénérer l'objet avec les nouveaux paramètres"
 
-msgid "The object is updated in-place, preserving any subsequent processing or analysis results. This is particularly useful for:"
+msgid "The object is updated in place, preserving any subsequent processing or analysis results. This is particularly useful for:"
 msgstr "L'objet est mis à jour sur place, préservant tous les résultats de traitement ou d'analyse ultérieurs. Cela est particulièrement utile pour :"
 
 msgid "Exploring different parameter values without cluttering the workspace"
@@ -109,11 +159,32 @@ msgstr "La création interactive n'est disponible que pour les objets créés av
 msgid "Interactive 1-to-1 processing"
 msgstr "Traitement interactif 1-vers-1"
 
-msgid "When applying a 1-to-1 processing operation that has configurable parameters (e.g., Gaussian filter, threshold, morphological operations), DataLab stores the processing metadata, enabling parameter adjustment and re-processing:"
-msgstr "Lors de l'application d'une opération de traitement 1-vers-1 qui a des paramètres configurables (par exemple, filtre gaussien, seuil, opérations morphologiques), DataLab stocke les métadonnées de traitement, permettant l'ajustement des paramètres et le re-traitement :"
+msgid "Live preview before applying a processing"
+msgstr "Aperçu avant l'application d'un traitement"
 
-msgid "Apply a processing operation with parameters (e.g., **Processing** > **Filtering** > **Gaussian filter**)"
-msgstr "Appliquer une opération de traitement avec des paramètres (par exemple, **Traitement** > **Filtrage** > **Filtre gaussien**)"
+msgid "Standard parameter dialogs for 1-to-1 processing offer a **Preview** checkbox, unchecked each time the dialog opens. Enable it to display a temporary result while adjusting the parameters. With several signals, images or groups selected, choose one source in the preview selector; **OK** still processes the whole original selection with the common parameters."
+msgstr "Les boîtes de dialogue standard des traitements 1-vers-1 proposent une case **Aperçu**, décochée à chaque ouverture. Cochez-la pour afficher un résultat temporaire pendant le réglage des paramètres. Si plusieurs signaux, images ou groupes sont sélectionnés, choisissez une source dans le sélecteur d'aperçu ; **OK** traite toujours toute la sélection initiale avec les paramètres communs."
+
+msgid "The preview uses the complete source data, including its regions of interest, without adding objects or history entries. Invalid entries suspend updates. Warnings and errors appear inside the dialog. Typing is debounced and slider drags are throttled; large data and expensive algorithms may take longer to update. The preview shows only the result, with its own axes and units, including when an image processing returns a signal."
+msgstr "L'aperçu utilise toutes les données sources, y compris leurs régions d'intérêt, sans ajouter d'objet ni d'entrée d'historique. Une saisie invalide suspend les mises à jour. Les avertissements et erreurs s'affichent dans la boîte de dialogue. Les saisies rapprochées sont regroupées et la cadence des curseurs est limitée ; les données volumineuses et les algorithmes coûteux peuvent prendre davantage de temps. L'aperçu affiche uniquement le résultat, avec ses propres axes et unités, y compris lorsqu'un traitement d'image produit un signal."
+
+msgid "Starting the first preview creates a dedicated process. After a preview has finished, DataLab keeps this process ready for later preview dialogs, including when switching between signal and image processing. Closing a dialog while a preview is still running stops that process; the next preview then performs a fresh startup. Reloading plugins also discards the cached preview process."
+msgstr "Le premier aperçu démarre un processus dédié. Une fois l'aperçu terminé, DataLab garde ce processus prêt pour les boîtes de dialogue d'aperçu suivantes, y compris lors du passage des traitements de signaux aux traitements d'images. Fermer une boîte de dialogue pendant qu'un aperçu est encore en cours arrête ce processus ; l'aperçu suivant effectue alors un nouveau démarrage. Le rechargement des plugins abandonne également le processus d'aperçu mis en cache."
+
+msgid "**Cancel** discards the draft parameters and stops the preview. With one source, **OK** reuses a completed, up-to-date preview once and publishes it through the normal processing path, including history. If the preview is still running or stale, or if several objects or groups are selected, DataLab runs the normal processing instead. Analysis, multi-input operations, operations without parameters and unknown custom parameter dialogs retain their existing workflow."
+msgstr "**Annuler** abandonne les paramètres en cours d'édition et arrête l'aperçu. Avec une seule source, **OK** réutilise une fois l'aperçu terminé et à jour, puis le publie par le chemin de traitement normal, historique compris. Si l'aperçu est encore en cours ou obsolète, ou si plusieurs objets ou groupes sont sélectionnés, DataLab exécute le traitement normal. Les analyses, les opérations à plusieurs entrées, les opérations sans paramètres et les éditeurs personnalisés non pris en charge conservent leur fonctionnement habituel."
+
+msgid "Bounded numeric fields automatically offer sliders in compatible processing forms and in the **Processing** tab. The exact text field remains authoritative; moving its slider does not limit the precision of values entered by keyboard. Fields without two usable bounds remain text-only. Sliders alone never enable preview or automatic re-processing."
+msgstr "Les champs numériques bornés proposent automatiquement des curseurs dans les formulaires de traitement compatibles et dans l'onglet **Traitement**. La valeur exacte du champ texte fait foi ; le curseur ne limite pas la précision des valeurs saisies au clavier. Les champs sans deux bornes utilisables restent textuels. Les curseurs n'activent jamais à eux seuls l'aperçu ou le retraitement automatique."
+
+msgid "Re-processing an existing result"
+msgstr "Retraiter un résultat existant"
+
+msgid "When applying a 1-to-1 processing operation that has configurable parameters (e.g., Gaussian filter, threshold, morphological operations), DataLab stores the processing metadata, enabling parameter adjustment and re-processing:"
+msgstr "Lors de l'application d'une opération de traitement 1-vers-1 qui a des paramètres configurables (par exemple, filtre gaussien, seuil, opérations morphologiques), DataLab stocke les métadonnées de traitement, permettant l'ajustement des paramètres et le retraitement :"
+
+msgid "Apply a processing operation with parameters (e.g., **Processing** > **Noise reduction** > **Gaussian filter**)"
+msgstr "Appliquer une opération de traitement avec des paramètres (par exemple, **Traitement** > **Réduction de bruit** > **Filtre gaussien**)"
 
 msgid "The result object contains processing metadata (parameters, source object, function name)"
 msgstr "L'objet résultant contient des métadonnées de traitement (paramètres, objet source, nom de la fonction)"
@@ -125,22 +196,22 @@ msgid "A **Processing** tab appears in the Properties panel"
 msgstr "Un onglet **Traitement** apparaît dans le panneau des propriétés"
 
 msgid "Modify processing parameters (e.g., filter sigma value)"
-msgstr "Modifier les paramètres de traitement (par exemple, valeur sigma du filtre)"
+msgstr "Modifier les paramètres de traitement (par exemple, valeur du sigma du filtre)"
 
 msgid "Click **Apply** to re-process with updated parameters"
-msgstr "Cliquer sur **Appliquer** pour re-traiter avec les paramètres mis à jour"
+msgstr "Cliquer sur **Appliquer** pour retraiter avec les paramètres mis à jour"
 
-msgid "The processed object is updated in-place with the new results. This workflow is ideal for:"
-msgstr "L'objet traité est mis à jour sur place avec les nouveaux résultats. Ce flux de travail est idéal pour :"
+msgid "Normally, **Apply** creates a new result and history entry. In the History panel's edit mode it updates the existing result and recomputes dependent actions. The optional **Auto-recompute on edit** checkbox follows the same rules, waits for slider release and valid input, and does not apply edits from a previously selected object. This workflow is ideal for:"
+msgstr "Normalement, **Appliquer** crée un nouveau résultat et une entrée d'historique. En mode édition du panneau Historique, le résultat existant est mis à jour et les actions dépendantes sont recalculées. La case facultative **Retraiter automatiquement à la modification** suit les mêmes règles, attend le relâchement du curseur et une saisie valide, et n'applique pas les modifications d'un objet précédemment sélectionné. Ce fonctionnement convient notamment pour :"
 
-msgid "Iteratively tuning filter parameters while observing results in real-time"
-msgstr "Ajustement itératif des paramètres du filtre tout en observant les résultats en temps réel"
+msgid "Iteratively tuning filter parameters while observing results in real time"
+msgstr "Ajuster de manière itérative les paramètres du filtre tout en observant les résultats en temps réel"
 
 msgid "Adjusting threshold values without creating multiple intermediate objects"
 msgstr "Ajustement des valeurs de seuil sans créer plusieurs objets intermédiaires"
 
-msgid "Experimenting with different morphological structure element sizes"
-msgstr "Expérimentation avec différentes tailles d'éléments de structure morphologique"
+msgid "Experimenting with different morphological structuring element sizes"
+msgstr "Tester différentes tailles d'éléments structurants morphologiques"
 
 msgid "Educational demonstrations of parameter effects on processing results"
 msgstr "Démonstrations éducatives des effets des paramètres sur les résultats du traitement"
@@ -155,7 +226,7 @@ msgid "Processing functions without parameters (e.g., absolute value, inverse) w
 msgstr "Les fonctions de traitement sans paramètres (par exemple, valeur absolue, inverse) fonctionnent comme auparavant"
 
 msgid "Source object must still exist for re-processing (error shown if deleted)"
-msgstr "L'objet source doit toujours exister pour le re-traitement (erreur affichée s'il est supprimé)"
+msgstr "L'objet source doit toujours exister pour le retraitement (erreur affichée s'il est supprimé)"
 
 msgid "**Not supported for:**"
 msgstr "**Non pris en charge pour :**"
@@ -172,23 +243,23 @@ msgstr "Ces modèles ne bénéficient pas de manière significative de l'ajustem
 msgid "Example workflow"
 msgstr "Exemple de flux de travail"
 
-msgid "Here's a typical workflow using interactive processing:"
-msgstr "Voici un flux de travail typique utilisant le traitement interactif :"
+msgid "Here's a typical workflow using interactive processing, with History edit mode enabled:"
+msgstr "Voici un flux de travail typique utilisant le traitement interactif, avec le mode édition de l'historique activé :"
 
-msgid "**Create a test signal**: Operations > Create > Gaussian signal"
-msgstr "**Créer un signal de test** : Opérations > Créer > Signal gaussien"
+msgid "**Create a test signal**: Create > Gaussian signal"
+msgstr "**Créer un signal de test** : Création > Signal gaussien"
 
 msgid "Initial parameters: amplitude=1.0, mu=50, sigma=10"
 msgstr "Paramètres initiaux : amplitude=1.0, mu=50, sigma=10"
 
 msgid "**Adjust creation parameters**: In the Creation tab, change sigma to 20, click Apply"
-msgstr "**Ajuster les paramètres de création** : Dans l'onglet Création, changer sigma à 20, cliquer sur Appliquer"
+msgstr "**Ajuster les paramètres de création** : Dans l'onglet Création, faire passer sigma à 20, cliquer sur Appliquer"
 
 msgid "Signal is regenerated with new width"
 msgstr "Le signal est régénéré avec une nouvelle largeur"
 
-msgid "**Apply Gaussian filter**: Processing > Filtering > Gaussian filter"
-msgstr "**Appliquer le filtre gaussien** : Traitement > Filtrage > Filtre gaussien"
+msgid "**Apply Gaussian filter**: Processing > Noise reduction > Gaussian filter"
+msgstr "**Appliquer le filtre gaussien** : Traitement > Réduction de bruit > Filtre gaussien"
 
 msgid "Initial sigma=2.0"
 msgstr "Sigma initial=2.0"
@@ -197,10 +268,11 @@ msgid "**Fine-tune filtering**: In the Processing tab, try sigma=1.0, then sigma
 msgstr "**Ajuster le filtrage** : Dans l'onglet Traitement, essayer sigma=1.0, puis sigma=5.0"
 
 msgid "Each Apply updates the filtered result"
-msgstr "Chaque application met à jour le résultat filtré"
+msgstr "Chaque clic sur **Appliquer** met à jour le résultat filtré"
 
 msgid "Compare different smoothing levels without creating multiple objects"
 msgstr "Comparer différents niveaux de lissage sans créer plusieurs objets"
 
 msgid "This interactive approach provides immediate visual feedback and keeps your workspace organized by avoiding proliferation of test objects with slightly different parameters."
 msgstr "Cette approche interactive fournit un retour visuel immédiat et garde votre espace de travail organisé en évitant la prolifération d'objets de test avec des paramètres légèrement différents."
+
