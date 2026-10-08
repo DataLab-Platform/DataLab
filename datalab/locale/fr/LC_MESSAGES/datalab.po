@@ -3746,6 +3746,9 @@ msgstr "Information"
 msgid "Question"
 msgstr "Question"
 
+msgid "Installed plugins"
+msgstr "Plugins installés"
+
 msgid "Test data"
 msgstr "Données de test"
 

@@ -16,11 +16,16 @@ CONTRACT_MODULES = (
     "tiles",
     "tools",
 )
+# Installer modules, reused outside the Qt host (DataLab-Web, catalog tooling)
+HEADLESS_HOST_MODULES = ("store", "wheels")
 
 
 def test_plugin_contracts_do_not_import_plugin_host() -> None:
     """Headless plugin layers import the contracts without loading Qt."""
-    imports = "".join(f"import datalab.plugins.{name}\n" for name in CONTRACT_MODULES)
+    imports = "".join(
+        f"import datalab.plugins.{name}\n"
+        for name in CONTRACT_MODULES + HEADLESS_HOST_MODULES
+    )
     code = (
         f"import sys\n{imports}"
         "print([name for name in ('datalab.plugins.base', 'qtpy') "

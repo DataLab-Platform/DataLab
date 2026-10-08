@@ -12,6 +12,8 @@ datas += [('datalab\\gui\\macros_templates', 'datalab\\gui\\macros_templates')]
 datas += collect_data_files('guidata') + collect_data_files('plotpy')
 datas += collect_data_files('sigima') + collect_data_files('sigimax')
 datas += copy_metadata('imageio')
+# Installed plugin wheels declare their requirements on these distributions
+datas += copy_metadata('datalab-platform', recursive=True)
 
 a = Analysis(
     ['datalab\\start.pyw'],

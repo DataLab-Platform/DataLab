@@ -35,6 +35,7 @@ from sigima.io.image.base import ImageFormatBase  # noqa: F401
 from sigima.io.image.formats import ClassicsImageFormat  # noqa: F401
 from sigima.io.signal.base import SignalFormatBase  # noqa: F401
 
+from datalab import __version__
 from datalab.config import (
     MOD_NAME,
     OTHER_PLUGINS_PATHLIST,
@@ -55,8 +56,10 @@ from datalab.plugins.recipe_binding import (
     is_compatible,
 )
 from datalab.plugins.recipes import RecipeDescriptor, RecipeOutcome
+from datalab.plugins.store import InstalledPluginStore
 from datalab.plugins.tiles import WelcomeTile
 from datalab.plugins.tools import PluginTool, ToolSelection, tool_accepts_selection
+from datalab.plugins.wheels import DESKTOP_ENTRY_POINT_GROUP
 
 if TYPE_CHECKING:
     from sigima.objects import ImageObj, NewImageParam, NewSignalParam, SignalObj
@@ -67,10 +70,26 @@ if TYPE_CHECKING:
 
 
 PLUGINS_DEFAULT_PATH = get_config_path("plugins")
-PLUGIN_ENTRY_POINT_GROUP = "datalab.plugins"
+PLUGIN_ENTRY_POINT_GROUP = DESKTOP_ENTRY_POINT_GROUP
+#: Plugins installed from a file (kept out of the plugin search path)
+INSTALLED_PLUGINS_PATH = get_config_path("installed_plugins")
 
 if not osp.isdir(PLUGINS_DEFAULT_PATH):
     os.makedirs(PLUGINS_DEFAULT_PATH)
+
+_INSTALLED_PLUGIN_STORE: InstalledPluginStore | None = None
+
+
+def get_installed_plugin_store() -> InstalledPluginStore:
+    """Return the store of the plugins installed from a file."""
+    global _INSTALLED_PLUGIN_STORE  # pylint: disable=global-statement
+    if _INSTALLED_PLUGIN_STORE is None:
+        _INSTALLED_PLUGIN_STORE = InstalledPluginStore(
+            INSTALLED_PLUGINS_PATH,
+            # Running from sources, DataLab may have no distribution metadata
+            host_distributions={"datalab-platform": __version__},
+        )
+    return _INSTALLED_PLUGIN_STORE
 
 
 #  pylint: disable=bad-mcs-classmethod-argument
@@ -1270,6 +1289,15 @@ def discover_plugins() -> list[ModuleType]:
         rpath = osp.realpath(path)
         if rpath not in sys.path:
             sys.path.append(rpath)
+    try:
+        get_installed_plugin_store().activate()
+    except (OSError, ValueError):
+        _record_plugin_discovery_failure(
+            _("Installed plugins"),
+            f"installed plugin store {INSTALLED_PLUGINS_PATH!r}",
+            traceback.format_exc(),
+            INSTALLED_PLUGINS_PATH,
+        )
 
     modules = _discover_entry_point_plugins()
     for finder, name, _ispkg in pkgutil.iter_modules():
