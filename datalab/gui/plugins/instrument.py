@@ -21,7 +21,7 @@ from datalab.objectmodel import get_uuid
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
-    from datalab.plugin_instruments import (
+    from datalab.plugins.instruments import (
         InstrumentAcquisition,
         InstrumentFrame,
         PluginInstrument,

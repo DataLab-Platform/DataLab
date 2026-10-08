@@ -74,7 +74,6 @@ from datalab.adapters_plotpy import create_adapter_from_object
 from datalab.config import APP_NAME, Conf, _
 from datalab.env import execenv
 from datalab.gui import actionhandler, objectview
-from datalab.gui.applications import get_declared_metadata_keys
 from datalab.gui.newobject import (
     CREATION_PARAMETERS_OPTION,
     LEGACY_CREATION_PARAMETERS_OPTION,
@@ -83,6 +82,7 @@ from datalab.gui.newobject import (
     extract_creation_parameters,
     insert_creation_parameters,
 )
+from datalab.gui.plugins.applications import get_declared_metadata_keys
 from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
     ProcessingParameters,

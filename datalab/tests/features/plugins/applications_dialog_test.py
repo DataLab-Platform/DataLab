@@ -15,9 +15,9 @@ from qtpy import QtWidgets as QW
 from sigimax.utils import qthelpers as sgmx_qth
 
 from datalab.config import Conf
-from datalab.gui import applications as applications_module
 from datalab.gui import main
-from datalab.gui.applications import (
+from datalab.gui.plugins import applications as applications_module
+from datalab.gui.plugins.applications import (
     ApplicationsDialog,
     get_application_plugins,
     get_declared_metadata_keys,
@@ -26,21 +26,21 @@ from datalab.gui.applications import (
     set_application_pinned,
     sort_welcome_applications,
 )
-from datalab.plugin_examples import PluginExample
-from datalab.plugin_tools import PluginTool
 from datalab.plugins import PluginCapability, PluginInfo, PluginRegistry
-from datalab.recipe_binding import (
+from datalab.plugins.examples import PluginExample
+from datalab.plugins.recipe_binding import (
     RecipeInputIssue,
     RecipeReadiness,
     RecipeReadinessStatus,
 )
-from datalab.recipes import (
+from datalab.plugins.recipes import (
     RecipeDescriptor,
     RecipeDiagnostic,
     RecipeInputSlot,
     RecipeMetadataRequirement,
     RecipeOutcome,
 )
+from datalab.plugins.tools import PluginTool
 from datalab.tests import datalab_test_app_context
 
 RECIPE = RecipeDescriptor(
@@ -198,7 +198,7 @@ def test_applications_dialog_filters_and_renders_declared_contracts() -> None:
 
 def test_tool_buttons_follow_the_tool_selection() -> None:
     """A tool that cannot be opened on the selection has a disabled button."""
-    QW.QApplication.instance() or QW.QApplication([])
+    qt_app = QW.QApplication.instance() or QW.QApplication([])
     issues = {"annotate": "Select one image"}
     application = _plugin(
         "org.example.camera",
@@ -221,6 +221,7 @@ def test_tool_buttons_follow_the_tool_selection() -> None:
         dialog.refresh_readiness()
         assert button.isEnabled()
         assert button.toolTip() == ""
+        assert qt_app is not None
     finally:
         registry[:] = previous_plugins
         if "dialog" in locals():

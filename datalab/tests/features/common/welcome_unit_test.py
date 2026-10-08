@@ -18,10 +18,10 @@ from sigimax.utils import qthelpers as sgmx_qth
 import datalab
 from datalab.config import Conf, _
 from datalab.gui import welcome
-from datalab.gui.applications import ApplicationsDialog
 from datalab.gui.main import DLMainWindow
-from datalab.plugin_tiles import WelcomeTile
+from datalab.gui.plugins.applications import ApplicationsDialog
 from datalab.plugins import PluginBase, PluginCapability, PluginInfo, PluginRegistry
+from datalab.plugins.tiles import WelcomeTile
 from datalab.tests import datalab_test_app_context
 
 PLUGIN_ICON = "datalab:data/icons/libre-gui-plugin.svg"

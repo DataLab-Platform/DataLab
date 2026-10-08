@@ -18,8 +18,8 @@ from sigima.objects import GeometryResult, ImageObj, SignalObj, TableResult
 from datalab import __version__ as datalab_version
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter
 from datalab.objectmodel import ObjectGroup, get_uuid
-from datalab.recipe_binding import check_recipe_inputs
-from datalab.recipes import (
+from datalab.plugins.recipe_binding import check_recipe_inputs
+from datalab.plugins.recipes import (
     RECIPE_RUN_RECORD_OPTION,
     RecipeCardinality,
     RecipeDescriptor,

@@ -778,10 +778,10 @@ def test_plugin_with_dialogs():
 
             # Mock dialog methods to avoid blocking
             with (
-                patch("datalab.plugins.QW.QMessageBox.warning") as mock_warning,
-                patch("datalab.plugins.QW.QMessageBox.critical") as mock_error,
-                patch("datalab.plugins.QW.QMessageBox.information") as mock_info,
-                patch("datalab.plugins.QW.QMessageBox.question") as mock_question,
+                patch("datalab.plugins.base.QW.QMessageBox.warning") as mock_warning,
+                patch("datalab.plugins.base.QW.QMessageBox.critical") as mock_error,
+                patch("datalab.plugins.base.QW.QMessageBox.information") as mock_info,
+                patch("datalab.plugins.base.QW.QMessageBox.question") as mock_question,
             ):
                 mock_question.return_value = QW.QMessageBox.Yes
 

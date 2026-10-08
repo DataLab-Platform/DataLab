@@ -17,22 +17,22 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from datalab.config import Conf, _
-from datalab.gui.recipe_inputs import (
+from datalab.gui.plugins.recipe_inputs import (
     format_diagnostic,
     format_inputs_html,
     format_readiness,
 )
-from datalab.plugin_resources import resolve_package_resource
 from datalab.plugins import PluginCapability, PluginRegistry
-from datalab.recipe_binding import RecipeReadiness, RecipeReadinessStatus
-from datalab.recipes import RecipeOutcome
+from datalab.plugins.recipe_binding import RecipeReadiness, RecipeReadinessStatus
+from datalab.plugins.recipes import RecipeOutcome
+from datalab.plugins.resources import resolve_package_resource
 from datalab.utils.qthelpers import qt_handle_error_message, try_or_log_error
 from datalab.widgets.expandabletext import apply_subdued_color
 
 if TYPE_CHECKING:
-    from datalab.plugin_examples import PluginExample
     from datalab.plugins import PluginBase
-    from datalab.recipes import RecipeDescriptor
+    from datalab.plugins.examples import PluginExample
+    from datalab.plugins.recipes import RecipeDescriptor
 
 
 __all__ = [

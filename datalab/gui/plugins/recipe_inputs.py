@@ -15,14 +15,14 @@ from sigima.objects import ImageObj, SignalObj
 
 from datalab.config import _
 from datalab.objectmodel import get_short_id
-from datalab.recipe_binding import (
+from datalab.plugins.recipe_binding import (
     RecipeInputIssue,
     RecipeInputIssueCode,
     RecipeReadiness,
     RecipeReadinessStatus,
     is_compatible,
 )
-from datalab.recipes import (
+from datalab.plugins.recipes import (
     RecipeCardinality,
     RecipeDescriptor,
     RecipeDiagnostic,

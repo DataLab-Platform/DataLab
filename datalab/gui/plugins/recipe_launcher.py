@@ -11,14 +11,14 @@ from typing import TYPE_CHECKING, Union
 from sigima.objects import ImageObj, SignalObj
 
 from datalab.config import _
-from datalab.gui.recipe_inputs import RecipeInputDialog, format_inputs_html
-from datalab.gui.recipe_runner import RecipeCommitError, RecipeRunner
-from datalab.recipe_binding import (
+from datalab.gui.plugins.recipe_inputs import RecipeInputDialog, format_inputs_html
+from datalab.gui.plugins.recipe_runner import RecipeCommitError, RecipeRunner
+from datalab.plugins.recipe_binding import (
     RecipeReadinessStatus,
     assess_recipe_inputs,
     create_recipe_parameters,
 )
-from datalab.recipes import (
+from datalab.plugins.recipes import (
     RecipeCancellationError,
     RecipeOutcome,
     RecipeValidationError,

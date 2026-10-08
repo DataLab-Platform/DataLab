@@ -14,8 +14,8 @@ from qtpy import QtWidgets as QW
 from sigima.objects import create_image
 
 from datalab.config import Conf
-from datalab.gui.instrument import InstrumentWindow
 from datalab.gui.main import DLMainWindow
+from datalab.gui.plugins.instrument import InstrumentWindow
 from datalab.plugins import PluginRegistry
 from datalab.tests import datalab_test_app_context
 from datalab.tests.features.plugins.plugin_test_dataset import temporary_plugin_dir
@@ -28,13 +28,13 @@ PLUGIN_SOURCE = textwrap.dedent(
     import numpy as np
     from sigima.objects import create_signal
 
-    from datalab.plugin_instruments import (
+    from datalab.plugins import PluginBase, PluginCapability, PluginInfo
+    from datalab.plugins.instruments import (
         InstrumentAcquisition,
         InstrumentFrame,
         PluginInstrument,
     )
-    from datalab.plugin_tools import PluginTool
-    from datalab.plugins import PluginBase, PluginCapability, PluginInfo
+    from datalab.plugins.tools import PluginTool
 
 
     class GeneratorSettings(gds.DataSet):

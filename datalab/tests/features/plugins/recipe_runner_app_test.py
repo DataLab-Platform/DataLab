@@ -20,9 +20,9 @@ from sigima.objects import (
 )
 
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter
-from datalab.gui.recipe_runner import RecipeCommitError, RecipeRunner
+from datalab.gui.plugins.recipe_runner import RecipeCommitError, RecipeRunner
 from datalab.objectmodel import get_uuid
-from datalab.recipes import (
+from datalab.plugins.recipes import (
     RECIPE_RUN_RECORD_OPTION,
     RecipeCancellationError,
     RecipeCardinality,

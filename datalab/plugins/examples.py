@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING
 
 from sigima.objects import ImageObj, SignalObj
 
-from datalab.plugin_resources import (
+from datalab.plugins.resources import (
     LOCAL_ID_PATTERN,
     resolve_package_resource,
     split_package_resource,

@@ -59,7 +59,6 @@ from datalab.control.baseproxy import AbstractDLControl
 from datalab.control.remote import RemoteServer
 from datalab.env import execenv
 from datalab.gui.actionhandler import ActionCategory
-from datalab.gui.applications import ApplicationsDialog, get_plugin_icon
 from datalab.gui.commandpalette import (
     CommandPaletteDialog,
     CommandSearchField,
@@ -67,21 +66,22 @@ from datalab.gui.commandpalette import (
 )
 from datalab.gui.docks import DockablePlotWidget
 from datalab.gui.h5io import H5InputOutput
-from datalab.gui.instrument import InstrumentWindow
 from datalab.gui.panel import base, history, image, macro, signal
-from datalab.gui.pluginconfig import PluginConfigDialog
+from datalab.gui.plugins.applications import ApplicationsDialog, get_plugin_icon
+from datalab.gui.plugins.config import PluginConfigDialog
+from datalab.gui.plugins.instrument import InstrumentWindow
 from datalab.gui.processor.base import FeatureNotFoundError
 from datalab.gui.processor.preview import PreviewExecutorCache
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
 from datalab.gui.welcome import WelcomePanel
 from datalab.objectmodel import ObjectGroup, get_uuid
-from datalab.plugin_tools import tool_accepts_selection
 from datalab.plugins import (
     PluginRegistry,
     discover_plugins,
     discover_v020_plugins,
     migrate_enabled_plugin_ids,
 )
+from datalab.plugins.tools import tool_accepts_selection
 from datalab.utils import qthelpers as qth
 from datalab.utils.qthelpers import (
     configure_menu_about_to_show,
@@ -100,8 +100,8 @@ if TYPE_CHECKING:
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.macro import MacroPanel
     from datalab.gui.panel.signal import SignalPanel
-    from datalab.plugin_tools import PluginTool
     from datalab.plugins import PluginBase
+    from datalab.plugins.tools import PluginTool
 
 
 def remote_controlled(func):

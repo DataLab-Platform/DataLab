@@ -18,7 +18,7 @@ from typing import Union
 import guidata.dataset as gds
 from sigima.objects import ImageObj, SignalObj
 
-from datalab.recipes import (
+from datalab.plugins.recipes import (
     RecipeCardinality,
     RecipeDescriptor,
     RecipeDiagnostic,
