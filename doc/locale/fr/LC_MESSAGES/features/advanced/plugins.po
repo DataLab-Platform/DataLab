@@ -97,6 +97,9 @@ msgstr "Répertoires de plugins supplémentaires : Tout nombre de répertoires s
 msgid "The standalone distribution directory: If using a frozen (standalone) build, the `plugins` folder located next to the executable is scanned."
 msgstr "Le répertoire de distribution autonome : Si vous utilisez une version gelée (autonome), le dossier `plugins` situé à côté de l'exécutable est analysé."
 
+msgid "Plugins installed from a file: Wheels and modules installed from **Plugins > Configure plugins...**, in the **Install plugins** tab (see :ref:`plugin_install_from_file`)."
+msgstr "Les plugins installés depuis un fichier : Wheels et modules installés depuis **Plugins > Configurer les plugins...**, dans l'onglet **Installer des plugins** (voir :ref:`plugin_install_from_file`)."
+
 msgid "The internal `datalab/plugins/builtin` folder (not recommended for user plugins): This location is reserved for built-in or bundled plugins and should not be modified manually."
 msgstr "Le dossier interne `datalab/plugins/builtin` (non recommandé pour les plugins utilisateur) : Cet emplacement est réservé aux plugins intégrés ou fournis et ne doit pas être modifié manuellement."
 
@@ -112,8 +115,8 @@ msgstr "Gestion des plugins dans DataLab"
 msgid "The **Plugins** menu provides two dedicated actions:"
 msgstr "Le menu **Plugins** propose deux actions dédiées :"
 
-msgid "**Configure plugins...** Opens the plugin configuration dialog, organized in two tabs: **Enable/disable plugins** and **Plugin settings**."
-msgstr "**Configurer les plugins...** Ouvre la boîte de dialogue de configuration des plugins, organisée en deux onglets : **Activer/désactiver les plugins** et **Paramètres des plugins**."
+msgid "**Configure plugins...** Opens the plugin configuration dialog, organized in three tabs: **Enable/disable plugins**, **Plugin settings** and **Install plugins**."
+msgstr "**Configurer les plugins...** Ouvre la boîte de dialogue de configuration des plugins, organisée en trois onglets : **Activer/désactiver les plugins**, **Paramètres des plugins** et **Installer des plugins**."
 
 msgid "**Reload plugins** Reloads plugin modules from disk without restarting DataLab."
 msgstr "**Recharger les plugins** Recharge les modules de plugins depuis le disque sans redémarrer DataLab."
@@ -150,6 +153,24 @@ msgstr "**Répertoires de plugins supplémentaires** : vos propres répertoires,
 
 msgid "The tab also holds a **Compatibility warnings** option to hide warnings for incompatible DataLab v0.20 plugins."
 msgstr "L'onglet contient également une option **Avertissements de compatibilité** pour masquer les avertissements concernant les plugins DataLab v0.20 incompatibles."
+
+msgid "Install plugins"
+msgstr "Installer des plugins"
+
+msgid "This tab installs a plugin shared as a file, without any Python tool: this is the way to add plugins to the standalone version of DataLab. **Install from file...** accepts two kinds of files:"
+msgstr "Cet onglet installe un plugin partagé sous forme de fichier, sans aucun outil Python : c'est ainsi que l'on ajoute des plugins à la version autonome de DataLab. **Installer depuis un fichier...** accepte deux types de fichiers :"
+
+msgid "a wheel (``.whl``) built from a plugin project, for example with ``python -m build``: it must be pure Python (``py3-none-any``), declare its plugin class in the ``datalab.plugins`` entry-point group, and depend only on packages already provided by DataLab;"
+msgstr "un wheel (``.whl``) construit à partir d'un projet de plugin, par exemple avec ``python -m build`` : il doit être en Python pur (``py3-none-any``), déclarer sa classe de plugin dans le groupe de points d'entrée ``datalab.plugins`` et ne dépendre que de paquets déjà fournis par DataLab ;"
+
+msgid "a single Python module named ``datalab_<name>.py``."
+msgstr "un module Python unique nommé ``datalab_<nom>.py``."
+
+msgid "Before installing, DataLab checks the file without running it and shows its name, version, plugin classes, dependencies and SHA-256 digest. A plugin runs with the same rights as DataLab: install only plugins from authors you trust."
+msgstr "Avant l'installation, DataLab vérifie le fichier sans l'exécuter et affiche son nom, sa version, ses classes de plugin, ses dépendances et son empreinte SHA-256. Un plugin s'exécute avec les mêmes droits que DataLab : n'installez que des plugins provenant d'auteurs de confiance."
+
+msgid "Installed plugins are kept in the ``installed_plugins`` folder of the DataLab configuration directory (e.g. ``~/.DataLab_v1/installed_plugins``) and listed in the tab, where **Uninstall** removes them. After installing or uninstalling, DataLab offers to reload plugins; a newly installed plugin is enabled. A new version of a plugin already loaded is only used at the next start of DataLab."
+msgstr "Les plugins installés sont conservés dans le dossier ``installed_plugins`` du répertoire de configuration de DataLab (par exemple ``~/.DataLab_v1/installed_plugins``) et listés dans l'onglet, où **Désinstaller** les supprime. Après une installation ou une désinstallation, DataLab propose de recharger les plugins ; un plugin nouvellement installé est activé. Une nouvelle version d'un plugin déjà chargé n'est utilisée qu'au prochain démarrage de DataLab."
 
 msgid "When reloading plugins, DataLab performs the following steps:"
 msgstr "Lors du rechargement des plugins, DataLab effectue les étapes suivantes :"

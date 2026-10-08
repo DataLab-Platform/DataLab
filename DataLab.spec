@@ -5,6 +5,8 @@
 
 from PyInstaller.utils.hooks import collect_submodules, collect_data_files, copy_metadata
 all_hidden_imports = collect_submodules('datalab')
+# Plugins installed from a file may import any Sigima module
+all_hidden_imports += collect_submodules('sigima', filter=lambda name: '.tests' not in name)
 datas = collect_data_files('datalab') + [('datalab\\plugins\\builtin', 'datalab\\plugins\\builtin')]
 # Macro templates are read with ``pkgutil.get_data`` and must exist on disk,
 # not only inside the PYZ archive (``collect_data_files`` skips ``.py`` files):

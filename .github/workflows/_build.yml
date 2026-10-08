@@ -421,6 +421,18 @@ jobs:
           # CPython 3.11 needs this Wine-built DLL to run on Windows 7.
           Copy-Item resources/api-ms-win-core-path-l1-1-0.dll dist/DataLab/_internal/ -Force
 
+      - name: Check that the executable loads a plugin installed from a file
+        shell: pwsh
+        run: |
+          # Isolated profile: DataLab reads its configuration from USERPROFILE
+          $env:USERPROFILE = Join-Path $env:RUNNER_TEMP "datalab-profile"
+          New-Item -ItemType Directory -Force $env:USERPROFILE | Out-Null
+          $env:DATALAB_PLUGIN_PROBE_MARKER = Join-Path $env:RUNNER_TEMP "plugin-probe.json"
+          python scripts/frozen_plugin_probe.py install
+          $process = Start-Process dist/DataLab/DataLab.exe -ArgumentList "--unattended", "--delay", "5000" -PassThru
+          if (-not $process.WaitForExit(300000)) { $process.Kill(); throw "DataLab did not quit" }
+          python scripts/frozen_plugin_probe.py verify
+
       - name: Package executable as zip (internal, required by MSI workflow)
         shell: pwsh
         run: |

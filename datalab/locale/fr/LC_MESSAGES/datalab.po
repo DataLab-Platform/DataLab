@@ -2111,6 +2111,9 @@ msgstr "Activer/désactiver les plugins"
 msgid "Plugin settings"
 msgstr "Paramètres des plugins"
 
+msgid "Install plugins"
+msgstr "Installer des plugins"
+
 msgid "Apply and reload plugins"
 msgstr "Appliquer et recharger les plugins"
 
@@ -2183,6 +2186,95 @@ msgstr "Recharger les plugins"
 
 msgid "Plugin configuration has been saved. Do you want to reload plugins now to apply changes?"
 msgstr "La configuration des plugins a été enregistrée. Voulez-vous recharger les plugins maintenant pour appliquer les modifications ?"
+
+msgid "Install plugin"
+msgstr "Installer un plugin"
+
+msgid "Plugin:"
+msgstr "Plugin :"
+
+msgid "Version:"
+msgstr "Version :"
+
+msgid "Description:"
+msgstr "Description :"
+
+msgid "Plugin classes:"
+msgstr "Classes de plugin :"
+
+msgid "not applicable"
+msgstr "non applicable"
+
+msgid "Dependencies:"
+msgstr "Dépendances :"
+
+msgid "Plugin module:"
+msgstr "Module de plugin :"
+
+msgid "File:"
+msgstr "Fichier :"
+
+msgid "Size:"
+msgstr "Taille :"
+
+msgid "SHA-256:"
+msgstr "SHA-256 :"
+
+msgid "A plugin runs with the same rights as DataLab: it may read and modify your files. Install only plugins from authors you trust."
+msgstr "Un plugin s'exécute avec les mêmes droits que DataLab : il peut lire et modifier vos fichiers. N'installez que des plugins provenant d'auteurs de confiance."
+
+msgid "Install"
+msgstr "Installer"
+
+#, python-format
+msgid "Installed on %s from %s"
+msgstr "Installé le %s depuis %s"
+
+msgid "Uninstall"
+msgstr "Désinstaller"
+
+msgid "Install a plugin shared as a wheel file (<code>.whl</code>) or as a Python module (<code>datalab_*.py</code>). Wheels must be pure Python and rely only on packages already provided by DataLab."
+msgstr "Installez un plugin partagé sous forme de fichier wheel (<code>.whl</code>) ou de module Python (<code>datalab_*.py</code>). Les wheels doivent être en Python pur et ne dépendre que de paquets déjà fournis par DataLab."
+
+msgid "Install from file..."
+msgstr "Installer depuis un fichier..."
+
+msgid "Plugins installed from a file"
+msgstr "Plugins installés depuis un fichier"
+
+msgid "No plugin has been installed from a file."
+msgstr "Aucun plugin n'a été installé depuis un fichier."
+
+msgid "Install plugin from file"
+msgstr "Installer un plugin depuis un fichier"
+
+msgid "DataLab plugins"
+msgstr "Plugins DataLab"
+
+msgid "This file cannot be installed as a plugin:"
+msgstr "Ce fichier ne peut pas être installé comme plugin :"
+
+#, python-format
+msgid "%s will be loaded at the next start of DataLab."
+msgstr "%s sera chargé au prochain démarrage de DataLab."
+
+#, python-format
+msgid "%s has been installed."
+msgstr "%s a été installé."
+
+msgid "Uninstall plugin"
+msgstr "Désinstaller le plugin"
+
+#, python-format
+msgid "Do you want to uninstall %s?"
+msgstr "Voulez-vous désinstaller %s ?"
+
+#, python-format
+msgid "%s has been uninstalled."
+msgstr "%s a été désinstallé."
+
+msgid "Do you want to reload plugins now?"
+msgstr "Voulez-vous recharger les plugins maintenant ?"
 
 msgid "Failed to deserialize processing parameters from JSON."
 msgstr "Échec de la désérialisation des paramètres de traitement depuis le format JSON."
@@ -3745,9 +3837,6 @@ msgstr "Information"
 
 msgid "Question"
 msgstr "Question"
-
-msgid "Installed plugins"
-msgstr "Plugins installés"
 
 msgid "Test data"
 msgstr "Données de test"
