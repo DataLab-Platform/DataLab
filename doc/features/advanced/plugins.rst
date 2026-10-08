@@ -117,6 +117,9 @@ Plugins are automatically discovered at startup from multiple locations:
 - The standalone distribution directory:
   If using a frozen (standalone) build, the `plugins` folder located next to the executable is scanned.
 
+- Plugins installed from a file:
+  Wheels and modules installed from **Plugins > Configure plugins...**, in the **Install plugins** tab (see :ref:`plugin_install_from_file`).
+
 - The internal `datalab/plugins/builtin` folder (not recommended for user plugins):
   This location is reserved for built-in or bundled plugins and should not be modified manually.
 
@@ -145,8 +148,8 @@ Managing plugins in DataLab
 The **Plugins** menu provides two dedicated actions:
 
 - **Configure plugins...**
-  Opens the plugin configuration dialog, organized in two tabs:
-  **Enable/disable plugins** and **Plugin settings**.
+  Opens the plugin configuration dialog, organized in three tabs:
+  **Enable/disable plugins**, **Plugin settings** and **Install plugins**.
 
 - **Reload plugins**
   Reloads plugin modules from disk without restarting DataLab.
@@ -186,6 +189,20 @@ This tab lists every directory scanned at startup, in two groups:
 
 The tab also holds a **Compatibility warnings** option to hide warnings for
 incompatible DataLab v0.20 plugins.
+
+.. _plugin_install_from_file:
+
+Install plugins
+~~~~~~~~~~~~~~~
+
+This tab installs a plugin shared as a file, without any Python tool: this is the way to add plugins to the standalone version of DataLab. **Install from file...** accepts two kinds of files:
+
+- a wheel (``.whl``) built from a plugin project, for example with ``python -m build``: it must be pure Python (``py3-none-any``), declare its plugin class in the ``datalab.plugins`` entry-point group, and depend only on packages already provided by DataLab;
+- a single Python module named ``datalab_<name>.py``.
+
+Before installing, DataLab checks the file without running it and shows its name, version, plugin classes, dependencies and SHA-256 digest. A plugin runs with the same rights as DataLab: install only plugins from authors you trust.
+
+Installed plugins are kept in the ``installed_plugins`` folder of the DataLab configuration directory (e.g. ``~/.DataLab_v1/installed_plugins``) and listed in the tab, where **Uninstall** removes them. After installing or uninstalling, DataLab offers to reload plugins; a newly installed plugin is enabled. A new version of a plugin already loaded is only used at the next start of DataLab.
 
 When reloading plugins, DataLab performs the following steps:
 

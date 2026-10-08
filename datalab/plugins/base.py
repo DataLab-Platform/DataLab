@@ -1293,7 +1293,7 @@ def discover_plugins() -> list[ModuleType]:
         get_installed_plugin_store().activate()
     except (OSError, ValueError):
         _record_plugin_discovery_failure(
-            _("Installed plugins"),
+            _("Plugins installed from a file"),
             f"installed plugin store {INSTALLED_PLUGINS_PATH!r}",
             traceback.format_exc(),
             INSTALLED_PLUGINS_PATH,

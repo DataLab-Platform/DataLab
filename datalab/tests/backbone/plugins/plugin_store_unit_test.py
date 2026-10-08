@@ -160,7 +160,7 @@ def test_corrupt_index_is_reported_without_aborting_discovery(
     discover_plugins()
 
     (failed,) = PluginRegistry.get_failed_plugins()
-    assert failed.name == "Installed plugins"
+    assert failed.name == "Plugins installed from a file"
     assert "PluginInstallError" in failed.traceback
 
 

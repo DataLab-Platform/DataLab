@@ -299,6 +299,20 @@ class InstalledPluginStore:
         )
         return InstallResult(plugin, replaced, plugin.is_imported())
 
+    def inspect_module_file(self, path: str) -> dict:
+        """Return the manifest of a ``datalab_*.py`` plugin module file.
+
+        Raises:
+            PluginInstallError: Invalid file name or conflicting module name
+        """
+        name, data = self._read_module(path)
+        return {
+            "filename": osp.basename(path),
+            "name": name,
+            "sha256": hashlib.sha256(data).hexdigest(),
+            "size_bytes": len(data),
+        }
+
     def install_module(
         self, path: str, *, expected_sha256: str | None = None
     ) -> InstallResult:
@@ -311,28 +325,9 @@ class InstalledPluginStore:
         Raises:
             PluginInstallError: Invalid file name or conflicting module name
         """
-        name, extension = osp.splitext(osp.basename(path))
-        if extension != ".py" or not _is_module_name(name):
-            raise PluginInstallError(
-                "A plugin module file name must look like datalab_<name>.py"
-            )
-        with open(path, "rb") as file:
-            data = file.read(MAX_MODULE_BYTES + 1)
-        if len(data) > MAX_MODULE_BYTES:
-            raise PluginInstallError(
-                f"Plugin module exceeds the {MAX_MODULE_BYTES} byte size limit"
-            )
+        name, data = self._read_module(path)
         sha256 = hashlib.sha256(data).hexdigest()
         self._check_expected_digest(sha256, expected_sha256)
-        modules_dir = _normalized(self.modules_dir)
-        search_path = [
-            entry for entry in sys.path if entry and _normalized(entry) != modules_dir
-        ]
-        spec = PathFinder.find_spec(name, search_path)
-        if spec is not None:
-            raise PluginInstallError(
-                f"A module named {name!r} already exists: {spec.origin}"
-            )
         plugin = InstalledPlugin(
             kind=MODULE_KIND,
             name=name,
@@ -412,6 +407,30 @@ class InstalledPluginStore:
     def _check_expected_digest(sha256: str, expected_sha256: str | None) -> None:
         if expected_sha256 is not None and sha256 != expected_sha256:
             raise PluginInstallError("The file changed since it was inspected")
+
+    def _read_module(self, path: str) -> tuple[str, bytes]:
+        """Return the name and content of a valid plugin module file."""
+        name, extension = osp.splitext(osp.basename(path))
+        if extension != ".py" or not _is_module_name(name):
+            raise PluginInstallError(
+                "A plugin module file name must look like datalab_<name>.py"
+            )
+        with open(path, "rb") as file:
+            data = file.read(MAX_MODULE_BYTES + 1)
+        if len(data) > MAX_MODULE_BYTES:
+            raise PluginInstallError(
+                f"Plugin module exceeds the {MAX_MODULE_BYTES} byte size limit"
+            )
+        modules_dir = _normalized(self.modules_dir)
+        search_path = [
+            entry for entry in sys.path if entry and _normalized(entry) != modules_dir
+        ]
+        spec = PathFinder.find_spec(name, search_path)
+        if spec is not None:
+            raise PluginInstallError(
+                f"A module named {name!r} already exists: {spec.origin}"
+            )
+        return name, data
 
     def _add(
         self, plugin: InstalledPlugin, data: bytes, same_plugin
