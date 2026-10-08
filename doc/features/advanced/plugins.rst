@@ -117,8 +117,8 @@ Plugins are automatically discovered at startup from multiple locations:
 - The standalone distribution directory:
   If using a frozen (standalone) build, the `plugins` folder located next to the executable is scanned.
 
-- Plugins installed from a file:
-  Wheels and modules installed from **Plugins > Configure plugins...**, in the **Install plugins** tab (see :ref:`plugin_install_from_file`).
+- Installed plugins:
+  Wheels and modules installed from **Plugins > Configure plugins...**, either from a file in the **Install plugins** tab (see :ref:`plugin_install_from_file`) or from the plugin catalog in the **Available plugins** tab (see :ref:`plugin_catalog`).
 
 - The internal `datalab/plugins/builtin` folder (not recommended for user plugins):
   This location is reserved for built-in or bundled plugins and should not be modified manually.
@@ -647,7 +647,7 @@ them. From the generated directory, install and validate the project with:
   python -m pytest
   python -m ruff check .
 
-The generated ``pyproject.toml`` requires the current DataLab major version (for example ``datalab-platform >= 1.4, < 2``) and declares the project URLs when the GitHub account is known. The generated ``.github/workflows/release.yml`` publishes the plugin without any PyPI account: pushing a tag such as ``v0.1.0`` builds the wheel, checks that the tag matches the package version, attaches the wheel to a GitHub release, and prints the entry to submit to the `DataLab plugin catalog <https://github.com/DataLab-Platform/plugins>`_, including the SHA-256 digest of the wheel. Users then install the wheel with **Plugins > Configure plugins... > Install plugins** (see :ref:`plugin_install_from_file`).
+The generated ``pyproject.toml`` requires the current DataLab major version (for example ``datalab-platform >= 1.4, < 2``) and declares the project URLs when the GitHub account is known. The generated ``.github/workflows/release.yml`` publishes the plugin without any PyPI account: pushing a tag such as ``v0.1.0`` builds the wheel, checks that the tag matches the package version, attaches the wheel to a GitHub release, and prints the entry to submit to the `DataLab plugin catalog <https://github.com/DataLab-Platform/plugins>`_, including the SHA-256 digest of the wheel. Users then install the wheel with **Plugins > Configure plugins... > Install plugins** (see :ref:`plugin_install_from_file`). Listing the plugin in the catalog is optional; once listed, it can also be installed from the **Available plugins** tab (see :ref:`plugin_catalog`).
 
 How to develop a plugin?
 ------------------------
@@ -731,10 +731,7 @@ browser runtime, however:
 - **Execution happens inside the browser** (WebAssembly), with no native file-system access
   beyond the in-memory file system.
 
-As a result, a plugin that relies on a custom graphical user interface may not be fully
-compatible with DataLab-Web. A curated set of web-compatible plugins will be provided
-separately; in the meantime, refer to the DataLab-Web documentation for the practical guide
-to loading plugins in the browser.
+As a result, a plugin that relies on a custom graphical user interface may not be fully compatible with DataLab-Web. The `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_ indicates which of its plugins also support DataLab-Web. Refer to the DataLab-Web documentation for the practical guide to loading plugins in the browser.
 
 Migrating from v0.20 to v1.0
 ----------------------------
