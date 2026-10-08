@@ -37,6 +37,7 @@ from collections import defaultdict
 
 import numpy as np
 import scipy.ndimage as spi
+import sigima.objects
 from plotpy.builder import make
 from plotpy.constants import PlotType
 from plotpy.items.annotation import AnnotatedPolygon
@@ -45,7 +46,6 @@ from plotpy.plot import PlotDialog, PlotOptions
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
-import sigima.objects
 import datalab.plugins
 from datalab.adapters_plotpy.objects.image import get_obj_coords
 
@@ -61,7 +61,7 @@ MIN_SIGMA = 0
 MAX_SIGMA = 20
 SIGMA_SCALE = 10  # slider uses integers: value / SIGMA_SCALE = actual sigma
 LABEL_FMT = "{:.3g}"
-LABEL_OFFSET = (5, 5)   # canvas offset (pixels) for LabelItem anchor
+LABEL_OFFSET = (5, 5)  # canvas offset (pixels) for LabelItem anchor
 
 
 def _prepare_contour_data(
@@ -426,9 +426,7 @@ class IsolevelMapPlugin(datalab.plugins.PluginBase):
         yn = y_grid / h
 
         cx, cy, sx, sy = 0.45, 0.55, 0.25, 0.20
-        z = 0.6 * np.exp(
-            -((xn - cx) ** 2 / (2 * sx**2) + (yn - cy) ** 2 / (2 * sy**2))
-        )
+        z = 0.6 * np.exp(-((xn - cx) ** 2 / (2 * sx**2) + (yn - cy) ** 2 / (2 * sy**2)))
         z += 0.25 * np.exp(
             -((xn - 0.75) ** 2 / (2 * 0.10**2) + (yn - 0.35) ** 2 / (2 * 0.12**2))
         )
@@ -458,4 +456,3 @@ class IsolevelMapPlugin(datalab.plugins.PluginBase):
                 "Show isolevel map",
                 triggered=self.show_isolevel_map,
             )
-
