@@ -45,9 +45,9 @@ from plotpy.items.contour import compute_contours
 from plotpy.plot import PlotDialog, PlotOptions
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
+from sigimax.adapters_plotpy.objects.image import get_obj_coords
 
 import datalab.plugins
-from datalab.adapters_plotpy.objects.image import get_obj_coords
 
 # ---------------------------------------------------------------------------
 # Constants
