@@ -108,6 +108,18 @@ msgstr "La page d'accueil reste lisible lorsque de nombreuses applications sont 
 msgid "Plugins may declare an icon, shown in the **Applications** catalog, on their welcome page tile and in the **Configure plugins...** dialog"
 msgstr "Les plugins peuvent déclarer une icône, affichée dans le catalogue **Applications**, sur leur tuile de la page d'accueil et dans la boîte de dialogue **Configurer les plugins...**"
 
+msgid "**Plugin installation:**"
+msgstr "**Installation de plugins :**"
+
+msgid "Plugins can now be installed from a file, without any Python tool, including in the standalone version of DataLab: the new **Install plugins** tab of **Plugins > Configure plugins...** accepts a pure-Python wheel (`.whl`) or a single `datalab_<name>.py` module"
+msgstr "Les plugins peuvent désormais être installés depuis un fichier, sans aucun outil Python, y compris dans la version autonome de DataLab : le nouvel onglet **Installer des plugins** de **Plugins > Configurer les plugins...** accepte un wheel en Python pur (`.whl`) ou un module unique `datalab_<nom>.py`"
+
+msgid "Before installing, DataLab checks the file without running it and shows its name, version, plugin classes, dependencies and SHA-256 digest; a wheel requiring a package that DataLab does not provide is refused"
+msgstr "Avant l'installation, DataLab vérifie le fichier sans l'exécuter et affiche son nom, sa version, ses classes de plugin, ses dépendances et son empreinte SHA-256 ; un wheel nécessitant un paquet que DataLab ne fournit pas est refusé"
+
+msgid "Installed plugins are listed in the same tab, where they can be uninstalled; a newly installed plugin is enabled and loaded after a plugin reload, and a new version of an already loaded plugin is used at the next start"
+msgstr "Les plugins installés sont listés dans le même onglet, où ils peuvent être désinstallés ; un plugin nouvellement installé est activé et chargé après un rechargement des plugins, et une nouvelle version d'un plugin déjà chargé est utilisée au prochain démarrage"
+
 msgid "**Plugin project generator:**"
 msgstr "**Générateur de projets de plugins :**"
 
