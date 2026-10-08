@@ -135,6 +135,12 @@ msgstr "Chaque projet généré comprend un test de non-régression exécutable 
 msgid "Long plugin names and descriptions are now formatted so newly generated projects pass their bundled Ruff checks without manual source edits"
 msgstr "Les noms et descriptions de plugins longs sont désormais mis en forme afin que les projets nouvellement générés réussissent leurs contrôles Ruff intégrés sans modification manuelle du code source"
 
+msgid "Generated projects are ready to publish: a release workflow attaches the wheel to a GitHub release when a version tag is pushed and prints the entry to submit to the DataLab plugin catalog; `pyproject.toml` requires the current DataLab major version and declares the project URLs"
+msgstr "Les projets générés sont prêts à publier : un workflow de release joint le wheel à une release GitHub lorsqu'une étiquette de version est poussée et affiche la fiche à soumettre au catalogue de plugins DataLab ; `pyproject.toml` exige la version majeure courante de DataLab et déclare les URL du projet"
+
+msgid "`datalab-plugin create` asks for the GitHub account hosting the project and derives the default plugin ID from it (`io.github.<account>.<name>`), `org.datalab.` IDs being reserved for DataLab-Platform plugins"
+msgstr "`datalab-plugin create` demande le compte GitHub qui héberge le projet et en déduit l'ID de plugin par défaut (`io.github.<compte>.<nom>`), les ID `org.datalab.` étant réservés aux plugins de DataLab-Platform"
+
 msgid "**Add metadata:**"
 msgstr "**Ajout de métadonnées :**"
 

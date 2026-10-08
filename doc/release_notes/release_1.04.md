@@ -53,6 +53,8 @@
 * Generated package roots expose stable identity without importing Qt; the installed entry point targets the Desktop adapter while Web support is explicitly marked unsupported
 * Every generated project includes an executable architecture regression test, contribution and architecture documentation, and a changelog
 * Long plugin names and descriptions are now formatted so newly generated projects pass their bundled Ruff checks without manual source edits
+* Generated projects are ready to publish: a release workflow attaches the wheel to a GitHub release when a version tag is pushed and prints the entry to submit to the DataLab plugin catalog; `pyproject.toml` requires the current DataLab major version and declares the project URLs
+* `datalab-plugin create` asks for the GitHub account hosting the project and derives the default plugin ID from it (`io.github.<account>.<name>`), `org.datalab.` IDs being reserved for DataLab-Platform plugins
 
 **Add metadata:**
 

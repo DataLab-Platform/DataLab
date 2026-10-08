@@ -589,14 +589,13 @@ options for an interactive setup:
 
   datalab-plugin create
 
-The command asks for the display name and offers defaults for the Python
-package, reverse-domain plugin ID, description, and destination. For scripts or
-reproducible setup, pass the values explicitly:
+The command asks for the display name and the GitHub account (user or organization) that will host the project, and offers defaults for the Python package, reverse-domain plugin ID, description, and destination. The default plugin ID is ``io.github.<account>.<name>``; ``org.datalab.`` IDs are reserved for the DataLab-Platform organization, and ``org.example.`` is used when no account is given. For scripts or reproducible setup, pass the values explicitly:
 
 .. code-block:: bash
 
   datalab-plugin create datalab-camera-characterization \
     --name "Camera Characterization" \
+    --github-account DataLab-Platform \
     --package datalab_camera_characterization \
     --plugin-id org.datalab.camera-characterization \
     --description "Characterize scientific cameras" \
@@ -637,6 +636,8 @@ them. From the generated directory, install and validate the project with:
   python -m pip install -e ".[test]"
   python -m pytest
   python -m ruff check .
+
+The generated ``pyproject.toml`` requires the current DataLab major version (for example ``datalab-platform >= 1.4, < 2``) and declares the project URLs when the GitHub account is known. The generated ``.github/workflows/release.yml`` publishes the plugin without any PyPI account: pushing a tag such as ``v0.1.0`` builds the wheel, checks that the tag matches the package version, attaches the wheel to a GitHub release, and prints the entry to submit to the `DataLab plugin catalog <https://github.com/DataLab-Platform/plugins>`_, including the SHA-256 digest of the wheel. Users then install the wheel with **Plugins > Configure plugins... > Install plugins** (see :ref:`plugin_install_from_file`).
 
 How to develop a plugin?
 ------------------------

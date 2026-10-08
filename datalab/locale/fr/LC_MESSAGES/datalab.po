@@ -3750,6 +3750,9 @@ msgstr "Le type d'objet doit être 'signal' ou 'image'"
 msgid "The minimal template currently supports BSD-3-Clause"
 msgstr "Le modèle minimal prend actuellement en charge BSD-3-Clause"
 
+msgid "GitHub account must be a GitHub user or organization"
+msgstr "Le compte GitHub doit être un utilisateur ou une organisation GitHub"
+
 msgid "Plugin name must contain letters or digits"
 msgstr "Le nom du plugin doit contenir des lettres ou des chiffres"
 
@@ -3763,6 +3766,9 @@ msgstr "%s est requis"
 
 msgid "Plugin name"
 msgstr "Nom du plugin"
+
+msgid "GitHub account (optional)"
+msgstr "Compte GitHub (facultatif)"
 
 msgid "Package name"
 msgstr "Nom du package"
@@ -3797,6 +3803,9 @@ msgstr "ID stable en notation de domaine inversé"
 
 msgid "One-line description"
 msgstr "Description sur une ligne"
+
+msgid "GitHub user or organization hosting the project"
+msgstr "Utilisateur ou organisation GitHub hébergeant le projet"
 
 msgid "Plugin capability; may be repeated"
 msgstr "Capacité du plugin ; l'option peut être répétée"

@@ -11,9 +11,11 @@ import sys
 from pathlib import Path
 
 import pytest
+import yaml
 
+from datalab import __version__
 from datalab.plugins import PluginCapability, PluginRegistry
-from datalab.plugins.generator import main
+from datalab.plugins.generator import _default_plugin_id, main
 
 PROJECT_ROOT = Path(__file__).parents[4]
 
@@ -66,6 +68,8 @@ def test_create_layered_plugin_project(
                 "processing",
                 "--object-kind",
                 "image",
+                "--github-account",
+                "DataLab-Platform",
             ]
         )
         == 0
@@ -73,6 +77,7 @@ def test_create_layered_plugin_project(
     assert str(destination.resolve()) in capsys.readouterr().out
 
     expected_files = {
+        ".github/workflows/release.yml",
         ".gitignore",
         "CHANGELOG.md",
         "CONTRIBUTING.md",
@@ -106,6 +111,15 @@ def test_create_layered_plugin_project(
     assert 'name = "datalab-camera-characterization"' in pyproject
     assert 'license = "BSD-3-Clause"' in pyproject
     assert 'license-files = ["LICENSE"]' in pyproject
+    major, minor = __version__.split(".")[:2]
+    assert (
+        f'dependencies = ["datalab-platform >= {major}.{minor}, < {int(major) + 1}"]'
+        in pyproject
+    )
+    assert 'keywords = ["datalab", "datalab-plugin"]' in pyproject
+    repository = "https://github.com/DataLab-Platform/datalab-camera-characterization"
+    assert f'Homepage = "{repository}"' in pyproject
+    assert f'Issues = "{repository}/issues"' in pyproject
     assert '[project.entry-points."datalab.plugins"]' in pyproject
     assert (
         "datalab_camera_characterization = "
@@ -114,6 +128,15 @@ def test_create_layered_plugin_project(
     )
 
     _run_generated_project_checks(destination)
+
+    release = (destination / ".github/workflows/release.yml").read_text(
+        encoding="utf-8"
+    )
+    steps = yaml.safe_load(release)["jobs"]["release"]["steps"]
+    assert "gh release create" in steps[4]["run"]
+    assert "id: org.datalab.camera-characterization\n" in steps[5]["run"]
+    assert 'name: "Camera Characterization"\n' in steps[5]["run"]
+    assert "capabilities: [application, processing]" in steps[5]["run"]
 
     web_adapter = (
         destination / "src/datalab_camera_characterization/adapters/web.py"
@@ -294,7 +317,7 @@ def test_create_interactive_defaults(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """The bare create command infers safe defaults from the plugin name."""
-    answers = iter(("Pulse Characterization", "", "", "", ""))
+    answers = iter(("Pulse Characterization", "DataLab-Platform", "", "", "", ""))
     monkeypatch.setattr("builtins.input", lambda _prompt: next(answers))
     monkeypatch.chdir(tmp_path)
 
@@ -312,6 +335,51 @@ def test_create_interactive_defaults(
     assert 'PLUGIN_ID = "org.datalab.pulse-characterization"' in package
     assert 'PLUGIN_DESCRIPTION = "Pulse Characterization plugin for DataLab"' in package
     assert "id=PLUGIN_ID" in plugin
+    assert (
+        'Homepage = "https://github.com/DataLab-Platform/'
+        'datalab-pulse-characterization"' in pyproject
+    )
+
+
+@pytest.mark.parametrize(
+    ("github_account", "plugin_id"),
+    [
+        ("", "org.example.spectrum-tools"),
+        ("Alice-Lab", "io.github.alice-lab.spectrum-tools"),
+        ("datalab-platform", "org.datalab.spectrum-tools"),
+    ],
+)
+def test_default_plugin_id_follows_the_github_account(
+    github_account: str, plugin_id: str
+) -> None:
+    """Only DataLab-Platform projects default to the reserved org.datalab IDs."""
+    assert _default_plugin_id("datalab_spectrum_tools", github_account) == plugin_id
+
+
+def test_create_rejects_invalid_github_account(tmp_path: Path) -> None:
+    """The account becomes part of URLs and of the default plugin ID."""
+    destination = tmp_path / "invalid-account"
+
+    with pytest.raises(SystemExit) as exc_info:
+        main(
+            [
+                "create",
+                str(destination),
+                "--name",
+                "Account Plugin",
+                "--package",
+                "datalab_account_plugin",
+                "--plugin-id",
+                "org.example.account-plugin",
+                "--description",
+                "Invalid account example",
+                "--github-account",
+                "alice/lab",
+            ]
+        )
+
+    assert exc_info.value.code == 2
+    assert not destination.exists()
 
 
 def test_create_pulse_project_with_long_metadata_passes_checks(tmp_path: Path) -> None:
