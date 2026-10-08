@@ -12,11 +12,15 @@ import re
 from collections.abc import Sequence
 from pathlib import Path
 
+from datalab import __version__
 from datalab.config import _
 
 _PACKAGE_PATTERN = re.compile(r"^[a-z][a-z0-9_]*$")
 _PLUGIN_ID_PATTERN = re.compile(r"^[a-z0-9]+(?:[.-][a-z0-9]+)+$")
+_GITHUB_ACCOUNT_PATTERN = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$")
 _CAPABILITIES = ("application", "processing", "io", "visualization")
+#: GitHub organization whose plugins use the reserved ``org.datalab.`` IDs
+OFFICIAL_GITHUB_ACCOUNT = "DataLab-Platform"
 
 
 @dataclasses.dataclass(frozen=True)
@@ -31,6 +35,7 @@ class PluginProject:
     capabilities: tuple[str, ...] = ("processing",)
     object_kind: str = "signal"
     license_id: str = "BSD-3-Clause"
+    github_account: str = ""
 
     def __post_init__(self) -> None:
         """Validate values used as paths, Python identifiers, and metadata."""
@@ -64,6 +69,17 @@ class PluginProject:
             raise ValueError(_("Object kind must be 'signal' or 'image'"))
         if self.license_id != "BSD-3-Clause":
             raise ValueError(_("The minimal template currently supports BSD-3-Clause"))
+        if self.github_account and not _GITHUB_ACCOUNT_PATTERN.fullmatch(
+            self.github_account
+        ):
+            raise ValueError(_("GitHub account must be a GitHub user or organization"))
+
+    @property
+    def repository_url(self) -> str:
+        """Return the GitHub repository URL, if the account is known."""
+        if not self.github_account:
+            return ""
+        return f"https://github.com/{self.github_account}/{self.distribution}"
 
     @property
     def distribution(self) -> str:
@@ -100,6 +116,15 @@ def _render_python_string_assignment(name: str, value: str) -> str:
 
 def _render_pyproject(project: PluginProject) -> str:
     """Render generated project metadata and plugin entry point."""
+    major, minor = __version__.split(".")[:2]
+    requirement = f"datalab-platform >= {major}.{minor}, < {int(major) + 1}"
+    urls = ""
+    if project.repository_url:
+        urls = f"""
+[project.urls]
+Homepage = "{project.repository_url}"
+Issues = "{project.repository_url}/issues"
+"""
     return f'''[build-system]
 requires = ["setuptools >= 77"]
 build-backend = "setuptools.build_meta"
@@ -112,8 +137,9 @@ readme = "README.md"
 license = "{project.license_id}"
 license-files = ["LICENSE"]
 requires-python = ">=3.9"
-dependencies = ["datalab-platform >= 1.3"]
-
+dependencies = ["{requirement}"]
+keywords = ["datalab", "datalab-plugin"]
+{urls}
 [project.entry-points."datalab.plugins"]
 {project.package} = "{project.package}.adapters.desktop:{project.class_name}"
 
@@ -389,7 +415,85 @@ Installing the project registers `{project.plugin_id}` through the
 compose them into headless recipes in `workflow`, and keep DataLab or browser
 integration in `adapters`. The generated architecture test preserves these
 dependency boundaries as the plugin grows.
+
+## Publishing
+
+Set the new version in `pyproject.toml` and in the package `__init__.py`, then
+push a tag such as `v0.1.0`. The **Release** workflow builds the wheel and
+attaches it to a GitHub release: DataLab users install it with
+**Plugins > Configure plugins... > Install plugins**.
+
+To list the plugin in the DataLab plugin catalog, open a pull request on
+<https://github.com/DataLab-Platform/plugins> with the entry printed in the
+summary of the **Release** workflow run.
 """
+
+
+_RELEASE_WORKFLOW = """name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: python -m pip install build
+
+      - run: python -m build --wheel
+
+      - name: Attach the wheel to a GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          wheel=$(ls dist/*-py3-none-any.whl)
+          case "$wheel" in
+            *-"${GITHUB_REF_NAME#v}"-py3-none-any.whl) ;;
+            *) echo "Tag $GITHUB_REF_NAME does not match $wheel" >&2; exit 1 ;;
+          esac
+          gh release create "$GITHUB_REF_NAME" "$wheel" --verify-tag --generate-notes
+
+      - name: Print the plugin catalog entry
+        run: |
+          sha256=$(sha256sum dist/*-py3-none-any.whl | cut -d " " -f 1)
+          {
+            echo "To list this release in the DataLab plugin catalog, add"
+            echo "\\`plugins/__PLUGIN_ID__.yaml\\` to"
+            echo "https://github.com/DataLab-Platform/plugins"
+            echo "(or only the new release if the plugin is already listed):"
+            echo
+            echo '```yaml'
+            cat <<'EOF'
+          id: __PLUGIN_ID__
+          name: __PLUGIN_NAME__
+          EOF
+            echo "repository: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
+            echo "capabilities: [__CAPABILITIES__]"
+            echo "releases:"
+            echo "  - version: ${GITHUB_REF_NAME#v}"
+            echo "    sha256: $sha256"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+"""
+
+
+def _render_release_workflow(project: PluginProject) -> str:
+    """Render the workflow publishing tagged wheels as GitHub releases."""
+    return (
+        _RELEASE_WORKFLOW.replace("__PLUGIN_ID__", project.plugin_id)
+        .replace("__PLUGIN_NAME__", _toml_string(project.name))
+        .replace("__CAPABILITIES__", ", ".join(project.capabilities))
+    )
 
 
 def _render_architecture_doc(project: PluginProject) -> str:
@@ -487,6 +591,7 @@ def create_plugin_project(project: PluginProject) -> Path:
     if destination.exists():
         raise FileExistsError(_("Destination already exists: %s") % destination)
     files = {
+        ".github/workflows/release.yml": _render_release_workflow(project),
         ".gitignore": _GITIGNORE,
         "CHANGELOG.md": _render_changelog(),
         "CONTRIBUTING.md": _render_contributing(),
@@ -523,10 +628,14 @@ def _default_package(name: str) -> str:
     return slug
 
 
-def _default_plugin_id(package: str) -> str:
-    """Derive a reverse-domain plugin ID from an import package."""
+def _default_plugin_id(package: str, github_account: str = "") -> str:
+    """Derive a reverse-domain plugin ID from an import package and its owner."""
     slug = package.removeprefix("datalab_").replace("_", "-")
-    return f"org.datalab.{slug}"
+    if github_account.lower() == OFFICIAL_GITHUB_ACCOUNT.lower():
+        return f"org.datalab.{slug}"
+    if github_account:
+        return f"io.github.{github_account.lower()}.{slug}"
+    return f"org.example.{slug}"
 
 
 def _prompt(label: str, default: str | None = None) -> str:
@@ -543,8 +652,17 @@ def _prompt(label: str, default: str | None = None) -> str:
 def _project_from_args(args: argparse.Namespace) -> PluginProject:
     """Resolve explicit options and interactive defaults into a project."""
     name = args.name or _prompt(_("Plugin name"))
+    github_account = args.github_account
+    if github_account is None:
+        github_account = (
+            _prompt(_("GitHub account (optional)"), "")
+            if args.plugin_id is None
+            else ""
+        )
     package = args.package or _prompt(_("Package name"), _default_package(name))
-    plugin_id = args.plugin_id or _prompt(_("Plugin ID"), _default_plugin_id(package))
+    plugin_id = args.plugin_id or _prompt(
+        _("Plugin ID"), _default_plugin_id(package, github_account)
+    )
     description = args.description or _prompt(
         _("Description"), _("%s plugin for DataLab") % name
     )
@@ -561,6 +679,7 @@ def _project_from_args(args: argparse.Namespace) -> PluginProject:
         capabilities=capabilities,
         object_kind=args.object_kind,
         license_id=args.license_id,
+        github_account=github_account,
     )
 
 
@@ -579,6 +698,10 @@ def build_parser() -> argparse.ArgumentParser:
     create_parser.add_argument("--package", help=_("Python import package name"))
     create_parser.add_argument("--plugin-id", help=_("Stable reverse-domain ID"))
     create_parser.add_argument("--description", help=_("One-line description"))
+    create_parser.add_argument(
+        "--github-account",
+        help=_("GitHub user or organization hosting the project"),
+    )
     create_parser.add_argument(
         "--capability",
         dest="capabilities",
