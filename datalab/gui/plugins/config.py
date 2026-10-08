@@ -36,6 +36,7 @@ from datalab.config import (
     set_user_plugin_paths,
 )
 from datalab.gui.plugins.applications import get_plugin_icon
+from datalab.gui.plugins.available import AvailablePluginsWidget
 from datalab.gui.plugins.install import InstalledPluginsWidget
 from datalab.plugins import (
     PLUGINS_DEFAULT_PATH,
@@ -619,6 +620,9 @@ class PluginConfigDialog(QW.QDialog):
         self.installed_plugins_widget = InstalledPluginsWidget(
             self._apply_and_reload_plugins
         )
+        self.available_plugins_widget = AvailablePluginsWidget(
+            self.installed_plugins_widget
+        )
 
         self.setWindowTitle(_("Plugin Configuration"))
         self.setMinimumWidth(DIALOG_MIN_WIDTH)
@@ -631,6 +635,7 @@ class PluginConfigDialog(QW.QDialog):
         self.tabs = QW.QTabWidget()
         self.tabs.addTab(self._create_plugins_tab(), _("Enable/disable plugins"))
         self.tabs.addTab(self._create_search_paths_tab(), _("Plugin settings"))
+        self.tabs.addTab(self.available_plugins_widget, _("Available plugins"))
         self.tabs.addTab(self.installed_plugins_widget, _("Install plugins"))
         self.tabs.setCornerWidget(self._create_corner_widget(), QC.Qt.TopRightCorner)
         layout.addWidget(self.tabs, 1)
@@ -1003,6 +1008,7 @@ class PluginConfigDialog(QW.QDialog):
         if self.settings_disabled_label is not None:
             self.settings_disabled_label.setVisible(not enabled)
         self.installed_plugins_widget.setEnabled(enabled)
+        self.available_plugins_widget.setEnabled(enabled)
         for widget in self.fixed_path_widgets + self.extra_path_widgets:
             widget.set_links_enabled(enabled)
 

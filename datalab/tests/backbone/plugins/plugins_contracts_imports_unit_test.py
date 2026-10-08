@@ -17,7 +17,7 @@ CONTRACT_MODULES = (
     "tools",
 )
 # Installer modules, reused outside the Qt host (DataLab-Web, catalog tooling)
-HEADLESS_HOST_MODULES = ("store", "wheels")
+HEADLESS_HOST_MODULES = ("catalog", "store", "wheels")
 
 
 def test_plugin_contracts_do_not_import_plugin_host() -> None:

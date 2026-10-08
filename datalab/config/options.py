@@ -44,6 +44,7 @@ from sigimax.config import (
 
 from datalab import __docurl__, __homeurl__, __supporturl__, __version__
 from datalab.config.appinfo import APP_NAME, DATAPATH
+from datalab.plugins.catalog import DEFAULT_CATALOG_URL
 
 if TYPE_CHECKING:
     from datalab.config.persistence import OptionStore
@@ -146,6 +147,14 @@ class DataLabOptions(SigimaXOptions):
             default=[],
             expected_type=list,
             description="List of extra plugin directories.",
+        )
+        self.plugins_catalog_url = TypedOptionField(
+            self,
+            "plugins_catalog_url",
+            category="main",
+            default=DEFAULT_CATALOG_URL,
+            expected_type=str,
+            description="URL of the plugin catalog (empty to disable it).",
         )
         self.welcome_on_startup = TypedOptionField(
             self,

@@ -78,12 +78,12 @@ def test_installed_wheel_is_enabled_loaded_and_uninstalled(
             )
             dialog = PluginConfigDialog(win)
             widget = dialog.installed_plugins_widget
-            assert dialog.tabs.indexOf(widget) == 2
+            assert dialog.tabs.indexOf(widget) == 3
             monkeypatch.setattr(widget, "select_file", lambda: path)
             monkeypatch.setattr(
                 widget,
                 "confirm_installation",
-                lambda manifest: consented.append(manifest) or True,
+                lambda manifest, origin=None: consented.append(manifest) or True,
             )
 
             widget.install_button.click()
@@ -136,7 +136,9 @@ def test_refused_or_invalid_files_are_not_installed(
     )
     path = write_wheel(tmp_path)
     monkeypatch.setattr(widget, "select_file", lambda: path)
-    monkeypatch.setattr(widget, "confirm_installation", lambda _manifest: False)
+    monkeypatch.setattr(
+        widget, "confirm_installation", lambda _manifest, origin=None: False
+    )
 
     assert widget.install_from_file() is None
 
