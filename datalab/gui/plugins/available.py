@@ -10,6 +10,7 @@ Browse the DataLab plugin catalog and install or update its plugins.
 from __future__ import annotations
 
 import shutil
+import sys
 import tempfile
 from collections.abc import Callable
 from html import escape
@@ -135,6 +136,9 @@ class AvailablePluginItemWidget(QW.QWidget):
         if plugin.status == "revoked":
             return _("Withdrawn: %s") % plugin.status_reason, None
         if release is None:
+            if plugin.get_installable_release(python_version="") is not None:
+                python = f"{sys.version_info.major}.{sys.version_info.minor}"
+                return _("Not available for Python %s") % python, None
             return _("Not available for DataLab desktop"), None
         how, version = installed
         if how == "environment":

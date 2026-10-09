@@ -50,16 +50,20 @@ def fixture_store(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
         del sys.modules[name]
 
 
-def publish_catalog(site: Path, versions: tuple[str, ...]) -> str:
+def publish_catalog(
+    site: Path, versions: tuple[str, ...], requires_python: dict[str, str] | None = None
+) -> str:
     """Publish probe plugin releases in a catalog folder and return its URL."""
     releases = []
     for version in sorted(versions, reverse=True):
+        python = (requires_python or {}).get(version, ">=3.9")
         data = make_plugin_wheel(
             distribution=DISTRIBUTION,
             version=version,
             package=PACKAGE,
             plugin_id=PLUGIN_ID,
             requires_dist=("datalab-platform>=1.0",),
+            requires_python=python,
         )
         digest = hashlib.sha256(data).hexdigest()
         filename = wheel_filename(DISTRIBUTION, version)
@@ -73,6 +77,7 @@ def publish_catalog(site: Path, versions: tuple[str, ...]) -> str:
                 "url": f"wheels/{digest}/{filename}",
                 "sha256": digest,
                 "size": len(data),
+                "requires_python": python,
                 "targets": ["desktop"],
             }
         )
@@ -148,6 +153,17 @@ def test_catalog_plugin_is_installed_then_offered_as_update(
         available.refresh()
         (row,) = available.item_widgets
         assert row.action_button.text() == "Update to 1.1.0"
+
+        future = {"2.0.0": ">=4"}
+        Conf.plugins_catalog_url.set(publish_catalog(site, ("1.1.0", "2.0.0"), future))
+        available.refresh()
+        (row,) = available.item_widgets
+        assert row.action_button.text() == "Update to 1.1.0"
+        Conf.plugins_catalog_url.set(publish_catalog(site, ("2.0.0",), future))
+        available.refresh()
+        (row,) = available.item_widgets
+        assert row.action_button is None
+        assert row.status_label.text().startswith("Not available for Python 3.")
 
         Conf.plugins_catalog_url.set((tmp_path / "missing.json").as_uri())
         available.refresh()

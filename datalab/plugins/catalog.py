@@ -21,7 +21,7 @@ import urllib.parse
 import urllib.request
 
 from datalab import __version__
-from datalab.plugins.wheels import MAX_WHEEL_BYTES
+from datalab.plugins.wheels import MAX_WHEEL_BYTES, is_compatible_wheel
 
 DEFAULT_CATALOG_URL = "https://datalab-platform.com/plugins/catalog.json"
 CATALOG_SCHEMA_VERSION = 1
@@ -49,6 +49,7 @@ class CatalogRelease:
         size: Wheel size in bytes
         targets: Hosts supported by the wheel (``desktop``, ``web``)
         yanked: Reason why the release should not be installed, if any
+        requires_python: ``Requires-Python`` metadata of the wheel, if any
     """
 
     version: str
@@ -58,6 +59,7 @@ class CatalogRelease:
     size: int = 0
     targets: tuple[str, ...] = ()
     yanked: str = ""
+    requires_python: str | None = None
 
 
 @dataclasses.dataclass(frozen=True)
@@ -76,15 +78,31 @@ class CatalogPlugin:
     license: str = ""
     keywords: tuple[str, ...] = ()
 
-    def get_installable_release(self, target: str = "desktop") -> CatalogRelease | None:
-        """Return the newest release that may be installed on a host."""
+    def get_installable_release(
+        self, target: str = "desktop", python_version: str | None = None
+    ) -> CatalogRelease | None:
+        """Return the newest release that may be installed on a host.
+
+        Args:
+            target: Host (``desktop`` or ``web``)
+            python_version: Host Python version, ignored if empty (default:
+             running interpreter)
+        """
         if self.status == "revoked":
             return None
         return next(
             (
                 release
                 for release in self.releases
-                if release.url and not release.yanked and target in release.targets
+                if release.url
+                and not release.yanked
+                and target in release.targets
+                and (
+                    python_version == ""
+                    or is_compatible_wheel(
+                        release.filename, release.requires_python, python_version
+                    )
+                )
             ),
             None,
         )
@@ -127,6 +145,7 @@ def _parse_release(item: dict, catalog_url: str) -> CatalogRelease:
         size=int(item.get("size", 0)),
         targets=tuple(item.get("targets", ())),
         yanked=item.get("yanked", ""),
+        requires_python=item.get("requires_python"),
     )
 
 

@@ -14,6 +14,7 @@ from datalab.plugins.wheels import (
     WEB_ENTRY_POINT_GROUP,
     WheelInspectionError,
     inspect_wheel,
+    is_compatible_wheel,
 )
 from datalab.tests.backbone.plugins.wheel_factory import (
     make_plugin_wheel,
@@ -129,6 +130,32 @@ def test_inspection_checks_python_requirement() -> None:
     """The wheel Requires-Python must accept the host interpreter."""
     with pytest.raises(WheelInspectionError, match="requires Python >=3.12"):
         inspect(make_plugin_wheel(requires_python=">=3.12"))
+
+
+@pytest.mark.parametrize(
+    ("tag", "python_version"),
+    [("cp313", "3.9"), ("py312", "3.11"), ("py2", "3.11"), ("cp39", "3.11")],
+)
+def test_inspection_rejects_wheels_built_for_another_python(
+    tag: str, python_version: str
+) -> None:
+    """Pure-Python tags must target the host Python, even without Requires-Python."""
+    filename = FILENAME.replace("py3-none-any", f"{tag}-none-any")
+    data = make_plugin_wheel(requires_python=">=2.7")
+
+    with pytest.raises(WheelInspectionError, match=f"built for {tag}, host has"):
+        inspect(data, filename=filename, python_version=python_version)
+    assert not is_compatible_wheel(filename, None, python_version)
+
+
+@pytest.mark.parametrize("tag", ["py3", "py2.py3", "py39", "py311", "cp311"])
+def test_inspection_accepts_wheels_for_the_host_python(tag: str) -> None:
+    """Generic and host-specific pure-Python tags are accepted, as by pip."""
+    filename = FILENAME.replace("py3-none-any", f"{tag}-none-any")
+
+    assert inspect(make_plugin_wheel(), filename=filename)["tags"]
+    assert is_compatible_wheel(filename, ">=3.9", "3.11")
+    assert not is_compatible_wheel(filename, ">=3.12", "3.11")
 
 
 def test_inspection_rejects_duplicate_dist_info_directories() -> None:
