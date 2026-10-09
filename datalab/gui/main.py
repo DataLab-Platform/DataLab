@@ -91,6 +91,7 @@ from datalab.webapi import WEBAPI_AVAILABLE, get_webapi_controller
 from datalab.webapi.actions import WebApiActions
 from datalab.widgets import instconfviewer
 from datalab.widgets import status as dl_status
+from datalab.widgets.expandabletext import refresh_subdued_colors
 
 if TYPE_CHECKING:
     from typing import Literal
@@ -2390,9 +2391,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         )
 
     def _update_extra_color_mode(self) -> None:
-        """Update the macro panel color mode"""
+        """Update the macro panel color mode and the subdued text colors"""
         if self.macropanel is not None:
             self.macropanel.update_color_mode()
+        refresh_subdued_colors()
 
     # Settings changes are intentionally dispatched in one place because each
     # option may trigger a specific live UI update or panel refresh.
