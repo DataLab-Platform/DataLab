@@ -9,6 +9,8 @@ from __future__ import annotations
 from types import SimpleNamespace
 
 import numpy as np
+from guidata import qthelpers as guidata_qth
+from plotpy import config as plotpy_config
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
@@ -118,6 +120,38 @@ def test_welcome_page(monkeypatch) -> None:
             assert Conf.welcome_on_startup.get() is (not initial)
         finally:
             Conf.welcome_on_startup.set(initial)
+
+
+def test_welcome_page_follows_color_mode(monkeypatch) -> None:
+    """Subdued texts remain legible when the color mode is switched at runtime"""
+    # Switching the color mode changes these globals: restore them at teardown
+    monkeypatch.setenv(guidata_qth.ENV_COLOR_MODE, guidata_qth.get_color_mode())
+    monkeypatch.setattr(guidata_qth, "CURRENT_THEME", guidata_qth.CURRENT_THEME)
+    initial_mode = Conf.color_mode.get()
+    description = _("Generate a 1D signal or 2D image from a template.")
+    with datalab_test_app_context(console=False) as win:
+        page = win.welcomepanel
+        labels = [page.start_title] + [
+            label
+            for label in page.entries["create"].findChildren(QW.QLabel)
+            if label.text() == description
+        ]
+        assert len(labels) == 2
+        try:
+            # Light to dark, then dark to light
+            for mode in ("light", "dark", "light"):
+                Conf.color_mode.set(mode)
+                win._update_color_mode()  # pylint: disable=protected-access
+                palette = QW.QApplication.instance().palette()
+                window = palette.color(QG.QPalette.Window).lightness()
+                for label in labels:
+                    text = label.palette().color(QG.QPalette.WindowText)
+                    alpha = text.alphaF()
+                    lightness = alpha * text.lightness() + (1 - alpha) * window
+                    assert abs(lightness - window) > 64, (mode, label.text())
+        finally:
+            Conf.color_mode.set(initial_mode)
+            plotpy_config.set_plotpy_color_mode(guidata_qth.LIGHT)
 
 
 def _application_plugin(
