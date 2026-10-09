@@ -196,7 +196,7 @@ Available plugins
 
 This tab lists the plugins of the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_, with their description, license and source code link. Plugins maintained by the DataLab team are marked **Official**; the others are **Community** plugins, maintained by their authors. A search field filters the list.
 
-**Install** downloads the newest release available for DataLab desktop, checks that its size and SHA-256 digest match the catalog, then installs it as described in :ref:`plugin_install_from_file`, after the same confirmation. When the catalog offers a newer version of a plugin installed this way, the button becomes **Update to...**. Plugins installed with ``pip`` in the Python environment are shown as such and are not modified.
+**Install** downloads the newest release available for DataLab desktop and for the running Python version, checks that its size and SHA-256 digest match the catalog, then installs it as described in :ref:`plugin_install_from_file`, after the same confirmation. When the catalog offers a newer version of a plugin installed this way, the button becomes **Update to...**. Plugins installed with ``pip`` in the Python environment are shown as such and are not modified.
 
 The catalog is downloaded only when the tab is shown or refreshed. Its address is the ``plugins_catalog_url`` option of the DataLab configuration file: it may point to a private copy of the catalog, including a ``file:`` URL for a folder shared on the network, or be emptied to disable the catalog.
 

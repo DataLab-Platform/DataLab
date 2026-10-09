@@ -2299,6 +2299,10 @@ msgid "Not available for DataLab desktop"
 msgstr "Non disponible pour DataLab desktop"
 
 #, python-format
+msgid "Not available for Python %s"
+msgstr "Non disponible pour Python %s"
+
+#, python-format
 msgid "Installed in the Python environment (%s)"
 msgstr "Installé dans l'environnement Python (%s)"
 

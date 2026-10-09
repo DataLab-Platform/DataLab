@@ -107,6 +107,23 @@ def test_installable_release_skips_yanked_web_only_and_revoked(tmp_path: Path) -
     assert plugin.matches("SPECTRO baseline") and not plugin.matches("camera")
 
 
+def test_installable_release_suits_the_host_python(tmp_path: Path) -> None:
+    """Releases requiring another Python, by metadata or by tag, are skipped."""
+    newest = publish(tmp_path, b"3", "3.0.0", requires_python=">=3.12")
+    tagged = publish(tmp_path, b"2", "2.0.0")
+    tagged["filename"] = tagged["filename"].replace("py3-none", "cp313-none")
+    oldest = publish(tmp_path, b"1", "1.0.0", requires_python=">=3.9")
+    url = write_catalog(tmp_path, [plugin_record([newest, tagged, oldest])])
+
+    (plugin,) = fetch_catalog(url)
+
+    assert plugin.get_installable_release(python_version="3.13").version == "3.0.0"
+    assert plugin.get_installable_release(python_version="3.12").version == "3.0.0"
+    assert plugin.get_installable_release(python_version="3.11").version == "1.0.0"
+    assert plugin.get_installable_release(python_version="3.8") is None
+    assert plugin.get_installable_release(python_version="").version == "3.0.0"
+
+
 def test_downloads_must_match_the_catalog(tmp_path: Path) -> None:
     """A wheel changed after publication is refused."""
     release = publish(tmp_path, b"original")

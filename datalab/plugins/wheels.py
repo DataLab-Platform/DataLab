@@ -27,6 +27,7 @@ from typing import Any
 from packaging.markers import default_environment
 from packaging.requirements import InvalidRequirement, Requirement
 from packaging.specifiers import InvalidSpecifier, SpecifierSet
+from packaging.tags import Tag, compatible_tags, interpreter_name
 from packaging.utils import canonicalize_name, parse_wheel_filename
 from packaging.version import InvalidVersion, Version
 
@@ -70,6 +71,40 @@ _RESERVED_TOP_LEVEL = frozenset(
 
 class WheelInspectionError(ValueError):
     """Raised when an archive cannot be accepted as a plugin wheel."""
+
+
+def _host_python(python_version: str | None) -> Version:
+    return Version(
+        python_version or f"{sys.version_info.major}.{sys.version_info.minor}"
+    )
+
+
+def _pure_python_tags(python: Version) -> frozenset[Tag]:
+    """Return the pure-Python wheel tags a Python version installs, as pip does."""
+    interpreter = f"{interpreter_name()}{python.major}{python.minor}"
+    return frozenset(
+        compatible_tags((python.major, python.minor), interpreter, ["any"])
+    )
+
+
+def is_compatible_wheel(
+    filename: str, requires_python: str | None, python_version: str | None = None
+) -> bool:
+    """Return True if a Python version can install a pure-Python wheel.
+
+    Args:
+        filename: Wheel file name, which carries its tags
+        requires_python: ``Requires-Python`` metadata of the wheel, if any
+        python_version: Host Python version (default: running interpreter)
+    """
+    try:
+        wheel_tags = parse_wheel_filename(filename)[3]
+        python = _host_python(python_version)
+        if requires_python and python not in SpecifierSet(requires_python):
+            return False
+    except (InvalidSpecifier, InvalidVersion, ValueError):
+        return False
+    return bool(wheel_tags & _pure_python_tags(python))
 
 
 def _is_stdlib_module(name: str) -> bool:
@@ -310,6 +345,13 @@ def inspect_wheel(
         raise WheelInspectionError(f"Invalid wheel filename: {filename!r}") from exc
     if any(tag.abi != "none" or tag.platform != "any" for tag in wheel_tags):
         raise WheelInspectionError("Only pure-Python *-none-any wheels are supported")
+    current_python = _host_python(python_version)
+    if not wheel_tags & _pure_python_tags(current_python):
+        interpreters = ".".join(sorted({tag.interpreter for tag in wheel_tags}))
+        raise WheelInspectionError(
+            f"Plugin wheel is built for {interpreters}, "
+            f"host has Python {current_python}"
+        )
 
     try:
         archive = zipfile.ZipFile(io.BytesIO(data))
@@ -350,9 +392,6 @@ def inspect_wheel(
             raise WheelInspectionError("Wheel filename and METADATA version differ")
 
         required_python = package_metadata.get("Requires-Python")
-        current_python = Version(
-            python_version or f"{sys.version_info.major}.{sys.version_info.minor}"
-        )
         if required_python:
             try:
                 specifier = SpecifierSet(required_python)
@@ -401,4 +440,5 @@ __all__ = [
     "WEB_ENTRY_POINT_GROUP",
     "WheelInspectionError",
     "inspect_wheel",
+    "is_compatible_wheel",
 ]
