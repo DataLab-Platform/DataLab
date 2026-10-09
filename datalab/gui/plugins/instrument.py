@@ -58,6 +58,7 @@ class InstrumentWindow(QW.QDialog):
         self.items: list = []
         self._plot_kind: str | None = None
         self._plot_signature: tuple | None = None
+        self._value_range: tuple[float, float] | None = None
 
         splitter = QW.QSplitter(QC.Qt.Horizontal)
         self._stage = QW.QWidget()
@@ -226,7 +227,14 @@ class InstrumentWindow(QW.QDialog):
             plot.do_autoscale(replot=False)
             if kind == "curve" and frame.value_range is not None:
                 plot.set_axis_limits("left", *frame.value_range)
+        elif kind == "curve" and frame.value_range != self._value_range:
+            # Like a new V/div on a scope: Y follows, the X zoom is kept
+            if frame.value_range is None:
+                plot.do_autoscale(replot=False, axis_id=plot.get_axis_id("left"))
+            else:
+                plot.set_axis_limits("left", *frame.value_range)
         self._plot_signature = signature
+        self._value_range = frame.value_range
         self.summary_label.setText(frame.summary)
         plot.replot()
 

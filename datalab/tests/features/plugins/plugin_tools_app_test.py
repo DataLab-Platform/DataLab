@@ -11,12 +11,13 @@ import textwrap
 import numpy as np
 import pytest
 from qtpy import QtWidgets as QW
-from sigima.objects import create_image
+from sigima.objects import create_image, create_signal
 
 from datalab.config import Conf
 from datalab.gui.main import DLMainWindow
 from datalab.gui.plugins.instrument import InstrumentWindow
 from datalab.plugins import PluginRegistry
+from datalab.plugins.instruments import InstrumentFrame
 from datalab.tests import datalab_test_app_context
 from datalab.tests.features.plugins.plugin_test_dataset import temporary_plugin_dir
 
@@ -166,6 +167,22 @@ def test_plugin_tools_in_menus_and_instrument_window(
             assert len(window.items) == 1
             assert window.summary_label.text().startswith("Frame")
             assert window.plotwidget.plot.get_axis_limits("left") == (-2.0, 2.0)
+
+            # A new value range with the same X axis updates Y and keeps the X zoom
+            plot = window.plotwidget.plot
+            x = np.linspace(0.0, 1.0, 11)
+            plot.set_axis_limits("bottom", 0.2, 0.6)
+            window.render(
+                InstrumentFrame((create_signal("Live", x, x),), value_range=(-5, 5))
+            )
+            assert plot.get_axis_limits("left") == (-5.0, 5.0)
+            assert plot.get_axis_limits("bottom") == (0.2, 0.6)
+            window.render(InstrumentFrame((create_signal("Live", x, x),)))
+            assert plot.get_axis_limits("left")[1] < 5.0
+            assert plot.get_axis_limits("bottom") == (0.2, 0.6)
+            wider = np.linspace(0.0, 2.0, 11)
+            window.render(InstrumentFrame((create_signal("Live", wider, wider),)))
+            assert plot.get_axis_limits("bottom")[1] >= 2.0
 
             window.live_button.setChecked(True)
             assert window._live_timer.isActive()  # pylint: disable=protected-access
