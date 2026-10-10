@@ -51,7 +51,7 @@ jobs:
       id-token: write
     steps:
       - name: Download Python distributions
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: python-dists
           path: dist
@@ -70,27 +70,27 @@ jobs:
       id-token: write       # required by attest-build-provenance (OIDC)
       attestations: write   # required by attest-build-provenance
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.11"
 
       - name: Download Python distributions
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: python-dists
           path: assets/dists
 
       - name: Download PDF documentation
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: pdf-docs
           path: assets/pdfs
 
       - name: Download MSI installer
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: msi-installer
           path: assets/msi
@@ -114,7 +114,7 @@ jobs:
       - name: Attest build provenance
         # Produces a Sigstore-backed attestation linking each artifact to
         # this exact workflow run. Verifiable with `gh attestation verify`.
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: |
             assets/dists/*.whl
@@ -129,7 +129,7 @@ jobs:
           head -n 20 release-notes.md
 
       - name: Create draft GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.ref_name }}
           name: DataLab ${{ github.ref_name }}

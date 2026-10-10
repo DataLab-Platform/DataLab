@@ -84,13 +84,13 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref || github.ref }}
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ inputs.python-version }}
 
@@ -126,12 +126,12 @@ jobs:
       DISPLAY: ":99.0"
       QT_QPA_PLATFORM: offscreen
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref || github.ref }}
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ inputs.python-version }}
           cache: pip
@@ -174,7 +174,7 @@ jobs:
         run: find datalab/locale doc/locale -name '*.mo' | sort
 
       - name: Upload compiled translations
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: translations-mo
           path: |
@@ -194,12 +194,12 @@ jobs:
       RELEASE: "1"
       UNATTENDED: "1"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref || github.ref }}
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ inputs.python-version }}
           cache: pip
@@ -234,7 +234,7 @@ jobs:
           ln -snf "$SITE" "$GITHUB_WORKSPACE/../Sigima"
 
       - name: Download compiled translations
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: translations-mo
           path: .
@@ -286,14 +286,14 @@ jobs:
           ls -lh datalab/data/doc/
 
       - name: Upload PDF documentation
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: pdf-docs
           path: datalab/data/doc/DataLab_*.pdf
           retention-days: ${{ inputs.artifact-retention-days }}
 
       - name: Upload doc assets (genreqs + validation status)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: doc-assets
           path: |
@@ -312,12 +312,12 @@ jobs:
     needs: [preflight, compile-translations, build-pdf-docs]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref || github.ref }}
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ inputs.python-version }}
           cache: pip
@@ -326,13 +326,13 @@ jobs:
         run: python -m pip install --upgrade pip build
 
       - name: Download compiled translations
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: translations-mo
           path: .
 
       - name: Download PDF documentation
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: pdf-docs
           path: datalab/data/doc
@@ -352,7 +352,7 @@ jobs:
             || { echo "::error::PDF docs missing from wheel"; exit 1; }
 
       - name: Upload Python distributions
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: python-dists
           path: dist/*
@@ -373,24 +373,24 @@ jobs:
       UNATTENDED: "1"
       VERSION: ${{ needs.preflight.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.ref || github.ref }}
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ inputs.python-version }}
           cache: pip
 
       - name: Download PDF documentation
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: pdf-docs
           path: datalab/data/doc
 
       - name: Download compiled translations
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: translations-mo
           path: .
@@ -448,14 +448,14 @@ jobs:
         run: wix build "wix/DataLab-$env:VERSION.wxs" -ext WixToolset.UI.wixext
 
       - name: Upload MSI installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: msi-installer
           path: wix/DataLab-*.msi
           retention-days: ${{ inputs.artifact-retention-days }}
 
       - name: Upload PyInstaller zip (debug only, not for public release)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: pyinstaller-exe
           path: dist/DataLab-v*_exe.zip
