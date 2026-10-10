@@ -170,10 +170,14 @@ sample names, processing steps, or any other custom information.
 
 When you select "Add metadata..." from the Edit menu, a dialog appears where you can:
 
-- **Metadata key**: Enter the name of the metadata field to add
+- **Metadata key**: Enter the name of the metadata field to add (letters, digits, ``_``, ``.`` and ``-``, e.g. a plugin key such as ``plugin.org.example.my-plugin.gain``)
+- **Known keys**: Pick a key already present on the selected images, or a key expected by the methods of the installed application plugins, to copy it into the metadata key
 - **Value pattern**: Define a pattern for the metadata value using Python format strings
+- **Extraction pattern**: Optionally, extract the value from the formatted text with a Python regular expression: its first group, or the whole match if it has no group, becomes the value
+- **If no match**: Leave images without a match unchanged (default), or report an error
 - **Conversion**: Choose how to store the value (string, float, integer, or boolean)
-- **Preview**: See how the metadata will be added to each selected image
+- **Scale factor**: Multiply numeric values, e.g. ``0.001`` to convert milliseconds to seconds
+- **Preview**: See how the metadata will be added to each selected image, and which images are left unchanged
 
 The value pattern supports the following placeholders:
 
@@ -199,6 +203,9 @@ You can also use format modifiers:
 
 - Flag calibrated images: key=``is_calibrated``, pattern=``true``, conversion=bool
   → Sets ``is_calibrated=True`` for all selected images
+
+- Read exposure times from titles: key=``exposure_time_s``, pattern=``{title}``, extraction=``([\d.]+)\s*ms``, conversion=float, scale factor=``0.001``
+  → Sets ``exposure_time_s=0.005`` on an image titled "Flat 5 ms 01" and leaves "Dark 01" unchanged
 
 Annotations
 -----------

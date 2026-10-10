@@ -31,6 +31,25 @@ class MainSettings(gds.DataSet):
         zip(Conf.color_mode.choices, Conf.color_mode.choices),
         help=_("Color mode for the application"),
     )
+    welcome_on_startup = gds.BoolItem(
+        "",
+        _("Show welcome page when the current panel is empty"),
+        help=_(
+            "The welcome page gathers the main actions to get started "
+            "(create or open data, guided tour, documentation...). It is shown "
+            "at startup and whenever the current signal or image panel is empty."
+        ),
+    )
+    welcome_application_rows = gds.IntItem(
+        _("Welcome page application rows"),
+        default=2,
+        min=1,
+        max=10,
+        help=_(
+            "Maximum number of application tile rows on the welcome page. Other "
+            "applications remain available from the Applications catalog."
+        ),
+    )
     process_isolation_enabled = gds.BoolItem(
         "",
         _("Process isolation"),

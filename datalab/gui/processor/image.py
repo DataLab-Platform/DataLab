@@ -269,11 +269,6 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                 "  • z' = a0 + a1*z + a2*z^2 + ..."
             ),
         )
-        self.register_1_to_1(
-            sipi.transpose,
-            _("Swap X/Y axes"),
-            icon_name="swap_x_y.svg",
-        )
         # Level adjustment
         self.register_1_to_1(
             sipi.normalize,

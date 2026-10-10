@@ -15,6 +15,8 @@ import os
 import os.path as osp
 import re
 import warnings
+from collections.abc import Sequence
+from contextlib import ExitStack
 from typing import TYPE_CHECKING, Any, Generator, Generic, Literal, Type
 
 import guidata.dataset as gds
@@ -80,6 +82,7 @@ from datalab.gui.newobject import (
     extract_creation_parameters,
     insert_creation_parameters,
 )
+from datalab.gui.plugins.applications import get_declared_metadata_keys
 from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
     ProcessingParameters,
@@ -109,6 +112,8 @@ from datalab.utils.qthelpers import (
 from datalab.widgets.textimport import TextImportWizard
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from plotpy.items import CurveItem, LabelItem, MaskedXYImageItem
     from sigima.io.image import ImageIORegistry
     from sigima.io.signal import SignalIORegistry
@@ -129,6 +134,28 @@ METADATA_PASTE_EXCLUSIONS = {
     f"__{CREATION_PARAMETERS_OPTION}",  # Object-specific creation parameters
     f"__{LEGACY_CREATION_PARAMETERS_OPTION}",  # Historical creation parameters
 }
+
+
+def collect_metadata_keys(objs: Sequence[TypeObj]) -> list[tuple[str, str]]:
+    """Return the user-visible scalar metadata keys of objects.
+
+    Args:
+        objs: objects to inspect
+
+    Returns:
+        Sorted ``(key, description)`` pairs, the description showing an example
+         value; internal options, ROIs and analysis results are excluded.
+    """
+    examples: dict[str, object] = {}
+    for obj in objs:
+        for key, value in obj.metadata.items():
+            if key in examples or key.startswith("_") or key == ROI_KEY:
+                continue
+            if GeometryAdapter.match(key, value) or TableAdapter.match(key, value):
+                continue
+            if isinstance(value, (str, bool, int, float, np.integer, np.floating)):
+                examples[key] = value
+    return [(key, _("e.g. %s") % repr(examples[key])) for key in sorted(examples)]
 
 
 def is_plot_item_serializable(item: Any) -> bool:
@@ -350,8 +377,9 @@ class ObjectProp(QW.QWidget):
                     history_items.append(_("Original object"))
                 break
 
-            # Add current processing step
-            func_name = proc_params.func_name.replace("_", " ").title()
+            # Add current processing step (without any plugin namespace)
+            local_name = proc_params.func_name.rsplit(":", 1)[-1]
+            func_name = local_name.replace("_", " ").title()
             history_items.append(func_name)
 
             # Try to find source object
@@ -1577,15 +1605,26 @@ class AddMetadataParam(
     comment=_(
         "Add a new metadata item to the selected objects.<br><br>"
         "The metadata key will be the same for all objects, "
-        "but the value can use a pattern to generate different values.<br>"
+        "but the value can use a pattern to generate different values, "
+        "optionally extracted with a regular expression.<br>"
         "Click the <b>Help</b> button for details on the pattern syntax.<br>"
     ),
 ):
-    """Add metadata parameters"""
+    """Add metadata parameters
 
-    def __init__(self, objs: list[TypeObj] | None = None) -> None:
+    Args:
+        objs: objects receiving the metadata item
+        known_keys: suggested ``(key, description)`` pairs
+    """
+
+    def __init__(
+        self,
+        objs: list[TypeObj] | None = None,
+        known_keys: Sequence[tuple[str, str]] | None = None,
+    ) -> None:
         super().__init__()
         self.__objs = objs or []
+        self.__known_keys = list(known_keys or [])
 
     def on_help_button_click(
         self: AddMetadataParam,
@@ -1636,9 +1675,50 @@ class AddMetadataParam(
                 </tr>
             </table>
             """,
+                "",
+                "<b>Extraction:</b>",
+                """When an extraction pattern (Python regular expression) is set,
+                it is searched in the formatted value: its first group, or the
+                whole match if it has no group, becomes the value. Objects without
+                a match are left unchanged, unless 'If no match' asks to report an
+                error. Numeric values are then multiplied by the scale factor.""",
+                "",
+                """
+            <table border="1" cellspacing="0" cellpadding="4">
+                <tr><th>Pattern</th><th>Extraction</th><th>Conversion</th>
+                    <th>Scale</th><th>Result</th></tr>
+                <tr>
+                    <td>{title}</td>
+                    <td>([\\d.]+)\\s*ms</td>
+                    <td>Float</td>
+                    <td>0.001</td>
+                    <td>'Flat 5 ms 01' &rarr; 0.005<br>'Dark 01' &rarr; unchanged</td>
+                </tr>
+                <tr>
+                    <td>{title}</td>
+                    <td>shot\\s*(\\d+)</td>
+                    <td>Integer</td>
+                    <td>1</td>
+                    <td>'CH1 shot 042' &rarr; 42</td>
+                </tr>
+            </table>
+            """,
             ]
         )
         NonModalInfoDialog(parent, _("Pattern help"), text).show()
+
+    def get_known_key_choices(self, _item=None, _value=None):
+        """Return the suggested metadata keys."""
+        return [("", _("Select a key..."), None)] + [
+            (key, f"{key} — {description}" if description else key, None)
+            for key, description in self.__known_keys
+        ]
+
+    def on_known_key_changed(self, _item=None, value=None) -> None:
+        """Copy the selected suggestion into the metadata key."""
+        if value:
+            self.metadata_key = value
+        self.update_preview()
 
     def get_conversion_choices(self, _item=None, _value=None):
         """Return list of available conversion choices."""
@@ -1651,41 +1731,72 @@ class AddMetadataParam(
 
     def build_values(
         self, objs: list[TypeObj] | None = None
-    ) -> list[str | float | int | bool]:
+    ) -> list[str | float | int | bool | None]:
         """Build values according to current parameters.
 
+        Returns:
+            One value per object; ``None`` for objects left unchanged because
+             the extraction pattern does not match.
+
         Raises:
-            ValueError: If a value cannot be converted to the target type.
+            ValueError: If the extraction pattern is invalid or does not match
+             (when asked to report it), or if a value cannot be converted.
         """
         objs = objs or self.__objs
         # Generate values using the pattern
         raw_values = format_basenames(objs, self.value_pattern)
+        regex = None
+        if self.extraction_pattern:
+            try:
+                regex = re.compile(self.extraction_pattern)
+            except re.error as exc:
+                raise ValueError(f"Invalid extraction pattern: {exc}") from exc
 
-        # Convert values according to the selected conversion type
-        converted_values = []
+        converted_values: list[str | float | int | bool | None] = []
         for i, value_str in enumerate(raw_values, start=1):
-            if self.conversion == "string":
-                converted_values.append(value_str)
-            elif self.conversion == "float":
-                try:
-                    converted_values.append(float(value_str))
-                except ValueError as exc:
-                    raise ValueError(
-                        f"Cannot convert value at index {i} to float: '{value_str}'"
-                    ) from exc
-            elif self.conversion == "int":
-                try:
-                    converted_values.append(int(value_str))
-                except ValueError as exc:
-                    raise ValueError(
-                        f"Cannot convert value at index {i} to integer: '{value_str}'"
-                    ) from exc
-            elif self.conversion == "bool":
-                # Convert to boolean: "true", "1", "yes" -> True, others -> False
-                lower_val = value_str.lower()
-                converted_values.append(lower_val in ("true", "1", "yes", "on"))
-
+            if regex is not None:
+                match = regex.search(value_str)
+                extracted = None
+                if match is not None:
+                    extracted = match.group(1) if regex.groups else match.group(0)
+                if extracted is None:
+                    if self.if_no_match == "error":
+                        raise ValueError(
+                            f"No match for the value at index {i}: '{value_str}'"
+                        )
+                    converted_values.append(None)
+                    continue
+                value_str = extracted
+            converted_values.append(self.__convert(i, value_str))
         return converted_values
+
+    def __convert(self, index: int, value_str: str) -> str | float | int | bool:
+        """Convert one formatted value according to the selected conversion."""
+        if self.conversion == "float":
+            try:
+                return float(value_str) * self.scale
+            except ValueError as exc:
+                raise ValueError(
+                    f"Cannot convert value at index {index} to float: '{value_str}'"
+                ) from exc
+        if self.conversion == "int":
+            try:
+                value = int(value_str)
+            except ValueError as exc:
+                raise ValueError(
+                    f"Cannot convert value at index {index} to integer: '{value_str}'"
+                ) from exc
+            if self.scale == 1.0:
+                return value
+            scaled = value * self.scale
+            if not float(scaled).is_integer():
+                raise ValueError(
+                    f"Scaled value at index {index} is not an integer: {scaled}"
+                )
+            return int(scaled)
+        if self.conversion == "bool":
+            return value_str.lower() in ("true", "1", "yes", "on")
+        return value_str
 
     def update_preview(self, _item=None, _value=None) -> None:
         """Update preview."""
@@ -1699,7 +1810,10 @@ class AddMetadataParam(
                 except (ValueError, KeyError):
                     # Fallback to simple index for objects not yet in panel
                     obj_id = str(i)
-                preview_lines.append(f"{obj_id}: {self.metadata_key} = {value!r}")
+                if value is None:
+                    preview_lines.append(f"{obj_id}: " + _("unchanged"))
+                else:
+                    preview_lines.append(f"{obj_id}: {self.metadata_key} = {value!r}")
             self.preview = "\n".join(preview_lines)
         except ValueError as exc:
             # Handle conversion errors
@@ -1712,9 +1826,16 @@ class AddMetadataParam(
         _("Metadata key"),
         default="custom_key",
         notempty=True,
-        regexp=r"^[a-zA-Z_][a-zA-Z0-9_]*$",
+        regexp=r"^[a-zA-Z_][a-zA-Z0-9_.\-]*$",
         help=_("The key name for the metadata item"),
     ).set_prop("display", callback=update_preview)
+
+    known_key = gds.ChoiceItem(
+        _("Known keys"),
+        get_known_key_choices,
+        default="",
+        help=_("Copy a key found on the selected objects into the metadata key"),
+    ).set_prop("display", callback=on_known_key_changed)
 
     value_pattern = gds.StringItem(
         _("Value pattern"),
@@ -1726,9 +1847,38 @@ class AddMetadataParam(
         _("Help"), on_help_button_click, "MessageBoxInformation"
     ).set_pos(col=1)
 
+    extraction_pattern = gds.StringItem(
+        _("Extraction pattern"),
+        default="",
+        help=_(
+            "Optional regular expression searched in the formatted value: "
+            "its first group, or the whole match, becomes the value"
+        ),
+    ).set_prop("display", callback=update_preview)
+
+    if_no_match = gds.ChoiceItem(
+        _("If no match"),
+        [
+            ("skip", _("Leave the object unchanged")),
+            ("error", _("Report an error")),
+        ],
+        default="skip",
+    ).set_prop("display", callback=update_preview)
+
+    _prop_conversion = gds.GetAttrProp("conversion")
     conversion = gds.ChoiceItem(
         _("Conversion"), get_conversion_choices, default="string"
-    ).set_prop("display", callback=update_preview)
+    ).set_prop("display", store=_prop_conversion, callback=update_preview)
+
+    scale = gds.FloatItem(
+        _("Scale factor"),
+        default=1.0,
+        help=_("Multiplies numeric values, e.g. 0.001 to convert ms to s"),
+    ).set_prop(
+        "display",
+        active=gds.FuncProp(_prop_conversion, lambda value: value in ("float", "int")),
+        callback=update_preview,
+    )
 
     preview = gds.TextItem(_("Preview"), default="", regexp=r"^(?!Invalid).*").set_prop(
         "display", readonly=True
@@ -1852,18 +2002,29 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
              If False, regenerate only UUIDs that conflict with existing
              objects (object import).
         """
-        with reader.group(self.H5_PREFIX):
-            for name in reader.h5.get(self.H5_PREFIX, []):
-                with reader.group(name):
-                    group = self.add_group("")
-                    with reader.group("title"):
-                        group.title = reader.read_str()
-                    for obj_name in reader.h5.get(f"{self.H5_PREFIX}/{name}", []):
-                        obj = self.deserialize_object_from_hdf5(
-                            reader, obj_name, reset_all
-                        )
-                        self.add_object(obj, get_uuid(group), set_current=False)
-                    self.selection_changed()
+        objects_added = False
+        signals_blocked = self.blockSignals(True)
+        try:
+            with reader.group(self.H5_PREFIX):
+                for name in reader.h5.get(self.H5_PREFIX, []):
+                    with reader.group(name):
+                        group = self.add_group("")
+                        with reader.group("title"):
+                            group.title = reader.read_str()
+                        objects: list[TypeObj] = []
+                        for obj_name in reader.h5.get(f"{self.H5_PREFIX}/{name}", []):
+                            obj = self.deserialize_object_from_hdf5(
+                                reader, obj_name, reset_all
+                            )
+                            objects.append(obj)
+                        self._add_objects(objects, get_uuid(group), set_current=False)
+                        objects_added = objects_added or bool(objects)
+        finally:
+            self.blockSignals(signals_blocked)
+            if objects_added:
+                self.SIG_OBJECT_ADDED.emit()
+        if not objects_added:
+            self.selection_changed()
 
     def __len__(self) -> int:
         """Return number of objects"""
@@ -1900,13 +2061,57 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
              the object is added to the current group.
             set_current: if True, set the added object as current
         """
-        if obj in self.objmodel:
-            # Prevent adding the same object twice
-            raise ValueError(
-                f"Object {hex(id(obj))} already in panel. "
-                f"The same object cannot be added twice: "
-                f"please use a copy of the object."
-            )
+        self._add_object(obj, group_id, set_current)
+
+    @qt_try_except()
+    def add_objects(
+        self,
+        objects: Sequence[TypeObj],
+        group_id: str | None = None,
+        set_current: bool = True,
+    ) -> None:
+        """Add multiple objects atomically.
+
+        Args:
+            objects: Objects to add, in insertion order
+            group_id: Group ID to which the objects belong. If None or empty,
+             the objects are added to the current group.
+            set_current: If True, set the last added object as current
+        """
+        self._add_objects(objects, group_id, set_current)
+
+    def _add_object(
+        self,
+        obj: TypeObj,
+        group_id: str | None = None,
+        set_current: bool = True,
+    ) -> None:
+        """Add an object while propagating errors to transactional callers."""
+        self._add_objects((obj,), group_id, set_current)
+
+    def _add_objects(
+        self,
+        objects: Sequence[TypeObj],
+        group_id: str | None = None,
+        set_current: bool = True,
+    ) -> None:
+        """Add objects atomically while propagating transactional errors."""
+        objects = tuple(objects)
+        if not objects:
+            return
+        object_ids: set[str] = set()
+        for obj in objects:
+            obj_uuid = get_uuid(obj)
+            if obj in self.objmodel or obj_uuid in object_ids:
+                raise ValueError(
+                    f"Object {hex(id(obj))} already in panel. "
+                    f"The same object cannot be added twice: "
+                    f"please use a copy of the object."
+                )
+            object_ids.add(obj_uuid)
+            obj.check_data()
+
+        created_group: ObjectGroup | None = None
         if group_id is None or group_id == "":
             group_id = self.objview.get_current_group_id()
             if group_id is None:
@@ -1914,30 +2119,86 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if groups:
                     group_id = get_uuid(groups[0])
                 else:
-                    group_id = get_uuid(self.add_group(""))
-        obj.check_data()
-        self.objmodel.add_object(obj, group_id)
+                    created_group = self.add_group("")
+                    group_id = get_uuid(created_group)
+        else:
+            self.objmodel.get_group(group_id)
 
-        # Mark this object as newly created to show Creation tab on first selection
-        # BUT: Don't overwrite if this object is already marked as freshly processed
-        # or has fresh analysis results (those take precedence)
+        current_item_id = self.objview.get_current_item_id()
+        transient_attributes = (
+            "newly_created_obj_uuid",
+            "fresh_processing_obj_uuid",
+            "fresh_analysis_obj_uuid",
+        )
+        transient_state = {
+            name: getattr(self.objprop, name) for name in transient_attributes
+        }
+        added_to_model = False
+        try:
+            self.objmodel.add_objects(objects, group_id)
+            added_to_model = True
+
+            for obj in objects:
+                # Don't overwrite fresh processing or analysis state: those tabs take
+                # precedence over the Creation tab on first selection.
+                obj_uuid = get_uuid(obj)
+                if obj_uuid not in (
+                    self.objprop.fresh_processing_obj_uuid,
+                    self.objprop.fresh_analysis_obj_uuid,
+                ):
+                    self.objprop.mark_as_newly_created(obj)
+
+            self.objview.add_object_items(
+                objects,
+                group_id,
+                set_current=set_current,
+            )
+            self.objview.update_tree()
+
+            # Emit signal to ensure that the data panel is shown in the main window and
+            # that the plot is updated (trigger a refresh of the plot)
+            self.SIG_OBJECT_ADDED.emit()
+        except Exception:
+            if added_to_model:
+                for obj in reversed(objects):
+                    self._remove_added_object(obj)
+            if created_group is not None:
+                self.objview.remove_item(get_uuid(created_group), refresh=False)
+                if created_group in self.objmodel.get_groups():
+                    self.objmodel.remove_group(created_group)
+            for name, value in transient_state.items():
+                setattr(self.objprop, name, value)
+            signals_blocked = self.objview.blockSignals(True)
+            try:
+                if current_item_id is None:
+                    self.objview.clearSelection()
+                    self.objview.setCurrentItem(None)
+                elif self.objview.get_item_from_id(current_item_id) is not None:
+                    self.objview.set_current_item_id(current_item_id)
+            finally:
+                self.objview.blockSignals(signals_blocked)
+            self.objview.update_tree()
+            raise
+
+    def _remove_added_object(self, obj: TypeObj) -> None:
+        """Remove a specifically identified object after a failed transaction."""
         obj_uuid = get_uuid(obj)
-        if obj_uuid not in (
-            self.objprop.fresh_processing_obj_uuid,
-            self.objprop.fresh_analysis_obj_uuid,
+        with ExitStack() as cleanup:
+            cleanup.callback(self._clear_added_object_state, obj_uuid)
+            if obj in self.objmodel:
+                cleanup.callback(self.objmodel.remove_object, obj)
+            cleanup.callback(self.objview.remove_item, obj_uuid, refresh=False)
+            cleanup.callback(self.plothandler.remove_item, obj_uuid)
+
+    def _clear_added_object_state(self, obj_uuid: str) -> None:
+        """Clear transient property-panel references to a removed object."""
+        for attr_name in (
+            "newly_created_obj_uuid",
+            "fresh_processing_obj_uuid",
+            "fresh_analysis_obj_uuid",
         ):
-            self.objprop.mark_as_newly_created(obj)
-
-        # Block signals to avoid updating the plot (unnecessary refresh)
-        self.objview.blockSignals(True)
-        self.objview.add_object_item(obj, group_id, set_current=set_current)
-        self.objview.blockSignals(False)
-
-        # Emit signal to ensure that the data panel is shown in the main window and
-        # that the plot is updated (trigger a refresh of the plot)
-        self.SIG_OBJECT_ADDED.emit()
-
-        self.objview.update_tree()
+            if getattr(self.objprop, attr_name) == obj_uuid:
+                setattr(self.objprop, attr_name, None)
 
     def set_object(self, obj: TypeObj) -> None:
         """Update an existing object in-place with data from ``obj``.
@@ -2082,9 +2343,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             Created group object
         """
         group = self.objmodel.add_group(title)
-        self.objview.add_group_item(group)
-        if select:
-            self.objview.select_groups([group])
+        try:
+            self.objview.add_group_item(group)
+            if select:
+                self.objview.select_groups([group])
+        except Exception:
+            self.objview.remove_item(get_uuid(group), refresh=False)
+            self.objmodel.remove_group(group)
+            raise
         return group
 
     def __duplicate_individual_obj(
@@ -2218,6 +2484,27 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.refresh_plot(
             "selected", update_items=True, only_visible=False, only_existing=True
         )
+        if sel_objects:
+            self.SIG_OBJECT_MODIFIED.emit()
+
+    def get_known_metadata_keys(self, objs: Sequence[TypeObj]) -> list[tuple[str, str]]:
+        """Return the metadata keys suggested by the Add metadata dialog.
+
+        Args:
+            objs: selected objects
+
+        Returns:
+            ``(key, description)`` pairs: the keys found on the objects, then the
+             keys expected by the methods of application plugins
+        """
+        keys = collect_metadata_keys(objs)
+        found = {key for key, _description in keys}
+        keys.extend(
+            (key, description)
+            for key, description in get_declared_metadata_keys(self.PANEL_STR_ID)
+            if key not in found
+        )
+        return keys
 
     def add_metadata(self, param: AddMetadataParam | None = None) -> None:
         """Add metadata item to selected object(s)
@@ -2230,10 +2517,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             return
 
         if param is None:
-            param = AddMetadataParam(sel_objects)
+            param = AddMetadataParam(
+                sel_objects, self.get_known_metadata_keys(sel_objects)
+            )
             # Restore settings from config
             saved_param = Conf.add_metadata_settings.get(AddMetadataParam())
             update_dataset(param, saved_param)
+            param.known_key = ""
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=gds.DataItemValidationWarning)
                 if not param.edit(parent=self.parentWidget(), wordwrap=False):
@@ -2253,14 +2543,19 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Build values for all selected objects
         values = param.build_values(sel_objects)
 
-        # Add metadata to each object
+        # Add metadata to each object, except those left unchanged by extraction
+        modified = False
         for obj, value in zip(sel_objects, values):
-            obj.metadata[param.metadata_key] = value
+            if value is not None:
+                obj.metadata[param.metadata_key] = value
+                modified = True
 
         # Refresh the plot to update any changes
         self.refresh_plot(
             "selected", update_items=True, only_visible=False, only_existing=True
         )
+        if modified:
+            self.SIG_OBJECT_MODIFIED.emit()
 
     def copy_roi(self, roi_data=None) -> None:
         """Copy regions of interest
@@ -2438,6 +2733,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             self.refresh_plot(
                 "selected", update_items=True, only_visible=False, only_existing=True
             )
+        if sel_objs:
+            self.SIG_OBJECT_MODIFIED.emit()
 
     def add_annotations_from_items(
         self, items: list, refresh_plot: bool = True

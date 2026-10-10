@@ -5,13 +5,17 @@
 
 from PyInstaller.utils.hooks import collect_submodules, collect_data_files, copy_metadata
 all_hidden_imports = collect_submodules('datalab')
-datas = collect_data_files('datalab') + [('datalab\\plugins', 'datalab\\plugins')]
+# Plugins installed from a file may import any Sigima module
+all_hidden_imports += collect_submodules('sigima', filter=lambda name: '.tests' not in name)
+datas = collect_data_files('datalab') + [('datalab\\plugins\\builtin', 'datalab\\plugins\\builtin')]
 # Macro templates are read with ``pkgutil.get_data`` and must exist on disk,
 # not only inside the PYZ archive (``collect_data_files`` skips ``.py`` files):
 datas += [('datalab\\gui\\macros_templates', 'datalab\\gui\\macros_templates')]
 datas += collect_data_files('guidata') + collect_data_files('plotpy')
 datas += collect_data_files('sigima') + collect_data_files('sigimax')
 datas += copy_metadata('imageio')
+# Installed plugin wheels declare their requirements on these distributions
+datas += copy_metadata('datalab-platform', recursive=True)
 
 a = Analysis(
     ['datalab\\start.pyw'],

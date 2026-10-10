@@ -70,6 +70,9 @@ datalab = "datalab.app:run"
 datalab-demo = "datalab.tests.scenarios.demo:run"
 datalab-tests = "datalab.tests:run"
 
+[project.scripts]
+datalab-plugin = "datalab.plugins.generator:main"
+
 [project.optional-dependencies]
 qt = ["PyQt5 >= 5.15.6"]
 opencv = ["opencv-python-headless >= 4.8.1.78"]

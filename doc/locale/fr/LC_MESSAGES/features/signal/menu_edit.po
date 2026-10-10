@@ -137,17 +137,29 @@ msgstr "Boîte de dialogue Ajouter des métadonnées."
 msgid "When you select \"Add metadata...\" from the Edit menu, a dialog appears where you can:"
 msgstr "Lorsque vous sélectionnez \"Ajouter des métadonnées...\" dans le menu Édition, une boîte de dialogue apparaît où vous pouvez :"
 
-msgid "**Metadata key**: Enter the name of the metadata field to add"
-msgstr "**Clé de métadonnées** : Entrez le nom du champ de métadonnées à ajouter"
+msgid "**Metadata key**: Enter the name of the metadata field to add (letters, digits, ``_``, ``.`` and ``-``, e.g. a plugin key such as ``plugin.org.example.my-plugin.gain``)"
+msgstr "**Clé de métadonnée** : Saisir le nom du champ de métadonnée à ajouter (lettres, chiffres, ``_``, ``.`` et ``-``, par exemple une clé de plugin telle que ``plugin.org.example.my-plugin.gain``)"
+
+msgid "**Known keys**: Pick a key already present on the selected signals, or a key expected by the methods of the installed application plugins, to copy it into the metadata key"
+msgstr "**Clés connues** : Choisir une clé déjà présente sur les signaux sélectionnés, ou une clé attendue par les méthodes des plugins d'application installés, pour la copier dans la clé de métadonnée"
 
 msgid "**Value pattern**: Define a pattern for the metadata value using Python format strings"
 msgstr "**Modèle de valeur** : Définissez un modèle pour la valeur des métadonnées en utilisant des chaînes de format Python"
 
+msgid "**Extraction pattern**: Optionally, extract the value from the formatted text with a Python regular expression: its first group, or the whole match if it has no group, becomes the value"
+msgstr "**Motif d'extraction** : Facultativement, extraire la valeur du texte formaté avec une expression régulière Python : son premier groupe, ou toute la correspondance si elle n'a pas de groupe, devient la valeur"
+
+msgid "**If no match**: Leave signals without a match unchanged (default), or report an error"
+msgstr "**Sans correspondance** : Laisser inchangés les signaux sans correspondance (par défaut), ou signaler une erreur"
+
 msgid "**Conversion**: Choose how to store the value (string, float, integer, or boolean)"
 msgstr "**Conversion** : Choisissez comment stocker la valeur (chaîne, flottant, entier ou booléen)"
 
-msgid "**Preview**: See how the metadata will be added to each selected signal"
-msgstr "**Aperçu** : Voir comment les métadonnées seront ajoutées à chaque signal sélectionné."
+msgid "**Scale factor**: Multiply numeric values, e.g. ``0.001`` to convert milliseconds to seconds"
+msgstr "**Facteur d'échelle** : Multiplier les valeurs numériques, par exemple ``0.001`` pour convertir des millisecondes en secondes"
+
+msgid "**Preview**: See how the metadata will be added to each selected signal, and which signals are left unchanged"
+msgstr "**Aperçu** : Voir comment les métadonnées seront ajoutées à chaque signal sélectionné, et quels signaux restent inchangés"
 
 msgid "The value pattern supports the following placeholders:"
 msgstr "Le modèle de valeur prend en charge les espaces réservés suivants :"
@@ -200,6 +212,10 @@ msgstr "Ajouter la température de l'échantillon : clé=``temperature``, modèl
 
 msgid "Mark processed signals: key=``is_processed``, pattern=``true``, conversion=bool → Sets ``is_processed=True`` for all selected signals"
 msgstr "Marquer les signaux traités : clé=``is_processed``, modèle=``true``, conversion=bool → Définit ``is_processed=True`` pour tous les signaux sélectionnés"
+
+#, python-brace-format
+msgid "Number shots from their titles: key=``shot``, pattern=``{title}``, extraction=``shot\\s*(\\d+)``, conversion=integer → Sets ``shot=42`` on a signal titled \"CH1 shot 042\""
+msgstr "Numéroter des tirs à partir de leurs titres : clé=``shot``, modèle=``{title}``, extraction=``shot\\s*(\\d+)``, conversion=entier → Définit ``shot=42`` sur un signal intitulé « CH1 shot 042 »"
 
 msgid "Annotations"
 msgstr "Annotations"

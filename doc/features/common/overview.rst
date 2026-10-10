@@ -28,8 +28,28 @@ self-explanatory. The main window is divided into two main areas:
     DataLab main window, at startup.
 
 Additional panels are available as dockable widgets, and may be shown or hidden
-from the "View" menu: the :ref:`historypanel`, the Macro panel (see
-:ref:`about_macros`) and the :ref:`ai_assistant`.
+from the "View" menu: the :ref:`welcome_page`, the :ref:`historypanel`, the Macro
+panel (see :ref:`about_macros`) and the :ref:`ai_assistant`.
+
+.. _welcome_page:
+
+Welcome page
+^^^^^^^^^^^^
+
+A **Welcome** page is shown next to the signal and image views when DataLab starts, and whenever the current signal or image panel is empty (for example after switching to an empty panel or deleting its last object). It gathers the main actions to get started:
+
+- create a signal or an image from a template, open signal or image files,
+  browse an HDF5 file, open a previously saved HDF5 workspace, or import text
+  data (CSV, TSV, ...) with the import wizard. When needed, a menu lets you choose
+  between signals and images;
+- ask the :ref:`ai_assistant`, take the guided tour, run the demo, read the
+  online documentation, or browse the release notes of the running version.
+
+When application plugins are installed, an **Applications** section at the top of the page shows their tiles: clicking the main tile of an application opens its page in the **Applications** catalog, or starts the main action provided by the plugin. An application may provide other tiles, for example to open an example directly: they are shown next to its main tile when the section has room for them, and otherwise move to the menu of the main tile. This menu, opened from the "…" button of the main tile or by right-clicking it, also lets you pin the application to the top of the section or hide it from the welcome page. Pinned applications come first, then recently used ones, then the others by name. The section is limited to two rows of tiles by default (this number may be changed in the :ref:`settings`): when more applications are installed, the last tile gives the number of applications left out and opens the catalog. The "Browse all applications..." button also opens the catalog, where a search field filters applications by name or description, and where the "Show on welcome page" and "Pin to the welcome page" check boxes of each application change the same preferences (see :ref:`about_plugins`).
+
+On the page of an application, the methods are listed one below the other, followed by the tools and datasets of the application, if any: clicking a title opens its section and closes the one previously open. The colored dot before each method tells whether the current selection can be analyzed, and its tooltip gives the reason. The open method presents the inputs it expects and this status in detail. When metadata are missing, the status points to "Edit > Metadata > Add metadata...", and it is updated as soon as objects are modified. "Run on selection..." starts the method, and asks you to assign the selected objects to its inputs only when needed. The examples designed for a method are listed below it: "Try with this example" opens the example and runs the method with suitable parameters. The vertical strip between the application list and the page hides the list, or shows it again: the window shrinks or grows accordingly, and DataLab remembers this choice.
+
+The Welcome page is a regular dockable panel: as soon as a signal or an image is created or opened, the corresponding view is brought to the front, and the Welcome page remains available as a tab. It may be closed like any other panel, and reopened at any time from the "Welcome page" entry of the "?" (Help) menu or from the "View" menu; it is also reopened automatically when the current panel becomes empty. The "Show welcome page when the current panel is empty" check box, at the bottom of the page, controls this automatic display, including at startup (this option is also available in the :ref:`settings`).
 
 .. _command_palette:
 

@@ -69,6 +69,7 @@ class ExecutionService:
         command_id: str | None,
         place: Callable[[SignalObj | ImageObj], str | None],
         preview: CompOut | None = None,
+        feature_id: str | None = None,
     ) -> SignalObj | ImageObj | str:
         """Run one 1-to-1 execution in commit mode.
 
@@ -81,6 +82,7 @@ class ExecutionService:
             command_id: Identifier shared by the executions of one command.
             place: Returns the group of the result (called before insertion).
             preview: Accepted preview result to reuse instead of computing.
+            feature_id: Stable feature identifier stored in processing metadata.
 
         Returns:
             The inserted result, :data:`CANCELLED` or :data:`SKIPPED`.
@@ -108,11 +110,11 @@ class ExecutionService:
         patch_title_with_ids(new_obj, [obj], get_short_id)
         processor._handle_keep_results(new_obj)  # pylint: disable=protected-access
         pp = ProcessingParameters(
-            func_name=func.__name__,
+            func_name=processor.get_feature_id(func, feature_id),
             pattern="1-to-1",
             param=param,
             source_uuid=get_uuid(obj),
-            plugin_origin=processor._get_plugin_origin_for(func),  # pylint: disable=protected-access
+            plugin_origin=processor._get_plugin_origin_for(func, feature_id),  # pylint: disable=protected-access
         )
         insert_processing_parameters(new_obj, pp)
         processor.panel.objprop.mark_as_freshly_processed(new_obj)

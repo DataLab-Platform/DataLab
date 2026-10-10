@@ -4,9 +4,11 @@
 
 from __future__ import annotations
 
+from collections.abc import Collection
 from datetime import datetime
 
 import pytest
+from guidata.configtools import get_icon
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
@@ -21,16 +23,16 @@ from datalab.config.persistence import (
     remove_persisted_option,
 )
 from datalab.env import execenv
-from datalab.gui import pluginconfig
 from datalab.gui.actionhandler import ActionCategory
-from datalab.gui.pluginconfig import (
+from datalab.gui.plugins import config as pluginconfig
+from datalab.gui.plugins.config import (
     ExpandableTextWidget,
     FailedPluginInfoWidget,
     PluginConfigDialog,
     PluginInfoWidget,
     PluginState,
 )
-from datalab.plugins import FailedPluginInfo
+from datalab.plugins import FailedPluginInfo, PluginCapability
 from datalab.tests import datalab_test_app_context
 from datalab.tests.features.plugins.plugin_test_dataset import (
     create_plugin_file,
@@ -39,7 +41,13 @@ from datalab.tests.features.plugins.plugin_test_dataset import (
 )
 
 
-def _make_dummy_plugin_class(name: str, description: str, filepath: str | None = None):
+def _make_dummy_plugin_class(
+    name: str,
+    description: str,
+    filepath: str | None = None,
+    capabilities: Collection[PluginCapability] = (),
+    icon: str | None = None,
+):
     """Create a minimal plugin class for UI-only widget tests."""
 
     class DummyPlugin:
@@ -52,7 +60,8 @@ def _make_dummy_plugin_class(name: str, description: str, filepath: str | None =
             "name": name,
             "version": "1.0.0",
             "description": description,
-            "icon": None,
+            "icon": icon,
+            "capabilities": capabilities,
         },
     )()
     if filepath is not None:
@@ -177,6 +186,9 @@ def test_plugin_enable_disable_config():
                 Conf.plugins_enabled_list.set([plugin_1_name])
                 win.reload_plugins()
                 QW.QApplication.processEvents()
+                assert Conf.plugins_enabled_list.get(None) == [
+                    "datalab_test_plugin_1.TestPluginOne"
+                ]
 
                 dialog2 = PluginConfigDialog(win)
                 _show_dialog(dialog2)
@@ -239,6 +251,26 @@ def test_plugin_enable_disable_config():
                     widget.checkbox.isChecked() for widget in dialog2.plugin_widgets
                 )
                 _close_dialog(dialog2)
+    finally:
+        if had_config:
+            Conf.plugins_enabled_list.set(original_enabled_list)
+        else:
+            remove_persisted_option(Conf, "plugins_enabled_list")
+
+
+def test_plugin_config_preserves_unavailable_enabled_ids():
+    """Saving the dialog keeps activation state for unavailable plugins."""
+    unavailable_plugin_id = "org.example.temporarily-unavailable"
+    had_config = has_persisted_option(Conf, "plugins_enabled_list")
+    original_enabled_list = Conf.plugins_enabled_list.get(None)
+
+    try:
+        Conf.plugins_enabled_list.set([unavailable_plugin_id])
+        with datalab_test_app_context(console=False) as win:
+            dialog = PluginConfigDialog(win)
+            dialog._save_configuration()  # pylint: disable=protected-access
+
+        assert unavailable_plugin_id in Conf.plugins_enabled_list.get(None)
     finally:
         if had_config:
             Conf.plugins_enabled_list.set(original_enabled_list)
@@ -567,7 +599,6 @@ def test_plugin_settings_tab_exposes_global_toggle_and_warning_option():
             assert dialog.tabs.tabText(1) == "Plugin settings"
             assert dialog.global_toggle_button is not None
             assert dialog.global_toggle_button.text() == "Disable plugins globally"
-            assert dialog.global_toggle_button.minimumHeight() == 24
             assert not dialog.global_toggle_button.icon().isNull()
             assert dialog.v020_warning_checkbox is not None
             assert dialog.v020_warning_checkbox.isChecked() is False
@@ -815,6 +846,56 @@ def test_plugin_widget_can_open_plugin_file_and_show_in_folder(monkeypatch):
         QW.QApplication.processEvents()
 
 
+def test_plugin_widget_displays_declared_capabilities():
+    """Plugin capabilities should be visible in a stable display order."""
+    with datalab_test_app_context(console=False):
+        widget = PluginInfoWidget(
+            _make_dummy_plugin_class(
+                "Application Plugin",
+                "Domain-specific application plugin.",
+                capabilities=(
+                    PluginCapability.PROCESSING,
+                    PluginCapability.APPLICATION,
+                ),
+            ),
+            enabled=True,
+            state=PluginState.ENABLED,
+        )
+
+        assert widget.capabilities_label is not None
+        assert widget.capabilities_label.text() == "Processing, Application"
+        assert widget.capabilities_label.wordWrap()
+
+        widget.close()
+        widget.deleteLater()
+        QW.QApplication.processEvents()
+
+
+def test_plugin_widget_displays_plugin_icon():
+    """Plugin rows show the declared plugin icon, or the generic one."""
+    with datalab_test_app_context(console=False):
+        widgets = [
+            PluginInfoWidget(
+                _make_dummy_plugin_class("Plugin", "Plugin with icon.", icon=icon),
+                enabled=True,
+                state=PluginState.ENABLED,
+            )
+            for icon in ("datalab:data/icons/analysis.svg", None)
+        ]
+        size = pluginconfig.PLUGIN_ICON_SIZE
+        declared, generic = (widget.icon_label.pixmap().toImage() for widget in widgets)
+        expected = get_icon("libre-gui-plugin.svg").pixmap(size, size).toImage()
+
+        assert not declared.isNull()
+        assert declared != expected
+        assert generic == expected
+
+        for widget in widgets:
+            widget.close()
+            widget.deleteLater()
+        QW.QApplication.processEvents()
+
+
 def test_plugin_very_long_description_scrolls_only_when_expanded():
     """Very long descriptions should use an internal scrollbar only when expanded."""
     description = " ".join(["Very long plugin description for scrollbar testing."] * 80)
@@ -855,6 +936,7 @@ def test_failed_plugin_description_uses_same_expand_collapse_behavior():
         name="bad_plugin.py",
         filepath="C:/plugins/bad_plugin.py",
         traceback=traceback_text,
+        source="entry point 'bad-plugin' (bad_plugin:BadPlugin)",
     )
 
     with datalab_test_app_context(console=False):
@@ -868,6 +950,7 @@ def test_failed_plugin_description_uses_same_expand_collapse_behavior():
         collapsed_height = scroll_area.height()
         assert widget.description_widget.toggle_button.isVisible()
         assert not widget.description_widget.is_expanded()
+        assert failed_info.source in widget.desc_label.toPlainText()
         assert scroll_area.verticalScrollBarPolicy() == QC.Qt.ScrollBarAlwaysOff
 
         widget.description_widget.set_expanded(True)

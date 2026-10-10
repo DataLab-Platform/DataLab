@@ -44,6 +44,7 @@ from sigimax.config import (
 
 from datalab import __docurl__, __homeurl__, __supporturl__, __version__
 from datalab.config.appinfo import APP_NAME, DATAPATH
+from datalab.plugins.catalog import DEFAULT_CATALOG_URL
 
 if TYPE_CHECKING:
     from datalab.config.persistence import OptionStore
@@ -128,7 +129,7 @@ class DataLabOptions(SigimaXOptions):
             "plugins_enabled_list",
             category="main",
             default=None,
-            description="Enabled plugin names (None = all, [] = none, or a list).",
+            description="Enabled plugin IDs (None = all, [] = none, or a list).",
         )
         self.plugins_path = TypedOptionField(
             self,
@@ -147,13 +148,64 @@ class DataLabOptions(SigimaXOptions):
             expected_type=list,
             description="List of extra plugin directories.",
         )
-        self.tour_enabled = TypedOptionField(
+        self.plugins_catalog_url = TypedOptionField(
             self,
-            "tour_enabled",
+            "plugins_catalog_url",
+            category="main",
+            default=DEFAULT_CATALOG_URL,
+            expected_type=str,
+            description="URL of the plugin catalog (empty to disable it).",
+        )
+        self.welcome_on_startup = TypedOptionField(
+            self,
+            "welcome_on_startup",
             category="main",
             default=True,
             expected_type=bool,
-            description="If True, offer the guided tour on first startup.",
+            description=(
+                "If True, show the welcome page at startup and whenever the "
+                "current signal or image panel is empty."
+            ),
+        )
+        self.welcome_application_rows = TypedOptionField(
+            self,
+            "welcome_application_rows",
+            category="main",
+            default=2,
+            expected_type=int,
+            description="Maximum number of application tile rows on the welcome page.",
+        )
+        self.welcome_pinned_applications = TypedOptionField(
+            self,
+            "welcome_pinned_applications",
+            category="main",
+            default=[],
+            expected_type=list,
+            description="IDs of the applications pinned on the welcome page.",
+        )
+        self.welcome_hidden_applications = TypedOptionField(
+            self,
+            "welcome_hidden_applications",
+            category="main",
+            default=[],
+            expected_type=list,
+            description="IDs of the applications hidden from the welcome page.",
+        )
+        self.welcome_recent_applications = TypedOptionField(
+            self,
+            "welcome_recent_applications",
+            category="main",
+            default=[],
+            expected_type=list,
+            description="IDs of the recently used applications, most recent first.",
+        )
+        self.applications_list_collapsed = TypedOptionField(
+            self,
+            "applications_list_collapsed",
+            category="main",
+            default=False,
+            expected_type=bool,
+            description="If True, hide the application list of the catalog.",
         )
         self.v020_plugins_warning_ignore = TypedOptionField(
             self,
