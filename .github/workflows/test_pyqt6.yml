@@ -52,7 +52,13 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install ruff pytest httpx
         pip install PyQt6
-        if [ "${{ github.base_ref || github.ref_name }}" = "develop" ]; then
+        # PRs select by target branch; pushes and manual runs by their own branch.
+        case "${{ github.base_ref || github.ref_name }}" in
+          develop|feature/*|fix/*) DEPENDENCIES=development ;;
+          release) DEPENDENCIES=release ;;
+          *) DEPENDENCIES=published ;;
+        esac
+        if [ "$DEPENDENCIES" = "development" ]; then
            # Clone and install development versions of key dependencies with editable install
            cd ..
            git clone --depth 1 https://github.com/PlotPyStack/PythonQwt.git
@@ -76,7 +82,7 @@ jobs:
            pip install -r deps.txt
            # Install DataLab without dependencies
            pip install --no-deps .
-        elif [ "${{ github.base_ref || github.ref_name }}" = "release" ]; then
+        elif [ "$DEPENDENCIES" = "release" ]; then
            # Clone dependencies from release branches (with fallback to main/master)
            cd ..
            # Try cloning PythonQwt from main or master
