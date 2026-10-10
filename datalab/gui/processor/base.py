@@ -37,6 +37,11 @@ from sigima.objects import (
     TypeROIParam,
     concat_geometries,
 )
+from sigima.proc.contracts import (
+    OperationContract,
+    XAlignmentError,
+    contract_for_function,
+)
 from sigima.proc.decorator import is_computation_function
 from sigima.tools.signal.interpolation import interpolate
 from sigimax.adapters_plotpy import coordutils
@@ -976,6 +981,61 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             True if processing signals, False if processing images
         """
         return self.panel.PARAMCLASS == SignalObj
+
+    def _x_alignment_contract(self, func: Callable) -> OperationContract | None:
+        """Return the contract of *func* if it declares its own X-alignment rule.
+
+        Such operations never go through :meth:`_check_signal_xarray_compatibility`:
+        the rule is applied, and recorded, for each source/operand pair.
+        """
+        if not self._is_signal_panel():
+            return None
+        contract = contract_for_function(func)
+        if contract is None or contract.x_alignment is None:
+            return None
+        return contract
+
+    def _align_with_contract(
+        self,
+        contract: OperationContract,
+        source: SignalObj,
+        operand: SignalObj,
+        title: str,
+        progress: QW.QProgressDialog,
+    ) -> tuple[list[SignalObj], dict[str, Any]] | None:
+        """Apply the contract's X-alignment rule to one source/operand pair.
+
+        Returns:
+            ``(inputs, context)``, or None if the rule refuses the pair (the
+            reason is shown as a computation error).
+        """
+        try:
+            inputs, context = contract.prepare_inputs([source, operand])
+        except XAlignmentError as exc:
+            reasons = {
+                "incompatible_units": _(
+                    "The signals have different units: no conversion is applied."
+                ),
+                "invalid_grid": _(
+                    "To interpolate the operand, the X values of both signals "
+                    "must be finite and strictly increasing."
+                ),
+                "insufficient_coverage": _(
+                    "The X range of the operand does not cover the X range of the "
+                    "source: extrapolation is not allowed."
+                ),
+                "uncertainty": _(
+                    "The operand has uncertainties, which cannot be interpolated."
+                ),
+            }
+            reason = reasons.get(exc.code, _("The signals cannot be aligned."))
+            self.handle_output(
+                CompOut(error_msg=f"{reason}\n\n{exc}"),
+                _("Calculating: %s") % title,
+                progress,
+            )
+            return None
+        return list(inputs), context
 
     def _check_signal_xarray_compatibility(
         self, signals: list[SignalObj], progress: QW.QProgressDialog | None = None
@@ -2626,6 +2686,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         name = func.__name__
         title = name if title is None else title
         feature_id = self.get_feature_id(func, feature_id)
+        aligned_contract = self._x_alignment_contract(func)
+        provenance = self.mainwindow.provenance
+        command_id = str(uuid.uuid4())
 
         if obj2 is None:
             objs2 = []
@@ -2690,7 +2753,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     for src_gid, i_pair in pair_keys
                 ]
                 preparation = self.prepare_2_to_1_pairs(
-                    original_pairs, skip_xarray_compat, pre_execute_hook
+                    original_pairs,
+                    skip_xarray_compat or aligned_contract is not None,
+                    pre_execute_hook,
                 )
                 if preparation is None:
                     return
@@ -2718,6 +2783,26 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             actual_obj1, actual_obj2 = pair_map[(src_gid, i_pair)]
 
                             args = [actual_obj1, actual_obj2]
+                            x_alignment = None
+                            if aligned_contract is not None:
+                                aligned = self._align_with_contract(
+                                    aligned_contract,
+                                    actual_obj1,
+                                    actual_obj2,
+                                    title,
+                                    progress,
+                                )
+                                if aligned is None:
+                                    continue
+                                args, context = aligned
+                                x_alignment = context["x_alignment"]
+                            pending = provenance.begin(
+                                func,
+                                param,
+                                [orig_obj1, orig_obj2],
+                                command_id,
+                                x_alignment=x_alignment,
+                            )
                             if param is not None:
                                 args.append(param)
                             result = self.__exec_func(func, tuple(args), progress)
@@ -2762,6 +2847,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             self._add_object_to_appropriate_panel(
                                 new_obj, group_id=dst_gid
                             )
+                            provenance.complete(pending, new_obj)
                             if source_transaction is not None:
                                 source_transaction.commit(orig_obj1)
 
@@ -2800,6 +2886,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     self._is_signal_panel()
                     and isinstance(obj2, SignalObj)
                     and not skip_xarray_compat
+                    and aligned_contract is None
                 ):
                     signal_objs = [obj for obj in objs if isinstance(obj, SignalObj)]
                     if signal_objs:
@@ -2852,6 +2939,23 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             if param is None
                             else (actual_obj, obj2, param)
                         )
+                        x_alignment = None
+                        if aligned_contract is not None:
+                            aligned = self._align_with_contract(
+                                aligned_contract, actual_obj, obj2, title, progress
+                            )
+                            if aligned is None:
+                                continue
+                            inputs, context = aligned
+                            args = tuple(inputs) if param is None else (*inputs, param)
+                            x_alignment = context["x_alignment"]
+                        pending = provenance.begin(
+                            func,
+                            param,
+                            [obj, orig_obj2],
+                            command_id,
+                            x_alignment=x_alignment,
+                        )
                         result = self.__exec_func(func, args, progress)
                         if result is None:
                             break
@@ -2887,6 +2991,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         self._add_object_to_appropriate_panel(
                             new_obj, group_id=group_id, use_group_for_non_native=False
                         )
+                        provenance.complete(pending, new_obj)
                         if source_transaction is not None:
                             source_transaction.commit(obj)
 

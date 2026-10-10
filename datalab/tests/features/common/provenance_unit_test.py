@@ -237,8 +237,8 @@ def test_verification_detects_divergence(monkeypatch) -> None:
         execution = win.signalpanel.processor.execution
         original = execution.execute_candidate
 
-        def altered(func, source, param):
-            candidate = original(func, source, param)
+        def altered(func, inputs, param):
+            candidate = original(func, inputs, param)
             candidate.y[2] += 0.5
             return candidate
 

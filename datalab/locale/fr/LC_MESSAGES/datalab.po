@@ -4819,3 +4819,18 @@ msgstr "%d objets ajoutés au groupe '%s'"
 #, python-format
 msgid "The provenance data of this workspace are invalid: %s"
 msgstr "Les données de provenance de cet espace de travail sont invalides : %s"
+
+msgid "The signals have different units: no conversion is applied."
+msgstr "Les signaux ont des unités différentes : aucune conversion n'est appliquée."
+
+msgid "To interpolate the operand, the X values of both signals must be finite and strictly increasing."
+msgstr "Pour interpoler l'opérande, les abscisses des deux signaux doivent être finies et strictement croissantes."
+
+msgid "The X range of the operand does not cover the X range of the source: extrapolation is not allowed."
+msgstr "L'intervalle des abscisses de l'opérande ne couvre pas celui de la source : l'extrapolation n'est pas autorisée."
+
+msgid "The operand has uncertainties, which cannot be interpolated."
+msgstr "L'opérande comporte des incertitudes, qui ne peuvent pas être interpolées."
+
+msgid "The signals cannot be aligned."
+msgstr "Les signaux ne peuvent pas être alignés."

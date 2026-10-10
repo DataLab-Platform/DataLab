@@ -5,7 +5,8 @@ Workspace provenance
 ====================
 
 The :class:`ProvenanceService` records, in a workspace-level ledger, every signal
-1-to-1 processing executed by DataLab, whatever the History "Record" setting. The
+1-to-1 and 2-to-1 processing executed by DataLab, whatever the History "Record"
+setting. The
 ledger model, fingerprints, replay preparation and reports come from
 DataLab-Capsule; operation contracts come from Sigima.
 
@@ -21,7 +22,7 @@ import contextlib
 import dataclasses
 import logging
 import uuid
-from collections.abc import Callable, Generator
+from collections.abc import Callable, Generator, Sequence
 from importlib import metadata
 from typing import TYPE_CHECKING, Any
 
@@ -40,6 +41,7 @@ from sigima.proc.contracts import (
     OperationContract,
     ParameterEncodingError,
     UnknownOperationError,
+    XAlignmentError,
     contract_for_function,
     get_operation_contract,
     parameters_from_values,
@@ -57,19 +59,22 @@ __all__ = ["PendingActivity", "ProvenanceService"]
 _logger = logging.getLogger(__name__)
 
 EDITION = "desktop"
+#: Roles of opaque (unqualified) calls, by number of inputs.
+OPAQUE_ROLES = {1: ("source",), 2: ("source", "operand")}
 
 
 @dataclasses.dataclass
 class PendingActivity:
-    """An execution whose input state was recorded, awaiting its output.
+    """An execution whose input states were recorded, awaiting its output.
 
     Attributes:
-        call: Operation call bound to the input state.
+        call: Operation call bound to the input states.
         implementation: Informative implementation descriptor.
         limits: Reasons why the activity is not replayable.
         command_id: Identifier shared by the executions of one user command.
         origin: Activity origin.
         started_at: Start time.
+        x_alignment: X-alignment record applied to the inputs, or None.
     """
 
     call: dict[str, Any]
@@ -78,6 +83,7 @@ class PendingActivity:
     command_id: str | None
     origin: str
     started_at: str
+    x_alignment: dict[str, Any] | None = None
 
 
 def implementation_of(func: Callable) -> dict[str, Any]:
@@ -192,7 +198,11 @@ class ProvenanceService:
         return self.ledger.observe(get_uuid(obj), signal_state_facts(obj))
 
     def _build_call(
-        self, func: Callable, param: gds.DataSet | None, state_id: str, obj: SignalObj
+        self,
+        func: Callable,
+        param: gds.DataSet | None,
+        state_ids: list[str],
+        objs: list[SignalObj],
     ) -> tuple[dict[str, Any], list[str]]:
         """Return the operation call and its limits for one execution."""
         limits: list[str] = []
@@ -200,15 +210,17 @@ class ProvenanceService:
         if (
             contract is not None
             and contract.qualified
-            and contract.check_preconditions([obj]) is None
+            and len(contract.inputs) == len(objs)
+            and contract.check_preconditions(objs) is None
         ):
             values = parameters_to_values(param)
+            roles = [role.name for role in contract.inputs]
             return (
                 make_call(
                     contract.operation_id,
                     contract.contract_version,
                     values,
-                    [("source", state_id)],
+                    list(zip(roles, state_ids)),
                 ),
                 limits,
             )
@@ -217,7 +229,8 @@ class ProvenanceService:
         except ParameterEncodingError:
             values = None
             limits.append("parameters_not_encoded")
-        return make_call(None, None, values, [("source", state_id)]), limits
+        roles = OPAQUE_ROLES[len(objs)]
+        return make_call(None, None, values, list(zip(roles, state_ids))), limits
 
     def begin(
         self,
@@ -226,17 +239,30 @@ class ProvenanceService:
         source: Any,
         command_id: str | None = None,
         origin: str = "ordinary",
+        x_alignment: dict[str, Any] | None = None,
     ) -> PendingActivity | None:
-        """Record the input state of a signal 1-to-1 execution, before it runs.
+        """Record the input states of a signal execution, before it runs.
+
+        Args:
+            func: Computation function.
+            param: Effective parameters, or None.
+            source: Source signal, or the original ``[source, operand]`` signals
+             of a 2-to-1 execution (before any alignment).
+            command_id: Identifier shared by the executions of one command.
+            origin: Activity origin.
+            x_alignment: X-alignment record applied to the inputs, or None.
 
         Returns:
             A pending activity, or None when the execution is not captured.
         """
-        if not isinstance(source, SignalObj):
+        objs = list(source) if isinstance(source, Sequence) else [source]
+        if len(objs) not in OPAQUE_ROLES or not all(
+            isinstance(obj, SignalObj) for obj in objs
+        ):
             return None
         try:
-            state_id = self.observe(source)
-            call, limits = self._build_call(func, param, state_id, source)
+            state_ids = [self.observe(obj) for obj in objs]
+            call, limits = self._build_call(func, param, state_ids, objs)
             return PendingActivity(
                 call=call,
                 implementation=implementation_of(func),
@@ -244,6 +270,7 @@ class ProvenanceService:
                 command_id=command_id,
                 origin=origin,
                 started_at=utc_timestamp(),
+                x_alignment=x_alignment,
             )
         except Exception as exc:  # pylint: disable=broad-exception-caught
             self._capture_failed(exc)
@@ -259,6 +286,7 @@ class ProvenanceService:
             implementation=pending.implementation,
             command_id=pending.command_id,
             limits=pending.limits,
+            context={"roi": None, "mask": None, "x_alignment": pending.x_alignment},
             started_at=pending.started_at,
         )
 
@@ -348,6 +376,15 @@ class ProvenanceService:
         except InvalidParametersError as exc:
             raise IneligibleError("invalid_parameters", str(exc)) from exc
 
+    @staticmethod
+    def _apply_context(
+        contract: OperationContract, objs: list[Any], context: dict[str, Any]
+    ) -> list[Any]:
+        try:
+            return contract.prepare_inputs(objs, context)[0]
+        except XAlignmentError as exc:
+            raise IneligibleError("unsupported_context", str(exc)) from exc
+
     def prepare(self, activity_id: str) -> Plan | Refusal:
         """Prepare a recorded activity for replay (no GUI selection needed)."""
         return prepare_activity(
@@ -361,6 +398,7 @@ class ProvenanceService:
             ),
             decode_parameters=self._decode,
             state_status=self.state_status,
+            apply_context=self._apply_context,
         )
 
     def _reference(self, activity: dict[str, Any]) -> tuple[dict | None, Any]:
@@ -389,7 +427,7 @@ class ProvenanceService:
     def verify(
         self,
         activity_id: str,
-        execute_candidate: Callable[[Callable, Any, Any], SignalObj | None],
+        execute_candidate: Callable[[Callable, list[Any], Any], SignalObj | None],
     ) -> dict[str, Any]:
         """Recompute a recorded activity as a separate candidate and compare it.
 
@@ -398,8 +436,9 @@ class ProvenanceService:
 
         Args:
             activity_id: Activity to verify.
-            execute_candidate: ``(function, source, parameters) -> result``; runs
-             the computation without inserting the result.
+            execute_candidate: ``(function, inputs, parameters) -> result``; runs
+             the computation without inserting the result. *inputs* are in role
+             order, after the recorded context (e.g. X alignment) was applied.
 
         Returns:
             Verification report.
@@ -423,14 +462,16 @@ class ProvenanceService:
                 reference=reference,
                 environment=environment,
                 reason=prepared.reason,
+                context=activity["context"],
             )
         inputs = [
             {"role": role, "state_id": state_id, "status": "available"}
             for role, state_id, _obj in prepared.inputs
         ]
-        source = prepared.inputs[0][2]
         candidate = execute_candidate(
-            prepared.contract.function, source, prepared.parameters
+            prepared.contract.function,
+            list(prepared.call_inputs),
+            prepared.parameters,
         )
         if candidate is None:
             return build_report(
@@ -441,6 +482,7 @@ class ProvenanceService:
                 reference=reference,
                 environment=environment,
                 reason="The candidate computation failed or was cancelled",
+                context=activity["context"],
             )
         comparison = None
         if ref_obj is not None:
@@ -456,4 +498,5 @@ class ProvenanceService:
             environment=environment,
             comparison=comparison,
             candidate_state_ids=[("result", str(uuid.uuid4()))],
+            context=activity["context"],
         )

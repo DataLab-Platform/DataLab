@@ -126,9 +126,14 @@ class ExecutionService:
         return new_obj
 
     def execute_candidate(
-        self, func: Callable, source: SignalObj | ImageObj, param: Any
+        self, func: Callable, inputs: list[SignalObj | ImageObj], param: Any
     ) -> SignalObj | ImageObj | None:
         """Compute a result in candidate mode: nothing is inserted or recorded.
+
+        Args:
+            func: Computation function.
+            inputs: Function inputs, in role order.
+            param: Parameters, or None.
 
         Returns:
             The candidate, or None on error or cancellation.
@@ -136,7 +141,7 @@ class ExecutionService:
         with create_progress_bar(
             self.processor.panel, _("Recomputing..."), max_=1
         ) as progress:
-            args = (source,) if param is None else (source, param)
+            args = tuple(inputs) if param is None else (*inputs, param)
             self.computations += 1
             compout = self._exec_func(func, args, progress)
             if compout is None:

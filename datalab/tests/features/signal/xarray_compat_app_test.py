@@ -26,13 +26,13 @@ def __check_addition_result(
 
 
 def __check_difference_result(
-    result: SignalObj, s_ref: SignalObj, context: str
+    result: SignalObj, s_ref: SignalObj, context: str, atol: float = 1e-4
 ) -> None:
     """Check that the Y data of the result is zero."""
     assert len(result.x) == len(s_ref.x), (
         f"[{context}] Difference result length mismatch"
     )
-    assert np.allclose(result.y, 0.0, atol=1e-4), (
+    assert np.allclose(result.y, 0.0, atol=atol), (
         f"[{context}] Difference result value mismatch"
     )
 
@@ -100,28 +100,34 @@ def test_xarray_compatibility_app():
                 panel.objview.get_sel_objects()[0], s_ref, "all", 1.0
             )
 
-        # Test with subtraction operation:
+        # Test with subtraction operation: the result is computed on the source grid
+        # and the operand must cover it (no extrapolation).
         with Conf.xarray_compat_behavior.context("interpolate"):
-            # Select signals with the same number of points but different X ranges:
-            panel.objview.select_objects([s_ref])
-            panel.processor.run_feature("difference", obj2=s_same_nbp)
-            __check_difference_result(
-                panel.objview.get_sel_objects()[0], s_ref, "same_nbp"
-            )
-
-            # Select signals with different number of points but same X ranges:
+            # Same X range, different number of points: the operand is
+            # interpolated on the source grid.
             panel.objview.select_objects([s_ref])
             panel.processor.run_feature("difference", obj2=s_same_range)
             __check_difference_result(
                 panel.objview.get_sel_objects()[0], s_ref, "same_range"
             )
 
-            # Select signals with different number of points and different X ranges:
-            panel.objview.select_objects([s_ref])
-            panel.processor.run_feature("difference", obj2=s_different)
-            __check_difference_result(
-                panel.objview.get_sel_objects()[0], s_ref, "different"
-            )
+            # Narrower operand: refused, in both cases (same or different number
+            # of points); swapping the roles is valid.
+            for narrower, context in (
+                (s_same_nbp, "same_nbp"),
+                (s_different, "different"),
+            ):
+                count = len(panel.objmodel)
+                panel.objview.select_objects([s_ref])
+                panel.processor.run_feature("difference", obj2=narrower)
+                assert len(panel.objmodel) == count, f"[{context}] Not refused"
+                panel.objview.select_objects([narrower])
+                panel.processor.run_feature("difference", obj2=s_ref)
+                # Coarse operand (step h = 0.04) on a finer grid: the linear
+                # interpolation error of this unit Gaussian is below h**2 / 8.
+                __check_difference_result(
+                    panel.objview.get_sel_objects()[0], narrower, context, 2.1e-4
+                )
 
 
 if __name__ == "__main__":
