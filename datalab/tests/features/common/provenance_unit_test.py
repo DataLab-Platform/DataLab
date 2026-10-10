@@ -331,7 +331,7 @@ def test_capture_failure_keeps_result(monkeypatch) -> None:
 
     with app() as win:
         add_signal(win)
-        monkeypatch.setattr(provenance_module, "signal_state_facts", broken)
+        monkeypatch.setattr(provenance_module, "state_facts", broken)
         result = normalize(win, "maximum")
         assert np.array_equal(result.y, MAXIMUM_Y)
         assert win.provenance.ledger.activities == ()
@@ -339,7 +339,7 @@ def test_capture_failure_keeps_result(monkeypatch) -> None:
 
 
 def test_scope_of_capture() -> None:
-    """Unqualified signal operations are opaque; images are not captured."""
+    """Unqualified operations, on signals or images, are captured as opaque."""
     with app() as win:
         add_signal(win)
         (smoothed,) = run(
@@ -354,7 +354,12 @@ def test_scope_of_capture() -> None:
         ipanel.add_object(create_sincos_image())
         ipanel.objview.select_objects([1])
         ipanel.processor.compute_1_to_1(sipi.normalize, edit=False)
-        assert len(win.provenance.ledger.activities) == 1
+        image_activity = win.provenance.ledger.activities[-1]
+        assert image_activity["call"]["operation"] is None
+        assert input_state(win, image_activity)["kind"] == "image"
+        assert output_state(win, image_activity)["kind"] == "image"
+        report = win.verify_provenance_activity(image_activity["activity_id"])
+        assert report["restoration"] == "opaque"
 
 
 def test_multiple_and_1_to_n_executions_are_captured() -> None:

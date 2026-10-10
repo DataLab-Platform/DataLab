@@ -4,11 +4,12 @@
 Workspace provenance
 ====================
 
-The :class:`ProvenanceService` records, in a workspace-level ledger, every signal
-1-to-1 and 2-to-1 processing executed by DataLab, whatever the History "Record"
-setting. The
+The :class:`ProvenanceService` records, in a workspace-level ledger, the signal and
+image processing executed by DataLab (1-to-1, 1-to-n, 2-to-1, n-to-1 and
+analyses), whatever the History "Record" setting. The
 ledger model, fingerprints, replay preparation and reports come from
-DataLab-Capsule; operation contracts come from Sigima.
+DataLab-Capsule; operation contracts come from Sigima. Only qualified operations
+can be replayed.
 
 Capture never breaks processing: if recording fails, the result is kept, no
 activity is recorded and the failure is logged and counted.
@@ -31,10 +32,10 @@ from datalab_capsule.calls import make_call
 from datalab_capsule.compare import build_report, compare_environments, compare_exact
 from datalab_capsule.environment import collect_environment, environment_id
 from datalab_capsule.hdf5 import save_ledger
-from datalab_capsule.integrity import signal_state_facts
+from datalab_capsule.integrity import state_facts
 from datalab_capsule.ledger import Ledger, utc_timestamp
 from datalab_capsule.replay import IneligibleError, Plan, prepare_activity
-from sigima.objects import SignalObj
+from sigima.objects import ImageObj, SignalObj
 from sigima.proc.contracts import (
     IncompatibleContractError,
     InvalidParametersError,
@@ -59,7 +60,7 @@ __all__ = ["PendingActivity", "ProvenanceService"]
 _logger = logging.getLogger(__name__)
 
 EDITION = "desktop"
-#: Roles of opaque (unqualified) calls, by number of inputs.
+#: Default roles of unqualified calls, by number of inputs.
 OPAQUE_ROLES = {1: ("source",), 2: ("source", "operand")}
 
 
@@ -193,16 +194,17 @@ class ProvenanceService:
         self.capture_failures += 1
         _logger.warning("Provenance capture failed: %s", exc, exc_info=True)
 
-    def observe(self, obj: SignalObj) -> str:
+    def observe(self, obj: SignalObj | ImageObj) -> str:
         """Return the state of *obj*, reusing its latest state if unchanged."""
-        return self.ledger.observe(get_uuid(obj), signal_state_facts(obj))
+        return self.ledger.observe(get_uuid(obj), state_facts(obj))
 
     def _build_call(
         self,
         func: Callable,
         param: gds.DataSet | None,
         state_ids: list[str],
-        objs: list[SignalObj],
+        objs: list[SignalObj | ImageObj],
+        roles: Sequence[str],
     ) -> tuple[dict[str, Any], list[str]]:
         """Return the operation call and its limits for one execution."""
         limits: list[str] = []
@@ -229,7 +231,6 @@ class ProvenanceService:
         except ParameterEncodingError:
             values = None
             limits.append("parameters_not_encoded")
-        roles = OPAQUE_ROLES[len(objs)]
         return make_call(None, None, values, list(zip(roles, state_ids))), limits
 
     def begin(
@@ -240,33 +241,43 @@ class ProvenanceService:
         command_id: str | None = None,
         origin: str = "ordinary",
         x_alignment: dict[str, Any] | None = None,
+        roles: Sequence[str] | None = None,
+        limits: Sequence[str] = (),
     ) -> PendingActivity | None:
-        """Record the input states of a signal execution, before it runs.
+        """Record the input states of an execution, before it runs.
 
         Args:
             func: Computation function.
             param: Effective parameters, or None.
-            source: Source signal, or the original ``[source, operand]`` signals
-             of a 2-to-1 execution (before any alignment).
+            source: Source signal or image, or the original input objects of a
+             multi-input execution (before any alignment or interpolation).
             command_id: Identifier shared by the executions of one command.
             origin: Activity origin.
             x_alignment: X-alignment record applied to the inputs, or None.
+            roles: Input roles of an unqualified call; by default ``source``, or
+             ``source`` and ``operand`` for two inputs.
+            limits: Extra reasons why the activity is not replayable.
 
         Returns:
             A pending activity, or None when the execution is not captured.
         """
         objs = list(source) if isinstance(source, Sequence) else [source]
-        if len(objs) not in OPAQUE_ROLES or not all(
-            isinstance(obj, SignalObj) for obj in objs
+        if roles is None:
+            roles = OPAQUE_ROLES.get(len(objs))
+        if (
+            not objs
+            or roles is None
+            or len(roles) != len(objs)
+            or not all(isinstance(obj, (SignalObj, ImageObj)) for obj in objs)
         ):
             return None
         try:
             state_ids = [self.observe(obj) for obj in objs]
-            call, limits = self._build_call(func, param, state_ids, objs)
+            call, call_limits = self._build_call(func, param, state_ids, objs, roles)
             return PendingActivity(
                 call=call,
                 implementation=implementation_of(func),
-                limits=limits,
+                limits=call_limits + list(limits),
                 command_id=command_id,
                 origin=origin,
                 started_at=utc_timestamp(),
@@ -276,10 +287,20 @@ class ProvenanceService:
             self._capture_failed(exc)
             return None
 
-    def _record(self, pending: PendingActivity, output: SignalObj, origin: str) -> Any:
+    def _record(
+        self,
+        pending: PendingActivity,
+        output: SignalObj | ImageObj | None,
+        origin: str,
+        artifacts: Sequence[tuple[str, str, str, str]] = (),
+    ) -> Any:
+        outputs = []
+        if output is not None:
+            outputs.append(("result", get_uuid(output), state_facts(output)))
         return self.ledger.record_activity(
             call=pending.call,
-            outputs=[("result", get_uuid(output), signal_state_facts(output))],
+            outputs=outputs,
+            artifacts=artifacts,
             environment=self.environment,
             edition=EDITION,
             origin=origin,
@@ -295,13 +316,13 @@ class ProvenanceService:
     ) -> dict[str, Any] | None:
         """Record a completed execution once its output was inserted.
 
-        Outputs that are not signals, or were not inserted in the workspace (e.g.
-        History output suppression), are not recorded.
+        Outputs that are not signals or images, or were not inserted in the
+        workspace (e.g. History output suppression), are not recorded.
 
         Returns:
             The recorded activity, or None.
         """
-        if pending is None or not isinstance(output, SignalObj):
+        if pending is None or not isinstance(output, (SignalObj, ImageObj)):
             return None
         try:
             output_uuid = get_uuid(output)
@@ -311,6 +332,30 @@ class ProvenanceService:
                 self._deferred.items.append((pending, output_uuid))
                 return None
             return self._record(pending, output, pending.origin)
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            self._capture_failed(exc)
+            return None
+
+    def complete_analysis(
+        self, pending: PendingActivity | None, obj: Any, kind: str, key: str
+    ) -> dict[str, Any] | None:
+        """Record an analysis whose result was stored in *obj*'s metadata.
+
+        Args:
+            pending: Pending activity of the analysis.
+            obj: Analysed object, which holds the result.
+            kind: Result kind (``geometry`` or ``table``).
+            key: Metadata key of the result.
+
+        Returns:
+            The recorded activity, or None.
+        """
+        if pending is None:
+            return None
+        try:
+            origin = pending.origin if self._deferred is None else self._deferred.origin
+            artifact = ("result", kind, get_uuid(obj), key)
+            return self._record(pending, None, origin, artifacts=[artifact])
         except Exception as exc:  # pylint: disable=broad-exception-caught
             self._capture_failed(exc)
             return None
@@ -346,7 +391,7 @@ class ProvenanceService:
         for pending, temp_uuid in items:
             final_uuid = remap.get(temp_uuid)
             output = None if final_uuid is None else self._find_object(final_uuid)
-            if not isinstance(output, SignalObj):
+            if not isinstance(output, (SignalObj, ImageObj)):
                 continue
             try:
                 self._record(pending, output, deferred.origin)
@@ -392,7 +437,7 @@ class ProvenanceService:
             activity_id,
             resolve_contract=self._resolve_contract,
             find_object=self._find_object,
-            observe_object=signal_state_facts,
+            observe_object=state_facts,
             check_preconditions=lambda contract, objs: contract.check_preconditions(
                 objs
             ),
@@ -419,7 +464,7 @@ class ProvenanceService:
         if obj is None or self.state_status.get(state["state_id"]) == "unavailable":
             status, obj = "missing", None
         elif self.state_status.get(state["state_id"]) == "altered" or (
-            signal_state_facts(obj)["fingerprint"] != state["fingerprint"]
+            state_facts(obj)["fingerprint"] != state["fingerprint"]
         ):
             status = "altered"
         return {"state_id": state["state_id"], "status": status}, obj

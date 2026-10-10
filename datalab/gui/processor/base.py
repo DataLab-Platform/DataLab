@@ -650,6 +650,17 @@ def is_pairwise_mode() -> bool:
     return state
 
 
+def _x_interpolated(
+    originals: list[SignalObj | ImageObj], actuals: list[SignalObj | ImageObj]
+) -> list[str]:
+    """Return the provenance limit of inputs interpolated by the legacy X check."""
+    changed = any(
+        isinstance(orig, SignalObj) and not np.array_equal(orig.x, actual.x)
+        for orig, actual in zip(originals, actuals)
+    )
+    return ["x_interpolated"] if changed else []
+
+
 class FeatureNotFoundError(ValueError):
     """Raised when a computing feature cannot be resolved by name or callable.
 
@@ -2277,6 +2288,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if action is not None:
             self.mainwindow.historypanel.register_action_outputs(action, [])
         refresh_needed = False
+        provenance = self.mainwindow.provenance
+        command_id = str(uuid.uuid4())
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
             rdata = ResultData()
             for idx, obj in enumerate(objs):
@@ -2284,6 +2297,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 pvalue = 0 if pvalue == 1 else pvalue
                 progress.setValue(pvalue)
                 args = (obj,) if param is None else (obj, param)
+                pending = provenance.begin(func, param, obj, command_id)
 
                 # Execute function
                 compout = self.__exec_func(func, args, progress)
@@ -2334,6 +2348,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     rdata.execution_success = False
                     continue
                 refresh_needed |= result_modified
+                kind = "geometry" if isinstance(result, GeometryResult) else "table"
+                provenance.complete_analysis(
+                    pending, obj, kind, create_adapter(result).metadata_key
+                )
                 if action is not None:
                     if action.effects is None:
                         action.effects = {}
@@ -2401,6 +2419,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         name = func.__name__
         title = name if title is None else title
         feature_id = self.get_feature_id(func, feature_id)
+        provenance = self.mainwindow.provenance
+        command_id = str(uuid.uuid4())
 
         pp_history = build_processing_parameters(feature_id, "n-to-1", param=param)
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
@@ -2446,6 +2466,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         for src_gid in src_gids[1:]:
                             src_obj = src_objs[src_gid][i_pair]
                             src_objs_pair.append(src_obj)
+                        orig_objs_pair = list(src_objs_pair)
 
                         # Check signal x-array compatibility for n-to-1 operations
                         if auto_interpolate_for_operation:
@@ -2470,6 +2491,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             auto_interpolate_for_operation = True
 
                         src_objs_pair = checked_objs
+                        pending = provenance.begin(
+                            func,
+                            param,
+                            orig_objs_pair,
+                            command_id,
+                            roles=["sources"] * len(orig_objs_pair),
+                            limits=_x_interpolated(orig_objs_pair, src_objs_pair),
+                        )
                         if param is None:
                             args = (src_objs_pair,)
                         else:
@@ -2505,6 +2534,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             dst_gid = self._create_group_for_result(new_obj, dst_gname)
 
                         self._add_object_to_appropriate_panel(new_obj, group_id=dst_gid)
+                        provenance.complete(pending, new_obj)
 
             else:
                 # In single operand mode, we create a single object
@@ -2538,6 +2568,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     progress.setValue(0)
                     progress.setLabelText(title)
                     for src_gid, src_obj_list in src_objs.items():
+                        orig_obj_list = list(src_obj_list)
                         # Check signal x-array compatibility for n-to-1 operations
                         if auto_interpolate_for_operation:
                             # "Yes to All" selected, automatically interpolate
@@ -2560,6 +2591,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             auto_interpolate_for_operation = True
 
                         src_obj_list = checked_objs
+                        pending = provenance.begin(
+                            func,
+                            param,
+                            orig_obj_list,
+                            command_id,
+                            roles=["sources"] * len(orig_obj_list),
+                            limits=_x_interpolated(orig_obj_list, src_obj_list),
+                        )
 
                         if param is None:
                             args = (src_obj_list,)
@@ -2606,6 +2645,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             group_id=group_id,
                             use_group_for_non_native=use_group_for_non_native,
                         )
+                        provenance.complete(pending, new_obj)
 
             # Select newly created group, if any
             if dst_gid is not None:
@@ -2791,6 +2831,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                                 [orig_obj1, orig_obj2],
                                 command_id,
                                 x_alignment=x_alignment,
+                                limits=_x_interpolated(
+                                    [orig_obj1, orig_obj2], [actual_obj1, actual_obj2]
+                                ),
                             )
                             if param is not None:
                                 args.append(param)
@@ -2944,6 +2987,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             [obj, orig_obj2],
                             command_id,
                             x_alignment=x_alignment,
+                            limits=_x_interpolated(
+                                [obj, orig_obj2], [actual_obj, obj2]
+                            ),
                         )
                         result = self.__exec_func(func, args, progress)
                         if result is None:
