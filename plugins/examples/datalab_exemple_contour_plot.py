@@ -19,9 +19,9 @@ from plotpy.items import AnnotatedPolygon
 from plotpy.items.contour import compute_contours
 from plotpy.plot import PlotDialog
 from plotpy.styles import AnnotationParam
+from sigimax.adapters_plotpy.objects.image import get_obj_coords
 
 from datalab.adapters_plotpy import create_adapter_from_object
-from datalab.adapters_plotpy.objects.adapters import get_obj_coords
 from datalab.config import _
 from datalab.objectmodel import get_uuid
 from datalab.plugins import PluginBase, PluginInfo
@@ -89,7 +89,7 @@ class ContourPlotPlugin(PluginBase):
     PLUGIN_INFO = PluginInfo(
         id="org.datalab.examples.contour-plot",
         name=_("Contour isoline plot"),
-        version="1.0.0",
+        version="1.1.0",
         description=_(
             "Display isolines (contour lines) overlaid on the selected image, "
             "with configurable level range, step, and optional value labels"
