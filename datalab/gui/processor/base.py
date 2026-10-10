@@ -2014,6 +2014,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             preview_results = []
         if remember_defaults:
             self.PARAM_DEFAULTS[type(param).__name__] = copy.deepcopy(param)
+        title = func.__name__ if title is None else title
         plugin_origin = self._get_plugin_origin_for(func, feature_id)
         pp = build_processing_parameters(
             feature_id,
@@ -2022,7 +2023,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             plugin_origin=plugin_origin,
         )
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
-            title or func.__name__,
+            title,
             pp,
             panel_str=self.panel.PANEL_STR_ID,
             plugin_origin=plugin_origin,
@@ -2088,8 +2089,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         pp = build_processing_parameters(
             func_names[0] if func_names else "", "multiple-1-to-1"
         )
+        title = "compute_multiple_1_to_1" if title is None else title
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
-            title or "compute_multiple_1_to_1",
+            title,
             pp,
             panel_str=self.panel.PANEL_STR_ID,
             func_names=func_names,
@@ -2141,8 +2143,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 return
         feature_id = self.get_feature_id(func, feature_id)
         pp = build_processing_parameters(feature_id, "1-to-n")
+        title = func.__name__ if title is None else title
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
-            title or func.__name__,
+            title,
             pp,
             panel_str=self.panel.PANEL_STR_ID,
             params=params,
@@ -2349,11 +2352,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         objmodel = self.panel.objmodel
         pairwise = is_pairwise_mode() if pairwise is None else pairwise
         name = func.__name__
+        title = name if title is None else title
         feature_id = self.get_feature_id(func, feature_id)
 
         pp_history = build_processing_parameters(feature_id, "n-to-1", param=param)
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
-            title or name,
+            title,
             pp_history,
             panel_str=self.panel.PANEL_STR_ID,
             pairwise=pairwise,
@@ -2622,6 +2626,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         objmodel = self.panel.objmodel
         pairwise = is_pairwise_mode() if pairwise is None else pairwise
         name = func.__name__
+        title = name if title is None else title
         feature_id = self.get_feature_id(func, feature_id)
 
         if obj2 is None:
