@@ -1067,23 +1067,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         # Get X arrays for comparison
         x_arrays = [sig.x for sig in signals]
 
-        # Check if all X arrays are identical
-        x_arrays_identical = True
-        if len(x_arrays) > 1:
-            # Compare sizes first
-            sizes = [len(x) for x in x_arrays]
-            if len(set(sizes)) > 1:
-                x_arrays_identical = False
-            else:
-                # Same sizes - check if xmin and xmax are also the same
-                xmins = [x.min() for x in x_arrays]
-                xmaxs = [x.max() for x in x_arrays]
-                # Use relative tolerance for floating point comparison
-                if not (
-                    np.allclose(xmins, xmins[0], rtol=1e-12)
-                    and np.allclose(xmaxs, xmaxs[0], rtol=1e-12)
-                ):
-                    x_arrays_identical = False
+        # Identical only if every coordinate is equal: same size and same ends
+        # do not make the same grid (e.g. [0, 1, 2] and [0, 0.5, 2]).
+        x_arrays_identical = all(
+            x.shape == x_arrays[0].shape and np.array_equal(x, x_arrays[0])
+            for x in x_arrays[1:]
+        )
 
         # If X arrays are identical, proceed normally
         if x_arrays_identical:
