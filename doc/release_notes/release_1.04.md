@@ -62,6 +62,15 @@
 * **Edit > Metadata > Add metadata...** can now extract the value from the formatted text with a regular expression, for example an exposure time or a shot number read from object titles. Objects without a match are left unchanged unless you ask for an error, and a scale factor converts numeric values (e.g. milliseconds to seconds)
 * Metadata keys may now contain dots and hyphens, as used by plugin keys, and a **Known keys** list copies a key already present on the selected objects
 
+**Workspace provenance:**
+
+* DataLab now records how each result was obtained: the processing applied, its parameters, the objects it used and their exact content, and the software versions. This record is saved with the HDF5 workspace and read back when the workspace is reopened, by DataLab or by DataLab-Web, so the history of a result survives saving, closing and sharing
+* Signal and image processing, operations combining several objects and analyses (geometry and table results) are recorded; regions of interest and the X alignment applied to a two-signal difference are part of the record. A result whose data, calibration or regions of interest were changed after it was computed is reported as altered rather than trusted
+* A recorded normalization or signal difference can be recomputed and compared with the stored result (exact, different, or not verified with the reason); other processing is recorded but not recomputed. Recomputation is available from scripts in this version, with no menu yet
+* Workspaces saved by earlier versions keep their processing history as stored: DataLab shows what is known and what is missing, invents nothing, and never recomputes such entries
+* A workspace whose provenance record is damaged is refused with an explicit message, and the current workspace is left unchanged
+* Workspaces can be exchanged as capsules (a workspace plus a description of its provenance) with the `workspace-capsule` command line of [DataLab-Capsule](https://github.com/DataLab-Platform/DataLab-Capsule), which checks them without running any computation; DataLab-Web creates and opens capsules directly
+
 ### 🔄 Changes ###
 
 **Guided tour:**
