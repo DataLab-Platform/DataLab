@@ -33,7 +33,7 @@ from datalab_capsule.compare import build_report, compare_environments, compare_
 from datalab_capsule.environment import collect_environment, environment_id
 from datalab_capsule.hdf5 import save_ledger
 from datalab_capsule.integrity import state_facts
-from datalab_capsule.ledger import Ledger, utc_timestamp
+from datalab_capsule.ledger import Ledger, artifact_status, utc_timestamp
 from datalab_capsule.replay import IneligibleError, Plan, prepare_activity
 from sigima.objects import ImageObj, SignalObj
 from sigima.proc.contracts import (
@@ -292,7 +292,7 @@ class ProvenanceService:
         pending: PendingActivity,
         output: SignalObj | ImageObj | None,
         origin: str,
-        artifacts: Sequence[tuple[str, str, str, str]] = (),
+        artifacts: Sequence[tuple[str, str, str, str, Any]] = (),
     ) -> Any:
         outputs = []
         if output is not None:
@@ -341,6 +341,10 @@ class ProvenanceService:
     ) -> dict[str, Any] | None:
         """Record an analysis whose result was stored in *obj*'s metadata.
 
+        The digest of the stored result is recorded, so that a later analysis
+        writing the same key is never taken for this one (see
+        :meth:`artifact_statuses`).
+
         Args:
             pending: Pending activity of the analysis.
             obj: Analysed object, which holds the result.
@@ -354,11 +358,35 @@ class ProvenanceService:
             return None
         try:
             origin = pending.origin if self._deferred is None else self._deferred.origin
-            artifact = ("result", kind, get_uuid(obj), key)
+            artifact = ("result", kind, get_uuid(obj), key, obj.metadata[key])
             return self._record(pending, None, origin, artifacts=[artifact])
         except Exception as exc:  # pylint: disable=broad-exception-caught
             self._capture_failed(exc)
             return None
+
+    def artifact_statuses(self, activity_id: str) -> list[dict[str, str]]:
+        """Return the status of each analysis result recorded by an activity.
+
+        Returns:
+            One ``{"object_uuid", "key", "status"}`` per artifact output;
+            ``status`` is ``available`` (the object still holds this result),
+            ``replaced`` (another result now holds the key) or ``missing``.
+        """
+        statuses = []
+        for output in self.ledger.activity(activity_id)["outputs"]:
+            artifact = output.get("artifact")
+            if artifact is None:
+                continue
+            obj = self._find_object(artifact["object_uuid"])
+            value = None if obj is None else obj.metadata.get(artifact["key"])
+            statuses.append(
+                {
+                    "object_uuid": artifact["object_uuid"],
+                    "key": artifact["key"],
+                    "status": artifact_status(artifact, value),
+                }
+            )
+        return statuses
 
     @contextlib.contextmanager
     def deferred(self, origin: str) -> Generator[_Deferred, None, None]:

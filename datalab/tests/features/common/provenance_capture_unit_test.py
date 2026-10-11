@@ -8,13 +8,16 @@ from __future__ import annotations
 
 import os.path as osp
 
+import h5py
 import numpy as np
+import pytest
 import sigima.objects
 import sigima.params
 import sigima.proc.image as sipi
 import sigima.proc.signal as sips
 from sigima.objects import create_image, create_signal
 
+from datalab.env import execenv
 from datalab.objectmodel import get_uuid
 from datalab.tests import helpers
 
@@ -172,3 +175,224 @@ def test_round_trip_with_images_and_analyses() -> None:
             assert win.provenance.ledger.to_dict() == saved
             assert win.provenance.state_status == {}
             win.provenance.ledger.validate()
+
+
+def _node_of(h5file, object_uuid: str):
+    """Return the HDF5 group of the object with *object_uuid*."""
+    for panel in ("DataLab_Sig", "DataLab_Ima"):
+        for group in h5file.get(panel, {}).values():
+            for obj in group.values():
+                if obj["metadata"].attrs["__uuid"] == object_uuid:
+                    return obj
+    raise KeyError(object_uuid)
+
+
+def _reopen(win, path: str, edit=None):
+    """Save *win*'s workspace, optionally edit the file, and return its path."""
+    win.save_h5_workspace(path)
+    if edit is not None:
+        with h5py.File(path, "r+") as h5file:
+            edit(h5file)
+    return path
+
+
+def _filter_image_with_roi(win, coords=(0, 0, 2, 2)):
+    """Filter an image holding a ROI; return it and the recorded activity."""
+    image = add_image(win)
+    image.roi = sigima.objects.create_image_roi("rectangle", list(coords))
+    win.imagepanel.objview.select_objects([get_uuid(image)])
+    win.imagepanel.processor.compute_1_to_1(
+        sipi.gaussian_filter, sigima.params.GaussianParam.create(sigma=1.0)
+    )
+    return image, win.provenance.ledger.activities[-1]
+
+
+def test_roi_only_change_is_a_new_state() -> None:
+    """Same pixels, different ROI: a new state is recorded, not reused."""
+    with app() as win:
+        image, first = _filter_image_with_roi(win)
+        image.roi = sigima.objects.create_image_roi("rectangle", [0, 0, 3, 2])
+        win.imagepanel.objview.select_objects([get_uuid(image)])
+        win.imagepanel.processor.compute_1_to_1(
+            sipi.gaussian_filter, sigima.params.GaussianParam.create(sigma=1.0)
+        )
+        before = input_state(win, first)
+        after = input_state(win, win.provenance.ledger.activities[-1])
+        assert before["state_id"] != after["state_id"]
+        assert before["fingerprint"] == after["fingerprint"]
+        assert before["roi"]["digest"] != after["roi"]["digest"]
+
+
+FILE_EDITS = {
+    "roi": lambda n: n["metadata/_roi_/single_rois/__seq0/coords"].__setitem__(2, 3.0),
+    "roi_removed": lambda n: n["metadata"].__delitem__("_roi_"),
+    "x0": lambda n: n.attrs.__setitem__("x0", 0.5),
+    "dy": lambda n: n.attrs.__setitem__("dy", 2.0),
+    "zunit": lambda n: n.attrs.__setitem__("zunit", "V"),
+}
+
+
+@pytest.mark.parametrize("name", list(FILE_EDITS))
+def test_roi_calibration_or_unit_change_in_file_is_altered(name: str) -> None:
+    """Unchanged pixels with another ROI, calibration or unit are not intact."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        intact, edited = osp.join(tmpdir, "intact.h5"), osp.join(tmpdir, "edited.h5")
+        with app() as win:
+            image, activity = _filter_image_with_roi(win)
+            uid = get_uuid(image)
+            source = activity["call"]["inputs"][0]["binding"]["state_id"]
+            _reopen(win, intact)
+            _reopen(win, edited, lambda f: FILE_EDITS[name](_node_of(f, uid)))
+        with app() as win:
+            win.load_h5_workspace([intact], reset_all=True)
+            assert win.provenance.state_status == {}
+            assert win.provenance.observe(win.find_object_by_uuid(uid)) == source
+        with app() as win:
+            win.load_h5_workspace([edited], reset_all=True)
+            assert win.provenance.state_status[source] == "altered"
+            # The reopened object is not taken for the recorded state either.
+            assert win.provenance.observe(win.find_object_by_uuid(uid)) != source
+
+
+def test_replaced_analysis_result_is_not_attributed() -> None:
+    """Two analyses replacing the same result: the first is reported replaced."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        path, edited = osp.join(tmpdir, "w.h5"), osp.join(tmpdir, "edited.h5")
+        with app() as win:
+            signal = add_signal(win)
+            uid = get_uuid(signal)
+            win.signalpanel.objview.select_objects([uid])
+            win.signalpanel.processor.run_feature("stats")
+            signal.set_xydata(X, Y * 2.0)
+            win.signalpanel.processor.run_feature("stats")
+            first, second = win.provenance.ledger.activities
+            artifacts = [a["outputs"][0]["artifact"] for a in (first, second)]
+            assert artifacts[0]["key"] == artifacts[1]["key"]
+            assert artifacts[0]["digest"] != artifacts[1]["digest"]
+            expected = [["replaced"], ["available"]]
+            statuses = [
+                [
+                    s["status"]
+                    for s in win.provenance.artifact_statuses(a["activity_id"])
+                ]
+                for a in (first, second)
+            ]
+            assert statuses == expected
+            _reopen(win, path)
+            key = artifacts[0]["key"]
+            _reopen(
+                win, edited, lambda f: _node_of(f, uid)["metadata"].__delitem__(key)
+            )
+        with app() as win:
+            win.load_h5_workspace([path], reset_all=True)
+            statuses = [
+                [
+                    s["status"]
+                    for s in win.provenance.artifact_statuses(a["activity_id"])
+                ]
+                for a in win.provenance.ledger.activities
+            ]
+            assert statuses == expected
+        with app() as win:
+            win.load_h5_workspace([edited], reset_all=True)
+            for activity in win.provenance.ledger.activities:
+                (status,) = win.provenance.artifact_statuses(activity["activity_id"])
+                assert status["status"] == "missing"
+
+
+# -- Cross-edition reference files ----------------------------------------
+#
+# The same scenario is written by each edition: an image with a rectangular ROI
+# (x0=0, y0=0, dx=2, dy=2) analysed (centroid) then filtered (Gaussian, sigma=1),
+# and a signal analysed (statistics). Desktop writes ``provenance_desktop_
+# capture.h5`` (run this module as a script); DataLab-Web writes ``web_capture.h5``
+# from Pyodide (Playwright, ``DLW_WRITE_PROVENANCE_FIXTURE=1``).
+
+HDF5_DIR = osp.join(osp.dirname(osp.dirname(__file__)), "hdf5")
+CAPTURE_SHAPE = [
+    ("image", None, "geometry"),
+    ("image", "image", None),
+    ("signal", None, "table"),
+]
+
+
+def build_capture(win) -> None:
+    """Run the cross-edition capture scenario."""
+    image = add_image(win)
+    image.roi = sigima.objects.create_image_roi("rectangle", [0, 0, 2, 2])
+    win.imagepanel.objview.select_objects([get_uuid(image)])
+    win.imagepanel.processor.run_feature("centroid")
+    win.imagepanel.processor.compute_1_to_1(
+        sipi.gaussian_filter, sigima.params.GaussianParam.create(sigma=1.0), edit=False
+    )
+    signal = add_signal(win)
+    win.signalpanel.objview.select_objects([get_uuid(signal)])
+    win.signalpanel.processor.run_feature("stats")
+
+
+def check_capture(win, edition: str) -> None:
+    """Check a reopened capture workspace written by *edition*."""
+    provenance = win.provenance
+    ledger = provenance.ledger
+    ledger.validate()
+    assert provenance.state_status == {}
+    shape = []
+    for activity in ledger.activities:
+        assert activity["edition"] == edition
+        (item,) = activity["call"]["inputs"]
+        (output,) = activity["outputs"]
+        source = ledger.states[item["binding"]["state_id"]]
+        result = ledger.states[output["state_id"]] if "state_id" in output else None
+        artifact = output.get("artifact")
+        shape.append(
+            (source["kind"], result and result["kind"], artifact and artifact["kind"])
+        )
+        if source["kind"] == "image":
+            (roi,) = source["roi"]["definition"]["single_rois"]
+            assert roi["coords"] == [0, 0, 2, 2]
+        if artifact is not None:
+            (status,) = provenance.artifact_statuses(activity["activity_id"])
+            assert status["status"] == "available", status
+    assert shape == CAPTURE_SHAPE
+    centroid, gaussian, _stats = ledger.activities
+    assert centroid["call"]["inputs"] == gaussian["call"]["inputs"]
+    # Every reopened object is recognised as its latest recorded state, ROI
+    # included, by this edition's own reading of the other edition's file.
+    for object_uuid in ledger.object_uuids():
+        obj = win.find_object_by_uuid(object_uuid)
+        assert provenance.observe(obj) == ledger.latest_state(object_uuid)["state_id"]
+
+
+def test_capture_round_trip() -> None:
+    """The capture scenario reopens intact in a fresh Desktop window."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        path = osp.join(tmpdir, "capture.h5")
+        with app() as win:
+            build_capture(win)
+            win.save_h5_workspace(path)
+        with app() as win:
+            win.load_h5_workspace([path], reset_all=True)
+            check_capture(win, "desktop")
+
+
+@pytest.mark.parametrize("edition", ["desktop", "web"])
+def test_capture_reference_files(edition: str) -> None:
+    """Reference capture files of both editions reopen intact on Desktop."""
+    path = osp.join(HDF5_DIR, f"provenance_{edition}_capture.h5")
+    with app() as win:
+        win.load_h5_workspace([path], reset_all=True)
+        check_capture(win, edition)
+
+
+def write_reference_file() -> None:
+    """Write the Desktop capture reference file (unattended)."""
+    path = osp.join(HDF5_DIR, "provenance_desktop_capture.h5")
+    execenv.unattended = True
+    with app() as win:
+        build_capture(win)
+        win.save_h5_workspace(path)
+    print(f"Written: {path}")
+
+
+if __name__ == "__main__":
+    write_reference_file()

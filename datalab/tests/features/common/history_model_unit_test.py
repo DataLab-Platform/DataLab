@@ -250,7 +250,7 @@ def test_compute_n_to_1_uses_provided_history_title() -> None:
             ),
             objmodel=object(),
         ),
-        mainwindow=SimpleNamespace(historypanel=history_panel),
+        mainwindow=SimpleNamespace(historypanel=history_panel, provenance=Mock()),
         _get_plugin_origin_for=Mock(return_value=None),
         get_feature_id=lambda func, feature_id=None: feature_id or func.__name__,
     )
