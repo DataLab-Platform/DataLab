@@ -11,7 +11,9 @@ image I with a ROI -> Gaussian filter -> J; centroid on I.
 from __future__ import annotations
 
 import os.path as osp
+import shutil
 
+import h5py
 import sigima.params
 import sigima.proc.signal as sips
 
@@ -72,12 +74,51 @@ def check_legacy(win) -> None:
         "class": "sigima.proc.base.NormalizeParam",
         "values": {"method": "MAXIMUM"},
     }
-    # Each processed object's current state is the output of its record.
+    # No historical result is claimed; each processing record names the holding
+    # object's state observed at opening, which no activity produced.
+    observed = 0
     for activity in provenance.ledger.activities:
-        for output in activity["outputs"]:
-            state = provenance.ledger.states[output["state_id"]]
+        assert activity["outputs"] == []
+        state_id = activity["legacy"].get("observed_state_id")
+        if state_id is not None:
+            observed += 1
+            state = provenance.ledger.states[state_id]
+            assert state["produced_by"] is None
             obj = win.find_object_by_uuid(state["object_uuid"])
-            assert provenance.observe(obj) == state["state_id"]
+            assert provenance.observe(obj) == state_id
+    assert observed == 4
+
+
+def _observed_fingerprint(win, title: str) -> str:
+    activity = next(
+        a
+        for a in win.provenance.ledger.activities
+        if a["legacy"]["record"]["func_name"] == title
+    )
+    assert activity["outputs"] == []
+    state = win.provenance.ledger.states[activity["legacy"]["observed_state_id"]]
+    assert state["produced_by"] is None
+    return state["fingerprint"]["value"]
+
+
+def test_modified_old_result_is_not_attested() -> None:
+    """Data changed after the processing, record unchanged: nothing is attested."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        path = osp.join(tmpdir, "modified.h5")
+        shutil.copy(LEGACY, path)
+        with h5py.File(path, "r+") as h5file:
+            for group in h5file["DataLab_Sig"].values():
+                for name, node in group.items():
+                    if name.startswith("s002"):
+                        node["xydata"][1, 0] += 1.0
+        with app() as win:
+            win.load_h5_workspace([LEGACY], reset_all=True)
+            original = _observed_fingerprint(win, "normalize")
+        with app() as win:
+            win.load_h5_workspace([path], reset_all=True)
+            assert _observed_fingerprint(win, "normalize") != original
+            summary = win.provenance.legacy_summary()
+            assert summary["items"][0]["issues"] == VERSION_ISSUES
 
 
 def test_legacy_workspace_is_imported() -> None:
