@@ -228,6 +228,32 @@ def test_verification_computes_a_separate_candidate() -> None:
         assert np.array_equal(source.y, Y) and np.array_equal(result.y, MAXIMUM_Y)
 
 
+# Exact literal oracles of every normalisation method (perfect-square energy and
+# mean square for the second input).
+Y2 = np.array([-3.0, 0.0, 4.0, 0.0])
+NORMALIZE_ORACLES = [
+    ("maximum", Y, [-0.5, 0.0, 0.25, 1.0]),
+    ("amplitude", Y, [0.0, 1 / 3, 0.5, 1.0]),
+    ("area", Y, [-2 / 3, 0.0, 1 / 3, 4 / 3]),
+    ("energy", Y2, [-0.6, 0.0, 0.8, 0.0]),
+    ("rms", Y2, [-1.2, 0.0, 1.6, 0.0]),
+]
+
+
+@pytest.mark.parametrize("method, y, expected", NORMALIZE_ORACLES)
+def test_every_normalize_method_replays_exactly(method, y, expected) -> None:
+    """Each qualified method gives its literal oracle and replays exactly."""
+    with app() as win:
+        add_signal(win, y)
+        result = normalize(win, method)
+        assert np.array_equal(result.y, np.array(expected))
+        (activity,) = win.provenance.ledger.activities
+        assert activity["call"]["parameters"] == {"method": method}
+        report = win.verify_provenance_activity(activity["activity_id"])
+        assert report["verdict"] == "exact", report
+        assert report["observed"]["mismatches"] == 0
+
+
 def test_verification_detects_divergence(monkeypatch) -> None:
     """A deliberately altered candidate gives ``different`` with its errors."""
     with app() as win:

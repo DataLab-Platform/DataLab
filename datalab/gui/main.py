@@ -95,7 +95,8 @@ from datalab.widgets import status as dl_status
 from datalab.widgets.expandabletext import refresh_subdued_colors
 
 if TYPE_CHECKING:
-    from typing import Literal
+    from collections.abc import Iterator
+    from typing import Any, Literal
 
     from datalab.gui.historysession_ops import SessionBehavior
     from datalab.gui.panel.base import AbstractPanel, BaseDataPanel
@@ -144,7 +145,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.started_at = datetime.now().astimezone()
         self.plugins_last_load_at = self.started_at
         self.preview_executor_cache = PreviewExecutorCache()
-        self.provenance = ProvenanceService(self.find_object_by_uuid)
+        self.provenance = ProvenanceService(
+            self.find_object_by_uuid,
+            self.__iter_data_objects,
+            self.__is_known_feature,
+        )
 
         self.webapistatus: dl_status.WebAPIStatus | None = None
         self.pluginstatus: dl_status.PluginStatus | None = None
@@ -346,6 +351,26 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 except KeyError:
                     continue
         return None
+
+    def __iter_data_objects(self) -> Iterator[SignalObj | ImageObj]:
+        """Yield every signal and image of the workspace, in panel order."""
+        for panel in (self.signalpanel, self.imagepanel):
+            if panel is not None:
+                yield from panel.objmodel
+
+    def __is_known_feature(self, name: str, plugin_origin: Any) -> bool:
+        """Return True if a signal or image processing feature has this name."""
+        for panel in (self.signalpanel, self.imagepanel):
+            if panel is None:
+                continue
+            try:
+                panel.processor.get_feature(name, plugin_origin)
+            except FeatureNotFoundError:
+                continue
+            except ValueError:  # several features match: the name is known
+                return True
+            return True
+        return False
 
     @remote_controlled
     def get_object_uuids(

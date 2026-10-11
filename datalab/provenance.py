@@ -23,7 +23,7 @@ import contextlib
 import dataclasses
 import logging
 import uuid
-from collections.abc import Callable, Generator, Sequence
+from collections.abc import Callable, Generator, Iterable, Sequence
 from importlib import metadata
 from typing import TYPE_CHECKING, Any
 
@@ -34,6 +34,12 @@ from datalab_capsule.environment import collect_environment, environment_id
 from datalab_capsule.hdf5 import save_ledger
 from datalab_capsule.integrity import state_facts
 from datalab_capsule.ledger import Ledger, artifact_status, utc_timestamp
+from datalab_capsule.legacy import (
+    PROCESSING_KEY,
+    LegacyObject,
+    import_legacy,
+    legacy_summary,
+)
 from datalab_capsule.replay import IneligibleError, Plan, prepare_activity
 from sigima.objects import ImageObj, SignalObj
 from sigima.proc.contracts import (
@@ -130,10 +136,20 @@ class ProvenanceService:
     Args:
         find_object: Object lookup by UUID across panels (injected, so that this
          module never depends on panels or History).
+        iter_objects: Signals and images of the workspace, in panel order.
+        is_known_feature: ``(feature name, plugin origin) -> bool``: whether a
+         processing feature named in old metadata is registered.
     """
 
-    def __init__(self, find_object: Callable[[str], Any]) -> None:
+    def __init__(
+        self,
+        find_object: Callable[[str], Any],
+        iter_objects: Callable[[], Iterable[SignalObj | ImageObj]],
+        is_known_feature: Callable[[str, Any], bool],
+    ) -> None:
         self._find_object = find_object
+        self._iter_objects = iter_objects
+        self._is_known_feature = is_known_feature
         self._environment: dict[str, Any] | None = None
         self._deferred: _Deferred | None = None
         self.ledger = Ledger()
@@ -164,14 +180,23 @@ class ProvenanceService:
         """Write the ledger block into a workspace file, after its panels."""
         save_ledger(h5file, self.ledger)
 
-    def load(self, block: tuple[Ledger, dict[str, str]] | None, replaced: bool) -> None:
+    def load(
+        self,
+        block: tuple[Ledger, dict[str, str]] | None,
+        replaced: bool,
+        saved_version: str | None = None,
+    ) -> None:
         """Adopt the ledger read from a workspace file, after its objects.
+
+        Processing records of objects unknown to the ledger (workspaces saved
+        without provenance) are then imported as ``legacy_metadata`` activities.
 
         Args:
             block: ``(ledger, state_status)`` read before the workspace was
              replaced, or None when the file has no provenance block.
             replaced: False when the file was appended to the current workspace:
              ledgers are not merged and the file's block is ignored.
+            saved_version: DataLab version that saved the file, as stored.
         """
         if not replaced:
             if block is not None:
@@ -184,9 +209,46 @@ class ProvenanceService:
         self.reset()
         if block is None:
             self.file_status = "absent"
+        else:
+            self.ledger, self.state_status = block
+            self.file_status = "loaded"
+        self._import_legacy(saved_version)
+
+    def _import_legacy(self, saved_version: str | None) -> None:
+        """Import the processing records of objects unknown to the ledger."""
+        try:
+            known = set(self.ledger.object_uuids())
+            objects = []
+            for obj in self._iter_objects():
+                uid = get_uuid(obj)
+                facts = None
+                if uid not in known and PROCESSING_KEY in obj.metadata:
+                    facts = state_facts(obj)
+                kind = "image" if isinstance(obj, ImageObj) else "signal"
+                objects.append(LegacyObject(uid, kind, obj.metadata, facts))
+            activities = import_legacy(
+                self.ledger,
+                objects,
+                is_known=lambda _kind, name, origin: self._is_known_feature(
+                    name, origin
+                ),
+                saved_version=saved_version,
+                current_version=datalab.__version__,
+            )
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            self._capture_failed(exc)
             return
-        self.ledger, self.state_status = block
-        self.file_status = "loaded"
+        if activities:
+            message = (
+                f"{len(activities)} processing records saved without provenance "
+                "were imported as legacy activities (never replayed)"
+            )
+            _logger.info(message)
+            self.notices.append(message)
+
+    def legacy_summary(self) -> dict[str, Any]:
+        """Return the legacy activities of the ledger and the issues found."""
+        return legacy_summary(self.ledger)
 
     # -- Capture ------------------------------------------------------------
 
