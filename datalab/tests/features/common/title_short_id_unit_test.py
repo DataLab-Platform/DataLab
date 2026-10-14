@@ -14,9 +14,10 @@ Validates the helpers underpinning UUID8 title references:
 
 from __future__ import annotations
 
+import sigima.params
 import sigima.proc.signal as sips
 from sigima.objects import create_signal
-from sigima.tests.data import create_paracetamol_signal
+from sigima.tests.data import create_paracetamol_signal, create_sincos_image
 
 from datalab.config import Conf
 from datalab.objectmodel import (
@@ -24,6 +25,7 @@ from datalab.objectmodel import (
     find_title_references,
     get_short_uuid,
     get_title_reference,
+    get_uuid,
     patch_title_with_ids,
     remap_title_references,
 )
@@ -86,3 +88,81 @@ def test_title_mode_follows_source_renames() -> None:
             assert win.render_object_title(derived.title) == (
                 "derivative(derivative(Renamed source))"
             )
+
+
+def test_title_mode_covers_common_operations() -> None:
+    """Source-title mode resolves 2-to-1, group n-to-1 and cross-panel results."""
+    with datalab_test_app_context(console=False) as win:
+        panel = win.signalpanel
+        sig_a, sig_b = create_paracetamol_signal(), create_paracetamol_signal()
+        sig_a.title, sig_b.title = "Signal A", "Signal B"
+        panel.add_object(sig_a)
+        panel.add_object(sig_b)
+        panel.objview.select_objects([sig_a])
+        panel.processor.run_feature("difference", sig_b)
+        difference = panel.objview.get_current_object()
+        group = panel.objmodel.get_group_from_object(sig_a)
+        group.title = "Campaign"
+        panel.objview.select_groups([group])
+        panel.processor.run_feature(sips.average)
+        average_group = panel.objmodel.get_groups()[-1]
+        image = create_sincos_image()
+        image.title = "Image A"
+        win.imagepanel.add_object(image)
+        param = sigima.params.LineProfileParam.create(
+            direction="horizontal", row=100, col=100
+        )
+        win.imagepanel.processor.run_feature("line_profile", param)
+        profile = win.signalpanel.objview.get_current_object()
+        assert get_title_reference(sig_b) in difference.title
+        assert get_title_reference(group) in average_group.title
+        assert get_title_reference(image) in profile.title
+
+        with Conf.result_title_mode.context("title"):
+            assert win.render_object_title(difference.title) == (
+                difference.title.replace(
+                    get_title_reference(sig_a), "Signal A"
+                ).replace(get_title_reference(sig_b), "Signal B")
+            )
+            assert win.render_object_title(average_group.title) == (
+                average_group.title.replace(get_title_reference(group), "Campaign")
+            )
+            assert win.render_object_title(profile.title) == (
+                profile.title.replace(get_title_reference(image), "Image A")
+            )
+
+
+def test_title_mode_falls_back_to_reference_of_deleted_source() -> None:
+    """A deleted source keeps its UUID8 reference, rendered as plain text."""
+    with datalab_test_app_context(console=False) as win:
+        panel = win.signalpanel
+        source = create_paracetamol_signal()
+        panel.add_object(source)
+        panel.processor.run_feature(sips.derivative)
+        derived = panel.objview.get_current_object()
+        panel.objview.select_objects([source])
+        panel.remove_object(force=True)
+        with Conf.result_title_mode.context("title"):
+            assert win.render_object_title(derived.title) == derived.title
+            reference = get_title_reference(source)
+            assert panel.objview.get_title_reference_display(reference) is None
+
+
+def test_title_mode_refreshes_legend_and_plot_title() -> None:
+    """Mode changes and renames refresh the shown legend and plot title."""
+    with datalab_test_app_context(console=False) as win:
+        panel = win.signalpanel
+        source = create_paracetamol_signal()
+        source.title = "Source"
+        panel.add_object(source)
+        panel.processor.run_feature(sips.derivative)
+        derived = panel.objview.get_current_object()
+        panel.objview.select_objects([source])
+        panel.objview.select_objects([derived])
+        item = panel.plothandler[get_uuid(derived)]
+        with Conf.result_title_mode.context("title"):
+            win.refresh_object_title_displays()
+            assert item.param.label == "derivative(Source)"
+            assert panel.plothandler.plot.get_title() == "derivative(Source)"
+            panel.rename_selected_object_or_group("My derivative")
+            assert item.param.label == "My derivative"
