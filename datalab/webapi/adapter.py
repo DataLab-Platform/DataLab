@@ -34,7 +34,7 @@ from typing import TYPE_CHECKING, Any, Union
 
 from qtpy.QtCore import QCoreApplication, QObject, QThread, Signal, Slot
 
-from datalab.objectmodel import get_uuid
+from datalab.objectmodel import UUID_REGEX, get_uuid
 
 if TYPE_CHECKING:
     from sigima.objects import ImageObj, SignalObj
@@ -170,13 +170,63 @@ class WorkspaceAdapter(QObject):
     # Read operations (marshaled to Qt main thread for thread safety)
     # =========================================================================
 
-    def list_objects(self) -> list[tuple[str, str]]:
+    def find_object(
+        self, identifier: str, panel_str: str | None = None
+    ) -> tuple[str, Any, DataObject]:
+        """Find one object by UUID or unique title on the Qt main thread.
+
+        Args:
+            identifier: Full object UUID or title.
+            panel_str: Optional panel restriction (``"signal"`` or ``"image"``).
+
+        Returns:
+            Panel name, panel widget, and matching object.
+
+        Raises:
+            KeyError: If no object matches.
+            ValueError: If a title matches multiple objects.
+        """
+        panels = (
+            ("signal", self._main_window.signalpanel),
+            ("image", self._main_window.imagepanel),
+        )
+        if panel_str is not None:
+            panels = tuple(item for item in panels if item[0] == panel_str)
+
+        matches = []
+        if UUID_REGEX.fullmatch(identifier):
+            matches = [
+                (name, panel, obj)
+                for name, panel in panels
+                if panel is not None
+                for obj in panel.objmodel
+                if get_uuid(obj) == identifier
+            ]
+        if not matches:
+            matches = [
+                (name, panel, obj)
+                for name, panel in panels
+                if panel is not None
+                for obj in panel.objmodel
+                if obj.title == identifier
+            ]
+
+        if not matches:
+            raise KeyError(f"Object '{identifier}' not found")
+        if len(matches) > 1:
+            match_ids = ", ".join(get_uuid(obj) for _name, _panel, obj in matches)
+            raise ValueError(
+                f"Object title '{identifier}' is ambiguous; matches: {match_ids}"
+            )
+        return matches[0]
+
+    def list_objects(self) -> list[tuple[str, str, str]]:
         """List all objects in the workspace.
 
         This operation is marshaled to the Qt main thread for thread safety.
 
         Returns:
-            List of (name, panel) tuples for all objects.
+            List of (uuid, title, panel) tuples for all objects.
         """
         self._ensure_main_window()
 
@@ -186,49 +236,39 @@ class WorkspaceAdapter(QObject):
             sig_panel = self._main_window.signalpanel
             if sig_panel is not None:
                 for obj in sig_panel.objmodel:
-                    result.append((obj.title, "signal"))
+                    result.append((get_uuid(obj), obj.title, "signal"))
 
             # Access image panel
             img_panel = self._main_window.imagepanel
             if img_panel is not None:
                 for obj in img_panel.objmodel:
-                    result.append((obj.title, "image"))
+                    result.append((get_uuid(obj), obj.title, "image"))
             return result
 
         return self._executor.run_on_main_thread(do_list)
 
-    def get_object(self, name: str) -> DataObject:
-        """Get an object by name.
+    def get_object(self, identifier: str) -> DataObject:
+        """Get an object by full UUID or canonical title.
 
         This operation is marshaled to the Qt main thread for thread safety.
 
         Args:
-            name: Object name/title.
+            identifier: Full object UUID or canonical title.
 
         Returns:
             The requested object.
 
         Raises:
             KeyError: If object not found.
+            ValueError: If multiple objects have the same title.
         """
         self._ensure_main_window()
 
         def do_get():
-            # Search in signal panel
-            sig_panel = self._main_window.signalpanel
-            if sig_panel is not None:
-                for obj in sig_panel.objmodel:
-                    if obj.title == name:
-                        return obj.copy()
-
-            # Search in image panel
-            img_panel = self._main_window.imagepanel
-            if img_panel is not None:
-                for obj in img_panel.objmodel:
-                    if obj.title == name:
-                        return obj.copy()
-
-            raise KeyError(f"Object '{name}' not found")
+            _panel_name, _panel, obj = self.find_object(identifier)
+            obj_copy = obj.copy(all_metadata=True)
+            obj_copy.set_metadata_option("uuid", get_uuid(obj))
+            return obj_copy
 
         return self._executor.run_on_main_thread(do_get)
 
@@ -247,35 +287,25 @@ class WorkspaceAdapter(QObject):
         except KeyError:
             return False
 
-    def get_object_panel(self, name: str) -> str | None:
+    def get_object_panel(self, identifier: str) -> str | None:
         """Get the panel containing an object.
 
         This operation is marshaled to the Qt main thread for thread safety.
 
         Args:
-            name: Object name/title.
+            identifier: Full object UUID or unique title.
 
         Returns:
             "signal" or "image", or None if not found.
         """
         self._ensure_main_window()
 
-        def do_lookup():
-            sig_panel = self._main_window.signalpanel
-            if sig_panel is not None:
-                for obj in sig_panel.objmodel:
-                    if obj.title == name:
-                        return "signal"
-
-            img_panel = self._main_window.imagepanel
-            if img_panel is not None:
-                for obj in img_panel.objmodel:
-                    if obj.title == name:
-                        return "image"
-
+        try:
+            return self._executor.run_on_main_thread(
+                lambda: self.find_object(identifier)[0]
+            )
+        except KeyError:
             return None
-
-        return self._executor.run_on_main_thread(do_lookup)
 
     # =========================================================================
     # Write operations (must be marshaled to Qt main thread)
@@ -337,38 +367,14 @@ class WorkspaceAdapter(QObject):
             KeyError: If object not found.
         """
         self._ensure_main_window()
-
-        if not self.object_exists(name):
-            raise KeyError(f"Object '{name}' not found")
-
         self._remove_object_sync(name)
 
     def _remove_object_sync(self, name: str) -> None:
         """Remove object (called from main thread or marshaled via executor)."""
-        panel_name = self.get_object_panel(name)
-        if panel_name is None:
-            return
-
-        main_window = self._main_window
 
         # Use executor to run on main thread, including all panel access
         def do_remove():
-            # All panel access happens inside the executor
-            if panel_name == "signal":
-                panel = main_window.signalpanel
-            else:
-                panel = main_window.imagepanel
-
-            # Find the object
-            target_obj = None
-            for obj in panel.objmodel:
-                if obj.title == name:
-                    target_obj = obj
-                    break
-
-            if target_obj is None:
-                return
-
+            _panel_name, panel, target_obj = self.find_object(name)
             obj_uuid = get_uuid(target_obj)
 
             # Remove using the same approach as remove_all_objects but for single object
@@ -385,7 +391,7 @@ class WorkspaceAdapter(QObject):
 
         self._executor.run_on_main_thread(do_remove)
 
-    def update_metadata(self, name: str, metadata: dict) -> None:
+    def update_metadata(self, name: str, metadata: dict) -> str:
         """Update object metadata.
 
         This operation modifies Qt objects and should be marshaled to the
@@ -400,29 +406,18 @@ class WorkspaceAdapter(QObject):
         """
         self._ensure_main_window()
 
-        panel_name = self.get_object_panel(name)
-        if panel_name is None:
-            raise KeyError(f"Object '{name}' not found")
-
-        if panel_name == "signal":
-            panel = self._main_window.signalpanel
-        else:
-            panel = self._main_window.imagepanel
-
         def do_update():
-            # Find and update object
-            for obj in panel.objmodel:
-                if obj.title == name:
-                    for key, value in metadata.items():
-                        if value is not None and hasattr(obj, key):
-                            setattr(obj, key, value)
-                    # Refresh display
-                    panel.SIG_REFRESH_PLOT.emit("selected", True)
-                    break
+            _panel_name, panel, obj = self.find_object(name)
+            for key, value in metadata.items():
+                if value is not None and hasattr(obj, key):
+                    setattr(obj, key, value)
+            panel.SIG_REFRESH_PLOT.emit("selected", True)
+            panel.SIG_OBJECT_MODIFIED.emit()
+            return get_uuid(obj)
 
-        self._executor.run_on_main_thread(do_update)
+        return self._executor.run_on_main_thread(do_update)
 
-    def set_object(self, name: str, obj: DataObject) -> None:
+    def set_object(self, name: str, obj: DataObject) -> str:
         """Update an existing object in-place with new data.
 
         This operation replaces all data attributes of the existing object
@@ -440,31 +435,22 @@ class WorkspaceAdapter(QObject):
         """
         self._ensure_main_window()
 
-        panel_name = self.get_object_panel(name)
-        if panel_name is None:
-            raise KeyError(f"Object '{name}' not found")
-
-        if panel_name == "signal":
-            panel = self._main_window.signalpanel
-        else:
-            panel = self._main_window.imagepanel
-
         def do_set():
-            # Find the existing object by title
-            for existing in panel.objmodel:
-                if existing.title == name:
-                    # Copy all public DataSet item values
-                    for item in existing._items:  # pylint: disable=protected-access
-                        attr_name = item.get_name()
-                        if not attr_name.startswith("_"):
-                            setattr(existing, attr_name, getattr(obj, attr_name))
-                    # Refresh display
-                    panel.objview.update_tree()
-                    panel.SIG_REFRESH_PLOT.emit("selected", True)
-                    return
-            raise KeyError(f"Object '{name}' not found")
+            _panel_name, panel, existing = self.find_object(name)
+            object_uuid = get_uuid(existing)
+            obj.title = existing.title
+            # Copy all public DataSet item values
+            for item in existing.get_items():
+                attr_name = item.get_name()
+                if not attr_name.startswith("_"):
+                    setattr(existing, attr_name, getattr(obj, attr_name))
+            existing.set_metadata_option("uuid", object_uuid)
+            panel.objview.update_tree()
+            panel.SIG_REFRESH_PLOT.emit("selected", True)
+            panel.SIG_OBJECT_MODIFIED.emit()
+            return object_uuid
 
-        self._executor.run_on_main_thread(do_set)
+        return self._executor.run_on_main_thread(do_set)
 
     def clear(self) -> None:
         """Clear all objects from the workspace.
@@ -508,13 +494,13 @@ class WorkspaceAdapter(QObject):
         def do_select():
             # Determine panel for each object
             panels_found = set()
+            resolved = []
             obj_indices = []
 
             for name in names:
-                obj_panel = self.get_object_panel(name)
-                if obj_panel is None:
-                    raise KeyError(f"Object '{name}' not found")
+                obj_panel, _panel_widget, obj = self.find_object(name, panel)
                 panels_found.add(obj_panel)
+                resolved.append(obj)
 
             if len(panels_found) > 1:
                 raise ValueError(
@@ -535,10 +521,10 @@ class WorkspaceAdapter(QObject):
             else:
                 panel_widget = self._main_window.imagepanel
 
-            # Find object indices (1-based) by name
-            for name in names:
+            # Find object indices (1-based) by stable identity
+            for resolved_obj in resolved:
                 for idx, obj in enumerate(panel_widget.objmodel):
-                    if obj.title == name:
+                    if get_uuid(obj) == get_uuid(resolved_obj):
                         obj_indices.append(idx + 1)  # 1-based indexing
                         break
 

@@ -541,95 +541,63 @@ msgstr ":class:`PluginBase`, qui est la classe de base pour tous les plugins"
 msgid "Plugins may also extends DataLab I/O features by providing new image or signal formats. To do so, they must provide a subclass of :class:`ImageFormatBase` or :class:`SignalFormatBase`, in which format information is defined using the :class:`FormatInfo` class."
 msgstr "Les plugins peuvent également étendre les fonctionnalités d'entrée/sortie de DataLab en fournissant de nouveaux formats d'image ou de signal. Pour ce faire, ils doivent fournir une sous-classe de :class:`ImageFormatBase` ou :class:`SignalFormatBase`, dans laquelle les informations de format sont définies à l'aide de la classe :class:`FormatInfo`."
 
-msgid "Metaclass for registering plugins"
-msgstr "Métaclasse pour l'enregistrement des plugins"
+msgid "Object representing classic image file types"
+msgstr ""
 
-msgid "Return plugin classes"
-msgstr "Retourne les classes de plugins"
-
-msgid "Return plugin instances"
-msgstr "Retourne les instances de plugins"
-
-msgid "Return a plugin by stable ID, legacy name, or class."
-msgstr "Renvoie un plugin à partir de son identifiant stable, de son ancien nom ou de sa classe."
-
-msgid "Legacy display names are accepted only when they identify a single plugin."
-msgstr "Les anciens noms d'affichage ne sont acceptés que s'ils désignent un seul plugin."
-
-msgid "Register plugin"
-msgstr "Enregistrer le plugin"
-
-msgid "Unregister plugin"
-msgstr "Désenregistrer le plugin"
-
-msgid "Unregister all plugins"
-msgstr "Désenregistrer tous les plugins"
-
-msgid "Clear registered plugin classes."
-msgstr "Effacer les classes de plugins enregistrées"
-
-msgid "This is mainly useful when reloading plugin modules at runtime."
-msgstr "Ceci est principalement utile lors du rechargement des modules de plugins à l'exécution."
-
-msgid "Record an error traceback that occurred during plugin discovery."
-msgstr "Enregistrer une trace d'erreur survenue lors de la découverte des plugins."
+msgid "Read data and return it"
+msgstr ""
 
 msgid "Parameters"
 msgstr "Paramètres"
 
-msgid "Formatted traceback string"
-msgstr "Chaîne de trace d'erreur formatée"
-
-msgid "Return error tracebacks collected during plugin discovery."
-msgstr "Retourner les traces d'erreur collectées lors de la découverte des plugins."
+msgid "File name"
+msgstr ""
 
 msgid "Returns"
 msgstr "Retourne"
 
-msgid "List of formatted traceback strings (may be empty)"
-msgstr "Liste des chaînes de trace d'erreur formatées (peut être vide)"
+msgid "Image array data"
+msgstr ""
 
-msgid "Clear recorded discovery errors."
-msgstr "Effacer les erreurs de découverte enregistrées."
-
-msgid "Record a plugin that failed to load or instantiate."
-msgstr "Enregistrer un plugin qui n'a pas pu être chargé ou instancié."
-
-msgid "Module or plugin class name"
-msgstr "Nom du module ou de la classe du plugin"
-
-msgid "File path of the plugin module"
-msgstr "Chemin d'accès du module du plugin"
-
-msgid "Discovery source description"
-msgstr "Description de la source de découverte"
-
-msgid "Return structured info about plugins that failed to load."
-msgstr "Renvoie des informations structurées sur les plugins qui n'ont pas pu être chargés."
-
-msgid "List of FailedPluginInfo objects (may be empty)"
-msgstr "Liste des objets FailedPluginInfo (peut être vide)"
-
-msgid "Clear recorded failed plugin info."
-msgstr "Effacer les informations sur les plugins ayant échoué."
-
-msgid "Return plugin information (names, versions, descriptions) in html format"
-msgstr "Retourne les informations sur les plugins (noms, versions, descriptions) au format html"
-
-msgid "return html formatted text (default: True)"
-msgstr "retourner du texte formaté en html (par défaut : True)"
+msgid "Write data to file"
+msgstr ""
 
 msgid "Information about a plugin that failed to load or instantiate."
 msgstr "Informations sur un plugin qui n'a pas pu être chargé ou instancié."
 
-msgid "Capability exposed by a plugin to DataLab consumers."
-msgstr "Capacité exposée par un plugin aux consommateurs de DataLab."
+msgid "Format info"
+msgstr ""
 
-msgid "Plugin info"
-msgstr "Informations sur le plugin"
+msgid "Return reStructuredText table row for format info (table `.. list-table::` format, with 5 columns)"
+msgstr ""
 
-msgid "Mixed metaclass to avoid conflicts"
-msgstr "Métaclasse mixte pour éviter les conflits"
+msgid "Base image format object."
+msgstr ""
+
+msgid "This class is used to define the interface for image I/O formats. It is an abstract base class that defines the methods that must be implemented by any image format class."
+msgstr ""
+
+msgid "Read list of image objects from file"
+msgstr ""
+
+msgid "Callback worker object"
+msgstr ""
+
+msgid "List of image objects"
+msgstr ""
+
+msgid "file name"
+msgstr ""
+
+#, fuzzy
+msgid "native object (signal or image)"
+msgstr "signaux et images générés"
+
+msgid "Raises"
+msgstr "Lève"
+
+msgid "if format is not supported"
+msgstr ""
 
 msgid "Plugin base class"
 msgstr "Classe de base du plugin"
@@ -691,9 +659,6 @@ msgstr "Ouvre un exemple, puis lance l'une des recettes pour lesquelles il est c
 msgid "Return validated tools listed in the Applications catalog."
 msgstr "Renvoie les outils validés listés dans le catalogue Applications."
 
-msgid "Return the message telling which objects to select to open a tool."
-msgstr "Renvoie le message indiquant quels objets sélectionner pour ouvrir un outil."
-
 msgid "Return one tool by its plugin-local ID."
 msgstr "Renvoie un outil à partir de son identifiant local au plugin."
 
@@ -705,9 +670,6 @@ msgstr "Message indiquant quels objets sélectionner, ou None si l'outil peut ê
 
 msgid "Open a plugin tool: call its launcher, or show its instrument."
 msgstr "Ouvre un outil du plugin : appelle sa méthode de lancement, ou affiche son instrument."
-
-msgid "Raises"
-msgstr "Lève"
 
 msgid "if the selection does not allow opening the tool"
 msgstr "si la sélection ne permet pas d'ouvrir l'outil"
@@ -805,6 +767,12 @@ msgstr "Nouveau jeu de paramètres d'image (ou None si annulé)"
 msgid "Return True if plugin is registered"
 msgstr "Retourne True si le plugin est enregistré"
 
+msgid "Register plugin"
+msgstr "Enregistrer le plugin"
+
+msgid "Unregister plugin"
+msgstr "Désenregistrer le plugin"
+
 msgid "Remove this plugin's computing features from available processors."
 msgstr "Supprime les fonctionnalités de calcul de ce plugin des processeurs disponibles."
 
@@ -832,20 +800,111 @@ msgstr "Crée les actions."
 msgid "Called immediately after :meth:`register_computations`, inside the panels' PLUGINS action category: actions created here populate the *Plugins* menu."
 msgstr "Appelée juste après :meth:`register_computations`, dans la catégorie d'actions PLUGINS des panneaux : les actions créées ici alimentent le menu *Plugins*."
 
-msgid "Migrate enabled plugin display names to stable IDs."
-msgstr "Convertit les noms d'affichage des plugins activés en identifiants stables."
+msgid "Mixed metaclass to avoid conflicts"
+msgstr "Métaclasse mixte pour éviter les conflits"
 
-msgid "Unknown entries are retained so temporarily unavailable plugins do not lose their activation state. A legacy name shared by multiple plugins enables all matching IDs because the old setting cannot distinguish between them."
-msgstr "Les entrées inconnues sont conservées afin que les plugins temporairement indisponibles ne perdent pas leur état d'activation. Un ancien nom partagé par plusieurs plugins active tous les identifiants correspondants, car l'ancien paramètre ne permet pas de les distinguer."
+msgid "Capability exposed by a plugin to DataLab consumers."
+msgstr "Capacité exposée par un plugin aux consommateurs de DataLab."
 
-msgid "Configured stable IDs or legacy display names"
-msgstr "Identifiants stables ou anciens noms d'affichage configurés"
+msgid "Plugin info"
+msgstr "Informations sur le plugin"
 
-msgid "Classes available for migration (registry by default)"
-msgstr "Classes disponibles pour la conversion (registre par défaut)"
+msgid "Metaclass for registering plugins"
+msgstr "Métaclasse pour l'enregistrement des plugins"
 
-msgid "Enabled stable IDs and retained unknown entries, or None for all plugins"
-msgstr "Identifiants stables activés et entrées inconnues conservées, ou None pour tous les plugins"
+msgid "Return plugin classes"
+msgstr "Retourne les classes de plugins"
+
+msgid "Return plugin instances"
+msgstr "Retourne les instances de plugins"
+
+msgid "Return a plugin by stable ID, legacy name, or class."
+msgstr "Renvoie un plugin à partir de son identifiant stable, de son ancien nom ou de sa classe."
+
+msgid "Legacy display names are accepted only when they identify a single plugin."
+msgstr "Les anciens noms d'affichage ne sont acceptés que s'ils désignent un seul plugin."
+
+msgid "Unregister all plugins"
+msgstr "Désenregistrer tous les plugins"
+
+msgid "Clear registered plugin classes."
+msgstr "Effacer les classes de plugins enregistrées"
+
+msgid "This is mainly useful when reloading plugin modules at runtime."
+msgstr "Ceci est principalement utile lors du rechargement des modules de plugins à l'exécution."
+
+msgid "Record an error traceback that occurred during plugin discovery."
+msgstr "Enregistrer une trace d'erreur survenue lors de la découverte des plugins."
+
+msgid "Formatted traceback string"
+msgstr "Chaîne de trace d'erreur formatée"
+
+msgid "Return error tracebacks collected during plugin discovery."
+msgstr "Retourner les traces d'erreur collectées lors de la découverte des plugins."
+
+msgid "List of formatted traceback strings (may be empty)"
+msgstr "Liste des chaînes de trace d'erreur formatées (peut être vide)"
+
+msgid "Clear recorded discovery errors."
+msgstr "Effacer les erreurs de découverte enregistrées."
+
+msgid "Record a plugin that failed to load or instantiate."
+msgstr "Enregistrer un plugin qui n'a pas pu être chargé ou instancié."
+
+msgid "Module or plugin class name"
+msgstr "Nom du module ou de la classe du plugin"
+
+msgid "File path of the plugin module"
+msgstr "Chemin d'accès du module du plugin"
+
+msgid "Discovery source description"
+msgstr "Description de la source de découverte"
+
+msgid "Return structured info about plugins that failed to load."
+msgstr "Renvoie des informations structurées sur les plugins qui n'ont pas pu être chargés."
+
+msgid "List of FailedPluginInfo objects (may be empty)"
+msgstr "Liste des objets FailedPluginInfo (peut être vide)"
+
+msgid "Clear recorded failed plugin info."
+msgstr "Effacer les informations sur les plugins ayant échoué."
+
+msgid "Return plugin information (names, versions, descriptions) in html format"
+msgstr "Retourne les informations sur les plugins (noms, versions, descriptions) au format html"
+
+msgid "return html formatted text (default: True)"
+msgstr "retourner du texte formaté en html (par défaut : True)"
+
+msgid "Class representing a signal file type"
+msgstr ""
+
+msgid "Create empty object"
+msgstr ""
+
+msgid "Index of object in file"
+msgstr ""
+
+#, fuzzy
+msgid "Signal object"
+msgstr "objets sélectionnés"
+
+msgid "Create signal object from xydata and filename."
+msgstr ""
+
+msgid "XY data"
+msgstr ""
+
+msgid "Create signal objects from xydata and filename"
+msgstr ""
+
+msgid "List of signal objects"
+msgstr ""
+
+msgid "Read list of signal objects from file"
+msgstr ""
+
+msgid "Read data and metadata from file, write metadata to object, return xydata"
+msgstr ""
 
 msgid "Discover plugins through package entry points and naming convention."
 msgstr "Découvrir les plugins via les points d'entrée de packages et la convention de nommage."
@@ -862,6 +921,36 @@ msgstr "Cette fonction modifie ``sys.modules`` et le registre des plugins sans s
 
 msgid "Imported/reloaded modules containing discovered plugins"
 msgstr "Modules importés ou rechargés contenant les plugins découverts"
+
+msgid "Discover v0.20 plugins (with ``cdl_`` prefix) without importing them"
+msgstr "Découvrir les plugins v0.20 (avec le préfixe ``cdl_``) sans les importer"
+
+msgid "List of tuples (plugin_name, directory_path) for discovered v0.20 plugins"
+msgstr "Liste des tuples (nom_du_plugin, chemin_du_répertoire) pour les plugins v0.20 découverts"
+
+msgid "Return the message telling which objects to select to open a tool."
+msgstr "Renvoie le message indiquant quels objets sélectionner pour ouvrir un outil."
+
+msgid "Instantiate and get available plugins"
+msgstr "Instancier et obtenir les plugins disponibles"
+
+msgid "List of available plugins (as instances)"
+msgstr "Liste des plugins disponibles (en tant qu'instances)"
+
+msgid "Migrate enabled plugin display names to stable IDs."
+msgstr "Convertit les noms d'affichage des plugins activés en identifiants stables."
+
+msgid "Unknown entries are retained so temporarily unavailable plugins do not lose their activation state. A legacy name shared by multiple plugins enables all matching IDs because the old setting cannot distinguish between them."
+msgstr "Les entrées inconnues sont conservées afin que les plugins temporairement indisponibles ne perdent pas leur état d'activation. Un ancien nom partagé par plusieurs plugins active tous les identifiants correspondants, car l'ancien paramètre ne permet pas de les distinguer."
+
+msgid "Configured stable IDs or legacy display names"
+msgstr "Identifiants stables ou anciens noms d'affichage configurés"
+
+msgid "Classes available for migration (registry by default)"
+msgstr "Classes disponibles pour la conversion (registre par défaut)"
+
+msgid "Enabled stable IDs and retained unknown entries, or None for all plugins"
+msgstr "Identifiants stables activés et entrées inconnues conservées, ou None pour tous les plugins"
 
 msgid "Reload plugin modules and reset plugin classes."
 msgstr "Recharger les modules de plugins et réinitialiser les classes de plugins."
@@ -880,18 +969,6 @@ msgstr "Recharge ou importe tous les modules correspondant à la convention de n
 
 msgid "Like :func:`discover_plugins`, this is not thread-safe: call it from the Qt main thread only."
 msgstr "Comme :func:`discover_plugins`, cette fonction n'est pas thread-safe : ne l'appelez que depuis le thread principal Qt."
-
-msgid "Discover v0.20 plugins (with ``cdl_`` prefix) without importing them"
-msgstr "Découvrir les plugins v0.20 (avec le préfixe ``cdl_``) sans les importer"
-
-msgid "List of tuples (plugin_name, directory_path) for discovered v0.20 plugins"
-msgstr "Liste des tuples (nom_du_plugin, chemin_du_répertoire) pour les plugins v0.20 découverts"
-
-msgid "Instantiate and get available plugins"
-msgstr "Instancier et obtenir les plugins disponibles"
-
-msgid "List of available plugins (as instances)"
-msgstr "Liste des plugins disponibles (en tant qu'instances)"
 
 msgid "Headless contracts for plugin-provided scientific recipes."
 msgstr "Contrats sans interface graphique pour les recettes scientifiques fournies par les plugins."

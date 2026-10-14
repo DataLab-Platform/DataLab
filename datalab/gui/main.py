@@ -74,7 +74,12 @@ from datalab.gui.processor.base import FeatureNotFoundError
 from datalab.gui.processor.preview import PreviewExecutorCache
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
 from datalab.gui.welcome import WelcomePanel
-from datalab.objectmodel import ObjectGroup, get_uuid
+from datalab.objectmodel import (
+    UUID_REGEX,
+    ObjectGroup,
+    get_uuid,
+    resolve_title_references,
+)
 from datalab.plugins import (
     PluginRegistry,
     discover_plugins,
@@ -299,8 +304,18 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         Raises:
             KeyError: if object not found
+            ValueError: if multiple objects have the same title
             TypeError: if index_id_title type is invalid
         """
+        if (
+            isinstance(nb_id_title, str)
+            and panel is None
+            and UUID_REGEX.fullmatch(nb_id_title)
+        ):
+            obj = self.find_object_by_uuid(nb_id_title)
+            if obj is None or isinstance(obj, ObjectGroup):
+                raise KeyError(f"Invalid object index, id or title: {nb_id_title}")
+            return obj
         panelw = self.__get_datapanel(panel)
         if nb_id_title is None:
             return panelw.objview.get_current_object()
@@ -340,10 +355,46 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         for panel in (self.signalpanel, self.imagepanel):
             if panel is not None:
                 try:
-                    return panel.objmodel[uuid]
+                    return panel.objmodel.get_object_or_group(uuid)
                 except KeyError:
                     continue
         return None
+
+    def resolve_title_reference(
+        self, reference: str
+    ) -> tuple[str, SignalObj | ImageObj | ObjectGroup] | None:
+        """Resolve a title reference to ``(panel_str, object or group)``.
+
+        Args:
+            reference: ``<UUID8>`` (object) or ``g<UUID8>`` (group) reference
+
+        Returns:
+            The unique match across signal and image panels, or None if the
+            reference matches nothing or is ambiguous.
+        """
+        matches = [
+            (panel.PANEL_STR_ID, obj)
+            for panel in (self.signalpanel, self.imagepanel)
+            for obj in panel.objmodel.find_by_title_reference(reference)
+        ]
+        return matches[0] if len(matches) == 1 else None
+
+    def render_object_title(self, title: str) -> str:
+        """Render an object title according to user settings."""
+        if Conf.result_title_mode.get() != "title":
+            return title
+
+        def resolve_source_title(reference: str) -> str | None:
+            resolved = self.resolve_title_reference(reference)
+            return None if resolved is None else resolved[1].title
+
+        return resolve_title_references(title, resolve_source_title)
+
+    def refresh_object_title_displays(self) -> None:
+        """Refresh object titles in trees and shown plot items."""
+        for panel in (self.signalpanel, self.imagepanel):
+            panel.objview.update_tree()
+            panel.refresh_plot("selected", update_items=True, force=True)
 
     @remote_controlled
     def get_object_uuids(
@@ -1637,6 +1688,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             panel.SIG_OBJECT_ADDED.connect(self.set_modified)
             panel.SIG_OBJECT_REMOVED.connect(self.set_modified)
             panel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
+        for panel in (self.signalpanel, self.imagepanel):
+            panel.SIG_OBJECT_MODIFIED.connect(self.refresh_object_title_displays)
+            panel.SIG_OBJECT_REMOVED.connect(self.refresh_object_title_displays)
         # Initializing common panel actions
         self.autorefresh_action.setChecked(Conf.auto_refresh.get(True))
         self.showfirstonly_action.setChecked(Conf.show_first_only.get(False))
@@ -2314,9 +2368,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         )
         return self.add_object(obj, group_id, set_current, new_session_behavior)
 
-    # This API mirrors the image metadata accepted by create_image, so the
-    # argument count is part of the stable public interface rather than noise.
-    def add_image(  # pylint: disable=too-many-arguments
+    def add_image(
         self,
         title: str,
         data: np.ndarray,
@@ -2328,6 +2380,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         zlabel: str = "",
         group_id: str = "",
         set_current: bool = True,
+        *,
         new_session_behavior: SessionBehavior | None = None,
     ) -> bool:
         """Add image data to DataLab.
@@ -2441,6 +2494,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 "max_cols_in_label",
             ):
                 refresh_signal_panel = refresh_image_panel = True
+            if option == "result_title_mode":
+                self.refresh_object_title_displays()
             if option == "show_result_label":
                 for panel in (self.signalpanel, self.imagepanel):
                     panel.acthandler.show_label_action.setChecked(

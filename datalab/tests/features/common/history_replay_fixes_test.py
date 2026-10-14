@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import os
 import os.path as osp
+import tempfile
 from unittest.mock import patch
 
 import numpy as np
@@ -71,6 +72,46 @@ def test_replay_cross_panel_output_stays_in_destination_panel() -> None:
             assert not ipanel.objmodel.has_uuid(output_uuid)
             assert len(ipanel.objmodel) == image_count
             assert len(spanel.objmodel) == signal_count
+
+
+def test_nonempty_dlhist_double_import_remaps_cross_panel_outputs() -> None:
+    """Append each imported session once and remap profile outputs per import."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        path = osp.join(tmpdir, "profile.dlhist")
+        with datalab_test_app_context(history=True) as source:
+            source.historypanel.toggle_record_mode(True)
+            _action, original_output_uuid = record_line_profile(source)
+            exported_session_count = len(source.historypanel.history_sessions)
+            assert source.historypanel.save_to_dlhist_file(path)
+
+        with datalab_test_app_context(history=True) as target:
+            target.signalpanel.add_object(create_paracetamol_signal())
+            target.imagepanel.add_object(create_sincos_image())
+            imported_output_sets = []
+            for _import_index in range(2):
+                previous_session_count = len(target.historypanel.history_sessions)
+                assert target.historypanel.open_dlhist_file(path)
+                assert len(target.historypanel.history_sessions) == (
+                    previous_session_count + exported_session_count
+                )
+                imported_sessions = target.historypanel.history_sessions[
+                    -exported_session_count:
+                ]
+                profile_actions = [
+                    action
+                    for session in imported_sessions
+                    for action in session.actions
+                    if action.func_name == "line_profile"
+                ]
+                assert len(profile_actions) == 1
+                profile_action = profile_actions[0]
+                image_source_uuid = profile_action.state.selection["image"][0]
+                output_uuid = profile_action.output_uuids[0]
+                assert target.imagepanel.objmodel.has_uuid(image_source_uuid)
+                assert target.signalpanel.objmodel.has_uuid(output_uuid)
+                assert output_uuid != original_output_uuid
+                imported_output_sets.append(set(profile_action.output_uuids))
+            assert imported_output_sets[0].isdisjoint(imported_output_sets[1])
 
 
 def test_replay_recreates_deleted_cross_panel_output_in_destination_panel() -> None:

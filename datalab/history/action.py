@@ -147,6 +147,7 @@ class HistoryAction(ObjItf):
     def __init__(
         self,
         title: str = "",
+        *,
         kind: str = KIND_UI,
         # --- compute-only --------------------------------------------------
         panel_str: str | None = None,
@@ -307,6 +308,13 @@ class HistoryAction(ObjItf):
             A new independent :class:`HistoryAction` with supported UUID
              references remapped.
         """
+
+        def remap_owned_uuid(uuid: str) -> str:
+            matches = [pmap[uuid] for pmap in uuid_remap.values() if uuid in pmap]
+            if len(matches) > 1:
+                raise ValueError(f"Ambiguous object UUID in remap: {uuid}")
+            return matches[0] if matches else uuid
+
         new_action = self.copy()
         # Rewrite state.selection
         for pstr, uuids in new_action.state.selection.items():
@@ -329,11 +337,18 @@ class HistoryAction(ObjItf):
             new_action.kwargs["obj2_uuids"] = (
                 rewritten[0] if len(rewritten) == 1 else rewritten
             )
-        # Rewrite output_uuids — they reference the target panel.
+        source_uuid = new_action.kwargs.get("source_uuid")
+        if isinstance(source_uuid, str):
+            pmap = uuid_remap.get(new_action.effective_panel_str(), {})
+            new_action.kwargs["source_uuid"] = pmap.get(source_uuid, source_uuid)
+        output_uuid = new_action.kwargs.get("output_uuid")
+        if isinstance(output_uuid, str):
+            new_action.kwargs["output_uuid"] = remap_owned_uuid(output_uuid)
+        # Outputs may belong to another panel, for example image profiles.
         if new_action.output_uuids:
-            pstr = new_action.effective_panel_str()
-            pmap = uuid_remap.get(pstr, {})
-            new_action.output_uuids = [pmap.get(u, u) for u in new_action.output_uuids]
+            new_action.output_uuids = [
+                remap_owned_uuid(uuid) for uuid in new_action.output_uuids
+            ]
         # Rewrite target_uuids — mutated objects live in the target panel.
         if new_action.target_uuids:
             pstr = new_action.effective_panel_str()
