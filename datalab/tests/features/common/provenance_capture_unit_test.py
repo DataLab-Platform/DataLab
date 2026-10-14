@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import os.path as osp
+import sys
 
 import h5py
 import numpy as np
@@ -524,15 +525,134 @@ def test_capture_reference_files(edition: str) -> None:
         check_capture(win, edition)
 
 
-def write_reference_file() -> None:
-    """Write the Desktop capture reference file (unattended)."""
-    path = osp.join(HDF5_DIR, "provenance_desktop_capture.h5")
+# -- Cross-edition families reference files -----------------------------------
+#
+# One operation of each family, run identically by each edition: Desktop writes
+# ``provenance_desktop_families.h5`` (run this module as a script); DataLab-Web
+# writes ``web_families.h5`` from Pyodide (Playwright,
+# ``DLW_WRITE_PROVENANCE_FIXTURE=1``). Each edition replays the other's file:
+# exact, or within the tolerance declared by the qualification of the operation
+# (different numerical libraries).
+
+FAMILIES_REFERENCE = [
+    "sigima.signal.average",
+    "sigima.signal.signals_to_image",
+    "sigima.signal.fft",
+    "sigima.signal.add_gaussian_noise",
+    "sigima.signal.moving_average",
+    "sigima.signal.stats",
+    "sigima.image.line_profile",
+    "sigima.image.centroid",
+    "sigima.image.convolution",
+    "sigima.image.peak_detection",
+]
+
+
+def build_families_reference(win) -> None:
+    """Run the cross-edition families scenario."""
+    spanel, ipanel = win.signalpanel, win.imagepanel
+    signals = [add_signal(win, Y * k, f"S{k}") for k in (1, 2, 3)]
+    uuids = [get_uuid(s) for s in signals]
+    spanel.objview.select_objects(uuids)
+    spanel.processor.compute_n_to_1(sips.average, edit=False)
+    spanel.objview.select_objects(uuids)
+    spanel.processor.compute_n_to_1(
+        sips.signals_to_image, sigima.params.SignalsToImageParam(), edit=False
+    )
+    spanel.objview.select_objects(uuids[:1])
+    spanel.processor.compute_1_to_1(
+        sips.fft, sigima.params.FFTParam.create(shift=True), edit=False
+    )
+    spanel.objview.select_objects(uuids[:1])
+    noise = sigima.objects.NormalDistributionParam.create(seed=7, sigma=0.5)
+    spanel.processor.compute_1_to_1(sips.add_gaussian_noise, noise, edit=False)
+    single = create_signal(
+        "F", X.astype(np.float32), Y.astype(np.float32), units=("s", "")
+    )
+    spanel.add_object(single)
+    spanel.objview.select_objects([get_uuid(single)])
+    spanel.processor.compute_1_to_1(
+        sips.moving_average,
+        sigima.params.MovingAverageParam.create(n=3),
+        edit=False,
+    )
+    spanel.objview.select_objects(uuids[:1])
+    spanel.processor.run_feature("stats")
+    image = add_image(win)
+    ipanel.objview.select_objects([get_uuid(image)])
+    profile = sigima.params.LineProfileParam.create(direction="horizontal", row=1)
+    ipanel.processor.compute_1_to_1(sipi.line_profile, profile, edit=False)
+    ipanel.objview.select_objects([get_uuid(image)])
+    ipanel.processor.run_feature("centroid")
+    kernel = add_image(win, "K")
+    ipanel.objview.select_objects([get_uuid(image)])
+    with sigima.config.options.auto_normalize_kernel.context(False):
+        ipanel.processor.compute_2_to_1(kernel, "K", sipi.convolution, edit=False)
+    ramp = create_image("ramp", np.add.outer(np.arange(16.0), np.arange(16.0)))
+    ipanel.add_object(ramp)
+    ipanel.objview.select_objects([get_uuid(ramp)])
+    ipanel.processor.compute_1_to_0(
+        sipi.peak_detection, sigima.params.Peak2DDetectionParam(), edit=False
+    )
+
+
+def check_families_reference(win, edition: str) -> list[dict]:
+    """Replay a reopened families file written by *edition*; return the reports."""
+    ledger = win.provenance.ledger
+    ledger.validate()
+    assert win.provenance.state_status == {}
+    activities = ledger.activities
+    assert [a["edition"] for a in activities] == [edition] * len(FAMILIES_REFERENCE)
+    assert [a["call"]["operation"]["id"] for a in activities] == FAMILIES_REFERENCE
+    assert activities[-1]["outputs"] == []  # nothing detected on the ramp
+    single = ledger.states[activities[4]["call"]["inputs"][0]["binding"]["state_id"]]
+    assert single["fingerprint"]["scheme"] == "datalab-signal-v2"  # float32 rows
+    reports = []
+    for activity in activities:
+        report = win.verify_provenance_activity(activity["activity_id"])
+        accepted = ("exact",) if edition == "desktop" else ("exact", "within_tolerance")
+        assert report["verdict"] in accepted, report
+        reports.append(report)
+    return reports
+
+
+def test_families_reference_round_trip() -> None:
+    """The families scenario reopens and replays exactly in a fresh window."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        path = osp.join(tmpdir, "families.h5")
+        with app() as win:
+            build_families_reference(win)
+            win.save_h5_workspace(path)
+        with app() as win:
+            win.load_h5_workspace([path], reset_all=True)
+            check_families_reference(win, "desktop")
+
+
+@pytest.mark.parametrize("edition", ["desktop", "web"])
+def test_families_reference_files(edition: str) -> None:
+    """Families files of both editions are replayed here under the declared rule."""
+    path = osp.join(HDF5_DIR, f"provenance_{edition}_families.h5")
+    with app() as win:
+        win.load_h5_workspace([path], reset_all=True)
+        check_families_reference(win, edition)
+
+
+def write_reference_file(name: str = "families") -> None:
+    """Write a Desktop reference file (unattended).
+
+    Args:
+        name: ``families`` or ``capture``. The capture file in the repository was
+         recorded by an earlier version (activities without identity) and is
+         kept as such, to check that older files stay readable.
+    """
+    build = {"capture": build_capture, "families": build_families_reference}[name]
+    path = osp.join(HDF5_DIR, f"provenance_desktop_{name}.h5")
     execenv.unattended = True
     with app() as win:
-        build_capture(win)
+        build(win)
         win.save_h5_workspace(path)
     print(f"Written: {path}")
 
 
 if __name__ == "__main__":
-    write_reference_file()
+    write_reference_file(*sys.argv[1:])
