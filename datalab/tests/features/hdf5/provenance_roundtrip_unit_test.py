@@ -80,13 +80,22 @@ def _output_object(win, activity):
     return win.find_object_by_uuid(state["object_uuid"])
 
 
-def check_chain(win, edition: str) -> None:
-    """Check a reopened chain workspace: facts, data and real replays."""
+def check_chain(win, edition: str, historical: bool = False) -> None:
+    """Check a reopened chain workspace: facts, data and real replays.
+
+    *historical* reference files were recorded when unqualified operations were
+    recorded without identity (opaque): they stay readable as such.
+    """
     ledger = win.provenance.ledger
     ledger.validate()
     a1, a2, a3, a4 = ledger.activities
     assert {a["edition"] for a in ledger.activities} == {edition}
-    assert a1["call"]["operation"] is None
+    # Not qualified yet, the constant addition keeps its identity.
+    assert a1["call"]["operation"] == (
+        None
+        if historical
+        else {"id": "sigima.signal.addition_constant", "contract_version": 1}
+    )
     assert a1["call"]["parameters"] == {"value": 1.0}
     assert [a["call"]["operation"] for a in (a2, a3, a4)] == [NORMALIZE] * 3
     assert [a["call"]["parameters"]["method"] for a in (a2, a3, a4)] == [
@@ -109,11 +118,18 @@ def check_chain(win, edition: str) -> None:
     references = {
         a["activity_id"]: _output_object(win, a).y.copy() for a in ledger.activities
     }
-    opaque = win.verify_provenance_activity(a1["activity_id"])
-    assert (opaque["restoration"], opaque["eligibility"]) == (
-        "opaque",
-        "unsupported_operation",
-    )
+    unqualified = win.verify_provenance_activity(a1["activity_id"])
+    if historical:
+        assert (unqualified["restoration"], unqualified["eligibility"]) == (
+            "opaque",
+            "unsupported_operation",
+        )
+    else:
+        assert (unqualified["restoration"], unqualified["eligibility"]) == (
+            "replayable",
+            "unsupported_contract",
+        )
+        assert "not qualified" in unqualified["reason"]
     computations = win.signalpanel.processor.execution.computations
     for activity in (a4, a2):
         report = win.verify_provenance_activity(activity["activity_id"])
@@ -165,7 +181,7 @@ def test_capsules_reopen(path: str, edition: str) -> None:
             file.write(capsule.workspace)
         with app() as win:
             _open(win, workspace)
-            check_chain(win, edition)
+            check_chain(win, edition, historical=True)
 
 
 @pytest.mark.parametrize(
@@ -175,7 +191,7 @@ def test_reference_files(path: str, edition: str) -> None:
     """Reference files of both editions reopen and replay on Desktop."""
     with app() as win:
         _open(win, path)
-        check_chain(win, edition)
+        check_chain(win, edition, historical=True)
 
 
 def test_altered_and_missing_objects() -> None:

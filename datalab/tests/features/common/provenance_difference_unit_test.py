@@ -214,15 +214,18 @@ def test_refused_alignment_creates_nothing() -> None:
         assert win.provenance.ledger.activities == ()
 
 
-def test_other_two_input_operations_are_opaque() -> None:
-    """Other 2-to-1 operations record their declared alignment, captured opaque."""
+def test_other_two_input_operations_keep_their_identity() -> None:
+    """Other 2-to-1 operations record their identity and declared alignment."""
     with app() as win:
         a = add(win, [0, 1, 2], [2, 4, 6], "A")
         b = add(win, [0, 1, 2], [1, 2, 3], "B")
         win.signalpanel.objview.select_objects([get_uuid(a)])
         win.signalpanel.processor.compute_2_to_1(b, "B", sips.division, edit=False)
         (activity,) = win.provenance.ledger.activities
-        assert activity["call"]["operation"] is None
+        assert activity["call"]["operation"] == {
+            "id": "sigima.signal.division",
+            "contract_version": 1,
+        }
         assert roles(win, activity) == [
             ("source", get_uuid(a)),
             ("operand", get_uuid(b)),
@@ -233,4 +236,4 @@ def test_other_two_input_operations_are_opaque() -> None:
             "interpolated": False,
         }
         report = win.verify_provenance_activity(activity["activity_id"])
-        assert report["restoration"] == "opaque"
+        assert report["eligibility"] == "unsupported_contract"

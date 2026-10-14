@@ -150,8 +150,13 @@ def test_roi_and_uncertainty_are_recorded() -> None:
         assert source["rows"] == ["x", "y", "dy"] and source["limits"] == []
         assert source["fingerprint"] is not None
         assert source["roi"]["definition"]["single_rois"][0]["coords"] == [0.0, 0.5]
-        # Qualified normalisation refuses ROI and uncertainty: recorded as opaque.
-        assert activity["call"]["operation"] is None
+        # ROI and uncertainty no longer restrict the qualified normalisation.
+        assert activity["call"]["operation"] == {
+            "id": "sigima.signal.normalize",
+            "contract_version": 1,
+        }
+        report = win.verify_provenance_activity(activity["activity_id"])
+        assert (report["eligibility"], report["verdict"]) == ("ready", "exact")
         image = add_image(win)
         image.roi = sigima.objects.create_image_roi("rectangle", [0, 0, 2, 2])
         state = win.provenance.ledger.states[win.provenance.observe(image)]
