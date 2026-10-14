@@ -7,6 +7,11 @@ from PyInstaller.utils.hooks import collect_submodules, collect_data_files, copy
 all_hidden_imports = collect_submodules('datalab')
 # Plugins installed from a file may import any Sigima module
 all_hidden_imports += collect_submodules('sigima', filter=lambda name: '.tests' not in name)
+# imagecodecs loads its codec extension modules lazily (``importlib``), so they
+# are not detected by static analysis; tifffile needs them for compressed TIFF
+all_hidden_imports += collect_submodules(
+    'imagecodecs', filter=lambda name: name.split('.')[-1] not in ('numcodecs', 'zarr')
+)
 datas = collect_data_files('datalab') + [('datalab\\plugins\\builtin', 'datalab\\plugins\\builtin')]
 # Macro templates are read with ``pkgutil.get_data`` and must exist on disk,
 # not only inside the PYZ archive (``collect_data_files`` skips ``.py`` files):
