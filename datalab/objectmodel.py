@@ -149,6 +149,32 @@ def render_title(title: str, resolver: Callable[[str], str | None]) -> str:
     return title
 
 
+def resolve_title_references(
+    title: str,
+    source_title: Callable[[str], str | None],
+    _visited: frozenset[str] = frozenset(),
+) -> str:
+    """Replace references by source titles, resolving nested references too.
+
+    Args:
+        title: Title containing object and group references
+        source_title: Callback returning the title of a referenced source, or None
+
+    Returns:
+        Title with every resolvable reference replaced, at any nesting depth.
+    """
+
+    def resolve(reference: str) -> str | None:
+        if reference in _visited:
+            return None
+        source = source_title(reference)
+        if source is None:
+            return None
+        return resolve_title_references(source, source_title, _visited | {reference})
+
+    return render_title(title, resolve)
+
+
 def patch_title_with_ids(
     dst_obj: SignalObj | ImageObj,
     src_objs: list[SignalObj] | list[ImageObj],

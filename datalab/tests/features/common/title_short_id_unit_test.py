@@ -72,16 +72,17 @@ def test_build_html_escapes_text() -> None:
 
 
 def test_title_mode_follows_source_renames() -> None:
-    """Source-title mode renders the current title of the referenced source."""
+    """Source-title mode renders current source titles, at any nesting depth."""
     with datalab_test_app_context(console=False) as win:
         panel = win.signalpanel
         source = create_paracetamol_signal()
         panel.add_object(source)
+        panel.processor.run_feature(sips.derivative)
         panel.processor.run_feature(sips.derivative)
         derived = panel.objview.get_current_object()
         assert win.render_object_title(derived.title) == derived.title
         with Conf.result_title_mode.context("title"):
             source.title = "Renamed source"
             assert win.render_object_title(derived.title) == (
-                "derivative(Renamed source)"
+                "derivative(derivative(Renamed source))"
             )

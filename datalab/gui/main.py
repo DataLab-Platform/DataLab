@@ -74,7 +74,12 @@ from datalab.gui.processor.base import FeatureNotFoundError
 from datalab.gui.processor.preview import PreviewExecutorCache
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
 from datalab.gui.welcome import WelcomePanel
-from datalab.objectmodel import UUID_REGEX, ObjectGroup, get_uuid, render_title
+from datalab.objectmodel import (
+    UUID_REGEX,
+    ObjectGroup,
+    get_uuid,
+    resolve_title_references,
+)
 from datalab.plugins import (
     PluginRegistry,
     discover_plugins,
@@ -383,13 +388,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             resolved = self.resolve_title_reference(reference)
             return None if resolved is None else resolved[1].title
 
-        return render_title(title, resolve_source_title)
+        return resolve_title_references(title, resolve_source_title)
 
     def refresh_object_title_displays(self) -> None:
-        """Refresh object titles in trees and existing plot items."""
+        """Refresh object titles in trees and shown plot items."""
         for panel in (self.signalpanel, self.imagepanel):
             panel.objview.update_tree()
-            panel.refresh_plot("existing", update_items=True, force=True)
+            panel.refresh_plot("selected", update_items=True, force=True)
 
     @remote_controlled
     def get_object_uuids(

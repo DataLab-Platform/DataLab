@@ -4445,7 +4445,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         )
         objs = self.objview.get_sel_objects(include_groups=True)
         for obj in objs:
-            create_adapter_from_object(obj).add_label_with_title(title=title)
+            label = (
+                self.mainwindow.render_object_title(obj.title)
+                if title is None
+                else title
+            )
+            create_adapter_from_object(obj).add_label_with_title(title=label)
         if (
             not Conf.ignore_title_insertion_msg.get(False)
             and not ignore_msg

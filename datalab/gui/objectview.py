@@ -51,6 +51,7 @@ from datalab.objectmodel import (
     find_title_references,
     get_title_reference,
     get_uuid,
+    resolve_title_references,
 )
 from datalab.utils.qthelpers import block_signals
 from datalab.widgets.titledelegate import (
@@ -234,8 +235,13 @@ class SimpleObjectTree(QW.QTreeWidget):
             return None
         _panel_str, obj = resolved
         if Conf.result_title_mode.get() == "title":
-            return obj.title
+            return resolve_title_references(obj.title, self.get_source_title)
         return reference
+
+    def get_source_title(self, reference: str) -> str | None:
+        """Return the title of the object or group a reference resolves to."""
+        resolved = self.resolve_title_reference(reference)
+        return None if resolved is None else resolved[1].title
 
     def build_title_reference_tooltip(self, text: str) -> str:
         """Return an HTML tooltip fragment listing the source objects
