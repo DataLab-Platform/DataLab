@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.datalab_platform.datalab</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>BSD-3-Clause</project_license>
+
+  <name>DataLab</name>
+  <summary>Process and visualize scientific signals and images</summary>
+  <developer id="io.github.datalab_platform">
+    <name>DataLab Platform Developers</name>
+  </developer>
+
+  <description>
+    <p>
+      DataLab is an open-source platform for scientific and technical data processing and visualization, with features designed to meet industrial requirements.
+    </p>
+    <ul>
+      <li>Process signals (1D): FFT, filtering, fitting, peak detection, stability analysis and more</li>
+      <li>Process images (2D): filtering, morphology, edge detection, blob detection and more</li>
+      <li>Apply processing in batches, with regions of interest</li>
+      <li>Record a history of actions and replay it on new data</li>
+      <li>Automate tasks with Python macros and extend the application with plugins</li>
+      <li>Control DataLab remotely from Jupyter, Spyder or any IDE through XML-RPC or an HTTP/JSON web API</li>
+      <li>Import and export data in HDF5 format</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">DataLab.desktop</launchable>
+  <provides>
+    <binary>datalab</binary>
+  </provides>
+
+  <categories>
+    <category>Science</category>
+    <category>Education</category>
+    <category>Physics</category>
+    <category>DataVisualization</category>
+  </categories>
+  <keywords>
+    <keyword>signal processing</keyword>
+    <keyword>image processing</keyword>
+    <keyword>data visualization</keyword>
+    <keyword>FFT</keyword>
+    <keyword>curve fitting</keyword>
+    <keyword>HDF5</keyword>
+  </keywords>
+
+  <url type="homepage">https://datalab-platform.com/</url>
+  <url type="help">https://datalab-platform.com/</url>
+  <url type="bugtracker">https://github.com/DataLab-Platform/DataLab/issues</url>
+  <url type="vcs-browser">https://github.com/DataLab-Platform/DataLab</url>
+  <url type="contribute">https://datalab-platform.com/en/contributing/index.html</url>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Blob detection on an image</caption>
+      <image>https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/shots/i_blob_detection_flower.en.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Signal panel with a chain of processing steps</caption>
+      <image>https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/DataLab-Screenshot-Signal.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Image panel with the contrast adjustment tool</caption>
+      <image>https://raw.githubusercontent.com/DataLab-Platform/DataLab/main/doc/images/DataLab-Screenshot-Image.png</image>
+    </screenshot>
+  </screenshots>
+
+  <content_rating type="oars-1.1"/>
+
+</component>
