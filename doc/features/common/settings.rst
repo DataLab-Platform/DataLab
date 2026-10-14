@@ -122,12 +122,15 @@ The Processing settings tab controls computation behavior and default parameters
     - **Source UUID** (default): use stable 8-character references derived from each
       source object's UUID.
     - **Source title**: use the source objects' live current titles, so references
-      follow later renames.
+      follow later renames. References nested in processing chains are resolved
+      too, e.g. ``derivative(derivative(My signal))``.
 
-    This setting changes only the displayed reference. Result titles store
-    8-character references (``g``-prefixed for groups), while each object's identity
-    remains its full UUID. Signal, image and group items in the trees show their own
-    ``#UUID8`` (or ``#gUUID8``) reference below their title.
+    This setting changes only the displayed reference, in the object trees, plot
+    legends, plot titles and labels added with *Add object title to plot*. The
+    title edited in the Properties panel keeps its stored references. Result titles
+    store 8-character references (``g``-prefixed for groups), while each object's
+    identity remains its full UUID. Signal, image and group items in the trees show
+    their own ``#UUID8`` (or ``#gUUID8``) reference below their title.
 
 **Use signal bounds for new signals**
     When enabled, the xmin and xmax values for new signals are initialized from

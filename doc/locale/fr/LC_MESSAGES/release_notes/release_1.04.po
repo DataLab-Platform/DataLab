@@ -165,8 +165,8 @@ msgstr "Les signaux, images et groupes des arborescences affichent désormais le
 msgid "Source references embedded in result titles no longer change when objects are reordered, removed or renumbered, and remain clickable to select the source object"
 msgstr "Les références aux sources intégrées dans les titres de résultats ne changent plus lorsque des objets sont réordonnés, supprimés ou renumérotés, et restent cliquables pour sélectionner l'objet source"
 
-msgid "The new **References in result titles** setting lets you display these references either as 8-character UUIDs (default) or as the current source titles, which follow later renames"
-msgstr "Le nouveau paramètre **Références dans les titres de résultats** permet d'afficher ces références soit sous forme d'UUID à 8 caractères (par défaut), soit avec les titres actuels des sources, qui suivent les renommages ultérieurs"
+msgid "The new **References in result titles** setting lets you display these references either as 8-character UUIDs (default) or as the current source titles, which follow later renames and are resolved through whole processing chains (e.g. `derivative(derivative(My signal))`)"
+msgstr "Le nouveau paramètre **Références dans les titres de résultats** permet d'afficher ces références soit sous forme d'UUID à 8 caractères (par défaut), soit avec les titres actuels des sources, qui suivent les renommages ultérieurs et sont résolus sur l'ensemble des chaînes de traitement (par exemple `derivative(derivative(Mon signal))`)"
 
 msgid "When a source object is deleted, its reference falls back to its 8-character UUID instead of becoming an anonymous placeholder"
 msgstr "Lorsqu'un objet source est supprimé, sa référence est affichée sous la forme de son UUID à 8 caractères au lieu de devenir un espace réservé anonyme"
