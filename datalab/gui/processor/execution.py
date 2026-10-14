@@ -20,8 +20,8 @@ import guidata.dataset as gds
 from datalab_capsule.recorder import CandidateError
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj
-from sigima.proc.execution import PreparedExecution
-from sigima.proc.execution import execute as execute_prepared
+from sigima.proc.contracts import PreparedExecution
+from sigima.proc.contracts import execute as execute_prepared
 
 from datalab.config import _
 from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids

@@ -25,7 +25,6 @@ from collections.abc import Callable, Iterable
 from typing import Any
 
 import sigima.proc.contracts as sigima_contracts
-import sigima.proc.execution as sigima_execution
 from datalab_capsule.ledger import Ledger
 from datalab_capsule.recorder import (
     PendingActivity,
@@ -81,9 +80,7 @@ class ProvenanceService(Recorder):
                 name, origin
             ),
         )
-        super().__init__(
-            host, computation_from_sigima(sigima_execution, sigima_contracts)
-        )
+        super().__init__(host, computation_from_sigima(sigima_contracts))
 
     def begin(
         self, func: Callable, param: Any, source: Any, *args, **kwargs
