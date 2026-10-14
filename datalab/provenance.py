@@ -36,6 +36,7 @@ from datalab_capsule.recorder import (
 from sigima.objects import ImageObj, SignalObj
 
 import datalab
+from datalab.gui.processor.geometry_postprocess import unwrap_computation_function
 from datalab.objectmodel import get_uuid
 
 __all__ = ["EDITION", "PendingActivity", "ProvenanceService"]
@@ -82,6 +83,20 @@ class ProvenanceService(Recorder):
         )
         super().__init__(
             host, computation_from_sigima(sigima_execution, sigima_contracts)
+        )
+
+    def begin(
+        self, func: Callable, param: Any, source: Any, *args, **kwargs
+    ) -> PendingActivity | None:
+        """Record the input states of an execution, before it runs.
+
+        The Sigima function run by a wrapped feature function is recorded (see
+        :func:`~datalab.gui.processor.geometry_postprocess.
+        unwrap_computation_function`). See
+        :meth:`datalab_capsule.recorder.Recorder.begin` for the arguments.
+        """
+        return super().begin(
+            unwrap_computation_function(func), param, source, *args, **kwargs
         )
 
     def load(

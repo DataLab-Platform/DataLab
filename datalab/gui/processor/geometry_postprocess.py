@@ -180,3 +180,21 @@ class GeometricTransformWrapper:
             if isinstance(metadata_dict, dict):
                 metadata = ComputationMetadata(**metadata_dict)
                 setattr(self, computation_metadata_attr, metadata)
+
+
+def unwrap_computation_function(func):
+    """Return the Sigima computation function run by a feature function.
+
+    Image geometric transformations are registered wrapped
+    (:class:`GeometricTransformWrapper`): the wrapper runs the Sigima function,
+    then transforms the analysis results carried in the metadata of the result,
+    which are not part of its recorded state. Workspace provenance records the
+    Sigima function, so that the operation keeps its identity.
+
+    Args:
+        func: Function of a computing feature.
+
+    Returns:
+        The wrapped Sigima function, or *func* itself.
+    """
+    return func.func if isinstance(func, GeometricTransformWrapper) else func
