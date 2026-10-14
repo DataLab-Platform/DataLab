@@ -14,11 +14,13 @@ progress stay in the processor. The service schedules nothing.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Callable
 
 import guidata.dataset as gds
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj
+from sigima.proc.execution import PreparedExecution
+from sigima.proc.execution import execute as execute_prepared
 
 from datalab.config import _
 from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids
@@ -126,14 +128,14 @@ class ExecutionService:
         return new_obj
 
     def execute_candidate(
-        self, func: Callable, inputs: list[SignalObj | ImageObj], param: Any
+        self, prepared: PreparedExecution
     ) -> SignalObj | ImageObj | None:
         """Compute a result in candidate mode: nothing is inserted or recorded.
 
         Args:
-            func: Computation function.
-            inputs: Function inputs, in role order.
-            param: Parameters, or None.
+            prepared: Computation prepared by Sigima (recorded parameters,
+             context and global options applied to the live inputs); it runs in
+             the processor's isolated process, like any computation.
 
         Returns:
             The candidate, or None on error or cancellation.
@@ -141,9 +143,8 @@ class ExecutionService:
         with create_progress_bar(
             self.processor.panel, _("Recomputing..."), max_=1
         ) as progress:
-            args = tuple(inputs) if param is None else (*inputs, param)
             self.computations += 1
-            compout = self._exec_func(func, args, progress)
+            compout = self._exec_func(execute_prepared, (prepared,), progress)
             if compout is None:
                 return None
             result = self.processor.handle_output(compout, _("Recomputing"), progress)
