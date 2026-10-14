@@ -286,7 +286,7 @@ def test_verification_refusals() -> None:
 
         source.roi = sigima.objects.create_signal_roi([0.0, 0.5])
         report = win.verify_provenance_activity(act_id)
-        assert report["eligibility"] == "unsupported_context"
+        assert report["eligibility"] == "input_changed"
         source.roi = None
 
         source.set_xydata(X, Y + 1.0)
@@ -321,7 +321,10 @@ def test_chain_scenario() -> None:
         ledger = win.provenance.ledger
         ledger.validate()
         a1, a2, a3, a4 = ledger.activities
-        assert a1["call"]["operation"] is None
+        assert a1["call"]["operation"] == {
+            "id": "sigima.signal.addition_constant",
+            "contract_version": 1,
+        }
         assert a1["call"]["parameters"] == {"value": 1.0}
         assert a1["implementation"]["python_name"].endswith("addition_constant")
         assert all(a["call"]["operation"] for a in (a2, a3, a4))
@@ -331,10 +334,10 @@ def test_chain_scenario() -> None:
         assert input_state(win, a3)["state_id"] == output_state(win, a2)["state_id"]
         assert output_state(win, a3)["object_uuid"] == get_uuid(s3)
 
-        opaque = win.verify_provenance_activity(a1["activity_id"])
-        assert (opaque["restoration"], opaque["eligibility"]) == (
-            "opaque",
-            "unsupported_operation",
+        unqualified = win.verify_provenance_activity(a1["activity_id"])
+        assert (unqualified["restoration"], unqualified["eligibility"]) == (
+            "replayable",
+            "unsupported_contract",
         )
         for activity in (a4, a2):
             report = win.verify_provenance_activity(activity["activity_id"])
@@ -371,7 +374,10 @@ def test_scope_of_capture() -> None:
             win, sips.gaussian_filter, sigima.params.GaussianParam.create(sigma=1.0)
         )
         (activity,) = win.provenance.ledger.activities
-        assert activity["call"]["operation"] is None
+        assert activity["call"]["operation"] == {
+            "id": "sigima.signal.gaussian_filter",
+            "contract_version": 1,
+        }
         assert activity["call"]["parameters"] == {"sigma": 1.0}
         assert output_state(win, activity)["object_uuid"] == get_uuid(smoothed)
 
@@ -380,11 +386,14 @@ def test_scope_of_capture() -> None:
         ipanel.objview.select_objects([1])
         ipanel.processor.compute_1_to_1(sipi.normalize, edit=False)
         image_activity = win.provenance.ledger.activities[-1]
-        assert image_activity["call"]["operation"] is None
+        assert image_activity["call"]["operation"] == {
+            "id": "sigima.image.normalize",
+            "contract_version": 1,
+        }
         assert input_state(win, image_activity)["kind"] == "image"
         assert output_state(win, image_activity)["kind"] == "image"
         report = win.verify_provenance_activity(image_activity["activity_id"])
-        assert report["restoration"] == "opaque"
+        assert report["eligibility"] == "unsupported_contract"
 
 
 def test_multiple_and_1_to_n_executions_are_captured() -> None:
