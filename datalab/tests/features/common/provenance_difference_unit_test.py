@@ -215,7 +215,7 @@ def test_refused_alignment_creates_nothing() -> None:
 
 
 def test_other_two_input_operations_are_opaque() -> None:
-    """Other 2-to-1 operations keep their behaviour and are captured opaque."""
+    """Other 2-to-1 operations record their declared alignment, captured opaque."""
     with app() as win:
         a = add(win, [0, 1, 2], [2, 4, 6], "A")
         b = add(win, [0, 1, 2], [1, 2, 3], "B")
@@ -227,6 +227,10 @@ def test_other_two_input_operations_are_opaque() -> None:
             ("source", get_uuid(a)),
             ("operand", get_uuid(b)),
         ]
-        assert activity["context"]["x_alignment"] is None
+        assert activity["context"]["x_alignment"] == {
+            "rule": "sigima.signal.x_alignment.source_grid_linear_hold",
+            "version": 1,
+            "interpolated": False,
+        }
         report = win.verify_provenance_activity(activity["activity_id"])
         assert report["restoration"] == "opaque"

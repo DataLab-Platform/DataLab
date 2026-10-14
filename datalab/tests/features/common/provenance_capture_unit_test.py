@@ -88,8 +88,9 @@ def test_n_to_1_records_every_source_in_order() -> None:
         assert activity["limits"] == []
 
 
-def test_legacy_interpolation_is_flagged() -> None:
-    """Inputs interpolated before an n-to-1 call are flagged; originals recorded."""
+def test_list_alignment_is_recorded() -> None:
+    """Inputs aligned before an n-to-1 call are recorded as originals, with the
+    alignment policy declared by the operation and its outcome."""
     with app() as win:
         first = add_signal(win, title="first")
         second = create_signal(
@@ -99,7 +100,13 @@ def test_legacy_interpolation_is_flagged() -> None:
         win.signalpanel.objview.select_objects([get_uuid(first), get_uuid(second)])
         win.signalpanel.processor.compute_n_to_1(sips.average, edit=False)
         (activity,) = win.provenance.ledger.activities
-        assert activity["limits"] == ["x_interpolated"]
+        assert activity["limits"] == []
+        assert activity["context"]["x_alignment"] == {
+            "rule": "sigima.signal.x_alignment.smallest_grid_linear_hold",
+            "version": 1,
+            "interpolated": [1],
+            "target": 0,
+        }
         recorded = states_of(win, activity)[1]
         assert recorded["object_uuid"] == get_uuid(second)
         assert recorded["state_id"] == win.provenance.observe(second)

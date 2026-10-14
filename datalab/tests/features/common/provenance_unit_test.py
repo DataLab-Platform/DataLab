@@ -19,7 +19,6 @@ from qtpy import QtWidgets as QW
 from sigima.objects import SignalObj, create_signal
 from sigima.tests.data import create_sincos_image
 
-from datalab import provenance as provenance_module
 from datalab.config import Conf
 from datalab.env import execenv
 from datalab.gui.processor.base import BaseProcessor
@@ -263,8 +262,8 @@ def test_verification_detects_divergence(monkeypatch) -> None:
         execution = win.signalpanel.processor.execution
         original = execution.execute_candidate
 
-        def altered(func, inputs, param):
-            candidate = original(func, inputs, param)
+        def altered(prepared):
+            candidate = original(prepared)
             candidate.y[2] += 0.5
             return candidate
 
@@ -357,7 +356,7 @@ def test_capture_failure_keeps_result(monkeypatch) -> None:
 
     with app() as win:
         add_signal(win)
-        monkeypatch.setattr(provenance_module, "state_facts", broken)
+        monkeypatch.setattr(win.provenance.host, "state_facts", broken)
         result = normalize(win, "maximum")
         assert np.array_equal(result.y, MAXIMUM_Y)
         assert win.provenance.ledger.activities == ()

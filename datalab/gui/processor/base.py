@@ -37,12 +37,14 @@ from sigima.objects import (
     TypeROIParam,
     concat_geometries,
 )
+from sigima.proc.alignment import SMALLEST_GRID_LINEAR_HOLD, SOURCE_GRID_LINEAR_HOLD
 from sigima.proc.contracts import (
     OperationContract,
     XAlignmentError,
     contract_for_function,
 )
 from sigima.proc.decorator import is_computation_function
+from sigima.proc.execution import PreparedExecution, prepare_execution
 from sigima.tools.signal.interpolation import interpolate
 from sigimax.adapters_plotpy import coordutils
 from sigimax.widgets.warningerror import show_warning_error
@@ -661,6 +663,23 @@ def _x_interpolated(
     return ["x_interpolated"] if changed else []
 
 
+#: X-alignment policies that ask the user before interpolating, as before.
+_CONSENT_POLICIES = frozenset({SOURCE_GRID_LINEAR_HOLD, SMALLEST_GRID_LINEAR_HOLD})
+
+
+class InterpolationRefused(Exception):
+    """Raised when the user refuses to interpolate signals on a common X array."""
+
+
+def _grids_differ(signals: list[SignalObj]) -> bool:
+    """Return True if the X arrays of *signals* are not all equal."""
+    first = signals[0].x
+    return any(
+        sig.x.shape != first.shape or not np.array_equal(sig.x, first)
+        for sig in signals[1:]
+    )
+
+
 class FeatureNotFoundError(ValueError):
     """Raised when a computing feature cannot be resolved by name or callable.
 
@@ -1006,22 +1025,94 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             return None
         return contract
 
-    def _align_with_contract(
-        self,
-        contract: OperationContract,
-        source: SignalObj,
-        operand: SignalObj,
-        title: str,
-        progress: QW.QProgressDialog,
-    ) -> tuple[list[SignalObj], dict[str, Any]] | None:
-        """Apply the contract's X-alignment rule to one source/operand pair.
+    def _ask_x_interpolation(
+        self, progress: QW.QProgressDialog | None = None
+    ) -> bool | None:
+        """Ask whether signals with different X arrays may be interpolated.
+
+        The answer follows the ``xarray_compat_behavior`` setting; History replay
+        and unattended runs never ask (automatic interpolation).
 
         Returns:
-            ``(inputs, context)``, or None if the rule refuses the pair (the
-            reason is shown as a computation error).
+            None if the user refused, True for "Yes to All", False for "Yes".
         """
+        behavior = Conf.xarray_compat_behavior.get("ask")
+        hpanel = self.mainwindow.historypanel
+        if behavior != "ask" or env.execenv.unattended or hpanel.is_replaying():
+            return False
+        initial_duration = 0
+        if progress is not None:
+            initial_duration = progress.minimumDuration()
+            # Hide the progress dialog while the question is shown
+            progress.setMinimumDuration(2000000)
+            QW.QApplication.processEvents()
+        msg_box = QW.QMessageBox(self.mainwindow)
+        msg_box.setWindowTitle(_("X-array incompatibility"))
+        msg_box.setText(
+            _(
+                "The selected signals have different X arrays.\n\n"
+                "To perform the computation, signals need to be interpolated "
+                "to match a common X array.\n\n"
+                "Do you want to continue with automatic interpolation?"
+            )
+        )
+        msg_box.setIcon(QW.QMessageBox.Icon.Question)
+        msg_box.addButton(_("Yes"), QW.QMessageBox.ButtonRole.YesRole)
+        yes_all_button = msg_box.addButton(
+            _("Yes to All"), QW.QMessageBox.ButtonRole.YesRole
+        )
+        no_button = msg_box.addButton(_("No"), QW.QMessageBox.ButtonRole.NoRole)
+        msg_box.setDefaultButton(no_button)
+        msg_box.exec()
+        clicked_button = msg_box.clickedButton()
+        if initial_duration > 0:
+            progress.setMinimumDuration(initial_duration)
+        if clicked_button == no_button:
+            return None
+        return clicked_button == yes_all_button
+
+    def _prepare_with_contract(
+        self,
+        contract: OperationContract,
+        inputs: list[SignalObj],
+        param: gds.DataSet | None,
+        title: str,
+        progress: QW.QProgressDialog,
+        consent: dict[str, bool],
+    ) -> PreparedExecution | None:
+        """Prepare one execution of a contract that declares an X-alignment policy.
+
+        Sigima applies the policy and records it with the global options read by
+        the computation. Historical policies (constant extension at the ends)
+        first ask the user, as before, when the grids differ.
+
+        Args:
+            contract: Operation contract.
+            inputs: Input signals, in role order.
+            param: Parameter argument, or None.
+            title: Progress title.
+            progress: Progress dialog.
+            consent: State shared by the executions of one command
+             (``yes_to_all``).
+
+        Returns:
+            The prepared execution, or None if the policy refuses the inputs
+            (the reason is shown as a computation error).
+
+        Raises:
+            InterpolationRefused: If the user refused the interpolation.
+        """
+        if (
+            contract.x_alignment in _CONSENT_POLICIES
+            and not consent.get("yes_to_all")
+            and _grids_differ(inputs)
+        ):
+            answer = self._ask_x_interpolation(progress)
+            if answer is None:
+                raise InterpolationRefused
+            consent["yes_to_all"] = answer
         try:
-            inputs, context = contract.prepare_inputs([source, operand])
+            return prepare_execution(contract, inputs, param=param)
         except XAlignmentError as exc:
             reasons = {
                 "incompatible_units": _(
@@ -1046,7 +1137,6 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 progress,
             )
             return None
-        return list(inputs), context
 
     def _check_signal_xarray_compatibility(
         self, signals: list[SignalObj], progress: QW.QProgressDialog | None = None
@@ -1092,44 +1182,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 progress.setMinimumDuration(initial_duration)
             return signals, False
 
-        # X arrays differ - handle based on configuration
-        behavior = Conf.xarray_compat_behavior.get("ask")
-        yes_to_all_selected = False
-
-        # History replay must be non-interactive and deterministic: treat
-        # "ask" as automatic interpolation while replaying.
-        hpanel = self.mainwindow.historypanel
-        replaying = hpanel.is_replaying()
-        if behavior == "ask" and not env.execenv.unattended and not replaying:
-            # Create custom message box with "Yes to All" option
-            msg_box = QW.QMessageBox(self.mainwindow)
-            msg_box.setWindowTitle(_("X-array incompatibility"))
-            msg_box.setText(
-                _(
-                    "The selected signals have different X arrays.\n\n"
-                    "To perform the computation, signals need to be interpolated "
-                    "to match a common X array.\n\n"
-                    "Do you want to continue with automatic interpolation?"
-                )
-            )
-            msg_box.setIcon(QW.QMessageBox.Icon.Question)
-
-            # Add custom buttons
-            msg_box.addButton(_("Yes"), QW.QMessageBox.ButtonRole.YesRole)
-            yes_all_button = msg_box.addButton(
-                _("Yes to All"), QW.QMessageBox.ButtonRole.YesRole
-            )
-            no_button = msg_box.addButton(_("No"), QW.QMessageBox.ButtonRole.NoRole)
-            msg_box.setDefaultButton(no_button)
-
-            # Execute dialog and get user choice
-            msg_box.exec()
-            clicked_button = msg_box.clickedButton()
-
-            if clicked_button == no_button:
-                return None
-            if clicked_button == yes_all_button:
-                yes_to_all_selected = True
+        # X arrays differ: ask for interpolation, according to configuration
+        if initial_duration > 0:
+            progress.setMinimumDuration(initial_duration)
+            initial_duration = 0
+        answer = self._ask_x_interpolation(progress)
+        if answer is None:
+            return None
+        yes_to_all_selected = answer
 
         # Perform interpolation to the smallest X array
         sizes = [len(x) for x in x_arrays]
@@ -2419,6 +2479,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         name = func.__name__
         title = name if title is None else title
         feature_id = self.get_feature_id(func, feature_id)
+        aligned_contract = self._x_alignment_contract(func)
+        consent: dict[str, bool] = {}
         provenance = self.mainwindow.provenance
         command_id = str(uuid.uuid4())
 
@@ -2467,9 +2529,24 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             src_obj = src_objs[src_gid][i_pair]
                             src_objs_pair.append(src_obj)
                         orig_objs_pair = list(src_objs_pair)
-
+                        context = None
+                        if aligned_contract is not None:
+                            try:
+                                prepared = self._prepare_with_contract(
+                                    aligned_contract,
+                                    src_objs_pair,
+                                    param,
+                                    title,
+                                    progress,
+                                    consent,
+                                )
+                            except InterpolationRefused:
+                                return
+                            if prepared is None:
+                                continue
+                            context = prepared.context
                         # Check signal x-array compatibility for n-to-1 operations
-                        if auto_interpolate_for_operation:
+                        elif auto_interpolate_for_operation:
                             # "Yes to All" selected, automatically interpolate
                             # by temporarily changing the configuration
                             with Conf.xarray_compat_behavior.context("interpolate"):
@@ -2482,15 +2559,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                                 src_objs_pair, progress=progress
                             )
 
-                        if result is None:
-                            # User canceled or compatibility check failed
-                            return
-
-                        checked_objs, yes_to_all_selected = result
-                        if yes_to_all_selected:
-                            auto_interpolate_for_operation = True
-
-                        src_objs_pair = checked_objs
+                        if context is None:
+                            if result is None:
+                                # User canceled or compatibility check failed
+                                return
+                            checked_objs, yes_to_all_selected = result
+                            if yes_to_all_selected:
+                                auto_interpolate_for_operation = True
+                            src_objs_pair = checked_objs
                         pending = provenance.begin(
                             func,
                             param,
@@ -2498,8 +2574,11 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             command_id,
                             roles=["sources"] * len(orig_objs_pair),
                             limits=_x_interpolated(orig_objs_pair, src_objs_pair),
+                            context=context,
                         )
-                        if param is None:
+                        if context is not None:
+                            args = prepared.args
+                        elif param is None:
                             args = (src_objs_pair,)
                         else:
                             args = (src_objs_pair, param)
@@ -2569,8 +2648,24 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     progress.setLabelText(title)
                     for src_gid, src_obj_list in src_objs.items():
                         orig_obj_list = list(src_obj_list)
+                        context = None
+                        if aligned_contract is not None:
+                            try:
+                                prepared = self._prepare_with_contract(
+                                    aligned_contract,
+                                    src_obj_list,
+                                    param,
+                                    title,
+                                    progress,
+                                    consent,
+                                )
+                            except InterpolationRefused:
+                                return
+                            if prepared is None:
+                                continue
+                            context = prepared.context
                         # Check signal x-array compatibility for n-to-1 operations
-                        if auto_interpolate_for_operation:
+                        elif auto_interpolate_for_operation:
                             # "Yes to All" selected, automatically interpolate
                             with Conf.xarray_compat_behavior.context("interpolate"):
                                 result = self._check_signal_xarray_compatibility(
@@ -2582,15 +2677,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                                 src_obj_list, progress=progress
                             )
 
-                        if result is None:
-                            # User canceled or compatibility check failed
-                            return
-
-                        checked_objs, yes_to_all_selected = result
-                        if yes_to_all_selected:
-                            auto_interpolate_for_operation = True
-
-                        src_obj_list = checked_objs
+                        if context is None:
+                            if result is None:
+                                # User canceled or compatibility check failed
+                                return
+                            checked_objs, yes_to_all_selected = result
+                            if yes_to_all_selected:
+                                auto_interpolate_for_operation = True
+                            src_obj_list = checked_objs
                         pending = provenance.begin(
                             func,
                             param,
@@ -2598,9 +2692,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             command_id,
                             roles=["sources"] * len(orig_obj_list),
                             limits=_x_interpolated(orig_obj_list, src_obj_list),
+                            context=context,
                         )
 
-                        if param is None:
+                        if context is not None:
+                            args = prepared.args
+                        elif param is None:
                             args = (src_obj_list,)
                         else:
                             args = (src_obj_list, param)
@@ -2716,6 +2813,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         title = name if title is None else title
         feature_id = self.get_feature_id(func, feature_id)
         aligned_contract = self._x_alignment_contract(func)
+        consent: dict[str, bool] = {}
         provenance = self.mainwindow.provenance
         command_id = str(uuid.uuid4())
 
@@ -2812,31 +2910,34 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             actual_obj1, actual_obj2 = pair_map[(src_gid, i_pair)]
 
                             args = [actual_obj1, actual_obj2]
-                            x_alignment = None
+                            if param is not None:
+                                args.append(param)
+                            context = None
                             if aligned_contract is not None:
-                                aligned = self._align_with_contract(
-                                    aligned_contract,
-                                    actual_obj1,
-                                    actual_obj2,
-                                    title,
-                                    progress,
-                                )
-                                if aligned is None:
+                                try:
+                                    prepared = self._prepare_with_contract(
+                                        aligned_contract,
+                                        [actual_obj1, actual_obj2],
+                                        param,
+                                        title,
+                                        progress,
+                                        consent,
+                                    )
+                                except InterpolationRefused:
+                                    return
+                                if prepared is None:
                                     continue
-                                args, context = aligned
-                                x_alignment = context["x_alignment"]
+                                args, context = list(prepared.args), prepared.context
                             pending = provenance.begin(
                                 func,
                                 param,
                                 [orig_obj1, orig_obj2],
                                 command_id,
-                                x_alignment=x_alignment,
+                                context=context,
                                 limits=_x_interpolated(
                                     [orig_obj1, orig_obj2], [actual_obj1, actual_obj2]
                                 ),
                             )
-                            if param is not None:
-                                args.append(param)
                             result = self.__exec_func(func, tuple(args), progress)
                             if result is None:
                                 break
@@ -2971,22 +3072,28 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             if param is None
                             else (actual_obj, obj2, param)
                         )
-                        x_alignment = None
+                        context = None
                         if aligned_contract is not None:
-                            aligned = self._align_with_contract(
-                                aligned_contract, actual_obj, obj2, title, progress
-                            )
-                            if aligned is None:
+                            try:
+                                prepared = self._prepare_with_contract(
+                                    aligned_contract,
+                                    [actual_obj, obj2],
+                                    param,
+                                    title,
+                                    progress,
+                                    consent,
+                                )
+                            except InterpolationRefused:
+                                return
+                            if prepared is None:
                                 continue
-                            inputs, context = aligned
-                            args = tuple(inputs) if param is None else (*inputs, param)
-                            x_alignment = context["x_alignment"]
+                            args, context = prepared.args, prepared.context
                         pending = provenance.begin(
                             func,
                             param,
                             [obj, orig_obj2],
                             command_id,
-                            x_alignment=x_alignment,
+                            context=context,
                             limits=_x_interpolated(
                                 [obj, orig_obj2], [actual_obj, obj2]
                             ),
