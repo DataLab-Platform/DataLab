@@ -215,7 +215,7 @@ def test_refused_alignment_creates_nothing() -> None:
 
 
 def test_other_two_input_operations_keep_their_identity() -> None:
-    """Other 2-to-1 operations record their identity and declared alignment."""
+    """Other 2-to-1 operations record their identity and alignment, and replay."""
     with app() as win:
         a = add(win, [0, 1, 2], [2, 4, 6], "A")
         b = add(win, [0, 1, 2], [1, 2, 3], "B")
@@ -236,4 +236,4 @@ def test_other_two_input_operations_keep_their_identity() -> None:
             "interpolated": False,
         }
         report = win.verify_provenance_activity(activity["activity_id"])
-        assert report["eligibility"] == "unsupported_contract"
+        assert report["verdict"] == "exact"
