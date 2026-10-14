@@ -37,14 +37,16 @@ from sigima.objects import (
     TypeROIParam,
     concat_geometries,
 )
-from sigima.proc.alignment import SMALLEST_GRID_LINEAR_HOLD, SOURCE_GRID_LINEAR_HOLD
 from sigima.proc.contracts import (
+    SMALLEST_GRID_LINEAR_HOLD,
+    SOURCE_GRID_LINEAR_HOLD,
     OperationContract,
+    PreparedExecution,
     XAlignmentError,
     contract_for_function,
+    prepare_execution,
 )
 from sigima.proc.decorator import is_computation_function
-from sigima.proc.execution import PreparedExecution, prepare_execution
 from sigima.tools.signal.interpolation import interpolate
 from sigimax.adapters_plotpy import coordutils
 from sigimax.widgets.warningerror import show_warning_error
