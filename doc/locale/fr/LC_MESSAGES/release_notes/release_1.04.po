@@ -219,8 +219,8 @@ msgstr "Correction de la largeur des panneaux Signal/Image non restaurée au dé
 msgid "**File import:**"
 msgstr "**Import de fichiers :**"
 
-msgid "Fixed compressed TIFF files (LZW, JPEG, WebP or CCITT compression) failing to open with the error \"requires the 'imagecodecs' package\"; LZW is the default compression of many acquisition and image-editing tools. These files now open out of the box, including with the standalone installer (fixes [Issue #381](https://github.com/DataLab-Platform/DataLab/issues/381))"
-msgstr "Correction de l'ouverture des fichiers TIFF compress?s (compression LZW, JPEG, WebP ou CCITT), qui ?chouait avec l'erreur ? requires the 'imagecodecs' package ? ; LZW est la compression par d?faut de nombreux outils d'acquisition et d'?dition d'images. Ces fichiers s'ouvrent d?sormais sans installation suppl?mentaire, y compris avec l'installeur autonome (corrige [Issue #381](https://github.com/DataLab-Platform/DataLab/issues/381))"
+msgid "Fixed compressed TIFF files (LZW, JPEG or WebP compression) failing to open with the error \"requires the 'imagecodecs' package\"; LZW is the default compression of many acquisition and image-editing tools. These files now open out of the box, including with the standalone installer. CCITT-compressed bilevel images are also supported with the standalone installer and with Python 3.11 or later (fixes [Issue #381](https://github.com/DataLab-Platform/DataLab/issues/381))"
+msgstr "Correction de l'ouverture des fichiers TIFF compress?s (compression LZW, JPEG ou WebP), qui ?chouait avec l'erreur ? requires the 'imagecodecs' package ? ; LZW est la compression par d?faut de nombreux outils d'acquisition et d'?dition d'images. Ces fichiers s'ouvrent d?sormais sans installation suppl?mentaire, y compris avec l'installeur autonome. Les images binaires compress?es en CCITT sont ?galement prises en charge avec l'installeur autonome et avec Python 3.11 ou ult?rieur (corrige [Issue #381](https://github.com/DataLab-Platform/DataLab/issues/381))"
 
 msgid "**Metadata:**"
 msgstr "**Métadonnées :**"

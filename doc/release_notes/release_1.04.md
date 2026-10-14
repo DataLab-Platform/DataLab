@@ -98,7 +98,7 @@ DataLab now uses stable UUID-based object references across object trees, result
 
 **File import:**
 
-* Fixed compressed TIFF files (LZW, JPEG, WebP or CCITT compression) failing to open with the error "requires the 'imagecodecs' package"; LZW is the default compression of many acquisition and image-editing tools. These files now open out of the box, including with the standalone installer (fixes [Issue #381](https://github.com/DataLab-Platform/DataLab/issues/381))
+* Fixed compressed TIFF files (LZW, JPEG or WebP compression) failing to open with the error "requires the 'imagecodecs' package"; LZW is the default compression of many acquisition and image-editing tools. These files now open out of the box, including with the standalone installer. CCITT-compressed bilevel images are also supported with the standalone installer and with Python 3.11 or later (fixes [Issue #381](https://github.com/DataLab-Platform/DataLab/issues/381))
 
 **Metadata:**
 
