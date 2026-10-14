@@ -11,6 +11,7 @@ import os.path as osp
 import h5py
 import numpy as np
 import pytest
+import sigima.config
 import sigima.objects
 import sigima.params
 import sigima.proc.image as sipi
@@ -133,6 +134,122 @@ def test_analyses_record_artifacts() -> None:
             assert artifact["key"] in obj.metadata
             assert states_of(win, activity)[0]["object_uuid"] == get_uuid(obj)
         win.provenance.ledger.validate()
+
+
+def test_analyses_are_verified() -> None:
+    """Analyses are recomputed and compared; a normal absence of result too."""
+    with app() as win:
+        signal = add_signal(win)
+        win.signalpanel.objview.select_objects([get_uuid(signal)])
+        win.signalpanel.processor.run_feature("stats")
+        (stats,) = win.provenance.ledger.activities
+        report = win.verify_provenance_activity(stats["activity_id"])
+        assert report["verdict"] == "exact"
+        (output,) = report["outputs"]
+        assert output["recorded"] == "artifact"
+        assert output["observed"]["structure_match"] is True
+        # A ramp has no local maximum: the detection normally finds nothing.
+        image = create_image("ramp", np.add.outer(np.arange(16.0), np.arange(16.0)))
+        win.imagepanel.add_object(image)
+        win.imagepanel.objview.select_objects([get_uuid(image)])
+        win.imagepanel.processor.compute_1_to_0(
+            sipi.peak_detection, sigima.params.Peak2DDetectionParam(), edit=False
+        )
+        empty = win.provenance.ledger.activities[-1]
+        assert empty["call"]["operation"]["id"] == "sigima.image.peak_detection"
+        assert empty["outputs"] == []
+        report = win.verify_provenance_activity(empty["activity_id"])
+        assert report["verdict"] == "exact"
+        assert report["outputs"][0]["recorded"] == "none"
+        win.provenance.ledger.validate()
+
+
+def run_families(win) -> None:
+    """Run one operation of each family on fresh objects (none is opaque)."""
+    spanel, ipanel = win.signalpanel, win.imagepanel
+    signals = [add_signal(win, Y * k, f"S{k}") for k in (1, 2, 3)]
+    uuids = [get_uuid(s) for s in signals]
+    spanel.objview.select_objects(uuids)
+    spanel.processor.compute_n_to_1(sips.average, edit=False)
+    spanel.objview.select_objects(uuids)
+    spanel.processor.compute_n_to_1(
+        sips.signals_to_image, sigima.params.SignalsToImageParam(), edit=False
+    )
+    spanel.objview.select_objects(uuids[:1])
+    spanel.processor.compute_1_to_1(
+        sips.fft, sigima.params.FFTParam.create(shift=True), edit=False
+    )
+    rois = [
+        sigima.objects.ROI1DParam.create(xmin=0.0, xmax=0.5),
+        sigima.objects.ROI1DParam.create(xmin=0.25, xmax=0.75),
+    ]
+    spanel.objview.select_objects(uuids[:1])
+    spanel.processor.compute_1_to_1(sips.extract_rois, rois, edit=False)
+    spanel.objview.select_objects(uuids[:1])
+    spanel.processor.compute_1_to_n(sips.extract_roi, rois, edit=False)
+    spanel.objview.select_objects(uuids[:1])
+    noise = sigima.objects.NormalDistributionParam.create(seed=7, sigma=0.5)
+    spanel.processor.compute_1_to_1(sips.add_gaussian_noise, noise, edit=False)
+    spanel.objview.select_objects(uuids[:1])
+    spanel.processor.run_feature("stats")
+    image = add_image(win)
+    ipanel.objview.select_objects([get_uuid(image)])
+    profile = sigima.params.LineProfileParam.create(direction="horizontal", row=1)
+    ipanel.processor.compute_1_to_1(sipi.line_profile, profile, edit=False)
+    ipanel.objview.select_objects([get_uuid(image)])
+    ipanel.processor.run_feature("centroid")
+    kernel = add_image(win, "K")
+    ipanel.objview.select_objects([get_uuid(image)])
+    with sigima.config.options.auto_normalize_kernel.context(True):
+        ipanel.processor.compute_2_to_1(kernel, "K", sipi.convolution, edit=False)
+
+
+FAMILIES = [
+    "sigima.signal.average",
+    "sigima.signal.signals_to_image",
+    "sigima.signal.fft",
+    "sigima.signal.extract_rois",
+    "sigima.signal.extract_roi",
+    "sigima.signal.extract_roi",
+    "sigima.signal.add_gaussian_noise",
+    "sigima.signal.stats",
+    "sigima.image.line_profile",
+    "sigima.image.centroid",
+    "sigima.image.convolution",
+]
+
+
+def check_families(win) -> None:
+    """Every family is identified and replayed exactly, every output compared."""
+    activities = win.provenance.ledger.activities
+    assert [a["call"]["operation"]["id"] for a in activities] == FAMILIES
+    roi_a, roi_b = activities[4:6]
+    assert roi_a["command_id"] is not None
+    assert roi_a["command_id"] == roi_b["command_id"]
+    assert activities[2]["call"]["parameters"] == {"shift": True}
+    assert activities[-1]["context"]["options"] == {"auto_normalize_kernel": True}
+    for activity in activities:
+        assert activity["limits"] == [], activity
+        report = win.verify_provenance_activity(activity["activity_id"])
+        assert report["verdict"] == "exact", report
+        assert [o["recorded"] for o in report["outputs"]] == [
+            "artifact" if "artifact" in o else "state" for o in activity["outputs"]
+        ]
+
+
+def test_operation_families_replay() -> None:
+    """Each family is recorded, saved, reopened and replayed with its outputs."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        path = osp.join(tmpdir, "families.h5")
+        with app() as win:
+            run_families(win)
+            # The recorded option is applied, whatever the current setting.
+            with sigima.config.options.auto_normalize_kernel.context(False):
+                check_families(win)
+            _reopen(win, path)
+        with app() as win:
+            win.load_h5_workspace([path], reset_all=True)
+            check_families(win)
 
 
 def test_roi_and_uncertainty_are_recorded() -> None:
@@ -365,6 +482,13 @@ def check_capture(win, edition: str) -> None:
         if artifact is not None:
             (status,) = provenance.artifact_statuses(activity["activity_id"])
             assert status["status"] == "available", status
+        # Replayed here, whichever edition recorded it, under the declared rule;
+        # activities recorded without identity (older files) are never replayed.
+        report = win.verify_provenance_activity(activity["activity_id"])
+        if activity["call"]["operation"] is None:
+            assert report["restoration"] == "opaque"
+        else:
+            assert report["verdict"] in ("exact", "within_tolerance"), report
     assert shape == CAPTURE_SHAPE
     centroid, gaussian, _stats = ledger.activities
     assert centroid["call"]["inputs"] == gaussian["call"]["inputs"]
