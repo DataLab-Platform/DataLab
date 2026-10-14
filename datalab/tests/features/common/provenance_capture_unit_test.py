@@ -257,6 +257,48 @@ def test_operation_families_replay() -> None:
             check_families(win)
 
 
+def test_metadata_read_by_evaluate_fit() -> None:
+    """Fit parameters read by ``evaluate_fit`` are recorded and checked."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        path = osp.join(tmpdir, "fit.h5")
+        with app() as win:
+            spanel = win.signalpanel
+            data = add_signal(win, X * 2.0 + 1.0, "line")
+            spanel.objview.select_objects([get_uuid(data)])
+            spanel.processor.compute_1_to_1(sips.linear_fit, edit=False)
+            fit = win.find_object_by_uuid(
+                output_state(win, win.provenance.ledger.activities[-1])["object_uuid"]
+            )
+            assert "fit_params" in fit.metadata
+            grid = create_signal("grid", np.linspace(0.0, 2.0, 9), np.zeros(9))
+            spanel.add_object(grid)
+            spanel.objview.select_objects([get_uuid(fit)])
+            spanel.processor.compute_2_to_1(
+                grid,
+                "grid",
+                sips.evaluate_fit,
+                edit=False,
+                skip_xarray_compat=True,
+                pre_execute_hook=spanel.processor.prepare_fit_evaluation,
+            )
+            activity = win.provenance.ledger.activities[-1]
+            assert activity["call"]["operation"]["id"] == "sigima.signal.evaluate_fit"
+            (read,) = activity["context"]["metadata"]
+            assert (read["role"], read["key"]) == ("source", "fit_params")
+            activity_id = activity["activity_id"]
+            assert win.verify_provenance_activity(activity_id)["verdict"] == "exact"
+            win.save_h5_workspace(path)
+            original = dict(fit.metadata["fit_params"])
+            fit.metadata["fit_params"] = {**original, "a": original["a"] + 1.0}
+            report = win.verify_provenance_activity(activity_id)
+            assert report["eligibility"] == "input_changed"
+            assert "fit_params" in report["reason"]
+        with app() as win:
+            win.load_h5_workspace([path], reset_all=True)
+            report = win.verify_provenance_activity(activity_id)
+            assert report["verdict"] == "exact", report
+
+
 def test_roi_and_uncertainty_are_recorded() -> None:
     """ROI definitions and uncertainty rows are part of the recorded states."""
     with app() as win:

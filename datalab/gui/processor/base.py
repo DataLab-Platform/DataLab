@@ -2942,6 +2942,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                                 limits=_x_interpolated(
                                     [orig_obj1, orig_obj2], [actual_obj1, actual_obj2]
                                 ),
+                                # Metadata read are those of the computed objects
+                                # (e.g. fit parameters converted by a hook).
+                                executed=[actual_obj1, actual_obj2],
                             )
                             result = self.__exec_func(func, tuple(args), progress)
                             if result is None:
@@ -3102,6 +3105,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             limits=_x_interpolated(
                                 [obj, orig_obj2], [actual_obj, obj2]
                             ),
+                            # Metadata read are those of the computed objects
+                            # (e.g. fit parameters converted by a hook).
+                            executed=[actual_obj, obj2],
                         )
                         result = self.__exec_func(func, args, progress)
                         if result is None:
