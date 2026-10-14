@@ -198,6 +198,9 @@ def run_families(win) -> None:
     ipanel.processor.compute_1_to_1(sipi.line_profile, profile, edit=False)
     ipanel.objview.select_objects([get_uuid(image)])
     ipanel.processor.run_feature("centroid")
+    # Registered wrapped (analysis results carried in metadata are transformed)
+    ipanel.objview.select_objects([get_uuid(image)])
+    ipanel.processor.run_feature("fliph")
     kernel = add_image(win, "K")
     ipanel.objview.select_objects([get_uuid(image)])
     with sigima.config.options.auto_normalize_kernel.context(True):
@@ -215,6 +218,7 @@ FAMILIES = [
     "sigima.signal.stats",
     "sigima.image.line_profile",
     "sigima.image.centroid",
+    "sigima.image.fliph",
     "sigima.image.convolution",
 ]
 
