@@ -3023,30 +3023,29 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.selection_changed()
         return objs
 
-    def edit_import_parameters(self, filename: str) -> tuple[bool, gds.DataSet | None]:
-        """Edit optional object import parameters.
+    def edit_import_parameters(
+        self, filenames: list[str], param: gds.DataSet | None = None
+    ) -> list[tuple[str, gds.DataSet | None]] | None:
+        """Return files to import with their optional format-specific parameters.
 
         Args:
-            filename: File name.
+            filenames: File names to import.
+            param: Optional import parameters applied to every file requiring
+             parameters, without showing any dialog.
 
         Returns:
-            A tuple containing the confirmation state and optional import parameters.
+            File names with aligned import parameters, without the files whose
+            parameter dialog was cancelled, or None if the whole import was
+            cancelled.
+
+        Raises:
+            TypeError: If ``param`` is given, as this panel has no import parameters.
         """
-        return True, None
-
-    def prepare_import_parameters(
-        self, filename: str, param: gds.DataSet | None
-    ) -> list[tuple[str, gds.DataSet | None]]:
-        """Prepare file names and parameters for object import.
-
-        Args:
-            filename: Selected file name.
-            param: Optional parameters returned by the import dialog or history.
-
-        Returns:
-            File names and aligned import parameters.
-        """
-        return [(filename, param)]
+        if param is not None:
+            raise TypeError(
+                f"{self.__class__.__name__} does not support import parameters"
+            )
+        return [(fname, None) for fname in filenames]
 
     def apply_import_parameters(
         self,
@@ -3091,13 +3090,27 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         del param
         self.IO_REGISTRY.write(filename, obj)
 
-    def load_from_directory(self, directory: str | None = None) -> list[TypeObj]:
+    def load_from_directory(
+        self,
+        directory: str | None = None,
+        import_filenames: list[str] | None = None,
+        import_params: list[gds.DataSet] | None = None,
+        param: gds.DataSet | None = None,
+    ) -> list[TypeObj]:
         """Open objects from directory (signals or images, depending on the panel),
         add them to DataLab and return them.
         If the directory is not specified, ask the user to select a directory.
 
         Args:
             directory: directory name
+            import_filenames: Optional file names, relative to ``directory``, of
+             the files imported with format-specific parameters. Recorded by
+             history so that replay does not reopen import dialogs.
+            import_params: Optional format-specific parameters aligned with
+             ``import_filenames``.
+            param: Optional format-specific parameters applied to every file
+             requiring import parameters (e.g. RAW images), without showing any
+             dialog.
 
         Returns:
             list of new objects
@@ -3110,6 +3123,54 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 directory = getexistingdirectory(self, _("Open"), basedir)
         if not directory:
             return []
+        folders: list[tuple[str, list[str]]] = []
+        for path in glob.glob(osp.join(directory, "**"), recursive=True):
+            if osp.isdir(path):
+                path = osp.normpath(path)
+                fnames = sorted(
+                    osp.join(path, fname)
+                    for fname in os.listdir(path)
+                    if osp.isfile(osp.join(path, fname))
+                )
+                if fnames:
+                    folders.append((path, fnames))
+
+        def relative_key(filename: str) -> str:
+            return osp.normcase(osp.normpath(osp.relpath(filename, directory)))
+
+        # Parameters recorded by history are reused; import parameters are asked
+        # once for all the other files of the directory tree
+        recorded_params: dict[str, gds.DataSet] = {}
+        if import_filenames is not None:
+            assert import_params is not None and len(import_params) == len(
+                import_filenames
+            ), "Number of import parameters must match number of files"
+            recorded_params = {
+                osp.normcase(osp.normpath(fname)): fparam
+                for fname, fparam in zip(import_filenames, import_params)
+            }
+        all_files = [fname for _path, fnames in folders for fname in fnames]
+        pending = [
+            fname for fname in all_files if relative_key(fname) not in recorded_params
+        ]
+        prepared_pairs = self.edit_import_parameters(pending, param)
+        if prepared_pairs is None:
+            return []
+        file_params: dict[str, gds.DataSet | None] = dict(prepared_pairs)
+        for fname in all_files:
+            if relative_key(fname) in recorded_params:
+                file_params[fname] = recorded_params[relative_key(fname)]
+        history_kwargs: dict[str, Any] = {"directory": directory}
+        param_files = [
+            fname for fname in all_files if file_params.get(fname) is not None
+        ]
+        if param_files:
+            history_kwargs["import_filenames"] = [
+                osp.relpath(fname, directory) for fname in param_files
+            ]
+            history_kwargs["import_params"] = [
+                copy.deepcopy(file_params[fname]) for fname in param_files
+            ]
         # Offer a fresh history session for this batch *before* loading anything.
         self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
         action = self.mainwindow.historypanel.add_ui_entry(
@@ -3117,13 +3178,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             target=self.PANEL_STR_ID + "panel",
             method_name="load_from_directory",
             save_state=False,
-            directory=directory,
+            **history_kwargs,
         )
-        folders = [
-            path
-            for path in glob.glob(osp.join(directory, "**"), recursive=True)
-            if osp.isdir(path) and len(os.listdir(path)) > 0
-        ]
         objs = []
         with self.mainwindow.historypanel.session_prompt_suppressed():
             with self.mainwindow.historypanel.capture_outputs(action):
@@ -3131,23 +3187,20 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     self, _("Scanning directory"), max_=len(folders) - 1
                 ) as progress:
                     # Iterate over all subfolders in the directory:
-                    for i_path, path in enumerate(folders):
+                    for i_path, (path, fnames) in enumerate(folders):
                         progress.setValue(i_path + 1)
                         if progress.wasCanceled():
                             break
-                        path = osp.normpath(path)
-                        fnames = sorted(
-                            [
-                                osp.join(path, fname)
-                                for fname in os.listdir(path)
-                                if osp.isfile(osp.join(path, fname))
-                            ]
-                        )
+                        # Files whose import dialog was cancelled are skipped
+                        fnames = [fname for fname in fnames if fname in file_params]
+                        if not fnames:
+                            continue
                         new_objs = self.load_from_files(
                             fnames,
                             create_group=False,
                             add_objects=False,
                             ignore_errors=True,
+                            import_params=[file_params[fname] for fname in fnames],
                         )
                         if new_objs:
                             objs += new_objs
@@ -3168,6 +3221,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         add_objects: bool = True,
         ignore_errors: bool = False,
         import_params: list[gds.DataSet | None] | None = None,
+        param: gds.DataSet | None = None,
     ) -> list[TypeObj]:
         """Open and return objects from files, optionally adding them to DataLab.
 
@@ -3180,10 +3234,15 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             ignore_errors: if True, ignore errors when loading files. Defaults to False.
             import_params: Optional format-specific parameters aligned with file names.
              When provided by history replay, import dialogs are not reopened.
+            param: Optional format-specific parameters applied to every file
+             requiring import parameters (e.g. RAW images), without showing any
+             dialog. Cannot be combined with ``import_params``.
 
         Returns:
             list of new objects
         """
+        if import_params is not None and param is not None:
+            raise ValueError("import_params and param cannot be combined")
         if not self.mainwindow.confirm_memory_state():
             return []
         if filenames is None:  # pragma: no cover
@@ -3193,38 +3252,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 filenames, _filt = getopenfilenames(self, _("Open"), basedir, filters)
         if not filenames:  # pragma: no cover
             return []
-        parameters_provided = import_params is not None
         if import_params is None:
-            import_params = [None] * len(filenames)
-        assert len(import_params) == len(filenames), (
-            "Number of import parameters must match number of files"
-        )
-        selected_pairs = sorted(zip(filenames, import_params), key=lambda pair: pair[0])
-        prepared_pairs: list[tuple[str, gds.DataSet | None]] = []
-        prepared_paths: set[str] = set()
-        expanded_paths: set[str] = set()
-        for filename, param in selected_pairs:
-            selected_path = osp.normcase(osp.abspath(filename))
-            if selected_path in expanded_paths:
-                continue
-            if not parameters_provided:
-                confirmed, param = self.edit_import_parameters(filename)
-                if not confirmed:
-                    continue
-            new_pairs = self.prepare_import_parameters(filename, param)
-            is_expansion = len(new_pairs) > 1
-            for prepared_filename, prepared_param in new_pairs:
-                path_key = osp.normcase(osp.abspath(prepared_filename))
-                if path_key in expanded_paths or (
-                    is_expansion and path_key in prepared_paths
-                ):
-                    continue
-                prepared_pairs.append((prepared_filename, prepared_param))
-                prepared_paths.add(path_key)
-            if is_expansion:
-                expanded_paths.update(
-                    osp.normcase(osp.abspath(path)) for path, _param in new_pairs
-                )
+            prepared_pairs = self.edit_import_parameters(sorted(filenames), param)
+            if prepared_pairs is None:
+                return []
+        else:
+            assert len(import_params) == len(filenames), (
+                "Number of import parameters must match number of files"
+            )
+            prepared_pairs = sorted(
+                zip(filenames, import_params), key=lambda pair: pair[0]
+            )
         if not prepared_pairs:
             return []
         filenames = [filename for filename, _param in prepared_pairs]

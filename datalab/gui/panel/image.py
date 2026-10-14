@@ -9,7 +9,6 @@
 from __future__ import annotations
 
 import copy
-import os
 import os.path as osp
 from typing import TYPE_CHECKING, Type
 from weakref import ReferenceType, ref
@@ -44,6 +43,7 @@ from sigima.io.image import ImageIORegistry
 from sigima.objects import ImageDatatypes, ImageObj, ImageROI, NewImageParam
 
 from datalab.config import Conf, _
+from datalab.env import execenv
 from datalab.gui import roieditor
 from datalab.gui.actionhandler import ImageActionHandler
 from datalab.gui.newobject import create_image_gui
@@ -257,12 +257,16 @@ def get_image_export_param_class(filename: str) -> type[ImageExportGUIParam]:
     return paramclass
 
 
-class RawImageImportGUIParam(RawImageImportParam, title=_("RAW image import")):
-    """RAW image import parameters extended with DataLab batch options."""
+def is_raw_image_file(filename: str) -> bool:
+    """Return True if the file is a headerless RAW image requiring parameters.
 
-    open_all_files = gds.BoolItem(
-        _("Open all RAW files in the same folder"), default=False
-    )
+    Args:
+        filename: File name.
+
+    Returns:
+        True if the file has a ``.raw`` extension.
+    """
+    return osp.splitext(filename)[1].lower() == ".raw"
 
 
 def create_image_export_gui_param(obj: ImageObj, filename: str) -> ImageExportGUIParam:
@@ -418,49 +422,94 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
         return roieditor.ImageROIEditor
 
     def edit_import_parameters(
-        self, filename: str
-    ) -> tuple[bool, RawImageImportGUIParam | None]:
-        """Edit RAW image import parameters when required by the file format.
+        self, filenames: list[str], param: gds.DataSet | None = None
+    ) -> list[tuple[str, gds.DataSet | None]] | None:
+        """Return files to import with their RAW image import parameters.
+
+        When several RAW files are imported, the user first chooses whether the same
+        parameters apply to all of them (a single dialog) or not (one dialog per
+        file).
 
         Args:
-            filename: Source file name.
+            filenames: File names to import.
+            param: Optional RAW image import parameters applied to every RAW file
+             without showing any dialog (e.g. remote control).
 
         Returns:
-            A tuple containing the confirmation state and optional import parameters.
-        """
-        if osp.splitext(filename)[1].lower() != ".raw":
-            return True, None
-        param = RawImageImportGUIParam()
-        if not param.edit(parent=self.parentWidget()):
-            return False, None
-        return True, param
+            File names with aligned import parameters, without the RAW files whose
+            dialog was cancelled, or None if the whole import was cancelled.
 
-    def prepare_import_parameters(
-        self, filename: str, param: gds.DataSet | None
-    ) -> list[tuple[str, gds.DataSet | None]]:
-        """Prepare RAW file names and backend parameters for import.
+        Raises:
+            TypeError: If ``param`` is not a RAW image import parameter set.
+        """
+        raw_files = [fname for fname in filenames if is_raw_image_file(fname)]
+        if param is not None:
+            if not isinstance(param, RawImageImportParam):
+                raise TypeError(
+                    "Image import parameters must be RawImageImportParam, "
+                    f"got {type(param).__name__}"
+                )
+            raw_params = {fname: copy.deepcopy(param) for fname in raw_files}
+        elif raw_files:
+            raw_params = self.edit_raw_import_parameters(raw_files)
+            if raw_params is None:
+                return None
+        else:
+            raw_params = {}
+        return [
+            (fname, raw_params.get(fname))
+            for fname in filenames
+            if not is_raw_image_file(fname) or fname in raw_params
+        ]
+
+    def edit_raw_import_parameters(
+        self, raw_files: list[str]
+    ) -> dict[str, RawImageImportParam] | None:
+        """Edit RAW image import parameters, once for all files or per file.
 
         Args:
-            filename: Selected file name.
-            param: Optional GUI or backend import parameters.
+            raw_files: RAW file names.
 
         Returns:
-            File names and aligned backend import parameters.
+            Parameters of the confirmed files, or None if the import was cancelled.
         """
-        if not isinstance(param, RawImageImportGUIParam):
-            return [(filename, param)]
-        backend_param = RawImageImportParam()
-        update_dataset(backend_param, param)
-        filenames = [filename]
-        if param.open_all_files:
-            directory = osp.dirname(filename) or "."
-            filenames = sorted(
-                osp.join(directory, name)
-                for name in os.listdir(directory)
-                if osp.isfile(osp.join(directory, name))
-                and osp.splitext(name)[1].lower() == ".raw"
+        same_for_all = True
+        if len(raw_files) > 1 and not execenv.unattended:
+            answer = QW.QMessageBox.question(
+                self.parentWidget(),
+                _("RAW image import"),
+                _(
+                    "%d RAW files are about to be imported.<br><br>"
+                    "Do you want to apply the same import parameters to all of them?"
+                    "<br><br>Choose <i>No</i> to set the parameters of each file."
+                )
+                % len(raw_files),
+                QW.QMessageBox.Yes | QW.QMessageBox.No | QW.QMessageBox.Cancel,
+                QW.QMessageBox.Yes,
             )
-        return [(path, copy.deepcopy(backend_param)) for path in filenames]
+            if answer == QW.QMessageBox.Cancel:
+                return None
+            same_for_all = answer == QW.QMessageBox.Yes
+        param = RawImageImportParam()
+        if same_for_all:
+            if len(raw_files) == 1:
+                title = f"{_('RAW image import')} - {osp.basename(raw_files[0])}"
+            else:
+                title = _("RAW image import (%d files)") % len(raw_files)
+            param.set_title(title)
+            if not param.edit(parent=self.parentWidget()):
+                return {}
+            return {fname: copy.deepcopy(param) for fname in raw_files}
+        raw_params: dict[str, RawImageImportParam] = {}
+        for index, fname in enumerate(raw_files):
+            param.set_title(
+                f"{_('RAW image import')} - {osp.basename(fname)} "
+                f"({index + 1}/{len(raw_files)})"
+            )
+            # Each dialog starts from the values confirmed for the previous file
+            if param.edit(parent=self.parentWidget()):
+                raw_params[fname] = copy.deepcopy(param)
+        return raw_params
 
     def apply_import_parameters(
         self, objs: list[ImageObj], param: gds.DataSet | None

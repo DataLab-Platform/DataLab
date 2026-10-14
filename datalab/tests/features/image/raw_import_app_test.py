@@ -4,12 +4,12 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from unittest.mock import patch
 
 import numpy as np
 from sigima.io import RawImageImportParam
 
-from datalab.gui.panel.image import RawImageImportGUIParam
 from datalab.objectmodel import get_uuid
 from datalab.tests import datalab_test_app_context
 from datalab.tests.features.common.history_test_helpers import select_tree_entry
@@ -26,7 +26,7 @@ def test_raw_import_replay_reloads_after_recorded_deletion(tmp_path) -> None:
         history, panel = win.historypanel, win.imagepanel
         history.toggle_record_mode(True)
 
-        with patch.object(RawImageImportGUIParam, "edit") as edit:
+        with patch.object(RawImageImportParam, "edit") as edit:
             objects = panel.load_from_files([str(filename)], import_params=[param])
 
             assert len(objects) == 1
@@ -64,3 +64,49 @@ def test_raw_import_replay_reloads_after_recorded_deletion(tmp_path) -> None:
         )
         recreated = panel.objmodel[replayed_output_uuid]
         np.testing.assert_array_equal(recreated.data, expected)
+
+
+def test_raw_directory_import_replay_reuses_recorded_parameters(tmp_path) -> None:
+    """Replay a RAW directory import without reopening import dialogs."""
+    first = np.array([[1, 2, 3], [4, 5, 6]], dtype=np.uint16)
+    second = np.array([[7, 8, 9], [10, 11, 12]], dtype=np.uint16)
+    (tmp_path / "sub").mkdir()
+    first.tofile(tmp_path / "a.raw")
+    second.tofile(tmp_path / "sub" / "b.raw")
+    param = RawImageImportParam.create(dtype="uint16", width=3, height=2)
+
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.imagepanel
+        history.toggle_record_mode(True)
+
+        with patch.object(RawImageImportParam, "edit") as edit:
+            objects = panel.load_from_directory(str(tmp_path), param=param)
+
+            assert len(objects) == 2
+            action = history[len(history)]
+            assert action.method_name == "load_from_directory"
+            assert sorted(action.kwargs["import_filenames"]) == sorted(
+                ["a.raw", str(Path("sub") / "b.raw")]
+            )
+            assert all(
+                isinstance(recorded, RawImageImportParam)
+                and (recorded.width, recorded.height) == (3, 2)
+                for recorded in action.kwargs["import_params"]
+            )
+
+            panel.objview.select_objects([get_uuid(obj) for obj in objects])
+            panel.remove_object(force=True)
+            assert len(panel.objmodel) == 0
+
+            select_tree_entry(history, action.uuid)
+            history.replay_restore_actions(restore_selection=False)
+
+            edit.assert_not_called()
+
+        reloaded = sorted(
+            (panel.objmodel[uuid].data for uuid in action.output_uuids),
+            key=lambda data: int(data[0, 0]),
+        )
+        assert len(reloaded) == 2
+        np.testing.assert_array_equal(reloaded[0], first)
+        np.testing.assert_array_equal(reloaded[1], second)

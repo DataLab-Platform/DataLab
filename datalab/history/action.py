@@ -296,8 +296,9 @@ class HistoryAction(ObjItf):
     ) -> HistoryAction:
         """Return a copy with supported object UUID references rewritten.
 
-        State selections and metadata, ``obj2_uuids``, and ``output_uuids`` are
-        remapped. Other UI keyword arguments are preserved.
+        State selections and metadata, ``obj2_uuids``, ``object_uuids``,
+        ``source_uuid``, ``output_uuid``, ``output_uuids``, ``target_uuids`` and
+        ``effects`` keys are remapped. Other UI keyword arguments are preserved.
 
         Args:
             uuid_remap: Per-panel mapping ``{panel_str: {old_uuid: new_uuid}}``
@@ -337,6 +338,11 @@ class HistoryAction(ObjItf):
             new_action.kwargs["obj2_uuids"] = (
                 rewritten[0] if len(rewritten) == 1 else rewritten
             )
+        # Objects exported by ``save_to_files`` live in the action panel.
+        object_uuids = new_action.kwargs.get("object_uuids")
+        if isinstance(object_uuids, (list, tuple)):
+            pmap = uuid_remap.get(new_action.effective_panel_str(), {})
+            new_action.kwargs["object_uuids"] = [pmap.get(u, u) for u in object_uuids]
         source_uuid = new_action.kwargs.get("source_uuid")
         if isinstance(source_uuid, str):
             pmap = uuid_remap.get(new_action.effective_panel_str(), {})
