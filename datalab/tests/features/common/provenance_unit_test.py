@@ -302,7 +302,7 @@ def test_verification_refusals() -> None:
 
 
 def test_chain_scenario() -> None:
-    """Opaque step, fan-out, linked states and replays in the middle of a chain."""
+    """Steps, fan-out, linked states and replays in the middle of a chain."""
     with app() as win:
         s0 = add_signal(win)
         (s1,) = run(
@@ -334,12 +334,7 @@ def test_chain_scenario() -> None:
         assert input_state(win, a3)["state_id"] == output_state(win, a2)["state_id"]
         assert output_state(win, a3)["object_uuid"] == get_uuid(s3)
 
-        unqualified = win.verify_provenance_activity(a1["activity_id"])
-        assert (unqualified["restoration"], unqualified["eligibility"]) == (
-            "replayable",
-            "unsupported_contract",
-        )
-        for activity in (a4, a2):
+        for activity in (a1, a4, a2):
             report = win.verify_provenance_activity(activity["activity_id"])
             assert report["verdict"] == "exact"
 
@@ -367,7 +362,11 @@ def test_capture_failure_keeps_result(monkeypatch) -> None:
 
 
 def test_scope_of_capture() -> None:
-    """Unqualified operations, on signals or images, are captured as opaque."""
+    """Operations on signals or images are captured with their identity.
+
+    Operations whose contract is not qualified are recorded as replayable, and
+    their replay is refused with the reason.
+    """
     with app() as win:
         add_signal(win)
         (smoothed,) = run(
@@ -380,6 +379,20 @@ def test_scope_of_capture() -> None:
         }
         assert activity["call"]["parameters"] == {"sigma": 1.0}
         assert output_state(win, activity)["object_uuid"] == get_uuid(smoothed)
+        report = win.verify_provenance_activity(activity["activity_id"])
+        assert report["verdict"] == "exact"
+
+        run(win, sips.phase_spectrum, None)
+        phase = win.provenance.ledger.activities[-1]
+        assert phase["call"]["operation"] == {
+            "id": "sigima.signal.phase_spectrum",
+            "contract_version": 1,
+        }
+        report = win.verify_provenance_activity(phase["activity_id"])
+        assert (report["restoration"], report["eligibility"]) == (
+            "replayable",
+            "unsupported_contract",
+        )
 
         ipanel = win.imagepanel
         ipanel.add_object(create_sincos_image())
@@ -393,7 +406,7 @@ def test_scope_of_capture() -> None:
         assert input_state(win, image_activity)["kind"] == "image"
         assert output_state(win, image_activity)["kind"] == "image"
         report = win.verify_provenance_activity(image_activity["activity_id"])
-        assert report["eligibility"] == "unsupported_contract"
+        assert report["verdict"] == "exact"
 
 
 def test_multiple_and_1_to_n_executions_are_captured() -> None:

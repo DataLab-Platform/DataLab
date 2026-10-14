@@ -2,8 +2,8 @@
 
 """Workspace provenance saved in HDF5 files, reopened in a fresh context and replayed.
 
-The chain workspace (S0 -> S1 opaque -> S2 -> S3, S0 -> S4) is checked for files
-written by Desktop and for the reference file written by DataLab-Web.
+The chain workspace (S0 -> S1 -> S2 -> S3, S0 -> S4) is checked for files written
+by Desktop and for the reference file written by DataLab-Web.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -83,14 +83,14 @@ def _output_object(win, activity):
 def check_chain(win, edition: str, historical: bool = False) -> None:
     """Check a reopened chain workspace: facts, data and real replays.
 
-    *historical* reference files were recorded when unqualified operations were
-    recorded without identity (opaque): they stay readable as such.
+    *historical* reference files were recorded when operations not qualified
+    at that time were recorded without identity (opaque): they stay readable
+    as such, and their replay is refused.
     """
     ledger = win.provenance.ledger
     ledger.validate()
     a1, a2, a3, a4 = ledger.activities
     assert {a["edition"] for a in ledger.activities} == {edition}
-    # Not qualified yet, the constant addition keeps its identity.
     assert a1["call"]["operation"] == (
         None
         if historical
@@ -118,27 +118,24 @@ def check_chain(win, edition: str, historical: bool = False) -> None:
     references = {
         a["activity_id"]: _output_object(win, a).y.copy() for a in ledger.activities
     }
-    unqualified = win.verify_provenance_activity(a1["activity_id"])
     if historical:
-        assert (unqualified["restoration"], unqualified["eligibility"]) == (
+        opaque = win.verify_provenance_activity(a1["activity_id"])
+        assert (opaque["restoration"], opaque["eligibility"]) == (
             "opaque",
             "unsupported_operation",
         )
-    else:
-        assert (unqualified["restoration"], unqualified["eligibility"]) == (
-            "replayable",
-            "unsupported_contract",
-        )
-        assert "not qualified" in unqualified["reason"]
+    replayed = (a4, a2) if historical else (a1, a4, a2)
     computations = win.signalpanel.processor.execution.computations
-    for activity in (a4, a2):
+    for activity in replayed:
         report = win.verify_provenance_activity(activity["activity_id"])
         assert report["verdict"] == "exact"
         assert report["restoration"] == "replayable"
         if edition != "desktop":
             assert report["environment"]["match"] == "different"
             assert "edition" in report["environment"]["differences"]
-    assert win.signalpanel.processor.execution.computations == computations + 2
+    assert win.signalpanel.processor.execution.computations == computations + len(
+        replayed
+    )
     for activity in ledger.activities:
         assert np.array_equal(
             _output_object(win, activity).y, references[activity["activity_id"]]
