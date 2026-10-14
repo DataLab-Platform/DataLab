@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download every artifact produced by the build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           path: all-artifacts
 

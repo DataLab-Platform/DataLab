@@ -814,5 +814,5 @@ msgstr "Si vous rencontrez des problèmes pendant la migration :"
 msgid "Check the `GitHub issue tracker <https://github.com/DataLab-Platform/DataLab/issues>`_"
 msgstr "Consultez le `suivi des problèmes GitHub <https://github.com/DataLab-Platform/DataLab/issues>`_"
 
-msgid "Consult the built-in plugin examples in the ``datalab/plugins`` directory"
-msgstr "Consultez les exemples de plugins intégrés dans le répertoire ``datalab/plugins``"
+msgid "Consult the built-in plugin examples in the ``datalab/plugins/builtin`` directory"
+msgstr "Consultez les exemples de plugins intégrés dans le répertoire ``datalab/plugins/builtin``"

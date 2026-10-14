@@ -269,11 +269,6 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
                 "  • z' = a0 + a1*z + a2*z^2 + ..."
             ),
         )
-        self.register_1_to_1(
-            sipi.transpose,
-            _("Swap X/Y axes"),
-            icon_name="swap_x_y.svg",
-        )
         # Level adjustment
         self.register_1_to_1(
             sipi.normalize,
@@ -415,6 +410,11 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
         self.register_1_to_1(sipi.threshold_triangle, _("Triangle thresholding"))
         self.register_1_to_1(sipi.threshold_yen, _("Yen thresholding"))
         # Exposure
+        self.register_1_to_1(
+            sipi.adjust_brightness_contrast,
+            _("Brightness and contrast"),
+            sipi.BrightnessContrastParam,
+        )
         self.register_1_to_1(
             sipi.adjust_gamma,
             _("Gamma correction"),

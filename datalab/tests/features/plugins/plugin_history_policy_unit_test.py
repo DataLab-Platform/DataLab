@@ -23,7 +23,9 @@ from datalab.gui import historysession_ops as hsess
 from datalab.gui.main import DLMainWindow
 from datalab.plugins import PluginRegistry
 
-testdata_path = Path(__file__).parents[3] / "plugins" / "datalab_testdata.py"
+testdata_path = (
+    Path(__file__).parents[3] / "plugins" / "builtin" / "datalab_testdata.py"
+)
 testdata_spec = importlib.util.spec_from_file_location(
     "datalab_testdata", testdata_path
 )
@@ -314,7 +316,7 @@ def test_multiload_validates_inputs_and_explicit_policy_wins() -> None:
             assert proxy.multiload_state.decision_applied is False
     get_behavior.assert_not_called()
     assert proxy.multiload_state is None
-    assert mainwindow.historypanel.calls == []
+    assert not mainwindow.historypanel.calls
 
     with pytest.raises(ValueError, match="Invalid data panel"):
         with proxy.multiload_session(cast(Any, "macro")):
@@ -348,8 +350,8 @@ def test_multiload_defers_empty_and_pre_add_exception_decisions() -> None:
     assert get_behavior.call_count == 2
     assert proxy.multiload_state is None
     assert mainwindow.memory_confirmation_count == 0
-    assert mainwindow.historypanel.calls == []
-    assert mainwindow.added_objects == []
+    assert not mainwindow.historypanel.calls
+    assert not mainwindow.added_objects
 
 
 def test_multiload_memory_rejection_does_not_consume_first_decision() -> None:
@@ -387,8 +389,8 @@ def test_multiload_rejects_panel_mismatch_before_mainwindow_mutation() -> None:
             proxy.add_object(ImageObj())
 
     assert mainwindow.memory_confirmation_count == 0
-    assert mainwindow.historypanel.calls == []
-    assert mainwindow.added_objects == []
+    assert not mainwindow.historypanel.calls
+    assert not mainwindow.added_objects
 
 
 def test_typed_adds_report_memory_rejection() -> None:
@@ -402,8 +404,8 @@ def test_typed_adds_report_memory_rejection() -> None:
     assert proxy.add_signal("signal", xdata, ydata) is False
     assert proxy.add_image("image", np.ones((2, 2))) is False
     assert mainwindow.memory_confirmation_count == 2
-    assert mainwindow.historypanel.calls == []
-    assert mainwindow.added_objects == []
+    assert not mainwindow.historypanel.calls
+    assert not mainwindow.added_objects
 
 
 @pytest.mark.parametrize(

@@ -164,7 +164,7 @@ def run_datalab_in_background(wait_until_ready: bool = True) -> None:
             "load_user_config": False,
             "option_overrides": {
                 "rpc_server_enabled": True,
-                "tour_enabled": False,
+                "welcome_on_startup": False,
             },
             "xmlrpc_port": port,
         },

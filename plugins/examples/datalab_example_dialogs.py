@@ -80,6 +80,7 @@ class DialogMethodsExample(datalab.plugins.PluginBase):
     """DataLab Dialog Methods Example Plugin"""
 
     PLUGIN_INFO = datalab.plugins.PluginInfo(
+        id="org.datalab.examples.dialog-methods",
         name="Dialog Methods (example)",
         version="1.0.0",
         description="Example plugin demonstrating dialog methods",

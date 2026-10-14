@@ -29,6 +29,7 @@ class PluginTestData(PluginBase):
     """DataLab Test Data Plugin"""
 
     PLUGIN_INFO = PluginInfo(
+        id="org.datalab.testdata",
         name=_("Test data"),
         version="1.0.0",
         description=_("Testing DataLab functionalities"),

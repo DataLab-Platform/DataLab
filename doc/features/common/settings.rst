@@ -23,6 +23,12 @@ The General settings tab contains main window and general feature settings:
 **Color mode**
     Choose the color mode for the application interface (e.g., light, dark, or auto).
 
+**Show welcome page when the current panel is empty**
+    When enabled (default), the welcome page is shown when DataLab starts and whenever the current signal or image panel is empty (see :ref:`welcome_page`).
+
+**Welcome page application rows**
+    Maximum number of application tile rows on the welcome page, from 1 to 10 (default: 2). Other applications remain available from the **Applications** catalog (see :ref:`welcome_page`).
+
 **Process isolation**
     When enabled, each computation runs in a separate process, preventing the application
     from freezing during long computations. This is the recommended setting for better
@@ -49,16 +55,12 @@ The General settings tab contains main window and general feature settings:
     This helps prevent out-of-memory errors when working with large datasets. Set to 0
     to disable the warning.
 
-**Third-party plugins**
-    Enable or disable third-party plugins immediately.
-    Changes are applied without restarting DataLab.
-    When disabled, third-party plugins are not discovered or loaded.
+.. note::
 
-**Plugins path**
-    Specify the directory path where DataLab should look for third-party plugins.
-    DataLab will also discover plugins in your PYTHONPATH.
-    To enable or disable individual plugins, use the ``Plugins > Configure plugins...``
-    menu action. DataLab then proposes reloading plugins automatically.
+    Plugin-related settings (global enabling of third-party plugins, per-plugin
+    enabling and additional plugin directories) are not part of this dialog:
+    they are grouped in the plugin configuration dialog, available from the
+    ``Plugins > Configure plugins...`` menu action (see :ref:`about_plugins`).
 
 Processing
 ----------
@@ -112,6 +114,23 @@ The Processing settings tab controls computation behavior and default parameters
 
           - New group 1: A-E, B-F
           - New group 2: C-E, D-F
+
+**References in result titles**
+    Choose how source objects are represented in titles generated for computation
+    results:
+
+    - **Source UUID** (default): use stable 8-character references derived from each
+      source object's UUID.
+    - **Source title**: use the source objects' live current titles, so references
+      follow later renames. References nested in processing chains are resolved
+      too, e.g. ``derivative(derivative(My signal))``.
+
+    This setting changes only the displayed reference, in the object trees, plot
+    legends, plot titles and labels added with *Add object title to plot*. The
+    title edited in the Properties panel keeps its stored references. Result titles
+    store 8-character references (``g``-prefixed for groups), while each object's
+    identity remains its full UUID. Signal, image and group items in the trees show
+    their own ``#UUID8`` (or ``#gUUID8``) reference below their title.
 
 **Use signal bounds for new signals**
     When enabled, the xmin and xmax values for new signals are initialized from

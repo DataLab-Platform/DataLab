@@ -133,10 +133,7 @@ def resolve_output_panel(
     Returns:
         Data panel that owns (or must own) the output object.
     """
-    # Stub panels in unit tests have no mainwindow: no cross-panel routing
-    mainwindow = getattr(panel, "mainwindow", None)
-    if mainwindow is None:
-        return fallback
+    mainwindow = panel.mainwindow
     signalpanel = mainwindow.signalpanel
     imagepanel = mainwindow.imagepanel
     if signalpanel.objmodel.has_uuid(out_uuid):
@@ -442,18 +439,17 @@ def execute_compute_via_ui(
         func_names = action.kwargs.get("func_names") or (
             [action.func_name] if action.func_name else []
         )
-        funcs = [
-            processor.get_feature(
-                func_name, plugin_origin=action.plugin_origin
-            ).function
+        features = [
+            processor.get_feature(func_name, plugin_origin=action.plugin_origin)
             for func_name in func_names
         ]
         params = action.kwargs.get("params")
         processor.compute_multiple_1_to_1(
-            funcs,
+            [feature.function for feature in features],
             params=copy.deepcopy(params) if params is not None else None,
             title=title,
             edit=False,
+            feature_ids=[feature.feature_id for feature in features],
         )
         return
     if action.pattern == "1_to_n":
@@ -464,7 +460,11 @@ def execute_compute_via_ui(
             paramclass_name=type(params[0]).__name__ if params else None,
         )
         processor.compute_1_to_n(
-            feature.function, params=params, title=title, edit=False
+            feature.function,
+            params=params,
+            title=title,
+            edit=False,
+            feature_id=feature.feature_id,
         )
         return
     param = copy.deepcopy(action.kwargs.get("param"))
@@ -474,7 +474,13 @@ def execute_compute_via_ui(
         paramclass_name=type(param).__name__ if param is not None else None,
     )
     if action.pattern == "1_to_1":
-        processor.compute_1_to_1(feature.function, param=param, title=title, edit=False)
+        processor.compute_1_to_1(
+            feature.function,
+            param=param,
+            title=title,
+            edit=False,
+            feature_id=feature.feature_id,
+        )
     elif action.pattern == "n_to_1":
         processor.compute_n_to_1(
             feature.function,
@@ -482,6 +488,7 @@ def execute_compute_via_ui(
             title=title,
             edit=False,
             pairwise=bool(action.kwargs.get("pairwise")),
+            feature_id=feature.feature_id,
         )
     elif action.pattern == "2_to_1":
         objs2 = [panel_data.objmodel[uuid] for uuid in obj2_uuids]
@@ -496,6 +503,7 @@ def execute_compute_via_ui(
             skip_xarray_compat=feature.skip_xarray_compat,
             pairwise=pairwise,
             pre_execute_hook=feature.pre_execute_hook,
+            feature_id=feature.feature_id,
         )
     else:
         raise ValueError(f"Unsupported compute pattern: {action.pattern!r}")
@@ -662,7 +670,7 @@ def _commit_outputs(
         raise
 
 
-def recompute_compute_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:
+def recompute_compute_in_place(panel: HistoryPanel, action: HistoryAction) -> bool:  # pylint: disable=too-many-return-statements
     """Replay a compute action through the real UI entry point, then reconcile.
 
     **Execute**: the recorded selection is restored and the same public

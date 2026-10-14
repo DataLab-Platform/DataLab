@@ -30,13 +30,24 @@ def test_call_method() -> None:
         proxy.set_current_panel("signal")
         titles_before = proxy.get_object_titles("signal")
         assert len(titles_before) == 1, "Should have one signal"
+        implicit_selection = proxy.get_sel_object_uuids()
+        proxy.select_objects([1])
+        selected_uuids = proxy.get_sel_object_uuids()
+        assert len(selected_uuids) == 1, (
+            "Signal should be selected before removal: "
+            f"implicit={implicit_selection}, explicit={selected_uuids}"
+        )
 
         # Remove the signal object using call_method (no panel parameter)
         # This should auto-detect and use the current panel
         proxy.call_method("remove_object", force=True)
 
         titles_after = proxy.get_object_titles("signal")
-        assert len(titles_after) == 0, "Signal should be removed"
+        assert len(titles_after) == 0, (
+            "Signal should be removed: "
+            f"implicit={implicit_selection}, explicit={selected_uuids}, "
+            f"remaining={titles_after}"
+        )
 
         # Test 3: Call method on specific panel
         proxy.set_current_panel("image")

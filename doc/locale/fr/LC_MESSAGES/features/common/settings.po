@@ -36,6 +36,18 @@ msgstr "**Mode couleur**"
 msgid "Choose the color mode for the application interface (e.g., light, dark, or auto)."
 msgstr "Choisir le mode couleur de l'interface de l'application (par exemple, clair, sombre ou automatique)."
 
+msgid "**Show welcome page when the current panel is empty**"
+msgstr "**Afficher la page d'accueil lorsque le panneau courant est vide**"
+
+msgid "When enabled (default), the welcome page is shown when DataLab starts and whenever the current signal or image panel is empty (see :ref:`welcome_page`)."
+msgstr "Lorsque cette option est activée (par défaut), la page d'accueil est affichée au démarrage de DataLab et chaque fois que le panneau signal ou image courant est vide (voir :ref:`welcome_page`)."
+
+msgid "**Welcome page application rows**"
+msgstr "**Lignes d'applications de la page d'accueil**"
+
+msgid "Maximum number of application tile rows on the welcome page, from 1 to 10 (default: 2). Other applications remain available from the **Applications** catalog (see :ref:`welcome_page`)."
+msgstr "Nombre maximal de lignes de tuiles d'applications sur la page d'accueil, de 1 à 10 (par défaut : 2). Les autres applications restent accessibles depuis le catalogue **Applications** (voir :ref:`welcome_page`)."
+
 msgid "**Process isolation**"
 msgstr "**Isolation des processus**"
 
@@ -63,17 +75,8 @@ msgstr "**Seuil de mémoire**"
 msgid "Set a threshold (in MB) below which a warning is displayed before loading new data. This helps prevent out-of-memory errors when working with large datasets. Set to 0 to disable the warning."
 msgstr "Définir un seuil (en Mo) en dessous duquel un avertissement est affiché avant de charger de nouvelles données. Cela permet d'éviter les erreurs de mémoire insuffisante lors du travail avec de grands ensembles de données. Mettre à 0 pour désactiver l'avertissement."
 
-msgid "**Third-party plugins**"
-msgstr "**Plugins tiers**"
-
-msgid "Enable or disable third-party plugins immediately. Changes are applied without restarting DataLab. When disabled, third-party plugins are not discovered or loaded."
-msgstr "Activer ou désactiver immédiatement les plugins tiers. Les modifications sont appliquées sans redémarrer DataLab. Lorsqu'ils sont désactivés, les plugins tiers ne sont ni détectés ni chargés."
-
-msgid "**Plugins path**"
-msgstr "**Chemin des plugins**"
-
-msgid "Specify the directory path where DataLab should look for third-party plugins. DataLab will also discover plugins in your PYTHONPATH. To enable or disable individual plugins, use the ``Plugins > Configure plugins...`` menu action. DataLab then proposes reloading plugins automatically."
-msgstr "Indiquer le répertoire dans lequel DataLab doit rechercher les plugins tiers. DataLab détectera également les plugins présents dans votre PYTHONPATH. Pour activer ou désactiver des plugins individuellement, utilisez l'action de menu ``Plugins > Configurer les plugins...``. DataLab proposera ensuite de recharger automatiquement les plugins."
+msgid "Plugin-related settings (global enabling of third-party plugins, per-plugin enabling and additional plugin directories) are not part of this dialog: they are grouped in the plugin configuration dialog, available from the ``Plugins > Configure plugins...`` menu action (see :ref:`about_plugins`)."
+msgstr "Paramètres liés aux plugins (activation globale des plugins tiers, activation par plugin et répertoires de plugins supplémentaires) ne font pas partie de cette boîte de dialogue : ils sont regroupés dans la boîte de dialogue de configuration des plugins, accessible depuis l'action de menu ``Plugins > Configurer les plugins...`` (voir :ref:`about_plugins`)."
 
 msgid "Processing"
 msgstr "Traitement"
@@ -144,6 +147,21 @@ msgstr "Nouveau groupe 1 : A-E, B-F"
 
 msgid "New group 2: C-E, D-F"
 msgstr "Nouveau groupe 2 : C-E, D-F"
+
+msgid "**References in result titles**"
+msgstr "**Références dans les titres de résultats**"
+
+msgid "Choose how source objects are represented in titles generated for computation results:"
+msgstr "Choisir comment les objets sources sont représentés dans les titres générés pour les résultats des calculs :"
+
+msgid "**Source UUID** (default): use stable 8-character references derived from each source object's UUID."
+msgstr "**UUID source** (par défaut) : utiliser des références stables de 8 caractères dérivées de l'UUID de chaque objet source."
+
+msgid "**Source title**: use the source objects' live current titles, so references follow later renames. References nested in processing chains are resolved too, e.g. ``derivative(derivative(My signal))``."
+msgstr "**Titre de la source** : utiliser les titres actuels des objets sources, afin que les références suivent les renommages ultérieurs. Les références imbriquées dans les chaînes de traitement sont également résolues, par exemple ``derivative(derivative(Mon signal))``."
+
+msgid "This setting changes only the displayed reference, in the object trees, plot legends, plot titles and labels added with *Add object title to plot*. The title edited in the Properties panel keeps its stored references. Result titles store 8-character references (``g``-prefixed for groups), while each object's identity remains its full UUID. Signal, image and group items in the trees show their own ``#UUID8`` (or ``#gUUID8``) reference below their title."
+msgstr "Ce réglage modifie uniquement la référence affichée, dans les arborescences d'objets, les légendes et titres des graphiques et les étiquettes ajoutées avec *Ajouter le titre de l'objet au graphique*. Le titre modifié dans le panneau Propriétés conserve ses références enregistrées. Les titres de résultats stockent des références de 8 caractères (préfixées par ``g`` pour les groupes), tandis que l'identité de chaque objet reste son UUID complet. Les signaux, images et groupes des arborescences affichent leur propre référence ``#UUID8`` (ou ``#gUUID8``) sous leur titre."
 
 msgid "**Use signal bounds for new signals**"
 msgstr "**Utiliser les bornes du signal pour les nouveaux signaux**"

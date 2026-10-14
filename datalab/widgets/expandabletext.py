@@ -33,6 +33,9 @@ DEFAULT_EXPANDED_MIN_FACTOR: int = 2
 #: Default left indent in pixels
 DEFAULT_INDENT: int = 20
 
+#: Dynamic property marking the widgets with a subdued text color
+SUBDUED_PROPERTY: str = "datalab_subdued"
+
 
 # --- Palette helpers (public — reused by other modules) --------------------------
 
@@ -52,18 +55,33 @@ def apply_palette_color(widget: QW.QWidget, color: QG.QColor) -> None:
 def apply_subdued_color(widget: QW.QWidget) -> None:
     """Apply a subdued/secondary text color on *widget*.
 
-    Uses the ``QPalette.PlaceholderText`` role (Qt 5.12+) which provides a
-    theme-native "dimmed" color.  Sets both ``WindowText`` (for ``QLabel``)
-    and ``Text`` (for ``QTextBrowser`` / ``QTextEdit``) roles.
+    The application ``WindowText`` (for ``QLabel``) and ``Text`` (for
+    ``QTextBrowser`` / ``QTextEdit``) colors are dimmed to half opacity, like Qt
+    placeholder texts. The widget is marked so that :func:`refresh_subdued_colors`
+    can follow color mode changes.
 
     Args:
         widget: Target widget
     """
-    subdued = QW.QApplication.instance().palette().color(QG.QPalette.PlaceholderText)
+    app_palette = QW.QApplication.instance().palette()
     palette = widget.palette()
-    palette.setColor(QG.QPalette.WindowText, subdued)
-    palette.setColor(QG.QPalette.Text, subdued)
+    for role in (QG.QPalette.WindowText, QG.QPalette.Text):
+        color = QG.QColor(app_palette.color(role))
+        color.setAlpha(128)
+        palette.setColor(role, color)
     widget.setPalette(palette)
+    widget.setProperty(SUBDUED_PROPERTY, True)
+
+
+def refresh_subdued_colors() -> None:
+    """Update the subdued text colors after an application palette change.
+
+    Subdued colors are set explicitly on widgets, so they do not follow the
+    application palette by themselves.
+    """
+    for widget in QW.QApplication.allWidgets():
+        if widget.property(SUBDUED_PROPERTY):
+            apply_subdued_color(widget)
 
 
 # --- Internal helpers ------------------------------------------------------------

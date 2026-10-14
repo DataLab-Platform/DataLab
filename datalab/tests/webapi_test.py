@@ -19,6 +19,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sigima import ImageObj, SignalObj
 
+from datalab.objectmodel import get_uuid
 from datalab.webapi.routes import (
     generate_auth_token,
     router,
@@ -42,7 +43,8 @@ from datalab.webapi.serialization import (
 class TestNPZSerialization:
     """Tests for NPZ serialization module."""
 
-    def test_signal_round_trip(self):
+    @pytest.mark.parametrize("compress", [False, True])
+    def test_signal_round_trip(self, compress):
         """Test serializing and deserializing a SignalObj."""
         # Create a signal
         x = np.linspace(0, 10, 100)
@@ -54,9 +56,10 @@ class TestNPZSerialization:
         obj.ylabel = "Amplitude"
         obj.xunit = "s"
         obj.yunit = "V"
+        obj.metadata["acquisition"] = {"sample": "signal", "gain": 2.5}
 
         # Serialize
-        data = serialize_object_to_npz(obj)
+        data = serialize_object_to_npz(obj, compress=compress)
         assert isinstance(data, bytes)
         assert len(data) > 0
 
@@ -79,6 +82,9 @@ class TestNPZSerialization:
         assert result.ylabel == "Amplitude"
         assert result.xunit == "s"
         assert result.yunit == "V"
+        assert result.metadata["acquisition"] == obj.metadata["acquisition"]
+        assert result.dx is None
+        assert result.dy is None
 
     def test_signal_with_uncertainties(self):
         """Test signal with dx/dy uncertainties."""
@@ -97,7 +103,8 @@ class TestNPZSerialization:
         np.testing.assert_array_equal(result.dx, dx)
         np.testing.assert_array_equal(result.dy, dy)
 
-    def test_image_round_trip(self):
+    @pytest.mark.parametrize("compress", [False, True])
+    def test_image_round_trip(self, compress):
         """Test serializing and deserializing an ImageObj."""
         # Create an image
         data = np.random.rand(128, 128).astype(np.float32)
@@ -107,13 +114,17 @@ class TestNPZSerialization:
         obj.xlabel = "X"
         obj.ylabel = "Y"
         obj.zlabel = "Intensity"
+        obj.xunit = "mm"
+        obj.yunit = "mm"
+        obj.zunit = "counts"
+        obj.metadata["acquisition"] = {"sample": "image", "gain": 2.5}
         obj.x0 = 10.0
         obj.y0 = 20.0
         obj.dx = 0.5
         obj.dy = 0.5
 
         # Serialize
-        npz_data = serialize_object_to_npz(obj)
+        npz_data = serialize_object_to_npz(obj, compress=compress)
         assert isinstance(npz_data, bytes)
 
         # Verify structure
@@ -129,6 +140,13 @@ class TestNPZSerialization:
         assert type(result).__name__ == "ImageObj"
         np.testing.assert_array_equal(result.data, data)
         assert result.title == "Test Image"
+        assert result.xlabel == "X"
+        assert result.ylabel == "Y"
+        assert result.zlabel == "Intensity"
+        assert result.xunit == "mm"
+        assert result.yunit == "mm"
+        assert result.zunit == "counts"
+        assert result.metadata["acquisition"] == obj.metadata["acquisition"]
         assert result.x0 == 10.0
         assert result.y0 == 20.0
         assert result.dx == 0.5
@@ -271,19 +289,22 @@ class MockWorkspaceAdapter:
         """Add an object to the mock workspace."""
         self._objects[name] = obj
 
-    def list_objects(self) -> list[tuple[str, str]]:
+    def list_objects(self) -> list[tuple[str, str, str]]:
         """List all objects in the mock workspace."""
         result = []
         for name, obj in self._objects.items():
             panel = "signal" if type(obj).__name__ == "SignalObj" else "image"
-            result.append((name, panel))
+            result.append((get_uuid(obj), name, panel))
         return result
 
     def get_object(self, name: str) -> SignalObj | ImageObj:
-        """Get an object by name."""
-        if name not in self._objects:
-            raise KeyError(f"Object '{name}' not found")
-        return self._objects[name]
+        """Get an object by name or UUID."""
+        if name in self._objects:
+            return self._objects[name]
+        for obj in self._objects.values():
+            if get_uuid(obj) == name:
+                return obj
+        raise KeyError(f"Object '{name}' not found")
 
 
 class TestAPIEndpointsWithMock:

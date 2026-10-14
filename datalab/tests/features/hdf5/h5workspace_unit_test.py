@@ -21,11 +21,17 @@ Also includes integration tests for the ``fix/HDF5_format`` Sigima changes:
 
 import enum
 import os.path as osp
+from types import SimpleNamespace
+from unittest.mock import Mock
 
 import h5py
 import pytest
+import sigima.proc.signal as sips
+from guidata.io import JSONWriter
 from numpy import ma
-from sigima.objects import GaussParam
+from plotpy.builder import make
+from plotpy.io import save_items
+from sigima.objects import GaussParam, RectangleAnnotation, annotation_to_dict
 from sigima.objects.scalar import NO_ROI, TableResult, TableResultBuilder
 from sigima.tests.data import (
     create_noisy_gaussian_image,
@@ -34,17 +40,88 @@ from sigima.tests.data import (
 )
 
 from datalab.adapters_metadata.table_adapter import TableAdapter
+from datalab.gui.h5io import H5InputOutput
 from datalab.gui.newobject import extract_creation_parameters
+from datalab.gui.panel.base import H5ImportBatch
+from datalab.objectmodel import get_title_reference, get_uuid
 from datalab.tests import datalab_test_app_context, helpers
 
 
-def test_save_and_load_h5_workspace():
+def test_h5_append_twice_remaps_title_references() -> None:
+    """Appending a workspace twice keeps each copy's title references local."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        with datalab_test_app_context(console=False) as win:
+            panel = win.signalpanel
+            src = create_paracetamol_signal()
+            src.title = "Run s001 20260107"
+            panel.add_object(src)
+            panel.processor.run_feature(sips.derivative)
+            panel.objview.select_groups([get_uuid(panel.objmodel.get_groups()[0])])
+            panel.processor.run_feature(sips.derivative)
+            fname = osp.join(tmpdir, "references.h5")
+            win.save_h5_workspace(fname)
+
+            for _index in range(2):
+                win.load_h5_workspace([fname], reset_all=False)
+
+            groups = panel.objmodel.get_groups()
+            assert len(groups) == 6
+            for src_group, result_group in (groups[2:4], groups[4:6]):
+                source, derived = src_group.get_objects()
+                assert source.title == "Run s001 20260107"
+                assert derived.title == f"derivative({get_title_reference(source)})"
+                assert result_group.title.endswith(
+                    f"({get_title_reference(src_group)})"
+                )
+
+
+def test_open_file_headless_refreshes_reference_displays(monkeypatch) -> None:
+    """Refresh existing titles and legends after a headless HDF5 import."""
+    panel = SimpleNamespace(refresh_after_reference_remap=Mock())
+    batch = H5ImportBatch(panel, {}, [], [])
+    panel.deserialize_from_hdf5 = Mock(return_value=batch)
+    mainwindow = SimpleNamespace(panels=[panel], reset_all=Mock())
+    reader = SimpleNamespace(close=Mock())
+    monkeypatch.setattr("datalab.gui.h5io.NativeH5Reader", lambda _filename: reader)
+
+    assert H5InputOutput(mainwindow).open_file_headless("workspace.h5", False)
+
+    panel.refresh_after_reference_remap.assert_called_once_with()
+    reader.close.assert_called_once_with()
+
+
+def test_save_and_load_h5_workspace(monkeypatch: pytest.MonkeyPatch):
     """Test save_h5_workspace and load_h5_workspace methods"""
     with helpers.WorkdirRestoringTempDir() as tmpdir:
         with datalab_test_app_context(console=False) as win:
             # === Create test objects
             sig1 = create_paracetamol_signal()
+            legacy_item = make.annotated_segment(1.0, 2.0, 5.0, 8.0, title="Historical")
+            writer = JSONWriter(None)
+            save_items(writer, [legacy_item])
+            annotations = [
+                annotation_to_dict(
+                    RectangleAnnotation(
+                        x=1.0,
+                        y=2.0,
+                        width=3.0,
+                        height=4.0,
+                        title="Canonical",
+                        extensions={"vendor": {"keep": True}},
+                    )
+                ),
+                {
+                    "type": "plotpy_item",
+                    "item_class": type(legacy_item).__name__,
+                    "plotpy_json": writer.get_json(),
+                },
+                {"consumer": "custom", "payload": {"keep": True}},
+            ]
+            sig1.set_annotations(annotations)
             win.signalpanel.add_object(sig1)
+            sig2 = create_paracetamol_signal()
+            sig2.title = "Second signal"
+            win.signalpanel.add_object(sig2)
 
             ima1 = create_noisy_gaussian_image()
             win.imagepanel.add_object(ima1)
@@ -52,7 +129,7 @@ def test_save_and_load_h5_workspace():
             # Store object counts and titles for verification
             sig_count_before = len(win.signalpanel.objmodel)
             ima_count_before = len(win.imagepanel.objmodel)
-            sig_title = sig1.title
+            sig_titles = [obj.title for obj in win.signalpanel]
             ima_title = ima1.title
 
             # === Test save_h5_workspace
@@ -68,6 +145,72 @@ def test_save_and_load_h5_workspace():
             assert len(win.imagepanel.objmodel) == 0
 
             # === Test load_h5_workspace
+            signal_batches: list[int] = []
+            image_batches: list[int] = []
+            selection_calls = {win.signalpanel: 0, win.imagepanel: 0}
+            signal_add_objects = win.signalpanel._add_objects
+            image_add_objects = win.imagepanel._add_objects
+            signal_selection_changed = win.signalpanel.selection_changed
+            image_selection_changed = win.imagepanel.selection_changed
+            signal_deserialize = win.signalpanel.deserialize_from_hdf5
+            image_deserialize = win.imagepanel.deserialize_from_hdf5
+            deserialize_selection_calls = {
+                win.signalpanel: [],
+                win.imagepanel: [],
+            }
+
+            def track_signal_batch(objects, *args, **kwargs) -> None:
+                batch = tuple(objects)
+                signal_batches.append(len(batch))
+                signal_add_objects(batch, *args, **kwargs)
+
+            def track_image_batch(objects, *args, **kwargs) -> None:
+                batch = tuple(objects)
+                image_batches.append(len(batch))
+                image_add_objects(batch, *args, **kwargs)
+
+            def track_signal_selection(*args, **kwargs) -> None:
+                selection_calls[win.signalpanel] += 1
+                signal_selection_changed(*args, **kwargs)
+
+            def track_image_selection(*args, **kwargs) -> None:
+                selection_calls[win.imagepanel] += 1
+                image_selection_changed(*args, **kwargs)
+
+            def track_signal_deserialize(*args, **kwargs) -> H5ImportBatch:
+                before = selection_calls[win.signalpanel]
+                batch = signal_deserialize(*args, **kwargs)
+                deserialize_selection_calls[win.signalpanel].append(
+                    selection_calls[win.signalpanel] - before
+                )
+                return batch
+
+            def track_image_deserialize(*args, **kwargs) -> H5ImportBatch:
+                before = selection_calls[win.imagepanel]
+                batch = image_deserialize(*args, **kwargs)
+                deserialize_selection_calls[win.imagepanel].append(
+                    selection_calls[win.imagepanel] - before
+                )
+                return batch
+
+            monkeypatch.setattr(win.signalpanel, "_add_objects", track_signal_batch)
+            monkeypatch.setattr(win.imagepanel, "_add_objects", track_image_batch)
+            monkeypatch.setattr(
+                win.signalpanel, "selection_changed", track_signal_selection
+            )
+            monkeypatch.setattr(
+                win.imagepanel, "selection_changed", track_image_selection
+            )
+            monkeypatch.setattr(
+                win.signalpanel,
+                "deserialize_from_hdf5",
+                track_signal_deserialize,
+            )
+            monkeypatch.setattr(
+                win.imagepanel,
+                "deserialize_from_hdf5",
+                track_image_deserialize,
+            )
             win.load_h5_workspace([fname], reset_all=True)
 
             # Verify objects were restored
@@ -75,10 +218,17 @@ def test_save_and_load_h5_workspace():
             assert len(win.imagepanel.objmodel) == ima_count_before
 
             # Verify titles (get objects in order from groups)
-            loaded_sig = win.signalpanel.objmodel.get_all_objects()[0]
+            loaded_signals = win.signalpanel.objmodel.get_all_objects()
             loaded_ima = win.imagepanel.objmodel.get_all_objects()[0]
-            assert loaded_sig.title == sig_title
+            assert [obj.title for obj in loaded_signals] == sig_titles
             assert loaded_ima.title == ima_title
+            assert loaded_signals[0].get_annotations() == annotations
+            assert signal_batches == [2]
+            assert image_batches == [1]
+            assert deserialize_selection_calls == {
+                win.signalpanel: [1],
+                win.imagepanel: [1],
+            }
 
 
 def test_peak_creation_parameters_h5_roundtrip():
@@ -441,7 +591,8 @@ def test_h5_workspace_builder_column_formats():
 
 
 if __name__ == "__main__":
-    test_save_and_load_h5_workspace()
+    with pytest.MonkeyPatch.context() as mp:
+        test_save_and_load_h5_workspace(mp)
     test_load_h5_workspace_invalid_file()
     test_load_h5_workspace_append()
     test_save_h5_workspace_modified_flag()

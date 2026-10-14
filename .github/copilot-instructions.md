@@ -57,8 +57,10 @@ DataLab/
 │   +-- h5/               # HDF5 I/O layer
 │   +-- widgets/          # Qt widgets (dialogs, editors, viewers)
 │   +-- utils/            # Utilities (instance check, etc.)
-│   +-- plugins/          # Built-in plugins
-│   +-- plugins.py        # Plugin system implementation
+│   +-- plugins/          # Plugin system (lazy facade over base.py, Qt-free contracts)
+│   │   +-- base.py       # Plugin host: registry, PluginBase, discovery (Qt)
+│   │   +-- recipes.py, recipe_binding.py, examples.py, tools.py, ...  # Contracts
+│   │   +-- builtin/      # Built-in plugins (data folder, not a package)
 │   +-- tests/            # pytest test suite
 │   +-- locale/           # Translations (.po files)
 │   +-- config.py         # Configuration management
@@ -297,7 +299,7 @@ generated with `scripts/print_datalab_menus.py`).
 
 ### 4. Plugin System
 
-**Location**: `datalab/plugins.py`, `datalab/plugins/`, `datalab/gui/pluginconfig.py`
+**Location**: `datalab/plugins/`, `datalab/plugins/builtin/`, `datalab/gui/plugins/`
 
 **Key Classes**:
 - `PluginBase`: Abstract base class for all plugins (uses metaclass `PluginBaseMeta`)
@@ -342,7 +344,7 @@ class MyPlugin(PluginBase):
 - `self.edit_new_signal_parameters()`, `self.edit_new_image_parameters()`: Object parameter dialogs
 
 **Plugin Discovery**: Plugins are loaded from:
-1. `datalab/plugins/` (built-in)
+1. `datalab/plugins/builtin/` (built-in)
 2. User plugin directory (`~/.DataLab/plugins`)
 3. Custom plugin directory (configurable in preferences)
 4. For frozen apps, from `plugins/` directory next to executable
@@ -449,6 +451,13 @@ and remote control from any HTTP client (including WASM/Pyodide environments).
 - **Function name**: Technical, precise (e.g., `replace_x_by_other_y`)
 - **UI text**: User-friendly, explicit (e.g., _("Replace X by other signal's Y"))
 - **French translation**: Natural phrasing (e.g., "Remplacer X par le Y d'un autre signal")
+
+### Attribute Contracts
+
+- Before adding `getattr(obj, "attribute", default)`, `hasattr`, or an `AttributeError` fallback, inspect the owning class, initialization order, and relevant call sites to establish whether the attribute can legitimately be absent.
+- Use direct access for attributes guaranteed by the object's contract (e.g., `mainwindow.historypanel` after window setup). Do not silently skip required behavior or add `None` guards to compensate for an unverified assumption.
+- If a test double lacks a required attribute, fix the test double to satisfy the production contract; do not weaken production code solely to accommodate incomplete mocks.
+- Defensive attribute access is appropriate only for verified optional capabilities, supported compatibility paths, or genuinely dynamic attribute names. Make the reason clear and cover the supported absence case in tests. If access occurs too early, fix the initialization order or call timing instead of hiding the defect.
 
 ### Type Annotations
 
@@ -700,8 +709,8 @@ DataLab development uses a **multi-root workspace** (`.code-workspace` file) wit
 | `datalab/gui/processor/base.py` | Base processor class (generic methods) |
 | `datalab/gui/actionhandler.py` | Menu and action management |
 | `datalab/config.py` | Configuration, `_()` translation function |
-| `datalab/plugins.py` | Plugin system implementation |
-| `datalab/gui/pluginconfig.py` | Plugin configuration dialog |
+| `datalab/plugins/base.py` | Plugin system implementation (public names re-exported by `datalab.plugins`) |
+| `datalab/gui/plugins/config.py` | Plugin configuration dialog |
 | `datalab/control/baseproxy.py` | Abstract base proxy (API definition) |
 | `datalab/control/proxy.py` | Remote control API (RemoteProxy, LocalProxy) |
 | `datalab/webapi/routes.py` | Web API endpoint definitions |

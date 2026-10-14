@@ -15,6 +15,9 @@ import os
 import os.path as osp
 import re
 import warnings
+from collections.abc import Sequence
+from contextlib import ExitStack
+from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Generator, Generic, Literal, Type
 
 import guidata.dataset as gds
@@ -80,10 +83,12 @@ from datalab.gui.newobject import (
     extract_creation_parameters,
     insert_creation_parameters,
 )
+from datalab.gui.plugins.applications import get_declared_metadata_keys
 from datalab.gui.processor.base import (
     PROCESSING_PARAMETERS_OPTION,
     ProcessingParameters,
     ProcessingReport,
+    apply_processing_result,
     clear_analysis_parameters,
     extract_analysis_parameters,
     extract_processing_parameters,
@@ -94,8 +99,10 @@ from datalab.objectmodel import (
     ObjectGroup,
     get_number,
     get_short_id,
+    get_short_uuid,
+    get_title_reference,
     get_uuid,
-    patch_title_with_ids,
+    remap_title_references,
     set_number,
     set_uuid,
 )
@@ -110,6 +117,8 @@ from datalab.utils.qthelpers import (
 from datalab.widgets.textimport import TextImportWizard
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from plotpy.items import CurveItem, LabelItem, MaskedXYImageItem
     from sigima.io import ImageExportParam
     from sigima.io.image import ImageIORegistry
@@ -131,6 +140,28 @@ METADATA_PASTE_EXCLUSIONS = {
     f"__{CREATION_PARAMETERS_OPTION}",  # Object-specific creation parameters
     f"__{LEGACY_CREATION_PARAMETERS_OPTION}",  # Historical creation parameters
 }
+
+
+def collect_metadata_keys(objs: Sequence[TypeObj]) -> list[tuple[str, str]]:
+    """Return the user-visible scalar metadata keys of objects.
+
+    Args:
+        objs: objects to inspect
+
+    Returns:
+        Sorted ``(key, description)`` pairs, the description showing an example
+         value; internal options, ROIs and analysis results are excluded.
+    """
+    examples: dict[str, object] = {}
+    for obj in objs:
+        for key, value in obj.metadata.items():
+            if key in examples or key.startswith("_") or key == ROI_KEY:
+                continue
+            if GeometryAdapter.match(key, value) or TableAdapter.match(key, value):
+                continue
+            if isinstance(value, (str, bool, int, float, np.integer, np.floating)):
+                examples[key] = value
+    return [(key, _("e.g. %s") % repr(examples[key])) for key in sorted(examples)]
 
 
 def is_plot_item_serializable(item: Any) -> bool:
@@ -352,8 +383,9 @@ class ObjectProp(QW.QWidget):
                     history_items.append(_("Original object"))
                 break
 
-            # Add current processing step
-            func_name = proc_params.func_name.replace("_", " ").title()
+            # Add current processing step (without any plugin namespace)
+            local_name = proc_params.func_name.rsplit(":", 1)[-1]
+            func_name = local_name.replace("_", " ").title()
             history_items.append(func_name)
 
             # Try to find source object
@@ -435,6 +467,9 @@ class ObjectProp(QW.QWidget):
 
         # Remove only Creation and Processing tabs (dynamic tabs)
         # Use widget references instead of text labels for reliable identification
+        self.__auto_recompute_timer.stop()
+        if self.processing_param_editor is not None:
+            self.processing_param_editor.on_change = None
         if self.creation_scroll is not None:
             index = self.tabwidget.indexOf(self.creation_scroll)
             if index >= 0:
@@ -443,6 +478,7 @@ class ObjectProp(QW.QWidget):
             index = self.tabwidget.indexOf(self.processing_scroll)
             if index >= 0:
                 self.tabwidget.removeTab(index)
+            self.processing_scroll.deleteLater()
         if self.analysis_scroll is not None:
             index = self.tabwidget.indexOf(self.analysis_scroll)
             if index >= 0:
@@ -767,14 +803,13 @@ class ObjectProp(QW.QWidget):
         # then cascade recompute to downstream actions so the chain stays
         # consistent with the new creation parameters. Creation actions are
         # KIND_UI without a func_name, so look them up via output_to_action.
-        hpanel = getattr(self.panel.mainwindow, "historypanel", None)
-        if hpanel is not None:
-            action = hpanel.find_creation_action_for_output(obj_uuid)
-            if action is not None:
-                action.snapshot_kwargs()
-                action.kwargs["param"] = copy.deepcopy(param)
-                hpanel.refresh_action(action)
-                hpanel.recompute_cascade(action)
+        hpanel = self.panel.mainwindow.historypanel
+        action = hpanel.find_creation_action_for_output(obj_uuid)
+        if action is not None:
+            action.snapshot_kwargs()
+            action.kwargs["param"] = copy.deepcopy(param)
+            hpanel.refresh_action(action)
+            hpanel.recompute_cascade(action)
 
         # Update the tree view item (to show new title if it changed)
         self.panel.objview.update_item(obj_uuid)
@@ -821,6 +856,10 @@ class ObjectProp(QW.QWidget):
         Returns:
             True if Processing tab was set up, False otherwise
         """
+        self.__auto_recompute_timer.stop()
+        if self.processing_param_editor is not None:
+            self.processing_param_editor.on_change = None
+
         # Extract processing parameters
         proc_params = extract_processing_parameters(obj)
         if proc_params is None:
@@ -843,23 +882,27 @@ class ObjectProp(QW.QWidget):
         if isinstance(param, list):
             return False
 
-        # Eventually call the `update_from_obj` method to properly initialize
-        # the parameter object from the current object state.
-        # Only do this when reset_params is True (initial setup), not when
-        # refreshing after user has modified parameters.
-        if reset_params and hasattr(param, "update_from_obj"):
-            # Warning: the `update_from_obj` method takes the input object as argument,
-            # not the output object (`obj` is the processed object here):
-            # Retrieve the input object from the source UUID
-            if proc_params.source_uuid is not None:
-                source_obj = self.panel.mainwindow.find_object_by_uuid(
-                    proc_params.source_uuid
-                )
-                if source_obj is not None:
-                    param.update_from_obj(source_obj)
+        # Source-aware parameters may refresh transient editor context without
+        # replacing their persisted values. Legacy parameters keep the previous
+        # reset-only initialization behavior.
+        source_obj = None
+        if proc_params.source_uuid is not None:
+            source_obj = self.panel.mainwindow.find_object_by_uuid(
+                proc_params.source_uuid
+            )
+        if hasattr(param, "update_editor_context"):
+            param.update_editor_context(source_obj)
+        elif (
+            reset_params
+            and source_obj is not None
+            and hasattr(param, "update_from_obj")
+        ):
+            param.update_from_obj(source_obj)
 
         # Create parameter editor widget
-        editor = gdq.DataSetEditGroupBox(
+        from datalab.widgets.processingparameters import ProcessingParametersEditor
+
+        editor = ProcessingParametersEditor(
             _("Processing Parameters"), param.__class__, wordwrap=True
         )
         update_dataset(editor.dataset, param)
@@ -869,22 +912,7 @@ class ObjectProp(QW.QWidget):
         editor.SIG_APPLY_BUTTON_CLICKED.connect(self.apply_processing_parameters)
         editor.set_apply_button_state(False)
 
-        # Hook into the per-edit change callback to support auto-recompute.
-        # ``DataSetEditLayout.change_callback`` is called whenever any widget
-        # value changes; wrap it so we can also (re)start the debounce timer.
-        try:
-            inner_layout = editor.edit  # DataSetEditLayout instance
-            original_change_cb = inner_layout.change_callback
-
-            def _wrapped_change_cb() -> None:
-                if original_change_cb is not None:
-                    original_change_cb()
-                if self.__auto_recompute_enabled:
-                    self.__auto_recompute_timer.start(300)
-
-            inner_layout.change_callback = _wrapped_change_cb
-        except AttributeError:
-            pass
+        editor.on_change = lambda: self.__processing_parameters_changed(editor)
 
         # Store reference to be able to retrieve it later
         self.processing_param_editor = editor
@@ -894,6 +922,7 @@ class ObjectProp(QW.QWidget):
             index = self.tabwidget.indexOf(self.processing_scroll)
             if index >= 0:
                 self.tabwidget.removeTab(index)
+            self.processing_scroll.deleteLater()
 
         # Processing tab comes after Creation tab (if it exists)
         # Find the correct insertion index: after Creation (index 0) if it exists,
@@ -912,21 +941,32 @@ class ObjectProp(QW.QWidget):
             QW.QSizePolicy.Expanding, QW.QSizePolicy.Preferred
         )
 
-        # Build the tab content: editor + "Auto-recompute" checkbox.
-        container = QW.QWidget()
-        vbox = QW.QVBoxLayout(container)
-        vbox.setContentsMargins(0, 0, 0, 0)
-        vbox.addWidget(editor)
-        auto_cb = QW.QCheckBox(_("Auto-recompute on edit"), container)
+        # Add the auto-recompute option below Apply, aligned with input fields.
+        auto_cb = QW.QCheckBox(_("Auto-recompute on edit"), editor)
+        auto_cb.setObjectName("auto_recompute_on_edit")
+        auto_cb.setIcon(get_icon("replay.svg"))
         auto_cb.setToolTip(
             _("Automatically re-run processing when parameters are modified")
         )
         auto_cb.setChecked(self.__auto_recompute_enabled)
         auto_cb.toggled.connect(self.__set_auto_recompute_enabled)
-        vbox.addWidget(auto_cb)
-        vbox.addStretch(1)
+        form_layout = editor.edit.layout
+        apply_index = form_layout.indexOf(editor.apply_button)
+        apply_row, _column, _row_span, _column_span = form_layout.getItemPosition(
+            apply_index
+        )
+        input_column = 1
+        input_column_span = max(1, form_layout.columnCount() - input_column)
+        form_layout.addWidget(
+            auto_cb,
+            apply_row + 1,
+            input_column,
+            1,
+            input_column_span,
+            QC.Qt.AlignLeft,
+        )
 
-        self.processing_scroll.setWidget(container)
+        self.processing_scroll.setWidget(editor)
         self.tabwidget.insertTab(
             insert_index,
             self.processing_scroll,
@@ -1092,13 +1132,12 @@ class ObjectProp(QW.QWidget):
         # analysis action (snapshot originals first) and refresh its tree
         # display. Analysis is a leaf operation (1-to-0), so no cascade is
         # needed.
-        hpanel = getattr(self.panel.mainwindow, "historypanel", None)
-        if hpanel is not None:
-            action = hpanel.find_analysis_action(get_uuid(obj), func_name)
-            if action is not None:
-                action.snapshot_kwargs()
-                action.kwargs["param"] = copy.deepcopy(recompute_param)
-                hpanel.refresh_action(action)
+        hpanel = self.panel.mainwindow.historypanel
+        action = hpanel.find_analysis_action(get_uuid(obj), func_name)
+        if action is not None:
+            action.snapshot_kwargs()
+            action.kwargs["param"] = copy.deepcopy(recompute_param)
+            hpanel.refresh_action(action)
 
         # Refresh the object display after re-analysis
         obj_uuid = get_uuid(obj)
@@ -1139,17 +1178,29 @@ class ObjectProp(QW.QWidget):
         if not self.__auto_recompute_enabled:
             self.__auto_recompute_timer.stop()
 
+    def __processing_parameters_changed(self, editor) -> None:
+        """Debounce real processing only for the current valid, released editor."""
+        if editor is not self.processing_param_editor:
+            return
+        self.__auto_recompute_timer.stop()
+        if (
+            self.__auto_recompute_enabled
+            and not editor.dragging
+            and editor.edit.check_all_values()
+        ):
+            self.__auto_recompute_timer.start(300)
+
     def __auto_recompute_trigger(self) -> None:
         """Debounced callback: push widget values then re-run processing."""
         if not self.__auto_recompute_enabled:
             return
         editor = self.processing_param_editor
-        if editor is None:
+        if editor is None or editor.dragging or not editor.edit.check_all_values():
             return
         # ``editor.set()`` synchronises widget values to the dataset and emits
         # ``SIG_APPLY_BUTTON_CLICKED`` which is already wired to
         # ``apply_processing_parameters``.
-        editor.set(check=False)
+        editor.set()
 
     def apply_processing_parameters(
         self,
@@ -1157,7 +1208,8 @@ class ObjectProp(QW.QWidget):
         interactive: bool = True,
         param: gds.DataSet | None = None,
     ) -> ProcessingReport:
-        """Apply processing parameters: re-run processing with updated parameters.
+        # pylint: disable=too-many-return-statements
+        """Apply processing parameters by recomputing the existing object in place.
 
         Args:
             obj: Signal or Image object to reprocess. If None, uses the current object.
@@ -1174,6 +1226,7 @@ class ObjectProp(QW.QWidget):
         if execenv.unattended:
             interactive = False
 
+        self.__auto_recompute_timer.stop()
         editor = self.processing_param_editor
         obj = obj or self.current_processing_obj
         if obj is None:
@@ -1217,16 +1270,16 @@ class ObjectProp(QW.QWidget):
             else:
                 param = proc_params.param
 
-        hpanel = getattr(self.panel.mainwindow, "historypanel", None)
-        is_edit_mode = hpanel is not None and hpanel.is_edit_mode()
+        hpanel = self.panel.mainwindow.historypanel
+        is_edit_mode = hpanel.is_edit_mode()
 
-        if is_edit_mode:
-            report = self.panel.processor.recompute_processing(
-                obj=obj,
-                param=param,
-                interactive=interactive,
-            )
-            if report.success:
+        report = self.panel.processor.recompute_processing(
+            obj=obj,
+            param=param,
+            interactive=interactive,
+        )
+        if report.success:
+            if is_edit_mode:
                 # Propagate the edited param to the History panel:
                 # Mutate the matching existing action (snapshot originals
                 # first), refresh its tree display, then cascade recompute
@@ -1241,83 +1294,18 @@ class ObjectProp(QW.QWidget):
                     hpanel.refresh_action(action)
                     hpanel.recompute_cascade(action)
 
-                # Update the tree view item and refresh plot
-                obj_uuid = get_uuid(obj)
-                self.panel.objview.update_item(obj_uuid)
-                self.panel.refresh_plot(obj_uuid, update_items=True, force=True)
+            def refresh_current_processing_tab() -> None:
+                if (
+                    self.current_processing_obj is obj
+                    and self.panel.objview.get_current_object() is obj
+                    and self.panel.objmodel.has_uuid(get_uuid(obj))
+                ):
+                    self.__update_properties_dataset(obj)
+                    self.update_original_values()
+                    self.display_processing_history(obj)
+                    self.setup_processing_tab(obj, reset_params=False, set_current=True)
 
-                # Update the Properties tab to reflect the new object
-                self.__update_properties_dataset(obj)
-                # Refresh the displayed processing history (Properties tab
-                # description) so the parameter change is visible immediately
-                self.display_processing_history(obj)
-
-                # Refresh the Processing tab with the new parameters
-                QC.QTimer.singleShot(
-                    0,
-                    lambda: self.setup_processing_tab(
-                        obj, reset_params=False, set_current=True
-                    ),
-                )
-        else:
-            source_processor = self.__get_processor_associated_to(source_obj)
-            try:
-                compout = source_processor.recompute_1_to_1(
-                    proc_params.func_name,
-                    source_obj,
-                    param,
-                    plugin_origin=proc_params.plugin_origin,
-                )
-            except Exception as exc:  # pylint: disable=broad-exception-caught
-                report = ProcessingReport(success=False, obj_uuid=get_uuid(obj))
-                report.message = _("Failed to reprocess object:\n%s") % str(exc)
-                if interactive:
-                    QW.QMessageBox.warning(self, _("Error"), report.message)
-                return report
-
-            report = ProcessingReport(success=False, obj_uuid=get_uuid(obj))
-            if compout.cancelled:
-                report.cancelled = True
-                report.message = _("Processing was cancelled.")
-                return report
-            new_obj = compout.result
-            if new_obj is None:
-                report.message = compout.error_msg or _("Failed to reprocess object.")
-                return report
-            report.success = True
-
-            # --- Non-edit mode: create a new independent object ---
-            patch_title_with_ids(new_obj, [obj], get_short_id)
-
-            # Store processing metadata on the new object
-            # pylint: disable=import-outside-toplevel
-            from datalab.gui.processor.base import build_processing_parameters
-
-            new_pp = build_processing_parameters(
-                proc_params.func_name,
-                proc_params.pattern,
-                param=copy.deepcopy(param),
-                source_uuid=proc_params.source_uuid,
-                plugin_origin=proc_params.plugin_origin,
-            )
-            insert_processing_parameters(new_obj, new_pp)
-
-            # Mark as freshly processed so the Processing tab is shown
-            self.mark_as_freshly_processed(new_obj)
-
-            # Add the new object to the same group as the source object
-            group_id = self.panel.objmodel.get_object_group_id(obj)
-            self.panel.add_object(new_obj, group_id=group_id, set_current=True)
-
-            # Record a brand-new history entry with the new object UUID
-            if hpanel is not None:
-                hpanel.add_compute_entry_from_pp(
-                    new_obj.title,
-                    new_pp,
-                    panel_str=self.panel.PANEL_STR_ID,
-                    output_uuids=[get_uuid(new_obj)],
-                    plugin_origin=proc_params.plugin_origin,
-                )
+            QC.QTimer.singleShot(0, refresh_current_processing_tab)
 
         return report
 
@@ -1329,21 +1317,81 @@ class ObjectProp(QW.QWidget):
     ) -> None:
         """Apply a freshly recomputed object onto ``obj`` in place.
 
-        Copies title + data from ``new_obj`` while preserving ``obj``'s own
-        metadata (only the processing parameters are refreshed).
+        Copies scientific data, coordinates, labels and units while preserving
+        metadata, annotations and display settings. Only processing metadata changes.
 
         Args:
             obj: Existing object to update in place (identity preserved).
             new_obj: Freshly recomputed object providing title + data.
             proc_params: Updated processing parameters to store on ``obj``.
         """
-        obj.title = new_obj.title
-        if isinstance(obj, SignalObj):
-            obj.xydata = new_obj.xydata
-        else:  # ImageObj
-            obj.data = new_obj.data
-            obj.invalidate_maskdata_cache()
-        insert_processing_parameters(obj, proc_params)
+        apply_processing_result(obj, new_obj, proc_params)
+
+
+@dataclass
+class H5ImportBatch:
+    """Objects and UUID remapping created by one native HDF5 import."""
+
+    panel: BaseDataPanel
+    reference_remap: dict[str, str]
+    objects: list[TypeObj]
+    groups: list[ObjectGroup]
+
+    def apply_reference_remap(
+        self, reference_remap: dict[str, str], title_remap: dict[str, str]
+    ) -> None:
+        """Remap title and processing references in this imported batch.
+
+        Args:
+            reference_remap: serialized UUID to imported UUID mapping
+            title_remap: serialized title reference to imported title reference
+        """
+        for group in self.groups:
+            group.title = remap_title_references(group.title, title_remap)
+        for obj in self.objects:
+            obj.title = remap_title_references(obj.title, title_remap)
+            for extract_parameters in (
+                extract_processing_parameters,
+                extract_analysis_parameters,
+            ):
+                parameters = extract_parameters(obj)
+                if parameters is None:
+                    continue
+                changed = False
+                if parameters.source_uuid in reference_remap:
+                    parameters.source_uuid = reference_remap[parameters.source_uuid]
+                    changed = True
+                if parameters.source_uuids is not None:
+                    source_uuids = [
+                        reference_remap.get(uuid, uuid)
+                        for uuid in parameters.source_uuids
+                    ]
+                    if source_uuids != parameters.source_uuids:
+                        parameters.source_uuids = source_uuids
+                        changed = True
+                if changed:
+                    insert_processing_parameters(obj, parameters)
+
+    @classmethod
+    def finalize_imports(
+        cls, batches: list[H5ImportBatch], refresh_panels: bool = False
+    ) -> None:
+        """Apply the combined signal/image UUID remapping to imported batches."""
+        reference_remap: dict[str, str] = {}
+        for batch in batches:
+            reference_remap.update(batch.reference_remap)
+        group_uuids = {get_uuid(group) for batch in batches for group in batch.groups}
+        title_remap: dict[str, str] = {}
+        for old_uuid, new_uuid in reference_remap.items():
+            if old_uuid != new_uuid:
+                prefix = "g" if new_uuid in group_uuids else ""
+                old_reference = prefix + get_short_uuid(old_uuid)
+                title_remap[old_reference] = prefix + get_short_uuid(new_uuid)
+        for batch in batches:
+            batch.apply_reference_remap(reference_remap, title_remap)
+        if refresh_panels:
+            for batch in batches:
+                batch.panel.refresh_after_reference_remap()
 
 
 class AbstractPanelMeta(type(QW.QSplitter), abc.ABCMeta):
@@ -1378,7 +1426,8 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     def get_serializable_name(self, obj: ObjItf) -> str:
         """Return serializable name of object"""
         title = re.sub("[^-a-zA-Z0-9_.() ]+", "", obj.title.replace("/", "_"))
-        name = f"{get_short_id(obj)}: {title}"
+        identifier = get_short_id(obj)
+        name = f"{identifier}: {title}"
         return name
 
     def serialize_object_to_hdf5(self, obj: ObjItf, writer: NativeH5Writer) -> None:
@@ -1401,14 +1450,9 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
         with reader.group(name):
             obj = self.create_object()
             obj.deserialize(reader)
-            # Only regenerate UUIDs when importing objects (reset_all=False).
-            # When reopening a workspace (reset_all=True), preserve original UUIDs
-            # so that processing parameter references (source_uuid, source_uuids)
-            # remain valid and features like "Show source" and "Recompute" work.
-            # When importing, only regenerate UUID if it conflicts with an existing one.
-            if not reset_all and isinstance(obj, (SignalObj, ImageObj, ObjectGroup)):
-                if self.objmodel.has_uuid(get_uuid(obj)):
-                    set_uuid(obj)
+            # UUID collision handling is deferred until the complete imported batch
+            # can record old-to-new references for titles and processing metadata.
+            del reset_all
         return obj
 
     @abc.abstractmethod
@@ -1418,7 +1462,7 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     @abc.abstractmethod
     def deserialize_from_hdf5(
         self, reader: NativeH5Reader, reset_all: bool = False
-    ) -> None:
+    ) -> H5ImportBatch | None:
         """Deserialize whole panel from a HDF5 file
 
         Args:
@@ -1492,11 +1536,15 @@ class SaveToDirectoryGUIParam(gds.DataSet, title=_("Save to directory")):
     """Save to directory parameters"""
 
     def __init__(
-        self, objs: list[TypeObj] | None = None, extensions: list[str] | None = None
+        self,
+        objs: list[TypeObj] | None = None,
+        extensions: list[str] | None = None,
+        labels: list[str] | None = None,
     ) -> None:
         super().__init__()
         self.__objs = objs or []
         self.__extensions = extensions or []
+        self.__labels = labels or [obj.title for obj in self.__objs]
 
     def on_button_click(
         self: SaveToDirectoryGUIParam,
@@ -1584,15 +1632,10 @@ class SaveToDirectoryGUIParam(gds.DataSet, title=_("Save to directory")):
         """Update preview."""
         try:
             filenames = self.build_filenames()
-            preview_lines = []
-            for i, (obj, filename) in enumerate(zip(self.__objs, filenames), start=1):
-                # Try to get short ID if object has been added to panel
-                try:
-                    obj_id = get_short_id(obj)
-                except (ValueError, KeyError):
-                    # Fallback to simple index for objects not yet in panel
-                    obj_id = str(i)
-                preview_lines.append(f"{obj_id}: {filename}")
+            preview_lines = [
+                f"{label}: {filename}"
+                for label, filename in zip(self.__labels, filenames)
+            ]
             self.preview = "\n".join(preview_lines)
         except (ValueError, KeyError, TypeError) as exc:
             # Handle formatting errors gracefully (e.g., incomplete format string)
@@ -1629,15 +1672,26 @@ class AddMetadataParam(
     comment=_(
         "Add a new metadata item to the selected objects.<br><br>"
         "The metadata key will be the same for all objects, "
-        "but the value can use a pattern to generate different values.<br>"
+        "but the value can use a pattern to generate different values, "
+        "optionally extracted with a regular expression.<br>"
         "Click the <b>Help</b> button for details on the pattern syntax.<br>"
     ),
 ):
-    """Add metadata parameters"""
+    """Add metadata parameters
 
-    def __init__(self, objs: list[TypeObj] | None = None) -> None:
+    Args:
+        objs: objects receiving the metadata item
+        known_keys: suggested ``(key, description)`` pairs
+    """
+
+    def __init__(
+        self,
+        objs: list[TypeObj] | None = None,
+        known_keys: Sequence[tuple[str, str]] | None = None,
+    ) -> None:
         super().__init__()
         self.__objs = objs or []
+        self.__known_keys = list(known_keys or [])
 
     def on_help_button_click(
         self: AddMetadataParam,
@@ -1688,9 +1742,50 @@ class AddMetadataParam(
                 </tr>
             </table>
             """,
+                "",
+                "<b>Extraction:</b>",
+                """When an extraction pattern (Python regular expression) is set,
+                it is searched in the formatted value: its first group, or the
+                whole match if it has no group, becomes the value. Objects without
+                a match are left unchanged, unless 'If no match' asks to report an
+                error. Numeric values are then multiplied by the scale factor.""",
+                "",
+                """
+            <table border="1" cellspacing="0" cellpadding="4">
+                <tr><th>Pattern</th><th>Extraction</th><th>Conversion</th>
+                    <th>Scale</th><th>Result</th></tr>
+                <tr>
+                    <td>{title}</td>
+                    <td>([\\d.]+)\\s*ms</td>
+                    <td>Float</td>
+                    <td>0.001</td>
+                    <td>'Flat 5 ms 01' &rarr; 0.005<br>'Dark 01' &rarr; unchanged</td>
+                </tr>
+                <tr>
+                    <td>{title}</td>
+                    <td>shot\\s*(\\d+)</td>
+                    <td>Integer</td>
+                    <td>1</td>
+                    <td>'CH1 shot 042' &rarr; 42</td>
+                </tr>
+            </table>
+            """,
             ]
         )
         NonModalInfoDialog(parent, _("Pattern help"), text).show()
+
+    def get_known_key_choices(self, _item=None, _value=None):
+        """Return the suggested metadata keys."""
+        return [("", _("Select a key..."), None)] + [
+            (key, f"{key} — {description}" if description else key, None)
+            for key, description in self.__known_keys
+        ]
+
+    def on_known_key_changed(self, _item=None, value=None) -> None:
+        """Copy the selected suggestion into the metadata key."""
+        if value:
+            self.metadata_key = value
+        self.update_preview()
 
     def get_conversion_choices(self, _item=None, _value=None):
         """Return list of available conversion choices."""
@@ -1703,55 +1798,84 @@ class AddMetadataParam(
 
     def build_values(
         self, objs: list[TypeObj] | None = None
-    ) -> list[str | float | int | bool]:
+    ) -> list[str | float | int | bool | None]:
         """Build values according to current parameters.
 
+        Returns:
+            One value per object; ``None`` for objects left unchanged because
+             the extraction pattern does not match.
+
         Raises:
-            ValueError: If a value cannot be converted to the target type.
+            ValueError: If the extraction pattern is invalid or does not match
+             (when asked to report it), or if a value cannot be converted.
         """
         objs = objs or self.__objs
         # Generate values using the pattern
         raw_values = format_basenames(objs, self.value_pattern)
+        regex = None
+        if self.extraction_pattern:
+            try:
+                regex = re.compile(self.extraction_pattern)
+            except re.error as exc:
+                raise ValueError(f"Invalid extraction pattern: {exc}") from exc
 
-        # Convert values according to the selected conversion type
-        converted_values = []
+        converted_values: list[str | float | int | bool | None] = []
         for i, value_str in enumerate(raw_values, start=1):
-            if self.conversion == "string":
-                converted_values.append(value_str)
-            elif self.conversion == "float":
-                try:
-                    converted_values.append(float(value_str))
-                except ValueError as exc:
-                    raise ValueError(
-                        f"Cannot convert value at index {i} to float: '{value_str}'"
-                    ) from exc
-            elif self.conversion == "int":
-                try:
-                    converted_values.append(int(value_str))
-                except ValueError as exc:
-                    raise ValueError(
-                        f"Cannot convert value at index {i} to integer: '{value_str}'"
-                    ) from exc
-            elif self.conversion == "bool":
-                # Convert to boolean: "true", "1", "yes" -> True, others -> False
-                lower_val = value_str.lower()
-                converted_values.append(lower_val in ("true", "1", "yes", "on"))
-
+            if regex is not None:
+                match = regex.search(value_str)
+                extracted = None
+                if match is not None:
+                    extracted = match.group(1) if regex.groups else match.group(0)
+                if extracted is None:
+                    if self.if_no_match == "error":
+                        raise ValueError(
+                            f"No match for the value at index {i}: '{value_str}'"
+                        )
+                    converted_values.append(None)
+                    continue
+                value_str = extracted
+            converted_values.append(self.__convert(i, value_str))
         return converted_values
+
+    def __convert(self, index: int, value_str: str) -> str | float | int | bool:
+        """Convert one formatted value according to the selected conversion."""
+        if self.conversion == "float":
+            try:
+                return float(value_str) * self.scale
+            except ValueError as exc:
+                raise ValueError(
+                    f"Cannot convert value at index {index} to float: '{value_str}'"
+                ) from exc
+        if self.conversion == "int":
+            try:
+                value = int(value_str)
+            except ValueError as exc:
+                raise ValueError(
+                    f"Cannot convert value at index {index} to integer: '{value_str}'"
+                ) from exc
+            if self.scale == 1.0:
+                return value
+            scaled = value * self.scale
+            if not float(scaled).is_integer():
+                raise ValueError(
+                    f"Scaled value at index {index} is not an integer: {scaled}"
+                )
+            return int(scaled)
+        if self.conversion == "bool":
+            return value_str.lower() in ("true", "1", "yes", "on")
+        return value_str
 
     def update_preview(self, _item=None, _value=None) -> None:
         """Update preview."""
         try:
             values = self.build_values()
             preview_lines = []
-            for i, (obj, value) in enumerate(zip(self.__objs, values), start=1):
-                # Try to get short ID if object has been added to panel
-                try:
-                    obj_id = get_short_id(obj)
-                except (ValueError, KeyError):
-                    # Fallback to simple index for objects not yet in panel
-                    obj_id = str(i)
-                preview_lines.append(f"{obj_id}: {self.metadata_key} = {value!r}")
+            for obj, value in zip(self.__objs, values):
+                label = obj.title
+                if value is None:
+                    preview_lines.append(f"{label}: " + _("unchanged"))
+                else:
+                    preview_lines.append(f"{label}: {self.metadata_key} = {value!r}")
             self.preview = "\n".join(preview_lines)
         except ValueError as exc:
             # Handle conversion errors
@@ -1764,9 +1888,16 @@ class AddMetadataParam(
         _("Metadata key"),
         default="custom_key",
         notempty=True,
-        regexp=r"^[a-zA-Z_][a-zA-Z0-9_]*$",
+        regexp=r"^[a-zA-Z_][a-zA-Z0-9_.\-]*$",
         help=_("The key name for the metadata item"),
     ).set_prop("display", callback=update_preview)
+
+    known_key = gds.ChoiceItem(
+        _("Known keys"),
+        get_known_key_choices,
+        default="",
+        help=_("Copy a key found on the selected objects into the metadata key"),
+    ).set_prop("display", callback=on_known_key_changed)
 
     value_pattern = gds.StringItem(
         _("Value pattern"),
@@ -1778,9 +1909,38 @@ class AddMetadataParam(
         _("Help"), on_help_button_click, "MessageBoxInformation"
     ).set_pos(col=1)
 
+    extraction_pattern = gds.StringItem(
+        _("Extraction pattern"),
+        default="",
+        help=_(
+            "Optional regular expression searched in the formatted value: "
+            "its first group, or the whole match, becomes the value"
+        ),
+    ).set_prop("display", callback=update_preview)
+
+    if_no_match = gds.ChoiceItem(
+        _("If no match"),
+        [
+            ("skip", _("Leave the object unchanged")),
+            ("error", _("Report an error")),
+        ],
+        default="skip",
+    ).set_prop("display", callback=update_preview)
+
+    _prop_conversion = gds.GetAttrProp("conversion")
     conversion = gds.ChoiceItem(
         _("Conversion"), get_conversion_choices, default="string"
-    ).set_prop("display", callback=update_preview)
+    ).set_prop("display", store=_prop_conversion, callback=update_preview)
+
+    scale = gds.FloatItem(
+        _("Scale factor"),
+        default=1.0,
+        help=_("Multiplies numeric values, e.g. 0.001 to convert ms to s"),
+    ).set_prop(
+        "display",
+        active=gds.FuncProp(_prop_conversion, lambda value: value in ("float", "int")),
+        callback=update_preview,
+    )
 
     preview = gds.TextItem(_("Preview"), default="", regexp=r"^(?!Invalid).*").set_prop(
         "display", readonly=True
@@ -1890,12 +2050,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 with writer.group(self.get_serializable_name(group)):
                     with writer.group("title"):
                         writer.write_str(group.title)
+                    with writer.group("uuid"):
+                        writer.write_str(get_uuid(group))
                     for obj in group.get_objects():
                         self.serialize_object_to_hdf5(obj, writer)
 
     def deserialize_from_hdf5(
         self, reader: NativeH5Reader, reset_all: bool = False
-    ) -> None:
+    ) -> H5ImportBatch:
         """Deserialize whole panel from a HDF5 file
 
         Args:
@@ -1904,18 +2066,61 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
              If False, regenerate only UUIDs that conflict with existing
              objects (object import).
         """
-        with reader.group(self.H5_PREFIX):
-            for name in reader.h5.get(self.H5_PREFIX, []):
-                with reader.group(name):
-                    group = self.add_group("")
-                    with reader.group("title"):
-                        group.title = reader.read_str()
-                    for obj_name in reader.h5.get(f"{self.H5_PREFIX}/{name}", []):
-                        obj = self.deserialize_object_from_hdf5(
-                            reader, obj_name, reset_all
-                        )
-                        self.add_object(obj, get_uuid(group), set_current=False)
-                    self.selection_changed()
+        batch = H5ImportBatch(self, {}, [], [])
+        objects_added = False
+        signals_blocked = self.blockSignals(True)
+        try:
+            with reader.group(self.H5_PREFIX):
+                for name in reader.h5.get(self.H5_PREFIX, []):
+                    with reader.group(name):
+                        with reader.group("title"):
+                            group_title = reader.read_str()
+                        serialized_group_uuid = reader.read("uuid", default=None)
+                        if not isinstance(serialized_group_uuid, str):
+                            serialized_group_uuid = None
+                        group_uuid = None
+                        if serialized_group_uuid and (
+                            reset_all
+                            or not self.objmodel.has_uuid(serialized_group_uuid)
+                        ):
+                            group_uuid = serialized_group_uuid
+                        group = self.add_group(group_title, group_uuid=group_uuid)
+                        if serialized_group_uuid:
+                            batch.reference_remap[serialized_group_uuid] = get_uuid(
+                                group
+                            )
+                        batch.groups.append(group)
+                        objects: list[TypeObj] = []
+                        for obj_name in reader.h5.get(f"{self.H5_PREFIX}/{name}", []):
+                            obj = self.deserialize_object_from_hdf5(
+                                reader, obj_name, reset_all
+                            )
+                            serialized_obj_uuid = obj.metadata.get("__uuid")
+                            if (
+                                not isinstance(serialized_obj_uuid, str)
+                                or not serialized_obj_uuid
+                            ):
+                                serialized_obj_uuid = None
+                            if serialized_obj_uuid is None or (
+                                not reset_all
+                                and self.objmodel.has_uuid(serialized_obj_uuid)
+                            ):
+                                set_uuid(obj)
+                            if serialized_obj_uuid is not None:
+                                batch.reference_remap[serialized_obj_uuid] = get_uuid(
+                                    obj
+                                )
+                            objects.append(obj)
+                        self._add_objects(objects, get_uuid(group), set_current=False)
+                        batch.objects.extend(objects)
+                        objects_added = objects_added or bool(objects)
+        finally:
+            self.blockSignals(signals_blocked)
+            if objects_added:
+                self.SIG_OBJECT_ADDED.emit()
+        if not objects_added:
+            self.selection_changed()
+        return batch
 
     def __len__(self) -> int:
         """Return number of objects"""
@@ -1952,13 +2157,57 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
              the object is added to the current group.
             set_current: if True, set the added object as current
         """
-        if obj in self.objmodel:
-            # Prevent adding the same object twice
-            raise ValueError(
-                f"Object {hex(id(obj))} already in panel. "
-                f"The same object cannot be added twice: "
-                f"please use a copy of the object."
-            )
+        self._add_object(obj, group_id, set_current)
+
+    @qt_try_except()
+    def add_objects(
+        self,
+        objects: Sequence[TypeObj],
+        group_id: str | None = None,
+        set_current: bool = True,
+    ) -> None:
+        """Add multiple objects atomically.
+
+        Args:
+            objects: Objects to add, in insertion order
+            group_id: Group ID to which the objects belong. If None or empty,
+             the objects are added to the current group.
+            set_current: If True, set the last added object as current
+        """
+        self._add_objects(objects, group_id, set_current)
+
+    def _add_object(
+        self,
+        obj: TypeObj,
+        group_id: str | None = None,
+        set_current: bool = True,
+    ) -> None:
+        """Add an object while propagating errors to transactional callers."""
+        self._add_objects((obj,), group_id, set_current)
+
+    def _add_objects(
+        self,
+        objects: Sequence[TypeObj],
+        group_id: str | None = None,
+        set_current: bool = True,
+    ) -> None:
+        """Add objects atomically while propagating transactional errors."""
+        objects = tuple(objects)
+        if not objects:
+            return
+        object_ids: set[str] = set()
+        for obj in objects:
+            obj_uuid = get_uuid(obj)
+            if obj in self.objmodel or obj_uuid in object_ids:
+                raise ValueError(
+                    f"Object {hex(id(obj))} already in panel. "
+                    f"The same object cannot be added twice: "
+                    f"please use a copy of the object."
+                )
+            object_ids.add(obj_uuid)
+            obj.check_data()
+
+        created_group: ObjectGroup | None = None
         if group_id is None or group_id == "":
             group_id = self.objview.get_current_group_id()
             if group_id is None:
@@ -1966,30 +2215,86 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if groups:
                     group_id = get_uuid(groups[0])
                 else:
-                    group_id = get_uuid(self.add_group(""))
-        obj.check_data()
-        self.objmodel.add_object(obj, group_id)
+                    created_group = self.add_group("")
+                    group_id = get_uuid(created_group)
+        else:
+            self.objmodel.get_group(group_id)
 
-        # Mark this object as newly created to show Creation tab on first selection
-        # BUT: Don't overwrite if this object is already marked as freshly processed
-        # or has fresh analysis results (those take precedence)
+        current_item_id = self.objview.get_current_item_id()
+        transient_attributes = (
+            "newly_created_obj_uuid",
+            "fresh_processing_obj_uuid",
+            "fresh_analysis_obj_uuid",
+        )
+        transient_state = {
+            name: getattr(self.objprop, name) for name in transient_attributes
+        }
+        added_to_model = False
+        try:
+            self.objmodel.add_objects(objects, group_id)
+            added_to_model = True
+
+            for obj in objects:
+                # Don't overwrite fresh processing or analysis state: those tabs take
+                # precedence over the Creation tab on first selection.
+                obj_uuid = get_uuid(obj)
+                if obj_uuid not in (
+                    self.objprop.fresh_processing_obj_uuid,
+                    self.objprop.fresh_analysis_obj_uuid,
+                ):
+                    self.objprop.mark_as_newly_created(obj)
+
+            self.objview.add_object_items(
+                objects,
+                group_id,
+                set_current=set_current,
+            )
+            self.objview.update_tree()
+
+            # Emit signal to ensure that the data panel is shown in the main window and
+            # that the plot is updated (trigger a refresh of the plot)
+            self.SIG_OBJECT_ADDED.emit()
+        except Exception:
+            if added_to_model:
+                for obj in reversed(objects):
+                    self._remove_added_object(obj)
+            if created_group is not None:
+                self.objview.remove_item(get_uuid(created_group), refresh=False)
+                if created_group in self.objmodel.get_groups():
+                    self.objmodel.remove_group(created_group)
+            for name, value in transient_state.items():
+                setattr(self.objprop, name, value)
+            signals_blocked = self.objview.blockSignals(True)
+            try:
+                if current_item_id is None:
+                    self.objview.clearSelection()
+                    self.objview.setCurrentItem(None)
+                elif self.objview.get_item_from_id(current_item_id) is not None:
+                    self.objview.set_current_item_id(current_item_id)
+            finally:
+                self.objview.blockSignals(signals_blocked)
+            self.objview.update_tree()
+            raise
+
+    def _remove_added_object(self, obj: TypeObj) -> None:
+        """Remove a specifically identified object after a failed transaction."""
         obj_uuid = get_uuid(obj)
-        if obj_uuid not in (
-            self.objprop.fresh_processing_obj_uuid,
-            self.objprop.fresh_analysis_obj_uuid,
+        with ExitStack() as cleanup:
+            cleanup.callback(self._clear_added_object_state, obj_uuid)
+            if obj in self.objmodel:
+                cleanup.callback(self.objmodel.remove_object, obj)
+            cleanup.callback(self.objview.remove_item, obj_uuid, refresh=False)
+            cleanup.callback(self.plothandler.remove_item, obj_uuid)
+
+    def _clear_added_object_state(self, obj_uuid: str) -> None:
+        """Clear transient property-panel references to a removed object."""
+        for attr_name in (
+            "newly_created_obj_uuid",
+            "fresh_processing_obj_uuid",
+            "fresh_analysis_obj_uuid",
         ):
-            self.objprop.mark_as_newly_created(obj)
-
-        # Block signals to avoid updating the plot (unnecessary refresh)
-        self.objview.blockSignals(True)
-        self.objview.add_object_item(obj, group_id, set_current=set_current)
-        self.objview.blockSignals(False)
-
-        # Emit signal to ensure that the data panel is shown in the main window and
-        # that the plot is updated (trigger a refresh of the plot)
-        self.SIG_OBJECT_ADDED.emit()
-
-        self.objview.update_tree()
+            if getattr(self.objprop, attr_name) == obj_uuid:
+                setattr(self.objprop, attr_name, None)
 
     def set_object(self, obj: TypeObj) -> None:
         """Update an existing object in-place with data from ``obj``.
@@ -2012,7 +2317,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Copy all public DataSet item values from obj to existing.
         # Skip computed (read-only) items such as ImageObj.xmin/xmax/ymin/ymax,
         # which would raise ValueError on assignment (see Issue #305).
-        for item in existing._items:  # pylint: disable=protected-access
+        for item in existing.get_items():
             name = item.get_name()
             if name.startswith("_"):
                 continue
@@ -2123,20 +2428,31 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         menu.popup(position)
 
     # ------Creating, adding, removing objects------------------------------------------
-    def add_group(self, title: str, select: bool = False) -> objectmodel.ObjectGroup:
+    def add_group(
+        self,
+        title: str,
+        select: bool = False,
+        group_uuid: str | None = None,
+    ) -> objectmodel.ObjectGroup:
         """Add group
 
         Args:
             title: group title
             select: if True, select the group in the tree view. Defaults to False.
+            group_uuid: optional group UUID. If None, a new UUID is generated.
 
         Returns:
             Created group object
         """
-        group = self.objmodel.add_group(title)
-        self.objview.add_group_item(group)
-        if select:
-            self.objview.select_groups([group])
+        group = self.objmodel.add_group(title, group_uuid)
+        try:
+            self.objview.add_group_item(group)
+            if select:
+                self.objview.select_groups([group])
+        except Exception:
+            self.objview.remove_item(get_uuid(group), refresh=False)
+            self.objmodel.remove_group(group)
+            raise
         return group
 
     def __duplicate_individual_obj(
@@ -2183,7 +2499,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.metadata_clipboard = obj.metadata.copy()
 
         # Rename geometry results to avoid conflicts when pasting to same object type
-        new_pref = get_short_id(obj) + "_"
+        new_pref = get_short_uuid(obj) + "_"
         self._rename_results_in_clipboard(new_pref)
 
         # Update action states (e.g., "Paste metadata" should now be enabled)
@@ -2270,6 +2586,27 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.refresh_plot(
             "selected", update_items=True, only_visible=False, only_existing=True
         )
+        if sel_objects:
+            self.SIG_OBJECT_MODIFIED.emit()
+
+    def get_known_metadata_keys(self, objs: Sequence[TypeObj]) -> list[tuple[str, str]]:
+        """Return the metadata keys suggested by the Add metadata dialog.
+
+        Args:
+            objs: selected objects
+
+        Returns:
+            ``(key, description)`` pairs: the keys found on the objects, then the
+             keys expected by the methods of application plugins
+        """
+        keys = collect_metadata_keys(objs)
+        found = {key for key, _description in keys}
+        keys.extend(
+            (key, description)
+            for key, description in get_declared_metadata_keys(self.PANEL_STR_ID)
+            if key not in found
+        )
+        return keys
 
     def add_metadata(self, param: AddMetadataParam | None = None) -> None:
         """Add metadata item to selected object(s)
@@ -2282,10 +2619,13 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             return
 
         if param is None:
-            param = AddMetadataParam(sel_objects)
+            param = AddMetadataParam(
+                sel_objects, self.get_known_metadata_keys(sel_objects)
+            )
             # Restore settings from config
             saved_param = Conf.add_metadata_settings.get(AddMetadataParam())
             update_dataset(param, saved_param)
+            param.known_key = ""
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=gds.DataItemValidationWarning)
                 if not param.edit(parent=self.parentWidget(), wordwrap=False):
@@ -2305,14 +2645,19 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         # Build values for all selected objects
         values = param.build_values(sel_objects)
 
-        # Add metadata to each object
+        # Add metadata to each object, except those left unchanged by extraction
+        modified = False
         for obj, value in zip(sel_objects, values):
-            obj.metadata[param.metadata_key] = value
+            if value is not None:
+                obj.metadata[param.metadata_key] = value
+                modified = True
 
         # Refresh the plot to update any changes
         self.refresh_plot(
             "selected", update_items=True, only_visible=False, only_existing=True
         )
+        if modified:
+            self.SIG_OBJECT_MODIFIED.emit()
 
     def copy_roi(self, roi_data=None) -> None:
         """Copy regions of interest
@@ -2490,6 +2835,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             self.refresh_plot(
                 "selected", update_items=True, only_visible=False, only_existing=True
             )
+        if sel_objs:
+            self.SIG_OBJECT_MODIFIED.emit()
 
     def add_annotations_from_items(
         self, items: list, refresh_plot: bool = True
@@ -2581,6 +2928,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     return
             group.title = new_name
             self.objview.update_item(get_uuid(group))
+        self.SIG_OBJECT_MODIFIED.emit()
 
     @abc.abstractmethod
     def get_newparam_from_current(
@@ -3072,7 +3420,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             extensions = get_file_extensions(self.IO_REGISTRY.get_write_filters())
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", category=gds.DataItemValidationWarning)
-                guiparam = SaveToDirectoryGUIParam(objs, extensions)
+                labels = []
+                for obj in objs:
+                    group = self.objmodel.get_group_from_object(obj)
+                    labels.append(f"[{group.title}] {obj.title}")
+                guiparam = SaveToDirectoryGUIParam(objs, extensions, labels)
                 # Restore settings from config
                 saved_param = Conf.save_to_directory_settings.get(
                     SaveToDirectoryParam()
@@ -3299,6 +3651,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 write_roi(filename, obj.roi)
 
     # ------Refreshing GUI--------------------------------------------------------------
+    def refresh_after_reference_remap(self) -> None:
+        """Refresh cached presentation after imported references are remapped."""
+        self.objview.update_tree()
+        self.selection_changed(update_items=True)
+
     def selection_changed(self, update_items: bool = False) -> None:
         """Object selection changed: update object properties, refresh plot and update
         object view.
@@ -3633,6 +3990,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 item = create_adapter_from_object(obj).make_item(
                     update_from=existing_item
                 )
+                item.param.label = self.mainwindow.render_object_title(obj.title)
+                item.param.update_item(item)
                 item.set_readonly(True)
                 plot.add_item(item, z=0)
         plot.set_active_item(item)
@@ -3659,7 +4018,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         # Create a new dialog and add plot items to it
         dlg = self.create_new_dialog(
-            title=obj.title if len(oids) == 1 else None,
+            title=(
+                self.mainwindow.render_object_title(obj.title)
+                if len(oids) == 1
+                else None
+            ),
             edit=True,
             name=f"{obj.PREFIX}_new_window",
         )
@@ -3696,8 +4059,10 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         plot = dlg.get_plot()
         for item in plot.items:
             item.set_selectable(False)
-        for item in create_adapter_from_object(obj).iterate_shape_items(editable=True):
+        adapter = create_adapter_from_object(obj)
+        for item in adapter.iterate_shape_items(editable=True):
             plot.add_item(item)
+            adapter.annotation_adapter.capture_item_reference(item)
         self.__separate_views[dlg] = obj
         toggle_annotations(edit_annotations)
         if len(oids) > 1:
@@ -3719,13 +4084,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         """
         dlg: PlotDialog = self.sender()
         if result == QW.QDialog.DialogCode.Accepted:
+            obj = self.__separate_views[dlg]
+            adapter = create_adapter_from_object(obj)
             rw_items = []
             for item in dlg.get_plot().get_items():
-                if not item.is_readonly() and is_plot_item_serializable(item):
+                if adapter.annotation_adapter.is_annotation_item(
+                    item
+                ) and is_plot_item_serializable(item):
                     rw_items.append(item)
-            obj = self.__separate_views[dlg]
-            # Use the annotation adapter to set annotations in the new format
-            adapter = create_adapter_from_object(obj)
             adapter.set_annotations_from_items(rw_items)
             self.selection_changed(update_items=True)
         self.__separate_views.pop(dlg)
@@ -3761,11 +4127,14 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             col = idx % num_cols
 
             # Create plot with title
-            plot = BasePlot(options=BasePlotOptions(title=obj.title, type="image"))
+            rendered_title = self.mainwindow.render_object_title(obj.title)
+            plot = BasePlot(options=BasePlotOptions(title=rendered_title, type="image"))
 
             # Create plot item from object
             adapter = create_adapter_from_object(obj)
             item = adapter.make_item()
+            item.param.label = rendered_title
+            item.param.update_item(item)
             item.set_readonly(True)
             plot.add_item(item, z=0)
 
@@ -4091,17 +4460,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     )
                 return
             obj = objs[0]
-            # Build a string with source object short IDs (max 3, then use "...")
+            # Build a string with source object references (max 3, then use "...")
             max_ids_to_show = 3
-            short_ids = [get_short_id(obj) for obj in objs]
-            if len(short_ids) <= max_ids_to_show:
-                source_ids = ", ".join(short_ids)
+            source_refs = [get_title_reference(obj) for obj in objs]
+            if len(source_refs) <= max_ids_to_show:
+                source_ids = ", ".join(source_refs)
             else:
-                # Show first 2, "...", then last one: "s001, s002, ..., s010"
+                # Show first 2, "...", then the last reference.
                 source_ids = (
-                    ", ".join(short_ids[: max_ids_to_show - 1])
+                    ", ".join(source_refs[: max_ids_to_show - 1])
                     + ", ..., "
-                    + short_ids[-1]
+                    + source_refs[-1]
                 )
             for i_roi in all_roi_indexes[0]:
                 roi_suffix = f"|ROI{int(i_roi + 1)}" if i_roi >= 0 else ""
@@ -4140,8 +4509,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         else:
                             x = roi_data[param.xaxis].values
                         y = roi_data[param.yaxis].values
-                        shid = get_short_id(objs[index])
-                        stitle = f"{title} ({shid}){roi_suffix}"
+                        source_ref = get_title_reference(objs[index])
+                        stitle = f"{title} ({source_ref}){roi_suffix}"
                         self.__add_result_signal(
                             x, y, stitle, param.xaxis, param.yaxis, result_group_id
                         )
@@ -4256,7 +4625,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         )
         objs = self.objview.get_sel_objects(include_groups=True)
         for obj in objs:
-            create_adapter_from_object(obj).add_label_with_title(title=title)
+            label = (
+                self.mainwindow.render_object_title(obj.title)
+                if title is None
+                else title
+            )
+            create_adapter_from_object(obj).add_label_with_title(title=label)
         if (
             not Conf.ignore_title_insertion_msg.get(False)
             and not ignore_msg

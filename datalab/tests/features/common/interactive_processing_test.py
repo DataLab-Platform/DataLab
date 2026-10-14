@@ -56,7 +56,7 @@ from datalab.gui.processor.base import (
     extract_processing_parameters,
 )
 from datalab.gui.processor.catcher import CompOut
-from datalab.objectmodel import get_short_id, get_uuid
+from datalab.objectmodel import get_short_uuid, get_uuid
 from datalab.tests import datalab_test_app_context
 
 
@@ -200,7 +200,10 @@ def test_recompute():
             assert PROCESSING_PARAMETERS_OPTION in filtered_sig.get_metadata_options()
             option_dict = filtered_sig.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
             assert option_dict["source_uuid"] == signal_uuid
-            assert option_dict["func_name"] == "gaussian_filter"
+            assert (
+                option_dict["func_name"]
+                == processor.get_feature("gaussian_filter").feature_id
+            )
 
 
 def test_recompute_selected_skips_analysis_when_1_to_1_cancelled():
@@ -272,7 +275,12 @@ def test_plugin_analysis_origin_is_stored_and_reused():
             }
 
             stats_func = processor.get_feature("stats").function
-            feature = processor.register_1_to_0(stats_func, "Plugin statistics")
+            feature = processor.register_1_to_0(
+                stats_func,
+                "Plugin statistics",
+                feature_id="test_plugin:stats",
+                owner_plugin_id="test_plugin",
+            )
             feature.plugin_origin = plugin_origin
 
             panel.new_object(edit=False)
@@ -386,10 +394,12 @@ def test_analysis_persistence_failure_is_isolated_per_object() -> None:
             assert extract_analysis_parameters(first) is None
             assert extract_analysis_parameters(second) is not None
             second_adapter = appended[1][0]
-            second_short_id = get_short_id(second)
+            second_short_uuid = get_short_uuid(second)
             assert result.results == [second_adapter]
-            assert result.ylabels == [f"{second_adapter.func_name}({second_short_id})"]
-            assert result.short_ids == [second_short_id]
+            assert result.ylabels == [
+                f"{second_adapter.func_name}({second_short_uuid})"
+            ]
+            assert result.short_ids == [second_short_uuid]
             error_calls = [
                 call for call in show_error.call_args_list if call.args[1] == "error"
             ]
@@ -476,7 +486,7 @@ def test_apply_analysis_parameters_failure_preserves_action() -> None:
 
             assert success is False
             assert action.kwargs == original_kwargs
-            assert status_messages == []
+            assert not status_messages
 
 
 def test_recompute_analyses_continues_after_failure_unattended() -> None:
@@ -1081,9 +1091,7 @@ def test_apply_processing_parameters_signal():
             # Change constant from 5.0 to 15.0
             editor.dataset.value = v1 = 15.0
 
-            # In-place update requires History panel edit mode (otherwise a new
-            # object is created instead of mutating the existing one).
-            win.historypanel.toggle_edit_mode(True)
+            assert not win.historypanel.is_edit_mode()
 
             # Apply the new processing parameters
             report = objprop.apply_processing_parameters()
@@ -1096,12 +1104,17 @@ def test_apply_processing_parameters_signal():
             assert get_uuid(processed_sig) == processed_uuid
 
             # Verify the new constant was applied: data should now be original + 15.0
+            assert len(panel.objmodel) == 2
+            assert panel.objmodel[processed_uuid] is processed_sig
             assert np.allclose(processed_sig.y, original_signal_data + v1)
 
             # Verify metadata still points to the same source
             pp_dict = processed_sig.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
             assert pp_dict["source_uuid"] == signal_uuid
-            assert pp_dict["func_name"] == "addition_constant"
+            assert (
+                pp_dict["func_name"]
+                == processor.get_feature("addition_constant").feature_id
+            )
 
             # Verify the parameter was updated
             stored_param = json_to_dataset(pp_dict["param_json"])
@@ -1146,9 +1159,7 @@ def test_apply_processing_parameters_image():
             # Change constant from 7.0 to 20.0
             editor.dataset.value = v1 = 20.0
 
-            # In-place update requires History panel edit mode (otherwise a new
-            # object is created instead of mutating the existing one).
-            win.historypanel.toggle_edit_mode(True)
+            assert not win.historypanel.is_edit_mode()
 
             # Apply the new processing parameters
             report = objprop.apply_processing_parameters()
@@ -1161,12 +1172,17 @@ def test_apply_processing_parameters_image():
             assert get_uuid(processed_ima) == processed_uuid
 
             # Verify the new constant was applied: data should now be original + 20.0
+            assert len(panel.objmodel) == 2
+            assert panel.objmodel[processed_uuid] is processed_ima
             assert np.allclose(processed_ima.data, original_image_data + v1)
 
             # Verify metadata still points to the same source
             pp_dict = processed_ima.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
             assert pp_dict["source_uuid"] == image_uuid
-            assert pp_dict["func_name"] == "addition_constant"
+            assert (
+                pp_dict["func_name"]
+                == processor.get_feature("addition_constant").feature_id
+            )
 
             # Verify the parameter was updated
             stored_param = json_to_dataset(pp_dict["param_json"])
@@ -1259,6 +1275,9 @@ def test_apply_processing_parameters_explicit_param():
                     processed_sig, interactive=False
                 )
                 assert report.success, f"Reprocessing failed: {report.message}"
+                assert report.obj_uuid == processed_uuid
+                assert len(panel.objmodel) == 2
+                assert panel.objmodel[processed_uuid] is processed_sig
             finally:
                 processor.recompute_1_to_1 = original_recompute_1_to_1
 
@@ -1423,7 +1442,10 @@ def test_cross_panel_image_to_signal():
 
             # Verify metadata content
             assert option_dict["source_uuid"] == image_uuid
-            assert option_dict["func_name"] == "radial_profile"
+            assert (
+                option_dict["func_name"]
+                == image_processor.get_feature("radial_profile").feature_id
+            )
             assert option_dict["pattern"] == "1-to-1"
 
             # Verify the parameter can be deserialized
@@ -1569,7 +1591,10 @@ def test_cross_panel_signal_to_image():
             option_dict = image.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
 
             # Verify metadata content for n-to-1 pattern
-            assert option_dict["func_name"] == "signals_to_image"
+            assert (
+                option_dict["func_name"]
+                == signal_processor.get_feature("signals_to_image").feature_id
+            )
             assert option_dict["pattern"] == "n-to-1"
             assert len(option_dict["source_uuids"]) == n_signals
             assert all(uuid in signal_uuids for uuid in option_dict["source_uuids"])
