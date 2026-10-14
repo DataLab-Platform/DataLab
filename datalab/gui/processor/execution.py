@@ -17,6 +17,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Callable
 
 import guidata.dataset as gds
+from datalab_capsule.recorder import CandidateError
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj
 from sigima.proc.execution import PreparedExecution
@@ -127,25 +128,28 @@ class ExecutionService:
         self.provenance.complete(pending, new_obj)
         return new_obj
 
-    def execute_candidate(
-        self, prepared: PreparedExecution
-    ) -> SignalObj | ImageObj | None:
+    def execute_candidate(self, prepared: PreparedExecution) -> object:
         """Compute a result in candidate mode: nothing is inserted or recorded.
 
         Args:
             prepared: Computation prepared by Sigima (recorded parameters,
-             context and global options applied to the live inputs); it runs in
-             the processor's isolated process, like any computation.
+             context and global options applied to copies of the live inputs);
+             it runs in the processor's isolated process, like any computation.
 
         Returns:
-            The candidate, or None on error or cancellation.
+            What the function returned: a signal, an image, an analysis result,
+            or None when it produced no result.
+
+        Raises:
+            CandidateError: On error or cancellation (reported, not displayed).
         """
         with create_progress_bar(
             self.processor.panel, _("Recomputing..."), max_=1
         ) as progress:
             self.computations += 1
             compout = self._exec_func(execute_prepared, (prepared,), progress)
-            if compout is None:
-                return None
-            result = self.processor.handle_output(compout, _("Recomputing"), progress)
-        return result if isinstance(result, (SignalObj, ImageObj)) else None
+        if compout is None:
+            raise CandidateError("cancelled by the user")
+        if compout.error_msg:
+            raise CandidateError(compout.error_msg)
+        return compout.result

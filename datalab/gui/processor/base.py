@@ -2368,6 +2368,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     compout, _("Computing: %s") % title, progress
                 )
                 if result is None:
+                    if not compout.error_msg:
+                        # A normal absence of result (e.g. nothing detected)
+                        provenance.complete_without_result(pending)
                     rdata.execution_success = False
                     continue
 
