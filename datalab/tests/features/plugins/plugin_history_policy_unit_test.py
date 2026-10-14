@@ -23,7 +23,9 @@ from datalab.gui import historysession_ops as hsess
 from datalab.gui.main import DLMainWindow
 from datalab.plugins import PluginRegistry
 
-testdata_path = Path(__file__).parents[3] / "plugins" / "datalab_testdata.py"
+testdata_path = (
+    Path(__file__).parents[3] / "plugins" / "builtin" / "datalab_testdata.py"
+)
 testdata_spec = importlib.util.spec_from_file_location(
     "datalab_testdata", testdata_path
 )

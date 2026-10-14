@@ -802,4 +802,4 @@ Getting help
 If you encounter issues during migration:
 
 1. Check the `GitHub issue tracker <https://github.com/DataLab-Platform/DataLab/issues>`_
-2. Consult the built-in plugin examples in the ``datalab/plugins`` directory
+2. Consult the built-in plugin examples in the ``datalab/plugins/builtin`` directory

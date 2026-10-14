@@ -166,7 +166,7 @@ sample names, processing steps, or any other custom information.
 When you select "Add metadata..." from the Edit menu, a dialog appears where you can:
 
 - **Metadata key**: Enter the name of the metadata field to add (letters, digits, ``_``, ``.`` and ``-``, e.g. a plugin key such as ``plugin.org.example.my-plugin.gain``)
-- **Known keys**: Pick a key already present on the selected signals to copy it into the metadata key
+- **Known keys**: Pick a key already present on the selected signals, or a key expected by the methods of the installed application plugins, to copy it into the metadata key
 - **Value pattern**: Define a pattern for the metadata value using Python format strings
 - **Extraction pattern**: Optionally, extract the value from the formatted text with a Python regular expression: its first group, or the whole match if it has no group, becomes the value
 - **If no match**: Leave signals without a match unchanged (default), or report an error

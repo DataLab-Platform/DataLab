@@ -36,7 +36,7 @@ a container for `SignalObj` and `ImageObj` instances.
 from __future__ import annotations
 
 import re
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterator, Sequence
 from uuid import uuid4
 
 from sigima import ImageObj, SignalObj
@@ -523,16 +523,38 @@ class ObjectModel:
 
     def add_object(self, obj: SignalObj | ImageObj, group_id: str) -> None:
         """Add object to model"""
-        self._objects[get_uuid(obj)] = obj
-        onb = 0
-        for group in self._groups:
-            onb += len(group)
-            if get_uuid(group) == group_id:
-                set_number(obj, onb + 1)
-                group.append(obj)
-                break
-        else:
-            raise KeyError(f"Group with uuid '{group_id}' not found")
+        self.add_objects((obj,), group_id)
+
+    def add_objects(
+        self,
+        objects: Sequence[SignalObj | ImageObj],
+        group_id: str,
+    ) -> None:
+        """Add objects to the model atomically.
+
+        Args:
+            objects: Objects to add, in insertion order
+            group_id: UUID of the target group
+
+        Raises:
+            KeyError: If the target group does not exist
+            ValueError: If an object UUID is duplicated or already exists
+        """
+        objects = tuple(objects)
+        if not objects:
+            return
+        group = self.get_group(group_id)
+        object_ids = [get_uuid(obj) for obj in objects]
+        if len(set(object_ids)) != len(object_ids):
+            raise ValueError("The same object cannot be added twice")
+        existing_ids = set(self._objects).intersection(object_ids)
+        if existing_ids:
+            raise ValueError(
+                f"Object UUID already exists in model: {sorted(existing_ids)[0]}"
+            )
+        for obj, obj_uuid in zip(objects, object_ids):
+            self._objects[obj_uuid] = obj
+            group.append(obj)
         self.reset_short_ids()
 
     def remove_object(self, obj: SignalObj | ImageObj) -> None:
