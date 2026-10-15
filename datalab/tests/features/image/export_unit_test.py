@@ -19,6 +19,7 @@ from sigima.io import (
     IMAGE_EXPORT_CAPABILITIES,
     ImageExportParam,
     get_image_export_capabilities,
+    prepare_image_export_preview,
     validate_image_export_options,
 )
 from sigima.objects import ImageObj, create_image
@@ -441,6 +442,115 @@ def test_export_dialog_accept_returns_validated_backend_parameters() -> None:
         finally:
             dialog.preview.close_preview()
             dialog.deleteLater()
+
+
+@pytest.mark.parametrize(
+    ("compression", "level_active", "predictor_active"),
+    [
+        ("none", False, False),
+        ("lzw", False, True),
+        ("deflate", True, True),
+        ("zstd", True, True),
+        ("jpeg", True, False),
+    ],
+)
+def test_tiff_options_follow_compression(
+    compression: str, level_active: bool, predictor_active: bool
+) -> None:
+    """Ignore TIFF level and predictor when the compression does not support them."""
+    image = create_image("Source", np.zeros((32, 32), dtype=np.uint16))
+    param = create_image_export_gui_param(image, "image.tif")
+    param.compression = compression
+    param.compression_level = 5
+    param.predictor = "horizontal"
+
+    assert param.is_item_active("compression_level") is level_active
+    assert param.is_item_active("predictor") is predictor_active
+    options = param.get_format_options()
+    assert options["compression_level"] == (5 if level_active else None)
+    assert options["predictor"] == ("horizontal" if predictor_active else "none")
+
+
+def test_lzw_with_leftover_compression_level_is_exportable() -> None:
+    """Export LZW even if a level was set for another compression beforehand."""
+    data = np.arange(32 * 32, dtype=np.uint16).reshape(32, 32)
+    param = create_image_export_gui_param(create_image("Source", data), "image.tif")
+    param.compression = "lzw"
+    param.compression_level = 36
+
+    export_param = param.to_export_param()
+
+    assert export_param.format_options["compression_level"] is None
+    preview = prepare_image_export_preview(data, "image.tif", export_param)
+    np.testing.assert_array_equal(preview, data)
+
+
+def test_inactive_gamma_and_invert_are_ignored() -> None:
+    """Reset gamma and inversion when normalization is disabled."""
+    image = create_image("Source", np.zeros((4, 4), dtype=np.uint16))
+    param = create_image_export_gui_param(image, "image.tif")
+    param.gamma = 2.0
+    param.invert = True
+
+    param.normalization = "none"
+    disabled = param.to_export_param()
+    param.normalization = "minmax"
+    enabled = param.to_export_param()
+
+    assert (disabled.gamma, disabled.invert) == (None, False)
+    assert (enabled.gamma, enabled.invert) == (2.0, True)
+
+
+def test_tiff_compression_level_has_help_and_no_automatic_slider() -> None:
+    """Describe per-compression level ranges instead of a misleading slider."""
+    paramclass = image_panel.get_image_export_param_class("image.tif")
+    param = paramclass()
+    item = next(
+        item for item in param.get_items() if item.get_name() == "compression_level"
+    )
+
+    assert item.get_prop("display", "auto_slider") is False
+    assert "Zstandard" in item.get_help(param)
+
+
+def test_format_image_export_error_keeps_only_expected_messages() -> None:
+    """Show validation messages alone, but keep unexpected tracebacks."""
+    validation = (
+        "Traceback (most recent call last):\n  File ...\n"
+        "ValueError: TIFF compression_level is not supported with 'lzw' compression\n"
+    )
+    unexpected = "Traceback (most recent call last):\n  File ...\nKeyError: 'x'"
+
+    assert (
+        image_panel.format_image_export_error(validation)
+        == "TIFF compression_level is not supported with 'lzw' compression"
+    )
+    assert image_panel.format_image_export_error(unexpected) == unexpected
+
+
+@pytest.mark.parametrize(
+    ("extension", "rejected"), [("png", True), ("tif", True), ("npy", False)]
+)
+def test_complex_image_export_to_classic_format_is_rejected(
+    extension: str, rejected: bool
+) -> None:
+    """Reject complex images upfront for formats without complex data types."""
+    obj = create_image("Complex", np.ones((4, 4), dtype=np.complex128))
+    panel = SimpleNamespace(
+        parentWidget=Mock(return_value=None),
+        mainwindow=SimpleNamespace(preview_executor_cache=None),
+    )
+
+    with (
+        patch.object(image_panel.QW.QMessageBox, "warning") as warning,
+        patch.object(image_panel, "ImageExportDialog") as dialog_class,
+        patch.object(image_panel, "exec_dialog", return_value=False),
+    ):
+        result = ImagePanel.edit_export_parameters(panel, obj, f"image.{extension}")
+
+    assert warning.called is rejected
+    assert dialog_class.called is not rejected
+    assert result == (False, None)
 
 
 def test_interactive_export_cancellation_skips_write_and_history_pair() -> None:

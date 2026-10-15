@@ -108,6 +108,49 @@ IMAGE_EXPORT_CHOICE_LABELS = {
 }
 
 
+# Format options only taken into account for some values of another (choice) option:
+# they are inactive (and ignored) otherwise. These rules mirror the constraints
+# checked by :func:`sigima.io.validate_image_export_configuration`.
+IMAGE_EXPORT_OPTION_DEPENDENCIES: dict[
+    str, dict[str, tuple[str, Callable[[object], bool]]]
+] = {
+    "tif": {
+        "compression_level": (
+            "compression",
+            lambda value: value in ("deflate", "zstd", "jpeg"),
+        ),
+        "predictor": ("compression", lambda value: value in ("deflate", "lzw", "zstd")),
+    },
+}
+
+IMAGE_EXPORT_OPTION_HELP = {
+    "tif": {
+        "compression": _("JPEG compression requires 8-bit data (uint8)"),
+        "compression_level": _(
+            "Deflate: 0 to 9, Zstandard: 1 to 22, JPEG: 1 to 100.<br>"
+            "Leave empty to use the default level."
+        ),
+        "predictor": _(
+            "Horizontal: integer data only.<br>Floating-point: floating data only."
+        ),
+        "rows_per_strip": _("Cannot be combined with tile size"),
+        "tile_size": _(
+            "Height and width, multiples of 16.<br>"
+            "Cannot be combined with rows per strip."
+        ),
+    },
+    "jp2": {
+        "num_resolutions": _(
+            "Leave empty to use the default value.<br>"
+            "The maximum depends on the image (or tile) size."
+        ),
+    },
+}
+
+# Options whose valid range depends on another option: no automatic slider
+IMAGE_EXPORT_OPTIONS_WITHOUT_SLIDER = {("tif", "compression_level")}
+
+
 def get_image_export_dtype_choices(
     param: ImageExportGUIParam, _item: gds.ChoiceItem, _value: str
 ) -> list[tuple[str, str, None]]:
@@ -142,15 +185,48 @@ class ImageExportGUIParam(ImageExportParam, title=_("Image export")):
         ),
     )
 
+    def is_item_active(self, name: str) -> bool:
+        """Return True if the item named ``name`` is taken into account."""
+        item = next(item for item in self.get_items() if item.get_name() == name)
+        return bool(item.get_prop_value("display", self, "active", True))
+
     def get_format_options(self) -> dict[str, object]:
-        """Return writer options exposed by this format parameter class."""
+        """Return writer options exposed by this format parameter class.
+
+        Inactive options are replaced by their default value, as they are not
+        taken into account for the current values of the other options.
+        """
         options = {}
         for spec in self.format_option_specs:
+            if not self.is_item_active(spec.key):
+                options[spec.key] = spec.default
+                continue
             value = getattr(self, spec.key)
             if spec.value_kind in ("int_pair", "float_pair", "float_list"):
                 value = serialize_image_export_sequence(value, spec)
             options[spec.key] = value
         return options
+
+    def to_export_param(self) -> ImageExportParam:
+        """Return backend export parameters from the current GUI values.
+
+        Inactive parameters (e.g. gamma without normalization) are reset to their
+        default value, as they are not taken into account.
+
+        Returns:
+            Backend image export parameters
+
+        Raises:
+            ValueError: If a format option value is invalid
+        """
+        param = ImageExportParam()
+        update_dataset(param, self)
+        for item in param.get_items():
+            name = item.get_name()
+            if not self.is_item_active(name):
+                setattr(param, name, item.get_default())
+        param.format_options = self.get_format_options()
+        return param
 
 
 def get_image_export_choice_label(value: object) -> str:
@@ -186,8 +262,29 @@ def serialize_image_export_sequence(
     return converted
 
 
-def create_image_export_option_item(spec: ImageExportOptionSpec) -> gds.DataItem:
-    """Create a guidata item for an image export capability option."""
+def create_image_export_option_item(
+    spec: ImageExportOptionSpec, extension: str = ""
+) -> gds.DataItem:
+    """Create a guidata item for an image export capability option.
+
+    Args:
+        spec: Option specification
+        extension: Canonical format extension, used for format-specific help
+
+    Returns:
+        Data item editing the option
+    """
+    item = _create_image_export_option_item(spec)
+    help_text = IMAGE_EXPORT_OPTION_HELP.get(extension, {}).get(spec.key)
+    if help_text:
+        item.set_help(help_text)
+    if (extension, spec.key) in IMAGE_EXPORT_OPTIONS_WITHOUT_SLIDER:
+        item.set_prop("display", auto_slider=False)
+    return item
+
+
+def _create_image_export_option_item(spec: ImageExportOptionSpec) -> gds.DataItem:
+    """Create the guidata item matching an option value kind."""
     label = IMAGE_EXPORT_OPTION_LABELS[spec.key]
     if spec.value_kind == "bool":
         return gds.BoolItem(label, default=spec.default, allow_none=spec.allow_none)
@@ -246,12 +343,20 @@ def get_image_export_param_class(filename: str) -> type[ImageExportGUIParam]:
             "__doc__": f"{capabilities.format_name} export parameters.",
             "format_option_specs": capabilities.option_specs,
         }
-        class_attributes.update(
-            {
-                spec.key: create_image_export_option_item(spec)
-                for spec in capabilities.option_specs
-            }
-        )
+        items = {
+            spec.key: create_image_export_option_item(spec, canonical_extension)
+            for spec in capabilities.option_specs
+        }
+        dependencies = IMAGE_EXPORT_OPTION_DEPENDENCIES.get(canonical_extension, {})
+        store_props: dict[str, gds.GetAttrProp] = {}
+        for key, (controller, predicate) in dependencies.items():
+            if controller not in store_props:
+                store_props[controller] = gds.GetAttrProp(controller)
+                items[controller].set_prop("display", store=store_props[controller])
+            items[key].set_prop(
+                "display", active=gds.FuncProp(store_props[controller], predicate)
+            )
+        class_attributes.update(items)
         paramclass = type(
             f"{class_name}ImageExportGUIParam",
             (ImageExportGUIParam,),
@@ -327,6 +432,26 @@ def compute_image_export_preview(
     return result
 
 
+def format_image_export_error(message: str) -> str:
+    """Return only the error message of an expected export validation error.
+
+    Validation errors raised by Sigima (``ValueError``/``TypeError``) explain the
+    invalid configuration: the traceback is only kept for unexpected errors.
+
+    Args:
+        message: Error message or formatted traceback
+
+    Returns:
+        Message to display
+    """
+    lines = [line for line in message.strip().splitlines() if line.strip()]
+    if lines:
+        for prefix in ("ValueError: ", "TypeError: "):
+            if lines[-1].startswith(prefix):
+                return lines[-1][len(prefix) :]
+    return message
+
+
 class ImageExportDialog(ProcessingPreviewDialog):
     """Format-aware image export dialog with a live preview of the exported data."""
 
@@ -350,6 +475,7 @@ class ImageExportDialog(ProcessingPreviewDialog):
         self.setWindowTitle(_("Export image"))
         self.setWindowIcon(get_icon("export.svg"))
         self.preview.prepare_param = self.to_export_param
+        self.preview.format_error = format_image_export_error
         self.preview.enabled.setChecked(True)
 
     @staticmethod
@@ -365,10 +491,7 @@ class ImageExportDialog(ProcessingPreviewDialog):
         Raises:
             ValueError: If a format option value is invalid
         """
-        param = ImageExportParam()
-        update_dataset(param, guiparam)
-        param.format_options = guiparam.get_format_options()
-        return param
+        return guiparam.to_export_param()
 
     def get_export_param(self) -> ImageExportParam:
         """Return backend parameters from the current GUI values."""
@@ -552,6 +675,17 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
             guiparam = create_image_export_gui_param(obj, filename)
         except ValueError:
             return True, None
+        if np.iscomplexobj(obj.data) and "complex128" not in guiparam.supported_dtypes:
+            QW.QMessageBox.warning(
+                self.parentWidget(),
+                _("Export image"),
+                _(
+                    "Complex images cannot be exported to %s files.<br><br>"
+                    "Use one of the NumPy, MAT-File, text, CSV or HDF5 image formats."
+                )
+                % get_image_export_capabilities(filename).format_name,
+            )
+            return False, None
         controller_factory = functools.partial(
             PreviewController, executor_cache=self.mainwindow.preview_executor_cache
         )

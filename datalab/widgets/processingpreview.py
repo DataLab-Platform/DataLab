@@ -92,6 +92,9 @@ class ProcessingPreviewWidget(QW.QWidget):
         # Optional conversion of the edited parameters into the parameters sent to
         # the preview process (e.g. when the form class cannot be pickled)
         self.prepare_param: Callable[[DataSet], DataSet] | None = None
+        # Optional formatting of preview error messages (e.g. to hide the traceback
+        # of expected validation errors)
+        self.format_error: Callable[[str], str] | None = None
         self.controller = controller_factory(function, self)
         self._dragging = False
         self._plot_kind = None
@@ -285,6 +288,8 @@ class ProcessingPreviewWidget(QW.QWidget):
         self.controller.request(self.sources[self.source_combo.currentIndex()], param)
 
     def _show_error(self, message: str) -> None:
+        if self.format_error is not None:
+            message = self.format_error(message)
         self.status.setText(_("Preview failed"))
         self.details.setPlainText(message)
         self.details.show()

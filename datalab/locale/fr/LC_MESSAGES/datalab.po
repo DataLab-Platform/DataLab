@@ -2056,6 +2056,24 @@ msgstr "Le noir vaut zéro"
 msgid "White is zero"
 msgstr "Le blanc vaut zéro"
 
+msgid "JPEG compression requires 8-bit data (uint8)"
+msgstr "La compression JPEG n?cessite des donn?es 8 bits (uint8)"
+
+msgid "Deflate: 0 to 9, Zstandard: 1 to 22, JPEG: 1 to 100.<br>Leave empty to use the default level."
+msgstr "Deflate : 0 ? 9, Zstandard : 1 ? 22, JPEG : 1 ? 100.<br>Laisser vide pour utiliser le niveau par d?faut."
+
+msgid "Horizontal: integer data only.<br>Floating-point: floating data only."
+msgstr "Horizontal : donn?es enti?res uniquement.<br>Virgule flottante : donn?es flottantes uniquement."
+
+msgid "Cannot be combined with tile size"
+msgstr "Incompatible avec la taille des tuiles"
+
+msgid "Height and width, multiples of 16.<br>Cannot be combined with rows per strip."
+msgstr "Hauteur et largeur, multiples de 16.<br>Incompatible avec le nombre de lignes par bande."
+
+msgid "Leave empty to use the default value.<br>The maximum depends on the image (or tile) size."
+msgstr "Laisser vide pour utiliser la valeur par d?faut.<br>Le maximum d?pend de la taille de l'image (ou des tuiles)."
+
 msgid "Automatic"
 msgstr "Automatique"
 
@@ -2099,6 +2117,10 @@ msgstr "%d fichiers RAW vont ?tre import?s.<br><br>Voulez-vous appliquer les m?m
 #, python-format
 msgid "RAW image import (%d files)"
 msgstr "Importation d'image RAW (%d fichiers)"
+
+#, python-format
+msgid "Complex images cannot be exported to %s files.<br><br>Use one of the NumPy, MAT-File, text, CSV or HDF5 image formats."
+msgstr "Les images complexes ne peuvent pas ?tre export?es dans des fichiers %s.<br><br>Utilisez l'un des formats NumPy, MAT-File, texte, CSV ou image HDF5."
 
 msgid "New image"
 msgstr "Nouvelle image"
