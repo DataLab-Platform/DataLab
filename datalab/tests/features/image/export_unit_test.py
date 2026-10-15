@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+import pickle
+from concurrent.futures import Future
 from contextlib import contextmanager, nullcontext
 from types import SimpleNamespace
 from unittest.mock import MagicMock, Mock, call, patch
@@ -11,12 +13,15 @@ from unittest.mock import MagicMock, Mock, call, patch
 import guidata.dataset as gds
 import numpy as np
 import pytest
+from guidata.qthelpers import qt_app_context
+from qtpy import QtWidgets as QW
 from sigima.io import (
     IMAGE_EXPORT_CAPABILITIES,
     ImageExportParam,
     get_image_export_capabilities,
     validate_image_export_options,
 )
+from sigima.objects import ImageObj, create_image
 
 from datalab.gui.panel import base as panel_base
 from datalab.gui.panel import image as image_panel
@@ -27,6 +32,7 @@ from datalab.gui.panel.image import (
     ImagePanel,
     create_image_export_gui_param,
 )
+from datalab.gui.processor.preview import PreviewController
 from datalab.h5.native import NativeH5Reader, NativeH5Writer
 from datalab.history.action import HistoryAction
 from datalab.history.core import decode_kwargs, encode_kwargs
@@ -287,54 +293,154 @@ def test_sequence_format_options_accept_comma_whitespace(
     assert param.get_format_options()[option_name] == expected
 
 
-def test_export_preview_delegates_and_updates_existing_item() -> None:
-    """Use Sigima's exact preview and update the existing plot item in place."""
-    source = np.arange(4, dtype=np.uint8).reshape(2, 2)
-    preview = source + 1
-    export_param = ImageExportParam.create(normalization="none")
-    preview_item = Mock()
-    plot = Mock()
-    dialog = SimpleNamespace(
-        obj=SimpleNamespace(data=source),
-        filename="image.jpeg",
-        preview_item=preview_item,
-        get_export_param=Mock(return_value=export_param),
-        manager=SimpleNamespace(get_plot=Mock(return_value=plot)),
+class FakePreviewExecutor:
+    """Record preview requests without starting any process."""
+
+    def __init__(self) -> None:
+        self.requests: list[tuple[Future, object, tuple]] = []
+        self.closed = False
+
+    def submit(self, function, args) -> Future:
+        """Record a request and return its pending future."""
+        future = Future()
+        self.requests.append((future, function, args))
+        return future
+
+    def close(self) -> None:
+        """Mark the executor as closed."""
+        self.closed = True
+
+
+def create_export_dialog(
+    obj: ImageObj, filename: str, executor: FakePreviewExecutor
+) -> ImageExportDialog:
+    """Create an export dialog whose preview requests are recorded."""
+    return ImageExportDialog(
+        None,
+        obj,
+        filename,
+        create_image_export_gui_param(obj, filename),
+        controller_factory=lambda function, parent: PreviewController(
+            function, parent, executor_factory=lambda: executor
+        ),
     )
+
+
+def test_compute_image_export_preview_returns_exported_image() -> None:
+    """Return a gray-level copy holding Sigima's exact export preview."""
+    source = create_image("Source", np.arange(6, dtype=np.float64).reshape(2, 3))
+    source.set_metadata_option("colormap", "jet")
+    source.set_metadata_option("invert_colormap", True)
+    preview = np.arange(6, dtype=np.uint8).reshape(2, 3)
+    param = ImageExportParam.create(normalization="minmax")
 
     with patch.object(
         image_panel, "prepare_image_export_preview", return_value=preview
     ) as prepare_preview:
-        result = ImageExportDialog.update_preview(dialog)
+        result = image_panel.compute_image_export_preview(source, param, "image.png")
 
-    assert result is True
-    dialog.get_export_param.assert_called_once_with()
-    prepare_preview.assert_called_once_with(source, "image.jpeg", export_param)
-    preview_item.set_data.assert_called_once_with(preview)
-    plot.replot.assert_called_once_with()
-    plot.add_item.assert_not_called()
+    prepare_preview.assert_called_once_with(source.data, "image.png", param)
+    assert result is not source
+    np.testing.assert_array_equal(result.data, preview)
+    assert result.title == source.title
+    assert result.get_metadata_option("colormap") == "gray"
+    assert result.get_metadata_option("invert_colormap") is False
+    assert source.data.dtype == np.float64
+    assert source.get_metadata_option("colormap") == "jet"
 
 
-@pytest.mark.parametrize("exception_type", [TypeError, ValueError, OSError])
-def test_export_preview_reports_expected_errors(
+def test_export_dialog_previews_backend_parameters_on_open() -> None:
+    """Enable the generic preview on open and send picklable backend parameters."""
+    obj = create_image("Source", np.linspace(0.0, 1.0, 12).reshape(3, 4))
+    executor = FakePreviewExecutor()
+    with qt_app_context():
+        dialog = create_export_dialog(obj, "image.jpg", executor)
+        try:
+            assert dialog.preview.enabled.isChecked()
+            assert dialog.preview.disabled_overlay.isHidden()
+            assert len(executor.requests) == 1
+            _future, function, (source, param) = executor.requests[0]
+            assert type(param) is ImageExportParam
+            assert param.format_options["quality"] == 75
+            assert function.keywords == {"filename": "image.jpg"}
+            np.testing.assert_array_equal(source.data, obj.data)
+            pickle.dumps((function, source, param))
+        finally:
+            dialog.preview.close_preview()
+            dialog.deleteLater()
+
+
+def test_export_dialog_reports_invalid_format_options_in_preview() -> None:
+    """Show format option serialization errors instead of requesting a preview."""
+    obj = create_image("Source", np.linspace(0.0, 1.0, 12).reshape(3, 4))
+    executor = FakePreviewExecutor()
+    with qt_app_context():
+        dialog = create_export_dialog(obj, "image.tif", executor)
+        try:
+            requests = len(executor.requests)
+            with patch.object(
+                type(dialog.instance),
+                "get_format_options",
+                side_effect=ValueError("Tile size must contain 2 values"),
+            ):
+                dialog.preview._request()
+            assert len(executor.requests) == requests
+            assert dialog.preview.status.text() == image_panel._("Invalid parameters")
+            assert "Tile size" in dialog.preview.details.toPlainText()
+        finally:
+            dialog.preview.close_preview()
+            dialog.deleteLater()
+
+
+@pytest.mark.parametrize("exception_type", [TypeError, ValueError])
+def test_export_dialog_accept_reports_invalid_configuration(
     exception_type: type[Exception],
 ) -> None:
-    """Report expected validation and encoding errors without updating the plot."""
+    """Keep the dialog open and warn when the export configuration is invalid."""
+    obj = create_image("Source", np.linspace(0.0, 1.0, 12).reshape(3, 4))
+    executor = FakePreviewExecutor()
     error = exception_type("Invalid export options")
-    dialog = SimpleNamespace(
-        obj=SimpleNamespace(data=np.zeros((2, 2), dtype=np.uint8)),
-        filename="image.png",
-        get_export_param=Mock(return_value=ImageExportParam()),
-    )
+    with qt_app_context():
+        dialog = create_export_dialog(obj, "image.png", executor)
+        try:
+            with (
+                patch.object(
+                    image_panel, "prepare_image_for_export", side_effect=error
+                ),
+                patch.object(image_panel.QW.QMessageBox, "warning") as warning,
+                patch.object(image_panel.ProcessingPreviewDialog, "accept") as accept,
+            ):
+                dialog.accept()
+            warning.assert_called_once_with(
+                dialog, image_panel._("Export image"), str(error)
+            )
+            accept.assert_not_called()
+        finally:
+            dialog.preview.close_preview()
+            dialog.deleteLater()
 
-    with (
-        patch.object(image_panel, "prepare_image_export_preview", side_effect=error),
-        patch.object(image_panel.QW.QMessageBox, "warning") as warning,
-    ):
-        result = ImageExportDialog.update_preview(dialog)
 
-    assert result is False
-    warning.assert_called_once_with(dialog, image_panel._("Export image"), str(error))
+def test_export_dialog_accept_returns_validated_backend_parameters() -> None:
+    """Accept a valid configuration and return backend export parameters."""
+    obj = create_image("Source", np.linspace(0.0, 1.0, 12).reshape(3, 4))
+    executor = FakePreviewExecutor()
+    with qt_app_context():
+        dialog = create_export_dialog(obj, "image.png", executor)
+        try:
+            widget = next(
+                widget
+                for widget in dialog.edit_layout.get_terminal_widgets()
+                if widget.item.item.get_name() == "compress_level"
+            )
+            widget.edit.setText("9")
+            dialog.accept()
+            assert dialog.result() == QW.QDialog.Accepted
+            param = dialog.get_export_param()
+            assert type(param) is ImageExportParam
+            assert param.format_options["compress_level"] == 9
+        finally:
+            dialog.preview.close_preview()
+            dialog.deleteLater()
 
 
 def test_interactive_export_cancellation_skips_write_and_history_pair() -> None:
@@ -537,7 +643,11 @@ def test_unsupported_extension_uses_legacy_writer_parameters(extension: str) -> 
 def test_export_dialog_validation_error_is_not_suppressed() -> None:
     """Propagate validation errors raised after GUI parameter creation."""
     obj = SimpleNamespace(data=np.array([[1, 3]], dtype=np.float32))
-    panel = SimpleNamespace(parentWidget=Mock(return_value=None))
+    executor_cache = object()
+    panel = SimpleNamespace(
+        parentWidget=Mock(return_value=None),
+        mainwindow=SimpleNamespace(preview_executor_cache=executor_cache),
+    )
     guiparam = Mock()
     dialog = Mock()
 
@@ -559,8 +669,12 @@ def test_export_dialog_validation_error_is_not_suppressed() -> None:
 
     create_guiparam.assert_called_once_with(obj, "image.png")
     panel.parentWidget.assert_called_once_with()
-    dialog_class.assert_called_once_with(None, obj, "image.png", guiparam)
+    args = dialog_class.call_args.args
+    assert args[:4] == (None, obj, "image.png", guiparam)
+    assert args[4].keywords == {"executor_cache": executor_cache}
     exec_dialog.assert_called_once_with(dialog)
+    dialog.preview.close_preview.assert_called_once_with()
+    dialog.deleteLater.assert_called_once_with()
 
 
 def test_explicit_image_export_parameter_is_forwarded() -> None:

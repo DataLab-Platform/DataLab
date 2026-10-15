@@ -9,18 +9,18 @@
 from __future__ import annotations
 
 import copy
+import functools
 import os.path as osp
+from collections.abc import Callable
 from typing import TYPE_CHECKING, Type
 from weakref import ReferenceType, ref
 
 import guidata.dataset as gds
-import guidata.dataset.qtwidgets as gdq
 import numpy as np
+from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
 from guidata.qthelpers import exec_dialog
-from plotpy.builder import make
 from plotpy.interfaces import IVoiImageItemType
-from plotpy.plot import PlotDialog, PlotOptions
 from plotpy.tools import (
     AnnotatedCircleTool,
     AnnotatedEllipseTool,
@@ -37,6 +37,8 @@ from sigima.io import (
     get_image_export_capabilities,
     get_supported_export_dtypes,
     prepare_image_export_preview,
+    prepare_image_for_export,
+    validate_image_export_configuration,
     write_image,
 )
 from sigima.io.image import ImageIORegistry
@@ -50,7 +52,9 @@ from datalab.gui.newobject import create_image_gui
 from datalab.gui.panel.base import BaseDataPanel
 from datalab.gui.plothandler import ImagePlotHandler
 from datalab.gui.processor.image import ImageProcessor
+from datalab.gui.processor.preview import PreviewController
 from datalab.objectmodel import get_uuid
+from datalab.widgets.processingpreview import ProcessingPreviewDialog
 
 if TYPE_CHECKING:
     from plotpy.plot import BasePlot
@@ -301,8 +305,30 @@ def create_image_export_gui_param(obj: ImageObj, filename: str) -> ImageExportGU
     return param
 
 
-class ImageExportDialog(PlotDialog):
-    """Format-aware image export dialog with an in-memory graphical preview."""
+def compute_image_export_preview(
+    source: ImageObj, param: ImageExportParam, filename: str
+) -> ImageObj:
+    """Return the image as it will be read back from the exported file.
+
+    This function runs in the preview process, so its arguments must be picklable.
+
+    Args:
+        source: Image to export
+        param: Image export parameters
+        filename: Destination file name
+
+    Returns:
+        Copy of the source image holding the exported data, displayed in gray levels
+    """
+    result = source.copy()
+    result.data = prepare_image_export_preview(source.data, filename, param)
+    result.set_metadata_option("colormap", "gray")
+    result.set_metadata_option("invert_colormap", False)
+    return result
+
+
+class ImageExportDialog(ProcessingPreviewDialog):
+    """Format-aware image export dialog with a live preview of the exported data."""
 
     def __init__(
         self,
@@ -310,79 +336,64 @@ class ImageExportDialog(PlotDialog):
         obj: ImageObj,
         filename: str,
         param: ImageExportGUIParam,
+        controller_factory: Callable = PreviewController,
     ) -> None:
         self.obj = obj
         self.filename = filename
-        self.preview_item = None
-        self.param_widget = gdq.DataSetEditGroupBox(
-            _("Export options"),
-            param.__class__,
-            button_text=_("Preview"),
-            button_icon="reload.svg",
-        )
-        update_dataset(self.param_widget.dataset, param)
-        self.param_widget.dataset.supported_dtypes = param.supported_dtypes
-        self.param_widget.dataset.format_extension = param.format_extension
         super().__init__(
-            parent=parent,
-            title=_("Export image"),
-            icon="export.svg",
-            toolbar=False,
-            edit=True,
-            options=PlotOptions(type="image", show_contrast=True),
-            size=(900, 600),
+            param,
+            functools.partial(compute_image_export_preview, filename=filename),
+            [obj],
+            parent,
+            controller_factory,
         )
-        self.param_widget.SIG_APPLY_BUTTON_CLICKED.connect(self.update_preview)
-        self.param_widget.set_apply_button_state(True)
-        self.update_preview()
+        self.setWindowTitle(_("Export image"))
+        self.setWindowIcon(get_icon("export.svg"))
+        self.preview.prepare_param = self.to_export_param
+        self.preview.enabled.setChecked(True)
 
-    def setup_layout(self) -> None:
-        """Add export controls beside the graphical preview."""
-        super().setup_layout()
-        self.plot_layout.addWidget(self.param_widget, 0, 1)
-        self.plot_layout.setColumnStretch(0, 2)
-        self.plot_layout.setColumnStretch(1, 1)
+    @staticmethod
+    def to_export_param(guiparam: ImageExportGUIParam) -> ImageExportParam:
+        """Return backend export parameters from GUI parameters.
 
-    def get_export_param(self) -> ImageExportParam:
-        """Return backend parameters from the current GUI values."""
-        guiparam = self.param_widget.dataset
+        Args:
+            guiparam: Format-specific GUI parameters
+
+        Returns:
+            Backend image export parameters
+
+        Raises:
+            ValueError: If a format option value is invalid
+        """
         param = ImageExportParam()
         update_dataset(param, guiparam)
         param.format_options = guiparam.get_format_options()
         return param
 
-    def update_preview(self) -> bool:
-        """Render current export preparation directly in the preview plot."""
-        try:
-            data = prepare_image_export_preview(
-                self.obj.data, self.filename, self.get_export_param()
-            )
-        except (TypeError, ValueError, OSError) as exc:
-            QW.QMessageBox.warning(self, _("Export image"), str(exc))
-            return False
-        plot = self.manager.get_plot()
-        if self.preview_item is None:
-            self.preview_item = make.image(data, colormap="gray")
-            plot.add_item(self.preview_item)
-            plot.set_active_item(self.preview_item)
-            plot.do_autoscale()
-        else:
-            self.preview_item.set_data(data)
-            plot.replot()
-        return True
+    def get_export_param(self) -> ImageExportParam:
+        """Return backend parameters from the current GUI values."""
+        return self.to_export_param(self.instance)
 
     def accept(self) -> None:
-        """Validate controls and preview preparation before accepting."""
-        if not self.param_widget.edit.check_all_values():
+        """Validate the export configuration before accepting."""
+        if not self.edit_layout.check_all_values():
             QW.QMessageBox.warning(
                 self,
                 _("Export image"),
                 _("Some required entries are incorrect."),
             )
             return
-        self.param_widget.edit.accept_changes()
-        if self.update_preview():
-            QW.QDialog.accept(self)
+        self.edit_layout.accept_changes()
+        try:
+            param = self.get_export_param()
+            prepared = prepare_image_for_export(self.obj.data, self.filename, param)
+            validate_image_export_configuration(
+                self.filename, prepared.dtype, param.format_options, prepared.shape
+            )
+        except (TypeError, ValueError) as exc:
+            QW.QMessageBox.warning(self, _("Export image"), str(exc))
+            return
+        super().accept()
 
 
 class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
@@ -541,10 +552,19 @@ class ImagePanel(BaseDataPanel[ImageObj, ImageROI, roieditor.ImageROIEditor]):
             guiparam = create_image_export_gui_param(obj, filename)
         except ValueError:
             return True, None
-        dialog = ImageExportDialog(self.parentWidget(), obj, filename, guiparam)
-        if not exec_dialog(dialog):
-            return False, None
-        return True, dialog.get_export_param()
+        controller_factory = functools.partial(
+            PreviewController, executor_cache=self.mainwindow.preview_executor_cache
+        )
+        dialog = ImageExportDialog(
+            self.parentWidget(), obj, filename, guiparam, controller_factory
+        )
+        try:
+            if not exec_dialog(dialog):
+                return False, None
+            return True, dialog.get_export_param()
+        finally:
+            dialog.preview.close_preview()
+            dialog.deleteLater()
 
     def write_object_to_file(
         self,

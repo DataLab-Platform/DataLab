@@ -2083,9 +2083,6 @@ msgstr "%s doit contenir 2 valeurs"
 msgid "%s contains invalid numbers"
 msgstr "%s contient des nombres non valides"
 
-msgid "Export options"
-msgstr "Options d'exportation"
-
 msgid "Export image"
 msgstr "Exporter l'image"
 
@@ -4528,6 +4525,9 @@ msgstr "Obtenir la liste des uuids"
 msgid "Get object"
 msgstr "Obtenir un objet"
 
+msgid "Invalid parameters"
+msgstr "Paramètres invalides"
+
 msgid "Raw data (2D-Gaussian)"
 msgstr "Image brute (gaussienne 2D)"
 
@@ -4696,9 +4696,6 @@ msgstr "Aperçu désactivé"
 
 msgid "Computing preview..."
 msgstr "Calcul de l'aperçu..."
-
-msgid "Invalid parameters"
-msgstr "Paramètres invalides"
 
 msgid "Updating preview..."
 msgstr "Mise à jour de l'aperçu..."
