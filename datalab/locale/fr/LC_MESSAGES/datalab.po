@@ -962,6 +962,9 @@ msgstr "Chargement des données depuis %s..."
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
+msgid "Warning"
+msgstr "Attention"
+
 msgid "No supported data available in HDF5 file(s)."
 msgstr "Aucune donnée prise en charge dans le(s) fichier(s) HDF5."
 
@@ -1015,6 +1018,9 @@ msgstr "# ==> Impossible d'exécuter la macro '%s'"
 msgid "Macro Python interpreter failed to start!"
 msgstr "Le démarrage de l'interpréteur Python des macros a échoué !"
 
+msgid "Error"
+msgstr "Erreur"
+
 #, python-format
 msgid "# ==> Running '%s' macro..."
 msgstr "# ==> Exécution de la macro '%s'..."
@@ -1044,6 +1050,10 @@ msgstr " ou dans la documentation PDF."
 
 msgid "Choosing to ignore this message will prevent it from appearing again."
 msgstr "Ignorer ce message empêchera son affichage ultérieur."
+
+#, python-format
+msgid "Opening tool '%s'"
+msgstr "Ouverture de l'outil '%s'"
 
 msgid "Plugins"
 msgstr "Plugins"
@@ -1080,6 +1090,9 @@ msgstr "Afficher les titres des objets graphiques"
 
 msgid "Show or hide ROI and other graphical object titles or subtitles"
 msgstr "Afficher ou cacher les titres (et sous-titres) des régions d'intérêt et autres objets graphiques"
+
+msgid "Browse application plugins, recipes and examples"
+msgstr "Parcourir les plugins d'application, les méthodes et les exemples"
 
 msgid "Reload plugins"
 msgstr "Recharger les plugins"
@@ -1135,6 +1148,9 @@ msgstr "Traitement"
 msgid "Analysis"
 msgstr "Analyse"
 
+msgid "Welcome page"
+msgstr "Page d'accueil"
+
 msgid "Tour"
 msgstr "Visite guidée"
 
@@ -1170,6 +1186,9 @@ msgstr "Gestionnaire de Macros"
 
 msgid "History Panel"
 msgstr "Historique"
+
+msgid "Welcome"
+msgstr "Accueil"
 
 msgid "Disable auto-refresh?"
 msgstr "Désactiver le rafraîchissement automatique ?"
@@ -1305,6 +1324,10 @@ msgstr ""
 "Vous souhaitez travailler avec des signaux 1D ?\n"
 "Passez au panneau Signal en utilisant l'onglet ci-dessus."
 
+#, python-format
+msgid "e.g. %s"
+msgstr "ex. %s"
+
 msgid "History"
 msgstr "Historique"
 
@@ -1414,20 +1437,6 @@ msgstr "L'objet source n'existe plus."
 msgid "The object that was used to create this processed object has been deleted and cannot be used for reprocessing."
 msgstr "L'objet qui a été utilisé pour créer cet objet traité a été supprimé et ne peut pas être utilisé pour le retraitement."
 
-#, python-format
-msgid ""
-"Failed to reprocess object:\n"
-"%s"
-msgstr ""
-"Échec du retraitement de l'objet :\n"
-"%s"
-
-msgid "Processing was cancelled."
-msgstr "Le traitement a été annulé."
-
-msgid "Failed to reprocess object."
-msgstr "Échec du retraitement de l'objet."
-
 msgid "Geometry results"
 msgstr "Résultats géométriques"
 
@@ -1467,8 +1476,11 @@ msgstr "Écraser les fichiers existants"
 msgid "Preview"
 msgstr "Aperçu"
 
-msgid "Add a new metadata item to the selected objects.<br><br>The metadata key will be the same for all objects, but the value can use a pattern to generate different values.<br>Click the <b>Help</b> button for details on the pattern syntax.<br>"
+msgid "Add a new metadata item to the selected objects.<br><br>The metadata key will be the same for all objects, but the value can use a pattern to generate different values, optionally extracted with a regular expression.<br>Click the <b>Help</b> button for details on the pattern syntax.<br>"
 msgstr "Ajouter un nouvel élément de métadonnée aux objets sélectionnés.<br><br>La clé de métadonnée sera la même pour tous les objets, mais la valeur peut utiliser un modèle pour générer des valeurs différentes, éventuellement extraites par une expression régulière.<br>Cliquez sur le bouton <b>Aide</b> pour plus de détails sur la syntaxe du modèle.<br>"
+
+msgid "Select a key..."
+msgstr "Choisir une clé..."
 
 msgid "String"
 msgstr "Chaîne de caractères"
@@ -1482,17 +1494,47 @@ msgstr "Entier"
 msgid "Boolean"
 msgstr "Booléen"
 
+msgid "unchanged"
+msgstr "inchangé"
+
 msgid "Metadata key"
 msgstr "Clé de métadonnées"
 
 msgid "The key name for the metadata item"
 msgstr "Le nom de la clé pour l'élément de métadonnées"
 
+msgid "Known keys"
+msgstr "Clés connues"
+
+msgid "Copy a key found on the selected objects into the metadata key"
+msgstr "Copier dans la clé de métadonnée une clé présente sur les objets sélectionnés"
+
 msgid "Value pattern"
 msgstr "Modèle de valeur"
 
+msgid "Extraction pattern"
+msgstr "Motif d'extraction"
+
+msgid "Optional regular expression searched in the formatted value: its first group, or the whole match, becomes the value"
+msgstr "Expression régulière facultative recherchée dans la valeur formatée : son premier groupe, ou toute la correspondance, devient la valeur"
+
+msgid "If no match"
+msgstr "Sans correspondance"
+
+msgid "Leave the object unchanged"
+msgstr "Laisser l'objet inchangé"
+
+msgid "Report an error"
+msgstr "Signaler une erreur"
+
 msgid "Conversion"
 msgstr "Conversion"
+
+msgid "Scale factor"
+msgstr "Facteur d'échelle"
+
+msgid "Multiplies numeric values, e.g. 0.001 to convert ms to s"
+msgstr "Multiplie les valeurs numériques, par ex. 0.001 pour convertir des ms en s"
 
 msgid "Duplicate object or group"
 msgstr "Dupliquer l'objet ou le groupe"
@@ -1519,11 +1561,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "Group name:"
-msgstr "Nom du groupe :"
-
 msgid "New group"
 msgstr "Nouveau groupe"
+
+msgid "Group name:"
+msgstr "Nom du groupe :"
 
 #, python-format
 msgid "New group \"%s\""
@@ -1568,6 +1610,10 @@ msgstr "Charger depuis %d fichiers"
 #, python-format
 msgid "Load \"%s\""
 msgstr "Charger \"%s\""
+
+#, python-format
+msgid "Skipping export: object %r no longer exists."
+msgstr "Export ignoré : l'objet %r n'existe plus."
 
 msgid "Save as"
 msgstr "Enregistrer sous"
@@ -1902,6 +1948,180 @@ msgstr "Pas à pas"
 msgid "Replay the selection step by step, editing parameters at each step"
 msgstr "Rejouer la sélection pas à pas, en modifiant les paramètres à chaque étape"
 
+msgid "Compression level"
+msgstr "Niveau de compression"
+
+msgid "Compression"
+msgstr "Compression"
+
+msgid "MAT compression"
+msgstr "Compression MAT"
+
+msgid "Quality"
+msgstr "Qualité"
+
+msgid "Subsampling"
+msgstr "Sous-échantillonnage"
+
+msgid "Progressive"
+msgstr "Progressif"
+
+msgid "Optimize"
+msgstr "Optimiser"
+
+msgid "Smoothing"
+msgstr "Lissage"
+
+msgid "Quality mode"
+msgstr "Mode de qualité"
+
+msgid "Quality layers"
+msgstr "Couches de qualité"
+
+msgid "Irreversible"
+msgstr "Irréversible"
+
+msgid "Progression order"
+msgstr "Ordre de progression"
+
+msgid "Number of resolutions"
+msgstr "Nombre de résolutions"
+
+msgid "Tile size"
+msgstr "Taille des tuiles"
+
+msgid "PLT markers"
+msgstr "Marqueurs PLT"
+
+msgid "Predictor"
+msgstr "Prédicteur"
+
+msgid "Rows per strip"
+msgstr "Lignes par bande"
+
+msgid "Resolution"
+msgstr "Résolution"
+
+msgid "Resolution unit"
+msgstr "Unité de résolution"
+
+msgid "Photometric interpretation"
+msgstr "Interprétation photométrique"
+
+msgid "Delimiter"
+msgstr "Délimiteur"
+
+msgid "Precision"
+msgstr "Précision"
+
+msgid "None"
+msgstr "Aucun"
+
+msgid "Rates"
+msgstr "Taux"
+
+msgid "Deflate"
+msgstr "Deflate"
+
+msgid "Zstandard"
+msgstr "Zstandard"
+
+msgid "Whitespace"
+msgstr "Espaces blancs"
+
+msgid "Tab"
+msgstr "Tabulation"
+
+msgid "Comma"
+msgstr "Virgule"
+
+msgid "Semicolon"
+msgstr "Point-virgule"
+
+msgid "Inch"
+msgstr "Pouce"
+
+msgid "Centimeter"
+msgstr "Centimètre"
+
+msgid "Horizontal"
+msgstr "Horizontal"
+
+msgid "Floating-point"
+msgstr "Virgule flottante"
+
+msgid "Black is zero"
+msgstr "Le noir vaut zéro"
+
+msgid "White is zero"
+msgstr "Le blanc vaut zéro"
+
+msgid "JPEG compression requires 8-bit data (uint8)"
+msgstr "La compression JPEG n?cessite des donn?es 8 bits (uint8)"
+
+msgid "Deflate: 0 to 9, Zstandard: 1 to 22, JPEG: 1 to 100.<br>Leave empty to use the default level."
+msgstr "Deflate : 0 ? 9, Zstandard : 1 ? 22, JPEG : 1 ? 100.<br>Laisser vide pour utiliser le niveau par d?faut."
+
+msgid "Horizontal: integer data only.<br>Floating-point: floating data only."
+msgstr "Horizontal : donn?es enti?res uniquement.<br>Virgule flottante : donn?es flottantes uniquement."
+
+msgid "Cannot be combined with tile size"
+msgstr "Incompatible avec la taille des tuiles"
+
+msgid "Height and width, multiples of 16.<br>Cannot be combined with rows per strip."
+msgstr "Hauteur et largeur, multiples de 16.<br>Incompatible avec le nombre de lignes par bande."
+
+msgid "Leave empty to use the default value.<br>The maximum depends on the image (or tile) size."
+msgstr "Laisser vide pour utiliser la valeur par d?faut.<br>Le maximum d?pend de la taille de l'image (ou des tuiles)."
+
+msgid "Automatic"
+msgstr "Automatique"
+
+msgid "Image export"
+msgstr "Exportation d'image"
+
+msgid "Target data type"
+msgstr "Type de données cible"
+
+msgid "Gamma"
+msgstr "Gamma"
+
+msgid "Invert"
+msgstr "Inverser"
+
+#, python-format
+msgid "%s may not be empty"
+msgstr "%s ne peut pas être vide"
+
+#, python-format
+msgid "%s must contain 2 values"
+msgstr "%s doit contenir 2 valeurs"
+
+#, python-format
+msgid "%s contains invalid numbers"
+msgstr "%s contient des nombres non valides"
+
+msgid "Export image"
+msgstr "Exporter l'image"
+
+msgid "Some required entries are incorrect."
+msgstr "Certaines entrées obligatoires sont incorrectes."
+
+msgid "RAW image import"
+msgstr "Importation d'image RAW"
+
+#, python-format
+msgid "%d RAW files are about to be imported.<br><br>Do you want to apply the same import parameters to all of them?<br><br>Choose <i>No</i> to set the parameters of each file."
+msgstr "%d fichiers RAW vont ?tre import?s.<br><br>Voulez-vous appliquer les m?mes param?tres d'importation ? tous ces fichiers ?<br><br>Choisissez <i>Non</i> pour d?finir les param?tres de chaque fichier."
+
+#, python-format
+msgid "RAW image import (%d files)"
+msgstr "Importation d'image RAW (%d fichiers)"
+
+#, python-format
+msgid "Complex images cannot be exported to %s files.<br><br>Use one of the NumPy, MAT-File, text, CSV or HDF5 image formats."
+msgstr "Les images complexes ne peuvent pas ?tre export?es dans des fichiers %s.<br><br>Utilisez l'un des formats NumPy, MAT-File, texte, CSV ou image HDF5."
+
 msgid "New image"
 msgstr "Nouvelle image"
 
@@ -2007,6 +2227,162 @@ msgstr "Création des formes géométriques"
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
+#, python-format
+msgid "Version: %s"
+msgstr "Version : %s"
+
+msgid "Expected inputs"
+msgstr "Entrées attendues"
+
+msgid "Run on selection..."
+msgstr "Exécuter sur la sélection..."
+
+msgid "Examples designed for this method"
+msgstr "Exemples conçus pour cette méthode"
+
+msgid "Try with this example"
+msgstr "Essayer avec cet exemple"
+
+msgid "The current selection could not be assessed"
+msgstr "La sélection courante n'a pas pu être évaluée"
+
+msgid "Show on welcome page"
+msgstr "Afficher sur la page d'accueil"
+
+msgid "Pin to the welcome page"
+msgstr "Épingler sur la page d'accueil"
+
+msgid "Documentation"
+msgstr "Documentation"
+
+#, python-format
+msgid "Plugin ID: %s"
+msgstr "ID du plugin : %s"
+
+msgid "No methods declared"
+msgstr "Aucune méthode déclarée"
+
+msgid "Open tool"
+msgstr "Ouvrir l'outil"
+
+#, python-format
+msgid "Tools (%d)"
+msgstr "Outils (%d)"
+
+msgid "Open dataset"
+msgstr "Ouvrir le jeu de données"
+
+#, python-format
+msgid "Datasets (%d)"
+msgstr "Jeux de données (%d)"
+
+#, python-format
+msgid "Created %d objects"
+msgstr "%d objets créés"
+
+msgid "Search applications..."
+msgstr "Rechercher des applications..."
+
+msgid "Hide the application list"
+msgstr "Masquer la liste des applications"
+
+msgid "Show the application list"
+msgstr "Afficher la liste des applications"
+
+msgid "No application plugins are currently loaded."
+msgstr "Aucun plugin d'application n'est actuellement chargé."
+
+#, python-format
+msgid "Starting analysis '%s'"
+msgstr "Lancement de l'analyse '%s'"
+
+#, python-format
+msgid "Trying example '%s'"
+msgstr "Essai de l'exemple '%s'"
+
+#, python-format
+msgid "Opening example '%s'"
+msgstr "Ouverture de l'exemple '%s'"
+
+msgid "Official"
+msgstr "Officiel"
+
+msgid "Community"
+msgstr "Communauté"
+
+msgid "Source code"
+msgstr "Code source"
+
+#, python-format
+msgid "Withdrawn: %s"
+msgstr "Retiré : %s"
+
+#, python-format
+msgid "Not available for Python %s"
+msgstr "Non disponible pour Python %s"
+
+msgid "Not available for DataLab desktop"
+msgstr "Non disponible pour DataLab desktop"
+
+#, python-format
+msgid "Installed in the Python environment (%s)"
+msgstr "Installé dans l'environnement Python (%s)"
+
+msgid "Installed"
+msgstr "Installé"
+
+#, python-format
+msgid "Deprecated: %s"
+msgstr "Obsolète : %s"
+
+#, python-format
+msgid "Installed: %s"
+msgstr "Installé : %s"
+
+#, python-format
+msgid "Update to %s"
+msgstr "Mettre à jour vers %s"
+
+msgid "Install"
+msgstr "Installer"
+
+#, python-format
+msgid "Plugins listed in the <a href=\"%s\">DataLab plugin catalog</a>. Official plugins are maintained by the DataLab team, community plugins by their authors: install only plugins from authors you trust."
+msgstr "Plugins répertoriés dans le <a href=\"%s\">catalogue de plugins DataLab</a>. Les plugins officiels sont maintenus par l'équipe DataLab, les plugins de la communauté par leurs auteurs : n'installez que des plugins provenant d'auteurs de confiance."
+
+msgid "Search plugins"
+msgstr "Rechercher des plugins"
+
+msgid "No plugin catalog is configured."
+msgstr "Aucun catalogue de plugins n'est configuré."
+
+msgid "Loading the plugin catalog..."
+msgstr "Chargement du catalogue de plugins..."
+
+#, python-format
+msgid "Downloading %s..."
+msgstr "Téléchargement de %s..."
+
+#, python-format
+msgid "Plugins in the catalog: %d"
+msgstr "Plugins dans le catalogue : %d"
+
+msgid "The plugin catalog cannot be loaded:"
+msgstr "Le catalogue de plugins ne peut pas être chargé :"
+
+#, python-format
+msgid "DataLab plugin catalog (%s)"
+msgstr "Catalogue de plugins DataLab (%s)"
+
+msgid "Install plugin"
+msgstr "Installer un plugin"
+
+msgid "Input/output"
+msgstr "Entrée/sortie"
+
+msgid "Application"
+msgstr "Application"
+
 msgid "today"
 msgstr "aujourd'hui"
 
@@ -2052,6 +2428,12 @@ msgstr "Activer/désactiver les plugins"
 
 msgid "Plugin settings"
 msgstr "Paramètres des plugins"
+
+msgid "Available plugins"
+msgstr "Plugins disponibles"
+
+msgid "Install plugins"
+msgstr "Installer des plugins"
 
 msgid "Apply and reload plugins"
 msgstr "Appliquer et recharger les plugins"
@@ -2126,6 +2508,218 @@ msgstr "Recharger les plugins"
 msgid "Plugin configuration has been saved. Do you want to reload plugins now to apply changes?"
 msgstr "La configuration des plugins a été enregistrée. Voulez-vous recharger les plugins maintenant pour appliquer les modifications ?"
 
+msgid "Source:"
+msgstr "Source :"
+
+msgid "Plugin:"
+msgstr "Plugin :"
+
+msgid "Version:"
+msgstr "Version :"
+
+msgid "Description:"
+msgstr "Description :"
+
+msgid "Plugin classes:"
+msgstr "Classes de plugin :"
+
+msgid "not applicable"
+msgstr "non applicable"
+
+msgid "Dependencies:"
+msgstr "Dépendances :"
+
+msgid "Plugin module:"
+msgstr "Module de plugin :"
+
+msgid "File:"
+msgstr "Fichier :"
+
+msgid "Size:"
+msgstr "Taille :"
+
+msgid "SHA-256:"
+msgstr "SHA-256 :"
+
+msgid "A plugin runs with the same rights as DataLab: it may read and modify your files. Install only plugins from authors you trust."
+msgstr "Un plugin s'exécute avec les mêmes droits que DataLab : il peut lire et modifier vos fichiers. N'installez que des plugins provenant d'auteurs de confiance."
+
+#, python-format
+msgid "Installed on %s from %s"
+msgstr "Installé le %s depuis %s"
+
+msgid "Uninstall"
+msgstr "Désinstaller"
+
+msgid "Install a plugin shared as a wheel file (<code>.whl</code>) or as a Python module (<code>datalab_*.py</code>). Wheels must be pure Python and rely only on packages already provided by DataLab."
+msgstr "Installez un plugin partagé sous forme de fichier wheel (<code>.whl</code>) ou de module Python (<code>datalab_*.py</code>). Les wheels doivent être en Python pur et ne dépendre que de paquets déjà fournis par DataLab."
+
+msgid "Install from file..."
+msgstr "Installer depuis un fichier..."
+
+msgid "Plugins installed from a file"
+msgstr "Plugins installés depuis un fichier"
+
+msgid "No plugin has been installed from a file."
+msgstr "Aucun plugin n'a été installé depuis un fichier."
+
+msgid "Install plugin from file"
+msgstr "Installer un plugin depuis un fichier"
+
+msgid "DataLab plugins"
+msgstr "Plugins DataLab"
+
+msgid "This file cannot be installed as a plugin:"
+msgstr "Ce fichier ne peut pas être installé comme plugin :"
+
+#, python-format
+msgid "%s will be loaded at the next start of DataLab."
+msgstr "%s sera chargé au prochain démarrage de DataLab."
+
+#, python-format
+msgid "%s has been installed."
+msgstr "%s a été installé."
+
+msgid "Uninstall plugin"
+msgstr "Désinstaller le plugin"
+
+#, python-format
+msgid "Do you want to uninstall %s?"
+msgstr "Voulez-vous désinstaller %s ?"
+
+#, python-format
+msgid "%s has been uninstalled."
+msgstr "%s a été désinstallé."
+
+msgid "Do you want to reload plugins now?"
+msgstr "Voulez-vous recharger les plugins maintenant ?"
+
+msgid "Live"
+msgstr "En direct"
+
+msgid "Refresh the view continuously"
+msgstr "Rafraîchir la vue en continu"
+
+msgid "Acquire"
+msgstr "Acquérir"
+
+msgid "Add an acquisition to the workspace, in a new group"
+msgstr "Ajouter une acquisition à l'espace de travail, dans un nouveau groupe"
+
+msgid "Invalid settings"
+msgstr "Réglages non valides"
+
+#, python-format
+msgid "%d objects added to group '%s'"
+msgstr "%d objets ajoutés au groupe '%s'"
+
+msgid "One signal"
+msgstr "Un signal"
+
+msgid "One image"
+msgstr "Une image"
+
+#, python-format
+msgid "At least %d signals"
+msgstr "Au moins %d signaux"
+
+#, python-format
+msgid "At least %d images"
+msgstr "Au moins %d images"
+
+msgid "One or more signals"
+msgstr "Un ou plusieurs signaux"
+
+msgid "One or more images"
+msgstr "Une ou plusieurs images"
+
+#, python-format
+msgid "%s (optional)"
+msgstr "%s (facultatif)"
+
+msgid "required metadata"
+msgstr "métadonnée requise"
+
+msgid "hint"
+msgstr "indicative"
+
+msgid "No input data"
+msgstr "Aucune donnée d'entrée"
+
+#, python-format
+msgid "%(slot)s: no object assigned"
+msgstr "%(slot)s : aucun objet affecté"
+
+#, python-format
+msgid "%(slot)s: choose the objects to use"
+msgstr "%(slot)s : choisir les objets à utiliser"
+
+#, python-format
+msgid "%(slot)s: %(count)d object(s) assigned, at least %(min_count)d required"
+msgstr "%(slot)s : %(count)d objet(s) affecté(s), au moins %(min_count)d requis"
+
+#, python-format
+msgid "%(slot)s: accepts only one object (%(count)d assigned)"
+msgstr "%(slot)s : un seul objet accepté (%(count)d affectés)"
+
+#, python-format
+msgid "%(slot)s: %(count)d object(s) of the wrong type (%(titles)s)"
+msgstr "%(slot)s : %(count)d objet(s) de type incorrect (%(titles)s)"
+
+#, python-format
+msgid "%(slot)s: metadata '%(key)s' missing on %(count)d object(s) (%(titles)s)"
+msgstr "%(slot)s : métadonnée '%(key)s' absente de %(count)d objet(s) (%(titles)s)"
+
+#, python-format
+msgid "%(slot)s: %(count)d object(s) assigned twice (%(titles)s)"
+msgstr "%(slot)s : %(count)d objet(s) affecté(s) deux fois (%(titles)s)"
+
+msgid "Information"
+msgstr "Information"
+
+msgid "Ready to run on the current selection"
+msgstr "Exécutable sur la sélection courante"
+
+msgid "Ready to run, with warnings"
+msgstr "Exécutable, avec des avertissements"
+
+msgid "Ready to run once the inputs are assigned"
+msgstr "Exécutable une fois les entrées affectées"
+
+msgid "The current selection cannot be analyzed"
+msgstr "La sélection courante ne peut pas être analysée"
+
+msgid "Select the input data in the workspace"
+msgstr "Sélectionner les données d'entrée dans l'espace de travail"
+
+msgid "To set it, use Edit > Metadata > Add metadata..."
+msgstr "Pour la définir, utilisez Édition > Métadonnées > Ajouter des métadonnées..."
+
+#, python-format
+msgid "Inputs of '%s'"
+msgstr "Entrées de '%s'"
+
+#, python-format
+msgid "(missing: %s)"
+msgstr "(manquant : %s)"
+
+msgid "Not assigned"
+msgstr "Non assigné"
+
+msgid "No compatible object"
+msgstr "Aucun objet compatible"
+
+#, python-format
+msgid "No selected object can be used by '%s'."
+msgstr "Aucun objet sélectionné n'est utilisable par '%s'."
+
+msgid "Expected inputs:"
+msgstr "Entrées attendues :"
+
+#, python-format
+msgid "Running '%s'"
+msgstr "Exécution de '%s'"
+
 msgid "Failed to deserialize processing parameters from JSON."
 msgstr "Échec de la désérialisation des paramètres de traitement depuis le format JSON."
 
@@ -2154,6 +2748,20 @@ msgstr "Oui à tout"
 msgid "Processing metadata is incomplete (missing source UUID)."
 msgstr "Les métadonnées de traitement sont incomplètes (UUID source manquant)."
 
+#, python-format
+msgid ""
+"Failed to reprocess object:\n"
+"%s"
+msgstr ""
+"Échec du retraitement de l'objet :\n"
+"%s"
+
+msgid "Processing was cancelled."
+msgstr "Le traitement a été annulé."
+
+msgid "Failed to reprocess object."
+msgstr "Échec du retraitement de l'objet."
+
 msgid "Signal was reprocessed."
 msgstr "Le signal a été retraité."
 
@@ -2178,6 +2786,9 @@ msgstr "En mode 'pairwise', vous devez sélectionner des objets dans au moins de
 
 msgid "In pairwise mode, you need to select the same number of objects in each group."
 msgstr "En mode 'pairwise', vous devez sélectionner le même nombre d'objets dans chaque groupe."
+
+msgid "A preview source was removed. The processing was cancelled."
+msgstr "Un objet source de l'aperçu a été supprimé. Le traitement a été annulé."
 
 #, python-format
 msgid "Calculating: %s"
@@ -2359,9 +2970,6 @@ msgstr ""
 "  • y' = a0 + a1*y + a2*y^2 + ...\n"
 "  • z' = a0 + a1*z + a2*z^2 + ..."
 
-msgid "Swap X/Y axes"
-msgstr "Permuter les axes X/Y"
-
 msgid "Normalize"
 msgstr "Normaliser"
 
@@ -2460,6 +3068,9 @@ msgstr "Seuillage Triangle"
 
 msgid "Yen thresholding"
 msgstr "Seuillage Yen"
+
+msgid "Brightness and contrast"
+msgstr "Luminosité et contraste"
 
 msgid "Gamma correction"
 msgstr "Correction gamma"
@@ -2752,6 +3363,9 @@ msgstr ""
 "  • x' = ax + b\n"
 "  • y' = ay + b"
 
+msgid "Swap X/Y axes"
+msgstr "Permuter les axes X/Y"
+
 msgid "Reverse X-axis"
 msgstr "Inverser l'axe des X"
 
@@ -2994,6 +3608,18 @@ msgstr "Thème de couleur"
 msgid "Color mode for the application"
 msgstr "Thème de couleur pour l'application"
 
+msgid "Show welcome page when the current panel is empty"
+msgstr "Afficher la page d'accueil lorsque le panneau courant est vide"
+
+msgid "The welcome page gathers the main actions to get started (create or open data, guided tour, documentation...). It is shown at startup and whenever the current signal or image panel is empty."
+msgstr "La page d'accueil rassemble les principales actions pour bien démarrer (créer ou ouvrir des données, visite guidée, documentation...). Elle est affichée au démarrage et chaque fois que le panneau signal ou image courant est vide."
+
+msgid "Welcome page application rows"
+msgstr "Lignes d'applications de la page d'accueil"
+
+msgid "Maximum number of application tile rows on the welcome page. Other applications remain available from the Applications catalog."
+msgstr "Nombre maximal de lignes de tuiles d'applications sur la page d'accueil. Les autres applications restent accessibles depuis le catalogue des applications."
+
 msgid "Process isolation"
 msgstr "Isolation de processus"
 
@@ -3076,6 +3702,18 @@ msgstr "Mode d'opération"
 #, python-format
 msgid "Operation mode for computations taking <i>N</i> inputs:<ul><li><b>single</b>: single operand mode</li><li><b>pairwise</b>: pairwise operation mode</li></ul><br>Computations taking <i>N</i> inputs are the ones where:<ul><li>N(>=2) objects in %s 1 object out</li><li>N(>=1) objects + 1 object in %s N objects out</li></ul>"
 msgstr "Mode d'opération pour les calculs prenant <i>N</i> entrées:<ul><li><b>single</b>: mode d'opération avec un seul opérande</li><li><b>pairwise</b>: mode d'opération par paire</li></ul><br>Les calculs prenant <i>N</i> entrées sont ceux où :<ul><li>N(>=2) objets en %s 1 objet en sortie</li><li>N(>=1) objets + 1 objet en %s N objets en sortie</li></ul>"
+
+msgid "References in result titles"
+msgstr "Références dans les titres de résultats"
+
+msgid "Source UUID"
+msgstr "UUID source"
+
+msgid "Source title"
+msgstr "Titre de la source"
+
+msgid "Display source references in generated titles as short UUIDs or as the current source titles. This setting does not change the stored UUID references."
+msgstr "Afficher les références aux sources dans les titres générés sous forme d'UUID courts ou avec les titres actuels des sources. Ce réglage ne modifie pas les références UUID enregistrées."
 
 msgid "Use current signal bounds"
 msgstr "Utiliser les bornes du signal courant"
@@ -3535,15 +4173,41 @@ msgstr "C'est la fin de la visite guidée !"
 msgid "You can show the tour again, or close this dialog box."
 msgstr "Vous pouvez afficher la visite guidée à nouveau, ou fermer cette boîte de dialogue."
 
-msgid "Welcome"
-msgstr "Accueil"
-
-msgid "Show welcome page when the current panel is empty"
-msgstr "Afficher la page d'accueil lorsque le panneau courant est vide"
+msgid "More actions"
+msgstr "Plus d'actions"
 
 #, python-format
-msgid "Version %s"
-msgstr "Version %s"
+msgid "More applications (%d)"
+msgstr "Autres applications (%d)"
+
+msgid "Browse all applications in the catalog."
+msgstr "Parcourir toutes les applications du catalogue."
+
+msgid "Browse all applications..."
+msgstr "Parcourir toutes les applications..."
+
+msgid "Applications"
+msgstr "Applications"
+
+msgid "Pin to the top"
+msgstr "Épingler en tête"
+
+msgid "Unpin"
+msgstr "Désépingler"
+
+msgid "Hide from welcome page"
+msgstr "Masquer de la page d'accueil"
+
+#, python-format
+msgid "Launching '%s'"
+msgstr "Lancement de '%s'"
+
+#, python-format
+msgid "Scientific signal and image processing — version %s"
+msgstr "Traitement scientifique du signal et de l'image — version %s"
+
+msgid "Desktop edition of DataLab"
+msgstr "Édition Desktop de DataLab"
 
 msgid "Create..."
 msgstr "Créer..."
@@ -3651,14 +4315,38 @@ msgstr "Aucun plugin disponible"
 msgid "Plugins are disabled (see DataLab settings)"
 msgstr "Les plugins sont désactivés (voir les préférences de DataLab)"
 
-msgid "Warning"
-msgstr "Attention"
+msgid "Select one signal"
+msgstr "Sélectionnez un signal"
 
-msgid "Error"
-msgstr "Erreur"
+msgid "Select one image"
+msgstr "Sélectionnez une image"
 
-msgid "Information"
-msgstr "Information"
+msgid "Select one object"
+msgstr "Sélectionnez un objet"
+
+msgid "Select at least one signal"
+msgstr "Sélectionnez au moins un signal"
+
+msgid "Select at least one image"
+msgstr "Sélectionnez au moins une image"
+
+msgid "Select at least one object"
+msgstr "Sélectionnez au moins un objet"
+
+msgid "Select at least two signals"
+msgstr "Sélectionnez au moins deux signaux"
+
+msgid "Select at least two images"
+msgstr "Sélectionnez au moins deux images"
+
+msgid "Select at least two objects"
+msgstr "Sélectionnez au moins deux objets"
+
+msgid "Opening this example replaces the current workspace. Continue?"
+msgstr "L'ouverture de cet exemple remplace l'espace de travail actuel. Continuer ?"
+
+msgid "Open example"
+msgstr "Ouvrir l'exemple"
 
 msgid "Question"
 msgstr "Question"
@@ -3707,6 +4395,103 @@ msgstr "Créer une image avec un anneau"
 
 msgid "Create image with a grid of gaussian spots"
 msgstr "Créer une image avec une grille de spots gaussiens"
+
+msgid "Plugin name must be a non-empty single line"
+msgstr "Le nom du plugin doit être une ligne non vide"
+
+msgid "Package name must start with a lowercase letter and contain only lowercase letters, digits, and underscores"
+msgstr "Le nom du package doit commencer par une lettre minuscule et ne contenir que des lettres minuscules, des chiffres et des tirets bas"
+
+msgid "Package name must not be a Python keyword"
+msgstr "Le nom du package ne doit pas être un mot-clé Python"
+
+msgid "Plugin ID must be a lowercase dotted identifier such as 'org.example.my-plugin'"
+msgstr "L'ID du plugin doit être un identifiant en minuscules séparé par des points, comme 'org.example.mon-plugin'"
+
+msgid "Description must be a single line"
+msgstr "La description doit tenir sur une seule ligne"
+
+msgid "Plugin capabilities are invalid"
+msgstr "Les capacités du plugin ne sont pas valides"
+
+msgid "Plugin capabilities must be unique"
+msgstr "Les capacités du plugin doivent être uniques"
+
+msgid "Object kind must be 'signal' or 'image'"
+msgstr "Le type d'objet doit être 'signal' ou 'image'"
+
+msgid "The minimal template currently supports BSD-3-Clause"
+msgstr "Le modèle minimal prend actuellement en charge BSD-3-Clause"
+
+msgid "GitHub account must be a GitHub user or organization"
+msgstr "Le compte GitHub doit être un utilisateur ou une organisation GitHub"
+
+msgid "Plugin name must contain letters or digits"
+msgstr "Le nom du plugin doit contenir des lettres ou des chiffres"
+
+#, python-format
+msgid "Destination already exists: %s"
+msgstr "La destination existe déjà : %s"
+
+#, python-format
+msgid "%s is required"
+msgstr "%s est requis"
+
+msgid "Plugin name"
+msgstr "Nom du plugin"
+
+msgid "GitHub account (optional)"
+msgstr "Compte GitHub (facultatif)"
+
+msgid "Package name"
+msgstr "Nom du package"
+
+msgid "Plugin ID"
+msgstr "ID du plugin"
+
+#, python-format
+msgid "%s plugin for DataLab"
+msgstr "Plugin %s pour DataLab"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Destination"
+msgstr "Destination"
+
+msgid "Create and maintain DataLab plugin projects."
+msgstr "Créer et maintenir des projets de plugins DataLab."
+
+msgid "Create a layered installable plugin project."
+msgstr "Créer un projet de plugin installable structuré en couches."
+
+msgid "Plugin display name"
+msgstr "Nom d'affichage du plugin"
+
+msgid "Python import package name"
+msgstr "Nom du package d'import Python"
+
+msgid "Stable reverse-domain ID"
+msgstr "ID stable en notation de domaine inversé"
+
+msgid "One-line description"
+msgstr "Description sur une ligne"
+
+msgid "GitHub user or organization hosting the project"
+msgstr "Utilisateur ou organisation GitHub hébergeant le projet"
+
+msgid "Plugin capability; may be repeated"
+msgstr "Capacité du plugin ; l'option peut être répétée"
+
+msgid "Object type used by the sample processing"
+msgstr "Type d'objet utilisé par le traitement d'exemple"
+
+msgid "Project license"
+msgstr "Licence du projet"
+
+#, python-format
+msgid "Created DataLab plugin project at %s"
+msgstr "Projet de plugin DataLab créé dans %s"
 
 msgid "Host application"
 msgstr "Application hôte"
@@ -3761,6 +4546,9 @@ msgstr "Obtenir la liste des uuids"
 
 msgid "Get object"
 msgstr "Obtenir un objet"
+
+msgid "Invalid parameters"
+msgstr "Paramètres invalides"
 
 msgid "Raw data (2D-Gaussian)"
 msgstr "Image brute (gaussienne 2D)"
@@ -3895,14 +4683,11 @@ msgstr "Afficher les détails"
 msgid "Hide details"
 msgstr "Masquer les détails"
 
-msgid "Title"
-msgstr "Titre"
-
-msgid "Description"
-msgstr "Description"
-
 msgid "Date and time"
 msgstr "Date et heure"
+
+msgid "Title"
+msgstr "Titre"
 
 msgid "Action is compatible with the current workspace state."
 msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
@@ -3933,9 +4718,6 @@ msgstr "Aperçu désactivé"
 
 msgid "Computing preview..."
 msgstr "Calcul de l'aperçu..."
-
-msgid "Invalid parameters"
-msgstr "Paramètres invalides"
 
 msgid "Updating preview..."
 msgstr "Mise à jour de l'aperçu..."
@@ -3991,11 +4773,11 @@ msgstr "Cliquer pour voir les infos de connexion"
 msgid "Source"
 msgstr "Source"
 
-msgid "File"
-msgstr "Fichier"
-
 msgid "Clipboard"
 msgstr "Presse-papiers"
+
+msgid "File"
+msgstr "Fichier"
 
 msgid "Source of the data"
 msgstr "Source des données"
@@ -4018,12 +4800,6 @@ msgstr "Sélectionner la source des données :"
 msgid "Source Parameters"
 msgstr "Paramètres de la source"
 
-msgid "Delimiter"
-msgstr "Délimiteur"
-
-msgid "Tab"
-msgstr "Tabulation"
-
 msgid "Space"
 msgstr "Espace"
 
@@ -4035,9 +4811,6 @@ msgstr "Décimal"
 
 msgid "Point"
 msgstr "Point"
-
-msgid "Comma"
-msgstr "Virgule"
 
 msgid "Decimal separator character"
 msgstr "Caractère séparateur décimal"
@@ -4062,9 +4835,6 @@ msgstr "Nombre maximum de lignes à importer"
 
 msgid "Header"
 msgstr "En-tête"
-
-msgid "None"
-msgstr "Aucun"
 
 msgid "Infer"
 msgstr "Inférer"
@@ -4185,617 +4955,6 @@ msgstr "Forme"
 msgid "Dimensions"
 msgstr "Dimensions"
 
-#, python-format
-msgid "Opening tool '%s'"
-msgstr "Ouverture de l'outil '%s'"
-
-msgid "Browse application plugins, recipes and examples"
-msgstr "Parcourir les plugins d'application, les méthodes et les exemples"
-
-msgid "Welcome page"
-msgstr "Page d'accueil"
-
-#, python-format
-msgid "e.g. %s"
-msgstr "ex. %s"
-
-msgid "Add a new metadata item to the selected objects.<br><br>The metadata key will be the same for all objects, but the value can use a pattern to generate different values, optionally extracted with a regular expression.<br>Click the <b>Help</b> button for details on the pattern syntax.<br>"
-msgstr "Ajouter un nouvel élément de métadonnée aux objets sélectionnés.<br><br>La clé de métadonnée sera la même pour tous les objets, mais la valeur peut utiliser un modèle pour générer des valeurs différentes, éventuellement extraites par une expression régulière.<br>Cliquez sur le bouton <b>Aide</b> pour plus de détails sur la syntaxe du modèle.<br>"
-
-msgid "Select a key..."
-msgstr "Choisir une clé..."
-
-msgid "unchanged"
-msgstr "inchangé"
-
-msgid "Known keys"
-msgstr "Clés connues"
-
-msgid "Copy a key found on the selected objects into the metadata key"
-msgstr "Copier dans la clé de métadonnée une clé présente sur les objets sélectionnés"
-
-msgid "Extraction pattern"
-msgstr "Motif d'extraction"
-
-msgid "Optional regular expression searched in the formatted value: its first group, or the whole match, becomes the value"
-msgstr "Expression régulière facultative recherchée dans la valeur formatée : son premier groupe, ou toute la correspondance, devient la valeur"
-
-msgid "If no match"
-msgstr "Sans correspondance"
-
-msgid "Leave the object unchanged"
-msgstr "Laisser l'objet inchangé"
-
-msgid "Report an error"
-msgstr "Signaler une erreur"
-
-msgid "Scale factor"
-msgstr "Facteur d'échelle"
-
-msgid "Multiplies numeric values, e.g. 0.001 to convert ms to s"
-msgstr "Multiplie les valeurs numériques, par ex. 0.001 pour convertir des ms en s"
-
-#, python-format
-msgid "Version: %s"
-msgstr "Version : %s"
-
-msgid "Expected inputs"
-msgstr "Entrées attendues"
-
-msgid "Run on selection..."
-msgstr "Exécuter sur la sélection..."
-
-msgid "Examples designed for this method"
-msgstr "Exemples conçus pour cette méthode"
-
-msgid "Try with this example"
-msgstr "Essayer avec cet exemple"
-
-msgid "The current selection could not be assessed"
-msgstr "La sélection courante n'a pas pu être évaluée"
-
-msgid "Show on welcome page"
-msgstr "Afficher sur la page d'accueil"
-
-msgid "Pin to the welcome page"
-msgstr "Épingler sur la page d'accueil"
-
-msgid "Documentation"
-msgstr "Documentation"
-
-#, python-format
-msgid "Plugin ID: %s"
-msgstr "ID du plugin : %s"
-
-msgid "No methods declared"
-msgstr "Aucune méthode déclarée"
-
-msgid "Open tool"
-msgstr "Ouvrir l'outil"
-
-#, python-format
-msgid "Tools (%d)"
-msgstr "Outils (%d)"
-
-msgid "Open dataset"
-msgstr "Ouvrir le jeu de données"
-
-#, python-format
-msgid "Datasets (%d)"
-msgstr "Jeux de données (%d)"
-
-#, python-format
-msgid "Created %d objects"
-msgstr "%d objets créés"
-
-msgid "Search applications..."
-msgstr "Rechercher des applications..."
-
-msgid "Hide the application list"
-msgstr "Masquer la liste des applications"
-
-msgid "Show the application list"
-msgstr "Afficher la liste des applications"
-
-msgid "No application plugins are currently loaded."
-msgstr "Aucun plugin d'application n'est actuellement chargé."
-
-#, python-format
-msgid "Starting analysis '%s'"
-msgstr "Lancement de l'analyse '%s'"
-
-#, python-format
-msgid "Trying example '%s'"
-msgstr "Essai de l'exemple '%s'"
-
-#, python-format
-msgid "Opening example '%s'"
-msgstr "Ouverture de l'exemple '%s'"
-
-msgid "Official"
-msgstr "Officiel"
-
-msgid "Community"
-msgstr "Communauté"
-
-msgid "Source code"
-msgstr "Code source"
-
-#, python-format
-msgid "Withdrawn: %s"
-msgstr "Retiré : %s"
-
-#, python-format
-msgid "Not available for Python %s"
-msgstr "Non disponible pour Python %s"
-
-msgid "Not available for DataLab desktop"
-msgstr "Non disponible pour DataLab desktop"
-
-#, python-format
-msgid "Installed in the Python environment (%s)"
-msgstr "Installé dans l'environnement Python (%s)"
-
-msgid "Installed"
-msgstr "Installé"
-
-#, python-format
-msgid "Deprecated: %s"
-msgstr "Obsolète : %s"
-
-#, python-format
-msgid "Installed: %s"
-msgstr "Installé : %s"
-
-#, python-format
-msgid "Update to %s"
-msgstr "Mettre à jour vers %s"
-
-msgid "Install"
-msgstr "Installer"
-
-#, python-format
-msgid "Plugins listed in the <a href=\"%s\">DataLab plugin catalog</a>. Official plugins are maintained by the DataLab team, community plugins by their authors: install only plugins from authors you trust."
-msgstr "Plugins répertoriés dans le <a href=\"%s\">catalogue de plugins DataLab</a>. Les plugins officiels sont maintenus par l'équipe DataLab, les plugins de la communauté par leurs auteurs : n'installez que des plugins provenant d'auteurs de confiance."
-
-msgid "Search plugins"
-msgstr "Rechercher des plugins"
-
-msgid "No plugin catalog is configured."
-msgstr "Aucun catalogue de plugins n'est configuré."
-
-msgid "Loading the plugin catalog..."
-msgstr "Chargement du catalogue de plugins..."
-
-#, python-format
-msgid "Downloading %s..."
-msgstr "Téléchargement de %s..."
-
-#, python-format
-msgid "Plugins in the catalog: %d"
-msgstr "Plugins dans le catalogue : %d"
-
-msgid "The plugin catalog cannot be loaded:"
-msgstr "Le catalogue de plugins ne peut pas être chargé :"
-
-#, python-format
-msgid "DataLab plugin catalog (%s)"
-msgstr "Catalogue de plugins DataLab (%s)"
-
-msgid "Install plugin"
-msgstr "Installer un plugin"
-
-msgid "Input/output"
-msgstr "Entrée/sortie"
-
-msgid "Application"
-msgstr "Application"
-
-msgid "Available plugins"
-msgstr "Plugins disponibles"
-
-msgid "Install plugins"
-msgstr "Installer des plugins"
-
-msgid "Source:"
-msgstr "Source :"
-
-msgid "Plugin:"
-msgstr "Plugin :"
-
-msgid "Version:"
-msgstr "Version :"
-
-msgid "Description:"
-msgstr "Description :"
-
-msgid "Plugin classes:"
-msgstr "Classes de plugin :"
-
-msgid "not applicable"
-msgstr "non applicable"
-
-msgid "Dependencies:"
-msgstr "Dépendances :"
-
-msgid "Plugin module:"
-msgstr "Module de plugin :"
-
-msgid "File:"
-msgstr "Fichier :"
-
-msgid "Size:"
-msgstr "Taille :"
-
-msgid "SHA-256:"
-msgstr "SHA-256 :"
-
-msgid "A plugin runs with the same rights as DataLab: it may read and modify your files. Install only plugins from authors you trust."
-msgstr "Un plugin s'exécute avec les mêmes droits que DataLab : il peut lire et modifier vos fichiers. N'installez que des plugins provenant d'auteurs de confiance."
-
-#, python-format
-msgid "Installed on %s from %s"
-msgstr "Installé le %s depuis %s"
-
-msgid "Uninstall"
-msgstr "Désinstaller"
-
-msgid "Install a plugin shared as a wheel file (<code>.whl</code>) or as a Python module (<code>datalab_*.py</code>). Wheels must be pure Python and rely only on packages already provided by DataLab."
-msgstr "Installez un plugin partagé sous forme de fichier wheel (<code>.whl</code>) ou de module Python (<code>datalab_*.py</code>). Les wheels doivent être en Python pur et ne dépendre que de paquets déjà fournis par DataLab."
-
-msgid "Install from file..."
-msgstr "Installer depuis un fichier..."
-
-msgid "Plugins installed from a file"
-msgstr "Plugins installés depuis un fichier"
-
-msgid "No plugin has been installed from a file."
-msgstr "Aucun plugin n'a été installé depuis un fichier."
-
-msgid "Install plugin from file"
-msgstr "Installer un plugin depuis un fichier"
-
-msgid "DataLab plugins"
-msgstr "Plugins DataLab"
-
-msgid "This file cannot be installed as a plugin:"
-msgstr "Ce fichier ne peut pas être installé comme plugin :"
-
-#, python-format
-msgid "%s will be loaded at the next start of DataLab."
-msgstr "%s sera chargé au prochain démarrage de DataLab."
-
-#, python-format
-msgid "%s has been installed."
-msgstr "%s a été installé."
-
-msgid "Uninstall plugin"
-msgstr "Désinstaller le plugin"
-
-#, python-format
-msgid "Do you want to uninstall %s?"
-msgstr "Voulez-vous désinstaller %s ?"
-
-#, python-format
-msgid "%s has been uninstalled."
-msgstr "%s a été désinstallé."
-
-msgid "Do you want to reload plugins now?"
-msgstr "Voulez-vous recharger les plugins maintenant ?"
-
-msgid "Live"
-msgstr "En direct"
-
-msgid "Refresh the view continuously"
-msgstr "Rafraîchir la vue en continu"
-
-msgid "Acquire"
-msgstr "Acquérir"
-
-msgid "Add an acquisition to the workspace, in a new group"
-msgstr "Ajouter une acquisition à l'espace de travail, dans un nouveau groupe"
-
-msgid "Invalid settings"
-msgstr "Réglages non valides"
-
-#, python-format
-msgid "%d objects added to group '%s'"
-msgstr "%d objets ajoutés au groupe '%s'"
-
-msgid "One signal"
-msgstr "Un signal"
-
-msgid "One image"
-msgstr "Une image"
-
-#, python-format
-msgid "At least %d signals"
-msgstr "Au moins %d signaux"
-
-#, python-format
-msgid "At least %d images"
-msgstr "Au moins %d images"
-
-msgid "One or more signals"
-msgstr "Un ou plusieurs signaux"
-
-msgid "One or more images"
-msgstr "Une ou plusieurs images"
-
-#, python-format
-msgid "%s (optional)"
-msgstr "%s (facultatif)"
-
-msgid "required metadata"
-msgstr "métadonnée requise"
-
-msgid "hint"
-msgstr "indicative"
-
-msgid "No input data"
-msgstr "Aucune donnée d'entrée"
-
-#, python-format
-msgid "%(slot)s: no object assigned"
-msgstr "%(slot)s : aucun objet affecté"
-
-#, python-format
-msgid "%(slot)s: choose the objects to use"
-msgstr "%(slot)s : choisir les objets à utiliser"
-
-#, python-format
-msgid "%(slot)s: %(count)d object(s) assigned, at least %(min_count)d required"
-msgstr "%(slot)s : %(count)d objet(s) affecté(s), au moins %(min_count)d requis"
-
-#, python-format
-msgid "%(slot)s: accepts only one object (%(count)d assigned)"
-msgstr "%(slot)s : un seul objet accepté (%(count)d affectés)"
-
-#, python-format
-msgid "%(slot)s: %(count)d object(s) of the wrong type (%(titles)s)"
-msgstr "%(slot)s : %(count)d objet(s) de type incorrect (%(titles)s)"
-
-#, python-format
-msgid "%(slot)s: metadata '%(key)s' missing on %(count)d object(s) (%(titles)s)"
-msgstr "%(slot)s : métadonnée '%(key)s' absente de %(count)d objet(s) (%(titles)s)"
-
-#, python-format
-msgid "%(slot)s: %(count)d object(s) assigned twice (%(titles)s)"
-msgstr "%(slot)s : %(count)d objet(s) affecté(s) deux fois (%(titles)s)"
-
-msgid "Ready to run on the current selection"
-msgstr "Exécutable sur la sélection courante"
-
-msgid "Ready to run, with warnings"
-msgstr "Exécutable, avec des avertissements"
-
-msgid "Ready to run once the inputs are assigned"
-msgstr "Exécutable une fois les entrées affectées"
-
-msgid "The current selection cannot be analyzed"
-msgstr "La sélection courante ne peut pas être analysée"
-
-msgid "Select the input data in the workspace"
-msgstr "Sélectionner les données d'entrée dans l'espace de travail"
-
-msgid "To set it, use Edit > Metadata > Add metadata..."
-msgstr "Pour la définir, utilisez Édition > Métadonnées > Ajouter des métadonnées..."
-
-#, python-format
-msgid "Inputs of '%s'"
-msgstr "Entrées de '%s'"
-
-#, python-format
-msgid "(missing: %s)"
-msgstr "(manquant : %s)"
-
-msgid "Not assigned"
-msgstr "Non assigné"
-
-msgid "No compatible object"
-msgstr "Aucun objet compatible"
-
-#, python-format
-msgid "No selected object can be used by '%s'."
-msgstr "Aucun objet sélectionné n'est utilisable par '%s'."
-
-msgid "Expected inputs:"
-msgstr "Entrées attendues :"
-
-#, python-format
-msgid "Running '%s'"
-msgstr "Exécution de '%s'"
-
-msgid "A preview source was removed. The processing was cancelled."
-msgstr "Un objet source de l'aperçu a été supprimé. Le traitement a été annulé."
-
-msgid "Brightness and contrast"
-msgstr "Luminosité et contraste"
-
-msgid "The welcome page gathers the main actions to get started (create or open data, guided tour, documentation...). It is shown at startup and whenever the current signal or image panel is empty."
-msgstr "La page d'accueil rassemble les principales actions pour bien démarrer (créer ou ouvrir des données, visite guidée, documentation...). Elle est affichée au démarrage et chaque fois que le panneau signal ou image courant est vide."
-
-msgid "Welcome page application rows"
-msgstr "Lignes d'applications de la page d'accueil"
-
-msgid "Maximum number of application tile rows on the welcome page. Other applications remain available from the Applications catalog."
-msgstr "Nombre maximal de lignes de tuiles d'applications sur la page d'accueil. Les autres applications restent accessibles depuis le catalogue des applications."
-
-msgid "References in result titles"
-msgstr "Références dans les titres de résultats"
-
-msgid "Source UUID"
-msgstr "UUID source"
-
-msgid "Source title"
-msgstr "Titre de la source"
-
-msgid "Display source references in generated titles as short UUIDs or as the current source titles. This setting does not change the stored UUID references."
-msgstr "Afficher les références aux sources dans les titres générés sous forme d'UUID courts ou avec les titres actuels des sources. Ce réglage ne modifie pas les références UUID enregistrées."
-
-msgid "More actions"
-msgstr "Plus d'actions"
-
-#, python-format
-msgid "More applications (%d)"
-msgstr "Autres applications (%d)"
-
-msgid "Browse all applications in the catalog."
-msgstr "Parcourir toutes les applications du catalogue."
-
-msgid "Browse all applications..."
-msgstr "Parcourir toutes les applications..."
-
-msgid "Applications"
-msgstr "Applications"
-
-msgid "Pin to the top"
-msgstr "Épingler en tête"
-
-msgid "Unpin"
-msgstr "Désépingler"
-
-msgid "Hide from welcome page"
-msgstr "Masquer de la page d'accueil"
-
-#, python-format
-msgid "Launching '%s'"
-msgstr "Lancement de '%s'"
-
-#, python-format
-msgid "Scientific signal and image processing — version %s"
-msgstr "Traitement scientifique du signal et de l'image — version %s"
-
-msgid "Desktop edition of DataLab"
-msgstr "Édition Desktop de DataLab"
-
-msgid "Select one signal"
-msgstr "Sélectionnez un signal"
-
-msgid "Select one image"
-msgstr "Sélectionnez une image"
-
-msgid "Select one object"
-msgstr "Sélectionnez un objet"
-
-msgid "Select at least one signal"
-msgstr "Sélectionnez au moins un signal"
-
-msgid "Select at least one image"
-msgstr "Sélectionnez au moins une image"
-
-msgid "Select at least one object"
-msgstr "Sélectionnez au moins un objet"
-
-msgid "Select at least two signals"
-msgstr "Sélectionnez au moins deux signaux"
-
-msgid "Select at least two images"
-msgstr "Sélectionnez au moins deux images"
-
-msgid "Select at least two objects"
-msgstr "Sélectionnez au moins deux objets"
-
-msgid "Opening this example replaces the current workspace. Continue?"
-msgstr "L'ouverture de cet exemple remplace l'espace de travail actuel. Continuer ?"
-
-msgid "Open example"
-msgstr "Ouvrir l'exemple"
-
-msgid "Plugin name must be a non-empty single line"
-msgstr "Le nom du plugin doit être une ligne non vide"
-
-msgid "Package name must start with a lowercase letter and contain only lowercase letters, digits, and underscores"
-msgstr "Le nom du package doit commencer par une lettre minuscule et ne contenir que des lettres minuscules, des chiffres et des tirets bas"
-
-msgid "Package name must not be a Python keyword"
-msgstr "Le nom du package ne doit pas être un mot-clé Python"
-
-msgid "Plugin ID must be a lowercase dotted identifier such as 'org.example.my-plugin'"
-msgstr "L'ID du plugin doit être un identifiant en minuscules séparé par des points, comme 'org.example.mon-plugin'"
-
-msgid "Description must be a single line"
-msgstr "La description doit tenir sur une seule ligne"
-
-msgid "Plugin capabilities are invalid"
-msgstr "Les capacités du plugin ne sont pas valides"
-
-msgid "Plugin capabilities must be unique"
-msgstr "Les capacités du plugin doivent être uniques"
-
-msgid "Object kind must be 'signal' or 'image'"
-msgstr "Le type d'objet doit être 'signal' ou 'image'"
-
-msgid "The minimal template currently supports BSD-3-Clause"
-msgstr "Le modèle minimal prend actuellement en charge BSD-3-Clause"
-
-msgid "GitHub account must be a GitHub user or organization"
-msgstr "Le compte GitHub doit être un utilisateur ou une organisation GitHub"
-
-msgid "Plugin name must contain letters or digits"
-msgstr "Le nom du plugin doit contenir des lettres ou des chiffres"
-
-#, python-format
-msgid "Destination already exists: %s"
-msgstr "La destination existe déjà : %s"
-
-#, python-format
-msgid "%s is required"
-msgstr "%s est requis"
-
-msgid "Plugin name"
-msgstr "Nom du plugin"
-
-msgid "GitHub account (optional)"
-msgstr "Compte GitHub (facultatif)"
-
-msgid "Package name"
-msgstr "Nom du package"
-
-msgid "Plugin ID"
-msgstr "ID du plugin"
-
-#, python-format
-msgid "%s plugin for DataLab"
-msgstr "Plugin %s pour DataLab"
-
-msgid "Destination"
-msgstr "Destination"
-
-msgid "Create and maintain DataLab plugin projects."
-msgstr "Créer et maintenir des projets de plugins DataLab."
-
-msgid "Create a layered installable plugin project."
-msgstr "Créer un projet de plugin installable structuré en couches."
-
-msgid "Plugin display name"
-msgstr "Nom d'affichage du plugin"
-
-msgid "Python import package name"
-msgstr "Nom du package d'import Python"
-
-msgid "Stable reverse-domain ID"
-msgstr "ID stable en notation de domaine inversé"
-
-msgid "One-line description"
-msgstr "Description sur une ligne"
-
-msgid "GitHub user or organization hosting the project"
-msgstr "Utilisateur ou organisation GitHub hébergeant le projet"
-
-msgid "Plugin capability; may be repeated"
-msgstr "Capacité du plugin ; l'option peut être répétée"
-
-msgid "Object type used by the sample processing"
-msgstr "Type d'objet utilisé par le traitement d'exemple"
-
-msgid "Project license"
-msgstr "Licence du projet"
-
-#, python-format
-msgid "Created DataLab plugin project at %s"
-msgstr "Projet de plugin DataLab créé dans %s"
-
 msgid "Minimum value"
 msgstr "Valeur minimum"
 
@@ -4843,3 +5002,4 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
+

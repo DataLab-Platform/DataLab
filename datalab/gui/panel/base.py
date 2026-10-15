@@ -120,6 +120,7 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
 
     from plotpy.items import CurveItem, LabelItem, MaskedXYImageItem
+    from sigima.io import ImageExportParam
     from sigima.io.image import ImageIORegistry
     from sigima.io.signal import SignalIORegistry
 
@@ -2976,7 +2977,11 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         )
 
     def __load_from_file(
-        self, filename: str, create_group: bool = True, add_objects: bool = True
+        self,
+        filename: str,
+        create_group: bool = True,
+        add_objects: bool = True,
+        import_param: gds.DataSet | None = None,
     ) -> list[SignalObj] | list[ImageObj]:
         """Open and return objects from file, optionally adding them to DataLab.
 
@@ -2985,12 +2990,20 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             create_group: if True, create a new group if more than one object is loaded.
              Defaults to True. If False, all objects are added to the current group.
             add_objects: if True, add objects to the panel. Defaults to True.
+            import_param: Optional format-specific import parameters.
 
         Returns:
             New object or list of new objects
         """
-        worker = CallbackWorker(lambda worker: self.IO_REGISTRY.read(filename, worker))
+
+        def read_objects(worker):
+            if import_param is None:
+                return self.IO_REGISTRY.read(filename, worker)
+            return self.IO_REGISTRY.read(filename, worker, param=import_param)
+
+        worker = CallbackWorker(read_objects)
         objs = qt_long_callback(self, _("Reading objects from file"), worker, True)
+        self.apply_import_parameters(objs, import_param)
         group_id = None
         if len(objs) > 1 and create_group:
             # Create a new group if more than one object is loaded
@@ -3010,22 +3023,94 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         self.selection_changed()
         return objs
 
-    def __save_to_file(self, obj: TypeObj, filename: str) -> None:
+    def edit_import_parameters(
+        self, filenames: list[str], param: gds.DataSet | None = None
+    ) -> list[tuple[str, gds.DataSet | None]] | None:
+        """Return files to import with their optional format-specific parameters.
+
+        Args:
+            filenames: File names to import.
+            param: Optional import parameters applied to every file requiring
+             parameters, without showing any dialog.
+
+        Returns:
+            File names with aligned import parameters, without the files whose
+            parameter dialog was cancelled, or None if the whole import was
+            cancelled.
+
+        Raises:
+            TypeError: If ``param`` is given, as this panel has no import parameters.
+        """
+        if param is not None:
+            raise TypeError(
+                f"{self.__class__.__name__} does not support import parameters"
+            )
+        return [(fname, None) for fname in filenames]
+
+    def apply_import_parameters(
+        self,
+        objs: list[SignalObj] | list[ImageObj],
+        param: gds.DataSet | None,
+    ) -> None:
+        """Apply optional import parameters to newly read objects.
+
+        Args:
+            objs: Imported objects.
+            param: Optional format-specific import parameters.
+        """
+        del objs, param
+
+    def edit_export_parameters(
+        self, obj: TypeObj, filename: str
+    ) -> tuple[bool, ImageExportParam | None]:
+        """Edit optional object export parameters.
+
+        Args:
+            obj: Object to export
+            filename: File name
+
+        Returns:
+            A tuple containing the confirmation state and optional export parameters
+        """
+        return True, None
+
+    def write_object_to_file(
+        self,
+        obj: TypeObj,
+        filename: str,
+        param: ImageExportParam | None = None,
+    ) -> None:
         """Save object to file (signal/image).
 
         Args:
             obj: object
             filename: file name
+            param: optional image export parameters
         """
+        del param
         self.IO_REGISTRY.write(filename, obj)
 
-    def load_from_directory(self, directory: str | None = None) -> list[TypeObj]:
+    def load_from_directory(
+        self,
+        directory: str | None = None,
+        import_filenames: list[str] | None = None,
+        import_params: list[gds.DataSet] | None = None,
+        param: gds.DataSet | None = None,
+    ) -> list[TypeObj]:
         """Open objects from directory (signals or images, depending on the panel),
         add them to DataLab and return them.
         If the directory is not specified, ask the user to select a directory.
 
         Args:
             directory: directory name
+            import_filenames: Optional file names, relative to ``directory``, of
+             the files imported with format-specific parameters. Recorded by
+             history so that replay does not reopen import dialogs.
+            import_params: Optional format-specific parameters aligned with
+             ``import_filenames``.
+            param: Optional format-specific parameters applied to every file
+             requiring import parameters (e.g. RAW images), without showing any
+             dialog.
 
         Returns:
             list of new objects
@@ -3038,6 +3123,54 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 directory = getexistingdirectory(self, _("Open"), basedir)
         if not directory:
             return []
+        folders: list[tuple[str, list[str]]] = []
+        for path in glob.glob(osp.join(directory, "**"), recursive=True):
+            if osp.isdir(path):
+                path = osp.normpath(path)
+                fnames = sorted(
+                    osp.join(path, fname)
+                    for fname in os.listdir(path)
+                    if osp.isfile(osp.join(path, fname))
+                )
+                if fnames:
+                    folders.append((path, fnames))
+
+        def relative_key(filename: str) -> str:
+            return osp.normcase(osp.normpath(osp.relpath(filename, directory)))
+
+        # Parameters recorded by history are reused; import parameters are asked
+        # once for all the other files of the directory tree
+        recorded_params: dict[str, gds.DataSet] = {}
+        if import_filenames is not None:
+            assert import_params is not None and len(import_params) == len(
+                import_filenames
+            ), "Number of import parameters must match number of files"
+            recorded_params = {
+                osp.normcase(osp.normpath(fname)): fparam
+                for fname, fparam in zip(import_filenames, import_params)
+            }
+        all_files = [fname for _path, fnames in folders for fname in fnames]
+        pending = [
+            fname for fname in all_files if relative_key(fname) not in recorded_params
+        ]
+        prepared_pairs = self.edit_import_parameters(pending, param)
+        if prepared_pairs is None:
+            return []
+        file_params: dict[str, gds.DataSet | None] = dict(prepared_pairs)
+        for fname in all_files:
+            if relative_key(fname) in recorded_params:
+                file_params[fname] = recorded_params[relative_key(fname)]
+        history_kwargs: dict[str, Any] = {"directory": directory}
+        param_files = [
+            fname for fname in all_files if file_params.get(fname) is not None
+        ]
+        if param_files:
+            history_kwargs["import_filenames"] = [
+                osp.relpath(fname, directory) for fname in param_files
+            ]
+            history_kwargs["import_params"] = [
+                copy.deepcopy(file_params[fname]) for fname in param_files
+            ]
         # Offer a fresh history session for this batch *before* loading anything.
         self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
         action = self.mainwindow.historypanel.add_ui_entry(
@@ -3045,13 +3178,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             target=self.PANEL_STR_ID + "panel",
             method_name="load_from_directory",
             save_state=False,
-            directory=directory,
+            **history_kwargs,
         )
-        folders = [
-            path
-            for path in glob.glob(osp.join(directory, "**"), recursive=True)
-            if osp.isdir(path) and len(os.listdir(path)) > 0
-        ]
         objs = []
         with self.mainwindow.historypanel.session_prompt_suppressed():
             with self.mainwindow.historypanel.capture_outputs(action):
@@ -3059,23 +3187,20 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     self, _("Scanning directory"), max_=len(folders) - 1
                 ) as progress:
                     # Iterate over all subfolders in the directory:
-                    for i_path, path in enumerate(folders):
+                    for i_path, (path, fnames) in enumerate(folders):
                         progress.setValue(i_path + 1)
                         if progress.wasCanceled():
                             break
-                        path = osp.normpath(path)
-                        fnames = sorted(
-                            [
-                                osp.join(path, fname)
-                                for fname in os.listdir(path)
-                                if osp.isfile(osp.join(path, fname))
-                            ]
-                        )
+                        # Files whose import dialog was cancelled are skipped
+                        fnames = [fname for fname in fnames if fname in file_params]
+                        if not fnames:
+                            continue
                         new_objs = self.load_from_files(
                             fnames,
                             create_group=False,
                             add_objects=False,
                             ignore_errors=True,
+                            import_params=[file_params[fname] for fname in fnames],
                         )
                         if new_objs:
                             objs += new_objs
@@ -3095,6 +3220,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         create_group: bool = False,
         add_objects: bool = True,
         ignore_errors: bool = False,
+        import_params: list[gds.DataSet | None] | None = None,
+        param: gds.DataSet | None = None,
     ) -> list[TypeObj]:
         """Open and return objects from files, optionally adding them to DataLab.
 
@@ -3105,10 +3232,17 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
              group.
             add_objects: if True, add objects to the panel. Defaults to True.
             ignore_errors: if True, ignore errors when loading files. Defaults to False.
+            import_params: Optional format-specific parameters aligned with file names.
+             When provided by history replay, import dialogs are not reopened.
+            param: Optional format-specific parameters applied to every file
+             requiring import parameters (e.g. RAW images), without showing any
+             dialog. Cannot be combined with ``import_params``.
 
         Returns:
             list of new objects
         """
+        if import_params is not None and param is not None:
+            raise ValueError("import_params and param cannot be combined")
         if not self.mainwindow.confirm_memory_state():
             return []
         if filenames is None:  # pragma: no cover
@@ -3118,9 +3252,22 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 filenames, _filt = getopenfilenames(self, _("Open"), basedir, filters)
         if not filenames:  # pragma: no cover
             return []
-        # Sort filenames to ensure consistent alphabetical order across all platforms
-        filenames = sorted(filenames)
-        nbf = len(filenames)
+        if import_params is None:
+            prepared_pairs = self.edit_import_parameters(sorted(filenames), param)
+            if prepared_pairs is None:
+                return []
+        else:
+            assert len(import_params) == len(filenames), (
+                "Number of import parameters must match number of files"
+            )
+            prepared_pairs = sorted(
+                zip(filenames, import_params), key=lambda pair: pair[0]
+            )
+        if not prepared_pairs:
+            return []
+        filenames = [filename for filename, _param in prepared_pairs]
+        import_params = [param for _filename, param in prepared_pairs]
+        nbf = len(prepared_pairs)
         if nbf > 1:
             entry_title = _("Load from %d files") % nbf
         else:
@@ -3133,21 +3280,30 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             # Offer a fresh history session for this batch *before* recording
             # any entry.
             self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
+            history_kwargs: dict[str, Any] = {
+                "filenames": list(filenames),
+                "create_group": create_group,
+                "add_objects": add_objects,
+                "ignore_errors": ignore_errors,
+            }
+            if any(param is not None for param in import_params):
+                history_kwargs["import_params"] = [
+                    copy.deepcopy(param) if param is not None else None
+                    for param in import_params
+                ]
             action = self.mainwindow.historypanel.add_ui_entry(
                 entry_title,
                 target=self.PANEL_STR_ID + "panel",
                 method_name="load_from_files",
                 save_state=False,
-                filenames=filenames,
-                create_group=create_group,
-                add_objects=add_objects,
-                ignore_errors=ignore_errors,
+                **history_kwargs,
             )
         objs = []
         loaded_filenames: list[str] = []
+        loaded_params: list[gds.DataSet | None] = []
         with self.mainwindow.historypanel.session_prompt_suppressed():
             with self.mainwindow.historypanel.capture_outputs(action):
-                for filename in filenames:
+                for filename, import_param in prepared_pairs:
                     with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
                         Conf.base_dir.set(filename)
                         try:
@@ -3155,6 +3311,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                                 filename,
                                 create_group=create_group,
                                 add_objects=add_objects,
+                                import_param=import_param,
                             )
                         except Exception as exc:  # pylint: disable=broad-exception-caught
                             if ignore_errors:
@@ -3166,6 +3323,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                             objs += new_objs
                             if new_objs:
                                 loaded_filenames.append(filename)
+                                loaded_params.append(import_param)
         if action is not None and loaded_filenames and len(loaded_filenames) < nbf:
             # Some files could not be loaded: make the recorded entry reflect
             # the files actually loaded, so the title is accurate and replay
@@ -3175,28 +3333,68 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 action.title = _("Load from %d files") % len(loaded_filenames)
             else:
                 action.title = _('Load "%s"') % osp.basename(loaded_filenames[0])
-            action.kwargs["filenames"] = loaded_filenames
+            action.kwargs["filenames"] = list(loaded_filenames)
+            if any(param is not None for param in loaded_params):
+                action.kwargs["import_params"] = [
+                    copy.deepcopy(param) if param is not None else None
+                    for param in loaded_params
+                ]
+            else:
+                action.kwargs.pop("import_params", None)
             self.mainwindow.historypanel.tree.refresh_action_item(action)
         return objs
 
-    def save_to_files(self, filenames: list[str] | str | None = None) -> None:
+    def save_to_files(
+        self,
+        filenames: list[str] | str | None = None,
+        export_params: list[ImageExportParam | None] | None = None,
+        object_uuids: list[str] | None = None,
+    ) -> None:
         """Save selected objects to files (signal/image).
 
         Args:
             filenames: File names
+            export_params: Optional image export parameters aligned with file names
+            object_uuids: Optional object UUIDs aligned with file names
         """
-        objs = self.objview.get_sel_objects(include_groups=True)
         if isinstance(filenames, str):
             filenames = [filenames]
-        if filenames is None:  # pragma: no cover
-            filenames = [None] * len(objs)
-        assert len(filenames) == len(objs), (
+        interactive = filenames is None
+        if object_uuids is None:
+            objs = self.objview.get_sel_objects(include_groups=True)
+            object_uuids = [get_uuid(obj) for obj in objs]
+        else:
+            objs = None
+        object_count = len(object_uuids)
+        if interactive:  # pragma: no cover
+            filenames = [None] * object_count
+        assert len(filenames) == object_count, (
             "Number of filenames must match number of objects"
         )
+        if export_params is None:
+            export_params = [None] * object_count
+        assert len(export_params) == object_count, (
+            "Number of export parameters must match number of objects"
+        )
+        aligned: list[tuple[TypeObj, str | None, ImageExportParam | None, str]] = []
+        if objs is not None:
+            aligned = list(zip(objs, filenames, export_params, object_uuids))
+        else:
+            for object_uuid, filename, param in zip(
+                object_uuids, filenames, export_params
+            ):
+                if not self.objmodel.has_uuid(object_uuid):
+                    warnings.warn(
+                        _("Skipping export: object %r no longer exists.") % object_uuid
+                    )
+                    continue
+                aligned.append(
+                    (self.objmodel[object_uuid], filename, param, object_uuid)
+                )
         # Ask for missing file names first, so that the history entry reflects the
         # actual files written (and is skipped altogether if the user cancels)
-        pairs: list[tuple[TypeObj, str]] = []
-        for obj, filename in zip(objs, filenames):
+        pairs: list[tuple[TypeObj, str, ImageExportParam | None, str]] = []
+        for obj, filename, param, object_uuid in aligned:
             if filename is None:  # pragma: no cover
                 basedir = Conf.base_dir.get()
                 filters = self.IO_REGISTRY.get_write_filters()
@@ -3205,25 +3403,45 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                         self, _("Save as"), basedir, filters
                     )
             if filename:
-                pairs.append((obj, filename))
+                confirmed = True
+                if interactive:  # pragma: no cover
+                    confirmed, param = self.edit_export_parameters(obj, filename)
+                if confirmed:
+                    pairs.append((obj, filename, param, object_uuid))
         if not pairs:  # pragma: no cover
             return
-        nbf = len(pairs)
+        successful_pairs: list[tuple[TypeObj, str, ImageExportParam | None, str]] = []
+        for obj, filename, param, object_uuid in pairs:
+            with qt_try_loadsave_file(self.parentWidget(), filename, "save"):
+                Conf.base_dir.set(filename)
+                self.write_object_to_file(obj, filename, param)
+                successful_pairs.append((obj, filename, param, object_uuid))
+        if not successful_pairs:
+            return
+        nbf = len(successful_pairs)
         if nbf > 1:
             entry_title = _("Save to %d different files") % nbf
         else:
-            entry_title = _('Save to "%s"') % osp.basename(pairs[0][1])
+            entry_title = _('Save to "%s"') % osp.basename(successful_pairs[0][1])
+        history_kwargs: dict[str, Any] = {
+            "filenames": [
+                filename for _obj, filename, _param, _uuid in successful_pairs
+            ],
+            "object_uuids": [
+                object_uuid for _obj, _filename, _param, object_uuid in successful_pairs
+            ],
+        }
+        if any(param is not None for _obj, _filename, param, _uuid in successful_pairs):
+            history_kwargs["export_params"] = [
+                param for _obj, _filename, param, _uuid in successful_pairs
+            ]
         self.mainwindow.historypanel.add_ui_entry(
             entry_title,
             target=self.PANEL_STR_ID + "panel",
             method_name="save_to_files",
             save_state=False,
-            filenames=[filename for _obj, filename in pairs],
+            **history_kwargs,
         )
-        for obj, filename in pairs:
-            with qt_try_loadsave_file(self.parentWidget(), filename, "save"):
-                Conf.base_dir.set(filename)
-                self.__save_to_file(obj, filename)
 
     def save_to_directory(self, param: SaveToDirectoryParam | None = None) -> None:
         """Save signals or images to directory using a filename pattern.
@@ -3282,7 +3500,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 if progress.wasCanceled():
                     break
                 with qt_try_loadsave_file(self.parentWidget(), path, "save"):
-                    self.__save_to_file(obj, path)
+                    self.write_object_to_file(obj, path)
 
     def handle_dropped_files(self, filenames: list[str] | None = None) -> None:
         """Handle dropped files

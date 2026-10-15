@@ -5,8 +5,11 @@
 from __future__ import annotations
 
 import json
+from types import SimpleNamespace
+from unittest.mock import Mock
 
 import pytest
+from sigima.io import RawImageImportParam
 
 from datalab.aiassistant.tools.builtin import build_default_registry
 from datalab.aiassistant.tools.registry import Tool, ToolRegistry, ToolResult
@@ -108,3 +111,70 @@ def test_default_registry_can_hide_macro_tool() -> None:
     assert "create_and_run_macro" not in names
     # Read-only macro inspection tool stays available (no code execution).
     assert "get_macro_console_output" in names
+
+
+def _make_load_file_context() -> tuple[Mock, SimpleNamespace, Mock]:
+    """Return a proxy, a main window and its image panel for ``load_file``."""
+    imagepanel = Mock(PANEL_STR_ID="image")
+    imagepanel.load_from_files.return_value = []
+    mainwindow = SimpleNamespace(imagepanel=imagepanel, signalpanel=Mock())
+    return Mock(), mainwindow, imagepanel
+
+
+def test_load_file_forwards_raw_import_parameters() -> None:
+    """``load_file`` converts RAW import parameters into a DataSet."""
+    reg = build_default_registry()
+    proxy, mainwindow, imagepanel = _make_load_file_context()
+    arguments = {
+        "filename": "image.raw",
+        "panel": "image",
+        "import_parameters": {"dtype": "uint8", "width": 4, "height": 3},
+    }
+
+    res = reg.call("load_file", arguments, proxy=proxy, mainwindow=mainwindow)
+
+    assert res.ok is True
+    param = imagepanel.load_from_files.call_args.kwargs["param"]
+    assert isinstance(param, RawImageImportParam)
+    assert (param.dtype, param.width, param.height) == ("uint8", 4, 3)
+
+
+def test_load_file_without_import_parameters_keeps_default_path() -> None:
+    """``load_file`` passes no import parameter when none is given."""
+    reg = build_default_registry()
+    proxy, mainwindow, imagepanel = _make_load_file_context()
+
+    res = reg.call(
+        "load_file",
+        {"filename": "image.png", "panel": "image"},
+        proxy=proxy,
+        mainwindow=mainwindow,
+    )
+
+    assert res.ok is True
+    imagepanel.load_from_files.assert_called_once_with(["image.png"], param=None)
+
+
+def test_load_file_rejects_unknown_import_parameter() -> None:
+    """``load_file`` reports invalid RAW import parameters as tool errors."""
+    reg = build_default_registry()
+    proxy, mainwindow, imagepanel = _make_load_file_context()
+
+    res = reg.call(
+        "load_file",
+        {"filename": "a.raw", "panel": "image", "import_parameters": {"nope": 1}},
+        proxy=proxy,
+        mainwindow=mainwindow,
+    )
+
+    assert res.ok is False
+    assert "nope" in (res.error or "")
+    imagepanel.load_from_files.assert_not_called()
+
+
+def test_load_file_schema_describes_raw_import_parameters() -> None:
+    """The ``load_file`` schema exposes RAW import parameter fields."""
+    reg = build_default_registry()
+    schema = next(s for s in reg.list_schemas() if s["name"] == "load_file")
+    props = schema["parameters"]["properties"]["import_parameters"]["properties"]
+    assert set(props) == {item.get_name() for item in RawImageImportParam().get_items()}

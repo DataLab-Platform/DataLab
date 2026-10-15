@@ -26,6 +26,8 @@ import numpy as np
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from sigima.io import RawImageImportParam
+from sigima.io.image.raw import RAW_DTYPES
 
 from datalab.aiassistant.providers.base import ChatMessage
 from datalab.aiassistant.tools.registry import Tool, ToolRegistry, ToolResult
@@ -408,10 +410,15 @@ def _tool_load_file(
     mainwindow: DLMainWindow,
     filename: str,
     panel: str | None = None,
+    import_parameters: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     panel_widget = _resolve_panel(mainwindow, panel)
     proxy.set_current_panel(panel_widget.PANEL_STR_ID)
-    objs = panel_widget.load_from_files([filename])
+    param = None
+    if import_parameters:
+        # ``create`` rejects unknown parameter names
+        param = RawImageImportParam.create(**import_parameters)
+    objs = panel_widget.load_from_files([filename], param=param)
     return {
         "filename": filename,
         "panel": panel_widget.PANEL_STR_ID,
@@ -994,13 +1001,45 @@ def build_default_registry(expose_macro_tool: bool = True) -> ToolRegistry:
             name="load_file",
             description=(
                 "Load a signal or image file into DataLab. The file format is "
-                "auto-detected based on the filename extension."
+                "auto-detected based on the filename extension. Headerless RAW "
+                "image files (*.raw) require 'import_parameters' describing their "
+                "binary layout; otherwise, the user is asked for them."
             ),
             parameters={
                 "type": "object",
                 "properties": {
                     "filename": {"type": "string"},
                     "panel": _PANEL_PARAM,
+                    "import_parameters": {
+                        "type": "object",
+                        "description": (
+                            "RAW image import parameters (image panel only). "
+                            "Omitted fields keep their default value."
+                        ),
+                        "properties": {
+                            "dtype": {"type": "string", "enum": list(RAW_DTYPES)},
+                            "width": {"type": "integer", "minimum": 1},
+                            "height": {"type": "integer", "minimum": 1},
+                            "offset": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "description": "Bytes before the first image.",
+                            },
+                            "count": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "description": "Number of images in the file.",
+                            },
+                            "gap": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "description": "Bytes between consecutive images.",
+                            },
+                            "little_endian": {"type": "boolean"},
+                            "white_is_zero": {"type": "boolean"},
+                        },
+                        "additionalProperties": False,
+                    },
                 },
                 "required": ["filename"],
                 "additionalProperties": False,

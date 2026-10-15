@@ -96,6 +96,10 @@ DataLab now uses stable UUID-based object references across object trees, result
 
 * Fixed the width of the signal/image panels not being restored at startup: after narrowing the panels and restarting DataLab, they came back wider (up to their maximum width) instead of keeping the width chosen by the user
 
+**File import:**
+
+* Fixed compressed TIFF files (LZW, JPEG or WebP compression) failing to open with the error "requires the 'imagecodecs' package"; LZW is the default compression of many acquisition and image-editing tools. These files now open out of the box, including with the standalone installer. CCITT-compressed bilevel images are also supported with the standalone installer and with Python 3.11 or later (fixes [Issue #381](https://github.com/DataLab-Platform/DataLab/issues/381))
+
 **Metadata:**
 
 * Adding, pasting or deleting metadata now marks the workspace as modified, so DataLab asks to save these changes before closing
