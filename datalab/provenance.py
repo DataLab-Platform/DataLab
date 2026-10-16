@@ -21,7 +21,8 @@ activity is recorded and the failure is logged and counted.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Iterable
+import contextlib
+from collections.abc import Callable, Generator, Iterable
 from typing import Any
 
 import sigima.proc.contracts as sigima_contracts
@@ -81,6 +82,68 @@ class ProvenanceService(Recorder):
             ),
         )
         super().__init__(host, computation_from_sigima(sigima_contracts))
+        #: Called (without argument) after activities were recorded, e.g. to
+        #: refresh the views showing the provenance of objects.
+        self.on_recorded: Callable[[], None] | None = None
+        self._collectors: list[list[str]] = []
+
+    @contextlib.contextmanager
+    def collecting(self) -> Generator[list[str], None, None]:
+        """Collect the identifiers of the activities recorded in this scope.
+
+        The identifiers are those returned by the capture itself (completed
+        executions, analyses, executions without result, and deferred
+        activities once finalized), in recording order: nothing is matched by
+        name, date or output UUID. Scopes may be nested.
+
+        Yields:
+            The list receiving the identifiers.
+        """
+        ids: list[str] = []
+        self._collectors.append(ids)
+        try:
+            yield ids
+        finally:
+            for index, collector in enumerate(self._collectors):
+                if collector is ids:
+                    del self._collectors[index]
+                    break
+
+    def _notify_recorded(self, activity_ids: list[str]) -> None:
+        """Collect recorded activities and call :attr:`on_recorded`."""
+        if not activity_ids:
+            return
+        for collector in self._collectors:
+            collector.extend(activity_ids)
+        if self.on_recorded is not None:
+            self.on_recorded()
+
+    def complete(self, pending: Any, output: Any) -> dict[str, Any] | None:
+        """Record a completed execution (see ``Recorder.complete``)."""
+        activity = super().complete(pending, output)
+        self._notify_recorded([activity["activity_id"]] if activity else [])
+        return activity
+
+    def complete_analysis(
+        self, pending: Any, obj: Any, kind: str, key: str
+    ) -> dict[str, Any] | None:
+        """Record an analysis (see ``Recorder.complete_analysis``)."""
+        activity = super().complete_analysis(pending, obj, kind, key)
+        self._notify_recorded([activity["activity_id"]] if activity else [])
+        return activity
+
+    def complete_without_result(self, pending: Any) -> dict[str, Any] | None:
+        """Record an execution without result (see ``Recorder``)."""
+        activity = super().complete_without_result(pending)
+        self._notify_recorded([activity["activity_id"]] if activity else [])
+        return activity
+
+    def finalize_deferred(self, deferred: Any, remap: dict[str, str]) -> int:
+        """Record held activities on their final UUIDs (see ``Recorder``)."""
+        start = len(deferred.activity_ids)
+        recorded = super().finalize_deferred(deferred, remap)
+        self._notify_recorded(list(deferred.activity_ids[start:]))
+        return recorded
 
     def begin(
         self, func: Callable, param: Any, source: Any, *args, **kwargs

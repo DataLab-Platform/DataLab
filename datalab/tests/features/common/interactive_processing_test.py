@@ -1602,10 +1602,14 @@ def test_cross_panel_signal_to_image():
             assert stored_param.orientation == "columns"
             assert stored_param.normalize is True
 
-            # Test that the Processing tab is NOT set up for n-to-1 pattern
-            # (interactive processing only works for 1-to-1 pattern)
+            # The Processing tab restores the n-to-1 conversion too, with its
+            # parameters, so that it can be applied again to every source.
             image_panel.objview.set_current_object(image)
-            assert image_panel.objprop.processing_param_editor is None
+            editor = image_panel.objprop.processing_param_editor
+            assert editor is not None
+            assert editor.dataset.orientation == "columns"
+            call = image_panel.objprop.current_processing_call
+            assert [item.object_uuid for item in call.inputs] == signal_uuids
 
 
 def test_select_source_objects_same_panel():

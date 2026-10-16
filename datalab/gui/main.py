@@ -150,6 +150,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.__iter_data_objects,
             self.__is_known_feature,
         )
+        self.__provenance_timer: QC.QTimer | None = None
 
         self.webapistatus: dl_status.WebAPIStatus | None = None
         self.pluginstatus: dl_status.PluginStatus | None = None
@@ -1664,6 +1665,17 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             panel.SIG_OBJECT_ADDED.connect(self.set_modified)
             panel.SIG_OBJECT_REMOVED.connect(self.set_modified)
             panel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
+        # Provenance views follow the workspace and the recorded activities.
+        # The timer coalesces refreshes; owned by the window, it never fires
+        # once the window is closed.
+        self.__provenance_timer = QC.QTimer(self)
+        self.__provenance_timer.setSingleShot(True)
+        self.__provenance_timer.timeout.connect(self.__refresh_provenance_views)
+        for panel in (self.signalpanel, self.imagepanel):
+            panel.SIG_OBJECT_ADDED.connect(self.__invalidate_provenance_views)
+            panel.SIG_OBJECT_REMOVED.connect(self.__invalidate_provenance_views)
+            panel.SIG_OBJECT_MODIFIED.connect(self.__invalidate_provenance_views)
+        self.provenance.on_recorded = self.__invalidate_provenance_views
         # Initializing common panel actions
         self.autorefresh_action.setChecked(Conf.auto_refresh.get(True))
         self.showfirstonly_action.setChecked(Conf.show_first_only.get(False))
@@ -1992,6 +2004,25 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """
         execution = self.signalpanel.processor.execution
         return self.provenance.verify(activity_id, execution.execute_candidate)
+
+    def __invalidate_provenance_views(self) -> None:
+        """Refresh the provenance views once control returns to the event loop.
+
+        The workspace changed or activities were recorded: the views read the
+        ledger again and drop the results of data checks and verifications.
+        Requests are coalesced, so that a batch of computations refreshes once.
+        """
+        if (
+            self.__provenance_timer is not None
+            and not self.__provenance_timer.isActive()
+        ):
+            self.__provenance_timer.start(0)
+
+    def __refresh_provenance_views(self) -> None:
+        """Refresh the provenance views of the current objects."""
+        for panel in (self.signalpanel, self.imagepanel):
+            if panel is not None:
+                panel.objprop.refresh_history()
 
     @remote_controlled
     def remove_object(self, force: bool = False) -> None:
