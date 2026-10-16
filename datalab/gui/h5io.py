@@ -15,7 +15,8 @@ from __future__ import annotations
 import os.path as osp
 from typing import TYPE_CHECKING
 
-from datalab_capsule.hdf5 import ProvenanceFormatError, load_ledger
+import h5py
+from datalab_capsule.hdf5 import ProvenanceFormatError, has_block, load_ledger
 from guidata.qthelpers import exec_dialog
 from qtpy import QtWidgets as QW
 from sigima.objects import SignalObj
@@ -29,9 +30,31 @@ from datalab.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
 
 if TYPE_CHECKING:
     from datalab_capsule.ledger import Ledger
+    from sigima.objects import ImageObj
     from sigimax.h5.common import BaseNode
 
     from datalab.gui.main import DLMainWindow
+
+
+def workspace_has_provenance(filename: str) -> bool:
+    """Return True if a HDF5 file holds a provenance block (nothing is loaded).
+
+    Args:
+        filename: HDF5 filename (unreadable files give False).
+    """
+    try:
+        with h5py.File(filename, "r") as h5file:
+            return has_block(h5file)
+    except (OSError, ValueError):
+        return False
+
+
+def append_provenance_notice() -> str:
+    """Return the notice shown before appending a workspace holding provenance."""
+    return _(
+        "The data will be added, but their earlier provenance will not be "
+        "imported. Open the file replacing the current workspace to keep it."
+    )
 
 
 class H5InputOutput:
@@ -44,6 +67,9 @@ class H5InputOutput:
     def __init__(self, mainwindow: DLMainWindow) -> None:
         self.mainwindow = mainwindow
         self.uint32_wng: bool = None
+        #: True when the user was already told, for the current opening, that
+        #: the provenance of appended workspaces is not imported (no repeat).
+        self.append_informed = False
 
     @staticmethod
     def __progbartitle(fname: str) -> str:
@@ -84,11 +110,46 @@ class H5InputOutput:
             value = value.decode("utf-8", "replace")
         return value if isinstance(value, str) else None
 
+    def __data_objects(self) -> list[SignalObj | ImageObj]:
+        """Return the objects of the signal and image panels."""
+        return [
+            obj
+            for panel in (self.mainwindow.signalpanel, self.mainwindow.imagepanel)
+            for obj in panel.objmodel.get_all_objects()
+        ]
+
+    def __confirm_append(self) -> bool:
+        """Warn, before anything changes, that appended provenance is ignored.
+
+        Shown once per opening, unless the question about clearing the workspace
+        already said so. Returns False if the user cancels.
+        """
+        if self.append_informed or execenv.unattended:
+            return True
+        box = QW.QMessageBox(
+            QW.QMessageBox.Warning,
+            _("Warning"),
+            append_provenance_notice(),
+            QW.QMessageBox.NoButton,
+            self.mainwindow,
+        )
+        add = box.addButton(_("Add without provenance"), QW.QMessageBox.AcceptRole)
+        box.addButton(QW.QMessageBox.Cancel)
+        box.setDefaultButton(add)
+        exec_dialog(box)
+        if box.clickedButton() is not add:
+            return False
+        self.append_informed = True
+        return True
+
     def open_file_headless(self, filename: str, reset_all: bool) -> bool:
         """Open native DataLab HDF5 file without any GUI elements.
 
         This method can be safely called from any thread (e.g., the console thread)
-        as it does not create any Qt widgets or dialogs.
+        as it does not create any Qt widgets or dialogs. When a file holding
+        provenance is appended (*reset_all* False), its provenance is not
+        imported and the notice ``datalab_capsule.recorder.APPEND_NOTICE`` is
+        added to ``mainwindow.provenance.notices`` (and logged).
 
         Args:
             filename: HDF5 filename
@@ -108,23 +169,36 @@ class H5InputOutput:
             saved_version = self.__saved_version(reader)
             if reset_all:
                 self.mainwindow.reset_all()
+            before = {id(obj) for obj in self.__data_objects()}
             for panel in self.mainwindow.panels:
                 panel.deserialize_from_hdf5(reader, reset_all)
             reader.close()
-            self.mainwindow.provenance.load(block, reset_all, saved_version)
+            appended = [o for o in self.__data_objects() if id(o) not in before]
+            self.mainwindow.provenance.load(
+                block, reset_all, saved_version, appended=appended
+            )
             return True
         except KeyError:
             return False
 
     def open_file(self, filename: str, import_all: bool, reset_all: bool) -> None:
-        """Open HDF5 file"""
+        """Open HDF5 file
+
+        When the file holds provenance and is appended to the current workspace,
+        the user is warned before anything changes (see :meth:`__confirm_append`)
+        and may cancel.
+        """
         progress = None
         try:
             reader = NativeH5Reader(filename)
             block = self.__read_provenance(reader)
             saved_version = self.__saved_version(reader)
+            if block is not None and not reset_all and not self.__confirm_append():
+                reader.close()
+                return
             if reset_all:
                 self.mainwindow.reset_all()
+            before = {id(obj) for obj in self.__data_objects()}
             with create_progress_bar(
                 self.mainwindow, self.__progbartitle(filename), 2
             ) as progress:
@@ -135,7 +209,10 @@ class H5InputOutput:
                     if progress.wasCanceled():
                         break
             reader.close()
-            self.mainwindow.provenance.load(block, reset_all, saved_version)
+            appended = [o for o in self.__data_objects() if id(o) not in before]
+            self.mainwindow.provenance.load(
+                block, reset_all, saved_version, appended=appended
+            )
         except KeyError:
             if progress is not None:
                 # KeyError was encoutered when deserializing datasets (DataLab data

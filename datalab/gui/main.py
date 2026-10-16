@@ -40,6 +40,7 @@ from plotpy.constants import PlotType
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from qtpy.compat import getopenfilenames
 from sigima.config import options as sigima_options
 from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 from sigimax.mainwindow import SGMXMainWindow
@@ -65,7 +66,11 @@ from datalab.gui.commandpalette import (
     collect_commands,
 )
 from datalab.gui.docks import DockablePlotWidget
-from datalab.gui.h5io import H5InputOutput
+from datalab.gui.h5io import (
+    H5InputOutput,
+    append_provenance_notice,
+    workspace_has_provenance,
+)
 from datalab.gui.panel import base, history, image, macro, signal
 from datalab.gui.plugins.applications import ApplicationsDialog, get_plugin_icon
 from datalab.gui.plugins.config import PluginConfigDialog
@@ -170,6 +175,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.signalview: DockablePlotWidget | None = None
         self.imageview: DockablePlotWidget | None = None
         self.h5inputoutput: H5InputOutput | None = None
+        # True while opening HDF5 files of which one holds provenance
+        self.__h5_provenance_files = False
         self.webapi_actions: WebApiActions | None = None
 
         self.openh5_action: QW.QAction | None = None
@@ -2055,12 +2062,43 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     ) -> None:
         """Open a DataLab HDF5 file or import from any other HDF5 file.
 
+        When the question about clearing the workspace will be asked, the files
+        are chosen first: if a workspace file holds provenance, the question
+        says that appending it ignores that provenance (no further warning).
+
         Args:
             h5files: HDF5 filenames (optionally with dataset name, separated by ",")
             import_all: Import all datasets from HDF5 files
             reset_all: Reset all application data before importing
         """
-        super().open_h5_files(h5files, import_all, reset_all)
+        if (
+            h5files is None
+            and reset_all is None
+            and not self._is_workspace_empty()
+            and Conf.h5_clear_workspace_ask.get()
+        ):
+            with qth.save_restore_stds():
+                h5files, _fl = getopenfilenames(
+                    self,
+                    _("Open"),
+                    Conf.base_dir.get(),
+                    _("HDF5 files (*.h5 *.hdf5 *.hdf *.he5);;All files (*)"),
+                )
+            if not h5files:
+                return
+        self.__h5_provenance_files = (
+            import_all is not None
+            and h5files is not None
+            and any(
+                "," not in fname and workspace_has_provenance(fname)
+                for fname in h5files
+            )
+        )
+        try:
+            super().open_h5_files(h5files, import_all, reset_all)
+        finally:
+            self.__h5_provenance_files = False
+            self.h5inputoutput.append_informed = False
 
     def _on_h5_save_requested(self, filename: str) -> None:
         """Record the workspace save in the history session"""
@@ -2122,6 +2160,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             "from being displayed again, and will use the "
             "current setting (%s)."
         ) % (_("Yes") if reset_all else _("No"))
+        if self.__h5_provenance_files:
+            msg += "<br><br><u>" + _("Provenance:") + "</u> "
+            msg += _("If you choose <i>No</i>: ") + append_provenance_notice()
+            # Said here: appending will not ask again (see H5InputOutput).
+            self.h5inputoutput.append_informed = True
         return msg
 
     def import_dataset_from_file(
@@ -2175,6 +2218,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         This method does not create file-selection widgets or progress bars. When
         history recording is active and the new-session policy is ``"ask"``, a
         history-session question may still be shown before loading.
+
+        When a file holding provenance is appended (``reset_all=False``), its
+        provenance is not imported: no question is asked, and the notice
+        ``datalab_capsule.recorder.APPEND_NOTICE`` is added to
+        ``provenance.notices`` (and logged).
 
         .. warning::
 

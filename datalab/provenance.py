@@ -165,6 +165,7 @@ class ProvenanceService(Recorder):
         replaced: bool,
         saved_version: str | None = None,
         current_version: str | None = None,
+        appended: Iterable[Any] = (),
     ) -> None:
         """Adopt the ledger read from a workspace file, after its objects.
 
@@ -179,10 +180,13 @@ class ProvenanceService(Recorder):
             saved_version: DataLab version that saved the file, as stored.
             current_version: Version compared with *saved_version* (default:
              this DataLab version).
+            appended: Objects added by an appended file: those holding an
+             identifier already known to the ledger never inherit its records.
         """
         super().load(
             block,
             replaced,
             saved_version,
             datalab.__version__ if current_version is None else current_version,
+            appended=appended,
         )

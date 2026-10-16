@@ -513,9 +513,10 @@ class ProvenanceWidget(QW.QWidget):
             item, _("Inputs"), str(activity.get("input_count", len(activity["inputs"])))
         )
         for position, entry in enumerate(activity["inputs"]):
-            name = self.__object_name(entry["object_uuid"]) or _(
-                "Original input missing"
-            )
+            # An absent input is not the object now holding its identifier
+            # (identity break after appending a workspace).
+            uuid = entry["object_uuid"] if entry["object_present"] else None
+            name = (uuid and self.__object_name(uuid)) or _("Original input missing")
             status = _input_message(entry["data"])
             if entry.get("cycle"):
                 status += " — " + _("already shown above (cycle)")
@@ -524,7 +525,7 @@ class ProvenanceWidget(QW.QWidget):
                 f"{position + 1}. {entry['role']}: {name}",
                 status,
                 {
-                    "object_uuid": entry["object_uuid"],
+                    "object_uuid": uuid,
                     "state_id": entry["state_id"],
                     "trail": trail,
                 },
@@ -540,18 +541,20 @@ class ProvenanceWidget(QW.QWidget):
                     outputs_item, _("No result"), _("Nothing was found (not an error)")
                 )
             for output in outputs:
+                uuid = output.get("object_uuid")
                 if output["recorded"] == "artifact":
                     text = f"{output['role']}: {output['key']}"
                 else:
+                    uuid = uuid if output["object_present"] else None
                     text = f"{output['role']}: " + (
-                        self.__object_name(output["object_uuid"])
+                        (uuid and self.__object_name(uuid))
                         or _("Object no longer exists")
                     )
                 self.__item(
                     outputs_item,
                     text,
                     _output_message(output["status"]),
-                    {"object_uuid": output.get("object_uuid")},
+                    {"object_uuid": uuid},
                 )
             if analysis:
                 outputs_item.setExpanded(True)
@@ -750,12 +753,16 @@ class ExecutionProvenanceDialog(QW.QDialog):
     @staticmethod
     def __label(mainwindow: DLMainWindow, activity: dict, number: int) -> str:
         """Return the tab label of an activity: its result, or its number."""
-        for output in activity["outputs"]:
-            if "state_id" in output:
-                state = mainwindow.provenance.ledger.states[output["state_id"]]
-                obj = mainwindow.find_object_by_uuid(state["object_uuid"])
+        described = mainwindow.provenance.describe_activity(activity["activity_id"])
+        for output in described["outputs"]:
+            if output["recorded"] == "state":
+                obj = (
+                    mainwindow.find_object_by_uuid(output["object_uuid"])
+                    if output["object_present"]
+                    else None
+                )
                 if isinstance(obj, (SignalObj, ImageObj)):
                     return f"{get_short_id(obj)}: {obj.title}"
-            elif "artifact" in output:
-                return f"#{number}: {output['artifact']['key']}"
+            else:
+                return f"#{number}: {output['key']}"
         return f"#{number}"
