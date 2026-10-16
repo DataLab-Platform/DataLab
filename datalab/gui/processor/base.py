@@ -73,6 +73,7 @@ if TYPE_CHECKING:
 
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
+    from datalab.processingcall import ProcessingCall
 
 
 @dataclass
@@ -159,6 +160,26 @@ class ProcessingReport:
     success: bool
     obj_uuid: str | None = None
     message: str | None = None
+    cancelled: bool = False
+
+
+@dataclass
+class ProcessingCandidate:
+    """Result of one processing call computed without being inserted.
+
+    Args:
+        result: Computed object, or None.
+        pending: Pending provenance activity (input states recorded), or None.
+        transaction: Source preparation transaction to commit once the result
+         is adopted, if any.
+        error_msg: Error message when no result was produced.
+        cancelled: True if the user cancelled the computation.
+    """
+
+    result: SignalObj | ImageObj | None = None
+    pending: Any = None
+    transaction: SourcePreparationTransaction | None = None
+    error_msg: str | None = None
     cancelled: bool = False
 
 
@@ -1556,128 +1577,94 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         param: gds.DataSet | None = None,
         interactive: bool = True,
         refresh_plot: bool = True,
+        call: ProcessingCall | None = None,
     ) -> ProcessingReport:
         # pylint: disable=too-many-return-statements
-        """Recompute a stored 1-to-1 processing operation on demand.
+        """Apply again, in place, the processing that produced an object.
 
-        This is the processing counterpart of :meth:`recompute_analysis`. It
-        resolves the stored 1-to-1 processing metadata from ``obj``, recomputes
-        the result from its source object, then updates ``obj`` in-place.
+        This is the processing counterpart of :meth:`recompute_analysis`. The
+        call that produced ``obj`` is restored (see
+        :func:`datalab.processingcall.resolve_processing_call`): 1-to-1, 2-to-1
+        and n-to-1 calls, conversions between signals and images included, with
+        every input in order. The result is computed from the current inputs by
+        the processor of the inputs, with the same preparation as the menus,
+        then copied into ``obj`` (whose identity is kept) and recorded as a new
+        activity; the previous ones are left unchanged.
 
         Args:
             obj: The processed object to recompute in-place.
-            param: Optional parameter override. When None, use the parameters
-             stored in the object's processing metadata.
+            param: Optional parameter override. When None, use the restored
+             parameters.
             interactive: If True, show UI error messages.
             refresh_plot: Whether to refresh the plot after recomputation.
+            call: Restored call, if already resolved.
 
         Returns:
             ProcessingReport describing the result.
         """
+        # pylint: disable=import-outside-toplevel
+        from datalab.processingcall import resolve_processing_call
+
         if env.execenv.unattended:
             interactive = False
 
         report = ProcessingReport(success=False, obj_uuid=get_uuid(obj))
 
-        # Extract processing parameters
-        proc_params = extract_processing_parameters(obj)
-        if proc_params is None or proc_params.pattern != "1-to-1":
-            report.message = _("Processing metadata is incomplete.")
+        def fail(message: str, critical: bool = False) -> ProcessingReport:
+            report.message = message
             if interactive:
-                QW.QMessageBox.critical(self.panel, _("Error"), report.message)
+                if critical:
+                    QW.QMessageBox.critical(self.panel, _("Error"), message)
+                else:
+                    QW.QMessageBox.warning(self.panel, _("Error"), message)
             return report
 
-        # Check if source object still exists
-        if proc_params.source_uuid is None:
-            report.message = _(
-                "Processing metadata is incomplete (missing source UUID)."
-            )
-            if interactive:
-                QW.QMessageBox.critical(self.panel, _("Error"), report.message)
-            return report
-
-        # Find source object
-        source_obj = self.mainwindow.find_object_by_uuid(proc_params.source_uuid)
-        if source_obj is None:
-            report.message = _("Source object no longer exists.")
-            if interactive:
-                QW.QMessageBox.critical(
-                    self.panel,
-                    _("Error"),
-                    report.message
-                    + "\n\n"
-                    + _(
-                        "The object that was used to create this processed object "
-                        "has been deleted and cannot be used for reprocessing."
-                    ),
+        if call is None:
+            call = resolve_processing_call(self.mainwindow, obj)
+        if call is None:
+            return fail(_("Processing metadata is incomplete."), critical=True)
+        if call.reason is not None:
+            message = call.reason
+            if call.missing_inputs and call.unavailable_reason is None:
+                message += "\n\n" + _(
+                    "The object that was used to create this processed object "
+                    "has been deleted and cannot be used for reprocessing."
                 )
-            return report
+                report.message = call.reason
+                if interactive:
+                    QW.QMessageBox.critical(self.panel, _("Error"), message)
+                return report
+            return fail(message, critical=True)
 
-        # Get updated parameters from caller/editor override, fallback to metadata
-        param = proc_params.param if param is None else param
-
-        # For cross-panel computations, we need to use the processor from the panel
-        # that owns the source object (e.g., radial_profile is in ImageProcessor)
-        if isinstance(source_obj, SignalObj):
-            source_processor = self.mainwindow.signalpanel.processor
-        else:
-            source_processor = self.mainwindow.imagepanel.processor
-
-        # Recompute using the dedicated method (with multiprocessing support)
-        pending = None
+        param = call.param if param is None else param
         try:
-            feature = source_processor.get_feature(
-                proc_params.func_name,
-                plugin_origin=proc_params.plugin_origin,
-                paramclass_name=type(param).__name__ if param is not None else None,
-            )
-            pending = self.mainwindow.provenance.begin(
-                feature.function, param, source_obj, origin="recompute_in_place"
-            )
-            compout = source_processor.recompute_1_to_1(
-                proc_params.func_name,
-                source_obj,
-                param,
-                plugin_origin=proc_params.plugin_origin,
+            candidate = call.processor.compute_processing_candidate(
+                call.feature, call.objects, param, call.roles, call.plugin_origin
             )
         except Exception as exc:  # pylint: disable=broad-exception-caught
-            report.message = _("Failed to reprocess object:\n%s") % str(exc)
-            if interactive:
-                QW.QMessageBox.warning(self.panel, _("Error"), report.message)
-            return report
+            return fail(_("Failed to reprocess object:\n%s") % str(exc))
 
-        # User cancelled the operation
-        if compout.cancelled:
+        if candidate.cancelled:
             report.message = _("Processing was cancelled.")
             report.cancelled = True
             return report
-
-        new_obj = compout.result
+        new_obj = candidate.result
         if new_obj is None:
-            report.message = compout.error_msg or _("Failed to reprocess object.")
+            report.message = candidate.error_msg or _("Failed to reprocess object.")
             return report
 
-        # Update metadata with new processing parameters
-        updated_proc_params = ProcessingParameters(
-            func_name=proc_params.func_name,
-            pattern=proc_params.pattern,
-            param=param,
-            source_uuid=proc_params.source_uuid,
-            plugin_origin=proc_params.plugin_origin,
-        )
         try:
             if (
                 not self.panel.objmodel.has_uuid(report.obj_uuid)
                 or self.panel.objmodel[report.obj_uuid] is not obj
             ):
                 raise ValueError("Processing destination no longer exists")
-            apply_processing_result(obj, new_obj, updated_proc_params)
+            apply_processing_result(obj, new_obj, call.processing_parameters(param))
         except Exception as exc:  # pylint: disable=broad-exception-caught
-            report.message = _("Failed to reprocess object:\n%s") % str(exc)
-            if interactive:
-                QW.QMessageBox.warning(self.panel, _("Error"), report.message)
-            return report
-        self.mainwindow.provenance.complete(pending, obj)
+            return fail(_("Failed to reprocess object:\n%s") % str(exc))
+        if candidate.transaction is not None:
+            candidate.transaction.commit(call.objects[0])
+        self.mainwindow.provenance.complete(candidate.pending, obj)
         self.panel.SIG_OBJECT_MODIFIED.emit()
 
         # Update the tree view item and refresh plot
@@ -1694,6 +1681,153 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             report.message = _("Image was reprocessed.")
         self.panel.SIG_STATUS_MESSAGE.emit("✅ " + report.message, 5000)
         return report
+
+    def compute_processing_candidate(
+        self,
+        feature: ComputingFeature,
+        inputs: list[SignalObj | ImageObj],
+        param: Any,
+        roles: list[str] | None = None,
+        plugin_origin: dict[str, Any] | None = None,
+    ) -> ProcessingCandidate:
+        # pylint: disable=too-many-locals
+        """Compute the result of one processing call without inserting it.
+
+        The inputs are prepared as by the menus (X-alignment policy of the
+        contract, or X-array compatibility check, source preparation hook of the
+        feature), the computation runs with process isolation and cancellation,
+        and the input states are recorded (``recompute_in_place`` origin) before
+        it runs. The caller adopts the result, records it with
+        ``provenance.complete(candidate.pending, output)`` and commits
+        ``candidate.transaction`` if any.
+
+        Args:
+            feature: Computing feature of this processor (1-to-1, 1-to-n,
+             2-to-1 or n-to-1).
+            inputs: Input objects, in call order (repetitions allowed).
+            param: Parameter argument, or None.
+            roles: Input roles; by default, those of the feature pattern.
+            plugin_origin: Plugin origin recorded with the result, if any
+             (default: the one of the feature).
+
+        Returns:
+            The candidate (result, error message or cancellation).
+        """
+        func = feature.function
+        title = feature.title or func.__name__
+        provenance = self.mainwindow.provenance
+        origin = "recompute_in_place"
+        inputs = list(inputs)
+        pattern = feature.pattern
+        transaction = None
+        if pattern in ("1_to_1", "1_to_n"):
+            # Same execution path as the historical 1-to-1 re-processing
+            (source,) = inputs
+            pending = provenance.begin(func, param, source, origin=origin)
+            comp_out = self.recompute_1_to_1(
+                feature.feature_id,
+                source,
+                param,
+                plugin_origin=plugin_origin or feature.plugin_origin,
+            )
+            if comp_out.cancelled:
+                return ProcessingCandidate(cancelled=True)
+            if comp_out.result is None:
+                return ProcessingCandidate(
+                    error_msg=comp_out.error_msg or _("Failed to reprocess object.")
+                )
+            return ProcessingCandidate(result=comp_out.result, pending=pending)
+        with create_progress_bar(self.panel, _("Recomputing..."), max_=1) as progress:
+            progress.setValue(0)
+            progress.setLabelText(_("Processing object with updated parameters..."))
+            if pattern == "2_to_1":
+                source, operand = inputs
+                aligned = self._x_alignment_contract(func)
+                preparation = self.prepare_2_to_1_pairs(
+                    [(source, operand)],
+                    feature.skip_xarray_compat or aligned is not None,
+                    feature.pre_execute_hook,
+                )
+                if preparation is None:
+                    return ProcessingCandidate(cancelled=True)
+                ((actual1, actual2),), transaction = preparation
+                args = (
+                    (actual1, actual2) if param is None else (actual1, actual2, param)
+                )
+                context = None
+                if aligned is not None:
+                    try:
+                        prepared = self._prepare_with_contract(
+                            aligned, [actual1, actual2], param, title, progress, {}
+                        )
+                    except InterpolationRefused:
+                        return ProcessingCandidate(cancelled=True)
+                    if prepared is None:
+                        return ProcessingCandidate(
+                            error_msg=_("The signals cannot be aligned.")
+                        )
+                    args, context = tuple(prepared.args), prepared.context
+                pending = provenance.begin(
+                    func,
+                    param,
+                    [source, operand],
+                    context=context,
+                    limits=_x_interpolated([source, operand], [actual1, actual2]),
+                    executed=[actual1, actual2],
+                    origin=origin,
+                )
+                executed = [actual1, actual2]
+            elif pattern == "n_to_1":
+                executed = list(inputs)
+                aligned = self._x_alignment_contract(func)
+                context = None
+                if aligned is not None:
+                    try:
+                        prepared = self._prepare_with_contract(
+                            aligned, executed, param, title, progress, {}
+                        )
+                    except InterpolationRefused:
+                        return ProcessingCandidate(cancelled=True)
+                    if prepared is None:
+                        return ProcessingCandidate(
+                            error_msg=_("The signals cannot be aligned.")
+                        )
+                    context = prepared.context
+                    args = prepared.args
+                else:
+                    checked = self._check_signal_xarray_compatibility(
+                        executed, progress=progress
+                    )
+                    if checked is None:
+                        return ProcessingCandidate(cancelled=True)
+                    executed = checked[0]
+                    args = (executed,) if param is None else (executed, param)
+                pending = provenance.begin(
+                    func,
+                    param,
+                    inputs,
+                    roles=roles or ["sources"] * len(inputs),
+                    limits=_x_interpolated(inputs, executed),
+                    context=context,
+                    origin=origin,
+                )
+            else:
+                raise ValueError(f"Unsupported processing pattern: {pattern!r}")
+            comp_out = self.__exec_func(func, tuple(args), progress)
+            if comp_out is None:
+                return ProcessingCandidate(cancelled=True)
+            new_obj = self.handle_output(comp_out, _("Recomputing"), progress)
+            if not isinstance(new_obj, (SignalObj, ImageObj)):
+                return ProcessingCandidate(
+                    error_msg=comp_out.error_msg or _("Failed to reprocess object.")
+                )
+            self._handle_keep_results(new_obj)
+            if pattern == "n_to_1":
+                self._merge_geometry_results_for_n_to_1(new_obj, executed)
+            patch_title_with_ids(new_obj, inputs, get_short_id)
+        return ProcessingCandidate(
+            result=new_obj, pending=pending, transaction=transaction
+        )
 
     def __exec_func(
         self,
