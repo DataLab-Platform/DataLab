@@ -21,7 +21,6 @@ import sigima.params
 import sigima.proc.signal as sips
 from datalab_capsule.inspection import IDENTITY_LIMIT
 from datalab_capsule.recorder import APPEND_NOTICE
-from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 import datalab.gui.h5io
@@ -125,12 +124,9 @@ def test_append_never_attributes_recorded_provenance() -> None:
             assert call.missing_inputs and call.reason
             # The provenance view does not name the copy as the input of S2.
             view = view_of(win, objs["S2"])
-            (item,) = [
-                i.child(0) for i in view.tree.findItems("Inputs", QC.Qt.MatchRecursive)
-            ]
-            assert "Original input missing" in item.text(0)
-            view.tree.setCurrentItem(item)
-            assert not view.select_button.isEnabled()
+            assert "1. source: Original input missing" in view.text()
+            goto = [entry for entry in view.links if entry["action"] == "goto"]
+            assert get_uuid(copy) not in [entry["payload"] for entry in goto]
             # The appended copy is processed and recorded as usual.
             _select(win, copy)
             out = _run(

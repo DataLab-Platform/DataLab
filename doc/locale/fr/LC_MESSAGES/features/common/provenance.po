@@ -35,32 +35,38 @@ msgstr "Sélectionnez un objet et ouvrez l'onglet **Provenance** du panneau des 
 msgid "a summary: the recorded execution that produced the current content, whether the data still have to be checked, and any limitation (e.g. data altered in the file, or a state observed without recorded production);"
 msgstr "un résumé : l'exécution enregistrée qui a produit le contenu actuel, si les données restent à contrôler, et toute limite (par exemple des données altérées dans le fichier, ou un état observé sans production enregistrée) ;"
 
-msgid "a tree with the **Production** of the object (operation, parameters, inputs, results, context and software), its **Recorded analyses**, its **Earlier recorded states** and, for workspaces saved by older versions, the **Records of an old workspace** and the **Metadata history (not verified)**."
-msgstr "une arborescence avec la **Production** de l'objet (opération, paramètres, entrées, résultats, contexte et logiciels), ses **Analyses enregistrées**, ses **États enregistrés antérieurs** et, pour les espaces de travail enregistrés par d'anciennes versions, les **Enregistrements d'un ancien espace de travail** et l'**Historique des métadonnées (non vérifié)**."
+msgid "the **Production** of the object, its **Recorded analyses**, its **Earlier recorded states** and, for workspaces saved by older versions, the **Records of an old workspace** and the **Metadata history (not verified)**."
+msgstr "la **Production** de l'objet, ses **Analyses enregistrées**, ses **États enregistrés antérieurs** et, pour les espaces de travail enregistrés par d'anciennes versions, les **Enregistrements d'un ancien espace de travail** et l'**Historique des métadonnées (non vérifié)**."
 
-msgid "Everything recorded for the object is shown expanded, and the main parameters of each operation are summarized on its line (e.g. ``Gaussian filter — sigma=2.0``)."
-msgstr "Tout ce qui est enregistré pour l'objet est affiché déplié, et les principaux paramètres de chaque opération sont résumés sur sa ligne (par exemple ``Gaussian filter — sigma=2.0``)."
+msgid "Each recorded step is shown as a card: the operation, how and when it was recorded and by which software (DataLab Desktop or DataLab Web), its parameters, its inputs and results with their status, and links acting on what they are next to:"
+msgstr "Chaque étape enregistrée est présentée sous forme de fiche : l'opération, comment, quand et par quel logiciel (DataLab Desktop ou DataLab Web) elle a été enregistrée, ses paramètres, ses entrées et ses résultats avec leur statut, et des liens qui agissent sur ce qu'ils accompagnent :"
 
-msgid "Each input of a production can be expanded to show how that input was itself produced, step by step, without computing anything (earlier steps are loaded when expanded). The state actually used is shown, even if the input object was modified or reprocessed since: for example, if ``S2`` was computed from ``S1`` filtered with sigma = 2 and ``S1`` was then filtered again with sigma = 5, expanding the input of ``S2`` shows sigma = 2."
-msgstr "Chaque entrée d'une production peut être développée pour montrer comment cette entrée a elle-même été produite, étape par étape, sans rien calculer (les étapes antérieures sont chargées lorsqu'elles sont développées). L'état réellement utilisé est affiché, même si l'objet d'entrée a été modifié ou retraité depuis : par exemple, si ``S2`` a été calculé à partir de ``S1`` filtré avec sigma = 2, puis ``S1`` filtré à nouveau avec sigma = 5, le développement de l'entrée de ``S2`` montre sigma = 2."
+msgid "**Show recorded step** (under an input) shows how that input was itself produced, step by step, without computing anything. The state actually used is shown, even if the input object was modified or reprocessed since: for example, if ``S2`` was computed from ``S1`` filtered with sigma = 2 and ``S1`` was then filtered again with sigma = 5, the recorded step of the input of ``S2`` shows sigma = 2. **Hide recorded step** hides it again;"
+msgstr "**Afficher l'étape enregistrée** (sous une entrée) montre comment cette entrée a elle-même été produite, étape par étape, sans rien calculer. L'état réellement utilisé est affiché, même si l'objet d'entrée a été modifié ou retraité depuis : par exemple, si ``S2`` a été calculé à partir de ``S1`` filtré avec sigma = 2, puis ``S1`` filtré à nouveau avec sigma = 5, l'étape enregistrée de l'entrée de ``S2`` montre sigma = 2. **Masquer l'étape enregistrée** la masque à nouveau ;"
+
+msgid "**Go to object** (under an input or a result) selects, in the signal or image panel, the object that holds it today (it may have changed since the computation);"
+msgstr "**Aller à l'objet** (sous une entrée ou un résultat) sélectionne, dans le panneau des signaux ou des images, l'objet qui la porte aujourd'hui (il a pu changer depuis le calcul) ;"
+
+msgid "**Verify this step** recomputes the step separately and compares every result with the recorded one: *Exact*, *Within tolerance*, *Different* or *Not verified* (with the reason). The workspace is not changed;"
+msgstr "**Vérifier cette étape** recalcule l'étape séparément et compare chaque résultat au résultat enregistré : *Exact*, *Dans la tolérance*, *Différent* ou *Non vérifié* (avec la raison). L'espace de travail n'est pas modifié ;"
+
+msgid "**History action** selects the History action whose last execution recorded the step, when there is one;"
+msgstr "**Action de l'historique** sélectionne l'action de l'historique dont la dernière exécution a enregistré l'étape, lorsqu'elle existe ;"
+
+msgid "**Show details** shows the context of the step (options, X alignment, metadata read) and the software versions."
+msgstr "**Afficher les détails** affiche le contexte de l'étape (options, alignement en X, métadonnées lues) et les versions des logiciels."
 
 msgid "Consulting reads the provenance record only: it never computes, never changes the workspace and never adds a History action."
 msgstr "La consultation lit uniquement l'enregistrement de provenance : elle ne calcule jamais, ne modifie jamais l'espace de travail et n'ajoute jamais d'action à l'historique."
 
-msgid "The buttons below the tree act on the selected item:"
-msgstr "Les boutons situés sous l'arborescence agissent sur l'élément sélectionné :"
+msgid "The buttons below the cards act on the object:"
+msgstr "Les boutons situés sous les fiches agissent sur l'objet :"
 
-msgid "**Check data** compares the object, and the direct inputs and results of its production, with their recorded states, without computing. The earlier steps shown, or expanded afterwards, are checked too; the items you expanded or collapsed stay so. A deleted input or result is reported as missing at once, without checking (nothing has to be read to know it);"
-msgstr "**Contrôler les données** compare l'objet, ainsi que les entrées directes et les résultats de sa production, à leurs états enregistrés, sans calculer. Les étapes antérieures affichées, ou développées ensuite, sont également contrôlées ; les éléments que vous avez développés ou réduits le restent. Une entrée ou un résultat supprimé est signalé absent immédiatement, sans contrôle (rien n'a besoin d'être lu pour le savoir) ;"
+msgid "**Check data** compares the object, the direct inputs and results of its production and the earlier steps shown with their recorded states, without computing. The steps shown and the details opened stay so. A deleted input or result is reported as missing at once, without checking (nothing has to be read to know it);"
+msgstr "**Contrôler les données** compare l'objet, les entrées directes et les résultats de sa production et les étapes antérieures affichées à leurs états enregistrés, sans calculer. Les étapes affichées et les détails ouverts le restent. Une entrée ou un résultat supprimé est signalé absent immédiatement, sans contrôle (rien n'a besoin d'être lu pour le savoir) ;"
 
-msgid "**Verify computation** recomputes the selected recorded activity separately and compares every result with the recorded one: *Exact*, *Within tolerance*, *Different* or *Not verified* (with the reason). The workspace is not changed;"
-msgstr "**Vérifier le calcul** recalcule séparément l'activité enregistrée sélectionnée et compare chaque résultat au résultat enregistré : *Exact*, *Dans la tolérance*, *Différent* ou *Non vérifié* (avec la raison). L'espace de travail n'est pas modifié ;"
-
-msgid "**Select current object** selects the object currently holding the identifier of the selected input or result;"
-msgstr "**Sélectionner l'objet actuel** sélectionne l'objet portant actuellement l'identifiant de l'entrée ou du résultat sélectionné ;"
-
-msgid "**History action** selects the History action whose last execution recorded this step, when there is one."
-msgstr "**Action de l'historique** sélectionne l'action de l'historique dont la dernière exécution a enregistré cette étape, lorsqu'elle existe."
+msgid "**Verify computation** verifies the production of the object, like **Verify this step**."
+msgstr "**Vérifier le calcul** vérifie la production de l'objet, comme **Vérifier cette étape**."
 
 msgid "States and messages"
 msgstr "États et messages"

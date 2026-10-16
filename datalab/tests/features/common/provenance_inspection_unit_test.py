@@ -18,7 +18,6 @@ import os.path as osp
 import numpy as np
 import sigima.params
 import sigima.proc.signal as sips
-from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from datalab.objectmodel import get_short_id, get_uuid
@@ -88,6 +87,14 @@ def same(before: tuple, after: tuple) -> bool:
     )
 
 
+def link(view, action: str, payload: str) -> str | None:
+    """Return the href of the link of *action* on *payload*, or None."""
+    for entry in view.links:
+        if entry["action"] == action and entry["payload"] == payload:
+            return entry["href"]
+    return None
+
+
 def view_of(win, obj):
     """Select *obj* and return the provenance view of its panel."""
     panel = win.signalpanel
@@ -112,11 +119,10 @@ def check_sigma_scenario(win, objs: dict) -> None:
     ancestor = win.provenance.describe_state(source["state_id"])
     assert ancestor["production"]["parameters"]["sigma"] == 2.0
     assert ancestor["anchor"]["latest"] is False
-    # The input item is expanded on demand to the sigma = 2 production.
-    item = view.tree.findItems("Inputs", QC.Qt.MatchRecursive, 0)[0].child(0)
-    item.setExpanded(True)
-    texts = [item.child(i).text(0) for i in range(item.childCount())]
-    assert any("gaussian" in text.lower() for text in texts), texts
+    # The input is expanded on demand to the sigma = 2 production.
+    assert "sigma = 2.0" not in view.text()
+    view.activate_link(link(view, "expand", "p/0"))
+    assert "Gaussian filter" in view.text() and "sigma = 2.0" in view.text()
     view.check_data()
     checked = view.description["production"]
     assert view.description["anchor"]["content"] == "matches"
@@ -256,56 +262,47 @@ def test_view_survives_metadata_deletion() -> None:
         for _index in range(3):
             QW.QApplication.processEvents()
         assert view.description["object"]["object_uuid"] == get_uuid(objs["s2"])
-        (results,) = view.tree.findItems("Results", QC.Qt.MatchRecursive, 0)
-        assert get_short_id(objs["s2"]) in results.child(0).text(0)
+        assert f"result: {get_short_id(objs['s2'])}" in view.text()
 
 
-def _item(view, *texts: str):
-    """Return the tree item whose path starts with *texts* (prefixes)."""
-    items = [view.tree.topLevelItem(i) for i in range(view.tree.topLevelItemCount())]
-    item = None
-    for text in texts:
-        (item,) = [i for i in items if i.text(0).startswith(text)]
-        items = [item.child(i) for i in range(item.childCount())]
-    return item
-
-
-def test_tree_is_readable_and_keeps_its_layout() -> None:
-    """Loaded steps are expanded; Check data keeps the layout and checks them."""
+def test_cards_are_readable_and_keep_their_state() -> None:
+    """Cards wrap; Check data keeps the steps expanded and checks them."""
     with app() as win:
         objs = build_chain(win)
         view = view_of(win, objs["s2"])
-        production = _item(view, "Production")
-        (operation,) = [production.child(0)]
-        assert operation.isExpanded() and "method=maximum" in operation.text(0)
-        assert "DataLab Desktop" in operation.text(1)
-        software = _item(view, "Production", "Normalize", "Details", "Software")
-        assert software.text(1).startswith("DataLab Desktop ")
-        source = _item(view, "Production", "Normalize", "Inputs", "1. source")
-        assert not source.isExpanded()  # Earlier steps are loaded on demand
-        source.setExpanded(True)
-        ancestor = _item(view, "Production", "Normalize", "Inputs", "1. source")
-        (step,) = [ancestor.child(0)]
-        assert "sigma=2.0" in step.text(0) and step.isExpanded()
-        before = ancestor.child(0)
-        inputs = [before.child(i) for i in range(before.childCount())]
-        (step_inputs,) = [i for i in inputs if i.text(0) == "Inputs"]
-        assert step_inputs.child(0).text(1) == "Data to be checked"
-        details = _item(view, "Production", "Normalize", "Details")
-        details.setExpanded(False)
+        text = view.text()
+        assert "Normalize" in text and "method = maximum" in text
+        assert "DataLab Desktop" in text
+        # Details are shown on demand
+        assert "Software" not in text
+        view.activate_link(link(view, "details", "d/p"))
+        assert "Software: DataLab Desktop " in view.text()
+        view.activate_link(link(view, "details", "d/p"))
+        assert "Software" not in view.text()
+        # The earlier step is loaded on demand, unchecked at first
+        view.activate_link(link(view, "expand", "p/0"))
+        step = view.text().split("sigma = 2.0", 1)[1]
+        assert "Data to be checked" in step
+        assert link(view, "collapse", "p/0")
         view.check_data()
-        # Layout kept: the earlier step stays expanded, Details stays collapsed
-        source = _item(view, "Production", "Normalize", "Inputs", "1. source")
-        assert source.isExpanded()
-        assert not _item(view, "Production", "Normalize", "Details").isExpanded()
-        step = source.child(0)
-        (step_inputs,) = [
-            step.child(i)
-            for i in range(step.childCount())
-            if step.child(i).text(0) == "Inputs"
-        ]
-        # The expanded earlier step is checked too
-        assert step_inputs.child(0).text(1) == "Recorded state available"
+        # Still expanded after the check, and checked too
+        assert link(view, "collapse", "p/0")
+        step = view.text().split("sigma = 2.0", 1)[1]
+        assert "Recorded state available" in step
+        assert "Data to be checked" not in step
+        # Collapsing the step hides it
+        view.activate_link(link(view, "collapse", "p/0"))
+        assert "sigma = 2.0" not in view.text()
+
+
+def test_titles_are_text_never_markup() -> None:
+    """An object title is shown as text, never interpreted as HTML."""
+    with app() as win:
+        objs = build_chain(win)
+        objs["s1"].title = "<b>bold</b> & <a href='x'>link</a>"
+        view = view_of(win, objs["s2"])
+        assert "<b>bold</b> & <a href='x'>link</a>" in view.text()
+        assert all(entry["href"].startswith("provenance:") for entry in view.links)
 
 
 def test_absent_input_is_reported_before_checking() -> None:
@@ -315,9 +312,25 @@ def test_absent_input_is_reported_before_checking() -> None:
         win.signalpanel.objview.select_objects([get_uuid(objs["s1"])])
         win.signalpanel.remove_object(force=True)
         view = view_of(win, objs["s2"])
-        source = _item(view, "Production", "Normalize", "Inputs", "1. source")
-        assert source.text(0) == "1. source: Original input missing"
-        assert source.text(1) == "Original input missing"
+        assert (
+            "1. source: Original input missing — Original input missing" in view.text()
+        )
+        # Nothing to go to: the object now holding the identifier is not the input
+        assert not [entry for entry in view.links if entry["action"] == "goto"]
+
+
+def test_go_to_object_selects_the_input() -> None:
+    """Go to object selects the object holding the input in its panel."""
+    with app() as win:
+        objs = build_chain(win)
+        view = view_of(win, objs["s2"])
+        (goto,) = [entry for entry in view.links if entry["action"] == "goto"]
+        assert goto["text"] == "Go to object"
+        assert goto["payload"] == get_uuid(objs["s1"])
+        view.activate_link(goto["href"])
+        QW.QApplication.processEvents()
+        current = win.signalpanel.objview.get_current_object()
+        assert current is objs["s1"]
 
 
 def test_history_action_keeps_the_provenance_tab() -> None:
@@ -332,12 +345,27 @@ def test_history_action_keeps_the_provenance_tab() -> None:
             objprop.tabwidget.tabText(objprop.tabwidget.indexOf(objprop.history_stack))
             == "Provenance"
         )
-        view.tree.setCurrentItem(_item(view, "Production", "Normalize"))
-        assert view.action_button.isEnabled()
-        view.action_button.click()
+        (action,) = [entry for entry in view.links if entry["action"] == "action"]
+        view.activate_link(action["href"])
         QW.QApplication.processEvents()
         assert objprop.tabwidget.currentWidget() is objprop.history_stack
+        selected = win.historypanel.navigation.current_action()
+        assert action["payload"] in selected.provenance_activity_ids
         # Another object shows its Properties first, as before
         win.signalpanel.objview.set_current_object(objs["s0"])
         QW.QApplication.processEvents()
         assert objprop.tabwidget.currentWidget() is objprop.properties
+
+
+def test_a_step_is_verified_from_its_card() -> None:
+    """Verify this step verifies that step and names it."""
+    with app() as win:
+        objs = build_chain(win)
+        view = view_of(win, objs["s2"])
+        view.activate_link(link(view, "expand", "p/0"))
+        verify = [entry for entry in view.links if entry["action"] == "verify"]
+        assert len(verify) == 2  # Production and the expanded earlier step
+        production = view.description["production"]["activity_id"]
+        (step,) = [entry for entry in verify if entry["payload"] != production]
+        view.activate_link(step["href"])
+        assert "Verification of Gaussian filter" in view.report.text()
