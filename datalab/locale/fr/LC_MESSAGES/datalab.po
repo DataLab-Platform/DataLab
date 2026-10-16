@@ -1347,8 +1347,8 @@ msgstr ""
 msgid "e.g. %s"
 msgstr "ex. %s"
 
-msgid "History"
-msgstr "Historique"
+msgid "Provenance"
+msgstr "Provenance"
 
 msgid "Analysis parameters"
 msgstr "Paramètres d'analyse"
@@ -4761,7 +4761,6 @@ msgstr "Vérification"
 msgid "Not recorded"
 msgstr "Non enregistré"
 
-#, python-format
 msgid "Inputs"
 msgstr "Entrées"
 

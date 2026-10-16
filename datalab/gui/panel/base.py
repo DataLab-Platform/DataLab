@@ -250,7 +250,7 @@ class ObjectProp(QW.QWidget):
         self.processing_history = QW.QTextEdit()
         self.processing_history.setReadOnly(True)
         self.processing_history.setFont(font)
-        # The History tab shows the provenance recorded in the workspace ledger,
+        # The Provenance tab shows the provenance recorded in the workspace ledger,
         # or the processing metadata of objects without recorded production.
         self.provenance_widget = ProvenanceWidget(panel.mainwindow)
         self.history_stack = QW.QStackedWidget()
@@ -267,8 +267,12 @@ class ObjectProp(QW.QWidget):
         self.fresh_analysis_obj_uuid: str | None = None
         # Track when object was just processed (1-to-1)
         self.fresh_processing_obj_uuid: str | None = None
+        # UUID of the object shown (see update_properties_from)
+        self.__shown_uuid: str | None = None
 
-        self.tabwidget.addTab(self.history_stack, get_icon("history.svg"), _("History"))
+        self.tabwidget.addTab(
+            self.history_stack, get_icon("history.svg"), _("Provenance")
+        )
         self.tabwidget.addTab(
             self.analysis_parameters, get_icon("analysis.svg"), _("Analysis parameters")
         )
@@ -422,7 +426,7 @@ class ObjectProp(QW.QWidget):
         return "\n".join(history_lines)
 
     def display_processing_history(self, obj: SignalObj | ImageObj) -> bool:
-        """Display the provenance of an object in the History tab.
+        """Display the provenance of an object in the Provenance tab.
 
         When the workspace ledger records a production, an old record or an
         analysis of the object, the provenance view is shown (see
@@ -479,6 +483,15 @@ class ObjectProp(QW.QWidget):
             force_tab: Force a specific tab to be current
         """
         self.properties.setDisabled(obj is None)
+        # The tab shown stays current when the same object is shown again (e.g.
+        # reselected from the History panel); another object shows Properties.
+        uuid = None if obj is None else get_uuid(obj)
+        previous_tab = (
+            self.__current_tab_kind()
+            if uuid is not None and uuid == self.__shown_uuid
+            else None
+        )
+        self.__shown_uuid = uuid
         if obj is None:
             obj = self.objclass()
 
@@ -556,9 +569,41 @@ class ObjectProp(QW.QWidget):
             self.tabwidget.setCurrentWidget(self.analysis_scroll)
         elif force_tab == "analysis" and has_analysis_parameters:
             self.tabwidget.setCurrentWidget(self.analysis_parameters)
+        elif previous_tab is not None and self.__restore_tab(previous_tab):
+            pass
         else:
             # Default: always show Properties tab when switching objects
             self.tabwidget.setCurrentWidget(self.properties)
+
+    def __current_tab_kind(self) -> str | None:
+        """Return the kind of the current tab (dynamic tabs are rebuilt)."""
+        widget = self.tabwidget.currentWidget()
+        kinds = {
+            "creation": self.creation_scroll,
+            "processing": self.processing_scroll,
+            "analysis": self.analysis_scroll,
+            "provenance": self.history_stack,
+            "analysis_parameters": self.analysis_parameters,
+        }
+        for kind, tab in kinds.items():
+            if tab is not None and widget is tab:
+                return kind
+        return None
+
+    def __restore_tab(self, kind: str) -> bool:
+        """Make the tab of *kind* current again if it is shown; return success."""
+        widget = {
+            "creation": self.creation_scroll,
+            "processing": self.processing_scroll,
+            "analysis": self.analysis_scroll,
+            "provenance": self.history_stack,
+            "analysis_parameters": self.analysis_parameters,
+        }[kind]
+        index = -1 if widget is None else self.tabwidget.indexOf(widget)
+        if index < 0 or not self.tabwidget.isTabVisible(index):
+            return False
+        self.tabwidget.setCurrentWidget(widget)
+        return True
 
     def mark_as_newly_created(self, obj: SignalObj | ImageObj) -> None:
         """Mark object to show Creation tab on next selection.

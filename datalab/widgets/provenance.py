@@ -40,12 +40,20 @@ from datalab.objectmodel import get_short_id, get_uuid
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
 
-__all__ = ["ExecutionProvenanceDialog", "ProvenanceWidget", "format_parameter_value"]
+__all__ = [
+    "EDITION_NAMES",
+    "ExecutionProvenanceDialog",
+    "ProvenanceWidget",
+    "edition_name",
+    "format_parameter_value",
+]
 
 #: Longest text shown for one value (details are bounded).
 MAX_TEXT = 120
 #: Items of a list shown before ellipsis.
 MAX_ITEMS = 8
+#: Parameters summarized on the line of a recorded operation.
+MAX_SUMMARY_PARAMETERS = 3
 
 _ROLE = QC.Qt.UserRole
 _PLACEHOLDER = {"placeholder": True}
@@ -145,6 +153,43 @@ def _verdict_text(verdict: str) -> str:
     }.get(verdict, verdict)
 
 
+#: Product names of the editions recorded in the ledger (``environment.edition``)
+EDITION_NAMES = {"desktop": "DataLab Desktop", "web": "DataLab Web"}
+
+
+def edition_name(edition: str | None) -> str:
+    """Return the product name of a recorded edition (e.g. ``DataLab Desktop``)."""
+    if not edition:
+        return ""
+    return EDITION_NAMES.get(edition, edition)
+
+
+def _parameter_summary(parameters: dict[str, Any]) -> str:
+    """Return a one-line summary of recorded parameters (first ones only)."""
+    items = [
+        f"{name}={format_parameter_value(value)}"
+        for name, value in list(parameters.items())[:MAX_SUMMARY_PARAMETERS]
+    ]
+    if len(parameters) > MAX_SUMMARY_PARAMETERS:
+        items.append("…")
+    text = ", ".join(items)
+    return text if len(text) <= MAX_TEXT else text[: MAX_TEXT - 1] + "…"
+
+
+def _is_lazy(item: QW.QTreeWidgetItem) -> bool:
+    """Return True if *item* only holds the placeholder of a lazy expansion."""
+    return item.childCount() == 1 and item.child(0).data(0, _ROLE) == _PLACEHOLDER
+
+
+def _item_path(item: QW.QTreeWidgetItem) -> tuple[str, ...]:
+    """Return the texts from the top-level item down to *item*."""
+    path = []
+    while item is not None:
+        path.append(item.text(0))
+        item = item.parent()
+    return tuple(reversed(path))
+
+
 class ProvenanceWidget(QW.QWidget):
     """Read-only provenance view of a signal or image.
 
@@ -163,6 +208,9 @@ class ProvenanceWidget(QW.QWidget):
         self._fallback: str = ""
         self._description: dict[str, Any] | None = None
         self._generation = 0
+        # True once the data were checked: steps expanded afterwards are
+        # checked too (reset when another object or activity is shown).
+        self._checked = False
 
         self.summary = QW.QLabel()
         self.summary.setObjectName("provenance_summary")
@@ -268,39 +316,50 @@ class ProvenanceWidget(QW.QWidget):
             analysis of the object.
         """
         self._generation += 1
+        uuid = get_uuid(obj) if obj is not None else None
+        same = uuid is not None and uuid == self._object_uuid
         self._activity_id = None
         self._fallback = fallback
-        self._object_uuid = get_uuid(obj) if obj is not None else None
-        self.__refresh(check_data=False)
+        self._object_uuid = uuid
+        self._checked = False
+        self.__refresh(check_data=False, keep_layout=same)
         return self.has_content()
 
     def set_activity(self, activity_id: str) -> None:
         """Show one recorded activity (e.g. an execution of a History action)."""
         self._generation += 1
+        same = activity_id == self._activity_id
         self._object_uuid = None
         self._activity_id = activity_id
         self._fallback = ""
-        self.__refresh(check_data=False)
+        self._checked = False
+        self.__refresh(check_data=False, keep_layout=same)
 
     def invalidate(self) -> None:
         """Drop check and verification results; read the ledger again."""
         if self._object_uuid is None and self._activity_id is None:
             return
         self._generation += 1
-        self.__refresh(check_data=False)
+        self._checked = False
+        self.__refresh(check_data=False, keep_layout=True)
 
     def check_data(self) -> None:
-        """Compare the data with their recorded states (no computation)."""
+        """Compare the data with their recorded states (no computation).
+
+        The steps shown (or expanded afterwards) are checked too; the items
+        expanded or collapsed by the user stay so.
+        """
         if self._object_uuid is None and self._activity_id is None:
             return
         generation = self._generation
         QW.QApplication.setOverrideCursor(QC.Qt.WaitCursor)
         try:
             description = self.__describe(check_data=True)
+            if generation == self._generation and description is not None:
+                self._checked = True
+                self.__show(description, keep_layout=True)
         finally:
             QW.QApplication.restoreOverrideCursor()
-        if generation == self._generation and description is not None:
-            self.__show(description)
 
     def verify(self) -> dict[str, Any] | None:
         """Verify the recorded activity of the selected item (or the production).
@@ -367,12 +426,47 @@ class ProvenanceWidget(QW.QWidget):
             return None
         return None
 
-    def __refresh(self, check_data: bool) -> None:
+    def __refresh(self, check_data: bool, keep_layout: bool = False) -> None:
         self.report.clear()
         self.report.setVisible(False)
         description = self.__describe(check_data)
         self._description = description
-        self.__show(description)
+        self.__show(description, keep_layout)
+
+    def __layout(self) -> dict[tuple[str, ...], bool]:
+        """Return the expansion state of the items that have children."""
+        layout = {}
+        stack = [
+            self.tree.topLevelItem(i) for i in range(self.tree.topLevelItemCount())
+        ]
+        while stack:
+            item = stack.pop()
+            if item.childCount() and not _is_lazy(item):
+                layout[_item_path(item)] = item.isExpanded()
+            elif _is_lazy(item):
+                layout[_item_path(item)] = False
+            stack.extend(item.child(i) for i in range(item.childCount()))
+        return layout
+
+    def __expand_loaded(self, item: QW.QTreeWidgetItem) -> None:
+        """Expand *item* and its loaded descendants (lazy steps stay closed)."""
+        for index in range(item.childCount()):
+            child = item.child(index)
+            if child.childCount() and not _is_lazy(child):
+                child.setExpanded(True)
+                self.__expand_loaded(child)
+
+    def __restore_layout(
+        self, item: QW.QTreeWidgetItem, layout: dict[tuple[str, ...], bool]
+    ) -> None:
+        """Expand or collapse the items as they were before a refresh."""
+        for index in range(item.childCount()):
+            child = item.child(index)
+            expanded = layout.get(_item_path(child))
+            if expanded is not None and child.childCount():
+                # Expanding a lazy step loads it (checked if data were checked)
+                child.setExpanded(expanded)
+            self.__restore_layout(child, layout)
 
     # -- Display --------------------------------------------------------------
 
@@ -409,12 +503,24 @@ class ProvenanceWidget(QW.QWidget):
                 return f"{feature.title} ({title})"
         return title
 
-    def __show(self, description: dict[str, Any] | None) -> None:
-        self._description = description
+    def __show(
+        self, description: dict[str, Any] | None, keep_layout: bool = False
+    ) -> None:
+        """Show *description*: everything loaded is expanded; with *keep_layout*,
+        the items expanded or collapsed before (same object) stay so."""
+        layout = self.__layout() if keep_layout else None
         self.tree.clear()
+        self.__build(description)
+        root = self.tree.invisibleRootItem()
+        self.__expand_loaded(root)
+        if layout:
+            self.__restore_layout(root, layout)
+        self.__update_buttons()
+
+    def __build(self, description: dict[str, Any] | None) -> None:
+        self._description = description
         if description is None:
             self.summary.setText(_("No provenance is recorded for this object."))
-            self.__update_buttons()
             return
         if "activity" in description:
             activity = description["activity"]
@@ -422,8 +528,6 @@ class ProvenanceWidget(QW.QWidget):
                 _("Recorded execution: %s") % self.__operation_title(activity)
             )
             self.__add_activity(self.tree.invisibleRootItem(), activity, [])
-            self.tree.expandToDepth(0)
-            self.__update_buttons()
             return
         lines = [_content_message(description["anchor"]["content"])]
         if description["anchor"].get("file_status") == "altered":
@@ -465,7 +569,6 @@ class ProvenanceWidget(QW.QWidget):
                 )
                 if state["produced_by"]:
                     self.__item(child, "…", "", _PLACEHOLDER)
-        self.__update_buttons()
 
     def __item(
         self,
@@ -492,26 +595,29 @@ class ProvenanceWidget(QW.QWidget):
             part
             for part in (
                 _origin_text(activity["origin"]),
-                activity.get("edition"),
+                edition_name(activity.get("edition")),
                 when,
             )
             if part
         )
+        title = self.__operation_title(activity)
+        parameters = activity.get("parameters")
+        if parameters:
+            # Main parameters on the operation line: readable without expanding
+            title += " — " + _parameter_summary(parameters)
         item = self.__item(
             parent,
-            self.__operation_title(activity),
+            title,
             details,
             {"activity_id": activity["activity_id"]},
         )
         support = activity["support"]
         if support.get("reason"):
             self.__item(item, _("Verification"), support["reason"])
-        parameters = activity.get("parameters")
         if parameters:
             params_item = self.__item(item, _("Parameters"), "")
             for name, value in parameters.items():
                 self.__item(params_item, str(name), format_parameter_value(value))
-            params_item.setExpanded(True)
         elif parameters is None and activity["operation"] is not None:
             self.__item(item, _("Parameters"), _("Not recorded"))
         inputs_item = self.__item(
@@ -593,7 +699,7 @@ class ProvenanceWidget(QW.QWidget):
             self.__item(
                 item,
                 _("Software"),
-                f"{environment.get('edition', '?')} {version}",
+                f"{edition_name(environment.get('edition')) or '?'} {version}",
             )
             for name, version in (environment.get("packages") or {}).items():
                 self.__item(item, name, str(version))
@@ -608,7 +714,7 @@ class ProvenanceWidget(QW.QWidget):
             return
         try:
             description = self.mainwindow.provenance.describe_state(
-                state_id, trail=data.get("trail") or []
+                state_id, check_data=self._checked, trail=data.get("trail") or []
             )
         except KeyError:
             return
@@ -621,6 +727,7 @@ class ProvenanceWidget(QW.QWidget):
             return
         trail = [*(data.get("trail") or []), state_id]
         self.__add_activity(item, production, trail)
+        self.__expand_loaded(item)
 
     def __show_report(self, report: dict[str, Any]) -> None:
         lines = [

@@ -19,7 +19,7 @@ History panel.
 Consulting the provenance of an object
 --------------------------------------
 
-Select an object and open the **History** tab of the Properties panel. When the
+Select an object and open the **Provenance** tab of the Properties panel. When the
 workspace holds a provenance record for this object, the tab shows its
 provenance:
 
@@ -31,8 +31,12 @@ provenance:
   recorded states** and, for workspaces saved by older versions, the **Records
   of an old workspace** and the **Metadata history (not verified)**.
 
+Everything recorded for the object is shown expanded, and the main parameters of
+each operation are summarized on its line (e.g. ``Gaussian filter — sigma=2.0``).
+
 Each input of a production can be expanded to show how that input was itself
-produced, step by step, without computing anything. The state actually used is
+produced, step by step, without computing anything (earlier steps are loaded
+when expanded). The state actually used is
 shown, even if the input object was modified or reprocessed since: for example,
 if ``S2`` was computed from ``S1`` filtered with sigma = 2 and ``S1`` was then
 filtered again with sigma = 5, expanding the input of ``S2`` shows sigma = 2.
@@ -43,7 +47,10 @@ the workspace and never adds a History action.
 The buttons below the tree act on the selected item:
 
 - **Check data** compares the object, and the direct inputs and results of its
-  production, with their recorded states, without computing;
+  production, with their recorded states, without computing. The earlier steps
+  shown, or expanded afterwards, are checked too; the items you expanded or
+  collapsed stay so. A deleted input or result is reported as missing at once,
+  without checking (nothing has to be read to know it);
 - **Verify computation** recomputes the selected recorded activity separately and
   compares every result with the recorded one: *Exact*, *Within tolerance*,
   *Different* or *Not verified* (with the reason). The workspace is not changed;
