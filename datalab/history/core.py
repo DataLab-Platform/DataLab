@@ -27,8 +27,10 @@ _TRUSTED_ROI_MODULE_PREFIX = "sigima."
 # handling in serialize/deserialize) when the on-disk layout evolves.
 # Action schema v2: optional ``effects`` manifest for 1_to_0 compute actions,
 # and optional mutation descriptors (``mutation_key``/``target_uuids``).
+# Action schema v3: optional ``provenance_activity_ids`` (activities of the last
+# successful execution of the action, in the workspace provenance ledger).
 HISTORY_SCHEMA_VERSION = 1
-HISTORY_ACTION_SCHEMA_VERSION = 2
+HISTORY_ACTION_SCHEMA_VERSION = 3
 # Keys used in the kwargs dict to mark DataSet payloads, so that the
 # serialization layer can round-trip them as JSON strings instead of pickling
 # arbitrary Python objects.

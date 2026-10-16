@@ -106,6 +106,22 @@ def find_output_object_uuid(
     return None
 
 
+def find_action_for_activity(
+    panel: HistoryPanel, activity_id: str
+) -> HistoryAction | None:
+    """Find the action whose last successful execution recorded an activity.
+
+    The link is exact (see :attr:`HistoryAction.provenance_activity_ids`):
+    nothing is matched by function name, date or output UUID. Old actions,
+    copies and imported actions have no link.
+    """
+    for session in reversed(panel.history_sessions):
+        for action in reversed(session.actions):
+            if activity_id in action.provenance_activity_ids:
+                return action
+    return None
+
+
 def find_action_for_output(
     panel: HistoryPanel, output_uuid: str, func_name: str
 ) -> HistoryAction | None:

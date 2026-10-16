@@ -217,6 +217,13 @@ class HistoryAction(ObjItf):
         # ``discard_snapshot`` (definitive commit when toggling Edit mode off)
         # or ``restore_kwargs`` during parameter rollback.
         self.saved_kwargs: dict[str, Any] | None = None
+        # Activities of the workspace provenance ledger recorded by the last
+        # successful execution of this action (one per concrete call; an
+        # analysis may record an activity without output object). Set from the
+        # identifiers returned by the capture, never matched by name or date.
+        # Persisted (schema v3); never copied: a copied recipe has not been
+        # executed. Empty for old actions, UI actions and mutations.
+        self.provenance_activity_ids: list[str] = []
 
     def snapshot_kwargs(self) -> None:
         """Save a copy of the current kwargs as the pre-edit baseline.
@@ -750,6 +757,10 @@ class HistoryAction(ObjItf):
         if self.effects is not None:
             with writer.group("effects"):
                 writer.write(json.dumps(self.effects))
+        # ``provenance_activity_ids`` (schema v3): only emitted when non-empty.
+        if self.provenance_activity_ids:
+            with writer.group("provenance_activity_ids"):
+                writer.write(json.dumps(list(self.provenance_activity_ids)))
         with writer.group("state"):
             self.state.serialize(writer)
         with writer.group("dtstr"):
@@ -922,3 +933,22 @@ def deserialize_outputs_plugin_origin(
                 action.effects = None
     else:
         action.effects = None
+    # ``provenance_activity_ids`` is present only in action schema v3+ files,
+    # for actions whose execution was recorded; otherwise there is no link.
+    action.provenance_activity_ids = []
+    if (
+        "provenance_activity_ids" in current.attrs
+        or "provenance_activity_ids" in current
+    ):
+        with reader.group("provenance_activity_ids"):
+            raw_ids = reader.read_any()
+        try:
+            ids = json.loads(raw_ids) if raw_ids not in (None, "") else []
+        except (TypeError, ValueError):
+            _logger.warning(
+                "Failed to decode provenance links for action %s; ignored.",
+                action.uuid,
+            )
+            ids = []
+        if isinstance(ids, list):
+            action.provenance_activity_ids = [str(i) for i in ids if i]
