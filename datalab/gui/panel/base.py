@@ -1347,13 +1347,20 @@ class ObjectProp(QW.QWidget):
                 # Mutate the matching existing action (snapshot originals
                 # first), refresh its tree display, then cascade recompute
                 # to downstream actions so the chain stays consistent with
-                # the new parameters.
-                action = hpanel.find_action_for_output(
-                    get_uuid(obj), proc_params.func_name
-                )
+                # the new parameters. The action is the one whose last
+                # execution recorded the restored activity; the output-based
+                # lookup is kept for actions recorded without this link.
+                action = None
+                if proc_params.activity_id is not None:
+                    action = hpanel.find_action_for_activity(proc_params.activity_id)
+                if action is None:
+                    action = hpanel.find_action_for_output(
+                        get_uuid(obj), proc_params.func_name
+                    )
                 if action is not None:
                     action.snapshot_kwargs()
                     action.kwargs["param"] = copy.deepcopy(param)
+                    self.__relink_action(action, proc_params.activity_id, obj)
                     hpanel.refresh_action(action)
                     hpanel.recompute_cascade(action)
 
@@ -1371,6 +1378,29 @@ class ObjectProp(QW.QWidget):
             QC.QTimer.singleShot(0, refresh_current_processing_tab)
 
         return report
+
+    def __relink_action(
+        self, action: Any, previous: str | None, obj: SignalObj | ImageObj
+    ) -> None:
+        """Link an edited History action to the execution that realized it.
+
+        The re-application from Processing executed the edited action for this
+        output: its new activity replaces, in the action links, the activity it
+        supersedes (the other outputs of the action keep theirs).
+        """
+        latest = self.panel.mainwindow.provenance.ledger.latest_state(get_uuid(obj))
+        current = None if latest is None else latest["produced_by"]
+        if current is None or current == previous:
+            return
+        links = list(action.provenance_activity_ids)
+        if previous in links:
+            links[links.index(previous)] = current
+        elif len(action.output_uuids) <= 1:
+            links = [current]
+        else:
+            # Several outputs without a link to this one: no partial link.
+            return
+        action.provenance_activity_ids = links
 
     def apply_recomputed_object_in_place(
         self,

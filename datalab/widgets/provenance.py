@@ -40,7 +40,7 @@ from datalab.objectmodel import get_short_id, get_uuid
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
 
-__all__ = ["ProvenanceWidget", "format_parameter_value"]
+__all__ = ["ExecutionProvenanceDialog", "ProvenanceWidget", "format_parameter_value"]
 
 #: Longest text shown for one value (details are bounded).
 MAX_TEXT = 120
@@ -209,9 +209,22 @@ class ProvenanceWidget(QW.QWidget):
             _("Select the object currently holding this identifier")
         )
         self.select_button.clicked.connect(self.select_current_object)
+        self.action_button = QW.QPushButton(
+            get_icon("history.svg"), _("History action")
+        )
+        self.action_button.setObjectName("provenance_history_action")
+        self.action_button.setToolTip(
+            _("Select the History action whose last execution recorded this step")
+        )
+        self.action_button.clicked.connect(self.show_history_action)
 
         buttons = QW.QHBoxLayout()
-        for button in (self.check_button, self.verify_button, self.select_button):
+        for button in (
+            self.check_button,
+            self.verify_button,
+            self.select_button,
+            self.action_button,
+        ):
             buttons.addWidget(button)
         buttons.addStretch()
         layout = QW.QVBoxLayout(self)
@@ -319,6 +332,26 @@ class ProvenanceWidget(QW.QWidget):
         )
         self.mainwindow.set_current_panel(panel)
         panel.objview.set_current_item_id(uuid)
+
+    def __history_action(self) -> Any:
+        """Return the History action linked to the selected activity, if any."""
+        activity_id = self.__selected_activity_id()
+        historypanel = self.mainwindow.historypanel
+        if activity_id is None or historypanel is None:
+            return None
+        return historypanel.find_action_for_activity(activity_id)
+
+    def show_history_action(self) -> None:
+        """Select the History action whose last execution recorded the activity."""
+        action = self.__history_action()
+        if action is None:
+            return
+        historypanel = self.mainwindow.historypanel
+        dock = self.mainwindow.docks.get(historypanel)
+        if dock is not None:
+            dock.show()
+            dock.raise_()
+        historypanel.navigation.select_action_in_tree(action)
 
     # -- Ledger access --------------------------------------------------------
 
@@ -633,3 +666,96 @@ class ProvenanceWidget(QW.QWidget):
             and uuid != self._object_uuid
             and self.mainwindow.find_object_by_uuid(uuid) is not None
         )
+        self.action_button.setEnabled(self.__history_action() is not None)
+
+
+class ExecutionProvenanceDialog(QW.QDialog):
+    """Provenance of the last successful execution of a History action.
+
+    One tab per recorded activity of the execution (e.g. one per result of a
+    command applied to several objects). The activities are those linked to
+    the action (:attr:`~datalab.history.action.HistoryAction.provenance_activity_ids`);
+    when the action was edited without being executed again, the dialog says
+    that the provenance describes the last successful execution.
+
+    Args:
+        mainwindow: DataLab main window.
+        action: History action.
+        parent: Parent widget.
+    """
+
+    def __init__(
+        self, mainwindow: DLMainWindow, action: Any, parent: QW.QWidget | None = None
+    ) -> None:
+        # pylint: disable=import-outside-toplevel
+        from datalab.processingcall import recipe_differs_from_execution
+
+        super().__init__(parent)
+        self.setObjectName("execution_provenance_dialog")
+        name = action.title or action.func_name or ""
+        self.setWindowTitle(_("Provenance of the execution: %s") % name)
+        ledger = mainwindow.provenance.ledger
+        ids = list(action.provenance_activity_ids)
+        known = []
+        for activity_id in ids:
+            try:
+                known.append(ledger.activity(activity_id))
+            except KeyError:
+                continue
+        notes = []
+        if not ids:
+            notes.append(
+                _(
+                    "No recorded execution is linked to this action (action "
+                    "recorded before this link existed, copied or imported, or "
+                    "not executed in this workspace)."
+                )
+            )
+        elif not known:
+            notes.append(
+                _(
+                    "The provenance of this execution is not available in this "
+                    "workspace (e.g. History imported without its provenance)."
+                )
+            )
+        elif recipe_differs_from_execution(mainwindow, action):
+            notes.append(
+                _(
+                    "The parameters of this action were edited since its last "
+                    "successful execution: the provenance below describes that "
+                    "execution."
+                )
+            )
+        self.note = QW.QLabel("\n".join(notes))
+        self.note.setObjectName("execution_provenance_note")
+        self.note.setTextFormat(QC.Qt.PlainText)
+        self.note.setWordWrap(True)
+        self.note.setVisible(bool(notes))
+        self.tabs = QW.QTabWidget()
+        self.views: list[ProvenanceWidget] = []
+        for number, activity in enumerate(known, start=1):
+            view = ProvenanceWidget(mainwindow, self)
+            view.set_activity(activity["activity_id"])
+            self.tabs.addTab(view, self.__label(mainwindow, activity, number))
+            self.views.append(view)
+        self.tabs.setVisible(bool(known))
+        buttons = QW.QDialogButtonBox(QW.QDialogButtonBox.Close)
+        buttons.rejected.connect(self.reject)
+        layout = QW.QVBoxLayout(self)
+        layout.addWidget(self.note)
+        layout.addWidget(self.tabs)
+        layout.addWidget(buttons)
+        self.resize(760, 560)
+
+    @staticmethod
+    def __label(mainwindow: DLMainWindow, activity: dict, number: int) -> str:
+        """Return the tab label of an activity: its result, or its number."""
+        for output in activity["outputs"]:
+            if "state_id" in output:
+                state = mainwindow.provenance.ledger.states[output["state_id"]]
+                obj = mainwindow.find_object_by_uuid(state["object_uuid"])
+                if isinstance(obj, (SignalObj, ImageObj)):
+                    return f"{get_short_id(obj)}: {obj.title}"
+            elif "artifact" in output:
+                return f"#{number}: {output['artifact']['key']}"
+        return f"#{number}"

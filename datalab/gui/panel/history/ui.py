@@ -13,6 +13,7 @@ from qtpy import QtWidgets as QW
 
 from datalab.config import _
 from datalab.gui import historytools_ops as htools
+from datalab.history import HistoryAction
 from datalab.widgets.workspacestate_widget import WorkspaceStateWidget
 
 if TYPE_CHECKING:
@@ -135,6 +136,16 @@ class HistoryPanelUI:
                     "Replay the selection step by step, editing parameters at each step"
                 ),
             ),
+            "provenance": create_action(
+                panel,
+                _("Show execution provenance"),
+                triggered=self.guarded(lambda: panel.show_execution_provenance()),
+                icon=get_icon("history.svg"),
+                tip=_(
+                    "Show the recorded provenance of the last successful execution "
+                    "of the selected action"
+                ),
+            ),
         }
         actions["record"].setChecked(panel.runtime.execution.record_mode)
         return actions
@@ -154,6 +165,8 @@ class HistoryPanelUI:
             None,
             action["replay"],
             action["step_by_step"],
+            None,
+            action["provenance"],
             None,
             action["duplicate"],
             None,
@@ -210,6 +223,12 @@ class HistoryPanelUI:
         )
         self.actions["step_next"].setEnabled(
             not busy and self.panel.navigation.can_step_next()
+        )
+        current = self.panel.navigation.current_action()
+        self.actions["provenance"].setEnabled(
+            not busy
+            and current is not None
+            and current.kind == HistoryAction.KIND_COMPUTE
         )
 
     def show_context_menu(self, pos: QC.QPoint) -> None:

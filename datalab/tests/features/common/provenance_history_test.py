@@ -135,3 +135,229 @@ def test_failed_history_replay_records_nothing() -> None:
         assert np.array_equal(
             win.signalpanel.objmodel[action.output_uuids[0]].y, MAXIMUM_Y
         )
+
+
+def link_of(win, obj) -> str:
+    """Return the activity that produced the latest recorded state of *obj*."""
+    return win.provenance.ledger.latest_state(get_uuid(obj))["produced_by"]
+
+
+def test_actions_link_the_activities_of_their_execution() -> None:
+    """Every compute action links exactly the activities of its execution."""
+    with app(history=True) as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+        first = add_signal(win)
+        second = add_signal(win, title="S1")
+        panel.objview.select_objects([get_uuid(first)])
+        result = normalize(win, "maximum")
+        action = history[len(history)]
+        assert action.provenance_activity_ids == [link_of(win, result)]
+        panel.objview.select_objects([get_uuid(first), get_uuid(second)])
+        panel.processor.compute_n_to_1(sips.average, edit=False)
+        mean = panel.objmodel[panel.objmodel.get_object_ids()[-1]]
+        action = history[len(history)]
+        assert action.provenance_activity_ids == [link_of(win, mean)]
+        panel.objview.select_objects([get_uuid(first)])
+        params = [
+            sigima.params.NormalizeParam.create(method="maximum"),
+            sigima.params.NormalizeParam.create(method="amplitude"),
+        ]
+        panel.processor.compute_1_to_n(sips.normalize, params)
+        action = history[len(history)]
+        outputs = [panel.objmodel[uid] for uid in action.output_uuids]
+        assert len(outputs) == 2
+        assert action.provenance_activity_ids == [link_of(win, o) for o in outputs]
+        command = win.provenance.ledger.activity(action.provenance_activity_ids[0])
+        assert win.provenance.command_activity_ids(command["command_id"]) == (
+            action.provenance_activity_ids
+        )
+        assert history.find_action_for_activity(link_of(win, outputs[1])) is action
+
+
+def test_replay_edit_and_failure_keep_exact_links() -> None:
+    """Replays relink on final UUIDs; edits and failures keep the last execution."""
+    # pylint: disable=import-outside-toplevel
+    from datalab.processingcall import recipe_differs_from_execution
+    from datalab.widgets.provenance import ExecutionProvenanceDialog
+
+    with app(history=True) as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        add_signal(win)
+        result = normalize(win, "maximum")
+        action = history[len(history)]
+        (first,) = action.provenance_activity_ids
+        before = json.dumps(win.provenance.ledger.activity(first), sort_keys=True)
+        assert recipe_differs_from_execution(win, action) is False
+        assert hrec.recompute_action_in_place(history, action) is True
+        (replay,) = action.provenance_activity_ids
+        assert replay != first and replay == link_of(win, result)
+        assert win.provenance.ledger.activity(replay)["origin"] == "history_replay"
+        assert json.dumps(win.provenance.ledger.activity(first), sort_keys=True) == (
+            before
+        )
+        # Edited, not executed: the recipe differs from the last execution.
+        action.kwargs["param"] = sigima.params.NormalizeParam.create(method="amplitude")
+        assert recipe_differs_from_execution(win, action) is True
+        dialog = ExecutionProvenanceDialog(win, action)
+        assert "edited" in dialog.note.text() and len(dialog.views) == 1
+        assert dialog.views[0].description["activity"]["activity_id"] == replay
+        # A failing replay keeps the link to the last successful execution.
+        original_execute = hrec.execute_compute_via_ui
+
+        def failing_execute(panel_data, act, obj2_uuids) -> None:
+            original_execute(panel_data, act, obj2_uuids)
+            raise RuntimeError("simulated mid-batch failure")
+
+        with patch.object(hrec, "execute_compute_via_ui", failing_execute):
+            assert hrec.recompute_action_in_place(history, action) is False
+        history.runtime.execution.cascade_warnings.clear()
+        assert action.provenance_activity_ids == [replay]
+        assert hrec.recompute_action_in_place(history, action) is True
+        (edited,) = action.provenance_activity_ids
+        assert win.provenance.ledger.activity(edited)["call"]["parameters"] == {
+            "method": "amplitude"
+        }
+        assert recipe_differs_from_execution(win, action) is False
+
+
+def test_processing_edit_updates_the_linked_action() -> None:
+    """Two calls of one function: Processing edits the action of its result."""
+    with app(history=True) as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        source = add_signal(win)
+        first_result = normalize(win, "maximum")
+        first_action = history[len(history)]
+        win.signalpanel.objview.select_objects([get_uuid(source)])
+        second_result = normalize(win, "maximum")
+        second_action = history[len(history)]
+        history.toggle_edit_mode(True)
+        objprop = win.signalpanel.objprop
+        report = objprop.apply_processing_parameters(
+            second_result,
+            interactive=False,
+            param=sigima.params.NormalizeParam.create(method="amplitude"),
+        )
+        assert report.success, report.message
+        assert second_action.kwargs["param"].method == "amplitude"
+        assert first_action.kwargs["param"].method == "maximum"
+        assert second_action.provenance_activity_ids == [link_of(win, second_result)]
+        assert first_action.provenance_activity_ids == [link_of(win, first_result)]
+
+
+def test_cascade_relinks_every_recomputed_action() -> None:
+    """A cascade gives each recomputed action its new activities."""
+    with app(history=True) as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        add_signal(win)
+        first = normalize(win, "maximum")
+        root = history[len(history)]
+        win.signalpanel.objview.select_objects([get_uuid(first)])
+        second = normalize(win, "amplitude")
+        child = history[len(history)]
+        old = (list(root.provenance_activity_ids), list(child.provenance_activity_ids))
+        root.kwargs["param"] = sigima.params.NormalizeParam.create(method="amplitude")
+        root.is_stale = True
+        history.recompute_cascade(root)
+        history.runtime.execution.cascade_warnings.clear()
+        assert root.provenance_activity_ids == [link_of(win, first)]
+        assert child.provenance_activity_ids == [link_of(win, second)]
+        assert root.provenance_activity_ids != old[0]
+        assert child.provenance_activity_ids != old[1]
+        for state in win.provenance.ledger.states.values():
+            assert win.find_object_by_uuid(state["object_uuid"]) is not None
+
+
+def test_same_computation_by_menu_processing_and_history() -> None:
+    """Menu, Processing and History run the same scientific call."""
+    with app(history=True) as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        add_signal(win)
+        result = normalize(win, "maximum")
+        action = history[len(history)]
+        menu = win.provenance.ledger.activity(link_of(win, result))
+        menu_y = result.y.copy()
+        report = win.signalpanel.processor.recompute_processing(
+            result, interactive=False
+        )
+        assert report.success
+        processing = win.provenance.ledger.activity(link_of(win, result))
+        processing_y = result.y.copy()
+        assert hrec.recompute_action_in_place(history, action) is True
+        replay = win.provenance.ledger.activity(link_of(win, result))
+        assert [a["origin"] for a in (menu, processing, replay)] == [
+            "ordinary",
+            "recompute_in_place",
+            "history_replay",
+        ]
+        for activity in (processing, replay):
+            for key in ("operation", "parameters", "inputs"):
+                assert activity["call"][key] == menu["call"][key]
+            assert activity["context"] == menu["context"]
+        assert np.array_equal(menu_y, processing_y)
+        assert np.array_equal(menu_y, result.y)
+        assert np.array_equal(menu_y, MAXIMUM_Y)
+
+
+def test_links_are_saved_and_never_copied(tmp_path) -> None:
+    """Links reopen with the workspace; copies and imports carry none."""
+    # pylint: disable=import-outside-toplevel
+    from datalab.gui import historytools_ops as htools
+    from datalab.tests.features.common.history_test_helpers import (
+        select_tree_session,
+    )
+    from datalab.widgets.provenance import ExecutionProvenanceDialog
+
+    path = str(tmp_path / "links.h5")
+    with app(history=True) as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        add_signal(win)
+        normalize(win, "maximum")
+        links = list(history[len(history)].provenance_activity_ids)
+        assert links
+        win.save_h5_workspace(path)
+    with app(history=True) as win:
+        win.load_h5_workspace([path], reset_all=True)
+        history = win.historypanel
+        compute = [
+            action
+            for session in history.history_sessions
+            for action in session.actions
+            if action.kind == "compute"
+        ]
+        assert compute[-1].provenance_activity_ids == links
+        assert history.find_action_for_activity(links[0]) is compute[-1]
+        session = history.history_sessions[-1]
+        select_tree_session(history, session)
+        htools.duplicate_selected_entries(history)
+        duplicate = history.history_sessions[-1]
+        assert duplicate is not session
+        assert all(not a.provenance_activity_ids for a in duplicate.actions)
+        copied = [a for a in duplicate.actions if a.kind == "compute"][-1]
+        dialog = ExecutionProvenanceDialog(win, copied)
+        assert "No recorded execution" in dialog.note.text() and not dialog.views
+        # A History without the matching ledger (e.g. another workspace)
+        win.provenance.reset()
+        dialog = ExecutionProvenanceDialog(win, compute[-1])
+        assert "not available" in dialog.note.text() and not dialog.views
+
+
+def test_verification_creates_no_action_nor_activity() -> None:
+    """Verifying an execution changes neither the History nor the ledger."""
+    with app(history=True) as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        add_signal(win)
+        normalize(win, "maximum")
+        (activity_id,) = history[len(history)].provenance_activity_ids
+        count, actions = len(win.provenance.ledger.activities), len(history)
+        report = win.verify_provenance_activity(activity_id)
+        assert report["verdict"] == "exact"
+        assert len(win.provenance.ledger.activities) == count
+        assert len(history) == actions

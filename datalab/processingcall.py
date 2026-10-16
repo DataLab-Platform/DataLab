@@ -50,7 +50,10 @@ if TYPE_CHECKING:
 __all__ = [
     "CallInput",
     "ProcessingCall",
+    "encoded_parameters",
     "feature_for_function",
+    "feature_for_name",
+    "recipe_differs_from_execution",
     "resolve_processing_call",
 ]
 
@@ -209,6 +212,60 @@ def feature_for_function(
     ]
     built_ins = [feature for feature in matches if feature.plugin_origin is None]
     return (built_ins or matches or [None])[0]
+
+
+def feature_for_name(
+    processor: BaseProcessor,
+    func_name: str,
+    plugin_origin: dict[str, Any] | None = None,
+    param: Any = None,
+) -> ComputingFeature:
+    """Return the feature named in processing metadata or in a History action.
+
+    Shared by the Processing tab (old workspaces) and the History replay, so
+    that both resolve a recorded name the same way.
+
+    Raises:
+        FeatureNotFoundError: If no feature has this name (e.g. removed plugin).
+        ValueError: If several features match and none is preferred.
+    """
+    return processor.get_feature(
+        func_name,
+        plugin_origin=plugin_origin,
+        paramclass_name=type(param).__name__
+        if isinstance(param, gds.DataSet)
+        else None,
+    )
+
+
+def encoded_parameters(feature: ComputingFeature, param: Any) -> dict[str, Any] | None:
+    """Return *param* encoded by the contract of *feature*, as it is recorded.
+
+    Returns:
+        The encoded parameters (the ``parameters`` of a recorded call), or None
+        when the feature has no contract or the values cannot be encoded.
+    """
+    # pylint: disable=import-outside-toplevel
+    from sigima.proc.contracts import contract_for_function
+
+    if feature.function is None:
+        return None
+    contract = contract_for_function(unwrap_computation_function(feature.function))
+    if contract is None:
+        return None
+    count = len(contract.parameters)
+    if count == 0:
+        arguments = []
+    elif count == 1:
+        arguments = [param]
+    elif isinstance(param, (list, tuple)) and len(param) == count:
+        arguments = list(param)
+    else:
+        return None
+    try:
+        return contract.encode_parameters(arguments)
+    except Exception:  # pylint: disable=broad-exception-caught
+        return None
 
 
 def _pattern_of_roles(roles: list[str]) -> str:
@@ -374,12 +431,8 @@ def _from_metadata(
     if processor is not None:
         param = call.param
         try:
-            call.feature = processor.get_feature(
-                stored.func_name,
-                plugin_origin=stored.plugin_origin,
-                paramclass_name=type(param).__name__
-                if isinstance(param, gds.DataSet)
-                else None,
+            call.feature = feature_for_name(
+                processor, stored.func_name, stored.plugin_origin, param
             )
         except ValueError as exc:
             call.unavailable_reason = str(exc)
@@ -406,3 +459,48 @@ def resolve_processing_call(
     if produced is not None and produced["output_status"] is None:
         return _from_ledger(mainwindow, obj, produced)
     return _from_metadata(mainwindow, obj)
+
+
+def recipe_differs_from_execution(mainwindow: DLMainWindow, action: Any) -> bool | None:
+    """Tell whether the parameters of a History action differ from its execution.
+
+    The recipe (the parameters of the action, possibly edited since) is encoded
+    by the contract of its feature and compared with the parameters recorded by
+    the activities of its last successful execution
+    (``action.provenance_activity_ids``).
+
+    Returns:
+        True if an executed call used other parameters than the recipe, False
+        if they match, None when they cannot be compared (no link, no
+        contract, plugin function...).
+    """
+    ids = list(action.provenance_activity_ids)
+    panel = {"signal": mainwindow.signalpanel, "image": mainwindow.imagepanel}.get(
+        action.effective_panel_str()
+    )
+    if not ids or panel is None or not action.func_name:
+        return None
+    if action.pattern == "1_to_n":
+        params = list(action.kwargs.get("params") or [])
+    elif action.pattern == "multiple_1_to_1":
+        return None
+    else:
+        params = [action.kwargs.get("param")]
+    try:
+        feature = feature_for_name(
+            panel.processor,
+            action.func_name,
+            action.plugin_origin,
+            params[0] if params else None,
+        )
+    except ValueError:
+        return None
+    recipe = [encoded_parameters(feature, param) for param in params]
+    if any(values is None for values in recipe):
+        return None
+    ledger = mainwindow.provenance.ledger
+    try:
+        executed = [ledger.activity(i)["call"]["parameters"] for i in ids]
+    except KeyError:
+        return None
+    return any(values not in recipe for values in executed)

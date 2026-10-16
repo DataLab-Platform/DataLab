@@ -1086,6 +1086,34 @@ def test_analysis_effects_round_trip_merge_and_persistence() -> None:
         assert legacy.effects is None
 
 
+def test_provenance_links_round_trip_and_are_never_copied() -> None:
+    """Links to executions are persisted (schema v3) and dropped by copies."""
+    action = build_history_action()
+    action.provenance_activity_ids = ["activity-1", "activity-2"]
+    session = HistorySession(number=1)
+    session.add_action(action)
+    with tempfile.TemporaryDirectory() as tmpdir:
+        path = os.path.join(tmpdir, "history.dlhist")
+        with NativeH5Writer(path) as writer:
+            writer.write_object_list([session], "history_session")
+        loaded = read_history_sessions(path)[0].actions[0]
+        assert loaded.provenance_activity_ids == ["activity-1", "activity-2"]
+        assert loaded.schema_version == HISTORY_ACTION_SCHEMA_VERSION == 3
+        with NativeH5Writer(path) as writer:
+            writer.write_object_list([session], "history_session")
+            delete_hdf5_items_by_name(writer.h5, "provenance_activity_ids")
+        legacy = read_history_sessions(path)[0].actions[0]
+        assert legacy.provenance_activity_ids == []
+    # A copied recipe has not been executed: no link is copied.
+    assert action.copy().provenance_activity_ids == []
+    assert action.copy_with_uuid_remap({}).provenance_activity_ids == []
+    assert all(
+        not copied.provenance_activity_ids
+        for copied in session.copy_with_uuid_remap("Copy", {}).actions
+    )
+    assert all(not copied.provenance_activity_ids for copied in session.copy().actions)
+
+
 def test_update_obj_in_place_preserves_roi() -> None:
     """In-place recompute keeps the target's ROI when the new object has none."""
     target = create_paracetamol_signal()
