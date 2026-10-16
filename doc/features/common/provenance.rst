@@ -33,7 +33,9 @@ provenance:
 Each recorded step is shown as a card: the operation, how and when it was
 recorded and by which software (DataLab Desktop or DataLab Web), its
 parameters, its inputs and results with their status, and links acting on what
-they are next to:
+they are next to. Links marked with a triangle (▸) show a hidden part of the view
+and become ▾ to hide it again; an earlier step is shown framed inside the card
+of the step that used it:
 
 - **Show recorded step** (under an input) shows how that input was itself
   produced, step by step, without computing anything. The state actually used
