@@ -218,6 +218,7 @@ class ProvenanceWidget(QW.QWidget):
         self._links: dict[str, tuple[str, Any, str]] = {}
         self._html: list[str] = []
         self._muted = self._warning = ""
+        self._border = self._card = ""
 
         self.summary = QW.QLabel()
         self.summary.setObjectName("provenance_summary")
@@ -524,17 +525,25 @@ class ProvenanceWidget(QW.QWidget):
         return title
 
     def __colors(self) -> tuple[str, str]:
-        """Return the muted and warning colors for the current palette."""
+        """Return the muted and warning colors for the current palette.
+
+        Also sets the border and background of the step cards.
+        """
         palette = self.browser.palette()
         text = palette.color(QG.QPalette.Text)
         base = palette.color(QG.QPalette.Base)
-        muted = QG.QColor(
-            (text.red() + base.red()) // 2,
-            (text.green() + base.green()) // 2,
-            (text.blue() + base.blue()) // 2,
-        )
+
+        def blend(ratio: float) -> str:
+            return QG.QColor(
+                round(base.red() + (text.red() - base.red()) * ratio),
+                round(base.green() + (text.green() - base.green()) * ratio),
+                round(base.blue() + (text.blue() - base.blue()) * ratio),
+            ).name()
+
+        self._border = blend(0.3)
+        self._card = blend(0.05)
         warning = "#f0a040" if base.lightness() < 128 else "#b05000"
-        return muted.name(), warning
+        return blend(0.5), warning
 
     def __link(self, action: str, payload: Any, text: str) -> str:
         href = f"provenance:{len(self._links)}"
@@ -635,9 +644,10 @@ class ProvenanceWidget(QW.QWidget):
 
     def __step_link(self, key: str, state_id: str) -> str:
         del state_id  # the key identifies the step
+        # The triangle says that the link shows or hides a part of the view
         if key in self._expanded:
-            return self.__link("collapse", key, _("Hide recorded step"))
-        return self.__link("expand", key, _("Show recorded step"))
+            return self.__link("collapse", key, "▾ " + _("Hide recorded step"))
+        return self.__link("expand", key, "▸ " + _("Show recorded step"))
 
     def __add_step(self, key: str, state_id: str, trail: list[str], level: int) -> None:
         """Add an earlier step (the production of a recorded state)."""
@@ -657,7 +667,8 @@ class ProvenanceWidget(QW.QWidget):
     def __add_activity(
         self, activity: dict[str, Any], trail: list[str], level: int, key: str
     ) -> None:
-        """Add the card of one recorded activity."""
+        """Add the card of one recorded activity (framed: an earlier step shown
+        inside another card is visibly a part that can be hidden again)."""
         details = " — ".join(
             part
             for part in (
@@ -667,13 +678,18 @@ class ProvenanceWidget(QW.QWidget):
             )
             if part
         )
+        self._html.append(
+            f'<table width="100%" border="1" cellspacing="0" cellpadding="4" '
+            f'style="margin-left:{level * 14}px; margin-top:4px; '
+            f"border-style:solid; border-color:{self._border}; "
+            f'background-color:{self._card}"><tr><td>'
+        )
         self.__line(
             f"<b>{_esc(self.__operation_title(activity))}</b><br>"
             + self.__muted(details),
-            level,
-            top=4,
+            0,
         )
-        inner = level + 1
+        inner = 1
         support = activity["support"]
         if support.get("reason"):
             self.__line(self.__muted(support["reason"]), inner)
@@ -709,12 +725,13 @@ class ProvenanceWidget(QW.QWidget):
             self.__link(
                 "details",
                 details_key,
-                _("Hide details") if shown else _("Show details"),
+                "▾ " + _("Hide details") if shown else "▸ " + _("Show details"),
             )
         )
         self.__line(" · ".join(links), inner)
         if shown:
             self.__add_details(activity, inner + 1)
+        self._html.append("</td></tr></table>")
 
     def __add_inputs(
         self, activity: dict[str, Any], trail: list[str], level: int, key: str
@@ -744,7 +761,7 @@ class ProvenanceWidget(QW.QWidget):
                 content += "<br>" + " · ".join(links)
             self.__line(content, level + 1)
             if step_key in self._expanded and entry["state_id"] is not None:
-                self.__add_step(step_key, entry["state_id"], trail, level + 2)
+                self.__add_step(step_key, entry["state_id"], trail, level + 1)
         if count > len(inputs):
             self.__line(self.__muted(_("%d inputs in total") % count), level + 1)
 
