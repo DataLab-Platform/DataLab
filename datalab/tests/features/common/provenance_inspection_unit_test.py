@@ -23,13 +23,13 @@ from qtpy import QtWidgets as QW
 
 from datalab.objectmodel import get_uuid
 from datalab.tests import helpers
-
-# The autouse fixture is imported to apply to this module too.
-# pylint: disable-next=unused-import
 from datalab.tests.features.common.provenance_processing_unit_test import (
     add_signal,
     compute,
 )
+
+# The autouse fixture is imported to apply to this module too.
+# pylint: disable-next=unused-import
 from datalab.tests.features.common.provenance_unit_test import (  # noqa: F401
     Y,
     app,

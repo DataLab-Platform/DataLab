@@ -290,7 +290,7 @@ def _typed_param(feature: ComputingFeature, param: Any) -> Any:
     return typed
 
 
-def _from_ledger(
+def _from_ledger(  # pylint: disable=too-many-return-statements
     mainwindow: DLMainWindow, obj: SignalObj | ImageObj, produced: dict[str, Any]
 ) -> ProcessingCall:
     """Return the call recorded in the ledger (see ``Recorder.producing_call``)."""

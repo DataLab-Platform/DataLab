@@ -51,7 +51,7 @@ _ROLE = QC.Qt.UserRole
 _PLACEHOLDER = {"placeholder": True}
 
 
-def format_parameter_value(value: Any) -> str:
+def format_parameter_value(value: Any) -> str:  # pylint: disable=R0911
     """Return a bounded text for a parameter value encoded by the codec.
 
     Arrays are shown by type and shape, never by content; long lists and

@@ -1682,7 +1682,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self.panel.SIG_STATUS_MESSAGE.emit("✅ " + report.message, 5000)
         return report
 
-    def compute_processing_candidate(
+    def compute_processing_candidate(  # pylint: disable=too-many-return-statements
         self,
         feature: ComputingFeature,
         inputs: list[SignalObj | ImageObj],
