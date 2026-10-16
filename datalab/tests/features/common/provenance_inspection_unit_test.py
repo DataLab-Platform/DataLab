@@ -2,7 +2,7 @@
 
 """Consultation of the provenance of a result (Desktop).
 
-The History tab of the object properties shows the recorded production of the
+The Provenance tab of the object properties shows the recorded production of the
 selected object, its inputs and their ancestors, and lets the user check the data
 and verify the computation; none of these operations changes the workspace or
 the ledger. The scenario of reference: S0 -> Gaussian filter (sigma = 2) -> S1
@@ -258,3 +258,86 @@ def test_view_survives_metadata_deletion() -> None:
         assert view.description["object"]["object_uuid"] == get_uuid(objs["s2"])
         (results,) = view.tree.findItems("Results", QC.Qt.MatchRecursive, 0)
         assert get_short_id(objs["s2"]) in results.child(0).text(0)
+
+
+def _item(view, *texts: str):
+    """Return the tree item whose path starts with *texts* (prefixes)."""
+    items = [view.tree.topLevelItem(i) for i in range(view.tree.topLevelItemCount())]
+    item = None
+    for text in texts:
+        (item,) = [i for i in items if i.text(0).startswith(text)]
+        items = [item.child(i) for i in range(item.childCount())]
+    return item
+
+
+def test_tree_is_readable_and_keeps_its_layout() -> None:
+    """Loaded steps are expanded; Check data keeps the layout and checks them."""
+    with app() as win:
+        objs = build_chain(win)
+        view = view_of(win, objs["s2"])
+        production = _item(view, "Production")
+        (operation,) = [production.child(0)]
+        assert operation.isExpanded() and "method=maximum" in operation.text(0)
+        assert "DataLab Desktop" in operation.text(1)
+        software = _item(view, "Production", "Normalize", "Details", "Software")
+        assert software.text(1).startswith("DataLab Desktop ")
+        source = _item(view, "Production", "Normalize", "Inputs", "1. source")
+        assert not source.isExpanded()  # Earlier steps are loaded on demand
+        source.setExpanded(True)
+        ancestor = _item(view, "Production", "Normalize", "Inputs", "1. source")
+        (step,) = [ancestor.child(0)]
+        assert "sigma=2.0" in step.text(0) and step.isExpanded()
+        before = ancestor.child(0)
+        inputs = [before.child(i) for i in range(before.childCount())]
+        (step_inputs,) = [i for i in inputs if i.text(0) == "Inputs"]
+        assert step_inputs.child(0).text(1) == "Data to be checked"
+        details = _item(view, "Production", "Normalize", "Details")
+        details.setExpanded(False)
+        view.check_data()
+        # Layout kept: the earlier step stays expanded, Details stays collapsed
+        source = _item(view, "Production", "Normalize", "Inputs", "1. source")
+        assert source.isExpanded()
+        assert not _item(view, "Production", "Normalize", "Details").isExpanded()
+        step = source.child(0)
+        (step_inputs,) = [
+            step.child(i)
+            for i in range(step.childCount())
+            if step.child(i).text(0) == "Inputs"
+        ]
+        # The expanded earlier step is checked too
+        assert step_inputs.child(0).text(1) == "Recorded state available"
+
+
+def test_absent_input_is_reported_before_checking() -> None:
+    """Knowing that an input was deleted needs no check."""
+    with app() as win:
+        objs = build_chain(win)
+        win.signalpanel.objview.select_objects([get_uuid(objs["s1"])])
+        win.signalpanel.remove_object(force=True)
+        view = view_of(win, objs["s2"])
+        source = _item(view, "Production", "Normalize", "Inputs", "1. source")
+        assert source.text(0) == "1. source: Original input missing"
+        assert source.text(1) == "Original input missing"
+
+
+def test_history_action_keeps_the_provenance_tab() -> None:
+    """Going to the History action of a step keeps the Provenance tab."""
+    with app(history=True) as win:
+        win.historypanel.toggle_record_mode(True)
+        objs = build_chain(win)
+        view = view_of(win, objs["s2"])
+        objprop = win.signalpanel.objprop
+        objprop.tabwidget.setCurrentWidget(objprop.history_stack)
+        assert (
+            objprop.tabwidget.tabText(objprop.tabwidget.indexOf(objprop.history_stack))
+            == "Provenance"
+        )
+        view.tree.setCurrentItem(_item(view, "Production", "Normalize"))
+        assert view.action_button.isEnabled()
+        view.action_button.click()
+        QW.QApplication.processEvents()
+        assert objprop.tabwidget.currentWidget() is objprop.history_stack
+        # Another object shows its Properties first, as before
+        win.signalpanel.objview.set_current_object(objs["s0"])
+        QW.QApplication.processEvents()
+        assert objprop.tabwidget.currentWidget() is objprop.properties
