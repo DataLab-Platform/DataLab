@@ -453,3 +453,61 @@ def test_one_output_of_a_grouped_command(method: str) -> None:
         assert inputs_of(win, activity) == [("source", get_uuid(s0))]
         assert output_uuid(win, activity) == get_uuid(second)
         assert len(win.signalpanel.objmodel) == 3
+
+
+def test_web_files_are_described_and_applied_again() -> None:
+    """Reference files written by DataLab-Web: consulted, restored, reapplied."""
+    hdf5 = osp.join(osp.dirname(osp.dirname(__file__)), "hdf5")
+    with app() as win:
+        win.load_h5_workspace(
+            [osp.join(hdf5, "provenance_web_chain.h5")], reset_all=True
+        )
+        ledger = win.provenance.ledger
+        _a1, a2, _a3, _a4 = ledger.activities
+        s1_uuid, s2_uuid = inputs_of(win, a2)[0][1], output_uuid(win, a2)
+        s2 = win.find_object_by_uuid(s2_uuid)
+        view = win.provenance.describe_object(s2_uuid, check_data=True)
+        production = view["production"]
+        assert production["activity_id"] == a2["activity_id"]
+        assert production["environment"]["edition"] == "web"
+        assert production["inputs"][0]["object_present"] is True
+        assert view["anchor"]["content"] == "matches"
+        call = resolve_processing_call(win, s2)
+        assert (call.origin, call.pattern, call.param.method) == (
+            "ledger",
+            "1-to-1",
+            "maximum",
+        )
+        assert call.inputs[0].object_uuid == s1_uuid and call.can_reapply
+        report = win.signalpanel.objprop.apply_processing_parameters(
+            s2,
+            interactive=False,
+            param=sigima.params.NormalizeParam.create(method="amplitude"),
+        )
+        assert report.success, report.message
+        activity = ledger.activities[-1]
+        assert (activity["edition"], activity["origin"]) == (
+            "desktop",
+            "recompute_in_place",
+        )
+        assert inputs_of(win, activity) == [("source", s1_uuid)]
+        assert output_uuid(win, activity) == s2_uuid
+    with app() as win:
+        win.load_h5_workspace(
+            [osp.join(hdf5, "provenance_web_difference.h5")], reset_all=True
+        )
+        act_ab, _act_ba = win.provenance.ledger.activities
+        a_b = win.find_object_by_uuid(output_uuid(win, act_ab))
+        call = resolve_processing_call(win, a_b)
+        assert call.pattern == "2-to-1" and call.can_reapply
+        assert [(i.role, i.object_uuid) for i in call.inputs] == inputs_of(win, act_ab)
+        a_b.y[:] = 0.0
+        report = win.signalpanel.processor.recompute_processing(a_b, interactive=False)
+        assert report.success, report.message
+        assert np.array_equal(a_b.y, A_MINUS_B)
+        activity = win.provenance.ledger.activities[-1]
+        assert activity["context"]["x_alignment"] == RULE
+        assert (
+            win.verify_provenance_activity(activity["activity_id"])["verdict"]
+            == "exact"
+        )
