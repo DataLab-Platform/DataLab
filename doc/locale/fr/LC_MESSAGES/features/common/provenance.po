@@ -1,0 +1,160 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Provenance of results in DataLab: consultation, data check, verification by recomputation, applying a processing again, link with the History panel"
+msgstr "Provenance des résultats dans DataLab : consultation, contrôle des données, vérification par recalcul, nouvelle application d'un traitement, lien avec le panneau Historique"
+
+msgid "DataLab, provenance, reproducibility, processing, verification, workspace, HDF5, history"
+msgstr "DataLab, provenance, reproductibilité, traitement, vérification, espace de travail, HDF5, historique"
+
+msgid "Provenance of results"
+msgstr "Provenance des résultats"
+
+msgid "DataLab records how each result was obtained: the processing or analysis applied, its parameters, the objects it used with their exact content, and the software versions. This record is saved with the HDF5 workspace and read back when the workspace is reopened, by DataLab or by DataLab-Web."
+msgstr "DataLab enregistre la manière dont chaque résultat a été obtenu : le traitement ou l'analyse appliqué, ses paramètres, les objets utilisés avec leur contenu exact, et les versions des logiciels. Cet enregistrement est sauvegardé avec l'espace de travail HDF5 et relu à la réouverture de l'espace de travail, par DataLab ou par DataLab-Web."
+
+msgid "This page describes how to consult that record for one object, how to check and verify it, how to apply a recorded processing again, and how it relates to the History panel."
+msgstr "Cette page décrit comment consulter cet enregistrement pour un objet, comment le contrôler et le vérifier, comment appliquer à nouveau un traitement enregistré, et quel est son lien avec le panneau Historique."
+
+msgid "Consulting the provenance of an object"
+msgstr "Consulter la provenance d'un objet"
+
+msgid "Select an object and open the **History** tab of the Properties panel. When the workspace holds a provenance record for this object, the tab shows its provenance:"
+msgstr "Sélectionnez un objet et ouvrez l'onglet **Historique** du panneau des propriétés. Lorsque l'espace de travail contient un enregistrement de provenance pour cet objet, l'onglet affiche sa provenance :"
+
+msgid "a summary: the recorded execution that produced the current content, whether the data still have to be checked, and any limitation (e.g. data altered in the file, or a state observed without recorded production);"
+msgstr "un résumé : l'exécution enregistrée qui a produit le contenu actuel, si les données restent à contrôler, et toute limite (par exemple des données altérées dans le fichier, ou un état observé sans production enregistrée) ;"
+
+msgid "a tree with the **Production** of the object (operation, parameters, inputs, results, context and software), its **Recorded analyses**, its **Earlier recorded states** and, for workspaces saved by older versions, the **Records of an old workspace** and the **Metadata history (not verified)**."
+msgstr "une arborescence avec la **Production** de l'objet (opération, paramètres, entrées, résultats, contexte et logiciels), ses **Analyses enregistrées**, ses **États enregistrés antérieurs** et, pour les espaces de travail enregistrés par d'anciennes versions, les **Enregistrements d'un ancien espace de travail** et l'**Historique des métadonnées (non vérifié)**."
+
+msgid "Each input of a production can be expanded to show how that input was itself produced, step by step, without computing anything. The state actually used is shown, even if the input object was modified or reprocessed since: for example, if ``S2`` was computed from ``S1`` filtered with sigma = 2 and ``S1`` was then filtered again with sigma = 5, expanding the input of ``S2`` shows sigma = 2."
+msgstr "Chaque entrée d'une production peut être développée pour montrer comment cette entrée a elle-même été produite, étape par étape, sans rien calculer. L'état réellement utilisé est affiché, même si l'objet d'entrée a été modifié ou retraité depuis : par exemple, si ``S2`` a été calculé à partir de ``S1`` filtré avec sigma = 2, puis ``S1`` filtré à nouveau avec sigma = 5, le développement de l'entrée de ``S2`` montre sigma = 2."
+
+msgid "Consulting reads the provenance record only: it never computes, never changes the workspace and never adds a History action."
+msgstr "La consultation lit uniquement l'enregistrement de provenance : elle ne calcule jamais, ne modifie jamais l'espace de travail et n'ajoute jamais d'action à l'historique."
+
+msgid "The buttons below the tree act on the selected item:"
+msgstr "Les boutons situés sous l'arborescence agissent sur l'élément sélectionné :"
+
+msgid "**Check data** compares the object, and the direct inputs and results of its production, with their recorded states, without computing;"
+msgstr "**Contrôler les données** compare l'objet, ainsi que les entrées directes et les résultats de sa production, à leurs états enregistrés, sans calculer ;"
+
+msgid "**Verify computation** recomputes the selected recorded activity separately and compares every result with the recorded one: *Exact*, *Within tolerance*, *Different* or *Not verified* (with the reason). The workspace is not changed;"
+msgstr "**Vérifier le calcul** recalcule séparément l'activité enregistrée sélectionnée et compare chaque résultat au résultat enregistré : *Exact*, *Dans la tolérance*, *Différent* ou *Non vérifié* (avec la raison). L'espace de travail n'est pas modifié ;"
+
+msgid "**Select current object** selects the object currently holding the identifier of the selected input or result;"
+msgstr "**Sélectionner l'objet actuel** sélectionne l'objet portant actuellement l'identifiant de l'entrée ou du résultat sélectionné ;"
+
+msgid "**History action** selects the History action whose last execution recorded this step, when there is one."
+msgstr "**Action de l'historique** sélectionne l'action de l'historique dont la dernière exécution a enregistré cette étape, lorsqu'elle existe."
+
+msgid "States and messages"
+msgstr "États et messages"
+
+msgid "The provenance never invents what is unknown. The main messages are:"
+msgstr "La provenance n'invente jamais ce qui est inconnu. Les principaux messages sont :"
+
+msgid "Message"
+msgstr "Message"
+
+msgid "Meaning"
+msgstr "Signification"
+
+msgid "Data to be checked"
+msgstr "Données à contrôler"
+
+msgid "Nothing was compared yet: use **Check data**"
+msgstr "Rien n'a encore été comparé : utilisez **Contrôler les données**"
+
+msgid "This input has changed since the computation"
+msgstr "Cette entrée a changé depuis le calcul"
+
+msgid "The input object no longer holds the state used by the computation; the recorded state is still described"
+msgstr "L'objet d'entrée ne contient plus l'état utilisé par le calcul ; l'état enregistré reste décrit"
+
+msgid "Original input missing"
+msgstr "Entrée d'origine absente"
+
+msgid "The input object was deleted (or its identifier is now held by another object, see :ref:`provenance_append`)"
+msgstr "L'objet d'entrée a été supprimé (ou son identifiant est désormais porté par un autre objet, voir :ref:`provenance_append`)"
+
+msgid "The result was modified since the computation"
+msgstr "Le résultat a été modifié depuis le calcul"
+
+msgid "The result was edited after it was computed: it is reported as altered rather than trusted"
+msgstr "Le résultat a été modifié après son calcul : il est signalé comme altéré plutôt que considéré comme fiable"
+
+msgid "The data of the object are not available"
+msgstr "Les données de l'objet ne sont pas disponibles"
+
+msgid "The data cannot be read to be compared (they are not checked)"
+msgstr "Les données ne peuvent pas être lues pour être comparées (elles ne sont pas contrôlées)"
+
+msgid "The state cannot be checked (no fingerprint)"
+msgstr "L'état ne peut pas être contrôlé (pas d'empreinte)"
+
+msgid "The record does not allow a comparison"
+msgstr "L'enregistrement ne permet pas de comparaison"
+
+msgid "Observed state, without recorded production"
+msgstr "État observé, sans production enregistrée"
+
+msgid "The object exists in the record, but how it was produced is unknown (e.g. data loaded from a file)"
+msgstr "L'objet figure dans l'enregistrement, mais la manière dont il a été produit est inconnue (par exemple des données chargées depuis un fichier)"
+
+msgid "Applying a processing again"
+msgstr "Appliquer à nouveau un traitement"
+
+msgid "When the latest recorded state of an object was produced by a processing of DataLab, the **Processing** tab of the Properties panel restores that call: its operation, its parameters and every input, in order and with its role (source, operand, or each aggregated object). This applies to processing combining several objects (e.g. difference of two signals, average of several images) as well as to 1-to-1 processing, and to workspaces reopened from a file, saved by DataLab or by DataLab-Web."
+msgstr "Lorsque le dernier état enregistré d'un objet a été produit par un traitement de DataLab, l'onglet **Traitement** du panneau des propriétés restaure cet appel : son opération, ses paramètres et chacune de ses entrées, dans l'ordre et avec son rôle (source, opérande, ou chacun des objets agrégés). Cela s'applique aux traitements combinant plusieurs objets (par exemple la différence de deux signaux, la moyenne de plusieurs images) comme aux traitements 1 vers 1, et aux espaces de travail rouverts depuis un fichier, enregistrés par DataLab ou par DataLab-Web."
+
+msgid "With parameters, edit them and click **Apply**;"
+msgstr "Avec des paramètres, modifiez-les puis cliquez sur **Appliquer** ;"
+
+msgid "Without parameters, click **Reapply**."
+msgstr "Sans paramètres, cliquez sur **Réappliquer**."
+
+msgid "The result is updated in place with the recorded inputs, never with the current selection, and the new execution is recorded. When the processing cannot be applied again, the tab says why (e.g. an input object no longer exists, the recorded parameters cannot be used, or the operation is not available in this version of DataLab)."
+msgstr "Le résultat est mis à jour sur place avec les entrées enregistrées, jamais avec la sélection courante, et la nouvelle exécution est enregistrée. Lorsque le traitement ne peut pas être appliqué à nouveau, l'onglet en indique la raison (par exemple un objet d'entrée n'existe plus, les paramètres enregistrés ne peuvent pas être utilisés, ou l'opération n'est pas disponible dans cette version de DataLab)."
+
+msgid "When no provenance is recorded for an object, the processing metadata stored with it are used as before."
+msgstr "Lorsqu'aucune provenance n'est enregistrée pour un objet, les métadonnées de traitement stockées avec lui sont utilisées comme auparavant."
+
+msgid "Link with the History panel"
+msgstr "Lien avec le panneau Historique"
+
+msgid "When the History panel records a session, each action keeps the identifiers of the provenance activities recorded by its last successful execution. Select an action and use **Show execution provenance** (History panel menu or toolbar) to display them, one tab per result. If the parameters of the action were edited without executing it again, the dialog says that the provenance describes the last successful execution."
+msgstr "Lorsque le panneau Historique enregistre une session, chaque action conserve les identifiants des activités de provenance enregistrées par sa dernière exécution réussie. Sélectionnez une action et utilisez **Afficher la provenance de l'exécution** (menu ou barre d'outils du panneau Historique) pour les afficher, avec un onglet par résultat. Si les paramètres de l'action ont été modifiés sans qu'elle soit exécutée à nouveau, la boîte de dialogue indique que la provenance décrit la dernière exécution réussie."
+
+msgid "These identifiers are stored in the optional ``provenance_activity_ids`` field of History actions (History action schema version 3). They are never copied with an action, and actions saved by earlier versions simply have none. Deleting a History session does not change the provenance record."
+msgstr "Ces identifiants sont stockés dans le champ optionnel ``provenance_activity_ids`` des actions de l'historique (version 3 du schéma des actions de l'historique). Ils ne sont jamais copiés avec une action, et les actions enregistrées par des versions antérieures n'en ont simplement pas. La suppression d'une session de l'historique ne modifie pas l'enregistrement de provenance."
+
+msgid "Appending a workspace"
+msgstr "Ajouter un espace de travail"
+
+msgid "When a workspace file is opened without clearing the current workspace, its data are added but **its earlier provenance is not imported**: the provenance record of the current workspace is kept unchanged, and later processing of the added objects is recorded as usual. An added object never inherits the provenance of another object, even when it holds the identifier of an object that was deleted from the current workspace."
+msgstr "Lorsqu'un fichier d'espace de travail est ouvert sans vider l'espace de travail actuel, ses données sont ajoutées mais **sa provenance antérieure n'est pas importée** : l'enregistrement de provenance de l'espace de travail actuel reste inchangé, et les traitements ultérieurs des objets ajoutés sont enregistrés normalement. Un objet ajouté n'hérite jamais de la provenance d'un autre objet, même lorsqu'il porte l'identifiant d'un objet supprimé de l'espace de travail actuel."
+
+msgid "DataLab states this limitation before anything changes:"
+msgstr "DataLab signale cette limite avant toute modification :"
+
+msgid "when DataLab asks whether to clear the current workspace, the files are chosen first and, if one of them holds provenance, the question says so;"
+msgstr "lorsque DataLab demande s'il faut vider l'espace de travail actuel, les fichiers sont choisis d'abord et, si l'un d'eux contient une provenance, la question le précise ;"
+
+msgid "otherwise, a single warning offers to **Add without provenance** or to **Cancel**."
+msgstr "sinon, un avertissement unique propose d'**Ajouter sans la provenance** ou d'**Annuler**."
+
+msgid "To keep the provenance of a file, open it replacing the current workspace. When workspaces are loaded from a script with :meth:`~datalab.control.proxy.LocalProxy.load_h5_workspace`, no question is asked and the notice is logged."
+msgstr "Pour conserver la provenance d'un fichier, ouvrez-le en remplaçant l'espace de travail actuel. Lorsque des espaces de travail sont chargés depuis un script avec :meth:`~datalab.control.proxy.LocalProxy.load_h5_workspace`, aucune question n'est posée et l'avis est journalisé."
+
