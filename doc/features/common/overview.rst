@@ -217,15 +217,15 @@ selected object. This workflow is ideal for:
 
     **Processing metadata requirements:**
 
-    - Only works for 1-to-1 processing functions with parameter classes
-    - Processing functions without parameters (e.g., absolute value, inverse) work as before
-    - Source object must still exist for re-processing (error shown if deleted)
+    - Processing functions with parameters can be edited; processing functions
+      without parameters (e.g., absolute value, average) offer a **Reapply** button
+    - Every input object must still exist for re-processing (the Processing tab
+      says why it cannot be applied otherwise)
 
-    **Not supported for:**
-
-    - 2-to-1 processing (operations combining two objects)
-    - n-to-1 processing (operations aggregating multiple objects)
-    - These patterns don't benefit significantly from interactive parameter adjustment
+    When the workspace holds a provenance record for the object, the Processing tab
+    restores the recorded call, including 2-to-1 processing (source and operand)
+    and n-to-1 processing (every aggregated object, in order). See
+    :ref:`provenance`.
 
 Example workflow
 ^^^^^^^^^^^^^^^^
