@@ -147,7 +147,8 @@ def test_append_never_attributes_recorded_provenance() -> None:
             assert win.provenance.capture_failures == 0
 
 
-def test_question_states_the_limitation_first(monkeypatch, ask) -> None:
+@pytest.mark.usefixtures("ask")
+def test_question_states_the_limitation_first(monkeypatch) -> None:
     """Files are chosen first; the question alone states the limitation."""
     with helpers.WorkdirRestoringTempDir() as tmpdir:
         path = osp.join(tmpdir, "chain.h5")
@@ -174,8 +175,9 @@ def test_question_states_the_limitation_first(monkeypatch, ask) -> None:
             assert notice not in dialogs.messages[1]
 
 
+@pytest.mark.usefixtures("ask")
 @pytest.mark.parametrize("button", ["cancel", "add"])
-def test_single_warning_when_not_asked(monkeypatch, ask, button) -> None:
+def test_single_warning_when_not_asked(monkeypatch, button) -> None:
     """Without the question, one warning comes before any change."""
     with helpers.WorkdirRestoringTempDir() as tmpdir:
         path = osp.join(tmpdir, "chain.h5")

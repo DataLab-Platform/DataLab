@@ -139,7 +139,7 @@ class HistoryPanelUI:
             "provenance": create_action(
                 panel,
                 _("Show execution provenance"),
-                triggered=self.guarded(lambda: panel.show_execution_provenance()),
+                triggered=self.guarded(panel.show_execution_provenance),
                 icon=get_icon("history.svg"),
                 tip=_(
                     "Show the recorded provenance of the last successful execution "
