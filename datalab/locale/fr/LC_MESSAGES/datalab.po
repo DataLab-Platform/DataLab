@@ -4684,35 +4684,17 @@ msgstr "Différent"
 msgid "Not verified"
 msgstr "Non vérifié"
 
-msgid "Item"
-msgstr "Élément"
-
-msgid "Details"
-msgstr "Détails"
-
 msgid "Check data"
 msgstr "Contrôler les données"
 
-msgid "Compare the object and the direct inputs of its production with their recorded states, without computing"
-msgstr "Comparer l'objet et les entrées directes de sa production à leurs états enregistrés, sans calculer"
+msgid "Compare the object, the direct inputs of its production and the earlier steps shown with their recorded states, without computing"
+msgstr "Comparer l'objet, les entrées directes de sa production et les étapes antérieures affichées à leurs états enregistrés, sans calculer"
 
 msgid "Verify computation"
 msgstr "Vérifier le calcul"
 
-msgid "Recompute the recorded activity separately and compare it with the recorded result; the workspace is not changed"
-msgstr "Recalculer séparément l'activité enregistrée et la comparer au résultat enregistré ; l'espace de travail n'est pas modifié"
-
-msgid "Select current object"
-msgstr "Sélectionner l'objet actuel"
-
-msgid "Select the object currently holding this identifier"
-msgstr "Sélectionner l'objet portant actuellement cet identifiant"
-
-msgid "History action"
-msgstr "Action de l'historique"
-
-msgid "Select the History action whose last execution recorded this step"
-msgstr "Sélectionner l'action de l'historique dont la dernière exécution a enregistré cette étape"
+msgid "Recompute the recorded production separately and compare it with the recorded result; the workspace is not changed"
+msgstr "Recalculer séparément la production enregistrée et la comparer au résultat enregistré ; l'espace de travail n'est pas modifié"
 
 msgid "Unknown operation"
 msgstr "Opération inconnue"
@@ -4733,9 +4715,6 @@ msgstr "Cet état a été observé, sans production enregistrée."
 msgid "Production"
 msgstr "Production"
 
-msgid "Metadata history (not verified)"
-msgstr "Historique des métadonnées (non vérifié)"
-
 msgid "Records of an old workspace"
 msgstr "Enregistrements d'un ancien espace de travail"
 
@@ -4755,35 +4734,56 @@ msgstr "Produit par une activité enregistrée"
 msgid "Observed state"
 msgstr "État observé"
 
-msgid "Verification"
-msgstr "Vérification"
+msgid "Metadata history (not verified)"
+msgstr "Historique des métadonnées (non vérifié)"
 
-msgid "Not recorded"
-msgstr "Non enregistré"
+msgid "Hide recorded step"
+msgstr "Masquer l'étape enregistrée"
 
-msgid "Inputs"
-msgstr "Entrées"
+msgid "Show recorded step"
+msgstr "Afficher l'étape enregistrée"
 
-msgid "already shown above (cycle)"
-msgstr "déjà affiché plus haut (cycle)"
+msgid "Observed state, without recorded production"
+msgstr "État observé, sans production enregistrée"
 
-msgid "No result"
-msgstr "Aucun résultat"
+msgid "Too many levels: not expanded"
+msgstr "Trop de niveaux : non développé"
+
+msgid "Parameters: not recorded"
+msgstr "Paramètres : non enregistrés"
 
 msgid "Nothing was found (not an error)"
 msgstr "Rien n'a été trouvé (ce n'est pas une erreur)"
 
-msgid "Object no longer exists"
-msgstr "L'objet n'existe plus"
-
-msgid "Limits"
-msgstr "Limites"
-
-msgid "Old record"
-msgstr "Ancien enregistrement"
+#, python-format
+msgid "Limits: %s"
+msgstr "Limites : %s"
 
 msgid "No issue"
 msgstr "Aucun problème"
+
+#, python-format
+msgid "Old record: %s"
+msgstr "Ancien enregistrement : %s"
+
+msgid "Verify this step"
+msgstr "Vérifier cette étape"
+
+msgid "History action"
+msgstr "Action de l'historique"
+
+msgid "already shown above (cycle)"
+msgstr "déjà affiché plus haut (cycle)"
+
+#, python-format
+msgid "%d inputs in total"
+msgstr "%d entrées au total"
+
+msgid "Object no longer exists"
+msgstr "L'objet n'existe plus"
+
+msgid "Go to object"
+msgstr "Aller à l'objet"
 
 #, python-format
 msgid "Metadata read: %s"
@@ -4792,15 +4792,12 @@ msgstr "Métadonnée lue : %s"
 msgid "Software"
 msgstr "Logiciel"
 
-msgid "Observed state, without recorded production"
-msgstr "État observé, sans production enregistrée"
-
-msgid "Too many levels: not expanded"
-msgstr "Trop de niveaux : non développé"
+msgid "Recorded at: "
+msgstr "Enregistré le : "
 
 #, python-format
-msgid "Verification: %s"
-msgstr "Vérification : %s"
+msgid "Verification of %s: %s"
+msgstr "Vérification de %s : %s"
 
 msgid "The software environment differs from the recorded one."
 msgstr "L'environnement logiciel diffère de celui enregistré."

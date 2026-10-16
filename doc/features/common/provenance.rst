@@ -26,39 +26,44 @@ provenance:
 - a summary: the recorded execution that produced the current content, whether
   the data still have to be checked, and any limitation (e.g. data altered in the
   file, or a state observed without recorded production);
-- a tree with the **Production** of the object (operation, parameters, inputs,
-  results, context and software), its **Recorded analyses**, its **Earlier
+- the **Production** of the object, its **Recorded analyses**, its **Earlier
   recorded states** and, for workspaces saved by older versions, the **Records
   of an old workspace** and the **Metadata history (not verified)**.
 
-Everything recorded for the object is shown expanded, and the main parameters of
-each operation are summarized on its line (e.g. ``Gaussian filter — sigma=2.0``).
+Each recorded step is shown as a card: the operation, how and when it was
+recorded and by which software (DataLab Desktop or DataLab Web), its
+parameters, its inputs and results with their status, and links acting on what
+they are next to:
 
-Each input of a production can be expanded to show how that input was itself
-produced, step by step, without computing anything (earlier steps are loaded
-when expanded). The state actually used is
-shown, even if the input object was modified or reprocessed since: for example,
-if ``S2`` was computed from ``S1`` filtered with sigma = 2 and ``S1`` was then
-filtered again with sigma = 5, expanding the input of ``S2`` shows sigma = 2.
+- **Show recorded step** (under an input) shows how that input was itself
+  produced, step by step, without computing anything. The state actually used
+  is shown, even if the input object was modified or reprocessed since: for
+  example, if ``S2`` was computed from ``S1`` filtered with sigma = 2 and ``S1``
+  was then filtered again with sigma = 5, the recorded step of the input of
+  ``S2`` shows sigma = 2. **Hide recorded step** hides it again;
+- **Go to object** (under an input or a result) selects, in the signal or image
+  panel, the object that holds it today (it may have changed since the
+  computation);
+- **Verify this step** recomputes the step separately and compares every result
+  with the recorded one: *Exact*, *Within tolerance*, *Different* or *Not
+  verified* (with the reason). The workspace is not changed;
+- **History action** selects the History action whose last execution recorded
+  the step, when there is one;
+- **Show details** shows the context of the step (options, X alignment,
+  metadata read) and the software versions.
 
 Consulting reads the provenance record only: it never computes, never changes
 the workspace and never adds a History action.
 
-The buttons below the tree act on the selected item:
+The buttons below the cards act on the object:
 
-- **Check data** compares the object, and the direct inputs and results of its
-  production, with their recorded states, without computing. The earlier steps
-  shown, or expanded afterwards, are checked too; the items you expanded or
-  collapsed stay so. A deleted input or result is reported as missing at once,
-  without checking (nothing has to be read to know it);
-- **Verify computation** recomputes the selected recorded activity separately and
-  compares every result with the recorded one: *Exact*, *Within tolerance*,
-  *Different* or *Not verified* (with the reason). The workspace is not changed;
-- **Select current object** selects the object currently holding the identifier
-  of the selected input or result;
-- **History action** selects the History action whose last execution recorded
-  this step, when there is one.
-
+- **Check data** compares the object, the direct inputs and results of its
+  production and the earlier steps shown with their recorded states, without
+  computing. The steps shown and the details opened stay so. A deleted input or
+  result is reported as missing at once, without checking (nothing has to be
+  read to know it);
+- **Verify computation** verifies the production of the object, like **Verify
+  this step**.
 States and messages
 ^^^^^^^^^^^^^^^^^^^
 
