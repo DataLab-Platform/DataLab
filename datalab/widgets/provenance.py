@@ -378,9 +378,14 @@ class ProvenanceWidget(QW.QWidget):
 
     def __object_name(self, uuid: str | None) -> str | None:
         obj = None if uuid is None else self.mainwindow.find_object_by_uuid(uuid)
-        if isinstance(obj, (SignalObj, ImageObj)):
+        if not isinstance(obj, (SignalObj, ImageObj)):
+            return None
+        try:
             return f"{get_short_id(obj)}: {obj.title}"
-        return None
+        except ValueError:
+            # Object numbers are briefly absent while metadata are deleted
+            # (see BaseDataPanel.delete_metadata); the view is refreshed after.
+            return obj.title
 
     def __operation_title(self, activity: dict[str, Any]) -> str:
         operation = activity.get("operation")

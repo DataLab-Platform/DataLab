@@ -21,7 +21,7 @@ import sigima.proc.signal as sips
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
-from datalab.objectmodel import get_uuid
+from datalab.objectmodel import get_short_id, get_uuid
 from datalab.tests import helpers
 from datalab.tests.features.common.provenance_processing_unit_test import (
     add_signal,
@@ -245,3 +245,16 @@ def test_history_session_deletion_keeps_the_provenance() -> None:
             edit=False,
         )[0]
         assert win.provenance.describe_object(get_uuid(s3))["production"] is not None
+
+
+def test_view_survives_metadata_deletion() -> None:
+    """Object numbers are briefly absent while metadata are deleted."""
+    with app() as win:
+        objs = build_chain(win)
+        view = view_of(win, objs["s2"])
+        win.signalpanel.delete_metadata(keep_roi=True)
+        for _index in range(3):
+            QW.QApplication.processEvents()
+        assert view.description["object"]["object_uuid"] == get_uuid(objs["s2"])
+        (results,) = view.tree.findItems("Results", QC.Qt.MatchRecursive, 0)
+        assert get_short_id(objs["s2"]) in results.child(0).text(0)
