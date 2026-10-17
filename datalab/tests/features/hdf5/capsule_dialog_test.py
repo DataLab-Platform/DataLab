@@ -11,6 +11,7 @@ File dialogs are bypassed by passing file names to the tab methods.
 
 from __future__ import annotations
 
+import dataclasses
 import json
 import os.path as osp
 import socket
@@ -165,6 +166,35 @@ def test_inspect_reports_problems() -> None:
             assert inspect.intact
             assert inspect.open(confirm=False) is False
             assert "select the workspace file" in dialog.error
+            dialog.close()
+
+
+def test_inspect_refuses_files_beyond_the_policy() -> None:
+    """Inspect: a capsule or a referenced workspace too large is not read."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        with capsule_app(tmpdir) as win:
+            build_chain(win)
+            dialog = CapsuleDialog(win)
+            export = dialog.export_tab
+            export.referenced_check.setChecked(True)
+            export.ref_edit.setText("https://data.example.org/chain.h5")
+            path = osp.join(tmpdir, "ref.dlcapsule")
+            workspace = osp.join(tmpdir, "published.h5")
+            assert export.export(path, workspace) is not None, dialog.error
+            size, ws_size = osp.getsize(path), osp.getsize(workspace)
+            capsuleio = win.capsuleio
+            default = capsuleio.policy
+            inspect = dialog.inspect_tab
+            capsuleio.policy = dataclasses.replace(default, max_archive_bytes=size - 1)
+            assert not inspect.choose(path)
+            assert "Capsule too large: ref.dlcapsule" in dialog.error
+            assert inspect.inspection is None
+            capsuleio.policy = dataclasses.replace(
+                default, max_archive_bytes=size, max_workspace_bytes=ws_size - 1
+            )
+            assert inspect.choose(path) and inspect.intact
+            assert not inspect.choose_workspace(workspace)
+            assert "Referenced workspace too large: published.h5" in dialog.error
             dialog.close()
 
 

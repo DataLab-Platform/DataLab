@@ -19,11 +19,18 @@ from collections.abc import Generator
 
 import pytest
 from datalab_capsule import exchange
-from datalab_capsule.archive import CapsuleError, create_from_hdf5, read_capsule
+from datalab_capsule.archive import (
+    MAX_MANIFEST_BYTES,
+    CapsuleError,
+    SizePolicy,
+    create_from_hdf5,
+    read_capsule,
+)
 from datalab_capsule.manifest import inspect_manifest
 
 from datalab.capsulestore import RevisionStore
 from datalab.control.proxy import LocalProxy
+from datalab.gui import capsuleio
 from datalab.gui.main import DLMainWindow
 from datalab.gui.panel.history import interactive_replay as hireplay
 from datalab.tests import helpers
@@ -195,3 +202,77 @@ def test_remote_server() -> None:
                 server.open_capsule(path)
             server.open_capsule(path, osp.join(tmpdir, "chain.h5"))
             check_chain(win, "desktop")
+
+
+def test_read_bounded(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A file beyond the limit is refused before it is opened."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        path = osp.join(tmpdir, "data.bin")
+        with open(path, "wb") as file:
+            file.write(b"x" * 100)
+        assert capsuleio.read_bounded(path, 100, "Capsule") == b"x" * 100
+
+        def refuse(*_args, **_kwargs):
+            raise AssertionError("the file was opened")
+
+        monkeypatch.setattr(capsuleio, "open", refuse, raising=False)
+        with pytest.raises(CapsuleError, match=r"Capsule too large: data\.bin"):
+            capsuleio.read_bounded(path, 99, "Capsule")
+
+
+def _policy(archive: int, workspace: int) -> SizePolicy:
+    return SizePolicy(
+        max_archive_bytes=archive,
+        max_manifest_bytes=MAX_MANIFEST_BYTES,
+        max_workspace_bytes=workspace,
+    )
+
+
+def test_size_policy_refuses_before_reading() -> None:
+    """Capsule and referenced workspace: refused beyond the policy, workspace kept.
+
+    Exact sizes are accepted; one byte less refuses the file before it is read
+    and leaves the current workspace unchanged.
+    """
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        capsule = osp.join(tmpdir, "chain.dlcapsule")
+        workspace = osp.join(tmpdir, "chain.h5")
+        with capsule_app(tmpdir) as win:
+            build_chain(win)
+            win.export_capsule(capsule, workspace_ref=REF)
+            size, ws_size = osp.getsize(capsule), osp.getsize(workspace)
+            activities = len(win.provenance.ledger.activities)
+            for policy, message in (
+                (_policy(size - 1, ws_size), "Capsule too large"),
+                (_policy(size, ws_size - 1), "Referenced workspace too large"),
+            ):
+                win.capsuleio.policy = policy
+                with pytest.raises(CapsuleError, match=message):
+                    win.open_capsule(capsule, workspace)
+                assert len(win.signalpanel) == 5
+                assert len(win.provenance.ledger.activities) == activities
+                assert win.provenance.capsule_origin is None
+            win.capsuleio.policy = _policy(size, ws_size)
+            win.open_capsule(capsule, workspace)
+            check_chain(win, "desktop")
+
+
+def test_size_policy_refuses_export() -> None:
+    """An export beyond the policy writes no file."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        reference = osp.join(tmpdir, "reference.dlcapsule")
+        with capsule_app(tmpdir) as win:
+            build_chain(win)
+            win.export_capsule(reference)
+            size = osp.getsize(reference)
+            workspace = len(win.capsuleio.workspace_bytes())
+            path = osp.join(tmpdir, "refused.dlcapsule")
+            for policy, message in (
+                (_policy(10 * size, workspace // 2), "Workspace too large"),
+                (_policy(size // 2, 10 * workspace), "too large"),
+            ):
+                win.capsuleio.policy = policy
+                with pytest.raises(CapsuleError, match=message):
+                    win.export_capsule(path, workspace_ref=None)
+                assert not osp.exists(path)
+            assert len(win.capsuleio.revisions.revisions()) == 1
