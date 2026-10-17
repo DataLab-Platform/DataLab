@@ -643,10 +643,6 @@ class InspectTab(_Tab):
                 bool(get_registry_settings()[0])
             )
 
-    def __read(self, filename: str) -> bytes:
-        with open(filename, "rb") as file:
-            return file.read()
-
     def inspect(self) -> bool:
         """Inspect the chosen capsule with the supplied workspace and documents."""
         capsule = self.capsule
@@ -654,13 +650,15 @@ class InspectTab(_Tab):
             return False
 
         def task() -> None:
+            capsuleio = self.mainwindow.capsuleio
             self.inspection = exchange.inspect_capsule(
-                self.__read(capsule),
+                capsuleio.read_capsule_file(capsule),
                 workspace=None
                 if self.workspace is None
-                else self.__read(self.workspace),
+                else capsuleio.read_workspace_file(self.workspace),
                 reports=[text for _name, text in self.reports],
                 reviews=[text for _name, text in self.reviews],
+                policy=capsuleio.policy,
             )
             if self.inspection["manifest"] is not None:
                 self.mainwindow.capsuleio.record_revision(
@@ -727,7 +725,10 @@ class InspectTab(_Tab):
         capsule = self.capsule
 
         def task() -> None:
-            data = exchange.capsule_attachment(self.__read(capsule), name)
+            capsuleio = self.mainwindow.capsuleio
+            data = exchange.capsule_attachment(
+                capsuleio.read_capsule_file(capsule), name, capsuleio.policy
+            )
             with open(filename, "wb") as file:
                 file.write(data)
 
@@ -743,14 +744,17 @@ class InspectTab(_Tab):
         def task() -> None:
             address, token = get_registry_settings()
             client = RegistryClient(address, token or None)
-            data = self.__read(capsule)
+            capsuleio = self.mainwindow.capsuleio
+            data = capsuleio.read_capsule_file(capsule)
             fingerprint = client.publish_manifest(
                 json.dumps(inspection["manifest"]).encode("utf-8")
             )["fingerprint"]
             for attachment in summary["attachments"]:
                 name = attachment["name"]
                 client.upload_attachment(
-                    fingerprint, name, exchange.capsule_attachment(data, name)
+                    fingerprint,
+                    name,
+                    exchange.capsule_attachment(data, name, capsuleio.policy),
                 )
             valid = (inspection.get("documents") or {}).get("reviews") or []
             count = 0

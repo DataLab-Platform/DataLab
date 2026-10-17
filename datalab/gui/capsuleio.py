@@ -26,8 +26,10 @@ from typing import TYPE_CHECKING, Any
 
 from datalab_capsule import exchange
 from datalab_capsule.archive import (
+    DEFAULT_SIZE_POLICY,
     MAX_ATTACHMENT_BYTES,
     CapsuleError,
+    SizePolicy,
     create_from_hdf5,
     read_capsule,
 )
@@ -39,7 +41,50 @@ from datalab.config import _
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
 
-__all__ = ["CapsuleInputOutput", "attachment_entries", "workspace_leaf"]
+__all__ = [
+    "SIZE_POLICY",
+    "CapsuleInputOutput",
+    "attachment_entries",
+    "read_bounded",
+    "workspace_leaf",
+]
+
+#: Size limits of DataLab Desktop for capsules: the default policy of
+#: DataLab-Capsule (4 GiB workspace), an accepted upper bound, not a tested
+#: capacity.
+SIZE_POLICY = DEFAULT_SIZE_POLICY
+
+
+def _mib(size: int) -> str:
+    return f"{size / 1024**2:.1f}"
+
+
+def read_bounded(filename: str, limit: int, what: str) -> bytes:
+    """Read a whole file, refusing it before reading when it is too large.
+
+    Args:
+        filename: File name.
+        limit: Largest size accepted (bytes).
+        what: What the file is, for the error message (e.g. "Capsule").
+
+    Returns:
+        The content of the file.
+
+    Raises:
+        CapsuleError: If the file is larger than *limit*, even if it grew while
+         being read: no more than *limit* + 1 bytes are read.
+    """
+    size = os.stat(filename).st_size
+    if size <= limit:
+        with open(filename, "rb") as file:
+            data = file.read(limit + 1)
+        if len(data) <= limit:
+            return data
+        size = len(data)
+    raise CapsuleError(
+        _("%s too large: %s, %s MiB (limit: %s MiB)")
+        % (what, osp.basename(filename), _mib(size), _mib(limit))
+    )
 
 
 def workspace_leaf(workspace_ref: str) -> str:
@@ -67,13 +112,30 @@ class CapsuleInputOutput:
         mainwindow: Main window
         revisions: Revisions seen on this computer (default: the store of the
          DataLab configuration folder).
+        policy: Size limits of the capsules read or written (default:
+         :data:`SIZE_POLICY`). Files are checked against them before they are
+         read, and a capsule this edition would refuse is never written.
     """
 
     def __init__(
-        self, mainwindow: DLMainWindow, revisions: RevisionStore | None = None
+        self,
+        mainwindow: DLMainWindow,
+        revisions: RevisionStore | None = None,
+        policy: SizePolicy | None = None,
     ) -> None:
         self.mainwindow = mainwindow
         self.revisions = RevisionStore() if revisions is None else revisions
+        self.policy = SIZE_POLICY if policy is None else policy
+
+    def read_capsule_file(self, filename: str) -> bytes:
+        """Read a capsule file, refused before reading beyond the size policy."""
+        return read_bounded(filename, self.policy.max_archive_bytes, _("Capsule"))
+
+    def read_workspace_file(self, filename: str) -> bytes:
+        """Read a referenced workspace file, refused beyond the size policy."""
+        return read_bounded(
+            filename, self.policy.max_workspace_bytes, _("Referenced workspace")
+        )
 
     def record_revision(self, manifest: dict[str, Any], source: str) -> None:
         """Record a revision seen on this computer (never fails the caller)."""
@@ -90,13 +152,16 @@ class CapsuleInputOutput:
 
         The workspace is saved to a temporary file, as by **Save to HDF5 file**,
         without changing the workspace file name or the last folder used.
+
+        Raises:
+            CapsuleError: If the saved workspace exceeds the size policy (checked
+             before the file is read back).
         """
         handle, path = tempfile.mkstemp(suffix=".h5", prefix="datalab-capsule-")
         os.close(handle)
         try:
             self.mainwindow.h5inputoutput.save_file(path)
-            with open(path, "rb") as file:
-                return file.read()
+            return read_bounded(path, self.policy.max_workspace_bytes, _("Workspace"))
         finally:
             os.remove(path)
 
@@ -131,8 +196,9 @@ class CapsuleInputOutput:
             Manifest fingerprint of the capsule.
 
         Raises:
-            CapsuleError: If an attachment is too large or the capsule cannot be
-             created.
+            CapsuleError: If the workspace or an attachment is too large, or the
+             capsule cannot be created or would be refused when read back. No
+             file is written then.
             ManifestError: If a field is invalid (workspace IRI, attachment).
         """
         files = []
@@ -161,6 +227,9 @@ class CapsuleInputOutput:
             workspace_ref=workspace_ref or None,
             attachments=files,
         )
+        # Read back before writing anything: a capsule this edition refuses
+        # (size policy, invalid manifest) is never written.
+        manifest = read_capsule(capsule, self.policy).manifest
         if workspace_ref:
             if workspace_filename is None:
                 workspace_filename = osp.join(
@@ -170,33 +239,32 @@ class CapsuleInputOutput:
                 file.write(workspace)
         with open(filename, "wb") as file:
             file.write(capsule)
-        manifest = read_capsule(capsule).manifest
         self.record_revision(manifest, "exported")
         return exchange.capsule_origin(manifest)["fingerprint"]
 
     def open(self, filename: str, workspace: str | None = None) -> None:
         """Open a capsule as the workspace (replacing it).
 
-        The capsule is checked first (archive, manifest, workspace SHA-256 and
-        size); nothing changes if it is invalid.
+        The capsule is checked first (size, archive, manifest, workspace SHA-256
+        and size); nothing changes if it is invalid. The capsule and the
+        referenced workspace are refused before being read when they exceed the
+        size policy.
 
         Args:
             filename: Capsule file name.
             workspace: Workspace file of a capsule that references it.
 
         Raises:
-            CapsuleError: If the capsule is invalid, or references a workspace
-             that was not supplied or does not match.
+            CapsuleError: If the capsule is invalid or too large, or references a
+             workspace that was not supplied, is too large or does not match.
             ProvenanceFormatError: If the provenance block is invalid.
         """
-        with open(filename, "rb") as file:
-            data = file.read()
-        supplied = None
-        if workspace is not None:
-            with open(workspace, "rb") as file:
-                supplied = file.read()
+        data = self.read_capsule_file(filename)
+        supplied = None if workspace is None else self.read_workspace_file(workspace)
         capsule = read_capsule(
-            data, resolve_workspace=None if supplied is None else lambda _iri: supplied
+            data,
+            self.policy,
+            resolve_workspace=None if supplied is None else lambda _iri: supplied,
         )
         if capsule.workspace is None:
             raise CapsuleError(

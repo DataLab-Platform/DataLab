@@ -5168,6 +5168,16 @@ msgstr "La révision parente a des pièces jointes qui ne sont pas copiées : %s
 msgid "Attachments are limited to 16 MiB: %s"
 msgstr "Les pièces jointes sont limitées à 16 Mio : %s"
 
+#, python-format
+msgid "%s too large: %s, %s MiB (limit: %s MiB)"
+msgstr "%s : taille excessive, %s, %s Mio (limite : %s Mio)"
+
+msgid "Capsule"
+msgstr "Capsule"
+
+msgid "Referenced workspace"
+msgstr "Espace de travail référencé"
+
 msgid "Save the referenced workspace"
 msgstr "Enregistrer l'espace de travail référencé"
 
