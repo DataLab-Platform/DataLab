@@ -5,7 +5,9 @@ Check that the DataLab executable loads a plugin installed from a file
 
 The probe plugin, installed like a user plugin wheel, records which modules a
 plugin can import and which distribution metadata are available, so that the
-frozen build is checked from a plugin's point of view.
+frozen build is checked from a plugin's point of view. It also creates,
+validates and inspects a small capsule, which needs the schemas and RO-Crate
+context embedded by DataLab-Capsule.
 
 Usage (with ``DATALAB_PLUGIN_PROBE_MARKER`` set to the result file path)::
 
@@ -52,13 +54,18 @@ MODULES = (
     "datalab.plugins.recipes",
     "datalab.plugins.tiles",
     "datalab.plugins.tools",
+    "datalab_capsule.exchange",
+    "datalab_capsule.registry_client",
+    "datalab.gui.capsuleio",
+    "datalab.widgets.capsule",
 )
 
 #: Distributions plugin wheels may declare as requirements
-DISTRIBUTIONS = ("guidata", "numpy", "plotpy", "scipy", "sigima")
+DISTRIBUTIONS = ("datalab-capsule", "guidata", "numpy", "plotpy", "scipy", "sigima")
 
 PLUGIN_SOURCE = f'''\
 import importlib
+import io
 import json
 import os
 
@@ -66,6 +73,39 @@ from packaging.utils import canonicalize_name
 
 from datalab.plugins import PluginBase, PluginInfo
 from datalab.plugins.base import get_installed_plugin_store
+
+
+def capsule_round_trip():
+    """Create, validate and inspect a capsule with the embedded resources."""
+    import h5py
+    import numpy as np
+    from datalab_capsule import exchange
+    from datalab_capsule.archive import create_from_hdf5
+    from datalab_capsule.hdf5 import save_ledger
+    from datalab_capsule.integrity import state_facts
+    from datalab_capsule.ledger import Ledger
+    from types import SimpleNamespace
+
+    uuid = "00000000-0000-4000-8000-000000000001"
+    sig = SimpleNamespace(
+        x=np.linspace(0.0, 1.0, 4), y=np.arange(4.0), dx=None, dy=None,
+        xunit="s", yunit="", roi=None,
+    )
+    ledger = Ledger()
+    ledger.observe(uuid, state_facts(sig))
+    buffer = io.BytesIO()
+    with h5py.File(buffer, "w") as h5file:
+        group = h5file.create_group("/DataLab_Sig/g: G/s: S")
+        group.attrs["xunit"], group.attrs["yunit"] = "s", ""
+        group["xydata"] = np.vstack([sig.x, sig.y])
+        group.create_group("metadata").attrs["__uuid"] = uuid
+        h5file["DataLab_Version"] = "probe"
+        save_ledger(h5file, ledger)
+    capsule = create_from_hdf5(buffer.getvalue(), name="probe")
+    integrity = exchange.inspect_capsule(capsule)["integrity"]
+    if not integrity["valid"] or integrity["states_located"] != 1:
+        return f"invalid: {{integrity}}"
+    return "ok"
 
 
 class FrozenProbe(PluginBase):
@@ -87,11 +127,16 @@ class FrozenProbe(PluginBase):
             .get_available_distributions()
             .items()
         }}
+        try:
+            capsule = capsule_round_trip()
+        except Exception as exc:  # pylint: disable=broad-except
+            capsule = f"{{type(exc).__name__}}: {{exc}}"
         result = {{
             "imports": imports,
             "distributions": {{
                 name: available.get(name) for name in {DISTRIBUTIONS!r}
             }},
+            "capsule": capsule,
         }}
         with open(os.environ["{MARKER_ENV}"], "w", encoding="utf-8") as file:
             json.dump(result, file, indent=2)
@@ -156,6 +201,8 @@ def verify() -> int:
         for name, version in result["distributions"].items()
         if version is None
     )
+    if result.get("capsule") != "ok":
+        failures.append(f"capsule round trip: {result.get('capsule')}")
     print(json.dumps(result, indent=2))
     for failure in failures:
         print(failure, file=sys.stderr)
