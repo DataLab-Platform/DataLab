@@ -124,6 +124,15 @@ def patch_title_with_ids(
 #: (e.g. ``s001``, ``i012``, ``gs003``, ``gi007``).
 SHORT_ID_REGEX = re.compile(r"\b(g?[si])(\d{3})\b")
 
+#: Short IDs to replace by UUIDs in titles. Unlike :data:`SHORT_ID_REGEX`, a
+#: short ID followed by a non-digit word character (``s001_avg``) is replaced,
+#: as titles always did; it must not be part of a longer word (``gs001`` is a
+#: group, not ``s001``) nor of a longer number (``s1000`` is not ``s100``).
+TITLE_SHORT_ID_REGEX = re.compile(r"(?<![0-9A-Za-z])g?[si]\d{3,}(?!\d)")
+
+#: Regex matching object and group UUIDs embedded in titles
+TITLE_UUID_REGEX = re.compile(r"\b[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}\b")
+
 
 def find_short_ids_in_title(title: str) -> list[tuple[int, int, str]]:
     """Return a list of ``(start, end, short_id)`` tuples for every short ID
@@ -482,16 +491,76 @@ class ObjectModel:
         """Add object to model"""
         self.add_objects((obj,), group_id)
 
+    def __numbering_is_current(self) -> bool:
+        """Return True if groups and objects hold the numbers of their positions"""
+        onb = 1
+        for gnb, group in enumerate(self._groups, start=1):
+            if group.number != gnb:
+                return False
+            for obj in group:
+                if obj.metadata.get("__number") != onb:
+                    return False
+                onb += 1
+        return True
+
+    def __append_objects(
+        self,
+        objects: tuple[SignalObj | ImageObj, ...],
+        object_ids: list[str],
+        group: ObjectGroup,
+    ) -> None:
+        """Add objects after every numbered object: no existing number changes.
+
+        Only the titles of the new objects are rewritten (see
+        :meth:`replace_short_ids_by_uuids_in_titles` and
+        :meth:`replace_uuids_by_short_ids_in_titles`, whose results are the same
+        here): the titles of the objects and groups already in the model refer to
+        numbers that do not change.
+        """
+        to_uuid: dict[str, str] = {}
+
+        def short_id_to_uuid(match: re.Match) -> str:
+            if not to_uuid:
+                mapping = self.__get_group_object_mapping_to_shortid()
+                to_uuid.update((short_id, uuid) for uuid, short_id in mapping.items())
+            return to_uuid.get(match.group(0), match.group(0))
+
+        for obj in objects:
+            self.__rewrite_title(obj, TITLE_SHORT_ID_REGEX, short_id_to_uuid)
+        number = sum(len(other) for other in self._groups)
+        for obj, obj_uuid in zip(objects, object_ids):
+            self._objects[obj_uuid] = obj
+            group.append(obj)
+            number += 1
+            set_number(obj, number)
+        groups = {get_uuid(other): other for other in self._groups}
+        for obj in objects:
+            missing = f"{obj.PREFIX}xxx"
+
+            def uuid_to_short_id(match: re.Match, missing: str = missing) -> str:
+                uuid = match.group(0)
+                target = self._objects.get(uuid)
+                if target is None:
+                    target = groups.get(uuid)
+                return missing if target is None else get_short_id(target)
+
+            self.__rewrite_title(obj, TITLE_UUID_REGEX, uuid_to_short_id)
+
     def add_objects(
         self,
         objects: Sequence[SignalObj | ImageObj],
         group_id: str,
-    ) -> None:
+    ) -> bool:
         """Add objects to the model atomically.
 
         Args:
             objects: Objects to add, in insertion order
             group_id: UUID of the target group
+
+        Returns:
+            True if the short IDs, hence possibly the titles, of objects or groups
+            already in the model changed; False when the objects were added after
+            every existing object (the usual case), which leaves them unchanged.
 
         Raises:
             KeyError: If the target group does not exist
@@ -499,7 +568,7 @@ class ObjectModel:
         """
         objects = tuple(objects)
         if not objects:
-            return
+            return False
         group = self.get_group(group_id)
         object_ids = [get_uuid(obj) for obj in objects]
         if len(set(object_ids)) != len(object_ids):
@@ -509,11 +578,18 @@ class ObjectModel:
             raise ValueError(
                 f"Object UUID already exists in model: {sorted(existing_ids)[0]}"
             )
+        group_index = self._groups.index(group)
+        appended = (
+            all(len(other) == 0 for other in self._groups[group_index + 1 :])
+            and self.__numbering_is_current()
+        )
 
-        tracked_objects = (*self._objects.values(), *objects)
+        tracked_objects = objects if appended else (*self._objects.values(), *objects)
         tracked_titles = tuple(
             (obj_or_group, obj_or_group.title)
-            for obj_or_group in (*self._groups, *tracked_objects)
+            for obj_or_group in (
+                tracked_objects if appended else (*self._groups, *tracked_objects)
+            )
         )
         missing = object()
         tracked_numbers = tuple(
@@ -526,12 +602,15 @@ class ObjectModel:
         group_objects_before = group.get_object_ids()
 
         try:
-            self.replace_short_ids_by_uuids_in_titles(objects)
-            for obj, obj_uuid in zip(objects, object_ids):
-                self._objects[obj_uuid] = obj
-                group.append(obj)
-            self.reset_short_ids()
-            self.replace_uuids_by_short_ids_in_titles()
+            if appended:
+                self.__append_objects(objects, object_ids, group)
+            else:
+                self.replace_short_ids_by_uuids_in_titles(objects)
+                for obj, obj_uuid in zip(objects, object_ids):
+                    self._objects[obj_uuid] = obj
+                    group.append(obj)
+                self.reset_short_ids()
+                self.replace_uuids_by_short_ids_in_titles()
         except Exception:
             self._objects = objects_before
             group.clear()
@@ -547,6 +626,7 @@ class ObjectModel:
             for tracked_group, number in tracked_group_numbers:
                 tracked_group.number = number
             raise
+        return not appended
 
     def remove_object(self, obj: SignalObj | ImageObj) -> None:
         """Remove object from model"""
@@ -656,6 +736,36 @@ class ObjectModel:
                 mapping[get_uuid(obj)] = get_short_id(obj)
         return mapping
 
+    def get_short_id_index(self) -> dict[str, SignalObj | ImageObj | ObjectGroup]:
+        """Return a dictionary mapping short IDs to groups and objects.
+
+        The index reflects the current numbering: it must be built again after
+        objects or groups are added, removed or reordered. When several items
+        share a short ID, the one :meth:`find_by_short_id` returns is kept.
+        """
+        index: dict[str, SignalObj | ImageObj | ObjectGroup] = {}
+        for group in self._groups:
+            index.setdefault(get_short_id(group), group)
+        for obj in self._objects.values():
+            index.setdefault(get_short_id(obj), obj)
+        return index
+
+    @staticmethod
+    def __rewrite_title(
+        obj_or_group: SignalObj | ImageObj | ObjectGroup,
+        pattern: re.Pattern,
+        replacement: Callable[[re.Match], str],
+    ) -> None:
+        """Rewrite the title with ``pattern.sub``, assigning it only if changed.
+
+        Assigning a title validates it (guidata data item): titles that do not
+        change are left untouched.
+        """
+        title = obj_or_group.title
+        new_title = pattern.sub(replacement, title)
+        if new_title != title:
+            obj_or_group.title = new_title
+
     def replace_short_ids_by_uuids_in_titles(
         self, other_objects: tuple[SignalObj | ImageObj] | None = None
     ) -> None:
@@ -674,16 +784,21 @@ class ObjectModel:
             stable. Once the reorganization is done, we will replace the uuids by the
             new short IDs thanks to the `__replace_uuids_by_short_ids_in_titles` method.
         """
-        mapping = self.__get_group_object_mapping_to_shortid()
+        to_uuid = {
+            short_id: uuid
+            for uuid, short_id in self.__get_group_object_mapping_to_shortid().items()
+        }
+
+        def replacement(match: re.Match) -> str:
+            return to_uuid.get(match.group(0), match.group(0))
+
         objs = self._objects.values()
         if other_objects is not None:
             objs = list(objs) + list(other_objects)
         for obj in objs:
-            for obj_uuid, short_id in mapping.items():
-                obj.title = obj.title.replace(short_id, obj_uuid)
+            self.__rewrite_title(obj, TITLE_SHORT_ID_REGEX, replacement)
         for group in self._groups:
-            for grp_uuid, short_id in mapping.items():
-                group.title = group.title.replace(short_id, grp_uuid)
+            self.__rewrite_title(group, TITLE_SHORT_ID_REGEX, replacement)
 
     def replace_uuids_by_short_ids_in_titles(self) -> None:
         """Replace uuids by short IDs in titles
@@ -691,23 +806,25 @@ class ObjectModel:
         .. note::
 
             This method is called after reorganizing groups or objects. It replaces
-            the uuids in titles by the short IDs.
+            the uuids in titles by the short IDs. In object titles, a uuid of an
+            object or group that is no longer in the model is replaced by
+            ``f"{obj.PREFIX}xxx"`` (this may happen if groups or objects were
+            removed in the meantime).
         """
         mapping = self.__get_group_object_mapping_to_shortid()
         for obj in self._objects.values():
-            for obj_uuid, short_id in mapping.items():
-                obj.title = obj.title.replace(obj_uuid, short_id)
+            missing = f"{obj.PREFIX}xxx"
+            self.__rewrite_title(
+                obj,
+                TITLE_UUID_REGEX,
+                lambda match, missing=missing: mapping.get(match.group(0), missing),
+            )
         for group in self._groups:
-            for grp_uuid, short_id in mapping.items():
-                group.title = group.title.replace(grp_uuid, short_id)
-        # Replace remaining UUIDs with f"{obj.PREFIX}xxx"
-        # (this may happen if groups or objects were removed in the meantime):
-        pattern = re.compile(r"\b[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}\b")
-        for obj in self._objects.values():
-            obj.title = pattern.sub(f"{obj.PREFIX}xxx", obj.title)
-        for group in self._groups:
-            for obj in group:
-                obj.title = pattern.sub(f"{obj.PREFIX}xxx", obj.title)
+            self.__rewrite_title(
+                group,
+                TITLE_UUID_REGEX,
+                lambda match: mapping.get(match.group(0), match.group(0)),
+            )
 
     def reorder_groups(self, group_ids: list[str]) -> None:
         """Reorder groups.
