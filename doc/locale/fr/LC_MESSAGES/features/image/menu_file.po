@@ -35,6 +35,9 @@ msgstr "Ouvrir, enregistrer et fermer des images (voir ci-dessous)."
 msgid "Save and restore the current workspace or browse HDF5 files (see :ref:`overview`)."
 msgstr "Enregistrer et restaurer l'espace de travail actuel ou parcourir les fichiers HDF5 (voir :ref:`overview`)."
 
+msgid "Export, inspect, replay and compare workspace capsules, i.e. a workspace with the provenance of its processing (see :ref:`capsules`)."
+msgstr "Exporter, inspecter, rejouer et comparer des capsules d'espace de travail, c'est-à-dire un espace de travail avec la provenance de ses traitements (voir :ref:`capsules`)."
+
 msgid "Edit DataLab preferences (see :ref:`settings`)."
 msgstr "Modifier les préférences de DataLab (voir :ref:`settings`)."
 
@@ -277,3 +280,4 @@ msgstr "Etape 3 : Afficher la représentation graphique"
 
 msgid "The third step shows a graphical representation of the imported data. You can use the `Finish` button to import the data into DataLab workspace."
 msgstr "La troisième étape montre une représentation graphique des données importées. Vous pouvez utiliser le bouton « Terminer » pour importer les données dans l'espace de travail de DataLab."
+

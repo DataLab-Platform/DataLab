@@ -22,6 +22,9 @@ The "File" menu allows you to:
 
 - Save and restore the current workspace or browse HDF5 files (see :ref:`overview`).
 
+- Export, inspect, replay and compare workspace capsules, i.e. a workspace with the
+  provenance of its processing (see :ref:`capsules`).
+
 - Edit DataLab preferences (see :ref:`settings`).
 
 .. _open_image:

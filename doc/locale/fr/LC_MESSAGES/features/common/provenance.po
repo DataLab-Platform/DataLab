@@ -23,8 +23,8 @@ msgstr "Provenance des résultats"
 msgid "DataLab records how each result was obtained: the processing or analysis applied, its parameters, the objects it used with their exact content, and the software versions. This record is saved with the HDF5 workspace and read back when the workspace is reopened, by DataLab or by DataLab-Web."
 msgstr "DataLab enregistre la manière dont chaque résultat a été obtenu : le traitement ou l'analyse appliqué, ses paramètres, les objets utilisés avec leur contenu exact, et les versions des logiciels. Cet enregistrement est sauvegardé avec l'espace de travail HDF5 et relu à la réouverture de l'espace de travail, par DataLab ou par DataLab-Web."
 
-msgid "This page describes how to consult that record for one object, how to check and verify it, how to apply a recorded processing again, and how it relates to the History panel."
-msgstr "Cette page décrit comment consulter cet enregistrement pour un objet, comment le contrôler et le vérifier, comment appliquer à nouveau un traitement enregistré, et quel est son lien avec le panneau Historique."
+msgid "This page describes how to consult that record for one object, how to check and verify it, how to apply a recorded processing again, and how it relates to the History panel. To exchange a workspace with the provenance of its processing, see :ref:`capsules`."
+msgstr "Cette page décrit comment consulter cet enregistrement pour un objet, comment le contrôler et le vérifier, comment appliquer à nouveau un traitement enregistré, et quel est son lien avec le panneau Historique. Pour échanger un espace de travail avec la provenance de ses traitements, voir :ref:`capsules`."
 
 msgid "Consulting the provenance of an object"
 msgstr "Consulter la provenance d'un objet"
