@@ -461,6 +461,94 @@ def resolve_processing_call(
     return _from_metadata(mainwindow, obj)
 
 
+def _recipe_elements(
+    mainwindow: DLMainWindow, action: Any
+) -> list[tuple[ComputingFeature, Any]] | None:
+    """Return the ``(feature, param)`` elements of a History action recipe.
+
+    One element for an ordinary computation; one per parameter set of a
+    ``1_to_n`` command; one per function of a ``multiple_1_to_1`` command.
+    None when a feature cannot be resolved.
+    """
+    panel = {"signal": mainwindow.signalpanel, "image": mainwindow.imagepanel}.get(
+        action.effective_panel_str()
+    )
+    if panel is None or not action.func_name:
+        return None
+    if action.pattern == "1_to_n":
+        params = list(action.kwargs.get("params") or [])
+        names = [action.func_name] * len(params)
+    elif action.pattern == "multiple_1_to_1":
+        names = list(action.kwargs.get("func_names") or [action.func_name])
+        params = list(action.kwargs.get("params") or [None] * len(names))
+    else:
+        params = [action.kwargs.get("param")]
+        names = [action.func_name]
+    if len(names) != len(params):
+        return None
+    try:
+        return [
+            (
+                feature_for_name(panel.processor, name, action.plugin_origin, param),
+                param,
+            )
+            for name, param in zip(names, params)
+        ]
+    except (ValueError, FeatureNotFoundError):
+        return None
+
+
+def grouped_recipe_index(
+    mainwindow: DLMainWindow, action: Any, call: ProcessingCall, output_uuid: str
+) -> int | None:
+    """Return the element of a grouped command recipe that produced an output.
+
+    For a ``1_to_n`` or ``multiple_1_to_1`` History action, the recipe holds one
+    element (function and parameters) per output of each processed object.
+    The element is the one whose function and encoded parameters are those of
+    the call restored for the output (*call*, recorded by the provenance);
+    when several elements match (same function and parameters), or without
+    recorded provenance, the position of the output among the outputs of the
+    action decides.
+
+    Returns:
+        The index in ``action.kwargs["params"]`` (and ``func_names``), or None
+        when the action is not a grouped command or the element is unknown.
+    """
+    if action.pattern not in ("1_to_n", "multiple_1_to_1"):
+        return None
+    elements = _recipe_elements(mainwindow, action)
+    if not elements:
+        return None
+    recorded = None
+    if call.activity_id is not None:
+        try:
+            recorded = mainwindow.provenance.ledger.activity(call.activity_id)["call"][
+                "parameters"
+            ]
+        except KeyError:
+            recorded = None
+    matching = (
+        []
+        if recorded is None or call.feature is None
+        else [
+            index
+            for index, (feature, param) in enumerate(elements)
+            if unwrap_computation_function(feature.function)
+            is unwrap_computation_function(call.feature.function)
+            and encoded_parameters(feature, param) == recorded
+        ]
+    )
+    if len(matching) == 1:
+        return matching[0]
+    outputs = list(action.output_uuids)
+    if output_uuid in outputs:
+        position = outputs.index(output_uuid) % len(elements)
+        if not matching or position in matching:
+            return position
+    return None
+
+
 def recipe_differs_from_execution(mainwindow: DLMainWindow, action: Any) -> bool | None:
     """Tell whether the parameters of a History action differ from its execution.
 
@@ -475,27 +563,12 @@ def recipe_differs_from_execution(mainwindow: DLMainWindow, action: Any) -> bool
         contract, plugin function...).
     """
     ids = list(action.provenance_activity_ids)
-    panel = {"signal": mainwindow.signalpanel, "image": mainwindow.imagepanel}.get(
-        action.effective_panel_str()
-    )
-    if not ids or panel is None or not action.func_name:
+    if not ids:
         return None
-    if action.pattern == "1_to_n":
-        params = list(action.kwargs.get("params") or [])
-    elif action.pattern == "multiple_1_to_1":
+    elements = _recipe_elements(mainwindow, action)
+    if not elements:
         return None
-    else:
-        params = [action.kwargs.get("param")]
-    try:
-        feature = feature_for_name(
-            panel.processor,
-            action.func_name,
-            action.plugin_origin,
-            params[0] if params else None,
-        )
-    except ValueError:
-        return None
-    recipe = [encoded_parameters(feature, param) for param in params]
+    recipe = [encoded_parameters(feature, param) for feature, param in elements]
     if any(values is None for values in recipe):
         return None
     ledger = mainwindow.provenance.ledger

@@ -361,3 +361,121 @@ def test_verification_creates_no_action_nor_activity() -> None:
         assert report["verdict"] == "exact"
         assert len(win.provenance.ledger.activities) == count
         assert len(history) == actions
+
+
+def _grouped(win, method: str) -> list:
+    """Run a grouped command (two Gaussian filters, sigma 1 and 2) on S0."""
+    panel = win.signalpanel
+    s0 = add_signal(win)
+    panel.objview.select_objects([get_uuid(s0)])
+    before = set(panel.objmodel.get_object_ids())
+    params = [
+        sigima.params.GaussianParam.create(sigma=1.0),
+        sigima.params.GaussianParam.create(sigma=2.0),
+    ]
+    if method == "compute_1_to_n":
+        panel.processor.compute_1_to_n(sips.gaussian_filter, params=params, edit=False)
+    else:
+        panel.processor.compute_multiple_1_to_1(
+            [sips.gaussian_filter, sips.gaussian_filter], params=params, edit=False
+        )
+    return [
+        panel.objmodel[uid]
+        for uid in panel.objmodel.get_object_ids()
+        if uid not in before
+    ]
+
+
+def _sigma(win, obj) -> float:
+    return win.provenance.describe_object(get_uuid(obj))["production"]["parameters"][
+        "sigma"
+    ]
+
+
+@pytest.mark.parametrize("method", ["compute_1_to_n", "compute_multiple_1_to_1"])
+def test_edited_output_of_a_grouped_command_is_replayed(method: str) -> None:
+    """Editing one output of a grouped command updates that element only."""
+    with app(history=True) as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        first, second = _grouped(win, method)
+        action = history[len(history)]
+        history.toggle_edit_mode(True)
+        report = win.signalpanel.objprop.apply_processing_parameters(
+            first,
+            interactive=False,
+            param=sigima.params.GaussianParam.create(sigma=5.0),
+        )
+        assert report.success, report.message
+        assert "param" not in action.kwargs
+        assert [p.sigma for p in action.kwargs["params"]] == [5.0, 2.0]
+        assert link_of(win, first) in action.provenance_activity_ids
+        assert link_of(win, second) in action.provenance_activity_ids
+        assert hrec.recompute_action_in_place(history, action) is True
+        history.runtime.execution.cascade_warnings.clear()
+        assert (_sigma(win, first), _sigma(win, second)) == (5.0, 2.0)
+
+
+def test_processing_outside_edit_mode_keeps_the_recipe() -> None:
+    """Outside History edit mode, the History action stays the recipe."""
+    with app(history=True) as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        first, _second = _grouped(win, "compute_1_to_n")
+        action = history[len(history)]
+        count = len(history)
+        report = win.signalpanel.objprop.apply_processing_parameters(
+            first,
+            interactive=False,
+            param=sigima.params.GaussianParam.create(sigma=5.0),
+        )
+        assert report.success, report.message
+        assert len(history) == count
+        assert [p.sigma for p in action.kwargs["params"]] == [1.0, 2.0]
+        assert _sigma(win, first) == 5.0  # Recorded by the provenance
+        assert hrec.recompute_action_in_place(history, action) is True
+        history.runtime.execution.cascade_warnings.clear()
+        assert _sigma(win, first) == 1.0  # The recipe is replayed
+
+
+def _analyses(win, obj) -> list[str]:
+    return [
+        activity["activity_id"]
+        for activity in win.provenance.describe_object(get_uuid(obj))["analyses"]
+    ]
+
+
+def test_analysis_actions_link_their_executions() -> None:
+    """Analyses from the menu and from the Analysis tab are linked."""
+    # pylint: disable=import-outside-toplevel
+    from datalab.widgets.provenance import ExecutionProvenanceDialog
+
+    with app(history=True) as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+        s0 = add_signal(win)
+        s1 = add_signal(win)
+        panel.objview.select_objects([get_uuid(s0), get_uuid(s1)])
+        panel.processor.compute_1_to_0(
+            sips.fwhm, param=sigima.params.FWHMParam(), edit=False
+        )
+        action = history[len(history)]
+        assert action.pattern == "1_to_0"
+        # One activity per analysed object, linked from the menu run
+        first0, first1 = _analyses(win, s0)[0], _analyses(win, s1)[0]
+        assert action.provenance_activity_ids == [first0, first1]
+        dialog = ExecutionProvenanceDialog(win, action)
+        assert len(dialog.views) == 2 and dialog.note.isHidden()
+        # A new analysis of s0 from the Analysis tab replaces its link only
+        panel.objview.set_current_object(s0)
+        QW.QApplication.processEvents()
+        assert panel.objprop.apply_analysis_parameters(
+            s0, interactive=False, param=sigima.params.FWHMParam()
+        )
+        (latest,) = [a for a in _analyses(win, s0) if a != first0]
+        assert action.provenance_activity_ids == [latest, first1]
+        # A History replay links the activities of the replay
+        assert hrec.recompute_action_in_place(history, action) is True
+        replayed = action.provenance_activity_ids
+        assert len(replayed) == 2 and latest not in replayed and first1 not in replayed

@@ -16,6 +16,7 @@ import os.path as osp
 import time
 import uuid
 import warnings
+from contextlib import ExitStack
 from dataclasses import asdict, dataclass, field
 from enum import Enum, auto
 from multiprocessing.pool import Pool
@@ -2486,7 +2487,13 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         refresh_needed = False
         provenance = self.mainwindow.provenance
         command_id = str(uuid.uuid4())
-        with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
+        # The activities recorded by this execution link the action to its
+        # provenance (one per analysed object, absences of result included).
+        with ExitStack() as stack:
+            activity_ids = stack.enter_context(provenance.collecting())
+            progress = stack.enter_context(
+                create_progress_bar(self.panel, title, max_=len(objs))
+            )
             rdata = ResultData()
             for idx, obj in enumerate(objs):
                 pvalue = idx + 1
@@ -2562,6 +2569,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     self.panel.selection_changed(update_items=True)
                 else:
                     self.panel.refresh_plot(get_uuid(obj), True, False)
+        if action is not None and activity_ids:
+            action.provenance_activity_ids = list(activity_ids)
 
         # Refresh plot if post-processing modified any objects (e.g., ROI creation)
         if refresh_needed:
