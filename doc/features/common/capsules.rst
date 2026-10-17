@@ -124,3 +124,30 @@ Capsules can be exported and opened from scripts and macros (see
 
 The ``workspace-capsule`` command line of DataLab-Capsule also validates,
 inspects, compares, verifies and publishes capsules.
+
+Limits
+------
+
+DataLab checks the size of a capsule, and of the workspace it references, before
+reading it, and never writes a capsule it would refuse to open. These limits are
+those of DataLab-Capsule (a workspace of 4 GiB at most): they are accepted
+sizes, not a tested capacity.
+
+What was measured, on a laptop of 2026 (32 GiB of RAM):
+
+- inspecting or opening a 32 MiB capsule from the dialog takes 0.2 to 0.5 s,
+  during which DataLab does not respond (wait cursor); exporting it takes
+  0.25 s. Larger capsules take longer, roughly in proportion; the library
+  verifies a 234 MiB capsule in less than a second;
+- opening a capsule needs about its size in memory, in addition to the
+  workspace it replaces;
+- recording the provenance of a processing costs the fingerprints of its
+  inputs and results: nothing measurable for a small signal, +29 ms for a
+  2048×2048 image filtered in 450 ms;
+- consulting the provenance of a result takes less than a millisecond, even
+  with 1000 recorded steps; listing 1000 steps in **Local replay** takes about
+  half a second.
+
+Workspaces with many objects (several hundreds) slow down every processing,
+with or without provenance: keep large series in several workspaces.
+DataLab-Web limits capsules to 256 MiB.

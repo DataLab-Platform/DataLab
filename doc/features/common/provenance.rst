@@ -172,3 +172,26 @@ To keep the provenance of a file, open it replacing the current workspace. When
 workspaces are loaded from a script with
 :meth:`~datalab.control.proxy.LocalProxy.load_h5_workspace`, no question is
 asked and the notice is logged.
+
+What the provenance does not do
+-------------------------------
+
+- **It does not keep every earlier array.** Earlier states are described by
+  their fingerprints; their data remain available only while an object holds
+  them. When an input was modified or deleted after a computation, the step is
+  still described, but it cannot be recomputed from that input: its
+  verification is *Not verified*, with the reason. To keep a result verifiable,
+  keep the objects it was computed from before saving.
+- **It does not clean up the workspace.** Trials and intermediate objects stay
+  in the workspace, and their recorded steps stay in the provenance record,
+  until you remove them; deleting an object never rewrites the record.
+- **It does not make everything verifiable.** Changes made outside recorded
+  processing (data edited or imported, operations unknown to the computation
+  library, such as some plugins) appear as observed states or opaque
+  operations: they are described, never replayed.
+- **It is not a proof of scientific validity.** *Exact* or *Within tolerance*
+  says that the recorded computation is reproduced under the rule declared for
+  that operation, not that the processing was the right one.
+- **It does not identify the author.** Fingerprints show that the content was
+  not altered; they do not authenticate who produced it, and capsules are not
+  signed.

@@ -179,3 +179,20 @@ msgstr "sinon, un avertissement unique propose d'**Ajouter sans la provenance** 
 msgid "To keep the provenance of a file, open it replacing the current workspace. When workspaces are loaded from a script with :meth:`~datalab.control.proxy.LocalProxy.load_h5_workspace`, no question is asked and the notice is logged."
 msgstr "Pour conserver la provenance d'un fichier, ouvrez-le en remplaçant l'espace de travail actuel. Lorsque des espaces de travail sont chargés depuis un script avec :meth:`~datalab.control.proxy.LocalProxy.load_h5_workspace`, aucune question n'est posée et l'avis est journalisé."
 
+msgid "What the provenance does not do"
+msgstr "Ce que la provenance ne fait pas"
+
+msgid "**It does not keep every earlier array.** Earlier states are described by their fingerprints; their data remain available only while an object holds them. When an input was modified or deleted after a computation, the step is still described, but it cannot be recomputed from that input: its verification is *Not verified*, with the reason. To keep a result verifiable, keep the objects it was computed from before saving."
+msgstr "**Elle ne conserve pas tous les tableaux antérieurs.** Les états antérieurs sont décrits par leurs empreintes ; leurs données ne restent disponibles que tant qu'un objet les contient. Lorsqu'une entrée a été modifiée ou supprimée après un calcul, l'étape reste décrite, mais elle ne peut pas être recalculée à partir de cette entrée : sa vérification est *Non vérifié*, avec le motif. Pour qu'un résultat reste vérifiable, conservez les objets à partir desquels il a été calculé avant d'enregistrer."
+
+msgid "**It does not clean up the workspace.** Trials and intermediate objects stay in the workspace, and their recorded steps stay in the provenance record, until you remove them; deleting an object never rewrites the record."
+msgstr "**Elle ne nettoie pas l'espace de travail.** Les essais et les objets intermédiaires restent dans l'espace de travail, et leurs étapes enregistrées restent dans le registre de provenance, jusqu'à ce que vous les supprimiez ; supprimer un objet ne réécrit jamais le registre."
+
+msgid "**It does not make everything verifiable.** Changes made outside recorded processing (data edited or imported, operations unknown to the computation library, such as some plugins) appear as observed states or opaque operations: they are described, never replayed."
+msgstr "**Elle ne rend pas tout vérifiable.** Les modifications faites en dehors des traitements enregistrés (données éditées ou importées, opérations inconnues de la bibliothèque de calcul, comme certains plugins) apparaissent comme des états observés ou des opérations opaques : elles sont décrites, jamais rejouées."
+
+msgid "**It is not a proof of scientific validity.** *Exact* or *Within tolerance* says that the recorded computation is reproduced under the rule declared for that operation, not that the processing was the right one."
+msgstr "**Elle ne prouve pas la validité scientifique.** *Exact* ou *Dans la tolérance* indique que le calcul enregistré est reproduit selon la règle déclarée pour cette opération, pas que le traitement était le bon."
+
+msgid "**It does not identify the author.** Fingerprints show that the content was not altered; they do not authenticate who produced it, and capsules are not signed."
+msgstr "**Elle n'identifie pas l'auteur.** Les empreintes montrent que le contenu n'a pas été altéré ; elles n'authentifient pas qui l'a produit, et les capsules ne sont pas signées."
