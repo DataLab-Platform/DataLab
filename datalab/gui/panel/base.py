@@ -1252,12 +1252,15 @@ class ObjectProp(QW.QWidget):
                 )
             return False
 
-        # Propagate the edited param to the History panel: mutate the matching
-        # analysis action (snapshot originals first) and refresh its tree
-        # display. Analysis is a leaf operation (1-to-0), so no cascade is
-        # needed.
+        # In History edit mode only, propagate the edited param to the History
+        # panel: mutate the matching analysis action (snapshot originals first)
+        # and refresh its tree display. Outside edit mode, the action keeps its
+        # recipe and its links; the new execution is recorded in provenance
+        # only. Analysis is a leaf operation (1-to-0), so no cascade is needed.
         hpanel = self.panel.mainwindow.historypanel
-        action = hpanel.find_analysis_action(get_uuid(obj), func_name)
+        action = None
+        if hpanel.is_edit_mode():
+            action = hpanel.find_analysis_action(get_uuid(obj), func_name)
         if action is not None:
             action.snapshot_kwargs()
             action.kwargs["param"] = copy.deepcopy(recompute_param)
