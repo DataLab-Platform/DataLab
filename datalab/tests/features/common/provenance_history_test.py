@@ -16,6 +16,7 @@ import sigima.proc.signal as sips
 from qtpy import QtWidgets as QW
 
 from datalab.gui.panel.history import recompute as hrec
+from datalab.gui.processor.base import extract_analysis_parameters
 from datalab.gui.processor.catcher import CompOut
 from datalab.objectmodel import get_uuid
 from datalab.tests.features.common.processing_preview_unit_test import FakeExecutor
@@ -467,15 +468,52 @@ def test_analysis_actions_link_their_executions() -> None:
         assert action.provenance_activity_ids == [first0, first1]
         dialog = ExecutionProvenanceDialog(win, action)
         assert len(dialog.views) == 2 and dialog.note.isHidden()
-        # A new analysis of s0 from the Analysis tab replaces its link only
+        # In edit mode, a new analysis of s0 from the Analysis tab updates the
+        # action and replaces the link of s0 only
         panel.objview.set_current_object(s0)
         QW.QApplication.processEvents()
+        history.toggle_edit_mode(True)
         assert panel.objprop.apply_analysis_parameters(
-            s0, interactive=False, param=sigima.params.FWHMParam()
+            s0, interactive=False, param=sigima.params.FWHMParam.create(method="gauss")
         )
+        history.toggle_edit_mode(False)
         (latest,) = [a for a in _analyses(win, s0) if a != first0]
         assert action.provenance_activity_ids == [latest, first1]
+        assert action.kwargs["param"].method == "gauss"
         # A History replay links the activities of the replay
         assert hrec.recompute_action_in_place(history, action) is True
         replayed = action.provenance_activity_ids
         assert len(replayed) == 2 and latest not in replayed and first1 not in replayed
+
+
+def test_analysis_outside_edit_mode_keeps_the_recipe() -> None:
+    """Outside History edit mode, an Analysis tab rerun leaves the action as is."""
+    with app(history=True) as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+        s0 = add_signal(win)
+        panel.processor.compute_1_to_0(
+            sips.fwhm, param=sigima.params.FWHMParam(), edit=False
+        )
+        action = history[len(history)]
+        (first,) = _analyses(win, s0)
+        assert action.provenance_activity_ids == [first]
+        count = len(history)
+        assert not history.is_edit_mode()
+        assert panel.objprop.apply_analysis_parameters(
+            s0, interactive=False, param=sigima.params.FWHMParam.create(method="gauss")
+        )
+        # The new execution is recorded in provenance...
+        (latest,) = [a for a in _analyses(win, s0) if a != first]
+        activity = win.provenance.ledger.activity(latest)
+        assert activity["call"]["parameters"]["method"] == "gauss"
+        assert extract_analysis_parameters(s0).param.method == "gauss"
+        # ...but the History action keeps its recipe and its links
+        assert len(history) == count
+        assert action.kwargs["param"].method == "zero-crossing"
+        assert action.provenance_activity_ids == [first]
+        # A History replay applies the recipe
+        assert hrec.recompute_action_in_place(history, action) is True
+        assert extract_analysis_parameters(s0).param.method == "zero-crossing"
+        assert latest not in action.provenance_activity_ids
