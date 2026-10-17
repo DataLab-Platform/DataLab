@@ -119,6 +119,14 @@ def test_append_never_attributes_recorded_provenance() -> None:
                 "production"
             ]["inputs"]
             assert source["object_present"] is False
+            # Verifying S2 never uses the copy (same identifier and content).
+            report = win.verify_provenance_activity(
+                win.provenance.describe_object(get_uuid(objs["S2"]))["production"][
+                    "activity_id"
+                ]
+            )
+            assert report["verdict"] == "not_verified"
+            assert report["eligibility"] == "missing_input"
             call = resolve_processing_call(win, objs["S2"])
             assert call.origin == "ledger" and call.inputs[0].obj is None
             assert call.missing_inputs and call.reason
