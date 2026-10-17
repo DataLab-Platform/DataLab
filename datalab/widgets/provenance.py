@@ -51,6 +51,8 @@ __all__ = [
     "ProvenanceWidget",
     "edition_name",
     "format_parameter_value",
+    "origin_text",
+    "verdict_text",
 ]
 
 #: Longest text shown for one value (details are bounded).
@@ -135,7 +137,7 @@ def _output_message(status: str) -> str:
     }.get(status, status)
 
 
-def _origin_text(origin: str) -> str:
+def origin_text(origin: str) -> str:
     return {
         "ordinary": _("Processing"),
         "recompute_in_place": _("Applied again in place"),
@@ -144,7 +146,7 @@ def _origin_text(origin: str) -> str:
     }.get(origin, origin)
 
 
-def _verdict_text(verdict: str) -> str:
+def verdict_text(verdict: str) -> str:
     return {
         "exact": _("Exact"),
         "within_tolerance": _("Within tolerance"),
@@ -672,7 +674,7 @@ class ProvenanceWidget(QW.QWidget):
         details = " — ".join(
             part
             for part in (
-                _origin_text(activity["origin"]),
+                origin_text(activity["origin"]),
                 edition_name(activity.get("edition")),
                 _short_date(activity.get("finished_at")),
             )
@@ -825,7 +827,7 @@ class ProvenanceWidget(QW.QWidget):
     def __show_report(self, report: dict[str, Any], title: str) -> None:
         lines = [
             _("Verification of %s: %s")
-            % (title, _verdict_text(report.get("verdict", ""))),
+            % (title, verdict_text(report.get("verdict", ""))),
         ]
         if report.get("reason"):
             lines.append(str(report["reason"]))
@@ -834,7 +836,7 @@ class ProvenanceWidget(QW.QWidget):
                 f"  {entry.get('role')}: {_input_message(entry.get('status', ''))}"
             )
         for output in report.get("outputs") or []:
-            line = f"  {output.get('role')}: {_verdict_text(output.get('verdict', ''))}"
+            line = f"  {output.get('role')}: {verdict_text(output.get('verdict', ''))}"
             if output.get("detail"):
                 line += f" ({output['detail']})"
             lines.append(line)

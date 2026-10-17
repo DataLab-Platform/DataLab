@@ -107,6 +107,14 @@ class DataLabOptions(SigimaXOptions):
             expected_type=bool,
             description="If True, allow localhost Web API connections without a token.",
         )
+        self.capsule_registry_address = TypedOptionField(
+            self,
+            "capsule_registry_address",
+            category="main",
+            default="",
+            expected_type=str,
+            description="Address of the capsule registry (empty: no registry).",
+        )
         # current_tab may be None or an int panel index: no type check.
         self.current_tab = OptionField(
             self,

@@ -86,6 +86,14 @@ class ProvenanceService(Recorder):
         #: refresh the views showing the provenance of objects.
         self.on_recorded: Callable[[], None] | None = None
         self._collectors: list[list[str]] = []
+        #: ``{"fingerprint", "name", "attachments"}`` of the capsule the
+        #: workspace was opened from (the parent of a revision exported later).
+        self.capsule_origin: dict[str, Any] | None = None
+
+    def reset(self) -> None:
+        """Start an empty ledger for a new workspace (no capsule origin)."""
+        super().reset()
+        self.capsule_origin = None
 
     @contextlib.contextmanager
     def collecting(self) -> Generator[list[str], None, None]:

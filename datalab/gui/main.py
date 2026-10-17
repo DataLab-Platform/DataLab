@@ -34,7 +34,7 @@ import numpy as np
 import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata.configtools import get_icon
-from guidata.qthelpers import add_actions, create_action
+from guidata.qthelpers import add_actions, create_action, exec_dialog
 from plotpy.builder import make
 from plotpy.constants import PlotType
 from qtpy import QtCore as QC
@@ -60,6 +60,7 @@ from datalab.control.baseproxy import AbstractDLControl
 from datalab.control.remote import RemoteServer
 from datalab.env import execenv
 from datalab.gui.actionhandler import ActionCategory
+from datalab.gui.capsuleio import CapsuleInputOutput
 from datalab.gui.commandpalette import (
     CommandPaletteDialog,
     CommandSearchField,
@@ -175,6 +176,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.signalview: DockablePlotWidget | None = None
         self.imageview: DockablePlotWidget | None = None
         self.h5inputoutput: H5InputOutput | None = None
+        self.capsuleio: CapsuleInputOutput | None = None
         # True while opening HDF5 files of which one holds provenance
         self.__h5_provenance_files = False
         self.webapi_actions: WebApiActions | None = None
@@ -184,6 +186,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.command_palette_action: QW.QAction | None = None
         self.browseh5_action: QW.QAction | None = None
         self.settings_action: QW.QAction | None = None
+        self.capsule_action: QW.QAction | None = None
         self.command_palette_action: QW.QAction | None = None
         self.quit_action: QW.QAction | None = None
         self.autorefresh_action: QW.QAction | None = None
@@ -206,6 +209,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Initialize DataLab-specific services before setting up the UI."""
         super()._before_setup(console)
         self.h5inputoutput = H5InputOutput(self)
+        self.capsuleio = CapsuleInputOutput(self)
 
         # Starting XML-RPC server thread
         self.remote_server = RemoteServer(self)
@@ -1304,6 +1308,16 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             tip=_("Open settings dialog"),
             triggered=self.__edit_settings,
         )
+        self.capsule_action = create_action(
+            self,
+            _("Workspace capsule..."),
+            icon=get_icon("capsule.svg"),
+            tip=_(
+                "Export, inspect, replay and compare workspace capsules "
+                "(workspace and provenance of its processing)"
+            ),
+            triggered=self.show_capsule_dialog,
+        )
         self.command_palette_action = create_action(
             self,
             _("Command palette..."),
@@ -1891,7 +1905,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def _get_file_menu_actions(self) -> list[QW.QAction | None]:
         """Append the settings action to the standard HDF5 actions."""
-        return super()._get_file_menu_actions() + [None, self.settings_action]
+        return super()._get_file_menu_actions() + [
+            self.capsule_action,
+            None,
+            self.settings_action,
+        ]
 
     def _update_file_menu(self) -> None:
         """Update file menu before showing up"""
@@ -2011,6 +2029,96 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """
         execution = self.signalpanel.processor.execution
         return self.provenance.verify(activity_id, execution.execute_candidate)
+
+    def show_capsule_dialog(self) -> None:
+        """Show the workspace capsule dialog (export, inspect, replay, compare)."""
+        # pylint: disable=import-outside-toplevel
+        from datalab.widgets.capsule import CapsuleDialog
+
+        dialog = CapsuleDialog(self)
+        exec_dialog(dialog)
+
+    @remote_controlled
+    def export_capsule(
+        self,
+        filename: str,
+        name: str | None = None,
+        description: str | None = None,
+        as_revision: bool = True,
+        workspace_ref: str | None = None,
+        workspace_filename: str | None = None,
+        attachments: list[str] | None = None,
+    ) -> str:
+        """Export the workspace as a capsule (workspace and its provenance).
+
+        Args:
+            filename: Capsule file name (``.dlcapsule``).
+            name: Capsule name.
+            description: Capsule description.
+            as_revision: When the workspace was opened from a capsule, name that
+             capsule as the parent revision. Defaults to True.
+            workspace_ref: Absolute IRI where the workspace will be published:
+             the capsule then references the workspace instead of including it,
+             and the workspace is saved apart, to *workspace_filename*.
+            workspace_filename: File name of the workspace published at
+             *workspace_ref* (default: last segment of the IRI, next to the
+             capsule).
+            attachments: Light files (protocol, notes, small tables, 16 MiB at
+             most each) declared in the capsule, never opened or executed.
+
+        Returns:
+            Manifest fingerprint of the capsule.
+        """
+        fingerprint = self.capsuleio.export(
+            filename,
+            name=name,
+            description=description,
+            as_revision=as_revision,
+            workspace_ref=workspace_ref,
+            workspace_filename=workspace_filename,
+            attachments=attachments or (),
+        )
+        self.historypanel.add_ui_entry(
+            _("Export capsule"),
+            target="mainwindow",
+            method_name="export_capsule",
+            save_state=False,
+            filename=filename,
+            name=name,
+            description=description,
+            as_revision=as_revision,
+            workspace_ref=workspace_ref,
+            workspace_filename=workspace_filename,
+            attachments=list(attachments or []),
+        )
+        return fingerprint
+
+    @remote_controlled
+    def open_capsule(self, filename: str, workspace: str | None = None) -> None:
+        """Open a capsule as the workspace, replacing the current one.
+
+        The capsule is checked first (archive, manifest, workspace SHA-256 and
+        size): the workspace is left unchanged if it is invalid. A revision
+        exported later names this capsule as its parent.
+
+        Args:
+            filename: Capsule file name (``.dlcapsule``).
+            workspace: Workspace file of a capsule that references its workspace
+             instead of including it.
+        """
+        if not self.confirm_memory_state():
+            return
+        self.capsuleio.open(filename, workspace)
+        # Recorded once opened, so that it begins the session started by the
+        # workspace reset (and nothing is recorded if the capsule is refused).
+        self.historypanel.add_ui_entry(
+            _("Open capsule"),
+            target="mainwindow",
+            method_name="open_capsule",
+            save_state=False,
+            filename=filename,
+            workspace=workspace,
+        )
 
     def __invalidate_provenance_views(self) -> None:
         """Refresh the provenance views once control returns to the event loop.
