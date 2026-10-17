@@ -16,6 +16,15 @@ datas += collect_data_files('sigima') + collect_data_files('sigimax')
 datas += copy_metadata('imageio')
 # Installed plugin wheels declare their requirements on these distributions
 datas += copy_metadata('datalab-platform', recursive=True)
+# Provenance and capsules: DataLab-Capsule reads its schemas and RO-Crate
+# context with ``importlib.resources``, and the capsule dialog imports some of
+# its modules lazily. The registry server (``registry_app``, FastAPI) and the
+# command line are not part of the application.
+all_hidden_imports += collect_submodules(
+    'datalab_capsule',
+    filter=lambda name: name not in ('datalab_capsule.registry_app', 'datalab_capsule.cli'),
+)
+datas += collect_data_files('datalab_capsule')
 
 a = Analysis(
     ['datalab\\start.pyw'],
