@@ -418,6 +418,33 @@ msgstr "Rafraîchir le graphique. Par défaut True."
 msgid "Keep ROI. Defaults to False."
 msgstr "Conserver les ROI. Par défaut False."
 
+msgid "Export the workspace as a capsule (workspace and its provenance)."
+msgstr "Exporter l'espace de travail sous forme de capsule (espace de travail et sa provenance)."
+
+msgid "Capsule file name (``.dlcapsule``)."
+msgstr "Nom du fichier de la capsule (``.dlcapsule``)."
+
+msgid "Capsule name."
+msgstr "Nom de la capsule."
+
+msgid "Capsule description."
+msgstr "Description de la capsule."
+
+msgid "When the workspace was opened from a capsule, name that capsule as the parent revision. Defaults to True."
+msgstr "Lorsque l'espace de travail a été ouvert depuis une capsule, désigner cette capsule comme révision parente. Par défaut True."
+
+msgid "Absolute IRI where the workspace will be published: the capsule then references the workspace instead of including it."
+msgstr "IRI absolue où l'espace de travail sera publié : la capsule référence alors l'espace de travail au lieu de l'inclure."
+
+msgid "File name of the workspace published at *workspace_ref* (default: last segment of the IRI, next to the capsule)."
+msgstr "Nom du fichier de l'espace de travail publié à *workspace_ref* (par défaut : dernier segment de l'IRI, à côté de la capsule)."
+
+msgid "Light files declared in the capsule (16 MiB at most each), never opened or executed."
+msgstr "Fichiers légers déclarés dans la capsule (16 Mio au plus chacun), jamais ouverts ni exécutés."
+
+msgid "Manifest fingerprint of the capsule."
+msgstr "Empreinte du manifeste de la capsule."
+
 msgid "Return current object uuid in current panel."
 msgstr "Renvoie l'UUID de l'objet courant dans le panneau courant."
 
@@ -526,6 +553,12 @@ msgstr "Réinitialiser toutes les données de l'application avant l'importation.
 msgid "If a file is not a valid native DataLab HDF5 file"
 msgstr "Si un fichier n'est pas un fichier HDF5 natif DataLab valide"
 
+msgid "Open a capsule as the workspace, replacing the current one."
+msgstr "Ouvrir une capsule comme espace de travail, en remplaçant l'espace de travail actuel."
+
+msgid "Workspace file of a capsule that references its workspace instead of including it."
+msgstr "Fichier de l'espace de travail d'une capsule qui référence son espace de travail au lieu de l'inclure."
+
 msgid "Open a DataLab HDF5 file or import from any other HDF5 file."
 msgstr "Ouvrir un fichier HDF5 DataLab ou importer depuis tout autre fichier HDF5."
 
@@ -603,3 +636,4 @@ msgstr "Basculer l'état d'affichage des titres."
 
 msgid "Show titles state"
 msgstr "État d'affichage des titres"
+

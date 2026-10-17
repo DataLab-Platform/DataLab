@@ -189,8 +189,26 @@ msgstr "Les espaces de travail enregistrés par des versions antérieures conser
 msgid "A workspace whose provenance record is damaged is refused with an explicit message, and the current workspace is left unchanged"
 msgstr "Un espace de travail dont l'enregistrement de provenance est endommagé est refusé avec un message explicite, et l'espace de travail actuel reste inchangé"
 
-msgid "Workspaces can be exchanged as capsules (a workspace plus a description of its provenance) with the `workspace-capsule` command line of [DataLab-Capsule](https://github.com/DataLab-Platform/DataLab-Capsule), which checks them without running any computation; DataLab-Web creates and opens capsules directly"
-msgstr "Les espaces de travail peuvent être échangés sous forme de capsules (un espace de travail accompagné d'une description de sa provenance) avec la ligne de commande `workspace-capsule` de [DataLab-Capsule](https://github.com/DataLab-Platform/DataLab-Capsule), qui les contrôle sans exécuter aucun calcul ; DataLab-Web crée et ouvre directement les capsules"
+msgid "Workspaces can be exchanged as capsules (a workspace plus a description of its provenance) from **File > Workspace capsule...**, the same dialog as in DataLab-Web, so that someone else can check and replay them with either edition:"
+msgstr "Les espaces de travail peuvent être échangés sous forme de capsules (un espace de travail et une description de sa provenance) depuis **Fichier > Capsule d'espace de travail...**, la même boîte de dialogue que dans DataLab-Web, afin qu'une autre personne puisse les vérifier et les rejouer avec l'une ou l'autre édition :"
+
+msgid "**Export** the workspace, with a name, a description, light attachments (protocol, notes, small tables) and, for a workspace opened from a capsule, the capsule it is a revision of; the workspace can also be referenced by its publication address instead of being included"
+msgstr "**Exporter** l'espace de travail, avec un nom, une description, des pièces jointes légères (protocole, notes, petits tableaux) et, pour un espace de travail ouvert depuis une capsule, la capsule dont il est une révision ; l'espace de travail peut aussi être référencé par son adresse de publication au lieu d'être inclus"
+
+msgid "**Inspect** a capsule without opening it: its activities, its attachments (saved only on request, never opened), its integrity (workspace and stored states checked, nothing recomputed) and the verification reports and reviews supplied with it, each checked against the capsule; write a review of it, or **Open as workspace** (recorded in the History panel)"
+msgstr "**Inspecter** une capsule sans l'ouvrir : ses activités, ses pièces jointes (enregistrées seulement à la demande, jamais ouvertes), son intégrité (espace de travail et états enregistrés vérifiés, rien n'est recalculé) et les rapports de vérification et revues fournis avec elle, chacun vérifié par rapport à la capsule ; en rédiger une revue, ou **Ouvrir comme espace de travail** (action enregistrée dans le panneau Historique)"
+
+msgid "**Local replay** recomputes a recorded activity of the open workspace and compares it with its stored result, without changing the workspace; the verification report can be saved to be shared with the capsule"
+msgstr "**Rejeu local** recalcule une activité enregistrée de l'espace de travail ouvert et la compare à son résultat enregistré, sans modifier l'espace de travail ; le rapport de vérification peut être enregistré pour être partagé avec la capsule"
+
+msgid "**Revisions** lists the capsules exported, inspected or retrieved on this computer and compares any two of them (scientific, presentation, storage, environment and attachment changes)"
+msgstr "**Révisions** énumère les capsules exportées, inspectées ou récupérées sur cet ordinateur et compare deux d'entre elles (changements scientifiques, de présentation, de stockage, d'environnement et de pièces jointes)"
+
+msgid "**Registry** connects to an optional capsule registry to publish capsules (never their workspaces) and reviews, list the published revisions and retrieve them, everything returned being checked"
+msgstr "**Registre** se connecte à un registre de capsules facultatif pour publier des capsules (jamais leurs espaces de travail) et des revues, lister les révisions publiées et les récupérer, tout ce qui est renvoyé étant vérifié"
+
+msgid "Scripts and macros can export and open capsules too (`export_capsule` and `open_capsule` of the proxy), and the `workspace-capsule` command line of [DataLab-Capsule](https://github.com/DataLab-Platform/DataLab-Capsule) still validates, compares and verifies them"
+msgstr "Les scripts et les macros peuvent aussi exporter et ouvrir des capsules (`export_capsule` et `open_capsule` du proxy), et la ligne de commande `workspace-capsule` de [DataLab-Capsule](https://github.com/DataLab-Platform/DataLab-Capsule) permet toujours de les valider, de les comparer et de les vérifier"
 
 msgid "🔄 Changes"
 msgstr "🔄 Changements"

@@ -14,7 +14,8 @@ workspace is reopened, by DataLab or by DataLab-Web.
 
 This page describes how to consult that record for one object, how to check and
 verify it, how to apply a recorded processing again, and how it relates to the
-History panel.
+History panel. To exchange a workspace with the provenance of its processing,
+see :ref:`capsules`.
 
 Consulting the provenance of an object
 --------------------------------------

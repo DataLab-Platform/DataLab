@@ -75,7 +75,13 @@
 * Before interpolating signals whose X grids differ, DataLab still asks for confirmation; the alignment it applies is the one it has always applied, now named and recorded so that a recomputation applies it identically. Several selected pairs of a two-signal operation now each align the operand on the grid of their own source signal
 * Workspaces saved by earlier versions keep their processing history as stored: DataLab shows what is known and what is missing, invents nothing, and never recomputes such entries
 * A workspace whose provenance record is damaged is refused with an explicit message, and the current workspace is left unchanged
-* Workspaces can be exchanged as capsules (a workspace plus a description of its provenance) with the `workspace-capsule` command line of [DataLab-Capsule](https://github.com/DataLab-Platform/DataLab-Capsule), which checks them without running any computation; DataLab-Web creates and opens capsules directly
+* Workspaces can be exchanged as capsules (a workspace plus a description of its provenance) from **File > Workspace capsule...**, the same dialog as in DataLab-Web, so that someone else can check and replay them with either edition:
+  * **Export** the workspace, with a name, a description, light attachments (protocol, notes, small tables) and, for a workspace opened from a capsule, the capsule it is a revision of; the workspace can also be referenced by its publication address instead of being included
+  * **Inspect** a capsule without opening it: its activities, its attachments (saved only on request, never opened), its integrity (workspace and stored states checked, nothing recomputed) and the verification reports and reviews supplied with it, each checked against the capsule; write a review of it, or **Open as workspace** (recorded in the History panel)
+  * **Local replay** recomputes a recorded activity of the open workspace and compares it with its stored result, without changing the workspace; the verification report can be saved to be shared with the capsule
+  * **Revisions** lists the capsules exported, inspected or retrieved on this computer and compares any two of them (scientific, presentation, storage, environment and attachment changes)
+  * **Registry** connects to an optional capsule registry to publish capsules (never their workspaces) and reviews, list the published revisions and retrieve them, everything returned being checked
+  * Scripts and macros can export and open capsules too (`export_capsule` and `open_capsule` of the proxy), and the `workspace-capsule` command line of [DataLab-Capsule](https://github.com/DataLab-Platform/DataLab-Capsule) still validates, compares and verifies them
 
 ### 🔄 Changes ###
 

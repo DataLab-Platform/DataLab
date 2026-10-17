@@ -1,0 +1,119 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Workspace capsules in DataLab: export a workspace with the provenance of its processing, inspect a capsule, replay its activities, compare revisions, write reviews and exchange them through a registry"
+msgstr "Capsules d'espace de travail dans DataLab : exporter un espace de travail avec la provenance de ses traitements, inspecter une capsule, rejouer ses activités, comparer des révisions, rédiger des revues et les échanger via un registre"
+
+msgid "DataLab, capsule, provenance, reproducibility, revision, review, registry, RO-Crate, DataLab-Web"
+msgstr "DataLab, capsule, provenance, reproductibilité, révision, revue, registre, RO-Crate, DataLab-Web"
+
+msgid "Workspace capsules"
+msgstr "Capsules d'espace de travail"
+
+msgid "A **capsule** (``.dlcapsule`` file) holds a workspace and a description of the provenance of its processing (see :ref:`provenance`), so that someone else can check it and replay it, with DataLab or with DataLab-Web. Capsules are created, read and checked by `DataLab-Capsule <https://github.com/DataLab-Platform/DataLab-Capsule>`_: opening or inspecting a capsule never executes anything it contains."
+msgstr "Une **capsule** (fichier ``.dlcapsule``) contient un espace de travail et une description de la provenance de ses traitements (voir :ref:`provenance`), afin qu'une autre personne puisse les vérifier et les rejouer, avec DataLab ou avec DataLab-Web. Les capsules sont créées, lues et vérifiées par `DataLab-Capsule <https://github.com/DataLab-Platform/DataLab-Capsule>`_ : ouvrir ou inspecter une capsule n'exécute jamais rien de ce qu'elle contient."
+
+msgid "Capsules are handled from **File > Workspace capsule...**, a dialog with the same tabs as in DataLab-Web. Three results are always shown apart:"
+msgstr "Les capsules sont gérées depuis **Fichier > Capsule d'espace de travail...**, une boîte de dialogue comportant les mêmes onglets que dans DataLab-Web. Trois résultats sont toujours présentés séparément :"
+
+msgid "the **integrity** of a capsule, computed from its files (nothing is recomputed);"
+msgstr "l'**intégrité** d'une capsule, calculée à partir de ses fichiers (rien n'est recalculé) ;"
+
+msgid "the **supplied documents** (verification reports and reviews): they are checked against the capsule, but their verdicts are what their authors claim;"
+msgstr "les **documents fournis** (rapports de vérification et revues) : ils sont vérifiés par rapport à la capsule, mais leurs verdicts sont ceux qu'affirment leurs auteurs ;"
+
+msgid "the **local replay** of an activity of the open workspace, recomputed by DataLab and compared with its stored result."
+msgstr "le **rejeu local** d'une activité de l'espace de travail ouvert, recalculée par DataLab et comparée à son résultat enregistré."
+
+msgid "Export"
+msgstr "Exporter"
+
+msgid "Exports the current workspace as a capsule:"
+msgstr "Exporte l'espace de travail actuel sous forme de capsule :"
+
+msgid "**Name** and **Description** of the capsule;"
+msgstr "**Nom** et **Description** de la capsule ;"
+
+msgid "**Revision of ...**: shown when the workspace was opened from a capsule. When checked, the new capsule names that capsule as its parent revision. The attachments of the parent are not copied: the dialog lists them, so that they can be selected again if they still apply;"
+msgstr "**Révision de ...** : affiché lorsque l'espace de travail a été ouvert depuis une capsule. Lorsque cette case est cochée, la nouvelle capsule désigne cette capsule comme sa révision parente. Les pièces jointes de la révision parente ne sont pas copiées : la boîte de dialogue les énumère, afin de pouvoir les sélectionner à nouveau si elles s'appliquent toujours ;"
+
+msgid "**Reference the workspace instead of including it**: the capsule then holds the address (absolute IRI) where the workspace will be published, with its size and SHA-256, and the workspace is saved as a separate HDF5 file, to be published at that address;"
+msgstr "**Référencer l'espace de travail au lieu de l'inclure** : la capsule contient alors l'adresse (IRI absolue) où l'espace de travail sera publié, avec sa taille et son SHA-256, et l'espace de travail est enregistré dans un fichier HDF5 distinct, à publier à cette adresse ;"
+
+msgid "**Attachments**: light files (protocol, notes, small tables, 16 MiB at most each) declared in the capsule with their size and fingerprint. They are never opened or executed."
+msgstr "**Pièces jointes** : fichiers légers (protocole, notes, petits tableaux, 16 Mio au plus chacun) déclarés dans la capsule avec leur taille et leur empreinte. Ils ne sont jamais ouverts ni exécutés."
+
+msgid "**Export capsule...** asks where to save the capsule (and, for a referenced workspace, the workspace file)."
+msgstr "**Exporter la capsule...** demande où enregistrer la capsule (et, pour un espace de travail référencé, le fichier de l'espace de travail)."
+
+msgid "Inspect"
+msgstr "Inspecter"
+
+msgid "**Choose a capsule...** checks a capsule without opening it and shows:"
+msgstr "**Choisir une capsule...** vérifie une capsule sans l'ouvrir et affiche :"
+
+msgid "its summary: name, description, fingerprint, parent revision, whether the workspace is included or referenced, licence, and its activities (which ones can be replayed);"
+msgstr "son résumé : nom, description, empreinte, révision parente, espace de travail inclus ou référencé, licence, et ses activités (celles qui peuvent être rejouées) ;"
+
+msgid "its **Attachments**, which are checked against the manifest and saved only when you click **Save...**;"
+msgstr "ses **Pièces jointes**, vérifiées par rapport au manifeste et enregistrées seulement lorsque vous cliquez sur **Enregistrer...** ;"
+
+msgid "its **Integrity**: archive, manifest, workspace and stored states. For a referenced workspace, **Select the referenced workspace...** supplies the file, which must match the size and SHA-256 declared in the capsule;"
+msgstr "son **Intégrité** : archive, manifeste, espace de travail et états enregistrés. Pour un espace de travail référencé, **Sélectionner l'espace de travail référencé...** fournit le fichier, qui doit correspondre à la taille et au SHA-256 déclarés dans la capsule ;"
+
+msgid "the **Supplied documents** added with **Add a verification report...** and **Add a review...**, each checked against the capsule."
+msgstr "les **Documents fournis** ajoutés avec **Ajouter un rapport de vérification...** et **Ajouter une revue...**, chacun vérifié par rapport à la capsule."
+
+msgid "**Write a review** creates a review of this revision: a separate JSON file (reviewer, statement, optional verdict *endorsed*, *disputed* or *comment*, cited verification reports). The capsule itself is not changed."
+msgstr "**Rédiger une revue** crée une revue de cette révision : un fichier JSON distinct (relecteur, déclaration, verdict facultatif *approuvé*, *contesté* ou *commentaire*, rapports de vérification cités). La capsule elle-même n'est pas modifiée."
+
+msgid "**Open as workspace** replaces the current workspace by the workspace of the capsule (after confirmation when the workspace is not empty). It is available only for an intact capsule. A capsule exported later from this workspace is proposed as a revision of it. Opening a capsule is recorded in the History panel."
+msgstr "**Ouvrir comme espace de travail** remplace l'espace de travail actuel par celui de la capsule (après confirmation si l'espace de travail n'est pas vide). Cette action n'est disponible que pour une capsule intacte. Une capsule exportée ensuite depuis cet espace de travail est proposée comme une révision de celle-ci. L'ouverture d'une capsule est enregistrée dans le panneau Historique."
+
+msgid "Local replay"
+msgstr "Rejeu local"
+
+msgid "Lists the recorded activities of the open workspace. **Replay** recomputes an activity separately and compares every result with the stored one: *Exact*, *Within tolerance*, *Different* or *Not verified* (with the reason). The workspace is not changed. **Save report...** saves the verification report as a JSON file, to be supplied with the capsule or cited by a review."
+msgstr "Énumère les activités enregistrées de l'espace de travail ouvert. **Rejouer** recalcule une activité séparément et compare chaque résultat au résultat enregistré : *Exact*, *Dans la tolérance*, *Différent* ou *Non vérifié* (avec la raison). L'espace de travail n'est pas modifié. **Enregistrer le rapport...** enregistre le rapport de vérification dans un fichier JSON, à fournir avec la capsule ou à citer dans une revue."
+
+msgid "Revisions"
+msgstr "Révisions"
+
+msgid "Lists the revisions exported, inspected or retrieved from a registry on this computer (with their parent revision), and compares any two of them: scientific, presentation, storage and integrity, environment and attachment changes, with a scientific conclusion that never claims equality beyond what the capsules record. The list is kept in the DataLab configuration folder (100 revisions at most); it is a convenience, never a source of truth: the capsule files are."
+msgstr "Énumère les révisions exportées, inspectées ou récupérées depuis un registre sur cet ordinateur (avec leur révision parente), et compare deux d'entre elles : changements scientifiques, de présentation, de stockage et d'intégrité, d'environnement et de pièces jointes, avec une conclusion scientifique qui n'affirme jamais une égalité au-delà de ce qu'enregistrent les capsules. La liste est conservée dans le dossier de configuration de DataLab (100 révisions au plus) ; c'est une commodité, jamais une source de vérité : ce sont les fichiers des capsules qui le sont."
+
+msgid "Registry"
+msgstr "Registre"
+
+msgid "A registry (optional, served by DataLab-Capsule) publishes capsule manifests, their attachments and reviews, never workspaces. Everything it returns is checked by DataLab."
+msgstr "Un registre (facultatif, servi par DataLab-Capsule) publie les manifestes des capsules, leurs pièces jointes et leurs revues, jamais les espaces de travail. Tout ce qu'il renvoie est vérifié par DataLab."
+
+msgid "**Registry address** and **Publishing token**: the address is saved in the configuration; the token is kept for the current session only;"
+msgstr "**Adresse du registre** et **Jeton de publication** : l'adresse est enregistrée dans la configuration ; le jeton n'est conservé que pour la session en cours ;"
+
+msgid "**List revisions** lists the published revisions; **Retrieve** checks a revision and its reviews, adds it to the **Revisions** tab and offers its stored attachments, checked against the manifest;"
+msgstr "**Lister les révisions** énumère les révisions publiées ; **Récupérer** vérifie une révision et ses revues, l'ajoute à l'onglet **Révisions** et propose ses pièces jointes stockées, vérifiées par rapport au manifeste ;"
+
+msgid "once a registry is set, the **Inspect** tab offers **Publish to the registry** (manifest, attachments and valid supplied reviews) and **Publish the review**."
+msgstr "une fois un registre défini, l'onglet **Inspecter** propose **Publier dans le registre** (manifeste, pièces jointes et revues fournies valides) et **Publier la revue**."
+
+msgid "From scripts"
+msgstr "Depuis des scripts"
+
+msgid "Capsules can be exported and opened from scripts and macros (see :ref:`ref-to-remote-control`), with :meth:`~datalab.control.proxy.RemoteProxy.export_capsule` and :meth:`~datalab.control.proxy.RemoteProxy.open_capsule`:"
+msgstr "Les capsules peuvent être exportées et ouvertes depuis des scripts et des macros (voir :ref:`ref-to-remote-control`), avec :meth:`~datalab.control.proxy.RemoteProxy.export_capsule` et :meth:`~datalab.control.proxy.RemoteProxy.open_capsule` :"
+
+msgid "The ``workspace-capsule`` command line of DataLab-Capsule also validates, inspects, compares, verifies and publishes capsules."
+msgstr "La ligne de commande ``workspace-capsule`` de DataLab-Capsule permet aussi de valider, inspecter, comparer, vérifier et publier des capsules."
+
