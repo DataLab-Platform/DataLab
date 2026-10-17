@@ -77,7 +77,17 @@ def read_bounded(filename: str, limit: int, what: str) -> bytes:
     size = os.stat(filename).st_size
     if size <= limit:
         with open(filename, "rb") as file:
-            data = file.read(limit + 1)
+            # Ask for the size found, not for the limit: the buffer of a read is
+            # allocated for the size requested.
+            data = file.read(size + 1)
+            if len(data) > size:  # the file grew while being read
+                grown = bytearray(data)
+                while len(grown) <= limit:
+                    chunk = file.read(min(8 * 1024**2, limit + 1 - len(grown)))
+                    if not chunk:
+                        break
+                    grown += chunk
+                data = bytes(grown)
         if len(data) <= limit:
             return data
         size = len(data)
