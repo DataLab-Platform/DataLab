@@ -115,11 +115,19 @@ import json, sys, threading, time
 import psutil
 root = psutil.Process(int(sys.argv[1]))
 period = float(sys.argv[2]) / 1000
-state = {"peak": 0, "samples": 0}
+state = {"peak": 0, "samples": 0, "tree": [root], "listed": 0.0}
 lock = threading.Lock()
 def rss():
+    # Listing the process tree is costly on Windows: refresh it every 250 ms
+    now = time.perf_counter()
+    if now - state["listed"] > 0.25:
+        try:
+            state["tree"] = [root] + root.children(recursive=True)
+        except psutil.NoSuchProcess:
+            pass
+        state["listed"] = now
     total = 0
-    for proc in [root] + root.children(recursive=True):
+    for proc in state["tree"]:
         try:
             total += proc.memory_info().rss
         except (psutil.NoSuchProcess, psutil.AccessDenied):
@@ -168,6 +176,16 @@ class TreeObserver:
     def read(self) -> dict[str, int]:
         """Return the current memory, the peak and the samples since reset."""
         return self.__command("read")
+
+    def cpu_seconds(self) -> float | None:
+        """Return the CPU time used by the observer itself (its own cost)."""
+        import psutil  # pylint: disable=import-outside-toplevel
+
+        try:
+            times = psutil.Process(self.process.pid).cpu_times()
+        except psutil.NoSuchProcess:
+            return None
+        return round(times.user + times.system, 3)
 
     def close(self) -> None:
         """Stop the observer."""
@@ -756,7 +774,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--case", action="append", default=[], metavar="PREFIX")
     parser.add_argument("--no-isolation", action="store_true")
     parser.add_argument("--no-rss", action="store_true")
-    parser.add_argument("--sample-ms", type=float, default=5.0)
+    parser.add_argument("--sample-ms", type=float, default=10.0)
     parser.add_argument(
         "--ledger",
         type=int,
@@ -794,7 +812,9 @@ def main(argv: list[str] | None = None) -> dict[str, Any]:
                     bench_ledger(win, report, sizes["ledger"], args.repeat, tmpdir)
                 environment = _environment(isolation)
     finally:
+        observer_cpu = None
         if observer is not None:
+            observer_cpu = observer.cpu_seconds()
             observer.close()
     result = {
         "report_version": REPORT_VERSION,
@@ -810,8 +830,10 @@ def main(argv: list[str] | None = None) -> dict[str, Any]:
         "memory_methods": {
             "rss_tree": f"resident memory of DataLab and its child processes, "
             f"summed at each sample every {args.sample_ms} ms by an observer "
-            "process, during one run measured apart from the durations",
+            "process (process list refreshed every 250 ms), during one run "
+            "measured apart from the durations",
         },
+        "observer_cpu_s": observer_cpu,
         "cases": report.cases,
     }
     text = json.dumps(result, indent=1)
