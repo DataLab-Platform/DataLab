@@ -2331,7 +2331,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         }
         added_to_model = False
         try:
-            self.objmodel.add_objects(objects, group_id)
+            renumbered = self.objmodel.add_objects(objects, group_id)
             added_to_model = True
 
             for obj in objects:
@@ -2349,7 +2349,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 group_id,
                 set_current=set_current,
             )
-            self.objview.update_tree()
+            if renumbered:
+                # Short IDs of existing objects changed: their titles too
+                self.objview.update_tree()
 
             # Emit signal to ensure that the data panel is shown in the main window and
             # that the plot is updated (trigger a refresh of the plot)

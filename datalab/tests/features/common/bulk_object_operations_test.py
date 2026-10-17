@@ -133,9 +133,25 @@ def test_panel_add_objects_updates_tree_and_notifies_once(
         ]
         assert model_ids == tree_ids == [get_uuid(signal) for signal in signals]
         assert notifications == [None]
-        assert update_calls == [None]
+        # Appended after every object: no short ID changes, the new items are
+        # created with their final text and the tree needs no update
+        assert update_calls == []
         assert resize_calls == [0]
         assert panel.objview.get_current_object() is None
+
+        # Inserting before the objects of another group renumbers them: one
+        # final tree update
+        other = panel.add_group("Other")
+        panel.add_objects((create_test_signal("Last"),), get_uuid(other))
+        update_calls.clear()
+        inserted = tuple(create_test_signal(f"Inserted {i}") for i in range(3))
+        panel.add_objects(inserted, get_uuid(group), set_current=False)
+        assert update_calls == [None]
+        tree_texts = [
+            panel.objview.get_item_from_id(oid).text(0)
+            for oid in panel.objmodel.get_object_ids()
+        ]
+        assert tree_texts[-1].startswith("s014: ")
 
 
 def test_panel_add_objects_sets_last_object_current() -> None:

@@ -37,6 +37,7 @@ from __future__ import annotations
 
 import os
 from collections.abc import Iterator, Sequence
+from contextlib import contextmanager
 from typing import TYPE_CHECKING
 
 from guidata.configtools import get_icon
@@ -106,6 +107,37 @@ class SimpleObjectTree(QW.QTreeWidget):
         self._title_delegate = ClickableTitleDelegate(self)
         self.setItemDelegateForColumn(0, self._title_delegate)
         self.viewport().setMouseTracking(True)
+        #: Short ID indexes of the models (by model id), while a batch of items
+        #: is updated (see :meth:`_short_id_indexes`); None otherwise.
+        self.__short_id_indexes: dict[int, dict] | None = None
+
+    @contextmanager
+    def _short_id_indexes(self) -> Iterator[None]:
+        """Resolve short IDs from indexes built once while updating many items.
+
+        Each item tooltip resolves the short IDs of its title: without indexes,
+        each resolution scans the whole model. The indexes are built on first
+        use, for the numbering current when the batch starts.
+        """
+        if self.__short_id_indexes is not None:
+            yield
+            return
+        self.__short_id_indexes = {}
+        try:
+            yield
+        finally:
+            self.__short_id_indexes = None
+
+    def _find_short_id(
+        self, model: ObjectModel, short_id: str
+    ) -> SignalObj | ImageObj | ObjectGroup | None:
+        """Return the item of ``model`` with ``short_id``, or None."""
+        if self.__short_id_indexes is None:
+            return model.find_by_short_id(short_id)
+        index = self.__short_id_indexes.get(id(model))
+        if index is None:
+            index = self.__short_id_indexes[id(model)] = model.get_short_id_index()
+        return index.get(short_id)
 
     def __str__(self) -> str:
         """Return string representation"""
@@ -219,7 +251,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         an empty ``panel_str``. Subclasses with access to several panels
         should override this method.
         """
-        obj = self.objmodel.find_by_short_id(short_id)
+        obj = self._find_short_id(self.objmodel, short_id)
         if obj is None:
             return None
         return ("", obj)
@@ -323,8 +355,9 @@ class SimpleObjectTree(QW.QTreeWidget):
         uuid = self.get_current_item_id()
         with block_signals(widget=self):
             self.clear()
-        for group in self.objmodel.get_groups():
-            self.add_group_item(group)
+        with self._short_id_indexes():
+            for group in self.objmodel.get_groups():
+                self.add_group_item(group)
         if uuid is not None:
             self.set_current_item_id(uuid)
 
@@ -335,20 +368,24 @@ class SimpleObjectTree(QW.QTreeWidget):
         consistency between the tree and the model. This can happen in rare cases when
         objects are added to the model but the tree was not properly updated.
         """
-        for group in self.objmodel.get_groups():
-            group_item = self.get_item_from_id(get_uuid(group))
-            if group_item is None:
-                # Group item not found, repopulate tree to fix inconsistency
-                self.populate_tree()
-                return
-            self.__update_item(group_item, group)
-            for obj in group:
-                obj_item = self.get_item_from_id(get_uuid(obj))
-                if obj_item is None:
-                    # Object item not found, repopulate tree to fix inconsistency
+        items = {}
+        for item in self.iter_items():
+            items.setdefault(item.data(0, QC.Qt.UserRole), item)
+        with self._short_id_indexes():
+            for group in self.objmodel.get_groups():
+                group_item = items.get(get_uuid(group))
+                if group_item is None:
+                    # Group item not found, repopulate tree to fix inconsistency
                     self.populate_tree()
                     return
-                self.__update_item(obj_item, obj)
+                self.__update_item(group_item, group)
+                for obj in group:
+                    obj_item = items.get(get_uuid(obj))
+                    if obj_item is None:
+                        # Object item not found, repopulate tree to fix inconsistency
+                        self.populate_tree()
+                        return
+                    self.__update_item(obj_item, obj)
 
     def __add_to_group_item(
         self, obj: SignalObj | ImageObj, group_item: QW.QTreeWidgetItem
@@ -400,8 +437,9 @@ class SimpleObjectTree(QW.QTreeWidget):
         updates_enabled = self.updatesEnabled()
         self.setUpdatesEnabled(False)
         try:
-            for obj in objects:
-                self.__add_to_group_item(obj, group_item)
+            with self._short_id_indexes():
+                for obj in objects:
+                    self.__add_to_group_item(obj, group_item)
             if set_current:
                 self.set_current_item_id(get_uuid(objects[-1]))
         finally:
@@ -545,7 +583,7 @@ class ObjectView(SimpleObjectTree):
         own = panel.PANEL_STR_ID
         candidates.sort(key=lambda c: 0 if c[0] == own else 1)
         for panel_str, model in candidates:
-            obj = model.find_by_short_id(short_id)
+            obj = self._find_short_id(model, short_id)
             if obj is not None:
                 return (panel_str, obj)
         return None
