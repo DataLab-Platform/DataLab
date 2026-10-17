@@ -1227,13 +1227,15 @@ class ObjectProp(QW.QWidget):
 
         # Re-run the analysis in place (no history entry: runs under replaying)
         processor = self.__get_processor_associated_to(obj)
+        provenance = self.panel.mainwindow.provenance
         try:
-            success = processor.recompute_1_to_0(
-                func_name,
-                obj,
-                recompute_param,
-                plugin_origin=proc_params.plugin_origin,
-            )
+            with provenance.collecting() as activity_ids:
+                success = processor.recompute_1_to_0(
+                    func_name,
+                    obj,
+                    recompute_param,
+                    plugin_origin=proc_params.plugin_origin,
+                )
         except Exception as exc:  # pylint: disable=broad-exception-caught
             if execenv.unattended:
                 raise exc
@@ -1259,6 +1261,7 @@ class ObjectProp(QW.QWidget):
         if action is not None:
             action.snapshot_kwargs()
             action.kwargs["param"] = copy.deepcopy(recompute_param)
+            self.__relink_analysis(action, get_uuid(obj), activity_ids)
             hpanel.refresh_action(action)
 
         # Refresh the object display after re-analysis
@@ -1277,6 +1280,40 @@ class ObjectProp(QW.QWidget):
             ),
         )
         return True
+
+    def __relink_analysis(
+        self, action: Any, obj_uuid: str, activity_ids: list[str]
+    ) -> None:
+        """Link an analysis action to the analysis of *obj_uuid* just recorded.
+
+        The activities of this object in the action links (its last execution)
+        are replaced by the new ones; those of the other analysed objects stay.
+        """
+        if not activity_ids:
+            return
+        ledger = self.panel.mainwindow.provenance.ledger
+
+        def concerns(activity_id: str) -> bool:
+            try:
+                activity = ledger.activity(activity_id)
+            except KeyError:
+                return True  # unknown here: superseded by the new execution
+            states = ledger.states
+            return any(
+                states[item["binding"]["state_id"]]["object_uuid"] == obj_uuid
+                for item in activity["call"]["inputs"]
+                if "state_id" in item["binding"]
+            )
+
+        links = list(action.provenance_activity_ids)
+        flags = [concerns(activity_id) for activity_id in links]
+        kept = [value for value, flag in zip(links, flags) if not flag]
+        # The new activities take the place of the first superseded one
+        position = flags.index(True) if True in flags else len(links)
+        position = sum(1 for flag in flags[:position] if not flag)
+        action.provenance_activity_ids = (
+            kept[:position] + list(activity_ids) + kept[position:]
+        )
 
     def __get_processor_associated_to(
         self, obj: SignalObj | ImageObj
@@ -1346,7 +1383,7 @@ class ObjectProp(QW.QWidget):
             ProcessingReport with success status, object UUID, and optional message.
         """
         # pylint: disable=import-outside-toplevel
-        from datalab.processingcall import resolve_processing_call
+        from datalab.processingcall import grouped_recipe_index, resolve_processing_call
 
         if execenv.unattended:
             interactive = False
@@ -1404,7 +1441,19 @@ class ObjectProp(QW.QWidget):
                     )
                 if action is not None:
                     action.snapshot_kwargs()
-                    action.kwargs["param"] = copy.deepcopy(param)
+                    if action.pattern in ("1_to_n", "multiple_1_to_1"):
+                        # A grouped command replays its list of parameters: the
+                        # element of the edited output is updated, the others
+                        # are kept (for every object processed by the command).
+                        index = grouped_recipe_index(
+                            self.panel.mainwindow, action, proc_params, get_uuid(obj)
+                        )
+                        params = list(action.kwargs.get("params") or [])
+                        if index is not None and index < len(params):
+                            params[index] = copy.deepcopy(param)
+                            action.kwargs["params"] = params
+                    else:
+                        action.kwargs["param"] = copy.deepcopy(param)
                     self.__relink_action(action, proc_params.activity_id, obj)
                     hpanel.refresh_action(action)
                     hpanel.recompute_cascade(action)

@@ -48,7 +48,8 @@ of the step that used it:
   computation);
 - **Verify this step** recomputes the step separately and compares every result
   with the recorded one: *Exact*, *Within tolerance*, *Different* or *Not
-  verified* (with the reason). The workspace is not changed;
+  verified* (with the reason, e.g. an original input missing). The workspace is
+  not changed;
 - **History action** selects the History action whose last execution recorded
   the step, when there is one;
 - **Show details** shows the context of the step (options, X alignment,
@@ -125,9 +126,21 @@ Link with the History panel
 When the History panel records a session, each action keeps the identifiers of
 the provenance activities recorded by its last successful execution. Select an
 action and use **Show execution provenance** (History panel menu or toolbar) to
-display them, one tab per result. If the parameters of the action were edited
-without executing it again, the dialog says that the provenance describes the
-last successful execution.
+display them, one tab per result (or per analysed object). If the parameters of
+the action were edited without executing it again, the dialog says that the
+provenance describes the last successful execution.
+
+The History action is the recipe, the provenance records each execution:
+
+- applying a processing again from the **Processing** tab, or an analysis from
+  the **Analysis** tab, is recorded in the provenance of the result;
+- in the History panel edit mode, the edited parameters also become those of
+  the History action, which is linked to this new execution. For a command
+  producing several results (e.g. several filters applied at once), only the
+  parameters of the edited result change in the action, and replaying the
+  action applies them to that result of every object it processed;
+- outside the edit mode, the History action is left unchanged: replaying it
+  applies its own parameters again.
 
 These identifiers are stored in the optional ``provenance_activity_ids`` field of
 History actions (History action schema version 3). They are never copied with an
@@ -144,7 +157,8 @@ are added but **its earlier provenance is not imported**: the provenance record
 of the current workspace is kept unchanged, and later processing of the added
 objects is recorded as usual. An added object never inherits the provenance of
 another object, even when it holds the identifier of an object that was deleted
-from the current workspace.
+from the current workspace: such an object is neither shown nor used as the
+original input or result of a recorded step, including when verifying it.
 
 DataLab states this limitation before anything changes:
 

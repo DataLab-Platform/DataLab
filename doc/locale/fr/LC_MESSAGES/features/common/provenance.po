@@ -47,8 +47,8 @@ msgstr "**Afficher l'étape enregistrée** (sous une entrée) montre comment cet
 msgid "**Go to object** (under an input or a result) selects, in the signal or image panel, the object that holds it today (it may have changed since the computation);"
 msgstr "**Aller à l'objet** (sous une entrée ou un résultat) sélectionne, dans le panneau des signaux ou des images, l'objet qui la porte aujourd'hui (il a pu changer depuis le calcul) ;"
 
-msgid "**Verify this step** recomputes the step separately and compares every result with the recorded one: *Exact*, *Within tolerance*, *Different* or *Not verified* (with the reason). The workspace is not changed;"
-msgstr "**Vérifier cette étape** recalcule l'étape séparément et compare chaque résultat au résultat enregistré : *Exact*, *Dans la tolérance*, *Différent* ou *Non vérifié* (avec la raison). L'espace de travail n'est pas modifié ;"
+msgid "**Verify this step** recomputes the step separately and compares every result with the recorded one: *Exact*, *Within tolerance*, *Different* or *Not verified* (with the reason, e.g. an original input missing). The workspace is not changed;"
+msgstr "**Vérifier cette étape** recalcule l'étape séparément et compare chaque résultat au résultat enregistré : *Exact*, *Dans la tolérance*, *Différent* ou *Non vérifié* (avec la raison, par exemple une entrée d'origine absente). L'espace de travail n'est pas modifié ;"
 
 msgid "**History action** selects the History action whose last execution recorded the step, when there is one;"
 msgstr "**Action de l'historique** sélectionne l'action de l'historique dont la dernière exécution a enregistré l'étape, lorsqu'elle existe ;"
@@ -143,8 +143,20 @@ msgstr "Lorsqu'aucune provenance n'est enregistrée pour un objet, les métadonn
 msgid "Link with the History panel"
 msgstr "Lien avec le panneau Historique"
 
-msgid "When the History panel records a session, each action keeps the identifiers of the provenance activities recorded by its last successful execution. Select an action and use **Show execution provenance** (History panel menu or toolbar) to display them, one tab per result. If the parameters of the action were edited without executing it again, the dialog says that the provenance describes the last successful execution."
-msgstr "Lorsque le panneau Historique enregistre une session, chaque action conserve les identifiants des activités de provenance enregistrées par sa dernière exécution réussie. Sélectionnez une action et utilisez **Afficher la provenance de l'exécution** (menu ou barre d'outils du panneau Historique) pour les afficher, avec un onglet par résultat. Si les paramètres de l'action ont été modifiés sans qu'elle soit exécutée à nouveau, la boîte de dialogue indique que la provenance décrit la dernière exécution réussie."
+msgid "When the History panel records a session, each action keeps the identifiers of the provenance activities recorded by its last successful execution. Select an action and use **Show execution provenance** (History panel menu or toolbar) to display them, one tab per result (or per analysed object). If the parameters of the action were edited without executing it again, the dialog says that the provenance describes the last successful execution."
+msgstr "Lorsque le panneau Historique enregistre une session, chaque action conserve les identifiants des activités de provenance enregistrées par sa dernière exécution réussie. Sélectionnez une action et utilisez **Afficher la provenance de l'exécution** (menu ou barre d'outils du panneau Historique) pour les afficher, avec un onglet par résultat (ou par objet analysé). Si les paramètres de l'action ont été modifiés sans qu'elle soit exécutée à nouveau, la boîte de dialogue indique que la provenance décrit la dernière exécution réussie."
+
+msgid "The History action is the recipe, the provenance records each execution:"
+msgstr "L'action de l'historique est la recette, la provenance enregistre chaque exécution :"
+
+msgid "applying a processing again from the **Processing** tab, or an analysis from the **Analysis** tab, is recorded in the provenance of the result;"
+msgstr "appliquer à nouveau un traitement depuis l'onglet **Traitement**, ou une analyse depuis l'onglet **Analyse**, est enregistré dans la provenance du résultat ;"
+
+msgid "in the History panel edit mode, the edited parameters also become those of the History action, which is linked to this new execution. For a command producing several results (e.g. several filters applied at once), only the parameters of the edited result change in the action, and replaying the action applies them to that result of every object it processed;"
+msgstr "en mode d'édition du panneau Historique, les paramètres modifiés deviennent aussi ceux de l'action de l'historique, qui est liée à cette nouvelle exécution. Pour une commande produisant plusieurs résultats (par exemple plusieurs filtres appliqués en une fois), seuls les paramètres du résultat modifié changent dans l'action, et rejouer l'action les applique à ce résultat pour chaque objet traité ;"
+
+msgid "outside the edit mode, the History action is left unchanged: replaying it applies its own parameters again."
+msgstr "hors du mode d'édition, l'action de l'historique reste inchangée : la rejouer applique à nouveau ses propres paramètres."
 
 msgid "These identifiers are stored in the optional ``provenance_activity_ids`` field of History actions (History action schema version 3). They are never copied with an action, and actions saved by earlier versions simply have none. Deleting a History session does not change the provenance record."
 msgstr "Ces identifiants sont stockés dans le champ optionnel ``provenance_activity_ids`` des actions de l'historique (version 3 du schéma des actions de l'historique). Ils ne sont jamais copiés avec une action, et les actions enregistrées par des versions antérieures n'en ont simplement pas. La suppression d'une session de l'historique ne modifie pas l'enregistrement de provenance."
@@ -152,8 +164,8 @@ msgstr "Ces identifiants sont stockés dans le champ optionnel ``provenance_acti
 msgid "Appending a workspace"
 msgstr "Ajouter un espace de travail"
 
-msgid "When a workspace file is opened without clearing the current workspace, its data are added but **its earlier provenance is not imported**: the provenance record of the current workspace is kept unchanged, and later processing of the added objects is recorded as usual. An added object never inherits the provenance of another object, even when it holds the identifier of an object that was deleted from the current workspace."
-msgstr "Lorsqu'un fichier d'espace de travail est ouvert sans vider l'espace de travail actuel, ses données sont ajoutées mais **sa provenance antérieure n'est pas importée** : l'enregistrement de provenance de l'espace de travail actuel reste inchangé, et les traitements ultérieurs des objets ajoutés sont enregistrés normalement. Un objet ajouté n'hérite jamais de la provenance d'un autre objet, même lorsqu'il porte l'identifiant d'un objet supprimé de l'espace de travail actuel."
+msgid "When a workspace file is opened without clearing the current workspace, its data are added but **its earlier provenance is not imported**: the provenance record of the current workspace is kept unchanged, and later processing of the added objects is recorded as usual. An added object never inherits the provenance of another object, even when it holds the identifier of an object that was deleted from the current workspace: such an object is neither shown nor used as the original input or result of a recorded step, including when verifying it."
+msgstr "Lorsqu'un fichier d'espace de travail est ouvert sans vider l'espace de travail actuel, ses données sont ajoutées mais **sa provenance antérieure n'est pas importée** : l'enregistrement de provenance de l'espace de travail actuel reste inchangé, et les traitements ultérieurs des objets ajoutés sont enregistrés normalement. Un objet ajouté n'hérite jamais de la provenance d'un autre objet, même lorsqu'il porte l'identifiant d'un objet supprimé de l'espace de travail actuel : un tel objet n'est ni affiché ni utilisé comme entrée ou résultat d'origine d'une étape enregistrée, y compris lors de sa vérification."
 
 msgid "DataLab states this limitation before anything changes:"
 msgstr "DataLab signale cette limite avant toute modification :"
