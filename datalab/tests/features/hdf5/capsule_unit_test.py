@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import contextlib
 import os.path as osp
+import tracemalloc
 from collections.abc import Generator
 
 import pytest
@@ -205,12 +206,22 @@ def test_remote_server() -> None:
 
 
 def test_read_bounded(monkeypatch: pytest.MonkeyPatch) -> None:
-    """A file beyond the limit is refused before it is opened."""
+    """A file beyond the limit is refused before it is opened.
+
+    Within the limit, the buffer read is the size of the file, not of the limit.
+    """
     with helpers.WorkdirRestoringTempDir() as tmpdir:
         path = osp.join(tmpdir, "data.bin")
         with open(path, "wb") as file:
             file.write(b"x" * 100)
         assert capsuleio.read_bounded(path, 100, "Capsule") == b"x" * 100
+        tracemalloc.start()
+        try:
+            assert capsuleio.read_bounded(path, 4 * 1024**3, "Capsule") == b"x" * 100
+            peak = tracemalloc.get_traced_memory()[1]
+        finally:
+            tracemalloc.stop()
+        assert peak < 1024**2, peak
 
         def refuse(*_args, **_kwargs):
             raise AssertionError("the file was opened")
