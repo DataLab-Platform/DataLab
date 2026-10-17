@@ -246,6 +246,18 @@ msgstr "DataLab nécessite désormais Sigima ≥ 1.3.0 et SigimaX ≥ 1.1.0"
 msgid "🛠️ Bug Fixes"
 msgstr "🛠️ Corrections de bugs"
 
+msgid "**Performance with many objects:**"
+msgstr "**Performances avec de nombreux objets :**"
+
+msgid "Fixed processing becoming progressively slower as signals or images accumulate in a panel: each new result rewrote the titles of every existing object and rebuilt the whole object tree, so creating 1000 signals one after the other took about 39 minutes instead of under 2 minutes now (the last processing step dropped from 2.3 s to about 150 ms)"
+msgstr "Correction du ralentissement progressif des traitements à mesure que les signaux ou les images s'accumulent dans un panneau : chaque nouveau résultat réécrivait les titres de tous les objets existants et reconstruisait toute l'arborescence des objets, si bien que créer 1000 signaux l'un après l'autre prenait environ 39 minutes, contre moins de 2 minutes désormais (le dernier traitement est passé de 2,3 s à environ 150 ms)"
+
+msgid "Image panels no longer slow down because of cross-section curves kept for hidden images (requires PlotPy ≥ 2.11.2)"
+msgstr "Les panneaux d'images ne ralentissent plus à cause des courbes de coupe conservées pour les images masquées (nécessite PlotPy ≥ 2.11.2)"
+
+msgid "Fixed titles referring to objects numbered 1000 or above (e.g., `s1000`) being corrupted when objects were added or reordered"
+msgstr "Correction de l'altération des titres faisant référence à des objets numérotés 1000 ou plus (par exemple `s1000`) lors de l'ajout ou du réordonnancement d'objets"
+
 msgid "**Window layout:**"
 msgstr "**Disposition de la fenêtre :**"
 

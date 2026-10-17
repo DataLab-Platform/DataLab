@@ -105,6 +105,12 @@
 
 ### 🛠️ Bug Fixes ###
 
+**Performance with many objects:**
+
+* Fixed processing becoming progressively slower as signals or images accumulate in a panel: each new result rewrote the titles of every existing object and rebuilt the whole object tree, so creating 1000 signals one after the other took about 39 minutes instead of under 2 minutes now (the last processing step dropped from 2.3 s to about 150 ms)
+* Image panels no longer slow down because of cross-section curves kept for hidden images (requires PlotPy ≥ 2.11.2)
+* Fixed titles referring to objects numbered 1000 or above (e.g., `s1000`) being corrupted when objects were added or reordered
+
 **Window layout:**
 
 * Fixed the width of the signal/image panels not being restored at startup: after narrowing the panels and restarting DataLab, they came back wider (up to their maximum width) instead of keeping the width chosen by the user
