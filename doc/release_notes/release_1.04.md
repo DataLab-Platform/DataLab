@@ -82,6 +82,8 @@
   * **Revisions** lists the capsules exported, inspected or retrieved on this computer and compares any two of them (scientific, presentation, storage, environment and attachment changes)
   * **Registry** connects to an optional capsule registry to publish capsules (never their workspaces) and reviews, list the published revisions and retrieve them, everything returned being checked
   * Scripts and macros can export and open capsules too (`export_capsule` and `open_capsule` of the proxy), and the `workspace-capsule` command line of [DataLab-Capsule](https://github.com/DataLab-Platform/DataLab-Capsule) still validates, compares and verifies them
+  * A capsule, or the workspace it references, that exceeds the size limit is refused before being read, and DataLab never writes a capsule it would refuse to open; the limits and the measured costs are given in the *Workspace capsules* page
+  * The standalone version (installer) embeds what capsules need (schemas and RO-Crate context of DataLab-Capsule)
 
 ### 🔄 Changes ###
 

@@ -117,3 +117,26 @@ msgstr "Les capsules peuvent être exportées et ouvertes depuis des scripts et 
 msgid "The ``workspace-capsule`` command line of DataLab-Capsule also validates, inspects, compares, verifies and publishes capsules."
 msgstr "La ligne de commande ``workspace-capsule`` de DataLab-Capsule permet aussi de valider, inspecter, comparer, vérifier et publier des capsules."
 
+msgid "Limits"
+msgstr "Limites"
+
+msgid "DataLab checks the size of a capsule, and of the workspace it references, before reading it, and never writes a capsule it would refuse to open. These limits are those of DataLab-Capsule (a workspace of 4 GiB at most): they are accepted sizes, not a tested capacity."
+msgstr "DataLab vérifie la taille d'une capsule, et de l'espace de travail qu'elle référence, avant de la lire, et n'écrit jamais une capsule qu'il refuserait d'ouvrir. Ces limites sont celles de DataLab-Capsule (un espace de travail de 4 Gio au plus) : ce sont des tailles acceptées, pas une capacité testée."
+
+msgid "What was measured, on a laptop of 2026 (32 GiB of RAM):"
+msgstr "Ce qui a été mesuré, sur un ordinateur portable de 2026 (32 Gio de mémoire vive) :"
+
+msgid "inspecting or opening a 32 MiB capsule from the dialog takes 0.2 to 0.5 s, during which DataLab does not respond (wait cursor); exporting it takes 0.25 s. Larger capsules take longer, roughly in proportion; the library verifies a 234 MiB capsule in less than a second;"
+msgstr "inspecter ou ouvrir une capsule de 32 Mio depuis la boîte de dialogue prend de 0,2 à 0,5 s, pendant lesquelles DataLab ne répond pas (curseur d'attente) ; l'exporter prend 0,25 s. Les capsules plus grandes prennent plus de temps, à peu près proportionnellement ; la bibliothèque vérifie une capsule de 234 Mio en moins d'une seconde ;"
+
+msgid "opening a capsule needs about its size in memory, in addition to the workspace it replaces;"
+msgstr "ouvrir une capsule demande environ sa taille en mémoire, en plus de l'espace de travail qu'elle remplace ;"
+
+msgid "recording the provenance of a processing costs the fingerprints of its inputs and results: nothing measurable for a small signal, +29 ms for a 2048×2048 image filtered in 450 ms;"
+msgstr "enregistrer la provenance d'un traitement coûte les empreintes de ses entrées et de ses résultats : rien de mesurable pour un petit signal, +29 ms pour une image de 2048×2048 filtrée en 450 ms ;"
+
+msgid "consulting the provenance of a result takes less than a millisecond, even with 1000 recorded steps; listing 1000 steps in **Local replay** takes about half a second."
+msgstr "consulter la provenance d'un résultat prend moins d'une milliseconde, même avec 1000 étapes enregistrées ; lister 1000 étapes dans **Rejeu local** prend environ une demi-seconde."
+
+msgid "Workspaces with many objects (several hundreds) slow down every processing, with or without provenance: keep large series in several workspaces. DataLab-Web limits capsules to 256 MiB."
+msgstr "Les espaces de travail comptant beaucoup d'objets (plusieurs centaines) ralentissent chaque traitement, avec ou sans provenance : répartissez les grandes séries dans plusieurs espaces de travail. DataLab-Web limite les capsules à 256 Mio."

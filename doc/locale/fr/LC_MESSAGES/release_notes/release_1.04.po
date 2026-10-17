@@ -264,3 +264,8 @@ msgstr "**Plugins et historique :**"
 msgid "Replaying a History action or re-processing a result created by a plugin feature that shares its name with a built-in feature now runs the plugin feature instead of the built-in one"
 msgstr "Le rejeu d'une action de l'historique ou le recalcul d'un résultat créé par une fonctionnalité de plugin portant le même nom qu'une fonctionnalité intégrée exécute désormais la fonctionnalité du plugin au lieu de la fonctionnalité intégrée"
 
+msgid "A capsule, or the workspace it references, that exceeds the size limit is refused before being read, and DataLab never writes a capsule it would refuse to open; the limits and the measured costs are given in the *Workspace capsules* page"
+msgstr "Une capsule, ou l'espace de travail qu'elle référence, qui dépasse la limite de taille est refusée avant d'être lue, et DataLab n'écrit jamais une capsule qu'il refuserait d'ouvrir ; les limites et les coûts mesurés sont indiqués dans la page *Capsules d'espace de travail*"
+
+msgid "The standalone version (installer) embeds what capsules need (schemas and RO-Crate context of DataLab-Capsule)"
+msgstr "La version autonome (installeur) embarque ce dont les capsules ont besoin (schémas et contexte RO-Crate de DataLab-Capsule)"
