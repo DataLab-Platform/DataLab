@@ -275,19 +275,22 @@ def test_verification_detects_divergence(monkeypatch) -> None:
 
 
 def test_verification_refusals() -> None:
-    """Changed, deleted or ROI-bearing sources are refused before computation."""
+    """Changed or deleted sources are refused before computation; a source whose
+    ROI alone changed is verified on a copy with the recorded ROI."""
     with app() as win:
         source = add_signal(win)
         normalize(win, "maximum")
         (activity,) = win.provenance.ledger.activities
         act_id = activity["activity_id"]
         execution = win.signalpanel.processor.execution
-        computations = execution.computations
 
         source.roi = sigima.objects.create_signal_roi([0.0, 0.5])
         report = win.verify_provenance_activity(act_id)
-        assert report["eligibility"] == "input_changed"
+        # Same data, other ROI: recomputed on a copy with the recorded ROI.
+        assert (report["eligibility"], report["verdict"]) == ("ready", "exact")
+        assert source.roi is not None
         source.roi = None
+        computations = execution.computations
 
         source.set_xydata(X, Y + 1.0)
         report = win.verify_provenance_activity(act_id)

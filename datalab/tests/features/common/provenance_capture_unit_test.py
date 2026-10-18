@@ -18,6 +18,7 @@ import sigima.params
 import sigima.proc.image as sipi
 import sigima.proc.signal as sips
 from sigima.objects import create_image, create_signal
+from sigima.tests.data import create_peak_image
 
 from datalab.env import execenv
 from datalab.objectmodel import get_uuid
@@ -175,6 +176,30 @@ def test_analyses_are_verified() -> None:
         assert report["verdict"] == "exact"
         assert report["outputs"][0]["recorded"] == "none"
         win.provenance.ledger.validate()
+
+
+def test_detection_rois_keep_the_analysis_verifiable() -> None:
+    """ROIs created on the input by a detection do not refuse its verification."""
+    with app() as win:
+        image = create_peak_image()
+        win.imagepanel.add_object(image)
+        win.imagepanel.objview.select_objects([get_uuid(image)])
+        win.imagepanel.processor.compute_1_to_0(
+            sipi.peak_detection,
+            sigima.params.Peak2DDetectionParam.create(create_rois=True),
+            edit=False,
+        )
+        assert image.roi is not None
+        roi = image.roi.to_dict()
+        activity = win.provenance.ledger.activities[-1]
+        assert activity["call"]["operation"]["id"] == "sigima.image.peak_detection"
+        assert states_of(win, activity)[0].get("roi") is None
+        report = win.verify_provenance_activity(activity["activity_id"])
+        assert (report["eligibility"], report["verdict"]) == ("ready", "exact")
+        assert len(image.roi.single_rois) == len(roi["single_rois"])
+        # Inspection still reports that the input changed since the analysis
+        description = win.provenance.describe_activity(activity["activity_id"], True)
+        assert description["inputs"][0]["data"] == "changed"
 
 
 def test_candidate_errors_are_reported(monkeypatch: pytest.MonkeyPatch) -> None:
