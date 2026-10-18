@@ -402,7 +402,7 @@ def test_execution_dialog_closes_on_navigation() -> None:
 
 def test_metadata_read_statuses_are_sentences() -> None:
     """The statuses of metadata read by a computation are not raw codes."""
-    # pylint: disable-next=protected-access
+    # pylint: disable-next=import-outside-toplevel,protected-access
     from datalab.widgets.provenance import _metadata_message
 
     for status in ("matches", "changed", "missing", "unknown"):

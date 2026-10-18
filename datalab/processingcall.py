@@ -564,13 +564,13 @@ def recipe_differs_from_execution(mainwindow: DLMainWindow, action: Any) -> bool
         recipe for each source object...).
     """
     ids = list(action.provenance_activity_ids)
-    if not ids:
-        return None
-    elements = _recipe_elements(mainwindow, action)
-    if not elements:
-        return None
-    recipe = [encoded_parameters(feature, param) for feature, param in elements]
-    if any(values is None for values in recipe):
+    elements = _recipe_elements(mainwindow, action) if ids else None
+    recipe = (
+        [encoded_parameters(feature, param) for feature, param in elements]
+        if elements
+        else []
+    )
+    if not recipe or any(values is None for values in recipe):
         return None
     ledger = mainwindow.provenance.ledger
     try:

@@ -74,7 +74,8 @@ def test_metadata_import_keeps_identity():
                 panel = win.signalpanel
                 for _index in range(2):
                     panel.new_object(edit=False)
-                first, second = panel.objmodel.get_all_objects()
+                objects = panel.objmodel.get_all_objects()
+                first, second = objects[0], objects[1]
                 first.metadata["custom"] = "value"
                 panel.objview.set_current_object(first)
                 panel.export_metadata_from_file(fname)

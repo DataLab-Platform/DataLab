@@ -163,6 +163,7 @@ def _metadata_message(status: str) -> str:
 
 
 def origin_text(origin: str) -> str:
+    """Return the translated text of an activity origin code."""
     return {
         "ordinary": _("Processing"),
         "recompute_in_place": _("Applied again in place"),
@@ -172,6 +173,7 @@ def origin_text(origin: str) -> str:
 
 
 def verdict_text(verdict: str) -> str:
+    """Return the translated text of a verification verdict code."""
     return {
         "exact": _("Exact"),
         "within_tolerance": _("Within tolerance"),

@@ -156,8 +156,10 @@ def test_save_and_load_h5_workspace(monkeypatch: pytest.MonkeyPatch):
             signal_batches: list[int] = []
             image_batches: list[int] = []
             selection_calls = {win.signalpanel: 0, win.imagepanel: 0}
+            # pylint: disable=protected-access
             signal_add_objects = win.signalpanel._add_objects
             image_add_objects = win.imagepanel._add_objects
+            # pylint: enable=protected-access
             signal_selection_changed = win.signalpanel.selection_changed
             image_selection_changed = win.imagepanel.selection_changed
             signal_deserialize = win.signalpanel.deserialize_from_hdf5

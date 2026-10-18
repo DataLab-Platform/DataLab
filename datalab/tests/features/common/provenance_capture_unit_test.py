@@ -529,8 +529,8 @@ def test_replaced_analysis_result_is_not_attributed() -> None:
         with app() as win:
             win.load_h5_workspace([edited], reset_all=True)
             for activity in win.provenance.ledger.activities:
-                (status,) = win.provenance.artifact_statuses(activity["activity_id"])
-                assert status["status"] == "missing"
+                statuses = win.provenance.artifact_statuses(activity["activity_id"])
+                assert [s["status"] for s in statuses] == ["missing"]
 
 
 # -- Cross-edition reference files ----------------------------------------

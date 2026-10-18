@@ -119,8 +119,6 @@ from datalab.widgets.provenance import ProvenanceWidget
 from datalab.widgets.textimport import TextImportWizard
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
-
     from plotpy.items import CurveItem, LabelItem, MaskedXYImageItem
     from sigima.io.image import ImageIORegistry
     from sigima.io.signal import SignalIORegistry

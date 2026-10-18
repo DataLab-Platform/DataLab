@@ -103,7 +103,7 @@ def test_panel_add_objects_updates_tree_and_notifies_once(
         assert model_ids == tree_ids == [get_uuid(signal) for signal in signals]
         assert notifications == [None]
         # The new items are created with their final text: no tree update
-        assert update_calls == []
+        assert not update_calls
         # One column fit, measuring the new items only
         assert resize_calls == [10]
         assert panel.objview.get_current_object() is None
@@ -115,7 +115,7 @@ def test_panel_add_objects_updates_tree_and_notifies_once(
         update_calls.clear()
         inserted = tuple(create_test_signal(f"Inserted {i}") for i in range(3))
         panel.add_objects(inserted, get_uuid(group), set_current=False)
-        assert update_calls == []
+        assert not update_calls
         object_ids = panel.objmodel.get_object_ids()
         tree_texts = [panel.objview.get_item_from_id(oid).text(0) for oid in object_ids]
         assert tree_texts == [panel.objmodel[oid].title for oid in object_ids]
@@ -250,6 +250,7 @@ def test_panel_add_objects_rolls_back_tree_failure(
         original_add_items = panel.objview.add_object_items
 
         def fail_after_first_item(objects, group_id, set_current=True) -> None:
+            del set_current
             original_add_items(objects[:1], group_id, set_current=False)
             raise RuntimeError("injected tree failure")
 
@@ -262,7 +263,7 @@ def test_panel_add_objects_rolls_back_tree_failure(
         assert len(panel) == 0
         assert panel.objmodel.get_groups() == []
         assert panel.objview.topLevelItemCount() == 0
-        assert notifications == []
+        assert not notifications
 
 
 def test_refresh_plot_batches_one_hundred_curves(
