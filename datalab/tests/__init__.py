@@ -29,6 +29,12 @@ import time
 from contextlib import contextmanager
 from typing import Generator
 
+# Tests check English messages: under pytest, the system language applies only
+# when LANG is set (before the translations are loaded by ``datalab.config``)
+if "pytest" in sys.modules:
+    os.environ.setdefault("LANG", "en_US.UTF-8")
+
+# pylint: disable=wrong-import-position
 import psutil
 import pytest
 from guidata.guitest import run_testlauncher
