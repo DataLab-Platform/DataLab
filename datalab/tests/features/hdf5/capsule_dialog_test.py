@@ -195,6 +195,14 @@ def test_inspect_refuses_files_beyond_the_policy() -> None:
             assert inspect.choose(path) and inspect.intact
             assert not inspect.choose_workspace(workspace)
             assert "Referenced workspace too large: published.h5" in dialog.error
+            # A new capsule that cannot be read never keeps the former inspection
+            capsuleio.policy = default
+            assert inspect.choose(path) and inspect.intact
+            capsuleio.policy = dataclasses.replace(default, max_archive_bytes=size - 1)
+            assert not inspect.choose(path)
+            assert inspect.inspection is None and not inspect.intact
+            assert inspect.open_button.isHidden()
+            assert inspect.publish_button.isHidden()
             dialog.close()
 
 

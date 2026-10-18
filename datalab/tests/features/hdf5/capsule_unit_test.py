@@ -170,6 +170,32 @@ def test_referenced_workspace() -> None:
             check_chain(win, "desktop")
 
 
+def test_export_never_overwrites_its_own_files() -> None:
+    """The capsule, its referenced workspace and its attachments are different
+    files: an export that would overwrite one of them writes nothing."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        capsule = osp.join(tmpdir, "chain.dlcapsule")
+        note = _note(tmpdir)
+        with open(capsule, "wb") as file:
+            file.write(NOTE)
+        with capsule_app(tmpdir) as win:
+            build_chain(win)
+            for kwargs in (
+                {"workspace_ref": REF, "workspace_filename": capsule},
+                {"attachments": [capsule]},
+                {
+                    "workspace_ref": REF,
+                    "workspace_filename": note,
+                    "attachments": [note],
+                },
+            ):
+                with pytest.raises(CapsuleError, match="different files"):
+                    win.export_capsule(capsule, **kwargs)
+            assert _read(note) == NOTE
+            assert _read(capsule) == NOTE
+            assert not win.capsuleio.revisions.revisions()
+
+
 def test_invalid_capsule_leaves_workspace() -> None:
     """A damaged capsule is refused before the workspace changes."""
     with helpers.WorkdirRestoringTempDir() as tmpdir:

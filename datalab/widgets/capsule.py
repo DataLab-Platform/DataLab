@@ -678,6 +678,7 @@ class InspectTab(_Tab):
                 return False
         self.capsule = filename
         self.workspace = None
+        self.inspection = None
         self.reports, self.reviews = [], []
         self.published.setText("")
         return self.inspect()

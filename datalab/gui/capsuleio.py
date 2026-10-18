@@ -207,26 +207,40 @@ class CapsuleInputOutput:
             Manifest fingerprint of the capsule.
 
         Raises:
-            CapsuleError: If the workspace or an attachment is too large, or the
-             capsule cannot be created or would be refused when read back. No
-             file is written then.
+            CapsuleError: If the workspace or an attachment is too large, the
+             capsule, the referenced workspace or an attachment are the same
+             file, or the capsule cannot be created or would be refused when
+             read back. No file is written then.
             ManifestError: If a field is invalid (workspace IRI, attachment).
         """
         files = []
+        sources = set()
         for attachment, path in attachment_entries(attachments):
             if osp.getsize(path) > MAX_ATTACHMENT_BYTES:
                 raise CapsuleError(
                     _("Attachments are limited to 16 MiB: %s") % osp.basename(path)
                 )
-            with open(path, "rb") as file:
-                data = file.read()
+            sources.add(osp.normcase(osp.abspath(path)))
             files.append(
                 {
                     "name": attachment,
-                    "data": data,
+                    "data": read_bounded(path, MAX_ATTACHMENT_BYTES, _("Attachment")),
                     "media_type": mimetypes.guess_type(path)[0]
                     or "application/octet-stream",
                 }
+            )
+        if workspace_ref and workspace_filename is None:
+            workspace_filename = osp.join(
+                osp.dirname(osp.abspath(filename)), workspace_leaf(workspace_ref)
+            )
+        targets = [filename] + ([workspace_filename] if workspace_ref else [])
+        targets = [osp.normcase(osp.abspath(path)) for path in targets]
+        if len(set(targets)) != len(targets) or sources.intersection(targets):
+            raise CapsuleError(
+                _(
+                    "The capsule, its referenced workspace and its attachments "
+                    "must be different files"
+                )
             )
         origin = self.mainwindow.provenance.capsule_origin
         workspace = self.workspace_bytes()
@@ -242,10 +256,6 @@ class CapsuleInputOutput:
         # (size policy, invalid manifest) is never written.
         manifest = read_capsule(capsule, self.policy).manifest
         if workspace_ref:
-            if workspace_filename is None:
-                workspace_filename = osp.join(
-                    osp.dirname(osp.abspath(filename)), workspace_leaf(workspace_ref)
-                )
             with open(workspace_filename, "wb") as file:
                 file.write(workspace)
         with open(filename, "wb") as file:
