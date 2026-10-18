@@ -149,6 +149,6 @@ What was measured, on a laptop of 2026 (32 GiB of RAM):
   with 1000 recorded steps; listing 1000 steps in **Local replay** takes about
   half a second.
 
-Workspaces with many objects (several hundreds) slow down every processing,
-with or without provenance: keep large series in several workspaces.
+Each processing gets slightly slower as a panel holds more objects, with or
+without provenance (about 0.1 s in an empty panel, 0.3 s with 1000 objects).
 DataLab-Web limits capsules to 256 MiB.

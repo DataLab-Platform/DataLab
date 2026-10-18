@@ -138,5 +138,6 @@ msgstr "enregistrer la provenance d'un traitement coûte les empreintes de ses e
 msgid "consulting the provenance of a result takes less than a millisecond, even with 1000 recorded steps; listing 1000 steps in **Local replay** takes about half a second."
 msgstr "consulter la provenance d'un résultat prend moins d'une milliseconde, même avec 1000 étapes enregistrées ; lister 1000 étapes dans **Rejeu local** prend environ une demi-seconde."
 
-msgid "Workspaces with many objects (several hundreds) slow down every processing, with or without provenance: keep large series in several workspaces. DataLab-Web limits capsules to 256 MiB."
-msgstr "Les espaces de travail comptant beaucoup d'objets (plusieurs centaines) ralentissent chaque traitement, avec ou sans provenance : répartissez les grandes séries dans plusieurs espaces de travail. DataLab-Web limite les capsules à 256 Mio."
+msgid "Each processing gets slightly slower as a panel holds more objects, with or without provenance (about 0.1 s in an empty panel, 0.3 s with 1000 objects). DataLab-Web limits capsules to 256 MiB."
+msgstr "Chaque traitement est un peu plus lent à mesure qu'un panneau contient plus d'objets, avec ou sans provenance (environ 0,1 s dans un panneau vide, 0,3 s avec 1000 objets). DataLab-Web limite les capsules à 256 Mio."
+
