@@ -137,6 +137,18 @@ def test_analyses_record_artifacts() -> None:
         win.provenance.ledger.validate()
 
 
+def test_recomputed_analyses_are_recorded_as_such() -> None:
+    """Analyses refreshed on demand are recorded as recomputations in place."""
+    with app() as win:
+        signal = add_signal(win)
+        win.signalpanel.objview.select_objects([get_uuid(signal)])
+        win.signalpanel.processor.run_feature("stats")
+        win.signalpanel.recompute_selected()
+        first, second = win.provenance.ledger.activities
+        assert (first["origin"], second["origin"]) == ("ordinary", "recompute_in_place")
+        win.provenance.ledger.validate()
+
+
 def test_analyses_are_verified() -> None:
     """Analyses are recomputed and compared; a normal absence of result too."""
     with app() as win:

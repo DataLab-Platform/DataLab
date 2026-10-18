@@ -2049,6 +2049,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 edit=False,
                 target_objs=[obj],
                 feature_id=feature.feature_id,
+                origin="recompute_in_place",
             )
         return result is not None and result.execution_success
 
@@ -2430,6 +2431,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         edit: bool | None = None,
         target_objs: list[SignalObj | ImageObj] | None = None,
         feature_id: str | None = None,
+        origin: str = "ordinary",
     ) -> ResultData | None:
         """Generic processing method: 1 object in â†’ no object out.
 
@@ -2452,6 +2454,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             target_objs: Optional list of specific objects to process. If None,
              processes all currently selected objects.
             feature_id: Stable feature identifier stored in analysis metadata.
+            origin: Origin of the recorded activities (e.g. ``recompute_in_place``
+             when an analysis is refreshed on demand).
 
         Returns:
             ResultData instance containing the results for all processed objects,
@@ -2506,7 +2510,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 pvalue = 0 if pvalue == 1 else pvalue
                 progress.setValue(pvalue)
                 args = (obj,) if param is None else (obj, param)
-                pending = provenance.begin(func, param, obj, command_id)
+                pending = provenance.begin(func, param, obj, command_id, origin=origin)
 
                 # Execute function
                 compout = self.__exec_func(func, args, progress)
