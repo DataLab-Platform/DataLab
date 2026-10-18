@@ -65,9 +65,6 @@ msgstr "Assistant IA prêt. Configurez votre fournisseur dans le menu Edition > 
 msgid "You"
 msgstr "Vous"
 
-msgid "Assistant"
-msgstr "Assistant"
-
 msgid "Save to Macros"
 msgstr "Enregistrer dans les macros"
 
@@ -313,6 +310,9 @@ msgstr ""
 "L'exécution simultanée de plusieurs instances peut entraîner des dysfonctionnements : écrasement des préférences, problèmes de découverte du contrôle à distance, etc.\n"
 "\n"
 "Souhaitez-vous néanmoins continuer ?"
+
+msgid "The registry address must be an http or https URL"
+msgstr "L'adresse du registre doit être une URL http ou https"
 
 msgid "DataLab is a generic signal and image processing platform"
 msgstr "DataLab est une plateforme générique de traitement du signal et de l'image"
@@ -940,6 +940,26 @@ msgstr "Afficher le panneau de contraste"
 msgid "Show or hide contrast adjustment panel"
 msgstr "Afficher ou cacher le panneau de réglage du contraste"
 
+#, python-format
+msgid "%s too large: %s, %s MiB (limit: %s MiB)"
+msgstr "%s : taille excessive, %s, %s Mio (limite : %s Mio)"
+
+msgid "Capsule"
+msgstr "Capsule"
+
+msgid "Referenced workspace"
+msgstr "Espace de travail référencé"
+
+msgid "Workspace"
+msgstr "Espace de travail"
+
+#, python-format
+msgid "Attachments are limited to 16 MiB: %s"
+msgstr "Les pièces jointes sont limitées à 16 Mio : %s"
+
+msgid "This capsule references its workspace: select the workspace file"
+msgstr "Cette capsule référence son espace de travail : sélectionnez le fichier de l'espace de travail"
+
 msgid "Command palette"
 msgstr "Palette de commandes"
 
@@ -971,6 +991,9 @@ msgstr "Attention"
 
 msgid "Add without provenance"
 msgstr "Ajouter sans la provenance"
+
+msgid "This file is not a DataLab workspace"
+msgstr "Ce fichier n'est pas un espace de travail DataLab"
 
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
@@ -1077,6 +1100,12 @@ msgstr "Préférences..."
 msgid "Open settings dialog"
 msgstr "Ouvrir la boîte de dialogue des préférences"
 
+msgid "Workspace capsule..."
+msgstr "Capsule d'espace de travail..."
+
+msgid "Export, inspect, replay and compare workspace capsules (workspace and provenance of its processing)"
+msgstr "Exporter, inspecter, rejouer et comparer des capsules d'espace de travail (espace de travail et provenance de ses traitements)"
+
 msgid "Command palette..."
 msgstr "Palette de commandes..."
 
@@ -1100,6 +1129,9 @@ msgstr "Afficher les titres des objets graphiques"
 
 msgid "Show or hide ROI and other graphical object titles or subtitles"
 msgstr "Afficher ou cacher les titres (et sous-titres) des régions d'intérêt et autres objets graphiques"
+
+msgid "Browse application plugins, recipes and examples"
+msgstr "Parcourir les plugins d'application, les méthodes et les exemples"
 
 msgid "Reload plugins"
 msgstr "Recharger les plugins"
@@ -1209,14 +1241,17 @@ msgstr "Vous devrez cliquer manuellement sur le bouton de rafraîchissement pour
 msgid "Are you sure you want to disable auto-refresh?"
 msgstr "Êtes-vous sûr de vouloir désactiver le rafraîchissement automatique ?"
 
+msgid "Export capsule"
+msgstr "Exporter une capsule"
+
+msgid "Open capsule"
+msgstr "Ouvrir une capsule"
+
 msgid "Open"
 msgstr "Ouvrir"
 
 msgid "HDF5 files (*.h5 *.hdf5 *.hdf *.he5);;All files (*)"
 msgstr "Fichiers HDF5 (*.h5 *.hdf5 *.hdf *.he5);;Tous les fichiers (*)"
-
-msgid "Save to HDF5 file"
-msgstr "Enregistrer dans un fichier HDF5"
 
 #, python-format
 msgid "Open %d HDF5 files"
@@ -1224,6 +1259,9 @@ msgstr "Ouvrir %d fichiers HDF5"
 
 msgid "Open HDF5 file"
 msgstr "Ouvrir un fichier HDF5"
+
+msgid "Save to HDF5 file"
+msgstr "Enregistrer dans un fichier HDF5"
 
 msgid "Do you want to clear current workspace (signals and images) before importing data from HDF5 files?"
 msgstr "Souhaitez-vous vider l'espace de travail actuel (signaux et images) avant d'importer des données depuis des fichiers HDF5 ?"
@@ -1366,9 +1404,6 @@ msgstr "Créé : paramètres de pic historiques"
 msgid "Created: invalid creation parameters"
 msgstr "Créé : paramètres de création invalides"
 
-msgid "Created"
-msgstr "Créé"
-
 msgid "Original object"
 msgstr "Objet original"
 
@@ -1465,25 +1500,6 @@ msgstr "Aucun objet de traitement disponible."
 msgid "Processing metadata is incomplete."
 msgstr "Les métadonnées de traitement sont incomplètes."
 
-msgid "Source object no longer exists."
-msgstr "L'objet source n'existe plus."
-
-msgid "The object that was used to create this processed object has been deleted and cannot be used for reprocessing."
-msgstr "L'objet qui a été utilisé pour créer cet objet traité a été supprimé et ne peut pas être utilisé pour le retraitement."
-
-#, python-format
-msgid ""
-"Failed to reprocess object:\n"
-"%s"
-msgstr ""
-"Échec du retraitement de l'objet :\n"
-"%s"
-
-msgid "Processing was cancelled."
-msgstr "Le traitement a été annulé."
-
-msgid "Failed to reprocess object."
-msgstr "Échec du retraitement de l'objet."
 msgid "Geometry results"
 msgstr "Résultats géométriques"
 
@@ -1523,7 +1539,7 @@ msgstr "Écraser les fichiers existants"
 msgid "Preview"
 msgstr "Aperçu"
 
-msgid "Add a new metadata item to the selected objects.<br><br>The metadata key will be the same for all objects, but the value can use a pattern to generate different values.<br>Click the <b>Help</b> button for details on the pattern syntax.<br>"
+msgid "Add a new metadata item to the selected objects.<br><br>The metadata key will be the same for all objects, but the value can use a pattern to generate different values, optionally extracted with a regular expression.<br>Click the <b>Help</b> button for details on the pattern syntax.<br>"
 msgstr "Ajouter un nouvel élément de métadonnée aux objets sélectionnés.<br><br>La clé de métadonnée sera la même pour tous les objets, mais la valeur peut utiliser un modèle pour générer des valeurs différentes, éventuellement extraites par une expression régulière.<br>Cliquez sur le bouton <b>Aide</b> pour plus de détails sur la syntaxe du modèle.<br>"
 
 msgid "Select a key..."
@@ -1608,11 +1624,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "Group name:"
-msgstr "Nom du groupe :"
-
 msgid "New group"
 msgstr "Nouveau groupe"
+
+msgid "Group name:"
+msgstr "Nom du groupe :"
 
 #, python-format
 msgid "New group \"%s\""
@@ -1855,9 +1871,6 @@ msgstr "L'action %s a été ignorée : ses paramètres enregistrés n'ont pas pu
 msgid "History panel"
 msgstr "Panneau d'historique"
 
-msgid "History files"
-msgstr "Enregistrer un fichier d'historique"
-
 #, python-format
 msgid "Action %s: target panel not found — skipping."
 msgstr "Action %s : panneau cible introuvable — ignorée."
@@ -2011,9 +2024,6 @@ msgstr "Effacer toutes les macros récentes ?"
 
 msgid "Macro panel"
 msgstr "Panneau des macros"
-
-msgid "Python files"
-msgstr "Ouvrir le fichier"
 
 msgid "Clear console"
 msgstr "Effacer la console"
@@ -2251,6 +2261,7 @@ msgstr "Entrée/sortie"
 
 msgid "Application"
 msgstr "Application"
+
 msgid "today"
 msgstr "aujourd'hui"
 
@@ -2285,9 +2296,6 @@ msgstr "Modifier le répertoire"
 msgid "Remove directory"
 msgstr "Supprimer le répertoire"
 
-msgid "from"
-msgstr "depuis"
-
 msgid "Plugin Configuration"
 msgstr "Configuration des plugins"
 
@@ -2302,6 +2310,7 @@ msgstr "Plugins disponibles"
 
 msgid "Install plugins"
 msgstr "Installer des plugins"
+
 msgid "Apply and reload plugins"
 msgstr "Appliquer et recharger les plugins"
 
@@ -2586,6 +2595,7 @@ msgstr "Entrées attendues :"
 #, python-format
 msgid "Running '%s'"
 msgstr "Exécution de '%s'"
+
 msgid "Failed to deserialize processing parameters from JSON."
 msgstr "Échec de la désérialisation des paramètres de traitement depuis le format JSON."
 
@@ -2630,6 +2640,23 @@ msgstr "Les signaux ne peuvent pas être alignés."
 msgid "Calculating: %s"
 msgstr "Calcul : %s"
 
+msgid "The object that was used to create this processed object has been deleted and cannot be used for reprocessing."
+msgstr "L'objet qui a été utilisé pour créer cet objet traité a été supprimé et ne peut pas être utilisé pour le retraitement."
+
+#, python-format
+msgid ""
+"Failed to reprocess object:\n"
+"%s"
+msgstr ""
+"Échec du retraitement de l'objet :\n"
+"%s"
+
+msgid "Processing was cancelled."
+msgstr "Le traitement a été annulé."
+
+msgid "Failed to reprocess object."
+msgstr "Échec du retraitement de l'objet."
+
 msgid "Signal was reprocessed."
 msgstr "Le signal a été retraité."
 
@@ -2650,6 +2677,9 @@ msgstr "En mode 'pairwise', vous devez sélectionner des objets dans au moins de
 
 msgid "In pairwise mode, you need to select the same number of objects in each group."
 msgstr "En mode 'pairwise', vous devez sélectionner le même nombre d'objets dans chaque groupe."
+
+msgid "A preview source was removed. The processing was cancelled."
+msgstr "Un objet source de l'aperçu a été supprimé. Le traitement a été annulé."
 
 #, python-format
 msgid "Computing: %s"
@@ -2831,9 +2861,6 @@ msgstr ""
 "  • y' = a0 + a1*y + a2*y^2 + ...\n"
 "  • z' = a0 + a1*z + a2*z^2 + ..."
 
-msgid "Swap X/Y axes"
-msgstr "Permuter les axes X/Y"
-
 msgid "Normalize"
 msgstr "Normaliser"
 
@@ -2933,6 +2960,9 @@ msgstr "Seuillage Triangle"
 msgid "Yen thresholding"
 msgstr "Seuillage Yen"
 
+msgid "Brightness and contrast"
+msgstr "Luminosité et contraste"
+
 msgid "Gamma correction"
 msgstr "Correction gamma"
 
@@ -3026,6 +3056,12 @@ msgstr "Filtre de Sobel (horizontal)"
 msgid "Sobel filter (vertical)"
 msgstr "Filtre de Sobel (vertical)"
 
+msgid "Extract ROI"
+msgstr "Extraire une ROI"
+
+msgid "Translate"
+msgstr "Translation"
+
 msgid "Resampling"
 msgstr "Rééchantillonnage"
 
@@ -3103,9 +3139,6 @@ msgstr "Détection de taches basée sur SimpleBlobDetector d'OpenCV"
 
 msgid "Creating a ROI grid will overwrite any existing ROI.<br><br>Do you want to continue?"
 msgstr "La création d'une grille de ROI écrasera toute ROI existante.<br><br>Voulez-vous continuer ?"
-
-msgid "Extract ROI"
-msgstr "Extraire une ROI"
 
 msgid "Do you want to extract images from the defined ROI?"
 msgstr "Souhaitez-vous extraire les images de la ROI définie ?"
@@ -3223,6 +3256,9 @@ msgstr ""
 "Appliquer un étalonnage linéaire à l'axe X ou Y :\n"
 "  • x' = ax + b\n"
 "  • y' = ay + b"
+
+msgid "Swap X/Y axes"
+msgstr "Permuter les axes X/Y"
 
 msgid "Reverse X-axis"
 msgstr "Inverser l'axe des X"
@@ -3560,6 +3596,18 @@ msgstr "Mode d'opération"
 #, python-format
 msgid "Operation mode for computations taking <i>N</i> inputs:<ul><li><b>single</b>: single operand mode</li><li><b>pairwise</b>: pairwise operation mode</li></ul><br>Computations taking <i>N</i> inputs are the ones where:<ul><li>N(>=2) objects in %s 1 object out</li><li>N(>=1) objects + 1 object in %s N objects out</li></ul>"
 msgstr "Mode d'opération pour les calculs prenant <i>N</i> entrées:<ul><li><b>single</b>: mode d'opération avec un seul opérande</li><li><b>pairwise</b>: mode d'opération par paire</li></ul><br>Les calculs prenant <i>N</i> entrées sont ceux où :<ul><li>N(>=2) objets en %s 1 objet en sortie</li><li>N(>=1) objets + 1 objet en %s N objets en sortie</li></ul>"
+
+msgid "References in result titles"
+msgstr "Références dans les titres de résultats"
+
+msgid "Source UUID"
+msgstr "UUID source"
+
+msgid "Source title"
+msgstr "Titre de la source"
+
+msgid "Display source references in generated titles as short UUIDs or as the current source titles. This setting does not change the stored UUID references."
+msgstr "Afficher les références aux sources dans les titres générés sous forme d'UUID courts ou avec les titres actuels des sources. Ce réglage ne modifie pas les références UUID enregistrées."
 
 msgid "Use current signal bounds"
 msgstr "Utiliser les bornes du signal courant"
@@ -4055,10 +4103,6 @@ msgstr "Traitement scientifique du signal et de l'image — version %s"
 msgid "Desktop edition of DataLab"
 msgstr "Édition Desktop de DataLab"
 
-#, python-format
-msgid "Version %s"
-msgstr "Version %s"
-
 msgid "Create..."
 msgstr "Créer..."
 
@@ -4158,6 +4202,7 @@ msgstr "Échec de la désérialisation de l'argument DataSet-list de l'historiqu
 
 msgid "Registered plugins:"
 msgstr "Plugins enregistrés :"
+
 msgid "No plugins available"
 msgstr "Aucun plugin disponible"
 
@@ -4342,6 +4387,9 @@ msgstr "Licence du projet"
 msgid "Created DataLab plugin project at %s"
 msgstr "Projet de plugin DataLab créé dans %s"
 
+msgid "Source object no longer exists."
+msgstr "L'objet source n'existe plus."
+
 msgid "An input object no longer exists."
 msgstr "Un objet d'entrée n'existe plus."
 
@@ -4511,6 +4559,349 @@ msgstr ""
 "\n"
 "Cela permettra aux applications externes de se connecter à DataLab et de le contrôler à distance via HTTP/JSON."
 
+msgid "DataLab capsules"
+msgstr "Capsules DataLab"
+
+msgid "All files"
+msgstr "Tous les fichiers"
+
+msgid "JSON files"
+msgstr "Fichiers JSON"
+
+msgid "HDF5 files"
+msgstr "Fichiers HDF5"
+
+#, python-format
+msgid "%d B"
+msgstr "%d o"
+
+#, python-format
+msgid "%.1f KiB"
+msgstr "%.1f Kio"
+
+msgid "Attachments"
+msgstr "Pièces jointes"
+
+msgid "Files added by the author, outside the processing. They are checked against the manifest and saved only when you ask; they are never opened."
+msgstr "Fichiers ajoutés par l'auteur, hors des traitements. Ils sont vérifiés par rapport au manifeste et enregistrés seulement à votre demande ; ils ne sont jamais ouverts."
+
+msgid "Type"
+msgstr "Type"
+
+msgid "SHA-256"
+msgstr "SHA-256"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Size"
+msgstr "Taille"
+
+msgid "Save..."
+msgstr "Enregistrer..."
+
+msgid "A capsule holds the workspace and the provenance of its processing, so that someone else can check and replay it."
+msgstr "Une capsule contient l'espace de travail et la provenance de ses traitements, afin qu'une autre personne puisse les vérifier et les rejouer."
+
+msgid "Reference the workspace instead of including it"
+msgstr "Référencer l'espace de travail au lieu de l'inclure"
+
+msgid "Workspace address (absolute IRI)"
+msgstr "Adresse de l'espace de travail (IRI absolue)"
+
+msgid "Light files (protocol, notes, small tables) declared in the capsule with their size and fingerprint. They are never opened or executed."
+msgstr "Fichiers légers (protocole, notes, petits tableaux) déclarés dans la capsule avec leur taille et leur empreinte. Ils ne sont jamais ouverts ni exécutés."
+
+msgid "Add attachments..."
+msgstr "Ajouter des pièces jointes..."
+
+msgid "Export capsule..."
+msgstr "Exporter la capsule..."
+
+#, python-format
+msgid "Revision of %(name)s (%(fingerprint)s)"
+msgstr "Révision de %(name)s (%(fingerprint)s)"
+
+#, python-format
+msgid "The parent revision has attachments that are not copied: %s. Select them again below if they still apply."
+msgstr "La révision parente a des pièces jointes qui ne sont pas copiées : %s. Sélectionnez-les à nouveau ci-dessous si elles s'appliquent toujours."
+
+msgid "Save the referenced workspace"
+msgstr "Enregistrer l'espace de travail référencé"
+
+#, python-format
+msgid "Capsule %(fingerprint)s saved to %(filename)s"
+msgstr "Capsule %(fingerprint)s enregistrée dans %(filename)s"
+
+msgid "Write a review"
+msgstr "Rédiger une revue"
+
+msgid "A review is a separate file about this revision; the capsule is not changed."
+msgstr "Une revue est un fichier distinct portant sur cette révision ; la capsule n'est pas modifiée."
+
+msgid "No verdict"
+msgstr "Sans verdict"
+
+msgid "endorsed"
+msgstr "approuvé"
+
+msgid "disputed"
+msgstr "contesté"
+
+msgid "comment"
+msgstr "commentaire"
+
+msgid "Reviewer"
+msgstr "Relecteur"
+
+msgid "Statement"
+msgstr "Déclaration"
+
+msgid "Verdict"
+msgstr "Verdict"
+
+msgid "Cite a report..."
+msgstr "Citer un rapport..."
+
+msgid "Save the review..."
+msgstr "Enregistrer la revue..."
+
+msgid "Publish the review"
+msgstr "Publier la revue"
+
+#, python-format
+msgid "Cited reports: %d"
+msgstr "Rapports cités : %d"
+
+#, python-format
+msgid "Review %s published"
+msgstr "Revue %s publiée"
+
+msgid "Choose a capsule..."
+msgstr "Choisir une capsule..."
+
+msgid "Select the referenced workspace..."
+msgstr "Sélectionner l'espace de travail référencé..."
+
+msgid "Add a verification report..."
+msgstr "Ajouter un rapport de vérification..."
+
+msgid "Add a review..."
+msgstr "Ajouter une revue..."
+
+msgid "Publish to the registry"
+msgstr "Publier dans le registre"
+
+msgid "Open as workspace"
+msgstr "Ouvrir comme espace de travail"
+
+#, python-format
+msgid "Published %(fingerprint)s with %(attachments)d attachments and %(reviews)d reviews"
+msgstr "%(fingerprint)s publiée avec %(attachments)d pièces jointes et %(reviews)d revues"
+
+msgid "The current workspace (signals and images) will be replaced by the workspace of this capsule. Continue?"
+msgstr "L'espace de travail actuel (signaux et images) sera remplacé par l'espace de travail de cette capsule. Continuer ?"
+
+msgid "Fingerprint"
+msgstr "Empreinte"
+
+msgid "Revision of"
+msgstr "Révision de"
+
+msgid "none"
+msgstr "aucune"
+
+#, python-format
+msgid "referenced at %s"
+msgstr "référencé à l'adresse %s"
+
+msgid "included"
+msgstr "inclus"
+
+msgid "Licence"
+msgstr "Licence"
+
+msgid "Origin"
+msgstr "Origine"
+
+msgid "Activity"
+msgstr "Activité"
+
+msgid "Operation"
+msgstr "Opération"
+
+msgid "replayable"
+msgstr "rejouable"
+
+msgid "not replayable"
+msgstr "non rejouable"
+
+msgid "Integrity"
+msgstr "Intégrité"
+
+msgid "Computed from the files; nothing is recomputed."
+msgstr "Calculée à partir des fichiers ; rien n'est recalculé."
+
+msgid "Intact"
+msgstr "Intacte"
+
+msgid "Not intact"
+msgstr "Non intacte"
+
+msgid "checked"
+msgstr "vérifié"
+
+msgid "SHA-256 and size checked; stored states not read"
+msgstr "SHA-256 et taille vérifiés ; états enregistrés non lus"
+
+msgid "not supplied: stored states not checked"
+msgstr "non fourni : états enregistrés non vérifiés"
+
+#, python-format
+msgid "Workspace: %s"
+msgstr "Espace de travail : %s"
+
+#, python-format
+msgid "Stored states checked: %(count)d, altered: %(altered)d"
+msgstr "États enregistrés vérifiés : %(count)d, altérés : %(altered)d"
+
+msgid "Supplied documents"
+msgstr "Documents fournis"
+
+msgid "Checked against this capsule. Their verdicts are what their authors claim; they were not recomputed here."
+msgstr "Vérifiés par rapport à cette capsule. Leurs verdicts sont ceux qu'affirment leurs auteurs ; ils n'ont pas été recalculés ici."
+
+msgid "consistent"
+msgstr "cohérent"
+
+#, python-format
+msgid "Report %(name)s: activity %(activity)s, claimed verdict %(verdict)s, %(status)s"
+msgstr "Rapport %(name)s : activité %(activity)s, verdict affirmé %(verdict)s, %(status)s"
+
+#, python-format
+msgid "Review %(name)s: %(status)s"
+msgstr "Revue %(name)s : %(status)s"
+
+#, python-format
+msgid "Unreadable document: %s"
+msgstr "Document illisible : %s"
+
+msgid "Recomputes an activity of the open workspace with DataLab and compares it with its stored result. The workspace is not changed."
+msgstr "Recalcule une activité de l'espace de travail ouvert avec DataLab et la compare à son résultat enregistré. L'espace de travail n'est pas modifié."
+
+msgid "The open workspace has no recorded activity."
+msgstr "L'espace de travail ouvert n'a aucune activité enregistrée."
+
+msgid "Local result"
+msgstr "Résultat local"
+
+msgid "Save report..."
+msgstr "Enregistrer le rapport..."
+
+msgid "opaque"
+msgstr "opaque"
+
+msgid "Revisions exported, inspected or retrieved on this computer. A revision names its parent by fingerprint."
+msgstr "Révisions exportées, inspectées ou récupérées sur cet ordinateur. Une révision désigne sa parente par son empreinte."
+
+msgid "Parent"
+msgstr "Parente"
+
+msgid "Source"
+msgstr "Source"
+
+msgid "Compare"
+msgstr "Comparer"
+
+msgid "exported"
+msgstr "exportée"
+
+msgid "from the registry"
+msgstr "depuis le registre"
+
+msgid "inspected"
+msgstr "inspectée"
+
+msgid "Older revision"
+msgstr "Révision la plus ancienne"
+
+msgid "Newer revision"
+msgstr "Révision la plus récente"
+
+msgid "The newer revision names the older one as its parent."
+msgstr "La révision la plus récente désigne la plus ancienne comme parente."
+
+msgid "The two revisions are identical."
+msgstr "Les deux révisions sont identiques."
+
+msgid "Scientific changes were found."
+msgstr "Des changements scientifiques ont été trouvés."
+
+msgid "No scientific change, the same workspace file and attachments."
+msgstr "Aucun changement scientifique, le même fichier d'espace de travail et les mêmes pièces jointes."
+
+msgid "No change in the recorded activities and states. The workspace files or the attachments differ: content outside the recorded provenance is not compared, so equality is not established."
+msgstr "Aucun changement dans les activités et états enregistrés. Les fichiers d'espace de travail ou les pièces jointes diffèrent : le contenu hors de la provenance enregistrée n'est pas comparé, l'égalité n'est donc pas établie."
+
+msgid "Scientific changes"
+msgstr "Changements scientifiques"
+
+msgid "Presentation changes"
+msgstr "Changements de présentation"
+
+msgid "Storage and integrity"
+msgstr "Stockage et intégrité"
+
+msgid "Environment changes"
+msgstr "Changements d'environnement"
+
+msgid "Optional: a registry publishes manifests, their attachments and reviews, never workspaces. Everything it returns is checked here."
+msgstr "Facultatif : un registre publie des manifestes, leurs pièces jointes et leurs revues, jamais d'espaces de travail. Tout ce qu'il renvoie est vérifié ici."
+
+msgid "Registry address"
+msgstr "Adresse du registre"
+
+msgid "Publishing token (kept for this session only)"
+msgstr "Jeton de publication (conservé pour cette session seulement)"
+
+msgid "List revisions"
+msgstr "Lister les révisions"
+
+msgid "Use these settings"
+msgstr "Utiliser ces réglages"
+
+msgid "Reviews"
+msgstr "Revues"
+
+#, python-format
+msgid "Connected to %(registry)s %(version)s"
+msgstr "Connecté à %(registry)s %(version)s"
+
+msgid "Retrieve"
+msgstr "Récupérer"
+
+#, python-format
+msgid "Manifest checked: valid, fingerprint %s. Added to the revisions of this computer."
+msgstr "Manifeste vérifié : valide, empreinte %s. Ajouté aux révisions de cet ordinateur."
+
+msgid "valid"
+msgstr "valide"
+
+msgid "Workspace capsule"
+msgstr "Capsule d'espace de travail"
+
+msgid "Inspect"
+msgstr "Inspecter"
+
+msgid "Local replay"
+msgstr "Rejeu local"
+
+msgid "Revisions"
+msgstr "Révisions"
+
+msgid "Registry"
+msgstr "Registre"
+
 msgid "Show more"
 msgstr "Afficher plus"
 
@@ -4559,11 +4950,11 @@ msgstr "Afficher les détails"
 msgid "Hide details"
 msgstr "Masquer les détails"
 
-msgid "Title"
-msgstr "Titre"
-
 msgid "Date and time"
 msgstr "Date et heure"
+
+msgid "Title"
+msgstr "Titre"
 
 msgid "Action is compatible with the current workspace state."
 msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
@@ -4667,6 +5058,48 @@ msgstr "Les données du résultat ne sont pas disponibles"
 
 msgid "Result replaced by another analysis"
 msgstr "Résultat remplacé par une autre analyse"
+
+msgid "the source objects are not recorded"
+msgstr "les objets sources ne sont pas enregistrés"
+
+msgid "a source object is no longer in the workspace"
+msgstr "un objet source n'est plus dans l'espace de travail"
+
+msgid "the processing is unknown to this application"
+msgstr "le traitement est inconnu de cette application"
+
+msgid "the kind of processing is unknown"
+msgstr "le type de traitement est inconnu"
+
+msgid "the parameters cannot be read"
+msgstr "les paramètres ne peuvent pas être lus"
+
+msgid "the result of the analysis is not identified"
+msgstr "le résultat de l'analyse n'est pas identifié"
+
+msgid "the object could not be read"
+msgstr "l'objet n'a pas pu être lu"
+
+msgid "the record cannot be read"
+msgstr "l'enregistrement ne peut pas être lu"
+
+msgid "the version that saved the workspace is unknown"
+msgstr "la version ayant enregistré l'espace de travail est inconnue"
+
+msgid "the workspace was saved by another version"
+msgstr "l'espace de travail a été enregistré par une autre version"
+
+msgid "Unchanged since the computation"
+msgstr "Inchangée depuis le calcul"
+
+msgid "Changed since the computation"
+msgstr "Modifiée depuis le calcul"
+
+msgid "Input missing"
+msgstr "Entrée absente"
+
+msgid "Cannot be checked"
+msgstr "Ne peut pas être contrôlée"
 
 msgid "Applied again in place"
 msgstr "Appliqué à nouveau sur place"
@@ -4859,14 +5292,11 @@ msgstr "Serveur API Web démarré"
 msgid "Click to view connection info"
 msgstr "Cliquer pour voir les infos de connexion"
 
-msgid "Source"
-msgstr "Source"
+msgid "Clipboard"
+msgstr "Presse-papiers"
 
 msgid "File"
 msgstr "Fichier"
-
-msgid "Clipboard"
-msgstr "Presse-papiers"
 
 msgid "Source of the data"
 msgstr "Source des données"
@@ -5053,46 +5483,6 @@ msgstr "Forme"
 msgid "Dimensions"
 msgstr "Dimensions"
 
-msgid "Browse application plugins, recipes and examples"
-msgstr "Parcourir les plugins d'application, les méthodes et les exemples"
-
-msgid "Add a new metadata item to the selected objects.<br><br>The metadata key will be the same for all objects, but the value can use a pattern to generate different values, optionally extracted with a regular expression.<br>Click the <b>Help</b> button for details on the pattern syntax.<br>"
-msgstr "Ajouter un nouvel élément de métadonnée aux objets sélectionnés.<br><br>La clé de métadonnée sera la même pour tous les objets, mais la valeur peut utiliser un modèle pour générer des valeurs différentes, éventuellement extraites par une expression régulière.<br>Cliquez sur le bouton <b>Aide</b> pour plus de détails sur la syntaxe du modèle.<br>"
-
-msgid "Source code"
-msgstr "Code source"
-
-msgid "Application"
-msgstr "Application"
-
-msgid "Install plugins"
-msgstr "Installer des plugins"
-
-msgid "not applicable"
-msgstr "non applicable"
-
-#, python-format
-msgid "Running '%s'"
-msgstr "Exécution de '%s'"
-
-msgid "A preview source was removed. The processing was cancelled."
-msgstr "Un objet source de l'aperçu a été supprimé. Le traitement a été annulé."
-
-msgid "Brightness and contrast"
-msgstr "Luminosité et contraste"
-
-msgid "References in result titles"
-msgstr "Références dans les titres de résultats"
-
-msgid "Source UUID"
-msgstr "UUID source"
-
-msgid "Source title"
-msgstr "Titre de la source"
-
-msgid "Display source references in generated titles as short UUIDs or as the current source titles. This setting does not change the stored UUID references."
-msgstr "Afficher les références aux sources dans les titres générés sous forme d'UUID courts ou avec les titres actuels des sources. Ce réglage ne modifie pas les références UUID enregistrées."
-
 msgid "Minimum value"
 msgstr "Valeur minimum"
 
@@ -5140,377 +5530,4 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
-msgid "DataLab capsules"
-msgstr "Capsules DataLab"
 
-msgid "All files"
-msgstr "Tous les fichiers"
-
-msgid "JSON files"
-msgstr "Fichiers JSON"
-
-msgid "HDF5 files"
-msgstr "Fichiers HDF5"
-
-#, python-format
-msgid "%d B"
-msgstr "%d o"
-
-#, python-format
-msgid "%.1f KiB"
-msgstr "%.1f Kio"
-
-msgid "Attachments"
-msgstr "Pièces jointes"
-
-msgid "Files added by the author, outside the processing. They are checked against the manifest and saved only when you ask; they are never opened."
-msgstr "Fichiers ajoutés par l'auteur, hors des traitements. Ils sont vérifiés par rapport au manifeste et enregistrés seulement à votre demande ; ils ne sont jamais ouverts."
-
-msgid "Name"
-msgstr "Nom"
-
-msgid "Type"
-msgstr "Type"
-
-msgid "Size"
-msgstr "Taille"
-
-msgid "SHA-256"
-msgstr "SHA-256"
-
-msgid "Save..."
-msgstr "Enregistrer..."
-
-msgid "A capsule holds the workspace and the provenance of its processing, so that someone else can check and replay it."
-msgstr "Une capsule contient l'espace de travail et la provenance de ses traitements, afin qu'une autre personne puisse les vérifier et les rejouer."
-
-msgid "Reference the workspace instead of including it"
-msgstr "Référencer l'espace de travail au lieu de l'inclure"
-
-msgid "Workspace address (absolute IRI)"
-msgstr "Adresse de l'espace de travail (IRI absolue)"
-
-msgid "Light files (protocol, notes, small tables) declared in the capsule with their size and fingerprint. They are never opened or executed."
-msgstr "Fichiers légers (protocole, notes, petits tableaux) déclarés dans la capsule avec leur taille et leur empreinte. Ils ne sont jamais ouverts ni exécutés."
-
-msgid "Add attachments..."
-msgstr "Ajouter des pièces jointes..."
-
-msgid "Export capsule..."
-msgstr "Exporter la capsule..."
-
-#, python-format
-msgid "Revision of %(name)s (%(fingerprint)s)"
-msgstr "Révision de %(name)s (%(fingerprint)s)"
-
-#, python-format
-msgid "The parent revision has attachments that are not copied: %s. Select them again below if they still apply."
-msgstr "La révision parente a des pièces jointes qui ne sont pas copiées : %s. Sélectionnez-les à nouveau ci-dessous si elles s'appliquent toujours."
-
-#, python-format
-msgid "Attachments are limited to 16 MiB: %s"
-msgstr "Les pièces jointes sont limitées à 16 Mio : %s"
-
-#, python-format
-msgid "%s too large: %s, %s MiB (limit: %s MiB)"
-msgstr "%s : taille excessive, %s, %s Mio (limite : %s Mio)"
-
-msgid "Capsule"
-msgstr "Capsule"
-
-msgid "Referenced workspace"
-msgstr "Espace de travail référencé"
-
-msgid "Save the referenced workspace"
-msgstr "Enregistrer l'espace de travail référencé"
-
-#, python-format
-msgid "Capsule %(fingerprint)s saved to %(filename)s"
-msgstr "Capsule %(fingerprint)s enregistrée dans %(filename)s"
-
-msgid "Write a review"
-msgstr "Rédiger une revue"
-
-msgid "A review is a separate file about this revision; the capsule is not changed."
-msgstr "Une revue est un fichier distinct portant sur cette révision ; la capsule n'est pas modifiée."
-
-msgid "No verdict"
-msgstr "Sans verdict"
-
-msgid "endorsed"
-msgstr "approuvé"
-
-msgid "disputed"
-msgstr "contesté"
-
-msgid "comment"
-msgstr "commentaire"
-
-msgid "Reviewer"
-msgstr "Relecteur"
-
-msgid "Statement"
-msgstr "Déclaration"
-
-msgid "Verdict"
-msgstr "Verdict"
-
-msgid "Cite a report..."
-msgstr "Citer un rapport..."
-
-msgid "Save the review..."
-msgstr "Enregistrer la revue..."
-
-msgid "Publish the review"
-msgstr "Publier la revue"
-
-#, python-format
-msgid "Cited reports: %d"
-msgstr "Rapports cités : %d"
-
-#, python-format
-msgid "Review %s published"
-msgstr "Revue %s publiée"
-
-msgid "Choose a capsule..."
-msgstr "Choisir une capsule..."
-
-msgid "Select the referenced workspace..."
-msgstr "Sélectionner l'espace de travail référencé..."
-
-msgid "Add a verification report..."
-msgstr "Ajouter un rapport de vérification..."
-
-msgid "Add a review..."
-msgstr "Ajouter une revue..."
-
-msgid "Publish to the registry"
-msgstr "Publier dans le registre"
-
-msgid "Open as workspace"
-msgstr "Ouvrir comme espace de travail"
-
-#, python-format
-msgid "Published %(fingerprint)s with %(attachments)d attachments and %(reviews)d reviews"
-msgstr "%(fingerprint)s publiée avec %(attachments)d pièces jointes et %(reviews)d revues"
-
-msgid "The current workspace (signals and images) will be replaced by the workspace of this capsule. Continue?"
-msgstr "L'espace de travail actuel (signaux et images) sera remplacé par l'espace de travail de cette capsule. Continuer ?"
-
-msgid "Fingerprint"
-msgstr "Empreinte"
-
-msgid "Revision of"
-msgstr "Révision de"
-
-msgid "none"
-msgstr "aucune"
-
-msgid "Workspace"
-msgstr "Espace de travail"
-
-#, python-format
-msgid "referenced at %s"
-msgstr "référencé à l'adresse %s"
-
-msgid "included"
-msgstr "inclus"
-
-msgid "Licence"
-msgstr "Licence"
-
-msgid "Activity"
-msgstr "Activité"
-
-msgid "Operation"
-msgstr "Opération"
-
-msgid "Origin"
-msgstr "Origine"
-
-msgid "replayable"
-msgstr "rejouable"
-
-msgid "not replayable"
-msgstr "non rejouable"
-
-msgid "Integrity"
-msgstr "Intégrité"
-
-msgid "Computed from the files; nothing is recomputed."
-msgstr "Calculée à partir des fichiers ; rien n'est recalculé."
-
-msgid "Intact"
-msgstr "Intacte"
-
-msgid "Not intact"
-msgstr "Non intacte"
-
-msgid "checked"
-msgstr "vérifié"
-
-msgid "SHA-256 and size checked; stored states not read"
-msgstr "SHA-256 et taille vérifiés ; états enregistrés non lus"
-
-msgid "not supplied: stored states not checked"
-msgstr "non fourni : états enregistrés non vérifiés"
-
-#, python-format
-msgid "Workspace: %s"
-msgstr "Espace de travail : %s"
-
-#, python-format
-msgid "Stored states checked: %(count)d, altered: %(altered)d"
-msgstr "États enregistrés vérifiés : %(count)d, altérés : %(altered)d"
-
-msgid "Supplied documents"
-msgstr "Documents fournis"
-
-msgid "Checked against this capsule. Their verdicts are what their authors claim; they were not recomputed here."
-msgstr "Vérifiés par rapport à cette capsule. Leurs verdicts sont ceux qu'affirment leurs auteurs ; ils n'ont pas été recalculés ici."
-
-msgid "consistent"
-msgstr "cohérent"
-
-#, python-format
-msgid "Report %(name)s: activity %(activity)s, claimed verdict %(verdict)s, %(status)s"
-msgstr "Rapport %(name)s : activité %(activity)s, verdict affirmé %(verdict)s, %(status)s"
-
-#, python-format
-msgid "Review %(name)s: %(status)s"
-msgstr "Revue %(name)s : %(status)s"
-
-#, python-format
-msgid "Unreadable document: %s"
-msgstr "Document illisible : %s"
-
-msgid "Recomputes an activity of the open workspace with DataLab and compares it with its stored result. The workspace is not changed."
-msgstr "Recalcule une activité de l'espace de travail ouvert avec DataLab et la compare à son résultat enregistré. L'espace de travail n'est pas modifié."
-
-msgid "The open workspace has no recorded activity."
-msgstr "L'espace de travail ouvert n'a aucune activité enregistrée."
-
-msgid "Local result"
-msgstr "Résultat local"
-
-msgid "Save report..."
-msgstr "Enregistrer le rapport..."
-
-msgid "opaque"
-msgstr "opaque"
-
-msgid "Revisions exported, inspected or retrieved on this computer. A revision names its parent by fingerprint."
-msgstr "Révisions exportées, inspectées ou récupérées sur cet ordinateur. Une révision désigne sa parente par son empreinte."
-
-msgid "Parent"
-msgstr "Parente"
-
-msgid "Compare"
-msgstr "Comparer"
-
-msgid "exported"
-msgstr "exportée"
-
-msgid "from the registry"
-msgstr "depuis le registre"
-
-msgid "inspected"
-msgstr "inspectée"
-
-msgid "Older revision"
-msgstr "Révision la plus ancienne"
-
-msgid "Newer revision"
-msgstr "Révision la plus récente"
-
-msgid "The newer revision names the older one as its parent."
-msgstr "La révision la plus récente désigne la plus ancienne comme parente."
-
-msgid "The two revisions are identical."
-msgstr "Les deux révisions sont identiques."
-
-msgid "Scientific changes were found."
-msgstr "Des changements scientifiques ont été trouvés."
-
-msgid "No scientific change, the same workspace file and attachments."
-msgstr "Aucun changement scientifique, le même fichier d'espace de travail et les mêmes pièces jointes."
-
-msgid "No change in the recorded activities and states. The workspace files or the attachments differ: content outside the recorded provenance is not compared, so equality is not established."
-msgstr "Aucun changement dans les activités et états enregistrés. Les fichiers d'espace de travail ou les pièces jointes diffèrent : le contenu hors de la provenance enregistrée n'est pas comparé, l'égalité n'est donc pas établie."
-
-msgid "Scientific changes"
-msgstr "Changements scientifiques"
-
-msgid "Presentation changes"
-msgstr "Changements de présentation"
-
-msgid "Storage and integrity"
-msgstr "Stockage et intégrité"
-
-msgid "Environment changes"
-msgstr "Changements d'environnement"
-
-msgid "Optional: a registry publishes manifests, their attachments and reviews, never workspaces. Everything it returns is checked here."
-msgstr "Facultatif : un registre publie des manifestes, leurs pièces jointes et leurs revues, jamais d'espaces de travail. Tout ce qu'il renvoie est vérifié ici."
-
-msgid "Registry address"
-msgstr "Adresse du registre"
-
-msgid "Publishing token (kept for this session only)"
-msgstr "Jeton de publication (conservé pour cette session seulement)"
-
-msgid "List revisions"
-msgstr "Lister les révisions"
-
-msgid "Use these settings"
-msgstr "Utiliser ces réglages"
-
-msgid "Reviews"
-msgstr "Revues"
-
-#, python-format
-msgid "Connected to %(registry)s %(version)s"
-msgstr "Connecté à %(registry)s %(version)s"
-
-msgid "Retrieve"
-msgstr "Récupérer"
-
-#, python-format
-msgid "Manifest checked: valid, fingerprint %s. Added to the revisions of this computer."
-msgstr "Manifeste vérifié : valide, empreinte %s. Ajouté aux révisions de cet ordinateur."
-
-msgid "valid"
-msgstr "valide"
-
-msgid "Workspace capsule"
-msgstr "Capsule d'espace de travail"
-
-msgid "Inspect"
-msgstr "Inspecter"
-
-msgid "Local replay"
-msgstr "Rejeu local"
-
-msgid "Revisions"
-msgstr "Révisions"
-
-msgid "Registry"
-msgstr "Registre"
-
-msgid "This capsule references its workspace: select the workspace file"
-msgstr "Cette capsule référence son espace de travail : sélectionnez le fichier de l'espace de travail"
-
-msgid "The registry address must be an http or https URL"
-msgstr "L'adresse du registre doit être une URL http ou https"
-
-msgid "Workspace capsule..."
-msgstr "Capsule d'espace de travail..."
-
-msgid "Export capsule"
-msgstr "Exporter une capsule"
-
-msgid "Open capsule"
-msgstr "Ouvrir une capsule"
-
-msgid "Export, inspect, replay and compare workspace capsules (workspace and provenance of its processing)"
-msgstr "Exporter, inspecter, rejouer et comparer des capsules d'espace de travail (espace de travail et provenance de ses traitements)"
