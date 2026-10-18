@@ -72,6 +72,8 @@ class H5InputOutput:
         #: True when the user was already told, for the current opening, that
         #: the provenance of appended workspaces is not imported (no repeat).
         self.append_informed = False
+        #: Files whose appending the user cancelled (see :meth:`__confirm_append`)
+        self.cancelled_files: list[str] = []
 
     @staticmethod
     def __progbartitle(fname: str) -> str:
@@ -233,6 +235,7 @@ class H5InputOutput:
             block = self.__read_provenance(reader)
             saved_version = self.__saved_version(reader)
             if block is not None and not reset_all and not self.__confirm_append():
+                self.cancelled_files.append(filename)
                 return True
             if reset_all:
                 self.mainwindow.reset_all()

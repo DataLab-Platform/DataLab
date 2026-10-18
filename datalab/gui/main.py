@@ -184,6 +184,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.capsuleio: CapsuleInputOutput | None = None
         # True while opening HDF5 files of which one holds provenance
         self.__h5_provenance_files = False
+        #: The question about clearing the workspace told that appending ignores
+        #: provenance, for the answer not yet known (see ``import_dataset_from_file``)
+        self.__h5_append_notice_shown = False
+        #: History entry of the HDF5 files being opened, recorded once opened
+        self.__h5_open_entry: tuple | None = None
         self.webapi_actions: WebApiActions | None = None
 
         self.openh5_action: QW.QAction | None = None
@@ -2256,11 +2261,49 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 for fname in h5files
             )
         )
+        self.h5inputoutput.cancelled_files = []
         try:
             super().open_h5_files(h5files, import_all, reset_all)
         finally:
             self.__h5_provenance_files = False
+            self.__h5_append_notice_shown = False
             self.h5inputoutput.append_informed = False
+            self.__record_h5_open_entry()
+
+    def __record_h5_open_entry(self) -> None:
+        """Record the HDF5 open/import in the history session, once done.
+
+        Files whose appending the user cancelled are not recorded (nothing was
+        opened), so that replaying the session does not open them.
+        """
+        entry, self.__h5_open_entry = self.__h5_open_entry, None
+        if entry is None:
+            return
+        h5files, import_all, reset_all = entry
+        cancelled = {
+            osp.normcase(osp.abspath(fname))
+            for fname in self.h5inputoutput.cancelled_files
+        }
+        h5files = [
+            fname
+            for fname in h5files
+            if osp.normcase(osp.abspath(fname.split(",")[0])) not in cancelled
+        ]
+        if not h5files:
+            return
+        if len(h5files) > 1:
+            entry_title = _("Open %d HDF5 files") % len(h5files)
+        else:
+            entry_title = _("Open HDF5 file")
+        self.historypanel.add_ui_entry(
+            entry_title,
+            target="mainwindow",
+            method_name="open_h5_files",
+            save_state=False,
+            h5files=h5files,
+            import_all=import_all,
+            reset_all=reset_all,
+        )
 
     def _on_h5_save_requested(self, filename: str) -> None:
         """Record the workspace save in the history session"""
@@ -2278,20 +2321,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         import_all: bool | None,
         reset_all: bool | None,
     ) -> None:
-        """Record the HDF5 open/import in the history session"""
-        if len(h5files) > 1:
-            entry_title = _("Open %d HDF5 files") % len(h5files)
-        else:
-            entry_title = _("Open HDF5 file")
-        self.historypanel.add_ui_entry(
-            entry_title,
-            target="mainwindow",
-            method_name="open_h5_files",
-            save_state=False,
-            h5files=h5files,
-            import_all=import_all,
-            reset_all=reset_all,
-        )
+        """Record the HDF5 open/import in the history session, once opened"""
+        self.__h5_open_entry = (list(h5files), import_all, reset_all)
 
     def _is_workspace_empty(self) -> bool:
         """Return whether the signal and image panels hold no object"""
@@ -2325,8 +2356,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         if self.__h5_provenance_files:
             msg += "<br><br><u>" + _("Provenance:") + "</u> "
             msg += _("If you choose <i>No</i>: ") + append_provenance_notice()
-            # Said here: appending will not ask again (see H5InputOutput).
-            self.h5inputoutput.append_informed = True
+            # Said here for the answer "No" (see import_dataset_from_file)
+            self.__h5_append_notice_shown = True
         return msg
 
     def import_dataset_from_file(
@@ -2344,6 +2375,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             import_all: If ``True``, import all datasets without browsing
             reset_all: If ``True``, clear workspace before importing
         """
+        if self.__h5_append_notice_shown:
+            # First file: its reset_all is the answer to the question about
+            # clearing the workspace. Only "No" was told that appending ignores
+            # provenance: with "Yes", appending the next files asks again.
+            self.h5inputoutput.append_informed = not reset_all
+            self.__h5_append_notice_shown = False
         if dsetname is None:
             self.h5inputoutput.open_file(filename, import_all, reset_all)
         else:

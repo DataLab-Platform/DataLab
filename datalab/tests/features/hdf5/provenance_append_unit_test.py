@@ -198,3 +198,40 @@ def test_single_warning_when_not_asked(monkeypatch, button) -> None:
             expected = count if button == "cancel" else 3 * count
             assert len(_objects(win)) == expected
             assert win.h5inputoutput.append_informed is False
+
+
+@pytest.mark.usefixtures("ask")
+def test_answer_yes_still_warns_before_appending_the_next_files(monkeypatch) -> None:
+    """Answering Yes (clear) told nothing about appending the next files."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        path = osp.join(tmpdir, "chain.h5")
+        _save_chain(path)
+        with app() as win:
+            build_chain(win)
+            Conf.h5_clear_workspace_ask.set(True)
+            dialogs = _Dialogs(monkeypatch, QW.QMessageBox.Yes, "cancel")
+            dialogs.files = [path, path]
+            win.open_h5_files(import_all=True)
+            # The first file replaces the workspace, the second asks first
+            assert dialogs.events == ["files", "question", "warning"]
+
+
+@pytest.mark.usefixtures("ask")
+def test_cancelled_append_is_not_recorded_in_history(monkeypatch) -> None:
+    """Opening a file whose appending was cancelled leaves no History entry."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        path = osp.join(tmpdir, "chain.h5")
+        _save_chain(path)
+        with app(history=True) as win:
+            build_chain(win)
+            history = win.historypanel
+            history.toggle_record_mode(True)
+            count = len(history)
+            Conf.h5_clear_workspace_ask.set(False)
+            _Dialogs(monkeypatch, None, "cancel")
+            win.open_h5_files([path], import_all=True, reset_all=False)
+            assert len(history) == count
+            _Dialogs(monkeypatch, None, "add")
+            win.open_h5_files([path], import_all=True, reset_all=False)
+            assert len(history) == count + 1
+            assert history[len(history)].method_name == "open_h5_files"
