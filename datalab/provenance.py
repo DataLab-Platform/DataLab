@@ -26,7 +26,6 @@ from collections.abc import Callable, Generator, Iterable
 from typing import Any
 
 import sigima.proc.contracts as sigima_contracts
-from datalab_capsule.ledger import Ledger
 from datalab_capsule.recorder import (
     PendingActivity,
     Recorder,
@@ -86,14 +85,6 @@ class ProvenanceService(Recorder):
         #: refresh the views showing the provenance of objects.
         self.on_recorded: Callable[[], None] | None = None
         self._collectors: list[list[str]] = []
-        #: ``{"fingerprint", "name", "attachments"}`` of the capsule the
-        #: workspace was opened from (the parent of a revision exported later).
-        self.capsule_origin: dict[str, Any] | None = None
-
-    def reset(self) -> None:
-        """Start an empty ledger for a new workspace (no capsule origin)."""
-        super().reset()
-        self.capsule_origin = None
 
     @contextlib.contextmanager
     def collecting(self) -> Generator[list[str], None, None]:
@@ -169,7 +160,7 @@ class ProvenanceService(Recorder):
 
     def load(
         self,
-        block: tuple[Ledger, dict[str, str]] | None,
+        block: tuple[Any, ...] | None,
         replaced: bool,
         saved_version: str | None = None,
         current_version: str | None = None,
@@ -181,10 +172,12 @@ class ProvenanceService(Recorder):
         without provenance) are then imported as ``legacy_metadata`` activities.
 
         Args:
-            block: ``(ledger, state_status)`` read before the workspace was
-             replaced, or None when the file has no provenance block.
+            block: ``(ledger, state_status, capsule_origin)`` read before the
+             workspace was replaced (see ``Recorder.read``), or None when the
+             file has no provenance block.
             replaced: False when the file was appended to the current workspace:
-             ledgers are not merged and the file's block is ignored.
+             ledgers are not merged and the file's block is ignored (the capsule
+             origin of the current workspace is kept).
             saved_version: DataLab version that saved the file, as stored.
             current_version: Version compared with *saved_version* (default:
              this DataLab version).

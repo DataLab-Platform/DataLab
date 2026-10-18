@@ -30,7 +30,8 @@ Export
 Exports the current workspace as a capsule:
 
 - **Name** and **Description** of the capsule;
-- **Revision of ...**: shown when the workspace was opened from a capsule. When
+- **Revision of ...**: shown when the workspace was opened from a capsule, also
+  after it was saved as a workspace file and opened again. When
   checked, the new capsule names that capsule as its parent revision. The
   attachments of the parent are not copied: the dialog lists them, so that they
   can be selected again if they still apply;

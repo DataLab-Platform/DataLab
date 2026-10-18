@@ -13,10 +13,11 @@ DataLab data model/main window.
 from __future__ import annotations
 
 import os.path as osp
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import h5py
-from datalab_capsule.hdf5 import ProvenanceFormatError, has_block, load_ledger
+from datalab_capsule.hdf5 import ProvenanceFormatError, has_block
+from datalab_capsule.recorder import Recorder
 from guidata.qthelpers import exec_dialog
 from qtpy import QtWidgets as QW
 from sigima.objects import SignalObj
@@ -87,15 +88,18 @@ class H5InputOutput:
     @staticmethod
     def __read_provenance(
         reader: NativeH5Reader,
-    ) -> tuple[Ledger, dict[str, str]] | None:
+    ) -> tuple[Ledger, dict[str, str], dict[str, Any] | None] | None:
         """Read and validate the provenance block before anything is replaced.
+
+        Returns:
+            ``(ledger, state_status, capsule_origin)``, or None without block.
 
         Raises:
             ProvenanceFormatError: If the block is invalid (never a KeyError, which
              would turn the file into a generic HDF5 import).
         """
         try:
-            return load_ledger(reader.h5)
+            return Recorder.read(reader.h5)
         except ProvenanceFormatError as exc:
             reader.close()
             raise ProvenanceFormatError(

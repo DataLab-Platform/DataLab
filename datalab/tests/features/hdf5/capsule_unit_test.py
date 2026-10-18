@@ -118,6 +118,38 @@ def test_export_open_and_revision() -> None:
             assert win.provenance.capsule_origin is None
 
 
+def test_revision_after_saving_the_workspace() -> None:
+    """A workspace saved and opened again still exports a revision of its parent."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        parent = osp.join(tmpdir, "chain.dlcapsule")
+        with capsule_app(tmpdir) as win:
+            build_chain(win)
+            fingerprint = win.export_capsule(parent, name="chain")
+        saved = osp.join(tmpdir, "work.h5")
+        with capsule_app(tmpdir) as win:
+            win.open_capsule(parent)
+            origin = win.provenance.capsule_origin
+            win.save_to_h5_file(saved)
+            win.reset_all()
+            assert win.provenance.capsule_origin is None
+            win.load_h5_workspace([saved], reset_all=True)
+            assert win.provenance.capsule_origin == origin
+            # Appending another workspace keeps the parent of the current one.
+            other = osp.join(tmpdir, "other.h5")
+            win.provenance.capsule_origin = {**origin, "name": "other"}
+            win.save_to_h5_file(other)
+            win.provenance.capsule_origin = origin
+            win.load_h5_workspace([other], reset_all=False)
+            assert win.provenance.capsule_origin == origin
+        with capsule_app(tmpdir) as win:
+            win.open_h5_files([saved], import_all=True, reset_all=True)
+            assert win.provenance.capsule_origin == origin
+            check_chain(win, "desktop")
+            child = osp.join(tmpdir, "child.dlcapsule")
+            win.export_capsule(child, name="child")
+            assert _root(child)["dlc:revisionOf"] == fingerprint
+
+
 def test_referenced_workspace() -> None:
     """A referenced workspace is saved apart and must be supplied to open."""
     with helpers.WorkdirRestoringTempDir() as tmpdir:
