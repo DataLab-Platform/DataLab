@@ -20,7 +20,7 @@ import sigima.params
 import sigima.proc.signal as sips
 from qtpy import QtWidgets as QW
 
-from datalab.objectmodel import get_short_id, get_uuid
+from datalab.objectmodel import get_uuid, get_uuid_display_id
 from datalab.tests import helpers
 from datalab.tests.features.common.provenance_processing_unit_test import (
     add_signal,
@@ -262,7 +262,7 @@ def test_view_survives_metadata_deletion() -> None:
         for _index in range(3):
             QW.QApplication.processEvents()
         assert view.description["object"]["object_uuid"] == get_uuid(objs["s2"])
-        assert f"result: {get_short_id(objs['s2'])}" in view.text()
+        assert f"result: {get_uuid_display_id(objs['s2'])}" in view.text()
 
 
 def test_cards_are_readable_and_keep_their_state() -> None:

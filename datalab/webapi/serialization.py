@@ -42,6 +42,8 @@ from typing import TYPE_CHECKING, Union
 import numpy as np
 from sigima.objects import ImageObj, SignalObj
 
+from datalab.objectmodel import get_uuid
+
 if TYPE_CHECKING:
     DataObject = Union[SignalObj, ImageObj]
 
@@ -355,6 +357,7 @@ def object_to_metadata(obj: DataObject, name: str) -> dict:
     if obj_type == "SignalObj":
         return {
             "name": name,
+            "uuid": get_uuid(obj),
             "type": "signal",
             "shape": list(obj.y.shape),
             "dtype": str(obj.y.dtype),
@@ -368,6 +371,7 @@ def object_to_metadata(obj: DataObject, name: str) -> dict:
     if obj_type == "ImageObj":
         return {
             "name": name,
+            "uuid": get_uuid(obj),
             "type": "image",
             "shape": list(obj.data.shape),
             "dtype": str(obj.data.dtype),

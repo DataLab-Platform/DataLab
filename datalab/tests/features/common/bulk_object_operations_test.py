@@ -7,7 +7,7 @@ from __future__ import annotations
 import pytest
 from sigima.objects import create_signal
 
-from datalab.objectmodel import ObjectModel, get_number, get_uuid
+from datalab.objectmodel import ObjectModel, get_number, get_title_reference, get_uuid
 from datalab.tests import datalab_test_app_context
 
 
@@ -17,21 +17,22 @@ def create_test_signal(title: str):
 
 
 def test_object_model_add_objects_preserves_order_and_references() -> None:
-    """Bulk insertion renumbers objects and updates short-ID references once."""
+    """Bulk insertion renumbers objects and leaves title references unchanged."""
     model = ObjectModel("gs")
     first_group = model.add_group("First")
     second_group = model.add_group("Second")
     source = create_test_signal("Source")
     model.add_object(source, get_uuid(second_group))
-    derived = create_test_signal("derived(s001)")
+    derived = create_test_signal(f"derived({get_title_reference(source)})")
     model.add_object(derived, get_uuid(second_group))
+    derived_title = derived.title
     inserted = (create_test_signal("A"), create_test_signal("B"))
 
     model.add_objects(inserted, get_uuid(first_group))
 
     assert model.get_all_objects() == [*inserted, source, derived]
     assert [get_number(obj) for obj in model.get_all_objects()] == [1, 2, 3, 4]
-    assert derived.title == "derived(s003)"
+    assert derived.title == derived_title
 
 
 def test_object_model_add_objects_rejects_internal_duplicate() -> None:
@@ -63,38 +64,6 @@ def test_object_model_add_objects_rejects_existing_uuid() -> None:
     assert model.get_all_objects() == [existing]
     assert group.get_objects() == [existing]
     assert "__number" not in collision.metadata
-
-
-def test_object_model_add_objects_rolls_back_partial_mutation(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    """An error after insertion restores objects, titles, and numbering."""
-    model = ObjectModel("gs")
-    group = model.add_group("Group")
-    existing = create_test_signal("Existing")
-    model.add_object(existing, get_uuid(group))
-    group.number = 17
-    inserted = create_test_signal("derived(s001)")
-
-    def fail_title_restoration() -> None:
-        raise RuntimeError("injected title failure")
-
-    monkeypatch.setattr(
-        model,
-        "replace_uuids_by_short_ids_in_titles",
-        fail_title_restoration,
-    )
-
-    with pytest.raises(RuntimeError, match="injected title failure"):
-        model.add_objects((inserted,), get_uuid(group))
-
-    assert model.get_all_objects() == [existing]
-    assert group.get_objects() == [existing]
-    assert existing.title == "Existing"
-    assert get_number(existing) == 1
-    assert group.number == 17
-    assert inserted.title == "derived(s001)"
-    assert "__number" not in inserted.metadata
 
 
 def test_panel_add_objects_updates_tree_and_notifies_once(
@@ -133,25 +102,22 @@ def test_panel_add_objects_updates_tree_and_notifies_once(
         ]
         assert model_ids == tree_ids == [get_uuid(signal) for signal in signals]
         assert notifications == [None]
-        # Appended after every object: no short ID changes, the new items are
-        # created with their final text and the tree needs no update
+        # The new items are created with their final text: no tree update
         assert update_calls == []
         assert resize_calls == [0]
         assert panel.objview.get_current_object() is None
 
-        # Inserting before the objects of another group renumbers them: one
-        # final tree update
+        # Inserting before the objects of another group renumbers them, which
+        # changes no item text (titles hold stable references): no tree update
         other = panel.add_group("Other")
         panel.add_objects((create_test_signal("Last"),), get_uuid(other))
         update_calls.clear()
         inserted = tuple(create_test_signal(f"Inserted {i}") for i in range(3))
         panel.add_objects(inserted, get_uuid(group), set_current=False)
-        assert update_calls == [None]
-        tree_texts = [
-            panel.objview.get_item_from_id(oid).text(0)
-            for oid in panel.objmodel.get_object_ids()
-        ]
-        assert tree_texts[-1].startswith("s014: ")
+        assert update_calls == []
+        object_ids = panel.objmodel.get_object_ids()
+        tree_texts = [panel.objview.get_item_from_id(oid).text(0) for oid in object_ids]
+        assert tree_texts == [panel.objmodel[oid].title for oid in object_ids]
 
 
 def test_panel_add_objects_sets_last_object_current() -> None:

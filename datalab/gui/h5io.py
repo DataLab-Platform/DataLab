@@ -25,6 +25,7 @@ from sigimax.widgets.h5browser import H5BrowserDialog
 
 from datalab.config import _
 from datalab.env import execenv
+from datalab.gui.panel.base import H5ImportBatch
 from datalab.h5 import H5Importer
 from datalab.h5.native import NativeH5Reader, NativeH5Writer
 from datalab.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
@@ -174,8 +175,12 @@ class H5InputOutput:
             if reset_all:
                 self.mainwindow.reset_all()
             before = {id(obj) for obj in self.__data_objects()}
+            batches: list[H5ImportBatch] = []
             for panel in self.mainwindow.panels:
-                panel.deserialize_from_hdf5(reader, reset_all)
+                batch = panel.deserialize_from_hdf5(reader, reset_all)
+                if isinstance(batch, H5ImportBatch):
+                    batches.append(batch)
+            H5ImportBatch.finalize_imports(batches, refresh_panels=True)
             reader.close()
             appended = [o for o in self.__data_objects() if id(o) not in before]
             self.mainwindow.provenance.load(
@@ -203,15 +208,19 @@ class H5InputOutput:
             if reset_all:
                 self.mainwindow.reset_all()
             before = {id(obj) for obj in self.__data_objects()}
+            batches: list[H5ImportBatch] = []
             with create_progress_bar(
                 self.mainwindow, self.__progbartitle(filename), 2
             ) as progress:
                 for idx, panel in enumerate(self.mainwindow.panels):
                     progress.setValue(idx + 1)
                     QW.QApplication.processEvents()
-                    panel.deserialize_from_hdf5(reader, reset_all)
+                    batch = panel.deserialize_from_hdf5(reader, reset_all)
+                    if isinstance(batch, H5ImportBatch):
+                        batches.append(batch)
                     if progress.wasCanceled():
                         break
+            H5ImportBatch.finalize_imports(batches, refresh_panels=True)
             reader.close()
             appended = [o for o in self.__data_objects() if id(o) not in before]
             self.mainwindow.provenance.load(

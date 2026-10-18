@@ -64,7 +64,7 @@ from datalab.config import Conf, _
 from datalab.gui.processor.catcher import CompOut, wng_err_func
 from datalab.gui.processor.execution import CANCELLED, ExecutionService
 from datalab.history.effects import capture_effects
-from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids
+from datalab.objectmodel import get_title_reference, get_uuid, patch_title_with_ids
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
 
 if TYPE_CHECKING:
@@ -1831,7 +1831,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             self._handle_keep_results(new_obj)
             if pattern == "n_to_1":
                 self._merge_geometry_results_for_n_to_1(new_obj, executed)
-            patch_title_with_ids(new_obj, inputs, get_short_id)
+            patch_title_with_ids(new_obj, inputs)
         return ProcessingCandidate(
             result=new_obj, pending=pending, transaction=transaction
         )
@@ -1930,7 +1930,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             if isinstance(new_obj, (SignalObj, ImageObj)):
                 self._handle_keep_results(new_obj)
 
-            patch_title_with_ids(new_obj, [obj], get_short_id)
+            patch_title_with_ids(new_obj, [obj])
             comp_out.result = new_obj
             return comp_out
 
@@ -2104,7 +2104,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         if new_gid is None:
                             old_g = self.panel.objmodel.get_group(old_gid)
                             new_gid = self._create_group_for_result(
-                                new_obj, f"{name}({get_short_id(old_g)})"
+                                new_obj, f"{name}({get_title_reference(old_g)})"
                             )
                             new_gids[old_gid] = new_gid
                         return new_gid
@@ -2654,10 +2654,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 )
                 if not valid:
                     return
-                dst_gname = (
-                    f"{name}({','.join([get_short_id(grp) for grp in src_grps])})"
-                    "|pairwise"
-                )
+                src_refs = ",".join(get_title_reference(grp) for grp in src_grps)
+                dst_gname = f"{name}({src_refs})|pairwise"
                 group_exclusive = len(self.panel.objview.get_sel_groups()) != 0
                 if not group_exclusive:
                     # This is not a group exclusive selection
@@ -2746,7 +2744,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             break
                         assert isinstance(new_obj, (SignalObj, ImageObj))
 
-                        patch_title_with_ids(new_obj, src_objs_pair, get_short_id)
+                        patch_title_with_ids(new_obj, src_objs_pair)
 
                         # Handle keep_results and geometry result merging
                         self._handle_keep_results(new_obj)
@@ -2781,7 +2779,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 if grps:
                     # (Group exclusive selection)
                     # At least one group is selected: create a new group
-                    dst_gname = f"{name}({','.join([get_uuid(grp) for grp in grps])})"
+                    grp_refs = ",".join(get_title_reference(grp) for grp in grps)
+                    dst_gname = f"{name}({grp_refs})"
                     # Delay group creation until after first result
                     dst_gid = None
                     dst_group_name = dst_gname  # Store name for later use
@@ -2866,7 +2865,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         assert isinstance(new_obj, (SignalObj, ImageObj))
 
                         group_id = dst_gid if dst_gid is not None else src_gid
-                        patch_title_with_ids(new_obj, src_obj_list, get_short_id)
+                        patch_title_with_ids(new_obj, src_obj_list)
 
                         # Handle keep_results and geometry result merging
                         self._handle_keep_results(new_obj)
@@ -2912,6 +2911,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         | None,
         obj2_name: str,
         func: Callable,
+        *,
         param: gds.DataSet | None = None,
         paramclass: type[gds.DataSet] | None = None,
         title: str | None = None,
@@ -3052,8 +3052,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         if group_exclusive:
                             # This is a group exclusive selection
                             src_grp = objmodel.get_group(src_gid)
-                            grp_short_ids = [get_uuid(grp) for grp in (src_grp, grp2)]
-                            dst_gname = f"{name}({','.join(grp_short_ids)})|pairwise"
+                            group_refs = [
+                                get_title_reference(grp) for grp in (src_grp, grp2)
+                            ]
+                            dst_gname = f"{name}({','.join(group_refs)})|pairwise"
                         else:
                             dst_gname = f"{name}[...]"
                         # Delay group creation until after first result
@@ -3106,9 +3108,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             assert isinstance(new_obj, (SignalObj, ImageObj))
 
                             # Use original objects for title generation
-                            patch_title_with_ids(
-                                new_obj, [orig_obj1, orig_obj2], get_short_id
-                            )
+                            patch_title_with_ids(new_obj, [orig_obj1, orig_obj2])
 
                             # Handle keep_results logic for 2_to_1 operations
                             self._handle_keep_results(new_obj)
@@ -3270,7 +3270,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
 
                         group_id = objmodel.get_object_group_id(obj)
                         # Use original objects for title generation
-                        patch_title_with_ids(new_obj, [obj, orig_obj2], get_short_id)
+                        patch_title_with_ids(new_obj, [obj, orig_obj2])
 
                         # Handle keep_results logic for 2_to_1 operations
                         self._handle_keep_results(new_obj)

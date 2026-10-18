@@ -24,7 +24,7 @@ from sigima.proc.contracts import PreparedExecution
 from sigima.proc.contracts import execute as execute_prepared
 
 from datalab.config import _
-from datalab.objectmodel import get_short_id, get_uuid, patch_title_with_ids
+from datalab.objectmodel import get_uuid, patch_title_with_ids
 from datalab.utils.qthelpers import create_progress_bar
 
 if TYPE_CHECKING:
@@ -110,7 +110,7 @@ class ExecutionService:
         if new_obj is None:
             return SKIPPED
         assert isinstance(new_obj, (SignalObj, ImageObj))
-        patch_title_with_ids(new_obj, [obj], get_short_id)
+        patch_title_with_ids(new_obj, [obj])
         processor._handle_keep_results(new_obj)  # pylint: disable=protected-access
         pp = ProcessingParameters(
             func_name=processor.get_feature_id(func, feature_id),

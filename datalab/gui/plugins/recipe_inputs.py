@@ -14,7 +14,7 @@ from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj
 
 from datalab.config import _
-from datalab.objectmodel import get_short_id
+from datalab.objectmodel import get_title_reference
 from datalab.plugins.recipe_binding import (
     RecipeInputIssue,
     RecipeInputIssueCode,
@@ -211,7 +211,7 @@ class RecipeInputDialog(QW.QDialog):
 
     def _candidate_label(self, slot: RecipeInputSlot, obj: DataObject) -> str:
         """Return the label of a candidate, naming its missing metadata."""
-        label = f"{get_short_id(obj)}: {obj.title}"
+        label = f"{get_title_reference(obj)}: {obj.title}"
         missing = [
             requirement.key
             for requirement in slot.metadata

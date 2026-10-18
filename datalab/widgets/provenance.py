@@ -40,7 +40,7 @@ from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj
 
 from datalab.config import _
-from datalab.objectmodel import get_short_id, get_uuid
+from datalab.objectmodel import get_uuid, get_uuid_display_id
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
@@ -498,7 +498,8 @@ class ProvenanceWidget(QW.QWidget):
         if not isinstance(obj, (SignalObj, ImageObj)):
             return None
         try:
-            return f"{get_short_id(obj)}: {obj.title}"
+            title = self.mainwindow.render_object_title(obj.title)
+            return f"{get_uuid_display_id(obj)}: {title}"
         except ValueError:
             # Object numbers are briefly absent while metadata are deleted
             # (see BaseDataPanel.delete_metadata); the view is refreshed after.
@@ -941,7 +942,8 @@ class ExecutionProvenanceDialog(QW.QDialog):
                     else None
                 )
                 if isinstance(obj, (SignalObj, ImageObj)):
-                    return f"{get_short_id(obj)}: {obj.title}"
+                    title = mainwindow.render_object_title(obj.title)
+                    return f"{get_uuid_display_id(obj)}: {title}"
             else:
                 return f"#{number}: {output['key']}"
         return f"#{number}"

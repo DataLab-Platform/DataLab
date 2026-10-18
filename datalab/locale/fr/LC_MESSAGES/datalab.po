@@ -65,6 +65,9 @@ msgstr "Assistant IA prêt. Configurez votre fournisseur dans le menu Edition > 
 msgid "You"
 msgstr "Vous"
 
+msgid "Assistant"
+msgstr "Assistant"
+
 msgid "Save to Macros"
 msgstr "Enregistrer dans les macros"
 
@@ -1098,9 +1101,6 @@ msgstr "Afficher les titres des objets graphiques"
 msgid "Show or hide ROI and other graphical object titles or subtitles"
 msgstr "Afficher ou cacher les titres (et sous-titres) des régions d'intérêt et autres objets graphiques"
 
-msgid "Browse application plugins, recipes and examples"
-msgstr "Parcourir les plugins d'application, les méthodes et les exemples"
-
 msgid "Reload plugins"
 msgstr "Recharger les plugins"
 
@@ -1366,6 +1366,9 @@ msgstr "Créé : paramètres de pic historiques"
 msgid "Created: invalid creation parameters"
 msgstr "Créé : paramètres de création invalides"
 
+msgid "Created"
+msgstr "Créé"
+
 msgid "Original object"
 msgstr "Objet original"
 
@@ -1462,6 +1465,25 @@ msgstr "Aucun objet de traitement disponible."
 msgid "Processing metadata is incomplete."
 msgstr "Les métadonnées de traitement sont incomplètes."
 
+msgid "Source object no longer exists."
+msgstr "L'objet source n'existe plus."
+
+msgid "The object that was used to create this processed object has been deleted and cannot be used for reprocessing."
+msgstr "L'objet qui a été utilisé pour créer cet objet traité a été supprimé et ne peut pas être utilisé pour le retraitement."
+
+#, python-format
+msgid ""
+"Failed to reprocess object:\n"
+"%s"
+msgstr ""
+"Échec du retraitement de l'objet :\n"
+"%s"
+
+msgid "Processing was cancelled."
+msgstr "Le traitement a été annulé."
+
+msgid "Failed to reprocess object."
+msgstr "Échec du retraitement de l'objet."
 msgid "Geometry results"
 msgstr "Résultats géométriques"
 
@@ -1501,7 +1523,7 @@ msgstr "Écraser les fichiers existants"
 msgid "Preview"
 msgstr "Aperçu"
 
-msgid "Add a new metadata item to the selected objects.<br><br>The metadata key will be the same for all objects, but the value can use a pattern to generate different values, optionally extracted with a regular expression.<br>Click the <b>Help</b> button for details on the pattern syntax.<br>"
+msgid "Add a new metadata item to the selected objects.<br><br>The metadata key will be the same for all objects, but the value can use a pattern to generate different values.<br>Click the <b>Help</b> button for details on the pattern syntax.<br>"
 msgstr "Ajouter un nouvel élément de métadonnée aux objets sélectionnés.<br><br>La clé de métadonnée sera la même pour tous les objets, mais la valeur peut utiliser un modèle pour générer des valeurs différentes, éventuellement extraites par une expression régulière.<br>Cliquez sur le bouton <b>Aide</b> pour plus de détails sur la syntaxe du modèle.<br>"
 
 msgid "Select a key..."
@@ -1586,11 +1608,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "New group"
-msgstr "Nouveau groupe"
-
 msgid "Group name:"
 msgstr "Nom du groupe :"
+
+msgid "New group"
+msgstr "Nouveau groupe"
 
 #, python-format
 msgid "New group \"%s\""
@@ -1833,6 +1855,9 @@ msgstr "L'action %s a été ignorée : ses paramètres enregistrés n'ont pas pu
 msgid "History panel"
 msgstr "Panneau d'historique"
 
+msgid "History files"
+msgstr "Enregistrer un fichier d'historique"
+
 #, python-format
 msgid "Action %s: target panel not found — skipping."
 msgstr "Action %s : panneau cible introuvable — ignorée."
@@ -1986,6 +2011,9 @@ msgstr "Effacer toutes les macros récentes ?"
 
 msgid "Macro panel"
 msgstr "Panneau des macros"
+
+msgid "Python files"
+msgstr "Ouvrir le fichier"
 
 msgid "Clear console"
 msgstr "Effacer la console"
@@ -2223,7 +2251,6 @@ msgstr "Entrée/sortie"
 
 msgid "Application"
 msgstr "Application"
-
 msgid "today"
 msgstr "aujourd'hui"
 
@@ -2258,6 +2285,9 @@ msgstr "Modifier le répertoire"
 msgid "Remove directory"
 msgstr "Supprimer le répertoire"
 
+msgid "from"
+msgstr "depuis"
+
 msgid "Plugin Configuration"
 msgstr "Configuration des plugins"
 
@@ -2272,7 +2302,6 @@ msgstr "Plugins disponibles"
 
 msgid "Install plugins"
 msgstr "Installer des plugins"
-
 msgid "Apply and reload plugins"
 msgstr "Appliquer et recharger les plugins"
 
@@ -2557,7 +2586,6 @@ msgstr "Entrées attendues :"
 #, python-format
 msgid "Running '%s'"
 msgstr "Exécution de '%s'"
-
 msgid "Failed to deserialize processing parameters from JSON."
 msgstr "Échec de la désérialisation des paramètres de traitement depuis le format JSON."
 
@@ -2602,23 +2630,6 @@ msgstr "Les signaux ne peuvent pas être alignés."
 msgid "Calculating: %s"
 msgstr "Calcul : %s"
 
-msgid "The object that was used to create this processed object has been deleted and cannot be used for reprocessing."
-msgstr "L'objet qui a été utilisé pour créer cet objet traité a été supprimé et ne peut pas être utilisé pour le retraitement."
-
-#, python-format
-msgid ""
-"Failed to reprocess object:\n"
-"%s"
-msgstr ""
-"Échec du retraitement de l'objet :\n"
-"%s"
-
-msgid "Processing was cancelled."
-msgstr "Le traitement a été annulé."
-
-msgid "Failed to reprocess object."
-msgstr "Échec du retraitement de l'objet."
-
 msgid "Signal was reprocessed."
 msgstr "Le signal a été retraité."
 
@@ -2639,9 +2650,6 @@ msgstr "En mode 'pairwise', vous devez sélectionner des objets dans au moins de
 
 msgid "In pairwise mode, you need to select the same number of objects in each group."
 msgstr "En mode 'pairwise', vous devez sélectionner le même nombre d'objets dans chaque groupe."
-
-msgid "A preview source was removed. The processing was cancelled."
-msgstr "Un objet source de l'aperçu a été supprimé. Le traitement a été annulé."
 
 #, python-format
 msgid "Computing: %s"
@@ -2823,6 +2831,9 @@ msgstr ""
 "  • y' = a0 + a1*y + a2*y^2 + ...\n"
 "  • z' = a0 + a1*z + a2*z^2 + ..."
 
+msgid "Swap X/Y axes"
+msgstr "Permuter les axes X/Y"
+
 msgid "Normalize"
 msgstr "Normaliser"
 
@@ -2921,9 +2932,6 @@ msgstr "Seuillage Triangle"
 
 msgid "Yen thresholding"
 msgstr "Seuillage Yen"
-
-msgid "Brightness and contrast"
-msgstr "Luminosité et contraste"
 
 msgid "Gamma correction"
 msgstr "Correction gamma"
@@ -3215,9 +3223,6 @@ msgstr ""
 "Appliquer un étalonnage linéaire à l'axe X ou Y :\n"
 "  • x' = ax + b\n"
 "  • y' = ay + b"
-
-msgid "Swap X/Y axes"
-msgstr "Permuter les axes X/Y"
 
 msgid "Reverse X-axis"
 msgstr "Inverser l'axe des X"
@@ -4050,6 +4055,10 @@ msgstr "Traitement scientifique du signal et de l'image — version %s"
 msgid "Desktop edition of DataLab"
 msgstr "Édition Desktop de DataLab"
 
+#, python-format
+msgid "Version %s"
+msgstr "Version %s"
+
 msgid "Create..."
 msgstr "Créer..."
 
@@ -4149,7 +4158,6 @@ msgstr "Échec de la désérialisation de l'argument DataSet-list de l'historiqu
 
 msgid "Registered plugins:"
 msgstr "Plugins enregistrés :"
-
 msgid "No plugins available"
 msgstr "Aucun plugin disponible"
 
@@ -4333,9 +4341,6 @@ msgstr "Licence du projet"
 #, python-format
 msgid "Created DataLab plugin project at %s"
 msgstr "Projet de plugin DataLab créé dans %s"
-
-msgid "Source object no longer exists."
-msgstr "L'objet source n'existe plus."
 
 msgid "An input object no longer exists."
 msgstr "Un objet d'entrée n'existe plus."
@@ -4554,11 +4559,11 @@ msgstr "Afficher les détails"
 msgid "Hide details"
 msgstr "Masquer les détails"
 
-msgid "Date and time"
-msgstr "Date et heure"
-
 msgid "Title"
 msgstr "Titre"
+
+msgid "Date and time"
+msgstr "Date et heure"
 
 msgid "Action is compatible with the current workspace state."
 msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
@@ -4857,11 +4862,11 @@ msgstr "Cliquer pour voir les infos de connexion"
 msgid "Source"
 msgstr "Source"
 
-msgid "Clipboard"
-msgstr "Presse-papiers"
-
 msgid "File"
 msgstr "Fichier"
+
+msgid "Clipboard"
+msgstr "Presse-papiers"
 
 msgid "Source of the data"
 msgstr "Source des données"
@@ -5048,6 +5053,46 @@ msgstr "Forme"
 msgid "Dimensions"
 msgstr "Dimensions"
 
+msgid "Browse application plugins, recipes and examples"
+msgstr "Parcourir les plugins d'application, les méthodes et les exemples"
+
+msgid "Add a new metadata item to the selected objects.<br><br>The metadata key will be the same for all objects, but the value can use a pattern to generate different values, optionally extracted with a regular expression.<br>Click the <b>Help</b> button for details on the pattern syntax.<br>"
+msgstr "Ajouter un nouvel élément de métadonnée aux objets sélectionnés.<br><br>La clé de métadonnée sera la même pour tous les objets, mais la valeur peut utiliser un modèle pour générer des valeurs différentes, éventuellement extraites par une expression régulière.<br>Cliquez sur le bouton <b>Aide</b> pour plus de détails sur la syntaxe du modèle.<br>"
+
+msgid "Source code"
+msgstr "Code source"
+
+msgid "Application"
+msgstr "Application"
+
+msgid "Install plugins"
+msgstr "Installer des plugins"
+
+msgid "not applicable"
+msgstr "non applicable"
+
+#, python-format
+msgid "Running '%s'"
+msgstr "Exécution de '%s'"
+
+msgid "A preview source was removed. The processing was cancelled."
+msgstr "Un objet source de l'aperçu a été supprimé. Le traitement a été annulé."
+
+msgid "Brightness and contrast"
+msgstr "Luminosité et contraste"
+
+msgid "References in result titles"
+msgstr "Références dans les titres de résultats"
+
+msgid "Source UUID"
+msgstr "UUID source"
+
+msgid "Source title"
+msgstr "Titre de la source"
+
+msgid "Display source references in generated titles as short UUIDs or as the current source titles. This setting does not change the stored UUID references."
+msgstr "Afficher les références aux sources dans les titres générés sous forme d'UUID courts ou avec les titres actuels des sources. Ce réglage ne modifie pas les références UUID enregistrées."
+
 msgid "Minimum value"
 msgstr "Valeur minimum"
 
@@ -5095,8 +5140,6 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
-
-
 msgid "DataLab capsules"
 msgstr "Capsules DataLab"
 

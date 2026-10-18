@@ -46,15 +46,19 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj
 
-from datalab.config import _
+from datalab.config import Conf, _
 from datalab.objectmodel import (
     ObjectGroup,
-    find_short_ids_in_title,
-    get_short_id,
+    find_title_references,
+    get_title_reference,
     get_uuid,
+    resolve_title_references,
 )
 from datalab.utils.qthelpers import block_signals
-from datalab.widgets.titledelegate import ClickableTitleDelegate
+from datalab.widgets.titledelegate import (
+    TITLE_REFERENCE_ROLE,
+    ClickableTitleDelegate,
+)
 
 if TYPE_CHECKING:
     from typing import Any
@@ -104,40 +108,44 @@ class SimpleObjectTree(QW.QTreeWidget):
         self.itemDoubleClicked.connect(self.item_double_clicked)
         self.header().setSectionResizeMode(QW.QHeaderView.Interactive)
         self.itemChanged.connect(lambda item: self.resizeColumnToContents(0))
-        self._title_delegate = ClickableTitleDelegate(self)
-        self.setItemDelegateForColumn(0, self._title_delegate)
+        self.title_delegate = ClickableTitleDelegate(
+            self, self.get_title_reference_display
+        )
+        self.setItemDelegateForColumn(0, self.title_delegate)
         self.viewport().setMouseTracking(True)
-        #: Short ID indexes of the models (by model id), while a batch of items
-        #: is updated (see :meth:`_short_id_indexes`); None otherwise.
-        self.__short_id_indexes: dict[int, dict] | None = None
+        #: Title reference indexes of the models (by model id), while a batch of
+        #: items is updated (see :meth:`_title_reference_indexes`); None otherwise.
+        self.__title_reference_indexes: dict[int, dict] | None = None
 
     @contextmanager
-    def _short_id_indexes(self) -> Iterator[None]:
-        """Resolve short IDs from indexes built once while updating many items.
+    def _title_reference_indexes(self) -> Iterator[None]:
+        """Resolve title references from indexes built once while updating many
+        items.
 
-        Each item tooltip resolves the short IDs of its title: without indexes,
+        Each item tooltip resolves the references of its title: without indexes,
         each resolution scans the whole model. The indexes are built on first
-        use, for the numbering current when the batch starts.
+        use, for the objects present when the batch starts.
         """
-        if self.__short_id_indexes is not None:
+        if self.__title_reference_indexes is not None:
             yield
             return
-        self.__short_id_indexes = {}
+        self.__title_reference_indexes = {}
         try:
             yield
         finally:
-            self.__short_id_indexes = None
+            self.__title_reference_indexes = None
 
-    def _find_short_id(
-        self, model: ObjectModel, short_id: str
-    ) -> SignalObj | ImageObj | ObjectGroup | None:
-        """Return the item of ``model`` with ``short_id``, or None."""
-        if self.__short_id_indexes is None:
-            return model.find_by_short_id(short_id)
-        index = self.__short_id_indexes.get(id(model))
+    def _find_title_reference(
+        self, model: ObjectModel, reference: str
+    ) -> list[SignalObj | ImageObj | ObjectGroup]:
+        """Return the items of ``model`` matching ``reference``."""
+        if self.__title_reference_indexes is None:
+            return model.find_by_title_reference(reference)
+        index = self.__title_reference_indexes.get(id(model))
         if index is None:
-            index = self.__short_id_indexes[id(model)] = model.get_short_id_index()
-        return index.get(short_id)
+            index = model.get_title_reference_index()
+            self.__title_reference_indexes[id(model)] = index
+        return index.get(reference, [])
 
     def __str__(self) -> str:
         """Return string representation"""
@@ -242,35 +250,44 @@ class SimpleObjectTree(QW.QTreeWidget):
         """Return selected groups"""
         return self.objmodel.get_groups(self.get_sel_group_uuids())
 
-    def _resolve_short_id(
-        self, short_id: str
+    def resolve_title_reference(
+        self, reference: str
     ) -> tuple[str, SignalObj | ImageObj | ObjectGroup] | None:
-        """Resolve a short ID embedded in a title to ``(panel_str, obj)``.
+        """Resolve a title reference to ``(panel_str, obj)``.
 
         Default implementation only looks up the tree's own model and returns
         an empty ``panel_str``. Subclasses with access to several panels
         should override this method.
         """
-        obj = self._find_short_id(self.objmodel, short_id)
-        if obj is None:
-            return None
-        return ("", obj)
+        matches = self._find_title_reference(self.objmodel, reference)
+        return ("", matches[0]) if len(matches) == 1 else None
 
-    def _build_short_id_tooltip(self, text: str) -> str:
+    def get_title_reference_display(self, reference: str) -> str | None:
+        """Return the configured display text for a resolvable title reference."""
+        resolved = self.resolve_title_reference(reference)
+        if resolved is None:
+            return None
+        _panel_str, obj = resolved
+        if Conf.result_title_mode.get() == "title":
+            return resolve_title_references(obj.title, self.get_source_title)
+        return reference
+
+    def get_source_title(self, reference: str) -> str | None:
+        """Return the title of the object or group a reference resolves to."""
+        resolved = self.resolve_title_reference(reference)
+        return None if resolved is None else resolved[1].title
+
+    def build_title_reference_tooltip(self, text: str) -> str:
         """Return an HTML tooltip fragment listing the source objects
-        referenced by short IDs embedded in ``text``, or an empty string when
-        no such reference is found."""
-        matches = find_short_ids_in_title(text)
+        referenced in ``text``, or an empty string when no such reference is
+        found."""
         rows: list[str] = []
         seen: set[str] = set()
-        for idx, (start, _end, sid) in enumerate(matches):
-            if idx == 0 and start == 0:
-                # Skip the leading "<short_id>:" prefix
+        for _start, _end, reference in find_title_references(text):
+            if reference in seen:
                 continue
-            if sid in seen:
-                continue
-            seen.add(sid)
-            resolved = self._resolve_short_id(sid)
+            seen.add(reference)
+            resolved = self.resolve_title_reference(reference)
             if resolved is None:
                 continue
             panel_str, obj = resolved
@@ -281,8 +298,10 @@ class SimpleObjectTree(QW.QTreeWidget):
                 if isinstance(obj, SignalObj)
                 else _("image")
             )
-            suffix = f" \u00b7 {panel_str}" if panel_str else ""
-            rows.append(f"<b>{sid}</b> \u2192 {obj.title} <i>({kind}{suffix})</i>")
+            suffix = f" &middot; {panel_str}" if panel_str else ""
+            rows.append(
+                f"<b>{reference}</b> &rarr; {obj.title} <i>({kind}{suffix})</i>"
+            )
         if not rows:
             return ""
         title = _("Source objects")
@@ -295,30 +314,31 @@ class SimpleObjectTree(QW.QTreeWidget):
         self, item: QW.QTreeWidgetItem, obj: SignalObj | ImageObj | ObjectGroup
     ) -> None:
         """Update item"""
-        text = f"{get_short_id(obj)}: {obj.title}"
+        text = obj.title
         item.setText(0, text)
         tooltip_parts: list[str] = []
-        sid_tooltip = self._build_short_id_tooltip(text)
-        if sid_tooltip:
-            tooltip_parts.append(sid_tooltip)
+        reference_tooltip = self.build_title_reference_tooltip(text)
+        if reference_tooltip:
+            tooltip_parts.append(reference_tooltip)
         if isinstance(obj, (SignalObj, ImageObj)):
             meta_tooltip = metadata_to_html(obj.metadata)
             if meta_tooltip:
                 tooltip_parts.append(meta_tooltip)
         item.setToolTip(0, "".join(tooltip_parts))
         item.setData(0, QC.Qt.UserRole, get_uuid(obj))
+        item.setData(0, TITLE_REFERENCE_ROLE, get_title_reference(obj))
 
-    def _handle_short_id_click(self, short_id: str) -> None:
-        """Handle a click on a short-ID hyperlink. Default implementation
+    def handle_title_reference_click(self, reference: str) -> None:
+        """Handle a click on a title-reference hyperlink. Default implementation
         selects the matching object within the tree's own model."""
-        resolved = self._resolve_short_id(short_id)
+        resolved = self.resolve_title_reference(reference)
         if resolved is None:
             return
         _panel_str, obj = resolved
         self.set_current_item_id(get_uuid(obj))
 
-    def _short_id_at(self, pos: QC.QPoint) -> str | None:
-        """Return the short ID under viewport position ``pos``, or ``None``
+    def title_reference_at(self, pos: QC.QPoint) -> str | None:
+        """Return the title reference under viewport position ``pos``, or ``None``
         when the cursor is not over an anchor."""
         index = self.indexAt(pos)
         if not index.isValid() or index.column() != 0:
@@ -326,25 +346,25 @@ class SimpleObjectTree(QW.QTreeWidget):
         rect = self.visualRect(index)
         option = self.viewOptions()
         option.rect = rect
-        return self._title_delegate.anchor_at(index, rect, pos, option)
+        return self.title_delegate.anchor_at(index, rect, pos, option)
 
     # pylint: disable=invalid-name
     def mousePressEvent(self, event: QG.QMouseEvent) -> None:
         """Reimplement Qt method to handle short-ID hyperlink clicks."""
         if event.button() == QC.Qt.LeftButton:
-            short_id = self._short_id_at(event.pos())
-            if short_id is not None:
+            reference = self.title_reference_at(event.pos())
+            if reference is not None:
                 event.accept()
-                self._handle_short_id_click(short_id)
+                self.handle_title_reference_click(reference)
                 return
         super().mousePressEvent(event)
 
     # pylint: disable=invalid-name
     def mouseMoveEvent(self, event: QG.QMouseEvent) -> None:
         """Reimplement Qt method to update the cursor over short-ID anchors."""
-        short_id = self._short_id_at(event.pos())
+        reference = self.title_reference_at(event.pos())
         viewport = self.viewport()
-        if short_id is not None:
+        if reference is not None:
             viewport.setCursor(QC.Qt.PointingHandCursor)
         else:
             viewport.unsetCursor()
@@ -355,7 +375,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         uuid = self.get_current_item_id()
         with block_signals(widget=self):
             self.clear()
-        with self._short_id_indexes():
+        with self._title_reference_indexes():
             for group in self.objmodel.get_groups():
                 self.add_group_item(group)
         if uuid is not None:
@@ -371,7 +391,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         items = {}
         for item in self.iter_items():
             items.setdefault(item.data(0, QC.Qt.UserRole), item)
-        with self._short_id_indexes():
+        with self._title_reference_indexes():
             for group in self.objmodel.get_groups():
                 group_item = items.get(get_uuid(group))
                 if group_item is None:
@@ -437,7 +457,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         updates_enabled = self.updatesEnabled()
         self.setUpdatesEnabled(False)
         try:
-            with self._short_id_indexes():
+            with self._title_reference_indexes():
                 for obj in objects:
                     self.__add_to_group_item(obj, group_item)
             if set_current:
@@ -560,37 +580,26 @@ class ObjectView(SimpleObjectTree):
         self.__dragged_groups: list[QW.QListWidgetItem] = []
         self.__dragged_expanded_states: dict[QW.QListWidgetItem, bool] = {}
 
-    def _resolve_short_id(
-        self, short_id: str
+    def resolve_title_reference(
+        self, reference: str
     ) -> tuple[str, SignalObj | ImageObj | ObjectGroup] | None:
-        """Resolve a short ID across the signal *and* image panels of the main
+        """Resolve a title reference across the signal and image panels of the main
         window, so titles can reference objects living in either panel.
         """
         panel: BaseDataPanel = self.parent()
         mainwindow = getattr(panel, "mainwindow", None)
-        candidates: list[tuple[str, ObjectModel]] = []
-        if mainwindow is not None:
-            sigpanel = getattr(mainwindow, "signalpanel", None)
-            if sigpanel is not None:
-                candidates.append(("signal", sigpanel.objmodel))
-            imgpanel = getattr(mainwindow, "imagepanel", None)
-            if imgpanel is not None:
-                candidates.append(("image", imgpanel.objmodel))
-        else:
-            candidates.append((panel.PANEL_STR_ID, self.objmodel))
-        # Prefer the panel that owns this view (so a self-reference resolves
-        # locally), then fall back to the other panel.
-        own = panel.PANEL_STR_ID
-        candidates.sort(key=lambda c: 0 if c[0] == own else 1)
-        for panel_str, model in candidates:
-            obj = self._find_short_id(model, short_id)
-            if obj is not None:
-                return (panel_str, obj)
-        return None
+        if mainwindow is None:
+            return super().resolve_title_reference(reference)
+        matches = [
+            (other.PANEL_STR_ID, obj)
+            for other in (mainwindow.signalpanel, mainwindow.imagepanel)
+            for obj in self._find_title_reference(other.objmodel, reference)
+        ]
+        return matches[0] if len(matches) == 1 else None
 
-    def _handle_short_id_click(self, short_id: str) -> None:
+    def handle_title_reference_click(self, reference: str) -> None:
         """Select the referenced object, switching active panel if needed."""
-        resolved = self._resolve_short_id(short_id)
+        resolved = self.resolve_title_reference(reference)
         if resolved is None:
             return
         panel_str, obj = resolved

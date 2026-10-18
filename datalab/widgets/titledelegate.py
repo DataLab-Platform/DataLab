@@ -6,7 +6,8 @@ Title delegate
 
 The :mod:`datalab.widgets.titledelegate` module provides a
 :class:`QStyledItemDelegate` that renders object tree titles as rich text and
-turns embedded short IDs (e.g. ``s001``, ``i012``) into clickable hyperlinks.
+turns embedded object references (e.g. ``1a2b3c4d``, ``g1a2b3c4d``) into
+clickable hyperlinks.
 
 .. autoclass:: ClickableTitleDelegate
 """
@@ -15,50 +16,56 @@ turns embedded short IDs (e.g. ``s001``, ``i012``) into clickable hyperlinks.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from html import escape
+from math import ceil
 from typing import TYPE_CHECKING
 
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from datalab.objectmodel import find_short_ids_in_title
+from datalab.objectmodel import find_title_references
 
 if TYPE_CHECKING:
     pass
 
 
 #: URL scheme used in anchors emitted by :class:`ClickableTitleDelegate`.
-SHORT_ID_URL_SCHEME = "dlb-shortid"
+REFERENCE_URL_SCHEME = "dlb-ref"
+#: Item data role holding the item's own title reference (``<UUID8>``/``g<UUID8>``)
+TITLE_REFERENCE_ROLE = QC.Qt.UserRole + 1
+TITLE_META_FONT_SIZE = "90%"
+TITLE_ROW_VERTICAL_PADDING = 2
 
 
-def _build_html(text: str) -> str:
-    """Build the HTML representation of ``text`` with short IDs wrapped in
-    anchors.
+def _build_html(
+    text: str, reference_resolver: Callable[[str], str | None] | None = None
+) -> str:
+    """Build the HTML representation of ``text`` with references as anchors.
 
-    The first short ID occurrence is always rendered as plain text: object
-    titles in DataLab tree views are formatted as ``"<short_id>: <title>"`` and
-    making the leading ``s001`` clickable would just re-select the current
-    item.
+    Only references resolved by ``reference_resolver`` become links; the others
+    are kept as plain text.
 
     Args:
-        text: raw item text (e.g. ``"s003: average(s001, s002)"``).
+        text: raw item text (e.g. ``"1a2b3c4d-5e6f7a8b"``).
+        reference_resolver: callback returning the display text of a reference,
+         or None when the reference cannot be resolved.
 
     Returns:
         HTML string.
     """
-    matches = find_short_ids_in_title(text)
-    if not matches:
-        return escape(text)
     out: list[str] = []
     cursor = 0
-    for idx, (start, end, sid) in enumerate(matches):
+    for start, end, reference in find_title_references(text):
         out.append(escape(text[cursor:start]))
-        if idx == 0 and start == 0:
-            # Leading "s001:" — keep as plain text
-            out.append(escape(sid))
+        display = None if reference_resolver is None else reference_resolver(reference)
+        if display is None:
+            out.append(escape(reference))
         else:
-            out.append(f'<a href="{SHORT_ID_URL_SCHEME}:{sid}">{escape(sid)}</a>')
+            out.append(
+                f'<a href="{REFERENCE_URL_SCHEME}:{reference}">{escape(display)}</a>'
+            )
         cursor = end
     out.append(escape(text[cursor:]))
     return "".join(out)
@@ -69,6 +76,9 @@ def _make_text_document(
     option: QW.QStyleOptionViewItem,
     link_color: QG.QColor,
     text_color: QG.QColor | None = None,
+    reference_resolver: Callable[[str], str | None] | None = None,
+    item_reference: str | None = None,
+    meta_color: QG.QColor | None = None,
 ) -> QG.QTextDocument:
     """Return a :class:`QTextDocument` rendering ``text`` with the styling
     inherited from ``option``.
@@ -84,21 +94,39 @@ def _make_text_document(
     css_parts = [f"a {{ color: {link_color.name()}; text-decoration: underline; }}"]
     if text_color is not None:
         css_parts.append(f"body, p, span {{ color: {text_color.name()}; }}")
+    if meta_color is not None:
+        css_parts.append(
+            ".title-meta { "
+            f"color: {meta_color.name()}; font-size: {TITLE_META_FONT_SIZE}; "
+            "}"
+        )
     doc.setDefaultStyleSheet(" ".join(css_parts))
-    doc.setHtml(_build_html(text))
+    title_html = _build_html(text, reference_resolver)
+    if item_reference:
+        own_id_html = f'<span class="title-meta">#{escape(item_reference)}</span>'
+        title_html = f"{title_html}<br>{own_id_html}" if title_html else own_id_html
+    doc.setHtml(title_html)
     return doc
 
 
 class ClickableTitleDelegate(QW.QStyledItemDelegate):
-    """Item delegate that renders object titles with clickable short IDs.
+    """Item delegate that renders object titles with clickable references.
 
     The delegate uses a :class:`QTextDocument` to render an HTML version of the
-    item's display text in which each embedded short ID — apart from the
-    leading one — is wrapped in an anchor pointing at ``dlb-shortid:<id>``.
+    item's display text in which each resolvable object or group reference is
+    wrapped in an anchor pointing at ``dlb-ref:<reference>``.
 
     Hit-testing is performed by :meth:`anchor_at`, which is meant to be called
     from the host view's ``mousePressEvent`` / ``mouseMoveEvent``.
     """
+
+    def __init__(
+        self,
+        parent: QW.QWidget,
+        reference_resolver: Callable[[str], str | None] | None = None,
+    ) -> None:
+        super().__init__(parent)
+        self.reference_resolver = reference_resolver
 
     # pylint: disable=invalid-name
     def paint(
@@ -109,7 +137,10 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
     ) -> None:
         """Reimplement Qt method to paint the item via a QTextDocument."""
         text = index.data(QC.Qt.DisplayRole) or ""
-        if not isinstance(text, str) or not find_short_ids_in_title(text):
+        item_reference = index.data(TITLE_REFERENCE_ROLE)
+        if not isinstance(text, str) or not (
+            find_title_references(text) or isinstance(item_reference, str)
+        ):
             super().paint(painter, option, index)
             return
         opt = QW.QStyleOptionViewItem(option)
@@ -130,27 +161,24 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
         accent = palette.color(QG.QPalette.Active, QG.QPalette.Highlight)
         if selected:
             text_color = palette.color(QG.QPalette.Active, QG.QPalette.HighlightedText)
-            # On dark themes the selection background *is* the accent color,
-            # so a plain accent-colored link would vanish: blend it 50/50
-            # with ``HighlightedText`` (typically white) to obtain a lighter
-            # tint that still reads as the same hue. On light themes the
-            # accent stays distinguishable on the highlight background, so
-            # we keep the unselected color for visual consistency.
-            base_is_light = (
-                palette.color(QG.QPalette.Active, QG.QPalette.Base).lightness() > 128
-            )
-            if base_is_light:
-                link_color = accent
-            else:
-                link_color = QG.QColor(
-                    (accent.red() + text_color.red()) // 2,
-                    (accent.green() + text_color.green()) // 2,
-                    (accent.blue() + text_color.blue()) // 2,
-                )
+            # The selection background uses ``Highlight`` itself, so links must
+            # use the theme's contrasting text role. Underlining preserves the
+            # link affordance even when link and selected text share a color.
+            link_color = text_color
+            meta_color = text_color
         else:
             text_color = palette.color(QG.QPalette.Active, QG.QPalette.Text)
             link_color = accent
-        doc = _make_text_document(text, option, link_color, text_color)
+            meta_color = palette.color(QG.QPalette.Active, QG.QPalette.Mid)
+        doc = _make_text_document(
+            text,
+            option,
+            link_color,
+            text_color,
+            self.reference_resolver,
+            item_reference if isinstance(item_reference, str) else None,
+            meta_color,
+        )
         doc.setTextWidth(text_rect.width())
         painter.save()
         painter.translate(text_rect.topLeft())
@@ -161,6 +189,39 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
         doc.documentLayout().draw(painter, ctx)
         painter.restore()
 
+    def sizeHint(
+        self, option: QW.QStyleOptionViewItem, index: QC.QModelIndex
+    ) -> QC.QSize:
+        """Return a size accommodating the title and own identity line."""
+        text = index.data(QC.Qt.DisplayRole) or ""
+        item_reference = index.data(TITLE_REFERENCE_ROLE)
+        if not isinstance(text, str) or not (
+            find_title_references(text) or isinstance(item_reference, str)
+        ):
+            return super().sizeHint(option, index)
+        opt = QW.QStyleOptionViewItem(option)
+        self.initStyleOption(opt, index)
+        doc = _make_text_document(
+            text,
+            opt,
+            QG.QColor("black"),
+            reference_resolver=self.reference_resolver,
+            item_reference=item_reference if isinstance(item_reference, str) else None,
+            meta_color=QG.QColor("gray"),
+        )
+        base_size = super().sizeHint(opt, index)
+        raw_text_width = opt.fontMetrics.horizontalAdvance(text)
+        horizontal_chrome = max(0, base_size.width() - raw_text_width)
+        width = max(base_size.width(), ceil(doc.idealWidth()) + horizontal_chrome)
+        style = opt.widget.style() if opt.widget else QW.QApplication.style()
+        text_rect = style.subElementRect(QW.QStyle.SE_ItemViewItemText, opt, opt.widget)
+        if text_rect.width() > 0:
+            doc.setTextWidth(text_rect.width())
+        height = max(
+            base_size.height(), ceil(doc.size().height()) + TITLE_ROW_VERTICAL_PADDING
+        )
+        return QC.QSize(width, height)
+
     def anchor_at(
         self,
         index: QC.QModelIndex,
@@ -168,7 +229,7 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
         pos: QC.QPoint,
         option: QW.QStyleOptionViewItem,
     ) -> str | None:
-        """Return the short ID under cursor position ``pos`` (in viewport
+        """Return the reference under cursor position ``pos`` (in viewport
         coordinates) for ``index``, or ``None`` if the cursor is not over any
         anchor.
 
@@ -179,7 +240,8 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
             option: style option (already initialized for the item)
         """
         text = index.data(QC.Qt.DisplayRole) or ""
-        if not isinstance(text, str) or not find_short_ids_in_title(text):
+        item_reference = index.data(TITLE_REFERENCE_ROLE)
+        if not isinstance(text, str) or not find_title_references(text):
             return None
         opt = QW.QStyleOptionViewItem(option)
         opt.rect = item_rect
@@ -189,10 +251,17 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
         if not text_rect.contains(pos):
             return None
         # Color does not influence hit-testing — pass any value.
-        doc = _make_text_document(text, option, QG.QColor("black"))
+        doc = _make_text_document(
+            text,
+            option,
+            QG.QColor("black"),
+            reference_resolver=self.reference_resolver,
+            item_reference=item_reference if isinstance(item_reference, str) else None,
+            meta_color=QG.QColor("gray"),
+        )
         doc.setTextWidth(text_rect.width())
         local = QC.QPointF(pos - text_rect.topLeft())
         href = doc.documentLayout().anchorAt(local)
-        if href and href.startswith(f"{SHORT_ID_URL_SCHEME}:"):
-            return href[len(SHORT_ID_URL_SCHEME) + 1 :]
+        if href and href.startswith(f"{REFERENCE_URL_SCHEME}:"):
+            return href[len(REFERENCE_URL_SCHEME) + 1 :]
         return None

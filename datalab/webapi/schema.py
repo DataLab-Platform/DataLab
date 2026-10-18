@@ -44,7 +44,8 @@ class ObjectMetadata(BaseModel):
     The actual data is transferred separately via the binary data plane.
     """
 
-    name: str = Field(..., description="Unique object identifier/title")
+    name: str = Field(..., description="Object name/title")
+    uuid: Optional[str] = Field(None, description="Stable full object UUID")
     type: ObjectType = Field(..., description="Object type (signal or image)")
     shape: list[int] = Field(..., description="Array shape (e.g., [100] or [512, 512])")
     dtype: str = Field(..., description="NumPy dtype string (e.g., 'float64')")
