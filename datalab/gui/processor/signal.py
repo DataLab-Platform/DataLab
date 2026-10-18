@@ -562,6 +562,16 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             comment=_("Plot one signal as a fonction of the other one"),
         )
         self.register_1_to_n(sips.extract_roi, "ROI", icon_name="roi.svg")
+        # Without menu entry: results of these features (several ROIs extracted
+        # into one signal, or saved by DataLab-Web) are applied again from the
+        # Processing tab and History
+        self.register_1_to_1(sips.extract_rois, _("Extract ROI"), icon_name="roi.svg")
+        self.register_1_to_1(
+            sips.peak_detection,
+            _("Peak detection"),
+            paramclass=sigima.params.PeakDetectionParam,
+            icon_name="peak_detect.svg",
+        )
 
     def register_analysis(self) -> None:
         """Register analysis functions."""

@@ -516,6 +516,11 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
 
         # Other processing
         self.register_1_to_n(sipi.extract_roi, "ROI", icon_name="roi.svg")
+        # Without menu entry: results of these features (several ROIs extracted
+        # into one image, or saved by DataLab-Web) are applied again from the
+        # Processing tab and History
+        self.register_1_to_1(sipi.extract_rois, _("Extract ROI"), icon_name="roi.svg")
+        self.register_1_to_1(sipi.translate, _("Translate"), sipi.TranslateParam)
         self.register_1_to_1(
             sipi.resize,
             _("Resize"),
