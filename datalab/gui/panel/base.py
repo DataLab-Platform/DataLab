@@ -3535,8 +3535,16 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
                 Conf.base_dir.set(filename)
                 obj = self.objview.get_sel_objects(include_groups=True)[0]
-                obj.metadata = read_metadata(filename)
+                metadata = read_metadata(filename)
+                # The object keeps its identity and number (provenance and titles
+                # refer to them), not those of the object the file was exported from
+                for key in ("__uuid", "__number"):
+                    metadata.pop(key, None)
+                    if key in obj.metadata:
+                        metadata[key] = obj.metadata[key]
+                obj.metadata = metadata
             self.refresh_plot("selected", True, False)
+            self.SIG_OBJECT_MODIFIED.emit()
 
     def export_metadata_from_file(self, filename: str | None = None) -> None:
         """Export metadata to file (JSON).
