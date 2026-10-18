@@ -421,3 +421,38 @@ def test_a_step_is_verified_from_its_card() -> None:
         (step,) = [entry for entry in verify if entry["payload"] != production]
         view.activate_link(step["href"])
         assert "Verification of Gaussian filter" in view.report.text()
+
+
+def _enum_of(schema, name: str) -> list[str]:
+    """Return the values allowed for property *name* anywhere in *schema*."""
+    if isinstance(schema, dict):
+        found = schema.get("properties", {}).get(name, {}).get("enum")
+        if found:
+            return found
+        values = schema.values()
+    elif isinstance(schema, list):
+        values = schema
+    else:
+        return []
+    for value in values:
+        found = _enum_of(value, name)
+        if found:
+            return found
+    return []
+
+
+def test_every_eligibility_code_has_a_text() -> None:
+    """Verification verdicts and eligibility codes are shown as text, never as
+    raw codes."""
+    # pylint: disable=import-outside-toplevel
+    from datalab_capsule._schema import load_schema
+
+    from datalab.widgets.provenance import eligibility_text, verdict_text
+
+    schema = load_schema("report-1")
+    codes = _enum_of(schema, "eligibility")
+    assert "input_changed" in codes
+    for code in codes:
+        assert "_" not in eligibility_text(code), code
+    for verdict in _enum_of(schema, "verdict"):
+        assert "_" not in verdict_text(verdict), verdict

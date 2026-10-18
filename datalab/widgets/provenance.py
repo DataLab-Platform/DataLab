@@ -180,6 +180,19 @@ def verdict_text(verdict: str) -> str:
     }.get(verdict, verdict)
 
 
+def eligibility_text(eligibility: str) -> str:
+    """Return the text of the eligibility code of a verification report."""
+    return {
+        "ready": _("ready"),
+        "missing_input": _("input missing"),
+        "input_changed": _("input changed"),
+        "unsupported_operation": _("operation not supported"),
+        "unsupported_contract": _("operation version not supported"),
+        "unsupported_context": _("context not supported"),
+        "invalid_parameters": _("invalid parameters"),
+    }.get(eligibility, eligibility)
+
+
 #: Product names of the editions recorded in the ledger (``environment.edition``)
 EDITION_NAMES = {"desktop": "DataLab Desktop", "web": "DataLab Web"}
 

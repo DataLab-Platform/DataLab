@@ -957,6 +957,12 @@ msgstr "Espace de travail"
 msgid "Attachments are limited to 16 MiB: %s"
 msgstr "Les pièces jointes sont limitées à 16 Mio : %s"
 
+msgid "Attachment"
+msgstr "Pièce jointe"
+
+msgid "The capsule, its referenced workspace and its attachments must be different files"
+msgstr "La capsule, son espace de travail référencé et ses pièces jointes doivent être des fichiers différents"
+
 msgid "This capsule references its workspace: select the workspace file"
 msgstr "Cette capsule référence son espace de travail : sélectionnez le fichier de l'espace de travail"
 
@@ -5121,6 +5127,27 @@ msgstr "Différent"
 
 msgid "Not verified"
 msgstr "Non vérifié"
+
+msgid "ready"
+msgstr "prêt"
+
+msgid "input missing"
+msgstr "entrée absente"
+
+msgid "input changed"
+msgstr "entrée modifiée"
+
+msgid "operation not supported"
+msgstr "opération non prise en charge"
+
+msgid "operation version not supported"
+msgstr "version de l'opération non prise en charge"
+
+msgid "context not supported"
+msgstr "contexte non pris en charge"
+
+msgid "invalid parameters"
+msgstr "paramètres invalides"
 
 msgid "Check data"
 msgstr "Contrôler les données"

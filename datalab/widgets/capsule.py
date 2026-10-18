@@ -49,7 +49,7 @@ from datalab.config import Conf, _
 from datalab.env import execenv
 from datalab.gui.capsuleio import attachment_entries, workspace_leaf
 from datalab.widgets.expandabletext import apply_palette_color, apply_subdued_color
-from datalab.widgets.provenance import origin_text, verdict_text
+from datalab.widgets.provenance import eligibility_text, origin_text, verdict_text
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
@@ -994,7 +994,8 @@ class ReplayTab(_Tab):
             report = self.reports.get(activity_id)
             result = ""
             if report is not None:
-                result = f"{verdict_text(report['verdict'])} ({report['eligibility']})"
+                verdict = verdict_text(report["verdict"])
+                result = f"{verdict} ({eligibility_text(report['eligibility'])})"
                 details = report_details(report)
                 if details:
                     result += "\n" + "\n".join(f"• {d}" for d in details)
