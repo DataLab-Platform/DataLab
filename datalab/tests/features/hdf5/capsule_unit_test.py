@@ -185,6 +185,34 @@ def test_invalid_capsule_leaves_workspace() -> None:
             assert len(win.provenance.ledger.activities) == activities
 
 
+def test_capsule_of_another_hdf5_file_is_refused() -> None:
+    """A capsule workspace that is not a DataLab workspace is never imported."""
+    import glob  # pylint: disable=import-outside-toplevel
+    import tempfile  # pylint: disable=import-outside-toplevel
+
+    import h5py  # pylint: disable=import-outside-toplevel
+
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        workspace = osp.join(tmpdir, "chain.h5")
+        with capsule_app(tmpdir) as win:
+            build_chain(win)
+            win.save_to_h5_file(workspace)
+        # Same objects and provenance, but not marked as a DataLab workspace
+        with h5py.File(workspace, "a") as h5file:
+            del h5file["DataLab_Version"]
+        path = osp.join(tmpdir, "foreign.dlcapsule")
+        with open(path, "wb") as file:
+            file.write(create_from_hdf5(_read(workspace), name="foreign"))
+        pattern = osp.join(tempfile.gettempdir(), "datalab-capsule-*.h5")
+        leftovers = set(glob.glob(pattern))
+        with capsule_app(tmpdir) as win:
+            with pytest.raises(CapsuleError, match="not a DataLab workspace"):
+                win.open_capsule(path)
+            assert win.provenance.capsule_origin is None
+            assert not win.capsuleio.revisions.revisions()
+        assert set(glob.glob(pattern)) == leftovers
+
+
 def test_web_capsule_opens_and_replays() -> None:
     """A capsule of a DataLab-Web workspace opens and replays on Desktop."""
     with helpers.WorkdirRestoringTempDir() as tmpdir:

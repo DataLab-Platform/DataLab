@@ -81,10 +81,12 @@ class H5InputOutput:
     def save_file(self, filename: str) -> None:
         """Save all signals and images from DataLab model into a HDF5 file"""
         writer = NativeH5Writer(filename)
-        for panel in self.mainwindow.panels:
-            panel.serialize_to_hdf5(writer)
-        self.mainwindow.provenance.save(writer.h5)
-        writer.close()
+        try:
+            for panel in self.mainwindow.panels:
+                panel.serialize_to_hdf5(writer)
+            self.mainwindow.provenance.save(writer.h5)
+        finally:
+            writer.close()
 
     @staticmethod
     def __read_provenance(
@@ -168,6 +170,7 @@ class H5InputOutput:
             ProvenanceFormatError: If the provenance block is invalid (raised
              before the workspace is replaced).
         """
+        reader = None
         try:
             reader = NativeH5Reader(filename)
             block = self.__read_provenance(reader)
@@ -181,7 +184,6 @@ class H5InputOutput:
                 if isinstance(batch, H5ImportBatch):
                     batches.append(batch)
             H5ImportBatch.finalize_imports(batches, refresh_panels=True)
-            reader.close()
             appended = [o for o in self.__data_objects() if id(o) not in before]
             self.mainwindow.provenance.load(
                 block, reset_all, saved_version, appended=appended
@@ -189,22 +191,49 @@ class H5InputOutput:
             return True
         except KeyError:
             return False
+        finally:
+            if reader is not None:
+                reader.close()
 
     def open_file(self, filename: str, import_all: bool, reset_all: bool) -> None:
         """Open HDF5 file
 
         When the file holds provenance and is appended to the current workspace,
         the user is warned before anything changes (see :meth:`__confirm_append`)
-        and may cancel.
+        and may cancel. A file that is not a DataLab workspace is imported as a
+        generic HDF5 file.
+        """
+        if not self.__open_native(filename, reset_all):
+            self.import_files([filename], import_all, reset_all)
+
+    def open_workspace_file(self, filename: str) -> None:
+        """Open a DataLab workspace file, replacing the workspace.
+
+        Unlike :meth:`open_file`, a file that is not a DataLab workspace is never
+        imported as a generic HDF5 file.
+
+        Raises:
+            ValueError: If the file is not a DataLab workspace.
+            ProvenanceFormatError: If the provenance block is invalid.
+        """
+        if not self.__open_native(filename, True):
+            raise ValueError(_("This file is not a DataLab workspace"))
+
+    def __open_native(self, filename: str, reset_all: bool) -> bool:
+        """Open a native DataLab HDF5 file (see :meth:`open_file`).
+
+        Returns:
+            False if the file is not a DataLab workspace (KeyError), else True
+            (also when the user cancels appending it).
         """
         progress = None
+        reader = None
         try:
             reader = NativeH5Reader(filename)
             block = self.__read_provenance(reader)
             saved_version = self.__saved_version(reader)
             if block is not None and not reset_all and not self.__confirm_append():
-                reader.close()
-                return
+                return True
             if reset_all:
                 self.mainwindow.reset_all()
             before = {id(obj) for obj in self.__data_objects()}
@@ -221,17 +250,20 @@ class H5InputOutput:
                     if progress.wasCanceled():
                         break
             H5ImportBatch.finalize_imports(batches, refresh_panels=True)
-            reader.close()
             appended = [o for o in self.__data_objects() if id(o) not in before]
             self.mainwindow.provenance.load(
                 block, reset_all, saved_version, appended=appended
             )
+            return True
         except KeyError:
             if progress is not None:
                 # KeyError was encoutered when deserializing datasets (DataLab data
                 # model is not compatible with this version)
                 progress.close()
-            self.import_files([filename], import_all, reset_all)
+            return False
+        finally:
+            if reader is not None:
+                reader.close()
 
     def __add_object_from_node(self, node: BaseNode) -> None:
         """Add DataLab object from h5 node"""

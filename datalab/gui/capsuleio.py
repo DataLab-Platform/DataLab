@@ -33,6 +33,7 @@ from datalab_capsule.archive import (
     create_from_hdf5,
     read_capsule,
 )
+from datalab_capsule.hdf5 import ProvenanceFormatError
 from datalab_capsule.manifest import inspect_manifest
 
 from datalab.capsulestore import CapsuleRevision, RevisionStore
@@ -284,7 +285,12 @@ class CapsuleInputOutput:
         try:
             with os.fdopen(handle, "wb") as file:
                 file.write(capsule.workspace)
-            self.mainwindow.h5inputoutput.open_file(path, True, True)
+            self.mainwindow.h5inputoutput.open_workspace_file(path)
+        except ProvenanceFormatError:
+            raise
+        except ValueError as exc:
+            # A capsule workspace is never imported as a generic HDF5 file
+            raise CapsuleError(str(exc)) from exc
         finally:
             os.remove(path)
         self.mainwindow.provenance.capsule_origin = exchange.capsule_origin(
