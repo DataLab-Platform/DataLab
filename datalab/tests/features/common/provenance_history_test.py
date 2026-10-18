@@ -224,6 +224,44 @@ def test_replay_edit_and_failure_keep_exact_links() -> None:
         assert recipe_differs_from_execution(win, action) is False
 
 
+def test_grouped_recipe_is_compared_by_position() -> None:
+    """A permuted or changed duplicate parameter of a grouped recipe differs."""
+    # pylint: disable=import-outside-toplevel
+    from datalab.processingcall import recipe_differs_from_execution
+
+    def norm(method: str):
+        return sigima.params.NormalizeParam.create(method=method)
+
+    with app(history=True) as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        panel = win.signalpanel
+        first = add_signal(win)
+        second = add_signal(win, title="S1")
+        panel.objview.select_objects([get_uuid(first), get_uuid(second)])
+        panel.processor.compute_1_to_n(
+            sips.normalize, [norm("maximum"), norm("amplitude")]
+        )
+        action = history[len(history)]
+        assert len(action.provenance_activity_ids) == 4
+        assert recipe_differs_from_execution(win, action) is False
+        # Permutation: the same parameters, associated with other results
+        action.kwargs["params"] = [norm("amplitude"), norm("maximum")]
+        assert recipe_differs_from_execution(win, action) is True
+        action.kwargs["params"] = [norm("maximum"), norm("amplitude")]
+        assert recipe_differs_from_execution(win, action) is False
+        # Duplicates: one of two equal parameters changed
+        panel.objview.select_objects([get_uuid(first)])
+        panel.processor.compute_1_to_n(sips.normalize, [norm("maximum")] * 2)
+        action = history[len(history)]
+        assert recipe_differs_from_execution(win, action) is False
+        action.kwargs["params"] = [norm("maximum"), norm("amplitude")]
+        assert recipe_differs_from_execution(win, action) is True
+        # An execution not covering the whole recipe cannot be compared
+        action.kwargs["params"] = [norm("maximum")] * 3
+        assert recipe_differs_from_execution(win, action) is None
+
+
 def test_processing_edit_updates_the_linked_action() -> None:
     """Two calls of one function: Processing edits the action of its result."""
     with app(history=True) as win:

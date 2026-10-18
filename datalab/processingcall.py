@@ -555,12 +555,16 @@ def recipe_differs_from_execution(mainwindow: DLMainWindow, action: Any) -> bool
     The recipe (the parameters of the action, possibly edited since) is encoded
     by the contract of its feature and compared with the parameters recorded by
     the activities of its last successful execution
-    (``action.provenance_activity_ids``).
+    (``action.provenance_activity_ids``). For a grouped command (``1_to_n``,
+    ``multiple_1_to_1``), the activities of each source object are compared
+    with the recipe element by element, in order: a permutation of the
+    parameters, or a change of one of two equal parameters, is a difference.
 
     Returns:
         True if an executed call used other parameters than the recipe, False
         if they match, None when they cannot be compared (no link, no
-        contract, plugin function...).
+        contract, plugin function, grouped execution not covering the whole
+        recipe for each source object...).
     """
     ids = list(action.provenance_activity_ids)
     if not ids:
@@ -573,7 +577,21 @@ def recipe_differs_from_execution(mainwindow: DLMainWindow, action: Any) -> bool
         return None
     ledger = mainwindow.provenance.ledger
     try:
-        executed = [ledger.activity(i)["call"]["parameters"] for i in ids]
+        calls = [ledger.activity(i)["call"] for i in ids]
     except KeyError:
         return None
-    return any(values not in recipe for values in executed)
+    if len(recipe) == 1:
+        return any(call["parameters"] != recipe[0] for call in calls)
+    # Grouped command: each source object went through the whole recipe, in
+    # order (see the 1-to-1 subroutine of the processors).
+    by_source: dict[str, list[Any]] = {}
+    for call in calls:
+        inputs = call["inputs"]
+        state_id = inputs[0]["binding"].get("state_id") if inputs else None
+        if state_id is None:
+            return None
+        source = ledger.states[state_id]["object_uuid"]
+        by_source.setdefault(source, []).append(call["parameters"])
+    if any(len(executed) != len(recipe) for executed in by_source.values()):
+        return None
+    return any(executed != recipe for executed in by_source.values())
