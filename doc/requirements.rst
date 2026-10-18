@@ -11,7 +11,7 @@ The `datalab-platform` package requires the following Python modules:
       - >=3.9, <4
       - Python programming language
     * - guidata
-      - >= 3.15.1
+      - >= 3.16.0
       - Automatic GUI generation for easy dataset editing and display
     * - PlotPy
       - >= 2.11.0
