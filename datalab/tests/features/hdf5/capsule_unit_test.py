@@ -249,6 +249,30 @@ def test_local_proxy_and_history() -> None:
             assert origin is not None and origin["fingerprint"] == fingerprint
 
 
+def test_history_replay_asks_before_overwriting_a_capsule() -> None:
+    """Replaying a capsule export overwrites a file: it is confirmed first."""
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.env import execenv
+
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        path = osp.join(tmpdir, "chain.dlcapsule")
+        with capsule_app(tmpdir, history=True) as win:
+            build_chain(win)
+            history = win.historypanel
+            history.toggle_record_mode(True)
+            win.export_capsule(path, name="chain")
+            action = history[len(history)]
+            assert action.method_name == "export_capsule"
+            with open(path, "wb") as file:
+                file.write(b"kept")
+            # Unattended: not confirmed, so not replayed
+            hireplay.replay_actions(history, [action], prompt=False)
+            assert _read(path) == b"kept"
+            with execenv.context(accept_dialogs=True):
+                hireplay.replay_actions(history, [action], prompt=False)
+            assert read_capsule(path).manifest is not None
+
+
 def test_remote_server() -> None:
     """The XML-RPC server exports and opens capsules, and reports refusals."""
     with helpers.WorkdirRestoringTempDir() as tmpdir:

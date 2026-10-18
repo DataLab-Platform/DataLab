@@ -116,7 +116,7 @@ class HistoryAction(ObjItf):
     # UI methods that write files on disk. Replaying them silently would
     # overwrite user files, so the replay engine asks for confirmation.
     FILE_OUTPUT_METHODS: frozenset[str] = frozenset(
-        {"save_to_h5_file", "save_to_files", "save_to_directory"}
+        {"save_to_h5_file", "save_to_files", "save_to_directory", "export_capsule"}
     )
 
     @dataclass
