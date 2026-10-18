@@ -147,7 +147,11 @@ class ExecutionService:
             self.processor.panel, _("Recomputing..."), max_=1
         ) as progress:
             self.computations += 1
-            compout = self._exec_func(execute_prepared, (prepared,), progress)
+            try:
+                compout = self._exec_func(execute_prepared, (prepared,), progress)
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                # Unattended runs re-raise computation errors (see ``catcher``)
+                raise CandidateError(str(exc) or type(exc).__name__) from exc
         if compout is None:
             raise CandidateError("cancelled by the user")
         if compout.error_msg:

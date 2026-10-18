@@ -165,6 +165,26 @@ def test_analyses_are_verified() -> None:
         win.provenance.ledger.validate()
 
 
+def test_candidate_errors_are_reported(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A computation error during a verification is reported, not raised."""
+    with app() as win:
+        signal = add_signal(win)
+        win.signalpanel.objview.select_objects([get_uuid(signal)])
+        win.signalpanel.processor.compute_1_to_1(
+            sips.gaussian_filter, sigima.params.GaussianParam.create(sigma=1.0)
+        )
+        (activity,) = win.provenance.ledger.activities
+
+        def failing(*_args, **_kwargs):
+            raise RuntimeError("computation failed")
+
+        execution = win.signalpanel.processor.execution
+        monkeypatch.setattr(execution, "_exec_func", failing)
+        report = win.verify_provenance_activity(activity["activity_id"])
+        assert report["verdict"] == "not_verified"
+        assert "computation failed" in report["reason"]
+
+
 def run_families(win) -> None:
     """Run one operation of each family on fresh objects (none is opaque)."""
     spanel, ipanel = win.signalpanel, win.imagepanel
