@@ -4004,6 +4004,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 only_visible=False,
                 only_existing=True,
             )
+            # The object changed (e.g. its provenance view is out of date)
+            self.panel.SIG_OBJECT_MODIFIED.emit()
             return edited_roi
         return obj.roi
 

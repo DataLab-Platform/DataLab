@@ -16,7 +16,7 @@ import os.path as osp
 import re
 import warnings
 from collections.abc import Sequence
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Generator, Generic, Literal, Type
 
@@ -275,6 +275,8 @@ class ObjectProp(QW.QWidget):
         self.fresh_processing_obj_uuid: str | None = None
         # UUID of the object shown (see update_properties_from)
         self.__shown_uuid: str | None = None
+        #: Tab kept current when another object is shown (see ``keeping_tab``)
+        self.__kept_tab: str | None = None
 
         self.tabwidget.addTab(
             self.history_stack, get_icon("history.svg"), _("Provenance")
@@ -497,6 +499,8 @@ class ObjectProp(QW.QWidget):
             if uuid is not None and uuid == self.__shown_uuid
             else None
         )
+        if uuid is not None and self.__kept_tab is not None:
+            previous_tab = self.__kept_tab
         self.__shown_uuid = uuid
         if obj is None:
             obj = self.objclass()
@@ -580,6 +584,19 @@ class ObjectProp(QW.QWidget):
         else:
             # Default: always show Properties tab when switching objects
             self.tabwidget.setCurrentWidget(self.properties)
+
+    @contextmanager
+    def keeping_tab(self, kind: str) -> Generator[None, None, None]:
+        """Keep the tab of *kind* current when another object is shown meanwhile.
+
+        For navigation from a tab to another object (e.g. from the provenance of
+        a result to one of its inputs), which otherwise shows Properties.
+        """
+        previous, self.__kept_tab = self.__kept_tab, kind
+        try:
+            yield
+        finally:
+            self.__kept_tab = previous
 
     def __current_tab_kind(self) -> str | None:
         """Return the kind of the current tab (dynamic tabs are rebuilt)."""
@@ -3673,6 +3690,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     obj.roi = obj.roi.combine_with(roi)
             self.selection_changed(update_items=True)
             self.refresh_plot("selected", True, False)
+            self.SIG_OBJECT_MODIFIED.emit()
 
     def export_roi_to_file(self, filename: str | None = None) -> None:
         """Export regions of interest to file (JSON).

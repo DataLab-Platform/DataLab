@@ -30,6 +30,7 @@ changes.
 from __future__ import annotations
 
 import html
+from contextlib import ExitStack
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Any
 
@@ -137,6 +138,30 @@ def _output_message(status: str) -> str:
     }.get(status, status)
 
 
+def _legacy_issue_message(issue: str) -> str:
+    return {
+        "missing_ancestry": _("the source objects are not recorded"),
+        "unavailable_input": _("a source object is no longer in the workspace"),
+        "unsupported_operation": _("the processing is unknown to this application"),
+        "pattern_unknown": _("the kind of processing is unknown"),
+        "parameters_unreadable": _("the parameters cannot be read"),
+        "result_not_identified": _("the result of the analysis is not identified"),
+        "output_not_observed": _("the object could not be read"),
+        "record_unreadable": _("the record cannot be read"),
+        "version_unknown": _("the version that saved the workspace is unknown"),
+        "version_mismatch": _("the workspace was saved by another version"),
+    }.get(issue, issue)
+
+
+def _metadata_message(status: str) -> str:
+    return {
+        "matches": _("Unchanged since the computation"),
+        "changed": _("Changed since the computation"),
+        "missing": _("Input missing"),
+        "unknown": _("Cannot be checked"),
+    }.get(status, status)
+
+
 def origin_text(origin: str) -> str:
     return {
         "ordinary": _("Processing"),
@@ -197,6 +222,9 @@ class ProvenanceWidget(QW.QWidget):
         mainwindow: DataLab main window.
         parent: Parent widget.
     """
+
+    #: Emitted when a link selected an object or a History action elsewhere
+    SIG_NAVIGATED = QC.Signal()
 
     def __init__(
         self, mainwindow: DLMainWindow, parent: QW.QWidget | None = None
@@ -405,8 +433,11 @@ class ProvenanceWidget(QW.QWidget):
             if isinstance(obj, SignalObj)
             else self.mainwindow.imagepanel
         )
-        self.mainwindow.set_current_panel(panel)
-        panel.objview.set_current_item_id(uuid)
+        # The provenance of the object is shown, as in this view
+        with panel.objprop.keeping_tab("provenance"):
+            self.mainwindow.set_current_panel(panel)
+            panel.objview.set_current_item_id(uuid)
+        self.SIG_NAVIGATED.emit()
 
     def show_history_action(self, activity_id: str) -> None:
         """Select the History action whose last execution recorded *activity_id*."""
@@ -418,7 +449,12 @@ class ProvenanceWidget(QW.QWidget):
         if dock is not None:
             dock.show()
             dock.raise_()
-        historypanel.navigation.select_action_in_tree(action)
+        # Selecting the action may select its objects: the Provenance tab stays
+        with ExitStack() as stack:
+            for panel in (self.mainwindow.signalpanel, self.mainwindow.imagepanel):
+                stack.enter_context(panel.objprop.keeping_tab("provenance"))
+            historypanel.navigation.select_action_in_tree(action)
+        self.SIG_NAVIGATED.emit()
 
     def activate_link(self, href: str) -> None:
         """Run the action of a link of the view (same path as a click)."""
@@ -510,6 +546,10 @@ class ProvenanceWidget(QW.QWidget):
         if operation is None:
             implementation = activity.get("implementation") or {}
             name = implementation.get("python_name")
+            if not name:
+                # A record of an old workspace only names the function it applied
+                record = (activity.get("legacy") or {}).get("record")
+                name = record.get("func_name") if isinstance(record, dict) else None
             return name or _("Unknown operation")
         title = operation["id"]
         try:
@@ -715,7 +755,9 @@ class ProvenanceWidget(QW.QWidget):
             )
         legacy = activity.get("legacy")
         if legacy:
-            issues = ", ".join(legacy.get("issues") or []) or _("No issue")
+            issues = ", ".join(
+                _legacy_issue_message(issue) for issue in legacy.get("issues") or []
+            ) or _("No issue")
             self.__line(self.__muted(_("Old record: %s") % issues), inner)
         links = [self.__link("verify", activity["activity_id"], _("Verify this step"))]
         if self.__history_action(activity["activity_id"]) is not None:
@@ -810,7 +852,9 @@ class ProvenanceWidget(QW.QWidget):
             self.__line(
                 _esc(_("Metadata read: %s") % read.get("key"))
                 + " — "
-                + self.__muted(status or _("Data to be checked")),
+                + self.__muted(
+                    _metadata_message(status) if status else _("Data to be checked")
+                ),
                 level,
             )
         if environment:
@@ -919,6 +963,9 @@ class ExecutionProvenanceDialog(QW.QDialog):
         for number, activity in enumerate(known, start=1):
             view = ProvenanceWidget(mainwindow, self)
             view.set_activity(activity["activity_id"])
+            # A link shows something in the main window: the dialog, modal,
+            # would hide it
+            view.SIG_NAVIGATED.connect(self.accept)
             self.tabs.addTab(view, self.__label(mainwindow, activity, number))
             self.views.append(view)
         self.tabs.setVisible(bool(known))

@@ -357,6 +357,58 @@ def test_history_action_keeps_the_provenance_tab() -> None:
         assert objprop.tabwidget.currentWidget() is objprop.properties
 
 
+def test_links_to_other_objects_keep_the_provenance_tab() -> None:
+    """Going to an input, or to the History action of an earlier step, shows the
+    provenance of what was selected, in the Provenance tab."""
+    with app(history=True) as win:
+        win.historypanel.toggle_record_mode(True)
+        objs = build_chain(win)
+        view = view_of(win, objs["s2"])
+        objprop = win.signalpanel.objprop
+        objprop.tabwidget.setCurrentWidget(objprop.history_stack)
+        (goto,) = [entry for entry in view.links if entry["action"] == "goto"]
+        view.activate_link(goto["href"])
+        QW.QApplication.processEvents()
+        assert win.signalpanel.objview.get_current_object() is objs["s1"]
+        assert objprop.tabwidget.currentWidget() is objprop.history_stack
+        view = view_of(win, objs["s2"])
+        objprop.tabwidget.setCurrentWidget(objprop.history_stack)
+        view.activate_link(link(view, "expand", "p/0"))
+        actions = [entry for entry in view.links if entry["action"] == "action"]
+        assert len(actions) == 2
+        view.activate_link(actions[-1]["href"])  # The earlier step
+        QW.QApplication.processEvents()
+        assert objprop.tabwidget.currentWidget() is objprop.history_stack
+
+
+def test_execution_dialog_closes_on_navigation() -> None:
+    """A link of the (modal) execution dialog closes it: the main window shows
+    what the link selects."""
+    # pylint: disable-next=import-outside-toplevel
+    from datalab.widgets.provenance import ExecutionProvenanceDialog
+
+    with app(history=True) as win:
+        win.historypanel.toggle_record_mode(True)
+        objs = build_chain(win)
+        history = win.historypanel
+        dialog = ExecutionProvenanceDialog(win, history[len(history)], win)
+        view = dialog.views[0]
+        goto = link(view, "goto", get_uuid(objs["s1"]))
+        assert goto is not None
+        view.activate_link(goto)
+        assert dialog.result() == QW.QDialog.Accepted
+        assert win.signalpanel.objview.get_current_object() is objs["s1"]
+
+
+def test_metadata_read_statuses_are_sentences() -> None:
+    """The statuses of metadata read by a computation are not raw codes."""
+    # pylint: disable-next=protected-access
+    from datalab.widgets.provenance import _metadata_message
+
+    for status in ("matches", "changed", "missing", "unknown"):
+        assert _metadata_message(status) != status
+
+
 def test_a_step_is_verified_from_its_card() -> None:
     """Verify this step verifies that step and names it."""
     with app() as win:
