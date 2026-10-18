@@ -350,7 +350,7 @@ class ObjectProp(QW.QWidget):
 
         # Walk backwards through processing chain, collecting items
         while current_obj is not None and len(history_items) < max_depth:
-            proc_params = extract_processing_parameters(current_obj)
+            proc_params = extract_processing_parameters(current_obj, parse_param=False)
 
             if proc_params is None:
                 # Check for creation parameters

@@ -191,6 +191,7 @@ ANALYSIS_PARAMETERS_OPTION = "analysis_parameters"  # Analysis operation (1-to-0
 
 def extract_processing_parameters(
     obj: SignalObj | ImageObj,
+    parse_param: bool = True,
 ) -> ProcessingParameters | None:
     """Extract processing parameters from object metadata.
 
@@ -199,6 +200,9 @@ def extract_processing_parameters(
 
     Args:
         obj: Signal or Image object
+        parse_param: If False, the processing parameters are not deserialized
+         (``param`` is None): faster when only the function name, the pattern
+         or the sources are needed.
 
     Returns:
         ProcessingParameters instance if processing metadata exists, None otherwise.
@@ -207,6 +211,8 @@ def extract_processing_parameters(
         pp_dict = obj.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
     except ValueError:
         return None
+    if not parse_param:
+        pp_dict = {key: val for key, val in pp_dict.items() if key != "param_json"}
     return ProcessingParameters.from_dict(pp_dict)
 
 
