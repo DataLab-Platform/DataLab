@@ -1769,6 +1769,50 @@ def test_select_source_objects_deleted_source():
             assert get_uuid(filtered_signal) in selected_uuids
 
 
+def _difference_without_metadata(win):
+    """Return ``(source, operand, result)`` of a difference recorded only in the
+    provenance ledger, as in a workspace saved by DataLab-Web."""
+    panel = win.signalpanel
+    x = np.linspace(0.0, 1.0, 11)
+    source = create_signal("source", x, x**2)
+    operand = create_signal("operand", x, x)
+    panel.add_object(source)
+    panel.add_object(operand)
+    panel.objview.set_current_item_id(get_uuid(source))
+    panel.processor.run_feature("difference", operand)
+    result = panel.objview.get_current_object()
+    result.metadata.pop("__processing_parameters", None)
+    return source, operand, result
+
+
+def test_select_source_objects_from_the_ledger():
+    """Sources are found in the provenance ledger, operand included."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            source, operand, result = _difference_without_metadata(win)
+            panel.objview.clearSelection()
+            panel.objview.set_current_item_id(get_uuid(result), extend=False)
+            panel.select_source_objects()
+            assert set(panel.objview.get_sel_object_uuids()) == {
+                get_uuid(source),
+                get_uuid(operand),
+            }
+
+
+def test_recompute_selected_two_to_one_from_the_ledger():
+    """A two-signal result recorded only in the ledger is recomputed in place."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            source, operand, result = _difference_without_metadata(win)
+            operand.set_xydata(operand.x, operand.y * 2.0)
+            panel.objview.set_current_item_id(get_uuid(result), extend=False)
+            panel.recompute_selected()
+            assert np.allclose(result.y, source.y - operand.y)
+            assert panel.objmodel[get_uuid(result)] is result
+
+
 def test_roi_mask_invalidation_on_size_change():
     """Test that ROI masks are invalidated when image size changes.
 

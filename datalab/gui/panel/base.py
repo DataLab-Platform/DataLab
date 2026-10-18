@@ -3738,7 +3738,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         This method handles both single objects and groups. For each object, it
         recomputes, on demand:
 
-        - 1-to-1 processing operations (in-place data transformations), and
+        - the processing that produced it (1-to-1, 2-to-1 or n-to-1, as restored
+          by :func:`datalab.processingcall.resolve_processing_call`: from the
+          provenance ledger, else from the processing metadata), in place, and
         - 1-to-0 analysis operations (statistics, measurements, detections, etc.).
 
         Analysis results are *not* recomputed automatically when data, ROIs or
@@ -3750,13 +3752,15 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if not objects:
             return
 
-        # Filter objects that have recomputable 1-to-1 processing parameters
-        # and/or 1-to-0 analysis parameters (an object may have both)
+        # pylint: disable-next=import-outside-toplevel
+        from datalab.processingcall import resolve_processing_call
+
+        # Filter objects that have a recorded processing and/or 1-to-0 analysis
+        # parameters (an object may have both)
         recomputable_objects: list[SignalObj | ImageObj] = []
         reanalyzable_objects: list[SignalObj | ImageObj] = []
         for obj in objects:
-            proc_params = extract_processing_parameters(obj)
-            if proc_params is not None and proc_params.pattern == "1-to-1":
+            if resolve_processing_call(self.mainwindow, obj) is not None:
                 recomputable_objects.append(obj)
             analysis_params = extract_analysis_parameters(obj)
             if analysis_params is not None and analysis_params.pattern == "1-to-0":
@@ -3900,6 +3904,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         This method retrieves the source object UUIDs from the selected object's
         processing parameters and selects them in the object view.
         """
+        # pylint: disable-next=import-outside-toplevel
+        from datalab.processingcall import resolve_processing_call
+
         # Get the selected object (should be exactly one)
         objects = self.objview.get_sel_objects(include_groups=False)
         if len(objects) != 1:
@@ -3907,9 +3914,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         obj = objects[0]
 
-        # Extract processing parameters
-        proc_params = extract_processing_parameters(obj)
-        if proc_params is None:
+        # Restore the processing call (provenance ledger, else metadata)
+        call = resolve_processing_call(self.mainwindow, obj)
+        if call is None:
             if not execenv.unattended:
                 QW.QMessageBox.information(
                     self,
@@ -3918,12 +3925,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 )
             return
 
-        # Get source UUIDs
-        source_uuids = []
-        if proc_params.source_uuid:
-            source_uuids.append(proc_params.source_uuid)
-        if proc_params.source_uuids:
-            source_uuids.extend(proc_params.source_uuids)
+        # Source UUIDs, without repetitions (an object may be several inputs)
+        source_uuids = list(dict.fromkeys(item.object_uuid for item in call.inputs))
 
         if not source_uuids:
             if not execenv.unattended:
@@ -3934,12 +3937,10 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 )
             return
 
-        # Check if source objects still exist (search across all panels)
-        existing_objs = []
-        for uuid in source_uuids:
-            obj = self.mainwindow.find_object_by_uuid(uuid)
-            if obj is not None:
-                existing_objs.append(obj)
+        # Objects still holding the sources (never an object appended later with
+        # the identifier of a deleted source)
+        present = {item.object_uuid: item.obj for item in call.inputs if item.obj}
+        existing_objs = [present[uuid] for uuid in source_uuids if uuid in present]
 
         if not existing_objs:
             if not execenv.unattended:
@@ -3952,7 +3953,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         # Determine which panel contains the source objects
         # Source objects are always in the same panel (either all signals or all images)
-        if all(uuid in self.objmodel.get_object_ids() for uuid in source_uuids):
+        object_ids = self.objmodel.get_object_ids()
+        if all(get_uuid(source) in object_ids for source in existing_objs):
             source_panel = self
         elif isinstance(existing_objs[0], SignalObj):
             source_panel = self.mainwindow.signalpanel
