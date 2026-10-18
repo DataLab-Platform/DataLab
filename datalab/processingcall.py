@@ -504,12 +504,13 @@ def grouped_recipe_index(
     """Return the element of a grouped command recipe that produced an output.
 
     For a ``1_to_n`` or ``multiple_1_to_1`` History action, the recipe holds one
-    element (function and parameters) per output of each processed object.
-    The element is the one whose function and encoded parameters are those of
-    the call restored for the output (*call*, recorded by the provenance);
-    when several elements match (same function and parameters), or without
-    recorded provenance, the position of the output among the outputs of the
-    action decides.
+    element (function and parameters) per output of each processed object, in
+    order. The position of the output among the outputs of the action decides:
+    its parameters may have been changed since (e.g. reapplied from the
+    Processing tab outside the History edit mode), possibly to those of
+    another element. For an output the action does not list, the element is
+    the only one whose function and encoded parameters are those of the call
+    restored for the output (*call*, recorded by the provenance).
 
     Returns:
         The index in ``action.kwargs["params"]`` (and ``func_names``), or None
@@ -520,6 +521,9 @@ def grouped_recipe_index(
     elements = _recipe_elements(mainwindow, action)
     if not elements:
         return None
+    outputs = list(action.output_uuids)
+    if output_uuid in outputs:
+        return outputs.index(output_uuid) % len(elements)
     recorded = None
     if call.activity_id is not None:
         try:
@@ -539,14 +543,7 @@ def grouped_recipe_index(
             and encoded_parameters(feature, param) == recorded
         ]
     )
-    if len(matching) == 1:
-        return matching[0]
-    outputs = list(action.output_uuids)
-    if output_uuid in outputs:
-        position = outputs.index(output_uuid) % len(elements)
-        if not matching or position in matching:
-            return position
-    return None
+    return matching[0] if len(matching) == 1 else None
 
 
 def recipe_differs_from_execution(mainwindow: DLMainWindow, action: Any) -> bool | None:

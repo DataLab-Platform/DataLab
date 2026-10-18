@@ -455,6 +455,34 @@ def test_edited_output_of_a_grouped_command_is_replayed(method: str) -> None:
         assert (_sigma(win, first), _sigma(win, second)) == (5.0, 2.0)
 
 
+@pytest.mark.parametrize("method", ["compute_1_to_n", "compute_multiple_1_to_1"])
+def test_grouped_output_edited_after_another_change(method: str) -> None:
+    """An output reapplied outside edit mode with the parameters of another
+    output, then edited in edit mode, updates its own element and link."""
+    with app(history=True) as win:
+        history = win.historypanel
+        history.toggle_record_mode(True)
+        first, second = _grouped(win, method)
+        action = history[len(history)]
+        # Outside edit mode: the first output now has the parameters of the second
+        report = win.signalpanel.objprop.apply_processing_parameters(
+            first,
+            interactive=False,
+            param=sigima.params.GaussianParam.create(sigma=2.0),
+        )
+        assert report.success, report.message
+        history.toggle_edit_mode(True)
+        report = win.signalpanel.objprop.apply_processing_parameters(
+            first,
+            interactive=False,
+            param=sigima.params.GaussianParam.create(sigma=5.0),
+        )
+        assert report.success, report.message
+        assert [p.sigma for p in action.kwargs["params"]] == [5.0, 2.0]
+        assert link_of(win, first) in action.provenance_activity_ids
+        assert link_of(win, second) in action.provenance_activity_ids
+
+
 def test_processing_outside_edit_mode_keeps_the_recipe() -> None:
     """Outside History edit mode, the History action stays the recipe."""
     with app(history=True) as win:

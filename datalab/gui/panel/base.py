@@ -1502,9 +1502,27 @@ class ObjectProp(QW.QWidget):
         elif len(action.output_uuids) <= 1:
             links = [current]
         else:
-            # Several outputs without a link to this one: no partial link.
-            return
+            # The superseded link is the one that produced this output (its
+            # activity may have been replaced since outside the edit mode)
+            index = self.__link_of_output(links, get_uuid(obj))
+            if index is None:
+                return
+            links[index] = current
         action.provenance_activity_ids = links
+
+    def __link_of_output(self, links: list[str], object_uuid: str) -> int | None:
+        """Return the position of the link whose activity produced an object."""
+        ledger = self.panel.mainwindow.provenance.ledger
+        for index, activity_id in enumerate(links):
+            try:
+                outputs = ledger.activity(activity_id)["outputs"]
+            except KeyError:
+                continue
+            for output in outputs:
+                state = ledger.states.get(output.get("state_id"))
+                if state is not None and state["object_uuid"] == object_uuid:
+                    return index
+        return None
 
     def apply_recomputed_object_in_place(
         self,
