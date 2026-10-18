@@ -128,6 +128,12 @@ DataLab now uses stable UUID-based object references across object trees, result
 **Metadata:**
 
 * Adding, pasting or deleting metadata now marks the workspace as modified, so DataLab asks to save these changes before closing
+* Importing metadata from a file into an object (**Edit > Metadata > Import metadata**) no longer gives it the identity of the object the metadata were exported from: two objects sharing an identity confused source references in titles, **Select source objects** and the saving of the workspace
+
+**Processing:**
+
+* Results of the extraction of several regions of interest into a single object can be processed again: the **Processing** tab showed "Unknown computing feature: extract_rois" with **Reapply** disabled, and replaying the History skipped the action
+* **Edit > Recompute** now also recomputes results of operations combining several objects (e.g., difference of two signals, average of several images), which were skipped
 
 **Plugins and History:**
 

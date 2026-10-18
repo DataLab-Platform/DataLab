@@ -314,3 +314,15 @@ msgstr "Correction des références aux sources illisibles dans les titres lorsq
 
 msgid "Fixed result titles pointing to the wrong source objects after appending an HDF5 workspace to a non-empty session; appending the same workspace twice now also keeps each imported processing chain independent, so **Recompute** and **Select source objects** use the sources of the same import (fixes [Issue #357](https://github.com/DataLab-Platform/DataLab/issues/357))"
 msgstr "Correction des titres de résultats qui désignaient de mauvais objets sources après l'ajout d'un espace de travail HDF5 à une session non vide ; ajouter deux fois le même espace de travail conserve désormais aussi des chaînes de traitement importées indépendantes, de sorte que **Retraiter** et **Sélectionner les objets source** utilisent les sources issues du même import (corrige [Issue #357](https://github.com/DataLab-Platform/DataLab/issues/357))"
+
+msgid "Importing metadata from a file into an object (**Edit > Metadata > Import metadata**) no longer gives it the identity of the object the metadata were exported from: two objects sharing an identity confused source references in titles, **Select source objects** and the saving of the workspace"
+msgstr "L'import de métadonnées depuis un fichier dans un objet (**Édition > Métadonnées > Importer les métadonnées**) ne lui donne plus l'identité de l'objet dont les métadonnées avaient été exportées : deux objets partageant une identité perturbaient les références aux sources dans les titres, **Sélectionner les objets source** et l'enregistrement de l'espace de travail"
+
+msgid "**Processing:**"
+msgstr "**Traitements :**"
+
+msgid "Results of the extraction of several regions of interest into a single object can be processed again: the **Processing** tab showed \"Unknown computing feature: extract_rois\" with **Reapply** disabled, and replaying the History skipped the action"
+msgstr "Les résultats de l'extraction de plusieurs régions d'intérêt dans un seul objet peuvent de nouveau être retraités : l'onglet **Traitement** affichait « Unknown computing feature: extract_rois » avec **Réappliquer** désactivé, et le rejeu de l'historique ignorait l'action"
+
+msgid "**Edit > Recompute** now also recomputes results of operations combining several objects (e.g., difference of two signals, average of several images), which were skipped"
+msgstr "**Édition > Retraiter** recalcule désormais aussi les résultats des opérations combinant plusieurs objets (par exemple la différence de deux signaux ou la moyenne de plusieurs images), qui étaient ignorés"
