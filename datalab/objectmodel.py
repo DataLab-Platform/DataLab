@@ -403,8 +403,14 @@ class ObjectModel:
         Returns:
             Matching objects or groups (more than one only on prefix collision).
         """
-        items = self._groups if reference.startswith("g") else self._objects.values()
-        return [item for item in items if get_title_reference(item) == reference]
+        if reference.startswith("g"):
+            return [g for g in self._groups if get_title_reference(g) == reference]
+        # Objects are keyed by their UUID, whose prefix is their title reference
+        return [
+            obj
+            for uuid, obj in self._objects.items()
+            if uuid[:UUID_DISPLAY_LENGTH] == reference
+        ]
 
     def get_group(self, uuid: str) -> ObjectGroup:
         """Return group with uuid"""
@@ -727,8 +733,10 @@ class ObjectModel:
         added or removed.
         """
         index: dict[str, list[SignalObj | ImageObj | ObjectGroup]] = {}
-        for item in (*self._groups, *self._objects.values()):
-            index.setdefault(get_title_reference(item), []).append(item)
+        for group in self._groups:
+            index.setdefault(get_title_reference(group), []).append(group)
+        for uuid, obj in self._objects.items():
+            index.setdefault(uuid[:UUID_DISPLAY_LENGTH], []).append(obj)
         return index
 
     def reorder_groups(self, group_ids: list[str]) -> None:

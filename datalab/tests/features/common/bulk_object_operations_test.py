@@ -78,19 +78,19 @@ def test_panel_add_objects_updates_tree_and_notifies_once(
         update_calls: list[None] = []
         resize_calls: list[int] = []
         original_update_tree = panel.objview.update_tree
-        original_resize = panel.objview.resizeColumnToContents
+        original_resize = panel.objview.resize_title_column
 
         def track_update_tree() -> None:
             update_calls.append(None)
             original_update_tree()
 
-        def track_resize(column: int) -> None:
-            resize_calls.append(column)
-            original_resize(column)
+        def track_resize(items=None) -> None:
+            resize_calls.append(None if items is None else len(items))
+            original_resize(items)
 
         panel.SIG_OBJECT_ADDED.connect(lambda: notifications.append(None))
         monkeypatch.setattr(panel.objview, "update_tree", track_update_tree)
-        monkeypatch.setattr(panel.objview, "resizeColumnToContents", track_resize)
+        monkeypatch.setattr(panel.objview, "resize_title_column", track_resize)
 
         panel.add_objects(signals, get_uuid(group), set_current=False)
 
@@ -104,7 +104,8 @@ def test_panel_add_objects_updates_tree_and_notifies_once(
         assert notifications == [None]
         # The new items are created with their final text: no tree update
         assert update_calls == []
-        assert resize_calls == [0]
+        # One column fit, measuring the new items only
+        assert resize_calls == [10]
         assert panel.objview.get_current_object() is None
 
         # Inserting before the objects of another group renumbers them, which
@@ -118,6 +119,43 @@ def test_panel_add_objects_updates_tree_and_notifies_once(
         object_ids = panel.objmodel.get_object_ids()
         tree_texts = [panel.objview.get_item_from_id(oid).text(0) for oid in object_ids]
         assert tree_texts == [panel.objmodel[oid].title for oid in object_ids]
+
+
+def test_adding_an_object_costs_the_same_whatever_the_panel_size(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Adding an object measures the new title only, not every title of the panel
+    (cost independent of the number of objects)."""
+    with datalab_test_app_context(console=False, exec_loop=False) as win:
+        panel = win.signalpanel
+        first = create_test_signal("Source")
+        panel.add_objects((first,))
+        reference = get_title_reference(first)
+        panel.add_objects(
+            tuple(create_test_signal(f"f({reference}) {i}") for i in range(30))
+        )
+        objview = panel.objview
+        hints: list[None] = []
+        original_hint = objview.title_delegate.sizeHint
+
+        def track_hint(option, index):
+            hints.append(None)
+            return original_hint(option, index)
+
+        monkeypatch.setattr(objview.title_delegate, "sizeHint", track_hint)
+        counts = []
+        for _batch in range(2):
+            hints.clear()
+            panel.add_objects((create_test_signal(f"g({reference})"),))
+            counts.append(len(hints))
+            panel.add_objects(
+                tuple(create_test_signal(f"f({reference}) {i}") for i in range(60))
+            )
+        # Same work with 31 and 92 objects: the existing titles are not measured
+        assert counts[0] == counts[1] < 31
+        before = objview.columnWidth(0)
+        panel.add_objects((create_test_signal("A much longer title " * 8),))
+        assert objview.columnWidth(0) > before
 
 
 def test_panel_add_objects_sets_last_object_current() -> None:

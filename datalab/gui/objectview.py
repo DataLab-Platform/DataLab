@@ -107,7 +107,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         self.setAlternatingRowColors(True)
         self.itemDoubleClicked.connect(self.item_double_clicked)
         self.header().setSectionResizeMode(QW.QHeaderView.Interactive)
-        self.itemChanged.connect(lambda item: self.resizeColumnToContents(0))
+        self.itemChanged.connect(lambda item: self.resize_title_column())
         self.title_delegate = ClickableTitleDelegate(
             self, self.get_title_reference_display
         )
@@ -377,7 +377,8 @@ class SimpleObjectTree(QW.QTreeWidget):
             self.clear()
         with self._title_reference_indexes():
             for group in self.objmodel.get_groups():
-                self.add_group_item(group)
+                self.add_group_item(group, resize=False)
+        self.resize_title_column()
         if uuid is not None:
             self.set_current_item_id(uuid)
 
@@ -391,42 +392,92 @@ class SimpleObjectTree(QW.QTreeWidget):
         items = {}
         for item in self.iter_items():
             items.setdefault(item.data(0, QC.Qt.UserRole), item)
+        # Items are updated without fitting the column once per changed item
+        with self._title_reference_indexes(), block_signals(widget=self):
+            complete = self.__update_items(items)
+        if complete:
+            self.resize_title_column()
+        else:
+            # Group or object item not found: repopulate tree to fix inconsistency
+            self.populate_tree()
+
+    def __update_items(self, items: dict[str, QW.QTreeWidgetItem]) -> bool:
+        """Update the items of all groups and objects from the model.
+
+        Returns:
+            False if an item is missing from the tree (nothing more is updated).
+        """
+        for group in self.objmodel.get_groups():
+            group_item = items.get(get_uuid(group))
+            if group_item is None:
+                return False
+            self.__update_item(group_item, group)
+            for obj in group:
+                obj_item = items.get(get_uuid(obj))
+                if obj_item is None:
+                    return False
+                self.__update_item(obj_item, obj)
+        return True
+
+    def resize_title_column(
+        self, items: Sequence[QW.QTreeWidgetItem] | None = None
+    ) -> None:
+        """Fit the title column to the titles.
+
+        Args:
+            items: Items just added to a tree whose column was already fitted to
+             the other items: the column is only widened if one of them needs it,
+             without measuring every title again. All items when None.
+        """
         with self._title_reference_indexes():
-            for group in self.objmodel.get_groups():
-                group_item = items.get(get_uuid(group))
-                if group_item is None:
-                    # Group item not found, repopulate tree to fix inconsistency
-                    self.populate_tree()
-                    return
-                self.__update_item(group_item, group)
-                for obj in group:
-                    obj_item = items.get(get_uuid(obj))
-                    if obj_item is None:
-                        # Object item not found, repopulate tree to fix inconsistency
-                        self.populate_tree()
-                        return
-                    self.__update_item(obj_item, obj)
+            if items is None:
+                self.resizeColumnToContents(0)
+                return
+            width = max((self.__title_width(item) for item in items), default=0)
+        if width > self.columnWidth(0):
+            self.setColumnWidth(0, width)
+
+    def __title_width(self, item: QW.QTreeWidgetItem) -> int:
+        """Return the width needed by *item* in the title column (indentation
+        included, as computed by :meth:`resizeColumnToContents`)."""
+        depth = 0
+        parent = item.parent()
+        while parent is not None:
+            depth += 1
+            parent = parent.parent()
+        if self.rootIsDecorated():
+            depth += 1
+        hint = self.sizeHintForIndex(self.indexFromItem(item, 0))
+        return hint.width() + depth * self.indentation()
 
     def __add_to_group_item(
         self, obj: SignalObj | ImageObj, group_item: QW.QTreeWidgetItem
-    ) -> None:
-        """Add object to group item"""
+    ) -> QW.QTreeWidgetItem:
+        """Add object to group item and return its item"""
         item = QW.QTreeWidgetItem()
         icon = "signal.svg" if isinstance(obj, SignalObj) else "image.svg"
         item.setIcon(0, get_icon(icon))
         self.__update_item(item, obj)
         group_item.addChild(item)
+        return item
 
-    def add_group_item(self, group: ObjectGroup) -> None:
-        """Add group item"""
+    def add_group_item(self, group: ObjectGroup, resize: bool = True) -> None:
+        """Add group item
+
+        Args:
+            group: Group to add, with its objects
+            resize: If True, fit the title column to the new items
+        """
         group_item = QW.QTreeWidgetItem()
         group_item.setIcon(0, get_icon("group.svg"))
         self.__update_item(group_item, group)
         self.addTopLevelItem(group_item)
         group_item.setExpanded(True)
+        items = [group_item]
         for obj in group:
-            self.__add_to_group_item(obj, group_item)
-        self.resizeColumnToContents(0)
+            items.append(self.__add_to_group_item(obj, group_item))
+        if resize:
+            self.resize_title_column(items)
 
     def add_object_item(
         self, obj: SignalObj | ImageObj, group_id: str, set_current: bool = True
@@ -458,14 +509,14 @@ class SimpleObjectTree(QW.QTreeWidget):
         self.setUpdatesEnabled(False)
         try:
             with self._title_reference_indexes():
-                for obj in objects:
-                    self.__add_to_group_item(obj, group_item)
+                items = [self.__add_to_group_item(obj, group_item) for obj in objects]
             if set_current:
                 self.set_current_item_id(get_uuid(objects[-1]))
         finally:
             self.setUpdatesEnabled(updates_enabled)
             self.blockSignals(signals_blocked)
-        self.resizeColumnToContents(0)
+        # The column fits the existing items: only the new ones are measured
+        self.resize_title_column(items)
 
     def update_item(self, uuid: str) -> None:
         """Update item"""
