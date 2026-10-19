@@ -29,7 +29,13 @@ on:
           - 'full'
           - 'provenance_roundtrip'
           - 'file_without_block_and_append'
+          - 'roundtrip_then_annotations'
         default: 'full'
+      pytest_repeat:
+        description: 'Number of consecutive pytest runs (diagnosing a hang)'
+        required: false
+        type: string
+        default: '1'
   schedule:
     # Only the "build_latest" job runs on schedule (see execution conditions below)
     - cron: "0 5 * * 1"
@@ -130,6 +136,10 @@ jobs:
       run: ruff check --output-format=github datalab
     - name: Test with pytest
       timeout-minutes: 40
+      env:
+        # Temporary probe of the diagnostic branch (see .github/diagnostics)
+        PYTHONPATH: ${{ github.workspace }}/.github/diagnostics
+        PYTEST_REPEAT: ${{ github.event.inputs.pytest_repeat || '1' }}
       run: |
         set -o pipefail
         targets=()
@@ -140,14 +150,23 @@ jobs:
           file_without_block_and_append)
             targets=(datalab/tests/features/hdf5/provenance_roundtrip_unit_test.py::test_file_without_block_and_append)
             ;;
+          roundtrip_then_annotations)
+            targets=(datalab/tests/features/hdf5/provenance_roundtrip_unit_test.py datalab/tests/features/image/annotations_app_test.py)
+            ;;
         esac
-        pytest -vv --tb=long --setup-show -o faulthandler_timeout=120 "${targets[@]}" 2>&1 | tee pytest-qt6.log
+        for run in $(seq 1 "$PYTEST_REPEAT"); do
+          echo "::group::pytest run $run/$PYTEST_REPEAT"
+          QT_HANG_PROBE_LOG="qt-hang-probe-$run.log" pytest -vv --tb=long --setup-show -p qt_hang_probe -o faulthandler_timeout=120 "${targets[@]}" 2>&1 | tee -a pytest-qt6.log
+          echo "::endgroup::"
+        done
     - name: Upload pytest diagnostics
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: pytest-qt6-${{ matrix.python-version }}
-        path: pytest-qt6.log
+        path: |
+          pytest-qt6.log
+          qt-hang-probe-*.log
         if-no-files-found: ignore
 
   build_latest:
