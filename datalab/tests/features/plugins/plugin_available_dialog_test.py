@@ -13,7 +13,12 @@ import pytest
 from qtpy import QtWidgets as QW
 
 from datalab import __version__
-from datalab.config import Conf
+from datalab.config import (
+    DATALAB_PLUGINS_CATALOG_ENV_VAR,
+    Conf,
+    get_plugin_catalog_paths,
+    set_plugin_catalog_paths,
+)
 from datalab.config.persistence import has_persisted_option, remove_persisted_option
 from datalab.gui.plugins.config import PluginConfigDialog
 from datalab.plugins import PluginRegistry
@@ -28,6 +33,7 @@ from datalab.tests.backbone.plugins.wheel_factory import (
 PACKAGE = "datalab_catalog_ui_probe"
 DISTRIBUTION = "datalab-catalog-ui-probe"
 PLUGIN_ID = "org.example.catalog-ui-probe"
+OPTIONS = ("plugins_catalog_url", "plugins_catalog_path_list")
 
 
 @pytest.fixture(name="store")
@@ -39,13 +45,18 @@ def fixture_store(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     )
     monkeypatch.setattr(plugin_base, "_INSTALLED_PLUGIN_STORE", store)
     monkeypatch.setattr(sys, "path", list(sys.path))
-    had_url = has_persisted_option(Conf, "plugins_catalog_url")
-    original_url = Conf.plugins_catalog_url.get()
+    monkeypatch.delenv(DATALAB_PLUGINS_CATALOG_ENV_VAR, raising=False)
+    saved = {
+        name: (has_persisted_option(Conf, name), getattr(Conf, name).get())
+        for name in OPTIONS
+    }
+    set_plugin_catalog_paths([])
     yield store
-    if had_url:
-        Conf.plugins_catalog_url.set(original_url)
-    else:
-        remove_persisted_option(Conf, "plugins_catalog_url")
+    for name, (persisted, value) in saved.items():
+        if persisted:
+            getattr(Conf, name).set(value)
+        else:
+            remove_persisted_option(Conf, name)
     for name in [name for name in sys.modules if name.startswith(PACKAGE)]:
         del sys.modules[name]
 
@@ -167,9 +178,115 @@ def test_catalog_plugin_is_installed_then_offered_as_update(
 
         Conf.plugins_catalog_url.set((tmp_path / "missing.json").as_uri())
         available.refresh()
-        assert "cannot be loaded" in available.status_label.text()
+        assert "Cannot download" in available.errors_label.text()
+        assert not available.item_widgets
         dialog.close()
         dialog.deleteLater()
+
+
+def publish_wheel(folder: Path, version: str) -> None:
+    """Drop a probe plugin wheel in a local catalog folder."""
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / wheel_filename(DISTRIBUTION, version)).write_bytes(
+        make_plugin_wheel(
+            distribution=DISTRIBUTION,
+            version=version,
+            package=PACKAGE,
+            plugin_id=PLUGIN_ID,
+            requires_dist=("datalab-platform>=1.0",),
+        )
+    )
+
+
+def test_local_catalog_plugin_takes_precedence_and_is_installed(
+    store: InstalledPluginStore, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A plugin of a local catalog hides the online one and is installed from it."""
+    local = tmp_path / "shared" / "plugins"
+    publish_wheel(local, "1.1.0")
+    Conf.plugins_catalog_url.set(publish_catalog(tmp_path / "site", ("1.0.0",)))
+    set_plugin_catalog_paths([str(local)])
+    origins: list[str] = []
+    monkeypatch.setattr(
+        QW.QMessageBox, "question", lambda *_args, **_kwargs: QW.QMessageBox.Yes
+    )
+    with datalab_test_app_context(console=False) as win:
+        dialog = PluginConfigDialog(win)
+        available = dialog.available_plugins_widget
+        assert available.get_catalog_directories() == [str(local)]
+        monkeypatch.setattr(available, "run_task", run_now)
+        monkeypatch.setattr(
+            dialog.installed_plugins_widget,
+            "confirm_installation",
+            lambda _manifest, origin=None: origins.append(origin) or True,
+        )
+
+        available.refresh()
+        (row,) = available.item_widgets
+        assert row.plugin.source == str(local)
+        assert row.action_button.text() == "Install"
+        assert available.status_label.text() == "Plugins in the catalogs: 1"
+        assert available.errors_label.isHidden()
+        row.action_button.click()
+        QW.QApplication.processEvents()
+
+        assert origins == [f"Local plugin catalog ({local})"]
+        assert [plugin.version for plugin in store.get_plugins()] == ["1.1.0"]
+
+        Conf.plugins_catalog_url.set((tmp_path / "missing.json").as_uri())
+        available.refresh()
+        (row,) = available.item_widgets
+        assert row.status_label.text() == "Installed"
+        assert "Cannot download" in available.errors_label.text()
+        dialog.close()
+        dialog.deleteLater()
+
+
+def test_local_catalog_folders_are_set_in_plugin_settings(
+    store: InstalledPluginStore, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Local catalog folders are edited without reloading plugins."""
+    del store
+    env_folder, added, edited = (tmp_path / name for name in ("env", "a", "b"))
+    monkeypatch.setenv(DATALAB_PLUGINS_CATALOG_ENV_VAR, str(env_folder))
+    Conf.plugins_catalog_url.set("")
+
+    def no_reload_question(*_args, **_kwargs):
+        raise AssertionError("Changing catalogs must not reload plugins")
+
+    monkeypatch.setattr(QW.QMessageBox, "question", no_reload_question)
+    with datalab_test_app_context(console=False) as win:
+        dialog = PluginConfigDialog(win)
+        available = dialog.available_plugins_widget
+        (env_widget,) = dialog.env_catalog_path_widgets
+        assert env_widget.path == str(env_folder) and env_widget.edit_button is None
+        assert DATALAB_PLUGINS_CATALOG_ENV_VAR in env_widget.path_label.text()
+        assert dialog.catalog_paths_placeholder.isHidden()
+        monkeypatch.setattr(available, "run_task", run_now)
+        selected = iter([str(added), str(env_folder), str(edited)])
+        monkeypatch.setattr(
+            dialog, "_browse_catalog_directory", lambda _path=None: next(selected)
+        )
+
+        dialog.add_catalog_button.click()
+        dialog.add_catalog_button.click()
+        assert dialog.catalog_paths == [str(added)]
+        assert available.get_catalog_directories() == [str(env_folder), str(added)]
+        dialog.catalog_path_widgets[0].edit_button.click()
+        assert available.get_catalog_directories() == [str(env_folder), str(edited)]
+
+        available.refresh()
+        assert available.errors_label.text().count("not found") == 2
+
+        dialog.accept()
+    assert get_plugin_catalog_paths() == [str(edited)]
+
+    with datalab_test_app_context(console=False) as win:
+        dialog = PluginConfigDialog(win)
+        dialog.catalog_path_widgets[0].delete_button.click()
+        assert not dialog.catalog_paths
+        dialog.reject()
+    assert get_plugin_catalog_paths() == [str(edited)]
 
 
 if __name__ == "__main__":

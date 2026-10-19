@@ -65,6 +65,16 @@ def set_user_plugin_paths(paths: list[str] | tuple[str, ...]) -> None:
     Conf.plugins_path_list.set(normalized)
 
 
+def get_plugin_catalog_paths() -> list[str]:
+    """Return the user-configured local plugin catalog folders."""
+    return normalize_plugin_paths(Conf.plugins_catalog_path_list.get([]) or [])
+
+
+def set_plugin_catalog_paths(paths: list[str] | tuple[str, ...]) -> None:
+    """Persist the user-configured local plugin catalog folders."""
+    Conf.plugins_catalog_path_list.set(normalize_plugin_paths(list(paths)))
+
+
 #: Active initialization mode: ``None`` (not yet initialized), ``"user"``
 #: (user configuration loaded/migrated, INI persistence enabled) or
 #: ``"defaults"`` (production defaults only, no persistence).

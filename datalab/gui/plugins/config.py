@@ -24,6 +24,7 @@ from qtpy import QtWidgets as QW
 from qtpy.compat import getexistingdirectory
 
 from datalab.config import (
+    DATALAB_PLUGINS_CATALOG_ENV_VAR,
     DATALAB_PLUGINS_ENV_PATHS,
     DATALAB_PLUGINS_ENV_VAR,
     OTHER_PLUGINS_PATHLIST,
@@ -31,12 +32,18 @@ from datalab.config import (
     PLUGIN_OK_COLOR,
     Conf,
     _,
+    get_env_plugin_catalog_paths,
+    get_plugin_catalog_paths,
     get_user_plugin_paths,
     normalize_plugin_paths,
+    set_plugin_catalog_paths,
     set_user_plugin_paths,
 )
 from datalab.gui.plugins.applications import get_plugin_icon
-from datalab.gui.plugins.available import AvailablePluginsWidget
+from datalab.gui.plugins.available import (
+    AvailablePluginsWidget,
+    merge_catalog_directories,
+)
 from datalab.gui.plugins.install import InstalledPluginsWidget
 from datalab.plugins import (
     PLUGINS_DEFAULT_PATH,
@@ -498,19 +505,26 @@ class FailedPluginInfoWidget(QW.QWidget):
 
 
 class SearchPathItemWidget(QW.QWidget):
-    """Widget representing one plugin search path."""
+    """Widget representing one plugin search path or local catalog folder.
+
+    Args:
+        path: Directory path
+        editable: Whether to show the edit and remove buttons
+        env_var: Environment variable providing the directory, if any
+        parent: Parent widget
+    """
 
     def __init__(
         self,
         path: str,
         *,
         editable: bool,
-        from_env: bool = False,
+        env_var: str = "",
         parent: QW.QWidget | None = None,
     ) -> None:
         super().__init__(parent)
         self.path = path
-        self.from_env = from_env
+        self.env_var = env_var
         self.path_label: QW.QLabel | None = None
         self.edit_button: QW.QToolButton | None = None
         self.delete_button: QW.QToolButton | None = None
@@ -572,8 +586,8 @@ class SearchPathItemWidget(QW.QWidget):
                 .name()
             )
             link_text = f'<span style="color: {disabled_color};">{path}</span>'
-        if self.from_env:
-            env_var = escape(DATALAB_PLUGINS_ENV_VAR)
+        if self.env_var:
+            env_var = escape(self.env_var)
             link_text += f" <i>({_('from')} <code>{env_var}</code>)</i>"
         return link_text
 
@@ -594,6 +608,8 @@ class PluginConfigDialog(QW.QDialog):
         self.failed_plugin_widgets: list[FailedPluginInfoWidget] = []
         self.fixed_path_widgets: list[SearchPathItemWidget] = []
         self.extra_path_widgets: list[SearchPathItemWidget] = []
+        self.env_catalog_path_widgets: list[SearchPathItemWidget] = []
+        self.catalog_path_widgets: list[SearchPathItemWidget] = []
         self.original_plugins_enabled = Conf.plugins_enabled.get(True)
         self.plugins_enabled = self.original_plugins_enabled
         self.original_v020_plugins_warning_ignore = (
@@ -602,6 +618,8 @@ class PluginConfigDialog(QW.QDialog):
         self.v020_plugins_warning_ignore = self.original_v020_plugins_warning_ignore
         self.original_extra_plugin_paths = get_user_plugin_paths()
         self.extra_plugin_paths = list(self.original_extra_plugin_paths)
+        self.original_catalog_paths = get_plugin_catalog_paths()
+        self.catalog_paths = list(self.original_catalog_paths)
         self.tabs: QW.QTabWidget | None = None
         self.toggle_all_checkbox: QW.QCheckBox | None = None
         self.filter_combo: QW.QComboBox | None = None
@@ -614,6 +632,9 @@ class PluginConfigDialog(QW.QDialog):
         self.settings_scroll: QW.QScrollArea | None = None
         self.settings_disabled_label: QW.QLabel | None = None
         self.add_path_button: QW.QPushButton | None = None
+        self.catalog_paths_layout: QW.QVBoxLayout | None = None
+        self.catalog_paths_placeholder: QW.QLabel | None = None
+        self.add_catalog_button: QW.QPushButton | None = None
         self.reload_button: QW.QPushButton | None = None
         self.global_toggle_button: QW.QPushButton | None = None
         self.v020_warning_checkbox: QW.QCheckBox | None = None
@@ -726,6 +747,8 @@ class PluginConfigDialog(QW.QDialog):
         container.setLayout(container_layout)
         container_layout.addLayout(self._create_search_paths_layout())
         container_layout.addSpacing(18)
+        container_layout.addLayout(self._create_catalog_paths_layout())
+        container_layout.addSpacing(18)
         container_layout.addLayout(self._create_warning_settings_layout())
         container_layout.addStretch()
         self.settings_scroll.setWidget(container)
@@ -784,7 +807,11 @@ class PluginConfigDialog(QW.QDialog):
         fixed_layout.setContentsMargins(18, 0, 0, 0)
         fixed_layout.setSpacing(4)
         for path, from_env in self._collect_fixed_search_paths():
-            widget = SearchPathItemWidget(path, editable=False, from_env=from_env)
+            widget = SearchPathItemWidget(
+                path,
+                editable=False,
+                env_var=DATALAB_PLUGINS_ENV_VAR if from_env else "",
+            )
             self.fixed_path_widgets.append(widget)
             fixed_layout.addWidget(widget)
         paths_layout.addLayout(fixed_layout)
@@ -837,6 +864,66 @@ class PluginConfigDialog(QW.QDialog):
         apply_subdued_color(hint)
         paths_layout.addWidget(hint)
         return paths_layout
+
+    def _create_catalog_paths_layout(self) -> QW.QVBoxLayout:
+        """Create the layout listing local plugin catalog folders."""
+        catalogs_layout = QW.QVBoxLayout()
+
+        header_layout = QW.QHBoxLayout()
+        title = QW.QLabel(_("Local plugin catalogs"))
+        title_font = title.font()
+        title_font.setBold(True)
+        title.setFont(title_font)
+        header_layout.addWidget(title)
+        header_layout.addStretch()
+        self.add_catalog_button = QW.QPushButton(get_icon("metadata_add.svg"), _("Add"))
+        self.add_catalog_button.clicked.connect(self._add_catalog_path)
+        header_layout.addWidget(self.add_catalog_button)
+        catalogs_layout.addLayout(header_layout)
+
+        intro = QW.QLabel(
+            _(
+                "Folders, possibly shared on the network, whose plugins are "
+                "listed in the <b>Available plugins</b> tab before those of the "
+                "DataLab plugin catalog. A folder provides the plugins of its "
+                "<code>catalog.json</code> file if any, otherwise its plugin "
+                "wheels."
+            )
+        )
+        intro.setWordWrap(True)
+        apply_subdued_color(intro)
+        catalogs_layout.addWidget(intro)
+
+        self.catalog_paths_layout = QW.QVBoxLayout()
+        self.catalog_paths_layout.setContentsMargins(18, 0, 0, 0)
+        self.catalog_paths_layout.setSpacing(4)
+        for path in get_env_plugin_catalog_paths():
+            widget = SearchPathItemWidget(
+                path, editable=False, env_var=DATALAB_PLUGINS_CATALOG_ENV_VAR
+            )
+            self.env_catalog_path_widgets.append(widget)
+            self.catalog_paths_layout.addWidget(widget)
+        self.catalog_paths_placeholder = QW.QLabel(
+            _("No local plugin catalog is configured.")
+        )
+        self.catalog_paths_placeholder.setWordWrap(True)
+        apply_subdued_color(self.catalog_paths_placeholder)
+        self.catalog_paths_layout.addWidget(self.catalog_paths_placeholder)
+        catalogs_layout.addLayout(self.catalog_paths_layout)
+        self._refresh_catalog_path_widgets()
+
+        hint = QW.QLabel(
+            _(
+                "Folders provided via the <code>%s</code> environment variable "
+                "(multiple paths separated by '<code>%s</code>') come first and "
+                "appear above as read-only entries."
+            )
+            % (DATALAB_PLUGINS_CATALOG_ENV_VAR, os.pathsep)
+        )
+        hint.setWordWrap(True)
+        apply_subdued_color(hint)
+        catalogs_layout.addWidget(hint)
+        return catalogs_layout
 
     def _create_warning_settings_layout(self) -> QW.QVBoxLayout:
         """Create the layout for plugin compatibility warning options."""
@@ -934,6 +1021,64 @@ class PluginConfigDialog(QW.QDialog):
         ]
         self._refresh_extra_path_widgets()
 
+    def _refresh_catalog_path_widgets(self) -> None:
+        """Rebuild the editable local catalog widgets and update the catalogs."""
+        for widget in self.catalog_path_widgets:
+            self.catalog_paths_layout.removeWidget(widget)
+            widget.deleteLater()
+        self.catalog_path_widgets.clear()
+        self.catalog_paths_placeholder.setVisible(
+            not self.catalog_paths and not self.env_catalog_path_widgets
+        )
+        for path in self.catalog_paths:
+            widget = SearchPathItemWidget(path, editable=True)
+            widget.edit_button.clicked.connect(
+                lambda _checked=False, item=widget: self._edit_catalog_path(item)
+            )
+            widget.delete_button.clicked.connect(
+                lambda _checked=False, item=widget: self._remove_catalog_path(item)
+            )
+            self.catalog_path_widgets.append(widget)
+            self.catalog_paths_layout.addWidget(widget)
+        self.available_plugins_widget.set_catalog_directories(
+            merge_catalog_directories(self.catalog_paths)
+        )
+
+    def _browse_catalog_directory(self, initial_path: str | None = None) -> str | None:
+        """Open a directory chooser for a local plugin catalog folder."""
+        basedir = initial_path or Conf.base_dir.get(osp.expanduser("~"))
+        directory = getexistingdirectory(
+            self, _("Select local plugin catalog folder"), basedir
+        )
+        normalized = normalize_plugin_paths([directory])
+        return normalized[0] if normalized else None
+
+    def _is_known_catalog_path(self, path: str, ignored: str | None = None) -> bool:
+        """Return whether a folder is already a local catalog."""
+        others = [other for other in self.catalog_paths if other != ignored]
+        return path in get_env_plugin_catalog_paths() or path in others
+
+    def _add_catalog_path(self) -> None:
+        """Append a local plugin catalog folder."""
+        path = self._browse_catalog_directory()
+        if not path or self._is_known_catalog_path(path):
+            return
+        self.catalog_paths.append(path)
+        self._refresh_catalog_path_widgets()
+
+    def _edit_catalog_path(self, item: SearchPathItemWidget) -> None:
+        """Replace a local plugin catalog folder."""
+        path = self._browse_catalog_directory(item.path)
+        if not path or self._is_known_catalog_path(path, ignored=item.path):
+            return
+        self.catalog_paths[self.catalog_paths.index(item.path)] = path
+        self._refresh_catalog_path_widgets()
+
+    def _remove_catalog_path(self, item: SearchPathItemWidget) -> None:
+        """Remove a local plugin catalog folder."""
+        self.catalog_paths.remove(item.path)
+        self._refresh_catalog_path_widgets()
+
     def _create_controls_layout(self) -> QW.QHBoxLayout:
         """Create the row with master controls."""
         controls_layout = QW.QHBoxLayout()
@@ -1009,7 +1154,12 @@ class PluginConfigDialog(QW.QDialog):
             self.settings_disabled_label.setVisible(not enabled)
         self.installed_plugins_widget.setEnabled(enabled)
         self.available_plugins_widget.setEnabled(enabled)
-        for widget in self.fixed_path_widgets + self.extra_path_widgets:
+        for widget in (
+            self.fixed_path_widgets
+            + self.extra_path_widgets
+            + self.env_catalog_path_widgets
+            + self.catalog_path_widgets
+        ):
             widget.set_links_enabled(enabled)
 
     def _toggle_global_plugins_enabled(self) -> None:
@@ -1027,6 +1177,7 @@ class PluginConfigDialog(QW.QDialog):
             widget.has_changed() for widget in self.plugin_widgets
         )
         path_changes_made = self.extra_plugin_paths != self.original_extra_plugin_paths
+        catalog_changes_made = self.catalog_paths != self.original_catalog_paths
         plugins_enabled_changed = self.plugins_enabled != self.original_plugins_enabled
         warning_changed = (
             self.v020_plugins_warning_ignore
@@ -1035,6 +1186,7 @@ class PluginConfigDialog(QW.QDialog):
         return (
             plugin_changes_made
             or path_changes_made
+            or catalog_changes_made
             or plugins_enabled_changed
             or warning_changed
         )
@@ -1074,12 +1226,14 @@ class PluginConfigDialog(QW.QDialog):
             )
         Conf.plugins_enabled_list.set(enabled_plugins)
         set_user_plugin_paths(self.extra_plugin_paths)
+        set_plugin_catalog_paths(self.catalog_paths)
 
     def _mark_current_state_as_saved(self) -> None:
         """Synchronize original values with the current dialog state."""
         self.original_plugins_enabled = self.plugins_enabled
         self.original_v020_plugins_warning_ignore = self.v020_plugins_warning_ignore
         self.original_extra_plugin_paths = list(self.extra_plugin_paths)
+        self.original_catalog_paths = list(self.catalog_paths)
 
     def _refresh_plugin_list(self) -> None:
         """Rebuild the plugin list from the current registry state."""

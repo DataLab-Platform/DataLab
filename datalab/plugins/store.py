@@ -149,6 +149,24 @@ def _release_archives() -> None:
     gc.collect()
 
 
+def get_available_distributions(
+    host_distributions: Mapping[str, str] | None = None,
+) -> dict[str, str]:
+    """Return distribution versions a plugin wheel may depend on.
+
+    Args:
+        host_distributions: Distribution versions provided by the host that the
+         environment metadata may lack (e.g. when running from sources)
+    """
+    distributions: dict[str, str] = {}
+    for distribution in importlib_metadata.distributions():
+        name = distribution.metadata["Name"]
+        if name:
+            distributions.setdefault(name, distribution.version)
+    distributions.update(host_distributions or {})
+    return distributions
+
+
 class InstalledPluginStore:
     """Store of the plugins installed from a file.
 
@@ -214,13 +232,7 @@ class InstalledPluginStore:
 
     def get_available_distributions(self) -> dict[str, str]:
         """Return distribution versions a plugin wheel may depend on."""
-        distributions: dict[str, str] = {}
-        for distribution in importlib_metadata.distributions():
-            name = distribution.metadata["Name"]
-            if name:
-                distributions.setdefault(name, distribution.version)
-        distributions.update(self._host_distributions)
-        return distributions
+        return get_available_distributions(self._host_distributions)
 
     def _get_environment_distributions(self) -> set[str]:
         """Return canonical names of distributions installed outside the store."""
@@ -485,4 +497,5 @@ __all__ = [
     "InstalledPlugin",
     "InstalledPluginStore",
     "PluginInstallError",
+    "get_available_distributions",
 ]
