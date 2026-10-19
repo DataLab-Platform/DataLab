@@ -31,8 +31,8 @@ msgstr "DataLab peut être contrôlé à distance en utilisant le protocole `XML
 msgid "If you are looking for a lightweight alternative to remote control DataLab (i.e. without installing the whole DataLab package and its dependencies in your environment), use the :py:class:`sigima.client.SimpleRemoteProxy` class provided by the `Sigima`_ package (``pip install sigima``). It exposes the same XML-RPC entry points as the ``RemoteProxy`` class described below, with a minimal set of dependencies."
 msgstr "Si vous recherchez une alternative légère pour contrôler DataLab à distance (c'est-à-dire sans installer l'ensemble du package DataLab et ses dépendances dans votre environnement), utilisez la classe :py:class:`sigima.client.SimpleRemoteProxy` fournie par le package `Sigima`_ (``pip install sigima``). Elle expose les mêmes points d'entrée XML-RPC que la classe ``RemoteProxy`` décrite ci-dessous, avec un ensemble minimal de dépendances."
 
-msgid "This class supersedes ``cdlclient.SimpleRemoteProxy``: the ``cdlclient`` package is deprecated and archived since DataLab 1.3. Its connection dialog is now provided by SigimaX (see `Connection dialog`_ below)."
-msgstr "Cette classe remplace ``cdlclient.SimpleRemoteProxy`` : le package ``cdlclient`` est obsolète et archivé depuis DataLab 1.3. Sa boîte de dialogue de connexion est désormais fournie par SigimaX (voir `Boîte de dialogue de connexion`_ ci-dessous)."
+msgid "This class supersedes ``cdlclient.SimpleRemoteProxy``: the ``cdlclient`` package is deprecated and archived since DataLab 1.3. Its connection dialog is now provided by SigimaX (see :ref:`remote_connection_dialog` below)."
+msgstr "Cette classe remplace ``cdlclient.SimpleRemoteProxy`` : le package ``cdlclient`` est obsolète et archivé depuis DataLab 1.3. Sa boîte de dialogue de connexion est désormais fournie par SigimaX (voir :ref:`remote_connection_dialog` ci-dessous)."
 
 msgid "From an IDE"
 msgstr "Depuis un IDE"
