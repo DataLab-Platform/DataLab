@@ -75,6 +75,11 @@ class _Dialogs:
                 add.click()
             else:
                 box.button(QW.QMessageBox.Cancel).click()
+            # guidata's exec_dialog deletes the executed dialog. This answered box
+            # was never shown: it refuses to close and, kept by its parent window,
+            # would stop the unattended quit of later application tests. Without
+            # a parent, it is deleted with its last reference.
+            box.setParent(None)
 
         def getopenfilenames(*_args, **_kwargs):
             self.events.append("files")
@@ -235,3 +240,23 @@ def test_cancelled_append_is_not_recorded_in_history(monkeypatch) -> None:
             win.open_h5_files([path], import_all=True, reset_all=False)
             assert len(history) == count + 1
             assert history[len(history)].method_name == "open_h5_files"
+
+
+@pytest.mark.usefixtures("ask")
+def test_answered_warning_can_be_closed(monkeypatch) -> None:
+    """An answered warning accepts closing, as the unattended quit requires."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        path = osp.join(tmpdir, "chain.h5")
+        _save_chain(path)
+        with app() as win:
+            build_chain(win)
+            Conf.h5_clear_workspace_ask.set(False)
+            _Dialogs(monkeypatch, None, "cancel")
+            win.open_h5_files([path], import_all=True, reset_all=False)
+            notice = datalab.gui.h5io.append_provenance_notice()
+            boxes = [
+                widget
+                for widget in QW.QApplication.topLevelWidgets()
+                if isinstance(widget, QW.QMessageBox) and widget.text() == notice
+            ]
+            assert all(box.close() for box in boxes)
