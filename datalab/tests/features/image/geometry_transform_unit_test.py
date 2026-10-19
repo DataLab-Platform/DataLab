@@ -20,6 +20,7 @@ from datalab.tests import datalab_test_app_context
 
 def __create_test_image() -> sio.ImageObj:
     """Create a test image with geometry results for testing."""
+    # Geometry results and ROI below are defined in pixel coordinates
     param = sio.Gauss2DParam.create(
         height=600,
         width=600,
@@ -27,6 +28,7 @@ def __create_test_image() -> sio.ImageObj:
         y0=7.5,
         title="Test image (with geometry results)",
         dtype=sio.ImageDatatypes.UINT16,
+        physical_coords=False,
     )
     obj = sio.create_image_from_param(param)
     for geometry in test_data.generate_geometry_results():
