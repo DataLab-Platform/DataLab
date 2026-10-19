@@ -5,11 +5,18 @@
 #
 msgid ""
 msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-10-19 07:30+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
 
 msgid "Provenance of results in DataLab: consultation, data check, verification by recomputation, applying a processing again, link with the History panel"
 msgstr "Provenance des résultats dans DataLab : consultation, contrôle des données, vérification par recalcul, nouvelle application d'un traitement, lien avec le panneau Historique"
@@ -20,8 +27,8 @@ msgstr "DataLab, provenance, reproductibilité, traitement, vérification, espac
 msgid "Provenance of results"
 msgstr "Provenance des résultats"
 
-msgid "DataLab records how each result was obtained: the processing or analysis applied, its parameters, the objects it used with their exact content, and the software versions. This record is saved with the HDF5 workspace and read back when the workspace is reopened, by DataLab or by DataLab-Web."
-msgstr "DataLab enregistre la manière dont chaque résultat a été obtenu : le traitement ou l'analyse appliqué, ses paramètres, les objets utilisés avec leur contenu exact, et les versions des logiciels. Cet enregistrement est sauvegardé avec l'espace de travail HDF5 et relu à la réouverture de l'espace de travail, par DataLab ou par DataLab-Web."
+msgid "For supported processing paths, DataLab records how a result was obtained: the processing or analysis applied, its parameters, the objects it used with their exact content, and the software versions. This record is saved with the HDF5 workspace and read back when the workspace is reopened, by DataLab or by DataLab-Web."
+msgstr "Pour les parcours de traitement pris en charge, DataLab enregistre comment un résultat a été obtenu : le traitement ou l'analyse appliqué, ses paramètres, les objets utilisés avec leur contenu exact et les versions des logiciels. Cet enregistrement est sauvegardé avec l'espace de travail HDF5 et relu à sa réouverture, par DataLab ou par DataLab-Web."
 
 msgid "This page describes how to consult that record for one object, how to check and verify it, how to apply a recorded processing again, and how it relates to the History panel. To exchange a workspace with the provenance of its processing, see :ref:`capsules`."
 msgstr "Cette page décrit comment consulter cet enregistrement pour un objet, comment le contrôler et le vérifier, comment appliquer à nouveau un traitement enregistré, et quel est son lien avec le panneau Historique. Pour échanger un espace de travail avec la provenance de ses traitements, voir :ref:`capsules`."
@@ -56,8 +63,8 @@ msgstr "**Action de l'historique** sélectionne l'action de l'historique dont la
 msgid "**Show details** shows the context of the step (options, X alignment, metadata read) and the software versions."
 msgstr "**Afficher les détails** affiche le contexte de l'étape (options, alignement en X, métadonnées lues) et les versions des logiciels."
 
-msgid "Consulting reads the provenance record only: it never computes, never changes the workspace and never adds a History action."
-msgstr "La consultation lit uniquement l'enregistrement de provenance : elle ne calcule jamais, ne modifie jamais l'espace de travail et n'ajoute jamais d'action à l'historique."
+msgid "Consulting reads the provenance record only: it never computes, never changes the workspace and never adds a History action. The view is bounded and long values are abbreviated: a truncated view does not mean that records were removed."
+msgstr "La consultation lit uniquement l'enregistrement de provenance : elle ne calcule jamais, ne modifie jamais l'espace de travail et n'ajoute jamais d'action à l'historique. La vue est bornée et les valeurs longues sont abrégées : une vue tronquée ne signifie pas que des enregistrements ont été supprimés."
 
 msgid "The buttons below the cards act on the object:"
 msgstr "Les boutons situés sous les fiches agissent sur l'objet :"
@@ -158,6 +165,9 @@ msgstr "en mode d'édition du panneau Historique, les paramètres modifiés devi
 msgid "outside the edit mode, the History action is left unchanged: replaying it applies its own parameters again."
 msgstr "hors du mode d'édition, l'action de l'historique reste inchangée : la rejouer applique à nouveau ses propres paramètres."
 
+msgid "Automatic provenance capture does not depend on the History panel's **Record** mode. Recording a recipe and recording a scientific execution are different operations."
+msgstr "La capture automatique de provenance ne dépend pas du mode **Enregistrer** du panneau Historique. Enregistrer une recette et enregistrer une exécution scientifique sont deux opérations différentes."
+
 msgid "These identifiers are stored in the optional ``provenance_activity_ids`` field of History actions (History action schema version 3). They are never copied with an action, and actions saved by earlier versions simply have none. Deleting a History session does not change the provenance record."
 msgstr "Ces identifiants sont stockés dans le champ optionnel ``provenance_activity_ids`` des actions de l'historique (version 3 du schéma des actions de l'historique). Ils ne sont jamais copiés avec une action, et les actions enregistrées par des versions antérieures n'en ont simplement pas. La suppression d'une session de l'historique ne modifie pas l'enregistrement de provenance."
 
@@ -182,17 +192,50 @@ msgstr "Pour conserver la provenance d'un fichier, ouvrez-le en remplaçant l'es
 msgid "What the provenance does not do"
 msgstr "Ce que la provenance ne fait pas"
 
-msgid "**It does not keep every earlier array.** Earlier states are described by their fingerprints; their data remain available only while an object holds them. When an input was modified or deleted after a computation, the step is still described, but it cannot be recomputed from that input: its verification is *Not verified*, with the reason. To keep a result verifiable, keep the objects it was computed from before saving."
-msgstr "**Elle ne conserve pas tous les tableaux antérieurs.** Les états antérieurs sont décrits par leurs empreintes ; leurs données ne restent disponibles que tant qu'un objet les contient. Lorsqu'une entrée a été modifiée ou supprimée après un calcul, l'étape reste décrite, mais elle ne peut pas être recalculée à partir de cette entrée : sa vérification est *Non vérifié*, avec le motif. Pour qu'un résultat reste vérifiable, conservez les objets à partir desquels il a été calculé avant d'enregistrer."
+msgid "**It does not keep every earlier array.** Earlier states are described by their fingerprints; their data remain available only while an object holds them. Deleting or replacing an input's numerical data can prevent replay even after saving and reopening. For example, saving a filtered signal after deleting its source saves the description of the source, not its arrays. Keep the necessary inputs and the recorded results before saving."
+msgstr "**Elle ne conserve pas tous les tableaux antérieurs.** Les états antérieurs sont décrits par leurs empreintes ; leurs données ne restent disponibles que tant qu'un objet les contient. Supprimer ou remplacer les données numériques d'une entrée peut empêcher le rejeu, même après sauvegarde et réouverture. Par exemple, sauvegarder un signal filtré après avoir supprimé sa source conserve la description de la source, pas ses tableaux. Conservez les entrées nécessaires et les résultats enregistrés avant de sauvegarder."
 
-msgid "**It does not clean up the workspace.** Trials and intermediate objects stay in the workspace, and their recorded steps stay in the provenance record, until you remove them; deleting an object never rewrites the record."
-msgstr "**Elle ne nettoie pas l'espace de travail.** Les essais et les objets intermédiaires restent dans l'espace de travail, et leurs étapes enregistrées restent dans le registre de provenance, jusqu'à ce que vous les supprimiez ; supprimer un objet ne réécrit jamais le registre."
+msgid "**ROI-only changes are a limited exception.** If an input's numerical data are unchanged, its recorded ROI can be restored on a copy for verification, including when a detection added ROI. This does not reconstruct missing values. A missing or altered output is still not a valid comparison reference: restoring an input's ROI does not repair the reference."
+msgstr "**Les modifications des seules ROI constituent une exception limitée.** Si les données numériques d'une entrée sont inchangées, ses ROI enregistrées peuvent être rétablies sur une copie pour la vérification, y compris lorsqu'une détection a ajouté des ROI. Cela ne reconstruit pas des valeurs disparues. Une sortie absente ou altérée reste une référence de comparaison invalide : rétablir les ROI d'une entrée ne répare pas la référence."
 
-msgid "**It does not make everything verifiable.** Changes made outside recorded processing (data edited or imported, operations unknown to the computation library, such as some plugins) appear as observed states or opaque operations: they are described, never replayed."
-msgstr "**Elle ne rend pas tout vérifiable.** Les modifications faites en dehors des traitements enregistrés (données éditées ou importées, opérations inconnues de la bibliothèque de calcul, comme certains plugins) apparaissent comme des états observés ou des opérations opaques : elles sont décrites, jamais rejouées."
+msgid "**Analysis values are not all archived.** A later analysis can replace a result under the same metadata key. The earlier artifact stays described as ``replaced``, without necessarily retaining its old value."
+msgstr "**Les valeurs d'analyse ne sont pas toutes archivées.** Une analyse ultérieure peut remplacer un résultat sous la même clé de métadonnées. L'artefact antérieur reste décrit comme ``replaced``, sans nécessairement conserver son ancienne valeur."
+
+msgid "**It does not clean up the workspace.** Trials and intermediate objects stay until you remove them. Their recorded steps remain in the provenance record: deleting an object never purges its activities or sensitive information."
+msgstr "**Elle ne nettoie pas l'espace de travail.** Les essais et les objets intermédiaires restent jusqu'à leur suppression. Leurs étapes enregistrées restent dans le registre de provenance : supprimer un objet ne purge jamais ses activités ni les informations sensibles."
+
+msgid "**It does not make everything verifiable.** Changes made outside recorded processing may be observed later without a known production. An operation without a contract can be recorded as opaque, but is never replayed. Old metadata records have unknown input states and possibly incomplete parameters or environments; they are not qualified retroactively or executed from their Python names."
+msgstr "**Elle ne rend pas tout vérifiable.** Les modifications faites en dehors des traitements enregistrés peuvent être observées ultérieurement sans production connue. Une opération sans contrat peut être enregistrée comme opaque, mais n'est jamais rejouée. Les anciens enregistrements de métadonnées ont des états d'entrée inconnus et parfois des paramètres ou environnements incomplets ; ils ne sont ni qualifiés rétroactivement ni exécutés à partir de leurs noms Python."
 
 msgid "**It is not a proof of scientific validity.** *Exact* or *Within tolerance* says that the recorded computation is reproduced under the rule declared for that operation, not that the processing was the right one."
 msgstr "**Elle ne prouve pas la validité scientifique.** *Exact* ou *Dans la tolérance* indique que le calcul enregistré est reproduit selon la règle déclarée pour cette opération, pas que le traitement était le bon."
 
 msgid "**It does not identify the author.** Fingerprints show that the content was not altered; they do not authenticate who produced it, and capsules are not signed."
 msgstr "**Elle n'identifie pas l'auteur.** Les empreintes montrent que le contenu n'a pas été altéré ; elles n'authentifient pas qui l'a produit, et les capsules ne sont pas signées."
+
+msgid "Capture scope and verification conditions"
+msgstr "Périmètre de capture et conditions de vérification"
+
+msgid "Ordinary and grouped processing, analyses, signal/image conversions and ROI extraction use the supported capture paths. **Processing**, **Recompute** and replaying a supported computation from the History panel record a new execution; verification itself works on copies and records no new execution. An accepted preview can become a committed result, but a discarded preview, a failed calculation or a cancellation is not a successful execution. A successful detection finding nothing is a normal recorded result."
+msgstr "Les traitements ordinaires et groupés, les analyses, les conversions signal/image et l'extraction de ROI utilisent les parcours de capture pris en charge. **Traitement**, **Recalculer** et le rejeu d'un calcul pris en charge depuis le panneau Historique enregistrent une nouvelle exécution ; la vérification elle-même travaille sur des copies et n'enregistre aucune nouvelle exécution. Un aperçu accepté peut devenir un résultat validé, mais un aperçu abandonné, un calcul en erreur ou une annulation ne sont pas des exécutions réussies. Une détection réussie qui ne trouve rien est un résultat normal enregistré."
+
+msgid "Importing or creating an object does not record how its physical acquisition or earlier conversions were performed. Editing data, ROI or metadata directly does not by itself record a scientific call. Interactive Desktop fits and creating a signal from a markers table are currently not recorded scientific calls, even when an editable History action exists."
+msgstr "Importer ou créer un objet n'enregistre pas comment son acquisition physique ou ses conversions antérieures ont été réalisées. Éditer directement les données, les ROI ou les métadonnées n'enregistre pas en soi un appel scientifique. Les ajustements interactifs Desktop et la création d'un signal à partir d'une table de marqueurs ne sont actuellement pas des appels scientifiques enregistrés, même lorsqu'une action d'historique éditable existe."
+
+msgid "Plugins, macros, scripts and remote API clients are captured when they use the supported processors. Code that creates or modifies objects directly can bypass them. Capture does not block processing: if it fails, a result may exist without an activity; the failure is logged and counted, not silently repaired."
+msgstr "Les plugins, macros, scripts et clients de l'API distante sont enregistrés lorsqu'ils utilisent les processeurs pris en charge. Du code qui crée ou modifie directement des objets peut les contourner. La capture ne bloque pas le traitement : si elle échoue, un résultat peut exister sans activité ; l'échec est journalisé et compté, pas réparé silencieusement."
+
+msgid "A replay needs a local operation contract qualified for the recorded version, decodable parameters, applicable context, available input data and valid output references. The signal and image phase spectra are identified but not qualified. Unknown operations, versions, codecs or policies produce an explicit refusal: the reader never downloads code to guess their meaning."
+msgstr "Un rejeu nécessite un contrat d'opération local qualifié pour la version enregistrée, des paramètres décodables, un contexte applicable, des données d'entrée disponibles et des références de sortie valides. Les spectres de phase signal et image sont identifiés mais non qualifiés. Une opération, une version, un codec ou une politique inconnus produisent un refus explicite : le lecteur ne télécharge jamais de code pour en deviner le sens."
+
+msgid "Scientific fingerprints cover numerical data, types, coordinates and units; ROI are checked separately. Titles, display settings and other metadata are not automatically covered. Only declared dependencies such as global options, X alignment or metadata read by the computation are reproduced. For example, changing fit parameters needed by ``evaluate_fit`` can refuse replay even if the signal values are unchanged."
+msgstr "Les empreintes scientifiques couvrent les données numériques, les types, les coordonnées et les unités ; les ROI sont contrôlées séparément. Les titres, les paramètres d'affichage et les autres métadonnées ne sont pas automatiquement couverts. Seules les dépendances déclarées, telles que les options globales, l'alignement en X ou les métadonnées lues par le calcul, sont reproduites. Par exemple, modifier les paramètres d'ajustement nécessaires à ``evaluate_fit`` peut entraîner un refus de rejeu même si les valeurs du signal sont inchangées."
+
+msgid "See the `common rules <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/rules.md>`_ and `capture and interoperability scope <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/interoperability.md>`_ for the conditions and the paths covered. Exchange, privacy and revision limits are described in :ref:`capsules`."
+msgstr "Consultez les `règles communes <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/rules.md>`_ et le `périmètre de capture et d'interopérabilité <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/interoperability.md>`_ pour les conditions et les parcours couverts. Les limites d'échange, de confidentialité et de révision sont décrites dans :ref:`capsules`."
+
+#~ msgid "**It does not keep every earlier array.** Earlier states are described by their fingerprints; their data remain available only while an object holds them. When an input was modified or deleted after a computation, the step is still described, but it cannot be recomputed from that input: its verification is *Not verified*, with the reason. To keep a result verifiable, keep the objects it was computed from before saving."
+#~ msgstr "**Elle ne conserve pas tous les tableaux antérieurs.** Les états antérieurs sont décrits par leurs empreintes ; leurs données ne restent disponibles que tant qu'un objet les contient. Lorsqu'une entrée a été modifiée ou supprimée après un calcul, l'étape reste décrite, mais elle ne peut pas être recalculée à partir de cette entrée : sa vérification est *Non vérifié*, avec le motif. Pour qu'un résultat reste vérifiable, conservez les objets à partir desquels il a été calculé avant d'enregistrer."
+
+#~ msgid "**It does not make everything verifiable.** Changes made outside recorded processing (data edited or imported, operations unknown to the computation library, such as some plugins) appear as observed states or opaque operations: they are described, never replayed."
+#~ msgstr "**Elle ne rend pas tout vérifiable.** Les modifications faites en dehors des traitements enregistrés (données éditées ou importées, opérations inconnues de la bibliothèque de calcul, comme certains plugins) apparaissent comme des états observés ou des opérations opaques : elles sont décrites, jamais rejouées."

@@ -7,7 +7,7 @@ Provenance of results
     :description: Provenance of results in DataLab: consultation, data check, verification by recomputation, applying a processing again, link with the History panel
     :keywords: DataLab, provenance, reproducibility, processing, verification, workspace, HDF5, history
 
-DataLab records how each result was obtained: the processing or analysis applied,
+For supported processing paths, DataLab records how a result was obtained: the processing or analysis applied,
 its parameters, the objects it used with their exact content, and the software
 versions. This record is saved with the HDF5 workspace and read back when the
 workspace is reopened, by DataLab or by DataLab-Web.
@@ -57,7 +57,8 @@ of the step that used it:
   metadata read) and the software versions.
 
 Consulting reads the provenance record only: it never computes, never changes
-the workspace and never adds a History action.
+the workspace and never adds a History action. The view is bounded and long
+values are abbreviated: a truncated view does not mean that records were removed.
 
 The buttons below the cards act on the object:
 
@@ -143,6 +144,10 @@ The History action is the recipe, the provenance records each execution:
 - outside the edit mode, the History action is left unchanged: replaying it
   applies its own parameters again.
 
+Automatic provenance capture does not depend on the History panel's **Record**
+mode. Recording a recipe and recording a scientific execution are different
+operations.
+
 These identifiers are stored in the optional ``provenance_activity_ids`` field of
 History actions (History action schema version 3). They are never copied with an
 action, and actions saved by earlier versions simply have none. Deleting a
@@ -178,20 +183,70 @@ What the provenance does not do
 
 - **It does not keep every earlier array.** Earlier states are described by
   their fingerprints; their data remain available only while an object holds
-  them. When an input was modified or deleted after a computation, the step is
-  still described, but it cannot be recomputed from that input: its
-  verification is *Not verified*, with the reason. To keep a result verifiable,
-  keep the objects it was computed from before saving.
+  them. Deleting or replacing an input's numerical data can prevent replay
+  even after saving and reopening. For example, saving a filtered signal after
+  deleting its source saves the description of the source, not its arrays.
+  Keep the necessary inputs and the recorded results before saving.
+- **ROI-only changes are a limited exception.** If an input's numerical data
+  are unchanged, its recorded ROI can be restored on a copy for verification,
+  including when a detection added ROI. This does not reconstruct missing
+  values. A missing or altered output is still not a valid comparison reference:
+  restoring an input's ROI does not repair the reference.
+- **Analysis values are not all archived.** A later analysis can replace a
+  result under the same metadata key. The earlier artifact stays described as
+  ``replaced``, without necessarily retaining its old value.
 - **It does not clean up the workspace.** Trials and intermediate objects stay
-  in the workspace, and their recorded steps stay in the provenance record,
-  until you remove them; deleting an object never rewrites the record.
+  until you remove them. Their recorded steps remain in the provenance record:
+  deleting an object never purges its activities or sensitive information.
 - **It does not make everything verifiable.** Changes made outside recorded
-  processing (data edited or imported, operations unknown to the computation
-  library, such as some plugins) appear as observed states or opaque
-  operations: they are described, never replayed.
+  processing may be observed later without a known production. An operation
+  without a contract can be recorded as opaque, but is never replayed. Old
+  metadata records have unknown input states and possibly incomplete parameters
+  or environments; they are not qualified retroactively or executed from their
+  Python names.
 - **It is not a proof of scientific validity.** *Exact* or *Within tolerance*
   says that the recorded computation is reproduced under the rule declared for
   that operation, not that the processing was the right one.
 - **It does not identify the author.** Fingerprints show that the content was
   not altered; they do not authenticate who produced it, and capsules are not
   signed.
+
+Capture scope and verification conditions
+-----------------------------------------
+
+Ordinary and grouped processing, analyses, signal/image conversions and ROI
+extraction use the supported capture paths. **Processing**, **Recompute** and
+replaying a supported computation from the History panel record a new execution;
+verification itself works on copies and records no new execution. An accepted
+preview can become a committed result, but a discarded preview, a failed
+calculation or a cancellation is not a successful execution. A successful
+detection finding nothing is a normal recorded result.
+
+Importing or creating an object does not record how its physical acquisition
+or earlier conversions were performed. Editing data, ROI or metadata directly
+does not by itself record a scientific call. Interactive Desktop fits and
+creating a signal from a markers table are currently not recorded scientific
+calls, even when an editable History action exists.
+
+Plugins, macros, scripts and remote API clients are captured when they use the
+supported processors. Code that creates or modifies objects directly can bypass
+them. Capture does not block processing: if it fails, a result may exist without
+an activity; the failure is logged and counted, not silently repaired.
+
+A replay needs a local operation contract qualified for the recorded version,
+decodable parameters, applicable context, available input data and valid output
+references. The signal and image phase spectra are identified but not qualified.
+Unknown operations, versions, codecs or policies produce an explicit refusal:
+the reader never downloads code to guess their meaning.
+
+Scientific fingerprints cover numerical data, types, coordinates and units;
+ROI are checked separately. Titles, display settings and other metadata are not
+automatically covered. Only declared dependencies such as global options,
+X alignment or metadata read by the computation are reproduced. For example,
+changing fit parameters needed by ``evaluate_fit`` can refuse replay even if
+the signal values are unchanged.
+
+See the `common rules <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/rules.md>`_
+and `capture and interoperability scope <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/interoperability.md>`_
+for the conditions and the paths covered. Exchange, privacy and revision limits
+are described in :ref:`capsules`.
