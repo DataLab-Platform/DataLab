@@ -111,7 +111,7 @@ DataLab now uses stable UUID-based object references across object trees, result
 * Plot annotations are now stored in a renderer-independent format shared with DataLab-Web, so annotations in workspaces and `.dlabann` files are no longer tied to PlotPy
 * Existing PlotPy annotations remain readable and are converted only after an annotation edit is accepted; simply opening a workspace or cancelling the editor leaves its data unchanged
 * Annotation identifiers, lock state, custom metadata and extension data are preserved across edits, while unknown third-party payloads are retained without modification
-* DataLab now requires Sigima ≥ 1.3.0 and SigimaX ≥ 1.1.0
+* DataLab now requires Sigima ≥ 1.3.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x
 
 ### 🛠️ Bug Fixes ###
 

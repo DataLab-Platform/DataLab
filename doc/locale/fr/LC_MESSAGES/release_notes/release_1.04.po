@@ -267,8 +267,8 @@ msgstr "Les annotations PlotPy existantes restent lisibles et ne sont converties
 msgid "Annotation identifiers, lock state, custom metadata and extension data are preserved across edits, while unknown third-party payloads are retained without modification"
 msgstr "Les identifiants d'annotation, l'état de verrouillage, les métadonnées personnalisées et les données d'extension sont conservés lors des modifications, tandis que les charges utiles tierces inconnues sont conservées sans modification"
 
-msgid "DataLab now requires Sigima ≥ 1.3.0 and SigimaX ≥ 1.1.0"
-msgstr "DataLab nécessite désormais Sigima ≥ 1.3.0 et SigimaX ≥ 1.1.0"
+msgid "DataLab now requires Sigima ≥ 1.3.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x"
+msgstr "DataLab nécessite désormais Sigima ≥ 1.3.0, SigimaX ≥ 1.1.0 et DataLab-Capsule 0.1.x"
 
 msgid "🛠️ Bug Fixes"
 msgstr "🛠️ Corrections de bugs"

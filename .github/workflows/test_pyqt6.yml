@@ -78,7 +78,7 @@ jobs:
            # Install tomli for TOML parsing (safe if already present)
            pip install tomli
            # Extract dependencies and save to file, then install
-           python -c "import tomli; f=open('pyproject.toml','rb'); data=tomli.load(f); deps=[d for d in data['project']['dependencies'] if not any(p in d for p in ['guidata','PlotPy','Sigima', 'SigimaX', 'DataLab-Capsule'])]; open('deps.txt','w').write('\n'.join(deps))"
+           python -c "import tomli; f=open('pyproject.toml','rb'); data=tomli.load(f); deps=[d for d in data['project']['dependencies'] if not any(p in d for p in ['guidata','PlotPy','Sigima', 'SigimaX', 'datalab-capsule'])]; open('deps.txt','w').write('\n'.join(deps))"
            pip install -r deps.txt
            # Install DataLab without dependencies
            pip install --no-deps .
@@ -106,7 +106,7 @@ jobs:
            # Install tomli for TOML parsing (safe if already present)
            pip install tomli
            # Extract dependencies and save to file, then install
-           python -c "import tomli; f=open('pyproject.toml','rb'); data=tomli.load(f); deps=[d for d in data['project']['dependencies'] if not any(p in d for p in ['guidata','PlotPy','Sigima', 'SigimaX', 'DataLab-Capsule'])]; open('deps.txt','w').write('\n'.join(deps))"
+           python -c "import tomli; f=open('pyproject.toml','rb'); data=tomli.load(f); deps=[d for d in data['project']['dependencies'] if not any(p in d for p in ['guidata','PlotPy','Sigima', 'SigimaX', 'datalab-capsule'])]; open('deps.txt','w').write('\n'.join(deps))"
            pip install -r deps.txt
            # Install DataLab without dependencies
            pip install --no-deps .
@@ -168,7 +168,7 @@ jobs:
 
         # Extract dependency names from pyproject.toml (excluding Sigima and
         # SigimaX, installed from local clones above) and install latest versions
-        python -m pip install -U --upgrade-strategy eager $(python -c "import tomllib, re; print(' '.join(re.sub(r'[\[\]<>=!~,.\s].*$', '', d).strip() for d in tomllib.loads(open('pyproject.toml', 'rb').read().decode())['project']['dependencies'] if not any(p in d for p in ['Sigima', 'SigimaX', 'DataLab-Capsule'])))")
+        python -m pip install -U --upgrade-strategy eager $(python -c "import tomllib, re; print(' '.join(re.sub(r'[\[\]<>=!~,.\s].*$', '', d).strip() for d in tomllib.loads(open('pyproject.toml', 'rb').read().decode())['project']['dependencies'] if not any(p in d for p in ['Sigima', 'SigimaX', 'datalab-capsule'])))")
 
     - name: Lint with Ruff (latest)
       run: ruff check --output-format=github datalab
