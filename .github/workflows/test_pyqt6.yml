@@ -21,21 +21,6 @@ on:
           - 'build'
           - 'build_latest'
         default: 'all'
-      pytest_scope:
-        description: 'Test scope for the build job (diagnosing a hang)'
-        required: true
-        type: choice
-        options:
-          - 'full'
-          - 'provenance_roundtrip'
-          - 'file_without_block_and_append'
-          - 'roundtrip_then_annotations'
-        default: 'full'
-      pytest_repeat:
-        description: 'Number of consecutive pytest runs (diagnosing a hang)'
-        required: false
-        type: string
-        default: '1'
   schedule:
     # Only the "build_latest" job runs on schedule (see execution conditions below)
     - cron: "0 5 * * 1"
@@ -47,7 +32,6 @@ jobs:
     env:
       DISPLAY: ':99.0'
       PYTHONFAULTHANDLER: '1'
-      PYTEST_SCOPE: ${{ github.event.inputs.pytest_scope || 'full' }}
 
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -135,38 +119,18 @@ jobs:
     - name: Lint with Ruff
       run: ruff check --output-format=github datalab
     - name: Test with pytest
+      # A blocked Qt event loop must not hold the runner for hours: stacks are
+      # dumped after 120 s in a test, and the log is kept as an artifact.
       timeout-minutes: 40
-      env:
-        # Temporary probe of the diagnostic branch (see .github/diagnostics)
-        PYTHONPATH: ${{ github.workspace }}/.github/diagnostics
-        PYTEST_REPEAT: ${{ github.event.inputs.pytest_repeat || '1' }}
       run: |
         set -o pipefail
-        targets=()
-        case "$PYTEST_SCOPE" in
-          provenance_roundtrip)
-            targets=(datalab/tests/features/hdf5/provenance_roundtrip_unit_test.py)
-            ;;
-          file_without_block_and_append)
-            targets=(datalab/tests/features/hdf5/provenance_roundtrip_unit_test.py::test_file_without_block_and_append)
-            ;;
-          roundtrip_then_annotations)
-            targets=(datalab/tests/features/hdf5/provenance_append_unit_test.py datalab/tests/features/hdf5/provenance_roundtrip_unit_test.py datalab/tests/features/image/annotations_app_test.py)
-            ;;
-        esac
-        for run in $(seq 1 "$PYTEST_REPEAT"); do
-          echo "::group::pytest run $run/$PYTEST_REPEAT"
-          QT_HANG_PROBE_LOG="qt-hang-probe-$run.log" pytest -vv --tb=long --setup-show -p qt_hang_probe -o faulthandler_timeout=120 "${targets[@]}" 2>&1 | tee -a pytest-qt6.log
-          echo "::endgroup::"
-        done
+        pytest -v --tb=long -o faulthandler_timeout=120 2>&1 | tee pytest-qt6.log
     - name: Upload pytest diagnostics
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: pytest-qt6-${{ matrix.python-version }}
-        path: |
-          pytest-qt6.log
-          qt-hang-probe-*.log
+        path: pytest-qt6.log
         if-no-files-found: ignore
 
   build_latest:
