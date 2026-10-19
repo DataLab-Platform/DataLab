@@ -1,6 +1,9 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
-"""Generate a layered installable DataLab plugin project."""
+"""Generate a layered installable DataLab plugin project.
+
+The ``datalab-plugin`` command also builds and checks local plugin catalogs.
+"""
 
 from __future__ import annotations
 
@@ -9,11 +12,14 @@ import dataclasses
 import json
 import keyword
 import re
+import sys
 from collections.abc import Sequence
 from pathlib import Path
 
 from datalab import __version__
 from datalab.config import _
+from datalab.plugins.catalog import CatalogError
+from datalab.plugins.catalogtool import build_local_catalog, check_local_catalog
 
 _PACKAGE_PATTERN = re.compile(r"^[a-z][a-z0-9_]*$")
 _PLUGIN_ID_PATTERN = re.compile(r"^[a-z0-9]+(?:[.-][a-z0-9]+)+$")
@@ -722,13 +728,59 @@ def build_parser() -> argparse.ArgumentParser:
         default="BSD-3-Clause",
         help=_("Project license"),
     )
+    catalog_parser = subparsers.add_parser(
+        "catalog", help=_("Build or check a local plugin catalog folder.")
+    )
+    catalog_subparsers = catalog_parser.add_subparsers(
+        dest="catalog_command", required=True
+    )
+    for name, text in (
+        ("build", _("Write the catalog.json file listing the plugin wheels.")),
+        ("check", _("Check the catalog.json file against the plugin wheels.")),
+    ):
+        subparser = catalog_subparsers.add_parser(name, help=text)
+        subparser.add_argument(
+            "directory", type=Path, help=_("Local plugin catalog folder")
+        )
     return parser
 
 
+def run_catalog_command(args: argparse.Namespace) -> int:
+    """Build or check a local plugin catalog and print the outcome.
+
+    Returns:
+        Exit code: 0 on success, 1 if the catalog has problems
+    """
+    try:
+        if args.catalog_command == "build":
+            report = build_local_catalog(str(args.directory))
+        else:
+            report = check_local_catalog(str(args.directory))
+    except CatalogError as exc:
+        print(_("Error: %s") % exc, file=sys.stderr)
+        return 1
+    for message in report.warnings:
+        print(_("Warning: %s") % message)
+    for message in report.errors:
+        print(_("Error: %s") % message, file=sys.stderr)
+    if report.errors:
+        if args.catalog_command == "build":
+            print(_("%s was not written.") % report.path, file=sys.stderr)
+        return 1
+    count = len(report.catalog["plugins"])
+    if report.written:
+        print(_("Wrote %s, listing %d plugins.") % (report.path, count))
+    else:
+        print(_("The local plugin catalog lists %d plugins.") % count)
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
-    """Run the plugin project generator command."""
+    """Run the ``datalab-plugin`` command."""
     parser = build_parser()
     args = parser.parse_args(argv)
+    if args.command == "catalog":
+        return run_catalog_command(args)
     try:
         project = _project_from_args(args)
         destination = create_plugin_project(project)

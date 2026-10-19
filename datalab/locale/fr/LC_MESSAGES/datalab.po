@@ -2198,6 +2198,13 @@ msgstr "Officiel"
 msgid "Community"
 msgstr "Communauté"
 
+msgid "Local catalog"
+msgstr "Catalogue local"
+
+#, python-format
+msgid "Local catalog: %s"
+msgstr "Catalogue local : %s"
+
 #, python-format
 msgid "Withdrawn: %s"
 msgstr "Retiré : %s"
@@ -2232,8 +2239,8 @@ msgid "Install"
 msgstr "Installer"
 
 #, python-format
-msgid "Plugins listed in the <a href=\"%s\">DataLab plugin catalog</a>. Official plugins are maintained by the DataLab team, community plugins by their authors: install only plugins from authors you trust."
-msgstr "Plugins répertoriés dans le <a href=\"%s\">catalogue de plugins DataLab</a>. Les plugins officiels sont maintenus par l'équipe DataLab, les plugins de la communauté par leurs auteurs : n'installez que des plugins provenant d'auteurs de confiance."
+msgid "Plugins listed in the <a href=\"%s\">DataLab plugin catalog</a> and in the local catalogs of the <b>Plugin settings</b> tab, which take precedence. Official plugins are maintained by the DataLab team, community plugins by their authors, and local catalogs by your organization: install only plugins from authors you trust."
+msgstr "Plugins répertoriés dans le <a href=\"%s\">catalogue de plugins DataLab</a> et dans les catalogues locaux de l'onglet <b>Paramètres des plugins</b>, qui sont prioritaires. Les plugins officiels sont maintenus par l'équipe DataLab, les plugins de la communauté par leurs auteurs et les catalogues locaux par votre organisation : n'installez que des plugins provenant d'auteurs de confiance."
 
 msgid "Search plugins"
 msgstr "Rechercher des plugins"
@@ -2241,12 +2248,16 @@ msgstr "Rechercher des plugins"
 msgid "No plugin catalog is configured."
 msgstr "Aucun catalogue de plugins n'est configuré."
 
-msgid "Loading the plugin catalog..."
-msgstr "Chargement du catalogue de plugins..."
+msgid "Loading the plugin catalogs..."
+msgstr "Chargement des catalogues de plugins..."
 
 #, python-format
 msgid "Downloading %s..."
 msgstr "Téléchargement de %s..."
+
+#, python-format
+msgid "Plugins in the catalogs: %d"
+msgstr "Plugins dans les catalogues : %d"
 
 #, python-format
 msgid "Plugins in the catalog: %d"
@@ -2254,6 +2265,10 @@ msgstr "Plugins dans le catalogue : %d"
 
 msgid "The plugin catalog cannot be loaded:"
 msgstr "Le catalogue de plugins ne peut pas être chargé :"
+
+#, python-format
+msgid "Local plugin catalog (%s)"
+msgstr "Catalogue local de plugins (%s)"
 
 #, python-format
 msgid "DataLab plugin catalog (%s)"
@@ -2348,6 +2363,19 @@ msgstr "Aucun répertoire de plugins supplémentaire n'est configuré."
 msgid "Directories provided via the <code>%s</code> environment variable (multiple paths separated by '<code>%s</code>') also appear above as read-only entries. Changes take effect at DataLab startup."
 msgstr "Les répertoires fournis via la variable d'environnement <code>%s</code> (plusieurs chemins séparés par '<code>%s</code>') apparaissent également ci-dessus en lecture seule. Les modifications prennent effet au démarrage de DataLab."
 
+msgid "Local plugin catalogs"
+msgstr "Catalogues locaux de plugins"
+
+msgid "Folders, possibly shared on the network, whose plugins are listed in the <b>Available plugins</b> tab before those of the DataLab plugin catalog. A folder provides the plugins of its <code>catalog.json</code> file if any, otherwise its plugin wheels."
+msgstr "Dossiers, éventuellement partagés sur le réseau, dont les plugins sont proposés dans l'onglet <b>Plugins disponibles</b> avant ceux du catalogue de plugins DataLab. Un dossier fournit les plugins de son fichier <code>catalog.json</code> s'il existe, sinon ses wheels de plugins."
+
+msgid "No local plugin catalog is configured."
+msgstr "Aucun catalogue local de plugins n'est configuré."
+
+#, python-format
+msgid "Folders provided via the <code>%s</code> environment variable (multiple paths separated by '<code>%s</code>') come first and appear above as read-only entries."
+msgstr "Les dossiers fournis via la variable d'environnement <code>%s</code> (plusieurs chemins séparés par '<code>%s</code>') sont prioritaires et apparaissent ci-dessus en lecture seule."
+
 msgid "Compatibility warnings"
 msgstr "Avertissements de compatibilité"
 
@@ -2359,6 +2387,9 @@ msgstr "Si activé, DataLab ne vous avertira pas des plugins v0.20 qui ne sont p
 
 msgid "Select plugin directory"
 msgstr "Sélectionner un répertoire de plugins"
+
+msgid "Select local plugin catalog folder"
+msgstr "Sélectionner un dossier de catalogue local de plugins"
 
 msgid "Enable all plugins"
 msgstr "Activer tous les plugins"
@@ -4388,6 +4419,34 @@ msgstr "Type d'objet utilisé par le traitement d'exemple"
 
 msgid "Project license"
 msgstr "Licence du projet"
+
+msgid "Build or check a local plugin catalog folder."
+msgstr "Construire ou vérifier un dossier de catalogue local de plugins."
+
+msgid "Write the catalog.json file listing the plugin wheels."
+msgstr "Écrire le fichier catalog.json répertoriant les wheels de plugins."
+
+msgid "Check the catalog.json file against the plugin wheels."
+msgstr "Vérifier le fichier catalog.json par rapport aux wheels de plugins."
+
+msgid "Local plugin catalog folder"
+msgstr "Dossier du catalogue local de plugins"
+
+#, python-format
+msgid "Warning: %s"
+msgstr "Avertissement : %s"
+
+#, python-format
+msgid "%s was not written."
+msgstr "%s n'a pas été écrit."
+
+#, python-format
+msgid "Wrote %s, listing %d plugins."
+msgstr "%s écrit, répertoriant %d plugins."
+
+#, python-format
+msgid "The local plugin catalog lists %d plugins."
+msgstr "Le catalogue local de plugins répertorie %d plugins."
 
 #, python-format
 msgid "Created DataLab plugin project at %s"
