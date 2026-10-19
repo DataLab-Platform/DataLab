@@ -142,3 +142,8 @@ Create a new signal from various models:
 
 For Gaussian, Lorentzian and Voigt models, :math:`A` is the signed peak height
 above the baseline :math:`y_0`, expressed in the signal's Y unit.
+
+The blackbody signal is the spectral radiance per unit wavelength of a blackbody
+at temperature :math:`T`: wavelengths :math:`\lambda` are expressed in meters and
+the spectral radiance in W·sr⁻¹·m⁻³. These axis titles and units are set by
+default, and may be changed in the creation dialog.
