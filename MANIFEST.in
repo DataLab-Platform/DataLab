@@ -8,3 +8,4 @@ include CONTRIBUTING.md
 include requirements.txt
 include *.desktop
 include *.metainfo.xml
+include com.datalab_platform.DataLab.svg

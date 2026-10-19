@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>io.github.datalab_platform.datalab</id>
+  <id>com.datalab_platform.DataLab</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>BSD-3-Clause</project_license>
 
   <name>DataLab</name>
   <summary>Process and visualize scientific signals and images</summary>
-  <developer id="io.github.datalab_platform">
+  <developer id="com.datalab_platform">
     <name>DataLab Platform Developers</name>
   </developer>
 
@@ -21,18 +21,23 @@
       <li>Record a history of actions and replay it on new data</li>
       <li>Automate tasks with Python macros and extend the application with plugins</li>
       <li>Control DataLab remotely from Jupyter, Spyder or any IDE through XML-RPC or an HTTP/JSON web API</li>
-      <li>Import and export data in HDF5 format</li>
+      <li>Open data from many file formats (text/CSV, NumPy, MAT-Files, TIFF, PNG, DICOM, HDF5 and more) and save workspaces in HDF5 format</li>
     </ul>
   </description>
 
-  <launchable type="desktop-id">DataLab.desktop</launchable>
+  <launchable type="desktop-id">com.datalab_platform.DataLab.desktop</launchable>
   <provides>
     <binary>datalab</binary>
   </provides>
 
+  <recommends>
+    <control>keyboard</control>
+    <control>pointing</control>
+    <display_length compare="ge">768</display_length>
+  </recommends>
+
   <categories>
     <category>Science</category>
-    <category>Education</category>
     <category>Physics</category>
     <category>DataVisualization</category>
   </categories>
@@ -46,7 +51,7 @@
   </keywords>
 
   <url type="homepage">https://datalab-platform.com/</url>
-  <url type="help">https://datalab-platform.com/</url>
+  <url type="help">https://datalab-platform.com/en/</url>
   <url type="bugtracker">https://github.com/DataLab-Platform/DataLab/issues</url>
   <url type="vcs-browser">https://github.com/DataLab-Platform/DataLab</url>
   <url type="contribute">https://datalab-platform.com/en/contributing/index.html</url>
