@@ -151,7 +151,7 @@ jobs:
             targets=(datalab/tests/features/hdf5/provenance_roundtrip_unit_test.py::test_file_without_block_and_append)
             ;;
           roundtrip_then_annotations)
-            targets=(datalab/tests/features/hdf5/provenance_roundtrip_unit_test.py datalab/tests/features/image/annotations_app_test.py)
+            targets=(datalab/tests/features/hdf5/provenance_append_unit_test.py datalab/tests/features/hdf5/provenance_roundtrip_unit_test.py datalab/tests/features/image/annotations_app_test.py)
             ;;
         esac
         for run in $(seq 1 "$PYTEST_REPEAT"); do
