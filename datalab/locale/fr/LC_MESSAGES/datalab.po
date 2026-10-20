@@ -10,6 +10,9 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Failed to deserialize analysis parameters from JSON."
+msgstr "Échec de la désérialisation des paramètres d'analyse depuis le format JSON."
+
 msgid "Results"
 msgstr "Résultats"
 

@@ -65,6 +65,7 @@ from datalab.gui.processor.catcher import CompOut, wng_err_func
 from datalab.gui.processor.execution import CANCELLED, ExecutionService
 from datalab.history.effects import capture_effects
 from datalab.objectmodel import get_title_reference, get_uuid, patch_title_with_ids
+from datalab.utils.datasetjson import decode_dataset_json
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
 
 if TYPE_CHECKING:
@@ -106,10 +107,10 @@ class ProcessingParameters:
         try:
             if isinstance(param_json, list):
                 # Handle list of JSON strings
-                self.param = [gds.json_to_dataset(p) for p in param_json]
+                self.param = [decode_dataset_json(p) for p in param_json]
             else:
                 # Handle single JSON string
-                self.param = gds.json_to_dataset(param_json)
+                self.param = decode_dataset_json(param_json)
         except Exception:  # pylint: disable=broad-except
             warnings.warn(_("Failed to deserialize processing parameters from JSON."))
             self.param = None
