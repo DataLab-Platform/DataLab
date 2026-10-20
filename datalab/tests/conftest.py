@@ -8,6 +8,7 @@ This file contains the configuration for running pytest in DataLab. It is
 executed before running any tests.
 """
 
+import gc
 import os
 import os.path as osp
 
@@ -23,6 +24,7 @@ import sigima
 import skimage
 from guidata.config import ValidationMode, set_validation_mode
 from guidata.utils.gitreport import format_git_info_for_pytest, get_git_info_for_modules
+from qtpy import QtCore as QC
 from sigima.tests import helpers
 
 import datalab
@@ -143,3 +145,11 @@ def reset_cwd(request):  # pylint: disable=unused-argument
 def pytest_runtest_teardown(item, nextitem):  # pylint: disable=unused-argument
     """Run teardown after each test."""
     PluginRegistry.unregister_all_plugins()
+    # Destroy the widgets of the test now, rather than during a later test: closed
+    # widgets deleted later (e.g. the internal console) are only deleted by the
+    # next event loop, and main windows are part of reference cycles, only
+    # destroyed when the garbage collector runs, possibly amid Qt operations
+    if QC.QCoreApplication.instance() is not None:
+        QC.QCoreApplication.processEvents()
+        QC.QCoreApplication.sendPostedEvents(None, QC.QEvent.DeferredDelete)
+    gc.collect()
