@@ -47,6 +47,9 @@ def reset_datalab_configuration():
     ensure_initialized(load_user_config=False)
     reset_to_defaults()
     Conf.rpc_server_enabled.set(False)
+    # Keep pytest's faulthandler, which reports crashes in the test output: the
+    # application context would redirect it to a log file, then disable it
+    Conf.faulthandler_enabled.set(False)
     try:
         yield
     finally:
