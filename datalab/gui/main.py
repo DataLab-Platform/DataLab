@@ -106,7 +106,7 @@ from datalab.widgets import status as dl_status
 from datalab.widgets.expandabletext import refresh_subdued_colors
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Callable, Iterator
     from typing import Any, Literal
 
     from datalab.gui.historysession_ops import SessionBehavior
@@ -221,7 +221,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.h5inputoutput = H5InputOutput(self)
         self.capsuleio = CapsuleInputOutput(self)
 
-        # Starting XML-RPC server thread
+        # Starting XML-RPC server thread: requests are processed once the main
+        # window is fully set up (see `_after_setup`)
         self.remote_server = RemoteServer(self)
         if Conf.rpc_server_enabled.get():
             self.remote_server.SIG_SERVER_PORT.connect(self.xmlrpc_server_started)
@@ -229,6 +230,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
         self.__register_plugins()
         self.webapi_actions = WebApiActions(self)
+
+    def _after_setup(self, console: bool) -> None:
+        """Process remote requests, the main window being fully set up."""
+        super()._after_setup(console)
+        self.remote_server.notify_window_ready()
 
     # ------API related to XML-RPC remote control
     @staticmethod
@@ -665,6 +671,23 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         except Exception as exc:  # pylint: disable=broad-except
             # Store exception for re-raising in XML-RPC thread
             self.remote_server.result = None
+            self.remote_server.exception = exc
+
+    @remote_controlled
+    def run_remote_command(self, command: Callable[..., object], *args) -> None:
+        """Slot to run a command requested by a remote client in GUI thread.
+
+        The exception raised by the command, if any, is stored in RemoteServer to
+        be re-raised to the client. Being remote controlled, this slot signals that
+        DataLab is ready only once the command is done and its exception stored.
+
+        Args:
+            command: Main window method running the command
+            args: Command arguments
+        """
+        try:
+            command(*args)
+        except Exception as exc:  # pylint: disable=broad-except
             self.remote_server.exception = exc
 
     @remote_controlled
@@ -2518,12 +2541,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             panel_str = "image"
         else:
             raise TypeError(f"Unsupported object type {type(obj)}")
-        # A remote call can reach the main window before the History panel dock
-        # exists, since the XML-RPC server is started before the UI is built.
         historypanel = self.historypanel
-        if historypanel is None:
-            panel.add_object(obj, group_id, set_current)
-            return True
         historypanel.maybe_start_session_for_input(behavior=new_session_behavior)
         panel.add_object(obj, group_id, set_current)
         # Record a creation entry so objects added programmatically (plugins,
