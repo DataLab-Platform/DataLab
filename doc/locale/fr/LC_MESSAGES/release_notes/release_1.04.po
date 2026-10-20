@@ -372,8 +372,24 @@ msgstr "**Création de signaux :**"
 msgid "The blackbody signal (**Create > Blackbody (Planck's law)**) now has axis titles and units (wavelength in m, spectral radiance in W·sr⁻¹·m⁻³), which were missing (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))"
 msgstr "Le signal de corps noir (**Création > Corps noir (loi de Planck)**) a désormais des titres et des unités d'axes (longueur d'onde en m, luminance énergétique spectrale en W·sr⁻¹·m⁻³), qui étaient absents (corrige [l'issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))"
 
+msgid "**Remote control:**"
+msgstr "**Contrôle à distance :**"
+
+msgid "Fixed files loaded remotely with `load_from_files` or `load_from_directory` being sometimes silently ignored, or still loading after the call had returned, when requested right after DataLab started: requests received while DataLab is starting are now processed as soon as its main window is ready (fixes [Issue #398](https://github.com/DataLab-Platform/DataLab/issues/398))"
+msgstr "Correction des fichiers chargés à distance avec `load_from_files` ou `load_from_directory` qui étaient parfois ignorés silencieusement, ou encore en cours de chargement après le retour de l'appel, lorsqu'ils étaient demandés juste après le démarrage de DataLab : les requêtes reçues pendant le démarrage de DataLab sont désormais traitées dès que sa fenêtre principale est prête (corrige [l'issue #398](https://github.com/DataLab-Platform/DataLab/issues/398))"
+
+msgid "Errors raised by remote commands, such as `calc` with an unknown computation function or `set_object` with an unknown object, are now reported to the client instead of being silently ignored"
+msgstr "Les erreurs levées par les commandes à distance, comme `calc` avec une fonction de calcul inconnue ou `set_object` avec un objet inconnu, sont désormais signalées au client au lieu d'être ignorées silencieusement"
+
+msgid "Fixed remote commands sometimes returning the result of the previous command instead of their own: for example, `get_current_object_uuid` could return a panel name instead of `None` when there was no current object"
+msgstr "Correction des commandes à distance qui renvoyaient parfois le résultat de la commande précédente au lieu du leur : par exemple, `get_current_object_uuid` pouvait renvoyer un nom de panneau au lieu de `None` en l'absence d'objet courant"
+
+msgid "Fixed DataLab freezing when closed while a remote command was still running (e.g. when closing the main window with `call_method(\"close\")`)"
+msgstr "Correction du blocage de DataLab lorsqu'il était fermé alors qu'une commande à distance était encore en cours d'exécution (par exemple en fermant la fenêtre principale avec `call_method(\"close\")`)"
+
 msgid "**Security:**"
 msgstr "**Sécurité :**"
 
 msgid "Opening a workspace received from someone else can no longer make DataLab load or run other code installed on the computer. The parameters stored with objects, analysis results and History actions name their class, and DataLab imported whatever module they named and called the object named there, which a modified file could use, for example, to make DataLab quit. Only parameter classes of DataLab, Sigima, guidata and installed plugins are now used; other stored parameters are reported as unreadable (fixes [Issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))"
 msgstr "Ouvrir un espace de travail reçu d'une autre personne ne permet plus de faire charger ou exécuter par DataLab un autre code installé sur l'ordinateur. Les paramètres enregistrés avec les objets, les résultats d'analyse et les actions de l'historique nomment leur classe, et DataLab importait le module ainsi nommé puis appelait l'objet désigné, ce qu'un fichier modifié pouvait exploiter, par exemple pour faire quitter DataLab. Seules les classes de paramètres de DataLab, Sigima, guidata et des plugins installés sont désormais utilisées ; les autres paramètres enregistrés sont signalés comme illisibles (corrige [l'issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))"
+
