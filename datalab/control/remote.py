@@ -50,6 +50,8 @@ def remote_call(func: Callable) -> object:
         """Decorator wrapper function"""
         self: RemoteServer = args[0]  # extracting 'self' from method arguments
         self.is_ready = False
+        self.exception = None
+        self.result = None
         output = func(*args, **kwargs)
         while not self.is_ready:
             QC.QCoreApplication.processEvents()
@@ -116,33 +118,37 @@ class RemoteServer(QC.QThread):
         self.win = win
         self.result = None
         self.exception = None
+        self.__window_ready = threading.Event()
         win.SIG_READY.connect(self.datalab_is_ready)
         win.SIG_CLOSING.connect(self.shutdown_server)
         self.SIG_CLOSE_APP.connect(win.close)
         self.SIG_RAISE_WINDOW.connect(win.raise_window)
-        self.SIG_ADD_OBJECT.connect(win.add_object)
-        self.SIG_SET_OBJECT.connect(win.set_object)
-        self.SIG_ADD_GROUP.connect(win.add_group)
-        self.SIG_LOAD_FROM_FILES.connect(win.load_from_files)
-        self.SIG_LOAD_FROM_DIRECTORY.connect(win.load_from_directory)
-        self.SIG_SELECT_OBJECTS.connect(win.select_objects)
-        self.SIG_SELECT_GROUPS.connect(win.select_groups)
-        self.SIG_SELECT_ALL_GROUPS.connect(lambda panel: win.select_groups(None, panel))
-        self.SIG_DELETE_METADATA.connect(win.delete_metadata)
-        self.SIG_SWITCH_TO_PANEL.connect(win.set_current_panel)
-        self.SIG_TOGGLE_AUTO_REFRESH.connect(win.toggle_auto_refresh)
-        self.SIG_TOGGLE_SHOW_TITLES.connect(win.toggle_show_titles)
-        self.SIG_RESET_ALL.connect(win.reset_all)
-        self.SIG_REMOVE_OBJECT.connect(win.remove_object)
-        self.SIG_SAVE_TO_H5.connect(win.save_to_h5_file)
-        self.SIG_OPEN_H5.connect(win.open_h5_files)
-        self.SIG_IMPORT_H5.connect(win.import_h5_file)
-        self.SIG_LOAD_H5_WORKSPACE.connect(win.load_h5_workspace)
-        self.SIG_SAVE_H5_WORKSPACE.connect(win.save_h5_workspace)
-        self.SIG_CALC.connect(win.calc)
-        self.SIG_RUN_MACRO.connect(win.run_macro)
-        self.SIG_STOP_MACRO.connect(win.stop_macro)
-        self.SIG_IMPORT_MACRO_FROM_FILE.connect(win.import_macro_from_file)
+        for signal, command in (
+            (self.SIG_ADD_OBJECT, win.add_object),
+            (self.SIG_SET_OBJECT, win.set_object),
+            (self.SIG_ADD_GROUP, win.add_group),
+            (self.SIG_LOAD_FROM_FILES, win.load_from_files),
+            (self.SIG_LOAD_FROM_DIRECTORY, win.load_from_directory),
+            (self.SIG_SELECT_OBJECTS, win.select_objects),
+            (self.SIG_SELECT_GROUPS, win.select_groups),
+            (self.SIG_SELECT_ALL_GROUPS, functools.partial(win.select_groups, None)),
+            (self.SIG_DELETE_METADATA, win.delete_metadata),
+            (self.SIG_SWITCH_TO_PANEL, win.set_current_panel),
+            (self.SIG_TOGGLE_AUTO_REFRESH, win.toggle_auto_refresh),
+            (self.SIG_TOGGLE_SHOW_TITLES, win.toggle_show_titles),
+            (self.SIG_RESET_ALL, win.reset_all),
+            (self.SIG_REMOVE_OBJECT, win.remove_object),
+            (self.SIG_SAVE_TO_H5, win.save_to_h5_file),
+            (self.SIG_OPEN_H5, win.open_h5_files),
+            (self.SIG_IMPORT_H5, win.import_h5_file),
+            (self.SIG_LOAD_H5_WORKSPACE, win.load_h5_workspace),
+            (self.SIG_SAVE_H5_WORKSPACE, win.save_h5_workspace),
+            (self.SIG_CALC, win.calc),
+            (self.SIG_RUN_MACRO, win.run_macro),
+            (self.SIG_STOP_MACRO, win.stop_macro),
+            (self.SIG_IMPORT_MACRO_FROM_FILE, win.import_macro_from_file),
+        ):
+            signal.connect(functools.partial(win.run_remote_command, command))
         self.SIG_CALL_METHOD.connect(win.call_method_slot)
 
     def serve(self) -> None:
@@ -157,11 +163,27 @@ class RemoteServer(QC.QThread):
             self.register_functions(server)
             self.port = server.server_address[1]
             self.notify_port(self.port)
+            # Clients may already connect: their requests wait for the main window
+            self.__window_ready.wait()
             with execenv.context(xmlrpcport=self.port):
                 server.serve_forever()
 
+    def notify_window_ready(self) -> None:
+        """Notify that the main window is fully set up.
+
+        Requests are processed from then on: processing them earlier would run
+        commands on a partially built main window.
+        """
+        self.__window_ready.set()
+
     def shutdown_server(self) -> None:
         """Shutdown server"""
+        # A server still waiting for the main window must be able to stop
+        self.__window_ready.set()
+        # Release the remote call waiting for DataLab to be ready, if any (e.g. the
+        # one closing DataLab): the main window, blocked below until the request is
+        # done, could not signal it, hence a deadlock
+        self.is_ready = True
         if self.server is not None:
             self.server.shutdown()
             self.server = None

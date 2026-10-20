@@ -167,3 +167,10 @@ DataLab now uses stable UUID-based object references across object trees, result
 **Signal creation:**
 
 * The blackbody signal (**Create > Blackbody (Planck's law)**) now has axis titles and units (wavelength in m, spectral radiance in W·sr⁻¹·m⁻³), which were missing (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))
+
+**Remote control:**
+
+* Fixed files loaded remotely with `load_from_files` or `load_from_directory` being sometimes silently ignored, or still loading after the call had returned, when requested right after DataLab started: requests received while DataLab is starting are now processed as soon as its main window is ready (fixes [Issue #398](https://github.com/DataLab-Platform/DataLab/issues/398))
+* Errors raised by remote commands, such as `calc` with an unknown computation function or `set_object` with an unknown object, are now reported to the client instead of being silently ignored
+* Fixed remote commands sometimes returning the result of the previous command instead of their own: for example, `get_current_object_uuid` could return a panel name instead of `None` when there was no current object
+* Fixed DataLab freezing when closed while a remote command was still running (e.g. when closing the main window with `call_method("close")`)
