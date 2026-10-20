@@ -119,7 +119,7 @@ msgid "Test function"
 msgstr "Fonction de test"
 
 msgid ":py:func:`absolute <sigima.proc.signal.absolute>`"
-msgstr "Calculer la valeur absolue avec :py:data:`numpy.absolute`"
+msgstr ""
 
 msgid "Compute absolute value with :py:data:`numpy.absolute`"
 msgstr "Calculer la valeur absolue avec :py:data:`numpy.absolute`"

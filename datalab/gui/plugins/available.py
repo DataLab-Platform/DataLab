@@ -4,7 +4,8 @@
 Available plugins
 -----------------
 
-Browse the DataLab plugin catalog and install or update its plugins.
+Browse the DataLab plugin catalog and the local plugin catalogs, and install or
+update their plugins.
 """
 
 from __future__ import annotations
@@ -12,7 +13,7 @@ from __future__ import annotations
 import shutil
 import sys
 import tempfile
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from html import escape
 from importlib import metadata as importlib_metadata
 
@@ -23,13 +24,21 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from datalab.config import PLUGIN_ERROR_COLOR, Conf, _
+from datalab.config import (
+    PLUGIN_ERROR_COLOR,
+    Conf,
+    _,
+    get_env_plugin_catalog_paths,
+    get_plugin_catalog_paths,
+    normalize_plugin_paths,
+)
 from datalab.gui.plugins.install import InstalledPluginsWidget
 from datalab.plugins.catalog import (
     CatalogPlugin,
     CatalogRelease,
+    CatalogsContent,
     download_release,
-    fetch_catalog,
+    load_catalogs,
 )
 from datalab.plugins.store import WHEEL_KIND
 from datalab.widgets.expandabletext import apply_palette_color, apply_subdued_color
@@ -71,6 +80,22 @@ def _tier_label(plugin: CatalogPlugin) -> str:
     return _("Official") if plugin.tier == "official" else _("Community")
 
 
+def _source_label(plugin: CatalogPlugin) -> str:
+    return _("Local catalog") if plugin.source else _tier_label(plugin)
+
+
+def merge_catalog_directories(configured: Sequence[str]) -> list[str]:
+    """Return the local catalog folders, by priority.
+
+    Folders of the ``DATALAB_PLUGINS_CATALOG`` environment variable come first,
+    then the folders configured in DataLab.
+
+    Args:
+        configured: Folders configured in DataLab
+    """
+    return normalize_plugin_paths([*get_env_plugin_catalog_paths(), *configured])
+
+
 class AvailablePluginItemWidget(QW.QWidget):
     """Row describing a catalog plugin and the action it allows.
 
@@ -96,20 +121,22 @@ class AvailablePluginItemWidget(QW.QWidget):
         self.setLayout(layout)
 
         version = f" {escape(release.version)}" if release else ""
+        source_link = (
+            f'<a href="{escape(plugin.repository, quote=True)}">'
+            f"{escape(_('Source code'))}</a>"
+            if plugin.repository
+            else ""
+        )
         details = " &middot; ".join(
-            part
-            for part in (
-                escape(plugin.license),
-                f'<a href="{escape(plugin.repository, quote=True)}">'
-                f"{escape(_('Source code'))}</a>",
-            )
-            if part
+            part for part in (escape(plugin.license), source_link) if part
         )
         label = QW.QLabel(
             f"<b>{escape(plugin.name)}</b>{version} "
-            f"<small>({escape(_tier_label(plugin))})</small><br>"
+            f"<small>({escape(_source_label(plugin))})</small><br>"
             f"{escape(plugin.summary)}<br><small>{details}</small>"
         )
+        if plugin.source:
+            label.setToolTip(_("Local catalog: %s") % plugin.source)
         label.setWordWrap(True)
         label.setOpenExternalLinks(True)
         label.setTextInteractionFlags(QC.Qt.TextBrowserInteraction)
@@ -157,6 +184,9 @@ class AvailablePluginItemWidget(QW.QWidget):
 class AvailablePluginsWidget(QW.QWidget):
     """Tab listing the catalog plugins, with install and update actions.
 
+    The local catalogs are listed first: a plugin they provide hides the same
+    plugin in the online catalog.
+
     Args:
         installer: Tab installing plugin files, used once a wheel is downloaded
         parent: Parent widget
@@ -171,15 +201,20 @@ class AvailablePluginsWidget(QW.QWidget):
         self.item_widgets: list[AvailablePluginItemWidget] = []
         self._download: tuple[CatalogPlugin, str] | None = None
         self._busy = False
+        self._directories = merge_catalog_directories(get_plugin_catalog_paths())
+        #: Catalog URL and local folders of the last loading
+        self._loaded_sources: tuple[str, tuple[str, ...]] | None = None
         layout = QW.QVBoxLayout()
         self.setLayout(layout)
 
         intro = QW.QLabel(
             _(
-                'Plugins listed in the <a href="%s">DataLab plugin catalog</a>. '
-                "Official plugins are maintained by the DataLab team, community "
-                "plugins by their authors: install only plugins from authors you "
-                "trust."
+                'Plugins listed in the <a href="%s">DataLab plugin catalog</a> '
+                "and in the local catalogs of the <b>Plugin settings</b> tab, "
+                "which take precedence. Official plugins are maintained by the "
+                "DataLab team, community plugins by their authors, and local "
+                "catalogs by your organization: install only plugins from "
+                "authors you trust."
             )
             % CATALOG_PAGE_URL
         )
@@ -203,6 +238,13 @@ class AvailablePluginsWidget(QW.QWidget):
         apply_subdued_color(self.status_label)
         layout.addWidget(self.status_label)
 
+        self.errors_label = QW.QLabel()
+        self.errors_label.setWordWrap(True)
+        self.errors_label.setTextFormat(QC.Qt.PlainText)
+        apply_palette_color(self.errors_label, QG.QColor(PLUGIN_ERROR_COLOR))
+        self.errors_label.hide()
+        layout.addWidget(self.errors_label)
+
         scroll = QW.QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setHorizontalScrollBarPolicy(QC.Qt.ScrollBarAlwaysOff)
@@ -215,10 +257,27 @@ class AvailablePluginsWidget(QW.QWidget):
         layout.addWidget(scroll, 1)
 
     def showEvent(self, event: QG.QShowEvent) -> None:  # pylint: disable=C0103
-        """Load the catalog the first time the tab is shown."""
+        """Load the catalogs when the tab is shown, unless already loaded."""
         super().showEvent(event)
-        if self.plugins is None and not self._busy:
+        if not self._busy and self._loaded_sources != self._get_sources():
             self.refresh()
+
+    def get_catalog_directories(self) -> list[str]:
+        """Return the local catalog folders, by priority."""
+        return list(self._directories)
+
+    def set_catalog_directories(self, directories: Sequence[str]) -> None:
+        """Set the local catalog folders, by priority.
+
+        The catalogs are loaded again when the tab is visible, otherwise when it
+        is shown.
+        """
+        self._directories = list(directories)
+        if self.isVisible() and not self._busy:
+            self.refresh()
+
+    def _get_sources(self) -> tuple[str, tuple[str, ...]]:
+        return Conf.plugins_catalog_url.get(), tuple(self._directories)
 
     def run_task(
         self,
@@ -235,13 +294,21 @@ class AvailablePluginsWidget(QW.QWidget):
         task.start()
 
     def refresh(self) -> None:
-        """Download the catalog again."""
-        url = Conf.plugins_catalog_url.get()
-        if not url:
+        """Load the catalogs again."""
+        sources = self._get_sources()
+        self._loaded_sources = sources
+        url, directories = sources
+        self.errors_label.hide()
+        if not url and not directories:
+            self.plugins = None
+            self._populate()
+            apply_subdued_color(self.status_label)
             self.status_label.setText(_("No plugin catalog is configured."))
             return
-        self._set_busy(_("Loading the plugin catalog..."))
-        self.run_task(lambda: fetch_catalog(url), self._on_catalog, self._on_error)
+        self._set_busy(_("Loading the plugin catalogs..."))
+        self.run_task(
+            lambda: load_catalogs(url, directories), self._on_catalog, self._on_error
+        )
 
     def install(self, plugin: CatalogPlugin) -> None:
         """Download the newest release of a plugin, then install it."""
@@ -267,11 +334,23 @@ class AvailablePluginsWidget(QW.QWidget):
             apply_subdued_color(self.status_label)
             self.status_label.setText(message)
 
-    def _on_catalog(self, plugins: list[CatalogPlugin]) -> None:
-        self.plugins = plugins
+    def _on_catalog(self, content: CatalogsContent) -> None:
+        self.plugins = list(content.plugins)
         self._set_busy(None)
-        self.status_label.setText(_("Plugins in the catalog: %d") % len(plugins))
+        url, directories = self._loaded_sources
+        if len(directories) + bool(url) > 1:
+            text = _("Plugins in the catalogs: %d") % len(self.plugins)
+        else:
+            text = _("Plugins in the catalog: %d") % len(self.plugins)
+        self.status_label.setText(text)
+        self.errors_label.setText(
+            "\n".join(f"\u26a0 {message}" for message in content.errors)
+        )
+        self.errors_label.setVisible(bool(content.errors))
         self._populate()
+        if self.isVisible() and self._loaded_sources != self._get_sources():
+            # The sources changed during the loading
+            self.refresh()
 
     def _on_error(self, message: str) -> None:
         self._set_busy(None)
@@ -286,9 +365,11 @@ class AvailablePluginsWidget(QW.QWidget):
         self._set_busy(None)
         self.status_label.setText("")
         try:
-            self._installer.install_path(
-                path, origin=_("DataLab plugin catalog (%s)") % _tier_label(plugin)
-            )
+            if plugin.source:
+                origin = _("Local plugin catalog (%s)") % plugin.source
+            else:
+                origin = _("DataLab plugin catalog (%s)") % _tier_label(plugin)
+            self._installer.install_path(path, origin=origin)
         finally:
             shutil.rmtree(directory, ignore_errors=True)
         self._populate()

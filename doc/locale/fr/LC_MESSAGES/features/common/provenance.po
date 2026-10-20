@@ -1,0 +1,234 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Provenance of results in DataLab: consultation, data check, verification by recomputation, applying a processing again, link with the History panel"
+msgstr "Provenance des résultats dans DataLab : consultation, contrôle des données, vérification par recalcul, nouvelle application d'un traitement, lien avec le panneau Historique"
+
+msgid "DataLab, provenance, reproducibility, processing, verification, workspace, HDF5, history"
+msgstr "DataLab, provenance, reproductibilité, traitement, vérification, espace de travail, HDF5, historique"
+
+msgid "Provenance of results"
+msgstr "Provenance des résultats"
+
+msgid "For supported processing paths, DataLab records how a result was obtained: the processing or analysis applied, its parameters, the objects it used with their exact content, and the software versions. This record is saved with the HDF5 workspace and read back when the workspace is reopened, by DataLab or by DataLab-Web."
+msgstr "Pour les parcours de traitement pris en charge, DataLab enregistre comment un résultat a été obtenu : le traitement ou l'analyse appliqué, ses paramètres, les objets utilisés avec leur contenu exact et les versions des logiciels. Cet enregistrement est sauvegardé avec l'espace de travail HDF5 et relu à sa réouverture, par DataLab ou par DataLab-Web."
+
+msgid "This page describes how to consult that record for one object, how to check and verify it, how to apply a recorded processing again, and how it relates to the History panel. To exchange a workspace with the provenance of its processing, see :ref:`capsules`."
+msgstr "Cette page décrit comment consulter cet enregistrement pour un objet, comment le contrôler et le vérifier, comment appliquer à nouveau un traitement enregistré, et quel est son lien avec le panneau Historique. Pour échanger un espace de travail avec la provenance de ses traitements, voir :ref:`capsules`."
+
+msgid "Consulting the provenance of an object"
+msgstr "Consulter la provenance d'un objet"
+
+msgid "Select an object and open the **Provenance** tab of the Properties panel. When the workspace holds a provenance record for this object, the tab shows its provenance:"
+msgstr "Sélectionnez un objet et ouvrez l'onglet **Provenance** du panneau des propriétés. Lorsque l'espace de travail contient un enregistrement de provenance pour cet objet, l'onglet affiche sa provenance :"
+
+msgid "a summary: the recorded execution that produced the current content, whether the data still have to be checked, and any limitation (e.g. data altered in the file, or a state observed without recorded production);"
+msgstr "un résumé : l'exécution enregistrée qui a produit le contenu actuel, si les données restent à contrôler, et toute limite (par exemple des données altérées dans le fichier, ou un état observé sans production enregistrée) ;"
+
+msgid "the **Production** of the object, its **Recorded analyses**, its **Earlier recorded states** and, for workspaces saved by older versions, the **Records of an old workspace** and the **Metadata history (not verified)**."
+msgstr "la **Production** de l'objet, ses **Analyses enregistrées**, ses **États enregistrés antérieurs** et, pour les espaces de travail enregistrés par d'anciennes versions, les **Enregistrements d'un ancien espace de travail** et l'**Historique des métadonnées (non vérifié)**."
+
+msgid "Each recorded step is shown as a card: the operation, how and when it was recorded and by which software (DataLab Desktop or DataLab Web), its parameters, its inputs and results with their status, and links acting on what they are next to. Links marked with a triangle (▸) show a hidden part of the view and become ▾ to hide it again; an earlier step is shown framed inside the card of the step that used it:"
+msgstr "Chaque étape enregistrée est présentée sous forme de fiche : l'opération, comment, quand et par quel logiciel (DataLab Desktop ou DataLab Web) elle a été enregistrée, ses paramètres, ses entrées et ses résultats avec leur statut, et des liens qui agissent sur ce qu'ils accompagnent. Les liens marqués d'un triangle (▸) affichent une partie masquée de la vue et deviennent ▾ pour la masquer à nouveau ; une étape antérieure est affichée encadrée dans la fiche de l'étape qui l'a utilisée :"
+
+msgid "**Show recorded step** (under an input) shows how that input was itself produced, step by step, without computing anything. The state actually used is shown, even if the input object was modified or reprocessed since: for example, if ``S2`` was computed from ``S1`` filtered with sigma = 2 and ``S1`` was then filtered again with sigma = 5, the recorded step of the input of ``S2`` shows sigma = 2. **Hide recorded step** hides it again;"
+msgstr "**Afficher l'étape enregistrée** (sous une entrée) montre comment cette entrée a elle-même été produite, étape par étape, sans rien calculer. L'état réellement utilisé est affiché, même si l'objet d'entrée a été modifié ou retraité depuis : par exemple, si ``S2`` a été calculé à partir de ``S1`` filtré avec sigma = 2, puis ``S1`` filtré à nouveau avec sigma = 5, l'étape enregistrée de l'entrée de ``S2`` montre sigma = 2. **Masquer l'étape enregistrée** la masque à nouveau ;"
+
+msgid "**Go to object** (under an input or a result) selects, in the signal or image panel, the object that holds it today (it may have changed since the computation);"
+msgstr "**Aller à l'objet** (sous une entrée ou un résultat) sélectionne, dans le panneau des signaux ou des images, l'objet qui la porte aujourd'hui (il a pu changer depuis le calcul) ;"
+
+msgid "**Verify this step** recomputes the step separately and compares every result with the recorded one: *Exact*, *Within tolerance*, *Different* or *Not verified* (with the reason, e.g. an original input missing). The workspace is not changed;"
+msgstr "**Vérifier cette étape** recalcule l'étape séparément et compare chaque résultat au résultat enregistré : *Exact*, *Dans la tolérance*, *Différent* ou *Non vérifié* (avec la raison, par exemple une entrée d'origine absente). L'espace de travail n'est pas modifié ;"
+
+msgid "**History action** selects the History action whose last execution recorded the step, when there is one;"
+msgstr "**Action de l'historique** sélectionne l'action de l'historique dont la dernière exécution a enregistré l'étape, lorsqu'elle existe ;"
+
+msgid "**Show details** shows the context of the step (options, X alignment, metadata read) and the software versions."
+msgstr "**Afficher les détails** affiche le contexte de l'étape (options, alignement en X, métadonnées lues) et les versions des logiciels."
+
+msgid "Consulting reads the provenance record only: it never computes, never changes the workspace and never adds a History action. The view is bounded and long values are abbreviated: a truncated view does not mean that records were removed."
+msgstr "La consultation lit uniquement l'enregistrement de provenance : elle ne calcule jamais, ne modifie jamais l'espace de travail et n'ajoute jamais d'action à l'historique. La vue est bornée et les valeurs longues sont abrégées : une vue tronquée ne signifie pas que des enregistrements ont été supprimés."
+
+msgid "The buttons below the cards act on the object:"
+msgstr "Les boutons situés sous les fiches agissent sur l'objet :"
+
+msgid "**Check data** compares the object, the direct inputs and results of its production and the earlier steps shown with their recorded states, without computing. The steps shown and the details opened stay so. A deleted input or result is reported as missing at once, without checking (nothing has to be read to know it);"
+msgstr "**Contrôler les données** compare l'objet, les entrées directes et les résultats de sa production et les étapes antérieures affichées à leurs états enregistrés, sans calculer. Les étapes affichées et les détails ouverts le restent. Une entrée ou un résultat supprimé est signalé absent immédiatement, sans contrôle (rien n'a besoin d'être lu pour le savoir) ;"
+
+msgid "**Verify computation** verifies the production of the object, like **Verify this step**."
+msgstr "**Vérifier le calcul** vérifie la production de l'objet, comme **Vérifier cette étape**."
+
+msgid "States and messages"
+msgstr "États et messages"
+
+msgid "The provenance never invents what is unknown. The main messages are:"
+msgstr "La provenance n'invente jamais ce qui est inconnu. Les principaux messages sont :"
+
+msgid "Message"
+msgstr "Message"
+
+msgid "Meaning"
+msgstr "Signification"
+
+msgid "Data to be checked"
+msgstr "Données à contrôler"
+
+msgid "Nothing was compared yet: use **Check data**"
+msgstr "Rien n'a encore été comparé : utilisez **Contrôler les données**"
+
+msgid "This input has changed since the computation"
+msgstr "Cette entrée a changé depuis le calcul"
+
+msgid "The input object no longer holds the state used by the computation; the recorded state is still described"
+msgstr "L'objet d'entrée ne contient plus l'état utilisé par le calcul ; l'état enregistré reste décrit"
+
+msgid "Original input missing"
+msgstr "Entrée d'origine absente"
+
+msgid "The input object was deleted (or its identifier is now held by another object, see :ref:`provenance_append`)"
+msgstr "L'objet d'entrée a été supprimé (ou son identifiant est désormais porté par un autre objet, voir :ref:`provenance_append`)"
+
+msgid "The result was modified since the computation"
+msgstr "Le résultat a été modifié depuis le calcul"
+
+msgid "The result was edited after it was computed: it is reported as altered rather than trusted"
+msgstr "Le résultat a été modifié après son calcul : il est signalé comme altéré plutôt que considéré comme fiable"
+
+msgid "The data of the object are not available"
+msgstr "Les données de l'objet ne sont pas disponibles"
+
+msgid "The data cannot be read to be compared (they are not checked)"
+msgstr "Les données ne peuvent pas être lues pour être comparées (elles ne sont pas contrôlées)"
+
+msgid "The state cannot be checked (no fingerprint)"
+msgstr "L'état ne peut pas être contrôlé (pas d'empreinte)"
+
+msgid "The record does not allow a comparison"
+msgstr "L'enregistrement ne permet pas de comparaison"
+
+msgid "Observed state, without recorded production"
+msgstr "État observé, sans production enregistrée"
+
+msgid "The object exists in the record, but how it was produced is unknown (e.g. data loaded from a file)"
+msgstr "L'objet figure dans l'enregistrement, mais la manière dont il a été produit est inconnue (par exemple des données chargées depuis un fichier)"
+
+msgid "Applying a processing again"
+msgstr "Appliquer à nouveau un traitement"
+
+msgid "When the latest recorded state of an object was produced by a processing of DataLab, the **Processing** tab of the Properties panel restores that call: its operation, its parameters and every input, in order and with its role (source, operand, or each aggregated object). This applies to processing combining several objects (e.g. difference of two signals, average of several images) as well as to 1-to-1 processing, and to workspaces reopened from a file, saved by DataLab or by DataLab-Web."
+msgstr "Lorsque le dernier état enregistré d'un objet a été produit par un traitement de DataLab, l'onglet **Traitement** du panneau des propriétés restaure cet appel : son opération, ses paramètres et chacune de ses entrées, dans l'ordre et avec son rôle (source, opérande, ou chacun des objets agrégés). Cela s'applique aux traitements combinant plusieurs objets (par exemple la différence de deux signaux, la moyenne de plusieurs images) comme aux traitements 1 vers 1, et aux espaces de travail rouverts depuis un fichier, enregistrés par DataLab ou par DataLab-Web."
+
+msgid "With parameters, edit them and click **Apply**;"
+msgstr "Avec des paramètres, modifiez-les puis cliquez sur **Appliquer** ;"
+
+msgid "Without parameters, click **Reapply**."
+msgstr "Sans paramètres, cliquez sur **Réappliquer**."
+
+msgid "The result is updated in place with the recorded inputs, never with the current selection, and the new execution is recorded. When the processing cannot be applied again, the tab says why (e.g. an input object no longer exists, the recorded parameters cannot be used, or the operation is not available in this version of DataLab)."
+msgstr "Le résultat est mis à jour sur place avec les entrées enregistrées, jamais avec la sélection courante, et la nouvelle exécution est enregistrée. Lorsque le traitement ne peut pas être appliqué à nouveau, l'onglet en indique la raison (par exemple un objet d'entrée n'existe plus, les paramètres enregistrés ne peuvent pas être utilisés, ou l'opération n'est pas disponible dans cette version de DataLab)."
+
+msgid "When no provenance is recorded for an object, the processing metadata stored with it are used as before."
+msgstr "Lorsqu'aucune provenance n'est enregistrée pour un objet, les métadonnées de traitement stockées avec lui sont utilisées comme auparavant."
+
+msgid "Link with the History panel"
+msgstr "Lien avec le panneau Historique"
+
+msgid "When the History panel records a session, each action keeps the identifiers of the provenance activities recorded by its last successful execution. Select an action and use **Show execution provenance** (History panel menu or toolbar) to display them, one tab per result (or per analysed object). If the parameters of the action were edited without executing it again, the dialog says that the provenance describes the last successful execution."
+msgstr "Lorsque le panneau Historique enregistre une session, chaque action conserve les identifiants des activités de provenance enregistrées par sa dernière exécution réussie. Sélectionnez une action et utilisez **Afficher la provenance de l'exécution** (menu ou barre d'outils du panneau Historique) pour les afficher, avec un onglet par résultat (ou par objet analysé). Si les paramètres de l'action ont été modifiés sans qu'elle soit exécutée à nouveau, la boîte de dialogue indique que la provenance décrit la dernière exécution réussie."
+
+msgid "The History action is the recipe, the provenance records each execution:"
+msgstr "L'action de l'historique est la recette, la provenance enregistre chaque exécution :"
+
+msgid "applying a processing again from the **Processing** tab, or an analysis from the **Analysis** tab, is recorded in the provenance of the result;"
+msgstr "appliquer à nouveau un traitement depuis l'onglet **Traitement**, ou une analyse depuis l'onglet **Analyse**, est enregistré dans la provenance du résultat ;"
+
+msgid "in the History panel edit mode, the edited parameters also become those of the History action, which is linked to this new execution. For a command producing several results (e.g. several filters applied at once), only the parameters of the edited result change in the action, and replaying the action applies them to that result of every object it processed;"
+msgstr "en mode d'édition du panneau Historique, les paramètres modifiés deviennent aussi ceux de l'action de l'historique, qui est liée à cette nouvelle exécution. Pour une commande produisant plusieurs résultats (par exemple plusieurs filtres appliqués en une fois), seuls les paramètres du résultat modifié changent dans l'action, et rejouer l'action les applique à ce résultat pour chaque objet traité ;"
+
+msgid "outside the edit mode, the History action is left unchanged: replaying it applies its own parameters again."
+msgstr "hors du mode d'édition, l'action de l'historique reste inchangée : la rejouer applique à nouveau ses propres paramètres."
+
+msgid "Automatic provenance capture does not depend on the History panel's **Record** mode. Recording a recipe and recording a scientific execution are different operations."
+msgstr "La capture automatique de provenance ne dépend pas du mode **Enregistrer** du panneau Historique. Enregistrer une recette et enregistrer une exécution scientifique sont deux opérations différentes."
+
+msgid "These identifiers are stored in the optional ``provenance_activity_ids`` field of History actions (History action schema version 3). They are never copied with an action, and actions saved by earlier versions simply have none. Deleting a History session does not change the provenance record."
+msgstr "Ces identifiants sont stockés dans le champ optionnel ``provenance_activity_ids`` des actions de l'historique (version 3 du schéma des actions de l'historique). Ils ne sont jamais copiés avec une action, et les actions enregistrées par des versions antérieures n'en ont simplement pas. La suppression d'une session de l'historique ne modifie pas l'enregistrement de provenance."
+
+msgid "Appending a workspace"
+msgstr "Ajouter un espace de travail"
+
+msgid "When a workspace file is opened without clearing the current workspace, its data are added but **its earlier provenance is not imported**: the provenance record of the current workspace is kept unchanged, and later processing of the added objects is recorded as usual. An added object never inherits the provenance of another object, even when it holds the identifier of an object that was deleted from the current workspace: such an object is neither shown nor used as the original input or result of a recorded step, including when verifying it."
+msgstr "Lorsqu'un fichier d'espace de travail est ouvert sans vider l'espace de travail actuel, ses données sont ajoutées mais **sa provenance antérieure n'est pas importée** : l'enregistrement de provenance de l'espace de travail actuel reste inchangé, et les traitements ultérieurs des objets ajoutés sont enregistrés normalement. Un objet ajouté n'hérite jamais de la provenance d'un autre objet, même lorsqu'il porte l'identifiant d'un objet supprimé de l'espace de travail actuel : un tel objet n'est ni affiché ni utilisé comme entrée ou résultat d'origine d'une étape enregistrée, y compris lors de sa vérification."
+
+msgid "DataLab states this limitation before anything changes:"
+msgstr "DataLab signale cette limite avant toute modification :"
+
+msgid "when DataLab asks whether to clear the current workspace, the files are chosen first and, if one of them holds provenance, the question says so;"
+msgstr "lorsque DataLab demande s'il faut vider l'espace de travail actuel, les fichiers sont choisis d'abord et, si l'un d'eux contient une provenance, la question le précise ;"
+
+msgid "otherwise, a single warning offers to **Add without provenance** or to **Cancel**."
+msgstr "sinon, un avertissement unique propose d'**Ajouter sans la provenance** ou d'**Annuler**."
+
+msgid "To keep the provenance of a file, open it replacing the current workspace. When workspaces are loaded from a script with :meth:`~datalab.control.proxy.LocalProxy.load_h5_workspace`, no question is asked and the notice is logged."
+msgstr "Pour conserver la provenance d'un fichier, ouvrez-le en remplaçant l'espace de travail actuel. Lorsque des espaces de travail sont chargés depuis un script avec :meth:`~datalab.control.proxy.LocalProxy.load_h5_workspace`, aucune question n'est posée et l'avis est journalisé."
+
+msgid "What the provenance does not do"
+msgstr "Ce que la provenance ne fait pas"
+
+msgid "**It does not keep every earlier array.** Earlier states are described by their fingerprints; their data remain available only while an object holds them. Deleting or replacing an input's numerical data can prevent replay even after saving and reopening. For example, saving a filtered signal after deleting its source saves the description of the source, not its arrays. Keep the necessary inputs and the recorded results before saving."
+msgstr "**Elle ne conserve pas tous les tableaux antérieurs.** Les états antérieurs sont décrits par leurs empreintes ; leurs données ne restent disponibles que tant qu'un objet les contient. Supprimer ou remplacer les données numériques d'une entrée peut empêcher le rejeu, même après sauvegarde et réouverture. Par exemple, sauvegarder un signal filtré après avoir supprimé sa source conserve la description de la source, pas ses tableaux. Conservez les entrées nécessaires et les résultats enregistrés avant de sauvegarder."
+
+msgid "**ROI-only changes are a limited exception.** If an input's numerical data are unchanged, its recorded ROI can be restored on a copy for verification, including when a detection added ROI. This does not reconstruct missing values. A missing or altered output is still not a valid comparison reference: restoring an input's ROI does not repair the reference."
+msgstr "**Les modifications des seules ROI constituent une exception limitée.** Si les données numériques d'une entrée sont inchangées, ses ROI enregistrées peuvent être rétablies sur une copie pour la vérification, y compris lorsqu'une détection a ajouté des ROI. Cela ne reconstruit pas des valeurs disparues. Une sortie absente ou altérée reste une référence de comparaison invalide : rétablir les ROI d'une entrée ne répare pas la référence."
+
+msgid "**Analysis values are not all archived.** A later analysis can replace a result under the same metadata key. The earlier artifact stays described as ``replaced``, without necessarily retaining its old value."
+msgstr "**Les valeurs d'analyse ne sont pas toutes archivées.** Une analyse ultérieure peut remplacer un résultat sous la même clé de métadonnées. L'artefact antérieur reste décrit comme ``replaced``, sans nécessairement conserver son ancienne valeur."
+
+msgid "**It does not clean up the workspace.** Trials and intermediate objects stay until you remove them. Their recorded steps remain in the provenance record: deleting an object never purges its activities or sensitive information."
+msgstr "**Elle ne nettoie pas l'espace de travail.** Les essais et les objets intermédiaires restent jusqu'à leur suppression. Leurs étapes enregistrées restent dans le registre de provenance : supprimer un objet ne purge jamais ses activités ni les informations sensibles."
+
+msgid "**It does not make everything verifiable.** Changes made outside recorded processing may be observed later without a known production. An operation without a contract can be recorded as opaque, but is never replayed. Old metadata records have unknown input states and possibly incomplete parameters or environments; they are not qualified retroactively or executed from their Python names."
+msgstr "**Elle ne rend pas tout vérifiable.** Les modifications faites en dehors des traitements enregistrés peuvent être observées ultérieurement sans production connue. Une opération sans contrat peut être enregistrée comme opaque, mais n'est jamais rejouée. Les anciens enregistrements de métadonnées ont des états d'entrée inconnus et parfois des paramètres ou environnements incomplets ; ils ne sont ni qualifiés rétroactivement ni exécutés à partir de leurs noms Python."
+
+msgid "**It is not a proof of scientific validity.** *Exact* or *Within tolerance* says that the recorded computation is reproduced under the rule declared for that operation, not that the processing was the right one."
+msgstr "**Elle ne prouve pas la validité scientifique.** *Exact* ou *Dans la tolérance* indique que le calcul enregistré est reproduit selon la règle déclarée pour cette opération, pas que le traitement était le bon."
+
+msgid "**It does not identify the author.** Fingerprints show that the content was not altered; they do not authenticate who produced it, and capsules are not signed."
+msgstr "**Elle n'identifie pas l'auteur.** Les empreintes montrent que le contenu n'a pas été altéré ; elles n'authentifient pas qui l'a produit, et les capsules ne sont pas signées."
+
+msgid "Capture scope and verification conditions"
+msgstr "Périmètre de capture et conditions de vérification"
+
+msgid "Ordinary and grouped processing, analyses, signal/image conversions and ROI extraction use the supported capture paths. **Processing**, **Recompute** and replaying a supported computation from the History panel record a new execution; verification itself works on copies and records no new execution. An accepted preview can become a committed result, but a discarded preview, a failed calculation or a cancellation is not a successful execution. A successful detection finding nothing is a normal recorded result."
+msgstr "Les traitements ordinaires et groupés, les analyses, les conversions signal/image et l'extraction de ROI utilisent les parcours de capture pris en charge. **Traitement**, **Recalculer** et le rejeu d'un calcul pris en charge depuis le panneau Historique enregistrent une nouvelle exécution ; la vérification elle-même travaille sur des copies et n'enregistre aucune nouvelle exécution. Un aperçu accepté peut devenir un résultat validé, mais un aperçu abandonné, un calcul en erreur ou une annulation ne sont pas des exécutions réussies. Une détection réussie qui ne trouve rien est un résultat normal enregistré."
+
+msgid "Importing or creating an object does not record how its physical acquisition or earlier conversions were performed. Editing data, ROI or metadata directly does not by itself record a scientific call. Interactive Desktop fits and creating a signal from a markers table are currently not recorded scientific calls, even when an editable History action exists."
+msgstr "Importer ou créer un objet n'enregistre pas comment son acquisition physique ou ses conversions antérieures ont été réalisées. Éditer directement les données, les ROI ou les métadonnées n'enregistre pas en soi un appel scientifique. Les ajustements interactifs Desktop et la création d'un signal à partir d'une table de marqueurs ne sont actuellement pas des appels scientifiques enregistrés, même lorsqu'une action d'historique éditable existe."
+
+msgid "Plugins, macros, scripts and remote API clients are captured when they use the supported processors. Code that creates or modifies objects directly can bypass them. Capture does not block processing: if it fails, a result may exist without an activity; the failure is logged and counted, not silently repaired."
+msgstr "Les plugins, macros, scripts et clients de l'API distante sont enregistrés lorsqu'ils utilisent les processeurs pris en charge. Du code qui crée ou modifie directement des objets peut les contourner. La capture ne bloque pas le traitement : si elle échoue, un résultat peut exister sans activité ; l'échec est journalisé et compté, pas réparé silencieusement."
+
+msgid "A replay needs a local operation contract qualified for the recorded version, decodable parameters, applicable context, available input data and valid output references. The signal and image phase spectra are identified but not qualified. Unknown operations, versions, codecs or policies produce an explicit refusal: the reader never downloads code to guess their meaning."
+msgstr "Un rejeu nécessite un contrat d'opération local qualifié pour la version enregistrée, des paramètres décodables, un contexte applicable, des données d'entrée disponibles et des références de sortie valides. Les spectres de phase signal et image sont identifiés mais non qualifiés. Une opération, une version, un codec ou une politique inconnus produisent un refus explicite : le lecteur ne télécharge jamais de code pour en deviner le sens."
+
+msgid "Scientific fingerprints cover numerical data, types, coordinates and units; ROI are checked separately. Titles, display settings and other metadata are not automatically covered. Only declared dependencies such as global options, X alignment or metadata read by the computation are reproduced. For example, changing fit parameters needed by ``evaluate_fit`` can refuse replay even if the signal values are unchanged."
+msgstr "Les empreintes scientifiques couvrent les données numériques, les types, les coordonnées et les unités ; les ROI sont contrôlées séparément. Les titres, les paramètres d'affichage et les autres métadonnées ne sont pas automatiquement couverts. Seules les dépendances déclarées, telles que les options globales, l'alignement en X ou les métadonnées lues par le calcul, sont reproduites. Par exemple, modifier les paramètres d'ajustement nécessaires à ``evaluate_fit`` peut entraîner un refus de rejeu même si les valeurs du signal sont inchangées."
+
+msgid "See the `common rules <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/rules.md>`_ and `capture and interoperability scope <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/interoperability.md>`_ for the conditions and the paths covered. Exchange, privacy and revision limits are described in :ref:`capsules`."
+msgstr "Consultez les `règles communes <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/rules.md>`_ et le `périmètre de capture et d'interopérabilité <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/interoperability.md>`_ pour les conditions et les parcours couverts. Les limites d'échange, de confidentialité et de révision sont décrites dans :ref:`capsules`."
+
+#~ msgid "**It does not keep every earlier array.** Earlier states are described by their fingerprints; their data remain available only while an object holds them. When an input was modified or deleted after a computation, the step is still described, but it cannot be recomputed from that input: its verification is *Not verified*, with the reason. To keep a result verifiable, keep the objects it was computed from before saving."
+#~ msgstr "**Elle ne conserve pas tous les tableaux antérieurs.** Les états antérieurs sont décrits par leurs empreintes ; leurs données ne restent disponibles que tant qu'un objet les contient. Lorsqu'une entrée a été modifiée ou supprimée après un calcul, l'étape reste décrite, mais elle ne peut pas être recalculée à partir de cette entrée : sa vérification est *Non vérifié*, avec le motif. Pour qu'un résultat reste vérifiable, conservez les objets à partir desquels il a été calculé avant d'enregistrer."
+
+#~ msgid "**It does not make everything verifiable.** Changes made outside recorded processing (data edited or imported, operations unknown to the computation library, such as some plugins) appear as observed states or opaque operations: they are described, never replayed."
+#~ msgstr "**Elle ne rend pas tout vérifiable.** Les modifications faites en dehors des traitements enregistrés (données éditées ou importées, opérations inconnues de la bibliothèque de calcul, comme certains plugins) apparaissent comme des états observés ou des opérations opaques : elles sont décrites, jamais rejouées."

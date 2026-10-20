@@ -36,6 +36,8 @@ Overview & Common features
    common/settings
    common/h5browser
    common/historypanel
+   common/provenance
+   common/capsules
 
 .. raw:: latex
 

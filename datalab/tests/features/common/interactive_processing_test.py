@@ -1604,10 +1604,14 @@ def test_cross_panel_signal_to_image():
             assert stored_param.orientation == "columns"
             assert stored_param.normalize is True
 
-            # Test that the Processing tab is NOT set up for n-to-1 pattern
-            # (interactive processing only works for 1-to-1 pattern)
+            # The Processing tab restores the n-to-1 conversion too, with its
+            # parameters, so that it can be applied again to every source.
             image_panel.objview.set_current_object(image)
-            assert image_panel.objprop.processing_param_editor is None
+            editor = image_panel.objprop.processing_param_editor
+            assert editor is not None
+            assert editor.dataset.orientation == "columns"
+            call = image_panel.objprop.current_processing_call
+            assert [item.object_uuid for item in call.inputs] == signal_uuids
 
 
 def test_select_source_objects_same_panel():
@@ -1763,6 +1767,50 @@ def test_select_source_objects_deleted_source():
             selected_uuids = panel.objview.get_sel_object_uuids()
             # The filtered signal should still be selected
             assert get_uuid(filtered_signal) in selected_uuids
+
+
+def _difference_without_metadata(win):
+    """Return ``(source, operand, result)`` of a difference recorded only in the
+    provenance ledger, as in a workspace saved by DataLab-Web."""
+    panel = win.signalpanel
+    x = np.linspace(0.0, 1.0, 11)
+    source = create_signal("source", x, x**2)
+    operand = create_signal("operand", x, x)
+    panel.add_object(source)
+    panel.add_object(operand)
+    panel.objview.set_current_item_id(get_uuid(source))
+    panel.processor.run_feature("difference", operand)
+    result = panel.objview.get_current_object()
+    result.metadata.pop("__processing_parameters", None)
+    return source, operand, result
+
+
+def test_select_source_objects_from_the_ledger():
+    """Sources are found in the provenance ledger, operand included."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            source, operand, result = _difference_without_metadata(win)
+            panel.objview.clearSelection()
+            panel.objview.set_current_item_id(get_uuid(result), extend=False)
+            panel.select_source_objects()
+            assert set(panel.objview.get_sel_object_uuids()) == {
+                get_uuid(source),
+                get_uuid(operand),
+            }
+
+
+def test_recompute_selected_two_to_one_from_the_ledger():
+    """A two-signal result recorded only in the ledger is recomputed in place."""
+    with qt_app_context():
+        with datalab_test_app_context() as win:
+            panel = win.signalpanel
+            source, operand, result = _difference_without_metadata(win)
+            operand.set_xydata(operand.x, operand.y * 2.0)
+            panel.objview.set_current_item_id(get_uuid(result), extend=False)
+            panel.recompute_selected()
+            assert np.allclose(result.y, source.y - operand.y)
+            assert panel.objmodel[get_uuid(result)] is result
 
 
 def test_roi_mask_invalidation_on_size_change():

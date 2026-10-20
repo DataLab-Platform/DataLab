@@ -219,26 +219,14 @@ msgstr "Démonstrations éducatives des effets des paramètres sur les résultat
 msgid "**Processing metadata requirements:**"
 msgstr "**Exigences en matière de métadonnées de traitement :**"
 
-msgid "Only works for 1-to-1 processing functions with parameter classes"
-msgstr "Ne fonctionne que pour les fonctions de traitement 1-vers-1 avec des classes de paramètres"
+msgid "Processing functions with parameters can be edited; processing functions without parameters (e.g., absolute value, average) offer a **Reapply** button"
+msgstr "Les traitements avec paramètres peuvent être modifiés ; les traitements sans paramètres (par exemple valeur absolue, moyenne) proposent un bouton **Réappliquer**"
 
-msgid "Processing functions without parameters (e.g., absolute value, inverse) work as before"
-msgstr "Les fonctions de traitement sans paramètres (par exemple, valeur absolue, inverse) fonctionnent comme auparavant"
+msgid "Every input object must still exist for re-processing (the Processing tab says why it cannot be applied otherwise)"
+msgstr "Chaque objet d'entrée doit encore exister pour le retraitement (sinon, l'onglet Traitement indique pourquoi il ne peut pas être appliqué)"
 
-msgid "Source object must still exist for re-processing (error shown if deleted)"
-msgstr "L'objet source doit toujours exister pour le retraitement (erreur affichée s'il est supprimé)"
-
-msgid "**Not supported for:**"
-msgstr "**Non pris en charge pour :**"
-
-msgid "2-to-1 processing (operations combining two objects)"
-msgstr "Traitement 2-vers-1 (opérations combinant deux objets)"
-
-msgid "n-to-1 processing (operations aggregating multiple objects)"
-msgstr "Traitement n-vers-1 (opérations agrégeant plusieurs objets)"
-
-msgid "These patterns don't benefit significantly from interactive parameter adjustment"
-msgstr "Ces modèles ne bénéficient pas de manière significative de l'ajustement interactif des paramètres"
+msgid "When the workspace holds a provenance record for the object, the Processing tab restores the recorded call, including 2-to-1 processing (source and operand) and n-to-1 processing (every aggregated object, in order). See :ref:`provenance`."
+msgstr "Lorsque l'espace de travail contient un enregistrement de provenance pour l'objet, l'onglet Traitement restaure l'appel enregistré, y compris pour les traitements 2 vers 1 (source et opérande) et n vers 1 (chacun des objets agrégés, dans l'ordre). Voir :ref:`provenance`."
 
 msgid "Example workflow"
 msgstr "Exemple de flux de travail"

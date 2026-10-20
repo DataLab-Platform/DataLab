@@ -403,8 +403,14 @@ class ObjectModel:
         Returns:
             Matching objects or groups (more than one only on prefix collision).
         """
-        items = self._groups if reference.startswith("g") else self._objects.values()
-        return [item for item in items if get_title_reference(item) == reference]
+        if reference.startswith("g"):
+            return [g for g in self._groups if get_title_reference(g) == reference]
+        # Objects are keyed by their UUID, whose prefix is their title reference
+        return [
+            obj
+            for uuid, obj in self._objects.items()
+            if uuid[:UUID_DISPLAY_LENGTH] == reference
+        ]
 
     def get_group(self, uuid: str) -> ObjectGroup:
         """Return group with uuid"""
@@ -551,16 +557,33 @@ class ObjectModel:
         """Add object to model"""
         self.add_objects((obj,), group_id)
 
+    def __numbering_is_current(self) -> bool:
+        """Return True if groups and objects hold the numbers of their positions"""
+        onb = 1
+        for gnb, group in enumerate(self._groups, start=1):
+            if group.number != gnb:
+                return False
+            for obj in group:
+                if obj.metadata.get("__number") != onb:
+                    return False
+                onb += 1
+        return True
+
     def add_objects(
         self,
         objects: Sequence[SignalObj | ImageObj],
         group_id: str,
-    ) -> None:
+    ) -> bool:
         """Add objects to the model atomically.
 
         Args:
             objects: Objects to add, in insertion order
             group_id: UUID of the target group
+
+        Returns:
+            True if the short IDs of objects or groups already in the model
+            changed; False when the objects were added after every existing
+            object (the usual case), which leaves them unchanged.
 
         Raises:
             KeyError: If the target group does not exist
@@ -568,7 +591,7 @@ class ObjectModel:
         """
         objects = tuple(objects)
         if not objects:
-            return
+            return False
         group = self.get_group(group_id)
         object_ids = [get_uuid(obj) for obj in objects]
         if len(set(object_ids)) != len(object_ids):
@@ -578,10 +601,22 @@ class ObjectModel:
             raise ValueError(
                 f"Object UUID already exists in model: {sorted(existing_ids)[0]}"
             )
+        group_index = self._groups.index(group)
+        appended = (
+            all(len(other) == 0 for other in self._groups[group_index + 1 :])
+            and self.__numbering_is_current()
+        )
+        number = sum(len(other) for other in self._groups)
         for obj, obj_uuid in zip(objects, object_ids):
             self._objects[obj_uuid] = obj
             group.append(obj)
-        self.reset_short_ids()
+        if appended:
+            for obj in objects:
+                number += 1
+                set_number(obj, number)
+        else:
+            self.reset_short_ids()
+        return not appended
 
     def remove_object(self, obj: SignalObj | ImageObj) -> None:
         """Remove object from model"""
@@ -687,6 +722,22 @@ class ObjectModel:
                 f"Object title '{title}' is ambiguous; matches: {match_ids}"
             )
         return matches[0]
+
+    def get_title_reference_index(
+        self,
+    ) -> dict[str, list[SignalObj | ImageObj | ObjectGroup]]:
+        """Return a dictionary mapping title references to groups and objects.
+
+        Each value is the list :meth:`find_by_title_reference` returns for the
+        reference. The index must be built again after objects or groups are
+        added or removed.
+        """
+        index: dict[str, list[SignalObj | ImageObj | ObjectGroup]] = {}
+        for group in self._groups:
+            index.setdefault(get_title_reference(group), []).append(group)
+        for uuid, obj in self._objects.items():
+            index.setdefault(uuid[:UUID_DISPLAY_LENGTH], []).append(obj)
+        return index
 
     def reorder_groups(self, group_ids: list[str]) -> None:
         """Reorder groups.

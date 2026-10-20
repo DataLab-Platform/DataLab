@@ -38,11 +38,13 @@ def make_plugin_wheel(
     top_level: str | None | object = _DEFAULT,
     files: dict[str, str | bytes] | None = None,
     extra_files: dict[str, str | bytes] | None = None,
+    extra_metadata: tuple[str, ...] = (),
 ) -> bytes:
     """Return the bytes of a DataLab plugin wheel.
 
     By default, the wheel provides a real desktop plugin class declared in the
-    ``datalab.plugins`` entry-point group.
+    ``datalab.plugins`` entry-point group. ``extra_metadata`` lists additional
+    ``METADATA`` lines, such as ``"Keywords: spectroscopy"``.
     """
     dist_info = f"{distribution.replace('-', '_')}-{version}.dist-info"
     if entry_points is None:
@@ -66,6 +68,7 @@ def make_plugin_wheel(
         f"Requires-Python: {requires_python}",
     ]
     metadata.extend(f"Requires-Dist: {requirement}" for requirement in requires_dist)
+    metadata.extend(extra_metadata)
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
         for name, data in {**files, **(extra_files or {})}.items():

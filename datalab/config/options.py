@@ -107,6 +107,14 @@ class DataLabOptions(SigimaXOptions):
             expected_type=bool,
             description="If True, allow localhost Web API connections without a token.",
         )
+        self.capsule_registry_address = TypedOptionField(
+            self,
+            "capsule_registry_address",
+            category="main",
+            default="",
+            expected_type=str,
+            description="Address of the capsule registry (empty: no registry).",
+        )
         # current_tab may be None or an int panel index: no type check.
         self.current_tab = OptionField(
             self,
@@ -155,6 +163,14 @@ class DataLabOptions(SigimaXOptions):
             default=DEFAULT_CATALOG_URL,
             expected_type=str,
             description="URL of the plugin catalog (empty to disable it).",
+        )
+        self.plugins_catalog_path_list = TypedOptionField(
+            self,
+            "plugins_catalog_path_list",
+            category="main",
+            default=[],
+            expected_type=list,
+            description="Local plugin catalog folders, by priority.",
         )
         self.welcome_on_startup = TypedOptionField(
             self,

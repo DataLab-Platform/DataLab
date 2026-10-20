@@ -1,0 +1,205 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Workspace capsules in DataLab: export a workspace with the provenance of its processing, inspect a capsule, replay its activities, compare revisions, write reviews and exchange them through a registry"
+msgstr "Capsules d'espace de travail dans DataLab : exporter un espace de travail avec la provenance de ses traitements, inspecter une capsule, rejouer ses activités, comparer des révisions, rédiger des revues et les échanger via un registre"
+
+msgid "DataLab, capsule, provenance, reproducibility, revision, review, registry, RO-Crate, DataLab-Web"
+msgstr "DataLab, capsule, provenance, reproductibilité, révision, revue, registre, RO-Crate, DataLab-Web"
+
+msgid "Workspace capsules"
+msgstr "Capsules d'espace de travail"
+
+msgid "A **capsule** (``.dlcapsule`` file) holds a workspace and a description of the provenance of its processing (see :ref:`provenance`), so that someone else can check it and replay it, with DataLab or with DataLab-Web. Capsules are created, read and checked by `DataLab-Capsule <https://github.com/DataLab-Platform/DataLab-Capsule>`_: opening or inspecting a capsule never executes anything it contains."
+msgstr "Une **capsule** (fichier ``.dlcapsule``) contient un espace de travail et une description de la provenance de ses traitements (voir :ref:`provenance`), afin qu'une autre personne puisse les vérifier et les rejouer, avec DataLab ou avec DataLab-Web. Les capsules sont créées, lues et vérifiées par `DataLab-Capsule <https://github.com/DataLab-Platform/DataLab-Capsule>`_ : ouvrir ou inspecter une capsule n'exécute jamais rien de ce qu'elle contient."
+
+msgid "Capsules are handled from **File > Workspace capsule...**, a dialog with the same tabs as in DataLab-Web. Three results are always shown apart:"
+msgstr "Les capsules sont gérées depuis **Fichier > Capsule d'espace de travail...**, une boîte de dialogue comportant les mêmes onglets que dans DataLab-Web. Trois résultats sont toujours présentés séparément :"
+
+msgid "the **integrity** of a capsule, computed from its files (nothing is recomputed);"
+msgstr "l'**intégrité** d'une capsule, calculée à partir de ses fichiers (rien n'est recalculé) ;"
+
+msgid "the **supplied documents** (verification reports and reviews): they are checked against the capsule, but their verdicts are what their authors claim;"
+msgstr "les **documents fournis** (rapports de vérification et revues) : ils sont vérifiés par rapport à la capsule, mais leurs verdicts sont ceux qu'affirment leurs auteurs ;"
+
+msgid "the **local replay** of an activity of the open workspace, recomputed by DataLab and compared with its stored result."
+msgstr "le **rejeu local** d'une activité de l'espace de travail ouvert, recalculée par DataLab et comparée à son résultat enregistré."
+
+msgid "Export"
+msgstr "Exporter"
+
+msgid "Exports the current workspace as a capsule:"
+msgstr "Exporte l'espace de travail actuel sous forme de capsule :"
+
+msgid "**Name** and **Description** of the capsule;"
+msgstr "**Nom** et **Description** de la capsule ;"
+
+msgid "**Revision of ...**: shown when the workspace was opened from a capsule, also after it was saved as a workspace file and opened again. When checked, the new capsule names that capsule as its parent revision. The attachments of the parent are not copied: the dialog lists them, so that they can be selected again if they still apply;"
+msgstr "**Révision de ...** : affiché lorsque l'espace de travail a été ouvert depuis une capsule, y compris après avoir été enregistré dans un fichier d'espace de travail puis rouvert. Lorsque cette case est cochée, la nouvelle capsule désigne cette capsule comme sa révision parente. Les pièces jointes de la révision parente ne sont pas copiées : la boîte de dialogue les énumère, afin de pouvoir les sélectionner à nouveau si elles s'appliquent toujours ;"
+
+msgid "**Reference the workspace instead of including it**: the capsule then holds the address (absolute IRI) where the workspace will be published, with its size and SHA-256, and the workspace is saved as a separate HDF5 file, to be published at that address;"
+msgstr "**Référencer l'espace de travail au lieu de l'inclure** : la capsule contient alors l'adresse (IRI absolue) où l'espace de travail sera publié, avec sa taille et son SHA-256, et l'espace de travail est enregistré dans un fichier HDF5 distinct, à publier à cette adresse ;"
+
+msgid "**Attachments**: light files (protocol, notes, small tables, 16 MiB at most each) declared in the capsule with their size and fingerprint. They are never opened or executed."
+msgstr "**Pièces jointes** : fichiers légers (protocole, notes, petits tableaux, 16 Mio au plus chacun) déclarés dans la capsule avec leur taille et leur empreinte. Ils ne sont jamais ouverts ni exécutés."
+
+msgid "**Export capsule...** asks where to save the capsule (and, for a referenced workspace, the workspace file)."
+msgstr "**Exporter la capsule...** demande où enregistrer la capsule (et, pour un espace de travail référencé, le fichier de l'espace de travail)."
+
+msgid "Review the data, metadata, titles, trials, timestamps and attachments before sharing. Nothing is anonymized or redacted automatically. Deleting an object does not guarantee that its traces disappear from the provenance record."
+msgstr "Examinez les données, métadonnées, titres, essais, dates et pièces jointes avant de partager. Rien n'est anonymisé ni expurgé automatiquement. Supprimer un objet ne garantit pas que ses traces disparaissent du registre de provenance."
+
+msgid "The export carries the current workspace, its record and the chosen attachments, not every external resource used upstream. It does not automatically select the minimal analysis needed for one result: trials and intermediate objects may travel with it. Copying only a result to another workspace does not make that workspace a complete verifiable analysis. Prepare a reduced exchange by deliberately keeping or rebuilding the useful inputs and checking what remains verifiable, not by editing the record by hand."
+msgstr "L'export transporte l'espace de travail actuel, son registre et les pièces jointes choisies, pas toutes les ressources externes utilisées en amont. Il ne sélectionne pas automatiquement l'analyse minimale nécessaire à un résultat : des essais et objets intermédiaires peuvent voyager avec lui. Copier uniquement un résultat dans un autre espace de travail ne fait pas de celui-ci une analyse complète vérifiable. Préparez un échange réduit en conservant ou reconstruisant volontairement les entrées utiles et en vérifiant ce qui reste vérifiable, pas en modifiant manuellement le registre."
+
+msgid "The software licence does not license the data. The manifest contains a workspace licence declaration; when none is supplied, it uses the neutral statement \"No licence was specified for this workspace.\""
+msgstr "La licence du logiciel ne détermine pas celle des données. Le manifeste contient une déclaration de licence de l'espace de travail ; lorsqu'aucune n'est fournie, il utilise la formulation neutre \"No licence was specified for this workspace.\" (aucune licence n'a été spécifiée pour cet espace de travail)."
+
+msgid "Inspect"
+msgstr "Inspecter"
+
+msgid "**Choose a capsule...** checks a capsule without opening it and shows:"
+msgstr "**Choisir une capsule...** vérifie une capsule sans l'ouvrir et affiche :"
+
+msgid "its summary: name, description, fingerprint, parent revision, whether the workspace is included or referenced, licence, and its activities (which ones can be replayed);"
+msgstr "son résumé : nom, description, empreinte, révision parente, espace de travail inclus ou référencé, licence, et ses activités (celles qui peuvent être rejouées) ;"
+
+msgid "its **Attachments**, which are checked against the manifest and saved only when you click **Save...**;"
+msgstr "ses **Pièces jointes**, vérifiées par rapport au manifeste et enregistrées seulement lorsque vous cliquez sur **Enregistrer...** ;"
+
+msgid "its **Integrity**: archive, manifest, workspace and stored states. For a referenced workspace, **Select the referenced workspace...** supplies the file, which must match the size and SHA-256 declared in the capsule;"
+msgstr "son **Intégrité** : archive, manifeste, espace de travail et états enregistrés. Pour un espace de travail référencé, **Sélectionner l'espace de travail référencé...** fournit le fichier, qui doit correspondre à la taille et au SHA-256 déclarés dans la capsule ;"
+
+msgid "the **Supplied documents** added with **Add a verification report...** and **Add a review...**, each checked against the capsule."
+msgstr "les **Documents fournis** ajoutés avec **Ajouter un rapport de vérification...** et **Ajouter une revue...**, chacun vérifié par rapport à la capsule."
+
+msgid "**Write a review** creates a review of this revision: a separate JSON file (reviewer, statement, optional verdict *endorsed*, *disputed* or *comment*, cited verification reports). The capsule itself is not changed."
+msgstr "**Rédiger une revue** crée une revue de cette révision : un fichier JSON distinct (relecteur, déclaration, verdict facultatif *approuvé*, *contesté* ou *commentaire*, rapports de vérification cités). La capsule elle-même n'est pas modifiée."
+
+msgid "**Open as workspace** replaces the current workspace by the workspace of the capsule (after confirmation when the workspace is not empty). It is available only for an intact capsule. A capsule exported later from this workspace is proposed as a revision of it. Opening a capsule is recorded in the History panel."
+msgstr "**Ouvrir comme espace de travail** remplace l'espace de travail actuel par celui de la capsule (après confirmation si l'espace de travail n'est pas vide). Cette action n'est disponible que pour une capsule intacte. Une capsule exportée ensuite depuis cet espace de travail est proposée comme une révision de celle-ci. L'ouverture d'une capsule est enregistrée dans le panneau Historique."
+
+msgid "For a referenced capsule, obtain the HDF5 file separately: its address is not downloaded automatically, and its size and fingerprint must match. A registry does not deliver that workspace on your behalf."
+msgstr "Pour une capsule référencée, obtenez le fichier HDF5 séparément : son adresse n'est pas téléchargée automatiquement, et sa taille et son empreinte doivent correspondre. Un registre ne fournit pas cet espace de travail à votre place."
+
+msgid "Local replay"
+msgstr "Rejeu local"
+
+msgid "Lists the recorded activities of the open workspace. **Replay** recomputes an activity separately and compares every result with the stored one: *Exact*, *Within tolerance*, *Different* or *Not verified* (with the reason). The workspace is not changed. **Save report...** saves the verification report as a JSON file, to be supplied with the capsule or cited by a review."
+msgstr "Énumère les activités enregistrées de l'espace de travail ouvert. **Rejouer** recalcule une activité séparément et compare chaque résultat au résultat enregistré : *Exact*, *Dans la tolérance*, *Différent* ou *Non vérifié* (avec la raison). L'espace de travail n'est pas modifié. **Enregistrer le rapport...** enregistre le rapport de vérification dans un fichier JSON, à fournir avec la capsule ou à citer dans une revue."
+
+msgid "Revisions"
+msgstr "Révisions"
+
+msgid "Lists the revisions exported, inspected or retrieved from a registry on this computer (with their parent revision), and compares any two of them: scientific, presentation, storage and integrity, environment and attachment changes, with a scientific conclusion that never claims equality beyond what the capsules record. The list is kept in the DataLab configuration folder (100 revisions at most); it is a convenience, never a source of truth: the capsule files are."
+msgstr "Énumère les révisions exportées, inspectées ou récupérées depuis un registre sur cet ordinateur (avec leur révision parente), et compare deux d'entre elles : changements scientifiques, de présentation, de stockage et d'intégrité, d'environnement et de pièces jointes, avec une conclusion scientifique qui n'affirme jamais une égalité au-delà de ce qu'enregistrent les capsules. La liste est conservée dans le dossier de configuration de DataLab (100 révisions au plus) ; c'est une commodité, jamais une source de vérité : ce sont les fichiers des capsules qui le sont."
+
+msgid "A capsule is immutable and names at most one direct parent. If you open A and export B, the next export still proposes A as its parent, not B; saving and reopening the workspace preserves that origin. Inspecting another file does not change it. Adding a workspace keeps the current record and parent without merging provenance (see :ref:`provenance_append`)."
+msgstr "Une capsule est immuable et désigne au plus un parent direct. Si vous ouvrez A puis exportez B, l'export suivant propose toujours A comme parent, pas B ; la sauvegarde et la réouverture de l'espace de travail conservent cette origine. Inspecter un autre fichier ne la change pas. Ajouter un espace de travail conserve le registre et le parent actuels sans fusionner les provenances (voir :ref:`provenance_append`)."
+
+msgid "Two exports can have different fingerprints without a new calculation: HDF5 storage, dates or presentation can change. ``none_detected`` means no scientific change detected in the recorded activities and states, not equality of everything outside the record. Changing an attached protocol is listed under attachments; the reader, not the comparison, judges its scientific importance. There is no automatic merge of concurrent work, collaborative editing or conflict resolution."
+msgstr "Deux exports peuvent avoir des empreintes différentes sans nouveau calcul : le stockage HDF5, les dates ou la présentation peuvent changer. ``none_detected`` signifie qu'aucun changement scientifique n'a été détecté dans les activités et états enregistrés, pas que tout ce qui est hors registre est égal. La modification d'un protocole joint est listée parmi les pièces jointes ; le lecteur, pas la comparaison, juge son importance scientifique. Il n'existe pas de fusion automatique de travaux concurrents, d'édition collaborative ou de résolution de conflits."
+
+msgid "Registry"
+msgstr "Registre"
+
+msgid "A registry (optional, served by DataLab-Capsule) publishes capsule manifests, their attachments and reviews, never workspaces. Everything it returns is checked by DataLab."
+msgstr "Un registre (facultatif, servi par DataLab-Capsule) publie les manifestes des capsules, leurs pièces jointes et leurs revues, jamais les espaces de travail. Tout ce qu'il renvoie est vérifié par DataLab."
+
+msgid "**Registry address** and **Publishing token**: the address is saved in the configuration; the token is kept for the current session only;"
+msgstr "**Adresse du registre** et **Jeton de publication** : l'adresse est enregistrée dans la configuration ; le jeton n'est conservé que pour la session en cours ;"
+
+msgid "**List revisions** lists the published revisions; **Retrieve** checks a revision and its reviews, adds it to the **Revisions** tab and offers its stored attachments, checked against the manifest;"
+msgstr "**Lister les révisions** énumère les révisions publiées ; **Récupérer** vérifie une révision et ses revues, l'ajoute à l'onglet **Révisions** et propose ses pièces jointes stockées, vérifiées par rapport au manifeste ;"
+
+msgid "once a registry is set, the **Inspect** tab offers **Publish to the registry** (manifest, attachments and valid supplied reviews) and **Publish the review**."
+msgstr "une fois un registre défini, l'onglet **Inspecter** propose **Publier dans le registre** (manifeste, pièces jointes et revues fournies valides) et **Publier la revue**."
+
+msgid "The reference registry has no accounts, strong author identity, quotas, rate limiting, delete API or fine-grained permissions. Its publishing token is not proof of scientific authorship. See the existing `deployment and trust guidance <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/security.md>`_. Reviews and reports target one revision; a checked author's assertion does not replace local replay or implement a complete approval workflow."
+msgstr "Le registre de référence n'offre pas de comptes, d'identité forte des auteurs, de quotas, de limitation de débit, d'API de suppression ni d'autorisations fines. Son jeton de publication ne prouve pas l'identité de l'auteur scientifique. Consultez les `recommandations de déploiement et de confiance <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/security.md>`_ existantes. Les revues et rapports ciblent une révision ; une assertion d'auteur contrôlée ne remplace pas un rejeu local et ne constitue pas un circuit complet d'approbation."
+
+msgid "From scripts"
+msgstr "Depuis des scripts"
+
+msgid "Capsules can be exported and opened from scripts and macros (see :ref:`ref-to-remote-control`), with :meth:`~datalab.control.proxy.RemoteProxy.export_capsule` and :meth:`~datalab.control.proxy.RemoteProxy.open_capsule`:"
+msgstr "Les capsules peuvent être exportées et ouvertes depuis des scripts et des macros (voir :ref:`ref-to-remote-control`), avec :meth:`~datalab.control.proxy.RemoteProxy.export_capsule` et :meth:`~datalab.control.proxy.RemoteProxy.open_capsule` :"
+
+msgid "The ``workspace-capsule`` command line of DataLab-Capsule also validates, inspects, compares, verifies and publishes capsules."
+msgstr "La ligne de commande ``workspace-capsule`` de DataLab-Capsule permet aussi de valider, inspecter, comparer, vérifier et publier des capsules."
+
+msgid "Its ``verify`` command performs no Sigima calculation. Without h5py, workspace checking is limited to size and SHA-256 (``integrity_only``), not individual HDF5 states. A referenced workspace not supplied further limits the checks."
+msgstr "Sa commande ``verify`` n'effectue aucun calcul Sigima. Sans h5py, le contrôle de l'espace de travail se limite à la taille et au SHA-256 (``integrity_only``), pas aux états HDF5 individuels. Un espace de travail référencé non fourni réduit encore les contrôles possibles."
+
+msgid "Limits"
+msgstr "Limites"
+
+msgid "DataLab checks the size of a capsule, and of the workspace it references, before reading it, and never writes a capsule it would refuse to open. These limits are those of DataLab-Capsule (a workspace of 4 GiB at most): they are accepted sizes, not a tested capacity."
+msgstr "DataLab vérifie la taille d'une capsule, et de l'espace de travail qu'elle référence, avant de la lire, et n'écrit jamais une capsule qu'il refuserait d'ouvrir. Ces limites sont celles de DataLab-Capsule (un espace de travail de 4 Gio au plus) : ce sont des tailles acceptées, pas une capacité testée."
+
+msgid "What was measured, on a laptop of 2026 (32 GiB of RAM):"
+msgstr "Ce qui a été mesuré, sur un ordinateur portable de 2026 (32 Gio de mémoire vive) :"
+
+msgid "inspecting or opening a 32 MiB capsule from the dialog takes 0.2 to 0.5 s, during which DataLab does not respond (wait cursor); exporting it takes 0.25 s. Larger capsules take longer, roughly in proportion; the library verifies a 234 MiB capsule in less than a second;"
+msgstr "inspecter ou ouvrir une capsule de 32 Mio depuis la boîte de dialogue prend de 0,2 à 0,5 s, pendant lesquelles DataLab ne répond pas (curseur d'attente) ; l'exporter prend 0,25 s. Les capsules plus grandes prennent plus de temps, à peu près proportionnellement ; la bibliothèque vérifie une capsule de 234 Mio en moins d'une seconde ;"
+
+msgid "opening a capsule needs about its size in memory, in addition to the workspace it replaces;"
+msgstr "ouvrir une capsule demande environ sa taille en mémoire, en plus de l'espace de travail qu'elle remplace ;"
+
+msgid "recording the provenance of a processing costs the fingerprints of its inputs and results: nothing measurable for a small signal, +29 ms for a 2048×2048 image filtered in 450 ms;"
+msgstr "enregistrer la provenance d'un traitement coûte les empreintes de ses entrées et de ses résultats : rien de mesurable pour un petit signal, +29 ms pour une image de 2048×2048 filtrée en 450 ms ;"
+
+msgid "consulting the provenance of a result takes less than a millisecond, even with 1000 recorded steps; listing 1000 steps in **Local replay** takes about half a second."
+msgstr "consulter la provenance d'un résultat prend moins d'une milliseconde, même avec 1000 étapes enregistrées ; lister 1000 étapes dans **Rejeu local** prend environ une demi-seconde."
+
+msgid "Each processing gets slightly slower as a panel holds more objects, with or without provenance (about 0.1 s in an empty panel, 0.3 s with 1000 objects). DataLab-Web limits capsules to 256 MiB."
+msgstr "Chaque traitement est un peu plus lent à mesure qu'un panneau contient plus d'objets, avec ou sans provenance (environ 0,1 s dans un panneau vide, 0,3 s avec 1000 objets). DataLab-Web limite les capsules à 256 Mio."
+
+msgid "Accepted file policies, not guaranteed capacities"
+msgstr "Politiques de fichiers acceptés, pas capacités garanties"
+
+msgid "Consumer"
+msgstr "Lecteur"
+
+msgid "Workspace / manifest"
+msgstr "Espace de travail / manifeste"
+
+msgid "Desktop and library"
+msgstr "Desktop et bibliothèque"
+
+msgid "4 GiB / 64 MiB; the archive has a separate total-size limit"
+msgstr "4 Gio / 64 Mio ; l'archive a une limite de taille totale distincte"
+
+msgid "Web"
+msgstr "Web"
+
+msgid "256 MiB / 16 MiB; archive also limited to 256 MiB"
+msgstr "256 Mio / 16 Mio ; archive également limitée à 256 Mio"
+
+msgid "Reference registry"
+msgstr "Registre de référence"
+
+msgid "No workspace; manifest 8 MiB, review 1 MiB"
+msgstr "Pas d'espace de travail ; manifeste 8 Mio, revue 1 Mio"
+
+msgid "Each capsule accepts at most 8 attachments of 16 MiB each. Memory can hold several representations of the archive and HDF5 while exporting; a valid file may exceed another edition's policy. The ledger also has JSON volume and structural bounds, even without a fixed activity-count limit. View truncation does not remove records. See the `technical limits and measured capacity <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/performance.md>`_."
+msgstr "Chaque capsule accepte au plus 8 pièces jointes de 16 Mio chacune. La mémoire peut contenir plusieurs représentations de l'archive et du HDF5 pendant l'export ; un fichier valide peut dépasser la politique d'une autre édition. Le registre a aussi des bornes de volume JSON et de structure, même sans limite fixe du nombre d'activités. La troncature de la vue ne supprime pas les enregistrements. Consultez les `limites techniques et capacités mesurées <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/performance.md>`_."
+
+msgid "Local replay verifies one activity on copies; it does not reconstruct an entire chain, restore all missing states or provide a workflow for new datasets. Environment versions are described, not reinstalled: a capsule is not an OS with all its dependencies, and a successful comparison is not universal reproducibility between machines."
+msgstr "Le rejeu local vérifie une activité sur des copies ; il ne reconstruit pas une chaîne entière, ne restaure pas tous les états manquants et ne fournit pas de workflow pour de nouveaux jeux de données. Les versions de l'environnement sont décrites, pas réinstallées : une capsule n'est pas un système d'exploitation avec toutes ses dépendances, et une comparaison réussie ne garantit pas une reproductibilité universelle entre machines."
+
+msgid "Fingerprints detect changes but do not authenticate authors; capsules and reviews are unsigned and their fingerprints can be recomputed after editing. Import never runs received macros, notebooks, attachments or Python names; explicit replay uses locally registered, qualified operations. The prescribed profile accepts native supported workspaces, not arbitrary ZIP/HDF5 files: ZIP entries are uncompressed (independent of internal HDF5 compression), and links and encrypted archives are refused. Format checks do not replace a sandbox: HDF5 parsing and dependencies remain trusted code on the Desktop."
+msgstr "Les empreintes détectent les changements mais n'authentifient pas les auteurs ; les capsules et revues ne sont pas signées et leurs empreintes peuvent être recalculées après modification. L'import n'exécute jamais les macros, notebooks, pièces jointes ou noms Python reçus ; le rejeu explicite utilise des opérations locales enregistrées et qualifiées. Le profil prescrit accepte les espaces de travail natifs pris en charge, pas des fichiers ZIP/HDF5 arbitraires : les entrées ZIP ne sont pas compressées (indépendamment de la compression interne HDF5), et les liens et archives chiffrées sont refusés. Les contrôles de format ne remplacent pas un bac à sable : le décodage HDF5 et les dépendances restent du code de confiance sur le Desktop."
+
+msgid "Profile 0.1 is experimental and unknown versions are refused. RO-Crate/PROV metadata do not guarantee that any third-party reader can restore or replay DataLab. See the `common rules <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/rules.md>`_ and `security analysis <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/security.md>`_. Desktop and the CLI can work offline once installed; the Web downloads its runtime at startup and some optional packages on first use. Computations remain local; neither a registry nor attachments certify the physical acquisition."
+msgstr "Le profil 0.1 est expérimental et les versions inconnues sont refusées. Les métadonnées RO-Crate/PROV ne garantissent pas que tout lecteur tiers puisse restaurer ou rejouer DataLab. Consultez les `règles communes <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/rules.md>`_ et l'`analyse de sécurité <https://github.com/DataLab-Platform/DataLab-Capsule/blob/develop/doc/security.md>`_. Le Desktop et la CLI peuvent travailler hors réseau une fois installés ; le Web télécharge son runtime au démarrage et certaines dépendances optionnelles au premier usage. Les calculs restent locaux ; ni un registre ni les pièces jointes ne certifient l'acquisition physique."

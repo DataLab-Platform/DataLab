@@ -72,3 +72,19 @@ Create a new image from various models
            :width: 30px
       - 2D sinc
       - :math:`z = A \cdot \mathrm{sinc}\left(\dfrac{\sqrt{(x-x_0)^2+(y-y_0)^2}}{\sigma}\right) + C`
+
+The 2D Gaussian, 2D ramp, sinusoidal grating, ring pattern, Siemens star and
+2D sinc models are computed over a domain
+:math:`[x_{min}, x_{max}] \times [y_{min}, y_{max}]`. When the
+**Physical coordinates** option is enabled (default), this domain defines the
+image coordinates: the axes show :math:`x` and :math:`y` as used in the
+equation, so that centers, widths and spatial frequencies can be read directly
+on the image (e.g. a sinusoidal grating of frequency :math:`f_x = 0.1` shows
+one period every 10 units along the X axis). When the option is disabled, the
+image is displayed in pixel coordinates.
+
+.. note::
+
+    Images created with DataLab 1.3 or earlier were displayed in pixel
+    coordinates: they keep these coordinates when their creation parameters
+    are edited or recomputed.

@@ -80,8 +80,16 @@ def test_open_file_headless_refreshes_reference_displays(monkeypatch) -> None:
     panel = SimpleNamespace(refresh_after_reference_remap=Mock())
     batch = H5ImportBatch(panel, {}, [], [])
     panel.deserialize_from_hdf5 = Mock(return_value=batch)
-    mainwindow = SimpleNamespace(panels=[panel], reset_all=Mock())
-    reader = SimpleNamespace(close=Mock())
+    empty = SimpleNamespace(objmodel=SimpleNamespace(get_all_objects=lambda: []))
+    mainwindow = SimpleNamespace(
+        panels=[panel],
+        reset_all=Mock(),
+        signalpanel=empty,
+        imagepanel=empty,
+        provenance=SimpleNamespace(load=Mock()),
+    )
+    # A workspace file without provenance block, saved by DataLab 1.4
+    reader = SimpleNamespace(close=Mock(), h5={}, version={(): "1.4.0"})
     monkeypatch.setattr("datalab.gui.h5io.NativeH5Reader", lambda _filename: reader)
 
     assert H5InputOutput(mainwindow).open_file_headless("workspace.h5", False)
@@ -148,8 +156,10 @@ def test_save_and_load_h5_workspace(monkeypatch: pytest.MonkeyPatch):
             signal_batches: list[int] = []
             image_batches: list[int] = []
             selection_calls = {win.signalpanel: 0, win.imagepanel: 0}
+            # pylint: disable=protected-access
             signal_add_objects = win.signalpanel._add_objects
             image_add_objects = win.imagepanel._add_objects
+            # pylint: enable=protected-access
             signal_selection_changed = win.signalpanel.selection_changed
             image_selection_changed = win.imagepanel.selection_changed
             signal_deserialize = win.signalpanel.deserialize_from_hdf5

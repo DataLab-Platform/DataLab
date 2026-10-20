@@ -32,6 +32,7 @@ from datalab.history import HistoryAction
 from datalab.history.core import decode_roi
 from datalab.history.effects import AnalysisEffects, capture_effects, merge_effects
 from datalab.objectmodel import get_uuid
+from datalab.processingcall import feature_for_name
 
 if TYPE_CHECKING:
     from datalab.gui.panel.base import BaseDataPanel
@@ -440,7 +441,7 @@ def execute_compute_via_ui(
             [action.func_name] if action.func_name else []
         )
         features = [
-            processor.get_feature(func_name, plugin_origin=action.plugin_origin)
+            feature_for_name(processor, func_name, action.plugin_origin)
             for func_name in func_names
         ]
         params = action.kwargs.get("params")
@@ -454,10 +455,11 @@ def execute_compute_via_ui(
         return
     if action.pattern == "1_to_n":
         params = [copy.deepcopy(param) for param in action.kwargs.get("params") or []]
-        feature = processor.get_feature(
+        feature = feature_for_name(
+            processor,
             action.func_name,
-            plugin_origin=action.plugin_origin,
-            paramclass_name=type(params[0]).__name__ if params else None,
+            action.plugin_origin,
+            params[0] if params else None,
         )
         processor.compute_1_to_n(
             feature.function,
@@ -468,11 +470,7 @@ def execute_compute_via_ui(
         )
         return
     param = copy.deepcopy(action.kwargs.get("param"))
-    feature = processor.get_feature(
-        action.func_name,
-        plugin_origin=action.plugin_origin,
-        paramclass_name=type(param).__name__ if param is not None else None,
-    )
+    feature = feature_for_name(processor, action.func_name, action.plugin_origin, param)
     if action.pattern == "1_to_1":
         processor.compute_1_to_1(
             feature.function,
@@ -738,7 +736,8 @@ def recompute_compute_in_place(panel: HistoryPanel, action: HistoryAction) -> bo
     }
     # ``replaying()`` suppresses history capture and session prompts for the
     # whole execute + reconcile scope (temporary insertions included).
-    with panel.replaying():
+    provenance = panel.mainwindow.provenance
+    with panel.replaying(), provenance.deferred("history_replay") as deferred:
         try:
             panel_data.objview.select_objects(sources)
             try:
@@ -783,6 +782,17 @@ def recompute_compute_in_place(panel: HistoryPanel, action: HistoryAction) -> bo
             ]
             _discard_new_empty_groups(data_panels, before_grps)
             _commit_outputs(panel, panel_data, action, recorded, detached)
+            provenance.finalize_deferred(
+                deferred,
+                {
+                    fresh_uuid: out_uuid
+                    for (_p, fresh_uuid), out_uuid in zip(fresh, recorded)
+                },
+            )
+            # The action now describes its last successful execution: the
+            # activities recorded on the final output UUIDs.
+            if deferred.activity_ids:
+                action.provenance_activity_ids = list(deferred.activity_ids)
         finally:
             _restore_selection(data_panels, saved_selection)
     return True
@@ -902,39 +912,43 @@ def recompute_1_to_0_in_place(panel: HistoryPanel, action: HistoryAction) -> boo
                 obj.roi = roi_snapshots[uuid]
 
     try:
-        for uuid, src_obj in zip(sources, source_objs):
-            analysis_parameters = extract_analysis_parameters(src_obj)
-            plugin_origin = action.plugin_origin or (
-                analysis_parameters.plugin_origin if analysis_parameters else None
-            )
-            # Restore the recorded pre-analysis ROI so the detection re-runs
-            # on the same region as the first run, with ROI creation enabled
-            # ("" encodes "no ROI before", None means legacy/not recorded).
-            roi_before = AnalysisEffects.from_dict(
-                (action.effects or {}).get(uuid) or {}
-            ).roi_before
-            if roi_before is not None:
-                roi_snapshots[uuid] = (
-                    src_obj.roi.copy() if src_obj.roi is not None else None
+        with panel.mainwindow.provenance.collecting() as activity_ids:
+            for uuid, src_obj in zip(sources, source_objs):
+                analysis_parameters = extract_analysis_parameters(src_obj)
+                plugin_origin = action.plugin_origin or (
+                    analysis_parameters.plugin_origin if analysis_parameters else None
                 )
-                src_obj.roi = decode_roi(roi_before) if roi_before else None
-            with capture_effects(src_obj) as effects:
-                # Register the (mutable) effects before running so rollback
-                # sees them even when the recompute raises
-                captured[uuid] = effects
-                success = panel_data.processor.recompute_1_to_0(
-                    action.func_name,
-                    src_obj,
-                    param,
-                    plugin_origin=plugin_origin,
-                    first_run_side_effects=roi_before is not None,
-                )
-            if not success:
-                rollback()
-                return False
+                # Restore the recorded pre-analysis ROI so the detection re-runs
+                # on the same region as the first run, with ROI creation enabled
+                # ("" encodes "no ROI before", None means legacy/not recorded).
+                roi_before = AnalysisEffects.from_dict(
+                    (action.effects or {}).get(uuid) or {}
+                ).roi_before
+                if roi_before is not None:
+                    roi_snapshots[uuid] = (
+                        src_obj.roi.copy() if src_obj.roi is not None else None
+                    )
+                    src_obj.roi = decode_roi(roi_before) if roi_before else None
+                with capture_effects(src_obj) as effects:
+                    # Register the (mutable) effects before running so rollback
+                    # sees them even when the recompute raises
+                    captured[uuid] = effects
+                    success = panel_data.processor.recompute_1_to_0(
+                        action.func_name,
+                        src_obj,
+                        param,
+                        plugin_origin=plugin_origin,
+                        first_run_side_effects=roi_before is not None,
+                    )
+                if not success:
+                    rollback()
+                    return False
     except Exception:
         rollback()
         raise
+    # The action now describes its last successful execution.
+    if activity_ids:
+        action.provenance_activity_ids = list(activity_ids)
     if action.effects is None:
         action.effects = {}
     for uuid in sources:

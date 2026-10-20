@@ -23,9 +23,14 @@ PROJECT_ROOT = Path(__file__).parents[4]
 def _run_generated_project_checks(destination: Path) -> None:
     """Run the quality checks advertised by a generated project."""
     environment = os.environ.copy()
-    environment["PYTHONPATH"] = os.pathsep.join(
-        (str(PROJECT_ROOT), environment.get("PYTHONPATH", ""))
-    )
+    # The checks run in the generated project: relative entries (e.g. those of
+    # the development ``.env``, relative to the project root) must stay valid
+    entries = [
+        str((PROJECT_ROOT / entry).resolve())
+        for entry in environment.get("PYTHONPATH", "").split(os.pathsep)
+        if entry
+    ]
+    environment["PYTHONPATH"] = os.pathsep.join((str(PROJECT_ROOT), *entries))
     commands = (
         ("ruff", "format", "--check", "."),
         ("ruff", "check", "."),

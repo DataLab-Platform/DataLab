@@ -14,7 +14,9 @@ import inspect
 import multiprocessing
 import os.path as osp
 import time
+import uuid
 import warnings
+from contextlib import ExitStack
 from dataclasses import asdict, dataclass, field
 from enum import Enum, auto
 from multiprocessing.pool import Pool
@@ -36,6 +38,15 @@ from sigima.objects import (
     TypeROIParam,
     concat_geometries,
 )
+from sigima.proc.contracts import (
+    SMALLEST_GRID_LINEAR_HOLD,
+    SOURCE_GRID_LINEAR_HOLD,
+    OperationContract,
+    PreparedExecution,
+    XAlignmentError,
+    contract_for_function,
+    prepare_execution,
+)
 from sigima.proc.decorator import is_computation_function
 from sigima.tools.signal.interpolation import interpolate
 from sigimax.adapters_plotpy import coordutils
@@ -51,6 +62,7 @@ from datalab.adapters_metadata import (
 )
 from datalab.config import Conf, _
 from datalab.gui.processor.catcher import CompOut, wng_err_func
+from datalab.gui.processor.execution import CANCELLED, ExecutionService
 from datalab.history.effects import capture_effects
 from datalab.objectmodel import get_title_reference, get_uuid, patch_title_with_ids
 from datalab.utils.qthelpers import create_progress_bar, qt_try_except
@@ -62,6 +74,7 @@ if TYPE_CHECKING:
 
     from datalab.gui.panel.image import ImagePanel
     from datalab.gui.panel.signal import SignalPanel
+    from datalab.processingcall import ProcessingCall
 
 
 @dataclass
@@ -151,6 +164,26 @@ class ProcessingReport:
     cancelled: bool = False
 
 
+@dataclass
+class ProcessingCandidate:
+    """Result of one processing call computed without being inserted.
+
+    Args:
+        result: Computed object, or None.
+        pending: Pending provenance activity (input states recorded), or None.
+        transaction: Source preparation transaction to commit once the result
+         is adopted, if any.
+        error_msg: Error message when no result was produced.
+        cancelled: True if the user cancelled the computation.
+    """
+
+    result: SignalObj | ImageObj | None = None
+    pending: Any = None
+    transaction: SourcePreparationTransaction | None = None
+    error_msg: str | None = None
+    cancelled: bool = False
+
+
 # Metadata options for storing processing parameters (DataLab-specific)
 PROCESSING_PARAMETERS_OPTION = "processing_parameters"  # Transformation history
 ANALYSIS_PARAMETERS_OPTION = "analysis_parameters"  # Analysis operation (1-to-0)
@@ -158,6 +191,7 @@ ANALYSIS_PARAMETERS_OPTION = "analysis_parameters"  # Analysis operation (1-to-0
 
 def extract_processing_parameters(
     obj: SignalObj | ImageObj,
+    parse_param: bool = True,
 ) -> ProcessingParameters | None:
     """Extract processing parameters from object metadata.
 
@@ -166,6 +200,9 @@ def extract_processing_parameters(
 
     Args:
         obj: Signal or Image object
+        parse_param: If False, the processing parameters are not deserialized
+         (``param`` is None): faster when only the function name, the pattern
+         or the sources are needed.
 
     Returns:
         ProcessingParameters instance if processing metadata exists, None otherwise.
@@ -174,6 +211,8 @@ def extract_processing_parameters(
         pp_dict = obj.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
     except ValueError:
         return None
+    if not parse_param:
+        pp_dict = {key: val for key, val in pp_dict.items() if key != "param_json"}
     return ProcessingParameters.from_dict(pp_dict)
 
 
@@ -643,6 +682,34 @@ def is_pairwise_mode() -> bool:
     return state
 
 
+def _x_interpolated(
+    originals: list[SignalObj | ImageObj], actuals: list[SignalObj | ImageObj]
+) -> list[str]:
+    """Return the provenance limit of inputs interpolated by the legacy X check."""
+    changed = any(
+        isinstance(orig, SignalObj) and not np.array_equal(orig.x, actual.x)
+        for orig, actual in zip(originals, actuals)
+    )
+    return ["x_interpolated"] if changed else []
+
+
+#: X-alignment policies that ask the user before interpolating, as before.
+_CONSENT_POLICIES = frozenset({SOURCE_GRID_LINEAR_HOLD, SMALLEST_GRID_LINEAR_HOLD})
+
+
+class InterpolationRefused(Exception):
+    """Raised when the user refuses to interpolate signals on a common X array."""
+
+
+def _grids_differ(signals: list[SignalObj]) -> bool:
+    """Return True if the X arrays of *signals* are not all equal."""
+    first = signals[0].x
+    return any(
+        sig.x.shape != first.shape or not np.array_equal(sig.x, first)
+        for sig in signals[1:]
+    )
+
+
 class FeatureNotFoundError(ValueError):
     """Raised when a computing feature cannot be resolved by name or callable.
 
@@ -943,6 +1010,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         self.worker: Worker | None = None
         self.set_process_isolation_enabled(Conf.process_isolation_enabled.get())
         self.computing_registry: dict[str, ComputingFeature] = {}
+        self.execution = ExecutionService(self, self.__exec_func)
         self.register_computations()
 
     def close(self):
@@ -974,6 +1042,132 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         """
         return self.panel.PARAMCLASS == SignalObj
 
+    def _x_alignment_contract(self, func: Callable) -> OperationContract | None:
+        """Return the contract of *func* if it declares its own X-alignment rule.
+
+        Such operations never go through :meth:`_check_signal_xarray_compatibility`:
+        the rule is applied, and recorded, for each source/operand pair.
+        """
+        if not self._is_signal_panel():
+            return None
+        contract = contract_for_function(func)
+        if contract is None or contract.x_alignment is None:
+            return None
+        return contract
+
+    def _ask_x_interpolation(
+        self, progress: QW.QProgressDialog | None = None
+    ) -> bool | None:
+        """Ask whether signals with different X arrays may be interpolated.
+
+        The answer follows the ``xarray_compat_behavior`` setting; History replay
+        and unattended runs never ask (automatic interpolation).
+
+        Returns:
+            None if the user refused, True for "Yes to All", False for "Yes".
+        """
+        behavior = Conf.xarray_compat_behavior.get("ask")
+        hpanel = self.mainwindow.historypanel
+        if behavior != "ask" or env.execenv.unattended or hpanel.is_replaying():
+            return False
+        initial_duration = 0
+        if progress is not None:
+            initial_duration = progress.minimumDuration()
+            # Hide the progress dialog while the question is shown
+            progress.setMinimumDuration(2000000)
+            QW.QApplication.processEvents()
+        msg_box = QW.QMessageBox(self.mainwindow)
+        msg_box.setWindowTitle(_("X-array incompatibility"))
+        msg_box.setText(
+            _(
+                "The selected signals have different X arrays.\n\n"
+                "To perform the computation, signals need to be interpolated "
+                "to match a common X array.\n\n"
+                "Do you want to continue with automatic interpolation?"
+            )
+        )
+        msg_box.setIcon(QW.QMessageBox.Icon.Question)
+        msg_box.addButton(_("Yes"), QW.QMessageBox.ButtonRole.YesRole)
+        yes_all_button = msg_box.addButton(
+            _("Yes to All"), QW.QMessageBox.ButtonRole.YesRole
+        )
+        no_button = msg_box.addButton(_("No"), QW.QMessageBox.ButtonRole.NoRole)
+        msg_box.setDefaultButton(no_button)
+        msg_box.exec()
+        clicked_button = msg_box.clickedButton()
+        if initial_duration > 0:
+            progress.setMinimumDuration(initial_duration)
+        if clicked_button == no_button:
+            return None
+        return clicked_button == yes_all_button
+
+    def _prepare_with_contract(
+        self,
+        contract: OperationContract,
+        inputs: list[SignalObj],
+        param: gds.DataSet | None,
+        title: str,
+        progress: QW.QProgressDialog,
+        consent: dict[str, bool],
+    ) -> PreparedExecution | None:
+        """Prepare one execution of a contract that declares an X-alignment policy.
+
+        Sigima applies the policy and records it with the global options read by
+        the computation. Historical policies (constant extension at the ends)
+        first ask the user, as before, when the grids differ.
+
+        Args:
+            contract: Operation contract.
+            inputs: Input signals, in role order.
+            param: Parameter argument, or None.
+            title: Progress title.
+            progress: Progress dialog.
+            consent: State shared by the executions of one command
+             (``yes_to_all``).
+
+        Returns:
+            The prepared execution, or None if the policy refuses the inputs
+            (the reason is shown as a computation error).
+
+        Raises:
+            InterpolationRefused: If the user refused the interpolation.
+        """
+        if (
+            contract.x_alignment in _CONSENT_POLICIES
+            and not consent.get("yes_to_all")
+            and _grids_differ(inputs)
+        ):
+            answer = self._ask_x_interpolation(progress)
+            if answer is None:
+                raise InterpolationRefused
+            consent["yes_to_all"] = answer
+        try:
+            return prepare_execution(contract, inputs, param=param)
+        except XAlignmentError as exc:
+            reasons = {
+                "incompatible_units": _(
+                    "The signals have different units: no conversion is applied."
+                ),
+                "invalid_grid": _(
+                    "To interpolate the operand, the X values of both signals "
+                    "must be finite and strictly increasing."
+                ),
+                "insufficient_coverage": _(
+                    "The X range of the operand does not cover the X range of the "
+                    "source: extrapolation is not allowed."
+                ),
+                "uncertainty": _(
+                    "The operand has uncertainties, which cannot be interpolated."
+                ),
+            }
+            reason = reasons.get(exc.code, _("The signals cannot be aligned."))
+            self.handle_output(
+                CompOut(error_msg=f"{reason}\n\n{exc}"),
+                _("Calculating: %s") % title,
+                progress,
+            )
+            return None
+
     def _check_signal_xarray_compatibility(
         self, signals: list[SignalObj], progress: QW.QProgressDialog | None = None
     ) -> tuple[list[SignalObj], bool] | None:
@@ -1004,23 +1198,12 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         # Get X arrays for comparison
         x_arrays = [sig.x for sig in signals]
 
-        # Check if all X arrays are identical
-        x_arrays_identical = True
-        if len(x_arrays) > 1:
-            # Compare sizes first
-            sizes = [len(x) for x in x_arrays]
-            if len(set(sizes)) > 1:
-                x_arrays_identical = False
-            else:
-                # Same sizes - check if xmin and xmax are also the same
-                xmins = [x.min() for x in x_arrays]
-                xmaxs = [x.max() for x in x_arrays]
-                # Use relative tolerance for floating point comparison
-                if not (
-                    np.allclose(xmins, xmins[0], rtol=1e-12)
-                    and np.allclose(xmaxs, xmaxs[0], rtol=1e-12)
-                ):
-                    x_arrays_identical = False
+        # Identical only if every coordinate is equal: same size and same ends
+        # do not make the same grid (e.g. [0, 1, 2] and [0, 0.5, 2]).
+        x_arrays_identical = all(
+            x.shape == x_arrays[0].shape and np.array_equal(x, x_arrays[0])
+            for x in x_arrays[1:]
+        )
 
         # If X arrays are identical, proceed normally
         if x_arrays_identical:
@@ -1029,44 +1212,14 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 progress.setMinimumDuration(initial_duration)
             return signals, False
 
-        # X arrays differ - handle based on configuration
-        behavior = Conf.xarray_compat_behavior.get("ask")
-        yes_to_all_selected = False
-
-        # History replay must be non-interactive and deterministic: treat
-        # "ask" as automatic interpolation while replaying.
-        hpanel = self.mainwindow.historypanel
-        replaying = hpanel.is_replaying()
-        if behavior == "ask" and not env.execenv.unattended and not replaying:
-            # Create custom message box with "Yes to All" option
-            msg_box = QW.QMessageBox(self.mainwindow)
-            msg_box.setWindowTitle(_("X-array incompatibility"))
-            msg_box.setText(
-                _(
-                    "The selected signals have different X arrays.\n\n"
-                    "To perform the computation, signals need to be interpolated "
-                    "to match a common X array.\n\n"
-                    "Do you want to continue with automatic interpolation?"
-                )
-            )
-            msg_box.setIcon(QW.QMessageBox.Icon.Question)
-
-            # Add custom buttons
-            msg_box.addButton(_("Yes"), QW.QMessageBox.ButtonRole.YesRole)
-            yes_all_button = msg_box.addButton(
-                _("Yes to All"), QW.QMessageBox.ButtonRole.YesRole
-            )
-            no_button = msg_box.addButton(_("No"), QW.QMessageBox.ButtonRole.NoRole)
-            msg_box.setDefaultButton(no_button)
-
-            # Execute dialog and get user choice
-            msg_box.exec()
-            clicked_button = msg_box.clickedButton()
-
-            if clicked_button == no_button:
-                return None
-            if clicked_button == yes_all_button:
-                yes_to_all_selected = True
+        # X arrays differ: ask for interpolation, according to configuration
+        if initial_duration > 0:
+            progress.setMinimumDuration(initial_duration)
+            initial_duration = 0
+        answer = self._ask_x_interpolation(progress)
+        if answer is None:
+            return None
+        yes_to_all_selected = answer
 
         # Perform interpolation to the smallest X array
         sizes = [len(x) for x in x_arrays]
@@ -1431,118 +1584,94 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         param: gds.DataSet | None = None,
         interactive: bool = True,
         refresh_plot: bool = True,
+        call: ProcessingCall | None = None,
     ) -> ProcessingReport:
         # pylint: disable=too-many-return-statements
-        """Recompute a stored 1-to-1 processing operation on demand.
+        """Apply again, in place, the processing that produced an object.
 
-        This is the processing counterpart of :meth:`recompute_analysis`. It
-        resolves the stored 1-to-1 processing metadata from ``obj``, recomputes
-        the result from its source object, then updates ``obj`` in-place.
+        This is the processing counterpart of :meth:`recompute_analysis`. The
+        call that produced ``obj`` is restored (see
+        :func:`datalab.processingcall.resolve_processing_call`): 1-to-1, 2-to-1
+        and n-to-1 calls, conversions between signals and images included, with
+        every input in order. The result is computed from the current inputs by
+        the processor of the inputs, with the same preparation as the menus,
+        then copied into ``obj`` (whose identity is kept) and recorded as a new
+        activity; the previous ones are left unchanged.
 
         Args:
             obj: The processed object to recompute in-place.
-            param: Optional parameter override. When None, use the parameters
-             stored in the object's processing metadata.
+            param: Optional parameter override. When None, use the restored
+             parameters.
             interactive: If True, show UI error messages.
             refresh_plot: Whether to refresh the plot after recomputation.
+            call: Restored call, if already resolved.
 
         Returns:
             ProcessingReport describing the result.
         """
+        # pylint: disable=import-outside-toplevel
+        from datalab.processingcall import resolve_processing_call
+
         if env.execenv.unattended:
             interactive = False
 
         report = ProcessingReport(success=False, obj_uuid=get_uuid(obj))
 
-        # Extract processing parameters
-        proc_params = extract_processing_parameters(obj)
-        if proc_params is None or proc_params.pattern != "1-to-1":
-            report.message = _("Processing metadata is incomplete.")
+        def fail(message: str, critical: bool = False) -> ProcessingReport:
+            report.message = message
             if interactive:
-                QW.QMessageBox.critical(self.panel, _("Error"), report.message)
+                if critical:
+                    QW.QMessageBox.critical(self.panel, _("Error"), message)
+                else:
+                    QW.QMessageBox.warning(self.panel, _("Error"), message)
             return report
 
-        # Check if source object still exists
-        if proc_params.source_uuid is None:
-            report.message = _(
-                "Processing metadata is incomplete (missing source UUID)."
-            )
-            if interactive:
-                QW.QMessageBox.critical(self.panel, _("Error"), report.message)
-            return report
-
-        # Find source object
-        source_obj = self.mainwindow.find_object_by_uuid(proc_params.source_uuid)
-        if source_obj is None:
-            report.message = _("Source object no longer exists.")
-            if interactive:
-                QW.QMessageBox.critical(
-                    self.panel,
-                    _("Error"),
-                    report.message
-                    + "\n\n"
-                    + _(
-                        "The object that was used to create this processed object "
-                        "has been deleted and cannot be used for reprocessing."
-                    ),
+        if call is None:
+            call = resolve_processing_call(self.mainwindow, obj)
+        if call is None:
+            return fail(_("Processing metadata is incomplete."), critical=True)
+        if call.reason is not None:
+            message = call.reason
+            if call.missing_inputs and call.unavailable_reason is None:
+                message += "\n\n" + _(
+                    "The object that was used to create this processed object "
+                    "has been deleted and cannot be used for reprocessing."
                 )
-            return report
+                report.message = call.reason
+                if interactive:
+                    QW.QMessageBox.critical(self.panel, _("Error"), message)
+                return report
+            return fail(message, critical=True)
 
-        # Get updated parameters from caller/editor override, fallback to metadata
-        param = proc_params.param if param is None else param
-
-        # For cross-panel computations, we need to use the processor from the panel
-        # that owns the source object (e.g., radial_profile is in ImageProcessor)
-        if isinstance(source_obj, SignalObj):
-            source_processor = self.mainwindow.signalpanel.processor
-        else:
-            source_processor = self.mainwindow.imagepanel.processor
-
-        # Recompute using the dedicated method (with multiprocessing support)
+        param = call.param if param is None else param
         try:
-            compout = source_processor.recompute_1_to_1(
-                proc_params.func_name,
-                source_obj,
-                param,
-                plugin_origin=proc_params.plugin_origin,
+            candidate = call.processor.compute_processing_candidate(
+                call.feature, call.objects, param, call.roles, call.plugin_origin
             )
         except Exception as exc:  # pylint: disable=broad-exception-caught
-            report.message = _("Failed to reprocess object:\n%s") % str(exc)
-            if interactive:
-                QW.QMessageBox.warning(self.panel, _("Error"), report.message)
-            return report
+            return fail(_("Failed to reprocess object:\n%s") % str(exc))
 
-        # User cancelled the operation
-        if compout.cancelled:
+        if candidate.cancelled:
             report.message = _("Processing was cancelled.")
             report.cancelled = True
             return report
-
-        new_obj = compout.result
+        new_obj = candidate.result
         if new_obj is None:
-            report.message = compout.error_msg or _("Failed to reprocess object.")
+            report.message = candidate.error_msg or _("Failed to reprocess object.")
             return report
 
-        # Update metadata with new processing parameters
-        updated_proc_params = ProcessingParameters(
-            func_name=proc_params.func_name,
-            pattern=proc_params.pattern,
-            param=param,
-            source_uuid=proc_params.source_uuid,
-            plugin_origin=proc_params.plugin_origin,
-        )
         try:
             if (
                 not self.panel.objmodel.has_uuid(report.obj_uuid)
                 or self.panel.objmodel[report.obj_uuid] is not obj
             ):
                 raise ValueError("Processing destination no longer exists")
-            apply_processing_result(obj, new_obj, updated_proc_params)
+            apply_processing_result(obj, new_obj, call.processing_parameters(param))
         except Exception as exc:  # pylint: disable=broad-exception-caught
-            report.message = _("Failed to reprocess object:\n%s") % str(exc)
-            if interactive:
-                QW.QMessageBox.warning(self.panel, _("Error"), report.message)
-            return report
+            return fail(_("Failed to reprocess object:\n%s") % str(exc))
+        if candidate.transaction is not None:
+            candidate.transaction.commit(call.objects[0])
+        self.mainwindow.provenance.complete(candidate.pending, obj)
         self.panel.SIG_OBJECT_MODIFIED.emit()
 
         # Update the tree view item and refresh plot
@@ -1559,6 +1688,153 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             report.message = _("Image was reprocessed.")
         self.panel.SIG_STATUS_MESSAGE.emit("✅ " + report.message, 5000)
         return report
+
+    def compute_processing_candidate(  # pylint: disable=too-many-return-statements
+        self,
+        feature: ComputingFeature,
+        inputs: list[SignalObj | ImageObj],
+        param: Any,
+        roles: list[str] | None = None,
+        plugin_origin: dict[str, Any] | None = None,
+    ) -> ProcessingCandidate:
+        # pylint: disable=too-many-locals
+        """Compute the result of one processing call without inserting it.
+
+        The inputs are prepared as by the menus (X-alignment policy of the
+        contract, or X-array compatibility check, source preparation hook of the
+        feature), the computation runs with process isolation and cancellation,
+        and the input states are recorded (``recompute_in_place`` origin) before
+        it runs. The caller adopts the result, records it with
+        ``provenance.complete(candidate.pending, output)`` and commits
+        ``candidate.transaction`` if any.
+
+        Args:
+            feature: Computing feature of this processor (1-to-1, 1-to-n,
+             2-to-1 or n-to-1).
+            inputs: Input objects, in call order (repetitions allowed).
+            param: Parameter argument, or None.
+            roles: Input roles; by default, those of the feature pattern.
+            plugin_origin: Plugin origin recorded with the result, if any
+             (default: the one of the feature).
+
+        Returns:
+            The candidate (result, error message or cancellation).
+        """
+        func = feature.function
+        title = feature.title or func.__name__
+        provenance = self.mainwindow.provenance
+        origin = "recompute_in_place"
+        inputs = list(inputs)
+        pattern = feature.pattern
+        transaction = None
+        if pattern in ("1_to_1", "1_to_n"):
+            # Same execution path as the historical 1-to-1 re-processing
+            (source,) = inputs
+            pending = provenance.begin(func, param, source, origin=origin)
+            comp_out = self.recompute_1_to_1(
+                feature.feature_id,
+                source,
+                param,
+                plugin_origin=plugin_origin or feature.plugin_origin,
+            )
+            if comp_out.cancelled:
+                return ProcessingCandidate(cancelled=True)
+            if comp_out.result is None:
+                return ProcessingCandidate(
+                    error_msg=comp_out.error_msg or _("Failed to reprocess object.")
+                )
+            return ProcessingCandidate(result=comp_out.result, pending=pending)
+        with create_progress_bar(self.panel, _("Recomputing..."), max_=1) as progress:
+            progress.setValue(0)
+            progress.setLabelText(_("Processing object with updated parameters..."))
+            if pattern == "2_to_1":
+                source, operand = inputs
+                aligned = self._x_alignment_contract(func)
+                preparation = self.prepare_2_to_1_pairs(
+                    [(source, operand)],
+                    feature.skip_xarray_compat or aligned is not None,
+                    feature.pre_execute_hook,
+                )
+                if preparation is None:
+                    return ProcessingCandidate(cancelled=True)
+                ((actual1, actual2),), transaction = preparation
+                args = (
+                    (actual1, actual2) if param is None else (actual1, actual2, param)
+                )
+                context = None
+                if aligned is not None:
+                    try:
+                        prepared = self._prepare_with_contract(
+                            aligned, [actual1, actual2], param, title, progress, {}
+                        )
+                    except InterpolationRefused:
+                        return ProcessingCandidate(cancelled=True)
+                    if prepared is None:
+                        return ProcessingCandidate(
+                            error_msg=_("The signals cannot be aligned.")
+                        )
+                    args, context = tuple(prepared.args), prepared.context
+                pending = provenance.begin(
+                    func,
+                    param,
+                    [source, operand],
+                    context=context,
+                    limits=_x_interpolated([source, operand], [actual1, actual2]),
+                    executed=[actual1, actual2],
+                    origin=origin,
+                )
+                executed = [actual1, actual2]
+            elif pattern == "n_to_1":
+                executed = list(inputs)
+                aligned = self._x_alignment_contract(func)
+                context = None
+                if aligned is not None:
+                    try:
+                        prepared = self._prepare_with_contract(
+                            aligned, executed, param, title, progress, {}
+                        )
+                    except InterpolationRefused:
+                        return ProcessingCandidate(cancelled=True)
+                    if prepared is None:
+                        return ProcessingCandidate(
+                            error_msg=_("The signals cannot be aligned.")
+                        )
+                    context = prepared.context
+                    args = prepared.args
+                else:
+                    checked = self._check_signal_xarray_compatibility(
+                        executed, progress=progress
+                    )
+                    if checked is None:
+                        return ProcessingCandidate(cancelled=True)
+                    executed = checked[0]
+                    args = (executed,) if param is None else (executed, param)
+                pending = provenance.begin(
+                    func,
+                    param,
+                    inputs,
+                    roles=roles or ["sources"] * len(inputs),
+                    limits=_x_interpolated(inputs, executed),
+                    context=context,
+                    origin=origin,
+                )
+            else:
+                raise ValueError(f"Unsupported processing pattern: {pattern!r}")
+            comp_out = self.__exec_func(func, tuple(args), progress)
+            if comp_out is None:
+                return ProcessingCandidate(cancelled=True)
+            new_obj = self.handle_output(comp_out, _("Recomputing"), progress)
+            if not isinstance(new_obj, (SignalObj, ImageObj)):
+                return ProcessingCandidate(
+                    error_msg=comp_out.error_msg or _("Failed to reprocess object.")
+                )
+            self._handle_keep_results(new_obj)
+            if pattern == "n_to_1":
+                self._merge_geometry_results_for_n_to_1(new_obj, executed)
+            patch_title_with_ids(new_obj, inputs)
+        return ProcessingCandidate(
+            result=new_obj, pending=pending, transaction=transaction
+        )
 
     def __exec_func(
         self,
@@ -1773,6 +2049,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 edit=False,
                 target_objs=[obj],
                 feature_id=feature.feature_id,
+                origin="recompute_in_place",
             )
         return result is not None and result.execution_success
 
@@ -1801,6 +2078,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         grps = self.panel.objview.get_sel_groups()
         n_glob = len(objs) * len(params)
         new_gids = {}
+        command_id = str(uuid.uuid4())
         with create_progress_bar(self.panel, title, max_=n_glob) as progress:
             for i_row, obj in enumerate(objs):
                 for i_param, (param, func, feature_id) in enumerate(
@@ -1812,55 +2090,39 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     i_title = f"{title} ({pvalue}/{n_glob})"
                     progress.setLabelText(i_title)
                     progress.setValue(pvalue)
+                    preview = None
                     if preview_result is not None and preview_result[0] is obj:
-                        result = preview_result[1]
+                        preview = preview_result[1]
                         preview_result = None
-                    else:
-                        args = (obj,) if param is None else (obj, param)
-                        result = self.__exec_func(func, args, progress)
-                    if result is None:
-                        break
-                    new_obj = self.handle_output(
-                        result, _("Computing: %s") % i_title, progress
-                    )
-                    if new_obj is None:
-                        continue
-                    assert isinstance(new_obj, (SignalObj, ImageObj))
 
-                    patch_title_with_ids(new_obj, [obj])
-
-                    # Handle keep_results logic for 1_to_1 operations
-                    self._handle_keep_results(new_obj)
-
-                    # Store processing metadata for interactive re-processing
-                    pp = ProcessingParameters(
-                        func_name=feature_id,
-                        pattern="1-to-1",
-                        param=param,
-                        source_uuid=get_uuid(obj),
-                        plugin_origin=self._get_plugin_origin_for(func, feature_id),
-                    )
-                    insert_processing_parameters(new_obj, pp)
-
-                    # Mark object as freshly processed to show Processing tab
-                    self.panel.objprop.mark_as_freshly_processed(new_obj)
-
-                    new_gid = None
-                    if grps:
-                        # If groups are selected, then it means that there is no
-                        # individual object selected: we work on groups only
+                    def place(new_obj, obj=obj, name=name) -> str | None:
+                        if not grps:
+                            return None
+                        # Groups selected: no individual object is selected, so
+                        # each source group gets its own result group
                         old_gid = self.panel.objmodel.get_object_group_id(obj)
                         new_gid = new_gids.get(old_gid)
                         if new_gid is None:
-                            # Create a new group for each selected group
                             old_g = self.panel.objmodel.get_group(old_gid)
                             new_gid = self._create_group_for_result(
                                 new_obj, f"{name}({get_title_reference(old_g)})"
                             )
                             new_gids[old_gid] = new_gid
-                    self._add_object_to_appropriate_panel(
-                        new_obj, group_id=new_gid, use_group_for_non_native=True
+                        return new_gid
+
+                    outcome = self.execution.run_1_to_1(
+                        obj,
+                        func,
+                        param,
+                        progress,
+                        i_title,
+                        command_id,
+                        place,
+                        preview=preview,
+                        feature_id=feature_id,
                     )
+                    if outcome == CANCELLED:
+                        break
         # Select newly created groups, if any
         for group_id in new_gids.values():
             self.panel.objview.set_current_item_id(group_id, extend=True)
@@ -2169,6 +2431,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         edit: bool | None = None,
         target_objs: list[SignalObj | ImageObj] | None = None,
         feature_id: str | None = None,
+        origin: str = "ordinary",
     ) -> ResultData | None:
         """Generic processing method: 1 object in â†’ no object out.
 
@@ -2191,6 +2454,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
             target_objs: Optional list of specific objects to process. If None,
              processes all currently selected objects.
             feature_id: Stable feature identifier stored in analysis metadata.
+            origin: Origin of the recorded activities (e.g. ``recompute_in_place``
+             when an analysis is refreshed on demand).
 
         Returns:
             ResultData instance containing the results for all processed objects,
@@ -2230,13 +2495,22 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         if action is not None:
             self.mainwindow.historypanel.register_action_outputs(action, [])
         refresh_needed = False
-        with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
+        provenance = self.mainwindow.provenance
+        command_id = str(uuid.uuid4())
+        # The activities recorded by this execution link the action to its
+        # provenance (one per analysed object, absences of result included).
+        with ExitStack() as stack:
+            activity_ids = stack.enter_context(provenance.collecting())
+            progress = stack.enter_context(
+                create_progress_bar(self.panel, title, max_=len(objs))
+            )
             rdata = ResultData()
             for idx, obj in enumerate(objs):
                 pvalue = idx + 1
                 pvalue = 0 if pvalue == 1 else pvalue
                 progress.setValue(pvalue)
                 args = (obj,) if param is None else (obj, param)
+                pending = provenance.begin(func, param, obj, command_id, origin=origin)
 
                 # Execute function
                 compout = self.__exec_func(func, args, progress)
@@ -2247,6 +2521,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     compout, _("Computing: %s") % title, progress
                 )
                 if result is None:
+                    if not compout.error_msg:
+                        # A normal absence of result (e.g. nothing detected)
+                        provenance.complete_without_result(pending)
                     rdata.execution_success = False
                     continue
 
@@ -2287,6 +2564,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     rdata.execution_success = False
                     continue
                 refresh_needed |= result_modified
+                kind = "geometry" if isinstance(result, GeometryResult) else "table"
+                provenance.complete_analysis(
+                    pending, obj, kind, create_adapter(result).metadata_key
+                )
                 if action is not None:
                     if action.effects is None:
                         action.effects = {}
@@ -2298,6 +2579,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     self.panel.selection_changed(update_items=True)
                 else:
                     self.panel.refresh_plot(get_uuid(obj), True, False)
+        if action is not None and activity_ids:
+            action.provenance_activity_ids = list(activity_ids)
 
         # Refresh plot if post-processing modified any objects (e.g., ROI creation)
         if refresh_needed:
@@ -2354,6 +2637,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         name = func.__name__
         title = name if title is None else title
         feature_id = self.get_feature_id(func, feature_id)
+        aligned_contract = self._x_alignment_contract(func)
+        consent: dict[str, bool] = {}
+        provenance = self.mainwindow.provenance
+        command_id = str(uuid.uuid4())
 
         pp_history = build_processing_parameters(feature_id, "n-to-1", param=param)
         action = self.mainwindow.historypanel.add_compute_entry_from_pp(
@@ -2397,9 +2684,25 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         for src_gid in src_gids[1:]:
                             src_obj = src_objs[src_gid][i_pair]
                             src_objs_pair.append(src_obj)
-
+                        orig_objs_pair = list(src_objs_pair)
+                        context = None
+                        if aligned_contract is not None:
+                            try:
+                                prepared = self._prepare_with_contract(
+                                    aligned_contract,
+                                    src_objs_pair,
+                                    param,
+                                    title,
+                                    progress,
+                                    consent,
+                                )
+                            except InterpolationRefused:
+                                return
+                            if prepared is None:
+                                continue
+                            context = prepared.context
                         # Check signal x-array compatibility for n-to-1 operations
-                        if auto_interpolate_for_operation:
+                        elif auto_interpolate_for_operation:
                             # "Yes to All" selected, automatically interpolate
                             # by temporarily changing the configuration
                             with Conf.xarray_compat_behavior.context("interpolate"):
@@ -2412,16 +2715,26 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                                 src_objs_pair, progress=progress
                             )
 
-                        if result is None:
-                            # User canceled or compatibility check failed
-                            return
-
-                        checked_objs, yes_to_all_selected = result
-                        if yes_to_all_selected:
-                            auto_interpolate_for_operation = True
-
-                        src_objs_pair = checked_objs
-                        if param is None:
+                        if context is None:
+                            if result is None:
+                                # User canceled or compatibility check failed
+                                return
+                            checked_objs, yes_to_all_selected = result
+                            if yes_to_all_selected:
+                                auto_interpolate_for_operation = True
+                            src_objs_pair = checked_objs
+                        pending = provenance.begin(
+                            func,
+                            param,
+                            orig_objs_pair,
+                            command_id,
+                            roles=["sources"] * len(orig_objs_pair),
+                            limits=_x_interpolated(orig_objs_pair, src_objs_pair),
+                            context=context,
+                        )
+                        if context is not None:
+                            args = prepared.args
+                        elif param is None:
                             args = (src_objs_pair,)
                         else:
                             args = (src_objs_pair, param)
@@ -2456,6 +2769,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             dst_gid = self._create_group_for_result(new_obj, dst_gname)
 
                         self._add_object_to_appropriate_panel(new_obj, group_id=dst_gid)
+                        provenance.complete(pending, new_obj)
 
             else:
                 # In single operand mode, we create a single object
@@ -2490,8 +2804,25 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     progress.setValue(0)
                     progress.setLabelText(title)
                     for src_gid, src_obj_list in src_objs.items():
+                        orig_obj_list = list(src_obj_list)
+                        context = None
+                        if aligned_contract is not None:
+                            try:
+                                prepared = self._prepare_with_contract(
+                                    aligned_contract,
+                                    src_obj_list,
+                                    param,
+                                    title,
+                                    progress,
+                                    consent,
+                                )
+                            except InterpolationRefused:
+                                return
+                            if prepared is None:
+                                continue
+                            context = prepared.context
                         # Check signal x-array compatibility for n-to-1 operations
-                        if auto_interpolate_for_operation:
+                        elif auto_interpolate_for_operation:
                             # "Yes to All" selected, automatically interpolate
                             with Conf.xarray_compat_behavior.context("interpolate"):
                                 result = self._check_signal_xarray_compatibility(
@@ -2503,17 +2834,27 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                                 src_obj_list, progress=progress
                             )
 
-                        if result is None:
-                            # User canceled or compatibility check failed
-                            return
+                        if context is None:
+                            if result is None:
+                                # User canceled or compatibility check failed
+                                return
+                            checked_objs, yes_to_all_selected = result
+                            if yes_to_all_selected:
+                                auto_interpolate_for_operation = True
+                            src_obj_list = checked_objs
+                        pending = provenance.begin(
+                            func,
+                            param,
+                            orig_obj_list,
+                            command_id,
+                            roles=["sources"] * len(orig_obj_list),
+                            limits=_x_interpolated(orig_obj_list, src_obj_list),
+                            context=context,
+                        )
 
-                        checked_objs, yes_to_all_selected = result
-                        if yes_to_all_selected:
-                            auto_interpolate_for_operation = True
-
-                        src_obj_list = checked_objs
-
-                        if param is None:
+                        if context is not None:
+                            args = prepared.args
+                        elif param is None:
                             args = (src_obj_list,)
                         else:
                             args = (src_obj_list, param)
@@ -2558,6 +2899,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             group_id=group_id,
                             use_group_for_non_native=use_group_for_non_native,
                         )
+                        provenance.complete(pending, new_obj)
 
             # Select newly created group, if any
             if dst_gid is not None:
@@ -2628,6 +2970,10 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         name = func.__name__
         title = name if title is None else title
         feature_id = self.get_feature_id(func, feature_id)
+        aligned_contract = self._x_alignment_contract(func)
+        consent: dict[str, bool] = {}
+        provenance = self.mainwindow.provenance
+        command_id = str(uuid.uuid4())
 
         if obj2 is None:
             objs2 = []
@@ -2692,7 +3038,9 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     for src_gid, i_pair in pair_keys
                 ]
                 preparation = self.prepare_2_to_1_pairs(
-                    original_pairs, skip_xarray_compat, pre_execute_hook
+                    original_pairs,
+                    skip_xarray_compat or aligned_contract is not None,
+                    pre_execute_hook,
                 )
                 if preparation is None:
                     return
@@ -2724,6 +3072,35 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             args = [actual_obj1, actual_obj2]
                             if param is not None:
                                 args.append(param)
+                            context = None
+                            if aligned_contract is not None:
+                                try:
+                                    prepared = self._prepare_with_contract(
+                                        aligned_contract,
+                                        [actual_obj1, actual_obj2],
+                                        param,
+                                        title,
+                                        progress,
+                                        consent,
+                                    )
+                                except InterpolationRefused:
+                                    return
+                                if prepared is None:
+                                    continue
+                                args, context = list(prepared.args), prepared.context
+                            pending = provenance.begin(
+                                func,
+                                param,
+                                [orig_obj1, orig_obj2],
+                                command_id,
+                                context=context,
+                                limits=_x_interpolated(
+                                    [orig_obj1, orig_obj2], [actual_obj1, actual_obj2]
+                                ),
+                                # Metadata read are those of the computed objects
+                                # (e.g. fit parameters converted by a hook).
+                                executed=[actual_obj1, actual_obj2],
+                            )
                             result = self.__exec_func(func, tuple(args), progress)
                             if result is None:
                                 break
@@ -2764,6 +3141,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             self._add_object_to_appropriate_panel(
                                 new_obj, group_id=dst_gid
                             )
+                            provenance.complete(pending, new_obj)
                             if source_transaction is not None:
                                 source_transaction.commit(orig_obj1)
 
@@ -2802,6 +3180,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                     self._is_signal_panel()
                     and isinstance(obj2, SignalObj)
                     and not skip_xarray_compat
+                    and aligned_contract is None
                 ):
                     signal_objs = [obj for obj in objs if isinstance(obj, SignalObj)]
                     if signal_objs:
@@ -2854,6 +3233,35 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                             if param is None
                             else (actual_obj, obj2, param)
                         )
+                        context = None
+                        if aligned_contract is not None:
+                            try:
+                                prepared = self._prepare_with_contract(
+                                    aligned_contract,
+                                    [actual_obj, obj2],
+                                    param,
+                                    title,
+                                    progress,
+                                    consent,
+                                )
+                            except InterpolationRefused:
+                                return
+                            if prepared is None:
+                                continue
+                            args, context = prepared.args, prepared.context
+                        pending = provenance.begin(
+                            func,
+                            param,
+                            [obj, orig_obj2],
+                            command_id,
+                            context=context,
+                            limits=_x_interpolated(
+                                [obj, orig_obj2], [actual_obj, obj2]
+                            ),
+                            # Metadata read are those of the computed objects
+                            # (e.g. fit parameters converted by a hook).
+                            executed=[actual_obj, obj2],
+                        )
                         result = self.__exec_func(func, args, progress)
                         if result is None:
                             break
@@ -2889,6 +3297,7 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                         self._add_object_to_appropriate_panel(
                             new_obj, group_id=group_id, use_group_for_non_native=False
                         )
+                        provenance.complete(pending, new_obj)
                         if source_transaction is not None:
                             source_transaction.commit(obj)
 
@@ -3595,6 +4004,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
                 only_visible=False,
                 only_existing=True,
             )
+            # The object changed (e.g. its provenance view is out of date)
+            self.panel.SIG_OBJECT_MODIFIED.emit()
             return edited_roi
         return obj.roi
 

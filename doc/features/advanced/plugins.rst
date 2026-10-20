@@ -118,7 +118,7 @@ Plugins are automatically discovered at startup from multiple locations:
   If using a frozen (standalone) build, the `plugins` folder located next to the executable is scanned.
 
 - Installed plugins:
-  Wheels and modules installed from **Plugins > Configure plugins...**, either from a file in the **Install plugins** tab (see :ref:`plugin_install_from_file`) or from the plugin catalog in the **Available plugins** tab (see :ref:`plugin_catalog`).
+  Wheels and modules installed from **Plugins > Configure plugins...**, either from a file in the **Install plugins** tab (see :ref:`plugin_install_from_file`) or from a plugin catalog in the **Available plugins** tab (see :ref:`plugin_catalog`).
 
 - The internal `datalab/plugins/builtin` folder (not recommended for user plugins):
   This location is reserved for built-in or bundled plugins and should not be modified manually.
@@ -186,6 +186,8 @@ This tab lists every directory scanned at startup, in two groups:
   buttons. Unlike the environment variable, these directories are saved in the
   DataLab configuration and therefore persist across sessions.
 
+It also lists the **Local plugin catalogs**: folders, possibly shared on the network, whose plugins are offered in the **Available plugins** tab (see :ref:`plugin_local_catalogs`). They are managed with the same buttons, and the folders declared through the ``DATALAB_PLUGINS_CATALOG`` environment variable come first, as read-only entries. Changing these folders does not require reloading plugins.
+
 The tab also holds a **Compatibility warnings** option to hide warnings for
 incompatible DataLab v0.20 plugins.
 
@@ -194,11 +196,47 @@ incompatible DataLab v0.20 plugins.
 Available plugins
 ~~~~~~~~~~~~~~~~~
 
-This tab lists the plugins of the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_, with their description, license and source code link. Plugins maintained by the DataLab team are marked **Official**; the others are **Community** plugins, maintained by their authors. A search field filters the list.
+This tab lists the plugins of the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_ and of the local plugin catalogs (see :ref:`plugin_local_catalogs`), with their description, license and source code link. Plugins maintained by the DataLab team are marked **Official**; the others are **Community** plugins, maintained by their authors, or **Local catalog** plugins, provided by your organization (the tooltip of such a plugin shows the folder of its catalog). A search field filters the list.
 
 **Install** downloads the newest release available for DataLab desktop and for the running Python version, checks that its size and SHA-256 digest match the catalog, then installs it as described in :ref:`plugin_install_from_file`, after the same confirmation. When the catalog offers a newer version of a plugin installed this way, the button becomes **Update to...**. Plugins installed with ``pip`` in the Python environment are shown as such and are not modified.
 
-The catalog is downloaded only when the tab is shown or refreshed. Its address is the ``plugins_catalog_url`` option of the DataLab configuration file: it may point to a private copy of the catalog, including a ``file:`` URL for a folder shared on the network, or be emptied to disable the catalog.
+The catalogs are read only when the tab is shown or refreshed, and again when the local catalog folders change. A catalog that cannot be read, for example a network share that is not connected, is reported below the plugin count without hiding the plugins of the other catalogs. The address of the DataLab plugin catalog is the ``plugins_catalog_url`` option of the DataLab configuration file: it may point to a private copy of the catalog, or be emptied to disable it, for example on computers without Internet access. For a catalog stored in a folder, including a folder shared on the network, use a local plugin catalog instead.
+
+.. _plugin_local_catalogs:
+
+Local plugin catalogs
+^^^^^^^^^^^^^^^^^^^^^
+
+A local plugin catalog is a folder, typically shared on the network (for example ``\\fileserver\datalab\plugins``), from which an organization distributes its own plugins, or the versions of public plugins it has approved, without publishing them. Local catalogs complement the DataLab plugin catalog and take precedence over it: when several catalogs list the same plugin (same distribution name or plugin ID), only the first one is shown, so that users install the version chosen by the organization. If the DataLab plugin catalog withdraws a plugin hidden this way, the tab reports it.
+
+Local catalogs are declared:
+
+- in the **Plugin settings** tab (see :ref:`plugin_search_paths`): these folders are saved in the DataLab configuration (``plugins_catalog_path_list`` option);
+- through the ``DATALAB_PLUGINS_CATALOG`` environment variable, for example to configure all the computers of an organization: folders are separated by the OS path separator (``;`` on Windows, ``:`` on Linux/macOS) and take precedence over the folders of the configuration. Unlike ``DATALAB_PLUGINS``, folders unavailable when DataLab starts are not ignored: they are reported in the **Available plugins** tab, and used as soon as they become available and the catalogs are refreshed.
+
+.. code-block:: bat
+
+   :: Windows
+   set DATALAB_PLUGINS_CATALOG=\\fileserver\datalab\plugins;D:\approved_plugins
+
+A local catalog folder holds either:
+
+- **plugin wheels only**: DataLab lists every pure-Python wheel of the folder (subfolders are not scanned) declaring a ``datalab.plugins`` entry point, and groups the versions of each plugin. Other files are ignored and reported. The plugin name is its distribution name; its description, license, keywords and source code link come from the wheel metadata. Copying a new version to the folder is enough to offer it as an update;
+- **or a** ``catalog.json`` **file**, in the format of the DataLab plugin catalog, whose release URLs are relative to the folder: only the plugins it lists are shown. It may be a copy of the DataLab plugin catalog with its wheels, or a catalog built from the wheels of the folder with ``datalab-plugin catalog build``, then edited to give a display name to the plugins, deprecate or revoke them (``status`` and ``status_reason`` fields), or withdraw a release (``yanked`` field).
+
+Whatever the catalog, DataLab checks the size and SHA-256 digest of the wheel before installing it, then inspects it without running it and asks for confirmation; the confirmation dialog shows the catalog folder as the source of the plugin. Being listed in a local catalog does not mean that a plugin was audited: the organization managing the folder is responsible for its content, and write access to the folder should be restricted accordingly.
+
+The ``datalab-plugin`` command maintains the ``catalog.json`` file of a folder:
+
+.. code-block:: bat
+
+   :: Write catalog.json, listing the plugin wheels of the folder
+   datalab-plugin catalog build \\fileserver\datalab\plugins
+
+   :: Check catalog.json against the plugin wheels of the folder
+   datalab-plugin catalog check \\fileserver\datalab\plugins
+
+``build`` checks every wheel as DataLab does before installing it (pure Python, plugin entry point, dependencies provided by DataLab, Python version supported by DataLab) and does not write the file if a wheel is refused. It keeps the fields edited in an existing ``catalog.json`` file (plugin ID, name, tier, status and its reason, repository, documentation, capabilities and keywords, and the reasons why releases are withdrawn), and revoked plugins remain listed. The file is replaced atomically, so that users may read the catalog meanwhile. ``check`` reports the wheels of the catalog that are missing, changed or refused, and the wheels of the folder that the catalog does not list: once a folder holds a ``catalog.json`` file, run ``build`` again after adding wheels. Both commands exit with a non-zero status when they find a problem.
 
 .. _plugin_install_from_file:
 

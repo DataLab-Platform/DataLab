@@ -47,6 +47,9 @@
 * Before installing, DataLab checks the file without running it and shows its name, version, plugin classes, dependencies and SHA-256 digest; a wheel requiring a package that DataLab does not provide is refused
 * Installed plugins are listed in the same tab, where they can be uninstalled; a newly installed plugin is enabled and loaded after a plugin reload, and a new version of an already loaded plugin is used at the next start
 * The new **Available plugins** tab lists the plugins of the [DataLab plugin catalog](https://datalab-platform.com/plugins/), official or from the community, with a search field: **Install** and **Update** download the wheel, check it against the catalog and install it after confirmation. The catalog address may be changed to use a private copy
+* Organizations can distribute their own plugins, or the versions of public plugins they have approved, from local plugin catalogs: folders, typically shared on the network, declared in the **Plugin settings** tab or with the `DATALAB_PLUGINS_CATALOG` environment variable. Their plugins are listed in the **Available plugins** tab before those of the DataLab plugin catalog, and hide them when both offer the same plugin
+* A local catalog folder may simply hold plugin wheels, listed as they are copied to it, or a `catalog.json` file giving display names, deprecations and withdrawn releases; `datalab-plugin catalog build` writes this file from the wheels of the folder, keeping the edited fields, and `datalab-plugin catalog check` reports wheels that are missing, changed, refused by DataLab or not listed
+* A catalog that cannot be read, such as a network share that is not connected or the online catalog on a computer without Internet access, is reported in the **Available plugins** tab without hiding the plugins of the other catalogs
 
 **Plugin project generator:**
 
@@ -62,6 +65,29 @@
 * **Edit > Metadata > Add metadata...** can now extract the value from the formatted text with a regular expression, for example an exposure time or a shot number read from object titles. Objects without a match are left unchanged unless you ask for an error, and a scale factor converts numeric values (e.g. milliseconds to seconds)
 * Metadata keys may now contain dots and hyphens, as used by plugin keys, and a **Known keys** list copies a key already present on the selected objects
 
+**Workspace provenance:**
+
+* DataLab now records how each result was obtained: the processing applied, its parameters, the objects it used and their exact content, and the software versions. This record is saved with the HDF5 workspace and read back when the workspace is reopened, by DataLab or by DataLab-Web, so the history of a result survives saving, closing and sharing
+* Signal and image processing, operations combining several objects and analyses (geometry and table results) are recorded, each with the identity of its Sigima operation; regions of interest, uncertainties, the X alignment applied to signals on different grids and the global options read by the computation (such as kernel normalization) are part of the record, and signals and images of every numeric type (float32, complex...) are covered. An analysis that finds nothing is recorded as such. A result whose data, calibration or regions of interest were changed after it was computed is reported as altered rather than trusted
+* Any recorded processing or analysis of a qualified Sigima operation (all of them but the phase spectrum) can be recomputed and every result compared with the stored one: exactly, or within the tolerance declared for the operation when the numerical libraries differ (exact, within tolerance, different, or not verified with the reason). Recomputation is available from the **Provenance** tab of the Properties panel (**Verify computation**) and from scripts; it never changes the workspace. When only the regions of interest of an input changed since the computation (for example regions created on the analysed image by a detection), it is recomputed on a copy carrying the recorded regions of interest, so that such an analysis remains verifiable
+* The **History** tab of the Properties panel is renamed **Provenance** (to avoid any confusion with the History panel) and now shows the provenance of the selected object: the recorded execution that produced its current content, its parameters and inputs, and, step by step, how each input was itself produced, as it was at the time (e.g. the sigma actually used, even if the input was filtered again since), with the software that recorded it (DataLab Desktop or DataLab Web). Each step is a card with its parameters, inputs and results, and links next to what they act on: show the recorded step of an input, **Go to object**, **Verify this step**, **History action** and details. **Check data** compares the object, its direct inputs and the earlier steps shown with their recorded states without computing; deleted inputs are reported at once, modified or unavailable ones after checking. Going to the History action of a step keeps the Provenance tab open
+* The **Processing** tab restores the recorded call of the selected result, including operations combining several objects (difference of two signals, average of several images, ...): every input is kept in order with its role, parameters can be edited, and processing without parameters offers a **Reapply** button. When the processing cannot be applied again (e.g. an input was deleted), the tab says why. This also works for workspaces reopened from a file, saved by DataLab or by DataLab-Web
+* History actions are linked to the provenance of their last successful execution: **Show execution provenance** in the History panel displays it, and the provenance of a result leads to the History action that produced it, analyses included. In the History panel edit mode, editing one result of a command producing several results changes only its parameters in the action
+* When a workspace file holding provenance is added to the current workspace (without clearing it), DataLab now says before anything changes that its earlier provenance will not be imported: in the question about clearing the workspace (files are chosen first), or in a single warning when that question is not asked. Added objects never inherit the provenance of another object (they are neither shown nor used as the original input of a recorded step, including when verifying it), and their later processing is recorded
+* DataLab Desktop and DataLab-Web record the same processing identically and replay each other's results
+* Before interpolating signals whose X grids differ, DataLab still asks for confirmation; the alignment it applies is the one it has always applied, now named and recorded so that a recomputation applies it identically. Several selected pairs of a two-signal operation now each align the operand on the grid of their own source signal
+* Workspaces saved by earlier versions keep their processing history as stored: DataLab shows what is known and what is missing, invents nothing, and never recomputes such entries
+* A workspace whose provenance record is damaged is refused with an explicit message, and the current workspace is left unchanged
+* Workspaces can be exchanged as capsules (a workspace plus a description of its provenance) from **File > Workspace capsule...**, the same dialog as in DataLab-Web, so that someone else can check and replay them with either edition:
+  * **Export** the workspace, with a name, a description, light attachments (protocol, notes, small tables) and, for a workspace opened from a capsule (also after it was saved and opened again), the capsule it is a revision of; the workspace can also be referenced by its publication address instead of being included
+  * **Inspect** a capsule without opening it: its activities, its attachments (saved only on request, never opened), its integrity (workspace and stored states checked, nothing recomputed) and the verification reports and reviews supplied with it, each checked against the capsule; write a review of it, or **Open as workspace** (recorded in the History panel)
+  * **Local replay** recomputes a recorded activity of the open workspace and compares it with its stored result, without changing the workspace; the verification report can be saved to be shared with the capsule
+  * **Revisions** lists the capsules exported, inspected or retrieved on this computer and compares any two of them (scientific, presentation, storage, environment and attachment changes)
+  * **Registry** connects to an optional capsule registry to publish capsules (never their workspaces) and reviews, list the published revisions and retrieve them, everything returned being checked
+  * Scripts and macros can export and open capsules too (`export_capsule` and `open_capsule` of the proxy), and the `workspace-capsule` command line of [DataLab-Capsule](https://github.com/DataLab-Platform/DataLab-Capsule) still validates, compares and verifies them
+  * A capsule, or the workspace it references, that exceeds the size limit is refused before being read, and DataLab never writes a capsule it would refuse to open, nor writes the capsule or its referenced workspace over each other or over an attachment; the limits and the measured costs are given in the *Workspace capsules* page
+  * The standalone version (installer) embeds what capsules need (schemas and RO-Crate context of DataLab-Capsule)
+
 **Object references in titles:**
 
 DataLab now uses stable UUID-based object references across object trees, result titles, plot legends and HDF5 workspaces (implements [Issue #367](https://github.com/DataLab-Platform/DataLab/issues/367) and [Issue #149](https://github.com/DataLab-Platform/DataLab/issues/149)).
@@ -72,7 +98,18 @@ DataLab now uses stable UUID-based object references across object trees, result
 * When a source object is deleted, its reference falls back to its 8-character UUID instead of becoming an anonymous placeholder
 * Titles of workspaces saved by previous versions keep their former `s001`-style references as plain text
 
+**Curve fitting formulas:**
+
+* Interactive fitting dialogs now show the formula of the fitted model below the fit parameters, and each parameter label shows its symbol in the formula (e.g. "Scale factor (x₀)"): the parameters stored in the fitted signal metadata can thus be related to the model without reading the source code. The *Fitting* documentation also gives, for each model, the name under which each parameter is stored (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))
+* Polynomial and linear fit coefficients are labelled `a`, `b`, `c`... as in the formula and in the metadata, instead of `c2`, `c1`, `c0`
+* The *Fitting* documentation explains how to derive the peak wavelength, the temperature and the emissivity from the parameters of a Planckian fit
+
 ### 🔄 Changes ###
+
+**Synthetic images in physical coordinates:**
+
+* The 2D Gaussian, 2D ramp, sinusoidal grating, ring pattern, Siemens star and 2D sinc images were computed over the [x<sub>min</sub>, x<sub>max</sub>] × [y<sub>min</sub>, y<sub>max</sub>] domain of their creation parameters, but were displayed in pixel coordinates: their centers, widths and spatial frequencies did not match the axes (a sinusoidal grating of frequency 0.1 over [0, 100] showed 10 periods along an axis graduated from 0 to 1023). These images are now displayed over their domain. The new **Physical coordinates** option of their creation parameters restores pixel coordinates when disabled (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))
+* Images created with earlier versions keep their pixel coordinates when their creation parameters are edited or recomputed
 
 **Guided tour:**
 
@@ -88,9 +125,15 @@ DataLab now uses stable UUID-based object references across object trees, result
 * Plot annotations are now stored in a renderer-independent format shared with DataLab-Web, so annotations in workspaces and `.dlabann` files are no longer tied to PlotPy
 * Existing PlotPy annotations remain readable and are converted only after an annotation edit is accepted; simply opening a workspace or cancelling the editor leaves its data unchanged
 * Annotation identifiers, lock state, custom metadata and extension data are preserved across edits, while unknown third-party payloads are retained without modification
-* DataLab now requires Sigima ≥ 1.3.0 and SigimaX ≥ 1.1.0
+* DataLab now requires Sigima ≥ 1.3.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x
 
 ### 🛠️ Bug Fixes ###
+
+**Performance with many objects:**
+
+* Fixed processing becoming progressively slower as signals or images accumulate in a panel: each new result rewrote the titles of every existing object, rebuilt the whole object tree and measured every title again, so creating 1000 signals one after the other took about 39 minutes; it now takes about 3 minutes (a processing step with 1000 objects in the panel dropped from 2.3 s to about 0.3 s)
+* Image panels no longer slow down because of cross-section curves kept for hidden images (requires PlotPy ≥ 2.11.2)
+* Fixed titles referring to objects numbered 1000 or above (e.g., `s1000`) being corrupted when objects were added or reordered
 
 **Window layout:**
 
@@ -103,6 +146,12 @@ DataLab now uses stable UUID-based object references across object trees, result
 **Metadata:**
 
 * Adding, pasting or deleting metadata now marks the workspace as modified, so DataLab asks to save these changes before closing
+* Importing metadata from a file into an object (**Edit > Metadata > Import metadata**) no longer gives it the identity of the object the metadata were exported from: two objects sharing an identity confused source references in titles, **Select source objects** and the saving of the workspace
+
+**Processing:**
+
+* Results of the extraction of several regions of interest into a single object can be processed again: the **Processing** tab showed "Unknown computing feature: extract_rois" with **Reapply** disabled, and replaying the History skipped the action
+* **Edit > Recompute** now also recomputes results of operations combining several objects (e.g., difference of two signals, average of several images), which were skipped
 
 **Plugins and History:**
 
@@ -113,3 +162,12 @@ DataLab now uses stable UUID-based object references across object trees, result
 * Fixed plot legends still showing the original generated title after renaming an object, e.g. a profile extracted from an image (fixes [Issue #323](https://github.com/DataLab-Platform/DataLab/issues/323))
 * Fixed source references in titles being unreadable when the object is selected in the signal or image tree, notably on Linux (fixes [Issue #358](https://github.com/DataLab-Platform/DataLab/issues/358))
 * Fixed result titles pointing to the wrong source objects after appending an HDF5 workspace to a non-empty session; appending the same workspace twice now also keeps each imported processing chain independent, so **Recompute** and **Select source objects** use the sources of the same import (fixes [Issue #357](https://github.com/DataLab-Platform/DataLab/issues/357))
+
+**Curve fitting:**
+
+* Fixed the automatic Planckian fit (**Processing > Fitting > Planckian fit**) returning a curve about 150 times lower than the signal on data in physical units, such as a blackbody signal with wavelengths in meters; the interactive Planckian fit dialog also starts from a curve matching the signal peak (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))
+* Fixed exponential fitting failing on short time constants depending on the X unit, e.g. a 1 ms time constant with X in seconds (automatic and interactive fits)
+
+**Signal creation:**
+
+* The blackbody signal (**Create > Blackbody (Planck's law)**) now has axis titles and units (wavelength in m, spectral radiance in W·sr⁻¹·m⁻³), which were missing (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))

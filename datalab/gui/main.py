@@ -34,12 +34,13 @@ import numpy as np
 import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata.configtools import get_icon
-from guidata.qthelpers import add_actions, create_action
+from guidata.qthelpers import add_actions, create_action, exec_dialog
 from plotpy.builder import make
 from plotpy.constants import PlotType
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from qtpy.compat import getopenfilenames
 from sigima.config import options as sigima_options
 from sigima.objects import ImageObj, SignalObj, create_image, create_signal
 from sigimax.mainwindow import SGMXMainWindow
@@ -59,13 +60,18 @@ from datalab.control.baseproxy import AbstractDLControl
 from datalab.control.remote import RemoteServer
 from datalab.env import execenv
 from datalab.gui.actionhandler import ActionCategory
+from datalab.gui.capsuleio import CapsuleInputOutput
 from datalab.gui.commandpalette import (
     CommandPaletteDialog,
     CommandSearchField,
     collect_commands,
 )
 from datalab.gui.docks import DockablePlotWidget
-from datalab.gui.h5io import H5InputOutput
+from datalab.gui.h5io import (
+    H5InputOutput,
+    append_provenance_notice,
+    workspace_has_provenance,
+)
 from datalab.gui.panel import base, history, image, macro, signal
 from datalab.gui.plugins.applications import ApplicationsDialog, get_plugin_icon
 from datalab.gui.plugins.config import PluginConfigDialog
@@ -87,6 +93,7 @@ from datalab.plugins import (
     migrate_enabled_plugin_ids,
 )
 from datalab.plugins.tools import tool_accepts_selection
+from datalab.provenance import ProvenanceService
 from datalab.utils import qthelpers as qth
 from datalab.utils.qthelpers import (
     configure_menu_about_to_show,
@@ -99,7 +106,8 @@ from datalab.widgets import status as dl_status
 from datalab.widgets.expandabletext import refresh_subdued_colors
 
 if TYPE_CHECKING:
-    from typing import Literal
+    from collections.abc import Iterator
+    from typing import Any, Literal
 
     from datalab.gui.historysession_ops import SessionBehavior
     from datalab.gui.panel.base import AbstractPanel, BaseDataPanel
@@ -148,6 +156,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.started_at = datetime.now().astimezone()
         self.plugins_last_load_at = self.started_at
         self.preview_executor_cache = PreviewExecutorCache()
+        self.provenance = ProvenanceService(
+            self.find_object_by_uuid,
+            self.__iter_data_objects,
+            self.__is_known_feature,
+        )
+        self.__provenance_timer: QC.QTimer | None = None
 
         self.webapistatus: dl_status.WebAPIStatus | None = None
         self.pluginstatus: dl_status.PluginStatus | None = None
@@ -167,6 +181,14 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.signalview: DockablePlotWidget | None = None
         self.imageview: DockablePlotWidget | None = None
         self.h5inputoutput: H5InputOutput | None = None
+        self.capsuleio: CapsuleInputOutput | None = None
+        # True while opening HDF5 files of which one holds provenance
+        self.__h5_provenance_files = False
+        #: The question about clearing the workspace told that appending ignores
+        #: provenance, for the answer not yet known (see ``import_dataset_from_file``)
+        self.__h5_append_notice_shown = False
+        #: History entry of the HDF5 files being opened, recorded once opened
+        self.__h5_open_entry: tuple | None = None
         self.webapi_actions: WebApiActions | None = None
 
         self.openh5_action: QW.QAction | None = None
@@ -174,6 +196,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.command_palette_action: QW.QAction | None = None
         self.browseh5_action: QW.QAction | None = None
         self.settings_action: QW.QAction | None = None
+        self.capsule_action: QW.QAction | None = None
         self.command_palette_action: QW.QAction | None = None
         self.quit_action: QW.QAction | None = None
         self.autorefresh_action: QW.QAction | None = None
@@ -196,6 +219,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Initialize DataLab-specific services before setting up the UI."""
         super()._before_setup(console)
         self.h5inputoutput = H5InputOutput(self)
+        self.capsuleio = CapsuleInputOutput(self)
 
         # Starting XML-RPC server thread
         self.remote_server = RemoteServer(self)
@@ -359,6 +383,26 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 except KeyError:
                     continue
         return None
+
+    def __iter_data_objects(self) -> Iterator[SignalObj | ImageObj]:
+        """Yield every signal and image of the workspace, in panel order."""
+        for panel in (self.signalpanel, self.imagepanel):
+            if panel is not None:
+                yield from panel.objmodel
+
+    def __is_known_feature(self, name: str, plugin_origin: Any) -> bool:
+        """Return True if a signal or image processing feature has this name."""
+        for panel in (self.signalpanel, self.imagepanel):
+            if panel is None:
+                continue
+            try:
+                panel.processor.get_feature(name, plugin_origin)
+            except FeatureNotFoundError:
+                continue
+            except ValueError:  # several features match: the name is known
+                return True
+            return True
+        return False
 
     def resolve_title_reference(
         self, reference: str
@@ -1320,6 +1364,16 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             tip=_("Open settings dialog"),
             triggered=self.__edit_settings,
         )
+        self.capsule_action = create_action(
+            self,
+            _("Workspace capsule..."),
+            icon=get_icon("capsule.svg"),
+            tip=_(
+                "Export, inspect, replay and compare workspace capsules "
+                "(workspace and provenance of its processing)"
+            ),
+            triggered=self.show_capsule_dialog,
+        )
         self.command_palette_action = create_action(
             self,
             _("Command palette..."),
@@ -1688,6 +1742,17 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             panel.SIG_OBJECT_ADDED.connect(self.set_modified)
             panel.SIG_OBJECT_REMOVED.connect(self.set_modified)
             panel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
+        # Provenance views follow the workspace and the recorded activities.
+        # The timer coalesces refreshes; owned by the window, it never fires
+        # once the window is closed.
+        self.__provenance_timer = QC.QTimer(self)
+        self.__provenance_timer.setSingleShot(True)
+        self.__provenance_timer.timeout.connect(self.__refresh_provenance_views)
+        for panel in (self.signalpanel, self.imagepanel):
+            panel.SIG_OBJECT_ADDED.connect(self.__invalidate_provenance_views)
+            panel.SIG_OBJECT_REMOVED.connect(self.__invalidate_provenance_views)
+            panel.SIG_OBJECT_MODIFIED.connect(self.__invalidate_provenance_views)
+        self.provenance.on_recorded = self.__invalidate_provenance_views
         for panel in (self.signalpanel, self.imagepanel):
             panel.SIG_OBJECT_MODIFIED.connect(self.refresh_object_title_displays)
             panel.SIG_OBJECT_REMOVED.connect(self.refresh_object_title_displays)
@@ -1899,7 +1964,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def _get_file_menu_actions(self) -> list[QW.QAction | None]:
         """Append the settings action to the standard HDF5 actions."""
-        return super()._get_file_menu_actions() + [None, self.settings_action]
+        return super()._get_file_menu_actions() + [
+            self.capsule_action,
+            None,
+            self.settings_action,
+        ]
 
     def _update_file_menu(self) -> None:
         """Update file menu before showing up"""
@@ -2002,8 +2071,132 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         for panel in self.panels:
             if panel is not None and panel is not self.historypanel:
                 panel.remove_all_objects()
+        self.provenance.reset()
         if self.historypanel is not None:
             self.historypanel.start_new_session_after_workspace_reset()
+
+    def verify_provenance_activity(self, activity_id: str) -> dict:
+        """Recompute a recorded activity as a separate candidate and compare it.
+
+        Nothing is inserted in the workspace and the ledger is not modified.
+
+        Args:
+            activity_id: Identifier of the recorded activity.
+
+        Returns:
+            Verification report (JSON-compatible).
+        """
+        execution = self.signalpanel.processor.execution
+        return self.provenance.verify(activity_id, execution.execute_candidate)
+
+    def show_capsule_dialog(self) -> None:
+        """Show the workspace capsule dialog (export, inspect, replay, compare)."""
+        # pylint: disable=import-outside-toplevel
+        from datalab.widgets.capsule import CapsuleDialog
+
+        dialog = CapsuleDialog(self)
+        exec_dialog(dialog)
+
+    @remote_controlled
+    def export_capsule(
+        self,
+        filename: str,
+        name: str | None = None,
+        description: str | None = None,
+        as_revision: bool = True,
+        workspace_ref: str | None = None,
+        workspace_filename: str | None = None,
+        attachments: list[str] | None = None,
+    ) -> str:
+        """Export the workspace as a capsule (workspace and its provenance).
+
+        Args:
+            filename: Capsule file name (``.dlcapsule``).
+            name: Capsule name.
+            description: Capsule description.
+            as_revision: When the workspace was opened from a capsule, name that
+             capsule as the parent revision. Defaults to True.
+            workspace_ref: Absolute IRI where the workspace will be published:
+             the capsule then references the workspace instead of including it,
+             and the workspace is saved apart, to *workspace_filename*.
+            workspace_filename: File name of the workspace published at
+             *workspace_ref* (default: last segment of the IRI, next to the
+             capsule).
+            attachments: Light files (protocol, notes, small tables, 16 MiB at
+             most each) declared in the capsule, never opened or executed.
+
+        Returns:
+            Manifest fingerprint of the capsule.
+        """
+        fingerprint = self.capsuleio.export(
+            filename,
+            name=name,
+            description=description,
+            as_revision=as_revision,
+            workspace_ref=workspace_ref,
+            workspace_filename=workspace_filename,
+            attachments=attachments or (),
+        )
+        self.historypanel.add_ui_entry(
+            _("Export capsule"),
+            target="mainwindow",
+            method_name="export_capsule",
+            save_state=False,
+            filename=filename,
+            name=name,
+            description=description,
+            as_revision=as_revision,
+            workspace_ref=workspace_ref,
+            workspace_filename=workspace_filename,
+            attachments=list(attachments or []),
+        )
+        return fingerprint
+
+    @remote_controlled
+    def open_capsule(self, filename: str, workspace: str | None = None) -> None:
+        """Open a capsule as the workspace, replacing the current one.
+
+        The capsule is checked first (archive, manifest, workspace SHA-256 and
+        size): the workspace is left unchanged if it is invalid. A revision
+        exported later names this capsule as its parent.
+
+        Args:
+            filename: Capsule file name (``.dlcapsule``).
+            workspace: Workspace file of a capsule that references its workspace
+             instead of including it.
+        """
+        if not self.confirm_memory_state():
+            return
+        self.capsuleio.open(filename, workspace)
+        # Recorded once opened, so that it begins the session started by the
+        # workspace reset (and nothing is recorded if the capsule is refused).
+        self.historypanel.add_ui_entry(
+            _("Open capsule"),
+            target="mainwindow",
+            method_name="open_capsule",
+            save_state=False,
+            filename=filename,
+            workspace=workspace,
+        )
+
+    def __invalidate_provenance_views(self) -> None:
+        """Refresh the provenance views once control returns to the event loop.
+
+        The workspace changed or activities were recorded: the views read the
+        ledger again and drop the results of data checks and verifications.
+        Requests are coalesced, so that a batch of computations refreshes once.
+        """
+        if (
+            self.__provenance_timer is not None
+            and not self.__provenance_timer.isActive()
+        ):
+            self.__provenance_timer.start(0)
+
+    def __refresh_provenance_views(self) -> None:
+        """Refresh the provenance views of the current objects."""
+        for panel in (self.signalpanel, self.imagepanel):
+            if panel is not None:
+                panel.objprop.refresh_history()
 
     @remote_controlled
     def remove_object(self, force: bool = False) -> None:
@@ -2036,12 +2229,81 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     ) -> None:
         """Open a DataLab HDF5 file or import from any other HDF5 file.
 
+        When the question about clearing the workspace will be asked, the files
+        are chosen first: if a workspace file holds provenance, the question
+        says that appending it ignores that provenance (no further warning).
+
         Args:
             h5files: HDF5 filenames (optionally with dataset name, separated by ",")
             import_all: Import all datasets from HDF5 files
             reset_all: Reset all application data before importing
         """
-        super().open_h5_files(h5files, import_all, reset_all)
+        if (
+            h5files is None
+            and reset_all is None
+            and not self._is_workspace_empty()
+            and Conf.h5_clear_workspace_ask.get()
+        ):
+            with qth.save_restore_stds():
+                h5files, _fl = getopenfilenames(
+                    self,
+                    _("Open"),
+                    Conf.base_dir.get(),
+                    _("HDF5 files (*.h5 *.hdf5 *.hdf *.he5);;All files (*)"),
+                )
+            if not h5files:
+                return
+        self.__h5_provenance_files = (
+            import_all is not None
+            and h5files is not None
+            and any(
+                "," not in fname and workspace_has_provenance(fname)
+                for fname in h5files
+            )
+        )
+        self.h5inputoutput.cancelled_files = []
+        try:
+            super().open_h5_files(h5files, import_all, reset_all)
+        finally:
+            self.__h5_provenance_files = False
+            self.__h5_append_notice_shown = False
+            self.h5inputoutput.append_informed = False
+            self.__record_h5_open_entry()
+
+    def __record_h5_open_entry(self) -> None:
+        """Record the HDF5 open/import in the history session, once done.
+
+        Files whose appending the user cancelled are not recorded (nothing was
+        opened), so that replaying the session does not open them.
+        """
+        entry, self.__h5_open_entry = self.__h5_open_entry, None
+        if entry is None:
+            return
+        h5files, import_all, reset_all = entry
+        cancelled = {
+            osp.normcase(osp.abspath(fname))
+            for fname in self.h5inputoutput.cancelled_files
+        }
+        h5files = [
+            fname
+            for fname in h5files
+            if osp.normcase(osp.abspath(fname.split(",")[0])) not in cancelled
+        ]
+        if not h5files:
+            return
+        if len(h5files) > 1:
+            entry_title = _("Open %d HDF5 files") % len(h5files)
+        else:
+            entry_title = _("Open HDF5 file")
+        self.historypanel.add_ui_entry(
+            entry_title,
+            target="mainwindow",
+            method_name="open_h5_files",
+            save_state=False,
+            h5files=h5files,
+            import_all=import_all,
+            reset_all=reset_all,
+        )
 
     def _on_h5_save_requested(self, filename: str) -> None:
         """Record the workspace save in the history session"""
@@ -2059,20 +2321,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         import_all: bool | None,
         reset_all: bool | None,
     ) -> None:
-        """Record the HDF5 open/import in the history session"""
-        if len(h5files) > 1:
-            entry_title = _("Open %d HDF5 files") % len(h5files)
-        else:
-            entry_title = _("Open HDF5 file")
-        self.historypanel.add_ui_entry(
-            entry_title,
-            target="mainwindow",
-            method_name="open_h5_files",
-            save_state=False,
-            h5files=h5files,
-            import_all=import_all,
-            reset_all=reset_all,
-        )
+        """Record the HDF5 open/import in the history session, once opened"""
+        self.__h5_open_entry = (list(h5files), import_all, reset_all)
 
     def _is_workspace_empty(self) -> bool:
         """Return whether the signal and image panels hold no object"""
@@ -2103,6 +2353,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             "from being displayed again, and will use the "
             "current setting (%s)."
         ) % (_("Yes") if reset_all else _("No"))
+        if self.__h5_provenance_files:
+            msg += "<br><br><u>" + _("Provenance:") + "</u> "
+            msg += _("If you choose <i>No</i>: ") + append_provenance_notice()
+            # Said here for the answer "No" (see import_dataset_from_file)
+            self.__h5_append_notice_shown = True
         return msg
 
     def import_dataset_from_file(
@@ -2120,6 +2375,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             import_all: If ``True``, import all datasets without browsing
             reset_all: If ``True``, clear workspace before importing
         """
+        if self.__h5_append_notice_shown:
+            # First file: its reset_all is the answer to the question about
+            # clearing the workspace. Only "No" was told that appending ignores
+            # provenance: with "Yes", appending the next files asks again.
+            self.h5inputoutput.append_informed = not reset_all
+            self.__h5_append_notice_shown = False
         if dsetname is None:
             self.h5inputoutput.open_file(filename, import_all, reset_all)
         else:
@@ -2156,6 +2417,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         This method does not create file-selection widgets or progress bars. When
         history recording is active and the new-session policy is ``"ask"``, a
         history-session question may still be shown before loading.
+
+        When a file holding provenance is appended (``reset_all=False``), its
+        provenance is not imported: no question is asked, and the notice
+        ``datalab_capsule.recorder.APPEND_NOTICE`` is added to
+        ``provenance.notices`` (and logged).
 
         .. warning::
 

@@ -13,8 +13,11 @@ DataLab data model/main window.
 from __future__ import annotations
 
 import os.path as osp
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
+import h5py
+from datalab_capsule.hdf5 import ProvenanceFormatError, has_block
+from datalab_capsule.recorder import Recorder
 from guidata.qthelpers import exec_dialog
 from qtpy import QtWidgets as QW
 from sigima.objects import SignalObj
@@ -28,9 +31,32 @@ from datalab.h5.native import NativeH5Reader, NativeH5Writer
 from datalab.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
 
 if TYPE_CHECKING:
+    from datalab_capsule.ledger import Ledger
+    from sigima.objects import ImageObj
     from sigimax.h5.common import BaseNode
 
     from datalab.gui.main import DLMainWindow
+
+
+def workspace_has_provenance(filename: str) -> bool:
+    """Return True if a HDF5 file holds a provenance block (nothing is loaded).
+
+    Args:
+        filename: HDF5 filename (unreadable files give False).
+    """
+    try:
+        with h5py.File(filename, "r") as h5file:
+            return has_block(h5file)
+    except (OSError, ValueError):
+        return False
+
+
+def append_provenance_notice() -> str:
+    """Return the notice shown before appending a workspace holding provenance."""
+    return _(
+        "The data will be added, but their earlier provenance will not be "
+        "imported. Open the file replacing the current workspace to keep it."
+    )
 
 
 class H5InputOutput:
@@ -43,6 +69,11 @@ class H5InputOutput:
     def __init__(self, mainwindow: DLMainWindow) -> None:
         self.mainwindow = mainwindow
         self.uint32_wng: bool = None
+        #: True when the user was already told, for the current opening, that
+        #: the provenance of appended workspaces is not imported (no repeat).
+        self.append_informed = False
+        #: Files whose appending the user cancelled (see :meth:`__confirm_append`)
+        self.cancelled_files: list[str] = []
 
     @staticmethod
     def __progbartitle(fname: str) -> str:
@@ -52,15 +83,82 @@ class H5InputOutput:
     def save_file(self, filename: str) -> None:
         """Save all signals and images from DataLab model into a HDF5 file"""
         writer = NativeH5Writer(filename)
-        for panel in self.mainwindow.panels:
-            panel.serialize_to_hdf5(writer)
-        writer.close()
+        try:
+            for panel in self.mainwindow.panels:
+                panel.serialize_to_hdf5(writer)
+            self.mainwindow.provenance.save(writer.h5)
+        finally:
+            writer.close()
+
+    @staticmethod
+    def __read_provenance(
+        reader: NativeH5Reader,
+    ) -> tuple[Ledger, dict[str, str], dict[str, Any] | None] | None:
+        """Read and validate the provenance block before anything is replaced.
+
+        Returns:
+            ``(ledger, state_status, capsule_origin)``, or None without block.
+
+        Raises:
+            ProvenanceFormatError: If the block is invalid (never a KeyError, which
+             would turn the file into a generic HDF5 import).
+        """
+        try:
+            return Recorder.read(reader.h5)
+        except ProvenanceFormatError as exc:
+            reader.close()
+            raise ProvenanceFormatError(
+                _("The provenance data of this workspace are invalid: %s") % exc
+            ) from exc
+
+    @staticmethod
+    def __saved_version(reader: NativeH5Reader) -> str | None:
+        """Return the DataLab version that saved the file, as stored."""
+        value = reader.version[()]
+        if isinstance(value, bytes):
+            value = value.decode("utf-8", "replace")
+        return value if isinstance(value, str) else None
+
+    def __data_objects(self) -> list[SignalObj | ImageObj]:
+        """Return the objects of the signal and image panels."""
+        return [
+            obj
+            for panel in (self.mainwindow.signalpanel, self.mainwindow.imagepanel)
+            for obj in panel.objmodel.get_all_objects()
+        ]
+
+    def __confirm_append(self) -> bool:
+        """Warn, before anything changes, that appended provenance is ignored.
+
+        Shown once per opening, unless the question about clearing the workspace
+        already said so. Returns False if the user cancels.
+        """
+        if self.append_informed or execenv.unattended:
+            return True
+        box = QW.QMessageBox(
+            QW.QMessageBox.Warning,
+            _("Warning"),
+            append_provenance_notice(),
+            QW.QMessageBox.NoButton,
+            self.mainwindow,
+        )
+        add = box.addButton(_("Add without provenance"), QW.QMessageBox.AcceptRole)
+        box.addButton(QW.QMessageBox.Cancel)
+        box.setDefaultButton(add)
+        exec_dialog(box)
+        if box.clickedButton() is not add:
+            return False
+        self.append_informed = True
+        return True
 
     def open_file_headless(self, filename: str, reset_all: bool) -> bool:
         """Open native DataLab HDF5 file without any GUI elements.
 
         This method can be safely called from any thread (e.g., the console thread)
-        as it does not create any Qt widgets or dialogs.
+        as it does not create any Qt widgets or dialogs. When a file holding
+        provenance is appended (*reset_all* False), its provenance is not
+        imported and the notice ``datalab_capsule.recorder.APPEND_NOTICE`` is
+        added to ``mainwindow.provenance.notices`` (and logged).
 
         Args:
             filename: HDF5 filename
@@ -69,29 +167,79 @@ class H5InputOutput:
         Returns:
             True if file was successfully opened as a native DataLab file,
             False if the file format is not compatible (KeyError was raised)
+
+        Raises:
+            ProvenanceFormatError: If the provenance block is invalid (raised
+             before the workspace is replaced).
         """
+        reader = None
         try:
             reader = NativeH5Reader(filename)
+            block = self.__read_provenance(reader)
+            saved_version = self.__saved_version(reader)
             if reset_all:
                 self.mainwindow.reset_all()
+            before = {id(obj) for obj in self.__data_objects()}
             batches: list[H5ImportBatch] = []
             for panel in self.mainwindow.panels:
                 batch = panel.deserialize_from_hdf5(reader, reset_all)
                 if isinstance(batch, H5ImportBatch):
                     batches.append(batch)
             H5ImportBatch.finalize_imports(batches, refresh_panels=True)
-            reader.close()
+            appended = [o for o in self.__data_objects() if id(o) not in before]
+            self.mainwindow.provenance.load(
+                block, reset_all, saved_version, appended=appended
+            )
             return True
         except KeyError:
             return False
+        finally:
+            if reader is not None:
+                reader.close()
 
     def open_file(self, filename: str, import_all: bool, reset_all: bool) -> None:
-        """Open HDF5 file"""
+        """Open HDF5 file
+
+        When the file holds provenance and is appended to the current workspace,
+        the user is warned before anything changes (see :meth:`__confirm_append`)
+        and may cancel. A file that is not a DataLab workspace is imported as a
+        generic HDF5 file.
+        """
+        if not self.__open_native(filename, reset_all):
+            self.import_files([filename], import_all, reset_all)
+
+    def open_workspace_file(self, filename: str) -> None:
+        """Open a DataLab workspace file, replacing the workspace.
+
+        Unlike :meth:`open_file`, a file that is not a DataLab workspace is never
+        imported as a generic HDF5 file.
+
+        Raises:
+            ValueError: If the file is not a DataLab workspace.
+            ProvenanceFormatError: If the provenance block is invalid.
+        """
+        if not self.__open_native(filename, True):
+            raise ValueError(_("This file is not a DataLab workspace"))
+
+    def __open_native(self, filename: str, reset_all: bool) -> bool:
+        """Open a native DataLab HDF5 file (see :meth:`open_file`).
+
+        Returns:
+            False if the file is not a DataLab workspace (KeyError), else True
+            (also when the user cancels appending it).
+        """
         progress = None
+        reader = None
         try:
             reader = NativeH5Reader(filename)
+            block = self.__read_provenance(reader)
+            saved_version = self.__saved_version(reader)
+            if block is not None and not reset_all and not self.__confirm_append():
+                self.cancelled_files.append(filename)
+                return True
             if reset_all:
                 self.mainwindow.reset_all()
+            before = {id(obj) for obj in self.__data_objects()}
             batches: list[H5ImportBatch] = []
             with create_progress_bar(
                 self.mainwindow, self.__progbartitle(filename), 2
@@ -105,13 +253,20 @@ class H5InputOutput:
                     if progress.wasCanceled():
                         break
             H5ImportBatch.finalize_imports(batches, refresh_panels=True)
-            reader.close()
+            appended = [o for o in self.__data_objects() if id(o) not in before]
+            self.mainwindow.provenance.load(
+                block, reset_all, saved_version, appended=appended
+            )
+            return True
         except KeyError:
             if progress is not None:
                 # KeyError was encoutered when deserializing datasets (DataLab data
                 # model is not compatible with this version)
                 progress.close()
-            self.import_files([filename], import_all, reset_all)
+            return False
+        finally:
+            if reader is not None:
+                reader.close()
 
     def __add_object_from_node(self, node: BaseNode) -> None:
         """Add DataLab object from h5 node"""

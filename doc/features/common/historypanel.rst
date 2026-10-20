@@ -158,6 +158,11 @@ The toolbar at the top of the panel exposes the following actions:
     :height: 24px
     :class: dark-light no-scaled-link
 
+.. |history| image:: ../../../datalab/data/icons/history.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
 - |record| **Record mode**: toggle the recording of new actions. When off, no
   new entry is added to the history (existing sessions are preserved).
 - |new_session| **New session**: start a new history session and make it the
@@ -205,6 +210,10 @@ The toolbar at the top of the panel exposes the following actions:
   as well. Cancelling a dialog stops the replay, restores the parameter
   edits made during that run, and silently recomputes any actions left
   outdated so the chain stays up to date.
+- |history| **Show execution provenance**: show the recorded provenance of the
+  last successful execution of the selected computation action (one tab per
+  result), see :ref:`provenance`. If the parameters of the action were edited
+  without executing it again, the dialog says so.
 - |duplicate| **Duplicate**: duplicate the processing chain containing each
   selected action, or the processing chains in each selected session. DataLab
   clones the required objects and creates independent history sessions. The
@@ -326,6 +335,15 @@ The history can be persisted in two complementary ways:
    loaded as incompatible — shown as a disabled row with an explanatory
    tooltip, and never replayed — while all other sessions and actions load
    normally. Such entries can be cleaned up with **Remove incompatible**.
+
+.. note::
+
+   Each action keeps, in the optional ``provenance_activity_ids`` field (History
+   action schema version 3), the identifiers of the provenance activities
+   recorded by its last successful execution. This field is never copied with an
+   action (duplicated chains and imported sessions have none), and actions saved
+   by earlier versions simply have none. Deleting a session does not change the
+   provenance record of the workspace.
 
 .. warning::
 

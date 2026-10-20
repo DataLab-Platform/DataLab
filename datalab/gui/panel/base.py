@@ -16,7 +16,7 @@ import os.path as osp
 import re
 import warnings
 from collections.abc import Sequence
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Generator, Generic, Literal, Type
 
@@ -102,6 +102,7 @@ from datalab.objectmodel import (
     get_short_uuid,
     get_title_reference,
     get_uuid,
+    get_uuid_display_id,
     remap_title_references,
     set_number,
     set_uuid,
@@ -114,11 +115,10 @@ from datalab.utils.qthelpers import (
     qt_try_loadsave_file,
     save_restore_stds,
 )
+from datalab.widgets.provenance import ProvenanceWidget
 from datalab.widgets.textimport import TextImportWizard
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
-
     from plotpy.items import CurveItem, LabelItem, MaskedXYImageItem
     from sigima.io import ImageExportParam
     from sigima.io.image import ImageIORegistry
@@ -130,6 +130,7 @@ if TYPE_CHECKING:
     from datalab.gui.processor.image import ImageProcessor
     from datalab.gui.processor.signal import SignalProcessor
     from datalab.h5.native import NativeH5Reader, NativeH5Writer
+    from datalab.processingcall import ProcessingCall
 
 
 # Metadata keys that should not be pasted when copying metadata between objects
@@ -230,6 +231,7 @@ class ObjectProp(QW.QWidget):
         # Object processing tab
         self.processing_param_editor: gdq.DataSetEditGroupBox | None = None
         self.current_processing_obj: SignalObj | ImageObj | None = None
+        self.current_processing_call: ProcessingCall | None = None
         self.processing_scroll: QW.QScrollArea | None = None
         # Object analysis tab (editable 1-to-0 analysis parameters)
         self.analysis_param_editor: gdq.DataSetEditGroupBox | None = None
@@ -253,6 +255,12 @@ class ObjectProp(QW.QWidget):
         self.processing_history = QW.QTextEdit()
         self.processing_history.setReadOnly(True)
         self.processing_history.setFont(font)
+        # The Provenance tab shows the provenance recorded in the workspace ledger,
+        # or the processing metadata of objects without recorded production.
+        self.provenance_widget = ProvenanceWidget(panel.mainwindow)
+        self.history_stack = QW.QStackedWidget()
+        self.history_stack.addWidget(self.processing_history)
+        self.history_stack.addWidget(self.provenance_widget)
 
         self.analysis_parameters = QW.QTextEdit()
         self.analysis_parameters.setReadOnly(True)
@@ -264,9 +272,13 @@ class ObjectProp(QW.QWidget):
         self.fresh_analysis_obj_uuid: str | None = None
         # Track when object was just processed (1-to-1)
         self.fresh_processing_obj_uuid: str | None = None
+        # UUID of the object shown (see update_properties_from)
+        self.__shown_uuid: str | None = None
+        #: Tab kept current when another object is shown (see ``keeping_tab``)
+        self.__kept_tab: str | None = None
 
         self.tabwidget.addTab(
-            self.processing_history, get_icon("history.svg"), _("History")
+            self.history_stack, get_icon("history.svg"), _("Provenance")
         )
         self.tabwidget.addTab(
             self.analysis_parameters, get_icon("analysis.svg"), _("Analysis parameters")
@@ -289,11 +301,17 @@ class ObjectProp(QW.QWidget):
 
     def _update_tab_visibility(self) -> None:
         """Update visibility of tabs based on their content."""
-        for textedit in (self.processing_history, self.analysis_parameters):
-            tab_index = self.tabwidget.indexOf(textedit)
-            if tab_index >= 0:
-                has_content = bool(textedit.toPlainText().strip())
-                self.tabwidget.setTabVisible(tab_index, has_content)
+        index = self.tabwidget.indexOf(self.history_stack)
+        if index >= 0:
+            if self.history_stack.currentWidget() is self.provenance_widget:
+                has_content = self.provenance_widget.has_content()
+            else:
+                has_content = bool(self.processing_history.toPlainText().strip())
+            self.tabwidget.setTabVisible(index, has_content)
+        index = self.tabwidget.indexOf(self.analysis_parameters)
+        if index >= 0:
+            has_content = bool(self.analysis_parameters.toPlainText().strip())
+            self.tabwidget.setTabVisible(index, has_content)
 
     def display_analysis_parameters(self, obj: SignalObj | ImageObj) -> bool:
         """Set analysis parameter label.
@@ -339,7 +357,7 @@ class ObjectProp(QW.QWidget):
 
         # Walk backwards through processing chain, collecting items
         while current_obj is not None and len(history_items) < max_depth:
-            proc_params = extract_processing_parameters(current_obj)
+            proc_params = extract_processing_parameters(current_obj, parse_param=False)
 
             if proc_params is None:
                 # Check for creation parameters
@@ -415,17 +433,38 @@ class ObjectProp(QW.QWidget):
         return "\n".join(history_lines)
 
     def display_processing_history(self, obj: SignalObj | ImageObj) -> bool:
-        """Display processing history.
+        """Display the provenance of an object in the Provenance tab.
+
+        When the workspace ledger records a production, an old record or an
+        analysis of the object, the provenance view is shown (see
+        :class:`datalab.widgets.provenance.ProvenanceWidget`); otherwise, the
+        history rebuilt from the processing metadata of the object is shown.
 
         Args:
             obj: Signal or Image object
 
         Returns:
-            True if processing history was found and displayed, False otherwise.
+            True if a history was found and displayed, False otherwise.
         """
         history_text = self._build_processing_history(obj)
         self.processing_history.setText(history_text)
+        if self.provenance_widget.set_object(obj, history_text):
+            self.history_stack.setCurrentWidget(self.provenance_widget)
+            self._update_tab_visibility()
+            return True
+        self.history_stack.setCurrentWidget(self.processing_history)
+        self._update_tab_visibility()
         return bool(history_text)
+
+    def refresh_history(self) -> None:
+        """Show again the History of the current object (ledger read again).
+
+        Called when activities were recorded or the workspace changed: results
+        of data checks and verifications shown before are dropped.
+        """
+        obj = self.panel.objview.get_current_object()
+        if obj is not None:
+            self.display_processing_history(obj)
 
     def __update_properties_dataset(self, obj: SignalObj | ImageObj) -> None:
         """Update properties dataset from signal/image dataset
@@ -451,6 +490,17 @@ class ObjectProp(QW.QWidget):
             force_tab: Force a specific tab to be current
         """
         self.properties.setDisabled(obj is None)
+        # The tab shown stays current when the same object is shown again (e.g.
+        # reselected from the History panel); another object shows Properties.
+        uuid = None if obj is None else get_uuid(obj)
+        previous_tab = (
+            self.__current_tab_kind()
+            if uuid is not None and uuid == self.__shown_uuid
+            else None
+        )
+        if uuid is not None and self.__kept_tab is not None:
+            previous_tab = self.__kept_tab
+        self.__shown_uuid = uuid
         if obj is None:
             obj = self.objclass()
 
@@ -490,6 +540,7 @@ class ObjectProp(QW.QWidget):
         self.creation_scroll = None
         self.processing_param_editor = None
         self.current_processing_obj = None
+        self.current_processing_call = None
         self.processing_scroll = None
         self.analysis_param_editor = None
         self.current_analysis_obj = None
@@ -511,20 +562,70 @@ class ObjectProp(QW.QWidget):
 
         # Determine which tab to show based on force_tab parameter:
         # - If force_tab="creation" and Creation tab exists, show it
-        # - If force_tab="processing" and Processing tab exists, show it
+        # - If force_tab="processing" and Processing tab has a parameter editor,
+        #   show it (a processing without editable parameters keeps Properties)
         # - If force_tab="analysis" and Analysis tab has content, show it
         # - Otherwise, always show Properties tab (default behavior)
         if force_tab == "creation" and has_creation_tab:
             self.tabwidget.setCurrentWidget(self.creation_scroll)
-        elif force_tab == "processing" and has_processing_tab:
+        elif (
+            force_tab == "processing"
+            and has_processing_tab
+            and self.processing_param_editor is not None
+        ):
             self.tabwidget.setCurrentWidget(self.processing_scroll)
         elif force_tab == "analysis" and has_analysis_tab:
             self.tabwidget.setCurrentWidget(self.analysis_scroll)
         elif force_tab == "analysis" and has_analysis_parameters:
             self.tabwidget.setCurrentWidget(self.analysis_parameters)
+        elif previous_tab is not None and self.__restore_tab(previous_tab):
+            pass
         else:
             # Default: always show Properties tab when switching objects
             self.tabwidget.setCurrentWidget(self.properties)
+
+    @contextmanager
+    def keeping_tab(self, kind: str) -> Generator[None, None, None]:
+        """Keep the tab of *kind* current when another object is shown meanwhile.
+
+        For navigation from a tab to another object (e.g. from the provenance of
+        a result to one of its inputs), which otherwise shows Properties.
+        """
+        previous, self.__kept_tab = self.__kept_tab, kind
+        try:
+            yield
+        finally:
+            self.__kept_tab = previous
+
+    def __current_tab_kind(self) -> str | None:
+        """Return the kind of the current tab (dynamic tabs are rebuilt)."""
+        widget = self.tabwidget.currentWidget()
+        kinds = {
+            "creation": self.creation_scroll,
+            "processing": self.processing_scroll,
+            "analysis": self.analysis_scroll,
+            "provenance": self.history_stack,
+            "analysis_parameters": self.analysis_parameters,
+        }
+        for kind, tab in kinds.items():
+            if tab is not None and widget is tab:
+                return kind
+        return None
+
+    def __restore_tab(self, kind: str) -> bool:
+        """Make the tab of *kind* current again if it is shown; return success."""
+        widget = {
+            "creation": self.creation_scroll,
+            "processing": self.processing_scroll,
+            "analysis": self.analysis_scroll,
+            "provenance": self.history_stack,
+            "analysis_parameters": self.analysis_parameters,
+        }[kind]
+        index = -1 if widget is None else self.tabwidget.indexOf(widget)
+        if index < 0 or not self.tabwidget.isTabVisible(index):
+            return False
+        self.tabwidget.setCurrentWidget(widget)
+        return True
 
     def mark_as_newly_created(self, obj: SignalObj | ImageObj) -> None:
         """Mark object to show Creation tab on next selection.
@@ -845,7 +946,14 @@ class ObjectProp(QW.QWidget):
         reset_params: bool = True,
         set_current: bool = False,
     ) -> bool:
-        """Setup the Processing tab with parameter editor for re-processing.
+        """Setup the Processing tab to show and apply again a processing.
+
+        The call that produced the object is restored (see
+        :func:`datalab.processingcall.resolve_processing_call`): 1-to-1, 2-to-1
+        and n-to-1 processing, with every input. Parameters are edited in a
+        parameter editor; a processing without editable parameters gets an
+        explicit *Reapply* button. When the processing cannot be applied again
+        (deleted input, unavailable operation...), the reason is shown.
 
         Args:
             obj: Signal or Image object
@@ -856,63 +964,46 @@ class ObjectProp(QW.QWidget):
         Returns:
             True if Processing tab was set up, False otherwise
         """
+        # pylint: disable=import-outside-toplevel
+        from datalab.processingcall import resolve_processing_call
+        from datalab.widgets.processingparameters import ProcessingParametersEditor
+
         self.__auto_recompute_timer.stop()
         if self.processing_param_editor is not None:
             self.processing_param_editor.on_change = None
 
-        # Extract processing parameters
-        proc_params = extract_processing_parameters(obj)
-        if proc_params is None:
-            return False
-
-        # Check if the pattern type is 1-to-1 (only interactive pattern)
-        if proc_params.pattern != "1-to-1":
+        call = resolve_processing_call(self.panel.mainwindow, obj)
+        if call is None:
             return False
 
         # Store reference to be able to retrieve it later
         self.current_processing_obj = obj
+        self.current_processing_call = call
 
-        # Check if object has processing parameter
-        param = proc_params.param
-        if param is None:
-            return False
-
-        # Skip interactive processing for list of parameters
-        # (e.g., ROI extraction, erase operations)
-        if isinstance(param, list):
-            return False
-
-        # Source-aware parameters may refresh transient editor context without
-        # replacing their persisted values. Legacy parameters keep the previous
-        # reset-only initialization behavior.
-        source_obj = None
-        if proc_params.source_uuid is not None:
-            source_obj = self.panel.mainwindow.find_object_by_uuid(
-                proc_params.source_uuid
+        editor = None
+        param = call.param
+        if call.param_editable:
+            # Source-aware parameters may refresh transient editor context
+            # without replacing their persisted values. Legacy parameters keep
+            # the previous reset-only initialization behavior.
+            source_obj = call.inputs[0].obj if call.inputs else None
+            if hasattr(param, "update_editor_context"):
+                param.update_editor_context(source_obj)
+            elif (
+                reset_params
+                and source_obj is not None
+                and hasattr(param, "update_from_obj")
+            ):
+                param.update_from_obj(source_obj)
+            editor = ProcessingParametersEditor(
+                _("Processing Parameters"), param.__class__, wordwrap=True
             )
-        if hasattr(param, "update_editor_context"):
-            param.update_editor_context(source_obj)
-        elif (
-            reset_params
-            and source_obj is not None
-            and hasattr(param, "update_from_obj")
-        ):
-            param.update_from_obj(source_obj)
-
-        # Create parameter editor widget
-        from datalab.widgets.processingparameters import ProcessingParametersEditor
-
-        editor = ProcessingParametersEditor(
-            _("Processing Parameters"), param.__class__, wordwrap=True
-        )
-        update_dataset(editor.dataset, param)
-        editor.get()
-
-        # Connect Apply button to reprocessing handler
-        editor.SIG_APPLY_BUTTON_CLICKED.connect(self.apply_processing_parameters)
-        editor.set_apply_button_state(False)
-
-        editor.on_change = lambda: self.__processing_parameters_changed(editor)
+            update_dataset(editor.dataset, param)
+            editor.get()
+            # Connect Apply button to reprocessing handler
+            editor.SIG_APPLY_BUTTON_CLICKED.connect(self.apply_processing_parameters)
+            editor.set_apply_button_state(False)
+            editor.on_change = lambda: self.__processing_parameters_changed(editor)
 
         # Store reference to be able to retrieve it later
         self.processing_param_editor = editor
@@ -941,32 +1032,60 @@ class ObjectProp(QW.QWidget):
             QW.QSizePolicy.Expanding, QW.QSizePolicy.Preferred
         )
 
-        # Add the auto-recompute option below Apply, aligned with input fields.
-        auto_cb = QW.QCheckBox(_("Auto-recompute on edit"), editor)
-        auto_cb.setObjectName("auto_recompute_on_edit")
-        auto_cb.setIcon(get_icon("replay.svg"))
-        auto_cb.setToolTip(
-            _("Automatically re-run processing when parameters are modified")
-        )
-        auto_cb.setChecked(self.__auto_recompute_enabled)
-        auto_cb.toggled.connect(self.__set_auto_recompute_enabled)
-        form_layout = editor.edit.layout
-        apply_index = form_layout.indexOf(editor.apply_button)
-        apply_row, _column, _row_span, _column_span = form_layout.getItemPosition(
-            apply_index
-        )
-        input_column = 1
-        input_column_span = max(1, form_layout.columnCount() - input_column)
-        form_layout.addWidget(
-            auto_cb,
-            apply_row + 1,
-            input_column,
-            1,
-            input_column_span,
-            QC.Qt.AlignLeft,
-        )
+        container = QW.QWidget()
+        layout = QW.QVBoxLayout(container)
+        layout.addWidget(self.__processing_call_summary(call))
+        if editor is not None:
+            # Add the auto-recompute option below Apply, aligned with inputs.
+            auto_cb = QW.QCheckBox(_("Auto-recompute on edit"), editor)
+            auto_cb.setObjectName("auto_recompute_on_edit")
+            auto_cb.setIcon(get_icon("replay.svg"))
+            auto_cb.setToolTip(
+                _("Automatically re-run processing when parameters are modified")
+            )
+            auto_cb.setChecked(self.__auto_recompute_enabled)
+            auto_cb.toggled.connect(self.__set_auto_recompute_enabled)
+            form_layout = editor.edit.layout
+            apply_index = form_layout.indexOf(editor.apply_button)
+            apply_row, _column, _row_span, _column_span = form_layout.getItemPosition(
+                apply_index
+            )
+            input_column = 1
+            input_column_span = max(1, form_layout.columnCount() - input_column)
+            form_layout.addWidget(
+                auto_cb,
+                apply_row + 1,
+                input_column,
+                1,
+                input_column_span,
+                QC.Qt.AlignLeft,
+            )
+            layout.addWidget(editor)
+        else:
+            if param is None:
+                note = _("This processing has no parameters.")
+            else:
+                note = _("The parameters of this processing cannot be edited here.")
+            note_label = QW.QLabel(note)
+            note_label.setWordWrap(True)
+            layout.addWidget(note_label)
+            button = QW.QPushButton(get_icon("replay.svg"), _("Reapply"))
+            button.setObjectName("reapply_processing")
+            button.setToolTip(
+                _("Apply this processing again to the current input objects")
+            )
+            button.setEnabled(call.can_reapply)
+            button.clicked.connect(lambda _checked=False: self.reapply_processing(obj))
+            layout.addWidget(button, 0, QC.Qt.AlignLeft)
+        if call.reason is not None:
+            reason_label = QW.QLabel("⚠️ " + call.reason)
+            reason_label.setObjectName("processing_unavailable_reason")
+            reason_label.setTextFormat(QC.Qt.PlainText)
+            reason_label.setWordWrap(True)
+            layout.addWidget(reason_label)
+        layout.addStretch()
 
-        self.processing_scroll.setWidget(editor)
+        self.processing_scroll.setWidget(container)
         self.tabwidget.insertTab(
             insert_index,
             self.processing_scroll,
@@ -979,6 +1098,32 @@ class ObjectProp(QW.QWidget):
             self.tabwidget.setCurrentWidget(self.processing_scroll)
 
         return True
+
+    def __processing_call_summary(self, call: ProcessingCall) -> QW.QLabel:
+        """Return a label describing a processing call and its ordered inputs."""
+        lines = [call.title]
+        for item in call.inputs:
+            if item.obj is None:
+                name = _("(deleted object)")
+            else:
+                title = self.panel.mainwindow.render_object_title(item.obj.title)
+                name = f"{get_uuid_display_id(item.obj)}: {title}"
+            lines.append(f"  • {item.role}: {name}")
+        label = QW.QLabel("\n".join(lines))
+        label.setObjectName("processing_call_summary")
+        label.setTextFormat(QC.Qt.PlainText)
+        label.setWordWrap(True)
+        return label
+
+    def reapply_processing(self, obj: SignalObj | ImageObj | None = None) -> None:
+        """Apply again the processing of an object without editable parameters.
+
+        Args:
+            obj: Processed object (default: the object of the Processing tab).
+        """
+        obj = obj or self.current_processing_obj
+        if obj is not None:
+            self.apply_processing_parameters(obj, param=None)
 
     def setup_analysis_tab(
         self, obj: SignalObj | ImageObj, set_current: bool = False
@@ -1105,13 +1250,15 @@ class ObjectProp(QW.QWidget):
 
         # Re-run the analysis in place (no history entry: runs under replaying)
         processor = self.__get_processor_associated_to(obj)
+        provenance = self.panel.mainwindow.provenance
         try:
-            success = processor.recompute_1_to_0(
-                func_name,
-                obj,
-                recompute_param,
-                plugin_origin=proc_params.plugin_origin,
-            )
+            with provenance.collecting() as activity_ids:
+                success = processor.recompute_1_to_0(
+                    func_name,
+                    obj,
+                    recompute_param,
+                    plugin_origin=proc_params.plugin_origin,
+                )
         except Exception as exc:  # pylint: disable=broad-exception-caught
             if execenv.unattended:
                 raise exc
@@ -1128,15 +1275,19 @@ class ObjectProp(QW.QWidget):
                 )
             return False
 
-        # Propagate the edited param to the History panel: mutate the matching
-        # analysis action (snapshot originals first) and refresh its tree
-        # display. Analysis is a leaf operation (1-to-0), so no cascade is
-        # needed.
+        # In History edit mode only, propagate the edited param to the History
+        # panel: mutate the matching analysis action (snapshot originals first)
+        # and refresh its tree display. Outside edit mode, the action keeps its
+        # recipe and its links; the new execution is recorded in provenance
+        # only. Analysis is a leaf operation (1-to-0), so no cascade is needed.
         hpanel = self.panel.mainwindow.historypanel
-        action = hpanel.find_analysis_action(get_uuid(obj), func_name)
+        action = None
+        if hpanel.is_edit_mode():
+            action = hpanel.find_analysis_action(get_uuid(obj), func_name)
         if action is not None:
             action.snapshot_kwargs()
             action.kwargs["param"] = copy.deepcopy(recompute_param)
+            self.__relink_analysis(action, get_uuid(obj), activity_ids)
             hpanel.refresh_action(action)
 
         # Refresh the object display after re-analysis
@@ -1155,6 +1306,40 @@ class ObjectProp(QW.QWidget):
             ),
         )
         return True
+
+    def __relink_analysis(
+        self, action: Any, obj_uuid: str, activity_ids: list[str]
+    ) -> None:
+        """Link an analysis action to the analysis of *obj_uuid* just recorded.
+
+        The activities of this object in the action links (its last execution)
+        are replaced by the new ones; those of the other analysed objects stay.
+        """
+        if not activity_ids:
+            return
+        ledger = self.panel.mainwindow.provenance.ledger
+
+        def concerns(activity_id: str) -> bool:
+            try:
+                activity = ledger.activity(activity_id)
+            except KeyError:
+                return True  # unknown here: superseded by the new execution
+            states = ledger.states
+            return any(
+                states[item["binding"]["state_id"]]["object_uuid"] == obj_uuid
+                for item in activity["call"]["inputs"]
+                if "state_id" in item["binding"]
+            )
+
+        links = list(action.provenance_activity_ids)
+        flags = [concerns(activity_id) for activity_id in links]
+        kept = [value for value, flag in zip(links, flags) if not flag]
+        # The new activities take the place of the first superseded one
+        position = flags.index(True) if True in flags else len(links)
+        position = sum(1 for flag in flags[:position] if not flag)
+        action.provenance_activity_ids = (
+            kept[:position] + list(activity_ids) + kept[position:]
+        )
 
     def __get_processor_associated_to(
         self, obj: SignalObj | ImageObj
@@ -1223,6 +1408,9 @@ class ObjectProp(QW.QWidget):
         Returns:
             ProcessingReport with success status, object UUID, and optional message.
         """
+        # pylint: disable=import-outside-toplevel
+        from datalab.processingcall import grouped_recipe_index, resolve_processing_call
+
         if execenv.unattended:
             interactive = False
 
@@ -1234,35 +1422,17 @@ class ObjectProp(QW.QWidget):
                 success=False, message=_("No processing object available.")
             )
 
-        proc_params = extract_processing_parameters(obj)
-        if proc_params is None or proc_params.pattern != "1-to-1":
+        proc_params = resolve_processing_call(self.panel.mainwindow, obj)
+        if proc_params is None:
             return ProcessingReport(
                 success=False,
                 obj_uuid=get_uuid(obj),
                 message=_("Processing metadata is incomplete."),
             )
 
-        # Find source object
-        source_obj = self.panel.mainwindow.find_object_by_uuid(proc_params.source_uuid)
-        if source_obj is None:
-            report = ProcessingReport(success=False, obj_uuid=get_uuid(obj))
-            report.message = _("Source object no longer exists.")
-            if interactive:
-                QW.QMessageBox.critical(
-                    self,
-                    _("Error"),
-                    report.message
-                    + "\n\n"
-                    + _(
-                        "The object that was used to create this processed object "
-                        "has been deleted and cannot be used for reprocessing."
-                    ),
-                )
-            return report
-
         # Resolve the parameters to apply. An explicit ``param`` argument takes
         # precedence and makes this method independent of the editor state;
-        # otherwise fall back to the editor (interactive Apply) or the stored
+        # otherwise fall back to the editor (interactive Apply) or the restored
         # processing parameters.
         if param is None:
             if editor is not None and obj is self.current_processing_obj:
@@ -1277,6 +1447,7 @@ class ObjectProp(QW.QWidget):
             obj=obj,
             param=param,
             interactive=interactive,
+            call=proc_params,
         )
         if report.success:
             if is_edit_mode:
@@ -1284,13 +1455,32 @@ class ObjectProp(QW.QWidget):
                 # Mutate the matching existing action (snapshot originals
                 # first), refresh its tree display, then cascade recompute
                 # to downstream actions so the chain stays consistent with
-                # the new parameters.
-                action = hpanel.find_action_for_output(
-                    get_uuid(obj), proc_params.func_name
-                )
+                # the new parameters. The action is the one whose last
+                # execution recorded the restored activity; the output-based
+                # lookup is kept for actions recorded without this link.
+                action = None
+                if proc_params.activity_id is not None:
+                    action = hpanel.find_action_for_activity(proc_params.activity_id)
+                if action is None:
+                    action = hpanel.find_action_for_output(
+                        get_uuid(obj), proc_params.func_name
+                    )
                 if action is not None:
                     action.snapshot_kwargs()
-                    action.kwargs["param"] = copy.deepcopy(param)
+                    if action.pattern in ("1_to_n", "multiple_1_to_1"):
+                        # A grouped command replays its list of parameters: the
+                        # element of the edited output is updated, the others
+                        # are kept (for every object processed by the command).
+                        index = grouped_recipe_index(
+                            self.panel.mainwindow, action, proc_params, get_uuid(obj)
+                        )
+                        params = list(action.kwargs.get("params") or [])
+                        if index is not None and index < len(params):
+                            params[index] = copy.deepcopy(param)
+                            action.kwargs["params"] = params
+                    else:
+                        action.kwargs["param"] = copy.deepcopy(param)
+                    self.__relink_action(action, proc_params.activity_id, obj)
                     hpanel.refresh_action(action)
                     hpanel.recompute_cascade(action)
 
@@ -1308,6 +1498,47 @@ class ObjectProp(QW.QWidget):
             QC.QTimer.singleShot(0, refresh_current_processing_tab)
 
         return report
+
+    def __relink_action(
+        self, action: Any, previous: str | None, obj: SignalObj | ImageObj
+    ) -> None:
+        """Link an edited History action to the execution that realized it.
+
+        The re-application from Processing executed the edited action for this
+        output: its new activity replaces, in the action links, the activity it
+        supersedes (the other outputs of the action keep theirs).
+        """
+        latest = self.panel.mainwindow.provenance.ledger.latest_state(get_uuid(obj))
+        current = None if latest is None else latest["produced_by"]
+        if current is None or current == previous:
+            return
+        links = list(action.provenance_activity_ids)
+        if previous in links:
+            links[links.index(previous)] = current
+        elif len(action.output_uuids) <= 1:
+            links = [current]
+        else:
+            # The superseded link is the one that produced this output (its
+            # activity may have been replaced since outside the edit mode)
+            index = self.__link_of_output(links, get_uuid(obj))
+            if index is None:
+                return
+            links[index] = current
+        action.provenance_activity_ids = links
+
+    def __link_of_output(self, links: list[str], object_uuid: str) -> int | None:
+        """Return the position of the link whose activity produced an object."""
+        ledger = self.panel.mainwindow.provenance.ledger
+        for index, activity_id in enumerate(links):
+            try:
+                outputs = ledger.activity(activity_id)["outputs"]
+            except KeyError:
+                continue
+            for output in outputs:
+                state = ledger.states.get(output.get("state_id"))
+                if state is not None and state["object_uuid"] == object_uuid:
+                    return index
+        return None
 
     def apply_recomputed_object_in_place(
         self,
@@ -2249,7 +2480,6 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 group_id,
                 set_current=set_current,
             )
-            self.objview.update_tree()
 
             # Emit signal to ensure that the data panel is shown in the main window and
             # that the plot is updated (trigger a refresh of the plot)
@@ -3556,8 +3786,16 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             with qt_try_loadsave_file(self.parentWidget(), filename, "load"):
                 Conf.base_dir.set(filename)
                 obj = self.objview.get_sel_objects(include_groups=True)[0]
-                obj.metadata = read_metadata(filename)
+                metadata = read_metadata(filename)
+                # The object keeps its identity and number (provenance and titles
+                # refer to them), not those of the object the file was exported from
+                for key in ("__uuid", "__number"):
+                    metadata.pop(key, None)
+                    if key in obj.metadata:
+                        metadata[key] = obj.metadata[key]
+                obj.metadata = metadata
             self.refresh_plot("selected", True, False)
+            self.SIG_OBJECT_MODIFIED.emit()
 
     def export_metadata_from_file(self, filename: str | None = None) -> None:
         """Export metadata to file (JSON).
@@ -3668,6 +3906,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                     obj.roi = obj.roi.combine_with(roi)
             self.selection_changed(update_items=True)
             self.refresh_plot("selected", True, False)
+            self.SIG_OBJECT_MODIFIED.emit()
 
     def export_roi_to_file(self, filename: str | None = None) -> None:
         """Export regions of interest to file (JSON).
@@ -3759,7 +3998,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         This method handles both single objects and groups. For each object, it
         recomputes, on demand:
 
-        - 1-to-1 processing operations (in-place data transformations), and
+        - the processing that produced it (1-to-1, 2-to-1 or n-to-1, as restored
+          by :func:`datalab.processingcall.resolve_processing_call`: from the
+          provenance ledger, else from the processing metadata), in place, and
         - 1-to-0 analysis operations (statistics, measurements, detections, etc.).
 
         Analysis results are *not* recomputed automatically when data, ROIs or
@@ -3771,13 +4012,15 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         if not objects:
             return
 
-        # Filter objects that have recomputable 1-to-1 processing parameters
-        # and/or 1-to-0 analysis parameters (an object may have both)
+        # pylint: disable-next=import-outside-toplevel
+        from datalab.processingcall import resolve_processing_call
+
+        # Filter objects that have a recorded processing and/or 1-to-0 analysis
+        # parameters (an object may have both)
         recomputable_objects: list[SignalObj | ImageObj] = []
         reanalyzable_objects: list[SignalObj | ImageObj] = []
         for obj in objects:
-            proc_params = extract_processing_parameters(obj)
-            if proc_params is not None and proc_params.pattern == "1-to-1":
+            if resolve_processing_call(self.mainwindow, obj) is not None:
                 recomputable_objects.append(obj)
             analysis_params = extract_analysis_parameters(obj)
             if analysis_params is not None and analysis_params.pattern == "1-to-0":
@@ -3921,6 +4164,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         This method retrieves the source object UUIDs from the selected object's
         processing parameters and selects them in the object view.
         """
+        # pylint: disable-next=import-outside-toplevel
+        from datalab.processingcall import resolve_processing_call
+
         # Get the selected object (should be exactly one)
         objects = self.objview.get_sel_objects(include_groups=False)
         if len(objects) != 1:
@@ -3928,9 +4174,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         obj = objects[0]
 
-        # Extract processing parameters
-        proc_params = extract_processing_parameters(obj)
-        if proc_params is None:
+        # Restore the processing call (provenance ledger, else metadata)
+        call = resolve_processing_call(self.mainwindow, obj)
+        if call is None:
             if not execenv.unattended:
                 QW.QMessageBox.information(
                     self,
@@ -3939,12 +4185,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 )
             return
 
-        # Get source UUIDs
-        source_uuids = []
-        if proc_params.source_uuid:
-            source_uuids.append(proc_params.source_uuid)
-        if proc_params.source_uuids:
-            source_uuids.extend(proc_params.source_uuids)
+        # Source UUIDs, without repetitions (an object may be several inputs)
+        source_uuids = list(dict.fromkeys(item.object_uuid for item in call.inputs))
 
         if not source_uuids:
             if not execenv.unattended:
@@ -3955,12 +4197,10 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 )
             return
 
-        # Check if source objects still exist (search across all panels)
-        existing_objs = []
-        for uuid in source_uuids:
-            obj = self.mainwindow.find_object_by_uuid(uuid)
-            if obj is not None:
-                existing_objs.append(obj)
+        # Objects still holding the sources (never an object appended later with
+        # the identifier of a deleted source)
+        present = {item.object_uuid: item.obj for item in call.inputs if item.obj}
+        existing_objs = [present[uuid] for uuid in source_uuids if uuid in present]
 
         if not existing_objs:
             if not execenv.unattended:
@@ -3973,7 +4213,8 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
 
         # Determine which panel contains the source objects
         # Source objects are always in the same panel (either all signals or all images)
-        if all(uuid in self.objmodel.get_object_ids() for uuid in source_uuids):
+        object_ids = self.objmodel.get_object_ids()
+        if all(get_uuid(source) in object_ids for source in existing_objs):
             source_panel = self
         elif isinstance(existing_objs[0], SignalObj):
             source_panel = self.mainwindow.signalpanel

@@ -37,6 +37,7 @@ from __future__ import annotations
 
 import os
 from collections.abc import Iterator, Sequence
+from contextlib import contextmanager
 from typing import TYPE_CHECKING
 
 from guidata.configtools import get_icon
@@ -106,12 +107,45 @@ class SimpleObjectTree(QW.QTreeWidget):
         self.setAlternatingRowColors(True)
         self.itemDoubleClicked.connect(self.item_double_clicked)
         self.header().setSectionResizeMode(QW.QHeaderView.Interactive)
-        self.itemChanged.connect(lambda item: self.resizeColumnToContents(0))
+        self.itemChanged.connect(lambda item: self.resize_title_column())
         self.title_delegate = ClickableTitleDelegate(
             self, self.get_title_reference_display
         )
         self.setItemDelegateForColumn(0, self.title_delegate)
         self.viewport().setMouseTracking(True)
+        #: Title reference indexes of the models (by model id), while a batch of
+        #: items is updated (see :meth:`_title_reference_indexes`); None otherwise.
+        self.__title_reference_indexes: dict[int, dict] | None = None
+
+    @contextmanager
+    def _title_reference_indexes(self) -> Iterator[None]:
+        """Resolve title references from indexes built once while updating many
+        items.
+
+        Each item tooltip resolves the references of its title: without indexes,
+        each resolution scans the whole model. The indexes are built on first
+        use, for the objects present when the batch starts.
+        """
+        if self.__title_reference_indexes is not None:
+            yield
+            return
+        self.__title_reference_indexes = {}
+        try:
+            yield
+        finally:
+            self.__title_reference_indexes = None
+
+    def _find_title_reference(
+        self, model: ObjectModel, reference: str
+    ) -> list[SignalObj | ImageObj | ObjectGroup]:
+        """Return the items of ``model`` matching ``reference``."""
+        if self.__title_reference_indexes is None:
+            return model.find_by_title_reference(reference)
+        index = self.__title_reference_indexes.get(id(model))
+        if index is None:
+            index = model.get_title_reference_index()
+            self.__title_reference_indexes[id(model)] = index
+        return index.get(reference, [])
 
     def __str__(self) -> str:
         """Return string representation"""
@@ -225,7 +259,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         an empty ``panel_str``. Subclasses with access to several panels
         should override this method.
         """
-        matches = self.objmodel.find_by_title_reference(reference)
+        matches = self._find_title_reference(self.objmodel, reference)
         return ("", matches[0]) if len(matches) == 1 else None
 
     def get_title_reference_display(self, reference: str) -> str | None:
@@ -341,8 +375,10 @@ class SimpleObjectTree(QW.QTreeWidget):
         uuid = self.get_current_item_id()
         with block_signals(widget=self):
             self.clear()
-        for group in self.objmodel.get_groups():
-            self.add_group_item(group)
+        with self._title_reference_indexes():
+            for group in self.objmodel.get_groups():
+                self.add_group_item(group, resize=False)
+        self.resize_title_column()
         if uuid is not None:
             self.set_current_item_id(uuid)
 
@@ -353,41 +389,95 @@ class SimpleObjectTree(QW.QTreeWidget):
         consistency between the tree and the model. This can happen in rare cases when
         objects are added to the model but the tree was not properly updated.
         """
+        items = {}
+        for item in self.iter_items():
+            items.setdefault(item.data(0, QC.Qt.UserRole), item)
+        # Items are updated without fitting the column once per changed item
+        with self._title_reference_indexes(), block_signals(widget=self):
+            complete = self.__update_items(items)
+        if complete:
+            self.resize_title_column()
+        else:
+            # Group or object item not found: repopulate tree to fix inconsistency
+            self.populate_tree()
+
+    def __update_items(self, items: dict[str, QW.QTreeWidgetItem]) -> bool:
+        """Update the items of all groups and objects from the model.
+
+        Returns:
+            False if an item is missing from the tree (nothing more is updated).
+        """
         for group in self.objmodel.get_groups():
-            group_item = self.get_item_from_id(get_uuid(group))
+            group_item = items.get(get_uuid(group))
             if group_item is None:
-                # Group item not found, repopulate tree to fix inconsistency
-                self.populate_tree()
-                return
+                return False
             self.__update_item(group_item, group)
             for obj in group:
-                obj_item = self.get_item_from_id(get_uuid(obj))
+                obj_item = items.get(get_uuid(obj))
                 if obj_item is None:
-                    # Object item not found, repopulate tree to fix inconsistency
-                    self.populate_tree()
-                    return
+                    return False
                 self.__update_item(obj_item, obj)
+        return True
+
+    def resize_title_column(
+        self, items: Sequence[QW.QTreeWidgetItem] | None = None
+    ) -> None:
+        """Fit the title column to the titles.
+
+        Args:
+            items: Items just added to a tree whose column was already fitted to
+             the other items: the column is only widened if one of them needs it,
+             without measuring every title again. All items when None.
+        """
+        with self._title_reference_indexes():
+            if items is None:
+                self.resizeColumnToContents(0)
+                return
+            width = max((self.__title_width(item) for item in items), default=0)
+        if width > self.columnWidth(0):
+            self.setColumnWidth(0, width)
+
+    def __title_width(self, item: QW.QTreeWidgetItem) -> int:
+        """Return the width needed by *item* in the title column (indentation
+        included, as computed by :meth:`resizeColumnToContents`)."""
+        depth = 0
+        parent = item.parent()
+        while parent is not None:
+            depth += 1
+            parent = parent.parent()
+        if self.rootIsDecorated():
+            depth += 1
+        hint = self.sizeHintForIndex(self.indexFromItem(item, 0))
+        return hint.width() + depth * self.indentation()
 
     def __add_to_group_item(
         self, obj: SignalObj | ImageObj, group_item: QW.QTreeWidgetItem
-    ) -> None:
-        """Add object to group item"""
+    ) -> QW.QTreeWidgetItem:
+        """Add object to group item and return its item"""
         item = QW.QTreeWidgetItem()
         icon = "signal.svg" if isinstance(obj, SignalObj) else "image.svg"
         item.setIcon(0, get_icon(icon))
         self.__update_item(item, obj)
         group_item.addChild(item)
+        return item
 
-    def add_group_item(self, group: ObjectGroup) -> None:
-        """Add group item"""
+    def add_group_item(self, group: ObjectGroup, resize: bool = True) -> None:
+        """Add group item
+
+        Args:
+            group: Group to add, with its objects
+            resize: If True, fit the title column to the new items
+        """
         group_item = QW.QTreeWidgetItem()
         group_item.setIcon(0, get_icon("group.svg"))
         self.__update_item(group_item, group)
         self.addTopLevelItem(group_item)
         group_item.setExpanded(True)
+        items = [group_item]
         for obj in group:
-            self.__add_to_group_item(obj, group_item)
-        self.resizeColumnToContents(0)
+            items.append(self.__add_to_group_item(obj, group_item))
+        if resize:
+            self.resize_title_column(items)
 
     def add_object_item(
         self, obj: SignalObj | ImageObj, group_id: str, set_current: bool = True
@@ -418,14 +508,15 @@ class SimpleObjectTree(QW.QTreeWidget):
         updates_enabled = self.updatesEnabled()
         self.setUpdatesEnabled(False)
         try:
-            for obj in objects:
-                self.__add_to_group_item(obj, group_item)
+            with self._title_reference_indexes():
+                items = [self.__add_to_group_item(obj, group_item) for obj in objects]
             if set_current:
                 self.set_current_item_id(get_uuid(objects[-1]))
         finally:
             self.setUpdatesEnabled(updates_enabled)
             self.blockSignals(signals_blocked)
-        self.resizeColumnToContents(0)
+        # The column fits the existing items: only the new ones are measured
+        self.resize_title_column(items)
 
     def update_item(self, uuid: str) -> None:
         """Update item"""
@@ -550,7 +641,12 @@ class ObjectView(SimpleObjectTree):
         mainwindow = getattr(panel, "mainwindow", None)
         if mainwindow is None:
             return super().resolve_title_reference(reference)
-        return mainwindow.resolve_title_reference(reference)
+        matches = [
+            (other.PANEL_STR_ID, obj)
+            for other in (mainwindow.signalpanel, mainwindow.imagepanel)
+            for obj in self._find_title_reference(other.objmodel, reference)
+        ]
+        return matches[0] if len(matches) == 1 else None
 
     def handle_title_reference_click(self, reference: str) -> None:
         """Select the referenced object, switching active panel if needed."""

@@ -242,6 +242,47 @@ class AbstractDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
+    def export_capsule(
+        self,
+        filename: str,
+        name: str | None = None,
+        description: str | None = None,
+        as_revision: bool = True,
+        workspace_ref: str | None = None,
+        workspace_filename: str | None = None,
+        attachments: list[str] | None = None,
+    ) -> str:
+        """Export the workspace as a capsule (workspace and its provenance).
+
+        Args:
+            filename: Capsule file name (``.dlcapsule``).
+            name: Capsule name.
+            description: Capsule description.
+            as_revision: When the workspace was opened from a capsule, name that
+             capsule as the parent revision. Defaults to True.
+            workspace_ref: Absolute IRI where the workspace will be published:
+             the capsule then references the workspace instead of including it.
+            workspace_filename: File name of the workspace published at
+             *workspace_ref* (default: last segment of the IRI, next to the
+             capsule).
+            attachments: Light files declared in the capsule (16 MiB at most
+             each), never opened or executed.
+
+        Returns:
+            Manifest fingerprint of the capsule.
+        """
+
+    @abc.abstractmethod
+    def open_capsule(self, filename: str, workspace: str | None = None) -> None:
+        """Open a capsule as the workspace, replacing the current one.
+
+        Args:
+            filename: Capsule file name (``.dlcapsule``).
+            workspace: Workspace file of a capsule that references its workspace
+             instead of including it.
+        """
+
+    @abc.abstractmethod
     def load_from_files(
         self, filenames: list[str], param: gds.DataSet | None = None
     ) -> None:
@@ -805,6 +846,55 @@ class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
             IOError: If file cannot be saved
         """
         self._datalab.save_h5_workspace(filename)
+
+    def export_capsule(
+        self,
+        filename: str,
+        name: str | None = None,
+        description: str | None = None,
+        as_revision: bool = True,
+        workspace_ref: str | None = None,
+        workspace_filename: str | None = None,
+        attachments: list[str] | None = None,
+    ) -> str:
+        """Export the workspace as a capsule (workspace and its provenance).
+
+        Args:
+            filename: Capsule file name (``.dlcapsule``).
+            name: Capsule name.
+            description: Capsule description.
+            as_revision: When the workspace was opened from a capsule, name that
+             capsule as the parent revision. Defaults to True.
+            workspace_ref: Absolute IRI where the workspace will be published:
+             the capsule then references the workspace instead of including it.
+            workspace_filename: File name of the workspace published at
+             *workspace_ref* (default: last segment of the IRI, next to the
+             capsule).
+            attachments: Light files declared in the capsule (16 MiB at most
+             each), never opened or executed.
+
+        Returns:
+            Manifest fingerprint of the capsule.
+        """
+        return self._datalab.export_capsule(
+            filename,
+            name,
+            description,
+            as_revision,
+            workspace_ref,
+            workspace_filename,
+            attachments,
+        )
+
+    def open_capsule(self, filename: str, workspace: str | None = None) -> None:
+        """Open a capsule as the workspace, replacing the current one.
+
+        Args:
+            filename: Capsule file name (``.dlcapsule``).
+            workspace: Workspace file of a capsule that references its workspace
+             instead of including it.
+        """
+        self._datalab.open_capsule(filename, workspace)
 
     def load_from_files(
         self, filenames: list[str], param: gds.DataSet | None = None
