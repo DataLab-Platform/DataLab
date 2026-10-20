@@ -51,6 +51,7 @@ def remote_call(func: Callable) -> object:
         self: RemoteServer = args[0]  # extracting 'self' from method arguments
         self.is_ready = False
         self.exception = None
+        self.result = None
         output = func(*args, **kwargs)
         while not self.is_ready:
             QC.QCoreApplication.processEvents()
@@ -179,6 +180,10 @@ class RemoteServer(QC.QThread):
         """Shutdown server"""
         # A server still waiting for the main window must be able to stop
         self.__window_ready.set()
+        # Release the remote call waiting for DataLab to be ready, if any (e.g. the
+        # one closing DataLab): the main window, blocked below until the request is
+        # done, could not signal it, hence a deadlock
+        self.is_ready = True
         if self.server is not None:
             self.server.shutdown()
             self.server = None
