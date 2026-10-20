@@ -60,8 +60,8 @@ _SERVER_URL: str | None = None
 _LOCALHOST_NO_TOKEN: bool = False
 
 
-def set_adapter(adapter: WorkspaceAdapter) -> None:
-    """Set the workspace adapter for route handlers."""
+def set_adapter(adapter: WorkspaceAdapter | None) -> None:
+    """Set the workspace adapter for route handlers (None when stopped)."""
     global _ADAPTER  # noqa: PLW0603  # pylint: disable=global-statement
     _ADAPTER = adapter
 
