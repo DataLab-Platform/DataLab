@@ -65,6 +65,9 @@ msgstr "Assistant IA prêt. Configurez votre fournisseur dans le menu Edition > 
 msgid "You"
 msgstr "Vous"
 
+msgid "Assistant"
+msgstr "Assistant"
+
 msgid "Save to Macros"
 msgstr "Enregistrer dans les macros"
 
@@ -310,9 +313,6 @@ msgstr ""
 "L'exécution simultanée de plusieurs instances peut entraîner des dysfonctionnements : écrasement des préférences, problèmes de découverte du contrôle à distance, etc.\n"
 "\n"
 "Souhaitez-vous néanmoins continuer ?"
-
-msgid "The registry address must be an http or https URL"
-msgstr "L'adresse du registre doit être une URL http ou https"
 
 msgid "DataLab is a generic signal and image processing platform"
 msgstr "DataLab est une plateforme générique de traitement du signal et de l'image"
@@ -940,32 +940,6 @@ msgstr "Afficher le panneau de contraste"
 msgid "Show or hide contrast adjustment panel"
 msgstr "Afficher ou cacher le panneau de réglage du contraste"
 
-#, python-format
-msgid "%s too large: %s, %s MiB (limit: %s MiB)"
-msgstr "%s : taille excessive, %s, %s Mio (limite : %s Mio)"
-
-msgid "Capsule"
-msgstr "Capsule"
-
-msgid "Referenced workspace"
-msgstr "Espace de travail référencé"
-
-msgid "Workspace"
-msgstr "Espace de travail"
-
-#, python-format
-msgid "Attachments are limited to 16 MiB: %s"
-msgstr "Les pièces jointes sont limitées à 16 Mio : %s"
-
-msgid "Attachment"
-msgstr "Pièce jointe"
-
-msgid "The capsule, its referenced workspace and its attachments must be different files"
-msgstr "La capsule, son espace de travail référencé et ses pièces jointes doivent être des fichiers différents"
-
-msgid "This capsule references its workspace: select the workspace file"
-msgstr "Cette capsule référence son espace de travail : sélectionnez le fichier de l'espace de travail"
-
 msgid "Command palette"
 msgstr "Palette de commandes"
 
@@ -981,25 +955,9 @@ msgstr "Signal personnalisé"
 msgid "Process signal"
 msgstr "Traiter le signal"
 
-msgid "The data will be added, but their earlier provenance will not be imported. Open the file replacing the current workspace to keep it."
-msgstr "Les données seront ajoutées, mais leur provenance antérieure ne sera pas importée. Ouvrez le fichier en remplaçant l'espace de travail actuel pour la conserver."
-
 #, python-format
 msgid "Loading data from %s..."
 msgstr "Chargement des données depuis %s..."
-
-#, python-format
-msgid "The provenance data of this workspace are invalid: %s"
-msgstr "Les données de provenance de cet espace de travail sont invalides : %s"
-
-msgid "Warning"
-msgstr "Attention"
-
-msgid "Add without provenance"
-msgstr "Ajouter sans la provenance"
-
-msgid "This file is not a DataLab workspace"
-msgstr "Ce fichier n'est pas un espace de travail DataLab"
 
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
@@ -1057,9 +1015,6 @@ msgstr "# ==> Impossible d'exécuter la macro '%s'"
 msgid "Macro Python interpreter failed to start!"
 msgstr "Le démarrage de l'interpréteur Python des macros a échoué !"
 
-msgid "Error"
-msgstr "Erreur"
-
 #, python-format
 msgid "# ==> Running '%s' macro..."
 msgstr "# ==> Exécution de la macro '%s'..."
@@ -1105,12 +1060,6 @@ msgstr "Préférences..."
 
 msgid "Open settings dialog"
 msgstr "Ouvrir la boîte de dialogue des préférences"
-
-msgid "Workspace capsule..."
-msgstr "Capsule d'espace de travail..."
-
-msgid "Export, inspect, replay and compare workspace capsules (workspace and provenance of its processing)"
-msgstr "Exporter, inspecter, rejouer et comparer des capsules d'espace de travail (espace de travail et provenance de ses traitements)"
 
 msgid "Command palette..."
 msgstr "Palette de commandes..."
@@ -1247,17 +1196,8 @@ msgstr "Vous devrez cliquer manuellement sur le bouton de rafraîchissement pour
 msgid "Are you sure you want to disable auto-refresh?"
 msgstr "Êtes-vous sûr de vouloir désactiver le rafraîchissement automatique ?"
 
-msgid "Export capsule"
-msgstr "Exporter une capsule"
-
-msgid "Open capsule"
-msgstr "Ouvrir une capsule"
-
-msgid "Open"
-msgstr "Ouvrir"
-
-msgid "HDF5 files (*.h5 *.hdf5 *.hdf *.he5);;All files (*)"
-msgstr "Fichiers HDF5 (*.h5 *.hdf5 *.hdf *.he5);;Tous les fichiers (*)"
+msgid "Save to HDF5 file"
+msgstr "Enregistrer dans un fichier HDF5"
 
 #, python-format
 msgid "Open %d HDF5 files"
@@ -1265,9 +1205,6 @@ msgstr "Ouvrir %d fichiers HDF5"
 
 msgid "Open HDF5 file"
 msgstr "Ouvrir un fichier HDF5"
-
-msgid "Save to HDF5 file"
-msgstr "Enregistrer dans un fichier HDF5"
 
 msgid "Do you want to clear current workspace (signals and images) before importing data from HDF5 files?"
 msgstr "Souhaitez-vous vider l'espace de travail actuel (signaux et images) avant d'importer des données depuis des fichiers HDF5 ?"
@@ -1284,12 +1221,6 @@ msgstr "Oui"
 
 msgid "No"
 msgstr "Non"
-
-msgid "Provenance:"
-msgstr "Provenance :"
-
-msgid "If you choose <i>No</i>: "
-msgstr "Si vous choisissez <i>Non</i> : "
 
 #, python-format
 msgid "New %s"
@@ -1391,8 +1322,9 @@ msgstr ""
 msgid "e.g. %s"
 msgstr "ex. %s"
 
-msgid "Provenance"
-msgstr "Provenance"
+#, fuzzy
+msgid "History"
+msgstr "Historique…"
 
 msgid "Analysis parameters"
 msgstr "Paramètres d'analyse"
@@ -1409,6 +1341,9 @@ msgstr "Créé : paramètres de pic historiques"
 
 msgid "Created: invalid creation parameters"
 msgstr "Créé : paramètres de création invalides"
+
+msgid "Created"
+msgstr "Créé"
 
 msgid "Original object"
 msgstr "Objet original"
@@ -1465,21 +1400,6 @@ msgstr "Recalcul automatique lors de l'édition"
 msgid "Automatically re-run processing when parameters are modified"
 msgstr "Relancer automatiquement le traitement à chaque modification de paramètre"
 
-msgid "This processing has no parameters."
-msgstr "Ce traitement n'a pas de paramètres."
-
-msgid "The parameters of this processing cannot be edited here."
-msgstr "Les paramètres de ce traitement ne peuvent pas être modifiés ici."
-
-msgid "Reapply"
-msgstr "Réappliquer"
-
-msgid "Apply this processing again to the current input objects"
-msgstr "Appliquer à nouveau ce traitement aux objets d'entrée actuels"
-
-msgid "(deleted object)"
-msgstr "(objet supprimé)"
-
 msgid "Analysis Parameters"
 msgstr "Paramètres d'analyse"
 
@@ -1505,6 +1425,12 @@ msgstr "Aucun objet de traitement disponible."
 
 msgid "Processing metadata is incomplete."
 msgstr "Les métadonnées de traitement sont incomplètes."
+
+msgid "Source object no longer exists."
+msgstr "L'objet source n'existe plus."
+
+msgid "The object that was used to create this processed object has been deleted and cannot be used for reprocessing."
+msgstr "L'objet qui a été utilisé pour créer cet objet traité a été supprimé et ne peut pas être utilisé pour le retraitement."
 
 msgid "Geometry results"
 msgstr "Résultats géométriques"
@@ -1630,11 +1556,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "New group"
-msgstr "Nouveau groupe"
-
 msgid "Group name:"
 msgstr "Nom du groupe :"
+
+msgid "New group"
+msgstr "Nouveau groupe"
 
 #, python-format
 msgid "New group \"%s\""
@@ -1662,6 +1588,9 @@ msgstr "Lecture des objets depuis le fichier"
 msgid "Adding objects to workspace"
 msgstr "Ajout d'objets à l'espace de travail"
 
+msgid "Open"
+msgstr "Ouvrir"
+
 #, python-format
 msgid "Load from directory \"%s\""
 msgstr "Charger depuis le répertoire \"%s\""
@@ -1676,6 +1605,10 @@ msgstr "Charger depuis %d fichiers"
 #, python-format
 msgid "Load \"%s\""
 msgstr "Charger \"%s\""
+
+#, python-format
+msgid "Skipping export: object %r no longer exists."
+msgstr "Export ignoré : l'objet %r n'existe plus."
 
 msgid "Save as"
 msgstr "Enregistrer sous"
@@ -1877,6 +1810,9 @@ msgstr "L'action %s a été ignorée : ses paramètres enregistrés n'ont pas pu
 msgid "History panel"
 msgstr "Panneau d'historique"
 
+msgid "History files"
+msgstr "Fichiers d'historique"
+
 #, python-format
 msgid "Action %s: target panel not found — skipping."
 msgstr "Action %s : panneau cible introuvable — ignorée."
@@ -2007,11 +1943,157 @@ msgstr "Pas à pas"
 msgid "Replay the selection step by step, editing parameters at each step"
 msgstr "Rejouer la sélection pas à pas, en modifiant les paramètres à chaque étape"
 
-msgid "Show execution provenance"
-msgstr "Afficher la provenance de l'exécution"
+msgid "Compression level"
+msgstr "Niveau de compression"
 
-msgid "Show the recorded provenance of the last successful execution of the selected action"
-msgstr "Afficher la provenance enregistrée de la dernière exécution réussie de l'action sélectionnée"
+msgid "Compression"
+msgstr "Compression"
+
+msgid "MAT compression"
+msgstr "Compression MAT"
+
+msgid "Quality"
+msgstr "Qualité"
+
+msgid "Subsampling"
+msgstr "Sous-échantillonnage"
+
+msgid "Progressive"
+msgstr "Progressif"
+
+msgid "Optimize"
+msgstr "Optimiser"
+
+msgid "Smoothing"
+msgstr "Lissage"
+
+msgid "Quality mode"
+msgstr "Mode de qualité"
+
+msgid "Quality layers"
+msgstr "Couches de qualité"
+
+msgid "Irreversible"
+msgstr "Irréversible"
+
+msgid "Progression order"
+msgstr "Ordre de progression"
+
+msgid "Number of resolutions"
+msgstr "Nombre de résolutions"
+
+msgid "Tile size"
+msgstr "Taille des tuiles"
+
+msgid "PLT markers"
+msgstr "Marqueurs PLT"
+
+msgid "Predictor"
+msgstr "Prédicteur"
+
+msgid "Rows per strip"
+msgstr "Lignes par bande"
+
+msgid "Resolution"
+msgstr "Résolution"
+
+msgid "Resolution unit"
+msgstr "Unité de résolution"
+
+msgid "Photometric interpretation"
+msgstr "Interprétation photométrique"
+
+msgid "Delimiter"
+msgstr "Délimiteur"
+
+msgid "Precision"
+msgstr "Précision"
+
+msgid "None"
+msgstr "Aucun"
+
+msgid "Rates"
+msgstr "Taux"
+
+msgid "Deflate"
+msgstr "Deflate"
+
+msgid "Zstandard"
+msgstr "Zstandard"
+
+msgid "Whitespace"
+msgstr "Espaces blancs"
+
+msgid "Tab"
+msgstr "Tabulation"
+
+msgid "Comma"
+msgstr "Virgule"
+
+msgid "Semicolon"
+msgstr "Point-virgule"
+
+msgid "Inch"
+msgstr "Pouce"
+
+msgid "Centimeter"
+msgstr "Centimètre"
+
+msgid "Horizontal"
+msgstr "Horizontal"
+
+msgid "Floating-point"
+msgstr "Virgule flottante"
+
+msgid "Black is zero"
+msgstr "Le noir vaut zéro"
+
+msgid "White is zero"
+msgstr "Le blanc vaut zéro"
+
+msgid "Automatic"
+msgstr "Automatique"
+
+msgid "Image export"
+msgstr "Exportation d'image"
+
+msgid "Target data type"
+msgstr "Type de données cible"
+
+msgid "Gamma"
+msgstr "Gamma"
+
+msgid "Invert"
+msgstr "Inverser"
+
+#, python-format
+msgid "%s may not be empty"
+msgstr "%s ne peut pas être vide"
+
+#, python-format
+msgid "%s must contain 2 values"
+msgstr "%s doit contenir 2 valeurs"
+
+#, python-format
+msgid "%s contains invalid numbers"
+msgstr "%s contient des nombres non valides"
+
+msgid "Export image"
+msgstr "Exporter l'image"
+
+msgid "Some required entries are incorrect."
+msgstr "Certaines entrées obligatoires sont incorrectes."
+
+msgid "RAW image import"
+msgstr "Importation d'image RAW"
+
+#, python-format
+msgid "%d RAW files are about to be imported.<br><br>Do you want to apply the same import parameters to all of them?<br><br>Choose <i>No</i> to set the parameters of each file."
+msgstr "%d fichiers RAW vont ?tre import?s.<br><br>Voulez-vous appliquer les m?mes param?tres d'importation ? tous ces fichiers ?<br><br>Choisissez <i>Non</i> pour d?finir les param?tres de chaque fichier."
+
+#, python-format
+msgid "RAW image import (%d files)"
+msgstr "Importation d'image RAW (%d fichiers)"
 
 msgid "New image"
 msgstr "Nouvelle image"
@@ -2030,6 +2112,9 @@ msgstr "Effacer toutes les macros récentes ?"
 
 msgid "Macro panel"
 msgstr "Panneau des macros"
+
+msgid "Python files"
+msgstr "Fichiers Python"
 
 msgid "Clear console"
 msgstr "Effacer la console"
@@ -2115,6 +2200,125 @@ msgstr "Création des formes géométriques"
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
+msgid "today"
+msgstr "aujourd'hui"
+
+msgid "yesterday"
+msgstr "hier"
+
+#, python-format
+msgid "Last loaded: %s at %s"
+msgstr "Dernier chargement : %s à %s"
+
+msgid "Active"
+msgstr "Actif"
+
+msgid "Disabled"
+msgstr "Désactivé"
+
+msgid "No description available"
+msgstr "Aucune description disponible"
+
+msgid "Open file"
+msgstr "Ouvrir le fichier"
+
+msgid "Show in folder"
+msgstr "Afficher dans le dossier"
+
+msgid "Import error"
+msgstr "Erreur d'importation"
+
+msgid "Edit directory"
+msgstr "Modifier le répertoire"
+
+msgid "Remove directory"
+msgstr "Supprimer le répertoire"
+
+msgid "from"
+msgstr "depuis"
+
+msgid "Plugin Configuration"
+msgstr "Configuration des plugins"
+
+msgid "Enable/disable plugins"
+msgstr "Activer/désactiver les plugins"
+
+msgid "Plugin settings"
+msgstr "Paramètres des plugins"
+
+msgid "Apply and reload plugins"
+msgstr "Appliquer et recharger les plugins"
+
+msgid "Third-party plugins are globally disabled."
+msgstr "Les plugins tiers sont désactivés globalement."
+
+msgid "Changes will be applied after clicking OK and reloading plugins."
+msgstr "Les modifications seront appliquées après avoir cliqué sur OK et rechargé les plugins."
+
+msgid "The following directories are scanned at startup for plugins:"
+msgstr "Les répertoires suivants sont analysés au démarrage pour détecter les plugins :"
+
+msgid "Default plugin directories"
+msgstr "Répertoires de plugins par défaut"
+
+msgid "Additional plugin directories"
+msgstr "Répertoires de plugins supplémentaires"
+
+msgid "Add"
+msgstr "Ajouter"
+
+msgid "Additional directories are saved in DataLab configuration."
+msgstr "Les répertoires supplémentaires sont enregistrés dans la configuration de DataLab."
+
+msgid "No additional plugin directory is configured."
+msgstr "Aucun répertoire de plugins supplémentaire n'est configuré."
+
+#, python-format
+msgid "Directories provided via the <code>%s</code> environment variable (multiple paths separated by '<code>%s</code>') also appear above as read-only entries. Changes take effect at DataLab startup."
+msgstr "Les répertoires fournis via la variable d'environnement <code>%s</code> (plusieurs chemins séparés par '<code>%s</code>') apparaissent également ci-dessus en lecture seule. Les modifications prennent effet au démarrage de DataLab."
+
+msgid "Compatibility warnings"
+msgstr "Avertissements de compatibilité"
+
+msgid "Hide warnings for incompatible DataLab v0.20 plugins"
+msgstr "Masquer les avertissements pour les plugins DataLab v0.20 incompatibles"
+
+msgid "If enabled, DataLab will not warn you about v0.20 plugins that are no longer compatible with v1.0."
+msgstr "Si activé, DataLab ne vous avertira pas des plugins v0.20 qui ne sont plus compatibles avec v1.0."
+
+msgid "Select plugin directory"
+msgstr "Sélectionner un répertoire de plugins"
+
+msgid "Enable all plugins"
+msgstr "Activer tous les plugins"
+
+msgid "Filter:"
+msgstr "Filtre :"
+
+msgid "All plugins"
+msgstr "Tous les plugins"
+
+msgid "Enabled plugins"
+msgstr "Plugins activés"
+
+msgid "Disabled plugins"
+msgstr "Plugins désactivés"
+
+msgid "Plugins with errors"
+msgstr "Plugins en erreur"
+
+msgid "Disable plugins globally"
+msgstr "Désactiver globalement les plugins"
+
+msgid "Enable plugins globally"
+msgstr "Activer globalement les plugins"
+
+msgid "Reload Plugins"
+msgstr "Recharger les plugins"
+
+msgid "Plugin configuration has been saved. Do you want to reload plugins now to apply changes?"
+msgstr "La configuration des plugins a été enregistrée. Voulez-vous recharger les plugins maintenant pour appliquer les modifications ?"
+
 #, python-format
 msgid "Version: %s"
 msgstr "Version : %s"
@@ -2198,12 +2402,8 @@ msgstr "Officiel"
 msgid "Community"
 msgstr "Communauté"
 
-msgid "Local catalog"
-msgstr "Catalogue local"
-
-#, python-format
-msgid "Local catalog: %s"
-msgstr "Catalogue local : %s"
+msgid "Source code"
+msgstr "Code source"
 
 #, python-format
 msgid "Withdrawn: %s"
@@ -2238,8 +2438,8 @@ msgstr "Mettre à jour vers %s"
 msgid "Install"
 msgstr "Installer"
 
-#, python-format
-msgid "Plugins listed in the <a href=\"%s\">DataLab plugin catalog</a> and in the local catalogs of the <b>Plugin settings</b> tab, which take precedence. Official plugins are maintained by the DataLab team, community plugins by their authors, and local catalogs by your organization: install only plugins from authors you trust."
+#, fuzzy, python-format
+msgid "Plugins listed in the <a href=\"%s\">DataLab plugin catalog</a>. Official plugins are maintained by the DataLab team, community plugins by their authors: install only plugins from authors you trust."
 msgstr "Plugins répertoriés dans le <a href=\"%s\">catalogue de plugins DataLab</a> et dans les catalogues locaux de l'onglet <b>Paramètres des plugins</b>, qui sont prioritaires. Les plugins officiels sont maintenus par l'équipe DataLab, les plugins de la communauté par leurs auteurs et les catalogues locaux par votre organisation : n'installez que des plugins provenant d'auteurs de confiance."
 
 msgid "Search plugins"
@@ -2248,7 +2448,8 @@ msgstr "Rechercher des plugins"
 msgid "No plugin catalog is configured."
 msgstr "Aucun catalogue de plugins n'est configuré."
 
-msgid "Loading the plugin catalogs..."
+#, fuzzy
+msgid "Loading the plugin catalog..."
 msgstr "Chargement des catalogues de plugins..."
 
 #, python-format
@@ -2256,19 +2457,11 @@ msgid "Downloading %s..."
 msgstr "Téléchargement de %s..."
 
 #, python-format
-msgid "Plugins in the catalogs: %d"
-msgstr "Plugins dans les catalogues : %d"
-
-#, python-format
 msgid "Plugins in the catalog: %d"
 msgstr "Plugins dans le catalogue : %d"
 
 msgid "The plugin catalog cannot be loaded:"
 msgstr "Le catalogue de plugins ne peut pas être chargé :"
-
-#, python-format
-msgid "Local plugin catalog (%s)"
-msgstr "Catalogue local de plugins (%s)"
 
 #, python-format
 msgid "DataLab plugin catalog (%s)"
@@ -2283,143 +2476,11 @@ msgstr "Entrée/sortie"
 msgid "Application"
 msgstr "Application"
 
-msgid "today"
-msgstr "aujourd'hui"
-
-msgid "yesterday"
-msgstr "hier"
-
-#, python-format
-msgid "Last loaded: %s at %s"
-msgstr "Dernier chargement : %s à %s"
-
-msgid "Active"
-msgstr "Actif"
-
-msgid "Disabled"
-msgstr "Désactivé"
-
-msgid "No description available"
-msgstr "Aucune description disponible"
-
-msgid "Open file"
-msgstr "Ouvrir le fichier"
-
-msgid "Show in folder"
-msgstr "Afficher dans le dossier"
-
-msgid "Import error"
-msgstr "Erreur d'importation"
-
-msgid "Edit directory"
-msgstr "Modifier le répertoire"
-
-msgid "Remove directory"
-msgstr "Supprimer le répertoire"
-
-msgid "Plugin Configuration"
-msgstr "Configuration des plugins"
-
-msgid "Enable/disable plugins"
-msgstr "Activer/désactiver les plugins"
-
-msgid "Plugin settings"
-msgstr "Paramètres des plugins"
-
 msgid "Available plugins"
 msgstr "Plugins disponibles"
 
 msgid "Install plugins"
 msgstr "Installer des plugins"
-
-msgid "Apply and reload plugins"
-msgstr "Appliquer et recharger les plugins"
-
-msgid "Third-party plugins are globally disabled."
-msgstr "Les plugins tiers sont désactivés globalement."
-
-msgid "Changes will be applied after clicking OK and reloading plugins."
-msgstr "Les modifications seront appliquées après avoir cliqué sur OK et rechargé les plugins."
-
-msgid "The following directories are scanned at startup for plugins:"
-msgstr "Les répertoires suivants sont analysés au démarrage pour détecter les plugins :"
-
-msgid "Default plugin directories"
-msgstr "Répertoires de plugins par défaut"
-
-msgid "Additional plugin directories"
-msgstr "Répertoires de plugins supplémentaires"
-
-msgid "Add"
-msgstr "Ajouter"
-
-msgid "Additional directories are saved in DataLab configuration."
-msgstr "Les répertoires supplémentaires sont enregistrés dans la configuration de DataLab."
-
-msgid "No additional plugin directory is configured."
-msgstr "Aucun répertoire de plugins supplémentaire n'est configuré."
-
-#, python-format
-msgid "Directories provided via the <code>%s</code> environment variable (multiple paths separated by '<code>%s</code>') also appear above as read-only entries. Changes take effect at DataLab startup."
-msgstr "Les répertoires fournis via la variable d'environnement <code>%s</code> (plusieurs chemins séparés par '<code>%s</code>') apparaissent également ci-dessus en lecture seule. Les modifications prennent effet au démarrage de DataLab."
-
-msgid "Local plugin catalogs"
-msgstr "Catalogues locaux de plugins"
-
-msgid "Folders, possibly shared on the network, whose plugins are listed in the <b>Available plugins</b> tab before those of the DataLab plugin catalog. A folder provides the plugins of its <code>catalog.json</code> file if any, otherwise its plugin wheels."
-msgstr "Dossiers, éventuellement partagés sur le réseau, dont les plugins sont proposés dans l'onglet <b>Plugins disponibles</b> avant ceux du catalogue de plugins DataLab. Un dossier fournit les plugins de son fichier <code>catalog.json</code> s'il existe, sinon ses wheels de plugins."
-
-msgid "No local plugin catalog is configured."
-msgstr "Aucun catalogue local de plugins n'est configuré."
-
-#, python-format
-msgid "Folders provided via the <code>%s</code> environment variable (multiple paths separated by '<code>%s</code>') come first and appear above as read-only entries."
-msgstr "Les dossiers fournis via la variable d'environnement <code>%s</code> (plusieurs chemins séparés par '<code>%s</code>') sont prioritaires et apparaissent ci-dessus en lecture seule."
-
-msgid "Compatibility warnings"
-msgstr "Avertissements de compatibilité"
-
-msgid "Hide warnings for incompatible DataLab v0.20 plugins"
-msgstr "Masquer les avertissements pour les plugins DataLab v0.20 incompatibles"
-
-msgid "If enabled, DataLab will not warn you about v0.20 plugins that are no longer compatible with v1.0."
-msgstr "Si activé, DataLab ne vous avertira pas des plugins v0.20 qui ne sont plus compatibles avec v1.0."
-
-msgid "Select plugin directory"
-msgstr "Sélectionner un répertoire de plugins"
-
-msgid "Select local plugin catalog folder"
-msgstr "Sélectionner un dossier de catalogue local de plugins"
-
-msgid "Enable all plugins"
-msgstr "Activer tous les plugins"
-
-msgid "Filter:"
-msgstr "Filtre :"
-
-msgid "All plugins"
-msgstr "Tous les plugins"
-
-msgid "Enabled plugins"
-msgstr "Plugins activés"
-
-msgid "Disabled plugins"
-msgstr "Plugins désactivés"
-
-msgid "Plugins with errors"
-msgstr "Plugins en erreur"
-
-msgid "Disable plugins globally"
-msgstr "Désactiver globalement les plugins"
-
-msgid "Enable plugins globally"
-msgstr "Activer globalement les plugins"
-
-msgid "Reload Plugins"
-msgstr "Recharger les plugins"
-
-msgid "Plugin configuration has been saved. Do you want to reload plugins now to apply changes?"
-msgstr "La configuration des plugins a été enregistrée. Voulez-vous recharger les plugins maintenant pour appliquer les modifications ?"
 
 msgid "Source:"
 msgstr "Source :"
@@ -2436,11 +2497,11 @@ msgstr "Description :"
 msgid "Plugin classes:"
 msgstr "Classes de plugin :"
 
+msgid "not applicable"
+msgstr "non applicable"
+
 msgid "Dependencies:"
 msgstr "Dépendances :"
-
-msgid "None"
-msgstr "Aucun"
 
 msgid "Plugin module:"
 msgstr "Module de plugin :"
@@ -2587,9 +2648,6 @@ msgstr "%(slot)s : métadonnée '%(key)s' absente de %(count)d objet(s) (%(title
 msgid "%(slot)s: %(count)d object(s) assigned twice (%(titles)s)"
 msgstr "%(slot)s : %(count)d objet(s) affecté(s) deux fois (%(titles)s)"
 
-msgid "Information"
-msgstr "Information"
-
 msgid "Ready to run on the current selection"
 msgstr "Exécutable sur la sélection courante"
 
@@ -2658,27 +2716,8 @@ msgstr ""
 msgid "Yes to All"
 msgstr "Oui à tout"
 
-msgid "The signals have different units: no conversion is applied."
-msgstr "Les signaux ont des unités différentes : aucune conversion n'est appliquée."
-
-msgid "To interpolate the operand, the X values of both signals must be finite and strictly increasing."
-msgstr "Pour interpoler l'opérande, les abscisses des deux signaux doivent être finies et strictement croissantes."
-
-msgid "The X range of the operand does not cover the X range of the source: extrapolation is not allowed."
-msgstr "L'intervalle des abscisses de l'opérande ne couvre pas celui de la source : l'extrapolation n'est pas autorisée."
-
-msgid "The operand has uncertainties, which cannot be interpolated."
-msgstr "L'opérande comporte des incertitudes, qui ne peuvent pas être interpolées."
-
-msgid "The signals cannot be aligned."
-msgstr "Les signaux ne peuvent pas être alignés."
-
-#, python-format
-msgid "Calculating: %s"
-msgstr "Calcul : %s"
-
-msgid "The object that was used to create this processed object has been deleted and cannot be used for reprocessing."
-msgstr "L'objet qui a été utilisé pour créer cet objet traité a été supprimé et ne peut pas être utilisé pour le retraitement."
+msgid "Processing metadata is incomplete (missing source UUID)."
+msgstr "Les métadonnées de traitement sont incomplètes (UUID source manquant)."
 
 #, python-format
 msgid ""
@@ -2709,6 +2748,10 @@ msgstr "Traitement de l'objet avec les paramètres mis à jour..."
 msgid "Recomputing"
 msgstr "Retraitement"
 
+#, python-format
+msgid "Computing: %s"
+msgstr "Calcul en cours : %s"
+
 msgid "In pairwise mode, you need to select objects in at least two groups."
 msgstr "En mode 'pairwise', vous devez sélectionner des objets dans au moins deux groupes."
 
@@ -2719,8 +2762,8 @@ msgid "A preview source was removed. The processing was cancelled."
 msgstr "Un objet source de l'aperçu a été supprimé. Le traitement a été annulé."
 
 #, python-format
-msgid "Computing: %s"
-msgstr "Calcul en cours : %s"
+msgid "Calculating: %s"
+msgstr "Calcul : %s"
 
 #, python-format
 msgid "Select %s"
@@ -3093,12 +3136,6 @@ msgstr "Filtre de Sobel (horizontal)"
 msgid "Sobel filter (vertical)"
 msgstr "Filtre de Sobel (vertical)"
 
-msgid "Extract ROI"
-msgstr "Extraire une ROI"
-
-msgid "Translate"
-msgstr "Translation"
-
 msgid "Resampling"
 msgstr "Rééchantillonnage"
 
@@ -3176,6 +3213,9 @@ msgstr "Détection de taches basée sur SimpleBlobDetector d'OpenCV"
 
 msgid "Creating a ROI grid will overwrite any existing ROI.<br><br>Do you want to continue?"
 msgstr "La création d'une grille de ROI écrasera toute ROI existante.<br><br>Voulez-vous continuer ?"
+
+msgid "Extract ROI"
+msgstr "Extraire une ROI"
 
 msgid "Do you want to extract images from the defined ROI?"
 msgstr "Souhaitez-vous extraire les images de la ROI définie ?"
@@ -4246,6 +4286,18 @@ msgstr "Aucun plugin disponible"
 msgid "Plugins are disabled (see DataLab settings)"
 msgstr "Les plugins sont désactivés (voir les préférences de DataLab)"
 
+msgid "Warning"
+msgstr "Attention"
+
+msgid "Error"
+msgstr "Erreur"
+
+msgid "Information"
+msgstr "Information"
+
+msgid "Question"
+msgstr "Question"
+
 msgid "Select one signal"
 msgstr "Sélectionnez un signal"
 
@@ -4278,9 +4330,6 @@ msgstr "L'ouverture de cet exemple remplace l'espace de travail actuel. Continue
 
 msgid "Open example"
 msgstr "Ouvrir l'exemple"
-
-msgid "Question"
-msgstr "Question"
 
 msgid "Test data"
 msgstr "Données de test"
@@ -4380,12 +4429,12 @@ msgstr "Nom du package"
 msgid "Plugin ID"
 msgstr "ID du plugin"
 
+msgid "Description"
+msgstr "Description"
+
 #, python-format
 msgid "%s plugin for DataLab"
 msgstr "Plugin %s pour DataLab"
-
-msgid "Description"
-msgstr "Description"
 
 msgid "Destination"
 msgstr "Destination"
@@ -4420,70 +4469,9 @@ msgstr "Type d'objet utilisé par le traitement d'exemple"
 msgid "Project license"
 msgstr "Licence du projet"
 
-msgid "Build or check a local plugin catalog folder."
-msgstr "Construire ou vérifier un dossier de catalogue local de plugins."
-
-msgid "Write the catalog.json file listing the plugin wheels."
-msgstr "Écrire le fichier catalog.json répertoriant les wheels de plugins."
-
-msgid "Check the catalog.json file against the plugin wheels."
-msgstr "Vérifier le fichier catalog.json par rapport aux wheels de plugins."
-
-msgid "Local plugin catalog folder"
-msgstr "Dossier du catalogue local de plugins"
-
-#, python-format
-msgid "Warning: %s"
-msgstr "Avertissement : %s"
-
-#, python-format
-msgid "%s was not written."
-msgstr "%s n'a pas été écrit."
-
-#, python-format
-msgid "Wrote %s, listing %d plugins."
-msgstr "%s écrit, répertoriant %d plugins."
-
-#, python-format
-msgid "The local plugin catalog lists %d plugins."
-msgstr "Le catalogue local de plugins répertorie %d plugins."
-
 #, python-format
 msgid "Created DataLab plugin project at %s"
 msgstr "Projet de plugin DataLab créé dans %s"
-
-msgid "Source object no longer exists."
-msgstr "L'objet source n'existe plus."
-
-msgid "An input object no longer exists."
-msgstr "Un objet d'entrée n'existe plus."
-
-msgid "This processing is not available in this version of DataLab."
-msgstr "Ce traitement n'est pas disponible dans cette version de DataLab."
-
-#, python-format
-msgid "Operation %s is not available in this version: %s"
-msgstr "L'opération %s n'est pas disponible dans cette version : %s"
-
-#, python-format
-msgid "Operation %s has no processing feature in this version of DataLab."
-msgstr "L'opération %s ne correspond à aucun traitement dans cette version de DataLab."
-
-msgid "The recorded inputs do not match this processing feature."
-msgstr "Les entrées enregistrées ne correspondent pas à ce traitement."
-
-msgid "The parameters of this processing were not recorded."
-msgstr "Les paramètres de ce traitement n'ont pas été enregistrés."
-
-#, python-format
-msgid "The recorded parameters cannot be used: %s"
-msgstr "Les paramètres enregistrés ne peuvent pas être utilisés : %s"
-
-msgid "This processing takes several parameter sets: it cannot be applied again from here."
-msgstr "Ce traitement utilise plusieurs jeux de paramètres : il ne peut pas être appliqué à nouveau d'ici."
-
-msgid "Processing metadata is incomplete (missing source UUID)."
-msgstr "Les métadonnées de traitement sont incomplètes (UUID source manquant)."
 
 msgid "Host application"
 msgstr "Application hôte"
@@ -4538,6 +4526,9 @@ msgstr "Obtenir la liste des uuids"
 
 msgid "Get object"
 msgstr "Obtenir un objet"
+
+msgid "Invalid parameters"
+msgstr "Paramètres invalides"
 
 msgid "Raw data (2D-Gaussian)"
 msgstr "Image brute (gaussienne 2D)"
@@ -4623,6 +4614,546 @@ msgstr ""
 "Souhaitez-vous démarrer le serveur API Web ?\n"
 "\n"
 "Cela permettra aux applications externes de se connecter à DataLab et de le contrôler à distance via HTTP/JSON."
+
+msgid "Show more"
+msgstr "Afficher plus"
+
+msgid "Show less"
+msgstr "Afficher moins"
+
+msgid "Find"
+msgstr "Rechercher"
+
+msgid "Replace with"
+msgstr "Remplacer par"
+
+msgid "Aa"
+msgstr "Aa"
+
+msgid "Match case"
+msgstr "Respecter la casse"
+
+msgid "W"
+msgstr "M"
+
+msgid "Whole words only"
+msgstr "Mots entiers uniquement"
+
+msgid "Next"
+msgstr "Suivant"
+
+msgid "Prev"
+msgstr "Précédent"
+
+msgid "Replace"
+msgstr "Remplacer"
+
+msgid "Replace all"
+msgstr "Tout remplacer"
+
+msgid "Find:"
+msgstr "Rechercher :"
+
+msgid "Replace:"
+msgstr "Remplacer :"
+
+msgid "Show details"
+msgstr "Afficher les détails"
+
+msgid "Hide details"
+msgstr "Masquer les détails"
+
+msgid "Title"
+msgstr "Titre"
+
+msgid "Date and time"
+msgstr "Date et heure"
+
+msgid "Action is compatible with the current workspace state."
+msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
+
+msgid "Action is not compatible with the current workspace state."
+msgstr "L'action n'est pas compatible avec l'état actuel de l'espace de travail."
+
+msgid "This step is outdated: replay it to refresh its result."
+msgstr "Cette étape est obsolète : rejouez-la pour actualiser son résultat."
+
+msgid "Active recording session."
+msgstr "Session d'enregistrement active."
+
+msgid "Installation configuration"
+msgstr "Configuration d'installation"
+
+msgid "User configuration"
+msgstr "Configuration utilisateur"
+
+msgid "Plugins and I/O features"
+msgstr "Plugins et fonctionnalités d'entrée/sortie"
+
+msgid "Preview source"
+msgstr "Source de l'aperçu"
+
+msgid "Preview disabled"
+msgstr "Aperçu désactivé"
+
+msgid "Computing preview..."
+msgstr "Calcul de l'aperçu..."
+
+msgid "Updating preview..."
+msgstr "Mise à jour de l'aperçu..."
+
+msgid "Preview failed"
+msgstr "Échec de l'aperçu"
+
+msgid "This result cannot be previewed."
+msgstr "Ce résultat ne peut pas être prévisualisé."
+
+msgid "Preview up to date"
+msgstr "Aperçu à jour"
+
+msgid "Kernel / Mask preview"
+msgstr "Aperçu du noyau / masque"
+
+#, python-brace-format
+msgid "{label} — Kernel / Mask preview"
+msgstr "{label} — Aperçu du noyau / masque"
+
+#, python-brace-format
+msgid "±{n} points"
+msgstr "±{n} points"
+
+#, python-brace-format
+msgid "±{n} rows × ±{n} columns"
+msgstr "±{n} lignes × ±{n} colonnes"
+
+msgid "This image uses an integer data type, so it cannot contain NaN or infinite values. Replace special values is therefore not applicable."
+msgstr "Cette image utilise un type de données entier, elle ne peut donc pas contenir de valeurs NaN ou infinies. Le remplacement des valeurs spéciales n'est donc pas applicable."
+
+msgid "Plugins:"
+msgstr "Plugins :"
+
+msgid "XML-RPC:"
+msgstr "XML-RPC :"
+
+msgid "Web API server is not running"
+msgstr "Serveur API Web arrêté"
+
+msgid "Click to start"
+msgstr "Cliquer pour démarrer"
+
+msgid "Web API:"
+msgstr "API Web :"
+
+msgid "Web API server is running"
+msgstr "Serveur API Web démarré"
+
+msgid "Click to view connection info"
+msgstr "Cliquer pour voir les infos de connexion"
+
+msgid "Source"
+msgstr "Source"
+
+msgid "File"
+msgstr "Fichier"
+
+msgid "Clipboard"
+msgstr "Presse-papiers"
+
+msgid "Source of the data"
+msgstr "Source des données"
+
+msgid "File containing the data"
+msgstr "Fichier contenant les données"
+
+msgid "Preview parameters"
+msgstr "Paramètres de l'aperçu"
+
+msgid "Maximum Number of Rows"
+msgstr "Nombre maximum de lignes"
+
+msgid "Maximum number of rows to display"
+msgstr "Nombre maximum de lignes à afficher"
+
+msgid "Select the source of the data:"
+msgstr "Sélectionner la source des données :"
+
+msgid "Source Parameters"
+msgstr "Paramètres de la source"
+
+msgid "Space"
+msgstr "Espace"
+
+msgid "Column delimiter character"
+msgstr "Caractère délimiteur de colonne"
+
+msgid "Decimal"
+msgstr "Décimal"
+
+msgid "Point"
+msgstr "Point"
+
+msgid "Decimal separator character"
+msgstr "Caractère séparateur décimal"
+
+msgid "Comments"
+msgstr "Commentaires"
+
+msgid "Character that indicates a comment line"
+msgstr "Caractère indiquant une ligne de commentaire"
+
+msgid "Rows to Skip"
+msgstr "Lignes à sauter"
+
+msgid "Number of rows to skip at the beginning of the file (including comments)"
+msgstr "Nombre de lignes à sauter au début du fichier (y compris les commentaires)"
+
+msgid "Max. nb of rows"
+msgstr "Nb max. de lignes"
+
+msgid "Maximum number of rows to import"
+msgstr "Nombre maximum de lignes à importer"
+
+msgid "Header"
+msgstr "En-tête"
+
+msgid "Infer"
+msgstr "Inférer"
+
+msgid "First row"
+msgstr "Première ligne"
+
+msgid "Row index to use as the column names"
+msgstr "Indice de ligne à utiliser comme noms de colonnes"
+
+msgid "Transpose"
+msgstr "Transposer"
+
+msgid "Transpose the data (swap rows and columns)"
+msgstr "Transposer les données (échanger les lignes et les colonnes)"
+
+msgid "Data type"
+msgstr "Type de données"
+
+msgid "Output signal data type."
+msgstr "Type de données du signal de sortie."
+
+msgid "First Column is X"
+msgstr "La première colonne est X"
+
+msgid ""
+"First column contains the X values\n"
+"(ignored if there is only one column)"
+msgstr ""
+"La première colonne contient les valeurs des X\n"
+"(ignoré s'il n'y a qu'une seule colonne)"
+
+msgid "Output image data type."
+msgstr "Type de données de l'image générée."
+
+msgid "Raw Data"
+msgstr "Données brutes"
+
+msgid "Data Preview"
+msgstr "Aperçu des données"
+
+msgid "Preview and modify the import settings:"
+msgstr "Aperçu et modification des paramètres d'importation :"
+
+msgid "Import Parameters"
+msgstr "Paramètres d'importation"
+
+msgid "Reading data"
+msgstr "Lecture des données"
+
+#, python-format
+msgid ""
+"The number of signals to import is very high (%d).\n"
+"This may be an error.\n"
+"\n"
+"Are you sure you want to continue?"
+msgstr ""
+"Le nombre de signaux à importer est très élevé (%d).\n"
+"Cela peut être une erreur.\n"
+"\n"
+"Etes-vous sûr de vouloir continuer ?"
+
+msgid "Graphical Representation"
+msgstr "Représentation graphique"
+
+msgid "Graphical representation of the imported data"
+msgstr "Représentation graphique des données importées"
+
+#, python-format
+msgid "Unselect the %s that you do not want to import:"
+msgstr "Désélectionner les %s que vous ne voulez pas importer :"
+
+msgid "Select all"
+msgstr "Tout sélectionner"
+
+msgid "Adding data to the plot"
+msgstr "Ajout des données au graphique"
+
+msgid "X label"
+msgstr "Titre X"
+
+msgid "Y label"
+msgstr "Titre Y"
+
+msgid "X unit"
+msgstr "Unité X"
+
+msgid "Y unit"
+msgstr "Unité Y"
+
+msgid "Z label"
+msgstr "Titre Z"
+
+msgid "Z unit"
+msgstr "Unité Z"
+
+msgid "Labels and units"
+msgstr "Titres et unités"
+
+msgid "Set the labels and units for the imported data"
+msgstr "Définir les titres et unités pour les données importées"
+
+msgid "The following title, labels and units will be applied to the data.<br><br><i><u>Note</u>: Leave empty the labels and units to keep the default values (i.e. the values which were inferred from the data).</i>"
+msgstr "Les titres, étiquettes et unités suivants seront appliqués aux données.<br><br><i><u>Note</u> : Laisser vide les étiquettes et unités pour conserver les valeurs par défaut (c'est-à-dire les valeurs qui ont été déduites des données).</i>"
+
+msgid "clipboard"
+msgstr "presse-papiers"
+
+msgid "Imported from:"
+msgstr "Importer depuis :"
+
+msgid "DataLab Import Wizard"
+msgstr "Assistant d'importation de DataLab"
+
+msgid "Shape"
+msgstr "Forme"
+
+msgid "Dimensions"
+msgstr "Dimensions"
+
+msgid "The registry address must be an http or https URL"
+msgstr "L'adresse du registre doit être une URL http ou https"
+
+#, python-format
+msgid "%s too large: %s, %s MiB (limit: %s MiB)"
+msgstr "%s : taille excessive, %s, %s Mio (limite : %s Mio)"
+
+msgid "Capsule"
+msgstr "Capsule"
+
+msgid "Referenced workspace"
+msgstr "Espace de travail référencé"
+
+msgid "Workspace"
+msgstr "Espace de travail"
+
+#, python-format
+msgid "Attachments are limited to 16 MiB: %s"
+msgstr "Les pièces jointes sont limitées à 16 Mio : %s"
+
+msgid "Attachment"
+msgstr "Pièce jointe"
+
+msgid "The capsule, its referenced workspace and its attachments must be different files"
+msgstr "La capsule, son espace de travail référencé et ses pièces jointes doivent être des fichiers différents"
+
+msgid "This capsule references its workspace: select the workspace file"
+msgstr "Cette capsule référence son espace de travail : sélectionnez le fichier de l'espace de travail"
+
+msgid "The data will be added, but their earlier provenance will not be imported. Open the file replacing the current workspace to keep it."
+msgstr "Les données seront ajoutées, mais leur provenance antérieure ne sera pas importée. Ouvrez le fichier en remplaçant l'espace de travail actuel pour la conserver."
+
+#, python-format
+msgid "The provenance data of this workspace are invalid: %s"
+msgstr "Les données de provenance de cet espace de travail sont invalides : %s"
+
+msgid "Add without provenance"
+msgstr "Ajouter sans la provenance"
+
+msgid "This file is not a DataLab workspace"
+msgstr "Ce fichier n'est pas un espace de travail DataLab"
+
+msgid "Workspace capsule..."
+msgstr "Capsule d'espace de travail..."
+
+msgid "Export, inspect, replay and compare workspace capsules (workspace and provenance of its processing)"
+msgstr "Exporter, inspecter, rejouer et comparer des capsules d'espace de travail (espace de travail et provenance de ses traitements)"
+
+msgid "Export capsule"
+msgstr "Exporter une capsule"
+
+msgid "Open capsule"
+msgstr "Ouvrir une capsule"
+
+msgid "HDF5 files (*.h5 *.hdf5 *.hdf *.he5);;All files (*)"
+msgstr "Fichiers HDF5 (*.h5 *.hdf5 *.hdf *.he5);;Tous les fichiers (*)"
+
+msgid "Provenance:"
+msgstr "Provenance :"
+
+msgid "If you choose <i>No</i>: "
+msgstr "Si vous choisissez <i>Non</i> : "
+
+msgid "Provenance"
+msgstr "Provenance"
+
+msgid "This processing has no parameters."
+msgstr "Ce traitement n'a pas de paramètres."
+
+msgid "The parameters of this processing cannot be edited here."
+msgstr "Les paramètres de ce traitement ne peuvent pas être modifiés ici."
+
+msgid "Reapply"
+msgstr "Réappliquer"
+
+msgid "Apply this processing again to the current input objects"
+msgstr "Appliquer à nouveau ce traitement aux objets d'entrée actuels"
+
+msgid "(deleted object)"
+msgstr "(objet supprimé)"
+
+msgid "Show execution provenance"
+msgstr "Afficher la provenance de l'exécution"
+
+msgid "Show the recorded provenance of the last successful execution of the selected action"
+msgstr "Afficher la provenance enregistrée de la dernière exécution réussie de l'action sélectionnée"
+
+msgid "JPEG compression requires 8-bit data (uint8)"
+msgstr "La compression JPEG n?cessite des donn?es 8 bits (uint8)"
+
+msgid "Deflate: 0 to 9, Zstandard: 1 to 22, JPEG: 1 to 100.<br>Leave empty to use the default level."
+msgstr "Deflate : 0 ? 9, Zstandard : 1 ? 22, JPEG : 1 ? 100.<br>Laisser vide pour utiliser le niveau par d?faut."
+
+msgid "Horizontal: integer data only.<br>Floating-point: floating data only."
+msgstr "Horizontal : donn?es enti?res uniquement.<br>Virgule flottante : donn?es flottantes uniquement."
+
+msgid "Cannot be combined with tile size"
+msgstr "Incompatible avec la taille des tuiles"
+
+msgid "Height and width, multiples of 16.<br>Cannot be combined with rows per strip."
+msgstr "Hauteur et largeur, multiples de 16.<br>Incompatible avec le nombre de lignes par bande."
+
+msgid "Leave empty to use the default value.<br>The maximum depends on the image (or tile) size."
+msgstr "Laisser vide pour utiliser la valeur par d?faut.<br>Le maximum d?pend de la taille de l'image (ou des tuiles)."
+
+#, python-format
+msgid "Complex images cannot be exported to %s files.<br><br>Use one of the NumPy, MAT-File, text, CSV or HDF5 image formats."
+msgstr "Les images complexes ne peuvent pas ?tre export?es dans des fichiers %s.<br><br>Utilisez l'un des formats NumPy, MAT-File, texte, CSV ou image HDF5."
+
+msgid "Local catalog"
+msgstr "Catalogue local"
+
+#, python-format
+msgid "Local catalog: %s"
+msgstr "Catalogue local : %s"
+
+#, python-format
+msgid "Plugins listed in the <a href=\"%s\">DataLab plugin catalog</a> and in the local catalogs of the <b>Plugin settings</b> tab, which take precedence. Official plugins are maintained by the DataLab team, community plugins by their authors, and local catalogs by your organization: install only plugins from authors you trust."
+msgstr "Plugins répertoriés dans le <a href=\"%s\">catalogue de plugins DataLab</a> et dans les catalogues locaux de l'onglet <b>Paramètres des plugins</b>, qui sont prioritaires. Les plugins officiels sont maintenus par l'équipe DataLab, les plugins de la communauté par leurs auteurs et les catalogues locaux par votre organisation : n'installez que des plugins provenant d'auteurs de confiance."
+
+msgid "Loading the plugin catalogs..."
+msgstr "Chargement des catalogues de plugins..."
+
+#, python-format
+msgid "Plugins in the catalogs: %d"
+msgstr "Plugins dans les catalogues : %d"
+
+#, python-format
+msgid "Local plugin catalog (%s)"
+msgstr "Catalogue local de plugins (%s)"
+
+msgid "Local plugin catalogs"
+msgstr "Catalogues locaux de plugins"
+
+msgid "Folders, possibly shared on the network, whose plugins are listed in the <b>Available plugins</b> tab before those of the DataLab plugin catalog. A folder provides the plugins of its <code>catalog.json</code> file if any, otherwise its plugin wheels."
+msgstr "Dossiers, éventuellement partagés sur le réseau, dont les plugins sont proposés dans l'onglet <b>Plugins disponibles</b> avant ceux du catalogue de plugins DataLab. Un dossier fournit les plugins de son fichier <code>catalog.json</code> s'il existe, sinon ses wheels de plugins."
+
+msgid "No local plugin catalog is configured."
+msgstr "Aucun catalogue local de plugins n'est configuré."
+
+#, python-format
+msgid "Folders provided via the <code>%s</code> environment variable (multiple paths separated by '<code>%s</code>') come first and appear above as read-only entries."
+msgstr "Les dossiers fournis via la variable d'environnement <code>%s</code> (plusieurs chemins séparés par '<code>%s</code>') sont prioritaires et apparaissent ci-dessus en lecture seule."
+
+msgid "Select local plugin catalog folder"
+msgstr "Sélectionner un dossier de catalogue local de plugins"
+
+msgid "The signals have different units: no conversion is applied."
+msgstr "Les signaux ont des unités différentes : aucune conversion n'est appliquée."
+
+msgid "To interpolate the operand, the X values of both signals must be finite and strictly increasing."
+msgstr "Pour interpoler l'opérande, les abscisses des deux signaux doivent être finies et strictement croissantes."
+
+msgid "The X range of the operand does not cover the X range of the source: extrapolation is not allowed."
+msgstr "L'intervalle des abscisses de l'opérande ne couvre pas celui de la source : l'extrapolation n'est pas autorisée."
+
+msgid "The operand has uncertainties, which cannot be interpolated."
+msgstr "L'opérande comporte des incertitudes, qui ne peuvent pas être interpolées."
+
+msgid "The signals cannot be aligned."
+msgstr "Les signaux ne peuvent pas être alignés."
+
+msgid "Translate"
+msgstr "Translation"
+
+msgid "Build or check a local plugin catalog folder."
+msgstr "Construire ou vérifier un dossier de catalogue local de plugins."
+
+msgid "Write the catalog.json file listing the plugin wheels."
+msgstr "Écrire le fichier catalog.json répertoriant les wheels de plugins."
+
+msgid "Check the catalog.json file against the plugin wheels."
+msgstr "Vérifier le fichier catalog.json par rapport aux wheels de plugins."
+
+msgid "Local plugin catalog folder"
+msgstr "Dossier du catalogue local de plugins"
+
+#, python-format
+msgid "Warning: %s"
+msgstr "Avertissement : %s"
+
+#, python-format
+msgid "%s was not written."
+msgstr "%s n'a pas été écrit."
+
+#, python-format
+msgid "Wrote %s, listing %d plugins."
+msgstr "%s écrit, répertoriant %d plugins."
+
+#, python-format
+msgid "The local plugin catalog lists %d plugins."
+msgstr "Le catalogue local de plugins répertorie %d plugins."
+
+msgid "An input object no longer exists."
+msgstr "Un objet d'entrée n'existe plus."
+
+msgid "This processing is not available in this version of DataLab."
+msgstr "Ce traitement n'est pas disponible dans cette version de DataLab."
+
+#, python-format
+msgid "Operation %s is not available in this version: %s"
+msgstr "L'opération %s n'est pas disponible dans cette version : %s"
+
+#, python-format
+msgid "Operation %s has no processing feature in this version of DataLab."
+msgstr "L'opération %s ne correspond à aucun traitement dans cette version de DataLab."
+
+msgid "The recorded inputs do not match this processing feature."
+msgstr "Les entrées enregistrées ne correspondent pas à ce traitement."
+
+msgid "The parameters of this processing were not recorded."
+msgstr "Les paramètres de ce traitement n'ont pas été enregistrés."
+
+#, python-format
+msgid "The recorded parameters cannot be used: %s"
+msgstr "Les paramètres enregistrés ne peuvent pas être utilisés : %s"
+
+msgid "This processing takes several parameter sets: it cannot be applied again from here."
+msgstr "Ce traitement utilise plusieurs jeux de paramètres : il ne peut pas être appliqué à nouveau d'ici."
 
 msgid "DataLab capsules"
 msgstr "Capsules DataLab"
@@ -4872,9 +5403,6 @@ msgstr "Révisions exportées, inspectées ou récupérées sur cet ordinateur. 
 msgid "Parent"
 msgstr "Parente"
 
-msgid "Source"
-msgstr "Source"
-
 msgid "Compare"
 msgstr "Comparer"
 
@@ -4966,105 +5494,6 @@ msgstr "Révisions"
 
 msgid "Registry"
 msgstr "Registre"
-
-msgid "Show more"
-msgstr "Afficher plus"
-
-msgid "Show less"
-msgstr "Afficher moins"
-
-msgid "Find"
-msgstr "Rechercher"
-
-msgid "Replace with"
-msgstr "Remplacer par"
-
-msgid "Aa"
-msgstr "Aa"
-
-msgid "Match case"
-msgstr "Respecter la casse"
-
-msgid "W"
-msgstr "M"
-
-msgid "Whole words only"
-msgstr "Mots entiers uniquement"
-
-msgid "Next"
-msgstr "Suivant"
-
-msgid "Prev"
-msgstr "Précédent"
-
-msgid "Replace"
-msgstr "Remplacer"
-
-msgid "Replace all"
-msgstr "Tout remplacer"
-
-msgid "Find:"
-msgstr "Rechercher :"
-
-msgid "Replace:"
-msgstr "Remplacer :"
-
-msgid "Show details"
-msgstr "Afficher les détails"
-
-msgid "Hide details"
-msgstr "Masquer les détails"
-
-msgid "Date and time"
-msgstr "Date et heure"
-
-msgid "Title"
-msgstr "Titre"
-
-msgid "Action is compatible with the current workspace state."
-msgstr "L'action est compatible avec l'état actuel de l'espace de travail."
-
-msgid "Action is not compatible with the current workspace state."
-msgstr "L'action n'est pas compatible avec l'état actuel de l'espace de travail."
-
-msgid "This step is outdated: replay it to refresh its result."
-msgstr "Cette étape est obsolète : rejouez-la pour actualiser son résultat."
-
-msgid "Active recording session."
-msgstr "Session d'enregistrement active."
-
-msgid "Installation configuration"
-msgstr "Configuration d'installation"
-
-msgid "User configuration"
-msgstr "Configuration utilisateur"
-
-msgid "Plugins and I/O features"
-msgstr "Plugins et fonctionnalités d'entrée/sortie"
-
-msgid "Preview source"
-msgstr "Source de l'aperçu"
-
-msgid "Preview disabled"
-msgstr "Aperçu désactivé"
-
-msgid "Computing preview..."
-msgstr "Calcul de l'aperçu..."
-
-msgid "Invalid parameters"
-msgstr "Paramètres invalides"
-
-msgid "Updating preview..."
-msgstr "Mise à jour de l'aperçu..."
-
-msgid "Preview failed"
-msgstr "Échec de l'aperçu"
-
-msgid "This result cannot be previewed."
-msgstr "Ce résultat ne peut pas être prévisualisé."
-
-msgid "Preview up to date"
-msgstr "Aperçu à jour"
 
 #, python-format
 msgid "array %s (%s)"
@@ -5296,6 +5725,9 @@ msgstr "Vérifier cette étape"
 msgid "History action"
 msgstr "Action de l'historique"
 
+msgid "Inputs"
+msgstr "Entr?es"
+
 msgid "already shown above (cycle)"
 msgstr "déjà affiché plus haut (cycle)"
 
@@ -5338,236 +5770,6 @@ msgstr "La provenance de cette exécution n'est pas disponible dans cet espace d
 
 msgid "The parameters of this action were edited since its last successful execution: the provenance below describes that execution."
 msgstr "Les paramètres de cette action ont été modifiés depuis sa dernière exécution réussie : la provenance ci-dessous décrit cette exécution."
-
-msgid "Kernel / Mask preview"
-msgstr "Aperçu du noyau / masque"
-
-#, python-brace-format
-msgid "{label} — Kernel / Mask preview"
-msgstr "{label} — Aperçu du noyau / masque"
-
-#, python-brace-format
-msgid "±{n} points"
-msgstr "±{n} points"
-
-#, python-brace-format
-msgid "±{n} rows × ±{n} columns"
-msgstr "±{n} lignes × ±{n} colonnes"
-
-msgid "This image uses an integer data type, so it cannot contain NaN or infinite values. Replace special values is therefore not applicable."
-msgstr "Cette image utilise un type de données entier, elle ne peut donc pas contenir de valeurs NaN ou infinies. Le remplacement des valeurs spéciales n'est donc pas applicable."
-
-msgid "Plugins:"
-msgstr "Plugins :"
-
-msgid "XML-RPC:"
-msgstr "XML-RPC :"
-
-msgid "Web API server is not running"
-msgstr "Serveur API Web arrêté"
-
-msgid "Click to start"
-msgstr "Cliquer pour démarrer"
-
-msgid "Web API:"
-msgstr "API Web :"
-
-msgid "Web API server is running"
-msgstr "Serveur API Web démarré"
-
-msgid "Click to view connection info"
-msgstr "Cliquer pour voir les infos de connexion"
-
-msgid "Clipboard"
-msgstr "Presse-papiers"
-
-msgid "File"
-msgstr "Fichier"
-
-msgid "Source of the data"
-msgstr "Source des données"
-
-msgid "File containing the data"
-msgstr "Fichier contenant les données"
-
-msgid "Preview parameters"
-msgstr "Paramètres de l'aperçu"
-
-msgid "Maximum Number of Rows"
-msgstr "Nombre maximum de lignes"
-
-msgid "Maximum number of rows to display"
-msgstr "Nombre maximum de lignes à afficher"
-
-msgid "Select the source of the data:"
-msgstr "Sélectionner la source des données :"
-
-msgid "Source Parameters"
-msgstr "Paramètres de la source"
-
-msgid "Delimiter"
-msgstr "Délimiteur"
-
-msgid "Tab"
-msgstr "Tabulation"
-
-msgid "Space"
-msgstr "Espace"
-
-msgid "Column delimiter character"
-msgstr "Caractère délimiteur de colonne"
-
-msgid "Decimal"
-msgstr "Décimal"
-
-msgid "Point"
-msgstr "Point"
-
-msgid "Comma"
-msgstr "Virgule"
-
-msgid "Decimal separator character"
-msgstr "Caractère séparateur décimal"
-
-msgid "Comments"
-msgstr "Commentaires"
-
-msgid "Character that indicates a comment line"
-msgstr "Caractère indiquant une ligne de commentaire"
-
-msgid "Rows to Skip"
-msgstr "Lignes à sauter"
-
-msgid "Number of rows to skip at the beginning of the file (including comments)"
-msgstr "Nombre de lignes à sauter au début du fichier (y compris les commentaires)"
-
-msgid "Max. nb of rows"
-msgstr "Nb max. de lignes"
-
-msgid "Maximum number of rows to import"
-msgstr "Nombre maximum de lignes à importer"
-
-msgid "Header"
-msgstr "En-tête"
-
-msgid "Infer"
-msgstr "Inférer"
-
-msgid "First row"
-msgstr "Première ligne"
-
-msgid "Row index to use as the column names"
-msgstr "Indice de ligne à utiliser comme noms de colonnes"
-
-msgid "Transpose"
-msgstr "Transposer"
-
-msgid "Transpose the data (swap rows and columns)"
-msgstr "Transposer les données (échanger les lignes et les colonnes)"
-
-msgid "Data type"
-msgstr "Type de données"
-
-msgid "Output signal data type."
-msgstr "Type de données du signal de sortie."
-
-msgid "First Column is X"
-msgstr "La première colonne est X"
-
-msgid ""
-"First column contains the X values\n"
-"(ignored if there is only one column)"
-msgstr ""
-"La première colonne contient les valeurs des X\n"
-"(ignoré s'il n'y a qu'une seule colonne)"
-
-msgid "Output image data type."
-msgstr "Type de données de l'image générée."
-
-msgid "Raw Data"
-msgstr "Données brutes"
-
-msgid "Data Preview"
-msgstr "Aperçu des données"
-
-msgid "Preview and modify the import settings:"
-msgstr "Aperçu et modification des paramètres d'importation :"
-
-msgid "Import Parameters"
-msgstr "Paramètres d'importation"
-
-msgid "Reading data"
-msgstr "Lecture des données"
-
-#, python-format
-msgid ""
-"The number of signals to import is very high (%d).\n"
-"This may be an error.\n"
-"\n"
-"Are you sure you want to continue?"
-msgstr ""
-"Le nombre de signaux à importer est très élevé (%d).\n"
-"Cela peut être une erreur.\n"
-"\n"
-"Etes-vous sûr de vouloir continuer ?"
-
-msgid "Graphical Representation"
-msgstr "Représentation graphique"
-
-msgid "Graphical representation of the imported data"
-msgstr "Représentation graphique des données importées"
-
-#, python-format
-msgid "Unselect the %s that you do not want to import:"
-msgstr "Désélectionner les %s que vous ne voulez pas importer :"
-
-msgid "Select all"
-msgstr "Tout sélectionner"
-
-msgid "Adding data to the plot"
-msgstr "Ajout des données au graphique"
-
-msgid "X label"
-msgstr "Titre X"
-
-msgid "Y label"
-msgstr "Titre Y"
-
-msgid "X unit"
-msgstr "Unité X"
-
-msgid "Y unit"
-msgstr "Unité Y"
-
-msgid "Z label"
-msgstr "Titre Z"
-
-msgid "Z unit"
-msgstr "Unité Z"
-
-msgid "Labels and units"
-msgstr "Titres et unités"
-
-msgid "Set the labels and units for the imported data"
-msgstr "Définir les titres et unités pour les données importées"
-
-msgid "The following title, labels and units will be applied to the data.<br><br><i><u>Note</u>: Leave empty the labels and units to keep the default values (i.e. the values which were inferred from the data).</i>"
-msgstr "Les titres, étiquettes et unités suivants seront appliqués aux données.<br><br><i><u>Note</u> : Laisser vide les étiquettes et unités pour conserver les valeurs par défaut (c'est-à-dire les valeurs qui ont été déduites des données).</i>"
-
-msgid "clipboard"
-msgstr "presse-papiers"
-
-msgid "Imported from:"
-msgstr "Importer depuis :"
-
-msgid "DataLab Import Wizard"
-msgstr "Assistant d'importation de DataLab"
-
-msgid "Shape"
-msgstr "Forme"
-
-msgid "Dimensions"
-msgstr "Dimensions"
 
 msgid "Minimum value"
 msgstr "Valeur minimum"
@@ -5616,4 +5818,3 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
-

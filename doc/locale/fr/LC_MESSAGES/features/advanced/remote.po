@@ -280,6 +280,21 @@ msgstr "Objet signal ou image (doit avoir le même UUID qu'un objet existant dan
 msgid "if no object with matching UUID is found"
 msgstr "si aucun objet avec un UUID correspondant n'est trouvé"
 
+msgid "Open objects from files in current panel (signals/images)."
+msgstr "Ouvrir des objets depuis des fichiers dans le panneau courant (signaux/images)."
+
+msgid "list of file names"
+msgstr "liste des noms de fichiers"
+
+msgid "Optional format-specific import parameters applied to every file requiring them, without showing any dialog (e.g. :class:`sigima.io.RawImageImportParam` for RAW images). Defaults to None."
+msgstr ""
+
+msgid "Open objects from directory in current panel (signals/images)."
+msgstr "Ouvrir des objets depuis un répertoire dans le panneau courant (signaux/images)."
+
+msgid "directory path"
+msgstr "chemin du répertoire"
+
 msgid "Call computation feature ``name``"
 msgstr "Appeler la fonctionnalité de calcul ``name``"
 
@@ -522,18 +537,6 @@ msgstr "Importer une macro depuis un fichier"
 
 msgid "Filename."
 msgstr "Nom du fichier."
-
-msgid "Open objects from directory in current panel (signals/images)."
-msgstr "Ouvrir des objets depuis un répertoire dans le panneau courant (signaux/images)."
-
-msgid "directory path"
-msgstr "chemin du répertoire"
-
-msgid "Open objects from files in current panel (signals/images)."
-msgstr "Ouvrir des objets depuis des fichiers dans le panneau courant (signaux/images)."
-
-msgid "list of file names"
-msgstr "liste des noms de fichiers"
 
 msgid "Load native DataLab HDF5 workspace files without any GUI elements."
 msgstr "Charger des fichiers d'espace de travail HDF5 natifs DataLab sans aucun élément d'interface graphique."

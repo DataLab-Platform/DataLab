@@ -88,8 +88,8 @@ class RemoteServer(QC.QThread):
     SIG_ADD_OBJECT = QC.Signal(object, str, bool)
     SIG_SET_OBJECT = QC.Signal(object)
     SIG_ADD_GROUP = QC.Signal(str, str, bool)
-    SIG_LOAD_FROM_FILES = QC.Signal(list)
-    SIG_LOAD_FROM_DIRECTORY = QC.Signal(str)
+    SIG_LOAD_FROM_FILES = QC.Signal(list, object)
+    SIG_LOAD_FROM_DIRECTORY = QC.Signal(str, object)
     SIG_SELECT_OBJECTS = QC.Signal(list, str)
     SIG_SELECT_GROUPS = QC.Signal(list, str)
     SIG_SELECT_ALL_GROUPS = QC.Signal(str)
@@ -412,22 +412,32 @@ class RemoteServer(QC.QThread):
         )
 
     @remote_call
-    def load_from_files(self, filenames: list[str]) -> None:
+    def load_from_files(
+        self, filenames: list[str], param_data: list[str] | None = None
+    ) -> None:
         """Open objects from files in current panel (signals/images).
 
         Args:
             filenames: list of file names
+            param_data: Optional serialized format-specific import parameters
+             applied to every file requiring them. Defaults to None.
         """
-        self.SIG_LOAD_FROM_FILES.emit(filenames)
+        param = None if param_data is None else utils.rpcjson_to_dataset(param_data)
+        self.SIG_LOAD_FROM_FILES.emit(filenames, param)
 
     @remote_call
-    def load_from_directory(self, path: str) -> None:
+    def load_from_directory(
+        self, path: str, param_data: list[str] | None = None
+    ) -> None:
         """Open objects from directory in current panel (signals/images).
 
         Args:
             path: directory path
+            param_data: Optional serialized format-specific import parameters
+             applied to every file requiring them. Defaults to None.
         """
-        self.SIG_LOAD_FROM_DIRECTORY.emit(path)
+        param = None if param_data is None else utils.rpcjson_to_dataset(param_data)
+        self.SIG_LOAD_FROM_DIRECTORY.emit(path, param)
 
     @remote_call
     def add_signal(
@@ -1192,6 +1202,38 @@ class RemoteClient(BaseProxy):
         """
         obj_data = utils.dataset_to_rpcjson(obj)
         self._datalab.set_object(obj_data)
+
+    def load_from_files(
+        self, filenames: list[str], param: gds.DataSet | None = None
+    ) -> None:
+        """Open objects from files in current panel (signals/images).
+
+        Args:
+            filenames: list of file names
+            param: Optional format-specific import parameters applied to every
+             file requiring them, without showing any dialog (e.g.
+             :class:`sigima.io.RawImageImportParam` for RAW images).
+             Defaults to None.
+        """
+        if param is None:
+            self._datalab.load_from_files(filenames)
+        else:
+            self._datalab.load_from_files(filenames, utils.dataset_to_rpcjson(param))
+
+    def load_from_directory(self, path: str, param: gds.DataSet | None = None) -> None:
+        """Open objects from directory in current panel (signals/images).
+
+        Args:
+            path: directory path
+            param: Optional format-specific import parameters applied to every
+             file requiring them, without showing any dialog (e.g.
+             :class:`sigima.io.RawImageImportParam` for RAW images).
+             Defaults to None.
+        """
+        if param is None:
+            self._datalab.load_from_directory(path)
+        else:
+            self._datalab.load_from_directory(path, utils.dataset_to_rpcjson(param))
 
     def calc(self, name: str, param: gds.DataSet | None = None) -> None:
         """Call computation feature ``name``

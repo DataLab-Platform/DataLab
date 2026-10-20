@@ -6,18 +6,11 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-19 07:30+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
-"Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.18.0\n"
 
 msgid "Workspace capsules in DataLab: export a workspace with the provenance of its processing, inspect a capsule, replay its activities, compare revisions, write reviews and exchange them through a registry"
 msgstr "Capsules d'espace de travail dans DataLab : exporter un espace de travail avec la provenance de ses traitements, inspecter une capsule, rejouer ses activités, comparer des révisions, rédiger des revues et les échanger via un registre"

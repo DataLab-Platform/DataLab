@@ -283,19 +283,29 @@ class AbstractDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
-    def load_from_files(self, filenames: list[str]) -> None:
+    def load_from_files(
+        self, filenames: list[str], param: gds.DataSet | None = None
+    ) -> None:
         """Open objects from files in current panel (signals/images).
 
         Args:
             filenames: list of file names
+            param: Optional format-specific import parameters applied to every
+             file requiring them, without showing any dialog (e.g.
+             :class:`sigima.io.RawImageImportParam` for RAW images).
+             Defaults to None.
         """
 
     @abc.abstractmethod
-    def load_from_directory(self, path: str) -> None:
+    def load_from_directory(self, path: str, param: gds.DataSet | None = None) -> None:
         """Open objects from directory in current panel (signals/images).
 
         Args:
             path: directory path
+            param: Optional format-specific import parameters applied to every
+             file requiring them, without showing any dialog (e.g.
+             :class:`sigima.io.RawImageImportParam` for RAW images).
+             Defaults to None.
         """
 
     @abc.abstractmethod
@@ -886,21 +896,31 @@ class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
         """
         self._datalab.open_capsule(filename, workspace)
 
-    def load_from_files(self, filenames: list[str]) -> None:
+    def load_from_files(
+        self, filenames: list[str], param: gds.DataSet | None = None
+    ) -> None:
         """Open objects from files in current panel (signals/images).
 
         Args:
             filenames: list of file names
+            param: Optional format-specific import parameters applied to every
+             file requiring them, without showing any dialog (e.g.
+             :class:`sigima.io.RawImageImportParam` for RAW images).
+             Defaults to None.
         """
-        self._datalab.load_from_files(filenames)
+        self._datalab.load_from_files(filenames, param)
 
-    def load_from_directory(self, path: str) -> None:
+    def load_from_directory(self, path: str, param: gds.DataSet | None = None) -> None:
         """Open objects from directory in current panel (signals/images).
 
         Args:
             path: directory path
+            param: Optional format-specific import parameters applied to every
+             file requiring them, without showing any dialog (e.g.
+             :class:`sigima.io.RawImageImportParam` for RAW images).
+             Defaults to None.
         """
-        self._datalab.load_from_directory(path)
+        self._datalab.load_from_directory(path, param)
 
     def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
         """Return selected objects uuids.

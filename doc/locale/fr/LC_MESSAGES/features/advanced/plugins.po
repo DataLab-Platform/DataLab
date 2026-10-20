@@ -598,6 +598,9 @@ msgstr ""
 msgid "Write data to file"
 msgstr ""
 
+msgid "Write classic image data with validated format-specific options."
+msgstr ""
+
 msgid "Information about a plugin that failed to load or instantiate."
 msgstr "Informations sur un plugin qui n'a pas pu être chargé ou instancié."
 
@@ -613,10 +616,16 @@ msgstr ""
 msgid "This class is used to define the interface for image I/O formats. It is an abstract base class that defines the methods that must be implemented by any image format class."
 msgstr ""
 
+msgid "Reject read parameters for formats that do not support them."
+msgstr ""
+
 msgid "Read list of image objects from file"
 msgstr ""
 
 msgid "Callback worker object"
+msgstr ""
+
+msgid "Optional format-specific read parameters"
 msgstr ""
 
 msgid "List of image objects"
@@ -633,6 +642,19 @@ msgid "Raises"
 msgstr "Lève"
 
 msgid "if format is not supported"
+msgstr ""
+
+msgid "Write an image with format-specific options."
+msgstr ""
+
+#, fuzzy
+msgid "Image object"
+msgstr "objets sélectionnés"
+
+msgid "Format-specific writer options"
+msgstr ""
+
+msgid "If this format does not support writer options"
 msgstr ""
 
 msgid "Plugin base class"

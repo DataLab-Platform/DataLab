@@ -2581,24 +2581,30 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             raise TypeError(f"Unsupported object type {type(obj)}")
 
     @remote_controlled
-    def load_from_files(self, filenames: list[str]) -> None:
+    def load_from_files(
+        self, filenames: list[str], param: gds.DataSet | None = None
+    ) -> None:
         """Open objects from files in current panel (signals/images)
 
         Args:
             filenames: list of filenames
+            param: Optional format-specific import parameters applied to every
+             file requiring them, without showing any dialog. Defaults to None.
         """
         panel = self.__get_current_basedatapanel()
-        panel.load_from_files(filenames)
+        panel.load_from_files(filenames, param=param)
 
     @remote_controlled
-    def load_from_directory(self, path: str) -> None:
+    def load_from_directory(self, path: str, param: gds.DataSet | None = None) -> None:
         """Open objects from directory in current panel (signals/images).
 
         Args:
             path: directory path
+            param: Optional format-specific import parameters applied to every
+             file requiring them, without showing any dialog. Defaults to None.
         """
         panel = self.__get_current_basedatapanel()
-        panel.load_from_directory(path)
+        panel.load_from_directory(path, param=param)
 
     # ------Other methods related to AbstractDLControl interface
     def get_version(self) -> str:
