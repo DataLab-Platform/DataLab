@@ -98,7 +98,18 @@ DataLab now uses stable UUID-based object references across object trees, result
 * When a source object is deleted, its reference falls back to its 8-character UUID instead of becoming an anonymous placeholder
 * Titles of workspaces saved by previous versions keep their former `s001`-style references as plain text
 
+**Curve fitting formulas:**
+
+* Interactive fitting dialogs now show the formula of the fitted model below the fit parameters, and each parameter label shows its symbol in the formula (e.g. "Scale factor (x₀)"): the parameters stored in the fitted signal metadata can thus be related to the model without reading the source code. The *Fitting* documentation also gives, for each model, the name under which each parameter is stored (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))
+* Polynomial and linear fit coefficients are labelled `a`, `b`, `c`... as in the formula and in the metadata, instead of `c2`, `c1`, `c0`
+* The *Fitting* documentation explains how to derive the peak wavelength, the temperature and the emissivity from the parameters of a Planckian fit
+
 ### 🔄 Changes ###
+
+**Synthetic images in physical coordinates:**
+
+* The 2D Gaussian, 2D ramp, sinusoidal grating, ring pattern, Siemens star and 2D sinc images were computed over the [x<sub>min</sub>, x<sub>max</sub>] × [y<sub>min</sub>, y<sub>max</sub>] domain of their creation parameters, but were displayed in pixel coordinates: their centers, widths and spatial frequencies did not match the axes (a sinusoidal grating of frequency 0.1 over [0, 100] showed 10 periods along an axis graduated from 0 to 1023). These images are now displayed over their domain. The new **Physical coordinates** option of their creation parameters restores pixel coordinates when disabled (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))
+* Images created with earlier versions keep their pixel coordinates when their creation parameters are edited or recomputed
 
 **Guided tour:**
 
@@ -147,3 +158,12 @@ DataLab now uses stable UUID-based object references across object trees, result
 * Fixed plot legends still showing the original generated title after renaming an object, e.g. a profile extracted from an image (fixes [Issue #323](https://github.com/DataLab-Platform/DataLab/issues/323))
 * Fixed source references in titles being unreadable when the object is selected in the signal or image tree, notably on Linux (fixes [Issue #358](https://github.com/DataLab-Platform/DataLab/issues/358))
 * Fixed result titles pointing to the wrong source objects after appending an HDF5 workspace to a non-empty session; appending the same workspace twice now also keeps each imported processing chain independent, so **Recompute** and **Select source objects** use the sources of the same import (fixes [Issue #357](https://github.com/DataLab-Platform/DataLab/issues/357))
+
+**Curve fitting:**
+
+* Fixed the automatic Planckian fit (**Processing > Fitting > Planckian fit**) returning a curve about 150 times lower than the signal on data in physical units, such as a blackbody signal with wavelengths in meters; the interactive Planckian fit dialog also starts from a curve matching the signal peak (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))
+* Fixed exponential fitting failing on short time constants depending on the X unit, e.g. a 1 ms time constant with X in seconds (automatic and interactive fits)
+
+**Signal creation:**
+
+* The blackbody signal (**Create > Blackbody (Planck's law)**) now has axis titles and units (wavelength in m, spectral radiance in W·sr⁻¹·m⁻³), which were missing (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))

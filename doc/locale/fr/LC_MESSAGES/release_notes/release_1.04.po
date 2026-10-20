@@ -246,8 +246,29 @@ msgstr "Lorsqu'un objet source est supprimé, sa référence est affichée sous 
 msgid "Titles of workspaces saved by previous versions keep their former `s001`-style references as plain text"
 msgstr "Les titres des espaces de travail enregistrés par les versions précédentes conservent leurs anciennes références de type `s001` sous forme de texte simple"
 
+msgid "**Curve fitting formulas:**"
+msgstr "**Formules des modèles d'ajustement :**"
+
+msgid "Interactive fitting dialogs now show the formula of the fitted model below the fit parameters, and each parameter label shows its symbol in the formula (e.g. \"Scale factor (x₀)\"): the parameters stored in the fitted signal metadata can thus be related to the model without reading the source code. The *Fitting* documentation also gives, for each model, the name under which each parameter is stored (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))"
+msgstr "Les fenêtres d'ajustement interactif affichent désormais la formule du modèle ajusté sous les paramètres d'ajustement, et le libellé de chaque paramètre indique son symbole dans la formule (par exemple \"Facteur d'échelle (x₀)\") : les paramètres enregistrés dans les métadonnées du signal ajusté peuvent ainsi être reliés au modèle sans lire le code source. La documentation *Ajustement* indique également, pour chaque modèle, le nom sous lequel chaque paramètre est enregistré (corrige [l'issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))"
+
+msgid "Polynomial and linear fit coefficients are labelled `a`, `b`, `c`... as in the formula and in the metadata, instead of `c2`, `c1`, `c0`"
+msgstr "Les coefficients des ajustements polynomial et linéaire sont nommés `a`, `b`, `c`... comme dans la formule et dans les métadonnées, au lieu de `c2`, `c1`, `c0`"
+
+msgid "The *Fitting* documentation explains how to derive the peak wavelength, the temperature and the emissivity from the parameters of a Planckian fit"
+msgstr "La documentation *Ajustement* explique comment déduire la longueur d'onde du pic, la température et l'émissivité des paramètres d'un ajustement planckien"
+
 msgid "🔄 Changes"
 msgstr "🔄 Changements"
+
+msgid "**Synthetic images in physical coordinates:**"
+msgstr "**Images synthétiques en coordonnées physiques :**"
+
+msgid "The 2D Gaussian, 2D ramp, sinusoidal grating, ring pattern, Siemens star and 2D sinc images were computed over the [x<sub>min</sub>, x<sub>max</sub>] × [y<sub>min</sub>, y<sub>max</sub>] domain of their creation parameters, but were displayed in pixel coordinates: their centers, widths and spatial frequencies did not match the axes (a sinusoidal grating of frequency 0.1 over [0, 100] showed 10 periods along an axis graduated from 0 to 1023). These images are now displayed over their domain. The new **Physical coordinates** option of their creation parameters restores pixel coordinates when disabled (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))"
+msgstr "Les images gaussienne 2D, rampe 2D, réseau sinusoïdal, anneaux, mire de Siemens et sinus cardinal 2D étaient calculées sur le domaine [x<sub>min</sub>, x<sub>max</sub>] × [y<sub>min</sub>, y<sub>max</sub>] de leurs paramètres de création, mais étaient affichées en coordonnées pixel : leurs centres, largeurs et fréquences spatiales ne correspondaient pas aux axes (un réseau sinusoïdal de fréquence 0,1 sur [0, 100] présentait 10 périodes le long d'un axe gradué de 0 à 1023). Ces images sont désormais affichées sur leur domaine. La nouvelle option **Coordonnées physiques** de leurs paramètres de création rétablit les coordonnées pixel lorsqu'elle est désactivée (corrige [l'issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))"
+
+msgid "Images created with earlier versions keep their pixel coordinates when their creation parameters are edited or recomputed"
+msgstr "Les images créées avec des versions antérieures conservent leurs coordonnées pixel lorsque leurs paramètres de création sont modifiés ou recalculés"
 
 msgid "**Guided tour:**"
 msgstr "**Visite guidée :**"
@@ -336,3 +357,17 @@ msgstr "Correction des références aux sources illisibles dans les titres lorsq
 msgid "Fixed result titles pointing to the wrong source objects after appending an HDF5 workspace to a non-empty session; appending the same workspace twice now also keeps each imported processing chain independent, so **Recompute** and **Select source objects** use the sources of the same import (fixes [Issue #357](https://github.com/DataLab-Platform/DataLab/issues/357))"
 msgstr "Correction des titres de résultats qui désignaient de mauvais objets sources après l'ajout d'un espace de travail HDF5 à une session non vide ; ajouter deux fois le même espace de travail conserve désormais aussi des chaînes de traitement importées indépendantes, de sorte que **Retraiter** et **Sélectionner les objets source** utilisent les sources issues du même import (corrige [Issue #357](https://github.com/DataLab-Platform/DataLab/issues/357))"
 
+msgid "**Curve fitting:**"
+msgstr "**Ajustement de courbes :**"
+
+msgid "Fixed the automatic Planckian fit (**Processing > Fitting > Planckian fit**) returning a curve about 150 times lower than the signal on data in physical units, such as a blackbody signal with wavelengths in meters; the interactive Planckian fit dialog also starts from a curve matching the signal peak (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))"
+msgstr "Correction de l'ajustement planckien automatique (**Traitement > Ajustement > Ajustement planckien**), qui renvoyait une courbe environ 150 fois plus basse que le signal sur des données en unités physiques, comme un signal de corps noir avec des longueurs d'onde en mètres ; la fenêtre d'ajustement planckien interactif part également d'une courbe correspondant au pic du signal (corrige [l'issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))"
+
+msgid "Fixed exponential fitting failing on short time constants depending on the X unit, e.g. a 1 ms time constant with X in seconds (automatic and interactive fits)"
+msgstr "Correction de l'ajustement exponentiel, qui échouait sur des constantes de temps courtes selon l'unité de X, par exemple une constante de temps de 1 ms avec X en secondes (ajustements automatique et interactif)"
+
+msgid "**Signal creation:**"
+msgstr "**Création de signaux :**"
+
+msgid "The blackbody signal (**Create > Blackbody (Planck's law)**) now has axis titles and units (wavelength in m, spectral radiance in W·sr⁻¹·m⁻³), which were missing (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))"
+msgstr "Le signal de corps noir (**Création > Corps noir (loi de Planck)**) a désormais des titres et des unités d'axes (longueur d'onde en m, luminance énergétique spectrale en W·sr⁻¹·m⁻³), qui étaient absents (corrige [l'issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))"
