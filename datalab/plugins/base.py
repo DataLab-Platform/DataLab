@@ -73,6 +73,11 @@ PLUGINS_DEFAULT_PATH = get_config_path("plugins")
 PLUGIN_ENTRY_POINT_GROUP = DESKTOP_ENTRY_POINT_GROUP
 #: Plugins installed from a file (kept out of the plugin search path)
 INSTALLED_PLUGINS_PATH = get_config_path("installed_plugins")
+#: Module of a ``datalab_*`` package defining its plugin class, as laid out by
+#: ``datalab-plugin create``: the package root stays free of Qt
+PACKAGE_DESKTOP_MODULE = "adapters.desktop"
+#: Subfolder of a plugin project holding its ``datalab_*`` packages
+PROJECT_SOURCE_FOLDER = "src"
 
 if not osp.isdir(PLUGINS_DEFAULT_PATH):
     os.makedirs(PLUGINS_DEFAULT_PATH)
@@ -1092,6 +1097,86 @@ def _add_plugin_discovery_source(plugin_class: type[PluginBase], source: str) ->
     plugin_class.__plugin_discovery_sources__ = tuple(dict.fromkeys((*sources, source)))
 
 
+def _holds_plugin_modules(directory: str) -> bool:
+    """Return True if a directory holds ``datalab_*`` modules or packages."""
+    prefix = f"{MOD_NAME}_"
+    try:
+        with os.scandir(directory) as entries:
+            for entry in entries:
+                if not entry.name.startswith(prefix):
+                    continue
+                if entry.is_file() and entry.name.endswith(".py"):
+                    return True
+                if entry.is_dir() and osp.isfile(osp.join(entry.path, "__init__.py")):
+                    return True
+    except OSError:
+        return False
+    return False
+
+
+def _get_plugin_search_paths() -> list[str]:
+    """Return the directories searched for plugins, in discovery order.
+
+    The ``src`` subfolder of a plugin project is searched too when it holds
+    ``datalab_*`` modules or packages, so that users may simply add the project
+    folder.
+    """
+    paths: list[str] = []
+    for path in (
+        get_user_plugin_paths() + [PLUGINS_DEFAULT_PATH] + OTHER_PLUGINS_PATHLIST
+    ):
+        rpath = osp.realpath(path)
+        source_path = osp.join(rpath, PROJECT_SOURCE_FOLDER)
+        candidates = [rpath]
+        if _holds_plugin_modules(source_path):
+            candidates.append(source_path)
+        paths.extend(candidate for candidate in candidates if candidate not in paths)
+    return paths
+
+
+def _extend_sys_path_with_plugin_paths() -> None:
+    """Append the plugin search paths missing from ``sys.path``."""
+    for path in _get_plugin_search_paths():
+        if path not in sys.path:
+            sys.path.append(path)
+
+
+def _reload_once(
+    name: str, reloadable_modules: Collection[str], reloaded_modules: set[str]
+) -> ModuleType | None:
+    """Reload a module imported before the discovery pass, at most once per pass.
+
+    Reloading takes code changes into account (hot reload). A module shared by
+    several entry points, or found both through an entry point and by naming
+    convention, is reloaded only once.
+
+    Args:
+        name: Module name
+        reloadable_modules: Modules imported before the discovery pass
+        reloaded_modules: Modules already reloaded during the pass (updated)
+
+    Returns:
+        The reloaded module, or None if the module was not imported before the
+         pass or was already reloaded
+    """
+    module = sys.modules.get(name)
+    if module is None or name not in reloadable_modules or name in reloaded_modules:
+        return None
+    reloaded_modules.add(name)
+    return importlib.reload(module)
+
+
+def _find_package_desktop_module(package_name: str) -> str | None:
+    """Return the full name of the Desktop module of a package, if it has one."""
+    module_name = package_name
+    for part in PACKAGE_DESKTOP_MODULE.split("."):
+        spec = importlib.util.find_spec(module_name)
+        if spec is None or spec.submodule_search_locations is None:
+            return None
+        module_name = f"{module_name}.{part}"
+    return module_name if importlib.util.find_spec(module_name) else None
+
+
 def _get_plugin_entry_points() -> list[importlib_metadata.EntryPoint]:
     """Return installed DataLab plugin entry points in deterministic order."""
     entry_points = importlib_metadata.entry_points()
@@ -1121,8 +1206,15 @@ def _record_plugin_discovery_failure(
     PluginRegistry.add_failed_plugin(name, filepath, tb_text, source)
 
 
-def _discover_entry_point_plugins() -> list[ModuleType]:
-    """Load and register plugin classes declared through package entry points."""
+def _discover_entry_point_plugins(
+    reloadable_modules: Collection[str], reloaded_modules: set[str]
+) -> list[ModuleType]:
+    """Load and register plugin classes declared through package entry points.
+
+    Args:
+        reloadable_modules: Modules imported before the discovery pass
+        reloaded_modules: Modules already reloaded during the pass (updated)
+    """
     try:
         entry_points = _get_plugin_entry_points()
     # Installed distribution metadata is external input. A malformed package
@@ -1135,8 +1227,6 @@ def _discover_entry_point_plugins() -> list[ModuleType]:
         return []
 
     discovered_modules: list[ModuleType] = []
-    reloadable_modules = set(sys.modules)
-    reloaded_modules: set[str] = set()
     for entry_point in entry_points:
         source = f"entry point {entry_point.name!r} ({entry_point.value})"
         plugin_classes = PluginRegistry.get_plugin_classes()
@@ -1144,12 +1234,8 @@ def _discover_entry_point_plugins() -> list[ModuleType]:
         try:
             try:
                 module_name = getattr(entry_point, "module", None)
-                if (
-                    module_name in reloadable_modules
-                    and module_name not in reloaded_modules
-                ):
-                    importlib.reload(sys.modules[module_name])
-                    reloaded_modules.add(module_name)
+                if module_name:
+                    _reload_once(module_name, reloadable_modules, reloaded_modules)
                 plugin_class = entry_point.load()
             finally:
                 # Importing the target module may invoke PluginBaseMeta. The entry
@@ -1262,7 +1348,9 @@ def discover_plugins() -> list[ModuleType]:
 
     Installed packages may expose a :class:`PluginBase` subclass through the
     ``datalab.plugins`` entry-point group. This function also reloads or imports
-    modules matching the historical ``"{MOD_NAME}_*"`` naming scheme.
+    modules and packages matching the historical ``"{MOD_NAME}_*"`` naming scheme,
+    as well as the ``adapters.desktop`` module of such packages, which defines
+    the plugin class of packages laid out by ``datalab-plugin create``.
 
     Import errors for individual plugins are captured and logged so that
     one broken plugin does not prevent the others from loading.  Error
@@ -1282,13 +1370,7 @@ def discover_plugins() -> list[ModuleType]:
     if not Conf.plugins_enabled.get():
         return []
 
-    # Ensure plugin search paths are present in sys.path
-    for path in (
-        get_user_plugin_paths() + [PLUGINS_DEFAULT_PATH] + OTHER_PLUGINS_PATHLIST
-    ):
-        rpath = osp.realpath(path)
-        if rpath not in sys.path:
-            sys.path.append(rpath)
+    _extend_sys_path_with_plugin_paths()
     try:
         get_installed_plugin_store().activate()
     except (OSError, ValueError):
@@ -1299,42 +1381,59 @@ def discover_plugins() -> list[ModuleType]:
             INSTALLED_PLUGINS_PATH,
         )
 
-    modules = _discover_entry_point_plugins()
-    for finder, name, _ispkg in pkgutil.iter_modules():
+    reloadable_modules = set(sys.modules)
+    reloaded_modules: set[str] = set()
+    modules = _discover_entry_point_plugins(reloadable_modules, reloaded_modules)
+    for finder, name, ispkg in pkgutil.iter_modules():
         if not name.startswith(f"{MOD_NAME}_"):
             continue
+        source = f"module convention {name!r}"
+        module_name = name
         try:
             previous_classes = list(PluginRegistry.get_plugin_classes())
             # If module is already loaded, reload it so that code changes
             # are taken into account (useful for hot-reload in dev).
-            if name in sys.modules:
-                module = importlib.reload(sys.modules[name])
-            else:
-                module = importlib.import_module(name)
-            source = f"module convention {name!r}"
+            loaded_modules = [
+                _reload_once(name, reloadable_modules, reloaded_modules)
+                or importlib.import_module(name)
+            ]
+            desktop_module_name = _find_package_desktop_module(name) if ispkg else None
+            if desktop_module_name is not None:
+                module_name = desktop_module_name
+                loaded_modules.append(
+                    _reload_once(module_name, reloadable_modules, reloaded_modules)
+                    or importlib.import_module(module_name)
+                )
+            loaded_names = {module.__name__ for module in loaded_modules}
             for plugin_class in PluginRegistry.get_plugin_classes():
-                if plugin_class not in previous_classes:
+                # Classes already registered by an entry point in this pass are
+                # also found by convention, without executing their module again
+                if (
+                    plugin_class not in previous_classes
+                    or plugin_class.__module__ in loaded_names
+                ):
                     _add_plugin_discovery_source(plugin_class, source)
-            _set_plugin_class_filepaths(module)
-            if module not in modules:
-                modules.append(module)
+            for module in loaded_modules:
+                _set_plugin_class_filepaths(module)
+                if module not in modules:
+                    modules.append(module)
         # Plugin discovery imports arbitrary third-party modules. We must catch
         # every failure here so discovery can continue and the error is exposed
         # through the console, log files, and plugin configuration dialog.
         except Exception as e:  # pylint: disable=broad-except
             tb_text = traceback.format_exc()
-            print(f"Error loading plugin '{name}': {e}")
+            print(f"Error loading plugin '{module_name}': {e}")
             traceback.print_exc()
             # Log to file so it appears in Log Files viewer
             logger = logging.getLogger(__name__)
-            logger.error("Error loading plugin '%s'", name, exc_info=True)
+            logger.error("Error loading plugin '%s'", module_name, exc_info=True)
             Conf.traceback_log_available.set(True)
             # Accumulate for replay in internal console
             PluginRegistry.add_discovery_error(tb_text)
             # Record structured info about the failed plugin
             filepath = ""
             try:
-                spec = importlib.util.find_spec(name)
+                spec = importlib.util.find_spec(module_name)
                 if spec and spec.origin:
                     filepath = spec.origin
             # Best effort only: failing to resolve the file path must never mask
@@ -1342,9 +1441,7 @@ def discover_plugins() -> list[ModuleType]:
             except Exception:  # pylint: disable=broad-except
                 if hasattr(finder, "path"):
                     filepath = osp.join(finder.path, name)
-            PluginRegistry.add_failed_plugin(
-                name, filepath, tb_text, f"module convention {name!r}"
-            )
+            PluginRegistry.add_failed_plugin(module_name, filepath, tb_text, source)
     _normalize_discovered_plugin_classes()
     return modules
 
@@ -1381,12 +1478,7 @@ def discover_v020_plugins() -> list[tuple[str, str]]:
     """
     v020_plugins = []
     if Conf.plugins_enabled.get():
-        for path in (
-            get_user_plugin_paths() + [PLUGINS_DEFAULT_PATH] + OTHER_PLUGINS_PATHLIST
-        ):
-            rpath = osp.realpath(path)
-            if rpath not in sys.path:
-                sys.path.append(rpath)
+        _extend_sys_path_with_plugin_paths()
         for finder, name, _ispkg in pkgutil.iter_modules():
             if name.startswith("cdl_"):
                 # Get the directory path from the module finder

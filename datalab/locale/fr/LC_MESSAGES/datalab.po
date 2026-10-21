@@ -4364,6 +4364,14 @@ msgid "Plugin name must contain letters or digits"
 msgstr "Le nom du plugin doit contenir des lettres ou des chiffres"
 
 #, python-format
+msgid "The module name of a single-file plugin must start with '%s'"
+msgstr "Le nom du module d'un plugin en fichier unique doit commencer par '%s'"
+
+#, python-format
+msgid "File already exists: %s"
+msgstr "Le fichier existe déjà : %s"
+
+#, python-format
 msgid "Destination already exists: %s"
 msgstr "La destination existe déjà : %s"
 
@@ -4393,11 +4401,17 @@ msgstr "Description"
 msgid "Destination"
 msgstr "Destination"
 
-msgid "Create and maintain DataLab plugin projects."
-msgstr "Créer et maintenir des projets de plugins DataLab."
+msgid "Create and maintain DataLab plugins."
+msgstr "Créer et maintenir des plugins DataLab."
 
-msgid "Create a layered installable plugin project."
-msgstr "Créer un projet de plugin installable structuré en couches."
+msgid "Create a single-file plugin, or a layered installable project with --project."
+msgstr "Créer un plugin en fichier unique, ou un projet installable structuré en couches avec --project."
+
+msgid "Folder receiving the plugin file (default: the user plugin directory), or project folder with --project"
+msgstr "Dossier recevant le fichier du plugin (par défaut : le répertoire de plugins de l'utilisateur), ou dossier du projet avec --project"
+
+msgid "Create a layered installable project, to publish the plugin"
+msgstr "Créer un projet installable structuré en couches, pour publier le plugin"
 
 msgid "Plugin display name"
 msgstr "Nom d'affichage du plugin"
@@ -4420,8 +4434,8 @@ msgstr "Capacité du plugin ; l'option peut être répétée"
 msgid "Object type used by the sample processing"
 msgstr "Type d'objet utilisé par le traitement d'exemple"
 
-msgid "Project license"
-msgstr "Licence du projet"
+msgid "Project license (with --project)"
+msgstr "Licence du projet (avec --project)"
 
 msgid "Build or check a local plugin catalog folder."
 msgstr "Construire ou vérifier un dossier de catalogue local de plugins."
@@ -4454,6 +4468,17 @@ msgstr "Le catalogue local de plugins répertorie %d plugins."
 #, python-format
 msgid "Created DataLab plugin project at %s"
 msgstr "Projet de plugin DataLab créé dans %s"
+
+#, python-format
+msgid "Created DataLab plugin %s at %s"
+msgstr "Plugin DataLab %s créé : %s"
+
+msgid "Select Plugins > Reload plugins in DataLab, or restart it."
+msgstr "Sélectionnez Plugins > Recharger les plugins dans DataLab, ou redémarrez-le."
+
+#, python-format
+msgid "Add %s to the plugin directories (Plugins > Configure plugins... > Plugin settings), then reload the plugins."
+msgstr "Ajoutez %s aux répertoires de plugins (Plugins > Configurer les plugins... > Paramètres des plugins), puis rechargez les plugins."
 
 msgid "Source object no longer exists."
 msgstr "L'objet source n'existe plus."

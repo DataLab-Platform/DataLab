@@ -138,6 +138,9 @@ msgstr "Un catalogue illisible, comme un partage réseau non connecté ou le cat
 msgid "**Plugin project generator:**"
 msgstr "**Générateur de projets de plugins :**"
 
+msgid "`datalab-plugin create` now creates a single-file plugin by default, the simplest way to extend DataLab: it only asks for the plugin name and description, then writes a `datalab_<name>.py` file to the user plugin directory. Once the plugins are reloaded, the plugin adds its submenu to the **Plugins** menu with a sample processing of the selected signals (or images, with `--object-kind image`), whose short NumPy function is the only part to edit. The file never overwrites an existing one, and can be shared and installed with **Plugins > Configure plugins... > Install plugins**. The layered installable project, described below, is created with `--project` (implements [Issue #413](https://github.com/DataLab-Platform/DataLab/issues/413))"
+msgstr "`datalab-plugin create` crée désormais par défaut un plugin en fichier unique, la façon la plus simple d'étendre DataLab : la commande demande seulement le nom du plugin et sa description, puis écrit un fichier `datalab_<nom>.py` dans le répertoire de plugins de l'utilisateur. Une fois les plugins rechargés, le plugin ajoute son sous-menu au menu **Plugins**, avec un traitement d'exemple des signaux sélectionnés (ou des images, avec `--object-kind image`), dont la courte fonction NumPy est la seule partie à modifier. Le fichier n'écrase jamais un fichier existant, et peut être partagé et installé avec **Plugins > Configurer les plugins... > Installer des plugins**. Le projet installable structuré en couches, décrit ci-dessous, est créé avec `--project` (implémente [l'issue #413](https://github.com/DataLab-Platform/DataLab/issues/413))"
+
 msgid "Hardened ``datalab-plugin create`` from the Camera pilot feedback: generated projects now separate host-independent ``core`` code, headless ``workflow`` orchestration, and Desktop/Web ``adapters`` from the first commit"
 msgstr "Durcissement de ``datalab-plugin create`` à partir du retour du pilote Camera : les projets générés séparent désormais dès le premier commit le code ``core`` indépendant de l'hôte, l'orchestration ``workflow`` sans interface et les ``adapters`` Desktop/Web"
 
@@ -153,8 +156,8 @@ msgstr "Les noms et descriptions de plugins longs sont désormais mis en forme a
 msgid "Generated projects are ready to publish: a release workflow attaches the wheel to a GitHub release when a version tag is pushed and prints the entry to submit to the DataLab plugin catalog; `pyproject.toml` requires the current DataLab major version and declares the project URLs"
 msgstr "Les projets générés sont prêts à publier : un workflow de release joint le wheel à une release GitHub lorsqu'une étiquette de version est poussée et affiche la fiche à soumettre au catalogue de plugins DataLab ; `pyproject.toml` exige la version majeure courante de DataLab et déclare les URL du projet"
 
-msgid "`datalab-plugin create` asks for the GitHub account hosting the project and derives the default plugin ID from it (`io.github.<account>.<name>`), `org.datalab.` IDs being reserved for DataLab-Platform plugins"
-msgstr "`datalab-plugin create` demande le compte GitHub qui héberge le projet et en déduit l'ID de plugin par défaut (`io.github.<compte>.<nom>`), les ID `org.datalab.` étant réservés aux plugins de DataLab-Platform"
+msgid "`datalab-plugin create --project` asks for the GitHub account hosting the project and derives the default plugin ID from it (`io.github.<account>.<name>`), `org.datalab.` IDs being reserved for DataLab-Platform plugins"
+msgstr "`datalab-plugin create --project` demande le compte GitHub qui héberge le projet et en déduit l'ID de plugin par défaut (`io.github.<compte>.<nom>`), les ID `org.datalab.` étant réservés aux plugins de DataLab-Platform"
 
 msgid "**Add metadata:**"
 msgstr "**Ajout de métadonnées :**"
@@ -383,6 +386,12 @@ msgstr "Les résultats de l'extraction de plusieurs régions d'intérêt dans un
 
 msgid "**Edit > Recompute** now also recomputes results of operations combining several objects (e.g., difference of two signals, average of several images), which were skipped"
 msgstr "**Édition > Retraiter** recalcule désormais aussi les résultats des opérations combinant plusieurs objets (par exemple la différence de deux signaux ou la moyenne de plusieurs images), qui étaient ignorés"
+
+msgid "**Plugins:**"
+msgstr "**Plugins :**"
+
+msgid "Plugins organized as a folder, such as those created by `datalab-plugin create --project`, are now loaded when their folder is added to the plugin directories, without being installed first: they were silently ignored, unless an earlier installation had left package information in the project. The project folder itself can now be added, instead of its `src` subfolder (fixes [Issue #411](https://github.com/DataLab-Platform/DataLab/issues/411))"
+msgstr "Les plugins organisés en dossier, comme ceux créés par `datalab-plugin create --project`, sont désormais chargés lorsque leur dossier est ajouté aux répertoires de plugins, sans devoir être installés au préalable : ils étaient ignorés sans message, sauf si une installation antérieure avait laissé des informations de paquet dans le projet. Le dossier du projet lui-même peut désormais être ajouté, au lieu de son sous-dossier `src` (corrige [l'issue #411](https://github.com/DataLab-Platform/DataLab/issues/411))"
 
 msgid "**Plugins and History:**"
 msgstr "**Plugins et historique :**"

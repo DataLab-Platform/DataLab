@@ -48,6 +48,8 @@ from sigima.proc.contracts import (
     prepare_execution,
 )
 from sigima.proc.decorator import is_computation_function
+from sigima.proc.image import Wrap1to1Func as ImageWrap1to1Func
+from sigima.proc.signal import Wrap1to1Func as SignalWrap1to1Func
 from sigima.tools.signal.interpolation import interpolate
 from sigimax.adapters_plotpy import coordutils
 from sigimax.widgets.warningerror import show_warning_error
@@ -902,13 +904,51 @@ SourcePreparationHook = Callable[
 ]
 
 
+#: Sigima wrappers turning a NumPy function into a 1-to-1 computation function
+_WRAPPED_1_TO_1_TYPES = (SignalWrap1to1Func, ImageWrap1to1Func)
+
+
+def _check_feature_function(function: Callable, pattern: str) -> None:
+    """Check that a function may be registered as a computing feature.
+
+    A feature runs either a Sigima computation function, decorated with
+    :func:`sigima.proc.decorator.computation_function`, or, for a 1-to-1 feature,
+    a NumPy function wrapped with ``Wrap1to1Func`` of :mod:`sigima.proc.signal`
+    or :mod:`sigima.proc.image`. Other callables are refused when they are
+    registered, rather than when processing objects in a separate process.
+
+    Args:
+        function: Function of the feature
+        pattern: Pattern of the feature
+
+    Raises:
+        ValueError: The function cannot run this feature
+    """
+    if is_computation_function(function):
+        return
+    name = getattr(function, "__name__", repr(function))
+    if isinstance(function, _WRAPPED_1_TO_1_TYPES):
+        if pattern == "1_to_1":
+            return
+        raise ValueError(
+            f"'{name}' is wrapped with Wrap1to1Func, which only applies to "
+            f"1-to-1 features, not to {pattern} features."
+        )
+    raise ValueError(
+        f"'{name}' is not a valid computation function: decorate it with "
+        "sigima.proc.decorator.computation_function(), or, for a 1-to-1 feature, "
+        "wrap a NumPy function with Wrap1to1Func."
+    )
+
+
 @dataclass
 class ComputingFeature(Generic[TypeObj]):
     """Computing feature dataclass.
 
     Args:
         pattern: pattern
-        function: function
+        function: Sigima computation function or, for a 1-to-1 feature, NumPy
+         function wrapped with ``Wrap1to1Func`` (see :func:`_check_feature_function`)
         paramclass: parameter class
         title: title
         icon_name: icon name
@@ -947,10 +987,8 @@ class ComputingFeature(Generic[TypeObj]):
 
     def __post_init__(self):
         """Validate the function and resolve the stable feature identifier."""
-        if self.function is not None and not is_computation_function(self.function):
-            raise ValueError(
-                f"'{self.function.__name__}' is not a valid computation function."
-            )
+        if self.function is not None:
+            _check_feature_function(self.function, self.pattern)
         if self.owner_plugin_id is not None and not self.owner_plugin_id.strip():
             raise ValueError("ComputingFeature owner_plugin_id must not be empty.")
         if self.feature_id is None:
@@ -3322,7 +3360,8 @@ class BaseProcessor(QC.QObject, Generic[TypeROI, TypeROIParam]):
         function is returned.
 
         Args:
-            function: function to register
+            function: Sigima computation function, or NumPy function wrapped with
+             ``Wrap1to1Func`` (:mod:`sigima.proc.signal` or :mod:`sigima.proc.image`)
             title: title of the function
             paramclass: parameter class. Defaults to None.
             icon_name: icon name. Defaults to None.

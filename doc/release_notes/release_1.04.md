@@ -54,12 +54,13 @@
 
 **Plugin project generator:**
 
+* `datalab-plugin create` now creates a single-file plugin by default, the simplest way to extend DataLab: it only asks for the plugin name and description, then writes a `datalab_<name>.py` file to the user plugin directory. Once the plugins are reloaded, the plugin adds its submenu to the **Plugins** menu with a sample processing of the selected signals (or images, with `--object-kind image`), whose short NumPy function is the only part to edit. The file never overwrites an existing one, and can be shared and installed with **Plugins > Configure plugins... > Install plugins**. The layered installable project, described below, is created with `--project` (implements [Issue #413](https://github.com/DataLab-Platform/DataLab/issues/413))
 * Hardened ``datalab-plugin create`` from the Camera pilot feedback: generated projects now separate host-independent ``core`` code, headless ``workflow`` orchestration, and Desktop/Web ``adapters`` from the first commit
 * Generated package roots expose stable identity without importing Qt; the installed entry point targets the Desktop adapter while Web support is explicitly marked unsupported
 * Every generated project includes an executable architecture regression test, contribution and architecture documentation, and a changelog
 * Long plugin names and descriptions are now formatted so newly generated projects pass their bundled Ruff checks without manual source edits
 * Generated projects are ready to publish: a release workflow attaches the wheel to a GitHub release when a version tag is pushed and prints the entry to submit to the DataLab plugin catalog; `pyproject.toml` requires the current DataLab major version and declares the project URLs
-* `datalab-plugin create` asks for the GitHub account hosting the project and derives the default plugin ID from it (`io.github.<account>.<name>`), `org.datalab.` IDs being reserved for DataLab-Platform plugins
+* `datalab-plugin create --project` asks for the GitHub account hosting the project and derives the default plugin ID from it (`io.github.<account>.<name>`), `org.datalab.` IDs being reserved for DataLab-Platform plugins
 
 **Add metadata:**
 
@@ -171,6 +172,10 @@ DataLab now uses stable UUID-based object references across object trees, result
 
 * Results of the extraction of several regions of interest into a single object can be processed again: the **Processing** tab showed "Unknown computing feature: extract_rois" with **Reapply** disabled, and replaying the History skipped the action
 * **Edit > Recompute** now also recomputes results of operations combining several objects (e.g., difference of two signals, average of several images), which were skipped
+
+**Plugins:**
+
+* Plugins organized as a folder, such as those created by `datalab-plugin create --project`, are now loaded when their folder is added to the plugin directories, without being installed first: they were silently ignored, unless an earlier installation had left package information in the project. The project folder itself can now be added, instead of its `src` subfolder (fixes [Issue #411](https://github.com/DataLab-Platform/DataLab/issues/411))
 
 **Plugins and History:**
 
