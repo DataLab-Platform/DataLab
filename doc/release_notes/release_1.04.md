@@ -114,6 +114,7 @@ DataLab now uses stable UUID-based object references across object trees, result
 * NeXus `NXdata` groups are shown as single items in the HDF5 browser and imported as signals or images with their axes, units, labels and, for signals, uncertainties. Bin edges are converted to bin centers, and non-uniform image axes are kept. Invalid axes are reported in the browser instead of being guessed
 * Imported signals and images record where they come from (file, group, signal and axes, applied conversions) in their `experimental_source` metadata, which is saved with the workspace: a saved workspace reopens without the NeXus file
 * `.nxs` and `.nx5` files are proposed when opening HDF5 files
+* Plugins can describe the signals and images of files that NeXus `NXdata` groups designate incompletely (no axes, several counters...) with declarative data mappings (JSON) registered with `sigimax.h5.mapping.register_mapping`: the HDF5 browser then shows each described object as an extra item, imported with its axes, labels and units
 
 ### 🔄 Changes ###
 
