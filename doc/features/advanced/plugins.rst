@@ -16,8 +16,8 @@ A plugin is Python code that is automatically loaded by DataLab at startup. It c
 
 A plugin defines a class that **inherits from** :class:`datalab.plugins.PluginBase`, includes a class attribute named ``PLUGIN_INFO`` (an instance of :class:`datalab.plugins.PluginInfo`) and implements the ``create_actions`` method. DataLab finds this class in a plugin directory (see :ref:`plugin_locations`), in one of two forms:
 
-- **A single file** whose name **starts with** ``datalab_`` (e.g. ``datalab_myplugin.py``) and which contains the class. This is the simplest form, recommended to get started.
-- **A folder** whose name starts with ``datalab_`` and which holds an ``__init__.py`` file (a Python package, e.g. ``datalab_myplugin/``). DataLab loads the folder, then its ``adapters/desktop.py`` file when it exists: this is where projects created by ``datalab-plugin create`` define the class (see :ref:`plugin_project`). Otherwise, the class is defined in ``__init__.py``.
+- **A single file** whose name **starts with** ``datalab_`` (e.g. ``datalab_myplugin.py``) and which contains the class. This is the simplest form, recommended to get started: ``datalab-plugin create`` creates such a file, ready to use (see :ref:`plugin_generator`).
+- **A folder** whose name starts with ``datalab_`` and which holds an ``__init__.py`` file (a Python package, e.g. ``datalab_myplugin/``). DataLab loads the folder, then its ``adapters/desktop.py`` file when it exists: this is where projects created by ``datalab-plugin create --project`` define the class (see :ref:`plugin_project`). Otherwise, the class is defined in ``__init__.py``.
 
 Nothing needs to be installed: the file or folder is loaded as it is.
 
@@ -142,7 +142,7 @@ Plugins are automatically discovered at startup from multiple locations:
 
   Changes to this variable are only taken into account at DataLab startup.
 
-A plugin directory may also be the folder of a plugin project, such as one created by ``datalab-plugin create``: DataLab then also searches its ``src`` subfolder, which holds the ``datalab_*`` folder of the plugin. The Python packages the plugin depends on must be available in DataLab's environment.
+A plugin directory may also be the folder of a plugin project, such as one created by ``datalab-plugin create --project``: DataLab then also searches its ``src`` subfolder, which holds the ``datalab_*`` folder of the plugin. The Python packages the plugin depends on must be available in DataLab's environment.
 
 Managing plugins in DataLab
 ---------------------------
@@ -630,24 +630,48 @@ Declared tiles replace the default tile. The first one is the main tile of the p
 
 The user decides which applications are shown and in which order: the welcome page shows a limited number of tile rows, pinned applications first, then recently used ones, then the others by name (see :ref:`welcome_page`). A plugin therefore cannot rely on its tile being visible: its features must remain available from the **Applications** catalog.
 
-.. _plugin_project:
+.. _plugin_generator:
 
-Creating a layered plugin project
-----------------------------------
+Creating a plugin with ``datalab-plugin create``
+-------------------------------------------------
 
-The installed ``datalab-plugin`` command creates a small, installable project
-that follows the stable plugin and feature ownership contracts. Run it without
-options for an interactive setup:
+The ``datalab-plugin`` command is installed with DataLab as a Python package; the standalone version of DataLab does not provide it. Run it without options to create a single-file plugin:
 
 .. code-block:: bash
 
   datalab-plugin create
 
+The command only asks for the plugin name and its description, then writes a ``datalab_<name>.py`` file to the user plugin directory (see :ref:`plugin_locations`). Select **Plugins > Reload plugins** in DataLab, or restart DataLab: the plugin adds its submenu to the **Plugins** menu, with a sample processing of the selected signals. To implement your own processing, edit the ``sample_processing`` function of the file, which receives the Y values of a signal as a NumPy array and returns new ones, then reload the plugins.
+
+Options adapt the generated file:
+
+- ``--object-kind image``: the sample processing applies to images, and its function receives the image data.
+- ``--capability``: without the ``processing`` capability, the submenu holds an action showing a message, to replace with your own.
+- A destination folder, given as argument: it must then be added to the plugin directories (see :ref:`plugin_search_paths`).
+- ``--package`` and ``--plugin-id``: the module name and the plugin ID are otherwise derived from the plugin name. The module name must start with ``datalab_``.
+
+An existing file is never overwritten. To share the plugin, send its file: other users install it with **Plugins > Configure plugins... > Install plugins** (see :ref:`plugin_install_from_file`).
+
+To publish a plugin in the plugin catalog, or to develop a larger plugin with tests, create a layered project with ``--project`` instead (see :ref:`plugin_project`).
+
+.. _plugin_project:
+
+Creating a layered plugin project
+----------------------------------
+
+With ``--project``, the installed ``datalab-plugin`` command creates a small,
+installable project that follows the stable plugin and feature ownership
+contracts. Run it without other options for an interactive setup:
+
+.. code-block:: bash
+
+  datalab-plugin create --project
+
 The command asks for the display name and the GitHub account (user or organization) that will host the project, and offers defaults for the Python package, reverse-domain plugin ID, description, and destination. The default plugin ID is ``io.github.<account>.<name>``; ``org.datalab.`` IDs are reserved for the DataLab-Platform organization, and ``org.example.`` is used when no account is given. For scripts or reproducible setup, pass the values explicitly:
 
 .. code-block:: bash
 
-  datalab-plugin create datalab-camera-characterization \
+  datalab-plugin create --project datalab-camera-characterization \
     --name "Camera Characterization" \
     --github-account DataLab-Platform \
     --package datalab_camera_characterization \
