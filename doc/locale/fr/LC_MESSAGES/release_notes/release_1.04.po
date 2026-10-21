@@ -84,6 +84,9 @@ msgstr "Les outils de plugin apparaissent aussi dans le sous-menu du plugin du m
 msgid "Application plugins may provide instruments, such as simulated cameras or oscilloscopes, without writing any user interface: DataLab shows a window with a live view and the instrument settings, refreshed as settings change or continuously in **Live** mode, and **Acquire** adds the acquired objects to a new group, ready for the application's methods"
 msgstr "Les plugins d'application peuvent fournir des instruments, comme des caméras ou des oscilloscopes simulés, sans écrire d'interface utilisateur : DataLab affiche une fenêtre avec une vue en direct et les réglages de l'instrument, rafraîchie à chaque modification des réglages ou en continu en mode **En direct**, et **Acquérir** ajoute les objets acquis dans un nouveau groupe, prêts pour les méthodes de l'application"
 
+msgid "Instruments are called outside the user interface thread, one call at a time: a slow instrument, such as a real device waiting for its data, no longer freezes DataLab, and repeated refresh requests made meanwhile are merged. Instruments may also declare `open` and `close` methods, called when their window opens and closes (including when plugins are reloaded or DataLab quits), for example to connect to a device and to release it"
+msgstr "Les instruments sont appelés en dehors du fil d'exécution de l'interface utilisateur, un appel à la fois : un instrument lent, comme un appareil réel attendant ses données, ne fige plus DataLab, et les demandes de rafraîchissement répétées entre-temps sont regroupées. Les instruments peuvent aussi déclarer des méthodes `open` et `close`, appelées à l'ouverture et à la fermeture de leur fenêtre (y compris lors du rechargement des plugins ou de la fermeture de DataLab), par exemple pour se connecter à un appareil puis le libérer"
+
 msgid "Plugin developers describe recipe inputs declaratively (titles, minimum counts, metadata requirements) and may add binding suggestions and fast input checks; every recipe then runs through DataLab's generic launcher, without plugin-specific input dialogs"
 msgstr "Les développeurs de plugins décrivent les entrées des recettes de manière déclarative (titres, effectifs minimaux, métadonnées requises) et peuvent ajouter des suggestions d'affectation et des vérifications rapides des entrées ; chaque recette s'exécute alors via le lanceur générique de DataLab, sans boîte de dialogue d'entrées propre au plugin"
 
@@ -258,6 +261,27 @@ msgstr "Les coefficients des ajustements polynomial et linéaire sont nommés `a
 msgid "The *Fitting* documentation explains how to derive the peak wavelength, the temperature and the emissivity from the parameters of a Planckian fit"
 msgstr "La documentation *Ajustement* explique comment déduire la longueur d'onde du pic, la température et l'émissivité des paramètres d'un ajustement planckien"
 
+msgid "**Remote control and plugins:**"
+msgstr "**Contrôle à distance et plugins :**"
+
+msgid "`add_group` now returns the UUID of the created group, so that a remote client, a macro or a plugin can add objects to it with `add_object(obj, group_id=...)` (or `add_signal`/`add_image`) instead of looking the group up by its title"
+msgstr "`add_group` renvoie désormais l'UUID du groupe créé, de sorte qu'un client distant, une macro ou un plugin peut y ajouter des objets avec `add_object(obj, group_id=...)` (ou `add_signal`/`add_image`) au lieu de rechercher le groupe par son titre"
+
+msgid "**NeXus files:**"
+msgstr "**Fichiers NeXus :**"
+
+msgid "NeXus `NXdata` groups are shown as single items in the HDF5 browser and imported as signals or images with their axes, units, labels and, for signals, uncertainties. Bin edges are converted to bin centers, and non-uniform image axes are kept. Invalid axes are reported in the browser instead of being guessed"
+msgstr "Les groupes NeXus `NXdata` sont présentés comme des éléments uniques dans l'explorateur HDF5 et importés comme signaux ou images avec leurs axes, unités, libellés et, pour les signaux, incertitudes. Les bords de classes sont convertis en centres de classes, et les axes d'image non uniformes sont conservés. Les axes invalides sont signalés dans l'explorateur au lieu d'être devinés"
+
+msgid "Imported signals and images record where they come from (file, group, signal and axes, applied conversions) in their `experimental_source` metadata, which is saved with the workspace: a saved workspace reopens without the NeXus file"
+msgstr "Les signaux et images importés enregistrent leur origine (fichier, groupe, signal et axes, conversions appliquées) dans leur métadonnée `experimental_source`, enregistrée avec l'espace de travail : un espace de travail enregistré se rouvre sans le fichier NeXus"
+
+msgid "`.nxs` and `.nx5` files are proposed when opening HDF5 files"
+msgstr "Les fichiers `.nxs` et `.nx5` sont proposés à l'ouverture de fichiers HDF5"
+
+msgid "Plugins can describe the signals and images of files that NeXus `NXdata` groups designate incompletely (no axes, several counters...) with declarative data mappings (JSON) registered with `sigimax.h5.mapping.register_mapping`: the HDF5 browser then shows each described object as an extra item, imported with its axes, labels and units"
+msgstr "Les plugins peuvent décrire les signaux et images des fichiers que les groupes NeXus `NXdata` désignent de manière incomplète (sans axes, plusieurs compteurs...) avec des profils de correspondance déclaratifs (JSON) enregistrés avec `sigimax.h5.mapping.register_mapping` : l'explorateur HDF5 présente alors chaque objet décrit comme un élément supplémentaire, importé avec ses axes, libellés et unités"
+
 msgid "🔄 Changes"
 msgstr "🔄 Changements"
 
@@ -300,6 +324,21 @@ msgstr "Les identifiants d'annotation, l'état de verrouillage, les métadonnée
 msgid "DataLab now requires Sigima ≥ 1.3.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x"
 msgstr "DataLab nécessite désormais Sigima ≥ 1.3.0, SigimaX ≥ 1.1.0 et DataLab-Capsule 0.1.x"
 
+msgid "**HDF5 browser:**"
+msgstr "**Explorateur HDF5 :**"
+
+msgid "Browsing an HDF5 file no longer reads its datasets entirely: they are listed and described from their shape and data type, and the value previews read only their first elements. Large files open faster and use less memory; data is read when a signal or an image is previewed or imported"
+msgstr "Parcourir un fichier HDF5 ne lit plus ses jeux de données en entier : ils sont listés et décrits à partir de leur forme et de leur type de données, et les aperçus de valeurs ne lisent que leurs premiers éléments. Les gros fichiers s'ouvrent plus vite et utilisent moins de mémoire ; les données sont lues lorsqu'un signal ou une image est prévisualisé ou importé"
+
+msgid "The HDF5 browser stays responsive while a preview is read, and previews datasets of more than 16 million values with a step along each axis"
+msgstr "L'explorateur HDF5 reste réactif pendant la lecture d'un aperçu, et prévisualise les jeux de données de plus de 16 millions de valeurs avec un pas le long de chaque axe"
+
+msgid "Datasets with three dimensions or more (image stacks, spectral cubes...) are now listed in the HDF5 browser"
+msgstr "Les jeux de données à trois dimensions ou plus (piles d'images, cubes spectraux...) sont désormais listés dans l'explorateur HDF5"
+
+msgid "Dataset attributes with more than 10 000 values are no longer copied to the metadata of imported objects"
+msgstr "Les attributs de jeux de données de plus de 10 000 valeurs ne sont plus copiés dans les métadonnées des objets importés"
+
 msgid "🛠️ Bug Fixes"
 msgstr "🛠️ Corrections de bugs"
 
@@ -320,6 +359,12 @@ msgstr "**Disposition de la fenêtre :**"
 
 msgid "Fixed the width of the signal/image panels not being restored at startup: after narrowing the panels and restarting DataLab, they came back wider (up to their maximum width) instead of keeping the width chosen by the user"
 msgstr "Correction de la largeur des panneaux Signal/Image non restaurée au démarrage : après avoir réduit les panneaux puis redémarré DataLab, ils réapparaissaient plus larges (jusqu'à leur largeur maximale) au lieu de conserver la largeur choisie par l'utilisateur"
+
+msgid "**HDF5 import:**"
+msgstr "**Import HDF5 :**"
+
+msgid "Fixed images with unsigned 32-bit values above 2 147 483 647 being clipped when imported from an HDF5 file (\"Clipping uint32 data to int32\" warning): such images are now imported as 64-bit floating-point images keeping every value exactly, as are other integer images that no supported integer type can hold, which were rounded to 32-bit floating-point values beyond 16 777 216 (requires Sigima ≥ 1.4.0)"
+msgstr "Correction de l'écrêtage des images aux valeurs entières non signées 32 bits supérieures à 2 147 483 647 lors de leur import depuis un fichier HDF5 (avertissement \"Clipping uint32 data to int32\") : ces images sont désormais importées comme images en virgule flottante 64 bits conservant exactement chaque valeur, comme les autres images entières qu'aucun type entier pris en charge ne peut contenir, qui étaient arrondies en virgule flottante 32 bits au-delà de 16 777 216 (nécessite Sigima ≥ 1.4.0)"
 
 msgid "**Metadata:**"
 msgstr "**Métadonnées :**"
@@ -392,4 +437,3 @@ msgstr "**Sécurité :**"
 
 msgid "Opening a workspace received from someone else can no longer make DataLab load or run other code installed on the computer. The parameters stored with objects, analysis results and History actions name their class, and DataLab imported whatever module they named and called the object named there, which a modified file could use, for example, to make DataLab quit. Only parameter classes of DataLab, Sigima, guidata and installed plugins are now used; other stored parameters are reported as unreadable (fixes [Issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))"
 msgstr "Ouvrir un espace de travail reçu d'une autre personne ne permet plus de faire charger ou exécuter par DataLab un autre code installé sur l'ordinateur. Les paramètres enregistrés avec les objets, les résultats d'analyse et les actions de l'historique nomment leur classe, et DataLab importait le module ainsi nommé puis appelait l'objet désigné, ce qu'un fichier modifié pouvait exploiter, par exemple pour faire quitter DataLab. Seules les classes de paramètres de DataLab, Sigima, guidata et des plugins installés sont désormais utilisées ; les autres paramètres enregistrés sont signalés comme illisibles (corrige [l'issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))"
-
