@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import importlib
 import os
+import pkgutil
 import subprocess
 import sys
 from pathlib import Path
@@ -14,8 +15,11 @@ import pytest
 import yaml
 
 from datalab import __version__
-from datalab.plugins import PluginCapability, PluginRegistry
+from datalab.config import Conf
+from datalab.plugins import PluginCapability, PluginRegistry, discover_plugins
+from datalab.plugins import base as plugin_base
 from datalab.plugins.generator import _default_plugin_id, main
+from datalab.plugins.store import InstalledPluginStore
 
 PROJECT_ROOT = Path(__file__).parents[4]
 
@@ -217,6 +221,85 @@ def test_create_application_only_project(tmp_path: Path) -> None:
         destination / "src/datalab_application_plugin/adapters/desktop.py"
     ).read_text(encoding="utf-8")
     assert "register_computations" not in desktop_adapter
+
+
+def test_generated_project_is_loaded_from_its_folder(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """DataLab loads a freshly generated project from its folder (Issue #411)."""
+    destination = tmp_path / "folder-plugin"
+    package_name = "datalab_folder_plugin"
+    assert (
+        main(
+            [
+                "create",
+                str(destination),
+                "--name",
+                "Folder Plugin",
+                "--package",
+                package_name,
+                "--plugin-id",
+                "org.example.folder-plugin",
+                "--description",
+                "Plugin loaded from its project folder",
+            ]
+        )
+        == 0
+    )
+    readme = (destination / "README.md").read_text(encoding="utf-8")
+    assert "**Plugins > Configure plugins... > Plugin settings**" in readme
+
+    # Only the project folder is scanned: no installed plugin, no user plugin
+    iter_modules = pkgutil.iter_modules
+    store = InstalledPluginStore(str(tmp_path / "installed_plugins"))
+    monkeypatch.setattr(sys, "path", list(sys.path))
+    monkeypatch.setattr(
+        plugin_base, "get_user_plugin_paths", lambda: [str(destination)]
+    )
+    monkeypatch.setattr(plugin_base, "PLUGINS_DEFAULT_PATH", str(tmp_path / "none"))
+    monkeypatch.setattr(plugin_base, "OTHER_PLUGINS_PATHLIST", [])
+    monkeypatch.setattr(plugin_base, "get_installed_plugin_store", lambda: store)
+    monkeypatch.setattr(plugin_base, "_get_plugin_entry_points", lambda: [])
+    monkeypatch.setattr(
+        plugin_base.pkgutil,
+        "iter_modules",
+        # pylint: disable-next=protected-access
+        lambda: iter_modules(plugin_base._get_plugin_search_paths()),
+    )
+    monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
+    previous_classes = list(PluginRegistry.get_plugin_classes())
+    discovery_errors = PluginRegistry.get_discovery_errors()
+    failed_plugins = PluginRegistry.get_failed_plugins()
+    PluginRegistry.clear_plugin_classes()
+    try:
+        discover_plugins()
+
+        assert not [*destination.rglob("*.egg-info"), *destination.rglob("*.dist-info")]
+        plugin_classes = PluginRegistry.get_plugin_classes()
+        assert len(plugin_classes) == 1
+        plugin_class = plugin_classes[0]
+        assert plugin_class.get_plugin_id() == "org.example.folder-plugin"
+        assert plugin_class.__module__ == f"{package_name}.adapters.desktop"
+        assert not PluginRegistry.get_failed_plugins()
+    finally:
+        PluginRegistry.clear_plugin_classes()
+        PluginRegistry.get_plugin_classes().extend(previous_classes)
+        PluginRegistry.clear_discovery_errors()
+        for tb_text in discovery_errors:
+            PluginRegistry.add_discovery_error(tb_text)
+        PluginRegistry.clear_failed_plugins()
+        for failed_plugin in failed_plugins:
+            PluginRegistry.add_failed_plugin(
+                failed_plugin.name,
+                failed_plugin.filepath,
+                failed_plugin.traceback,
+                failed_plugin.source,
+            )
+        for module_name in tuple(sys.modules):
+            if module_name == package_name or module_name.startswith(
+                f"{package_name}."
+            ):
+                sys.modules.pop(module_name)
 
 
 def test_create_refuses_existing_destination(tmp_path: Path) -> None:
