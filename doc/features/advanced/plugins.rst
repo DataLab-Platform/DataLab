@@ -305,6 +305,8 @@ image panels exist. Owned features are removed automatically when the plugin is
 disabled, reloaded, or uninstalled. ``create_actions()`` may then reference the
 registered feature by its stable ID.
 
+A registered feature runs a Sigima computation function, decorated with :func:`sigima.proc.decorator.computation_function`. For a 1-to-1 feature without parameters, the simplest is to wrap a function processing NumPy arrays with :class:`sigima.proc.signal.Wrap1to1Func` (signal Y values) or :class:`sigima.proc.image.Wrap1to1Func` (image data), as in the processing plugin example (see :ref:`plugin_example_processing`). DataLab refuses other functions when they are registered.
+
 Headless recipes
 ----------------
 
@@ -720,6 +722,8 @@ To develop in your usual Python environment (e.g., with an IDE like `Spyder <htt
 .. note::
 
    Even if you’ve installed `datalab` in your environment, you cannot run the full DataLab application directly from an IDE. You must launch DataLab via the command line or using the installer-created shortcut to properly test your plugin.
+
+.. _plugin_example_processing:
 
 Example: processing plugin
 --------------------------
