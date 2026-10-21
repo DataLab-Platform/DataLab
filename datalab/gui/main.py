@@ -1173,9 +1173,18 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             window.deleteLater()
 
     def close_plugin_instruments(self) -> None:
-        """Close all plugin instrument windows."""
-        for window in list(self.__instrument_windows.values()):
+        """Close all plugin instrument windows, and wait for their instruments."""
+        windows = list(self.__instrument_windows.values())
+        for window in windows:
             window.close()
+            window.stop()
+        for window in windows:
+            if not window.wait_closed():
+                logging.getLogger(__name__).warning(
+                    "Instrument '%s' did not close within %g s",
+                    window.windowTitle(),
+                    window.CLOSE_TIMEOUT,
+                )
 
     def __unregister_plugins(self) -> None:
         """Unregister all plugins and let them cleanup their hooks"""

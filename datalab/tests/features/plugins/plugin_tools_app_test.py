@@ -53,6 +53,13 @@ PLUGIN_SOURCE = textwrap.dedent(
         def __init__(self):
             super().__init__(GeneratorSettings())
             self.frames = 0
+            self.events = []
+
+        def open(self):
+            self.events.append("open")
+
+        def close(self):
+            self.events.append("close")
 
         def preview(self):
             self.frames += 1
@@ -164,6 +171,9 @@ def test_plugin_tools_in_menus_and_instrument_window(
             assert isinstance(window, InstrumentWindow)
             assert plugin.launch_tool("generator") is window
             window.refresh()
+            assert window.wait_until_idle()
+            instrument = plugin.get_instrument("generator")
+            assert instrument.events == ["open"]
             assert len(window.items) == 1
             assert window.summary_label.text().startswith("Frame")
             assert window.plotwidget.plot.get_axis_limits("left") == (-2.0, 2.0)
@@ -188,17 +198,17 @@ def test_plugin_tools_in_menus_and_instrument_window(
             assert window._live_timer.isActive()  # pylint: disable=protected-access
             window.live_button.setChecked(False)
 
-            instrument = plugin.get_instrument("generator")
-
             def failing_preview():
                 raise ValueError("Amplitude out of range")
 
             monkeypatch.setattr(instrument, "preview", failing_preview)
             window.refresh()
+            assert window.wait_until_idle()
             assert window.status_label.text() == "Amplitude out of range"
             monkeypatch.undo()
 
             window.acquire()
+            assert window.wait_until_idle()
             groups = win.signalpanel.objmodel.get_groups()
             assert groups[-1].title == "Generator acquisition"
             assert len(groups[-1]) == 3
@@ -210,6 +220,7 @@ def test_plugin_tools_in_menus_and_instrument_window(
             win.reload_plugins()
             QW.QApplication.processEvents()
             assert closed
+            assert instrument.events == ["open", "close"]
             reloaded = PluginRegistry.get_plugin("org.example.tools-app")
             assert reloaded.launch_tool("generator") is not window
             win.close_plugin_instruments()
