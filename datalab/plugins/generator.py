@@ -39,22 +39,17 @@ _PLUGIN_IMPORT = (
     "from datalab.plugins import PluginBase, PluginCapability, PluginInfo\n"
 )
 #: Sample processing of single-file plugins, by object kind: argument, summary and
-#: returned expression of the NumPy function that users edit, then object class
-#: and summary of the computation function registered in DataLab
+#: returned expression of the NumPy function that users edit
 _SAMPLE_FUNCTIONS = {
     "signal": (
         "y",
         "Return new Y values computed from those of the selected signal.",
         "np.maximum(y, 0.0)",
-        "SignalObj",
-        "Return a new signal whose Y values are computed by ``sample_processing``.",
     ),
     "image": (
         "data",
         "Return new image data computed from that of the selected image.",
         "data.max() - data",
-        "ImageObj",
-        "Return a new image whose data are computed by ``sample_processing``.",
     ),
 }
 
@@ -337,17 +332,16 @@ def _check_single_file_module(project: PluginProject) -> None:
 
 
 def _render_sample_processing(project: PluginProject) -> tuple[str, str, str]:
-    """Render the imports, function and methods of the sample processing."""
+    """Render the imports, function and methods of the sample processing.
+
+    The NumPy function is registered wrapped with ``Wrap1to1Func``, which applies
+    it to the data of the selected signals or images.
+    """
     kind = project.object_kind
     alias = "sips" if kind == "signal" else "sipi"
-    argument, summary, expression, object_class, computation_summary = (
-        _SAMPLE_FUNCTIONS[kind]
-    )
+    argument, summary, expression = _SAMPLE_FUNCTIONS[kind]
     imports = (
-        f"import numpy as np\nimport sigima.proc.{kind} as {alias}\n"
-        f"{_PLUGIN_IMPORT}"
-        f"from sigima.objects import {object_class}\n"
-        "from sigima.proc.decorator import computation_function\n"
+        f"import numpy as np\nimport sigima.proc.{kind} as {alias}\n{_PLUGIN_IMPORT}"
     )
     function = f'''FEATURE_ID = f"{{PLUGIN_ID}}:sample-processing"
 
@@ -357,18 +351,12 @@ def sample_processing({argument}: np.ndarray) -> np.ndarray:
 
     Edit this function to implement your own processing.
     """
-    return {expression}
-
-
-@computation_function()
-def compute_sample_processing(src: {object_class}) -> {object_class}:
-    """{computation_summary}"""
-    return {alias}.Wrap1to1Func(sample_processing)(src)'''
+    return {expression}'''
     methods = f'''
     def register_computations(self) -> None:
         """Register the processing of this plugin."""
         self.{kind}panel.processor.register_1_to_1(
-            compute_sample_processing,
+            {alias}.Wrap1to1Func(sample_processing),
             "Sample processing",
             feature_id=FEATURE_ID,
             owner_plugin_id=self.plugin_id,

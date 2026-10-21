@@ -618,8 +618,9 @@ def test_create_single_file_plugin_by_default(
         "PLUGIN_NAME": "My Filters",
     }
     assert "def sample_processing(y: np.ndarray) -> np.ndarray:" in source
-    assert "@computation_function()\ndef compute_sample_processing(" in source
-    assert "sips.Wrap1to1Func(sample_processing)" in source
+    # The NumPy function is registered as it is, wrapped with Wrap1to1Func
+    assert "            sips.Wrap1to1Func(sample_processing),\n" in source
+    assert "computation_function" not in source
     assert "handler.action_for(FEATURE_ID)" in source
 
 
