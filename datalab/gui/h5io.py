@@ -68,7 +68,6 @@ class H5InputOutput:
 
     def __init__(self, mainwindow: DLMainWindow) -> None:
         self.mainwindow = mainwindow
-        self.uint32_wng: bool = None
         #: True when the user was already told, for the current opening, that
         #: the provenance of appended workspaces is not imported (no repeat).
         self.append_informed = False
@@ -273,18 +272,10 @@ class H5InputOutput:
         obj = node.get_native_object()
         if obj is None:
             return
-        self.uint32_wng = self.uint32_wng or node.uint32_wng
         if isinstance(obj, SignalObj):
             self.mainwindow.signalpanel.add_object(obj)
         else:
             self.mainwindow.imagepanel.add_object(obj)
-
-    def __eventually_show_warnings(self) -> None:
-        """Eventually show warnings after everything is imported"""
-        if self.uint32_wng:
-            QW.QMessageBox.warning(
-                self.mainwindow, _("Warning"), _("Clipping uint32 data to int32.")
-            )
 
     def import_files(
         self, filenames: list[str], import_all: bool, reset_all: bool
@@ -316,7 +307,6 @@ class H5InputOutput:
                     self.mainwindow.reset_all()
                 with qt_try_loadsave_file(self.mainwindow, "*.h5", "load"):
                     with create_progress_bar(self.mainwindow, "", len(nodes)) as prog:
-                        self.uint32_wng = False
                         for idx, node in enumerate(nodes):
                             prog.setLabelText(self.__progbartitle(node.h5file.filename))
                             prog.setValue(idx + 1)
@@ -324,7 +314,6 @@ class H5InputOutput:
                             if prog.wasCanceled():
                                 break
                             self.__add_object_from_node(node)
-                self.__eventually_show_warnings()
         h5browser.cleanup()
 
     def import_dataset_from_file(self, filename: str, dsetname: str) -> None:
@@ -332,9 +321,7 @@ class H5InputOutput:
         h5importer = H5Importer(filename)
         try:
             node = h5importer.get(dsetname)
-            self.uint32_wng = False
             self.__add_object_from_node(node)
-            self.__eventually_show_warnings()
         except KeyError as exc:
             raise KeyError(f"Dataset not found: {dsetname}") from exc
         h5importer.close()
