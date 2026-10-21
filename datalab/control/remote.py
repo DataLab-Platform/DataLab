@@ -126,7 +126,6 @@ class RemoteServer(QC.QThread):
         for signal, command in (
             (self.SIG_ADD_OBJECT, win.add_object),
             (self.SIG_SET_OBJECT, win.set_object),
-            (self.SIG_ADD_GROUP, win.add_group),
             (self.SIG_LOAD_FROM_FILES, win.load_from_files),
             (self.SIG_LOAD_FROM_DIRECTORY, win.load_from_directory),
             (self.SIG_SELECT_OBJECTS, win.select_objects),
@@ -149,6 +148,9 @@ class RemoteServer(QC.QThread):
             (self.SIG_IMPORT_MACRO_FROM_FILE, win.import_macro_from_file),
         ):
             signal.connect(functools.partial(win.run_remote_command, command))
+        self.SIG_ADD_GROUP.connect(
+            functools.partial(win.run_remote_command, win.add_group, return_result=True)
+        )
         self.SIG_CALL_METHOD.connect(win.call_method_slot)
 
     def serve(self) -> None:
@@ -579,6 +581,9 @@ class RemoteServer(QC.QThread):
             title: Group title
             panel: Panel name (valid values: "signal", "image"). Defaults to None.
             select: Select the group after creation. Defaults to False.
+
+        Returns:
+            UUID of the created group, set by the main window slot
         """
         self.SIG_ADD_GROUP.emit(title, panel, select)
 

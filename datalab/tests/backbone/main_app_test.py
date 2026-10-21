@@ -65,7 +65,8 @@ def test_main_app():
         panel.remove_object(force=True)
         win.add_group("Group 4", select=True)
         panel.remove_object(force=True)
-        win.add_group("Group 5", panel="signal", select=True)
+        group_id = win.add_group("Group 5", panel="signal", select=True)
+        assert panel.objmodel.get_group(group_id).title == "Group 5"
         panel.remove_object(force=True)
         # Rename group
         panel.objview.select_groups([2])

@@ -509,15 +509,18 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         title: str,
         panel: Literal["signal", "image"] | None = None,
         select: bool = False,
-    ) -> None:
+    ) -> str:
         """Add group to DataLab.
 
         Args:
             title: Group title
             panel: Panel name. Defaults to None.
             select: Select the group after creation. Defaults to False.
+
+        Returns:
+            UUID of the created group
         """
-        self.__get_datapanel(panel).add_group(title, select)
+        return get_uuid(self.__get_datapanel(panel).add_group(title, select))
 
     @remote_controlled
     def select_objects(
@@ -674,7 +677,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.remote_server.exception = exc
 
     @remote_controlled
-    def run_remote_command(self, command: Callable[..., object], *args) -> None:
+    def run_remote_command(
+        self, command: Callable[..., object], *args, return_result: bool = False
+    ) -> None:
         """Slot to run a command requested by a remote client in GUI thread.
 
         The exception raised by the command, if any, is stored in RemoteServer to
@@ -684,9 +689,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         Args:
             command: Main window method running the command
             args: Command arguments
+            return_result: If True, store the command result in RemoteServer, to be
+             returned to the client (it must be XML-RPC serializable)
         """
         try:
-            command(*args)
+            result = command(*args)
+            if return_result:
+                self.remote_server.result = result
         except Exception as exc:  # pylint: disable=broad-except
             self.remote_server.exception = exc
 

@@ -69,6 +69,19 @@ def test_remote_command_result() -> None:
         assert proxy.get_current_object_uuid() is None
 
 
+def test_remote_add_group_returns_uuid() -> None:
+    """The UUID returned by add_group lets the client fill the new group"""
+    with datalab_in_background_context() as proxy:
+        group_id = proxy.add_group("Scan 12.1", panel="signal")
+        assert isinstance(group_id, str) and group_id
+        signal = create_signal("I0", np.arange(3.0), np.ones(3))
+        proxy.add_object(signal, group_id=group_id)
+        assert len(proxy.get_object_uuids("signal", group=group_id)) == 1
+        # The group UUID must not be returned by the next command
+        proxy.set_current_panel("image")
+        assert proxy.get_current_object_uuid() is None
+
+
 def test_remote_close_during_call() -> None:
     """Closing DataLab while a remote call is pending does not hang DataLab"""
     errors: list[Exception] = []
@@ -98,4 +111,5 @@ if __name__ == "__main__":
             test_remote_load_at_startup(Path(tmpdir), load_mode)
     test_remote_command_error()
     test_remote_command_result()
+    test_remote_add_group_returns_uuid()
     test_remote_close_during_call()

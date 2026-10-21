@@ -401,13 +401,16 @@ class AbstractDLControl(abc.ABC):
     @abc.abstractmethod
     def add_group(
         self, title: str, panel: str | None = None, select: bool = False
-    ) -> None:
+    ) -> str:
         """Add group to DataLab.
 
         Args:
             title: Group title
             panel: Panel name (valid values: "signal", "image"). Defaults to None.
             select: Select the group after creation. Defaults to False.
+
+        Returns:
+            UUID of the created group
         """
 
     @abc.abstractmethod
@@ -923,15 +926,18 @@ class BaseProxy(AbstractDLControl, metaclass=abc.ABCMeta):
 
     def add_group(
         self, title: str, panel: str | None = None, select: bool = False
-    ) -> None:
+    ) -> str:
         """Add group to DataLab.
 
         Args:
             title: Group title
             panel: Panel name (valid values: "signal", "image"). Defaults to None.
             select: Select the group after creation. Defaults to False.
+
+        Returns:
+            UUID of the created group
         """
-        self._datalab.add_group(title, panel, select)
+        return self._datalab.add_group(title, panel, select)
 
     def select_objects(
         self,
