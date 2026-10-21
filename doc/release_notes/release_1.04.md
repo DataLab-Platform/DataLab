@@ -108,6 +108,12 @@ DataLab now uses stable UUID-based object references across object trees, result
 
 * `add_group` now returns the UUID of the created group, so that a remote client, a macro or a plugin can add objects to it with `add_object(obj, group_id=...)` (or `add_signal`/`add_image`) instead of looking the group up by its title
 
+**NeXus files:**
+
+* NeXus `NXdata` groups are shown as single items in the HDF5 browser and imported as signals or images with their axes, units, labels and, for signals, uncertainties. Bin edges are converted to bin centers, and non-uniform image axes are kept. Invalid axes are reported in the browser instead of being guessed
+* Imported signals and images record where they come from (file, group, signal and axes, applied conversions) in their `experimental_source` metadata, which is saved with the workspace: a saved workspace reopens without the NeXus file
+* `.nxs` and `.nx5` files are proposed when opening HDF5 files
+
 ### 🔄 Changes ###
 
 **Synthetic images in physical coordinates:**
@@ -134,6 +140,8 @@ DataLab now uses stable UUID-based object references across object trees, result
 **HDF5 browser:**
 
 * Browsing an HDF5 file no longer reads its datasets entirely: they are listed and described from their shape and data type, and the value previews read only their first elements. Large files open faster and use less memory; data is read when a signal or an image is previewed or imported
+* The HDF5 browser stays responsive while a preview is read, and previews datasets of more than 16 million values with a step along each axis
+* Datasets with three dimensions or more (image stacks, spectral cubes...) are now listed in the HDF5 browser
 * Dataset attributes with more than 10 000 values are no longer copied to the metadata of imported objects
 
 ### 🛠️ Bug Fixes ###
