@@ -12,18 +12,16 @@ DataLab supports a robust plugin architecture, allowing users to extend the appl
 What is a plugin?
 -----------------
 
-A plugin is a Python module that is automatically loaded by DataLab at startup. It can define new features or modify existing ones.
+A plugin is Python code that is automatically loaded by DataLab at startup. It can define new features or modify existing ones.
 
-To be recognized by the historical module scan, a local plugin file must:
+A plugin defines a class that **inherits from** :class:`datalab.plugins.PluginBase`, includes a class attribute named ``PLUGIN_INFO`` (an instance of :class:`datalab.plugins.PluginInfo`) and implements the ``create_actions`` method. DataLab finds this class in a plugin directory (see :ref:`plugin_locations`), in one of two forms:
 
-- Be a Python module whose name **starts with** ``datalab_`` (e.g. ``datalab_myplugin.py``),
-- Contain a class that **inherits from** :class:`datalab.plugins.PluginBase`,
-- Include a class attribute named ``PLUGIN_INFO``, which must be an instance of :class:`datalab.plugins.PluginInfo`,
-- Implement the ``create_actions`` method.
+- **A single file** whose name **starts with** ``datalab_`` (e.g. ``datalab_myplugin.py``) and which contains the class. This is the simplest form, recommended to get started.
+- **A folder** whose name starts with ``datalab_`` and which holds an ``__init__.py`` file (a Python package, e.g. ``datalab_myplugin/``). DataLab loads the folder, then its ``adapters/desktop.py`` file when it exists: this is where projects created by ``datalab-plugin create`` define the class (see :ref:`plugin_project`). Otherwise, the class is defined in ``__init__.py``.
 
-Plugins distributed as installed Python packages may instead expose their
-``PluginBase`` subclass through the ``datalab.plugins`` entry-point group,
-without relying on the module-name prefix.
+Nothing needs to be installed: the file or folder is loaded as it is.
+
+Plugins distributed as installed Python packages, such as the wheels of the plugin catalog, declare their ``PluginBase`` subclass through the ``datalab.plugins`` entry-point group, without relying on the ``datalab_`` prefix. A plugin found both ways, for example a project that is installed and whose folder is also a plugin directory, is loaded only once.
 
 The ``PLUGIN_INFO`` object must define a unique, namespaced ``id`` that remains
 stable when the display name or implementation class changes. DataLab uses this
@@ -54,7 +52,7 @@ field remain valid and are shown without capability labels.
 
 .. note::
 
-   Only Python files whose names start with ``datalab_`` will be scanned for plugins.
+   Only files and folders whose names start with ``datalab_`` are scanned for plugins.
 
 DataLab supports three categories of plugins, each with its own purpose and registration mechanism:
 
@@ -87,6 +85,8 @@ Live preview compatibility
   must not assume a fresh Python interpreter for each preview: process-local
   module state may persist until a preview is cancelled while running, plugins
   are reloaded, or DataLab exits.
+
+.. _plugin_locations:
 
 Where to put a plugin?
 ----------------------
@@ -141,6 +141,8 @@ Plugins are automatically discovered at startup from multiple locations:
      set DATALAB_PLUGINS=C:\my_plugins;D:\shared\datalab_plugins
 
   Changes to this variable are only taken into account at DataLab startup.
+
+A plugin directory may also be the folder of a plugin project, such as one created by ``datalab-plugin create``: DataLab then also searches its ``src`` subfolder, which holds the ``datalab_*`` folder of the plugin. The Python packages the plugin depends on must be available in DataLab's environment.
 
 Managing plugins in DataLab
 ---------------------------
@@ -626,6 +628,8 @@ Declared tiles replace the default tile. The first one is the main tile of the p
 
 The user decides which applications are shown and in which order: the welcome page shows a limited number of tile rows, pinned applications first, then recently used ones, then the others by name (see :ref:`welcome_page`). A plugin therefore cannot rely on its tile being visible: its features must remain available from the **Applications** catalog.
 
+.. _plugin_project:
+
 Creating a layered plugin project
 ----------------------------------
 
@@ -677,7 +681,9 @@ destination.
 
 The template remains deliberately small. Add domain recipes, DataSet
 parameters, packaged examples, and specialized CI only when the plugin needs
-them. From the generated directory, install and validate the project with:
+them.
+
+To try the plugin, add the generated directory as a plugin directory (see :ref:`plugin_search_paths`) and reload the plugins: DataLab loads the plugin class from ``adapters/desktop.py`` without installing the project. To validate the project, install it with its test dependencies and run its checks from the generated directory:
 
 .. code-block:: bash
 
