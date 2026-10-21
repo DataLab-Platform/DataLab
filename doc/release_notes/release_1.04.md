@@ -104,6 +104,10 @@ DataLab now uses stable UUID-based object references across object trees, result
 * Polynomial and linear fit coefficients are labelled `a`, `b`, `c`... as in the formula and in the metadata, instead of `c2`, `c1`, `c0`
 * The *Fitting* documentation explains how to derive the peak wavelength, the temperature and the emissivity from the parameters of a Planckian fit
 
+**Remote control and plugins:**
+
+* `add_group` now returns the UUID of the created group, so that a remote client, a macro or a plugin can add objects to it with `add_object(obj, group_id=...)` (or `add_signal`/`add_image`) instead of looking the group up by its title
+
 ### 🔄 Changes ###
 
 **Synthetic images in physical coordinates:**
@@ -127,6 +131,11 @@ DataLab now uses stable UUID-based object references across object trees, result
 * Annotation identifiers, lock state, custom metadata and extension data are preserved across edits, while unknown third-party payloads are retained without modification
 * DataLab now requires Sigima ≥ 1.3.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x
 
+**HDF5 browser:**
+
+* Browsing an HDF5 file no longer reads its datasets entirely: they are listed and described from their shape and data type, and the value previews read only their first elements. Large files open faster and use less memory; data is read when a signal or an image is previewed or imported
+* Dataset attributes with more than 10 000 values are no longer copied to the metadata of imported objects
+
 ### 🛠️ Bug Fixes ###
 
 **Performance with many objects:**
@@ -138,6 +147,10 @@ DataLab now uses stable UUID-based object references across object trees, result
 **Window layout:**
 
 * Fixed the width of the signal/image panels not being restored at startup: after narrowing the panels and restarting DataLab, they came back wider (up to their maximum width) instead of keeping the width chosen by the user
+
+**HDF5 import:**
+
+* Fixed images with unsigned 32-bit values above 2 147 483 647 being clipped when imported from an HDF5 file ("Clipping uint32 data to int32" warning): such images are now imported as 64-bit floating-point images keeping every value exactly, as are other integer images that no supported integer type can hold, which were rounded to 32-bit floating-point values beyond 16 777 216 (requires Sigima ≥ 1.4.0)
 
 **Metadata:**
 
