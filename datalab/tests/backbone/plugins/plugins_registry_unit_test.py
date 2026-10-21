@@ -5,6 +5,8 @@
 from __future__ import annotations
 
 import importlib
+import os.path as osp
+import pkgutil
 import sys
 import textwrap
 from collections.abc import Iterator
@@ -23,6 +25,8 @@ from datalab.plugins import (
     discover_plugins,
     migrate_enabled_plugin_ids,
 )
+from datalab.plugins import base as plugin_base
+from datalab.plugins.store import InstalledPluginStore
 
 
 @pytest.fixture(autouse=True)
@@ -733,3 +737,325 @@ def test_plugin_registration_rollback_on_hook_abort() -> None:
     assert not plugin.is_registered()
     assert plugin.main is None
     assert plugin.proxy is None
+
+
+# --- Plugin packages found in plugin directories (Issue #411) ---------------------
+
+FOLDER_PACKAGE_PREFIX = "datalab_folder_probe"
+
+
+def write_plugin_project(
+    project: Path, suffix: str, *, version: str = "1.0.0", desktop: str | None = None
+) -> str:
+    """Write a plugin project laid out as ``datalab-plugin create`` does.
+
+    The project has no distribution metadata (no ``.dist-info`` or ``.egg-info``),
+    as a fresh clone.
+
+    Args:
+        project: Project folder
+        suffix: Suffix of the package name and of the plugin ID
+        version: Plugin version
+        desktop: Source of ``adapters/desktop.py`` (default: a plugin class)
+
+    Returns:
+        Package name
+    """
+    package = f"{FOLDER_PACKAGE_PREFIX}_{suffix}"
+    root = project / "src" / package
+    (root / "adapters").mkdir(parents=True)
+    (root / "__init__.py").write_text(
+        f'"""Qt-free package identity."""\n\nPLUGIN_ID = "org.example.{suffix}"\n',
+        encoding="utf-8",
+    )
+    (root / "adapters" / "__init__.py").write_text(
+        '"""Host adapters."""\n', encoding="utf-8"
+    )
+    if desktop is None:
+        desktop = textwrap.dedent(
+            f"""
+            from datalab.plugins import PluginBase, PluginInfo
+
+            from .. import PLUGIN_ID
+
+
+            class FolderPlugin(PluginBase):
+                PLUGIN_INFO = PluginInfo(
+                    id=PLUGIN_ID, name="{suffix}", version="{version}"
+                )
+
+                def create_actions(self):
+                    pass
+            """
+        )
+    (root / "adapters" / "desktop.py").write_text(desktop, encoding="utf-8")
+    return package
+
+
+@pytest.fixture(name="plugin_folders")
+def fixture_plugin_folders(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> Iterator[list[str]]:
+    """Return the configured plugin directories, initially empty.
+
+    Discovery is isolated from the user's plugins, from installed packages and
+    from the rest of the environment: only the plugin directories are scanned.
+    """
+    configured: list[str] = []
+    default_path = tmp_path / "default_plugins"
+    default_path.mkdir()
+    store = InstalledPluginStore(str(tmp_path / "installed_plugins"))
+    iter_modules = pkgutil.iter_modules
+    monkeypatch.setattr(sys, "path", list(sys.path))
+    # Edited sources must not be shadowed by bytecode of the same size and time
+    monkeypatch.setattr(sys, "dont_write_bytecode", True)
+    monkeypatch.setattr(plugin_base, "get_user_plugin_paths", lambda: list(configured))
+    monkeypatch.setattr(plugin_base, "PLUGINS_DEFAULT_PATH", str(default_path))
+    monkeypatch.setattr(plugin_base, "OTHER_PLUGINS_PATHLIST", [])
+    monkeypatch.setattr(plugin_base, "get_installed_plugin_store", lambda: store)
+    monkeypatch.setattr(plugin_base, "_get_plugin_entry_points", lambda: [])
+    monkeypatch.setattr(
+        plugin_base.pkgutil,
+        "iter_modules",
+        # pylint: disable-next=protected-access
+        lambda: iter_modules(plugin_base._get_plugin_search_paths()),
+    )
+    monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
+    PluginRegistry.clear_plugin_classes()
+    try:
+        yield configured
+    finally:
+        for name in [
+            name for name in sys.modules if name.startswith(FOLDER_PACKAGE_PREFIX)
+        ]:
+            del sys.modules[name]
+        importlib.invalidate_caches()
+
+
+def count_reloads(monkeypatch: pytest.MonkeyPatch) -> list[str]:
+    """Record the names of the modules reloaded by plugin discovery."""
+    reloaded: list[str] = []
+    reload = importlib.reload
+
+    def reload_module(module: ModuleType) -> ModuleType:
+        reloaded.append(module.__name__)
+        return reload(module)
+
+    monkeypatch.setattr(plugin_base.importlib, "reload", reload_module)
+    return reloaded
+
+
+def get_single_plugin_class() -> type[PluginBase]:
+    """Return the only discovered plugin class."""
+    plugin_classes = PluginRegistry.get_plugin_classes()
+    assert len(plugin_classes) == 1, plugin_classes
+    return plugin_classes[0]
+
+
+@pytest.mark.parametrize("configured_folder", ["project", "src"])
+def test_plugin_project_folder_is_discovered_without_installation(
+    plugin_folders: list[str], tmp_path: Path, configured_folder: str
+) -> None:
+    """A fresh plugin project is loaded from its folder or from its ``src``."""
+    project = tmp_path / "project"
+    package = write_plugin_project(project, "fresh")
+    source_folder = project / "src"
+    desktop_name = f"{package}.adapters.desktop"
+    folder = project if configured_folder == "project" else source_folder
+    plugin_folders.append(str(folder))
+
+    discovered = discover_plugins()
+
+    assert osp.realpath(source_folder) in sys.path
+    assert not [*project.rglob("*.egg-info"), *project.rglob("*.dist-info")]
+    plugin_class = get_single_plugin_class()
+    assert plugin_class.get_plugin_id() == "org.example.fresh"
+    assert plugin_class.__module__ == desktop_name
+    assert plugin_class.__plugin_discovery_sources__ == (
+        f"module convention {package!r}",
+    )
+    assert osp.samefile(
+        plugin_class.__plugin_filepath__,
+        source_folder / package / "adapters" / "desktop.py",
+    )
+    assert [module.__name__ for module in discovered] == [package, desktop_name]
+    assert not PluginRegistry.get_failed_plugins()
+
+
+def test_plugins_without_desktop_module_are_discovered_as_before(
+    plugin_folders: list[str], tmp_path: Path
+) -> None:
+    """Single files and packages without ``adapters/desktop.py`` are unchanged."""
+    folder = tmp_path / "plugins"
+    plugin_source = textwrap.dedent(
+        """
+        from datalab.plugins import PluginBase, PluginInfo
+
+
+        class LocalPlugin(PluginBase):
+            PLUGIN_INFO = PluginInfo(id=PLUGIN_ID, name=PLUGIN_ID)
+
+            def create_actions(self):
+                pass
+        """
+    )
+    files = {
+        f"{FOLDER_PACKAGE_PREFIX}_single.py": (
+            'PLUGIN_ID = "org.example.single"\n' + plugin_source
+        ),
+        f"{FOLDER_PACKAGE_PREFIX}_root/__init__.py": (
+            'PLUGIN_ID = "org.example.root"\n' + plugin_source
+        ),
+        f"{FOLDER_PACKAGE_PREFIX}_library/__init__.py": '"""Not a plugin."""\n',
+        f"{FOLDER_PACKAGE_PREFIX}_flat/__init__.py": '"""Not a plugin."""\n',
+        f"{FOLDER_PACKAGE_PREFIX}_flat/adapters.py": '"""Not a package."""\n',
+    }
+    for relative_path, source in files.items():
+        path = folder / relative_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(source, encoding="utf-8")
+    plugin_folders.append(str(folder))
+
+    discover_plugins()
+
+    assert {
+        (plugin_class.get_plugin_id(), plugin_class.__module__)
+        for plugin_class in PluginRegistry.get_plugin_classes()
+    } == {
+        ("org.example.single", f"{FOLDER_PACKAGE_PREFIX}_single"),
+        ("org.example.root", f"{FOLDER_PACKAGE_PREFIX}_root"),
+    }
+    assert not PluginRegistry.get_failed_plugins()
+
+
+def test_desktop_module_error_is_reported_without_blocking_other_plugins(
+    plugin_folders: list[str], tmp_path: Path
+) -> None:
+    """A failing Desktop module is reported; other plugins are still loaded."""
+    broken = write_plugin_project(
+        tmp_path / "broken",
+        "broken",
+        desktop='raise ImportError("missing plugin dependency")\n',
+    )
+    write_plugin_project(tmp_path / "working", "working")
+    plugin_folders.extend([str(tmp_path / "broken"), str(tmp_path / "working")])
+
+    discover_plugins()
+
+    plugin_class = get_single_plugin_class()
+    assert plugin_class.get_plugin_id() == "org.example.working"
+    failed_plugins = PluginRegistry.get_failed_plugins()
+    assert len(failed_plugins) == 1
+    failed_plugin = failed_plugins[0]
+    assert failed_plugin.name == f"{broken}.adapters.desktop"
+    assert failed_plugin.source == f"module convention {broken!r}"
+    assert osp.samefile(
+        failed_plugin.filepath,
+        tmp_path / "broken" / "src" / broken / "adapters" / "desktop.py",
+    )
+    assert "missing plugin dependency" in failed_plugin.traceback
+
+
+def test_plugin_package_reload_takes_desktop_changes_into_account(
+    plugin_folders: list[str], tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Reloading plugins executes the edited Desktop module once."""
+    project = tmp_path / "project"
+    package = write_plugin_project(project, "reloaded", version="1.0.0")
+    plugin_folders.append(str(project))
+    discover_plugins()
+    desktop = project / "src" / package / "adapters" / "desktop.py"
+    desktop.write_text(
+        desktop.read_text(encoding="utf-8").replace('"1.0.0"', '"2.0.0"'),
+        encoding="utf-8",
+    )
+    reloaded = count_reloads(monkeypatch)
+
+    # The main window clears plugin classes before discovering them again
+    PluginRegistry.clear_plugin_classes()
+    discover_plugins()
+
+    plugin_class = get_single_plugin_class()
+    assert plugin_class.PLUGIN_INFO.version == "2.0.0"
+    assert reloaded == [package, f"{package}.adapters.desktop"]
+
+
+def test_plugin_package_also_installed_is_loaded_once(
+    plugin_folders: list[str], tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A package found by its entry point and by convention is merged."""
+    project = tmp_path / "project"
+    package = write_plugin_project(project, "installed")
+    desktop_name = f"{package}.adapters.desktop"
+    plugin_folders.append(str(project))
+
+    class EntryPoint:
+        """Installed entry point targeting the Desktop adapter of the package."""
+
+        name = "installed-folder-plugin"
+        module = desktop_name
+        value = f"{desktop_name}:FolderPlugin"
+
+        @staticmethod
+        def load() -> type[PluginBase]:
+            """Return the plugin class of the Desktop adapter."""
+            return importlib.import_module(desktop_name).FolderPlugin
+
+    monkeypatch.setattr(plugin_base, "_get_plugin_entry_points", lambda: [EntryPoint()])
+    discover_plugins()
+    reloaded = count_reloads(monkeypatch)
+    PluginRegistry.clear_plugin_classes()
+
+    discover_plugins()
+
+    plugin_class = get_single_plugin_class()
+    assert plugin_class is sys.modules[desktop_name].FolderPlugin
+    assert plugin_class.__plugin_discovery_sources__ == (
+        f"entry point 'installed-folder-plugin' ({desktop_name}:FolderPlugin)",
+        f"module convention {package!r}",
+    )
+    assert reloaded == [desktop_name, package]
+    assert not PluginRegistry.get_failed_plugins()
+
+
+def test_plugin_search_paths_include_project_source_folders(
+    plugin_folders: list[str], tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Only ``src`` folders holding ``datalab_*`` modules are searched, once."""
+    project = tmp_path / "project"
+    write_plugin_project(project, "paths")
+    environment_project = tmp_path / "environment_project"
+    write_plugin_project(environment_project, "environment")
+    other = tmp_path / "other"
+    (other / "src" / "datalab_other.egg-info").mkdir(parents=True)
+    (other / "src" / "other_package").mkdir()
+    (other / "src" / "other_package" / "__init__.py").write_text("", encoding="utf-8")
+    missing = tmp_path / "missing"
+    plugin_folders.extend(
+        [str(project), str(project / "src"), str(other), str(missing)]
+    )
+    # Directories of the DATALAB_PLUGINS environment variable
+    monkeypatch.setattr(
+        plugin_base, "OTHER_PLUGINS_PATHLIST", [str(environment_project)]
+    )
+
+    # pylint: disable-next=protected-access
+    paths = plugin_base._get_plugin_search_paths()
+    discover_plugins()
+
+    assert paths == [
+        osp.realpath(path)
+        for path in (
+            project,
+            project / "src",
+            other,
+            missing,
+            tmp_path / "default_plugins",
+            environment_project,
+            environment_project / "src",
+        )
+    ]
+    assert {
+        plugin_class.get_plugin_id()
+        for plugin_class in PluginRegistry.get_plugin_classes()
+    } == {"org.example.paths", "org.example.environment"}
