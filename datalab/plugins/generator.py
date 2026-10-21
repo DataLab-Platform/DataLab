@@ -408,6 +408,12 @@ def _render_readme(project: PluginProject) -> str:
 
 {project.description}
 
+## Trying the plugin in DataLab
+
+Add this project folder in **Plugins > Configure plugins... > Plugin settings**,
+then reload the plugins: DataLab loads the plugin from
+`src/{project.package}/adapters/desktop.py`, without installing the project.
+
 ## Development
 
 ```bash
@@ -416,11 +422,11 @@ python -m pytest
 python -m ruff check .
 ```
 
-Installing the project registers `{project.plugin_id}` through the
-`datalab.plugins` entry-point group. Put host-independent algorithms in `core`,
-compose them into headless recipes in `workflow`, and keep DataLab or browser
-integration in `adapters`. The generated architecture test preserves these
-dependency boundaries as the plugin grows.
+Installing the project also registers `{project.plugin_id}` through the
+`datalab.plugins` entry-point group, as the published wheel does. Put
+host-independent algorithms in `core`, compose them into headless recipes in
+`workflow`, and keep DataLab or browser integration in `adapters`. The generated
+architecture test preserves these dependency boundaries as the plugin grows.
 
 ## Publishing
 
@@ -514,7 +520,8 @@ adapters -> workflow -> core
 
 - `core` owns host-independent domain behavior and does not import DataLab.
 - `workflow` may use DataLab's headless recipe contracts, but not GUI modules.
-- `adapters/desktop.py` is the installed DataLab plugin entry point.
+- `adapters/desktop.py` defines the DataLab plugin class: DataLab loads it from
+  the project folder, and the installed entry point targets it.
 - `adapters/web.py` records Web support explicitly and starts as unsupported.
 
 The package root exposes identity metadata without importing a host adapter.
@@ -525,6 +532,10 @@ The package root exposes identity metadata without importing a host adapter.
 def _render_contributing() -> str:
     """Render concise development and architecture rules."""
     return """# Contributing
+
+To try a change in DataLab, add the project folder in **Plugins > Configure
+plugins... > Plugin settings** and reload the plugins: no installation is
+needed.
 
 Install the project in editable mode and run its checks before submitting a
 change:
