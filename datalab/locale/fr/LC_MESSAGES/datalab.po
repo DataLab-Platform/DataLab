@@ -1259,8 +1259,8 @@ msgstr "Ouvrir une capsule"
 msgid "Open"
 msgstr "Ouvrir"
 
-msgid "HDF5 files (*.h5 *.hdf5 *.hdf *.he5);;All files (*)"
-msgstr "Fichiers HDF5 (*.h5 *.hdf5 *.hdf *.he5);;Tous les fichiers (*)"
+msgid "HDF5 files (*.h5 *.hdf5 *.hdf *.he5 *.nxs *.nx5);;All files (*)"
+msgstr "Fichiers HDF5 (*.h5 *.hdf5 *.hdf *.he5 *.nxs *.nx5);;Tous les fichiers (*)"
 
 #, python-format
 msgid "Open %d HDF5 files"

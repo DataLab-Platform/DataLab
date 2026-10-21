@@ -185,7 +185,9 @@ def is_hdf5_file(filename: str, check_content: bool = False) -> bool:
         True if the file is (likely) an HDF5 file, False otherwise.
     """
     # First, check by extension (fast)
-    has_hdf5_extension = filename.lower().endswith((".h5", ".hdf5", ".hdf", ".he5"))
+    has_hdf5_extension = filename.lower().endswith(
+        (".h5", ".hdf5", ".hdf", ".he5", ".nxs", ".nx5")
+    )
 
     if not check_content:
         return has_hdf5_extension
