@@ -14,12 +14,15 @@ import importlib
 import importlib.util
 import os
 import os.path as osp
+import shutil
 from contextlib import contextmanager
 from pathlib import Path
 from unittest.mock import patch
 
+import numpy as np
 import pytest
 from qtpy import QtWidgets as QW
+from sigima.objects import create_image
 from sigima.tests.data import create_paracetamol_signal
 
 from datalab.config import Conf
@@ -812,6 +815,77 @@ def test_plugin_examples_import() -> None:
         assert spec.loader is not None
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
+
+
+#: Shipped example plugins, by module, with the stable ID of their plugin class
+#: (the image format example only declares a file format)
+SHIPPED_EXAMPLES = {
+    "datalab_custom_func": "org.datalab.examples.custom-filters",
+    "datalab_example_dialogs": "org.datalab.examples.dialog-methods",
+    "datalab_example_empty": "org.datalab.examples.empty",
+    "datalab_example_imageformat": None,
+    "datalab_example_imageproc": "org.datalab.examples.extract-blobs",
+    "datalab_example_nested_menus": "org.datalab.examples.nested-menus",
+    "datalab_exemple_contour_plot": "org.datalab.examples.contour-plot",
+}
+
+
+def _run_custom_filter(win: DLMainWindow) -> np.ndarray:
+    """Run the processing of the custom function example on a new image.
+
+    Returns:
+        Data of the processed image
+    """
+    menus = [
+        item
+        for item in win.imagepanel.get_category_actions(ActionCategory.PLUGINS)
+        if isinstance(item, QW.QMenu) and item.title() == "My custom filters"
+    ]
+    assert len(menus) == 1, "'My custom filters' menu not found"
+    menus[0].aboutToShow.emit()
+    assert [action.text() for action in menus[0].actions()] == [
+        "Weighted average denoise"
+    ]
+    data = np.arange(64, dtype=float).reshape(8, 8)
+    win.imagepanel.add_object(create_image("Ramp", data))
+    count = len(win.imagepanel)
+    win.imagepanel.processor.run_feature(
+        "org.datalab.examples.custom-filters:weighted-average-denoise"
+    )
+    assert len(win.imagepanel) == count + 1
+    return win.imagepanel[len(win.imagepanel)].data
+
+
+@enabled_plugins_context()
+def test_shipped_plugin_examples_load_in_datalab() -> None:
+    """All shipped examples load in DataLab, and their processing runs."""
+    examples_dir = Path(__file__).parents[4] / "plugins" / "examples"
+    assert {path.stem for path in examples_dir.glob("*.py")} == set(SHIPPED_EXAMPLES)
+    with temporary_plugin_dir(module_prefixes=tuple(SHIPPED_EXAMPLES)) as plugin_dir:
+        for module_name in SHIPPED_EXAMPLES:
+            shutil.copy(examples_dir / f"{module_name}.py", plugin_dir)
+        spec = importlib.util.spec_from_file_location(
+            "custom_func_reference", examples_dir / "datalab_custom_func.py"
+        )
+        reference = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(reference)
+        expected = reference.weighted_average_denoise(
+            np.arange(64, dtype=float).reshape(8, 8)
+        )
+
+        with datalab_test_app_context(console=False) as win:
+            for _reload in range(2):
+                failed = [
+                    failed.name
+                    for failed in PluginRegistry.get_failed_plugins()
+                    if failed.name.split(".")[0] in SHIPPED_EXAMPLES
+                ]
+                assert not failed, f"Example plugins failed to load: {failed}"
+                for plugin_id in filter(None, SHIPPED_EXAMPLES.values()):
+                    assert PluginRegistry.get_plugin(plugin_id) is not None, plugin_id
+                assert np.allclose(_run_custom_filter(win), expected)
+                win.reload_plugins()
+                QW.QApplication.processEvents()
 
 
 if __name__ == "__main__":
