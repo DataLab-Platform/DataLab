@@ -6,9 +6,16 @@
 #, fuzzy
 msgid ""
 msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-10-22 21:34+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
 
 msgid "The `datalab-platform` package requires the following Python modules:"
 msgstr "Le paquet `datalab-platform` nécessite les modules Python suivants :"
@@ -34,8 +41,8 @@ msgstr "Langage de programmation Python"
 msgid "guidata"
 msgstr ""
 
-msgid ">= 3.15.1"
-msgstr ""
+msgid ">= 3.16.0"
+msgstr ">= 3.16.0"
 
 msgid "Automatic GUI generation for easy dataset editing and display"
 msgstr "Génération automatique d'interface graphique pour l'édition et l'affichage de jeux de données"
@@ -52,8 +59,8 @@ msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
 msgid "Sigima"
 msgstr ""
 
-msgid ">= 1.2.0"
-msgstr ""
+msgid ">= 1.4.0"
+msgstr ">= 1.4.0"
 
 msgid "Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform."
 msgstr "Moteur de calcul scientifique pour signaux 1D et images 2D, faisant partie de la plateforme open-source DataLab."
@@ -61,8 +68,8 @@ msgstr "Moteur de calcul scientifique pour signaux 1D et images 2D, faisant part
 msgid "SigimaX"
 msgstr ""
 
-msgid ">= 1.0.2"
-msgstr ""
+msgid ">= 1.1.0"
+msgstr ">= 1.1.0"
 
 msgid "Reusable GUI components and application utilities, part of the DataLab platform for signal and image processing"
 msgstr ""

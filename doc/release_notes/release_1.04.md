@@ -141,14 +141,16 @@ DataLab now uses stable UUID-based object references across object trees, result
 * Plot annotations are now stored in a renderer-independent format shared with DataLab-Web, so annotations in workspaces and `.dlabann` files are no longer tied to PlotPy
 * Existing PlotPy annotations remain readable and are converted only after an annotation edit is accepted; simply opening a workspace or cancelling the editor leaves its data unchanged
 * Annotation identifiers, lock state, custom metadata and extension data are preserved across edits, while unknown third-party payloads are retained without modification
-* DataLab now requires Sigima ≥ 1.3.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x
+* DataLab now requires Sigima ≥ 1.4.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x; HDF5 imports use Sigima's experimental-source API
 
 **HDF5 browser:**
 
 * Browsing an HDF5 file no longer reads its datasets entirely: they are listed and described from their shape and data type, and the value previews read only their first elements. Large files open faster and use less memory; data is read when a signal or an image is previewed or imported
-* The HDF5 browser stays responsive while a preview is read, and previews datasets of more than 16 million values with a step along each axis
-* Datasets with three dimensions or more (image stacks, spectral cubes...) are now listed in the HDF5 browser
+* The HDF5 browser stays responsive while a preview is read. Ordinary 1D arrays and 2D images above 2²⁴ values (about 16.8 million) are previewed with a step along each axis; NeXus and mapped objects, compound datasets and signals stored in 2D tables still use complete objects for graphical previews
+* Datasets with three dimensions or more (image stacks, spectral cubes...) are now listed in the HDF5 browser, but are not directly importable and have no graphical slice selector
 * Dataset attributes with more than 10 000 values are no longer copied to the metadata of imported objects
+
+See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific object import, experimental origin and preview limits.
 
 ### 🛠️ Bug Fixes ###
 
@@ -164,7 +166,7 @@ DataLab now uses stable UUID-based object references across object trees, result
 
 **HDF5 import:**
 
-* Fixed images with unsigned 32-bit values above 2 147 483 647 being clipped when imported from an HDF5 file ("Clipping uint32 data to int32" warning): such images are now imported as 64-bit floating-point images keeping every value exactly, as are other integer images that no supported integer type can hold, which were rounded to 32-bit floating-point values beyond 16 777 216 (requires Sigima ≥ 1.4.0)
+* Fixed images with unsigned 32-bit values above 2 147 483 647 being clipped when imported from an HDF5 file ("Clipping uint32 data to int32" warning): such images are now imported as 64-bit floating-point images keeping every value exactly. Other integer images that no supported integer type can hold also use a sufficiently precise floating-point type when possible, instead of rounding to 32-bit floating-point values beyond 16 777 216; a warning is emitted when no supported type guarantees exact conversion (in particular beyond ±2⁵³ for float64)
 
 **Metadata:**
 

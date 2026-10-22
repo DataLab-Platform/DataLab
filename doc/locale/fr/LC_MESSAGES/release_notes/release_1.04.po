@@ -339,8 +339,8 @@ msgstr "Les annotations PlotPy existantes restent lisibles et ne sont converties
 msgid "Annotation identifiers, lock state, custom metadata and extension data are preserved across edits, while unknown third-party payloads are retained without modification"
 msgstr "Les identifiants d'annotation, l'état de verrouillage, les métadonnées personnalisées et les données d'extension sont conservés lors des modifications, tandis que les charges utiles tierces inconnues sont conservées sans modification"
 
-msgid "DataLab now requires Sigima ≥ 1.3.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x"
-msgstr "DataLab nécessite désormais Sigima ≥ 1.3.0, SigimaX ≥ 1.1.0 et DataLab-Capsule 0.1.x"
+msgid "DataLab now requires Sigima ≥ 1.4.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x; HDF5 imports use Sigima's experimental-source API"
+msgstr "DataLab nécessite désormais Sigima ≥ 1.4.0, SigimaX ≥ 1.1.0 et DataLab-Capsule 0.1.x ; les imports HDF5 utilisent l'API d'origine expérimentale de Sigima"
 
 msgid "**HDF5 browser:**"
 msgstr "**Explorateur HDF5 :**"
@@ -348,14 +348,17 @@ msgstr "**Explorateur HDF5 :**"
 msgid "Browsing an HDF5 file no longer reads its datasets entirely: they are listed and described from their shape and data type, and the value previews read only their first elements. Large files open faster and use less memory; data is read when a signal or an image is previewed or imported"
 msgstr "Parcourir un fichier HDF5 ne lit plus ses jeux de données en entier : ils sont listés et décrits à partir de leur forme et de leur type de données, et les aperçus de valeurs ne lisent que leurs premiers éléments. Les gros fichiers s'ouvrent plus vite et utilisent moins de mémoire ; les données sont lues lorsqu'un signal ou une image est prévisualisé ou importé"
 
-msgid "The HDF5 browser stays responsive while a preview is read, and previews datasets of more than 16 million values with a step along each axis"
-msgstr "L'explorateur HDF5 reste réactif pendant la lecture d'un aperçu, et prévisualise les jeux de données de plus de 16 millions de valeurs avec un pas le long de chaque axe"
+msgid "The HDF5 browser stays responsive while a preview is read. Ordinary 1D arrays and 2D images above 2²⁴ values (about 16.8 million) are previewed with a step along each axis; NeXus and mapped objects, compound datasets and signals stored in 2D tables still use complete objects for graphical previews"
+msgstr "L'explorateur HDF5 reste réactif pendant la lecture d'un aperçu. Les tableaux 1D ordinaires et les images 2D au-delà de 2²⁴ valeurs (environ 16,8 millions) sont prévisualisés avec un pas le long de chaque axe ; les objets NeXus et décrits par un profil, les jeux de données composites et les signaux stockés dans des tableaux 2D utilisent encore des objets complets pour leurs aperçus graphiques"
 
-msgid "Datasets with three dimensions or more (image stacks, spectral cubes...) are now listed in the HDF5 browser"
-msgstr "Les jeux de données à trois dimensions ou plus (piles d'images, cubes spectraux...) sont désormais listés dans l'explorateur HDF5"
+msgid "Datasets with three dimensions or more (image stacks, spectral cubes...) are now listed in the HDF5 browser, but are not directly importable and have no graphical slice selector"
+msgstr "Les jeux de données à trois dimensions ou plus (piles d'images, cubes spectraux...) sont désormais listés dans l'explorateur HDF5, mais ne sont pas directement importables et n'ont pas de sélecteur graphique de coupes"
 
 msgid "Dataset attributes with more than 10 000 values are no longer copied to the metadata of imported objects"
 msgstr "Les attributs de jeux de données de plus de 10 000 valeurs ne sont plus copiés dans les métadonnées des objets importés"
+
+msgid "See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific object import, experimental origin and preview limits."
+msgstr "Le [guide de l'explorateur HDF5](../features/common/h5browser.rst) décrit l'import d'objets scientifiques, l'origine expérimentale et les limites des aperçus."
 
 msgid "🛠️ Bug Fixes"
 msgstr "🛠️ Corrections de bugs"
@@ -381,8 +384,8 @@ msgstr "Correction de la largeur des panneaux Signal/Image non restaurée au dé
 msgid "**HDF5 import:**"
 msgstr "**Import HDF5 :**"
 
-msgid "Fixed images with unsigned 32-bit values above 2 147 483 647 being clipped when imported from an HDF5 file (\"Clipping uint32 data to int32\" warning): such images are now imported as 64-bit floating-point images keeping every value exactly, as are other integer images that no supported integer type can hold, which were rounded to 32-bit floating-point values beyond 16 777 216 (requires Sigima ≥ 1.4.0)"
-msgstr "Correction de l'écrêtage des images aux valeurs entières non signées 32 bits supérieures à 2 147 483 647 lors de leur import depuis un fichier HDF5 (avertissement \"Clipping uint32 data to int32\") : ces images sont désormais importées comme images en virgule flottante 64 bits conservant exactement chaque valeur, comme les autres images entières qu'aucun type entier pris en charge ne peut contenir, qui étaient arrondies en virgule flottante 32 bits au-delà de 16 777 216 (nécessite Sigima ≥ 1.4.0)"
+msgid "Fixed images with unsigned 32-bit values above 2 147 483 647 being clipped when imported from an HDF5 file (\"Clipping uint32 data to int32\" warning): such images are now imported as 64-bit floating-point images keeping every value exactly. Other integer images that no supported integer type can hold also use a sufficiently precise floating-point type when possible, instead of rounding to 32-bit floating-point values beyond 16 777 216; a warning is emitted when no supported type guarantees exact conversion (in particular beyond ±2⁵³ for float64)"
+msgstr "Correction de l'écrêtage des images contenant des valeurs entières non signées sur 32 bits supérieures à 2 147 483 647 lors de leur import depuis un fichier HDF5 (avertissement « Clipping uint32 data to int32 ») : ces images sont désormais importées en flottants sur 64 bits en conservant chaque valeur exactement. Les autres images entières qu'aucun type entier pris en charge ne peut contenir utilisent aussi, lorsque c'est possible, un type flottant suffisamment précis, au lieu d'être arrondies en flottants sur 32 bits au-delà de 16 777 216 ; un avertissement est émis lorsqu'aucun type pris en charge ne garantit une conversion exacte (notamment au-delà de ±2⁵³ pour float64)"
 
 msgid "**Metadata:**"
 msgstr "**Métadonnées :**"
