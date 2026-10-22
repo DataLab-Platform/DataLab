@@ -75,6 +75,27 @@ msgstr "**Plugins HDF5** Plugins spéciaux qui prennent en charge les fichiers H
 msgid "Live preview compatibility"
 msgstr "Compatibilité avec l'aperçu interactif"
 
+msgid "Source organization and distribution"
+msgstr "Organisation du code source et distribution"
+
+msgid "**Source organization**, **distribution format** and **functional capabilities** are independent concepts. A single-file plugin and a plugin organized as a Python package use the same :class:`datalab.plugins.PluginBase` API; neither form determines whether it provides processing, input/output, visualization or application features."
+msgstr "**L'organisation du code source**, le **format de distribution** et les **capacités fonctionnelles** sont des notions indépendantes. Un plugin en fichier unique et un plugin organisé en paquet Python utilisent la même API :class:`datalab.plugins.PluginBase` ; aucune de ces formes ne détermine s'il fournit des fonctions de traitement, d'entrée/sortie, de visualisation ou d'application."
+
+msgid "**Single-file plugin:** one ``datalab_<name>.py`` module, easy to edit and share without a packaging project. This historical form is also the default output of ``datalab-plugin create``; it is not deprecated."
+msgstr "**Plugin en fichier unique :** un module ``datalab_<nom>.py``, facile à modifier et à partager sans projet de packaging. Cette forme historique est aussi celle produite par défaut par ``datalab-plugin create`` ; elle n'est pas obsolète."
+
+msgid "**Package or project:** Python modules and, optionally, resources, tests and packaging metadata. ``datalab-plugin create --project`` offers one layered organization, not a mandatory architecture for all plugins."
+msgstr "**Paquet ou projet :** des modules Python et, éventuellement, des ressources, des tests et des métadonnées de packaging. ``datalab-plugin create --project`` propose une organisation en couches, pas une architecture obligatoire pour tous les plugins."
+
+msgid "**Wheel distribution:** an installable ``.whl`` archive with standardized metadata and plugin entry points. A wheel can contain a single module or a larger package; it is a distribution format, not a functional plugin category."
+msgstr "**Distribution wheel :** une archive ``.whl`` installable, contenant des métadonnées normalisées et des points d'entrée de plugins. Un wheel peut contenir un seul module ou un paquet plus important ; c'est un format de distribution, pas une catégorie fonctionnelle de plugin."
+
+msgid "At present, a single-file plugin can be loaded from a plugin directory or installed with **Install from file...**, but online and local catalogs accept only wheels. Publishing an existing single-module implementation as a wheel does not require reorganizing it into the generated layered project, although packaging metadata must be supplied."
+msgstr "Actuellement, un plugin en fichier unique peut être chargé depuis un répertoire de plugins ou installé avec **Installer depuis un fichier...**, mais les catalogues en ligne et locaux n'acceptent que les wheels. Distribuer une implémentation existante en un seul module sous forme de wheel n'impose pas de la réorganiser selon le projet en couches généré, mais nécessite des métadonnées de packaging."
+
+msgid "A directly loaded source file remains in its development directory. A file installed through DataLab is copied to its managed user storage. A plugin is not a macro: a plugin registers persistent application features, whereas a macro is a script run to automate a task. Supporting the historical single-file form does not mean that obsolete APIs from DataLab v0.20 are automatically supported."
+msgstr "Un fichier source chargé directement reste dans son répertoire de développement. Un fichier installé par DataLab est copié dans son stockage utilisateur géré. Un plugin n'est pas une macro : un plugin enregistre des fonctions persistantes dans l'application, tandis qu'une macro est un script exécuté pour automatiser une tâche. La prise en charge de la forme historique en fichier unique n'implique pas celle des API obsolètes de DataLab v0.20."
+
 msgid "Standard parameterized functions registered with ``register_1_to_1`` can participate in live preview without a custom renderer. They must return a ``SignalObj`` or ``ImageObj``, be importable in a spawned process, and accept serializable source/parameter copies. Preview uses a private process and does not publish results to the workspace. It is not a sandbox for filesystem, network or other external side effects. Register functions that must not run speculatively with ``preview_enabled=False``. Serialization or computation failures are reported in the preview; the normal OK path remains available. Unknown custom ``DataSet.edit`` implementations and alternate guidata backends are not replaced."
 msgstr "Les fonctions paramétrées standard enregistrées avec ``register_1_to_1`` peuvent utiliser l'aperçu interactif sans moteur de rendu personnalisé. Elles doivent retourner un ``SignalObj`` ou un ``ImageObj``, être importables dans un processus démarré par spawn et accepter des copies sérialisables des sources et paramètres. L'aperçu utilise un processus privé et ne publie aucun résultat dans l'espace de travail. Il ne protège pas des effets externes sur les fichiers, le réseau ou d'autres ressources. Enregistrez les fonctions qui ne doivent pas être exécutées provisoirement avec ``preview_enabled=False``. Les erreurs de sérialisation ou de calcul sont signalées dans l'aperçu ; le chemin normal via OK reste disponible. Les implémentations personnalisées de ``DataSet.edit`` non prises en charge et les backends alternatifs de guidata ne sont pas remplacés."
 
@@ -360,8 +381,8 @@ msgstr "un paquet wheel (``.whl``) construit à partir d'un projet de plugin, pa
 msgid "a single Python module named ``datalab_<name>.py``."
 msgstr "un module Python unique nommé ``datalab_<nom>.py``."
 
-msgid "Before installing, DataLab checks the file without running it and shows its name, version, plugin classes, dependencies and SHA-256 digest. A plugin runs with the same rights as DataLab: install only plugins from authors you trust."
-msgstr "Avant l'installation, DataLab vérifie le fichier sans l'exécuter et affiche son nom, sa version, ses classes de plugin, ses dépendances et son empreinte SHA-256. Un plugin s'exécute avec les mêmes droits que DataLab : n'installez que des plugins provenant d'auteurs de confiance."
+msgid "Before installing, DataLab checks the file without running it. For a wheel, the confirmation shows the distribution, version, entry points and requirements from its metadata. For a single-file module, it shows the module name, file, size and SHA-256 digest, without claiming to know its version, classes or dependencies. A plugin runs with the same rights as DataLab: install only plugins from authors you trust."
+msgstr "Avant l'installation, DataLab vérifie le fichier sans l'exécuter. Pour un wheel, la confirmation affiche la distribution, la version, les points d'entrée et les exigences issus de ses métadonnées. Pour un module en fichier unique, elle affiche le nom du module, le fichier, la taille et l'empreinte SHA-256, sans prétendre connaître sa version, ses classes ou ses dépendances. Un plugin s'exécute avec les mêmes droits que DataLab : n'installez que des plugins provenant d'auteurs de confiance."
 
 msgid "Installed plugins are kept in the ``installed_plugins`` folder of the DataLab configuration directory (e.g. ``~/.DataLab_v1/installed_plugins``) and listed in the tab, where **Uninstall** removes them. Installations not adding dependencies retain the plugin reload workflow; a newly installed plugin is enabled. Additional dependencies and new versions of already loaded plugins are only activated at the next start of DataLab."
 msgstr "Les plugins installés sont conservés dans le dossier ``installed_plugins`` du répertoire de configuration DataLab (par exemple ``~/.DataLab_v1/installed_plugins``) et listés dans l'onglet, où **Désinstaller** les supprime. Les installations sans ajout de dépendances conservent le mécanisme de rechargement des plugins ; un plugin nouvellement installé est activé. Les dépendances supplémentaires et les nouvelles versions de plugins déjà chargés ne sont activées qu'au prochain démarrage de DataLab."
@@ -600,8 +621,8 @@ msgstr "``--package`` et ``--plugin-id`` : à défaut, le nom du module et l'ID 
 msgid "An existing file is never overwritten. To share the plugin, send its file: other users install it with **Plugins > Configure plugins... > Install plugins** (see :ref:`plugin_install_from_file`)."
 msgstr "Un fichier existant n'est jamais écrasé. Pour partager le plugin, envoyez son fichier : les autres utilisateurs l'installent avec **Plugins > Configurer les plugins... > Installer des plugins** (voir :ref:`plugin_install_from_file`)."
 
-msgid "To publish a plugin in the plugin catalog, or to develop a larger plugin with tests, create a layered project with ``--project`` instead (see :ref:`plugin_project`)."
-msgstr "Pour publier un plugin dans le catalogue de plugins, ou pour développer un plugin plus important avec des tests, créez plutôt un projet structuré en couches avec ``--project`` (voir :ref:`plugin_project`)."
+msgid "The catalogs currently require a wheel, not a particular source architecture (see :ref:`plugin_forms`). To develop a larger plugin with packaging and tests already configured, create a layered project with ``--project`` instead (see :ref:`plugin_project`)."
+msgstr "Les catalogues exigent actuellement un wheel, pas une architecture particulière du code source (voir :ref:`plugin_forms`). Pour développer un plugin plus important avec le packaging et les tests déjà configurés, créez plutôt un projet structuré en couches avec ``--project`` (voir :ref:`plugin_project`)."
 
 msgid "Creating a layered plugin project"
 msgstr "Créer un projet de plugin structuré en couches"

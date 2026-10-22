@@ -65,6 +65,21 @@ DataLab supports three categories of plugins, each with its own purpose and regi
 - **HDF5 plugins**
   Special plugins that support HDF5 files with domain-specific tree structures. These allow DataLab to interpret signals or images organized in non-standard ways.
 
+.. _plugin_forms:
+
+Source organization and distribution
+-----------------------------------
+
+**Source organization**, **distribution format** and **functional capabilities** are independent concepts. A single-file plugin and a plugin organized as a Python package use the same :class:`datalab.plugins.PluginBase` API; neither form determines whether it provides processing, input/output, visualization or application features.
+
+- **Single-file plugin:** one ``datalab_<name>.py`` module, easy to edit and share without a packaging project. This historical form is also the default output of ``datalab-plugin create``; it is not deprecated.
+- **Package or project:** Python modules and, optionally, resources, tests and packaging metadata. ``datalab-plugin create --project`` offers one layered organization, not a mandatory architecture for all plugins.
+- **Wheel distribution:** an installable ``.whl`` archive with standardized metadata and plugin entry points. A wheel can contain a single module or a larger package; it is a distribution format, not a functional plugin category.
+
+At present, a single-file plugin can be loaded from a plugin directory or installed with **Install from file...**, but online and local catalogs accept only wheels. Publishing an existing single-module implementation as a wheel does not require reorganizing it into the generated layered project, although packaging metadata must be supplied.
+
+A directly loaded source file remains in its development directory. A file installed through DataLab is copied to its managed user storage. A plugin is not a macro: a plugin registers persistent application features, whereas a macro is a script run to automate a task. Supporting the historical single-file form does not mean that obsolete APIs from DataLab v0.20 are automatically supported.
+
 Live preview compatibility
 --------------------------
 
@@ -379,7 +394,7 @@ This tab installs a plugin shared as a file, without any Python tool: this is th
 - a wheel (``.whl``) built from a plugin project, for example with ``python -m build``: it must be pure Python (``py3-none-any``), declare its plugin class in the ``datalab.plugins`` entry-point group, and have its requirements provided by the host or the adjacent dependency wheelhouse (see :ref:`plugin_dependencies`);
 - a single Python module named ``datalab_<name>.py``.
 
-Before installing, DataLab checks the file without running it and shows its name, version, plugin classes, dependencies and SHA-256 digest. A plugin runs with the same rights as DataLab: install only plugins from authors you trust.
+Before installing, DataLab checks the file without running it. For a wheel, the confirmation shows the distribution, version, entry points and requirements from its metadata. For a single-file module, it shows the module name, file, size and SHA-256 digest, without claiming to know its version, classes or dependencies. A plugin runs with the same rights as DataLab: install only plugins from authors you trust.
 
 Installed plugins are kept in the ``installed_plugins`` folder of the DataLab configuration directory (e.g. ``~/.DataLab_v1/installed_plugins``) and listed in the tab, where **Uninstall** removes them. Installations not adding dependencies retain the plugin reload workflow; a newly installed plugin is enabled. Additional dependencies and new versions of already loaded plugins are only activated at the next start of DataLab.
 
@@ -781,7 +796,7 @@ Options adapt the generated file:
 
 An existing file is never overwritten. To share the plugin, send its file: other users install it with **Plugins > Configure plugins... > Install plugins** (see :ref:`plugin_install_from_file`).
 
-To publish a plugin in the plugin catalog, or to develop a larger plugin with tests, create a layered project with ``--project`` instead (see :ref:`plugin_project`).
+The catalogs currently require a wheel, not a particular source architecture (see :ref:`plugin_forms`). To develop a larger plugin with packaging and tests already configured, create a layered project with ``--project`` instead (see :ref:`plugin_project`).
 
 .. _plugin_project:
 
