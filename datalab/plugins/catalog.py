@@ -32,6 +32,7 @@ from email.message import Message
 from email.parser import BytesParser
 from email.policy import default as email_policy
 
+from packaging.tags import sys_tags
 from packaging.utils import canonicalize_name, parse_wheel_filename
 from packaging.version import InvalidVersion, Version
 
@@ -62,6 +63,16 @@ class CatalogError(ValueError):
 
 
 @dataclasses.dataclass(frozen=True)
+class CatalogWheel:
+    """A dependency artifact distributed with a plugin release."""
+
+    filename: str
+    url: str
+    sha256: str
+    size: int
+
+
+@dataclasses.dataclass(frozen=True)
 class CatalogRelease:
     """Release of a catalog plugin.
 
@@ -85,6 +96,7 @@ class CatalogRelease:
     targets: tuple[str, ...] = ()
     yanked: str = ""
     requires_python: str | None = None
+    dependency_wheels: tuple[CatalogWheel, ...] = ()
 
 
 @dataclasses.dataclass(frozen=True)
@@ -204,6 +216,18 @@ def _parse_release(item: dict, resolve: Callable[[str], str]) -> CatalogRelease:
     if not _SHA256_PATTERN.fullmatch(item["sha256"]):
         raise ValueError(f"Invalid SHA-256 digest: {item['sha256']!r}")
     url = item.get("url", "")
+    dependencies: list[CatalogWheel] = []
+    for artifact in item.get("dependency_wheels", ()):
+        if not _SHA256_PATTERN.fullmatch(artifact["sha256"]):
+            raise ValueError("Invalid dependency SHA-256 digest")
+        dependencies.append(
+            CatalogWheel(
+                filename=osp.basename(artifact["filename"]),
+                url=resolve(artifact["url"]),
+                sha256=artifact["sha256"],
+                size=int(artifact["size"]),
+            )
+        )
     return CatalogRelease(
         version=str(item["version"]),
         sha256=item["sha256"],
@@ -213,6 +237,7 @@ def _parse_release(item: dict, resolve: Callable[[str], str]) -> CatalogRelease:
         targets=tuple(item.get("targets", ())),
         yanked=item.get("yanked", ""),
         requires_python=item.get("requires_python"),
+        dependency_wheels=tuple(dependencies),
     )
 
 
@@ -551,7 +576,7 @@ def load_catalogs(url: str, directories: Sequence[str] = ()) -> CatalogsContent:
     return CatalogsContent(tuple(plugins), tuple(errors))
 
 
-def download_release(release: CatalogRelease, directory: str) -> str:
+def download_release(release: CatalogRelease | CatalogWheel, directory: str) -> str:
     """Download a release wheel into a directory after checking it.
 
     Returns:
@@ -575,6 +600,21 @@ def download_release(release: CatalogRelease, directory: str) -> str:
     return path
 
 
+def download_dependency_wheels(release: CatalogRelease, directory: str) -> None:
+    """Copy compatible, verified dependency artifacts into a wheelhouse."""
+    tags = frozenset(sys_tags())
+    os.makedirs(directory, exist_ok=True)
+    for artifact in release.dependency_wheels:
+        try:
+            compatible = bool(parse_wheel_filename(artifact.filename)[3] & tags)
+        except ValueError as exc:
+            raise CatalogError(
+                f"Invalid dependency wheel filename: {artifact.filename}"
+            ) from exc
+        if compatible:
+            download_release(artifact, directory)
+
+
 __all__ = [
     "CATALOG_FILENAME",
     "DEFAULT_CATALOG_URL",
@@ -582,7 +622,9 @@ __all__ = [
     "CatalogError",
     "CatalogPlugin",
     "CatalogRelease",
+    "CatalogWheel",
     "CatalogsContent",
+    "download_dependency_wheels",
     "download_release",
     "fetch_catalog",
     "list_folder_wheels",

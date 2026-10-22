@@ -14,6 +14,10 @@ Usage (with ``DATALAB_PLUGIN_PROBE_MARKER`` set to the result file path)::
     python scripts/frozen_plugin_probe.py install
     DataLab.exe --unattended --delay 5000
     python scripts/frozen_plugin_probe.py verify
+
+Set ``DATALAB_PLUGIN_PROBE_WHEELHOUSE`` to a ``dependencies`` folder and run
+``prepare`` online first to include a real PyTango wheel. The release check
+then runs ``install`` inside DataLab.exe, without an index or external Python.
 """
 
 from __future__ import annotations
@@ -26,6 +30,7 @@ import tempfile
 import zipfile
 
 MARKER_ENV = "DATALAB_PLUGIN_PROBE_MARKER"
+WHEELHOUSE_ENV = "DATALAB_PLUGIN_PROBE_WHEELHOUSE"
 
 #: Modules commonly imported by plugins
 MODULES = (
@@ -62,6 +67,9 @@ MODULES = (
 
 #: Distributions plugin wheels may declare as requirements
 DISTRIBUTIONS = ("datalab-capsule", "guidata", "numpy", "plotpy", "scipy", "sigima")
+if os.environ.get(WHEELHOUSE_ENV):
+    MODULES += ("tango",)
+    DISTRIBUTIONS += ("pytango",)
 
 PLUGIN_SOURCE = f'''\
 import importlib
@@ -153,7 +161,12 @@ def make_probe_wheel() -> tuple[str, bytes]:
         archive.writestr(
             f"{dist_info}/METADATA",
             "Metadata-Version: 2.1\nName: datalab-frozen-probe\nVersion: 1.0.0\n"
-            "Requires-Dist: datalab-platform\n",
+            "Requires-Dist: datalab-platform\n"
+            + (
+                "Requires-Dist: pytango==10.3.1\n"
+                if os.environ.get(WHEELHOUSE_ENV)
+                else ""
+            ),
         )
         archive.writestr(
             f"{dist_info}/WHEEL",
@@ -178,9 +191,35 @@ def install() -> int:
         with open(path, "wb") as file:
             file.write(data)
         store = get_installed_plugin_store()
-        store.install_wheel(path)
+        manifest, plan = store.prepare_wheel_file(
+            path, wheelhouse=os.environ.get(WHEELHOUSE_ENV)
+        )
+        try:
+            store.install_wheel(
+                path, expected_sha256=manifest["sha256"], dependency_plan=plan
+            )
+        finally:
+            if plan is not None:
+                plan.close()
     print(f"Probe plugin installed in {store.root}")
     return 0
+
+
+def prepare() -> int:
+    """Prepare the optional native dependency wheelhouse before the offline check."""
+    from datalab.plugins.catalogtool import (
+        prepare_local_catalog,  # pylint: disable=import-outside-toplevel
+    )
+
+    directory = os.path.dirname(os.environ[WHEELHOUSE_ENV])
+    os.makedirs(directory, exist_ok=True)
+    filename, data = make_probe_wheel()
+    with open(os.path.join(directory, filename), "wb") as stream:
+        stream.write(data)
+    report = prepare_local_catalog(directory)
+    for error in report.errors:
+        print(error, file=sys.stderr)
+    return 1 if report.errors else 0
 
 
 def verify() -> int:
@@ -210,7 +249,7 @@ def verify() -> int:
 
 
 if __name__ == "__main__":
-    COMMANDS = {"install": install, "verify": verify}
+    COMMANDS = {"install": install, "verify": verify, "prepare": prepare}
     if len(sys.argv) != 2 or sys.argv[1] not in COMMANDS:
         sys.exit(f"Usage: {sys.argv[0]} {{{'|'.join(COMMANDS)}}}")
     sys.exit(COMMANDS[sys.argv[1]]())

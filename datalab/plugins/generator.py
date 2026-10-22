@@ -23,8 +23,11 @@ from pathlib import Path
 
 from datalab import __version__
 from datalab.config import _, get_config_path
-from datalab.plugins.catalog import CatalogError
-from datalab.plugins.catalogtool import build_local_catalog, check_local_catalog
+from datalab.plugins.catalogtool import (
+    build_local_catalog,
+    check_local_catalog,
+    prepare_local_catalog,
+)
 
 _PACKAGE_PATTERN = re.compile(r"^[a-z][a-z0-9_]*$")
 _PLUGIN_ID_PATTERN = re.compile(r"^[a-z0-9]+(?:[.-][a-z0-9]+)+$")
@@ -996,7 +999,7 @@ def build_parser() -> argparse.ArgumentParser:
         help=_("Project license (with --project)"),
     )
     catalog_parser = subparsers.add_parser(
-        "catalog", help=_("Build or check a local plugin catalog folder.")
+        "catalog", help=_("Prepare, build or check a local plugin catalog folder.")
     )
     catalog_subparsers = catalog_parser.add_subparsers(
         dest="catalog_command", required=True
@@ -1004,6 +1007,10 @@ def build_parser() -> argparse.ArgumentParser:
     for name, text in (
         ("build", _("Write the catalog.json file listing the plugin wheels.")),
         ("check", _("Check the catalog.json file against the plugin wheels.")),
+        (
+            "prepare",
+            _("Download dependency wheels for this host and build the local catalog."),
+        ),
     ):
         subparser = catalog_subparsers.add_parser(name, help=text)
         subparser.add_argument(
@@ -1021,9 +1028,11 @@ def run_catalog_command(args: argparse.Namespace) -> int:
     try:
         if args.catalog_command == "build":
             report = build_local_catalog(str(args.directory))
+        elif args.catalog_command == "prepare":
+            report = prepare_local_catalog(str(args.directory))
         else:
             report = check_local_catalog(str(args.directory))
-    except CatalogError as exc:
+    except (OSError, ValueError) as exc:
         print(_("Error: %s") % exc, file=sys.stderr)
         return 1
     for message in report.warnings:
@@ -1039,6 +1048,13 @@ def run_catalog_command(args: argparse.Namespace) -> int:
         print(_("Wrote %s, listing %d plugins.") % (report.path, count))
     else:
         print(_("The local plugin catalog lists %d plugins.") % count)
+    if report.dependency_wheels:
+        print(_("Dependency artifacts for the public catalog:"))
+        print("dependency_wheels:")
+        for artifact in report.dependency_wheels:
+            print(f"  - filename: {artifact['filename']}")
+            print(f"    url: {artifact['url']}")
+            print(f"    sha256: {artifact['sha256']}")
     return 0
 
 

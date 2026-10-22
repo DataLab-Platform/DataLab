@@ -27,6 +27,7 @@ from types import MappingProxyType, ModuleType
 from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
+from packaging.utils import canonicalize_name
 from qtpy import QtWidgets as QW
 
 # pylint: disable=unused-import
@@ -1091,6 +1092,33 @@ def _set_plugin_class_filepaths(module) -> None:
             plugin_class.__plugin_filepath__ = filepath
 
 
+def enable_installed_plugin_classes(
+    store: InstalledPluginStore, names: Sequence[str]
+) -> tuple[bool, set[str]]:
+    """Enable discovered classes from selected installed distributions."""
+    requested = {canonicalize_name(name) for name in names}
+    recognized: set[str] = set()
+    enabled = Conf.plugins_enabled_list.get(None)
+    changed = False
+    for plugin_class in PluginRegistry.get_plugin_classes():
+        filepath = getattr(plugin_class, "__plugin_filepath__", None)
+        if not filepath:
+            continue
+        installed = store.find_plugin(filepath)
+        if installed is None:
+            continue
+        name = canonicalize_name(installed.name)
+        if name not in requested:
+            continue
+        recognized.add(name)
+        if enabled is not None and plugin_class.get_plugin_id() not in enabled:
+            enabled = [*enabled, plugin_class.get_plugin_id()]
+            changed = True
+    if changed:
+        Conf.plugins_enabled_list.set(enabled)
+    return changed, recognized
+
+
 def _add_plugin_discovery_source(plugin_class: type[PluginBase], source: str) -> None:
     """Attach a discovery source to a plugin class without duplicates."""
     sources = getattr(plugin_class, "__plugin_discovery_sources__", ())
@@ -1371,8 +1399,11 @@ def discover_plugins() -> list[ModuleType]:
         return []
 
     _extend_sys_path_with_plugin_paths()
+    installed_store = None
     try:
-        get_installed_plugin_store().activate()
+        store = get_installed_plugin_store()
+        store.activate()
+        installed_store = store
     except (OSError, ValueError):
         _record_plugin_discovery_failure(
             _("Plugins installed from a file"),
@@ -1443,6 +1474,22 @@ def discover_plugins() -> list[ModuleType]:
                     filepath = osp.join(finder.path, name)
             PluginRegistry.add_failed_plugin(module_name, filepath, tb_text, source)
     _normalize_discovered_plugin_classes()
+    if installed_store is not None:
+        try:
+            pending = installed_store.get_pending_enabled_names()
+            if pending:
+                _changed, recognized = enable_installed_plugin_classes(
+                    installed_store, pending
+                )
+                if recognized:
+                    installed_store.clear_pending_enabled_names(list(recognized))
+        except (OSError, ValueError):
+            _record_plugin_discovery_failure(
+                _("Plugins installed from a file"),
+                f"installed plugin store {INSTALLED_PLUGINS_PATH!r}",
+                traceback.format_exc(),
+                INSTALLED_PLUGINS_PATH,
+            )
     return modules
 
 

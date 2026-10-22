@@ -3,14 +3,20 @@
 # This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 #
-#, fuzzy
 msgid ""
 msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-10-22 14:31+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
 
 msgid "Version 1.4"
 msgstr "Version 1.4"
@@ -114,11 +120,17 @@ msgstr "**Installation de plugins :**"
 msgid "Plugins can now be installed from a file, without any Python tool, including in the standalone version of DataLab: the new **Install plugins** tab of **Plugins > Configure plugins...** accepts a pure-Python wheel (`.whl`) or a single `datalab_<name>.py` module"
 msgstr "Les plugins peuvent désormais être installés depuis un fichier, sans aucun outil Python, y compris dans la version autonome de DataLab : le nouvel onglet **Installer des plugins** de **Plugins > Configurer les plugins...** accepte un wheel en Python pur (`.whl`) ou un module unique `datalab_<nom>.py`"
 
-msgid "Before installing, DataLab checks the file without running it and shows its name, version, plugin classes, dependencies and SHA-256 digest; a wheel requiring a package that DataLab does not provide is refused"
-msgstr "Avant l'installation, DataLab vérifie le fichier sans l'exécuter et affiche son nom, sa version, ses classes de plugin, ses dépendances et son empreinte SHA-256 ; un wheel nécessitant un paquet que DataLab ne fournit pas est refusé"
+msgid "Before installing, DataLab checks the file without running it and shows its name, version, plugin classes, dependencies and SHA-256 digest"
+msgstr "Avant l'installation, DataLab vérifie le fichier sans l'exécuter et affiche son nom, sa version, ses classes de plugins, ses dépendances et son empreinte SHA-256"
 
-msgid "Installed plugins are listed in the same tab, where they can be uninstalled; a newly installed plugin is enabled and loaded after a plugin reload, and a new version of an already loaded plugin is used at the next start"
-msgstr "Les plugins installés sont listés dans le même onglet, où ils peuvent être désinstallés ; un plugin nouvellement installé est activé et chargé après un rechargement des plugins, et une nouvelle version d'un plugin déjà chargé est utilisée au prochain démarrage"
+msgid "Plugins may now include additional dependencies as separate wheels, including compatible native libraries, without changing packages already supplied by DataLab. A complete local catalog can be installed without Internet access; missing files and version conflicts are reported before any partial installation is activated"
+msgstr "Les plugins peuvent désormais fournir des dépendances supplémentaires sous forme de paquets wheel séparés, y compris des bibliothèques natives compatibles, sans modifier les paquets déjà fournis par DataLab. Un catalogue local complet peut être installé sans accès à Internet ; les fichiers manquants et les conflits de versions sont signalés avant toute activation d'une installation partielle"
+
+msgid "The confirmation dialog lists the additional packages and their fingerprints. They are shared by plugins of the same Python runtime, activated after restarting DataLab, and kept when a plugin is uninstalled"
+msgstr "La boîte de dialogue de confirmation liste les paquets supplémentaires et leurs empreintes. Ils sont partagés entre les plugins d'un même environnement d'exécution Python, activés après redémarrage de DataLab et conservés lorsqu'un plugin est désinstallé"
+
+msgid "Installed plugins are listed in the same tab, where they can be uninstalled; a newly installed plugin is enabled after a plugin reload when no additional packages are needed, or after restarting when dependencies were added. A new version of an already loaded plugin is used at the next start"
+msgstr "Les plugins installés sont listés dans le même onglet, où ils peuvent être désinstallés ; un plugin nouvellement installé est activé après rechargement si aucun paquet supplémentaire n'est nécessaire, ou après redémarrage si des dépendances ont été ajoutées. Une nouvelle version d'un plugin déjà chargé est utilisée au prochain démarrage"
 
 msgid "The new **Available plugins** tab lists the plugins of the [DataLab plugin catalog](https://datalab-platform.com/plugins/), official or from the community, with a search field: **Install** and **Update** download the wheel, check it against the catalog and install it after confirmation. The catalog address may be changed to use a private copy"
 msgstr "Le nouvel onglet **Plugins disponibles** liste les plugins du [catalogue de plugins DataLab](https://datalab-platform.com/plugins/), officiels ou issus de la communauté, avec un champ de recherche : **Installer** et **Mettre à jour** téléchargent le wheel, le vérifient par rapport au catalogue et l'installent après confirmation. L'adresse du catalogue peut être modifiée pour utiliser une copie privée"
@@ -128,6 +140,9 @@ msgstr "Les organisations peuvent diffuser leurs propres plugins, ou les version
 
 msgid "A local catalog folder may simply hold plugin wheels, listed as they are copied to it, or a `catalog.json` file giving display names, deprecations and withdrawn releases; `datalab-plugin catalog build` writes this file from the wheels of the folder, keeping the edited fields, and `datalab-plugin catalog check` reports wheels that are missing, changed, refused by DataLab or not listed"
 msgstr "Un dossier de catalogue local peut simplement contenir des wheels de plugins, listées dès qu'elles y sont copiées, ou un fichier `catalog.json` indiquant les noms d'affichage, les dépréciations et les versions retirées ; `datalab-plugin catalog build` écrit ce fichier à partir des wheels du dossier en conservant les champs modifiés, et `datalab-plugin catalog check` signale les wheels manquantes, modifiées, refusées par DataLab ou non listées"
+
+msgid "Authors can prepare an offline catalog with `datalab-plugin catalog prepare`: it downloads the additional dependency wheels needed by the reference host without installing them, then writes the catalog. The complete folder can be distributed on a network share or copied to computers without Internet access"
+msgstr "Les auteurs peuvent préparer un catalogue hors ligne avec `datalab-plugin catalog prepare` : la commande télécharge les paquets de dépendances supplémentaires nécessaires à l'environnement hôte de référence sans les installer, puis écrit le catalogue. Le dossier complet peut être distribué sur un partage réseau ou copié sur des ordinateurs sans accès à Internet"
 
 msgid "A catalog that cannot be read, such as a network share that is not connected or the online catalog on a computer without Internet access, is reported in the **Available plugins** tab without hiding the plugins of the other catalogs"
 msgstr "Un catalogue illisible, comme un partage réseau non connecté ou le catalogue en ligne sur un ordinateur sans accès à Internet, est signalé dans l'onglet **Plugins disponibles** sans masquer les plugins des autres catalogues"

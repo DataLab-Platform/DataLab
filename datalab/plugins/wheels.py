@@ -19,15 +19,16 @@ import re
 import sys
 import sysconfig
 import zipfile
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from email.parser import BytesParser
 from email.policy import default as email_policy
+from importlib import metadata as importlib_metadata
 from typing import Any
 
 from packaging.markers import default_environment
 from packaging.requirements import InvalidRequirement, Requirement
 from packaging.specifiers import InvalidSpecifier, SpecifierSet
-from packaging.tags import Tag, compatible_tags, interpreter_name
+from packaging.tags import Tag, compatible_tags, interpreter_name, parse_tag, sys_tags
 from packaging.utils import canonicalize_name, parse_wheel_filename
 from packaging.version import InvalidVersion, Version
 
@@ -139,7 +140,9 @@ def _read_bytes(path_or_bytes: str | bytes | bytearray | memoryview) -> bytes:
     return data
 
 
-def _safe_archive_entries(archive: zipfile.ZipFile) -> tuple[zipfile.ZipInfo, ...]:
+def _safe_archive_entries(
+    archive: zipfile.ZipFile, *, allow_native: bool = False
+) -> tuple[zipfile.ZipInfo, ...]:
     entries = tuple(archive.infolist())
     if len(entries) > MAX_ARCHIVE_ENTRIES:
         raise WheelInspectionError("Plugin wheel contains too many archive entries")
@@ -161,7 +164,11 @@ def _safe_archive_entries(archive: zipfile.ZipFile) -> tuple[zipfile.ZipInfo, ..
             raise WheelInspectionError(
                 "Plugin wheel exceeds the uncompressed size limit"
             )
-        if not entry.is_dir() and normalized.lower().endswith(_NATIVE_SUFFIXES):
+        if (
+            not allow_native
+            and not entry.is_dir()
+            and normalized.lower().endswith(_NATIVE_SUFFIXES)
+        ):
             raise WheelInspectionError(
                 f"Native payloads are not supported in plugin wheels: {normalized!r}"
             )
@@ -225,6 +232,8 @@ def _top_level_packages(
     archive: zipfile.ZipFile,
     entries: tuple[zipfile.ZipInfo, ...],
     dist_info: str,
+    *,
+    allow_native: bool = False,
 ) -> list[str]:
     top_level_name = f"{dist_info}/top_level.txt"
     names = {entry.filename.replace("\\", "/") for entry in entries}
@@ -247,9 +256,16 @@ def _top_level_packages(
                 # Flat layout: a root-level module is itself a package.
                 if top.endswith(".py"):
                     packages.add(top[: -len(".py")])
+                elif allow_native and top.lower().endswith((".pyd", ".so")):
+                    packages.add(top.split(".", maxsplit=1)[0])
                 continue
             if top.endswith(".data"):
-                # Wheel payload directories are not importable packages.
+                if allow_native:
+                    parts = name.split("/")
+                    if len(parts) > 2 and parts[1] in ("purelib", "platlib"):
+                        packages.add(parts[2].split(".", maxsplit=1)[0])
+                continue
+            if allow_native and top.endswith(".libs"):
                 continue
             packages.add(top)
     for package in packages:
@@ -262,12 +278,21 @@ def _top_level_packages(
     return sorted(packages)
 
 
-def _validate_dependencies(
+def validate_dependencies(
     requires_dist: list[str],
     available_distributions: Mapping[str, str],
     marker_environment: Mapping[str, str] | None,
     host_name: str,
+    *,
+    allow_missing: bool = False,
+    additional_distributions: Mapping[str, Sequence[str]] | None = None,
 ) -> list[dict[str, Any]]:
+    """Check requirements without changing installed distribution versions."""
+    provided_names = {canonicalize_name(name) for name in available_distributions}
+    candidates = {
+        canonicalize_name(name): tuple(Version(version) for version in versions)
+        for name, versions in (additional_distributions or {}).items()
+    }
     available: dict[str, Version] = {}
     for name, version in available_distributions.items():
         try:
@@ -292,6 +317,10 @@ def _validate_dependencies(
             not applies
             or (installed is not None and installed in requirement.specifier)
         )
+        if applies and installed is None and key not in provided_names:
+            compatible = any(
+                version in requirement.specifier for version in candidates.get(key, ())
+            )
         dependencies.append(
             {
                 "requirement": str(requirement),
@@ -300,7 +329,7 @@ def _validate_dependencies(
                 "compatible": compatible,
             }
         )
-        if not compatible:
+        if not compatible and not (allow_missing and installed is None):
             if installed is None:
                 detail = f"is not provided by {host_name}"
             else:
@@ -309,33 +338,14 @@ def _validate_dependencies(
     return dependencies
 
 
-def inspect_wheel(
+def _inspect_archive(
     path_or_bytes: str | bytes | bytearray | memoryview,
     *,
     filename: str,
-    entry_point_group: str,
-    available_distributions: Mapping[str, str],
-    host_name: str = "DataLab",
-    python_version: str | None = None,
-    marker_environment: Mapping[str, str] | None = None,
+    entry_point_group: str | None,
 ) -> dict[str, Any]:
-    """Return a JSON-friendly plugin wheel manifest without importing code.
-
-    Args:
-        path_or_bytes: Wheel file path or content
-        filename: Wheel file name, which carries the distribution name and tags
-        entry_point_group: Entry-point group the host loads plugins from
-        available_distributions: Distribution versions provided by the host
-        host_name: Host name used in dependency error messages
-        python_version: Host Python version (default: running interpreter)
-        marker_environment: Overrides of the environment markers
-
-    Returns:
-        Wheel manifest: identity, digest, entry points, packages and dependencies
-
-    Raises:
-        WheelInspectionError: The archive cannot be accepted as a plugin wheel
-    """
+    """Inspect archive structure and metadata, independently of the host."""
+    plugin = entry_point_group is not None
     data = _read_bytes(path_or_bytes)
     if not filename.lower().endswith(".whl"):
         raise WheelInspectionError("Plugin archive filename must end with .whl")
@@ -343,35 +353,44 @@ def inspect_wheel(
         wheel_name, wheel_version, _build, wheel_tags = parse_wheel_filename(filename)
     except (InvalidVersion, ValueError) as exc:
         raise WheelInspectionError(f"Invalid wheel filename: {filename!r}") from exc
-    if any(tag.abi != "none" or tag.platform != "any" for tag in wheel_tags):
+    if plugin and any(tag.abi != "none" or tag.platform != "any" for tag in wheel_tags):
         raise WheelInspectionError("Only pure-Python *-none-any wheels are supported")
-    current_python = _host_python(python_version)
-    if not wheel_tags & _pure_python_tags(current_python):
-        interpreters = ".".join(sorted({tag.interpreter for tag in wheel_tags}))
-        raise WheelInspectionError(
-            f"Plugin wheel is built for {interpreters}, "
-            f"host has Python {current_python}"
-        )
 
     try:
         archive = zipfile.ZipFile(io.BytesIO(data))
     except zipfile.BadZipFile as exc:
         raise WheelInspectionError("Plugin wheel is not a valid ZIP archive") from exc
     with archive:
-        entries = _safe_archive_entries(archive)
+        entries = _safe_archive_entries(archive, allow_native=not plugin)
         dist_info = _single_dist_info(entries)
         wheel_metadata = BytesParser(policy=email_policy).parsebytes(
             _read_required_file(archive, entries, f"{dist_info}/WHEEL")
         )
-        if wheel_metadata.get("Root-Is-Purelib", "").lower() != "true":
+        if plugin and wheel_metadata.get("Root-Is-Purelib", "").lower() != "true":
             raise WheelInspectionError(
                 "Plugin wheel must declare Root-Is-Purelib: true"
             )
         declared_tags = wheel_metadata.get_all("Tag", [])
-        if not declared_tags or any(
-            not tag.endswith("-none-any") for tag in declared_tags
+        if not declared_tags or (
+            plugin and any(not tag.endswith("-none-any") for tag in declared_tags)
         ):
             raise WheelInspectionError("Plugin wheel declares a non-pure Python tag")
+        if not plugin:
+            if wheel_metadata.get("Root-Is-Purelib", "").lower() not in (
+                "true",
+                "false",
+            ):
+                raise WheelInspectionError("Wheel must declare Root-Is-Purelib")
+            try:
+                metadata_tags = {
+                    tag
+                    for declaration in declared_tags
+                    for tag in parse_tag(declaration)
+                }
+            except ValueError as exc:
+                raise WheelInspectionError("Wheel declares invalid tags") from exc
+            if not wheel_tags.intersection(metadata_tags):
+                raise WheelInspectionError("Wheel filename and WHEEL tags differ")
 
         package_metadata = BytesParser(policy=email_policy).parsebytes(
             _read_required_file(archive, entries, f"{dist_info}/METADATA")
@@ -394,27 +413,21 @@ def inspect_wheel(
         required_python = package_metadata.get("Requires-Python")
         if required_python:
             try:
-                specifier = SpecifierSet(required_python)
+                SpecifierSet(required_python)
             except InvalidSpecifier as exc:
                 raise WheelInspectionError(
                     "Wheel has invalid Requires-Python metadata"
                 ) from exc
-            if current_python not in specifier:
-                raise WheelInspectionError(
-                    f"Plugin requires Python {required_python}, "
-                    f"host has {current_python}"
-                )
-
-        entry_points = _parse_entry_points(
-            _read_required_file(archive, entries, f"{dist_info}/entry_points.txt"),
-            entry_point_group,
+        entry_points = (
+            _parse_entry_points(
+                _read_required_file(archive, entries, f"{dist_info}/entry_points.txt"),
+                entry_point_group,
+            )
+            if entry_point_group is not None
+            else []
         )
-        packages = _top_level_packages(archive, entries, dist_info)
-        dependencies = _validate_dependencies(
-            package_metadata.get_all("Requires-Dist", []),
-            available_distributions,
-            marker_environment,
-            host_name,
+        packages = _top_level_packages(
+            archive, entries, dist_info, allow_native=not plugin
         )
 
     return {
@@ -428,8 +441,120 @@ def inspect_wheel(
         "tags": sorted(str(tag) for tag in wheel_tags),
         "entry_points": entry_points,
         "top_level_packages": packages,
-        "dependencies": dependencies,
+        "requires_dist": package_metadata.get_all("Requires-Dist", []),
     }
+
+
+def inspect_dependency_wheel(
+    path_or_bytes: str | bytes | bytearray | memoryview, *, filename: str
+) -> dict[str, Any]:
+    """Inspect an ordinary dependency wheel, including native payloads.
+
+    No code is imported. ``compatible`` describes the running interpreter;
+    catalogs may also inspect wheels destined for other hosts.
+    """
+    manifest = _inspect_archive(
+        path_or_bytes, filename=filename, entry_point_group=None
+    )
+    tags = parse_wheel_filename(filename)[3]
+    required_python = manifest["requires_python"]
+    manifest["compatible"] = bool(tags.intersection(sys_tags())) and (
+        not required_python or _host_python(None) in SpecifierSet(required_python)
+    )
+    return manifest
+
+
+def inspect_wheel(
+    path_or_bytes: str | bytes | bytearray | memoryview,
+    *,
+    filename: str,
+    entry_point_group: str,
+    available_distributions: Mapping[str, str],
+    host_name: str = "DataLab",
+    python_version: str | None = None,
+    marker_environment: Mapping[str, str] | None = None,
+    allow_missing_dependencies: bool = False,
+    additional_distributions: Mapping[str, Sequence[str]] | None = None,
+) -> dict[str, Any]:
+    """Inspect a pure-Python plugin wheel without importing its code.
+
+    Args:
+        path_or_bytes: Wheel file path or content
+        filename: Wheel file name
+        entry_point_group: Plugin entry-point group
+        available_distributions: Distribution versions provided by the host
+        host_name: Host name used in dependency error messages
+        python_version: Host Python version (default: running interpreter)
+        marker_environment: Overrides of the environment markers
+        allow_missing_dependencies: Return missing requirements for planning;
+         incompatible installed versions are still refused
+        additional_distributions: Candidate versions in a catalog wheelhouse,
+         used for metadata checks only; pip resolves the actual installation
+
+    Returns:
+        JSON-friendly plugin manifest
+    """
+    manifest = _inspect_archive(
+        path_or_bytes, filename=filename, entry_point_group=entry_point_group
+    )
+    current_python = _host_python(python_version)
+    required_python = manifest["requires_python"]
+    if required_python and current_python not in SpecifierSet(required_python):
+        raise WheelInspectionError(
+            f"Plugin requires Python {required_python}, host has {current_python}"
+        )
+    if not is_compatible_wheel(filename, required_python, python_version):
+        tags = parse_wheel_filename(filename)[3]
+        interpreters = ".".join(sorted({tag.interpreter for tag in tags}))
+        raise WheelInspectionError(
+            f"Plugin wheel is built for {interpreters}, "
+            f"host has Python {current_python}"
+        )
+    manifest["dependencies"] = validate_dependencies(
+        manifest["requires_dist"],
+        available_distributions,
+        marker_environment,
+        host_name,
+        allow_missing=allow_missing_dependencies,
+        additional_distributions=additional_distributions,
+    )
+    return manifest
+
+
+def get_reference_distributions(root: str = "datalab-platform") -> dict[str, str]:
+    """Snapshot the installed host's declared runtime dependency closure.
+
+    Authoring tools must not mistake an already installed third-party plugin
+    or its libraries for packages distributed with DataLab.
+    """
+    distributions: dict[str, importlib_metadata.Distribution] = {}
+    for distribution in importlib_metadata.distributions():
+        name = distribution.metadata["Name"]
+        if name:
+            distributions.setdefault(canonicalize_name(name), distribution)
+    pending = [(canonicalize_name(root), frozenset())]
+    visited: dict[str, set[str]] = {}
+    versions: dict[str, str] = {}
+    while pending:
+        name, extras = pending.pop()
+        if name in visited and extras.issubset(visited[name]):
+            continue
+        if name not in distributions:
+            raise WheelInspectionError(f"Host distribution is missing: {name}")
+        distribution = distributions[name]
+        enabled = visited.setdefault(name, set())
+        enabled.update(extras)
+        versions[name] = distribution.version
+        for raw in distribution.requires or []:
+            requirement = Requirement(raw)
+            if requirement.marker is None or any(
+                requirement.marker.evaluate({"extra": extra})
+                for extra in {"", *enabled}
+            ):
+                pending.append(
+                    (canonicalize_name(requirement.name), frozenset(requirement.extras))
+                )
+    return versions
 
 
 __all__ = [
@@ -439,6 +564,9 @@ __all__ = [
     "MAX_WHEEL_BYTES",
     "WEB_ENTRY_POINT_GROUP",
     "WheelInspectionError",
+    "get_reference_distributions",
+    "inspect_dependency_wheel",
     "inspect_wheel",
     "is_compatible_wheel",
+    "validate_dependencies",
 ]
