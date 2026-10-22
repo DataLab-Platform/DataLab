@@ -16,7 +16,8 @@ import json
 import os
 import os.path as osp
 import tempfile
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
+from urllib.parse import quote
 
 from packaging.utils import canonicalize_name
 
@@ -30,11 +31,14 @@ from datalab.plugins.catalog import (
     read_folder_catalog,
     scan_wheel_folder,
 )
+from datalab.plugins.dependencies import DEPENDENCIES_DIRECTORY, download_dependencies
 from datalab.plugins.store import get_available_distributions
 from datalab.plugins.wheels import (
     DESKTOP_ENTRY_POINT_GROUP,
     MAX_WHEEL_BYTES,
     WheelInspectionError,
+    get_reference_distributions,
+    inspect_dependency_wheel,
     inspect_wheel,
 )
 
@@ -72,6 +76,7 @@ class CatalogReport:
     errors: list[str] = dataclasses.field(default_factory=list)
     warnings: list[str] = dataclasses.field(default_factory=list)
     written: bool = False
+    dependency_wheels: list[dict] = dataclasses.field(default_factory=list)
 
 
 def _get_root(directory: str) -> str:
@@ -81,7 +86,11 @@ def _get_root(directory: str) -> str:
     return root
 
 
-def inspect_plugin_wheel(path: str, available: Mapping[str, str]) -> dict:
+def inspect_plugin_wheel(
+    path: str,
+    available: Mapping[str, str],
+    additional_distributions: Mapping[str, Sequence[str]] | None = None,
+) -> dict:
     """Check a plugin wheel as DataLab does before installing it.
 
     The wheel must install on one of the Python versions supported by DataLab.
@@ -106,6 +115,7 @@ def inspect_plugin_wheel(path: str, available: Mapping[str, str]) -> dict:
                 filename=osp.basename(path),
                 entry_point_group=DESKTOP_ENTRY_POINT_GROUP,
                 available_distributions=available,
+                additional_distributions=additional_distributions,
                 python_version=python_version,
                 marker_environment={
                     "python_version": python_version,
@@ -115,6 +125,61 @@ def inspect_plugin_wheel(path: str, available: Mapping[str, str]) -> dict:
         except WheelInspectionError as exc:
             error = exc
     raise error
+
+
+def _dependency_records(directory: str) -> tuple[list[dict], dict[str, list[str]]]:
+    folder = osp.join(directory, DEPENDENCIES_DIRECTORY)
+    if not osp.isdir(folder):
+        return [], {}
+    records: list[dict] = []
+    versions: dict[str, list[str]] = {}
+    for path in list_folder_wheels(folder):
+        manifest = inspect_dependency_wheel(path, filename=osp.basename(path))
+        records.append(
+            {
+                "filename": manifest["filename"],
+                "url": f"{DEPENDENCIES_DIRECTORY}/{quote(manifest['filename'])}",
+                "size": manifest["size_bytes"],
+                "sha256": manifest["sha256"],
+            }
+        )
+        name = canonicalize_name(manifest["distribution"])
+        versions.setdefault(name, []).append(manifest["version"])
+    return records, versions
+
+
+def prepare_local_catalog(directory: str) -> CatalogReport:
+    """Download missing dependency wheels for this host, then build the catalog."""
+    root = _get_root(directory)
+    report = CatalogReport(osp.join(root, CATALOG_FILENAME))
+    available = get_reference_distributions()
+    artifacts: dict[str, dict] = {}
+    for path in list_folder_wheels(root):
+        try:
+            manifest = inspect_wheel(
+                path,
+                filename=osp.basename(path),
+                entry_point_group=DESKTOP_ENTRY_POINT_GROUP,
+                available_distributions=available,
+                allow_missing_dependencies=True,
+            )
+            missing = [
+                item["requirement"]
+                for item in manifest["dependencies"]
+                if item["applies"] and not item["compatible"]
+            ]
+            if missing:
+                for artifact in download_dependencies(
+                    missing, osp.join(root, DEPENDENCIES_DIRECTORY), available
+                ):
+                    artifacts[artifact["sha256"]] = artifact
+        except (OSError, ValueError) as exc:
+            report.errors.append(f"{path}: {exc}")
+    if report.errors:
+        return report
+    report = build_local_catalog(root)
+    report.dependency_wheels = list(artifacts.values())
+    return report
 
 
 def _read_existing_plugins(path: str) -> list[dict]:
@@ -195,19 +260,29 @@ def build_local_catalog(directory: str, *, write: bool = True) -> CatalogReport:
     payload, ignored = scan_wheel_folder(root)
     report.errors.extend(ignored)
     available = get_available_distributions({"datalab-platform": __version__})
+    try:
+        dependency_records, dependency_versions = _dependency_records(root)
+        if dependency_records:
+            available = get_reference_distributions()
+    except (OSError, ValueError) as exc:
+        report.errors.append(f"Dependency wheelhouse refused: {exc}")
+        dependency_records = []
+        dependency_versions = {}
     plugins: list[dict] = []
     for plugin in payload["plugins"]:
         releases = []
         for release in plugin["releases"]:
             path = osp.join(root, release["filename"])
             try:
-                manifest = inspect_plugin_wheel(path, available)
+                manifest = inspect_plugin_wheel(path, available, dependency_versions)
             except (OSError, WheelInspectionError) as exc:
                 report.errors.append(f"{path} refused: {exc}")
                 continue
             release["requires_dist"] = [
                 item["requirement"] for item in manifest["dependencies"]
             ]
+            if dependency_records:
+                release["dependency_wheels"] = dependency_records
             releases.append(release)
         if releases:
             plugin["releases"] = releases
@@ -277,7 +352,33 @@ def check_local_catalog(directory: str) -> CatalogReport:
             label = f"{plugin.name} {release.version}"
             listed.add(osp.normcase(release.url))
             try:
-                manifest = inspect_plugin_wheel(release.url, available)
+                release_available = dict(available)
+                additional: dict[str, list[str]] = {}
+                if release.dependency_wheels:
+                    release_available = get_reference_distributions()
+                for artifact in release.dependency_wheels:
+                    if not osp.isabs(artifact.url):
+                        report.warnings.append(
+                            f"{label}: dependency is not stored locally: {artifact.url}"
+                        )
+                        continue
+                    dependency = inspect_dependency_wheel(
+                        artifact.url, filename=artifact.filename
+                    )
+                    if (
+                        dependency["size_bytes"] != artifact.size
+                        or dependency["sha256"] != artifact.sha256
+                    ):
+                        raise WheelInspectionError(
+                            f"{artifact.filename} does not match the size and digest "
+                            "of the catalog"
+                        )
+                    additional.setdefault(
+                        canonicalize_name(dependency["distribution"]), []
+                    ).append(dependency["version"])
+                manifest = inspect_plugin_wheel(
+                    release.url, release_available, additional
+                )
             except OSError as exc:
                 report.errors.append(f"{label}: cannot read {release.url}: {exc}")
                 continue
@@ -306,4 +407,5 @@ __all__ = [
     "build_local_catalog",
     "check_local_catalog",
     "inspect_plugin_wheel",
+    "prepare_local_catalog",
 ]

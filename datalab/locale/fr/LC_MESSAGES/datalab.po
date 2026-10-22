@@ -10,6 +10,39 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Additional packages from the local wheelhouse:"
+msgstr "Paquets supplémentaires du dépôt local :"
+
+msgid "Dependency source:"
+msgstr "Source des dépendances :"
+
+msgid "not installed"
+msgstr "non installé"
+
+msgid "Checking the local dependency wheels..."
+msgstr "Vérification des paquets de dépendances locaux..."
+
+msgid "The plugin changed while checking dependencies."
+msgstr "Le plugin a été modifié pendant la vérification des dépendances."
+
+msgid "Installing the plugin and its dependencies..."
+msgstr "Installation du plugin et de ses dépendances..."
+
+msgid "Installing plugin..."
+msgstr "Installation du plugin..."
+
+msgid "Prepare, build or check a local plugin catalog folder."
+msgstr "Préparer, construire ou vérifier le dossier d'un catalogue local de plugins."
+
+msgid "Download dependency wheels for this host and build the local catalog."
+msgstr "Télécharger les paquets de dépendances pour cet environnement et construire le catalogue local."
+
+msgid "Dependency artifacts for the public catalog:"
+msgstr "Fichiers de dépendances pour le catalogue public :"
+
+msgid "Install a plugin shared as a wheel file (<code>.whl</code>) or as a Python module (<code>datalab_*.py</code>). Wheels must be pure Python. Missing dependencies may be supplied as wheels in an adjacent <code>dependencies</code> folder, without Internet access or changing packages already installed."
+msgstr "Installer un plugin distribué sous forme de paquet wheel (<code>.whl</code>) ou de module Python (<code>datalab_*.py</code>). Les plugins au format wheel doivent être en Python pur. Les dépendances manquantes peuvent être fournies sous forme de paquets wheel dans un dossier <code>dependencies</code> adjacent, sans accès à Internet ni modification des paquets déjà installés."
+
 msgid "Failed to deserialize analysis parameters from JSON."
 msgstr "Échec de la désérialisation des paramètres d'analyse depuis le format JSON."
 
@@ -5644,4 +5677,3 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
-

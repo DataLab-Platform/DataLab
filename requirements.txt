@@ -17,6 +17,7 @@ myst_parser
 opencv-python-headless >= 4.8.1.78
 packaging >= 21.3
 pandas >= 1.4, < 3.1
+pip >= 22.2
 pre-commit
 psutil >= 5.8
 pydantic >= 2.0

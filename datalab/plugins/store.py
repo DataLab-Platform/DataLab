@@ -28,14 +28,26 @@ import logging
 import os
 import os.path as osp
 import re
+import shutil
 import sys
+import tempfile
 import zipimport
 from collections.abc import Mapping
 from importlib import metadata as importlib_metadata
 from importlib.machinery import PathFinder
 
+from packaging.requirements import Requirement
+from packaging.tags import sys_tags
 from packaging.utils import canonicalize_name
 
+from datalab.plugins.dependencies import (
+    DEPENDENCIES_DIRECTORY,
+    DependencyPlan,
+    install_dependencies,
+    installed_versions,
+    plan_dependencies,
+    validate_installed,
+)
 from datalab.plugins.wheels import (
     DESKTOP_ENTRY_POINT_GROUP,
     MAX_WHEEL_BYTES,
@@ -184,14 +196,25 @@ class InstalledPluginStore:
         self.modules_dir = osp.join(self.root, "modules")
         self.index_path = osp.join(self.root, "index.json")
         self._host_distributions = dict(host_distributions or {})
+        self._blocked_dependency_paths: set[str] = set()
+        self._deferred_plugin_digests: set[str] = set()
 
     def get_plugins(self) -> list[InstalledPlugin]:
         """Return installed plugins, in installation order."""
+        data = self._read_index()
+        try:
+            return [InstalledPlugin(**item) for item in data["plugins"]]
+        except (TypeError, ValueError) as exc:
+            raise PluginInstallError(
+                f"Invalid installed plugin index: {self.index_path}"
+            ) from exc
+
+    def _read_index(self) -> dict:
         try:
             with open(self.index_path, encoding="utf-8") as file:
                 data = json.load(file)
         except FileNotFoundError:
-            return []
+            return {"schema_version": INDEX_SCHEMA_VERSION, "plugins": []}
         except (OSError, ValueError) as exc:
             raise PluginInstallError(
                 f"Unreadable installed plugin index: {self.index_path}"
@@ -204,12 +227,54 @@ class InstalledPluginStore:
             raise PluginInstallError(
                 f"Unsupported installed plugin index: {self.index_path}"
             )
-        try:
-            return [InstalledPlugin(**item) for item in data["plugins"]]
-        except (TypeError, ValueError) as exc:
-            raise PluginInstallError(
-                f"Invalid installed plugin index: {self.index_path}"
-            ) from exc
+        return data
+
+    def get_dependency_paths(self) -> list[str]:
+        """Return validated paths for this interpreter's shared dependencies."""
+        roots = self._read_index().get("dependency_roots", [])
+        if not isinstance(roots, list) or not all(
+            isinstance(root, str) for root in roots
+        ):
+            raise PluginInstallError("Invalid installed dependency roots")
+        directory = _normalized(osp.join(self.root, DEPENDENCIES_DIRECTORY))
+        base = _normalized(self._dependency_parent())
+        paths: list[str] = []
+        for relative in roots:
+            path = _normalized(osp.join(self.root, relative))
+            if not path.startswith(directory + os.sep):
+                raise PluginInstallError(
+                    "Dependency directory is outside the installed plugin store: "
+                    f"{path}"
+                )
+            if not path.startswith(base + os.sep):
+                logging.getLogger(__name__).warning(
+                    "Dependencies for another Python runtime are not activated: %s",
+                    path,
+                )
+                continue
+            paths.append(path)
+        return paths
+
+    def _dependency_parent(self) -> str:
+        return osp.join(self.root, DEPENDENCIES_DIRECTORY, str(next(sys_tags())))
+
+    def get_pending_enabled_names(self) -> list[str]:
+        """Return newly installed distributions to enable after restarting."""
+        names = self._read_index().get("pending_enabled", [])
+        if not isinstance(names, list) or not all(
+            isinstance(name, str) for name in names
+        ):
+            raise PluginInstallError("Invalid pending plugin enablement")
+        return names
+
+    def clear_pending_enabled_names(self, names: list[str]) -> None:
+        """Acknowledge distributions discovered after their installation."""
+        self._write_index(
+            self.get_plugins(),
+            pending_enabled=[
+                name for name in self.get_pending_enabled_names() if name not in names
+            ],
+        )
 
     def get_path(self, plugin: InstalledPlugin) -> str:
         """Return the file path of an installed plugin."""
@@ -232,7 +297,10 @@ class InstalledPluginStore:
 
     def get_available_distributions(self) -> dict[str, str]:
         """Return distribution versions a plugin wheel may depend on."""
-        return get_available_distributions(self._host_distributions)
+        return validate_installed(
+            self.get_dependency_paths(),
+            get_available_distributions(self._host_distributions),
+        )
 
     def _get_environment_distributions(self) -> set[str]:
         """Return canonical names of distributions installed outside the store."""
@@ -250,7 +318,9 @@ class InstalledPluginStore:
                 names.add(canonicalize_name(name))
         return names
 
-    def inspect_wheel_file(self, path: str) -> dict:
+    def inspect_wheel_file(
+        self, path: str, *, allow_missing_dependencies: bool = False
+    ) -> dict:
         """Return the manifest of a plugin wheel file without importing it.
 
         Raises:
@@ -261,10 +331,40 @@ class InstalledPluginStore:
             filename=osp.basename(path),
             entry_point_group=DESKTOP_ENTRY_POINT_GROUP,
             available_distributions=self.get_available_distributions(),
+            allow_missing_dependencies=allow_missing_dependencies,
         )
 
+    def prepare_wheel_file(
+        self, path: str, wheelhouse: str | None = None
+    ) -> tuple[dict, DependencyPlan | None]:
+        """Inspect a plugin and plan missing dependencies from local wheels."""
+        manifest = self.inspect_wheel_file(path, allow_missing_dependencies=True)
+        missing = [
+            dependency["requirement"]
+            for dependency in manifest["dependencies"]
+            if dependency["applies"] and not dependency["compatible"]
+        ]
+        if not missing:
+            return manifest, None
+        source = wheelhouse or osp.join(osp.dirname(path), DEPENDENCIES_DIRECTORY)
+        plan = plan_dependencies(
+            missing,
+            source,
+            self.get_available_distributions(),
+            self.get_dependency_paths(),
+        )
+        manifest["additional_dependencies"] = [
+            dataclasses.asdict(wheel) for wheel in plan.wheels
+        ]
+        manifest["dependency_source"] = source
+        return manifest, plan
+
     def install_wheel(
-        self, path: str, *, expected_sha256: str | None = None
+        self,
+        path: str,
+        *,
+        expected_sha256: str | None = None,
+        dependency_plan: DependencyPlan | None = None,
     ) -> InstallResult:
         """Install a plugin wheel file.
 
@@ -279,11 +379,22 @@ class InstalledPluginStore:
         """
         with open(path, "rb") as file:
             data = file.read(MAX_WHEEL_BYTES + 1)
+        available = self.get_available_distributions()
+        if dependency_plan is not None:
+            if available != dependency_plan.protected_versions:
+                raise PluginInstallError("Installed packages changed since planning")
+            for wheel in dependency_plan.wheels:
+                key = canonicalize_name(wheel.distribution)
+                if key in available:
+                    raise PluginInstallError(
+                        f"Refusing to replace {wheel.distribution}"
+                    )
+                available[key] = wheel.version
         manifest = inspect_wheel(
             data,
             filename=osp.basename(path),
             entry_point_group=DESKTOP_ENTRY_POINT_GROUP,
-            available_distributions=self.get_available_distributions(),
+            available_distributions=available,
         )
         self._check_expected_digest(manifest["sha256"], expected_sha256)
         name = manifest["distribution"]
@@ -302,14 +413,80 @@ class InstalledPluginStore:
             packages=manifest["top_level_packages"],
             installed_at=_now(),
         )
-        replaced = self._add(
-            plugin,
-            data,
-            lambda other: (
+        installed_directory: str | None = None
+        success = False
+        try:
+            roots = None
+            pending = None
+            if dependency_plan is not None and dependency_plan.wheels:
+                packages = set(plugin.packages)
+                for other in self.get_plugins():
+                    packages.update(other.packages)
+                for wheel in dependency_plan.wheels:
+                    for package in wheel.packages:
+                        if (
+                            package in packages
+                            or PathFinder.find_spec(package) is not None
+                        ):
+                            raise PluginInstallError(
+                                "Dependency package conflicts with an existing "
+                                f"module: {package}"
+                            )
+                        packages.add(package)
+                parent = self._dependency_parent()
+                os.makedirs(parent, exist_ok=True)
+                # Only the index publishes this generation; keep DLL paths short.
+                installed_directory = tempfile.mkdtemp(prefix="", dir=parent)
+                install_dependencies(dependency_plan, installed_directory)
+                if (
+                    self.get_available_distributions()
+                    != dependency_plan.protected_versions
+                ):
+                    raise PluginInstallError(
+                        "Installed packages changed during dependency installation"
+                    )
+                roots = [
+                    *self._read_index().get("dependency_roots", []),
+                    osp.relpath(installed_directory, self.root),
+                ]
+            blocked = set(self._blocked_dependency_paths)
+            if installed_directory is not None:
+                blocked.add(_normalized(installed_directory))
+            pending_dependencies = installed_versions(list(blocked))
+            restart = (
+                plugin.is_imported()
+                or installed_directory is not None
+                or any(
+                    dependency["applies"]
+                    and canonicalize_name(Requirement(dependency["requirement"]).name)
+                    in pending_dependencies
+                    for dependency in manifest["dependencies"]
+                )
+            )
+            if restart and not any(
                 other.kind == WHEEL_KIND and canonicalize_name(other.name) == key
-            ),
-        )
-        return InstallResult(plugin, replaced, plugin.is_imported())
+                for other in self.get_plugins()
+            ):
+                pending = [*self.get_pending_enabled_names(), key]
+            replaced = self._add(
+                plugin,
+                data,
+                lambda other: (
+                    other.kind == WHEEL_KIND and canonicalize_name(other.name) == key
+                ),
+                dependency_roots=roots,
+                pending_enabled=pending,
+                repair=installed_directory is not None,
+            )
+            if installed_directory is not None:
+                self._blocked_dependency_paths.add(_normalized(installed_directory))
+            if restart:
+                self._deferred_plugin_digests.add(plugin.sha256)
+            success = True
+            return InstallResult(plugin, replaced, restart)
+        finally:
+            if not success and installed_directory is not None:
+                shutil.rmtree(installed_directory)
 
     def inspect_module_file(self, path: str) -> dict:
         """Return the manifest of a ``datalab_*.py`` plugin module file.
@@ -372,7 +549,14 @@ class InstalledPluginStore:
         plugins = self.get_plugins()
         if plugin not in plugins:
             raise PluginInstallError(f"{plugin.name} is not installed")
-        self._write_index([other for other in plugins if other != plugin])
+        self._write_index(
+            [other for other in plugins if other != plugin],
+            pending_enabled=[
+                name
+                for name in self.get_pending_enabled_names()
+                if name != canonicalize_name(plugin.name)
+            ],
+        )
         path = self.get_path(plugin)
         if plugin.kind == WHEEL_KIND:
             _remove_from_sys_path(path)
@@ -395,8 +579,18 @@ class InstalledPluginStore:
         plugins = self.get_plugins()
         self._collect_garbage(plugins)
         sys_path = {_normalized(entry) for entry in sys.path if entry}
-        added: list[str] = []
+        paths = self.get_dependency_paths()
+        validate_installed(paths, get_available_distributions(self._host_distributions))
+        added: list[str] = [
+            path
+            for path in paths
+            if _normalized(path) not in sys_path
+            and path not in self._blocked_dependency_paths
+        ]
+        sys_path.update(_normalized(path) for path in added)
         for plugin in plugins:
+            if plugin.sha256 in self._deferred_plugin_digests:
+                continue
             path = self.get_path(plugin)
             if not osp.isfile(path):
                 logging.getLogger(__name__).warning(
@@ -445,21 +639,43 @@ class InstalledPluginStore:
         return name, data
 
     def _add(
-        self, plugin: InstalledPlugin, data: bytes, same_plugin
+        self,
+        plugin: InstalledPlugin,
+        data: bytes,
+        same_plugin,
+        *,
+        dependency_roots: list[str] | None = None,
+        pending_enabled: list[str] | None = None,
+        repair: bool = False,
     ) -> InstalledPlugin | None:
         plugins = self.get_plugins()
         replaced = next((other for other in plugins if same_plugin(other)), None)
-        if replaced is not None and replaced.sha256 == plugin.sha256:
+        if replaced is not None and replaced.sha256 == plugin.sha256 and not repair:
             raise PluginInstallError(f"{plugin.name} is already installed")
         self._write_file(self.get_path(plugin), data)
-        self._write_index([other for other in plugins if other != replaced] + [plugin])
+        self._write_index(
+            [other for other in plugins if other != replaced] + [plugin],
+            dependency_roots=dependency_roots,
+            pending_enabled=pending_enabled,
+        )
         return replaced
 
-    def _write_index(self, plugins: list[InstalledPlugin]) -> None:
+    def _write_index(
+        self,
+        plugins: list[InstalledPlugin],
+        *,
+        dependency_roots: list[str] | None = None,
+        pending_enabled: list[str] | None = None,
+    ) -> None:
         payload = {
+            **self._read_index(),
             "schema_version": INDEX_SCHEMA_VERSION,
             "plugins": [dataclasses.asdict(plugin) for plugin in plugins],
         }
+        if dependency_roots is not None:
+            payload["dependency_roots"] = dependency_roots
+        if pending_enabled is not None:
+            payload["pending_enabled"] = pending_enabled
         self._write_file(self.index_path, json.dumps(payload, indent=2).encode())
 
     @staticmethod

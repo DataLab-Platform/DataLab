@@ -428,9 +428,19 @@ jobs:
           $env:USERPROFILE = Join-Path $env:RUNNER_TEMP "datalab-profile"
           New-Item -ItemType Directory -Force $env:USERPROFILE | Out-Null
           $env:DATALAB_PLUGIN_PROBE_MARKER = Join-Path $env:RUNNER_TEMP "plugin-probe.json"
-          python scripts/frozen_plugin_probe.py install
+          if (Test-Path -LiteralPath $env:DATALAB_PLUGIN_PROBE_MARKER) { Remove-Item -LiteralPath $env:DATALAB_PLUGIN_PROBE_MARKER }
+          $env:DATALAB_PLUGIN_PROBE_WHEELHOUSE = Join-Path $env:RUNNER_TEMP "plugin-probe-catalog\dependencies"
+          python scripts/frozen_plugin_probe.py prepare
+          if ($LASTEXITCODE -ne 0) { throw "Cannot prepare the dependency wheelhouse" }
+          $probe = (Resolve-Path scripts/frozen_plugin_probe.py).Path
+          $log = Join-Path $env:RUNNER_TEMP "plugin-install.log"
+          $code = "import runpy,sys; sys.stdout = sys.stderr = open(r'$log', 'w', encoding='utf-8'); sys.argv = [r'$probe', 'install']; runpy.run_path(r'$probe', run_name='__main__')"
+          $installer = Start-Process dist\DataLab\DataLab.exe -ArgumentList "-c", ('"' + $code + '"') -PassThru
+          if (-not $installer.WaitForExit(300000)) { Stop-Process -Id $installer.Id; throw "Plugin installation did not finish" }
+          if ($installer.ExitCode -ne 0) { Get-Content $log; throw "Offline plugin installation failed" }
           $process = Start-Process dist/DataLab/DataLab.exe -ArgumentList "--unattended", "--delay", "5000" -PassThru
           if (-not $process.WaitForExit(300000)) { $process.Kill(); throw "DataLab did not quit" }
+          if ($process.ExitCode -ne 0) { throw "Frozen DataLab exited with code $($process.ExitCode)" }
           python scripts/frozen_plugin_probe.py verify
 
       - name: Package executable as zip (internal, required by MSI workflow)
