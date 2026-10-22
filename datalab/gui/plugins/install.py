@@ -27,7 +27,9 @@ from datalab.plugins.base import (
     enable_installed_plugin_classes,
     get_installed_plugin_store,
 )
+from datalab.plugins.catalog import CatalogPlugin
 from datalab.plugins.dependencies import DependencyPlan
+from datalab.plugins.modules import apply_catalog_metadata
 from datalab.plugins.store import (
     WHEEL_KIND,
     InstalledPlugin,
@@ -93,7 +95,9 @@ def _format_date(timestamp: str) -> str:
 def _plugin_title(plugin: InstalledPlugin) -> str:
     if plugin.kind == WHEEL_KIND:
         return f"{plugin.name} {plugin.version}"
-    return plugin.filename
+    if plugin.version:
+        return f"{plugin.filename} {plugin.version}"
+    return f"{plugin.filename} ({_('revision %s') % plugin.sha256[:12]})"
 
 
 class PluginConsentDialog(QW.QDialog):
@@ -164,6 +168,26 @@ class PluginConsentDialog(QW.QDialog):
                 form.addRow(_("Dependency source:"), source)
         else:
             form.addRow(_("Plugin module:"), QW.QLabel(manifest["name"]))
+            if manifest["display_name"]:
+                form.addRow(_("Plugin:"), QW.QLabel(escape(manifest["display_name"])))
+            if manifest["version"]:
+                form.addRow(_("Version:"), QW.QLabel(escape(manifest["version"])))
+            else:
+                form.addRow(_("Revision:"), QW.QLabel(manifest["sha256"][:12]))
+            if manifest["summary"]:
+                description = QW.QLabel(escape(manifest["summary"]))
+                description.setWordWrap(True)
+                form.addRow(_("Description:"), description)
+            if manifest["warnings"]:
+                warning = QW.QLabel(
+                    _(
+                        "Some metadata cannot be read without executing the file. "
+                        "Catalog metadata is used when provided; dependencies are "
+                        "not installed for single-file plugins."
+                    )
+                )
+                warning.setWordWrap(True)
+                form.addRow(warning)
         form.addRow(_("File:"), QW.QLabel(manifest["filename"]))
         form.addRow(_("Size:"), QW.QLabel(_format_size(manifest["size_bytes"])))
         digest = QW.QLabel(manifest["sha256"])
@@ -245,7 +269,7 @@ class InstalledPluginsWidget(QW.QWidget):
     ) -> None:
         super().__init__(parent)
         self._reload_plugins = reload_plugins
-        self._pending_install: tuple[str, str | None] | None = None
+        self._pending_install: tuple[str, str | None, str] | None = None
         self._pending_finish: Callable[[], None] | None = None
         self._dependency_plan: DependencyPlan | None = None
         self._manifest: dict | None = None
@@ -354,6 +378,7 @@ class InstalledPluginsWidget(QW.QWidget):
         *,
         wheelhouse: str | None = None,
         on_finished: Callable[[], None] | None = None,
+        catalog_plugin: CatalogPlugin | None = None,
     ) -> InstallResult | None:
         """Install a plugin file after the user's consent.
 
@@ -377,7 +402,11 @@ class InstalledPluginsWidget(QW.QWidget):
                     item["applies"] and not item["compatible"]
                     for item in manifest["dependencies"]
                 ):
-                    self._pending_install = path, origin
+                    self._pending_install = (
+                        path,
+                        origin,
+                        catalog_plugin.id if catalog_plugin else "",
+                    )
                     self._pending_finish = on_finished
                     self._manifest = manifest
                     self._set_busy(True, _("Checking the local dependency wheels..."))
@@ -390,12 +419,35 @@ class InstalledPluginsWidget(QW.QWidget):
                     return None
             else:
                 manifest = self.store.inspect_module_file(path)
+                if catalog_plugin is not None:
+                    release = catalog_plugin.get_installable_release()
+                    if release is None or catalog_plugin.module != manifest["name"]:
+                        raise PluginInstallError(
+                            "The module does not match the catalog"
+                        )
+                    manifest = apply_catalog_metadata(
+                        manifest,
+                        plugin_id=catalog_plugin.id,
+                        name=catalog_plugin.name,
+                        version=release.version,
+                        summary=catalog_plugin.summary,
+                    )
             if not self.confirm_installation(manifest, origin=origin):
                 return None
-            install = (
-                self.store.install_wheel if is_wheel else self.store.install_module
-            )
-            result = install(path, expected_sha256=manifest["sha256"])
+            if is_wheel:
+                result = self.store.install_wheel(
+                    path,
+                    expected_sha256=manifest["sha256"],
+                    catalog_id=catalog_plugin.id if catalog_plugin else "",
+                )
+            else:
+                result = self.store.install_module(
+                    path,
+                    expected_sha256=manifest["sha256"],
+                    catalog_id=catalog_plugin.id if catalog_plugin else "",
+                    catalog_name=catalog_plugin.name if catalog_plugin else "",
+                    catalog_version=manifest["version"],
+                )
         except (OSError, ValueError) as exc:
             QW.QMessageBox.warning(
                 self,
@@ -433,7 +485,7 @@ class InstalledPluginsWidget(QW.QWidget):
     def _on_prepared(self, prepared: tuple[dict, DependencyPlan | None]) -> None:
         manifest, self._dependency_plan = prepared
         assert self._pending_install is not None
-        path, origin = self._pending_install
+        path, origin, catalog_id = self._pending_install
         if self._manifest is None or manifest["sha256"] != self._manifest["sha256"]:
             self._on_install_failed(
                 _("The plugin changed while checking dependencies.")
@@ -448,6 +500,7 @@ class InstalledPluginsWidget(QW.QWidget):
                 path,
                 expected_sha256=manifest["sha256"],
                 dependency_plan=self._dependency_plan,
+                catalog_id=catalog_id,
             ),
             self._on_installed,
             self._on_install_failed,

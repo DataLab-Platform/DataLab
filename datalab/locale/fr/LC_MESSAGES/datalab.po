@@ -10,6 +10,39 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Source code"
+msgstr "Code source"
+
+msgid "not applicable"
+msgstr "sans objet"
+
+msgid "Provided outside the plugin store"
+msgstr "Fourni hors du stockage géré des plugins"
+
+msgid "Conflicting installed plugin: %s"
+msgstr "Plugin installé en conflit : %s"
+
+msgid "Different installed revision"
+msgstr "Révision installée différente"
+
+msgid "Replace..."
+msgstr "Remplacer..."
+
+msgid "Revision:"
+msgstr "Révision :"
+
+msgid "revision %s"
+msgstr "révision %s"
+
+msgid "Some metadata cannot be read without executing the file. Catalog metadata is used when provided; dependencies are not installed for single-file plugins."
+msgstr "Certaines métadonnées ne peuvent pas être lues sans exécuter le fichier. Les métadonnées du catalogue sont utilisées si elles sont fournies ; les dépendances ne sont pas installées pour les plugins en fichier unique."
+
+msgid "Write the catalog.json file listing the plugin files."
+msgstr "Écrire le fichier catalog.json qui liste les fichiers des plugins."
+
+msgid "Check the catalog.json file against the plugin files."
+msgstr "Vérifier le fichier catalog.json par rapport aux fichiers des plugins."
+
 msgid "Additional packages from the local wheelhouse:"
 msgstr "Paquets supplémentaires du dépôt local :"
 

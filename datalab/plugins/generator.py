@@ -1005,8 +1005,8 @@ def build_parser() -> argparse.ArgumentParser:
         dest="catalog_command", required=True
     )
     for name, text in (
-        ("build", _("Write the catalog.json file listing the plugin wheels.")),
-        ("check", _("Check the catalog.json file against the plugin wheels.")),
+        ("build", _("Write the catalog.json file listing the plugin files.")),
+        ("check", _("Check the catalog.json file against the plugin files.")),
         (
             "prepare",
             _("Download dependency wheels for this host and build the local catalog."),

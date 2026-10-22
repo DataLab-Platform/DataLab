@@ -4,13 +4,13 @@
 Plugin catalog client
 ---------------------
 
-Read the DataLab plugin catalog (``catalog.json``) and download release wheels
+Read the DataLab plugin catalog (``catalog.json``) and download plugin artifacts
 whose size and SHA-256 digest match the catalog. This module is Qt-free: the
 plugin dialog calls it from a worker thread.
 
 Besides the online catalog, local catalogs are folders, typically shared on the
 network, read as files: their ``catalog.json`` if any, otherwise the plugin
-wheels they hold.
+wheels and single-file modules they hold.
 """
 
 from __future__ import annotations
@@ -23,6 +23,7 @@ import json
 import os
 import os.path as osp
 import re
+import sys
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -32,11 +33,13 @@ from email.message import Message
 from email.parser import BytesParser
 from email.policy import default as email_policy
 
+from packaging.specifiers import InvalidSpecifier, SpecifierSet
 from packaging.tags import sys_tags
 from packaging.utils import canonicalize_name, parse_wheel_filename
 from packaging.version import InvalidVersion, Version
 
 from datalab import __version__
+from datalab.plugins.modules import MAX_MODULE_BYTES, inspect_module, module_name
 from datalab.plugins.wheels import (
     DESKTOP_ENTRY_POINT_GROUP,
     MAX_WHEEL_BYTES,
@@ -97,6 +100,7 @@ class CatalogRelease:
     yanked: str = ""
     requires_python: str | None = None
     dependency_wheels: tuple[CatalogWheel, ...] = ()
+    kind: str = "wheel"
 
 
 @dataclasses.dataclass(frozen=True)
@@ -119,6 +123,8 @@ class CatalogPlugin:
     license: str = ""
     keywords: tuple[str, ...] = ()
     source: str = ""
+    kind: str = "wheel"
+    module: str = ""
 
     def get_installable_release(
         self, target: str = "desktop", python_version: str | None = None
@@ -141,8 +147,14 @@ class CatalogPlugin:
                 and target in release.targets
                 and (
                     python_version == ""
-                    or is_compatible_wheel(
-                        release.filename, release.requires_python, python_version
+                    or (
+                        _module_python_compatible(
+                            release.requires_python, python_version
+                        )
+                        if release.kind == "module"
+                        else is_compatible_wheel(
+                            release.filename, release.requires_python, python_version
+                        )
                     )
                 )
             ),
@@ -212,7 +224,21 @@ def _folder_resolver(root: str) -> Callable[[str], str]:
     return resolve
 
 
-def _parse_release(item: dict, resolve: Callable[[str], str]) -> CatalogRelease:
+def _module_python_compatible(
+    requirement: str | None, python_version: str | None
+) -> bool:
+    if not requirement:
+        return True
+    try:
+        version = python_version or f"{sys.version_info.major}.{sys.version_info.minor}"
+        return Version(version) in SpecifierSet(requirement)
+    except (InvalidSpecifier, InvalidVersion):
+        return False
+
+
+def _parse_release(
+    item: dict, resolve: Callable[[str], str], kind: str = "wheel"
+) -> CatalogRelease:
     if not _SHA256_PATTERN.fullmatch(item["sha256"]):
         raise ValueError(f"Invalid SHA-256 digest: {item['sha256']!r}")
     url = item.get("url", "")
@@ -228,6 +254,17 @@ def _parse_release(item: dict, resolve: Callable[[str], str]) -> CatalogRelease:
                 size=int(artifact["size"]),
             )
         )
+    if kind == "module":
+        if dependencies:
+            raise ValueError("Module plugins cannot install additional dependencies")
+        if url:
+            module_name(item["filename"])
+            if tuple(item.get("targets", ())) != ("desktop",):
+                raise ValueError("Module plugins are Desktop-only")
+        if item.get("version"):
+            Version(str(item["version"]))
+        if item.get("requires_python"):
+            SpecifierSet(item["requires_python"])
     return CatalogRelease(
         version=str(item["version"]),
         sha256=item["sha256"],
@@ -238,27 +275,44 @@ def _parse_release(item: dict, resolve: Callable[[str], str]) -> CatalogRelease:
         yanked=item.get("yanked", ""),
         requires_python=item.get("requires_python"),
         dependency_wheels=tuple(dependencies),
+        kind=kind,
     )
 
 
 def _parse_plugin(
     item: dict, resolve: Callable[[str], str], source: str
 ) -> CatalogPlugin:
+    kind = item.get("kind", "wheel")
+    if kind not in ("wheel", "module"):
+        raise ValueError(f"Unknown plugin artifact kind: {kind!r}")
+    module = item.get("module", "")
+    releases = tuple(
+        _parse_release(release, resolve, kind) for release in item["releases"]
+    )
+    if kind == "module":
+        module_name(f"{module}.py")
+        if item.get("distribution"):
+            raise ValueError("Module plugins are not Python distributions")
+        if any(
+            release.url and module_name(release.filename) != module
+            for release in releases
+        ):
+            raise ValueError("Module file names must stay stable between releases")
     return CatalogPlugin(
         id=item["id"],
         name=item["name"],
         tier=item["tier"],
         status=item["status"],
         repository=item["repository"],
-        releases=tuple(
-            _parse_release(release, resolve) for release in item["releases"]
-        ),
+        releases=releases,
         status_reason=item.get("status_reason", ""),
         distribution=item.get("distribution", ""),
         summary=item.get("summary", ""),
         license=item.get("license", ""),
         keywords=tuple(item.get("keywords", ())),
         source=source,
+        kind=kind,
+        module=module,
     )
 
 
@@ -448,8 +502,51 @@ def list_folder_wheels(directory: str) -> list[str]:
     return [osp.join(directory, name) for name in names]
 
 
+def list_folder_modules(directory: str) -> list[str]:
+    """List potential single-file plugins at the catalog root only."""
+    try:
+        names = sorted(
+            name
+            for name in os.listdir(directory)
+            if name.startswith("datalab_")
+            and name.endswith(".py")
+            and osp.isfile(osp.join(directory, name))
+        )
+    except OSError as exc:
+        raise CatalogError(f"Cannot read the plugin catalog folder: {exc}") from exc
+    if len(names) > MAX_FOLDER_WHEELS:
+        raise CatalogError(f"{directory} holds too many plugin modules")
+    return [osp.join(directory, name) for name in names]
+
+
+def read_module_entry(path: str) -> tuple[dict, dict, list[str]]:
+    """Describe a source module without importing it or inventing a version."""
+    manifest = inspect_module(path, filename=osp.basename(path))
+    name = manifest["name"]
+    plugin = {
+        "id": manifest["plugin_id"] or f"local.module.{name.replace('_', '-')}",
+        "name": manifest["display_name"] or name,
+        "kind": "module",
+        "module": name,
+        "tier": LOCAL_TIER,
+        "status": "active",
+        "repository": "",
+        "summary": manifest["summary"],
+        "license": "",
+    }
+    release = {
+        "version": manifest["version"],
+        "filename": manifest["filename"],
+        "url": urllib.parse.quote(manifest["filename"]),
+        "size": manifest["size_bytes"],
+        "sha256": manifest["sha256"],
+        "targets": ["desktop"],
+    }
+    return plugin, release, manifest["warnings"]
+
+
 def scan_wheel_folder(directory: str) -> tuple[dict, list[str]]:
-    """Return the catalog describing the plugin wheels of a folder.
+    """Return the catalog describing the wheels and modules of a folder.
 
     Releases of a plugin are grouped by distribution, from the newest.
 
@@ -485,6 +582,24 @@ def scan_wheel_folder(directory: str) -> tuple[dict, list[str]]:
         versions = releases[key]
         plugin["releases"] = [versions[version] for version in sorted(versions)[::-1]]
         records.append(plugin)
+    for path in list_folder_modules(directory):
+        try:
+            plugin, release, _remarks = read_module_entry(path)
+        except (OSError, ValueError) as exc:
+            warnings.append(f"{path} ignored: {exc}")
+            continue
+        if any(
+            record["id"] == plugin["id"]
+            or record.get("distribution", "").replace("-", "_") == plugin["module"]
+            for record in records
+        ):
+            warnings.append(
+                f"{path} ignored: conflicting plugin identity or module name"
+            )
+            continue
+        plugin["releases"] = [release]
+        records.append(plugin)
+    records.sort(key=lambda record: record["name"].casefold())
     return {"schema_version": CATALOG_SCHEMA_VERSION, "plugins": records}, warnings
 
 
@@ -492,7 +607,7 @@ def read_folder_catalog(directory: str) -> tuple[list[CatalogPlugin], list[str]]
     """Read a local catalog folder.
 
     The folder ``catalog.json`` lists the plugins if it exists, with release URLs
-    relative to the folder; otherwise, the plugin wheels of the folder are listed.
+    relative to the folder; otherwise, its plugin wheels and modules are listed.
 
     Args:
         directory: Catalog folder, possibly shared on the network
@@ -547,6 +662,7 @@ def load_catalogs(url: str, directories: Sequence[str] = ()) -> CatalogsContent:
     errors: list[str] = []
     ids: set[str] = set()
     distributions: set[str] = set()
+    modules: set[str] = set()
     readers: list[Callable[[], tuple[list[CatalogPlugin], list[str]]]] = [
         lambda directory=directory: read_folder_catalog(directory)
         for directory in directories
@@ -562,7 +678,11 @@ def load_catalogs(url: str, directories: Sequence[str] = ()) -> CatalogsContent:
         errors.extend(warnings)
         for plugin in items:
             distribution = canonicalize_name(plugin.distribution)
-            if plugin.id in ids or (distribution and distribution in distributions):
+            if (
+                plugin.id in ids
+                or (distribution and distribution in distributions)
+                or (plugin.module and osp.normcase(plugin.module) in modules)
+            ):
                 if plugin.status == "revoked":
                     errors.append(
                         f"{plugin.name} ({plugin.id}) is withdrawn from "
@@ -572,12 +692,14 @@ def load_catalogs(url: str, directories: Sequence[str] = ()) -> CatalogsContent:
             ids.add(plugin.id)
             if distribution:
                 distributions.add(distribution)
+            if plugin.module:
+                modules.add(osp.normcase(plugin.module))
             plugins.append(plugin)
     return CatalogsContent(tuple(plugins), tuple(errors))
 
 
 def download_release(release: CatalogRelease | CatalogWheel, directory: str) -> str:
-    """Download a release wheel into a directory after checking it.
+    """Download a wheel or source module after checking size and digest.
 
     Returns:
         Path of the downloaded wheel, named as in the catalog
@@ -585,9 +707,13 @@ def download_release(release: CatalogRelease | CatalogWheel, directory: str) -> 
     Raises:
         CatalogError: The download failed or does not match the catalog
     """
-    if not release.url or not release.filename.endswith(".whl"):
+    is_module = isinstance(release, CatalogRelease) and release.kind == "module"
+    if is_module:
+        module_name(release.filename)
+    if not release.url or (not is_module and not release.filename.endswith(".whl")):
         raise CatalogError("This release cannot be downloaded")
-    if not 0 < release.size <= MAX_WHEEL_BYTES:
+    limit = MAX_MODULE_BYTES if is_module else MAX_WHEEL_BYTES
+    if not 0 < release.size <= limit:
         raise CatalogError(f"Invalid wheel size in the catalog: {release.size}")
     data = _read(release.url, release.size)
     if len(data) != release.size or hashlib.sha256(data).hexdigest() != release.sha256:
@@ -627,10 +753,12 @@ __all__ = [
     "download_dependency_wheels",
     "download_release",
     "fetch_catalog",
+    "list_folder_modules",
     "list_folder_wheels",
     "load_catalog_json",
     "load_catalogs",
     "read_folder_catalog",
+    "read_module_entry",
     "read_wheel_entry",
     "scan_wheel_folder",
 ]
