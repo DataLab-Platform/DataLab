@@ -11,7 +11,11 @@ import sys
 
 # --------------------------------------------------------------------------------------
 # Macro command execution for the standalone version of DataLab
-if len(sys.argv) > 1 and sys.argv[1] == "-c":
+if len(sys.argv) > 1 and sys.argv[1] == "--internal-plugin-pip":
+    from datalab.plugins.dependencies import run_pip_request
+
+    sys.exit(run_pip_request(sys.argv[2]))
+elif len(sys.argv) > 1 and sys.argv[1] == "-c":
     exec(sys.argv[2])
 # --------------------------------------------------------------------------------------
 

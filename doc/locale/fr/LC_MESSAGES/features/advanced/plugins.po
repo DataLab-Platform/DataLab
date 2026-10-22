@@ -3,12 +3,20 @@
 # This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
-#, fuzzy
 msgid ""
 msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-10-22 14:49+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
 
 msgid "Plugin system for DataLab, the open-source scientific data analysis and visualization platform"
 msgstr "Système de plugins de DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
@@ -199,8 +207,146 @@ msgstr "Quel que soit le catalogue, DataLab vérifie la taille et l'empreinte SH
 msgid "The ``datalab-plugin`` command maintains the ``catalog.json`` file of a folder:"
 msgstr "La commande ``datalab-plugin`` gère le fichier ``catalog.json`` d'un dossier :"
 
-msgid "``build`` checks every wheel as DataLab does before installing it (pure Python, plugin entry point, dependencies provided by DataLab, Python version supported by DataLab) and does not write the file if a wheel is refused. It keeps the fields edited in an existing ``catalog.json`` file (plugin ID, name, tier, status and its reason, repository, documentation, capabilities and keywords, and the reasons why releases are withdrawn), and revoked plugins remain listed. The file is replaced atomically, so that users may read the catalog meanwhile. ``check`` reports the wheels of the catalog that are missing, changed or refused, and the wheels of the folder that the catalog does not list: once a folder holds a ``catalog.json`` file, run ``build`` again after adding wheels. Both commands exit with a non-zero status when they find a problem."
-msgstr "``build`` vérifie chaque wheel comme DataLab le fait avant de l'installer (Python pur, point d'entrée de plugin, dépendances fournies par DataLab, version de Python prise en charge par DataLab) et n'écrit pas le fichier si une wheel est refusée. Il conserve les champs modifiés d'un fichier ``catalog.json`` existant (identifiant, nom, niveau, statut et sa raison, dépôt, documentation, capacités et mots-clés des plugins, ainsi que les raisons du retrait des versions), et les plugins révoqués restent listés. Le fichier est remplacé de manière atomique, afin que les utilisateurs puissent lire le catalogue pendant ce temps. ``check`` signale les wheels du catalogue manquantes, modifiées ou refusées, ainsi que les wheels du dossier que le catalogue ne liste pas : dès qu'un dossier contient un fichier ``catalog.json``, relancez ``build`` après avoir ajouté des wheels. Les deux commandes se terminent avec un code de sortie non nul lorsqu'elles détectent un problème."
+msgid "``build`` checks the plugin wheels (pure Python, plugin entry point, requirements available from the host or the catalog wheelhouse, supported Python version) and does not write the file if a wheel is refused. It keeps the fields edited in an existing ``catalog.json`` file (plugin ID, name, tier, status and its reason, repository, documentation, capabilities and keywords, and the reasons why releases are withdrawn), and revoked plugins remain listed. The file is replaced atomically, so that users may read the catalog meanwhile. ``check`` reports wheels that are missing, changed, refused or not listed, including the dependency artifacts. Run ``build`` again after adding wheels. Both commands exit with a non-zero status when they find a problem."
+msgstr "``build`` vérifie les paquets wheel des plugins (Python pur, point d'entrée de plugin, exigences satisfaites par l'environnement hôte ou le dépôt de dépendances du catalogue, version de Python prise en charge) et n'écrit pas le fichier si un paquet est refusé. Il conserve les champs modifiés dans un ``catalog.json`` existant (identifiant, nom, catégorie, statut et motif, dépôt, documentation, capacités et mots-clés des plugins, ainsi que les motifs de retrait des versions), et les plugins révoqués restent listés. Le fichier est remplacé de manière atomique, pour que les utilisateurs puissent lire le catalogue pendant cette opération. ``check`` signale les paquets manquants, modifiés, refusés ou non listés, y compris les fichiers de dépendances. Relancez ``build`` après avoir ajouté des paquets. Les deux commandes renvoient un code de sortie non nul si elles détectent un problème."
+
+msgid "Additional dependencies and offline installation"
+msgstr "Dépendances supplémentaires et installation hors ligne"
+
+msgid "Desktop plugins may require packages not shipped with DataLab. Keep the plugin itself as a pure-Python wheel, and supply the additional packages, including all their transitive dependencies, as ordinary wheels in a ``dependencies`` subfolder of the local catalog. These dependency wheels may contain native libraries, provided they match the Python version, ABI and platform of the host. They do not need a DataLab plugin entry point."
+msgstr "Les plugins Desktop peuvent nécessiter des paquets qui ne sont pas fournis avec DataLab. Conservez le plugin lui-même sous forme de paquet wheel en Python pur et fournissez les paquets supplémentaires, y compris toutes leurs dépendances transitives, sous forme de wheels ordinaires dans un sous-dossier ``dependencies`` du catalogue local. Ces paquets de dépendances peuvent contenir des bibliothèques natives, à condition de correspondre à la version de Python, à l'ABI et à la plateforme de l'environnement hôte. Ils n'ont pas besoin de point d'entrée de plugin DataLab."
+
+msgid "On a computer with Internet access, the authoring command prepares the wheelhouse and writes the catalog:"
+msgstr "Sur un ordinateur disposant d'un accès à Internet, la commande de préparation constitue le dépôt de paquets wheel et écrit le catalogue :"
+
+msgid "The command downloads wheels for the current host without installing them or changing its packages. It uses DataLab's declared runtime dependencies as the reference, so that unrelated plugins already installed on the author's computer are not mistaken for packages shipped with DataLab. Prepare wheels on each target environment when different Python versions or platforms need different artifacts, then copy the complete folder to the offline computer or network share. ``build`` and ``check`` themselves do not download missing packages."
+msgstr "La commande télécharge les paquets wheel pour l'environnement courant sans les installer ni modifier ses paquets. Elle utilise les dépendances d'exécution déclarées de DataLab comme référence : les plugins sans rapport déjà installés sur l'ordinateur de l'auteur ne sont donc pas confondus avec les paquets livrés avec DataLab. Préparez les paquets dans chaque environnement cible lorsque des versions de Python ou des plateformes différentes nécessitent des fichiers différents, puis copiez le dossier complet sur l'ordinateur hors ligne ou le partage réseau. Les commandes ``build`` et ``check`` ne téléchargent pas elles-mêmes les paquets manquants."
+
+msgid "For example, a Windows CPython 3.11 catalog may contain:"
+msgstr "Par exemple, un catalogue pour CPython 3.11 sous Windows peut contenir :"
+
+msgid "The **Available plugins** tab copies the verified dependency artifacts of the chosen release. For **Install from file...**, place the ``dependencies`` folder next to the plugin wheel. DataLab resolves the installation using only these local files, with no package-index fallback and no compilation. Before confirmation it displays the additional packages, versions, sizes, source folder and SHA-256 digests."
+msgstr "L'onglet **Plugins disponibles** copie les fichiers de dépendances vérifiés de la version choisie. Pour **Installer depuis un fichier...**, placez le dossier ``dependencies`` à côté du paquet wheel du plugin. DataLab résout l'installation à partir de ces seuls fichiers locaux, sans repli vers un index de paquets et sans compilation. Avant confirmation, il affiche les paquets supplémentaires, leurs versions, leurs tailles, le dossier source et leurs empreintes SHA-256."
+
+msgid "Packages already provided by the Python environment or by DataLab are never replaced, upgraded or downgraded. Additional packages are shared by plugins in the same Python runtime. An incompatible installed version, missing transitive wheel or unsupported native wheel causes an explicit refusal; no partial installation is activated. Catalog metadata checks do not replace this resolution against the actual host."
+msgstr "Les paquets déjà fournis par l'environnement Python ou par DataLab ne sont jamais remplacés, mis à jour ou rétrogradés. Les paquets supplémentaires sont partagés entre les plugins d'un même environnement d'exécution Python. Une version installée incompatible, un paquet transitif manquant ou un paquet natif non pris en charge entraîne un refus explicite ; aucune installation partielle n'est activée. Les vérifications des métadonnées du catalogue ne remplacent pas cette résolution dans l'environnement hôte réel."
+
+msgid "An installation adding dependencies is activated after restarting DataLab. A newly installed plugin is then enabled, including when an explicit enablement list is configured. Uninstalling the plugin keeps the shared dependencies. Different Python/ABI/platform runtimes use separate dependency directories; dependencies incompatible with a changed host are reported rather than repaired over the network."
+msgstr "Une installation qui ajoute des dépendances est activée après le redémarrage de DataLab. Un plugin nouvellement installé est alors activé, y compris lorsqu'une liste explicite de plugins autorisés est configurée. Désinstaller le plugin conserve les dépendances partagées. Les environnements Python/ABI/plateforme différents utilisent des répertoires de dépendances séparés ; les dépendances incompatibles avec un environnement hôte modifié sont signalées plutôt que réparées par téléchargement."
+
+msgid "There is no environment per plugin: plugins requiring contradictory versions cannot coexist. Wheels requiring external system libraries or drivers still need those prerequisites installed separately. Standalone dependencies are intended for library imports, not for supplying an external Python interpreter or promising that their command-line scripts can be run independently. The Web installer remains unchanged."
+msgstr "Il n'y a pas d'environnement par plugin : des plugins exigeant des versions contradictoires ne peuvent pas coexister. Les paquets nécessitant des bibliothèques système ou des pilotes externes exigent toujours l'installation séparée de ces prérequis. Dans l'application autonome, les dépendances sont destinées à être importées comme bibliothèques ; elles ne fournissent pas d'interpréteur Python externe et le fonctionnement indépendant de leurs scripts en ligne de commande n'est pas garanti. L'installateur Web reste inchangé."
+
+msgid "On Windows, native library paths must also fit the DLL loader's path limit. DataLab uses short generation directory names and refuses an installation whose DLL paths would still be too long, before publishing it; use a shorter configuration directory in that case."
+msgstr "Sous Windows, les chemins des bibliothèques natives doivent également respecter la limite du chargeur de DLL. DataLab utilise des noms courts pour les répertoires de générations et refuse une installation dont les chemins de DLL resteraient trop longs, avant de la publier ; utilisez alors un répertoire de configuration dont le chemin est plus court."
+
+msgid "Offline deployment, step by step"
+msgstr "Déploiement hors ligne, pas à pas"
+
+msgid "This procedure is self-contained: the disconnected computer does not need a package index, a Python development environment, or access to the public plugin website. A local network share may be used without Internet access; a USB drive or an ordinary local folder works as well. Preparation takes place on a connected computer, installation on the disconnected computer."
+msgstr "Cette procédure est autonome : l'ordinateur déconnecté n'a besoin ni d'un index de paquets, ni d'un environnement de développement Python, ni d'un accès au site public des plugins. Un partage sur le réseau local peut être utilisé sans accès à Internet ; une clé USB ou un simple dossier local convient également. La préparation se fait sur un ordinateur connecté, l'installation sur l'ordinateur déconnecté."
+
+msgid "A plugin catalog is a **source of installation files**, not a plugin search directory. Add it under **Local plugin catalogs**, not **Additional plugin directories**. ``DATALAB_PLUGINS_CATALOG`` supplies catalogs; ``DATALAB_PLUGINS`` supplies code loaded directly. Installing copies the approved files into the user's DataLab configuration directory, so the source folder or network share is not needed to run the installed plugin afterwards."
+msgstr "Un catalogue de plugins est une **source de fichiers d'installation**, pas un répertoire de recherche de plugins. Ajoutez-le dans **Catalogues locaux de plugins**, et non dans **Répertoires supplémentaires de plugins**. ``DATALAB_PLUGINS_CATALOG`` indique des catalogues ; ``DATALAB_PLUGINS`` indique du code chargé directement. L'installation copie les fichiers approuvés dans le répertoire de configuration DataLab de l'utilisateur : le dossier source ou le partage réseau n'est donc plus nécessaire pour exécuter ensuite le plugin installé."
+
+msgid "1. Prepare a complete catalog on a connected computer"
+msgstr "1. Préparer un catalogue complet sur un ordinateur connecté"
+
+msgid "The provider needs DataLab installed in a Python environment, with the ``datalab-plugin`` command available. The standalone application does not supply this authoring command; its users only need the prepared files. Use a reference environment matching the target's DataLab version, Python version, operating system, architecture and host package versions. **? > Installation and configuration...** identifies the target installation. A Windows 64-bit CPython 3.11 wheel is not interchangeable with a Linux, 32-bit or CPython 3.12 wheel."
+msgstr "Le fournisseur doit disposer de DataLab installé dans un environnement Python, avec la commande ``datalab-plugin`` disponible. L'application autonome ne fournit pas cette commande de préparation ; ses utilisateurs n'ont besoin que des fichiers préparés. Utilisez un environnement de référence correspondant à la version de DataLab, à la version de Python, au système d'exploitation, à l'architecture et aux versions des paquets de l'ordinateur cible. **? > Installation et configuration...** permet d'identifier l'installation cible. Un paquet pour CPython 3.11 sous Windows 64 bits n'est pas interchangeable avec un paquet pour Linux, une architecture 32 bits ou CPython 3.12."
+
+msgid "Create a folder, place the plugin's ``.whl`` file at its root, then run:"
+msgstr "Créez un dossier, placez le fichier ``.whl`` du plugin à sa racine, puis exécutez :"
+
+msgid "``prepare`` needs Internet access: it resolves the missing requirements against the reference host, downloads their wheels, including transitive dependencies, into ``dependencies``, and writes ``catalog.json``. It does not install these packages in the reference host. No source distribution is compiled. If it reports a missing wheel or a conflict, fix the reference catalog before transferring it."
+msgstr "``prepare`` nécessite Internet : la commande résout les exigences manquantes par rapport à l'environnement hôte de référence, télécharge leurs paquets wheel, y compris les dépendances transitives, dans ``dependencies`` et écrit ``catalog.json``. Elle n'installe pas ces paquets dans l'environnement de référence. Aucune distribution source n'est compilée. Si elle signale un paquet manquant ou un conflit, corrigez le catalogue de référence avant de le transférer."
+
+msgid "Keep all files produced, including the dependency wheels. Do not copy just ``catalog.json`` or just the plugin wheel. If serving several target environments, prepare their wheels on matching reference environments, combine the needed files, then run ``datalab-plugin catalog build D:\\approved_plugins`` followed by ``check``. A pure-Python wheel may also restrict the supported Python versions in its metadata."
+msgstr "Conservez tous les fichiers produits, y compris les paquets de dépendances. Ne copiez pas uniquement ``catalog.json`` ou uniquement le paquet wheel du plugin. Pour desservir plusieurs environnements cibles, préparez leurs paquets dans des environnements de référence correspondants, rassemblez les fichiers nécessaires, puis exécutez ``datalab-plugin catalog build D:\\approved_plugins``, suivi de ``check``. Un paquet en Python pur peut lui aussi restreindre les versions de Python prises en charge dans ses métadonnées."
+
+msgid "``check`` checks the catalog files, their integrity and metadata. It is not a substitute for an installation test on the actual target: complete dependency resolution happens at installation time. Before wider deployment, test the complete folder on an equivalent installation with Internet access unavailable."
+msgstr "``check`` vérifie les fichiers du catalogue, leur intégrité et leurs métadonnées. Cette commande ne remplace pas un essai d'installation sur la cible réelle : la résolution complète des dépendances se fait lors de l'installation. Avant un déploiement plus large, testez le dossier complet sur une installation équivalente dont l'accès à Internet est indisponible."
+
+msgid "2. Transfer the folder, preserving its layout"
+msgstr "2. Transférer le dossier en conservant son organisation"
+
+msgid "Copy the complete folder to a USB drive, local disk or network share accessible from the target computer. Preserve relative paths and file names. A mirror of the public catalog may store files under ``wheels\\<digest>\\...`` instead of ``dependencies``: preserve those directories too, because ``catalog.json`` references them. The JSON file alone is not a mirror, and DataLab does not automatically export an online catalog for offline use."
+msgstr "Copiez le dossier complet sur une clé USB, un disque local ou un partage réseau accessible depuis l'ordinateur cible. Conservez les chemins relatifs et les noms de fichiers. Un miroir du catalogue public peut stocker les fichiers dans ``wheels\\<digest>\\...`` plutôt que dans ``dependencies`` : conservez également ces répertoires, car ``catalog.json`` les référence. Le seul fichier JSON n'est pas un miroir, et DataLab n'exporte pas automatiquement un catalogue en ligne pour un usage hors ligne."
+
+msgid "For a strictly offline JSON catalog, the installation ``url`` of every release and dependency artifact must resolve to an existing local file. An absolute ``https://`` URL is still downloaded from its server even if the catalog itself is local; placing a wheel beside that JSON does not override its URL. Informational links such as ``repository``, ``documentation`` and ``source_url`` do not replace installation files. Catalogs generated by ``build`` use relative file URLs; published mirrors must retain the matching relative directory tree."
+msgstr "Pour un catalogue JSON strictement hors ligne, l'URL d'installation (champ ``url``) de chaque version et de chaque fichier de dépendance doit désigner un fichier local existant. Une URL absolue ``https://`` entraîne toujours un téléchargement depuis son serveur, même si le catalogue est local ; placer un paquet wheel à côté de ce JSON ne remplace pas son URL. Les liens informatifs tels que ``repository``, ``documentation`` et ``source_url`` ne remplacent pas les fichiers d'installation. Les catalogues générés par ``build`` utilisent des URL de fichiers relatives ; les miroirs publiés doivent conserver l'arborescence relative correspondante."
+
+msgid "The user needs read access to this source, and write access to their own configuration and temporary directories. Administrator privileges are not required to install a plugin this way. Limit write access to the shared catalog to its maintainers; a SHA-256 check detects changed files but does not certify that a plugin or dependency is safe."
+msgstr "L'utilisateur doit disposer d'un accès en lecture à cette source, et d'un accès en écriture à ses propres répertoires de configuration et de fichiers temporaires. Les privilèges d'administrateur ne sont pas nécessaires pour installer un plugin de cette manière. Réservez l'accès en écriture au catalogue partagé à ses responsables ; une vérification SHA-256 détecte les fichiers modifiés, mais ne certifie pas l'innocuité d'un plugin ou d'une dépendance."
+
+msgid "3. Configure the disconnected computer"
+msgstr "3. Configurer l'ordinateur déconnecté"
+
+msgid "Open **Plugins > Configure plugins... > Plugin settings**. Under **Local plugin catalogs**, click **Add**, select the catalog root (the folder containing ``catalog.json`` or the plugin wheels), and apply the configuration. Do not select the ``dependencies`` subfolder. Open **Available plugins** and click **Refresh** if needed."
+msgstr "Ouvrez **Plugins > Configurer les plugins... > Paramètres des plugins**. Dans **Catalogues locaux de plugins**, cliquez sur **Ajouter**, sélectionnez la racine du catalogue (le dossier contenant ``catalog.json`` ou les paquets des plugins), puis appliquez la configuration. Ne sélectionnez pas le sous-dossier ``dependencies``. Ouvrez **Plugins disponibles** et cliquez sur **Actualiser** si nécessaire."
+
+msgid "Administrators may instead set the following environment variable before launching DataLab:"
+msgstr "Les administrateurs peuvent aussi définir la variable d'environnement suivante avant de lancer DataLab :"
+
+msgid "This example applies to DataLab started from the same PowerShell window; a shortcut launched separately does not inherit that window's environment. An organization may also deploy the variable through its usual workstation configuration. Environment-variable folders come before folders saved in DataLab's settings; both come before the online catalog. The first matching plugin ID or distribution wins: releases from different sources are not merged."
+msgstr "Cet exemple s'applique à DataLab démarré depuis la même fenêtre PowerShell ; un raccourci lancé séparément n'hérite pas de l'environnement de cette fenêtre. Une organisation peut également déployer la variable par son mécanisme habituel de configuration des postes. Les dossiers de la variable d'environnement sont prioritaires sur ceux enregistrés dans les paramètres de DataLab ; les deux sont prioritaires sur le catalogue en ligne. Le premier identifiant de plugin ou nom de distribution correspondant l'emporte : les versions de sources différentes ne sont pas fusionnées."
+
+msgid "Adding a local catalog does **not** disable the online catalog. If its URL is left configured, DataLab still tries to read it when refreshing, which can cause a network wait and an error on a disconnected computer. The other catalogs remain usable after that error."
+msgstr "Ajouter un catalogue local ne désactive **pas** le catalogue en ligne. Si son URL reste configurée, DataLab tente toujours de le lire lors de l'actualisation, ce qui peut entraîner une attente réseau et une erreur sur un ordinateur déconnecté. Les autres catalogues restent utilisables après cette erreur."
+
+msgid "To disable that lookup, close DataLab, back up its configuration file, and set ``plugins_catalog_url`` to an empty value in its existing ``[main]`` section. With the standard Windows user profile, DataLab 1.3 and later use ``%USERPROFILE%\\.DataLab_v1\\DataLab_v1_typed.ini`` (on Linux/macOS, normally ``~/.DataLab_v1/DataLab_v1_typed.ini``). Custom profiles may use another base folder. Do not edit the legacy ``DataLab_v1.ini`` file instead."
+msgstr "Pour désactiver cette recherche, fermez DataLab, sauvegardez son fichier de configuration et donnez une valeur vide à ``plugins_catalog_url`` dans la section ``[main]`` existante. Avec le profil utilisateur Windows standard, DataLab 1.3 et les versions suivantes utilisent ``%USERPROFILE%\\.DataLab_v1\\DataLab_v1_typed.ini`` (sous Linux/macOS, normalement ``~/.DataLab_v1/DataLab_v1_typed.ini``). Les profils personnalisés peuvent utiliser un autre dossier de base. Ne modifiez pas à sa place l'ancien fichier ``DataLab_v1.ini``."
+
+msgid "Preserve the rest of the file. Do not delete this option to disable it: an absent option uses the default public URL again. Restart DataLab after editing. A private HTTPS URL still requires access to that server; for a strictly file-based offline installation, use a local catalog folder."
+msgstr "Conservez le reste du fichier. Ne supprimez pas cette option pour la désactiver : une option absente rétablit l'URL publique par défaut. Redémarrez DataLab après modification. Une URL HTTPS privée nécessite toujours un accès à son serveur ; pour une installation hors ligne reposant uniquement sur des fichiers, utilisez un dossier de catalogue local."
+
+msgid "4. Install, confirm and restart when requested"
+msgstr "4. Installer, confirmer et redémarrer si nécessaire"
+
+msgid "In **Available plugins**, find the plugin and click **Install**. DataLab chooses the newest release offered for Desktop and the running Python version, checks the plugin file and listed compatible dependency artifacts against their sizes and SHA-256 digests, then plans any additional installation using the local files only. Selection of a release does not guarantee that all its dependencies can be installed: this is checked against the actual host before confirmation."
+msgstr "Dans **Plugins disponibles**, trouvez le plugin et cliquez sur **Installer**. DataLab choisit la version la plus récente proposée pour Desktop et pour la version de Python utilisée, vérifie la taille et les empreintes SHA-256 du plugin et des fichiers de dépendances compatibles listés, puis prépare toute installation supplémentaire à partir des seuls fichiers locaux. La sélection d'une version ne garantit pas que toutes ses dépendances puissent être installées : ce point est vérifié dans l'environnement hôte réel avant confirmation."
+
+msgid "Read the confirmation: it gives the plugin identity, classes, requirements and fingerprint, and lists the additional packages, their versions, sizes, fingerprints and source folder when needed. Cancel leaves the installation unchanged. If approved, DataLab installs into its private user storage; it does not modify the environment's existing package versions or load code from the shared catalog at every startup."
+msgstr "Lisez la confirmation : elle indique l'identité du plugin, ses classes, ses exigences et son empreinte, ainsi que les paquets supplémentaires, leurs versions, leurs tailles, leurs empreintes et le dossier source si nécessaire. Annuler laisse l'installation inchangée. Après accord, DataLab installe les fichiers dans son stockage utilisateur privé ; il ne modifie pas les versions des paquets de l'environnement et ne recharge pas le code depuis le catalogue partagé à chaque démarrage."
+
+msgid "Restart DataLab if dependencies were added or if replacing an already loaded wheel. Otherwise, DataLab may offer a plugin reload. After restarting, check **Enable/disable plugins** for the plugin's state and any import error, then try one of its actions. The source catalog may be disconnected after successful installation. For a one-off file installation, **Install plugins > Install from file...** uses the same checks; keep ``dependencies`` next to the plugin wheel."
+msgstr "Redémarrez DataLab si des dépendances ont été ajoutées ou si vous remplacez un paquet déjà chargé. Sinon, DataLab peut proposer de recharger les plugins. Après redémarrage, vérifiez l'état du plugin et les éventuelles erreurs d'importation dans **Activer/désactiver les plugins**, puis essayez l'une de ses actions. Le catalogue source peut être déconnecté après une installation réussie. Pour installer un fichier ponctuellement, **Installer des plugins > Installer depuis un fichier...** effectue les mêmes vérifications ; conservez ``dependencies`` à côté du paquet wheel du plugin."
+
+msgid "5. Maintain and troubleshoot the offline catalog"
+msgstr "5. Maintenir et dépanner le catalogue hors ligne"
+
+msgid "When ``catalog.json`` exists, it is authoritative: DataLab lists and copies only its declared releases and dependency artifacts. For a catalog managed from plugin wheels at its root, run ``build`` and ``check`` again on the preparation computer after adding or changing a plugin **or dependency** wheel, then redistribute the complete folder. Simply copying a new wheel beside an existing JSON file does not update that file. ``prepare`` may require Internet; ``build`` and ``check`` do not fetch missing packages."
+msgstr "Lorsque ``catalog.json`` existe, il fait autorité : DataLab ne liste et ne copie que les versions et fichiers de dépendances qui y sont déclarés. Pour un catalogue géré à partir de paquets de plugins placés à sa racine, relancez ``build`` et ``check`` sur l'ordinateur de préparation après ajout ou modification d'un paquet de plugin **ou de dépendance**, puis redistribuez le dossier complet. Copier simplement un nouveau paquet à côté d'un JSON existant ne met pas ce fichier à jour. ``prepare`` peut nécessiter Internet ; ``build`` et ``check`` ne récupèrent pas les paquets manquants."
+
+msgid "Do not run ``build`` on an unchanged mirror whose plugin wheels live only under ``wheels\\<digest>\\...``: the command scans the catalog root, not that recursive tree, and would remove unrepresented entries from the generated catalog. Update such a mirror by transferring a complete, consistent published catalog and its files. To curate it with the local authoring commands instead, first arrange the plugin wheels at the root and the additional packages in ``dependencies``."
+msgstr "N'exécutez pas ``build`` sur un miroir inchangé dont les paquets de plugins sont uniquement dans ``wheels\\<digest>\\...`` : la commande parcourt la racine du catalogue, pas cette arborescence récursive, et supprimerait du catalogue généré les entrées non représentées. Mettez à jour un tel miroir en transférant un catalogue publié complet et cohérent avec ses fichiers. Pour le gérer avec les commandes locales de préparation, disposez d'abord les paquets des plugins à la racine et les paquets supplémentaires dans ``dependencies``."
+
+msgid "Users refresh **Available plugins** to discover updates, then explicitly click **Update to...**. Updates are not installed automatically. Plugins installed with ``pip`` in the Python environment are identified but not updated by this dialog. Shared additional dependencies are retained when a plugin is uninstalled, and their existing versions remain protected on subsequent installations."
+msgstr "Les utilisateurs actualisent **Plugins disponibles** pour découvrir les mises à jour, puis cliquent explicitement sur **Mettre à jour vers...**. Les mises à jour ne sont pas installées automatiquement. Les plugins installés avec ``pip`` dans l'environnement Python sont identifiés, mais ne sont pas mis à jour par cette boîte de dialogue. Les dépendances supplémentaires partagées sont conservées lorsqu'un plugin est désinstallé, et leurs versions existantes restent protégées lors des installations suivantes."
+
+msgid "If an installation fails, read the error in the plugin dialog before changing files:"
+msgstr "Si une installation échoue, lisez l'erreur dans la boîte de dialogue des plugins avant de modifier les fichiers :"
+
+msgid "**Catalog not found or inaccessible:** check the selected root, drive letter, USB drive, network connection and read permissions. A missing share is not an Internet problem. Refresh once it is available."
+msgstr "**Catalogue introuvable ou inaccessible :** vérifiez la racine sélectionnée, la lettre de lecteur, la clé USB, la connexion réseau et les droits de lecture. Un partage manquant n'est pas un problème d'accès à Internet. Actualisez lorsqu'il est de nouveau disponible."
+
+msgid "**Size or SHA-256 mismatch:** the copied files differ from the catalog. Ask the provider for a complete, consistent copy or regenerate the catalog from the intended wheels; do not bypass the check."
+msgstr "**Taille ou SHA-256 incorrect :** les fichiers copiés diffèrent du catalogue. Demandez au fournisseur une copie complète et cohérente ou régénérez le catalogue à partir des paquets souhaités ; ne contournez pas cette vérification."
+
+msgid "**No matching wheel or missing requirement:** the wheelhouse may lack a transitive dependency or the wheel for this Python/ABI/platform. Ask the provider to run ``prepare`` on a matching reference environment. The installer never falls back to PyPI."
+msgstr "**Aucun paquet compatible ou exigence manquante :** le dépôt peut ne pas contenir une dépendance transitive ou le paquet correspondant à ce Python, à cette ABI ou à cette plateforme. Demandez au fournisseur d'exécuter ``prepare`` dans un environnement de référence correspondant. L'installateur ne se replie jamais vers PyPI."
+
+msgid "**Incompatible installed version:** the host or another plugin already provides a conflicting package version. Ask for a compatible release or reference installation; do not force an upgrade or downgrade to bypass the refusal."
+msgstr "**Version installée incompatible :** l'environnement hôte ou un autre plugin fournit déjà une version de paquet en conflit. Demandez une version ou une installation de référence compatible ; ne forcez pas de mise à jour ou de rétrogradation pour contourner le refus."
+
+msgid "**Windows DLL path too long:** use a shorter configuration path. **DLL import or missing system library:** check the native package's external prerequisites with the provider; DataLab installs neither drivers nor system packages."
+msgstr "**Chemin de DLL Windows trop long :** utilisez un chemin de configuration plus court. **Erreur d'importation de DLL ou bibliothèque système manquante :** vérifiez les prérequis externes du paquet natif avec le fournisseur ; DataLab n'installe ni pilotes ni paquets système."
+
+msgid "**Installed but not active:** restart when requested, check the global and individual plugin enablement settings, and consult the import error displayed in **Enable/disable plugins**. Reloading alone does not replace an imported native library."
+msgstr "**Installé mais inactif :** redémarrez si cela est demandé, vérifiez l'activation globale et individuelle des plugins et consultez l'erreur d'importation affichée dans **Activer/désactiver les plugins**. Un simple rechargement ne remplace pas une bibliothèque native déjà importée."
+
+msgid "For local help, use **? > PDF documentation**, then search for *Offline deployment, step by step* or ``DATALAB_PLUGINS_CATALOG``. This PDF is a local file and does not need Internet access. **Online documentation**, the welcome page's documentation link, and external source-code/documentation links open websites instead. The PDF menu action appears only when a local PDF is present; DataLab tries the system language first, then English. If it is absent or unreadable, ask the administrator for the PDF shipped with the matching DataLab version rather than relying on an online link."
+msgstr "Pour l'aide locale, utilisez **? > Documentation PDF**, puis recherchez *Déploiement hors ligne, pas à pas* ou ``DATALAB_PLUGINS_CATALOG``. Ce PDF est un fichier local et ne nécessite pas Internet. **Documentation en ligne**, le lien vers la documentation de la page d'accueil et les liens externes vers le code source ou la documentation ouvrent, eux, des sites web. L'action de menu du PDF n'apparaît que si un PDF local est présent ; DataLab essaie d'abord la langue du système, puis l'anglais. S'il est absent ou illisible, demandez à l'administrateur le PDF livré avec la version correspondante de DataLab plutôt que de dépendre d'un lien en ligne."
 
 msgid "Install plugins"
 msgstr "Installer des plugins"
@@ -208,8 +354,8 @@ msgstr "Installer des plugins"
 msgid "This tab installs a plugin shared as a file, without any Python tool: this is the way to add plugins to the standalone version of DataLab. **Install from file...** accepts two kinds of files:"
 msgstr "Cet onglet installe un plugin partagé sous forme de fichier, sans aucun outil Python : c'est ainsi que l'on ajoute des plugins à la version autonome de DataLab. **Installer depuis un fichier...** accepte deux types de fichiers :"
 
-msgid "a wheel (``.whl``) built from a plugin project, for example with ``python -m build``: it must be pure Python (``py3-none-any``), declare its plugin class in the ``datalab.plugins`` entry-point group, and depend only on packages already provided by DataLab;"
-msgstr "un wheel (``.whl``) construit à partir d'un projet de plugin, par exemple avec ``python -m build`` : il doit être en Python pur (``py3-none-any``), déclarer sa classe de plugin dans le groupe de points d'entrée ``datalab.plugins`` et ne dépendre que de paquets déjà fournis par DataLab ;"
+msgid "a wheel (``.whl``) built from a plugin project, for example with ``python -m build``: it must be pure Python (``py3-none-any``), declare its plugin class in the ``datalab.plugins`` entry-point group, and have its requirements provided by the host or the adjacent dependency wheelhouse (see :ref:`plugin_dependencies`);"
+msgstr "un paquet wheel (``.whl``) construit à partir d'un projet de plugin, par exemple avec ``python -m build`` : il doit être en Python pur (``py3-none-any``), déclarer sa classe de plugin dans le groupe de points d'entrée ``datalab.plugins``, et ses exigences doivent être satisfaites par l'environnement hôte ou le dépôt de dépendances adjacent (voir :ref:`plugin_dependencies`) ;"
 
 msgid "a single Python module named ``datalab_<name>.py``."
 msgstr "un module Python unique nommé ``datalab_<nom>.py``."
@@ -217,8 +363,8 @@ msgstr "un module Python unique nommé ``datalab_<nom>.py``."
 msgid "Before installing, DataLab checks the file without running it and shows its name, version, plugin classes, dependencies and SHA-256 digest. A plugin runs with the same rights as DataLab: install only plugins from authors you trust."
 msgstr "Avant l'installation, DataLab vérifie le fichier sans l'exécuter et affiche son nom, sa version, ses classes de plugin, ses dépendances et son empreinte SHA-256. Un plugin s'exécute avec les mêmes droits que DataLab : n'installez que des plugins provenant d'auteurs de confiance."
 
-msgid "Installed plugins are kept in the ``installed_plugins`` folder of the DataLab configuration directory (e.g. ``~/.DataLab_v1/installed_plugins``) and listed in the tab, where **Uninstall** removes them. After installing or uninstalling, DataLab offers to reload plugins; a newly installed plugin is enabled. A new version of a plugin already loaded is only used at the next start of DataLab."
-msgstr "Les plugins installés sont conservés dans le dossier ``installed_plugins`` du répertoire de configuration de DataLab (par exemple ``~/.DataLab_v1/installed_plugins``) et listés dans l'onglet, où **Désinstaller** les supprime. Après une installation ou une désinstallation, DataLab propose de recharger les plugins ; un plugin nouvellement installé est activé. Une nouvelle version d'un plugin déjà chargé n'est utilisée qu'au prochain démarrage de DataLab."
+msgid "Installed plugins are kept in the ``installed_plugins`` folder of the DataLab configuration directory (e.g. ``~/.DataLab_v1/installed_plugins``) and listed in the tab, where **Uninstall** removes them. Installations not adding dependencies retain the plugin reload workflow; a newly installed plugin is enabled. Additional dependencies and new versions of already loaded plugins are only activated at the next start of DataLab."
+msgstr "Les plugins installés sont conservés dans le dossier ``installed_plugins`` du répertoire de configuration DataLab (par exemple ``~/.DataLab_v1/installed_plugins``) et listés dans l'onglet, où **Désinstaller** les supprime. Les installations sans ajout de dépendances conservent le mécanisme de rechargement des plugins ; un plugin nouvellement installé est activé. Les dépendances supplémentaires et les nouvelles versions de plugins déjà chargés ne sont activées qu'au prochain démarrage de DataLab."
 
 msgid "When reloading plugins, DataLab performs the following steps:"
 msgstr "Lors du rechargement des plugins, DataLab effectue les étapes suivantes :"
@@ -617,62 +763,82 @@ msgid "Plugins may also extends DataLab I/O features by providing new image or s
 msgstr "Les plugins peuvent également étendre les fonctionnalités d'entrée/sortie de DataLab en fournissant de nouveaux formats d'image ou de signal. Pour ce faire, ils doivent fournir une sous-classe de :class:`ImageFormatBase` ou :class:`SignalFormatBase`, dans laquelle les informations de format sont définies à l'aide de la classe :class:`FormatInfo`."
 
 msgid "Object representing classic image file types"
-msgstr ""
+msgstr "Objet représentant les types de fichiers image classiques"
 
 msgid "Read data and return it"
-msgstr ""
+msgstr "Lire les données et les renvoyer"
 
 msgid "Parameters"
 msgstr "Paramètres"
 
 msgid "File name"
-msgstr ""
+msgstr "Nom du fichier"
 
 msgid "Returns"
 msgstr "Retourne"
 
 msgid "Image array data"
-msgstr ""
+msgstr "Données du tableau de l'image"
 
 msgid "Write data to file"
-msgstr ""
+msgstr "Écrire les données dans un fichier"
+
+msgid "Write classic image data with validated format-specific options."
+msgstr "Écrire des données d'image classiques avec des options propres au format validées."
 
 msgid "Information about a plugin that failed to load or instantiate."
 msgstr "Informations sur un plugin qui n'a pas pu être chargé ou instancié."
 
 msgid "Format info"
-msgstr ""
+msgstr "Informations sur le format"
 
 msgid "Return reStructuredText table row for format info (table `.. list-table::` format, with 5 columns)"
-msgstr ""
+msgstr "Renvoyer une ligne de tableau reStructuredText décrivant le format (tableau ``.. list-table::`` à 5 colonnes)"
 
 msgid "Base image format object."
-msgstr ""
+msgstr "Objet de base pour les formats d'image."
 
 msgid "This class is used to define the interface for image I/O formats. It is an abstract base class that defines the methods that must be implemented by any image format class."
-msgstr ""
+msgstr "Cette classe définit l'interface des formats d'entrée/sortie des images. C'est une classe de base abstraite qui définit les méthodes devant être implémentées par toute classe de format d'image."
+
+msgid "Reject read parameters for formats that do not support them."
+msgstr "Refuser les paramètres de lecture pour les formats qui ne les prennent pas en charge."
 
 msgid "Read list of image objects from file"
-msgstr ""
+msgstr "Lire une liste d'objets image dans un fichier"
 
 msgid "Callback worker object"
-msgstr ""
+msgstr "Objet de traitement des rappels"
+
+msgid "Optional format-specific read parameters"
+msgstr "Paramètres de lecture facultatifs propres au format"
 
 msgid "List of image objects"
-msgstr ""
+msgstr "Liste d'objets image"
 
 msgid "file name"
-msgstr ""
+msgstr "nom du fichier"
 
-#, fuzzy
 msgid "native object (signal or image)"
-msgstr "signaux et images générés"
+msgstr "objet natif (signal ou image)"
 
 msgid "Raises"
 msgstr "Lève"
 
 msgid "if format is not supported"
-msgstr ""
+msgstr "si le format n'est pas pris en charge"
+
+msgid "Write an image with format-specific options."
+msgstr "Écrire une image avec des options propres au format."
+
+msgid "Image object"
+msgstr "Objet image"
+
+msgid "Format-specific writer options"
+msgstr "Options d'écriture propres au format"
+
+msgid "If this format does not support writer options"
+msgstr "Si ce format ne prend pas en charge les options d'écriture"
 
 msgid "Plugin base class"
 msgstr "Classe de base du plugin"
@@ -951,35 +1117,34 @@ msgid "return html formatted text (default: True)"
 msgstr "retourner du texte formaté en html (par défaut : True)"
 
 msgid "Class representing a signal file type"
-msgstr ""
+msgstr "Classe représentant un type de fichier de signal"
 
 msgid "Create empty object"
-msgstr ""
+msgstr "Créer un objet vide"
 
 msgid "Index of object in file"
-msgstr ""
+msgstr "Indice de l'objet dans le fichier"
 
-#, fuzzy
 msgid "Signal object"
-msgstr "objets sélectionnés"
+msgstr "Objet signal"
 
 msgid "Create signal object from xydata and filename."
-msgstr ""
+msgstr "Créer un objet signal à partir de xydata et du nom de fichier."
 
 msgid "XY data"
-msgstr ""
+msgstr "Données XY"
 
 msgid "Create signal objects from xydata and filename"
-msgstr ""
+msgstr "Créer des objets signal à partir de xydata et du nom de fichier"
 
 msgid "List of signal objects"
-msgstr ""
+msgstr "Liste d'objets signal"
 
 msgid "Read list of signal objects from file"
-msgstr ""
+msgstr "Lire une liste d'objets signal dans un fichier"
 
 msgid "Read data and metadata from file, write metadata to object, return xydata"
-msgstr ""
+msgstr "Lire les données et métadonnées d'un fichier, écrire les métadonnées dans l'objet et renvoyer xydata"
 
 msgid "Discover plugins through package entry points and naming convention."
 msgstr "Découvrir les plugins via les points d'entrée de packages et la convention de nommage."
@@ -1365,4 +1530,3 @@ msgstr "Valide, exécute et valide de manière transactionnelle une recette sur 
 
 msgid "Validate, execute, and atomically commit one recipe invocation."
 msgstr "Valide, exécute et valide de manière atomique un appel de recette."
-

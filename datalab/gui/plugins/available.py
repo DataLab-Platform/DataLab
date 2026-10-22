@@ -10,7 +10,7 @@ update their plugins.
 
 from __future__ import annotations
 
-import shutil
+import os.path as osp
 import sys
 import tempfile
 from collections.abc import Callable, Sequence
@@ -32,41 +32,20 @@ from datalab.config import (
     get_plugin_catalog_paths,
     normalize_plugin_paths,
 )
-from datalab.gui.plugins.install import InstalledPluginsWidget
+from datalab.gui.plugins.install import InstalledPluginsWidget, run_plugin_task
 from datalab.plugins.catalog import (
     CatalogPlugin,
     CatalogRelease,
     CatalogsContent,
+    download_dependency_wheels,
     download_release,
     load_catalogs,
 )
+from datalab.plugins.dependencies import DEPENDENCIES_DIRECTORY
 from datalab.plugins.store import WHEEL_KIND
 from datalab.widgets.expandabletext import apply_palette_color, apply_subdued_color
 
 CATALOG_PAGE_URL = "https://datalab-platform.com/plugins/"
-
-#: Running tasks, kept alive until their thread finishes
-_RUNNING_TASKS: set[_Task] = set()
-
-
-class _Task(QC.QThread):
-    """Run a function in a background thread."""
-
-    succeeded = QC.Signal(object)
-    failed = QC.Signal(str)
-
-    def __init__(self, function: Callable[[], object]) -> None:
-        super().__init__()
-        self._function = function
-
-    def run(self) -> None:  # pragma: no cover - thread entry point
-        """Call the function and emit its result or error message."""
-        try:
-            result = self._function()
-        except (OSError, ValueError) as exc:
-            self.failed.emit(str(exc))
-            return
-        self.succeeded.emit(result)
 
 
 def _is_newer(version: str, installed: str) -> bool:
@@ -199,8 +178,11 @@ class AvailablePluginsWidget(QW.QWidget):
         self._installer = installer
         self.plugins: list[CatalogPlugin] | None = None
         self.item_widgets: list[AvailablePluginItemWidget] = []
-        self._download: tuple[CatalogPlugin, str] | None = None
+        self._download: tuple[CatalogPlugin, tempfile.TemporaryDirectory] | None = None
         self._busy = False
+        self._installer.busy_changed.connect(
+            lambda busy: self._set_busy(_("Installing plugin...") if busy else None)
+        )
         self._directories = merge_catalog_directories(get_plugin_catalog_paths())
         #: Catalog URL and local folders of the last loading
         self._loaded_sources: tuple[str, tuple[str, ...]] | None = None
@@ -286,12 +268,7 @@ class AvailablePluginsWidget(QW.QWidget):
         on_failure: Callable[[str], None],
     ) -> None:
         """Run a function in a background thread and report its outcome."""
-        task = _Task(function)
-        _RUNNING_TASKS.add(task)
-        task.succeeded.connect(on_success)
-        task.failed.connect(on_failure)
-        task.finished.connect(lambda: _RUNNING_TASKS.discard(task))
-        task.start()
+        run_plugin_task(function, on_success, on_failure)
 
     def refresh(self) -> None:
         """Load the catalogs again."""
@@ -315,14 +292,23 @@ class AvailablePluginsWidget(QW.QWidget):
         release = plugin.get_installable_release()
         if release is None or self._busy:
             return
-        directory = tempfile.mkdtemp(prefix="datalab-plugin-")
+        directory = tempfile.TemporaryDirectory(prefix="datalab-plugin-")
         self._download = (plugin, directory)
         self._set_busy(_("Downloading %s...") % release.filename)
         self.run_task(
-            lambda: download_release(release, directory),
+            lambda: self._download_release(release, directory.name),
             self._on_downloaded,
             self._on_download_failed,
         )
+
+    @staticmethod
+    def _download_release(release: CatalogRelease, directory: str) -> str:
+        path = download_release(release, directory)
+        if release.dependency_wheels:
+            download_dependency_wheels(
+                release, str(osp.join(directory, DEPENDENCIES_DIRECTORY))
+            )
+        return path
 
     def _set_busy(self, message: str | None) -> None:
         self._busy = message is not None
@@ -364,20 +350,26 @@ class AvailablePluginsWidget(QW.QWidget):
         self._download = None
         self._set_busy(None)
         self.status_label.setText("")
-        try:
-            if plugin.source:
-                origin = _("Local plugin catalog (%s)") % plugin.source
-            else:
-                origin = _("DataLab plugin catalog (%s)") % _tier_label(plugin)
-            self._installer.install_path(path, origin=origin)
-        finally:
-            shutil.rmtree(directory, ignore_errors=True)
-        self._populate()
+        if plugin.source:
+            origin = _("Local plugin catalog (%s)") % plugin.source
+        else:
+            origin = _("DataLab plugin catalog (%s)") % _tier_label(plugin)
+        wheelhouse = osp.join(directory.name, DEPENDENCIES_DIRECTORY)
+        if plugin.source and not osp.isdir(wheelhouse):
+            wheelhouse = osp.join(plugin.source, DEPENDENCIES_DIRECTORY)
+
+        def finished() -> None:
+            directory.cleanup()
+            self._populate()
+
+        self._installer.install_path(
+            path, origin=origin, wheelhouse=wheelhouse, on_finished=finished
+        )
 
     def _on_download_failed(self, message: str) -> None:
         _plugin, directory = self._download
         self._download = None
-        shutil.rmtree(directory, ignore_errors=True)
+        directory.cleanup()
         self._set_busy(None)
         self.status_label.setText("")
         QW.QMessageBox.warning(self, _("Install plugin"), message)
