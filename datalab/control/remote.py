@@ -911,7 +911,7 @@ def get_datalab_xmlrpc_port() -> str:
     Raises:
         ConnectionRefusedError: DataLab has not yet been executed
     """
-    #  The following is valid only when using Python 3.9+ with DataLab
+    #  The following is valid when using Python 3.10+ with DataLab
     #  installed on the client side. In any other situation, please use the
     #  ``get_datalab_xmlrpc_port`` function from doc/remotecontrol_py27.py.
     ensure_initialized(load_user_config=True)

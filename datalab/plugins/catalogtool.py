@@ -46,7 +46,7 @@ from datalab.plugins.wheels import (
 
 #: Python versions supported by DataLab: a plugin wheel must install on one of
 #: them (update when DataLab supports a new Python version)
-DESKTOP_PYTHONS = ("3.9", "3.10", "3.11", "3.12", "3.13", "3.14")
+DESKTOP_PYTHONS = ("3.10", "3.11", "3.12", "3.13", "3.14")
 #: Plugin fields edited in ``catalog.json`` and kept when building it again
 CURATED_PLUGIN_FIELDS = (
     "id",

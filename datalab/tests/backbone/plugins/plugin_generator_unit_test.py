@@ -192,6 +192,8 @@ def test_create_layered_plugin_project(
     assert 'name = "datalab-camera-characterization"' in pyproject
     assert 'license = "BSD-3-Clause"' in pyproject
     assert 'license-files = ["LICENSE"]' in pyproject
+    assert 'requires-python = ">=3.10"' in pyproject
+    assert 'target-version = "py310"' in pyproject
     major, minor = __version__.split(".")[:2]
     assert (
         f'dependencies = ["datalab-platform >= {major}.{minor}, < {int(major) + 1}"]'

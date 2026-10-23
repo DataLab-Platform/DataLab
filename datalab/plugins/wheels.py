@@ -12,12 +12,10 @@ from __future__ import annotations
 
 import configparser
 import hashlib
-import importlib.util
 import io
 import pathlib
 import re
 import sys
-import sysconfig
 import zipfile
 from collections.abc import Mapping, Sequence
 from email.parser import BytesParser
@@ -109,18 +107,7 @@ def is_compatible_wheel(
 
 
 def _is_stdlib_module(name: str) -> bool:
-    stdlib_names = getattr(sys, "stdlib_module_names", None)
-    if stdlib_names is not None:
-        return name in stdlib_names
-    # Python 3.9 has no stdlib module list: locate the module instead.
-    if name in sys.builtin_module_names:
-        return True
-    spec = importlib.util.find_spec(name)
-    if spec is None or not spec.origin:
-        return False
-    stdlib_dir = pathlib.Path(sysconfig.get_paths()["stdlib"]).resolve()
-    origin = pathlib.Path(spec.origin).resolve()
-    return stdlib_dir in origin.parents and "site-packages" not in origin.parts
+    return name in sys.stdlib_module_names
 
 
 def _read_bytes(path_or_bytes: str | bytes | bytearray | memoryview) -> bytes:

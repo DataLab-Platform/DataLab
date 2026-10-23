@@ -592,7 +592,7 @@ class ImageROIEditor(
         ImageObj,
         ImageROI,
         MaskedXYImageItem,
-        # `Union` is mandatory here for Python 3.9-3.10 compatibility:
+        # `Union` is mandatory here for Python 3.10 compatibility:
         Union[AnnotatedPolygon, AnnotatedRectangle, AnnotatedCircle],
     ]
 ):

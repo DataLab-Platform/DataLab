@@ -68,7 +68,6 @@ The following table lists the currently officially used Python distributions:
 
 | Python version | Status       | WinPython version |
 | -------------- | ------------ | ----------------- |
-| 3.9            | OK           | 3.9.10.0          |
 | 3.10           | OK           | 3.10.11.1         |
 | 3.11           | OK           | 3.11.5.0          |
 | 3.12           | OK           | 3.12.3.0          |

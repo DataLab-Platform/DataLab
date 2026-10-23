@@ -137,13 +137,7 @@ msgstr "Statut"
 msgid "WinPython version"
 msgstr "Version de WinPython"
 
-msgid "3.9"
-msgstr ""
-
 msgid "OK"
-msgstr ""
-
-msgid "3.9.10.0"
 msgstr ""
 
 msgid "3.10"
