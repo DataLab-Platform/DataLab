@@ -28,9 +28,40 @@ import os
 import sys
 import tempfile
 import zipfile
+from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from datalab.plugins.store import InstalledPluginStore
 
 MARKER_ENV = "DATALAB_PLUGIN_PROBE_MARKER"
 WHEELHOUSE_ENV = "DATALAB_PLUGIN_PROBE_WHEELHOUSE"
+MODULE_FILENAME = "datalab_frozen_module_probe.py"
+GENERATED_MODULE = "datalab_frozen_generated_probe"
+MODULE_SOURCE = f'''\
+import json
+import os
+import sys
+
+import numpy as np
+from datalab.plugins import PluginBase, PluginInfo
+
+
+class SingleFileProbe(PluginBase):
+    # Intentionally no ID or version: this is a historical, unchanged module.
+    PLUGIN_INFO = PluginInfo(name="Frozen single-file probe")
+
+    def create_actions(self):
+        generated = sys.modules["{GENERATED_MODULE}"]
+        result = {{
+            "module": __file__,
+            "generated": generated.__file__,
+            "sum": int(np.arange(4).sum()),
+        }}
+        marker = os.environ["{MARKER_ENV}"] + ".module"
+        with open(marker, "w", encoding="utf-8") as stream:
+            json.dump(result, stream)
+'''
 
 #: Modules commonly imported by plugins
 MODULES = (
@@ -186,6 +217,9 @@ def install() -> int:
     from datalab.plugins.base import get_installed_plugin_store
 
     filename, data = make_probe_wheel()
+    module_marker = os.environ[MARKER_ENV] + ".module"
+    if os.path.isfile(module_marker):
+        os.remove(module_marker)
     with tempfile.TemporaryDirectory() as directory:
         path = os.path.join(directory, filename)
         with open(path, "wb") as file:
@@ -201,8 +235,54 @@ def install() -> int:
         finally:
             if plan is not None:
                 plan.close()
+        install_modules(directory, store)
     print(f"Probe plugin installed in {store.root}")
     return 0
+
+
+def install_modules(directory: str, store: InstalledPluginStore) -> None:
+    """Install historical and generated scripts from a local catalog."""
+    from datalab.plugins.catalog import download_release, read_folder_catalog
+    from datalab.plugins.catalogtool import build_local_catalog
+    from datalab.plugins.generator import PluginProject, render_single_file_plugin
+
+    folder = Path(directory) / "module-catalog"
+    folder.mkdir()
+    (folder / MODULE_FILENAME).write_text(MODULE_SOURCE, encoding="utf-8")
+    project = PluginProject(
+        destination=folder,
+        name="Frozen generated probe",
+        package=GENERATED_MODULE,
+        plugin_id="org.datalab.frozen-generated-probe",
+        description="Generated single-file build qualification",
+    )
+    (folder / f"{GENERATED_MODULE}.py").write_text(
+        render_single_file_plugin(project), encoding="utf-8"
+    )
+    report = build_local_catalog(str(folder))
+    if report.errors:
+        raise ValueError("\n".join(report.errors))
+    plugins, warnings = read_folder_catalog(str(folder))
+    if warnings or len(plugins) != 2:
+        raise ValueError(f"Invalid single-file probe catalog: {warnings}")
+    target = Path(directory) / "download"
+    target.mkdir()
+    for plugin in plugins:
+        release = plugin.get_installable_release()
+        if release is None:
+            raise ValueError(f"No probe release for {plugin.name}")
+        path = download_release(release, str(target))
+        result = store.install_module(
+            path,
+            expected_sha256=release.sha256,
+            catalog_id=plugin.id,
+            catalog_name=plugin.name,
+            catalog_version=release.version,
+        )
+        if result.restart_required or result.plugin.version != release.version:
+            raise ValueError("Incorrect module installation state")
+    if os.path.exists(os.environ[MARKER_ENV] + ".module"):
+        raise ValueError("The module ran during catalog inspection or installation")
 
 
 def prepare() -> int:
@@ -242,6 +322,17 @@ def verify() -> int:
     )
     if result.get("capsule") != "ok":
         failures.append(f"capsule round trip: {result.get('capsule')}")
+    module_marker = marker + ".module"
+    if not os.path.isfile(module_marker):
+        failures.append("The single-file plugin probes were not loaded")
+    else:
+        with open(module_marker, encoding="utf-8") as stream:
+            module = json.load(stream)
+        if module["sum"] != 6 or not module["module"].endswith(MODULE_FILENAME):
+            failures.append(f"Invalid single-file module result: {module}")
+        if not module["generated"].endswith(f"{GENERATED_MODULE}.py"):
+            failures.append(f"Generated module did not load: {module}")
+        result["single_file"] = module
     print(json.dumps(result, indent=2))
     for failure in failures:
         print(failure, file=sys.stderr)
