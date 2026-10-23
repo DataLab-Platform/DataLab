@@ -43,9 +43,13 @@ coordinates. Signal Y uncertainties are imported when supplied; image
 uncertainties are not imported. Histogram axes supplied as bin edges are
 converted to bin centers, and this conversion is recorded.
 
-An axis with an invalid shape or length is reported in the group description
-and prevents importing the group. An undeclared axis uses point or pixel
-indices; the importer does not infer a physical axis from neighbouring datasets.
+An axis with an invalid shape or length, an ``axes`` attribute that does not
+give one axis per dimension, or an axis that does not hold numbers is reported
+in the group description and prevents importing the group. An undeclared axis
+uses point or pixel indices; the importer does not infer a physical axis from
+neighbouring datasets. Images need increasing coordinates: a decreasing image
+axis is reversed together with the image, and this conversion is recorded,
+while an image axis that is not strictly monotonic prevents the import.
 
 Files with several counters or incomplete NeXus descriptions can be interpreted
 by a plugin-provided data mapping. Each mapped object appears as an additional
@@ -61,13 +65,14 @@ Listing numeric datasets uses their shape and type without loading all their
 values. Textual value previews read only the first elements, and attributes
 containing more than 10 000 values are not copied to imported object metadata.
 Graphical previews are read in a background thread; only the preview of the
-last selected item is displayed.
+last selected item is displayed, and items selected meanwhile are not read.
 
-Large ordinary 1D arrays and 2D images are previewed with a sampling step above
-``2**24`` elements (about 16.8 million). Import still reads every value, not the
-sampled preview. This is not a universal memory limit: NeXus and mapped objects,
-compound datasets and signals stored as 2D tables still use complete objects
-for their graphical previews. Closing a file waits for its preview read to end.
+Large ordinary 1D arrays and 2D images, NeXus and mapped objects are previewed
+with a sampling step above ``2**24`` elements (about 16.8 million). Import still
+reads every value, not the sampled preview. This is not a universal memory
+limit: compound datasets and signals stored as 2D tables still use complete
+objects for their graphical previews. Closing a file or the browser waits for
+its preview read to end.
 
 Datasets with three or more dimensions, such as image stacks and spectral
 cubes, are listed but cannot be imported as complete objects. There is no
@@ -81,11 +86,13 @@ Unsigned 32-bit detector counts above 2 147 483 647 are imported as ``float64``
 images without clipping or rounding. Other integer arrays are also converted
 to an exact supported type when possible. If conversion to floating point
 cannot preserve every integer (in particular beyond ``+/-2**53`` for ``float64``),
-Sigima emits a warning instead of silently promising exact values.
+Sigima emits a warning instead of silently promising exact values. Complex
+signals keep their imaginary part, including single-precision ones.
 
 NeXus and mapped objects carry an ``experimental_source`` metadata entry
-describing the source file, group, measured dataset, axes and recorded
-conversions. Mapped objects also identify their mapping. This entry describes
+describing the source file, group, measured dataset, axes (``"."`` for a
+dimension without axis) and recorded conversions. Mapped objects also identify
+their mapping. This entry describes
 where the measurement came from; it is not the processing provenance shown in
 the Properties panel and does not make the experiment reproducible.
 

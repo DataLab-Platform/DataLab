@@ -32,7 +32,7 @@
 * Application plugins may also list tools, such as wizards or editors, in the catalog
 * Plugin tools also appear in the plugin's submenu of the **Plugins** menu, in the Signal or Image panel they work on. A tool that needs a selection is disabled until the right objects are selected, and its catalog button tells what to select
 * Application plugins may provide instruments, such as simulated cameras or oscilloscopes, without writing any user interface: DataLab shows a window with a live view and the instrument settings, refreshed as settings change or continuously in **Live** mode, and **Acquire** adds the acquired objects to a new group, ready for the application's methods
-* Instruments are called outside the user interface thread, one call at a time: a slow instrument, such as a real device waiting for its data, no longer freezes DataLab, and repeated refresh requests made meanwhile are merged. Instruments may also declare `open` and `close` methods, called when their window opens and closes (including when plugins are reloaded or DataLab quits), for example to connect to a device and to release it
+* Instruments are called outside the user interface thread, one call at a time: a slow instrument, such as a real device waiting for its data, no longer freezes DataLab, and repeated refresh requests made meanwhile are merged. Instruments may also declare `open` and `close` methods, called when their window opens and closes (including when plugins are reloaded or DataLab quits), for example to connect to a device and to release it. Calls stay one at a time when a window is closed and opened again while a call is running. When `open` fails, its message stays in the window and the instrument is opened again before the next refresh or acquisition, for example after a settings change
 * Plugin developers describe recipe inputs declaratively (titles, minimum counts, metadata requirements) and may add binding suggestions and fast input checks; every recipe then runs through DataLab's generic launcher, without plugin-specific input dialogs
 * The catalog is non-modal and remains open after starting a method or opening an example, so users may continue interacting with the DataLab workspace
 * The methods, tools and datasets of an application form an accordion: one section is open at a time, and a colored dot tells, without opening it, whether each method can run on the current selection
@@ -118,7 +118,7 @@ DataLab now uses stable UUID-based object references across object trees, result
 
 **NeXus files:**
 
-* NeXus `NXdata` groups are shown as single items in the HDF5 browser and imported as signals or images with their axes, units, labels and, for signals, uncertainties. Bin edges are converted to bin centers, and non-uniform image axes are kept. Invalid axes are reported in the browser instead of being guessed
+* NeXus `NXdata` groups are shown as single items in the HDF5 browser and imported as signals or images with their axes, units, labels and, for signals, uncertainties. Bin edges are converted to bin centers, non-uniform image axes are kept, and decreasing image axes are reversed with the image. Invalid axes are reported in the browser instead of being guessed
 * Imported signals and images record where they come from (file, group, signal and axes, applied conversions) in their `experimental_source` metadata, which is saved with the workspace: a saved workspace reopens without the NeXus file
 * `.nxs` and `.nx5` files are proposed when opening HDF5 files
 * Plugins can describe the signals and images of files that NeXus `NXdata` groups designate incompletely (no axes, several counters...) with declarative data mappings (JSON) registered with `sigimax.h5.mapping.register_mapping`: the HDF5 browser then shows each described object as an extra item, imported with its axes, labels and units
@@ -149,7 +149,7 @@ DataLab now uses stable UUID-based object references across object trees, result
 **HDF5 browser:**
 
 * Browsing an HDF5 file no longer reads its datasets entirely: they are listed and described from their shape and data type, and the value previews read only their first elements. Large files open faster and use less memory; data is read when a signal or an image is previewed or imported
-* The HDF5 browser stays responsive while a preview is read. Ordinary 1D arrays and 2D images above 2²⁴ values (about 16.8 million) are previewed with a step along each axis; NeXus and mapped objects, compound datasets and signals stored in 2D tables still use complete objects for graphical previews
+* The HDF5 browser stays responsive while a preview is read, and items selected meanwhile are not read. Ordinary 1D arrays and 2D images, NeXus and mapped objects above 2²⁴ values (about 16.8 million) are previewed with a step along each axis; compound datasets and signals stored in 2D tables still use complete objects for graphical previews
 * Datasets with three dimensions or more (image stacks, spectral cubes...) are now listed in the HDF5 browser, but are not directly importable and have no graphical slice selector
 * Dataset attributes with more than 10 000 values are no longer copied to the metadata of imported objects
 
@@ -170,6 +170,7 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 **HDF5 import:**
 
 * Fixed images with unsigned 32-bit values above 2 147 483 647 being clipped when imported from an HDF5 file ("Clipping uint32 data to int32" warning): such images are now imported as 64-bit floating-point images keeping every value exactly. Other integer images that no supported integer type can hold also use a sufficiently precise floating-point type when possible, instead of rounding to 32-bit floating-point values beyond 16 777 216; a warning is emitted when no supported type guarantees exact conversion (in particular beyond ±2⁵³ for float64)
+* Fixed single-precision complex (`complex64`) 1D datasets losing their imaginary part when imported from an HDF5 file: they are now imported as complex signals. Integer signals beyond ±2⁵³ now also emit the precision warning instead of being rounded silently
 
 **Metadata:**
 

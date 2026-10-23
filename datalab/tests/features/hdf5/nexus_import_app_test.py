@@ -5,13 +5,15 @@ NeXus import test
 -----------------
 
 A NeXus ``NXdata`` group is imported with its axes and its origin, and the
-workspace saved afterwards is reopened without the NeXus file.
+workspace saved afterwards is reopened without the NeXus file: the origin keeps
+its JSON types, and dimensions without axis or decreasing axes are preserved.
 """
 
 # guitest: show
 
 from __future__ import annotations
 
+import json
 import os
 import os.path as osp
 
@@ -23,7 +25,8 @@ from datalab.tests import datalab_test_app_context, helpers
 
 
 def _create_nexus_file(fname: str) -> None:
-    """Create a NeXus file with a spectrum and a map with non-uniform axes"""
+    """Create a NeXus file with a spectrum, a map with non-uniform axes, and a
+    detector image with a decreasing axis and a dimension without axis"""
     with h5py.File(fname, "w") as h5file:
         entry = h5file.create_group("entry")
         entry.attrs["NX_class"] = "NXentry"
@@ -38,6 +41,11 @@ def _create_nexus_file(fname: str) -> None:
         mapping["counts"] = np.array([[1, 2, 3], [4, 5, 2**32 - 1]], dtype=np.uint32)
         mapping["x"] = np.array([0.0, 1.0, 4.0])
         mapping["y"] = np.array([0.0, 2.0])
+        detector = entry.create_group("detector")
+        detector.attrs.update({"NX_class": "NXdata", "signal": "frame"})
+        detector.attrs["axes"] = np.array([b".", b"x"])
+        detector["frame"] = np.array([[1, 2, 3], [4, 5, 6]], dtype=np.uint16)
+        detector["x"] = np.array([4.0, 2.0, 0.0])
 
 
 def test_nexus_import_and_workspace() -> None:
@@ -50,22 +58,27 @@ def test_nexus_import_and_workspace() -> None:
             h5io = win.h5inputoutput
             h5io.import_dataset_from_file(nxsname, "/entry/spectrum")
             h5io.import_dataset_from_file(nxsname, "/entry/map")
+            h5io.import_dataset_from_file(nxsname, "/entry/detector")
             signal = win.signalpanel.objmodel.get_all_objects()[0]
-            image = win.imagepanel.objmodel.get_all_objects()[0]
+            image, detector = win.imagepanel.objmodel.get_all_objects()
             assert np.array_equal(signal.x, [7.1, 7.2, 7.4])
             assert signal.y[1] == 2**31 + 5
             assert signal.xunit == "keV"
             assert image.data[1, 2] == 2**32 - 1
             assert np.array_equal(image.xcoords, [0.0, 1.0, 4.0])
+            # Decreasing axis: reversed with the image, as PlotPy needs
+            assert (detector.x0, detector.dx) == (0.0, 2.0)
+            assert np.array_equal(detector.data, [[3, 2, 1], [6, 5, 4]])
             win.save_h5_workspace(wsname)
             os.remove(nxsname)
 
             win.load_h5_workspace([wsname], reset_all=True)
             signal = win.signalpanel.objmodel.get_all_objects()[0]
-            image = win.imagepanel.objmodel.get_all_objects()[0]
+            image, detector = win.imagepanel.objmodel.get_all_objects()
             assert np.array_equal(signal.x, [7.1, 7.2, 7.4])
             assert image.data[1, 2] == 2**32 - 1
             assert np.array_equal(image.xcoords, [0.0, 1.0, 4.0])
+            assert np.array_equal(detector.data, [[3, 2, 1], [6, 5, 4]])
             source = get_experimental_source(signal)
             assert source["kind"] == "nexus"
             assert source["location"] == nxsname
@@ -75,6 +88,14 @@ def test_nexus_import_and_workspace() -> None:
                 "signal": "counts",
                 "axes": ["y", "x"],
             }
+            source = get_experimental_source(detector)
+            assert source["selection"] == {"signal": "frame", "axes": [".", "x"]}
+            assert source["conversions"] == ["axis 'x': reversed to increasing order"]
+            # The reloaded origin keeps its JSON types, so it can be stored again
+            for obj in (signal, image, detector):
+                stored = obj.metadata["experimental_source"]
+                assert type(stored["version"]) is int
+                json.dumps(stored)
 
 
 if __name__ == "__main__":
