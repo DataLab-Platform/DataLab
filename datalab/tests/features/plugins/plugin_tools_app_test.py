@@ -224,12 +224,30 @@ def test_plugin_tools_in_menus_and_instrument_window(
             assert instrument.events == ["open", "close", "open"]
             window = reopened
 
+            # A window closed while hidden (Qt does not emit `finished`) is
+            # replaced by a new one when the tool is launched again
+            window.hide()
+            window.close()
+            assert window.wait_closed()
+            replaced = plugin.launch_tool("generator")
+            assert replaced is not window
+            assert replaced.wait_until_idle()
+            assert instrument.events == ["open", "close", "open", "close", "open"]
+            window = replaced
+
             closed: list[int] = []
             window.finished.connect(closed.append)
             win.reload_plugins()
             QW.QApplication.processEvents()
             assert closed
-            assert instrument.events == ["open", "close", "open", "close"]
+            assert instrument.events == [
+                "open",
+                "close",
+                "open",
+                "close",
+                "open",
+                "close",
+            ]
             reloaded = PluginRegistry.get_plugin("org.example.tools-app")
             assert reloaded.launch_tool("generator") is not window
             win.close_plugin_instruments()

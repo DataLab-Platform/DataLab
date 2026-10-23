@@ -1165,6 +1165,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """
         key = (plugin.plugin_id, tool.id)
         window = self.__instrument_windows.get(key)
+        if window is not None and window.close_future is not None:
+            # Closed while hidden: Qt did not emit `finished`, release it now
+            self.__forget_instrument_window(key)
+            window = None
         if window is None:
             worker = self.__instrument_workers.get(key)
             if worker is None:
