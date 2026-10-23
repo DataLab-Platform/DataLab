@@ -574,7 +574,7 @@ class RemoteServer(QC.QThread):
     @remote_call
     def add_group(
         self, title: str, panel: str | None = None, select: bool = False
-    ) -> None:
+    ) -> str:
         """Add group to DataLab.
 
         Args:
@@ -583,9 +583,11 @@ class RemoteServer(QC.QThread):
             select: Select the group after creation. Defaults to False.
 
         Returns:
-            UUID of the created group, set by the main window slot
+            UUID of the created group
         """
         self.SIG_ADD_GROUP.emit(title, panel, select)
+        # The decorator waits for the main window slot, which sets the result
+        return self.result
 
     @remote_call
     def select_objects(
