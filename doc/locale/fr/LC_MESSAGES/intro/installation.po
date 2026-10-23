@@ -248,7 +248,7 @@ msgid ">= 1.4.0"
 msgstr ""
 
 msgid "Scientific computing engine for 1D signals and 2D images, part of the DataLab open-source platform."
-msgstr ""
+msgstr "Moteur de calcul scientifique pour signaux 1D et images 2D, faisant partie de la plateforme open-source DataLab."
 
 msgid "SigimaX"
 msgstr ""
@@ -257,7 +257,7 @@ msgid ">= 1.1.0"
 msgstr ""
 
 msgid "Reusable GUI components and application utilities, part of the DataLab platform for signal and image processing"
-msgstr ""
+msgstr "Composants d'interface graphique réutilisables et utilitaires applicatifs, faisant partie de la plateforme DataLab de traitement du signal et des images"
 
 msgid "datalab-capsule"
 msgstr ""
@@ -266,7 +266,7 @@ msgid ">= 0.1.0, < 0.2"
 msgstr ""
 
 msgid "Exchange and verify scientific workspace provenance as open RO-Crate capsules (library and CLI, no DataLab required)"
-msgstr ""
+msgstr "Échange et vérification de la provenance d'espaces de travail scientifiques sous forme de capsules RO-Crate ouvertes (bibliothèque et ligne de commande, sans DataLab)"
 
 msgid "NumPy"
 msgstr ""

@@ -65,7 +65,7 @@ msgid ">= 1.1.0"
 msgstr ">= 1.1.0"
 
 msgid "Reusable GUI components and application utilities, part of the DataLab platform for signal and image processing"
-msgstr ""
+msgstr "Composants d'interface graphique réutilisables et utilitaires applicatifs, faisant partie de la plateforme DataLab de traitement du signal et des images"
 
 msgid "datalab-capsule"
 msgstr ""
