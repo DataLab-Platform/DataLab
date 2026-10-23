@@ -125,7 +125,6 @@ class InstrumentWindow(QW.QDialog):
         self._busy = False
         self._opened = False
         self._pending: str | None = None
-        self._resume_live = False
         self._close_future: Future | None = None
         self.SIG_CALL_DONE.connect(self._call_done)
 
@@ -241,7 +240,6 @@ class InstrumentWindow(QW.QDialog):
             self._executor.submit(self._call, "open")
             return
         if method == "acquire":
-            self._resume_live = self._live_timer.isActive()
             self._live_timer.stop()
             self.acquire_button.setEnabled(False)
         self._busy = True
@@ -254,7 +252,8 @@ class InstrumentWindow(QW.QDialog):
         self._busy = False
         if method == "acquire":
             self.acquire_button.setEnabled(True)
-            if self._resume_live and self._close_future is None:
+            # Live mode may have been switched off during the acquisition
+            if self.live_button.isChecked() and self._close_future is None:
                 self._live_timer.start()
         if self._close_future is not None:
             return

@@ -8,8 +8,9 @@ Instrument calls run one at a time outside the GUI thread: a slow instrument
 does not freeze DataLab, repeated refresh requests are merged, and closing the
 window closes the instrument once its running call is done, even if the window
 was never shown. A window opened again with the worker of a closed one calls
-the instrument once it is closed. When opening the instrument fails, the reason
-stays in view and the instrument is opened again before the next call.
+the instrument once it is closed. Live mode switched off during an acquisition
+is not resumed after it. When opening the instrument fails, the reason stays in
+view and the instrument is opened again before the next call.
 """
 
 # guitest: show
@@ -141,6 +142,35 @@ def test_reopened_window_waits_for_closing() -> None:
         main.deleteLater()
 
 
+def test_live_mode_after_acquisition() -> None:
+    """Live mode is resumed after an acquisition, unless it was switched off
+    while the acquisition was running."""
+    with qt_app_context():
+        main = QW.QWidget()
+        instrument = SlowInstrument()
+        instrument.release.set()
+        window = InstrumentWindow(main, instrument, "Slow instrument")
+        window.show()
+        assert window.wait_until_idle()
+        live_timer = window._live_timer  # pylint: disable=protected-access
+        for keep_live in (False, True):
+            window.live_button.setChecked(True)
+            instrument.release.clear()
+            instrument.running.clear()
+            window.acquire()
+            assert instrument.running.wait(10.0)
+            assert not live_timer.isActive()
+            window.live_button.setChecked(keep_live)
+            instrument.release.set()
+            assert window.wait_until_idle()
+            assert live_timer.isActive() == keep_live
+        window.live_button.setChecked(False)
+        window.close()
+        assert window.wait_closed()
+        assert instrument.calls.count("acquire") == 2
+        main.deleteLater()
+
+
 def test_hidden_window_closes_instrument() -> None:
     """Closing a window that was never shown closes its instrument."""
     with qt_app_context():
@@ -199,5 +229,6 @@ if __name__ == "__main__":
     test_slow_instrument_calls_are_serialized()
     test_close_waits_for_running_call()
     test_reopened_window_waits_for_closing()
+    test_live_mode_after_acquisition()
     test_hidden_window_closes_instrument()
     test_open_failure_is_shown_and_retried()
