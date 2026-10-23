@@ -1076,6 +1076,12 @@ msgstr "Troncature de données uint32 en int32."
 msgid "No supported data available in HDF5 file(s)."
 msgstr "Aucune donnée prise en charge dans le(s) fichier(s) HDF5."
 
+msgid "... and %d more"
+msgstr "... et %d autres"
+
+msgid "Some datasets could not be imported:"
+msgstr "Certains jeux de données n'ont pas pu être importés :"
+
 msgid "A new object was loaded. Start a new history session?"
 msgstr "Un nouvel objet a été chargé. Démarrer une nouvelle session d'historique ?"
 

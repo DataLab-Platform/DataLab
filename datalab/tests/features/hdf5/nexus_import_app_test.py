@@ -19,6 +19,7 @@ import os.path as osp
 
 import h5py
 import numpy as np
+import pytest
 from sigima.objects import get_experimental_source
 
 from datalab.tests import datalab_test_app_context, helpers
@@ -98,5 +99,31 @@ def test_nexus_import_and_workspace() -> None:
                 json.dumps(stored)
 
 
+def test_import_continues_after_error() -> None:
+    """A dataset that cannot be imported does not prevent importing the next ones:
+    errors are reported once all datasets were imported."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        nxsname = osp.join(tmpdir, "errors.nxs")
+        with h5py.File(nxsname, "w") as h5file:
+            bad = h5file.create_group("a_bad")
+            bad.attrs.update({"NX_class": "NXdata", "signal": "data"})
+            bad.attrs["axes"] = np.array([b".", b"x"])
+            bad["data"] = np.ones((2, 4))
+            bad["x"] = np.array([0.0, 2.0, 1.0, 3.0])  # Not monotonic
+            good = h5file.create_group("b_good")
+            good.attrs.update({"NX_class": "NXdata", "signal": "I0"})
+            good["I0"] = np.array([1.0, 2.0, 3.0])
+        with datalab_test_app_context(console=False, exec_loop=False) as win:
+            with pytest.raises(ValueError, match="a_bad: Axis 'x' is not strictly"):
+                win.h5inputoutput.import_files([nxsname], True, False)
+            entries = [
+                get_experimental_source(obj)["entry"]
+                for obj in win.signalpanel.objmodel.get_all_objects()
+                if get_experimental_source(obj) is not None
+            ]
+            assert entries == ["/b_good"]
+
+
 if __name__ == "__main__":
     test_nexus_import_and_workspace()
+    test_import_continues_after_error()

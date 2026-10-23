@@ -399,6 +399,9 @@ msgstr "Correction de l'écrêtage des images contenant des valeurs entières no
 msgid "Fixed single-precision complex (`complex64`) 1D datasets losing their imaginary part when imported from an HDF5 file: they are now imported as complex signals. Integer signals beyond ±2⁵³ now also emit the precision warning instead of being rounded silently"
 msgstr "Correction de la perte de la partie imaginaire des jeux de données 1D complexes en simple précision (`complex64`) lors de leur import depuis un fichier HDF5 : ils sont désormais importés comme des signaux complexes. Les signaux entiers au-delà de ±2⁵³ émettent désormais aussi l'avertissement de précision au lieu d'être arrondis silencieusement"
 
+msgid "Fixed the import of several datasets from HDF5 files stopping at the first dataset that could not be imported: the other datasets are now imported, and the datasets that could not be are listed in a single message at the end"
+msgstr "Correction de l'import de plusieurs jeux de données depuis des fichiers HDF5, qui s'arrêtait au premier jeu de données impossible à importer : les autres jeux de données sont désormais importés, et ceux qui n'ont pas pu l'être sont listés dans un message unique à la fin"
+
 msgid "**Metadata:**"
 msgstr "**Métadonnées :**"
 

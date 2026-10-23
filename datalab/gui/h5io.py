@@ -305,6 +305,7 @@ class H5InputOutput:
             if nodes is not None:
                 if reset_all:
                     self.mainwindow.reset_all()
+                errors: list[str] = []
                 with qt_try_loadsave_file(self.mainwindow, "*.h5", "load"):
                     with create_progress_bar(self.mainwindow, "", len(nodes)) as prog:
                         for idx, node in enumerate(nodes):
@@ -313,8 +314,36 @@ class H5InputOutput:
                             QW.QApplication.processEvents()
                             if prog.wasCanceled():
                                 break
-                            self.__add_object_from_node(node)
+                            try:
+                                self.__add_object_from_node(node)
+                            except Exception as exc:  # pylint: disable=broad-except
+                                # Data of third-party files: import the other
+                                # datasets, then report all errors at once
+                                errors.append(f"{node.id}: {exc}")
+                    self.__report_import_errors(errors)
         h5browser.cleanup()
+
+    def __report_import_errors(self, errors: list[str]) -> None:
+        """Report the datasets that could not be imported
+
+        Args:
+            errors: description of each error ("dataset: reason")
+
+        Raises:
+            ValueError: in unattended mode, if any dataset could not be imported
+        """
+        if not errors:
+            return
+        if execenv.unattended:
+            raise ValueError("\n".join(errors))
+        shown = errors[:10]
+        if len(errors) > len(shown):
+            shown.append(_("... and %d more") % (len(errors) - len(shown)))
+        QW.QMessageBox.warning(
+            self.mainwindow,
+            _("Warning"),
+            _("Some datasets could not be imported:") + "\n\n" + "\n".join(shown),
+        )
 
     def import_dataset_from_file(self, filename: str, dsetname: str) -> None:
         """Import dataset from HDF5 file"""
