@@ -391,6 +391,9 @@ msgstr "Nom du panneau (valeurs valides : \"signal\", \"image\"). Par défaut No
 msgid "Select the group after creation. Defaults to False."
 msgstr "Sélectionner le groupe après sa création. Par défaut False."
 
+msgid "UUID of the created group"
+msgstr "UUID du groupe créé"
+
 msgid "Add a label with object title on the associated plot"
 msgstr "Ajouter un libellé avec le titre de l'objet sur le graphique associé"
 
@@ -636,4 +639,3 @@ msgstr "Basculer l'état d'affichage des titres."
 
 msgid "Show titles state"
 msgstr "État d'affichage des titres"
-
