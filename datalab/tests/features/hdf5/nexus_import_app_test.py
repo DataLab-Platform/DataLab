@@ -7,6 +7,8 @@ NeXus import test
 A NeXus ``NXdata`` group is imported with its axes and its origin, and the
 workspace saved afterwards is reopened without the NeXus file: the origin keeps
 its JSON types, and dimensions without axis or decreasing axes are preserved.
+Datasets that cannot be imported are reported without preventing the import of
+the others, and the NeXus file is closed afterwards.
 """
 
 # guitest: show
@@ -20,7 +22,7 @@ import os.path as osp
 import h5py
 import numpy as np
 import pytest
-from sigima.objects import get_experimental_source
+from sigima.objects import ImageObj, get_experimental_source
 
 from datalab.tests import datalab_test_app_context, helpers
 
@@ -49,6 +51,13 @@ def _create_nexus_file(fname: str) -> None:
         detector["x"] = np.array([4.0, 2.0, 0.0])
 
 
+def _two_images(win) -> tuple[ImageObj, ImageObj]:
+    """Return the two images of the workspace"""
+    images = win.imagepanel.objmodel.get_all_objects()
+    assert len(images) == 2
+    return images[0], images[1]
+
+
 def test_nexus_import_and_workspace() -> None:
     """NXdata import, then workspace round trip without the NeXus file"""
     with helpers.WorkdirRestoringTempDir() as tmpdir:
@@ -61,7 +70,7 @@ def test_nexus_import_and_workspace() -> None:
             h5io.import_dataset_from_file(nxsname, "/entry/map")
             h5io.import_dataset_from_file(nxsname, "/entry/detector")
             signal = win.signalpanel.objmodel.get_all_objects()[0]
-            image, detector = win.imagepanel.objmodel.get_all_objects()
+            image, detector = _two_images(win)
             assert np.array_equal(signal.x, [7.1, 7.2, 7.4])
             assert signal.y[1] == 2**31 + 5
             assert signal.xunit == "keV"
@@ -75,7 +84,7 @@ def test_nexus_import_and_workspace() -> None:
 
             win.load_h5_workspace([wsname], reset_all=True)
             signal = win.signalpanel.objmodel.get_all_objects()[0]
-            image, detector = win.imagepanel.objmodel.get_all_objects()
+            image, detector = _two_images(win)
             assert np.array_equal(signal.x, [7.1, 7.2, 7.4])
             assert image.data[1, 2] == 2**32 - 1
             assert np.array_equal(image.xcoords, [0.0, 1.0, 4.0])
@@ -95,13 +104,20 @@ def test_nexus_import_and_workspace() -> None:
             # The reloaded origin keeps its JSON types, so it can be stored again
             for obj in (signal, image, detector):
                 stored = obj.metadata["experimental_source"]
-                assert type(stored["version"]) is int
+                version = stored["version"]
+                assert isinstance(version, int) and not isinstance(version, bool)
                 json.dumps(stored)
+
+
+def _is_open(fname: str) -> bool:
+    """Return True if an HDF5 file of this name is open in this process"""
+    names = [fid.name for fid in h5py.h5f.get_obj_ids(types=h5py.h5f.OBJ_FILE)]
+    return osp.basename(fname) in [osp.basename(os.fsdecode(name)) for name in names]
 
 
 def test_import_continues_after_error() -> None:
     """A dataset that cannot be imported does not prevent importing the next ones:
-    errors are reported once all datasets were imported."""
+    errors are reported once all datasets were imported, and the file is closed."""
     with helpers.WorkdirRestoringTempDir() as tmpdir:
         nxsname = osp.join(tmpdir, "errors.nxs")
         with h5py.File(nxsname, "w") as h5file:
@@ -116,12 +132,16 @@ def test_import_continues_after_error() -> None:
         with datalab_test_app_context(console=False, exec_loop=False) as win:
             with pytest.raises(ValueError, match="a_bad: Axis 'x' is not strictly"):
                 win.h5inputoutput.import_files([nxsname], True, False)
+            assert not _is_open(nxsname)
             entries = [
                 get_experimental_source(obj)["entry"]
                 for obj in win.signalpanel.objmodel.get_all_objects()
                 if get_experimental_source(obj) is not None
             ]
             assert entries == ["/b_good"]
+            with pytest.raises(ValueError, match="Axis 'x' is not strictly"):
+                win.h5inputoutput.import_dataset_from_file(nxsname, "/a_bad")
+            assert not _is_open(nxsname)
 
 
 if __name__ == "__main__":

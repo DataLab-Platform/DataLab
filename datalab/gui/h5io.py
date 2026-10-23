@@ -282,11 +282,26 @@ class H5InputOutput:
     ) -> None:
         """Import HDF5 files"""
         h5browser = H5BrowserDialog(self.mainwindow)
+        try:
+            self.__import_files_from_browser(
+                h5browser, filenames, import_all, reset_all
+            )
+        finally:
+            # Close the HDF5 files, even if an import error is raised
+            h5browser.cleanup()
+
+    def __import_files_from_browser(
+        self,
+        h5browser: H5BrowserDialog,
+        filenames: list[str],
+        import_all: bool,
+        reset_all: bool,
+    ) -> None:
+        """Open HDF5 files in browser, then import the selected datasets"""
         for filename in filenames:
             with qt_try_loadsave_file(self.mainwindow, filename, "load"):
                 h5browser.open_file(filename)
         if h5browser.is_empty():
-            h5browser.cleanup()
             if not execenv.unattended:
                 QW.QMessageBox.warning(
                     self.mainwindow,
@@ -321,7 +336,6 @@ class H5InputOutput:
                                 # datasets, then report all errors at once
                                 errors.append(f"{node.id}: {exc}")
                     self.__report_import_errors(errors)
-        h5browser.cleanup()
 
     def __report_import_errors(self, errors: list[str]) -> None:
         """Report the datasets that could not be imported
@@ -353,4 +367,5 @@ class H5InputOutput:
             self.__add_object_from_node(node)
         except KeyError as exc:
             raise KeyError(f"Dataset not found: {dsetname}") from exc
-        h5importer.close()
+        finally:
+            h5importer.close()
