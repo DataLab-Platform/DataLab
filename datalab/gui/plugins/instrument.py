@@ -78,9 +78,11 @@ class InstrumentWindow(QW.QDialog):
 
     The view is refreshed when settings change, and periodically in live mode.
     Each acquisition is added to the workspace in a new group. The instrument is
-    opened with the window and closed with it. Its methods are called one at a
-    time in a worker thread: a request made while a call is running is done
-    next (an acquisition before a refresh, repeated refreshes only once).
+    opened with the window and closed with it; if opening it fails, the reason
+    is shown, and it is opened again before the next call. Its methods are
+    called one at a time in a worker thread: a request made while a call is
+    running is done next (an acquisition before a refresh, repeated refreshes
+    only once).
 
     Args:
         main: DataLab main window
@@ -121,6 +123,7 @@ class InstrumentWindow(QW.QDialog):
         self._owns_executor = executor is None
         self._executor = SerialWorker() if executor is None else executor
         self._busy = False
+        self._opened = False
         self._pending: str | None = None
         self._resume_live = False
         self._close_future: Future | None = None
@@ -198,9 +201,12 @@ class InstrumentWindow(QW.QDialog):
             min(self.width(), screen.width()), min(self.height(), screen.height())
         )
         splitter.setSizes([650, 450])
+        # The first view is requested once the instrument is opened (filling the
+        # settings editor reported changes, which do not need another view)
+        self._refresh_timer.stop()
         self._busy = True
+        self._pending = "preview"
         self._executor.submit(self._call, "open")
-        self._refresh_timer.start(0)
 
     def _call(self, method: str) -> None:
         """Call an instrument method (worker thread)."""
@@ -218,7 +224,9 @@ class InstrumentWindow(QW.QDialog):
             pass  # Window deleted after being closed
 
     def _request(self, method: str) -> None:
-        """Call ``preview`` or ``acquire`` now, or after the running call."""
+        """Call ``preview`` or ``acquire`` now, or after the running call.
+
+        If opening the instrument failed, it is opened again first."""
         if self._close_future is not None:
             return
         if self._busy:
@@ -226,6 +234,11 @@ class InstrumentWindow(QW.QDialog):
                 self._pending = method
             return
         if not self._apply_settings():
+            return
+        if not self._opened:
+            self._busy = True
+            self._pending = method
+            self._executor.submit(self._call, "open")
             return
         if method == "acquire":
             self._resume_live = self._live_timer.isActive()
@@ -245,8 +258,15 @@ class InstrumentWindow(QW.QDialog):
                 self._live_timer.start()
         if self._close_future is not None:
             return
+        if method == "open":
+            self._opened = error is None
         if error is not None:
             self.status_label.setText(str(error))
+            if method == "open":
+                # Keep the reason in view: the instrument is not called until
+                # the next request opens it again (e.g. after a settings change)
+                self._pending = None
+                return
         elif method == "preview":
             self._show_frame(result)
         elif method == "acquire":

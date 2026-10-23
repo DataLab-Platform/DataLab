@@ -119,7 +119,10 @@ class PluginInstrument(abc.ABC):
         """Prepare the instrument when its window opens (e.g. connect to it).
 
         Raises ``ValueError`` with a user-facing message if the instrument
-        cannot be used. Does nothing by default.
+        cannot be used: DataLab shows this message, and does not call
+        :meth:`preview` or :meth:`acquire` until a new request (e.g. after a
+        settings change) opens the instrument successfully. Does nothing by
+        default.
         """
 
     def close(self) -> None:

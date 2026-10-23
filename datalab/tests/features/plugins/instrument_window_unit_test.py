@@ -8,7 +8,8 @@ Instrument calls run one at a time outside the GUI thread: a slow instrument
 does not freeze DataLab, repeated refresh requests are merged, and closing the
 window closes the instrument once its running call is done, even if the window
 was never shown. A window opened again with the worker of a closed one calls
-the instrument once it is closed.
+the instrument once it is closed. When opening the instrument fails, the reason
+stays in view and the instrument is opened again before the next call.
 """
 
 # guitest: show
@@ -153,8 +154,50 @@ def test_hidden_window_closes_instrument() -> None:
         main.deleteLater()
 
 
+class FailingInstrument(SlowInstrument):
+    """Instrument that cannot be opened until the test allows it."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.fail = True
+        self.release.set()
+
+    def open(self) -> None:
+        self._record("open")
+        if self.fail:
+            raise ValueError("Device unreachable")
+
+
+def test_open_failure_is_shown_and_retried() -> None:
+    """When opening fails, the reason stays in view and the instrument is not
+    called: the next request opens it again."""
+    with qt_app_context():
+        main = QW.QWidget()
+        instrument = FailingInstrument()
+        window = InstrumentWindow(main, instrument, "Failing instrument")
+        window.show()
+        assert window.wait_until_idle()
+        assert instrument.calls == ["open"]
+        assert window.status_label.text() == "Device unreachable"
+        window.refresh()
+        assert window.wait_until_idle()
+        assert instrument.calls == ["open", "open"]
+        assert window.status_label.text() == "Device unreachable"
+        instrument.fail = False
+        window.refresh()
+        assert window.wait_until_idle()
+        assert instrument.calls == ["open", "open", "open", "preview"]
+        assert window.status_label.text() == ""
+        assert len(window.items) == 1
+        window.close()
+        assert window.wait_closed()
+        assert instrument.calls[-1] == "close"
+        main.deleteLater()
+
+
 if __name__ == "__main__":
     test_slow_instrument_calls_are_serialized()
     test_close_waits_for_running_call()
     test_reopened_window_waits_for_closing()
     test_hidden_window_closes_instrument()
+    test_open_failure_is_shown_and_retried()
