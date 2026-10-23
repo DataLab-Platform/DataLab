@@ -149,7 +149,7 @@ DataLab now uses stable UUID-based object references across object trees, result
 **HDF5 browser:**
 
 * Browsing an HDF5 file no longer reads its datasets entirely: they are listed and described from their shape and data type, and the value previews read only their first elements. Large files open faster and use less memory; data is read when a signal or an image is previewed or imported
-* The HDF5 browser stays responsive while a preview is read, and items selected meanwhile are not read. Ordinary 1D arrays and 2D images, NeXus and mapped objects above 2²⁴ values (about 16.8 million) are previewed with a step along each axis; compound datasets and signals stored in 2D tables still use complete objects for graphical previews
+* The HDF5 browser stays responsive while a preview is read, and items selected meanwhile are not read; selecting an item that cannot be previewed (a group, for example) clears the preview. Ordinary 1D arrays and 2D images, NeXus and mapped objects above 2²⁴ values (about 16.8 million) are previewed with a step along each axis; compound datasets and signals stored in 2D tables still use complete objects for graphical previews
 * Datasets with three dimensions or more (image stacks, spectral cubes...) are now listed in the HDF5 browser, but are not directly importable and have no graphical slice selector
 * Dataset attributes with more than 10 000 values are no longer copied to the metadata of imported objects
 
@@ -172,6 +172,7 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 * Fixed images with unsigned 32-bit values above 2 147 483 647 being clipped when imported from an HDF5 file ("Clipping uint32 data to int32" warning): such images are now imported as 64-bit floating-point images keeping every value exactly. Other integer images that no supported integer type can hold also use a sufficiently precise floating-point type when possible, instead of rounding to 32-bit floating-point values beyond 16 777 216; a warning is emitted when no supported type guarantees exact conversion (in particular beyond ±2⁵³ for float64)
 * Fixed single-precision complex (`complex64`) 1D datasets losing their imaginary part when imported from an HDF5 file: they are now imported as complex signals. Integer signals beyond ±2⁵³ now also emit the precision warning instead of being rounded silently
 * Fixed the import of several datasets from HDF5 files stopping at the first dataset that could not be imported: the other datasets are now imported, and the datasets that could not be are listed in a single message at the end
+* Fixed HDF5 files containing broken links failing to open in the HDF5 browser, for example synchrotron master files whose detector files are not available (external links to a missing file): the broken links are now skipped and the rest of the file can be browsed and imported
 
 **Metadata:**
 

@@ -66,6 +66,9 @@ values. Textual value previews read only the first elements, and attributes
 containing more than 10 000 values are not copied to imported object metadata.
 Graphical previews are read in a background thread; only the preview of the
 last selected item is displayed, and items selected meanwhile are not read.
+Selecting an item that cannot be previewed, such as a group, clears the
+preview. Broken links, such as external links to missing detector files, are
+skipped when the file is opened.
 
 Large ordinary 1D arrays and 2D images, NeXus and mapped objects are previewed
 with a sampling step above ``2**24`` elements (about 16.8 million). Import still

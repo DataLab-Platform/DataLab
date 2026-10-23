@@ -5,18 +5,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-22 22:19+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
-"Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.18.0\n"
 
 msgid "Version 1.4"
 msgstr "Version 1.4"
@@ -357,8 +350,8 @@ msgstr "**Explorateur HDF5 :**"
 msgid "Browsing an HDF5 file no longer reads its datasets entirely: they are listed and described from their shape and data type, and the value previews read only their first elements. Large files open faster and use less memory; data is read when a signal or an image is previewed or imported"
 msgstr "Parcourir un fichier HDF5 ne lit plus ses jeux de données en entier : ils sont listés et décrits à partir de leur forme et de leur type de données, et les aperçus de valeurs ne lisent que leurs premiers éléments. Les gros fichiers s'ouvrent plus vite et utilisent moins de mémoire ; les données sont lues lorsqu'un signal ou une image est prévisualisé ou importé"
 
-msgid "The HDF5 browser stays responsive while a preview is read, and items selected meanwhile are not read. Ordinary 1D arrays and 2D images, NeXus and mapped objects above 2²⁴ values (about 16.8 million) are previewed with a step along each axis; compound datasets and signals stored in 2D tables still use complete objects for graphical previews"
-msgstr "L'explorateur HDF5 reste réactif pendant la lecture d'un aperçu, et les éléments sélectionnés entre-temps ne sont pas lus. Les tableaux 1D ordinaires et les images 2D, les objets NeXus et décrits par un profil au-delà de 2²⁴ valeurs (environ 16,8 millions) sont prévisualisés avec un pas le long de chaque axe ; les jeux de données composites et les signaux stockés dans des tableaux 2D utilisent encore des objets complets pour leurs aperçus graphiques"
+msgid "The HDF5 browser stays responsive while a preview is read, and items selected meanwhile are not read; selecting an item that cannot be previewed (a group, for example) clears the preview. Ordinary 1D arrays and 2D images, NeXus and mapped objects above 2²⁴ values (about 16.8 million) are previewed with a step along each axis; compound datasets and signals stored in 2D tables still use complete objects for graphical previews"
+msgstr "L'explorateur HDF5 reste réactif pendant la lecture d'un aperçu, et les éléments sélectionnés entre-temps ne sont pas lus ; la sélection d'un élément qui ne peut pas être prévisualisé (un groupe, par exemple) efface l'aperçu. Les tableaux 1D ordinaires et les images 2D, les objets NeXus et décrits par un profil au-delà de 2²⁴ valeurs (environ 16,8 millions) sont prévisualisés avec un pas le long de chaque axe ; les jeux de données composites et les signaux stockés dans des tableaux 2D utilisent encore des objets complets pour leurs aperçus graphiques"
 
 msgid "Datasets with three dimensions or more (image stacks, spectral cubes...) are now listed in the HDF5 browser, but are not directly importable and have no graphical slice selector"
 msgstr "Les jeux de données à trois dimensions ou plus (piles d'images, cubes spectraux...) sont désormais listés dans l'explorateur HDF5, mais ne sont pas directement importables et n'ont pas de sélecteur graphique de coupes"
@@ -401,6 +394,9 @@ msgstr "Correction de la perte de la partie imaginaire des jeux de données 1D c
 
 msgid "Fixed the import of several datasets from HDF5 files stopping at the first dataset that could not be imported: the other datasets are now imported, and the datasets that could not be are listed in a single message at the end"
 msgstr "Correction de l'import de plusieurs jeux de données depuis des fichiers HDF5, qui s'arrêtait au premier jeu de données impossible à importer : les autres jeux de données sont désormais importés, et ceux qui n'ont pas pu l'être sont listés dans un message unique à la fin"
+
+msgid "Fixed HDF5 files containing broken links failing to open in the HDF5 browser, for example synchrotron master files whose detector files are not available (external links to a missing file): the broken links are now skipped and the rest of the file can be browsed and imported"
+msgstr "Correction de l'échec d'ouverture dans l'explorateur HDF5 des fichiers HDF5 contenant des liens rompus, par exemple les fichiers maîtres de synchrotron dont les fichiers de détecteur ne sont pas disponibles (liens externes vers un fichier absent) : les liens rompus sont désormais ignorés et le reste du fichier peut être exploré et importé"
 
 msgid "**Metadata:**"
 msgstr "**Métadonnées :**"
@@ -479,3 +475,4 @@ msgstr "**Sécurité :**"
 
 msgid "Opening a workspace received from someone else can no longer make DataLab load or run other code installed on the computer. The parameters stored with objects, analysis results and History actions name their class, and DataLab imported whatever module they named and called the object named there, which a modified file could use, for example, to make DataLab quit. Only parameter classes of DataLab, Sigima, guidata and installed plugins are now used; other stored parameters are reported as unreadable (fixes [Issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))"
 msgstr "Ouvrir un espace de travail reçu d'une autre personne ne permet plus de faire charger ou exécuter par DataLab un autre code installé sur l'ordinateur. Les paramètres enregistrés avec les objets, les résultats d'analyse et les actions de l'historique nomment leur classe, et DataLab importait le module ainsi nommé puis appelait l'objet désigné, ce qu'un fichier modifié pouvait exploiter, par exemple pour faire quitter DataLab. Seules les classes de paramètres de DataLab, Sigima, guidata et des plugins installés sont désormais utilisées ; les autres paramètres enregistrés sont signalés comme illisibles (corrige [l'issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))"
+

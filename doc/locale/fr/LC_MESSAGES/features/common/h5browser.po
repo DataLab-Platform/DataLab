@@ -2,16 +2,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-22 21:34+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.18.0\n"
 
 msgid "HDF5 Browser in DataLab, the open-source scientific data analysis and visualization platform"
 msgstr "Explorateur HDF5 dans DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
@@ -67,8 +60,8 @@ msgstr "Les fichiers contenant plusieurs compteurs ou des descriptions NeXus inc
 msgid "Large datasets and previews"
 msgstr "Grands jeux de données et aperçus"
 
-msgid "Listing numeric datasets uses their shape and type without loading all their values. Textual value previews read only the first elements, and attributes containing more than 10 000 values are not copied to imported object metadata. Graphical previews are read in a background thread; only the preview of the last selected item is displayed, and items selected meanwhile are not read."
-msgstr "La liste des jeux de données numériques utilise leur forme et leur type sans charger toutes leurs valeurs. Les aperçus textuels ne lisent que les premiers éléments, et les attributs contenant plus de 10 000 valeurs ne sont pas copiés dans les métadonnées des objets importés. Les aperçus graphiques sont lus dans un fil d'exécution en arrière-plan ; seul l'aperçu du dernier élément sélectionné est affiché, et les éléments sélectionnés entre-temps ne sont pas lus."
+msgid "Listing numeric datasets uses their shape and type without loading all their values. Textual value previews read only the first elements, and attributes containing more than 10 000 values are not copied to imported object metadata. Graphical previews are read in a background thread; only the preview of the last selected item is displayed, and items selected meanwhile are not read. Selecting an item that cannot be previewed, such as a group, clears the preview. Broken links, such as external links to missing detector files, are skipped when the file is opened."
+msgstr "La liste des jeux de données numériques utilise leur forme et leur type sans charger toutes leurs valeurs. Les aperçus textuels ne lisent que les premiers éléments, et les attributs contenant plus de 10 000 valeurs ne sont pas copiés dans les métadonnées des objets importés. Les aperçus graphiques sont lus dans un fil d'exécution en arrière-plan ; seul l'aperçu du dernier élément sélectionné est affiché, et les éléments sélectionnés entre-temps ne sont pas lus. La sélection d'un élément qui ne peut pas être prévisualisé, comme un groupe, efface l'aperçu. Les liens rompus, comme les liens externes vers des fichiers de détecteur absents, sont ignorés à l'ouverture du fichier."
 
 msgid "Large ordinary 1D arrays and 2D images, NeXus and mapped objects are previewed with a sampling step above ``2**24`` elements (about 16.8 million). Import still reads every value, not the sampled preview. This is not a universal memory limit: compound datasets and signals stored as 2D tables still use complete objects for their graphical previews. Closing a file or the browser waits for its preview read to end."
 msgstr "Les grands tableaux 1D ordinaires et les images 2D, les objets NeXus et décrits par un profil sont prévisualisés avec un pas d'échantillonnage au-delà de ``2**24`` éléments (environ 16,8 millions). L'import lit toujours toutes les valeurs, pas l'aperçu échantillonné. Ce n'est pas une limite mémoire universelle : les jeux de données composites et les signaux stockés dans des tableaux 2D utilisent encore des objets complets pour leurs aperçus graphiques. La fermeture d'un fichier ou de l'explorateur attend la fin de la lecture de son aperçu."
@@ -87,3 +80,4 @@ msgstr "Les objets NeXus et décrits par un profil portent une entrée de métad
 
 msgid "Save the imported objects in a DataLab workspace to keep both their data and this metadata. Reopening that workspace does not require the original NeXus file or the mapping plugin. Generic raw dataset imports do not automatically receive this structured experimental source."
 msgstr "Enregistrez les objets importés dans un espace de travail DataLab pour conserver leurs données et ces métadonnées. La réouverture de cet espace de travail ne nécessite ni le fichier NeXus original ni le plugin du profil. Les imports génériques de jeux de données bruts ne reçoivent pas automatiquement cette description structurée de leur origine expérimentale."
+
