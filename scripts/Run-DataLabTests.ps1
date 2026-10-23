@@ -22,8 +22,9 @@
            * develop : Sigima and DataLab from the latest commit of their
                        "develop" branch (git+URL@develop); the rest from PyPI.
            * main    : same but from the "main" branch of Sigima and DataLab.
-      2. Python version: 3.9 to 3.14, or "all" to iterate over every version in
-         turn (one venv + one log per version).
+      2. Python version: 3.10 to 3.14, or "all" to iterate over the configured
+         supported versions (one venv + one log per version). Python 3.9 is
+         available only explicitly for a pinned historical release.
       3. Whether to delete the venvs at the end of the run (default: yes). The
          .log files are always kept.
 
@@ -40,6 +41,8 @@
 .PARAMETER PythonVersion
     3.9, 3.10, 3.11, 3.12, 3.13, 3.14 or "all". If absent: asked interactively
     (default 3.11). Only versions present in the config file can be run.
+    Python 3.9 is excluded from menus, "all" and matrix mode, and requires a
+    historical -Source tag or -Source pypi with an explicit -DataLabVersion.
 
 .PARAMETER DeleteVenv
     $true (default) deletes the venv(s) at the end of the run; $false keeps them.
@@ -95,7 +98,7 @@
 .PARAMETER Matrix
     Matrix mode: automatically runs the report matrix instead of a single run --
     Source {develop, main} x PythonQwt {pypi, <chosen fix>} x window mode(s) x
-    Python 3.9-3.14, sequentially. A few questions (fix variant, mode(s), venv
+    Python 3.10-3.14, sequentially. A few questions (fix variant, mode(s), venv
     deletion) then confirmation of the number of cells. Produces a console
     summary and an aggregated Markdown report (per-cell detail + Source x
     PythonQwt x mode synthesis) in runs\. In fully interactive mode (no
@@ -122,7 +125,7 @@
     .\Run-DataLabTests.ps1 -Source develop -PythonVersion all -DeleteVenv:$false
 
 .EXAMPLE
-    .\Run-DataLabTests.ps1 -PythonVersion 3.9 -PytestArgs '-k','signal','--durations=20'
+    .\Run-DataLabTests.ps1 -Source v1.2.0 -PythonVersion 3.9 -PytestArgs '-k','signal','--durations=20'
 
 .EXAMPLE
     .\Run-DataLabTests.ps1 -PythonQwtBranch v0.15.0
@@ -156,7 +159,7 @@ param(
     [bool] $GdiProbe = $true,
 
     # Matrix mode: automatically runs the report matrix
-    # (Source {develop,main} x PythonQwt {pypi, <fix>} x mode x Python 3.9-3.14).
+    # (Source {develop,main} x PythonQwt {pypi, <fix>} x mode x Python 3.10-3.14).
     # Produces a console summary + an aggregated Markdown report in runs\.
     [switch] $Matrix,
 
@@ -233,12 +236,13 @@ if (-not $Config.ContainsKey('PythonPaths')) {
     throw "Config '$ConfigPath' must define a 'PythonPaths' hashtable (version -> python.exe)."
 }
 # Import-PowerShellDataFile returns an UNORDERED hashtable: re-sort the keys by
-# version so that "all" / the matrix iterate 3.9 -> 3.14 deterministically.
+# version so that "all" / the matrix iterate 3.10 -> 3.14 deterministically.
 $PythonPaths = [ordered]@{}
 foreach ($key in ($Config.PythonPaths.Keys | Sort-Object { [version]$_ })) {
     $PythonPaths[$key] = $Config.PythonPaths[$key]
 }
-$AllVersions = @($PythonPaths.Keys)
+$SupportedPythonVersions = @('3.10', '3.11', '3.12', '3.13', '3.14')
+$AllVersions = @($PythonPaths.Keys | Where-Object { $_ -in $SupportedPythonVersions })
 
 # requirements.txt: explicit -RequirementsPath wins, else the config override,
 # else <repo>\requirements.txt (resolved relative to the script location).
@@ -383,7 +387,22 @@ if (-not $PSBoundParameters.ContainsKey('Branch') -and $Source -in @('develop', 
 }
 if (-not $Matrix -and -not $PSBoundParameters.ContainsKey('PythonVersion')) {
     $PythonVersion = Select-FromMenu -Title 'Python version:' `
-        -Options @('3.9', '3.10', '3.11', '3.12', '3.13', '3.14', 'all') -Default '3.11'
+        -Options ($SupportedPythonVersions + @('all')) -Default '3.11'
+}
+if ($PythonVersion -eq '3.9' -and (
+        $Matrix -or -not (
+            $TagCombos.Contains($Source) -or (
+                $Source -eq 'pypi' -and
+                -not [string]::IsNullOrWhiteSpace($DataLabVersion) -and
+                $DataLabVersion -notmatch '\*'
+            )
+        ))) {
+    throw ('Python 3.9 is reserved for a pinned historical release: use ' +
+        '-Source <historical tag> or -Source pypi -DataLabVersion <version>. ' +
+        'Current branches, floating PyPI installs and matrix mode require Python 3.10 or later.')
+}
+if (($Matrix -or $PythonVersion -eq 'all') -and $AllVersions.Count -eq 0) {
+    throw "No supported Python interpreter is configured. Add Python 3.10-3.14 to '$ConfigPath'."
 }
 if (-not $Matrix -and -not $PSBoundParameters.ContainsKey('DeleteVenv')) {
     $delChoice = Select-FromMenu -Title 'Delete the venv(s) at the end of the run?' `
@@ -561,9 +580,15 @@ function Invoke-DataLabTestRun {
         Invoke-Step -Title '2. Upgrading pip' -Exe $venvPy `
             -Arguments @('-m', 'pip', 'install', '--upgrade', 'pip') | Out-Null
 
-        # 3. Install DataLab's dependencies
-        Invoke-Step -Title '3. Installing dependencies (requirements.txt)' -Exe $venvPy `
-            -Arguments @('-m', 'pip', 'install', '-r', $RequirementsPath) | Out-Null
+        # Historical releases must resolve their own dependencies, not today's.
+        if ($PyVersion -eq '3.9') {
+            Invoke-Step -Title '3. Installing pytest for a historical release' -Exe $venvPy `
+                -Arguments @('-m', 'pip', 'install', 'pytest') | Out-Null
+        }
+        else {
+            Invoke-Step -Title '3. Installing dependencies (requirements.txt)' -Exe $venvPy `
+                -Arguments @('-m', 'pip', 'install', '-r', $RequirementsPath) | Out-Null
+        }
 
         # 4. Install DataLab (+ Sigima in develop mode)
         if ($Source -eq 'pypi') {
@@ -1113,6 +1138,9 @@ $versionsToRun = if ($PythonVersion -eq 'all') { $AllVersions } else { @($Python
 
 # Pre-validate the interpreters to fail early.
 foreach ($v in $versionsToRun) {
+    if (-not $PythonPaths.Contains($v)) {
+        throw "No Python interpreter is configured for $v. Add its path to '$ConfigPath'."
+    }
     if (-not (Test-Path -LiteralPath $PythonPaths[$v])) {
         throw "Python interpreter not found for $v : $($PythonPaths[$v])"
     }

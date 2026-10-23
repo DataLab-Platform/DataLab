@@ -255,41 +255,6 @@ def test_real_distribution_entry_point_is_discovered(
         sys.modules.pop(module_name, None)
 
 
-def test_python39_entry_point_mapping_is_supported(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    """The Python 3.9 mapping-shaped entry-point API remains supported."""
-    plugin_class = create_plugin_class(
-        "Python39Plugin",
-        "python39_plugin",
-        plugin_id="org.example.python39",
-        display_name="Python 3.9 plugin",
-    )
-    PluginRegistry.clear_plugin_classes()
-
-    class EntryPoint:
-        """Minimal mapping entry-point value."""
-
-        name = "python39-plugin"
-        value = "python39_plugin:Python39Plugin"
-
-        @staticmethod
-        def load() -> type[PluginBase]:
-            """Return the Python 3.9 plugin class."""
-            return plugin_class
-
-    monkeypatch.setattr(
-        "datalab.plugins.base.importlib_metadata.entry_points",
-        lambda: {"datalab.plugins": [EntryPoint()]},
-    )
-    monkeypatch.setattr("datalab.plugins.base.pkgutil.iter_modules", lambda: [])
-    monkeypatch.setattr(Conf.plugins_enabled, "get", lambda: True)
-
-    discover_plugins()
-
-    assert PluginRegistry.get_plugin_classes() == [plugin_class]
-
-
 def test_shared_entry_point_module_is_reloaded_once(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

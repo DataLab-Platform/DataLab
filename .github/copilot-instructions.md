@@ -19,7 +19,7 @@ This document provides comprehensive guidance for AI coding agents working on th
 
 ### Technology Stack
 
-- **Python**: 3.9+ (using `from __future__ import annotations`)
+- **Python**: 3.10+ (using `from __future__ import annotations`)
 - **Core Libraries**: NumPy (>=1.22), SciPy (>=1.10.1), scikit-image (>=0.19.2), OpenCV (optional)
 - **GUI**: Qt via PlotPy (>=2.8.2) and guidata (>=3.13.4)
 - **Computation**: Sigima (>=1.1.2) - separate package

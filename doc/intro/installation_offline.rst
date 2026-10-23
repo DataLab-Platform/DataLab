@@ -20,7 +20,7 @@ Offline installation via pip
 
 :octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`Windows` :bdg-info-line:`macOS`
 
-This method works on **any operating system** with **Python 3.9 to 3.14**.
+This method works on **any operating system** with **Python 3.10 to 3.14**.
 It assumes you have an online machine available to download packages, and a separate
 offline machine where DataLab will be installed.
 
@@ -31,7 +31,7 @@ Offline machine
 ^^^^^^^^^^^^^^^
 
 - GNU/Linux, Windows, or macOS
-- Python 3.9 to 3.14 installed with the **same major version** as the online machine
+- Python 3.10 to 3.14 installed with the **same major version** as the online machine
 - No assumptions regarding installed packages
 
 .. important::

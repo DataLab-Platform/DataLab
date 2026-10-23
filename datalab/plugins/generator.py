@@ -195,7 +195,7 @@ description = {_toml_string(project.description)}
 readme = "README.md"
 license = "{project.license_id}"
 license-files = ["LICENSE"]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = ["{requirement}"]
 keywords = ["datalab", "datalab-plugin"]
 {urls}
@@ -213,7 +213,7 @@ pythonpath = ["src"]
 
 [tool.ruff]
 line-length = 88
-target-version = "py39"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]

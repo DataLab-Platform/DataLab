@@ -134,7 +134,7 @@ def test_inspection_checks_python_requirement() -> None:
 
 @pytest.mark.parametrize(
     ("tag", "python_version"),
-    [("cp313", "3.9"), ("py312", "3.11"), ("py2", "3.11"), ("cp39", "3.11")],
+    [("cp313", "3.10"), ("py312", "3.11"), ("py2", "3.11"), ("cp39", "3.11")],
 )
 def test_inspection_rejects_wheels_built_for_another_python(
     tag: str, python_version: str
@@ -232,14 +232,12 @@ def test_inspection_treats_invalid_host_version_as_unavailable() -> None:
         )
 
 
-def test_inspection_rejects_stdlib_names_without_stdlib_module_list(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    """Python 3.9 has no ``sys.stdlib_module_names``: modules are located."""
-    monkeypatch.delattr(sys, "stdlib_module_names", raising=False)
-    data = make_plugin_wheel(top_level="json\n")
+@pytest.mark.parametrize("name", ["json", "os", "sys"])
+def test_inspection_rejects_stdlib_names(name: str) -> None:
+    """Standard-library packages cannot be replaced by an installed plugin."""
+    data = make_plugin_wheel(top_level=f"{name}\n")
 
-    with pytest.raises(WheelInspectionError, match="reserved package: 'json'"):
+    with pytest.raises(WheelInspectionError, match=f"reserved package: '{name}'"):
         inspect(data)
     assert inspect(make_plugin_wheel())["top_level_packages"] == [
         "example_datalab_plugin"

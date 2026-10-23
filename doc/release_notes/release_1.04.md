@@ -2,6 +2,11 @@
 
 ## DataLab Version 1.4.0 ##
 
+### Requirements ###
+
+* The Python package and newly generated plugin projects now require Python 3.10 or later. Python 3.9 users must keep an earlier compatible release. The standalone application continues to include its own Python interpreter.
+* The Windows test runner excludes Python 3.9 from current matrices, while retaining explicit tests of pinned historical releases.
+
 ### ✨ New Features ###
 
 **Welcome page:**

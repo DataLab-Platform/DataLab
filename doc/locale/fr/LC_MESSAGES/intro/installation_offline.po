@@ -30,8 +30,8 @@ msgstr "Installation hors ligne via pip"
 msgid ":octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`Windows` :bdg-info-line:`macOS`"
 msgstr ":octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`Windows` :bdg-info-line:`macOS`"
 
-msgid "This method works on **any operating system** with **Python 3.9 to 3.14**. It assumes you have an online machine available to download packages, and a separate offline machine where DataLab will be installed."
-msgstr "Cette méthode fonctionne sur **tout système d'exploitation** avec **Python 3.9 à 3.14**. Elle suppose que vous disposez d'une machine en ligne pour télécharger les paquets, et d'une machine hors ligne distincte où DataLab sera installé."
+msgid "This method works on **any operating system** with **Python 3.10 to 3.14**. It assumes you have an online machine available to download packages, and a separate offline machine where DataLab will be installed."
+msgstr "Cette méthode fonctionne sur **tout système d'exploitation** avec **Python 3.10 à 3.14**. Elle suppose que vous disposez d'une machine en ligne pour télécharger les paquets, et d'une machine hors ligne distincte où DataLab sera installé."
 
 msgid "Requirements"
 msgstr "Prérequis"
@@ -42,8 +42,8 @@ msgstr "Machine hors ligne"
 msgid "GNU/Linux, Windows, or macOS"
 msgstr "GNU/Linux, Windows ou macOS"
 
-msgid "Python 3.9 to 3.14 installed with the **same major version** as the online machine"
-msgstr "Python 3.9 à 3.14 installé avec la **même version majeure** que la machine en ligne"
+msgid "Python 3.10 to 3.14 installed with the **same major version** as the online machine"
+msgstr "Python 3.10 à 3.14 installé avec la **même version majeure** que la machine en ligne"
 
 msgid "No assumptions regarding installed packages"
 msgstr "Aucune hypothèse concernant les paquets installés"

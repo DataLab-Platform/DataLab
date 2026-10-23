@@ -17,8 +17,9 @@
     # matrix modes iterate over the versions listed here, in ascending order).
     #
     # The example paths below point to WinPython distributions; adapt them.
+    # For an explicitly pinned historical release only, optionally add a '3.9'
+    # entry. It is never included in the current "all" or matrix selections.
     PythonPaths = @{
-        '3.9'  = 'C:\path\to\python.exe'
         '3.10' = 'C:\path\to\python.exe'
         '3.11' = 'C:\path\to\python.exe'
         '3.12' = 'C:\path\to\python.exe'

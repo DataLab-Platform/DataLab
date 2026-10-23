@@ -310,7 +310,7 @@ For the public catalog, publish the unchanged file as a named GitHub release ass
      - version: "1.0.0"
        filename: datalab_spectroscopy.py
        sha256: <SHA-256 of the released file>
-       requires_python: ">=3.9"
+       requires_python: ">=3.10"
 
 The public catalog verifies and mirrors the script under ``modules/<sha256>/...``. To use that published catalog offline, copy its JSON and complete relative tree, including both ``modules`` and ``wheels`` when present. Do not rebuild an unchanged mirror whose artifacts are in these subdirectories: the local authoring commands scan the root. Source URLs, revision checks, withdrawals and local-catalog priority follow the same rules for both formats. Module entries target Desktop only, not DataLab-Web or PyPI.
 
@@ -924,7 +924,7 @@ To try the plugin, add the generated directory as a plugin directory (see :ref:`
   python -m pytest
   python -m ruff check .
 
-The generated ``pyproject.toml`` requires the current DataLab major version (for example ``datalab-platform >= 1.4, < 2``) and declares the project URLs when the GitHub account is known. The generated ``.github/workflows/release.yml`` publishes the plugin without any PyPI account: pushing a tag such as ``v0.1.0`` builds the wheel, checks that the tag matches the package version, attaches the wheel to a GitHub release, and prints the entry to submit to the `DataLab plugin catalog <https://github.com/DataLab-Platform/plugins>`_, including the SHA-256 digest of the wheel. Users then install the wheel with **Plugins > Configure plugins... > Install plugins** (see :ref:`plugin_install_from_file`). Listing the plugin in the catalog is optional; once listed, it can also be installed from the **Available plugins** tab (see :ref:`plugin_catalog`).
+The generated ``pyproject.toml`` requires Python 3.10 or later and the current DataLab major version (for example ``datalab-platform >= 1.4, < 2``), and declares the project URLs when the GitHub account is known. The generated ``.github/workflows/release.yml`` publishes the plugin without any PyPI account: pushing a tag such as ``v0.1.0`` builds the wheel, checks that the tag matches the package version, attaches the wheel to a GitHub release, and prints the entry to submit to the `DataLab plugin catalog <https://github.com/DataLab-Platform/plugins>`_, including the SHA-256 digest of the wheel. Users then install the wheel with **Plugins > Configure plugins... > Install plugins** (see :ref:`plugin_install_from_file`). Listing the plugin in the catalog is optional; once listed, it can also be installed from the **Available plugins** tab (see :ref:`plugin_catalog`).
 
 How to develop a plugin?
 ------------------------

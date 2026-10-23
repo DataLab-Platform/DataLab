@@ -1207,11 +1207,7 @@ def _find_package_desktop_module(package_name: str) -> str | None:
 
 def _get_plugin_entry_points() -> list[importlib_metadata.EntryPoint]:
     """Return installed DataLab plugin entry points in deterministic order."""
-    entry_points = importlib_metadata.entry_points()
-    if hasattr(entry_points, "select"):
-        selected = entry_points.select(group=PLUGIN_ENTRY_POINT_GROUP)
-    else:  # Python 3.9 compatibility
-        selected = entry_points.get(PLUGIN_ENTRY_POINT_GROUP, ())
+    selected = importlib_metadata.entry_points().select(group=PLUGIN_ENTRY_POINT_GROUP)
     return sorted(
         selected, key=lambda entry_point: (entry_point.name, entry_point.value)
     )
