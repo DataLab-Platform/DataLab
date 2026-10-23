@@ -5,18 +5,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-22 22:19+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
-"Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.18.0\n"
 
 msgid "Plugin system for DataLab, the open-source scientific data analysis and visualization platform"
 msgstr "Système de plugins de DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
@@ -632,6 +625,12 @@ msgstr "DataLab modifie :attr:`~datalab.plugins.instruments.PluginInstrument.set
 
 msgid "DataLab creates the instrument once per tool and keeps it until the plugins are reloaded, so the settings remain from one opening to the next."
 msgstr "DataLab crée l'instrument une seule fois par outil et le conserve jusqu'au rechargement des plugins : les réglages sont ainsi conservés d'une ouverture à l'autre."
+
+msgid "DataLab Desktop calls the instrument outside the user interface thread, one call at a time, even when its window is closed and opened again while a call is running, and changes its settings only between two calls: a slow instrument, such as a device waiting for its data, does not freeze DataLab. The optional :meth:`~datalab.plugins.instruments.PluginInstrument.open` and :meth:`~datalab.plugins.instruments.PluginInstrument.close` methods are called when the window opens and closes, including when plugins are reloaded or DataLab quits, for example to connect to a device and to release it. If ``open`` raises an error, its message stays in the window and the instrument is not called: the next refresh or acquisition, for example after a settings change, calls ``open`` again first. ``close`` is called even if ``open`` failed, and must release only what is still held. Data received by the instrument in its own threads, such as device events, is kept by the instrument for its next ``preview`` or ``acquire`` call."
+msgstr "DataLab Desktop appelle l'instrument en dehors du fil d'exécution de l'interface utilisateur, un appel à la fois, même lorsque sa fenêtre est fermée puis rouverte pendant un appel, et ne modifie ses réglages qu'entre deux appels : un instrument lent, comme un appareil attendant ses données, ne fige pas DataLab. Les méthodes facultatives :meth:`~datalab.plugins.instruments.PluginInstrument.open` et :meth:`~datalab.plugins.instruments.PluginInstrument.close` sont appelées à l'ouverture et à la fermeture de la fenêtre, y compris lors du rechargement des plugins ou de la fermeture de DataLab, par exemple pour se connecter à un appareil puis le libérer. Si ``open`` lève une erreur, son message reste affiché dans la fenêtre et l'instrument n'est pas appelé : le rafraîchissement ou l'acquisition suivant, par exemple après une modification des réglages, appelle d'abord ``open`` à nouveau. ``close`` est appelée même si ``open`` a échoué, et ne doit libérer que ce qui est encore détenu. Les données reçues par l'instrument dans ses propres fils d'exécution, comme les événements d'un appareil, sont conservées par l'instrument jusqu'à son prochain appel de ``preview`` ou ``acquire``."
+
+msgid "Instrument connectors should attach an ``experimental_source`` metadata entry to acquired objects before returning them; DataLab does not fill it automatically. Use Sigima's ``make_experimental_source`` and ``set_experimental_source`` helpers to record the device address, attribute, selection and timestamps as appropriate. This identifies the measurement origin, not a reproducible acquisition. See the `Sigima experimental data guide <https://sigima.readthedocs.io/en/latest/user_guide/overview.html#experimental-data-origin>`_ for an example and the portable metadata format."
+msgstr "Les connecteurs d'instruments doivent attacher une entrée de métadonnées ``experimental_source`` aux objets acquis avant de les renvoyer ; DataLab ne la remplit pas automatiquement. Utilisez les fonctions ``make_experimental_source`` et ``set_experimental_source`` de Sigima pour enregistrer, selon le cas, l'adresse de l'appareil, l'attribut, la sélection et les horodatages. Cela identifie l'origine de la mesure, pas une acquisition reproductible. Le `guide des données expérimentales de Sigima <https://sigima.readthedocs.io/en/latest/user_guide/overview.html#experimental-data-origin>`_ fournit un exemple et décrit le format portable des métadonnées."
 
 msgid "DataLab-Web supports tools too: it lists them in the same places, opens instruments in the same window, and calls launchers in the plugin's Pyodide host."
 msgstr "DataLab-Web prend aussi en charge les outils : il les liste aux mêmes endroits, ouvre les instruments dans la même fenêtre et appelle les lanceurs dans l'hôte Pyodide du plugin."
@@ -1579,11 +1578,26 @@ msgstr "Instrument ouvert par un outil de plugin."
 msgid "DataLab writes the edited values into :attr:`settings` before calling :meth:`preview` or :meth:`acquire`. Both methods raise ``ValueError`` with a user-facing message when the settings cannot be used. The plugin keeps one instance per tool during the session, so settings are kept from one opening to the next."
 msgstr "DataLab écrit les valeurs modifiées dans :attr:`settings` avant d'appeler :meth:`preview` ou :meth:`acquire`. Les deux méthodes lèvent ``ValueError`` avec un message destiné à l'utilisateur lorsque les réglages ne peuvent pas être utilisés. Le plugin conserve une instance par outil pendant la session : les réglages sont ainsi conservés d'une ouverture à l'autre."
 
+msgid "DataLab calls :meth:`open` when the instrument window opens and :meth:`close` when it closes (including when the plugin is reloaded or DataLab quits). It calls these methods, :meth:`preview` and :meth:`acquire` one at a time, outside the GUI thread, even when the window is closed and opened again while a call is running, and writes :attr:`settings` only between two calls: a slow instrument does not freeze DataLab. Data received by the instrument in its own threads (e.g. device events) must be stored for the next :meth:`preview` or :meth:`acquire` call."
+msgstr "DataLab appelle :meth:`open` à l'ouverture de la fenêtre de l'instrument et :meth:`close` à sa fermeture (y compris lorsque le plugin est rechargé ou que DataLab se ferme). Il appelle ces méthodes, :meth:`preview` et :meth:`acquire` une à la fois, en dehors du fil d'exécution de l'interface graphique, même lorsque la fenêtre est fermée puis rouverte pendant un appel, et ne modifie :attr:`settings` qu'entre deux appels : un instrument lent ne fige pas DataLab. Les données reçues par l'instrument dans ses propres fils d'exécution (par exemple les événements d'un appareil) doivent être conservées jusqu'au prochain appel de :meth:`preview` ou :meth:`acquire`."
+
 msgid "instrument settings, edited by DataLab"
 msgstr "réglages de l'instrument, modifiés par DataLab"
 
 msgid "Interval between two frames in live mode, in milliseconds"
 msgstr "Intervalle entre deux images en mode direct, en millisecondes"
+
+msgid "Prepare the instrument when its window opens (e.g. connect to it)."
+msgstr "Préparer l'instrument à l'ouverture de sa fenêtre (par exemple s'y connecter)."
+
+msgid "Raises ``ValueError`` with a user-facing message if the instrument cannot be used: DataLab shows this message, and does not call :meth:`preview` or :meth:`acquire` until a new request (e.g. after a settings change) opens the instrument successfully. Does nothing by default."
+msgstr "Lève ``ValueError`` avec un message destiné à l'utilisateur si l'instrument ne peut pas être utilisé : DataLab affiche ce message, et n'appelle pas :meth:`preview` ou :meth:`acquire` tant qu'une nouvelle demande (par exemple après une modification des réglages) n'a pas ouvert l'instrument avec succès. Ne fait rien par défaut."
+
+msgid "Release the instrument when its window closes (e.g. disconnect)."
+msgstr "Libérer l'instrument à la fermeture de sa fenêtre (par exemple s'en déconnecter)."
+
+msgid "Called even if :meth:`open` failed, and possibly several times: it must release only what is still held. Does nothing by default."
+msgstr "Appelée même si :meth:`open` a échoué, et éventuellement plusieurs fois : elle ne doit libérer que ce qui est encore détenu. Ne fait rien par défaut."
 
 msgid "Return a live frame for the current settings."
 msgstr "Renvoie une image en direct pour les réglages courants."

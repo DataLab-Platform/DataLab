@@ -792,6 +792,10 @@ DataLab edits :attr:`~datalab.plugins.instruments.PluginInstrument.settings` in 
 
 DataLab creates the instrument once per tool and keeps it until the plugins are reloaded, so the settings remain from one opening to the next.
 
+DataLab Desktop calls the instrument outside the user interface thread, one call at a time, even when its window is closed and opened again while a call is running, and changes its settings only between two calls: a slow instrument, such as a device waiting for its data, does not freeze DataLab. The optional :meth:`~datalab.plugins.instruments.PluginInstrument.open` and :meth:`~datalab.plugins.instruments.PluginInstrument.close` methods are called when the window opens and closes, including when plugins are reloaded or DataLab quits, for example to connect to a device and to release it. If ``open`` raises an error, its message stays in the window and the instrument is not called: the next refresh or acquisition, for example after a settings change, calls ``open`` again first. ``close`` is called even if ``open`` failed, and must release only what is still held. Data received by the instrument in its own threads, such as device events, is kept by the instrument for its next ``preview`` or ``acquire`` call.
+
+Instrument connectors should attach an ``experimental_source`` metadata entry to acquired objects before returning them; DataLab does not fill it automatically. Use Sigima's ``make_experimental_source`` and ``set_experimental_source`` helpers to record the device address, attribute, selection and timestamps as appropriate. This identifies the measurement origin, not a reproducible acquisition. See the `Sigima experimental data guide <https://sigima.readthedocs.io/en/latest/user_guide/overview.html#experimental-data-origin>`_ for an example and the portable metadata format.
+
 DataLab-Web supports tools too: it lists them in the same places, opens instruments in the same window, and calls launchers in the plugin's Pyodide host.
 
 Welcome page tiles

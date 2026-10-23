@@ -68,7 +68,6 @@ class H5InputOutput:
 
     def __init__(self, mainwindow: DLMainWindow) -> None:
         self.mainwindow = mainwindow
-        self.uint32_wng: bool = None
         #: True when the user was already told, for the current opening, that
         #: the provenance of appended workspaces is not imported (no repeat).
         self.append_informed = False
@@ -273,29 +272,36 @@ class H5InputOutput:
         obj = node.get_native_object()
         if obj is None:
             return
-        self.uint32_wng = self.uint32_wng or node.uint32_wng
         if isinstance(obj, SignalObj):
             self.mainwindow.signalpanel.add_object(obj)
         else:
             self.mainwindow.imagepanel.add_object(obj)
-
-    def __eventually_show_warnings(self) -> None:
-        """Eventually show warnings after everything is imported"""
-        if self.uint32_wng:
-            QW.QMessageBox.warning(
-                self.mainwindow, _("Warning"), _("Clipping uint32 data to int32.")
-            )
 
     def import_files(
         self, filenames: list[str], import_all: bool, reset_all: bool
     ) -> None:
         """Import HDF5 files"""
         h5browser = H5BrowserDialog(self.mainwindow)
+        try:
+            self.__import_files_from_browser(
+                h5browser, filenames, import_all, reset_all
+            )
+        finally:
+            # Close the HDF5 files, even if an import error is raised
+            h5browser.cleanup()
+
+    def __import_files_from_browser(
+        self,
+        h5browser: H5BrowserDialog,
+        filenames: list[str],
+        import_all: bool,
+        reset_all: bool,
+    ) -> None:
+        """Open HDF5 files in browser, then import the selected datasets"""
         for filename in filenames:
             with qt_try_loadsave_file(self.mainwindow, filename, "load"):
                 h5browser.open_file(filename)
         if h5browser.is_empty():
-            h5browser.cleanup()
             if not execenv.unattended:
                 QW.QMessageBox.warning(
                     self.mainwindow,
@@ -314,27 +320,52 @@ class H5InputOutput:
             if nodes is not None:
                 if reset_all:
                     self.mainwindow.reset_all()
+                errors: list[str] = []
                 with qt_try_loadsave_file(self.mainwindow, "*.h5", "load"):
                     with create_progress_bar(self.mainwindow, "", len(nodes)) as prog:
-                        self.uint32_wng = False
                         for idx, node in enumerate(nodes):
                             prog.setLabelText(self.__progbartitle(node.h5file.filename))
                             prog.setValue(idx + 1)
                             QW.QApplication.processEvents()
                             if prog.wasCanceled():
                                 break
-                            self.__add_object_from_node(node)
-                self.__eventually_show_warnings()
-        h5browser.cleanup()
+                            try:
+                                self.__add_object_from_node(node)
+                            except Exception as exc:  # pylint: disable=broad-except
+                                # Data of third-party files: import the other
+                                # datasets, then report all errors at once
+                                errors.append(f"{node.id}: {exc}")
+                    self.__report_import_errors(errors)
+
+    def __report_import_errors(self, errors: list[str]) -> None:
+        """Report the datasets that could not be imported
+
+        Args:
+            errors: description of each error ("dataset: reason")
+
+        Raises:
+            ValueError: in unattended mode, if any dataset could not be imported
+        """
+        if not errors:
+            return
+        if execenv.unattended:
+            raise ValueError("\n".join(errors))
+        shown = errors[:10]
+        if len(errors) > len(shown):
+            shown.append(_("... and %d more") % (len(errors) - len(shown)))
+        QW.QMessageBox.warning(
+            self.mainwindow,
+            _("Warning"),
+            _("Some datasets could not be imported:") + "\n\n" + "\n".join(shown),
+        )
 
     def import_dataset_from_file(self, filename: str, dsetname: str) -> None:
         """Import dataset from HDF5 file"""
         h5importer = H5Importer(filename)
         try:
             node = h5importer.get(dsetname)
-            self.uint32_wng = False
             self.__add_object_from_node(node)
-            self.__eventually_show_warnings()
         except KeyError as exc:
             raise KeyError(f"Dataset not found: {dsetname}") from exc
-        h5importer.close()
+        finally:
+            h5importer.close()

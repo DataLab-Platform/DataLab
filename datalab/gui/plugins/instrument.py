@@ -4,13 +4,20 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+import logging
+import queue
+import threading
+import time
+from concurrent.futures import Future
+from concurrent.futures import wait as wait_futures
+from typing import TYPE_CHECKING, Callable, Iterable
 
 from guidata.configtools import get_icon
 from guidata.dataset.qtwidgets import DataSetEditLayout
 from guidata.qthelpers import win32_fix_title_bar_background
 from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
+from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj
 from sigimax.adapters_plotpy.objects.signal import CURVESTYLES
@@ -27,26 +34,97 @@ if TYPE_CHECKING:
         PluginInstrument,
     )
 
-__all__ = ["InstrumentWindow"]
+__all__ = ["InstrumentWindow", "SerialWorker", "wait_instruments_closed"]
+
+
+def wait_instruments_closed(
+    closings: Iterable[tuple[str, Future]], timeout: float
+) -> list[str]:
+    """Wait for instruments being closed, within a common time limit.
+
+    Args:
+        closings: title of each instrument, with the call closing it
+        timeout: maximum waiting time for all instruments (s)
+
+    Returns:
+        Titles of the instruments that were not closed in time
+    """
+    closings = list(closings)
+    _done, not_done = wait_futures([future for _title, future in closings], timeout)
+    return [title for title, future in closings if future in not_done]
+
+
+class SerialWorker:
+    """Run calls one at a time in a daemon thread.
+
+    Unlike a thread pool, a call stuck in third-party code does not prevent
+    DataLab from quitting.
+    """
+
+    def __init__(self) -> None:
+        self._queue: queue.SimpleQueue = queue.SimpleQueue()
+        thread = threading.Thread(target=self._run, name="instrument", daemon=True)
+        thread.start()
+
+    def submit(self, func: Callable, *args) -> Future:
+        """Schedule a call and return its future."""
+        future: Future = Future()
+        self._queue.put((future, func, args))
+        return future
+
+    def shutdown(self) -> None:
+        """Stop the thread once the scheduled calls are done."""
+        self._queue.put(None)
+
+    def _run(self) -> None:
+        """Run scheduled calls until shutdown."""
+        while True:
+            item = self._queue.get()
+            if item is None:
+                return
+            future, func, args = item
+            if future.set_running_or_notify_cancel():
+                try:
+                    future.set_result(func(*args))
+                except BaseException as exc:  # pylint: disable=broad-except
+                    future.set_exception(exc)
 
 
 class InstrumentWindow(QW.QDialog):
     """Live view of a plugin instrument, next to its settings.
 
     The view is refreshed when settings change, and periodically in live mode.
-    Each acquisition is added to the workspace in a new group.
+    Each acquisition is added to the workspace in a new group. The instrument is
+    opened with the window and closed with it; if opening it fails, the reason
+    is shown, and it is opened again before the next call. Its methods are
+    called one at a time in a worker thread: a request made while a call is
+    running is done next (an acquisition before a refresh, repeated refreshes
+    only once).
 
     Args:
         main: DataLab main window
         instrument: instrument opened by a plugin tool
         title: window title
+        executor: worker running the calls of the instrument, shared by the
+         successive windows of the instrument so that a window opened again runs
+         its calls after those of the closed one (default: a worker of its own,
+         stopped when the window is closed)
     """
 
     #: Delay between a settings change and the refresh of the view (ms)
     REFRESH_DELAY = 150
 
+    #: Maximum time DataLab waits for an instrument to close (s)
+    CLOSE_TIMEOUT = 5.0
+
+    SIG_CALL_DONE = QC.Signal(str, object, object)
+
     def __init__(
-        self, main: DLMainWindow, instrument: PluginInstrument, title: str
+        self,
+        main: DLMainWindow,
+        instrument: PluginInstrument,
+        title: str,
+        executor: SerialWorker | None = None,
     ) -> None:
         super().__init__(main)
         win32_fix_title_bar_background(self)
@@ -59,6 +137,13 @@ class InstrumentWindow(QW.QDialog):
         self._plot_kind: str | None = None
         self._plot_signature: tuple | None = None
         self._value_range: tuple[float, float] | None = None
+        self._owns_executor = executor is None
+        self._executor = SerialWorker() if executor is None else executor
+        self._busy = False
+        self._opened = False
+        self._pending: str | None = None
+        self._close_future: Future | None = None
+        self.SIG_CALL_DONE.connect(self._call_done)
 
         splitter = QW.QSplitter(QC.Qt.Horizontal)
         self._stage = QW.QWidget()
@@ -132,7 +217,121 @@ class InstrumentWindow(QW.QDialog):
             min(self.width(), screen.width()), min(self.height(), screen.height())
         )
         splitter.setSizes([650, 450])
-        self._refresh_timer.start(0)
+        # The first view is requested once the instrument is opened (filling the
+        # settings editor reported changes, which do not need another view)
+        self._refresh_timer.stop()
+        self._busy = True
+        self._pending = "preview"
+        self._executor.submit(self._call, "open")
+
+    def _call(self, method: str) -> None:
+        """Call an instrument method (worker thread)."""
+        result, error = None, None
+        try:
+            result = getattr(self.instrument, method)()
+        except Exception as exc:  # pylint: disable=broad-except
+            # Instruments are third-party code: keep the window usable
+            error = exc
+            if method == "close":
+                logging.getLogger(__name__).exception("Closing instrument failed")
+        try:
+            self.SIG_CALL_DONE.emit(method, result, error)
+        except RuntimeError:
+            pass  # Window deleted after being closed
+
+    def _request(self, method: str) -> None:
+        """Call ``preview`` or ``acquire`` now, or after the running call.
+
+        If opening the instrument failed, it is opened again first."""
+        if self._close_future is not None:
+            return
+        if self._busy:
+            if self._pending != "acquire":
+                self._pending = method
+            return
+        if not self._apply_settings():
+            return
+        if not self._opened:
+            self._busy = True
+            self._pending = method
+            self._executor.submit(self._call, "open")
+            return
+        if method == "acquire":
+            self._live_timer.stop()
+            self.acquire_button.setEnabled(False)
+        self._busy = True
+        self._executor.submit(self._call, method)
+
+    def _call_done(self, method: str, result, error: Exception | None) -> None:
+        """Show the result of an instrument call, then make the pending one."""
+        if method == "close":
+            return
+        self._busy = False
+        if method == "acquire":
+            self.acquire_button.setEnabled(True)
+            # Live mode may have been switched off during the acquisition
+            if self.live_button.isChecked() and self._close_future is None:
+                self._live_timer.start()
+        if self._close_future is not None:
+            return
+        if method == "open":
+            self._opened = error is None
+        if error is not None:
+            self.status_label.setText(str(error))
+            if method == "open":
+                # Keep the reason in view: the instrument is not called until
+                # the next request opens it again (e.g. after a settings change)
+                self._pending = None
+                return
+        elif method == "preview":
+            self._show_frame(result)
+        elif method == "acquire":
+            self._add_acquired(result)
+        pending, self._pending = self._pending, None
+        if pending is not None:
+            self._request(pending)
+
+    def is_idle(self) -> bool:
+        """Return True if no instrument call is running, requested or scheduled."""
+        return not (
+            self._busy or self._pending is not None or self._refresh_timer.isActive()
+        )
+
+    def wait_until_idle(self, timeout: float = 10.0) -> bool:
+        """Process events until no instrument call is running or requested.
+
+        Args:
+            timeout: maximum waiting time (s)
+
+        Returns:
+            True if the window is idle, False on timeout
+        """
+        deadline = time.monotonic() + timeout
+        while not self.is_idle():
+            if time.monotonic() > deadline:
+                return False
+            QW.QApplication.processEvents()
+            time.sleep(0.005)
+        return True
+
+    def wait_closed(self, timeout: float = CLOSE_TIMEOUT) -> bool:
+        """Wait until the instrument is closed, after the window was closed.
+
+        Args:
+            timeout: maximum waiting time (s)
+
+        Returns:
+            True if the instrument is closed, False on timeout
+        """
+        if self._close_future is None:
+            return False
+        done, _not_done = wait_futures([self._close_future], timeout)
+        return bool(done)
+
+    @property
+    def close_future(self) -> Future | None:
+        """Call closing the instrument, once the window was closed (else None)"""
+        return self._close_future
 
     def child_title(self, item) -> str:
         """Supply the usual guidata title for nested editors."""
@@ -150,9 +349,20 @@ class InstrumentWindow(QW.QDialog):
             self._live_timer.stop()
 
     def stop(self) -> None:
-        """Stop refreshing the view."""
+        """Stop refreshing the view and close the instrument."""
         self._refresh_timer.stop()
         self._live_timer.stop()
+        if self._close_future is None:
+            self._pending = None
+            self._close_future = self._executor.submit(self._call, "close")
+            if self._owns_executor:
+                self._executor.shutdown()
+
+    def closeEvent(self, event: QG.QCloseEvent) -> None:  # pylint: disable=invalid-name
+        """Close the instrument, even if the window was never shown (Qt only
+        emits ``finished`` when a visible dialog is closed)."""
+        self.stop()
+        super().closeEvent(event)
 
     def _apply_settings(self) -> bool:
         """Write the edited values into the instrument settings."""
@@ -164,13 +374,13 @@ class InstrumentWindow(QW.QDialog):
 
     def refresh(self) -> None:
         """Show a live frame for the current settings."""
-        if not self._apply_settings():
-            return
+        self._request("preview")
+
+    def _show_frame(self, frame: InstrumentFrame) -> None:
+        """Draw a frame returned by the instrument."""
         try:
-            frame = self.instrument.preview()
             self.render(frame)
         except Exception as exc:  # pylint: disable=broad-except
-            # Instruments are third-party code: keep the window usable
             self.status_label.setText(str(exc))
             return
         self.status_label.clear()
@@ -240,20 +450,15 @@ class InstrumentWindow(QW.QDialog):
 
     def acquire(self) -> None:
         """Add an acquisition to the workspace, in a new group."""
-        if not self._apply_settings():
-            return
-        live = self._live_timer.isActive()
-        self._live_timer.stop()
+        self._request("acquire")
+
+    def _add_acquired(self, acquisition: InstrumentAcquisition) -> None:
+        """Add the objects acquired by the instrument to the workspace."""
         try:
-            acquisition = self.instrument.acquire()
             self.add_acquisition(acquisition)
         except Exception as exc:  # pylint: disable=broad-except
-            # Instruments are third-party code: keep the window usable
             self.status_label.setText(str(exc))
             return
-        finally:
-            if live:
-                self._live_timer.start()
         self.status_label.setText(
             _("%d objects added to group '%s'")
             % (len(acquisition.objects), acquisition.group_title)

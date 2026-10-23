@@ -94,6 +94,15 @@ class PluginInstrument(abc.ABC):
     keeps one instance per tool during the session, so settings are kept
     from one opening to the next.
 
+    DataLab calls :meth:`open` when the instrument window opens and
+    :meth:`close` when it closes (including when the plugin is reloaded or
+    DataLab quits). It calls these methods, :meth:`preview` and :meth:`acquire`
+    one at a time, outside the GUI thread, even when the window is closed and
+    opened again while a call is running, and writes :attr:`settings` only
+    between two calls: a slow instrument does not freeze DataLab. Data received
+    by the instrument in its own threads (e.g. device events) must be stored
+    for the next :meth:`preview` or :meth:`acquire` call.
+
     Args:
         settings: instrument settings, edited by DataLab
     """
@@ -105,6 +114,23 @@ class PluginInstrument(abc.ABC):
         if not isinstance(settings, gds.DataSet):
             raise TypeError("Instrument settings must be a guidata DataSet")
         self.settings = settings
+
+    def open(self) -> None:
+        """Prepare the instrument when its window opens (e.g. connect to it).
+
+        Raises ``ValueError`` with a user-facing message if the instrument
+        cannot be used: DataLab shows this message, and does not call
+        :meth:`preview` or :meth:`acquire` until a new request (e.g. after a
+        settings change) opens the instrument successfully. Does nothing by
+        default.
+        """
+
+    def close(self) -> None:
+        """Release the instrument when its window closes (e.g. disconnect).
+
+        Called even if :meth:`open` failed, and possibly several times: it must
+        release only what is still held. Does nothing by default.
+        """
 
     @abc.abstractmethod
     def preview(self) -> InstrumentFrame:

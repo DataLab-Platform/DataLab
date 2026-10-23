@@ -1076,6 +1076,12 @@ msgstr "Troncature de données uint32 en int32."
 msgid "No supported data available in HDF5 file(s)."
 msgstr "Aucune donnée prise en charge dans le(s) fichier(s) HDF5."
 
+msgid "... and %d more"
+msgstr "... et %d autres"
+
+msgid "Some datasets could not be imported:"
+msgstr "Certains jeux de données n'ont pas pu être importés :"
+
 msgid "A new object was loaded. Start a new history session?"
 msgstr "Un nouvel objet a été chargé. Démarrer une nouvelle session d'historique ?"
 
@@ -1325,8 +1331,8 @@ msgstr "Ouvrir une capsule"
 msgid "Open"
 msgstr "Ouvrir"
 
-msgid "HDF5 files (*.h5 *.hdf5 *.hdf *.he5);;All files (*)"
-msgstr "Fichiers HDF5 (*.h5 *.hdf5 *.hdf *.he5);;Tous les fichiers (*)"
+msgid "HDF5 files (*.h5 *.hdf5 *.hdf *.he5 *.nxs *.nx5);;All files (*)"
+msgstr "Fichiers HDF5 (*.h5 *.hdf5 *.hdf *.he5 *.nxs *.nx5);;Tous les fichiers (*)"
 
 #, python-format
 msgid "Open %d HDF5 files"

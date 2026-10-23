@@ -25,6 +25,7 @@ import os.path as osp
 import sys
 import time
 import traceback
+from concurrent.futures import Future
 from contextlib import ExitStack
 from datetime import datetime
 from typing import TYPE_CHECKING
@@ -75,7 +76,11 @@ from datalab.gui.h5io import (
 from datalab.gui.panel import base, history, image, macro, signal
 from datalab.gui.plugins.applications import ApplicationsDialog, get_plugin_icon
 from datalab.gui.plugins.config import PluginConfigDialog
-from datalab.gui.plugins.instrument import InstrumentWindow
+from datalab.gui.plugins.instrument import (
+    InstrumentWindow,
+    SerialWorker,
+    wait_instruments_closed,
+)
 from datalab.gui.processor.base import FeatureNotFoundError
 from datalab.gui.processor.preview import PreviewExecutorCache
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
@@ -172,6 +177,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.aiassistantpanel = None  # type: ignore[assignment]
         self.__applications_dialog: ApplicationsDialog | None = None
         self.__instrument_windows: dict[tuple[str, str], InstrumentWindow] = {}
+        #: Worker of each plugin instrument, shared by its successive windows
+        self.__instrument_workers: dict[tuple[str, str], SerialWorker] = {}
+        #: Title and closing call of the last closed window of each instrument
+        self.__instrument_closings: dict[tuple[str, str], tuple[str, Future]] = {}
         self.welcomepanel: WelcomePanel | None = None
 
         self.signalpanel_toolbar: QW.QToolBar | None = None
@@ -509,15 +518,18 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         title: str,
         panel: Literal["signal", "image"] | None = None,
         select: bool = False,
-    ) -> None:
+    ) -> str:
         """Add group to DataLab.
 
         Args:
             title: Group title
             panel: Panel name. Defaults to None.
             select: Select the group after creation. Defaults to False.
+
+        Returns:
+            UUID of the created group
         """
-        self.__get_datapanel(panel).add_group(title, select)
+        return get_uuid(self.__get_datapanel(panel).add_group(title, select))
 
     @remote_controlled
     def select_objects(
@@ -674,7 +686,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             self.remote_server.exception = exc
 
     @remote_controlled
-    def run_remote_command(self, command: Callable[..., object], *args) -> None:
+    def run_remote_command(
+        self, command: Callable[..., object], *args, return_result: bool = False
+    ) -> None:
         """Slot to run a command requested by a remote client in GUI thread.
 
         The exception raised by the command, if any, is stored in RemoteServer to
@@ -684,9 +698,13 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         Args:
             command: Main window method running the command
             args: Command arguments
+            return_result: If True, store the command result in RemoteServer, to be
+             returned to the client (it must be XML-RPC serializable)
         """
         try:
-            command(*args)
+            result = command(*args)
+            if return_result:
+                self.remote_server.result = result
         except Exception as exc:  # pylint: disable=broad-except
             self.remote_server.exception = exc
 
@@ -1143,11 +1161,24 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     def open_plugin_instrument(
         self, plugin: PluginBase, tool: PluginTool
     ) -> InstrumentWindow:
-        """Show the instrument window of a plugin tool, creating it if needed."""
+        """Show the instrument window of a plugin tool, creating it if needed.
+
+        The successive windows of an instrument share its worker: a window
+        opened again calls the instrument once the closed one has closed it.
+        """
         key = (plugin.plugin_id, tool.id)
         window = self.__instrument_windows.get(key)
+        if window is not None and window.close_future is not None:
+            # Closed while hidden: Qt did not emit `finished`, release it now
+            self.__forget_instrument_window(key)
+            window = None
         if window is None:
-            window = InstrumentWindow(self, plugin.get_instrument(tool.id), tool.title)
+            worker = self.__instrument_workers.get(key)
+            if worker is None:
+                worker = self.__instrument_workers[key] = SerialWorker()
+            window = InstrumentWindow(
+                self, plugin.get_instrument(tool.id), tool.title, worker
+            )
             window.finished.connect(
                 functools.partial(self.__forget_instrument_window, key)
             )
@@ -1158,15 +1189,33 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         return window
 
     def __forget_instrument_window(self, key: tuple[str, str], *_args) -> None:
-        """Release a closed instrument window."""
+        """Release a closed instrument window, keeping track of its instrument
+        until it is closed."""
         window = self.__instrument_windows.pop(key, None)
         if window is not None:
+            window.stop()
+            closing = (window.windowTitle(), window.close_future)
+            self.__instrument_closings[key] = closing
             window.deleteLater()
 
     def close_plugin_instruments(self) -> None:
-        """Close all plugin instrument windows."""
+        """Close all plugin instrument windows, and wait for their instruments,
+        including those of windows closed before, within a common time limit."""
         for window in list(self.__instrument_windows.values()):
             window.close()
+        # Windows that were not visible do not emit `finished` when closed
+        for key in list(self.__instrument_windows):
+            self.__forget_instrument_window(key)
+        timeout = InstrumentWindow.CLOSE_TIMEOUT
+        closings = self.__instrument_closings.values()
+        for title in wait_instruments_closed(closings, timeout):
+            logging.getLogger(__name__).warning(
+                "Instrument '%s' did not close within %g s", title, timeout
+            )
+        for worker in self.__instrument_workers.values():
+            worker.shutdown()
+        self.__instrument_workers.clear()
+        self.__instrument_closings.clear()
 
     def __unregister_plugins(self) -> None:
         """Unregister all plugins and let them cleanup their hooks"""
@@ -2272,7 +2321,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     self,
                     _("Open"),
                     Conf.base_dir.get(),
-                    _("HDF5 files (*.h5 *.hdf5 *.hdf *.he5);;All files (*)"),
+                    _(
+                        "HDF5 files (*.h5 *.hdf5 *.hdf *.he5 *.nxs *.nx5);;"
+                        "All files (*)"
+                    ),
                 )
             if not h5files:
                 return
