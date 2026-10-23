@@ -10,7 +10,8 @@ window closes the instrument once its running call is done, even if the window
 was never shown. A window opened again with the worker of a closed one calls
 the instrument once it is closed. Live mode switched off during an acquisition
 is not resumed after it. When opening the instrument fails, the reason stays in
-view and the instrument is opened again before the next call.
+view and the instrument is opened again before the next call. When DataLab
+closes, the instruments are waited for within a common time limit.
 """
 
 # guitest: show
@@ -18,6 +19,8 @@ view and the instrument is opened again before the next call.
 from __future__ import annotations
 
 import threading
+import time
+from concurrent.futures import Future
 
 import guidata.dataset as gds
 import numpy as np
@@ -25,7 +28,11 @@ from guidata.qthelpers import qt_app_context
 from qtpy import QtWidgets as QW
 from sigima.objects import create_signal
 
-from datalab.gui.plugins.instrument import InstrumentWindow, SerialWorker
+from datalab.gui.plugins.instrument import (
+    InstrumentWindow,
+    SerialWorker,
+    wait_instruments_closed,
+)
 from datalab.plugins.instruments import (
     InstrumentAcquisition,
     InstrumentFrame,
@@ -225,6 +232,16 @@ def test_open_failure_is_shown_and_retried() -> None:
         main.deleteLater()
 
 
+def test_instruments_close_within_common_time_limit() -> None:
+    """Instruments are waited for together: their time limits do not add up."""
+    closed: Future = Future()
+    closed.set_result(None)
+    closings = [("Stuck 1", Future()), ("Closed", closed), ("Stuck 2", Future())]
+    start = time.perf_counter()
+    assert wait_instruments_closed(closings, 0.5) == ["Stuck 1", "Stuck 2"]
+    assert time.perf_counter() - start < 0.9
+
+
 if __name__ == "__main__":
     test_slow_instrument_calls_are_serialized()
     test_close_waits_for_running_call()
@@ -232,3 +249,4 @@ if __name__ == "__main__":
     test_live_mode_after_acquisition()
     test_hidden_window_closes_instrument()
     test_open_failure_is_shown_and_retried()
+    test_instruments_close_within_common_time_limit()

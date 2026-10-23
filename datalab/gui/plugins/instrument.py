@@ -10,7 +10,7 @@ import threading
 import time
 from concurrent.futures import Future
 from concurrent.futures import wait as wait_futures
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING, Callable, Iterable
 
 from guidata.configtools import get_icon
 from guidata.dataset.qtwidgets import DataSetEditLayout
@@ -34,7 +34,24 @@ if TYPE_CHECKING:
         PluginInstrument,
     )
 
-__all__ = ["InstrumentWindow", "SerialWorker"]
+__all__ = ["InstrumentWindow", "SerialWorker", "wait_instruments_closed"]
+
+
+def wait_instruments_closed(
+    closings: Iterable[tuple[str, Future]], timeout: float
+) -> list[str]:
+    """Wait for instruments being closed, within a common time limit.
+
+    Args:
+        closings: title of each instrument, with the call closing it
+        timeout: maximum waiting time for all instruments (s)
+
+    Returns:
+        Titles of the instruments that were not closed in time
+    """
+    closings = list(closings)
+    _done, not_done = wait_futures([future for _title, future in closings], timeout)
+    return [title for title, future in closings if future in not_done]
 
 
 class SerialWorker:

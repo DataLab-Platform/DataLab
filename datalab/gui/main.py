@@ -26,7 +26,6 @@ import sys
 import time
 import traceback
 from concurrent.futures import Future
-from concurrent.futures import wait as wait_futures
 from contextlib import ExitStack
 from datetime import datetime
 from typing import TYPE_CHECKING
@@ -77,7 +76,11 @@ from datalab.gui.h5io import (
 from datalab.gui.panel import base, history, image, macro, signal
 from datalab.gui.plugins.applications import ApplicationsDialog, get_plugin_icon
 from datalab.gui.plugins.config import PluginConfigDialog
-from datalab.gui.plugins.instrument import InstrumentWindow, SerialWorker
+from datalab.gui.plugins.instrument import (
+    InstrumentWindow,
+    SerialWorker,
+    wait_instruments_closed,
+)
 from datalab.gui.processor.base import FeatureNotFoundError
 from datalab.gui.processor.preview import PreviewExecutorCache
 from datalab.gui.settings import AI_OPTION_NAMES, edit_settings
@@ -1197,20 +1200,18 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     def close_plugin_instruments(self) -> None:
         """Close all plugin instrument windows, and wait for their instruments,
-        including those of windows closed before."""
+        including those of windows closed before, within a common time limit."""
         for window in list(self.__instrument_windows.values()):
             window.close()
         # Windows that were not visible do not emit `finished` when closed
         for key in list(self.__instrument_windows):
             self.__forget_instrument_window(key)
-        for title, future in self.__instrument_closings.values():
-            done, _not_done = wait_futures([future], InstrumentWindow.CLOSE_TIMEOUT)
-            if not done:
-                logging.getLogger(__name__).warning(
-                    "Instrument '%s' did not close within %g s",
-                    title,
-                    InstrumentWindow.CLOSE_TIMEOUT,
-                )
+        timeout = InstrumentWindow.CLOSE_TIMEOUT
+        closings = self.__instrument_closings.values()
+        for title in wait_instruments_closed(closings, timeout):
+            logging.getLogger(__name__).warning(
+                "Instrument '%s' did not close within %g s", title, timeout
+            )
         for worker in self.__instrument_workers.values():
             worker.shutdown()
         self.__instrument_workers.clear()
