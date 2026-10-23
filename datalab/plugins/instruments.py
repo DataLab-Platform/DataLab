@@ -97,7 +97,8 @@ class PluginInstrument(abc.ABC):
     DataLab calls :meth:`open` when the instrument window opens and
     :meth:`close` when it closes (including when the plugin is reloaded or
     DataLab quits). It calls these methods, :meth:`preview` and :meth:`acquire`
-    one at a time, outside the GUI thread, and writes :attr:`settings` only
+    one at a time, outside the GUI thread, even when the window is closed and
+    opened again while a call is running, and writes :attr:`settings` only
     between two calls: a slow instrument does not freeze DataLab. Data received
     by the instrument in its own threads (e.g. device events) must be stored
     for the next :meth:`preview` or :meth:`acquire` call.

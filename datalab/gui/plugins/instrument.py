@@ -17,6 +17,7 @@ from guidata.dataset.qtwidgets import DataSetEditLayout
 from guidata.qthelpers import win32_fix_title_bar_background
 from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
+from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj
 from sigimax.adapters_plotpy.objects.signal import CURVESTYLES
@@ -33,10 +34,10 @@ if TYPE_CHECKING:
         PluginInstrument,
     )
 
-__all__ = ["InstrumentWindow"]
+__all__ = ["InstrumentWindow", "SerialWorker"]
 
 
-class _SerialWorker:
+class SerialWorker:
     """Run calls one at a time in a daemon thread.
 
     Unlike a thread pool, a call stuck in third-party code does not prevent
@@ -85,6 +86,10 @@ class InstrumentWindow(QW.QDialog):
         main: DataLab main window
         instrument: instrument opened by a plugin tool
         title: window title
+        executor: worker running the calls of the instrument, shared by the
+         successive windows of the instrument so that a window opened again runs
+         its calls after those of the closed one (default: a worker of its own,
+         stopped when the window is closed)
     """
 
     #: Delay between a settings change and the refresh of the view (ms)
@@ -96,7 +101,11 @@ class InstrumentWindow(QW.QDialog):
     SIG_CALL_DONE = QC.Signal(str, object, object)
 
     def __init__(
-        self, main: DLMainWindow, instrument: PluginInstrument, title: str
+        self,
+        main: DLMainWindow,
+        instrument: PluginInstrument,
+        title: str,
+        executor: SerialWorker | None = None,
     ) -> None:
         super().__init__(main)
         win32_fix_title_bar_background(self)
@@ -109,7 +118,8 @@ class InstrumentWindow(QW.QDialog):
         self._plot_kind: str | None = None
         self._plot_signature: tuple | None = None
         self._value_range: tuple[float, float] | None = None
-        self._executor = _SerialWorker()
+        self._owns_executor = executor is None
+        self._executor = SerialWorker() if executor is None else executor
         self._busy = False
         self._pending: str | None = None
         self._resume_live = False
@@ -282,6 +292,11 @@ class InstrumentWindow(QW.QDialog):
         done, _not_done = wait_futures([self._close_future], timeout)
         return bool(done)
 
+    @property
+    def close_future(self) -> Future | None:
+        """Call closing the instrument, once the window was closed (else None)"""
+        return self._close_future
+
     def child_title(self, item) -> str:
         """Supply the usual guidata title for nested editors."""
         return f"{self.windowTitle()} - {item.label()}"
@@ -304,7 +319,14 @@ class InstrumentWindow(QW.QDialog):
         if self._close_future is None:
             self._pending = None
             self._close_future = self._executor.submit(self._call, "close")
-            self._executor.shutdown()
+            if self._owns_executor:
+                self._executor.shutdown()
+
+    def closeEvent(self, event: QG.QCloseEvent) -> None:  # pylint: disable=invalid-name
+        """Close the instrument, even if the window was never shown (Qt only
+        emits ``finished`` when a visible dialog is closed)."""
+        self.stop()
+        super().closeEvent(event)
 
     def _apply_settings(self) -> bool:
         """Write the edited values into the instrument settings."""

@@ -6,7 +6,9 @@ Instrument window unit test
 
 Instrument calls run one at a time outside the GUI thread: a slow instrument
 does not freeze DataLab, repeated refresh requests are merged, and closing the
-window closes the instrument once its running call is done.
+window closes the instrument once its running call is done, even if the window
+was never shown. A window opened again with the worker of a closed one calls
+the instrument once it is closed.
 """
 
 # guitest: show
@@ -21,7 +23,7 @@ from guidata.qthelpers import qt_app_context
 from qtpy import QtWidgets as QW
 from sigima.objects import create_signal
 
-from datalab.gui.plugins.instrument import InstrumentWindow
+from datalab.gui.plugins.instrument import InstrumentWindow, SerialWorker
 from datalab.plugins.instruments import (
     InstrumentAcquisition,
     InstrumentFrame,
@@ -41,24 +43,30 @@ class SlowInstrument(PluginInstrument):
     def __init__(self) -> None:
         super().__init__(SlowSettings())
         self.calls: list[str] = []
+        self.threads: set[int] = set()
         self.running = threading.Event()
         self.release = threading.Event()
 
+    def _record(self, method: str) -> None:
+        """Record a call and the thread running it."""
+        self.calls.append(method)
+        self.threads.add(threading.get_ident())
+
     def open(self) -> None:
-        self.calls.append("open")
+        self._record("open")
 
     def preview(self) -> InstrumentFrame:
-        self.calls.append("preview")
+        self._record("preview")
         self.running.set()
         assert self.release.wait(10.0)
         x = np.linspace(0.0, 1.0, 5)
         return InstrumentFrame((create_signal("Live", x, self.settings.gain * x),))
 
     def close(self) -> None:
-        self.calls.append("close")
+        self._record("close")
 
     def acquire(self) -> InstrumentAcquisition:
-        self.calls.append("acquire")
+        self._record("acquire")
         return InstrumentAcquisition("Slow", self.preview().objects)
 
 
@@ -103,6 +111,50 @@ def test_close_waits_for_running_call() -> None:
         main.deleteLater()
 
 
+def test_reopened_window_waits_for_closing() -> None:
+    """A window opened again while the closed one still runs a call (sharing its
+    worker, as DataLab does) calls the instrument once it is closed, in the same
+    thread."""
+    with qt_app_context():
+        main = QW.QWidget()
+        instrument = SlowInstrument()
+        worker = SerialWorker()
+        first = InstrumentWindow(main, instrument, "Slow instrument", worker)
+        first.show()
+        while not instrument.running.is_set():
+            QW.QApplication.processEvents()
+        first.close()
+        second = InstrumentWindow(main, instrument, "Slow instrument", worker)
+        second.show()
+        QW.QApplication.processEvents()
+        assert instrument.calls == ["open", "preview"]
+        instrument.release.set()
+        assert first.wait_closed()
+        assert second.wait_until_idle()
+        assert instrument.calls == ["open", "preview", "close", "open", "preview"]
+        assert len(instrument.threads) == 1
+        second.close()
+        assert second.wait_closed()
+        assert instrument.calls[-1] == "close"
+        worker.shutdown()
+        main.deleteLater()
+
+
+def test_hidden_window_closes_instrument() -> None:
+    """Closing a window that was never shown closes its instrument."""
+    with qt_app_context():
+        main = QW.QWidget()
+        instrument = SlowInstrument()
+        instrument.release.set()
+        window = InstrumentWindow(main, instrument, "Slow instrument")
+        window.close()
+        assert window.wait_closed()
+        assert instrument.calls[0] == "open" and instrument.calls[-1] == "close"
+        main.deleteLater()
+
+
 if __name__ == "__main__":
     test_slow_instrument_calls_are_serialized()
     test_close_waits_for_running_call()
+    test_reopened_window_waits_for_closing()
+    test_hidden_window_closes_instrument()

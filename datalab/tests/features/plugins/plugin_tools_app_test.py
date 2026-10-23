@@ -215,12 +215,21 @@ def test_plugin_tools_in_menus_and_instrument_window(
             assert win.get_current_panel() == "signal"
             assert "3 objects" in window.status_label.text()
 
+            # A window opened again calls the instrument after the closed one
+            window.close()
+            QW.QApplication.processEvents()
+            reopened = plugin.launch_tool("generator")
+            assert reopened is not window
+            assert reopened.wait_until_idle()
+            assert instrument.events == ["open", "close", "open"]
+            window = reopened
+
             closed: list[int] = []
             window.finished.connect(closed.append)
             win.reload_plugins()
             QW.QApplication.processEvents()
             assert closed
-            assert instrument.events == ["open", "close"]
+            assert instrument.events == ["open", "close", "open", "close"]
             reloaded = PluginRegistry.get_plugin("org.example.tools-app")
             assert reloaded.launch_tool("generator") is not window
             win.close_plugin_instruments()
