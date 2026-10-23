@@ -20,7 +20,6 @@ from __future__ import annotations
 import dataclasses
 import datetime
 import gc
-import hashlib
 import importlib
 import importlib.util
 import json
@@ -48,6 +47,13 @@ from datalab.plugins.dependencies import (
     plan_dependencies,
     validate_installed,
 )
+from datalab.plugins.modules import (
+    MAX_MODULE_BYTES,
+    ModuleInspectionError,
+    apply_catalog_metadata,
+    inspect_module,
+    module_name,
+)
 from datalab.plugins.wheels import (
     DESKTOP_ENTRY_POINT_GROUP,
     MAX_WHEEL_BYTES,
@@ -55,7 +61,6 @@ from datalab.plugins.wheels import (
 )
 
 INDEX_SCHEMA_VERSION = 1
-MAX_MODULE_BYTES = 4 * 1024 * 1024
 WHEEL_KIND = "wheel"
 MODULE_KIND = "module"
 
@@ -78,12 +83,13 @@ class InstalledPlugin:
     Args:
         kind: ``"wheel"`` or ``"module"``
         name: Distribution name (wheel) or module name (module)
-        version: Distribution version, empty for a module
+        version: Distribution version, or known module version (otherwise empty)
         filename: Name of the file the plugin was installed from
         sha256: SHA-256 digest of the installed file
         size_bytes: Size of the installed file
         packages: Top-level packages or modules provided by the plugin
         installed_at: Installation date (ISO 8601, UTC)
+        catalog_id: Catalog identity when installed from a catalog
     """
 
     kind: str
@@ -94,6 +100,7 @@ class InstalledPlugin:
     size_bytes: int
     packages: tuple[str, ...]
     installed_at: str
+    catalog_id: str = ""
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "packages", tuple(self.packages))
@@ -101,8 +108,8 @@ class InstalledPlugin:
             raise ValueError(f"Unknown installed plugin kind: {self.kind!r}")
         if not _SHA256_PATTERN.fullmatch(self.sha256):
             raise ValueError(f"Invalid SHA-256 digest: {self.sha256!r}")
-        if self.kind == MODULE_KIND and not _is_module_name(self.name):
-            raise ValueError(f"Invalid plugin module name: {self.name!r}")
+        if self.kind == MODULE_KIND:
+            module_name(f"{self.name}.py")
         if not all(
             isinstance(name, str) and name.isidentifier() for name in self.packages
         ):
@@ -127,14 +134,6 @@ class InstallResult:
     plugin: InstalledPlugin
     replaced: InstalledPlugin | None
     restart_required: bool
-
-
-def _is_module_name(name: str) -> bool:
-    return (
-        name.startswith(_MODULE_PREFIX)
-        and len(name) > len(_MODULE_PREFIX)
-        and name.isidentifier()
-    )
 
 
 def _now() -> str:
@@ -365,6 +364,7 @@ class InstalledPluginStore:
         *,
         expected_sha256: str | None = None,
         dependency_plan: DependencyPlan | None = None,
+        catalog_id: str = "",
     ) -> InstallResult:
         """Install a plugin wheel file.
 
@@ -412,7 +412,16 @@ class InstalledPluginStore:
             size_bytes=manifest["size_bytes"],
             packages=manifest["top_level_packages"],
             installed_at=_now(),
+            catalog_id=catalog_id,
         )
+        for other in self.get_plugins():
+            if other.kind == MODULE_KIND and (
+                set(plugin.packages).intersection(other.packages)
+                or (catalog_id and other.catalog_id == catalog_id)
+            ):
+                raise PluginInstallError(
+                    "The plugin conflicts with an installed module"
+                )
         installed_directory: str | None = None
         success = False
         try:
@@ -495,15 +504,16 @@ class InstalledPluginStore:
             PluginInstallError: Invalid file name or conflicting module name
         """
         name, data = self._read_module(path)
-        return {
-            "filename": osp.basename(path),
-            "name": name,
-            "sha256": hashlib.sha256(data).hexdigest(),
-            "size_bytes": len(data),
-        }
+        return inspect_module(data, filename=f"{name}.py")
 
     def install_module(
-        self, path: str, *, expected_sha256: str | None = None
+        self,
+        path: str,
+        *,
+        expected_sha256: str | None = None,
+        catalog_id: str = "",
+        catalog_name: str = "",
+        catalog_version: str = "",
     ) -> InstallResult:
         """Install a single-file ``datalab_*.py`` plugin module.
 
@@ -515,18 +525,45 @@ class InstalledPluginStore:
             PluginInstallError: Invalid file name or conflicting module name
         """
         name, data = self._read_module(path)
-        sha256 = hashlib.sha256(data).hexdigest()
+        manifest = inspect_module(data, filename=f"{name}.py")
+        if catalog_id:
+            manifest = apply_catalog_metadata(
+                manifest,
+                plugin_id=catalog_id,
+                name=catalog_name,
+                version=catalog_version,
+            )
+        sha256 = manifest["sha256"]
         self._check_expected_digest(sha256, expected_sha256)
         plugin = InstalledPlugin(
             kind=MODULE_KIND,
             name=name,
-            version="",
+            version=manifest["version"],
             filename=osp.basename(path),
             sha256=sha256,
             size_bytes=len(data),
             packages=(name,),
             installed_at=_now(),
+            catalog_id=catalog_id,
         )
+        for other in self.get_plugins():
+            if other.kind == MODULE_KIND and _normalized(
+                self.get_path(other)
+            ) == _normalized(self.get_path(plugin)):
+                if other.name != name:
+                    raise PluginInstallError(
+                        "Module file name conflicts with an installed module"
+                    )
+                if other.catalog_id and catalog_id and other.catalog_id != catalog_id:
+                    raise PluginInstallError(
+                        f"Module {name} belongs to another catalog plugin"
+                    )
+            elif other.kind == WHEEL_KIND and name in other.packages:
+                raise PluginInstallError("Module conflicts with an installed wheel")
+            elif catalog_id and other.catalog_id == catalog_id:
+                raise PluginInstallError(
+                    "Catalog plugin uses another installed artifact"
+                )
         replaced = self._add(
             plugin,
             data,
@@ -616,11 +653,10 @@ class InstalledPluginStore:
 
     def _read_module(self, path: str) -> tuple[str, bytes]:
         """Return the name and content of a valid plugin module file."""
-        name, extension = osp.splitext(osp.basename(path))
-        if extension != ".py" or not _is_module_name(name):
-            raise PluginInstallError(
-                "A plugin module file name must look like datalab_<name>.py"
-            )
+        try:
+            name = module_name(osp.basename(path))
+        except ModuleInspectionError as exc:
+            raise PluginInstallError(str(exc)) from exc
         with open(path, "rb") as file:
             data = file.read(MAX_MODULE_BYTES + 1)
         if len(data) > MAX_MODULE_BYTES:
@@ -652,12 +688,25 @@ class InstalledPluginStore:
         replaced = next((other for other in plugins if same_plugin(other)), None)
         if replaced is not None and replaced.sha256 == plugin.sha256 and not repair:
             raise PluginInstallError(f"{plugin.name} is already installed")
-        self._write_file(self.get_path(plugin), data)
-        self._write_index(
-            [other for other in plugins if other != replaced] + [plugin],
-            dependency_roots=dependency_roots,
-            pending_enabled=pending_enabled,
-        )
+        path = self.get_path(plugin)
+        previous_data = None
+        if plugin.kind == MODULE_KIND and osp.isfile(path):
+            with open(path, "rb") as stream:
+                previous_data = stream.read(MAX_MODULE_BYTES + 1)
+        self._write_file(path, data)
+        try:
+            self._write_index(
+                [other for other in plugins if other != replaced] + [plugin],
+                dependency_roots=dependency_roots,
+                pending_enabled=pending_enabled,
+            )
+        except (OSError, ValueError):
+            if plugin.kind == MODULE_KIND:
+                if previous_data is None:
+                    os.remove(path)
+                else:
+                    self._write_file(path, previous_data)
+            raise
         return replaced
 
     def _write_index(

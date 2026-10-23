@@ -16,6 +16,7 @@ import tempfile
 from collections.abc import Callable, Sequence
 from html import escape
 from importlib import metadata as importlib_metadata
+from importlib.machinery import PathFinder
 
 from guidata.configtools import get_icon
 from packaging.utils import canonicalize_name
@@ -42,7 +43,7 @@ from datalab.plugins.catalog import (
     load_catalogs,
 )
 from datalab.plugins.dependencies import DEPENDENCIES_DIRECTORY
-from datalab.plugins.store import WHEEL_KIND
+from datalab.plugins.store import MODULE_KIND, WHEEL_KIND
 from datalab.widgets.expandabletext import apply_palette_color, apply_subdued_color
 
 CATALOG_PAGE_URL = "https://datalab-platform.com/plugins/"
@@ -88,7 +89,7 @@ class AvailablePluginItemWidget(QW.QWidget):
     def __init__(
         self,
         plugin: CatalogPlugin,
-        installed: tuple[str, str],
+        installed: tuple[str, str, str],
         parent: QW.QWidget | None = None,
     ) -> None:
         super().__init__(parent)
@@ -135,7 +136,7 @@ class AvailablePluginItemWidget(QW.QWidget):
             layout.addWidget(self.action_button)
 
     def _describe(
-        self, release: CatalogRelease | None, installed: tuple[str, str]
+        self, release: CatalogRelease | None, installed: tuple[str, str, str]
     ) -> tuple[str, str | None]:
         """Return the status text and the action button text, if any."""
         plugin = self.plugin
@@ -146,9 +147,34 @@ class AvailablePluginItemWidget(QW.QWidget):
                 python = f"{sys.version_info.major}.{sys.version_info.minor}"
                 return _("Not available for Python %s") % python, None
             return _("Not available for DataLab desktop"), None
-        how, version = installed
+        how, version, digest = installed
+        if how == "unmanaged":
+            return _("Provided outside the plugin store"), None
+        if how == "conflict":
+            return _("Conflicting installed plugin: %s") % version, None
+        if how == "error":
+            return version, None
         if how == "environment":
             return _("Installed in the Python environment (%s)") % version, None
+        if how == "file" and plugin.kind == MODULE_KIND:
+            notice = (
+                _("Deprecated: %s") % plugin.status_reason
+                if plugin.status == "deprecated"
+                else ""
+            )
+            if digest == release.sha256:
+                return notice or _("Installed"), None
+            if version and release.version:
+                try:
+                    if Version(release.version) < Version(version):
+                        return _("Installed: %s") % version, None
+                    if Version(release.version) > Version(version):
+                        return notice or _("Installed: %s") % version, _(
+                            "Update to %s"
+                        ) % release.version
+                except InvalidVersion:
+                    pass
+            return notice or _("Different installed revision"), _("Replace...")
         if how == "file" and not _is_newer(release.version, version):
             return _("Installed"), None
         status = ""
@@ -363,7 +389,11 @@ class AvailablePluginsWidget(QW.QWidget):
             self._populate()
 
         self._installer.install_path(
-            path, origin=origin, wheelhouse=wheelhouse, on_finished=finished
+            path,
+            origin=origin,
+            wheelhouse=wheelhouse,
+            on_finished=finished,
+            catalog_plugin=plugin,
         )
 
     def _on_download_failed(self, message: str) -> None:
@@ -374,25 +404,49 @@ class AvailablePluginsWidget(QW.QWidget):
         self.status_label.setText("")
         QW.QMessageBox.warning(self, _("Install plugin"), message)
 
-    def _get_installed(self, plugin: CatalogPlugin) -> tuple[str, str]:
+    def _get_installed(self, plugin: CatalogPlugin) -> tuple[str, str, str]:
         """Return how a catalog plugin is installed, and its version."""
-        if not plugin.distribution:
-            return "", ""
-        key = canonicalize_name(plugin.distribution)
         try:
             installed_plugins = self._installer.store.get_plugins()
-        except ValueError:
-            installed_plugins = []
+        except (OSError, ValueError) as exc:
+            return "error", str(exc), ""
+        if plugin.kind == MODULE_KIND:
+            for installed in installed_plugins:
+                same_module = installed.kind == MODULE_KIND and osp.normcase(
+                    installed.name
+                ) == osp.normcase(plugin.module)
+                if same_module:
+                    if installed.name != plugin.module:
+                        return "conflict", installed.name, ""
+                    if installed.catalog_id and installed.catalog_id != plugin.id:
+                        return "conflict", installed.catalog_id, ""
+                    return "file", installed.version, installed.sha256
+                if installed.catalog_id == plugin.id:
+                    return "conflict", installed.name, ""
+            managed = osp.normcase(osp.realpath(self._installer.store.modules_dir))
+            paths = [
+                entry
+                for entry in sys.path
+                if osp.normcase(osp.realpath(entry)) != managed
+            ]
+            if PathFinder.find_spec(plugin.module, paths) is not None:
+                return "unmanaged", "", ""
+            return "", "", ""
+        if not plugin.distribution:
+            return "", "", ""
+        key = canonicalize_name(plugin.distribution)
         for installed in installed_plugins:
             if (
                 installed.kind == WHEEL_KIND
                 and canonicalize_name(installed.name) == key
             ):
-                return "file", installed.version
+                return "file", installed.version, installed.sha256
+            if installed.catalog_id == plugin.id and installed.kind != WHEEL_KIND:
+                return "conflict", installed.name, ""
         try:
-            return "environment", importlib_metadata.version(plugin.distribution)
+            return "environment", importlib_metadata.version(plugin.distribution), ""
         except importlib_metadata.PackageNotFoundError:
-            return "", ""
+            return "", "", ""
 
     def _populate(self) -> None:
         """Rebuild the plugin rows matching the search text."""

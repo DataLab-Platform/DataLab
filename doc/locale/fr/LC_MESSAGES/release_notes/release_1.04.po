@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-22 14:31+0200\n"
+"POT-Creation-Date: 2026-10-22 22:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -120,6 +120,15 @@ msgstr "Les plugins peuvent déclarer une icône, affichée dans le catalogue **
 msgid "**Plugin installation:**"
 msgstr "**Installation de plugins :**"
 
+msgid "Online and offline Desktop catalogs now accept single-file `datalab_*.py` plugins alongside wheels. Historical files do not need a packaging project or source changes to be listed; catalog inspection never imports or executes them (implements [Issue #419](https://github.com/DataLab-Platform/DataLab/issues/419))"
+msgstr "Les catalogues Desktop en ligne et hors ligne acceptent désormais les plugins en fichier unique `datalab_*.py` à côté des wheels. Les fichiers historiques n'ont besoin ni de projet de packaging ni de modification du code source pour être référencés ; l'inspection du catalogue ne les importe ni ne les exécute jamais (implémente [l'issue #419](https://github.com/DataLab-Platform/DataLab/issues/419))"
+
+msgid "Known script versions can be updated; unversioned files are identified by SHA-256 and offer explicit replacement when their content changes. Scripts previously installed from a file are recognized, and existing development copies are not overwritten"
+msgstr "Les versions connues des scripts peuvent être mises à jour ; les fichiers sans version sont identifiés par SHA-256 et proposent un remplacement explicite lorsque leur contenu change. Les scripts précédemment installés depuis un fichier sont reconnus et les copies de développement existantes ne sont pas écrasées"
+
+msgid "The local catalog commands handle mixed folders of scripts and wheels. Single-file plugins use libraries already available to DataLab and do not trigger dependency downloads. The documentation now explicitly distinguishes source organization, distribution formats and functional capabilities, including in the French offline guide"
+msgstr "Les commandes de catalogue local gèrent les dossiers mêlant scripts et wheels. Les plugins en fichier unique utilisent les bibliothèques déjà disponibles dans DataLab et ne déclenchent pas de téléchargement de dépendances. La documentation distingue désormais explicitement l'organisation du code source, les formats de distribution et les capacités fonctionnelles, y compris dans le guide hors ligne français"
+
 msgid "Plugins can now be installed from a file, without any Python tool, including in the standalone version of DataLab: the new **Install plugins** tab of **Plugins > Configure plugins...** accepts a pure-Python wheel (`.whl`) or a single `datalab_<name>.py` module"
 msgstr "Les plugins peuvent désormais être installés depuis un fichier, sans aucun outil Python, y compris dans la version autonome de DataLab : le nouvel onglet **Installer des plugins** de **Plugins > Configurer les plugins...** accepte un wheel en Python pur (`.whl`) ou un module unique `datalab_<nom>.py`"
 
@@ -141,8 +150,8 @@ msgstr "Le nouvel onglet **Plugins disponibles** liste les plugins du [catalogue
 msgid "Organizations can distribute their own plugins, or the versions of public plugins they have approved, from local plugin catalogs: folders, typically shared on the network, declared in the **Plugin settings** tab or with the `DATALAB_PLUGINS_CATALOG` environment variable. Their plugins are listed in the **Available plugins** tab before those of the DataLab plugin catalog, and hide them when both offer the same plugin"
 msgstr "Les organisations peuvent diffuser leurs propres plugins, ou les versions de plugins publics qu'elles ont validées, depuis des catalogues locaux de plugins : des dossiers, généralement partagés sur le réseau, déclarés dans l'onglet **Paramètres des plugins** ou par la variable d'environnement `DATALAB_PLUGINS_CATALOG`. Leurs plugins sont listés dans l'onglet **Plugins disponibles** avant ceux du catalogue de plugins DataLab, et les masquent lorsque les deux proposent le même plugin"
 
-msgid "A local catalog folder may simply hold plugin wheels, listed as they are copied to it, or a `catalog.json` file giving display names, deprecations and withdrawn releases; `datalab-plugin catalog build` writes this file from the wheels of the folder, keeping the edited fields, and `datalab-plugin catalog check` reports wheels that are missing, changed, refused by DataLab or not listed"
-msgstr "Un dossier de catalogue local peut simplement contenir des wheels de plugins, listées dès qu'elles y sont copiées, ou un fichier `catalog.json` indiquant les noms d'affichage, les dépréciations et les versions retirées ; `datalab-plugin catalog build` écrit ce fichier à partir des wheels du dossier en conservant les champs modifiés, et `datalab-plugin catalog check` signale les wheels manquantes, modifiées, refusées par DataLab ou non listées"
+msgid "A local catalog folder may hold plugin wheels and single-file modules, listed as they are copied to it, or a `catalog.json` index giving display names, deprecations and withdrawn releases; `datalab-plugin catalog build` writes this index while keeping curated metadata, and `datalab-plugin catalog check` reports missing, changed, refused or unlisted artifacts"
+msgstr "Un dossier de catalogue local peut contenir des wheels et des modules en fichier unique, listés à mesure qu'ils y sont copiés, ou un index `catalog.json` indiquant les noms d'affichage, les dépréciations et les versions retirées ; `datalab-plugin catalog build` écrit cet index en conservant les métadonnées administrées, et `datalab-plugin catalog check` signale les fichiers manquants, modifiés, refusés ou non listés"
 
 msgid "Authors can prepare an offline catalog with `datalab-plugin catalog prepare`: it downloads the additional dependency wheels needed by the reference host without installing them, then writes the catalog. The complete folder can be distributed on a network share or copied to computers without Internet access"
 msgstr "Les auteurs peuvent préparer un catalogue hors ligne avec `datalab-plugin catalog prepare` : la commande télécharge les paquets de dépendances supplémentaires nécessaires à l'environnement hôte de référence sans les installer, puis écrit le catalogue. Le dossier complet peut être distribué sur un partage réseau ou copié sur des ordinateurs sans accès à Internet"
