@@ -178,6 +178,11 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 * Fixed single-precision complex (`complex64`) 1D datasets losing their imaginary part when imported from an HDF5 file: they are now imported as complex signals. Integer signals beyond ±2⁵³ now also emit the precision warning instead of being rounded silently
 * Fixed the import of several datasets from HDF5 files stopping at the first dataset that could not be imported: the other datasets are now imported, and the datasets that could not be are listed in a single message at the end
 * Fixed HDF5 files containing broken links failing to open in the HDF5 browser, for example synchrotron master files whose detector files are not available (external links to a missing file): the broken links are now skipped and the rest of the file can be browsed and imported
+* Fixed HDF5 files containing a group linked into itself or into one of its subgroups failing to open in the HDF5 browser (the file was browsed endlessly until an error): such links back to a parent group are now skipped, while other aliases of a group or dataset are still shown at each of their paths
+
+**Workspace saving:**
+
+* Fixed a failed save destroying the previous version of the workspace file: the file was emptied before the data was written, so that an error during the save, a full disk or an interruption left neither the previous nor the new workspace on disk. Workspaces, capsules and History files (`.dlhist`) are now written to a temporary file, which replaces the previous file only once completely written; if the save fails, the previous file is left untouched
 
 **Metadata:**
 
@@ -188,6 +193,13 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 
 * Results of the extraction of several regions of interest into a single object can be processed again: the **Processing** tab showed "Unknown computing feature: extract_rois" with **Reapply** disabled, and replaying the History skipped the action
 * **Edit > Recompute** now also recomputes results of operations combining several objects (e.g., difference of two signals, average of several images), which were skipped
+* Fixed **Processing > Resampling** of images shifting every value by half a pixel: resampling an image with the default parameters, i.e. onto its own grid, filled its last row and column with NaN. The X/Y min/max parameters are now the coordinates of the centers of the first and last output pixels (by default, those of the image), and the 'Pixel size' mode keeps the requested pixel size exactly
+* Fixed the sum, average, product and standard deviation of several signals, and their combination into an image, depending on the order of the signals: when a real signal came first, the imaginary parts of the complex signals were discarded
+* The sum, average and product of several images now accept complex images, which raised an error
+* Fixed modifying the result of a diagonal, horizontal or vertical flip or a 90° rotation of an image in place (e.g. from a macro or a plugin) also modifying its source image
+* Fixed the extraction of several regions of interest into a single image giving wrong coordinates to images with non-uniform coordinates (the X coordinates were taken from the extracted rows and the Y coordinates from the extracted columns)
+* The arbitrary rotation of images (**Processing > Geometry > Rotate by...**) now refuses images with non-uniform coordinates, like resizing and resampling, instead of producing an image whose coordinates did not match its pixels
+* Fixed the uncertainty of the product of signals being lost where one of the signals is zero: it is now propagated there too
 
 **Plugins:**
 
@@ -218,6 +230,7 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 * Errors raised by remote commands, such as `calc` with an unknown computation function or `set_object` with an unknown object, are now reported to the client instead of being silently ignored
 * Fixed remote commands sometimes returning the result of the previous command instead of their own: for example, `get_current_object_uuid` could return a panel name instead of `None` when there was no current object
 * Fixed DataLab freezing when closed while a remote command was still running (e.g. when closing the main window with `call_method("close")`)
+* Fixed images with non-uniform coordinates losing them when transferred through the Web API (`GET` and `PUT /objects/{name}/data`): they were rebuilt with default uniform coordinates. The NPZ data format now includes these coordinates; archives written by earlier versions remain readable. Clients with their own NPZ reader, such as DataLab-Kernel, must support the new entries to take advantage of this
 
 **Security:**
 
