@@ -363,6 +363,76 @@ class TestSerializationEdgeCases:
         assert result.x0 == pytest.approx(1.5)
         assert result.dx == pytest.approx(0.1)
 
+    def test_image_non_uniform_coords_round_trip(self) -> None:
+        """Non-uniform image coordinates survive a round trip.
+
+        Regression: they were lost, the image being rebuilt with uniform
+        coordinates (its pixels survived, but not their physical positions).
+        """
+        obj = _make_image(shape=(3, 4))
+        obj.xunit, obj.yunit = "mm", "s"
+        obj.set_coords(np.array([1.0, 2.0, 4.0, 8.0]), np.array([10.0, 11.0, 15.0]))
+        result = deserialize_object_from_npz(serialize_object_to_npz(obj))
+        assert not result.is_uniform_coords
+        np.testing.assert_array_equal(result.xcoords, obj.xcoords)
+        np.testing.assert_array_equal(result.ycoords, obj.ycoords)
+        np.testing.assert_array_equal(result.data, obj.data)
+        assert (result.xunit, result.yunit) == ("mm", "s")
+
+    def test_image_uniform_coords_round_trip(self) -> None:
+        """Uniform images are stored without coordinate arrays."""
+        obj = _make_image(shape=(3, 4))
+        obj.set_uniform_coords(0.5, 2.0, -1.0, 3.0)
+        data = serialize_object_to_npz(obj)
+        with zipfile.ZipFile(io.BytesIO(data)) as zf:
+            assert sorted(zf.namelist()) == ["data.npy", "metadata.json"]
+            assert json.loads(zf.read("metadata.json"))["is_uniform_coords"] is True
+        result = deserialize_object_from_npz(data)
+        assert result.is_uniform_coords
+        assert (result.dx, result.dy, result.x0, result.y0) == (0.5, 2.0, -1.0, 3.0)
+
+    def test_image_archive_without_coords_flag_is_uniform(self) -> None:
+        """Archives written by earlier versions (no ``is_uniform_coords``) are read
+        with uniform coordinates."""
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w") as zf:
+            arr = io.BytesIO()
+            np.save(arr, np.zeros((3, 4)))
+            zf.writestr("data.npy", arr.getvalue())
+            metadata = {"type": "image", "x0": 1.0, "y0": 2.0, "dx": 0.5, "dy": 0.25}
+            zf.writestr("metadata.json", json.dumps(metadata))
+        result = deserialize_object_from_npz(buf.getvalue())
+        assert result.is_uniform_coords
+        assert (result.dx, result.dy, result.x0, result.y0) == (0.5, 0.25, 1.0, 2.0)
+
+    @pytest.mark.parametrize(
+        "xcoords, ycoords, match",
+        [
+            (None, np.arange(3.0), "missing xcoords.npy"),
+            (np.arange(3.0), np.arange(3.0), "do not match image shape"),
+            (np.arange(4.0), np.arange(4.0), "do not match image shape"),
+        ],
+    )
+    def test_image_invalid_non_uniform_coords_raise(
+        self, xcoords, ycoords, match: str
+    ) -> None:
+        """Missing or mismatched coordinate arrays are rejected."""
+        buf = io.BytesIO()
+        with zipfile.ZipFile(buf, "w") as zf:
+            for name, array in (
+                ("data.npy", np.zeros((3, 4))),
+                ("xcoords.npy", xcoords),
+                ("ycoords.npy", ycoords),
+            ):
+                if array is not None:
+                    arr = io.BytesIO()
+                    np.save(arr, array)
+                    zf.writestr(name, arr.getvalue())
+            metadata = {"type": "image", "is_uniform_coords": False}
+            zf.writestr("metadata.json", json.dumps(metadata))
+        with pytest.raises(ValueError, match=match):
+            deserialize_object_from_npz(buf.getvalue())
+
 
 # =============================================================================
 # Routes integration tests
@@ -637,6 +707,29 @@ class TestBinaryDataEndpoints:
         client, token, _adapter = api_client
         response = client.get("/api/v1/objects/nope/data", headers=_auth(token))
         assert response.status_code == 404
+
+    def test_non_uniform_image_round_trip_through_endpoints(self, api_client) -> None:
+        """An image with non-uniform coordinates keeps them when uploaded with
+        ``PUT data`` and downloaded with ``GET data``."""
+        client, token, adapter = api_client
+        obj = _make_image("NU", shape=(3, 4))
+        xcoords, ycoords = np.array([1.0, 2.0, 4.0, 8.0]), np.array([10.0, 11.0, 15.0])
+        obj.set_coords(xcoords, ycoords)
+        response = client.put(
+            "/api/v1/objects/NU/data",
+            content=serialize_object_to_npz(obj),
+            headers={**_auth(token), "Content-Type": "application/x-npz"},
+        )
+        assert response.status_code == 201
+        stored = adapter.get_object("NU")
+        assert not stored.is_uniform_coords
+        np.testing.assert_array_equal(stored.xcoords, xcoords)
+        response = client.get("/api/v1/objects/NU/data", headers=_auth(token))
+        assert response.status_code == 200
+        result = deserialize_object_from_npz(response.content)
+        assert not result.is_uniform_coords
+        np.testing.assert_array_equal(result.xcoords, xcoords)
+        np.testing.assert_array_equal(result.ycoords, ycoords)
 
     def test_put_creates_object(self, api_client) -> None:
         """``PUT data`` creates a new object from an NPZ payload."""
