@@ -883,11 +883,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             if exec_dialog(dlg):
                 x0, y0, x1, y1 = dlg.get_rect_coords()
                 param = ROI2DParam.create(
-                    geometry="rectangle",
-                    x0=int(x0),
-                    y0=int(y0),
-                    dx=int(x1 - x0),
-                    dy=int(y1 - y0),
+                    geometry="rectangle", x0=x0, y0=y0, dx=x1 - x0, dy=y1 - y0
                 )
             else:
                 return
