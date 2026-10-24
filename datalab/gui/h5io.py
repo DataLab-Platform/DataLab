@@ -27,7 +27,7 @@ from datalab.config import _
 from datalab.env import execenv
 from datalab.gui.panel.base import H5ImportBatch
 from datalab.h5 import H5Importer
-from datalab.h5.native import NativeH5Reader, NativeH5Writer
+from datalab.h5.native import NativeH5Reader, atomic_native_writer
 from datalab.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
 
 if TYPE_CHECKING:
@@ -80,14 +80,15 @@ class H5InputOutput:
         return _("Loading data from %s...") % osp.basename(fname)
 
     def save_file(self, filename: str) -> None:
-        """Save all signals and images from DataLab model into a HDF5 file"""
-        writer = NativeH5Writer(filename)
-        try:
+        """Save all signals and images from DataLab model into a HDF5 file
+
+        The file is replaced only once completely written: if saving fails, the
+        previous file (if any) is left untouched.
+        """
+        with atomic_native_writer(filename) as writer:
             for panel in self.mainwindow.panels:
                 panel.serialize_to_hdf5(writer)
             self.mainwindow.provenance.save(writer.h5)
-        finally:
-            writer.close()
 
     @staticmethod
     def __read_provenance(

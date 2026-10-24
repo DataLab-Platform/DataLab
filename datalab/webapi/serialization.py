@@ -24,12 +24,17 @@ For SignalObj:
 
 For ImageObj:
     - ``data.npy``: Image data (2D array, preserves dtype)
+    - ``xcoords.npy``, ``ycoords.npy``: Pixel center coordinates along X and Y
+      (1D float arrays, only for non-uniform coordinates)
     - ``metadata.json``: JSON-encoded metadata
 
 Metadata JSON includes:
     - ``type``: "signal" or "image"
     - ``title``, ``xlabel``, ``ylabel``, etc.
     - ``x0``, ``y0``, ``dx``, ``dy`` (for images)
+    - ``is_uniform_coords`` (for images): False when the coordinates are given by
+      ``xcoords.npy`` and ``ycoords.npy``. Archives without this key (written by
+      earlier versions) have uniform coordinates.
 """
 
 from __future__ import annotations
@@ -214,6 +219,7 @@ def _serialize_image(obj, buffer: io.BytesIO, *, compress: bool = True) -> None:
         "y0": _to_python_scalar(obj.y0),
         "dx": _to_python_scalar(obj.dx),
         "dy": _to_python_scalar(obj.dy),
+        "is_uniform_coords": bool(obj.is_uniform_coords),
     }
     # Include object metadata (contains Geometry_*, Table_* results)
     obj_metadata = obj.metadata
@@ -224,6 +230,9 @@ def _serialize_image(obj, buffer: io.BytesIO, *, compress: bool = True) -> None:
     compression = zipfile.ZIP_DEFLATED if compress else zipfile.ZIP_STORED
     with zipfile.ZipFile(buffer, "w", compression) as zf:
         _write_array_to_zip(zf, "data.npy", obj.data)
+        if not obj.is_uniform_coords:
+            _write_array_to_zip(zf, "xcoords.npy", obj.xcoords)
+            _write_array_to_zip(zf, "ycoords.npy", obj.ycoords)
         zf.writestr("metadata.json", json.dumps(metadata, ensure_ascii=False))
 
 
@@ -330,10 +339,26 @@ def _deserialize_image(zf: zipfile.ZipFile, metadata: dict) -> DataObject:
         obj.zunit = metadata["zunit"]
 
     # Set coordinate info
-    obj.x0 = metadata.get("x0", 0.0)
-    obj.y0 = metadata.get("y0", 0.0)
-    obj.dx = metadata.get("dx", 1.0)
-    obj.dy = metadata.get("dy", 1.0)
+    if metadata.get("is_uniform_coords", True):
+        obj.x0 = metadata.get("x0", 0.0)
+        obj.y0 = metadata.get("y0", 0.0)
+        obj.dx = metadata.get("dx", 1.0)
+        obj.dy = metadata.get("dy", 1.0)
+    else:
+        xcoords = _read_array_from_zip(zf, "xcoords.npy")
+        ycoords = _read_array_from_zip(zf, "ycoords.npy")
+        if xcoords is None or ycoords is None:
+            raise ValueError(
+                "Invalid image NPZ: missing xcoords.npy or ycoords.npy "
+                "for non-uniform coordinates"
+            )
+        nrows, ncols = data.shape
+        if xcoords.shape != (ncols,) or ycoords.shape != (nrows,):
+            raise ValueError(
+                f"Invalid image NPZ: coordinates of shape {xcoords.shape} (X) and "
+                f"{ycoords.shape} (Y) do not match image shape {data.shape}"
+            )
+        obj.set_coords(xcoords, ycoords)
 
     # Restore object metadata (Geometry_*, Table_* results)
     if metadata.get("obj_metadata"):

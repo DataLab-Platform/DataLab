@@ -13,7 +13,7 @@ from qtpy.compat import getopenfilename, getsavefilename
 
 from datalab.config import Conf, _
 from datalab.gui.panel.base import H5ImportBatch
-from datalab.h5.native import NativeH5Reader, NativeH5Writer
+from datalab.h5.native import NativeH5Reader, NativeH5Writer, atomic_native_writer
 from datalab.history import HistorySession
 from datalab.objectmodel import get_uuid
 from datalab.utils.qthelpers import qt_try_loadsave_file, save_restore_stds
@@ -53,7 +53,7 @@ def save_to_dlhist_file(panel: HistoryPanel, filename: str | None = None) -> boo
         filename += ".dlhist"
     with qt_try_loadsave_file(panel.parentWidget(), filename, "save"):
         Conf.base_dir.set(filename)
-        with NativeH5Writer(filename) as writer:
+        with atomic_native_writer(filename) as writer:
             # Make the .dlhist file panel-contained: store the signal and
             # image panel objects (all of them) alongside the history, so
             # that reopening restores both the data objects and the history

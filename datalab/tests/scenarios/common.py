@@ -328,9 +328,9 @@ def run_image_computations(
             width=width_param,
             height=height_param,
             xmin=ima1.x0,
-            xmax=ima1.x0 + ima1.width,
+            xmax=ima1.x0 + ima1.width - ima1.dx,
             ymin=ima1.y0,
-            ymax=ima1.y0 + ima1.height,
+            ymax=ima1.y0 + ima1.height - ima1.dy,
         )
         panel.processor.run_feature("resampling", param)
 

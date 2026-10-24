@@ -241,7 +241,10 @@ ImageObj NPZ Structure
 
     my_image.npz
     ├── data.npy       # 2D image array (preserves dtype)
-    └── metadata.json  # Labels, units, coordinates (x0, y0, dx, dy)
+    ├── xcoords.npy    # X pixel centers (only for non-uniform coordinates)
+    ├── ycoords.npy    # Y pixel centers (only for non-uniform coordinates)
+    └── metadata.json  # Labels, units, coordinates
+                       # (x0, y0, dx, dy, is_uniform_coords)
 
 Authentication
 --------------

@@ -8,7 +8,13 @@ DataLab Native HDF5 I/O module
 
 from __future__ import annotations
 
+import contextlib
 import importlib
+import os
+import os.path as osp
+import stat
+import tempfile
+from collections.abc import Generator
 from typing import Any, Callable
 
 from guidata.io import HDF5Reader, HDF5Writer
@@ -71,6 +77,57 @@ class NativeH5Writer(HDF5Writer):
                     self.end(group_name)
             else:
                 raise
+
+
+def _set_final_permissions(tmpname: str, filename: str) -> None:
+    """Give the temporary file the permissions the final file must have.
+
+    Args:
+        tmpname: Temporary file name (created with owner-only permissions).
+        filename: Final file name: its permissions are kept if it exists,
+         otherwise those of a newly created file are applied.
+    """
+    if osp.exists(filename):
+        mode = stat.S_IMODE(os.stat(filename).st_mode)
+    else:
+        umask = os.umask(0)
+        os.umask(umask)
+        mode = 0o666 & ~umask
+    os.chmod(tmpname, mode)
+
+
+@contextlib.contextmanager
+def atomic_native_writer(filename: str) -> Generator[NativeH5Writer, None, None]:
+    """Write a native DataLab HDF5 file without losing the previous one on failure.
+
+    The file is written to a temporary file of the same directory, which replaces
+    ``filename`` only once it has been completely written and closed. If writing
+    fails (serialization error, full disk, interruption...), the temporary file is
+    removed and the previous file, if any, is left untouched.
+
+    Args:
+        filename: HDF5 file name
+
+    Yields:
+        Writer of the temporary file
+    """
+    filename = osp.abspath(filename)
+    fd, tmpname = tempfile.mkstemp(
+        prefix=f".{osp.basename(filename)}.", suffix=".tmp", dir=osp.dirname(filename)
+    )
+    os.close(fd)
+    try:
+        writer = NativeH5Writer(tmpname)
+        try:
+            yield writer
+        finally:
+            writer.close()
+        _set_final_permissions(tmpname, filename)
+        os.replace(tmpname, filename)
+    except BaseException:
+        with contextlib.suppress(OSError):
+            os.remove(tmpname)
+        raise
 
 
 class NativeH5Reader(HDF5Reader):
