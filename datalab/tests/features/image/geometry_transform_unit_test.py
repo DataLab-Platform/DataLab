@@ -8,13 +8,17 @@ from __future__ import annotations
 from typing import Callable
 
 import numpy as np
+import pytest
 import sigima.objects as sio
 import sigima.params as sip
 import sigima.proc.image as sipi
 from sigima.tests import data as test_data
 
 from datalab.adapters_metadata.geometry_adapter import GeometryAdapter
-from datalab.gui.processor.geometry_postprocess import apply_geometry_transform
+from datalab.gui.processor.geometry_postprocess import (
+    GeometricTransformWrapper,
+    apply_geometry_transform,
+)
 from datalab.tests import datalab_test_app_context
 
 
@@ -43,25 +47,30 @@ def __get_geometries(obj: sio.ImageObj) -> list[sio.GeometryResult]:
 
 
 def __get_expected_geometry_result(
-    orig_geom: sio.GeometryResult, operation: str
+    orig_geom: sio.GeometryResult, operation: str, src: sio.ImageObj
 ) -> sio.GeometryResult:
     """Get expected geometry result for a given operation.
 
     Args:
         orig_geom: Original geometry result
         operation: Operation name (rotate90, rotate270, etc.)
+        src: Source image of the operation (uniform coordinates)
 
     Returns:
         Expected geometry result after transformation
     """
-    # For image transformations, rotations should be around the image center
-    # (300, 300 for our 600x600 test image)
-    xc, yc = (300.0, 300.0)
+    # The image operations move the pixel centers: flips mirror the coordinates
+    # about the center of the pixel grid (299.5, 299.5 for our 600x600 test image)
+    nrows, ncols = src.data.shape
+    xc = src.x0 + 0.5 * (ncols - 1) * src.dx
+    yc = src.y0 + 0.5 * (nrows - 1) * src.dy
 
     if operation == "rotate90":
-        exp_geom = sipi.transformer.rotate(orig_geom, -np.pi / 2, (xc, yc))
+        # Counter-clockwise: (x, y) -> (y, 2 * xc - x)
+        exp_geom = sipi.transformer.flipv(sipi.transformer.transpose(orig_geom), xc)
     elif operation == "rotate270":
-        exp_geom = sipi.transformer.rotate(orig_geom, np.pi / 2, (xc, yc))
+        # Clockwise: (x, y) -> (2 * yc - y, x)
+        exp_geom = sipi.transformer.fliph(sipi.transformer.transpose(orig_geom), yc)
     elif operation == "fliph":
         exp_geom = sipi.transformer.fliph(orig_geom, xc)
     elif operation == "flipv":
@@ -83,6 +92,7 @@ def __validate_geometry_transformation(
     tr_geometries: list[sio.GeometryResult],
     or_geometries: list[sio.GeometryResult],
     operation: str,
+    src: sio.ImageObj,
     test_context: str = "geometry",
 ) -> None:
     """Validate that geometry transformation was applied correctly.
@@ -91,11 +101,12 @@ def __validate_geometry_transformation(
         tr_geometries: List of transformed geometry results
         or_geometries: List of original geometry results
         operation: Operation name (rotate90, rotate270, etc.)
+        src: Source image of the operation
         test_context: Context string for error messages (e.g., "App", "Unit")
     """
     for i, tr_geom in enumerate(tr_geometries):
         original_geom = or_geometries[i]
-        expected_geom = __get_expected_geometry_result(original_geom, operation)
+        expected_geom = __get_expected_geometry_result(original_geom, operation, src)
 
         # Compare the actual transformation result with expected
         np.testing.assert_allclose(
@@ -160,7 +171,7 @@ def __validate_roi_transformation(
             sio.KindShape.RECTANGLE,
             coords=np.asarray([or_roi.get_physical_coords(or_obj)]),
         )
-        expected_geom = __get_expected_geometry_result(temp_geom, operation)
+        expected_geom = __get_expected_geometry_result(temp_geom, operation, or_obj)
         exp_coords = expected_geom.coords[0]
         np.testing.assert_allclose(
             roi.get_physical_coords(tr_obj),
@@ -245,7 +256,7 @@ def __create_unit_test(
         # (skip geometry transformation for resize and binning as they preserve
         # physical coordinates)
         if operation not in ["resize", "binning"]:
-            apply_geometry_transform(tr_obj, operation)
+            apply_geometry_transform(tr_obj, operation, src=obj)
 
         # Validate basic transformation requirements
         __validate_basic_transformation(tr_obj, obj)
@@ -253,12 +264,11 @@ def __create_unit_test(
         # Validate geometry transformation
         tr_geometries = __get_geometries(tr_obj)
         __validate_geometry_transformation(
-            tr_geometries, or_geometries, operation, "Unit"
+            tr_geometries, or_geometries, operation, obj, "Unit"
         )
 
-        # Validate ROI transformation (only for simple operations)
-        simple_ops = ["fliph", "flipv", "transpose"]
-        if operation in simple_ops:
+        # Validate ROI transformation (only for exact image operations)
+        if operation not in ["resize", "binning"]:
             __validate_roi_transformation(tr_obj, obj, operation)
 
     # Set proper function name and docstring
@@ -318,12 +328,8 @@ def __create_app_test(
         # Verify that image data is properly transformed
         __validate_image_data_transformation(tr_obj, obj, operation)
 
-        # For simple transformations, validate ROI transformation
-        # Skip ROI validation for rotation operations due to inconsistency in Sigima
-        # library between image data rotation (around image center) and ROI coordinate
-        # rotation (around ROI center)
-        simple_ops = ["fliph", "flipv", "transpose"]
-        if operation in simple_ops:
+        # For exact image operations, validate ROI transformation
+        if operation not in ["resize", "binning"]:
             __validate_roi_transformation(tr_obj, obj, operation)
 
     # Set proper function name and docstring
@@ -335,6 +341,67 @@ def __create_app_test(
     )
 
     return test_func
+
+
+# =============================================================================
+# Results moved with the pixels
+# =============================================================================
+
+
+EXACT_OPERATIONS = ["rotate90", "rotate270", "fliph", "flipv", "transpose"]
+
+
+def __create_feature_image(uniform: bool) -> sio.ImageObj:
+    """Create an image with an off-center peak (pixel at row 11, column 17), on a
+    non-square grid with an origin offset and anisotropic pixels (or non-uniform
+    coordinates)."""
+    nrows, ncols = 40, 64
+    y, x = np.mgrid[0:nrows, 0:ncols]
+    data = np.exp(-((x - 17.0) ** 2 / 20.0 + (y - 11.0) ** 2 / 8.0))
+    obj = sio.create_image("Off-center feature", data)
+    if uniform:
+        obj.set_uniform_coords(0.5, 2.0, -3.0, 7.0)
+    else:
+        icol, irow = np.arange(ncols), np.arange(nrows)
+        obj.set_coords(-3.0 + 0.5 * icol + 0.01 * icol**2, 7.0 + 2.0 * irow**1.2)
+    return obj
+
+
+def __peak_position(obj: sio.ImageObj) -> tuple[float, float]:
+    """Return the physical coordinates of the center of the brightest pixel."""
+    # pylint: disable-next=unbalanced-tuple-unpacking
+    row, col = np.unravel_index(np.argmax(obj.data), obj.data.shape)
+    if obj.is_uniform_coords:
+        return obj.x0 + col * obj.dx, obj.y0 + row * obj.dy
+    return obj.xcoords[col], obj.ycoords[row]
+
+
+@pytest.mark.parametrize("uniform", [True, False], ids=["uniform", "non-uniform"])
+@pytest.mark.parametrize("operation", EXACT_OPERATIONS)
+def test_transformed_results_follow_the_pixels(operation: str, uniform: bool) -> None:
+    """Analysis results moved by an image operation stay on the pixels they
+    describe."""
+    src = __create_feature_image(uniform)
+    peak = sio.GeometryResult(
+        "Peak", sio.KindShape.POINT, np.array([__peak_position(src)]), func_name="peak"
+    )
+    GeometryAdapter(peak).add_to(src)
+    dst = GeometricTransformWrapper(getattr(sipi, operation), operation)(src)
+    (moved,) = __get_geometries(dst)
+    np.testing.assert_allclose(moved.coords[0], __peak_position(dst), atol=1e-12)
+
+
+@pytest.mark.parametrize("operation", EXACT_OPERATIONS)
+def test_transformed_results_match_recomputed_results(operation: str) -> None:
+    """Analysis results moved by an image operation are the results of the same
+    analysis on the transformed image."""
+    src = __create_feature_image(uniform=True)
+    GeometryAdapter(sipi.centroid(src)).add_to(src)
+    dst = GeometricTransformWrapper(getattr(sipi, operation), operation)(src)
+    (moved,) = __get_geometries(dst)
+    recomputed = sipi.centroid(dst)
+    # (the centroid is computed in a way which is sensitive to rounding noise)
+    np.testing.assert_allclose(moved.coords, recomputed.coords, rtol=0, atol=1e-6)
 
 
 # =============================================================================

@@ -151,6 +151,11 @@ DataLab now uses stable UUID-based object references across object trees, result
 * Annotation identifiers, lock state, custom metadata and extension data are preserved across edits, while unknown third-party payloads are retained without modification
 * DataLab now requires Sigima ≥ 1.4.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x; HDF5 imports use Sigima's experimental-source API
 
+**Rectangular regions of interest:**
+
+* A rectangular region of interest now selects the pixels whose centers lie inside the rectangle, bounds included, like circular and polygonal ROIs and like the display: its bounds were rounded to the nearest pixel, which could shift the selection by up to half a pixel. A rectangle whose bounds lie exactly on pixel centers now includes the pixels on both bounds, i.e. one more row and one more column than before. This applies to processing and analysis in ROIs, to ROI extraction and to the background area of the offset correction
+* A rectangular ROI defined in pixel indices now covers its pixels up to their outer edges, so that it keeps the same pixels when converted to physical coordinates and back, and the cells of ROI grids now share the pixels of the image without overlap nor gap
+
 **HDF5 browser:**
 
 * Browsing an HDF5 file no longer reads its datasets entirely: they are listed and described from their shape and data type, and the value previews read only their first elements. Large files open faster and use less memory; data is read when a signal or an image is previewed or imported
@@ -200,6 +205,10 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 * Fixed the extraction of several regions of interest into a single image giving wrong coordinates to images with non-uniform coordinates (the X coordinates were taken from the extracted rows and the Y coordinates from the extracted columns)
 * The arbitrary rotation of images (**Processing > Geometry > Rotate by...**) now refuses images with non-uniform coordinates, like resizing and resampling, instead of producing an image whose coordinates did not match its pixels
 * Fixed the uncertainty of the product of signals being lost where one of the signals is zero: it is now propagated there too
+* Fixed ROIs, annotations and analysis results (centroids, detected peaks, contours...) being shifted by one pixel after a flip or a 90° rotation of an image; after a 90° rotation of a non-square image, or of an image whose coordinates do not start at zero, analysis results even ended up far from the features they describe. They now move exactly with the pixels, also for images with non-uniform coordinates. ROIs defined in pixel indices are also moved correctly, and inverse ROIs (which mask the inside of their shape) no longer become normal ROIs after these operations, a translation or a distribution of images on a grid
+* Fixed **ROI > Extract...** giving the extracted image a wrong origin when the coordinates of the source image do not start at zero, and coordinates not matching the extracted pixels for images with non-uniform coordinates
+* Fixed the coordinates of analysis results computed in a ROI being off by up to half a pixel
+* Fixed **Processing > Level adjustment > Offset correction** using a background area truncated to integer coordinates: the area was wrong for images whose coordinates are not in pixels (e.g. in millimeters), and empty when smaller than one unit
 
 **Plugins:**
 
