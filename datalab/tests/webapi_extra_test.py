@@ -40,8 +40,6 @@ from datalab.webapi.routes import (
     set_server_url,
 )
 from datalab.webapi.serialization import (
-    _deserialize_obj_metadata,
-    _make_json_serializable,
     _to_python_scalar,
     deserialize_object_from_npz,
     object_to_metadata,
@@ -148,7 +146,7 @@ def test_workspace_adapter_resolves_uuid_and_rejects_ambiguous_titles() -> None:
 
 
 # =============================================================================
-# Serialization helpers — _to_python_scalar / _make_json_serializable
+# Serialization helpers — _to_python_scalar
 # =============================================================================
 
 
@@ -178,71 +176,6 @@ class TestToPythonScalar:
         assert _to_python_scalar("hello") == "hello"
         assert _to_python_scalar(None) is None
         assert _to_python_scalar(3.14) == pytest.approx(3.14)
-
-
-class TestMakeJsonSerializable:
-    """Tests for the ``_make_json_serializable`` recursive helper."""
-
-    def test_nested_dict_with_numpy(self) -> None:
-        """Numpy values nested in dicts are recursively converted."""
-        data = {
-            "outer": {
-                "ints": np.int32(2),
-                "floats": np.float64(2.5),
-                "bools": np.bool_(False),
-                "arr": np.array([1, 2, 3]),
-            }
-        }
-        result = _make_json_serializable(data)
-        assert result == {
-            "outer": {
-                "ints": 2,
-                "floats": 2.5,
-                "bools": False,
-                "arr": [1, 2, 3],
-            }
-        }
-        # Round-trip through JSON to confirm true serialisability:
-        json.dumps(result)
-
-    def test_tuple_becomes_list(self) -> None:
-        """Tuples are converted to lists for JSON compatibility."""
-        result = _make_json_serializable((1, np.float64(2.0), "x"))
-        assert result == [1, 2.0, "x"]
-
-    def test_list_with_arrays(self) -> None:
-        """Lists of numpy arrays/scalars are recursively converted."""
-        result = _make_json_serializable([np.array([1, 2]), np.int8(5)])
-        assert result == [[1, 2], 5]
-
-    def test_passthrough_basic_types(self) -> None:
-        """Basic JSON-compatible values are returned unchanged."""
-        assert _make_json_serializable(42) == 42
-        assert _make_json_serializable("abc") == "abc"
-        assert _make_json_serializable(None) is None
-
-
-class TestDeserializeObjMetadata:
-    """Tests for ``_deserialize_obj_metadata`` (coords → ndarray restoration)."""
-
-    def test_coords_restored_to_array(self) -> None:
-        """Geometry ``coords`` lists are restored to numpy arrays."""
-        serialized = {"Geometry_circle": {"coords": [[1.0, 2.0], [3.0, 4.0]]}}
-        result = _deserialize_obj_metadata(serialized)
-        coords = result["Geometry_circle"]["coords"]
-        assert isinstance(coords, np.ndarray)
-        np.testing.assert_array_equal(coords, [[1.0, 2.0], [3.0, 4.0]])
-
-    def test_non_coords_list_kept_as_list(self) -> None:
-        """Non-``coords`` list entries remain Python lists."""
-        result = _deserialize_obj_metadata({"labels": ["a", "b"]})
-        assert result == {"labels": ["a", "b"]}
-        assert isinstance(result["labels"], list)
-
-    def test_scalar_passthrough(self) -> None:
-        """Scalar metadata values are returned unchanged."""
-        result = _deserialize_obj_metadata({"title": "T", "count": 7})
-        assert result == {"title": "T", "count": 7}
 
 
 # =============================================================================

@@ -220,7 +220,10 @@ Computation (Auth Required)
 Data Format
 -----------
 
-Objects are transferred using NumPy's NPZ format for efficiency.
+Objects are transferred using NumPy's NPZ format for efficiency. The format is
+implemented by Sigima (``sigima.io.serialize_object_to_npz`` and
+``sigima.io.deserialize_object_from_npz``), so that Python clients can read and
+write these archives with the same code as DataLab.
 
 SignalObj NPZ Structure
 ^^^^^^^^^^^^^^^^^^^^^^^
