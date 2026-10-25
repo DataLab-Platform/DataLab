@@ -18,6 +18,7 @@ import sigima.params
 import sigima.proc.image as sipi
 import sigima.proc.signal as sips
 from sigima.objects import create_image, create_signal
+from sigima.proc import contracts
 from sigima.tests.data import create_peak_image
 
 from datalab.env import execenv
@@ -542,6 +543,11 @@ def test_replaced_analysis_result_is_not_attributed() -> None:
 # from Pyodide (Playwright, ``DLW_WRITE_PROVENANCE_FIXTURE=1``).
 
 HDF5_DIR = osp.join(osp.dirname(osp.dirname(__file__)), "hdf5")
+#: Contract versions of the local Sigima, by operation identifier
+LOCAL_VERSIONS = {
+    contract.operation_id: contract.contract_version
+    for contract in contracts.build_contract_registry().contracts
+}
 CAPTURE_SHAPE = [
     ("image", None, "geometry"),
     ("image", "image", None),
@@ -709,6 +715,13 @@ def check_families_reference(win, edition: str) -> list[dict]:
     reports = []
     for activity in activities:
         report = win.verify_provenance_activity(activity["activity_id"])
+        operation = activity["call"]["operation"]
+        if operation["contract_version"] != LOCAL_VERSIONS[operation["id"]]:
+            # Recorded with another version of the contract (e.g. before Sigima
+            # 1.4): refused explicitly, never compared
+            assert report["eligibility"] == "unsupported_contract", report
+            reports.append(report)
+            continue
         accepted = ("exact",) if edition == "desktop" else ("exact", "within_tolerance")
         assert report["verdict"] in accepted, report
         reports.append(report)
@@ -724,12 +737,15 @@ def test_families_reference_round_trip() -> None:
             win.save_h5_workspace(path)
         with app() as win:
             win.load_h5_workspace([path], reset_all=True)
-            check_families_reference(win, "desktop")
+            reports = check_families_reference(win, "desktop")
+            # Recorded with the local contracts: every activity is replayed
+            assert all(report["eligibility"] == "ready" for report in reports)
 
 
 @pytest.mark.parametrize("edition", ["desktop", "web"])
 def test_families_reference_files(edition: str) -> None:
-    """Families files of both editions are replayed here under the declared rule."""
+    """Families files of both editions are replayed here under the declared rule,
+    except the activities recorded with an earlier contract version (refused)."""
     path = osp.join(HDF5_DIR, f"provenance_{edition}_families.h5")
     with app() as win:
         win.load_h5_workspace([path], reset_all=True)
