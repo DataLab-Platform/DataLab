@@ -456,7 +456,8 @@ def test_one_output_of_a_grouped_command(method: str) -> None:
 
 
 def test_web_files_are_described_and_applied_again() -> None:
-    """Reference files written by DataLab-Web: consulted, restored, reapplied."""
+    """Reference files written by DataLab-Web: consulted, restored, reapplied when
+    their contract version is still supported."""
     hdf5 = osp.join(osp.dirname(osp.dirname(__file__)), "hdf5")
     with app() as win:
         win.load_h5_workspace(
@@ -497,17 +498,15 @@ def test_web_files_are_described_and_applied_again() -> None:
             [osp.join(hdf5, "provenance_web_difference.h5")], reset_all=True
         )
         act_ab, _act_ba = win.provenance.ledger.activities
+        # Recorded with version 1 of the difference contract (before Sigima 1.4):
+        # described, but not applied again with the current contract
+        assert act_ab["call"]["operation"]["contract_version"] == 1
         a_b = win.find_object_by_uuid(output_uuid(win, act_ab))
         call = resolve_processing_call(win, a_b)
-        assert call.pattern == "2-to-1" and call.can_reapply
+        assert call.pattern == "2-to-1" and not call.can_reapply
+        assert "sigima.signal.difference" in call.reason
         assert [(i.role, i.object_uuid) for i in call.inputs] == inputs_of(win, act_ab)
-        a_b.y[:] = 0.0
+        count = len(win.provenance.ledger.activities)
         report = win.signalpanel.processor.recompute_processing(a_b, interactive=False)
-        assert report.success, report.message
-        assert np.array_equal(a_b.y, A_MINUS_B)
-        activity = win.provenance.ledger.activities[-1]
-        assert activity["context"]["x_alignment"] == RULE
-        assert (
-            win.verify_provenance_activity(activity["activity_id"])["verdict"]
-            == "exact"
-        )
+        assert not report.success
+        assert len(win.provenance.ledger.activities) == count

@@ -12,6 +12,7 @@ import numpy as np
 import pytest
 import sigima.proc.signal as sips
 from sigima.objects import SignalObj, create_signal
+from sigima.proc import contracts
 
 from datalab.env import execenv
 from datalab.objectmodel import get_uuid
@@ -25,6 +26,8 @@ from datalab.tests.features.common.provenance_unit_test import (  # noqa: F401
 )
 
 HDF5_DIR = osp.join(osp.dirname(osp.dirname(__file__)), "hdf5")
+#: Version of the difference contract of the local Sigima
+DIFFERENCE_VERSION = contracts.contract_for_function(sips.difference).contract_version
 
 
 def add(win, x, y, title: str, units=("s", "V")) -> SignalObj:
@@ -89,8 +92,14 @@ def build_differences(win) -> tuple[SignalObj, ...]:
     return a, b, a_b, b_a
 
 
-def check_differences(win, edition: str = "desktop") -> None:
-    """Check the two recorded differences of a workspace and replay them."""
+def check_differences(
+    win, edition: str = "desktop", contract_version: int = DIFFERENCE_VERSION
+) -> None:
+    """Check the two recorded differences of a workspace and replay them.
+
+    Activities recorded with another version of the difference contract (files
+    written before Sigima 1.4) are refused explicitly, without computation.
+    """
     ledger = win.provenance.ledger
     ledger.validate()
     act_ab, act_ba = ledger.activities
@@ -99,7 +108,7 @@ def check_differences(win, edition: str = "desktop") -> None:
         assert activity["edition"] == edition
         assert activity["call"]["operation"] == {
             "id": "sigima.signal.difference",
-            "contract_version": 1,
+            "contract_version": contract_version,
         }
         assert activity["call"]["parameters"] == {}
         assert activity["context"]["x_alignment"] == RULE
@@ -111,11 +120,17 @@ def check_differences(win, edition: str = "desktop") -> None:
         result = win.find_object_by_uuid(state["object_uuid"])
         assert np.array_equal(result.y, expected)
     computations = win.signalpanel.processor.execution.computations
+    replayable = contract_version == DIFFERENCE_VERSION
     for activity in (act_ab, act_ba):
         report = win.verify_provenance_activity(activity["activity_id"])
-        assert report["verdict"] == "exact", report
-        assert report["context"]["x_alignment"] == RULE
-    assert win.signalpanel.processor.execution.computations == computations + 2
+        if replayable:
+            assert report["verdict"] == "exact", report
+            assert report["context"]["x_alignment"] == RULE
+        else:
+            assert report["eligibility"] == "unsupported_contract", report
+            assert report["verdict"] == "not_verified", report
+    expected = computations + (2 if replayable else 0)
+    assert win.signalpanel.processor.execution.computations == expected
 
 
 def test_capture_and_verification() -> None:
@@ -148,11 +163,12 @@ def test_desktop_round_trip() -> None:
 
 @pytest.mark.parametrize("edition", ["desktop", "web"])
 def test_reference_files(edition: str) -> None:
-    """Reference files of both editions reopen and replay exactly on Desktop."""
+    """Reference files of both editions reopen on Desktop; recorded with version 1
+    of the difference contract (before Sigima 1.4), they are refused explicitly."""
     path = osp.join(HDF5_DIR, f"provenance_{edition}_difference.h5")
     with app() as win:
         win.load_h5_workspace([path], reset_all=True)
-        check_differences(win, edition)
+        check_differences(win, edition, contract_version=1)
 
 
 def test_swapped_roles_give_a_different_result() -> None:
