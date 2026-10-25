@@ -145,6 +145,42 @@ def test_workspace_adapter_resolves_uuid_and_rejects_ambiguous_titles() -> None:
     image_panel.SIG_OBJECT_REMOVED.emit.assert_called_once_with()
 
 
+def test_workspace_adapter_uploaded_copy_gets_a_new_identity() -> None:
+    """An object downloaded then uploaded under another name is a new object.
+
+    Regression: the copy carried the UUID of the original object, the panel
+    refused it and showed the error in a modal dialog, so that the request hung
+    until the main-thread timeout (DataLab-Kernel ``rename``).
+    """
+    signal = _make_signal("Original", n=10)
+    signal_panel = make_panel([signal])
+
+    def add_object(obj: DataObject) -> None:
+        if get_uuid(obj) in [get_uuid(other) for other in signal_panel.objmodel]:
+            raise ValueError("Object already in panel")
+        signal_panel.objmodel.append(obj)
+
+    signal_panel._add_object = add_object  # pylint: disable=protected-access
+    adapter = WorkspaceAdapter(
+        SimpleNamespace(signalpanel=signal_panel, imagepanel=make_panel([]))
+    )
+    copy = adapter.get_object(get_uuid(signal))
+    assert get_uuid(copy) == get_uuid(signal)
+    copy.title = "Renamed"
+    adapter.add_object(copy)
+    assert len(signal_panel.objmodel) == 2
+    assert get_uuid(signal_panel.objmodel[1]) != get_uuid(signal)
+    assert get_uuid(signal) == get_uuid(signal_panel.objmodel[0])
+
+    # Errors of the panel are raised to the caller, not shown in a dialog
+    def failing_add(_obj: DataObject) -> None:
+        raise ValueError("refused")
+
+    signal_panel._add_object = failing_add  # pylint: disable=protected-access
+    with pytest.raises(ValueError, match="refused"):
+        adapter.add_object(_make_signal("Other"))
+
+
 # =============================================================================
 # Serialization helpers — _to_python_scalar
 # =============================================================================
