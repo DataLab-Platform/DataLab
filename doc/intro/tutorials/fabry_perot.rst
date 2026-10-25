@@ -324,8 +324,8 @@ corresponds to the ``calc("line_profile")`` computation feature of DataLab's API
 entry |profile| in the "Operations" menu and the "Line profile" dialog will open, letting you
 select the profile row (for a horizontal profile) or column (for a vertical profile)
 on the image.
-You can also enter the row/column number directly by clicking on "parameters..." in the
-"Line profile" dialog.
+You can also enter the Y coordinate of the row (or the X coordinate of the column)
+directly by clicking on "parameters..." in the "Line profile" dialog.
 
 .. figure:: ../../images/tutorials/fabry_perot/24.png
 
@@ -333,8 +333,9 @@ You can also enter the row/column number directly by clicking on "parameters..."
 
 .. figure:: ../../images/tutorials/fabry_perot/25.png
 
-    The "Profile" dialog opens. Enter the row of the horizontal profile
-    (or the column of the vertical profile) in the dialog box that opens. Click "OK".
+    The "Profile" dialog opens. Enter the Y coordinate of the horizontal profile
+    (or the X coordinate of the vertical profile) in the dialog box that opens.
+    Click "OK".
 
 After clicking "OK", the intensity profile along the X axis is computed and
 displayed in the "Signals" panel. DataLab automatically switches to the "Signals"

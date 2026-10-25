@@ -18,6 +18,7 @@ import sigima.params
 import sigima.proc.image as sipi
 import sigima.proc.signal as sips
 from sigima.objects import create_image, create_signal
+from sigima.proc.contracts import build_contract_registry
 from sigima.tests.data import create_peak_image
 
 from datalab.env import execenv
@@ -252,7 +253,7 @@ def run_families(win) -> None:
     spanel.processor.run_feature("stats")
     image = add_image(win)
     ipanel.objview.select_objects([get_uuid(image)])
-    profile = sigima.params.LineProfileParam.create(direction="horizontal", row=1)
+    profile = sigima.params.LineProfileParam.create(direction="horizontal", y=1)
     ipanel.processor.compute_1_to_1(sipi.line_profile, profile, edit=False)
     ipanel.objview.select_objects([get_uuid(image)])
     ipanel.processor.run_feature("centroid")
@@ -646,6 +647,13 @@ FAMILIES_REFERENCE = [
     "sigima.image.peak_detection",
 ]
 
+#: Local contract versions: a reference file written before a change of the result
+#: of an operation records an older version, refused instead of being replayed
+LOCAL_VERSIONS = {
+    contract.operation_id: contract.contract_version
+    for contract in build_contract_registry().contracts
+}
+
 
 def build_families_reference(win) -> None:
     """Run the cross-edition families scenario."""
@@ -679,7 +687,7 @@ def build_families_reference(win) -> None:
     spanel.processor.run_feature("stats")
     image = add_image(win)
     ipanel.objview.select_objects([get_uuid(image)])
-    profile = sigima.params.LineProfileParam.create(direction="horizontal", row=1)
+    profile = sigima.params.LineProfileParam.create(direction="horizontal", y=1)
     ipanel.processor.compute_1_to_1(sipi.line_profile, profile, edit=False)
     ipanel.objview.select_objects([get_uuid(image)])
     ipanel.processor.run_feature("centroid")
@@ -709,8 +717,16 @@ def check_families_reference(win, edition: str) -> list[dict]:
     reports = []
     for activity in activities:
         report = win.verify_provenance_activity(activity["activity_id"])
-        accepted = ("exact",) if edition == "desktop" else ("exact", "within_tolerance")
-        assert report["verdict"] in accepted, report
+        operation = activity["call"]["operation"]
+        if operation["contract_version"] != LOCAL_VERSIONS[operation["id"]]:
+            # Recorded before a change of the result: refused, never replayed
+            assert report["eligibility"] == "unsupported_contract", report
+            assert report["verdict"] == "not_verified", report
+        else:
+            accepted = ("exact",)
+            if edition != "desktop":
+                accepted += ("within_tolerance",)
+            assert report["verdict"] in accepted, report
         reports.append(report)
     return reports
 

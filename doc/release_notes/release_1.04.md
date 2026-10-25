@@ -159,6 +159,13 @@ DataLab now uses stable UUID-based object references across object trees, result
 * The cells of ROI grids (**ROI > Create ROI grid...**) are now made of whole pixels, so that adjacent cells never share a pixel and a full-size grid covers every pixel exactly once, whatever the image size; on images with non-uniform coordinates, the grid now spans the whole image, whose last rows and columns were left out
 * Regions of interest saved with earlier versions are not converted: they select pixels according to these rules when they are used again, so that processing and analysis in these regions may give slightly different results when recomputed
 
+**Image profiles in physical coordinates:**
+
+* Line, segment, average and radial profiles (**Analysis > Intensity profiles**) are now defined in the physical coordinates of the image, like regions of interest and analysis results, instead of pixel indices: the profile parameters show coordinates in the units of the image axes, and the X axis of the resulting signals holds physical coordinates or distances with the matching unit. On images without calibration (origin 0, pixel size 1), results are unchanged
+* The radial profile is now circular on images with rectangular pixels or non-uniform coordinates, and its center is correct on calibrated images, where the image center was misplaced
+* Segment and radial profiles are refused on images whose X and Y units differ, since distances are then undefined; coordinates outside the image are refused instead of being silently moved to its edge. Lines and segments drawn beyond the image in the profile dialog are brought back to its outermost pixels
+* Scripts, macros and plugins must use the new parameter names (`y`/`x` for line profiles, `x1`, `y1`, `x2`, `y2` for segment and average profiles, `xc`/`yc` for radial profiles) and physical coordinates. Profile computations recorded in the provenance of workspaces saved with earlier versions are reported as not verifiable, instead of being replayed with a different meaning
+
 **HDF5 browser:**
 
 * Browsing an HDF5 file no longer reads its datasets entirely: they are listed and described from their shape and data type, and the value previews read only their first elements. Large files open faster and use less memory; data is read when a signal or an image is previewed or imported

@@ -79,11 +79,14 @@ msgstr "Exemple d'histogramme."
 msgid "Intensity profiles"
 msgstr "Profils d'intensité"
 
+msgid "Profiles are defined in the physical coordinates of the image, like regions of interest and analysis results. The X axis of the resulting signals holds physical coordinates (line and average profiles) or distances (segment and radial profiles), with the unit of the corresponding axis of the image. Segment and radial profiles require the same unit on the X and Y axes of the image."
+msgstr "Les profils sont définis dans les coordonnées physiques de l'image, comme les régions d'intérêt et les résultats d'analyse. L'axe X des signaux obtenus contient des coordonnées physiques (profils rectilignes et moyens) ou des distances (profils de segment et radiaux), avec l'unité de l'axe correspondant de l'image. Les profils de segment et radiaux exigent la même unité sur les axes X et Y de l'image."
+
 msgid "Line profile"
 msgstr "Profil rectiligne"
 
-msgid "Extract an horizontal or vertical profile from each selected image, and create new signals from these profiles."
-msgstr "Extraire un profil horizontal ou vertical de chaque image sélectionnée et créer un nouveau signal à partir de chacun de ces profils."
+msgid "Extract an horizontal or vertical profile from each selected image, and create new signals from these profiles. The profile is extracted along the row (or column) of pixels whose center is the nearest to the given Y (or X) coordinate."
+msgstr "Extraire un profil horizontal ou vertical de chaque image sélectionnée et créer un nouveau signal à partir de chacun de ces profils. Le profil est extrait le long de la ligne (ou de la colonne) de pixels dont le centre est le plus proche de la coordonnée Y (ou X) indiquée."
 
 msgid "Line profile dialog. Parameters may also be set manually (\"Edit profile parameters\" button)."
 msgstr "Boîte de dialogue d'extraction de profil. Les paramètres peuvent être également définis manuellement (bouton \"Editer les paramètres du profil\")."
@@ -91,14 +94,14 @@ msgstr "Boîte de dialogue d'extraction de profil. Les paramètres peuvent être
 msgid "Segment profile"
 msgstr "Profil le long d'un segment"
 
-msgid "Extract a segment profile from each selected image, and create new signals from these profiles."
-msgstr "Extraire un profil le long d'un segment de chaque image sélectionnée et créer un nouveau signal à partir de chacun de ces profils."
+msgid "Extract a segment profile from each selected image, and create new signals from these profiles. The segment is sampled at regular steps, equal to the smallest distance between neighboring pixel centers, each sample taking the value of the nearest pixel."
+msgstr "Extraire un profil le long d'un segment de chaque image sélectionnée et créer un nouveau signal à partir de chacun de ces profils. Le segment est échantillonné par pas réguliers, égaux à la plus petite distance entre centres de pixels voisins, chaque échantillon prenant la valeur du pixel le plus proche."
 
 msgid "Average profile"
 msgstr "Profil moyen"
 
-msgid "Extract an horizontal or vertical profile averaged over a rectangular area, from each selected image, and create new signals from these profiles."
-msgstr "Extraire un profil horizontal ou vertical moyenné sur une zone rectangulaire de chaque image sélectionnée et créer un nouveau signal à partir de chacun de ces profils."
+msgid "Extract an horizontal or vertical profile averaged over a rectangular area, from each selected image, and create new signals from these profiles. The pixels whose centers lie inside the rectangle (bounds included) are averaged, as for rectangular regions of interest."
+msgstr "Extraire un profil horizontal ou vertical moyenné sur une zone rectangulaire de chaque image sélectionnée et créer un nouveau signal à partir de chacun de ces profils. Les pixels dont le centre se trouve dans le rectangle (bornes comprises) sont moyennés, comme pour les régions d'intérêt rectangulaires."
 
 msgid "Average profile dialog: the area is defined by a rectangle shape. Parameters may also be set manually (\"Edit profile parameters\" button)."
 msgstr "Boîte de dialogue d'extraction de profil moyen : la zone est définie par un rectangle. Les paramètres peuvent être également définis manuellement (bouton \"Editer les paramètres du profil\")."
@@ -121,14 +124,14 @@ msgstr "Centre autour duquel le profil radial est calculé : centre de masse, ce
 msgid "X"
 msgstr "X"
 
-msgid "X coordinate of the center (if user-defined), in pixels"
-msgstr "Coordonnée X du centre (si défini par l'utilisateur), en pixels"
+msgid "X coordinate of the center (if user-defined), in physical units"
+msgstr "Coordonnée X du centre (si définie par l'utilisateur), en unités physiques"
 
 msgid "Y"
 msgstr "Y"
 
-msgid "Y coordinate of the center (if user-defined), in pixels"
-msgstr "Coordonnée Y du centre (si défini par l'utilisateur), en pixels"
+msgid "Y coordinate of the center (if user-defined), in physical units"
+msgstr "Coordonnée Y du centre (si définie par l'utilisateur), en unités physiques"
 
 msgid "Horizontal and vertical projections"
 msgstr "Projections horizontale et verticale"
