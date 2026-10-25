@@ -276,8 +276,8 @@ msgstr "Exécuter une fonction de calcul DataLab sur la sélection courante"
 msgid "Data Format"
 msgstr "Format des données"
 
-msgid "Objects are transferred using NumPy's NPZ format for efficiency."
-msgstr "Les objets sont transférés au format NPZ de NumPy pour plus d'efficacité."
+msgid "Objects are transferred using NumPy's NPZ format for efficiency. The format is implemented by Sigima (``sigima.io.serialize_object_to_npz`` and ``sigima.io.deserialize_object_from_npz``), so that Python clients can read and write these archives with the same code as DataLab."
+msgstr "Les objets sont transférés au format NPZ de NumPy pour plus d'efficacité. Le format est implémenté par Sigima (``sigima.io.serialize_object_to_npz`` et ``sigima.io.deserialize_object_from_npz``), de sorte que les clients Python peuvent lire et écrire ces archives avec le même code que DataLab."
 
 msgid "SignalObj NPZ Structure"
 msgstr "Structure NPZ de SignalObj"
