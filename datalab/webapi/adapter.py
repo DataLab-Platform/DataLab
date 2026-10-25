@@ -34,7 +34,7 @@ from typing import TYPE_CHECKING, Any, Union
 
 from qtpy.QtCore import QCoreApplication, QObject, QThread, Signal, Slot
 
-from datalab.objectmodel import UUID_REGEX, get_uuid
+from datalab.objectmodel import UUID_REGEX, get_uuid, set_uuid
 
 if TYPE_CHECKING:
     from sigima.objects import ImageObj, SignalObj
@@ -342,7 +342,13 @@ class WorkspaceAdapter(QObject):
         self._add_object_sync(obj)
 
     def _add_object_sync(self, obj: DataObject) -> None:
-        """Add object (called from main thread or marshaled via executor)."""
+        """Add object (called from main thread or marshaled via executor).
+
+        The object is a new one: it gets its own identity, whatever UUID its
+        metadata carry (e.g. an object downloaded from the API and uploaded
+        again under another name). Errors are raised to the caller, never shown
+        in a dialog.
+        """
         obj_type = type(obj).__name__
 
         if obj_type == "SignalObj":
@@ -352,8 +358,9 @@ class WorkspaceAdapter(QObject):
         else:
             raise TypeError(f"Unsupported object type: {obj_type}")
 
-        # Use executor to run on main thread if necessary
-        self._executor.run_on_main_thread(lambda: panel.add_object(obj))
+        set_uuid(obj)
+        # pylint: disable-next=protected-access
+        self._executor.run_on_main_thread(lambda: panel._add_object(obj))
 
     def remove_object(self, name: str) -> None:
         """Remove an object from the workspace.
