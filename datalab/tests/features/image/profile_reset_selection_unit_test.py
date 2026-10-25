@@ -72,13 +72,12 @@ def test_profile_reset_selection_unit():
         dialog = ProfileExtractionDialog("rectangle", param, add_initial_shape=False)
         dialog.set_obj(obj)
 
-        # The test image is a 2000x2000 pixel array with unit spacing and
-        # origin at (0, 0), so physical coordinates map 1:1 to pixel indices:
-        # each drawn rectangle is committed to `param` with identical values.
+        # Profile parameters are in physical coordinates: each drawn rectangle is
+        # committed to `param` with identical values.
 
         # First user selection
         _simulate_draw(dialog, 10, 10, 50, 50)
-        first_coords = (param.col1, param.row1, param.col2, param.row2)
+        first_coords = (param.x1, param.y1, param.x2, param.y2)
         assert first_coords == (10, 10, 50, 50)
 
         # User clicks "Reset selection"
@@ -97,7 +96,7 @@ def test_profile_reset_selection_unit():
         # The caller's `param` object must reflect the *second* selection: the
         # committed coordinates must match the newly drawn rectangle, not the
         # first (discarded) one (issue #322).
-        second_coords = (param.col1, param.row1, param.col2, param.row2)
+        second_coords = (param.x1, param.y1, param.x2, param.y2)
         assert second_coords == (100, 100, 150, 150), (
             f"'param' holds {second_coords} instead of the second selection "
             "(100, 100, 150, 150) after Reset selection + new draw (issue #322)"

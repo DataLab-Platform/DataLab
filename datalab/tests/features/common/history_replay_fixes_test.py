@@ -46,9 +46,7 @@ def record_line_profile(win) -> tuple:
     history, ipanel = win.historypanel, win.imagepanel
     ipanel.add_object(create_sincos_image())
     ipanel.objview.select_objects([1])
-    param = sigima.params.LineProfileParam.create(
-        direction="horizontal", row=100, col=100
-    )
+    param = sigima.params.LineProfileParam.create(direction="horizontal", y=100, x=100)
     ipanel.processor.run_feature("line_profile", param)
     action = history[len(history)]
     return action, action.output_uuids[0]

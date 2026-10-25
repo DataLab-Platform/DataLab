@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Literal
 
+import numpy as np
 import qtpy.QtCore as QC
 import sigima.params
 from guidata.configtools import get_icon
@@ -243,55 +244,87 @@ class ProfileExtractionDialog(PlotDialog):
         self.shape_to_param()
         self.update_cs_panels_state()
 
-    def __physical_to_indices(self, coords: list[float]) -> tuple[int, int]:
-        """Physical to indices
+    def __clip_to_pixel_centers(self, x: float, y: float) -> tuple[float, float]:
+        """Clip a point to the range of the pixel centers of the image
 
         Args:
-            coords: Coordinates
+            x: X coordinate
+            y: Y coordinate
 
         Returns:
-            Tuple of indices
+            Clipped coordinates (physical units)
         """
         assert self.__obj is not None
-        return self.__obj.physical_to_indices(coords, clip=True)
+        obj = self.__obj
+        nrows, ncols = obj.data.shape
+        xb = obj.axis_to_physical(np.array([0.0, ncols - 1.0]), "x")
+        yb = obj.axis_to_physical(np.array([0.0, nrows - 1.0]), "y")
+        x = float(np.clip(x, np.min(xb), np.max(xb)))
+        y = float(np.clip(y, np.min(yb), np.max(yb)))
+        return x, y
+
+    def __fit_param_to_image(self) -> None:
+        """Bring the profile parameters back into the image (e.g. the parameters
+        of the last profile, extracted from another image)"""
+        assert self.__obj is not None
+        clip = self.__clip_to_pixel_centers
+        p = self.param
+        if isinstance(p, sigima.params.LineProfileParam):
+            p.x, p.y = clip(p.x, p.y)
+        elif isinstance(p, sigima.params.SegmentProfileParam):
+            (p.x1, p.y1), (p.x2, p.y2) = clip(p.x1, p.y1), clip(p.x2, p.y2)
+        else:
+            nrows, ncols = self.__obj.data.shape
+            x0, y0, x1, y1 = self.__obj.pixel_range_to_physical([0, 0, ncols, nrows])
+            xmin, xmax, ymin, ymax = min(x0, x1), max(x0, x1), min(y0, y1), max(y0, y1)
+            for name, vmin, vmax in (
+                ("x1", xmin, xmax),
+                ("x2", xmin, xmax),
+                ("y1", ymin, ymax),
+                ("y2", ymin, ymax),
+            ):
+                value = getattr(p, name)
+                if value is not None:
+                    setattr(p, name, float(np.clip(value, vmin, vmax)))
 
     def shape_to_param(self) -> None:
-        """Shape to param"""
+        """Shape to param (profile parameters are in physical coordinates)"""
         assert self.__obj is not None
-        p2i = self.__physical_to_indices
+        clip = self.__clip_to_pixel_centers
         p = self.param
         if isinstance(self.shape, AnnotatedPoint):
             assert isinstance(p, sigima.params.LineProfileParam)
-            p.col, p.row = p2i(self.shape.get_pos())
+            p.x, p.y = clip(*self.shape.get_pos())
         elif isinstance(self.shape, AnnotatedSegment):
             assert isinstance(p, sigima.params.SegmentProfileParam)
-            p.col1, p.row1, p.col2, p.row2 = p2i(self.shape.get_rect())
-            if p.col1 > p.col2:
-                p.col1, p.col2 = p.col2, p.col1
-                p.row1, p.row2 = p.row2, p.row1
+            x1, y1, x2, y2 = self.shape.get_rect()
+            (p.x1, p.y1), (p.x2, p.y2) = clip(x1, y1), clip(x2, y2)
+            if p.x1 > p.x2:
+                p.x1, p.x2 = p.x2, p.x1
+                p.y1, p.y2 = p.y2, p.y1
         else:
             assert isinstance(p, sigima.params.AverageProfileParam)
-            p.col1, p.row1, p.col2, p.row2 = p2i(self.shape.get_rect())
-            if p.col1 > p.col2:
-                p.col1, p.col2 = p.col2, p.col1
-                p.row1, p.row2 = p.row2, p.row1
+            x1, y1, x2, y2 = self.shape.get_rect()
+            p.x1, p.x2 = sorted((float(x1), float(x2)))
+            p.y1, p.y2 = sorted((float(y1), float(y2)))
 
     def param_to_shape(self) -> None:
         """Param to shape"""
         assert self.__obj is not None
-        i2p = self.__obj.indices_to_physical
         p = self.param
         if isinstance(self.shape, AnnotatedPoint):
             assert isinstance(p, sigima.params.LineProfileParam)
-            x, y = i2p([p.col, p.row])
-            self.shape.set_pos(x, y)
+            self.shape.set_pos(p.x, p.y)
         elif isinstance(self.shape, AnnotatedSegment):
             assert isinstance(p, sigima.params.SegmentProfileParam)
-            x1, y1, x2, y2 = i2p([p.col1, p.row1, p.col2, p.row2])
-            self.shape.set_rect(x1, y1, x2, y2)
+            self.shape.set_rect(p.x1, p.y1, p.x2, p.y2)
         else:
             assert isinstance(p, sigima.params.AverageProfileParam)
-            x1, y1, x2, y2 = i2p([p.col1, p.row1, p.col2, p.row2])
+            # Undefined bounds stand for the edges of the image
+            nrows, ncols = self.__obj.data.shape
+            edges = self.__obj.pixel_range_to_physical([0, 0, ncols, nrows])
+            coords = [p.x1, p.y1, p.x2, p.y2]
+            x1, y1, x2, y2 = [e if c is None else c for c, e in zip(coords, edges)]
             self.shape.set_rect(x1, y1, x2, y2)
 
     def edit_values(self) -> None:
@@ -330,6 +363,7 @@ class ProfileExtractionDialog(PlotDialog):
             p0 = QC.QPointF(0.0, 0.0)
             self.cstool.add_shape_to_plot(plot, p0, p0)
             self.shape = self.cstool.get_last_final_shape()
+            self.__fit_param_to_image()
             self.param_to_shape()
             self.param_btn.setEnabled(True)
             self.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(True)

@@ -38,11 +38,11 @@ def test_contour_app() -> None:
         panel.add_object(ima2)
         panel.processor.run_feature("contour_shape", param)
 
-        param = sigima.params.LineProfileParam.create(direction="horizontal", row=554)
+        param = sigima.params.LineProfileParam.create(direction="horizontal", y=554)
         panel.processor.run_feature("line_profile", param)
 
         param = sigima.params.AverageProfileParam.create(
-            direction="horizontal", row1=550, row2=560
+            direction="horizontal", y1=550, y2=560
         )
         panel.processor.run_feature("average_profile", param)
 

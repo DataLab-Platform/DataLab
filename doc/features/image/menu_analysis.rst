@@ -66,11 +66,18 @@ Parameters are:
 Intensity profiles
 ^^^^^^^^^^^^^^^^^^
 
+Profiles are defined in the physical coordinates of the image, like regions of
+interest and analysis results. The X axis of the resulting signals holds physical
+coordinates (line and average profiles) or distances (segment and radial
+profiles), with the unit of the corresponding axis of the image. Segment and
+radial profiles require the same unit on the X and Y axes of the image.
+
 Line profile
 ~~~~~~~~~~~~
 
 Extract an horizontal or vertical profile from each selected image, and create
-new signals from these profiles.
+new signals from these profiles. The profile is extracted along the row (or column)
+of pixels whose center is the nearest to the given Y (or X) coordinate.
 
 .. figure:: /images/shots/i_profile.png
 
@@ -81,13 +88,17 @@ Segment profile
 ~~~~~~~~~~~~~~~
 
 Extract a segment profile from each selected image, and create new signals
-from these profiles.
+from these profiles. The segment is sampled at regular steps, equal to the
+smallest distance between neighboring pixel centers, each sample taking the value
+of the nearest pixel.
 
 Average profile
 ~~~~~~~~~~~~~~~
 
 Extract an horizontal or vertical profile averaged over a rectangular area, from
-each selected image, and create new signals from these profiles.
+each selected image, and create new signals from these profiles. The pixels whose
+centers lie inside the rectangle (bounds included) are averaged, as for
+rectangular regions of interest.
 
 .. figure:: /images/shots/i_profile_average.png
 
@@ -111,9 +122,9 @@ The following parameters are available:
     * - Center
       - Center around which the radial profile is computed: centroid, image center, or user-defined
     * - X
-      - X coordinate of the center (if user-defined), in pixels
+      - X coordinate of the center (if user-defined), in physical units
     * - Y
-      - Y coordinate of the center (if user-defined), in pixels
+      - Y coordinate of the center (if user-defined), in physical units
 
 Horizontal and vertical projections
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
