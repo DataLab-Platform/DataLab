@@ -1,5 +1,13 @@
 # Version 1.3 #
 
+## DataLab Version 1.3.1 ##
+
+### 🔧 Improvements since version 1.3.0 ###
+
+**Compatibility:**
+
+* Updated minimum Sigima requirement from 1.2.0 to 1.3.0: Gaussian, 2D ramp, sinusoidal grating, ring pattern, Siemens star and 2D sinc images are now created in physical coordinates (over their [x<sub>min</sub>, x<sub>max</sub>] × [y<sub>min</sub>, y<sub>max</sub>] domain) instead of pixel coordinates, unless the new "Physical coordinates" option is disabled. Images created with earlier versions keep their pixel coordinates when they are recreated
+
 ## DataLab Version 1.3.0 ##
 
 ### ✨ New Features ###
