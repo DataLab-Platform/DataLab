@@ -88,9 +88,9 @@ Segment profile
 ~~~~~~~~~~~~~~~
 
 Extract a segment profile from each selected image, and create new signals
-from these profiles. The segment is sampled at regular steps, equal to the
-smallest distance between neighboring pixel centers, each sample taking the value
-of the nearest pixel.
+from these profiles. The segment is sampled at regular steps from its start point
+to its end point included, with one sample per pixel along the axis where it spans
+the most pixels, each sample taking the value of the nearest pixel.
 
 Average profile
 ~~~~~~~~~~~~~~~
