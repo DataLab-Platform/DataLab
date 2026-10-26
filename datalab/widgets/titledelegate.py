@@ -145,34 +145,46 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
             return
         opt = QW.QStyleOptionViewItem(option)
         self.initStyleOption(opt, index)
+        palette = opt.palette
+        dark = palette.color(QG.QPalette.Base).lightness() < 128
+        selected = bool(opt.state & QW.QStyle.State_Selected)
+        link_color = QG.QColor("#8ed4ff" if dark else "#004b99")
+        if selected:
+            background = QG.QColor("#204a70" if dark else "#cce8ff")
+            text_color = QG.QColor("#f0f0f0" if dark else "#202020")
+            meta_color = QG.QColor("#cbd5e1" if dark else "#4a5563")
+            # Native selection painting may ignore Highlight (notably on
+            # Windows). Use an explicit brush so the contrast is predictable.
+            opt.state &= ~(
+                QW.QStyle.State_Selected
+                | QW.QStyle.State_MouseOver
+                | QW.QStyle.State_HasFocus
+            )
+            opt.backgroundBrush = QG.QBrush(background)
+        else:
+            group = (
+                QG.QPalette.Active
+                if opt.state & QW.QStyle.State_Active
+                else QG.QPalette.Inactive
+            )
+            text_color = palette.color(group, QG.QPalette.Text)
+            meta_color = QG.QColor("#aeb8c4" if dark else "#59636e")
         # Let the style draw the background, focus rect and decoration
         # (icon), but not the text.
         opt.text = ""
         style = opt.widget.style() if opt.widget else QW.QApplication.style()
         style.drawControl(QW.QStyle.CE_ItemViewItem, opt, painter, opt.widget)
+        if selected and option.state & QW.QStyle.State_HasFocus:
+            painter.save()
+            painter.setPen(QG.QPen(meta_color, 1, QC.Qt.DotLine))
+            painter.setBrush(QC.Qt.NoBrush)
+            painter.drawRect(opt.rect.adjusted(1, 1, -2, -2))
+            painter.restore()
 
         text_rect = style.subElementRect(QW.QStyle.SE_ItemViewItemText, opt, opt.widget)
-        palette = option.palette
-        selected = bool(option.state & QW.QStyle.State_Selected)
-        # ``QPalette.Highlight`` is the theme's accent color (vivid in both
-        # light and dark modes) — much more readable than the default
-        # ``QPalette.Link`` role, which many themes leave at Qt's hard-coded
-        # dark blue.
-        accent = palette.color(QG.QPalette.Active, QG.QPalette.Highlight)
-        if selected:
-            text_color = palette.color(QG.QPalette.Active, QG.QPalette.HighlightedText)
-            # The selection background uses ``Highlight`` itself, so links must
-            # use the theme's contrasting text role. Underlining preserves the
-            # link affordance even when link and selected text share a color.
-            link_color = text_color
-            meta_color = text_color
-        else:
-            text_color = palette.color(QG.QPalette.Active, QG.QPalette.Text)
-            link_color = accent
-            meta_color = palette.color(QG.QPalette.Active, QG.QPalette.Mid)
         doc = _make_text_document(
             text,
-            option,
+            opt,
             link_color,
             text_color,
             self.reference_resolver,
@@ -183,6 +195,9 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
         painter.save()
         painter.translate(text_rect.topLeft())
         ctx = QG.QAbstractTextDocumentLayout.PaintContext()
+        # Unformatted fragments do not inherit the document's body CSS.
+        ctx.palette = QG.QPalette(palette)
+        ctx.palette.setColor(QG.QPalette.Text, text_color)
         clip = QC.QRectF(0, 0, text_rect.width(), text_rect.height())
         ctx.clip = clip
         painter.setClipRect(clip)
