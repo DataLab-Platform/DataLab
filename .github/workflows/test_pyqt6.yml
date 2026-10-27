@@ -77,8 +77,9 @@ jobs:
            pip install -e ../DataLab-Capsule
            # Install tomli for TOML parsing (safe if already present)
            pip install tomli
-           # Extract dependencies and save to file, then install
-           python -c "import tomli; f=open('pyproject.toml','rb'); data=tomli.load(f); deps=[d for d in data['project']['dependencies'] if not any(p in d for p in ['guidata','PlotPy','Sigima', 'SigimaX', 'datalab-capsule'])]; open('deps.txt','w').write('\n'.join(deps))"
+           # Extract dependencies of DataLab and SigimaX (installed with --no-deps
+           # above), save them to file, then install
+           python -c "import tomli; deps=[d for p in ('pyproject.toml', '../SigimaX/pyproject.toml') for d in tomli.load(open(p,'rb'))['project']['dependencies'] if not any(n in d for n in ['guidata','PlotPy','Sigima', 'SigimaX', 'datalab-capsule'])]; open('deps.txt','w').write('\n'.join(deps))"
            pip install -r deps.txt
            # Install DataLab without dependencies
            pip install --no-deps .
@@ -105,8 +106,9 @@ jobs:
            pip install -e ../DataLab-Capsule
            # Install tomli for TOML parsing (safe if already present)
            pip install tomli
-           # Extract dependencies and save to file, then install
-           python -c "import tomli; f=open('pyproject.toml','rb'); data=tomli.load(f); deps=[d for d in data['project']['dependencies'] if not any(p in d for p in ['guidata','PlotPy','Sigima', 'SigimaX', 'datalab-capsule'])]; open('deps.txt','w').write('\n'.join(deps))"
+           # Extract dependencies of DataLab and SigimaX (installed with --no-deps
+           # above), save them to file, then install
+           python -c "import tomli; deps=[d for p in ('pyproject.toml', '../SigimaX/pyproject.toml') for d in tomli.load(open(p,'rb'))['project']['dependencies'] if not any(n in d for n in ['guidata','PlotPy','Sigima', 'SigimaX', 'datalab-capsule'])]; open('deps.txt','w').write('\n'.join(deps))"
            pip install -r deps.txt
            # Install DataLab without dependencies
            pip install --no-deps .
@@ -166,9 +168,10 @@ jobs:
         python -m pip install -e ../SigimaX --no-deps
         python -m pip install -e ../DataLab-Capsule
 
-        # Extract dependency names from pyproject.toml (excluding Sigima and
-        # SigimaX, installed from local clones above) and install latest versions
-        python -m pip install -U --upgrade-strategy eager $(python -c "import tomllib, re; print(' '.join(re.sub(r'[\[\]<>=!~,.\s].*$', '', d).strip() for d in tomllib.loads(open('pyproject.toml', 'rb').read().decode())['project']['dependencies'] if not any(p in d for p in ['Sigima', 'SigimaX', 'datalab-capsule'])))")
+        # Extract dependency names from the pyproject.toml of DataLab and SigimaX
+        # (excluding Sigima and SigimaX, installed from local clones above) and
+        # install latest versions
+        python -m pip install -U --upgrade-strategy eager $(python -c "import tomllib, re; print(' '.join(sorted({re.sub(r'[\[\]<>=!~,.\s].*$', '', d).strip() for p in ('pyproject.toml', '../SigimaX/pyproject.toml') for d in tomllib.loads(open(p, 'rb').read().decode())['project']['dependencies'] if not any(n in d for n in ['Sigima', 'SigimaX', 'datalab-capsule'])})))")
 
     - name: Lint with Ruff (latest)
       run: ruff check --output-format=github datalab
