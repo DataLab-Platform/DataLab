@@ -1177,7 +1177,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             if worker is None:
                 worker = self.__instrument_workers[key] = SerialWorker()
             window = InstrumentWindow(
-                self, plugin.get_instrument(tool.id), tool.title, worker
+                self,
+                plugin.get_instrument(tool.id),
+                tool.title,
+                worker,
+                option_key=f"{plugin.plugin_id}/{tool.id}",
             )
             window.finished.connect(
                 functools.partial(self.__forget_instrument_window, key)

@@ -251,3 +251,80 @@ def test_plugin_tools_in_menus_and_instrument_window(
             reloaded = PluginRegistry.get_plugin("org.example.tools-app")
             assert reloaded.launch_tool("generator") is not window
             win.close_plugin_instruments()
+
+
+def test_instrument_new_group_option() -> None:
+    """Acquisitions go to a new group, or to the current group of the panel when
+    the **New group** option is off; the option is remembered per instrument."""
+    with (
+        Conf.plugins_enabled.context(True),
+        Conf.plugins_enabled_list.context(None),
+        Conf.instrument_new_group.context({}),
+        temporary_plugin_dir() as plugin_dir,
+    ):
+        with open(
+            f"{plugin_dir}/datalab_test_plugin_tools.py", "w", encoding="utf-8"
+        ) as handle:
+            handle.write(PLUGIN_SOURCE)
+        with datalab_test_app_context(console=False) as win:
+            plugin = PluginRegistry.get_plugin("org.example.tools-app")
+            instrument = plugin.get_instrument("generator")
+            key = "org.example.tools-app/generator"
+            model = win.signalpanel.objmodel
+
+            def acquire(window: InstrumentWindow) -> None:
+                window.acquire()
+                assert window.wait_until_idle()
+
+            # Default state set by the instrument, nothing remembered yet
+            window = plugin.launch_tool("generator")
+            assert window.wait_until_idle()
+            assert window.new_group_box.isChecked()
+            assert key not in Conf.instrument_new_group.get()
+
+            # Option off, panel without current group: a group is created anyway
+            window.new_group_box.setChecked(False)
+            assert Conf.instrument_new_group.get()[key] is False
+            assert not model.get_groups()
+            acquire(window)
+            groups = model.get_groups()
+            assert [group.title for group in groups] == ["Generator acquisition"]
+            assert len(groups[0]) == 3
+
+            # Option off: the next acquisitions go to the current group
+            acquire(window)
+            assert len(model.get_groups()) == 1
+            assert len(groups[0]) == 6
+            assert "group 'Generator acquisition'" in window.status_label.text()
+            target = win.signalpanel.add_group("Target", select=True)
+            acquire(window)
+            assert len(model.get_groups()) == 2
+            assert len(groups[0]) == 6 and len(target) == 3
+            assert "group 'Target'" in window.status_label.text()
+            acquire(window)
+            assert len(target) == 6
+
+            # Option on: each acquisition goes to a new group
+            window.new_group_box.setChecked(True)
+            assert Conf.instrument_new_group.get()[key] is True
+            acquire(window)
+            groups = model.get_groups()
+            assert len(groups) == 3 and len(groups[-1]) == 3
+            assert len(target) == 6
+
+            # The choice of the user is remembered, and prevails over the default
+            window.new_group_box.setChecked(False)
+            window.close()
+            QW.QApplication.processEvents()
+            window = plugin.launch_tool("generator")
+            assert not window.new_group_box.isChecked()
+            window.close()
+            QW.QApplication.processEvents()
+
+            # Without a remembered choice, the instrument sets the default state
+            Conf.instrument_new_group.set({})
+            instrument.new_group = False
+            window = plugin.launch_tool("generator")
+            assert not window.new_group_box.isChecked()
+            assert key not in Conf.instrument_new_group.get()
+            win.close_plugin_instruments()

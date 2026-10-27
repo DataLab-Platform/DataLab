@@ -223,6 +223,17 @@ class DataLabOptions(SigimaXOptions):
             expected_type=bool,
             description="If True, hide the application list of the catalog.",
         )
+        self.instrument_new_group = TypedOptionField(
+            self,
+            "instrument_new_group",
+            category="main",
+            default={},
+            expected_type=dict,
+            description=(
+                "State of the 'New group' option of each instrument window, chosen "
+                "by the user (key: 'plugin_id/tool_id')."
+            ),
+        )
         self.v020_plugins_warning_ignore = TypedOptionField(
             self,
             "v020_plugins_warning_ignore",

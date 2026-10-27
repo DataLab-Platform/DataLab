@@ -298,6 +298,7 @@ def test_plugin_validates_and_launches_tools() -> None:
         assert opened == [(plugin, generator)]
         instrument = plugin.get_instrument("generator")
         assert plugin.get_instrument("generator") is instrument
+        assert instrument.new_group is True
         with pytest.raises(ValueError, match="no instrument"):
             plugin.get_instrument("annotate")
         plugin._reset_registration_state()  # pylint: disable=protected-access

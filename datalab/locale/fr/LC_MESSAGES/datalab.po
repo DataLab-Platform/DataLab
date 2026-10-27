@@ -2591,8 +2591,11 @@ msgstr "Rafraîchir la vue en continu"
 msgid "Acquire"
 msgstr "Acquérir"
 
-msgid "Add an acquisition to the workspace, in a new group"
-msgstr "Ajouter une acquisition à l'espace de travail, dans un nouveau groupe"
+msgid "Add each acquisition to a new group, otherwise to the current group of the panel"
+msgstr "Ajouter chaque acquisition à un nouveau groupe, sinon au groupe courant du panneau"
+
+msgid "Add an acquisition to the workspace"
+msgstr "Ajouter une acquisition à l'espace de travail"
 
 msgid "Invalid settings"
 msgstr "Réglages non valides"
