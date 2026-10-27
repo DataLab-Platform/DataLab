@@ -51,9 +51,26 @@ neighbouring datasets. Images need increasing coordinates: a decreasing image
 axis is reversed together with the image, and this conversion is recorded,
 while an image axis that is not strictly monotonic prevents the import.
 
+Files written with the legacy NeXus conventions, such as the scans of
+synchrotron SOLEIL, are imported with their axes too: an axis dataset may give
+the dimension it describes with its ``axis`` attribute, the one with the lowest
+``primary`` attribute being preferred. The other measured datasets of a group,
+such as all the counters and detectors of a scan, appear as additional items
+below the group, each with the axes that fit its dimensions: a counter is a
+signal versus the scanned motor, a detector writing a spectrum at each point an
+image with the motor along Y, and a detector writing an image at each point a
+stack of images (see below).
+
+When a NeXus file designates a default measurement (``default`` attributes), the
+browser selects and previews it when the file is opened. Compressed detector
+data, such as the bitshuffle/LZ4 data of Eiger detectors, is read; a dataset
+compressed with an unavailable filter is reported in the tree instead of failing.
+
 Files with several counters or incomplete NeXus descriptions can be interpreted
 by a plugin-provided data mapping. Each mapped object appears as an additional
-item with its own axes, labels and units. Mappings must be registered before
+item with its own axes, labels and units; the axes of a mapped object may
+describe its first dimensions only, so that one mapping applies to the counters
+and detectors of a scan. Mappings must be registered before
 opening the file; DataLab does not automatically discover JSON files beside it.
 Plugin authors can follow the
 `SigimaX HDF5 import guide <https://sigimax.readthedocs.io/en/latest/user_guide/hdf5_workspace.html>`_.
@@ -77,10 +94,30 @@ limit: compound datasets and signals stored as 2D tables still use complete
 objects for their graphical previews. Closing a file or the browser waits for
 its preview read to end.
 
+Multidimensional datasets
+-------------------------
+
 Datasets with three or more dimensions, such as image stacks and spectral
-cubes, are listed but cannot be imported as complete objects. There is no
-graphical slice selector yet. Developers can read 1D or 2D views without loading
-the whole cube using the selection API described in the SigimaX guide.
+cubes, are imported as one image or signal per frame. Selecting such an item
+shows a view selector below the preview:
+
+  * **View**: images of two axes, or signals along one axis
+  * **Frames along**: the axis along which frames are taken, with the **First**
+    and **Last** frame and a **Step**
+  * **Fixed indices**: the index of the other axes, if any
+  * **Import these frames**: makes the item checkable and checked; unchecking
+    the item cancels the import
+
+The first frame of the view is previewed, and the number of frames is shown.
+Images of the last two axes, with every frame along the preceding axis, are
+proposed by default, unless the NeXus ``interpretation`` attribute of the
+dataset designates spectra (signals along the last axis) or RGB images (one
+image per channel). DataLab asks for confirmation before importing more than
+100 frames. The frames of NeXus datasets keep the axes of their displayed
+dimensions; their title gives the frame indices and, if the other axes have
+coordinates, the position of the frame (e.g. ``frames[3, :, :] (theta=0.3)``).
+Developers can also read views without creating objects, using the selection
+API described in the SigimaX guide.
 
 Numerical values and experimental origin
 ---------------------------------------
@@ -94,8 +131,9 @@ signals keep their imaginary part, including single-precision ones.
 
 NeXus and mapped objects carry an ``experimental_source`` metadata entry
 describing the source file, group, measured dataset, axes (``"."`` for a
-dimension without axis) and recorded conversions. Mapped objects also identify
-their mapping. This entry describes
+dimension without axis) and recorded conversions, with the title, start and end
+times of the NeXus entry, and, for frames, the frame indices and position.
+Mapped objects also identify their mapping. This entry describes
 where the measurement came from; it is not the processing provenance shown in
 the Properties panel and does not make the experiment reproducible.
 

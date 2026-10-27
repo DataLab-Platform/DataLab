@@ -11,6 +11,12 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Version 1.4"
+msgstr "Version 1.4"
+
+msgid "DataLab Version 1.4.0"
+msgstr "DataLab Version 1.4.0"
+
 msgid "Requirements"
 msgstr "Prérequis"
 
@@ -19,12 +25,6 @@ msgstr "Le package Python et les nouveaux projets de plugins générés exigent 
 
 msgid "The Windows test runner excludes Python 3.9 from current matrices, while retaining explicit tests of pinned historical releases."
 msgstr "Le lanceur de tests Windows exclut Python 3.9 des matrices courantes, tout en conservant les tests explicites de versions historiques précisément sélectionnées."
-
-msgid "Version 1.4"
-msgstr "Version 1.4"
-
-msgid "DataLab Version 1.4.0"
-msgstr "DataLab Version 1.4.0"
 
 msgid "✨ New Features"
 msgstr "✨ Nouvelles fonctionnalités"
@@ -305,14 +305,23 @@ msgstr "**Fichiers NeXus :**"
 msgid "NeXus `NXdata` groups are shown as single items in the HDF5 browser and imported as signals or images with their axes, units, labels and, for signals, uncertainties. Bin edges are converted to bin centers, non-uniform image axes are kept, and decreasing image axes are reversed with the image. Invalid axes are reported in the browser instead of being guessed"
 msgstr "Les groupes NeXus `NXdata` sont présentés comme des éléments uniques dans l'explorateur HDF5 et importés comme signaux ou images avec leurs axes, unités, libellés et, pour les signaux, incertitudes. Les bords de classes sont convertis en centres de classes, les axes d'image non uniformes sont conservés, et les axes d'image décroissants sont inversés avec l'image. Les axes invalides sont signalés dans l'explorateur au lieu d'être devinés"
 
-msgid "Imported signals and images record where they come from (file, group, signal and axes, applied conversions) in their `experimental_source` metadata, which is saved with the workspace: a saved workspace reopens without the NeXus file"
-msgstr "Les signaux et images importés enregistrent leur origine (fichier, groupe, signal et axes, conversions appliquées) dans leur métadonnée `experimental_source`, enregistrée avec l'espace de travail : un espace de travail enregistré se rouvre sans le fichier NeXus"
+msgid "Files written with the legacy NeXus conventions, such as the scans of synchrotron SOLEIL, are imported with their axes (`axis` and `primary` attributes of the axis datasets), and every counter and detector of a scan is shown as an item of its own: counters as signals versus the scanned motor, detectors as images (a spectrum per point) or image stacks (an image per point) with the motor along their first axis"
+msgstr "Les fichiers écrits selon les conventions NeXus anciennes, comme les scans du synchrotron SOLEIL, sont importés avec leurs axes (attributs `axis` et `primary` des jeux de données d'axe), et chaque compteur et détecteur d'un scan apparaît comme un élément à part entière : les compteurs comme des signaux en fonction du moteur scanné, les détecteurs comme des images (un spectre par point) ou des piles d'images (une image par point) avec le moteur selon leur premier axe"
+
+msgid "The HDF5 browser selects and previews the default measurement of a NeXus file (`default` attributes) when it is opened"
+msgstr "Le navigateur HDF5 sélectionne et affiche la mesure par défaut d'un fichier NeXus (attributs `default`) à son ouverture"
+
+msgid "Compressed detector data, such as the bitshuffle/LZ4 data of Eiger detectors, is now read (with hdf5plugin, also in the standalone application); a dataset compressed with an unavailable filter is reported in the browser instead of failing"
+msgstr "Les données de détecteur compressées, comme les données bitshuffle/LZ4 des détecteurs Eiger, sont désormais lues (avec hdf5plugin, y compris dans l'application autonome) ; un jeu de données compressé avec un filtre indisponible est signalé dans le navigateur au lieu de provoquer une erreur"
+
+msgid "Imported signals and images record where they come from (file, group, signal and axes, applied conversions, title and times of the NeXus entry) in their `experimental_source` metadata, which is saved with the workspace: a saved workspace reopens without the NeXus file"
+msgstr "Les signaux et images importés enregistrent leur origine (fichier, groupe, signal et axes, conversions appliquées, titre et dates de l'entrée NeXus) dans leurs métadonnées `experimental_source`, enregistrées avec l'espace de travail : un espace de travail enregistré se rouvre sans le fichier NeXus"
 
 msgid "`.nxs` and `.nx5` files are proposed when opening HDF5 files"
 msgstr "Les fichiers `.nxs` et `.nx5` sont proposés à l'ouverture de fichiers HDF5"
 
-msgid "Plugins can describe the signals and images of files that NeXus `NXdata` groups designate incompletely (no axes, several counters...) with declarative data mappings (JSON) registered with `sigimax.h5.mapping.register_mapping`: the HDF5 browser then shows each described object as an extra item, imported with its axes, labels and units"
-msgstr "Les plugins peuvent décrire les signaux et images des fichiers que les groupes NeXus `NXdata` désignent de manière incomplète (sans axes, plusieurs compteurs...) avec des profils de correspondance déclaratifs (JSON) enregistrés avec `sigimax.h5.mapping.register_mapping` : l'explorateur HDF5 présente alors chaque objet décrit comme un élément supplémentaire, importé avec ses axes, libellés et unités"
+msgid "Plugins can describe the signals and images of files that NeXus `NXdata` groups designate incompletely (no axes, several counters...) with declarative data mappings (JSON) registered with `sigimax.h5.mapping.register_mapping`: the HDF5 browser then shows each described object as an extra item, imported with its axes, labels and units; the axes of a mapped object may describe its first dimensions only, so that one mapping applies to the counters and detectors of a scan"
+msgstr "Les plugins peuvent décrire les signaux et images des fichiers dont les groupes NeXus `NXdata` sont incomplets (pas d'axes, plusieurs compteurs...) avec des profils de correspondance déclaratifs (JSON) enregistrés par `sigimax.h5.mapping.register_mapping` : le navigateur HDF5 affiche alors chaque objet décrit comme un élément supplémentaire, importé avec ses axes, libellés et unités ; les axes d'un objet décrit peuvent ne décrire que ses premières dimensions, de sorte qu'un même profil s'applique aux compteurs et aux détecteurs d'un scan"
 
 msgid "🔄 Changes"
 msgstr "🔄 Changements"
@@ -356,6 +365,39 @@ msgstr "Les identifiants d'annotation, l'état de verrouillage, les métadonnée
 msgid "DataLab now requires Sigima ≥ 1.4.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x; HDF5 imports use Sigima's experimental-source API"
 msgstr "DataLab nécessite désormais Sigima ≥ 1.4.0, SigimaX ≥ 1.1.0 et DataLab-Capsule 0.1.x ; les imports HDF5 utilisent l'API d'origine expérimentale de Sigima"
 
+msgid "**Regions of interest:**"
+msgstr "**Régions d'intérêt :**"
+
+msgid "A rectangular region of interest now selects the pixels whose centers lie inside the rectangle, bounds included, like circular and polygonal ROIs and like the display: its bounds were rounded to the nearest pixel, which could shift the selection by up to half a pixel. A rectangle whose bounds lie exactly on pixel centers now includes the pixels on both bounds, i.e. one more row and one more column than before. This applies to processing and analysis in ROIs, to ROI extraction and to the background area of the offset correction"
+msgstr "Une région d'intérêt rectangulaire sélectionne désormais les pixels dont le centre est situé dans le rectangle, bornes comprises, comme les ROI circulaires et polygonales et comme l'affichage : ses bornes étaient arrondies au pixel le plus proche, ce qui pouvait décaler la sélection jusqu'à un demi-pixel. Un rectangle dont les bornes sont situées exactement sur des centres de pixels inclut désormais les pixels des deux bornes, soit une ligne et une colonne de plus qu'auparavant. Cela s'applique aux traitements et analyses dans les ROI, à l'extraction de ROI et à la zone de fond de la soustraction d'offset"
+
+msgid "Circular and polygonal regions of interest now also select the pixels whose centers lie inside their shape, boundary included: polygon vertices were rounded to the nearest pixel, so that the selected pixels could differ from the polygon drawn on the image, and circles were drawn in pixel units on images with non-uniform coordinates"
+msgstr "Les régions d'intérêt circulaires et polygonales sélectionnent elles aussi désormais les pixels dont le centre est situé dans leur forme, bord compris : les sommets des polygones étaient arrondis au pixel le plus proche, de sorte que les pixels sélectionnés pouvaient différer du polygone tracé sur l'image, et les cercles étaient tracés en unités de pixels sur les images à coordonnées non uniformes"
+
+msgid "A rectangular ROI defined in pixel indices now covers its pixels up to their outer edges, so that it keeps the same pixels when converted to physical coordinates and back"
+msgstr "Une ROI rectangulaire définie en indices de pixels couvre désormais ses pixels jusqu'à leurs bords extérieurs, de sorte qu'elle conserve les mêmes pixels lorsqu'elle est convertie en coordonnées physiques et inversement"
+
+msgid "The cells of ROI grids (**ROI > Create ROI grid...**) are now made of whole pixels, so that adjacent cells never share a pixel and a full-size grid covers every pixel exactly once, whatever the image size; on images with non-uniform coordinates, the grid now spans the whole image, whose last rows and columns were left out"
+msgstr "Les cellules des grilles de ROI (**ROI > Créer une grille de ROI...**) sont désormais formées de pixels entiers, de sorte que des cellules adjacentes n'ont jamais de pixel en commun et qu'une grille pleine couvre chaque pixel exactement une fois, quelle que soit la taille de l'image ; sur les images à coordonnées non uniformes, la grille couvre désormais toute l'image, dont les dernières lignes et colonnes étaient omises"
+
+msgid "Regions of interest saved with earlier versions are not converted: they select pixels according to these rules when they are used again, so that processing and analysis in these regions may give slightly different results when recomputed"
+msgstr "Les régions d'intérêt enregistrées avec des versions antérieures ne sont pas converties : elles sélectionnent les pixels selon ces règles lorsqu'elles sont réutilisées, de sorte que les traitements et analyses dans ces régions peuvent donner des résultats légèrement différents lorsqu'ils sont recalculés"
+
+msgid "**Image profiles in physical coordinates:**"
+msgstr "**Profils d'image en coordonnées physiques :**"
+
+msgid "Line, segment, average and radial profiles (**Analysis > Intensity profiles**) are now defined in the physical coordinates of the image, like regions of interest and analysis results, instead of pixel indices: the profile parameters show coordinates in the units of the image axes, and the X axis of the resulting signals holds physical coordinates or distances with the matching unit. On images without calibration (origin 0, pixel size 1), results are unchanged"
+msgstr "Les profils rectilignes, de segment, moyens et radiaux (**Analyse > Profils d'intensité**) sont désormais définis dans les coordonnées physiques de l'image, comme les régions d'intérêt et les résultats d'analyse, au lieu d'indices de pixels : les paramètres des profils indiquent des coordonnées dans les unités des axes de l'image, et l'axe X des signaux obtenus contient des coordonnées ou des distances physiques avec l'unité correspondante. Sur les images sans calibration (origine 0, taille de pixel 1), les résultats sont inchangés"
+
+msgid "The radial profile is now circular on images with rectangular pixels or non-uniform coordinates, and its center is correct on calibrated images, where the image center was misplaced"
+msgstr "Le profil radial est désormais circulaire sur les images à pixels rectangulaires ou à coordonnées non uniformes, et son centre est correct sur les images calibrées, où le centre de l'image était mal placé"
+
+msgid "Segment and radial profiles are refused on images whose X and Y units differ, since distances are then undefined; coordinates outside the image are refused instead of being silently moved to its edge. Lines and segments drawn beyond the image in the profile dialog are brought back to its outermost pixels"
+msgstr "Les profils de segment et radiaux sont refusés sur les images dont les unités X et Y diffèrent, les distances n'étant alors pas définies ; les coordonnées hors de l'image sont refusées au lieu d'être ramenées silencieusement au bord. Les lignes et segments tracés au-delà de l'image dans la boîte de dialogue de profil sont ramenés à ses pixels extrêmes"
+
+msgid "Scripts, macros and plugins must use the new parameter names (`y`/`x` for line profiles, `x1`, `y1`, `x2`, `y2` for segment and average profiles, `xc`/`yc` for radial profiles) and physical coordinates. Profile computations recorded in the provenance of workspaces saved with earlier versions are reported as not verifiable, instead of being replayed with a different meaning"
+msgstr "Les scripts, macros et plugins doivent utiliser les nouveaux noms de paramètres (`y`/`x` pour les profils rectilignes, `x1`, `y1`, `x2`, `y2` pour les profils de segment et moyens, `xc`/`yc` pour les profils radiaux) et des coordonnées physiques. Les calculs de profils enregistrés dans la provenance d'espaces de travail sauvegardés avec des versions antérieures sont signalés comme non vérifiables, au lieu d'être rejoués avec une signification différente"
+
 msgid "**HDF5 browser:**"
 msgstr "**Explorateur HDF5 :**"
 
@@ -365,8 +407,8 @@ msgstr "Parcourir un fichier HDF5 ne lit plus ses jeux de données en entier : i
 msgid "The HDF5 browser stays responsive while a preview is read, and items selected meanwhile are not read; selecting an item that cannot be previewed (a group, for example) clears the preview. Ordinary 1D arrays and 2D images, NeXus and mapped objects above 2²⁴ values (about 16.8 million) are previewed with a step along each axis (the axes of NeXus images are still read entirely, to check them as on import); compound datasets and signals stored in 2D tables still use complete objects for graphical previews"
 msgstr "L'explorateur HDF5 reste réactif pendant la lecture d'un aperçu, et les éléments sélectionnés entre-temps ne sont pas lus ; la sélection d'un élément qui ne peut pas être prévisualisé (un groupe, par exemple) efface l'aperçu. Les tableaux 1D ordinaires et les images 2D, les objets NeXus et décrits par un profil au-delà de 2²⁴ valeurs (environ 16,8 millions) sont prévisualisés avec un pas le long de chaque axe (les axes des images NeXus sont encore lus entièrement, pour les vérifier comme à l'import) ; les jeux de données composites et les signaux stockés dans des tableaux 2D utilisent encore des objets complets pour leurs aperçus graphiques"
 
-msgid "Datasets with three dimensions or more (image stacks, spectral cubes...) are now listed in the HDF5 browser, but are not directly importable and have no graphical slice selector"
-msgstr "Les jeux de données à trois dimensions ou plus (piles d'images, cubes spectraux...) sont désormais listés dans l'explorateur HDF5, mais ne sont pas directement importables et n'ont pas de sélecteur graphique de coupes"
+msgid "Datasets with three dimensions or more (image stacks, spectral cubes...) are now listed in the HDF5 browser and imported as one image or signal per frame: a view selector chooses the displayed axes, the frames (first, last and step along another axis) and the index of the other axes, previews the first frame, and imports the frames once **Import these frames** is checked (with a confirmation beyond 100 frames). Frames of NeXus datasets keep their axes, and their title gives their position (e.g. the motor position of each detector image of a scan)"
+msgstr "Les jeux de données à trois dimensions ou plus (piles d'images, cubes spectraux...) sont désormais listés dans le navigateur HDF5 et importés sous la forme d'une image ou d'un signal par trame : un sélecteur de vue choisit les axes affichés, les trames (première, dernière et pas selon un autre axe) et l'indice des autres axes, affiche la première trame en aperçu, et importe les trames une fois **Importer ces trames** coché (avec une confirmation au-delà de 100 trames). Les trames des jeux de données NeXus conservent leurs axes, et leur titre donne leur position (par exemple la position du moteur pour chaque image de détecteur d'un scan)"
 
 msgid "Dataset attributes with more than 10 000 values are no longer copied to the metadata of imported objects"
 msgstr "Les attributs de jeux de données de plus de 10 000 valeurs ne sont plus copiés dans les métadonnées des objets importés"
@@ -410,6 +452,15 @@ msgstr "Correction de l'import de plusieurs jeux de données depuis des fichiers
 msgid "Fixed HDF5 files containing broken links failing to open in the HDF5 browser, for example synchrotron master files whose detector files are not available (external links to a missing file): the broken links are now skipped and the rest of the file can be browsed and imported"
 msgstr "Correction de l'échec d'ouverture dans l'explorateur HDF5 des fichiers HDF5 contenant des liens rompus, par exemple les fichiers maîtres de synchrotron dont les fichiers de détecteur ne sont pas disponibles (liens externes vers un fichier absent) : les liens rompus sont désormais ignorés et le reste du fichier peut être exploré et importé"
 
+msgid "Fixed HDF5 files containing a group linked into itself or into one of its subgroups failing to open in the HDF5 browser (the file was browsed endlessly until an error): such links back to a parent group are now skipped, while other aliases of a group or dataset are still shown at each of their paths"
+msgstr "Correction des fichiers HDF5 contenant un groupe lié dans lui-même ou dans l'un de ses sous-groupes, qui ne pouvaient pas être ouverts dans l'explorateur HDF5 (le fichier était parcouru sans fin jusqu'à une erreur) : ces liens vers un groupe parent sont désormais ignorés, tandis que les autres alias d'un groupe ou d'un jeu de données restent affichés à chacun de leurs chemins"
+
+msgid "**Workspace saving:**"
+msgstr "**Enregistrement de l'espace de travail :**"
+
+msgid "Fixed a failed save destroying the previous version of the workspace file: the file was emptied before the data was written, so that an error during the save, a full disk or an interruption left neither the previous nor the new workspace on disk. Workspaces, capsules and History files (`.dlhist`) are now written to a temporary file, which replaces the previous file only once completely written; if the save fails, the previous file is left untouched"
+msgstr "Correction d'un enregistrement en échec qui détruisait la version précédente du fichier d'espace de travail : le fichier était vidé avant l'écriture des données, si bien qu'une erreur pendant l'enregistrement, un disque plein ou une interruption ne laissaient sur le disque ni l'ancien ni le nouvel espace de travail. Les espaces de travail, les capsules et les fichiers d'historique (`.dlhist`) sont désormais écrits dans un fichier temporaire, qui ne remplace le fichier précédent qu'une fois entièrement écrit ; en cas d'échec de l'enregistrement, le fichier précédent reste intact"
+
 msgid "**Metadata:**"
 msgstr "**Métadonnées :**"
 
@@ -427,6 +478,42 @@ msgstr "Les résultats de l'extraction de plusieurs régions d'intérêt dans un
 
 msgid "**Edit > Recompute** now also recomputes results of operations combining several objects (e.g., difference of two signals, average of several images), which were skipped"
 msgstr "**Édition > Retraiter** recalcule désormais aussi les résultats des opérations combinant plusieurs objets (par exemple la différence de deux signaux ou la moyenne de plusieurs images), qui étaient ignorés"
+
+msgid "Fixed **Processing > Resampling** of images shifting every value by half a pixel: resampling an image with the default parameters, i.e. onto its own grid, filled its last row and column with NaN. The X/Y min/max parameters are now the coordinates of the centers of the first and last output pixels (by default, those of the image), and the 'Pixel size' mode keeps the requested pixel size exactly"
+msgstr "Correction du **Traitement > Rééchantillonnage** des images, qui décalait toutes les valeurs d'un demi-pixel : rééchantillonner une image avec les paramètres par défaut, c'est-à-dire sur sa propre grille, remplissait sa dernière ligne et sa dernière colonne de NaN. Les paramètres X/Y min/max sont désormais les coordonnées des centres du premier et du dernier pixel de sortie (par défaut, ceux de l'image), et le mode 'Taille de pixel' conserve exactement la taille de pixel demandée"
+
+msgid "Fixed the sum, average, product and standard deviation of several signals, and their combination into an image, depending on the order of the signals: when a real signal came first, the imaginary parts of the complex signals were discarded"
+msgstr "Correction de la somme, de la moyenne, du produit et de l'écart-type de plusieurs signaux, ainsi que de leur combinaison en image, qui dépendaient de l'ordre des signaux : lorsqu'un signal réel venait en premier, les parties imaginaires des signaux complexes étaient perdues"
+
+msgid "The sum, average and product of several images now accept complex images, which raised an error"
+msgstr "La somme, la moyenne et le produit de plusieurs images acceptent désormais les images complexes, qui provoquaient une erreur"
+
+msgid "Fixed **Processing > Resampling** of complex images with the default parameters, and the Z-axis **Polynomial calibration** of complex images, discarding the imaginary parts: complex images now stay complex"
+msgstr "Correction du **Traitement > Rééchantillonnage** des images complexes avec les paramètres par défaut, et de l'**Étalonnage polynomial** de l'axe Z des images complexes, qui supprimaient les parties imaginaires : les images complexes restent désormais complexes"
+
+msgid "Fixed modifying the result of a diagonal, horizontal or vertical flip or a 90° rotation of an image in place (e.g. from a macro or a plugin) also modifying its source image"
+msgstr "Correction de la modification en place du résultat d'un retournement diagonal, horizontal ou vertical ou d'une rotation de 90° d'une image (par exemple depuis une macro ou un plugin), qui modifiait aussi l'image source"
+
+msgid "Fixed the extraction of several regions of interest into a single image giving wrong coordinates to images with non-uniform coordinates (the X coordinates were taken from the extracted rows and the Y coordinates from the extracted columns)"
+msgstr "Correction de l'extraction de plusieurs régions d'intérêt dans une seule image, qui donnait des coordonnées erronées aux images à coordonnées non uniformes (les coordonnées X étaient prises sur les lignes extraites et les coordonnées Y sur les colonnes extraites)"
+
+msgid "The arbitrary rotation of images (**Processing > Geometry > Rotate by...**) now refuses images with non-uniform coordinates, like resizing and resampling, instead of producing an image whose coordinates did not match its pixels"
+msgstr "La rotation arbitraire des images (**Traitement > Géométrie > Rotation de...**) refuse désormais les images à coordonnées non uniformes, comme le redimensionnement et le rééchantillonnage, au lieu de produire une image dont les coordonnées ne correspondaient pas à ses pixels"
+
+msgid "Fixed the uncertainty of the product of signals being lost where one of the signals is zero: it is now propagated there too"
+msgstr "Correction de l'incertitude du produit de signaux, qui était perdue là où l'un des signaux est nul : elle y est désormais également propagée"
+
+msgid "Fixed ROIs, annotations and analysis results (centroids, detected peaks, contours...) being shifted by one pixel after a flip or a 90° rotation of an image; after a 90° rotation of a non-square image, or of an image whose coordinates do not start at zero, analysis results even ended up far from the features they describe. They now move exactly with the pixels; for images with non-uniform coordinates, circles, ellipses and polygons are moved approximately when the pixels are reversed along a non-uniform axis (a circle does not stay a circle). ROIs defined in pixel indices are also moved correctly, and inverse ROIs (which mask the inside of their shape) no longer become normal ROIs after these operations, a translation or a distribution of images on a grid"
+msgstr "Correction du décalage d'un pixel des ROI, des annotations et des résultats d'analyse (centroïdes, pics détectés, contours...) après une symétrie ou une rotation de 90° d'une image ; après une rotation de 90° d'une image non carrée, ou d'une image dont les coordonnées ne commencent pas à zéro, les résultats d'analyse se retrouvaient même loin des éléments qu'ils décrivent. Ils se déplacent désormais exactement avec les pixels ; pour les images à coordonnées non uniformes, les cercles, ellipses et polygones sont déplacés de façon approchée lorsque les pixels sont inversés le long d'un axe non uniforme (un cercle ne reste pas un cercle). Les ROI définies en indices de pixels sont aussi correctement déplacées, et les ROI inverses (qui masquent l'intérieur de leur forme) ne deviennent plus des ROI normales après ces opérations, une translation ou une distribution d'images sur une grille"
+
+msgid "Fixed **ROI > Extract...** giving the extracted image a wrong origin when the coordinates of the source image do not start at zero, and coordinates not matching the extracted pixels for images with non-uniform coordinates"
+msgstr "Correction de **ROI > Extraire...**, qui donnait à l'image extraite une origine erronée lorsque les coordonnées de l'image source ne commencent pas à zéro, et des coordonnées ne correspondant pas aux pixels extraits pour les images à coordonnées non uniformes"
+
+msgid "Fixed the coordinates of analysis results computed in a ROI being off by up to half a pixel"
+msgstr "Correction des coordonnées des résultats d'analyse calculés dans une ROI, qui pouvaient être fausses jusqu'à un demi-pixel"
+
+msgid "Fixed **Processing > Level adjustment > Offset correction** using a background area truncated to integer coordinates: the area was wrong for images whose coordinates are not in pixels (e.g. in millimeters), and empty when smaller than one unit"
+msgstr "Correction de **Traitement > Ajustement de niveau > Soustraction d'offset**, qui utilisait une zone de fond tronquée à des coordonnées entières : la zone était erronée pour les images dont les coordonnées ne sont pas en pixels (par exemple en millimètres), et vide lorsqu'elle mesurait moins d'une unité"
 
 msgid "**Plugins:**"
 msgstr "**Plugins :**"
@@ -482,89 +569,16 @@ msgstr "Correction des commandes à distance qui renvoyaient parfois le résulta
 msgid "Fixed DataLab freezing when closed while a remote command was still running (e.g. when closing the main window with `call_method(\"close\")`)"
 msgstr "Correction du blocage de DataLab lorsqu'il était fermé alors qu'une commande à distance était encore en cours d'exécution (par exemple en fermant la fenêtre principale avec `call_method(\"close\")`)"
 
+#, python-brace-format
+msgid "Fixed images with non-uniform coordinates losing them when transferred through the Web API (`GET` and `PUT /objects/{name}/data`): they were rebuilt with default uniform coordinates. The NPZ data format now includes these coordinates; archives written by earlier versions remain readable. Clients with their own NPZ reader, such as DataLab-Kernel, must support the new entries to take advantage of this"
+msgstr "Correction des images à coordonnées non uniformes qui perdaient celles-ci lors d'un transfert par l'API Web (`GET` et `PUT /objects/{name}/data`) : elles étaient reconstruites avec des coordonnées uniformes par défaut. Le format de données NPZ inclut désormais ces coordonnées ; les archives écrites par les versions antérieures restent lisibles. Les clients disposant de leur propre lecteur NPZ, comme DataLab-Kernel, doivent prendre en charge les nouvelles entrées pour en bénéficier"
+
 msgid "**Security:**"
 msgstr "**Sécurité :**"
 
 msgid "Opening a workspace received from someone else can no longer make DataLab load or run other code installed on the computer. The parameters stored with objects, analysis results and History actions name their class, and DataLab imported whatever module they named and called the object named there, which a modified file could use, for example, to make DataLab quit. Only parameter classes of DataLab, Sigima, guidata and installed plugins are now used; other stored parameters are reported as unreadable (fixes [Issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))"
 msgstr "Ouvrir un espace de travail reçu d'une autre personne ne permet plus de faire charger ou exécuter par DataLab un autre code installé sur l'ordinateur. Les paramètres enregistrés avec les objets, les résultats d'analyse et les actions de l'historique nomment leur classe, et DataLab importait le module ainsi nommé puis appelait l'objet désigné, ce qu'un fichier modifié pouvait exploiter, par exemple pour faire quitter DataLab. Seules les classes de paramètres de DataLab, Sigima, guidata et des plugins installés sont désormais utilisées ; les autres paramètres enregistrés sont signalés comme illisibles (corrige [l'issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))"
 
-msgid "Fixed HDF5 files containing a group linked into itself or into one of its subgroups failing to open in the HDF5 browser (the file was browsed endlessly until an error): such links back to a parent group are now skipped, while other aliases of a group or dataset are still shown at each of their paths"
-msgstr "Correction des fichiers HDF5 contenant un groupe lié dans lui-même ou dans l'un de ses sous-groupes, qui ne pouvaient pas être ouverts dans l'explorateur HDF5 (le fichier était parcouru sans fin jusqu'à une erreur) : ces liens vers un groupe parent sont désormais ignorés, tandis que les autres alias d'un groupe ou d'un jeu de données restent affichés à chacun de leurs chemins"
+#~ msgid "Datasets with three dimensions or more (image stacks, spectral cubes...) are now listed in the HDF5 browser, but are not directly importable and have no graphical slice selector"
+#~ msgstr "Les jeux de données à trois dimensions ou plus (piles d'images, cubes spectraux...) sont désormais listés dans l'explorateur HDF5, mais ne sont pas directement importables et n'ont pas de sélecteur graphique de coupes"
 
-msgid "**Workspace saving:**"
-msgstr "**Enregistrement de l'espace de travail :**"
-
-msgid "Fixed a failed save destroying the previous version of the workspace file: the file was emptied before the data was written, so that an error during the save, a full disk or an interruption left neither the previous nor the new workspace on disk. Workspaces, capsules and History files (`.dlhist`) are now written to a temporary file, which replaces the previous file only once completely written; if the save fails, the previous file is left untouched"
-msgstr "Correction d'un enregistrement en échec qui détruisait la version précédente du fichier d'espace de travail : le fichier était vidé avant l'écriture des données, si bien qu'une erreur pendant l'enregistrement, un disque plein ou une interruption ne laissaient sur le disque ni l'ancien ni le nouvel espace de travail. Les espaces de travail, les capsules et les fichiers d'historique (`.dlhist`) sont désormais écrits dans un fichier temporaire, qui ne remplace le fichier précédent qu'une fois entièrement écrit ; en cas d'échec de l'enregistrement, le fichier précédent reste intact"
-
-msgid "Fixed **Processing > Resampling** of images shifting every value by half a pixel: resampling an image with the default parameters, i.e. onto its own grid, filled its last row and column with NaN. The X/Y min/max parameters are now the coordinates of the centers of the first and last output pixels (by default, those of the image), and the 'Pixel size' mode keeps the requested pixel size exactly"
-msgstr "Correction du **Traitement > Rééchantillonnage** des images, qui décalait toutes les valeurs d'un demi-pixel : rééchantillonner une image avec les paramètres par défaut, c'est-à-dire sur sa propre grille, remplissait sa dernière ligne et sa dernière colonne de NaN. Les paramètres X/Y min/max sont désormais les coordonnées des centres du premier et du dernier pixel de sortie (par défaut, ceux de l'image), et le mode 'Taille de pixel' conserve exactement la taille de pixel demandée"
-
-msgid "Fixed the sum, average, product and standard deviation of several signals, and their combination into an image, depending on the order of the signals: when a real signal came first, the imaginary parts of the complex signals were discarded"
-msgstr "Correction de la somme, de la moyenne, du produit et de l'écart-type de plusieurs signaux, ainsi que de leur combinaison en image, qui dépendaient de l'ordre des signaux : lorsqu'un signal réel venait en premier, les parties imaginaires des signaux complexes étaient perdues"
-
-msgid "The sum, average and product of several images now accept complex images, which raised an error"
-msgstr "La somme, la moyenne et le produit de plusieurs images acceptent désormais les images complexes, qui provoquaient une erreur"
-
-msgid "Fixed **Processing > Resampling** of complex images with the default parameters, and the Z-axis **Polynomial calibration** of complex images, discarding the imaginary parts: complex images now stay complex"
-msgstr "Correction du **Traitement > Rééchantillonnage** des images complexes avec les paramètres par défaut, et de l'**Étalonnage polynomial** de l'axe Z des images complexes, qui supprimaient les parties imaginaires : les images complexes restent désormais complexes"
-
-msgid "Fixed modifying the result of a diagonal, horizontal or vertical flip or a 90° rotation of an image in place (e.g. from a macro or a plugin) also modifying its source image"
-msgstr "Correction de la modification en place du résultat d'un retournement diagonal, horizontal ou vertical ou d'une rotation de 90° d'une image (par exemple depuis une macro ou un plugin), qui modifiait aussi l'image source"
-
-msgid "Fixed the extraction of several regions of interest into a single image giving wrong coordinates to images with non-uniform coordinates (the X coordinates were taken from the extracted rows and the Y coordinates from the extracted columns)"
-msgstr "Correction de l'extraction de plusieurs régions d'intérêt dans une seule image, qui donnait des coordonnées erronées aux images à coordonnées non uniformes (les coordonnées X étaient prises sur les lignes extraites et les coordonnées Y sur les colonnes extraites)"
-
-msgid "The arbitrary rotation of images (**Processing > Geometry > Rotate by...**) now refuses images with non-uniform coordinates, like resizing and resampling, instead of producing an image whose coordinates did not match its pixels"
-msgstr "La rotation arbitraire des images (**Traitement > Géométrie > Rotation de...**) refuse désormais les images à coordonnées non uniformes, comme le redimensionnement et le rééchantillonnage, au lieu de produire une image dont les coordonnées ne correspondaient pas à ses pixels"
-
-msgid "Fixed the uncertainty of the product of signals being lost where one of the signals is zero: it is now propagated there too"
-msgstr "Correction de l'incertitude du produit de signaux, qui était perdue là où l'un des signaux est nul : elle y est désormais également propagée"
-
-msgid "Fixed images with non-uniform coordinates losing them when transferred through the Web API (`GET` and `PUT /objects/{name}/data`): they were rebuilt with default uniform coordinates. The NPZ data format now includes these coordinates; archives written by earlier versions remain readable. Clients with their own NPZ reader, such as DataLab-Kernel, must support the new entries to take advantage of this"
-msgstr "Correction des images à coordonnées non uniformes qui perdaient celles-ci lors d'un transfert par l'API Web (`GET` et `PUT /objects/{name}/data`) : elles étaient reconstruites avec des coordonnées uniformes par défaut. Le format de données NPZ inclut désormais ces coordonnées ; les archives écrites par les versions antérieures restent lisibles. Les clients disposant de leur propre lecteur NPZ, comme DataLab-Kernel, doivent prendre en charge les nouvelles entrées pour en bénéficier"
-
-msgid "**Regions of interest:**"
-msgstr "**Régions d'intérêt :**"
-
-msgid "A rectangular region of interest now selects the pixels whose centers lie inside the rectangle, bounds included, like circular and polygonal ROIs and like the display: its bounds were rounded to the nearest pixel, which could shift the selection by up to half a pixel. A rectangle whose bounds lie exactly on pixel centers now includes the pixels on both bounds, i.e. one more row and one more column than before. This applies to processing and analysis in ROIs, to ROI extraction and to the background area of the offset correction"
-msgstr "Une région d'intérêt rectangulaire sélectionne désormais les pixels dont le centre est situé dans le rectangle, bornes comprises, comme les ROI circulaires et polygonales et comme l'affichage : ses bornes étaient arrondies au pixel le plus proche, ce qui pouvait décaler la sélection jusqu'à un demi-pixel. Un rectangle dont les bornes sont situées exactement sur des centres de pixels inclut désormais les pixels des deux bornes, soit une ligne et une colonne de plus qu'auparavant. Cela s'applique aux traitements et analyses dans les ROI, à l'extraction de ROI et à la zone de fond de la soustraction d'offset"
-
-msgid "Circular and polygonal regions of interest now also select the pixels whose centers lie inside their shape, boundary included: polygon vertices were rounded to the nearest pixel, so that the selected pixels could differ from the polygon drawn on the image, and circles were drawn in pixel units on images with non-uniform coordinates"
-msgstr "Les régions d'intérêt circulaires et polygonales sélectionnent elles aussi désormais les pixels dont le centre est situé dans leur forme, bord compris : les sommets des polygones étaient arrondis au pixel le plus proche, de sorte que les pixels sélectionnés pouvaient différer du polygone tracé sur l'image, et les cercles étaient tracés en unités de pixels sur les images à coordonnées non uniformes"
-
-msgid "A rectangular ROI defined in pixel indices now covers its pixels up to their outer edges, so that it keeps the same pixels when converted to physical coordinates and back"
-msgstr "Une ROI rectangulaire définie en indices de pixels couvre désormais ses pixels jusqu'à leurs bords extérieurs, de sorte qu'elle conserve les mêmes pixels lorsqu'elle est convertie en coordonnées physiques et inversement"
-
-msgid "The cells of ROI grids (**ROI > Create ROI grid...**) are now made of whole pixels, so that adjacent cells never share a pixel and a full-size grid covers every pixel exactly once, whatever the image size; on images with non-uniform coordinates, the grid now spans the whole image, whose last rows and columns were left out"
-msgstr "Les cellules des grilles de ROI (**ROI > Créer une grille de ROI...**) sont désormais formées de pixels entiers, de sorte que des cellules adjacentes n'ont jamais de pixel en commun et qu'une grille pleine couvre chaque pixel exactement une fois, quelle que soit la taille de l'image ; sur les images à coordonnées non uniformes, la grille couvre désormais toute l'image, dont les dernières lignes et colonnes étaient omises"
-
-msgid "Regions of interest saved with earlier versions are not converted: they select pixels according to these rules when they are used again, so that processing and analysis in these regions may give slightly different results when recomputed"
-msgstr "Les régions d'intérêt enregistrées avec des versions antérieures ne sont pas converties : elles sélectionnent les pixels selon ces règles lorsqu'elles sont réutilisées, de sorte que les traitements et analyses dans ces régions peuvent donner des résultats légèrement différents lorsqu'ils sont recalculés"
-
-msgid "**Image profiles in physical coordinates:**"
-msgstr "**Profils d'image en coordonnées physiques :**"
-
-msgid "Line, segment, average and radial profiles (**Analysis > Intensity profiles**) are now defined in the physical coordinates of the image, like regions of interest and analysis results, instead of pixel indices: the profile parameters show coordinates in the units of the image axes, and the X axis of the resulting signals holds physical coordinates or distances with the matching unit. On images without calibration (origin 0, pixel size 1), results are unchanged"
-msgstr "Les profils rectilignes, de segment, moyens et radiaux (**Analyse > Profils d'intensité**) sont désormais définis dans les coordonnées physiques de l'image, comme les régions d'intérêt et les résultats d'analyse, au lieu d'indices de pixels : les paramètres des profils indiquent des coordonnées dans les unités des axes de l'image, et l'axe X des signaux obtenus contient des coordonnées ou des distances physiques avec l'unité correspondante. Sur les images sans calibration (origine 0, taille de pixel 1), les résultats sont inchangés"
-
-msgid "The radial profile is now circular on images with rectangular pixels or non-uniform coordinates, and its center is correct on calibrated images, where the image center was misplaced"
-msgstr "Le profil radial est désormais circulaire sur les images à pixels rectangulaires ou à coordonnées non uniformes, et son centre est correct sur les images calibrées, où le centre de l'image était mal placé"
-
-msgid "Segment and radial profiles are refused on images whose X and Y units differ, since distances are then undefined; coordinates outside the image are refused instead of being silently moved to its edge. Lines and segments drawn beyond the image in the profile dialog are brought back to its outermost pixels"
-msgstr "Les profils de segment et radiaux sont refusés sur les images dont les unités X et Y diffèrent, les distances n'étant alors pas définies ; les coordonnées hors de l'image sont refusées au lieu d'être ramenées silencieusement au bord. Les lignes et segments tracés au-delà de l'image dans la boîte de dialogue de profil sont ramenés à ses pixels extrêmes"
-
-msgid "Scripts, macros and plugins must use the new parameter names (`y`/`x` for line profiles, `x1`, `y1`, `x2`, `y2` for segment and average profiles, `xc`/`yc` for radial profiles) and physical coordinates. Profile computations recorded in the provenance of workspaces saved with earlier versions are reported as not verifiable, instead of being replayed with a different meaning"
-msgstr "Les scripts, macros et plugins doivent utiliser les nouveaux noms de paramètres (`y`/`x` pour les profils rectilignes, `x1`, `y1`, `x2`, `y2` pour les profils de segment et moyens, `xc`/`yc` pour les profils radiaux) et des coordonnées physiques. Les calculs de profils enregistrés dans la provenance d'espaces de travail sauvegardés avec des versions antérieures sont signalés comme non vérifiables, au lieu d'être rejoués avec une signification différente"
-
-msgid "Fixed ROIs, annotations and analysis results (centroids, detected peaks, contours...) being shifted by one pixel after a flip or a 90° rotation of an image; after a 90° rotation of a non-square image, or of an image whose coordinates do not start at zero, analysis results even ended up far from the features they describe. They now move exactly with the pixels; for images with non-uniform coordinates, circles, ellipses and polygons are moved approximately when the pixels are reversed along a non-uniform axis (a circle does not stay a circle). ROIs defined in pixel indices are also moved correctly, and inverse ROIs (which mask the inside of their shape) no longer become normal ROIs after these operations, a translation or a distribution of images on a grid"
-msgstr "Correction du décalage d'un pixel des ROI, des annotations et des résultats d'analyse (centroïdes, pics détectés, contours...) après une symétrie ou une rotation de 90° d'une image ; après une rotation de 90° d'une image non carrée, ou d'une image dont les coordonnées ne commencent pas à zéro, les résultats d'analyse se retrouvaient même loin des éléments qu'ils décrivent. Ils se déplacent désormais exactement avec les pixels ; pour les images à coordonnées non uniformes, les cercles, ellipses et polygones sont déplacés de façon approchée lorsque les pixels sont inversés le long d'un axe non uniforme (un cercle ne reste pas un cercle). Les ROI définies en indices de pixels sont aussi correctement déplacées, et les ROI inverses (qui masquent l'intérieur de leur forme) ne deviennent plus des ROI normales après ces opérations, une translation ou une distribution d'images sur une grille"
-
-msgid "Fixed **ROI > Extract...** giving the extracted image a wrong origin when the coordinates of the source image do not start at zero, and coordinates not matching the extracted pixels for images with non-uniform coordinates"
-msgstr "Correction de **ROI > Extraire...**, qui donnait à l'image extraite une origine erronée lorsque les coordonnées de l'image source ne commencent pas à zéro, et des coordonnées ne correspondant pas aux pixels extraits pour les images à coordonnées non uniformes"
-
-msgid "Fixed the coordinates of analysis results computed in a ROI being off by up to half a pixel"
-msgstr "Correction des coordonnées des résultats d'analyse calculés dans une ROI, qui pouvaient être fausses jusqu'à un demi-pixel"
-
-msgid "Fixed **Processing > Level adjustment > Offset correction** using a background area truncated to integer coordinates: the area was wrong for images whose coordinates are not in pixels (e.g. in millimeters), and empty when smaller than one unit"
-msgstr "Correction de **Traitement > Ajustement de niveau > Soustraction d'offset**, qui utilisait une zone de fond tronquée à des coordonnées entières : la zone était erronée pour les images dont les coordonnées ne sont pas en pixels (par exemple en millimètres), et vide lorsqu'elle mesurait moins d'une unité"
