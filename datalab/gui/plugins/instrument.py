@@ -23,7 +23,7 @@ from sigima.objects import ImageObj, SignalObj
 from sigimax.adapters_plotpy.objects.signal import CURVESTYLES
 
 from datalab.adapters_plotpy import create_adapter_from_object
-from datalab.config import _
+from datalab.config import Conf, _
 from datalab.objectmodel import get_uuid
 
 if TYPE_CHECKING:
@@ -94,12 +94,13 @@ class InstrumentWindow(QW.QDialog):
     """Live view of a plugin instrument, next to its settings.
 
     The view is refreshed when settings change, and periodically in live mode.
-    Each acquisition is added to the workspace in a new group. The instrument is
-    opened with the window and closed with it; if opening it fails, the reason
-    is shown, and it is opened again before the next call. Its methods are
-    called one at a time in a worker thread: a request made while a call is
-    running is done next (an acquisition before a refresh, repeated refreshes
-    only once).
+    Each acquisition is added to the workspace in a new group or, when the
+    **New group** option is off, in the current group of the panel. The
+    instrument is opened with the window and closed with it; if opening it
+    fails, the reason is shown, and it is opened again before the next call. Its
+    methods are called one at a time in a worker thread: a request made while a
+    call is running is done next (an acquisition before a refresh, repeated
+    refreshes only once).
 
     Args:
         main: DataLab main window
@@ -109,6 +110,9 @@ class InstrumentWindow(QW.QDialog):
          successive windows of the instrument so that a window opened again runs
          its calls after those of the closed one (default: a worker of its own,
          stopped when the window is closed)
+        option_key: key under which the state of the **New group** option is
+         remembered in the configuration (default: not remembered, the option
+         starts from :attr:`PluginInstrument.new_group`)
     """
 
     #: Delay between a settings change and the refresh of the view (ms)
@@ -125,11 +129,13 @@ class InstrumentWindow(QW.QDialog):
         instrument: PluginInstrument,
         title: str,
         executor: SerialWorker | None = None,
+        option_key: str | None = None,
     ) -> None:
         super().__init__(main)
         win32_fix_title_bar_background(self)
         self.main = main
         self.instrument = instrument
+        self.option_key = option_key
         self.setWindowTitle(title.rstrip(".…"))
         self.setModal(False)
         self.plotwidget: PlotWidget | None = None
@@ -180,10 +186,18 @@ class InstrumentWindow(QW.QDialog):
         self.live_button.toggled.connect(self.set_live)
         commands.addWidget(self.live_button)
         commands.addStretch()
-        self.acquire_button = QW.QPushButton(get_icon("record.svg"), _("Acquire"))
-        self.acquire_button.setToolTip(
-            _("Add an acquisition to the workspace, in a new group")
+        self.new_group_box = QW.QCheckBox(_("New group"))
+        self.new_group_box.setToolTip(
+            _(
+                "Add each acquisition to a new group, "
+                "otherwise to the current group of the panel"
+            )
         )
+        self.new_group_box.setChecked(self._stored_new_group())
+        self.new_group_box.toggled.connect(self._store_new_group)
+        commands.addWidget(self.new_group_box)
+        self.acquire_button = QW.QPushButton(get_icon("record.svg"), _("Acquire"))
+        self.acquire_button.setToolTip(_("Add an acquisition to the workspace"))
         self.acquire_button.clicked.connect(self.acquire)
         commands.addWidget(self.acquire_button)
         settings_layout.addLayout(commands)
@@ -348,6 +362,21 @@ class InstrumentWindow(QW.QDialog):
         else:
             self._live_timer.stop()
 
+    def _stored_new_group(self) -> bool:
+        """Return the remembered state of the **New group** option, or the
+        default state set by the instrument."""
+        default = bool(self.instrument.new_group)
+        if self.option_key is None:
+            return default
+        return bool(Conf.instrument_new_group.get().get(self.option_key, default))
+
+    def _store_new_group(self, new_group: bool) -> None:
+        """Remember the state of the **New group** option chosen by the user."""
+        if self.option_key is not None:
+            states = dict(Conf.instrument_new_group.get())
+            states[self.option_key] = bool(new_group)
+            Conf.instrument_new_group.set(states)
+
     def stop(self) -> None:
         """Stop refreshing the view and close the instrument."""
         self._refresh_timer.stop()
@@ -449,36 +478,54 @@ class InstrumentWindow(QW.QDialog):
         plot.replot()
 
     def acquire(self) -> None:
-        """Add an acquisition to the workspace, in a new group."""
+        """Add an acquisition to the workspace, in a new group or in the current
+        group of the panel, depending on the **New group** option."""
         self._request("acquire")
 
     def _add_acquired(self, acquisition: InstrumentAcquisition) -> None:
         """Add the objects acquired by the instrument to the workspace."""
         try:
-            self.add_acquisition(acquisition)
+            group_title = self.add_acquisition(acquisition)
         except Exception as exc:  # pylint: disable=broad-except
             self.status_label.setText(str(exc))
             return
         self.status_label.setText(
             _("%d objects added to group '%s'")
-            % (len(acquisition.objects), acquisition.group_title)
+            % (len(acquisition.objects), group_title)
         )
 
-    def add_acquisition(self, acquisition: InstrumentAcquisition) -> None:
-        """Add acquired objects to their panel, in a new group."""
+    def add_acquisition(self, acquisition: InstrumentAcquisition) -> str:
+        """Add acquired objects to their panel.
+
+        The objects are added to the current group of the panel if the **New
+        group** option is off and the panel has a current group, otherwise to a
+        new group.
+
+        Returns:
+            Title of the group where the objects were added
+        """
         objects = acquisition.objects
         panel_name = "signal" if isinstance(objects[0], SignalObj) else "image"
         panel = (
             self.main.signalpanel if panel_name == "signal" else self.main.imagepanel
         )
         with self.main.context_no_refresh():
-            group = panel.add_group(acquisition.group_title)
-            try:
+            group_id = None
+            if not self.new_group_box.isChecked():
+                group_id = panel.objview.get_current_group_id()
+            if group_id is None:
+                group = panel.add_group(acquisition.group_title)
+                try:
+                    # pylint: disable=protected-access
+                    panel._add_objects(objects, get_uuid(group))
+                except Exception:
+                    panel.objview.remove_item(get_uuid(group), refresh=False)
+                    panel.objmodel.remove_group(group)
+                    raise
+            else:
+                group = panel.objmodel.get_group(group_id)
                 # pylint: disable=protected-access
-                panel._add_objects(objects, get_uuid(group))
-            except Exception:
-                panel.objview.remove_item(get_uuid(group), refresh=False)
-                panel.objmodel.remove_group(group)
-                raise
+                panel._add_objects(objects, group_id)
         self.main.set_current_panel(panel_name)
         panel.objview.select_objects(objects)
+        return group.title

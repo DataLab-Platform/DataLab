@@ -155,6 +155,7 @@ def test_round_trip_across_types() -> None:
     src.window_size.set((1234, 567))
     src.plugins_path_list.set(["/tmp/plugins_a", "/tmp/plugins_b"])
     src.plugins_enabled_list.set(["Test Plugin 1"])
+    src.instrument_new_group.set({"org.example/tool": False})
     src.macro_console_max_lines.set(4242)
     src.ai_temperature.set(0.9)
 
@@ -173,6 +174,7 @@ def test_round_trip_across_types() -> None:
     assert dst.window_size.get() == (1234, 567)
     assert dst.plugins_path_list.get() == ["/tmp/plugins_a", "/tmp/plugins_b"]
     assert dst.plugins_enabled_list.get() == ["Test Plugin 1"]
+    assert dst.instrument_new_group.get() == {"org.example/tool": False}
     assert dst.macro_console_max_lines.get() == 4242
     assert abs(dst.ai_temperature.get() - 0.9) < 1e-9
     assert dst.traceback_log_path.to_storage() == ".DataLab_custom.log"

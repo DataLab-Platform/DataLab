@@ -746,7 +746,7 @@ The launcher is called without arguments. :meth:`datalab.plugins.PluginBase.get_
 Instruments
 ^^^^^^^^^^^
 
-A tool may name an ``instrument`` method instead of a ``launcher``. This method returns a :class:`datalab.plugins.instruments.PluginInstrument`, and DataLab opens a window for it: a live view on the left, the instrument settings on the right, a **Live** button that refreshes the view continuously, and an **Acquire** button. The plugin writes no user interface code:
+A tool may name an ``instrument`` method instead of a ``launcher``. This method returns a :class:`datalab.plugins.instruments.PluginInstrument`, and DataLab opens a window for it: a live view on the left, the instrument settings on the right, a **Live** button that refreshes the view continuously, a **New group** option and an **Acquire** button. The plugin writes no user interface code:
 
 .. code-block:: python
 
@@ -788,7 +788,9 @@ A tool may name an ``instrument`` method instead of a ``launcher``. This method 
     def signal_source(self):
       return Source()
 
-DataLab edits :attr:`~datalab.plugins.instruments.PluginInstrument.settings` in place, with the active state, groups and tabs of the guidata DataSet, then calls :meth:`~datalab.plugins.instruments.PluginInstrument.preview` after each change and, in live mode, every ``live_interval_ms`` milliseconds. An :class:`~datalab.plugins.instruments.InstrumentFrame` holds signals drawn together or a single image, a short summary shown below the view, and an optional fixed Y range (signals) or color range (image). :meth:`~datalab.plugins.instruments.PluginInstrument.acquire` returns an :class:`~datalab.plugins.instruments.InstrumentAcquisition`: DataLab adds its objects to a new group of the matching panel and selects them, so that a recipe can run on them at once. Both methods raise ``ValueError`` with a user-facing message when the settings cannot be used; DataLab shows the message in the window.
+DataLab edits :attr:`~datalab.plugins.instruments.PluginInstrument.settings` in place, with the active state, groups and tabs of the guidata DataSet, then calls :meth:`~datalab.plugins.instruments.PluginInstrument.preview` after each change and, in live mode, every ``live_interval_ms`` milliseconds. An :class:`~datalab.plugins.instruments.InstrumentFrame` holds signals drawn together or a single image, a short summary shown below the view, and an optional fixed Y range (signals) or color range (image). :meth:`~datalab.plugins.instruments.PluginInstrument.acquire` returns an :class:`~datalab.plugins.instruments.InstrumentAcquisition`: DataLab adds its objects to a new group of the matching panel, titled after the acquisition, and selects them, so that a recipe can run on them at once. Both methods raise ``ValueError`` with a user-facing message when the settings cannot be used; DataLab shows the message in the window.
+
+When the user turns off the **New group** option of the window, DataLab adds the acquired objects to the current group of the panel instead: as they are selected, the next acquisitions go to the same group, until the user selects another group. A new group is still created when the panel has no current group, for example when it is empty. The :attr:`~datalab.plugins.instruments.PluginInstrument.new_group` class attribute sets the default state of the option (``True`` by default): an instrument whose acquisitions are usually single objects, such as a device attribute read on demand, may set it to ``False``. The choice of the user, once made, is remembered for each instrument and prevails over this default.
 
 DataLab creates the instrument once per tool and keeps it until the plugins are reloaded, so the settings remain from one opening to the next.
 

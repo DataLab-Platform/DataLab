@@ -66,10 +66,14 @@ class InstrumentFrame:
 
 @dataclasses.dataclass(frozen=True)
 class InstrumentAcquisition:
-    """Objects acquired by an instrument, added by DataLab in a new group.
+    """Objects acquired by an instrument, added by DataLab to the workspace.
+
+    DataLab adds them to a new group, or to the current group of the panel when
+    the user turns off the **New group** option of the instrument window (see
+    :attr:`PluginInstrument.new_group`).
 
     Args:
-        group_title: title of the group created for the acquisition
+        group_title: title of the group created for the acquisition, if any
         objects: acquired signals, or acquired images
     """
 
@@ -109,6 +113,11 @@ class PluginInstrument(abc.ABC):
 
     #: Interval between two frames in live mode, in milliseconds
     live_interval_ms: int = 500
+
+    #: Default state of the **New group** option of the instrument window (if
+    #: True, each acquisition is added to a new group, otherwise to the current
+    #: group of the panel). The choice of the user, once made, prevails.
+    new_group: bool = True
 
     def __init__(self, settings: gds.DataSet) -> None:
         if not isinstance(settings, gds.DataSet):
