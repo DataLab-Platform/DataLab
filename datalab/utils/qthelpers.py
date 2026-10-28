@@ -46,6 +46,7 @@ __all__ = [
     "create_menu_button",
     "create_progress_bar",
     "datalab_app_context",
+    "event_pos",
     "grab_save_window",
     "is_running_tests",
     "open_local_path",
@@ -57,7 +58,39 @@ __all__ = [
     "save_restore_stds",
     "show_in_folder",
     "try_or_log_error",
+    "view_item_option",
 ]
+
+
+def event_pos(event: QG.QMouseEvent | QG.QHoverEvent) -> QC.QPoint:
+    """Return the position of a mouse or hover event, in the coordinates of the
+    widget receiving it.
+
+    Args:
+        event: Mouse or hover event
+
+    Returns:
+        Event position
+    """
+    if hasattr(event, "position"):  # Qt 6 (``pos`` is deprecated)
+        return event.position().toPoint()
+    return event.pos()
+
+
+def view_item_option(view: QW.QAbstractItemView) -> QW.QStyleOptionViewItem:
+    """Return the style option an item view initializes to draw its items.
+
+    Args:
+        view: Item view
+
+    Returns:
+        Style option
+    """
+    if hasattr(view, "initViewItemOption"):  # Qt 6 (``viewOptions`` was removed)
+        option = QW.QStyleOptionViewItem()
+        view.initViewItemOption(option)
+        return option
+    return view.viewOptions()
 
 
 def open_local_path(path: str) -> bool:

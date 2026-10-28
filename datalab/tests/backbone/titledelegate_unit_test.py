@@ -10,6 +10,7 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
+from datalab.utils.qthelpers import view_item_option
 from datalab.widgets import titledelegate
 from datalab.widgets.titledelegate import (
     TITLE_REFERENCE_ROLE,
@@ -176,7 +177,7 @@ def test_text_clip_provider_leaves_room_for_view_buttons() -> None:
         model.appendRow(item)
         view.setModel(model)
         delegate = ClickableTitleDelegate(view, lambda reference: reference)
-        option = view.viewOptions()
+        option = view_item_option(view)
         option.rect = QC.QRect(0, 0, 800, 40)
 
         def last_painted_column(clip_right: int | None) -> int:

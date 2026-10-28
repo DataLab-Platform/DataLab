@@ -54,7 +54,7 @@ from datalab.objectmodel import (
     get_uuid,
     resolve_title_references,
 )
-from datalab.utils.qthelpers import block_signals
+from datalab.utils.qthelpers import block_signals, event_pos, view_item_option
 from datalab.widgets.titledelegate import (
     TITLE_REFERENCE_ROLE,
     ClickableTitleDelegate,
@@ -365,7 +365,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         if not index.isValid() or index.column() != 0:
             return None
         rect = self.visualRect(index)
-        option = self.viewOptions()
+        option = view_item_option(self)
         option.rect = rect
         return self.title_delegate.anchor_at(index, rect, pos, option)
 
@@ -373,7 +373,7 @@ class SimpleObjectTree(QW.QTreeWidget):
     def mousePressEvent(self, event: QG.QMouseEvent) -> None:
         """Reimplement Qt method to handle short-ID hyperlink clicks."""
         if event.button() == QC.Qt.LeftButton:
-            reference = self.title_reference_at(event.pos())
+            reference = self.title_reference_at(event_pos(event))
             if reference is not None:
                 event.accept()
                 self.handle_title_reference_click(reference)
@@ -383,7 +383,7 @@ class SimpleObjectTree(QW.QTreeWidget):
     # pylint: disable=invalid-name
     def mouseMoveEvent(self, event: QG.QMouseEvent) -> None:
         """Reimplement Qt method to update the cursor over short-ID anchors."""
-        reference = self.title_reference_at(event.pos())
+        reference = self.title_reference_at(event_pos(event))
         viewport = self.viewport()
         if reference is not None:
             viewport.setCursor(QC.Qt.PointingHandCursor)
@@ -400,7 +400,8 @@ class SimpleObjectTree(QW.QTreeWidget):
         """Reimplement Qt method to track the hovered item"""
         etype = event.type()
         if etype in (QC.QEvent.HoverEnter, QC.QEvent.HoverMove):
-            self.__hover_index = QC.QPersistentModelIndex(self.indexAt(event.pos()))
+            index = self.indexAt(event_pos(event))
+            self.__hover_index = QC.QPersistentModelIndex(index)
         elif etype == QC.QEvent.HoverLeave:
             self.__hover_index = QC.QPersistentModelIndex()
         return super().viewportEvent(event)
@@ -863,7 +864,7 @@ class ObjectView(SimpleObjectTree):
                 return True
         result = super().viewportEvent(event)
         if etype in (QC.QEvent.HoverEnter, QC.QEvent.HoverMove):
-            index = self.__delete_button_index_at(event.pos())
+            index = self.__delete_button_index_at(event_pos(event))
             self.__set_delete_button_hovered(index is not None)
         elif etype == QC.QEvent.HoverLeave:
             self.__set_delete_button_hovered(False)
@@ -874,7 +875,7 @@ class ObjectView(SimpleObjectTree):
         """Reimplement Qt method to press the delete button, without selecting
         or dragging the item"""
         if event.button() == QC.Qt.LeftButton:
-            index = self.__delete_button_index_at(event.pos())
+            index = self.__delete_button_index_at(event_pos(event))
             if index is not None:
                 self.__delete_button_pressed = QC.QPersistentModelIndex(index)
                 self.__update_row(index)
@@ -886,16 +887,15 @@ class ObjectView(SimpleObjectTree):
     def mouseMoveEvent(self, event: QG.QMouseEvent) -> None:
         """Reimplement Qt method to follow the mouse cursor over the delete
         button"""
+        pos = event_pos(event)
         if self.__delete_button_pressed is not None:
             # The press started on a delete button: neither select nor drag items
             rect = self.delete_button_rect(QC.QModelIndex(self.__delete_button_pressed))
-            self.__set_delete_button_hovered(
-                rect is not None and rect.contains(event.pos())
-            )
+            self.__set_delete_button_hovered(rect is not None and rect.contains(pos))
             event.accept()
             return
         super().mouseMoveEvent(event)
-        if self.__delete_button_index_at(event.pos()) is not None:
+        if self.__delete_button_index_at(pos) is not None:
             self.viewport().setCursor(QC.Qt.PointingHandCursor)
 
     # pylint: disable=invalid-name
@@ -908,14 +908,16 @@ class ObjectView(SimpleObjectTree):
         self.__delete_button_pressed = None
         event.accept()
         self.__update_row(pressed)
-        if pressed.isValid() and self.__delete_button_index_at(event.pos()) == pressed:
+        if pressed.isValid() and self.__delete_button_index_at(event_pos(event)) == (
+            pressed
+        ):
             self.SIG_DELETE_REQUESTED.emit(pressed.data(QC.Qt.UserRole))
 
     # pylint: disable=invalid-name
     def mouseDoubleClickEvent(self, event: QG.QMouseEvent) -> None:
         """Reimplement Qt method to ignore double-clicks on the delete button
         (which would open the item in a separate view)"""
-        if self.__delete_button_index_at(event.pos()) is not None:
+        if self.__delete_button_index_at(event_pos(event)) is not None:
             event.accept()
             return
         super().mouseDoubleClickEvent(event)

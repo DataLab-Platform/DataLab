@@ -53,7 +53,7 @@ def index_of(view: ObjectView, uuid: str) -> QC.QModelIndex:
 
 def send_hover(view: ObjectView, etype: QC.QEvent.Type, pos: QC.QPoint) -> None:
     """Send a hover event to the viewport of an object view"""
-    event = QG.QHoverEvent(etype, pos, QC.QPoint(-1, -1))
+    event = QG.QHoverEvent(etype, QC.QPointF(pos), QC.QPointF(-1, -1))
     QW.QApplication.sendEvent(view.viewport(), event)
 
 
