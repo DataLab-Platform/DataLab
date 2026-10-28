@@ -108,3 +108,14 @@ def test_default_registry_can_hide_macro_tool() -> None:
     assert "create_and_run_macro" not in names
     # Read-only macro inspection tool stays available (no code execution).
     assert "get_macro_console_output" in names
+
+
+def test_macro_tool_documents_autorun() -> None:
+    """The model must be told how to propose a macro without running it."""
+    reg = build_default_registry()
+    tool = reg.get("create_and_run_macro")
+    autorun = tool.parameters["properties"]["autorun"]
+    assert autorun["type"] == "boolean"
+    assert autorun["default"] is True
+    assert "without executing" in autorun["description"]
+    assert "'autorun' to false" in tool.description

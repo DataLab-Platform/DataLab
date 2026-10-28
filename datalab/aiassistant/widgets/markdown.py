@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import html
 import re
+from typing import Callable
 
 # Order matters: code spans/fences must be extracted first so their content
 # is not affected by other inline rules.
@@ -44,6 +45,30 @@ _HR_RE = re.compile(r"^\s*([-*_])\s*\1\s*\1[\s\1]*$")
 _UL_RE = re.compile(r"^(\s*)[-*+]\s+(.*)$")
 _OL_RE = re.compile(r"^(\s*)(\d+)\.\s+(.*)$")
 _BLOCKQUOTE_RE = re.compile(r"^>\s?(.*)$")
+
+_PYTHON_LANGS = frozenset({"python", "py", "python3", "py3"})
+# Unlabelled fences are taken as Python when they import something or
+# drive DataLab through ``proxy`` (the way macros are written).
+_PYTHON_HINT_RE = re.compile(
+    r"^\s*(import\s+\w|from\s+[\w.]+\s+import\s)|\bproxy\.", re.MULTILINE
+)
+
+
+def is_python_code_block(lang: str, code: str) -> bool:
+    """Return True if a fenced code block holds Python code.
+
+    Args:
+        lang: Language hint of the fence (may be empty).
+        code: Source of the block.
+
+    Returns:
+        True for ``python``/``py`` fences, and for unlabelled fences that
+        look like a macro (imports or ``proxy.`` calls).
+    """
+    words = lang.strip().lower().split()
+    if words:
+        return words[0] in _PYTHON_LANGS
+    return bool(code.strip()) and _PYTHON_HINT_RE.search(code) is not None
 
 
 def _render_inline(text: str) -> str:
@@ -111,8 +136,21 @@ def _close_lists(stack: list[str], out: list[str], down_to: int = 0) -> None:
         out.append(f"</{stack.pop()}>")
 
 
-def markdown_to_html(text: str) -> str:
-    """Convert a Markdown string to a Qt-compatible HTML fragment."""
+def markdown_to_html(
+    text: str, code_block_footer: Callable[[str, str], str] | None = None
+) -> str:
+    """Convert a Markdown string to a Qt-compatible HTML fragment.
+
+    Args:
+        text: Markdown source.
+        code_block_footer: Optional callable ``(lang, code) -> html`` whose
+         result is inserted right after each fenced code block (e.g. a
+         "Save to Macros" link). It receives the raw (unescaped) code and
+         must return trusted HTML, or an empty string.
+
+    Returns:
+        HTML fragment.
+    """
     if not text:
         return ""
 
@@ -120,11 +158,17 @@ def markdown_to_html(text: str) -> str:
     code_blocks: list[str] = []
 
     def _on_fence(match: re.Match[str]) -> str:
-        code = html.escape(match.group(2).rstrip("\n"))
+        raw_code = match.group(2).rstrip("\n")
+        code = html.escape(raw_code)
+        footer = (
+            code_block_footer(match.group(1).strip(), raw_code)
+            if code_block_footer is not None
+            else ""
+        )
         code_blocks.append(
             "<pre style='background-color:#f4f4f4;border:1px solid #ddd;"
             "padding:6px;font-family:Consolas,monospace;'>"
-            f"<code>{code}</code></pre>"
+            f"<code>{code}</code></pre>{footer}"
         )
         return f"\x01{len(code_blocks) - 1}\x01"
 

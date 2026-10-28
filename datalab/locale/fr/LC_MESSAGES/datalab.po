@@ -148,6 +148,9 @@ msgstr "Échec de l'enregistrement de la macro : %s"
 msgid "Saved macro '%s' to the Macro panel."
 msgstr "Macro '%s' enregistrée dans le panneau de macros."
 
+msgid "Show in Macro panel"
+msgstr "Afficher dans le panneau de macros"
+
 msgid "Thinking…"
 msgstr "Réflexion en cours…"
 
@@ -356,11 +359,17 @@ msgstr "Assistant IA — Confirmer l'appel d'outil"
 msgid "The AI assistant requests to run the following action:"
 msgstr "L'assistant IA demande à exécuter l'action suivante :"
 
+msgid "This macro will not be executed: approving only offers it for saving to the Macro panel."
+msgstr "Cette macro ne sera pas exécutée : l'approuver permet seulement de l'enregistrer dans le panneau de macros."
+
 msgid "Parameters:"
 msgstr "Paramètres :"
 
 msgid "Macro code:"
 msgstr "Code de la macro :"
+
+msgid "Approve"
+msgstr "Approuver"
 
 msgid "Run"
 msgstr "Exécuter"

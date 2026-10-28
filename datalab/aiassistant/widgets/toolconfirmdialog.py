@@ -39,9 +39,25 @@ class ToolConfirmDialog(QW.QDialog):
 
         layout = QW.QVBoxLayout(self)
 
+        no_exec = tool.name == "create_and_run_macro" and (
+            arguments.get("autorun") is False
+        )
+
         header = QW.QLabel(_("The AI assistant requests to run the following action:"))
         header.setWordWrap(True)
         layout.addWidget(header)
+
+        if no_exec:
+            note = QW.QLabel(
+                "<b>"
+                + _(
+                    "This macro will not be executed: approving only offers it "
+                    "for saving to the Macro panel."
+                )
+                + "</b>"
+            )
+            note.setWordWrap(True)
+            layout.addWidget(note)
 
         title = QW.QLabel(f"<b>{tool.name}</b>")
         layout.addWidget(title)
@@ -70,7 +86,9 @@ class ToolConfirmDialog(QW.QDialog):
         button_box = QW.QDialogButtonBox(
             QW.QDialogButtonBox.Ok | QW.QDialogButtonBox.Cancel
         )
-        button_box.button(QW.QDialogButtonBox.Ok).setText(_("Run"))
+        button_box.button(QW.QDialogButtonBox.Ok).setText(
+            _("Approve") if no_exec else _("Run")
+        )
         button_box.button(QW.QDialogButtonBox.Cancel).setText(_("Cancel"))
         button_box.accepted.connect(self.accept)
         button_box.rejected.connect(self.reject)
