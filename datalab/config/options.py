@@ -314,6 +314,15 @@ class DataLabOptions(SigimaXOptions):
             description="Ignore the message shown when inserting a title as an "
             "annotation label.",
         )
+        self.show_delete_button_on_hover = TypedOptionField(
+            self,
+            "show_delete_button_on_hover",
+            category="view",
+            default=True,
+            expected_type=bool,
+            description="Show a delete button at the right of the signal, image or "
+            "group under the mouse cursor in the object lists.",
+        )
         self.auto_refresh = TypedOptionField(
             self,
             "auto_refresh",

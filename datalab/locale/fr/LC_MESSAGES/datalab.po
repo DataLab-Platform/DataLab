@@ -1454,6 +1454,23 @@ msgstr "groupe"
 msgid "Source objects"
 msgstr "Objets source"
 
+#, python-format
+msgid "Delete the %d selected groups"
+msgstr "Supprimer les %d groupes sélectionnés"
+
+#, python-format
+msgid "Delete the %d selected objects"
+msgstr "Supprimer les %d objets sélectionnés"
+
+msgid "Delete this group"
+msgstr "Supprimer ce groupe"
+
+msgid "Delete this signal"
+msgstr "Supprimer ce signal"
+
+msgid "Delete this image"
+msgstr "Supprimer cette image"
+
 msgid "Drag files here to open"
 msgstr "Déposer des fichiers ici pour les ouvrir"
 
@@ -1703,6 +1720,22 @@ msgstr "Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?"
 
 msgid "Remove selected objects"
 msgstr "Supprimer les objets sélectionnés"
+
+#, python-format
+msgid "Do you want to delete the %d selected groups and their objects?"
+msgstr "Souhaitez-vous supprimer les %d groupes sélectionnés et leurs objets ?"
+
+#, python-format
+msgid "Do you want to delete the %d selected objects?"
+msgstr "Souhaitez-vous supprimer les %d objets sélectionnés ?"
+
+#, python-format
+msgid "Do you want to delete group \"%s\" and its %d object(s)?"
+msgstr "Souhaitez-vous supprimer le groupe « %s » et ses objets (%d) ?"
+
+#, python-format
+msgid "Do you want to delete \"%s\"?"
+msgstr "Souhaitez-vous supprimer « %s » ?"
 
 #, python-format
 msgid "Do you want to delete all objects (%s)?"
@@ -3876,6 +3909,12 @@ msgstr "Ignorer le message d'insertion du titre"
 
 msgid "Ignore information message when inserting object title as annotation label"
 msgstr "Ignorer le message d'information lors de l'insertion du titre de l'objet en tant qu'étiquette d'annotation"
+
+msgid "Show delete button when hovering list items"
+msgstr "Afficher un bouton de suppression au survol des éléments des listes"
+
+msgid "Show a delete button at the right of the signal, image or group under the mouse cursor in the signal and image lists"
+msgstr "Afficher un bouton de suppression à droite du signal, de l'image ou du groupe situé sous le curseur de la souris, dans les listes de signaux et d'images"
 
 msgid "Signals"
 msgstr "Signaux"

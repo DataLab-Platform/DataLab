@@ -58,6 +58,7 @@ from datalab.utils.qthelpers import block_signals
 from datalab.widgets.titledelegate import (
     TITLE_REFERENCE_ROLE,
     ClickableTitleDelegate,
+    hover_background_color,
 )
 
 if TYPE_CHECKING:
@@ -65,6 +66,22 @@ if TYPE_CHECKING:
 
     from datalab.gui.panel.base import BaseDataPanel
     from datalab.objectmodel import ObjectModel
+
+
+#: Side of the delete button shown at the right of the hovered item (pixels)
+DELETE_BUTTON_SIZE = 20
+#: Side of the icon of the delete button (pixels)
+DELETE_BUTTON_ICON_SIZE = 14
+#: Space between the delete button and the right edge of the viewport (pixels)
+DELETE_BUTTON_MARGIN = 6
+#: Space between the item title and the delete button (pixels)
+DELETE_BUTTON_SPACING = 2
+#: Corner radius of the delete button background (pixels)
+DELETE_BUTTON_RADIUS = 3
+#: Background colors of the delete button under the mouse cursor, and pressed
+#: (the former is the "danger" color of DataLab-Web)
+DELETE_BUTTON_HOVER_COLOR = "#c4302b"
+DELETE_BUTTON_PRESSED_COLOR = "#9e2420"
 
 
 def metadata_to_html(metadata: dict[str, Any]) -> str:
@@ -113,6 +130,10 @@ class SimpleObjectTree(QW.QTreeWidget):
         )
         self.setItemDelegateForColumn(0, self.title_delegate)
         self.viewport().setMouseTracking(True)
+        # Hover events let the view flag the hovered item, whatever the Qt style
+        self.viewport().setAttribute(QC.Qt.WA_Hover, True)
+        #: Hovered item, tracked from the same events as the view's own hover state
+        self.__hover_index = QC.QPersistentModelIndex()
         #: Title reference indexes of the models (by model id), while a batch of
         #: items is updated (see :meth:`_title_reference_indexes`); None otherwise.
         self.__title_reference_indexes: dict[int, dict] | None = None
@@ -370,6 +391,40 @@ class SimpleObjectTree(QW.QTreeWidget):
             viewport.unsetCursor()
         super().mouseMoveEvent(event)
 
+    def hovered_index(self) -> QC.QModelIndex:
+        """Return the index of the item under the mouse cursor (invalid if none)"""
+        return QC.QModelIndex(self.__hover_index)
+
+    # pylint: disable=invalid-name
+    def viewportEvent(self, event: QC.QEvent) -> bool:
+        """Reimplement Qt method to track the hovered item"""
+        etype = event.type()
+        if etype in (QC.QEvent.HoverEnter, QC.QEvent.HoverMove):
+            self.__hover_index = QC.QPersistentModelIndex(self.indexAt(event.pos()))
+        elif etype == QC.QEvent.HoverLeave:
+            self.__hover_index = QC.QPersistentModelIndex()
+        return super().viewportEvent(event)
+
+    # pylint: disable=invalid-name
+    def changeEvent(self, event: QC.QEvent) -> None:
+        """Reimplement Qt method to keep hover events after a style change (some
+        styles disable them when unpolishing item views)"""
+        if event.type() == QC.QEvent.StyleChange:
+            self.viewport().setAttribute(QC.Qt.WA_Hover, True)
+        super().changeEvent(event)
+
+    # pylint: disable=invalid-name
+    def drawBranches(
+        self, painter: QG.QPainter, rect: QC.QRect, index: QC.QModelIndex
+    ) -> None:
+        """Reimplement Qt method to extend the highlight of the hovered item to
+        its branch area (the delegate highlights the rest of the item)"""
+        if index == self.hovered_index() and not self.selectionModel().isSelected(
+            index
+        ):
+            painter.fillRect(rect, hover_background_color(self.palette()))
+        super().drawBranches(painter, rect, index)
+
     def populate_tree(self) -> None:
         """Populate tree with objects"""
         uuid = self.get_current_item_id()
@@ -615,10 +670,16 @@ class GetObjectsDialog(QW.QDialog):
 
 
 class ObjectView(SimpleObjectTree):
-    """Object handling panel list widget, object (sig/ima) lists"""
+    """Object handling panel list widget, object (sig/ima) lists
+
+    A delete button is shown at the right of the hovered item (signal, image or
+    group), unless disabled (see :meth:`set_delete_button_enabled`): clicking it
+    emits :attr:`SIG_DELETE_REQUESTED` with the item UUID.
+    """
 
     SIG_SELECTION_CHANGED = QC.Signal()
     SIG_IMPORT_FILES = QC.Signal(list)
+    SIG_DELETE_REQUESTED = QC.Signal(str)
 
     def __init__(self, parent: BaseDataPanel, objmodel: ObjectModel) -> None:
         super().__init__(parent, objmodel)
@@ -630,6 +691,234 @@ class ObjectView(SimpleObjectTree):
         self.__dragged_objects: list[QW.QListWidgetItem] = []
         self.__dragged_groups: list[QW.QListWidgetItem] = []
         self.__dragged_expanded_states: dict[QW.QListWidgetItem, bool] = {}
+        self.__delete_button_enabled = Conf.show_delete_button_on_hover.get()
+        self.__delete_icon = get_icon("delete.svg")
+        #: True when the mouse cursor is over the delete button of the hovered item
+        self.__delete_button_hovered = False
+        #: Item whose delete button is pressed, None when no button is pressed
+        self.__delete_button_pressed: QC.QPersistentModelIndex | None = None
+        self.title_delegate.text_clip_provider = self.__title_clip_right
+        # The button sticks to the right edge of the viewport: scrolling
+        # horizontally must not move its pixels with the items
+        self.horizontalScrollBar().valueChanged.connect(self.__repaint_viewport)
+
+    def set_delete_button_enabled(self, enabled: bool) -> None:
+        """Show or hide the delete button of the hovered item
+
+        Args:
+            enabled: True to show the button
+        """
+        self.__delete_button_enabled = enabled
+        self.__delete_button_hovered = False
+        self.__delete_button_pressed = None
+        self.viewport().update()
+
+    def is_delete_button_enabled(self) -> bool:
+        """Return True if the delete button of the hovered item is shown"""
+        return self.__delete_button_enabled
+
+    def delete_button_rect(self, index: QC.QModelIndex) -> QC.QRect | None:
+        """Return the rectangle of the delete button of an item
+
+        The button is shown on the hovered item only, at the right edge of the
+        visible part of the viewport (the title column may be wider than the
+        viewport).
+
+        Args:
+            index: model index of the item
+
+        Returns:
+            Button rectangle in viewport coordinates, or None if the item shows
+            no delete button.
+        """
+        if (
+            not self.__delete_button_enabled
+            or not index.isValid()
+            or index.sibling(index.row(), 0) != self.hovered_index()
+            or self.state()
+            not in (QW.QAbstractItemView.NoState, QW.QAbstractItemView.AnimatingState)
+        ):
+            return None
+        item_rect = self.visualRect(index)
+        size = DELETE_BUTTON_SIZE
+        return QC.QRect(
+            self.viewport().width() - DELETE_BUTTON_MARGIN - size,
+            item_rect.top() + (item_rect.height() - size) // 2,
+            size,
+            size,
+        )
+
+    def get_delete_targets(self, uuid: str) -> list[str]:
+        """Return the UUIDs of the items deleted by the delete button of an item
+
+        Args:
+            uuid: UUID of the item whose delete button is clicked
+
+        Returns:
+            UUIDs of the selected objects or groups if the item is part of the
+            selection, else the item UUID only.
+        """
+        selection = self.get_sel_object_uuids() + self.get_sel_group_uuids()
+        return selection if uuid in selection else [uuid]
+
+    def delete_button_tooltip(self, index: QC.QModelIndex) -> str:
+        """Return the tooltip of the delete button of an item
+
+        Args:
+            index: model index of the item
+
+        Returns:
+            Tooltip text
+        """
+        uuid = index.data(QC.Qt.UserRole)
+        targets = self.get_delete_targets(uuid)
+        if len(targets) > 1:
+            if isinstance(self.objmodel.get_object_or_group(targets[0]), ObjectGroup):
+                return _("Delete the %d selected groups") % len(targets)
+            return _("Delete the %d selected objects") % len(targets)
+        obj = self.objmodel.get_object_or_group(uuid)
+        if isinstance(obj, ObjectGroup):
+            return _("Delete this group")
+        if isinstance(obj, SignalObj):
+            return _("Delete this signal")
+        return _("Delete this image")
+
+    def __delete_button_index_at(self, pos: QC.QPoint) -> QC.QModelIndex | None:
+        """Return the index of the item whose delete button is at viewport
+        position ``pos``, or None"""
+        index = self.indexAt(pos)
+        rect = self.delete_button_rect(index)
+        if rect is not None and rect.contains(pos):
+            return index
+        return None
+
+    def __title_clip_right(self, index: QC.QModelIndex) -> int | None:
+        """Return the viewport X coordinate beyond which the title of an item must
+        not be drawn, to leave room for its delete button (None if no button)"""
+        rect = self.delete_button_rect(index)
+        return None if rect is None else rect.left() - DELETE_BUTTON_SPACING
+
+    def __update_row(self, index: QC.QModelIndex) -> None:
+        """Repaint the row of an item, over the whole viewport width"""
+        if index.isValid():
+            rect = self.visualRect(index)
+            width = self.viewport().width()
+            self.viewport().update(QC.QRect(0, rect.top(), width, rect.height()))
+
+    def __repaint_viewport(self) -> None:
+        """Repaint the whole viewport"""
+        self.viewport().update()
+
+    def __set_delete_button_hovered(self, hovered: bool) -> None:
+        """Set whether the mouse cursor is over the delete button"""
+        if hovered != self.__delete_button_hovered:
+            self.__delete_button_hovered = hovered
+            self.__update_row(self.hovered_index())
+
+    def __paint_delete_button(self, painter: QG.QPainter, rect: QC.QRect) -> None:
+        """Paint the delete button in ``rect``"""
+        painter.save()
+        if self.__delete_button_hovered:
+            pressed = self.__delete_button_pressed is not None
+            color = (
+                DELETE_BUTTON_PRESSED_COLOR if pressed else DELETE_BUTTON_HOVER_COLOR
+            )
+            painter.setRenderHint(QG.QPainter.Antialiasing)
+            painter.setPen(QC.Qt.NoPen)
+            painter.setBrush(QG.QColor(color))
+            radius = DELETE_BUTTON_RADIUS
+            painter.drawRoundedRect(QC.QRectF(rect), radius, radius)
+        icon_rect = QC.QRect(0, 0, DELETE_BUTTON_ICON_SIZE, DELETE_BUTTON_ICON_SIZE)
+        icon_rect.moveCenter(rect.center())
+        self.__delete_icon.paint(painter, icon_rect)
+        painter.restore()
+
+    # pylint: disable=invalid-name
+    def drawRow(
+        self,
+        painter: QG.QPainter,
+        option: QW.QStyleOptionViewItem,
+        index: QC.QModelIndex,
+    ) -> None:
+        """Reimplement Qt method to draw the delete button of the hovered item"""
+        super().drawRow(painter, option, index)
+        rect = self.delete_button_rect(index)
+        if rect is not None:
+            self.__paint_delete_button(painter, rect)
+
+    # pylint: disable=invalid-name
+    def viewportEvent(self, event: QC.QEvent) -> bool:
+        """Reimplement Qt method to show the tooltip of the delete button and
+        follow the mouse cursor over it"""
+        etype = event.type()
+        if etype == QC.QEvent.ToolTip:
+            index = self.__delete_button_index_at(event.pos())
+            if index is not None:
+                QW.QToolTip.showText(
+                    event.globalPos(),
+                    self.delete_button_tooltip(index),
+                    self.viewport(),
+                    self.delete_button_rect(index),
+                )
+                return True
+        result = super().viewportEvent(event)
+        if etype in (QC.QEvent.HoverEnter, QC.QEvent.HoverMove):
+            index = self.__delete_button_index_at(event.pos())
+            self.__set_delete_button_hovered(index is not None)
+        elif etype == QC.QEvent.HoverLeave:
+            self.__set_delete_button_hovered(False)
+        return result
+
+    # pylint: disable=invalid-name
+    def mousePressEvent(self, event: QG.QMouseEvent) -> None:
+        """Reimplement Qt method to press the delete button, without selecting
+        or dragging the item"""
+        if event.button() == QC.Qt.LeftButton:
+            index = self.__delete_button_index_at(event.pos())
+            if index is not None:
+                self.__delete_button_pressed = QC.QPersistentModelIndex(index)
+                self.__update_row(index)
+                event.accept()
+                return
+        super().mousePressEvent(event)
+
+    # pylint: disable=invalid-name
+    def mouseMoveEvent(self, event: QG.QMouseEvent) -> None:
+        """Reimplement Qt method to follow the mouse cursor over the delete
+        button"""
+        if self.__delete_button_pressed is not None:
+            # The press started on a delete button: neither select nor drag items
+            rect = self.delete_button_rect(QC.QModelIndex(self.__delete_button_pressed))
+            self.__set_delete_button_hovered(
+                rect is not None and rect.contains(event.pos())
+            )
+            event.accept()
+            return
+        super().mouseMoveEvent(event)
+        if self.__delete_button_index_at(event.pos()) is not None:
+            self.viewport().setCursor(QC.Qt.PointingHandCursor)
+
+    # pylint: disable=invalid-name
+    def mouseReleaseEvent(self, event: QG.QMouseEvent) -> None:
+        """Reimplement Qt method to click the delete button"""
+        if self.__delete_button_pressed is None or event.button() != QC.Qt.LeftButton:
+            super().mouseReleaseEvent(event)
+            return
+        pressed = QC.QModelIndex(self.__delete_button_pressed)
+        self.__delete_button_pressed = None
+        event.accept()
+        self.__update_row(pressed)
+        if pressed.isValid() and self.__delete_button_index_at(event.pos()) == pressed:
+            self.SIG_DELETE_REQUESTED.emit(pressed.data(QC.Qt.UserRole))
+
+    # pylint: disable=invalid-name
+    def mouseDoubleClickEvent(self, event: QG.QMouseEvent) -> None:
+        """Reimplement Qt method to ignore double-clicks on the delete button
+        (which would open the item in a separate view)"""
+        if self.__delete_button_index_at(event.pos()) is not None:
+            event.accept()
+            return
+        super().mouseDoubleClickEvent(event)
 
     def resolve_title_reference(
         self, reference: str
@@ -900,8 +1189,14 @@ class ObjectView(SimpleObjectTree):
         """Set current object"""
         self.set_current_item_id(get_uuid(obj))
 
-    def __select_uuids(self, uuids: list[str]) -> None:
-        """Select UUIDs atomically and publish the complete final state once."""
+    def select_uuids(self, uuids: Sequence[str], notify: bool = True) -> None:
+        """Select objects or groups atomically, the last one becoming current
+
+        Args:
+            uuids: UUIDs of the objects or groups to select
+            notify: if True, publish the complete final state once (see
+             :meth:`item_selection_changed`)
+        """
         if not uuids:
             return
         signals_blocked = self.blockSignals(True)
@@ -910,7 +1205,8 @@ class ObjectView(SimpleObjectTree):
                 self.set_current_item_id(uuid, extend=idx > 0)
         finally:
             self.blockSignals(signals_blocked)
-        self.item_selection_changed()
+        if notify:
+            self.item_selection_changed()
 
     def item_selection_changed(self) -> None:
         """Refreshing the selection of objects and groups, emitting the
@@ -954,7 +1250,7 @@ class ObjectView(SimpleObjectTree):
         else:
             assert all(isinstance(obj, (SignalObj, ImageObj)) for obj in selection)
             uuids = [get_uuid(obj) for obj in selection]
-        self.__select_uuids(uuids)
+        self.select_uuids(uuids)
 
     def select_groups(
         self, groups: list[ObjectGroup | int | str] | None = None
@@ -972,7 +1268,7 @@ class ObjectView(SimpleObjectTree):
         elif all(isinstance(group, str) for group in groups):
             groups = self.objmodel.get_groups(groups)
         assert all(isinstance(group, ObjectGroup) for group in groups)
-        self.__select_uuids([get_uuid(group) for group in groups])
+        self.select_uuids([get_uuid(group) for group in groups])
 
     def __reorder_model(self) -> None:
         """Reorder model"""
