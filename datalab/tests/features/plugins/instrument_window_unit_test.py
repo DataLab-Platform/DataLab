@@ -21,6 +21,7 @@ from __future__ import annotations
 import threading
 import time
 from concurrent.futures import Future
+from types import SimpleNamespace
 
 import guidata.dataset as gds
 import numpy as np
@@ -149,11 +150,22 @@ def test_reopened_window_waits_for_closing() -> None:
         main.deleteLater()
 
 
+class MainWindowDouble(QW.QWidget):
+    """Main window double, with the panels whose current group is taken when an
+    acquisition is requested (adding acquired objects to them fails, which the
+    window reports)."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        objview = SimpleNamespace(get_current_group_id=lambda: None)
+        self.signalpanel = self.imagepanel = SimpleNamespace(objview=objview)
+
+
 def test_live_mode_after_acquisition() -> None:
     """Live mode is resumed after an acquisition, unless it was switched off
     while the acquisition was running."""
     with qt_app_context():
-        main = QW.QWidget()
+        main = MainWindowDouble()
         instrument = SlowInstrument()
         instrument.release.set()
         window = InstrumentWindow(main, instrument, "Slow instrument")
