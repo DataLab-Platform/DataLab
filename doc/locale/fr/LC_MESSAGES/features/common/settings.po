@@ -301,6 +301,12 @@ msgstr "**Ignorer le message d'insertion de titre**"
 msgid "Suppress the information message when inserting an object title as an annotation label."
 msgstr "Supprimer le message d'information lors de l'insertion d'un titre d'objet comme étiquette d'annotation."
 
+msgid "**Show delete button when hovering list items**"
+msgstr "**Afficher un bouton de suppression au survol des éléments des listes**"
+
+msgid "When enabled (default), a delete button appears at the right of the signal, image or group under the mouse cursor in the signal and image lists (see :ref:`overview`). Disable this option to hide the button: items can still be deleted with the \"Remove\" action of the \"Edit\" menu, or with the :kbd:`Delete` key."
+msgstr "Lorsque cette option est activée (par défaut), un bouton de suppression apparaît à droite du signal, de l'image ou du groupe situé sous le curseur de la souris, dans les listes de signaux et d'images (voir :ref:`overview`). Désactivez cette option pour masquer le bouton : les éléments peuvent toujours être supprimés avec l'action « Supprimer » du menu « Édition », ou avec la touche :kbd:`Suppr`."
+
 msgid "Signals"
 msgstr "Signaux"
 

@@ -112,6 +112,16 @@ DataLab now uses stable UUID-based object references across object trees, result
 * When a source object is deleted, its reference falls back to its 8-character UUID instead of becoming an anonymous placeholder
 * Titles of workspaces saved by previous versions keep their former `s001`-style references as plain text
 
+**Signal and image lists:**
+
+Signals, images and groups can now be deleted directly from the lists, as in DataLab-Web (implements [Issue #449](https://github.com/DataLab-Platform/DataLab/issues/449)).
+
+* The item under the mouse cursor is subtly highlighted, in light and dark modes alike (the hovered item was not highlighted at all in dark mode)
+* A delete button appears at the right of the hovered signal, image or group: it turns red when the mouse cursor is over it, and its tooltip tells what it deletes
+* Clicking it deletes the item, or the whole selection when the item is part of it, after confirmation. Deleting an item which is not selected keeps the current selection and the displayed objects unchanged
+* As with the **Remove** action, the deletion is recorded in the History panel
+* The button may be hidden with the new **Show delete button when hovering list items** setting (Visualization > Common)
+
 **Curve fitting formulas:**
 
 * Interactive fitting dialogs now show the formula of the fitted model below the fit parameters, and each parameter label shows its symbol in the formula (e.g. "Scale factor (x₀)"): the parameters stored in the fitted signal metadata can thus be related to the model without reading the source code. The *Fitting* documentation also gives, for each model, the name under which each parameter is stored (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))
