@@ -96,14 +96,19 @@ class ReconnectionTarget:
 
 @dataclass
 class ReconnectionPlan:
-    """Planned source rewrites after one data object has been removed."""
+    """Planned source rewrites after one data object has been removed.
+
+    ``unreconnected_operation`` is the title of the recorded processing step that
+    produced the removed object when its dependent results cannot be reconnected
+    because its source no longer exists (None otherwise).
+    """
 
     panel_str: str
     removed_uuid: str
     source_uuid: str | None
     producer_action: HistoryAction | None
     targets: list[ReconnectionTarget] = field(default_factory=list)
-    warning: str | None = None
+    unreconnected_operation: str | None = None
     remove_producer: bool = False
 
 

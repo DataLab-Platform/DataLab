@@ -1904,12 +1904,8 @@ msgstr "Annotation ajoutée"
 msgid "The label has been added as an annotation. You can edit or remove it using the annotation editing window.<br><br>Choosing to ignore this message will prevent it from being displayed again."
 msgstr "L'étiquette a été ajoutée comme annotation. Vous pouvez la modifier ou la supprimer en utilisant la fenêtre d'édition des annotations.<br><br>Ignorer ce message empêchera son affichage ultérieur."
 
-#, python-format
-msgid "“%s” has dependent operations but no valid source to reconnect to — downstream results are left unchanged."
-msgstr "« %s » possède des opérations dépendantes mais aucune source valide à laquelle se reconnecter — les résultats en aval restent inchangés."
-
-msgid "Some operations could not be reconnected after deletion:"
-msgstr "Certaines opérations n'ont pas pu être reconnectées après la suppression :"
+msgid "The outputs of the following operations were deleted, but their source no longer exists: the results depending on them could not be reconnected and are left unchanged."
+msgstr "Les sorties des opérations suivantes ont été supprimées, mais leur source n'existe plus : les résultats qui en dépendent n'ont pas pu être reconnectés et restent inchangés."
 
 msgid "Commit edit mode changes?"
 msgstr "Valider les modifications du mode d'édition ?"

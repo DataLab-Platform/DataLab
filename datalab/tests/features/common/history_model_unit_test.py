@@ -1290,10 +1290,10 @@ def test_plan_reconnection_dead_source_warning_and_producer_removal() -> None:
         )
         return panel, signal_panel
 
-    # Dead source: the plan carries a warning and applying it is a no-op
+    # Dead source: the plan reports the producer and applying it is a no-op
     panel, signal_panel = make_panel([consumer_obj])
     plan = hchain.plan_reconnection(panel, signal_panel, removed_uuid)
-    assert plan.warning is not None and "Normalize" in plan.warning
+    assert plan.unreconnected_operation == "Normalize"
     assert [target.object_uuid for target in plan.targets] == [consumer_uuid]
     assert plan.targets[0].action is consumer_action
     roots: list[HistoryAction] = []
@@ -1305,13 +1305,13 @@ def test_plan_reconnection_dead_source_warning_and_producer_removal() -> None:
         patch.object(hchain, "execenv", SimpleNamespace(unattended=True)),
         patch.object(hchain.QW, "QMessageBox") as message_box,
     ):
-        hchain.show_reconnection_warnings(panel, [plan.warning])
+        hchain.show_reconnection_warnings(panel, [plan.unreconnected_operation])
     message_box.warning.assert_not_called()
 
     # Alive source: reconnect the consumer and remove the outputless producer
     panel, signal_panel = make_panel([source, consumer_obj])
     plan = hchain.plan_reconnection(panel, signal_panel, removed_uuid)
-    assert plan.warning is None
+    assert plan.unreconnected_operation is None
     assert plan.source_uuid == source_uuid
     assert plan.remove_producer is True
     roots = []
@@ -1321,6 +1321,84 @@ def test_plan_reconnection_dead_source_warning_and_producer_removal() -> None:
     assert consumer_action.state.selection["signal"] == [source_uuid]
     assert producer not in session.actions
     panel.runtime.objects.remove_action_outputs.assert_called_once_with(producer)
+
+
+def test_plan_reconnection_ignores_objects_without_processing_source() -> None:
+    """Deleting a raw object reports nothing and reconnects nothing, even when
+    its creation action recorded a selection or history was not recording."""
+    unrelated = create_paracetamol_signal()
+    removed_uuid = "removed-raw"
+    consumer_obj = create_paracetamol_signal()
+    insert_processing_parameters(
+        consumer_obj,
+        ProcessingParameters(
+            func_name="normalize", pattern="1-to-1", source_uuid=removed_uuid
+        ),
+    )
+    creation = HistoryAction(
+        title="New signal",
+        kind=HistoryAction.KIND_UI,
+        panel_str="signal",
+        target="signalpanel",
+        method_name="new_object",
+        state=build_workspace_state([get_uuid(unrelated)]),
+    )
+    session = HistorySession(number=1)
+    session.add_action(creation)
+    signal_panel = SimpleNamespace(
+        PANEL_STR_ID="signal", objmodel=CascadeObjectModel([unrelated, consumer_obj])
+    )
+    # Not recorded (no producer), then recorded by a creation action
+    for output_to_action in ({}, {removed_uuid: creation.uuid}):
+        panel = SimpleNamespace(
+            history_sessions=[session],
+            runtime=SimpleNamespace(
+                objects=SimpleNamespace(
+                    output_to_action=output_to_action, action_output_uuids={}
+                )
+            ),
+            mainwindow=SimpleNamespace(
+                signalpanel=signal_panel,
+                imagepanel=SimpleNamespace(
+                    PANEL_STR_ID="image", objmodel=CascadeObjectModel([])
+                ),
+            ),
+        )
+        plan = hchain.plan_reconnection(panel, signal_panel, removed_uuid)
+        assert len(plan.targets) == 1
+        assert plan.source_uuid is None
+        assert plan.unreconnected_operation is None
+        roots: list[HistoryAction] = []
+        hchain.apply_reconnection_plan(panel, signal_panel, plan, roots)
+        assert not roots
+        pp = extract_processing_parameters(consumer_obj)
+        assert pp.source_uuid == removed_uuid
+    assert creation in session.actions
+
+
+def test_show_reconnection_warnings_lists_each_operation_once() -> None:
+    """One message lists each operation once, up to a maximum number."""
+    panel = SimpleNamespace(mainwindow=None)
+    with (
+        patch.object(hchain, "execenv", SimpleNamespace(unattended=False)),
+        patch.object(hchain.QW, "QMessageBox") as message_box,
+    ):
+        hchain.show_reconnection_warnings(panel, [])
+        message_box.warning.assert_not_called()
+
+        hchain.show_reconnection_warnings(panel, ["Normalize"] * 5 + ["Derivative"])
+        message_box.warning.assert_called_once()
+        text = message_box.warning.call_args.args[2]
+        assert text.count("• ") == 2
+        assert text.count("Normalize") == text.count("Derivative") == 1
+
+        message_box.warning.reset_mock()
+        count = hchain.MAX_LISTED_UNRECONNECTED + 3
+        hchain.show_reconnection_warnings(panel, [f"Op {i}" for i in range(count)])
+        text = message_box.warning.call_args.args[2]
+        assert text.count("• ") == hchain.MAX_LISTED_UNRECONNECTED
+        assert f"Op {hchain.MAX_LISTED_UNRECONNECTED}" not in text
+        assert "3" in text.splitlines()[-1]
 
 
 def test_prepare_action_param_edit_skips_paramless_actions() -> None:
