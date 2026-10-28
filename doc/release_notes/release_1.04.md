@@ -256,6 +256,12 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 * Fixed DataLab freezing when closed while a remote command was still running (e.g. when closing the main window with `call_method("close")`)
 * Fixed images with non-uniform coordinates losing them when transferred through the Web API (`GET` and `PUT /objects/{name}/data`): they were rebuilt with default uniform coordinates. The NPZ data format now includes these coordinates; archives written by earlier versions remain readable. Clients with their own NPZ reader, such as DataLab-Kernel, must support the new entries to take advantage of this
 
+**AI Assistant:**
+
+* Fixed the **Save to Macros** link missing when a conversation is reopened from **History...**: a macro proposed by the assistant in a previous session could no longer be saved. Reopened conversations also showed every tool call as successful, including the failed ones; they now show the actual outcome (fixes [Issue #447](https://github.com/DataLab-Platform/DataLab/issues/447))
+* Saving a macro proposed by the assistant now offers a **Show in Macro panel** link: the Macro panel is tabbed with the AI Assistant, so the saved macro stayed hidden behind the conversation
+* Fixed the assistant answering a request to *write* a macro with the code in its reply, which could not be saved to the Macro panel: it now proposes the macro without running it (the confirmation dialog states that it will not be executed) and offers the **Save to Macros** link. A **Save to Macros** link is also offered under each Python code block of its replies, unless macro creation is disabled
+
 **Security:**
 
 * Opening a workspace received from someone else can no longer make DataLab load or run other code installed on the computer. The parameters stored with objects, analysis results and History actions name their class, and DataLab imported whatever module they named and called the object named there, which a modified file could use, for example, to make DataLab quit. Only parameter classes of DataLab, Sigima, guidata and installed plugins are now used; other stored parameters are reported as unreadable (fixes [Issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))

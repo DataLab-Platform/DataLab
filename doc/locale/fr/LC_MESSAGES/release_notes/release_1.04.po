@@ -573,6 +573,18 @@ msgstr "Correction du blocage de DataLab lorsqu'il était fermé alors qu'une co
 msgid "Fixed images with non-uniform coordinates losing them when transferred through the Web API (`GET` and `PUT /objects/{name}/data`): they were rebuilt with default uniform coordinates. The NPZ data format now includes these coordinates; archives written by earlier versions remain readable. Clients with their own NPZ reader, such as DataLab-Kernel, must support the new entries to take advantage of this"
 msgstr "Correction des images à coordonnées non uniformes qui perdaient celles-ci lors d'un transfert par l'API Web (`GET` et `PUT /objects/{name}/data`) : elles étaient reconstruites avec des coordonnées uniformes par défaut. Le format de données NPZ inclut désormais ces coordonnées ; les archives écrites par les versions antérieures restent lisibles. Les clients disposant de leur propre lecteur NPZ, comme DataLab-Kernel, doivent prendre en charge les nouvelles entrées pour en bénéficier"
 
+msgid "**AI Assistant:**"
+msgstr "**Assistant IA :**"
+
+msgid "Fixed the **Save to Macros** link missing when a conversation is reopened from **History...**: a macro proposed by the assistant in a previous session could no longer be saved. Reopened conversations also showed every tool call as successful, including the failed ones; they now show the actual outcome (fixes [Issue #447](https://github.com/DataLab-Platform/DataLab/issues/447))"
+msgstr "Correction de l'absence du lien **Enregistrer dans les macros** lorsqu'une conversation est rouverte depuis **Historique...** : une macro proposée par l'assistant lors d'une session précédente ne pouvait plus être enregistrée. Les conversations rouvertes affichaient aussi tous les appels d'outils comme réussis, y compris ceux en échec ; elles affichent désormais leur résultat réel (corrige [l'issue #447](https://github.com/DataLab-Platform/DataLab/issues/447))"
+
+msgid "Saving a macro proposed by the assistant now offers a **Show in Macro panel** link: the Macro panel is tabbed with the AI Assistant, so the saved macro stayed hidden behind the conversation"
+msgstr "L'enregistrement d'une macro proposée par l'assistant propose désormais un lien **Afficher dans le panneau de macros** : le panneau de macros étant regroupé en onglets avec l'assistant IA, la macro enregistrée restait cachée derrière la conversation"
+
+msgid "Fixed the assistant answering a request to *write* a macro with the code in its reply, which could not be saved to the Macro panel: it now proposes the macro without running it (the confirmation dialog states that it will not be executed) and offers the **Save to Macros** link. A **Save to Macros** link is also offered under each Python code block of its replies, unless macro creation is disabled"
+msgstr "Correction de l'assistant qui répondait à une demande d'*écriture* de macro en plaçant le code dans sa réponse, d'où il ne pouvait pas être enregistré dans le panneau de macros : il propose désormais la macro sans l'exécuter (la boîte de dialogue de confirmation indique qu'elle ne sera pas exécutée) et offre le lien **Enregistrer dans les macros**. Un lien **Enregistrer dans les macros** est également proposé sous chaque bloc de code Python de ses réponses, sauf si la création de macros est désactivée"
+
 msgid "**Security:**"
 msgstr "**Sécurité :**"
 
