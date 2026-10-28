@@ -42,6 +42,11 @@ def reconnect_chain_after_removal(
             if success:
                 hrec.recompute_cascade(panel, action)
         hchain.show_reconnection_warnings(
-            panel, [plan.warning for plan in plans if plan.warning is not None]
+            panel,
+            [
+                plan.unreconnected_operation
+                for plan in plans
+                if plan.unreconnected_operation is not None
+            ],
         )
         hchain.refresh_reconnected_history(panel)
