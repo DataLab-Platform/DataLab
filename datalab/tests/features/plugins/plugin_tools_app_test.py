@@ -7,6 +7,8 @@
 from __future__ import annotations
 
 import textwrap
+import threading
+import time
 
 import numpy as np
 import pytest
@@ -327,4 +329,84 @@ def test_instrument_new_group_option() -> None:
             window = plugin.launch_tool("generator")
             assert not window.new_group_box.isChecked()
             assert key not in Conf.instrument_new_group.get()
+            win.close_plugin_instruments()
+
+
+def test_instrument_acquisition_target() -> None:
+    """The destination of an acquisition is taken when **Acquire** is clicked:
+    selecting another group or toggling the **New group** option while the
+    acquisition is running does not change it, and a new group replaces a group
+    removed meanwhile."""
+    with (
+        Conf.plugins_enabled.context(True),
+        Conf.plugins_enabled_list.context(None),
+        Conf.instrument_new_group.context({}),
+        temporary_plugin_dir() as plugin_dir,
+    ):
+        with open(
+            f"{plugin_dir}/datalab_test_plugin_tools.py", "w", encoding="utf-8"
+        ) as handle:
+            handle.write(PLUGIN_SOURCE)
+        with datalab_test_app_context(console=False) as win:
+            plugin = PluginRegistry.get_plugin("org.example.tools-app")
+            instrument = plugin.get_instrument("generator")
+            running, release = threading.Event(), threading.Event()
+            acquire = instrument.acquire
+
+            def slow_acquire():
+                """Acquire once the test releases the acquisition."""
+                running.set()
+                assert release.wait(10.0)
+                return acquire()
+
+            instrument.acquire = slow_acquire
+            panel = win.signalpanel
+            window = plugin.launch_tool("generator")
+            assert window.wait_until_idle()
+
+            def start_acquisition() -> None:
+                """Click Acquire, and wait until the acquisition is running."""
+                running.clear()
+                release.clear()
+                window.acquire()
+                deadline = time.monotonic() + 10.0
+                while not running.is_set():
+                    assert time.monotonic() < deadline
+                    QW.QApplication.processEvents()
+                    time.sleep(0.005)
+
+            def finish_acquisition() -> None:
+                """Release the acquisition, and wait until it is added."""
+                release.set()
+                assert window.wait_until_idle()
+
+            # Option off and group A current when Acquire is clicked
+            window.new_group_box.setChecked(False)
+            group_a = panel.add_group("A", select=True)
+            start_acquisition()
+            group_b = panel.add_group("B", select=True)
+            window.new_group_box.setChecked(True)
+            finish_acquisition()
+            assert len(panel.objmodel.get_groups()) == 2
+            assert len(group_a) == 3 and len(group_b) == 0
+            assert "group 'A'" in window.status_label.text()
+
+            # Option on when Acquire is clicked
+            panel.objview.select_groups([group_b])
+            start_acquisition()
+            window.new_group_box.setChecked(False)
+            finish_acquisition()
+            groups = panel.objmodel.get_groups()
+            assert len(groups) == 3 and groups[-1].title == "Generator acquisition"
+            assert len(group_a) == 3 and len(group_b) == 0 and len(groups[-1]) == 3
+
+            # Current group removed while the acquisition is running
+            panel.objview.select_groups([group_b])
+            start_acquisition()
+            panel.remove_object(force=True)
+            assert group_b not in panel.objmodel.get_groups()
+            finish_acquisition()
+            groups = panel.objmodel.get_groups()
+            assert len(groups) == 3 and groups[-1].title == "Generator acquisition"
+            assert len(groups[-1]) == 3 and len(group_a) == 3
             win.close_plugin_instruments()

@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 import logging
 import queue
 import threading
@@ -34,7 +35,12 @@ if TYPE_CHECKING:
         PluginInstrument,
     )
 
-__all__ = ["InstrumentWindow", "SerialWorker", "wait_instruments_closed"]
+__all__ = [
+    "AcquisitionTarget",
+    "InstrumentWindow",
+    "SerialWorker",
+    "wait_instruments_closed",
+]
 
 
 def wait_instruments_closed(
@@ -90,12 +96,27 @@ class SerialWorker:
                     future.set_exception(exc)
 
 
+@dataclasses.dataclass(frozen=True)
+class AcquisitionTarget:
+    """Destination of an acquisition, taken when it is requested.
+
+    Args:
+        new_group: True to add the acquired objects to a new group
+        group_ids: current group of each panel (``"signal"``, ``"image"``), if
+         any: the panel of the objects is only known once they are acquired
+    """
+
+    new_group: bool
+    group_ids: dict[str, str | None]
+
+
 class InstrumentWindow(QW.QDialog):
     """Live view of a plugin instrument, next to its settings.
 
     The view is refreshed when settings change, and periodically in live mode.
     Each acquisition is added to the workspace in a new group or, when the
-    **New group** option is off, in the current group of the panel. The
+    **New group** option is off, in the current group of the panel, as they are
+    when the acquisition is requested. The
     instrument is opened with the window and closed with it; if opening it
     fails, the reason is shown, and it is opened again before the next call. Its
     methods are called one at a time in a worker thread: a request made while a
@@ -121,7 +142,7 @@ class InstrumentWindow(QW.QDialog):
     #: Maximum time DataLab waits for an instrument to close (s)
     CLOSE_TIMEOUT = 5.0
 
-    SIG_CALL_DONE = QC.Signal(str, object, object)
+    SIG_CALL_DONE = QC.Signal(str, object, object, object)
 
     def __init__(
         self,
@@ -148,6 +169,8 @@ class InstrumentWindow(QW.QDialog):
         self._busy = False
         self._opened = False
         self._pending: str | None = None
+        # Destination of the requested acquisition, until the instrument is called
+        self._acquire_target: AcquisitionTarget | None = None
         self._close_future: Future | None = None
         self.SIG_CALL_DONE.connect(self._call_done)
 
@@ -238,8 +261,13 @@ class InstrumentWindow(QW.QDialog):
         self._pending = "preview"
         self._executor.submit(self._call, "open")
 
-    def _call(self, method: str) -> None:
-        """Call an instrument method (worker thread)."""
+    def _call(self, method: str, target: AcquisitionTarget | None = None) -> None:
+        """Call an instrument method (worker thread).
+
+        Args:
+            method: name of the method
+            target: destination of an acquisition, returned with the result
+        """
         result, error = None, None
         try:
             result = getattr(self.instrument, method)()
@@ -249,7 +277,7 @@ class InstrumentWindow(QW.QDialog):
             if method == "close":
                 logging.getLogger(__name__).exception("Closing instrument failed")
         try:
-            self.SIG_CALL_DONE.emit(method, result, error)
+            self.SIG_CALL_DONE.emit(method, result, error, target)
         except RuntimeError:
             pass  # Window deleted after being closed
 
@@ -270,13 +298,22 @@ class InstrumentWindow(QW.QDialog):
             self._pending = method
             self._executor.submit(self._call, "open")
             return
+        target = None
         if method == "acquire":
             self._live_timer.stop()
             self.acquire_button.setEnabled(False)
+            # Requests made during the acquisition do not change its destination
+            target, self._acquire_target = self._acquire_target, None
         self._busy = True
-        self._executor.submit(self._call, method)
+        self._executor.submit(self._call, method, target)
 
-    def _call_done(self, method: str, result, error: Exception | None) -> None:
+    def _call_done(
+        self,
+        method: str,
+        result,
+        error: Exception | None,
+        target: AcquisitionTarget | None,
+    ) -> None:
         """Show the result of an instrument call, then make the pending one."""
         if method == "close":
             return
@@ -300,7 +337,7 @@ class InstrumentWindow(QW.QDialog):
         elif method == "preview":
             self._show_frame(result)
         elif method == "acquire":
-            self._add_acquired(result)
+            self._add_acquired(result, target)
         pending, self._pending = self._pending, None
         if pending is not None:
             self._request(pending)
@@ -479,13 +516,30 @@ class InstrumentWindow(QW.QDialog):
 
     def acquire(self) -> None:
         """Add an acquisition to the workspace, in a new group or in the current
-        group of the panel, depending on the **New group** option."""
+        group of the panel, depending on the **New group** option.
+
+        The option and the current group are taken now: changing them while the
+        acquisition is running does not change its destination."""
+        self._acquire_target = self.acquisition_target()
         self._request("acquire")
 
-    def _add_acquired(self, acquisition: InstrumentAcquisition) -> None:
+    def acquisition_target(self) -> AcquisitionTarget:
+        """Return the destination of an acquisition requested now: state of the
+        **New group** option and current group of each panel."""
+        return AcquisitionTarget(
+            self.new_group_box.isChecked(),
+            {
+                "signal": self.main.signalpanel.objview.get_current_group_id(),
+                "image": self.main.imagepanel.objview.get_current_group_id(),
+            },
+        )
+
+    def _add_acquired(
+        self, acquisition: InstrumentAcquisition, target: AcquisitionTarget | None
+    ) -> None:
         """Add the objects acquired by the instrument to the workspace."""
         try:
-            group_title = self.add_acquisition(acquisition)
+            group_title = self.add_acquisition(acquisition, target)
         except Exception as exc:  # pylint: disable=broad-except
             self.status_label.setText(str(exc))
             return
@@ -494,25 +548,39 @@ class InstrumentWindow(QW.QDialog):
             % (len(acquisition.objects), group_title)
         )
 
-    def add_acquisition(self, acquisition: InstrumentAcquisition) -> str:
+    def add_acquisition(
+        self,
+        acquisition: InstrumentAcquisition,
+        target: AcquisitionTarget | None = None,
+    ) -> str:
         """Add acquired objects to their panel.
 
         The objects are added to the current group of the panel if the **New
         group** option is off and the panel has a current group, otherwise to a
-        new group.
+        new group. A new group is also created if the current group was removed
+        since the acquisition was requested.
+
+        Args:
+            acquisition: acquired objects
+            target: destination taken when the acquisition was requested
+             (default: current state of the option and of the panel)
 
         Returns:
             Title of the group where the objects were added
         """
+        if target is None:
+            target = self.acquisition_target()
         objects = acquisition.objects
         panel_name = "signal" if isinstance(objects[0], SignalObj) else "image"
         panel = (
             self.main.signalpanel if panel_name == "signal" else self.main.imagepanel
         )
         with self.main.context_no_refresh():
-            group_id = None
-            if not self.new_group_box.isChecked():
-                group_id = panel.objview.get_current_group_id()
+            group_id = None if target.new_group else target.group_ids.get(panel_name)
+            existing = {get_uuid(group) for group in panel.objmodel.get_groups()}
+            if group_id not in existing:
+                # No current group, or group removed since the request
+                group_id = None
             if group_id is None:
                 group = panel.add_group(acquisition.group_title)
                 try:
