@@ -363,9 +363,13 @@ chain:
   the source of the deleted step as their new input.
 - For ``2_to_1`` operations (e.g. *difference*), the first source is used
   for reconnection.
-- If no valid source can be determined (e.g. the source itself was already
-  deleted), a warning is displayed listing the unreconnectable operations,
-  but the deletion is allowed to proceed.
+- If the source of the deleted step no longer exists (e.g. it was already
+  deleted, or is deleted at the same time), the deletion proceeds and the
+  dependent results are left unchanged: a single warning lists the processing
+  steps concerned, each of them once.
+- Deleting an object that was not produced by a recorded processing step
+  (e.g. a created or loaded object, or any object when recording was off)
+  leaves the results depending on it unchanged, without any warning.
 
 This behaviour mirrors removing a link from a chain: the adjacent links
 reconnect to preserve the processing flow.

@@ -548,6 +548,12 @@ msgstr "**Plugins et historique :**"
 msgid "Replaying a History action or re-processing a result created by a plugin feature that shares its name with a built-in feature now runs the plugin feature instead of the built-in one"
 msgstr "Le rejeu d'une action de l'historique ou le recalcul d'un résultat créé par une fonctionnalité de plugin portant le même nom qu'une fonctionnalité intégrée exécute désormais la fonctionnalité du plugin au lieu de la fonctionnalité intégrée"
 
+msgid "**History Panel:**"
+msgstr "**Panneau d'historique :**"
+
+msgid "Fixed an oversized warning appearing when deleting a group of signals or images whose processing results were kept in another group, even when the History panel was not recording: it listed every deleted object, often as an unreadable identifier, and stated that \"operations could not be reconnected\" although there was nothing to reconnect. Deleting such objects now shows no message, and the results depending on them are left unchanged as before. The warning is now shown only when a recorded processing step loses its source, and it lists each step once, in a message of bounded size (fixes [Issue #451](https://github.com/DataLab-Platform/DataLab/issues/451))"
+msgstr "Correction d'un avertissement démesuré qui s'affichait lors de la suppression d'un groupe de signaux ou d'images dont les résultats de traitement étaient conservés dans un autre groupe, même lorsque le panneau d'historique n'enregistrait pas : il listait chaque objet supprimé, souvent sous la forme d'un identifiant illisible, et indiquait que des « opérations n'avaient pas pu être reconnectées » alors qu'il n'y avait rien à reconnecter. La suppression de tels objets n'affiche plus aucun message, et les résultats qui en dépendent restent inchangés, comme auparavant. L'avertissement n'est désormais affiché que lorsqu'une étape de traitement enregistrée perd sa source, et il liste chaque étape une seule fois, dans un message de taille limitée (corrige [l'issue #451](https://github.com/DataLab-Platform/DataLab/issues/451))"
+
 msgid "**Object titles:**"
 msgstr "**Titres des objets :**"
 
