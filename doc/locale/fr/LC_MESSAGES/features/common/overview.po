@@ -33,6 +33,12 @@ msgstr "La zone de droite affiche la visualisation du jeu de données actuelleme
 msgid "DataLab main window, at startup."
 msgstr "Fenêtre principale de DataLab, au démarrage."
 
+msgid "In the list of data sets, the signal, image or group under the mouse cursor is highlighted, and a |delete| delete button appears at its right. Clicking this button deletes the item, or the whole selection if the item is part of it, after confirmation. Deleting an item which is not selected keeps the current selection unchanged. Like the \"Remove\" action of the \"Edit\" menu, the deletion is recorded in the :ref:`historypanel`. The button may be hidden in the :ref:`settings` (\"Visualization\" tab, \"Common\" sub-tab)."
+msgstr "Dans la liste des jeux de données, le signal, l'image ou le groupe situé sous le curseur de la souris est mis en évidence, et un bouton de suppression |delete| apparaît à sa droite. Un clic sur ce bouton supprime l'élément, ou toute la sélection si l'élément en fait partie, après confirmation. Supprimer un élément non sélectionné laisse la sélection courante inchangée. Comme l'action « Supprimer » du menu « Édition », la suppression est enregistrée dans le :ref:`historypanel`. Le bouton peut être masqué dans les :ref:`settings` (onglet « Visualisation », sous-onglet « Commun »)."
+
+msgid "delete"
+msgstr "delete"
+
 msgid "Additional panels are available as dockable widgets, and may be shown or hidden from the \"View\" menu: the :ref:`welcome_page`, the :ref:`historypanel`, the Macro panel (see :ref:`about_macros`) and the :ref:`ai_assistant`."
 msgstr "D'autres panneaux sont disponibles sous forme de widgets ancrables, et peuvent être affichés ou masqués depuis le menu « Affichage » : la :ref:`welcome_page`, le :ref:`historypanel`, le panneau de macros (voir :ref:`about_macros`) et l':ref:`ai_assistant`."
 

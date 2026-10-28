@@ -281,6 +281,27 @@ msgstr "Lorsqu'un objet source est supprimé, sa référence est affichée sous 
 msgid "Titles of workspaces saved by previous versions keep their former `s001`-style references as plain text"
 msgstr "Les titres des espaces de travail enregistrés par les versions précédentes conservent leurs anciennes références de type `s001` sous forme de texte simple"
 
+msgid "**Signal and image lists:**"
+msgstr "**Listes de signaux et d'images :**"
+
+msgid "Signals, images and groups can now be deleted directly from the lists, as in DataLab-Web (implements [Issue #449](https://github.com/DataLab-Platform/DataLab/issues/449))."
+msgstr "Les signaux, images et groupes peuvent désormais être supprimés directement depuis les listes, comme dans DataLab-Web (implémente [l'issue #449](https://github.com/DataLab-Platform/DataLab/issues/449))."
+
+msgid "The item under the mouse cursor is subtly highlighted, in light and dark modes alike (the hovered item was not highlighted at all in dark mode)"
+msgstr "L'élément situé sous le curseur de la souris est discrètement mis en évidence, en mode clair comme en mode sombre (l'élément survolé n'était pas du tout mis en évidence en mode sombre)"
+
+msgid "A delete button appears at the right of the hovered signal, image or group: it turns red when the mouse cursor is over it, and its tooltip tells what it deletes"
+msgstr "Un bouton de suppression apparaît à droite du signal, de l'image ou du groupe survolé : il devient rouge lorsque le curseur de la souris le survole, et son info-bulle indique ce qu'il supprime"
+
+msgid "Clicking it deletes the item, or the whole selection when the item is part of it, after confirmation. Deleting an item which is not selected keeps the current selection and the displayed objects unchanged"
+msgstr "Un clic sur ce bouton supprime l'élément, ou toute la sélection lorsque l'élément en fait partie, après confirmation. Supprimer un élément non sélectionné laisse inchangés la sélection courante et les objets affichés"
+
+msgid "As with the **Remove** action, the deletion is recorded in the History panel"
+msgstr "Comme avec l'action **Supprimer**, la suppression est enregistrée dans le panneau Historique"
+
+msgid "The button may be hidden with the new **Show delete button when hovering list items** setting (Visualization > Common)"
+msgstr "Le bouton peut être masqué avec le nouveau paramètre **Afficher un bouton de suppression au survol des éléments des listes** (Visualisation > Commun)"
+
 msgid "**Curve fitting formulas:**"
 msgstr "**Formules des modèles d'ajustement :**"
 

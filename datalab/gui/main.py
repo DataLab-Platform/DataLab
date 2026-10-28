@@ -2847,6 +2847,11 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                 self._update_console_show_mode()
             if option == "welcome_application_rows":
                 self.welcomepanel.update_application_tiles()
+            if option == "show_delete_button_on_hover":
+                for panel in (self.signalpanel, self.imagepanel):
+                    panel.objview.set_delete_button_enabled(
+                        Conf.show_delete_button_on_hover.get()
+                    )
             if option == "plot_toolbar_position":
                 for dock in self.docks.values():
                     widget = dock.widget()

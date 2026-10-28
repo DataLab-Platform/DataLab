@@ -381,6 +381,15 @@ class ViewSettings(gds.DataSet):
         ),
         default=False,
     )
+    show_delete_button_on_hover = gds.BoolItem(
+        "",
+        _("Show delete button when hovering list items"),
+        help=_(
+            "Show a delete button at the right of the signal, image or group under "
+            "the mouse cursor in the signal and image lists"
+        ),
+        default=True,
+    )
     _g0 = gds.EndGroup("")
 
     g1 = gds.BeginGroup(_("Signals")).set_prop("display", icon="signal.svg")

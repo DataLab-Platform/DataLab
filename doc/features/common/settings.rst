@@ -231,6 +231,13 @@ The Common sub-tab contains settings that apply to all visualizations:
 **Ignore title insertion message**
     Suppress the information message when inserting an object title as an annotation label.
 
+**Show delete button when hovering list items**
+    When enabled (default), a delete button appears at the right of the signal,
+    image or group under the mouse cursor in the signal and image lists (see
+    :ref:`overview`). Disable this option to hide the button: items can still be
+    deleted with the "Remove" action of the "Edit" menu, or with the
+    :kbd:`Delete` key.
+
 Signals
 ^^^^^^^
 

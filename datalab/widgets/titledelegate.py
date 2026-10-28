@@ -7,9 +7,12 @@ Title delegate
 The :mod:`datalab.widgets.titledelegate` module provides a
 :class:`QStyledItemDelegate` that renders object tree titles as rich text and
 turns embedded object references (e.g. ``1a2b3c4d``, ``g1a2b3c4d``) into
-clickable hyperlinks.
+clickable hyperlinks. Hovered items are highlighted with the same discreet
+background color whatever the Qt style, in light and dark modes.
 
 .. autoclass:: ClickableTitleDelegate
+
+.. autofunction:: hover_background_color
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -37,6 +40,37 @@ REFERENCE_URL_SCHEME = "dlb-ref"
 TITLE_REFERENCE_ROLE = QC.Qt.UserRole + 1
 TITLE_META_FONT_SIZE = "90%"
 TITLE_ROW_VERTICAL_PADDING = 2
+#: Background colors of hovered (unselected) items, in light and dark modes
+HOVER_BACKGROUND_LIGHT = "#e5f3ff"
+HOVER_BACKGROUND_DARK = "#2d3138"
+
+
+def hover_background_color(palette: QG.QPalette) -> QG.QColor:
+    """Return the background color of hovered (unselected) items.
+
+    The color is discreet but distinct from the base, alternate base and
+    selection colors, in light and dark modes. It does not depend on the Qt
+    style, because some styles (e.g. Fusion, used in dark mode) do not
+    highlight hovered items.
+
+    Args:
+        palette: palette of the view.
+
+    Returns:
+        Background color.
+    """
+    dark = palette.color(QG.QPalette.Base).lightness() < 128
+    return QG.QColor(HOVER_BACKGROUND_DARK if dark else HOVER_BACKGROUND_LIGHT)
+
+
+def _apply_hover_background(opt: QW.QStyleOptionViewItem) -> None:
+    """Replace the native highlight of a hovered, unselected item by the
+    background color returned by :func:`hover_background_color`."""
+    if opt.state & QW.QStyle.State_MouseOver and not (
+        opt.state & QW.QStyle.State_Selected
+    ):
+        opt.state &= ~QW.QStyle.State_MouseOver
+        opt.backgroundBrush = QG.QBrush(hover_background_color(opt.palette))
 
 
 def _build_html(
@@ -118,6 +152,10 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
 
     Hit-testing is performed by :meth:`anchor_at`, which is meant to be called
     from the host view's ``mousePressEvent`` / ``mouseMoveEvent``.
+
+    Hovered, unselected items are highlighted with :func:`hover_background_color`
+    (the host view must set the ``Qt.WA_Hover`` attribute of its viewport, so that
+    hovered items are flagged by the view whatever the Qt style).
     """
 
     def __init__(
@@ -127,6 +165,10 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
     ) -> None:
         super().__init__(parent)
         self.reference_resolver = reference_resolver
+        #: Optional callback returning, for a model index, the viewport X
+        #: coordinate beyond which its rich title must not be drawn (e.g. to
+        #: leave room for a button drawn by the view over the item), or None.
+        self.text_clip_provider: Callable[[QC.QModelIndex], int | None] | None = None
 
     # pylint: disable=invalid-name
     def paint(
@@ -141,7 +183,9 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
         if not isinstance(text, str) or not (
             find_title_references(text) or isinstance(item_reference, str)
         ):
-            super().paint(painter, option, index)
+            opt = QW.QStyleOptionViewItem(option)
+            _apply_hover_background(opt)
+            super().paint(painter, opt, index)
             return
         opt = QW.QStyleOptionViewItem(option)
         self.initStyleOption(opt, index)
@@ -169,6 +213,7 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
             )
             text_color = palette.color(group, QG.QPalette.Text)
             meta_color = QG.QColor("#aeb8c4" if dark else "#59636e")
+            _apply_hover_background(opt)
         # Let the style draw the background, focus rect and decoration
         # (icon), but not the text.
         opt.text = ""
@@ -192,13 +237,18 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
             meta_color,
         )
         doc.setTextWidth(text_rect.width())
+        clip_width = text_rect.width()
+        if self.text_clip_provider is not None:
+            clip_right = self.text_clip_provider(index)
+            if clip_right is not None:
+                clip_width = max(0, min(clip_width, clip_right - text_rect.left()))
         painter.save()
         painter.translate(text_rect.topLeft())
         ctx = QG.QAbstractTextDocumentLayout.PaintContext()
         # Unformatted fragments do not inherit the document's body CSS.
         ctx.palette = QG.QPalette(palette)
         ctx.palette.setColor(QG.QPalette.Text, text_color)
-        clip = QC.QRectF(0, 0, text_rect.width(), text_rect.height())
+        clip = QC.QRectF(0, 0, clip_width, text_rect.height())
         ctx.clip = clip
         painter.setClipRect(clip)
         doc.documentLayout().draw(painter, ctx)

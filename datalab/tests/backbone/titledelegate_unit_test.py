@@ -10,8 +10,13 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
+from datalab.utils.qthelpers import view_item_option
 from datalab.widgets import titledelegate
-from datalab.widgets.titledelegate import TITLE_REFERENCE_ROLE, ClickableTitleDelegate
+from datalab.widgets.titledelegate import (
+    TITLE_REFERENCE_ROLE,
+    ClickableTitleDelegate,
+    hover_background_color,
+)
 
 
 def _contrast(first: QG.QColor, second: QG.QColor) -> float:
@@ -34,11 +39,13 @@ def _contrast(first: QG.QColor, second: QG.QColor) -> float:
 @pytest.mark.parametrize("dark", [False, True])
 @pytest.mark.parametrize("selected", [False, True])
 @pytest.mark.parametrize("active", [False, True])
+@pytest.mark.parametrize("hovered", [False, True])
 def test_reference_rendering(
     style_name: str,
     dark: bool,
     selected: bool,
     active: bool,
+    hovered: bool,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Keep actual backgrounds, text and clickable references consistent."""
@@ -72,6 +79,8 @@ def test_reference_rendering(
             option.state |= QW.QStyle.State_Selected
         if active:
             option.state |= QW.QStyle.State_Active | QW.QStyle.State_HasFocus
+        if hovered:
+            option.state |= QW.QStyle.State_MouseOver
         documents = []
         make_document = titledelegate._make_text_document
 
@@ -90,6 +99,15 @@ def test_reference_rendering(
         background = image.pixelColor(350, 30)
         if selected:
             assert background == QG.QColor("#204a70" if dark else "#cce8ff")
+        elif hovered and not active:
+            # Same discreet highlight whatever the style, distinct from the base
+            # and selection colors (styles may draw their focus indicator over
+            # the background of the item having the focus, e.g. Fusion)
+            assert background == hover_background_color(palette)
+            assert background not in (
+                palette.color(QG.QPalette.Base),
+                QG.QColor("#204a70" if dark else "#cce8ff"),
+            )
         assert len({link.name(), text.name(), meta.name()}) == 3
         for color in (link, text, meta):
             assert _contrast(color, background) >= 4.5
@@ -147,3 +165,39 @@ def test_size_hint_height_tracks_painted_wrapping(with_item_uuid: bool) -> None:
         narrow_height = delegate.sizeHint(narrow_option, model.index(0, 0)).height()
 
         assert narrow_height > wide_height
+
+
+def test_text_clip_provider_leaves_room_for_view_buttons() -> None:
+    """Do not draw rich titles beyond the X coordinate given by the view."""
+    with qt_app_context():
+        view = QW.QTreeView()
+        model = QG.QStandardItemModel()
+        item = QG.QStandardItem("Title referencing 12345678, " * 4)
+        item.setData("87654321", TITLE_REFERENCE_ROLE)
+        model.appendRow(item)
+        view.setModel(model)
+        delegate = ClickableTitleDelegate(view, lambda reference: reference)
+        option = view_item_option(view)
+        option.rect = QC.QRect(0, 0, 800, 40)
+
+        def last_painted_column(clip_right: int | None) -> int:
+            """Return the rightmost painted column with the given clip"""
+            delegate.text_clip_provider = lambda _index: clip_right
+            image = QG.QImage(800, 40, QG.QImage.Format_ARGB32)
+            image.fill(QC.Qt.transparent)
+            painter = QG.QPainter(image)
+            delegate.paint(painter, option, model.index(0, 0))
+            painter.end()
+            return max(
+                (
+                    x
+                    for x in range(image.width())
+                    for y in range(image.height())
+                    if image.pixelColor(x, y).alpha() > 0
+                ),
+                default=-1,
+            )
+
+        assert last_painted_column(None) > 300
+        assert 0 < last_painted_column(300) < 300
+        view.close()

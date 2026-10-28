@@ -2588,6 +2588,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             lambda oid: self.open_separate_view([oid])
         )
         self.objview.SIG_CONTEXT_MENU.connect(self.__popup_contextmenu)
+        self.objview.SIG_DELETE_REQUESTED.connect(self.__delete_from_button)
         self.objprop.properties.SIG_APPLY_BUTTON_CLICKED.connect(
             self.properties_changed
         )
@@ -2959,6 +2960,19 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             )
             if answer == QW.QMessageBox.No:
                 return
+        self.__remove_selection(force)
+
+    def __remove_selection(
+        self, force: bool, restored_selection: Sequence[str] = ()
+    ) -> None:
+        """Remove the selected objects and groups
+
+        Args:
+            force: ``force`` argument of :meth:`remove_object`, recorded in history
+            restored_selection: UUIDs of the remaining objects or groups to select
+             after removal (the last one becoming current). If empty, the selection
+             is left to the object view.
+        """
         # IMPORTANT: save_state=True is required so that the selection of objects
         # being deleted is captured. On replay, the captured selection is restored
         # before remove_object runs, ensuring that the correct object is removed
@@ -2970,6 +2984,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             save_state=True,
             force=force,
         )
+        sel_groups = self.objview.get_sel_groups()
         sel_objects = self.objview.get_sel_objects(include_groups=True)
         for obj in sorted(sel_objects, key=get_short_id, reverse=True):
             dlg_list: list[QW.QDialog] = []
@@ -2985,8 +3000,71 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             self.objview.remove_item(get_uuid(group), refresh=False)
             self.objmodel.remove_group(group)
         self.objview.update_tree()
+        if restored_selection:
+            remaining = set(self.objmodel.get_object_ids())
+            remaining.update(get_uuid(group) for group in self.objmodel.get_groups())
+            self.objview.select_uuids(
+                [uuid for uuid in restored_selection if uuid in remaining],
+                notify=False,
+            )
         self.selection_changed(update_items=True)
         self.SIG_OBJECT_REMOVED.emit()
+
+    def __confirm_deletion(self, uuids: Sequence[str]) -> bool:
+        """Ask the user to confirm the deletion of objects or groups
+
+        Args:
+            uuids: UUIDs of the objects, or of the groups, to delete
+
+        Returns:
+            True if the deletion is confirmed
+        """
+        items = [self.objmodel.get_object_or_group(uuid) for uuid in uuids]
+        if len(items) > 1:
+            if isinstance(items[0], ObjectGroup):
+                message = _(
+                    "Do you want to delete the %d selected groups and their objects?"
+                ) % len(items)
+            else:
+                message = _("Do you want to delete the %d selected objects?") % len(
+                    items
+                )
+        elif isinstance(items[0], ObjectGroup):
+            message = _('Do you want to delete group "%s" and its %d object(s)?') % (
+                items[0].title,
+                len(items[0]),
+            )
+        else:
+            message = _('Do you want to delete "%s"?') % items[0].title
+        answer = QW.QMessageBox.warning(
+            self, _("Delete"), message, QW.QMessageBox.Yes | QW.QMessageBox.No
+        )
+        return answer == QW.QMessageBox.Yes
+
+    def __delete_from_button(self, uuid: str) -> None:
+        """Delete objects or groups with the delete button of an item of the
+        object view, after confirmation
+
+        If the item is part of the selection, the whole selection is deleted.
+        Otherwise, only the item is deleted, and the selection is preserved.
+
+        Args:
+            uuid: UUID of the item whose delete button was clicked
+        """
+        targets = self.objview.get_delete_targets(uuid)
+        if not execenv.unattended and not self.__confirm_deletion(targets):
+            return
+        selection = self.objview.get_sel_object_uuids()
+        selection += self.objview.get_sel_group_uuids()
+        restored_selection: list[str] = []
+        if uuid not in selection:
+            current = self.objview.get_current_item_id()
+            restored_selection = [oid for oid in selection if oid != current]
+            if current in selection:
+                restored_selection.append(current)
+            # Selecting the item records it in history as the removed object
+            self.objview.select_uuids([uuid], notify=False)
+        self.__remove_selection(force=True, restored_selection=restored_selection)
 
     def delete_all_objects(self) -> None:  # pragma: no cover
         """Confirm before removing all objects"""

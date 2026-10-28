@@ -27,6 +27,19 @@ self-explanatory. The main window is divided into two main areas:
 
     DataLab main window, at startup.
 
+In the list of data sets, the signal, image or group under the mouse cursor is
+highlighted, and a |delete| delete button appears at its right. Clicking this
+button deletes the item, or the whole selection if the item is part of it, after
+confirmation. Deleting an item which is not selected keeps the current selection
+unchanged. Like the "Remove" action of the "Edit" menu, the deletion is recorded
+in the :ref:`historypanel`. The button may be hidden in the :ref:`settings`
+("Visualization" tab, "Common" sub-tab).
+
+.. |delete| image:: ../../../datalab/data/icons/edit/delete.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
 Additional panels are available as dockable widgets, and may be shown or hidden
 from the "View" menu: the :ref:`welcome_page`, the :ref:`historypanel`, the Macro
 panel (see :ref:`about_macros`) and the :ref:`ai_assistant`.
