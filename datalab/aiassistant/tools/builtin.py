@@ -589,6 +589,10 @@ def _tool_create_and_run_macro(
     }
     if not autorun:
         result["autorun"] = False
+        result["note"] = (
+            "Macro not executed. The user can save it to the Macro panel "
+            "with the 'Save to Macros' link."
+        )
         return result
 
     console = macropanel.console
@@ -1062,9 +1066,12 @@ def build_default_registry(expose_macro_tool: bool = True) -> ToolRegistry:
                     "the Macro panel; the user can opt in via a "
                     "'Save to Macros' link surfaced on the result, so always "
                     "pick a short, descriptive title (e.g. 'Generate "
-                    "super-Gaussian'). Use this for complex multi-step "
-                    "scripts; prefer 'apply_operation' for atomic actions. "
-                    "If 'ok' is False, read 'console_output' or "
+                    "super-Gaussian'). Set 'autorun' to false when the user "
+                    "asks you to write (not run) a macro: the code is then "
+                    "only validated and offered through the 'Save to Macros' "
+                    "link, without being executed. Use this for complex "
+                    "multi-step scripts; prefer 'apply_operation' for atomic "
+                    "actions. If 'ok' is False, read 'console_output' or "
                     "'validation_errors' and try again."
                 ),
                 parameters={
@@ -1075,7 +1082,16 @@ def build_default_registry(expose_macro_tool: bool = True) -> ToolRegistry:
                             "type": "string",
                             "description": "Full Python source code of the macro.",
                         },
-                        "autorun": {"type": "boolean", "default": True},
+                        "autorun": {
+                            "type": "boolean",
+                            "default": True,
+                            "description": (
+                                "Run the macro (default true). Set to false "
+                                "to only validate the code and offer it to "
+                                "the user for saving to the Macro panel, "
+                                "without executing it."
+                            ),
+                        },
                         "timeout": {
                             "type": "number",
                             "default": 30.0,

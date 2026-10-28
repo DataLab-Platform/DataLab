@@ -87,6 +87,9 @@ msgstr "La zone de saisie conserve un historique des messages précédemment env
 msgid "When the assistant proposes a macro, the generated code is **transient**: it is executed without cluttering the Macro panel. A **Save to Macros** link is offered after the run if you want to keep it."
 msgstr "Lorsque l'assistant propose une macro, le code généré est **temporaire** : il est exécuté sans encombrer le panneau de macros. Un lien **Enregistrer dans les macros** est proposé après l'exécution si vous souhaitez la conserver."
 
+msgid "When you ask the assistant to *write* a macro rather than to run it, the code is only proposed: the confirmation dialog states that the macro will not be executed, and the same **Save to Macros** link is offered. Such a link is also offered under each Python code block of the assistant's replies (unless macro creation is disabled), and all these links are available again when a conversation is reopened from **History...**. Once a macro is saved, a **Show in Macro panel** link brings that panel to the front."
+msgstr "Lorsque vous demandez à l'assistant d'*écrire* une macro plutôt que de l'exécuter, le code est seulement proposé : la boîte de dialogue de confirmation indique que la macro ne sera pas exécutée, et le même lien **Enregistrer dans les macros** est proposé. Un tel lien est également proposé sous chaque bloc de code Python des réponses de l'assistant (sauf si la création de macros est désactivée), et tous ces liens sont de nouveau disponibles lorsqu'une conversation est rouverte depuis **Historique...**. Une fois la macro enregistrée, un lien **Afficher dans le panneau de macros** fait passer ce panneau au premier plan."
+
 msgid "Tools available to the assistant"
 msgstr "Outils à la disposition de l'assistant"
 
@@ -186,8 +189,8 @@ msgstr "Exécuter n'importe quelle fonctionnalité de traitement enregistrée"
 msgid "``create_and_run_macro``"
 msgstr ""
 
-msgid "Create and execute a Python macro"
-msgstr "Créer et exécuter une macro Python"
+msgid "Create and execute a Python macro, or only propose it for saving"
+msgstr "Créer et exécuter une macro Python, ou seulement la proposer à l'enregistrement"
 
 msgid "The ``create_and_run_macro`` tool is only exposed to the model when the **Allow AI to create and run macros** option is enabled. When it is disabled, the assistant cannot even propose arbitrary code execution."
 msgstr "L'outil ``create_and_run_macro`` n'est exposé au modèle que si l'option **Autoriser l'IA à créer et exécuter des macros** est activée. Lorsqu'elle est désactivée, l'assistant ne peut même pas proposer l'exécution de code arbitraire."

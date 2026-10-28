@@ -333,6 +333,18 @@ def test_default_system_prompt_unrestricted_when_no_filter() -> None:
     assert "create_and_run_macro" in prompt
 
 
+def test_default_system_prompt_routes_macro_writing_to_autorun_false() -> None:
+    """A request to *write* a macro must go through the tool (so that the user
+    gets a 'Save to Macros' link), not through code pasted in the reply."""
+    enabled = " ".join(
+        build_default_system_prompt({"list_objects", "create_and_run_macro"}).split()
+    )
+    disabled = build_default_system_prompt({"list_objects"})
+    assert "call 'create_and_run_macro' with 'autorun' set to false" in enabled
+    assert "NEVER paste the code of a macro in your reply" in enabled
+    assert "autorun" not in disabled
+
+
 def test_default_system_prompt_forbids_inline_image_payloads() -> None:
     """The prompt must instruct the model not to embed images or base64 blobs
     in its prose responses (would bloat tokens and break QTextBrowser rendering)."""
