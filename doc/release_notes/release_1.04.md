@@ -144,6 +144,17 @@ Signals, images and groups can now be deleted directly from the lists, as in Dat
 
 ### 🔄 Changes ###
 
+**Curve readability:**
+
+* Signal curves are easier to read, especially when many curves are shown (closes [Issue #453](https://github.com/DataLab-Platform/DataLab/issues/453)):
+  * Curve colors now stand out on both light and dark backgrounds: several colors of the former palette (orange, pink, yellow-green, cyan) were pale on a white background, and gray curves could not be told apart from the grid
+  * After the first 10 curves, curves are now drawn with dashed lines only: dash-dot and dash-dot-dot lines, which drew only half of the curve, are no longer used
+  * The plot grid now uses discreet solid lines instead of gray dotted lines, which competed with dashed curves; it also follows color theme changes
+* Curve colors and line styles now depend on the position of the curves among those shown on the plot, in the order of the signals in the panel: the first curve shown is always drawn in the first color. Opening the ROI editor, **View in a new window** or other dialogs no longer shifts the styles of the next curves, which could reach dotted styles with only a few curves shown
+* Automatic curve styles are no longer saved in workspaces: only a color or a line style chosen by the user is saved and kept. Workspaces saved with earlier versions are displayed with the new automatic styles
+* **View > Reset curve styles** now gives the selected signals automatic curve styles again, removing the colors and line styles chosen for them
+* On high-DPI screens (e.g. with a 150 % display scaling), curves of width 1 are now drawn one screen pixel wide, which makes their rendering much faster: noisy signals were drawn up to several hundred times slower than at 100 % (requires PlotPy ≥ 2.12.0)
+
 **Synthetic images in physical coordinates:**
 
 * The 2D Gaussian, 2D ramp, sinusoidal grating, ring pattern, Siemens star and 2D sinc images were computed over the [x<sub>min</sub>, x<sub>max</sub>] × [y<sub>min</sub>, y<sub>max</sub>] domain of their creation parameters, but were displayed in pixel coordinates: their centers, widths and spatial frequencies did not match the axes (a sinusoidal grating of frequency 0.1 over [0, 100] showed 10 periods along an axis graduated from 0 to 1023). These images are now displayed over their domain. The new **Physical coordinates** option of their creation parameters restores pixel coordinates when disabled (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))

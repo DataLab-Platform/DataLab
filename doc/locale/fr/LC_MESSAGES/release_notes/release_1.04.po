@@ -347,6 +347,34 @@ msgstr "Les plugins peuvent décrire les signaux et images des fichiers dont les
 msgid "🔄 Changes"
 msgstr "🔄 Changements"
 
+msgid "**Curve readability:**"
+msgstr "**Lisibilité des courbes :**"
+
+msgid "Signal curves are easier to read, especially when many curves are shown (closes [Issue #453](https://github.com/DataLab-Platform/DataLab/issues/453)):"
+msgstr "Les courbes des signaux sont plus lisibles, en particulier lorsque de nombreuses courbes sont affichées (corrige [l'issue #453](https://github.com/DataLab-Platform/DataLab/issues/453)) :"
+
+msgid "Curve colors now stand out on both light and dark backgrounds: several colors of the former palette (orange, pink, yellow-green, cyan) were pale on a white background, and gray curves could not be told apart from the grid"
+msgstr "Les couleurs des courbes ressortent désormais sur fond clair comme sur fond sombre : plusieurs couleurs de l'ancienne palette (orange, rose, vert-jaune, cyan) étaient pâles sur fond blanc, et les courbes grises se confondaient avec la grille"
+
+msgid "After the first 10 curves, curves are now drawn with dashed lines only: dash-dot and dash-dot-dot lines, which drew only half of the curve, are no longer used"
+msgstr "Au-delà des 10 premières courbes, les courbes sont désormais tracées uniquement en tirets : les traits mixtes (tiret-point et tiret-point-point), qui ne traçaient que la moitié de la courbe, ne sont plus utilisés"
+
+msgid "The plot grid now uses discreet solid lines instead of gray dotted lines, which competed with dashed curves; it also follows color theme changes"
+msgstr "La grille des graphiques utilise désormais des traits pleins discrets au lieu de pointillés gris, qui se confondaient avec les courbes en tirets ; elle suit également les changements de thème de couleurs"
+
+msgid "Curve colors and line styles now depend on the position of the curves among those shown on the plot, in the order of the signals in the panel: the first curve shown is always drawn in the first color. Opening the ROI editor, **View in a new window** or other dialogs no longer shifts the styles of the next curves, which could reach dotted styles with only a few curves shown"
+msgstr "Les couleurs et les styles de trait des courbes dépendent désormais de la position des courbes parmi celles affichées dans le graphique, dans l'ordre des signaux du panneau : la première courbe affichée est toujours tracée avec la première couleur. L'ouverture de l'éditeur de ROI, de **Voir dans une nouvelle fenêtre** ou d'autres boîtes de dialogue ne décale plus les styles des courbes suivantes, ce qui pouvait faire apparaître des pointillés avec seulement quelques courbes affichées"
+
+msgid "Automatic curve styles are no longer saved in workspaces: only a color or a line style chosen by the user is saved and kept. Workspaces saved with earlier versions are displayed with the new automatic styles"
+msgstr "Les styles de courbes automatiques ne sont plus enregistrés dans les espaces de travail : seuls une couleur ou un style de trait choisis par l'utilisateur sont enregistrés et conservés. Les espaces de travail enregistrés avec les versions précédentes sont affichés avec les nouveaux styles automatiques"
+
+msgid "**View > Reset curve styles** now gives the selected signals automatic curve styles again, removing the colors and line styles chosen for them"
+msgstr "**Affichage > Réinitialiser les styles de courbes** rend désormais aux signaux sélectionnés des styles de courbes automatiques, en supprimant les couleurs et les styles de trait choisis pour eux"
+
+#, python-format
+msgid "On high-DPI screens (e.g. with a 150 % display scaling), curves of width 1 are now drawn one screen pixel wide, which makes their rendering much faster: noisy signals were drawn up to several hundred times slower than at 100 % (requires PlotPy ≥ 2.12.0)"
+msgstr "Sur les écrans haute résolution (par exemple avec une mise à l'échelle de l'affichage de 150 %), les courbes d'épaisseur 1 sont désormais tracées avec une largeur d'un pixel de l'écran, ce qui rend leur tracé beaucoup plus rapide : les signaux bruités étaient tracés jusqu'à plusieurs centaines de fois plus lentement qu'à 100 % (nécessite PlotPy ≥ 2.12.0)"
+
 msgid "**Synthetic images in physical coordinates:**"
 msgstr "**Images synthétiques en coordonnées physiques :**"
 
@@ -617,7 +645,4 @@ msgstr "**Sécurité :**"
 
 msgid "Opening a workspace received from someone else can no longer make DataLab load or run other code installed on the computer. The parameters stored with objects, analysis results and History actions name their class, and DataLab imported whatever module they named and called the object named there, which a modified file could use, for example, to make DataLab quit. Only parameter classes of DataLab, Sigima, guidata and installed plugins are now used; other stored parameters are reported as unreadable (fixes [Issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))"
 msgstr "Ouvrir un espace de travail reçu d'une autre personne ne permet plus de faire charger ou exécuter par DataLab un autre code installé sur l'ordinateur. Les paramètres enregistrés avec les objets, les résultats d'analyse et les actions de l'historique nomment leur classe, et DataLab importait le module ainsi nommé puis appelait l'objet désigné, ce qu'un fichier modifié pouvait exploiter, par exemple pour faire quitter DataLab. Seules les classes de paramètres de DataLab, Sigima, guidata et des plugins installés sont désormais utilisées ; les autres paramètres enregistrés sont signalés comme illisibles (corrige [l'issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))"
-
-#~ msgid "Datasets with three dimensions or more (image stacks, spectral cubes...) are now listed in the HDF5 browser, but are not directly importable and have no graphical slice selector"
-#~ msgstr "Les jeux de données à trois dimensions ou plus (piles d'images, cubes spectraux...) sont désormais listés dans l'explorateur HDF5, mais ne sont pas directement importables et n'ont pas de sélecteur graphique de coupes"
 
