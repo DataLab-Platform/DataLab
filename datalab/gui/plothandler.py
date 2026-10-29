@@ -333,6 +333,24 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
             item.param.label = self.panel.mainwindow.render_object_title(obj.title)
             item.param.update_item(item)
 
+    def update_existing_items(self) -> None:
+        """Update all existing plot items from their objects and current settings
+
+        Unlike :py:meth:`refresh_plot`, the visibility of the plot items and the
+        shape items are left unchanged. This applies a change of display settings
+        (e.g. signal auto downsampling or line width) to the plot items of all
+        objects, and not only to those of the selected objects.
+        """
+        auto_replot = self.plot.autoReplot()
+        self.plot.setAutoReplot(False)
+        try:
+            with block_signals(self.plot):
+                for oid in self.get_existing_oids():
+                    self.update_item_on_plot(oid)
+        finally:
+            self.plot.setAutoReplot(auto_replot)
+            self.plot.replot()
+
     def set_auto_refresh(self, auto_refresh: bool) -> None:
         """Set auto refresh mode.
 

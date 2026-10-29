@@ -2797,6 +2797,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         sigima_options.fft_shift_enabled.set(Conf.fft_shift_enabled.get())
         sigima_options.auto_normalize_kernel.set(Conf.auto_normalize_kernel.get())
         refresh_signal_panel = refresh_image_panel = False
+        update_signal_items = False
 
         # Handling changes to shape/marker parameters
         s_view_result_param = (
@@ -2858,7 +2859,9 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     if isinstance(widget, DockablePlotWidget):
                         widget.update_toolbar_position()
             if option.startswith(("sig_autodownsampling", "sig_linewidth")):
-                refresh_signal_panel = True
+                # Signal display settings apply to the curves of all signals, not
+                # only to those of the selected signals
+                update_signal_items = True
             if option == "sig_autoscale_margin_percent":
                 # Update signal plot widget autoscale margin
                 sig_margin = Conf.sig_autoscale_margin_percent.get()
@@ -2898,6 +2901,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     self.imagepanel.update_metadata_view_settings()
             if option == "ima_aspect_ratio_1_1":
                 refresh_image_panel = True
+        if update_signal_items:
+            self.signalpanel.plothandler.update_existing_items()
         if refresh_signal_panel:
             self.signalpanel.manual_refresh()
         if refresh_image_panel:
