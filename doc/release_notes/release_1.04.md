@@ -218,6 +218,10 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 * Fixed changes of the auto downsampling and line width settings only applying to the curves of the selected signals: the other curves kept the former settings, even once selected again. These settings now apply to all curves as soon as the Settings dialog is closed
 * Fixed the X axis ticks being shifted relative to the vertical grid lines and the curves after opening a signal or changing the selection, for signals whose X axis does not start and end on a graduation (e.g., `step.npy` from the Sigima test data): the shift remained until the view was panned or zoomed. The X axis now stays aligned with the grid and the curves (fixes [Issue #457](https://github.com/DataLab-Platform/DataLab/issues/457))
 
+**Custom colormaps:**
+
+* Fixed custom colormaps (created with the colormap manager) being saved outside DataLab's configuration directory, in a `.plotpy` or `.none` directory of the user's configuration directory shared with other applications based on PlotPy, depending on how DataLab was started. They are now saved in the `plotpy` subdirectory of DataLab's configuration directory; the first time, custom colormaps saved in the former directories are copied there (requires PlotPy ≥ 2.12.0)
+
 **HDF5 import:**
 
 * Fixed images with unsigned 32-bit values above 2 147 483 647 being clipped when imported from an HDF5 file ("Clipping uint32 data to int32" warning): such images are now imported as 64-bit floating-point images keeping every value exactly. Other integer images that no supported integer type can hold also use a sufficiently precise floating-point type when possible, instead of rounding to 32-bit floating-point values beyond 16 777 216; a warning is emitted when no supported type guarantees exact conversion (in particular beyond ±2⁵³ for float64)
