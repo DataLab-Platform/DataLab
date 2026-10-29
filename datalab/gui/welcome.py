@@ -23,7 +23,7 @@ import urllib.parse
 import webbrowser
 from typing import TYPE_CHECKING, Callable
 
-from guidata.configtools import get_icon, get_image_file_path
+from guidata.configtools import get_icon, get_pixmap
 from guidata.qthelpers import add_actions
 from guidata.widgets.dockable import DockableWidgetMixin
 from qtpy import QtCore as QC
@@ -588,7 +588,7 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
     def __setup_header(self) -> None:
         """Setup the header: logo, slogan with version, and edition"""
         logo = QW.QLabel()
-        logo.setPixmap(QG.QPixmap(get_image_file_path("DataLab-Banner-200.png")))
+        logo.setPixmap(get_pixmap("DataLab-Banner-200.png"))
         slogan = QW.QLabel(
             _("Scientific signal and image processing \u2014 version %s")
             % datalab.__version__
