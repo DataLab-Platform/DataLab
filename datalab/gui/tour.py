@@ -53,7 +53,7 @@ from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 import numpy as np
-from guidata.configtools import get_icon, get_image_file_path
+from guidata.configtools import get_icon, get_pixmap
 from guidata.qthelpers import is_dark_theme
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -294,7 +294,7 @@ class StepDialog(QW.QDialog):
         self._layout = QW.QVBoxLayout()
         if self.step.step_type in ("introduction", "conclusion"):
             logo = QW.QLabel()
-            logo.setPixmap(QG.QPixmap(get_image_file_path("DataLab-Banner2-100.png")))
+            logo.setPixmap(get_pixmap("DataLab-Banner2-100.png"))
             logo.setAlignment(QC.Qt.AlignCenter)
             self._layout.addWidget(logo)
         title_color = QC.Qt.lightGray if is_dark_theme() else QC.Qt.darkGray
