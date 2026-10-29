@@ -1510,12 +1510,14 @@ class SignalActionHandler(BaseActionHandler):
             antialiasing_action.setChecked(Conf.sig_antialiasing.get(True))
             self.new_action(
                 _("Reset curve styles"),
-                select_condition=SelectCond.always,
+                select_condition=SelectCond.at_least_one_group_or_one_object,
                 icon_name="reset_curve_styles.svg",
                 triggered=self.panel.reset_curve_styles,
                 tip=_(
-                    "Curve styles are looped over a list of predefined styles.\n"
-                    "This action resets the list to its initial state."
+                    "Curves are given automatic styles according to their "
+                    "position on the plot.\n"
+                    "This action removes the colors and line styles chosen for "
+                    "the selected signals, which are given automatic styles again."
                 ),
                 toolbar_pos=-1,
             )

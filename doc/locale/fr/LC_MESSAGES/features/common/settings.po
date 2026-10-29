@@ -319,8 +319,9 @@ msgstr "Préférences de visualisation - Sous-onglet Signaux"
 msgid "**Default line width**"
 msgstr "**Épaisseur par défaut**"
 
-msgid "Default line width for curves representing signals. This setting affects all signal visualizations unless overridden individually. Note: for signals exceeding the line width performance threshold (see below), the line width is automatically clamped to 1.0 for optimal rendering performance."
-msgstr "Épaisseur de trait par défaut pour les courbes représentant les signaux. Ce paramètre affecte toutes les visualisations de signaux, sauf si elles sont remplacées individuellement. Remarque : pour les signaux dépassant le seuil de performance de l'épaisseur de trait (voir ci-dessous), l'épaisseur de trait est automatiquement plafonnée à 1,0 pour des performances de rendu optimales."
+#, python-format
+msgid "Default line width for curves representing signals. This setting affects all signal visualizations unless overridden individually. Note: for signals exceeding the line width performance threshold (see below), the line width is automatically clamped to 1.0 for optimal rendering performance. Curves of width 1.0 or less are drawn one screen pixel wide, also on high-DPI screens (e.g. with a 150% display scaling), which keeps their rendering fast."
+msgstr "Épaisseur de trait par défaut pour les courbes représentant les signaux. Ce paramètre affecte toutes les visualisations de signaux, sauf si elles sont remplacées individuellement. Remarque : pour les signaux dépassant le seuil de performance de l'épaisseur de trait (voir ci-dessous), l'épaisseur de trait est automatiquement plafonnée à 1,0 pour des performances de rendu optimales. Les courbes d'épaisseur 1,0 ou moins sont tracées avec une largeur d'un pixel de l'écran, y compris sur les écrans haute résolution (par exemple avec une mise à l'échelle de l'affichage de 150%), ce qui préserve la rapidité de leur tracé."
 
 msgid "**Line width performance threshold**"
 msgstr "**Seuil de performance de l'épaisseur de trait**"
@@ -630,3 +631,4 @@ msgstr "**Arguments de l'éditeur externe**"
 
 msgid "Command-line arguments to pass to the external editor."
 msgstr "Arguments de ligne de commande à passer à l'éditeur externe."
+

@@ -251,7 +251,9 @@ The Signals sub-tab contains settings specific to signal visualizations:
     Default line width for curves representing signals. This setting affects all signal
     visualizations unless overridden individually. Note: for signals exceeding the line
     width performance threshold (see below), the line width is automatically clamped to
-    1.0 for optimal rendering performance.
+    1.0 for optimal rendering performance. Curves of width 1.0 or less are drawn one
+    screen pixel wide, also on high-DPI screens (e.g. with a 150% display scaling),
+    which keeps their rendering fast.
 
 **Line width performance threshold**
     For signals with more than this number of points (default: 1,000), line width is

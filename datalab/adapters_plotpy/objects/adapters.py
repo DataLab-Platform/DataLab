@@ -21,6 +21,7 @@ from sigimax.adapters_plotpy.objects.image import (
 from sigimax.adapters_plotpy.objects.image import get_obj_coords
 from sigimax.adapters_plotpy.objects.signal import (
     CURVESTYLES,
+    LINE_STYLE_KEYS,
     CurveStyles,
     apply_downsampling,
     apply_line_width,
@@ -31,6 +32,7 @@ from sigimax.adapters_plotpy.objects.signal import (
 
 __all__ = [
     "CURVESTYLES",
+    "LINE_STYLE_KEYS",
     "BaseObjPlotPyAdapter",
     "CurveStyles",
     "ImageObjPlotPyAdapter",

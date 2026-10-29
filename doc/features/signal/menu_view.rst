@@ -127,12 +127,23 @@ Anti-aliasing makes the curves look smoother, but it may also make them look les
 Reset curve styles
 ^^^^^^^^^^^^^^^^^^
 
-Reset the curve style cycle to the beginning.
+Give the selected signals automatic curve styles again.
 
 When plotting curves, DataLab automatically assigns a color and a line style to
-each curve. Both parameters are chosen from a predefined list of colors and
-line styles, and are assigned in a round-robin fashion.
+each curve, according to its position among the curves shown on the plot (in the
+order of the signals in the panel): the first curves are drawn with solid lines
+in distinct colors, readable on both light and dark backgrounds, and the next
+ones with dashed lines in the same colors. The first curve shown is thus always
+assigned the first color, whatever the signals shown.
 
-This menu entry allows you to reset the curve styles, so that the next time
-you plot curves, the first curve will be assigned the first color and the first
-line style of the predefined lists, and the loop will start again from there.
+Automatic styles are not saved with the signals. If you choose another color or
+line style for a curve (with the "Parameters" option of its context menu), this
+style is saved in the metadata of the signal and is kept afterwards.
+
+This menu entry removes the colors and line styles chosen for the selected signals,
+so that their curves are assigned automatic styles again.
+
+.. note::
+    Workspaces saved with DataLab 1.3 or earlier store the automatic style of
+    each curve: these styles are recognized as automatic styles, and are replaced
+    by the current ones.

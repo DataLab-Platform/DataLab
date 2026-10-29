@@ -134,11 +134,18 @@ msgstr "L'anticrénelage peut ralentir significativement l'affichage, surtout qu
 msgid "Reset curve styles"
 msgstr "Réinitialiser les styles de courbes"
 
-msgid "Reset the curve style cycle to the beginning."
-msgstr "Réinitialise le style de courbe au début du cycle."
+msgid "Give the selected signals automatic curve styles again."
+msgstr "Rend aux signaux sélectionnés des styles de courbes automatiques."
 
-msgid "When plotting curves, DataLab automatically assigns a color and a line style to each curve. Both parameters are chosen from a predefined list of colors and line styles, and are assigned in a round-robin fashion."
-msgstr "Lors de l'affichage de courbes, DataLab attribue automatiquement une couleur et un style de ligne à chaque courbe. Les deux paramètres sont choisis dans une liste prédéfinie de couleurs et de styles de ligne, et sont attribués de manière cyclique."
+msgid "When plotting curves, DataLab automatically assigns a color and a line style to each curve, according to its position among the curves shown on the plot (in the order of the signals in the panel): the first curves are drawn with solid lines in distinct colors, readable on both light and dark backgrounds, and the next ones with dashed lines in the same colors. The first curve shown is thus always assigned the first color, whatever the signals shown."
+msgstr "Lors de l'affichage de courbes, DataLab attribue automatiquement une couleur et un style de trait à chaque courbe, selon sa position parmi les courbes affichées dans le graphique (dans l'ordre des signaux du panneau) : les premières courbes sont tracées en traits pleins de couleurs bien distinctes, lisibles sur fond clair comme sur fond sombre, et les suivantes en tirets avec les mêmes couleurs. La première courbe affichée reçoit donc toujours la première couleur, quels que soient les signaux affichés."
 
-msgid "This menu entry allows you to reset the curve styles, so that the next time you plot curves, the first curve will be assigned the first color and the first line style of the predefined lists, and the loop will start again from there."
-msgstr "Cette entrée de menu permet de réinitialiser les styles de courbes, de sorte que la prochaine fois que vous afficherez des courbes, la première courbe sera attribuée la première couleur et le premier style de ligne de la liste prédéfinie, et la boucle recommencera à partir de là."
+msgid "Automatic styles are not saved with the signals. If you choose another color or line style for a curve (with the \"Parameters\" option of its context menu), this style is saved in the metadata of the signal and is kept afterwards."
+msgstr "Les styles automatiques ne sont pas enregistrés avec les signaux. Si vous choisissez une autre couleur ou un autre style de trait pour une courbe (avec l'option « Paramètres » de son menu contextuel), ce style est enregistré dans les métadonnées du signal et il est conservé par la suite."
+
+msgid "This menu entry removes the colors and line styles chosen for the selected signals, so that their curves are assigned automatic styles again."
+msgstr "Cette entrée de menu supprime les couleurs et les styles de trait choisis pour les signaux sélectionnés, afin que leurs courbes reçoivent à nouveau des styles automatiques."
+
+msgid "Workspaces saved with DataLab 1.3 or earlier store the automatic style of each curve: these styles are recognized as automatic styles, and are replaced by the current ones."
+msgstr "Les espaces de travail enregistrés avec DataLab 1.3 ou une version antérieure contiennent le style automatique de chaque courbe : ces styles sont reconnus comme des styles automatiques et sont remplacés par les styles actuels."
+

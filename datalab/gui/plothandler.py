@@ -41,7 +41,12 @@ from qwt import QwtScaleDraw
 from sigima.objects import ImageObj, SignalObj, TypeObj
 
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter
-from datalab.adapters_plotpy import TypePlotItem, create_adapter_from_object
+from datalab.adapters_plotpy import (
+    CURVESTYLES,
+    CurveStyles,
+    TypePlotItem,
+    create_adapter_from_object,
+)
 from datalab.adapters_plotpy.objects.scalar import MergedResultPlotPyAdapter
 from datalab.config import Conf, _
 from datalab.utils.qthelpers import block_signals, create_progress_bar
@@ -297,7 +302,10 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
         """
         obj = self.panel.objmodel[oid]
         self.__cached_hashes[obj] = calc_data_hash(obj)
-        item: TypePlotItem = create_adapter_from_object(obj).make_item()
+        # Automatic curve styles are given by `update_automatic_styles`, according
+        # to the position of the curves on the plot: the style cycle is not used
+        with CURVESTYLES.suspend():
+            item: TypePlotItem = create_adapter_from_object(obj).make_item()
         item.param.label = self.panel.mainwindow.render_object_title(obj.title)
         item.param.update_item(item)
         item.set_readonly(True)
@@ -412,9 +420,16 @@ class BasePlotHandler(Generic[TypeObj, TypePlotItem]):  # type: ignore
                 only_visible=only_visible,
                 only_existing=only_existing,
             )
+            self.update_automatic_styles()
         finally:
             self.plot.setAutoReplot(auto_replot)
             self.plot.replot()
+
+    def update_automatic_styles(self) -> None:
+        """Update the automatic styles of the visible plot items
+
+        This base implementation does nothing.
+        """
 
     def __refresh_plot(
         self,
@@ -619,6 +634,30 @@ class SignalPlotHandler(BasePlotHandler[SignalObj, CurveItem]):
         options = super().get_plot_options()
         options.curve_antialiasing = self.plot.antialiased
         return options
+
+    def update_automatic_styles(self) -> None:
+        """Give the visible curves the automatic style of their position
+
+        Visible curves are numbered in the order of their signals in the panel.
+        Each curve whose color and line style were not chosen by the user is given
+        the automatic style of its position (see :py:meth:`CurveStyles.style_at`),
+        so that the first curves shown are always given the first styles.
+        """
+        index = 0
+        for oid in self.panel.objmodel.get_object_ids():
+            item = self.get(oid)
+            if item is None or not item.isVisible():
+                continue
+            style = CurveStyles.style_at(index)
+            index += 1
+            if (
+                CURVESTYLES.has_automatic_style(item)
+                and CURVESTYLES.get_automatic_style(item) != style
+            ):
+                CURVESTYLES.set_automatic_style(item, *style)
+                item.param.update_item(item)
+                if item.selected:
+                    item.select()
 
     def refresh_plot(
         self,
