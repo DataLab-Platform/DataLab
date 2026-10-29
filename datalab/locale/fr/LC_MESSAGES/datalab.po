@@ -3944,8 +3944,8 @@ msgstr "Utiliser l'auto-sous-échantillonnage pour les signaux volumineux"
 msgid "Downsampling max points"
 msgstr "Nombre max. de points"
 
-msgid "Maximum number of points for downsampling"
-msgstr "Nombre maximum de points pour le sous-échantillonnage"
+msgid "Maximum number of points displayed for a signal: signals with more points are downsampled for display only (data are not modified)"
+msgstr "Nombre maximal de points affichés pour un signal : les signaux comportant plus de points sont sous-échantillonnés pour l'affichage uniquement (les données ne sont pas modifiées)"
 
 msgid "Autoscale margin"
 msgstr "Marge de zoom automatique"

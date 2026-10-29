@@ -332,14 +332,14 @@ msgstr "Pour les signaux comportant plus de ce nombre de points (par défaut : 1
 msgid "**Use auto downsampling**"
 msgstr "**Utiliser le sous-échantillonnage automatique**"
 
-msgid "Enable automatic downsampling for large signals to improve performance and visualization clarity."
-msgstr "Activer le sous-échantillonnage automatique pour les grands signaux afin d'améliorer les performances et la clarté de la visualisation."
+msgid "Enable automatic downsampling for large signals to improve performance and visualization clarity. Downsampling only affects the display: signal data and processing are not modified."
+msgstr "Activer le sous-échantillonnage automatique pour les grands signaux afin d'améliorer les performances et la clarté de la visualisation. Le sous-échantillonnage ne concerne que l'affichage : les données des signaux et les traitements ne sont pas modifiés."
 
 msgid "**Downsampling max points**"
 msgstr "**Nombre maximum de points de sous-échantillonnage**"
 
-msgid "Maximum number of points to display when downsampling is enabled (default: 10,000)."
-msgstr "Nombre maximum de points à afficher lorsque le sous-échantillonnage est activé (par défaut : 10 000)."
+msgid "Maximum number of points displayed for a signal when auto downsampling is enabled (default: 100,000). Signals with more points are downsampled so that at most this number of points is displayed."
+msgstr "Nombre maximal de points affichés pour un signal lorsque le sous-échantillonnage automatique est activé (par défaut : 100 000). Les signaux comportant plus de points sont sous-échantillonnés de sorte qu'au plus ce nombre de points soit affiché."
 
 msgid "**Autoscale margin**"
 msgstr "**Marge d'échelle automatique**"
