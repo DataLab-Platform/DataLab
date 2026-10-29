@@ -37,7 +37,7 @@ from plotpy.constants import PlotType
 from plotpy.items import CurveItem, GridItem, LegendBoxItem, MaskedXYImageItem
 from plotpy.plot import PlotOptions
 from qtpy import QtWidgets as QW
-from qwt import QwtScaleDraw
+from qwt import QwtDateTimeScaleDraw, QwtScaleDraw
 from sigima.objects import ImageObj, SignalObj, TypeObj
 
 from datalab.adapters_metadata import GeometryAdapter, TableAdapter
@@ -725,8 +725,12 @@ class SignalPlotHandler(BasePlotHandler[SignalObj, CurveItem]):
         if has_datetime and datetime_format is not None:
             self.plot.set_axis_datetime("bottom", format=datetime_format)
         else:
-            # Restore default scale draw (remove datetime formatting)
-            self.plot.setAxisScaleDraw(self.plot.get_axis_id("bottom"), QwtScaleDraw())
+            # Restore default scale draw only when leaving the datetime mode:
+            # replacing it on every refresh could misalign the axis ticks with
+            # the grid and the curves (see Issue #457)
+            axis_id = self.plot.get_axis_id("bottom")
+            if isinstance(self.plot.axisScaleDraw(axis_id), QwtDateTimeScaleDraw):
+                self.plot.setAxisScaleDraw(axis_id, QwtScaleDraw())
 
 
 class ImagePlotHandler(BasePlotHandler[ImageObj, MaskedXYImageItem]):
