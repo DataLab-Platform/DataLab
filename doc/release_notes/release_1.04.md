@@ -212,6 +212,11 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 
 * Fixed the width of the signal/image panels not being restored at startup: after narrowing the panels and restarting DataLab, they came back wider (up to their maximum width) instead of keeping the width chosen by the user
 
+**Signal display:**
+
+* Fixed auto downsampling of signals (**Settings > Visualization > Signals**) only starting above 5 times the configured maximum number of points: with the default value of 100,000 points, signals of a few hundred thousand points were drawn in full, which slowed down the display. Signals with more points than the maximum are now downsampled so that at most this number of points is drawn, and the Settings dialog and the documentation now give the actual default value (100,000 instead of 10,000) (fixes [Issue #455](https://github.com/DataLab-Platform/DataLab/issues/455))
+* Fixed changes of the auto downsampling and line width settings only applying to the curves of the selected signals: the other curves kept the former settings, even once selected again. These settings now apply to all curves as soon as the Settings dialog is closed
+
 **HDF5 import:**
 
 * Fixed images with unsigned 32-bit values above 2 147 483 647 being clipped when imported from an HDF5 file ("Clipping uint32 data to int32" warning): such images are now imported as 64-bit floating-point images keeping every value exactly. Other integer images that no supported integer type can hold also use a sufficiently precise floating-point type when possible, instead of rounding to 32-bit floating-point values beyond 16 777 216; a warning is emitted when no supported type guarantees exact conversion (in particular beyond ±2⁵³ for float64)

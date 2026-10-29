@@ -264,10 +264,13 @@ The Signals sub-tab contains settings specific to signal visualizations:
 
 **Use auto downsampling**
     Enable automatic downsampling for large signals to improve performance and
-    visualization clarity.
+    visualization clarity. Downsampling only affects the display: signal data and
+    processing are not modified.
 
 **Downsampling max points**
-    Maximum number of points to display when downsampling is enabled (default: 10,000).
+    Maximum number of points displayed for a signal when auto downsampling is enabled
+    (default: 100,000). Signals with more points are downsampled so that at most this
+    number of points is displayed.
 
 **Autoscale margin**
     Percentage of margin to add around data when auto-scaling signal plots. A value of

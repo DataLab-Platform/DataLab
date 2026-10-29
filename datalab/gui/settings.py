@@ -419,9 +419,12 @@ class ViewSettings(gds.DataSet):
     ).set_prop("display", store=_prop_ads)
     sig_autodownsampling_maxpoints = gds.IntItem(
         _("Downsampling max points"),
-        default=10000,
+        default=100000,
         min=1000,
-        help=_("Maximum number of points for downsampling"),
+        help=_(
+            "Maximum number of points displayed for a signal: signals with more "
+            "points are downsampled for display only (data are not modified)"
+        ),
     ).set_prop("display", active=_prop_ads)
     sig_autoscale_margin_percent = gds.FloatItem(
         _("Autoscale margin"),
