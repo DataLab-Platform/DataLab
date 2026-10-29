@@ -67,3 +67,5 @@ The application icon (``resources/DataLab.ico``) and the WiX installer bitmaps (
     scripts\build_resources.bat
 
 or via the **🎨 Generate resources** VS Code task.
+
+The images displayed by the application (splash screen, logos, plot watermark) are generated in ``datalab/data/logo/`` together with their ``@2x`` high-resolution variants, used on high-DPI displays: to regenerate only these images, run ``scripts\build_resources.bat logo``.

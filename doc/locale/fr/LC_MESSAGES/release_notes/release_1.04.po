@@ -486,6 +486,16 @@ msgstr "**Disposition de la fenêtre :**"
 msgid "Fixed the width of the signal/image panels not being restored at startup: after narrowing the panels and restarting DataLab, they came back wider (up to their maximum width) instead of keeping the width chosen by the user"
 msgstr "Correction de la largeur des panneaux Signal/Image non restaurée au démarrage : après avoir réduit les panneaux puis redémarré DataLab, ils réapparaissaient plus larges (jusqu'à leur largeur maximale) au lieu de conserver la largeur choisie par l'utilisateur"
 
+msgid "**Display scaling:**"
+msgstr "**Mise à l'échelle de l'affichage :**"
+
+msgid "Fixed the splash screen, the DataLab logo of the welcome page and of the guided tour, and the watermark of empty plots being blurry with a Windows display scaling greater than 100% (e.g., 125%): they are now displayed at the resolution of the screen"
+msgstr "Correction du flou de l'écran de démarrage, du logo DataLab de la page d'accueil et de la visite guidée, et du filigrane des graphiques vides avec une mise à l'échelle de l'affichage Windows supérieure à 100 % (par exemple 125 %) : ils sont désormais affichés à la résolution de l'écran"
+
+#, python-format
+msgid "Fixed most of the text of the user interface (welcome page, object properties, panel tabs, dialog boxes, ...) keeping its 100% size with a Windows display scaling greater than 100% (e.g., 125%), while menus and the status bar were enlarged. All the text now follows the display scaling and the Windows text size setting, and uses the standard font of Windows applications (\"Segoe UI\"). This affected DataLab running with Qt 5, like the standalone application (requires guidata ≥ 3.16.1)"
+msgstr "Correction de la majeure partie du texte de l'interface (page d'accueil, propriétés des objets, onglets des panneaux, boîtes de dialogue, ...) qui conservait sa taille à 100 % avec une mise à l'échelle de l'affichage Windows supérieure à 100 % (par exemple 125 %), alors que les menus et la barre d'état étaient agrandis. Tout le texte suit désormais la mise à l'échelle de l'affichage et le réglage de la taille du texte de Windows, et utilise la police standard des applications Windows (« Segoe UI »). Cela concernait DataLab exécuté avec Qt 5, comme l'application autonome (nécessite guidata ≥ 3.16.1)"
+
 msgid "**Signal display:**"
 msgstr "**Affichage des signaux :**"
 
