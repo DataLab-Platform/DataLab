@@ -10,7 +10,9 @@ PlotPy to integrate with DataLab's data model and GUI.
 
 __all__ = [
     "CURVESTYLES",
+    "LINE_STYLE_KEYS",
     "CircularROIPlotPyAdapter",
+    "CurveStyles",
     "GeometryPlotPyAdapter",
     "ImageObjPlotPyAdapter",
     "PolygonalROIPlotPyAdapter",
@@ -51,6 +53,8 @@ from sigimax.adapters_plotpy.roi.signal import (
 from .factories import DataLabPlotPyAdapterFactory
 from .objects.adapters import (
     CURVESTYLES,
+    LINE_STYLE_KEYS,
+    CurveStyles,
     ImageObjPlotPyAdapter,
     SignalObjPlotPyAdapter,
     TypePlotItem,

@@ -24,7 +24,7 @@ from plotpy.tools import (
 from sigima.io.signal import SignalIORegistry
 from sigima.objects import SignalObj, SignalROI
 
-from datalab.adapters_plotpy import CURVESTYLES
+from datalab.adapters_plotpy import CURVESTYLES, LINE_STYLE_KEYS
 from datalab.config import Conf, _
 from datalab.gui import roieditor
 from datalab.gui.actionhandler import SignalActionHandler
@@ -173,5 +173,22 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
         self.plothandler.toggle_anti_aliasing(state)
 
     def reset_curve_styles(self) -> None:
-        """Reset curve styles"""
+        """Reset the curve styles of the selected signals
+
+        Colors and line styles chosen by the user are removed from the metadata of
+        the selected signals, whose curves are given automatic styles again.
+        """
         CURVESTYLES.reset_styles()
+        modified = False
+        for obj in self.objview.get_sel_objects(include_groups=True):
+            for key in LINE_STYLE_KEYS:
+                if obj.metadata.pop(key, None) is not None:
+                    modified = True
+            item = self.plothandler.get(get_uuid(obj))
+            if item is not None and not CURVESTYLES.has_automatic_style(item):
+                CURVESTYLES.restore_automatic_style(item)
+                item.param.update_item(item)
+                modified = True
+        self.refresh_plot("selected", update_items=False)
+        if modified:
+            self.SIG_OBJECT_MODIFIED.emit()
