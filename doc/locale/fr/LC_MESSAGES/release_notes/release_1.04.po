@@ -495,6 +495,9 @@ msgstr "Correction du sous-échantillonnage automatique des signaux (**Préfére
 msgid "Fixed changes of the auto downsampling and line width settings only applying to the curves of the selected signals: the other curves kept the former settings, even once selected again. These settings now apply to all curves as soon as the Settings dialog is closed"
 msgstr "Correction des modifications des préférences de sous-échantillonnage automatique et d'épaisseur de trait qui ne s'appliquaient qu'aux courbes des signaux sélectionnés : les autres courbes conservaient les anciennes préférences, même une fois sélectionnées à nouveau. Ces préférences s'appliquent désormais à toutes les courbes dès la fermeture de la boîte de dialogue des préférences"
 
+msgid "Fixed the X axis ticks being shifted relative to the vertical grid lines and the curves after opening a signal or changing the selection, for signals whose X axis does not start and end on a graduation (e.g., `step.npy` from the Sigima test data): the shift remained until the view was panned or zoomed. The X axis now stays aligned with the grid and the curves (fixes [Issue #457](https://github.com/DataLab-Platform/DataLab/issues/457))"
+msgstr "Correction des graduations de l'axe X qui étaient décalées par rapport aux lignes verticales de la grille et aux courbes après l'ouverture d'un signal ou un changement de sélection, pour les signaux dont l'axe X ne commence et ne se termine pas sur une graduation (par exemple, `step.npy` des données de test de Sigima) : le décalage persistait jusqu'à un déplacement ou un zoom de la vue. L'axe X reste désormais aligné avec la grille et les courbes (corrige [Issue #457](https://github.com/DataLab-Platform/DataLab/issues/457))"
+
 msgid "**HDF5 import:**"
 msgstr "**Import HDF5 :**"
 
