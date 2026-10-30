@@ -18,6 +18,7 @@ from __future__ import annotations
 import configparser
 import dataclasses
 import hashlib
+import http.client
 import io
 import json
 import os
@@ -43,6 +44,7 @@ from datalab.plugins.modules import MAX_MODULE_BYTES, inspect_module, module_nam
 from datalab.plugins.wheels import (
     DESKTOP_ENTRY_POINT_GROUP,
     MAX_WHEEL_BYTES,
+    ZIP_MEMBER_ERRORS,
     is_compatible_wheel,
 )
 
@@ -193,7 +195,8 @@ def _read(location: str, limit: int) -> bytes:
         try:
             with urllib.request.urlopen(request, timeout=DOWNLOAD_TIMEOUT) as response:
                 data = response.read(limit + 1)
-        except (urllib.error.URLError, OSError) as exc:
+        # HTTPException: response truncated (IncompleteRead) or malformed
+        except (urllib.error.URLError, OSError, http.client.HTTPException) as exc:
             raise CatalogError(f"Cannot download {location}: {exc}") from exc
     if len(data) > limit:
         raise CatalogError(f"{location} exceeds the {limit} byte size limit")
@@ -435,6 +438,8 @@ def read_wheel_entry(path: str) -> tuple[dict, dict]:
             entry_points = _dist_info_file(archive, "entry_points.txt") or b""
     except zipfile.BadZipFile as exc:
         raise CatalogError("not a valid ZIP archive") from exc
+    except ZIP_MEMBER_ERRORS as exc:
+        raise CatalogError(f"damaged ZIP archive: {exc}") from exc
     if metadata_data is None:
         raise CatalogError("no METADATA file")
     parser = configparser.ConfigParser(interpolation=None)

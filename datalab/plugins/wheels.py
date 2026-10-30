@@ -17,6 +17,7 @@ import pathlib
 import re
 import sys
 import zipfile
+import zlib
 from collections.abc import Mapping, Sequence
 from email.parser import BytesParser
 from email.policy import default as email_policy
@@ -70,6 +71,28 @@ _RESERVED_TOP_LEVEL = frozenset(
 
 class WheelInspectionError(ValueError):
     """Raised when an archive cannot be accepted as a plugin wheel."""
+
+
+#: Errors raised when reading a member of a damaged or unsupported ZIP archive
+#: (corrupted headers or data, truncated data, encryption, unknown compression):
+#: the central directory may be valid while a member is not.
+ZIP_MEMBER_ERRORS = (
+    zipfile.BadZipFile,
+    zlib.error,
+    EOFError,
+    NotImplementedError,
+    RuntimeError,
+)
+
+
+def _read_member(archive: zipfile.ZipFile, member: zipfile.ZipInfo | str) -> bytes:
+    try:
+        return archive.read(member)
+    except ZIP_MEMBER_ERRORS as exc:
+        name = member.filename if isinstance(member, zipfile.ZipInfo) else member
+        raise WheelInspectionError(
+            f"Plugin wheel member {name!r} cannot be read: {exc}"
+        ) from exc
 
 
 def _host_python(python_version: str | None) -> Version:
@@ -184,7 +207,7 @@ def _read_required_file(
         entry = names[name]
     except KeyError as exc:
         raise WheelInspectionError(f"Plugin wheel is missing {name!r}") from exc
-    return archive.read(entry)
+    return _read_member(archive, entry)
 
 
 def _parse_entry_points(data: bytes, group: str) -> list[dict[str, str]]:
@@ -227,7 +250,9 @@ def _top_level_packages(
     if top_level_name in names:
         packages = {
             line.strip()
-            for line in archive.read(top_level_name).decode("utf-8").splitlines()
+            for line in _read_member(archive, top_level_name)
+            .decode("utf-8")
+            .splitlines()
             if line.strip()
         }
     else:

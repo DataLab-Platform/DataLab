@@ -15,7 +15,11 @@ from datalab import __version__
 from datalab.config import Conf
 from datalab.config.persistence import has_persisted_option, remove_persisted_option
 from datalab.gui.plugins.config import PluginConfigDialog, PluginState
-from datalab.gui.plugins.install import InstalledPluginsWidget, PluginConsentDialog
+from datalab.gui.plugins.install import (
+    InstalledPluginsWidget,
+    PluginConsentDialog,
+    run_plugin_task,
+)
 from datalab.plugins import PluginRegistry
 from datalab.plugins import base as plugin_base
 from datalab.plugins.store import InstalledPluginStore
@@ -231,6 +235,28 @@ def test_additional_dependencies_are_planned_before_consent(
     assert not reloads
     assert not store.activate()
     widget.deleteLater()
+
+
+@pytest.mark.parametrize(
+    "error", [ValueError("invalid file"), RuntimeError("unexpected failure")]
+)
+def test_plugin_task_reports_every_error(error: Exception) -> None:
+    """A failed operation always ends with the failure signal.
+
+    An unexpected exception escaping the thread would emit no signal at all,
+    leaving the plugin dialogs waiting forever.
+    """
+    _app = QW.QApplication.instance() or QW.QApplication([])
+    succeeded: list[object] = []
+    failed: list[str] = []
+
+    def operation() -> None:
+        raise error
+
+    run_plugin_task(operation, succeeded.append, failed.append)
+    qt_wait_until(lambda: bool(failed or succeeded), timeout=10)
+    assert not succeeded
+    assert len(failed) == 1 and str(error) in failed[0]
 
 
 if __name__ == "__main__":

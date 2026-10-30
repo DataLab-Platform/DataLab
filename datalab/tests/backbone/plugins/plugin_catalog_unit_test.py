@@ -5,7 +5,9 @@
 from __future__ import annotations
 
 import hashlib
+import http.client
 import json
+import urllib.request
 from pathlib import Path
 
 import pytest
@@ -203,6 +205,28 @@ def test_only_https_and_file_urls_are_used() -> None:
     """Plain HTTP could be tampered with on the way."""
     with pytest.raises(CatalogError, match="Unsupported URL scheme"):
         fetch_catalog("http://example.org/catalog.json")
+
+
+def test_truncated_download_is_a_catalog_error(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A response cut short (not an ``OSError``) is reported, not raised as is."""
+
+    class TruncatedResponse:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args) -> None:
+            pass
+
+        def read(self, _size: int) -> bytes:
+            raise http.client.IncompleteRead(b"{", 100)
+
+    monkeypatch.setattr(
+        urllib.request, "urlopen", lambda *_args, **_kwargs: TruncatedResponse()
+    )
+    with pytest.raises(CatalogError, match="Cannot download"):
+        fetch_catalog("https://example.org/catalog.json")
 
 
 if __name__ == "__main__":

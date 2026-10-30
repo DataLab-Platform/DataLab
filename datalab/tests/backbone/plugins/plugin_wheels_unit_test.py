@@ -168,6 +168,29 @@ def test_inspection_rejects_duplicate_dist_info_directories() -> None:
         inspect(data)
 
 
+@pytest.mark.parametrize("damage", ["local header", "compressed data"])
+def test_inspection_rejects_damaged_members(damage: str) -> None:
+    """A member damaged behind a valid central directory is an inspection error.
+
+    Reading it raises ``zipfile.BadZipFile`` or ``zlib.error``, which are not
+    ``ValueError``: unconverted, they would escape the callers.
+    """
+    data = bytearray(make_plugin_wheel())
+    name = b"example_datalab_plugin-1.2.0.dist-info/WHEEL"
+    header = data.rfind(b"PK\x03\x04", 0, data.find(name))
+    if damage == "local header":
+        data[header + 3] = 0xFE
+    else:
+        # Local header: 30 bytes, then the name and extra field
+        name_length = int.from_bytes(data[header + 26 : header + 28], "little")
+        extra_length = int.from_bytes(data[header + 28 : header + 30], "little")
+        start = header + 30 + name_length + extra_length
+        data[start : start + 8] = b"\xff" * 8
+
+    with pytest.raises(WheelInspectionError, match="cannot be read"):
+        inspect(bytes(data))
+
+
 def test_inspection_rejects_oversized_wheel(monkeypatch: pytest.MonkeyPatch) -> None:
     """The archive size is bounded before it is opened."""
     data = make_plugin_wheel()

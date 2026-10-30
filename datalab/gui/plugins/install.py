@@ -10,6 +10,7 @@ the plugins installed this way.
 
 from __future__ import annotations
 
+import logging
 import os.path as osp
 from collections.abc import Callable
 from datetime import datetime
@@ -55,11 +56,17 @@ class _Task(QC.QThread):
         self._function = function
 
     def run(self) -> None:
-        """Call the operation and report expected file or validation errors."""
+        """Call the operation and report its errors, expected or not."""
         try:
             result = self._function()
         except (OSError, ValueError) as exc:
             self.failed.emit(str(exc))
+            return
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            # Escaping this thread, the exception would emit no signal at all: the
+            # caller would wait forever for the end of the operation
+            logging.getLogger(__name__).exception("Plugin operation failed")
+            self.failed.emit(f"{type(exc).__name__}: {exc}")
             return
         self.succeeded.emit(result)
 
