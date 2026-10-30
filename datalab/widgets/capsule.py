@@ -98,6 +98,8 @@ def _safe_filename(name: str) -> str:
 def _note(text: str) -> QW.QLabel:
     """Return a subdued, word-wrapped label."""
     label = QW.QLabel(text)
+    # Never interpreted as HTML: shown texts may come from a capsule or a registry
+    label.setTextFormat(QC.Qt.PlainText)
     label.setWordWrap(True)
     apply_subdued_color(label)
     return label
@@ -113,6 +115,8 @@ def _error(text: str = "") -> QW.QLabel:
 def _text(text: str = "") -> QW.QLabel:
     """Return a selectable, word-wrapped label."""
     label = QW.QLabel(text)
+    # Never interpreted as HTML: shown texts may come from a capsule or a registry
+    label.setTextFormat(QC.Qt.PlainText)
     label.setWordWrap(True)
     label.setTextInteractionFlags(QC.Qt.TextSelectableByMouse)
     return label
