@@ -11,6 +11,7 @@ PlotPy to integrate with DataLab's data model and GUI.
 __all__ = [
     "CURVESTYLES",
     "LINE_STYLE_KEYS",
+    "LINE_WIDTH_KEY",
     "CircularROIPlotPyAdapter",
     "CurveStyles",
     "GeometryPlotPyAdapter",
@@ -54,6 +55,7 @@ from .factories import DataLabPlotPyAdapterFactory
 from .objects.adapters import (
     CURVESTYLES,
     LINE_STYLE_KEYS,
+    LINE_WIDTH_KEY,
     CurveStyles,
     ImageObjPlotPyAdapter,
     SignalObjPlotPyAdapter,
