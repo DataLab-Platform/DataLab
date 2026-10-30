@@ -589,6 +589,12 @@ msgstr "L'ajout, le collage ou la suppression de métadonnées marque désormais
 msgid "Importing metadata from a file into an object (**Edit > Metadata > Import metadata**) no longer gives it the identity of the object the metadata were exported from: two objects sharing an identity confused source references in titles, **Select source objects** and the saving of the workspace"
 msgstr "L'import de métadonnées depuis un fichier dans un objet (**Édition > Métadonnées > Importer les métadonnées**) ne lui donne plus l'identité de l'objet dont les métadonnées avaient été exportées : deux objets partageant une identité perturbaient les références aux sources dans les titres, **Sélectionner les objets source** et l'enregistrement de l'espace de travail"
 
+msgid "Fixed the **Inverse ROI logic** option of image ROIs being lost when validating the ROI editor: the option had no effect when set in the coordinates dialog of the editor (e.g., **Rectangular ROI**), and image ROIs created with it (e.g., by a macro) lost it once edited"
+msgstr "Correction de la perte de l'option **Inverser la logique de la ROI** des ROI d'image lors de la validation de l'éditeur de ROI : l'option restait sans effet lorsqu'elle était définie dans la boîte de dialogue de coordonnées de l'éditeur (par exemple **ROI rectangulaire**), et les ROI d'image créées avec cette option (par exemple par une macro) la perdaient une fois modifiées"
+
+msgid "Fixed ROIs defined in pixel indices (e.g., by a macro or with the remote control) being converted to physical coordinates when the ROI editor was validated. They now stay in pixel indices, also when moved in the editor"
+msgstr "Correction des ROI définies en indices de pixels (par exemple par une macro ou par le contrôle à distance), qui étaient converties en coordonnées physiques lors de la validation de l'éditeur de ROI. Elles restent désormais en indices de pixels, y compris lorsqu'elles sont déplacées dans l'éditeur"
+
 msgid "**Processing:**"
 msgstr "**Traitements :**"
 

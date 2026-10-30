@@ -264,6 +264,11 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 * Adding, pasting or deleting metadata now marks the workspace as modified, so DataLab asks to save these changes before closing
 * Importing metadata from a file into an object (**Edit > Metadata > Import metadata**) no longer gives it the identity of the object the metadata were exported from: two objects sharing an identity confused source references in titles, **Select source objects** and the saving of the workspace
 
+**Regions of interest:**
+
+* Fixed the **Inverse ROI logic** option of image ROIs being lost when validating the ROI editor: the option had no effect when set in the coordinates dialog of the editor (e.g., **Rectangular ROI**), and image ROIs created with it (e.g., by a macro) lost it once edited
+* Fixed ROIs defined in pixel indices (e.g., by a macro or with the remote control) being converted to physical coordinates when the ROI editor was validated. They now stay in pixel indices, also when moved in the editor
+
 **Processing:**
 
 * Results of the extraction of several regions of interest into a single object can be processed again: the **Processing** tab showed "Unknown computing feature: extract_rois" with **Reapply** disabled, and replaying the History skipped the action
