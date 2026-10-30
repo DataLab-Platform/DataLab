@@ -49,6 +49,9 @@ class PluginStatus(sigimax.widgets.status.BaseStatus):
         size = cls.ICON_TINT_SIZE
         pixmap = icon.pixmap(size, size)
         red_pixmap = QG.QPixmap(pixmap.size())
+        # The pixmap size is in device pixels: without the same device pixel
+        # ratio, the icon would only cover part of the tinted pixmap at high DPI
+        red_pixmap.setDevicePixelRatio(pixmap.devicePixelRatio())
         red_pixmap.fill(QC.Qt.transparent)
         painter = QG.QPainter(red_pixmap)
         painter.drawPixmap(0, 0, pixmap)
