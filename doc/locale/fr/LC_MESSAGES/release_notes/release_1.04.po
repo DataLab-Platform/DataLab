@@ -465,6 +465,18 @@ msgstr "Les attributs de jeux de données de plus de 10 000 valeurs ne sont plus
 msgid "See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific object import, experimental origin and preview limits."
 msgstr "Le [guide de l'explorateur HDF5](../features/common/h5browser.rst) décrit l'import d'objets scientifiques, l'origine expérimentale et les limites des aperçus."
 
+msgid "**Scripts, macros and plugins:**"
+msgstr "**Scripts, macros et plugins :**"
+
+msgid "An object or a group looked up by its title, from a macro, a plugin, a remote client (e.g. `get_object(\"My signal\")`) or the Web API, is no longer silently replaced by the first one found when several objects or groups share this title (e.g. files imported twice, \"Untitled\" objects): an error now names the matching objects with their UUID, which identifies them unambiguously (HTTP 409 for the Web API)"
+msgstr "Un objet ou un groupe recherché par son titre, depuis une macro, un plugin, un client distant (par exemple `get_object(\"My signal\")`) ou l'API Web, n'est plus silencieusement remplacé par le premier trouvé lorsque plusieurs objets ou groupes portent ce titre (par exemple des fichiers importés deux fois, des objets « Untitled ») : une erreur indique désormais les objets correspondants avec leur UUID, qui les identifie sans ambiguïté (HTTP 409 pour l'API Web)"
+
+msgid "For plugin developers: `patch_title_with_ids` no longer takes the third argument (`id_func`), and the helpers of the former `s001`-style identifiers (`SHORT_ID_REGEX`, `find_by_short_id`, `find_short_ids_in_title`, `replace_short_ids_by_uuids_in_titles`, `replace_uuids_by_short_ids_in_titles`) are removed from `datalab.objectmodel`, as titles now refer to objects by their UUID"
+msgstr "Pour les développeurs de plugins : `patch_title_with_ids` ne prend plus de troisième argument (`id_func`), et les fonctions des anciens identifiants de type `s001` (`SHORT_ID_REGEX`, `find_by_short_id`, `find_short_ids_in_title`, `replace_short_ids_by_uuids_in_titles`, `replace_uuids_by_short_ids_in_titles`) sont retirées de `datalab.objectmodel`, les titres désignant désormais les objets par leur UUID"
+
+msgid "For developers of custom DataLab controllers derived from `BaseProxy`: the new `export_capsule` and `open_capsule` methods must be implemented"
+msgstr "Pour les développeurs de contrôleurs DataLab personnalisés dérivés de `BaseProxy` : les nouvelles méthodes `export_capsule` et `open_capsule` doivent être implémentées"
+
 msgid "🛠️ Bug Fixes"
 msgstr "🛠️ Corrections de bugs"
 

@@ -200,6 +200,12 @@ Signals, images and groups can now be deleted directly from the lists, as in Dat
 
 See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific object import, experimental origin and preview limits.
 
+**Scripts, macros and plugins:**
+
+* An object or a group looked up by its title, from a macro, a plugin, a remote client (e.g. `get_object("My signal")`) or the Web API, is no longer silently replaced by the first one found when several objects or groups share this title (e.g. files imported twice, "Untitled" objects): an error now names the matching objects with their UUID, which identifies them unambiguously (HTTP 409 for the Web API)
+* For plugin developers: `patch_title_with_ids` no longer takes the third argument (`id_func`), and the helpers of the former `s001`-style identifiers (`SHORT_ID_REGEX`, `find_by_short_id`, `find_short_ids_in_title`, `replace_short_ids_by_uuids_in_titles`, `replace_uuids_by_short_ids_in_titles`) are removed from `datalab.objectmodel`, as titles now refer to objects by their UUID
+* For developers of custom DataLab controllers derived from `BaseProxy`: the new `export_capsule` and `open_capsule` methods must be implemented
+
 ### 🛠️ Bug Fixes ###
 
 **Performance with many objects:**
