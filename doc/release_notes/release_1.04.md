@@ -169,6 +169,10 @@ Signals, images and groups can now be deleted directly from the lists, as in Dat
 * Opening, selecting, and displaying large generated campaigns no longer repeats a complete workspace and plot refresh for every object
 * Native HDF5 workspaces and multi-object recipe results now load in groups, making large signal and image collections available substantially faster while preserving every selected and visible object
 
+**Image display responsiveness:**
+
+* Moving or resizing regions of interest, annotations and markers over images is now much smoother, as the image is no longer rendered again for each mouse move: with a 2048 × 2048 image, each mouse move takes about 5 ms instead of 13 ms (13 ms instead of 33 ms with a 200% display scaling). Panning and zooming images without masked pixels are also up to 25% faster (requires PlotPy ≥ 2.12.1)
+
 **Portable plot annotations:**
 
 * Plot annotations are now stored in a renderer-independent format shared with DataLab-Web, so annotations in workspaces and `.dlabann` files are no longer tied to PlotPy

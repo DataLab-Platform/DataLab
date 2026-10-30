@@ -399,6 +399,13 @@ msgstr "L'ouverture, la sélection et l'affichage de grandes campagnes généré
 msgid "Native HDF5 workspaces and multi-object recipe results now load in groups, making large signal and image collections available substantially faster while preserving every selected and visible object"
 msgstr "Les espaces de travail HDF5 natifs et les résultats de méthodes multi-objets se chargent désormais par lots, ce qui rend les grandes collections de signaux et d'images disponibles nettement plus vite tout en préservant chaque objet sélectionné et visible"
 
+msgid "**Image display responsiveness:**"
+msgstr "**Réactivité de l'affichage des images :**"
+
+#, python-format
+msgid "Moving or resizing regions of interest, annotations and markers over images is now much smoother, as the image is no longer rendered again for each mouse move: with a 2048 × 2048 image, each mouse move takes about 5 ms instead of 13 ms (13 ms instead of 33 ms with a 200% display scaling). Panning and zooming images without masked pixels are also up to 25% faster (requires PlotPy ≥ 2.12.1)"
+msgstr "Le déplacement ou le redimensionnement de régions d'intérêt, d'annotations et de marqueurs sur les images est désormais beaucoup plus fluide, car l'image n'est plus recalculée à chaque mouvement de la souris : avec une image de 2048 × 2048 pixels, chaque mouvement de la souris prend environ 5 ms au lieu de 13 ms (13 ms au lieu de 33 ms avec une mise à l'échelle de l'affichage de 200 %). Le déplacement et le zoom des images sans pixels masqués sont également jusqu'à 25 % plus rapides (nécessite PlotPy ≥ 2.12.1)"
+
 msgid "**Portable plot annotations:**"
 msgstr "**Annotations de tracé portables :**"
 
