@@ -111,14 +111,6 @@ class H5InputOutput:
                 _("The provenance data of this workspace are invalid: %s") % exc
             ) from exc
 
-    @staticmethod
-    def __saved_version(reader: NativeH5Reader) -> str | None:
-        """Return the DataLab version that saved the file, as stored."""
-        value = reader.version[()]
-        if isinstance(value, bytes):
-            value = value.decode("utf-8", "replace")
-        return value if isinstance(value, str) else None
-
     def __data_objects(self) -> list[SignalObj | ImageObj]:
         """Return the objects of the signal and image panels."""
         return [
@@ -176,7 +168,7 @@ class H5InputOutput:
         try:
             reader = NativeH5Reader(filename)
             block = self.__read_provenance(reader)
-            saved_version = self.__saved_version(reader)
+            saved_version = reader.saved_version
             if reset_all:
                 self.mainwindow.reset_all()
             before = {id(obj) for obj in self.__data_objects()}
@@ -233,7 +225,7 @@ class H5InputOutput:
         try:
             reader = NativeH5Reader(filename)
             block = self.__read_provenance(reader)
-            saved_version = self.__saved_version(reader)
+            saved_version = reader.saved_version
             if block is not None and not reset_all and not self.__confirm_append():
                 self.cancelled_files.append(filename)
                 return True

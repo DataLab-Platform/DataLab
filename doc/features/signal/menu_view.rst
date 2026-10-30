@@ -144,6 +144,10 @@ This menu entry removes the colors and line styles chosen for the selected signa
 so that their curves are assigned automatic styles again.
 
 .. note::
-    Workspaces saved with DataLab 1.3 or earlier store the automatic style of
-    each curve: these styles are recognized as automatic styles, and are replaced
-    by the current ones.
+    Workspaces and history files saved with DataLab 1.3 or earlier store the
+    automatic style of each curve: when opening them, these styles are removed
+    from the metadata of the signals, whose curves are assigned the current
+    automatic styles. A color and a line style chosen at that time cannot be told
+    apart from an automatic style when they are identical to one of them: they
+    are removed as well. Files saved with later versions, as well as metadata
+    imported from a file, are not converted.

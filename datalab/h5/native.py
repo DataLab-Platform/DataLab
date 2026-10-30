@@ -19,6 +19,7 @@ from typing import Any, Callable
 
 from guidata.io import HDF5Reader, HDF5Writer
 from guidata.io.h5fmt import NoDefault
+from packaging.version import InvalidVersion, Version
 
 import datalab
 
@@ -26,6 +27,30 @@ DATALAB_VERSION_NAME = "DataLab_Version"
 DATALAB_PACKAGE_NAME = "datalab"
 
 H5_CALLABLE_PREFIX = "#callable#"
+
+#: First DataLab version which no longer stores automatic curve styles in signal
+#: metadata (earlier versions stored them, see :func:`is_legacy_style_version`)
+NON_PERSISTENT_CURVE_STYLES_VERSION = (1, 4)
+
+
+def is_legacy_style_version(version: str | None) -> bool:
+    """Return True if a file saved by the given DataLab version may store automatic
+    curve styles in signal metadata (DataLab 1.3 or earlier)
+
+    Args:
+        version: DataLab version that saved the file, as stored in the file
+
+    Returns:
+        True if the version is earlier than 1.4 (pre-releases of 1.4 included in
+        1.4); False if it is 1.4 or later, missing or invalid
+    """
+    if not isinstance(version, str):
+        return False
+    try:
+        release = Version(version).release
+    except InvalidVersion:
+        return False
+    return release < NON_PERSISTENT_CURVE_STYLES_VERSION
 
 
 class NativeH5Writer(HDF5Writer):
@@ -140,6 +165,25 @@ class NativeH5Reader(HDF5Reader):
     def __init__(self, filename: str) -> None:
         super().__init__(filename)
         self.version = self.h5[DATALAB_VERSION_NAME]
+        self.__saved_version: str | None = None
+        self.__saved_version_read = False
+
+    @property
+    def saved_version(self) -> str | None:
+        """DataLab version that saved the file, or None if it is not readable"""
+        if not self.__saved_version_read:
+            value = self.version[()]
+            if isinstance(value, bytes):
+                value = value.decode("utf-8", "replace")
+            self.__saved_version = value if isinstance(value, str) else None
+            self.__saved_version_read = True
+        return self.__saved_version
+
+    @property
+    def has_legacy_curve_styles(self) -> bool:
+        """True if the file was saved by a DataLab version which stored automatic
+        curve styles in signal metadata (DataLab 1.3 or earlier)"""
+        return is_legacy_style_version(self.saved_version)
 
     @staticmethod
     def deserialize_func_or_class(obj: str) -> Callable | type:
