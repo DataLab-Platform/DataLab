@@ -217,6 +217,11 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 **Window layout:**
 
 * Fixed the width of the signal/image panels not being restored at startup: after narrowing the panels and restarting DataLab, they came back wider (up to their maximum width) instead of keeping the width chosen by the user
+* Fixed DataLab failing to start when its configuration file held an invalid window layout or an invalid log file name (e.g., after editing the file by hand): such settings are now ignored, and the default ones are used
+
+**Console:**
+
+* Fixed the console still being shown on errors after disabling **Show console on error** in the Settings dialog (with Qt 5, when the setting was enabled at startup), until DataLab was restarted
 
 **Display scaling:**
 
@@ -248,6 +253,7 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 * Fixed datasets stored in other files, such as the detector data of synchrotron master files, missing from the HDF5 browser even when these files are available: the datasets reached through an external link were looked up at their path in their own file, so that they were skipped, or the data of another dataset of the opened file, found at that path, was imported instead. They are now listed and imported at their path in the opened file
 * Fixed HDF5 files whose name contains a comma failing to open: the comma was taken for the separator between a file name and the name of a dataset to import. When appending such a workspace, the question about clearing the workspace also did not mention that its provenance is not imported, and an append cancelled by the user was still recorded in the History panel
 * Fixed datasets holding a single row of values (e.g., a single scan stored as a 1 × N array) being silently skipped when imported from an HDF5 file: they are now imported and previewed as signals
+* Fixed an error when clicking **Show array** in the HDF5 browser after selecting a group with the keyboard, or after closing the file of the selected dataset: the button now only shows arrays, and is disabled once the file is closed
 
 **Workspace saving:**
 

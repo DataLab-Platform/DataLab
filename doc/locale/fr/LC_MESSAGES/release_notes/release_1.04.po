@@ -498,6 +498,15 @@ msgstr "**Disposition de la fenêtre :**"
 msgid "Fixed the width of the signal/image panels not being restored at startup: after narrowing the panels and restarting DataLab, they came back wider (up to their maximum width) instead of keeping the width chosen by the user"
 msgstr "Correction de la largeur des panneaux Signal/Image non restaurée au démarrage : après avoir réduit les panneaux puis redémarré DataLab, ils réapparaissaient plus larges (jusqu'à leur largeur maximale) au lieu de conserver la largeur choisie par l'utilisateur"
 
+msgid "Fixed DataLab failing to start when its configuration file held an invalid window layout or an invalid log file name (e.g., after editing the file by hand): such settings are now ignored, and the default ones are used"
+msgstr "Correction de l'échec du démarrage de DataLab lorsque son fichier de configuration contenait une disposition de fenêtre ou un nom de fichier journal invalide (par exemple après une modification manuelle du fichier) : ces paramètres sont désormais ignorés, et les paramètres par défaut sont utilisés"
+
+msgid "**Console:**"
+msgstr "**Console :**"
+
+msgid "Fixed the console still being shown on errors after disabling **Show console on error** in the Settings dialog (with Qt 5, when the setting was enabled at startup), until DataLab was restarted"
+msgstr "Correction de la console qui restait affichée en cas d'erreur après la désactivation de **Afficher la console en cas d'erreur** dans la boîte de dialogue des préférences (avec Qt 5, lorsque ce paramètre était activé au démarrage), jusqu'au redémarrage de DataLab"
+
 msgid "**Display scaling:**"
 msgstr "**Mise à l'échelle de l'affichage :**"
 
@@ -561,6 +570,9 @@ msgstr "Correction de l'échec d'ouverture des fichiers HDF5 dont le nom contien
 
 msgid "Fixed datasets holding a single row of values (e.g., a single scan stored as a 1 × N array) being silently skipped when imported from an HDF5 file: they are now imported and previewed as signals"
 msgstr "Correction des jeux de données contenant une seule ligne de valeurs (par exemple, un scan unique stocké sous forme de tableau 1 × N), qui étaient ignorés sans message lors de leur import depuis un fichier HDF5 : ils sont désormais importés et prévisualisés comme des signaux"
+
+msgid "Fixed an error when clicking **Show array** in the HDF5 browser after selecting a group with the keyboard, or after closing the file of the selected dataset: the button now only shows arrays, and is disabled once the file is closed"
+msgstr "Correction d'une erreur lors d'un clic sur **Afficher le tableau** dans l'explorateur HDF5 après la sélection d'un groupe au clavier, ou après la fermeture du fichier du jeu de données sélectionné : le bouton n'affiche désormais que des tableaux, et il est désactivé une fois le fichier fermé"
 
 msgid "**Workspace saving:**"
 msgstr "**Enregistrement de l'espace de travail :**"
