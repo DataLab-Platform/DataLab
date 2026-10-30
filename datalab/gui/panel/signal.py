@@ -38,6 +38,7 @@ if TYPE_CHECKING:
     from qtpy import QtWidgets as QW
 
     from datalab.gui.docks import DockablePlotWidget
+    from datalab.h5.native import NativeH5Reader
 
 
 class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]):
@@ -87,6 +88,32 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
         self.processor = SignalProcessor(self, dockableplotwidget.plotwidget)
         view_toolbar = dockableplotwidget.toolbar
         self.acthandler = SignalActionHandler(self, panel_toolbar, view_toolbar)
+
+    def deserialize_object_from_hdf5(
+        self, reader: NativeH5Reader, name: str, reset_all: bool = False
+    ) -> SignalObj:
+        """Deserialize object from a HDF5 file
+
+        DataLab 1.3 and earlier stored automatic curve styles in signal metadata:
+        when loading a file saved by these versions, the colors and line styles of
+        their automatic style cycle are removed, so that curves are given the
+        current automatic styles. Other stored styles are kept.
+
+        Args:
+            reader: HDF5 reader
+            name: Object name in HDF5 file
+            reset_all: If True, preserve original UUIDs (workspace reload).
+             If False, regenerate only UUIDs that conflict with existing
+             objects (object import).
+        """
+        obj = super().deserialize_object_from_hdf5(reader, name, reset_all)
+        metadata = obj.metadata
+        if reader.has_legacy_curve_styles and CURVESTYLES.is_legacy_automatic(
+            *(metadata.get(key) for key in LINE_STYLE_KEYS)
+        ):
+            for key in LINE_STYLE_KEYS:
+                metadata.pop(key, None)
+        return obj
 
     # ------Creating, adding, removing objects------------------------------------------
     def get_newparam_from_current(
