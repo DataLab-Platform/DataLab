@@ -9,9 +9,11 @@ ROI editor unit test
 
 from __future__ import annotations
 
+import copy
+
 import numpy as np
 from guidata.qthelpers import exec_dialog, qt_app_context
-from sigima.objects import ImageROI, create_image_roi, create_signal_roi
+from sigima.objects import ImageROI, create_image, create_image_roi, create_signal_roi
 from sigima.tests.data import create_multigaussian_image, create_paracetamol_signal
 
 from datalab.env import execenv
@@ -140,6 +142,32 @@ def test_image_roi_editor_contrast_sync() -> None:
         assert panel.applied[-1][3] is editor
 
 
+def test_image_roi_editor_keeps_roi_attributes() -> None:
+    """ROIs edited in the image ROI editor keep their coordinate system (pixel
+    indices or physical coordinates) and their inverse logic, whether they are
+    moved or not"""
+    obj = create_image("Test image", np.zeros((60, 80)))
+    obj.set_uniform_coords(0.5, 0.5, 10.0, -5.0)
+    roi = create_image_roi("rectangle", [3, 4, 20, 10], indices=True, inverse=True)
+    roi.add_roi(create_image_roi("circle", [40, 30, 8], indices=True))
+    roi.add_roi(create_image_roi("rectangle", [30.0, 5.0, 4.0, 3.0], inverse=True))
+    obj.roi = roi
+    originals = copy.deepcopy(roi.single_rois)
+    with qt_app_context(exec_loop=False):
+        editor = ImageROIEditor(parent=None, obj=obj, mode="apply", size=(800, 600))
+        # Move the first ROI by 2 pixels along X and 3 pixels along Y
+        moved_item = editor.get_roi_items()[0]
+        moved_item.shape.move_shape([0.0, 0.0], [2 * obj.dx, 3 * obj.dy])
+        editor.accept()
+        edited, _modified = editor.get_roieditor_results()
+    moved, *unmoved = edited.single_rois
+    assert moved.indices and moved.inverse
+    assert moved.coords.tolist() == [5, 7, 20, 10]
+    assert unmoved == originals[1:]
+    assert [sroi.inverse for sroi in unmoved] == [False, True]
+
+
 if __name__ == "__main__":
     test_signal_roi_editor(screenshots=True)
     test_image_roi_editor(screenshots=True)
+    test_image_roi_editor_keeps_roi_attributes()
