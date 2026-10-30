@@ -517,6 +517,17 @@ msgstr "Correction du flou de l'écran de démarrage, du logo DataLab de la page
 msgid "Fixed most of the text of the user interface (welcome page, object properties, panel tabs, dialog boxes, ...) keeping its 100% size with a Windows display scaling greater than 100% (e.g., 125%), while menus and the status bar were enlarged. All the text now follows the display scaling and the Windows text size setting, and uses the standard font of Windows applications (\"Segoe UI\"). This affected DataLab running with Qt 5, like the standalone application (requires guidata ≥ 3.16.1)"
 msgstr "Correction de la majeure partie du texte de l'interface (page d'accueil, propriétés des objets, onglets des panneaux, boîtes de dialogue, ...) qui conservait sa taille à 100 % avec une mise à l'échelle de l'affichage Windows supérieure à 100 % (par exemple 125 %), alors que les menus et la barre d'état étaient agrandis. Tout le texte suit désormais la mise à l'échelle de l'affichage et le réglage de la taille du texte de Windows, et utilise la police standard des applications Windows (« Segoe UI »). Cela concernait DataLab exécuté avec Qt 5, comme l'application autonome (nécessite guidata ≥ 3.16.1)"
 
+#, python-format
+msgid "Fixed the line of the X axis of signal and image plots not being drawn with a display scaling such as 125% or 150%, depending on the size and position of the plot in the window (requires PythonQwt ≥ 0.17.1)"
+msgstr "Correction de la ligne de l'axe des X des graphiques de signaux et d'images, qui n'était pas tracée avec une mise à l'échelle de l'affichage de 125 % ou 150 % par exemple, selon la taille et la position du graphique dans la fenêtre (nécessite PythonQwt ≥ 0.17.1)"
+
+#, python-format
+msgid "Fixed images being displayed with a lower resolution than the screen with a display scaling greater than 100%: with a 200% scaling, images were shown with half the resolution of the screen, and with 125%, one screen pixel row and column out of five were duplicated, which made fine details (e.g., noise) look irregular. Images are now displayed at the resolution of the screen (requires PlotPy ≥ 2.12.1)"
+msgstr "Correction des images affichées avec une résolution inférieure à celle de l'écran avec une mise à l'échelle de l'affichage supérieure à 100 % : avec une mise à l'échelle de 200 %, les images étaient affichées avec la moitié de la résolution de l'écran, et avec 125 %, une ligne et une colonne de pixels de l'écran sur cinq étaient dupliquées, ce qui rendait irréguliers les détails fins (par exemple le bruit). Les images sont désormais affichées à la résolution de l'écran (nécessite PlotPy ≥ 2.12.1)"
+
+msgid "Fixed the red plugin icon of the status bar (shown when some plugins failed to load) being too small and shifted to the top-left corner with a display scaling greater than 100% (e.g., half its size with 200%)"
+msgstr "Correction de l'icône rouge des plugins dans la barre d'état (affichée lorsque des plugins n'ont pas pu être chargés), qui était trop petite et décalée vers le coin supérieur gauche avec une mise à l'échelle de l'affichage supérieure à 100 % (par exemple réduite de moitié avec 200 %)"
+
 msgid "**Plot watermark:**"
 msgstr "**Filigrane des graphiques :**"
 

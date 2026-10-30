@@ -227,6 +227,9 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 
 * Fixed the splash screen, the DataLab logo of the welcome page and of the guided tour, and the watermark of empty plots being blurry with a Windows display scaling greater than 100% (e.g., 125%): they are now displayed at the resolution of the screen
 * Fixed most of the text of the user interface (welcome page, object properties, panel tabs, dialog boxes, ...) keeping its 100% size with a Windows display scaling greater than 100% (e.g., 125%), while menus and the status bar were enlarged. All the text now follows the display scaling and the Windows text size setting, and uses the standard font of Windows applications ("Segoe UI"). This affected DataLab running with Qt 5, like the standalone application (requires guidata ≥ 3.16.1)
+* Fixed the line of the X axis of signal and image plots not being drawn with a display scaling such as 125% or 150%, depending on the size and position of the plot in the window (requires PythonQwt ≥ 0.17.1)
+* Fixed images being displayed with a lower resolution than the screen with a display scaling greater than 100%: with a 200% scaling, images were shown with half the resolution of the screen, and with 125%, one screen pixel row and column out of five were duplicated, which made fine details (e.g., noise) look irregular. Images are now displayed at the resolution of the screen (requires PlotPy ≥ 2.12.1)
+* Fixed the red plugin icon of the status bar (shown when some plugins failed to load) being too small and shifted to the top-left corner with a display scaling greater than 100% (e.g., half its size with 200%)
 
 **Plot watermark:**
 
