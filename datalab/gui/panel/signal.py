@@ -24,7 +24,7 @@ from plotpy.tools import (
 from sigima.io.signal import SignalIORegistry
 from sigima.objects import SignalObj, SignalROI
 
-from datalab.adapters_plotpy import CURVESTYLES, LINE_STYLE_KEYS
+from datalab.adapters_plotpy import CURVESTYLES, LINE_STYLE_KEYS, LINE_WIDTH_KEY
 from datalab.config import Conf, _
 from datalab.gui import roieditor
 from datalab.gui.actionhandler import SignalActionHandler
@@ -39,6 +39,10 @@ if TYPE_CHECKING:
 
     from datalab.gui.docks import DockablePlotWidget
     from datalab.h5.native import NativeH5Reader
+
+#: Line width stored by DataLab 1.3 or earlier for curves drawn with the default
+#: line width, or with a line width clamped for curves with many points
+LEGACY_AUTOMATIC_LINE_WIDTH = 1.0
 
 
 class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]):
@@ -97,7 +101,11 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
         DataLab 1.3 and earlier stored automatic curve styles in signal metadata:
         when loading a file saved by these versions, the colors and line styles of
         their automatic style cycle are removed, so that curves are given the
-        current automatic styles. Other stored styles are kept.
+        current automatic styles. Other stored styles are kept. These versions
+        also stored the line width of every curve: a line width of 1.0 (the
+        default width, also used for curves with many points) is removed, so that
+        curves are given the configured line width; other widths were chosen by
+        the user and are kept.
 
         Args:
             reader: HDF5 reader
@@ -108,11 +116,14 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
         """
         obj = super().deserialize_object_from_hdf5(reader, name, reset_all)
         metadata = obj.metadata
-        if reader.has_legacy_curve_styles and CURVESTYLES.is_legacy_automatic(
-            *(metadata.get(key) for key in LINE_STYLE_KEYS)
-        ):
-            for key in LINE_STYLE_KEYS:
-                metadata.pop(key, None)
+        if reader.has_legacy_curve_styles:
+            if CURVESTYLES.is_legacy_automatic(
+                *(metadata.get(key) for key in LINE_STYLE_KEYS)
+            ):
+                for key in LINE_STYLE_KEYS:
+                    metadata.pop(key, None)
+            if metadata.get(LINE_WIDTH_KEY) == LEGACY_AUTOMATIC_LINE_WIDTH:
+                metadata.pop(LINE_WIDTH_KEY)
         return obj
 
     # ------Creating, adding, removing objects------------------------------------------

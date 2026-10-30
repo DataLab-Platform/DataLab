@@ -6,8 +6,8 @@ Curve style unit tests
 
 Automatic curve styles depend on the position of the curves on the plot, are not
 stored in signal metadata, and are not shifted by dialogs showing signals. Curve
-styles chosen by the user are kept. Automatic styles stored by DataLab 1.3 or
-earlier are removed when loading files saved by these versions.
+styles chosen by the user are kept. Automatic styles and line widths of 1.0 stored by
+DataLab 1.3 or earlier are removed when loading files saved by these versions.
 """
 
 # guitest: show
@@ -26,9 +26,11 @@ from sigima.objects import SignalObj, create_signal
 from datalab.adapters_plotpy import (
     CURVESTYLES,
     LINE_STYLE_KEYS,
+    LINE_WIDTH_KEY,
     CurveStyles,
     create_adapter_from_object,
 )
+from datalab.config import Conf
 from datalab.gui.main import DLMainWindow
 from datalab.gui.panel.signal import SignalPanel
 from datalab.h5.native import DATALAB_VERSION_NAME, is_legacy_style_version
@@ -232,6 +234,37 @@ def test_legacy_styles_converted_on_load() -> None:
             assert _style(_item(panel, loaded[2])) == (LEGACY_STYLE[0], "DotLine")
 
 
+def test_legacy_line_widths_converted_on_load() -> None:
+    """Line widths of 1.0 stored by DataLab 1.3 or earlier (default or clamped
+    width) are removed on load, other stored line widths are kept"""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        with datalab_test_app_context(console=False, exec_loop=False) as win:
+            panel = win.signalpanel
+            signals = _create_signals(3)
+            signals[0].metadata[LINE_WIDTH_KEY] = 1.0
+            signals[1].metadata[LINE_WIDTH_KEY] = 2.5
+            panel.add_objects(signals, set_current=False)
+            panel.objview.select_objects(signals)
+            fname = osp.join(tmpdir, "legacy_line_widths.h5")
+            win.save_h5_workspace(fname)
+
+            with Conf.sig_linewidth.context(3.0):
+                # Saved by the current version: stored line widths are kept
+                loaded = _reload_workspace(win, fname)
+                widths = [obj.metadata.get(LINE_WIDTH_KEY) for obj in loaded]
+                assert widths == [1.0, 2.5, None]
+                drawn = [_item(panel, obj).param.line.width for obj in loaded]
+                assert drawn == [1.0, 2.5, 3.0]
+
+                # Saved by DataLab 1.3: line widths of 1.0 are removed
+                _set_saved_version(fname, "1.3.0")
+                loaded = _reload_workspace(win, fname)
+                widths = [obj.metadata.get(LINE_WIDTH_KEY) for obj in loaded]
+                assert widths == [None, 2.5, None]
+                drawn = [_item(panel, obj).param.line.width for obj in loaded]
+                assert drawn == [3.0, 2.5, 3.0]
+
+
 def test_legacy_styles_converted_on_dlhist_import() -> None:
     """Automatic styles stored by DataLab 1.3 or earlier are removed when importing
     a history file in a workspace in use"""
@@ -282,5 +315,6 @@ if __name__ == "__main__":
     test_user_styles_are_kept()
     test_user_style_from_legacy_cycle_is_kept()
     test_legacy_styles_converted_on_load()
+    test_legacy_line_widths_converted_on_load()
     test_legacy_styles_converted_on_dlhist_import()
     test_reset_curve_styles()

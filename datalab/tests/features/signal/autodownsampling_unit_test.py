@@ -6,12 +6,14 @@ Signal auto downsampling unit tests
 
 Signal display settings (auto downsampling, line width) are applied to the curves of
 all signals when they are changed in the Settings dialog, and not only to the curves
-of the selected signals.
+of the selected signals, including the curves of a reloaded workspace.
 """
 
 # guitest: show
 
 from __future__ import annotations
+
+import os.path as osp
 
 import numpy as np
 import pytest
@@ -25,7 +27,7 @@ from datalab.gui.main import DLMainWindow
 from datalab.gui.panel.signal import SignalPanel
 from datalab.gui.settings import ViewSettings
 from datalab.objectmodel import get_uuid
-from datalab.tests import datalab_test_app_context
+from datalab.tests import datalab_test_app_context, helpers
 
 #: Number of points of the test signals
 SIZES = (1_000, 30_000, 300_000)
@@ -143,6 +145,27 @@ def test_line_width_applies_to_all_curves(monkeypatch: pytest.MonkeyPatch) -> No
             item = _item(panel, obj)
             assert item.param.line.width == 2.0, obj.title
             assert item.pen().widthF() == 2.0, obj.title
+
+
+def test_line_width_applies_to_reloaded_curves(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Line width settings are applied to the curves of a reloaded workspace, and
+    are still clamped for curves with many points"""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        with datalab_test_app_context(console=False, exec_loop=False) as win:
+            panel = win.signalpanel
+            threshold = Conf.sig_linewidth_perfs_threshold.get()
+            _add_signals(panel, _create_signals((100, 200, threshold + 1)))
+            fname = osp.join(tmpdir, "line_width.h5")
+            win.save_h5_workspace(fname)
+            panel.remove_all_objects()
+            win.load_h5_workspace([fname], reset_all=True)
+            loaded = panel.objmodel.get_all_objects()
+            panel.objview.select_objects(loaded)
+            _edit_settings(win, monkeypatch, sig_linewidth=2.0)
+            for obj in loaded:
+                assert "width" not in obj.metadata, obj.title
+                expected = 1.0 if obj.x.size > threshold else 2.0
+                assert _item(panel, obj).param.line.width == expected, obj.title
 
 
 def test_settings_update_keeps_shapes(monkeypatch: pytest.MonkeyPatch) -> None:
