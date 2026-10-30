@@ -496,6 +496,12 @@ msgstr "Correction du flou de l'écran de démarrage, du logo DataLab de la page
 msgid "Fixed most of the text of the user interface (welcome page, object properties, panel tabs, dialog boxes, ...) keeping its 100% size with a Windows display scaling greater than 100% (e.g., 125%), while menus and the status bar were enlarged. All the text now follows the display scaling and the Windows text size setting, and uses the standard font of Windows applications (\"Segoe UI\"). This affected DataLab running with Qt 5, like the standalone application (requires guidata ≥ 3.16.1)"
 msgstr "Correction de la majeure partie du texte de l'interface (page d'accueil, propriétés des objets, onglets des panneaux, boîtes de dialogue, ...) qui conservait sa taille à 100 % avec une mise à l'échelle de l'affichage Windows supérieure à 100 % (par exemple 125 %), alors que les menus et la barre d'état étaient agrandis. Tout le texte suit désormais la mise à l'échelle de l'affichage et le réglage de la taille du texte de Windows, et utilise la police standard des applications Windows (« Segoe UI »). Cela concernait DataLab exécuté avec Qt 5, comme l'application autonome (nécessite guidata ≥ 3.16.1)"
 
+msgid "**Plot watermark:**"
+msgstr "**Filigrane des graphiques :**"
+
+msgid "Fixed the watermark of empty plots being read from another installation of DataLab sharing the same user configuration (e.g., DataLab installed in another Python environment): the watermark disappeared once this other installation was removed, and stayed blurry on high-DPI screens when it was an older version. The watermark of the running DataLab is now always used"
+msgstr "Correction du filigrane des graphiques vides, qui était lu dans une autre installation de DataLab partageant la même configuration utilisateur (par exemple DataLab installé dans un autre environnement Python) : le filigrane disparaissait une fois cette autre installation supprimée, et restait flou sur les écrans haute résolution lorsqu'il s'agissait d'une version plus ancienne. Le filigrane du DataLab en cours d'exécution est désormais toujours utilisé"
+
 msgid "**Signal display:**"
 msgstr "**Affichage des signaux :**"
 

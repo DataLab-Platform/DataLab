@@ -620,6 +620,10 @@ class DataLabOptions(SigimaXOptions):
         self.watermark_image_path.set(
             configtools.get_image_file_path("DataLab-watermark.png")
         )
+        # The watermark path depends on the running installation: persisting it
+        # would make other installations sharing the user configuration (e.g. in
+        # another Python environment) display this one's image.
+        self.watermark_image_path.category = ""
         self.app_docurl.set(__docurl__)
         self.app_homeurl.set(__homeurl__)
         self.app_supporturl.set(__supporturl__)
