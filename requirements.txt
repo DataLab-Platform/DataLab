@@ -1,6 +1,6 @@
 Coverage
 NumPy >= 1.22, < 2.6
-PlotPy >= 2.11.0
+PlotPy >= 2.12.0
 PyQt5 >= 5.15.6
 PyWavelets >= 1.2, < 2.0
 SciPy >= 1.10.1, < 1.19
@@ -10,7 +10,7 @@ babel
 build
 datalab-capsule >= 0.1.0, < 0.2
 fastapi >= 0.110.0
-guidata >= 3.16.0
+guidata >= 3.17.0
 httpx
 jedi >= 0.18.2
 myst_parser
