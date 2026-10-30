@@ -14,6 +14,7 @@ and replay as well.
 from __future__ import annotations
 
 import contextlib
+import os
 import os.path as osp
 import tracemalloc
 from collections.abc import Generator
@@ -397,3 +398,38 @@ def test_size_policy_refuses_export() -> None:
                     win.export_capsule(path, workspace_ref=None)
                 assert not osp.exists(path)
             assert len(win.capsuleio.revisions.revisions()) == 1
+
+
+def test_write_files_atomically() -> None:
+    """All files are replaced, or none: a failed write leaves no temporary file."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        first, second = osp.join(tmpdir, "a.h5"), osp.join(tmpdir, "b.dlcapsule")
+        capsuleio.write_files_atomically([(first, b"old a"), (second, b"old b")])
+        assert (_read(first), _read(second)) == (b"old a", b"old b")
+        with pytest.raises(TypeError):
+            # The second file cannot be written: the first one is not replaced
+            capsuleio.write_files_atomically([(first, b"new a"), (second, None)])
+        assert (_read(first), _read(second)) == (b"old a", b"old b")
+        assert sorted(os.listdir(tmpdir)) == ["a.h5", "b.dlcapsule"]
+
+
+def test_failed_export_keeps_the_previous_capsule(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Overwriting a capsule and its workspace: on failure, both are kept."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        capsule = osp.join(tmpdir, "chain.dlcapsule")
+        workspace = osp.join(tmpdir, "chain.h5")
+        with capsule_app(tmpdir) as win:
+            build_chain(win)
+            win.export_capsule(capsule, workspace_ref=REF)
+            previous = _read(capsule), _read(workspace)
+
+            def full_disk(*_args) -> None:
+                raise OSError("No space left on device")
+
+            monkeypatch.setattr(capsuleio, "set_final_permissions", full_disk)
+            with pytest.raises(OSError, match="No space left"):
+                win.export_capsule(capsule, name="other", workspace_ref=REF)
+            assert (_read(capsule), _read(workspace)) == previous
+            assert not [name for name in os.listdir(tmpdir) if name.endswith(".tmp")]

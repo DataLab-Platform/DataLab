@@ -104,7 +104,7 @@ class NativeH5Writer(HDF5Writer):
                 raise
 
 
-def _set_final_permissions(tmpname: str, filename: str) -> None:
+def set_final_permissions(tmpname: str, filename: str) -> None:
     """Give the temporary file the permissions the final file must have.
 
     Args:
@@ -147,7 +147,7 @@ def atomic_native_writer(filename: str) -> Generator[NativeH5Writer, None, None]
             yield writer
         finally:
             writer.close()
-        _set_final_permissions(tmpname, filename)
+        set_final_permissions(tmpname, filename)
         os.replace(tmpname, filename)
     except BaseException:
         with contextlib.suppress(OSError):

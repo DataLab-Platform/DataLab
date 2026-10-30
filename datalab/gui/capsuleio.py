@@ -17,6 +17,7 @@ seen on this computer (:class:`~datalab.capsulestore.RevisionStore`).
 
 from __future__ import annotations
 
+import contextlib
 import mimetypes
 import os
 import os.path as osp
@@ -38,6 +39,7 @@ from datalab_capsule.manifest import inspect_manifest
 
 from datalab.capsulestore import CapsuleRevision, RevisionStore
 from datalab.config import _
+from datalab.h5.native import set_final_permissions
 
 if TYPE_CHECKING:
     from datalab.gui.main import DLMainWindow
@@ -48,6 +50,7 @@ __all__ = [
     "attachment_entries",
     "read_bounded",
     "workspace_leaf",
+    "write_files_atomically",
 ]
 
 #: Size limits of DataLab Desktop for capsules: the default policy of
@@ -102,6 +105,40 @@ def workspace_leaf(workspace_ref: str) -> str:
     """Return the file name of a workspace published at *workspace_ref*."""
     leaf = workspace_ref.rstrip("/").rsplit("/", 1)[-1]
     return leaf if leaf and ":" not in leaf else "workspace.h5"
+
+
+def write_files_atomically(contents: Sequence[tuple[str, bytes]]) -> None:
+    """Write files without losing their previous version on failure.
+
+    Each file is first written to a temporary file of its directory. The
+    temporary files replace their targets only once all of them have been
+    written: if writing fails (full disk, interruption...), the temporary files
+    are removed and the previous files, if any, are left untouched.
+
+    Args:
+        contents: ``(filename, data)`` of the files to write.
+    """
+    temporaries: list[tuple[str, str]] = []
+    try:
+        for filename, data in contents:
+            filename = osp.abspath(filename)
+            handle, temporary = tempfile.mkstemp(
+                prefix=f".{osp.basename(filename)}.",
+                suffix=".tmp",
+                dir=osp.dirname(filename),
+            )
+            temporaries.append((temporary, filename))
+            with os.fdopen(handle, "wb") as file:
+                file.write(data)
+            set_final_permissions(temporary, filename)
+        while temporaries:
+            temporary, filename = temporaries[0]
+            os.replace(temporary, filename)
+            temporaries.pop(0)
+    finally:
+        for temporary, _filename in temporaries:
+            with contextlib.suppress(OSError):
+                os.remove(temporary)
 
 
 def attachment_entries(paths: Sequence[str]) -> list[tuple[str, str]]:
@@ -212,6 +249,8 @@ class CapsuleInputOutput:
              file, or the capsule cannot be created or would be refused when
              read back. No file is written then.
             ManifestError: If a field is invalid (workspace IRI, attachment).
+            OSError: If a file cannot be written (full disk...): the previous
+             capsule and workspace files, if any, are then left untouched.
         """
         files = []
         sources = set()
@@ -255,11 +294,10 @@ class CapsuleInputOutput:
         # Read back before writing anything: a capsule this edition refuses
         # (size policy, invalid manifest) is never written.
         manifest = read_capsule(capsule, self.policy).manifest
+        contents = [(filename, capsule)]
         if workspace_ref:
-            with open(workspace_filename, "wb") as file:
-                file.write(workspace)
-        with open(filename, "wb") as file:
-            file.write(capsule)
+            contents.insert(0, (workspace_filename, workspace))
+        write_files_atomically(contents)
         self.record_revision(manifest, "exported")
         return exchange.capsule_origin(manifest)["fingerprint"]
 
