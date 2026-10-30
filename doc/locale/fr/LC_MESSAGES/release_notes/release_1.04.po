@@ -550,6 +550,9 @@ msgstr "Correction de l'échec d'ouverture dans l'explorateur HDF5 des fichiers 
 msgid "Fixed HDF5 files containing a group linked into itself or into one of its subgroups failing to open in the HDF5 browser (the file was browsed endlessly until an error): such links back to a parent group are now skipped, while other aliases of a group or dataset are still shown at each of their paths"
 msgstr "Correction des fichiers HDF5 contenant un groupe lié dans lui-même ou dans l'un de ses sous-groupes, qui ne pouvaient pas être ouverts dans l'explorateur HDF5 (le fichier était parcouru sans fin jusqu'à une erreur) : ces liens vers un groupe parent sont désormais ignorés, tandis que les autres alias d'un groupe ou d'un jeu de données restent affichés à chacun de leurs chemins"
 
+msgid "Fixed datasets stored in other files, such as the detector data of synchrotron master files, missing from the HDF5 browser even when these files are available: the datasets reached through an external link were looked up at their path in their own file, so that they were skipped, or the data of another dataset of the opened file, found at that path, was imported instead. They are now listed and imported at their path in the opened file"
+msgstr "Correction des jeux de données stockés dans d'autres fichiers, comme les données de détecteur des fichiers maîtres de synchrotron, qui n'apparaissaient pas dans l'explorateur HDF5 même lorsque ces fichiers sont disponibles : les jeux de données atteints par un lien externe étaient recherchés à leur chemin dans leur propre fichier, si bien qu'ils étaient ignorés, ou que les données d'un autre jeu de données du fichier ouvert, situé à ce chemin, étaient importées à leur place. Ils sont désormais listés et importés à leur chemin dans le fichier ouvert"
+
 msgid "**Workspace saving:**"
 msgstr "**Enregistrement de l'espace de travail :**"
 
