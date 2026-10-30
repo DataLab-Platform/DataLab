@@ -44,6 +44,7 @@ from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilenames
 from sigima.config import options as sigima_options
 from sigima.objects import ImageObj, SignalObj, create_image, create_signal
+from sigimax.h5.utils import split_h5_file_selector
 from sigimax.mainwindow import SGMXMainWindow
 from sigimax.utils import qthelpers as sgmx_qth
 
@@ -2336,7 +2337,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             import_all is not None
             and h5files is not None
             and any(
-                "," not in fname and workspace_has_provenance(fname)
+                split_h5_file_selector(fname)[1] is None
+                and workspace_has_provenance(fname)
                 for fname in h5files
             )
         )
@@ -2366,7 +2368,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         h5files = [
             fname
             for fname in h5files
-            if osp.normcase(osp.abspath(fname.split(",")[0])) not in cancelled
+            if osp.normcase(osp.abspath(split_h5_file_selector(fname)[0]))
+            not in cancelled
         ]
         if not h5files:
             return
