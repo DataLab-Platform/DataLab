@@ -315,7 +315,7 @@ To extract the intensity profile along the X axis, we have two options:
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |cross_section| image:: ../../images/tutorials/csection.png
+.. |cross_section| image:: ../../images/tutorials/csection.svg
 
 Let's try the first option: select the "Line profile..." entry |profile|.
 This is the most straightforward way to extract a profile from an image, and it

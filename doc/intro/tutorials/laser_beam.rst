@@ -120,7 +120,7 @@ in the visualization panel, and activate the "Cross section" tool |cross_section
 the vertical toolbar on the left side of the visualization panel. This
 reveals that the background noise level is approximately 30 lsb.
 
-.. |cross_section| image:: ../../images/tutorials/csection.png
+.. |cross_section| image:: ../../images/tutorials/csection.svg
 
 .. figure:: ../../images/tutorials/laser_beam/04.png
 
@@ -139,7 +139,7 @@ across the image. This analysis confirms that the background noise level is appr
     The "Image statistics" tool
     |imagestats| in the vertical toolbar.
 
-.. |imagestats| image:: ../../images/tutorials/imagestats.png
+.. |imagestats| image:: ../../images/tutorials/imagestats.svg
 
 Note that these tools are not persistent: the analysis results disappear when you select
 another image, they are intended to provide a fast insight on the image data.
