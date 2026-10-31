@@ -107,34 +107,136 @@ def workspace_leaf(workspace_ref: str) -> str:
     return leaf if leaf and ":" not in leaf else "workspace.h5"
 
 
-def write_files_atomically(contents: Sequence[tuple[str, bytes]]) -> None:
-    """Write files without losing their previous version on failure.
+def _sibling_file(filename: str, suffix: str) -> tuple[int, str]:
+    """Create a new empty file in the directory of *filename*, named after it.
 
-    Each file is first written to a temporary file of its directory. The
-    temporary files replace their targets only once all of them have been
-    written: if writing fails (full disk, interruption...), the temporary files
-    are removed and the previous files, if any, are left untouched.
+    Returns:
+        OS-level handle and name of the file (see :func:`tempfile.mkstemp`).
+    """
+    return tempfile.mkstemp(
+        prefix=f".{osp.basename(filename)}.", suffix=suffix, dir=osp.dirname(filename)
+    )
+
+
+def _move_aside(filename: str) -> str:
+    """Move *filename* to a new backup file of its directory.
+
+    Returns:
+        Name of the backup file.
+    """
+    handle, backup = _sibling_file(filename, ".bak")
+    os.close(handle)
+    try:
+        os.replace(filename, backup)
+    except BaseException:
+        with contextlib.suppress(OSError):
+            os.remove(backup)
+        raise
+    return backup
+
+
+def _undo_replacements(
+    steps: Sequence[tuple[str, str | None]],
+) -> list[tuple[str, str]]:
+    """Put the previous files back, in the reverse order of their replacement.
 
     Args:
-        contents: ``(filename, data)`` of the files to write.
+        steps: ``(filename, backup)`` of the files moved aside to *backup*, and
+         ``(filename, None)`` of the files created where there was none.
+
+    Returns:
+        ``(filename, backup)`` of the previous files that could not be put back:
+         their backups are kept.
+    """
+    kept = []
+    for filename, backup in reversed(steps):
+        if backup is None:
+            with contextlib.suppress(OSError):
+                os.remove(filename)
+            continue
+        try:
+            os.replace(backup, filename)
+        except OSError:
+            kept.append((filename, backup))
+    return kept
+
+
+def _replace_all(temporaries: Sequence[tuple[str, str]]) -> None:
+    """Replace each target by its temporary file: all of them, or none.
+
+    Each previous file is moved aside to a backup file before being replaced. If
+    a step fails, the files already replaced are put back, and the backups are
+    removed once all the files are replaced.
+
+    Args:
+        temporaries: ``(temporary, filename)`` pairs, in replacement order.
+
+    Raises:
+        OSError: If a file cannot be moved aside or replaced. If a previous file
+         cannot be put back either, its backup is kept and named in the message.
+    """
+    steps: list[tuple[str, str | None]] = []
+    try:
+        for temporary, filename in temporaries:
+            backup = _move_aside(filename) if osp.lexists(filename) else None
+            if backup is not None:
+                steps.append((filename, backup))
+            os.replace(temporary, filename)
+            if backup is None:
+                steps.append((filename, None))
+    except BaseException as exc:
+        kept = _undo_replacements(steps)
+        if kept and isinstance(exc, Exception):
+            lines = [str(exc)] + [
+                _("Previous version of %(filename)s kept as %(backup)s")
+                % {"filename": filename, "backup": backup}
+                for filename, backup in kept
+            ]
+            raise OSError("\n".join(lines)) from exc
+        raise
+    for _filename, backup in steps:
+        if backup is not None:
+            with contextlib.suppress(OSError):
+                os.remove(backup)
+
+
+def write_files_atomically(contents: Sequence[tuple[str, bytes]]) -> None:
+    """Write files together, without losing their previous versions on failure.
+
+    Each file is first written to a temporary file of its directory and flushed
+    to disk. Once all of them are written, they replace their targets in the
+    order of *contents* (a file referencing another one comes last), each
+    previous file being first moved aside to a backup file of its directory. If
+    writing or replacing a file fails (full disk, file in use...), the files
+    already replaced are put back from their backups, the files created are
+    removed and the temporary files too: the previous files, if any, are left as
+    they were.
+
+    A crash or a power failure between two replacements can still leave files
+    of two different writes, with the backups of the previous files next to
+    them.
+
+    Args:
+        contents: ``(filename, data)`` of the files to write, in replacement
+         order.
+
+    Raises:
+        OSError: If a file cannot be written or replaced. If a previous file
+         cannot be put back either, its backup is kept and named in the message.
     """
     temporaries: list[tuple[str, str]] = []
     try:
         for filename, data in contents:
             filename = osp.abspath(filename)
-            handle, temporary = tempfile.mkstemp(
-                prefix=f".{osp.basename(filename)}.",
-                suffix=".tmp",
-                dir=osp.dirname(filename),
-            )
+            handle, temporary = _sibling_file(filename, ".tmp")
             temporaries.append((temporary, filename))
             with os.fdopen(handle, "wb") as file:
                 file.write(data)
+                file.flush()
+                os.fsync(file.fileno())
             set_final_permissions(temporary, filename)
-        while temporaries:
-            temporary, filename = temporaries[0]
-            os.replace(temporary, filename)
-            temporaries.pop(0)
+        _replace_all(temporaries)
+        temporaries.clear()
     finally:
         for temporary, _filename in temporaries:
             with contextlib.suppress(OSError):
@@ -249,8 +351,9 @@ class CapsuleInputOutput:
              file, or the capsule cannot be created or would be refused when
              read back. No file is written then.
             ManifestError: If a field is invalid (workspace IRI, attachment).
-            OSError: If a file cannot be written (full disk...): the previous
-             capsule and workspace files, if any, are then left untouched.
+            OSError: If a file cannot be written (full disk...) or replaced (file
+             in use...): the previous capsule and workspace files, if any, are
+             then kept or put back together (see :func:`write_files_atomically`).
         """
         files = []
         sources = set()

@@ -17,7 +17,7 @@ import contextlib
 import os
 import os.path as osp
 import tracemalloc
-from collections.abc import Generator
+from collections.abc import Callable, Generator
 
 import pytest
 from datalab_capsule import exchange
@@ -29,6 +29,7 @@ from datalab_capsule.archive import (
     read_capsule,
 )
 from datalab_capsule.manifest import inspect_manifest
+from sigima.objects import create_signal
 
 from datalab.capsulestore import RevisionStore
 from datalab.control.proxy import LocalProxy
@@ -39,6 +40,8 @@ from datalab.tests import helpers
 from datalab.tests.features.common.provenance_unit_test import app
 from datalab.tests.features.hdf5.provenance_roundtrip_unit_test import (
     WEB_FIXTURE,
+    X,
+    Y,
     build_chain,
     check_chain,
 )
@@ -400,8 +403,33 @@ def test_size_policy_refuses_export() -> None:
             assert len(win.capsuleio.revisions.revisions()) == 1
 
 
-def test_write_files_atomically() -> None:
-    """All files are replaced, or none: a failed write leaves no temporary file."""
+def _fail_replace(
+    monkeypatch: pytest.MonkeyPatch, fails: Callable[[str, str], bool]
+) -> None:
+    """Make ``os.replace`` fail, as for a file in use, when *fails* returns True.
+
+    Args:
+        monkeypatch: Pytest fixture undoing the change after the test.
+        fails: Called with the base names of the source and destination files.
+    """
+    replace = os.replace
+
+    def failing_replace(src: str, dst: str) -> None:
+        if fails(osp.basename(src), osp.basename(dst)):
+            raise PermissionError(13, "File in use", dst)
+        replace(src, dst)
+
+    monkeypatch.setattr(os, "replace", failing_replace)
+
+
+def _leftovers(dirname: str) -> list[str]:
+    """Return the temporary and backup files left in *dirname*."""
+    return [name for name in os.listdir(dirname) if name.endswith((".tmp", ".bak"))]
+
+
+def test_write_files_atomically(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Files are flushed to disk, then replace the previous ones: a file that cannot
+    be written replaces none of them, and no temporary or backup file is left."""
     with helpers.WorkdirRestoringTempDir() as tmpdir:
         first, second = osp.join(tmpdir, "a.h5"), osp.join(tmpdir, "b.dlcapsule")
         capsuleio.write_files_atomically([(first, b"old a"), (second, b"old b")])
@@ -411,12 +439,82 @@ def test_write_files_atomically() -> None:
             capsuleio.write_files_atomically([(first, b"new a"), (second, None)])
         assert (_read(first), _read(second)) == (b"old a", b"old b")
         assert sorted(os.listdir(tmpdir)) == ["a.h5", "b.dlcapsule"]
+        fsync, synced = os.fsync, []
+
+        def recording_fsync(fd: int) -> None:
+            synced.append(fd)
+            fsync(fd)
+
+        monkeypatch.setattr(os, "fsync", recording_fsync)
+        capsuleio.write_files_atomically([(first, b"new a"), (second, b"new b")])
+        assert (_read(first), _read(second)) == (b"new a", b"new b")
+        assert len(synced) == 2
+        assert sorted(os.listdir(tmpdir)) == ["a.h5", "b.dlcapsule"]
 
 
-def test_failed_export_keeps_the_previous_capsule(
-    monkeypatch: pytest.MonkeyPatch,
+@pytest.mark.parametrize(
+    "previous, fails",
+    [
+        pytest.param(True, lambda src, _dst: src == "b.dlcapsule", id="capsule-in-use"),
+        pytest.param(
+            True,
+            lambda src, dst: src.endswith(".tmp") and dst == "b.dlcapsule",
+            id="capsule-not-replaced",
+        ),
+        pytest.param(
+            False,
+            lambda src, dst: src.endswith(".tmp") and dst == "b.dlcapsule",
+            id="new-files",
+        ),
+    ],
+)
+def test_failed_replacement_keeps_the_previous_files(
+    monkeypatch: pytest.MonkeyPatch, previous: bool, fails: Callable[[str, str], bool]
 ) -> None:
-    """Overwriting a capsule and its workspace: on failure, both are kept."""
+    """Regression: when the capsule could not be replaced, its workspace had already
+    been replaced. The previous files are now put back (the new ones removed)."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        first, second = osp.join(tmpdir, "a.h5"), osp.join(tmpdir, "b.dlcapsule")
+        if previous:
+            capsuleio.write_files_atomically([(first, b"old a"), (second, b"old b")])
+        _fail_replace(monkeypatch, fails)
+        with pytest.raises(PermissionError, match="File in use"):
+            capsuleio.write_files_atomically([(first, b"new a"), (second, b"new b")])
+        if previous:
+            assert (_read(first), _read(second)) == (b"old a", b"old b")
+            assert sorted(os.listdir(tmpdir)) == ["a.h5", "b.dlcapsule"]
+        else:
+            assert not os.listdir(tmpdir)
+
+
+def test_failed_restoration_keeps_the_backup(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A previous file that cannot be put back is kept, and named in the error."""
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        first, second = osp.join(tmpdir, "a.h5"), osp.join(tmpdir, "b.dlcapsule")
+        capsuleio.write_files_atomically([(first, b"old a"), (second, b"old b")])
+        _fail_replace(
+            monkeypatch,
+            lambda src, dst: (
+                (src.endswith(".tmp") and dst == "b.dlcapsule")
+                or (src.endswith(".bak") and dst == "a.h5")
+            ),
+        )
+        with pytest.raises(OSError, match="File in use") as excinfo:
+            capsuleio.write_files_atomically([(first, b"new a"), (second, b"new b")])
+        assert isinstance(excinfo.value.__cause__, PermissionError)
+        backups = _leftovers(tmpdir)
+        assert len(backups) == 1 and backups[0].startswith(".a.h5.")
+        assert backups[0].endswith(".bak") and backups[0] in str(excinfo.value)
+        assert _read(osp.join(tmpdir, backups[0])) == b"old a"
+        assert (_read(first), _read(second)) == (b"new a", b"old b")
+
+
+@pytest.mark.parametrize("failure", ["full-disk", "capsule-not-replaced"])
+def test_failed_export_keeps_the_previous_capsule(
+    monkeypatch: pytest.MonkeyPatch, failure: str
+) -> None:
+    """Overwriting a capsule and its workspace: on failure, both are kept (or put
+    back), even when the workspace was replaced before the capsule failed."""
     with helpers.WorkdirRestoringTempDir() as tmpdir:
         capsule = osp.join(tmpdir, "chain.dlcapsule")
         workspace = osp.join(tmpdir, "chain.h5")
@@ -424,12 +522,23 @@ def test_failed_export_keeps_the_previous_capsule(
             build_chain(win)
             win.export_capsule(capsule, workspace_ref=REF)
             previous = _read(capsule), _read(workspace)
+            # A different workspace, so that replacing the previous one shows
+            win.signalpanel.add_object(create_signal("S5", X.copy(), Y.copy()))
 
             def full_disk(*_args) -> None:
                 raise OSError("No space left on device")
 
-            monkeypatch.setattr(capsuleio, "set_final_permissions", full_disk)
-            with pytest.raises(OSError, match="No space left"):
+            if failure == "full-disk":
+                monkeypatch.setattr(capsuleio, "set_final_permissions", full_disk)
+                message = "No space left"
+            else:
+                _fail_replace(
+                    monkeypatch,
+                    lambda src, dst: src.endswith(".tmp") and dst == "chain.dlcapsule",
+                )
+                message = "File in use"
+            with pytest.raises(OSError, match=message):
                 win.export_capsule(capsule, name="other", workspace_ref=REF)
             assert (_read(capsule), _read(workspace)) == previous
-            assert not [name for name in os.listdir(tmpdir) if name.endswith(".tmp")]
+            assert not _leftovers(tmpdir)
+            assert len(win.capsuleio.revisions.revisions()) == 1
