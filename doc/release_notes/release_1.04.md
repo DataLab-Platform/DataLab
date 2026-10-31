@@ -173,6 +173,10 @@ Signals, images and groups can now be deleted directly from the lists, as in Dat
 
 * Moving or resizing regions of interest, annotations and markers over images is now much smoother, as the image is no longer rendered again for each mouse move: with a 2048 × 2048 image, each mouse move takes about 5 ms instead of 13 ms (13 ms instead of 33 ms with a 200% display scaling). Panning and zooming images without masked pixels are also up to 25% faster (requires PlotPy ≥ 2.12.1)
 
+**Sharp icons with display scaling:**
+
+* The icons of the plots and of the editors provided by PlotPy and guidata (plot toolbars, contrast panel, cross sections, item list, array editor, ...) are now SVG images: they remain sharp with a display scaling such as 125 %, 150 % or 200 %, instead of looking blurry (requires PlotPy ≥ 2.12.1, closes [Issue #470](https://github.com/DataLab-Platform/DataLab/issues/470))
+
 **Portable plot annotations:**
 
 * Plot annotations are now stored in a renderer-independent format shared with DataLab-Web, so annotations in workspaces and `.dlabann` files are no longer tied to PlotPy

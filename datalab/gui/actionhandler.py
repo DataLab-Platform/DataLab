@@ -1787,7 +1787,7 @@ class ImageActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.VIEW):
             showcontrast_action = self.new_action(
                 _("Show contrast panel"),
-                icon_name="contrast.png",
+                icon_name="contrast.svg",
                 tip=_("Show or hide contrast adjustment panel"),
                 select_condition=SelectCond.always,
                 toggled=self.panel.toggle_show_contrast,

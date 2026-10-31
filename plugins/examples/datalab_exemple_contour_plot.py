@@ -161,7 +161,7 @@ class ContourPlotPlugin(PluginBase):
             def _info_cb(ann: AnnotatedPolygon, text: str = level_text) -> str:
                 return f"Z = {text}"
 
-            ann_param = AnnotationParam(_("Annotation"), icon="annotation.png")
+            ann_param = AnnotationParam(_("Annotation"), icon="annotation.svg")
             ann_param.read_config(CONF, "plot", "shape/label")
             fraction = (idx * golden_angle) % 1.0
             item = _ContourAnnotatedPolygon(
