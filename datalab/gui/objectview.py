@@ -511,7 +511,9 @@ class SimpleObjectTree(QW.QTreeWidget):
     ) -> QW.QTreeWidgetItem:
         """Add object to group item and return its item"""
         item = QW.QTreeWidgetItem()
-        icon = "signal.svg" if isinstance(obj, SignalObj) else "image.svg"
+        icon = (
+            "sigimax:signal.svg" if isinstance(obj, SignalObj) else "sigimax:image.svg"
+        )
         item.setIcon(0, get_icon(icon))
         self.__update_item(item, obj)
         group_item.addChild(item)
@@ -693,7 +695,7 @@ class ObjectView(SimpleObjectTree):
         self.__dragged_groups: list[QW.QListWidgetItem] = []
         self.__dragged_expanded_states: dict[QW.QListWidgetItem, bool] = {}
         self.__delete_button_enabled = Conf.show_delete_button_on_hover.get()
-        self.__delete_icon = get_icon("delete.svg")
+        self.__delete_icon = get_icon("datalab:delete.svg")
         #: True when the mouse cursor is over the delete button of the hovered item
         self.__delete_button_hovered = False
         #: Item whose delete button is pressed, None when no button is pressed

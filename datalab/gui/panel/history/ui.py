@@ -86,7 +86,7 @@ class HistoryPanelUI:
                 panel,
                 _("Delete"),
                 self.guarded(lambda: htools.delete_selected(panel)),
-                icon=get_icon("delete.svg"),
+                icon=get_icon("datalab:delete.svg"),
             ),
             "duplicate": create_action(
                 panel,

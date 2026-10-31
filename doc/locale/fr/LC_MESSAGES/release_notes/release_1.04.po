@@ -412,6 +412,12 @@ msgstr "**Icônes nettes avec la mise à l'échelle de l'affichage :**"
 msgid "The icons of the plots and of the editors provided by PlotPy and guidata (plot toolbars, contrast panel, cross sections, item list, array editor, ...) are now SVG images: they remain sharp with a display scaling such as 125 %, 150 % or 200 %, instead of looking blurry (requires PlotPy ≥ 2.12.1, closes [Issue #470](https://github.com/DataLab-Platform/DataLab/issues/470))"
 msgstr "Les icônes des graphiques et des éditeurs fournies par PlotPy et guidata (barres d'outils des graphiques, panneau de contraste, coupes, liste des éléments, éditeur de tableaux, ...) sont désormais des images SVG : elles restent nettes avec une mise à l'échelle de l'affichage de 125 %, 150 % ou 200 %, au lieu d'apparaître floues (nécessite PlotPy ≥ 2.12.1, corrige [l'issue #470](https://github.com/DataLab-Platform/DataLab/issues/470))"
 
+msgid "The **Processing > Resize** action of images showed the column resizing icon of guidata's editors instead of its own icon: DataLab icons now take precedence over guidata and PlotPy icons with the same name (requires guidata ≥ 3.17.1, closes [Issue #472](https://github.com/DataLab-Platform/DataLab/issues/472))"
+msgstr "L'action **Traitement > Redimensionner** des images affichait l'icône de redimensionnement des colonnes des éditeurs de guidata au lieu de sa propre icône : les icônes de DataLab ont désormais priorité sur les icônes de guidata et de PlotPy portant le même nom (nécessite guidata ≥ 3.17.1, corrige [l'issue #472](https://github.com/DataLab-Platform/DataLab/issues/472))"
+
+msgid "Plugin icons (`PluginInfo.icon`, tools and welcome tiles) may also designate an icon registered by a module, e.g. `\"datalab:delete.svg\"`, in addition to `package:path` resources and DataLab icon file names"
+msgstr "Les icônes des plugins (`PluginInfo.icon`, outils et tuiles de la page d'accueil) peuvent également désigner une icône enregistrée par un module, par exemple `\"datalab:delete.svg\"`, en plus des ressources `package:path` et des noms de fichiers d'icônes de DataLab"
+
 msgid "**Portable plot annotations:**"
 msgstr "**Annotations de tracé portables :**"
 

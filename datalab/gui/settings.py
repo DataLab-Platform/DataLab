@@ -392,7 +392,7 @@ class ViewSettings(gds.DataSet):
     )
     _g0 = gds.EndGroup("")
 
-    g1 = gds.BeginGroup(_("Signals")).set_prop("display", icon="signal.svg")
+    g1 = gds.BeginGroup(_("Signals")).set_prop("display", icon="sigimax:signal.svg")
     _prop_ads = gds.ValueProp(False)
     sig_linewidth = gds.FloatItem(
         _("Default line width"),
@@ -464,7 +464,7 @@ class ViewSettings(gds.DataSet):
     )
     _g1 = gds.EndGroup("")
 
-    g2 = gds.BeginGroup(_("Images")).set_prop("display", icon="image.svg")
+    g2 = gds.BeginGroup(_("Images")).set_prop("display", icon="sigimax:image.svg")
     ima_aspect_ratio_1_1 = gds.BoolItem(
         "",
         _("Lock aspect ratio to 1:1"),
@@ -500,7 +500,7 @@ class ViewSettings(gds.DataSet):
     ima_defaults = gds.ButtonItem(
         _("Default image visualization settings"),
         edit_default_image_settings,
-        icon="image.svg",
+        icon="sigimax:image.svg",
         default=False,
     )
     ima_shape_param = gds.ButtonItem(

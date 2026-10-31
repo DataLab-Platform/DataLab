@@ -528,7 +528,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             sipi.resize,
             _("Resize"),
             sipi.ResizeParam,
-            icon_name="resize.svg",
+            icon_name="datalab:resize.svg",
         )
         self.register_1_to_1(
             sipi.binning,
@@ -569,7 +569,7 @@ class ImageProcessor(BaseProcessor[ImageROI, ROI2DParam]):
             sipi.histogram,
             _("Histogram"),
             paramclass=sipb.HistogramParam,
-            icon_name="histogram.svg",
+            icon_name="datalab:histogram.svg",
         )
         self.register_1_to_0(
             sipi.centroid,

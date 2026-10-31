@@ -199,7 +199,7 @@ class AIAssistantPanel(QW.QWidget, DockableWidgetMixin):
         self.stop_button.clicked.connect(self._on_stop)
         self.stop_button.setVisible(False)
         send_row.addWidget(self.stop_button)
-        self.send_button = QW.QPushButton(get_icon("apply.svg"), _("Send"))
+        self.send_button = QW.QPushButton(get_icon("sigimax:apply.svg"), _("Send"))
         self.send_button.clicked.connect(self._on_send)
         send_row.addWidget(self.send_button)
         layout.addLayout(send_row)

@@ -85,7 +85,7 @@ class ProfileExtractionDialog(PlotDialog):
         self.cstool = tool
         self.shape: AnnotatedPoint | AnnotatedSegment | AnnotatedRectangle | None = None
         self.param_btn = pbtn = QW.QPushButton(_("Edit profile parameters"))
-        pbtn.setIcon(get_icon("edit.svg"))
+        pbtn.setIcon(get_icon("datalab:edit.svg"))
         pbtn.clicked.connect(self.edit_values)
         pbtn.setEnabled(False)
         self.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(False)

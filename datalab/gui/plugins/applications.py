@@ -10,7 +10,7 @@ from collections.abc import Callable, Iterable
 from math import ceil
 from typing import TYPE_CHECKING
 
-from guidata.configtools import get_icon
+from guidata.configtools import get_icon, get_image_file_path
 from guidata.qthelpers import win32_fix_title_bar_background
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -61,8 +61,9 @@ def get_plugin_icon(icon: str | None) -> QG.QIcon:
     """Return a plugin icon
 
     Args:
-        icon: ``package:path`` resource (SVG or bitmap), DataLab icon file name,
-         or None
+        icon: ``package:path`` resource (SVG or bitmap), ``module:filename`` image
+         registered by a module with guidata (e.g. ``"datalab:delete.svg"``),
+         DataLab icon file name, or None
 
     Returns:
         Plugin icon, or the generic plugin icon if ``icon`` is None or cannot be
@@ -72,7 +73,12 @@ def get_plugin_icon(icon: str | None) -> QG.QIcon:
         with try_or_log_error(f"Loading plugin icon {icon!r}"):
             if ":" not in icon:
                 return get_icon(icon)
-            resource = resolve_package_resource(icon, "Plugin icon")
+            try:
+                resource = resolve_package_resource(icon, "Plugin icon")
+            except FileNotFoundError:
+                # Image registered by the module with guidata ("module:filename")
+                get_image_file_path(icon, default=None)
+                return get_icon(icon)
             buffer = QC.QBuffer()
             buffer.setData(resource.read_bytes())
             reader = QG.QImageReader(buffer)

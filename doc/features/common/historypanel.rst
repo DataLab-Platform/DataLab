@@ -113,12 +113,12 @@ The toolbar at the top of the panel exposes the following actions:
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |open_history| image:: ../../../datalab/data/icons/io/fileopen_h5.svg
+.. |open_history| image:: ../../images/icons/fileopen_h5.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |save_history| image:: ../../../datalab/data/icons/io/filesave_h5.svg
+.. |save_history| image:: ../../images/icons/filesave_h5.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

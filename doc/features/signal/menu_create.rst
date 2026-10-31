@@ -75,7 +75,7 @@ Create a new signal from various models:
            :width: 30px
       - Triangle
       - :math:`y = y_{0}+A \sawtooth\left(2 \pi f x + \phi, \text{width} = 0.5\right)`
-    * - .. image:: ../../../datalab/data/icons/create/square.svg
+    * - .. image:: ../../../datalab/data/icons/create/square_wave.svg
            :width: 30px
       - Square
       - :math:`y = y_0 + A \sgn\left( \sin\left( 2\pi f x + \phi \right) \right)`

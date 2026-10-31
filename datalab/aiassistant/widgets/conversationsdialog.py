@@ -73,7 +73,9 @@ class ConversationsDialog(QW.QDialog):
         )
         self._rename_button.setToolTip(_("Rename the selected conversation (F2)."))
         self._rename_button.clicked.connect(self._on_rename)
-        self._export_button = QW.QPushButton(get_icon("export.svg"), _("Export…"))
+        self._export_button = QW.QPushButton(
+            get_icon("guidata:export.svg"), _("Export…")
+        )
         self._export_button.setToolTip(
             _("Save the selected conversation as a Markdown file.")
         )
