@@ -234,7 +234,7 @@ msgstr "Amplitude"
 msgid ""
 ":math:`y_{1}= \\dfrac{y_{0}'}{\\max\\left(y_{0}'\\right)}` with "
 ":math:`y_{0}'=y_{0}-\\min\\left(y_{0}\\right)`"
-msgstr ""
+msgstr ":math:`y_{1}= \\dfrac{y_{0}'}{\\max\\left(y_{0}'\\right)}` avec :math:`y_{0}'=y_{0}-\\min\\left(y_{0}\\right)`"
 
 msgid "Area"
 msgstr "Aire"
@@ -593,7 +593,7 @@ msgstr ""
 " signal sélectionné."
 
 msgid "|lowpass| Low-pass"
-msgstr ""
+msgstr "|lowpass| Passe-bas"
 
 msgid "lowpass"
 msgstr ""
@@ -602,7 +602,7 @@ msgid "Filter out high frequencies, above a cutoff frequency"
 msgstr "Filtre les hautes fréquences, au-dessus d'une fréquence de coupure"
 
 msgid "|highpass| High-pass"
-msgstr ""
+msgstr "|highpass| Passe-haut"
 
 msgid "highpass"
 msgstr ""
@@ -611,7 +611,7 @@ msgid "Filter out low frequencies, below a cutoff frequency"
 msgstr "Filtre les basses fréquences, en-dessous d'une fréquence de coupure"
 
 msgid "|bandpass| Band-pass"
-msgstr ""
+msgstr "|bandpass| Passe-bande"
 
 msgid "bandpass"
 msgstr ""
@@ -620,7 +620,7 @@ msgid "Filter out frequencies outside a range"
 msgstr "Filtre les fréquences en dehors d'une plage"
 
 msgid "|bandstop| Band-stop"
-msgstr ""
+msgstr "|bandstop| Coupe-bande"
 
 msgid "bandstop"
 msgstr ""
@@ -663,7 +663,7 @@ msgstr ""
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.butter.html>`_"
 
 msgid "Chebyshev I"
-msgstr ""
+msgstr "Tchebychev I"
 
 msgid ""
 "Chebyshev type I filter, using SciPy's `scipy.signal.cheby1 "
@@ -675,7 +675,7 @@ msgstr ""
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.cheby1.html>`_"
 
 msgid "Chebyshev II"
-msgstr ""
+msgstr "Tchebychev II"
 
 msgid ""
 "Chebyshev type II filter, using SciPy's `scipy.signal.cheby2 "
@@ -687,7 +687,7 @@ msgstr ""
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.cheby2.html>`_"
 
 msgid "Elliptic"
-msgstr ""
+msgstr "Elliptique"
 
 msgid ""
 "Elliptic filter, using SciPy's `scipy.signal.ellip "
@@ -1103,7 +1103,7 @@ msgid ":py:func:`scipy.signal.windows.exponential`"
 msgstr ""
 
 msgid "Flat top"
-msgstr ""
+msgstr "À sommet plat"
 
 msgid ":py:func:`scipy.signal.windows.flattop`"
 msgstr ""

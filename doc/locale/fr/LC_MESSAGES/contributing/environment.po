@@ -120,7 +120,7 @@ msgid "ℹ️ See [Installation](https://datalab-platform.com/en/intro/installat
 msgstr "Voir [Installation](https://datalab-platform.com/en/intro/installation.html) pour plus de détails sur les versions de référence de Python et Qt."
 
 msgid "⚠️ If you are contributing to DataLab's processing features, you will need to work on both DataLab's main repository and sigima's repository. To install `sigima` in editable mode, use the following command:"
-msgstr ""
+msgstr "⚠️ Si vous contribuez aux fonctionnalités de traitement de DataLab, vous devrez travailler à la fois sur le dépôt principal de DataLab et sur celui de Sigima. Pour installer `sigima` en mode éditable, utilisez la commande suivante :"
 
 msgid "If you are using [WinPython](https://winpython.github.io/), thank you for supporting the scientific open-source Python community!"
 msgstr "Si vous utilisez [WinPython](https://winpython.github.io/), merci de soutenir la communauté scientifique Python open-source !"
@@ -216,19 +216,19 @@ msgid "The official Windows executable and MSI installer are built by the GitHub
 msgstr "L'exécutable Windows officiel et l'installeur MSI sont générés par le pipeline de publication de l'intégration continue GitHub. La version de Python embarquée dans l'application autonome distribuée aux utilisateurs finaux est définie par la valeur par défaut de l'entrée `python-version` du workflow de build réutilisable (`.github/workflows/_build.yml`), utilisée par son job `build-msi` ; les workflows de publication ne la redéfinissent pas. Ce workflow est la source de vérité unique — reportez-vous-y pour connaître la version exacte actuellement utilisée."
 
 msgid "The Windows installer is built using [WiX Toolset](https://wixtoolset.org/) V4.0.5. Using the WiX Toolset requires [.NET SDK](https://dotnet.microsoft.com/download/dotnet/) V6.0 minimum."
-msgstr ""
+msgstr "L'installateur Windows est construit avec [WiX Toolset](https://wixtoolset.org/) V4.0.5. L'utilisation de WiX Toolset nécessite le [SDK .NET](https://dotnet.microsoft.com/download/dotnet/) V6.0 au minimum."
 
 msgid "You may install .NET SDK using `winget`:"
-msgstr ""
+msgstr "Vous pouvez installer le SDK .NET avec `winget` :"
 
 msgid "Once .NET SDK is installed, the WiX Toolset can be installed and configured using the following commands:"
-msgstr ""
+msgstr "Une fois le SDK .NET installé, WiX Toolset peut être installé et configuré avec les commandes suivantes :"
 
 msgid "First, you need to generate the installer script from a generic template:"
-msgstr ""
+msgstr "Vous devez d'abord générer le script de l'installateur à partir d'un modèle générique :"
 
 msgid "Building the installer is done using the following command:"
-msgstr ""
+msgstr "La construction de l'installateur s'effectue avec la commande suivante :"
 
 msgid "Third-party Software"
 msgstr "Logiciels tiers"

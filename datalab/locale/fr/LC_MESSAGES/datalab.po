@@ -10,72 +10,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Source code"
-msgstr "Code source"
-
-msgid "not applicable"
-msgstr "sans objet"
-
-msgid "Provided outside the plugin store"
-msgstr "Fourni hors du stockage géré des plugins"
-
-msgid "Conflicting installed plugin: %s"
-msgstr "Plugin installé en conflit : %s"
-
-msgid "Different installed revision"
-msgstr "Révision installée différente"
-
-msgid "Replace..."
-msgstr "Remplacer..."
-
-msgid "Revision:"
-msgstr "Révision :"
-
-msgid "revision %s"
-msgstr "révision %s"
-
-msgid "Some metadata cannot be read without executing the file. Catalog metadata is used when provided; dependencies are not installed for single-file plugins."
-msgstr "Certaines métadonnées ne peuvent pas être lues sans exécuter le fichier. Les métadonnées du catalogue sont utilisées si elles sont fournies ; les dépendances ne sont pas installées pour les plugins en fichier unique."
-
-msgid "Write the catalog.json file listing the plugin files."
-msgstr "Écrire le fichier catalog.json qui liste les fichiers des plugins."
-
-msgid "Check the catalog.json file against the plugin files."
-msgstr "Vérifier le fichier catalog.json par rapport aux fichiers des plugins."
-
-msgid "Additional packages from the local wheelhouse:"
-msgstr "Paquets supplémentaires du dépôt local :"
-
-msgid "Dependency source:"
-msgstr "Source des dépendances :"
-
-msgid "not installed"
-msgstr "non installé"
-
-msgid "Checking the local dependency wheels..."
-msgstr "Vérification des paquets de dépendances locaux..."
-
-msgid "The plugin changed while checking dependencies."
-msgstr "Le plugin a été modifié pendant la vérification des dépendances."
-
-msgid "Installing the plugin and its dependencies..."
-msgstr "Installation du plugin et de ses dépendances..."
-
-msgid "Installing plugin..."
-msgstr "Installation du plugin..."
-
-msgid "Prepare, build or check a local plugin catalog folder."
-msgstr "Préparer, construire ou vérifier le dossier d'un catalogue local de plugins."
-
-msgid "Download dependency wheels for this host and build the local catalog."
-msgstr "Télécharger les paquets de dépendances pour cet environnement et construire le catalogue local."
-
-msgid "Dependency artifacts for the public catalog:"
-msgstr "Fichiers de dépendances pour le catalogue public :"
-
-msgid "Install a plugin shared as a wheel file (<code>.whl</code>) or as a Python module (<code>datalab_*.py</code>). Wheels must be pure Python. Missing dependencies may be supplied as wheels in an adjacent <code>dependencies</code> folder, without Internet access or changing packages already installed."
-msgstr "Installer un plugin distribué sous forme de paquet wheel (<code>.whl</code>) ou de module Python (<code>datalab_*.py</code>). Les plugins au format wheel doivent être en Python pur. Les dépendances manquantes peuvent être fournies sous forme de paquets wheel dans un dossier <code>dependencies</code> adjacent, sans accès à Internet ni modification des paquets déjà installés."
-
 msgid "Failed to deserialize analysis parameters from JSON."
 msgstr "Échec de la désérialisation des paramètres d'analyse depuis le format JSON."
 
@@ -133,6 +67,9 @@ msgstr "Assistant IA prêt. Configurez votre fournisseur dans le menu Edition > 
 
 msgid "You"
 msgstr "Vous"
+
+msgid "Assistant"
+msgstr "Assistant"
 
 msgid "Save to Macros"
 msgstr "Enregistrer dans les macros"
@@ -1083,12 +1020,10 @@ msgstr "Ajouter sans la provenance"
 msgid "This file is not a DataLab workspace"
 msgstr "Ce fichier n'est pas un espace de travail DataLab"
 
-msgid "Clipping uint32 data to int32."
-msgstr "Troncature de données uint32 en int32."
-
 msgid "No supported data available in HDF5 file(s)."
 msgstr "Aucune donnée prise en charge dans le(s) fichier(s) HDF5."
 
+#, python-format
 msgid "... and %d more"
 msgstr "... et %d autres"
 
@@ -1515,6 +1450,9 @@ msgstr "Créé : paramètres de pic historiques"
 msgid "Created: invalid creation parameters"
 msgstr "Créé : paramètres de création invalides"
 
+msgid "Created"
+msgstr "Créé"
+
 msgid "Original object"
 msgstr "Objet original"
 
@@ -1751,11 +1689,11 @@ msgstr "Supprimer les métadonnées"
 msgid "Some selected objects have regions of interest.<br>Do you want to delete them as well?"
 msgstr "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-msgid "New group"
-msgstr "Nouveau groupe"
-
 msgid "Group name:"
 msgstr "Nom du groupe :"
+
+msgid "New group"
+msgstr "Nouveau groupe"
 
 #, python-format
 msgid "New group \"%s\""
@@ -1994,6 +1932,9 @@ msgstr "L'action %s a été ignorée : ses paramètres enregistrés n'ont pas pu
 msgid "History panel"
 msgstr "Panneau d'historique"
 
+msgid "History files"
+msgstr "Fichiers d'historique"
+
 #, python-format
 msgid "Action %s: target panel not found — skipping."
 msgstr "Action %s : panneau cible introuvable — ignorée."
@@ -2148,6 +2089,9 @@ msgstr "Effacer toutes les macros récentes ?"
 msgid "Macro panel"
 msgstr "Panneau des macros"
 
+msgid "Python files"
+msgstr "Fichiers Python"
+
 msgid "Clear console"
 msgstr "Effacer la console"
 
@@ -2170,7 +2114,7 @@ msgid "Duplicate macro"
 msgstr "Dupliquer la macro"
 
 msgid "Import macro from file"
-msgstr "Importer la macro depuis un fichier"
+msgstr "Importer une macro depuis un fichier"
 
 msgid "Export macro to file"
 msgstr "Exporter la macro vers un fichier"
@@ -2318,6 +2262,9 @@ msgstr "Communauté"
 msgid "Local catalog"
 msgstr "Catalogue local"
 
+msgid "Source code"
+msgstr "Code source"
+
 #, python-format
 msgid "Local catalog: %s"
 msgstr "Catalogue local : %s"
@@ -2333,16 +2280,23 @@ msgstr "Non disponible pour Python %s"
 msgid "Not available for DataLab desktop"
 msgstr "Non disponible pour DataLab desktop"
 
+msgid "Provided outside the plugin store"
+msgstr "Fourni hors du stockage géré des plugins"
+
+#, python-format
+msgid "Conflicting installed plugin: %s"
+msgstr "Plugin installé en conflit : %s"
+
 #, python-format
 msgid "Installed in the Python environment (%s)"
 msgstr "Installé dans l'environnement Python (%s)"
 
-msgid "Installed"
-msgstr "Installé"
-
 #, python-format
 msgid "Deprecated: %s"
 msgstr "Obsolète : %s"
+
+msgid "Installed"
+msgstr "Installé"
 
 #, python-format
 msgid "Installed: %s"
@@ -2352,8 +2306,17 @@ msgstr "Installé : %s"
 msgid "Update to %s"
 msgstr "Mettre à jour vers %s"
 
+msgid "Different installed revision"
+msgstr "Révision installée différente"
+
+msgid "Replace..."
+msgstr "Remplacer..."
+
 msgid "Install"
 msgstr "Installer"
+
+msgid "Installing plugin..."
+msgstr "Installation du plugin..."
 
 #, python-format
 msgid "Plugins listed in the <a href=\"%s\">DataLab plugin catalog</a> and in the local catalogs of the <b>Plugin settings</b> tab, which take precedence. Official plugins are maintained by the DataLab team, community plugins by their authors, and local catalogs by your organization: install only plugins from authors you trust."
@@ -2433,6 +2396,9 @@ msgstr "Modifier le répertoire"
 
 msgid "Remove directory"
 msgstr "Supprimer le répertoire"
+
+msgid "from"
+msgstr "depuis"
 
 msgid "Plugin Configuration"
 msgstr "Configuration des plugins"
@@ -2538,6 +2504,10 @@ msgstr "Recharger les plugins"
 msgid "Plugin configuration has been saved. Do you want to reload plugins now to apply changes?"
 msgstr "La configuration des plugins a été enregistrée. Voulez-vous recharger les plugins maintenant pour appliquer les modifications ?"
 
+#, python-format
+msgid "revision %s"
+msgstr "révision %s"
+
 msgid "Source:"
 msgstr "Source :"
 
@@ -2553,14 +2523,32 @@ msgstr "Description :"
 msgid "Plugin classes:"
 msgstr "Classes de plugin :"
 
+msgid "not installed"
+msgstr "non installé"
+
+msgid "not applicable"
+msgstr "sans objet"
+
 msgid "Dependencies:"
 msgstr "Dépendances :"
 
 msgid "None"
 msgstr "Aucun"
 
+msgid "Additional packages from the local wheelhouse:"
+msgstr "Paquets supplémentaires du dépôt local :"
+
+msgid "Dependency source:"
+msgstr "Source des dépendances :"
+
 msgid "Plugin module:"
 msgstr "Module de plugin :"
+
+msgid "Revision:"
+msgstr "Révision :"
+
+msgid "Some metadata cannot be read without executing the file. Catalog metadata is used when provided; dependencies are not installed for single-file plugins."
+msgstr "Certaines métadonnées ne peuvent pas être lues sans exécuter le fichier. Les métadonnées du catalogue sont utilisées si elles sont fournies ; les dépendances ne sont pas installées pour les plugins en fichier unique."
 
 msgid "File:"
 msgstr "Fichier :"
@@ -2581,8 +2569,8 @@ msgstr "Installé le %s depuis %s"
 msgid "Uninstall"
 msgstr "Désinstaller"
 
-msgid "Install a plugin shared as a wheel file (<code>.whl</code>) or as a Python module (<code>datalab_*.py</code>). Wheels must be pure Python and rely only on packages already provided by DataLab."
-msgstr "Installez un plugin partagé sous forme de fichier wheel (<code>.whl</code>) ou de module Python (<code>datalab_*.py</code>). Les wheels doivent être en Python pur et ne dépendre que de paquets déjà fournis par DataLab."
+msgid "Install a plugin shared as a wheel file (<code>.whl</code>) or as a Python module (<code>datalab_*.py</code>). Wheels must be pure Python. Missing dependencies may be supplied as wheels in an adjacent <code>dependencies</code> folder, without Internet access or changing packages already installed."
+msgstr "Installer un plugin distribué sous forme de paquet wheel (<code>.whl</code>) ou de module Python (<code>datalab_*.py</code>). Les plugins au format wheel doivent être en Python pur. Les dépendances manquantes peuvent être fournies sous forme de paquets wheel dans un dossier <code>dependencies</code> adjacent, sans accès à Internet ni modification des paquets déjà installés."
 
 msgid "Install from file..."
 msgstr "Installer depuis un fichier..."
@@ -2599,6 +2587,9 @@ msgstr "Installer un plugin depuis un fichier"
 msgid "DataLab plugins"
 msgstr "Plugins DataLab"
 
+msgid "Checking the local dependency wheels..."
+msgstr "Vérification des paquets de dépendances locaux..."
+
 msgid "This file cannot be installed as a plugin:"
 msgstr "Ce fichier ne peut pas être installé comme plugin :"
 
@@ -2609,6 +2600,12 @@ msgstr "%s sera chargé au prochain démarrage de DataLab."
 #, python-format
 msgid "%s has been installed."
 msgstr "%s a été installé."
+
+msgid "The plugin changed while checking dependencies."
+msgstr "Le plugin a été modifié pendant la vérification des dépendances."
+
+msgid "Installing the plugin and its dependencies..."
+msgstr "Installation du plugin et de ses dépendances..."
 
 msgid "Uninstall plugin"
 msgstr "Désinstaller le plugin"
@@ -2630,11 +2627,11 @@ msgstr "En direct"
 msgid "Refresh the view continuously"
 msgstr "Rafraîchir la vue en continu"
 
-msgid "Acquire"
-msgstr "Acquérir"
-
 msgid "Add each acquisition to a new group, otherwise to the current group of the panel"
 msgstr "Ajouter chaque acquisition à un nouveau groupe, sinon au groupe courant du panneau"
+
+msgid "Acquire"
+msgstr "Acquérir"
 
 msgid "Add an acquisition to the workspace"
 msgstr "Ajouter une acquisition à l'espace de travail"
@@ -4560,14 +4557,17 @@ msgstr "Type d'objet utilisé par le traitement d'exemple"
 msgid "Project license (with --project)"
 msgstr "Licence du projet (avec --project)"
 
-msgid "Build or check a local plugin catalog folder."
-msgstr "Construire ou vérifier un dossier de catalogue local de plugins."
+msgid "Prepare, build or check a local plugin catalog folder."
+msgstr "Préparer, construire ou vérifier le dossier d'un catalogue local de plugins."
 
-msgid "Write the catalog.json file listing the plugin wheels."
-msgstr "Écrire le fichier catalog.json répertoriant les wheels de plugins."
+msgid "Write the catalog.json file listing the plugin files."
+msgstr "Écrire le fichier catalog.json qui liste les fichiers des plugins."
 
-msgid "Check the catalog.json file against the plugin wheels."
-msgstr "Vérifier le fichier catalog.json par rapport aux wheels de plugins."
+msgid "Check the catalog.json file against the plugin files."
+msgstr "Vérifier le fichier catalog.json par rapport aux fichiers des plugins."
+
+msgid "Download dependency wheels for this host and build the local catalog."
+msgstr "Télécharger les paquets de dépendances pour cet environnement et construire le catalogue local."
 
 msgid "Local plugin catalog folder"
 msgstr "Dossier du catalogue local de plugins"
@@ -4587,6 +4587,9 @@ msgstr "%s écrit, répertoriant %d plugins."
 #, python-format
 msgid "The local plugin catalog lists %d plugins."
 msgstr "Le catalogue local de plugins répertorie %d plugins."
+
+msgid "Dependency artifacts for the public catalog:"
+msgstr "Fichiers de dépendances pour le catalogue public :"
 
 #, python-format
 msgid "Created DataLab plugin project at %s"
@@ -5446,6 +5449,9 @@ msgstr "Vérifier cette étape"
 
 msgid "History action"
 msgstr "Action de l'historique"
+
+msgid "Inputs"
+msgstr "Entrées"
 
 msgid "already shown above (cycle)"
 msgstr "déjà affiché plus haut (cycle)"

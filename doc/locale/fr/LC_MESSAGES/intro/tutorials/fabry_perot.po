@@ -34,9 +34,7 @@ msgstr ""
 msgid ""
 ":octicon:`book;1em;sd-text-info` Analyzing Fabry-Perot interferograms: "
 "ring detection and circle fitting"
-msgstr ""
-":octicon:`book;1em;sd-text-info` Analyse d'interférogrammes Fabry-Perot :"
-" détection d'anneaux et ajustement de cercles"
+msgstr ":octicon:`book;1em;sd-text-info` Analyse d'interférogrammes Fabry-Perot : détection d'anneaux et ajustement de cercles"
 
 msgid ""
 "This example shows how to measure Fabry-Perot fringes using the image "
@@ -664,12 +662,10 @@ msgid ""
 "whole workspace, or the \"File > Browse HDF5 file...\" (or the "
 "|h5browser| button in the toolbar) to load only a selection of data sets "
 "from the workspace."
-msgstr ""
+msgstr "Pour charger à nouveau l'espace de travail, vous pouvez utiliser « Fichier > Ouvrir un fichier HDF5... » (ou le bouton |fileopen_h5| de la barre d'outils) pour charger l'ensemble de l'espace de travail, ou « Fichier > Parcourir un fichier HDF5... » (ou le bouton |h5browser| de la barre d'outils) pour charger uniquement une sélection de jeux de données."
 
-#, fuzzy
 msgid "fileopen_h5"
-msgstr "fileopen_ima"
+msgstr ""
 
 msgid "h5browser"
 msgstr ""
-

@@ -839,7 +839,7 @@ msgid ":py:func:`signals_to_image <sigima.proc.signal.signals_to_image>`"
 msgstr ""
 
 msgid "Combine multiple signals into an image"
-msgstr ""
+msgstr "Combiner plusieurs signaux en une image"
 
 msgid "`test_signal_signals_to_image <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/signal/operation_unit_test.py#L424>`_"
 msgstr ""
@@ -1400,7 +1400,7 @@ msgid ":py:func:`extract_roi <sigima.proc.image.extract_roi>`"
 msgstr ""
 
 msgid "Extract single ROI"
-msgstr ""
+msgstr "Extraire une seule ROI"
 
 msgid "`test_image_extract_roi <https://github.com/DataLab-Platform/Sigima/blob/v1.2.0/sigima/tests/image/roi_advanced_unit_test.py#L231>`_"
 msgstr ""

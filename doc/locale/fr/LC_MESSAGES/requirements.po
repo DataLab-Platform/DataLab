@@ -25,7 +25,7 @@ msgstr "Description"
 msgid "Python"
 msgstr "Python"
 
-msgid ">=3.9, <4"
+msgid ">=3.10, <4"
 msgstr ""
 
 msgid "Python programming language"
@@ -34,8 +34,8 @@ msgstr "Langage de programmation Python"
 msgid "guidata"
 msgstr ""
 
-msgid ">= 3.16.0"
-msgstr ">= 3.16.0"
+msgid ">= 3.17.0"
+msgstr ""
 
 msgid "Automatic GUI generation for easy dataset editing and display"
 msgstr "Génération automatique d'interface graphique pour l'édition et l'affichage de jeux de données"
@@ -43,7 +43,7 @@ msgstr "Génération automatique d'interface graphique pour l'édition et l'affi
 msgid "PlotPy"
 msgstr ""
 
-msgid ">= 2.11.0"
+msgid ">= 2.12.0"
 msgstr ""
 
 msgid "Curve and image plotting tools for Python/Qt applications"
@@ -79,7 +79,7 @@ msgstr "Échange et vérification de la provenance d'espaces de travail scientif
 msgid "NumPy"
 msgstr ""
 
-msgid ">= 1.22, < 2.5"
+msgid ">= 1.22, < 2.6"
 msgstr ""
 
 msgid "Fundamental package for array computing in Python"
@@ -88,7 +88,7 @@ msgstr "Paquet fondamental pour le calcul sur tableaux en Python"
 msgid "SciPy"
 msgstr ""
 
-msgid ">= 1.10.1, < 1.17"
+msgid ">= 1.10.1, < 1.19"
 msgstr ""
 
 msgid "Fundamental algorithms for scientific computing in Python"
@@ -128,7 +128,7 @@ msgid ">= 5.8"
 msgstr ""
 
 msgid "Cross-platform lib for process and system monitoring."
-msgstr ""
+msgstr "Bibliothèque multiplateforme pour la surveillance des processus et du système."
 
 msgid "packaging"
 msgstr ""
@@ -139,6 +139,15 @@ msgstr ""
 msgid "Core utilities for Python packages"
 msgstr "Utilitaires de base pour les paquets Python"
 
+msgid "pip"
+msgstr ""
+
+msgid ">= 22.2"
+msgstr ""
+
+msgid "The PyPA recommended tool for installing Python packages."
+msgstr "L'outil recommandé par la PyPA pour installer des paquets Python."
+
 msgid "jedi"
 msgstr ""
 
@@ -146,7 +155,7 @@ msgid ">= 0.18.2"
 msgstr ""
 
 msgid "An autocompletion tool for Python that can be used for text editors."
-msgstr ""
+msgstr "Un outil d'autocomplétion Python utilisable dans les éditeurs de texte."
 
 msgid "fastapi"
 msgstr ""
@@ -191,7 +200,7 @@ msgid "build"
 msgstr ""
 
 msgid "A simple, correct Python build frontend"
-msgstr "Un frontend de construction Python simple et correct"
+msgstr "Une interface simple et fiable pour la construction de paquets Python"
 
 msgid "babel"
 msgstr ""
@@ -221,7 +230,7 @@ msgid "pre-commit"
 msgstr ""
 
 msgid "A framework for managing and maintaining multi-language pre-commit hooks."
-msgstr "Un framework pour gérer et maintenir des hooks multi-langages pour pre-commit."
+msgstr "Un framework pour gérer et maintenir des hooks de pré-commit pour plusieurs langages."
 
 msgid "Optional modules for building the documentation:"
 msgstr "Modules optionnels pour construire la documentation :"
@@ -248,7 +257,7 @@ msgid "sphinxext-opengraph"
 msgstr ""
 
 msgid "Sphinx Extension to enable OGP support"
-msgstr ""
+msgstr "Extension Sphinx pour la prise en charge du protocole Open Graph (OGP)"
 
 msgid "myst_parser"
 msgstr ""
