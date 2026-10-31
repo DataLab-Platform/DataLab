@@ -24,6 +24,8 @@ class PluginStatus(sigimax.widgets.status.BaseStatus):
         parent (QWidget): parent widget
     """
 
+    SIG_CONFIGURE_PLUGINS = QC.Signal()
+
     #: Size used for creating the tinted icon pixmap
     ICON_TINT_SIZE: int = 64
 
@@ -34,7 +36,17 @@ class PluginStatus(sigimax.widgets.status.BaseStatus):
         super().__init__(None, parent)
         self.ok_icon = get_icon("libre-gui-plugin.svg")
         self.ko_icon = self._make_red_icon(self.ok_icon)
+        self.label.mouseReleaseEvent = self.on_click
         self.update_status()
+
+    def on_click(self, event: QG.QMouseEvent) -> None:
+        """Handle mouse click event on label.
+
+        Args:
+            event: mouse event
+        """
+        if self.isEnabled() and event.button() == QC.Qt.LeftButton:
+            self.SIG_CONFIGURE_PLUGINS.emit()
 
     @classmethod
     def _make_red_icon(cls, icon: QG.QIcon) -> QG.QIcon:
@@ -63,7 +75,8 @@ class PluginStatus(sigimax.widgets.status.BaseStatus):
     def update_status(self) -> None:
         """Update status widget"""
         text = _("Plugins:") + " "
-        if Conf.plugins_enabled.get():
+        plugins_enabled = Conf.plugins_enabled.get()
+        if plugins_enabled:
             nplugins = len(PluginRegistry.get_plugins())
             nfailed = len(PluginRegistry.get_failed_plugins())
             ntotal = nplugins + nfailed
@@ -80,7 +93,15 @@ class PluginStatus(sigimax.widgets.status.BaseStatus):
             self.label.setStyleSheet("color: red")
         else:
             self.label.setStyleSheet("")
-        self.setToolTip(PluginRegistry.get_plugin_info())
+        self.label.setCursor(
+            QG.QCursor(
+                QC.Qt.PointingHandCursor if plugins_enabled else QC.Qt.ArrowCursor
+            )
+        )
+        tooltip = PluginRegistry.get_plugin_info()
+        if plugins_enabled:
+            tooltip += "<br>" + _("Click to configure plugins")
+        self.setToolTip(tooltip)
 
 
 class XMLRPCStatus(sigimax.widgets.status.BaseStatus):

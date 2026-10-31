@@ -5517,6 +5517,9 @@ msgstr "Cette image utilise un type de données entier, elle ne peut donc pas co
 msgid "Plugins:"
 msgstr "Plugins :"
 
+msgid "Click to configure plugins"
+msgstr "Cliquer pour configurer les plugins"
+
 msgid "XML-RPC:"
 msgstr "XML-RPC :"
 
