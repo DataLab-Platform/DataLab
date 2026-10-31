@@ -74,8 +74,8 @@ def test_plugin_status_label_requests_configuration(
             assert widget.label.styleSheet() == ("color: red" if has_errors else "")
             expected_icon = widget.ko_icon if has_errors else widget.ok_icon
             assert (
-                widget.icon.pixmap().cacheKey()
-                == expected_icon.pixmap(widget.label.sizeHint().height()).cacheKey()
+                widget.icon.pixmap().toImage()
+                == expected_icon.pixmap(widget.label.sizeHint().height()).toImage()
             )
 
             for button in (QC.Qt.RightButton, QC.Qt.MiddleButton):
