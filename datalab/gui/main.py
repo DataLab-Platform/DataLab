@@ -1394,6 +1394,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
     def _get_extra_status_widgets(self) -> list[QW.QWidget]:
         """Return the plugin, XML-RPC server and Web API server status widgets"""
         self.pluginstatus = dl_status.PluginStatus()
+        self.pluginstatus.SIG_CONFIGURE_PLUGINS.connect(self.__configure_plugins)
         xmlrpcstatus = dl_status.XMLRPCStatus()
         xmlrpcstatus.set_port(self.remote_server.port)
         self.webapistatus = dl_status.WebAPIStatus()

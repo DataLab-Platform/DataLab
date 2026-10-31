@@ -26,6 +26,10 @@
 * Completed previews keep their dedicated process ready for later dialogs, avoiding repeated process startup. Cancelling a preview that is still running stops its process so speculative work cannot continue in the background.
 * Bounded numeric parameters now offer sliders alongside precise text entry. The Processing tab retains Apply and automatic re-processing, with updates deferred until slider release and valid input.
 
+**Plugin status:**
+
+* Click the **Plugins:** label in the status bar to open **Configure plugins...**, as with the Web API and internal console status labels. The shortcut is available whenever plugins are globally enabled, including when no plugins are loaded or a plugin fails to load.
+
 **Application plugins:**
 
 * Added a top-level **Applications** entry that presents active scientific application plugins in a dedicated catalog

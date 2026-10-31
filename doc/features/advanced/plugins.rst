@@ -186,6 +186,8 @@ The **Plugins** menu provides two dedicated actions:
 - **Reload plugins**
   Reloads plugin modules from disk without restarting DataLab.
 
+When plugins are globally enabled, a single left click on the **Plugins:** label in the status bar also opens the same configuration dialog. The icon is not clickable; the shortcut remains available when no plugins are loaded or some plugins failed to load.
+
 Enable/disable plugins
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -470,7 +472,7 @@ This workflow allows iterative plugin development while DataLab is running.
 
 .. note::
 
-  Plugin enable/disable state is persisted in DataLab settings. Disabled plugins remain listed in the configuration dialog and can be re-enabled later. The global third-party plugins setting in Preferences is also applied immediately: disabling it removes plugin actions and greys out the Plugins menu and status indicator, while enabling it reloads plugins automatically.
+  Plugin enable/disable state is persisted in DataLab settings. Disabled plugins remain listed in the configuration dialog and can be re-enabled later. The global third-party plugins setting in Preferences is also applied immediately: disabling it removes plugin actions and disables the status indicator, which displays **Plugins: -**, while enabling it reloads plugins automatically. The **Plugins > Configure plugins...** menu action remains accessible when the status indicator is disabled.
 
 Hot-reload workflow for plugin development
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

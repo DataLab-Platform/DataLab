@@ -10,6 +10,7 @@ from datetime import datetime
 import pytest
 from guidata.configtools import get_icon
 from qtpy import QtCore as QC
+from qtpy import QtTest as QT
 from qtpy import QtWidgets as QW
 
 from datalab.config import (
@@ -531,6 +532,45 @@ def test_plugins_menu_stays_available_when_plugins_are_globally_disabled():
             assert "Reload plugins" in plugin_menu_texts
     finally:
         Conf.plugins_enabled.set(original_plugins_enabled)
+
+
+@pytest.mark.parametrize("plugins_enabled", [True, False])
+def test_plugin_status_opens_existing_configuration_dialog(
+    monkeypatch: pytest.MonkeyPatch, plugins_enabled: bool
+) -> None:
+    """The status label and menu use the same dialog without reloading plugins."""
+    Conf.plugins_enabled.set(plugins_enabled)
+    dialogs: list[PluginConfigDialog] = []
+    reload_calls: list[bool] = []
+
+    def record_dialog(dialog: PluginConfigDialog) -> int:
+        """Intercept the modal dialog without accepting configuration changes."""
+        dialogs.append(dialog)
+        return QW.QDialog.Rejected
+
+    monkeypatch.setattr(PluginConfigDialog, "exec", record_dialog)
+    with datalab_test_app_context(console=False) as win:
+        assert win.pluginstatus is not None
+        assert win.configure_plugins_action is not None
+        enabled_list = Conf.plugins_enabled_list.get(None)
+        monkeypatch.setattr(win, "reload_plugins", lambda: reload_calls.append(True))
+
+        QT.QTest.mouseClick(win.pluginstatus.label, QC.Qt.LeftButton)
+        assert len(dialogs) == int(plugins_enabled)
+
+        for button in (QC.Qt.RightButton, QC.Qt.MiddleButton):
+            QT.QTest.mouseClick(win.pluginstatus.label, button)
+        QT.QTest.mouseClick(win.pluginstatus.icon, QC.Qt.LeftButton)
+        assert len(dialogs) == int(plugins_enabled)
+
+        win.configure_plugins_action.trigger()
+        assert len(dialogs) == int(plugins_enabled) + 1
+        assert all(dialog.parent() is win for dialog in dialogs)
+        assert reload_calls == []
+        assert Conf.plugins_enabled.get() is plugins_enabled
+        assert Conf.plugins_enabled_list.get(None) == enabled_list
+        for dialog in dialogs:
+            _close_dialog(dialog)
 
 
 def test_disabled_plugins_still_appear_in_configuration_dialog():
