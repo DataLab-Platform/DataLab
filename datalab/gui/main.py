@@ -1605,10 +1605,10 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         configure_menu_about_to_show(self.tabmenu, self.__update_tab_menu)
         self.tabwidget.setMaximumWidth(600)
         s_idx = self.tabwidget.addTab(
-            self.signalpanel, get_icon("signal.svg"), _("Signal Panel")
+            self.signalpanel, get_icon("sigimax:signal.svg"), _("Signal Panel")
         )
         i_idx = self.tabwidget.addTab(
-            self.imagepanel, get_icon("image.svg"), _("Image Panel")
+            self.imagepanel, get_icon("sigimax:image.svg"), _("Image Panel")
         )
         self.tabwidget.setTabToolTip(
             s_idx, _("1D Signals: Manage and process one-dimensional data")

@@ -791,7 +791,9 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
         menu = QW.QMenu(self)
         choices = {}
         for panel, label in self.__data_panels():
-            action = menu.addAction(get_icon(f"{panel.PANEL_STR_ID}.svg"), label)
+            action = menu.addAction(
+                get_icon(f"sigimax:{panel.PANEL_STR_ID}.svg"), label
+            )
             choices[action] = panel
         chosen = menu.exec(self.__popup_position(key))
         menu.deleteLater()
@@ -801,7 +803,7 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
         """Show the signal and image creation actions"""
         menu = QW.QMenu(self)
         for panel, label in self.__data_panels():
-            submenu = menu.addMenu(get_icon(f"{panel.PANEL_STR_ID}.svg"), label)
+            submenu = menu.addMenu(get_icon(f"sigimax:{panel.PANEL_STR_ID}.svg"), label)
             add_actions(submenu, panel.get_category_actions(ActionCategory.CREATE))
         menu.exec(self.__popup_position("create"))
         menu.deleteLater()

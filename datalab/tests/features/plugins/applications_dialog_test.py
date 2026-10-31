@@ -295,6 +295,25 @@ def test_applications_dialog_shows_plugin_icons(monkeypatch) -> None:
             dialog.deleteLater()
 
 
+def test_plugin_icon_registered_image(monkeypatch) -> None:
+    """Plugin icons also accept images registered with guidata ("module:filename"),
+    consistently with guidata's image names."""
+    qt_app = QW.QApplication.instance() or QW.QApplication([])
+    # Outside tests, icon loading errors are logged instead of raised
+    monkeypatch.setattr(sgmx_qth, "is_running_tests", lambda: False)
+    generic_image = _icon_image(get_icon("libre-gui-plugin.svg"))
+    delete_image = _icon_image(get_icon("datalab:delete.svg"))
+    assert delete_image != generic_image
+    icon = applications_module.get_plugin_icon("datalab:delete.svg")
+    assert _icon_image(icon) == delete_image
+    icon = applications_module.get_plugin_icon("datalab:edit/delete.svg")
+    assert _icon_image(icon) == delete_image
+    for missing in ("datalab:missing.svg", "unknown_package:icons/missing.svg"):
+        icon = applications_module.get_plugin_icon(missing)
+        assert _icon_image(icon) == generic_image
+    assert qt_app is not None
+
+
 def test_application_page_has_explicit_empty_states() -> None:
     """A page without methods says so; commands need a declared target."""
     qt_app = QW.QApplication.instance() or QW.QApplication([])

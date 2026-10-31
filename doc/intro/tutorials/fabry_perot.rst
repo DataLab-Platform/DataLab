@@ -182,7 +182,7 @@ close the dialog. The fitted circles are displayed on the image.
 
     .. image:: ../../images/tutorials/fabry_perot/12.png
 
-.. |show_results| image:: ../../../datalab/data/icons/analysis/show_results.svg
+.. |show_results| image:: ../../images/icons/show_results.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -379,7 +379,7 @@ Click on the "Process signal" button |to_signal| in the toolbar near the
 profile to transfer the profile to the "Signals" panel. The intensity profile is added
 to the "Signals" panel, and DataLab switches to this panel to display the profile.
 
-.. |to_signal| image:: ../../../datalab/data/icons/to_signal.svg
+.. |to_signal| image:: ../../images/icons/to_signal.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -398,7 +398,7 @@ the annotations.
     Save the workspace to a file with "File > Save to HDF5 file...",
     or the |filesave_h5| button in the toolbar.
 
-.. |filesave_h5| image:: ../../../datalab/data/icons/io/filesave_h5.svg
+.. |filesave_h5| image:: ../../images/icons/filesave_h5.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -408,12 +408,12 @@ If you want to load the workspace again, you can use the "File > Open HDF5 file.
 "File > Browse HDF5 file..." (or the |h5browser| button in the toolbar) to load
 only a selection of data sets from the workspace.
 
-.. |fileopen_h5| image:: ../../../datalab/data/icons/io/fileopen_h5.svg
+.. |fileopen_h5| image:: ../../images/icons/fileopen_h5.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |h5browser| image:: ../../../datalab/data/icons/h5/h5browser.svg
+.. |h5browser| image:: ../../images/icons/h5browser.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

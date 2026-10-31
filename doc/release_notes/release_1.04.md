@@ -176,6 +176,8 @@ Signals, images and groups can now be deleted directly from the lists, as in Dat
 **Sharp icons with display scaling:**
 
 * The icons of the plots and of the editors provided by PlotPy and guidata (plot toolbars, contrast panel, cross sections, item list, array editor, ...) are now SVG images: they remain sharp with a display scaling such as 125 %, 150 % or 200 %, instead of looking blurry (requires PlotPy ≥ 2.12.1, closes [Issue #470](https://github.com/DataLab-Platform/DataLab/issues/470))
+* The **Processing > Resize** action of images showed the column resizing icon of guidata's editors instead of its own icon: DataLab icons now take precedence over guidata and PlotPy icons with the same name (requires guidata ≥ 3.17.1, closes [Issue #472](https://github.com/DataLab-Platform/DataLab/issues/472))
+* Plugin icons (`PluginInfo.icon`, tools and welcome tiles) may also designate an icon registered by a module, e.g. `"datalab:delete.svg"`, in addition to `package:path` resources and DataLab icon file names
 
 **Portable plot annotations:**
 

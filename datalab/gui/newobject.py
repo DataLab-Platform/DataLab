@@ -99,7 +99,7 @@ class CustomSignalParam(OrigCustomSignalParam):
         return current_value
 
     btn_curve_edit = gds.ButtonItem(
-        "Edit curve", callback=edit_curve_callback, icon="signal.svg"
+        "Edit curve", callback=edit_curve_callback, icon="sigimax:signal.svg"
     )
 
 

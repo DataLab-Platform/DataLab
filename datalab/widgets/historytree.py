@@ -172,7 +172,11 @@ class HistoryTree(QW.QTreeWidget):
                 compatible = action.is_current_state_compatible(mainwindow)
                 item.setData(0, self.COMPATIBILITY_ROLE, compatible)
                 brush = default_brush if compatible else disabled_brush
-                icon = get_icon("apply.svg") if compatible else get_icon("delete.svg")
+                icon = (
+                    get_icon("sigimax:apply.svg")
+                    if compatible
+                    else get_icon("datalab:delete.svg")
+                )
                 item.setIcon(0, icon)
                 for col in range(self.columnCount()):
                     item.setForeground(col, brush)

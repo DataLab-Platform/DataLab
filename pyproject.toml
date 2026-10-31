@@ -149,6 +149,8 @@ filterwarnings = [
     # Ignore specific user warnings from Sigima (expected behavior)
     "ignore:Multiple crossing points found. Returning first.:UserWarning:sigima.*",
     "ignore:Multiple crossing points found. Returning last.:UserWarning:sigima.*",
+    # Ambiguous image names must be designated explicitly ("module:filename")
+    "error::guidata.configtools.ImageNameConflictWarning",
 ]
 
 [tool.ruff]
