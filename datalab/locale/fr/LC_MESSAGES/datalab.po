@@ -1022,6 +1022,10 @@ msgstr "Afficher ou cacher le panneau de réglage du contraste"
 msgid "%s too large: %s, %s MiB (limit: %s MiB)"
 msgstr "%s : taille excessive, %s, %s Mio (limite : %s Mio)"
 
+#, python-format
+msgid "Previous version of %(filename)s kept as %(backup)s"
+msgstr "Version précédente de %(filename)s conservée sous %(backup)s"
+
 msgid "Capsule"
 msgstr "Capsule"
 
