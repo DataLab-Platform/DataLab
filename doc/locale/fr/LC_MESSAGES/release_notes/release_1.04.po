@@ -436,6 +436,9 @@ msgstr "Les annotations PlotPy existantes restent lisibles et ne sont converties
 msgid "Annotation identifiers, lock state, custom metadata and extension data are preserved across edits, while unknown third-party payloads are retained without modification"
 msgstr "Les identifiants d'annotation, l'état de verrouillage, les métadonnées personnalisées et les données d'extension sont conservés lors des modifications, tandis que les charges utiles tierces inconnues sont conservées sans modification"
 
+msgid "Rectangles and segments drawn on signals are now the same labeled shapes as on images; unlike on images, segments drawn on signals do not show their length and angle, which would mix X and Y units"
+msgstr "Les rectangles et segments tracés sur les signaux sont désormais les mêmes formes avec étiquette que sur les images ; contrairement aux images, les segments tracés sur les signaux n'affichent pas leur longueur et leur angle, qui mélangeraient les unités de X et de Y"
+
 msgid "DataLab now requires Sigima ≥ 1.4.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x; HDF5 imports use Sigima's experimental-source API"
 msgstr "DataLab nécessite désormais Sigima ≥ 1.4.0, SigimaX ≥ 1.1.0 et DataLab-Capsule 0.1.x ; les imports HDF5 utilisent l'API d'origine expérimentale de Sigima"
 
