@@ -188,6 +188,7 @@ Signals, images and groups can now be deleted directly from the lists, as in Dat
 * Plot annotations are now stored in a renderer-independent format shared with DataLab-Web, so annotations in workspaces and `.dlabann` files are no longer tied to PlotPy
 * Existing PlotPy annotations remain readable and are converted only after an annotation edit is accepted; simply opening a workspace or cancelling the editor leaves its data unchanged
 * Annotation identifiers, lock state, custom metadata and extension data are preserved across edits, while unknown third-party payloads are retained without modification
+* Rectangles and segments drawn on signals are now the same labeled shapes as on images; unlike on images, segments drawn on signals do not show their length and angle, which would mix X and Y units
 * DataLab now requires Sigima ≥ 1.4.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x; HDF5 imports use Sigima's experimental-source API
 
 **Regions of interest:**

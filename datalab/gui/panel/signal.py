@@ -13,11 +13,11 @@ from typing import TYPE_CHECKING, Type
 import guidata.dataset as gds
 from guidata.config import ValidationMode, temporary_validation_mode
 from plotpy.tools import (
+    AnnotatedRectangleTool,
+    AnnotatedSegmentTool,
     HCursorTool,
     HRangeTool,
     LabelTool,
-    RectangleTool,
-    SegmentTool,
     VCursorTool,
     XCursorTool,
 )
@@ -35,6 +35,7 @@ from datalab.gui.processor.signal import SignalProcessor
 from datalab.objectmodel import get_uuid
 
 if TYPE_CHECKING:
+    from plotpy.items import AnnotatedSegment
     from qtpy import QtWidgets as QW
 
     from datalab.gui.docks import DockablePlotWidget
@@ -43,6 +44,24 @@ if TYPE_CHECKING:
 #: Line width stored by DataLab 1.3 or earlier for curves drawn with the default
 #: line width, or with a line width clamped for curves with many points
 LEGACY_AUTOMATIC_LINE_WIDTH = 1.0
+
+
+class SignalAnnotatedSegmentTool(AnnotatedSegmentTool):
+    """Annotated segment tool for signals
+
+    The length and the angle of a segment combine its X and Y extents, whose units
+    generally differ on a signal: unlike on images, they are not displayed.
+    """
+
+    def create_shape(self) -> tuple[AnnotatedSegment, int, int]:
+        """Create an annotated segment without computations
+
+        Returns:
+            Annotated segment and the indices of its handles
+        """
+        annotation, handle0, handle1 = super().create_shape()
+        annotation.area_computations_visible = False
+        return annotation, handle0, handle1
 
 
 class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]):
@@ -56,13 +75,16 @@ class SignalPanel(BaseDataPanel[SignalObj, SignalROI, roieditor.SignalROIEditor]
     # The following tools are used to create annotations on signals. The annotation
     # items are created using PlotPy's default settings. Those appearance settings
     # may be modified in the configuration (see `datalab.config`).
+    # Each tool must create items that can be stored as portable annotations (hence
+    # the annotated variants of the rectangle and segment tools), otherwise they are
+    # discarded when the annotation editor is validated.
     ANNOTATION_TOOLS = (
         LabelTool,
         VCursorTool,
         HCursorTool,
         XCursorTool,
-        SegmentTool,
-        RectangleTool,
+        SignalAnnotatedSegmentTool,
+        AnnotatedRectangleTool,
         HRangeTool,
     )
 
