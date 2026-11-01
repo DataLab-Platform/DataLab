@@ -18,6 +18,7 @@ import hashlib
 import os
 import os.path as osp
 import re
+import warnings
 
 import plotpy.config  # noqa: F401  (registers PlotPy's icon path)
 import pytest
@@ -140,6 +141,13 @@ def test_explicit_designation(name: str, relpath: str | None) -> None:
     if relpath is None:
         relpath = name.split(":", 1)[1]
     assert osp.normcase(path) == osp.normcase(osp.join(root, *relpath.split("/")))
+
+
+def test_image_name_conflict_warning_is_an_error() -> None:
+    """Test that an ambiguous image name fails the test suite (filter added by
+    ``datalab/tests/conftest.py``)"""
+    with pytest.raises(configtools.ImageNameConflictWarning):
+        warnings.warn("ambiguous image name", configtools.ImageNameConflictWarning)
 
 
 if __name__ == "__main__":

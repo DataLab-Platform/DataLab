@@ -126,12 +126,17 @@ def pytest_report_header(config):  # pylint: disable=unused-argument
 
 
 def pytest_configure(config):
-    """Add custom markers to pytest."""
+    """Add custom markers and warning filters to pytest."""
     if config.option.durations is None:
         config.option.durations = 20  # Default to showing 20 slowest tests
     config.addinivalue_line(
         "markers",
         "validation: mark a test as a validation test (ground truth or analytical)",
+    )
+    # Ambiguous image names must be designated explicitly ("module:filename").
+    # Not in pyproject.toml: see the comment of its "filterwarnings" option
+    config.addinivalue_line(
+        "filterwarnings", "error::guidata.configtools.ImageNameConflictWarning"
     )
     if not config.getoption("--show-windows"):
         os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
