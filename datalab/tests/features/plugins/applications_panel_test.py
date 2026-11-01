@@ -711,14 +711,18 @@ def test_main_window_shows_applications_panel(monkeypatch) -> None:
         available = window.screen().availableGeometry()
         assert available.contains(dock.frameGeometry())
         assert dock.width() == ApplicationsPanel.DEFAULT_WIDTH
-        assert dock.height() == window.height()
+        # As high as the window, within the available screen area
+        decoration = window.frameGeometry().height() - window.height()
+        assert dock.height() == min(window.height(), available.height() - decoration)
         assert window.isEnabled()
 
         window.set_current_panel("image")
         assert window.get_current_panel() == "image"
         assert dock.isVisible()
 
-        # Afterwards, the panel is shown where the user left it
+        # Afterwards, the panel is shown where the user left it (small enough to
+        # be left there whatever the screen size)
+        dock.resize(dock.width(), available.height() // 2)
         position = available.topLeft() + QC.QPoint(10, 10)
         dock.move(position)
         dock.close()
@@ -768,6 +772,11 @@ def test_docked_applications_panel_keeps_its_size() -> None:
         dock = window.docks[window.applicationspanel]
         window.show_applications()
         dock.setFloating(False)
+        qt_app.processEvents()
+        # Room for the docked panel beyond the minimum width of the other areas,
+        # whatever the screen size and the fonts
+        width = window.minimumSizeHint().width() + ApplicationsPanel.DEFAULT_WIDTH
+        window.resize(width, window.height())
         qt_app.processEvents()
         window.resizeDocks([dock], [ApplicationsPanel.DEFAULT_WIDTH], QC.Qt.Horizontal)
         qt_app.processEvents()
