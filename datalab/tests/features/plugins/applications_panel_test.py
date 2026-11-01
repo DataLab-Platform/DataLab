@@ -850,6 +850,45 @@ def test_docked_applications_panel_keeps_its_size() -> None:
         assert Conf.applications_panel_docked_size.get() is None
 
 
+def test_floating_applications_panel_is_shown_again_as_closed(monkeypatch) -> None:
+    """Closed while floating, the panel is shown again with the same size and a
+    title bar following the color theme, even when its content was hidden
+    meanwhile: with Qt 5, the dock widget was then limited to the size of its
+    title bar buttons, and its native window lost the dark title bar."""
+    fixed_title_bars: list[QW.QWidget] = []
+    monkeypatch.setattr(
+        applications_module,
+        "win32_fix_title_bar_background",
+        fixed_title_bars.append,
+    )
+    with datalab_test_app_context(console=False, exec_loop=False) as window:
+        qt_app = QW.QApplication.instance()
+        panel = window.applicationspanel
+        dock = window.docks[panel]
+        window.show_applications()
+        qt_app.processEvents()
+        assert dock.isFloating()
+        dock.resize(ApplicationsPanel.MINIMUM_WIDTH + 40, 300)
+        qt_app.processEvents()
+        size = dock.size()
+
+        dock.close()
+        qt_app.processEvents()
+        # What Qt 5 does once the window layout has been restored: the content is
+        # hidden, and the layout limits the dock widget to its title bar buttons
+        panel.hide()
+        layout = dock.layout()
+        layout.invalidate()
+        layout.activate()
+        assert dock.maximumHeight() < panel.minimumSizeHint().height()
+        fixed_title_bars.clear()
+        window.show_applications()
+        qt_app.processEvents()
+        assert dock.isVisible() and dock.isFloating() and panel.isVisible()
+        assert dock.size() == size
+        assert dock in fixed_title_bars
+
+
 def test_applications_panel_floats_beside_a_window() -> None:
     """With room on the screen, the panel floats to the right of the window,
     as high as the window."""
