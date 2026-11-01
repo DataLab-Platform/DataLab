@@ -103,6 +103,10 @@ CAPABILITY_LABELS: dict[PluginCapability, str] = {
 DIALOG_MIN_WIDTH: int = 600
 DIALOG_MIN_HEIGHT: int = 400
 
+#: Room left around the tab titles and the global toggle in the minimum dialog
+#: width (tab widget frame and spacing)
+TAB_TITLES_MARGIN: int = 8
+
 #: Dialog size when no size has been saved yet
 DIALOG_DEFAULT_SIZE: tuple[int, int] = (700, 560)
 
@@ -728,6 +732,28 @@ class PluginConfigDialog(QW.QDialog):
         return (
             max(DIALOG_MIN_WIDTH, min(width, max_width)),
             max(DIALOG_MIN_HEIGHT, min(height, max_height)),
+        )
+
+    def showEvent(self, event: QG.QShowEvent) -> None:  # pylint: disable=invalid-name
+        """Widen the minimum dialog width so that all tab titles fit.
+
+        The width of the tab titles depends on the fonts of the platform (they
+        are wider on Linux, for instance): it is only known once the dialog is
+        polished, before it is shown.
+        """
+        self.setMinimumWidth(max(DIALOG_MIN_WIDTH, self._get_tab_titles_width()))
+        super().showEvent(event)
+
+    def _get_tab_titles_width(self) -> int:
+        """Return the dialog width showing all tab titles and the global toggle."""
+        margins = self.layout().contentsMargins()
+        corner = self.tabs.cornerWidget(QC.Qt.TopRightCorner)
+        return (
+            self.tabs.tabBar().sizeHint().width()
+            + (0 if corner is None else corner.sizeHint().width())
+            + margins.left()
+            + margins.right()
+            + TAB_TITLES_MARGIN
         )
 
     def done(self, result: int) -> None:

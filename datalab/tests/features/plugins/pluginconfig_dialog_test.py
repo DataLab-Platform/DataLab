@@ -675,11 +675,16 @@ def test_plugin_settings_tab_exposes_global_toggle_and_warning_option():
 
 
 def test_tab_titles_fit_at_minimum_width():
-    """All tab titles should stay visible at the minimum dialog width."""
+    """All tab titles should stay visible at the minimum dialog width, whatever
+    the width of the fonts of the platform."""
     with datalab_test_app_context(console=False) as win:
         dialog = PluginConfigDialog(win)
         dialog.resize(pluginconfig.DIALOG_MIN_WIDTH, pluginconfig.DIALOG_MIN_HEIGHT)
         _show_dialog(dialog)
+        assert dialog.minimumWidth() >= pluginconfig.DIALOG_MIN_WIDTH
+        dialog.resize(dialog.minimumWidth(), dialog.minimumHeight())
+        QW.QApplication.processEvents()
+        assert dialog.width() == dialog.minimumWidth()
 
         assert dialog.tabs is not None
         titles = [dialog.tabs.tabText(index) for index in range(dialog.tabs.count())]
@@ -726,7 +731,8 @@ def test_dialog_size_is_restored_and_saved():
 
         dialog = PluginConfigDialog(win)
         _show_dialog(dialog)
-        new_size = (min_size[0] + 10, min_size[1] + 10)
+        # The minimum width depends on the width of the tab titles
+        new_size = (dialog.minimumWidth() + 10, dialog.minimumHeight() + 10)
         dialog.resize(*new_size)
         dialog.reject()
         # Running tests must not overwrite the user's dialog size
