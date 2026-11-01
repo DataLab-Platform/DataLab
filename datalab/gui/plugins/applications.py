@@ -1012,8 +1012,9 @@ class ApplicationPage(QW.QWidget):
             + "\n"
             + _("Version: %s") % info.version
         )
-        description.setVisible(bool(info.description))
+        # Parented first: a parentless widget made visible flashes as a window
         layout.addWidget(description)
+        description.setVisible(bool(info.description))
         collapsed = Conf.applications_collapsed_sections.get()
         self._add_methods(layout, collapsed)
         self._add_tools(layout, collapsed)
