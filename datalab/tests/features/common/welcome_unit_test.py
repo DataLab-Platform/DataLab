@@ -21,7 +21,6 @@ import datalab
 from datalab.config import Conf, _
 from datalab.gui import welcome
 from datalab.gui.main import DLMainWindow
-from datalab.gui.plugins.applications import ApplicationsDialog
 from datalab.plugins import PluginBase, PluginCapability, PluginInfo, PluginRegistry
 from datalab.plugins.tiles import WelcomeTile
 from datalab.tests import datalab_test_app_context
@@ -469,7 +468,8 @@ def test_welcome_page_isolates_invalid_application_tiles(monkeypatch) -> None:
 
 
 def test_welcome_page_application_plugin_lifecycle() -> None:
-    """A registered plugin tile opens its catalog page until plugins are disabled"""
+    """A registered plugin tile shows its page in the Applications panel, until
+    plugins are disabled"""
     plugin_id = "org.example.welcome-tiles"
     with datalab_test_app_context(console=False) as win:
         # Defined after startup, which clears the registered plugin classes
@@ -496,16 +496,16 @@ def test_welcome_page_application_plugin_lifecycle() -> None:
 
             entry.SIG_CLICKED.emit()
             QW.QApplication.processEvents()
-            (dialog,) = win.findChildren(ApplicationsDialog)
-            assert dialog.isVisible()
-            assert dialog.application_list.currentItem().data(QC.Qt.UserRole) == (
-                plugin_id
-            )
-            dialog.close()
+            panel = win.applicationspanel
+            dock = win.docks[panel]
+            assert dock.isVisible()
+            assert panel.current_plugin_id() == plugin_id
+            dock.close()
 
             win.set_plugins_enabled(False)
             assert page.application_tiles == {}
             assert page.applications_section.isHidden()
+            assert not panel.application_pages
         finally:
             PluginRegistry.get_plugin_classes().remove(TileApplicationPlugin)
 

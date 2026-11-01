@@ -71,11 +71,11 @@ msgstr "Cliquez sur le libellé **Plugins :** de la barre de statut pour ouvrir 
 msgid "**Application plugins:**"
 msgstr "**Plugins d'application :**"
 
-msgid "Added a top-level **Applications** entry that presents active scientific application plugins in a dedicated catalog"
-msgstr "Ajout d'une entrée de premier niveau **Applications** qui présente les plugins d'application scientifique actifs dans un catalogue dédié"
+msgid "Added a top-level **Applications** entry that shows the active scientific application plugins in a new **Applications** panel"
+msgstr "Ajout d'une entrée de premier niveau **Applications** qui présente les plugins d'application scientifique actifs dans un nouveau panneau **Applications**"
 
-msgid "Each application displays its description, identity, version, methods, tools, and examples; processing-only plugins remain outside this focused view"
-msgstr "Chaque application affiche sa description, son identité, sa version, ses méthodes, ses outils et ses exemples ; les plugins de traitement seul restent en dehors de cette vue ciblée"
+msgid "Each application displays its description, version, methods, tools, and examples; processing-only plugins remain outside this focused view"
+msgstr "Chaque application affiche sa description, sa version, ses méthodes, ses outils et ses exemples ; les plugins de traitement seul restent en dehors de cette vue ciblée"
 
 msgid "Each method shows the inputs it expects (object type and count, required metadata) and a live status telling whether the current selection can be analyzed, and why not"
 msgstr "Chaque méthode présente les entrées qu'elle attend (type et nombre d'objets, métadonnées requises) et un statut mis à jour indiquant si la sélection courante peut être analysée, et sinon pourquoi"
@@ -83,17 +83,17 @@ msgstr "Chaque méthode présente les entrées qu'elle attend (type et nombre d'
 msgid "When required metadata are missing, the status points to **Edit > Metadata > Add metadata...**, whose **Known keys** list also offers the keys expected by application methods; the status is updated as soon as objects are modified"
 msgstr "Lorsque des métadonnées requises manquent, le statut renvoie vers **Édition > Métadonnées > Ajouter des métadonnées...**, dont la liste **Clés connues** propose aussi les clés attendues par les méthodes des applications ; le statut est mis à jour dès que des objets sont modifiés"
 
-msgid "**Run on selection...** starts a method directly when the selection is ready, and asks for the input assignment only when it is ambiguous or invalid; the assignment dialog checks the chosen objects before the run can continue"
-msgstr "**Exécuter sur la sélection...** lance directement une méthode lorsque la sélection convient, et ne demande l'affectation des entrées que si elle est ambiguë ou invalide ; la boîte de dialogue d'affectation vérifie les objets choisis avant de permettre l'exécution"
+msgid "**Run...** starts a method on the current selection directly when the selection is ready, and asks for the input assignment only when it is ambiguous or invalid; the assignment dialog checks the chosen objects before the run can continue"
+msgstr "**Exécuter...** lance directement une méthode sur la sélection courante lorsque celle-ci convient, et ne demande l'affectation des entrées que si elle est ambiguë ou invalide ; la boîte de dialogue d'affectation vérifie les objets choisis avant de permettre l'exécution"
 
 msgid "Examples are listed under the methods they are designed for: **Try with this example** opens the example, prefills the method parameters, and runs the method once they are accepted. One example may serve several methods, and examples designed for no method are listed as datasets"
 msgstr "Les exemples sont listés sous les méthodes pour lesquelles ils sont conçus : **Essayer avec cet exemple** ouvre l'exemple, préremplit les paramètres de la méthode et exécute celle-ci une fois qu'ils sont acceptés. Un exemple peut servir plusieurs méthodes, et les exemples conçus pour aucune méthode sont listés comme jeux de données"
 
-msgid "Application plugins may also list tools, such as wizards or editors, in the catalog"
-msgstr "Les plugins d'application peuvent aussi lister des outils, comme des assistants ou des éditeurs, dans le catalogue"
+msgid "Application plugins may also list tools, such as wizards or editors, in the **Applications** panel"
+msgstr "Les plugins d'application peuvent aussi lister des outils, comme des assistants ou des éditeurs, dans le panneau **Applications**"
 
-msgid "Plugin tools also appear in the plugin's submenu of the **Plugins** menu, in the Signal or Image panel they work on. A tool that needs a selection is disabled until the right objects are selected, and its catalog button tells what to select"
-msgstr "Les outils de plugin apparaissent aussi dans le sous-menu du plugin du menu **Plugins**, dans le panneau Signal ou Image sur lequel ils travaillent. Un outil qui a besoin d'une sélection est désactivé jusqu'à ce que les bons objets soient sélectionnés, et son bouton dans le catalogue indique quoi sélectionner"
+msgid "Plugin tools also appear in the plugin's submenu of the **Plugins** menu, in the Signal or Image panel they work on. A tool that needs a selection is disabled until the right objects are selected, and its button in the **Applications** panel tells what to select"
+msgstr "Les outils de plugin apparaissent aussi dans le sous-menu du plugin du menu **Plugins**, dans le panneau Signal ou Image sur lequel ils travaillent. Un outil qui a besoin d'une sélection est désactivé jusqu'à ce que les bons objets soient sélectionnés, et son bouton dans le panneau **Applications** indique quoi sélectionner"
 
 msgid "Application plugins may provide instruments, such as simulated cameras or oscilloscopes, without writing any user interface: DataLab shows a window with a live view and the instrument settings, refreshed as settings change or continuously in **Live** mode, and **Acquire** adds the acquired objects to a new group, ready for the application's methods"
 msgstr "Les plugins d'application peuvent fournir des instruments, comme des caméras ou des oscilloscopes simulés, sans écrire d'interface utilisateur : DataLab affiche une fenêtre avec une vue en direct et les réglages de l'instrument, rafraîchie à chaque modification des réglages ou en continu en mode **En direct**, et **Acquérir** ajoute les objets acquis dans un nouveau groupe, prêts pour les méthodes de l'application"
@@ -107,26 +107,26 @@ msgstr "Les instruments sont appelés en dehors du fil d'exécution de l'interfa
 msgid "Plugin developers describe recipe inputs declaratively (titles, minimum counts, metadata requirements) and may add binding suggestions and fast input checks; every recipe then runs through DataLab's generic launcher, without plugin-specific input dialogs"
 msgstr "Les développeurs de plugins décrivent les entrées des recettes de manière déclarative (titres, effectifs minimaux, métadonnées requises) et peuvent ajouter des suggestions d'affectation et des vérifications rapides des entrées ; chaque recette s'exécute alors via le lanceur générique de DataLab, sans boîte de dialogue d'entrées propre au plugin"
 
-msgid "The catalog is non-modal and remains open after starting a method or opening an example, so users may continue interacting with the DataLab workspace"
-msgstr "Le catalogue est non modal et reste ouvert après le lancement d'une méthode ou l'ouverture d'un exemple, de sorte que l'utilisateur peut continuer à interagir avec l'espace de travail DataLab"
+msgid "The **Applications** panel is a regular panel that does not hide the DataLab workspace: the first time, it floats beside the main window, as high as this window, so that the data and their views stay in sight while using it. It may then be docked (for example next to the list of signals or images whose selection it analyzes), tabified with another panel or left floating, and DataLab shows it again where the user left it, with the same size. It remains open after starting a method or opening an example"
+msgstr "Le panneau **Applications** est un panneau comme les autres, qui ne masque pas l'espace de travail de DataLab : la première fois, il s'affiche en fenêtre flottante à côté de la fenêtre principale, sur toute la hauteur de celle-ci, afin que les données et leurs vues restent visibles pendant son utilisation. Il peut ensuite être ancré (par exemple à côté de la liste des signaux ou des images dont il analyse la sélection), regroupé en onglets avec un autre panneau ou laissé flottant, et DataLab l'affiche à nouveau là où l'utilisateur l'a laissé, avec la même taille. Il reste ouvert après le lancement d'une méthode ou l'ouverture d'un exemple"
 
-msgid "The methods, tools and datasets of an application form an accordion: one section is open at a time, and a colored dot tells, without opening it, whether each method can run on the current selection"
-msgstr "Les méthodes, outils et jeux de données d'une application forment un accordéon : une seule section est ouverte à la fois, et une pastille de couleur indique, sans l'ouvrir, si chaque méthode peut s'exécuter sur la sélection courante"
+msgid "The panel stays compact and readable when docked: each method takes one row, with a colored dot and a short text telling whether the current selection can be analyzed, and a **Run...** button; below the list, the panel gives the full details of the selected method (description, reasons of its status, expected inputs with the description and the key of their metadata, examples). The result of the last run of a method is shown below its row. The sections of the list may be collapsed, and the height of the details set with a splitter: DataLab remembers these choices"
+msgstr "Le panneau reste compact et lisible lorsqu'il est ancré : chaque méthode occupe une ligne, avec une pastille de couleur et un court texte indiquant si la sélection courante peut être analysée, et un bouton **Exécuter...** ; sous la liste, le panneau donne tous les détails de la méthode sélectionnée (description, raisons de son statut, entrées attendues avec la description et la clé de leurs métadonnées, exemples). Le résultat de la dernière exécution d'une méthode s'affiche sous sa ligne. Les sections de la liste peuvent être repliées, et la hauteur des détails réglée à l'aide d'un séparateur : DataLab mémorise ces choix"
 
-msgid "The application list of the catalog may be hidden with the strip separating it from the application page: the window shrinks accordingly, and the choice is remembered"
-msgstr "La liste des applications du catalogue peut être masquée à l'aide de la bande qui la sépare de la page de l'application : la fenêtre se réduit en conséquence, et ce choix est mémorisé"
+msgid "When several application plugins are installed, their number is shown at the top of the panel, above the list selecting the application; the documentation and welcome page options of the application are in the menu next to it"
+msgstr "Lorsque plusieurs plugins d'application sont installés, leur nombre est indiqué en haut du panneau, au-dessus de la liste permettant de choisir l'application ; la documentation et les options de page d'accueil de l'application se trouvent dans le menu situé à côté"
 
 msgid "Completed application methods select their last generated object, consistently with standard DataLab processing"
 msgstr "Les méthodes d'application terminées sélectionnent le dernier objet qu'elles ont généré, de manière cohérente avec les traitements standard de DataLab"
 
-msgid "Application plugins add tiles to a new **Applications** section of the welcome page: by default, one tile per plugin opens its page in the catalog, and plugins may declare additional tiles, for example to open an example directly. Additional tiles are shown when there is room for them, and otherwise move to the menu of the main tile"
-msgstr "Les plugins d'application ajoutent des tuiles à une nouvelle section **Applications** de la page d'accueil : par défaut, une tuile par plugin ouvre sa page dans le catalogue, et les plugins peuvent déclarer des tuiles supplémentaires, par exemple pour ouvrir directement un exemple. Les tuiles supplémentaires sont affichées lorsqu'il y a la place nécessaire, et passent sinon dans le menu de la tuile principale"
+msgid "Application plugins add tiles to a new **Applications** section of the welcome page: by default, one tile per plugin shows its page in the **Applications** panel, and plugins may declare additional tiles, for example to open an example directly. Additional tiles are shown when there is room for them, and otherwise move to the menu of the main tile"
+msgstr "Les plugins d'application ajoutent des tuiles à une nouvelle section **Applications** de la page d'accueil : par défaut, une tuile par plugin affiche sa page dans le panneau **Applications**, et les plugins peuvent déclarer des tuiles supplémentaires, par exemple pour ouvrir directement un exemple. Les tuiles supplémentaires sont affichées lorsqu'il y a la place nécessaire, et passent sinon dans le menu de la tuile principale"
 
-msgid "The welcome page stays tidy when many applications are installed: tiles are limited to a configurable number of rows (two by default), with a last tile opening the catalog for the others. Applications may be pinned to the top or hidden, and recently used ones come first; the catalog offers a search field and the same welcome page options"
-msgstr "La page d'accueil reste lisible lorsque de nombreuses applications sont installées : les tuiles sont limitées à un nombre de lignes configurable (deux par défaut), une dernière tuile ouvrant le catalogue pour les autres. Les applications peuvent être épinglées en tête ou masquées, et celles utilisées récemment viennent en premier ; le catalogue propose un champ de recherche et les mêmes options de page d'accueil"
+msgid "The welcome page stays tidy when many applications are installed: tiles are limited to a configurable number of rows (two by default), with a last tile showing the **Applications** panel for the others. Applications may be pinned to the top or hidden, and recently used ones come first; the **Applications** panel offers the same welcome page options"
+msgstr "La page d'accueil reste lisible lorsque de nombreuses applications sont installées : les tuiles sont limitées à un nombre de lignes configurable (deux par défaut), une dernière tuile affichant le panneau **Applications** pour les autres. Les applications peuvent être épinglées en tête ou masquées, et celles utilisées récemment viennent en premier ; le panneau **Applications** propose les mêmes options de page d'accueil"
 
-msgid "Plugins may declare an icon, shown in the **Applications** catalog, on their welcome page tile and in the **Configure plugins...** dialog"
-msgstr "Les plugins peuvent déclarer une icône, affichée dans le catalogue **Applications**, sur leur tuile de la page d'accueil et dans la boîte de dialogue **Configurer les plugins...**"
+msgid "Plugins may declare an icon, shown in the **Applications** panel, on their welcome page tile and in the **Configure plugins...** dialog"
+msgstr "Les plugins peuvent déclarer une icône, affichée dans le panneau **Applications**, sur leur tuile de la page d'accueil et dans la boîte de dialogue **Configurer les plugins...**"
 
 msgid "**Plugin installation:**"
 msgstr "**Installation de plugins :**"

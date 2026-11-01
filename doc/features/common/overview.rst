@@ -41,8 +41,9 @@ in the :ref:`historypanel`. The button may be hidden in the :ref:`settings`
     :class: dark-light no-scaled-link
 
 Additional panels are available as dockable widgets, and may be shown or hidden
-from the "View" menu: the :ref:`welcome_page`, the :ref:`historypanel`, the Macro
-panel (see :ref:`about_macros`) and the :ref:`ai_assistant`.
+from the "View" menu: the :ref:`welcome_page`, the :ref:`applications_panel`, the
+:ref:`historypanel`, the Macro panel (see :ref:`about_macros`) and the
+:ref:`ai_assistant`.
 
 .. _welcome_page:
 
@@ -58,11 +59,22 @@ A **Welcome** page is shown next to the signal and image views when DataLab star
 - ask the :ref:`ai_assistant`, take the guided tour, run the demo, read the
   online documentation, or browse the release notes of the running version.
 
-When application plugins are installed, an **Applications** section at the top of the page shows their tiles: clicking the main tile of an application opens its page in the **Applications** catalog, or starts the main action provided by the plugin. An application may provide other tiles, for example to open an example directly: they are shown next to its main tile when the section has room for them, and otherwise move to the menu of the main tile. This menu, opened from the "…" button of the main tile or by right-clicking it, also lets you pin the application to the top of the section or hide it from the welcome page. Pinned applications come first, then recently used ones, then the others by name. The section is limited to two rows of tiles by default (this number may be changed in the :ref:`settings`): when more applications are installed, the last tile gives the number of applications left out and opens the catalog. The "Browse all applications..." button also opens the catalog, where a search field filters applications by name or description, and where the "Show on welcome page" and "Pin to the welcome page" check boxes of each application change the same preferences (see :ref:`about_plugins`).
-
-On the page of an application, the methods are listed one below the other, followed by the tools and datasets of the application, if any: clicking a title opens its section and closes the one previously open. The colored dot before each method tells whether the current selection can be analyzed, and its tooltip gives the reason. The open method presents the inputs it expects and this status in detail. When metadata are missing, the status points to "Edit > Metadata > Add metadata...", and it is updated as soon as objects are modified. "Run on selection..." starts the method, and asks you to assign the selected objects to its inputs only when needed. The examples designed for a method are listed below it: "Try with this example" opens the example and runs the method with suitable parameters. The vertical strip between the application list and the page hides the list, or shows it again: the window shrinks or grows accordingly, and DataLab remembers this choice.
+When application plugins are installed, an **Applications** section at the top of the page shows their tiles: clicking the main tile of an application shows its page in the :ref:`applications_panel`, or starts the main action provided by the plugin. An application may provide other tiles, for example to open an example directly: they are shown next to its main tile when the section has room for them, and otherwise move to the menu of the main tile. This menu, opened from the "…" button of the main tile or by right-clicking it, also lets you pin the application to the top of the section or hide it from the welcome page. Pinned applications come first, then recently used ones, then the others by name. The section is limited to two rows of tiles by default (this number may be changed in the :ref:`settings`): when more applications are installed, the last tile gives the number of applications left out and shows the Applications panel. The "Browse all applications..." button also shows this panel, where the "…" menu of each application offers the same "Show on welcome page" and "Pin to the welcome page" options (see :ref:`about_plugins`).
 
 The Welcome page is a regular dockable panel: as soon as a signal or an image is created or opened, the corresponding view is brought to the front, and the Welcome page remains available as a tab. It may be closed like any other panel, and reopened at any time from the "Welcome page" entry of the "?" (Help) menu or from the "View" menu; it is also reopened automatically when the current panel becomes empty. The "Show welcome page when the current panel is empty" check box, at the bottom of the page, controls this automatic display, including at startup (this option is also available in the :ref:`settings`).
+
+.. _applications_panel:
+
+Applications panel
+^^^^^^^^^^^^^^^^^^
+
+The **Applications** panel presents the methods of the installed application plugins. It is shown by the **Applications** entry of the menu bar, by the application tiles of the :ref:`welcome_page`, or from the "View" menu. The first time, it floats beside the main window, as high as this window, so that you keep your data and their views in sight while using it. You may then dock it like any other panel, for example on the left of the main window, next to the list of data sets whose selection it analyzes, tabify it with another panel, or leave it floating: DataLab shows it again where you left it, with the same size.
+
+When several application plugins are installed, their number is given at the top of the panel, above a list which selects the application: click it to show all the applications, with the version and the description of each one. With only one application, its name is shown instead. The "…" button next to it opens a menu with the documentation of the application and its welcome page options: "Show on welcome page" and "Pin to the welcome page".
+
+The methods of the application are listed one below the other, followed by its tools and datasets, if any: clicking the title of one of these sections hides its content, or shows it again, and DataLab remembers this choice for all applications. Each method takes one row. Its colored dot and the text below its title tell whether the current selection can be analyzed; the tooltip gives the reasons. When metadata are missing, the status points to "Edit > Metadata > Add metadata...", and it is updated as soon as objects are modified. "Run..." starts the method on the current selection, and asks you to assign the selected objects to its inputs only when needed; the number of created objects and the diagnostics of the run are then shown below the row.
+
+Below the list, the panel gives the details of the selected method: click a row, or use the :kbd:`Up` and :kbd:`Down` keys, to select another method. The details give the version and the description of the method, whether the current selection can be analyzed and why not, the inputs it expects (with their description, and the description and the key of the metadata they require), and the examples designed for it: "Try with this example" opens an example and runs the method with suitable parameters. The splitter between the list and the details sets their heights; DataLab remembers it, as well as the method selected for each application.
 
 .. _command_palette:
 

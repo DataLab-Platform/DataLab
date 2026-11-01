@@ -541,7 +541,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
 
     @classmethod
     def get_tools(cls) -> tuple[PluginTool, ...]:
-        """Return validated tools listed in the Applications catalog."""
+        """Return validated tools listed in the Applications panel."""
         tools = tuple(cls.TOOLS)
         if not tools:
             return ()
@@ -836,11 +836,11 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
     def launch_welcome_tile(self, tile_id: str) -> object:
         """Launch a welcome page tile.
 
-        A tile without launcher opens the plugin page of the Applications
-        catalog; otherwise, its plugin method is called without arguments.
+        A tile without launcher shows the plugin page in the Applications
+        panel; otherwise, its plugin method is called without arguments.
 
         Returns:
-            Value returned by the launcher method (None for the catalog page)
+            Value returned by the launcher method (None for the Applications panel)
         """
         if self.main is None:
             raise RuntimeError(

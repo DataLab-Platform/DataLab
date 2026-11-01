@@ -47,7 +47,7 @@ class MainSettings(gds.DataSet):
         max=10,
         help=_(
             "Maximum number of application tile rows on the welcome page. Other "
-            "applications remain available from the Applications catalog."
+            "applications remain available from the Applications panel."
         ),
     )
     process_isolation_enabled = gds.BoolItem(

@@ -224,13 +224,48 @@ class DataLabOptions(SigimaXOptions):
             expected_type=list,
             description="IDs of the recently used applications, most recent first.",
         )
-        self.applications_list_collapsed = TypedOptionField(
+        self.applications_panel_shown = TypedOptionField(
             self,
-            "applications_list_collapsed",
+            "applications_panel_shown",
             category="main",
             default=False,
             expected_type=bool,
-            description="If True, hide the application list of the catalog.",
+            description="True once the Applications panel has been shown: it floats "
+            "beside the main window the first time only.",
+        )
+        self.applications_panel_docked_size = TupleOptionField(
+            self,
+            "applications_panel_docked_size",
+            category="main",
+            default=None,
+            description="Size of the docked Applications panel when it was closed, "
+            "as (width, height) tuple, given back when it is shown again, or None.",
+        )
+        self.applications_collapsed_sections = TypedOptionField(
+            self,
+            "applications_collapsed_sections",
+            category="main",
+            default=[],
+            expected_type=list,
+            description="Keys of the collapsed sections of the Applications panel "
+            "('methods', 'tools', 'datasets').",
+        )
+        self.applications_details_sizes = TupleOptionField(
+            self,
+            "applications_details_sizes",
+            category="main",
+            default=None,
+            description="Heights of the method list and of the method details in "
+            "the Applications panel, as (list, details) tuple, or None.",
+        )
+        self.applications_selected_methods = TypedOptionField(
+            self,
+            "applications_selected_methods",
+            category="main",
+            default={},
+            expected_type=dict,
+            description="Recipe ID of the method selected in the Applications "
+            "panel, by application plugin ID.",
         )
         self.instrument_new_group = TypedOptionField(
             self,

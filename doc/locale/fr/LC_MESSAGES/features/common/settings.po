@@ -45,8 +45,8 @@ msgstr "Lorsque cette option est activée (par défaut), la page d'accueil est a
 msgid "**Welcome page application rows**"
 msgstr "**Lignes d'applications de la page d'accueil**"
 
-msgid "Maximum number of application tile rows on the welcome page, from 1 to 10 (default: 2). Other applications remain available from the **Applications** catalog (see :ref:`welcome_page`)."
-msgstr "Nombre maximal de lignes de tuiles d'applications sur la page d'accueil, de 1 à 10 (par défaut : 2). Les autres applications restent accessibles depuis le catalogue **Applications** (voir :ref:`welcome_page`)."
+msgid "Maximum number of application tile rows on the welcome page, from 1 to 10 (default: 2). Other applications remain available from the :ref:`applications_panel`."
+msgstr "Nombre maximal de lignes de tuiles d'applications sur la page d'accueil, de 1 à 10 (par défaut : 2). Les autres applications restent accessibles depuis le :ref:`applications_panel`."
 
 msgid "**Process isolation**"
 msgstr "**Isolation des processus**"
