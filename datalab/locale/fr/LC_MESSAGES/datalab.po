@@ -1258,6 +1258,9 @@ msgstr "Historique"
 msgid "Welcome"
 msgstr "Accueil"
 
+msgid "Applications"
+msgstr "Applications"
+
 msgid "Disable auto-refresh?"
 msgstr "Désactiver le rafraîchissement automatique ?"
 
@@ -2180,11 +2183,34 @@ msgstr "Création des objets graphiques"
 msgid "Version: %s"
 msgstr "Version : %s"
 
+#, python-format
+msgid "Plugin ID: %s"
+msgstr "ID du plugin : %s"
+
+#, python-format
+msgid "Created %d objects"
+msgstr "%d objets créés"
+
+msgid "The current selection could not be assessed"
+msgstr "La sélection courante n'a pas pu être évaluée"
+
+msgid "Run..."
+msgstr "Exécuter..."
+
+msgid "Run this method on the current selection"
+msgstr "Exécuter cette méthode sur la sélection courante"
+
 msgid "Expected inputs"
 msgstr "Entrées attendues"
 
-msgid "Run on selection..."
-msgstr "Exécuter sur la sélection..."
+msgid "No input data"
+msgstr "Aucune donnée d'entrée"
+
+msgid "required metadata"
+msgstr "métadonnée requise"
+
+msgid "hint"
+msgstr "indicative"
 
 msgid "Examples designed for this method"
 msgstr "Exemples conçus pour cette méthode"
@@ -2192,24 +2218,15 @@ msgstr "Exemples conçus pour cette méthode"
 msgid "Try with this example"
 msgstr "Essayer avec cet exemple"
 
-msgid "The current selection could not be assessed"
-msgstr "La sélection courante n'a pas pu être évaluée"
-
-msgid "Show on welcome page"
-msgstr "Afficher sur la page d'accueil"
-
-msgid "Pin to the welcome page"
-msgstr "Épingler sur la page d'accueil"
-
-msgid "Documentation"
-msgstr "Documentation"
-
-#, python-format
-msgid "Plugin ID: %s"
-msgstr "ID du plugin : %s"
+msgid "Details"
+msgstr "Détails"
 
 msgid "No methods declared"
 msgstr "Aucune méthode déclarée"
+
+#, python-format
+msgid "Methods (%d)"
+msgstr "Méthodes (%d)"
 
 msgid "Open tool"
 msgstr "Ouvrir l'outil"
@@ -2225,21 +2242,27 @@ msgstr "Ouvrir le jeu de données"
 msgid "Datasets (%d)"
 msgstr "Jeux de données (%d)"
 
-#, python-format
-msgid "Created %d objects"
-msgstr "%d objets créés"
+msgid "Documentation"
+msgstr "Documentation"
 
-msgid "Search applications..."
-msgstr "Rechercher des applications..."
+msgid "Show on welcome page"
+msgstr "Afficher sur la page d'accueil"
 
-msgid "Hide the application list"
-msgstr "Masquer la liste des applications"
-
-msgid "Show the application list"
-msgstr "Afficher la liste des applications"
+msgid "Pin to the welcome page"
+msgstr "Épingler sur la page d'accueil"
 
 msgid "No application plugins are currently loaded."
 msgstr "Aucun plugin d'application n'est actuellement chargé."
+
+msgid "Click to show all available application plugins"
+msgstr "Cliquer pour afficher tous les plugins d'application disponibles"
+
+msgid "Application"
+msgstr "Application"
+
+#, python-format
+msgid "Applications (%d)"
+msgstr "Applications (%d)"
 
 #, python-format
 msgid "Starting analysis '%s'"
@@ -2359,9 +2382,6 @@ msgstr "Installer un plugin"
 
 msgid "Input/output"
 msgstr "Entrée/sortie"
-
-msgid "Application"
-msgstr "Application"
 
 msgid "today"
 msgstr "aujourd'hui"
@@ -2678,15 +2698,6 @@ msgstr "Une ou plusieurs images"
 #, python-format
 msgid "%s (optional)"
 msgstr "%s (facultatif)"
-
-msgid "required metadata"
-msgstr "métadonnée requise"
-
-msgid "hint"
-msgstr "indicative"
-
-msgid "No input data"
-msgstr "Aucune donnée d'entrée"
 
 #, python-format
 msgid "%(slot)s: no object assigned"
@@ -3677,8 +3688,8 @@ msgstr "La page d'accueil rassemble les principales actions pour bien démarrer 
 msgid "Welcome page application rows"
 msgstr "Lignes d'applications de la page d'accueil"
 
-msgid "Maximum number of application tile rows on the welcome page. Other applications remain available from the Applications catalog."
-msgstr "Nombre maximal de lignes de tuiles d'applications sur la page d'accueil. Les autres applications restent accessibles depuis le catalogue des applications."
+msgid "Maximum number of application tile rows on the welcome page. Other applications remain available from the Applications panel."
+msgstr "Nombre maximal de lignes de tuiles d'applications sur la page d'accueil. Les autres applications restent accessibles depuis le panneau Applications."
 
 msgid "Process isolation"
 msgstr "Isolation de processus"
@@ -4246,14 +4257,11 @@ msgstr "Plus d'actions"
 msgid "More applications (%d)"
 msgstr "Autres applications (%d)"
 
-msgid "Browse all applications in the catalog."
-msgstr "Parcourir toutes les applications du catalogue."
+msgid "Browse all applications in the Applications panel."
+msgstr "Parcourir toutes les applications dans le panneau Applications."
 
 msgid "Browse all applications..."
 msgstr "Parcourir toutes les applications..."
-
-msgid "Applications"
-msgstr "Applications"
 
 msgid "Pin to the top"
 msgstr "Épingler en tête"
@@ -4710,6 +4718,12 @@ msgstr "Image brute (gaussienne 2D)"
 
 msgid "Flat data (Uniform random)"
 msgstr "Image d'homogénéité (Distribution uniforme)"
+
+msgid "Plugins:"
+msgstr "Plugins :"
+
+msgid "Click to configure plugins"
+msgstr "Cliquer pour configurer les plugins"
 
 msgid "Random function"
 msgstr "Fonction gaussienne aléatoire"
@@ -5525,12 +5539,6 @@ msgstr "±{n} lignes × ±{n} colonnes"
 
 msgid "This image uses an integer data type, so it cannot contain NaN or infinite values. Replace special values is therefore not applicable."
 msgstr "Cette image utilise un type de données entier, elle ne peut donc pas contenir de valeurs NaN ou infinies. Le remplacement des valeurs spéciales n'est donc pas applicable."
-
-msgid "Plugins:"
-msgstr "Plugins :"
-
-msgid "Click to configure plugins"
-msgstr "Cliquer pour configurer les plugins"
 
 msgid "XML-RPC:"
 msgstr "XML-RPC :"

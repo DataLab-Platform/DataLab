@@ -387,7 +387,7 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
         overflow_tile = WelcomeEntry(
             "libre-gui-plugin.svg",
             "",
-            _("Browse all applications in the catalog."),
+            _("Browse all applications in the Applications panel."),
             tile=True,
         )
         overflow_tile.SIG_CLICKED.connect(self.__show_applications)
@@ -453,7 +453,7 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
         self.applications_section.hide()
 
     def __show_applications(self) -> None:
-        """Open the application catalog"""
+        """Show the Applications panel"""
         self.mainwindow.show_applications()
 
     def refresh_application_tiles(self) -> None:
@@ -506,7 +506,7 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
             [self.application_groups[plugin.plugin_id] for plugin in plugins],
             Conf.welcome_application_rows.get(),
         )
-        # Keep the section (and its catalog button) when all tiles are hidden
+        # Keep the section (and its "Browse all" button) when all tiles are hidden
         self.applications_section.setVisible(bool(self.application_tiles))
 
     def __create_tile_menu(

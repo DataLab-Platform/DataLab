@@ -27,7 +27,7 @@ The General settings tab contains main window and general feature settings:
     When enabled (default), the welcome page is shown when DataLab starts and whenever the current signal or image panel is empty (see :ref:`welcome_page`).
 
 **Welcome page application rows**
-    Maximum number of application tile rows on the welcome page, from 1 to 10 (default: 2). Other applications remain available from the **Applications** catalog (see :ref:`welcome_page`).
+    Maximum number of application tile rows on the welcome page, from 1 to 10 (default: 2). Other applications remain available from the :ref:`applications_panel`.
 
 **Process isolation**
     When enabled, each computation runs in a separate process, preventing the application

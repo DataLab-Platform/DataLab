@@ -75,7 +75,7 @@ from datalab.gui.h5io import (
     workspace_has_provenance,
 )
 from datalab.gui.panel import base, history, image, macro, signal
-from datalab.gui.plugins.applications import ApplicationsDialog, get_plugin_icon
+from datalab.gui.plugins.applications import ApplicationsPanel, get_plugin_icon
 from datalab.gui.plugins.config import PluginConfigDialog
 from datalab.gui.plugins.instrument import (
     InstrumentWindow,
@@ -176,7 +176,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         self.macropanel: MacroPanel | None = None
         self.historypanel: history.HistoryPanel | None = None
         self.aiassistantpanel = None  # type: ignore[assignment]
-        self.__applications_dialog: ApplicationsDialog | None = None
+        self.applicationspanel: ApplicationsPanel | None = None
         self.__instrument_windows: dict[tuple[str, str], InstrumentWindow] = {}
         #: Worker of each plugin instrument, shared by its successive windows
         self.__instrument_workers: dict[tuple[str, str], SerialWorker] = {}
@@ -967,11 +967,12 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
 
     # ------GUI setup
     def _setup_docks(self) -> None:
-        """Add the macro, history, AI assistant and welcome page docks"""
+        """Add the macro, history, AI assistant, welcome page and applications docks"""
         self.__add_macro_panel()
         self.__add_history_panel()
         self.__add_aiassistant_panel()
         self.__add_welcome_panel()
+        self.__add_applications_panel()
 
     def _post_setup(self, console: bool) -> None:
         """Create plugin actions and wire panels, once the whole UI exists"""
@@ -1242,34 +1243,31 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         dialog.exec()
 
     def show_applications(self, plugin_id: str | None = None) -> None:
-        """Open the application plugin catalog
+        """Show the Applications panel
+
+        The first time, the panel floats beside the main window; afterwards, it
+        is shown where the user left it (docked, tabified or floating). When it
+        is already shown, it flashes to draw attention to it.
 
         Args:
-            plugin_id: ID of the application plugin to show (default: first one)
+            plugin_id: ID of the application plugin to show (default: the one
+             already shown)
         """
-        if self.__applications_dialog is None:
-            self.__applications_dialog = ApplicationsDialog(self)
-            self.__applications_dialog.SIG_WELCOME_PREFERENCES_CHANGED.connect(
-                self.welcomepanel.update_application_tiles
-            )
-            for panel in (self.signalpanel, self.imagepanel):
-                panel.objview.SIG_SELECTION_CHANGED.connect(
-                    self.__applications_dialog.schedule_readiness_update
-                )
-                # Metadata edits change readiness without changing the selection
-                panel.SIG_OBJECT_MODIFIED.connect(
-                    self.__applications_dialog.schedule_readiness_update
-                )
-            self.tabwidget.currentChanged.connect(
-                self.__applications_dialog.schedule_readiness_update
-            )
-        else:
-            self.__applications_dialog.refresh()
+        panel = self.applicationspanel
+        panel.refresh()
         if plugin_id is not None:
-            self.__applications_dialog.select_plugin(plugin_id)
-        self.__applications_dialog.show()
-        self.__applications_dialog.raise_()
-        self.__applications_dialog.activateWindow()
+            panel.select_plugin(plugin_id)
+        dock = self.docks[panel]
+        already_shown = dock.isVisible()
+        # The first time, the panel places itself beside the window when shown
+        dock.show()
+        panel.ensure_on_screen(self)
+        dock.raise_()
+        if dock.isFloating():
+            dock.activateWindow()
+        if already_shown:
+            # Otherwise, nothing would seem to happen
+            panel.flash()
 
     def set_plugins_enabled(self, enabled: bool) -> None:
         """Apply the global third-party plugin enabled state."""
@@ -1373,6 +1371,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             # Recreate plugin actions for the new plugin set
             self.__create_plugins_actions()
             self.welcomepanel.refresh_application_tiles()
+            self.applicationspanel.refresh()
 
             # Update actions and menus to reflect new plugin set
             self.__update_actions(update_other_data_panel=True)
@@ -1428,6 +1427,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         for panel in (self.signalpanel, self.imagepanel):
             panel.acthandler.clear_plugin_actions()
         self.welcomepanel.refresh_application_tiles()
+        self.applicationspanel.refresh()
 
         self.__update_actions(update_other_data_panel=True)
         self.__update_plugins_availability()
@@ -1812,6 +1812,25 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             name="welcome_page",
             tabify_with=self.signalpanel,
         )
+
+    def __add_applications_panel(self) -> None:
+        """Add the Applications panel, hidden until it is shown"""
+        panel = self.applicationspanel = ApplicationsPanel(self)
+        dock = self._add_dockwidget(panel, _("Applications"), name="applications_panel")
+        dock.hide()
+        if not Conf.applications_panel_shown.get():
+            # The panel floats the first time, even when shown from the View menu
+            panel.place_beside(self)
+        panel.SIG_WELCOME_PREFERENCES_CHANGED.connect(
+            self.welcomepanel.update_application_tiles
+        )
+        for datapanel in (self.signalpanel, self.imagepanel):
+            datapanel.objview.SIG_SELECTION_CHANGED.connect(
+                panel.schedule_readiness_update
+            )
+            # Metadata edits change readiness without changing the selection
+            datapanel.SIG_OBJECT_MODIFIED.connect(panel.schedule_readiness_update)
+        self.tabwidget.currentChanged.connect(panel.schedule_readiness_update)
 
     def __configure_panels(self) -> None:
         """Configure panels"""

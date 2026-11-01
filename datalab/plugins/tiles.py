@@ -22,7 +22,7 @@ class WelcomeTile:
         icon: ``package:path`` resource (SVG or bitmap) or DataLab icon file
          name; ``None`` falls back to the plugin icon
         launcher: name of the plugin method called when the tile is clicked;
-         ``None`` opens the plugin page of the **Applications** catalog
+         ``None`` shows the plugin page in the **Applications** panel
     """
 
     id: str
