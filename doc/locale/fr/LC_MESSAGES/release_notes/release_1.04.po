@@ -296,9 +296,6 @@ msgstr "**Listes de signaux et d'images :**"
 msgid "Signals, images and groups can now be deleted directly from the lists, as in DataLab-Web (implements [Issue #449](https://github.com/DataLab-Platform/DataLab/issues/449))."
 msgstr "Les signaux, images et groupes peuvent désormais être supprimés directement depuis les listes, comme dans DataLab-Web (implémente [l'issue #449](https://github.com/DataLab-Platform/DataLab/issues/449))."
 
-msgid "The item under the mouse cursor is subtly highlighted, in light and dark modes alike (the hovered item was not highlighted at all in dark mode)"
-msgstr "L'élément situé sous le curseur de la souris est discrètement mis en évidence, en mode clair comme en mode sombre (l'élément survolé n'était pas du tout mis en évidence en mode sombre)"
-
 msgid "A delete button appears at the right of the hovered signal, image or group: it turns red when the mouse cursor is over it, and its tooltip tells what it deletes"
 msgstr "Un bouton de suppression apparaît à droite du signal, de l'image ou du groupe survolé : il devient rouge lorsque le curseur de la souris le survole, et son info-bulle indique ce qu'il supprime"
 

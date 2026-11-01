@@ -15,7 +15,6 @@ from datalab.widgets import titledelegate
 from datalab.widgets.titledelegate import (
     TITLE_REFERENCE_ROLE,
     ClickableTitleDelegate,
-    hover_background_color,
 )
 
 
@@ -97,18 +96,14 @@ def test_reference_rendering(
         painter.end()
         document, link, text, meta = documents[0]
         background = image.pixelColor(350, 30)
-        if selected:
-            assert background == QG.QColor("#204a70" if dark else "#cce8ff")
-        elif hovered and not active:
-            # Same discreet highlight whatever the style, distinct from the base
-            # and selection colors (styles may draw their focus indicator over
-            # the background of the item having the focus, e.g. Fusion)
-            assert background == hover_background_color(palette)
-            assert background not in (
-                palette.color(QG.QPalette.Base),
-                QG.QColor("#204a70" if dark else "#cce8ff"),
-            )
-        assert len({link.name(), text.name(), meta.name()}) == 3
+        # The background (selection, hover) is drawn by the style, as for items
+        # rendered by the standard delegate
+        native = QG.QImage(400, 60, QG.QImage.Format_ARGB32)
+        native.fill(palette.color(QG.QPalette.Base))
+        painter = QG.QPainter(native)
+        QW.QStyledItemDelegate(parent).paint(painter, option, model.index(0, 0))
+        painter.end()
+        assert background == native.pixelColor(350, 30)
         for color in (link, text, meta):
             assert _contrast(color, background) >= 4.5
         # Inspect the rendered pixels too: unformatted title text must not use
@@ -138,6 +133,56 @@ def test_reference_rendering(
             for x in range(50, 170, 3)
         )
         parent.close()
+
+
+def _title_colors_option(palette: QG.QPalette) -> QW.QStyleOptionViewItem:
+    """Return the style option of an enabled, active item with ``palette``"""
+    option = QW.QStyleOptionViewItem()
+    option.palette = palette
+    option.rect = QC.QRect(0, 0, 400, 40)
+    option.state = QW.QStyle.State_Enabled | QW.QStyle.State_Active
+    # As set by item views (with Qt 5, styles only fill the selected item then)
+    option.showDecorationSelected = True
+    return option
+
+
+def test_title_colors_with_translucent_palette() -> None:
+    """Translucent palette colors (e.g. "windows11" style in light mode) are
+    composited over the background: the title remains dark on alternate rows."""
+    with qt_app_context():
+        palette = QG.QPalette()
+        palette.setColor(QG.QPalette.Base, QG.QColor("#ffffff"))
+        palette.setColor(QG.QPalette.AlternateBase, QG.QColor.fromRgb(0, 0, 0, 9))
+        palette.setColor(QG.QPalette.Text, QG.QColor.fromRgb(0, 0, 0, 228))
+        palette.setColor(QG.QPalette.HighlightedText, QG.QColor("#ffffff"))
+        option = _title_colors_option(palette)
+        option.features |= QW.QStyleOptionViewItem.Alternate
+        style = QW.QStyleFactory.create("Fusion")
+        text, link, meta = titledelegate._title_colors(option, style)  # pylint: disable=protected-access
+        background = QG.QColor.fromRgb(246, 246, 246)
+        assert text.lightness() < 64
+        for color in (text, link, meta):
+            assert color.alpha() == 255
+            assert _contrast(color, background) >= 4.5
+
+
+def test_title_colors_without_readable_palette_text() -> None:
+    """When no text color of the palette is readable on the selection drawn by
+    the style (e.g. light accent color of the "windows11" style in dark mode), the
+    title is drawn in black or white."""
+    with qt_app_context():
+        palette = QG.QPalette()
+        palette.setColor(QG.QPalette.Base, QG.QColor("#2d2d2d"))
+        palette.setColor(QG.QPalette.Highlight, QG.QColor("#4cc2ff"))
+        palette.setColor(QG.QPalette.Text, QG.QColor("#ffffff"))
+        palette.setColor(QG.QPalette.HighlightedText, QG.QColor("#ffffff"))
+        option = _title_colors_option(palette)
+        option.state |= QW.QStyle.State_Selected
+        style = QW.QStyleFactory.create("Fusion")
+        text, link, meta = titledelegate._title_colors(option, style)  # pylint: disable=protected-access
+        assert text == QG.QColor("#000000")
+        for color in (link, meta):
+            assert _contrast(color, QG.QColor("#4cc2ff")) >= 4.5
 
 
 @pytest.mark.parametrize("with_item_uuid", [False, True])
