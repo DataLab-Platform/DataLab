@@ -1246,7 +1246,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Show the Applications panel
 
         The first time, the panel floats beside the main window; afterwards, it
-        is shown where the user left it (docked, tabified or floating).
+        is shown where the user left it (docked, tabified or floating). When it
+        is already shown, it flashes to draw attention to it.
 
         Args:
             plugin_id: ID of the application plugin to show (default: the one
@@ -1257,12 +1258,16 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         if plugin_id is not None:
             panel.select_plugin(plugin_id)
         dock = self.docks[panel]
+        already_shown = dock.isVisible()
         # The first time, the panel places itself beside the window when shown
         dock.show()
         panel.ensure_on_screen(self)
         dock.raise_()
         if dock.isFloating():
             dock.activateWindow()
+        if already_shown:
+            # Otherwise, nothing would seem to happen
+            panel.flash()
 
     def set_plugins_enabled(self, enabled: bool) -> None:
         """Apply the global third-party plugin enabled state."""

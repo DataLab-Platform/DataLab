@@ -41,6 +41,7 @@ __all__ = [
     "ApplicationPage",
     "ApplicationsPanel",
     "CollapsibleSection",
+    "FlashOverlay",
     "RecipeDetails",
     "RecipeRow",
     "get_application_plugins",
@@ -994,6 +995,8 @@ class ApplicationPage(QW.QWidget):
         self.outcome_label = _outcome_label()
         self.splitter = QW.QSplitter(QC.Qt.Vertical)
         self.details_stack = QW.QStackedWidget()
+        #: Title separating the details of the selected method from the list
+        self.details_title_label = QW.QLabel(_("Details"))
         self.__details_areas: dict[str, QW.QScrollArea] = {}
         self.__current_recipe_id: str | None = None
 
@@ -1022,7 +1025,7 @@ class ApplicationPage(QW.QWidget):
         self.splitter.addWidget(self.list_area)
         self.splitter.setChildrenCollapsible(False)
         if self.recipe_rows:
-            self.splitter.addWidget(self.details_stack)
+            self.splitter.addWidget(self.__create_details_area())
             self.splitter.setStretchFactor(0, 2)
             self.splitter.setStretchFactor(1, 3)
             selected = Conf.applications_selected_methods.get().get(plugin.plugin_id)
@@ -1037,6 +1040,22 @@ class ApplicationPage(QW.QWidget):
         page_layout = QW.QVBoxLayout(self)
         page_layout.setContentsMargins(0, 0, 0, 0)
         page_layout.addWidget(self.splitter)
+
+    def __create_details_area(self) -> QW.QWidget:
+        """Create the area showing the details of the selected method.
+
+        A line and a title separate it from the list above.
+        """
+        area = QW.QWidget()
+        layout = QW.QVBoxLayout(area)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        layout.addWidget(_separator())
+        _apply_section_title_style(self.details_title_label)
+        self.details_title_label.setContentsMargins(8, 6, 8, 0)
+        layout.addWidget(self.details_title_label)
+        layout.addWidget(self.details_stack, 1)
+        return area
 
     def _add_section(
         self,
@@ -1249,6 +1268,37 @@ class ApplicationPage(QW.QWidget):
             self.outcome_label.show()
 
 
+class FlashOverlay(QW.QWidget):
+    """Frame drawn over a widget, in the highlight color of the current theme.
+
+    The frame lets mouse events through to the widget below.
+    """
+
+    #: Width of the frame, in pixels
+    FRAME_WIDTH = 3
+
+    def __init__(self, parent: QW.QWidget) -> None:
+        super().__init__(parent)
+        self.setAttribute(QC.Qt.WA_TransparentForMouseEvents)
+        self.hide()
+
+    def paintEvent(self, event: QG.QPaintEvent) -> None:  # pylint: disable=invalid-name
+        """Draw a light highlight over the widget, framed by a thicker border."""
+        painter = QG.QPainter(self)
+        color = QG.QColor(self.palette().color(QG.QPalette.Highlight))
+        color.setAlpha(40)
+        painter.fillRect(self.rect(), color)
+        color.setAlpha(255)
+        width = self.FRAME_WIDTH
+        pen = QG.QPen(color, width)
+        pen.setJoinStyle(QC.Qt.MiterJoin)
+        painter.setPen(pen)
+        half = width // 2
+        painter.drawRect(self.rect().adjusted(half, half, -half - 1, -half - 1))
+        painter.end()
+        super().paintEvent(event)
+
+
 class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
     """Dockable panel presenting the methods of the active application plugins.
 
@@ -1278,6 +1328,9 @@ class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
     DEFAULT_WIDTH = 440
     #: Size of the application icon shown when there is only one application
     TITLE_ICON_SIZE = 24
+    #: Number of flashes drawing attention to the panel, and their half period (ms)
+    FLASH_COUNT = 3
+    FLASH_INTERVAL = 150
 
     def __init__(self, parent: QW.QWidget | None = None):
         QW.QWidget.__init__(self, parent)
@@ -1303,6 +1356,12 @@ class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
         self.__readiness_timer.setSingleShot(True)
         self.__readiness_timer.setInterval(150)
         self.__readiness_timer.timeout.connect(self.refresh_readiness)
+        #: Frame drawn over the panel to draw attention to it (see :meth:`flash`)
+        self.flash_overlay = FlashOverlay(self)
+        self.__flash_timer = QC.QTimer(self)
+        self.__flash_timer.setInterval(self.FLASH_INTERVAL)
+        self.__flash_timer.timeout.connect(self.__toggle_flash)
+        self.__flash_steps = 0
         self.setMinimumWidth(self.MINIMUM_WIDTH)
         self.__setup_ui()
         self.refresh()
@@ -1695,6 +1754,36 @@ class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
         """Assess the methods on the current selection when shown."""
         super().showEvent(event)
         self.refresh_readiness()
+
+    def resizeEvent(self, event: QG.QResizeEvent) -> None:  # pylint: disable=invalid-name
+        """Keep the flashing frame over the whole panel."""
+        super().resizeEvent(event)
+        self.flash_overlay.setGeometry(self.rect())
+
+    def flash(self) -> None:
+        """Flash a frame over the panel a few times, to draw attention to it.
+
+        Used when the panel is requested while it is already shown: otherwise,
+        nothing would seem to happen.
+        """
+        self.__flash_steps = 2 * self.FLASH_COUNT
+        self.flash_overlay.setGeometry(self.rect())
+        self.flash_overlay.raise_()
+        self.flash_overlay.show()
+        self.__flash_timer.start()
+
+    def is_flashing(self) -> bool:
+        """Return whether the panel is flashing."""
+        return self.__flash_timer.isActive()
+
+    def __toggle_flash(self) -> None:
+        """Show the flashing frame, or hide it, until the flashing is over."""
+        self.__flash_steps -= 1
+        if self.__flash_steps <= 0:
+            self.__flash_timer.stop()
+            self.flash_overlay.hide()
+        else:
+            self.flash_overlay.setVisible(not self.flash_overlay.isVisible())
 
     def _page_of(self, plugin: PluginBase) -> ApplicationPage | None:
         """Return the page of an application plugin."""

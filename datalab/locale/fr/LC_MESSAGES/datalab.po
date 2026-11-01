@@ -2218,6 +2218,9 @@ msgstr "Exemples conçus pour cette méthode"
 msgid "Try with this example"
 msgstr "Essayer avec cet exemple"
 
+msgid "Details"
+msgstr "Détails"
+
 msgid "No methods declared"
 msgstr "Aucune méthode déclarée"
 

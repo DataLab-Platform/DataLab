@@ -239,6 +239,9 @@ def test_applications_panel_renders_declared_contracts(make_panel) -> None:
     # The method is selected: the page shows its details below the list
     assert page.current_recipe_id() == RECIPE.recipe_id and row.is_selected()
     assert page.splitter.count() == 2
+    # A titled area, below a line, gives the details
+    assert page.details_title_label.text() == "Details"
+    assert not page.details_title_label.isHidden()
     assert page.details_stack.currentWidget().widget() is details
     assert row.title_label.text() == details.title_label.text() == RECIPE.title
     # Nothing is left out: input descriptions, metadata descriptions and keys
@@ -715,6 +718,8 @@ def test_main_window_shows_applications_panel(monkeypatch) -> None:
         decoration = window.frameGeometry().height() - window.height()
         assert dock.height() == min(window.height(), available.height() - decoration)
         assert window.isEnabled()
+        # Shown for the first time, the panel needs no flashing
+        assert not panel.is_flashing() and panel.flash_overlay.isHidden()
 
         window.set_current_panel("image")
         assert window.get_current_panel() == "image"
@@ -731,6 +736,7 @@ def test_main_window_shows_applications_panel(monkeypatch) -> None:
         assert dock.isVisible() and dock.isFloating()
         assert dock.pos() == position
         assert window.findChildren(ApplicationsPanel) == [panel]
+        assert not panel.is_flashing()
 
         # ...unless it is out of all screens (e.g. on a disconnected screen)
         dock.move(available.right() + 5000, available.bottom() + 5000)
@@ -743,6 +749,18 @@ def test_main_window_shows_applications_panel(monkeypatch) -> None:
         window.imagepanel.SIG_OBJECT_MODIFIED.emit()
         window.signalpanel.objview.SIG_SELECTION_CHANGED.emit()
         assert len(updates) == 2
+
+        # Requested again while shown (here from the welcome page), the panel
+        # flashes to show where it is
+        window.welcomepanel.browse_applications_button.click()
+        assert panel.is_flashing()
+        assert not panel.flash_overlay.isHidden()
+        assert panel.flash_overlay.geometry() == panel.rect()
+        qt_app = QW.QApplication.instance()
+        flash_duration = 2 * panel.FLASH_COUNT * panel.FLASH_INTERVAL
+        QC.QTimer.singleShot(flash_duration + 300, qt_app.quit)
+        qt_app.exec()
+        assert not panel.is_flashing() and panel.flash_overlay.isHidden()
 
 
 def test_applications_panel_floats_when_shown_from_the_view_menu() -> None:
