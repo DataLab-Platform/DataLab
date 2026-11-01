@@ -83,7 +83,7 @@ def test_installed_wheel_is_enabled_loaded_and_uninstalled(
             )
             dialog = PluginConfigDialog(win)
             widget = dialog.installed_plugins_widget
-            assert dialog.tabs.indexOf(widget) == 3
+            assert dialog.tabs.indexOf(widget) == 2
             monkeypatch.setattr(widget, "select_file", lambda: path)
             monkeypatch.setattr(
                 widget,

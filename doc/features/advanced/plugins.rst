@@ -141,7 +141,7 @@ Plugins are automatically discovered at startup from multiple locations:
 
 - Additional plugin directories:
   Any number of extra directories may be declared from
-  **Plugins > Configure plugins...**, in the **Plugin settings** tab (see
+  **Plugins > Configure plugins...**, in the **Advanced** tab (see
   :ref:`plugin_search_paths`). They are saved in the DataLab configuration and
   scanned at every startup.
 
@@ -149,7 +149,7 @@ Plugins are automatically discovered at startup from multiple locations:
   If using a frozen (standalone) build, the `plugins` folder located next to the executable is scanned.
 
 - Installed plugins:
-  Wheels and modules installed from **Plugins > Configure plugins...**, either from a file in the **Install plugins** tab (see :ref:`plugin_install_from_file`) or from a plugin catalog in the **Available plugins** tab (see :ref:`plugin_catalog`).
+  Wheels and modules installed from **Plugins > Configure plugins...**, either from a file in the **From file** tab (see :ref:`plugin_install_from_file`) or from a plugin catalog in the **Catalog** tab (see :ref:`plugin_catalog`).
 
 - The internal `datalab/plugins/builtin` folder (not recommended for user plugins):
   This location is reserved for built-in or bundled plugins and should not be modified manually.
@@ -181,15 +181,15 @@ Managing plugins in DataLab
 The **Plugins** menu provides two dedicated actions:
 
 - **Configure plugins...**
-  Opens the plugin configuration dialog, organized in four tabs: **Enable/disable plugins**, **Plugin settings**, **Available plugins** and **Install plugins**.
+  Opens the plugin configuration dialog, organized in four tabs: **Installed plugins**, **Catalog**, **From file** and **Advanced**. Hovering over a tab title describes its content. The dialog reopens with the size it had when last closed.
 
 - **Reload plugins**
   Reloads plugin modules from disk without restarting DataLab.
 
 When plugins are globally enabled, a single left click on the **Plugins:** label in the status bar also opens the same configuration dialog. The icon is not clickable; the shortcut remains available when no plugins are loaded or some plugins failed to load.
 
-Enable/disable plugins
-~~~~~~~~~~~~~~~~~~~~~~
+Installed plugins tab
+~~~~~~~~~~~~~~~~~~~~~
 
 This tab lists all discovered plugins with their icon, name, version, description and
 file path, as well as the plugins that failed to import. For each entry:
@@ -204,32 +204,10 @@ large plugin collection. A **Last loaded: ...** indicator shows when plugins
 were last loaded during the current session, and the **Apply and reload
 plugins** button applies the changes without leaving the dialog.
 
-.. _plugin_search_paths:
-
-Plugin settings
-~~~~~~~~~~~~~~~
-
-This tab lists every directory scanned at startup, in two groups:
-
-- **Default plugin directories** (read-only): the user plugin directory, the
-  bundled `datalab/plugins/builtin` folder, the standalone distribution folder when
-  applicable, and the directories declared through the ``DATALAB_PLUGINS``
-  environment variable (identified by a *(from DATALAB_PLUGINS)* suffix).
-
-- **Additional plugin directories**: your own directories, added with the
-  **Add** button and managed with the *Edit directory* and *Remove directory*
-  buttons. Unlike the environment variable, these directories are saved in the
-  DataLab configuration and therefore persist across sessions.
-
-It also lists the **Local plugin catalogs**: folders, possibly shared on the network, whose plugins are offered in the **Available plugins** tab (see :ref:`plugin_local_catalogs`). They are managed with the same buttons, and the folders declared through the ``DATALAB_PLUGINS_CATALOG`` environment variable come first, as read-only entries. Changing these folders does not require reloading plugins.
-
-The tab also holds a **Compatibility warnings** option to hide warnings for
-incompatible DataLab v0.20 plugins.
-
 .. _plugin_catalog:
 
-Available plugins
-~~~~~~~~~~~~~~~~~
+Catalog tab
+~~~~~~~~~~~
 
 This tab lists the plugins of the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_ and of the local plugin catalogs (see :ref:`plugin_local_catalogs`), with their description, license and source code link. Plugins maintained by the DataLab team are marked **Official**; the others are **Community** plugins, maintained by their authors, or **Local catalog** plugins, provided by your organization (the tooltip of such a plugin shows the folder of its catalog). A search field filters the list.
 
@@ -246,8 +224,8 @@ A local plugin catalog is a folder, typically shared on the network (for example
 
 Local catalogs are declared:
 
-- in the **Plugin settings** tab (see :ref:`plugin_search_paths`): these folders are saved in the DataLab configuration (``plugins_catalog_path_list`` option);
-- through the ``DATALAB_PLUGINS_CATALOG`` environment variable, for example to configure all the computers of an organization: folders are separated by the OS path separator (``;`` on Windows, ``:`` on Linux/macOS) and take precedence over the folders of the configuration. Unlike ``DATALAB_PLUGINS``, folders unavailable when DataLab starts are not ignored: they are reported in the **Available plugins** tab, and used as soon as they become available and the catalogs are refreshed.
+- in the **Advanced** tab (see :ref:`plugin_search_paths`): these folders are saved in the DataLab configuration (``plugins_catalog_path_list`` option);
+- through the ``DATALAB_PLUGINS_CATALOG`` environment variable, for example to configure all the computers of an organization: folders are separated by the OS path separator (``;`` on Windows, ``:`` on Linux/macOS) and take precedence over the folders of the configuration. Unlike ``DATALAB_PLUGINS``, folders unavailable when DataLab starts are not ignored: they are reported in the **Catalog** tab, and used as soon as they become available and the catalogs are refreshed.
 
 .. code-block:: bat
 
@@ -295,7 +273,7 @@ An administrator may edit the display name, summary, license and other descripti
 
 If a module has no usable version, leave ``version`` empty: DataLab compares SHA-256 fingerprints instead. The confirmation and installed-files list distinguish a known version from a revision. A changed unversioned file, or different contents with the same declared version, requires explicit **Replace...** consent; it is not labelled as a newer version. Existing modules installed manually through DataLab are recognized too. Files in development directories are not overwritten; resolve a name conflict or remove the unmanaged copy before using the managed installation.
 
-Single-file modules use packages already available to DataLab. Their ``import`` statements are not interpreted as package requirements, no dependencies are downloaded, and a ``dependencies`` subfolder is not installed for them. ``prepare`` includes modules in the catalog but performs dependency downloads only for wheels. Imports that cannot be checked statically may still fail when the plugin is loaded, and are then shown in **Enable/disable plugins**.
+Single-file modules use packages already available to DataLab. Their ``import`` statements are not interpreted as package requirements, no dependencies are downloaded, and a ``dependencies`` subfolder is not installed for them. ``prepare`` includes modules in the catalog but performs dependency downloads only for wheels. Imports that cannot be checked statically may still fail when the plugin is loaded, and are then shown in the **Installed plugins** tab.
 
 For the public catalog, publish the unchanged file as a named GitHub release asset and provide its version, license, description and SHA-256 in the YAML entry. The source is not required to expose those values statically. An entry has this structure (replace the example repository, file and fingerprint with the actual release information):
 
@@ -342,7 +320,7 @@ For example, a Windows CPython 3.11 catalog may contain:
            pytango-10.3.1-cp311-cp311-win_amd64.whl
            docstring_parser-0.18.0-py3-none-any.whl
 
-The **Available plugins** tab copies the verified dependency artifacts of the chosen release. For **Install from file...**, place the ``dependencies`` folder next to the plugin wheel. DataLab resolves the installation using only these local files, with no package-index fallback and no compilation. Before confirmation it displays the additional packages, versions, sizes, source folder and SHA-256 digests.
+The **Catalog** tab copies the verified dependency artifacts of the chosen release. For **Install from file...**, place the ``dependencies`` folder next to the plugin wheel. DataLab resolves the installation using only these local files, with no package-index fallback and no compilation. Before confirmation it displays the additional packages, versions, sizes, source folder and SHA-256 digests.
 
 Packages already provided by the Python environment or by DataLab are never replaced, upgraded or downgraded. Additional packages are shared by plugins in the same Python runtime. An incompatible installed version, missing transitive wheel or unsupported native wheel causes an explicit refusal; no partial installation is activated. Catalog metadata checks do not replace this resolution against the actual host.
 
@@ -393,7 +371,7 @@ The user needs read access to this source, and write access to their own configu
 3. Configure the disconnected computer
 """""""""""""""""""""""""""""""""""""
 
-Open **Plugins > Configure plugins... > Plugin settings**. Under **Local plugin catalogs**, click **Add**, select the catalog root (the folder containing ``catalog.json`` or the plugin wheels), and apply the configuration. Do not select the ``dependencies`` subfolder. Open **Available plugins** and click **Refresh** if needed.
+Open **Plugins > Configure plugins... > Advanced**. Under **Local plugin catalogs**, click **Add**, select the catalog root (the folder containing ``catalog.json`` or the plugin wheels), and apply the configuration. Do not select the ``dependencies`` subfolder. Open the **Catalog** tab and click **Refresh** if needed.
 
 Administrators may instead set the following environment variable before launching DataLab:
 
@@ -419,11 +397,11 @@ Preserve the rest of the file. Do not delete this option to disable it: an absen
 4. Install, confirm and restart when requested
 """"""""""""""""""""""""""""""""""""""""""""
 
-In **Available plugins**, find the plugin and click **Install**. DataLab chooses the newest release offered for Desktop and the running Python version, checks the plugin file and listed compatible dependency artifacts against their sizes and SHA-256 digests, then plans any additional installation using the local files only. Selection of a release does not guarantee that all its dependencies can be installed: this is checked against the actual host before confirmation.
+In the **Catalog** tab, find the plugin and click **Install**. DataLab chooses the newest release offered for Desktop and the running Python version, checks the plugin file and listed compatible dependency artifacts against their sizes and SHA-256 digests, then plans any additional installation using the local files only. Selection of a release does not guarantee that all its dependencies can be installed: this is checked against the actual host before confirmation.
 
 Read the confirmation: it gives the plugin identity, classes, requirements and fingerprint, and lists the additional packages, their versions, sizes, fingerprints and source folder when needed. Cancel leaves the installation unchanged. If approved, DataLab installs into its private user storage; it does not modify the environment's existing package versions or load code from the shared catalog at every startup.
 
-Restart DataLab if dependencies were added or if replacing an already loaded wheel. Otherwise, DataLab may offer a plugin reload. After restarting, check **Enable/disable plugins** for the plugin's state and any import error, then try one of its actions. The source catalog may be disconnected after successful installation. For a one-off file installation, **Install plugins > Install from file...** uses the same checks; keep ``dependencies`` next to the plugin wheel.
+Restart DataLab if dependencies were added or if replacing an already loaded wheel. Otherwise, DataLab may offer a plugin reload. After restarting, check the **Installed plugins** tab for the plugin's state and any import error, then try one of its actions. The source catalog may be disconnected after successful installation. For a one-off file installation, **From file > Install from file...** uses the same checks; keep ``dependencies`` next to the plugin wheel.
 
 5. Maintain and troubleshoot the offline catalog
 """""""""""""""""""""""""""""""""""""""""""""""
@@ -432,7 +410,7 @@ When ``catalog.json`` exists, it is authoritative: DataLab lists and copies only
 
 Do not run ``build`` on an unchanged mirror whose plugins live only under ``wheels\<digest>\...`` or ``modules\<digest>\...``: it scans the catalog root, not the recursive tree, and would remove unrepresented entries. Update a mirror by transferring a complete, consistent published catalog and its files. To manage it with the local authoring commands instead, first arrange plugin wheels and modules at the root and additional packages in ``dependencies``.
 
-Users refresh **Available plugins** to discover updates, then explicitly click **Update to...**. Updates are not installed automatically. Plugins installed with ``pip`` in the Python environment are identified but not updated by this dialog. Shared additional dependencies are retained when a plugin is uninstalled, and their existing versions remain protected on subsequent installations.
+Users refresh the **Catalog** tab to discover updates, then explicitly click **Update to...**. Updates are not installed automatically. Plugins installed with ``pip`` in the Python environment are identified but not updated by this dialog. Shared additional dependencies are retained when a plugin is uninstalled, and their existing versions remain protected on subsequent installations.
 
 If an installation fails, read the error in the plugin dialog before changing files:
 
@@ -441,14 +419,14 @@ If an installation fails, read the error in the plugin dialog before changing fi
 - **No matching wheel or missing requirement:** the wheelhouse may lack a transitive dependency or the wheel for this Python/ABI/platform. Ask the provider to run ``prepare`` on a matching reference environment. The installer never falls back to PyPI.
 - **Incompatible installed version:** the host or another plugin already provides a conflicting package version. Ask for a compatible release or reference installation; do not force an upgrade or downgrade to bypass the refusal.
 - **Windows DLL path too long:** use a shorter configuration path. **DLL import or missing system library:** check the native package's external prerequisites with the provider; DataLab installs neither drivers nor system packages.
-- **Installed but not active:** restart when requested, check the global and individual plugin enablement settings, and consult the import error displayed in **Enable/disable plugins**. Reloading alone does not replace an imported native library.
+- **Installed but not active:** restart when requested, check the global and individual plugin enablement settings, and consult the import error displayed in the **Installed plugins** tab. Reloading alone does not replace an imported native library.
 
 For local help, use **? > PDF documentation**, then search for *Offline deployment, step by step* or ``DATALAB_PLUGINS_CATALOG``. This PDF is a local file and does not need Internet access. **Online documentation**, the welcome page's documentation link, and external source-code/documentation links open websites instead. The PDF menu action appears only when a local PDF is present; DataLab tries the system language first, then English. If it is absent or unreadable, ask the administrator for the PDF shipped with the matching DataLab version rather than relying on an online link.
 
 .. _plugin_install_from_file:
 
-Install plugins
-~~~~~~~~~~~~~~~
+From file tab
+~~~~~~~~~~~~~
 
 This tab installs a plugin shared as a file, without any Python tool: this is the way to add plugins to the standalone version of DataLab. **Install from file...** accepts two kinds of files:
 
@@ -473,6 +451,28 @@ This workflow allows iterative plugin development while DataLab is running.
 .. note::
 
   Plugin enable/disable state is persisted in DataLab settings. Disabled plugins remain listed in the configuration dialog and can be re-enabled later. The global third-party plugins setting in Preferences is also applied immediately: disabling it removes plugin actions and disables the status indicator, which displays **Plugins: -**, while enabling it reloads plugins automatically. The **Plugins > Configure plugins...** menu action remains accessible when the status indicator is disabled.
+
+.. _plugin_search_paths:
+
+Advanced tab
+~~~~~~~~~~~~
+
+This tab lists every directory scanned at startup, in two groups:
+
+- **Default plugin directories** (read-only): the user plugin directory, the
+  bundled `datalab/plugins/builtin` folder, the standalone distribution folder when
+  applicable, and the directories declared through the ``DATALAB_PLUGINS``
+  environment variable (identified by a *(from DATALAB_PLUGINS)* suffix).
+
+- **Additional plugin directories**: your own directories, added with the
+  **Add** button and managed with the *Edit directory* and *Remove directory*
+  buttons. Unlike the environment variable, these directories are saved in the
+  DataLab configuration and therefore persist across sessions.
+
+It also lists the **Local plugin catalogs**: folders, possibly shared on the network, whose plugins are offered in the **Catalog** tab (see :ref:`plugin_local_catalogs`). They are managed with the same buttons, and the folders declared through the ``DATALAB_PLUGINS_CATALOG`` environment variable come first, as read-only entries. Changing these folders does not require reloading plugins.
+
+The tab also holds a **Compatibility warnings** option to hide warnings for
+incompatible DataLab v0.20 plugins.
 
 Hot-reload workflow for plugin development
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -861,7 +861,7 @@ Options adapt the generated file:
 - A destination folder, given as argument: it must then be added to the plugin directories (see :ref:`plugin_search_paths`).
 - ``--package`` and ``--plugin-id``: the module name and the plugin ID are otherwise derived from the plugin name. The module name must start with ``datalab_``.
 
-An existing file is never overwritten. To share the plugin, send its file: other users install it with **Plugins > Configure plugins... > Install plugins** (see :ref:`plugin_install_from_file`).
+An existing file is never overwritten. To share the plugin, send its file: other users install it with **Plugins > Configure plugins... > From file** (see :ref:`plugin_install_from_file`).
 
 Both the raw single-file plugin and a wheel can be published in a Desktop catalog (see :ref:`plugin_module_catalog`). To develop a larger plugin with packaging and tests already configured, create a layered project with ``--project`` instead (see :ref:`plugin_project`).
 
@@ -928,7 +928,7 @@ To try the plugin, add the generated directory as a plugin directory (see :ref:`
   python -m pytest
   python -m ruff check .
 
-The generated ``pyproject.toml`` requires Python 3.10 or later and the current DataLab major version (for example ``datalab-platform >= 1.4, < 2``), and declares the project URLs when the GitHub account is known. The generated ``.github/workflows/release.yml`` publishes the plugin without any PyPI account: pushing a tag such as ``v0.1.0`` builds the wheel, checks that the tag matches the package version, attaches the wheel to a GitHub release, and prints the entry to submit to the `DataLab plugin catalog <https://github.com/DataLab-Platform/plugins>`_, including the SHA-256 digest of the wheel. Users then install the wheel with **Plugins > Configure plugins... > Install plugins** (see :ref:`plugin_install_from_file`). Listing the plugin in the catalog is optional; once listed, it can also be installed from the **Available plugins** tab (see :ref:`plugin_catalog`).
+The generated ``pyproject.toml`` requires Python 3.10 or later and the current DataLab major version (for example ``datalab-platform >= 1.4, < 2``), and declares the project URLs when the GitHub account is known. The generated ``.github/workflows/release.yml`` publishes the plugin without any PyPI account: pushing a tag such as ``v0.1.0`` builds the wheel, checks that the tag matches the package version, attaches the wheel to a GitHub release, and prints the entry to submit to the `DataLab plugin catalog <https://github.com/DataLab-Platform/plugins>`_, including the SHA-256 digest of the wheel. Users then install the wheel with **Plugins > Configure plugins... > From file** (see :ref:`plugin_install_from_file`). Listing the plugin in the catalog is optional; once listed, it can also be installed from the **Catalog** tab (see :ref:`plugin_catalog`).
 
 How to develop a plugin?
 ------------------------

@@ -218,7 +218,7 @@ class AvailablePluginsWidget(QW.QWidget):
         intro = QW.QLabel(
             _(
                 'Plugins listed in the <a href="%s">DataLab plugin catalog</a> '
-                "and in the local catalogs of the <b>Plugin settings</b> tab, "
+                "and in the local catalogs of the <b>Advanced</b> tab, "
                 "which take precedence. Official plugins are maintained by the "
                 "DataLab team, community plugins by their authors, and local "
                 "catalogs by your organization: install only plugins from "
