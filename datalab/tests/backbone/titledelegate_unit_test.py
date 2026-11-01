@@ -141,6 +141,8 @@ def _title_colors_option(palette: QG.QPalette) -> QW.QStyleOptionViewItem:
     option.palette = palette
     option.rect = QC.QRect(0, 0, 400, 40)
     option.state = QW.QStyle.State_Enabled | QW.QStyle.State_Active
+    # As set by item views (with Qt 5, styles only fill the selected item then)
+    option.showDecorationSelected = True
     return option
 
 
