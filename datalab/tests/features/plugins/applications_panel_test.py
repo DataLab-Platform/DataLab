@@ -379,6 +379,43 @@ def test_applications_panel_is_compact(make_panel) -> None:
     assert minimum_widths(wordy_page) == minimum_widths(concise_page)
 
 
+class _WindowShowSpy(QC.QObject):
+    """Record the windows shown while the spy is installed on the application."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.shown: list[str] = []
+
+    def eventFilter(self, obj: QC.QObject, event: QC.QEvent) -> bool:  # pylint: disable=invalid-name
+        """Record the class name of each window being shown."""
+        if event.type() == QC.QEvent.Show and obj.isWidgetType() and obj.isWindow():
+            self.shown.append(type(obj).__name__)
+        return False
+
+
+def test_hidden_applications_panel_shows_no_window(make_panel) -> None:
+    """Building the hidden panel at startup shows no transient window."""
+    application = _plugin(
+        "org.example.camera",
+        "Camera Characterization",
+        recipes=(RECIPE, OTHER_RECIPE),
+        examples=(EXAMPLE, DATASET),
+        tools=(TOOL,),
+    )
+    other = _plugin("org.example.pulse", "Pulse Characterization", recipes=(RECIPE,))
+    spy = _WindowShowSpy()
+    app = QW.QApplication.instance()
+    app.installEventFilter(spy)
+    try:
+        panel = make_panel(application, other, show=False)
+        panel.refresh_readiness()
+        QW.QApplication.processEvents()
+    finally:
+        app.removeEventFilter(spy)
+    assert len(panel.application_pages) == 2
+    assert spy.shown == []
+
+
 def test_tool_buttons_follow_the_tool_selection(make_panel) -> None:
     """A tool that cannot be opened on the selection has a disabled button."""
     issues = {"annotate": "Select one image"}
