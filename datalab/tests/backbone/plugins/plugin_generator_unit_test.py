@@ -323,7 +323,7 @@ def test_generated_project_is_loaded_from_its_folder(
         == 0
     )
     readme = (destination / "README.md").read_text(encoding="utf-8")
-    assert "**Plugins > Configure plugins... > Plugin settings**" in readme
+    assert "**Plugins > Configure plugins... > Advanced**" in readme
 
     plugin_classes, failed_plugins = _discover_from_folder(
         destination, tmp_path, monkeypatch, package_name
@@ -692,7 +692,7 @@ def test_single_file_plugin_is_loaded_from_its_folder(
     )
     assert not user_plugins.exists()
     # Outside the user plugin directory, the folder must be added to DataLab
-    assert "Plugin settings" in capsys.readouterr().out
+    assert "Configure plugins... > Advanced" in capsys.readouterr().out
     source = _check_single_file(folder / f"{module_name}.py")
     assert expected_code in source
     assert f"self.{object_kind}panel" in source

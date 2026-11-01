@@ -39,6 +39,7 @@ from sigimax.config import (
     FormatStringOptionField,
     OptionField,
     SigimaXOptions,
+    TupleOptionField,
     TypedOptionField,
 )
 
@@ -171,6 +172,14 @@ class DataLabOptions(SigimaXOptions):
             default=[],
             expected_type=list,
             description="Local plugin catalog folders, by priority.",
+        )
+        self.plugins_dialog_size = TupleOptionField(
+            self,
+            "plugins_dialog_size",
+            category="main",
+            default=None,
+            description="Plugin configuration dialog size as (width, height) tuple, "
+            "or None for the default size.",
         )
         self.welcome_on_startup = TypedOptionField(
             self,

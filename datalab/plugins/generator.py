@@ -640,7 +640,7 @@ def _render_readme(project: PluginProject) -> str:
 
 ## Trying the plugin in DataLab
 
-Add this project folder in **Plugins > Configure plugins... > Plugin settings**,
+Add this project folder in **Plugins > Configure plugins... > Advanced**,
 then reload the plugins: DataLab loads the plugin from
 `src/{project.package}/adapters/desktop.py`, without installing the project.
 
@@ -663,7 +663,7 @@ architecture test preserves these dependency boundaries as the plugin grows.
 Set the new version in `pyproject.toml` and in the package `__init__.py`, then
 push a tag such as `v0.1.0`. The **Release** workflow builds the wheel and
 attaches it to a GitHub release: DataLab users install it with
-**Plugins > Configure plugins... > Install plugins**.
+**Plugins > Configure plugins... > From file**.
 
 To list the plugin in the DataLab plugin catalog, open a pull request on
 <https://github.com/DataLab-Platform/plugins> with the entry printed in the
@@ -764,8 +764,7 @@ def _render_contributing() -> str:
     return """# Contributing
 
 To try a change in DataLab, add the project folder in **Plugins > Configure
-plugins... > Plugin settings** and reload the plugins: no installation is
-needed.
+plugins... > Advanced** and reload the plugins: no installation is needed.
 
 Install the project in editable mode and run its checks before submitting a
 change:
@@ -1082,7 +1081,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(
             _(
                 "Add %s to the plugin directories (Plugins > Configure plugins... "
-                "> Plugin settings), then reload the plugins."
+                "> Advanced), then reload the plugins."
             )
             % destination.parent
         )

@@ -135,7 +135,7 @@ def test_catalog_plugin_is_installed_then_offered_as_update(
     with datalab_test_app_context(console=False) as win:
         dialog = PluginConfigDialog(win)
         available = dialog.available_plugins_widget
-        assert dialog.tabs.indexOf(available) == 2
+        assert dialog.tabs.indexOf(available) == 1
         monkeypatch.setattr(available, "run_task", run_now)
         monkeypatch.setattr(
             dialog.installed_plugins_widget,

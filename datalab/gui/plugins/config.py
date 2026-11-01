@@ -39,6 +39,7 @@ from datalab.config import (
     set_plugin_catalog_paths,
     set_user_plugin_paths,
 )
+from datalab.env import execenv
 from datalab.gui.plugins.applications import get_plugin_icon
 from datalab.gui.plugins.available import (
     AvailablePluginsWidget,
@@ -101,6 +102,12 @@ CAPABILITY_LABELS: dict[PluginCapability, str] = {
 #: Dialog minimum dimensions
 DIALOG_MIN_WIDTH: int = 600
 DIALOG_MIN_HEIGHT: int = 400
+
+#: Dialog size when no size has been saved yet
+DIALOG_DEFAULT_SIZE: tuple[int, int] = (700, 560)
+
+#: Maximum fraction of the available screen area used by the restored dialog size
+DIALOG_MAX_SCREEN_RATIO: float = 0.9
 
 #: Title font point-size increment relative to default
 TITLE_FONT_SIZE_DELTA: int = 4
@@ -654,10 +661,42 @@ class PluginConfigDialog(QW.QDialog):
         self.setLayout(layout)
 
         self.tabs = QW.QTabWidget()
-        self.tabs.addTab(self._create_plugins_tab(), _("Enable/disable plugins"))
-        self.tabs.addTab(self._create_search_paths_tab(), _("Plugin settings"))
-        self.tabs.addTab(self.available_plugins_widget, _("Available plugins"))
-        self.tabs.addTab(self.installed_plugins_widget, _("Install plugins"))
+        for widget, title, tooltip in (
+            (
+                self._create_plugins_tab(),
+                _("Installed plugins"),
+                _(
+                    "Plugins found by DataLab: enable or disable them and check "
+                    "their state"
+                ),
+            ),
+            (
+                self.available_plugins_widget,
+                _("Catalog"),
+                _(
+                    "Plugins offered by the DataLab plugin catalog and by the local "
+                    "plugin catalogs"
+                ),
+            ),
+            (
+                self.installed_plugins_widget,
+                _("From file"),
+                _(
+                    "Install a plugin from a wheel or Python module file, and "
+                    "uninstall the plugins installed this way"
+                ),
+            ),
+            (
+                self._create_search_paths_tab(),
+                _("Advanced"),
+                _(
+                    "Plugin directories, local plugin catalogs and compatibility "
+                    "warnings"
+                ),
+            ),
+        ):
+            index = self.tabs.addTab(widget, title)
+            self.tabs.setTabToolTip(index, tooltip)
         self.tabs.setCornerWidget(self._create_corner_widget(), QC.Qt.TopRightCorner)
         layout.addWidget(self.tabs, 1)
 
@@ -678,6 +717,25 @@ class PluginConfigDialog(QW.QDialog):
         layout.addLayout(self._create_footer_layout(button_box))
         self._update_load_info_label()
         self._update_global_plugins_ui()
+        self.resize(*self._get_initial_size())
+
+    def _get_initial_size(self) -> tuple[int, int]:
+        """Return the saved dialog size, or the default one, fitted to the screen."""
+        width, height = Conf.plugins_dialog_size.get() or DIALOG_DEFAULT_SIZE
+        available = self.main.screen().availableGeometry()
+        max_width = int(available.width() * DIALOG_MAX_SCREEN_RATIO)
+        max_height = int(available.height() * DIALOG_MAX_SCREEN_RATIO)
+        return (
+            max(DIALOG_MIN_WIDTH, min(width, max_width)),
+            max(DIALOG_MIN_HEIGHT, min(height, max_height)),
+        )
+
+    def done(self, result: int) -> None:
+        """Save the dialog size, then close the dialog."""
+        # Running tests must not overwrite the user's dialog size
+        if not execenv.unattended:
+            Conf.plugins_dialog_size.set((self.width(), self.height()))
+        super().done(result)
 
     def _create_corner_widget(self) -> QW.QWidget:
         """Create the low-impact global plugin toggle shown near the tab titles."""
@@ -701,7 +759,7 @@ class PluginConfigDialog(QW.QDialog):
         return container
 
     def _create_plugins_tab(self) -> QW.QWidget:
-        """Create the 'Enable/disable plugins' tab content."""
+        """Create the 'Installed plugins' tab content."""
         tab = QW.QWidget()
         tab_layout = QW.QVBoxLayout()
         tab.setLayout(tab_layout)
@@ -725,7 +783,7 @@ class PluginConfigDialog(QW.QDialog):
         return tab
 
     def _create_search_paths_tab(self) -> QW.QWidget:
-        """Create the 'Plugin settings' tab content (scrollable)."""
+        """Create the 'Advanced' tab content (scrollable)."""
         tab = QW.QWidget()
         tab_layout = QW.QVBoxLayout()
         tab_layout.setContentsMargins(0, 0, 0, 0)
@@ -884,7 +942,7 @@ class PluginConfigDialog(QW.QDialog):
         intro = QW.QLabel(
             _(
                 "Folders, possibly shared on the network, whose plugins are "
-                "listed in the <b>Available plugins</b> tab before those of the "
+                "listed in the <b>Catalog</b> tab before those of the "
                 "DataLab plugin catalog. A folder provides the plugins of its "
                 "<code>catalog.json</code> file if any, otherwise its plugin "
                 "wheels."
