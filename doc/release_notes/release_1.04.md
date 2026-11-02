@@ -121,7 +121,6 @@ DataLab now uses stable UUID-based object references across object trees, result
 
 Signals, images and groups can now be deleted directly from the lists, as in DataLab-Web (implements [Issue #449](https://github.com/DataLab-Platform/DataLab/issues/449)).
 
-* The item under the mouse cursor is subtly highlighted, in light and dark modes alike (the hovered item was not highlighted at all in dark mode)
 * A delete button appears at the right of the hovered signal, image or group: it turns red when the mouse cursor is over it, and its tooltip tells what it deletes
 * Clicking it deletes the item, or the whole selection when the item is part of it, after confirmation. Deleting an item which is not selected keeps the current selection and the displayed objects unchanged
 * As with the **Remove** action, the deletion is recorded in the History panel

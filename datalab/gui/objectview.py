@@ -58,7 +58,6 @@ from datalab.utils.qthelpers import block_signals, event_pos, view_item_option
 from datalab.widgets.titledelegate import (
     TITLE_REFERENCE_ROLE,
     ClickableTitleDelegate,
-    hover_background_color,
 )
 
 if TYPE_CHECKING:
@@ -413,18 +412,6 @@ class SimpleObjectTree(QW.QTreeWidget):
         if event.type() == QC.QEvent.StyleChange:
             self.viewport().setAttribute(QC.Qt.WA_Hover, True)
         super().changeEvent(event)
-
-    # pylint: disable=invalid-name
-    def drawBranches(
-        self, painter: QG.QPainter, rect: QC.QRect, index: QC.QModelIndex
-    ) -> None:
-        """Reimplement Qt method to extend the highlight of the hovered item to
-        its branch area (the delegate highlights the rest of the item)"""
-        if index == self.hovered_index() and not self.selectionModel().isSelected(
-            index
-        ):
-            painter.fillRect(rect, hover_background_color(self.palette()))
-        super().drawBranches(painter, rect, index)
 
     def populate_tree(self) -> None:
         """Populate tree with objects"""

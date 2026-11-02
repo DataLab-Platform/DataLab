@@ -7,12 +7,10 @@ Title delegate
 The :mod:`datalab.widgets.titledelegate` module provides a
 :class:`QStyledItemDelegate` that renders object tree titles as rich text and
 turns embedded object references (e.g. ``1a2b3c4d``, ``g1a2b3c4d``) into
-clickable hyperlinks. Hovered items are highlighted with the same discreet
-background color whatever the Qt style, in light and dark modes.
+clickable hyperlinks. The background of items (selection, hover, focus) is drawn
+by the Qt style, and the title colors are chosen to remain readable on it.
 
 .. autoclass:: ClickableTitleDelegate
-
-.. autofunction:: hover_background_color
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -40,37 +38,131 @@ REFERENCE_URL_SCHEME = "dlb-ref"
 TITLE_REFERENCE_ROLE = QC.Qt.UserRole + 1
 TITLE_META_FONT_SIZE = "90%"
 TITLE_ROW_VERTICAL_PADDING = 2
-#: Background colors of hovered (unselected) items, in light and dark modes
-HOVER_BACKGROUND_LIGHT = "#e5f3ff"
-HOVER_BACKGROUND_DARK = "#2d3138"
+#: Minimum contrast ratio (WCAG) of the title colors with the item background
+MIN_TITLE_CONTRAST = 4.5
+#: Width of the item drawn off-screen to get the background color of the style
+BACKGROUND_PROBE_WIDTH = 64
 
 
-def hover_background_color(palette: QG.QPalette) -> QG.QColor:
-    """Return the background color of hovered (unselected) items.
+def _composite(color: QG.QColor, background: QG.QColor) -> QG.QColor:
+    """Return the opaque color of ``color`` drawn over an opaque ``background``
+    (palettes may have translucent colors, e.g. with the "windows11" style)"""
+    alpha = color.alphaF()
+    return QG.QColor.fromRgbF(
+        *(
+            alpha * channel + (1 - alpha) * base
+            for channel, base in zip(color.getRgbF()[:3], background.getRgbF()[:3])
+        )
+    )
 
-    The color is discreet but distinct from the base, alternate base and
-    selection colors, in light and dark modes. It does not depend on the Qt
-    style, because some styles (e.g. Fusion, used in dark mode) do not
-    highlight hovered items.
+
+def _contrast(first: QG.QColor, second: QG.QColor) -> float:
+    """Return the contrast ratio (WCAG) of two opaque colors"""
+
+    def luminance(color: QG.QColor) -> float:
+        channels = [
+            value / 12.92 if value <= 0.04045 else ((value + 0.055) / 1.055) ** 2.4
+            for value in (color.redF(), color.greenF(), color.blueF())
+        ]
+        return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
+
+    light, dark = sorted((luminance(first), luminance(second)), reverse=True)
+    return (light + 0.05) / (dark + 0.05)
+
+
+def _muted_color(color: QG.QColor, background: QG.QColor) -> QG.QColor:
+    """Return ``color`` blended with ``background``, as much as possible while
+    keeping a readable contrast (for secondary texts)"""
+    for weight in (0.6, 0.7, 0.8, 0.9):
+        muted = QG.QColor(color)
+        muted.setAlphaF(weight)
+        muted = _composite(muted, background)
+        if _contrast(muted, background) >= MIN_TITLE_CONTRAST:
+            return muted
+    return QG.QColor(color)
+
+
+def _style_background(option: QW.QStyleOptionViewItem, style: QW.QStyle) -> QG.QColor:
+    """Return the background color drawn by the style behind the text of an item
+
+    The item is drawn off-screen without text over the base color of the view: the
+    background of selected or hovered items depends on the style (e.g. a light
+    selection with the "windowsvista" style, an accent color with the "windows11"
+    style and alternating row colors), whatever the Highlight color of the palette.
 
     Args:
-        palette: palette of the view.
+        option: style option of the item
+        style: style drawing the item
 
     Returns:
-        Background color.
+        Background color (opaque).
     """
-    dark = palette.color(QG.QPalette.Base).lightness() < 128
-    return QG.QColor(HOVER_BACKGROUND_DARK if dark else HOVER_BACKGROUND_LIGHT)
+    base = option.palette.color(QG.QPalette.Base)
+    if option.features & QW.QStyleOptionViewItem.Alternate:
+        base = _composite(option.palette.color(QG.QPalette.AlternateBase), base)
+    if not option.state & (QW.QStyle.State_Selected | QW.QStyle.State_MouseOver):
+        return base
+    probe = QW.QStyleOptionViewItem(option)
+    probe.rect = QC.QRect(0, 0, BACKGROUND_PROBE_WIDTH, option.rect.height())
+    probe.text = ""
+    probe.icon = QG.QIcon()
+    probe.features &= ~QW.QStyleOptionViewItem.HasDecoration
+    image = QG.QImage(probe.rect.size(), QG.QImage.Format_ARGB32_Premultiplied)
+    image.fill(base)
+    painter = QG.QPainter(image)
+    style.drawControl(QW.QStyle.CE_ItemViewItem, probe, painter, option.widget)
+    painter.end()
+    return image.pixelColor(probe.rect.center())
 
 
-def _apply_hover_background(opt: QW.QStyleOptionViewItem) -> None:
-    """Replace the native highlight of a hovered, unselected item by the
-    background color returned by :func:`hover_background_color`."""
-    if opt.state & QW.QStyle.State_MouseOver and not (
-        opt.state & QW.QStyle.State_Selected
-    ):
-        opt.state &= ~QW.QStyle.State_MouseOver
-        opt.backgroundBrush = QG.QBrush(hover_background_color(opt.palette))
+def _title_colors(
+    option: QW.QStyleOptionViewItem, style: QW.QStyle
+) -> tuple[QG.QColor, QG.QColor, QG.QColor]:
+    """Return the colors of the title, its references and its own identity
+
+    The colors come from the palette (text, highlighted text, link), and are chosen
+    to remain readable on the background drawn by the style.
+
+    Args:
+        option: style option of the item
+        style: style drawing the item
+
+    Returns:
+        Text, link and identity colors (opaque).
+    """
+    palette = option.palette
+    if not option.state & QW.QStyle.State_Enabled:
+        group = QG.QPalette.Disabled
+    elif option.state & QW.QStyle.State_Active:
+        group = QG.QPalette.Active
+    else:
+        group = QG.QPalette.Inactive
+    background = _style_background(option, style)
+
+    def contrast(color: QG.QColor) -> float:
+        """Return the contrast of a color with the background"""
+        return _contrast(color, background)
+
+    text_color = _composite(palette.color(group, QG.QPalette.Text), background)
+    highlighted = _composite(
+        palette.color(group, QG.QPalette.HighlightedText), background
+    )
+    # Styles drawing a light selection keep the text color of the palette, and
+    # the text color must remain readable on any background drawn by the style
+    if (
+        option.state & QW.QStyle.State_Selected
+        or contrast(text_color) < MIN_TITLE_CONTRAST
+    ) and contrast(highlighted) > contrast(text_color):
+        text_color = highlighted
+    if contrast(text_color) < MIN_TITLE_CONTRAST:
+        # No text color of the palette fits the background (e.g. "windows11" style
+        # drawing the selection with a light accent color in dark mode)
+        text_color = max(QG.QColor(QC.Qt.black), QG.QColor(QC.Qt.white), key=contrast)
+    link_color = _composite(palette.color(group, QG.QPalette.Link), background)
+    if contrast(link_color) < MIN_TITLE_CONTRAST:
+        # References remain underlined
+        link_color = text_color
+    return text_color, link_color, _muted_color(text_color, background)
 
 
 def _build_html(
@@ -153,9 +245,9 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
     Hit-testing is performed by :meth:`anchor_at`, which is meant to be called
     from the host view's ``mousePressEvent`` / ``mouseMoveEvent``.
 
-    Hovered, unselected items are highlighted with :func:`hover_background_color`
-    (the host view must set the ``Qt.WA_Hover`` attribute of its viewport, so that
-    hovered items are flagged by the view whatever the Qt style).
+    The background of items (selection, hover, focus) is drawn by the Qt style:
+    the colors of the title come from the palette, and are chosen to remain
+    readable on this background.
     """
 
     def __init__(
@@ -183,48 +275,16 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
         if not isinstance(text, str) or not (
             find_title_references(text) or isinstance(item_reference, str)
         ):
-            opt = QW.QStyleOptionViewItem(option)
-            _apply_hover_background(opt)
-            super().paint(painter, opt, index)
+            super().paint(painter, option, index)
             return
         opt = QW.QStyleOptionViewItem(option)
         self.initStyleOption(opt, index)
-        palette = opt.palette
-        dark = palette.color(QG.QPalette.Base).lightness() < 128
-        selected = bool(opt.state & QW.QStyle.State_Selected)
-        link_color = QG.QColor("#8ed4ff" if dark else "#004b99")
-        if selected:
-            background = QG.QColor("#204a70" if dark else "#cce8ff")
-            text_color = QG.QColor("#f0f0f0" if dark else "#202020")
-            meta_color = QG.QColor("#cbd5e1" if dark else "#4a5563")
-            # Native selection painting may ignore Highlight (notably on
-            # Windows). Use an explicit brush so the contrast is predictable.
-            opt.state &= ~(
-                QW.QStyle.State_Selected
-                | QW.QStyle.State_MouseOver
-                | QW.QStyle.State_HasFocus
-            )
-            opt.backgroundBrush = QG.QBrush(background)
-        else:
-            group = (
-                QG.QPalette.Active
-                if opt.state & QW.QStyle.State_Active
-                else QG.QPalette.Inactive
-            )
-            text_color = palette.color(group, QG.QPalette.Text)
-            meta_color = QG.QColor("#aeb8c4" if dark else "#59636e")
-            _apply_hover_background(opt)
-        # Let the style draw the background, focus rect and decoration
-        # (icon), but not the text.
-        opt.text = ""
         style = opt.widget.style() if opt.widget else QW.QApplication.style()
+        text_color, link_color, meta_color = _title_colors(opt, style)
+        # Let the style draw the background (selection, hover), focus rect and
+        # decoration (icon), but not the text.
+        opt.text = ""
         style.drawControl(QW.QStyle.CE_ItemViewItem, opt, painter, opt.widget)
-        if selected and option.state & QW.QStyle.State_HasFocus:
-            painter.save()
-            painter.setPen(QG.QPen(meta_color, 1, QC.Qt.DotLine))
-            painter.setBrush(QC.Qt.NoBrush)
-            painter.drawRect(opt.rect.adjusted(1, 1, -2, -2))
-            painter.restore()
 
         text_rect = style.subElementRect(QW.QStyle.SE_ItemViewItemText, opt, opt.widget)
         doc = _make_text_document(
@@ -246,7 +306,7 @@ class ClickableTitleDelegate(QW.QStyledItemDelegate):
         painter.translate(text_rect.topLeft())
         ctx = QG.QAbstractTextDocumentLayout.PaintContext()
         # Unformatted fragments do not inherit the document's body CSS.
-        ctx.palette = QG.QPalette(palette)
+        ctx.palette = QG.QPalette(opt.palette)
         ctx.palette.setColor(QG.QPalette.Text, text_color)
         clip = QC.QRectF(0, 0, clip_width, text_rect.height())
         ctx.clip = clip
