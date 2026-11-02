@@ -1557,7 +1557,10 @@ class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
             window: window next to which the panel floats
         """
         dock = self.dockwidget
-        dock.setFloating(True)
+        # Already floating, Qt 5 would hide and show the dock widget again, which
+        # places it again (see visibility_changed): endlessly when off all screens
+        if not dock.isFloating():
+            dock.setFloating(True)
         available = window.screen().availableGeometry()
         frame = window.frameGeometry()
         # Leave room for a title bar as high as the one of the window
@@ -1810,8 +1813,8 @@ class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
     def flash(self) -> None:
         """Flash a frame over the panel a few times, to draw attention to it.
 
-        Used when the panel is requested while it is already shown: otherwise,
-        nothing would seem to happen.
+        Used when the panel is requested while it is already shown with the
+        requested application: otherwise, nothing would seem to happen.
         """
         self.__flash_steps = 2 * self.FLASH_COUNT
         self.flash_overlay.setGeometry(self.rect())

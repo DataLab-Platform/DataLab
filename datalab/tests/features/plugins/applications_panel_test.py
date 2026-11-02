@@ -868,6 +868,38 @@ def test_main_window_shows_applications_panel(monkeypatch) -> None:
         assert not panel.is_flashing() and panel.flash_overlay.isHidden()
 
 
+def test_applications_panel_flashes_only_when_unchanged() -> None:
+    """Switching the shown panel to another application changes it visibly:
+    only a request leaving it unchanged makes it flash."""
+    camera = _plugin("org.example.camera", "Camera Characterization")
+    pulse = _plugin("org.example.pulse", "Pulse Characterization")
+    with datalab_test_app_context(console=False, exec_loop=False) as window:
+        # DataLab unregisters the plugins on close: restore the registry first
+        registry = PluginRegistry.get_plugins()
+        previous_plugins = list(registry)
+        registry[:] = [camera, pulse]
+        try:
+            panel = window.applicationspanel
+            dock = window.docks[panel]
+            window.show_applications("org.example.camera")
+            QW.QApplication.processEvents()
+            assert dock.isVisible()
+            assert not panel.is_flashing()
+
+            # Another application is shown (e.g. from its welcome tile)
+            window.show_applications("org.example.pulse")
+            QW.QApplication.processEvents()
+            assert panel.current_plugin_id() == "org.example.pulse"
+            assert not panel.is_flashing() and panel.flash_overlay.isHidden()
+
+            # The same application is requested again
+            window.show_applications("org.example.pulse")
+            assert panel.current_plugin_id() == "org.example.pulse"
+            assert panel.is_flashing()
+        finally:
+            registry[:] = previous_plugins
+
+
 def test_applications_panel_floats_when_shown_from_the_view_menu() -> None:
     """Shown for the first time from the View menu, the panel floats too; once
     docked and closed, it is shown docked again."""
@@ -985,6 +1017,38 @@ def test_applications_panel_floats_beside_a_window() -> None:
         assert dock.frameGeometry().top() == window.frameGeometry().top()
         assert dock.width() == ApplicationsPanel.DEFAULT_WIDTH
         assert dock.height() == window.height()
+    finally:
+        window.close()
+        window.deleteLater()
+        qt_app.processEvents()
+
+
+def test_applications_panel_off_all_screens_floats_beside_the_window() -> None:
+    """A floating panel left out of all screens (e.g. on a disconnected screen)
+    floats beside the window again without being hidden and shown again: with
+    Qt 5, the panel then placed itself again endlessly, until DataLab crashed."""
+    qt_app = QW.QApplication.instance() or QW.QApplication([])
+    window = QW.QMainWindow()
+    try:
+        window.setCentralWidget(QW.QLabel("Central widget"))
+        panel = ApplicationsPanel(window)
+        dock, area = panel.create_dockwidget("Applications")
+        window.addDockWidget(area, dock)
+        available = window.screen().availableGeometry()
+        window.setGeometry(available.left(), available.top(), 200, 300)
+        window.show()
+        dock.setFloating(True)
+        dock.show()
+        qt_app.processEvents()
+        visibility_changes: list[bool] = []
+        dock.visibilityChanged.connect(visibility_changes.append)
+
+        dock.move(available.right() + 5000, available.bottom() + 5000)
+        panel.ensure_on_screen(window)
+        qt_app.processEvents()
+        assert not visibility_changes
+        assert dock.isVisible() and dock.isFloating()
+        assert available.contains(dock.frameGeometry())
     finally:
         window.close()
         window.deleteLater()
