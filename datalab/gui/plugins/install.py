@@ -18,7 +18,6 @@ from html import escape
 from typing import TypeVar
 
 from guidata.configtools import get_icon
-from guidata.qthelpers import win32_fix_title_bar_background
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename
@@ -123,7 +122,6 @@ class PluginConsentDialog(QW.QDialog):
         origin: str | None = None,
     ) -> None:
         super().__init__(parent)
-        win32_fix_title_bar_background(self)
         self.setWindowTitle(_("Install plugin"))
         layout = QW.QVBoxLayout()
         self.setLayout(layout)

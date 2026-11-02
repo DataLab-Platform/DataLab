@@ -950,17 +950,11 @@ def test_docked_applications_panel_keeps_its_size() -> None:
         assert Conf.applications_panel_docked_size.get() is None
 
 
-def test_floating_applications_panel_is_shown_again_as_closed(monkeypatch) -> None:
-    """Closed while floating, the panel is shown again with the same size and a
-    title bar following the color theme, even when its content was hidden
-    meanwhile: with Qt 5, the dock widget was then limited to the size of its
-    title bar buttons, and its native window lost the dark title bar."""
-    fixed_title_bars: list[QW.QWidget] = []
-    monkeypatch.setattr(
-        applications_module,
-        "win32_fix_title_bar_background",
-        fixed_title_bars.append,
-    )
+def test_floating_applications_panel_is_shown_again_as_closed() -> None:
+    """Closed while floating, the panel is shown again with the same size, even
+    when its content was hidden meanwhile: with Qt 5, the dock widget was then
+    limited to the size of its title bar buttons (the title bar following the
+    color theme is checked in ``title_bars_unit_test``)."""
     with datalab_test_app_context(console=False, exec_loop=False) as window:
         qt_app = QW.QApplication.instance()
         panel = window.applicationspanel
@@ -981,12 +975,10 @@ def test_floating_applications_panel_is_shown_again_as_closed(monkeypatch) -> No
         layout.invalidate()
         layout.activate()
         assert dock.maximumHeight() < panel.minimumSizeHint().height()
-        fixed_title_bars.clear()
         window.show_applications()
         qt_app.processEvents()
         assert dock.isVisible() and dock.isFloating() and panel.isVisible()
         assert dock.size() == size
-        assert dock in fixed_title_bars
 
 
 def test_applications_panel_floats_beside_a_window() -> None:

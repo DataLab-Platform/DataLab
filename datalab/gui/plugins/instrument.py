@@ -15,7 +15,6 @@ from typing import TYPE_CHECKING, Callable, Iterable
 
 from guidata.configtools import get_icon
 from guidata.dataset.qtwidgets import DataSetEditLayout
-from guidata.qthelpers import win32_fix_title_bar_background
 from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -153,7 +152,6 @@ class InstrumentWindow(QW.QDialog):
         option_key: str | None = None,
     ) -> None:
         super().__init__(main)
-        win32_fix_title_bar_background(self)
         self.main = main
         self.instrument = instrument
         self.option_key = option_key
