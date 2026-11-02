@@ -517,6 +517,74 @@ def test_application_page_has_explicit_empty_states(make_panel) -> None:
     assert not panel.documentation_action.isEnabled()
 
 
+def _broken_plugin(plugin_id: str, name: str) -> object:
+    """Build an application plugin whose recipes cannot be read."""
+    plugin = _plugin(plugin_id, name, recipes=(RECIPE,))
+
+    def get_recipes() -> tuple[RecipeDescriptor, ...]:
+        raise ValueError("Invalid recipe declaration")
+
+    plugin.get_recipes = get_recipes
+    return plugin
+
+
+def test_applications_panel_leaves_out_application_whose_page_fails(
+    make_panel, monkeypatch
+) -> None:
+    """An application whose page cannot be built is left out (Issue #484).
+
+    The other applications remain available, with the selector and the pages
+    aligned.
+    """
+    broken = _broken_plugin("org.example.broken", "Broken application")
+    camera = _plugin("org.example.camera", "Camera Characterization", recipes=(RECIPE,))
+    pulse = _plugin(
+        "org.example.pulse", "Pulse Characterization", recipes=(OTHER_RECIPE,)
+    )
+    # Outside tests, page errors are logged instead of raised
+    monkeypatch.setattr(sgmx_qth, "is_running_tests", lambda: False)
+    panel = make_panel(broken, camera, pulse)
+
+    assert [page.plugin for page in panel.application_pages] == [camera, pulse]
+    assert panel.application_stack.count() == 2
+    combo = panel.application_combo
+    assert not combo.signalsBlocked()
+    assert [combo.itemData(index) for index in range(combo.count())] == [
+        "org.example.camera",
+        "org.example.pulse",
+    ]
+    assert panel.count_label.text() == "Applications (2)"
+    assert not combo.isHidden() and panel.empty_label.isHidden()
+    combo.setCurrentIndex(1)
+    assert panel.current_page().plugin is pulse
+    panel.select_plugin("org.example.camera")
+    assert panel.current_page().plugin is camera
+    with pytest.raises(KeyError):
+        panel.select_plugin("org.example.broken")
+
+
+def test_applications_panel_refresh_is_retried_after_an_error(
+    make_panel, registry: list
+) -> None:
+    """An interrupted refresh leaves the panel usable, and is not skipped later."""
+    camera = _plugin("org.example.camera", "Camera Characterization", recipes=(RECIPE,))
+    panel = make_panel(camera)
+    registry[:] = [_broken_plugin("org.example.broken", "Broken application"), camera]
+    # In tests, errors are raised instead of logged
+    with pytest.raises(ValueError, match="Invalid recipe declaration"):
+        panel.refresh()
+    assert not panel.application_combo.signalsBlocked()
+    # The pages are not considered up to date: they are built again
+    with pytest.raises(ValueError, match="Invalid recipe declaration"):
+        panel.refresh()
+
+    registry[:] = [camera]
+    panel.refresh()
+    assert [page.plugin for page in panel.application_pages] == [camera]
+    assert panel.current_page().plugin is camera
+    assert panel.title_label.text() == "Camera Characterization"
+
+
 def test_application_page_shows_readiness_of_each_method(make_panel) -> None:
     """Method rows summarize whether the current selection can be analyzed."""
     readiness = RecipeReadiness(

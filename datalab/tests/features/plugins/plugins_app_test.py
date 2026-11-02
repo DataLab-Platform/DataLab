@@ -646,6 +646,114 @@ def test_plugin_computation_registration_rollback():
                 assert feature_id not in win.signalpanel.processor.computing_registry
 
 
+APPLICATION_PLUGIN_SOURCE = """\
+from datalab.plugins import PluginBase, PluginCapability, PluginInfo
+from datalab.plugins.recipes import (
+    RecipeDescriptor,
+    RecipeInputSlot,
+    RecipeMetadataRequirement,
+    RecipeOutcome,
+)
+
+
+class {class_name}(PluginBase):
+    PLUGIN_INFO = PluginInfo(
+        id="{plugin_id}",
+        name="{class_name}",
+        version="1.1.0",
+        capabilities=frozenset({{PluginCapability.APPLICATION}}),
+    )
+    RECIPES = (
+        RecipeDescriptor(
+            recipe_id="{plugin_id}:check",
+            plugin_version="{recipe_plugin_version}",
+            title="Check",
+            version="1.0",
+            run=lambda *_args: RecipeOutcome(),
+            inputs=(
+                RecipeInputSlot(
+                    "frames",
+                    "image",
+                    "many",
+                    metadata=(RecipeMetadataRequirement("{metadata_key}", "Key"),),
+                ),
+            ),
+        ),
+    )
+
+    def create_actions(self):
+        pass
+"""
+
+
+@enabled_plugins_context()
+def test_invalid_application_plugin_does_not_prevent_startup():
+    """An application plugin with invalid declarations is not loaded (Issue #484).
+
+    It is reported as a failed plugin, while DataLab starts and reloads its
+    plugins normally: the Applications panel and the metadata keys expected by
+    application methods only come from the valid plugins.
+    """
+    valid_id = "org.example.valid-application"
+    invalid_id = "org.example.invalid-application"
+    with temporary_plugin_dir() as plugin_dir:
+        for filename, class_name, plugin_id, recipe_plugin_version, key in (
+            (
+                "datalab_test_plugin_valid_application.py",
+                "ValidApplicationPlugin",
+                valid_id,
+                "1.1.0",
+                "valid_key",
+            ),
+            (
+                "datalab_test_plugin_invalid_application.py",
+                "InvalidApplicationPlugin",
+                invalid_id,
+                # Plugin version bumped, recipe forgotten
+                "1.0.0",
+                "invalid_key",
+            ),
+        ):
+            with open(
+                osp.join(plugin_dir, filename), "w", encoding="utf-8"
+            ) as plugin_file:
+                plugin_file.write(
+                    APPLICATION_PLUGIN_SOURCE.format(
+                        class_name=class_name,
+                        plugin_id=plugin_id,
+                        recipe_plugin_version=recipe_plugin_version,
+                        metadata_key=key,
+                    )
+                )
+
+        def check_plugins(win: DLMainWindow) -> None:
+            """Check that only the valid application plugin is loaded."""
+            assert PluginRegistry.get_plugin(valid_id) is not None
+            assert PluginRegistry.get_plugin(invalid_id) is None
+            failed_plugin = next(
+                failed
+                for failed in PluginRegistry.get_failed_plugins()
+                if failed.name == "InvalidApplicationPlugin"
+            )
+            assert "plugin version does not match" in failed_plugin.traceback
+            shown_ids = [
+                page.plugin.plugin_id
+                for page in win.applicationspanel.application_pages
+            ]
+            assert valid_id in shown_ids and invalid_id not in shown_ids
+            keys = [key for key, _desc in win.imagepanel.get_known_metadata_keys([])]
+            assert "valid_key" in keys and "invalid_key" not in keys
+
+        # Outside tests, plugin errors are reported instead of raised
+        with patch("sigimax.utils.qthelpers.is_running_tests", return_value=False):
+            with datalab_test_app_context(console=False) as win:
+                QW.QApplication.processEvents()
+                check_plugins(win)
+                win.reload_plugins()
+                QW.QApplication.processEvents()
+                check_plugins(win)
+
+
 @enabled_plugins_context()
 def test_plugin_nested_menus():
     """Test plugin with nested submenus (3 levels deep)"""

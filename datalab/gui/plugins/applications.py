@@ -1585,49 +1585,64 @@ class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
         """Rebuild the pages if the application plugins have changed.
 
         The shown application remains shown if it is still active; otherwise,
-        the most recently used application is shown, or the first one.
+        the most recently used application is shown, or the first one. An
+        application whose page cannot be built is left out (the error is
+        logged), so that the other applications remain available.
         """
         plugins = get_application_plugins()
         if self.__plugins is not None and len(plugins) == len(self.__plugins):
             if all(new is old for new, old in zip(plugins, self.__plugins)):
                 return
-        self.__plugins = plugins
         current_id = self.current_plugin_id()
+        # Until rebuilt: if interrupted, the pages are rebuilt by the next refresh
+        self.__plugins = None
         combo = self.application_combo
         combo.blockSignals(True)
-        combo.clear()
-        self.application_pages.clear()
-        while self.application_stack.count():
-            widget = self.application_stack.widget(0)
-            self.application_stack.removeWidget(widget)
-            widget.deleteLater()
-        for plugin in plugins:
-            page = ApplicationPage(plugin)
-            page.start_requested.connect(self._start_recipe)
-            page.try_example_requested.connect(self._try_example)
-            page.open_example_requested.connect(self._open_example)
-            page.tool_requested.connect(self._launch_tool)
-            page.recipe_selected.connect(self.__remember_recipe)
-            page.section_toggled.connect(self.__remember_section)
-            page.splitter_moved.connect(self.__remember_splitter_sizes)
-            self.application_pages.append(page)
-            self.application_stack.addWidget(page)
-            _add_application_item(combo, plugin)
-        combo.blockSignals(False)
+        try:
+            combo.clear()
+            self.application_pages.clear()
+            while self.application_stack.count():
+                widget = self.application_stack.widget(0)
+                self.application_stack.removeWidget(widget)
+                widget.deleteLater()
+            for plugin in plugins:
+                page = None
+                # Application declarations are third-party code: keep the panel
+                # usable, and DataLab running, if one of them is broken
+                with try_or_log_error(
+                    f"Creating the Applications page of {plugin.info.name}"
+                ):
+                    page = ApplicationPage(plugin)
+                if page is None:
+                    continue
+                page.start_requested.connect(self._start_recipe)
+                page.try_example_requested.connect(self._try_example)
+                page.open_example_requested.connect(self._open_example)
+                page.tool_requested.connect(self._launch_tool)
+                page.recipe_selected.connect(self.__remember_recipe)
+                page.section_toggled.connect(self.__remember_section)
+                page.splitter_moved.connect(self.__remember_splitter_sizes)
+                self.application_pages.append(page)
+                self.application_stack.addWidget(page)
+                _add_application_item(combo, plugin)
+        finally:
+            combo.blockSignals(False)
+        self.__plugins = plugins
 
-        several = len(plugins) > 1
-        self.count_label.setText(_("Applications (%d)") % len(plugins))
+        shown = [page.plugin for page in self.application_pages]
+        several = len(shown) > 1
+        self.count_label.setText(_("Applications (%d)") % len(shown))
         for widget, visible in (
             (self.count_label, several),
             (combo, several),
-            (self.title_widget, len(plugins) == 1),
-            (self.menu_button, bool(plugins)),
-            (self.application_stack, bool(plugins)),
-            (self.empty_label, not plugins),
+            (self.title_widget, len(shown) == 1),
+            (self.menu_button, bool(shown)),
+            (self.application_stack, bool(shown)),
+            (self.empty_label, not shown),
         ):
             widget.setVisible(visible)
-        if plugins:
-            ids = [plugin.plugin_id for plugin in plugins]
+        if shown:
+            ids = [plugin.plugin_id for plugin in shown]
             candidates = (current_id, *Conf.welcome_recent_applications.get())
             index = next(
                 (ids.index(candidate) for candidate in candidates if candidate in ids),
