@@ -17,7 +17,6 @@ from html import escape
 from typing import TYPE_CHECKING
 
 from guidata.configtools import get_icon
-from guidata.qthelpers import win32_fix_title_bar_background
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
@@ -613,7 +612,6 @@ class PluginConfigDialog(QW.QDialog):
             parent: Main window instance
         """
         super().__init__(parent)
-        win32_fix_title_bar_background(self)
         self.main = parent
         self.plugin_widgets: list[PluginInfoWidget] = []
         self.failed_plugin_widgets: list[FailedPluginInfoWidget] = []

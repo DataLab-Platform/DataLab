@@ -11,7 +11,6 @@ from math import ceil
 from typing import TYPE_CHECKING
 
 from guidata.configtools import get_icon, get_image_file_path
-from guidata.qthelpers import win32_fix_title_bar_background
 from guidata.widgets.dockable import DockableWidgetMixin
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -1440,9 +1439,8 @@ class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
     def create_dockwidget(
         self, title: str
     ) -> tuple[QW.QDockWidget, QC.Qt.DockWidgetArea]:
-        """Create the dock widget, with a title bar following the color theme."""
+        """Create the dock widget, shown again as it was when closed while floating."""
         dock, location = super().create_dockwidget(title)
-        dock.topLevelChanged.connect(self.__fix_title_bar)
         dock.installEventFilter(self)
         return dock, location
 
@@ -1470,11 +1468,6 @@ class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
                 obj.setGeometry(self.__floating_geometry)
         return super().eventFilter(obj, event)
 
-    def __fix_title_bar(self, floating: bool) -> None:
-        """Fix the title bar background of the floating panel on Windows."""
-        if floating:
-            win32_fix_title_bar_background(self.dockwidget)
-
     def visibility_changed(self, enable: bool) -> None:
         """Float beside the main window the first time, and keep floating after.
 
@@ -1500,9 +1493,6 @@ class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
                 # widget is not always taken into account
                 if dock.isFloating():
                     self.place_beside(window)
-            if dock.isFloating():
-                # Its native window may have been created again when shown
-                self.__fix_title_bar(True)
             self.ensure_on_screen(window)
             if not dock.isFloating() and Conf.applications_panel_docked_size.get():
                 # Once the main window has laid out the dock area again

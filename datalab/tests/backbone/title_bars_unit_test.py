@@ -5,9 +5,9 @@ Window title bars on Windows
 
 With the dark theme on Windows, Windows draws the title bar of windows with its own
 color scheme: since guidata 3.17.2, every window is given a title bar following the
-color theme, including the DataLab windows which do not fix it themselves (e.g. the
-conversation history of the AI Assistant), the dialogs created by static methods, and
-the floating panels.
+color theme, so that the DataLab windows do not fix it themselves: the dialogs (e.g.
+the conversation history of the AI Assistant, or the plugin dialogs), the dialogs
+created by static methods, and the floating panels.
 
 Native Windows platform only (``--show-windows``).
 """
@@ -18,6 +18,7 @@ import os
 import time
 from collections.abc import Callable
 
+import guidata.dataset as gds
 import numpy as np
 import pytest
 from guidata import qthelpers as guidata_qth
@@ -26,6 +27,8 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from sigima.objects import create_signal
+from sigima.params import GaussianParam
+from sigima.proc.signal import gaussian_filter
 
 from datalab.aiassistant.conversation import ConversationStore
 from datalab.aiassistant.widgets.conversationsdialog import ConversationsDialog
@@ -35,12 +38,63 @@ from datalab.gui.main import DLMainWindow
 from datalab.gui.objectview import GetObjectsDialog
 from datalab.gui.panel.base import NonModalInfoDialog
 from datalab.gui.panel.macro import _RecentMacrosDialog
+from datalab.gui.plugins.config import PluginConfigDialog
+from datalab.gui.plugins.install import PluginConsentDialog
+from datalab.gui.plugins.instrument import InstrumentWindow
+from datalab.gui.plugins.recipe_inputs import RecipeInputDialog
+from datalab.plugins.instruments import (
+    InstrumentAcquisition,
+    InstrumentFrame,
+    PluginInstrument,
+)
+from datalab.plugins.recipe_binding import RecipeReadiness, RecipeReadinessStatus
+from datalab.plugins.recipes import RecipeDescriptor, RecipeInputSlot, RecipeOutcome
 from datalab.tests import datalab_test_app_context
 from datalab.widgets.capsule import CapsuleDialog
 from datalab.widgets.instconfviewer import InstallConfigViewerWindow
+from datalab.widgets.processingpreview import ProcessingPreviewDialog
 from datalab.widgets.textimport import TextImportWizard
 
 pytestmark = pytest.mark.skipif(os.name != "nt", reason="Windows only")
+
+PLUGIN_MANIFEST = {
+    "name": "datalab_example",
+    "display_name": "Example",
+    "version": "1.0.0",
+    "summary": "Example plugin",
+    "warnings": [],
+    "filename": "datalab_example.py",
+    "size_bytes": 1024,
+    "sha256": "0" * 64,
+}
+RECIPE = RecipeDescriptor(
+    recipe_id="org.example.check:signals",
+    plugin_version="1.0.0",
+    title="Check signals",
+    version="1.0.0",
+    run=lambda *_args: RecipeOutcome(),
+    inputs=(RecipeInputSlot("signals", "signal", "many"),),
+)
+
+
+class InstrumentSettings(gds.DataSet):
+    """Settings of the test instrument"""
+
+    gain = gds.FloatItem("Gain", default=1.0)
+
+
+class RampInstrument(PluginInstrument):
+    """Instrument returning a ramp"""
+
+    def __init__(self) -> None:
+        super().__init__(InstrumentSettings())
+
+    def preview(self) -> InstrumentFrame:
+        x = np.linspace(0.0, 1.0, 5)
+        return InstrumentFrame((create_signal("Live", x, self.settings.gain * x),))
+
+    def acquire(self) -> InstrumentAcquisition:
+        return InstrumentAcquisition("Ramp", self.preview().objects)
 
 
 def is_dark_title_bar(widget: QW.QWidget) -> bool:
@@ -111,9 +165,9 @@ def test_title_bars_follow_color_mode(monkeypatch, tmp_path) -> None:
         dialogs: dict[str, QW.QWidget] = {}
         try:
             set_color_mode(win, "dark")
-            win.signalpanel.add_object(
-                create_signal("Signal", np.arange(10.0), np.arange(10.0))
-            )
+            signal = create_signal("Signal", np.arange(10.0), np.arange(10.0))
+            win.signalpanel.add_object(signal)
+            readiness = RecipeReadiness(RecipeReadinessStatus.NO_INPUT, {})
             dialogs = {
                 "conversation history": ConversationsDialog(
                     ConversationStore(str(tmp_path)), win
@@ -125,6 +179,15 @@ def test_title_bars_follow_color_mode(monkeypatch, tmp_path) -> None:
                 "recent macros": _RecentMacrosDialog(win.macropanel),
                 "pattern help": NonModalInfoDialog(win, "Pattern help", "Text"),
                 "text import wizard": TextImportWizard("signal", win),
+                "plugin configuration": PluginConfigDialog(win),
+                "plugin installation": PluginConsentDialog(PLUGIN_MANIFEST, win),
+                "recipe inputs": RecipeInputDialog(
+                    win, RECIPE, [signal], readiness, lambda _bindings: readiness
+                ),
+                "processing preview": ProcessingPreviewDialog(
+                    GaussianParam.create(sigma=1.0), gaussian_filter, [signal], win
+                ),
+                "instrument": InstrumentWindow(win, RampInstrument(), "Instrument"),
             }
             for dialog in dialogs.values():
                 dialog.show()
@@ -152,16 +215,23 @@ def test_title_bars_follow_color_mode(monkeypatch, tmp_path) -> None:
                 assert is_dark_title_bar(dock), dock.windowTitle()
                 dock.setFloating(False)
                 dock.setVisible(visible)
-            # Applications panel: floating, closed, then shown again
+            # Applications panel: floating, closed, then shown again, also after its
+            # content was hidden meanwhile (as done by Qt 5 once the window layout
+            # has been restored)
             dock = win.docks[win.applicationspanel]
-            for _index in range(2):
+            for hide_content in (False, False, True):
                 win.show_applications()
                 process_events()
                 assert dock.isFloating() and is_dark_title_bar(dock)
                 dock.close()
                 process_events()
+                if hide_content:
+                    win.applicationspanel.hide()
+                    dock.layout().invalidate()
+                    dock.layout().activate()
             win.show_applications()
             process_events()
+            assert dock.isFloating() and is_dark_title_bar(dock)
             windows["Applications panel"] = dock
 
             set_color_mode(win, "light")
@@ -173,6 +243,8 @@ def test_title_bars_follow_color_mode(monkeypatch, tmp_path) -> None:
         finally:
             for dialog in dialogs.values():
                 dialog.close()
+                if isinstance(dialog, InstrumentWindow):
+                    assert dialog.wait_closed()
                 dialog.deleteLater()
             Conf.color_mode.set(initial_mode)
             # The style depends on the color mode: following tests must keep it
