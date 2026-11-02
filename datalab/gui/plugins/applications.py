@@ -1810,8 +1810,8 @@ class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
     def flash(self) -> None:
         """Flash a frame over the panel a few times, to draw attention to it.
 
-        Used when the panel is requested while it is already shown: otherwise,
-        nothing would seem to happen.
+        Used when the panel is requested while it is already shown with the
+        requested application: otherwise, nothing would seem to happen.
         """
         self.__flash_steps = 2 * self.FLASH_COUNT
         self.flash_overlay.setGeometry(self.rect())

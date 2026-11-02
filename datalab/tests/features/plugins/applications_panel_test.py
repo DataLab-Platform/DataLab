@@ -868,6 +868,38 @@ def test_main_window_shows_applications_panel(monkeypatch) -> None:
         assert not panel.is_flashing() and panel.flash_overlay.isHidden()
 
 
+def test_applications_panel_flashes_only_when_unchanged() -> None:
+    """Switching the shown panel to another application changes it visibly:
+    only a request leaving it unchanged makes it flash."""
+    camera = _plugin("org.example.camera", "Camera Characterization")
+    pulse = _plugin("org.example.pulse", "Pulse Characterization")
+    with datalab_test_app_context(console=False, exec_loop=False) as window:
+        # DataLab unregisters the plugins on close: restore the registry first
+        registry = PluginRegistry.get_plugins()
+        previous_plugins = list(registry)
+        registry[:] = [camera, pulse]
+        try:
+            panel = window.applicationspanel
+            dock = window.docks[panel]
+            window.show_applications("org.example.camera")
+            QW.QApplication.processEvents()
+            assert dock.isVisible()
+            assert not panel.is_flashing()
+
+            # Another application is shown (e.g. from its welcome tile)
+            window.show_applications("org.example.pulse")
+            QW.QApplication.processEvents()
+            assert panel.current_plugin_id() == "org.example.pulse"
+            assert not panel.is_flashing() and panel.flash_overlay.isHidden()
+
+            # The same application is requested again
+            window.show_applications("org.example.pulse")
+            assert panel.current_plugin_id() == "org.example.pulse"
+            assert panel.is_flashing()
+        finally:
+            registry[:] = previous_plugins
+
+
 def test_applications_panel_floats_when_shown_from_the_view_menu() -> None:
     """Shown for the first time from the View menu, the panel floats too; once
     docked and closed, it is shown docked again."""
