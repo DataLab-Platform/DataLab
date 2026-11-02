@@ -6,6 +6,7 @@
 
 * The Python package and newly generated plugin projects now require Python 3.10 or later. Python 3.9 users must keep an earlier compatible release. The standalone application continues to include its own Python interpreter.
 * The Windows test runner excludes Python 3.9 from current matrices, while retaining explicit tests of pinned historical releases.
+* guidata 3.17.2 or later is required: it gives every window a title bar following the color theme on Windows, including the windows of plugins (closes [Issue #492](https://github.com/DataLab-Platform/DataLab/issues/492)).
 
 ### ✨ New Features ###
 

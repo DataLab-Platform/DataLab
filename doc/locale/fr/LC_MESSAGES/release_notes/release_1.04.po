@@ -26,6 +26,9 @@ msgstr "Le package Python et les nouveaux projets de plugins générés exigent 
 msgid "The Windows test runner excludes Python 3.9 from current matrices, while retaining explicit tests of pinned historical releases."
 msgstr "Le lanceur de tests Windows exclut Python 3.9 des matrices courantes, tout en conservant les tests explicites de versions historiques précisément sélectionnées."
 
+msgid "guidata 3.17.2 or later is required: it gives every window a title bar following the color theme on Windows, including the windows of plugins (closes [Issue #492](https://github.com/DataLab-Platform/DataLab/issues/492))."
+msgstr "guidata 3.17.2 ou ultérieur est requis : il donne à chaque fenêtre une barre de titre suivant le thème de couleurs sous Windows, y compris aux fenêtres des plugins (corrige [Issue #492](https://github.com/DataLab-Platform/DataLab/issues/492))."
+
 msgid "✨ New Features"
 msgstr "✨ Nouvelles fonctionnalités"
 
