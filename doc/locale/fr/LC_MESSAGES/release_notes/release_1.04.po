@@ -560,6 +560,12 @@ msgstr "Correction des images affichées avec une résolution inférieure à cel
 msgid "Fixed the red plugin icon of the status bar (shown when some plugins failed to load) being too small and shifted to the top-left corner with a display scaling greater than 100% (e.g., half its size with 200%)"
 msgstr "Correction de l'icône rouge des plugins dans la barre d'état (affichée lorsque des plugins n'ont pas pu être chargés), qui était trop petite et décalée vers le coin supérieur gauche avec une mise à l'échelle de l'affichage supérieure à 100 % (par exemple réduite de moitié avec 200 %)"
 
+msgid "**Dark theme:**"
+msgstr "**Thème sombre :**"
+
+msgid "Fixed most windows keeping a white title bar with the dark theme on Windows, next to their dark content: the conversation history of the AI Assistant, the workspace capsule, the command palette and other dialog boxes, the import wizard, the confirmation and input boxes (e.g., when renaming a group or a conversation) and the panels detached from the main window (signal and image views, macro, history, AI Assistant and welcome panels, console). All the windows now have a dark title bar with the dark theme, also after changing the color mode in the Settings dialog (requires guidata ≥ 3.17.2, fixes [Issue #490](https://github.com/DataLab-Platform/DataLab/issues/490))"
+msgstr "Correction de la plupart des fenêtres qui conservaient une barre de titre blanche avec le thème sombre sous Windows, à côté de leur contenu sombre : l'historique des conversations de l'Assistant IA, la capsule d'espace de travail, la palette de commandes et d'autres boîtes de dialogue, l'assistant d'importation, les boîtes de confirmation et de saisie (par exemple lors du renommage d'un groupe ou d'une conversation) et les panneaux détachés de la fenêtre principale (vues signal et image, panneaux macro, historique, Assistant IA et accueil, console). Toutes les fenêtres ont désormais une barre de titre sombre avec le thème sombre, y compris après un changement du mode de couleur dans la boîte de dialogue des préférences (nécessite guidata ≥ 3.17.2, corrige [Issue #490](https://github.com/DataLab-Platform/DataLab/issues/490))"
+
 msgid "**Plot watermark:**"
 msgstr "**Filigrane des graphiques :**"
 

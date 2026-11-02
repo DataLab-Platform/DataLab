@@ -247,6 +247,10 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 * Fixed images being displayed with a lower resolution than the screen with a display scaling greater than 100%: with a 200% scaling, images were shown with half the resolution of the screen, and with 125%, one screen pixel row and column out of five were duplicated, which made fine details (e.g., noise) look irregular. Images are now displayed at the resolution of the screen (requires PlotPy ≥ 2.12.1)
 * Fixed the red plugin icon of the status bar (shown when some plugins failed to load) being too small and shifted to the top-left corner with a display scaling greater than 100% (e.g., half its size with 200%)
 
+**Dark theme:**
+
+* Fixed most windows keeping a white title bar with the dark theme on Windows, next to their dark content: the conversation history of the AI Assistant, the workspace capsule, the command palette and other dialog boxes, the import wizard, the confirmation and input boxes (e.g., when renaming a group or a conversation) and the panels detached from the main window (signal and image views, macro, history, AI Assistant and welcome panels, console). All the windows now have a dark title bar with the dark theme, also after changing the color mode in the Settings dialog (requires guidata ≥ 3.17.2, fixes [Issue #490](https://github.com/DataLab-Platform/DataLab/issues/490))
+
 **Plot watermark:**
 
 * Fixed the watermark of empty plots being read from another installation of DataLab sharing the same user configuration (e.g., DataLab installed in another Python environment): the watermark disappeared once this other installation was removed, and stayed blurry on high-DPI screens when it was an older version. The watermark of the running DataLab is now always used
