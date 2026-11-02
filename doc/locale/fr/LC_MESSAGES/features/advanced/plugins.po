@@ -530,6 +530,9 @@ msgstr "Les descripteurs de recettes restent détenus par la classe de plugin co
 msgid "The descriptor's ``plugin_version`` must match ``PLUGIN_INFO.version``. Keeping the plugin and recipe versions explicit lets execution records identify both the installed implementation and the independently versioned workflow."
 msgstr "La valeur ``plugin_version`` du descripteur doit correspondre à ``PLUGIN_INFO.version``. L'explicitation des versions du plugin et de la recette permet aux traces d'exécution d'identifier à la fois l'implémentation installée et le workflow versionné indépendamment."
 
+msgid "DataLab validates the declarations of a plugin when loading it: recipes, recipe launchers, examples, tools and welcome tiles, described below. A plugin with an invalid declaration, for example a recipe whose ``plugin_version`` no longer matches the plugin version, is not loaded: its error is shown in the internal console and written to the log file, and the plugin is listed with this error in the **Installed plugins** tab of **Configure plugins...** (*Plugins with errors* filter). The other plugins are loaded normally."
+msgstr "DataLab valide les déclarations d'un plugin lors de son chargement : recettes, lanceurs de recettes, exemples, outils et tuiles de la page d'accueil, décrits ci-dessous. Un plugin dont une déclaration est invalide, par exemple une recette dont le ``plugin_version`` ne correspond plus à la version du plugin, n'est pas chargé : son erreur est affichée dans la console interne et consignée dans le fichier journal, et le plugin est listé avec cette erreur dans l'onglet **Installés** de **Configurer les plugins...** (filtre *Plugins avec erreurs*). Les autres plugins sont chargés normalement."
+
 msgid "The recipe callable receives a mapping from slot IDs to tuples of Sigima ``SignalObj`` or ``ImageObj`` instances, the parameter ``DataSet`` instance (or ``None``), and a :class:`datalab.plugins.recipes.RecipeExecutionContext`. The context provides technology-neutral progress and cancellation callbacks and has no Qt dependency."
 msgstr "La fonction de la recette reçoit une correspondance entre les ID d'emplacements et des tuples d'instances Sigima ``SignalObj`` ou ``ImageObj``, l'instance de paramètres ``DataSet`` (ou ``None``) et un :class:`datalab.plugins.recipes.RecipeExecutionContext`. Le contexte fournit des fonctions de rappel de progression et d'annulation indépendantes de la technologie et ne dépend pas de Qt."
 
@@ -1090,6 +1093,15 @@ msgstr "Retourne True si le plugin est enregistré"
 
 msgid "Register plugin"
 msgstr "Enregistrer le plugin"
+
+msgid "The declarations of the plugin (recipes, examples, tools, welcome tiles) are validated first: an invalid plugin is not registered, so that the Applications panel, the welcome page and the menus only get valid declarations."
+msgstr "Les déclarations du plugin (recettes, exemples, outils, tuiles de la page d'accueil) sont d'abord validées : un plugin invalide n'est pas enregistré, de sorte que le panneau Applications, la page d'accueil et les menus ne reçoivent que des déclarations valides."
+
+msgid "if a declaration has the wrong type"
+msgstr "si une déclaration n'est pas du bon type"
+
+msgid "if a declaration is invalid or the plugin ID is already used"
+msgstr "si une déclaration est invalide ou si l'ID du plugin est déjà utilisé"
 
 msgid "Unregister plugin"
 msgstr "Désenregistrer le plugin"

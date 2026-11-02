@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 import importlib
 import os.path as osp
 import pkgutil
@@ -26,7 +27,11 @@ from datalab.plugins import (
     migrate_enabled_plugin_ids,
 )
 from datalab.plugins import base as plugin_base
+from datalab.plugins.examples import PluginExample
+from datalab.plugins.recipes import RecipeDescriptor, RecipeOutcome
 from datalab.plugins.store import InstalledPluginStore
+from datalab.plugins.tiles import WelcomeTile
+from datalab.plugins.tools import PluginTool
 
 
 @pytest.fixture(autouse=True)
@@ -699,6 +704,140 @@ def test_plugin_registration_rollback_on_hook_abort() -> None:
         plugin.register(object())
 
     assert PluginRegistry.get_plugin(plugin.plugin_id) is None
+    assert not plugin.is_registered()
+    assert plugin.main is None
+    assert plugin.proxy is None
+
+
+DECLARATIONS_PLUGIN_ID = "org.example.declarations"
+DECLARATIONS_RECIPE = RecipeDescriptor(
+    recipe_id=f"{DECLARATIONS_PLUGIN_ID}:check",
+    plugin_version="1.1.0",
+    title="Check",
+    version="1.0",
+    run=lambda *_args: RecipeOutcome(),
+)
+UNKNOWN_RECIPE_ID = f"{DECLARATIONS_PLUGIN_ID}:missing"
+
+
+def create_application_plugin_class(**declarations: object) -> type[PluginBase]:
+    """Create an application plugin class with one valid recipe by default.
+
+    Args:
+        declarations: class attributes replacing the default declarations
+         (``RECIPES``, ``EXAMPLES``, ``RECIPE_LAUNCHERS``, ``TOOLS``,
+         ``WELCOME_TILES``)
+    """
+
+    def create_actions(self: PluginBase) -> None:  # pylint: disable=unused-argument
+        """Dummy action creation method for test plugin."""
+
+    def open_editor(self: PluginBase) -> None:  # pylint: disable=unused-argument
+        """Dummy tool and welcome tile launcher."""
+
+    attributes = {
+        "__module__": "datalab_declarations_plugin",
+        "PLUGIN_INFO": PluginInfo(
+            id=DECLARATIONS_PLUGIN_ID,
+            name="Declarations plugin",
+            version="1.1.0",
+            capabilities=frozenset({PluginCapability.APPLICATION}),
+        ),
+        "RECIPES": (DECLARATIONS_RECIPE,),
+        "create_actions": create_actions,
+        "open_editor": open_editor,
+    }
+    attributes.update(declarations)
+    return type("DeclarationsPlugin", (PluginBase,), attributes)
+
+
+def test_plugin_registration_accepts_valid_declarations() -> None:
+    """A plugin whose declarations are all valid is registered."""
+    plugin_class = create_application_plugin_class(
+        EXAMPLES=(
+            PluginExample(
+                id="demo", title="Demo", recipe_ids=(DECLARATIONS_RECIPE.recipe_id,)
+            ),
+        ),
+        RECIPE_LAUNCHERS={DECLARATIONS_RECIPE.recipe_id: "open_editor"},
+        TOOLS=(PluginTool(id="editor", title="Editor", launcher="open_editor"),),
+        WELCOME_TILES=(WelcomeTile(id="start", title="Start", launcher="open_editor"),),
+    )
+    plugin = plugin_class()
+    main = object()
+
+    plugin.register(main)
+
+    assert PluginRegistry.get_plugin(DECLARATIONS_PLUGIN_ID) is plugin
+    assert plugin.is_registered()
+    assert plugin.main is main
+
+
+@pytest.mark.parametrize(
+    ("declarations", "error", "match"),
+    [
+        pytest.param(
+            {
+                "RECIPES": (
+                    dataclasses.replace(DECLARATIONS_RECIPE, plugin_version="1.0.0"),
+                )
+            },
+            ValueError,
+            "plugin version does not match",
+            id="stale-recipe-plugin-version",
+        ),
+        pytest.param(
+            {"RECIPES": ("not-a-recipe",)},
+            TypeError,
+            "RecipeDescriptor",
+            id="recipe-of-wrong-type",
+        ),
+        pytest.param(
+            {"RECIPE_LAUNCHERS": {UNKNOWN_RECIPE_ID: "open_editor"}},
+            ValueError,
+            "unknown recipe",
+            id="launcher-of-unknown-recipe",
+        ),
+        pytest.param(
+            {
+                "EXAMPLES": (
+                    PluginExample(
+                        id="demo", title="Demo", recipe_ids=(UNKNOWN_RECIPE_ID,)
+                    ),
+                )
+            },
+            ValueError,
+            "references unknown recipe",
+            id="example-of-unknown-recipe",
+        ),
+        pytest.param(
+            {"TOOLS": (PluginTool(id="editor", title="Editor", launcher="renamed"),)},
+            ValueError,
+            "is not callable",
+            id="tool-launcher-not-callable",
+        ),
+        pytest.param(
+            {"WELCOME_TILES": (WelcomeTile(id="start", title="Start", launcher="x"),)},
+            ValueError,
+            "is not callable",
+            id="welcome-tile-launcher-not-callable",
+        ),
+    ],
+)
+def test_plugin_registration_rejects_invalid_declarations(
+    declarations: dict[str, object], error: type[Exception], match: str
+) -> None:
+    """A plugin with invalid declarations is not registered (Issue #484).
+
+    The Applications panel, the welcome page and the menus would otherwise fail
+    on them, preventing DataLab from starting.
+    """
+    plugin = create_application_plugin_class(**declarations)()
+
+    with pytest.raises(error, match=match):
+        plugin.register(object())
+
+    assert PluginRegistry.get_plugin(DECLARATIONS_PLUGIN_ID) is None
     assert not plugin.is_registered()
     assert plugin.main is None
     assert plugin.proxy is None

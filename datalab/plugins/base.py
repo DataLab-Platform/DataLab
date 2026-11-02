@@ -959,10 +959,35 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         self.proxy = None
         self._instruments.clear()
 
+    @classmethod
+    def _validate_declarations(cls) -> None:
+        """Validate the recipes, examples, tools and welcome tiles of the plugin.
+
+        Raises:
+            TypeError: if a declaration has the wrong type
+            ValueError: if a declaration is invalid (e.g. unknown recipe ID)
+        """
+        cls.get_recipes()
+        cls.get_recipe_launchers()
+        cls.get_examples()
+        cls.get_tools()
+        cls.get_welcome_tiles()
+
     def register(self, main: main.DLMainWindow) -> None:
-        """Register plugin"""
+        """Register plugin
+
+        The declarations of the plugin (recipes, examples, tools, welcome tiles)
+        are validated first: an invalid plugin is not registered, so that the
+        Applications panel, the welcome page and the menus only get valid
+        declarations.
+
+        Raises:
+            TypeError: if a declaration has the wrong type
+            ValueError: if a declaration is invalid or the plugin ID is already used
+        """
         if self._is_registered:
             return
+        self._validate_declarations()
         PluginRegistry.register_plugin(self)
         self._is_registered = True
         self.main = main

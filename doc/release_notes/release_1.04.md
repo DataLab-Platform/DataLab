@@ -51,6 +51,7 @@
 * Application plugins add tiles to a new **Applications** section of the welcome page: by default, one tile per plugin shows its page in the **Applications** panel, and plugins may declare additional tiles, for example to open an example directly. Additional tiles are shown when there is room for them, and otherwise move to the menu of the main tile
 * The welcome page stays tidy when many applications are installed: tiles are limited to a configurable number of rows (two by default), with a last tile showing the **Applications** panel for the others. Applications may be pinned to the top or hidden, and recently used ones come first; the **Applications** panel offers the same welcome page options
 * Plugins may declare an icon, shown in the **Applications** panel, on their welcome page tile and in the **Configure plugins...** dialog
+* DataLab checks the declarations of application plugins (methods, examples, tools, welcome page tiles) when loading them: a plugin with an invalid declaration, for example a method whose plugin version was not updated with the plugin, or an example referring to a renamed method, is not loaded and is listed with its error in **Configure plugins...**, while DataLab and the other plugins start normally (fixes [Issue #484](https://github.com/DataLab-Platform/DataLab/issues/484))
 
 **Plugin installation:**
 

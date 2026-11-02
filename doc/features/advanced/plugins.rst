@@ -568,6 +568,14 @@ The descriptor's ``plugin_version`` must match ``PLUGIN_INFO.version``. Keeping
 the plugin and recipe versions explicit lets execution records identify both
 the installed implementation and the independently versioned workflow.
 
+DataLab validates the declarations of a plugin when loading it: recipes, recipe
+launchers, examples, tools and welcome tiles, described below. A plugin with an
+invalid declaration, for example a recipe whose ``plugin_version`` no longer
+matches the plugin version, is not loaded: its error is shown in the internal
+console and written to the log file, and the plugin is listed with this error in
+the **Installed plugins** tab of **Configure plugins...** (*Plugins with errors*
+filter). The other plugins are loaded normally.
+
 The recipe callable receives a mapping from slot IDs to tuples of Sigima
 ``SignalObj`` or ``ImageObj`` instances, the parameter ``DataSet`` instance (or
 ``None``), and a :class:`datalab.plugins.recipes.RecipeExecutionContext`. The context

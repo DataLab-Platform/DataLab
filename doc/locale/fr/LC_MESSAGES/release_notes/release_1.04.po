@@ -128,6 +128,9 @@ msgstr "La page d'accueil reste lisible lorsque de nombreuses applications sont 
 msgid "Plugins may declare an icon, shown in the **Applications** panel, on their welcome page tile and in the **Configure plugins...** dialog"
 msgstr "Les plugins peuvent déclarer une icône, affichée dans le panneau **Applications**, sur leur tuile de la page d'accueil et dans la boîte de dialogue **Configurer les plugins...**"
 
+msgid "DataLab checks the declarations of application plugins (methods, examples, tools, welcome page tiles) when loading them: a plugin with an invalid declaration, for example a method whose plugin version was not updated with the plugin, or an example referring to a renamed method, is not loaded and is listed with its error in **Configure plugins...**, while DataLab and the other plugins start normally (fixes [Issue #484](https://github.com/DataLab-Platform/DataLab/issues/484))"
+msgstr "DataLab vérifie les déclarations des plugins d'application (méthodes, exemples, outils, tuiles de la page d'accueil) lors de leur chargement : un plugin dont une déclaration est invalide, par exemple une méthode dont la version du plugin n'a pas été mise à jour avec celui-ci, ou un exemple faisant référence à une méthode renommée, n'est pas chargé et est listé avec son erreur dans **Configurer les plugins...**, tandis que DataLab et les autres plugins démarrent normalement (corrige [l'issue #484](https://github.com/DataLab-Platform/DataLab/issues/484))"
+
 msgid "**Plugin installation:**"
 msgstr "**Installation de plugins :**"
 
