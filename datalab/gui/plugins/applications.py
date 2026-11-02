@@ -1363,6 +1363,8 @@ class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
         self.__flash_timer.setInterval(self.FLASH_INTERVAL)
         self.__flash_timer.timeout.connect(self.__toggle_flash)
         self.__flash_steps = 0
+        #: Geometry of the floating panel when it was last closed
+        self.__floating_geometry: QC.QRect | None = None
         self.setMinimumWidth(self.MINIMUM_WIDTH)
         self.__setup_ui()
         self.refresh()
@@ -1441,7 +1443,32 @@ class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
         """Create the dock widget, with a title bar following the color theme."""
         dock, location = super().create_dockwidget(title)
         dock.topLevelChanged.connect(self.__fix_title_bar)
+        dock.installEventFilter(self)
         return dock, location
+
+    def eventFilter(  # pylint: disable=invalid-name
+        self, obj: QC.QObject, event: QC.QEvent
+    ) -> bool:
+        """Show the floating panel again as it was when it was closed.
+
+        With Qt 5, closing the floating panel hides its content: shown again, the
+        dock widget may be limited to the size of its title bar buttons, its
+        layout setting its minimum and maximum sizes from its visible content.
+        The geometry is given back when the dock widget is shown, before it
+        notifies its visibility (which depends on its geometry).
+        """
+        if obj is self.dockwidget and obj.isFloating():
+            if event.type() == QC.QEvent.Hide:
+                self.__floating_geometry = obj.geometry()
+            elif (
+                event.type() == QC.QEvent.Show and self.__floating_geometry is not None
+            ):
+                self.show()
+                layout = obj.layout()
+                layout.invalidate()
+                layout.activate()
+                obj.setGeometry(self.__floating_geometry)
+        return super().eventFilter(obj, event)
 
     def __fix_title_bar(self, floating: bool) -> None:
         """Fix the title bar background of the floating panel on Windows."""
@@ -1453,9 +1480,10 @@ class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
 
         Other panels are docked again when they are shown after being closed
         while floating; the Applications panel stays floating, so that it is
-        shown again where the user left it, within the available screen area.
-        Docked, it gets back the size it had when it was closed: alone in its
-        dock area, it would otherwise get its minimum size.
+        shown again where the user left it, with the same geometry (see
+        :meth:`eventFilter`), within the available screen area. Docked, it gets
+        back the size it had when it was closed: alone in its dock area, it would
+        otherwise get its minimum size.
 
         Args:
             enable: True if the panel is visible
@@ -1472,6 +1500,9 @@ class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
                 # widget is not always taken into account
                 if dock.isFloating():
                     self.place_beside(window)
+            if dock.isFloating():
+                # Its native window may have been created again when shown
+                self.__fix_title_bar(True)
             self.ensure_on_screen(window)
             if not dock.isFloating() and Conf.applications_panel_docked_size.get():
                 # Once the main window has laid out the dock area again
