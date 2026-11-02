@@ -835,6 +835,10 @@ class PluginConfigDialog(QW.QDialog):
         container_layout.addSpacing(18)
         container_layout.addLayout(self._create_warning_settings_layout())
         container_layout.addStretch()
+        # Populate the path lists only once their layouts belong to `container`:
+        # showing a parentless placeholder would briefly open a top-level window
+        self._refresh_extra_path_widgets()
+        self._refresh_catalog_path_widgets()
         self.settings_scroll.setWidget(container)
         tab_layout.addWidget(self.settings_scroll)
         return tab
@@ -932,7 +936,6 @@ class PluginConfigDialog(QW.QDialog):
         self.extra_paths_placeholder.setWordWrap(True)
         apply_subdued_color(self.extra_paths_placeholder)
         self.extra_paths_layout.addWidget(self.extra_paths_placeholder)
-        self._refresh_extra_path_widgets()
 
         hint = QW.QLabel(
             _(
@@ -994,7 +997,6 @@ class PluginConfigDialog(QW.QDialog):
         apply_subdued_color(self.catalog_paths_placeholder)
         self.catalog_paths_layout.addWidget(self.catalog_paths_placeholder)
         catalogs_layout.addLayout(self.catalog_paths_layout)
-        self._refresh_catalog_path_widgets()
 
         hint = QW.QLabel(
             _(

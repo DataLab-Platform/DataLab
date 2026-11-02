@@ -310,6 +310,7 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 **Plugins:**
 
 * Plugins organized as a folder, such as those created by `datalab-plugin create --project`, are now loaded when their folder is added to the plugin directories, without being installed first: they were silently ignored, unless an earlier installation had left package information in the project. The project folder itself can now be added, instead of its `src` subfolder (fixes [Issue #411](https://github.com/DataLab-Platform/DataLab/issues/411))
+* Fixed small empty windows briefly flashing on screen when opening **Plugins > Configure plugins...**, just before the dialog appeared (fixes [Issue #486](https://github.com/DataLab-Platform/DataLab/issues/486))
 
 **Plugins and History:**
 
