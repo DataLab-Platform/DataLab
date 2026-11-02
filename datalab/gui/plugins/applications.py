@@ -1557,7 +1557,10 @@ class ApplicationsPanel(QW.QWidget, DockableWidgetMixin):
             window: window next to which the panel floats
         """
         dock = self.dockwidget
-        dock.setFloating(True)
+        # Already floating, Qt 5 would hide and show the dock widget again, which
+        # places it again (see visibility_changed): endlessly when off all screens
+        if not dock.isFloating():
+            dock.setFloating(True)
         available = window.screen().availableGeometry()
         frame = window.frameGeometry()
         # Leave room for a title bar as high as the one of the window

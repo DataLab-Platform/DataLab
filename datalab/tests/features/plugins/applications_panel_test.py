@@ -1023,6 +1023,38 @@ def test_applications_panel_floats_beside_a_window() -> None:
         qt_app.processEvents()
 
 
+def test_applications_panel_off_all_screens_floats_beside_the_window() -> None:
+    """A floating panel left out of all screens (e.g. on a disconnected screen)
+    floats beside the window again without being hidden and shown again: with
+    Qt 5, the panel then placed itself again endlessly, until DataLab crashed."""
+    qt_app = QW.QApplication.instance() or QW.QApplication([])
+    window = QW.QMainWindow()
+    try:
+        window.setCentralWidget(QW.QLabel("Central widget"))
+        panel = ApplicationsPanel(window)
+        dock, area = panel.create_dockwidget("Applications")
+        window.addDockWidget(area, dock)
+        available = window.screen().availableGeometry()
+        window.setGeometry(available.left(), available.top(), 200, 300)
+        window.show()
+        dock.setFloating(True)
+        dock.show()
+        qt_app.processEvents()
+        visibility_changes: list[bool] = []
+        dock.visibilityChanged.connect(visibility_changes.append)
+
+        dock.move(available.right() + 5000, available.bottom() + 5000)
+        panel.ensure_on_screen(window)
+        qt_app.processEvents()
+        assert not visibility_changes
+        assert dock.isVisible() and dock.isFloating()
+        assert available.contains(dock.frameGeometry())
+    finally:
+        window.close()
+        window.deleteLater()
+        qt_app.processEvents()
+
+
 def test_add_metadata_suggests_keys_declared_by_applications() -> None:
     """Add metadata offers the keys expected by application methods"""
     application = _plugin(
