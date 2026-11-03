@@ -329,6 +329,7 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 **History Panel:**
 
 * Fixed an oversized warning appearing when deleting a group of signals or images whose processing results were kept in another group, even when the History panel was not recording: it listed every deleted object, often as an unreadable identifier, and stated that "operations could not be reconnected" although there was nothing to reconnect. Deleting such objects now shows no message, and the results depending on them are left unchanged as before. The warning is now shown only when a recorded processing step loses its source, and it lists each step once, in a message of bounded size (fixes [Issue #451](https://github.com/DataLab-Platform/DataLab/issues/451))
+* Fixed the **Description** column of the History panel showing the raw content of voluminous parameters, e.g. the whole histogram of a **Brightness and contrast** action: the row grew to a huge height and scrolling the panel became erratic. The description now shows the actual parameters (e.g. the minimum and maximum of the brightness and contrast range) on a single line, shortened to the column width with the full summary in its tooltip; long values are shortened, and expanded details scroll inside a row of limited height (fixes [Issue #369](https://github.com/DataLab-Platform/DataLab/issues/369))
 
 **Object titles:**
 

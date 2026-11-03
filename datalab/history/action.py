@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-import html
 import inspect
 import json
 import logging
@@ -40,6 +39,15 @@ from datalab.history.core import (
     decode_kwargs,
     encode_kwargs,
     get_datetime_str,
+)
+from datalab.history.description import (
+    SUMMARY_MAX_LENGTH,
+    dataset_to_html,
+    first_line,
+    shorten,
+    single_line,
+    summarize_dataset,
+    text_to_html,
 )
 from datalab.history.workspace_state import WorkspaceState
 from datalab.objectmodel import get_uuid
@@ -425,64 +433,36 @@ class HistoryAction(ObjItf):
         """Return a short, single-line summary of the description (collapsed view).
 
         For DataSet parameters, uses the dataset title followed by a compact
-        representation of its public fields ("name=value, ..."). Falls back to
-        the first non-empty line of the full description when no DataSet is
-        present.
+        representation of its public, persistent fields ("name=value, ...").
+        Falls back to the first non-empty line of the full description when no
+        DataSet is present. The summary never exceeds
+        :data:`~datalab.history.description.SUMMARY_MAX_LENGTH` characters.
         """
-        summaries: list[str] = []
-        for param in self.__iter_param_kwargs():
-            if isinstance(param, DataSet):
-                title = param.get_title() or ""
-                # Collect "name=value" for each non-private item of the DataSet.
-                pairs: list[str] = []
-                for item in param.get_items():
-                    name = item.get_name()
-                    if name.startswith("_"):
-                        continue
-                    try:
-                        value = item.get_value(param)
-                    except (AttributeError, KeyError, TypeError, ValueError):
-                        continue
-                    # Format floats compactly, leave other reprs as-is
-                    if isinstance(value, float):
-                        value_str = f"{value:g}"
-                    else:
-                        value_str = str(value)
-                    pairs.append(f"{name}={value_str}")
-                if pairs:
-                    summaries.append(
-                        f"{title}: {', '.join(pairs)}" if title else ", ".join(pairs)
-                    )
-                elif title:
-                    summaries.append(title)
-        if summaries:
-            return " | ".join(summaries)
-        for line in self.description.splitlines():
-            stripped = line.strip()
-            if stripped:
-                return stripped
-        return ""
+        summaries = [
+            summarize_dataset(param)
+            for param in self.__iter_param_kwargs()
+            if isinstance(param, DataSet)
+        ]
+        summary = " | ".join(summary for summary in summaries if summary)
+        if not summary:
+            summary = first_line(self.description)
+        return shorten(single_line(summary), SUMMARY_MAX_LENGTH)
 
     @property
     def description_html(self) -> str:
-        """Return rich-text (HTML) description used for the expanded view."""
-        # Normal path
-        parts: list[str] = []
-        no_parameters = True
-        for param in self.__iter_param_kwargs():
-            no_parameters = False
-            if isinstance(param, DataSet):
-                parts.append(param.to_html())
-            else:
-                parts.append(html.escape(str(param)).replace("\n", "<br>"))
+        """Return rich-text (HTML) description used for the expanded view.
+
+        The description is bounded: see :mod:`datalab.history.description`.
+        """
+        parts = [
+            dataset_to_html(param)
+            if isinstance(param, DataSet)
+            else text_to_html(str(param))
+            for param in self.__iter_param_kwargs()
+        ]
         if parts:
             return "<br><br>".join(parts)
-        if no_parameters:
-            text = self.description
-            if not text:
-                return ""
-            return html.escape(text).replace("\n", "<br>")
-        return ""
+        return text_to_html(self.description)
 
     # ------------------------------------------------------------------
     # Workspace-state delegation
