@@ -94,6 +94,8 @@ MODULES = (
     "datalab_capsule.registry_client",
     "datalab.gui.capsuleio",
     "datalab.widgets.capsule",
+    # The demo must not need the test dependencies, not bundled (issue #365)
+    "datalab.gui.demo",
 )
 
 #: Distributions plugin wheels may declare as requirements

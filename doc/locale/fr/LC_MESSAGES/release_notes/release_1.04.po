@@ -542,6 +542,15 @@ msgstr "**Console :**"
 msgid "Fixed the console still being shown on errors after disabling **Show console on error** in the Settings dialog (with Qt 5, when the setting was enabled at startup), until DataLab was restarted"
 msgstr "Correction de la console qui restait affichée en cas d'erreur après la désactivation de **Afficher la console en cas d'erreur** dans la boîte de dialogue des préférences (avec Qt 5, lorsque ce paramètre était activé au démarrage), jusqu'au redémarrage de DataLab"
 
+msgid "**Demo:**"
+msgstr "**Démo :**"
+
+msgid "Fixed the demo failing with the error \"No module named 'pytest'\" in the standalone version of DataLab (installed with the MSI installer) and in installations without the test dependencies (e.g., `pip install datalab-platform`), whether started from the **?** menu, the welcome page, the last step of the guided tour or the `datalab-demo` command (fixes [Issue #365](https://github.com/DataLab-Platform/DataLab/issues/365))"
+msgstr "Correction de l'échec de la démo, avec l'erreur \"No module named 'pytest'\", dans la version autonome de DataLab (installée avec l'installeur MSI) et dans les installations sans les dépendances de test (par exemple `pip install datalab-platform`), qu'elle soit lancée depuis le menu **?**, la page d'accueil, la dernière étape de la visite guidée ou la commande `datalab-demo` (corrige [l'issue #365](https://github.com/DataLab-Platform/DataLab/issues/365))"
+
+msgid "The `datalab-demo` command no longer deletes the DataLab configuration of the user: the demo now runs with the default settings, without reading or changing the settings of the user"
+msgstr "La commande `datalab-demo` ne supprime plus la configuration DataLab de l'utilisateur : la démo s'exécute désormais avec les paramètres par défaut, sans lire ni modifier les paramètres de l'utilisateur"
+
 msgid "**Display scaling:**"
 msgstr "**Mise à l'échelle de l'affichage :**"
 

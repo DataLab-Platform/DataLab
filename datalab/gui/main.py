@@ -2967,7 +2967,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """Play demo"""
         # pylint: disable=import-outside-toplevel
         # pylint: disable=cyclic-import
-        from datalab.tests.scenarios import demo
+        from datalab.gui import demo
 
         demo.play_demo(self)
 

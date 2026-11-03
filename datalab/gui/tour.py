@@ -532,10 +532,7 @@ class BaseTour(QW.QWidget, metaclass=BaseTourMeta):
             self.end()
         elif result is StepResult.DEMO:
             self.end()
-            # pylint: disable=import-outside-toplevel
-            from datalab.tests.scenarios import demo
-
-            demo.play_demo(self.win)
+            self.win.play_demo()
         elif result is StepResult.RESTART:
             self.start()
         else:
