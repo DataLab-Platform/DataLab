@@ -13,6 +13,8 @@ from typing import Any
 
 from sigimax.env import SGMXExecEnv, VerbosityLevels
 
+from datalab.utils.smoketest import DEFAULT_REPORT as SMOKE_TEST_REPORT
+
 # We could import DEBUG from datalab.config, but is it really worth it?
 DEBUG = os.environ.get("DATALAB_DEBUG", "").lower() in ("1", "true")
 
@@ -28,6 +30,9 @@ class DLExecEnv(SGMXExecEnv):
     def __init__(self) -> None:
         """Initialize DataLab state and parse DataLab command-line options."""
         super().__init__(parse_args=False)
+        # Path of the installation check report (``--smoke-test`` option): when set,
+        # DataLab checks its installation and exits instead of opening its window
+        self.smoke_test_report: str | None = None
         if "pytest" not in sys.argv[0]:
             self.parse_args()
         if self.unattended:
@@ -115,6 +120,15 @@ class DLExecEnv(SGMXExecEnv):
             default=None,
             help="verbosity level: for debugging/testing purpose",
         )
+        parser.add_argument(
+            "--smoke-test",
+            nargs="?",
+            const=SMOKE_TEST_REPORT,
+            default=None,
+            metavar="REPORT",
+            help="check the installation, write a JSON report (default: "
+            "%(const)s) and exit with a non-zero code if a check failed",
+        )
         args, _unknown = parser.parse_known_args()
 
         if args.h5:
@@ -140,6 +154,7 @@ class DLExecEnv(SGMXExecEnv):
             finally:
                 print("Done.")
             sys.exit()
+        self.smoke_test_report = args.smoke_test
         self.set_env_from_args(args)
 
     def set_env_from_args(self, args: argparse.Namespace) -> None:

@@ -356,6 +356,12 @@ msgstr "Les fichiers `.nxs` et `.nx5` sont proposés à l'ouverture de fichiers 
 msgid "Plugins can describe the signals and images of files that NeXus `NXdata` groups designate incompletely (no axes, several counters...) with declarative data mappings (JSON) registered with `sigimax.h5.mapping.register_mapping`: the HDF5 browser then shows each described object as an extra item, imported with its axes, labels and units; the axes of a mapped object may describe its first dimensions only, so that one mapping applies to the counters and detectors of a scan"
 msgstr "Les plugins peuvent décrire les signaux et images des fichiers dont les groupes NeXus `NXdata` sont incomplets (pas d'axes, plusieurs compteurs...) avec des profils de correspondance déclaratifs (JSON) enregistrés par `sigimax.h5.mapping.register_mapping` : le navigateur HDF5 affiche alors chaque objet décrit comme un élément supplémentaire, importé avec ses axes, libellés et unités ; les axes d'un objet décrit peuvent ne décrire que ses premières dimensions, de sorte qu'un même profil s'applique aux compteurs et aux détecteurs d'un scan"
 
+msgid "**Installation check:**"
+msgstr "**Vérification de l'installation :**"
+
+msgid "The new `--smoke-test` command line option checks that DataLab is correctly installed without opening its main window, e.g. `DataLab.exe --smoke-test report.json` for the standalone version or `datalab --smoke-test report.json`: the packages it relies on, the resources provided with it (macro templates, PDF documentation, French translations and icons) and processing in a separate process. The results are written in a JSON report, and the exit code is not zero when a check failed (see [Command line features](../features/advanced/command.rst))"
+msgstr "La nouvelle option de ligne de commande `--smoke-test` vérifie que DataLab est correctement installé sans ouvrir sa fenêtre principale, par exemple `DataLab.exe --smoke-test report.json` pour la version autonome ou `datalab --smoke-test report.json` : les packages dont il dépend, les ressources fournies avec lui (modèles de macros, documentation PDF, traductions françaises et icônes) et le traitement dans un processus séparé. Les résultats sont écrits dans un rapport JSON, et le code de sortie est non nul lorsqu'une vérification a échoué (voir [Fonctionnalités de la ligne de commande](../features/advanced/command.rst))"
+
 msgid "🔄 Changes"
 msgstr "🔄 Changements"
 
