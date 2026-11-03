@@ -725,6 +725,13 @@ class FeatureNotFoundError(ValueError):
          time. See :func:`_detect_plugin_origin` for the dict shape.
         paramclass_name: Optional name of the required parameter class (for
          diagnostic display).
+
+    Args:
+        func_name: Name (or repr) of the missing feature.
+        plugin_origin: Optional plugin origin descriptor.
+        paramclass_name: Optional name of the required parameter class.
+        message: Exception message. Defaults to None (message built from the
+         other arguments).
     """
 
     def __init__(
@@ -732,11 +739,12 @@ class FeatureNotFoundError(ValueError):
         func_name: str,
         plugin_origin: dict[str, Any] | None = None,
         paramclass_name: str | None = None,
+        message: str | None = None,
     ) -> None:
         self.func_name = func_name
         self.plugin_origin = plugin_origin
         self.paramclass_name = paramclass_name
-        super().__init__(self._build_message())
+        super().__init__(message or self._build_message())
 
     def _build_message(self) -> str:
         """Build the default exception message."""

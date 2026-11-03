@@ -19,6 +19,7 @@ from __future__ import annotations
 import io
 import json
 import zipfile
+from contextlib import nullcontext
 from types import SimpleNamespace
 from typing import Union
 from unittest.mock import Mock
@@ -29,7 +30,10 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sigima import ImageObj, SignalObj
 
-from datalab.gui.processor.base import PROCESSING_PARAMETERS_OPTION
+from datalab.gui.processor.base import (
+    PROCESSING_PARAMETERS_OPTION,
+    FeatureNotFoundError,
+)
 from datalab.objectmodel import get_uuid
 from datalab.webapi.adapter import WorkspaceAdapter
 from datalab.webapi.routes import (
@@ -93,15 +97,24 @@ def make_panel(objects: list[DataObject]) -> SimpleNamespace:
     )
 
 
+def make_main_window(
+    signalpanel: SimpleNamespace, imagepanel: SimpleNamespace
+) -> SimpleNamespace:
+    """Build the main window surface required by :class:`WorkspaceAdapter`."""
+    return SimpleNamespace(
+        signalpanel=signalpanel,
+        imagepanel=imagepanel,
+        remote_request_context=nullcontext,
+    )
+
+
 def test_workspace_adapter_resolves_uuid_and_rejects_ambiguous_titles() -> None:
     """Use stable UUIDs for mutations and reject ambiguous title lookups."""
     signal = _make_signal("Duplicate", n=10)
     image = _make_image("Duplicate")
     signal_panel = make_panel([signal])
     image_panel = make_panel([image])
-    adapter = WorkspaceAdapter(
-        SimpleNamespace(signalpanel=signal_panel, imagepanel=image_panel)
-    )
+    adapter = WorkspaceAdapter(make_main_window(signal_panel, image_panel))
     signal_uuid = get_uuid(signal)
     image_uuid = get_uuid(image)
     processing_parameters = {
@@ -161,9 +174,7 @@ def test_workspace_adapter_uploaded_copy_gets_a_new_identity() -> None:
         signal_panel.objmodel.append(obj)
 
     signal_panel._add_object = add_object  # pylint: disable=protected-access
-    adapter = WorkspaceAdapter(
-        SimpleNamespace(signalpanel=signal_panel, imagepanel=make_panel([]))
-    )
+    adapter = WorkspaceAdapter(make_main_window(signal_panel, make_panel([])))
     copy = adapter.get_object(get_uuid(signal))
     assert get_uuid(copy) == get_uuid(signal)
     copy.title = "Renamed"
@@ -179,6 +190,30 @@ def test_workspace_adapter_uploaded_copy_gets_a_new_identity() -> None:
     signal_panel._add_object = failing_add  # pylint: disable=protected-access
     with pytest.raises(ValueError, match="refused"):
         adapter.add_object(_make_signal("Other"))
+
+
+def test_workspace_adapter_calc_errors() -> None:
+    """Only unknown computation functions are reported as such (HTTP 404).
+
+    Computation errors, including ``ValueError`` (e.g. invalid parameters), are
+    reported as computation failures (HTTP 500).
+    """
+    main_window = make_main_window(make_panel([]), make_panel([]))
+    adapter = WorkspaceAdapter(main_window)
+
+    def unknown_calc(name: str, *_args, **_kwargs) -> None:
+        raise FeatureNotFoundError(name, message=f"Unknown computation function {name}")
+
+    main_window.calc = unknown_calc
+    with pytest.raises(FeatureNotFoundError, match="Unknown computation function"):
+        adapter.calc("unknown_function")
+
+    def failing_calc(*_args, **_kwargs) -> None:
+        raise ValueError("Invalid parameter")
+
+    main_window.calc = failing_calc
+    with pytest.raises(RuntimeError, match="'derivative' failed: Invalid parameter"):
+        adapter.calc("derivative")
 
 
 # =============================================================================

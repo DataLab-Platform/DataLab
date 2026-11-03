@@ -25,7 +25,9 @@ from sigimax.utils.qthelpers import (
     bring_to_front,
     configure_menu_about_to_show,
     create_progress_bar,
+    errors_propagated_to_caller,
     is_running_tests,
+    must_propagate_errors,
     qt_handle_error_message,
     qt_long_callback,
     qt_try_loadsave_file,
@@ -46,9 +48,11 @@ __all__ = [
     "create_menu_button",
     "create_progress_bar",
     "datalab_app_context",
+    "errors_propagated_to_caller",
     "event_pos",
     "grab_save_window",
     "is_running_tests",
+    "must_propagate_errors",
     "open_local_path",
     "qt_handle_error_message",
     "qt_long_callback",
@@ -141,7 +145,11 @@ def datalab_app_context(
 
 
 def qt_try_except(message=None, context=None):
-    """Decorate a DataLab Qt method with status and error handling."""
+    """Decorate a DataLab Qt method with status and error handling.
+
+    Errors are shown in a message box, or re-raised when running tests or inside an
+    :func:`errors_propagated_to_caller` context (e.g. remote requests).
+    """
 
     def qt_try_except_decorator(func):
         @functools.wraps(func)
@@ -156,7 +164,7 @@ def qt_try_except(message=None, context=None):
             try:
                 output = func(*args, **kwargs)
             except Exception as msg:  # pylint: disable=broad-except
-                if is_running_tests():
+                if must_propagate_errors():
                     raise
                 qt_handle_error_message(panel.parentWidget(), msg, context)
             finally:
