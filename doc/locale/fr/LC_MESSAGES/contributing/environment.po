@@ -120,7 +120,7 @@ msgid "ℹ️ See [Installation](https://datalab-platform.com/en/intro/installat
 msgstr "Voir [Installation](https://datalab-platform.com/en/intro/installation.html) pour plus de détails sur les versions de référence de Python et Qt."
 
 msgid "⚠️ If you are contributing to DataLab's processing features, you will need to work on both DataLab's main repository and sigima's repository. To install `sigima` in editable mode, use the following command:"
-msgstr ""
+msgstr "⚠️ Si vous contribuez aux fonctionnalités de traitement de DataLab, vous devrez travailler à la fois sur le dépôt principal de DataLab et sur celui de Sigima. Pour installer `sigima` en mode éditable, utilisez la commande suivante :"
 
 msgid "If you are using [WinPython](https://winpython.github.io/), thank you for supporting the scientific open-source Python community!"
 msgstr "Si vous utilisez [WinPython](https://winpython.github.io/), merci de soutenir la communauté scientifique Python open-source !"
@@ -137,13 +137,7 @@ msgstr "Statut"
 msgid "WinPython version"
 msgstr "Version de WinPython"
 
-msgid "3.9"
-msgstr ""
-
 msgid "OK"
-msgstr ""
-
-msgid "3.9.10.0"
 msgstr ""
 
 msgid "3.10"
@@ -222,19 +216,34 @@ msgid "The official Windows executable and MSI installer are built by the GitHub
 msgstr "L'exécutable Windows officiel et l'installeur MSI sont générés par le pipeline de publication de l'intégration continue GitHub. La version de Python embarquée dans l'application autonome distribuée aux utilisateurs finaux est définie par la valeur par défaut de l'entrée `python-version` du workflow de build réutilisable (`.github/workflows/_build.yml`), utilisée par son job `build-msi` ; les workflows de publication ne la redéfinissent pas. Ce workflow est la source de vérité unique — reportez-vous-y pour connaître la version exacte actuellement utilisée."
 
 msgid "The Windows installer is built using [WiX Toolset](https://wixtoolset.org/) V4.0.5. Using the WiX Toolset requires [.NET SDK](https://dotnet.microsoft.com/download/dotnet/) V6.0 minimum."
-msgstr ""
+msgstr "L'installateur Windows est construit avec [WiX Toolset](https://wixtoolset.org/) V4.0.5. L'utilisation de WiX Toolset nécessite le [SDK .NET](https://dotnet.microsoft.com/download/dotnet/) V6.0 au minimum."
 
 msgid "You may install .NET SDK using `winget`:"
-msgstr ""
+msgstr "Vous pouvez installer le SDK .NET avec `winget` :"
 
 msgid "Once .NET SDK is installed, the WiX Toolset can be installed and configured using the following commands:"
-msgstr ""
+msgstr "Une fois le SDK .NET installé, WiX Toolset peut être installé et configuré avec les commandes suivantes :"
 
 msgid "First, you need to generate the installer script from a generic template:"
-msgstr ""
+msgstr "Vous devez d'abord générer le script de l'installateur à partir d'un modèle générique :"
 
 msgid "Building the installer is done using the following command:"
-msgstr ""
+msgstr "La construction de l'installateur s'effectue avec la commande suivante :"
+
+msgid "Release smoke test"
+msgstr "Test de fumée avant publication"
+
+msgid "Before uploading the MSI installer, the `build-msi` job of the reusable build workflow smoke-tests it with `scripts/frozen_smoke_test.py`: it installs the MSI in a disposable folder, compares the installed files with the PyInstaller folder, starts the installed `DataLab.exe` in unattended mode with screenshots, runs `DataLab.exe --smoke-test` (installation check implemented in `datalab/utils/smoketest.py`), uninstalls the MSI and checks that the release artifacts were not modified. Any failure fails the job, so nothing is published. The screenshots, reports and logs are uploaded as the `msi-smoke-test` artifact."
+msgstr "Avant de téléverser l'installeur MSI, le job `build-msi` du workflow de build réutilisable le soumet à un test de fumée avec `scripts/frozen_smoke_test.py` : il installe le MSI dans un dossier jetable, compare les fichiers installés avec le dossier PyInstaller, démarre le `DataLab.exe` installé en mode non interactif avec captures d'écran, exécute `DataLab.exe --smoke-test` (vérification de l'installation implémentée dans `datalab/utils/smoketest.py`), désinstalle le MSI et vérifie que les artefacts de publication n'ont pas été modifiés. Tout échec fait échouer le job : rien n'est alors publié. Les captures d'écran, rapports et journaux sont téléversés dans l'artefact `msi-smoke-test`."
+
+msgid "To run it locally, after building the executable and the installer (the script refuses to run if DataLab of the same major version is installed on the computer, as it uninstalls the MSI at the end):"
+msgstr "Pour l'exécuter localement, après avoir construit l'exécutable et l'installeur (le script refuse de s'exécuter si DataLab de même version majeure est installé sur l'ordinateur, car il désinstalle le MSI à la fin) :"
+
+msgid "The `gui` and `probe` commands of this script only start an executable (e.g. `dist/DataLab/DataLab.exe`) with screenshots, or run its installation check."
+msgstr "Les commandes `gui` et `probe` de ce script se contentent de démarrer un exécutable (par exemple `dist/DataLab/DataLab.exe`) avec captures d'écran, ou d'exécuter sa vérification d'installation."
+
+msgid "When DataLab requires versions of Sigima, SigimaX or DataLab-Capsule which are not published yet, run the \"Release (dry-run)\" workflow with the `dependencies` input set to `development`: these packages are then built from their branch named like the dispatched branch, or from `develop`."
+msgstr "Lorsque DataLab nécessite des versions de Sigima, SigimaX ou DataLab-Capsule qui ne sont pas encore publiées, exécuter le workflow « Release (dry-run) » avec l'entrée `dependencies` à `development` : ces packages sont alors construits depuis leur branche de même nom que la branche choisie, ou depuis `develop`."
 
 msgid "Third-party Software"
 msgstr "Logiciels tiers"

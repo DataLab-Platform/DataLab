@@ -20,10 +20,10 @@ from __future__ import annotations
 import importlib
 from typing import Literal
 
-import numpy as np
 import sigima.proc.image as sipi
 from sigima.objects import ImageObj
 from sigima.proc.decorator import ComputationMetadata
+from sigima.proc.image.transformations import IMAGE_OPERATIONS
 
 # Import GeometryAdapter directly from its module (not from the package __init__)
 # to avoid pulling in datalab.adapters_metadata.common -> datalab.config -> PlotPy/Qt
@@ -35,17 +35,22 @@ def apply_geometry_transform(
     operation: Literal[
         "translate", "scale", "rotate90", "rotate270", "fliph", "flipv", "transpose"
     ],
+    src: ImageObj | None = None,
     **kwargs,
 ) -> None:
     """Apply a geometric transformation to all geometry results in an object.
 
     This uses the Sigima transformation system for proper geometric operations.
-    For image objects, rotations are performed around the image center to match
-    how the image data is transformed.
+    For the exact image operations (flips, quarter turns and transposition), the
+    results move exactly as the pixels of the source image, so that they stay on
+    the image features they describe.
 
     Args:
         obj: The object containing geometry results to transform
         operation: The transformation operation name
+        src: Source image of the exact image operations (``rotate90``,
+         ``rotate270``, ``fliph``, ``flipv`` and ``transpose``), whose pixel grid
+         defines how the results move (required for these operations)
         **kwargs: Optional parameters for the transformation (e.g., angle for rotate)
     """
     assert operation in [
@@ -65,6 +70,8 @@ def apply_geometry_transform(
         if not kwargs or "sx" not in kwargs or "sy" not in kwargs:
             raise ValueError("scale operation requires 'sx' and 'sy' parameters")
         sx, sy = kwargs["sx"], kwargs["sy"]
+    elif src is None:
+        raise ValueError(f"{operation} operation requires the source image")
     for adapter in list(GeometryAdapter.iterate_from_obj(obj)):
         geom = adapter.result
         assert geom is not None, "Geometry should not be None"
@@ -73,16 +80,8 @@ def apply_geometry_transform(
             tr_geom = sipi.transformer.translate(geom, dx, dy)
         elif operation == "scale":
             tr_geom = sipi.transformer.scale(geom, sx, sy, (obj.xc, obj.yc))
-        elif operation == "rotate90":
-            tr_geom = sipi.transformer.rotate(geom, -np.pi / 2, (obj.xc, obj.yc))
-        elif operation == "rotate270":
-            tr_geom = sipi.transformer.rotate(geom, np.pi / 2, (obj.xc, obj.yc))
-        elif operation == "fliph":
-            tr_geom = sipi.transformer.fliph(geom, obj.xc)
-        elif operation == "flipv":
-            tr_geom = sipi.transformer.flipv(geom, obj.yc)
-        elif operation == "transpose":
-            tr_geom = sipi.transformer.transpose(geom)
+        elif operation in IMAGE_OPERATIONS:
+            tr_geom = sipi.transformer.transform_like_image(geom, src, operation)
         else:
             raise ValueError(f"Unknown operation: {operation}")
 
@@ -132,7 +131,7 @@ class GeometricTransformWrapper:
             dst_obj = self.func(src_obj, param)
         else:
             dst_obj = self.func(src_obj)
-        apply_geometry_transform(dst_obj, operation=self.operation)
+        apply_geometry_transform(dst_obj, operation=self.operation, src=src_obj)
         return dst_obj
 
     def __getstate__(self):

@@ -84,11 +84,8 @@ def write_wheel(directory: Path, suffix: str, version: str = "1.0.0", **kwargs) 
 
 
 def select_entry_points(group: str) -> list[importlib_metadata.EntryPoint]:
-    """Return entry points of a group, with the Python 3.9 API too."""
-    entry_points = importlib_metadata.entry_points()
-    if hasattr(entry_points, "select"):
-        return list(entry_points.select(group=group))
-    return list(entry_points.get(group, ()))  # Python 3.9 compatibility
+    """Return entry points of a group."""
+    return list(importlib_metadata.entry_points().select(group=group))
 
 
 def test_installed_wheel_is_discovered_from_its_archive(

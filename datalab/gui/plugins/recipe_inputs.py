@@ -8,7 +8,6 @@ import html
 from collections.abc import Callable, Mapping, Sequence
 from typing import Union
 
-from guidata.qthelpers import win32_fix_title_bar_background
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from sigima.objects import ImageObj, SignalObj
@@ -176,7 +175,6 @@ class RecipeInputDialog(QW.QDialog):
         assess: BindingsAssessor,
     ) -> None:
         super().__init__(parent)
-        win32_fix_title_bar_background(self)
         self.descriptor = descriptor
         self.__assess = assess
         self.__candidates = tuple(candidates)

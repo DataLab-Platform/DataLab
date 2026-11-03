@@ -68,7 +68,6 @@ The following table lists the currently officially used Python distributions:
 
 | Python version | Status       | WinPython version |
 | -------------- | ------------ | ----------------- |
-| 3.9            | OK           | 3.9.10.0          |
 | 3.10           | OK           | 3.10.11.1         |
 | 3.11           | OK           | 3.11.5.0          |
 | 3.12           | OK           | 3.12.3.0          |
@@ -142,6 +141,19 @@ First, you need to generate the installer script from a generic template:
 Building the installer is done using the following command:
 
     wix build .\wix\DataLab.wxs -ext WixToolset.UI.wixext
+
+Release smoke test
+------------------
+
+Before uploading the MSI installer, the `build-msi` job of the reusable build workflow smoke-tests it with `scripts/frozen_smoke_test.py`: it installs the MSI in a disposable folder, compares the installed files with the PyInstaller folder, starts the installed `DataLab.exe` in unattended mode with screenshots, runs `DataLab.exe --smoke-test` (installation check implemented in `datalab/utils/smoketest.py`), uninstalls the MSI and checks that the release artifacts were not modified. Any failure fails the job, so nothing is published. The screenshots, reports and logs are uploaded as the `msi-smoke-test` artifact.
+
+To run it locally, after building the executable and the installer (the script refuses to run if DataLab of the same major version is installed on the computer, as it uninstalls the MSI at the end):
+
+    python scripts/frozen_smoke_test.py all --msi wix/DataLab-1.4.0.msi --dist dist/DataLab --workdir build/msi-smoke-test
+
+The `gui` and `probe` commands of this script only start an executable (e.g. `dist/DataLab/DataLab.exe`) with screenshots, or run its installation check.
+
+When DataLab requires versions of Sigima, SigimaX or DataLab-Capsule which are not published yet, run the "Release (dry-run)" workflow with the `dependencies` input set to `development`: these packages are then built from their branch named like the dispatched branch, or from `develop`.
 
 Third-party Software
 --------------------

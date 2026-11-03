@@ -150,13 +150,13 @@ msgid "To add a new file format, you may use the `imageio_formats` entry of Data
 msgstr "Pour ajouter un nouveau format de fichier, vous pouvez utiliser l'entrée `imageio_formats` du fichier de configuration de DataLab. Cette entrée est formatée comme l'objet `IMAGEIO_FORMATS` qui représente les formats pris en charge nativement :"
 
 msgid "Built-in immutable sequence."
-msgstr ""
+msgstr "Séquence immuable intégrée."
 
 msgid "If no argument is given, the constructor returns an empty tuple. If iterable is specified the tuple is initialized from iterable's items."
-msgstr ""
+msgstr "Si aucun argument n'est fourni, le constructeur renvoie un tuple vide. Si iterable est fourni, le tuple est initialisé à partir des éléments de cet itérable."
 
 msgid "If the argument is a tuple, the return value is the same object."
-msgstr ""
+msgstr "Si l'argument est un tuple, la valeur renvoyée est ce même objet."
 
 msgid "Open from directory"
 msgstr "Ouvrir depuis un répertoire"
@@ -280,4 +280,3 @@ msgstr "Etape 3 : Afficher la représentation graphique"
 
 msgid "The third step shows a graphical representation of the imported data. You can use the `Finish` button to import the data into DataLab workspace."
 msgstr "La troisième étape montre une représentation graphique des données importées. Vous pouvez utiliser le bouton « Terminer » pour importer les données dans l'espace de travail de DataLab."
-

@@ -317,7 +317,7 @@ def test_image_to_signal_conversion() -> None:
 
     def build(win):
         image = add_image(win, np.outer(np.hanning(32), np.hanning(32)), "I")
-        param = sigima.params.RadialProfileParam.create(center="user", x0=16, y0=16)
+        param = sigima.params.RadialProfileParam.create(center="user", xc=16, yc=16)
         (profile,) = compute(
             win.imagepanel,
             [image],
@@ -333,8 +333,8 @@ def test_image_to_signal_conversion() -> None:
         assert isinstance(profile, SignalObj)
         call = resolve_processing_call(win, profile)
         assert call.processor is win.imagepanel.processor
-        assert (call.param.x0, call.param.y0) == (16, 16)
-        param = sigima.params.RadialProfileParam.create(center="user", x0=10, y0=10)
+        assert (call.param.xc, call.param.yc) == (16, 16)
+        param = sigima.params.RadialProfileParam.create(center="user", xc=10, yc=10)
         report = win.signalpanel.objprop.apply_processing_parameters(
             profile, interactive=False, param=param
         )

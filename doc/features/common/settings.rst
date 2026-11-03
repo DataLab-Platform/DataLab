@@ -27,7 +27,7 @@ The General settings tab contains main window and general feature settings:
     When enabled (default), the welcome page is shown when DataLab starts and whenever the current signal or image panel is empty (see :ref:`welcome_page`).
 
 **Welcome page application rows**
-    Maximum number of application tile rows on the welcome page, from 1 to 10 (default: 2). Other applications remain available from the **Applications** catalog (see :ref:`welcome_page`).
+    Maximum number of application tile rows on the welcome page, from 1 to 10 (default: 2). Other applications remain available from the :ref:`applications_panel`.
 
 **Process isolation**
     When enabled, each computation runs in a separate process, preventing the application
@@ -231,6 +231,13 @@ The Common sub-tab contains settings that apply to all visualizations:
 **Ignore title insertion message**
     Suppress the information message when inserting an object title as an annotation label.
 
+**Show delete button when hovering list items**
+    When enabled (default), a delete button appears at the right of the signal,
+    image or group under the mouse cursor in the signal and image lists (see
+    :ref:`overview`). Disable this option to hide the button: items can still be
+    deleted with the "Remove" action of the "Edit" menu, or with the
+    :kbd:`Delete` key.
+
 Signals
 ^^^^^^^
 
@@ -244,7 +251,9 @@ The Signals sub-tab contains settings specific to signal visualizations:
     Default line width for curves representing signals. This setting affects all signal
     visualizations unless overridden individually. Note: for signals exceeding the line
     width performance threshold (see below), the line width is automatically clamped to
-    1.0 for optimal rendering performance.
+    1.0 for optimal rendering performance. Curves of width 1.0 or less are drawn one
+    screen pixel wide, also on high-DPI screens (e.g. with a 150% display scaling),
+    which keeps their rendering fast.
 
 **Line width performance threshold**
     For signals with more than this number of points (default: 1,000), line width is
@@ -255,10 +264,13 @@ The Signals sub-tab contains settings specific to signal visualizations:
 
 **Use auto downsampling**
     Enable automatic downsampling for large signals to improve performance and
-    visualization clarity.
+    visualization clarity. Downsampling only affects the display: signal data and
+    processing are not modified.
 
 **Downsampling max points**
-    Maximum number of points to display when downsampling is enabled (default: 10,000).
+    Maximum number of points displayed for a signal when auto downsampling is enabled
+    (default: 100,000). Signals with more points are downsampled so that at most this
+    number of points is displayed.
 
 **Autoscale margin**
     Percentage of margin to add around data when auto-scaling signal plots. A value of

@@ -473,7 +473,7 @@ class ImageExportDialog(ProcessingPreviewDialog):
             controller_factory,
         )
         self.setWindowTitle(_("Export image"))
-        self.setWindowIcon(get_icon("export.svg"))
+        self.setWindowIcon(get_icon("plotpy:export.svg"))
         self.preview.prepare_param = self.to_export_param
         self.preview.format_error = format_image_export_error
         self.preview.enabled.setChecked(True)

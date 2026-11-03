@@ -183,7 +183,7 @@ msgid "filesave_h5"
 msgstr "filesave_h5"
 
 msgid "If you want to load the workspace again, you can use the \"File > Open HDF5 file...\" (or the |fileopen_h5| button in the toolbar) to load the whole workspace, or the \"File > Browse HDF5 file...\" (or the |h5browser| button in the toolbar) to load only a selection of data sets from the workspace."
-msgstr "Si vous voulez charger à nouveau l'espace de travail, vous pouvez utiliser le \"Fichier > Ouvrir un fichier HDF5...\" (ou le bouton |fileopen_h5| dans la barre d'outils) pour charger l'ensemble de l'espace de travail, ou le \"Fichier > Parcourir un fichier HDF5...\" (ou le bouton |h5browser| dans la barre d'outils) pour charger uniquement une sélection d'ensembles de données de l'espace de travail."
+msgstr "Pour charger à nouveau l'espace de travail, vous pouvez utiliser « Fichier > Ouvrir un fichier HDF5... » (ou le bouton |fileopen_h5| de la barre d'outils) pour charger l'ensemble de l'espace de travail, ou « Fichier > Parcourir un fichier HDF5... » (ou le bouton |h5browser| de la barre d'outils) pour charger uniquement une sélection de jeux de données."
 
 msgid "fileopen_h5"
 msgstr "fileopen_h5"

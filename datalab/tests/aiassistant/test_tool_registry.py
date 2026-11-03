@@ -178,3 +178,14 @@ def test_load_file_schema_describes_raw_import_parameters() -> None:
     schema = next(s for s in reg.list_schemas() if s["name"] == "load_file")
     props = schema["parameters"]["properties"]["import_parameters"]["properties"]
     assert set(props) == {item.get_name() for item in RawImageImportParam().get_items()}
+
+
+def test_macro_tool_documents_autorun() -> None:
+    """The model must be told how to propose a macro without running it."""
+    reg = build_default_registry()
+    tool = reg.get("create_and_run_macro")
+    autorun = tool.parameters["properties"]["autorun"]
+    assert autorun["type"] == "boolean"
+    assert autorun["default"] is True
+    assert "without executing" in autorun["description"]
+    assert "'autorun' to false" in tool.description

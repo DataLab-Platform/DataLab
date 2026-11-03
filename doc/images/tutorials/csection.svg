@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+<title>csection</title>
+<desc>Hand-authored vector reconstruction. Explicit geometric primitives and curves; no raster tracing.</desc>
+
+<rect x="5.5" y="5.5" width="9" height="9" fill="#ff9e22" stroke="#e34c13" stroke-width="1"/>
+<ellipse cx="10" cy="10" rx="3.3" ry="2.5" fill="#ffcd37"/>
+<ellipse cx="10.5" cy="9.5" rx="1.8" ry="1.5" fill="#fff06a"/>
+<path d="M5 4.5 L15.5 4.5" fill="none" stroke="#1874b5" stroke-width="0.75"/>
+<path d="M5.5 3.5 C7.3 3.5 7.3 .7 9 .7 C10.7 .7 10.2 3.5 11.5 3.5 C12.7 3.5 12.4 1.8 14.5 2.5" fill="none" stroke="#0089ca" stroke-width="0.85"/>
+<g transform="matrix(0 1 1 0 0 0)">
+<path d="M5 4.5 L15.5 4.5" fill="none" stroke="#1874b5" stroke-width="0.75"/>
+<path d="M5.5 3.5 C7.3 3.5 7.3 .7 9 .7 C10.7 .7 10.2 3.5 11.5 3.5 C12.7 3.5 12.4 1.8 14.5 2.5" fill="none" stroke="#0089ca" stroke-width="0.85"/>
+</g>
+<path d="M5.5 10 H14.5 M10 5.5 V14.5" fill="none" stroke="#bb20db" stroke-width="1.1"/>
+</svg>

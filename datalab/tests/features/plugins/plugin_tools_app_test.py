@@ -7,6 +7,8 @@
 from __future__ import annotations
 
 import textwrap
+import threading
+import time
 
 import numpy as np
 import pytest
@@ -53,6 +55,13 @@ PLUGIN_SOURCE = textwrap.dedent(
         def __init__(self):
             super().__init__(GeneratorSettings())
             self.frames = 0
+            self.events = []
+
+        def open(self):
+            self.events.append("open")
+
+        def close(self):
+            self.events.append("close")
 
         def preview(self):
             self.frames += 1
@@ -164,6 +173,9 @@ def test_plugin_tools_in_menus_and_instrument_window(
             assert isinstance(window, InstrumentWindow)
             assert plugin.launch_tool("generator") is window
             window.refresh()
+            assert window.wait_until_idle()
+            instrument = plugin.get_instrument("generator")
+            assert instrument.events == ["open"]
             assert len(window.items) == 1
             assert window.summary_label.text().startswith("Frame")
             assert window.plotwidget.plot.get_axis_limits("left") == (-2.0, 2.0)
@@ -188,28 +200,213 @@ def test_plugin_tools_in_menus_and_instrument_window(
             assert window._live_timer.isActive()  # pylint: disable=protected-access
             window.live_button.setChecked(False)
 
-            instrument = plugin.get_instrument("generator")
-
             def failing_preview():
                 raise ValueError("Amplitude out of range")
 
             monkeypatch.setattr(instrument, "preview", failing_preview)
             window.refresh()
+            assert window.wait_until_idle()
             assert window.status_label.text() == "Amplitude out of range"
             monkeypatch.undo()
 
             window.acquire()
+            assert window.wait_until_idle()
             groups = win.signalpanel.objmodel.get_groups()
             assert groups[-1].title == "Generator acquisition"
             assert len(groups[-1]) == 3
             assert win.get_current_panel() == "signal"
             assert "3 objects" in window.status_label.text()
 
+            # A window opened again calls the instrument after the closed one
+            window.close()
+            QW.QApplication.processEvents()
+            reopened = plugin.launch_tool("generator")
+            assert reopened is not window
+            assert reopened.wait_until_idle()
+            assert instrument.events == ["open", "close", "open"]
+            window = reopened
+
+            # A window closed while hidden (Qt does not emit `finished`) is
+            # replaced by a new one when the tool is launched again
+            window.hide()
+            window.close()
+            assert window.wait_closed()
+            replaced = plugin.launch_tool("generator")
+            assert replaced is not window
+            assert replaced.wait_until_idle()
+            assert instrument.events == ["open", "close", "open", "close", "open"]
+            window = replaced
+
             closed: list[int] = []
             window.finished.connect(closed.append)
             win.reload_plugins()
             QW.QApplication.processEvents()
             assert closed
+            assert instrument.events == [
+                "open",
+                "close",
+                "open",
+                "close",
+                "open",
+                "close",
+            ]
             reloaded = PluginRegistry.get_plugin("org.example.tools-app")
             assert reloaded.launch_tool("generator") is not window
+            win.close_plugin_instruments()
+
+
+def test_instrument_new_group_option() -> None:
+    """Acquisitions go to a new group, or to the current group of the panel when
+    the **New group** option is off; the option is remembered per instrument."""
+    with (
+        Conf.plugins_enabled.context(True),
+        Conf.plugins_enabled_list.context(None),
+        Conf.instrument_new_group.context({}),
+        temporary_plugin_dir() as plugin_dir,
+    ):
+        with open(
+            f"{plugin_dir}/datalab_test_plugin_tools.py", "w", encoding="utf-8"
+        ) as handle:
+            handle.write(PLUGIN_SOURCE)
+        with datalab_test_app_context(console=False) as win:
+            plugin = PluginRegistry.get_plugin("org.example.tools-app")
+            instrument = plugin.get_instrument("generator")
+            key = "org.example.tools-app/generator"
+            model = win.signalpanel.objmodel
+
+            def acquire(window: InstrumentWindow) -> None:
+                window.acquire()
+                assert window.wait_until_idle()
+
+            # Default state set by the instrument, nothing remembered yet
+            window = plugin.launch_tool("generator")
+            assert window.wait_until_idle()
+            assert window.new_group_box.isChecked()
+            assert key not in Conf.instrument_new_group.get()
+
+            # Option off, panel without current group: a group is created anyway
+            window.new_group_box.setChecked(False)
+            assert Conf.instrument_new_group.get()[key] is False
+            assert not model.get_groups()
+            acquire(window)
+            groups = model.get_groups()
+            assert [group.title for group in groups] == ["Generator acquisition"]
+            assert len(groups[0]) == 3
+
+            # Option off: the next acquisitions go to the current group
+            acquire(window)
+            assert len(model.get_groups()) == 1
+            assert len(groups[0]) == 6
+            assert "group 'Generator acquisition'" in window.status_label.text()
+            target = win.signalpanel.add_group("Target", select=True)
+            acquire(window)
+            assert len(model.get_groups()) == 2
+            assert len(groups[0]) == 6 and len(target) == 3
+            assert "group 'Target'" in window.status_label.text()
+            acquire(window)
+            assert len(target) == 6
+
+            # Option on: each acquisition goes to a new group
+            window.new_group_box.setChecked(True)
+            assert Conf.instrument_new_group.get()[key] is True
+            acquire(window)
+            groups = model.get_groups()
+            assert len(groups) == 3 and len(groups[-1]) == 3
+            assert len(target) == 6
+
+            # The choice of the user is remembered, and prevails over the default
+            window.new_group_box.setChecked(False)
+            window.close()
+            QW.QApplication.processEvents()
+            window = plugin.launch_tool("generator")
+            assert not window.new_group_box.isChecked()
+            window.close()
+            QW.QApplication.processEvents()
+
+            # Without a remembered choice, the instrument sets the default state
+            Conf.instrument_new_group.set({})
+            instrument.new_group = False
+            window = plugin.launch_tool("generator")
+            assert not window.new_group_box.isChecked()
+            assert key not in Conf.instrument_new_group.get()
+            win.close_plugin_instruments()
+
+
+def test_instrument_acquisition_target() -> None:
+    """The destination of an acquisition is taken when **Acquire** is clicked:
+    selecting another group or toggling the **New group** option while the
+    acquisition is running does not change it, and a new group replaces a group
+    removed meanwhile."""
+    with (
+        Conf.plugins_enabled.context(True),
+        Conf.plugins_enabled_list.context(None),
+        Conf.instrument_new_group.context({}),
+        temporary_plugin_dir() as plugin_dir,
+    ):
+        with open(
+            f"{plugin_dir}/datalab_test_plugin_tools.py", "w", encoding="utf-8"
+        ) as handle:
+            handle.write(PLUGIN_SOURCE)
+        with datalab_test_app_context(console=False) as win:
+            plugin = PluginRegistry.get_plugin("org.example.tools-app")
+            instrument = plugin.get_instrument("generator")
+            running, release = threading.Event(), threading.Event()
+            acquire = instrument.acquire
+
+            def slow_acquire():
+                """Acquire once the test releases the acquisition."""
+                running.set()
+                assert release.wait(10.0)
+                return acquire()
+
+            instrument.acquire = slow_acquire
+            panel = win.signalpanel
+            window = plugin.launch_tool("generator")
+            assert window.wait_until_idle()
+
+            def start_acquisition() -> None:
+                """Click Acquire, and wait until the acquisition is running."""
+                running.clear()
+                release.clear()
+                window.acquire()
+                deadline = time.monotonic() + 10.0
+                while not running.is_set():
+                    assert time.monotonic() < deadline
+                    QW.QApplication.processEvents()
+                    time.sleep(0.005)
+
+            def finish_acquisition() -> None:
+                """Release the acquisition, and wait until it is added."""
+                release.set()
+                assert window.wait_until_idle()
+
+            # Option off and group A current when Acquire is clicked
+            window.new_group_box.setChecked(False)
+            group_a = panel.add_group("A", select=True)
+            start_acquisition()
+            group_b = panel.add_group("B", select=True)
+            window.new_group_box.setChecked(True)
+            finish_acquisition()
+            assert len(panel.objmodel.get_groups()) == 2
+            assert len(group_a) == 3 and len(group_b) == 0
+            assert "group 'A'" in window.status_label.text()
+
+            # Option on when Acquire is clicked
+            panel.objview.select_groups([group_b])
+            start_acquisition()
+            window.new_group_box.setChecked(False)
+            finish_acquisition()
+            groups = panel.objmodel.get_groups()
+            assert len(groups) == 3 and groups[-1].title == "Generator acquisition"
+            assert len(group_a) == 3 and len(group_b) == 0 and len(groups[-1]) == 3
+
+            # Current group removed while the acquisition is running
+            panel.objview.select_groups([group_b])
+            start_acquisition()
+            panel.remove_object(force=True)
+            assert group_b not in panel.objmodel.get_groups()
+            finish_acquisition()
+            groups = panel.objmodel.get_groups()
+            assert len(groups) == 3 and groups[-1].title == "Generator acquisition"
+            assert len(groups[-1]) == 3 and len(group_a) == 3
             win.close_plugin_instruments()

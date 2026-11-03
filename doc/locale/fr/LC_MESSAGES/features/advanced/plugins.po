@@ -3,9 +3,10 @@
 # This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
-#, fuzzy
 msgid ""
 msgstr ""
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,26 +26,23 @@ msgstr "DataLab prend en charge une architecture de plugin robuste, permettant a
 msgid "What is a plugin?"
 msgstr "Qu'est-ce qu'un plugin ?"
 
-msgid "A plugin is a Python module that is automatically loaded by DataLab at startup. It can define new features or modify existing ones."
-msgstr "Un plugin est un module Python qui est automatiquement chargé par DataLab au démarrage. Il peut définir de nouvelles fonctionnalités ou modifier des fonctionnalités existantes."
+msgid "A plugin is Python code that is automatically loaded by DataLab at startup. It can define new features or modify existing ones."
+msgstr "Un plugin est du code Python qui est automatiquement chargé par DataLab au démarrage. Il peut définir de nouvelles fonctionnalités ou modifier des fonctionnalités existantes."
 
-msgid "To be recognized by the historical module scan, a local plugin file must:"
-msgstr "Pour être reconnu par l'analyse historique des modules, un fichier de plugin local doit :"
+msgid "A plugin defines a class that **inherits from** :class:`datalab.plugins.PluginBase`, includes a class attribute named ``PLUGIN_INFO`` (an instance of :class:`datalab.plugins.PluginInfo`) and implements the ``create_actions`` method. DataLab finds this class in a plugin directory (see :ref:`plugin_locations`), in one of two forms:"
+msgstr "Un plugin définit une classe qui **hérite de** :class:`datalab.plugins.PluginBase`, comporte un attribut de classe nommé ``PLUGIN_INFO`` (une instance de :class:`datalab.plugins.PluginInfo`) et implémente la méthode ``create_actions``. DataLab trouve cette classe dans un répertoire de plugins (voir :ref:`plugin_locations`), sous l'une de ces deux formes :"
 
-msgid "Be a Python module whose name **starts with** ``datalab_`` (e.g. ``datalab_myplugin.py``),"
-msgstr "Être un module Python dont le nom **commence par** ``datalab_`` (par exemple ``datalab_myplugin.py``),"
+msgid "**A single file** whose name **starts with** ``datalab_`` (e.g. ``datalab_myplugin.py``) and which contains the class. This is the simplest form, recommended to get started: ``datalab-plugin create`` creates such a file, ready to use (see :ref:`plugin_generator`)."
+msgstr "**Un fichier unique** dont le nom **commence par** ``datalab_`` (par exemple ``datalab_myplugin.py``) et qui contient la classe. C'est la forme la plus simple, recommandée pour débuter : ``datalab-plugin create`` crée un tel fichier, prêt à l'emploi (voir :ref:`plugin_generator`)."
 
-msgid "Contain a class that **inherits from** :class:`datalab.plugins.PluginBase`,"
-msgstr "Contenir une classe qui **hérite de** :class:`datalab.plugins.PluginBase`,"
+msgid "**A folder** whose name starts with ``datalab_`` and which holds an ``__init__.py`` file (a Python package, e.g. ``datalab_myplugin/``). DataLab loads the folder, then its ``adapters/desktop.py`` file when it exists: this is where projects created by ``datalab-plugin create --project`` define the class (see :ref:`plugin_project`). Otherwise, the class is defined in ``__init__.py``."
+msgstr "**Un dossier** dont le nom commence par ``datalab_`` et qui contient un fichier ``__init__.py`` (un paquet Python, par exemple ``datalab_myplugin/``). DataLab charge le dossier, puis son fichier ``adapters/desktop.py`` s'il existe : c'est là que les projets créés par ``datalab-plugin create --project`` définissent la classe (voir :ref:`plugin_project`). Sinon, la classe est définie dans ``__init__.py``."
 
-msgid "Include a class attribute named ``PLUGIN_INFO``, which must be an instance of :class:`datalab.plugins.PluginInfo`,"
-msgstr "Inclure un attribut de classe nommé ``PLUGIN_INFO``, qui doit être une instance de :class:`datalab.plugins.PluginInfo`,"
+msgid "Nothing needs to be installed: the file or folder is loaded as it is."
+msgstr "Rien n'a besoin d'être installé : le fichier ou le dossier est chargé tel quel."
 
-msgid "Implement the ``create_actions`` method."
-msgstr "Implémenter la méthode ``create_actions``."
-
-msgid "Plugins distributed as installed Python packages may instead expose their ``PluginBase`` subclass through the ``datalab.plugins`` entry-point group, without relying on the module-name prefix."
-msgstr "Les plugins distribués sous forme de paquets Python installés peuvent à la place exposer leur sous-classe ``PluginBase`` via le groupe de points d'entrée ``datalab.plugins``, sans dépendre du préfixe du nom de module."
+msgid "Plugins distributed as installed Python packages, such as the wheels of the plugin catalog, declare their ``PluginBase`` subclass through the ``datalab.plugins`` entry-point group, without relying on the ``datalab_`` prefix. A plugin found both ways, for example a project that is installed and whose folder is also a plugin directory, is loaded only once."
+msgstr "Les plugins distribués sous forme de paquets Python installés, comme les wheels du catalogue de plugins, déclarent leur sous-classe de ``PluginBase`` via le groupe de points d'entrée ``datalab.plugins``, sans dépendre du préfixe ``datalab_``. Un plugin trouvé des deux façons, par exemple un projet installé dont le dossier est aussi un répertoire de plugins, n'est chargé qu'une seule fois."
 
 msgid "The ``PLUGIN_INFO`` object must define a unique, namespaced ``id`` that remains stable when the display name or implementation class changes. DataLab uses this ID for registration and persisted enablement settings. Plugins without an ID remain supported through a module-and-class fallback for backward compatibility, but new plugins should not rely on that fallback."
 msgstr "L'objet ``PLUGIN_INFO`` doit définir un ``id`` unique, préfixé par un espace de noms, qui reste stable lorsque le nom affiché ou la classe d'implémentation changent. DataLab utilise cet identifiant pour l'enregistrement et pour les paramètres d'activation persistants. Les plugins sans identifiant restent pris en charge grâce à un repli fondé sur le module et la classe, pour assurer la rétrocompatibilité, mais les nouveaux plugins ne doivent pas s'appuyer sur ce repli."
@@ -52,8 +50,8 @@ msgstr "L'objet ``PLUGIN_INFO`` doit définir un ``id`` unique, préfixé par un
 msgid "``capabilities`` declares how DataLab may present and consume a plugin. Supported values are ``PROCESSING``, ``IO``, ``VISUALIZATION`` and ``APPLICATION``. A plugin may combine several values; domain applications typically declare ``APPLICATION`` together with ``PROCESSING``. The plugin configuration dialog shows declared capabilities in a stable order. Existing plugins that omit the field remain valid and are shown without capability labels."
 msgstr "``capabilities`` déclare comment DataLab peut présenter et utiliser un plugin. Les valeurs prises en charge sont ``PROCESSING``, ``IO``, ``VISUALIZATION`` et ``APPLICATION``. Un plugin peut combiner plusieurs valeurs ; les applications métier déclarent généralement ``APPLICATION`` avec ``PROCESSING``. La boîte de dialogue de configuration des plugins affiche les capacités déclarées dans un ordre stable. Les plugins existants qui omettent ce champ restent valides et sont affichés sans libellé de capacité."
 
-msgid "Only Python files whose names start with ``datalab_`` will be scanned for plugins."
-msgstr "Seuls les fichiers Python dont les noms commencent par ``datalab_`` seront analysés pour les plugins."
+msgid "Only files and folders whose names start with ``datalab_`` are scanned for plugins."
+msgstr "Seuls les fichiers et dossiers dont les noms commencent par ``datalab_`` sont analysés pour les plugins."
 
 msgid "DataLab supports three categories of plugins, each with its own purpose and registration mechanism:"
 msgstr "DataLab prend en charge trois catégories de plugins, chacune ayant son propre objectif et mécanisme d'enregistrement :"
@@ -66,6 +64,60 @@ msgstr "**Plugins d'entrée/sortie** Définissent de nouveaux formats de fichier
 
 msgid "**HDF5 plugins** Special plugins that support HDF5 files with domain-specific tree structures. These allow DataLab to interpret signals or images organized in non-standard ways."
 msgstr "**Plugins HDF5** Plugins spéciaux qui prennent en charge les fichiers HDF5 avec des structures d'arbre spécifiques au domaine. Ceux-ci permettent à DataLab d'interpréter des signaux ou des images organisés de manière non standard."
+
+msgid "Source organization and distribution"
+msgstr "Organisation du code source et distribution"
+
+msgid "**Source organization**, **distribution format** and **functional capabilities** are independent concepts. A single-file plugin and a plugin organized as a Python package use the same :class:`datalab.plugins.PluginBase` API; neither form determines whether it provides processing, input/output, visualization or application features."
+msgstr "**L'organisation du code source**, le **format de distribution** et les **capacités fonctionnelles** sont des notions indépendantes. Un plugin en fichier unique et un plugin organisé en paquet Python utilisent la même API :class:`datalab.plugins.PluginBase` ; aucune de ces formes ne détermine s'il fournit des fonctions de traitement, d'entrée/sortie, de visualisation ou d'application."
+
+msgid "**Single-file plugin:** one ``datalab_<name>.py`` module, easy to edit and share without a packaging project. This historical form is also the default output of ``datalab-plugin create``; it is not deprecated."
+msgstr "**Plugin en fichier unique :** un module ``datalab_<nom>.py``, facile à modifier et à partager sans projet de packaging. Cette forme historique est aussi celle produite par défaut par ``datalab-plugin create`` ; elle n'est pas obsolète."
+
+msgid "**Package or project:** Python modules and, optionally, resources, tests and packaging metadata. ``datalab-plugin create --project`` offers one layered organization, not a mandatory architecture for all plugins."
+msgstr "**Paquet ou projet :** des modules Python et, éventuellement, des ressources, des tests et des métadonnées de packaging. ``datalab-plugin create --project`` propose une organisation en couches, pas une architecture obligatoire pour tous les plugins."
+
+msgid "**Wheel distribution:** an installable ``.whl`` archive with standardized metadata and plugin entry points. A wheel can contain a single module or a larger package; it is a distribution format, not a functional plugin category."
+msgstr "**Distribution wheel :** une archive ``.whl`` installable, contenant des métadonnées normalisées et des points d'entrée de plugins. Un wheel peut contenir un seul module ou un paquet plus important ; c'est un format de distribution, pas une catégorie fonctionnelle de plugin."
+
+msgid "Both single-file modules and wheels can be installed with **Install from file...** or distributed through online and local catalogs. The catalogs do not require the layered project generated by ``--project``. Packaging a single module as a wheel remains possible, but is optional for Desktop."
+msgstr "Les modules en fichier unique et les wheels peuvent être installés avec **Installer depuis un fichier...** ou distribués dans les catalogues en ligne et locaux. Les catalogues n'imposent pas le projet en couches généré par ``--project``. Empaqueter un module unique en wheel reste possible, mais est facultatif pour Desktop."
+
+msgid "Development forms and distribution"
+msgstr "Formes de développement et distribution"
+
+msgid "Development form"
+msgstr "Forme de développement"
+
+msgid "Direct source loading"
+msgstr "Chargement direct du code source"
+
+msgid "Managed distribution"
+msgstr "Distribution gérée"
+
+msgid "Single Python file"
+msgstr "Fichier Python unique"
+
+msgid "``datalab_<name>.py`` in a plugin directory"
+msgstr "``datalab_<nom>.py`` dans un répertoire de plugins"
+
+msgid "Raw ``.py`` file, or an optional wheel"
+msgstr "Fichier ``.py`` brut, ou wheel facultatif"
+
+msgid "Python package or project"
+msgstr "Paquet ou projet Python"
+
+msgid "Package folder, including a project's ``src`` layout"
+msgstr "Dossier du paquet, y compris l'organisation ``src`` d'un projet"
+
+msgid "Wheel containing the package and its resources"
+msgstr "Wheel contenant le paquet et ses ressources"
+
+msgid "Both managed formats work in local and online Desktop catalogs. The historical single-file form is not a separate functional plugin category, and its source does not need to be changed merely to list it in a catalog. DataLab-Web support is not implied by a Desktop catalog entry."
+msgstr "Les deux formats gérés fonctionnent dans les catalogues locaux et en ligne de Desktop. La forme historique en fichier unique n'est pas une catégorie fonctionnelle distincte et son code source n'a pas besoin d'être modifié pour être référencé dans un catalogue. Une entrée dans un catalogue Desktop n'implique pas la prise en charge de DataLab-Web."
+
+msgid "A directly loaded source file remains in its development directory. A file installed through DataLab is copied to its managed user storage. A plugin is not a macro: a plugin registers persistent application features, whereas a macro is a script run to automate a task. Supporting the historical single-file form does not mean that obsolete APIs from DataLab v0.20 are automatically supported."
+msgstr "Un fichier source chargé directement reste dans son répertoire de développement. Un fichier installé par DataLab est copié dans son stockage utilisateur géré. Un plugin n'est pas une macro : un plugin enregistre des fonctions persistantes dans l'application, tandis qu'une macro est un script exécuté pour automatiser une tâche. La prise en charge de la forme historique en fichier unique n'implique pas celle des API obsolètes de DataLab v0.20."
 
 msgid "Live preview compatibility"
 msgstr "Compatibilité avec l'aperçu interactif"
@@ -91,14 +143,14 @@ msgstr "La cible doit être une sous-classe de :class:`datalab.plugins.PluginBas
 msgid "The user plugin directory: Typically `~/.DataLab_v1/plugins` on Linux/macOS or `C:/Users/YourName/.DataLab_v1/plugins` on Windows."
 msgstr "Le répertoire des plugins utilisateur : Typiquement `~/.DataLab_v1/plugins` sur Linux/macOS ou `C:/Users/YourName/.DataLab_v1/plugins` sur Windows."
 
-msgid "Additional plugin directories: Any number of extra directories may be declared from **Plugins > Configure plugins...**, in the **Plugin settings** tab (see :ref:`plugin_search_paths`). They are saved in the DataLab configuration and scanned at every startup."
-msgstr "Répertoires de plugins supplémentaires : Tout nombre de répertoires supplémentaires peuvent être déclarés depuis **Plugins > Configurer les plugins...**, dans l'onglet **Paramètres des plugins** (voir :ref:`plugin_search_paths`). Ils sont enregistrés dans la configuration de DataLab et analysés à chaque démarrage."
+msgid "Additional plugin directories: Any number of extra directories may be declared from **Plugins > Configure plugins...**, in the **Advanced** tab (see :ref:`plugin_search_paths`). They are saved in the DataLab configuration and scanned at every startup."
+msgstr "Répertoires de plugins supplémentaires : Tout nombre de répertoires supplémentaires peuvent être déclarés depuis **Plugins > Configurer les plugins...**, dans l'onglet **Avancé** (voir :ref:`plugin_search_paths`). Ils sont enregistrés dans la configuration de DataLab et analysés à chaque démarrage."
 
 msgid "The standalone distribution directory: If using a frozen (standalone) build, the `plugins` folder located next to the executable is scanned."
 msgstr "Le répertoire de distribution autonome : Si vous utilisez une version gelée (autonome), le dossier `plugins` situé à côté de l'exécutable est analysé."
 
-msgid "Installed plugins: Wheels and modules installed from **Plugins > Configure plugins...**, either from a file in the **Install plugins** tab (see :ref:`plugin_install_from_file`) or from a plugin catalog in the **Available plugins** tab (see :ref:`plugin_catalog`)."
-msgstr "Les plugins installés : wheels et modules installés depuis **Plugins > Configurer les plugins...**, soit depuis un fichier dans l'onglet **Installer des plugins** (voir :ref:`plugin_install_from_file`), soit depuis un catalogue de plugins dans l'onglet **Plugins disponibles** (voir :ref:`plugin_catalog`)."
+msgid "Installed plugins: Wheels and modules installed from **Plugins > Configure plugins...**, either from a file in the **From file** tab (see :ref:`plugin_install_from_file`) or from a plugin catalog in the **Catalog** tab (see :ref:`plugin_catalog`)."
+msgstr "Les plugins installés : wheels et modules installés depuis **Plugins > Configurer les plugins...**, soit depuis un fichier dans l'onglet **Depuis un fichier** (voir :ref:`plugin_install_from_file`), soit depuis un catalogue de plugins dans l'onglet **Catalogue** (voir :ref:`plugin_catalog`)."
 
 msgid "The internal `datalab/plugins/builtin` folder (not recommended for user plugins): This location is reserved for built-in or bundled plugins and should not be modified manually."
 msgstr "Le dossier interne `datalab/plugins/builtin` (non recommandé pour les plugins utilisateur) : Cet emplacement est réservé aux plugins intégrés ou fournis et ne doit pas être modifié manuellement."
@@ -109,20 +161,26 @@ msgstr "Répertoires supplémentaires listés dans la variable d'environnement `
 msgid "Changes to this variable are only taken into account at DataLab startup."
 msgstr "Les modifications apportées à cette variable ne sont prises en compte qu'au démarrage de DataLab."
 
+msgid "A plugin directory may also be the folder of a plugin project, such as one created by ``datalab-plugin create --project``: DataLab then also searches its ``src`` subfolder, which holds the ``datalab_*`` folder of the plugin. The Python packages the plugin depends on must be available in DataLab's environment."
+msgstr "Un répertoire de plugins peut aussi être le dossier d'un projet de plugin, comme ceux créés par ``datalab-plugin create --project`` : DataLab recherche alors aussi dans son sous-dossier ``src``, qui contient le dossier ``datalab_*`` du plugin. Les paquets Python dont dépend le plugin doivent être disponibles dans l'environnement de DataLab."
+
 msgid "Managing plugins in DataLab"
 msgstr "Gestion des plugins dans DataLab"
 
 msgid "The **Plugins** menu provides two dedicated actions:"
 msgstr "Le menu **Plugins** propose deux actions dédiées :"
 
-msgid "**Configure plugins...** Opens the plugin configuration dialog, organized in four tabs: **Enable/disable plugins**, **Plugin settings**, **Available plugins** and **Install plugins**."
-msgstr "**Configurer les plugins...** Ouvre la boîte de dialogue de configuration des plugins, organisée en quatre onglets : **Activer/désactiver les plugins**, **Paramètres des plugins**, **Plugins disponibles** et **Installer des plugins**."
+msgid "**Configure plugins...** Opens the plugin configuration dialog, organized in four tabs: **Installed plugins**, **Catalog**, **From file** and **Advanced**. Hovering over a tab title describes its content. The dialog reopens with the size it had when last closed."
+msgstr "**Configurer les plugins...** Ouvre la boîte de dialogue de configuration des plugins, organisée en quatre onglets : **Installés**, **Catalogue**, **Depuis un fichier** et **Avancé**. Le survol du titre d'un onglet décrit son contenu. La boîte de dialogue se rouvre avec la taille qu'elle avait à sa dernière fermeture."
 
 msgid "**Reload plugins** Reloads plugin modules from disk without restarting DataLab."
 msgstr "**Recharger les plugins** Recharge les modules de plugins depuis le disque sans redémarrer DataLab."
 
-msgid "Enable/disable plugins"
-msgstr "Activer/désactiver les plugins"
+msgid "When plugins are globally enabled, a single left click on the **Plugins:** label in the status bar also opens the same configuration dialog. The icon is not clickable; the shortcut remains available when no plugins are loaded or some plugins failed to load."
+msgstr "Lorsque les plugins sont globalement activés, un simple clic gauche sur le libellé **Plugins :** de la barre de statut ouvre également la même boîte de dialogue de configuration. L'icône n'est pas cliquable ; le raccourci reste disponible lorsqu'aucun plugin n'est chargé ou que certains plugins n'ont pas pu être chargés."
+
+msgid "Installed plugins tab"
+msgstr "Onglet Installés"
 
 msgid "This tab lists all discovered plugins with their icon, name, version, description and file path, as well as the plugins that failed to import. For each entry:"
 msgstr "Cet onglet liste tous les plugins découverts avec leur icône, nom, version, description et chemin de fichier, ainsi que les plugins qui n'ont pas pu être importés. Pour chaque entrée :"
@@ -139,32 +197,14 @@ msgstr "**Afficher dans le dossier** révèle le fichier du plugin dans le gesti
 msgid "An **Enable all plugins** checkbox and a **Filter** combo box (*All plugins*, *Enabled plugins*, *Disabled plugins*, *Plugins with errors*) help navigating a large plugin collection. A **Last loaded: ...** indicator shows when plugins were last loaded during the current session, and the **Apply and reload plugins** button applies the changes without leaving the dialog."
 msgstr "Une case à cocher **Activer tous les plugins** et une boîte combinée **Filtrer** (*Tous les plugins*, *Plugins activés*, *Plugins désactivés*, *Plugins avec erreurs*) facilitent la navigation dans une grande collection de plugins. Un indicateur **Dernier chargement : ...** montre quand les plugins ont été chargés pour la dernière fois pendant la session en cours, et le bouton **Appliquer et recharger les plugins** applique les modifications sans quitter la boîte de dialogue."
 
-msgid "Plugin settings"
-msgstr "Paramètres des plugins"
-
-msgid "This tab lists every directory scanned at startup, in two groups:"
-msgstr "Cet onglet liste tous les répertoires scannés au démarrage, en deux groupes :"
-
-msgid "**Default plugin directories** (read-only): the user plugin directory, the bundled `datalab/plugins/builtin` folder, the standalone distribution folder when applicable, and the directories declared through the ``DATALAB_PLUGINS`` environment variable (identified by a *(from DATALAB_PLUGINS)* suffix)."
-msgstr "**Répertoires de plugins par défaut** (lecture seule) : le répertoire de plugins utilisateur, le dossier `datalab/plugins/builtin` inclus, le dossier de distribution autonome le cas échéant, et les répertoires déclarés via la variable d'environnement ``DATALAB_PLUGINS`` (identifiés par un suffixe *(from DATALAB_PLUGINS)*)."
-
-msgid "**Additional plugin directories**: your own directories, added with the **Add** button and managed with the *Edit directory* and *Remove directory* buttons. Unlike the environment variable, these directories are saved in the DataLab configuration and therefore persist across sessions."
-msgstr "**Répertoires de plugins supplémentaires** : vos propres répertoires, ajoutés avec le bouton **Ajouter** et gérés avec les boutons *Modifier le répertoire* et *Supprimer le répertoire*. Contrairement à la variable d'environnement, ces répertoires sont enregistrés dans la configuration de DataLab et persistent donc entre les sessions."
-
-msgid "It also lists the **Local plugin catalogs**: folders, possibly shared on the network, whose plugins are offered in the **Available plugins** tab (see :ref:`plugin_local_catalogs`). They are managed with the same buttons, and the folders declared through the ``DATALAB_PLUGINS_CATALOG`` environment variable come first, as read-only entries. Changing these folders does not require reloading plugins."
-msgstr "Il liste aussi les **Catalogues locaux de plugins** : des dossiers, éventuellement partagés sur le réseau, dont les plugins sont proposés dans l'onglet **Plugins disponibles** (voir :ref:`plugin_local_catalogs`). Ils se gèrent avec les mêmes boutons, et les dossiers déclarés par la variable d'environnement ``DATALAB_PLUGINS_CATALOG`` apparaissent en premier, en lecture seule. Modifier ces dossiers ne nécessite pas de recharger les plugins."
-
-msgid "The tab also holds a **Compatibility warnings** option to hide warnings for incompatible DataLab v0.20 plugins."
-msgstr "L'onglet contient également une option **Avertissements de compatibilité** pour masquer les avertissements concernant les plugins DataLab v0.20 incompatibles."
-
-msgid "Available plugins"
-msgstr "Plugins disponibles"
+msgid "Catalog tab"
+msgstr "Onglet Catalogue"
 
 msgid "This tab lists the plugins of the `DataLab plugin catalog <https://datalab-platform.com/plugins/>`_ and of the local plugin catalogs (see :ref:`plugin_local_catalogs`), with their description, license and source code link. Plugins maintained by the DataLab team are marked **Official**; the others are **Community** plugins, maintained by their authors, or **Local catalog** plugins, provided by your organization (the tooltip of such a plugin shows the folder of its catalog). A search field filters the list."
 msgstr "Cet onglet liste les plugins du `catalogue de plugins DataLab <https://datalab-platform.com/plugins/>`_ et des catalogues locaux de plugins (voir :ref:`plugin_local_catalogs`), avec leur description, leur licence et un lien vers leur code source. Les plugins maintenus par l'équipe DataLab sont marqués **Officiel** ; les autres sont des plugins de la **Communauté**, maintenus par leurs auteurs, ou des plugins d'un **Catalogue local**, fournis par votre organisation (l'infobulle d'un tel plugin indique le dossier de son catalogue). Un champ de recherche filtre la liste."
 
-msgid "**Install** downloads the newest release available for DataLab desktop and for the running Python version, checks that its size and SHA-256 digest match the catalog, then installs it as described in :ref:`plugin_install_from_file`, after the same confirmation. When the catalog offers a newer version of a plugin installed this way, the button becomes **Update to...**. Plugins installed with ``pip`` in the Python environment are shown as such and are not modified."
-msgstr "**Installer** télécharge la version la plus récente disponible pour DataLab desktop et pour la version de Python utilisée, vérifie que sa taille et son empreinte SHA-256 correspondent au catalogue, puis l'installe comme décrit dans :ref:`plugin_install_from_file`, après la même confirmation. Lorsque le catalogue propose une version plus récente d'un plugin installé ainsi, le bouton devient **Mettre à jour vers...**. Les plugins installés avec ``pip`` dans l'environnement Python sont signalés comme tels et ne sont pas modifiés."
+msgid "**Install** copies or downloads the wheel or single-file module available for Desktop and the running Python version, checks its size and SHA-256 digest, then installs it as described in :ref:`plugin_install_from_file`, after confirmation. Versioned releases may offer **Update to...**. For a module without a comparable version, changed content offers **Replace...** instead; an identical digest is already installed. Plugins installed with ``pip`` or supplied by unmanaged source directories are identified but are not modified."
+msgstr "**Installer** copie ou télécharge le wheel ou le module en fichier unique disponible pour Desktop et la version de Python utilisée, vérifie sa taille et son empreinte SHA-256, puis l'installe comme décrit dans :ref:`plugin_install_from_file`, après confirmation. Les versions numérotées peuvent proposer **Mettre à jour vers...**. Pour un module sans version comparable, un contenu modifié propose plutôt **Remplacer...** ; une empreinte identique indique qu'il est déjà installé. Les plugins installés avec ``pip`` ou fournis par des répertoires sources non gérés sont identifiés, mais ne sont pas modifiés."
 
 msgid "The catalogs are read only when the tab is shown or refreshed, and again when the local catalog folders change. A catalog that cannot be read, for example a network share that is not connected, is reported below the plugin count without hiding the plugins of the other catalogs. The address of the DataLab plugin catalog is the ``plugins_catalog_url`` option of the DataLab configuration file: it may point to a private copy of the catalog, or be emptied to disable it, for example on computers without Internet access. For a catalog stored in a folder, including a folder shared on the network, use a local plugin catalog instead."
 msgstr "Les catalogues ne sont lus que lorsque l'onglet est affiché ou actualisé, ainsi que lorsque les dossiers des catalogues locaux changent. Un catalogue illisible, par exemple un partage réseau non connecté, est signalé sous le nombre de plugins sans masquer les plugins des autres catalogues. L'adresse du catalogue de plugins DataLab est l'option ``plugins_catalog_url`` du fichier de configuration de DataLab : elle peut désigner une copie privée du catalogue, ou être vidée pour le désactiver, par exemple sur des ordinateurs sans accès à Internet. Pour un catalogue stocké dans un dossier, y compris un dossier partagé sur le réseau, utilisez plutôt un catalogue local de plugins."
@@ -178,47 +218,209 @@ msgstr "Un catalogue local de plugins est un dossier, généralement partagé su
 msgid "Local catalogs are declared:"
 msgstr "Les catalogues locaux sont déclarés :"
 
-msgid "in the **Plugin settings** tab (see :ref:`plugin_search_paths`): these folders are saved in the DataLab configuration (``plugins_catalog_path_list`` option);"
-msgstr "dans l'onglet **Paramètres des plugins** (voir :ref:`plugin_search_paths`) : ces dossiers sont enregistrés dans la configuration de DataLab (option ``plugins_catalog_path_list``) ;"
+msgid "in the **Advanced** tab (see :ref:`plugin_search_paths`): these folders are saved in the DataLab configuration (``plugins_catalog_path_list`` option);"
+msgstr "dans l'onglet **Avancé** (voir :ref:`plugin_search_paths`) : ces dossiers sont enregistrés dans la configuration de DataLab (option ``plugins_catalog_path_list``) ;"
 
-msgid "through the ``DATALAB_PLUGINS_CATALOG`` environment variable, for example to configure all the computers of an organization: folders are separated by the OS path separator (``;`` on Windows, ``:`` on Linux/macOS) and take precedence over the folders of the configuration. Unlike ``DATALAB_PLUGINS``, folders unavailable when DataLab starts are not ignored: they are reported in the **Available plugins** tab, and used as soon as they become available and the catalogs are refreshed."
-msgstr "par la variable d'environnement ``DATALAB_PLUGINS_CATALOG``, par exemple pour configurer tous les ordinateurs d'une organisation : les dossiers sont séparés par le séparateur de chemins du système (``;`` sous Windows, ``:`` sous Linux/macOS) et sont prioritaires sur les dossiers de la configuration. Contrairement à ``DATALAB_PLUGINS``, les dossiers indisponibles au démarrage de DataLab ne sont pas ignorés : ils sont signalés dans l'onglet **Plugins disponibles**, et utilisés dès qu'ils deviennent disponibles et que les catalogues sont actualisés."
+msgid "through the ``DATALAB_PLUGINS_CATALOG`` environment variable, for example to configure all the computers of an organization: folders are separated by the OS path separator (``;`` on Windows, ``:`` on Linux/macOS) and take precedence over the folders of the configuration. Unlike ``DATALAB_PLUGINS``, folders unavailable when DataLab starts are not ignored: they are reported in the **Catalog** tab, and used as soon as they become available and the catalogs are refreshed."
+msgstr "par la variable d'environnement ``DATALAB_PLUGINS_CATALOG``, par exemple pour configurer tous les ordinateurs d'une organisation : les dossiers sont séparés par le séparateur de chemins du système (``;`` sous Windows, ``:`` sous Linux/macOS) et sont prioritaires sur les dossiers de la configuration. Contrairement à ``DATALAB_PLUGINS``, les dossiers indisponibles au démarrage de DataLab ne sont pas ignorés : ils sont signalés dans l'onglet **Catalogue**, et utilisés dès qu'ils deviennent disponibles et que les catalogues sont actualisés."
 
 msgid "A local catalog folder holds either:"
 msgstr "Un dossier de catalogue local contient :"
 
-msgid "**plugin wheels only**: DataLab lists every pure-Python wheel of the folder (subfolders are not scanned) declaring a ``datalab.plugins`` entry point, and groups the versions of each plugin. Other files are ignored and reported. The plugin name is its distribution name; its description, license, keywords and source code link come from the wheel metadata. Copying a new version to the folder is enough to offer it as an update;"
-msgstr "**soit uniquement des wheels de plugins** : DataLab liste chaque wheel en Python pur du dossier (les sous-dossiers ne sont pas parcourus) déclarant un point d'entrée ``datalab.plugins``, et regroupe les versions de chaque plugin. Les autres fichiers sont ignorés et signalés. Le nom du plugin est son nom de distribution ; sa description, sa licence, ses mots-clés et le lien vers son code source proviennent des métadonnées de la wheel. Copier une nouvelle version dans le dossier suffit pour la proposer en mise à jour ;"
+msgid "**plugin files without an index**: DataLab scans pure-Python wheels declaring a ``datalab.plugins`` entry point and source files named ``datalab_<name>.py`` at the folder root, without scanning subfolders. Wheels are grouped by distribution and version; each module is one installable file, even if it declares several plugin classes. Module metadata is read statically where possible; unknown names use the module name, and unknown versions remain empty and are tracked by digest. Invalid artifacts are reported. Copying a changed module or a new wheel version is enough to offer it;"
+msgstr "**des fichiers de plugins sans index** : DataLab recherche les wheels en Python pur déclarant un point d'entrée ``datalab.plugins`` et les fichiers source nommés ``datalab_<nom>.py`` à la racine du dossier, sans parcourir les sous-dossiers. Les wheels sont regroupés par distribution et version ; chaque module constitue un fichier installable, même s'il déclare plusieurs classes de plugins. Les métadonnées des modules sont lues statiquement lorsque c'est possible ; un nom inconnu est remplacé par le nom du module et une version inconnue reste vide, avec un suivi par empreinte. Les fichiers invalides sont signalés. Copier un module modifié ou une nouvelle version d'un wheel suffit pour le proposer ;"
 
 msgid "**or a** ``catalog.json`` **file**, in the format of the DataLab plugin catalog, whose release URLs are relative to the folder: only the plugins it lists are shown. It may be a copy of the DataLab plugin catalog with its wheels, or a catalog built from the wheels of the folder with ``datalab-plugin catalog build``, then edited to give a display name to the plugins, deprecate or revoke them (``status`` and ``status_reason`` fields), or withdraw a release (``yanked`` field)."
 msgstr "**soit un fichier** ``catalog.json``, au format du catalogue de plugins DataLab, dont les URL des versions sont relatives au dossier : seuls les plugins qu'il liste sont affichés. Il peut s'agir d'une copie du catalogue de plugins DataLab avec ses wheels, ou d'un catalogue construit à partir des wheels du dossier avec ``datalab-plugin catalog build``, puis modifié pour donner un nom d'affichage aux plugins, les déprécier ou les révoquer (champs ``status`` et ``status_reason``), ou retirer une version (champ ``yanked``)."
 
-msgid "Whatever the catalog, DataLab checks the size and SHA-256 digest of the wheel before installing it, then inspects it without running it and asks for confirmation; the confirmation dialog shows the catalog folder as the source of the plugin. Being listed in a local catalog does not mean that a plugin was audited: the organization managing the folder is responsible for its content, and write access to the folder should be restricted accordingly."
-msgstr "Quel que soit le catalogue, DataLab vérifie la taille et l'empreinte SHA-256 de la wheel avant de l'installer, puis l'inspecte sans l'exécuter et demande une confirmation ; la boîte de dialogue de confirmation indique le dossier du catalogue comme source du plugin. Figurer dans un catalogue local ne signifie pas qu'un plugin a été audité : l'organisation qui gère le dossier est responsable de son contenu, et l'accès en écriture au dossier doit être restreint en conséquence."
+msgid "Whatever the catalog, DataLab checks the size and SHA-256 digest of the artifact before installing it, inspects it without running it and asks for confirmation; the dialog shows the catalog folder as the source. A module is checked for a valid importable file name, Python encoding and syntax, with a 4 MiB size limit. Inspection does not import its code or certify its behavior. The organization managing a shared catalog is responsible for its content and should restrict write access."
+msgstr "Quel que soit le catalogue, DataLab vérifie la taille et l'empreinte SHA-256 du fichier avant son installation, l'inspecte sans l'exécuter et demande confirmation ; la boîte de dialogue indique le dossier du catalogue comme source. Pour un module, la validité du nom importable, l'encodage Python et la syntaxe sont vérifiés, avec une taille maximale de 4 Mio. L'inspection n'importe pas le code et ne certifie pas son comportement. L'organisation responsable d'un catalogue partagé doit en contrôler le contenu et limiter les droits d'écriture."
 
 msgid "The ``datalab-plugin`` command maintains the ``catalog.json`` file of a folder:"
 msgstr "La commande ``datalab-plugin`` gère le fichier ``catalog.json`` d'un dossier :"
 
-msgid "``build`` checks every wheel as DataLab does before installing it (pure Python, plugin entry point, dependencies provided by DataLab, Python version supported by DataLab) and does not write the file if a wheel is refused. It keeps the fields edited in an existing ``catalog.json`` file (plugin ID, name, tier, status and its reason, repository, documentation, capabilities and keywords, and the reasons why releases are withdrawn), and revoked plugins remain listed. The file is replaced atomically, so that users may read the catalog meanwhile. ``check`` reports the wheels of the catalog that are missing, changed or refused, and the wheels of the folder that the catalog does not list: once a folder holds a ``catalog.json`` file, run ``build`` again after adding wheels. Both commands exit with a non-zero status when they find a problem."
-msgstr "``build`` vérifie chaque wheel comme DataLab le fait avant de l'installer (Python pur, point d'entrée de plugin, dépendances fournies par DataLab, version de Python prise en charge par DataLab) et n'écrit pas le fichier si une wheel est refusée. Il conserve les champs modifiés d'un fichier ``catalog.json`` existant (identifiant, nom, niveau, statut et sa raison, dépôt, documentation, capacités et mots-clés des plugins, ainsi que les raisons du retrait des versions), et les plugins révoqués restent listés. Le fichier est remplacé de manière atomique, afin que les utilisateurs puissent lire le catalogue pendant ce temps. ``check`` signale les wheels du catalogue manquantes, modifiées ou refusées, ainsi que les wheels du dossier que le catalogue ne liste pas : dès qu'un dossier contient un fichier ``catalog.json``, relancez ``build`` après avoir ajouté des wheels. Les deux commandes se terminent avec un code de sortie non nul lorsqu'elles détectent un problème."
+msgid "``build`` checks wheels and source modules without executing them and does not write the index if an artifact is refused. Wheels retain their pure-Python, entry-point and dependency checks; modules follow the rules below. Curated metadata, withdrawal reasons and revoked entries are preserved. The JSON file is replaced atomically. ``check`` reports missing, changed, refused or unlisted plugin files and dependency artifacts. Run ``build`` again after changing the root files. Both commands exit with a non-zero status when they find a problem."
+msgstr "``build`` vérifie les wheels et les modules source sans les exécuter et n'écrit pas l'index si un fichier est refusé. Les wheels conservent leurs vérifications de Python pur, de points d'entrée et de dépendances ; les modules suivent les règles ci-dessous. Les métadonnées administrées, les motifs de retrait et les entrées révoquées sont conservés. Le fichier JSON est remplacé de manière atomique. ``check`` signale les fichiers de plugins et de dépendances manquants, modifiés, refusés ou non listés. Relancez ``build`` après modification des fichiers à la racine. Les deux commandes renvoient un code de sortie non nul si elles détectent un problème."
 
-msgid "Install plugins"
-msgstr "Installer des plugins"
+msgid "Single-file modules in a catalog"
+msgstr "Modules en fichier unique dans un catalogue"
+
+msgid "For a simple offline catalog, put the unchanged ``datalab_<name>.py`` file at its root and add that folder under **Local plugin catalogs**. No ``pyproject.toml``, wheel or Internet access is needed. To generate an index that an administrator can curate, run ``datalab-plugin catalog build <folder>``, then ``check``. Mixed folders may contain both modules and wheels:"
+msgstr "Pour un catalogue hors ligne simple, placez le fichier ``datalab_<nom>.py`` inchangé à sa racine et ajoutez ce dossier dans **Catalogues locaux de plugins**. Aucun ``pyproject.toml``, wheel ou accès à Internet n'est nécessaire. Pour générer un index administrable, exécutez ``datalab-plugin catalog build <dossier>``, puis ``check``. Un dossier mixte peut contenir des modules et des wheels :"
+
+msgid "The generated JSON uses ``kind: \"module\"`` and the real import name in ``module``; it does not give the script a fictitious Python distribution. Its release contains ``filename``, a relative ``url``, ``size``, ``sha256``, ``targets: [\"desktop\"]`` and ``version`` (possibly an empty string). ``kind`` is omitted or ``\"wheel\"`` for existing wheel entries. Add an optional ``requires_python`` constraint to a module release when its compatibility is known."
+msgstr "Le JSON généré utilise ``kind: \"module\"`` et le vrai nom d'importation dans ``module`` ; il n'attribue pas de distribution Python fictive au script. Sa version contient ``filename``, une ``url`` relative, ``size``, ``sha256``, ``targets: [\"desktop\"]`` et ``version`` (éventuellement une chaîne vide). ``kind`` est omis ou vaut ``\"wheel\"`` pour les entrées wheel existantes. Ajoutez une contrainte facultative ``requires_python`` à une version de module lorsque sa compatibilité est connue."
+
+msgid "An administrator may edit the display name, summary, license and other descriptive fields in the JSON, and supply a catalog identity and version when they are not statically available in the source. ``build`` preserves these fields. A known source identity or version must agree with the catalog. For dynamic metadata or several plugin classes, the catalog describes the complete module without executing it. Its catalog identity does not rewrite the runtime ``PluginInfo`` or require editing a historical file."
+msgstr "Un administrateur peut modifier le nom d'affichage, le résumé, la licence et les autres champs descriptifs du JSON, et fournir une identité de catalogue et une version lorsqu'elles ne sont pas accessibles statiquement dans le code source. ``build`` conserve ces champs. Une identité ou une version connue dans le code source doit correspondre au catalogue. En présence de métadonnées dynamiques ou de plusieurs classes de plugins, le catalogue décrit le module complet sans l'exécuter. Son identité de catalogue ne réécrit pas le ``PluginInfo`` utilisé à l'exécution et n'impose pas de modifier un fichier historique."
+
+msgid "If a module has no usable version, leave ``version`` empty: DataLab compares SHA-256 fingerprints instead. The confirmation and installed-files list distinguish a known version from a revision. A changed unversioned file, or different contents with the same declared version, requires explicit **Replace...** consent; it is not labelled as a newer version. Existing modules installed manually through DataLab are recognized too. Files in development directories are not overwritten; resolve a name conflict or remove the unmanaged copy before using the managed installation."
+msgstr "Si un module n'a pas de version exploitable, laissez ``version`` vide : DataLab compare alors les empreintes SHA-256. La confirmation et la liste des fichiers installés distinguent une version connue d'une révision. Un fichier sans version modifié, ou un contenu différent portant la même version déclarée, demande un accord explicite via **Remplacer...** ; il n'est pas présenté comme une version plus récente. Les modules déjà installés manuellement par DataLab sont aussi reconnus. Les fichiers des répertoires de développement ne sont pas écrasés ; résolvez un conflit de nom ou retirez la copie non gérée avant d'utiliser l'installation gérée."
+
+msgid "Single-file modules use packages already available to DataLab. Their ``import`` statements are not interpreted as package requirements, no dependencies are downloaded, and a ``dependencies`` subfolder is not installed for them. ``prepare`` includes modules in the catalog but performs dependency downloads only for wheels. Imports that cannot be checked statically may still fail when the plugin is loaded, and are then shown in the **Installed plugins** tab."
+msgstr "Les modules en fichier unique utilisent les paquets déjà disponibles dans DataLab. Leurs instructions ``import`` ne sont pas interprétées comme des exigences de paquets, aucune dépendance n'est téléchargée et un sous-dossier ``dependencies`` n'est pas installé pour eux. ``prepare`` inclut les modules dans le catalogue, mais ne télécharge de dépendances que pour les wheels. Les importations qui ne peuvent pas être vérifiées statiquement peuvent encore échouer au chargement du plugin ; ces erreurs sont alors affichées dans l'onglet **Installés**."
+
+msgid "For the public catalog, publish the unchanged file as a named GitHub release asset and provide its version, license, description and SHA-256 in the YAML entry. The source is not required to expose those values statically. An entry has this structure (replace the example repository, file and fingerprint with the actual release information):"
+msgstr "Pour le catalogue public, publiez le fichier inchangé comme fichier joint nommé d'une release GitHub et indiquez sa version, sa licence, sa description et son SHA-256 dans la fiche YAML. Le code source n'est pas obligé d'exposer ces valeurs statiquement. Une fiche a la structure suivante (remplacez le dépôt, le fichier et l'empreinte d'exemple par les informations de la release réelle) :"
+
+msgid "The public catalog verifies and mirrors the script under ``modules/<sha256>/...``. To use that published catalog offline, copy its JSON and complete relative tree, including both ``modules`` and ``wheels`` when present. Do not rebuild an unchanged mirror whose artifacts are in these subdirectories: the local authoring commands scan the root. Source URLs, revision checks, withdrawals and local-catalog priority follow the same rules for both formats. Module entries target Desktop only, not DataLab-Web or PyPI."
+msgstr "Le catalogue public vérifie le script et le met en miroir dans ``modules/<sha256>/...``. Pour utiliser ce catalogue publié hors ligne, copiez son JSON et toute son arborescence relative, y compris ``modules`` et ``wheels`` lorsqu'ils sont présents. Ne reconstruisez pas un miroir inchangé dont les fichiers se trouvent dans ces sous-dossiers : les commandes locales de préparation parcourent la racine. Les URL sources, les vérifications de révision, les retraits et la priorité des catalogues locaux suivent les mêmes règles pour les deux formats. Les modules ciblent uniquement Desktop, pas DataLab-Web ni PyPI."
+
+msgid "Additional dependencies and offline installation"
+msgstr "Dépendances supplémentaires et installation hors ligne"
+
+msgid "Desktop plugins may require packages not shipped with DataLab. Keep the plugin itself as a pure-Python wheel, and supply the additional packages, including all their transitive dependencies, as ordinary wheels in a ``dependencies`` subfolder of the local catalog. These dependency wheels may contain native libraries, provided they match the Python version, ABI and platform of the host. They do not need a DataLab plugin entry point."
+msgstr "Les plugins Desktop peuvent nécessiter des paquets qui ne sont pas fournis avec DataLab. Conservez le plugin lui-même sous forme de paquet wheel en Python pur et fournissez les paquets supplémentaires, y compris toutes leurs dépendances transitives, sous forme de wheels ordinaires dans un sous-dossier ``dependencies`` du catalogue local. Ces paquets de dépendances peuvent contenir des bibliothèques natives, à condition de correspondre à la version de Python, à l'ABI et à la plateforme de l'environnement hôte. Ils n'ont pas besoin de point d'entrée de plugin DataLab."
+
+msgid "On a computer with Internet access, the authoring command prepares the wheelhouse and writes the catalog:"
+msgstr "Sur un ordinateur disposant d'un accès à Internet, la commande de préparation constitue le dépôt de paquets wheel et écrit le catalogue :"
+
+msgid "The command downloads wheels for the current host without installing them or changing its packages. It uses DataLab's declared runtime dependencies as the reference, so that unrelated plugins already installed on the author's computer are not mistaken for packages shipped with DataLab. Prepare wheels on each target environment when different Python versions or platforms need different artifacts, then copy the complete folder to the offline computer or network share. ``build`` and ``check`` themselves do not download missing packages."
+msgstr "La commande télécharge les paquets wheel pour l'environnement courant sans les installer ni modifier ses paquets. Elle utilise les dépendances d'exécution déclarées de DataLab comme référence : les plugins sans rapport déjà installés sur l'ordinateur de l'auteur ne sont donc pas confondus avec les paquets livrés avec DataLab. Préparez les paquets dans chaque environnement cible lorsque des versions de Python ou des plateformes différentes nécessitent des fichiers différents, puis copiez le dossier complet sur l'ordinateur hors ligne ou le partage réseau. Les commandes ``build`` et ``check`` ne téléchargent pas elles-mêmes les paquets manquants."
+
+msgid "For example, a Windows CPython 3.11 catalog may contain:"
+msgstr "Par exemple, un catalogue pour CPython 3.11 sous Windows peut contenir :"
+
+msgid "The **Catalog** tab copies the verified dependency artifacts of the chosen release. For **Install from file...**, place the ``dependencies`` folder next to the plugin wheel. DataLab resolves the installation using only these local files, with no package-index fallback and no compilation. Before confirmation it displays the additional packages, versions, sizes, source folder and SHA-256 digests."
+msgstr "L'onglet **Catalogue** copie les fichiers de dépendances vérifiés de la version choisie. Pour **Installer depuis un fichier...**, placez le dossier ``dependencies`` à côté du paquet wheel du plugin. DataLab résout l'installation à partir de ces seuls fichiers locaux, sans repli vers un index de paquets et sans compilation. Avant confirmation, il affiche les paquets supplémentaires, leurs versions, leurs tailles, le dossier source et leurs empreintes SHA-256."
+
+msgid "Packages already provided by the Python environment or by DataLab are never replaced, upgraded or downgraded. Additional packages are shared by plugins in the same Python runtime. An incompatible installed version, missing transitive wheel or unsupported native wheel causes an explicit refusal; no partial installation is activated. Catalog metadata checks do not replace this resolution against the actual host."
+msgstr "Les paquets déjà fournis par l'environnement Python ou par DataLab ne sont jamais remplacés, mis à jour ou rétrogradés. Les paquets supplémentaires sont partagés entre les plugins d'un même environnement d'exécution Python. Une version installée incompatible, un paquet transitif manquant ou un paquet natif non pris en charge entraîne un refus explicite ; aucune installation partielle n'est activée. Les vérifications des métadonnées du catalogue ne remplacent pas cette résolution dans l'environnement hôte réel."
+
+msgid "An installation adding dependencies is activated after restarting DataLab. A newly installed plugin is then enabled, including when an explicit enablement list is configured. Uninstalling the plugin keeps the shared dependencies. Different Python/ABI/platform runtimes use separate dependency directories; dependencies incompatible with a changed host are reported rather than repaired over the network."
+msgstr "Une installation qui ajoute des dépendances est activée après le redémarrage de DataLab. Un plugin nouvellement installé est alors activé, y compris lorsqu'une liste explicite de plugins autorisés est configurée. Désinstaller le plugin conserve les dépendances partagées. Les environnements Python/ABI/plateforme différents utilisent des répertoires de dépendances séparés ; les dépendances incompatibles avec un environnement hôte modifié sont signalées plutôt que réparées par téléchargement."
+
+msgid "There is no environment per plugin: plugins requiring contradictory versions cannot coexist. Wheels requiring external system libraries or drivers still need those prerequisites installed separately. Standalone dependencies are intended for library imports, not for supplying an external Python interpreter or promising that their command-line scripts can be run independently. The Web installer remains unchanged."
+msgstr "Il n'y a pas d'environnement par plugin : des plugins exigeant des versions contradictoires ne peuvent pas coexister. Les paquets nécessitant des bibliothèques système ou des pilotes externes exigent toujours l'installation séparée de ces prérequis. Dans l'application autonome, les dépendances sont destinées à être importées comme bibliothèques ; elles ne fournissent pas d'interpréteur Python externe et le fonctionnement indépendant de leurs scripts en ligne de commande n'est pas garanti. L'installateur Web reste inchangé."
+
+msgid "On Windows, native library paths must also fit the DLL loader's path limit. DataLab uses short generation directory names and refuses an installation whose DLL paths would still be too long, before publishing it; use a shorter configuration directory in that case."
+msgstr "Sous Windows, les chemins des bibliothèques natives doivent également respecter la limite du chargeur de DLL. DataLab utilise des noms courts pour les répertoires de générations et refuse une installation dont les chemins de DLL resteraient trop longs, avant de la publier ; utilisez alors un répertoire de configuration dont le chemin est plus court."
+
+msgid "Offline deployment, step by step"
+msgstr "Déploiement hors ligne, pas à pas"
+
+msgid "This procedure is self-contained: the disconnected computer does not need a package index, a Python development environment, or access to the public plugin website. A local network share, USB drive or ordinary local folder works. Preparing missing wheel dependencies requires a connected reference computer; a catalog containing only source modules can be assembled entirely offline (see :ref:`plugin_module_catalog`)."
+msgstr "Cette procédure est autonome : l'ordinateur déconnecté n'a besoin ni d'un index de paquets, ni d'un environnement de développement Python, ni d'un accès au site public des plugins. Un partage réseau local, une clé USB ou un simple dossier local convient. Préparer les dépendances manquantes des wheels nécessite un ordinateur de référence connecté ; un catalogue ne contenant que des modules source peut être constitué entièrement hors ligne (voir :ref:`plugin_module_catalog`)."
+
+msgid "A plugin catalog is a **source of installation files**, not a plugin search directory. Add it under **Local plugin catalogs**, not **Additional plugin directories**. ``DATALAB_PLUGINS_CATALOG`` supplies catalogs; ``DATALAB_PLUGINS`` supplies code loaded directly. Installing copies the approved files into the user's DataLab configuration directory, so the source folder or network share is not needed to run the installed plugin afterwards."
+msgstr "Un catalogue de plugins est une **source de fichiers d'installation**, pas un répertoire de recherche de plugins. Ajoutez-le dans **Catalogues locaux de plugins**, et non dans **Répertoires supplémentaires de plugins**. ``DATALAB_PLUGINS_CATALOG`` indique des catalogues ; ``DATALAB_PLUGINS`` indique du code chargé directement. L'installation copie les fichiers approuvés dans le répertoire de configuration DataLab de l'utilisateur : le dossier source ou le partage réseau n'est donc plus nécessaire pour exécuter ensuite le plugin installé."
+
+msgid "1. Prepare a complete catalog on a connected computer"
+msgstr "1. Préparer un catalogue complet sur un ordinateur connecté"
+
+msgid "The provider needs DataLab installed in a Python environment, with the ``datalab-plugin`` command available. The standalone application does not supply this authoring command; its users only need the prepared files. Use a reference environment matching the target's DataLab version, Python version, operating system, architecture and host package versions. **? > Installation and configuration...** identifies the target installation. A Windows 64-bit CPython 3.11 wheel is not interchangeable with a Linux, 32-bit or CPython 3.12 wheel."
+msgstr "Le fournisseur doit disposer de DataLab installé dans un environnement Python, avec la commande ``datalab-plugin`` disponible. L'application autonome ne fournit pas cette commande de préparation ; ses utilisateurs n'ont besoin que des fichiers préparés. Utilisez un environnement de référence correspondant à la version de DataLab, à la version de Python, au système d'exploitation, à l'architecture et aux versions des paquets de l'ordinateur cible. **? > Installation et configuration...** permet d'identifier l'installation cible. Un paquet pour CPython 3.11 sous Windows 64 bits n'est pas interchangeable avec un paquet pour Linux, une architecture 32 bits ou CPython 3.12."
+
+msgid "Create a folder, place the plugin's ``.whl`` or ``datalab_*.py`` file at its root, then run:"
+msgstr "Créez un dossier, placez le fichier ``.whl`` ou ``datalab_*.py`` du plugin à sa racine, puis exécutez :"
+
+msgid "For wheels, ``prepare`` resolves missing requirements against the reference host, downloads their wheels and transitive dependencies into ``dependencies``, then writes ``catalog.json``. It does not install them in the reference host or compile source distributions. Modules are included without dependency downloads. Use ``build`` for a purely file-based catalog; if preparation reports a missing wheel or a conflict, fix the catalog before transferring it."
+msgstr "Pour les wheels, ``prepare`` résout les exigences manquantes par rapport à l'environnement hôte de référence, télécharge leurs wheels et dépendances transitives dans ``dependencies``, puis écrit ``catalog.json``. La commande ne les installe pas dans l'environnement de référence et ne compile pas de distributions source. Les modules sont inclus sans téléchargement de dépendances. Utilisez ``build`` pour un catalogue reposant uniquement sur des fichiers ; si la préparation signale un wheel manquant ou un conflit, corrigez le catalogue avant de le transférer."
+
+msgid "Keep all files produced, including the dependency wheels. Do not copy just ``catalog.json`` or just the plugin wheel. If serving several target environments, prepare their wheels on matching reference environments, combine the needed files, then run ``datalab-plugin catalog build D:\\approved_plugins`` followed by ``check``. A pure-Python wheel may also restrict the supported Python versions in its metadata."
+msgstr "Conservez tous les fichiers produits, y compris les paquets de dépendances. Ne copiez pas uniquement ``catalog.json`` ou uniquement le paquet wheel du plugin. Pour desservir plusieurs environnements cibles, préparez leurs paquets dans des environnements de référence correspondants, rassemblez les fichiers nécessaires, puis exécutez ``datalab-plugin catalog build D:\\approved_plugins``, suivi de ``check``. Un paquet en Python pur peut lui aussi restreindre les versions de Python prises en charge dans ses métadonnées."
+
+msgid "``check`` checks the catalog files, their integrity and metadata. It is not a substitute for an installation test on the actual target: complete dependency resolution happens at installation time. Before wider deployment, test the complete folder on an equivalent installation with Internet access unavailable."
+msgstr "``check`` vérifie les fichiers du catalogue, leur intégrité et leurs métadonnées. Cette commande ne remplace pas un essai d'installation sur la cible réelle : la résolution complète des dépendances se fait lors de l'installation. Avant un déploiement plus large, testez le dossier complet sur une installation équivalente dont l'accès à Internet est indisponible."
+
+msgid "2. Transfer the folder, preserving its layout"
+msgstr "2. Transférer le dossier en conservant son organisation"
+
+msgid "Copy the complete folder to a USB drive, local disk or network share accessible from the target computer. Preserve relative paths and file names. A public mirror may store artifacts under ``wheels\\<digest>\\...`` and ``modules\\<digest>\\...``: preserve those directories too, because ``catalog.json`` references them. The JSON file alone is not a mirror, and DataLab does not automatically export an online catalog for offline use."
+msgstr "Copiez le dossier complet sur une clé USB, un disque local ou un partage réseau accessible depuis l'ordinateur cible. Conservez les chemins relatifs et les noms de fichiers. Un miroir public peut stocker les fichiers dans ``wheels\\<digest>\\...`` et ``modules\\<digest>\\...`` : conservez aussi ces répertoires, car ``catalog.json`` les référence. Le seul fichier JSON n'est pas un miroir et DataLab n'exporte pas automatiquement un catalogue en ligne pour un usage hors ligne."
+
+msgid "For a strictly offline JSON catalog, the installation ``url`` of every release and dependency artifact must resolve to an existing local file. An absolute ``https://`` URL is still downloaded from its server even if the catalog itself is local; placing a wheel beside that JSON does not override its URL. Informational links such as ``repository``, ``documentation`` and ``source_url`` do not replace installation files. Catalogs generated by ``build`` use relative file URLs; published mirrors must retain the matching relative directory tree."
+msgstr "Pour un catalogue JSON strictement hors ligne, l'URL d'installation (champ ``url``) de chaque version et de chaque fichier de dépendance doit désigner un fichier local existant. Une URL absolue ``https://`` entraîne toujours un téléchargement depuis son serveur, même si le catalogue est local ; placer un paquet wheel à côté de ce JSON ne remplace pas son URL. Les liens informatifs tels que ``repository``, ``documentation`` et ``source_url`` ne remplacent pas les fichiers d'installation. Les catalogues générés par ``build`` utilisent des URL de fichiers relatives ; les miroirs publiés doivent conserver l'arborescence relative correspondante."
+
+msgid "The user needs read access to this source, and write access to their own configuration and temporary directories. Administrator privileges are not required to install a plugin this way. Limit write access to the shared catalog to its maintainers; a SHA-256 check detects changed files but does not certify that a plugin or dependency is safe."
+msgstr "L'utilisateur doit disposer d'un accès en lecture à cette source, et d'un accès en écriture à ses propres répertoires de configuration et de fichiers temporaires. Les privilèges d'administrateur ne sont pas nécessaires pour installer un plugin de cette manière. Réservez l'accès en écriture au catalogue partagé à ses responsables ; une vérification SHA-256 détecte les fichiers modifiés, mais ne certifie pas l'innocuité d'un plugin ou d'une dépendance."
+
+msgid "3. Configure the disconnected computer"
+msgstr "3. Configurer l'ordinateur déconnecté"
+
+msgid "Open **Plugins > Configure plugins... > Advanced**. Under **Local plugin catalogs**, click **Add**, select the catalog root (the folder containing ``catalog.json`` or the plugin wheels), and apply the configuration. Do not select the ``dependencies`` subfolder. Open the **Catalog** tab and click **Refresh** if needed."
+msgstr "Ouvrez **Plugins > Configurer les plugins... > Avancé**. Dans **Catalogues locaux de plugins**, cliquez sur **Ajouter**, sélectionnez la racine du catalogue (le dossier contenant ``catalog.json`` ou les paquets des plugins), puis appliquez la configuration. Ne sélectionnez pas le sous-dossier ``dependencies``. Ouvrez l'onglet **Catalogue** et cliquez sur **Actualiser** si nécessaire."
+
+msgid "Administrators may instead set the following environment variable before launching DataLab:"
+msgstr "Les administrateurs peuvent aussi définir la variable d'environnement suivante avant de lancer DataLab :"
+
+msgid "This example applies to DataLab started from the same PowerShell window; a shortcut launched separately does not inherit that window's environment. An organization may also deploy the variable through its usual workstation configuration. Environment-variable folders come before folders saved in DataLab's settings; both come before the online catalog. The first matching plugin ID or distribution wins: releases from different sources are not merged."
+msgstr "Cet exemple s'applique à DataLab démarré depuis la même fenêtre PowerShell ; un raccourci lancé séparément n'hérite pas de l'environnement de cette fenêtre. Une organisation peut également déployer la variable par son mécanisme habituel de configuration des postes. Les dossiers de la variable d'environnement sont prioritaires sur ceux enregistrés dans les paramètres de DataLab ; les deux sont prioritaires sur le catalogue en ligne. Le premier identifiant de plugin ou nom de distribution correspondant l'emporte : les versions de sources différentes ne sont pas fusionnées."
+
+msgid "Adding a local catalog does **not** disable the online catalog. If its URL is left configured, DataLab still tries to read it when refreshing, which can cause a network wait and an error on a disconnected computer. The other catalogs remain usable after that error."
+msgstr "Ajouter un catalogue local ne désactive **pas** le catalogue en ligne. Si son URL reste configurée, DataLab tente toujours de le lire lors de l'actualisation, ce qui peut entraîner une attente réseau et une erreur sur un ordinateur déconnecté. Les autres catalogues restent utilisables après cette erreur."
+
+msgid "To disable that lookup, close DataLab, back up its configuration file, and set ``plugins_catalog_url`` to an empty value in its existing ``[main]`` section. With the standard Windows user profile, DataLab 1.3 and later use ``%USERPROFILE%\\.DataLab_v1\\DataLab_v1_typed.ini`` (on Linux/macOS, normally ``~/.DataLab_v1/DataLab_v1_typed.ini``). Custom profiles may use another base folder. Do not edit the legacy ``DataLab_v1.ini`` file instead."
+msgstr "Pour désactiver cette recherche, fermez DataLab, sauvegardez son fichier de configuration et donnez une valeur vide à ``plugins_catalog_url`` dans la section ``[main]`` existante. Avec le profil utilisateur Windows standard, DataLab 1.3 et les versions suivantes utilisent ``%USERPROFILE%\\.DataLab_v1\\DataLab_v1_typed.ini`` (sous Linux/macOS, normalement ``~/.DataLab_v1/DataLab_v1_typed.ini``). Les profils personnalisés peuvent utiliser un autre dossier de base. Ne modifiez pas à sa place l'ancien fichier ``DataLab_v1.ini``."
+
+msgid "Preserve the rest of the file. Do not delete this option to disable it: an absent option uses the default public URL again. Restart DataLab after editing. A private HTTPS URL still requires access to that server; for a strictly file-based offline installation, use a local catalog folder."
+msgstr "Conservez le reste du fichier. Ne supprimez pas cette option pour la désactiver : une option absente rétablit l'URL publique par défaut. Redémarrez DataLab après modification. Une URL HTTPS privée nécessite toujours un accès à son serveur ; pour une installation hors ligne reposant uniquement sur des fichiers, utilisez un dossier de catalogue local."
+
+msgid "4. Install, confirm and restart when requested"
+msgstr "4. Installer, confirmer et redémarrer si nécessaire"
+
+msgid "In the **Catalog** tab, find the plugin and click **Install**. DataLab chooses the newest release offered for Desktop and the running Python version, checks the plugin file and listed compatible dependency artifacts against their sizes and SHA-256 digests, then plans any additional installation using the local files only. Selection of a release does not guarantee that all its dependencies can be installed: this is checked against the actual host before confirmation."
+msgstr "Dans l'onglet **Catalogue**, trouvez le plugin et cliquez sur **Installer**. DataLab choisit la version la plus récente proposée pour Desktop et pour la version de Python utilisée, vérifie la taille et les empreintes SHA-256 du plugin et des fichiers de dépendances compatibles listés, puis prépare toute installation supplémentaire à partir des seuls fichiers locaux. La sélection d'une version ne garantit pas que toutes ses dépendances puissent être installées : ce point est vérifié dans l'environnement hôte réel avant confirmation."
+
+msgid "Read the confirmation: it gives the plugin identity, classes, requirements and fingerprint, and lists the additional packages, their versions, sizes, fingerprints and source folder when needed. Cancel leaves the installation unchanged. If approved, DataLab installs into its private user storage; it does not modify the environment's existing package versions or load code from the shared catalog at every startup."
+msgstr "Lisez la confirmation : elle indique l'identité du plugin, ses classes, ses exigences et son empreinte, ainsi que les paquets supplémentaires, leurs versions, leurs tailles, leurs empreintes et le dossier source si nécessaire. Annuler laisse l'installation inchangée. Après accord, DataLab installe les fichiers dans son stockage utilisateur privé ; il ne modifie pas les versions des paquets de l'environnement et ne recharge pas le code depuis le catalogue partagé à chaque démarrage."
+
+msgid "Restart DataLab if dependencies were added or if replacing an already loaded wheel. Otherwise, DataLab may offer a plugin reload. After restarting, check the **Installed plugins** tab for the plugin's state and any import error, then try one of its actions. The source catalog may be disconnected after successful installation. For a one-off file installation, **From file > Install from file...** uses the same checks; keep ``dependencies`` next to the plugin wheel."
+msgstr "Redémarrez DataLab si des dépendances ont été ajoutées ou si vous remplacez un paquet déjà chargé. Sinon, DataLab peut proposer de recharger les plugins. Après redémarrage, vérifiez l'état du plugin et les éventuelles erreurs d'importation dans l'onglet **Installés**, puis essayez l'une de ses actions. Le catalogue source peut être déconnecté après une installation réussie. Pour installer un fichier ponctuellement, **Depuis un fichier > Installer depuis un fichier...** effectue les mêmes vérifications ; conservez ``dependencies`` à côté du paquet wheel du plugin."
+
+msgid "5. Maintain and troubleshoot the offline catalog"
+msgstr "5. Maintenir et dépanner le catalogue hors ligne"
+
+msgid "When ``catalog.json`` exists, it is authoritative: DataLab lists and copies only its declared releases and dependency artifacts. For a catalog managed from files at its root, run ``build`` and ``check`` again after adding or changing a module, plugin wheel or dependency wheel, then redistribute the complete folder. Copying a new file beside an existing JSON does not update that index. ``prepare`` may require Internet for wheel dependencies; ``build`` and ``check`` never fetch missing packages."
+msgstr "Lorsque ``catalog.json`` existe, il fait autorité : DataLab ne liste et ne copie que les versions et fichiers de dépendances qui y sont déclarés. Pour un catalogue géré à partir de fichiers à sa racine, relancez ``build`` et ``check`` après ajout ou modification d'un module, d'un wheel de plugin ou de dépendance, puis redistribuez le dossier complet. Copier un nouveau fichier à côté d'un JSON existant ne met pas cet index à jour. ``prepare`` peut nécessiter Internet pour les dépendances des wheels ; ``build`` et ``check`` ne récupèrent jamais les paquets manquants."
+
+msgid "Do not run ``build`` on an unchanged mirror whose plugins live only under ``wheels\\<digest>\\...`` or ``modules\\<digest>\\...``: it scans the catalog root, not the recursive tree, and would remove unrepresented entries. Update a mirror by transferring a complete, consistent published catalog and its files. To manage it with the local authoring commands instead, first arrange plugin wheels and modules at the root and additional packages in ``dependencies``."
+msgstr "N'exécutez pas ``build`` sur un miroir inchangé dont les plugins se trouvent uniquement dans ``wheels\\<digest>\\...`` ou ``modules\\<digest>\\...`` : la commande parcourt la racine du catalogue, pas l'arborescence récursive, et supprimerait les entrées non représentées. Mettez à jour un miroir en transférant un catalogue publié complet et cohérent avec ses fichiers. Pour le gérer avec les commandes locales de préparation, disposez d'abord les wheels et modules des plugins à la racine et les paquets supplémentaires dans ``dependencies``."
+
+msgid "Users refresh the **Catalog** tab to discover updates, then explicitly click **Update to...**. Updates are not installed automatically. Plugins installed with ``pip`` in the Python environment are identified but not updated by this dialog. Shared additional dependencies are retained when a plugin is uninstalled, and their existing versions remain protected on subsequent installations."
+msgstr "Les utilisateurs actualisent l'onglet **Catalogue** pour découvrir les mises à jour, puis cliquent explicitement sur **Mettre à jour vers...**. Les mises à jour ne sont pas installées automatiquement. Les plugins installés avec ``pip`` dans l'environnement Python sont identifiés, mais ne sont pas mis à jour par cette boîte de dialogue. Les dépendances supplémentaires partagées sont conservées lorsqu'un plugin est désinstallé, et leurs versions existantes restent protégées lors des installations suivantes."
+
+msgid "If an installation fails, read the error in the plugin dialog before changing files:"
+msgstr "Si une installation échoue, lisez l'erreur dans la boîte de dialogue des plugins avant de modifier les fichiers :"
+
+msgid "**Catalog not found or inaccessible:** check the selected root, drive letter, USB drive, network connection and read permissions. A missing share is not an Internet problem. Refresh once it is available."
+msgstr "**Catalogue introuvable ou inaccessible :** vérifiez la racine sélectionnée, la lettre de lecteur, la clé USB, la connexion réseau et les droits de lecture. Un partage manquant n'est pas un problème d'accès à Internet. Actualisez lorsqu'il est de nouveau disponible."
+
+msgid "**Size or SHA-256 mismatch:** the copied files differ from the catalog. Ask the provider for a complete, consistent copy or regenerate the catalog from the intended wheels; do not bypass the check."
+msgstr "**Taille ou SHA-256 incorrect :** les fichiers copiés diffèrent du catalogue. Demandez au fournisseur une copie complète et cohérente ou régénérez le catalogue à partir des paquets souhaités ; ne contournez pas cette vérification."
+
+msgid "**No matching wheel or missing requirement:** the wheelhouse may lack a transitive dependency or the wheel for this Python/ABI/platform. Ask the provider to run ``prepare`` on a matching reference environment. The installer never falls back to PyPI."
+msgstr "**Aucun paquet compatible ou exigence manquante :** le dépôt peut ne pas contenir une dépendance transitive ou le paquet correspondant à ce Python, à cette ABI ou à cette plateforme. Demandez au fournisseur d'exécuter ``prepare`` dans un environnement de référence correspondant. L'installateur ne se replie jamais vers PyPI."
+
+msgid "**Incompatible installed version:** the host or another plugin already provides a conflicting package version. Ask for a compatible release or reference installation; do not force an upgrade or downgrade to bypass the refusal."
+msgstr "**Version installée incompatible :** l'environnement hôte ou un autre plugin fournit déjà une version de paquet en conflit. Demandez une version ou une installation de référence compatible ; ne forcez pas de mise à jour ou de rétrogradation pour contourner le refus."
+
+msgid "**Windows DLL path too long:** use a shorter configuration path. **DLL import or missing system library:** check the native package's external prerequisites with the provider; DataLab installs neither drivers nor system packages."
+msgstr "**Chemin de DLL Windows trop long :** utilisez un chemin de configuration plus court. **Erreur d'importation de DLL ou bibliothèque système manquante :** vérifiez les prérequis externes du paquet natif avec le fournisseur ; DataLab n'installe ni pilotes ni paquets système."
+
+msgid "**Installed but not active:** restart when requested, check the global and individual plugin enablement settings, and consult the import error displayed in the **Installed plugins** tab. Reloading alone does not replace an imported native library."
+msgstr "**Installé mais inactif :** redémarrez si cela est demandé, vérifiez l'activation globale et individuelle des plugins et consultez l'erreur d'importation affichée dans l'onglet **Installés**. Un simple rechargement ne remplace pas une bibliothèque native déjà importée."
+
+msgid "For local help, use **? > PDF documentation**, then search for *Offline deployment, step by step* or ``DATALAB_PLUGINS_CATALOG``. This PDF is a local file and does not need Internet access. **Online documentation**, the welcome page's documentation link, and external source-code/documentation links open websites instead. The PDF menu action appears only when a local PDF is present; DataLab tries the system language first, then English. If it is absent or unreadable, ask the administrator for the PDF shipped with the matching DataLab version rather than relying on an online link."
+msgstr "Pour l'aide locale, utilisez **? > Documentation PDF**, puis recherchez *Déploiement hors ligne, pas à pas* ou ``DATALAB_PLUGINS_CATALOG``. Ce PDF est un fichier local et ne nécessite pas Internet. **Documentation en ligne**, le lien vers la documentation de la page d'accueil et les liens externes vers le code source ou la documentation ouvrent, eux, des sites web. L'action de menu du PDF n'apparaît que si un PDF local est présent ; DataLab essaie d'abord la langue du système, puis l'anglais. S'il est absent ou illisible, demandez à l'administrateur le PDF livré avec la version correspondante de DataLab plutôt que de dépendre d'un lien en ligne."
+
+msgid "From file tab"
+msgstr "Onglet Depuis un fichier"
 
 msgid "This tab installs a plugin shared as a file, without any Python tool: this is the way to add plugins to the standalone version of DataLab. **Install from file...** accepts two kinds of files:"
 msgstr "Cet onglet installe un plugin partagé sous forme de fichier, sans aucun outil Python : c'est ainsi que l'on ajoute des plugins à la version autonome de DataLab. **Installer depuis un fichier...** accepte deux types de fichiers :"
 
-msgid "a wheel (``.whl``) built from a plugin project, for example with ``python -m build``: it must be pure Python (``py3-none-any``), declare its plugin class in the ``datalab.plugins`` entry-point group, and depend only on packages already provided by DataLab;"
-msgstr "un wheel (``.whl``) construit à partir d'un projet de plugin, par exemple avec ``python -m build`` : il doit être en Python pur (``py3-none-any``), déclarer sa classe de plugin dans le groupe de points d'entrée ``datalab.plugins`` et ne dépendre que de paquets déjà fournis par DataLab ;"
+msgid "a wheel (``.whl``) built from a plugin project, for example with ``python -m build``: it must be pure Python (``py3-none-any``), declare its plugin class in the ``datalab.plugins`` entry-point group, and have its requirements provided by the host or the adjacent dependency wheelhouse (see :ref:`plugin_dependencies`);"
+msgstr "un paquet wheel (``.whl``) construit à partir d'un projet de plugin, par exemple avec ``python -m build`` : il doit être en Python pur (``py3-none-any``), déclarer sa classe de plugin dans le groupe de points d'entrée ``datalab.plugins``, et ses exigences doivent être satisfaites par l'environnement hôte ou le dépôt de dépendances adjacent (voir :ref:`plugin_dependencies`) ;"
 
 msgid "a single Python module named ``datalab_<name>.py``."
 msgstr "un module Python unique nommé ``datalab_<nom>.py``."
 
-msgid "Before installing, DataLab checks the file without running it and shows its name, version, plugin classes, dependencies and SHA-256 digest. A plugin runs with the same rights as DataLab: install only plugins from authors you trust."
-msgstr "Avant l'installation, DataLab vérifie le fichier sans l'exécuter et affiche son nom, sa version, ses classes de plugin, ses dépendances et son empreinte SHA-256. Un plugin s'exécute avec les mêmes droits que DataLab : n'installez que des plugins provenant d'auteurs de confiance."
+msgid "Before installing, DataLab checks the file without running it. For a wheel, the confirmation shows the distribution, version, entry points and requirements from its metadata. For a single-file module, it shows its import name, file, size, SHA-256 and any statically readable or explicit catalog metadata. An unknown version stays unknown and is displayed as a revision; no class or dependency list is guessed. A plugin runs with the same rights as DataLab: install only plugins from authors you trust."
+msgstr "Avant l'installation, DataLab vérifie le fichier sans l'exécuter. Pour un wheel, la confirmation affiche la distribution, la version, les points d'entrée et les exigences issus de ses métadonnées. Pour un module en fichier unique, elle affiche son nom d'importation, le fichier, la taille, le SHA-256 et les métadonnées lisibles statiquement ou explicites du catalogue. Une version inconnue reste inconnue et est affichée comme une révision ; aucune liste de classes ou de dépendances n'est devinée. Un plugin s'exécute avec les mêmes droits que DataLab : n'installez que des plugins provenant d'auteurs de confiance."
 
-msgid "Installed plugins are kept in the ``installed_plugins`` folder of the DataLab configuration directory (e.g. ``~/.DataLab_v1/installed_plugins``) and listed in the tab, where **Uninstall** removes them. After installing or uninstalling, DataLab offers to reload plugins; a newly installed plugin is enabled. A new version of a plugin already loaded is only used at the next start of DataLab."
-msgstr "Les plugins installés sont conservés dans le dossier ``installed_plugins`` du répertoire de configuration de DataLab (par exemple ``~/.DataLab_v1/installed_plugins``) et listés dans l'onglet, où **Désinstaller** les supprime. Après une installation ou une désinstallation, DataLab propose de recharger les plugins ; un plugin nouvellement installé est activé. Une nouvelle version d'un plugin déjà chargé n'est utilisée qu'au prochain démarrage de DataLab."
+msgid "Installed plugins are kept in the ``installed_plugins`` folder of the DataLab configuration directory (e.g. ``~/.DataLab_v1/installed_plugins``) and listed in the tab, where **Uninstall** removes them. Modules can be reloaded after installation or replacement; a newly installed plugin is enabled. Additional dependencies and new versions of already loaded wheels are only activated at the next start of DataLab."
+msgstr "Les plugins installés sont conservés dans le dossier ``installed_plugins`` du répertoire de configuration DataLab (par exemple ``~/.DataLab_v1/installed_plugins``) et listés dans l'onglet, où **Désinstaller** les supprime. Les modules peuvent être rechargés après installation ou remplacement ; un plugin nouvellement installé est activé. Les dépendances supplémentaires et les nouvelles versions de wheels déjà chargés ne sont activées qu'au prochain démarrage de DataLab."
 
 msgid "When reloading plugins, DataLab performs the following steps:"
 msgstr "Lors du rechargement des plugins, DataLab effectue les étapes suivantes :"
@@ -244,8 +446,26 @@ msgstr "Recréer les actions des plugins et rafraîchir les menus."
 msgid "This workflow allows iterative plugin development while DataLab is running."
 msgstr "Ce flux permet un développement itératif des plugins pendant que DataLab est en cours d'exécution."
 
-msgid "Plugin enable/disable state is persisted in DataLab settings. Disabled plugins remain listed in the configuration dialog and can be re-enabled later. The global third-party plugins setting in Preferences is also applied immediately: disabling it removes plugin actions and greys out the Plugins menu and status indicator, while enabling it reloads plugins automatically."
-msgstr "L'état d'activation/désactivation des plugins est conservé dans les paramètres de DataLab. Les plugins désactivés restent listés dans la boîte de dialogue de configuration et peuvent être réactivés plus tard. Le réglage global des plugins tiers dans les préférences est lui aussi appliqué immédiatement : le désactiver supprime les actions des plugins et grise le menu Plugins ainsi que l'indicateur d'état, tandis que le réactiver recharge automatiquement les plugins."
+msgid "Plugin enable/disable state is persisted in DataLab settings. Disabled plugins remain listed in the configuration dialog and can be re-enabled later. The global third-party plugins setting in Preferences is also applied immediately: disabling it removes plugin actions and disables the status indicator, which displays **Plugins: -**, while enabling it reloads plugins automatically. The **Plugins > Configure plugins...** menu action remains accessible when the status indicator is disabled."
+msgstr "L'état d'activation/désactivation des plugins est conservé dans les paramètres de DataLab. Les plugins désactivés restent listés dans la boîte de dialogue de configuration et peuvent être réactivés plus tard. Le réglage global des plugins tiers dans les préférences est lui aussi appliqué immédiatement : le désactiver supprime les actions des plugins et désactive l'indicateur d'état, qui affiche **Plugins : -**, tandis que le réactiver recharge automatiquement les plugins. L'action du menu **Plugins > Configurer les plugins...** reste accessible lorsque l'indicateur d'état est désactivé."
+
+msgid "Advanced tab"
+msgstr "Onglet Avancé"
+
+msgid "This tab lists every directory scanned at startup, in two groups:"
+msgstr "Cet onglet liste tous les répertoires scannés au démarrage, en deux groupes :"
+
+msgid "**Default plugin directories** (read-only): the user plugin directory, the bundled `datalab/plugins/builtin` folder, the standalone distribution folder when applicable, and the directories declared through the ``DATALAB_PLUGINS`` environment variable (identified by a *(from DATALAB_PLUGINS)* suffix)."
+msgstr "**Répertoires de plugins par défaut** (lecture seule) : le répertoire de plugins utilisateur, le dossier `datalab/plugins/builtin` inclus, le dossier de distribution autonome le cas échéant, et les répertoires déclarés via la variable d'environnement ``DATALAB_PLUGINS`` (identifiés par un suffixe *(from DATALAB_PLUGINS)*)."
+
+msgid "**Additional plugin directories**: your own directories, added with the **Add** button and managed with the *Edit directory* and *Remove directory* buttons. Unlike the environment variable, these directories are saved in the DataLab configuration and therefore persist across sessions."
+msgstr "**Répertoires de plugins supplémentaires** : vos propres répertoires, ajoutés avec le bouton **Ajouter** et gérés avec les boutons *Modifier le répertoire* et *Supprimer le répertoire*. Contrairement à la variable d'environnement, ces répertoires sont enregistrés dans la configuration de DataLab et persistent donc entre les sessions."
+
+msgid "It also lists the **Local plugin catalogs**: folders, possibly shared on the network, whose plugins are offered in the **Catalog** tab (see :ref:`plugin_local_catalogs`). They are managed with the same buttons, and the folders declared through the ``DATALAB_PLUGINS_CATALOG`` environment variable come first, as read-only entries. Changing these folders does not require reloading plugins."
+msgstr "Il liste aussi les **Catalogues locaux de plugins** : des dossiers, éventuellement partagés sur le réseau, dont les plugins sont proposés dans l'onglet **Catalogue** (voir :ref:`plugin_local_catalogs`). Ils se gèrent avec les mêmes boutons, et les dossiers déclarés par la variable d'environnement ``DATALAB_PLUGINS_CATALOG`` apparaissent en premier, en lecture seule. Modifier ces dossiers ne nécessite pas de recharger les plugins."
+
+msgid "The tab also holds a **Compatibility warnings** option to hide warnings for incompatible DataLab v0.20 plugins."
+msgstr "L'onglet contient également une option **Avertissements de compatibilité** pour masquer les avertissements concernant les plugins DataLab v0.20 incompatibles."
 
 msgid "Hot-reload workflow for plugin development"
 msgstr "Rechargement à chaud pour le développement de plugins"
@@ -295,6 +515,9 @@ msgstr "Ces aides simplifient le code des plugins et le maintiennent cohérent a
 msgid "Processing plugins should override ``register_computations()`` and register each feature with a stable ``feature_id`` of the form ``<plugin_id>:<local_id>`` and ``owner_plugin_id=self.plugin_id``. DataLab calls this hook after the signal and image panels exist. Owned features are removed automatically when the plugin is disabled, reloaded, or uninstalled. ``create_actions()`` may then reference the registered feature by its stable ID."
 msgstr "Les plugins de traitement doivent surcharger ``register_computations()`` et enregistrer chaque fonctionnalité avec un ``feature_id`` stable de la forme ``<plugin_id>:<local_id>`` et ``owner_plugin_id=self.plugin_id``. DataLab appelle cette méthode une fois les panneaux Signal et Image créés. Les fonctionnalités détenues par le plugin sont supprimées automatiquement lorsque celui-ci est désactivé, rechargé ou désinstallé. ``create_actions()`` peut ensuite faire référence à la fonctionnalité enregistrée par son identifiant stable."
 
+msgid "A registered feature runs a Sigima computation function, decorated with :func:`sigima.proc.decorator.computation_function`. For a 1-to-1 feature without parameters, the simplest is to wrap a function processing NumPy arrays with :class:`sigima.proc.signal.Wrap1to1Func` (signal Y values) or :class:`sigima.proc.image.Wrap1to1Func` (image data), as in the processing plugin example (see :ref:`plugin_example_processing`). DataLab refuses other functions when they are registered."
+msgstr "Une fonctionnalité enregistrée exécute une fonction de calcul Sigima, décorée par :func:`sigima.proc.decorator.computation_function`. Pour une fonctionnalité 1 vers 1 sans paramètre, le plus simple est d'envelopper une fonction traitant des tableaux NumPy avec :class:`sigima.proc.signal.Wrap1to1Func` (valeurs Y d'un signal) ou :class:`sigima.proc.image.Wrap1to1Func` (données d'une image), comme dans l'exemple de plugin de traitement (voir :ref:`plugin_example_processing`). DataLab refuse les autres fonctions dès leur enregistrement."
+
 msgid "Headless recipes"
 msgstr "Recettes sans interface graphique"
 
@@ -306,6 +529,9 @@ msgstr "Les descripteurs de recettes restent détenus par la classe de plugin co
 
 msgid "The descriptor's ``plugin_version`` must match ``PLUGIN_INFO.version``. Keeping the plugin and recipe versions explicit lets execution records identify both the installed implementation and the independently versioned workflow."
 msgstr "La valeur ``plugin_version`` du descripteur doit correspondre à ``PLUGIN_INFO.version``. L'explicitation des versions du plugin et de la recette permet aux traces d'exécution d'identifier à la fois l'implémentation installée et le workflow versionné indépendamment."
+
+msgid "DataLab validates the declarations of a plugin when loading it: recipes, recipe launchers, examples, tools and welcome tiles, described below. A plugin with an invalid declaration, for example a recipe whose ``plugin_version`` no longer matches the plugin version, is not loaded: its error is shown in the internal console and written to the log file, and the plugin is listed with this error in the **Installed plugins** tab of **Configure plugins...** (*Plugins with errors* filter). The other plugins are loaded normally."
+msgstr "DataLab valide les déclarations d'un plugin lors de son chargement : recettes, lanceurs de recettes, exemples, outils et tuiles de la page d'accueil, décrits ci-dessous. Un plugin dont une déclaration est invalide, par exemple une recette dont le ``plugin_version`` ne correspond plus à la version du plugin, n'est pas chargé : son erreur est affichée dans la console interne et consignée dans le fichier journal, et le plugin est listé avec cette erreur dans l'onglet **Installés** de **Configurer les plugins...** (filtre *Plugins avec erreurs*). Les autres plugins sont chargés normalement."
 
 msgid "The recipe callable receives a mapping from slot IDs to tuples of Sigima ``SignalObj`` or ``ImageObj`` instances, the parameter ``DataSet`` instance (or ``None``), and a :class:`datalab.plugins.recipes.RecipeExecutionContext`. The context provides technology-neutral progress and cancellation callbacks and has no Qt dependency."
 msgstr "La fonction de la recette reçoit une correspondance entre les ID d'emplacements et des tuples d'instances Sigima ``SignalObj`` ou ``ImageObj``, l'instance de paramètres ``DataSet`` (ou ``None``) et un :class:`datalab.plugins.recipes.RecipeExecutionContext`. Le contexte fournit des fonctions de rappel de progression et d'annulation indépendantes de la technologie et ne dépend pas de Qt."
@@ -343,8 +569,8 @@ msgstr "Exécuter une recette sur Desktop"
 msgid "Most plugins do not call the runner directly. :meth:`datalab.plugins.PluginBase.start_recipe` runs a recipe on the current selection with DataLab's generic launcher. It assesses the selection, opens an input assignment dialog only when the bindings are ambiguous or invalid, edits the declared parameters, and then calls the runner. A plugin menu action therefore only needs:"
 msgstr "La plupart des plugins n'appellent pas directement l'exécuteur. :meth:`datalab.plugins.PluginBase.start_recipe` exécute une recette sur la sélection courante avec le lanceur générique de DataLab. Il évalue la sélection, n'ouvre une boîte de dialogue d'affectation des entrées que si les affectations sont ambiguës ou invalides, édite les paramètres déclarés, puis appelle l'exécuteur. Une action de menu de plugin se résume donc à :"
 
-msgid "The **Run on selection...** buttons of the **Applications** catalog use the same launcher. A plugin that needs a dedicated interface for one recipe may map its recipe ID to a plugin method name in the class-level ``RECIPE_LAUNCHERS`` mapping; the catalog then calls this method, without arguments, instead of the generic launcher."
-msgstr "Les boutons **Exécuter sur la sélection...** du catalogue **Applications** utilisent le même lanceur. Un plugin qui a besoin d'une interface dédiée pour une recette peut associer son identifiant de recette au nom d'une méthode du plugin dans la correspondance de classe ``RECIPE_LAUNCHERS`` ; le catalogue appelle alors cette méthode, sans argument, à la place du lanceur générique."
+msgid "The **Run...** buttons of the :ref:`applications_panel` use the same launcher. A plugin that needs a dedicated interface for one recipe may map its recipe ID to a plugin method name in the class-level ``RECIPE_LAUNCHERS`` mapping; the panel then calls this method, without arguments, instead of the generic launcher."
+msgstr "Les boutons **Exécuter...** du :ref:`applications_panel` utilisent le même lanceur. Un plugin qui a besoin d'une interface dédiée pour une recette peut associer son identifiant de recette au nom d'une méthode du plugin dans la correspondance de classe ``RECIPE_LAUNCHERS`` ; le panneau appelle alors cette méthode, sans argument, à la place du lanceur générique."
 
 msgid "Use :class:`datalab.gui.plugins.recipe_runner.RecipeRunner` from the GUI thread to run a recipe on explicit inputs. It validates inputs and parameters, executes the headless callable, and commits its outcome to the DataLab workspace:"
 msgstr "Utilisez :class:`datalab.gui.plugins.recipe_runner.RecipeRunner` depuis le thread de l'interface graphique pour exécuter une recette sur des entrées explicites. Il valide les entrées et les paramètres, exécute la fonction sans interface et committe son résultat dans le workspace DataLab :"
@@ -379,8 +605,8 @@ msgstr ":meth:`datalab.plugins.PluginBase.get_examples` valide l'unicité des ID
 msgid "``recipe_ids`` lists the recipes an example is designed for. One example may serve several recipes, for instance a dark ramp analyzed by two methods. A plugin may also generate an example in memory by overriding ``materialize_example()`` to return a :class:`datalab.plugins.examples.PluginExampleData`; its ``parameter_values`` mapping gives, for each recipe ID, the parameter values suited to the generated objects."
 msgstr "``recipe_ids`` liste les recettes pour lesquelles un exemple est conçu. Un exemple peut servir plusieurs recettes, par exemple une rampe d'obscurité analysée par deux méthodes. Un plugin peut aussi générer un exemple en mémoire en surchargeant ``materialize_example()`` pour renvoyer un :class:`datalab.plugins.examples.PluginExampleData` ; sa correspondance ``parameter_values`` donne, pour chaque identifiant de recette, les valeurs de paramètres adaptées aux objets générés."
 
-msgid "The **Applications** catalog presents each recipe as a method with its expected inputs, a live status for the current selection, a **Run on selection...** button, and the examples designed for it. **Try with this example** calls :meth:`datalab.plugins.PluginBase.try_example`: it opens the example, prefills the recipe parameters with the example values, and runs the recipe once the user accepts them. Examples without ``recipe_ids`` are listed as datasets, which only open."
-msgstr "Le catalogue **Applications** présente chaque recette comme une méthode, avec ses entrées attendues, un statut mis à jour pour la sélection courante, un bouton **Exécuter sur la sélection...** et les exemples conçus pour elle. **Essayer avec cet exemple** appelle :meth:`datalab.plugins.PluginBase.try_example` : il ouvre l'exemple, préremplit les paramètres de la recette avec les valeurs de l'exemple et exécute la recette une fois qu'ils sont acceptés par l'utilisateur. Les exemples sans ``recipe_ids`` sont listés comme jeux de données, qui s'ouvrent seulement."
+msgid "The :ref:`applications_panel` presents each recipe as a method with a live status for the current selection and a **Run...** button; its details give the expected inputs and the examples designed for it. **Try with this example** calls :meth:`datalab.plugins.PluginBase.try_example`: it opens the example, prefills the recipe parameters with the example values, and runs the recipe once the user accepts them. Examples without ``recipe_ids`` are listed as datasets, which only open."
+msgstr "Le :ref:`applications_panel` présente chaque recette comme une méthode, avec un statut mis à jour pour la sélection courante et un bouton **Exécuter...** ; ses détails donnent les entrées attendues et les exemples conçus pour elle. **Essayer avec cet exemple** appelle :meth:`datalab.plugins.PluginBase.try_example` : il ouvre l'exemple, préremplit les paramètres de la recette avec les valeurs de l'exemple et exécute la recette une fois qu'ils sont acceptés par l'utilisateur. Les exemples sans ``recipe_ids`` sont listés comme jeux de données, qui s'ouvrent seulement."
 
 msgid "Plugin tools"
 msgstr "Outils de plugin"
@@ -388,8 +614,8 @@ msgstr "Outils de plugin"
 msgid "A recipe covers a headless analysis run by DataLab. Any other interaction owned by an application plugin, such as a wizard, an interactive editor, a data preparation step or a simulated instrument, is a tool. Declare tools in the class-level ``TOOLS`` tuple of :class:`datalab.plugins.tools.PluginTool` values:"
 msgstr "Une recette couvre une analyse sans interface exécutée par DataLab. Toute autre interaction propre à un plugin d'application, comme un assistant, un éditeur interactif, une étape de préparation des données ou un instrument simulé, est un outil. Déclarez les outils dans le tuple de classe ``TOOLS`` de valeurs :class:`datalab.plugins.tools.PluginTool` :"
 
-msgid "DataLab lists each tool in two places: in the **Tools** section of the **Applications** catalog, and in the plugin's submenu of the **Plugins** menu, after the plugin's own actions. ``object_type`` gives the panel whose menu shows the tool; with ``None``, both panels show it. ``selection`` states which selection the tool needs: ``NONE`` (the default), ``EXACTLY_ONE``, ``AT_LEAST_ONE`` or ``AT_LEAST_TWO`` objects of ``object_type``. When the selection does not match, DataLab disables the menu entry and the catalog button, and the button tooltip tells what to select. ``icon`` takes a ``package:path`` resource or a DataLab icon file name; by default, the tool uses the plugin icon."
-msgstr "DataLab liste chaque outil à deux endroits : dans la section **Outils** du catalogue **Applications**, et dans le sous-menu du plugin du menu **Plugins**, après les actions propres au plugin. ``object_type`` indique le panneau dont le menu affiche l'outil ; avec ``None``, les deux panneaux l'affichent. ``selection`` indique la sélection dont l'outil a besoin : ``NONE`` (par défaut), ``EXACTLY_ONE``, ``AT_LEAST_ONE`` ou ``AT_LEAST_TWO`` objets de type ``object_type``. Lorsque la sélection ne convient pas, DataLab désactive l'entrée de menu et le bouton du catalogue, et l'info-bulle du bouton indique quoi sélectionner. ``icon`` accepte une ressource ``package:path`` ou un nom de fichier d'icône DataLab ; par défaut, l'outil utilise l'icône du plugin."
+msgid "DataLab lists each tool in two places: in the **Tools** section of the :ref:`applications_panel`, and in the plugin's submenu of the **Plugins** menu, after the plugin's own actions. ``object_type`` gives the panel whose menu shows the tool; with ``None``, both panels show it. ``selection`` states which selection the tool needs: ``NONE`` (the default), ``EXACTLY_ONE``, ``AT_LEAST_ONE`` or ``AT_LEAST_TWO`` objects of ``object_type``. When the selection does not match, DataLab disables the menu entry and the button of the Applications panel, and the button tooltip tells what to select. ``icon`` takes a ``package:path`` resource, a ``module:filename`` image registered with guidata (e.g. ``datalab:delete.svg``) or a DataLab icon file name; by default, the tool uses the plugin icon."
+msgstr "DataLab liste chaque outil à deux endroits : dans la section **Outils** du :ref:`applications_panel`, et dans le sous-menu du plugin du menu **Plugins**, après les actions propres au plugin. ``object_type`` indique le panneau dont le menu affiche l'outil ; avec ``None``, les deux panneaux l'affichent. ``selection`` indique la sélection dont l'outil a besoin : ``NONE`` (par défaut), ``EXACTLY_ONE``, ``AT_LEAST_ONE`` ou ``AT_LEAST_TWO`` objets de type ``object_type``. Lorsque la sélection ne convient pas, DataLab désactive l'entrée de menu et le bouton du panneau Applications, et l'info-bulle du bouton indique quoi sélectionner. ``icon`` accepte une ressource ``package:path``, une image ``module:filename`` enregistrée auprès de guidata (par exemple ``datalab:delete.svg``) ou un nom de fichier d'icône DataLab ; par défaut, l'outil utilise l'icône du plugin."
 
 msgid "The launcher is called without arguments. :meth:`datalab.plugins.PluginBase.get_tools` validates unique local IDs and the tool methods, and rejects tools declared by plugins without the ``APPLICATION`` capability. :meth:`datalab.plugins.PluginBase.assess_tool` returns the reason why a tool cannot be opened for the current selection, or ``None``."
 msgstr "Le lanceur est appelé sans argument. :meth:`datalab.plugins.PluginBase.get_tools` vérifie l'unicité des identifiants locaux et les méthodes des outils, et rejette les outils déclarés par des plugins sans la capacité ``APPLICATION``. :meth:`datalab.plugins.PluginBase.assess_tool` renvoie la raison pour laquelle un outil ne peut pas être ouvert pour la sélection courante, ou ``None``."
@@ -397,14 +623,23 @@ msgstr "Le lanceur est appelé sans argument. :meth:`datalab.plugins.PluginBase.
 msgid "Instruments"
 msgstr "Instruments"
 
-msgid "A tool may name an ``instrument`` method instead of a ``launcher``. This method returns a :class:`datalab.plugins.instruments.PluginInstrument`, and DataLab opens a window for it: a live view on the left, the instrument settings on the right, a **Live** button that refreshes the view continuously, and an **Acquire** button. The plugin writes no user interface code:"
-msgstr "Un outil peut désigner une méthode ``instrument`` au lieu d'un ``launcher``. Cette méthode renvoie un :class:`datalab.plugins.instruments.PluginInstrument`, et DataLab ouvre une fenêtre pour lui : une vue en direct à gauche, les réglages de l'instrument à droite, un bouton **En direct** qui rafraîchit la vue en continu et un bouton **Acquérir**. Le plugin n'écrit aucun code d'interface utilisateur :"
+msgid "A tool may name an ``instrument`` method instead of a ``launcher``. This method returns a :class:`datalab.plugins.instruments.PluginInstrument`, and DataLab opens a window for it: a live view on the left, the instrument settings on the right, a **Live** button that refreshes the view continuously, a **New group** option and an **Acquire** button. The plugin writes no user interface code:"
+msgstr "Un outil peut désigner une méthode ``instrument`` au lieu d'un ``launcher``. Cette méthode renvoie un :class:`datalab.plugins.instruments.PluginInstrument`, et DataLab ouvre une fenêtre pour lui : une vue en direct à gauche, les réglages de l'instrument à droite, un bouton **En direct** qui rafraîchit la vue en continu, une option **Nouveau groupe** et un bouton **Acquérir**. Le plugin n'écrit aucun code d'interface utilisateur :"
 
-msgid "DataLab edits :attr:`~datalab.plugins.instruments.PluginInstrument.settings` in place, with the active state, groups and tabs of the guidata DataSet, then calls :meth:`~datalab.plugins.instruments.PluginInstrument.preview` after each change and, in live mode, every ``live_interval_ms`` milliseconds. An :class:`~datalab.plugins.instruments.InstrumentFrame` holds signals drawn together or a single image, a short summary shown below the view, and an optional fixed Y range (signals) or color range (image). :meth:`~datalab.plugins.instruments.PluginInstrument.acquire` returns an :class:`~datalab.plugins.instruments.InstrumentAcquisition`: DataLab adds its objects to a new group of the matching panel and selects them, so that a recipe can run on them at once. Both methods raise ``ValueError`` with a user-facing message when the settings cannot be used; DataLab shows the message in the window."
-msgstr "DataLab modifie :attr:`~datalab.plugins.instruments.PluginInstrument.settings` sur place, en respectant l'état actif, les groupes et les onglets du DataSet guidata, puis appelle :meth:`~datalab.plugins.instruments.PluginInstrument.preview` après chaque modification et, en mode direct, toutes les ``live_interval_ms`` millisecondes. Un :class:`~datalab.plugins.instruments.InstrumentFrame` contient des signaux tracés ensemble ou une seule image, un court résumé affiché sous la vue, et une plage fixe facultative en Y (signaux) ou de couleurs (image). :meth:`~datalab.plugins.instruments.PluginInstrument.acquire` renvoie un :class:`~datalab.plugins.instruments.InstrumentAcquisition` : DataLab ajoute ses objets dans un nouveau groupe du panneau correspondant et les sélectionne, afin qu'une recette puisse s'exécuter aussitôt sur eux. Les deux méthodes lèvent ``ValueError`` avec un message destiné à l'utilisateur lorsque les réglages ne peuvent pas être utilisés ; DataLab affiche ce message dans la fenêtre."
+msgid "DataLab edits :attr:`~datalab.plugins.instruments.PluginInstrument.settings` in place, with the active state, groups and tabs of the guidata DataSet, then calls :meth:`~datalab.plugins.instruments.PluginInstrument.preview` after each change and, in live mode, every ``live_interval_ms`` milliseconds. An :class:`~datalab.plugins.instruments.InstrumentFrame` holds signals drawn together or a single image, a short summary shown below the view, and an optional fixed Y range (signals) or color range (image). :meth:`~datalab.plugins.instruments.PluginInstrument.acquire` returns an :class:`~datalab.plugins.instruments.InstrumentAcquisition`: DataLab adds its objects to a new group of the matching panel, titled after the acquisition, and selects them, so that a recipe can run on them at once. Both methods raise ``ValueError`` with a user-facing message when the settings cannot be used; DataLab shows the message in the window."
+msgstr "DataLab modifie :attr:`~datalab.plugins.instruments.PluginInstrument.settings` sur place, en respectant l'état actif, les groupes et les onglets du DataSet guidata, puis appelle :meth:`~datalab.plugins.instruments.PluginInstrument.preview` après chaque modification et, en mode direct, toutes les ``live_interval_ms`` millisecondes. Un :class:`~datalab.plugins.instruments.InstrumentFrame` contient des signaux tracés ensemble ou une seule image, un court résumé affiché sous la vue, et une plage fixe facultative en Y (signaux) ou de couleurs (image). :meth:`~datalab.plugins.instruments.PluginInstrument.acquire` renvoie un :class:`~datalab.plugins.instruments.InstrumentAcquisition` : DataLab ajoute ses objets dans un nouveau groupe du panneau correspondant, portant le titre de l'acquisition, et les sélectionne, afin qu'une recette puisse s'exécuter aussitôt sur eux. Les deux méthodes lèvent ``ValueError`` avec un message destiné à l'utilisateur lorsque les réglages ne peuvent pas être utilisés ; DataLab affiche ce message dans la fenêtre."
+
+msgid "When the user turns off the **New group** option of the window, DataLab adds the acquired objects to the current group of the panel instead: as they are selected, the next acquisitions go to the same group, until the user selects another group. The option and the current group are taken when **Acquire** is clicked: changing them while the acquisition is running does not change its destination, and a new group is created if the group was removed meanwhile. A new group is still created when the panel has no current group, for example when it is empty. The :attr:`~datalab.plugins.instruments.PluginInstrument.new_group` class attribute sets the default state of the option (``True`` by default): an instrument whose acquisitions are usually single objects, such as a device attribute read on demand, may set it to ``False``. The choice of the user, once made, is remembered for each instrument and prevails over this default."
+msgstr "Lorsque l'utilisateur désactive l'option **Nouveau groupe** de la fenêtre, DataLab ajoute plutôt les objets acquis au groupe courant du panneau : comme ils sont sélectionnés, les acquisitions suivantes vont dans le même groupe, jusqu'à ce que l'utilisateur sélectionne un autre groupe. L'option et le groupe courant sont pris en compte au clic sur **Acquérir** : les modifier pendant l'acquisition ne change pas sa destination, et un nouveau groupe est créé si le groupe a été supprimé entre-temps. Un nouveau groupe est tout de même créé lorsque le panneau n'a pas de groupe courant, par exemple lorsqu'il est vide. L'attribut de classe :attr:`~datalab.plugins.instruments.PluginInstrument.new_group` définit l'état par défaut de l'option (``True`` par défaut) : un instrument dont les acquisitions sont généralement des objets uniques, comme un attribut d'appareil lu à la demande, peut le mettre à ``False``. Une fois fait, le choix de l'utilisateur est mémorisé pour chaque instrument et prévaut sur cette valeur par défaut."
 
 msgid "DataLab creates the instrument once per tool and keeps it until the plugins are reloaded, so the settings remain from one opening to the next."
 msgstr "DataLab crée l'instrument une seule fois par outil et le conserve jusqu'au rechargement des plugins : les réglages sont ainsi conservés d'une ouverture à l'autre."
+
+msgid "DataLab Desktop calls the instrument outside the user interface thread, one call at a time, even when its window is closed and opened again while a call is running, and changes its settings only between two calls: a slow instrument, such as a device waiting for its data, does not freeze DataLab. The optional :meth:`~datalab.plugins.instruments.PluginInstrument.open` and :meth:`~datalab.plugins.instruments.PluginInstrument.close` methods are called when the window opens and closes, including when plugins are reloaded or DataLab quits, for example to connect to a device and to release it. If ``open`` raises an error, its message stays in the window and the instrument is not called: the next refresh or acquisition, for example after a settings change, calls ``open`` again first. ``close`` is called even if ``open`` failed, and must release only what is still held. Data received by the instrument in its own threads, such as device events, is kept by the instrument for its next ``preview`` or ``acquire`` call."
+msgstr "DataLab Desktop appelle l'instrument en dehors du fil d'exécution de l'interface utilisateur, un appel à la fois, même lorsque sa fenêtre est fermée puis rouverte pendant un appel, et ne modifie ses réglages qu'entre deux appels : un instrument lent, comme un appareil attendant ses données, ne fige pas DataLab. Les méthodes facultatives :meth:`~datalab.plugins.instruments.PluginInstrument.open` et :meth:`~datalab.plugins.instruments.PluginInstrument.close` sont appelées à l'ouverture et à la fermeture de la fenêtre, y compris lors du rechargement des plugins ou de la fermeture de DataLab, par exemple pour se connecter à un appareil puis le libérer. Si ``open`` lève une erreur, son message reste affiché dans la fenêtre et l'instrument n'est pas appelé : le rafraîchissement ou l'acquisition suivant, par exemple après une modification des réglages, appelle d'abord ``open`` à nouveau. ``close`` est appelée même si ``open`` a échoué, et ne doit libérer que ce qui est encore détenu. Les données reçues par l'instrument dans ses propres fils d'exécution, comme les événements d'un appareil, sont conservées par l'instrument jusqu'à son prochain appel de ``preview`` ou ``acquire``."
+
+msgid "Instrument connectors should attach an ``experimental_source`` metadata entry to acquired objects before returning them; DataLab does not fill it automatically. Use Sigima's ``make_experimental_source`` and ``set_experimental_source`` helpers to record the device address, attribute, selection and timestamps as appropriate. This identifies the measurement origin, not a reproducible acquisition. See the `Sigima experimental data guide <https://sigima.readthedocs.io/en/latest/user_guide/overview.html#experimental-data-origin>`_ for an example and the portable metadata format."
+msgstr "Les connecteurs d'instruments doivent attacher une entrée de métadonnées ``experimental_source`` aux objets acquis avant de les renvoyer ; DataLab ne la remplit pas automatiquement. Utilisez les fonctions ``make_experimental_source`` et ``set_experimental_source`` de Sigima pour enregistrer, selon le cas, l'adresse de l'appareil, l'attribut, la sélection et les horodatages. Cela identifie l'origine de la mesure, pas une acquisition reproductible. Le `guide des données expérimentales de Sigima <https://sigima.readthedocs.io/en/latest/user_guide/overview.html#experimental-data-origin>`_ fournit un exemple et décrit le format portable des métadonnées."
 
 msgid "DataLab-Web supports tools too: it lists them in the same places, opens instruments in the same window, and calls launchers in the plugin's Pyodide host."
 msgstr "DataLab-Web prend aussi en charge les outils : il les liste aux mêmes endroits, ouvre les instruments dans la même fenêtre et appelle les lanceurs dans l'hôte Pyodide du plugin."
@@ -412,23 +647,53 @@ msgstr "DataLab-Web prend aussi en charge les outils : il les liste aux mêmes e
 msgid "Welcome page tiles"
 msgstr "Tuiles de la page d'accueil"
 
-msgid "Every active plugin declaring the ``APPLICATION`` capability adds a tile to the **Applications** section, at the top of the :ref:`welcome_page`. By default, this tile is built from the plugin's ``PluginInfo`` name, description and icon. Clicking this tile opens the plugin page of the **Applications** catalog."
-msgstr "Chaque plugin actif déclarant la capacité ``APPLICATION`` ajoute une tuile à la section **Applications**, en haut de la :ref:`welcome_page`. Par défaut, cette tuile est construite à partir du nom, de la description et de l'icône du ``PluginInfo`` du plugin. Un clic sur cette tuile ouvre la page du plugin dans le catalogue **Applications**."
+msgid "Every active plugin declaring the ``APPLICATION`` capability adds a tile to the **Applications** section, at the top of the :ref:`welcome_page`. By default, this tile is built from the plugin's ``PluginInfo`` name, description and icon. Clicking this tile shows the plugin page in the :ref:`applications_panel`."
+msgstr "Chaque plugin actif déclarant la capacité ``APPLICATION`` ajoute une tuile à la section **Applications**, en haut de la :ref:`welcome_page`. Par défaut, cette tuile est construite à partir du nom, de la description et de l'icône du ``PluginInfo`` du plugin. Un clic sur cette tuile affiche la page du plugin dans le :ref:`applications_panel`."
 
-msgid "The plugin icon is declared with ``PluginInfo.icon``, either as a ``package:relative/path`` resource (SVG or bitmap image shipped in the plugin wheel) or as the file name of a DataLab icon. It is shown on the default tile, in the **Applications** catalog and in the plugin configuration dialog; plugins without icon use a generic plugin icon. To offer other entry points, for example to open an example directly, declare the class-level ``WELCOME_TILES`` tuple of :class:`datalab.plugins.tiles.WelcomeTile` values:"
-msgstr "L'icône du plugin est déclarée avec ``PluginInfo.icon``, soit sous la forme d'une ressource ``package:relative/path`` (image SVG ou bitmap fournie dans la wheel du plugin), soit sous la forme du nom de fichier d'une icône de DataLab. Elle est affichée sur la tuile par défaut, dans le catalogue **Applications** et dans la boîte de dialogue de configuration des plugins ; les plugins sans icône utilisent une icône de plugin générique. Pour proposer d'autres points d'entrée, par exemple pour ouvrir directement un exemple, déclarez le tuple de classe ``WELCOME_TILES`` de valeurs :class:`datalab.plugins.tiles.WelcomeTile` :"
+msgid "The plugin icon is declared with ``PluginInfo.icon``, either as a ``package:relative/path`` resource (SVG or bitmap image shipped in the plugin wheel), as a ``module:filename`` image registered by a module with guidata (e.g. ``datalab:delete.svg``), or as the file name of a DataLab icon. It is shown on the default tile, in the **Applications** panel and in the plugin configuration dialog; plugins without icon use a generic plugin icon. To offer other entry points, for example to open an example directly, declare the class-level ``WELCOME_TILES`` tuple of :class:`datalab.plugins.tiles.WelcomeTile` values:"
+msgstr "L'icône du plugin est déclarée avec ``PluginInfo.icon``, soit sous la forme d'une ressource ``package:relative/path`` (image SVG ou bitmap fournie dans la wheel du plugin), soit sous la forme d'une image ``module:filename`` enregistrée par un module auprès de guidata (par exemple ``datalab:delete.svg``), soit sous la forme du nom de fichier d'une icône de DataLab. Elle est affichée sur la tuile par défaut, dans le panneau **Applications** et dans la boîte de dialogue de configuration des plugins ; les plugins sans icône utilisent une icône de plugin générique. Pour proposer d'autres points d'entrée, par exemple pour ouvrir directement un exemple, déclarez le tuple de classe ``WELCOME_TILES`` de valeurs :class:`datalab.plugins.tiles.WelcomeTile` :"
 
-msgid "Declared tiles replace the default tile. The first one is the main tile of the plugin; the others are shown next to it when the **Applications** section has room for them, and otherwise become actions of its menu, opened from its \"…\" button or by right-clicking it. A tile without ``launcher`` opens the plugin page of the **Applications** catalog; otherwise, the named plugin method is called without arguments. A tile without ``icon`` uses the plugin icon. :meth:`datalab.plugins.PluginBase.get_welcome_tiles` validates unique local IDs and launcher methods, and rejects tiles declared by plugins without the ``APPLICATION`` capability. The welcome page refreshes its tiles when plugins are loaded, reloaded or disabled, and reports errors raised by a launcher without closing DataLab."
-msgstr "Les tuiles déclarées remplacent la tuile par défaut. La première est la tuile principale du plugin ; les autres sont affichées à côté d'elle lorsque la section **Applications** a la place nécessaire, et deviennent sinon des actions de son menu, ouvert depuis son bouton « … » ou par un clic droit sur la tuile. Une tuile sans ``launcher`` ouvre la page du plugin dans le catalogue **Applications** ; sinon, la méthode du plugin indiquée est appelée sans argument. Une tuile sans ``icon`` utilise l'icône du plugin. :meth:`datalab.plugins.PluginBase.get_welcome_tiles` valide l'unicité des ID locaux et les méthodes de lancement, et rejette les tuiles déclarées par des plugins sans la capacité ``APPLICATION``. La page d'accueil actualise ses tuiles lorsque les plugins sont chargés, rechargés ou désactivés, et signale les erreurs levées par une méthode de lancement sans fermer DataLab."
+msgid "Declared tiles replace the default tile. The first one is the main tile of the plugin; the others are shown next to it when the **Applications** section has room for them, and otherwise become actions of its menu, opened from its \"…\" button or by right-clicking it. A tile without ``launcher`` shows the plugin page in the **Applications** panel; otherwise, the named plugin method is called without arguments. A tile without ``icon`` uses the plugin icon. :meth:`datalab.plugins.PluginBase.get_welcome_tiles` validates unique local IDs and launcher methods, and rejects tiles declared by plugins without the ``APPLICATION`` capability. The welcome page refreshes its tiles when plugins are loaded, reloaded or disabled, and reports errors raised by a launcher without closing DataLab."
+msgstr "Les tuiles déclarées remplacent la tuile par défaut. La première est la tuile principale du plugin ; les autres sont affichées à côté d'elle lorsque la section **Applications** a la place nécessaire, et deviennent sinon des actions de son menu, ouvert depuis son bouton « … » ou par un clic droit sur la tuile. Une tuile sans ``launcher`` affiche la page du plugin dans le panneau **Applications** ; sinon, la méthode du plugin indiquée est appelée sans argument. Une tuile sans ``icon`` utilise l'icône du plugin. :meth:`datalab.plugins.PluginBase.get_welcome_tiles` valide l'unicité des ID locaux et les méthodes de lancement, et rejette les tuiles déclarées par des plugins sans la capacité ``APPLICATION``. La page d'accueil actualise ses tuiles lorsque les plugins sont chargés, rechargés ou désactivés, et signale les erreurs levées par une méthode de lancement sans fermer DataLab."
 
-msgid "The user decides which applications are shown and in which order: the welcome page shows a limited number of tile rows, pinned applications first, then recently used ones, then the others by name (see :ref:`welcome_page`). A plugin therefore cannot rely on its tile being visible: its features must remain available from the **Applications** catalog."
-msgstr "L'utilisateur choisit les applications affichées et leur ordre : la page d'accueil affiche un nombre limité de lignes de tuiles, avec d'abord les applications épinglées, puis celles utilisées récemment, puis les autres par ordre alphabétique (voir :ref:`welcome_page`). Un plugin ne peut donc pas compter sur la visibilité de sa tuile : ses fonctionnalités doivent rester accessibles depuis le catalogue **Applications**."
+msgid "The user decides which applications are shown and in which order: the welcome page shows a limited number of tile rows, pinned applications first, then recently used ones, then the others by name (see :ref:`welcome_page`). A plugin therefore cannot rely on its tile being visible: its features must remain available from the **Applications** panel."
+msgstr "L'utilisateur choisit les applications affichées et leur ordre : la page d'accueil affiche un nombre limité de lignes de tuiles, avec d'abord les applications épinglées, puis celles utilisées récemment, puis les autres par ordre alphabétique (voir :ref:`welcome_page`). Un plugin ne peut donc pas compter sur la visibilité de sa tuile : ses fonctionnalités doivent rester accessibles depuis le panneau **Applications**."
+
+msgid "Creating a plugin with ``datalab-plugin create``"
+msgstr "Créer un plugin avec ``datalab-plugin create``"
+
+msgid "The ``datalab-plugin`` command is installed with DataLab as a Python package; the standalone version of DataLab does not provide it. Run it without options to create a single-file plugin:"
+msgstr "La commande ``datalab-plugin`` est installée avec DataLab sous forme de paquet Python ; la version autonome de DataLab ne la fournit pas. Exécutez-la sans option pour créer un plugin en fichier unique :"
+
+msgid "The command only asks for the plugin name and its description, then writes a ``datalab_<name>.py`` file to the user plugin directory (see :ref:`plugin_locations`). Select **Plugins > Reload plugins** in DataLab, or restart DataLab: the plugin adds its submenu to the **Plugins** menu, with a sample processing of the selected signals. To implement your own processing, edit the ``sample_processing`` function of the file, which receives the Y values of a signal as a NumPy array and returns new ones, then reload the plugins."
+msgstr "La commande demande seulement le nom du plugin et sa description, puis écrit un fichier ``datalab_<nom>.py`` dans le répertoire de plugins de l'utilisateur (voir :ref:`plugin_locations`). Sélectionnez **Plugins > Recharger les plugins** dans DataLab, ou redémarrez DataLab : le plugin ajoute son sous-menu au menu **Plugins**, avec un traitement d'exemple des signaux sélectionnés. Pour réaliser votre propre traitement, modifiez la fonction ``sample_processing`` du fichier, qui reçoit les valeurs Y d'un signal sous forme de tableau NumPy et en renvoie de nouvelles, puis rechargez les plugins."
+
+msgid "Options adapt the generated file:"
+msgstr "Des options adaptent le fichier généré :"
+
+msgid "``--object-kind image``: the sample processing applies to images, and its function receives the image data."
+msgstr "``--object-kind image`` : le traitement d'exemple s'applique aux images, et sa fonction reçoit les données de l'image."
+
+msgid "``--capability``: without the ``processing`` capability, the submenu holds an action showing a message, to replace with your own."
+msgstr "``--capability`` : sans la capacité ``processing``, le sous-menu contient une action affichant un message, à remplacer par la vôtre."
+
+msgid "A destination folder, given as argument: it must then be added to the plugin directories (see :ref:`plugin_search_paths`)."
+msgstr "Un dossier de destination, donné en argument : il doit alors être ajouté aux répertoires de plugins (voir :ref:`plugin_search_paths`)."
+
+msgid "``--package`` and ``--plugin-id``: the module name and the plugin ID are otherwise derived from the plugin name. The module name must start with ``datalab_``."
+msgstr "``--package`` et ``--plugin-id`` : à défaut, le nom du module et l'ID du plugin sont déduits du nom du plugin. Le nom du module doit commencer par ``datalab_``."
+
+msgid "An existing file is never overwritten. To share the plugin, send its file: other users install it with **Plugins > Configure plugins... > From file** (see :ref:`plugin_install_from_file`)."
+msgstr "Un fichier existant n'est jamais écrasé. Pour partager le plugin, envoyez son fichier : les autres utilisateurs l'installent avec **Plugins > Configurer les plugins... > Depuis un fichier** (voir :ref:`plugin_install_from_file`)."
+
+msgid "Both the raw single-file plugin and a wheel can be published in a Desktop catalog (see :ref:`plugin_module_catalog`). To develop a larger plugin with packaging and tests already configured, create a layered project with ``--project`` instead (see :ref:`plugin_project`)."
+msgstr "Le plugin brut en fichier unique et le wheel peuvent tous deux être publiés dans un catalogue Desktop (voir :ref:`plugin_module_catalog`). Pour développer un plugin plus important avec le packaging et les tests déjà configurés, créez plutôt un projet structuré en couches avec ``--project`` (voir :ref:`plugin_project`)."
 
 msgid "Creating a layered plugin project"
 msgstr "Créer un projet de plugin structuré en couches"
 
-msgid "The installed ``datalab-plugin`` command creates a small, installable project that follows the stable plugin and feature ownership contracts. Run it without options for an interactive setup:"
-msgstr "La commande installée ``datalab-plugin`` crée un petit projet installable qui respecte les contrats stables des plugins et de propriété des fonctionnalités. Exécutez-la sans option pour une configuration interactive :"
+msgid "With ``--project``, the installed ``datalab-plugin`` command creates a small, installable project that follows the stable plugin and feature ownership contracts. Run it without other options for an interactive setup:"
+msgstr "Avec ``--project``, la commande installée ``datalab-plugin`` crée un petit projet installable qui respecte les contrats stables des plugins et de propriété des fonctionnalités. Exécutez-la sans autre option pour une configuration interactive :"
 
 msgid "The command asks for the display name and the GitHub account (user or organization) that will host the project, and offers defaults for the Python package, reverse-domain plugin ID, description, and destination. The default plugin ID is ``io.github.<account>.<name>``; ``org.datalab.`` IDs are reserved for the DataLab-Platform organization, and ``org.example.`` is used when no account is given. For scripts or reproducible setup, pass the values explicitly:"
 msgstr "La commande demande le nom d'affichage et le compte GitHub (utilisateur ou organisation) qui hébergera le projet, et propose des valeurs par défaut pour le package Python, l'ID de plugin en notation de domaine inversé, la description et la destination. L'ID de plugin par défaut est ``io.github.<compte>.<nom>`` ; les ID ``org.datalab.`` sont réservés à l'organisation DataLab-Platform, et ``org.example.`` est utilisé lorsqu'aucun compte n'est indiqué. Pour les scripts ou une configuration reproductible, indiquez explicitement les valeurs :"
@@ -442,11 +707,14 @@ msgstr "``core`` contient le comportement métier indépendant de l'hôte, ``wor
 msgid "The project also includes a stable :class:`datalab.plugins.PluginInfo`, an owned sample processing when the ``processing`` capability is selected, Ruff settings, architecture and contribution documentation, a changelog, a README, and a BSD-3-Clause license. The command refuses to overwrite an existing destination."
 msgstr "Le projet comprend également un :class:`datalab.plugins.PluginInfo` stable, un traitement d'exemple possédé lorsque la capacité ``processing`` est sélectionnée, une configuration Ruff, une documentation de l'architecture et des contributions, un changelog, un README et une licence BSD-3-Clause. La commande refuse d'écraser une destination existante."
 
-msgid "The template remains deliberately small. Add domain recipes, DataSet parameters, packaged examples, and specialized CI only when the plugin needs them. From the generated directory, install and validate the project with:"
-msgstr "Le modèle reste volontairement réduit. Ajoutez des recettes métier, des paramètres DataSet, des exemples empaquetés et une intégration continue spécialisée uniquement lorsque le plugin en a besoin. Depuis le répertoire généré, installez et validez le projet avec :"
+msgid "The template remains deliberately small. Add domain recipes, DataSet parameters, packaged examples, and specialized CI only when the plugin needs them."
+msgstr "Le modèle reste volontairement réduit. Ajoutez des recettes métier, des paramètres DataSet, des exemples empaquetés et une intégration continue spécialisée uniquement lorsque le plugin en a besoin."
 
-msgid "The generated ``pyproject.toml`` requires the current DataLab major version (for example ``datalab-platform >= 1.4, < 2``) and declares the project URLs when the GitHub account is known. The generated ``.github/workflows/release.yml`` publishes the plugin without any PyPI account: pushing a tag such as ``v0.1.0`` builds the wheel, checks that the tag matches the package version, attaches the wheel to a GitHub release, and prints the entry to submit to the `DataLab plugin catalog <https://github.com/DataLab-Platform/plugins>`_, including the SHA-256 digest of the wheel. Users then install the wheel with **Plugins > Configure plugins... > Install plugins** (see :ref:`plugin_install_from_file`). Listing the plugin in the catalog is optional; once listed, it can also be installed from the **Available plugins** tab (see :ref:`plugin_catalog`)."
-msgstr "Le ``pyproject.toml`` généré exige la version majeure courante de DataLab (par exemple ``datalab-platform >= 1.4, < 2``) et déclare les URL du projet lorsque le compte GitHub est connu. Le fichier ``.github/workflows/release.yml`` généré publie le plugin sans compte PyPI : pousser une étiquette comme ``v0.1.0`` construit le wheel, vérifie que l'étiquette correspond à la version du package, joint le wheel à une release GitHub et affiche la fiche à soumettre au `catalogue de plugins DataLab <https://github.com/DataLab-Platform/plugins>`_, avec l'empreinte SHA-256 du wheel. Les utilisateurs installent ensuite le wheel avec **Plugins > Configurer les plugins... > Installer des plugins** (voir :ref:`plugin_install_from_file`). L'inscription du plugin au catalogue est facultative ; une fois inscrit, il peut aussi être installé depuis l'onglet **Plugins disponibles** (voir :ref:`plugin_catalog`)."
+msgid "To try the plugin, add the generated directory as a plugin directory (see :ref:`plugin_search_paths`) and reload the plugins: DataLab loads the plugin class from ``adapters/desktop.py`` without installing the project. To validate the project, install it with its test dependencies and run its checks from the generated directory:"
+msgstr "Pour essayer le plugin, ajoutez le répertoire généré comme répertoire de plugins (voir :ref:`plugin_search_paths`) et rechargez les plugins : DataLab charge la classe du plugin depuis ``adapters/desktop.py`` sans installer le projet. Pour valider le projet, installez-le avec ses dépendances de test et lancez ses vérifications depuis le répertoire généré :"
+
+msgid "The generated ``pyproject.toml`` requires Python 3.10 or later and the current DataLab major version (for example ``datalab-platform >= 1.4, < 2``), and declares the project URLs when the GitHub account is known. The generated ``.github/workflows/release.yml`` publishes the plugin without any PyPI account: pushing a tag such as ``v0.1.0`` builds the wheel, checks that the tag matches the package version, attaches the wheel to a GitHub release, and prints the entry to submit to the `DataLab plugin catalog <https://github.com/DataLab-Platform/plugins>`_, including the SHA-256 digest of the wheel. Users then install the wheel with **Plugins > Configure plugins... > From file** (see :ref:`plugin_install_from_file`). Listing the plugin in the catalog is optional; once listed, it can also be installed from the **Catalog** tab (see :ref:`plugin_catalog`)."
+msgstr "Le ``pyproject.toml`` généré exige Python 3.10 ou ultérieur et la version majeure courante de DataLab (par exemple ``datalab-platform >= 1.4, < 2``), et déclare les URL du projet lorsque le compte GitHub est connu. Le fichier ``.github/workflows/release.yml`` généré publie le plugin sans compte PyPI : pousser une étiquette comme ``v0.1.0`` construit le wheel, vérifie que l'étiquette correspond à la version du package, joint le wheel à une release GitHub et affiche la fiche à soumettre au `catalogue de plugins DataLab <https://github.com/DataLab-Platform/plugins>`_, avec l'empreinte SHA-256 du wheel. Les utilisateurs installent ensuite le wheel avec **Plugins > Configurer les plugins... > Depuis un fichier** (voir :ref:`plugin_install_from_file`). L'inscription du plugin au catalogue est facultative ; une fois inscrit, il peut aussi être installé depuis l'onglet **Catalogue** (voir :ref:`plugin_catalog`)."
 
 msgid "How to develop a plugin?"
 msgstr "Comment développer un plugin ?"
@@ -578,25 +846,28 @@ msgid "Plugins may also extends DataLab I/O features by providing new image or s
 msgstr "Les plugins peuvent également étendre les fonctionnalités d'entrée/sortie de DataLab en fournissant de nouveaux formats d'image ou de signal. Pour ce faire, ils doivent fournir une sous-classe de :class:`ImageFormatBase` ou :class:`SignalFormatBase`, dans laquelle les informations de format sont définies à l'aide de la classe :class:`FormatInfo`."
 
 msgid "Object representing classic image file types"
-msgstr ""
+msgstr "Objet représentant les types de fichiers image classiques"
 
 msgid "Read data and return it"
-msgstr ""
+msgstr "Lire les données et les renvoyer"
 
 msgid "Parameters"
 msgstr "Paramètres"
 
 msgid "File name"
-msgstr ""
+msgstr "Nom du fichier"
 
 msgid "Returns"
 msgstr "Retourne"
 
 msgid "Image array data"
-msgstr ""
+msgstr "Données du tableau de l'image"
 
 msgid "Write data to file"
-msgstr ""
+msgstr "Écrire les données dans un fichier"
+
+msgid "Write classic image data with validated format-specific options."
+msgstr "Écrire des données d'image classiques avec des options propres au format validées."
 
 msgid "Write classic image data with validated format-specific options."
 msgstr ""
@@ -605,44 +876,61 @@ msgid "Information about a plugin that failed to load or instantiate."
 msgstr "Informations sur un plugin qui n'a pas pu être chargé ou instancié."
 
 msgid "Format info"
-msgstr ""
+msgstr "Informations sur le format"
 
 msgid "Return reStructuredText table row for format info (table `.. list-table::` format, with 5 columns)"
-msgstr ""
+msgstr "Renvoyer une ligne de tableau reStructuredText décrivant le format (tableau ``.. list-table::`` à 5 colonnes)"
 
 msgid "Base image format object."
-msgstr ""
+msgstr "Objet de base pour les formats d'image."
 
 msgid "This class is used to define the interface for image I/O formats. It is an abstract base class that defines the methods that must be implemented by any image format class."
-msgstr ""
+msgstr "Cette classe définit l'interface des formats d'entrée/sortie des images. C'est une classe de base abstraite qui définit les méthodes devant être implémentées par toute classe de format d'image."
+
+msgid "Reject read parameters for formats that do not support them."
+msgstr "Refuser les paramètres de lecture pour les formats qui ne les prennent pas en charge."
 
 msgid "Reject read parameters for formats that do not support them."
 msgstr ""
 
 msgid "Read list of image objects from file"
-msgstr ""
+msgstr "Lire une liste d'objets image dans un fichier"
 
 msgid "Callback worker object"
-msgstr ""
+msgstr "Objet de traitement des rappels"
+
+msgid "Optional format-specific read parameters"
+msgstr "Paramètres de lecture facultatifs propres au format"
 
 msgid "Optional format-specific read parameters"
 msgstr ""
 
 msgid "List of image objects"
-msgstr ""
+msgstr "Liste d'objets image"
 
 msgid "file name"
-msgstr ""
+msgstr "nom du fichier"
 
-#, fuzzy
 msgid "native object (signal or image)"
-msgstr "signaux et images générés"
+msgstr "objet natif (signal ou image)"
 
 msgid "Raises"
 msgstr "Lève"
 
 msgid "if format is not supported"
-msgstr ""
+msgstr "si le format n'est pas pris en charge"
+
+msgid "Write an image with format-specific options."
+msgstr "Écrire une image avec des options propres au format."
+
+msgid "Image object"
+msgstr "Objet image"
+
+msgid "Format-specific writer options"
+msgstr "Options d'écriture propres au format"
+
+msgid "If this format does not support writer options"
+msgstr "Si ce format ne prend pas en charge les options d'écriture"
 
 msgid "Write an image with format-specific options."
 msgstr ""
@@ -714,8 +1002,8 @@ msgstr "Résultat de la recette, ou None en cas d'annulation ou d'échec"
 msgid "Open an example, then start one of the recipes it was designed for."
 msgstr "Ouvre un exemple, puis lance l'une des recettes pour lesquelles il est conçu."
 
-msgid "Return validated tools listed in the Applications catalog."
-msgstr "Renvoie les outils validés listés dans le catalogue Applications."
+msgid "Return validated tools listed in the Applications panel."
+msgstr "Renvoie les outils validés listés dans le panneau Applications."
 
 msgid "Return one tool by its plugin-local ID."
 msgstr "Renvoie un outil à partir de son identifiant local au plugin."
@@ -762,11 +1050,11 @@ msgstr "Sans ``WELCOME_TILES`` déclarées, un plugin d'application expose une t
 msgid "Launch a welcome page tile."
 msgstr "Lance une tuile de la page d'accueil."
 
-msgid "A tile without launcher opens the plugin page of the Applications catalog; otherwise, its plugin method is called without arguments."
-msgstr "Une tuile sans méthode de lancement ouvre la page du plugin dans le catalogue Applications ; sinon, sa méthode de plugin est appelée sans argument."
+msgid "A tile without launcher shows the plugin page in the Applications panel; otherwise, its plugin method is called without arguments."
+msgstr "Une tuile sans méthode de lancement affiche la page du plugin dans le panneau Applications ; sinon, sa méthode de plugin est appelée sans argument."
 
-msgid "Value returned by the launcher method (None for the catalog page)"
-msgstr "Valeur renvoyée par la méthode de lancement (None pour la page du catalogue)"
+msgid "Value returned by the launcher method (None for the Applications panel)"
+msgstr "Valeur renvoyée par la méthode de lancement (None pour le panneau Applications)"
 
 msgid "Return signal panel"
 msgstr "Retourne le panneau de signal"
@@ -827,6 +1115,15 @@ msgstr "Retourne True si le plugin est enregistré"
 
 msgid "Register plugin"
 msgstr "Enregistrer le plugin"
+
+msgid "The declarations of the plugin (recipes, examples, tools, welcome tiles) are validated first: an invalid plugin is not registered, so that the Applications panel, the welcome page and the menus only get valid declarations."
+msgstr "Les déclarations du plugin (recettes, exemples, outils, tuiles de la page d'accueil) sont d'abord validées : un plugin invalide n'est pas enregistré, de sorte que le panneau Applications, la page d'accueil et les menus ne reçoivent que des déclarations valides."
+
+msgid "if a declaration has the wrong type"
+msgstr "si une déclaration n'est pas du bon type"
+
+msgid "if a declaration is invalid or the plugin ID is already used"
+msgstr "si une déclaration est invalide ou si l'ID du plugin est déjà utilisé"
 
 msgid "Unregister plugin"
 msgstr "Désenregistrer le plugin"
@@ -934,42 +1231,41 @@ msgid "return html formatted text (default: True)"
 msgstr "retourner du texte formaté en html (par défaut : True)"
 
 msgid "Class representing a signal file type"
-msgstr ""
+msgstr "Classe représentant un type de fichier de signal"
 
 msgid "Create empty object"
-msgstr ""
+msgstr "Créer un objet vide"
 
 msgid "Index of object in file"
-msgstr ""
+msgstr "Indice de l'objet dans le fichier"
 
-#, fuzzy
 msgid "Signal object"
-msgstr "objets sélectionnés"
+msgstr "Objet signal"
 
 msgid "Create signal object from xydata and filename."
-msgstr ""
+msgstr "Créer un objet signal à partir de xydata et du nom de fichier."
 
 msgid "XY data"
-msgstr ""
+msgstr "Données XY"
 
 msgid "Create signal objects from xydata and filename"
-msgstr ""
+msgstr "Créer des objets signal à partir de xydata et du nom de fichier"
 
 msgid "List of signal objects"
-msgstr ""
+msgstr "Liste d'objets signal"
 
 msgid "Read list of signal objects from file"
-msgstr ""
+msgstr "Lire une liste d'objets signal dans un fichier"
 
 msgid "Read data and metadata from file, write metadata to object, return xydata"
-msgstr ""
+msgstr "Lire les données et métadonnées d'un fichier, écrire les métadonnées dans l'objet et renvoyer xydata"
 
 msgid "Discover plugins through package entry points and naming convention."
 msgstr "Découvrir les plugins via les points d'entrée de packages et la convention de nommage."
 
 #, python-brace-format
-msgid "Installed packages may expose a :class:`PluginBase` subclass through the ``datalab.plugins`` entry-point group. This function also reloads or imports modules matching the historical ``\"{MOD_NAME}_*\"`` naming scheme."
-msgstr "Les packages installés peuvent exposer une sous-classe de :class:`PluginBase` via le groupe de points d'entrée ``datalab.plugins``. Cette fonction recharge ou importe également les modules qui respectent la convention de nommage historique ``\"{MOD_NAME}_*\"``."
+msgid "Installed packages may expose a :class:`PluginBase` subclass through the ``datalab.plugins`` entry-point group. This function also reloads or imports modules and packages matching the historical ``\"{MOD_NAME}_*\"`` naming scheme, as well as the ``adapters.desktop`` module of such packages, which defines the plugin class of packages laid out by ``datalab-plugin create``."
+msgstr "Les packages installés peuvent exposer une sous-classe de :class:`PluginBase` via le groupe de points d'entrée ``datalab.plugins``. Cette fonction recharge ou importe également les modules et packages qui respectent la convention de nommage historique ``\"{MOD_NAME}_*\"``, ainsi que le module ``adapters.desktop`` de ces packages, qui définit la classe du plugin des packages organisés comme ceux créés par ``datalab-plugin create``."
 
 msgid "Import errors for individual plugins are captured and logged so that one broken plugin does not prevent the others from loading.  Error tracebacks are accumulated in :class:`PluginRegistry` class attributes so that callers (e.g. the main window) can replay them into the internal console once it is ready."
 msgstr "Les erreurs d'importation pour les plugins individuels sont capturées et enregistrées afin qu'un plugin défectueux n'empêche pas les autres de se charger. Les traces d'erreurs sont accumulées dans les attributs de classe :class:`PluginRegistry` afin que les appelants (par exemple, la fenêtre principale) puissent les rejouer dans la console interne une fois qu'elle est prête."
@@ -1232,8 +1528,8 @@ msgstr "description courte affichée sous le titre"
 msgid "``package:path`` resource (SVG or bitmap) or DataLab icon file name; ``None`` falls back to the plugin icon"
 msgstr "ressource ``package:path`` (SVG ou bitmap) ou nom de fichier d'une icône de DataLab ; ``None`` utilise l'icône du plugin"
 
-msgid "name of the plugin method called when the tile is clicked; ``None`` opens the plugin page of the **Applications** catalog"
-msgstr "nom de la méthode du plugin appelée lors d'un clic sur la tuile ; ``None`` ouvre la page du plugin dans le catalogue **Applications**"
+msgid "name of the plugin method called when the tile is clicked; ``None`` shows the plugin page in the **Applications** panel"
+msgstr "nom de la méthode du plugin appelée lors d'un clic sur la tuile ; ``None`` affiche la page du plugin dans le panneau **Applications**"
 
 msgid "Return True if the icon is a ``package:path`` resource"
 msgstr "Renvoie True si l'icône est une ressource ``package:path``"
@@ -1295,11 +1591,14 @@ msgstr "Instruments exposés comme outils par les plugins d'application."
 msgid "An instrument is a headless object: it holds settings (a guidata DataSet), returns a live frame for these settings, and acquires objects. DataLab shows it in a window with the live view on the left and the settings on the right. DataLab Desktop and DataLab-Web share this module."
 msgstr "Un instrument est un objet sans interface : il porte des réglages (un DataSet guidata), renvoie une image en direct pour ces réglages et acquiert des objets. DataLab l'affiche dans une fenêtre avec la vue en direct à gauche et les réglages à droite. DataLab Desktop et DataLab-Web partagent ce module."
 
-msgid "Objects acquired by an instrument, added by DataLab in a new group."
-msgstr "Objets acquis par un instrument, ajoutés par DataLab dans un nouveau groupe."
+msgid "Objects acquired by an instrument, added by DataLab to the workspace."
+msgstr "Objets acquis par un instrument, ajoutés par DataLab à l'espace de travail."
 
-msgid "title of the group created for the acquisition"
-msgstr "titre du groupe créé pour l'acquisition"
+msgid "DataLab adds them to a new group, or to the current group of the panel when the user turns off the **New group** option of the instrument window (see :attr:`PluginInstrument.new_group`)."
+msgstr "DataLab les ajoute à un nouveau groupe, ou au groupe courant du panneau lorsque l'utilisateur désactive l'option **Nouveau groupe** de la fenêtre de l'instrument (voir :attr:`PluginInstrument.new_group`)."
+
+msgid "title of the group created for the acquisition, if any"
+msgstr "titre du groupe créé pour l'acquisition, le cas échéant"
 
 msgid "acquired signals, or acquired images"
 msgstr "signaux acquis, ou images acquises"
@@ -1322,11 +1621,29 @@ msgstr "Instrument ouvert par un outil de plugin."
 msgid "DataLab writes the edited values into :attr:`settings` before calling :meth:`preview` or :meth:`acquire`. Both methods raise ``ValueError`` with a user-facing message when the settings cannot be used. The plugin keeps one instance per tool during the session, so settings are kept from one opening to the next."
 msgstr "DataLab écrit les valeurs modifiées dans :attr:`settings` avant d'appeler :meth:`preview` ou :meth:`acquire`. Les deux méthodes lèvent ``ValueError`` avec un message destiné à l'utilisateur lorsque les réglages ne peuvent pas être utilisés. Le plugin conserve une instance par outil pendant la session : les réglages sont ainsi conservés d'une ouverture à l'autre."
 
+msgid "DataLab calls :meth:`open` when the instrument window opens and :meth:`close` when it closes (including when the plugin is reloaded or DataLab quits). It calls these methods, :meth:`preview` and :meth:`acquire` one at a time, outside the GUI thread, even when the window is closed and opened again while a call is running, and writes :attr:`settings` only between two calls: a slow instrument does not freeze DataLab. Data received by the instrument in its own threads (e.g. device events) must be stored for the next :meth:`preview` or :meth:`acquire` call."
+msgstr "DataLab appelle :meth:`open` à l'ouverture de la fenêtre de l'instrument et :meth:`close` à sa fermeture (y compris lorsque le plugin est rechargé ou que DataLab se ferme). Il appelle ces méthodes, :meth:`preview` et :meth:`acquire` une à la fois, en dehors du fil d'exécution de l'interface graphique, même lorsque la fenêtre est fermée puis rouverte pendant un appel, et ne modifie :attr:`settings` qu'entre deux appels : un instrument lent ne fige pas DataLab. Les données reçues par l'instrument dans ses propres fils d'exécution (par exemple les événements d'un appareil) doivent être conservées jusqu'au prochain appel de :meth:`preview` ou :meth:`acquire`."
+
 msgid "instrument settings, edited by DataLab"
 msgstr "réglages de l'instrument, modifiés par DataLab"
 
 msgid "Interval between two frames in live mode, in milliseconds"
 msgstr "Intervalle entre deux images en mode direct, en millisecondes"
+
+msgid "Default state of the **New group** option of the instrument window (if True, each acquisition is added to a new group, otherwise to the current group of the panel). The choice of the user, once made, prevails."
+msgstr "État par défaut de l'option **Nouveau groupe** de la fenêtre de l'instrument (si True, chaque acquisition est ajoutée à un nouveau groupe, sinon au groupe courant du panneau). Une fois fait, le choix de l'utilisateur prévaut."
+
+msgid "Prepare the instrument when its window opens (e.g. connect to it)."
+msgstr "Préparer l'instrument à l'ouverture de sa fenêtre (par exemple s'y connecter)."
+
+msgid "Raises ``ValueError`` with a user-facing message if the instrument cannot be used: DataLab shows this message, and does not call :meth:`preview` or :meth:`acquire` until a new request (e.g. after a settings change) opens the instrument successfully. Does nothing by default."
+msgstr "Lève ``ValueError`` avec un message destiné à l'utilisateur si l'instrument ne peut pas être utilisé : DataLab affiche ce message, et n'appelle pas :meth:`preview` ou :meth:`acquire` tant qu'une nouvelle demande (par exemple après une modification des réglages) n'a pas ouvert l'instrument avec succès. Ne fait rien par défaut."
+
+msgid "Release the instrument when its window closes (e.g. disconnect)."
+msgstr "Libérer l'instrument à la fermeture de sa fenêtre (par exemple s'en déconnecter)."
+
+msgid "Called even if :meth:`open` failed, and possibly several times: it must release only what is still held. Does nothing by default."
+msgstr "Appelée même si :meth:`open` a échoué, et éventuellement plusieurs fois : elle ne doit libérer que ce qui est encore détenu. Ne fait rien par défaut."
 
 msgid "Return a live frame for the current settings."
 msgstr "Renvoie une image en direct pour les réglages courants."

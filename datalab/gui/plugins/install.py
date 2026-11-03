@@ -10,20 +10,26 @@ the plugins installed this way.
 
 from __future__ import annotations
 
+import logging
 import os.path as osp
 from collections.abc import Callable
 from datetime import datetime
 from html import escape
+from typing import TypeVar
 
 from guidata.configtools import get_icon
-from guidata.qthelpers import win32_fix_title_bar_background
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename
 
 from datalab.config import Conf, _
-from datalab.plugins import PluginRegistry
-from datalab.plugins.base import get_installed_plugin_store
+from datalab.plugins.base import (
+    enable_installed_plugin_classes,
+    get_installed_plugin_store,
+)
+from datalab.plugins.catalog import CatalogPlugin
+from datalab.plugins.dependencies import DependencyPlan
+from datalab.plugins.modules import apply_catalog_metadata
 from datalab.plugins.store import (
     WHEEL_KIND,
     InstalledPlugin,
@@ -33,6 +39,49 @@ from datalab.plugins.store import (
 )
 from datalab.utils.qthelpers import show_in_folder as _show_in_folder
 from datalab.widgets.expandabletext import apply_subdued_color
+
+_Result = TypeVar("_Result")
+_RUNNING_TASKS: set[_Task] = set()
+
+
+class _Task(QC.QThread):
+    """Run file and dependency operations outside the GUI thread."""
+
+    succeeded = QC.Signal(object)
+    failed = QC.Signal(str)
+
+    def __init__(self, function: Callable[[], object]) -> None:
+        super().__init__()
+        self._function = function
+
+    def run(self) -> None:
+        """Call the operation and report its errors, expected or not."""
+        try:
+            result = self._function()
+        except (OSError, ValueError) as exc:
+            self.failed.emit(str(exc))
+            return
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+            # Escaping this thread, the exception would emit no signal at all: the
+            # caller would wait forever for the end of the operation
+            logging.getLogger(__name__).exception("Plugin operation failed")
+            self.failed.emit(f"{type(exc).__name__}: {exc}")
+            return
+        self.succeeded.emit(result)
+
+
+def run_plugin_task(
+    function: Callable[[], _Result],
+    on_success: Callable[[_Result], None],
+    on_failure: Callable[[str], None],
+) -> None:
+    """Keep an asynchronous plugin operation alive until its thread finishes."""
+    task = _Task(function)
+    _RUNNING_TASKS.add(task)
+    task.succeeded.connect(on_success)
+    task.failed.connect(on_failure)
+    task.finished.connect(lambda: _RUNNING_TASKS.discard(task))
+    task.start()
 
 
 def _format_size(size_bytes: int) -> str:
@@ -52,7 +101,9 @@ def _format_date(timestamp: str) -> str:
 def _plugin_title(plugin: InstalledPlugin) -> str:
     if plugin.kind == WHEEL_KIND:
         return f"{plugin.name} {plugin.version}"
-    return plugin.filename
+    if plugin.version:
+        return f"{plugin.filename} {plugin.version}"
+    return f"{plugin.filename} ({_('revision %s') % plugin.sha256[:12]})"
 
 
 class PluginConsentDialog(QW.QDialog):
@@ -71,7 +122,6 @@ class PluginConsentDialog(QW.QDialog):
         origin: str | None = None,
     ) -> None:
         super().__init__(parent)
-        win32_fix_title_bar_background(self)
         self.setWindowTitle(_("Install plugin"))
         layout = QW.QVBoxLayout()
         self.setLayout(layout)
@@ -91,16 +141,58 @@ class PluginConsentDialog(QW.QDialog):
                 for entry in manifest["entry_points"]
             )
             form.addRow(_("Plugin classes:"), QW.QLabel(entry_points))
-            dependencies = "<br>".join(
-                escape(
-                    f"{dependency['requirement']} "
-                    f"({dependency['installed_version'] or _('not applicable')})"
-                )
-                for dependency in manifest["dependencies"]
+            dependencies = []
+            for dependency in manifest["dependencies"]:
+                version = dependency["installed_version"]
+                if version is None:
+                    version = (
+                        _("not installed")
+                        if dependency["applies"]
+                        else _("not applicable")
+                    )
+                dependencies.append(escape(f"{dependency['requirement']} ({version})"))
+            form.addRow(
+                _("Dependencies:"), QW.QLabel("<br>".join(dependencies) or _("None"))
             )
-            form.addRow(_("Dependencies:"), QW.QLabel(dependencies or _("None")))
+            additional = manifest.get("additional_dependencies", [])
+            if additional:
+                details = "<br>".join(
+                    escape(
+                        f"{wheel['distribution']} {wheel['version']} "
+                        f"({_format_size(wheel['size_bytes'])})"
+                    )
+                    + f"<br><small>SHA-256: {escape(wheel['sha256'])}</small>"
+                    for wheel in additional
+                )
+                label = QW.QLabel(details)
+                label.setWordWrap(True)
+                label.setTextInteractionFlags(QC.Qt.TextSelectableByMouse)
+                form.addRow(_("Additional packages from the local wheelhouse:"), label)
+                source = QW.QLabel(escape(manifest["dependency_source"]))
+                source.setWordWrap(True)
+                form.addRow(_("Dependency source:"), source)
         else:
             form.addRow(_("Plugin module:"), QW.QLabel(manifest["name"]))
+            if manifest["display_name"]:
+                form.addRow(_("Plugin:"), QW.QLabel(escape(manifest["display_name"])))
+            if manifest["version"]:
+                form.addRow(_("Version:"), QW.QLabel(escape(manifest["version"])))
+            else:
+                form.addRow(_("Revision:"), QW.QLabel(manifest["sha256"][:12]))
+            if manifest["summary"]:
+                description = QW.QLabel(escape(manifest["summary"]))
+                description.setWordWrap(True)
+                form.addRow(_("Description:"), description)
+            if manifest["warnings"]:
+                warning = QW.QLabel(
+                    _(
+                        "Some metadata cannot be read without executing the file. "
+                        "Catalog metadata is used when provided; dependencies are "
+                        "not installed for single-file plugins."
+                    )
+                )
+                warning.setWordWrap(True)
+                form.addRow(warning)
         form.addRow(_("File:"), QW.QLabel(manifest["filename"]))
         form.addRow(_("Size:"), QW.QLabel(_format_size(manifest["size_bytes"])))
         digest = QW.QLabel(manifest["sha256"])
@@ -175,11 +267,17 @@ class InstalledPluginsWidget(QW.QWidget):
         parent: Parent widget
     """
 
+    busy_changed = QC.Signal(bool)
+
     def __init__(
         self, reload_plugins: Callable[[], None], parent: QW.QWidget | None = None
     ) -> None:
         super().__init__(parent)
         self._reload_plugins = reload_plugins
+        self._pending_install: tuple[str, str | None, str] | None = None
+        self._pending_finish: Callable[[], None] | None = None
+        self._dependency_plan: DependencyPlan | None = None
+        self._manifest: dict | None = None
         self.item_widgets: list[InstalledPluginItemWidget] = []
         layout = QW.QVBoxLayout()
         self.setLayout(layout)
@@ -188,7 +286,9 @@ class InstalledPluginsWidget(QW.QWidget):
             _(
                 "Install a plugin shared as a wheel file (<code>.whl</code>) or as "
                 "a Python module (<code>datalab_*.py</code>). Wheels must be pure "
-                "Python and rely only on packages already provided by DataLab."
+                "Python. Missing dependencies may be supplied as wheels in an "
+                "adjacent <code>dependencies</code> folder, without Internet "
+                "access or changing packages already installed."
             )
         )
         intro.setWordWrap(True)
@@ -203,6 +303,10 @@ class InstalledPluginsWidget(QW.QWidget):
         install_layout.addStretch()
         layout.addLayout(install_layout)
         layout.addSpacing(12)
+        self.status_label = QW.QLabel()
+        self.status_label.setWordWrap(True)
+        apply_subdued_color(self.status_label)
+        layout.addWidget(self.status_label)
 
         title = QW.QLabel(_("Plugins installed from a file"))
         title_font = title.font()
@@ -273,7 +377,13 @@ class InstalledPluginsWidget(QW.QWidget):
         return self.install_path(path)
 
     def install_path(
-        self, path: str, origin: str | None = None
+        self,
+        path: str,
+        origin: str | None = None,
+        *,
+        wheelhouse: str | None = None,
+        on_finished: Callable[[], None] | None = None,
+        catalog_plugin: CatalogPlugin | None = None,
     ) -> InstallResult | None:
         """Install a plugin file after the user's consent.
 
@@ -285,17 +395,64 @@ class InstalledPluginsWidget(QW.QWidget):
             Installation result, or None if refused
         """
         is_wheel = path.lower().endswith(".whl")
+        asynchronous = False
         try:
+            if self._pending_install is not None:
+                raise PluginInstallError("Another plugin installation is in progress")
             if is_wheel:
-                manifest = self.store.inspect_wheel_file(path)
+                manifest = self.store.inspect_wheel_file(
+                    path, allow_missing_dependencies=True
+                )
+                if any(
+                    item["applies"] and not item["compatible"]
+                    for item in manifest["dependencies"]
+                ):
+                    self._pending_install = (
+                        path,
+                        origin,
+                        catalog_plugin.id if catalog_plugin else "",
+                    )
+                    self._pending_finish = on_finished
+                    self._manifest = manifest
+                    self._set_busy(True, _("Checking the local dependency wheels..."))
+                    run_plugin_task(
+                        lambda: self.store.prepare_wheel_file(path, wheelhouse),
+                        self._on_prepared,
+                        self._on_install_failed,
+                    )
+                    asynchronous = True
+                    return None
             else:
                 manifest = self.store.inspect_module_file(path)
+                if catalog_plugin is not None:
+                    release = catalog_plugin.get_installable_release()
+                    if release is None or catalog_plugin.module != manifest["name"]:
+                        raise PluginInstallError(
+                            "The module does not match the catalog"
+                        )
+                    manifest = apply_catalog_metadata(
+                        manifest,
+                        plugin_id=catalog_plugin.id,
+                        name=catalog_plugin.name,
+                        version=release.version,
+                        summary=catalog_plugin.summary,
+                    )
             if not self.confirm_installation(manifest, origin=origin):
                 return None
-            install = (
-                self.store.install_wheel if is_wheel else self.store.install_module
-            )
-            result = install(path, expected_sha256=manifest["sha256"])
+            if is_wheel:
+                result = self.store.install_wheel(
+                    path,
+                    expected_sha256=manifest["sha256"],
+                    catalog_id=catalog_plugin.id if catalog_plugin else "",
+                )
+            else:
+                result = self.store.install_module(
+                    path,
+                    expected_sha256=manifest["sha256"],
+                    catalog_id=catalog_plugin.id if catalog_plugin else "",
+                    catalog_name=catalog_plugin.name if catalog_plugin else "",
+                    catalog_version=manifest["version"],
+                )
         except (OSError, ValueError) as exc:
             QW.QMessageBox.warning(
                 self,
@@ -303,6 +460,13 @@ class InstalledPluginsWidget(QW.QWidget):
                 _("This file cannot be installed as a plugin:") + f"\n\n{exc}",
             )
             return None
+        finally:
+            if not asynchronous and on_finished is not None:
+                on_finished()
+        self._present_result(result)
+        return result
+
+    def _present_result(self, result: InstallResult) -> None:
         self.refresh()
         title = _plugin_title(result.plugin)
         if result.restart_required:
@@ -315,7 +479,59 @@ class InstalledPluginsWidget(QW.QWidget):
             self._reload_plugins()
             if self._enable_plugins_from(result.plugin):
                 self._reload_plugins()
-        return result
+
+    def _set_busy(self, busy: bool, text: str = "") -> None:
+        self.install_button.setEnabled(not busy)
+        for item in self.item_widgets:
+            item.uninstall_button.setEnabled(not busy)
+        self.status_label.setText(text)
+        self.busy_changed.emit(busy)
+
+    def _on_prepared(self, prepared: tuple[dict, DependencyPlan | None]) -> None:
+        manifest, self._dependency_plan = prepared
+        assert self._pending_install is not None
+        path, origin, catalog_id = self._pending_install
+        if self._manifest is None or manifest["sha256"] != self._manifest["sha256"]:
+            self._on_install_failed(
+                _("The plugin changed while checking dependencies.")
+            )
+            return
+        if not self.confirm_installation(manifest, origin=origin):
+            self._finish_installation()
+            return
+        self._set_busy(True, _("Installing the plugin and its dependencies..."))
+        run_plugin_task(
+            lambda: self.store.install_wheel(
+                path,
+                expected_sha256=manifest["sha256"],
+                dependency_plan=self._dependency_plan,
+                catalog_id=catalog_id,
+            ),
+            self._on_installed,
+            self._on_install_failed,
+        )
+
+    def _on_installed(self, result: InstallResult) -> None:
+        try:
+            self._present_result(result)
+        finally:
+            self._finish_installation()
+
+    def _on_install_failed(self, message: str) -> None:
+        self._finish_installation()
+        QW.QMessageBox.warning(self, _("Install plugin"), message)
+
+    def _finish_installation(self) -> None:
+        if self._dependency_plan is not None:
+            self._dependency_plan.close()
+        self._dependency_plan = None
+        self._pending_install = None
+        self._manifest = None
+        self._set_busy(False)
+        callback = self._pending_finish
+        self._pending_finish = None
+        if callback is not None:
+            callback()
 
     def uninstall(self, plugin: InstalledPlugin) -> None:
         """Uninstall a plugin after confirmation."""
@@ -354,17 +570,7 @@ class InstalledPluginsWidget(QW.QWidget):
         Returns:
             True if the list of enabled plugins changed
         """
-        enabled_ids = Conf.plugins_enabled_list.get(None)
-        if enabled_ids is None:
-            return False
-        new_ids = [
-            plugin_class.get_plugin_id()
-            for plugin_class in PluginRegistry.get_plugin_classes()
-            if getattr(plugin_class, "__plugin_filepath__", None)
-            and self.store.find_plugin(plugin_class.__plugin_filepath__) == plugin
-            and plugin_class.get_plugin_id() not in enabled_ids
-        ]
-        if not new_ids:
-            return False
-        Conf.plugins_enabled_list.set(list(enabled_ids) + new_ids)
-        return True
+        changed, _recognized = enable_installed_plugin_classes(
+            self.store, [plugin.name]
+        )
+        return changed

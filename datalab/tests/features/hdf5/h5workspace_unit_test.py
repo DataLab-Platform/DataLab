@@ -89,7 +89,7 @@ def test_open_file_headless_refreshes_reference_displays(monkeypatch) -> None:
         provenance=SimpleNamespace(load=Mock()),
     )
     # A workspace file without provenance block, saved by DataLab 1.4
-    reader = SimpleNamespace(close=Mock(), h5={}, version={(): "1.4.0"})
+    reader = SimpleNamespace(close=Mock(), h5={}, saved_version="1.4.0")
     monkeypatch.setattr("datalab.gui.h5io.NativeH5Reader", lambda _filename: reader)
 
     assert H5InputOutput(mainwindow).open_file_headless("workspace.h5", False)

@@ -10,6 +10,7 @@ from datetime import datetime
 import pytest
 from guidata.configtools import get_icon
 from qtpy import QtCore as QC
+from qtpy import QtTest as QT
 from qtpy import QtWidgets as QW
 
 from datalab.config import (
@@ -533,6 +534,45 @@ def test_plugins_menu_stays_available_when_plugins_are_globally_disabled():
         Conf.plugins_enabled.set(original_plugins_enabled)
 
 
+@pytest.mark.parametrize("plugins_enabled", [True, False])
+def test_plugin_status_opens_existing_configuration_dialog(
+    monkeypatch: pytest.MonkeyPatch, plugins_enabled: bool
+) -> None:
+    """The status label and menu use the same dialog without reloading plugins."""
+    Conf.plugins_enabled.set(plugins_enabled)
+    dialogs: list[PluginConfigDialog] = []
+    reload_calls: list[bool] = []
+
+    def record_dialog(dialog: PluginConfigDialog) -> int:
+        """Intercept the modal dialog without accepting configuration changes."""
+        dialogs.append(dialog)
+        return QW.QDialog.Rejected
+
+    monkeypatch.setattr(PluginConfigDialog, "exec", record_dialog)
+    with datalab_test_app_context(console=False) as win:
+        assert win.pluginstatus is not None
+        assert win.configure_plugins_action is not None
+        enabled_list = Conf.plugins_enabled_list.get(None)
+        monkeypatch.setattr(win, "reload_plugins", lambda: reload_calls.append(True))
+
+        QT.QTest.mouseClick(win.pluginstatus.label, QC.Qt.LeftButton)
+        assert len(dialogs) == int(plugins_enabled)
+
+        for button in (QC.Qt.RightButton, QC.Qt.MiddleButton):
+            QT.QTest.mouseClick(win.pluginstatus.label, button)
+        QT.QTest.mouseClick(win.pluginstatus.icon, QC.Qt.LeftButton)
+        assert len(dialogs) == int(plugins_enabled)
+
+        win.configure_plugins_action.trigger()
+        assert len(dialogs) == int(plugins_enabled) + 1
+        assert all(dialog.parent() is win for dialog in dialogs)
+        assert reload_calls == []
+        assert Conf.plugins_enabled.get() is plugins_enabled
+        assert Conf.plugins_enabled_list.get(None) == enabled_list
+        for dialog in dialogs:
+            _close_dialog(dialog)
+
+
 def test_disabled_plugins_still_appear_in_configuration_dialog():
     """Globally disabled plugins should remain listed but inactive in the dialog."""
     plugin_name = "Disabled Visible Plugin"
@@ -583,7 +623,7 @@ def test_disabled_plugins_still_appear_in_configuration_dialog():
 
 
 def test_plugin_settings_tab_exposes_global_toggle_and_warning_option():
-    """Plugin settings tab should host the global toggle and warning option."""
+    """Advanced tab should host the global toggle and warning option."""
     original_plugins_enabled = Conf.plugins_enabled.get(True)
     original_warning_ignore = Conf.v020_plugins_warning_ignore.get(False)
 
@@ -596,7 +636,7 @@ def test_plugin_settings_tab_exposes_global_toggle_and_warning_option():
             _show_dialog(dialog)
 
             assert dialog.tabs is not None
-            assert dialog.tabs.tabText(1) == "Plugin settings"
+            assert dialog.tabs.tabText(3) == "Advanced"
             assert dialog.global_toggle_button is not None
             assert dialog.global_toggle_button.text() == "Disable plugins globally"
             assert not dialog.global_toggle_button.icon().isNull()
@@ -617,7 +657,7 @@ def test_plugin_settings_tab_exposes_global_toggle_and_warning_option():
             assert not dialog.plugins_content.isEnabled()
             assert not dialog.settings_scroll.isEnabled()
             assert dialog.plugins_disabled_label.isVisible()
-            dialog.tabs.setCurrentIndex(1)
+            dialog.tabs.setCurrentIndex(3)
             QW.QApplication.processEvents()
             assert dialog.settings_disabled_label.isVisible()
             assert not dialog.reload_button.isEnabled()
@@ -632,6 +672,79 @@ def test_plugin_settings_tab_exposes_global_toggle_and_warning_option():
     finally:
         Conf.plugins_enabled.set(original_plugins_enabled)
         Conf.v020_plugins_warning_ignore.set(original_warning_ignore)
+
+
+def test_tab_titles_fit_at_minimum_width():
+    """All tab titles should stay visible at the minimum dialog width, whatever
+    the width of the fonts of the platform."""
+    with datalab_test_app_context(console=False) as win:
+        dialog = PluginConfigDialog(win)
+        dialog.resize(pluginconfig.DIALOG_MIN_WIDTH, pluginconfig.DIALOG_MIN_HEIGHT)
+        _show_dialog(dialog)
+        assert dialog.minimumWidth() >= pluginconfig.DIALOG_MIN_WIDTH
+        dialog.resize(dialog.minimumWidth(), dialog.minimumHeight())
+        QW.QApplication.processEvents()
+        assert dialog.width() == dialog.minimumWidth()
+
+        assert dialog.tabs is not None
+        titles = [dialog.tabs.tabText(index) for index in range(dialog.tabs.count())]
+        assert titles == ["Installed plugins", "Catalog", "From file", "Advanced"]
+        assert all(
+            dialog.tabs.tabToolTip(index) for index in range(dialog.tabs.count())
+        )
+        tab_bar = dialog.tabs.tabBar()
+        assert tab_bar.width() >= tab_bar.sizeHint().width()
+
+        _close_dialog(dialog)
+
+
+def test_dialog_size_is_restored_and_saved():
+    """The dialog should reopen with its last size, fitted to the screen."""
+    min_size = (pluginconfig.DIALOG_MIN_WIDTH, pluginconfig.DIALOG_MIN_HEIGHT)
+    with datalab_test_app_context(console=False) as win:
+        available = win.screen().availableGeometry()
+        ratio = pluginconfig.DIALOG_MAX_SCREEN_RATIO
+        max_size = (
+            max(min_size[0], int(available.width() * ratio)),
+            max(min_size[1], int(available.height() * ratio)),
+        )
+
+        def open_dialog_size() -> tuple[int, int]:
+            dialog = PluginConfigDialog(win)
+            size = (dialog.width(), dialog.height())
+            dialog.deleteLater()
+            return size
+
+        assert Conf.plugins_dialog_size.get() is None
+        default_width, default_height = pluginconfig.DIALOG_DEFAULT_SIZE
+        assert open_dialog_size() == (
+            min(default_width, max_size[0]),
+            min(default_height, max_size[1]),
+        )
+
+        Conf.plugins_dialog_size.set(min_size)
+        assert open_dialog_size() == min_size
+        Conf.plugins_dialog_size.set((10, 10))
+        assert open_dialog_size() == min_size
+        Conf.plugins_dialog_size.set((100000, 100000))
+        assert open_dialog_size() == max_size
+
+        dialog = PluginConfigDialog(win)
+        _show_dialog(dialog)
+        # The minimum width depends on the width of the tab titles
+        new_size = (dialog.minimumWidth() + 10, dialog.minimumHeight() + 10)
+        dialog.resize(*new_size)
+        dialog.reject()
+        # Running tests must not overwrite the user's dialog size
+        assert Conf.plugins_dialog_size.get() == (100000, 100000)
+
+        dialog = PluginConfigDialog(win)
+        _show_dialog(dialog)
+        dialog.resize(*new_size)
+        with execenv.context(unattended=False):
+            dialog.reject()
+        assert Conf.plugins_dialog_size.get() == new_size
+        _close_dialog(dialog)
 
 
 def test_accept_applies_global_plugin_toggle(monkeypatch):

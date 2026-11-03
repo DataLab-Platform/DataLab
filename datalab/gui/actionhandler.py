@@ -873,7 +873,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Rename"),
-                icon_name="rename.svg",
+                icon_name="datalab:rename.svg",
                 shortcut="F2",
                 tip=_("Edit title of selected %s or group") % self.OBJECT_STR,
                 triggered=self.panel.rename_selected_object_or_group,
@@ -920,7 +920,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Remove"),
-                icon_name="delete.svg",
+                icon_name="datalab:delete.svg",
                 tip=_("Remove selected %s") % self.OBJECT_STR,
                 triggered=self.panel.remove_object,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Delete),
@@ -1304,7 +1304,7 @@ class SignalActionHandler(BaseActionHandler):
                 (_("Cosine"), sio.CosineParam, "cosine.svg", False),
                 (_("Sawtooth"), sio.SawtoothParam, "sawtooth.svg", False),
                 (_("Triangle"), sio.TriangleParam, "triangle.svg", False),
-                (_("Square"), sio.SquareParam, "square.svg", False),
+                (_("Square"), sio.SquareParam, "square_wave.svg", False),
                 (_("Cardinal sine"), sio.SincParam, "sinc.svg", False),
                 (_("Linear chirp"), sio.LinearChirpParam, "linear_chirp.svg", False),
                 (_("Step"), sio.StepParam, "step.svg", True),
@@ -1510,12 +1510,14 @@ class SignalActionHandler(BaseActionHandler):
             antialiasing_action.setChecked(Conf.sig_antialiasing.get(True))
             self.new_action(
                 _("Reset curve styles"),
-                select_condition=SelectCond.always,
+                select_condition=SelectCond.at_least_one_group_or_one_object,
                 icon_name="reset_curve_styles.svg",
                 triggered=self.panel.reset_curve_styles,
                 tip=_(
-                    "Curve styles are looped over a list of predefined styles.\n"
-                    "This action resets the list to its initial state."
+                    "Curves are given automatic styles according to their "
+                    "position on the plot.\n"
+                    "This action removes the colors and line styles chosen for "
+                    "the selected signals, which are given automatic styles again."
                 ),
                 toolbar_pos=-1,
             )
@@ -1754,7 +1756,7 @@ class ImageActionHandler(BaseActionHandler):
             self.new_action(
                 _("Resize") + "...",
                 triggered=self.panel.processor.compute_resize,
-                icon_name="resize.svg",
+                icon_name="datalab:resize.svg",
                 separator=True,
             )
             self.new_action(
@@ -1785,7 +1787,7 @@ class ImageActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.VIEW):
             showcontrast_action = self.new_action(
                 _("Show contrast panel"),
-                icon_name="contrast.png",
+                icon_name="contrast.svg",
                 tip=_("Show or hide contrast adjustment panel"),
                 select_condition=SelectCond.always,
                 toggled=self.panel.toggle_show_contrast,

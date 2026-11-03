@@ -13,12 +13,13 @@ from copy import deepcopy
 from typing import Any
 
 import numpy as np
-from guidata.dataset.conv import dataset_to_json, json_to_dataset
+from guidata.dataset.conv import dataset_to_json
 from guidata.dataset.datatypes import DataSet
 from qtpy import QtCore as QC
 from sigima.objects.base import BaseROI
 
 from datalab.config import _
+from datalab.utils.datasetjson import decode_dataset_json
 
 _TRUSTED_ROI_MODULE_PREFIX = "sigima."
 
@@ -169,7 +170,7 @@ def decode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
     for key, value in kwargs.items():
         if isinstance(value, dict) and _DATASET_MARKER in value:
             try:
-                decoded[key] = json_to_dataset(value[_DATASET_MARKER])
+                decoded[key] = decode_dataset_json(value[_DATASET_MARKER])
             except (TypeError, ValueError, KeyError):
                 warnings.warn(
                     _("Failed to deserialize history DataSet kwarg %r.") % key
@@ -192,7 +193,7 @@ def decode_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
                 decoded[key] = [
                     None
                     if item in (None, "", _DATASET_LIST_NONE_SENTINEL)
-                    else json_to_dataset(item)
+                    else decode_dataset_json(item)
                     for item in value[_DATASET_LIST_MARKER]
                 ]
             except (TypeError, ValueError, KeyError):
@@ -210,7 +211,7 @@ def copy_history_value(value: Any) -> Any:
     if callable(value):
         raise TypeError("History duplication does not support callable kwargs")
     if isinstance(value, DataSet):
-        return json_to_dataset(dataset_to_json(value))
+        return decode_dataset_json(dataset_to_json(value))
     if isinstance(value, BaseROI):
         return decode_roi(encode_roi(value))
     if isinstance(value, dict):

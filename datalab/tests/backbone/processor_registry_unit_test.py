@@ -4,7 +4,9 @@
 
 from __future__ import annotations
 
+import numpy as np
 import pytest
+import sigima.proc.image as sipi
 import sigima.proc.signal as sips
 
 from datalab.gui.processor.base import BaseProcessor, ComputingFeature
@@ -146,3 +148,46 @@ def test_implicit_plugin_feature_id_is_namespaced() -> None:
 
     assert feature.feature_id == "org.example.plugin:derivative"
     assert processor.get_feature("derivative") is feature
+
+
+def positive_part(values: np.ndarray) -> np.ndarray:
+    """NumPy function of a plugin, wrapped to process signals or images."""
+    return np.maximum(values, 0.0)
+
+
+@pytest.mark.parametrize("module", [sips, sipi], ids=["signal", "image"])
+def test_wrapped_numpy_function_is_a_1_to_1_feature(module) -> None:
+    """Plugins may register a NumPy function wrapped with ``Wrap1to1Func``."""
+    processor = ProcessorRegistryHarness()
+    function = module.Wrap1to1Func(positive_part)
+    feature = ComputingFeature(
+        pattern="1_to_1",
+        function=function,
+        title="Positive part",
+    )
+
+    processor.add_feature(feature, owner="org.example.plugin")
+
+    assert feature.name == "positive_part"
+    assert feature.feature_id == "org.example.plugin:positive_part"
+    assert processor.get_feature(function) is feature
+
+
+@pytest.mark.parametrize("pattern", ["1_to_0", "1_to_n", "n_to_1", "2_to_1"])
+def test_wrapped_numpy_function_is_only_a_1_to_1_feature(pattern: str) -> None:
+    """``Wrap1to1Func`` produces one object from one object only."""
+    with pytest.raises(ValueError, match="only applies to 1-to-1 features"):
+        ComputingFeature(
+            pattern=pattern,
+            function=sips.Wrap1to1Func(positive_part),
+            title="Positive part",
+        )
+
+
+def test_plain_function_is_refused_with_accepted_forms() -> None:
+    """Other callables are refused when registered, naming the accepted forms."""
+    with pytest.raises(ValueError, match="'positive_part' is not a valid") as error:
+        ComputingFeature(pattern="1_to_1", function=positive_part, title="Positive")
+
+    assert "computation_function()" in str(error.value)
+    assert "Wrap1to1Func" in str(error.value)

@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import csv
 import io
 import zipfile
 
@@ -39,6 +40,7 @@ def make_plugin_wheel(
     files: dict[str, str | bytes] | None = None,
     extra_files: dict[str, str | bytes] | None = None,
     extra_metadata: tuple[str, ...] = (),
+    record: bool = False,
 ) -> bytes:
     """Return the bytes of a DataLab plugin wheel.
 
@@ -84,4 +86,10 @@ def make_plugin_wheel(
         archive.writestr(f"{dist_info}/entry_points.txt", entry_points)
         if top_level is not None:
             archive.writestr(f"{dist_info}/top_level.txt", top_level)
+        if record:
+            rows = io.StringIO()
+            writer = csv.writer(rows, lineterminator="\n")
+            for name in [*archive.namelist(), f"{dist_info}/RECORD"]:
+                writer.writerow((name, "", ""))
+            archive.writestr(f"{dist_info}/RECORD", rows.getvalue())
     return buffer.getvalue()

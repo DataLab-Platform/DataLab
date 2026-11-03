@@ -182,7 +182,7 @@ close the dialog. The fitted circles are displayed on the image.
 
     .. image:: ../../images/tutorials/fabry_perot/12.png
 
-.. |show_results| image:: ../../../datalab/data/icons/analysis/show_results.svg
+.. |show_results| image:: ../../images/icons/show_results.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -315,7 +315,7 @@ To extract the intensity profile along the X axis, we have two options:
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |cross_section| image:: ../../images/tutorials/csection.png
+.. |cross_section| image:: ../../images/tutorials/csection.svg
 
 Let's try the first option: select the "Line profile..." entry |profile|.
 This is the most straightforward way to extract a profile from an image, and it
@@ -324,8 +324,8 @@ corresponds to the ``calc("line_profile")`` computation feature of DataLab's API
 entry |profile| in the "Operations" menu and the "Line profile" dialog will open, letting you
 select the profile row (for a horizontal profile) or column (for a vertical profile)
 on the image.
-You can also enter the row/column number directly by clicking on "parameters..." in the
-"Line profile" dialog.
+You can also enter the Y coordinate of the row (or the X coordinate of the column)
+directly by clicking on "parameters..." in the "Line profile" dialog.
 
 .. figure:: ../../images/tutorials/fabry_perot/24.png
 
@@ -333,8 +333,9 @@ You can also enter the row/column number directly by clicking on "parameters..."
 
 .. figure:: ../../images/tutorials/fabry_perot/25.png
 
-    The "Profile" dialog opens. Enter the row of the horizontal profile
-    (or the column of the vertical profile) in the dialog box that opens. Click "OK".
+    The "Profile" dialog opens. Enter the Y coordinate of the horizontal profile
+    (or the X coordinate of the vertical profile) in the dialog box that opens.
+    Click "OK".
 
 After clicking "OK", the intensity profile along the X axis is computed and
 displayed in the "Signals" panel. DataLab automatically switches to the "Signals"
@@ -378,7 +379,7 @@ Click on the "Process signal" button |to_signal| in the toolbar near the
 profile to transfer the profile to the "Signals" panel. The intensity profile is added
 to the "Signals" panel, and DataLab switches to this panel to display the profile.
 
-.. |to_signal| image:: ../../../datalab/data/icons/to_signal.svg
+.. |to_signal| image:: ../../images/icons/to_signal.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -397,7 +398,7 @@ the annotations.
     Save the workspace to a file with "File > Save to HDF5 file...",
     or the |filesave_h5| button in the toolbar.
 
-.. |filesave_h5| image:: ../../../datalab/data/icons/io/filesave_h5.svg
+.. |filesave_h5| image:: ../../images/icons/filesave_h5.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
@@ -407,12 +408,12 @@ If you want to load the workspace again, you can use the "File > Open HDF5 file.
 "File > Browse HDF5 file..." (or the |h5browser| button in the toolbar) to load
 only a selection of data sets from the workspace.
 
-.. |fileopen_h5| image:: ../../../datalab/data/icons/io/fileopen_h5.svg
+.. |fileopen_h5| image:: ../../images/icons/fileopen_h5.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link
 
-.. |h5browser| image:: ../../../datalab/data/icons/h5/h5browser.svg
+.. |h5browser| image:: ../../images/icons/h5browser.svg
     :width: 24px
     :height: 24px
     :class: dark-light no-scaled-link

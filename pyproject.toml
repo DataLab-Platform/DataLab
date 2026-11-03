@@ -26,7 +26,6 @@ classifiers = [
     "Operating System :: Microsoft :: Windows :: Windows 10",
     "Operating System :: Microsoft :: Windows :: Windows 11",
     "Operating System :: POSIX :: Linux",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -39,20 +38,21 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Software Development :: Widget Sets",
 ]
-requires-python = ">=3.9, <4"
+requires-python = ">=3.10, <4"
 dependencies = [
-    "guidata >= 3.16.0",
-    "PlotPy >= 2.11.0",
-    "Sigima >= 1.3.0",
+    "guidata >= 3.17.2",
+    "PlotPy >= 2.12.1",
+    "Sigima >= 1.4.0",
     "SigimaX >= 1.1.0",
     "datalab-capsule >= 0.1.0, < 0.2",
-    "NumPy >= 1.22, < 2.5",
-    "SciPy >= 1.10.1, < 1.17",
+    "NumPy >= 1.22, < 2.6",
+    "SciPy >= 1.10.1, < 1.19",
     "scikit-image >= 0.19.2, < 0.27",
     "pandas >= 1.4, < 3.1",
     "PyWavelets >= 1.2, < 2.0",
     "psutil >= 5.8",
     "packaging >= 21.3",
+    "pip >= 22.2",
     "jedi >= 0.18.2",
     # Web API server for HTTP/JSON remote control and notebook integration
     "fastapi >= 0.110.0",
@@ -67,7 +67,7 @@ Documentation = "https://datalab-platform.com/"
 
 [project.gui-scripts]
 datalab = "datalab.app:run"
-datalab-demo = "datalab.tests.scenarios.demo:run"
+datalab-demo = "datalab.gui.demo:run"
 datalab-tests = "datalab.tests:run"
 
 [project.scripts]
@@ -149,6 +149,11 @@ filterwarnings = [
     # Ignore specific user warnings from Sigima (expected behavior)
     "ignore:Multiple crossing points found. Returning first.:UserWarning:sigima.*",
     "ignore:Multiple crossing points found. Returning last.:UserWarning:sigima.*",
+    #
+    # ⚠️ Filters on a category of guidata, PlotPy, Sigima or DataLab belong to
+    #    datalab/tests/conftest.py: here, pytest would import the module of the
+    #    category first, which loads its translations in the system language,
+    #    before the tests can switch to English
 ]
 
 [tool.ruff]
@@ -163,7 +168,7 @@ exclude = [
 ]
 line-length = 88                               # Same as Black.
 indent-width = 4                               # Same as Black.
-target-version = "py39"                        # Assume Python 3.9.
+target-version = "py310"                       # Assume Python 3.10.
 
 [tool.ruff.lint]
 # all rules can be found here: https://beta.ruff.rs/docs/rules/

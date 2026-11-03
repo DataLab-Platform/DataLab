@@ -1079,6 +1079,58 @@ def test_replay_recreates_deleted_output_under_recorded_uuid() -> None:
         assert parameters.source_uuid == source_uuid
 
 
+@pytest.mark.parametrize("record", (False, True))
+def test_group_deletion_warns_only_for_unreconnectable_operations(
+    record: bool,
+) -> None:
+    """Deleting raw signals whose results live in another group shows no message;
+    deleting the processed group then lists its recorded operation only once."""
+    with datalab_test_app_context(history=True) as win:
+        history, panel = win.historypanel, win.signalpanel
+        history.toggle_record_mode(record)
+        raw_group = panel.add_group("Raw")
+        for _index in range(3):
+            win.add_object(create_paracetamol_signal(), get_uuid(raw_group))
+        raw_uuids = panel.objmodel.get_object_ids()
+        panel.objview.select_groups([get_uuid(raw_group)])
+        panel.processor.run_feature(
+            sips.normalize, sigima.params.NormalizeParam.create(method="maximum")
+        )
+        normalize_title = history[len(history)].title if record else None
+        normalized_group = panel.objmodel.get_groups()[-1]
+        normalized_uuids = [get_uuid(obj) for obj in normalized_group.get_objects()]
+        panel.objview.select_groups([get_uuid(normalized_group)])
+        panel.processor.run_feature(
+            sips.moving_average, sigima.params.MovingAverageParam.create(n=3)
+        )
+        averaged_group = panel.objmodel.get_groups()[-1]
+        averaged_uuids = [get_uuid(obj) for obj in averaged_group.get_objects()]
+        with (
+            patch.object(hchain, "execenv", SimpleNamespace(unattended=False)),
+            patch.object(hchain.QW, "QMessageBox") as message_box,
+        ):
+            panel.objview.select_groups([get_uuid(raw_group)])
+            panel.remove_object(force=True)
+            message_box.warning.assert_not_called()
+            assert [
+                extract_processing_parameters(panel.objmodel[uuid]).source_uuid
+                for uuid in normalized_uuids
+            ] == raw_uuids
+
+            panel.objview.select_groups([get_uuid(normalized_group)])
+            panel.remove_object(force=True)
+            if record:
+                message_box.warning.assert_called_once()
+                text = message_box.warning.call_args.args[2]
+                assert text.count("• ") == 1 and text.count(normalize_title) == 1
+            else:
+                message_box.warning.assert_not_called()
+        assert [
+            extract_processing_parameters(panel.objmodel[uuid]).source_uuid
+            for uuid in averaged_uuids
+        ] == normalized_uuids
+
+
 def test_deletion_reconnects_and_splices_chain() -> None:
     """Reconnect after data deletion, then splice the producing action."""
     with datalab_test_app_context(history=True) as win:

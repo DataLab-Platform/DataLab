@@ -151,11 +151,17 @@ def test_append_never_attributes_recorded_provenance() -> None:
             assert win.provenance.capture_failures == 0
 
 
+#: Workspace file names, including a name with a comma (it does not select a
+#: dataset, see :func:`sigimax.h5.utils.split_h5_file_selector`)
+FILE_NAMES = ["chain.h5", "chain,v2.h5"]
+
+
 @pytest.mark.usefixtures("ask")
-def test_question_states_the_limitation_first(monkeypatch) -> None:
+@pytest.mark.parametrize("name", FILE_NAMES)
+def test_question_states_the_limitation_first(monkeypatch, name: str) -> None:
     """Files are chosen first; the question alone states the limitation."""
     with helpers.WorkdirRestoringTempDir() as tmpdir:
-        path = osp.join(tmpdir, "chain.h5")
+        path = osp.join(tmpdir, name)
         _save_chain(path)
         plain = _without_block(path, osp.join(tmpdir, "plain.h5"))
         with app() as win:
@@ -217,10 +223,11 @@ def test_answer_yes_still_warns_before_appending_the_next_files(monkeypatch) -> 
 
 
 @pytest.mark.usefixtures("ask")
-def test_cancelled_append_is_not_recorded_in_history(monkeypatch) -> None:
+@pytest.mark.parametrize("name", FILE_NAMES)
+def test_cancelled_append_is_not_recorded_in_history(monkeypatch, name: str) -> None:
     """Opening a file whose appending was cancelled leaves no History entry."""
     with helpers.WorkdirRestoringTempDir() as tmpdir:
-        path = osp.join(tmpdir, "chain.h5")
+        path = osp.join(tmpdir, name)
         _save_chain(path)
         with app(history=True) as win:
             build_chain(win)

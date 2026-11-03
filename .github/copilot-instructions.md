@@ -19,7 +19,7 @@ This document provides comprehensive guidance for AI coding agents working on th
 
 ### Technology Stack
 
-- **Python**: 3.9+ (using `from __future__ import annotations`)
+- **Python**: 3.10+ (using `from __future__ import annotations`)
 - **Core Libraries**: NumPy (>=1.22), SciPy (>=1.10.1), scikit-image (>=0.19.2), OpenCV (optional)
 - **GUI**: Qt via PlotPy (>=2.8.2) and guidata (>=3.13.4)
 - **Computation**: Sigima (>=1.1.2) - separate package
@@ -179,7 +179,14 @@ python scripts/run_with_env.py python -m sphinx build doc build/doc -b html -D l
 **Example: Implementing a New Processing Feature**
 
 ```python
-# 1. Implement computation in Sigima (sigima/proc/signal/processing.py)
+# 1. Implement computation in Sigima (sigima/proc/signal/processing.py), with its
+#    operation contract (see "Adding a New Signal Processing Feature" for the
+#    contract versioning rule)
+@computation_function(
+    operation_id="sigima.signal.my_processing_func",
+    contract_version=1,
+    qualification=ReplayQualification(contract_version=1, comparison=EXACT),
+)
 def my_processing_func(src: SignalObj, param: MyParam) -> SignalObj:
     """My processing function."""
     dst = src.copy()
@@ -546,14 +553,31 @@ menu_title = "Processing"  # Not translatable!
 
 **Complete workflow**:
 
-1. **Implement computation in Sigima** (`sigima/proc/signal/processing.py`):
+1. **Implement computation in Sigima** (`sigima/proc/signal/processing.py`), with its
+   operation contract (identifier, version, replay qualification):
    ```python
+   @computation_function(
+       operation_id="sigima.signal.my_feature",
+       contract_version=1,
+       qualification=ReplayQualification(contract_version=1, comparison=EXACT),
+   )
    def my_feature(src: SignalObj, param: MyParam | None = None) -> SignalObj:
        """My feature."""
        dst = src.copy()
        # ... computation ...
        return dst
    ```
+
+   **Contract versioning rule (mandatory)**: when a change of an existing Sigima computation
+   function changes the result it returns (values, outputs, defaults, parameters, inputs now
+   refused), increase its `contract_version` (and its qualification) in Sigima in the same change,
+   **whatever the releases of DataLab**: Sigima is a reference of its own. Only previously refused
+   inputs now accepted, changes without effect on the result, or changes covered by a versioned
+   rule of the execution context (image ROI convention, X alignment) do not require it. The 1.4
+   exception (contracts kept at version 1) was one-off and does not apply anymore. Then update the
+   DataLab provenance tests that check a contract version
+   (`datalab/tests/features/common/provenance_*_test.py`). Full rules: Sigima
+   `doc/contributing/guidelines.rst` and `doc/user_guide/contracts.rst`.
 
 2. **Export from Sigima** (`sigima/proc/signal/__init__.py`):
    ```python

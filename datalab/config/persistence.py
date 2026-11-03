@@ -117,8 +117,16 @@ EXPECTED_UNCATEGORIZED: frozenset[str] = frozenset(
         "app_copyright",
         "splash_image_path",
         "splash_show_progress",
+        "watermark_image_path",
         "datetime_format",
     }
+)
+
+#: ``(section, key)`` INI options written by earlier versions that must no longer
+#: be read, and are removed when the configuration is loaded.
+OBSOLETE_INI_OPTIONS: tuple[tuple[str, str], ...] = (
+    # Absolute path of the installation that wrote it (DataLab 1.3)
+    ("view", "watermark_image_path"),
 )
 
 
@@ -208,6 +216,25 @@ def remove_persisted_option(
         conf.remove_option(section, key)
     conf.save()
     return True
+
+
+def remove_obsolete_ini_options(conf: UserConfig) -> bool:
+    """Remove the INI options listed in :data:`OBSOLETE_INI_OPTIONS`.
+
+    Args:
+        conf: The ``UserConfig`` INI backend to clean up.
+
+    Returns:
+        True if at least one option was removed, False otherwise.
+    """
+    removed = False
+    for section, key in OBSOLETE_INI_OPTIONS:
+        if conf.has_option(section, key):
+            conf.remove_option(section, key)
+            removed = True
+    if removed:
+        conf.save()
+    return removed
 
 
 def _iter_persisted_field_names(options: DataLabOptions):
@@ -308,6 +335,9 @@ def load_options_from_ini(
 ) -> None:
     """Load all mapped option values from the INI backend into the container.
 
+    Obsolete options (see :data:`OBSOLETE_INI_OPTIONS`) are removed from the
+    backend.
+
     Args:
         options: The DataLab options container to populate.
         conf: The ``UserConfig`` INI backend to read from (defaults to the
@@ -319,6 +349,7 @@ def load_options_from_ini(
         if location is None:
             continue
         _load_field(options, conf, field_name, *location)
+    remove_obsolete_ini_options(conf)
 
 
 def save_options_to_ini(

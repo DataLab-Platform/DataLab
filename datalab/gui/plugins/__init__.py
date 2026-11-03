@@ -5,6 +5,6 @@ Plugin GUI
 ==========
 
 The :mod:`datalab.gui.plugins` package contains the Qt user interface of the
-plugin system: the Applications catalog, the plugin configuration dialog, the
+plugin system: the Applications panel, the plugin configuration dialog, the
 instrument window and the generic Desktop interaction running plugin recipes.
 """

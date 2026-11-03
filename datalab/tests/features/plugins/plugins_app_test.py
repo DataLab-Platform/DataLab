@@ -14,12 +14,15 @@ import importlib
 import importlib.util
 import os
 import os.path as osp
+import shutil
 from contextlib import contextmanager
 from pathlib import Path
 from unittest.mock import patch
 
+import numpy as np
 import pytest
 from qtpy import QtWidgets as QW
+from sigima.objects import create_image
 from sigima.tests.data import create_paracetamol_signal
 
 from datalab.config import Conf
@@ -643,6 +646,114 @@ def test_plugin_computation_registration_rollback():
                 assert feature_id not in win.signalpanel.processor.computing_registry
 
 
+APPLICATION_PLUGIN_SOURCE = """\
+from datalab.plugins import PluginBase, PluginCapability, PluginInfo
+from datalab.plugins.recipes import (
+    RecipeDescriptor,
+    RecipeInputSlot,
+    RecipeMetadataRequirement,
+    RecipeOutcome,
+)
+
+
+class {class_name}(PluginBase):
+    PLUGIN_INFO = PluginInfo(
+        id="{plugin_id}",
+        name="{class_name}",
+        version="1.1.0",
+        capabilities=frozenset({{PluginCapability.APPLICATION}}),
+    )
+    RECIPES = (
+        RecipeDescriptor(
+            recipe_id="{plugin_id}:check",
+            plugin_version="{recipe_plugin_version}",
+            title="Check",
+            version="1.0",
+            run=lambda *_args: RecipeOutcome(),
+            inputs=(
+                RecipeInputSlot(
+                    "frames",
+                    "image",
+                    "many",
+                    metadata=(RecipeMetadataRequirement("{metadata_key}", "Key"),),
+                ),
+            ),
+        ),
+    )
+
+    def create_actions(self):
+        pass
+"""
+
+
+@enabled_plugins_context()
+def test_invalid_application_plugin_does_not_prevent_startup():
+    """An application plugin with invalid declarations is not loaded (Issue #484).
+
+    It is reported as a failed plugin, while DataLab starts and reloads its
+    plugins normally: the Applications panel and the metadata keys expected by
+    application methods only come from the valid plugins.
+    """
+    valid_id = "org.example.valid-application"
+    invalid_id = "org.example.invalid-application"
+    with temporary_plugin_dir() as plugin_dir:
+        for filename, class_name, plugin_id, recipe_plugin_version, key in (
+            (
+                "datalab_test_plugin_valid_application.py",
+                "ValidApplicationPlugin",
+                valid_id,
+                "1.1.0",
+                "valid_key",
+            ),
+            (
+                "datalab_test_plugin_invalid_application.py",
+                "InvalidApplicationPlugin",
+                invalid_id,
+                # Plugin version bumped, recipe forgotten
+                "1.0.0",
+                "invalid_key",
+            ),
+        ):
+            with open(
+                osp.join(plugin_dir, filename), "w", encoding="utf-8"
+            ) as plugin_file:
+                plugin_file.write(
+                    APPLICATION_PLUGIN_SOURCE.format(
+                        class_name=class_name,
+                        plugin_id=plugin_id,
+                        recipe_plugin_version=recipe_plugin_version,
+                        metadata_key=key,
+                    )
+                )
+
+        def check_plugins(win: DLMainWindow) -> None:
+            """Check that only the valid application plugin is loaded."""
+            assert PluginRegistry.get_plugin(valid_id) is not None
+            assert PluginRegistry.get_plugin(invalid_id) is None
+            failed_plugin = next(
+                failed
+                for failed in PluginRegistry.get_failed_plugins()
+                if failed.name == "InvalidApplicationPlugin"
+            )
+            assert "plugin version does not match" in failed_plugin.traceback
+            shown_ids = [
+                page.plugin.plugin_id
+                for page in win.applicationspanel.application_pages
+            ]
+            assert valid_id in shown_ids and invalid_id not in shown_ids
+            keys = [key for key, _desc in win.imagepanel.get_known_metadata_keys([])]
+            assert "valid_key" in keys and "invalid_key" not in keys
+
+        # Outside tests, plugin errors are reported instead of raised
+        with patch("sigimax.utils.qthelpers.is_running_tests", return_value=False):
+            with datalab_test_app_context(console=False) as win:
+                QW.QApplication.processEvents()
+                check_plugins(win)
+                win.reload_plugins()
+                QW.QApplication.processEvents()
+                check_plugins(win)
+
+
 @enabled_plugins_context()
 def test_plugin_nested_menus():
     """Test plugin with nested submenus (3 levels deep)"""
@@ -812,6 +923,77 @@ def test_plugin_examples_import() -> None:
         assert spec.loader is not None
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
+
+
+#: Shipped example plugins, by module, with the stable ID of their plugin class
+#: (the image format example only declares a file format)
+SHIPPED_EXAMPLES = {
+    "datalab_custom_func": "org.datalab.examples.custom-filters",
+    "datalab_example_dialogs": "org.datalab.examples.dialog-methods",
+    "datalab_example_empty": "org.datalab.examples.empty",
+    "datalab_example_imageformat": None,
+    "datalab_example_imageproc": "org.datalab.examples.extract-blobs",
+    "datalab_example_nested_menus": "org.datalab.examples.nested-menus",
+    "datalab_exemple_contour_plot": "org.datalab.examples.contour-plot",
+}
+
+
+def _run_custom_filter(win: DLMainWindow) -> np.ndarray:
+    """Run the processing of the custom function example on a new image.
+
+    Returns:
+        Data of the processed image
+    """
+    menus = [
+        item
+        for item in win.imagepanel.get_category_actions(ActionCategory.PLUGINS)
+        if isinstance(item, QW.QMenu) and item.title() == "My custom filters"
+    ]
+    assert len(menus) == 1, "'My custom filters' menu not found"
+    menus[0].aboutToShow.emit()
+    assert [action.text() for action in menus[0].actions()] == [
+        "Weighted average denoise"
+    ]
+    data = np.arange(64, dtype=float).reshape(8, 8)
+    win.imagepanel.add_object(create_image("Ramp", data))
+    count = len(win.imagepanel)
+    win.imagepanel.processor.run_feature(
+        "org.datalab.examples.custom-filters:weighted-average-denoise"
+    )
+    assert len(win.imagepanel) == count + 1
+    return win.imagepanel[len(win.imagepanel)].data
+
+
+@enabled_plugins_context()
+def test_shipped_plugin_examples_load_in_datalab() -> None:
+    """All shipped examples load in DataLab, and their processing runs."""
+    examples_dir = Path(__file__).parents[4] / "plugins" / "examples"
+    assert {path.stem for path in examples_dir.glob("*.py")} == set(SHIPPED_EXAMPLES)
+    with temporary_plugin_dir(module_prefixes=tuple(SHIPPED_EXAMPLES)) as plugin_dir:
+        for module_name in SHIPPED_EXAMPLES:
+            shutil.copy(examples_dir / f"{module_name}.py", plugin_dir)
+        spec = importlib.util.spec_from_file_location(
+            "custom_func_reference", examples_dir / "datalab_custom_func.py"
+        )
+        reference = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(reference)
+        expected = reference.weighted_average_denoise(
+            np.arange(64, dtype=float).reshape(8, 8)
+        )
+
+        with datalab_test_app_context(console=False) as win:
+            for _reload in range(2):
+                failed = [
+                    failed.name
+                    for failed in PluginRegistry.get_failed_plugins()
+                    if failed.name.split(".")[0] in SHIPPED_EXAMPLES
+                ]
+                assert not failed, f"Example plugins failed to load: {failed}"
+                for plugin_id in filter(None, SHIPPED_EXAMPLES.values()):
+                    assert PluginRegistry.get_plugin(plugin_id) is not None, plugin_id
+                assert np.allclose(_run_custom_filter(win), expected)
+                win.reload_plugins()
+                QW.QApplication.processEvents()
 
 
 if __name__ == "__main__":

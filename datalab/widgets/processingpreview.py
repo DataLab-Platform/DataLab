@@ -10,7 +10,7 @@ from guidata.configtools import get_icon
 from guidata.dataset import DataSet, update_dataset
 from guidata.dataset.backends import get_handler
 from guidata.dataset.qtwidgets import DataSetEditLayout
-from guidata.qthelpers import exec_dialog, win32_fix_title_bar_background
+from guidata.qthelpers import exec_dialog
 from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
@@ -403,7 +403,6 @@ class ProcessingPreviewDialog(QW.QDialog):
         controller_factory: Callable = PreviewController,
     ) -> None:
         super().__init__(parent)
-        win32_fix_title_bar_background(self)
         self.instance = copy.deepcopy(instance)
         self._original = instance
         self.preview_result = None

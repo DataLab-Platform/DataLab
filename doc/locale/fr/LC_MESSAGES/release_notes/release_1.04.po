@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Language: fr\n"
@@ -17,6 +16,18 @@ msgstr "Version 1.4"
 
 msgid "DataLab Version 1.4.0"
 msgstr "DataLab Version 1.4.0"
+
+msgid "Requirements"
+msgstr "Prérequis"
+
+msgid "The Python package and newly generated plugin projects now require Python 3.10 or later. Python 3.9 users must keep an earlier compatible release. The standalone application continues to include its own Python interpreter."
+msgstr "Le package Python et les nouveaux projets de plugins générés exigent désormais Python 3.10 ou ultérieur. Les utilisateurs de Python 3.9 doivent conserver une version antérieure compatible. L'application autonome continue d'inclure son propre interpréteur Python."
+
+msgid "The Windows test runner excludes Python 3.9 from current matrices, while retaining explicit tests of pinned historical releases."
+msgstr "Le lanceur de tests Windows exclut Python 3.9 des matrices courantes, tout en conservant les tests explicites de versions historiques précisément sélectionnées."
+
+msgid "guidata 3.17.2 or later is required: it gives every window a title bar following the color theme on Windows, including the windows of plugins (closes [Issue #492](https://github.com/DataLab-Platform/DataLab/issues/492))."
+msgstr "guidata 3.17.2 ou ultérieur est requis : il donne à chaque fenêtre une barre de titre suivant le thème de couleurs sous Windows, y compris aux fenêtres des plugins (corrige [Issue #492](https://github.com/DataLab-Platform/DataLab/issues/492))."
 
 msgid "✨ New Features"
 msgstr "✨ Nouvelles fonctionnalités"
@@ -54,14 +65,20 @@ msgstr "Les aperçus terminés conservent leur processus dédié prêt pour les 
 msgid "Bounded numeric parameters now offer sliders alongside precise text entry. The Processing tab retains Apply and automatic re-processing, with updates deferred until slider release and valid input."
 msgstr "Les paramètres numériques bornés proposent désormais des curseurs en complément d'une saisie textuelle précise. L'onglet Traitement conserve Appliquer et le retraitement automatique, avec des mises à jour différées jusqu'au relâchement du curseur et à une saisie valide."
 
+msgid "**Plugin status:**"
+msgstr "**Statut des plugins :**"
+
+msgid "Click the **Plugins:** label in the status bar to open **Configure plugins...**, as with the Web API and internal console status labels. The shortcut is available whenever plugins are globally enabled, including when no plugins are loaded or a plugin fails to load."
+msgstr "Cliquez sur le libellé **Plugins :** de la barre de statut pour ouvrir **Configurer les plugins...**, comme avec les libellés de statut de l'API Web et de la console interne. Le raccourci est disponible lorsque les plugins sont globalement activés, y compris lorsqu'aucun plugin n'est chargé ou qu'un plugin n'a pas pu être chargé."
+
 msgid "**Application plugins:**"
 msgstr "**Plugins d'application :**"
 
-msgid "Added a top-level **Applications** entry that presents active scientific application plugins in a dedicated catalog"
-msgstr "Ajout d'une entrée de premier niveau **Applications** qui présente les plugins d'application scientifique actifs dans un catalogue dédié"
+msgid "Added a top-level **Applications** entry that shows the active scientific application plugins in a new **Applications** panel"
+msgstr "Ajout d'une entrée de premier niveau **Applications** qui présente les plugins d'application scientifique actifs dans un nouveau panneau **Applications**"
 
-msgid "Each application displays its description, identity, version, methods, tools, and examples; processing-only plugins remain outside this focused view"
-msgstr "Chaque application affiche sa description, son identité, sa version, ses méthodes, ses outils et ses exemples ; les plugins de traitement seul restent en dehors de cette vue ciblée"
+msgid "Each application displays its description, version, methods, tools, and examples; processing-only plugins remain outside this focused view"
+msgstr "Chaque application affiche sa description, sa version, ses méthodes, ses outils et ses exemples ; les plugins de traitement seul restent en dehors de cette vue ciblée"
 
 msgid "Each method shows the inputs it expects (object type and count, required metadata) and a live status telling whether the current selection can be analyzed, and why not"
 msgstr "Chaque méthode présente les entrées qu'elle attend (type et nombre d'objets, métadonnées requises) et un statut mis à jour indiquant si la sélection courante peut être analysée, et sinon pourquoi"
@@ -69,71 +86,104 @@ msgstr "Chaque méthode présente les entrées qu'elle attend (type et nombre d'
 msgid "When required metadata are missing, the status points to **Edit > Metadata > Add metadata...**, whose **Known keys** list also offers the keys expected by application methods; the status is updated as soon as objects are modified"
 msgstr "Lorsque des métadonnées requises manquent, le statut renvoie vers **Édition > Métadonnées > Ajouter des métadonnées...**, dont la liste **Clés connues** propose aussi les clés attendues par les méthodes des applications ; le statut est mis à jour dès que des objets sont modifiés"
 
-msgid "**Run on selection...** starts a method directly when the selection is ready, and asks for the input assignment only when it is ambiguous or invalid; the assignment dialog checks the chosen objects before the run can continue"
-msgstr "**Exécuter sur la sélection...** lance directement une méthode lorsque la sélection convient, et ne demande l'affectation des entrées que si elle est ambiguë ou invalide ; la boîte de dialogue d'affectation vérifie les objets choisis avant de permettre l'exécution"
+msgid "**Run...** starts a method on the current selection directly when the selection is ready, and asks for the input assignment only when it is ambiguous or invalid; the assignment dialog checks the chosen objects before the run can continue"
+msgstr "**Exécuter...** lance directement une méthode sur la sélection courante lorsque celle-ci convient, et ne demande l'affectation des entrées que si elle est ambiguë ou invalide ; la boîte de dialogue d'affectation vérifie les objets choisis avant de permettre l'exécution"
 
 msgid "Examples are listed under the methods they are designed for: **Try with this example** opens the example, prefills the method parameters, and runs the method once they are accepted. One example may serve several methods, and examples designed for no method are listed as datasets"
 msgstr "Les exemples sont listés sous les méthodes pour lesquelles ils sont conçus : **Essayer avec cet exemple** ouvre l'exemple, préremplit les paramètres de la méthode et exécute celle-ci une fois qu'ils sont acceptés. Un exemple peut servir plusieurs méthodes, et les exemples conçus pour aucune méthode sont listés comme jeux de données"
 
-msgid "Application plugins may also list tools, such as wizards or editors, in the catalog"
-msgstr "Les plugins d'application peuvent aussi lister des outils, comme des assistants ou des éditeurs, dans le catalogue"
+msgid "Application plugins may also list tools, such as wizards or editors, in the **Applications** panel"
+msgstr "Les plugins d'application peuvent aussi lister des outils, comme des assistants ou des éditeurs, dans le panneau **Applications**"
 
-msgid "Plugin tools also appear in the plugin's submenu of the **Plugins** menu, in the Signal or Image panel they work on. A tool that needs a selection is disabled until the right objects are selected, and its catalog button tells what to select"
-msgstr "Les outils de plugin apparaissent aussi dans le sous-menu du plugin du menu **Plugins**, dans le panneau Signal ou Image sur lequel ils travaillent. Un outil qui a besoin d'une sélection est désactivé jusqu'à ce que les bons objets soient sélectionnés, et son bouton dans le catalogue indique quoi sélectionner"
+msgid "Plugin tools also appear in the plugin's submenu of the **Plugins** menu, in the Signal or Image panel they work on. A tool that needs a selection is disabled until the right objects are selected, and its button in the **Applications** panel tells what to select"
+msgstr "Les outils de plugin apparaissent aussi dans le sous-menu du plugin du menu **Plugins**, dans le panneau Signal ou Image sur lequel ils travaillent. Un outil qui a besoin d'une sélection est désactivé jusqu'à ce que les bons objets soient sélectionnés, et son bouton dans le panneau **Applications** indique quoi sélectionner"
 
 msgid "Application plugins may provide instruments, such as simulated cameras or oscilloscopes, without writing any user interface: DataLab shows a window with a live view and the instrument settings, refreshed as settings change or continuously in **Live** mode, and **Acquire** adds the acquired objects to a new group, ready for the application's methods"
 msgstr "Les plugins d'application peuvent fournir des instruments, comme des caméras ou des oscilloscopes simulés, sans écrire d'interface utilisateur : DataLab affiche une fenêtre avec une vue en direct et les réglages de l'instrument, rafraîchie à chaque modification des réglages ou en continu en mode **En direct**, et **Acquérir** ajoute les objets acquis dans un nouveau groupe, prêts pour les méthodes de l'application"
 
+msgid "The **New group** option of the instrument window may be turned off to add the next acquisitions to the current group of the panel instead of creating a group for each of them. The option and the current group are taken when **Acquire** is clicked, so that selecting another group during an acquisition does not change its destination. Each instrument sets the default state of the option, and the choice of the user is remembered for each instrument"
+msgstr "L'option **Nouveau groupe** de la fenêtre d'instrument peut être désactivée pour ajouter les acquisitions suivantes au groupe courant du panneau, au lieu de créer un groupe pour chacune d'elles. L'option et le groupe courant sont pris en compte au clic sur **Acquérir**, de sorte que sélectionner un autre groupe pendant une acquisition ne change pas sa destination. Chaque instrument définit l'état par défaut de l'option, et le choix de l'utilisateur est mémorisé pour chaque instrument"
+
+msgid "Instruments are called outside the user interface thread, one call at a time: a slow instrument, such as a real device waiting for its data, no longer freezes DataLab, and repeated refresh requests made meanwhile are merged. Instruments may also declare `open` and `close` methods, called when their window opens and closes (including when plugins are reloaded or DataLab quits), for example to connect to a device and to release it. Calls stay one at a time when a window is closed and opened again while a call is running. When `open` fails, its message stays in the window and the instrument is opened again before the next refresh or acquisition, for example after a settings change"
+msgstr "Les instruments sont appelés en dehors du fil d'exécution de l'interface utilisateur, un appel à la fois : un instrument lent, comme un appareil réel attendant ses données, ne fige plus DataLab, et les demandes de rafraîchissement répétées entre-temps sont regroupées. Les instruments peuvent aussi déclarer des méthodes `open` et `close`, appelées à l'ouverture et à la fermeture de leur fenêtre (y compris lors du rechargement des plugins ou de la fermeture de DataLab), par exemple pour se connecter à un appareil puis le libérer. Les appels restent successifs lorsqu'une fenêtre est fermée puis rouverte pendant un appel. Lorsque `open` échoue, son message reste affiché dans la fenêtre et l'instrument est ouvert à nouveau avant le rafraîchissement ou l'acquisition suivant, par exemple après une modification des réglages"
+
 msgid "Plugin developers describe recipe inputs declaratively (titles, minimum counts, metadata requirements) and may add binding suggestions and fast input checks; every recipe then runs through DataLab's generic launcher, without plugin-specific input dialogs"
 msgstr "Les développeurs de plugins décrivent les entrées des recettes de manière déclarative (titres, effectifs minimaux, métadonnées requises) et peuvent ajouter des suggestions d'affectation et des vérifications rapides des entrées ; chaque recette s'exécute alors via le lanceur générique de DataLab, sans boîte de dialogue d'entrées propre au plugin"
 
-msgid "The catalog is non-modal and remains open after starting a method or opening an example, so users may continue interacting with the DataLab workspace"
-msgstr "Le catalogue est non modal et reste ouvert après le lancement d'une méthode ou l'ouverture d'un exemple, de sorte que l'utilisateur peut continuer à interagir avec l'espace de travail DataLab"
+msgid "The **Applications** panel is a regular panel that does not hide the DataLab workspace: the first time, it floats beside the main window, as high as this window, so that the data and their views stay in sight while using it. It may then be docked (for example next to the list of signals or images whose selection it analyzes), tabified with another panel or left floating, and DataLab shows it again where the user left it, with the same size; when it is requested while already shown, without switching to another application, it flashes briefly to show where it is. It remains open after starting a method or opening an example"
+msgstr "Le panneau **Applications** est un panneau comme les autres, qui ne masque pas l'espace de travail de DataLab : la première fois, il s'affiche en fenêtre flottante à côté de la fenêtre principale, sur toute la hauteur de celle-ci, afin que les données et leurs vues restent visibles pendant son utilisation. Il peut ensuite être ancré (par exemple à côté de la liste des signaux ou des images dont il analyse la sélection), regroupé en onglets avec un autre panneau ou laissé flottant, et DataLab l'affiche à nouveau là où l'utilisateur l'a laissé, avec la même taille ; lorsqu'il est demandé alors qu'il est déjà affiché, sans changer d'application, il clignote brièvement pour indiquer où il se trouve. Il reste ouvert après le lancement d'une méthode ou l'ouverture d'un exemple"
 
-msgid "The methods, tools and datasets of an application form an accordion: one section is open at a time, and a colored dot tells, without opening it, whether each method can run on the current selection"
-msgstr "Les méthodes, outils et jeux de données d'une application forment un accordéon : une seule section est ouverte à la fois, et une pastille de couleur indique, sans l'ouvrir, si chaque méthode peut s'exécuter sur la sélection courante"
+msgid "The panel stays compact and readable when docked: each method takes one row, with a colored dot and a short text telling whether the current selection can be analyzed, and a **Run...** button; below the list, a **Details** area gives the full details of the selected method (description, reasons of its status, expected inputs with the description and the key of their metadata, examples). The result of the last run of a method is shown below its row. The sections of the list may be collapsed, and the height of the details set with a splitter: DataLab remembers these choices"
+msgstr "Le panneau reste compact et lisible lorsqu'il est ancré : chaque méthode occupe une ligne, avec une pastille de couleur et un court texte indiquant si la sélection courante peut être analysée, et un bouton **Exécuter...** ; sous la liste, une zone **Détails** donne tous les détails de la méthode sélectionnée (description, raisons de son statut, entrées attendues avec la description et la clé de leurs métadonnées, exemples). Le résultat de la dernière exécution d'une méthode s'affiche sous sa ligne. Les sections de la liste peuvent être repliées, et la hauteur des détails réglée à l'aide d'un séparateur : DataLab mémorise ces choix"
 
-msgid "The application list of the catalog may be hidden with the strip separating it from the application page: the window shrinks accordingly, and the choice is remembered"
-msgstr "La liste des applications du catalogue peut être masquée à l'aide de la bande qui la sépare de la page de l'application : la fenêtre se réduit en conséquence, et ce choix est mémorisé"
+msgid "When several application plugins are installed, their number is shown at the top of the panel, above the list selecting the application; the documentation and welcome page options of the application are in the menu next to it"
+msgstr "Lorsque plusieurs plugins d'application sont installés, leur nombre est indiqué en haut du panneau, au-dessus de la liste permettant de choisir l'application ; la documentation et les options de page d'accueil de l'application se trouvent dans le menu situé à côté"
 
 msgid "Completed application methods select their last generated object, consistently with standard DataLab processing"
 msgstr "Les méthodes d'application terminées sélectionnent le dernier objet qu'elles ont généré, de manière cohérente avec les traitements standard de DataLab"
 
-msgid "Application plugins add tiles to a new **Applications** section of the welcome page: by default, one tile per plugin opens its page in the catalog, and plugins may declare additional tiles, for example to open an example directly. Additional tiles are shown when there is room for them, and otherwise move to the menu of the main tile"
-msgstr "Les plugins d'application ajoutent des tuiles à une nouvelle section **Applications** de la page d'accueil : par défaut, une tuile par plugin ouvre sa page dans le catalogue, et les plugins peuvent déclarer des tuiles supplémentaires, par exemple pour ouvrir directement un exemple. Les tuiles supplémentaires sont affichées lorsqu'il y a la place nécessaire, et passent sinon dans le menu de la tuile principale"
+msgid "Application plugins add tiles to a new **Applications** section of the welcome page: by default, one tile per plugin shows its page in the **Applications** panel, and plugins may declare additional tiles, for example to open an example directly. Additional tiles are shown when there is room for them, and otherwise move to the menu of the main tile"
+msgstr "Les plugins d'application ajoutent des tuiles à une nouvelle section **Applications** de la page d'accueil : par défaut, une tuile par plugin affiche sa page dans le panneau **Applications**, et les plugins peuvent déclarer des tuiles supplémentaires, par exemple pour ouvrir directement un exemple. Les tuiles supplémentaires sont affichées lorsqu'il y a la place nécessaire, et passent sinon dans le menu de la tuile principale"
 
-msgid "The welcome page stays tidy when many applications are installed: tiles are limited to a configurable number of rows (two by default), with a last tile opening the catalog for the others. Applications may be pinned to the top or hidden, and recently used ones come first; the catalog offers a search field and the same welcome page options"
-msgstr "La page d'accueil reste lisible lorsque de nombreuses applications sont installées : les tuiles sont limitées à un nombre de lignes configurable (deux par défaut), une dernière tuile ouvrant le catalogue pour les autres. Les applications peuvent être épinglées en tête ou masquées, et celles utilisées récemment viennent en premier ; le catalogue propose un champ de recherche et les mêmes options de page d'accueil"
+msgid "The welcome page stays tidy when many applications are installed: tiles are limited to a configurable number of rows (two by default), with a last tile showing the **Applications** panel for the others. Applications may be pinned to the top or hidden, and recently used ones come first; the **Applications** panel offers the same welcome page options"
+msgstr "La page d'accueil reste lisible lorsque de nombreuses applications sont installées : les tuiles sont limitées à un nombre de lignes configurable (deux par défaut), une dernière tuile affichant le panneau **Applications** pour les autres. Les applications peuvent être épinglées en tête ou masquées, et celles utilisées récemment viennent en premier ; le panneau **Applications** propose les mêmes options de page d'accueil"
 
-msgid "Plugins may declare an icon, shown in the **Applications** catalog, on their welcome page tile and in the **Configure plugins...** dialog"
-msgstr "Les plugins peuvent déclarer une icône, affichée dans le catalogue **Applications**, sur leur tuile de la page d'accueil et dans la boîte de dialogue **Configurer les plugins...**"
+msgid "Plugins may declare an icon, shown in the **Applications** panel, on their welcome page tile and in the **Configure plugins...** dialog"
+msgstr "Les plugins peuvent déclarer une icône, affichée dans le panneau **Applications**, sur leur tuile de la page d'accueil et dans la boîte de dialogue **Configurer les plugins...**"
+
+msgid "DataLab checks the declarations of application plugins (methods, examples, tools, welcome page tiles) when loading them: a plugin with an invalid declaration, for example a method whose plugin version was not updated with the plugin, or an example referring to a renamed method, is not loaded and is listed with its error in **Configure plugins...**, while DataLab and the other plugins start normally (fixes [Issue #484](https://github.com/DataLab-Platform/DataLab/issues/484))"
+msgstr "DataLab vérifie les déclarations des plugins d'application (méthodes, exemples, outils, tuiles de la page d'accueil) lors de leur chargement : un plugin dont une déclaration est invalide, par exemple une méthode dont la version du plugin n'a pas été mise à jour avec celui-ci, ou un exemple faisant référence à une méthode renommée, n'est pas chargé et est listé avec son erreur dans **Configurer les plugins...**, tandis que DataLab et les autres plugins démarrent normalement (corrige [l'issue #484](https://github.com/DataLab-Platform/DataLab/issues/484))"
 
 msgid "**Plugin installation:**"
 msgstr "**Installation de plugins :**"
 
-msgid "Plugins can now be installed from a file, without any Python tool, including in the standalone version of DataLab: the new **Install plugins** tab of **Plugins > Configure plugins...** accepts a pure-Python wheel (`.whl`) or a single `datalab_<name>.py` module"
-msgstr "Les plugins peuvent désormais être installés depuis un fichier, sans aucun outil Python, y compris dans la version autonome de DataLab : le nouvel onglet **Installer des plugins** de **Plugins > Configurer les plugins...** accepte un wheel en Python pur (`.whl`) ou un module unique `datalab_<nom>.py`"
+msgid "Online and offline Desktop catalogs now accept single-file `datalab_*.py` plugins alongside wheels. Historical files do not need a packaging project or source changes to be listed; catalog inspection never imports or executes them (implements [Issue #419](https://github.com/DataLab-Platform/DataLab/issues/419))"
+msgstr "Les catalogues Desktop en ligne et hors ligne acceptent désormais les plugins en fichier unique `datalab_*.py` à côté des wheels. Les fichiers historiques n'ont besoin ni de projet de packaging ni de modification du code source pour être référencés ; l'inspection du catalogue ne les importe ni ne les exécute jamais (implémente [l'issue #419](https://github.com/DataLab-Platform/DataLab/issues/419))"
 
-msgid "Before installing, DataLab checks the file without running it and shows its name, version, plugin classes, dependencies and SHA-256 digest; a wheel requiring a package that DataLab does not provide is refused"
-msgstr "Avant l'installation, DataLab vérifie le fichier sans l'exécuter et affiche son nom, sa version, ses classes de plugin, ses dépendances et son empreinte SHA-256 ; un wheel nécessitant un paquet que DataLab ne fournit pas est refusé"
+msgid "Known script versions can be updated; unversioned files are identified by SHA-256 and offer explicit replacement when their content changes. Scripts previously installed from a file are recognized, and existing development copies are not overwritten"
+msgstr "Les versions connues des scripts peuvent être mises à jour ; les fichiers sans version sont identifiés par SHA-256 et proposent un remplacement explicite lorsque leur contenu change. Les scripts précédemment installés depuis un fichier sont reconnus et les copies de développement existantes ne sont pas écrasées"
 
-msgid "Installed plugins are listed in the same tab, where they can be uninstalled; a newly installed plugin is enabled and loaded after a plugin reload, and a new version of an already loaded plugin is used at the next start"
-msgstr "Les plugins installés sont listés dans le même onglet, où ils peuvent être désinstallés ; un plugin nouvellement installé est activé et chargé après un rechargement des plugins, et une nouvelle version d'un plugin déjà chargé est utilisée au prochain démarrage"
+msgid "The local catalog commands handle mixed folders of scripts and wheels. Single-file plugins use libraries already available to DataLab and do not trigger dependency downloads. The documentation now explicitly distinguishes source organization, distribution formats and functional capabilities, including in the French offline guide"
+msgstr "Les commandes de catalogue local gèrent les dossiers mêlant scripts et wheels. Les plugins en fichier unique utilisent les bibliothèques déjà disponibles dans DataLab et ne déclenchent pas de téléchargement de dépendances. La documentation distingue désormais explicitement l'organisation du code source, les formats de distribution et les capacités fonctionnelles, y compris dans le guide hors ligne français"
 
-msgid "The new **Available plugins** tab lists the plugins of the [DataLab plugin catalog](https://datalab-platform.com/plugins/), official or from the community, with a search field: **Install** and **Update** download the wheel, check it against the catalog and install it after confirmation. The catalog address may be changed to use a private copy"
-msgstr "Le nouvel onglet **Plugins disponibles** liste les plugins du [catalogue de plugins DataLab](https://datalab-platform.com/plugins/), officiels ou issus de la communauté, avec un champ de recherche : **Installer** et **Mettre à jour** téléchargent le wheel, le vérifient par rapport au catalogue et l'installent après confirmation. L'adresse du catalogue peut être modifiée pour utiliser une copie privée"
+msgid "Plugins can now be installed from a file, without any Python tool, including in the standalone version of DataLab: the new **From file** tab of **Plugins > Configure plugins...** accepts a pure-Python wheel (`.whl`) or a single `datalab_<name>.py` module"
+msgstr "Les plugins peuvent désormais être installés depuis un fichier, sans aucun outil Python, y compris dans la version autonome de DataLab : le nouvel onglet **Depuis un fichier** de **Plugins > Configurer les plugins...** accepte un wheel en Python pur (`.whl`) ou un module unique `datalab_<nom>.py`"
 
-msgid "Organizations can distribute their own plugins, or the versions of public plugins they have approved, from local plugin catalogs: folders, typically shared on the network, declared in the **Plugin settings** tab or with the `DATALAB_PLUGINS_CATALOG` environment variable. Their plugins are listed in the **Available plugins** tab before those of the DataLab plugin catalog, and hide them when both offer the same plugin"
-msgstr "Les organisations peuvent diffuser leurs propres plugins, ou les versions de plugins publics qu'elles ont validées, depuis des catalogues locaux de plugins : des dossiers, généralement partagés sur le réseau, déclarés dans l'onglet **Paramètres des plugins** ou par la variable d'environnement `DATALAB_PLUGINS_CATALOG`. Leurs plugins sont listés dans l'onglet **Plugins disponibles** avant ceux du catalogue de plugins DataLab, et les masquent lorsque les deux proposent le même plugin"
+msgid "Before installing, DataLab checks the file without running it and shows its name, version, plugin classes, dependencies and SHA-256 digest"
+msgstr "Avant l'installation, DataLab vérifie le fichier sans l'exécuter et affiche son nom, sa version, ses classes de plugins, ses dépendances et son empreinte SHA-256"
 
-msgid "A local catalog folder may simply hold plugin wheels, listed as they are copied to it, or a `catalog.json` file giving display names, deprecations and withdrawn releases; `datalab-plugin catalog build` writes this file from the wheels of the folder, keeping the edited fields, and `datalab-plugin catalog check` reports wheels that are missing, changed, refused by DataLab or not listed"
-msgstr "Un dossier de catalogue local peut simplement contenir des wheels de plugins, listées dès qu'elles y sont copiées, ou un fichier `catalog.json` indiquant les noms d'affichage, les dépréciations et les versions retirées ; `datalab-plugin catalog build` écrit ce fichier à partir des wheels du dossier en conservant les champs modifiés, et `datalab-plugin catalog check` signale les wheels manquantes, modifiées, refusées par DataLab ou non listées"
+msgid "Plugins may now include additional dependencies as separate wheels, including compatible native libraries, without changing packages already supplied by DataLab. A complete local catalog can be installed without Internet access; missing files and version conflicts are reported before any partial installation is activated"
+msgstr "Les plugins peuvent désormais fournir des dépendances supplémentaires sous forme de paquets wheel séparés, y compris des bibliothèques natives compatibles, sans modifier les paquets déjà fournis par DataLab. Un catalogue local complet peut être installé sans accès à Internet ; les fichiers manquants et les conflits de versions sont signalés avant toute activation d'une installation partielle"
 
-msgid "A catalog that cannot be read, such as a network share that is not connected or the online catalog on a computer without Internet access, is reported in the **Available plugins** tab without hiding the plugins of the other catalogs"
-msgstr "Un catalogue illisible, comme un partage réseau non connecté ou le catalogue en ligne sur un ordinateur sans accès à Internet, est signalé dans l'onglet **Plugins disponibles** sans masquer les plugins des autres catalogues"
+msgid "The confirmation dialog lists the additional packages and their fingerprints. They are shared by plugins of the same Python runtime, activated after restarting DataLab, and kept when a plugin is uninstalled"
+msgstr "La boîte de dialogue de confirmation liste les paquets supplémentaires et leurs empreintes. Ils sont partagés entre les plugins d'un même environnement d'exécution Python, activés après redémarrage de DataLab et conservés lorsqu'un plugin est désinstallé"
+
+msgid "Installed plugins are listed in the same tab, where they can be uninstalled; a newly installed plugin is enabled after a plugin reload when no additional packages are needed, or after restarting when dependencies were added. A new version of an already loaded plugin is used at the next start"
+msgstr "Les plugins installés sont listés dans le même onglet, où ils peuvent être désinstallés ; un plugin nouvellement installé est activé après rechargement si aucun paquet supplémentaire n'est nécessaire, ou après redémarrage si des dépendances ont été ajoutées. Une nouvelle version d'un plugin déjà chargé est utilisée au prochain démarrage"
+
+msgid "The new **Catalog** tab lists the plugins of the [DataLab plugin catalog](https://datalab-platform.com/plugins/), official or from the community, with a search field: **Install** and **Update** download the wheel, check it against the catalog and install it after confirmation. The catalog address may be changed to use a private copy"
+msgstr "Le nouvel onglet **Catalogue** liste les plugins du [catalogue de plugins DataLab](https://datalab-platform.com/plugins/), officiels ou issus de la communauté, avec un champ de recherche : **Installer** et **Mettre à jour** téléchargent le wheel, le vérifient par rapport au catalogue et l'installent après confirmation. L'adresse du catalogue peut être modifiée pour utiliser une copie privée"
+
+msgid "Organizations can distribute their own plugins, or the versions of public plugins they have approved, from local plugin catalogs: folders, typically shared on the network, declared in the **Advanced** tab or with the `DATALAB_PLUGINS_CATALOG` environment variable. Their plugins are listed in the **Catalog** tab before those of the DataLab plugin catalog, and hide them when both offer the same plugin"
+msgstr "Les organisations peuvent diffuser leurs propres plugins, ou les versions de plugins publics qu'elles ont validées, depuis des catalogues locaux de plugins : des dossiers, généralement partagés sur le réseau, déclarés dans l'onglet **Avancé** ou par la variable d'environnement `DATALAB_PLUGINS_CATALOG`. Leurs plugins sont listés dans l'onglet **Catalogue** avant ceux du catalogue de plugins DataLab, et les masquent lorsque les deux proposent le même plugin"
+
+msgid "A local catalog folder may hold plugin wheels and single-file modules, listed as they are copied to it, or a `catalog.json` index giving display names, deprecations and withdrawn releases; `datalab-plugin catalog build` writes this index while keeping curated metadata, and `datalab-plugin catalog check` reports missing, changed, refused or unlisted artifacts"
+msgstr "Un dossier de catalogue local peut contenir des wheels et des modules en fichier unique, listés à mesure qu'ils y sont copiés, ou un index `catalog.json` indiquant les noms d'affichage, les dépréciations et les versions retirées ; `datalab-plugin catalog build` écrit cet index en conservant les métadonnées administrées, et `datalab-plugin catalog check` signale les fichiers manquants, modifiés, refusés ou non listés"
+
+msgid "Authors can prepare an offline catalog with `datalab-plugin catalog prepare`: it downloads the additional dependency wheels needed by the reference host without installing them, then writes the catalog. The complete folder can be distributed on a network share or copied to computers without Internet access"
+msgstr "Les auteurs peuvent préparer un catalogue hors ligne avec `datalab-plugin catalog prepare` : la commande télécharge les paquets de dépendances supplémentaires nécessaires à l'environnement hôte de référence sans les installer, puis écrit le catalogue. Le dossier complet peut être distribué sur un partage réseau ou copié sur des ordinateurs sans accès à Internet"
+
+msgid "A catalog that cannot be read, such as a network share that is not connected or the online catalog on a computer without Internet access, is reported in the **Catalog** tab without hiding the plugins of the other catalogs"
+msgstr "Un catalogue illisible, comme un partage réseau non connecté ou le catalogue en ligne sur un ordinateur sans accès à Internet, est signalé dans l'onglet **Catalogue** sans masquer les plugins des autres catalogues"
+
+msgid "The **Configure plugins...** dialog opens larger and keeps the size it had when last closed. Its tabs follow the order of use and have explicit titles, described by their tooltips: **Installed plugins**, **Catalog**, **From file** and **Advanced**"
+msgstr "La boîte de dialogue **Configurer les plugins...** s'ouvre plus grande et conserve la taille qu'elle avait à sa dernière fermeture. Ses onglets suivent l'ordre d'utilisation et ont des titres explicites, décrits par leurs info-bulles : **Installés**, **Catalogue**, **Depuis un fichier** et **Avancé**"
 
 msgid "**Plugin project generator:**"
 msgstr "**Générateur de projets de plugins :**"
+
+msgid "`datalab-plugin create` now creates a single-file plugin by default, the simplest way to extend DataLab: it only asks for the plugin name and description, then writes a `datalab_<name>.py` file to the user plugin directory. Once the plugins are reloaded, the plugin adds its submenu to the **Plugins** menu with a sample processing of the selected signals (or images, with `--object-kind image`), whose short NumPy function is the only part to edit. The file never overwrites an existing one, and can be shared and installed with **Plugins > Configure plugins... > From file**. The layered installable project, described below, is created with `--project` (implements [Issue #413](https://github.com/DataLab-Platform/DataLab/issues/413))"
+msgstr "`datalab-plugin create` crée désormais par défaut un plugin en fichier unique, la façon la plus simple d'étendre DataLab : la commande demande seulement le nom du plugin et sa description, puis écrit un fichier `datalab_<nom>.py` dans le répertoire de plugins de l'utilisateur. Une fois les plugins rechargés, le plugin ajoute son sous-menu au menu **Plugins**, avec un traitement d'exemple des signaux sélectionnés (ou des images, avec `--object-kind image`), dont la courte fonction NumPy est la seule partie à modifier. Le fichier n'écrase jamais un fichier existant, et peut être partagé et installé avec **Plugins > Configurer les plugins... > Depuis un fichier**. Le projet installable structuré en couches, décrit ci-dessous, est créé avec `--project` (implémente [l'issue #413](https://github.com/DataLab-Platform/DataLab/issues/413))"
 
 msgid "Hardened ``datalab-plugin create`` from the Camera pilot feedback: generated projects now separate host-independent ``core`` code, headless ``workflow`` orchestration, and Desktop/Web ``adapters`` from the first commit"
 msgstr "Durcissement de ``datalab-plugin create`` à partir du retour du pilote Camera : les projets générés séparent désormais dès le premier commit le code ``core`` indépendant de l'hôte, l'orchestration ``workflow`` sans interface et les ``adapters`` Desktop/Web"
@@ -150,8 +200,8 @@ msgstr "Les noms et descriptions de plugins longs sont désormais mis en forme a
 msgid "Generated projects are ready to publish: a release workflow attaches the wheel to a GitHub release when a version tag is pushed and prints the entry to submit to the DataLab plugin catalog; `pyproject.toml` requires the current DataLab major version and declares the project URLs"
 msgstr "Les projets générés sont prêts à publier : un workflow de release joint le wheel à une release GitHub lorsqu'une étiquette de version est poussée et affiche la fiche à soumettre au catalogue de plugins DataLab ; `pyproject.toml` exige la version majeure courante de DataLab et déclare les URL du projet"
 
-msgid "`datalab-plugin create` asks for the GitHub account hosting the project and derives the default plugin ID from it (`io.github.<account>.<name>`), `org.datalab.` IDs being reserved for DataLab-Platform plugins"
-msgstr "`datalab-plugin create` demande le compte GitHub qui héberge le projet et en déduit l'ID de plugin par défaut (`io.github.<compte>.<nom>`), les ID `org.datalab.` étant réservés aux plugins de DataLab-Platform"
+msgid "`datalab-plugin create --project` asks for the GitHub account hosting the project and derives the default plugin ID from it (`io.github.<account>.<name>`), `org.datalab.` IDs being reserved for DataLab-Platform plugins"
+msgstr "`datalab-plugin create --project` demande le compte GitHub qui héberge le projet et en déduit l'ID de plugin par défaut (`io.github.<compte>.<nom>`), les ID `org.datalab.` étant réservés aux plugins de DataLab-Platform"
 
 msgid "**Add metadata:**"
 msgstr "**Ajout de métadonnées :**"
@@ -246,6 +296,24 @@ msgstr "Lorsqu'un objet source est supprimé, sa référence est affichée sous 
 msgid "Titles of workspaces saved by previous versions keep their former `s001`-style references as plain text"
 msgstr "Les titres des espaces de travail enregistrés par les versions précédentes conservent leurs anciennes références de type `s001` sous forme de texte simple"
 
+msgid "**Signal and image lists:**"
+msgstr "**Listes de signaux et d'images :**"
+
+msgid "Signals, images and groups can now be deleted directly from the lists, as in DataLab-Web (implements [Issue #449](https://github.com/DataLab-Platform/DataLab/issues/449))."
+msgstr "Les signaux, images et groupes peuvent désormais être supprimés directement depuis les listes, comme dans DataLab-Web (implémente [l'issue #449](https://github.com/DataLab-Platform/DataLab/issues/449))."
+
+msgid "A delete button appears at the right of the hovered signal, image or group: it turns red when the mouse cursor is over it, and its tooltip tells what it deletes"
+msgstr "Un bouton de suppression apparaît à droite du signal, de l'image ou du groupe survolé : il devient rouge lorsque le curseur de la souris le survole, et son info-bulle indique ce qu'il supprime"
+
+msgid "Clicking it deletes the item, or the whole selection when the item is part of it, after confirmation. Deleting an item which is not selected keeps the current selection and the displayed objects unchanged"
+msgstr "Un clic sur ce bouton supprime l'élément, ou toute la sélection lorsque l'élément en fait partie, après confirmation. Supprimer un élément non sélectionné laisse inchangés la sélection courante et les objets affichés"
+
+msgid "As with the **Remove** action, the deletion is recorded in the History panel"
+msgstr "Comme avec l'action **Supprimer**, la suppression est enregistrée dans le panneau Historique"
+
+msgid "The button may be hidden with the new **Show delete button when hovering list items** setting (Visualization > Common)"
+msgstr "Le bouton peut être masqué avec le nouveau paramètre **Afficher un bouton de suppression au survol des éléments des listes** (Visualisation > Commun)"
+
 msgid "**Curve fitting formulas:**"
 msgstr "**Formules des modèles d'ajustement :**"
 
@@ -258,8 +326,75 @@ msgstr "Les coefficients des ajustements polynomial et linéaire sont nommés `a
 msgid "The *Fitting* documentation explains how to derive the peak wavelength, the temperature and the emissivity from the parameters of a Planckian fit"
 msgstr "La documentation *Ajustement* explique comment déduire la longueur d'onde du pic, la température et l'émissivité des paramètres d'un ajustement planckien"
 
+msgid "**Remote control and plugins:**"
+msgstr "**Contrôle à distance et plugins :**"
+
+msgid "`add_group` now returns the UUID of the created group, so that a remote client, a macro or a plugin can add objects to it with `add_object(obj, group_id=...)` (or `add_signal`/`add_image`) instead of looking the group up by its title"
+msgstr "`add_group` renvoie désormais l'UUID du groupe créé, de sorte qu'un client distant, une macro ou un plugin peut y ajouter des objets avec `add_object(obj, group_id=...)` (ou `add_signal`/`add_image`) au lieu de rechercher le groupe par son titre"
+
+msgid "**NeXus files:**"
+msgstr "**Fichiers NeXus :**"
+
+msgid "NeXus `NXdata` groups are shown as single items in the HDF5 browser and imported as signals or images with their axes, units, labels and, for signals, uncertainties. Bin edges are converted to bin centers, non-uniform image axes are kept, and decreasing image axes are reversed with the image. Invalid axes are reported in the browser instead of being guessed"
+msgstr "Les groupes NeXus `NXdata` sont présentés comme des éléments uniques dans l'explorateur HDF5 et importés comme signaux ou images avec leurs axes, unités, libellés et, pour les signaux, incertitudes. Les bords de classes sont convertis en centres de classes, les axes d'image non uniformes sont conservés, et les axes d'image décroissants sont inversés avec l'image. Les axes invalides sont signalés dans l'explorateur au lieu d'être devinés"
+
+msgid "Files written with the legacy NeXus conventions, such as the scans of synchrotron SOLEIL, are imported with their axes (`axis` and `primary` attributes of the axis datasets), and every counter and detector of a scan is shown as an item of its own: counters as signals versus the scanned motor, detectors as images (a spectrum per point) or image stacks (an image per point) with the motor along their first axis"
+msgstr "Les fichiers écrits selon les conventions NeXus anciennes, comme les scans du synchrotron SOLEIL, sont importés avec leurs axes (attributs `axis` et `primary` des jeux de données d'axe), et chaque compteur et détecteur d'un scan apparaît comme un élément à part entière : les compteurs comme des signaux en fonction du moteur scanné, les détecteurs comme des images (un spectre par point) ou des piles d'images (une image par point) avec le moteur selon leur premier axe"
+
+msgid "The HDF5 browser selects and previews the default measurement of a NeXus file (`default` attributes) when it is opened"
+msgstr "Le navigateur HDF5 sélectionne et affiche la mesure par défaut d'un fichier NeXus (attributs `default`) à son ouverture"
+
+msgid "Compressed detector data, such as the bitshuffle/LZ4 data of Eiger detectors, is now read (with hdf5plugin, also in the standalone application); a dataset compressed with an unavailable filter is reported in the browser instead of failing"
+msgstr "Les données de détecteur compressées, comme les données bitshuffle/LZ4 des détecteurs Eiger, sont désormais lues (avec hdf5plugin, y compris dans l'application autonome) ; un jeu de données compressé avec un filtre indisponible est signalé dans le navigateur au lieu de provoquer une erreur"
+
+msgid "Imported signals and images record where they come from (file, group, signal and axes, applied conversions, title and times of the NeXus entry) in their `experimental_source` metadata, which is saved with the workspace: a saved workspace reopens without the NeXus file"
+msgstr "Les signaux et images importés enregistrent leur origine (fichier, groupe, signal et axes, conversions appliquées, titre et dates de l'entrée NeXus) dans leurs métadonnées `experimental_source`, enregistrées avec l'espace de travail : un espace de travail enregistré se rouvre sans le fichier NeXus"
+
+msgid "`.nxs` and `.nx5` files are proposed when opening HDF5 files"
+msgstr "Les fichiers `.nxs` et `.nx5` sont proposés à l'ouverture de fichiers HDF5"
+
+msgid "Plugins can describe the signals and images of files that NeXus `NXdata` groups designate incompletely (no axes, several counters...) with declarative data mappings (JSON) registered with `sigimax.h5.mapping.register_mapping`: the HDF5 browser then shows each described object as an extra item, imported with its axes, labels and units; the axes of a mapped object may describe its first dimensions only, so that one mapping applies to the counters and detectors of a scan"
+msgstr "Les plugins peuvent décrire les signaux et images des fichiers dont les groupes NeXus `NXdata` sont incomplets (pas d'axes, plusieurs compteurs...) avec des profils de correspondance déclaratifs (JSON) enregistrés par `sigimax.h5.mapping.register_mapping` : le navigateur HDF5 affiche alors chaque objet décrit comme un élément supplémentaire, importé avec ses axes, libellés et unités ; les axes d'un objet décrit peuvent ne décrire que ses premières dimensions, de sorte qu'un même profil s'applique aux compteurs et aux détecteurs d'un scan"
+
+msgid "**Installation check:**"
+msgstr "**Vérification de l'installation :**"
+
+msgid "The new `--smoke-test` command line option checks that DataLab is correctly installed without opening its main window, e.g. `DataLab.exe --smoke-test report.json` for the standalone version or `datalab --smoke-test report.json`: the packages it relies on, the resources provided with it (macro templates, PDF documentation, French translations and icons) and processing in a separate process. The results are written in a JSON report, and the exit code is not zero when a check failed (see [Command line features](../features/advanced/command.rst))"
+msgstr "La nouvelle option de ligne de commande `--smoke-test` vérifie que DataLab est correctement installé sans ouvrir sa fenêtre principale, par exemple `DataLab.exe --smoke-test report.json` pour la version autonome ou `datalab --smoke-test report.json` : les packages dont il dépend, les ressources fournies avec lui (modèles de macros, documentation PDF, traductions françaises et icônes) et le traitement dans un processus séparé. Les résultats sont écrits dans un rapport JSON, et le code de sortie est non nul lorsqu'une vérification a échoué (voir [Fonctionnalités de la ligne de commande](../features/advanced/command.rst))"
+
+msgid "Before being published, each Windows installer is now installed on a test computer, where the installed application is started and checked this way (implements [Issue #366](https://github.com/DataLab-Platform/DataLab/issues/366))"
+msgstr "Avant sa publication, chaque installeur Windows est désormais installé sur un ordinateur de test, où l'application installée est démarrée puis vérifiée de cette façon (implémente [l'issue #366](https://github.com/DataLab-Platform/DataLab/issues/366))"
+
 msgid "🔄 Changes"
 msgstr "🔄 Changements"
+
+msgid "**Curve readability:**"
+msgstr "**Lisibilité des courbes :**"
+
+msgid "Signal curves are easier to read, especially when many curves are shown (closes [Issue #453](https://github.com/DataLab-Platform/DataLab/issues/453)):"
+msgstr "Les courbes des signaux sont plus lisibles, en particulier lorsque de nombreuses courbes sont affichées (corrige [l'issue #453](https://github.com/DataLab-Platform/DataLab/issues/453)) :"
+
+msgid "Curve colors now stand out on both light and dark backgrounds: several colors of the former palette (orange, pink, yellow-green, cyan) were pale on a white background, and gray curves could not be told apart from the grid"
+msgstr "Les couleurs des courbes ressortent désormais sur fond clair comme sur fond sombre : plusieurs couleurs de l'ancienne palette (orange, rose, vert-jaune, cyan) étaient pâles sur fond blanc, et les courbes grises se confondaient avec la grille"
+
+msgid "After the first 10 curves, curves are now drawn with dashed lines only: dash-dot and dash-dot-dot lines, which drew only half of the curve, are no longer used"
+msgstr "Au-delà des 10 premières courbes, les courbes sont désormais tracées uniquement en tirets : les traits mixtes (tiret-point et tiret-point-point), qui ne traçaient que la moitié de la courbe, ne sont plus utilisés"
+
+msgid "The plot grid now uses discreet solid lines instead of gray dotted lines, which competed with dashed curves; it also follows color theme changes"
+msgstr "La grille des graphiques utilise désormais des traits pleins discrets au lieu de pointillés gris, qui se confondaient avec les courbes en tirets ; elle suit également les changements de thème de couleurs"
+
+msgid "Curve colors and line styles now depend on the position of the curves among those shown on the plot, in the order of the signals in the panel: the first curve shown is always drawn in the first color. Opening the ROI editor, **View in a new window** or other dialogs no longer shifts the styles of the next curves, which could reach dotted styles with only a few curves shown"
+msgstr "Les couleurs et les styles de trait des courbes dépendent désormais de la position des courbes parmi celles affichées dans le graphique, dans l'ordre des signaux du panneau : la première courbe affichée est toujours tracée avec la première couleur. L'ouverture de l'éditeur de ROI, de **Voir dans une nouvelle fenêtre** ou d'autres boîtes de dialogue ne décale plus les styles des courbes suivantes, ce qui pouvait faire apparaître des pointillés avec seulement quelques courbes affichées"
+
+msgid "Automatic curve styles are no longer saved in workspaces: only a color or a line style chosen by the user is saved and always kept, whatever its value. When opening workspaces and history files saved with DataLab 1.3 or earlier, which saved the automatic style of every curve, these styles are removed so that curves are displayed with the new automatic styles; a style chosen with these versions is removed as well when it is identical to one of their automatic styles. Metadata imported from a file are applied as they are"
+msgstr "Les styles de courbes automatiques ne sont plus enregistrés dans les espaces de travail : seuls une couleur ou un style de trait choisis par l'utilisateur sont enregistrés et toujours conservés, quelle que soit leur valeur. À l'ouverture des espaces de travail et des fichiers d'historique enregistrés avec DataLab 1.3 ou une version antérieure, qui enregistraient le style automatique de chaque courbe, ces styles sont supprimés afin que les courbes soient affichées avec les nouveaux styles automatiques ; un style choisi avec ces versions est également supprimé lorsqu'il est identique à l'un de leurs styles automatiques. Les métadonnées importées depuis un fichier sont appliquées telles quelles"
+
+msgid "**View > Reset curve styles** now gives the selected signals automatic curve styles again, removing the colors and line styles chosen for them"
+msgstr "**Affichage > Réinitialiser les styles de courbes** rend désormais aux signaux sélectionnés des styles de courbes automatiques, en supprimant les couleurs et les styles de trait choisis pour eux"
+
+#, python-format
+msgid "On high-DPI screens (e.g. with a 150 % display scaling), curves of width 1 are now drawn one screen pixel wide, which makes their rendering much faster: noisy signals were drawn up to several hundred times slower than at 100 % (requires PlotPy ≥ 2.12.0)"
+msgstr "Sur les écrans haute résolution (par exemple avec une mise à l'échelle de l'affichage de 150 %), les courbes d'épaisseur 1 sont désormais tracées avec une largeur d'un pixel de l'écran, ce qui rend leur tracé beaucoup plus rapide : les signaux bruités étaient tracés jusqu'à plusieurs centaines de fois plus lentement qu'à 100 % (nécessite PlotPy ≥ 2.12.0)"
 
 msgid "**Synthetic images in physical coordinates:**"
 msgstr "**Images synthétiques en coordonnées physiques :**"
@@ -285,6 +420,26 @@ msgstr "L'ouverture, la sélection et l'affichage de grandes campagnes généré
 msgid "Native HDF5 workspaces and multi-object recipe results now load in groups, making large signal and image collections available substantially faster while preserving every selected and visible object"
 msgstr "Les espaces de travail HDF5 natifs et les résultats de méthodes multi-objets se chargent désormais par lots, ce qui rend les grandes collections de signaux et d'images disponibles nettement plus vite tout en préservant chaque objet sélectionné et visible"
 
+msgid "**Image display responsiveness:**"
+msgstr "**Réactivité de l'affichage des images :**"
+
+#, python-format
+msgid "Moving or resizing regions of interest, annotations and markers over images is now much smoother, as the image is no longer rendered again for each mouse move: with a 2048 × 2048 image, each mouse move takes about 5 ms instead of 13 ms (13 ms instead of 33 ms with a 200% display scaling). Panning and zooming images without masked pixels are also up to 25% faster (requires PlotPy ≥ 2.12.1)"
+msgstr "Le déplacement ou le redimensionnement de régions d'intérêt, d'annotations et de marqueurs sur les images est désormais beaucoup plus fluide, car l'image n'est plus recalculée à chaque mouvement de la souris : avec une image de 2048 × 2048 pixels, chaque mouvement de la souris prend environ 5 ms au lieu de 13 ms (13 ms au lieu de 33 ms avec une mise à l'échelle de l'affichage de 200 %). Le déplacement et le zoom des images sans pixels masqués sont également jusqu'à 25 % plus rapides (nécessite PlotPy ≥ 2.12.1)"
+
+msgid "**Sharp icons with display scaling:**"
+msgstr "**Icônes nettes avec la mise à l'échelle de l'affichage :**"
+
+#, python-format
+msgid "The icons of the plots and of the editors provided by PlotPy and guidata (plot toolbars, contrast panel, cross sections, item list, array editor, ...) are now SVG images: they remain sharp with a display scaling such as 125 %, 150 % or 200 %, instead of looking blurry (requires PlotPy ≥ 2.12.1, closes [Issue #470](https://github.com/DataLab-Platform/DataLab/issues/470))"
+msgstr "Les icônes des graphiques et des éditeurs fournies par PlotPy et guidata (barres d'outils des graphiques, panneau de contraste, coupes, liste des éléments, éditeur de tableaux, ...) sont désormais des images SVG : elles restent nettes avec une mise à l'échelle de l'affichage de 125 %, 150 % ou 200 %, au lieu d'apparaître floues (nécessite PlotPy ≥ 2.12.1, corrige [l'issue #470](https://github.com/DataLab-Platform/DataLab/issues/470))"
+
+msgid "The **Processing > Resize** action of images showed the column resizing icon of guidata's editors instead of its own icon: DataLab icons now take precedence over guidata and PlotPy icons with the same name (requires guidata ≥ 3.17.1, closes [Issue #472](https://github.com/DataLab-Platform/DataLab/issues/472))"
+msgstr "L'action **Traitement > Redimensionner** des images affichait l'icône de redimensionnement des colonnes des éditeurs de guidata au lieu de sa propre icône : les icônes de DataLab ont désormais priorité sur les icônes de guidata et de PlotPy portant le même nom (nécessite guidata ≥ 3.17.1, corrige [l'issue #472](https://github.com/DataLab-Platform/DataLab/issues/472))"
+
+msgid "Plugin icons (`PluginInfo.icon`, tools and welcome tiles) may also designate an icon registered by a module, e.g. `\"datalab:delete.svg\"`, in addition to `package:path` resources and DataLab icon file names"
+msgstr "Les icônes des plugins (`PluginInfo.icon`, outils et tuiles de la page d'accueil) peuvent également désigner une icône enregistrée par un module, par exemple `\"datalab:delete.svg\"`, en plus des ressources `package:path` et des noms de fichiers d'icônes de DataLab"
+
 msgid "**Portable plot annotations:**"
 msgstr "**Annotations de tracé portables :**"
 
@@ -297,8 +452,74 @@ msgstr "Les annotations PlotPy existantes restent lisibles et ne sont converties
 msgid "Annotation identifiers, lock state, custom metadata and extension data are preserved across edits, while unknown third-party payloads are retained without modification"
 msgstr "Les identifiants d'annotation, l'état de verrouillage, les métadonnées personnalisées et les données d'extension sont conservés lors des modifications, tandis que les charges utiles tierces inconnues sont conservées sans modification"
 
-msgid "DataLab now requires Sigima ≥ 1.3.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x"
-msgstr "DataLab nécessite désormais Sigima ≥ 1.3.0, SigimaX ≥ 1.1.0 et DataLab-Capsule 0.1.x"
+msgid "Rectangles and segments drawn on signals are now the same labeled shapes as on images; unlike on images, segments drawn on signals do not show their length and angle, which would mix X and Y units"
+msgstr "Les rectangles et segments tracés sur les signaux sont désormais les mêmes formes avec étiquette que sur les images ; contrairement aux images, les segments tracés sur les signaux n'affichent pas leur longueur et leur angle, qui mélangeraient les unités de X et de Y"
+
+msgid "DataLab now requires Sigima ≥ 1.4.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x; HDF5 imports use Sigima's experimental-source API"
+msgstr "DataLab nécessite désormais Sigima ≥ 1.4.0, SigimaX ≥ 1.1.0 et DataLab-Capsule 0.1.x ; les imports HDF5 utilisent l'API d'origine expérimentale de Sigima"
+
+msgid "**Regions of interest:**"
+msgstr "**Régions d'intérêt :**"
+
+msgid "A rectangular region of interest now selects the pixels whose centers lie inside the rectangle, bounds included, like circular and polygonal ROIs and like the display: its bounds were rounded to the nearest pixel, which could shift the selection by up to half a pixel. A rectangle whose bounds lie exactly on pixel centers now includes the pixels on both bounds, i.e. one more row and one more column than before. This applies to processing and analysis in ROIs, to ROI extraction and to the background area of the offset correction"
+msgstr "Une région d'intérêt rectangulaire sélectionne désormais les pixels dont le centre est situé dans le rectangle, bornes comprises, comme les ROI circulaires et polygonales et comme l'affichage : ses bornes étaient arrondies au pixel le plus proche, ce qui pouvait décaler la sélection jusqu'à un demi-pixel. Un rectangle dont les bornes sont situées exactement sur des centres de pixels inclut désormais les pixels des deux bornes, soit une ligne et une colonne de plus qu'auparavant. Cela s'applique aux traitements et analyses dans les ROI, à l'extraction de ROI et à la zone de fond de la soustraction d'offset"
+
+msgid "Circular and polygonal regions of interest now also select the pixels whose centers lie inside their shape, boundary included: polygon vertices were rounded to the nearest pixel, so that the selected pixels could differ from the polygon drawn on the image, and circles were drawn in pixel units on images with non-uniform coordinates"
+msgstr "Les régions d'intérêt circulaires et polygonales sélectionnent elles aussi désormais les pixels dont le centre est situé dans leur forme, bord compris : les sommets des polygones étaient arrondis au pixel le plus proche, de sorte que les pixels sélectionnés pouvaient différer du polygone tracé sur l'image, et les cercles étaient tracés en unités de pixels sur les images à coordonnées non uniformes"
+
+msgid "A rectangular ROI defined in pixel indices now covers its pixels up to their outer edges, so that it keeps the same pixels when converted to physical coordinates and back"
+msgstr "Une ROI rectangulaire définie en indices de pixels couvre désormais ses pixels jusqu'à leurs bords extérieurs, de sorte qu'elle conserve les mêmes pixels lorsqu'elle est convertie en coordonnées physiques et inversement"
+
+msgid "The cells of ROI grids (**ROI > Create ROI grid...**) are now made of whole pixels, so that adjacent cells never share a pixel and a full-size grid covers every pixel exactly once, whatever the image size; on images with non-uniform coordinates, the grid now spans the whole image, whose last rows and columns were left out"
+msgstr "Les cellules des grilles de ROI (**ROI > Créer une grille de ROI...**) sont désormais formées de pixels entiers, de sorte que des cellules adjacentes n'ont jamais de pixel en commun et qu'une grille pleine couvre chaque pixel exactement une fois, quelle que soit la taille de l'image ; sur les images à coordonnées non uniformes, la grille couvre désormais toute l'image, dont les dernières lignes et colonnes étaient omises"
+
+msgid "Regions of interest saved with earlier versions are not converted: they select pixels according to these rules when they are used again, so that processing and analysis in these regions may give slightly different results when recomputed"
+msgstr "Les régions d'intérêt enregistrées avec des versions antérieures ne sont pas converties : elles sélectionnent les pixels selon ces règles lorsqu'elles sont réutilisées, de sorte que les traitements et analyses dans ces régions peuvent donner des résultats légèrement différents lorsqu'ils sont recalculés"
+
+msgid "**Image profiles in physical coordinates:**"
+msgstr "**Profils d'image en coordonnées physiques :**"
+
+msgid "Line, segment, average and radial profiles (**Analysis > Intensity profiles**) are now defined in the physical coordinates of the image, like regions of interest and analysis results, instead of pixel indices: the profile parameters show coordinates in the units of the image axes, and the X axis of the resulting signals holds physical coordinates or distances with the matching unit. On images without calibration (origin 0, pixel size 1), results are unchanged"
+msgstr "Les profils rectilignes, de segment, moyens et radiaux (**Analyse > Profils d'intensité**) sont désormais définis dans les coordonnées physiques de l'image, comme les régions d'intérêt et les résultats d'analyse, au lieu d'indices de pixels : les paramètres des profils indiquent des coordonnées dans les unités des axes de l'image, et l'axe X des signaux obtenus contient des coordonnées ou des distances physiques avec l'unité correspondante. Sur les images sans calibration (origine 0, taille de pixel 1), les résultats sont inchangés"
+
+msgid "The radial profile is now circular on images with rectangular pixels or non-uniform coordinates, and its center is correct on calibrated images, where the image center was misplaced"
+msgstr "Le profil radial est désormais circulaire sur les images à pixels rectangulaires ou à coordonnées non uniformes, et son centre est correct sur les images calibrées, où le centre de l'image était mal placé"
+
+msgid "Segment and radial profiles are refused on images whose X and Y units differ, since distances are then undefined; coordinates outside the image are refused instead of being silently moved to its edge. Lines and segments drawn beyond the image in the profile dialog are brought back to its outermost pixels"
+msgstr "Les profils de segment et radiaux sont refusés sur les images dont les unités X et Y diffèrent, les distances n'étant alors pas définies ; les coordonnées hors de l'image sont refusées au lieu d'être ramenées silencieusement au bord. Les lignes et segments tracés au-delà de l'image dans la boîte de dialogue de profil sont ramenés à ses pixels extrêmes"
+
+msgid "Scripts, macros and plugins must use the new parameter names (`y`/`x` for line profiles, `x1`, `y1`, `x2`, `y2` for segment and average profiles, `xc`/`yc` for radial profiles) and physical coordinates. Profile computations recorded in the provenance of workspaces saved with earlier versions are reported as not verifiable, instead of being replayed with a different meaning"
+msgstr "Les scripts, macros et plugins doivent utiliser les nouveaux noms de paramètres (`y`/`x` pour les profils rectilignes, `x1`, `y1`, `x2`, `y2` pour les profils de segment et moyens, `xc`/`yc` pour les profils radiaux) et des coordonnées physiques. Les calculs de profils enregistrés dans la provenance d'espaces de travail sauvegardés avec des versions antérieures sont signalés comme non vérifiables, au lieu d'être rejoués avec une signification différente"
+
+msgid "**HDF5 browser:**"
+msgstr "**Explorateur HDF5 :**"
+
+msgid "Browsing an HDF5 file no longer reads its datasets entirely: they are listed and described from their shape and data type, and the value previews read only their first elements. Large files open faster and use less memory; data is read when a signal or an image is previewed or imported"
+msgstr "Parcourir un fichier HDF5 ne lit plus ses jeux de données en entier : ils sont listés et décrits à partir de leur forme et de leur type de données, et les aperçus de valeurs ne lisent que leurs premiers éléments. Les gros fichiers s'ouvrent plus vite et utilisent moins de mémoire ; les données sont lues lorsqu'un signal ou une image est prévisualisé ou importé"
+
+msgid "The HDF5 browser stays responsive while a preview is read, and items selected meanwhile are not read; selecting an item that cannot be previewed (a group, for example) clears the preview. Ordinary 1D arrays and 2D images, NeXus and mapped objects above 2²⁴ values (about 16.8 million) are previewed with a step along each axis (the axes of NeXus images are still read entirely, to check them as on import); compound datasets and signals stored in 2D tables still use complete objects for graphical previews"
+msgstr "L'explorateur HDF5 reste réactif pendant la lecture d'un aperçu, et les éléments sélectionnés entre-temps ne sont pas lus ; la sélection d'un élément qui ne peut pas être prévisualisé (un groupe, par exemple) efface l'aperçu. Les tableaux 1D ordinaires et les images 2D, les objets NeXus et décrits par un profil au-delà de 2²⁴ valeurs (environ 16,8 millions) sont prévisualisés avec un pas le long de chaque axe (les axes des images NeXus sont encore lus entièrement, pour les vérifier comme à l'import) ; les jeux de données composites et les signaux stockés dans des tableaux 2D utilisent encore des objets complets pour leurs aperçus graphiques"
+
+msgid "Datasets with three dimensions or more (image stacks, spectral cubes...) are now listed in the HDF5 browser and imported as one image or signal per frame: a view selector chooses the displayed axes, the frames (first, last and step along another axis) and the index of the other axes, previews the first frame, and imports the frames once **Import these frames** is checked (with a confirmation beyond 100 frames). Frames of NeXus datasets keep their axes, and their title gives their position (e.g. the motor position of each detector image of a scan)"
+msgstr "Les jeux de données à trois dimensions ou plus (piles d'images, cubes spectraux...) sont désormais listés dans le navigateur HDF5 et importés sous la forme d'une image ou d'un signal par trame : un sélecteur de vue choisit les axes affichés, les trames (première, dernière et pas selon un autre axe) et l'indice des autres axes, affiche la première trame en aperçu, et importe les trames une fois **Importer ces trames** coché (avec une confirmation au-delà de 100 trames). Les trames des jeux de données NeXus conservent leurs axes, et leur titre donne leur position (par exemple la position du moteur pour chaque image de détecteur d'un scan)"
+
+msgid "Dataset attributes with more than 10 000 values are no longer copied to the metadata of imported objects"
+msgstr "Les attributs de jeux de données de plus de 10 000 valeurs ne sont plus copiés dans les métadonnées des objets importés"
+
+msgid "See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific object import, experimental origin and preview limits."
+msgstr "Le [guide de l'explorateur HDF5](../features/common/h5browser.rst) décrit l'import d'objets scientifiques, l'origine expérimentale et les limites des aperçus."
+
+msgid "**Scripts, macros and plugins:**"
+msgstr "**Scripts, macros et plugins :**"
+
+msgid "An object or a group looked up by its title, from a macro, a plugin, a remote client (e.g. `get_object(\"My signal\")`) or the Web API, is no longer silently replaced by the first one found when several objects or groups share this title (e.g. files imported twice, \"Untitled\" objects): an error now names the matching objects with their UUID, which identifies them unambiguously (HTTP 409 for the Web API)"
+msgstr "Un objet ou un groupe recherché par son titre, depuis une macro, un plugin, un client distant (par exemple `get_object(\"My signal\")`) ou l'API Web, n'est plus silencieusement remplacé par le premier trouvé lorsque plusieurs objets ou groupes portent ce titre (par exemple des fichiers importés deux fois, des objets « Untitled ») : une erreur indique désormais les objets correspondants avec leur UUID, qui les identifie sans ambiguïté (HTTP 409 pour l'API Web)"
+
+msgid "For plugin developers: `patch_title_with_ids` no longer takes the third argument (`id_func`), and the helpers of the former `s001`-style identifiers (`SHORT_ID_REGEX`, `find_by_short_id`, `find_short_ids_in_title`, `replace_short_ids_by_uuids_in_titles`, `replace_uuids_by_short_ids_in_titles`) are removed from `datalab.objectmodel`, as titles now refer to objects by their UUID"
+msgstr "Pour les développeurs de plugins : `patch_title_with_ids` ne prend plus de troisième argument (`id_func`), et les fonctions des anciens identifiants de type `s001` (`SHORT_ID_REGEX`, `find_by_short_id`, `find_short_ids_in_title`, `replace_short_ids_by_uuids_in_titles`, `replace_uuids_by_short_ids_in_titles`) sont retirées de `datalab.objectmodel`, les titres désignant désormais les objets par leur UUID"
+
+msgid "For developers of custom DataLab controllers derived from `BaseProxy`: the new `export_capsule` and `open_capsule` methods must be implemented"
+msgstr "Pour les développeurs de contrôleurs DataLab personnalisés dérivés de `BaseProxy` : les nouvelles méthodes `export_capsule` et `open_capsule` doivent être implémentées"
 
 msgid "🛠️ Bug Fixes"
 msgstr "🛠️ Corrections de bugs"
@@ -321,11 +542,125 @@ msgstr "**Disposition de la fenêtre :**"
 msgid "Fixed the width of the signal/image panels not being restored at startup: after narrowing the panels and restarting DataLab, they came back wider (up to their maximum width) instead of keeping the width chosen by the user"
 msgstr "Correction de la largeur des panneaux Signal/Image non restaurée au démarrage : après avoir réduit les panneaux puis redémarré DataLab, ils réapparaissaient plus larges (jusqu'à leur largeur maximale) au lieu de conserver la largeur choisie par l'utilisateur"
 
+msgid "Fixed DataLab failing to start when its configuration file held an invalid window layout or an invalid log file name (e.g., after editing the file by hand): such settings are now ignored, and the default ones are used"
+msgstr "Correction de l'échec du démarrage de DataLab lorsque son fichier de configuration contenait une disposition de fenêtre ou un nom de fichier journal invalide (par exemple après une modification manuelle du fichier) : ces paramètres sont désormais ignorés, et les paramètres par défaut sont utilisés"
+
+msgid "**Console:**"
+msgstr "**Console :**"
+
+msgid "Fixed the console still being shown on errors after disabling **Show console on error** in the Settings dialog (with Qt 5, when the setting was enabled at startup), until DataLab was restarted"
+msgstr "Correction de la console qui restait affichée en cas d'erreur après la désactivation de **Afficher la console en cas d'erreur** dans la boîte de dialogue des préférences (avec Qt 5, lorsque ce paramètre était activé au démarrage), jusqu'au redémarrage de DataLab"
+
+msgid "**Demo:**"
+msgstr "**Démo :**"
+
+msgid "Fixed the demo failing with the error \"No module named 'pytest'\" in the standalone version of DataLab (installed with the MSI installer) and in installations without the test dependencies (e.g., `pip install datalab-platform`), whether started from the **?** menu, the welcome page, the last step of the guided tour or the `datalab-demo` command (fixes [Issue #365](https://github.com/DataLab-Platform/DataLab/issues/365))"
+msgstr "Correction de l'échec de la démo, avec l'erreur \"No module named 'pytest'\", dans la version autonome de DataLab (installée avec l'installeur MSI) et dans les installations sans les dépendances de test (par exemple `pip install datalab-platform`), qu'elle soit lancée depuis le menu **?**, la page d'accueil, la dernière étape de la visite guidée ou la commande `datalab-demo` (corrige [l'issue #365](https://github.com/DataLab-Platform/DataLab/issues/365))"
+
+msgid "The `datalab-demo` command no longer deletes the DataLab configuration of the user: the demo now runs with the default settings, without reading or changing the settings of the user"
+msgstr "La commande `datalab-demo` ne supprime plus la configuration DataLab de l'utilisateur : la démo s'exécute désormais avec les paramètres par défaut, sans lire ni modifier les paramètres de l'utilisateur"
+
+msgid "**Standalone version:**"
+msgstr "**Version autonome :**"
+
+msgid "Fixed the standalone version of DataLab exiting with a success code when it failed to start: it now exits with an error code, so that scripts and deployment tools launching it can detect the failure (the cause is still written in `datalab_error.log`, in the current folder)"
+msgstr "Correction de la version autonome de DataLab qui s'arrêtait avec un code de succès lorsqu'elle ne parvenait pas à démarrer : elle s'arrête désormais avec un code d'erreur, afin que les scripts et outils de déploiement qui la lancent puissent détecter l'échec (la cause est toujours écrite dans `datalab_error.log`, dans le dossier courant)"
+
+msgid "**Display scaling:**"
+msgstr "**Mise à l'échelle de l'affichage :**"
+
+msgid "Fixed the splash screen, the DataLab logo of the welcome page and of the guided tour, and the watermark of empty plots being blurry with a Windows display scaling greater than 100% (e.g., 125%): they are now displayed at the resolution of the screen"
+msgstr "Correction du flou de l'écran de démarrage, du logo DataLab de la page d'accueil et de la visite guidée, et du filigrane des graphiques vides avec une mise à l'échelle de l'affichage Windows supérieure à 100 % (par exemple 125 %) : ils sont désormais affichés à la résolution de l'écran"
+
+#, python-format
+msgid "Fixed most of the text of the user interface (welcome page, object properties, panel tabs, dialog boxes, ...) keeping its 100% size with a Windows display scaling greater than 100% (e.g., 125%), while menus and the status bar were enlarged. All the text now follows the display scaling and the Windows text size setting, and uses the standard font of Windows applications (\"Segoe UI\"). This affected DataLab running with Qt 5, like the standalone application (requires guidata ≥ 3.16.1)"
+msgstr "Correction de la majeure partie du texte de l'interface (page d'accueil, propriétés des objets, onglets des panneaux, boîtes de dialogue, ...) qui conservait sa taille à 100 % avec une mise à l'échelle de l'affichage Windows supérieure à 100 % (par exemple 125 %), alors que les menus et la barre d'état étaient agrandis. Tout le texte suit désormais la mise à l'échelle de l'affichage et le réglage de la taille du texte de Windows, et utilise la police standard des applications Windows (« Segoe UI »). Cela concernait DataLab exécuté avec Qt 5, comme l'application autonome (nécessite guidata ≥ 3.16.1)"
+
+#, python-format
+msgid "Fixed the line of the X axis of signal and image plots not being drawn with a display scaling such as 125% or 150%, depending on the size and position of the plot in the window (requires PythonQwt ≥ 0.17.1)"
+msgstr "Correction de la ligne de l'axe des X des graphiques de signaux et d'images, qui n'était pas tracée avec une mise à l'échelle de l'affichage de 125 % ou 150 % par exemple, selon la taille et la position du graphique dans la fenêtre (nécessite PythonQwt ≥ 0.17.1)"
+
+#, python-format
+msgid "Fixed images being displayed with a lower resolution than the screen with a display scaling greater than 100%: with a 200% scaling, images were shown with half the resolution of the screen, and with 125%, one screen pixel row and column out of five were duplicated, which made fine details (e.g., noise) look irregular. Images are now displayed at the resolution of the screen (requires PlotPy ≥ 2.12.1)"
+msgstr "Correction des images affichées avec une résolution inférieure à celle de l'écran avec une mise à l'échelle de l'affichage supérieure à 100 % : avec une mise à l'échelle de 200 %, les images étaient affichées avec la moitié de la résolution de l'écran, et avec 125 %, une ligne et une colonne de pixels de l'écran sur cinq étaient dupliquées, ce qui rendait irréguliers les détails fins (par exemple le bruit). Les images sont désormais affichées à la résolution de l'écran (nécessite PlotPy ≥ 2.12.1)"
+
+msgid "Fixed the red plugin icon of the status bar (shown when some plugins failed to load) being too small and shifted to the top-left corner with a display scaling greater than 100% (e.g., half its size with 200%)"
+msgstr "Correction de l'icône rouge des plugins dans la barre d'état (affichée lorsque des plugins n'ont pas pu être chargés), qui était trop petite et décalée vers le coin supérieur gauche avec une mise à l'échelle de l'affichage supérieure à 100 % (par exemple réduite de moitié avec 200 %)"
+
+msgid "**Dark theme:**"
+msgstr "**Thème sombre :**"
+
+msgid "Fixed most windows keeping a white title bar with the dark theme on Windows, next to their dark content: the conversation history of the AI Assistant, the workspace capsule, the command palette and other dialog boxes, the import wizard, the confirmation and input boxes (e.g., when renaming a group or a conversation) and the panels detached from the main window (signal and image views, macro, history, AI Assistant and welcome panels, console). All the windows now have a dark title bar with the dark theme, also after changing the color mode in the Settings dialog (requires guidata ≥ 3.17.2, fixes [Issue #490](https://github.com/DataLab-Platform/DataLab/issues/490))"
+msgstr "Correction de la plupart des fenêtres qui conservaient une barre de titre blanche avec le thème sombre sous Windows, à côté de leur contenu sombre : l'historique des conversations de l'Assistant IA, la capsule d'espace de travail, la palette de commandes et d'autres boîtes de dialogue, l'assistant d'importation, les boîtes de confirmation et de saisie (par exemple lors du renommage d'un groupe ou d'une conversation) et les panneaux détachés de la fenêtre principale (vues signal et image, panneaux macro, historique, Assistant IA et accueil, console). Toutes les fenêtres ont désormais une barre de titre sombre avec le thème sombre, y compris après un changement du mode de couleur dans la boîte de dialogue des préférences (nécessite guidata ≥ 3.17.2, corrige [Issue #490](https://github.com/DataLab-Platform/DataLab/issues/490))"
+
+msgid "**Plot watermark:**"
+msgstr "**Filigrane des graphiques :**"
+
+msgid "Fixed the watermark of empty plots being read from another installation of DataLab sharing the same user configuration (e.g., DataLab installed in another Python environment): the watermark disappeared once this other installation was removed, and stayed blurry on high-DPI screens when it was an older version. The watermark of the running DataLab is now always used"
+msgstr "Correction du filigrane des graphiques vides, qui était lu dans une autre installation de DataLab partageant la même configuration utilisateur (par exemple DataLab installé dans un autre environnement Python) : le filigrane disparaissait une fois cette autre installation supprimée, et restait flou sur les écrans haute résolution lorsqu'il s'agissait d'une version plus ancienne. Le filigrane du DataLab en cours d'exécution est désormais toujours utilisé"
+
+msgid "**Signal display:**"
+msgstr "**Affichage des signaux :**"
+
+msgid "Fixed auto downsampling of signals (**Settings > Visualization > Signals**) only starting above 5 times the configured maximum number of points: with the default value of 100,000 points, signals of a few hundred thousand points were drawn in full, which slowed down the display. Signals with more points than the maximum are now downsampled so that at most this number of points is drawn, and the Settings dialog and the documentation now give the actual default value (100,000 instead of 10,000) (fixes [Issue #455](https://github.com/DataLab-Platform/DataLab/issues/455))"
+msgstr "Correction du sous-échantillonnage automatique des signaux (**Préférences > Visualisation > Signaux**), qui ne commençait qu'au-delà de 5 fois le nombre maximal de points configuré : avec la valeur par défaut de 100 000 points, les signaux de quelques centaines de milliers de points étaient tracés en entier, ce qui ralentissait l'affichage. Les signaux comportant plus de points que ce maximum sont désormais sous-échantillonnés de sorte qu'au plus ce nombre de points soit tracé, et la boîte de dialogue des préférences ainsi que la documentation indiquent désormais la valeur par défaut réelle (100 000 au lieu de 10 000) (corrige [Issue #455](https://github.com/DataLab-Platform/DataLab/issues/455))"
+
+msgid "Fixed changes of the auto downsampling and line width settings only applying to the curves of the selected signals: the other curves kept the former settings, even once selected again. These settings now apply to all curves as soon as the Settings dialog is closed"
+msgstr "Correction des modifications des préférences de sous-échantillonnage automatique et d'épaisseur de trait qui ne s'appliquaient qu'aux courbes des signaux sélectionnés : les autres courbes conservaient les anciennes préférences, même une fois sélectionnées à nouveau. Ces préférences s'appliquent désormais à toutes les courbes dès la fermeture de la boîte de dialogue des préférences"
+
+msgid "Fixed the X axis ticks being shifted relative to the vertical grid lines and the curves after opening a signal or changing the selection, for signals whose X axis does not start and end on a graduation (e.g., `step.npy` from the Sigima test data): the shift remained until the view was panned or zoomed. The X axis now stays aligned with the grid and the curves (fixes [Issue #457](https://github.com/DataLab-Platform/DataLab/issues/457))"
+msgstr "Correction des graduations de l'axe X qui étaient décalées par rapport aux lignes verticales de la grille et aux courbes après l'ouverture d'un signal ou un changement de sélection, pour les signaux dont l'axe X ne commence et ne se termine pas sur une graduation (par exemple, `step.npy` des données de test de Sigima) : le décalage persistait jusqu'à un déplacement ou un zoom de la vue. L'axe X reste désormais aligné avec la grille et les courbes (corrige [Issue #457](https://github.com/DataLab-Platform/DataLab/issues/457))"
+
+msgid "Fixed curves of reloaded workspaces keeping the line width they had when the workspace was saved: changes of the line width setting (**Settings > Visualization > Signals**) no longer applied to them, and thick lines were no longer drawn 1 pixel wide for signals with many points, which slowed down their display. Only line widths chosen for a curve (e.g. in its parameters dialog) are now saved, and they are also drawn 1 pixel wide for signals with many points. When opening workspaces and history files saved with DataLab 1.3 or earlier, which saved the line width of every curve, line widths of 1 are removed so that curves follow the line width setting; other line widths are kept"
+msgstr "Correction des courbes des espaces de travail rechargés qui conservaient l'épaisseur de trait qu'elles avaient lors de l'enregistrement de l'espace de travail : les modifications de la préférence d'épaisseur de trait (**Préférences > Visualisation > Signaux**) ne s'y appliquaient plus, et les traits épais n'étaient plus tracés avec une largeur de 1 pixel pour les signaux comportant de nombreux points, ce qui ralentissait leur affichage. Seules les épaisseurs de trait choisies pour une courbe (par exemple dans sa boîte de dialogue de paramètres) sont désormais enregistrées, et elles sont elles aussi tracées avec une largeur de 1 pixel pour les signaux comportant de nombreux points. À l'ouverture des espaces de travail et des fichiers d'historique enregistrés avec DataLab 1.3 ou antérieur, qui enregistraient l'épaisseur de trait de chaque courbe, les épaisseurs de trait de 1 sont supprimées afin que les courbes suivent la préférence d'épaisseur de trait ; les autres épaisseurs de trait sont conservées"
+
+msgid "**Custom colormaps:**"
+msgstr "**Palettes de couleurs personnalisées :**"
+
+msgid "Fixed custom colormaps (created with the colormap manager) being saved outside DataLab's configuration directory, in a `.plotpy` or `.none` directory of the user's configuration directory shared with other applications based on PlotPy, depending on how DataLab was started. They are now saved in the `plotpy` subdirectory of DataLab's configuration directory; the first time, custom colormaps saved in the former directories are copied there (requires PlotPy ≥ 2.12.0)"
+msgstr "Correction des palettes de couleurs personnalisées (créées avec le gestionnaire de palettes de couleurs) qui étaient enregistrées en dehors du répertoire de configuration de DataLab, dans un répertoire `.plotpy` ou `.none` du répertoire de configuration de l'utilisateur partagé avec les autres applications basées sur PlotPy, selon la manière dont DataLab avait été lancé. Elles sont désormais enregistrées dans le sous-répertoire `plotpy` du répertoire de configuration de DataLab ; la première fois, les palettes de couleurs personnalisées enregistrées dans les anciens répertoires y sont copiées (nécessite PlotPy ≥ 2.12.0)"
+
+msgid "**HDF5 import:**"
+msgstr "**Import HDF5 :**"
+
+msgid "Fixed images with unsigned 32-bit values above 2 147 483 647 being clipped when imported from an HDF5 file (\"Clipping uint32 data to int32\" warning): such images are now imported as 64-bit floating-point images keeping every value exactly. Other integer images that no supported integer type can hold also use a sufficiently precise floating-point type when possible, instead of rounding to 32-bit floating-point values beyond 16 777 216; a warning is emitted when no supported type guarantees exact conversion (in particular beyond ±2⁵³ for float64)"
+msgstr "Correction de l'écrêtage des images contenant des valeurs entières non signées sur 32 bits supérieures à 2 147 483 647 lors de leur import depuis un fichier HDF5 (avertissement « Clipping uint32 data to int32 ») : ces images sont désormais importées en flottants sur 64 bits en conservant chaque valeur exactement. Les autres images entières qu'aucun type entier pris en charge ne peut contenir utilisent aussi, lorsque c'est possible, un type flottant suffisamment précis, au lieu d'être arrondies en flottants sur 32 bits au-delà de 16 777 216 ; un avertissement est émis lorsqu'aucun type pris en charge ne garantit une conversion exacte (notamment au-delà de ±2⁵³ pour float64)"
+
+msgid "Fixed single-precision complex (`complex64`) 1D datasets losing their imaginary part when imported from an HDF5 file: they are now imported as complex signals. Integer signals beyond ±2⁵³ now also emit the precision warning instead of being rounded silently"
+msgstr "Correction de la perte de la partie imaginaire des jeux de données 1D complexes en simple précision (`complex64`) lors de leur import depuis un fichier HDF5 : ils sont désormais importés comme des signaux complexes. Les signaux entiers au-delà de ±2⁵³ émettent désormais aussi l'avertissement de précision au lieu d'être arrondis silencieusement"
+
+msgid "Fixed the import of several datasets from HDF5 files stopping at the first dataset that could not be imported: the other datasets are now imported, and the datasets that could not be are listed in a single message at the end"
+msgstr "Correction de l'import de plusieurs jeux de données depuis des fichiers HDF5, qui s'arrêtait au premier jeu de données impossible à importer : les autres jeux de données sont désormais importés, et ceux qui n'ont pas pu l'être sont listés dans un message unique à la fin"
+
+msgid "Fixed HDF5 files containing broken links failing to open in the HDF5 browser, for example synchrotron master files whose detector files are not available (external links to a missing file): the broken links are now skipped and the rest of the file can be browsed and imported"
+msgstr "Correction de l'échec d'ouverture dans l'explorateur HDF5 des fichiers HDF5 contenant des liens rompus, par exemple les fichiers maîtres de synchrotron dont les fichiers de détecteur ne sont pas disponibles (liens externes vers un fichier absent) : les liens rompus sont désormais ignorés et le reste du fichier peut être exploré et importé"
+
+msgid "Fixed HDF5 files containing a group linked into itself or into one of its subgroups failing to open in the HDF5 browser (the file was browsed endlessly until an error): such links back to a parent group are now skipped, while other aliases of a group or dataset are still shown at each of their paths"
+msgstr "Correction des fichiers HDF5 contenant un groupe lié dans lui-même ou dans l'un de ses sous-groupes, qui ne pouvaient pas être ouverts dans l'explorateur HDF5 (le fichier était parcouru sans fin jusqu'à une erreur) : ces liens vers un groupe parent sont désormais ignorés, tandis que les autres alias d'un groupe ou d'un jeu de données restent affichés à chacun de leurs chemins"
+
+msgid "Fixed datasets stored in other files, such as the detector data of synchrotron master files, missing from the HDF5 browser even when these files are available: the datasets reached through an external link were looked up at their path in their own file, so that they were skipped, or the data of another dataset of the opened file, found at that path, was imported instead. They are now listed and imported at their path in the opened file"
+msgstr "Correction des jeux de données stockés dans d'autres fichiers, comme les données de détecteur des fichiers maîtres de synchrotron, qui n'apparaissaient pas dans l'explorateur HDF5 même lorsque ces fichiers sont disponibles : les jeux de données atteints par un lien externe étaient recherchés à leur chemin dans leur propre fichier, si bien qu'ils étaient ignorés, ou que les données d'un autre jeu de données du fichier ouvert, situé à ce chemin, étaient importées à leur place. Ils sont désormais listés et importés à leur chemin dans le fichier ouvert"
+
+msgid "Fixed HDF5 files whose name contains a comma failing to open: the comma was taken for the separator between a file name and the name of a dataset to import. When appending such a workspace, the question about clearing the workspace also did not mention that its provenance is not imported, and an append cancelled by the user was still recorded in the History panel"
+msgstr "Correction de l'échec d'ouverture des fichiers HDF5 dont le nom contient une virgule : la virgule était prise pour le séparateur entre un nom de fichier et le nom d'un jeu de données à importer. Lors de l'ajout d'un tel espace de travail, la question proposant de vider l'espace de travail n'indiquait pas non plus que sa provenance n'est pas importée, et un ajout annulé par l'utilisateur était tout de même enregistré dans le panneau Historique"
+
+msgid "Fixed datasets holding a single row of values (e.g., a single scan stored as a 1 × N array) being silently skipped when imported from an HDF5 file: they are now imported and previewed as signals"
+msgstr "Correction des jeux de données contenant une seule ligne de valeurs (par exemple, un scan unique stocké sous forme de tableau 1 × N), qui étaient ignorés sans message lors de leur import depuis un fichier HDF5 : ils sont désormais importés et prévisualisés comme des signaux"
+
+msgid "Fixed an error when clicking **Show array** in the HDF5 browser after selecting a group with the keyboard, or after closing the file of the selected dataset: the button now only shows arrays, and is disabled once the file is closed"
+msgstr "Correction d'une erreur lors d'un clic sur **Afficher le tableau** dans l'explorateur HDF5 après la sélection d'un groupe au clavier, ou après la fermeture du fichier du jeu de données sélectionné : le bouton n'affiche désormais que des tableaux, et il est désactivé une fois le fichier fermé"
+
+msgid "**Workspace saving:**"
+msgstr "**Enregistrement de l'espace de travail :**"
+
+msgid "Fixed a failed save destroying the previous version of the workspace file: the file was emptied before the data was written, so that an error during the save, a full disk or an interruption left neither the previous nor the new workspace on disk. Workspaces, capsules and History files (`.dlhist`) are now written to a temporary file, which replaces the previous file only once completely written; if the save fails, the previous file is left untouched"
+msgstr "Correction d'un enregistrement en échec qui détruisait la version précédente du fichier d'espace de travail : le fichier était vidé avant l'écriture des données, si bien qu'une erreur pendant l'enregistrement, un disque plein ou une interruption ne laissaient sur le disque ni l'ancien ni le nouvel espace de travail. Les espaces de travail, les capsules et les fichiers d'historique (`.dlhist`) sont désormais écrits dans un fichier temporaire, qui ne remplace le fichier précédent qu'une fois entièrement écrit ; en cas d'échec de l'enregistrement, le fichier précédent reste intact"
+
 msgid "**File import:**"
 msgstr "**Import de fichiers :**"
 
 msgid "Fixed compressed TIFF files (LZW, JPEG or WebP compression) failing to open with the error \"requires the 'imagecodecs' package\"; LZW is the default compression of many acquisition and image-editing tools. These files now open out of the box, including with the standalone installer. CCITT-compressed bilevel images are also supported with the standalone installer and with Python 3.11 or later (fixes [Issue #381](https://github.com/DataLab-Platform/DataLab/issues/381))"
-msgstr "Correction de l'ouverture des fichiers TIFF compress?s (compression LZW, JPEG ou WebP), qui ?chouait avec l'erreur ? requires the 'imagecodecs' package ? ; LZW est la compression par d?faut de nombreux outils d'acquisition et d'?dition d'images. Ces fichiers s'ouvrent d?sormais sans installation suppl?mentaire, y compris avec l'installeur autonome. Les images binaires compress?es en CCITT sont ?galement prises en charge avec l'installeur autonome et avec Python 3.11 ou ult?rieur (corrige [Issue #381](https://github.com/DataLab-Platform/DataLab/issues/381))"
+msgstr "Correction de l'ouverture des fichiers TIFF compressés (compression LZW, JPEG ou WebP), qui échouait avec l'erreur « requires the 'imagecodecs' package » ; LZW est la compression par défaut de nombreux outils d'acquisition et d'édition d'images. Ces fichiers s'ouvrent désormais sans installation supplémentaire, y compris avec l'installeur autonome. Les images binaires compressées en CCITT sont également prises en charge avec l'installeur autonome et avec Python 3.11 ou ultérieur (corrige [l'issue #381](https://github.com/DataLab-Platform/DataLab/issues/381))"
 
 msgid "**Metadata:**"
 msgstr "**Métadonnées :**"
@@ -336,6 +671,12 @@ msgstr "L'ajout, le collage ou la suppression de métadonnées marque désormais
 msgid "Importing metadata from a file into an object (**Edit > Metadata > Import metadata**) no longer gives it the identity of the object the metadata were exported from: two objects sharing an identity confused source references in titles, **Select source objects** and the saving of the workspace"
 msgstr "L'import de métadonnées depuis un fichier dans un objet (**Édition > Métadonnées > Importer les métadonnées**) ne lui donne plus l'identité de l'objet dont les métadonnées avaient été exportées : deux objets partageant une identité perturbaient les références aux sources dans les titres, **Sélectionner les objets source** et l'enregistrement de l'espace de travail"
 
+msgid "Fixed the **Inverse ROI logic** option of image ROIs being lost when validating the ROI editor: the option had no effect when set in the coordinates dialog of the editor (e.g., **Rectangular ROI**), and image ROIs created with it (e.g., by a macro) lost it once edited"
+msgstr "Correction de la perte de l'option **Inverser la logique de la ROI** des ROI d'image lors de la validation de l'éditeur de ROI : l'option restait sans effet lorsqu'elle était définie dans la boîte de dialogue de coordonnées de l'éditeur (par exemple **ROI rectangulaire**), et les ROI d'image créées avec cette option (par exemple par une macro) la perdaient une fois modifiées"
+
+msgid "Fixed ROIs defined in pixel indices (e.g., by a macro or with the remote control) being converted to physical coordinates when the ROI editor was validated. They now stay in pixel indices, also when moved in the editor"
+msgstr "Correction des ROI définies en indices de pixels (par exemple par une macro ou par le contrôle à distance), qui étaient converties en coordonnées physiques lors de la validation de l'éditeur de ROI. Elles restent désormais en indices de pixels, y compris lorsqu'elles sont déplacées dans l'éditeur"
+
 msgid "**Processing:**"
 msgstr "**Traitements :**"
 
@@ -345,11 +686,71 @@ msgstr "Les résultats de l'extraction de plusieurs régions d'intérêt dans un
 msgid "**Edit > Recompute** now also recomputes results of operations combining several objects (e.g., difference of two signals, average of several images), which were skipped"
 msgstr "**Édition > Retraiter** recalcule désormais aussi les résultats des opérations combinant plusieurs objets (par exemple la différence de deux signaux ou la moyenne de plusieurs images), qui étaient ignorés"
 
+msgid "Fixed **Processing > Resampling** of images shifting every value by half a pixel: resampling an image with the default parameters, i.e. onto its own grid, filled its last row and column with NaN. The X/Y min/max parameters are now the coordinates of the centers of the first and last output pixels (by default, those of the image), and the 'Pixel size' mode keeps the requested pixel size exactly"
+msgstr "Correction du **Traitement > Rééchantillonnage** des images, qui décalait toutes les valeurs d'un demi-pixel : rééchantillonner une image avec les paramètres par défaut, c'est-à-dire sur sa propre grille, remplissait sa dernière ligne et sa dernière colonne de NaN. Les paramètres X/Y min/max sont désormais les coordonnées des centres du premier et du dernier pixel de sortie (par défaut, ceux de l'image), et le mode 'Taille de pixel' conserve exactement la taille de pixel demandée"
+
+msgid "Fixed the sum, average, product and standard deviation of several signals, and their combination into an image, depending on the order of the signals: when a real signal came first, the imaginary parts of the complex signals were discarded"
+msgstr "Correction de la somme, de la moyenne, du produit et de l'écart-type de plusieurs signaux, ainsi que de leur combinaison en image, qui dépendaient de l'ordre des signaux : lorsqu'un signal réel venait en premier, les parties imaginaires des signaux complexes étaient perdues"
+
+msgid "The sum, average and product of several images now accept complex images, which raised an error"
+msgstr "La somme, la moyenne et le produit de plusieurs images acceptent désormais les images complexes, qui provoquaient une erreur"
+
+msgid "Fixed **Processing > Resampling** of complex images with the default parameters, and the Z-axis **Polynomial calibration** of complex images, discarding the imaginary parts: complex images now stay complex"
+msgstr "Correction du **Traitement > Rééchantillonnage** des images complexes avec les paramètres par défaut, et de l'**Étalonnage polynomial** de l'axe Z des images complexes, qui supprimaient les parties imaginaires : les images complexes restent désormais complexes"
+
+msgid "Fixed modifying the result of a diagonal, horizontal or vertical flip or a 90° rotation of an image in place (e.g. from a macro or a plugin) also modifying its source image"
+msgstr "Correction de la modification en place du résultat d'un retournement diagonal, horizontal ou vertical ou d'une rotation de 90° d'une image (par exemple depuis une macro ou un plugin), qui modifiait aussi l'image source"
+
+msgid "Fixed the extraction of several regions of interest into a single image giving wrong coordinates to images with non-uniform coordinates (the X coordinates were taken from the extracted rows and the Y coordinates from the extracted columns)"
+msgstr "Correction de l'extraction de plusieurs régions d'intérêt dans une seule image, qui donnait des coordonnées erronées aux images à coordonnées non uniformes (les coordonnées X étaient prises sur les lignes extraites et les coordonnées Y sur les colonnes extraites)"
+
+msgid "The arbitrary rotation of images (**Processing > Geometry > Rotate by...**) now refuses images with non-uniform coordinates, like resizing and resampling, instead of producing an image whose coordinates did not match its pixels"
+msgstr "La rotation arbitraire des images (**Traitement > Géométrie > Rotation de...**) refuse désormais les images à coordonnées non uniformes, comme le redimensionnement et le rééchantillonnage, au lieu de produire une image dont les coordonnées ne correspondaient pas à ses pixels"
+
+msgid "Fixed the uncertainty of the product of signals being lost where one of the signals is zero: it is now propagated there too"
+msgstr "Correction de l'incertitude du produit de signaux, qui était perdue là où l'un des signaux est nul : elle y est désormais également propagée"
+
+msgid "Fixed ROIs, annotations and analysis results (centroids, detected peaks, contours...) being shifted by one pixel after a flip or a 90° rotation of an image; after a 90° rotation of a non-square image, or of an image whose coordinates do not start at zero, analysis results even ended up far from the features they describe. They now move exactly with the pixels; for images with non-uniform coordinates, circles, ellipses and polygons are moved approximately when the pixels are reversed along a non-uniform axis (a circle does not stay a circle). ROIs defined in pixel indices are also moved correctly, and inverse ROIs (which mask the inside of their shape) no longer become normal ROIs after these operations, a translation or a distribution of images on a grid"
+msgstr "Correction du décalage d'un pixel des ROI, des annotations et des résultats d'analyse (centroïdes, pics détectés, contours...) après une symétrie ou une rotation de 90° d'une image ; après une rotation de 90° d'une image non carrée, ou d'une image dont les coordonnées ne commencent pas à zéro, les résultats d'analyse se retrouvaient même loin des éléments qu'ils décrivent. Ils se déplacent désormais exactement avec les pixels ; pour les images à coordonnées non uniformes, les cercles, ellipses et polygones sont déplacés de façon approchée lorsque les pixels sont inversés le long d'un axe non uniforme (un cercle ne reste pas un cercle). Les ROI définies en indices de pixels sont aussi correctement déplacées, et les ROI inverses (qui masquent l'intérieur de leur forme) ne deviennent plus des ROI normales après ces opérations, une translation ou une distribution d'images sur une grille"
+
+msgid "Fixed **ROI > Extract...** giving the extracted image a wrong origin when the coordinates of the source image do not start at zero, and coordinates not matching the extracted pixels for images with non-uniform coordinates"
+msgstr "Correction de **ROI > Extraire...**, qui donnait à l'image extraite une origine erronée lorsque les coordonnées de l'image source ne commencent pas à zéro, et des coordonnées ne correspondant pas aux pixels extraits pour les images à coordonnées non uniformes"
+
+msgid "Fixed the coordinates of analysis results computed in a ROI being off by up to half a pixel"
+msgstr "Correction des coordonnées des résultats d'analyse calculés dans une ROI, qui pouvaient être fausses jusqu'à un demi-pixel"
+
+msgid "Fixed the analysis results of images with non-uniform coordinates (**Analysis > Centroid...**, **Minimum enclosing circle center...**, **2D peak detection**, **Contour detection...**, **Circle Hough transform...** and **Blob detection**) being given in pixel indices, or according to the former pixel size and origin of an image switched to non-uniform coordinates, so that they were drawn away from the features they describe: they are now placed at the positions of the pixels on the image axes, with radii scaled by the local pixel size. The results of images with uniform coordinates are unchanged"
+msgstr "Correction des résultats d'analyse des images à coordonnées non uniformes (**Analyse > Barycentre...**, **Centre du cercle minimum...**, **Détection de pics 2D**, **Détection de contours...**, **Transformée de Hough circulaire...** et **Détection de taches**), qui étaient donnés en indices de pixels, ou selon l'ancienne taille de pixel et l'ancienne origine d'une image passée en coordonnées non uniformes, de sorte qu'ils étaient tracés loin des éléments qu'ils décrivent : ils sont désormais placés aux positions des pixels sur les axes de l'image, les rayons étant mis à l'échelle de la taille locale des pixels. Les résultats des images à coordonnées uniformes sont inchangés"
+
+msgid "**ROI > Extract...** now reports an explicit error for a region of interest holding no pixel of the image (for example a cell of a ROI grid narrower than a pixel, or a region outside the image) instead of silently creating an empty image; the other regions of interest are still extracted"
+msgstr "**ROI > Extraire...** signale désormais une erreur explicite pour une région d'intérêt ne contenant aucun pixel de l'image (par exemple une cellule d'une grille de ROI plus étroite qu'un pixel, ou une région hors de l'image) au lieu de créer silencieusement une image vide ; les autres régions d'intérêt sont tout de même extraites"
+
+msgid "Fixed **Processing > Level adjustment > Offset correction** using a background area truncated to integer coordinates: the area was wrong for images whose coordinates are not in pixels (e.g. in millimeters), and empty when smaller than one unit"
+msgstr "Correction de **Traitement > Ajustement de niveau > Soustraction d'offset**, qui utilisait une zone de fond tronquée à des coordonnées entières : la zone était erronée pour les images dont les coordonnées ne sont pas en pixels (par exemple en millimètres), et vide lorsqu'elle mesurait moins d'une unité"
+
+msgid "**Plugins:**"
+msgstr "**Plugins :**"
+
+msgid "Plugins organized as a folder, such as those created by `datalab-plugin create --project`, are now loaded when their folder is added to the plugin directories, without being installed first: they were silently ignored, unless an earlier installation had left package information in the project. The project folder itself can now be added, instead of its `src` subfolder (fixes [Issue #411](https://github.com/DataLab-Platform/DataLab/issues/411))"
+msgstr "Les plugins organisés en dossier, comme ceux créés par `datalab-plugin create --project`, sont désormais chargés lorsque leur dossier est ajouté aux répertoires de plugins, sans devoir être installés au préalable : ils étaient ignorés sans message, sauf si une installation antérieure avait laissé des informations de paquet dans le projet. Le dossier du projet lui-même peut désormais être ajouté, au lieu de son sous-dossier `src` (corrige [l'issue #411](https://github.com/DataLab-Platform/DataLab/issues/411))"
+
+msgid "Fixed small empty windows briefly flashing on screen when opening **Plugins > Configure plugins...**, just before the dialog appeared (fixes [Issue #486](https://github.com/DataLab-Platform/DataLab/issues/486))"
+msgstr "Correction de petites fenêtres vides qui apparaissaient brièvement à l'écran à l'ouverture de **Plugins > Configurer les plugins...**, juste avant l'affichage de la boîte de dialogue (corrige [l'issue #486](https://github.com/DataLab-Platform/DataLab/issues/486))"
+
 msgid "**Plugins and History:**"
 msgstr "**Plugins et historique :**"
 
 msgid "Replaying a History action or re-processing a result created by a plugin feature that shares its name with a built-in feature now runs the plugin feature instead of the built-in one"
 msgstr "Le rejeu d'une action de l'historique ou le recalcul d'un résultat créé par une fonctionnalité de plugin portant le même nom qu'une fonctionnalité intégrée exécute désormais la fonctionnalité du plugin au lieu de la fonctionnalité intégrée"
+
+msgid "**History Panel:**"
+msgstr "**Panneau d'historique :**"
+
+msgid "Fixed an oversized warning appearing when deleting a group of signals or images whose processing results were kept in another group, even when the History panel was not recording: it listed every deleted object, often as an unreadable identifier, and stated that \"operations could not be reconnected\" although there was nothing to reconnect. Deleting such objects now shows no message, and the results depending on them are left unchanged as before. The warning is now shown only when a recorded processing step loses its source, and it lists each step once, in a message of bounded size (fixes [Issue #451](https://github.com/DataLab-Platform/DataLab/issues/451))"
+msgstr "Correction d'un avertissement démesuré qui s'affichait lors de la suppression d'un groupe de signaux ou d'images dont les résultats de traitement étaient conservés dans un autre groupe, même lorsque le panneau d'historique n'enregistrait pas : il listait chaque objet supprimé, souvent sous la forme d'un identifiant illisible, et indiquait que des « opérations n'avaient pas pu être reconnectées » alors qu'il n'y avait rien à reconnecter. La suppression de tels objets n'affiche plus aucun message, et les résultats qui en dépendent restent inchangés, comme auparavant. L'avertissement n'est désormais affiché que lorsqu'une étape de traitement enregistrée perd sa source, et il liste chaque étape une seule fois, dans un message de taille limitée (corrige [l'issue #451](https://github.com/DataLab-Platform/DataLab/issues/451))"
+
+msgid "Fixed the **Description** column of the History panel showing the raw content of voluminous parameters, e.g. the whole histogram of a **Brightness and contrast** action: the row grew to a huge height and scrolling the panel became erratic. The description now shows the actual parameters (e.g. the minimum and maximum of the brightness and contrast range) on a single line, shortened to the column width with the full summary in its tooltip; long values are shortened, and expanded details scroll inside a row of limited height (fixes [Issue #369](https://github.com/DataLab-Platform/DataLab/issues/369))"
+msgstr "Correction de la colonne **Description** du panneau d'historique qui affichait le contenu brut des paramètres volumineux, par exemple l'histogramme complet d'une action **Luminosité et contraste** : la ligne prenait une hauteur démesurée et le défilement du panneau devenait erratique. La description affiche désormais les paramètres réels (par exemple le minimum et le maximum de la plage de luminosité et de contraste) sur une seule ligne, raccourcie à la largeur de la colonne, le résumé complet figurant dans son info-bulle ; les valeurs longues sont raccourcies, et les détails dépliés défilent dans une ligne de hauteur limitée (corrige [l'issue #369](https://github.com/DataLab-Platform/DataLab/issues/369))"
 
 msgid "**Object titles:**"
 msgstr "**Titres des objets :**"
@@ -377,3 +778,47 @@ msgstr "**Création de signaux :**"
 
 msgid "The blackbody signal (**Create > Blackbody (Planck's law)**) now has axis titles and units (wavelength in m, spectral radiance in W·sr⁻¹·m⁻³), which were missing (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))"
 msgstr "Le signal de corps noir (**Création > Corps noir (loi de Planck)**) a désormais des titres et des unités d'axes (longueur d'onde en m, luminance énergétique spectrale en W·sr⁻¹·m⁻³), qui étaient absents (corrige [l'issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))"
+
+msgid "**Remote control:**"
+msgstr "**Contrôle à distance :**"
+
+msgid "Fixed files loaded remotely with `load_from_files` or `load_from_directory` being sometimes silently ignored, or still loading after the call had returned, when requested right after DataLab started: requests received while DataLab is starting are now processed as soon as its main window is ready (fixes [Issue #398](https://github.com/DataLab-Platform/DataLab/issues/398))"
+msgstr "Correction des fichiers chargés à distance avec `load_from_files` ou `load_from_directory` qui étaient parfois ignorés silencieusement, ou encore en cours de chargement après le retour de l'appel, lorsqu'ils étaient demandés juste après le démarrage de DataLab : les requêtes reçues pendant le démarrage de DataLab sont désormais traitées dès que sa fenêtre principale est prête (corrige [l'issue #398](https://github.com/DataLab-Platform/DataLab/issues/398))"
+
+msgid "Errors raised by remote commands, such as `calc` with an unknown computation function or `set_object` with an unknown object, are now reported to the client instead of being silently ignored"
+msgstr "Les erreurs levées par les commandes à distance, comme `calc` avec une fonction de calcul inconnue ou `set_object` avec un objet inconnu, sont désormais signalées au client au lieu d'être ignorées silencieusement"
+
+msgid "Fixed remote commands sometimes returning the result of the previous command instead of their own: for example, `get_current_object_uuid` could return a panel name instead of `None` when there was no current object"
+msgstr "Correction des commandes à distance qui renvoyaient parfois le résultat de la commande précédente au lieu du leur : par exemple, `get_current_object_uuid` pouvait renvoyer un nom de panneau au lieu de `None` en l'absence d'objet courant"
+
+msgid "Fixed DataLab freezing when closed while a remote command was still running (e.g. when closing the main window with `call_method(\"close\")`)"
+msgstr "Correction du blocage de DataLab lorsqu'il était fermé alors qu'une commande à distance était encore en cours d'exécution (par exemple en fermant la fenêtre principale avec `call_method(\"close\")`)"
+
+msgid "Fixed DataLab crashing, or opening an error message box, when a request of a remote client or a macro failed, e.g. a computation requested with `calc` that failed on the selected signal, or a file that could not be read with `load_from_files`: the client was not informed of the error, and DataLab crashed when it ran without display (e.g. in the background, for tests or automation). The error is now reported to the client, as an `xmlrpc.client.Fault` with XML-RPC or as an HTTP error with the Web API (500 for a failed computation, 404 for an unknown computation function), and shown in the status bar of DataLab; this also applies to the datasets of an HDF5 file that could not be imported. Macros and remote clients now get an exception where they continued after the message box was closed (fixes [Issue #404](https://github.com/DataLab-Platform/DataLab/issues/404))"
+msgstr "Correction du plantage de DataLab, ou de l'ouverture d'une boîte de message d'erreur, lorsqu'une requête d'un client distant ou d'une macro échouait, par exemple un calcul demandé avec `calc` qui échouait sur le signal sélectionné, ou un fichier qui ne pouvait pas être lu avec `load_from_files` : le client n'était pas informé de l'erreur, et DataLab plantait lorsqu'il s'exécutait sans affichage (par exemple en arrière-plan, pour des tests ou de l'automatisation). L'erreur est désormais signalée au client, sous la forme d'une `xmlrpc.client.Fault` avec XML-RPC ou d'une erreur HTTP avec l'API Web (500 pour un calcul en échec, 404 pour une fonction de calcul inconnue), et affichée dans la barre d'état de DataLab ; cela s'applique aussi aux jeux de données d'un fichier HDF5 qui n'ont pas pu être importés. Les macros et les clients distants reçoivent désormais une exception là où ils poursuivaient leur exécution après la fermeture de la boîte de message (corrige [l'issue #404](https://github.com/DataLab-Platform/DataLab/issues/404))"
+
+msgid "Fixed every Web API request failing after 30 seconds with an HTTP 500 error (\"Main thread execution timed out\") when the Web API server had been started by a remote client with `start_webapi_server` (XML-RPC), including requests that should have failed at once, such as `calc` with an unknown computation function; the requested operation could even be carried out later, after the error had been returned. Requests are now served as when the server is started from the **File > Web API** menu (fixes [Issue #403](https://github.com/DataLab-Platform/DataLab/issues/403))"
+msgstr "Correction de l'échec de toutes les requêtes de l'API Web au bout de 30 secondes, avec une erreur HTTP 500 (\"Main thread execution timed out\"), lorsque le serveur de l'API Web avait été démarré par un client distant avec `start_webapi_server` (XML-RPC), y compris pour les requêtes qui auraient dû échouer immédiatement, comme `calc` avec une fonction de calcul inconnue ; l'opération demandée pouvait même être effectuée plus tard, après le renvoi de l'erreur. Les requêtes sont désormais servies comme lorsque le serveur est démarré depuis le menu **Fichier > API Web** (corrige [l'issue #403](https://github.com/DataLab-Platform/DataLab/issues/403))"
+
+#, python-brace-format
+msgid "Fixed images with non-uniform coordinates losing them when transferred through the Web API (`GET` and `PUT /objects/{name}/data`): they were rebuilt with default uniform coordinates. The NPZ data format now includes these coordinates; archives written by earlier versions remain readable. Clients with their own NPZ reader, such as DataLab-Kernel, must support the new entries to take advantage of this"
+msgstr "Correction des images à coordonnées non uniformes qui perdaient celles-ci lors d'un transfert par l'API Web (`GET` et `PUT /objects/{name}/data`) : elles étaient reconstruites avec des coordonnées uniformes par défaut. Le format de données NPZ inclut désormais ces coordonnées ; les archives écrites par les versions antérieures restent lisibles. Les clients disposant de leur propre lecteur NPZ, comme DataLab-Kernel, doivent prendre en charge les nouvelles entrées pour en bénéficier"
+
+msgid "**AI Assistant:**"
+msgstr "**Assistant IA :**"
+
+msgid "Fixed the **Save to Macros** link missing when a conversation is reopened from **History...**: a macro proposed by the assistant in a previous session could no longer be saved. Reopened conversations also showed every tool call as successful, including the failed ones; they now show the actual outcome (fixes [Issue #447](https://github.com/DataLab-Platform/DataLab/issues/447))"
+msgstr "Correction de l'absence du lien **Enregistrer dans les macros** lorsqu'une conversation est rouverte depuis **Historique...** : une macro proposée par l'assistant lors d'une session précédente ne pouvait plus être enregistrée. Les conversations rouvertes affichaient aussi tous les appels d'outils comme réussis, y compris ceux en échec ; elles affichent désormais leur résultat réel (corrige [l'issue #447](https://github.com/DataLab-Platform/DataLab/issues/447))"
+
+msgid "Saving a macro proposed by the assistant now offers a **Show in Macro panel** link: the Macro panel is tabbed with the AI Assistant, so the saved macro stayed hidden behind the conversation"
+msgstr "L'enregistrement d'une macro proposée par l'assistant propose désormais un lien **Afficher dans le panneau de macros** : le panneau de macros étant regroupé en onglets avec l'assistant IA, la macro enregistrée restait cachée derrière la conversation"
+
+msgid "Fixed the assistant answering a request to *write* a macro with the code in its reply, which could not be saved to the Macro panel: it now proposes the macro without running it (the confirmation dialog states that it will not be executed) and offers the **Save to Macros** link. A **Save to Macros** link is also offered under each Python code block of its replies, unless macro creation is disabled"
+msgstr "Correction de l'assistant qui répondait à une demande d'*écriture* de macro en plaçant le code dans sa réponse, d'où il ne pouvait pas être enregistré dans le panneau de macros : il propose désormais la macro sans l'exécuter (la boîte de dialogue de confirmation indique qu'elle ne sera pas exécutée) et offre le lien **Enregistrer dans les macros**. Un lien **Enregistrer dans les macros** est également proposé sous chaque bloc de code Python de ses réponses, sauf si la création de macros est désactivée"
+
+msgid "**Security:**"
+msgstr "**Sécurité :**"
+
+msgid "Opening a workspace received from someone else can no longer make DataLab load or run other code installed on the computer. The parameters stored with objects, analysis results and History actions name their class, and DataLab imported whatever module they named and called the object named there, which a modified file could use, for example, to make DataLab quit. Only parameter classes of DataLab, Sigima, guidata and installed plugins are now used; other stored parameters are reported as unreadable (fixes [Issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))"
+msgstr "Ouvrir un espace de travail reçu d'une autre personne ne permet plus de faire charger ou exécuter par DataLab un autre code installé sur l'ordinateur. Les paramètres enregistrés avec les objets, les résultats d'analyse et les actions de l'historique nomment leur classe, et DataLab importait le module ainsi nommé puis appelait l'objet désigné, ce qu'un fichier modifié pouvait exploiter, par exemple pour faire quitter DataLab. Seules les classes de paramètres de DataLab, Sigima, guidata et des plugins installés sont désormais utilisées ; les autres paramètres enregistrés sont signalés comme illisibles (corrige [l'issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))"
+

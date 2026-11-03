@@ -19,6 +19,8 @@ import threading
 import time
 
 import pytest
+from qtpy import QtCore as QC
+from qtpy import QtWidgets as QW
 
 from datalab.capsulestore import get_registry_settings, set_registry_settings
 from datalab.tests import helpers
@@ -166,6 +168,27 @@ def test_inspect_reports_problems() -> None:
             assert inspect.intact
             assert inspect.open(confirm=False) is False
             assert "select the workspace file" in dialog.error
+            dialog.close()
+
+
+def test_inspect_shows_capsule_texts_as_plain_text() -> None:
+    """Texts read from a capsule are never interpreted as HTML."""
+    description = '<b>Bold</b> <a href="https://example.org">link</a>'
+    with helpers.WorkdirRestoringTempDir() as tmpdir:
+        with capsule_app(tmpdir) as win:
+            build_chain(win)
+            dialog = CapsuleDialog(win)
+            path = _export(dialog, tmpdir)
+            dialog.export_tab.description_edit.setText(description)
+            assert dialog.export_tab.export(path) is not None, dialog.error
+            inspect = dialog.inspect_tab
+            assert inspect.choose(path)
+            [label] = [
+                label
+                for label in inspect.findChildren(QW.QLabel)
+                if label.text() == description
+            ]
+            assert label.textFormat() == QC.Qt.PlainText
             dialog.close()
 
 

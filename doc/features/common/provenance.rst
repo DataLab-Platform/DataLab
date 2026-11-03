@@ -239,6 +239,17 @@ references. The signal and image phase spectra are identified but not qualified.
 Unknown operations, versions, codecs or policies produce an explicit refusal:
 the reader never downloads code to guess their meaning.
 
+Sigima increases the version of an operation contract whenever a change of the
+computation changes its result, whatever the version of DataLab. Activities
+recorded with an earlier version of the contract are then refused explicitly
+(*unsupported contract*) instead of being replayed with a different result, and
+their processing cannot be applied again as recorded: compute the result again
+to record it with the current version. The same applies to the versioned rules
+of the execution context, such as the selection of image pixels by regions of
+interest. See `Operation contracts and versions
+<https://sigima.readthedocs.io/en/latest/user_guide/contracts.html>`_ in the
+Sigima documentation.
+
 Scientific fingerprints cover numerical data, types, coordinates and units;
 ROI are checked separately. Titles, display settings and other metadata are not
 automatically covered. Only declared dependencies such as global options,

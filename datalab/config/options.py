@@ -39,6 +39,7 @@ from sigimax.config import (
     FormatStringOptionField,
     OptionField,
     SigimaXOptions,
+    TupleOptionField,
     TypedOptionField,
 )
 
@@ -172,6 +173,14 @@ class DataLabOptions(SigimaXOptions):
             expected_type=list,
             description="Local plugin catalog folders, by priority.",
         )
+        self.plugins_dialog_size = TupleOptionField(
+            self,
+            "plugins_dialog_size",
+            category="main",
+            default=None,
+            description="Plugin configuration dialog size as (width, height) tuple, "
+            "or None for the default size.",
+        )
         self.welcome_on_startup = TypedOptionField(
             self,
             "welcome_on_startup",
@@ -215,13 +224,59 @@ class DataLabOptions(SigimaXOptions):
             expected_type=list,
             description="IDs of the recently used applications, most recent first.",
         )
-        self.applications_list_collapsed = TypedOptionField(
+        self.applications_panel_shown = TypedOptionField(
             self,
-            "applications_list_collapsed",
+            "applications_panel_shown",
             category="main",
             default=False,
             expected_type=bool,
-            description="If True, hide the application list of the catalog.",
+            description="True once the Applications panel has been shown: it floats "
+            "beside the main window the first time only.",
+        )
+        self.applications_panel_docked_size = TupleOptionField(
+            self,
+            "applications_panel_docked_size",
+            category="main",
+            default=None,
+            description="Size of the docked Applications panel when it was closed, "
+            "as (width, height) tuple, given back when it is shown again, or None.",
+        )
+        self.applications_collapsed_sections = TypedOptionField(
+            self,
+            "applications_collapsed_sections",
+            category="main",
+            default=[],
+            expected_type=list,
+            description="Keys of the collapsed sections of the Applications panel "
+            "('methods', 'tools', 'datasets').",
+        )
+        self.applications_details_sizes = TupleOptionField(
+            self,
+            "applications_details_sizes",
+            category="main",
+            default=None,
+            description="Heights of the method list and of the method details in "
+            "the Applications panel, as (list, details) tuple, or None.",
+        )
+        self.applications_selected_methods = TypedOptionField(
+            self,
+            "applications_selected_methods",
+            category="main",
+            default={},
+            expected_type=dict,
+            description="Recipe ID of the method selected in the Applications "
+            "panel, by application plugin ID.",
+        )
+        self.instrument_new_group = TypedOptionField(
+            self,
+            "instrument_new_group",
+            category="main",
+            default={},
+            expected_type=dict,
+            description=(
+                "State of the 'New group' option of each instrument window, chosen "
+                "by the user (key: 'plugin_id/tool_id')."
+            ),
         )
         self.v020_plugins_warning_ignore = TypedOptionField(
             self,
@@ -302,6 +357,15 @@ class DataLabOptions(SigimaXOptions):
             expected_type=bool,
             description="Ignore the message shown when inserting a title as an "
             "annotation label.",
+        )
+        self.show_delete_button_on_hover = TypedOptionField(
+            self,
+            "show_delete_button_on_hover",
+            category="view",
+            default=True,
+            expected_type=bool,
+            description="Show a delete button at the right of the signal, image or "
+            "group under the mouse cursor in the object lists.",
         )
         self.auto_refresh = TypedOptionField(
             self,
@@ -600,6 +664,10 @@ class DataLabOptions(SigimaXOptions):
         self.watermark_image_path.set(
             configtools.get_image_file_path("DataLab-watermark.png")
         )
+        # The watermark path depends on the running installation: persisting it
+        # would make other installations sharing the user configuration (e.g. in
+        # another Python environment) display this one's image.
+        self.watermark_image_path.category = ""
         self.app_docurl.set(__docurl__)
         self.app_homeurl.set(__homeurl__)
         self.app_supporturl.set(__supporturl__)

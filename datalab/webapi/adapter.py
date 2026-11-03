@@ -30,13 +30,16 @@ handlers via FastAPI dependency injection.
 from __future__ import annotations
 
 import threading
+from contextlib import AbstractContextManager, nullcontext
 from typing import TYPE_CHECKING, Any, Union
 
 from qtpy.QtCore import QCoreApplication, QObject, QThread, Signal, Slot
 
-from datalab.objectmodel import UUID_REGEX, get_uuid
+from datalab.objectmodel import UUID_REGEX, get_uuid, set_uuid
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from sigima.objects import ImageObj, SignalObj
 
     DataObject = Union[SignalObj, ImageObj]
@@ -54,18 +57,41 @@ class MainThreadExecutor(QObject):
     work to the main thread's event loop, and a threading.Event to synchronize
     the calling thread with the result.
 
-    Important: This class must be instantiated on the main thread!
+    The executor may be created in any thread (e.g. when the Web API server is
+    started by a remote client): it always targets the thread of the Qt
+    application, which must exist.
+
+    Args:
+        request_context: Factory of the context manager in which each function runs
+         on the main thread (e.g. to report its errors to the caller instead of
+         showing them). Defaults to None (no context).
     """
 
     # Signal to request execution on main thread
     _execute_signal = Signal(object, object)  # (func, result_holder)
 
-    def __init__(self) -> None:
+    def __init__(
+        self, request_context: Callable[[], AbstractContextManager] | None = None
+    ) -> None:
         super().__init__()
-        # Connect signal to slot - this connection will queue calls to main thread
+        self._request_context = request_context or nullcontext
+        self._main_thread = QCoreApplication.instance().thread()
+        # Queued calls are run by the thread of the receiver: whatever the thread
+        # creating the executor, the slot must be run by the main thread
+        self.moveToThread(self._main_thread)
         self._execute_signal.connect(self._execute_on_main_thread)
-        # Store the main thread for comparison
-        self._main_thread = QThread.currentThread()
+
+    def _call(self, func) -> Any:
+        """Call a function on the main thread, in the request context.
+
+        Args:
+            func: Zero-argument callable to execute.
+
+        Returns:
+            The result of the function.
+        """
+        with self._request_context():
+            return func()
 
     @Slot(object, object)
     def _execute_on_main_thread(self, func, result_holder: dict) -> None:
@@ -76,7 +102,7 @@ class MainThreadExecutor(QObject):
             result_holder: Dict to store result/exception and signal completion.
         """
         try:
-            result_holder["result"] = func()
+            result_holder["result"] = self._call(func)
             result_holder["exception"] = None
         except Exception as e:  # pylint: disable=broad-exception-caught
             result_holder["result"] = None
@@ -102,7 +128,7 @@ class MainThreadExecutor(QObject):
         """
         # Check if we're already on the main thread
         if QThread.currentThread() == self._main_thread:
-            return func()
+            return self._call(func)
 
         # Create result holder with synchronization event
         result_holder = {
@@ -142,16 +168,23 @@ class WorkspaceAdapter(QObject):
     def __init__(self, main_window=None) -> None:
         """Initialize the adapter.
 
-        This should be called from the main thread to ensure the executor
-        is properly initialized with working Qt signals.
-
         Args:
             main_window: The DataLab main window. If None, operations will fail.
         """
         super().__init__()
         self._main_window = main_window
-        # Create executor on main thread to ensure proper Qt signal connection
-        self._executor = MainThreadExecutor()
+        self._executor = MainThreadExecutor(self._request_context)
+
+    def _request_context(self) -> AbstractContextManager:
+        """Return the context in which a request runs on the main thread.
+
+        Errors of the request are reported to the client and shown in the status
+        bar, instead of being shown in a message box.
+        """
+        if self._main_window is None:
+            # The operation reports that the main window is not available
+            return nullcontext()
+        return self._main_window.remote_request_context()
 
     def set_main_window(self, main_window) -> None:
         """Set the main window reference.
@@ -342,7 +375,13 @@ class WorkspaceAdapter(QObject):
         self._add_object_sync(obj)
 
     def _add_object_sync(self, obj: DataObject) -> None:
-        """Add object (called from main thread or marshaled via executor)."""
+        """Add object (called from main thread or marshaled via executor).
+
+        The object is a new one: it gets its own identity, whatever UUID its
+        metadata carry (e.g. an object downloaded from the API and uploaded
+        again under another name). Errors are raised to the caller, never shown
+        in a dialog.
+        """
         obj_type = type(obj).__name__
 
         if obj_type == "SignalObj":
@@ -352,8 +391,9 @@ class WorkspaceAdapter(QObject):
         else:
             raise TypeError(f"Unsupported object type: {obj_type}")
 
-        # Use executor to run on main thread if necessary
-        self._executor.run_on_main_thread(lambda: panel.add_object(obj))
+        set_uuid(obj)
+        # pylint: disable-next=protected-access
+        self._executor.run_on_main_thread(lambda: panel._add_object(obj))
 
     def remove_object(self, name: str) -> None:
         """Remove an object from the workspace.
@@ -576,7 +616,11 @@ class WorkspaceAdapter(QObject):
 
         Raises:
             ValueError: If computation function not found.
+            RuntimeError: If the computation failed.
         """
+        # pylint: disable-next=import-outside-toplevel
+        from datalab.gui.processor.base import FeatureNotFoundError
+
         self._ensure_main_window()
 
         def do_calc():
@@ -593,9 +637,10 @@ class WorkspaceAdapter(QObject):
             try:
                 self._main_window.calc(name, param_dataset, edit=False)
                 success = True
-            except ValueError:
+            except FeatureNotFoundError:
                 raise
             except Exception as e:  # pylint: disable=broad-exception-caught
+                # Including ValueError, reserved to unknown functions by the routes
                 raise RuntimeError(f"Computation '{name}' failed: {e}") from e
 
             # Get objects after calc to find new ones

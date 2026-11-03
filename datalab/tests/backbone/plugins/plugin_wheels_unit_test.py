@@ -134,7 +134,7 @@ def test_inspection_checks_python_requirement() -> None:
 
 @pytest.mark.parametrize(
     ("tag", "python_version"),
-    [("cp313", "3.9"), ("py312", "3.11"), ("py2", "3.11"), ("cp39", "3.11")],
+    [("cp313", "3.10"), ("py312", "3.11"), ("py2", "3.11"), ("cp39", "3.11")],
 )
 def test_inspection_rejects_wheels_built_for_another_python(
     tag: str, python_version: str
@@ -166,6 +166,29 @@ def test_inspection_rejects_duplicate_dist_info_directories() -> None:
 
     with pytest.raises(WheelInspectionError, match="exactly one .dist-info"):
         inspect(data)
+
+
+@pytest.mark.parametrize("damage", ["local header", "compressed data"])
+def test_inspection_rejects_damaged_members(damage: str) -> None:
+    """A member damaged behind a valid central directory is an inspection error.
+
+    Reading it raises ``zipfile.BadZipFile`` or ``zlib.error``, which are not
+    ``ValueError``: unconverted, they would escape the callers.
+    """
+    data = bytearray(make_plugin_wheel())
+    name = b"example_datalab_plugin-1.2.0.dist-info/WHEEL"
+    header = data.rfind(b"PK\x03\x04", 0, data.find(name))
+    if damage == "local header":
+        data[header + 3] = 0xFE
+    else:
+        # Local header: 30 bytes, then the name and extra field
+        name_length = int.from_bytes(data[header + 26 : header + 28], "little")
+        extra_length = int.from_bytes(data[header + 28 : header + 30], "little")
+        start = header + 30 + name_length + extra_length
+        data[start : start + 8] = b"\xff" * 8
+
+    with pytest.raises(WheelInspectionError, match="cannot be read"):
+        inspect(bytes(data))
 
 
 def test_inspection_rejects_oversized_wheel(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -232,14 +255,12 @@ def test_inspection_treats_invalid_host_version_as_unavailable() -> None:
         )
 
 
-def test_inspection_rejects_stdlib_names_without_stdlib_module_list(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    """Python 3.9 has no ``sys.stdlib_module_names``: modules are located."""
-    monkeypatch.delattr(sys, "stdlib_module_names", raising=False)
-    data = make_plugin_wheel(top_level="json\n")
+@pytest.mark.parametrize("name", ["json", "os", "sys"])
+def test_inspection_rejects_stdlib_names(name: str) -> None:
+    """Standard-library packages cannot be replaced by an installed plugin."""
+    data = make_plugin_wheel(top_level=f"{name}\n")
 
-    with pytest.raises(WheelInspectionError, match="reserved package: 'json'"):
+    with pytest.raises(WheelInspectionError, match=f"reserved package: '{name}'"):
         inspect(data)
     assert inspect(make_plugin_wheel())["top_level_packages"] == [
         "example_datalab_plugin"

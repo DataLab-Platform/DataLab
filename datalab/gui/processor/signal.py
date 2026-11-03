@@ -580,7 +580,7 @@ class SignalProcessor(BaseProcessor[SignalROI, ROI1DParam]):
             sips.histogram,
             _("Histogram"),
             paramclass=sigima.params.HistogramParam,
-            icon_name="histogram.svg",
+            icon_name="datalab:histogram.svg",
         )
         self.register_1_to_0(
             sips.fwhm,

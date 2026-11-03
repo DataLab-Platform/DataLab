@@ -110,7 +110,7 @@ def test_title_mode_covers_common_operations() -> None:
         image.title = "Image A"
         win.imagepanel.add_object(image)
         param = sigima.params.LineProfileParam.create(
-            direction="horizontal", row=100, col=100
+            direction="horizontal", y=100, x=100
         )
         win.imagepanel.processor.run_feature("line_profile", param)
         profile = win.signalpanel.objview.get_current_object()

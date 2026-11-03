@@ -1429,7 +1429,7 @@ def test_cross_panel_image_to_signal():
             image_uuid = get_uuid(image)
 
             # Apply radial_profile (Image → Signal cross-panel computation)
-            profile_param = RadialProfileParam.create(x0=50, y0=50)
+            profile_param = RadialProfileParam.create(xc=50, yc=50)
             image_processor.run_feature("radial_profile", param=profile_param)
 
             # Verify the result is now in the signal panel
@@ -1450,8 +1450,8 @@ def test_cross_panel_image_to_signal():
 
             # Verify the parameter can be deserialized
             stored_param = json_to_dataset(option_dict["param_json"])
-            assert stored_param.x0 == 50
-            assert stored_param.y0 == 50
+            assert stored_param.xc == 50
+            assert stored_param.yc == 50
 
             # Test that the Processing tab is set up correctly
             # (even though source is in a different panel)
@@ -1461,8 +1461,8 @@ def test_cross_panel_image_to_signal():
             # Test modifying processing parameters
             editor = signal_panel.objprop.processing_param_editor
             # Change the center position
-            editor.dataset.x0 = 40
-            editor.dataset.y0 = 40
+            editor.dataset.xc = 40
+            editor.dataset.yc = 40
 
             # In-place update + in-place recompute require History panel edit
             # mode (otherwise new objects are created instead of mutating).
@@ -1477,8 +1477,8 @@ def test_cross_panel_image_to_signal():
             # Verify the parameter was updated in metadata
             updated_dict = signal.get_metadata_option(PROCESSING_PARAMETERS_OPTION)
             updated_param = json_to_dataset(updated_dict["param_json"])
-            assert updated_param.x0 == 40
-            assert updated_param.y0 == 40
+            assert updated_param.xc == 40
+            assert updated_param.yc == 40
 
             # Test recompute feature with modified source image
             image.data *= 2.0  # Double the image intensity
@@ -1525,7 +1525,7 @@ def test_cross_panel_image_to_signal_group():
             signal_groups_before = len(signal_panel.objmodel.get_groups())
 
             # Apply radial_profile to the entire group (Image → Signal cross-panel)
-            profile_param = RadialProfileParam.create(x0=50, y0=50)
+            profile_param = RadialProfileParam.create(xc=50, yc=50)
             image_processor.run_feature("radial_profile", param=profile_param)
 
             # Verify a NEW group was created in the signal panel
@@ -1666,7 +1666,7 @@ def test_select_source_objects_cross_panel():
             image_uuid = get_uuid(image)
 
             # Apply radial_profile (Image → Signal)
-            profile_param = RadialProfileParam.create(x0=50, y0=50)
+            profile_param = RadialProfileParam.create(xc=50, yc=50)
             image_processor.run_feature("radial_profile", param=profile_param)
 
             # Verify we're now in the signal panel

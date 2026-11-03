@@ -8,6 +8,7 @@ This file contains the configuration for running pytest in DataLab. It is
 executed before running any tests.
 """
 
+import gc
 import os
 import os.path as osp
 
@@ -23,6 +24,7 @@ import sigima
 import skimage
 from guidata.config import ValidationMode, set_validation_mode
 from guidata.utils.gitreport import format_git_info_for_pytest, get_git_info_for_modules
+from qtpy import QtCore as QC
 from sigima.tests import helpers
 
 import datalab
@@ -47,6 +49,9 @@ def reset_datalab_configuration():
     ensure_initialized(load_user_config=False)
     reset_to_defaults()
     Conf.rpc_server_enabled.set(False)
+    # Keep pytest's faulthandler, which reports crashes in the test output: the
+    # application context would redirect it to a log file, then disable it
+    Conf.faulthandler_enabled.set(False)
     try:
         yield
     finally:
@@ -121,12 +126,17 @@ def pytest_report_header(config):  # pylint: disable=unused-argument
 
 
 def pytest_configure(config):
-    """Add custom markers to pytest."""
+    """Add custom markers and warning filters to pytest."""
     if config.option.durations is None:
         config.option.durations = 20  # Default to showing 20 slowest tests
     config.addinivalue_line(
         "markers",
         "validation: mark a test as a validation test (ground truth or analytical)",
+    )
+    # Ambiguous image names must be designated explicitly ("module:filename").
+    # Not in pyproject.toml: see the comment of its "filterwarnings" option
+    config.addinivalue_line(
+        "filterwarnings", "error::guidata.configtools.ImageNameConflictWarning"
     )
     if not config.getoption("--show-windows"):
         os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
@@ -143,3 +153,11 @@ def reset_cwd(request):  # pylint: disable=unused-argument
 def pytest_runtest_teardown(item, nextitem):  # pylint: disable=unused-argument
     """Run teardown after each test."""
     PluginRegistry.unregister_all_plugins()
+    # Destroy the widgets of the test now, rather than during a later test: closed
+    # widgets deleted later (e.g. the internal console) are only deleted by the
+    # next event loop, and main windows are part of reference cycles, only
+    # destroyed when the garbage collector runs, possibly amid Qt operations
+    if QC.QCoreApplication.instance() is not None:
+        QC.QCoreApplication.processEvents()
+        QC.QCoreApplication.sendPostedEvents(None, QC.QEvent.DeferredDelete)
+    gc.collect()

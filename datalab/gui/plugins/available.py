@@ -10,12 +10,13 @@ update their plugins.
 
 from __future__ import annotations
 
-import shutil
+import os.path as osp
 import sys
 import tempfile
 from collections.abc import Callable, Sequence
 from html import escape
 from importlib import metadata as importlib_metadata
+from importlib.machinery import PathFinder
 
 from guidata.configtools import get_icon
 from packaging.utils import canonicalize_name
@@ -32,41 +33,20 @@ from datalab.config import (
     get_plugin_catalog_paths,
     normalize_plugin_paths,
 )
-from datalab.gui.plugins.install import InstalledPluginsWidget
+from datalab.gui.plugins.install import InstalledPluginsWidget, run_plugin_task
 from datalab.plugins.catalog import (
     CatalogPlugin,
     CatalogRelease,
     CatalogsContent,
+    download_dependency_wheels,
     download_release,
     load_catalogs,
 )
-from datalab.plugins.store import WHEEL_KIND
+from datalab.plugins.dependencies import DEPENDENCIES_DIRECTORY
+from datalab.plugins.store import MODULE_KIND, WHEEL_KIND
 from datalab.widgets.expandabletext import apply_palette_color, apply_subdued_color
 
 CATALOG_PAGE_URL = "https://datalab-platform.com/plugins/"
-
-#: Running tasks, kept alive until their thread finishes
-_RUNNING_TASKS: set[_Task] = set()
-
-
-class _Task(QC.QThread):
-    """Run a function in a background thread."""
-
-    succeeded = QC.Signal(object)
-    failed = QC.Signal(str)
-
-    def __init__(self, function: Callable[[], object]) -> None:
-        super().__init__()
-        self._function = function
-
-    def run(self) -> None:  # pragma: no cover - thread entry point
-        """Call the function and emit its result or error message."""
-        try:
-            result = self._function()
-        except (OSError, ValueError) as exc:
-            self.failed.emit(str(exc))
-            return
-        self.succeeded.emit(result)
 
 
 def _is_newer(version: str, installed: str) -> bool:
@@ -109,7 +89,7 @@ class AvailablePluginItemWidget(QW.QWidget):
     def __init__(
         self,
         plugin: CatalogPlugin,
-        installed: tuple[str, str],
+        installed: tuple[str, str, str],
         parent: QW.QWidget | None = None,
     ) -> None:
         super().__init__(parent)
@@ -156,7 +136,7 @@ class AvailablePluginItemWidget(QW.QWidget):
             layout.addWidget(self.action_button)
 
     def _describe(
-        self, release: CatalogRelease | None, installed: tuple[str, str]
+        self, release: CatalogRelease | None, installed: tuple[str, str, str]
     ) -> tuple[str, str | None]:
         """Return the status text and the action button text, if any."""
         plugin = self.plugin
@@ -167,9 +147,34 @@ class AvailablePluginItemWidget(QW.QWidget):
                 python = f"{sys.version_info.major}.{sys.version_info.minor}"
                 return _("Not available for Python %s") % python, None
             return _("Not available for DataLab desktop"), None
-        how, version = installed
+        how, version, digest = installed
+        if how == "unmanaged":
+            return _("Provided outside the plugin store"), None
+        if how == "conflict":
+            return _("Conflicting installed plugin: %s") % version, None
+        if how == "error":
+            return version, None
         if how == "environment":
             return _("Installed in the Python environment (%s)") % version, None
+        if how == "file" and plugin.kind == MODULE_KIND:
+            notice = (
+                _("Deprecated: %s") % plugin.status_reason
+                if plugin.status == "deprecated"
+                else ""
+            )
+            if digest == release.sha256:
+                return notice or _("Installed"), None
+            if version and release.version:
+                try:
+                    if Version(release.version) < Version(version):
+                        return _("Installed: %s") % version, None
+                    if Version(release.version) > Version(version):
+                        return notice or _("Installed: %s") % version, _(
+                            "Update to %s"
+                        ) % release.version
+                except InvalidVersion:
+                    pass
+            return notice or _("Different installed revision"), _("Replace...")
         if how == "file" and not _is_newer(release.version, version):
             return _("Installed"), None
         status = ""
@@ -199,8 +204,11 @@ class AvailablePluginsWidget(QW.QWidget):
         self._installer = installer
         self.plugins: list[CatalogPlugin] | None = None
         self.item_widgets: list[AvailablePluginItemWidget] = []
-        self._download: tuple[CatalogPlugin, str] | None = None
+        self._download: tuple[CatalogPlugin, tempfile.TemporaryDirectory] | None = None
         self._busy = False
+        self._installer.busy_changed.connect(
+            lambda busy: self._set_busy(_("Installing plugin...") if busy else None)
+        )
         self._directories = merge_catalog_directories(get_plugin_catalog_paths())
         #: Catalog URL and local folders of the last loading
         self._loaded_sources: tuple[str, tuple[str, ...]] | None = None
@@ -210,7 +218,7 @@ class AvailablePluginsWidget(QW.QWidget):
         intro = QW.QLabel(
             _(
                 'Plugins listed in the <a href="%s">DataLab plugin catalog</a> '
-                "and in the local catalogs of the <b>Plugin settings</b> tab, "
+                "and in the local catalogs of the <b>Advanced</b> tab, "
                 "which take precedence. Official plugins are maintained by the "
                 "DataLab team, community plugins by their authors, and local "
                 "catalogs by your organization: install only plugins from "
@@ -286,12 +294,7 @@ class AvailablePluginsWidget(QW.QWidget):
         on_failure: Callable[[str], None],
     ) -> None:
         """Run a function in a background thread and report its outcome."""
-        task = _Task(function)
-        _RUNNING_TASKS.add(task)
-        task.succeeded.connect(on_success)
-        task.failed.connect(on_failure)
-        task.finished.connect(lambda: _RUNNING_TASKS.discard(task))
-        task.start()
+        run_plugin_task(function, on_success, on_failure)
 
     def refresh(self) -> None:
         """Load the catalogs again."""
@@ -315,14 +318,23 @@ class AvailablePluginsWidget(QW.QWidget):
         release = plugin.get_installable_release()
         if release is None or self._busy:
             return
-        directory = tempfile.mkdtemp(prefix="datalab-plugin-")
+        directory = tempfile.TemporaryDirectory(prefix="datalab-plugin-")
         self._download = (plugin, directory)
         self._set_busy(_("Downloading %s...") % release.filename)
         self.run_task(
-            lambda: download_release(release, directory),
+            lambda: self._download_release(release, directory.name),
             self._on_downloaded,
             self._on_download_failed,
         )
+
+    @staticmethod
+    def _download_release(release: CatalogRelease, directory: str) -> str:
+        path = download_release(release, directory)
+        if release.dependency_wheels:
+            download_dependency_wheels(
+                release, str(osp.join(directory, DEPENDENCIES_DIRECTORY))
+            )
+        return path
 
     def _set_busy(self, message: str | None) -> None:
         self._busy = message is not None
@@ -364,43 +376,77 @@ class AvailablePluginsWidget(QW.QWidget):
         self._download = None
         self._set_busy(None)
         self.status_label.setText("")
-        try:
-            if plugin.source:
-                origin = _("Local plugin catalog (%s)") % plugin.source
-            else:
-                origin = _("DataLab plugin catalog (%s)") % _tier_label(plugin)
-            self._installer.install_path(path, origin=origin)
-        finally:
-            shutil.rmtree(directory, ignore_errors=True)
-        self._populate()
+        if plugin.source:
+            origin = _("Local plugin catalog (%s)") % plugin.source
+        else:
+            origin = _("DataLab plugin catalog (%s)") % _tier_label(plugin)
+        wheelhouse = osp.join(directory.name, DEPENDENCIES_DIRECTORY)
+        if plugin.source and not osp.isdir(wheelhouse):
+            wheelhouse = osp.join(plugin.source, DEPENDENCIES_DIRECTORY)
+
+        def finished() -> None:
+            directory.cleanup()
+            self._populate()
+
+        self._installer.install_path(
+            path,
+            origin=origin,
+            wheelhouse=wheelhouse,
+            on_finished=finished,
+            catalog_plugin=plugin,
+        )
 
     def _on_download_failed(self, message: str) -> None:
         _plugin, directory = self._download
         self._download = None
-        shutil.rmtree(directory, ignore_errors=True)
+        directory.cleanup()
         self._set_busy(None)
         self.status_label.setText("")
         QW.QMessageBox.warning(self, _("Install plugin"), message)
 
-    def _get_installed(self, plugin: CatalogPlugin) -> tuple[str, str]:
+    def _get_installed(self, plugin: CatalogPlugin) -> tuple[str, str, str]:
         """Return how a catalog plugin is installed, and its version."""
-        if not plugin.distribution:
-            return "", ""
-        key = canonicalize_name(plugin.distribution)
         try:
             installed_plugins = self._installer.store.get_plugins()
-        except ValueError:
-            installed_plugins = []
+        except (OSError, ValueError) as exc:
+            return "error", str(exc), ""
+        if plugin.kind == MODULE_KIND:
+            for installed in installed_plugins:
+                same_module = installed.kind == MODULE_KIND and osp.normcase(
+                    installed.name
+                ) == osp.normcase(plugin.module)
+                if same_module:
+                    if installed.name != plugin.module:
+                        return "conflict", installed.name, ""
+                    if installed.catalog_id and installed.catalog_id != plugin.id:
+                        return "conflict", installed.catalog_id, ""
+                    return "file", installed.version, installed.sha256
+                if installed.catalog_id == plugin.id:
+                    return "conflict", installed.name, ""
+            managed = osp.normcase(osp.realpath(self._installer.store.modules_dir))
+            paths = [
+                entry
+                for entry in sys.path
+                if osp.normcase(osp.realpath(entry)) != managed
+            ]
+            if PathFinder.find_spec(plugin.module, paths) is not None:
+                return "unmanaged", "", ""
+            return "", "", ""
+        if not plugin.distribution:
+            return "", "", ""
+        key = canonicalize_name(plugin.distribution)
         for installed in installed_plugins:
             if (
                 installed.kind == WHEEL_KIND
                 and canonicalize_name(installed.name) == key
             ):
-                return "file", installed.version
+                return "file", installed.version, installed.sha256
+            if installed.catalog_id == plugin.id and installed.kind != WHEEL_KIND:
+                return "conflict", installed.name, ""
         try:
-            return "environment", importlib_metadata.version(plugin.distribution)
+            return "environment", importlib_metadata.version(plugin.distribution), ""
         except importlib_metadata.PackageNotFoundError:
-            return "", ""
+            return "", "", ""
 
     def _populate(self) -> None:
         """Rebuild the plugin rows matching the search text."""

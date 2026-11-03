@@ -2,6 +2,12 @@
 
 ## DataLab Version 1.4.0 ##
 
+### Requirements ###
+
+* The Python package and newly generated plugin projects now require Python 3.10 or later. Python 3.9 users must keep an earlier compatible release. The standalone application continues to include its own Python interpreter.
+* The Windows test runner excludes Python 3.9 from current matrices, while retaining explicit tests of pinned historical releases.
+* guidata 3.17.2 or later is required: it gives every window a title bar following the color theme on Windows, including the windows of plugins (closes [Issue #492](https://github.com/DataLab-Platform/DataLab/issues/492)).
+
 ### ✨ New Features ###
 
 **Welcome page:**
@@ -21,44 +27,59 @@
 * Completed previews keep their dedicated process ready for later dialogs, avoiding repeated process startup. Cancelling a preview that is still running stops its process so speculative work cannot continue in the background.
 * Bounded numeric parameters now offer sliders alongside precise text entry. The Processing tab retains Apply and automatic re-processing, with updates deferred until slider release and valid input.
 
+**Plugin status:**
+
+* Click the **Plugins:** label in the status bar to open **Configure plugins...**, as with the Web API and internal console status labels. The shortcut is available whenever plugins are globally enabled, including when no plugins are loaded or a plugin fails to load.
+
 **Application plugins:**
 
-* Added a top-level **Applications** entry that presents active scientific application plugins in a dedicated catalog
-* Each application displays its description, identity, version, methods, tools, and examples; processing-only plugins remain outside this focused view
+* Added a top-level **Applications** entry that shows the active scientific application plugins in a new **Applications** panel
+* Each application displays its description, version, methods, tools, and examples; processing-only plugins remain outside this focused view
 * Each method shows the inputs it expects (object type and count, required metadata) and a live status telling whether the current selection can be analyzed, and why not
 * When required metadata are missing, the status points to **Edit > Metadata > Add metadata...**, whose **Known keys** list also offers the keys expected by application methods; the status is updated as soon as objects are modified
-* **Run on selection...** starts a method directly when the selection is ready, and asks for the input assignment only when it is ambiguous or invalid; the assignment dialog checks the chosen objects before the run can continue
+* **Run...** starts a method on the current selection directly when the selection is ready, and asks for the input assignment only when it is ambiguous or invalid; the assignment dialog checks the chosen objects before the run can continue
 * Examples are listed under the methods they are designed for: **Try with this example** opens the example, prefills the method parameters, and runs the method once they are accepted. One example may serve several methods, and examples designed for no method are listed as datasets
-* Application plugins may also list tools, such as wizards or editors, in the catalog
-* Plugin tools also appear in the plugin's submenu of the **Plugins** menu, in the Signal or Image panel they work on. A tool that needs a selection is disabled until the right objects are selected, and its catalog button tells what to select
+* Application plugins may also list tools, such as wizards or editors, in the **Applications** panel
+* Plugin tools also appear in the plugin's submenu of the **Plugins** menu, in the Signal or Image panel they work on. A tool that needs a selection is disabled until the right objects are selected, and its button in the **Applications** panel tells what to select
 * Application plugins may provide instruments, such as simulated cameras or oscilloscopes, without writing any user interface: DataLab shows a window with a live view and the instrument settings, refreshed as settings change or continuously in **Live** mode, and **Acquire** adds the acquired objects to a new group, ready for the application's methods
+* The **New group** option of the instrument window may be turned off to add the next acquisitions to the current group of the panel instead of creating a group for each of them. The option and the current group are taken when **Acquire** is clicked, so that selecting another group during an acquisition does not change its destination. Each instrument sets the default state of the option, and the choice of the user is remembered for each instrument
+* Instruments are called outside the user interface thread, one call at a time: a slow instrument, such as a real device waiting for its data, no longer freezes DataLab, and repeated refresh requests made meanwhile are merged. Instruments may also declare `open` and `close` methods, called when their window opens and closes (including when plugins are reloaded or DataLab quits), for example to connect to a device and to release it. Calls stay one at a time when a window is closed and opened again while a call is running. When `open` fails, its message stays in the window and the instrument is opened again before the next refresh or acquisition, for example after a settings change
 * Plugin developers describe recipe inputs declaratively (titles, minimum counts, metadata requirements) and may add binding suggestions and fast input checks; every recipe then runs through DataLab's generic launcher, without plugin-specific input dialogs
-* The catalog is non-modal and remains open after starting a method or opening an example, so users may continue interacting with the DataLab workspace
-* The methods, tools and datasets of an application form an accordion: one section is open at a time, and a colored dot tells, without opening it, whether each method can run on the current selection
-* The application list of the catalog may be hidden with the strip separating it from the application page: the window shrinks accordingly, and the choice is remembered
+* The **Applications** panel is a regular panel that does not hide the DataLab workspace: the first time, it floats beside the main window, as high as this window, so that the data and their views stay in sight while using it. It may then be docked (for example next to the list of signals or images whose selection it analyzes), tabified with another panel or left floating, and DataLab shows it again where the user left it, with the same size; when it is requested while already shown, without switching to another application, it flashes briefly to show where it is. It remains open after starting a method or opening an example
+* The panel stays compact and readable when docked: each method takes one row, with a colored dot and a short text telling whether the current selection can be analyzed, and a **Run...** button; below the list, a **Details** area gives the full details of the selected method (description, reasons of its status, expected inputs with the description and the key of their metadata, examples). The result of the last run of a method is shown below its row. The sections of the list may be collapsed, and the height of the details set with a splitter: DataLab remembers these choices
+* When several application plugins are installed, their number is shown at the top of the panel, above the list selecting the application; the documentation and welcome page options of the application are in the menu next to it
 * Completed application methods select their last generated object, consistently with standard DataLab processing
-* Application plugins add tiles to a new **Applications** section of the welcome page: by default, one tile per plugin opens its page in the catalog, and plugins may declare additional tiles, for example to open an example directly. Additional tiles are shown when there is room for them, and otherwise move to the menu of the main tile
-* The welcome page stays tidy when many applications are installed: tiles are limited to a configurable number of rows (two by default), with a last tile opening the catalog for the others. Applications may be pinned to the top or hidden, and recently used ones come first; the catalog offers a search field and the same welcome page options
-* Plugins may declare an icon, shown in the **Applications** catalog, on their welcome page tile and in the **Configure plugins...** dialog
+* Application plugins add tiles to a new **Applications** section of the welcome page: by default, one tile per plugin shows its page in the **Applications** panel, and plugins may declare additional tiles, for example to open an example directly. Additional tiles are shown when there is room for them, and otherwise move to the menu of the main tile
+* The welcome page stays tidy when many applications are installed: tiles are limited to a configurable number of rows (two by default), with a last tile showing the **Applications** panel for the others. Applications may be pinned to the top or hidden, and recently used ones come first; the **Applications** panel offers the same welcome page options
+* Plugins may declare an icon, shown in the **Applications** panel, on their welcome page tile and in the **Configure plugins...** dialog
+* DataLab checks the declarations of application plugins (methods, examples, tools, welcome page tiles) when loading them: a plugin with an invalid declaration, for example a method whose plugin version was not updated with the plugin, or an example referring to a renamed method, is not loaded and is listed with its error in **Configure plugins...**, while DataLab and the other plugins start normally (fixes [Issue #484](https://github.com/DataLab-Platform/DataLab/issues/484))
 
 **Plugin installation:**
 
-* Plugins can now be installed from a file, without any Python tool, including in the standalone version of DataLab: the new **Install plugins** tab of **Plugins > Configure plugins...** accepts a pure-Python wheel (`.whl`) or a single `datalab_<name>.py` module
-* Before installing, DataLab checks the file without running it and shows its name, version, plugin classes, dependencies and SHA-256 digest; a wheel requiring a package that DataLab does not provide is refused
-* Installed plugins are listed in the same tab, where they can be uninstalled; a newly installed plugin is enabled and loaded after a plugin reload, and a new version of an already loaded plugin is used at the next start
-* The new **Available plugins** tab lists the plugins of the [DataLab plugin catalog](https://datalab-platform.com/plugins/), official or from the community, with a search field: **Install** and **Update** download the wheel, check it against the catalog and install it after confirmation. The catalog address may be changed to use a private copy
-* Organizations can distribute their own plugins, or the versions of public plugins they have approved, from local plugin catalogs: folders, typically shared on the network, declared in the **Plugin settings** tab or with the `DATALAB_PLUGINS_CATALOG` environment variable. Their plugins are listed in the **Available plugins** tab before those of the DataLab plugin catalog, and hide them when both offer the same plugin
-* A local catalog folder may simply hold plugin wheels, listed as they are copied to it, or a `catalog.json` file giving display names, deprecations and withdrawn releases; `datalab-plugin catalog build` writes this file from the wheels of the folder, keeping the edited fields, and `datalab-plugin catalog check` reports wheels that are missing, changed, refused by DataLab or not listed
-* A catalog that cannot be read, such as a network share that is not connected or the online catalog on a computer without Internet access, is reported in the **Available plugins** tab without hiding the plugins of the other catalogs
+* Online and offline Desktop catalogs now accept single-file `datalab_*.py` plugins alongside wheels. Historical files do not need a packaging project or source changes to be listed; catalog inspection never imports or executes them (implements [Issue #419](https://github.com/DataLab-Platform/DataLab/issues/419))
+* Known script versions can be updated; unversioned files are identified by SHA-256 and offer explicit replacement when their content changes. Scripts previously installed from a file are recognized, and existing development copies are not overwritten
+* The local catalog commands handle mixed folders of scripts and wheels. Single-file plugins use libraries already available to DataLab and do not trigger dependency downloads. The documentation now explicitly distinguishes source organization, distribution formats and functional capabilities, including in the French offline guide
+* Plugins can now be installed from a file, without any Python tool, including in the standalone version of DataLab: the new **From file** tab of **Plugins > Configure plugins...** accepts a pure-Python wheel (`.whl`) or a single `datalab_<name>.py` module
+* Before installing, DataLab checks the file without running it and shows its name, version, plugin classes, dependencies and SHA-256 digest
+* Plugins may now include additional dependencies as separate wheels, including compatible native libraries, without changing packages already supplied by DataLab. A complete local catalog can be installed without Internet access; missing files and version conflicts are reported before any partial installation is activated
+* The confirmation dialog lists the additional packages and their fingerprints. They are shared by plugins of the same Python runtime, activated after restarting DataLab, and kept when a plugin is uninstalled
+* Installed plugins are listed in the same tab, where they can be uninstalled; a newly installed plugin is enabled after a plugin reload when no additional packages are needed, or after restarting when dependencies were added. A new version of an already loaded plugin is used at the next start
+* The new **Catalog** tab lists the plugins of the [DataLab plugin catalog](https://datalab-platform.com/plugins/), official or from the community, with a search field: **Install** and **Update** download the wheel, check it against the catalog and install it after confirmation. The catalog address may be changed to use a private copy
+* Organizations can distribute their own plugins, or the versions of public plugins they have approved, from local plugin catalogs: folders, typically shared on the network, declared in the **Advanced** tab or with the `DATALAB_PLUGINS_CATALOG` environment variable. Their plugins are listed in the **Catalog** tab before those of the DataLab plugin catalog, and hide them when both offer the same plugin
+* A local catalog folder may hold plugin wheels and single-file modules, listed as they are copied to it, or a `catalog.json` index giving display names, deprecations and withdrawn releases; `datalab-plugin catalog build` writes this index while keeping curated metadata, and `datalab-plugin catalog check` reports missing, changed, refused or unlisted artifacts
+* Authors can prepare an offline catalog with `datalab-plugin catalog prepare`: it downloads the additional dependency wheels needed by the reference host without installing them, then writes the catalog. The complete folder can be distributed on a network share or copied to computers without Internet access
+* A catalog that cannot be read, such as a network share that is not connected or the online catalog on a computer without Internet access, is reported in the **Catalog** tab without hiding the plugins of the other catalogs
+* The **Configure plugins...** dialog opens larger and keeps the size it had when last closed. Its tabs follow the order of use and have explicit titles, described by their tooltips: **Installed plugins**, **Catalog**, **From file** and **Advanced**
 
 **Plugin project generator:**
 
+* `datalab-plugin create` now creates a single-file plugin by default, the simplest way to extend DataLab: it only asks for the plugin name and description, then writes a `datalab_<name>.py` file to the user plugin directory. Once the plugins are reloaded, the plugin adds its submenu to the **Plugins** menu with a sample processing of the selected signals (or images, with `--object-kind image`), whose short NumPy function is the only part to edit. The file never overwrites an existing one, and can be shared and installed with **Plugins > Configure plugins... > From file**. The layered installable project, described below, is created with `--project` (implements [Issue #413](https://github.com/DataLab-Platform/DataLab/issues/413))
 * Hardened ``datalab-plugin create`` from the Camera pilot feedback: generated projects now separate host-independent ``core`` code, headless ``workflow`` orchestration, and Desktop/Web ``adapters`` from the first commit
 * Generated package roots expose stable identity without importing Qt; the installed entry point targets the Desktop adapter while Web support is explicitly marked unsupported
 * Every generated project includes an executable architecture regression test, contribution and architecture documentation, and a changelog
 * Long plugin names and descriptions are now formatted so newly generated projects pass their bundled Ruff checks without manual source edits
 * Generated projects are ready to publish: a release workflow attaches the wheel to a GitHub release when a version tag is pushed and prints the entry to submit to the DataLab plugin catalog; `pyproject.toml` requires the current DataLab major version and declares the project URLs
-* `datalab-plugin create` asks for the GitHub account hosting the project and derives the default plugin ID from it (`io.github.<account>.<name>`), `org.datalab.` IDs being reserved for DataLab-Platform plugins
+* `datalab-plugin create --project` asks for the GitHub account hosting the project and derives the default plugin ID from it (`io.github.<account>.<name>`), `org.datalab.` IDs being reserved for DataLab-Platform plugins
 
 **Add metadata:**
 
@@ -98,13 +119,52 @@ DataLab now uses stable UUID-based object references across object trees, result
 * When a source object is deleted, its reference falls back to its 8-character UUID instead of becoming an anonymous placeholder
 * Titles of workspaces saved by previous versions keep their former `s001`-style references as plain text
 
+**Signal and image lists:**
+
+Signals, images and groups can now be deleted directly from the lists, as in DataLab-Web (implements [Issue #449](https://github.com/DataLab-Platform/DataLab/issues/449)).
+
+* A delete button appears at the right of the hovered signal, image or group: it turns red when the mouse cursor is over it, and its tooltip tells what it deletes
+* Clicking it deletes the item, or the whole selection when the item is part of it, after confirmation. Deleting an item which is not selected keeps the current selection and the displayed objects unchanged
+* As with the **Remove** action, the deletion is recorded in the History panel
+* The button may be hidden with the new **Show delete button when hovering list items** setting (Visualization > Common)
+
 **Curve fitting formulas:**
 
 * Interactive fitting dialogs now show the formula of the fitted model below the fit parameters, and each parameter label shows its symbol in the formula (e.g. "Scale factor (x₀)"): the parameters stored in the fitted signal metadata can thus be related to the model without reading the source code. The *Fitting* documentation also gives, for each model, the name under which each parameter is stored (fixes [Issue #400](https://github.com/DataLab-Platform/DataLab/issues/400))
 * Polynomial and linear fit coefficients are labelled `a`, `b`, `c`... as in the formula and in the metadata, instead of `c2`, `c1`, `c0`
 * The *Fitting* documentation explains how to derive the peak wavelength, the temperature and the emissivity from the parameters of a Planckian fit
 
+**Remote control and plugins:**
+
+* `add_group` now returns the UUID of the created group, so that a remote client, a macro or a plugin can add objects to it with `add_object(obj, group_id=...)` (or `add_signal`/`add_image`) instead of looking the group up by its title
+
+**NeXus files:**
+
+* NeXus `NXdata` groups are shown as single items in the HDF5 browser and imported as signals or images with their axes, units, labels and, for signals, uncertainties. Bin edges are converted to bin centers, non-uniform image axes are kept, and decreasing image axes are reversed with the image. Invalid axes are reported in the browser instead of being guessed
+* Files written with the legacy NeXus conventions, such as the scans of synchrotron SOLEIL, are imported with their axes (`axis` and `primary` attributes of the axis datasets), and every counter and detector of a scan is shown as an item of its own: counters as signals versus the scanned motor, detectors as images (a spectrum per point) or image stacks (an image per point) with the motor along their first axis
+* The HDF5 browser selects and previews the default measurement of a NeXus file (`default` attributes) when it is opened
+* Compressed detector data, such as the bitshuffle/LZ4 data of Eiger detectors, is now read (with hdf5plugin, also in the standalone application); a dataset compressed with an unavailable filter is reported in the browser instead of failing
+* Imported signals and images record where they come from (file, group, signal and axes, applied conversions, title and times of the NeXus entry) in their `experimental_source` metadata, which is saved with the workspace: a saved workspace reopens without the NeXus file
+* `.nxs` and `.nx5` files are proposed when opening HDF5 files
+* Plugins can describe the signals and images of files that NeXus `NXdata` groups designate incompletely (no axes, several counters...) with declarative data mappings (JSON) registered with `sigimax.h5.mapping.register_mapping`: the HDF5 browser then shows each described object as an extra item, imported with its axes, labels and units; the axes of a mapped object may describe its first dimensions only, so that one mapping applies to the counters and detectors of a scan
+
+**Installation check:**
+
+* The new `--smoke-test` command line option checks that DataLab is correctly installed without opening its main window, e.g. `DataLab.exe --smoke-test report.json` for the standalone version or `datalab --smoke-test report.json`: the packages it relies on, the resources provided with it (macro templates, PDF documentation, French translations and icons) and processing in a separate process. The results are written in a JSON report, and the exit code is not zero when a check failed (see [Command line features](../features/advanced/command.rst))
+* Before being published, each Windows installer is now installed on a test computer, where the installed application is started and checked this way (implements [Issue #366](https://github.com/DataLab-Platform/DataLab/issues/366))
+
 ### 🔄 Changes ###
+
+**Curve readability:**
+
+* Signal curves are easier to read, especially when many curves are shown (closes [Issue #453](https://github.com/DataLab-Platform/DataLab/issues/453)):
+  * Curve colors now stand out on both light and dark backgrounds: several colors of the former palette (orange, pink, yellow-green, cyan) were pale on a white background, and gray curves could not be told apart from the grid
+  * After the first 10 curves, curves are now drawn with dashed lines only: dash-dot and dash-dot-dot lines, which drew only half of the curve, are no longer used
+  * The plot grid now uses discreet solid lines instead of gray dotted lines, which competed with dashed curves; it also follows color theme changes
+* Curve colors and line styles now depend on the position of the curves among those shown on the plot, in the order of the signals in the panel: the first curve shown is always drawn in the first color. Opening the ROI editor, **View in a new window** or other dialogs no longer shifts the styles of the next curves, which could reach dotted styles with only a few curves shown
+* Automatic curve styles are no longer saved in workspaces: only a color or a line style chosen by the user is saved and always kept, whatever its value. When opening workspaces and history files saved with DataLab 1.3 or earlier, which saved the automatic style of every curve, these styles are removed so that curves are displayed with the new automatic styles; a style chosen with these versions is removed as well when it is identical to one of their automatic styles. Metadata imported from a file are applied as they are
+* **View > Reset curve styles** now gives the selected signals automatic curve styles again, removing the colors and line styles chosen for them
+* On high-DPI screens (e.g. with a 150 % display scaling), curves of width 1 are now drawn one screen pixel wide, which makes their rendering much faster: noisy signals were drawn up to several hundred times slower than at 100 % (requires PlotPy ≥ 2.12.0)
 
 **Synthetic images in physical coordinates:**
 
@@ -120,12 +180,53 @@ DataLab now uses stable UUID-based object references across object trees, result
 * Opening, selecting, and displaying large generated campaigns no longer repeats a complete workspace and plot refresh for every object
 * Native HDF5 workspaces and multi-object recipe results now load in groups, making large signal and image collections available substantially faster while preserving every selected and visible object
 
+**Image display responsiveness:**
+
+* Moving or resizing regions of interest, annotations and markers over images is now much smoother, as the image is no longer rendered again for each mouse move: with a 2048 × 2048 image, each mouse move takes about 5 ms instead of 13 ms (13 ms instead of 33 ms with a 200% display scaling). Panning and zooming images without masked pixels are also up to 25% faster (requires PlotPy ≥ 2.12.1)
+
+**Sharp icons with display scaling:**
+
+* The icons of the plots and of the editors provided by PlotPy and guidata (plot toolbars, contrast panel, cross sections, item list, array editor, ...) are now SVG images: they remain sharp with a display scaling such as 125 %, 150 % or 200 %, instead of looking blurry (requires PlotPy ≥ 2.12.1, closes [Issue #470](https://github.com/DataLab-Platform/DataLab/issues/470))
+* The **Processing > Resize** action of images showed the column resizing icon of guidata's editors instead of its own icon: DataLab icons now take precedence over guidata and PlotPy icons with the same name (requires guidata ≥ 3.17.1, closes [Issue #472](https://github.com/DataLab-Platform/DataLab/issues/472))
+* Plugin icons (`PluginInfo.icon`, tools and welcome tiles) may also designate an icon registered by a module, e.g. `"datalab:delete.svg"`, in addition to `package:path` resources and DataLab icon file names
+
 **Portable plot annotations:**
 
 * Plot annotations are now stored in a renderer-independent format shared with DataLab-Web, so annotations in workspaces and `.dlabann` files are no longer tied to PlotPy
 * Existing PlotPy annotations remain readable and are converted only after an annotation edit is accepted; simply opening a workspace or cancelling the editor leaves its data unchanged
 * Annotation identifiers, lock state, custom metadata and extension data are preserved across edits, while unknown third-party payloads are retained without modification
-* DataLab now requires Sigima ≥ 1.3.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x
+* Rectangles and segments drawn on signals are now the same labeled shapes as on images; unlike on images, segments drawn on signals do not show their length and angle, which would mix X and Y units
+* DataLab now requires Sigima ≥ 1.4.0, SigimaX ≥ 1.1.0 and DataLab-Capsule 0.1.x; HDF5 imports use Sigima's experimental-source API
+
+**Regions of interest:**
+
+* A rectangular region of interest now selects the pixels whose centers lie inside the rectangle, bounds included, like circular and polygonal ROIs and like the display: its bounds were rounded to the nearest pixel, which could shift the selection by up to half a pixel. A rectangle whose bounds lie exactly on pixel centers now includes the pixels on both bounds, i.e. one more row and one more column than before. This applies to processing and analysis in ROIs, to ROI extraction and to the background area of the offset correction
+* Circular and polygonal regions of interest now also select the pixels whose centers lie inside their shape, boundary included: polygon vertices were rounded to the nearest pixel, so that the selected pixels could differ from the polygon drawn on the image, and circles were drawn in pixel units on images with non-uniform coordinates
+* A rectangular ROI defined in pixel indices now covers its pixels up to their outer edges, so that it keeps the same pixels when converted to physical coordinates and back
+* The cells of ROI grids (**ROI > Create ROI grid...**) are now made of whole pixels, so that adjacent cells never share a pixel and a full-size grid covers every pixel exactly once, whatever the image size; on images with non-uniform coordinates, the grid now spans the whole image, whose last rows and columns were left out
+* Regions of interest saved with earlier versions are not converted: they select pixels according to these rules when they are used again, so that processing and analysis in these regions may give slightly different results when recomputed
+
+**Image profiles in physical coordinates:**
+
+* Line, segment, average and radial profiles (**Analysis > Intensity profiles**) are now defined in the physical coordinates of the image, like regions of interest and analysis results, instead of pixel indices: the profile parameters show coordinates in the units of the image axes, and the X axis of the resulting signals holds physical coordinates or distances with the matching unit. On images without calibration (origin 0, pixel size 1), results are unchanged
+* The radial profile is now circular on images with rectangular pixels or non-uniform coordinates, and its center is correct on calibrated images, where the image center was misplaced
+* Segment and radial profiles are refused on images whose X and Y units differ, since distances are then undefined; coordinates outside the image are refused instead of being silently moved to its edge. Lines and segments drawn beyond the image in the profile dialog are brought back to its outermost pixels
+* Scripts, macros and plugins must use the new parameter names (`y`/`x` for line profiles, `x1`, `y1`, `x2`, `y2` for segment and average profiles, `xc`/`yc` for radial profiles) and physical coordinates. Profile computations recorded in the provenance of workspaces saved with earlier versions are reported as not verifiable, instead of being replayed with a different meaning
+
+**HDF5 browser:**
+
+* Browsing an HDF5 file no longer reads its datasets entirely: they are listed and described from their shape and data type, and the value previews read only their first elements. Large files open faster and use less memory; data is read when a signal or an image is previewed or imported
+* The HDF5 browser stays responsive while a preview is read, and items selected meanwhile are not read; selecting an item that cannot be previewed (a group, for example) clears the preview. Ordinary 1D arrays and 2D images, NeXus and mapped objects above 2²⁴ values (about 16.8 million) are previewed with a step along each axis (the axes of NeXus images are still read entirely, to check them as on import); compound datasets and signals stored in 2D tables still use complete objects for graphical previews
+* Datasets with three dimensions or more (image stacks, spectral cubes...) are now listed in the HDF5 browser and imported as one image or signal per frame: a view selector chooses the displayed axes, the frames (first, last and step along another axis) and the index of the other axes, previews the first frame, and imports the frames once **Import these frames** is checked (with a confirmation beyond 100 frames). Frames of NeXus datasets keep their axes, and their title gives their position (e.g. the motor position of each detector image of a scan)
+* Dataset attributes with more than 10 000 values are no longer copied to the metadata of imported objects
+
+See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific object import, experimental origin and preview limits.
+
+**Scripts, macros and plugins:**
+
+* An object or a group looked up by its title, from a macro, a plugin, a remote client (e.g. `get_object("My signal")`) or the Web API, is no longer silently replaced by the first one found when several objects or groups share this title (e.g. files imported twice, "Untitled" objects): an error now names the matching objects with their UUID, which identifies them unambiguously (HTTP 409 for the Web API)
+* For plugin developers: `patch_title_with_ids` no longer takes the third argument (`id_func`), and the helpers of the former `s001`-style identifiers (`SHORT_ID_REGEX`, `find_by_short_id`, `find_short_ids_in_title`, `replace_short_ids_by_uuids_in_titles`, `replace_uuids_by_short_ids_in_titles`) are removed from `datalab.objectmodel`, as titles now refer to objects by their UUID
+* For developers of custom DataLab controllers derived from `BaseProxy`: the new `export_capsule` and `open_capsule` methods must be implemented
 
 ### 🛠️ Bug Fixes ###
 
@@ -138,6 +239,63 @@ DataLab now uses stable UUID-based object references across object trees, result
 **Window layout:**
 
 * Fixed the width of the signal/image panels not being restored at startup: after narrowing the panels and restarting DataLab, they came back wider (up to their maximum width) instead of keeping the width chosen by the user
+* Fixed DataLab failing to start when its configuration file held an invalid window layout or an invalid log file name (e.g., after editing the file by hand): such settings are now ignored, and the default ones are used
+
+**Console:**
+
+* Fixed the console still being shown on errors after disabling **Show console on error** in the Settings dialog (with Qt 5, when the setting was enabled at startup), until DataLab was restarted
+
+**Demo:**
+
+* Fixed the demo failing with the error "No module named 'pytest'" in the standalone version of DataLab (installed with the MSI installer) and in installations without the test dependencies (e.g., `pip install datalab-platform`), whether started from the **?** menu, the welcome page, the last step of the guided tour or the `datalab-demo` command (fixes [Issue #365](https://github.com/DataLab-Platform/DataLab/issues/365))
+* The `datalab-demo` command no longer deletes the DataLab configuration of the user: the demo now runs with the default settings, without reading or changing the settings of the user
+
+**Standalone version:**
+
+* Fixed the standalone version of DataLab exiting with a success code when it failed to start: it now exits with an error code, so that scripts and deployment tools launching it can detect the failure (the cause is still written in `datalab_error.log`, in the current folder)
+
+**Display scaling:**
+
+* Fixed the splash screen, the DataLab logo of the welcome page and of the guided tour, and the watermark of empty plots being blurry with a Windows display scaling greater than 100% (e.g., 125%): they are now displayed at the resolution of the screen
+* Fixed most of the text of the user interface (welcome page, object properties, panel tabs, dialog boxes, ...) keeping its 100% size with a Windows display scaling greater than 100% (e.g., 125%), while menus and the status bar were enlarged. All the text now follows the display scaling and the Windows text size setting, and uses the standard font of Windows applications ("Segoe UI"). This affected DataLab running with Qt 5, like the standalone application (requires guidata ≥ 3.16.1)
+* Fixed the line of the X axis of signal and image plots not being drawn with a display scaling such as 125% or 150%, depending on the size and position of the plot in the window (requires PythonQwt ≥ 0.17.1)
+* Fixed images being displayed with a lower resolution than the screen with a display scaling greater than 100%: with a 200% scaling, images were shown with half the resolution of the screen, and with 125%, one screen pixel row and column out of five were duplicated, which made fine details (e.g., noise) look irregular. Images are now displayed at the resolution of the screen (requires PlotPy ≥ 2.12.1)
+* Fixed the red plugin icon of the status bar (shown when some plugins failed to load) being too small and shifted to the top-left corner with a display scaling greater than 100% (e.g., half its size with 200%)
+
+**Dark theme:**
+
+* Fixed most windows keeping a white title bar with the dark theme on Windows, next to their dark content: the conversation history of the AI Assistant, the workspace capsule, the command palette and other dialog boxes, the import wizard, the confirmation and input boxes (e.g., when renaming a group or a conversation) and the panels detached from the main window (signal and image views, macro, history, AI Assistant and welcome panels, console). All the windows now have a dark title bar with the dark theme, also after changing the color mode in the Settings dialog (requires guidata ≥ 3.17.2, fixes [Issue #490](https://github.com/DataLab-Platform/DataLab/issues/490))
+
+**Plot watermark:**
+
+* Fixed the watermark of empty plots being read from another installation of DataLab sharing the same user configuration (e.g., DataLab installed in another Python environment): the watermark disappeared once this other installation was removed, and stayed blurry on high-DPI screens when it was an older version. The watermark of the running DataLab is now always used
+
+**Signal display:**
+
+* Fixed auto downsampling of signals (**Settings > Visualization > Signals**) only starting above 5 times the configured maximum number of points: with the default value of 100,000 points, signals of a few hundred thousand points were drawn in full, which slowed down the display. Signals with more points than the maximum are now downsampled so that at most this number of points is drawn, and the Settings dialog and the documentation now give the actual default value (100,000 instead of 10,000) (fixes [Issue #455](https://github.com/DataLab-Platform/DataLab/issues/455))
+* Fixed changes of the auto downsampling and line width settings only applying to the curves of the selected signals: the other curves kept the former settings, even once selected again. These settings now apply to all curves as soon as the Settings dialog is closed
+* Fixed the X axis ticks being shifted relative to the vertical grid lines and the curves after opening a signal or changing the selection, for signals whose X axis does not start and end on a graduation (e.g., `step.npy` from the Sigima test data): the shift remained until the view was panned or zoomed. The X axis now stays aligned with the grid and the curves (fixes [Issue #457](https://github.com/DataLab-Platform/DataLab/issues/457))
+* Fixed curves of reloaded workspaces keeping the line width they had when the workspace was saved: changes of the line width setting (**Settings > Visualization > Signals**) no longer applied to them, and thick lines were no longer drawn 1 pixel wide for signals with many points, which slowed down their display. Only line widths chosen for a curve (e.g. in its parameters dialog) are now saved, and they are also drawn 1 pixel wide for signals with many points. When opening workspaces and history files saved with DataLab 1.3 or earlier, which saved the line width of every curve, line widths of 1 are removed so that curves follow the line width setting; other line widths are kept
+
+**Custom colormaps:**
+
+* Fixed custom colormaps (created with the colormap manager) being saved outside DataLab's configuration directory, in a `.plotpy` or `.none` directory of the user's configuration directory shared with other applications based on PlotPy, depending on how DataLab was started. They are now saved in the `plotpy` subdirectory of DataLab's configuration directory; the first time, custom colormaps saved in the former directories are copied there (requires PlotPy ≥ 2.12.0)
+
+**HDF5 import:**
+
+* Fixed images with unsigned 32-bit values above 2 147 483 647 being clipped when imported from an HDF5 file ("Clipping uint32 data to int32" warning): such images are now imported as 64-bit floating-point images keeping every value exactly. Other integer images that no supported integer type can hold also use a sufficiently precise floating-point type when possible, instead of rounding to 32-bit floating-point values beyond 16 777 216; a warning is emitted when no supported type guarantees exact conversion (in particular beyond ±2⁵³ for float64)
+* Fixed single-precision complex (`complex64`) 1D datasets losing their imaginary part when imported from an HDF5 file: they are now imported as complex signals. Integer signals beyond ±2⁵³ now also emit the precision warning instead of being rounded silently
+* Fixed the import of several datasets from HDF5 files stopping at the first dataset that could not be imported: the other datasets are now imported, and the datasets that could not be are listed in a single message at the end
+* Fixed HDF5 files containing broken links failing to open in the HDF5 browser, for example synchrotron master files whose detector files are not available (external links to a missing file): the broken links are now skipped and the rest of the file can be browsed and imported
+* Fixed HDF5 files containing a group linked into itself or into one of its subgroups failing to open in the HDF5 browser (the file was browsed endlessly until an error): such links back to a parent group are now skipped, while other aliases of a group or dataset are still shown at each of their paths
+* Fixed datasets stored in other files, such as the detector data of synchrotron master files, missing from the HDF5 browser even when these files are available: the datasets reached through an external link were looked up at their path in their own file, so that they were skipped, or the data of another dataset of the opened file, found at that path, was imported instead. They are now listed and imported at their path in the opened file
+* Fixed HDF5 files whose name contains a comma failing to open: the comma was taken for the separator between a file name and the name of a dataset to import. When appending such a workspace, the question about clearing the workspace also did not mention that its provenance is not imported, and an append cancelled by the user was still recorded in the History panel
+* Fixed datasets holding a single row of values (e.g., a single scan stored as a 1 × N array) being silently skipped when imported from an HDF5 file: they are now imported and previewed as signals
+* Fixed an error when clicking **Show array** in the HDF5 browser after selecting a group with the keyboard, or after closing the file of the selected dataset: the button now only shows arrays, and is disabled once the file is closed
+
+**Workspace saving:**
+
+* Fixed a failed save destroying the previous version of the workspace file: the file was emptied before the data was written, so that an error during the save, a full disk or an interruption left neither the previous nor the new workspace on disk. Workspaces, capsules and History files (`.dlhist`) are now written to a temporary file, which replaces the previous file only once completely written; if the save fails, the previous file is left untouched
 
 **File import:**
 
@@ -148,14 +306,43 @@ DataLab now uses stable UUID-based object references across object trees, result
 * Adding, pasting or deleting metadata now marks the workspace as modified, so DataLab asks to save these changes before closing
 * Importing metadata from a file into an object (**Edit > Metadata > Import metadata**) no longer gives it the identity of the object the metadata were exported from: two objects sharing an identity confused source references in titles, **Select source objects** and the saving of the workspace
 
+**Regions of interest:**
+
+* Fixed the **Inverse ROI logic** option of image ROIs being lost when validating the ROI editor: the option had no effect when set in the coordinates dialog of the editor (e.g., **Rectangular ROI**), and image ROIs created with it (e.g., by a macro) lost it once edited
+* Fixed ROIs defined in pixel indices (e.g., by a macro or with the remote control) being converted to physical coordinates when the ROI editor was validated. They now stay in pixel indices, also when moved in the editor
+
 **Processing:**
 
 * Results of the extraction of several regions of interest into a single object can be processed again: the **Processing** tab showed "Unknown computing feature: extract_rois" with **Reapply** disabled, and replaying the History skipped the action
 * **Edit > Recompute** now also recomputes results of operations combining several objects (e.g., difference of two signals, average of several images), which were skipped
+* Fixed **Processing > Resampling** of images shifting every value by half a pixel: resampling an image with the default parameters, i.e. onto its own grid, filled its last row and column with NaN. The X/Y min/max parameters are now the coordinates of the centers of the first and last output pixels (by default, those of the image), and the 'Pixel size' mode keeps the requested pixel size exactly
+* Fixed the sum, average, product and standard deviation of several signals, and their combination into an image, depending on the order of the signals: when a real signal came first, the imaginary parts of the complex signals were discarded
+* The sum, average and product of several images now accept complex images, which raised an error
+* Fixed **Processing > Resampling** of complex images with the default parameters, and the Z-axis **Polynomial calibration** of complex images, discarding the imaginary parts: complex images now stay complex
+* Fixed modifying the result of a diagonal, horizontal or vertical flip or a 90° rotation of an image in place (e.g. from a macro or a plugin) also modifying its source image
+* Fixed the extraction of several regions of interest into a single image giving wrong coordinates to images with non-uniform coordinates (the X coordinates were taken from the extracted rows and the Y coordinates from the extracted columns)
+* The arbitrary rotation of images (**Processing > Geometry > Rotate by...**) now refuses images with non-uniform coordinates, like resizing and resampling, instead of producing an image whose coordinates did not match its pixels
+* Fixed the uncertainty of the product of signals being lost where one of the signals is zero: it is now propagated there too
+* Fixed ROIs, annotations and analysis results (centroids, detected peaks, contours...) being shifted by one pixel after a flip or a 90° rotation of an image; after a 90° rotation of a non-square image, or of an image whose coordinates do not start at zero, analysis results even ended up far from the features they describe. They now move exactly with the pixels; for images with non-uniform coordinates, circles, ellipses and polygons are moved approximately when the pixels are reversed along a non-uniform axis (a circle does not stay a circle). ROIs defined in pixel indices are also moved correctly, and inverse ROIs (which mask the inside of their shape) no longer become normal ROIs after these operations, a translation or a distribution of images on a grid
+* Fixed **ROI > Extract...** giving the extracted image a wrong origin when the coordinates of the source image do not start at zero, and coordinates not matching the extracted pixels for images with non-uniform coordinates
+* Fixed the coordinates of analysis results computed in a ROI being off by up to half a pixel
+* Fixed the analysis results of images with non-uniform coordinates (**Analysis > Centroid...**, **Minimum enclosing circle center...**, **2D peak detection**, **Contour detection...**, **Circle Hough transform...** and **Blob detection**) being given in pixel indices, or according to the former pixel size and origin of an image switched to non-uniform coordinates, so that they were drawn away from the features they describe: they are now placed at the positions of the pixels on the image axes, with radii scaled by the local pixel size. The results of images with uniform coordinates are unchanged
+* **ROI > Extract...** now reports an explicit error for a region of interest holding no pixel of the image (for example a cell of a ROI grid narrower than a pixel, or a region outside the image) instead of silently creating an empty image; the other regions of interest are still extracted
+* Fixed **Processing > Level adjustment > Offset correction** using a background area truncated to integer coordinates: the area was wrong for images whose coordinates are not in pixels (e.g. in millimeters), and empty when smaller than one unit
+
+**Plugins:**
+
+* Plugins organized as a folder, such as those created by `datalab-plugin create --project`, are now loaded when their folder is added to the plugin directories, without being installed first: they were silently ignored, unless an earlier installation had left package information in the project. The project folder itself can now be added, instead of its `src` subfolder (fixes [Issue #411](https://github.com/DataLab-Platform/DataLab/issues/411))
+* Fixed small empty windows briefly flashing on screen when opening **Plugins > Configure plugins...**, just before the dialog appeared (fixes [Issue #486](https://github.com/DataLab-Platform/DataLab/issues/486))
 
 **Plugins and History:**
 
 * Replaying a History action or re-processing a result created by a plugin feature that shares its name with a built-in feature now runs the plugin feature instead of the built-in one
+
+**History Panel:**
+
+* Fixed an oversized warning appearing when deleting a group of signals or images whose processing results were kept in another group, even when the History panel was not recording: it listed every deleted object, often as an unreadable identifier, and stated that "operations could not be reconnected" although there was nothing to reconnect. Deleting such objects now shows no message, and the results depending on them are left unchanged as before. The warning is now shown only when a recorded processing step loses its source, and it lists each step once, in a message of bounded size (fixes [Issue #451](https://github.com/DataLab-Platform/DataLab/issues/451))
+* Fixed the **Description** column of the History panel showing the raw content of voluminous parameters, e.g. the whole histogram of a **Brightness and contrast** action: the row grew to a huge height and scrolling the panel became erratic. The description now shows the actual parameters (e.g. the minimum and maximum of the brightness and contrast range) on a single line, shortened to the column width with the full summary in its tooltip; long values are shortened, and expanded details scroll inside a row of limited height (fixes [Issue #369](https://github.com/DataLab-Platform/DataLab/issues/369))
 
 **Object titles:**
 
@@ -178,3 +365,16 @@ DataLab now uses stable UUID-based object references across object trees, result
 * Errors raised by remote commands, such as `calc` with an unknown computation function or `set_object` with an unknown object, are now reported to the client instead of being silently ignored
 * Fixed remote commands sometimes returning the result of the previous command instead of their own: for example, `get_current_object_uuid` could return a panel name instead of `None` when there was no current object
 * Fixed DataLab freezing when closed while a remote command was still running (e.g. when closing the main window with `call_method("close")`)
+* Fixed DataLab crashing, or opening an error message box, when a request of a remote client or a macro failed, e.g. a computation requested with `calc` that failed on the selected signal, or a file that could not be read with `load_from_files`: the client was not informed of the error, and DataLab crashed when it ran without display (e.g. in the background, for tests or automation). The error is now reported to the client, as an `xmlrpc.client.Fault` with XML-RPC or as an HTTP error with the Web API (500 for a failed computation, 404 for an unknown computation function), and shown in the status bar of DataLab; this also applies to the datasets of an HDF5 file that could not be imported. Macros and remote clients now get an exception where they continued after the message box was closed (fixes [Issue #404](https://github.com/DataLab-Platform/DataLab/issues/404))
+* Fixed every Web API request failing after 30 seconds with an HTTP 500 error ("Main thread execution timed out") when the Web API server had been started by a remote client with `start_webapi_server` (XML-RPC), including requests that should have failed at once, such as `calc` with an unknown computation function; the requested operation could even be carried out later, after the error had been returned. Requests are now served as when the server is started from the **File > Web API** menu (fixes [Issue #403](https://github.com/DataLab-Platform/DataLab/issues/403))
+* Fixed images with non-uniform coordinates losing them when transferred through the Web API (`GET` and `PUT /objects/{name}/data`): they were rebuilt with default uniform coordinates. The NPZ data format now includes these coordinates; archives written by earlier versions remain readable. Clients with their own NPZ reader, such as DataLab-Kernel, must support the new entries to take advantage of this
+
+**AI Assistant:**
+
+* Fixed the **Save to Macros** link missing when a conversation is reopened from **History...**: a macro proposed by the assistant in a previous session could no longer be saved. Reopened conversations also showed every tool call as successful, including the failed ones; they now show the actual outcome (fixes [Issue #447](https://github.com/DataLab-Platform/DataLab/issues/447))
+* Saving a macro proposed by the assistant now offers a **Show in Macro panel** link: the Macro panel is tabbed with the AI Assistant, so the saved macro stayed hidden behind the conversation
+* Fixed the assistant answering a request to *write* a macro with the code in its reply, which could not be saved to the Macro panel: it now proposes the macro without running it (the confirmation dialog states that it will not be executed) and offers the **Save to Macros** link. A **Save to Macros** link is also offered under each Python code block of its replies, unless macro creation is disabled
+
+**Security:**
+
+* Opening a workspace received from someone else can no longer make DataLab load or run other code installed on the computer. The parameters stored with objects, analysis results and History actions name their class, and DataLab imported whatever module they named and called the object named there, which a modified file could use, for example, to make DataLab quit. Only parameter classes of DataLab, Sigima, guidata and installed plugins are now used; other stored parameters are reported as unreadable (fixes [Issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))

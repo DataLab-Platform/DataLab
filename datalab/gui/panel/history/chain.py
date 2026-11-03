@@ -377,13 +377,19 @@ def remove_single_action(panel: HistoryPanel, action: HistoryAction) -> None:
 def find_reconnection_source(
     panel: HistoryPanel, panel_str: str, output_uuid: str
 ) -> tuple[HistoryAction | None, str | None]:
-    """Return the action and source UUID behind a removed output."""
+    """Return the action and source UUID behind a removed output.
+
+    Only a processing step has a source: an object created or loaded by a UI
+    action has none, whatever the selection recorded with the action.
+    """
     action_uuid = panel.runtime.objects.output_to_action.get(output_uuid)
     if action_uuid is None:
         return None, None
     for session in panel.history_sessions:
         for action in session.actions:
             if action.uuid == action_uuid:
+                if action.kind != HistoryAction.KIND_COMPUTE:
+                    return action, None
                 selection = action.state.selection.get(panel_str, [])
                 source_uuid = selection[0] if selection else None
                 return action, source_uuid
@@ -423,16 +429,15 @@ def plan_reconnection(
         return plan
     alive_ids = set(panel_data.objmodel.get_object_ids())
     if source_uuid is None or source_uuid not in alive_ids:
-        label = removed_uuid
-        if producer_action is not None:
-            label = producer_action.title or producer_action.func_name or removed_uuid
-        plan.warning = (
-            _(
-                "“%s” has dependent operations but no valid source to "
-                "reconnect to — downstream results are left unchanged."
+        # Objects that were not produced by a recorded processing step (raw
+        # data, or history not recording) have no source: nothing to report.
+        if (
+            producer_action is not None
+            and producer_action.kind == HistoryAction.KIND_COMPUTE
+        ):
+            plan.unreconnected_operation = (
+                producer_action.title or producer_action.func_name
             )
-            % label
-        )
         return plan
     if producer_action is not None:
         outputs = panel.runtime.objects.action_output_uuids.get(
@@ -449,7 +454,7 @@ def apply_reconnection_plan(
     roots_to_recompute: list[HistoryAction],
 ) -> None:
     """Apply object and action source rewrites described by ``plan``."""
-    if plan.warning is not None or plan.source_uuid is None:
+    if plan.source_uuid is None or not panel_data.objmodel.has_uuid(plan.source_uuid):
         return
     for target in plan.targets:
         if not panel_data.objmodel.has_uuid(target.object_uuid):
@@ -474,16 +479,36 @@ def apply_reconnection_plan(
         remove_single_action(panel, plan.producer_action)
 
 
-def show_reconnection_warnings(panel: HistoryPanel, warnings: list[str]) -> None:
-    """Show reconnection warnings at the GUI boundary."""
-    if warnings and not execenv.unattended:
-        QW.QMessageBox.warning(
-            panel.mainwindow,
-            _("Delete"),
-            _("Some operations could not be reconnected after deletion:")
-            + "\n\n• "
-            + "\n• ".join(warnings),
+#: Maximum number of operations listed by the reconnection warning
+MAX_LISTED_UNRECONNECTED = 10
+
+
+def show_reconnection_warnings(panel: HistoryPanel, operations: list[str]) -> None:
+    """Show, in a single message, the operations that could not be reconnected.
+
+    Args:
+        panel: History panel
+        operations: titles of the processing steps whose deleted outputs had
+         dependent results but no remaining source (listed once each, at most
+         :data:`MAX_LISTED_UNRECONNECTED` of them)
+    """
+    unique = list(dict.fromkeys(operations))
+    if not unique or execenv.unattended:
+        return
+    lines = ["• " + title for title in unique[:MAX_LISTED_UNRECONNECTED]]
+    if len(unique) > MAX_LISTED_UNRECONNECTED:
+        lines.append(_("... and %d more") % (len(unique) - MAX_LISTED_UNRECONNECTED))
+    QW.QMessageBox.warning(
+        panel.mainwindow,
+        _("Delete"),
+        _(
+            "The outputs of the following operations were deleted, but their "
+            "source no longer exists: the results depending on them could not "
+            "be reconnected and are left unchanged."
         )
+        + "\n\n"
+        + "\n".join(lines),
+    )
 
 
 def refresh_reconnected_history(panel: HistoryPanel) -> None:

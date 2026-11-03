@@ -5,12 +5,19 @@
 from __future__ import annotations
 
 import hashlib
+import http.client
 import json
+import urllib.request
 from pathlib import Path
 
 import pytest
 
-from datalab.plugins.catalog import CatalogError, download_release, fetch_catalog
+from datalab.plugins.catalog import (
+    CatalogError,
+    download_dependency_wheels,
+    download_release,
+    fetch_catalog,
+)
 
 FILENAME = "example_plugin-1.0.0-py3-none-any.whl"
 
@@ -77,6 +84,42 @@ def test_release_is_downloaded_from_a_relative_url(tmp_path: Path) -> None:
     assert latest.url == (tmp_path / release["url"]).as_uri()
     assert Path(path) == destination / FILENAME
     assert Path(path).read_bytes() == b"wheel content"
+
+
+def test_dependency_artifacts_are_selected_and_verified(tmp_path: Path) -> None:
+    """Compatible dependency wheels use the same size and digest checks."""
+    filename = "offline_helper-1.0-py3-none-any.whl"
+    dependency = tmp_path / filename
+    data = b"dependency bytes"
+    dependency.write_bytes(data)
+    artifact = {
+        "filename": filename,
+        "url": filename,
+        "size": len(data),
+        "sha256": hashlib.sha256(data).hexdigest(),
+    }
+    release = publish(
+        tmp_path,
+        b"plugin",
+        dependency_wheels=[
+            artifact,
+            {
+                **artifact,
+                "filename": "foreign_helper-1.0-cp399-cp399-win_amd64.whl",
+                "url": "must-not-be-requested.whl",
+            },
+        ],
+    )
+    (plugin,) = fetch_catalog(write_catalog(tmp_path, [plugin_record([release])]))
+    latest = plugin.get_installable_release()
+    assert latest is not None
+    destination = tmp_path / "dependencies"
+    download_dependency_wheels(latest, str(destination))
+    assert [path.name for path in destination.iterdir()] == [filename]
+    assert (destination / filename).read_bytes() == data
+    dependency.write_bytes(b"changed")
+    with pytest.raises(CatalogError, match="size and digest"):
+        download_dependency_wheels(latest, str(destination))
 
 
 def test_installable_release_skips_yanked_web_only_and_revoked(tmp_path: Path) -> None:
@@ -162,6 +205,28 @@ def test_only_https_and_file_urls_are_used() -> None:
     """Plain HTTP could be tampered with on the way."""
     with pytest.raises(CatalogError, match="Unsupported URL scheme"):
         fetch_catalog("http://example.org/catalog.json")
+
+
+def test_truncated_download_is_a_catalog_error(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A response cut short (not an ``OSError``) is reported, not raised as is."""
+
+    class TruncatedResponse:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args) -> None:
+            pass
+
+        def read(self, _size: int) -> bytes:
+            raise http.client.IncompleteRead(b"{", 100)
+
+    monkeypatch.setattr(
+        urllib.request, "urlopen", lambda *_args, **_kwargs: TruncatedResponse()
+    )
+    with pytest.raises(CatalogError, match="Cannot download"):
+        fetch_catalog("https://example.org/catalog.json")
 
 
 if __name__ == "__main__":

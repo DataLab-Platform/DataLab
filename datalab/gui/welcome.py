@@ -23,7 +23,7 @@ import urllib.parse
 import webbrowser
 from typing import TYPE_CHECKING, Callable
 
-from guidata.configtools import get_icon, get_image_file_path
+from guidata.configtools import get_icon, get_pixmap
 from guidata.qthelpers import add_actions
 from guidata.widgets.dockable import DockableWidgetMixin
 from qtpy import QtCore as QC
@@ -387,7 +387,7 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
         overflow_tile = WelcomeEntry(
             "libre-gui-plugin.svg",
             "",
-            _("Browse all applications in the catalog."),
+            _("Browse all applications in the Applications panel."),
             tile=True,
         )
         overflow_tile.SIG_CLICKED.connect(self.__show_applications)
@@ -453,7 +453,7 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
         self.applications_section.hide()
 
     def __show_applications(self) -> None:
-        """Open the application catalog"""
+        """Show the Applications panel"""
         self.mainwindow.show_applications()
 
     def refresh_application_tiles(self) -> None:
@@ -506,7 +506,7 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
             [self.application_groups[plugin.plugin_id] for plugin in plugins],
             Conf.welcome_application_rows.get(),
         )
-        # Keep the section (and its catalog button) when all tiles are hidden
+        # Keep the section (and its "Browse all" button) when all tiles are hidden
         self.applications_section.setVisible(bool(self.application_tiles))
 
     def __create_tile_menu(
@@ -588,7 +588,7 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
     def __setup_header(self) -> None:
         """Setup the header: logo, slogan with version, and edition"""
         logo = QW.QLabel()
-        logo.setPixmap(QG.QPixmap(get_image_file_path("DataLab-Banner-200.png")))
+        logo.setPixmap(get_pixmap("DataLab-Banner-200.png"))
         slogan = QW.QLabel(
             _("Scientific signal and image processing \u2014 version %s")
             % datalab.__version__
@@ -791,7 +791,9 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
         menu = QW.QMenu(self)
         choices = {}
         for panel, label in self.__data_panels():
-            action = menu.addAction(get_icon(f"{panel.PANEL_STR_ID}.svg"), label)
+            action = menu.addAction(
+                get_icon(f"sigimax:{panel.PANEL_STR_ID}.svg"), label
+            )
             choices[action] = panel
         chosen = menu.exec(self.__popup_position(key))
         menu.deleteLater()
@@ -801,7 +803,7 @@ class WelcomePanel(QW.QWidget, DockableWidgetMixin):
         """Show the signal and image creation actions"""
         menu = QW.QMenu(self)
         for panel, label in self.__data_panels():
-            submenu = menu.addMenu(get_icon(f"{panel.PANEL_STR_ID}.svg"), label)
+            submenu = menu.addMenu(get_icon(f"sigimax:{panel.PANEL_STR_ID}.svg"), label)
             add_actions(submenu, panel.get_category_actions(ActionCategory.CREATE))
         menu.exec(self.__popup_position("create"))
         menu.deleteLater()
