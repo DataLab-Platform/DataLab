@@ -240,6 +240,11 @@ See the [HDF5 browser guide](../features/common/h5browser.rst) for scientific ob
 
 * Fixed the console still being shown on errors after disabling **Show console on error** in the Settings dialog (with Qt 5, when the setting was enabled at startup), until DataLab was restarted
 
+**Demo:**
+
+* Fixed the demo failing with the error "No module named 'pytest'" in the standalone version of DataLab (installed with the MSI installer) and in installations without the test dependencies (e.g., `pip install datalab-platform`), whether started from the **?** menu, the welcome page, the last step of the guided tour or the `datalab-demo` command (fixes [Issue #365](https://github.com/DataLab-Platform/DataLab/issues/365))
+* The `datalab-demo` command no longer deletes the DataLab configuration of the user: the demo now runs with the default settings, without reading or changing the settings of the user
+
 **Display scaling:**
 
 * Fixed the splash screen, the DataLab logo of the welcome page and of the guided tour, and the watermark of empty plots being blurry with a Windows display scaling greater than 100% (e.g., 125%): they are now displayed at the resolution of the screen
