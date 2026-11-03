@@ -8,7 +8,7 @@
 #   compile-translations  - UI + docs .mo files                  (ubuntu)
 #   build-pdf-docs        - DataLab_fr.pdf + DataLab_en.pdf      (ubuntu)
 #   build-python-dists    - sdist + wheel (PDFs embedded)        (ubuntu)
-#   build-msi             - PyInstaller EXE + WiX MSI            (windows)
+#   build-msi             - PyInstaller EXE + WiX MSI, smoke test (windows)
 #
 # Each job uploads its own artifact (see "Artifacts produced" below) so
 # they can be downloaded individually from the workflow run page even when
@@ -18,11 +18,17 @@
 # `dependencies` input is "development" (dry runs before they are published):
 # they are then built from the branch named like the built ref, else develop.
 #
+# The MSI is smoke-tested before being uploaded (scripts/frozen_smoke_test.py):
+# installed in a disposable folder, started with screenshots, checked with
+# `DataLab.exe --smoke-test` and uninstalled. A failure fails the job, so
+# nothing is published.
+#
 # Artifacts produced:
 #   translations-mo   compiled .mo files (datalab/locale/**)
 #   pdf-docs          DataLab_fr.pdf, DataLab_en.pdf
 #   python-dists      *.whl, *.tar.gz
 #   msi-installer     DataLab-X.Y.Z.msi
+#   msi-smoke-test    screenshots, reports and logs of the MSI smoke test
 #   pyinstaller-exe   DataLab-vX.Y.Z_exe.zip   (debug only)
 # ============================================================================
 name: _build (reusable)
@@ -484,6 +490,27 @@ jobs:
       - name: Build MSI installer
         shell: pwsh
         run: wix build "wix/DataLab-$env:VERSION.wxs" -ext WixToolset.UI.wixext
+
+      # Release gate: install the MSI in a disposable folder, start the
+      # installed application, run `DataLab.exe --smoke-test` and uninstall.
+      - name: Smoke-test the installed MSI
+        shell: pwsh
+        run: |
+          python scripts/frozen_smoke_test.py all `
+            --msi "wix/DataLab-$env:VERSION.msi" `
+            --dist dist/DataLab `
+            --artifact "dist/DataLab-v$($env:VERSION)_exe.zip" `
+            --workdir (Join-Path $env:RUNNER_TEMP "msi-smoke-test")
+          if ($LASTEXITCODE -ne 0) { throw "MSI smoke test failed" }
+
+      - name: Upload MSI smoke-test evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: msi-smoke-test
+          path: ${{ runner.temp }}/msi-smoke-test/evidence
+          if-no-files-found: ignore
+          retention-days: ${{ inputs.artifact-retention-days }}
 
       - name: Upload MSI installer
         uses: actions/upload-artifact@v6

@@ -362,6 +362,9 @@ msgstr "**Vérification de l'installation :**"
 msgid "The new `--smoke-test` command line option checks that DataLab is correctly installed without opening its main window, e.g. `DataLab.exe --smoke-test report.json` for the standalone version or `datalab --smoke-test report.json`: the packages it relies on, the resources provided with it (macro templates, PDF documentation, French translations and icons) and processing in a separate process. The results are written in a JSON report, and the exit code is not zero when a check failed (see [Command line features](../features/advanced/command.rst))"
 msgstr "La nouvelle option de ligne de commande `--smoke-test` vérifie que DataLab est correctement installé sans ouvrir sa fenêtre principale, par exemple `DataLab.exe --smoke-test report.json` pour la version autonome ou `datalab --smoke-test report.json` : les packages dont il dépend, les ressources fournies avec lui (modèles de macros, documentation PDF, traductions françaises et icônes) et le traitement dans un processus séparé. Les résultats sont écrits dans un rapport JSON, et le code de sortie est non nul lorsqu'une vérification a échoué (voir [Fonctionnalités de la ligne de commande](../features/advanced/command.rst))"
 
+msgid "Before being published, each Windows installer is now installed on a test computer, where the installed application is started and checked this way (implements [Issue #366](https://github.com/DataLab-Platform/DataLab/issues/366))"
+msgstr "Avant sa publication, chaque installeur Windows est désormais installé sur un ordinateur de test, où l'application installée est démarrée puis vérifiée de cette façon (implémente [l'issue #366](https://github.com/DataLab-Platform/DataLab/issues/366))"
+
 msgid "🔄 Changes"
 msgstr "🔄 Changements"
 

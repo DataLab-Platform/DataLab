@@ -100,6 +100,7 @@ jobs:
           test -f all-artifacts/pdf-docs/DataLab_en.pdf                    || { echo "::error::no EN PDF"; exit 1; }
           if [ "${{ inputs.build-msi }}" = "true" ]; then
             test -n "$(ls all-artifacts/msi-installer/*.msi 2>/dev/null)"  || { echo "::error::no MSI"; exit 1; }
+            test -f all-artifacts/msi-smoke-test/summary.json              || { echo "::error::no MSI smoke-test summary"; exit 1; }
           fi
           echo "All expected artifacts present ✔"
 

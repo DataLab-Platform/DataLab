@@ -19,6 +19,9 @@ import xml.etree.ElementTree as ET
 
 COUNT = 0
 
+#: Upgrade code of the DataLab installer (must match ``generic-DataLab.wxs``)
+UPGRADE_CODE = uuid.UUID("e7a3f5c1-9d84-4b2a-a6f1-2c5d8e9b7a31")
+
 
 def generate_id() -> str:
     """Generate an ID for a WiX Toolset XML element."""
@@ -43,30 +46,60 @@ def insert_text_after(text: str, containing: str, content: str) -> str:
     return linesep.join(lines)
 
 
-def make_wxs(product_name: str, version: str) -> None:
-    """Make a .wxs file for the DataLab Windows installer."""
-    # MSI Version does not support labels, at least not in a way compatible with
-    # Python packaging (e.g., "0.16.dev0" is not a valid MSI version).
-    #
-    # Here is the conversion we must do (the pre-release / dev / post separator
-    # may be absent, a dot, or a hyphen depending on the source -- e.g. the
-    # PEP 440 normalised "1.2.1rc99" or the git tag form "1.2.1-rc99"):
-    # - "0.16.post1" -> "0.16.1"
-    # - "0.16.post2" -> "0.16.1"
-    # - "0.16.dev0" -> "0.16.0"
-    # - "0.16.dev1" -> "0.16.0"
-    # - "0.16.alpha1" -> "0.16.0"
-    # - "0.16.alpha2" -> "0.16.0"
-    # - "0.16.beta1" -> "0.16.0"
-    # - "0.16.beta2" -> "0.16.0"
-    # - "0.16rc1" / "0.16-rc1" -> "0.16.0"
-    # - "1.2.1-rc99" -> "1.2.1.0"
-    #
+def get_msi_version(version: str) -> str:
+    """Return the MSI version of a DataLab version.
+
+    MSI Version does not support labels, at least not in a way compatible with
+    Python packaging (e.g., "0.16.dev0" is not a valid MSI version).
+
+    Here is the conversion we must do (the pre-release / dev / post separator
+    may be absent, a dot, or a hyphen depending on the source -- e.g. the
+    PEP 440 normalised "1.2.1rc99" or the git tag form "1.2.1-rc99"):
+
+    - "0.16.post1" -> "0.16.1"
+    - "0.16.post2" -> "0.16.1"
+    - "0.16.dev0" -> "0.16.0"
+    - "0.16.dev1" -> "0.16.0"
+    - "0.16.alpha1" -> "0.16.0"
+    - "0.16.alpha2" -> "0.16.0"
+    - "0.16.beta1" -> "0.16.0"
+    - "0.16.beta2" -> "0.16.0"
+    - "0.16rc1" / "0.16-rc1" -> "0.16.0"
+    - "1.2.1-rc99" -> "1.2.1.0"
+
+    Args:
+        version: DataLab version.
+
+    Returns:
+        MSI version.
+    """
     version_msi = re.sub(r"[._-]?post\d+$", ".1", version)
     version_msi = re.sub(r"[._-]?dev\d+$", ".0", version_msi)
-    version_msi = re.sub(
-        r"[._-]?(?:rc|alpha|beta|pre|preview|a|b|c)\d+$", ".0", version_msi
-    )
+    return re.sub(r"[._-]?(?:rc|alpha|beta|pre|preview|a|b|c)\d+$", ".0", version_msi)
+
+
+def get_product_code(version: str) -> str:
+    """Return the ProductCode of the DataLab installer.
+
+    The ProductCode is deterministic and based on the MAJOR version only: all
+    versions with the same major version (e.g., 1.0.0, 1.0.1, 1.1.0) have the same
+    ProductCode, preventing installation of multiple v1.x versions. Different major
+    versions (v1.x vs v2.x) have different ProductCodes, allowing them to be
+    installed side-by-side.
+
+    Args:
+        version: DataLab version.
+
+    Returns:
+        ProductCode (GUID without braces).
+    """
+    major_version = get_msi_version(version).split(".")[0]
+    return str(uuid.uuid5(UPGRADE_CODE, f"v{major_version}"))
+
+
+def make_wxs(product_name: str, version: str) -> None:
+    """Make a .wxs file for the DataLab Windows installer."""
+    version_msi = get_msi_version(version)
 
     # Generate version-based names for folders
     # Extract major.minor version (e.g., "1.0" from "1.0.0")
@@ -78,13 +111,7 @@ def make_wxs(product_name: str, version: str) -> None:
     # User-friendly folder name: "DataLab 1.0"
     display_folder_name = f"{product_name} {major_minor}"
 
-    # Generate a deterministic ProductCode based on MAJOR version only
-    # All versions with the same major version (e.g., 1.0.0, 1.0.1, 1.1.0) will have
-    # the same ProductCode, preventing installation of multiple v1.x versions.
-    # Different major versions (v1.x vs v2.x) will have different ProductCodes,
-    # allowing them to be installed side-by-side.
-    upgrade_code = uuid.UUID("e7a3f5c1-9d84-4b2a-a6f1-2c5d8e9b7a31")
-    product_code = str(uuid.uuid5(upgrade_code, f"v{major_version}"))
+    product_code = get_product_code(version)
 
     wix_dir = osp.abspath(osp.dirname(__file__))
     proj_dir = osp.join(wix_dir, os.pardir)

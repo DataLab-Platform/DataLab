@@ -151,6 +151,7 @@ Signals, images and groups can now be deleted directly from the lists, as in Dat
 **Installation check:**
 
 * The new `--smoke-test` command line option checks that DataLab is correctly installed without opening its main window, e.g. `DataLab.exe --smoke-test report.json` for the standalone version or `datalab --smoke-test report.json`: the packages it relies on, the resources provided with it (macro templates, PDF documentation, French translations and icons) and processing in a separate process. The results are written in a JSON report, and the exit code is not zero when a check failed (see [Command line features](../features/advanced/command.rst))
+* Before being published, each Windows installer is now installed on a test computer, where the installed application is started and checked this way (implements [Issue #366](https://github.com/DataLab-Platform/DataLab/issues/366))
 
 ### 🔄 Changes ###
 
