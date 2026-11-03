@@ -551,6 +551,12 @@ msgstr "Correction de l'échec de la démo, avec l'erreur \"No module named 'pyt
 msgid "The `datalab-demo` command no longer deletes the DataLab configuration of the user: the demo now runs with the default settings, without reading or changing the settings of the user"
 msgstr "La commande `datalab-demo` ne supprime plus la configuration DataLab de l'utilisateur : la démo s'exécute désormais avec les paramètres par défaut, sans lire ni modifier les paramètres de l'utilisateur"
 
+msgid "**Standalone version:**"
+msgstr "**Version autonome :**"
+
+msgid "Fixed the standalone version of DataLab exiting with a success code when it failed to start: it now exits with an error code, so that scripts and deployment tools launching it can detect the failure (the cause is still written in `datalab_error.log`, in the current folder)"
+msgstr "Correction de la version autonome de DataLab qui s'arrêtait avec un code de succès lorsqu'elle ne parvenait pas à démarrer : elle s'arrête désormais avec un code d'erreur, afin que les scripts et outils de déploiement qui la lancent puissent détecter l'échec (la cause est toujours écrite dans `datalab_error.log`, dans le dossier courant)"
+
 msgid "**Display scaling:**"
 msgstr "**Mise à l'échelle de l'affichage :**"
 

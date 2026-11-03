@@ -53,4 +53,6 @@ elif __name__ == "__main__":
                 stream.write(f"    {path}\n")
             stream.write("\n")
             traceback.print_exc(file=stream)
+        # Let callers (installers, scripts, CI) detect the failure
+        sys.exit(1)
 # --------------------------------------------------------------------------------------
