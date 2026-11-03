@@ -28,7 +28,11 @@ from datalab.env import execenv
 from datalab.gui.panel.base import H5ImportBatch
 from datalab.h5 import H5Importer
 from datalab.h5.native import NativeH5Reader, atomic_native_writer
-from datalab.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
+from datalab.utils.qthelpers import (
+    create_progress_bar,
+    must_propagate_errors,
+    qt_try_loadsave_file,
+)
 
 if TYPE_CHECKING:
     from datalab_capsule.ledger import Ledger
@@ -337,11 +341,12 @@ class H5InputOutput:
             errors: description of each error ("dataset: reason")
 
         Raises:
-            ValueError: in unattended mode, if any dataset could not be imported
+            ValueError: in unattended mode, or when the errors are reported by the
+             caller (e.g. remote request), if any dataset could not be imported
         """
         if not errors:
             return
-        if execenv.unattended:
+        if execenv.unattended or must_propagate_errors():
             raise ValueError("\n".join(errors))
         shown = errors[:10]
         if len(errors) > len(shown):

@@ -61,6 +61,29 @@ def test_remote_command_error() -> None:
         assert proxy.get_current_panel() == "signal"
 
 
+def test_remote_processing_error(tmp_path: Path) -> None:
+    """Errors caught by error boundaries are reported to the client (Issue #404)
+
+    Computation and file loading errors were shown in a message box, which crashed
+    DataLab when it ran without display, instead of being reported to the client.
+
+    Args:
+        tmp_path: Temporary directory
+    """
+    filename = tmp_path / "invalid.npy"
+    filename.write_text("Not a NumPy file", encoding="utf-8")
+    with datalab_in_background_context() as proxy:
+        proxy.add_signal("One point", np.array([0.0]), np.array([1.0]))
+        proxy.select_objects([1], "signal")
+        # The derivative of a one-point signal raises IndexError in Sigima
+        with pytest.raises(xmlrpc.client.Fault, match="IndexError"):
+            proxy.calc("derivative")
+        with pytest.raises(xmlrpc.client.Fault):
+            proxy.load_from_files([str(filename)])
+        # DataLab is still running
+        assert proxy.get_object_titles("signal") == ["One point"]
+
+
 def test_remote_command_result() -> None:
     """The result of a remote command is not returned by the next command"""
     with datalab_in_background_context() as proxy:
@@ -110,6 +133,8 @@ if __name__ == "__main__":
         for load_mode in ("files", "directory"):
             test_remote_load_at_startup(Path(tmpdir), load_mode)
     test_remote_command_error()
+    with tempfile.TemporaryDirectory() as tmpdir:
+        test_remote_processing_error(Path(tmpdir))
     test_remote_command_result()
     test_remote_add_group_returns_uuid()
     test_remote_close_during_call()

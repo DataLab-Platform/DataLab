@@ -1095,6 +1095,10 @@ msgstr "Arrêt de la macro '%s'"
 msgid "# <== '%s' macro has finished"
 msgstr "# <== La macro '%s' a terminé son exécution"
 
+#, python-format
+msgid "Remote request failed: %s"
+msgstr "Échec de la requête distante : %s"
+
 msgid "DataLab v0.20 plugins detected"
 msgstr "Plugins DataLab v0.20 détectés"
 

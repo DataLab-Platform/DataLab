@@ -26,7 +26,7 @@ import sys
 import time
 import traceback
 from concurrent.futures import Future
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager
 from datetime import datetime
 from typing import TYPE_CHECKING
 
@@ -656,6 +656,26 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
             f"Method '{method_name}' does not exist on main window or current panel"
         )
 
+    @contextmanager
+    def remote_request_context(self) -> Iterator[None]:
+        """Context in which a request of a remote client runs (XML-RPC, Web API).
+
+        Errors are propagated to the caller, which reports them to the client,
+        instead of being shown in a message box: no user waits for it, and showing
+        a message box crashes DataLab when it runs without display. The error is
+        also shown in the status bar.
+        """
+        try:
+            with qth.errors_propagated_to_caller():
+                yield
+        except Exception as exc:
+            lines = str(exc).strip().splitlines()
+            summary = lines[0] if lines else type(exc).__name__
+            self.statusBar().showMessage(
+                "❌ " + _("Remote request failed: %s") % summary, 10000
+            )
+            raise
+
     @remote_controlled
     def call_method_slot(
         self,
@@ -677,7 +697,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
         """
         # Call the method and store result in RemoteServer
         try:
-            result = self.call_method(method_name, *args, panel=panel, **kwargs)
+            with self.remote_request_context():
+                result = self.call_method(method_name, *args, panel=panel, **kwargs)
             # Store result in RemoteServer for retrieval by XML-RPC thread
             self.remote_server.result = result
             self.remote_server.exception = None  # Clear any previous exception
@@ -703,7 +724,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
              returned to the client (it must be XML-RPC serializable)
         """
         try:
-            result = command(*args)
+            with self.remote_request_context():
+                result = command(*args)
             if return_result:
                 self.remote_server.result = result
         except Exception as exc:  # pylint: disable=broad-except
@@ -1952,7 +1974,7 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
              Set to False when calling from remote/API to avoid blocking dialogs.
 
         Raises:
-            ValueError: unknown function
+            FeatureNotFoundError: unknown function (a :class:`ValueError`)
         """
         panels = [self.tabwidget.currentWidget()]
         panels.extend(self.panels)
@@ -1977,7 +1999,8 @@ class DLMainWindow(  # pylint: disable=too-many-instance-attributes,too-many-pub
                     continue
                 panel.processor.run_feature(feature, param, edit=edit)
                 return
-        raise ValueError(f"Unknown computation function {name}")
+        # A dedicated exception, so that clients may tell it from computation errors
+        raise FeatureNotFoundError(name, message=f"Unknown computation function {name}")
 
     # ------GUI refresh
     def has_objects(self) -> bool:
