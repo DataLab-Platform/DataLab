@@ -18,7 +18,10 @@ from __future__ import annotations
 
 import io
 import json
+import threading
+import time
 import zipfile
+from collections.abc import Generator
 from contextlib import nullcontext
 from types import SimpleNamespace
 from typing import Union
@@ -28,6 +31,9 @@ import numpy as np
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from guidata.qthelpers import qt_app_context
+from qtpy import QtCore as QC
+from qtpy import QtWidgets as QW
 from sigima import ImageObj, SignalObj
 
 from datalab.gui.processor.base import (
@@ -35,7 +41,7 @@ from datalab.gui.processor.base import (
     FeatureNotFoundError,
 )
 from datalab.objectmodel import get_uuid
-from datalab.webapi.adapter import WorkspaceAdapter
+from datalab.webapi.adapter import MainThreadExecutor, WorkspaceAdapter
 from datalab.webapi.routes import (
     router,
     set_adapter,
@@ -55,6 +61,13 @@ from datalab.webapi.serialization import (
 # =============================================================================
 
 DataObject = Union[SignalObj, ImageObj]
+
+
+@pytest.fixture(name="qt_app")
+def fixture_qt_app() -> Generator[QW.QApplication, None, None]:
+    """Qt application, whose thread runs the functions of the main-thread executor"""
+    with qt_app_context() as qt_app:
+        yield qt_app
 
 
 def _make_signal(title: str = "S", n: int = 32) -> SignalObj:
@@ -108,6 +121,7 @@ def make_main_window(
     )
 
 
+@pytest.mark.usefixtures("qt_app")
 def test_workspace_adapter_resolves_uuid_and_rejects_ambiguous_titles() -> None:
     """Use stable UUIDs for mutations and reject ambiguous title lookups."""
     signal = _make_signal("Duplicate", n=10)
@@ -158,6 +172,7 @@ def test_workspace_adapter_resolves_uuid_and_rejects_ambiguous_titles() -> None:
     image_panel.SIG_OBJECT_REMOVED.emit.assert_called_once_with()
 
 
+@pytest.mark.usefixtures("qt_app")
 def test_workspace_adapter_uploaded_copy_gets_a_new_identity() -> None:
     """An object downloaded then uploaded under another name is a new object.
 
@@ -192,6 +207,7 @@ def test_workspace_adapter_uploaded_copy_gets_a_new_identity() -> None:
         adapter.add_object(_make_signal("Other"))
 
 
+@pytest.mark.usefixtures("qt_app")
 def test_workspace_adapter_calc_errors() -> None:
     """Only unknown computation functions are reported as such (HTTP 404).
 
@@ -214,6 +230,58 @@ def test_workspace_adapter_calc_errors() -> None:
     main_window.calc = failing_calc
     with pytest.raises(RuntimeError, match="'derivative' failed: Invalid parameter"):
         adapter.calc("derivative")
+
+
+def test_main_thread_executor_created_in_worker_thread(qt_app: QW.QApplication):
+    """Functions are run by the main thread, whatever the thread of the executor.
+
+    Regression: started by a remote client, the Web API server created its executor
+    in the XML-RPC server thread, which has no event loop: requests were not run,
+    and timed out after 30 seconds (see DataLab Issue #403).
+
+    Args:
+        qt_app: Qt application
+    """
+    executors: list[MainThreadExecutor] = []
+    created = threading.Event()
+    release = threading.Event()
+
+    def create_executor() -> None:
+        """Create the executor in a thread without event loop, kept alive"""
+        executors.append(MainThreadExecutor())
+        created.set()
+        release.wait(20.0)
+
+    creator = threading.Thread(target=create_executor, daemon=True)
+    creator.start()
+    try:
+        assert created.wait(10.0)
+        executor = executors[0]
+        main_thread = qt_app.thread()
+        assert executor.thread() == main_thread
+
+        results: dict[str, object] = {}
+
+        def request() -> None:
+            """Run a function on the main thread, as a Web API request"""
+            try:
+                results["value"] = executor.run_on_main_thread(
+                    lambda: QC.QThread.currentThread() == main_thread
+                )
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                results["error"] = exc
+
+        caller = threading.Thread(target=request, daemon=True)
+        caller.start()
+        deadline = time.monotonic() + 10.0
+        while caller.is_alive() and time.monotonic() < deadline:
+            QC.QCoreApplication.processEvents()
+            time.sleep(0.01)
+        assert not caller.is_alive(), "Function not run by the main thread"
+        assert results == {"value": True}
+    finally:
+        release.set()
+        creator.join(10.0)
 
 
 # =============================================================================
