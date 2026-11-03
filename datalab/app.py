@@ -7,6 +7,7 @@ DataLab launcher module
 from __future__ import annotations
 
 import atexit
+import sys
 from typing import TYPE_CHECKING
 
 from qtpy import QtCore as QC
@@ -18,6 +19,7 @@ from datalab.env import execenv
 from datalab.gui.main import DLMainWindow
 from datalab.utils.instancecheck import ApplicationInstanceRegistry
 from datalab.utils.qthelpers import datalab_app_context
+from datalab.utils.smoketest import run_smoke_test
 
 if TYPE_CHECKING:
     from sigima.objects import ImageObj, SignalObj
@@ -82,6 +84,8 @@ def run(
         option_overrides: option values applied after configuration initialization
         xmlrpc_port: runtime XML-RPC port requested for this application instance
     """
+    if execenv.smoke_test_report is not None:
+        sys.exit(run_smoke_test(execenv.smoke_test_report))
     if execenv.h5files:
         h5files = ([] if h5files is None else h5files) + execenv.h5files
 

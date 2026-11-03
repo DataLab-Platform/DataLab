@@ -356,6 +356,15 @@ msgstr "Les fichiers `.nxs` et `.nx5` sont proposés à l'ouverture de fichiers 
 msgid "Plugins can describe the signals and images of files that NeXus `NXdata` groups designate incompletely (no axes, several counters...) with declarative data mappings (JSON) registered with `sigimax.h5.mapping.register_mapping`: the HDF5 browser then shows each described object as an extra item, imported with its axes, labels and units; the axes of a mapped object may describe its first dimensions only, so that one mapping applies to the counters and detectors of a scan"
 msgstr "Les plugins peuvent décrire les signaux et images des fichiers dont les groupes NeXus `NXdata` sont incomplets (pas d'axes, plusieurs compteurs...) avec des profils de correspondance déclaratifs (JSON) enregistrés par `sigimax.h5.mapping.register_mapping` : le navigateur HDF5 affiche alors chaque objet décrit comme un élément supplémentaire, importé avec ses axes, libellés et unités ; les axes d'un objet décrit peuvent ne décrire que ses premières dimensions, de sorte qu'un même profil s'applique aux compteurs et aux détecteurs d'un scan"
 
+msgid "**Installation check:**"
+msgstr "**Vérification de l'installation :**"
+
+msgid "The new `--smoke-test` command line option checks that DataLab is correctly installed without opening its main window, e.g. `DataLab.exe --smoke-test report.json` for the standalone version or `datalab --smoke-test report.json`: the packages it relies on, the resources provided with it (macro templates, PDF documentation, French translations and icons) and processing in a separate process. The results are written in a JSON report, and the exit code is not zero when a check failed (see [Command line features](../features/advanced/command.rst))"
+msgstr "La nouvelle option de ligne de commande `--smoke-test` vérifie que DataLab est correctement installé sans ouvrir sa fenêtre principale, par exemple `DataLab.exe --smoke-test report.json` pour la version autonome ou `datalab --smoke-test report.json` : les packages dont il dépend, les ressources fournies avec lui (modèles de macros, documentation PDF, traductions françaises et icônes) et le traitement dans un processus séparé. Les résultats sont écrits dans un rapport JSON, et le code de sortie est non nul lorsqu'une vérification a échoué (voir [Fonctionnalités de la ligne de commande](../features/advanced/command.rst))"
+
+msgid "Before being published, each Windows installer is now installed on a test computer, where the installed application is started and checked this way (implements [Issue #366](https://github.com/DataLab-Platform/DataLab/issues/366))"
+msgstr "Avant sa publication, chaque installeur Windows est désormais installé sur un ordinateur de test, où l'application installée est démarrée puis vérifiée de cette façon (implémente [l'issue #366](https://github.com/DataLab-Platform/DataLab/issues/366))"
+
 msgid "🔄 Changes"
 msgstr "🔄 Changements"
 
@@ -550,6 +559,12 @@ msgstr "Correction de l'échec de la démo, avec l'erreur \"No module named 'pyt
 
 msgid "The `datalab-demo` command no longer deletes the DataLab configuration of the user: the demo now runs with the default settings, without reading or changing the settings of the user"
 msgstr "La commande `datalab-demo` ne supprime plus la configuration DataLab de l'utilisateur : la démo s'exécute désormais avec les paramètres par défaut, sans lire ni modifier les paramètres de l'utilisateur"
+
+msgid "**Standalone version:**"
+msgstr "**Version autonome :**"
+
+msgid "Fixed the standalone version of DataLab exiting with a success code when it failed to start: it now exits with an error code, so that scripts and deployment tools launching it can detect the failure (the cause is still written in `datalab_error.log`, in the current folder)"
+msgstr "Correction de la version autonome de DataLab qui s'arrêtait avec un code de succès lorsqu'elle ne parvenait pas à démarrer : elle s'arrête désormais avec un code d'erreur, afin que les scripts et outils de déploiement qui la lancent puissent détecter l'échec (la cause est toujours écrite dans `datalab_error.log`, dans le dossier courant)"
 
 msgid "**Display scaling:**"
 msgstr "**Mise à l'échelle de l'affichage :**"

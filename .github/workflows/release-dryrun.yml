@@ -17,6 +17,9 @@
 #
 # Optional inputs:
 #   * build-msi  - skip the slow Windows MSI job when not needed.
+#   * dependencies - "development" builds Sigima, SigimaX and DataLab-Capsule
+#     from their git branch named like the dispatched branch (else develop),
+#     e.g. to validate the pipeline before these dependencies are published.
 #   * pages-dry-build - also exercise the Pages build (no deploy).
 # ============================================================================
 name: Release (dry-run)
@@ -29,6 +32,14 @@ on:
         type: boolean
         required: true
         default: true
+      dependencies:
+        description: "Sigima, SigimaX and DataLab-Capsule source"
+        type: choice
+        options:
+          - published
+          - development
+        required: true
+        default: published
       pages-dry-build:
         description: "Also run pages.yml in build-only mode (no deploy)"
         type: boolean
@@ -52,6 +63,7 @@ jobs:
     uses: ./.github/workflows/_build.yml
     with:
       build-msi: ${{ inputs.build-msi }}
+      dependencies: ${{ inputs.dependencies }}
       # On a dry-run we typically run on a branch (not a tag) so the
       # tag-related checks must be relaxed.
       skip-tag-check: true
@@ -88,6 +100,7 @@ jobs:
           test -f all-artifacts/pdf-docs/DataLab_en.pdf                    || { echo "::error::no EN PDF"; exit 1; }
           if [ "${{ inputs.build-msi }}" = "true" ]; then
             test -n "$(ls all-artifacts/msi-installer/*.msi 2>/dev/null)"  || { echo "::error::no MSI"; exit 1; }
+            test -f all-artifacts/msi-smoke-test/summary.json              || { echo "::error::no MSI smoke-test summary"; exit 1; }
           fi
           echo "All expected artifacts present ✔"
 
