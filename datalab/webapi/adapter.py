@@ -57,7 +57,9 @@ class MainThreadExecutor(QObject):
     work to the main thread's event loop, and a threading.Event to synchronize
     the calling thread with the result.
 
-    Important: This class must be instantiated on the main thread!
+    The executor may be created in any thread (e.g. when the Web API server is
+    started by a remote client): it always targets the thread of the Qt
+    application, which must exist.
 
     Args:
         request_context: Factory of the context manager in which each function runs
@@ -73,10 +75,11 @@ class MainThreadExecutor(QObject):
     ) -> None:
         super().__init__()
         self._request_context = request_context or nullcontext
-        # Connect signal to slot - this connection will queue calls to main thread
+        self._main_thread = QCoreApplication.instance().thread()
+        # Queued calls are run by the thread of the receiver: whatever the thread
+        # creating the executor, the slot must be run by the main thread
+        self.moveToThread(self._main_thread)
         self._execute_signal.connect(self._execute_on_main_thread)
-        # Store the main thread for comparison
-        self._main_thread = QThread.currentThread()
 
     def _call(self, func) -> Any:
         """Call a function on the main thread, in the request context.
@@ -165,15 +168,11 @@ class WorkspaceAdapter(QObject):
     def __init__(self, main_window=None) -> None:
         """Initialize the adapter.
 
-        This should be called from the main thread to ensure the executor
-        is properly initialized with working Qt signals.
-
         Args:
             main_window: The DataLab main window. If None, operations will fail.
         """
         super().__init__()
         self._main_window = main_window
-        # Create executor on main thread to ensure proper Qt signal connection
         self._executor = MainThreadExecutor(self._request_context)
 
     def _request_context(self) -> AbstractContextManager:

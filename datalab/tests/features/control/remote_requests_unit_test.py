@@ -12,8 +12,11 @@ main window may still be set up (see DataLab Issue #398).
 
 from __future__ import annotations
 
+import json
 import tempfile
 import threading
+import urllib.error
+import urllib.request
 import xmlrpc.client
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -128,6 +131,45 @@ def test_remote_close_during_call() -> None:
         assert not errors
 
 
+def test_remote_webapi_server(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    """The Web API server started by a remote client serves requests (Issue #403)
+
+    Its requests timed out after 30 seconds: the server was created in the XML-RPC
+    server thread, which has no event loop, instead of the GUI thread.
+
+    Args:
+        tmp_path: Temporary directory
+        monkeypatch: Fixture isolating the connection file of the Web API server
+    """
+    # The connection file written by the Web API server of the DataLab process must
+    # not replace the one of a DataLab instance in use
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path))
+    with datalab_in_background_context() as proxy:
+        info = proxy.start_webapi_server()
+        try:
+            assert proxy.get_webapi_status()["running"]
+            request = urllib.request.Request(
+                f"{info['url']}/api/v1/calc",
+                data=json.dumps({"name": "unknown_function"}).encode(),
+                headers={
+                    "Authorization": f"Bearer {info['token']}",
+                    "Content-Type": "application/json",
+                },
+                method="POST",
+            )
+            # The request is served by the GUI thread, which reports at once that the
+            # function is unknown (instead of HTTP 500 after 30 seconds)
+            with pytest.raises(urllib.error.HTTPError) as exc_info:
+                with urllib.request.urlopen(request, timeout=20.0):
+                    pass
+            assert exc_info.value.code == 404
+            assert "Unknown computation function" in exc_info.value.read().decode()
+        finally:
+            proxy.stop_webapi_server()
+        assert not proxy.get_webapi_status()["running"]
+
+
 if __name__ == "__main__":
     with tempfile.TemporaryDirectory() as tmpdir:
         for load_mode in ("files", "directory"):
@@ -138,3 +180,5 @@ if __name__ == "__main__":
     test_remote_command_result()
     test_remote_add_group_returns_uuid()
     test_remote_close_during_call()
+    with tempfile.TemporaryDirectory() as tmpdir, pytest.MonkeyPatch.context() as mp:
+        test_remote_webapi_server(Path(tmpdir), mp)

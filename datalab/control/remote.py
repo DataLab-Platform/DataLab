@@ -860,15 +860,18 @@ class RemoteServer(QC.QThread):
             RuntimeError: If Web API dependencies not installed or server
              already running.
         """
-        # Delegate to main window method which is @remote_controlled
-        # This ensures SIG_READY is emitted for the @remote_call decorator
-        return self.win.start_webapi_server(host, port)
+        # The server and its workspace adapter must be created in the GUI thread:
+        # created in this thread, which has no event loop, the adapter would never
+        # run the requests it receives (see DataLab Issue #403)
+        self.result = None
+        self.SIG_CALL_METHOD.emit("start_webapi_server", [host, port], None, {})
+        return self.result
 
     @remote_call
     def stop_webapi_server(self) -> None:
         """Stop the Web API server."""
-        # Delegate to main window method which is @remote_controlled
-        return self.win.stop_webapi_server()
+        self.result = None
+        self.SIG_CALL_METHOD.emit("stop_webapi_server", [], None, {})
 
     @remote_call
     def get_webapi_status(self) -> dict:
@@ -877,8 +880,9 @@ class RemoteServer(QC.QThread):
         Returns:
             Dictionary with "running", "url", and "token" keys.
         """
-        # Delegate to main window method which is @remote_controlled
-        return self.win.get_webapi_status()
+        self.result = None
+        self.SIG_CALL_METHOD.emit("get_webapi_status", [], None, {})
+        return self.result
 
 
 RemoteServer.check_remote_functions()
