@@ -350,6 +350,18 @@ def test_compute_image_export_preview_returns_exported_image() -> None:
     assert source.get_metadata_option("colormap") == "jet"
 
 
+def test_compute_image_export_preview_drops_source_display_bounds() -> None:
+    """Derive the preview contrast from the exported values, not the source."""
+    source = create_image("Source", np.linspace(1000.0, 2000.0, 6).reshape(2, 3))
+    source.zscalemin, source.zscalemax = 1000.0, 2000.0
+    param = ImageExportParam.create(normalization="minmax", target_dtype="uint8")
+
+    result = image_panel.compute_image_export_preview(source, param, "image.png")
+
+    assert (result.zscalemin, result.zscalemax) == (None, None)
+    assert (source.zscalemin, source.zscalemax) == (1000.0, 2000.0)
+
+
 def test_export_dialog_previews_backend_parameters_on_open() -> None:
     """Enable the generic preview on open and send picklable backend parameters."""
     obj = create_image("Source", np.linspace(0.0, 1.0, 12).reshape(3, 4))

@@ -3406,6 +3406,7 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
         import_filenames: list[str] | None = None,
         import_params: list[gds.DataSet] | None = None,
         param: gds.DataSet | None = None,
+        skipped_filenames: list[str] | None = None,
     ) -> list[TypeObj]:
         """Open objects from directory (signals or images, depending on the panel),
         add them to DataLab and return them.
@@ -3421,6 +3422,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             param: Optional format-specific parameters applied to every file
              requiring import parameters (e.g. RAW images), without showing any
              dialog.
+            skipped_filenames: Optional file names, relative to ``directory``, of
+             the files whose import dialog was cancelled. Recorded by history so
+             that replay skips them without reopening their dialog.
 
         Returns:
             list of new objects
@@ -3459,7 +3463,9 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
                 osp.normcase(osp.normpath(fname)): fparam
                 for fname, fparam in zip(import_filenames, import_params)
             }
+        skipped = {osp.normcase(osp.normpath(f)) for f in skipped_filenames or []}
         all_files = [fname for _path, fnames in folders for fname in fnames]
+        all_files = [fname for fname in all_files if relative_key(fname) not in skipped]
         pending = [
             fname for fname in all_files if relative_key(fname) not in recorded_params
         ]
@@ -3481,6 +3487,12 @@ class BaseDataPanel(AbstractPanel, Generic[TypeObj, TypeROI, TypeROIEditor]):
             history_kwargs["import_params"] = [
                 copy.deepcopy(file_params[fname]) for fname in param_files
             ]
+        cancelled = [
+            osp.relpath(f, directory) for f in all_files if f not in file_params
+        ]
+        skipped_all = sorted(set(skipped_filenames or []) | set(cancelled))
+        if skipped_all:
+            history_kwargs["skipped_filenames"] = skipped_all
         # Offer a fresh history session for this batch *before* loading anything.
         self.mainwindow.historypanel.maybe_start_session_for_input(load=True)
         action = self.mainwindow.historypanel.add_ui_entry(

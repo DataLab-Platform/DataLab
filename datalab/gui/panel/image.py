@@ -427,6 +427,8 @@ def compute_image_export_preview(
     """
     result = source.copy()
     result.data = prepare_image_export_preview(source.data, filename, param)
+    # The source display bounds do not apply to rescaled or converted data
+    result.zscalemin = result.zscalemax = None
     result.set_metadata_option("colormap", "gray")
     result.set_metadata_option("invert_colormap", False)
     return result

@@ -448,6 +448,39 @@ def test_directory_replay_reuses_recorded_raw_parameters(tmp_path) -> None:
     assert [param.width for param in action.kwargs["import_params"]] == [2, 7]
 
 
+def test_directory_replay_skips_cancelled_raw_files(tmp_path) -> None:
+    """Record cancelled RAW files so that replay skips them without a dialog."""
+    kept, cancelled = create_files(tmp_path, "a.raw", "b.raw")
+    panel = RawLoadPanelStub()
+    answers = iter([True, False])
+
+    def edit(param, parent=None):
+        del parent
+        param.width = 4
+        return next(answers)
+
+    with (
+        interactive_question(panel_image.QW.QMessageBox.No),
+        patch.object(RawImageImportParam, "edit", autospec=True, side_effect=edit),
+    ):
+        run_stub_directory_import(panel, tmp_path)
+
+    assert list(panel.loaded_params()) == [kept]
+    (action,) = panel.historypanel.actions
+    assert action.kwargs["skipped_filenames"] == ["b.raw"]
+
+    replay = RawLoadPanelStub()
+    kwargs = {k: v for k, v in action.kwargs.items() if k != "directory"}
+    with patch.object(RawImageImportParam, "edit") as replay_edit:
+        run_stub_directory_import(replay, tmp_path, **kwargs)
+
+    replay_edit.assert_not_called()
+    assert list(replay.loaded_params()) == [kept]
+    assert cancelled not in replay.loaded_params()
+    (replayed,) = replay.historypanel.actions
+    assert replayed.kwargs["skipped_filenames"] == ["b.raw"]
+
+
 def test_directory_import_without_raw_files_records_directory_only(
     tmp_path,
 ) -> None:
