@@ -1643,4 +1643,3 @@ msgstr "Valide, exécute et valide de manière transactionnelle une recette sur 
 
 msgid "Validate, execute, and atomically commit one recipe invocation."
 msgstr "Valide, exécute et valide de manière atomique un appel de recette."
-

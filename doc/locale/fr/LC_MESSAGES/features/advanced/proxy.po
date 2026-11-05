@@ -388,6 +388,9 @@ msgstr "Ouvrir des objets depuis un répertoire dans le panneau courant (signaux
 msgid "directory path"
 msgstr "chemin du répertoire"
 
+msgid "Optional format-specific import parameters applied to every file requiring them, without showing any dialog (e.g. :class:`sigima.io.RawImageImportParam` for RAW images). Defaults to None."
+msgstr "Paramètres d'import optionnels propres au format, appliqués à chaque fichier qui en a besoin, sans afficher de boîte de dialogue (par exemple :class:`sigima.io.RawImageImportParam` pour les images RAW). Par défaut None."
+
 msgid "Open objects from files in current panel (signals/images)."
 msgstr "Ouvrir des objets depuis des fichiers dans le panneau courant (signaux/images)."
 

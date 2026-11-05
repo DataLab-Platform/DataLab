@@ -997,6 +997,24 @@ msgstr "Rechercher une commande…"
 msgid "Custom signal"
 msgstr "Signal personnalisé"
 
+msgid "Random function"
+msgstr "Fonction gaussienne aléatoire"
+
+msgid "Multi-Gaussian"
+msgstr "Multi-gaussienne"
+
+msgid "2D Peaks with noise background"
+msgstr "Pics 2D avec fond bruité"
+
+msgid "Demo"
+msgstr "Démo"
+
+msgid "Click OK to start the demo.<br><br><u>Note:</u><br>- Demo will cover a <i>selection</i> of DataLab features (for a complete list of features, please refer to the documentation).<br>- It won't require any user interaction."
+msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La démo couvre une <i>sélection</i> des fonctionnalités de DataLab (pour une liste complète des fonctionnalités, veuillez vous référer à la documentation).<br>- Elle ne nécessite aucune interaction de l'utilisateur."
+
+msgid "Click OK to end demo."
+msgstr "Cliquer sur OK pour terminer la démo."
+
 msgid "Process signal"
 msgstr "Traiter le signal"
 
@@ -1225,9 +1243,6 @@ msgstr "Page d'accueil"
 
 msgid "Tour"
 msgstr "Visite guidée"
-
-msgid "Demo"
-msgstr "Démo"
 
 msgid "Installation and configuration"
 msgstr "Installation et configuration"
@@ -1743,6 +1758,10 @@ msgstr "Charger depuis %d fichiers"
 msgid "Load \"%s\""
 msgstr "Charger \"%s\""
 
+#, python-format
+msgid "Skipping export: object %r no longer exists."
+msgstr "Export ignoré : l'objet %r n'existe plus."
+
 msgid "Save as"
 msgstr "Enregistrer sous"
 
@@ -2077,6 +2096,180 @@ msgstr "Afficher la provenance de l'exécution"
 
 msgid "Show the recorded provenance of the last successful execution of the selected action"
 msgstr "Afficher la provenance enregistrée de la dernière exécution réussie de l'action sélectionnée"
+
+msgid "Compression level"
+msgstr "Niveau de compression"
+
+msgid "Compression"
+msgstr "Compression"
+
+msgid "MAT compression"
+msgstr "Compression MAT"
+
+msgid "Quality"
+msgstr "Qualité"
+
+msgid "Subsampling"
+msgstr "Sous-échantillonnage"
+
+msgid "Progressive"
+msgstr "Progressif"
+
+msgid "Optimize"
+msgstr "Optimiser"
+
+msgid "Smoothing"
+msgstr "Lissage"
+
+msgid "Quality mode"
+msgstr "Mode de qualité"
+
+msgid "Quality layers"
+msgstr "Couches de qualité"
+
+msgid "Irreversible"
+msgstr "Irréversible"
+
+msgid "Progression order"
+msgstr "Ordre de progression"
+
+msgid "Number of resolutions"
+msgstr "Nombre de résolutions"
+
+msgid "Tile size"
+msgstr "Taille des tuiles"
+
+msgid "PLT markers"
+msgstr "Marqueurs PLT"
+
+msgid "Predictor"
+msgstr "Prédicteur"
+
+msgid "Rows per strip"
+msgstr "Lignes par bande"
+
+msgid "Resolution"
+msgstr "Résolution"
+
+msgid "Resolution unit"
+msgstr "Unité de résolution"
+
+msgid "Photometric interpretation"
+msgstr "Interprétation photométrique"
+
+msgid "Delimiter"
+msgstr "Délimiteur"
+
+msgid "Precision"
+msgstr "Précision"
+
+msgid "None"
+msgstr "Aucun"
+
+msgid "Rates"
+msgstr "Taux"
+
+msgid "Deflate"
+msgstr "Deflate"
+
+msgid "Zstandard"
+msgstr "Zstandard"
+
+msgid "Whitespace"
+msgstr "Espaces blancs"
+
+msgid "Tab"
+msgstr "Tabulation"
+
+msgid "Comma"
+msgstr "Virgule"
+
+msgid "Semicolon"
+msgstr "Point-virgule"
+
+msgid "Inch"
+msgstr "Pouce"
+
+msgid "Centimeter"
+msgstr "Centimètre"
+
+msgid "Horizontal"
+msgstr "Horizontal"
+
+msgid "Floating-point"
+msgstr "Virgule flottante"
+
+msgid "Black is zero"
+msgstr "Le noir vaut zéro"
+
+msgid "White is zero"
+msgstr "Le blanc vaut zéro"
+
+msgid "JPEG compression requires 8-bit data (uint8)"
+msgstr "La compression JPEG nécessite des données 8 bits (uint8)"
+
+msgid "Deflate: 0 to 9, Zstandard: 1 to 22, JPEG: 1 to 100.<br>Leave empty to use the default level."
+msgstr "Deflate : 0 à 9, Zstandard : 1 à 22, JPEG : 1 à 100.<br>Laisser vide pour utiliser le niveau par défaut."
+
+msgid "Horizontal: integer data only.<br>Floating-point: floating data only."
+msgstr "Horizontal : données entières uniquement.<br>Virgule flottante : données flottantes uniquement."
+
+msgid "Cannot be combined with tile size"
+msgstr "Incompatible avec la taille des tuiles"
+
+msgid "Height and width, multiples of 16.<br>Cannot be combined with rows per strip."
+msgstr "Hauteur et largeur, multiples de 16.<br>Incompatible avec le nombre de lignes par bande."
+
+msgid "Leave empty to use the default value.<br>The maximum depends on the image (or tile) size."
+msgstr "Laisser vide pour utiliser la valeur par défaut.<br>Le maximum dépend de la taille de l'image (ou des tuiles)."
+
+msgid "Automatic"
+msgstr "Automatique"
+
+msgid "Image export"
+msgstr "Exportation d'image"
+
+msgid "Target data type"
+msgstr "Type de données cible"
+
+msgid "Gamma"
+msgstr "Gamma"
+
+msgid "Invert"
+msgstr "Inverser"
+
+#, python-format
+msgid "%s may not be empty"
+msgstr "%s ne peut pas être vide"
+
+#, python-format
+msgid "%s must contain 2 values"
+msgstr "%s doit contenir 2 valeurs"
+
+#, python-format
+msgid "%s contains invalid numbers"
+msgstr "%s contient des nombres non valides"
+
+msgid "Export image"
+msgstr "Exporter l'image"
+
+msgid "Some required entries are incorrect."
+msgstr "Certaines entrées obligatoires sont incorrectes."
+
+msgid "RAW image import"
+msgstr "Importation d'image RAW"
+
+#, python-format
+msgid "%d RAW files are about to be imported.<br><br>Do you want to apply the same import parameters to all of them?<br><br>Choose <i>No</i> to set the parameters of each file."
+msgstr "%d fichiers RAW vont être importés.<br><br>Voulez-vous appliquer les mêmes paramètres d'importation à tous ces fichiers ?<br><br>Choisissez <i>Non</i> pour définir les paramètres de chaque fichier."
+
+#, python-format
+msgid "RAW image import (%d files)"
+msgstr "Importation d'image RAW (%d fichiers)"
+
+#, python-format
+msgid "Complex images cannot be exported to %s files.<br><br>Use one of the NumPy, MAT-File, text, CSV or HDF5 image formats."
+msgstr "Les images complexes ne peuvent pas être exportées dans des fichiers %s.<br><br>Utilisez l'un des formats NumPy, MAT-File, texte, CSV ou image HDF5."
 
 msgid "New image"
 msgstr "Nouvelle image"
@@ -2567,9 +2760,6 @@ msgstr "sans objet"
 
 msgid "Dependencies:"
 msgstr "Dépendances :"
-
-msgid "None"
-msgstr "Aucun"
 
 msgid "Additional packages from the local wheelhouse:"
 msgstr "Paquets supplémentaires du dépôt local :"
@@ -4717,6 +4907,9 @@ msgstr "Obtenir la liste des uuids"
 msgid "Get object"
 msgstr "Obtenir un objet"
 
+msgid "Invalid parameters"
+msgstr "Paramètres invalides"
+
 msgid "Raw data (2D-Gaussian)"
 msgstr "Image brute (gaussienne 2D)"
 
@@ -4728,21 +4921,6 @@ msgstr "Plugins :"
 
 msgid "Click to configure plugins"
 msgstr "Cliquer pour configurer les plugins"
-
-msgid "Random function"
-msgstr "Fonction gaussienne aléatoire"
-
-msgid "Multi-Gaussian"
-msgstr "Multi-gaussienne"
-
-msgid "2D Peaks with noise background"
-msgstr "Pics 2D avec fond bruité"
-
-msgid "Click OK to start the demo.<br><br><u>Note:</u><br>- Demo will cover a <i>selection</i> of DataLab features (for a complete list of features, please refer to the documentation).<br>- It won't require any user interaction."
-msgstr "Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La démo couvre une <i>sélection</i> des fonctionnalités de DataLab (pour une liste complète des fonctionnalités, veuillez vous référer à la documentation).<br>- Elle ne nécessite aucune interaction de l'utilisateur."
-
-msgid "Click OK to end demo."
-msgstr "Cliquer sur OK pour terminer la démo."
 
 msgid "Start Web API Server"
 msgstr "Démarrer le serveur API Web"
@@ -5235,9 +5413,6 @@ msgstr "Aperçu désactivé"
 msgid "Computing preview..."
 msgstr "Calcul de l'aperçu..."
 
-msgid "Invalid parameters"
-msgstr "Paramètres invalides"
-
 msgid "Updating preview..."
 msgstr "Mise à jour de l'aperçu..."
 
@@ -5589,12 +5764,6 @@ msgstr "Sélectionner la source des données :"
 msgid "Source Parameters"
 msgstr "Paramètres de la source"
 
-msgid "Delimiter"
-msgstr "Délimiteur"
-
-msgid "Tab"
-msgstr "Tabulation"
-
 msgid "Space"
 msgstr "Espace"
 
@@ -5606,9 +5775,6 @@ msgstr "Décimal"
 
 msgid "Point"
 msgstr "Point"
-
-msgid "Comma"
-msgstr "Virgule"
 
 msgid "Decimal separator character"
 msgstr "Caractère séparateur décimal"
@@ -5800,3 +5966,4 @@ msgstr "Aucun contour n'a été trouvé pour la plage de niveaux sélectionnée.
 
 msgid "Show contour plot..."
 msgstr "Afficher le tracé de contours..."
+

@@ -89,6 +89,12 @@ class ProcessingPreviewWidget(QW.QWidget):
         super().__init__(parent)
         self.sources = tuple(sources)
         self.editor: DataSetEditLayout | None = None
+        # Optional conversion of the edited parameters into the parameters sent to
+        # the preview process (e.g. when the form class cannot be pickled)
+        self.prepare_param: Callable[[DataSet], DataSet] | None = None
+        # Optional formatting of preview error messages (e.g. to hide the traceback
+        # of expected validation errors)
+        self.format_error: Callable[[str], str] | None = None
         self.controller = controller_factory(function, self)
         self._dragging = False
         self._plot_kind = None
@@ -268,12 +274,22 @@ class ProcessingPreviewWidget(QW.QWidget):
             self.status.setText(_("Invalid parameters"))
             return
         self.editor.accept_changes()
+        param = self.editor.instance
+        if self.prepare_param is not None:
+            try:
+                param = self.prepare_param(param)
+            except (TypeError, ValueError) as error:
+                self.controller.invalidate()
+                self.status.setText(_("Invalid parameters"))
+                self.details.setPlainText(str(error))
+                self.details.show()
+                return
         self.status.setText(_("Computing preview..."))
-        self.controller.request(
-            self.sources[self.source_combo.currentIndex()], self.editor.instance
-        )
+        self.controller.request(self.sources[self.source_combo.currentIndex()], param)
 
     def _show_error(self, message: str) -> None:
+        if self.format_error is not None:
+            message = self.format_error(message)
         self.status.setText(_("Preview failed"))
         self.details.setPlainText(message)
         self.details.show()

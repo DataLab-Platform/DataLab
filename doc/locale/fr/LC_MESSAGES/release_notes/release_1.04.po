@@ -53,6 +53,30 @@ msgstr "Une nouvelle opération **Traitement > Exposition > Luminosité et contr
 msgid "Intensity windows may extend beyond the observed data range. Exact floating-point bounds survive editing and reapplication, while declared parameter constraints remain enforced and Cancel preserves the original parameters."
 msgstr "La fenêtre d'intensité peut s'étendre au-delà de la plage de données observée. Les limites en virgule flottante exactes survivent à l'édition et à la réapplication, tandis que les contraintes de paramètres déclarées restent appliquées et Annuler préserve les paramètres d'origine."
 
+msgid "**RAW image import:**"
+msgstr "**Import d'images RAW :**"
+
+msgid "Headerless RAW image files (`*.raw`) can now be opened from **File > Open...**, **File > Open from directory...**, drag-and-drop, the AI Assistant (`load_file` tool) and remote control (`load_from_files` and `load_from_directory` with an optional `RawImageImportParam` argument) (implements [Issue #237](https://github.com/DataLab-Platform/DataLab/issues/237))"
+msgstr "Les fichiers d'images RAW sans en-tête (`*.raw`) peuvent désormais être ouverts depuis **Fichier > Ouvrir...**, **Fichier > Ouvrir depuis un répertoire...**, par glisser-déposer, avec l'Assistant IA (outil `load_file`) et par contrôle à distance (`load_from_files` et `load_from_directory` avec un argument optionnel `RawImageImportParam`) (implémente [l'issue #237](https://github.com/DataLab-Platform/DataLab/issues/237))"
+
+msgid "The **RAW image import** dialog defines the pixel data type, image width and height, byte offset to the first image, number of images, byte gap between consecutive images, byte order, and the **White is zero** option (which displays the imported image with an inverted gray colormap without modifying pixel values). Multi-image RAW files create one image per frame"
+msgstr "La boîte de dialogue **Import d'image RAW** définit le type de données des pixels, la largeur et la hauteur de l'image, le décalage en octets avant la première image, le nombre d'images, l'espacement en octets entre images consécutives, l'ordre des octets, ainsi que l'option **Blanc à zéro** (qui affiche l'image importée avec une palette de niveaux de gris inversée sans modifier les valeurs des pixels). Les fichiers RAW multi-images créent une image par trame"
+
+msgid "When several RAW files are imported at once, DataLab asks whether to apply the same import parameters to all of them or to set the parameters of each file (each dialog starting from the values confirmed for the previous file); recorded History actions store the import parameters so that replaying them does not reopen the dialog"
+msgstr "Lorsque plusieurs fichiers RAW sont importés simultanément, DataLab demande s'il faut appliquer les mêmes paramètres d'import à tous les fichiers ou définir les paramètres de chaque fichier (chaque boîte de dialogue reprenant les valeurs validées pour le fichier précédent) ; les actions enregistrées dans l'historique conservent les paramètres d'import afin que leur rejeu ne rouvre pas la boîte de dialogue"
+
+msgid "**Format-aware image export:**"
+msgstr "**Export d'images adapté au format :**"
+
+msgid "Saving an image with **File > Save...** now opens an **Export image** dialog adapted to the selected file format, with a live preview showing the image in gray levels as it will be read back from the exported file (including quantization and lossy compression for BMP, PNG, JPEG, JPEG 2000 and TIFF files) (implements [Issue #256](https://github.com/DataLab-Platform/DataLab/issues/256))"
+msgstr "L'enregistrement d'une image avec **Fichier > Enregistrer...** ouvre désormais une boîte de dialogue **Exporter l'image** adaptée au format de fichier sélectionné, avec un aperçu en direct affichant l'image en niveaux de gris telle qu'elle sera relue depuis le fichier exporté (y compris la quantification et la compression avec perte pour les fichiers BMP, PNG, JPEG, JPEG 2000 et TIFF) (implémente [l'issue #256](https://github.com/DataLab-Platform/DataLab/issues/256))"
+
+msgid "Data preparation covers normalization (none, min-max, percentile or manual bounds), out-of-range behavior (clip or rescale), non-finite value policy (error, clip or replace), gamma correction, inversion and conversion to a data type supported by the destination format; when exporting a floating-point or unsupported image to an integer-only format (such as PNG, JPEG or BMP), min-max rescaling is selected by default, and complex images are rejected when the format cannot store complex values"
+msgstr "La préparation des données couvre la normalisation (aucune, min-max, percentiles ou bornes manuelles), le comportement hors plage (écrêtage ou rééchelonnage), le traitement des valeurs non finies (erreur, écrêtage ou remplacement), la correction gamma, l'inversion et la conversion vers un type de données pris en charge par le format de destination ; lors de l'export d'une image flottante ou d'un type non pris en charge vers un format uniquement entier (comme PNG, JPEG ou BMP), le rééchelonnage min-max est sélectionné par défaut, et les images complexes sont refusées lorsque le format ne peut pas stocker de valeurs complexes"
+
+msgid "Format-specific options are exposed and validated for each format (PNG compression level, JPEG quality/subsampling/progressive/optimization/smoothing, JPEG 2000 quality mode/layers/irreversible/progression/resolutions/tiling/PLT markers, TIFF compression/level/predictor/rows per strip/tiling/resolution/photometric interpretation, text and CSV delimiter and precision, MAT-File compression), and recorded History actions preserve the export parameters and target object UUIDs"
+msgstr "Les options propres au format sont proposées et validées pour chaque format (niveau de compression PNG, qualité/sous-échantillonnage/progressif/optimisation/lissage JPEG, mode et couches de qualité/irréversible/ordre de progression/résolutions/tuilage/marqueurs PLT JPEG 2000, compression/niveau/prédicteur/lignes par bande/tuilage/résolution/interprétation photométrique TIFF, séparateur et précision des fichiers texte et CSV, compression MAT-File), et les actions enregistrées dans l'historique conservent les paramètres d'export ainsi que les UUID des objets cibles"
+
 msgid "**Live processing preview:**"
 msgstr "**Aperçu interactif des traitements :**"
 
@@ -331,6 +355,9 @@ msgstr "**Contrôle à distance et plugins :**"
 
 msgid "`add_group` now returns the UUID of the created group, so that a remote client, a macro or a plugin can add objects to it with `add_object(obj, group_id=...)` (or `add_signal`/`add_image`) instead of looking the group up by its title"
 msgstr "`add_group` renvoie désormais l'UUID du groupe créé, de sorte qu'un client distant, une macro ou un plugin peut y ajouter des objets avec `add_object(obj, group_id=...)` (ou `add_signal`/`add_image`) au lieu de rechercher le groupe par son titre"
+
+msgid "`load_from_files` and `load_from_directory` now accept an optional `param` argument with format-specific import parameters (e.g. `RawImageImportParam` for RAW images), applied without showing any dialog"
+msgstr "`load_from_files` et `load_from_directory` acceptent désormais un argument optionnel `param` contenant les paramètres d'import propres au format (par exemple `RawImageImportParam` pour les images RAW), appliqués sans afficher de boîte de dialogue"
 
 msgid "**NeXus files:**"
 msgstr "**Fichiers NeXus :**"
@@ -656,6 +683,12 @@ msgstr "**Enregistrement de l'espace de travail :**"
 msgid "Fixed a failed save destroying the previous version of the workspace file: the file was emptied before the data was written, so that an error during the save, a full disk or an interruption left neither the previous nor the new workspace on disk. Workspaces, capsules and History files (`.dlhist`) are now written to a temporary file, which replaces the previous file only once completely written; if the save fails, the previous file is left untouched"
 msgstr "Correction d'un enregistrement en échec qui détruisait la version précédente du fichier d'espace de travail : le fichier était vidé avant l'écriture des données, si bien qu'une erreur pendant l'enregistrement, un disque plein ou une interruption ne laissaient sur le disque ni l'ancien ni le nouvel espace de travail. Les espaces de travail, les capsules et les fichiers d'historique (`.dlhist`) sont désormais écrits dans un fichier temporaire, qui ne remplace le fichier précédent qu'une fois entièrement écrit ; en cas d'échec de l'enregistrement, le fichier précédent reste intact"
 
+msgid "**File import:**"
+msgstr "**Import de fichiers :**"
+
+msgid "Fixed compressed TIFF files (LZW, JPEG or WebP compression) failing to open with the error \"requires the 'imagecodecs' package\"; LZW is the default compression of many acquisition and image-editing tools. These files now open out of the box, including with the standalone installer. CCITT-compressed bilevel images are also supported with the standalone installer and with Python 3.11 or later (fixes [Issue #381](https://github.com/DataLab-Platform/DataLab/issues/381))"
+msgstr "Correction de l'ouverture des fichiers TIFF compressés (compression LZW, JPEG ou WebP), qui échouait avec l'erreur « requires the 'imagecodecs' package » ; LZW est la compression par défaut de nombreux outils d'acquisition et d'édition d'images. Ces fichiers s'ouvrent désormais sans installation supplémentaire, y compris avec l'installeur autonome. Les images binaires compressées en CCITT sont également prises en charge avec l'installeur autonome et avec Python 3.11 ou ultérieur (corrige [l'issue #381](https://github.com/DataLab-Platform/DataLab/issues/381))"
+
 msgid "**Metadata:**"
 msgstr "**Métadonnées :**"
 
@@ -815,4 +848,3 @@ msgstr "**Sécurité :**"
 
 msgid "Opening a workspace received from someone else can no longer make DataLab load or run other code installed on the computer. The parameters stored with objects, analysis results and History actions name their class, and DataLab imported whatever module they named and called the object named there, which a modified file could use, for example, to make DataLab quit. Only parameter classes of DataLab, Sigima, guidata and installed plugins are now used; other stored parameters are reported as unreadable (fixes [Issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))"
 msgstr "Ouvrir un espace de travail reçu d'une autre personne ne permet plus de faire charger ou exécuter par DataLab un autre code installé sur l'ordinateur. Les paramètres enregistrés avec les objets, les résultats d'analyse et les actions de l'historique nomment leur classe, et DataLab importait le module ainsi nommé puis appelait l'objet désigné, ce qu'un fichier modifié pouvait exploiter, par exemple pour faire quitter DataLab. Seules les classes de paramètres de DataLab, Sigima, guidata et des plugins installés sont désormais utilisées ; les autres paramètres enregistrés sont signalés comme illisibles (corrige [l'issue #407](https://github.com/DataLab-Platform/DataLab/issues/407))"
-

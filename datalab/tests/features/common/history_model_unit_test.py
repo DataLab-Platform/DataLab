@@ -840,6 +840,30 @@ def test_action_copy_remaps_cross_panel_outputs() -> None:
     assert copied.output_uuids == ["new-signal-output"]
 
 
+def test_action_copy_remaps_exported_object_uuids() -> None:
+    """Remap objects exported by ``save_to_files`` in the action panel."""
+    action = HistoryAction(
+        title="Save to 2 different files",
+        target="imagepanel",
+        method_name="save_to_files",
+        kwargs={
+            "filenames": ["first.png", "second.png"],
+            "object_uuids": ["first-uuid", "unmapped-uuid"],
+        },
+    )
+
+    copied = action.copy_with_uuid_remap(
+        {
+            "image": {"first-uuid": "new-first"},
+            "signal": {"unmapped-uuid": "other-panel-uuid"},
+        }
+    )
+
+    assert copied.kwargs["object_uuids"] == ["new-first", "unmapped-uuid"]
+    assert copied.kwargs["filenames"] == ["first.png", "second.png"]
+    assert action.kwargs["object_uuids"] == ["first-uuid", "unmapped-uuid"]
+
+
 def _make_analysis_action(obj_uuid: str) -> HistoryAction:
     """Build a 1-to-0 compute action analysing ``obj_uuid``."""
     return HistoryAction(
